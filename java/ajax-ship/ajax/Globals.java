@@ -45,7 +45,9 @@ public class Globals {
     private static Writer logWriter = null;
     private static File logFile = null;
     private static boolean fatalErrors = false;
-    
+
+    public static boolean quietUserError = false;
+
     private static Writer getLogWriter() {
         if (logWriter == null) {
             try {
@@ -56,31 +58,31 @@ public class Globals {
                 logWriter = new OutputStreamWriter(System.err);
             }
         }
-        
+
         return logWriter;
     }
-    
+
     private static Globals exitHandler = new Globals();
-    
+
     private Globals() {
         System.runFinalizersOnExit(true);
     }
-    
+
     protected void finalize() {
         flushLog();
     }
-    
+
     public static void flushLog() {
         try {
             getLogWriter().flush();
         } catch (IOException ex) {
         }
     }
-    
+
     public static void setFatalErrors(boolean fatal) {
         fatalErrors = fatal;
     }
-    
+
     public static void setLogFileName(String name) {
         try {
             logWriter = new FileWriter(name);
@@ -88,13 +90,13 @@ public class Globals {
             System.err.println("Could not open new log file " + name);
         }
     }
-    
+
 /** This turns all debugging code on or off. */
     public static final boolean debug = true; // CONFIG
 /** This turns determinism on or off.
     We can't make things truly deterministic, but we try. */
     public static final boolean debugDeterminism = false; // CONFIG
-    
+
     private static RuntimeException dumpStack(RuntimeException t) {
         System.err.println("Sorry, an internal error occurred:");
         if (fatalErrors) {
@@ -105,23 +107,25 @@ public class Globals {
             return t;
         }
     }
-    
+
     public static RuntimeException localError(String s) {
         writeLog(null, "ERROR: " + s);
         flushLog();
         return dumpStack(new RuntimeException(s));
     }
-    
+
     public static RuntimeException nonlocalError(String s) {
 	writeLog(null, "ERROR: " + s);
         flushLog();
         return dumpStack(new RuntimeException(s));
     }
-    
+
     public static void userError(String s) {
 	writeLog(null, "ERROR: " + s);
         flushLog();
-        System.err.println(s);
+        if (! quietUserError) {
+            System.err.println(s);
+        }
     }
 
 /**
@@ -132,7 +136,7 @@ provide "this". A String can also be provided with the class name, in a pinch.
     public static void writeLog(Object source, String s) {
         /*
         String className;
-        
+
         if (source instanceof Class) {
             className = ((Class)source).getName();
         } else if (source instanceof String) {
@@ -140,10 +144,10 @@ provide "this". A String can also be provided with the class name, in a pinch.
         } else {
             className = source.getClass().getName();
         } */
-        
+
         try {
             Writer log = getLogWriter();
-            
+
             synchronized (log) {
                 log.write(s);
                 log.write('\n');
@@ -154,7 +158,7 @@ provide "this". A String can also be provided with the class name, in a pinch.
             throw new RuntimeException("I/O error writing to log " + logFile + ": " + ex.getMessage());
         }
     }
-    
+
     public static String getHexID(Object o) {
         return "0x" + Integer.toHexString(IdentityManager.getIdentityHashCode(o));
     }

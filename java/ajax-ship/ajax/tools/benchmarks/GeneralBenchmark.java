@@ -30,19 +30,19 @@ class GeneralBenchmark {
 
     GeneralBenchmark() {
     }
-    
+
     String getMainClassName() {
         return mainClass;
     }
-    
+
     private static String memString(long bytes) {
         return Long.toString((bytes + MB - 1)/MB) + "MB";
     }
-    
+
     private void makeEngine(String analysisType, Args args, JBCWorld world) {
         RTAInstance = new RTA(world);
         RTAAnalyzer = new Analyzer(RTAInstance);
-        
+
         if (analysisType.equals("RTA")) {
             analyzer = RTAAnalyzer;
         } else if (analysisType.equals("RTA-SEMI")) {
@@ -52,22 +52,22 @@ class GeneralBenchmark {
             SEMIInstance = new SEMIAnalyzer(RTAAnalyzer);
 
             GenericAnalyzer[] sources = { SEMIInstance, new RTA(world) };
-                
+
             analyzer = new Analyzer(new HybridAnalysis(sources));
         } else {
             throw args.printUsageErrorAndDie("Invalid analysis type: " + analysisType);
         }
     }
-    
+
     public static String fractionToString(int numerator, int denominator) {
         return numerator + " out of " + denominator + " ("
             + numerator*100/denominator + "%)";
     }
-    
+
     static void run(String[] argStrings, Benchmark b) {
         run(argStrings, b, null, "RTA-SEMI/RTA");
     }
-    
+
     static void run(String[] argStrings, Benchmark b, String specialOptions) {
         run(argStrings, b, specialOptions, "RTA-SEMI/RTA");
     }
@@ -82,14 +82,14 @@ class GeneralBenchmark {
         Globals.writeLog(this, "ERROR: Terminated --- " + reason);
 	    benchmark.terminate();
     }
-    
+
     private static PrintStream makePrintSinkStream() {
         // use reflection here to avoid a @deprecated warning
         // the deprecated constructor is the only way to do this!
         try {
             Class[] paramTypes = { Class.forName("java.io.OutputStream") };
             Object[] args = { new SinkOutputStream() };
-            
+
             return (PrintStream)Class.forName("java.io.PrintStream")
                 .getDeclaredConstructor(paramTypes).newInstance(args);
         } catch (ClassNotFoundException ex) {
@@ -110,10 +110,10 @@ class GeneralBenchmark {
 
         Globals.writeLog(this, "Started on " + (new Date()).toString() + "\n"
             + "Command line arguments: " + StringUtils.join(" ", argStrings));
-        
+
         try {
 	        benchmark = b;
-	        
+
             Args args = new Args(argStrings,
                 "Usage: <main-class>" + specialOptions
                     + " [-cp <class-path>] [-ap <application-path>] [-dump] [-dumpdir <dir>] [-iterlimit <n>] [-iterfun <function>] [-lenient]"
@@ -122,12 +122,14 @@ class GeneralBenchmark {
                     + "Additional options for SEMI: [-semi-hindleymilner] [-semi-opdump] [-semi-ndvirtuals] [-semi-checkconsistency]\n"
                     + "                             [-semi-usesubchunks] [-semi-usesubobjects]\n"
                     + "Additional options for RTA: [-rta-nopreciseclasses] [-rta-noinstanceoftracking]\n");
-            
+
             if (args.extractBoolOption("-help")
                 || args.extractBoolOption("-h")) {
                 throw args.printUsageAndDie();
             }
 
+            boolean quiet = args.extractBoolOption("-quiet");
+            Globals.quietUserError = quiet;
             boolean doDump = args.extractBoolOption("-dump");
             int iterationLimit = args.extractIntOption("-iterlimit", Integer.MAX_VALUE);
             int timeLimit = args.extractIntOption("-timelimit", Integer.MAX_VALUE);
@@ -149,17 +151,17 @@ class GeneralBenchmark {
             boolean noStdErr = args.extractBoolOption("-nostderr");
             boolean noStdOut = args.extractBoolOption("-nostdout");
             String analysisName = args.extractStringOption("-analysis", defaultAnalysis);
-            
+
             if (noStdErr) {
                 System.setErr(makePrintSinkStream());
             }
-            
+
             if (noStdOut) {
                 System.setOut(makePrintSinkStream());
             }
-            
+
             b.parseOptions(args);
-            
+
             mainClass = args.extractNextArg("main class name");
             if (mainClass.indexOf('/') != -1) {
                 String mainClassDot = mainClass.replace('/', '.');
@@ -168,11 +170,11 @@ class GeneralBenchmark {
             }
 
             b.parseArgs(args);
-            
+
             args.checkDone();
-            
+
             Globals.setFatalErrors(fatalErrors);
-            
+
             if (dumpDir != null) {
 	            if (!dumpDir.endsWith(File.separator)) {
 		            dumpDir = dumpDir + File.separator;
@@ -180,10 +182,10 @@ class GeneralBenchmark {
                 Globals.setLogFileName(dumpDir + "ajax.log");
                 IdentityManager.setBindingsLogFileName(dumpDir + "bindings");
             }
-                
+
             BasicAnalyzerStats stats = new BasicAnalyzerStats();
             GeneralBenchmarkConfig cfg = new GeneralBenchmarkConfig();
-            
+
             if (classPath != null) {
                 cfg.setClassPath(classPath);
             }
@@ -191,12 +193,12 @@ class GeneralBenchmark {
                 cfg.setAppClassPath(appPath);
             }
             cfg.setStats(stats);
-            
+
             cfg.getWorld().setVerificationLenient(lenientVerification);
             cfg.init();
-                
+
             makeEngine(analysisName, args, cfg.getWorld());
-            
+
             if (SEMIInstance != null) {
                 if (dumpDir != null) {
                     SEMIInstance.setDumpDirectory(dumpDir);
@@ -208,31 +210,31 @@ class GeneralBenchmark {
                 SEMIInstance.setUseSubchunks(SEMIUseSubchunks);
                 SEMIInstance.setUseSubobjects(SEMIUseSubobjects);
             }
-            
+
             if (RTAInstance != null) {
                 RTAInstance.setUsePreciseClassTypes(!RTADisablePreciseClassTypes);
                 RTAInstance.setUseInstanceOfTracking(!RTADisableInstanceOfTracking);
             }
-            
+
             analyzer.enableLogging();
             analyzer.setIterationLimit(iterationLimit, iterationFunction);
             analyzer.setStatisticsListener(stats);
-            
+
             b.notifyAppClassLoader(cfg.getApplicationClassLoader());
-            
+
             ReflectionHandler reflectionHandler = cfg.getReflectionHandler();
-            
+
             if (reflectionHandler != null) {
                 reflectionHandler.setReceiveLivenessNotifications();
                 RTAAnalyzer.setReflectionHandler(reflectionHandler);
             }
 
             b.configure(analyzer);
-            
+
             if (!b.usesDynamicQueryFamilies()) {
                 analyzer.disableNewQueryFamilies();
             }
-            
+
             try {
                 cfg.addMainInvocation(mainClass);
             } catch (UnresolvedClassException ex) {
@@ -245,56 +247,58 @@ class GeneralBenchmark {
                 Globals.userError("Ambiguous main method in " + ex.getClassName());
                 return;
             }
-                
+
             boolean finishedNormally = false;
 
             (new GeneralBenchmarkTerminationThread(this)).start();
-            
+
             GeneralBenchmarkTimerTerminationThread terminator
                 = new GeneralBenchmarkTimerTerminationThread(this, timeLimit);
-            
+
             terminator.start();
-                
+
             try {
                 byte[] savedSpace = new byte[1000000];
-                    
+
                 finishedNormally = !b.work(analyzer);
             } catch (Error ex) {
                 StringWriter w = new StringWriter();
-                
+
                 w.write("Internal error: ");
                 ex.printStackTrace(new PrintWriter(w));
                 Globals.writeLog(this, w.toString());
                 System.err.println(w.toString());
             } catch (RuntimeException ex) {
                 StringWriter w = new StringWriter();
-                
+
                 w.write("Internal error: ");
                 ex.printStackTrace(new PrintWriter(w));
                 Globals.writeLog(this, w.toString());
                 System.err.println(w.toString());
             }
-                
+
             try {
                 StringWriter errWriter = new StringWriter();
                 Runtime r = Runtime.getRuntime();
-                        
+
                 errWriter.write("Iterations: " + analyzer.getIterations() + "\n");
                 errWriter.write("Max memory used: " + memString(terminator.getMaxUsedMemory()) + "\n");
-                
+
                 System.gc();
-                
+
                 errWriter.write("Current memory used: " + memString(r.totalMemory() - r.freeMemory()) + "\n");
                 errWriter.write("Total memory allocated: " + memString(r.totalMemory()) + "\n");
 
                 stats.write(errWriter);
-                
+
                 Globals.writeLog(this, errWriter.toString());
-                System.err.println(errWriter.toString());
+                if (! quiet) {
+                    System.err.println(errWriter.toString());
+                }
 
                 if (finishedNormally) {
                     StringWriter writer = new StringWriter();
-                    
+
                     b.printReport(writer);
                     System.out.println(writer.toString());
 		    result = 0;
@@ -302,7 +306,7 @@ class GeneralBenchmark {
             } catch (IOException ex) {
                 Globals.userError("Error printing stats: " + ex.getMessage());
             }
-                
+
             if (doDump && SEMIInstance != null) {
                 SEMIInstance.dumpInfo();
             }
