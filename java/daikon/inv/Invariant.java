@@ -432,7 +432,7 @@ public abstract class Invariant
     falsified = false;
   }
 
-  /** Returns whether or not his invariant has been destroyed. */
+  /** Returns whether or not this invariant has been destroyed. */
   public boolean is_false() {
     return (falsified);
   }
