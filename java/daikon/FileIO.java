@@ -561,8 +561,8 @@ public final class FileIO {
   static HashMap/*Integer->Invocation*/ call_hashmap = new HashMap();
 
   /** Reads data trace files using the default sample processor. **/
-  public static void read_data_trace_files(Collection /*String*/
-  files, PptMap all_ppts) throws IOException {
+  public static void read_data_trace_files(Collection /*String*/ files,
+                                           PptMap all_ppts) throws IOException {
 
     Processor processor = new Processor();
     read_data_trace_files(files, all_ppts, processor);
@@ -573,8 +573,8 @@ public final class FileIO {
    * Calls @link{read_data_trace_file(File,PptMap,Pattern)} for each
    * element of filenames.
    **/
-  public static void read_data_trace_files(Collection /*String*/
-  files, PptMap all_ppts, Processor processor) throws IOException {
+  public static void read_data_trace_files(Collection /*String*/ files,
+                                           PptMap all_ppts, Processor processor) throws IOException {
     for (Iterator i = files.iterator(); i.hasNext();) {
       String filename = (String) i.next();
       try {
