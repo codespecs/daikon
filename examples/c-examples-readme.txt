@@ -5,14 +5,14 @@ STEP-BY-STEP INSTRUCTIONS
 
 First, install the Daikon invariant detector.  This is well-documented
 in the daikon manual.  Download and install the most recent
-distrobution.
+distribution.
 
 In addition to the Daikon engine, you also need a front end.  Dfec is
 the front end for C.  Obtain dfec.zip and set it up as follows.
 
 (We will refer to the directory DFEC is unzipped in as $DFECDIR.
 This path, and all other paths discussed in these instructions, should
-be in terms of the cywgin file namespace;
+be in terms of the cygwin file namespace;
 e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt).
 
 Compile the daikon runtime library.  At a cygwin prompt:
@@ -69,11 +69,11 @@ XXX quotes are the thing.
 Now set DFEC to be the correct dfec, plus include paths (note the
 order!); recall that all paths are cygwin paths.
 
-$ export DFEC="$DFECDIR/dfec.exe ${INC_PATH} ${INC_SEARCH} ${INC_AFTER} ${DFEC_OPTS}"
+$ export DFEC="$DFECDIR/dfec.exe $INC_PATH $INC_SEARCH $INC_AFTER $DFEC_OPTS"
 
-Then, to invoke dfec from the cygwin bash shell, you can call ${DFEC}.
+Then, to invoke dfec from the cygwin bash shell, you can call just run $DFEC.
 
-$ ${DFEC} program.c ... (more later)
+$ $DFEC program.c ... (more explanation later)
 
 Now dfec is set up.  Let's move on to some examples
 
@@ -104,7 +104,7 @@ $ cp $DFECDIR/daikon_runtime.h .
 
 Then run the front-end:
 
-$ ${DFEC} print_tokens.c stream.h tokens.h
+$ $DFEC print_tokens.c stream.h tokens.h
 
 We instrument the source file and all the user-created header files it
 depends on.  This command creates two directories, daikon-instrumented
@@ -206,7 +206,7 @@ First, it is recommended that you set the TRACE_KAT_MCT variable when
 you run the C front end, so you will see some output when running the
 test suite.
 
-2.  $DFECDIR/dfec -w -I$DFECDIR -DTRACE_KAT_MCT rijndael.c \
+2.  $DFEC-DTRACE_KAT_MCT rijndael.c \
       rijndael-alg-ref.h rijndael-api-ref.h
 
 Second, you will need to manually reduce the size of the dtrace file.
