@@ -91,20 +91,27 @@ public class SUBSET
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
-    // System.out.println("SubSet.isObviousDerived(" + format() + ") = "
-    //                    + ((SubSet.isObviousDerived(var1(), var2()))
-    //                       || (SubSet.isObviousDerived(var2(), var1()))));
-    Object[] obvDeriv1 = SUBSET.isObviousSubSet(var1, var2);
-    Object[] obvDeriv2 = SUBSET.isObviousSubSet(var2, var1);
-    if (obvDeriv1[1]!=null || obvDeriv2[1]!=null) {
-      Global.implied_noninstantiated_invariants++;
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine (var1 + ", " + var2);
-        debug.fine ("Obvious derived, returning null");
-      }
-      return null;
-    }
 
+    #if 0
+      // This code is removed because these sorts of static checks
+      // can't be reliability performed with equality sets (just because
+      // the leaders are obvious subsets, does not imply that all members
+      // are.  Eventually this should be moved to isObviousStatically()
+
+      // System.out.println("SubSet.isObviousDerived(" + format() + ") = "
+      //                    + ((SubSet.isObviousDerived(var1(), var2()))
+      //                       || (SubSet.isObviousDerived(var2(), var1()))));
+      Object[] obvDeriv1 = SUBSET.isObviousSubSet(var1, var2);
+      Object[] obvDeriv2 = SUBSET.isObviousSubSet(var2, var1);
+      if (obvDeriv1[1]!=null || obvDeriv2[1]!=null) {
+        Global.implied_noninstantiated_invariants++;
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine (var1 + ", " + var2);
+          debug.fine ("Obvious derived, returning null");
+        }
+        return null;
+      }
+    #endif
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Instantiating " + var1.name + " and " + var2.name);

@@ -80,6 +80,12 @@ public class CLASSNAME
   public static CLASSNAME instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
+    /*
+    // This code is removed because these sorts of static checks
+    // can't be reliability performed with equality sets (just because
+    // the leaders are obvious subsets, does not imply that all members
+    // are.  Eventually this should be moved to isObviousStatically()
+
     VarInfo x = ppt.var_infos[0];
     VarInfo y = ppt.var_infos[1];
     VarInfo z = ppt.var_infos[2];
@@ -229,6 +235,7 @@ public class CLASSNAME
         }
       }
     }
+    */
 
     CLASSNAME result = new CLASSNAME(ppt);
     if (debugLinearTernary) {
