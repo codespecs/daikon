@@ -729,10 +729,11 @@ public final class FeatureExtractor {
     Field[] fields = inv.getClass().getFields();
 
     for (int i = 0; i < fields.length; i++) {
-      if (fields[i].getType().equals(Boolean.TYPE))
-        answer.add(new IntDoublePair(((Integer) lookup.get(fields[i].getName() + "Bool")).intValue(), 1));
-      else if (TYPES.contains(fields[i].getType()))
-        answer.add(new IntDoublePair(((Integer) lookup.get(fields[i].getName() + "Float")).intValue(), fields[i].getDouble(inv)));
+      if (!BANNED_METHODS.contains(fields[i].getName()))
+        if (fields[i].getType().equals(Boolean.TYPE))
+          answer.add(new IntDoublePair(((Integer) lookup.get(fields[i].getName() + "Bool")).intValue(), 1));
+        else if (TYPES.contains(fields[i].getType()))
+          answer.add(new IntDoublePair(((Integer) lookup.get(fields[i].getName() + "Float")).intValue(), fields[i].getDouble(inv)));
     }
 
     Method[] methods = inv.getClass().getMethods();
@@ -1102,6 +1103,8 @@ public final class FeatureExtractor {
     TYPES.add(Float.TYPE);
 
     BANNED_METHODS.add("hashCode");
+    BANNED_METHODS.add("min_elt");
+    BANNED_METHODS.add("max_elt");
   }
 
 }
