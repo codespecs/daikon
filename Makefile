@@ -15,6 +15,9 @@ SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/defaults.txt daikon/simplify/daikon-background.txt
 AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
+# This includes backup files.  But so does
+#   WWW_FILES := $(shell cd doc/www; find . \( -name CVS -o -name uw \) -prune -o \( -type f -not -name '*~' \) -print)
+# I'm not sure of the correct solution.
 WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -o -type f -print)
 WWW_DIR := /home/httpd/html/daikon/
 
@@ -260,7 +263,7 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	# jar xf java/lib/junit.jar -C /tmp/daikon-jar
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
+	# (cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
@@ -360,15 +363,19 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	cp -pR java/ajax-ship /tmp/daikon/java
 	rm -rf /tmp/daikon/java/ajax-ship/ajax
 	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
+
 	## JUnit
 	# This is wrong:
 	#   unzip java/lib/junit3.7.zip -d /tmp/daikon/java
 	#   (cd /tmp/daikon/java; ln -s junit3.7/junit .)
 	# Need to extract a jar file in the zip file, then unjar that.
+	# (src.jar only contains .java files, not .class files.)
 	mkdir /tmp/daikon/tmp-junit
 	unzip java/lib/junit3.7.zip junit3.7/src.jar -d /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/tmp-junit; unzip junit3.7/src.jar; rm -f junit3.7/src.jar; rmdir junit3.7; chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
 	rm -rf /tmp/daikon/tmp-junit
+	(cd /tmp/daikon/java/junit; javac -g `find . -name '*.java'`)
+
 	## Log4j is a loss; can't include source because its build 
 	## configuration is so weird that it cannot be easily integrated.
 	mkdir /tmp/daikon/java/lib
@@ -394,6 +401,7 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES))
 
 	# Make the source distribution proper
+	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp; tar cf daikon-source.tar daikon)
 	cp -pf /tmp/daikon-source.tar .
 
@@ -540,3 +548,4 @@ dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
 	@echo "AJAX_JAVA_FILES = " $(AJAX_JAVA_FILES)
+	@echo "WWW_FILES = " $(WWW_FILES)
