@@ -3027,6 +3027,18 @@ invariants for the browsed code.
 * Context GUI::                 
 @end menu
 
+@node    Eclipse plug-in, Context GUI, GUIs, GUIs
+@section Eclipse plug-in
+@cindex Eclipse plug-in
+@cindex GUI, Eclipse
+
+Daikon is integrated with the 
+@uref{http://eclipse.org/, ,
+Eclipse} IDE (Integrated Development Environment) for Java.  For
+details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
+documentation}.
+
+
 @node    Tree GUI, Context GUI, GUIs, GUIs
 @section Tree-structured invariant browser
 @cindex Tree GUI
