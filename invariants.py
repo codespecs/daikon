@@ -57,6 +57,8 @@ if not locals().has_key("fn_var_infos"):
     # From function name to stats.  Used *only* if collect_stats = true
     fn_to_stats = {}
 
+    fn_derived_from = {}    # functions that have had derived vars introduced
+
     ## Function variables
     # Used to add invocation count variables for each program function.
     # (What do we do now, if not that??)
@@ -228,6 +230,7 @@ def clear_trace_variables():
     fn_invocations.clear()
     fn_to_orig_param_vals.clear()
     fn_to_stats.clear()
+    fn_derived_from.clear()
 
 def clear_invariants(fn_regexp=None):
     """Reset the values of invariants, globally."""
@@ -364,6 +367,9 @@ def parse_lackwit_vartype(raw_str, vartype):
             raw_str = raw_str[:-1]
         return tuple(ws_regexp.split(raw_str))
 
+def array_derived_vars(array, indices):
+    return ("%s-element" % array,) + tuple(map(lambda i,a=array: "%s-index%d" % (a,i), range(1,indices+1)))
+
 def lackwit_types_compatible(name1, type1, name2, type2):
     # print "lackwit_types_compatible", name1, type1, name2, type2
     assert type(name1) == types.StringType
@@ -384,8 +390,24 @@ def lackwit_types_compatible(name1, type1, name2, type2):
         assert type(name2) == types.StringType
         assert type(type2) == types.TupleType
 
+    if (type1[0] == 'array') and (type2[0] == 'array'):
+        # This isn't right.  I really want to loop over all the elements,
+        # generating the appropriate variables and ensuring that the
+        # subtypes are compatible.
+        assert len(type1) == len(type2)
+
+        dims = len(type1) - 2
+    	subnames1 = array_derived_vars(name1, dims)
+        subnames2 = array_derived_vars(name2, dims)
+        # I really want to use "all" or some such here.  Is that not built in?
+        results = map(lackwit_types_compatible, subnames1, type1[1:], subnames2, type2[1:])
+        return not (0 in results)
+
+
+    # Scalar type
     in12 = name1 in type2
     in21 = name2 in type1
+    # print "lackwit_types_compatible = ", in12, "for:", name1, type1, name2, type2
     assert in12 == in21
     return in12
 
@@ -1685,49 +1707,57 @@ def all_numeric_invariants(fn_regexp=None):
             # print "No values for function", fn_name
             continue
 
-        derivation_functions = (None, pass1_functions, pass2_functions)
-        derivation_passes = len(derivation_functions)-1
-        # First number: invariants are computed up to this index, non-inclusive
-        # Remaining numbers: values have been derived from up to these indices
-        derivation_index = (0,) * (derivation_passes+1)
+        if fn_derived_from.has_key(fn_name):
+            # Don't do any variable derivation, only invariant inference
+            numeric_invariants_over_index(
+                range(0, len(var_infos)), var_infos, var_values)
+        else:
+            # Perform variable derivation as well as invariant inference
+            fn_derived_from[fn_name] = true
 
-        # invariant:  len(var_infos) >= invariants_index >= derivation_index[0]
-        #   >= derivation_index[1] >= ...
+            derivation_functions = (None, pass1_functions, pass2_functions)
+            derivation_passes = len(derivation_functions)-1
+            # First number: invariants are computed up to this index, non-inclusive
+            # Remaining numbers: values have been derived from up to these indices
+            derivation_index = (0,) * (derivation_passes+1)
 
-        while derivation_index[-1] < len(var_infos):
-            assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
-            for i in range(0,derivation_index[1]):
-                vi = var_infos[i]
-                assert (not is_array_var_type(vi.type)) or vi.derived_len != None or not vi.is_canonical()
-            if debug_derive:
-                print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
+            # invariant:  len(var_infos) >= invariants_index >= derivation_index[0]
+            #   >= derivation_index[1] >= ...
 
-            # If derivation_index == (a, b, c) and n = len(var_infos), then
-            # the body of this loop:
-            #     * computes invariants over a..n
-            #     * does pass1 introduction for b..a
-            #     * does pass2 introduction for c..a
-            # and afterward, derivation_index == (n, a, b).
-
-            # original number of vars; this body may well add more
-            num_vars = len(var_infos)
-            if derivation_index[0] != num_vars:
-                numeric_invariants_over_index(
-                    range(derivation_index[0], num_vars), var_infos, var_values)
-
-            for pass_no in range(1,derivation_passes+1):
+            while derivation_index[-1] < len(var_infos):
+                assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
+                for i in range(0,derivation_index[1]):
+                    vi = var_infos[i]
+                    assert (not is_array_var_type(vi.type)) or vi.derived_len != None or not vi.is_canonical()
                 if debug_derive:
-                    print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
-                if derivation_index[pass_no] == derivation_index[pass_no-1]:
-                    continue
-                introduce_new_variables_one_pass(
-                    var_infos, var_values,
-                    range(derivation_index[pass_no], derivation_index[pass_no-1]),
-                    derivation_functions[pass_no])
+                    print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
-            derivation_index = (num_vars,) + derivation_index[:-1]
-            if debug_derive:
-                print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
+                # If derivation_index == (a, b, c) and n = len(var_infos), then
+                # the body of this loop:
+                #     * computes invariants over a..n
+                #     * does pass1 introduction for b..a
+                #     * does pass2 introduction for c..a
+                # and afterward, derivation_index == (n, a, b).
+
+                # original number of vars; this body may well add more
+                num_vars = len(var_infos)
+                if derivation_index[0] != num_vars:
+                    numeric_invariants_over_index(
+                        range(derivation_index[0], num_vars), var_infos, var_values)
+
+                for pass_no in range(1,derivation_passes+1):
+                    if debug_derive:
+                        print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
+                    if derivation_index[pass_no] == derivation_index[pass_no-1]:
+                        continue
+                    introduce_new_variables_one_pass(
+                        var_infos, var_values,
+                        range(derivation_index[pass_no], derivation_index[pass_no-1]),
+                        derivation_functions[pass_no])
+
+                derivation_index = (num_vars,) + derivation_index[:-1]
+                if debug_derive:
+                    print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
 
         assert len(var_infos) == len(var_values.keys()[0])
@@ -1751,7 +1781,7 @@ def all_numeric_invariants(fn_regexp=None):
 
 def numeric_invariants_over_index(indices, var_infos, var_values):
     """Install invariants in VAR_INFOS.
-    The installed invariants all have at least one element in INDICES.
+    The installed invariants will all have at least one element in INDICES.
     VAR_INFOS and VAR_VALUES are elements of globals `fn_var_infos' and
     `fn_var_values'."""
 
@@ -2104,7 +2134,10 @@ class invariant:
 
         if self.one_of:
             if len(self.one_of) == 1:
-                return "%s = %s" % (args, self.one_of[0])
+                if self.one_of == [None]:
+                    return None
+                else:
+                    return "%s = %s" % (args, self.one_of[0])
             ## Perhaps I should unconditionally return this value;
             ## otherwise I end up printing ranges more often than small
             ## numbers of values (because when few values and many samples,
