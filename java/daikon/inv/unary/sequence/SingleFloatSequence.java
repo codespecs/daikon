@@ -22,9 +22,10 @@ public abstract class SingleFloatSequence
   }
 
   /** Returns whether or not the specified types are valid  **/
-  public boolean valid_types (ProglangType[] rep_types) {
-    return ((rep_types.length == 1)
-            && rep_types[0].baseIsFloat() && rep_types[0].isArray());
+  public final boolean valid_types (VarInfo[] vis) {
+    return ((vis.length == 1)
+            && vis[0].file_rep_type.baseIsFloat()
+            && vis[0].file_rep_type.isArray());
   }
 
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.

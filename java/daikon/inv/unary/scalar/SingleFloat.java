@@ -22,8 +22,8 @@ public abstract class SingleFloat
   }
 
   /** Returns whether or not the specified types are valid for unary float **/
-  public boolean valid_types (ProglangType[] rep_types) {
-    return ((rep_types.length == 1) && rep_types[0].isFloat());
+  public final boolean valid_types (VarInfo[] vis) {
+    return ((vis.length == 1) && vis[0].file_rep_type.isFloat());
   }
 
   public VarInfo var() {

@@ -26,9 +26,9 @@ public abstract class SingleScalar
   }
 
   /** Returns whether or not the specified types are valid for unary scalar **/
-  public boolean valid_types (ProglangType[] rep_types) {
+  public final boolean valid_types (VarInfo[] vis) {
 
-    return ((rep_types.length == 1) && rep_types[0].isScalar());
+    return ((vis.length == 1) && vis[0].file_rep_type.isScalar());
   }
 
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.

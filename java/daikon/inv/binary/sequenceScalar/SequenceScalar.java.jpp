@@ -62,16 +62,17 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * subclasses accept a scalar in one parameter and an array over
    * the same scalar type in the other
    */
-  public boolean valid_types (ProglangType[] rep_types) {
+  public boolean valid_types (VarInfo[] vis) {
 
-    if (rep_types.length != 2)
+    if (vis.length != 2)
       return (false);
 
-    if (!rep_types[0].BASE_IS_SCALAR || !rep_types[1].BASE_IS_SCALAR)
+    if (!vis[0].file_rep_type.BASE_IS_SCALAR
+        || !vis[1].file_rep_type.BASE_IS_SCALAR)
       return (false);
 
-    return ((rep_types[0].isArray() && !rep_types[1].isArray())
-            || !rep_types[0].isArray() && rep_types[1].isArray());
+    return ((vis[0].file_rep_type.isArray() && !vis[1].file_rep_type.isArray())
+          || !vis[0].file_rep_type.isArray() && vis[1].file_rep_type.isArray());
   }
 
   /**
@@ -80,6 +81,14 @@ public abstract class CLASSNAME extends BinaryInvariant {
    */
   protected Invariant resurrect_done_swapped() {
     return this;
+  }
+
+  /**
+   * Since the order is determined from the vars and the sequence is always
+   * first, this is essentially symmetric.  Subclasses can override if necessary
+   */
+  public boolean is_symmetric() {
+    return (true);
   }
 
    // Check if swap occurred and call one of the other two methods

@@ -92,18 +92,21 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /** Returns whether or not the specified types are valid **/
-  public boolean valid_types (ProglangType[] rep_types) {
+  final public boolean valid_types (VarInfo[] vis) {
 
-    if (rep_types.length != 2)
+    if (vis.length != 2)
       return (false);
 
     #if defined(TYPELONG) || defined(TYPEDOUBLE) || defined(TYPESTRING)
-      boolean dim_ok = !rep_types[0].isArray() && !rep_types[1].isArray();
+      boolean dim_ok = !vis[0].file_rep_type.isArray()
+                        && !vis[1].file_rep_type.isArray();
     #else
-      boolean dim_ok = rep_types[0].isArray() && rep_types[1].isArray();
+      boolean dim_ok = vis[0].file_rep_type.isArray()
+                        && vis[1].file_rep_type.isArray();
     #endif
 
-    return (dim_ok && rep_types[0].BASE_IS_TYPE && rep_types[1].BASE_IS_TYPE);
+    return (dim_ok && vis[0].file_rep_type.BASE_IS_TYPE
+            && vis[1].file_rep_type.BASE_IS_TYPE);
   }
 
   /**
