@@ -163,14 +163,35 @@ public final class LinearBinaryCore implements java.io.Serializable {
 
   public static String format(String x, String y, double a, double b) {
     if ((a == 0) && (b == 0)) {
-      return y + " == 0 * " + x + " + 0";
+      return y + " == ? * " + x + " + ?";
     }
 
     return y + " == " + formatTerm(a, x, true) + formatTerm(b, null, false);
   }
 
+  public static String format_simplify(VarInfoName x, VarInfoName y, double da, double db) {
+    int a = (int) da;
+    int b = (int) db;
+
+    //      no data            or      non-integral
+    if (((a == 0) && (b == 0)) || (a != da) || (b != db)) {
+      return "format_simplify cannot handle " + format(x.name(), y.name(), da, db);
+    }
+
+    // y == a x + b
+    String str_y = y.simplify_name();
+    String str_x = x.simplify_name();
+    String str_ax = (a == 1) ? str_x : "(* " + a + " " + str_x + ")";
+    String str_axpb = (b == 0) ? str_ax : "(+ " + str_ax + " " + b + ")";
+    return "(EQ " + str_y + " " + str_axpb + ")";
+  }
+
   public String format(String x, String y) {
     return format(x, y, a, b);
+  }
+
+  public String format_simplify(VarInfoName x, VarInfoName y) {
+    return format_simplify(x, y, a, b);
   }
 
   // Format as "x = cy+d" instead of as "y = ax+b".
