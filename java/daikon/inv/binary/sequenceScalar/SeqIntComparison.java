@@ -96,7 +96,14 @@ public final class SeqIntComparison extends SequenceScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    String comparator = core.format_comparator();
+    if ("==".equals(comparator)) {
+      comparator = "EQ";
+    }
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ seqvar().name, sclvar().name });
+    return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
   public void add_modified(long [] a, long x, int count) {

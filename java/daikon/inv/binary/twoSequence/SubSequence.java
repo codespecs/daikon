@@ -50,11 +50,17 @@ public class SubSequence extends TwoSequence {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    String[] form =
+      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ var1().name, var2().name }, true); // elementwise does what we want
+    return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ var1().name, var2().name }, true); // elementwise does what we want
+    return form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {

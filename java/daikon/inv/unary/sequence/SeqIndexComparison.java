@@ -87,7 +87,14 @@ public final class SeqIndexComparison extends SingleSequence {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    String comparator = core.format_comparator();
+    if ("==".equals(comparator)) {
+      comparator = "EQ";
+    }
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ var().name });
+    return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
   }
 
   public void add_modified(long [] a, int count) {

@@ -250,13 +250,31 @@ public final class Member extends SEQUENCESCALAR {
     return sclvar().name.name() + " in " + seqvar().name.name();
   }
 
+#ifdef SCALAR
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    String[] form =
+      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ seqvar().name, sclvar().name });
+    String result = form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
+    return UtilMDE.replaceString(result, "forall", "exists");
   }
 
   public String format_simplify() {
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ seqvar().name, sclvar().name });
+    String result = form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
+    return UtilMDE.replaceString(result, "EXISTS", "EXISTS");
+  }
+
+#else
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+  public String format_simplify() {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
+#endif  
 
   public void add_modified(SCALAR[] a, SCALAR i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
@@ -267,7 +285,6 @@ public final class Member extends SEQUENCESCALAR {
       return;
     }
   }
-
 
   protected double computeProbability() {
     if (no_invariant)

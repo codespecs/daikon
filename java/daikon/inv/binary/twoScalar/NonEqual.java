@@ -45,7 +45,7 @@ public final class NonEqual extends TwoScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    return "(NEQ " + var1().name.simplify_name() + " " + var2().name.simplify_name() + ")";
   }
 
   public void add_modified(long v1, long v2, int count) {
