@@ -6,7 +6,8 @@
 -include Makefile.user
 
 JAVA ?= java
-JAVAC ?= jikes -g +E +F
+JAVAC ?= javac -g
+# JAVAC ?= jikes -g +E +F
 
 
 JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
