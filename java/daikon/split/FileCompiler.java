@@ -21,7 +21,8 @@ public final class FileCompiler {
   static {
     try {
       splitter_classname_pattern
-        = re_compiler.compile("([^" + UtilMDE.quote(File.separator) + "]+)\\.java");
+        = re_compiler.compile("([^" + UtilMDE.escapeNonJava(File.separator)
+                              + "]+)\\.java");
     } catch (MalformedPatternException me) {
       me.printStackTrace();
       throw new Error("Error in regexp: " + me.toString());
