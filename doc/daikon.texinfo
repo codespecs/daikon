@@ -2401,15 +2401,16 @@ expected by Parasoft's Jtest tool (@uref{http://www.parasoft.com}).
 Like the Java output format, this output format makes extensive use of
 helper methods defined in class @code{daikon.Quant}.
 
-@cindex ESC output format
-@cindex output format, ESC
+@cindex ESC/Java output format
+@cindex output format, ESC/Java
+@item ESC/Java format
 @item ESC format
 The Extended Static Checker for Java (ESC/Java) is a programming tool
 for finding errors in Java programs by checking annotations that are
 inserted in source code; for more details, see
-@uref{http://research.compaq.com/SRC/esc/}.  Daikon's ESC format is
-intended for use with the original ESC/Java tool.  Use Daikon's JML
-format for use with the
+@uref{http://research.compaq.com/SRC/esc/}.  Daikon's ESC/Java format
+(which can also be specified as ESC format) is intended for use with the
+original ESC/Java tool.  Use Daikon's JML format for use with the
 @uref{http://www.cs.kun.nl/sos/research/escjava/index.html, ,ESC/Java2}
 tool.
 
