@@ -27,7 +27,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   private int num_elts;
 
   private boolean is_boolean;
-  private boolean is_object;
+  private boolean is_hashcode;
 
   OneOfScalar (PptSlice ppt) {
     super(ppt);
@@ -37,7 +37,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     num_elts = 0;
 
     is_boolean = (var().type == ProglangType.BOOLEAN);
-    is_object = var().type.isObject();
+    is_hashcode = var().type.isObject() || var().type.isArray();
 
   }
 
@@ -93,14 +93,14 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       if (is_boolean) {
         Assert.assert((elts[0] == 0) || (elts[0] == 1));
         return var().name  + " = " + ((elts[0] == 0) ? "false" : "true");
-      } else if (is_object) {
+      } else if (is_hashcode) {
         if (elts[0] == 0) {
           return var().name  + " = null";
         } else {
-          return var().name  + " has only one value (" + elts[0] + ")";
+          return var().name  + " has only one value (hashcode=" + elts[0] + ")";
         }
       } else {
-      return var().name  + " = " +  elts[0]  ;
+        return var().name  + " = " +  elts[0]  ;
       }
 
     } else {
@@ -119,11 +119,11 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     }
 
     if ((is_boolean && (num_elts == 1))
-        || (is_object && (num_elts > 2))) {
+        || (is_hashcode && (num_elts > 2))) {
       destroy();
       return;
     }
-    if (is_object && (num_elts == 2)) {
+    if (is_hashcode && (num_elts == 2)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (elts[1] != 0)) {
         destroy();
@@ -141,7 +141,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
 
-    } else if (is_object && (num_elts > 1)) {
+    } else if (is_hashcode && (num_elts > 1)) {
       // This should never happen
       return Invariant.PROBABILITY_UNJUSTIFIED;
 

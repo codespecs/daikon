@@ -83,7 +83,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   private int num_elts;
 #if defined(SCALAR)
   private boolean is_boolean;
-  private boolean is_object;
+  private boolean is_hashcode;
 #endif
 
   ONEOFSCALAR(PptSlice ppt) {
@@ -100,7 +100,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     num_elts = 0;
 #if defined(SCALAR)
     is_boolean = (var().type == ProglangType.BOOLEAN);
-    is_object = var().type.isObject();
+    is_hashcode = var().type.isObject() || var().type.isArray();
 #endif
   }
 
@@ -169,14 +169,14 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       if (is_boolean) {
         Assert.assert((elts[0] == 0) || (elts[0] == 1));
         return NAME + " = " + ((elts[0] == 0) ? "false" : "true");
-      } else if (is_object) {
+      } else if (is_hashcode) {
         if (elts[0] == 0) {
           return NAME + " = " + "null";
         } else {
-          return NAME + " has only one value (" + elts[0] + ")";
+          return NAME + " has only one value (hashcode=" + elts[0] + ")";
         }
       } else {
-      return NAME + " = " + TOSTRING(elts[0]);
+        return NAME + " = " + TOSTRING(elts[0]);
       }
 #else
       return NAME + " = " + TOSTRING(elts[0]);
@@ -210,11 +210,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
 #if defined(SCALAR)
     if ((is_boolean && (num_elts == 1))
-        || (is_object && (num_elts > 2))) {
+        || (is_hashcode && (num_elts > 2))) {
       destroy();
       return;
     }
-    if (is_object && (num_elts == 2)) {
+    if (is_hashcode && (num_elts == 2)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (elts[1] != 0)) {
         destroy();
@@ -240,7 +240,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
 #if defined(SCALAR)
-    } else if (is_object && (num_elts > 1)) {
+    } else if (is_hashcode && (num_elts > 1)) {
       // This should never happen
       return Invariant.PROBABILITY_UNJUSTIFIED;
 #endif
