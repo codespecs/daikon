@@ -40,6 +40,10 @@ public final class VarComparabilityNone
     return 0;
   }
 
+  public boolean alwaysComparable() {
+    return true;
+  }
+
   /**
    * The best we can do without comparability info is to check if the
    * representation types in the data trace file are the same.  This

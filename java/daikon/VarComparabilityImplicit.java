@@ -76,6 +76,10 @@ public final class VarComparabilityImplicit
     return equality_set_ok (o);
   }
 
+  public boolean alwaysComparable() {
+    return (base < 0);
+  }
+
   static VarComparabilityImplicit parse(String rep, ProglangType vartype) {
     String rep_ = rep;          // for debugging
 
