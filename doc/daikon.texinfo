@@ -3985,7 +3985,8 @@ it finds, and writes these invariants into a splitter info file for conditional
 invariant detection.
 
 To find splitting conditions using cluster analysis, run the
-@command{runcluster.pl} program in the following way:
+@command{runcluster.pl} program (found in the @file{$DAIKONDIR/bin}
+directory) in the following way:
 @example
 runcluster.pl [OPTIONS] dtrace_file(s) decls_files(s)
 @end example
@@ -4008,26 +4009,14 @@ The options are:
            process.  This is a debugging flag.
 @end table
 
-The @command{runcluster.pl} program performs the following steps: 
-@enumerate
-@item Extracts the variable values from the data trace file.
-
-@item Performs clustering over these extract variables using a clustering
-tool. Three clustering programs are currently provided in the @file{$DAIKONDIR/bin} directory,
-with documentation on how to use them. They are implementations of the kmeans
-algorithm, hierarchical clustering and the xmeans algorithm (kmeans algorithm
-with efficient discovery of the number of clusters).
-
-@item Writes new data and decls files and, to each point in the data trace file,
-adds information about the cluster to which it belongs.
-
-@item Runs Daikon on the augmented data trace and decls files, splitting the
-data by cluster number and performing invariant detection in each cluster. The
-consequents of the resulting conditional invariants (which are invariants found
-in certain clusters, but not in others) are then extracted and written into a
-splitter info file.
-@end enumerate
-
+Three clustering programs are currently catered for by the runcluster.pl script,
+but it can be modified to cater to other clustering algorithm implementations
+fairly easily. They are implementations of the kmeans algorithm, hierarchical
+clustering and the xmeans algorithm (kmeans algorithm with efficient discovery
+of the number of clusters). The kmeans and hierarchical clustering tools are
+provided in the daikon distribution. The xmeans code and executable are publicly
+available at  @uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html,
+,http://www.cs.cmu.edu/~dpelleg/kmeans.html }
 
 @node    Tools, Extending Daikon, Enhancing Daikon output, Top
 @chapter Tools
