@@ -3,7 +3,7 @@
 <FindBugsFilter>
   <!-- Ignore libraries that are distributed with Daikon. -->
   <Match classregex="ajax.*" />
-  <Match classregex="org.apache.log4j.*" />
+  <Match classregex="org.apache.*" />
   <Match classregex="jtb.*" />
   <Match classregex="daikon.tools.jtb.cparser.*" />
   <Match classregex="junit.*" />
@@ -37,4 +37,33 @@
      </Match>
 -->
 
+
+  <!-- These uses are OK because they are used in testing code. -->
+  <Match class="utilMDE.TestUtilMDE$1InternTest">
+    <Method name="test" />
+    <BugCode name="Dm" />
+  </Match>
+  <Match class="utilMDE.UtilMDE.TestUtilMDE">
+    <Method name="testInternObject" />
+    <BugCode name="Dm" />
+  </Match>
+
+  <!-- Fix idioms not handled by FindBugs -->
+  <Match class="utilMDE.UtilMDE.NullableStringComparator">
+    <Method name="compare" params="java.lang.Object,java.lang.Object" returns="int" />
+    <BugCode name="NP" />
+  </Match>
+
+
+
+int ( o1, Object o2) {
+
+
 </FindBugsFilter>
+
+
+<!--
+Local Variables:
+auto-fill-function: nil
+End:
+-->
