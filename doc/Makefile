@@ -88,7 +88,7 @@ developer.ps: developer.dvi
 
 pdf: daikon.pdf developer.pdf
 
-pdf-direct: daikon.texinfo daikon.dvi images/daikon-logo.pdf images/gui-InvariantsDisplay-small.pdf images/gui-ControlPanel.pdf images/context-gui.pdf
+pdf-direct: daikon.texinfo daikon.dvi images/daikon-logo.pdf images/gui-InvariantsDisplay-small.pdf images/gui-ControlPanel.pdf images/context-gui.pdf images/dfepl-flow.pdf
 	pdftex $<
 
 # daikon.pdf: daikon.ps
