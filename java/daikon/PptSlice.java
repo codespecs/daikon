@@ -602,7 +602,8 @@ public abstract class PptSlice
     List invariantsToGuard = new ArrayList();
 
     if (debugGuarding.isDebugEnabled()) {
-      debugGuarding.debug("PptSlice.guardInvariants init: "); 
+      debugGuarding.debug("PptSlice.guardInvariants init: " + this.parent.ppt_name); 
+      debugGuarding.debug("  I have " + invs.size() + " invariants");
       for (int i=0; i<var_infos.length; i++) {
         try {
           debugGuarding.debug("  var_info[" + i +
@@ -621,19 +622,23 @@ public abstract class PptSlice
 
     for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
       Invariant inv = (Invariant)overInvs.next();
-
+      if (debugGuarding.isDebugEnabled()) {
+        debugGuarding.debug("  Trying to add implication for: " + inv.repr());
+      }
+      if (inv.isGuardingPredicate) {
+        debugGuarding.debug("  Continuing: this is a guarding predicate");
+        continue;
+      }
       Invariant guardingPredicate = inv.createGuardingPredicate();
       Invariant guardingImplication;
       if (debugGuarding.isDebugEnabled()) {
-        debugGuarding.debug("  Trying to add implication:");
         if (guardingPredicate != null) {
           debugGuarding.debug("  Predicate: " +
                               guardingPredicate.format_using(OutputFormat.JML));
           debugGuarding.debug("  Consequent: " +
                               inv.format_using(OutputFormat.JML));
         } else {
-        debugGuarding.debug("  No implication needed for: " +
-                            inv.format_using(OutputFormat.JML));
+          debugGuarding.debug("  No implication needed");
         }
       }
         
