@@ -226,6 +226,30 @@ public class Ast {
     return className + "." + methodDeclarator;
   }
 
+  // Returns the classname if the given type declaration declares a
+  // ClassOrInterfaceDeclaration. Otherwise returns null.
+  public static String getClassNameForType(TypeDeclaration d) {
+
+    /**
+     * Grammar production for TypeDeclaration:
+     * f0 -> ";"
+     *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
+     */
+
+    NodeChoice c = d.f0;
+    if (c.which == 0) {
+      return null;
+    } else {
+      NodeSequence seq = (NodeSequence)c.choice;
+      NodeChoice c2 = (NodeChoice)seq.elementAt(1);
+      if (c2.choice instanceof ClassOrInterfaceDeclaration) {
+        return getClassName(c2.choice);
+      } else {
+        return null;
+      }
+    }
+  }
+
   // Return the fully qualified name of the class containing the node.
   // (The result does not include the trailing period, though it did once.)
   // <package>.<class>*.<method>
