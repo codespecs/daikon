@@ -312,6 +312,7 @@ Troubleshooting
 * Daikon problems::             
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
+* Chicory problems::            
 * dfej problems::               
 * dfec problems::               
 * Reporting bugs::              
@@ -335,6 +336,10 @@ Large data trace (.dtrace) files
 * Reducing program points::     
 * Reducing variables::          
 * Reducing executions::         
+
+Problems with Chicory
+
+* VerifyError constant pool index error::  
 
 Problems with dfej
 
@@ -6870,6 +6875,7 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * Daikon problems::             
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
+* Chicory problems::            
 * dfej problems::               
 * dfec problems::               
 * Reporting bugs::              
@@ -7360,7 +7366,7 @@ faster on very large files.  In order to use
 @end enumerate
 
 
-@node    Parsing Java 5.0 code, dfej problems, Large dtrace files, Troubleshooting
+@node    Parsing Java 5.0 code, Chicory problems, Large dtrace files, Troubleshooting
 @section Parsing Java 5.0 code
 
 The Annotate (@pxref{Annotate}) and runtimechecker (@pxref{Runtime-check
@@ -7403,7 +7409,38 @@ as comments, and runtimechecker silently ignores them.)
 @c your system administrator to do so.
 
 
-@node    dfej problems, dfec problems, Parsing Java 5.0 code, Troubleshooting
+@node    Chicory problems, dfej problems, Parsing Java 5.0 code, Troubleshooting
+@section Problems with Chicory
+
+@menu
+* VerifyError constant pool index error::  
+@end menu
+
+@node    VerifyError constant pool index error,  , Chicory problems, Chicory problems
+@subsection VerifyError constant pool index error
+
+@cindex VerifyError, when running Chicory
+@cindex java.lang.VerifyError, when running Chicory
+@cindex illegal constant pool index error, when running Chicory
+@cindex constant pool index error, when running Chicory
+
+Chicory throws an error such as the following:
+@example
+Exception in thread "main" java.lang.VerifyError: 
+  (class: ps1/PublicTest, method: <init> signature: (Ljava/lang/String;)V)
+  Illegal constant pool index
+@end example
+@noindent
+then the problem is most likely that your classpath contains a version
+of the BCEL library (@file{bcel.jar}) that is not compatible with Java
+5.  You should either remove that version of BCEL from your classpath,
+or you should ensure that it appears after @file{daikon.jar}.  (If you
+are running Daikon from sources rather than from @file{daikon.jar}, then
+ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
+BCEL on your classpath.)
+
+
+@node    dfej problems, dfec problems, Chicory problems, Troubleshooting
 @section Problems with dfej
 
 @menu
