@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2004-07-10 13:35:16 mernst>
+# Time-stamp: <2004-12-03 16:10:10 jhp>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -23,6 +23,7 @@
 
 use English;
 use strict;
+use filetest 'access';  # needed for afs!
 $WARNING = 1;			# "-w" command-line switch
 
 my $debug = 0;
