@@ -57,6 +57,8 @@ public final class Diff {
 
     boolean optionSelected = false;
 
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
+
     Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpv");
     int c;
     while ((c = g.getopt()) !=-1) {
