@@ -30,7 +30,7 @@ public class Dataflow
    * Indicate progress for FileIOProgress.
    **/
   public static String progress = "";
-  
+
   // Temporary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest
   //
@@ -71,7 +71,7 @@ public class Dataflow
         init_partial_order(ppt, all_ppts);
       }
       progress = null;
-      
+
       // Create or modify the data flow and invariant flow vectors.  We
       // *must* recompute all of them, rather than just the new ones.
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
@@ -181,7 +181,7 @@ public class Dataflow
                                          VarInfo[] higher,
                                          VarInfoName.Transformer higher_xform)
   {
-    debug.debug ("Setup_po_same_name");
+    debugInit.debug ("Setup_po_same_name");
     for (int i=0; i<higher.length; i++) {
       VarInfo higher_vi = higher[i];
       VarInfoName higher_vi_name = higher_xform.transform(higher_vi.name);
@@ -189,12 +189,13 @@ public class Dataflow
         VarInfo lower_vi = lower[j];
         VarInfoName lower_vi_name = lower_xform.transform(lower_vi.name);
         if (higher_vi_name == lower_vi_name) { // VarInfoNames are interned
-          // Commented because it's inside a loop
-          //      if (debugInit.isDebugEnabled()) {
-          //        debugInit.debug ("Lower and higher: " + lower_vi_name.name() + " " + higher_vi_name.name());
-          //        debugInit.debug ("Lower and higher ppt: " + lower_vi.ppt.name + " " + higher_vi.ppt.name);
+          if (debugInit.isDebugEnabled()) {
+            debugInit.debug ("Lower and higher: " + lower_vi_name.name()
+                + " " + higher_vi_name.name());
+            debugInit.debug ("Lower and higher ppt: " + lower_vi.ppt.name
+                + " " + higher_vi.ppt.name);
 
-          //      }
+          }
 
           // Why is this guard needed?  Because there could be
           // transforms where Foo.x gets set up with Foo.x
@@ -360,7 +361,11 @@ public class Dataflow
         debugInit.debug ("Processing VarInfo: " + vi.name.name());
       }
 
-      if (vi.name.equals(VarInfoName.THIS)) continue;
+      if (vi.name.equals(VarInfoName.THIS)) {
+        debugInit.debug ("Skipping because name is 'this': " + vi.name.name());
+        continue;
+      }
+
       // Arguments are the things with no controller yet
       if (vi.po_higher().size() == 0) {
         debugInit.debug ("  which is an orphan");
@@ -386,14 +391,37 @@ public class Dataflow
     }
     // For each known-type variable, substitute its name for
     // 'this' in the OBJECT ppt and see if we get any expression
-    // matches with other orphaned variables.
-
+    // matches with other orphaned variables.  Note that only the
+    // fields of the object (eg, this.x, this.y) and not the object
+    // itself (eg, this) are substituted in this fashion.
+    //
+    // While it could be argued that a pointer to an object of type T
+    // and the this pointer in an object of type T are analogous, they are
+    // really not the same.  The pointer is a reference to the object while
+    // 'this' is really the object itself.  The relationship is also not
+    // intuitive when looking at the invariants.  For example, assume that
+    // every reference to T at all ppts was not null.  This invariant would
+    // print as 'this != null.'  The invariant is both confusing (since
+    // in a normal context 'this' can never be null) and it is not obvious
+    // that it implies that all references to the object are not NULL.
+    //
     // So for example, if we have a and a.x in a lower ppt B, where a
-    // is of type A, we relate the two variables to this and this.x in
-    // the ppt for A.  We do this by using a transformer that replaces
-    // "this" with a and checks for matches between A:::a and B:::a.
+    // is of type A, we relate a.x to this.x in the ppt for A.  We do
+    // this by using a transformer that replaces "this" with a and
+    // checks for matches between A:::a and B:::a.  This transformer
+    // explicitly rejects variables whose name is exactly 'this'
 
-    debugInit.debug ("Entering second stage: ");
+    if (debugInit.isDebugEnabled()) {
+      String orphan_str = "";
+      for (Iterator ii = orphans.iterator(); ii.hasNext(); )
+        orphan_str += ((VarInfo)ii.next()).name.name() + " ";
+      String known_str = "";
+      for (Iterator it = known.keySet().iterator(); it.hasNext(); )
+        known_str += ((VarInfo) it.next()).name.name() + " ";
+      debugInit.debug ("Entering second stage, orphans: " + orphan_str
+                        + " known = " + known_str);
+      }
+
     VarInfo[] orphans_array = (VarInfo[]) orphans.toArray(new VarInfo[orphans.size()]);
     for (Iterator it = known.keySet().iterator(); it.hasNext(); ) {
       final VarInfo known_vi = (VarInfo) it.next();
@@ -408,8 +436,11 @@ public class Dataflow
                          // but with known_vi.name in for "this"
                          new VarInfoName.Transformer() {
                              public VarInfoName transform(VarInfoName v) {
-                               return v.replaceAll(VarInfoName.THIS,
-                                                   known_vi.name);
+                               if (v == VarInfoName.THIS)
+                                 return (v);
+                               else
+                                 return v.replaceAll(VarInfoName.THIS,
+                                                     known_vi.name);
                              }
                            }
                          );
@@ -522,6 +553,9 @@ public class Dataflow
     public VarAndSource(VarInfo _var, int _source) {
       var = _var;
       source = _source;
+    }
+    public String toString() {
+      return (var.name.name() + " [" + source + "/" + var.varinfo_index + "]");
     }
   }
 
@@ -673,6 +707,17 @@ public class Dataflow
                                               boolean all_steps,
                                               boolean higher)
   {
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("compute_ppt_flow for " + ppt.name + " all_steps = "
+                       + all_steps + " higher = " + higher);
+      String vars = "";
+      for (Iterator ii = start.iterator(); ii.hasNext(); ) {
+        VarAndSource vs = (VarAndSource) ii.next();
+        vars += vs.var.name.name() + "[" + vs.source + "] ";
+      }
+      debugInit.debug ("vars = " + vars);
+    }
+
     // We could assert that start's VarInfos are from ppt, and that
     // the VarAndSources have right the varinfo_index for them.
 
@@ -719,6 +764,19 @@ public class Dataflow
         dataflow_ppts.add(flow_ppt);
         dataflow_transforms.add(flow_transform);
 
+        // Debug print flow_ppt, flow_ppt vars, transforms, and head list
+        if (debugInit.isDebugEnabled()) {
+          debugInit.debug ("  Add flow ppt: " + flow_ppt.name);
+          String vars = "";
+          for (int ii = 0; ii < flow_ppt.var_infos.length; ii++)
+            vars += flow_ppt.var_infos[ii].name.name() + " ";
+          debugInit.debug ("  With vars: " + vars);
+          debugInit.debug ("  Add transforms: "
+                            + ArraysMDE.toString (flow_transform));
+          vars = "";
+          debugInit.debug ("  head var list: " + head);
+        }
+
         // Extend head using all higher (or lower) nonces
         Map nonce_to_vars = new HashMap(); // [Integer -> List[VarAndSource]]
         for (Iterator i = head.iterator(); i.hasNext(); ) {
@@ -728,6 +786,10 @@ public class Dataflow
           for (int nonce_idx = 0; nonce_idx < higher_vis.size(); nonce_idx++) {
             VarInfo higher_vi = (VarInfo) higher_vis.get(nonce_idx);
             Integer higher_nonce = new Integer(higher_nonces[nonce_idx]);
+            if (debugInit.isDebugEnabled()) {
+              debugInit.debug ("  var " + vs + " po " + higher_vi.name.name()
+                               + "[nonce = " + higher_nonce + "]");
+            }
             // newpath has type List[VarAndSource].
             List newpath = (List) nonce_to_vars.get(higher_nonce);
             if (newpath == null) {
@@ -742,6 +804,8 @@ public class Dataflow
           List newpath = (List) nonce_to_vars.get(nonce);
           Assert.assertTrue(newpath != null);
           worklist.add(newpath);
+          if (debugInit.isDebugEnabled())
+            debugInit.debug ("  Added new worklist: " + newpath);
         }
 
         // Put in a null to signal that all of the fields of the original
