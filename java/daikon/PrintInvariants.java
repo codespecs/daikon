@@ -17,6 +17,8 @@ public class PrintInvariants {
       "      Suppress display of implied invariants (by controlling ppt).",
       "  --" + Daikon.suppress_post_SWITCH,
       "      Suppress display of obvious postconditions on prestate.",
+      "  --" + Daikon.suppress_redundant_SWITCH,
+      "      Suppress display of logically redundant invariants.", 
       "  --" + Daikon.esc_output_SWITCH,
       "      Write output in ESC-like format.",
       "  --" + Daikon.simplify_output_SWITCH,
