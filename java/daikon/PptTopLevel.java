@@ -681,8 +681,8 @@ public class PptTopLevel
     Assert.assertTrue(dataflow_transforms != null, name);
     Assert.assertTrue(dataflow_ppts.length == dataflow_transforms.length, name);
 
-    if (debugSuppress.isDebugEnabled()) {
-      debugSuppress.debug ("<<< Doing add_and_flow() for " + name);
+    if (debugFlow.isDebugEnabled()) {
+      debugFlow.debug ("<<< Doing add_and_flow() for " + name);
     }
 
     for (int i=0; i < dataflow_ppts.length; i++) {
@@ -731,9 +731,14 @@ public class PptTopLevel
     //       debugFlow.debug ("Add for " + this.name);
     //     }
 
+    if (debugSuppress.isDebugEnabled()) {
+      debugSuppress.debug ("<<< Doing add() for " + name);
+      // debugSuppress.debug ("    with vt " + vt);
+    }
+
 
     if (values_num_samples == 0) {
-      //       debugFlow.debug ("  Instantiating views for the first time");
+      debugFlow.debug ("  Instantiating views for the first time");
       instantiate_views_and_invariants();
 
       if (Global.debugInfer.isDebugEnabled()) {
@@ -750,11 +755,6 @@ public class PptTopLevel
 
 
     Set viewsToCheck = new HashSet(viewsAsCollection());
-
-    if (debugSuppress.isDebugEnabled()) {
-      debugSuppress.debug ("<<< Doing add() for " + name);
-      // debugSuppress.debug ("    with vt " + vt);
-    }
 
     int checkCount = 0;
     Invariants invsFlowed = new Invariants();

@@ -634,6 +634,11 @@ public final class Daikon {
         try {
           if (debugTrace.isDebugEnabled()) {
             debugTrace.debug ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
+            debugTrace.debug ("Used memory: " +
+                              (java.lang.Runtime.getRuntime().totalMemory()
+                               - java.lang.Runtime.getRuntime().freeMemory()));
+
+
             // We sleep shorter so we can get more information.
             sleep(500);
           } else {

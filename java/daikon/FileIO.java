@@ -734,6 +734,7 @@ public final class FileIO {
 
         if (debugRead.isDebugEnabled()) {
           debugRead.debug("Adding ValueTuple to " + ppt.name);
+          debugRead.debug("  length is " + vt.vals.length);
         }
         ppt.add_and_flow(vt, 1);
 

@@ -56,6 +56,7 @@ public final class SequenceFloatIntersectionFactory  extends BinaryDerivationFac
 
     if (debug.isDebugEnabled()) {
       debug.debug("Instantiatiating " + seq1.name + " and " + seq2.name);
+      debug.debug("  in " + seq1.ppt.ppt_name);
     }
 
     return new BinaryDerivation[] {
