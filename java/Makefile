@@ -182,6 +182,7 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/PairwiseNumericFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequence.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFloat.java \
+	daikon/inv/binary/twoSequence/TwoSequenceString.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFactory.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequenceString.java \
@@ -224,13 +225,24 @@ AUTO_GENERATED_FILES = \
 	daikon/derive/unary/SequenceInitialFloat.java \
 	daikon/derive/unary/SequenceInitialFactory.java \
 	daikon/derive/unary/SequenceInitialFactoryFloat.java \
-	daikon/inv/binary/twoSequence/TwoSequenceString.java \
+
+
+# These files were auto-generated previously; they still might exist in
+# some user's directory.
+OLD_AUTO_GENERATED_FILES = \
+	daikon/inv/binary/twoScalar/FunctionUnaryCore.java \
+	daikon/inv/binary/twoScalar/FunctionUnaryCoreFloat.java \
+	daikon/inv/binary/twoScalar/FunctionUnary.java \
+	daikon/inv/binary/twoScalar/FunctionUnaryFloat.java \
+	daikon/inv/binary/twoSequence/PairwiseFunctionUnary.java \
+	daikon/inv/binary/twoSequence/PairwiseFunctionUnaryFloat.java \
+
+OLD_AUTO_GENERATED_CLASSES = $(subst .java,.class,${OLD_AUTO_GENERATED_FILES})
 
 
 # These files cannot be generated until everything else has been compiled.
 AUTO_GENERATED_FILES_2 = \
 	daikon/test/split/SplitterFactoryTest.java \
-
 
 AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
@@ -314,14 +326,15 @@ daikon/Runtime.class: daikon/Runtime.java
 # It's good to run "make clean" occasionally, because it costs little to
 # regenerate .class files and it's bad to continue to use an orphaned class
 # file (whose source file was renamed).  Or, run "orphaned-class-files".
-# The downside is that the regenerated .class files might cause some Make
-# rules to unnecessarily re-run, if the code hasn't actually changed.
+# The (slight) downside is that the regenerated .class files might cause some
+# Make rules to unnecessarily re-run, if the code hasn't actually changed.
 clean:
 	-rm -f `find . -name "*.class" -print`
 	# java/daikon might be a symbolic link; the alternative is to pass
 	# "-follow" to the above find command, but I don't necessarily
 	# want to remove everything reachable through symbolic links.
 	-rm -f `find daikon -follow -name "*.class" -print`
+	-rm -f ${OLD_AUTO_GENERATED_FILES}
 
 dist_clean: clean
 	-rm -f TAGS

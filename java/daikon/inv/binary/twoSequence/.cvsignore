@@ -9,8 +9,6 @@ SuperSet.java
 SuperSetFloat.java
 PairwiseLinearBinary.java
 PairwiseLinearBinaryFloat.java
-PairwiseFunctionUnary.java
-PairwiseFunctionUnaryFloat.java
 TwoSequence.java
 TwoSequenceFloat.java
 TwoSequenceString.java
@@ -41,3 +39,5 @@ PairwiseFloatLessThan.java
 PairwiseFloatGreaterThan.java
 PairwiseFloatLessEqual.java
 PairwiseFloatGreaterEqual.java
+PairwiseNumericInt.java
+PairwiseNumericFloat.java

@@ -14,10 +14,6 @@ IntGreaterThan.java
 FloatGreaterThan.java
 IntGreaterEqual.java
 FloatGreaterEqual.java
-FunctionUnaryCore.java
-FunctionUnaryCoreFloat.java
-FunctionUnary.java
-FunctionUnaryFloat.java
 LinearBinaryCore.java
 LinearBinaryCoreFloat.java
 LinearBinary.java
@@ -28,3 +24,5 @@ TwoScalarFactory.java
 TwoFloatFactory.java
 TwoScalar.java
 TwoFloat.java
+NumericInt.java
+NumericFloat.java
