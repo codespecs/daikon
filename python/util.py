@@ -646,6 +646,8 @@ def expand_file_name(filename):
 ### Forms
 ###
 
+re_class = re.compile("a").__class__
+
 def read_form(file, form):
     """Reads input from the file, parse the input according to the form,
     and returns a list of values.
@@ -660,8 +662,6 @@ def read_form(file, form):
       (the next pattern is tried).  The last pattern should not be optional,
       lest this code gobble a line without processing it.
     """
-
-    re_class = re.compile("a").__class__
 
     # First, convert any strings to regular expressions
     for elt in form:
