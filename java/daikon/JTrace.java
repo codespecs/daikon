@@ -10,7 +10,7 @@
  */
 
 package daikon;
- 
+
 import java.lang.reflect.*;
 
 import daikon.JTraceInference;
@@ -23,7 +23,7 @@ abstract class JTrace
 	// This usage message is displayed on behalf of the toplevel
 	// driver script.
         if(args.length < 1) {
-            println(V_ERROR, 
+            println(V_ERROR,
 		    "usage: jtrace [options] -- <classname> [args] ...");
 	    return;
         }
@@ -34,7 +34,7 @@ abstract class JTrace
 
 	// Crank up the system (load the libJTrace.so debugger)
 	System.loadLibrary("JTrace");
-       
+
 	JTrace.verbosity = getVerbosity();
 
 	// create and start the data-harvesting loop:
@@ -86,7 +86,7 @@ abstract class JTrace
 	    return null;
 	}
 	catch(Throwable e) {
-	    println(V_ERROR, "JTrace: couldn't load class `" + target 
+	    println(V_ERROR, "JTrace: couldn't load class `" + target
 			       + "': " + e.getMessage());
 	    return null;
 	}
@@ -94,7 +94,7 @@ abstract class JTrace
 	Method method = null;
 	try {
 	    method = cls.getMethod("main", new Class[] { String[].class });
-	} 
+	}
 	catch(Throwable e) {
 	    println(V_ERROR, "JTrace: couldn't find method `main' in class `"
 			       + target + "'.");
@@ -107,7 +107,7 @@ abstract class JTrace
 	{
 	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
 			       "modifiers.");
-	    return null; 
+	    return null;
 	}
 
 	if(!method.toString().equals("public static void " + target +
@@ -115,7 +115,7 @@ abstract class JTrace
 	{
 	    println(V_ERROR, "JTrace: target's method `main' has wrong sig: "
 			       + method);
-	    return null; 
+	    return null;
 	}
 
 	return method;
@@ -132,26 +132,23 @@ abstract class JTrace
 	}
         catch(InvocationTargetException e)
 	{
-	    try {
-		throw e.getTargetException();
-	    }
-	    catch(SystemExitException e2)
+	    if (e.getTargetException() instanceof SystemExitException)
 	    {
 		println(V_INFO, "JTrace: System.exit() intercepted.");
 		// XXX note -- shutdown hooks not yet called;
 		// target threads could still be running.  What do we do?
 	    }
-	    catch(Throwable e2)
+	    else
 	    {
-		println(V_INFO, "JTrace: target exited due to exception: " 
-				   + e2);
+		println(V_INFO, "JTrace: target exited due to exception: "
+				   + e);
 	    }
 	}
 	catch(Throwable e)
-	{	    
+	{
 	    println(V_ERROR, "JTrace: target's method `main' could not be "+
 			       "invoked: "  + e);
-	    return false; 
+	    return false;
 	}
 
 	return true;
@@ -160,12 +157,12 @@ abstract class JTrace
     // startTracing() enables tracing for this thread and causes all
     // subsequently-forked threads to be traced as well (if the "all
     // threads" option is specified).
-    private native static void		startTracing(Thread threadID);	
+    private native static void		startTracing(Thread threadID);
 
     // stopTracing() causes the STOP marker to be introduced into the
     // control stream, which the inference thread will take as a cue
     // to shutdown.
-    private native static void		stopTracing(Thread threadID);	
+    private native static void		stopTracing(Thread threadID);
 
     // get the verbosity level from the underlying C system
     private native static int		getVerbosity();
@@ -188,7 +185,7 @@ abstract class JTrace
 	public void checkPermission(java.security.Permission p, Object o) {}
 	public void checkPermission(java.security.Permission p) {}
     }
-   
+
     // exported to JTraceInference:
 
     static final int V_ERROR	= 0;
