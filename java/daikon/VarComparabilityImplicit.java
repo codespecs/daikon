@@ -67,12 +67,12 @@ public final class VarComparabilityImplicit
     return base;
   }
 
-  public boolean Equals (Object o) {
+  public boolean equals (Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }
 
-  public boolean Equals (VarComparabilityImplicit o) {
+  public boolean equals (VarComparabilityImplicit o) {
     return equality_set_ok (o);
   }
 
