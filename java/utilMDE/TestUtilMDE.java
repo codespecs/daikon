@@ -116,6 +116,51 @@ public final class TestUtilMDE extends TestCase {
   ///
 
   public static void testArraysMDE() {
+
+    // public static int no_dups(int[] a)
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -2, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.no_dups(new int[] {}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {42}) == true);
+
+
+
+    // public static int no_dups(long[] a)
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -2, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.no_dups(new long[] {}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {42}) == true);
+
+
+    // public static int no_dups(double[] a)
+    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.no_dups(new double[] {1., 1.001, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {1., 2, -2.00, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.no_dups(new double[] {}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {42}) == true);
+
+    // public static int no_dups(String[] a)
+    assertTrue (ArraysMDE.no_dups(new String[] {"1", "2", "3", "5", "4","0"})
+                == true);
+    assertTrue (ArraysMDE.no_dups(new String[] {"A","a", "foo", "Foo",""})
+                == true);
+    assertTrue (ArraysMDE.no_dups(new String[] {" ", " "})
+                == false);
+    assertTrue (ArraysMDE.no_dups(new String[] {"  ", " "})
+                == true);
+
+
     // public static int min(int[] a)
     assertTrue(ArraysMDE.min(new int[] { 1,2,3 }) == 1);
     assertTrue(ArraysMDE.min(new int[] { 2,33,1 }) == 1);
