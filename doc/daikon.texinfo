@@ -2293,7 +2293,7 @@ The value of @code{a[]} (that is, the array object, not the reference
 @code{a}) in the pre-state, indexed by the post-state value of i:
 @{22, 23@}[1]
 
-@item orig(a)[orig[i]) = 24
+@item orig(a)[orig(i)] = 24
 orig(a) is the original value of the reference @code{a}, not
 @code{a}'s original elements: @{24, 25@}[0]
 
