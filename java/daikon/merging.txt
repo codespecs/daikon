@@ -38,7 +38,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 (8) Commit the files under $inv/daikon.ver3 to CVS, using a log
     message that communicates the time you ran step 3 (which is the
     same as the time at the top of the merge history).  Be sure to
-    commit your changes to this file, as well.
+    commit your changes to this file (merging.txt), as well.
 
 
 ==========================================================================

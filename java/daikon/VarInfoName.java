@@ -815,16 +815,6 @@ public abstract class VarInfoName
   }
 
   /**
-   * Returns a name for the intersection of with another sequence, like
-   * "union(a[], b[])"
-   **/
-  public VarInfoName applyUnion(VarInfoName seq2) {
-    Assert.assert(seq2 != null);
-    return (new Union(this, seq2)).intern();
-  }
-
-
-  /**
    * Intersection of two sequences.  Extends FunctionOfTwo, and the
    * only change is that it does special formatting for IOA.
    **/
@@ -842,6 +832,15 @@ public abstract class VarInfoName
       return "(" + getArg(0).ioa_name() + " \\I " + getArg(1).ioa_name() + ")";
     }
 
+  }
+
+  /**
+   * Returns a name for the intersection of with another sequence, like
+   * "union(a[], b[])"
+   **/
+  public VarInfoName applyUnion(VarInfoName seq2) {
+    Assert.assert(seq2 != null);
+    return (new Union(this, seq2)).intern();
   }
 
   /**
