@@ -1,8 +1,13 @@
 #!/uns/bin/perl -w
 
+### WARINNG!
+### As of 11/12/99, this does not work:  it uses an out-of-date
+### trace file format.
+
+
 ## Previous named "reduce-traces".
 
-# Given a directory containing trace files, copy them to a new directory,
+# Given a directory containing only trace files, copy them to a new directory,
 # including only data for functions matching the regular expression.  This
 # can effectively split large trace files into a multiplicity of smallers
 # ones.  This might save on time spent reading input files.
@@ -13,7 +18,8 @@ use strict;
 use Carp;
 use checkargs;
 
-my $orig_dir = "/projects/se/people/jake/replace_traces";
+my $orig_dir = "/homes/gws/mernst/tmp/traces";
+# my $orig_dir = "/projects/se/people/jake/replace_traces";
 # my $orig_dir = "/homes/fish/mernst/tmp/trace-test";
 
 # my $new_dir = "/projects/se/people/jake/replace_traces_makepat";
