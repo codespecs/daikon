@@ -390,7 +390,7 @@ junit:
 JAVADOC_DEST  = doc
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
-                -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
+                -linkoffline http://java.sun.com/j2se/1.4.2/docs/api/ http://java.sun.com/j2se/1.4.2/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # Note that this excludes Ajax
 JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v ajax | grep -v '\#'`
