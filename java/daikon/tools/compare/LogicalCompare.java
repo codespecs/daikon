@@ -29,20 +29,6 @@ import gnu.getopt.*;
  * preconditions.
  **/
 
-import java.util.*;
-import java.io.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import utilMDE.Assert;
-import utilMDE.UtilMDE;
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.string.*;
-import daikon.simplify.*;
-import daikon.inv.Invariant.OutputFormat;
-
 public class LogicalCompare {
   // Options corresponding to command-line flags
   private static boolean opt_proofs         = false;
@@ -100,6 +86,9 @@ public class LogicalCompare {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
+      if (inv instanceof GuardingImplication)
+        inv = ((Implication)inv).consequent();
+//       System.err.println("Examining " + inv.format());
       if (inv instanceof LowerBound || inv instanceof UpperBound ||
           inv instanceof EltLowerBound || inv instanceof EltUpperBound ||
           inv instanceof LowerBoundFloat || inv instanceof UpperBoundFloat ||
@@ -135,6 +124,9 @@ public class LogicalCompare {
       if (inv.format_using(OutputFormat.DAIKON)
           .indexOf("warning: too few samples") != -1)
         continue;
+      if (inv.isGuardingPredicate)
+        continue;
+//       System.err.println("Keeping   " + inv.format());
       new_invs.add(inv);
     }
     return new_invs;
@@ -143,7 +135,7 @@ public class LogicalCompare {
   // This is a modified version of the method with the same name from
   // the DerivedParameterFilter, with an exception for invariants
   // indicating that variables are unchanged (except that that
-  // excpetion is currently turned off)
+  // exception is currently turned off)
   private static boolean shouldDiscardInvariant( Invariant inv ) {
     for (int i = 0; i < inv.ppt.var_infos.length; i++) {
       VarInfo vi = inv.ppt.var_infos[i];
@@ -156,12 +148,13 @@ public class LogicalCompare {
           VarInfo var2 = comp.var2();
           boolean vars_are_same = var1.name.applyPrestate().equals(var2.name)
             || var2.name.applyPrestate().equals(var1.name);
-          //if (vars_are_same) return false;
+          if (vars_are_same) return false;
         }
 //         if (inv instanceof OneOf || inv instanceof OneOfString ||
 //             inv instanceof OneOfString)
 //           return false;
-        //System.err.println("Because of " + vi.name.name() + ",");
+//         System.err.println("Because of " + vi.name.name() + ", discarding "
+//                            + inv.format());
         return true;
       }
     }
@@ -299,6 +292,11 @@ public class LogicalCompare {
                                   PptTopLevel test_enter_ppt,
                                   PptTopLevel app_exit_ppt,
                                   PptTopLevel test_exit_ppt) {
+    app_enter_ppt.guardInvariants();
+    test_enter_ppt.guardInvariants();
+    app_exit_ppt.guardInvariants();
+    test_exit_ppt.guardInvariants();
+
     Vector a_pre = app_enter_ppt.invariants_vector();
     Vector t_pre = test_enter_ppt.invariants_vector();
     Vector a_post = app_exit_ppt.invariants_vector();
