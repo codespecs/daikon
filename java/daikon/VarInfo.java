@@ -48,6 +48,10 @@ public final class VarInfo
    **/
   public VarInfoName name;      // interned
 
+  public String name() {
+    return (name.name());
+  }
+
   /** Type as declared in the program. **/
   public ProglangType type;      // interned
 
