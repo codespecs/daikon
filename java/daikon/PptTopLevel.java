@@ -284,18 +284,21 @@ public class PptTopLevel extends Ppt {
 
   void set_controlling_ppts(PptMap all_ppts)
   {
-    // System.out.println("set_controlling_ppts: " + name);
     // TODO: also require that this is a public method
     if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
       PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeObject());
       if (object_ppt != null) {
-        // System.out.println("set_controlling_ppts(" + name + "): " + object_ppt.name);
 	controlling_ppts.add(object_ppt);
+      } else {
+	// If we didn't find :::OBJECT, fall back to :::CLASS
+	PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
+	if (class_ppt != null) {
+	  controlling_ppts.add(class_ppt);
+	}
       }
     } else if (ppt_name.isObjectInstanceSynthetic()) {
       PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
       if (class_ppt != null) {
-        // System.out.println("set_controlling_ppts(" + name + "): " + class_ppt.name);
 	controlling_ppts.add(class_ppt);
       }
     }
