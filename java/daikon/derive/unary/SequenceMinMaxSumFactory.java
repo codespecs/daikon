@@ -16,6 +16,7 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
       return null;
     if (elttype.base() == "char") // interned
       return null;
+    // Should be reversed at some point; for now, will improve runtime.m
     if (Daikon.esc_output)
       return null;
 
