@@ -11,6 +11,8 @@ versions as the user manual.
 
 ===========================================================================
 
+Removed old V2 code and support for top-down and the global ppt
+
 Changed the way that invariants are instantiated.  The get_proto()
 method now always returns a prototype invariant (even if the invariant
 is not enabled).  The enabled() method was added to return whether or
