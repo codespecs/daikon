@@ -41,6 +41,23 @@ public final class IntComparison extends TwoScalar implements Comparison {
                          + ", seqvar2=" + seqvar2);
     }
 
+    { // Tests involving sequence lengths.
+
+      SequenceLength sl1 = null;
+      if (var1.isDerived() && (var1.derived instanceof SequenceLength))
+        sl1 = (SequenceLength) var1.derived;
+      SequenceLength sl2 = null;
+      if (var2.isDerived() && (var2.derived instanceof SequenceLength))
+        sl2 = (SequenceLength) var2.derived;
+
+      // Avoid "size(a)-1 cmp size(b)-1"; use "size(a) cmp size(b)" instead.
+      if ((sl1 != null) && (sl2 != null)
+          && ((sl1.shift == sl2.shift) && (sl1.shift != 0) || (sl2.shift != 0))) {
+        // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
+        return null;
+      }
+    }
+
     boolean only_eq = false;
     boolean obvious_lt = false;
     boolean obvious_gt = false;
@@ -142,7 +159,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
   /* IOA */
   public String format_ioa(String classname) {
     String comparator = core.format_comparator();
-    comparator = comparator.equals("==") ? "=" : comparator;
+    comparator = comparator.equals("==") ? "=" : comparator; // "interned"
     return var1().name.ioa_name(classname)+" "+comparator+" "+var2().name.ioa_name(classname);
   }
 
@@ -153,10 +170,10 @@ public final class IntComparison extends TwoScalar implements Comparison {
   }
 
   public void add_modified(long v1, long v2, int count) {
-    if (ppt.debugged) {
-      System.out.println("IntComparison" + ppt.varNames() + ".add_modified("
-                         + v1 + "," + v2 + ", count=" + count + ")");
-    }
+    // if (ppt.debugged) {
+    //   System.out.println("IntComparison" + ppt.varNames() + ".add_modified("
+    //                      + v1 + "," + v2 + ", count=" + count + ")");
+    // }
     core.add_modified(v1, v2, count);
   }
 
@@ -264,17 +281,16 @@ public final class IntComparison extends TwoScalar implements Comparison {
       }
     }
     { // Sequence length tests
+
       SequenceLength sl1 = null;
       if (var1.isDerived() && (var1.derived instanceof SequenceLength))
         sl1 = (SequenceLength) var1.derived;
       SequenceLength sl2 = null;
       if (var2.isDerived() && (var2.derived instanceof SequenceLength))
         sl2 = (SequenceLength) var2.derived;
-      if ((sl1 != null) && (sl2 != null)
-          && ((sl1.shift == sl2.shift) && (sl1.shift != 0) || (sl2.shift != 0))) {
-        // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
-        return true;
-      }
+
+      // "size(a)-1 cmp size(b)-1" is never even instantiated;
+      // use "size(a) cmp size(b)" instead.
 
       // This might never get invoked, as equality is printed out specially.
       VarInfo s1 = (sl1 == null) ? null : sl1.base;
