@@ -44,8 +44,11 @@ pdf: daikon.pdf
 pdf-direct: daikon.texinfo daikon.dvi
 	pdftex $<
 
-daikon.pdf: daikon.ps
-	ps2pdf $<
+# daikon.pdf: daikon.ps
+# 	ps2pdf $<
+
+daikon.pdf: daikon.dvi
+	dvipdfm $<
 
 clean:
 	rm -f daikon.log daikon.info daikon.info-[0-9] daikon.tmp daikon.dvi daikon.ps daikon.pdf daikon.html .fix-menu
