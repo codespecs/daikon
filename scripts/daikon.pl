@@ -33,7 +33,9 @@ use Getopt::Long;
 # environment vars
 
 $TAR_MANIFEST_TAG = $ENV{'TAR_MANIFEST_TAG'} || '-T'; # change to -I for athena tar
-$DAIKON_WRAPPER_CLASSPATH = $ENV{'DAIKON_WRAPPER_CLASSPATH'} || '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
+$DAIKON_WRAPPER_CLASSPATH = $ENV{'DAIKON_WRAPPER_CLASSPATH'} ||
+    $ENV{'CLASSPATH'} ||
+    '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
 
 $cp_lib = $DAIKON_WRAPPER_CLASSPATH;
 $cp_dot = $cp_lib . ':.';
