@@ -279,7 +279,7 @@
 @item daikon.inv.unary.sequence.EltOneOf.size
   Positive integer.  Specifies the maximum set size for this type
  of invariant (x is one of 'n' items).
-  The default value is `5'.
+  The default value is `3'.
 
 @item daikon.inv.unary.sequence.EltUpperBound.enabled
   Boolean.  True iff EltUpperBound  invariants should be considered.
