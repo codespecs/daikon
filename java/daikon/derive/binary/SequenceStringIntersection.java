@@ -1,29 +1,3 @@
-#if 0
-Do not attempt to compile this file with a Java compiler such as javac.
-You first need to preprocess it with cpp, the C preprocessor.
-The correct way to build the system is to run 'make'.
-#endif
-
-#if !(defined(SCALAR) || defined(STRING))
-#error "One of SCALAR or STRING should be defined"
-#endif
-
-#if defined(SCALAR)
-#undef SCALAR
-#define SCALAR long
-#define SCALARSEQUENCESINTERSECTION SequenceScalarIntersection
-#define SCALARSEQUENCESINTERSECTION_STRING "SequenceScalarIntersection"
-#define INTERN(v) Intern.internedLong(v)
-#elif defined(STRING)
-#define SCALAR String
-#define SCALARSEQUENCESINTERSECTION SequenceStringIntersection
-#define SCALARSEQUENCESINTERSECTION_STRING "SequenceStringIntersection"
-#define IN_THIS_PARTICULAR_CASE the string is already interned
-#define INTERN(v) v
-#else
-#error "One of SCALAR or STRING should be defined"
-#endif
-
 package daikon.derive.binary;
 
 import daikon.*;
@@ -37,11 +11,10 @@ import org.apache.log4j.Category;
 // it is automatically generated from SequencesIntersection.java.jpp
 // *****
 
-public final class SCALARSEQUENCESINTERSECTION
+public final class SequenceStringIntersection 
   extends BinaryDerivation
 {
-  public static final Category debug = Category.getInstance("daikon.derive.binary" + SCALARSEQUENCESINTERSECTION_STRING);
-
+  public static final Category debug = Category.getInstance("daikon.derive.binarySequenceStringIntersection" );
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -51,11 +24,11 @@ public final class SCALARSEQUENCESINTERSECTION
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SCALARSEQUENCESINTERSECTION derived variables should be generated.
+   * Boolean.  True iff SequenceStringIntersection  derived variables should be generated.
    **/
   public static boolean dkconfig_enabled = false;
 
-  public SCALARSEQUENCESINTERSECTION(VarInfo vi1, VarInfo vi2) {
+  public SequenceStringIntersection (VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 
@@ -71,23 +44,23 @@ public final class SCALARSEQUENCESINTERSECTION
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING;
-    SCALAR[] val1_array = (SCALAR[]) val1;
+    String [] val1_array = (String []) val1;
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
       return ValueAndModified.MISSING;
-    SCALAR[] val2_array = (SCALAR[]) val2;
+    String [] val2_array = (String []) val2;
 
-    SCALAR[] tmp = new SCALAR[val1_array.length + val2_array.length];
+    String [] tmp = new String [val1_array.length + val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
-      SCALAR v = val1_array[i];
+      String  v = val1_array[i];
       if ((ArraysMDE.indexOf(val2_array, v)!=-1) &&
 	  (size==0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1)))
 	tmp[size++] = v;
     }
 
-    SCALAR[] intersect = ArraysMDE.subarray(tmp, 0, size);
-    intersect = (SCALAR []) Intern.intern(intersect);
+    String [] intersect = ArraysMDE.subarray(tmp, 0, size);
+    intersect = (String  []) Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
 		&& (mod2 == ValueTuple.UNMODIFIED))
@@ -99,7 +72,6 @@ public final class SCALARSEQUENCESINTERSECTION
   protected VarInfo makeVarInfo() {
     debug.debug ("Computing varInfo");
 
-
     VarInfoName name = base1.name.applyIntersection(base2.name);
     ProglangType type = base1.type;
     ProglangType file_rep_type = base1.file_rep_type;
@@ -108,14 +80,8 @@ public final class SCALARSEQUENCESINTERSECTION
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SCALARSEQUENCESINTERSECTION);
+    return (other instanceof SequenceStringIntersection );
   }
 
 }
 
-
-#if 0
-// Local Variables:
-// mode: java
-// End:
-#endif

@@ -12,15 +12,17 @@ The correct way to build the system is to run 'make'.
 #undef SCALAR
 #define PROGLANG_INT ProglangType.INT
 #define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
-#define SCALARSEQUENCESINTERSECTIONFACTORY ScalarSequencesIntersectionFactory
-#define SCALARSEQUENCESINTERSECTION ScalarSequencesIntersection
+#define SCALARSEQUENCESINTERSECTIONFACTORY SequenceScalarIntersectionFactory
+#define SCALARSEQUENCESINTERSECTIONFACTORY_STRING "SequenceScalarIntersectionFactory"
+#define SCALARSEQUENCESINTERSECTION SequenceScalarIntersection
 #elif defined(STRING)
 #define THIS_UNDEF_OF_STRING is for "ProglangType.STRING"
 #undef STRING
 #define PROGLANG_INT ProglangType.STRING
 #define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
-#define SCALARSEQUENCESINTERSECTIONFACTORY StringSequencesIntersectionFactory
-#define SCALARSEQUENCESINTERSECTION StringSequencesIntersection
+#define SCALARSEQUENCESINTERSECTIONFACTORY SequenceStringIntersectionFactory
+#define SCALARSEQUENCESINTERSECTIONFACTORY_STRING "SequenceStringIntersectionFactory"
+#define SCALARSEQUENCESINTERSECTION SequenceStringIntersection
 #else
 #error "One of SCALAR or STRING should be defined"
 #endif
@@ -32,6 +34,7 @@ import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 
 import utilMDE.*;
+import org.apache.log4j.Category;
 import java.util.*;
 
 // *****
@@ -45,7 +48,14 @@ import java.util.*;
 
 public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFactory {
 
+  /**
+   * Debug tracer.
+   **/
+
+  public static final Category debug = Category.getInstance("daikon.derive.binary" + SCALARSEQUENCESINTERSECTIONFACTORY_STRING);
+
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
+
     if (!SCALARSEQUENCESINTERSECTION.dkconfig_enabled) {
       return null;
     }
@@ -54,6 +64,7 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
         || (seq2.rep_type != PROGLANG_INT_ARRAY)) {
       return null;
     }
+
 
     // Intersect only sets with the same declared element type
     if (!seq1.type.base().equals(seq2.type.base()))
@@ -65,6 +76,11 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
     // For now, do nothing if the sequences are derived.
     if ((seq1.derived != null)||(seq2.derived != null))
       return null;
+
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Instantiatiating " + seq1.name + " and " + seq2.name);
+    }
+
 
     return new BinaryDerivation[] {
 	new SCALARSEQUENCESINTERSECTION(seq1, seq2) };

@@ -12,15 +12,17 @@ The correct way to build the system is to run 'make'.
 #undef SCALAR
 #define PROGLANG_INT ProglangType.INT
 #define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
-#define SCALARSEQUENCESUNIONFACTORY ScalarSequencesUnionFactory
-#define SCALARSEQUENCESUNION ScalarSequencesUnion
+#define SCALARSEQUENCESUNIONFACTORY SequenceScalarUnionFactory
+#define SCALARSEQUENCESUNIONFACTORY_STRING "SequenceScalarUnionFactory"
+#define SCALARSEQUENCESUNION SequenceScalarUnion
 #elif defined(STRING)
 #define THIS_UNDEF_OF_STRING is for "ProglangType.STRING"
 #undef STRING
 #define PROGLANG_INT ProglangType.STRING
 #define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
-#define SCALARSEQUENCESUNIONFACTORY StringSequencesUnionFactory
-#define SCALARSEQUENCESUNION StringSequencesUnion
+#define SCALARSEQUENCESUNIONFACTORY SequenceStringUnionFactory
+#define SCALARSEQUENCESUNIONFACTORY_STRING "SequenceStringUnionFactory"
+#define SCALARSEQUENCESUNION SequenceStringUnion
 #else
 #error "One of SCALAR or STRING should be defined"
 #endif

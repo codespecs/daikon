@@ -10,7 +10,7 @@ import utilMDE.*;
 // it is automatically generated from SequencesUnion.java.jpp
 // *****
 
-public final class StringSequencesUnion 
+public final class SequenceStringUnion 
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -21,11 +21,11 @@ public final class StringSequencesUnion
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff StringSequencesUnion  derived variables should be generated.
+   * Boolean.  True iff SequenceStringUnion  derived variables should be generated.
    **/
   public static boolean dkconfig_enabled = false;
 
-  public StringSequencesUnion (VarInfo vi1, VarInfo vi2) {
+  public SequenceStringUnion (VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 
@@ -79,7 +79,7 @@ public final class StringSequencesUnion
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof StringSequencesUnion );
+    return (other instanceof SequenceStringUnion );
   }
 
 }

@@ -105,6 +105,9 @@ public final class SequencesPredicate
 
     Assert.assert(val2 == null || val2 instanceof long[]);
 
+    length1 = Math.min (length1, length2);
+    length2 = Math.min (length1, length2);
+
     Assert.assert(length1 == length2);
 
     int mod = ValueTuple.UNMODIFIED;
@@ -175,14 +178,22 @@ public final class SequencesPredicate
   }
 
   public String toString() {
-    return "[SequencesPredicate of " + var1().toString() + " " +
-      var2().toString() + " for " + name + "]";
+    // Hack to prevent recursion
+    return "[SequencesPredicate of " + var1().name + " " +
+      var2().name + " for " + name + "]";
 
   }
 
   public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
-    throw new UnsupportedOperationException("Not implemented");
+    if (other instanceof SequencesPredicate) {
+      SequencesPredicate o = (SequencesPredicate) other;
+      return o.var1().equals(var1())
+	&& o.var2().equals(var2())
+	&& choose == o.choose;
+    }
+    return false;
   }
 
 }
+

@@ -192,7 +192,7 @@ public final class SequencesJoin
   }
 
   public String toString() {
-    return "[SequencesJoin of " + var1().toString() + " " + var2().toString() + "]";
+    return "[SequencesJoin of " + var1().name + " " + var2().name + "]";
 
   }
 

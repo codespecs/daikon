@@ -11,11 +11,13 @@ The correct way to build the system is to run 'make'.
 #if defined(SCALAR)
 #undef SCALAR
 #define SCALAR long
-#define SCALARSEQUENCESUNION ScalarSequencesUnion
+#define SCALARSEQUENCESUNION SequenceScalarUnion
+#define SCALARSEQUENCESUNION_STRING "SequenceScalarUnion"
 #define INTERN(v) Intern.internedLong(v)
 #elif defined(STRING)
 #define SCALAR String
-#define SCALARSEQUENCESUNION StringSequencesUnion
+#define SCALARSEQUENCESUNION SequenceStringUnion
+#define SCALARSEQUENCESUNION_STRING "SequenceStringUnion"
 #define IN_THIS_PARTICULAR_CASE the string is already interned
 #define INTERN(v) v
 #else

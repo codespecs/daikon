@@ -4,7 +4,19 @@ import daikon.*;
 
 import java.util.Iterator;
 
+import org.apache.log4j.Category;
+
 public final class SequenceLengthFactory extends UnaryDerivationFactory {
+
+
+  /**
+   * Debug output.
+   *
+   *
+   **/
+
+  public static final Category debug =
+    Category.getInstance("daikon.derive.unary.SequenceLengthFactory");
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
     if (!SequenceLength.dkconfig_enabled) {
@@ -41,6 +53,10 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
     if (! SequenceLength.applicable(vi)) {
       Global.tautological_suppressed_derived_variables++;
       return null;
+    }
+
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Instantiating for " + vi.name + " in " + vi.ppt);
     }
 
     return new UnaryDerivation[] { new SequenceLength(vi, 0),

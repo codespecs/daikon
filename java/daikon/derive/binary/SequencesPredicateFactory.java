@@ -32,9 +32,11 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
     }
 
 
-    if (!(var2.file_rep_type == ProglangType.BOOLEAN_ARRAY)) {
-      return null;
-    }
+
+    //
+    //      if (!(var2.file_rep_type == ProglangType.BOOLEAN_ARRAY)) {
+    //        return null;
+    //      }
 
 
 
@@ -43,7 +45,13 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
       return null;
     }
 
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Trying " + var1.name + " and " + var2.name);
+    }
+
     if (var1.name.equals(var2.name)) return null;
+
+    /*
 
     if (!(var1.name instanceof VarInfoName.Field) ||
 	!(var2.name instanceof VarInfoName.Field))   return null;
@@ -58,6 +66,13 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
 
     // Assert.assert(var1.isCanonical()); // [INCR]
     // Assert.assert(var2.isCanonical()); // [INCR]
+
+    */
+
+    if (!var1.domainTypeIOA().equals(var2.domainTypeIOA())) {
+      debug.debug ("Incorrect domains");
+      return null;
+    }
 
     if (debug.isDebugEnabled()) {
       debug.debug (var1.ppt + ": " + var1.name + " and " +

@@ -16,15 +16,15 @@ import java.util.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public final class StringSequencesUnionFactory  extends BinaryDerivationFactory {
+public final class SequenceScalarUnionFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
-    if (! StringSequencesUnion.dkconfig_enabled) {
+    if (! SequenceScalarUnion .dkconfig_enabled) {
       return null;
     }
 
-    if ((seq1.rep_type != ProglangType.STRING_ARRAY )
-        || (seq2.rep_type != ProglangType.STRING_ARRAY )) {
+    if ((seq1.rep_type != ProglangType.INT_ARRAY )
+        || (seq2.rep_type != ProglangType.INT_ARRAY )) {
       return null;
     }
 
@@ -40,7 +40,7 @@ public final class StringSequencesUnionFactory  extends BinaryDerivationFactory 
       return null;
 
     return new BinaryDerivation[] {
-	new StringSequencesUnion (seq1, seq2) };
+	new SequenceScalarUnion (seq1, seq2) };
   }
 }
 

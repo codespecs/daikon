@@ -49,8 +49,8 @@ public final class SequenceInitial
     // not a prefix subsequence (sequence slice) we have added.
     if (vi.derived != null) {
       Assert.assert((vi.derived instanceof SequenceScalarSubsequence) ||
-		    (vi.derived instanceof ScalarSequencesIntersection) ||
-		    (vi.derived instanceof ScalarSequencesUnion));
+		    (vi.derived instanceof SequenceScalarIntersection) ||
+		    (vi.derived instanceof SequenceScalarUnion));
       return false;
     }
 

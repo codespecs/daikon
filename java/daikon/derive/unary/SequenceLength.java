@@ -32,14 +32,24 @@ public final class SequenceLength
 
     if (vi.derived != null) {
       Assert.assert((vi.derived instanceof SequenceScalarSubsequence) ||
-		    (vi.derived instanceof StringSequencesIntersection) ||
-		    (vi.derived instanceof ScalarSequencesIntersection) ||
-		    (vi.derived instanceof StringSequencesUnion) ||
-		    (vi.derived instanceof ScalarSequencesUnion) ||
+		    (vi.derived instanceof SequenceStringIntersection) ||
+		    (vi.derived instanceof SequenceScalarIntersection) ||
+		    (vi.derived instanceof SequenceStringUnion) ||
+		    (vi.derived instanceof SequenceScalarUnion) ||
 		    (vi.derived instanceof SequencesConcat)      ||
 		    (vi.derived instanceof SequencesJoin)
 		    );
-      return false;
+
+      if (
+	  (vi.derived instanceof SequenceStringIntersection) ||
+	  (vi.derived instanceof SequenceScalarIntersection) ||
+	  (vi.derived instanceof SequenceStringUnion) ||
+	  (vi.derived instanceof SequenceScalarUnion) 
+	  ) 
+
+	return true;
+      else
+	return false;
     }
     // Don't do this for now, because we depend on being able to call
     // sequenceSize() later.
