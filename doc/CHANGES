@@ -11,6 +11,12 @@ versions as the user manual.
 
 ===========================================================================
 
+3.1.2
+
+Added configuration option daikon.FileIO.continue_after_ioexception.
+
+---------------------------------
+
 3.1.1 (01 July 2004)
 
 Modified Java formatting to used FuzzyFloat comparisons rather than
