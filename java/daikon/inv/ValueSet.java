@@ -152,6 +152,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
 
     long min_val = Long.MAX_VALUE;
     long max_val = Long.MIN_VALUE;
+    int max_length = 0;
     int elem_cnt = 0;
     int multi_arr_cnt = 0;  // number of arrays with 2 or more elements
 
@@ -168,6 +169,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
         elem_cnt += val.length;
         if (val.length > 1)
           multi_arr_cnt++;
+        if (val.length > max_length)
+          max_length = val.length;
       }
       add(UtilMDE.hash((long[]) v1));
     }
@@ -178,12 +181,14 @@ public abstract class ValueSet extends LimitedSizeIntSet
       max_val = Math.max (max_val, vs.max_val);
       elem_cnt += vs.elem_cnt;
       multi_arr_cnt += vs.multi_arr_cnt;
+      max_length = Math.max (max_length, vs.max_length);
     }
 
     public long min() { return (min_val); }
     public long max() { return (max_val); }
     public int elem_cnt() { return (elem_cnt); }
     public int multi_arr_cnt() { return (multi_arr_cnt); }
+    public int max_length() { return (max_length); }
 
     public String repr_short() {
       if (size() > 0)
@@ -202,6 +207,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
 
     double min_val = Long.MAX_VALUE;
     double max_val = Long.MIN_VALUE;
+    int max_length = 0;
     int elem_cnt = 0;
     int multi_arr_cnt = 0;  // number of arrays with 2 or more elements
 
@@ -218,6 +224,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
         elem_cnt += val.length;
         if (val.length > 1)
           multi_arr_cnt++;
+        if (val.length > max_length)
+          max_length = val.length;
       }
       add(UtilMDE.hash(val));
     }
@@ -228,12 +236,14 @@ public abstract class ValueSet extends LimitedSizeIntSet
       max_val = Math.max (max_val, vs.max_val);
       elem_cnt += vs.elem_cnt;
       multi_arr_cnt += vs.multi_arr_cnt;
+      max_length = Math.max (max_length, vs.max_length);
     }
 
     public double min() { return (min_val); }
     public double max() { return (max_val); }
     public int elem_cnt() { return (elem_cnt); }
     public int multi_arr_cnt() { return (multi_arr_cnt); }
+    public int max_length() { return (max_length); }
 
     public String repr_short() {
       if (size() > 0)
