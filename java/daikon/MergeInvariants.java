@@ -135,7 +135,7 @@ public class MergeInvariants {
     for (int i = 0; i < inv_files.size(); i++) {
       File file = (File) inv_files.get(i);
       debugProgress.fine ("Processing " + file);
-      PptMap ppts = FileIO.read_serialized_pptmap (file, true);
+      PptMap ppts = FileIO.read_serialized_pptmap (file, false);
       ppts.repCheck();
       pptmaps.add (ppts);
     }
