@@ -109,6 +109,45 @@ public abstract class CLASSNAME extends SUPERCLASS {
    */
   private static List func_list = new ArrayList();
 
+  private static void build_func_list() {
+    // Build the map of functions to array of instances for that function
+    debug.fine ("Processing " + #CLASSNAME);
+    functions = new LinkedHashMap();
+    Class[] subclasses = CLASSNAME.class.getDeclaredClasses();
+    for (int ii = 0; ii < subclasses.length; ii++) {
+      Class subc = subclasses[ii];
+      String function = subc.getName();
+      function = function.replaceFirst (".*FunctionBinary\\$", "");
+      function = function.replaceFirst ("_.*", "");
+      if (function.equals ("SubClass"))
+        continue;
+      CLASSNAME[] fb_arr = (CLASSNAME[]) functions.get (function);
+      if (fb_arr == null) {
+        fb_arr = new CLASSNAME[7];
+        functions.put (function, fb_arr);
+        func_list.add (fb_arr);
+      }
+      int func_id = func_list.indexOf (fb_arr);
+      CLASSNAME fb = null;
+      try {
+        Constructor con = subc.getDeclaredConstructor (new Class[] {});
+        fb = (CLASSNAME) con.newInstance (new Object[] {});
+
+        // Field var_order_field = subc.getDeclaredField ("var_order");
+        // var_order = var_order_field.getInt (null);
+        // Field func_id_field = subc.getDeclaredField ("function_id");
+        // func_id_field.setInt (null, func_list.size() - 1);
+      }  catch (Exception e) {
+        throw new Error (" can't create instance for " + subc.getName());
+      }
+      Assert.assertTrue (fb_arr[fb.get_var_order()] == null);
+      fb_arr[fb.get_var_order()] = fb;
+      fb.set_function_id (func_id);
+      debug.fine ("Adding " + function + " " + fb.getClass().getName()
+                  + " " + fb.get_var_order() + " " + fb.get_function_id());
+    }
+  }
+
   /**
    * Returns a list of all of the FunctionBinary invariants setup for the
    * specified slice.
@@ -117,43 +156,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // If this is the first call
     if (functions == null) {
-
-      // Build the map of functions to array of instances for that function
-      debug.fine ("Processing " + #CLASSNAME);
-      functions = new LinkedHashMap();
-      Class[] subclasses = CLASSNAME.class.getDeclaredClasses();
-      for (int ii = 0; ii < subclasses.length; ii++) {
-        Class subc = subclasses[ii];
-        String function = subc.getName();
-        function = function.replaceFirst (".*FunctionBinary\\$", "");
-        function = function.replaceFirst ("_.*", "");
-        if (function.equals ("SubClass"))
-          continue;
-        CLASSNAME[] fb_arr = (CLASSNAME[]) functions.get (function);
-        if (fb_arr == null) {
-          fb_arr = new CLASSNAME[7];
-          functions.put (function, fb_arr);
-          func_list.add (fb_arr);
-        }
-        int func_id = func_list.indexOf (fb_arr);
-        CLASSNAME fb = null;
-        try {
-          Constructor con = subc.getDeclaredConstructor (new Class[] {});
-          fb = (CLASSNAME) con.newInstance (new Object[] {});
-
-          // Field var_order_field = subc.getDeclaredField ("var_order");
-          // var_order = var_order_field.getInt (null);
-          // Field func_id_field = subc.getDeclaredField ("function_id");
-          // func_id_field.setInt (null, func_list.size() - 1);
-        }  catch (Exception e) {
-          throw new Error (" can't create instance for " + subc.getName());
-        }
-        Assert.assertTrue (fb_arr[fb.get_var_order()] == null);
-        fb_arr[fb.get_var_order()] = fb;
-        fb.set_function_id (func_id);
-        debug.fine ("Adding " + function + " " + fb.getClass().getName()
-                    + " " + fb.get_var_order() + " " + fb.get_function_id());
-      }
+      build_func_list();
     }
 
     // Instantiate all of the subclasses and return them
@@ -258,6 +261,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (this);
 
     // Find the class that corresponds to the new order
+    if (functions == null)
+      build_func_list();
     int func_id = get_function_id();
     CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (func_id);
     Assert.assertTrue (fb_arr != null);
