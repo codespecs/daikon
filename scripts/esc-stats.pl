@@ -13,13 +13,13 @@ use Carp;
 my @types = ("invariant","set","requires","modifies","ensures","exsures","also_req","also_mods","also_ens","also_exs");
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
 my %prefixes = 
-    (EVU => "/*@",
-     EVR => "/**@",
-     ENU => "/*#",
-     ENR => "/**#",
-     IU => "/*!",
-     IR => "/**!",
-     A => "//@",
+    (EVU => "/*@",   # Expressible Verified Unique
+     EVR => "/**@",  # Expressible Verified Redundant
+     ENU => "/*#",   # Expressible Unverified Unique
+     ENR => "/**#",  # Expressible Unverified Redundant
+     IU => "/*!",    # Inexpressible Unique
+     IR => "/**!",   # Inexpressible Redundant
+     A => "//@",     # Added by hand
      );
 
 for my $file (@ARGV) {
