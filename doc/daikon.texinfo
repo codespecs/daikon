@@ -6309,15 +6309,15 @@ invariants can only be obtained dynamically from class
 A future release of Daikon will provide tools that process the list in
 the following ways:
 @enumerate
-@item To write a file of all the violations for a program execution.
 @cindex WriteViolationFile tool
-  A prototype of such a tool is provided in the Daikon distribution, as
-  program @code{daikon.tools.runtimechecker.WriteViolationFile}.  If you
-  would ordinarily run your program as @samp{java MyProg arg1 arg2},
-  then running @samp{java daikon.tools.runtimechecker.WriteViolationFile
-  MyProg arg1 arg2} creates a file called @file{violations.txt} in the
-  current directory.  If the program under test calls
-  @code{System.exit}, then no @file{violations.txt} file is created.
+@item To write a file of all the violations for a program execution.
+A prototype of such a tool is provided in the Daikon distribution, as
+program @code{daikon.tools.runtimechecker.WriteViolationFile}.  If you
+would ordinarily run your program as @samp{java MyProg arg1 arg2},
+then running @samp{java daikon.tools.runtimechecker.WriteViolationFile
+MyProg arg1 arg2} creates a file called @file{violations.txt} in the
+current directory.  If the program under test calls
+@code{System.exit}, then no @file{violations.txt} file is created.
 @item Throw an exception when any violation occurs.
 @end enumerate
 
