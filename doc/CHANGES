@@ -7,6 +7,10 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.8 (6 May 2002):
+
+Add example C files to distribution; add manual section describing them.
+
 2.3.7 (1 May 2002):
 
 Rewrite of dfec documentation.  dfec is now easier to use, more robust, and

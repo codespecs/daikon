@@ -320,10 +320,14 @@ daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS)
 	mkdir /tmp/daikon/bin
 	cp -p $(SCRIPT_PATHS) /tmp/daikon/bin
 
-	# Example files
+	# Java example files
 	cp -pR examples /tmp/daikon
 	# Keep .java files, delete everything else
 	cd /tmp/daikon && find examples \( -name '*.java' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+	# C example files
+	cp examples/c-examples.tar.gz /tmp/daikon/examples
+	cd /tmp/daikon/examples && tar zxf c-examples.tar.gz
+	rm /tmp/daikon/examples/c-examples.tar.gz
 
 	chgrp -R $(INV_GROUP) /tmp/daikon
 
