@@ -566,6 +566,12 @@ public final class ProglangType
             || (this == BOOLEAN));
   }
 
+  public boolean baseIsScalar() {
+    return (baseIsIntegral()
+            || (base == BASE_BOOLEAN)
+            || (base == BASE_HASHCODE));
+  }
+
   public boolean baseIsFloat() {
     return ((base == BASE_DOUBLE) || (base == BASE_FLOAT));
   }
@@ -587,6 +593,10 @@ public final class ProglangType
 
   public boolean baseIsString() {
     return (base == BASE_STRING);
+  }
+
+  public boolean isString() {
+    return ((dimensions == 0) && baseIsString());
   }
 
   /**
@@ -655,6 +665,16 @@ public final class ProglangType
     for (int i=0; i<dimensions; i++)
       sb.append("[]");
     return sb.toString();
+  }
+
+  public static String toString (ProglangType[] types) {
+    String out = "[";
+    for (int i = 0; i < types.length; i++) {
+      if (out != "[")
+        out += ", ";
+      out += types[i];
+    }
+    return (out + "]");
   }
 
   public String toString() {
