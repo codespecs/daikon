@@ -6,7 +6,7 @@ if (! $?LC_ALL) setenv LC_ALL en_US
 if (! $?DAIKONPARENT) setenv DAIKONPARENT ${HOME}/research
 setenv DAIKONDIR ${DAIKONPARENT}/invariants
 
-if (-d ${DAIKONDIR} then
+if (! -d ${DAIKONDIR}) then
   echo "*****"
   echo "pag-daikon.cshrc cannot find ${DAIKONDIR}"
   echo "Please check out Daikon to correct this problem."
@@ -59,3 +59,4 @@ alias bibfind /afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail
 if (! $?EDITOR) setenv EDITOR emacsclient
 if (! $?ALTERNATE_EDITOR) setenv ALTERNATE_EDITOR emacs
 if (! $?VISUAL) setenv VISUAL emacsclient
+

@@ -61,3 +61,4 @@ export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
 export VISUAL=${VISUAL:-emacsclient}
+
