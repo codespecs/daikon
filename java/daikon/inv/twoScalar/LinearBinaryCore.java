@@ -1,17 +1,19 @@
 package daikon.inv.twoScalar;
 
 import daikon.inv.*;
+import utilMDE.*;
 
-public class LinearBinaryCore {
+public final class LinearBinaryCore implements java.io.Serializable {
 
   final static boolean debugLinearBinaryCore = false;
+  // final static boolean debugLinearBinaryCore = true;
 
   // y == ax + b;
   public int a, b;
 
   Invariant wrapper;
 
-  int values_seen = 0;
+  public int values_seen = 0;
 
   final static int MINPAIRS = 4;
 
@@ -24,22 +26,32 @@ public class LinearBinaryCore {
 
   public void add_modified(int x, int y, int count) {
     if (values_seen < MINPAIRS) {
+      // We delay computation of a and b until we have seen several pairs
+      // so that we can compute a and b based on a far-separated pair.  If
+      // the points in a pair are nearby, then roundoff errors in the
+      // computation of the slope can be non-negligible.
+
       for (int i=0; i<values_seen; i++)
-	if ((x_cache[i] == i) && (y_cache[i] == y))
+	if ((x_cache[i] == x) && (y_cache[i] == y))
 	  return;
       x_cache[values_seen] = x;
       y_cache[values_seen] = y;
       values_seen++;
       if (values_seen == MINPAIRS) {
 	// Find the most separated pair
-	int max_separation = 0;
-	int max_i = 0;
-	int max_j = 1;
+        // Do I really need to check in two dimensions, or would one be enough?
+        // indices of the most-separated pair
+	int max_i = -1;
+	int max_j = -1;
+        // (square of the) distance between the most separated pair
+	long max_separation = 0;
 	for (int i=0; i<MINPAIRS-1; i++) {
 	  for (int j=i+1; j<MINPAIRS; j++) {
-	    int xsep = (x_cache[i] - x_cache[j]);
-	    int ysep = (y_cache[i] - y_cache[j]);
-	    int separation = xsep*xsep + ysep*ysep;
+            // not int, lest we get wraparound
+	    long xsep = (x_cache[i] - x_cache[j]);
+	    long ysep = (y_cache[i] - y_cache[j]);
+	    long separation = xsep*xsep + ysep*ysep;
+            // Assert.assert(separation > 0);
 	    if (separation > max_separation) {
 	      max_separation = separation;
 	      max_i = i;
@@ -78,10 +90,12 @@ public class LinearBinaryCore {
   }
 
   // Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
-  // If no such (a,b) exists, then set no_invariant.
+  // If no such (a,b) exists, then destroy self.
 
   void set_bi_linear(int x0, int x1, int y0, int y1) {
     if (x0 == x1) {
+      // x being constant would have been discovered elsewhere (and this
+      // invariant would not have been instantiated).
       if (debugLinearBinaryCore) {
         System.out.println("Suppressing " + "LinearBinaryCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
@@ -89,9 +103,6 @@ public class LinearBinaryCore {
       return;
     }
 
-    double xdiff = x1-x0;
-
-    // Assume that constants have already been found by a previous pass.
     a = (y1-y0)/(x1-x0);
     b = (y0*x1-x0*y1)/(x1-x0);
 
@@ -102,8 +113,21 @@ public class LinearBinaryCore {
       return Invariant.PROBABILITY_NEVER;
     if (values_seen < MINPAIRS)
       return Invariant.PROBABILITY_UNKNOWN;
-    // This isn't right, is it?
-    return 0;
+    return Invariant.PROBABILITY_JUSTIFIED;
+  }
+
+  public String repr() {
+    return "LinearBinaryCore" + wrapper.varNames() + ": "
+      + "a=" + a
+      + ",b=" + b
+      + ",values_seen=" + values_seen;
+  }
+
+  public String format(String x, String y) {
+    // For efficiency, I could use a single StringBuffer here.
+    String b_rep = (b<0) ? (" - " + -b) : (b>0) ? (" + " + b) : "";
+    String a_rep = (a==1) ? "" : ("" + a + " * ");
+    return y + " = " + a_rep + x + b_rep;
   }
 
 }

@@ -1,24 +1,18 @@
 package daikon.inv.threeScalar;
 
+import daikon.*;
 import daikon.inv.*;
+import java.io.*;
 import java.lang.reflect.*;
+import utilMDE.*;
 
-// Two basic options here:
-//     * take java.lang.reflect.Method objects
-//        + that fits in well with pre-existing methods.  It also does wrapping
-//          and unwrapping as appropriate
-//        + I must provide an object or arrange that the methods are all static,
-//          so I might end up with a new object of my own type after all.
-//     * take Invokable objects, where I define a new interface with invoke() method
-//        + I might not want wrapping, unwrapping, and args wrapped in Object[]:
-//          more efficient not to do so
-//        + might be more efficient to define my own interface with specialized
-//          types, not Object
-//        - must convert existing functions to this format.
+// See FunctionUnaryCore for discussion of tradeoffs between constructing
+// from java.lang.reflect.Method objects vs. Invokable objects.
 
-public class FunctionBinaryCore {
+public final class FunctionBinaryCore implements java.io.Serializable {
 
-  public Method function;
+  transient public Method function;
+  public final String methodname;
   // see "Variable order"
   public int var_order;
 
@@ -27,10 +21,25 @@ public class FunctionBinaryCore {
 
   Invariant wrapper;
 
-  public FunctionBinaryCore(Invariant wrapper_, Method function_, int var_order_) {
+  public FunctionBinaryCore(Invariant wrapper_, String methodname_, Method function_, int var_order_) {
     wrapper = wrapper_;
+    methodname = methodname_;
     function = function_;
     var_order = var_order_;
+  }
+
+  public FunctionBinaryCore(Invariant wrapper_, String methodname_, int var_order_) throws ClassNotFoundException, NoSuchMethodException {
+    this(wrapper_, methodname_, UtilMDE.methodForName(methodname_), var_order_);
+  }
+
+  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException, NoSuchMethodException {
+    in.defaultReadObject();
+    this.set_function();
+  }
+
+  private void set_function() throws ClassNotFoundException, NoSuchMethodException {
+    Assert.assert(function == null);
+    function = UtilMDE.methodForName(methodname);
   }
 
   public void add_modified(int x_int, int y_int, int z_int, int count) {
@@ -80,7 +89,7 @@ public class FunctionBinaryCore {
     if (wrapper.ppt.num_values() < 5)
       return Invariant.PROBABILITY_UNKNOWN;
     // The actual value probably depends on the function.
-    return 0;
+    return Invariant.PROBABILITY_JUSTIFIED;
   }
 
 
@@ -116,5 +125,22 @@ public class FunctionBinaryCore {
                                              "x=f(z,y)",
                                              "y=f(z,x)",
                                              "z=f(y,x)" };
+
+  public String repr() {
+    return "FunctionBinaryCore: "
+      + "function=" + function
+      + ",var_order=" + var_order;
+  }
+
+  // Perhaps this should take arguments rather than looking into the wrapper.
+  public String format() {
+    PptSlice ppt = wrapper.ppt;
+    VarInfo argresult = ppt.var_infos[var_indices[var_order][0]];
+    VarInfo arg1 = ppt.var_infos[var_indices[var_order][1]];
+    VarInfo arg2 = ppt.var_infos[var_indices[var_order][2]];
+
+    return argresult.name + " = "
+      + function.getName() + "(" + arg1.name + ", " + arg2.name + ")";
+  }
 
 }

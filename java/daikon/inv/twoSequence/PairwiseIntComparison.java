@@ -3,8 +3,10 @@ package daikon.inv.twoSequence;
 import daikon.*;
 import daikon.inv.twoScalar.*;
 
+// Requires that the lengths are the same.  Should it?  (Hard to tell;
+// could argue either way, on completeness vs. efficiency grounds.)
 
-// Also see NonEqual, NonAliased
+// Also see NonEqual
 class PairwiseIntComparison extends TwoSequence {
 
   final static boolean debugPairwiseIntComparison = false;
@@ -34,36 +36,23 @@ class PairwiseIntComparison extends TwoSequence {
   }
 
   public String repr() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-
     double probability = getProbability();
     return "PairwiseIntComparison(" + var1().name + "," + var2().name + "): "
-      + "can_be_eq=" + can_be_eq
-      + ",can_be_lt=" + can_be_lt
-      + ",can_be_gt=" + can_be_gt
-      + "; probability = " + probability;
+      + "probability = " + probability
+      + "; " + core.repr();
   }
 
   public String format() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-
-    if (justified() && (can_be_eq || can_be_gt || can_be_lt)) {
-      String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
-      String comparison = (can_be_eq ? "=" : "");
-      if (debugPairwiseIntComparison) {
-        System.out.println(repr()
-                           + "; inequality=\"" + inequality + "\""
-                           + ",comparison=\"" + comparison + "\"");
-      }
-      return var1().name + " " + inequality + comparison + " " + var2().name
-        + " (elementwise)";
-    } else {
+    if (! justified()) {
       return null;
     }
+
+    String comparator = core.format_comparator();
+    if (comparator == null) {
+      return null;
+    }
+    return var1().name + " " + comparator + " " + var2().name
+      + " (elementwise)";
   }
 
 
