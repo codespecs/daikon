@@ -651,7 +651,12 @@ public class RetTransform implements ClassFileTransformer {
     InstructionList il = mgen.getInstructionList();
     int line_number = 0;
     int last_line_number = 0;
+    boolean foundLine;
+    
     for (Iterator ii = il.iterator(); ii.hasNext(); ) {
+        
+        foundLine = false;
+        
       InstructionHandle ih = (InstructionHandle) ii.next();
       if (ih.hasTargeters()) {
         for (InstructionTargeter it : ih.getTargeters()) {
@@ -660,6 +665,7 @@ public class RetTransform implements ClassFileTransformer {
             // log ("  line number at %s: %d\n", ih, lng.getSourceLine());
             //System.out.printf("  line number at %s: %d\n", ih, lng.getSourceLine());
             line_number = lng.getSourceLine();
+            foundLine = true;
           }
         }
       }
@@ -672,8 +678,14 @@ public class RetTransform implements ClassFileTransformer {
       case Constants.LRETURN:
       case Constants.RETURN:
         // log ("Exit at line %d\n", line_number);
-        if (line_number == last_line_number)
-          line_number++;
+          
+          //only do incremental lines if we don't have the line generator
+        if (line_number == last_line_number && foundLine==false)
+          {
+            //System.out.printf("Could not find line... at %d\n", line_number);
+            line_number++;
+          }
+        
         last_line_number = line_number;
         exit_locs.add (new Integer (line_number));
         break;
