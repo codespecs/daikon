@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Used by the cron job that runs as user daikonbuildtest
+
+cd $HOME/build
+exec /usr/local/bin/perl $HOME/research/invariants/scripts/buildtest.pl --quiet
