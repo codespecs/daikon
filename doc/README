@@ -1,10 +1,23 @@
+Contents of this file:
+ * Manifest of this directory
+See also README-dist -- user documentation for the invariant detection engine.
+
+If you have any questions, can suggest ways to improve the documentation,
+find bugs in the system, or have suggestions for its improvement, please
+let me know and I'll do my best to help.
+
+===========================================================================
+
 In this directory (~mernst/research/notkin/invariants/):
 
+ * README: this file
+ * README-dist: user documentation for the invariant detection engine
  * notes: my (organized and disorganized) notes
  * examples-notes: notes about test inputs (separated from notes file above)
  * invariants.bib: notes on related work
  * cubist/ and foil/:  experiments with machine learning programs
  * invariants.py, util.py: the invariant detector, implemented in Python
+ * invariants.py.doc: implementation documentation for invariants.py
  * gries.lisp:  the programs from David Gries' book (in Lisp syntax)
  * gries-helper.lisp, data-trace.lisp:  Gries Lisp syntax; output data to file
  * p*.dtrace: files created by running instrumented Gries programs
@@ -17,3 +30,5 @@ Example programs:
       invariant detector; you are only interested in .inv files
  * rothermel/: adaptations of Siemens test programs; from Gregg Rothermel
  * edg/: EDG C/C++ front end version 2.38
+
+===========================================================================

@@ -9,75 +9,11 @@
 ;; `instrument' produces a new file of instrumented Lisp code which can be
 ;; compiled and run.
 
-;; To instrument the Medic package, do something like this:
-;;   From $inv/medic/data, start Lisp (via  M-x run-lisp, or, better, outside Emacs via just  lisp )
-;;   (load "../code/main") (in-package medic) (load-all) (load-domains)
-;;   ;; Either one of these:
-;;     (regress-dtrace)
-;;     ;; these are useful when running a few problems on many machines:
-;;     (regress-dtrace 0 5)
-;;     (regress-dtrace 5 10)
-;;     (regress-dtrace 10 15)
-;;     (regress-dtrace 15 20)
-;;     (regress-dtrace 20 25)
-;;     (regress-dtrace 25 30)
-;;     (regress-dtrace 30)
-;;   ;; or follow these directions:
-;;   ;; One of these:
-;;     (dtrace-file-per-problem)
-;;     ;; or, wrap this around a computation to put data trace in one big file:
-;;     (init-data-trace) ... (finish-data-trace)
-;;   ;; Maybe one or more of these:
-;;     (setq *run-program-timeout* 3600) ; one hour
-;;     (setq *cnf-solver* 'walksat)
-;;     (setq *dont-solve* t)
-;;     (medic-clean-directory)
-;;     (medic-clean-directory nil '("*.info" "*.cnf-size"))
-;;   ;; One of these:
-;;     (multi-flags-regress)
-;;     (multi-flags-regress (subseq *regression-problems* 0 5))
-;;     (multi-flags-regress (subseq *regression-problems* 5 10))
-;;     (multi-flags-regress (subseq *regression-problems* 10 15))
-;;     (multi-flags-regress (subseq *regression-problems* 15 20))
-;;     (multi-flags-regress (subseq *regression-problems* 20 25))
-;;     (multi-flags-regress (subseq *regression-problems* 25 30))
-;;     (multi-flags-regress (subseq *regression-problems* 30))
-;;   (ext:quit)
-;;   Copy file dtrace to elsewhere
-
-(defun regress-dtrace (&optional (start 0) (end (length *regression-problems*)))
-  (dtrace-file-per-problem)
-  (setq *run-program-timeout* 3600)
-  (multi-flags-regress (subseq *regression-problems* start end)))
-
-;; Also see section in README about only generating CNF.
-
-;; data/ATT-LOGISTICS1-crsn-6-simple.cnf failed -- I'm not sure why
-
-;; TINY-crse-4.cnf failed
-;; (set-flags "crse")
-;; Then these are OK:
-;;    (solve-find-problem 'tiny)
-;;    (solve-find-problem 'tiny 1 1)
-;; But these are no good:
-;;    (solve-find-problem 'tiny 1 2)
-;;    (solve-find-problem 'tiny 1 4)
-;;    (solve-find-problem 'tiny 4 4)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Types
 ;;;
-
-(defun op-parameters-length (x) (length (op-parameters x)))
-(defun op-formals-length (x) (length (op-formals x)))
-(defun op-formal-types-length (x) (length (op-formal-types x)))
-(defun op-precondition-length (x) (length (op-precondition x)))
-(defun op-effect-length (x) (length (op-effect x)))
-(defun op-obj-lst-length (x) (length (op-obj-lst x)))
-(defun op-bindings-length (x) (length (op-bindings x)))
-
-(defun sprop-args-length (x) (length (sprop-args x)))
 
 (defun null-or-int->int (x) (or x 0))	; how well does this work???
 
@@ -85,27 +21,38 @@
 (defun array-dim-2 (a) (second (array-dimensions a)))
 (defun array-dim-3 (a) (third (array-dimensions a)))
 
+;; Like identity, but not quite
+(defun inv-format-array-character-1 (s)
+  (format nil "~s" s))
+(defun inv-format-array-integer-1 (a)
+  (let ((raw (format nil "~s" a)))
+    (subseq raw 2 (1- (length raw)))))
+
+
 ;; So far, only numeric accessors
 (defvar *inv-types-accessors*
   '(;; (int identity)
     (integer identity)
     (list length)
-    (operator op-parameters-length op-formals-length op-formal-types-length
-	      op-precondition-length op-effect-length op-obj-lst-length
-	      op-bindings-length)
-    (sprop sprop-args-length)
     ;; ((or null int) null-or-int->int)
     ((or integer null) null-or-int->int)
     ((or null integer) null-or-int->int)
     (alist length)
     (hash-table hash-table-count)
     ;; These used to include array_dim_1, array_dim_2, etc.
-    ((array integer 1) (identity . "[]"))
-    ((array integer 2) (identity . "[][]"))
-    ((array integer 3) (identity . "[][][]"))
-    ((array character 1) (identity . "[]"))
-    ((array character 2) (identity . "[][]"))
-    ((array character 3) (identity . "[][][]"))
+    (array identity)
+    ;; ((array integer 1) (identity . "[]"))
+    ;; ((array integer 2) (identity . "[][]"))
+    ;; ((array integer 3) (identity . "[][][]"))
+    ;; ((array character 1) (identity . "[]"))
+    ;; ((array character 2) (identity . "[][]"))
+    ;; ((array character 3) (identity . "[][][]"))
+    ((array integer 1) inv-format-array-integer-1)
+    ((array integer 2) identity)
+    ((array integer 3) identity)
+    ((array character 1) inv-format-array-character-1)
+    ((array character 2) identity)
+    ((array character 3) identity)
     ))
 
 ;; Returns either a symbol or a (funcallable-function . print-repr) pair,
@@ -168,83 +115,111 @@
   (close *dtrace-output-stream*)
   (setq *dtrace-output-stream* nil))
 
-;; Used to be called check-for-invariants; but that is not what it does.
-;; Maybe someday we'll use a version that actually does an online check.
-(defmacro write-to-data-trace (function-name function-parameters &rest type-lists)
-  (assert (every #'listp type-lists))
-  (assert (every #'(lambda (type-list) (accessors-for-type (car type-list))) type-lists))
-  (if (and (listp function-name)
-	   (eq 'quote (car function-name)))
-      (setq function-name (second function-name)))
+(defvar *trace-pretty-type-names*
+  '((integer . "int")
+    ((array integer 1) . "int")))
+
+(defun write-data-trace-declaration (ostream program-point-name var+type-list)
+  (format ostream "DECLARE~%~a~%" program-point-name)
+  ;; (format ostream "*lackwit-env* = ~s~%" *lackwit-env*)
+  ;; I could do all this in one tricky format line, too.
+  (loop for var+type in var+type-list
+	do (let* ((var (car var+type))
+		  (type (cdr var+type))
+		  (lackwit-type (lackwit-var-representative var)))
+	     (format *decl-output-stream* "~a~%~a~%~a~%"
+		     var
+		     (or (cdr (assoc type *trace-pretty-type-names*
+				     :test #'equal))
+			 type)
+		     lackwit-type)))
+  (format ostream "~%")
+  )
+
+(defmacro write-to-data-trace (program-point-name var+type-list)
+  (assert (every #'consp var+type-list))
+  (assert (every #'(lambda (var+type) (accessors-for-type (cdr var+type))) var+type-list))
+  (if (and (listp program-point-name)
+	   (eq 'quote (car program-point-name)))
+      (setq program-point-name (second program-point-name)))
   `(when *dtrace-output-stream*
      (let ((*print-pretty* nil))
        (format *dtrace-output-stream*
-	       ,(format nil "~a~a~~%" function-name
-			(mapcar (lambda (var)
-				  (if (some #'(lambda (type-list)
-					       (and (member var (cdr type-list))
-						    (listp (car type-list))
-						    (eq 'array (caar type-list))))
-					   type-lists)
-				      (format nil "~a[]" var)
-				    var))
-				function-parameters)))
-       ,@(loop for type-list in type-lists
-	       nconc (let ((type (car type-list)))
-		       (loop for var in (cdr type-list) ; actually expressions
-			     nconc (let ((var-sans-spaces (nsubstitute #\_ #\space (format nil "~s" var))))
-				     (loop for function in (accessors-for-type type)
-					   collect (cond
-						    ((eq function 'identity)
-						     `(format *dtrace-output-stream*
-							      ,(format nil "~a~c~~s~~%" var-sans-spaces #\tab)
-							      ,var))
-						    ((and (consp function)
-							  (atom (cdr function)))
-						     `(format *dtrace-output-stream*
-							      ,(format nil "~a~a~c~~s~~%" var-sans-spaces (cdr function) #\tab)
-							      ,(if (eq (car function) 'identity)
-								   var
-								 `(funcall ,(car function) ,var))))
-						    (t
-						     `(format *dtrace-output-stream*
-							      ,(format nil "~a.~a~c~~s~~%" var-sans-spaces function #\tab)
-							      (,function ,var)))))))))
-       ;; used when all the above was on one line
-       ;; (format *dtrace-output-stream* "~%")
+	       ,(format nil "~a~~%" program-point-name))
+       ,@(loop for var+type in var+type-list
+	       nconc (let* ((var (car var+type)) ; actually expressions
+			    (type (cdr var+type))
+			    (var-sans-spaces (nsubstitute #\_ #\space (format nil "~s" var))))
+		       (loop for function in (accessors-for-type type)
+			     collect (cond
+				      ((eq function 'identity)
+				       `(format *dtrace-output-stream*
+						,(format nil "~a~c~~s~c1~~%" var-sans-spaces #\newline #\newline)
+						,var))
+				      ((member function '(inv-format-array-integer-1
+							  inv-format-array-character-1))
+				       `(format *dtrace-output-stream*
+						;; use of "~~a" instead of "~~s"
+						,(format nil "~a~c~~a~c1~~%" var-sans-spaces #\newline #\newline)
+						(,function ,var)))
+				      ((and (consp function)
+					    (atom (cdr function)))
+				       `(format *dtrace-output-stream*
+						,(format nil "~a~a~c~~s~c1~~%" var-sans-spaces (cdr function) #\newline #\newline)
+						,(if (eq (car function) 'identity)
+						     var
+						   `(funcall ,(car function) ,var))))
+				      (t
+				       `(format *dtrace-output-stream*
+						,(format nil "~a.~a~c~~s~c1~~%" var-sans-spaces function #\newline #\newline)
+						(,function ,var)))))))
+       (format *dtrace-output-stream* "~%")
        )))
+
+;;; Old version that used type-lists, which merge adjacent variables of the
+;;; same type.  The added complexity isn't worth the small potential
+;;; increase in efficiency.
+;; Used to be called check-for-invariants; but that is not what it does.
+;; Maybe someday we'll use a version that actually does an online check.
+;; (defmacro write-to-data-trace (program-point-name &rest type-lists)
+;;   (assert (every #'listp type-lists))
+;;   (assert (every #'(lambda (type-list) (accessors-for-type (car type-list))) type-lists))
+;;   (if (and (listp program-point-name)
+;; 	   (eq 'quote (car program-point-name)))
+;;       (setq program-point-name (second program-point-name)))
+;;   `(when *dtrace-output-stream*
+;;      (let ((*print-pretty* nil))
+;;        (format *dtrace-output-stream*
+;; 	       ,(format nil "~a~~%" program-point-name))
+;;        ,@(loop for type-list in type-lists
+;; 	       nconc (let ((type (car type-list)))
+;; 		       (loop for var in (cdr type-list) ; actually expressions
+;; 			     nconc (let ((var-sans-spaces (nsubstitute #\_ #\space (format nil "~s" var))))
+;; 				     (loop for function in (accessors-for-type type)
+;; 					   collect (cond
+;; 						    ((eq function 'identity)
+;; 						     `(format *dtrace-output-stream*
+;; 							      ,(format nil "~a~c~~s~~%" var-sans-spaces #\tab)
+;; 							      ,var))
+;; 						    ((and (consp function)
+;; 							  (atom (cdr function)))
+;; 						     `(format *dtrace-output-stream*
+;; 							      ,(format nil "~a~a~c~~s~~%" var-sans-spaces (cdr function) #\tab)
+;; 							      ,(if (eq (car function) 'identity)
+;; 								   var
+;; 								 `(funcall ,(car function) ,var))))
+;; 						    (t
+;; 						     `(format *dtrace-output-stream*
+;; 							      ,(format nil "~a.~a~c~~s~~%" var-sans-spaces function #\tab)
+;; 							      (,function ,var)))))))))
+;;        ;; used when all the above was on one line
+;;        ;; (format *dtrace-output-stream* "~%")
+;;        )))
 
 ;; (macroexpand '(write-to-data-trace split-argnum-sprop (params) (integer argnum) (operator op)))
 ;; (macroexpand '(write-to-data-trace non-matching-var-sprops (params) (sprop occurrence) (list fluent-args fluent-occurrences) (alist var-argnum-alist)))
 ;; (macroexpand '(WRITE-TO-DATA-TRACE '|P180-15.1.1:::END| (b n) ((ARRAY INTEGER 1) B) (INTEGER N I S)))
 ;; ;; (macroexpand '(write-to-data-trace find-plan-1 (params) ((list integer 3) cnf-size) (list-elements nil integer integer integer integer integer integer)))
-
-
-;; Perhaps omit MAX-STEPS.
-(defun dtrace-file-name (experimentnum problemname &optional max-steps)
-  (declare (ignore experimentnum))
-  (format nil "~a.dtrace" (file-name-header problemname max-steps)))
-
-(defun dtrace-solve-problem-start-function (prob max-steps start-steps experimentnum)
-  (declare (ignore start-steps))
-  (let ((probname (cond ((symbolp prob)
-			 prob)
-			((problem-p prob)
-			 (problem-name prob))
-			(t
-			 (error "Expected symbol or problem structure" prob)))))
-    (init-data-trace
-     (dtrace-file-name experimentnum probname max-steps))))
-
-
-(defun dtrace-solve-problem-end-function (prob max-steps start-steps experimentnum)
-  (declare (ignore prob max-steps start-steps experimentnum))
-  (finish-data-trace))
-
-
-(defun dtrace-file-per-problem ()
-  (setq solve-problem-start-function 'dtrace-solve-problem-start-function)
-  (setq solve-problem-end-function 'dtrace-solve-problem-end-function))
 
 
 (defmacro with-data-trace (filename &rest body)

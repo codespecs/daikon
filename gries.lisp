@@ -9,7 +9,8 @@
 ;; of the second.
 
 
-;; Should already have loaded gries-helper.lisp, which defines macros and such.
+;; Should already have loaded gries-helper.lisp, which defines macros for
+;; Gries synax.
 
 
 ;; (load "data-trace.lisp")
@@ -49,9 +50,10 @@
 (defun p173-14.3 (x y)
   (declare (type integer x y))
   (pre true)
-  ;; z is a new variable
-  (let (z)
-    (declare (type (or integer null) z))	; yuck
+  ;; z is a new variable.  I'm setting it to 0 because if I leave it
+  ;; unbound, I must declare its type as "(or integer null)".
+  (let ((z 0))
+    (declare (type integer z))
     (if-fi ((>= x y) (setq z x))
 	   ((>= y x) (setq z y)))
     ;; equivalently, (and (>= z x) (>= z y) (or (= z x) (= z y)))
@@ -450,7 +452,7 @@
 
 ;; page 197, program (16.2.5)
 ;; linear search:  x is in b[0..m-1]; set i to the first index containing x
-(defun p197-16.2.5 (x b m)
+(defun p197-16.2.5-a (x b m)
   (declare (type integer x)
 	   (type (array integer 1) b)
 	   (type integer m))
@@ -466,7 +468,7 @@
 
 ;; page 197, program (16.2.5), expanded postcondition noted in middle of page
 ;; linear search:  x is in b[0..m-1]; set i to the first index containing x
-(defun p197-16.2.5-altpost (x b m)
+(defun p197-16.2.5-altpost-a (x b m)
   (declare (type integer x)
 	   (type (array integer 1) b)
 	   (type integer m))
@@ -486,7 +488,7 @@
 ;; throughout, not just in the loop:  because the loop doesn't change, that
 ;; isn't interesting).
 ;; linear search:  x is in b[0..m-1]; set i to the first index containing x
-(defun p197-16.2.5 (x b m)
+(defun p197-16.2.5-b (x b m)
   (declare (type integer x)
 	   (type (array integer 1) b)
 	   (type integer m))
@@ -507,7 +509,7 @@
 ;; isn't interesting).
 ;; expanded postcondition noted in middle of page
 ;; linear search:  x is in b[0..m-1]; set i to the first index containing x
-(defun p197-16.2.5-altpost (x b m)
+(defun p197-16.2.5-altpost-b (x b m)
   (declare (type integer x)
 	   (type (array integer 1) b)
 	   (type integer m))
@@ -527,7 +529,7 @@
 
 ;; page 197, program (16.2.5), expanded postcondition noted in middle of page
 ;; linear search:  x is in b[0..m-1]; set i to the first index containing x
-(defun p197-16.2.5-alt2 (x b m)
+(defun p197-16.2.5-c (x b m)
   (declare (type integer x)
 	   (type (array integer 1) b)
 	   (type integer m))

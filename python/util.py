@@ -137,6 +137,14 @@ If the input string STR has no trailing newline, it is returned unmodified."""
     else:
         return str
 
+def re_compile_maybe(str, flags):
+    """If first argument is a string, return it as a compiled regular expression.
+Otherwise, return it unchanged."""
+    if type(str) == types.StringType:
+        return re.compile(str, flags)
+    else:
+        return str
+
 
 ###########################################################################
 ### Lists

@@ -2,6 +2,13 @@ If you have any questions, can suggest ways to improve the documentation,
 find bugs in the system, or have suggestions for its improvement, please
 let me know and I'll do my best to help.
 
+The invariant detector is further described in the paper ``Dynamically
+Discovering Likely Program Invariants to Support Program Evolution'' by
+Michael D. Ernst, Jake Cockrell, William G. Griswold, and David Notkin, in
+Proceedings of the 19th International Conference on Software Engineering
+(ICSE '99), Los Angeles, CA, May 19-21, 1999.  This paper is available at
+http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html
+
 
 Using the invariant detection engine
 ====================================
@@ -10,6 +17,7 @@ Detecting invariants involves three steps:
  1. Instrument the program to add instructions that output variable values.
  2. Run the program (probably using a test suite) to create data trace files.
  3. Run the invariant engine over the data trace files to detect invariants.
+
 
 Step 1:  Instrumentation
 ------------------------
@@ -25,7 +33,7 @@ C front end:
 
   a. Make a copy of your source tree.
   b. Instrument each file in your source tree;
-       edgcpfe -D__ANSIC__ -D__sparc <filename>
+       edgcpfe --c -D__ANSIC__ -D__sparc <filename>
      creates file foo.int.c (in directory /release/dump_trace_src, maybe?).
   c. Do one of the following:
       * rename that file to the original name, or
@@ -36,17 +44,62 @@ C front end:
   e. Build your program in the usual way, perhaps by running "make"; this
      creates an instrumented executable.
 
+  [[
+    To use the latest and (possibly) greatest, get the (Solaris) binary from
+      ~jake/research/invariant/vortex/C++/front-end/release/bin/edgcpfe
+    and use dump_trace.h and dump-trace.o from
+      ~jake/research/invariant/vortex/C++/front-end/release/dump_trace_src
+    You will also need a file label.txt which contains a single integer.
+  ]]
+
+  [[
+    Here is a set of directions from Jake Cockrell <jake@cs.washington.edu>.
+    I was once told that the above didn't work, but these did.  (Someone
+    please tell me what is wrong with the above, or that nothing is wrong
+    with it, so we can merge these different instructions.)
+
+      The main directory you will be working out of is:
+      /projects/se/people/jake/invariants/vortex/C++/front-end/release
+
+      The executable is run out of the directory release/bin like this
+      edgcpfe --c -D__ANSIC__ -D__sparc <filename>.c
+
+      It produces your instrumented file <filename>.int.c
+
+      Move this file to /release/dump_trace_src.  Open the Makefile (I know
+      this is gross) and change the first two lines so that it is building
+      <filename>.int.c and writing to <filename>.exe.
+
+      gmake in this directory and you have your instrumented executable.
+      Everytime you run this, you'll get a trace file with variable values for
+      that run.  Collect a bunch of these and you can run the invariant engine
+      on them.  
+
+      You can find the invariant engine here:
+      ~jake/research/invariant/invariants/invariants.py
+
+      you can just copy this.  run 'python' in the directory you copied
+      invariants.py.  enter the command 'import invariants' to load the code.
+      Then enter 'invariants.read_invs('<directory where your trace files
+      are>/*.trace', 1).  This will read in all the trace file data.  Finally,
+      type 'invariants.all_numeric_invariants()'.  This will output all the
+      invariants detected for each instrumentation point.  You might want to
+      pipe this output to a file, or run python through emacs so you can just
+      save it that way.
+  ]]
+
 Lisp front end:
-  (load "invariants.lisp")	; code for writing to logs
-  (load "gries-helper.lisp")	; definitions for the Gries-style syntax;
-                                ;   also instrumentation code
+  (load "load-all")
   ;; Add instrumentation code to the beginning and end of each function, and
   ;; to each loop head.
   ;; The instrumentation writes the values of all the live variables to a file.
   (instrument-file "gries.lisp" "gries-instrumented.lisp")
   (load "gries-instrumented.lisp")
-  ;; run all the test-* functions; test-* function creates one *.inv file
+  ;; run all test-* functions; each test-* function creates one *.dtrace file
   (test-all)
+
+  ;; For efficiency, you might want to compile the Lisp files and run the
+  ;; compiled versions.
 
 Java front end:
   This is still under development.
@@ -56,12 +109,16 @@ Java front end:
  not be separate steps for instrumentation and
     running the program; instead, one command will accomplish both, though
 
+
 Step 2:  Run the program
 ------------------------
 
-You should be able to run the modified program in just the same way you did
-before; the only behavioral change will be writing a .dtrace file (for the
-Lisp and Java front ends) or a .trace file (for the C front end).
+You should be able to run the instrumented program in just the same way you
+did before; the only behavioral change will be writing a .dtrace file (for
+the Lisp and Java front ends) or a .trace file (for the C front end).  Run
+the program over some test suite in order to create a collection of trace
+files.
+
 
 Step 3:  Detect invariants in the data trace files
 --------------------------------------------------
@@ -86,8 +143,8 @@ its definition in invariants.py.
 To do all this from a single shell command, do the following:
   python -O -c "__debug__ = 0; import invariants; invariants.read_invs('$inv/jake/testsuite/replace/traces/*.trace',1); invariants.all_numeric_invariants()"
 
-In the output, an "ORIG-" prefix refers to the original value of a formal
-parameter, for (var) parameters possibly modified in the function body.
+In the output, the "_orig" suffix refers to the original value of a formal
+parameter, for parameters possibly modified in the function body.
 ":::BEGIN", ":::END", and ":::LOOP" are tags identifying at which program
 the instrumentation was inserted; invariants are program-point-specific.
 There is some redundancy in the output (e.g., both "Z = max(Y, X)" and

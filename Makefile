@@ -3,7 +3,9 @@
 ###
 
 # Should gries-instrumented be in this list?
-LISP_FILES := gries-helper.lisp gries.lisp gries-instrumented.lisp data-trace.lisp
+LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
+	load-all.lisp \
+	gries.lisp gries-instrumented.lisp inv-medic.lisp
 PYTHON_FILES := invariants.py util.py
 
 ## Examples of better ways to get the lists:
@@ -26,3 +28,6 @@ tags: TAGS
 ## So I should be sure to do the make on a Linux machine. -MDE
 TAGS:  $(LISP_FILES) $(PYTHON_FILES)
 	etags $(LISP_FILES) $(PYTHON_FILES)
+
+## I should add a rule for making the distribution, which will include
+## documentation and sample files.

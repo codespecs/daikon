@@ -44,38 +44,37 @@ if not locals().has_key("fn_var_infos"):
     debug_infer = false                 # inferring invariants
 
     ### Internal variables
-    fn_var_infos = {}           # from function name to list of var_infos
-    fn_var_values = {}	    # from function name to (tuple of values to occurrence count)
 
-    fn_samples = {}         # from function name to number of samples
-    file_fn_var_infos = {}  # from filename to (function to list of var_infos)
+    ## Program point variables
+    # "fn" should really be "ppt" or some such.
+    fn_var_infos = {}           # from program point name to list of var_infos
+    fn_truevars = {}                    # from program point name to number of original var_infos
+    fn_var_values = {}	    # from program point name to (tuple of values to occurrence count)
+    fn_samples = {}         # from program point name to number of samples
+    ## What is the purpose of having this as a separate variable??
     # Issue: this does not contain any derived variables, only original ones.
-    file_fn_var_values = {} # from filename to (function to (values-tuple to occurrence))
-
-    # From function name to invocation count.  Used to add invocation
-    # count variables for each program function.
-    # Note the function name does not include the suffix ':::END...'
-    ftn_names_to_call_ct = {}
-
-    # From function name to (parameter names to list of param values)
-    # Used to store parameter list for functions.  Also used to store
-    # the original value of parameters at the beginning of a ftn call
-    # so we can use them in comparison at the end of a ftn call.
-    # We have a list for the param values to provide for recursive
-    # function calls.  As we pop recursive calls to the function off
-    # the stack, we pop orig parameter vals off the list.
-    # Note the function name does not include the suffix ':::END...'
-    ftn_to_orig_param_vals = {}
-
+    file_fn_var_values = {} # from filename to (program point to (values-tuple to occurrence))
     # From function name to stats.  Used *only* if collect_stats = true
     fn_to_stats = {}
 
+    ## Function variables
+    # Used to add invocation count variables for each program function.
+    # (What do we do now, if not that??)
+    # Note the function name does not include the suffix ':::END...'
+    functions = []
+    fn_invocations = {}       # from function name to invocation count
+    # From function name to stack of parameter values.
+    fn_to_orig_param_vals = {}
+
+    ## Diffing variables
     diff_to_ct = {}
     unary_diff_to_ct = {}
     bin_diff_to_ct = {}
 
+
+
 ##########################################
-### jake's vars to keep track of numbers of diffing invariants
+### jake's vars to keep track of numbers of differing invariants
 
 inv_one_cons = 0
 inv_diff_small_no_vals = 1
@@ -212,14 +211,23 @@ def print_inv_diff_tracking():
 def clear_variables():
     """Reset the values of some global variables."""
 
+    global functions
+
+    # Declaration-related variables
     fn_var_infos.clear()
+    fn_truevars.clear()
+    functions = []
+    # Data-related variables
+    clear_trace_variables()
+
+def clear_trace_variables():
+    """Reset the values of trace-related global variables."""
     fn_var_values.clear()
     fn_samples.clear()
-    file_fn_var_infos.clear()
     file_fn_var_values.clear()
-    ftn_names_to_call_ct = {}
-    ftn_to_orig_param_vals = {}
-    fn_to_stats = {}
+    fn_invocations.clear()
+    fn_to_orig_param_vals.clear()
+    fn_to_stats.clear()
 
 def clear_invariants(fn_regexp=None):
     """Reset the values of invariants, globally."""
@@ -240,26 +248,34 @@ sequence_re = re.compile(r'^[^	]+\[(|[^][]+\.\.[^][]+)\]$')
 min_or_max_re = re.compile("^(min|max)\((.*)\)$")
 
 
+def types_compatible(type1, type2):
+    return type1 == type2
+
+
 class var_info:
 
     # Instance variables:
     #  name                # string
-    #  type            # type information:  a string, not an
+    #  type                # type information:  a string, not an
                                   #   unpicklable object like types.IntType
-    #  index              # index in lists of variables
+    #  index               # index in lists of variables
 
     # Info about derived variables: derivees from this and derivers of this.
-    #  derived               # will be variables derived from this
-                                    #   one; presently not used.
+    #  derived             # will be variables derived from this
+                                  #   one; presently not used.
     #  derived_len         # index of len variable
-    #  is_derived    # boolean (for now)
+    #  is_derived          # boolean (for now)
 
     # To find the invariant over a pair of variables, do a double-dispatch:
     # first look up the "invariants" field of one of the variables, then
     # look up the other variable in that map.
     #  invariant
-    #  invariants	# map from indices to multiple-arity invariants
-    #  equal_to        # list of indices of equal variables;
+    #  invariants	# map from indices to multiple-arity invariants.
+			# The entry for a variable can sometimes be
+                        # missing, which I think is equivalent to it being
+                        # a trivial invariant satisfying no properties; but
+                        # I'm not sure exactly when each is the case.
+    #  equal_to         # list of indices of equal variables;
                                 #   could be derived from invariants
                                 #   by checking for inv.comparison == "="
                                 #   the variable itself is not on this list
@@ -333,36 +349,52 @@ def var_infos_compatible(vis1, vis2):
     return (map(lambda vi: vi.name, vis1) == map(lambda vi: vi.name, vis2))
 
 
-def merge_variables(filename, sub_fn_var_infos, sub_fn_var_values, sub_fn_samples):
+def merge_var_infos(filename, sub_fn_var_infos):
     """Merge the values for the arguments into the corresponding global variables.
     See `read_data_trace_file' for a description of the argument types;
-    arguments 2-4 are dictionaries mapping from a function name to information
+    argument 2 is a dictionary mapping from a function name to information
     about the function.
     """
 
     if debug_read:
-        print "merge_variables", filename, sub_fn_var_infos.keys()
+        print "merge_var_infos", filename, sub_fn_var_infos.keys()
 
-    assert not(file_fn_var_infos.has_key(filename))
     for fname in sub_fn_var_infos.keys():
-        sub_var_infos = sub_fn_var_infos[fname]
-	if not(fn_var_infos.has_key(fname)):
+	if not(fn_var_values.has_key(fname)):
             var_infos = []
+            sub_var_infos = sub_fn_var_infos[fname]
             for vi in sub_var_infos:
                 var_infos.append(var_info(vi.name, vi.type, len(var_infos)))
 	    fn_var_infos[fname] = var_infos
             fn_var_values[fname] = {}
 	else:
-            assert var_infos_compatible(fn_var_infos[fname], sub_fn_var_infos[fname])
+            assert var_infos_compatible(fn_var_infos[fname], sub_fn_var_values[fname])
+
+
+def merge_var_values(filename, sub_fn_var_values, sub_fn_samples):
+    """Merge the values for the arguments into the corresponding global variables.
+    See `read_data_trace_file' for a description of the argument types;
+    arguments 2-3 are dictionaries mapping from a function name to information
+    about the function.
+    """
+
+    if debug_read:
+        print "merge_var_varlues", filename, sub_fn_var_values.keys()
+
+    for fname in sub_fn_var_values.keys():
+        sub_var_values = sub_fn_var_values[fname]
         var_infos = fn_var_infos[fname]
         var_values = fn_var_values[fname]
         sub_var_values = sub_fn_var_values[fname]
         for (values, count) in sub_var_values.items():
             var_values[values] = var_values.get(values, 0) + count
         fn_samples[fname] = fn_samples.get(fname, 0) + sub_fn_samples[fname]
-    file_fn_var_infos[filename] = sub_fn_var_infos
     file_fn_var_values[filename] = sub_fn_var_values
 
+
+###
+### Dictionary utilities
+###
 
 def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
     """Input: a dictionary mapping a tuple of elements to a count.
@@ -571,6 +603,10 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
     if debug_derive:
         print "introduce_new_variables_one_pass: indices %s (limit %d), functions %s" % (indices, len(var_infos), functions)
 
+    if var_values == {}:
+        # This function was never called
+        return
+
     (intro_from_sequence, intro_from_scalar,
      intro_from_sequence_sequence, intro_from_sequence_scalar,
      intro_from_scalar_sequence, intro_from_scalar_scalar) = functions
@@ -650,7 +686,7 @@ def introduce_from_sequence_pass1(var_infos, var_new_values, index):
     # sequence, not a subsequence (sequence slice) we have added
     if (seq_var_info.derived_len == None and not seq_var_info.is_derived):
         name_size = "size(%s)" % (seq_var_info.name,)
-        seq_len_var_info = var_info(name_size, "IntType", len(var_infos), true)
+        seq_len_var_info = var_info(name_size, "int", len(var_infos), true)
         var_infos.append(seq_len_var_info)
         seq_var_info.derived_len = len(var_infos)-1
         if debug_derive:
@@ -701,9 +737,9 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
     seqvar = seq_var_info.name
 
     # Add sum, min, and max (unconditionally)
-    var_infos.append(var_info("sum(%s)" % (seqvar,), "IntType", len(var_infos), true))
-    var_infos.append(var_info("min(%s)" % (seqvar,), "IntType", len(var_infos), true))
-    var_infos.append(var_info("max(%s)" % (seqvar,), "IntType", len(var_infos), true))
+    var_infos.append(var_info("sum(%s)" % (seqvar,), "int", len(var_infos), true))
+    var_infos.append(var_info("min(%s)" % (seqvar,), "int", len(var_infos), true))
+    var_infos.append(var_info("max(%s)" % (seqvar,), "int", len(var_infos), true))
     for new_values in var_new_values.values():
         this_seq = new_values[seqidx]
         if this_seq == None:
@@ -734,7 +770,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
         len_min = min(2, len_min)
         if len_min > 0:
             for i in range(0, len_min):
-                var_infos.append(var_info("%s[%d]" % (seqvar, i), "IntType", len(var_infos), true))
+                var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", len(var_infos), true))
             for new_values in var_new_values.values():
                 for i in range(0, len_min):
                     seq = new_values[seqidx]
@@ -745,7 +781,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
                     new_values.append(elt_val)
             if len_min != seq_len_inv.max:
                 for i in range(-len_min, 0):
-                    var_infos.append(var_info("%s[%d]" % (seqvar, i), "IntType", len(var_infos), true))
+                    var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", len(var_infos), true))
                 for new_values in var_new_values.values():
                     for i in range(-len_min, 0):
                         seq = new_values[seqidx]
@@ -851,7 +887,7 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
         and (not scalar_value_1)
         and (seq_size_idx != 'known_var')
         and (scl_inv.max <= var_infos[seq_size_idx].invariant.max)):
-        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), "IntType", len(var_infos), true))
+        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), "int", len(var_infos), true))
         for new_values in var_new_values.values():
             this_seq = new_values[seqidx]
             this_scl = new_values[sclidx]
@@ -1063,36 +1099,41 @@ pass2_functions = (introduce_from_sequence_pass2,
 # An instrumented program produces a .dtrace file containing information about
 # run-time values of expressions and variables.  The invariant detector tries
 # to find patterns in the values recorded in one or more trace files.
-# 
 # To detect invariants in a particular program, it is enough to insert code
 # in the application which creates a trace file.  In Lisp, the
 # `write-to-data-trace' macro and `instrument' function perform this task.
-# 
-# Each entry of a .inv file is of the form
-# 
-#   tag
-#   varname1	value1
-#   varname2	value2
-#   ...
-# 
-# The tag is an arbitrary alphanumeric string indicating the program point
-# at which this data was collected.  Varnames are separated by values by a
-# tab (\t) character.  The varnames are uninterpreted strings (but for a
-# given tag, the variable names must be consistent across different
-# entries).  Tags and varnames may not contain the tab (\t) character.
-# Currently the values are integers; this will be extended soon.
+# For documentation of the data trace file format, see invariants.py.doc.
 
-def read_data_trace_file_ftns(filename, fn_regexp=None):
+
+
+# This function makes a separate pass over the trace files because at each
+# program point, we need to know the names of all the available variables,
+# which includes all global variables (of which these are examples).
+#  * Alternative:  declare all the functions before any data are seen
+#     + more reasonable for on-line information (can't know when a
+#       new declaration would be seen)
+#     + obviates the need for this function and extra pass over the data
+#     - forces declaration of all functions ahead of time
+#     - perhaps not reasonable (at the least, complicated) for dynamic
+#       loading of code
+#  * Alternative:  go back and update info to insert new "zero" values
+#    everywhere that the variables weren't yet known about
+#     - not reasonable for online operation
+#  * Alternative:  when a new variable is added, somehow treat the previous
+#    tuples as having a default zero value.  I'm not sure exactly how this
+#    would work, but it might be the best solution.
+
+def read_data_trace_file_declarations(filename, fn_regexp=None):
     """Read data from .dtrace file; add to dictionary mapping file
     names to invocation counts.  The invocation counts are initialized
-    to zero.  Also initialize dict mapping files to parameters to
-    original values."""
+    to zero."""
 
-    if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+    this_fn_var_infos = {}      # from function name to tuple of variable names
+
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
     if debug_read:
-        print "read_data_trace_file_ftns", filename, (fn_regexp and fn_regexp.pattern) or ""
+        print "read_data_trace_file_declarations", filename, (fn_regexp and fn_regexp.pattern) or ""
 
     file = open(filename, "r")
     line = file.readline()
@@ -1102,62 +1143,125 @@ def read_data_trace_file_ftns(filename, fn_regexp=None):
     # Not using processed_lines dictionary appears to be marginally faster.
     # processed_lines = {}                # hashtable of tag lines seen so far
     while (line != ""):         # line == "" when we hit end of file
-        # if (not processed_lines.has_key(line)) and not (fn_regexp and not fn_regexp.search(line)):
-        if not (fn_regexp and not fn_regexp.search(line)):
-            # processed_lines[line] = 1
-            if line[-1] == "\n":
-                line = line[:-1]        # remove trailing newline
-            colon_separated_parts = string.split(line, ":::", 1)
-            if len(colon_separated_parts) == 1:
-                colon_separated_parts.append("")
-            (tag, leftover) = colon_separated_parts
-            assert not ftn_names_to_call_ct.has_key(tag)
-
-            # Get parameter list and initialize ftn to param vals dict
-            label_and_params = string.split(leftover, "(", 1)
-            if len(label_and_params) == 1:
-                # Backward compatibility if no parameter list specified
-                label = label_and_params
-                param_list = ""
-            else:
-                (label, param_list) = label_and_params
-                assert param_list[-1] == ")"
-                param_list = param_list[:-1] # remove trailing ')'
-            param_list = re.split("[, ]", param_list)
-            params_to_orig_val_list = {}
-            for param in param_list:
-                if param != '': # handle empty parameter list???
-                    params_to_orig_val_list[param] = []
-            ftn_to_orig_param_vals[tag] = params_to_orig_val_list
-
-        line = file.readline()
-        while "\t" in line:
-            # skip over (variable,value) line
+        if (line == "\n") or (line[0] == '#'):
             line = file.readline()
+        elif (line == "DECLARE\n"):
+            process_declaration(file, this_fn_var_infos, fn_regexp)
+            line = file.readline()
+        else:
+            while (line != "") and (line != "\n") and (line[0] != "#"):
+                line = file.readline()
+
+    return this_fn_var_infos
+
 
 def init_ftn_call_ct():
-    """Initialize ftn call counts to 0."""
-    for ftn_tag in ftn_names_to_call_ct.keys():
-        ftn_names_to_call_ct[ftn_tag] = 0
+    """Initialize function call counts to 0."""
+    # Clear out the entire dictionaries in the name of paranoia
+    global fn_to_orig_param_vals, fn_invocations
+    fn_invocations = {}
+    fn_to_orig_param_vals = {}
+
+    for fn_name in functions:
+        fn_invocations[fn_name] = 0
+        fn_to_orig_param_vals[fn_name] = []
+
+
+# This has certain parallels with read_data_trace file; but I think
+# separating the implementations is clearer, even if there's a bit of
+# duplication.
+def process_declaration(file, this_fn_var_infos, fn_regexp=None):
+    # We have just read the "DECLARATION" line.
+    line = file.readline()
+    if (fn_regexp and not fn_regexp.search(line)):
+        while (line != "\n") and (line != ""):
+            line = file.readline()
+        return
+
+    assert line[-1] == "\n"
+    program_point = line[:-1]
+    (tag_sans_suffix, tag_suffix) = (string.split(program_point, ":::", 1) + [""])[0:2]
+    if tag_suffix == "BEGIN":
+        functions.append(tag_sans_suffix)
+
+    assert not this_fn_var_infos.has_key(program_point)
+    these_var_infos = []
+    line = file.readline()
+    while (line != "\n") and (line != ""):
+        assert line[-1] == "\n"
+        varname = line[:-1]
+        line = file.readline()
+        assert line[-1] == "\n"
+        vartype = line[:-1]
+        these_var_infos.append(var_info(varname, vartype, len(these_var_infos)))
+        line = file.readline()
+
+    assert not(this_fn_var_infos.has_key(program_point))
+    this_fn_var_infos[program_point] = these_var_infos
+    ## Is this done somewhere else?
+    # this_fn_var_values[program_point] = {}
+
+
+
+# I probably *do* want to have original values even for global variables,
+# so I probably want to add original values after globals.
+# What about original vs. final invocation counts?  That could give info
+# about the dynamic call graph.  For now I'll do it, to avoid potential
+# problems with number of orig vars not equaling number of final vars.
+def after_processing_all_declarations():
+
+    ## Take care not to call this multiple times.  If fn_truevars is set,
+    ## it has been called.  But we need to set all the fn_truevars (for use
+    ## adding _orig) before doing the rest of the work.
+
+    fns_to_process = []
+
+    for fn in fn_var_infos.keys():
+        if not fn_truevars.has_key(fn):
+            fn_truevars[fn] = len(fn_var_infos[fn])
+            fns_to_process.append(fn)
+
+    # Add invocation counts
+    if not no_invocation_counts:
+        for ppt in fns_to_process:
+            these_var_infos = fn_var_infos[ppt]
+            for callee in fn_invocations.keys():
+                calls_var_name = "calls(%s)" % callee
+                these_var_infos.append(var_info(calls_var_name, "int", len(these_var_infos)))
+                these_values.append(fn_invocations[callee])
+                current_var_index = current_var_index + 1
+
+    # Add "_orig"inal values
+    for ppt in fns_to_process:
+        (ppt_sans_suffix, ppt_suffix) = (string.split(ppt, ":::", 1) + [""])[0:2]
+        if ppt_suffix != "END":
+            continue
+        these_var_infos = fn_var_infos[ppt]
+        begin_ppt = ppt_sans_suffix + ":::BEGIN"
+        for vi in fn_var_infos[begin_ppt][0:fn_truevars[begin_ppt]]:
+            these_var_infos.append(var_info(vi.name + "_orig", vi.type, len(these_var_infos)))
+
+
 
 def read_data_trace_file(filename, fn_regexp=None):
     """Read data from .dtrace file; return a tuple of three dictionaries.
-     * map from function name to tuple of variable names.
+     * map from function name to tuple of variable names (actually, var_infos)
      * map from function name to (map from tuple of values to occurrence count)
      * map from function name to number of samples
     """
 
-    if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
     if debug_read:
         print "read_data_trace_file", filename, fn_regexp and fn_regexp.pattern
 
     file = open(filename, "r")
 
-    this_fn_var_infos = {}      # from function name to tuple of variable names
     this_fn_var_values = {}	# from function name to (tuple of values to occurrence count)
     this_fn_samples = {}        # from function name to number of samples
+    for ppt in fn_var_infos.keys():
+        this_fn_var_values[ppt] = {}
+        this_fn_samples[ppt] = 0
 
     init_ftn_call_ct()          # initialize function call counts to 0
     line = file.readline()
@@ -1170,7 +1274,16 @@ def read_data_trace_file(filename, fn_regexp=None):
 
     while (line != ""):                 # line == "" when we hit end of file
 
-        # line contains no tab character
+        if (line == "\n") or (line[0] == '#'):
+            line = file.readline()
+            continue
+
+        if (line == "DECLARE\n"):
+            while (line != "\n"):
+                line = file.readline()
+            line = file.readline()
+            continue
+
         tag = line[:-1]                 # remove trailing newline
 
         # Would it be faster to have a hashtable of lines that don't match
@@ -1183,52 +1296,36 @@ def read_data_trace_file(filename, fn_regexp=None):
             continue
         # print "+", line, 	# comma because line ends in newline
 
-        tag_seen = this_fn_var_infos.has_key(tag)
+        assert fn_var_infos.has_key(tag), "No declaration for tag " + tag
 
-        # I postulate that this hashtable check is faster than regexps.
+        # I postulated that this hashtable check is faster than regexps.
+        # It doesn't seem to be true, though; see above.
         #         if tag_seen:
         #             (tag_sans_suffix, tag_suffix) = seen_tags[tag]
         #         else:
-        colon_separated_parts = string.split(tag, ":::", 1)
-        if len(colon_separated_parts) == 1:
-            colon_separated_parts.append("")
-        (tag_sans_suffix, tag_suffix) = colon_separated_parts
-        tag_suffix = string.split(tag_suffix, "(", 1)[0]
-        #            seen_tags[tag] = (tag_sans_suffix, tag_suffix)
+        (tag_sans_suffix, tag_suffix) = (string.split(tag, ":::", 1) + [""])[0:2]
 
         # Increment function invocation count if ':::BEGIN'
         if (not no_invocation_counts) and (tag_suffix == "BEGIN"):
-            ftn_names_to_call_ct[tag_sans_suffix] = ftn_names_to_call_ct[tag_sans_suffix] + 1
+            fn_invocations[tag_sans_suffix] = fn_invocations[tag_sans_suffix] + 1
 
-        # Get param to val stack for the function
-        # Accessing global here, crappy
-        params_to_orig_val_list = ftn_to_orig_param_vals[tag_sans_suffix]
-
-        if tag_seen:
-            these_var_infos = this_fn_var_infos[tag]
-        else:
-            these_var_infos = []
+        ## Read the variable values
+        these_var_infos = fn_var_infos[tag]
 	these_values = []
-        line = file.readline()
-        current_var_index = 0
-        while "\t" in line:
-            (this_var_name,this_value) = string.split(line, "\t", 1)
-            this_var_name_orig = this_var_name
-	    if this_value[-1] == "\n":
-	        this_value = this_value[:-1]   # remove trailing newline
-            # if sequence_re.match(this_var_name) or re.match("^#\((.*)\)$", this_value):
-            if this_var_name[-1] == "]" or this_value[0:1] == "#(":
+        for this_var_info in these_var_infos[0:fn_truevars[tag]]:
+            line = file.readline()
+            assert line[-1] == "\n"
+            assert line[:-1] == this_var_info.name
+            line = file.readline()
+            assert line[-1] == "\n"
+            this_value = line[:-1]
+            line = file.readline()
+            assert (line == "1\n") or (line == "0\n")
+            this_var_modified = (line == "1\n")
+
+            this_var_type = this_var_info.type
+            if (this_var_type == "ListType"):
                 # variable is a sequence
-                this_var_type = "ListType"
-                if this_var_name[-2:] == "[]":
-                    this_var_name = this_var_name[:-2]
-                ## I'm not sure whether regular expressions are chewing up
-                ## all my time, but just in case...
-                # lisp_delimiters = re.match("^#\((.*)\)$", this_value)
-                # if lisp_delimiters:
-                #     this_value = lisp_delimiters.group(1)
-                if this_value[0:2] == "#(" and this_value[-1] == ")":
-                    this_value = this_value[2:-1]
                 this_value = string.split(this_value, " ")
                 if len(this_value) > 0 and this_value[-1] == "":
                     # Cope with trailing spaces on the line
@@ -1237,7 +1334,7 @@ def read_data_trace_file(filename, fn_regexp=None):
                 # The regexp test and call to int do seem to be faster
                 # than a call to "eval", according to my timing tests.
                 # They also may be less error-prone (eg, not evaluating
-                # a string that happens to be a variable).
+                # a string that happens to be a variable name).
 
                 # If sequence variable is uninit, (as opposed to one
                 # element being uninit), mark as None
@@ -1259,7 +1356,7 @@ def read_data_trace_file(filename, fn_regexp=None):
                             raise "What value in " + filename + "? " + `this_value[seq_elem]`
                     this_value = tuple(this_value)
             else:
-                this_var_type = "IntType"
+                assert this_var_type == "int"
                 if integer_re.match(this_value):
                     this_value = int(this_value)
                 elif float_re.match(this_value):
@@ -1271,73 +1368,47 @@ def read_data_trace_file(filename, fn_regexp=None):
                     this_value = 0
                 else:
                     raise "What value in " + filename + "?"
-            if tag_seen:
-                assert this_var_name == these_var_infos[current_var_index].name
-            else:
-                these_var_infos.append(var_info(this_var_name, this_var_type, len(these_var_infos)))
 	    these_values.append(this_value)
-            current_var_index = current_var_index + 1
-            # print this_var_name, this_value
 
-            # If beginning of function, store the original param val
-            if tag_suffix == "BEGIN":
-                if this_var_name_orig in params_to_orig_val_list.keys():
-                    param_list = params_to_orig_val_list[this_var_name_orig]
-                    param_list.append(this_value)
+        line = file.readline()
+        assert (line == "\n") or (line == "")
 
-            line = file.readline()
         # Add invocation counts
         # Accessing global here-crappy
         if not no_invocation_counts:
-            for ftn_tag in ftn_names_to_call_ct.keys():
+            for ftn_tag in fn_invocations.keys():
                 calls_var_name = "calls(%s)" % ftn_tag
-                if tag_seen:
-                    assert calls_var_name == these_var_infos[current_var_index].name
-                else:
-                    these_var_infos.append(var_info(calls_var_name, "IntType", len(these_var_infos)))
-                these_values.append(ftn_names_to_call_ct[ftn_tag])
+                assert calls_var_name == these_var_infos[current_var_index].name
+                these_values.append(fn_invocations[ftn_tag])
                 current_var_index = current_var_index + 1
 
-
-        # Add original parameter values if end of function call
-        # Then pop previous original param value off of param val list
+        ## Original values.
+        params_to_orig_val_stack = fn_to_orig_param_vals[tag_sans_suffix]
+        # If beginning of function, store the original param val
+        if tag_suffix == "BEGIN":
+            params_to_orig_val_stack.append(these_values)
+        # If end of function call, pop previous original param value and
+        # add to current parameter values.
         if tag_suffix == "END":
-            for (param, param_list) in params_to_orig_val_list.items():
-                if tag_seen:
-                    if param[-2:] == "[]":
-                        param = param[:-2]
-                    assert param + "_orig" == these_var_infos[current_var_index].name
-                else:
-                    # Shouldn't need to do this regexp match; just look up the type
-                    if sequence_re.match(param):
-                        if param[-2:] == "[]":
-                            param = param[:-2]
-                        these_var_infos.append(var_info(param + "_orig", "ListType", len(these_var_infos)))
-                    else:
-                        these_var_infos.append(var_info(param + "_orig", "IntType", len(these_var_infos)))
-                these_values.append(param_list[-1])
-                del param_list[-1]
-                current_var_index = current_var_index + 1
+            # Equivalently, in Python 1.5.2:
+            #   these_values = these_values + params_to_orig_val_stack.pop()
+            old_values = params_to_orig_val_stack[-1]
+            del params_to_orig_val_stack[-1]
+            these_values = these_values + old_values
 
 	these_values = tuple(these_values)
         assert len(these_values) == len(these_var_infos)
-        assert len(these_var_infos) == current_var_index
-        if tag_seen:
-            # Effectively done above, by checking names and not reconstructing
-            # these_var_infos from scratch
-	    # assert var_infos_compatible(this_fn_var_infos[tag], these_var_infos)
-            assert type(this_fn_var_values[tag]) == types.DictType
-	else:
-            assert not(this_fn_var_infos.has_key(tag))
-	    this_fn_var_infos[tag] = these_var_infos
-	    this_fn_var_values[tag] = {}
+        # Effectively done above, by checking names and not reconstructing
+        # these_var_infos from scratch
+        # assert var_infos_compatible(fn_var_infos[tag], these_var_infos)
+        assert type(this_fn_var_values[tag]) == types.DictType
         this_var_values = this_fn_var_values[tag]
         this_var_values[these_values] = this_var_values.get(these_values, 0) + 1
         this_fn_samples[tag] = this_fn_samples.get(tag, 0) + 1
 
     # print ""
 
-    return (this_fn_var_infos, this_fn_var_values, this_fn_samples)
+    return (this_fn_var_values, this_fn_samples)
 
 
 def print_hashtables():
@@ -1430,23 +1501,22 @@ negative_invariant_confidence = .01     # .05 might also be reasonable
 
 def all_numeric_invariants(fn_regexp=None):
     """Compute and print all the numeric invariants."""
-    if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
     clear_invariants(fn_regexp)
 
-    if collect_stats:
-        collect_pre_derive_data()
-        engine_begin_time = time.clock()
-        engine_begin_time_wall = time.time()
+    # if collect_stats:
+    #     collect_pre_derive_data()
+    #     engine_begin_time = time.clock()
+    #     engine_begin_time_wall = time.time()
 
     fn_names = fn_var_infos.keys()
     fn_names.sort()
     for fn_name in fn_names:
         if fn_regexp and not fn_regexp.search(fn_name):
             continue
-        if collect_stats:
-            begin_fn_timing(fn_name)
+        # if collect_stats:
+        #     begin_fn_timing(fn_name)
 
         # If we discover that two values are equal, then there is no sense
         # in using both at any later stage; eliminate one of them and so
@@ -1457,6 +1527,9 @@ def all_numeric_invariants(fn_regexp=None):
 
         var_infos = fn_var_infos[fn_name]
         var_values = fn_var_values[fn_name]
+        if var_values == {}:
+            # print "No values for function", fn_name
+            continue
 
         derivation_functions = (None, pass1_functions, pass2_functions)
         derivation_passes = len(derivation_functions)-1
@@ -1508,14 +1581,14 @@ def all_numeric_invariants(fn_regexp=None):
         # I hope this doesn't give too many results
         print_invariants("^" + re.escape(fn_name) + r'($|\b)')
 
-        if collect_stats:
-            end_fn_timing(fn_name)
+        # if collect_stats:
+        #     end_fn_timing(fn_name)
 
-    if collect_stats:
-        engine_end_time = time.clock()
-        engine_end_time_wall = time.time()
-        collect_post_derive_data()
-        print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engine_end_time_wall)
+    # if collect_stats:
+    #     engine_end_time = time.clock()
+    #     engine_end_time_wall = time.time()
+    #     collect_post_derive_data()
+    #     print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engine_end_time_wall)
     # print_invariants(fn_regexp)
 
 ## Testing:
@@ -1530,9 +1603,14 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
 
     if indices == []:
         return
+    if var_values == {}:
+        # This function was never executed
+        return
 
     if debug_infer:
         print "numeric_invariants_over_index", indices
+        for i in indices:
+            print var_infos[i]
 
     # (Intentionally) ignores anything added by body,
     # though probably nothing should be added by this body.
@@ -1559,6 +1637,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
 
     if debug_infer:
         print "numeric_invariants_over_index: done with single invariants, starting pairs"
+        for j in indices:
+            print var_infos[i].invariant
 
     # Invariant pairs
     ## Don't do this; the large list of pairs can exhaust memory, though
@@ -1582,6 +1662,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             assert (i1 in indices) or (i2 in indices) # implied by the for loop
             vi2 = var_infos[i2]
             if not vi2.is_canonical():
+                continue
+            if not types_compatible(vi1.type, vi2.type):
                 continue
             inv2 = vi2.invariant
             if inv2.can_be_None:
@@ -1650,11 +1732,13 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 and vi1.invariants[i2].is_exact()):
                 continue
             vi2 = var_infos[i2]
+            if not vi2.is_canonical():
+                continue
+            if not types_compatible(vi1.type, vi2.type):
+                continue
             if vi2.invariant.is_exact():
                 continue
             if vi2.invariant.can_be_None:
-                continue
-            if not vi2.is_canonical():
                 continue
             ## Old for loop
             # for i3 in range(i2+1, index_limit):
@@ -1667,6 +1751,11 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 assert i1 != i3 and i2 != i3
 
                 vi3 = var_infos[i3]
+                if not vi3.is_canonical():
+                    continue
+                if not (types_compatible(vi1.type, vi3.type)
+                        and types_compatible(vi2.type, vi3.type)):
+                    continue
                 if vi3.invariant.is_exact():
                     # Do nothing if any of the variables is a constant.
                     continue
@@ -1678,8 +1767,6 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                     continue
                 if vi3.invariant.can_be_None:
                     # Do nothing if any of the variables can be missing.
-                    continue
-                if not vi3.is_canonical():
                     continue
 
                 values = dict_of_tuples_slice_3(var_values, i1, i2, i3)
@@ -1705,8 +1792,7 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
     If optional second argument print_unconstrained is true,
     then print all invariants."""
 
-    if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
     # print "print_invariants", fn_regexp and fn_regexp.pattern
 
@@ -1725,6 +1811,7 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
             if not vi.is_canonical():
                 continue
             if vi.equal_to == []:
+                # Not equal to anything else, so not an equality invariant
                 continue
             if vi.invariant.is_exact():
                 value = "= %s" % (vi.invariant.min,) # this value may be a sequence
@@ -2421,7 +2508,8 @@ class two_scalar_numeric_invariant(invariant):
             return "%d <= %s - %s <= %d \tjustified" % (diff_inv.min, x, y, diff_inv.max) + suffix
         if diff_inv.min_justified:
             if diff_inv.min == 0:
-                return "%s <= %s \tjustified" % (y,x) + suffix
+                if not self.comparison_obvious == ">=":
+                    return "%s <= %s \tjustified" % (y,x) + suffix
             elif diff_inv.min > 0:
                 return "%s <= %s - %d \tjustified" % (y,x,diff_inv.min) + suffix
             else:
@@ -2429,7 +2517,8 @@ class two_scalar_numeric_invariant(invariant):
                 return "%s <= %s + %d \tjustified" % (y,x,-diff_inv.min) + suffix
         if diff_inv.max_justified:
             if diff_inv.max == 0:
-                return "%s <= %s \tjustified" % (x,y) + suffix
+                if not self.comparison_obvious == "<=":
+                    return "%s <= %s \tjustified" % (x,y) + suffix
             elif diff_inv.max > 0:
                 return "%s <= %s + %d \tjustified" % (x,y,diff_inv.max) + suffix
             else:
@@ -3932,8 +4021,7 @@ def find_violations(condition, fn_regexp=None):
       find_violations("*j_orig == *j - 1", "plclose:::END")
     """
 
-    if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
     max_var_idx = -1
 
@@ -3996,33 +4084,71 @@ def find_violations(condition, fn_regexp=None):
 # As of 5/16/98, this took half an hour or more
 # invariants.read_invs('*.inv', "clear first")
 
+def read_merge_data_trace_file_declarations(filename, fn_regexp=None):
+    if debug_read:
+        print "read_merge_data_trace_file_declarations", filename, fn_regexp and fn_regexp.pattern
+    this_fn_var_infos = read_data_trace_file_declarations(filename, fn_regexp)
+    merge_var_infos(filename, this_fn_var_infos)
+
 def read_merge_data_trace_file(filename, fn_regexp=None):
     if debug_read:
         print "read_merge_data_trace_file", filename, fn_regexp and fn_regexp.pattern
-    (this_fn_var_infos, this_fn_var_values, this_fn_samples) = read_data_trace_file(filename, fn_regexp)
-    merge_variables(filename, this_fn_var_infos, this_fn_var_values, this_fn_samples)
+    (this_fn_var_values, this_fn_samples) = read_data_trace_file(filename, fn_regexp)
+    merge_var_values(filename, this_fn_var_values, this_fn_samples)
 
 # consider calling clear_variables() before calling this
 def read_inv(filename="medic/invariants.raw"):
     read_merge_data_trace_file(filename)
     print_hashtables()
 
-def read_invs(files, clear=0, fn_regexp=None, num_files=None, random_seed=None):
-    """FILES is either a sequence of file names or a single Unix file pattern.
+def read_decls_and_traces(files, clear=0, fn_regexp=None, num_files=None, random_seed=None):
+    """Read declarations from the FILES, then read the traces in the FILES.
+    When declarations and data traces are inseparate files, it is more
+    efficient to call read_declarations and then read_data_traces.
+
+    FILES is either a sequence of file names or a single Unix file pattern.
+    The remaining arguments are optional.
     CLEAR, if non-zero, means clear out global arrays first:  that is,
       replace old values with these, rather than appending these values.
-    FN_REGEXP, if a string, is converted into a case-insensitive regular expression.
-    Don't supply a value containing ":::END" or ":::BEGIN"; it should match only
-    the function name, as ":::BEGIN" and ":::END" are expected to match.
+    FN_REGEXP, if a string, is converted into a case-insensitive regular
+      expression, and only program points matching it are considered.
     NUM_FILES indicates how many (randomly chosen) files are to be read;
-      it defaults to all of the files.  Optional RANDOM_SEED is a triple of
-      numbers, each in range(0,256), used to initialize the random number
-      generator.
+      it defaults to all of the files.
+    RANDOM_SEED is a triple of numbers, each in range(0,256), used to
+      initialize the random number generator.
+    """
+    read_declarations(files, clear, fn_regexp)
+    read_data_traces(files, clear, fn_regexp, num_files, random_seed)
+
+
+def read_declarations(files, clear=0, fn_regexp=None):
+    """Read function declarations from FILES.
+    See read_decls_and_traces for more documentation.
     """
     if clear:
         clear_variables()
-    if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
+
+    files_orig = files
+    if type(files) == types.StringType:
+        files = util.expand_file_name(files)
+        files = glob.glob(files)
+    if files == []:
+        raise "No files specified"
+
+    # Get all function names to add checks on ftn invocation counts
+    for file in files:
+        read_merge_data_trace_file_declarations(file, fn_regexp)
+    after_processing_all_declarations()
+
+
+def read_data_traces(files, clear=0, fn_regexp=None, num_files=None, random_seed=None):
+    """Read data traces from FILES.
+    See read_decls_and_traces for more documentation.
+    """
+    if clear:
+        clear_trace_variables()
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
     files_orig = files
     if type(files) == types.StringType:
@@ -4046,15 +4172,13 @@ def read_invs(files, clear=0, fn_regexp=None, num_files=None, random_seed=None):
         #     print " ", file
     assert num_files == None or num_files == len(files)
 
-    # Get all function names to add checks on ftn invocation counts
-    for file in files:
-        read_data_trace_file_ftns(file, fn_regexp)
     for file in files:
         read_merge_data_trace_file(file, fn_regexp)
 
     if __debug__:                       # for loop is outside assert, yuck
         for fname in fn_var_values.keys():
-            assert len(fn_var_infos[fname]) == len(fn_var_values[fname].keys()[0])
+            assert ((len(fn_var_values[fname].keys()) == 0)
+                    or (len(fn_var_infos[fname]) == len(fn_var_values[fname].keys()[0])))
 
 
 def _test():
@@ -4190,10 +4314,10 @@ class stats:
         print "    Derived number of sequences:           ", "%3i" % (self.total_num_seq - (self.orig_num_seq_params + self.orig_num_seq_locals + self.orig_num_seq_globals))
 
 
-def init_collect_stats():
-    """ Initialize the function to stats dictionary."""
-    for fn_name in fn_var_infos.keys():
-        fn_to_stats[fn_name] = stats()
+# def init_collect_stats():
+#     """ Initialize the function to stats dictionary."""
+#     for fn_name in fn_var_infos.keys():
+#         fn_to_stats[fn_name] = stats()
 
 def get_global_var_list():
     """Compile a list of globals for use in stat collection."""
@@ -4213,93 +4337,91 @@ def get_global_var_list():
             globals.append(a_var_info.name)
     return globals
 
-def collect_pre_derive_data():
-    init_collect_stats()
-    globals = get_global_var_list()
-
-    for (fn_name,var_info_list) in fn_var_infos.items():
-        fn_stats = fn_to_stats[fn_name]
-        colon_separated_parts = string.split(fn_name, ":::", 1)
-        if len(colon_separated_parts) == 1:
-            colon_separated_parts.append("")
-        (fn_name_sans_suffix, suffix) = colon_separated_parts
-        params = (ftn_to_orig_param_vals[fn_name_sans_suffix]).keys()
-        for var in var_info_list:
-            # original values of parameters should be considered derived?
-            if string.find(var.name, "_orig") == -1:
-                if var.type == "ListType":
-                    if var.name in params:
-                        fn_stats.orig_num_seq_params = fn_stats.orig_num_seq_params + 1
-                    elif var.name in globals:
-                        fn_stats.orig_num_seq_globals = fn_stats.orig_num_seq_globals + 1
-                    else:
-                        fn_stats.orig_num_seq_locals = fn_stats.orig_num_seq_locals + 1
-                else:
-                    if var.name in params:
-                        fn_stats.orig_num_scl_params = fn_stats.orig_num_scl_params + 1
-                    elif var.name in globals:
-                        fn_stats.orig_num_scl_globals = fn_stats.orig_num_scl_globals + 1
-                    else:
-                        fn_stats.orig_num_scl_locals = fn_stats.orig_num_scl_locals + 1
-
-def collect_post_derive_data():
-    for (fn_name,var_info_list) in fn_var_infos.items():
-        fn_stats = fn_to_stats[fn_name]
-        fn_stats.samples = fn_samples[fn_name]
-        for var in var_info_list:
-            if var.invariant == None:
-                # When can this happen?  (I know it can.)
-                print "Warning: no invariant for variable", var, "in function", fn_name
-            else:
-                fn_stats.total_num_values_ind = fn_stats.total_num_values_ind + var.invariant.values
-
-            # Count all values for pairs of invariants.
-            # Be careful not to double count.  For example, if there is a
-            # pair invariant for indices (2,7), the invariant will appear
-            # in index 2's invariants[7] and in index 7's invariants[2].
-            # So we'll only include the invariants[j] in the list for index
-            # i if i < j.
-            # This doesn't work if include triple invariants???
-
-            for i in var.invariants.keys():
-                if i > var.index:
-                    fn_stats.total_num_values_pair = fn_stats.total_num_values_pair + var.invariants[i].values
-                    fn_stats.total_num_invs_pair = fn_stats.total_num_invs_pair + 1
-
-            if var.type == "ListType":
-                    fn_stats.total_num_seq = fn_stats.total_num_seq + 1
-            else:
-                    fn_stats.total_num_scl = fn_stats.total_num_scl + 1
-
-def begin_fn_timing(fn):
-    fn_stats = fn_to_stats[fn]
-    fn_stats.fn_begin_time = time.clock()
-    fn_stats.fn_begin_time_wall = time.time()
-
-
-def end_fn_timing(fn):
-    fn_stats = fn_to_stats[fn]
-    fn_stats.fn_end_time = time.clock()
-    fn_stats.fn_end_time_wall = time.time()
-
-def print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engine_end_time_wall):
-    print "Invariant Engine Stats"
-    print "Configuration: no_invocation_counts: %s, no_ternary_invariants: %s, no_opts: %s" % (no_invocation_counts, no_ternary_invariants, __debug__)
-
-    total_secs = engine_end_time - engine_begin_time
-    total_secs_wall = engine_end_time_wall - engine_begin_time_wall
-    # for (fn_name,fn_stats) in fn_to_stats.items():
-    #    total_secs = total_secs + (fn_stats.fn_end_time - fn_stats.fn_begin_time)
-    hours = int(total_secs / 3600.0)
-    minutes = int((total_secs % 3600)/60.0)
-    seconds = int(total_secs % 60)
-    print "CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds)
-    print "CPU time in secs: ", total_secs
-    print "Wall time in secs: ", total_secs_wall
-    fn_names = fn_to_stats.keys()
-    fn_names.sort()
-    for fn_name in fn_names:
-         fn_stats = fn_to_stats[fn_name]
-         print "==============================================================================="
-         print fn_name
-         fn_stats.format()
+# def collect_pre_derive_data():
+#     init_collect_stats()
+#     globals = get_global_var_list()
+# 
+#     for (fn_name,var_info_list) in fn_var_infos.items():
+#         fn_stats = fn_to_stats[fn_name]
+#         (fn_name_sans_suffix, suffix) = (string.split(fn_name, ":::", 1) + [""])[0:2]
+#         # The list of *original* paramters, as opposed to derived ones (???).
+#         params = foobar["*****"]
+#         for var in var_info_list:
+#             # original values of parameters should be considered derived?
+#             if string.find(var.name, "_orig") == -1:
+#                 if var.type == "ListType":
+#                     if var.name in params:
+#                         fn_stats.orig_num_seq_params = fn_stats.orig_num_seq_params + 1
+#                     elif var.name in globals:
+#                         fn_stats.orig_num_seq_globals = fn_stats.orig_num_seq_globals + 1
+#                     else:
+#                         fn_stats.orig_num_seq_locals = fn_stats.orig_num_seq_locals + 1
+#                 else:
+#                     if var.name in params:
+#                         fn_stats.orig_num_scl_params = fn_stats.orig_num_scl_params + 1
+#                     elif var.name in globals:
+#                         fn_stats.orig_num_scl_globals = fn_stats.orig_num_scl_globals + 1
+#                     else:
+#                         fn_stats.orig_num_scl_locals = fn_stats.orig_num_scl_locals + 1
+# 
+# def collect_post_derive_data():
+#     for (fn_name,var_info_list) in fn_var_infos.items():
+#         fn_stats = fn_to_stats[fn_name]
+#         fn_stats.samples = fn_samples[fn_name]
+#         for var in var_info_list:
+#             if var.invariant == None:
+#                 # When can this happen?  (I know it can.)
+#                 print "Warning: no invariant for variable", var, "in function", fn_name
+#             else:
+#                 fn_stats.total_num_values_ind = fn_stats.total_num_values_ind + var.invariant.values
+# 
+#             # Count all values for pairs of invariants.
+#             # Be careful not to double count.  For example, if there is a
+#             # pair invariant for indices (2,7), the invariant will appear
+#             # in index 2's invariants[7] and in index 7's invariants[2].
+#             # So we'll only include the invariants[j] in the list for index
+#             # i if i < j.
+#             # This doesn't work if include triple invariants???
+# 
+#             for i in var.invariants.keys():
+#                 if i > var.index:
+#                     fn_stats.total_num_values_pair = fn_stats.total_num_values_pair + var.invariants[i].values
+#                     fn_stats.total_num_invs_pair = fn_stats.total_num_invs_pair + 1
+# 
+#             if var.type == "ListType":
+#                     fn_stats.total_num_seq = fn_stats.total_num_seq + 1
+#             else:
+#                     fn_stats.total_num_scl = fn_stats.total_num_scl + 1
+# 
+# def begin_fn_timing(fn):
+#     fn_stats = fn_to_stats[fn]
+#     fn_stats.fn_begin_time = time.clock()
+#     fn_stats.fn_begin_time_wall = time.time()
+# 
+# 
+# def end_fn_timing(fn):
+#     fn_stats = fn_to_stats[fn]
+#     fn_stats.fn_end_time = time.clock()
+#     fn_stats.fn_end_time_wall = time.time()
+# 
+# def print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engine_end_time_wall):
+#     print "Invariant Engine Stats"
+#     print "Configuration: no_invocation_counts: %s, no_ternary_invariants: %s, no_opts: %s" % (no_invocation_counts, no_ternary_invariants, __debug__)
+# 
+#     total_secs = engine_end_time - engine_begin_time
+#     total_secs_wall = engine_end_time_wall - engine_begin_time_wall
+#     # for (fn_name,fn_stats) in fn_to_stats.items():
+#     #    total_secs = total_secs + (fn_stats.fn_end_time - fn_stats.fn_begin_time)
+#     hours = int(total_secs / 3600.0)
+#     minutes = int((total_secs % 3600)/60.0)
+#     seconds = int(total_secs % 60)
+#     print "CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds)
+#     print "CPU time in secs: ", total_secs
+#     print "Wall time in secs: ", total_secs_wall
+#     fn_names = fn_to_stats.keys()
+#     fn_names.sort()
+#     for fn_name in fn_names:
+#          fn_stats = fn_to_stats[fn_name]
+#          print "==============================================================================="
+#          print fn_name
+#          fn_stats.format()
