@@ -235,7 +235,8 @@ C/C++ front end dfec
 * Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
-* dfec requirements and troubleshooting::           
+* dfec requirements and troubleshooting::  
+* dfec troubleshooting::        
 
 Pointer type disambiguation
 
@@ -251,6 +252,11 @@ dfec requirements and troubleshooting
 * C program requirements::      
 * Header file dependencies::    
 * gcc version::                 
+
+dfec troubleshooting
+
+* Trouble running dfec::        
+* Trouble running instrumented code::  
 
 Perl front end dfepl
 
@@ -3435,7 +3441,8 @@ java daikon.Daikon daikon-output/myprog.decls \
 * Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
-* dfec requirements::           
+* dfec requirements and troubleshooting::  
+* dfec troubleshooting::        
 @end menu
 
 @node    dfec command-line arguments, Daikon runtime customization, C/C++ front end dfec, C/C++ front end dfec
@@ -4041,7 +4048,7 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements and troubleshooting,  , Instrumentation scope, C/C++ front end dfec
+@node    dfec requirements and troubleshooting, dfec troubleshooting, Instrumentation scope, C/C++ front end dfec
 @subsection dfec requirements and troubleshooting
 
 @command{dfec} does not output the contents of C unions.  This section
@@ -4049,8 +4056,10 @@ of the manual lists other requirements and limitations.
 
 If you have trouble with @command{dfec}, you should first ensure that
 the input to @command{dfec} (the program being instrumented) is
-proper, because @command{dfec} sometimes issues obscure error messages
-when provided invalid input.
+proper, according to the requirements set out in this section.
+@command{dfec} sometimes issues obscure error messages when provided
+invalid input.
+For additional help troubleshooting dfec, @xref{dfec problems}.
 
 @menu
 * C program requirements::      
@@ -4270,7 +4279,7 @@ other problems.
 
 @command{dfec} works with gcc 2.95.3 or 2.95.2, so long as you do not
 include both C's @file{math.h} and C++'s @file{complex.h}.
-@command{dfec} works with gcc 2.96; this is not an official gcc
+@command{dfec} also works with gcc 2.96; this is not an official gcc
 release, but it does appear in some Linux distributions, such as Red Hat's.
 @command{dfec} does not currently work with other
 compilers or other versions of gcc.  In particular, gcc 3 does not
@@ -4282,7 +4291,8 @@ Debian).
 @cindex gcc 2.95.3, installing
 @cindex installing gcc 2.95.3
 
-You can download gcc 2.95.3 from @uref{http://gcc.gnu.org/releases.html}.
+You can download gcc 2.95.3, which is the last official release in the
+gcc 2.x series, from @uref{http://gcc.gnu.org/releases.html}.
 
 gcc is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
 GCC installations instructions}.  If you do not wish to read them,
@@ -5484,6 +5494,14 @@ should solve the problem.
 @node    dfec problems, Daikon problems, dfej problems, Troubleshooting
 @section Problems with dfec
 
+
+Problems with dfec can be divided into those encountered when running
+dfec, those encountered when compiling the instrumented code, and
+those encountered when running the instrumented code.
+
+
+
+
 @menu
 * dfec instrumentation problems::  
 * Compilation and linking of instrumented code problems::  
@@ -5499,9 +5517,33 @@ compiling the instrumented program, @xref{C program requirements}.
 @node    Compilation and linking of instrumented code problems, Instrumented code problems, dfec instrumentation problems, dfec problems
 @subsection Problems compiling and linking instrumented programs
 
+dfec errors in system files, such as
+@file{.../gcc-3.2.1/include/c++/3.2.1/cstdlib}, or in the Daikon C
+runtime, @file{daikon_runtime.h}, are likely to indicate that you are
+using an unsupported version of gcc.  In particular, when you run
+dfec, the version of gcc on your path should be 2.95.2, 2.95.3, or
+2.96; @xref{gcc version}.
+
+dfec is sometimes confused by the conditional expression (@samp{?:})
+operator, saying that the two sides are of different types.  If either
+of the reported types involve ``DaikonSmartPointer'', then try
+rewriting the expression using a conditional statement (@samp{if
+... else}).  Otherwise, just add an appropriate cast to give the two
+arms of the conditional expression the same type.
+
+
+@node    Lackwit problems, Compilation and linking of instrumented code problems, dfec problems, dfec problems
+@subsubsection Lackwit problems
+
 @cindex Lackwit error, identifier undefined
 @cindex identifier undefined, Lackwit error
 @cindex undefined identifier, Lackwit error
+
+By default, dfec runs the Lackwit variable comparability analysis
+package.  Use of Lackwit is optional, but it can make invariant
+detection more accurate and efficient.  Lackwit errors are non-fatal
+to dfec, which can continue even if Lackwit fails.  (Lackwit is
+pickier than dfec, so it may fail when dfec does not.)
 
 If Lackwit (but not dfec proper) gives errors of the form
 ``identifier "strcat" is undefined'', then you have failed to include
@@ -5584,7 +5626,7 @@ g++.
 @end itemize
 
 
-@node    Instrumented code problems,  , Compilation and linking of instrumented code problems, dfec problems
+@node    Running instrumented code problems,  , Compilation and linking of instrumented code problems, dfec problems
 @subsection Problems running instrumented code
 
 @cindex daikon_runtime error
