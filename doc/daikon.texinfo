@@ -18,7 +18,7 @@
 @email{daikon@@sdg.lcs.mit.edu}
 @end macro
 
-@setchapternewpage odd
+@c @setchapternewpage odd
 
 @c @ifinfo
 @c This is a short example of a complete Texinfo file.
@@ -31,6 +31,7 @@
 
 @titlepage
 @sp 10
+@c Could also use @title, @subtitle, @author here.
 @center @titlefont{The Daikon Invariant Detector}
 
 @sp 5
@@ -40,7 +41,8 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2001 Michael Ernst
+Copyright @copyright{} 1998-2001
+@c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
 @html
