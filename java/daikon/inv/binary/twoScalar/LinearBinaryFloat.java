@@ -8,6 +8,9 @@ import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
 
+/**
+ * Invariants of the form x = ay + b
+ **/
 public class LinearBinaryFloat
   extends TwoFloat
 {
@@ -99,6 +102,12 @@ public class LinearBinaryFloat
       return true;
     }
 
+    return false;
+  }
+
+  public boolean isObviousImplied() {
+    if (core.a == 0) return true;                // Constant
+    if (core.a == 1 && core.b == 0) return true; // Equality
     return false;
   }
 
