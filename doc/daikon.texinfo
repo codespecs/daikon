@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.13
+@center Daikon version 2.3.14
 
 @sp 1
-@c Daikon version 2.3.13 date
-@center July 17, 2002
+@c Daikon version 2.3.14 date
+@center August  1, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.13, released July 17, 2002.
+It describes Daikon version 2.3.14, released August  1, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.13, released July 17, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.13, released July 17, 2002.
+It describes Daikon version 2.3.14, released August  1, 2002.
 @end ifnottex
 
 @menu
@@ -3763,8 +3763,6 @@ its source code.
 @cindex invariant, conditional
 @cindex implication invariant
 @cindex invariant, implication
-@cindex static analysis
-@cindex cluster analysis
 
 Conditional invariants are invariants that are true only part of the time.
 For instance, the postcondition for the absolute value procedure is
@@ -5142,7 +5140,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.13, released July 17, 2002.
+This manual describes Daikon version 2.3.14, released August  1, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

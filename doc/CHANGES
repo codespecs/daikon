@@ -9,7 +9,11 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 2.3.14 (1 August 2002):
 
-(To be written.)
+CreateSpinfoC program creates splitting conditions via static analysis of C
+programs; this complements CreateSpinfo, which works for Java programs.
+
+daikon_runtime.h lists many customization variables for the Daikon C
+Runtime.
 
 2.3.13 (17 July 2002):
 
