@@ -6,10 +6,17 @@
 # $Id$
 
 sub usage() {
-    print "Usage: $0 [options] <runnable class> [arguments]\n";
-    print "Options: --output file[.inv]\n";
-    print "         --verbose\n";
-    print "         --killu\n";
+    print
+	"Usage: $0 [OPTION] <MAIN CLASS> [MAIN ARGUMENTS]\n",
+	"\n",
+	"Options:\n",
+	"  -o, --output FILE   Save invariants in FILE.inv\n",
+	"  -v, --verbose       Display progress messages\n",
+	"  -c, --cleanup       Remove files left over from an interrupted session before starting\n",
+	"\n",
+	"Example:\n",
+	"  $0 --output test1 packfoo.MyTestSuite 200\n",
+	;
 }
 
 sub usagedie() {
@@ -20,18 +27,19 @@ sub usagedie() {
 use POSIX qw(tmpnam);
 use Getopt::Long;
 
-# global vars
+# environment vars
 
-$RTLIB = '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
+$TAR_MANIFEST_TAG = $ENV{'TAR_MANIFEST_TAG'} || '-T'; # change to -I for athena tar
+$DAIKON_WRAPPER_CLASSPATH = $ENV{'DAIKON_WRAPPER_CLASSPATH'} || '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
 
 # read options from command line
 
 GetOptions("output=s" => \$output,
 	   "verbose" => \$verbose,
-	   "killu" => \$killu,
+	   "cleanup" => \$cleanup,
 	   ) or usagedie();
 
-$runnable = shift @ARGV or usagedie();
+$runnable = shift @ARGV  or usagedie();
 $runnable_args = join(' ', @ARGV);
 
 # subroutines first
@@ -47,6 +55,14 @@ sub find {
     }
     close(F);
     return @result;
+}
+
+# do cleanup first
+
+if ($cleanup) {
+    for $fname (find("*.u")) {
+	unlink($fname);
+    }
 }
 
 # figure out the configuration
@@ -71,7 +87,7 @@ die ("Fix compiler errors before running daikon") if $error;
 # come up with a list of files which we need to care about
 print "Building dependency list...\n" if $verbose;
 
-die (".u files already exist") if (!$killu && find("*.u"));
+die (".u files already exist; try running with --cleanup option") if (find("*.u"));
 
 %interesting = (); # keys are interesting java file names
 system("jikes -depend -nowrite -nowarn +M $mainsrc") && die ("Unexpected jikes error");
@@ -100,8 +116,7 @@ for $srcfile (sort keys %interesting) {
 }
 close(MANIFEST);
 
-  # have to change -T to -I for athena tar (blah!)
-$err = system("tar cf - -T $manifest | gzip > $output.src.tar.gz");
+$err = system("tar cf - $TAR_MANIFEST_TAG $manifest | gzip > $output.src.tar.gz");
 unlink($manifest) or die("Could not unlink source manifest");
 die("Could not archive source") if $err;
 
@@ -126,7 +141,7 @@ while (1) {
 
     # compile the instrumented source files
     print "Compiling files...\n" if $verbose;
-    $cp = "$RTLIB:$working/daikon-java";
+    $cp = "$DAIKON_WRAPPER_CLASSPATH:$working/daikon-java";
     $jikeserr = system("jikes -classpath $cp -depend -g -nowarn $working/daikon-java/$mainsrc");
     last if $jikeserr;
 
@@ -149,6 +164,11 @@ while (1) {
     $dkerr = system("java daikon.Daikon -o $output.inv $decls $dtrace > /dev/null");
     last if $dkerr;
 
+    # compress the output
+    print "Compressing output...\n" if $verbose;
+    $gzerr = system("gzip $output.inv");
+    last if $gzerr;
+
     last;
 }
 
@@ -161,8 +181,9 @@ die("jikes error") if $jikeserr;
 die("java test suite error") if $javaerr;
 die("modbit error") if $mberr;
 die("daikon error") if $dkerr;
+die("gzip error") if $gzerr;
 
 # run the gui
 print "Starting the gui...\n" if $verbose;
 
-system("java -classpath $cp daikon.gui.InvariantsGUI $output.inv");
+system("java -classpath $cp daikon.gui.InvariantsGUI $output.inv.gz");
