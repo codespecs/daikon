@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-15 19:07:47 mistere>
+# Time-stamp: <2001-11-15 19:23:23 mistere>
 
 # The input is ... TODO
 
@@ -74,7 +74,7 @@ for my $filename (@ARGV) {
 
 # ********** Post-processing **********
 
-my %spinfo = ();  # in creating spinfo file, just dump this out (key -> header, values -> list of splits)
+my %spinfos = ();  # in creating spinfo file, just dump this out (key -> header, values -> list of splits)
 my %remap = ();   # in processing daikon output, remap these keys to the values
 
 if ("line" eq $grain) {
@@ -125,7 +125,7 @@ if ("line" eq $grain) {
       $spinfos{$header} .= $splitter;
     } elsif ("remap" eq $mode) {
       # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class.method>"
-      my $from = $method;
+      my $from = $num;
       my $to = "<Called from " . $caller . ">";
       $remap{$from} = $to;
     }
@@ -158,7 +158,7 @@ if ("line" eq $grain) {
       $spinfos{$header} .= $splitter;
     } elsif ("remap" eq $mode) {
       # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class>"
-      my $from = $class;
+      my $from = $num;
       my $to = "<Called from " . $caller . ">";
       $remap{$from} = $to;
     }
@@ -177,8 +177,7 @@ if ("spinfo" eq $mode) {
   for my $line (@lines) {
     for my $from (keys %remap) {
       my $to = $remap{$from};
-      # XXX Quote to,from?
-      $line =~ s/$from/$to/g;
+      $line =~ s/\Q$from/$to/g;
     }
     print $line;
   }
