@@ -735,6 +735,34 @@ public class Debug {
   }
 
   /**
+   * Returns a string containing each variable and its value
+   * The string is of the form v1 = val1: v2 = val2, etc.
+   */
+  public static String toString (VarInfo[] vis, ValueTuple vt) {
+
+    String out = "";
+
+    for (int i = 0; i < vis.length; i++) {
+      VarInfo v = vis[i];
+      Object val = v.getValue (vt);
+      int mod = vt.getModified (v);
+      out += v.name.name() + "=";
+      out += toString (val);
+      if (v.isMissing (vt))
+        out += " (missing)";
+      if (v.missingOutOfBounds())
+        out += " (out of bounds)";
+      if (v.equalitySet != null) {
+       if (!v.isCanonical())
+         out += " (leader=" + v.canonicalRep().name.name() + ")";
+      }
+      out += ": ";
+    }
+
+    return (out);
+  }
+
+  /**
    * Parses the specified argument to --track and sets up the track arrays
    * accordingly.  The syntax of the argument is
    *
