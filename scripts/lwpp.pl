@@ -50,11 +50,26 @@
 # comparability of the variables used to index "a".  We currently only
 # handle single-dimensional arrays.
 
+# This script can handle only one-dimensional arrays.  This is OK,
+# since dfec can also handle only one-dimensional arrays.
+
 # MISC: Lackwit doesn't know about procedure returns, so again we
 # added a dummy variable named "lh_return_value"
 
 # We must remove the leading :: from global variables in the decls
 # file, since lackwit can't handle ::.
+
+# We have to be careful about preserving the transitivity of the
+# comparable relationship.  That is, if a cmp b, then b cmp a.  One
+# place in this script where transitivity is broken is handling fields
+# of struct pointers.  To determine the comparability of "a->b", we
+# also check the comparability of "a".  If a cmp c, then we assume
+# a->b cmp c->b.  However, this can potentially break transitivity.
+# Say a cmp a->next->next, and a->next cmp b->next->next, but
+# according to lackwit, a !cmp b->next->next->next.  In this case, we
+# will break transitivity.  To fix this, we find the comparability of
+# each result returned from lackwit, and return the closure of the
+# sets of comparable variables.
 
 # STRUCTS: Lackwit gets structs about 90% right.  It has problems with
 # pointers to structs.
@@ -76,10 +91,16 @@
 # expression, just assume it returned no comparability information,
 # and use the comparability of its parent.
 
+# lh adds _element and _index variables for pointers to and arrays of
+# structs, just like it does for scalars.  When determining the
+# comparability of a struct field, lackwit will return something like
+# "a_element.b", but it might *not* return "a->b" as well.  Thus,
+# results of the form "a_element.b" are converted to "a->b".
+
 use English;
 use strict;
 $WARNING = 1;
-use vars qw(%cache);
+use vars qw(%cache %int_vars @comp_lists);
 
 my $element_suffix = "_element";
 my $index_suffix = "_index";
@@ -130,87 +151,145 @@ print OUT "\n";
 
 # maps explicit types (a string of space-separated comparable
 # variables) to implicit types (integers)
-my %implicit_types = ();
+my %explicit_to_implicit = ();
 
 while (<DECLS>) {
   print OUT;
 
   if (/DECLARE/) {
 
-    # show progress
-    #actually, no, don't
-    #print STDERR '.';
-
-    # variables at this program point that Daikon finds interesting,
-    # namely parameters and global variables
-    my %interesting_variables = ();
-
-    # read the whole paragraph into a string, excluding the blank line
-    my $ppt_declaration = <DECLS>;
-    while (1) {
-      my $variable = <DECLS>;
-      last if ((!$variable) || ($variable =~ /^\s+$/));
-
-      $ppt_declaration .= $variable;
-
-      chomp $variable;
-
-      $variable = transform($variable);
-
-      if (is_array_element($variable)) {
-        add_array_variables_to_interesting_variables($variable,
-                                                     \%interesting_variables);
-      } else {
-        $interesting_variables{$variable} = 1;
-      }
-
-      # read the next three lines
-      $ppt_declaration .= <DECLS>;
-      $ppt_declaration .= <DECLS>;
-      $ppt_declaration .= <DECLS>;
-    }
-
-    my @ppt_declaration = split(/\n/, $ppt_declaration);
-    my $ppt = shift @ppt_declaration;
-
+    my $ppt = <DECLS>;
+    chomp $ppt;
+    print OUT "$ppt\n";
     $ppt =~ /^.*\.(.*)\(/;
     my $function = $1;
 
-    print OUT "$ppt\n";
+    # location in the file where the variable declarations start
+    my $start_vars = tell DECLS;
 
-    # process the variable declarations, one at a time
-    while(my $variable = shift @ppt_declaration) {
-      my $declared_type = shift @ppt_declaration;
-      my $representation_type = shift @ppt_declaration;
+    # variables at this program point that Daikon finds interesting,
+    # namely parameters and global variables
+    %int_vars = ();
 
-      # throw away old comparability information
-      shift @ppt_declaration;
+    # list of lists of comparable variables at this program point
+    # includes uninteresting variables, which will be filtered out later
+    @comp_lists = ();
 
-      print OUT "$variable\n";
-      print OUT "$declared_type\n";
-      print OUT "$representation_type\n";
+    get_vars_and_comp($function);
 
-      if (is_array_element($variable)) {
-        print_implicit_type($variable, $function, \%interesting_variables);
-        print_array_index_types($variable, $function, $representation_type,
-                                \%interesting_variables);
-      } else {
-        print_implicit_type($variable, $function, \%interesting_variables);
-      }
+    @comp_lists = union_lists(@comp_lists);
+    @comp_lists = filter_lists_by_hash(\@comp_lists, \%int_vars);
 
-      print OUT "\n";
-    }
+    # reset the file pointer to the start of the ppt
+    seek DECLS, $start_vars, 0;
+
+    print_vars_and_comp();
   }
   print OUT "\n";
 }
 
-#print STDERR "\n";
-
 print OUT "# Implicit Type to Explicit Type\n";
-foreach my $implicit_type (sort {$a <=> $b;} values %implicit_types) {
-  my %explicit_types = reverse %implicit_types;
+foreach my $implicit_type (sort {$a <=> $b;} values %explicit_to_implicit) {
+  my %explicit_types = reverse %explicit_to_implicit;
   my $explicit_type = $explicit_types{$implicit_type};
   printf OUT "# %3s : $explicit_type\n", $implicit_type;
+}
+
+
+
+# takes a list of lists and a hash
+# filters each sublist, keeping only the elements present in the hash
+# returns the new list of lists
+sub filter_lists_by_hash {
+  my ($lists_ref, $hash_ref) = @_;
+  my @new_lists = ();
+  foreach my $list_ref (@{$lists_ref}) {
+    my @list = @{$list_ref};
+    my @new_list = grep {exists $hash_ref->{$_}} @list;
+    push @new_lists, \@new_list;
+  }
+  return @new_lists;
+}
+
+
+# read the whole program point, creating the hash of interesting
+# variables and the list of lists of comparable variables
+sub get_vars_and_comp {
+  my ($function) = @_;
+
+  while (my $variable = <DECLS>) {
+    last if ((!$variable) || ($variable =~ /^\s+$/));
+    chomp $variable;
+    
+    $variable = transform($variable);
+    
+    my $declared_type = <DECLS>;
+    my $rep_type = <DECLS>;
+    my $old_comparability = <DECLS>;
+    
+    if (is_array_element($variable)) {
+      add_array_variables_to_int_vars($variable, \%int_vars);
+      my $array_base = $variable;
+      $array_base =~ s/\[\]//;
+      my $element_variable = $array_base . $element_suffix;
+      my $index_variable = $array_base . $index_suffix;
+      $int_vars{$element_variable} = 1;
+      $int_vars{$index_variable} = 1;
+      
+      my %element_comparable_variables =
+        get_comparable_variables($element_variable, $function);
+      push @comp_lists, [keys %element_comparable_variables];
+      
+      my %index_comparable_variables =
+        get_comparable_variables($index_variable, $function);
+      push @comp_lists, [keys %index_comparable_variables];
+    } else {
+      $int_vars{$variable} = 1;
+      my %comparable_variables =
+          get_comparable_variables($variable, $function);
+      push @comp_lists, [keys %comparable_variables];
+    }
+  }
+}
+
+
+# read the program point, printing the variables and implicit
+# comparability types to the output file
+sub print_vars_and_comp {
+  my ($function) = @_;  
+
+  # process the variable declarations, one at a time
+  while(my $variable = <DECLS>) {
+    last if ((!$variable) || ($variable =~ /^\s+$/));
+
+    chomp $variable;
+    my $declared_type = <DECLS>;
+    chomp $declared_type;
+    my $representation_type = <DECLS>;
+    chomp $representation_type;
+    
+    print OUT "$variable\n";
+    print OUT "$declared_type\n";
+    print OUT "$representation_type\n";
+
+    # throw away old comparability information
+    <DECLS>;
+    
+    $variable = transform($variable);
+
+    if (is_array_element($variable)) {
+      my $array_base = $variable;
+      $array_base =~ s/\[\]//;
+      my $element_variable = $array_base . $element_suffix;
+      my $index_variable = $array_base . $index_suffix;
+      my $elem_imp_type = implicit_type($element_variable);
+      my $index_imp_type = implicit_type($index_variable);
+      print OUT "$elem_imp_type\[$index_imp_type\]\n";
+    } else {
+      my $imp_type = implicit_type($variable);
+      print OUT "$imp_type\n";
+    }
+  }
 }
 
 
@@ -219,26 +298,20 @@ sub is_array_element {
   return $variable =~ /\[\]/ || $variable =~ /\[0\]/;
 }
 
+
 sub is_struct_field {
   my ($variable) = @_;
   return $variable =~ /->/ || $variable =~ /\./;
 }
 
+
 sub get_comparable_variables {
-  my ($variable, $function, $interesting_variables) = @_;
+  my ($variable, $function) = @_;
 
   my %comparable_variables = ();
 
-  # every variable is comparable to itself, except array elements,
-  # which are comparable to their _element variable
-  if (is_array_element($variable)) {
-    my $array_base = $variable;
-    $array_base =~ s/\[\]//;
-    my $element_variable = $array_base . $element_suffix;
-    $comparable_variables{$element_variable} = 1;
-  } else {
-    $comparable_variables{$variable} = 1;
-  }
+  # every variable is comparable to itself
+  $comparable_variables{$variable} = 1;
 
   my $lackwit_results = lackwit($function, $variable);
 
@@ -255,6 +328,9 @@ sub get_comparable_variables {
     # functions ("@")
     next if ($comparable =~ /\{|@/);
 
+    # skip function static variables ("#")
+    next if ($comparable =~ /\#/);
+
     # If the variable name contains a colon, it is either local to
     # a function, or a function parameter.  It will be of the
     # format "function:variable".  If the name does not contain a
@@ -270,20 +346,48 @@ sub get_comparable_variables {
       $comparable_variable = $comparable;
     }
 
-    if (is_array_element($comparable_variable)) {
-      # change array[0][0]... to array_element
-      $comparable_variable =~ s/(\[0\])+/$element_suffix/;
-    }
+    # change array[0] to array_element
+    $comparable_variable =~ s/\[0\]/$element_suffix/;
 
-    if (exists $interesting_variables->{$comparable_variable}) {
-      $comparable_variables{$comparable_variable} = 1;
-    } elsif ($comparable_variable =~ /^(.*)$element_suffix/) {
-      # an array element may be represented in the trace file as a pointer
+    # fields of struct array elements are in the trace file with an "->"
+    # convert "a_element.b_element.c->d" to "a->b->c->d"
+    $comparable_variable =~ s/$element_suffix\./->/g;
+
+    $comparable_variables{$comparable_variable} = 1;
+
+    # an array element may be represented in the trace file as a pointer
+    if ($comparable_variable =~ /^(.*)$element_suffix/) {
       my $array_base = $1;
       my $pointer = "*$array_base";
-      if (exists $interesting_variables->{$pointer}) {
-        $comparable_variables{$pointer} = 1;
-      }
+      $comparable_variables{$pointer} = 1;
+    }
+  }
+
+  # If the variable is an array element, we need to check the
+  # comparability of the array itself.  If the array is comparable to
+  # another array, the elements of the arrays should be comparable as
+  # well.
+  if ($variable =~ /^(.*)$element_suffix$/) {
+    my $array_base = $1;
+    my %base_comp_var =
+      get_comparable_variables($array_base, $function);
+    foreach my $base_comp_var (keys %base_comp_var) {
+      my $elem_comp_var = $base_comp_var . $element_suffix;
+      $comparable_variables{$elem_comp_var} = 1;
+    }
+  }
+
+  # If the variable is an array index, we need to check the
+  # comparability of the array itself.  If the array is comparable to
+  # another array, the indices of the arrays should be comparable as
+  # well.
+  if ($variable =~ /^(.*)$index_suffix$/) {
+    my $pointer_var = $1;
+    my %pointer_comp_var =
+      get_comparable_variables($pointer_var, $function);
+    foreach my $pointer_comp_var (keys %pointer_comp_var) {
+      my $index_comp_var = $pointer_comp_var . $index_suffix;
+      $comparable_variables{$index_comp_var} = 1;
     }
   }
 
@@ -295,17 +399,16 @@ sub get_comparable_variables {
   if (is_struct_field($variable)) {
     my ($struct, $field) = split_struct($variable);
     my %parent_comp_var =
-      get_comparable_variables($struct, $function, $interesting_variables);
+      get_comparable_variables($struct, $function);
     foreach my $parent_comp_var (keys %parent_comp_var) {
       my $field_comp_var = $parent_comp_var . $field;
-      if (exists $interesting_variables->{$field_comp_var}) {
-        $comparable_variables{$field_comp_var} = 1;
-      }
+      $comparable_variables{$field_comp_var} = 1;
     }
   }
 
   return %comparable_variables;
 }
+
 
 # Splits a structure field variable into the parent structure and the
 # field.  The field accessor is appended to the front of the field.
@@ -318,6 +421,7 @@ sub split_struct {
   $variable =~ s/(.*)(\.|->)([^\.-]*)$//;
   return ($1, $2.$3);
 }
+
 
 # memoizes calls to BackEnd to improve performance
 sub lackwit {
@@ -333,14 +437,13 @@ sub lackwit {
   return $retval;
 }
 
+
 sub _lackwit {
   my ($function, $variable) = @_;
   my $result =
     `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
   if ($CHILD_ERROR != 0) {
     if (is_struct_field($variable)) {
-      print STDERR
-        "Warning: BackEnd failed on struct field $function:$variable\n";
       return "";
     } else {
       die "FAILURE: BackEnd failed on $function:$variable\n";
@@ -349,97 +452,46 @@ sub _lackwit {
   return $result;
 }
 
-sub add_array_variables_to_interesting_variables {
-  my ($variable, $interesting_variables) = @_;
+
+sub add_array_variables_to_int_vars {
+  my ($variable, $int_vars) = @_;
   my $array_base = $variable;
   $array_base =~ s/\[\]//;
   my $element_variable = $array_base . $element_suffix;
-  $interesting_variables->{$element_variable} = 1;
+  $int_vars->{$element_variable} = 1;
   if ($variable =~ /\[\]/) {
     my $index_variable = $array_base . $index_suffix;
-    $interesting_variables->{$index_variable} = 1;
+    $int_vars->{$index_variable} = 1;
   }
 }
 
 
-sub print_array_index_types {
-  my ($variable, $function, $representation_type, $interesting_variables) = @_;
+sub implicit_type {
+  my ($var) = @_;
+  my @explicit_type = explicit_type($var);
 
-  $variable = transform($variable);
+  my $key = join ' ', (sort @explicit_type);
 
-  my $array_base = $variable;
-  $array_base =~ s/\[\]//;
-
-  # Treat String rep type like an array, because the underlying C
-  # implementation is actually an array
-  if ($representation_type eq "String") {
-    $representation_type = $array_base . "[]";
-  }
-
-  if ($representation_type =~ /\[\]/) {
-    my $index_variable = $array_base . $index_suffix;
-    my %comparable_variables = get_comparable_variables($index_variable,
-      $function, $interesting_variables);
-
-    if (is_array_element($variable)) {
-      my $pointer_var = $variable;
-      $pointer_var =~ s/(\[\]|\[0\])//;
-      my %pointer_comp_var = get_comparable_variables($pointer_var,
-        $function, $interesting_variables);
-      foreach my $pointer_comp_var (keys %pointer_comp_var) {
-        my $index_comp_var = $pointer_comp_var . $index_suffix;
-        if (exists $interesting_variables->{$index_comp_var}) {
-          $comparable_variables{$index_comp_var} = 1;
-        }
-      }
-    }
-
-    my $implicit_type = get_implicit_type(%comparable_variables);
-
-    print OUT "[" . $implicit_type . "]";
-  }
-}
-
-
-sub print_implicit_type {
-  my ($variable, $function, $interesting_variables) = @_;
-
-  $variable = transform($variable);
-
-  my %comparable_variables = get_comparable_variables($variable,
-    $function, $interesting_variables);
-
-  if (is_array_element($variable)) {
-    my $pointer_var = $variable;
-    $pointer_var =~ s/(\[\]|\[0\])//;
-    my %pointer_comp_var = get_comparable_variables($pointer_var,
-      $function, $interesting_variables);
-    foreach my $pointer_comp_var (keys %pointer_comp_var) {
-      my $elem_comp_var = $pointer_comp_var . $element_suffix;
-      if (exists $interesting_variables->{$elem_comp_var}) {
-        $comparable_variables{$elem_comp_var} = 1;
-      }
-    }
-  }
-
-  my $implicit_type = get_implicit_type(%comparable_variables);
-  print OUT $implicit_type;
-}
-
-
-sub get_implicit_type {
-  my (%comparable_variables) = @_;
-  my $key = join ' ', (sort keys %comparable_variables);
-
-  if (not exists $implicit_types{$key}) {
-    my @types = sort {$a <=> $b;} values %implicit_types;
+  if (not exists $explicit_to_implicit{$key}) {
+    my @types = sort {$a <=> $b;} values %explicit_to_implicit;
     if (my $maximum_type = pop @types) {
-      $implicit_types{$key} = $maximum_type + 1;
+      $explicit_to_implicit{$key} = $maximum_type + 1;
     } else {
-      $implicit_types{$key} = 1;
+      $explicit_to_implicit{$key} = 1;
     }
   }
-  return $implicit_types{$key};
+  return $explicit_to_implicit{$key};  
+}
+
+
+sub explicit_type {
+  my ($var) = @_;
+  foreach my $list_ref (@comp_lists) {
+    my @comp_list = @{$list_ref};
+    if (grep {$_ eq $var} @comp_list) {
+      return @comp_list;
+    }
+  }
 }
 
 
@@ -447,12 +499,60 @@ sub get_implicit_type {
 # lackwit can process
 sub transform {
   my ($var) = @_;
-  if ($var eq "return" || $var eq "return[]") {
-    $var =~ s/return/$dummy_return/;
+
+  # change "return" to "$dummy_return" when appropriate
+  if ($var eq "return" || $var eq "return[]" ||
+      $var =~ /^return->/ || $var =~ /^return\./) {
+    $var =~ s/^return/$dummy_return/;
   }
 
   # remove the leading "::" from global variables
   $var =~ s/^:://;
 
   return $var;
+}
+
+
+# Given a list of list refs, merges the lists with common elements.
+# Returns a list of list refs, such that the sublists are disjoint.
+sub union_lists {
+  my (@lists) = @_;
+  my $cur_list_index = 0;
+  while ($cur_list_index < @lists) {
+    my $cur_list_ref = $lists[$cur_list_index];
+    my $cur_elem_index = 0;
+    while ($cur_elem_index < @{$cur_list_ref}) {
+      my $cur_elem = $cur_list_ref->[$cur_elem_index];
+      my $other_list_index = $cur_list_index + 1;
+      while ($other_list_index < @lists) {
+        my $other_list_ref = $lists[$other_list_index];
+        my $other_list_removed = 0;
+        if (grep {$_ eq $cur_elem} @{$other_list_ref}) {
+          merge_lists($cur_list_ref, $other_list_ref);
+          # remove the other list
+          splice @lists, $other_list_index, 1;
+          $other_list_removed = 1;
+        }
+        if (! $other_list_removed) {
+          $other_list_index++;
+        }
+      }      
+      $cur_elem_index++;
+    }
+    $cur_list_index++;    
+  }
+  return @lists;
+}
+
+
+# Takes two list references as arguments.  Adds each element of the
+# second list to the end of the first, if the element is not already
+# in the first list
+sub merge_lists {
+  my ($list_ref1, $list_ref2) = @_;
+  foreach my $elem (@{$list_ref2}) {
+    if (! (grep {$_ eq $elem} @{$list_ref1})) {
+      push @{$list_ref1}, $elem;
+    }
+  }
 }
