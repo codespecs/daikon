@@ -147,6 +147,24 @@ public abstract class CLASSNAME extends SUPERCLASS {
     String v2 = null;
 
     #if defined(SEQ)
+      if (format.isJavaFamily()) {
+        v1 = var1().name.name_using(format, var1());
+        v2 = var2().name.name_using(format, var2());
+        if (this instanceof Divides) {
+          return "daikon.Quant.pairwiseDivides(" + v1 + ", " + v2 + ")";
+        } else if (this instanceof Square) {
+          return "daikon.Quant.pairwiseSquare(" + v1 + ", " + v2 + ")";
+      #if defined(TYPELONG) || defined(TYPELONGSEQ)
+        } else if (this instanceof BitwiseComplement) {
+          return "daikon.Quant.pairwiseBitwiseComplement(" + v1 + ", " + v2 + ")";
+        } else if (this instanceof BitwiseSubset) {
+          return "daikon.Quant.pairwiseBitwiseSubset(" + v1 + ", " + v2 + ")";
+      #endif
+        } else {
+          return format_unimplemented(format);
+        }
+      }
+
       if (format == OutputFormat.ESCJAVA) {
         String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[]
                               { var1().name, var2().name }, true);

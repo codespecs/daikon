@@ -72,6 +72,114 @@ The correct way to build the system is to run 'make'.
   #define CAST_TYPE double
 #endif
 
+#if (defined(INT) || defined(LONG))
+
+  /**
+   * Pairwise divides
+   */
+  /*@ pure */ public static boolean pairwiseDivides(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] % seq2[i] == 0)) {
+      return false;
+    }
+  }
+  return true;
+}
+/*@ pure */ public static boolean pairwiseDivides(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] % seq2[i] == 0)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+  /**
+   * Pairwise aquare
+   */
+  /*@ pure */ public static boolean pairwiseSquare(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] == seq2[i] * seq2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+/*@ pure */ public static boolean pairwiseSquare(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] == seq2[i] * seq2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+  /**
+   * Pairwise bitwise complement
+   */
+  /*@ pure */ public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] == ~seq2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+/*@ pure */ public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] == ~seq2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+  /**
+   * Pairwise bitwise subset
+   */
+  /*@ pure */ public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] == (seq2[i] | seq1[i]))) {
+      return false;
+    }
+  }
+  return true;
+}
+/*@ pure */ public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (! (seq1[i] == (seq2[i] | seq1[i]))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#endif
+
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
 /**
@@ -1198,13 +1306,10 @@ The correct way to build the system is to run 'make'.
 }
 #endif
 
-
-#if defined(INT)
-
 /**
  *
  * ONLY works for field sequences with exactly one field representing
- * a collection.
+ * a collection (e.g it doesn't work for a[].b.c[].d).
  *
  * for anything non-primitive, inst should be an Object, and we'll
  * lose any more precise type information.
@@ -1220,14 +1325,14 @@ The correct way to build the system is to run 'make'.
  * is.
  */
 
-/*@ pure */  public static Object[] collect(Object object,
-                                            String[] fields, int fieldsStartIdx) {
+/*@@ pure */  public static _TYPE[] collect(_TYPE inst, Object object,
+                                                  String[] fields, int fieldsStartIdx) {
 
-// For debugging.
 //   System.out.println("ENTERING COLLECT "
 //                      + "inst=" + inst + ", object=" + object
 //                      + "fields=" + utilMDE.ArraysMDE.toString(fields)
 //                      + "fieldsStartIdx=" + fieldsStartIdx);
+
 
   Field field = null;
   Class cls = null;
@@ -1238,23 +1343,23 @@ The correct way to build the system is to run 'make'.
     fieldObj = field.get(object);
     //System.out.println("***fieldObj="+fieldObj);
   } catch (NoSuchFieldException e) {
-    throw new RuntimeException("daikon.Quant.fieldArray: NoSuchFieldException: "
-                               + "object=" + object
+    throw new RuntimeException("quant.Quant.fieldArray: NoSuchFieldException: "
+                               + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (NullPointerException e) {
-    throw new RuntimeException("daikon.Quant.fieldArray: NullPointerException: "
-                               + "object=" + object
+    throw new RuntimeException("quant.Quant.fieldArray: NullPointerException: "
+                               + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (SecurityException e) {
-    throw new RuntimeException("daikon.Quant.fieldArray: SecurityException: "
-                               + "object=" + object
+    throw new RuntimeException("quant.Quant.fieldArray: SecurityException: "
+                               + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (Exception e) {
-    throw new RuntimeException("daikon.Quant.fieldArray: Exception: "
-                               + "object=" + object
+    throw new RuntimeException("quant.Quant.fieldArray: Exception: "
+                               + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   }
@@ -1262,10 +1367,19 @@ The correct way to build the system is to run 'make'.
   // base case: one field
   if (fields.length - 1 == fieldsStartIdx) {
 
-    // Can't really check for this. Is there a way we could?
+#if (defined(OBJECT) || defined(STRING))
+
     //Assert.assertTrue(inst.getClass().equals(fieldObj.getClass()));
     //return new _TYPE[] { (_TYPE)fieldObj };
-    return new Object[] { fieldObj };
+    return new _TYPE[] { (_TYPE)fieldObj };
+
+#else
+
+    Assert.assertTrue(cls.equals(_TYPE_WRAPPER_NAME.TYPE));
+    return
+      new _TYPE[] { ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE_WRAPPER_GETVAL_METHOD() };
+
+#endif
 
   // recursive case: more than one field
   } else {
@@ -1275,10 +1389,10 @@ The correct way to build the system is to run 'make'.
       //System.out.println("ITS AN ARRAY");
 
       // collect elements across array
-      Object[] intermediate = new Object[Array.getLength(fieldObj)];
+      _TYPE[] intermediate = new _TYPE[Array.getLength(fieldObj)];
       for (int i = 0 ; i < intermediate.length ; i++) {
-        Object[] oneEltArray = collect(Array.get(fieldObj, i),
-                                       fields, fieldsStartIdx + 1);
+        _TYPE[] oneEltArray = collect(inst, Array.get(fieldObj, i),
+                                      fields, fieldsStartIdx + 1);
         Assert.assertTrue(oneEltArray.length == 1);
         intermediate[i] = oneEltArray[0];
       }
@@ -1286,7 +1400,7 @@ The correct way to build the system is to run 'make'.
 
     } else {
 
-      return collect(fieldObj, fields, fieldsStartIdx + 1);
+      return collect(inst, fieldObj, fields, fieldsStartIdx + 1);
     }
   }
 }
@@ -1298,14 +1412,12 @@ The correct way to build the system is to run 'make'.
  * at least one of the fields in fieldStr represents a collection [explain]
  */
 
-/*@ pure */ public static Object[] collect(Object object, String fieldStr) {
+/*@@ pure */ public static _TYPE[] collect(_TYPE inst, Object object, String fieldStr) {
 
   Assert.assertTrue(fieldStr != null && !"".equals(fieldStr));
   String[] splits = fieldStr.split("\\.");
 
-  Object[] retval = collect(object, splits, 0);
+  _TYPE[] retval = collect(inst, object, splits, 0);
   //System.out.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
   return retval;
 }
-
-#endif

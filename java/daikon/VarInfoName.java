@@ -830,12 +830,17 @@ public abstract class VarInfoName
     }
     protected String java_family_impl(OutputFormat format, VarInfo v) {
       if (testCall) { return "no format when testCall."; }
-      if (v.type.pseudoDimensions() == 1) {
+      Assert.assertTrue(v != null);
+      Assert.assertTrue(v.isDerived());
+      Derivation derived = v.derived;
+      Assert.assertTrue(derived instanceof SequenceLength);
+      VarInfo seqVarInfo = ((SequenceLength)derived).base;
+      if (seqVarInfo.type.pseudoDimensions() > seqVarInfo.type.dimensions()) {
         // It's a Collection
-        return sequence.term.name_using(format, v) + ".size()";
+        return sequence.term.name_using(format, seqVarInfo) + ".size()";
       } else {
         // It's an array
-        return sequence.term.name_using(format, v) + ".length";
+        return sequence.term.name_using(format, seqVarInfo) + ".length";
       }
     }
     protected String identifier_name_impl() {
@@ -1171,39 +1176,43 @@ public abstract class VarInfoName
       return term.ioa_name() + "." + field;
     }
     protected String java_name_impl(VarInfo v) {
-      return collectExpr(OutputFormat.JAVA, v);
+      return java_family_name(OutputFormat.JAVA, v);
     }
     protected String jml_name_impl(VarInfo v) {
-      return collectExpr(OutputFormat.JML, v);
+      return java_family_name(OutputFormat.JML, v);
     }
     protected String dbc_name_impl(VarInfo v) {
-      return collectExpr(OutputFormat.DBCJAVA, v);
-    }
-
-    // performs: foo[] --> foo.  requires: if foo does have "[]", it's
-    // only at the end of the string.
-    private String removeBrackets(String str) {
-      if (str.indexOf("[]") != -1) {
-        Assert.assertTrue(str.indexOf("[]") == str.length()-2);
-        return str.substring(0,str.length()-2);
-      } else {
-        return str;
-      }
+      return java_family_name(OutputFormat.DBCJAVA, v);
     }
 
     // For JAVA, JML and DBC formats.
-    protected String collectExpr(OutputFormat format, VarInfo v) {
+    protected String java_family_name(OutputFormat format, VarInfo v) {
 
-        String term_name = null;
-        if (format == OutputFormat.JML) {
-          term_name = term.jml_name(v);
-        } else if (format == OutputFormat.JAVA) {
-          term_name = term.java_name(v);
-        } else {
-          term_name = term.dbc_name(v);
-        }
+      if (testCall) { return "no format when testCall."; }
 
-      if (term.name().indexOf("[]") != -1) {
+      String term_name = null;
+      if (format == OutputFormat.JML) {
+        term_name = term.jml_name(v);
+      } else if (format == OutputFormat.JAVA) {
+        term_name = term.java_name(v);
+      } else {
+        term_name = term.dbc_name(v);
+      }
+
+      if (term_name.indexOf("daikon.Quant.slice") != -1) {
+        // [[[ FIXME: We run into problems when we ask for things like
+        // arr[i..].x because this translates into
+        // daikon.Quant.collect(new java.lang.Object,daikon.Quant.slice(arr,i,arr.length),"x").
+        // Method collect() will then query for the field "x" of type Object.]]]
+        return "(warning: " + format + " format cannot express a field applied to a slice:"
+          + " [repr=" + repr() + "])";
+      }
+
+      if (term.name().indexOf("[]") == -1) {
+        // Case 1: Not an array collection
+        return term_name + "." + field;
+      } else {
+        // Case 2: An array collection
 
         // How to translate foo[].f, which is the array obtained from
         // collecting o.f for every element o in the array foo?  Just as
@@ -1217,29 +1226,50 @@ public abstract class VarInfoName
         // The method Quant.collect takes care of the "y.foo[].bar.f"
         // mess for object x.
 
+        // In order to invoke the correct version of
+        // daikon.Quant.collect(), we need to communicate to it the
+        // base type of the array it should produce. This information
+        // needs to affect the signature of collect(), so it must be
+        // reflected in the type of one of the arguments passed to it.
+        String v_type_base = v.type.base();
+        String type_instance = null;
+        if (v_type_base == ProglangType.BASE_BOOLEAN) {
+          type_instance = "false";
+        } else if(v_type_base == ProglangType.BASE_BYTE) {
+          type_instance = "(byte)0";
+        } else if(v_type_base == ProglangType.BASE_CHAR) {
+          type_instance = "(char)0";
+        } else if(v_type_base == ProglangType.BASE_DOUBLE) {
+          type_instance = "(double)0";
+        } else if(v_type_base == ProglangType.BASE_FLOAT) {
+          type_instance = "(float)0";
+        } else if(v_type_base == ProglangType.BASE_INT) {
+          type_instance = "(int)0";
+        } else if(v_type_base == ProglangType.BASE_LONG) {
+          type_instance = "(long)0";
+        } else if(v_type_base == ProglangType.BASE_SHORT) {
+          type_instance = "(short)0";
+        } else {
+          type_instance = "new java.lang.Object()";
+        }
+
         String[] splits = term.name().split("\\.");
         if (splits[0].equals(term.name())) {
           // Simple case: foo[].bar
-          // Assumption: the term isn't of the form orig(..).
-          // We need this assumption because we're passing
-          // null in term.dbc_name(null).
-          return  "daikon.Quant.collect(" + term_name + ", " + "\"" + field + "\"" + ")";
+          return  "daikon.Quant.collect(" + type_instance + ", " + term_name + ", " + "\"" + field + "\"" + ")";
 
         } else {
           // complicated case: x.y.foo[].bar
-          String object = removeBrackets(splits[0]);
+          String object = splits[0].replaceAll("\\[\\]", ""); // remove brackets
           Assert.assertTrue(splits.length > 1);
           String fields = "";
           for (int j = 1 ; j < splits.length ; j++) {
             if (j != 1) { fields += "."; }
-            fields += removeBrackets(splits[j]);
+            fields += splits[j].replaceAll("\\[\\]", ""); // remove brackets
           }
           return
-            "daikon.Quant.collect(" + object + ", "
-            + "\"" + fields + "." + field + "\"" + ")";
+            "daikon.Quant.collect(" + type_instance + ", " + object + ", " + "\"" + fields + "." + field + "\"" + ")";
         }
-      } else {
-        return term_name + "." + field;
       }
     }
 
@@ -1904,7 +1934,7 @@ public abstract class VarInfoName
         } else {
           VarInfo seqVarInfo = ((SequenceSubsequence)derived).seqvar();
           String lastIdxString = null;
-          if (seqVarInfo.type.pseudoDimensions() == 1) {
+          if (seqVarInfo.type.pseudoDimensions() > seqVarInfo.type.dimensions()) {
             // it's a collection
             lastIdxString = sequence.name_using(format, seqVarInfo) + ".size()-1";
           } else {
@@ -1915,7 +1945,7 @@ public abstract class VarInfoName
             "daikon.Quant.slice("
             + sequence.name_using(format, ((SequenceSubsequence)derived).seqvar())
             + ", " + i.name_using(format, ((SequenceSubsequence)derived).sclvar())
-            + lastIdxString
+            + ", " + lastIdxString
             + ")";
         }
       } else {
@@ -1925,24 +1955,24 @@ public abstract class VarInfoName
           return
             "daikon.Quant.slice("
             + sequence.name_using(format, derived2.seqvar())
-            + i.name_using(format, derived2.startvar())
-            + j.name_using(format, derived2.endvar())
+            + ", " + i.name_using(format, derived2.startvar())
+            + ", " + j.name_using(format, derived2.endvar())
             + ")";
         } else if(derived instanceof SequenceFloatArbitrarySubsequence) {
           SequenceFloatArbitrarySubsequence derived2 = (SequenceFloatArbitrarySubsequence)derived;
           return
             "daikon.Quant.slice("
             + sequence.name_using(format, derived2.seqvar())
-            + i.name_using(format, derived2.startvar())
-            + j.name_using(format, derived2.endvar())
+            + ", " + i.name_using(format, derived2.startvar())
+            + ", " + j.name_using(format, derived2.endvar())
             + ")";
         } else {
           SequenceStringArbitrarySubsequence derived2 = (SequenceStringArbitrarySubsequence)derived;
           return
             "daikon.Quant.slice("
             + sequence.name_using(format, derived2.seqvar())
-            + i.name_using(format, derived2.startvar())
-            + j.name_using(format, derived2.endvar())
+            + ", " + i.name_using(format, derived2.startvar())
+            + ", " + j.name_using(format, derived2.endvar())
             + ")";
         }
       }

@@ -39,7 +39,7 @@ f_of_two_vars.jml_name() = no format when testCall.
 ; field field_of_var1 var1 var1_field
 field_of_var1 = var1.var1_field
 ; jml_name field_of_var1
-field_of_var1.jml_name() = var1.var1_field
+field_of_var1.jml_name() = no format when testCall.
 ;# Test TypeOf formatting
 ; typeof type_of_var1 var1
 type_of_var1 = var1.class
