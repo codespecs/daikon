@@ -280,7 +280,7 @@ public abstract class Invariant
    * Mark this invariant as falsified.
    * Invariants must also call flow when they are falsified
    * Has to be public because of wrappers; do not call from outside world.
-   * @see flow
+   * @see #flow(Invariant)
    **/
   public void destroy() {
     falsified = true;

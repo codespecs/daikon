@@ -256,7 +256,8 @@ public abstract class PptSlice
    * Instead, it is specified as a PptTopLevel a subset of its
    * variables.
    *
-   * @see po_lower, po_lower_vis
+   * @see #po_lower
+   * @see #po_lower_vis
    **/
   protected void addToOnePO(PptTopLevel adj,
                             VarInfo[] slice_vis)

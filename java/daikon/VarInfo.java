@@ -364,8 +364,8 @@ public final class VarInfo
    * the partial order (compared to this).  Not a view (sees no updates).
    * If A is higher than B then every value seen at B is seen at A.
    * Elements are VarInfos.  Contains no duplicates.
-   * @see po_lower()
-   * @see po_higher_nonce()
+   * @see #po_lower()
+   * @see #po_higher_nonce()
    **/
   public List po_higher() {
     if (po_higher == null) {
@@ -380,7 +380,7 @@ public final class VarInfo
 
   /**
    * @return read-only int[] giving the nonces for po_higher()
-   * @see po_higher()
+   * @see #po_higher()
    **/
   public int[] po_higher_nonce() {
     return po_higher_nonce; // writable; oh well
@@ -391,7 +391,7 @@ public final class VarInfo
    * the partial order (compared to this).  Not a view (sees no updates).
    * If A is higher than B then every value seen at B is seen at A.
    * Elements are VarInfos.  Contains no duplicates.
-   * @see po_higher()
+   * @see #po_higher()
    **/
   public List po_lower() {
     if (po_lower == null) {
@@ -411,7 +411,7 @@ public final class VarInfo
    * since this is only called from daikon.Dataflow, which is only
    * used during decls file setup.)
    *
-   * @see po_lower()
+   * @see #po_lower()
    **/
   public int[] po_lower_nonce() {
     List lo = po_lower();

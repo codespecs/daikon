@@ -115,7 +115,7 @@ public class PptSlice0
     throw new Error("Shouldn't get called");
   }
 
-  PptSlice cloneAllPivots () {
+  PptSlice cloneAllPivots() {
     throw new Error("Shouldn't get called");
   }
 }

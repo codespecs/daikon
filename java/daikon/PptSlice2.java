@@ -214,7 +214,7 @@ public final class PptSlice2
     //       }
     //       debugFlow.debug ("    with values:" + sb);
     //     }
-    
+
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
@@ -576,7 +576,7 @@ public final class PptSlice2
   }
 
   /**
-   * @see daikon.PptSlice.cloneOnePivot
+   * @see daikon.PptSlice#cloneOnePivot(VarInfo leader, VarInfo newLeader)
    **/
   protected PptSlice cloneOnePivot (VarInfo leader, VarInfo newLeader) {
     VarInfo[] newVarInfos = new VarInfo[arity];
@@ -634,9 +634,9 @@ public final class PptSlice2
   }
 
   /**
-   * @see daikon.PptSlice.cloneAllPivots
+   * @see daikon.PptSlice#cloneAllPivots()
    **/
-  protected PptSlice cloneAllPivots () {
+  protected PptSlice cloneAllPivots() {
 
     // No need to do it if this is a slice for equality
     if (this.var_infos[0].equalitySet == this.var_infos[1].equalitySet) {

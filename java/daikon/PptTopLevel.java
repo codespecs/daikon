@@ -165,7 +165,7 @@ public class PptTopLevel
    * Foo:::OBJECT.)
    **/
   public PptTopLevel[] dataflow_ppts;
-  /** @see dataflow_ppts */
+  /** @see #dataflow_ppts */
   public int[][] dataflow_transforms;
 
   /**
@@ -191,7 +191,7 @@ public class PptTopLevel
    * Foo:::OBJECT.)
    **/
   public PptTopLevel[] invflow_ppts;
-  /** @see invflow_ppts */
+  /** @see #invflow_ppts */
   public int[][] invflow_transforms;
 
   // [INCR] ...
@@ -351,7 +351,7 @@ public class PptTopLevel
    * elements in vis.  Method is not private so that FileIO can access
    * it; should not be called by other classes.
    * @param vis must not contain static constant VarInfos
-   * @see addVarInfos(VarInfo)
+   * @see #addVarInfos(VarInfo)
    **/
   void addVarInfos(VarInfo[] vis) {
     if (vis.length == 0)

@@ -1,5 +1,5 @@
 /*
- *  (C) 2002-2003 MIT Laboratory for Computer Science.
+ *  Copyright 2002-2003 MIT Laboratory for Computer Science.
  *
  *  Author: Alan Donovan <adonovan@lcs.mit.edu>
  *

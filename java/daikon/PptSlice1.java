@@ -193,7 +193,7 @@ public final class PptSlice1
     //       }
     //       debugFlow.debug ("    with values:" + sb);
     //     }
-    
+
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
@@ -416,7 +416,7 @@ public final class PptSlice1
   }
 
   /**
-   * @see daikon.PptSlice.cloneOnePivot
+   * @see daikon.PptSlice#cloneOnePivot(VarInfo leader, VarInfo newLeader)
    **/
   protected PptSlice cloneOnePivot (VarInfo leader, VarInfo newLeader) {
     VarInfo[] newVarInfos = new VarInfo[arity];
@@ -474,9 +474,9 @@ public final class PptSlice1
   }
 
   /**
-   * @see daikon.PptSlice.cloneAllPivots
+   * @see daikon.PptSlice#cloneAllPivots()
    **/
-  protected PptSlice cloneAllPivots () {
+  protected PptSlice cloneAllPivots() {
 
     VarInfo[] newVarInfos = new VarInfo[this.var_infos.length];
     boolean pivoted = false;
