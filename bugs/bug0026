@@ -3,7 +3,7 @@ Owner:        mharder <mharder@lcs.mit.edu>, scruffy@lcs.mit.edu
 Tool:         dtrace-diff.pl
 Summary:      Warning: Argument "uninit" isn't numeric in subtraction
 Severity:     Boneheaded
-Status:       New
+Status:       Closed
 Reproducible: Yes
 Description:
 
@@ -21,8 +21,14 @@ These were revealed when Mike changed the dtrace-diff.pl script so
 warnings are enabled.  The code should be changed to eliminate these
 warnings.
 
+[mharder]
+Ben fixed this.  Closing.
+
 --
 $Log$
-Revision 1.1  2002-03-18 22:23:38  mharder
+Revision 1.2  2002-03-21 17:52:52  mharder
+changed bug0026
+
+Revision 1.1  2002/03/18 22:23:38  mharder
 new bug0026
 
