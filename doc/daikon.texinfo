@@ -194,6 +194,10 @@ File formats
 * Data trace files::            
 * Examples::                    
 
+Declaration files
+
+* pptname format::              
+
 Examples
 
 * Example declaration file::    
@@ -529,6 +533,12 @@ This command creates two directories, @file{daikon-java} and
 @file{StackAr.java} at @file{daikon-java/DataStructures/StackAr.java}.
 It creates a declaration file at
 @file{daikon-output/DataStructures/StackAr.decls}.
+
+@example
+  topLevel.bottomLevel:::pptInfo
+@end example
+
+
 
 @item Compile the instrumented version of StackAr.java.
 
@@ -1872,8 +1882,9 @@ Program point information includes:
    name ("tag") of this program point, an arbitrary string containing no
    tab or newline characters.  This name contains information such as the
    class name or method name; what information is contained depends on
-   which instrumenter is being used.  For a full format specification for
-   the name, see @uref{http://sdg.lcs.mit.edu/daikon/download/doc/pptname.html}.
+   which instrumenter is being used.  @xref{pptname format} for a full
+   specification of the naming format.
+
    By convention, the entry and exit points for a function have names of
    a special form so that they can be associated with one another.
    (Currently, those names end with ":::BEGIN" and ":::END".)  This
@@ -1937,7 +1948,7 @@ Program point information includes:
 @end itemize
 @end itemize
 
-Future enhancements may include
+Future enhancements may include:
 @itemize @bullet
 @item
       permit variables to be omitted if they haven't changed (but always
@@ -1958,6 +1969,63 @@ which might look like the following:
 @noindent
 This controls how the comparability field in the declarations is interpreted.
 
+
+@menu
+* pptname format::
+@end menu
+
+
+@node    pptname format, , Declaration files, Declaration files
+@subsection Program point name format specification
+
+Instrumenting code creates a .decls file that contains program point names
+such as:
+
+@example
+  StackAr.makeEmpty()V:::EXIT54
+  StackAr.makeEmpty()V:::ENTER
+  StackAr.top()Ljava/lang/Object;:::EXIT64
+  StackAr.top()Ljava/lang/Object;:::EXIT65
+  StackAr.top()Ljava/lang/Object;:::ENTER
+@end example
+
+This section describes the format of these program point names.  Someone
+writing an instrumenter for a new language must be sure to follow this
+format specification.
+
+A program point name is a string with no tabs or newlines in it. The basic
+format is:
+
+@example
+  topLevel.bottomLevel:::pptInfo
+@end example
+
+For the first example given above, the top level of the hierarchy would
+be @file{StackAr}, the bottom level would be @file{makeEmpty()V}, and the
+program point information would be @file{EXIT54}.
+
+@file{topLevel} and @file{bottomLevel} can represent anything. Currently
+for Java, @file{topLevel} consists of the class name while
+@file{bottomLevel} consists of the method name and method signature. For
+C, @file{topLevel} could consist of a filename and @file{bottomLevel}
+could consist of a method name and signature. For IAO, @file{topLevel}
+could consist of an Automaton name and @file{bottomLevel} could consist of
+information for a transition state.
+
+@file{topLevel} may contain any number of periods ('.'). @file{bottomLevel}
+and @file{pptInfo} may not contain any periods. The string ":::" may only
+appear once.
+
+@file{topLevel} and @file{pptInfo} are required (ie, they must be non-empty),
+as are the period to the right of @file{topLevel} and the colons to the
+left of @file{pptInfo}. However, @file{bottomLevel} is optional. For
+example, the Java instrumenter creates an artifical object program point
+which contains invariants that are true for all of an object's methods,
+rather than for just one method:
+
+@example
+  StackAr.:::OBJECT
+@end example
 
 
 @node    Data trace files, Examples, Declaration files, File formats
