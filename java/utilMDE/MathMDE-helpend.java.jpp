@@ -1,0 +1,8 @@
+#undef INT
+#undef INTEGER
+#undef INTValue
+#undef modulus_INT
+#undef modulus_strict_INT
+#undef nonmodulus_strict_INT
+#undef MissingNumbersIteratorINT
+#undef CastToInt

@@ -1,0 +1,45 @@
+
+
+  /** Return the greatest common divisor of the two arguments. */
+  public static INT gcd(INT a, INT b) {
+    if (b == 0)
+      return 0;
+    while (b != 0) {
+      INT tmp = b;
+      b = a % b;
+      a = tmp;
+    }
+    return a;
+  }
+
+  /** Return the greatest common divisor of the elements of INT array a. */
+  public static INT gcd(INT[] a) {
+    if (a.length == 0) {
+      return 0;
+    }
+    INT result = a[0];
+    for (int i=1; i<a.length; i++) {
+      result = gcd(a[i], result);
+      if ((result == 1) || (result == 0))
+	return result;
+    }
+    return result;
+  }
+
+  /**
+   * Return the gcd (greatest common divisor) of the differences
+   * between the elements of INT array a.
+   */
+  public static INT gcd_differences(INT[] a) {
+    if (a.length < 2) {
+      return 0;
+    }
+    INT result = a[1] - a[0];
+    for (int i=2; i<a.length; i++) {
+      result = gcd(a[i] - a[i-1], result);
+      if ((result == 1) || (result == 0))
+	return result;
+    }
+    return result;
+  }
+

@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Given two sequences/iterators/whatever, thsi class returns a new
- * sequence/iterator/whatever which matches the matching elements of the
+ * sequence/iterator/whatever which pairs the matching elements of the
  * inputs.
  *
  * It's not clear that this is always the right thing to do; you might
@@ -13,7 +13,7 @@ import java.util.*;
 public class OrderedPairIterator implements java.util.Iterator {
 
   public static class Pair {
-    public Pair(Object a_, Object b_) { a = a_; b = b_; }
+    public Pair(Object a, Object b) { this.a = a; this.b = b; }
     public Object a;
     public Object b;
   }

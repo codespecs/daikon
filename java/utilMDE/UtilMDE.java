@@ -158,7 +158,7 @@ public final class UtilMDE {
   /** Converts an Enumeration into an Iterator. */
   public static final class EnumerationIterator implements Iterator {
     Enumeration e;
-    public EnumerationIterator(Enumeration e_) { e = e_; }
+    public EnumerationIterator(Enumeration e) { this.e = e; }
     public boolean hasNext() { return e.hasMoreElements(); }
     public Object next() { return e.nextElement(); }
     public void remove() { throw new UnsupportedOperationException(); }
@@ -167,7 +167,7 @@ public final class UtilMDE {
   /** Converts an Iterator into an Enumeration. */
   public static final class IteratorEnumeration implements Enumeration {
     Iterator itor;
-    public IteratorEnumeration(Iterator itor_) { itor = itor_; }
+    public IteratorEnumeration(Iterator itor) { this.itor = itor; }
     public boolean hasMoreElements() { return itor.hasNext(); }
     public Object nextElement() { return itor.next(); }
   }
@@ -180,7 +180,7 @@ public final class UtilMDE {
   public static final class MergedIterator2 implements Iterator {
     Iterator itor1, itor2;
     public MergedIterator2(Iterator itor1_, Iterator itor2_) {
-      itor1 = itor1_; itor2 = itor2_;
+      this.itor1 = itor1_; this.itor2 = itor2_;
     }
     public boolean hasNext() {
       return (itor1.hasNext() || itor2.hasNext());
@@ -205,7 +205,7 @@ public final class UtilMDE {
    */
   public static final class MergedIterator implements Iterator {
     Iterator itorOfItors;
-    public MergedIterator(Iterator itorOfItors_) {itorOfItors = itorOfItors_; }
+    public MergedIterator(Iterator itorOfItors) { this.itorOfItors = itorOfItors; }
 
     // an empty iterator to prime the pump
     Iterator current = Collections.EMPTY_SET.iterator();
@@ -230,8 +230,8 @@ public final class UtilMDE {
     Iterator itor;
     Filter filter;
 
-    public FilteredIterator(Iterator itor_, Filter filter_) {
-      itor = itor_; filter = filter_;
+    public FilteredIterator(Iterator itor, Filter filter) {
+      this.itor = itor; this.filter = filter;
     }
 
     Object current;

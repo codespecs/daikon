@@ -34,6 +34,8 @@ public final class Intern {
       return (value == ((String) value).intern());
     } else if (value instanceof Integer) {
       return (value == intern((Integer) value));
+    } else if (value instanceof Long) {
+      return (value == intern((Long) value));
     } else if (value instanceof int[]) {
       return (value == intern((int[]) value));
     } else if (value instanceof Double) {
@@ -65,6 +67,21 @@ public final class Intern {
     }
     public int hashCode(Object o) {
       Integer i = (Integer) o;
+      return i.intValue();
+    }
+  }
+
+  /**
+   * Hasher object which hashes and compares Longs.
+   * This is the obvious implementation that uses intValue() for the hashCode.
+   * @see Hasher
+   */
+  private static final class LongHasher implements Hasher {
+    public boolean equals(Object a1, Object a2) {
+      return a1.equals(a2);
+    }
+    public int hashCode(Object o) {
+      Long i = (Long) o;
       return i.intValue();
     }
   }
@@ -153,6 +170,7 @@ public final class Intern {
   // WeakReference because the array isn't the key of the WeakHashMap).
 
   private static WeakHasherMap internedIntegers;
+  private static WeakHasherMap internedLongs;
   private static WeakHasherMap internedIntArrays;
   private static WeakHasherMap internedDoubles;
   private static WeakHasherMap internedDoubleArrays;
@@ -160,6 +178,7 @@ public final class Intern {
 
   static {
     internedIntegers = new WeakHasherMap(new IntegerHasher());
+    internedLongs = new WeakHasherMap(new LongHasher());
     internedIntArrays = new WeakHasherMap(new IntArrayHasher());
     internedDoubles = new WeakHasherMap(new DoubleHasher());
     internedDoubleArrays = new WeakHasherMap(new DoubleArrayHasher());
@@ -168,11 +187,13 @@ public final class Intern {
 
   // For testing only
   public static int numIntegers() { return internedIntegers.size(); }
+  public static int numLongs() { return internedLongs.size(); }
   public static int numIntArrays() { return internedIntArrays.size(); }
   public static int numDoubles() { return internedDoubles.size(); }
   public static int numDoubleArrays() { return internedDoubleArrays.size(); }
   public static int numObjectArrays() { return internedObjectArrays.size(); }
   public static Iterator integers() { return internedIntegers.keySet().iterator(); }
+  public static Iterator longs() { return internedLongs.keySet().iterator(); }
   public static Iterator intArrays() { return internedIntArrays.keySet().iterator(); }
   public static Iterator doubles() { return internedDoubles.keySet().iterator(); }
   public static Iterator doubleArrays() { return internedDoubleArrays.keySet().iterator(); }
@@ -203,6 +224,34 @@ public final class Intern {
   /** Returns an interned Integer with value parsed from the string. */
   public static Integer internedInteger(String s) {
     return internedInteger(Integer.parseInt(s));
+  }
+
+
+  /**
+   * Intern (canonicalize) a Long.
+   * Returns a canonical representation for the Long.
+   */
+  public static Long intern(Long a) {
+    Object lookup = internedLongs.get(a);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (Long)ref.get();
+    } else {
+      internedLongs.put(a, new WeakReference(a));
+      return a;
+    }
+  }
+
+  // Not sure whether this convenience method is really worth it.
+  /** Returns an interned Long with value i. */
+  public static Long internedLong(long i) {
+    return intern(new Long(i));
+  }
+
+  // Not sure whether this convenience method is really worth it.
+  /** Returns an interned Long with value parsed from the string. */
+  public static Long internedLong(String s) {
+    return internedLong(Long.parseLong(s));
   }
 
 
@@ -393,8 +442,8 @@ public final class Intern {
 
   // static final class IntArrayWrapper {
   //   private int[] a;
-  //   IntArrayWrapper(int[] a_) {
-  //     a = a_;
+  //   IntArrayWrapper(int[] a) {
+  //     this.a = a;
   //   }
   //   boolean equals(IntArrayWrapper other) {
   //     return java.util.Arrays.equals(a, other.a);
@@ -411,8 +460,8 @@ public final class Intern {
 
   // static final class ObjectArrayWrapper {
   //   private Object[] a;
-  //   ObjectArrayWrapper(Object[] a_) {
-  //     a = a_;
+  //   ObjectArrayWrapper(Object[] a) {
+  //     this.a = a;
   //   }
   //   boolean equals(ObjectArrayWrapper other) {
   //     return java.util.Arrays.equals(a, other.a);

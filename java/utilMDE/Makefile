@@ -1,13 +1,19 @@
-JAVA_FILES := $(shell find . -name '*.java' -print)
+ALL_JAVA_FILES := $(shell find . -name '*.java' -print)
+JAVA_FILES := $(shell find . -name '*-cpp.java' -prune -o -name '*.java' -print)
+AUTO_GENERATED_FILES = \
+	MathMDE.java
 
-all:
-	jikes -g +E +F *.java
+all: ${AUTO_GENERATED_FILES}
+	jikes -g +E +F ${JAVA_FILES}
 
 clean:
 	rm -f *.class
 
+veryclean: clean
+	rm -f ${AUTO_GENERATED_FILES}
+
 tags:
-	etags *.java
+	etags ${ALL_JAVA_FILES}
 
 # Run Jikes unconditionally.
 # This "set" form doesn't seem to work for me.
@@ -36,3 +42,34 @@ utilMDE.tar.gz: $(JAVA_FILES) Makefile README
 	rm -f utilMDE.tar.gz
 	mv /tmp/utilMDE.tar.gz .
 	rm -rf /tmp/utilMDE
+
+showvars:
+	@echo ALL_JAVA_FILES = $(ALL_JAVA_FILES)
+	@echo JAVA_FILES = $(JAVA_FILES)
+
+
+###########################################################################
+### Automatically generated files
+###
+
+JAVA_CPP = java-cpp.pl $< -DDEFINEDVAR > $@
+
+MathMDE.java: MathMDE-cpp.java MathMDE-gcd-cpp.java MathMDE-modulus-cpp.java MathMDE-nonmodulus-cpp.java  MathMDE-help-cpp.java MathMDE-helpend-cpp.java
+	-mv -f $@ $@-bak
+	java-cpp.pl $< > $@
+	chmod -w $@
+
+
+###########################################################################
+###
+###
+
+# Existence of this rule means that a target is deleted if has just changed
+# and its rule commands exit with nonzero status.  It's needed for the
+# java-cpp rules above.
+# (Actually, it isn't anymore, for I arrange not to overwrite the file
+# unless success.  But leave it in for now anyway.)
+
+.DELETE_ON_ERROR:
+
+# end

@@ -541,18 +541,18 @@ public final class TestUtilMDE {
 			 new int[] { 4,5,7 });
 
 
-    // class MissingNumbersIterator
-    class TestMissingNumbersIterator {
+    // class MissingNumbersIteratorInt
+    class TestMissingNumbersIteratorInt {
       // javadoc won't let this be static
       void test(int[] orig, int[] goal_missing) {
 	Iterator orig_iterator = int_array_iterator(orig);
-	Iterator missing_iterator = new MathMDE.MissingNumbersIterator(orig_iterator);
+	Iterator missing_iterator = new MathMDE.MissingNumbersIteratorInt(orig_iterator);
 	int[] missing = TestUtilMDE.int_iterator_array(missing_iterator);
 	assert_arrays_equals(missing, goal_missing);
       }
     }
 
-    TestMissingNumbersIterator tmni = new TestMissingNumbersIterator();
+    TestMissingNumbersIteratorInt tmni = new TestMissingNumbersIteratorInt();
     tmni.test(new int[] { 3,4,5,6,7,8 }, new int[] {});
     tmni.test(new int[] { 3,4,6,7,8 }, new int[] { 5 });
     tmni.test(new int[] { 3,4,8 }, new int[] { 5,6,7 });
@@ -587,7 +587,7 @@ public final class TestUtilMDE {
 	// There would be no point to this:  it's testing
 	// int_iterator_array, not the iterator version!
 	// return check(int_iterator_array(itor), goal_rm);
-	assert_arrays_equals(MathMDE.modulus(itor), goal_rm);
+	assert_arrays_equals(MathMDE.modulus_int(itor), goal_rm);
       }
 
       // javadoc won't let this be static
@@ -618,7 +618,7 @@ public final class TestUtilMDE {
       void check_strict(int[] nums, int[] goal_rm) {
 	check(nums, goal_rm, true);
 	Iterator itor = int_array_iterator(nums);
-	assert_arrays_equals(MathMDE.nonmodulus_strict(itor), goal_rm);
+	assert_arrays_equals(MathMDE.nonmodulus_strict_int(itor), goal_rm);
       }
 
       // javadoc won't let this be static
