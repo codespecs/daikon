@@ -23,6 +23,7 @@
 #   * compiled source
 #   * dtrace files
 # Creates PROJECT/PROJECT.txt-daikon with daikon-style invariants
+# Creates PROJECT/PROJECT.txt-simplify with simplify-style invariants
 # Creates PROJECT/PROJECT.txt-esc with esc-style invariants
 # Creates PROJECT/(+ package) with esc-annotated versions of the source
 # Creates PROJECT/PROJECT.esc with output from escjava verification
@@ -61,6 +62,7 @@ help:
 	@echo ""
 	@echo "  make inv            : detects invariants, writes in serialized style"
 	@echo "  make txt-daikon     : detects invariants, writes in daikon style"
+	@echo "  make txt-simplify   : detects invariants, writes in daikon style"
 	@echo ""
 	@echo "  make clean          : "
 	@echo "  make all            : does 1-5, merge, esc"
@@ -80,6 +82,7 @@ compile: ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 data: ${SCRATCH_FOR_DAIKON}/.run-timestamp
 inv: ${PROJECT}.inv
 txt-daikon: ${PROJECT}.txt-daikon
+txt-simplify: ${PROJECT}.txt-simplify
 txt-esc: ${PROJECT}.txt-esc
 esc: ${PROJECT}.esc
 stats: stats-impl
@@ -88,7 +91,7 @@ clean: reset-scratch
 	@echo
 	@echo \#\#\# clean
 	@echo
-	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-daikon-failed ${PROJECT}.txt-esc ${PROJECT}.txt-esc-failed ${PROJECT}.esc *.bak
+	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-daikon-failed ${PROJECT}.txt-simplify ${PROJECT}.txt-simplify-failed ${PROJECT}.txt-esc ${PROJECT}.txt-esc-failed ${PROJECT}.esc *.bak
 #	rm -rf ${PACKAGE}
 
 
@@ -168,6 +171,13 @@ ${PROJECT}.txt-daikon: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	-rm -f $@-failed
 	${DAIKON} --output_num_samples ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
 #	../remove-conditional-ppts.pl $@
+
+${PROJECT}.txt-simplify: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
+	@echo
+	@echo \#\#\# txt-simplify
+	@echo
+	-rm -f $@-failed
+	${DAIKON} --simplify_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
 
 ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
