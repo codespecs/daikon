@@ -28,7 +28,7 @@ public class LinearTernaryCoreTest
   void one_test_set_tri_linear(int[][] triples, long goal_a, long goal_b, long goal_c) {
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     for (int i=0; i<triples.length; i++) {
-      assert(triples[i].length == 3);
+      assertTrue(triples[i].length == 3);
       ltc.x_cache[i] = triples[i][0];
       ltc.y_cache[i] = triples[i][1];
       ltc.z_cache[i] = triples[i][2];
@@ -37,7 +37,7 @@ public class LinearTernaryCoreTest
     // System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c);
     // System.out.println("actual: " + ltc.a + " " + ltc.b + " " + ltc.c);
     // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c - ltc.c));
-    assert(ltc.a == goal_a && ltc.b == goal_b && ltc.c == goal_c);
+    assertTrue(ltc.a == goal_a && ltc.b == goal_b && ltc.c == goal_c);
   }
 
   public void test_set_tri_linear() {
@@ -89,7 +89,7 @@ public class LinearTernaryCoreTest
     ltc.c = c;
     // System.out.println("Expecting: " + result);
     // System.out.println("Actual:    " + ltc.format("x", "y", "z"));
-    assert(ltc.format("x", "y", "z").equals(result));
+    assertTrue(ltc.format("x", "y", "z").equals(result));
   }
 
   public void test_format() {
