@@ -1943,6 +1943,10 @@ class single_scalar_numeric_invariant(invariant):
         inv1 = self
         inv2 = other
 
+        # If they print the same, then make them compare the same
+        if diffs_same_format(inv1, inv2):
+            return None
+
         as_base = invariant.diff(inv1, inv2)
         if as_base:
             return as_base
@@ -2248,13 +2252,19 @@ class two_scalar_numeric_invariant(invariant):
         if diff_inv.min_justified:
             if diff_inv.min == 0:
                 return "%s <= %s \tjustified" % (y,x) + suffix
-            else:
+            elif diff_inv.min > 0:
                 return "%s <= %s - %d \tjustified" % (y,x,diff_inv.min) + suffix
+            else:
+                assert diff_inv.min < 0
+                return "%s <= %s + %d \tjustified" % (y,x,-diff_inv.min) + suffix
         if diff_inv.max_justified:
             if diff_inv.max == 0:
                 return "%s <= %s \tjustified" % (x,y) + suffix
+            elif diff_inv.max > 0:
+                return "%s <= %s + %d \tjustified" % (x,y,diff_inv.max) + suffix
             else:
-                return "%s <= %s - %d \tjustified" % (x,y,diff_inv.max) + suffix
+                assert diff_inv.max < 0
+                return "%s <= %s - %d \tjustified" % (x,y,-diff_inv.max) + suffix
 
         # What can be interesting about a sum?  I'm not sure...
         sum_inv = self.sum_invariant
@@ -2290,6 +2300,10 @@ class two_scalar_numeric_invariant(invariant):
         # print "diff(two_scalar_numeric_invariant)"
         inv1 = self
         inv2 = other
+
+        # If they print the same, then make them compare the same
+        if diffs_same_format(inv1, inv2):
+            return None
 
         as_base = invariant.diff(inv1, inv2)
         if as_base:
@@ -2545,6 +2559,10 @@ class three_scalar_numeric_invariant(invariant):
         # print "diff(three_scalar_numeric_invariant)"
         inv1 = self
         inv2 = other
+
+        # If they print the same, then make them compare the same
+        if diffs_same_format(inv1, inv2):
+            return None
 
         as_base = invariant.diff(inv1, inv2)
         if as_base:
@@ -2967,6 +2985,10 @@ class single_sequence_numeric_invariant(invariant):
         inv1 = self
         inv2 = other
 
+        # If they print the same, then make them compare the same
+        if diffs_same_format(inv1, inv2):
+            return None
+
         as_base = invariant.diff(inv1, inv2)
         if as_base:
             return as_base
@@ -3126,6 +3148,10 @@ class scalar_sequence_numeric_invariant(invariant):
         # print "diff(scalar_sequence_numeric_invariant)"
         inv1 = self
         inv2 = other
+
+        # If they print the same, then make them compare the same
+        if diffs_same_format(inv1, inv2):
+            return None
 
         as_base = invariant.diff(inv1, inv2)
         if as_base:
@@ -3312,6 +3338,10 @@ class two_sequence_numeric_invariant(invariant):
         # print "diff(two_sequence_numeric_invariant)"
         inv1 = self
         inv2 = other
+
+        # If they print the same, then make them compare the same
+        if diffs_same_format(inv1, inv2):
+            return None
 
         as_base = invariant.diff(inv1, inv2)
         if as_base:
@@ -3565,6 +3595,18 @@ def diff_var_infos(var_infos1, var_infos2):
 #             if print_unconstrained or not inv.is_unconstrained():
 #                 print "     ", inv.format((vname, var_infos[i1].name, var_infos[i2].name))
 
+# If they print the same, then make them compare the same
+def diffs_same_format(inv1, inv2):
+    # This is a hack.  Better to do something more principled about whether
+    # to put the number of values in the output.
+    formatted1 = inv1.format()
+    formatted2 = inv2.format()
+    suffix_re = re.compile(r'\t\([0-9]+ values\)$')
+    match1 = suffix_re.search(formatted1)
+    match2 = suffix_re.search(formatted2)
+    if match1: formatted1 = formatted1[0:match1.start(0)]
+    if match2: formatted2 = formatted2[0:match2.start(0)]
+    return formatted1 == formatted2
 
 
 
