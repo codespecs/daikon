@@ -118,9 +118,11 @@ public class VarInfoNameDriver {
 	roots[i] = (VarInfoName) vars.get(args[i]);
       }
       String[] result = VarInfoName.QuantHelper.format_esc(roots);
+      String result2 = VarInfoName.QuantHelper.format_esc(roots, true)[0];
       for (int i=0; i < result.length; i++) {
 	if (i != 0 && i != result.length-1) { out.print('\t'); }
 	out.println(result[i]);
+	if (i == 0 && roots.length > 1) { out.println(result2); }
       }
     }
   }
