@@ -486,9 +486,6 @@ public final class Equality
       debugPostProcess.fine ("  at: " + this.ppt.parent.name());
     }
     VarInfo leader = leader();
-    ProglangType rep = leader.rep_type;
-    boolean rep_is_scalar = rep.isScalar();
-    boolean rep_is_float = rep.isFloat();
 
     if (debugPostProcess.isLoggable(Level.FINE)) {
       debugPostProcess.fine ("  var1: " + leader.name.name());
@@ -503,60 +500,7 @@ public final class Equality
       if (is_global_equality (leader, vars[i]))
         continue;
 
-      PptSlice newSlice = parent.get_or_instantiate_slice (leader, vars[i]);
-      // Copy over the number of samples from this to the new slice,
-      // so that all invariants on the slice report the right number
-      // of samples.
-      newSlice.set_samples (this.numSamples());
-      Invariant invEquals = null;
-
-      // This is almost directly copied from PptSlice2's instantiation
-      // of factories
-      if (rep_is_scalar) {
-        invEquals = IntEqual.instantiate (newSlice);
-        debugPostProcess.fine ("  intEqual");
-      } else if ((rep == ProglangType.STRING)) {
-        invEquals = StringComparison.instantiate (newSlice, true);
-        debugPostProcess.fine ("  stringEqual");
-        ((StringComparison) invEquals).core.can_be_eq = true;
-      } else if ((rep == ProglangType.INT_ARRAY)) {
-        invEquals = SeqSeqIntEqual.instantiate (newSlice, true);
-        debugPostProcess.fine ("  seqEqual");
-      } else if ((rep == ProglangType.STRING_ARRAY)) {
-        // JHP commented out to see what diffs are coming from here (5/3/3)
-//         invEquals = SeqComparisonString.instantiate (newSlice, true);
-//         if (invEquals != null) {
-//           ((SeqComparisonString) invEquals).can_be_eq = true;
-//         }
-//         debugPostProcess.fine ("  seqStringEqual");
-      } else if (Daikon.dkconfig_enable_floats) {
-        if (rep_is_float) {
-          invEquals = FloatEqual.instantiate (newSlice);
-          debugPostProcess.fine ("  floatEqual");
-        } else if (rep == ProglangType.DOUBLE_ARRAY) {
-          debugPostProcess.fine ("  seqFloatEqual");
-          invEquals = SeqSeqFloatEqual.instantiate (newSlice, true);
-        }
-      } else {
-        throw new Error ("No known Comparison invariant to convert equality into");
-      }
-
-      if (invEquals != null) {
-        if (debugPostProcess.isLoggable(Level.FINE)) {
-          debugPostProcess.fine ("  adding invariant: " + invEquals.repr());
-        }
-        SuppressionLink sl = SelfSuppressionFactory.getInstance().generateSuppressionLink (invEquals);
-        if (sl != null) {
-          if (debugPostProcess.isLoggable(Level.FINE)) {
-            debugPostProcess.fine ("  suppressed by another equality: " +
-                                    sl);
-          }
-        } else {
-          newSlice.addInvariant (invEquals);
-        }
-      } else {
-        newSlice.parent.removeSlice (newSlice);
-      }
+      parent.create_equality_inv (leader, vars[i], numSamples());
     }
   }
 
