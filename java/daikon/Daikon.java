@@ -9,7 +9,6 @@ import daikon.inv.Invariant;
 import daikon.config.Configuration;
 
 import java.util.*;
-import java.util.zip.GZIPOutputStream;
 import java.io.*;
 import java.lang.Thread;
 
@@ -91,8 +90,6 @@ public final class Daikon {
   public static Pattern var_omit_regexp;
 
   // I appear to need both of these variables.  (Or do I?)
-  public static FileOutputStream inv_ostream;
-  public static ObjectOutputStream inv_oostream;
   static Set spinfo_files = new HashSet();
 
   // The invariants detected will be serialized and written to this
@@ -258,8 +255,9 @@ public final class Daikon {
         System.exit(1);
         break;
       case 'o':
-        //        if (inv_ostream != null)
-        //          throw new Error("multiple serialization output files supplied on command line");
+	if (inv_file != null)
+	  throw new Error("multiple serialization output files supplied on command line");
+
         String inv_filename = g.getOptarg();
         System.out.println("Inv filename = " + inv_filename);
         inv_file = new File(inv_filename);
@@ -454,20 +452,10 @@ public final class Daikon {
 
     if (inv_file != null) {
       try {
-        OutputStream inv_ostream = new FileOutputStream(inv_file);
-        if (inv_file.getName().endsWith(".gz")) {
-          inv_ostream = new GZIPOutputStream(inv_ostream);
-        }
-        ObjectOutputStream inv_oostream = new ObjectOutputStream(inv_ostream);
-        // This sends the header immediately; irrelevant for files.
-        // inv_oostream.flush();
-        inv_oostream.writeObject(all_ppts);
-        inv_oostream.flush();
-        inv_oostream.close();
-        // inv_ostream.close();    // is this necessary?
+	FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
-        e.printStackTrace();
-        throw new Error(e.toString());
+	throw new RuntimeException("Error while writing .inv file "
+				   + "'" + inv_file + "': " + e.toString());
       }
     }
 

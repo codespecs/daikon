@@ -113,18 +113,28 @@ public final class Diff {
     PptMap map1 = null;
     PptMap map2 = null;
 
-    if (numFiles == 1) {
-      String filename1 = args[firstFileIndex];
-      map1 = FileIO.read_invariant_file(filename1);
-      map2 = new PptMap();
-    } else if (numFiles == 2) {
-      String filename1 = args[firstFileIndex];
-      String filename2 = args[firstFileIndex + 1];
-      map1 = FileIO.read_invariant_file(filename1);
-      map2 = FileIO.read_invariant_file(filename2);
-    } else {
-      System.out.println(usage);
-      System.exit(1);
+    try {
+      if (numFiles == 1) {
+	String filename1 = args[firstFileIndex];
+	map1 = FileIO.read_serialized_pptmap(new File(filename1),
+					     false // use saved config
+					     );
+	map2 = new PptMap();
+      } else if (numFiles == 2) {
+	String filename1 = args[firstFileIndex];
+	String filename2 = args[firstFileIndex + 1];
+	map1 = FileIO.read_serialized_pptmap(new File(filename1),
+					     false // use saved config
+					     );
+	map2 = FileIO.read_serialized_pptmap(new File(filename2),
+					     false // use saved config
+					     );
+      } else {
+	System.out.println(usage);
+	System.exit(1);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Could not load .inv file: " + e);
     }
 
     RootNode root = diff.diffPptMap(map1, map2);

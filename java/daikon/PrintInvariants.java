@@ -83,7 +83,9 @@ public class PrintInvariants {
         System.exit(1);
     }
     String filename = args[fileIndex];
-    PptMap ppts = FileIO.read_invariant_file(filename);
+    PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
+					       true // use saved config
+					       );
     Daikon.print_invariants(ppts);
   }
 
