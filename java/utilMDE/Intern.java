@@ -255,7 +255,7 @@ public final class Intern {
   // Delegates to the builtin String.intern() method.  Provided for
   // completeness, so we can intern() any type used in OneOf.java.jpp.
   public static String intern(String a) {
-    return a.intern();
+    return (a == null) ? null : a.intern();
   }
 
   // Interns a long.
