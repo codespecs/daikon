@@ -5,7 +5,7 @@
 
 sub usage () {
   return
-    "$0 [numrepetitions [previous-match-files ...]]\n"
+    "$0 [-r numrepetitions] [previous-match-files ...]\n"
     . "output format (to stdout) is same as input format for colony-runmatches.pl\n"
     . "previous-match-files are in output format of colony-runmatch.pl\n";
 }
@@ -22,9 +22,12 @@ use checkargs;
 use util_daikon;
 use colony_simconf;
 
-my $numrepetitions = 1;
-if (scalar(@ARGV) > 0) {
+my $numrepetitions;
+if ((scalar(@ARGV) > 0) && ($ARGV[0] eq "-r"))  {
+  shift @ARGV;
   $numrepetitions = shift @ARGV;
+} elsif (scalar(@ARGV) == 0) {
+  $numrepetitions = 1;
 }
 
 
@@ -56,6 +59,20 @@ while (@ARGV) {
     if (($team1 cmp $team2) > 0) { die "Teams should be alphabetized: $line"; }
     if (($i1 > $i2) > 0) { die "Teams should be alphabetized: $line"; }
     $prev_matches[$i1][$i2]++;
+  }
+}
+
+# If the number of repetitions was not provided, make it equal to the
+# maximum number of matches that were played between any two teams.
+if (! defined($numrepetitions)) {
+  $numrepetitions = 1;
+  for (my $i1=0; $i1<$num_teams; $i1++) {
+    for (my $i2=$i1+1; $i2<$num_teams; $i2++) {
+      my $nummatches = $prev_matches[$i1][$i2];
+      if ($nummatches > $numrepetitions) {
+        $numrepetitions = $nummatches;
+      }
+    }
   }
 }
 

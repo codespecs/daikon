@@ -29,5 +29,7 @@ my $line;
 while (defined($line = <IN>)) {
   chomp($line);
   my ($team1, $team2) = split(' ', $line, 2);
-  system_or_die("colony-runmatch.pl $team1 $team2 $output_filename $parameters");
+  # Not system_or_die; it's OK if it dies (we'll notice the missing run
+  # and come back to it later).
+  system("colony-runmatch.pl $team1 $team2 $output_filename $parameters");
 }

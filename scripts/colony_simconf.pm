@@ -31,6 +31,9 @@ my %package_to_line = ();
 # provide accessor functions.
 sub name_to_package ( $ ) {
   my ($name) = check_args(1, @_);
+  if ($name eq "No winner.") {
+    return "NoWinner";
+  }
   my $result = $name_to_package{$name};
   if (! defined $result) {
     die "not defined: name_to_package{$name}";
