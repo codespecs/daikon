@@ -470,7 +470,7 @@ public final class Daikon {
     try {
       System.out.print("Reading declaration files ");
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
-      Dataflow.init(all_ppts);
+      Dataflow.init_partial_order(all_ppts);
       all_ppts.trimToSize();
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(decl_files.size(), "file"));

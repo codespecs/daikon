@@ -145,7 +145,7 @@ class JTraceInference extends Thread
 	//
 
 
-	Dataflow.init(all_ppts);
+	Dataflow.init_partial_order(all_ppts);
 	all_ppts.trimToSize();
 
 	// XXX this stuff should be done when we create TraceSamples,

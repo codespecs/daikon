@@ -30,7 +30,7 @@ public class Dataflow
       files[i] = new File(args[i]);
     }
     PptMap map = FileIO.read_declaration_files(Arrays.asList(files));
-    init(map);
+    init_partial_order(map);
 
     OutputStream out = new FileOutputStream(new File(outf));
     dump_ppts(out, map);
@@ -40,27 +40,48 @@ public class Dataflow
 
 
   /**
-   * @param files files to be read (java.io.File)
-   * @return a new PptMap containing declarations read from the files
-   * listed in the argument; connection information (controlling
-   * variables and entry ppts) is set correctly upon return.
+   * Process all ppts by adding orig and derived variables, relating
+   * variables to other program points, and fixing all necessary
+   * pre-computed flows.  (Calls init_partial_order(PptTopLevel,
+   * PptMap) for each ppt in turn.)
    **/
-  public static void init(PptMap all_ppts)
+  public static void init_partial_order(PptMap all_ppts)
   {
+    for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      init_partial_order(ppt, all_ppts);
+    }
+  }
+
+  /**
+   * Process the ppt by adding orig and derived variables, relating
+   * variables to other program points, and fixing all necessary
+   * pre-computed flows.
+   **/
+  public static void init_partial_order(PptTopLevel ppt, PptMap all_ppts)
+  {
+    // Let's punt this one, because we want to deprecate EXITnn
     // Set up EXIT points to control EXITnn points
-    create_and_relate_combined_exits(all_ppts);
+    // create_and_relate_combined_exits(ppt, all_ppts);
+
     // Set up OBJECT and CLASS relationships
-    relate_object_procedure_ppts(all_ppts);
+    relate_object_procedure_ppts(ppt, all_ppts);
     // Set up orig() declarations and relationships
-    create_and_relate_orig_vars(all_ppts);
+    create_and_relate_orig_vars(ppt, all_ppts);
     // Set up OBJECT on arguments relationships
-    relate_arguments_to_object_ppts(all_ppts);
+    relate_types_to_object_ppts(ppt, all_ppts);
+
     // Set up derived variables
-    create_derived_variables(all_ppts);
-    // Set up the data flow vectors
-    create_ppt_dataflow(all_ppts);
-    // Set up the invariant flow vectors
-    create_ppt_invflow(all_ppts);
+    create_derived_variables(ppt, all_ppts);
+
+    // Create or modify the data flow and invariant flow vectors.  We
+    // recompute all of them, instead of trying to figure out exactly
+    // what might have changed.
+    for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
+      PptTopLevel item = (PptTopLevel) i.next();
+      create_ppt_dataflow(item);
+      create_ppt_invflow(item);
+    }
   }
 
   /**
@@ -107,46 +128,31 @@ public class Dataflow
   private static int static_po_group_nonce = 0;
 
   /**
-   * For each fooENTER point, add a fooEXIT point that contains all of
-   * the common variables from the fooEXITnn points.  It is an error
-   * if one of the fooEXIT points already exists.
+   * Ensure that when ppt is an EXITnn, a EXIT version also exists.
    **/
-  public static void create_and_relate_combined_exits(PptMap ppts)
+  public static void create_and_relate_combined_exits(PptTopLevel ppt, PptMap ppts)
   {
-    List new_ppts = new ArrayList(); // worklist to avoid concurrent mod exn
-    for (Iterator itor = ppts.iterator(); itor.hasNext(); ) {
-      PptTopLevel enter_ppt = (PptTopLevel) itor.next();
-      if (!enter_ppt.ppt_name.isEnterPoint())
-	continue;
-      // Construct the combined EXIT name
-      PptName exit_name = enter_ppt.ppt_name.makeExit();
-      Assert.assert(ppts.get(exit_name) == null);
-      // Find all of the EXITnn points
-      List exits = new ArrayList();
-      for (Iterator it = ppts.iterator(); it.hasNext(); ) {
-	PptTopLevel exitnn = (PptTopLevel) it.next();
-	if (exitnn.ppt_name.isExitPoint()) {
-	  Assert.assert(!exitnn.ppt_name.isCombinedExitPoint());
-	  if (exit_name.equals(exitnn.ppt_name.makeExit())) {
-	    exits.add(exitnn);
-	  }
-	}
-      }
+    // return unless its an EXITnn
+    if (! (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint()))
+      return;
+
+    PptTopLevel exitnn_ppt = ppt;
+    PptName exitnn_name = exitnn_ppt.ppt_name;
+    PptName exit_name = ppt.ppt_name.makeExit();
+    PptTopLevel exit_ppt = ppts.get(exit_name);
+
+    // Create the exit, if necessary
+    if (exit_ppt == null) {
       // Find common vars in EXITnn points, and make a new ppt from them
+      // We can't do this incrementally, so we just use the first, which should be ok
+      List exits = Collections.singletonList(exitnn_ppt);
       VarInfo[] exit_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
-      PptTopLevel exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
-      // Set up the PO between EXIT and EXITnn
-      for (Iterator it = exits.iterator(); it.hasNext(); ) {
-	PptTopLevel exitnn = (PptTopLevel) it.next();
-	setup_po_same_name(exitnn.var_infos, exit_ppt.var_infos);
-      }
-      // Put new ppt on worklist to be added once iteration is complete
-      new_ppts.add(exit_ppt);
+      exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
+      ppts.add(exit_ppt);
     }
-    // Avoid ConcurrentModificationException by adding after the above loop
-    for (int i=0; i<new_ppts.size(); i++) {
-      ppts.add((PptTopLevel) new_ppts.get(i));
-    }
+
+    // Set up the PO between EXIT and EXITnn
+    setup_po_same_name(exitnn_ppt.var_infos, exit_ppt.var_infos);
   }
 
   /**
@@ -154,173 +160,142 @@ public class Dataflow
    * VarInfos using the OBJECT, CLASS, ENTER-EXIT program point
    * naming.
    **/
-  private static void relate_object_procedure_ppts(PptMap ppts)
+  private static void relate_object_procedure_ppts(PptTopLevel ppt, PptMap ppts)
   {
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      PptName ppt_name = ppt.ppt_name;
-      // Find the ppt which controlls this one.
-      // CLASS controls OBJECT controls ENTER/EXIT.
-      PptTopLevel controlling_ppt = null;
-      if (ppt_name.isObjectInstanceSynthetic()) {
-	controlling_ppt = ppts.get(ppt_name.makeClassStatic());
-      } else {
-	boolean enter = ppt_name.isEnterPoint();
-	boolean ctor = ppt_name.isConstructor();
-	boolean exit = ppt_name.isCombinedExitPoint();
-	if ((enter && !ctor) || exit) {
-	  // TODO: also require that this is a public method (?)
-	  controlling_ppt = ppts.get(ppt_name.makeObject());
-	  if (controlling_ppt == null) {
-	    // If we didn't find :::OBJECT, fall back to :::CLASS
-	    controlling_ppt = ppts.get(ppt_name.makeClassStatic());
-	  }
+    PptName ppt_name = ppt.ppt_name;
+    // Find the ppt which controlls this one.
+    // CLASS controls OBJECT controls ENTER/EXIT.
+    PptTopLevel controlling_ppt = null;
+    if (ppt_name.isObjectInstanceSynthetic()) {
+      controlling_ppt = ppts.get(ppt_name.makeClassStatic());
+    } else {
+      boolean enter = ppt_name.isEnterPoint();
+      boolean ctor = ppt_name.isConstructor();
+      boolean exit = ppt_name.isCombinedExitPoint();
+      if ((enter && !ctor) || exit) {
+	// TODO: also require that this is a public method (?)
+	controlling_ppt = ppts.get(ppt_name.makeObject());
+	if (controlling_ppt == null) {
+	  // If we didn't find :::OBJECT, fall back to :::CLASS
+	  controlling_ppt = ppts.get(ppt_name.makeClassStatic());
 	}
       }
-      // Create VarInfo relations with the controller when names match.
-      if (controlling_ppt != null) {
-	setup_po_same_name(ppt.var_infos, controlling_ppt.var_infos);
-      }
+    }
+    // Create VarInfo relations with the controller when names match.
+    if (controlling_ppt != null) {
+      setup_po_same_name(ppt.var_infos, controlling_ppt.var_infos);
     }
   }
 
   /**
-   * Add orig() variables to all EXIT or EXITnn program points.
-   * Should be performed after combined exits and controlling ppts
-   * have been added.
+   * Add orig() variables to the given EXIT point, and relate them to
+   * the corresponding ENTER point.  Does nothing is exit_ppt is not
+   * an EXIT.
    **/
-  private static void create_and_relate_orig_vars(PptMap ppts)
+  private static void create_and_relate_orig_vars(PptTopLevel exit_ppt, PptMap ppts)
   {
-    for (Iterator i = ppts.iterator() ; i.hasNext() ; ) {
-      PptTopLevel entry_ppt = (PptTopLevel) i.next();
-      if (! entry_ppt.ppt_name.isEnterPoint()) {
-	continue;
-      }
-      for (Iterator j = ppts.iterator() ; j.hasNext() ; ) {
-	PptTopLevel exit_ppt = (PptTopLevel) j.next();
-	if (! exit_ppt.ppt_name.isExitPoint()) {
-	  continue;
-	}
-	if (! entry_ppt.ppt_name.equals(exit_ppt.ppt_name.makeEnter())) {
-	  continue;
-	}
-	// comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
-	PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
-	// Add "orig(...)" (prestate) variables to the program point.
-	// Don't bother to include the constants.  Walk through
-	// entry_ppt's vars.  For each non-constant, put it on the
-	// new_vis worklist after fixing its comparability information.
-	exit_ppt.num_orig_vars = entry_ppt.var_infos.length - entry_ppt.num_static_constant_vars;
-	VarInfo[] new_vis = new VarInfo[exit_ppt.num_orig_vars];
-	{
-	  VarInfo[] entry_ppt_vis = entry_ppt.var_infos;
-	  Assert.assert(exit_ppt.num_orig_vars == entry_ppt.num_tracevars);
-	  int new_vis_index = 0;
-	  for (int k = 0; k < entry_ppt_vis.length; k++) {
-	    VarInfo vi = entry_ppt_vis[k];
-	    Assert.assert(!vi.isDerived(),"Derived when making orig(): "+vi.name);
-	    if (vi.isStaticConstant())
-	      continue;
-	    VarInfo origvar = VarInfo.origVarInfo(vi);
-	    // Fix comparability
-	    VarInfo postvar = exit_ppt.findVar(vi.name);
-	    Assert.assert(postvar != null,"Exit not superset of entry: "+vi.name);
-	    origvar.comparability = postvar.comparability.makeAlias(origvar.name);
-	    // Setup PO
-	    if (exit_ppt.ppt_name.isCombinedExitPoint()) {
-	      // Relate orig(...) on EXIT to ... on ENTER
-	      origvar.addHigherPO(vi, static_po_group_nonce);
-	    } else {
-	      // Relate orig(...) on EXITnn to orig(...) on EXIT
-	      // (We depend on the fact that we see EXIT before EXITnn
-	      // in the iterator (eep!).)
-	      VarInfo combvar = comb_exit_ppt.findVar(origvar.name);
-	      int[] nonces = postvar.po_higher_nonce();
-	      Assert.assert(nonces.length == 1, vi.name.name());
-	      origvar.addHigherPO(combvar, nonces[0]);
-	    }
-	    // Add to new_vis
-	    new_vis[new_vis_index] = origvar;
-	    new_vis_index++;
-	  }
-	  Assert.assert(new_vis_index == exit_ppt.num_orig_vars);
-	  static_po_group_nonce++; // advance once per (EXIT#) program point
-	}
-	exit_ppt.addVarInfos(new_vis);
-      }
+    if (! exit_ppt.ppt_name.isCombinedExitPoint()) {
+      return;
     }
+    PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
+    Assert.assert(entry_ppt != null, exit_ppt.name);
+
+    // comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
+    PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
+    // Add "orig(...)" (prestate) variables to the program point.
+    // Don't bother to include the constants.  Walk through
+    // entry_ppt's vars.  For each non-constant, put it on the
+    // new_vis worklist after fixing its comparability information.
+    exit_ppt.num_orig_vars = entry_ppt.num_tracevars;
+    VarInfo[] new_vis = new VarInfo[exit_ppt.num_orig_vars];
+    {
+      VarInfo[] entry_ppt_vis = entry_ppt.var_infos;
+      int new_vis_index = 0;
+      for (int k = 0; k < entry_ppt.num_declvars; k++) {
+	VarInfo vi = entry_ppt_vis[k];
+	Assert.assert(!vi.isDerived(),"Derived when making orig(): "+vi.name);
+	if (vi.isStaticConstant())
+	  continue;
+	VarInfo origvar = VarInfo.origVarInfo(vi);
+	// Fix comparability
+	VarInfo postvar = exit_ppt.findVar(vi.name);
+	Assert.assert(postvar != null,"Exit not superset of entry: "+vi.name);
+	origvar.comparability = postvar.comparability.makeAlias(origvar.name);
+	// Setup PO; relate orig(...) on EXIT to ... on ENTER
+	origvar.addHigherPO(vi, static_po_group_nonce);
+	// Add to new_vis
+	new_vis[new_vis_index] = origvar;
+	new_vis_index++;
+      }
+      Assert.assert(new_vis_index == exit_ppt.num_orig_vars);
+      static_po_group_nonce++; // advance once per (EXIT#) program point
+    }
+    exit_ppt.addVarInfos(new_vis);
   }
 
   /**
-   * For all ENTER point arguments that have a type that we have an
-   * OBJECT ppt for, add the appropriate partial order relation.  This
-   * must be done after OBJECT-ENTER controlling relations are already
-   * set up.
-   * (XXX: Should we also set this up for post-state arguments in EXIT points?)
+   * For all variables that have no parent, and whose type we have an
+   * OBJECT ppt for, add a partial order relation due to types.
+   * Because of the "have no parent" constraint, this step must be the
+   * last one performed on a program point being related.
    **/
-  private static void relate_arguments_to_object_ppts(PptMap ppts)
+  private static void relate_types_to_object_ppts(PptTopLevel ppt, PptMap ppts)
   {
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel entry_ppt = (PptTopLevel) itor.next();
-      if (! entry_ppt.ppt_name.isEnterPoint()) {
-	continue;
-      }
-      // All derived expressions from arguments
-      List args = new ArrayList(); // [VarInfo]
-      // Subset of above which we have an OBJECT ppt for
-      Map known = new HashMap(); // [VarInfo -> PptTopLevel]
-      // Search and fill these lists
-      VarInfo[] vis = entry_ppt.var_infos;
-      for (int i=0; i<vis.length; i++) {
-	VarInfo vi = vis[i];
-	// Arguments are the things with no controller yet
-	if (vi.po_higher().size() == 0) {
-	  args.add(vi);
-	  if (! vi.type.isPseudoArray()) {
-	    PptName objname = new PptName(vi.type.base(), // class
-					  null, // method
-					  FileIO.object_suffix // point
-					  );
-	    Assert.assert(objname.isObjectInstanceSynthetic());
-	    PptTopLevel object_ppt = ppts.get(objname);
-	    if (object_ppt != null) {
-	      known.put(vi, object_ppt);
-	    }
+    // All expresions with no parent
+    List orphans = new ArrayList(); // [VarInfo]
+    // Subset of orphans which we have an OBJECT ppt for
+    Map known = new HashMap(); // [VarInfo -> PptTopLevel]
+    // Search and fill the "orphans" and "known" lists
+    VarInfo[] vis = ppt.var_infos;
+    for (int i=0; i<vis.length; i++) {
+      VarInfo vi = vis[i];
+      if (vi.name.equals(VarInfoName.THIS)) continue;
+      // Arguments are the things with no controller yet
+      if (vi.po_higher().size() == 0) {
+	orphans.add(vi);
+	if (! vi.type.isPseudoArray()) {
+	  PptName objname = new PptName(vi.type.base(), // class
+					null, // method
+					FileIO.object_suffix // point
+					);
+	  Assert.assert(objname.isObjectInstanceSynthetic());
+	  PptTopLevel object_ppt = ppts.get(objname);
+	  if (object_ppt != null) {
+	    known.put(vi, object_ppt);
+	  } else {
+	    // TODO: Note that orphan has no relatives, for later hook?
 	  }
 	}
       }
-      // For each known-type variable, substitute its name in for
-      // 'this' in the OBJECT ppt and see if we get any expression
-      // matches with other "argument" variables.
-      VarInfo[] args_array = (VarInfo[]) args.toArray(new VarInfo[args.size()]);
-      for (Iterator it = known.keySet().iterator(); it.hasNext(); ) {
-	final VarInfo known_vi = (VarInfo) it.next();
-	PptTopLevel object_ppt = (PptTopLevel) known.get(known_vi);
-	setup_po_same_name(args_array, // lower
-			   VarInfoName.IDENTITY_TRANSFORMER,
-			   object_ppt.var_infos, // higher
-			   // but with known_vi.name in for "this"
-			   new VarInfoName.Transformer() {
-			       public VarInfoName transform(VarInfoName v) {
-				 return v.replaceAll(VarInfoName.parse("this"),
-						     known_vi.name);
-			       }
+    }
+    // For each known-type variable, substitute its name in for
+    // 'this' in the OBJECT ppt and see if we get any expression
+    // matches with other orphaned variables.
+    VarInfo[] orphans_array = (VarInfo[]) orphans.toArray(new VarInfo[orphans.size()]);
+    for (Iterator it = known.keySet().iterator(); it.hasNext(); ) {
+      final VarInfo known_vi = (VarInfo) it.next();
+      PptTopLevel object_ppt = (PptTopLevel) known.get(known_vi);
+      setup_po_same_name(orphans_array, // lower
+			 VarInfoName.IDENTITY_TRANSFORMER,
+			 object_ppt.var_infos, // higher
+			 // but with known_vi.name in for "this"
+			 new VarInfoName.Transformer() {
+			     public VarInfoName transform(VarInfoName v) {
+			       return v.replaceAll(VarInfoName.THIS,
+						   known_vi.name);
 			     }
-			   );
-      }
+			   }
+			 );
     }
   }
 
   /**
    * Create all of the derived variables for all program points.
    **/
-  private static void create_derived_variables(PptMap all_ppts) {
-    for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      int first_new = ppt.var_infos.length;
-      ppt.create_derived_variables();
-      relate_derived_variables(ppt, first_new, ppt.var_infos.length);
-    }
+  private static void create_derived_variables(PptTopLevel ppt, PptMap all_ppts) {
+    int first_new = ppt.var_infos.length;
+    ppt.create_derived_variables();
+    relate_derived_variables(ppt, first_new, ppt.var_infos.length);
   }
 
   /**
@@ -334,7 +309,7 @@ public class Dataflow
   {
     debug.debug("relate_derived_variables on " + ppt.name);
 
-    // For all immediately higher (or lower) groups of variables
+    // For all immediately higher groups of variables
     PptsAndInts flow = compute_ppt_flow(ppt,
 					false, // one step only
 					true   // higher
@@ -446,28 +421,21 @@ public class Dataflow
   }
 
   /**
-   * Create the dataflow injection vectors in all of the PptTopLevels
+   * Create the dataflow injection vectors for PptTopLevels
    * that receive samples.  Must be done after VarInfo partial
    * ordering relations have been fully set up.
    **/
-  private static void create_ppt_dataflow(PptMap all_ppts)
+  private static void create_ppt_dataflow(PptTopLevel ppt)
   {
-    // For all points that receive samples (currently just EXITnn)
-    for (Iterator h = all_ppts.iterator(); h.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) h.next();
-      boolean receives_samples = ppt.ppt_name.isExitPoint()
-	&& !ppt.ppt_name.isCombinedExitPoint();
-      if (!receives_samples) {
-	continue;
-      }
+    // Points that receive samples (currently just EXITnn)
+    boolean receives_samples = ppt.ppt_name.isCombinedExitPoint();
 
+    if (receives_samples) {
       PptsAndInts rec = compute_ppt_flow(ppt,
 					 true, // full paths
 					 true  // higher
 					 );
-      // Store result into receiving_ppt
-      Assert.assert(ppt.dataflow_ppts == null);
-      Assert.assert(ppt.dataflow_transforms == null);
+      // Store result into ppt
       ppt.dataflow_ppts = rec.ppts;
       ppt.dataflow_transforms = rec.ints;
     }
@@ -475,15 +443,13 @@ public class Dataflow
 
 
   /**
-   * Create the invariant flow injection vectors in all of the
-   * PptTopLevels.  Must be done after VarInfo partial ordering
-   * relations have been fully set up.
+   * Create the invariant flow injection vectors for PptTopLevels.
+   * Must be done after VarInfo partial ordering relations have been
+   * fully set up.
    **/
-  private static void create_ppt_invflow(PptMap all_ppts)
+  private static void create_ppt_invflow(PptTopLevel ppt)
   {
-    for (Iterator h = all_ppts.iterator(); h.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) h.next();
-
+    {
       PptsAndInts rec = compute_ppt_flow(ppt,
 					 false, // one-step paths
 					 false  // lower
@@ -491,8 +457,6 @@ public class Dataflow
       // Remove last element (don't flow invariant to same ppt)
       rec = rec.makeSubArray(rec.ppts.length - 1);
       // Store result into ppt
-      Assert.assert(ppt.invflow_ppts == null);
-      Assert.assert(ppt.invflow_transforms == null);
       ppt.invflow_ppts = rec.ppts;
       ppt.invflow_transforms = rec.ints;
     }
