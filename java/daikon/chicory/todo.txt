@@ -18,6 +18,13 @@ Todo list sorted in approximate order of importance.
     in the StackAr example (though not in the StackAr regression test).
     It would be good to fix this so that the examples we ship work.
 
+    Another interesting solution would be to accept floating point
+    values as a valid hashcode in Daikon (note that integer values
+    work fine right now).  
+
+  - Static variables are not named correctly when a class with
+    a static variable is referenced from another class. [sjl]
+
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
     we should consider a class instrumented if any of its methods
