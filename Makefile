@@ -340,6 +340,7 @@ dist-dfej-solaris: $(DIST_BIN_DIR)/dfej-solaris
 
 $(DIST_BIN_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	cp -pf $< $@
+	strip $@
 	update-link-dates $(DIST_DIR)/index.html
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
@@ -354,7 +355,9 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	# Now copy it over
 	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86
 	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
+	strip $(DIST_BIN_DIR)/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
+	# Unstripped, to permit better debugging
 	cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
