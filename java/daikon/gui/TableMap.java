@@ -1,3 +1,7 @@
+//  I downloaded this file from
+//  http://www.cs.huji.ac.il/support/docs/java/jdk1.3/demo/jfc/TableExample/src/.
+//  I have not changed anything, except adding the package line.  -Melissa
+
 package daikon.gui; // For simplicity, put this file in daikon.gui.  -Melissa
 
 /** 
