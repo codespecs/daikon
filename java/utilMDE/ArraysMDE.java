@@ -472,7 +472,7 @@ public final class ArraysMDE {
   /**
    * Searches for the first subsequence of the array that matches the given array elementwise,
    *    testing for equality using the equals method.
-   * @return the first index whose element is equal to the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if no such element is found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
@@ -488,7 +488,7 @@ public final class ArraysMDE {
   /**
    * Searches for the first subsequence of the array that matches the given array elementwise,
    *    testing for equality using == (not the equals method).
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
@@ -503,7 +503,7 @@ public final class ArraysMDE {
 
   /**
    * Searches for the first subsequence of the array that matches the given array elementwise.
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
@@ -518,7 +518,7 @@ public final class ArraysMDE {
 
   /**
    * Searches for the first subsequence of the array that matches the given array elementwise.
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
@@ -534,7 +534,7 @@ public final class ArraysMDE {
 
   /**
    * Searches for the first subsequence of the array that matches the given array elementwise.
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
@@ -882,7 +882,7 @@ public final class ArraysMDE {
    * Determines whether the second array is a subarray of the first,
    *    starting at the specified index of the first,
    *    testing for equality using the equals method.
-   * @return the first index whose element is equal to the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if no such element is found in the array.
    **/
   public static boolean isSubarray(Object[] a, Object[] sub, int a_offset) {
@@ -900,7 +900,7 @@ public final class ArraysMDE {
    * Determines whether the second array is a subarray of the first,
    *    starting at the specified index of the first,
    *    testing for equality using == (not the equals method).
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
   public static boolean isSubarrayEq(Object[] a, Object[] sub, int a_offset) {
@@ -917,7 +917,7 @@ public final class ArraysMDE {
   /**
    * Determines whether the second array is a subarray of the first,
    *    starting at the specified index of the first.
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
   public static boolean isSubarray(int[] a, int[] sub, int a_offset) {
@@ -934,7 +934,7 @@ public final class ArraysMDE {
   /**
    * Determines whether the second array is a subarray of the first,
    *    starting at the specified index of the first.
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
   public static boolean isSubarray(long[] a, long[] sub, int a_offset) {
@@ -951,7 +951,7 @@ public final class ArraysMDE {
   /**
    * Determines whether the second array is a subarray of the first,
    *    starting at the specified index of the first.
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
   public static boolean isSubarray(double[] a, double[] sub, int a_offset) {
@@ -968,7 +968,7 @@ public final class ArraysMDE {
   /**
    * Determines whether the second array is a subarray of the first,
    *    starting at the specified index of the first.
-   * @return the first index containing the specified element,
+   * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
   public static boolean isSubarray(boolean[] a, boolean[] sub, int a_offset) {
