@@ -102,6 +102,7 @@ public class CLASSNAME
       return format_simplify();
     }
 
+
     if (format == OutputFormat.JML) {
       VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var().name,var().name});
       String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,false);
@@ -113,7 +114,7 @@ public class CLASSNAME
         quantResult[2] + ")" + quantResult[3];
     }
 
-    if (format == OutputFormat.DBCJAVA) {
+    if (format.isJavaFamily()) {
       return format_dbc();
     }
 
@@ -217,7 +218,7 @@ public class CLASSNAME
   }
 
   public String format_dbc() {
-    return "quant.Quant.noDups(" + var().name.dbc_name(var()) + ")";
+    return "daikon.Quant.noDups(" + var().name.dbc_name(var()) + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a, int count) {

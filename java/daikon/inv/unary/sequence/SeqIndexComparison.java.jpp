@@ -237,6 +237,11 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String format_using(OutputFormat format) {
+    if (format.isJavaFamily()) return format_dbc();
+
+    // TODO: Eliminate the unnecessary format_xxx() below if the
+    // format_dbc() can handle all the Java family output.
+
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
@@ -313,7 +318,7 @@ public class CLASSNAME extends SUPERCLASS {
     } else {
       comparatorDBC = "?comparatorDBC?";
     }
-    return "quant.Quant.index" + comparatorDBC + "(" + var().name.dbc_name(var()) + ")";
+    return "daikon.Quant.index" + comparatorDBC + "(" + var().name.dbc_name(var()) + ")";
   }
 
   public String format_simplify() {

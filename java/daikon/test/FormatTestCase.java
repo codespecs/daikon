@@ -660,7 +660,7 @@ class FormatTestCase {
     if (format.equalsIgnoreCase("daikon"))
       return OutputFormat.DAIKON;
     else if (format.equalsIgnoreCase("java"))
-      return OutputFormat.DBCJAVA;
+      return OutputFormat.JAVA;
     else if (format.equalsIgnoreCase("esc"))
       return OutputFormat.ESCJAVA;
     else if (format.equalsIgnoreCase("ioa"))

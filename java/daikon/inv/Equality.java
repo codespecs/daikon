@@ -156,6 +156,14 @@ public final class Equality
   }
 
   public String format_using(OutputFormat format) {
+
+
+    if (format.isJavaFamily()) return format_dbc();
+
+    // TODO: Eliminate the unnecessary format_xxx() below if the
+    // format_dbc() can handle all the Java family output.
+
+
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format_java();
@@ -365,7 +373,7 @@ public final class Equality
       VarInfo var = (VarInfo) i.next();
       if (leader == var) continue;
       if (leader.rep_type.isArray()) {
-        result.append("(").append("quant.Quant.pairwiseEqual(");
+        result.append("(").append("daikon.Quant.pairwiseEqual(");
         result.append(leaderName).append(", ").append(var.name.dbc_name(var));
         result.append(")");
       } else {

@@ -157,9 +157,7 @@ public final class StringComparison
     String comparator = core.format_comparator(format);
 
     // RRN: check that this is correct:
-    if (format == OutputFormat.JAVA
-        || format == OutputFormat.JML
-        || format == OutputFormat.DBCJAVA) {
+    if (format.isJavaFamily()) {
       name1 = var1().name.JMLElementCorrector().name_using(format, var1());
       name2 = var2().name.JMLElementCorrector().name_using(format, var2());
       if (comparator.equals("==")) {
@@ -167,8 +165,6 @@ public final class StringComparison
       } else {
         return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
       }
-    } else if (format == OutputFormat.DBCJAVA) {
-      return format_unimplemented(format);
     } else if (format == OutputFormat.SIMPLIFY) {
       comparator = (comparator.equals("==") ? "EQ" : comparator);
       if (comparator.equals("?cmp?"))

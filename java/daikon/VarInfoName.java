@@ -919,7 +919,7 @@ public abstract class VarInfoName
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
       Assert.assertTrue(derived instanceof UnaryDerivation);
-      return "quant.Quant." + function + "("
+      return "daikon.Quant." + function + "("
         + argument.dbc_name_impl(((UnaryDerivation)derived).base) + ")";
     }
 
@@ -1027,7 +1027,7 @@ public abstract class VarInfoName
                         //|| derived instanceof TernaryDerivation);
       Assert.assertTrue(args.size() == 2);
 
-      return "quant.Quant." + function + "("
+      return "daikon.Quant." + function + "("
         + ((VarInfoName)args.get(0)).dbc_name_impl(((BinaryDerivation)derived).base1)  + ", "
         + ((VarInfoName)args.get(1)).dbc_name_impl(((BinaryDerivation)derived).base2)  + ")";
     }
@@ -1187,7 +1187,7 @@ public abstract class VarInfoName
 
         // x.y.foo[].bar.f
         // ---translates-into--->
-        // quant.Quant.fieldArray(<type instance>, x, "y.foo[].bar.f")
+        // daikon.Quant.fieldArray(<type instance>, x, "y.foo[].bar.f")
 
         // [explain clunky <type instance>]
 
@@ -1235,7 +1235,7 @@ public abstract class VarInfoName
         if (splits[0].equals(term.name())) {
           // Simple case: foo[]
           return
-            "quant.Quant.fieldArray(" + i + ", " + term.dbc_name(v) + ", "
+            "daikon.Quant.fieldArray(" + i + ", " + term.dbc_name(v) + ", "
             + "\"" + field + "\"" + ")";
         } else {
           // complicated case: x.y.foo[].bar
@@ -1247,7 +1247,7 @@ public abstract class VarInfoName
             fields += removeBrackets(splits[j]);
           }
           return
-            "quant.Quant.fieldArray(" + i + ", " + object + ", "
+            "daikon.Quant.fieldArray(" + i + ", " + object + ", "
             + "\"" + fields + "." + field + "\"" + ")";
         }
       } else {
@@ -1398,7 +1398,7 @@ public abstract class VarInfoName
       }
       String preType = v.type.base();
       if ((term instanceof Slice)
-          // Slices are obtained by calling quant.Quant.slice(...)
+          // Slices are obtained by calling daikon.Quant.slice(...)
           // which returns things of type java.lang.Object
           && (v.type.dimensions()) > 0
           && (v.type.base().equals("java.lang.Object"))) {
@@ -1907,17 +1907,17 @@ public abstract class VarInfoName
         if (i == null) { // sequence[0..j]
           Assert.assertTrue(j != null);
           return
-            "quant.Quant.slice("
+            "daikon.Quant.slice("
             + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar())
             + ", 0,  "
             + j.dbc_name_impl(((SequenceSubsequence)derived).sclvar())
             + ")";
         } else {
           return
-            "quant.Quant.slice("
+            "daikon.Quant.slice("
             + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar())
             + ", " + i.dbc_name_impl(((SequenceSubsequence)derived).sclvar())
-            + ", quant.Quant.lastIdx(" + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar()) + ")"
+            + ", daikon.Quant.lastIdx(" + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar()) + ")"
             + ")";
         }
       } else {
@@ -1925,7 +1925,7 @@ public abstract class VarInfoName
         if(derived instanceof SequenceScalarArbitrarySubsequence) {
           SequenceScalarArbitrarySubsequence derived2 = (SequenceScalarArbitrarySubsequence)derived;
           return
-            "quant.Quant.slice("
+            "daikon.Quant.slice("
             + sequence.dbc_name_impl(derived2.seqvar())
             + i.dbc_name_impl(derived2.startvar())
             + j.dbc_name_impl(derived2.endvar())
@@ -1933,7 +1933,7 @@ public abstract class VarInfoName
         } else if(derived instanceof SequenceFloatArbitrarySubsequence) {
           SequenceFloatArbitrarySubsequence derived2 = (SequenceFloatArbitrarySubsequence)derived;
           return
-            "quant.Quant.slice("
+            "daikon.Quant.slice("
             + sequence.dbc_name_impl(derived2.seqvar())
             + i.dbc_name_impl(derived2.startvar())
             + j.dbc_name_impl(derived2.endvar())
@@ -1941,7 +1941,7 @@ public abstract class VarInfoName
         } else {
           SequenceStringArbitrarySubsequence derived2 = (SequenceStringArbitrarySubsequence)derived;
           return
-            "quant.Quant.slice("
+            "daikon.Quant.slice("
             + sequence.dbc_name_impl(derived2.seqvar())
             + i.dbc_name_impl(derived2.startvar())
             + j.dbc_name_impl(derived2.endvar())
@@ -3242,7 +3242,7 @@ public abstract class VarInfoName
      * and $exists constrcuts, but testing showed that Jtest does not
      * allow these constructs in @post annotations (!). The current
      * implementation uses helper methods defined in a separate class
-     * quant.Quant (not currently included with Daikon's
+     * daikon.Quant (not currently included with Daikon's
      * distribution). These methods always return a boolean value and
      * look something like this:
      *

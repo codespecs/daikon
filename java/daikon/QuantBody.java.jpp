@@ -1236,22 +1236,22 @@ The correct way to build the system is to run 'make'.
     fieldObj = field.get(object);
     System.out.println("***fieldObj="+fieldObj);
   } catch (NoSuchFieldException e) {
-    throw new RuntimeException("quant.Quant.fieldArray: NoSuchFieldException: "
+    throw new RuntimeException("daikon.Quant.fieldArray: NoSuchFieldException: "
                                + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (NullPointerException e) {
-    throw new RuntimeException("quant.Quant.fieldArray: NullPointerException: "
+    throw new RuntimeException("daikon.Quant.fieldArray: NullPointerException: "
                                + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (SecurityException e) {
-    throw new RuntimeException("quant.Quant.fieldArray: SecurityException: "
+    throw new RuntimeException("daikon.Quant.fieldArray: SecurityException: "
                                + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (Exception e) {
-    throw new RuntimeException("quant.Quant.fieldArray: Exception: "
+    throw new RuntimeException("daikon.Quant.fieldArray: Exception: "
                                + "inst=" + inst + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);

@@ -123,10 +123,8 @@ public class NONZERO
     String name = var().name.name_using(format, var());
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.JAVA)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.JML)
-        || (format == OutputFormat.DBCJAVA))
+        || (format.isJavaFamily()))
     {
       return name + " != " + zero(format);
     }

@@ -627,8 +627,7 @@ public final class CLASSNAME
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.IOA)
-        || (format == OutputFormat.JML)
-        || (format == OutputFormat.DBCJAVA))
+        || (format.isJavaFamily()))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";

@@ -121,8 +121,22 @@ public class CLASSNAME
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.JML) return format_jml();
+    if (format == OutputFormat.JAVA) return format_java();
 
     return format_unimplemented(format);
+  }
+
+  public String format_java() {
+    String v1 = var1().name.name();
+    String v2 = var2().name.name();
+    if (var1_in_var2 && var2_in_var1) {
+      return v1 + " is a {sub,super}sequence of " + v2;
+    } else {
+      String subvar = (var1_in_var2 ? v1 : v2);
+      String supervar = (var1_in_var2 ? v2 : v1);
+      return subvar + " is a subsequence of " + supervar;
+    }
+
   }
 
   public String format_daikon() {

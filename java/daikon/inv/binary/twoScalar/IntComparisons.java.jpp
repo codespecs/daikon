@@ -557,10 +557,9 @@ invariants.
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.JML)
-        || (format == OutputFormat.JAVA)
-        || (format == OutputFormat.IOA)
-        || (format == OutputFormat.DBCJAVA))
+        || (format.isJavaFamily())
+        || (format == OutputFormat.IOA))
+
     {
       String comparator = EQUALSstring;
       #if defined(EQUAL_OP)

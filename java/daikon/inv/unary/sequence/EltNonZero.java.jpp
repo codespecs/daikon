@@ -113,6 +113,12 @@ public final class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
+    if (format.isJavaFamily()) return format_dbc();
+
+    // TODO: Eliminate the unnecessary format_xxx() below if the
+    // format_dbc() can handle all the Java family output.
+
+
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.IOA) return format_ioa();
@@ -198,7 +204,7 @@ public final class CLASSNAME
 
     // if (viname instanceof VarInfoName.Elements) {
     return
-      "quant.Quant.eltsNotEqual(" + var().name.dbc_name(var())
+      "daikon.Quant.eltsNotEqual(" + var().name.dbc_name(var())
       + (is_pointer() ? ", null" : ", 0") + ")";
     // }
 

@@ -476,6 +476,12 @@ public final class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
+    if (format.isJavaFamily()) return format_dbc();
+
+    // TODO: Eliminate the unnecessary format_xxx() below if the
+    // format_dbc() can handle all the Java family output.
+
+
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
     } else if (format == OutputFormat.JAVA) {
@@ -512,7 +518,7 @@ public final class CLASSNAME
   }
 
   public String format_dbc() {
-    return "quant.Quant.memberOf(" + sclvar().name.dbc_name(sclvar())
+    return "daikon.Quant.memberOf(" + sclvar().name.dbc_name(sclvar())
       + " , " + seqvar().name.dbc_name(seqvar()) + " )";
   }
 

@@ -84,6 +84,12 @@ public class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
+    if (format.isJavaFamily()) return format_dbc();
+
+    // TODO: Eliminate the unnecessary format_xxx() below if the
+    // format_dbc() can handle all the Java family output.
+
+
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format_java();
@@ -153,7 +159,7 @@ public class CLASSNAME
   }
 
   public String format_dbc() {
-          return "quant.Quant.isReverse(" + var1().name.dbc_name(var1())
+          return "daikon.Quant.isReverse(" + var1().name.dbc_name(var1())
             + ", " + var2().name.dbc_name(var2()) + ")";
   }
 

@@ -355,8 +355,8 @@ public class SEQSEQINTEQUAL
       return format_simplify();
     }
 
-    if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.JAVA)) // CP: this is incorrect for JAVA
+    if (format == OutputFormat.DAIKON)
+
     {
       String name1 = var1().name.name_using(format, var1());
       String name2 = var2().name.name_using(format, var2());
@@ -371,10 +371,10 @@ public class SEQSEQINTEQUAL
     }
 
 
-    if (format == OutputFormat.DBCJAVA) {
+    if (format.isJavaFamily()) {
       String name1 = var1().name.name_using(format, var1());
       String name2 = var2().name.name_using(format, var2());
-      return "quant.Quant." + EQUALSstringDBC + "(" + name1 + ", " + name2 + ")";
+      return "daikon.Quant." + EQUALSstringDBC + "(" + name1 + ", " + name2 + ")";
     }
 
     if (format == OutputFormat.IOA) {

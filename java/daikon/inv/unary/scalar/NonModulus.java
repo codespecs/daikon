@@ -81,10 +81,7 @@ public class NonModulus
       return "mod(" + name + ", " + modulus + ") ~= " + remainder;
     }
 
-    if (format == OutputFormat.JAVA
-        || format == OutputFormat.JML
-        || format == OutputFormat.DBCJAVA) {
-
+    if (format.isJavaFamily()) {
       return name + " % " + modulus + " != " + remainder;
     }
 

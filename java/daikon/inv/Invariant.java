@@ -793,6 +793,10 @@ public abstract class Invariant
     private final String name;
     public final String toString() { return "OutputFormat:" + name; }
 
+    public boolean isJavaFamily() {
+      return (this == DBCJAVA || this == JML ||  this == JAVA);
+    }
+
     // Nobody should ever construct these
     private OutputFormat(String name) {
       this.name = name;

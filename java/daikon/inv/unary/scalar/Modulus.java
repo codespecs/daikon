@@ -69,15 +69,15 @@ public class Modulus
       return "mod(" + var().name.ioa_name() + ", " + modulus + ") = " + remainder;
     }
 
-    if (format == OutputFormat.DBCJAVA) {
+    if (format.isJavaFamily()) {
       name = var().name.dbc_name(var());
       return name + " % " + modulus + " == " + remainder;
     }
 
-    if (format == OutputFormat.JAVA
-        || format == OutputFormat.JML) {
-      return var().name.name() + " % " + modulus + " == " + remainder;
-    }
+    //   if (format == OutputFormat.JAVA
+    //     || format == OutputFormat.JML) {
+    //   return var().name.name() + " % " + modulus + " == " + remainder;
+    //  }
 
     if (format == OutputFormat.SIMPLIFY) {
       if (modulus > 0) {

@@ -272,9 +272,7 @@ public class LOWERBOUND
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.IOA)
-        || (format == OutputFormat.JAVA)
-        || (format == OutputFormat.JML)
-        || (format == OutputFormat.DBCJAVA))
+        || (format.isJavaFamily()))
     {
       return name + " " + GTESTR + " " + MIN1;
     }
@@ -292,6 +290,13 @@ public class LOWERBOUND
 #else
 
   public String format_using(OutputFormat format) {
+
+    if (format.isJavaFamily()) return format_dbc();
+
+    // TODO: Eliminate the unnecessary format_xxx() below if the
+    // format_dbc() can handle all the Java family output.
+
+
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
     } else if (format == OutputFormat.IOA) {
@@ -337,7 +342,7 @@ public class LOWERBOUND
   public String format_dbc() {
 #ifdef IS_ELT
     return
-      "quant.Quant.elts" + GTESTRDBC + "(" + var().name.dbc_name(var()) + ", " + MIN1 + ")";
+      "daikon.Quant.elts" + GTESTRDBC + "(" + var().name.dbc_name(var()) + ", " + MIN1 + ")";
 #else
     String varname = var().name.dbc_name(var());
     return varname + " " + GTESTR + " " + MIN1;

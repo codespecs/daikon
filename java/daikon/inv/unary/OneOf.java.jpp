@@ -467,6 +467,12 @@ public final class ONEOFSCALAR
 
   public String format_using(OutputFormat format) {
     sort_rep();
+
+    if (format.isJavaFamily()) return format_dbc();
+
+    // TODO: Eliminate the unnecessary format_xxx() below if the
+    // format_dbc() can handle all the Java family output.
+
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
     } else if (format == OutputFormat.JAVA) {
@@ -1120,22 +1126,22 @@ public final class ONEOFSCALAR
 
     #if defined(BASE_INT)
       if (is_boolean) {
-        result = "quant.Quant.eltsEqual(" + varname + ", "
+        result = "daikon.Quant.eltsEqual(" + varname + ", "
           + ((elts[0] == 0) ? "false" : "true") + ")";
       } else if (is_hashcode) {
         result =
           ((elts[0] == 0)
-           ? ("quant.Quant.eltsEqual(" + varname + ", null)")
-           : ("quant.Quant.eltsNotEqual(" + varname + ", null)"));
+           ? ("daikon.Quant.eltsEqual(" + varname + ", null)")
+           : ("daikon.Quant.eltsNotEqual(" + varname + ", null)"));
       } else
     #endif
         {
-          result = "quant.Quant.eltsEqual(" + varname + ", "
+          result = "daikon.Quant.eltsEqual(" + varname + ", "
             + TOSTRING(elts[0]) + ")";
         }
     } else {
       Assert.assertTrue(num_elts > 1);
-      result = "quant.Quant.eltsOneOf(" + varname + ", " + oneOfArray + ")";
+      result = "daikon.Quant.eltsOneOf(" + varname + ", " + oneOfArray + ")";
     }
 
 #elif defined(IS_SCALAR)
@@ -1218,7 +1224,7 @@ public final class ONEOFSCALAR
       }
       seq += " }";
 
-      result += "quant.Quant.pairwiseEqual(" + varname + ", " + seq + ")";
+      result += "daikon.Quant.pairwiseEqual(" + varname + ", " + seq + ")";
     }
   #endif
 

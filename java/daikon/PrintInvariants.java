@@ -1079,7 +1079,7 @@ public class PrintInvariants {
          if (other.isDerivedSequenceMinMaxSum())
            break;
          if (leader.rep_type.isArray()) {
-           out.println("quant.Quant.pairwiseEqual("
+           out.println("daikon.Quant.pairwiseEqual("
                        + leader.name.dbc_name(leader)
                        + other.name.dbc_name(leader)
                        + ")");
@@ -1223,7 +1223,7 @@ public class PrintInvariants {
 
       // TODO: Remove once we revise OutputFormat
       if (Daikon.output_style == OutputFormat.JAVA) {
-        inv_rep = inv.format_using (OutputFormat.DBCJAVA);
+        inv_rep = inv.format_using (OutputFormat.JAVA);
         // if there is a $pre string in the format, then it contains
         // the orig variable and should not be printed.
         if (inv_rep.indexOf ("$pre") != -1) {
