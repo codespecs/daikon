@@ -2948,7 +2948,8 @@ Defines the preprocessor macro @var{macro} to be @var{value}.
 @item --tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
-the instrumented program file that contains the main() function).  If the filename is relative with respect
+the instrumented program file that contains the main() function).
+A relative filename is interpreted with respect
 to the current directory at runtime, not at compile time.
 If the DTRACEFILE environment
 variable is set (to a file name) when the instrumented program is run,
@@ -3072,19 +3073,20 @@ single-element array --- can speed up Daikon and improve its output.
 (See the example below.)
 
 Information about whether each pointer refers to an array or a single
-element can be specified in a ``disambig file'' that resides in the same
-directory as the decls file.  The @option{--disambig} option instructs
-dfec to read this file.  (dfec can also produce the file automatically,
-permitting users to edit it for use on subsequent runs, rather than
-having to create it from scratch.)  The disambig file
+element can be specified in a ``disambig file'' that resides in the
+same directory as the decls file.  The @option{--disambig} option
+instructs dfec to read this file.  (dfec can also produce the file
+automatically, permitting users to edit it for use on subsequent runs,
+rather than having to create it from scratch.)  The disambig file
 lists all the instrumented program points, and under each, a list of
 all the variables in scope at that program point, along with the types
-that the variables are instrumented as.
-For pointer variables, there are two options:  @samp{A} for array, and @samp{P} for pointer to single value.
-For variables of type @code{char}, there are two options:  @samp{I} for
-integer (i.e. numerical value), @samp{C} for character.  This allows you to
-choose whether a @code{char} variable refers to a short numerical value that
-mathematical invariants should be calculated over, or an ASCII character.
+that the variables are instrumented as.  For pointer variables, there
+are two options:  @samp{A} for array, and @samp{P} for pointer to
+single value.  For variables of type @code{char}, there are two
+options:  @samp{I} for integer (i.e., numerical value), and @samp{C}
+for character.  This allows you to choose whether a @code{char}
+variable refers to an ASCII character or a short numerical value that
+mathematical invariants should be calculated over.
 
 The disambig file contains an entry for each program point and for every
 user-defined class or struct in instrumentation scope.  Members of structs
@@ -3264,6 +3266,7 @@ For example, if there was a function with signature
 @example
   int foo(char *arg1, char *arg2)
 @end example
+@noindent
 that was in the system header file @file{<bar.h>}, you would need to do
 these things:
 
@@ -3280,10 +3283,10 @@ go.  You can find this section by searching for this text:
 @item
 Add an instrumented implementation to @file{daikon_runtime.cc}.  This requires
 knowledge of how smartpointers and the basemap work.  Typically, the
-instrumented implementation will call the normal library function, then
-manually adjust the max_seen pointers in the basemap to their correct values,
-based on semantic knowledge about the function itself.  For examples, look
-over the implementations provided for @file{string.h}.
+instrumented implementation calls the normal library function, then
+manually adjusts the max_seen pointers in the basemap to their correct values,
+based on semantic knowledge about the function itself.  For examples, see
+the implementations provided for @file{string.h}.
 The signature of the function must be changed in two ways:  the name should
 have "DAIKON_" prepended to it, to avoid namespace pollution (the calls are
 resolved through a macro definition explained below), and the argument and
