@@ -18,13 +18,14 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import utilMDE.Assert;
 import utilMDE.Intern;
 
 /**
  * This class is used by the InvariantFormatTester class to store data
  * representing test cases and for formatting results related to that
  * data. This class is related to tests performed on one invariant.
- */
+ **/
 class FormatTestCase {
 
   /**
@@ -33,37 +34,38 @@ class FormatTestCase {
    * can easily be extended to incorporating more than one test case
    * under an invariant heading, such as what is currently done in the
    * main code with having multiple goal outputs per invariant.
-   */
+   **/
   static class SingleOutputTestCase {
 
     /**
      * A method that produces the formatting output when invoked
-     */
+     **/
     private Method outputProducer;
 
     /**
      * The arguments that must be passed to outputProducer to create the output
-     */
+     **/
     private Object [] outputProducerArgs;
 
     /**
      * The goal output for this particular test case
-     */
+     **/
     private String goalOutput;
 
     /**
-     * The line number in the input file in which the goalOutput should occur
-     */
+     * The line number in the input file in which the goalOutput should occur in
+     * the output file
+     **/
     private int goalLineNumber;
 
     /**
      * A cached copy of the result achieved by invoking the output method
-     */
+     **/
     private String resultCache;
 
     /**
      * A string containing the format that this particular test case represented
-     */
+     **/
     private String formatString;
 
     /**
@@ -78,7 +80,7 @@ class FormatTestCase {
      * @param goalLineNumber the line number in the input file in which the goal
      * should occur
      * @param formatString the format that this test case belongs to
-     */
+     **/
     public SingleOutputTestCase(Method outputProducer,
 				Object[] outputProducerArgs,
 				String goalOutput,
@@ -97,8 +99,8 @@ class FormatTestCase {
      *
      * @param inv the Invariant object on which to invoke the function
      * @return a String representing the output
-     */
-    public String createTestOutput (Invariant inv) {
+     **/
+    public String createTestOutput(Invariant inv) {
       try {
 	if (resultCache == null)
 	  resultCache = (String)outputProducer.invoke(inv,outputProducerArgs);
@@ -113,12 +115,12 @@ class FormatTestCase {
     }
 
     /**
-     * This function tests to see whether this test is passed
+     * This function tests whether this test is passed
      *
      * @param inv the Invariant object on which to perform the test
      * @return true if the test is passed, false otherwise
-     */
-    public boolean performTest (Invariant inv) {
+     **/
+    public boolean performTest(Invariant inv) {
       return createTestOutput(inv).equals(goalOutput);
     }
 
@@ -128,7 +130,7 @@ class FormatTestCase {
      *
      * @return the line number that the goal should be listed on
      *         in the commands file
-     */
+     **/
     public int getGoalLineNumber() {
       return goalLineNumber;
     }
@@ -137,18 +139,18 @@ class FormatTestCase {
      * This function returns the format string of which the test case is a part
      *
      * @return the format string of which the test case is a part
-     */
+     **/
     public String getFormatString() {
       return formatString;
     }
 
     /**
      * This function creates a String representing the differences between the
-     * goal output and the actual output
+     * goal output and the actual output; empty if there are no differences
      *
      * @return a String as described above
-     */
-    public String createDiffString () {
+     **/
+    public String getDiffString() {
       if (resultCache != null && !resultCache.equals(goalOutput)) {
 	return "Error on line " + goalLineNumber + ":\n" +
 	  "Expected result:\n" + goalOutput + "\n" +
@@ -157,25 +159,26 @@ class FormatTestCase {
       return "";
     }
   }
+  // End of SingleOutputTestCase
 
   /**
    * Prefix to each goal line in the file for identitication
-   */
+   **/
   private static final String GOAL_PREFIX = "Goal";
 
   /**
-   * A list of all of the test cases that are to be performed on the contained
-   * Invariant
-   */
+   * A list of all of the test cases (which are SingleOutputTestCase
+   * objects) that are to be performed on the contained Invariant
+   **/
   private List testCases;
 
   /**
    * The Invariant object to be tested
-   */
+   **/
   private Invariant invariantToTest;
 
   /**
-   * This function constructed a FormatTestCase object directly from passed
+   * This function constructs a FormatTestCase object directly from passed
    * in objects. It is to be called internally by instantiate to create an
    * instance of FormatTestCase
    *
@@ -183,38 +186,38 @@ class FormatTestCase {
    *        on an Invariant
    * @param invariantToTest the Invariant on which the tests are to be
    *        performed
-   */
+   **/
   private FormatTestCase(List testCases, Invariant invariantToTest) {
     this.testCases = testCases;
     this.invariantToTest = invariantToTest;
   }
 
   /**
-   * This function generates the way a revised input for a given exception
-   * should look upon being supplemented with generated goals. The output is
-   * only up until the last goal statement for any test of the invariant since
-   * the test cases do not store what their samples look like in String format.
-   * Therefore, it is recommended that the only use of this function be to get
-   * output from the invariant tests in the order they appear in the file.
-   * (Note: The output is done is this particular way to maintain comments and
-   * white space between Invariants)
+   * This function generates the way a revised input file section for
+   * a given invariant test should look upon being supplemented with
+   * generated goals. The output represents an entire invariant up
+   * until the last goal statement for any test of the invariant since
+   * the test cases do not store what their samples look like in
+   * String format.  Therefore, it is recommended that the only use of
+   * this function be to get output from the invariant tests in the
+   * order they appear in the file.  (Note: The output is done is this
+   * particular way to maintain comments and white space between
+   * Invariants)
    *
    * @param theInputFile a LineNumberReader object representing the input file
    * @throws IOException if reading operations from the input buffer fail
    * @return a String representing the goal output file object
-   */
+   **/
   public String generateGoalOutput(LineNumberReader theInputFile) throws IOException {
     StringBuffer output = new StringBuffer();
-    SingleOutputTestCase current;
-    int currentGoalLineNumber;
     String currentLineOfText = null;
     int currentLine = theInputFile.getLineNumber();
 
     // System.out.println("Generating goal output");
     for (int i=0; i<testCases.size(); i++) {
       // System.out.println("Goal output gen: " + i);
-      current = (SingleOutputTestCase)testCases.get(i);
-      currentGoalLineNumber = current.getGoalLineNumber();
+      SingleOutputTestCase current = (SingleOutputTestCase)testCases.get(i);
+      int currentGoalLineNumber = current.getGoalLineNumber();
       for (int j=currentLine; j<currentGoalLineNumber; j++) {
 	currentLineOfText = theInputFile.readLine();
 	if (parseGoal(currentLineOfText) == null)
@@ -231,10 +234,10 @@ class FormatTestCase {
   }
 
   /**
-   * Checks to see whether a test is passed
+   * Checks to see whether all tests on this invariant are passed
    *
-   * @return true if the test case is passed, false otherwise
-   */
+   * @return true if all the tests on this invariant passed, false otherwise
+   **/
   public boolean passes() {
     boolean passTest = true;
     boolean currentResult;
@@ -252,13 +255,13 @@ class FormatTestCase {
    *
    * @returns a String representing the difference between the test
    * result and the desired result
-   */
-  public String createDiffString() {
+   **/
+  public String getDiffString() {
     StringBuffer result = new StringBuffer();
     String currentDiffString;
 
     for (int i=0; i<testCases.size(); i++) {
-      currentDiffString = ((SingleOutputTestCase)testCases.get(i)).createDiffString();
+      currentDiffString = ((SingleOutputTestCase)testCases.get(i)).getDiffString();
       result.append(currentDiffString);
       if (i != testCases.size() && currentDiffString != "") // "interned"
 	result.append("\n\n");
@@ -272,8 +275,9 @@ class FormatTestCase {
    * fully-qualified name.
    *
    * @param classInfo the fully-qualified class name
-   * @return the class if it exists, else null
-   */
+   * @return a Class object representing the class name if such a class is
+   *         defined, otherwise null
+   **/
   private static Class getClass(String classInfo) {
     try {
       return ClassLoader.getSystemClassLoader().loadClass(classInfo);
@@ -289,7 +293,7 @@ class FormatTestCase {
    *
    * @returns the actual result String represented by the goal statement or
    *          null if the String isn't actually a goal statement
-   */
+   **/
   static String parseGoal(String goalString) {
     if (goalString.startsWith(GOAL_PREFIX)) {
       return goalString.substring(GOAL_PREFIX.length(),goalString.length());
@@ -320,18 +324,31 @@ class FormatTestCase {
   }
 
   /**
+   * This function is an alias for the {@link #getNextRealLine(BufferedReader) getNextRealLine}
+   * method.
+   **/
+  static String getNextRealLine(BufferedReader buffer) {
+    return InvariantFormatTester.getNextRealLine(buffer);
+  }
+
+  /**
    * This function returns a FormatTestCase instance after parsing it
-   * from file
+   * from file or null if the end of the file has been reached
    *
-   * @param commands a buffer representing the data to be converted
+   * @param commands a reader object representing the file to be parsed that
+   *        contains data necessary to initialize the new object. The file
+   *        must conform to the format described in
+   *        InvariantFormatTester.Description
    * @param generateGoals true if goal generation is desired, false if goal testing
    *        is desired
-   */
+   * @return a new FormatTestCase instance
+   **/
   public static FormatTestCase instantiate(LineNumberReader commands, boolean generateGoals) {
     List testCases = new Vector();
 
-    String className = InvariantFormatTester.getNextRealLine((BufferedReader)commands);
+    String className = getNextRealLine((BufferedReader)commands);
 
+    // End of file reached
     if (className == null) return null;
 
     // System.out.println("On class " + className);
@@ -348,7 +365,7 @@ class FormatTestCase {
     // Instantiate variables to be used as the names in the
     // invariants, variables are labelled a,b,c and so on as they
     // appear
-    String typeString = InvariantFormatTester.getNextRealLine((BufferedReader)commands);
+    String typeString = getNextRealLine((BufferedReader)commands);
 
     ProglangType types[] = getTypes(typeString);
     VarInfo vars[] =
@@ -357,9 +374,6 @@ class FormatTestCase {
 
     // Create an actual instance of the class
     Invariant invariantToTest = instantiateClass(classToTest, sl);
-
-    if (invariantToTest == null)
-      throw new RuntimeException("Could not instantiate invariant");
 
     String goalOutput = "";
     String currentLine = null;
@@ -375,7 +389,7 @@ class FormatTestCase {
     // If not generating goals get the goal lines from the file
     // If generating goals get the formats from the list of formats
     if (!generateGoals) {
-      goalOutput = parseGoal(InvariantFormatTester.getNextRealLine(commands));
+      goalOutput = parseGoal(getNextRealLine(commands));
       if (goalOutput == null)
 	throw new RuntimeException("Bad format of goal data");
     } else {
@@ -473,15 +487,14 @@ class FormatTestCase {
   /**
    * This function creates an array of VarInfo objects that can
    * represent a set of program language types provided by the
-   * caller. These objects are meant explicitly for the purpose of
-   * this testing and have no real other significance.  Their names
-   * carry no meaning except for the type.
+   * caller. Their names carry no meaning except for the type.
    *
-   * @param classToTest the invariant class for which the VarInfos must be determined
+   * @param classToTest the invariant class for which the VarInfos
+   *        must be determined
    * @param types the types that the VarInfos must have
-   * @return an array of VarInfo objects that have the types corresponding to those
-   *         in types
-   */
+   * @return an array of VarInfo objects that have the types corresponding
+   *         to those in types
+   **/
   private static VarInfo [] getVarInfos(Class classToTest, ProglangType types[]) {
     int numInfos = getArity(classToTest);
 
@@ -502,7 +515,7 @@ class FormatTestCase {
    *
    * @param classToTest the invariant type in question
    * @return the arity of the invariant if it can be determined, -1 otherwise
-   */
+   **/
   private static int getArity(Class classToTest) {
     if (UnaryInvariant.class.isAssignableFrom(classToTest))
       return 1;
@@ -515,18 +528,16 @@ class FormatTestCase {
   }
 
   /**
-   * This function determines a unique VarInfo for an invariant given
-   * a type and a number that is unique for that particular instance
-   * of the invariant.  (Produces variables such that i=0 -> name=a,
-   * i=1 -> name=b, ...)
+   * This function returns a VarInfo of the given type. The name is
+   * the ith letter of the alphabet. (Produces variables such that i=0
+   * -> name=a, i=1 -> name=b, ...)
    *
    * @param type the desired type that the VarInfo will represent
    * @param i a unique identifier that determines the name to be used
    * @return a VarInfo object that described the type
-   */
+   **/
   private static VarInfo getVarInfo(ProglangType type, int i) {
-    if (type == null)
-      return null;
+    Assert.assert(type != null,"Unexpected null variable type passed to getVarInfo");
 
     String arrayModifier = "";
 
@@ -544,23 +555,27 @@ class FormatTestCase {
     // - The ProglangType will be specified in the parameters
     // - The comparability will be none
     return new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
-					  arrayModifier), type, type, null, VarInfoAux.getDefault());
+					  arrayModifier), type, type,
+			/* comparability = */ null, VarInfoAux.getDefault());
   }
 
   /**
-   * This function parses a format string and determines the types of
-   * objects to be collected
+   * This function parses a format string - a space seperated list of
+   * types - and determines the types of objects to be collected
    *
    * @param typeNames the type string for an invariant
    * @return an array of ProglangTypes representing the data in typeNames
-   */
+   **/
   private static ProglangType [] getTypes(String typeNames) {
     StringTokenizer stok = new StringTokenizer(typeNames);
     ProglangType result[] = new ProglangType [stok.countTokens()];
-    String typeName;
 
     for (int i=0; i<result.length; i++) {
-      typeName = stok.nextToken();
+      String typeName = stok.nextToken();
+
+      // A way of doing the same thing as below in fewer lines of code
+      // Doesn't seem to work...
+      //result[i] = ProglangType.parse(typeName);
 
       if (typeName.equalsIgnoreCase("int"))
 	result[i] = ProglangType.INT;
@@ -576,6 +591,8 @@ class FormatTestCase {
 	result[i] = ProglangType.STRING_ARRAY;
       else
 	return null;
+
+      Assert.assert(result[i] != null,"ProglangType unexpectedly parsed to null in getTypes(String)");
     }
 
     return result;
@@ -590,8 +607,8 @@ class FormatTestCase {
    * @param format a string representing the format
    * @return an OutputFormat object representing the output type if
    *         format corresponds to any known formats
-   *         null otherwise
-   */
+   *         otherwise throws a RuntimeException
+   **/
   private static OutputFormat getOutputFormat(String format) {
     if (format.equalsIgnoreCase("daikon"))
       return OutputFormat.DAIKON;
@@ -605,7 +622,7 @@ class FormatTestCase {
       return OutputFormat.SIMPLIFY;
     else if (format.equalsIgnoreCase("jml"))
       return OutputFormat.JML;
-    return null;
+    throw new RuntimeException("Invalid output format passed to getOutputFormat(String)");
   }
 
   /**
@@ -617,7 +634,7 @@ class FormatTestCase {
    * @param classToTest the class of the invariant being tested
    * @param commands the input file for the commands
    * @param samples the list to which the samples are to be added
-   */
+   **/
 //    private static void getSamples(Class classToTest, BufferedReader commands, List samples) {
 //      getSamples(classToTest, commands, samples, false, null);
 //    }
@@ -637,28 +654,30 @@ class FormatTestCase {
   }
 
   private static void getSamples(ProglangType types[], BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
-    Object sample[];
-
-    String currentLine;
-
-    currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
+    String currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
 		                       firstLine);
 
     // System.out.println("firstLine in getSamples: " + firstLine);
     // System.out.println("currentLine line in getSamples: " + currentLine);
 
     try {
+      // Read until end of file or seperator (whitespace line) encountered
       while (currentLine != null && !InvariantFormatTester.isWhitespace(currentLine)) {
+	// Skip over goal lines and comments
 	while (InvariantFormatTester.isComment(currentLine) ||
 	       (generateGoals && parseGoal(currentLine) != null)) {
 	  currentLine = commands.readLine();
 	  // System.out.println("In getSamples early part, currentLine = " + currentLine);
 	}
 	// System.out.println("Current line: " + currentLine);
-	if (!InvariantFormatTester.isComment(currentLine) &&
-	    !InvariantFormatTester.isWhitespace(currentLine)) {
+
+	// if (!InvariantFormatTester.isComment(currentLine) &&
+	//    !InvariantFormatTester.isWhitespace(currentLine)) {
+
+	// if current line is not whitespace then we have a valid line (that is, end hasn't been reached
+	if (!InvariantFormatTester.isWhitespace(currentLine)) {
 	  // System.out.println(InvariantFormatTester.isComment(currentLine));
-	  sample = new Object [types.length];
+	  Object sample[] = new Object [types.length];
 	  for (int i=0; i<types.length; i++) {
 	    // Parse each line according to a type in the paramTypes array
 	    // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
@@ -675,165 +694,165 @@ class FormatTestCase {
     }
   }
 
-  /**
-   * This function parses a string or a section of a string into an
-   * appropriate data type as indicated by the type class. The result
-   * is stored into sample[sampleIndex]
-   *
-   * @param type the type of the object to create
-   * @param sampleIndex the index in the sample array in which the result is to be stored
-   * @param sample the array in which the result is to be stored
-   * @param toBeParsed the String to be parsed for the result
-   */
-  public static void parse(Class type, int sampleIndex, Object sample[], String toBeParsed) {
-    Method parser;
-    String typeName = type.getName();
-    String arrayFunctionName;
-    Method arrayFunction;
+  //    /**
+  //     * This function parses a string or a section of a string into an
+  //     * appropriate data type as indicated by the type class. The result
+  //     * is stored into sample[sampleIndex]
+  //     *
+  //     * @param type the type of the object to create
+  //     * @param sampleIndex the index in the sample array in which the result is to be stored
+  //     * @param sample the array in which the result is to be stored
+  //     * @param toBeParsed the String to be parsed for the result
+  //     */
+  //    public static void parse(Class type, int sampleIndex, Object sample[], String toBeParsed) {
+  //      Method parser;
+  //      String typeName = type.getName();
+  //      String arrayFunctionName;
+  //      Method arrayFunction;
 
-    // System.out.println("Parse called");
+  //      // System.out.println("Parse called");
 
-    // System.out.println(type.getName());
-    // System.out.println(sampleIndex);
-    // System.out.println(sample.length);
-    // System.out.println(toBeParsed);
+  //      // System.out.println(type.getName());
+  //      // System.out.println(sampleIndex);
+  //      // System.out.println(sample.length);
+  //      // System.out.println(toBeParsed);
 
-    try {
-      if (type.isPrimitive()) { // Primitive types
-	Class wrapper = getWrapperClass(type);
+  //      try {
+  //        if (type.isPrimitive()) { // Primitive types
+  //          Class wrapper = getWrapperClass(type);
 
-	if (wrapper != null) {
-	  // Use the valueOf function in the wrapper of the primitive
-	  // type to create the result
-	  parser = wrapper.getMethod("valueOf",new Class [] {String.class});
+  //          if (wrapper != null) {
+  //            // Use the valueOf function in the wrapper of the primitive
+  //            // type to create the result
+  //            parser = wrapper.getMethod("valueOf",new Class [] {String.class});
 
-	  // Use the Array.set to set the appropriate spot in the
-	  // array to the result of the parser method
+  //            // Use the Array.set to set the appropriate spot in the
+  //            // array to the result of the parser method
 
-	  arrayFunction =
-	    Array.class.getMethod("set", new Class [] {Object.class, int.class, Object.class});
+  //            arrayFunction =
+  //              Array.class.getMethod("set", new Class [] {Object.class, int.class, Object.class});
 
-	  Object arrayFunctionParams[] = new Object [3];
-	  arrayFunctionParams[0] = (Object)sample;
-	  arrayFunctionParams[1] = new Integer(sampleIndex);
+  //            Object arrayFunctionParams[] = new Object [3];
+  //            arrayFunctionParams[0] = (Object)sample;
+  //            arrayFunctionParams[1] = new Integer(sampleIndex);
 
-	  // Debug code
+  //            // Debug code
 
-	  // System.out.println("**********\n" + toBeParsed + "\n" +
-	  // arrayFunctionParams[1] + "\n**********\n");
+  //            // System.out.println("**********\n" + toBeParsed + "\n" +
+  //            // arrayFunctionParams[1] + "\n**********\n");
 
-	  try {
-	    // Get the result
-	    arrayFunctionParams[2] = parser.invoke(null, new Object [] {toBeParsed});
-	  }
-	  catch (Exception e) {
-	    throw new RuntimeException("Error in invoking parser for primitive object");
-	  }
+  //            try {
+  //              // Get the result
+  //              arrayFunctionParams[2] = parser.invoke(null, new Object [] {toBeParsed});
+  //            }
+  //            catch (Exception e) {
+  //              throw new RuntimeException("Error in invoking parser for primitive object");
+  //            }
 
-	  try {
-	    // Put the result into the array
-	    arrayFunction.invoke(null,arrayFunctionParams);
-	  }
-	  catch (Exception e) {
-	    throw new RuntimeException("Error in invoking arrayFunction to put result in sample");
-	  }
-	}
-	else
-	  throw new RuntimeException("Could not find wrapper class for primitive");
-      } else if (type.isArray()) { // Array type - only parses single dimensional now
-	Class subType = type.getComponentType();
+  //            try {
+  //              // Put the result into the array
+  //              arrayFunction.invoke(null,arrayFunctionParams);
+  //            }
+  //            catch (Exception e) {
+  //              throw new RuntimeException("Error in invoking arrayFunction to put result in sample");
+  //            }
+  //          }
+  //          else
+  //            throw new RuntimeException("Could not find wrapper class for primitive");
+  //        } else if (type.isArray()) { // Array type - only parses single dimensional now
+  //          Class subType = type.getComponentType();
 
-	StringTokenizer stok = new StringTokenizer(toBeParsed);
-	int arrayLength = stok.countTokens();
-	Object temp[] = new Object [arrayLength];
+  //          StringTokenizer stok = new StringTokenizer(toBeParsed);
+  //          int arrayLength = stok.countTokens();
+  //          Object temp[] = new Object [arrayLength];
 
-	// Recursively call parse on the substrings to get the array
-	// entries
-	for (int i=0; i<arrayLength; i++) {
-	  parse(subType, i, temp, stok.nextToken());
-	}
+  //          // Recursively call parse on the substrings to get the array
+  //          // entries
+  //          for (int i=0; i<arrayLength; i++) {
+  //            parse(subType, i, temp, stok.nextToken());
+  //          }
 
-	Object result = Array.newInstance(subType, arrayLength);
+  //          Object result = Array.newInstance(subType, arrayLength);
 
-	// If primitive subtype, must use appropriate set function to
-	// get entries into the result array
-	if (subType.isPrimitive()) {
-	  String subTypeName = subType.getName();
-	  // Capitalize the first letter pf subTypeName
-	  String capsSubTypeName =
-	    new String(new char [] {Character.toUpperCase(subTypeName.charAt(0))}) +
-	    subTypeName.substring(1, subTypeName.length());
+  //          // If primitive subtype, must use appropriate set function to
+  //          // get entries into the result array
+  //          if (subType.isPrimitive()) {
+  //            String subTypeName = subType.getName();
+  //            // Capitalize the first letter pf subTypeName
+  //            String capsSubTypeName =
+  //              new String(new char [] {Character.toUpperCase(subTypeName.charAt(0))}) +
+  //              subTypeName.substring(1, subTypeName.length());
 
-	  arrayFunctionName = "set" + capsSubTypeName;
-	  arrayFunction = Array.class.getMethod(arrayFunctionName, new Class [] {Object.class, int.class, subType});
+  //            arrayFunctionName = "set" + capsSubTypeName;
+  //            arrayFunction = Array.class.getMethod(arrayFunctionName, new Class [] {Object.class, int.class, subType});
 
-	  for (int i=0; i<arrayLength; i++) {
-	    arrayFunction.invoke(null, new Object [] {result, new Integer(i), temp[i]});
-	  }
-	} else {
-	  for (int i=0; i<arrayLength; i++) {
-	    Array.set(result, i, temp[i]);
-	  }
-	}
+  //            for (int i=0; i<arrayLength; i++) {
+  //              arrayFunction.invoke(null, new Object [] {result, new Integer(i), temp[i]});
+  //            }
+  //          } else {
+  //            for (int i=0; i<arrayLength; i++) {
+  //              Array.set(result, i, temp[i]);
+  //            }
+  //          }
 
-	sample[sampleIndex] = result;
+  //          sample[sampleIndex] = result;
 
-      } else { // Non-array (non-primitive) objects
-	try {
-	  if (type != String.class) {
-	    parser = type.getMethod("valueOf", new Class [] {String.class});
-	    sample[sampleIndex] = parser.invoke(null, new Object [] {toBeParsed});
-	  }
-	  else
-	    sample[sampleIndex] = toBeParsed;
-	}
-	catch (Exception e) {
-	  throw new RuntimeException("Error in invoking parser on complex type" +
-				     " - no way to create one from a String");
-	}
-      }
-    }
-    catch (IllegalAccessException e) {
-      throw new RuntimeException(e.toString());
-    }
-    catch (InvocationTargetException e) {
-      throw new RuntimeException(e.toString());
-    }
-    catch (NoSuchMethodException e) {
-      throw new RuntimeException(e.toString());
-    }
-    catch (SecurityException e) {
-      throw new RuntimeException("SecurityException generated that indicates" +
-				 " reflection has been disallowed");
-    }
-  }
+  //        } else { // Non-array (non-primitive) objects
+  //          try {
+  //            if (type != String.class) {
+  //              parser = type.getMethod("valueOf", new Class [] {String.class});
+  //              sample[sampleIndex] = parser.invoke(null, new Object [] {toBeParsed});
+  //            }
+  //            else
+  //              sample[sampleIndex] = toBeParsed;
+  //          }
+  //          catch (Exception e) {
+  //            throw new RuntimeException("Error in invoking parser on complex type" +
+  //                                       " - no way to create one from a String");
+  //          }
+  //        }
+  //      }
+  //      catch (IllegalAccessException e) {
+  //        throw new RuntimeException(e.toString());
+  //      }
+  //      catch (InvocationTargetException e) {
+  //        throw new RuntimeException(e.toString());
+  //      }
+  //      catch (NoSuchMethodException e) {
+  //        throw new RuntimeException(e.toString());
+  //      }
+  //      catch (SecurityException e) {
+  //        throw new RuntimeException("SecurityException generated that indicates" +
+  //                                   " reflection has been disallowed");
+  //      }
+  //    }
 
-  /**
-   * This function generates the wrapper class for a primitive class
-   *
-   * @param type the type for which the wrapper class is to be generated
-   * @return the corresponding wrapper class if type is a primitive type,
-   *         null otherwise
-   */
-  private static Class getWrapperClass(Class type) {
-    if (type.equals(int.class))
-      return Integer.class;
-    else if (type.equals(long.class))
-      return Long.class;
-    else if (type.equals(double.class))
-      return Double.class;
-    else if (type.equals(float.class))
-      return Float.class;
-    else if (type.equals(boolean.class))
-      return Boolean.class;
-    else if (type.equals(byte.class))
-      return Byte.class;
-    else if (type.equals(char.class))
-      return Character.class;
-    else if (type.equals(short.class))
-      return Short.class;
-    return null;
-  }
+  //    /**
+  //     * This function generates the wrapper class for a primitive class
+  //     *
+  //     * @param type the type for which the wrapper class is to be generated
+  //     * @return the corresponding wrapper class if type is a primitive type,
+  //     *         null otherwise
+  //     */
+  //    private static Class getWrapperClass(Class type) {
+  //      if (type.equals(int.class))
+  //        return Integer.class;
+  //      else if (type.equals(long.class))
+  //        return Long.class;
+  //      else if (type.equals(double.class))
+  //        return Double.class;
+  //      else if (type.equals(float.class))
+  //        return Float.class;
+  //      else if (type.equals(boolean.class))
+  //        return Boolean.class;
+  //      else if (type.equals(byte.class))
+  //        return Byte.class;
+  //      else if (type.equals(char.class))
+  //        return Character.class;
+  //      else if (type.equals(short.class))
+  //        return Short.class;
+  //      return null;
+  //    }
 
   /**
    * This function adds the samples in the samples list to the passed
@@ -841,9 +860,9 @@ class FormatTestCase {
    * (determined by reflection).
    *
    * @param inv an invariant to which samples are added
-   * @param samples a list of samples (Object []) that can be added to the
-   *        variables involved
-   */
+   * @param samples a list of samples (each entry of type Object []) that
+   *        can be added to the variables involved
+   **/
   private static void populateWithSamples(Invariant inv, List samples) {
     if (samples == null || samples.size() == 0) return;
 
@@ -851,39 +870,42 @@ class FormatTestCase {
     // System.out.println(samples.size());
 
     Method addModified = getAddModified(inv.getClass());
-    Object params[],currentSample[];
     int sampleSize = ((Object [])samples.get(0)).length;
     Class currentClass;
 
     // System.out.println(sampleSize);
 
     for (int i=0; i<samples.size(); i++) {
-      params = new Object [sampleSize+1];
-      currentSample = (Object [])samples.get(i);
+
+      // Last slot is for "count" parameter
+      Object params[] = new Object [sampleSize+1];
+      Object currentSample[] = (Object [])samples.get(i);
 
       for (int j=0; j<sampleSize; j++) {
 	currentClass = currentSample[j].getClass();
 
-	// Intern all objects that can be interned
+	// Intern all objects that can be interned because some equality
+	// functions will not work correctly unless the objects are
+	// interned
 	if (currentClass.equals(String.class)) {
 	  // Intern strings
 	  currentSample[j] = Intern.intern(currentSample[j]);
 	} else if (currentClass.isArray()) {
 	  // Intern arrays
-	  currentSample[j] = Intern.intern(currentSample[j]);
 	  if (currentClass.getComponentType().equals(String.class)) {
 	    for (int k=0; k<((String [])(currentSample[j])).length; k++) {
 	      // Intern Strings that are inside arrays
 	      ((String [])currentSample[j])[k] = Intern.intern(((String [])currentSample[j])[k]);
 	    }
 	  }
+	  currentSample[j] = Intern.intern(currentSample[j]);
 	}
 
 	params[j] = currentSample[j];
       }
 
       // Set count to 1
-      Array.set(params, sampleSize, new Integer(1));
+      params[sampleSize] = new Integer(1);
 
       // Debug code
 
@@ -913,14 +935,13 @@ class FormatTestCase {
       //    	throw new RuntimeException(e.toString());
       //        }
       catch (Exception e) {
-	throw new RuntimeException("Error in populating invariant with add_modified");
+	throw new RuntimeException("Error in populating invariant with add_modified: " + e.toString());
       }
     }
   }
 
   /**
-   * This function gets the appropriate add_modified function from the
-   * class type provided and returns it as a Method
+   * This function returns the add_modified method from the class type provided
    *
    * @param theClass the class in which to find the add_modified method
    * @return the add_modified method if it exists, null otherwise
@@ -946,7 +967,7 @@ class FormatTestCase {
    *        to be created
    * @param ppt the PptTopLevel object representing the program point
    * @return a new PptSlice object if the creation of one is possible,
-   *         else null
+   *         else throws a RuntimeException
    */
   private static PptSlice createSlice(VarInfo vars[], PptTopLevel ppt) {
     if (vars.length == 1)
@@ -956,7 +977,7 @@ class FormatTestCase {
     else if (vars.length == 3)
       return new PptSlice3(ppt, vars);
     else
-      return null;
+      throw new RuntimeException("Improper vars passed to createSlice (length = " + vars.length + ")");
   }
 
   /**
@@ -967,13 +988,13 @@ class FormatTestCase {
    * @param sl the PptSlice representing the variables about
    *        which an invariant is determined
    * @return an instance of the class in theClass if one can be constructed,
-   *         null otherwise
+   *         else throw a RuntimeException
    */
   private static Invariant instantiateClass(Class theClass, PptSlice sl) {
     try {
       Method instanceCreator = theClass.getMethod("instantiate", new Class [] {PptSlice.class});
 
-      if (instanceCreator == null) return null;
+      if (instanceCreator == null) throw new RuntimeException("Could not instantiate invariant " + theClass.getName());
 
       return (Invariant)instanceCreator.invoke(null, new Object [] {sl});
     }
