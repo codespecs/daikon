@@ -53,7 +53,6 @@ The correct way to build the system is to run 'make'.
                                       ArraysMDE.isSubset (v2, v1))
   #define SUBSEQUENCE SubSequenceString
   #define BASEISTYPE baseIsString()
-  #define VALUETRACKER StringValueTracker
   #define SEQ_SUBSEQUENCE SequenceStringSubsequence
   #define PAIRWISECOMP_EQ PairwiseStringEqual
   #define PAIRWISECOMP_LT PairwiseStringLessThan
