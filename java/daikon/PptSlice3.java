@@ -47,7 +47,7 @@ public final class PptSlice3
     Dataflow.init_pptslice_po(this);
 
     // values_cache = new HashMap(); // [INCR]
-    if (this.debugged || debug.isDebugEnabled())
+    if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled())
       debug.info("Created PptSlice3 " + this.name);
 
     // Make the caller do this, because
@@ -67,7 +67,7 @@ public final class PptSlice3
     // if (isControlled()) return;
 
     // Instantiate invariants
-    if (this.debugged || debug.isDebugEnabled())
+    if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled())
       debug.info("instantiate_invariants for " + name + ": originally " + invs.size() + " invariants in " + invs);
 
     Vector new_invs = null;
@@ -92,10 +92,10 @@ public final class PptSlice3
       }
     }
 
-    if (this.debugged || debug.isDebugEnabled()) {
+    if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled()) {
       debug.info("after instantiate_invariants PptSlice3 " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
-    if (this.debugged && (invs.size() > 0)) {
+    if ((this.debugged  || debugSpecific.isDebugEnabled()) && (invs.size() > 0)) {
       debug.info("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
         Invariant inv = (Invariant) invs.get(i);
@@ -288,7 +288,7 @@ public final class PptSlice3
     Assert.assert(invariant != null);
     invs.add(invariant);
     Global.instantiated_invariants++;
-    if (Global.debugStatistics.isDebugEnabled() || this.debugged)
+    if (Global.debugStatistics.isDebugEnabled() || this.debugged || debugSpecific.isDebugEnabled())
       debug.info("instantiated_invariant: " + invariant);
 
     /* [INCR] ... I think this is now unnecessary; not sure. XXX

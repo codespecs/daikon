@@ -56,6 +56,7 @@ public final class PptConditional
     // This try block may be a very inefficient way to do this computation.
     // Perhaps figure out another way, or invalidate the whole PptConditional
     // if any exception is thrown.
+
     try {
       boolean splitter_test = splitter.test(vt);
       if (splitter_inverse ? (! splitter_test) : splitter_test)

@@ -12,7 +12,7 @@ import org.apache.log4j.Category;
 public class Dataflow
 {
 
-  public static final Category debug = Category.getInstance(Dataflow.class.getName());
+  public static final Category debug = Category.getInstance("daikon.DataFlow");
 
   // Tempoary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest

@@ -938,7 +938,7 @@ public class PptTopLevel
       if (slice1.isControlled()) {
 	// let invariant flow from controlling slice
 	if (Global.debugInfer.isDebugEnabled())
-	  Global.debugInfer.debug("Skipping " + slice1.name + "; is controlled.");
+	  Global.debugInfer.debug("Skipping " + slice1.name + "; is controlled(1).");
 	continue;
       }
       slice1.instantiate_invariants();
@@ -965,7 +965,7 @@ public class PptTopLevel
 	if (slice2.isControlled()) {
 	  // let invariant flow from controlling slice
 	  if (Global.debugInfer.isDebugEnabled())
-	    Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled.");
+	    Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled(2).");
 	  continue;
 	}
         slice2.instantiate_invariants();
@@ -977,6 +977,10 @@ public class PptTopLevel
 
     // 3. all ternary views
     if (! Daikon.disable_ternary_invariants) {
+      if (Global.debugInfer.isDebugEnabled()) {
+	Global.debugInfer.debug ("Trying ternary slices for " + this.ppt_name);
+      }
+
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
@@ -1013,10 +1017,13 @@ public class PptTopLevel
 	    if (slice3.isControlled()) {
 	      // let invariant flow from controlling slice
 	      if (Global.debugInfer.isDebugEnabled())
-		Global.debugInfer.debug("Skipping " + slice3.name + "; is controlled.");
+		Global.debugInfer.debug("Skipping " + slice3.name + "; is controlled(3).");
 	      continue;
 	    }
             slice3.instantiate_invariants();
+	    if (Global.debugInfer.isDebugEnabled()) {
+	      Global.debugInfer.debug("Instantiated for PptSlice3");
+	    }
             ternary_views.add(slice3);
           }
         }
@@ -1024,8 +1031,9 @@ public class PptTopLevel
       addViews(ternary_views);
     }
 
-    if (Global.debugInfer.isDebugEnabled())
+    if (Global.debugInfer.isDebugEnabled()) {
       Global.debugInfer.debug(views.size() - old_num_views + " new views for " + name);
+    }
 
     // This method didn't add any new variables.
     Assert.assert(old_num_vars == var_infos.length);
