@@ -14,6 +14,12 @@ versions as the user manual.
 Changed the way that Linear* invariants are printed.
 [Perhaps change their names as well?]
 
+LinearBinary invariants are not printed in standard form rather than 
+slope intercept form, i.e. ax + by + c == 0 rather than y = ax + b.
+LinearBinary invariants now have integer coefficients and like 
+LinearTernary invariants, the coefficient of the x variable is positive.
+
+
 Removed old V2 code and support for top-down and the global ppt
 
 Changed the way that invariants are instantiated.  The get_proto()
