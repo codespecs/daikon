@@ -27,6 +27,10 @@ public final class Intern {
   /// Testing interning
   ///
 
+  /**
+   * Return true if the argument is interned (is canonical among all
+   * objects equal to itself).
+   **/
   public static boolean isInterned(Object value) {
     if (value == null) {
       // nothing to do
@@ -156,13 +160,27 @@ public final class Intern {
    **/
   private static final class DoubleArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
-      return java.util.Arrays.equals((double[])a1, (double[])a2);
+      // "java.util.Arrays.equals" considers +0.0 != -0.0.
+      // Also, it gives inconsistent results (on different JVMs/classpaths?).
+      // return java.util.Arrays.equals((double[])a1, (double[])a2);
+      double[] da1 = (double[])a1;
+      double[] da2 = (double[])a2;
+      if (da1.length != da2.length)
+        return false;
+      for (int i=0; i<da1.length; i++) {
+        if (! ((da1[i] == da2[i])
+               || (Double.isNaN(da1[i]) && Double.isNaN(da2[i])))) {
+          return false;
+        }
+      }
+      return true;
     }
     public int hashCode(Object o) {
       double[] a = (double[])o;
       double running = 0;
       for (int i=0; i<a.length; i++) {
-        running = running * FACTOR + a[i] * DOUBLE_FACTOR;
+        double elt = (Double.isNaN(a[i]) ? 0.0 : a[i]);
+        running = running * FACTOR + elt * DOUBLE_FACTOR;
       }
       // Could add "... % Integer.MAX_VALUE" here; is that good to do?
       long result = Math.round(running);

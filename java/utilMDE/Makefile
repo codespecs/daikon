@@ -5,6 +5,7 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
+JAVA ?= java
 JAVAC ?= jikes -g +E +F
 
 
@@ -39,7 +40,7 @@ tags:
 # This "set" form doesn't seem to work for me (maybe needs to be export?).
 # Used to depend on targets "clean all", but I want to run this in "all".
 test:
-	set JAVA_COMPILER=NONE; java utilMDE.TestUtilMDE
+	set JAVA_COMPILER=NONE; ${JAVA} utilMDE.TestUtilMDE
 
 doc: $(JAVA_FILES)
 	mkdir -p doc
@@ -58,7 +59,7 @@ utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 	rm -rf /tmp/utilMDE
 	mkdir /tmp/utilMDE
 	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
-	cp -p Makefile README /tmp/utilMDE	
+	cp -p Makefile README /tmp/utilMDE
 	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:/SDG/g2/users/mernst/research/invariants/java/lib/junit.jar' all_javac_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
