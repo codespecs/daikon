@@ -84,7 +84,6 @@ public final class OneOfString
       throw new Error("Represents " + num_elts + " elements");
 
     return elts[0];
-
   }
 
   static Comparator comparator = new UtilMDE.NullableStringComparator();
@@ -99,7 +98,6 @@ public final class OneOfString
     sort_rep();
 
     return elts[0];
-
   }
 
   public Object max_elt() {
@@ -108,7 +106,6 @@ public final class OneOfString
     sort_rep();
 
     return elts[num_elts-1];
-
   }
 
   // Assumes the other array is already sorted
@@ -167,7 +164,6 @@ public final class OneOfString
     if (num_elts == 1) {
 
       return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"") ;
-
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -396,7 +392,7 @@ public final class OneOfString
 
     // We are significantly changing our state (not just zeroing in on
     // a constant), so we have to flow a copy before we do so.
-    flowClone();
+    if (num_elts > 0) flowClone();
 
     elts[num_elts] = v;
     num_elts++;
@@ -407,7 +403,6 @@ public final class OneOfString
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
-
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
