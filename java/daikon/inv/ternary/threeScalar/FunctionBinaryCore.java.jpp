@@ -261,18 +261,21 @@ public final class CLASSNAME
     }
 
     PptSlice ppt = wrapper.ppt;
-    VarInfoName argresult = ppt.var_infos[var_indices[var_order][0]].name;
-    VarInfoName arg1 = ppt.var_infos[var_indices[var_order][1]].name;
-    VarInfoName arg2 = ppt.var_infos[var_indices[var_order][2]].name;
+    VarInfo argresultvi = ppt.var_infos[var_indices[var_order][0]];
+    VarInfoName argresult = argresultvi.name;
+    VarInfo arg1vi = ppt.var_infos[var_indices[var_order][1]];
+    VarInfoName arg1 = arg1vi.name;
+    VarInfo arg2vi = ppt.var_infos[var_indices[var_order][2]];
+    VarInfoName arg2 = arg2vi.name;
 
-    String argresult_name = argresult.name_using(format);
-    String arg1_name = arg1.name_using(format);
-    String arg2_name = arg2.name_using(format);
+    String argresult_name = argresult.name_using(format, argresultvi);
+    String arg1_name = arg1.name_using(format, arg1vi);
+    String arg2_name = arg2.name_using(format, arg2vi);
 
     if (format == OutputFormat.DAIKON
         || format == OutputFormat.JML
         || format == OutputFormat.DBCJAVA) {  // RRN: verify the validity of this.
-      return argresult_name + " == " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2] /* + " [vo=" + var_order + "]" */;
+      return argresult_name + " == " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2];
     }
 
     if (format == OutputFormat.IOA) {
