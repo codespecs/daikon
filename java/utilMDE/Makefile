@@ -60,7 +60,7 @@ utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 	mkdir /tmp/utilMDE
 	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE
-	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:/SDG/g2/users/mernst/research/invariants/java/lib/junit.jar' all_javac_notest doc)
+	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${HOME}/research/invariants/java/lib/junit.jar' all_javac_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
 	mv /tmp/utilMDE.tar.gz .
