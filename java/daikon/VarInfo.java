@@ -348,8 +348,9 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   }
 
   /**
-   * Returns all variables that are equal to this variable.  The result
-   * vector does not include this.  Also see @link{equalToNonobvious}.
+   * Returns all other variables that are equal to this variable.
+   * The result Vector does not include this.
+   * Also see @link{equalToNonobvious}.
    **/
   public Vector equalTo() {
     // should only call this for canonical variables
