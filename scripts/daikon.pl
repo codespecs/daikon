@@ -11,8 +11,10 @@ sub usage() {
 	"\n",
 	"Options:\n",
 	"  -o, --output FILE   Save invariants in FILE.inv\n",
+	"  -t, --textfile      Save text of invariants in a .txt file\n",
 	"  -v, --verbose       Display progress messages\n",
 	"  -c, --cleanup       Remove files left over from an interrupted session before starting\n",
+	"  -n, --nogui         Do not start the gui\n",
 	"\n",
 	"Example:\n",
 	"  $0 --output test1 packfoo.MyTestSuite 200\n",
@@ -35,8 +37,10 @@ $DAIKON_WRAPPER_CLASSPATH = $ENV{'DAIKON_WRAPPER_CLASSPATH'} || '/g2/users/merns
 # read options from command line
 
 GetOptions("output=s" => \$output,
+	   "textfile" => \$textfile,
 	   "verbose" => \$verbose,
 	   "cleanup" => \$cleanup,
+	   "nogui" => \$nogui,
 	   ) or usagedie();
 
 $runnable = shift @ARGV  or usagedie();
@@ -161,7 +165,8 @@ while (1) {
 
     # run daikon
     print "Running invariant detector...\n" if $verbose;
-    $dkerr = system("java daikon.Daikon -o $output.inv $decls $dtrace > /dev/null");
+    $output_to = $textfile ? "$output.txt" : '/dev/null';
+    $dkerr = system("java daikon.Daikon -o $output.inv $decls $dtrace > $output_to");
     last if $dkerr;
 
     # compress the output
@@ -184,6 +189,7 @@ die("daikon error") if $dkerr;
 die("gzip error") if $gzerr;
 
 # run the gui
-print "Starting the gui...\n" if $verbose;
-
-system("java -classpath $cp daikon.gui.InvariantsGUI $output.inv.gz");
+unless ($nogui) {
+    print "Starting the gui...\n" if $verbose;
+    system("java -classpath $cp daikon.gui.InvariantsGUI $output.inv.gz");
+}
