@@ -11,6 +11,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
 import utilMDE.*;
+import org.apache.log4j.Category;
 
 import java.util.*;
 
@@ -137,6 +138,7 @@ public class EltUpperBoundFloat
   public void add_modified(double[]  value, int count) {
     // System.out.println("EltUpperBoundFloat"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
+    core.changed = false;
 
     for (int i=0; i<value.length; i++) {
       core.add_modified(value[i], count);
@@ -144,6 +146,9 @@ public class EltUpperBoundFloat
         return;
     }
 
+    if (core.changed) {
+      cloneAndFlow();
+    }
   }
 
   public boolean enoughSamples() {

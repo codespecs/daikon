@@ -143,6 +143,11 @@ public class LOWERBOUNDCORE
 
   int samples = 0;
 
+  /**
+   * Tell the wrapper that this has changed.
+   **/
+  public boolean changed;
+
   public Invariant wrapper;
 
   public LOWERBOUNDCORE(Invariant wrapper) {
@@ -213,11 +218,17 @@ public class LOWERBOUNDCORE
 
     PRIMITIVE v = value;
 
-    if (v GT MAX) MAX = v;
+    if (v GT MAX) {
+      MAX = v;
+    }
 
     if (v == MIN1) {
       NUM_MIN1 += count;
     } else if (v LT MIN1) {
+      // wrapper.cloneAndFlow();
+      // Disabled because array bounds could call this twice
+      changed = true;
+      
       MIN3 = MIN2;
       NUM_MIN3 = NUM_MIN2;
       MIN2 = MIN1;

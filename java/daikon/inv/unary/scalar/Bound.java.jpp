@@ -158,7 +158,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
 import utilMDE.*;
-
+import org.apache.log4j.Category;
 
 import java.util.*;
 
@@ -312,6 +312,7 @@ public class LOWERBOUND
   public void add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
+    core.changed = false;
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
     core.add_modified(value, count);
 #elif (defined(ELTLOWER) || defined(ELTUPPER) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
@@ -321,6 +322,9 @@ public class LOWERBOUND
         return;
     }
 #endif
+    if (core.changed) {
+      cloneAndFlow();
+    }
   }
 
   public boolean enoughSamples() {

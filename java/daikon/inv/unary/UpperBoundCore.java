@@ -43,6 +43,11 @@ public class UpperBoundCore
 
   int samples = 0;
 
+  /**
+   * Tell the wrapper that this has changed.
+   **/
+  public boolean changed;
+
   public Invariant wrapper;
 
   public UpperBoundCore (Invariant wrapper) {
@@ -108,11 +113,17 @@ public class UpperBoundCore
 
     long  v = value;
 
-    if (v <  min ) min  = v;
+    if (v <  min ) {
+      min  = v;
+    }
 
     if (v == max1 ) {
       num_max1  += count;
     } else if (v >  max1 ) {
+      // wrapper.cloneAndFlow();
+      // Disabled because array bounds could call this twice
+      changed = true;
+
       max3  = max2 ;
       num_max3  = num_max2 ;
       max2  = max1 ;

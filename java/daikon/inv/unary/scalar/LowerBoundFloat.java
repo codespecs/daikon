@@ -11,6 +11,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
 import utilMDE.*;
+import org.apache.log4j.Category;
 
 import java.util.*;
 
@@ -99,9 +100,13 @@ public class LowerBoundFloat
   public void add_modified(double  value, int count) {
     // System.out.println("LowerBoundFloat"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
+    core.changed = false;
 
     core.add_modified(value, count);
 
+    if (core.changed) {
+      cloneAndFlow();
+    }
   }
 
   public boolean enoughSamples() {

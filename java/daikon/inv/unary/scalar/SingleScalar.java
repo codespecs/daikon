@@ -3,6 +3,7 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.*;
+import daikon.suppress.*;
 import utilMDE.*;
 
 public abstract class SingleScalar
@@ -49,6 +50,15 @@ public abstract class SingleScalar
   public void add_unmodified(long value, int count) {
     // System.out.println("SingleScalar.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
     return;
+  }
+
+  private static final SuppressionFactory[] suppressionFactories =
+    new SuppressionFactory[] {
+      SelfSuppressionFactory.getInstance(),
+    };
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    return suppressionFactories;
   }
 
 }
