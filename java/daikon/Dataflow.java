@@ -150,8 +150,12 @@ public class Dataflow
 
           //      }
 
+          // Why is this guard needed?  Because there could be
+          // transforms where Foo.x gets set up with Foo.x
 
-          lower_vi.addHigherPO(higher_vi, static_po_group_nonce);
+          if (lower_vi != higher_vi) {
+            lower_vi.addHigherPO(higher_vi, static_po_group_nonce);
+          }
         }
       }
     }
@@ -313,7 +317,7 @@ public class Dataflow
       if (vi.name.equals(VarInfoName.THIS)) continue;
       // Arguments are the things with no controller yet
       if (vi.po_higher().size() == 0) {
-        debugInit.debug ("which is an orphan");
+        debugInit.debug ("  which is an orphan");
         orphans.add(vi);
         if (! vi.type.isPseudoArray()) {
           PptName objname = new PptName(vi.type.base(), // class
@@ -323,11 +327,14 @@ public class Dataflow
           Assert.assertTrue(objname.isObjectInstanceSynthetic());
           PptTopLevel object_ppt = ppts.get(objname);
           if (object_ppt != null) {
-            debugInit.debug ("whose type is known");
+            debugInit.debug ("  whose type is known (success)");
             known.put(vi, object_ppt);
           } else {
+            debugInit.debug ("  but whose type is not known");
             // TODO: Note that orphan has no relatives, for later hook?
           }
+        } else {
+          debugInit.debug ("  but type won't be known because it's a pseudoarray");
         }
       }
     }
@@ -340,9 +347,14 @@ public class Dataflow
     // the ppt for A.  We do this by using a transformer that replaces
     // "this" with a and checks for matches between A:::a and B:::a.
 
+    debugInit.debug ("Entering second stage: ");
     VarInfo[] orphans_array = (VarInfo[]) orphans.toArray(new VarInfo[orphans.size()]);
     for (Iterator it = known.keySet().iterator(); it.hasNext(); ) {
       final VarInfo known_vi = (VarInfo) it.next();
+      if (debugInit.isDebugEnabled()) {
+        debugInit.debug ("  known vi is: " + known_vi.name.name());
+      }
+
       PptTopLevel object_ppt = (PptTopLevel) known.get(known_vi);
       setup_po_same_name(orphans_array, // lower
                          VarInfoName.IDENTITY_TRANSFORMER,
