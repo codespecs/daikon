@@ -21,9 +21,9 @@ public class DtraceEquivalenceChecker
     private HashSet nonceAlert;
     private String fileName;
 
-    public DtraceEquivalenceChecker (String fileName) {
+    public DtraceEquivalenceChecker (String fileN) {
         try {
-            this.fileName = fileName;
+            this.fileName = fileN;
             br = UtilMDE.BufferedFileReader (fileName);
             nonceAlert = new HashSet();
         } catch (Exception e) {e.printStackTrace(); }
@@ -81,6 +81,7 @@ public class DtraceEquivalenceChecker
 
     public ArrayList patchValues (ArrayList enters) {
         try {
+            System.out.println ("Entering patchValues");
             // Build a hashmap of values to watch
             HashMap nonceMap = new HashMap();
             for (int i = 0; i < enters.size(); i++) {
@@ -93,13 +94,19 @@ public class DtraceEquivalenceChecker
                     continue;
                 }
 
+                // get the nonce of this invocation and use it
+                // as the key in the nonceMap, which maps
+                // nonces --> ENTER half of invocation
                 int theNonce = calcNonce (enterStr);
                 nonceMap.put (new Integer (theNonce), enterStr);
             }
 
 
 
-            br = new BufferedReader (new FileReader (fileName));
+            // look for EXIT half of invocations and augment
+            // the values of nonceMap so that the map eventually
+            // maps nonces --> full invocations with ENTER / EXIT
+            br = UtilMDE.BufferedFileReader(fileName);
             while (br.ready()) {
                 String nextInvo = grabNextInvocation();
                 if (nextInvo.indexOf ("EXIT") == -1) continue;

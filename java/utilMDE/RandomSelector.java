@@ -23,8 +23,8 @@ import java.util.*;
 public class RandomSelector {
 
     // Rep Invariant: values != null && values.size() <= num_elts &&
-    //                ((num_elts == -1 && coin_toss_mode == false) ||
-    //                 (keep_probability == -1.0 && coin_toss_mode == true))
+    //                ((num_elts == -1 && coin_toss_mode == true) ||
+    //                 (keep_probability == -1.0 && coin_toss_mode == false))
 
     // Abstraction Function:
     // 1. for all elements, 'val' of AF(current_values),
@@ -85,6 +85,10 @@ public class RandomSelector {
         if (coin_toss_mode) {
             if (seed.nextDouble() < keep_probability) {
                 values.add (next);
+                //                System.out.println ("ACCEPTED " + keep_probability );
+            }
+            else {
+                //System.out.println ("didn't accept " + keep_probability );
             }
             return;
         }

@@ -22,21 +22,22 @@ public class MultiRandSelector {
         this (num_elts, new Random(), eq);
     }
 
-    public MultiRandSelector (double keep_probability, EquivalenceChecker eq) {
-        this (keep_probability, new Random(), eq);
+    public MultiRandSelector (double keep_prob, EquivalenceChecker eq) {
+        this (keep_prob, new Random(), eq);
     }
 
     public MultiRandSelector (int num_elts, Random r,
                               EquivalenceChecker eq) {
+
         this.num_elts = num_elts;
         seed = r;
         this.eq = eq;
         map = new HashMap();
     }
 
-    public MultiRandSelector (double keep_probabilty, Random r,
+    public MultiRandSelector (double keep_prob, Random r,
                               EquivalenceChecker eq) {
-        this.keep_probability = keep_probability;
+        this.keep_probability = keep_prob;
         coin_toss_mode = true;
         seed = r;
         this.eq = eq;
@@ -48,6 +49,7 @@ public class MultiRandSelector {
             accept (iter.next());
         }
     }
+
 
     public void accept (Object next) {
         Object equivClass = eq.deriveEquivalence (next);
