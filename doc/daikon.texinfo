@@ -6016,12 +6016,12 @@ different files than data traces.)
 
 
 Daikon files are textual, to permit easier viewing and editing by humans.
-Each record is separated by one or more blank line.
+Each record is separated by one or more blank lines.
 To permit easier parsing by programs, each piece of information in a record
-is on a separate line
+appears on a separate line.
 
-Any line starting with a pound sign (#) is ignored as a comment (except
-inside a record, where comments are not permitted)
+Outside a record, any line starting with a pound sign (#) is ignored as
+a comment.  Comments are not permitted inside a record.
 
 
 @node    Declaration files, Data trace files, Conventions, File formats
@@ -6311,7 +6311,9 @@ Value information includes:
 @item name
 @item value
 @itemize @bullet
-@item    integer: sequence of digits, optionally preceded by a minus sign
+@item    integer: sequence of digits, optionally preceded by a minus sign.
+Boolean values are written as the number 0 (for false) or the number 1
+(for true).
 @item    string: characters surrounded by double-quotes; internal
 double-quotes and backslashes are escaped by a backslash; newlines and
 carriage returns are represented as "\n" and "\r", respectively
