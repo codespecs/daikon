@@ -399,10 +399,11 @@ public class PAIRWISEINTEQUAL
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
-    if (a1.length != a2.length) {
+    if (a1.length != a2.length || a1.length == 0 || a2.length == 0) {
       // destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
+    
 
     int len = a1.length;
     // int len = Math.min(a1.length, a2.length);
