@@ -10,9 +10,9 @@ import java.util.*;
 public class InvMapTester extends TestCase {
 
   private InvMap map;
-  private PptTopLevel pptA = new PptTopLevel("A", new VarInfo[0]);
-  private PptTopLevel pptB = new PptTopLevel("A", new VarInfo[0]);
-  private PptTopLevel pptC = new PptTopLevel("A", new VarInfo[0]);
+  private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
+  private PptTopLevel pptB = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
+  private PptTopLevel pptC = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private List invsA = new ArrayList();
   private List invsB = new ArrayList();
   private List invsC = new ArrayList();

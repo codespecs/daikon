@@ -4,6 +4,7 @@
 
 package daikon;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 import java.io.*;
@@ -33,6 +34,7 @@ public final class Runtime {
   public static final AbstractException abstractException =
     new AbstractException();
 
+
   ///////////////////////////////////////////////////////////////////////////
   /// Timestamps
   ///
@@ -40,6 +42,54 @@ public final class Runtime {
   // This is used as this_invocation_nonce (and is incremented after use).
   // Uses of it should be synchronized (probably on dtrace).
   public static int time = 0;
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Classname utilities
+  ///
+
+  // This section is lifted from utilMDE/UtilMDE.java and should be kept
+  // in synch with that version.
+
+  private static HashMap primitiveClassesFromJvm = new HashMap(8);
+  static {
+    primitiveClassesFromJvm.put("Z", "boolean");
+    primitiveClassesFromJvm.put("B", "byte");
+    primitiveClassesFromJvm.put("C", "char");
+    primitiveClassesFromJvm.put("D", "double");
+    primitiveClassesFromJvm.put("F", "float");
+    primitiveClassesFromJvm.put("I", "int");
+    primitiveClassesFromJvm.put("J", "long");
+    primitiveClassesFromJvm.put("S", "short");
+  }
+
+  /**
+   * Convert a classname from JVML format to Java format.
+   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
+   **/
+  public static String classnameFromJvm(String classname) {
+    int dims = 0;
+    while (classname.startsWith("[")) {
+      dims++;
+      classname = classname.substring(1);
+    }
+    String result;
+    if (classname.startsWith("L") && classname.endsWith(";")) {
+      result = classname.substring(1, classname.length() - 1);
+      result = result.replace('/', '.');
+    } else {
+      result = (String) primitiveClassesFromJvm.get(classname);
+      if (result == null) {
+        // As a failsafe, use the input; perhaps it in Java, not JVML, format.
+        result = classname;
+        // throw new Error("Malformed base class: " + classname);
+      }
+    }
+    for (int i=0; i<dims; i++) {
+      result += "[]";
+    }
+    return result;
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -227,7 +277,7 @@ public final class Runtime {
     if (x == null) {
       ps.print("null");
     } else {
-      print_String(ps, x.getClass().getName());
+      print_String(ps, classnameFromJvm(x.getClass().getName()));
     }
   }
 

@@ -69,6 +69,15 @@ public class LowerBound
 
   public static LowerBound instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
+    VarInfo x = ppt.var_infos[0];
+    if ((x.derived instanceof SequenceLength)
+         && (((SequenceLength) x.derived).shift != 0)) {
+      // Do not instantiate size(a[])-1 < 50. Instead, we rely on a
+      // simpler invariant with a different constant, like
+      // "size(a[]) < 51".
+      Global.implied_noninstantiated_invariants += 1;
+      return null;
+    }
     return new LowerBound(ppt);
   }
 
@@ -153,12 +162,16 @@ public class LowerBound
 
   public boolean isObviousDerived() {
     VarInfo v = var();
+
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
+      // Invariants with over sequence lengths with vshift != 0 are
+      // now no longer even instantiated.  However, the commented-out
+      // assertion below would break reading old .inv files, so we'll
+      // still do the check at runtime for the moment.
       int vshift = ((SequenceLength) v.derived).shift;
-      if (vshift != 0) {
-        return true;
-      } else if (core.min1 == 0) {
-        // vshift == 0
+      // Assert.assertTrue(vshift == 0);
+      if (vshift == 0 && core.min1 == 0) {
+        // "size(a[]) >= 0" is obvious.
         return true;
       }
     }

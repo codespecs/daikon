@@ -398,6 +398,7 @@ public final class OneOfSequence
   }
 
   public String format_simplify() {
+
     sort_rep();
 
     String result;
@@ -546,6 +547,7 @@ public final class OneOfSequence
             return false;
         }
       }
+
       return true;
     }
 

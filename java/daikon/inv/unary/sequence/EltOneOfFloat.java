@@ -268,6 +268,7 @@ public final class EltOneOfFloat
   }
 
   public String format_simplify() {
+
     sort_rep();
 
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
@@ -400,6 +401,7 @@ public final class EltOneOfFloat
             return false;
         }
       }
+
       return true;
     }
 

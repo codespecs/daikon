@@ -370,6 +370,117 @@ public class PptTopLevel
   }
 
 
+  /* [INCR] ...
+  ///////////////////////////////////////////////////////////////////////////
+  /// Finding an object or class ppt for a given ppt
+  ///
+
+  void set_controlling_ppts(PptMap all_ppts)
+  {
+    // TODO: also require that this is a public method
+    if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
+      PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeObject());
+      if (object_ppt != null) {
+        controlling_ppts.add(object_ppt);
+      } else {
+        // If we didn't find :::OBJECT, fall back to :::CLASS
+        PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
+        if (class_ppt != null) {
+          controlling_ppts.add(class_ppt);
+        }
+      }
+    } else if (ppt_name.isObjectInstanceSynthetic()) {
+      PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
+      if (class_ppt != null) {
+        controlling_ppts.add(class_ppt);
+      }
+    }
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Adding special variables
+  ///
+
+  // Given a program point, if it represents a function exit, then
+  // return the corresponding function entry point.  The result is
+  // cached in the entry_ppt slot, to prevent repeating this expensive
+  // computation.
+
+  void compute_entry_ppt(PptMap all_ppts) {
+    if (ppt_name.isExitPoint() || ppt_name.isThrowsPoint()) {
+      entry_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeEnter());
+      if (ppt_name.isExitPoint()) {
+        if (entry_ppt == null) {
+          throw new Error("Found no entry point for exit point " + this.name);
+        }
+        // System.out.println("Adding exit point " + this.name + " to " + entry_ppt.name);
+        entry_ppt.exit_ppts.add(this);
+      }
+    }
+  }
+
+  // Add "_orig" (prestate) variables to the program point.
+  // Derivation should not yet have occurred for the entry program point.
+  void add_orig_vars(PptTopLevel entry_ppt) {
+    VarInfo[] begin_vis = entry_ppt.var_infos;
+    num_orig_vars = begin_vis.length - entry_ppt.num_static_constant_vars;
+    Assert.assertTrue(num_orig_vars == entry_ppt.num_tracevars);
+    // Don't bother to include the constants.
+    VarInfo[] new_vis = new VarInfo[num_orig_vars];
+    int new_vis_index = 0;
+    for (int i=0; i<begin_vis.length; i++) {
+      VarInfo vi = begin_vis[i];
+      if (vi.isStaticConstant() || vi.isDerived())
+        continue;
+      VarInfo origvar = VarInfo.origVarInfo(vi);
+      {
+        VarInfo postvar = findVar(vi.name);
+        if (postvar == null) {
+          System.out.println("no postvar for origvar " + origvar.name.name());
+        }
+        origvar.comparability = postvar.comparability.makeAlias(origvar.name);
+      }
+      new_vis[new_vis_index] = origvar;
+      new_vis_index++;
+    }
+    Assert.assertTrue(new_vis_index == num_orig_vars);
+    addVarInfos(new_vis);
+  }
+
+
+
+  /// Possibly just blow this off; I'm not sure I care about it.
+  /// In any event, leave it until later.
+  //
+  // void add_invocation_count_vars() {
+  //
+  //   // Add invocation counts
+  //   if (compute_invocation_counts) {
+  //     for ppt in fns_to_process {
+  //       these_var_infos = fn_var_infos[ppt];
+  //       for callee in fn_invocations.keys() {
+  //    calls_var_name = "calls(%s)" % callee;
+  //    these_var_infos.append(var_info(calls_var_name, "integral", "always", len(these_var_infos)));
+  //    these_values.append(fn_invocations[callee]);
+  //    current_var_index++;
+  //       }
+  //     }
+  //   }
+  //
+  //       (ppt_sans_suffix, ppt_suffix) = (string.split(ppt, ":::", 1) + [""])[0:2]
+  //       if ((ppt_suffix != "EXIT")
+  //      and (ppt_suffix[0:4] != "EXIT")):
+  //      continue
+  //       these_var_infos = fn_var_infos[ppt]
+  //       entry_ppt = ppt_sans_suffix + ":::ENTER"
+  //       for vi in fn_var_infos[entry_ppt][0:fn_truevars[entry_ppt]]:
+  //      these_var_infos.append(var_info("orig(" + vi.name + ")", vi.type, comparability_make_alias(vi.name, vi.comparability), len(these_var_infos)))
+  //
+  // }
+  */ // ... [INCR]
+
+
   ///////////////////////////////////////////////////////////////////////////
   /// Derived variables
   ///
@@ -2944,6 +3055,7 @@ public class PptTopLevel
           for (int i=0; i<orig.var_infos.length; i++) {
             orig.var_infos[i] = VarInfo.origVarInfo(saved.var_infos[i]);
           }
+          // [INCR] PptSlice orig = PptSlice0.makeFakePrestate(saved);
           inv.ppt = orig;
           all_cont.append("\t\t");
           all_cont.append(inv.format_using(OutputFormat.SIMPLIFY));

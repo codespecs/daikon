@@ -9,6 +9,7 @@ package daikon.inv;
  * SVM-Light, SVMfu, or C5 uses.
  *********************************************/
 
+import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
 import java.text.*;
@@ -355,27 +356,49 @@ public final class FeatureExtractor {
 
     // First create a TreeSet of all the Feature Numbers and 0 as value
     TreeSet allFeatures =  new TreeSet();
-    for (int i = 0; i < usefulFeatures.size(); i++) {
-      for (Iterator fets = ((TreeSet) usefulFeatures.get(i)).iterator();
-           fets.hasNext();) {
-        IntDoublePair fet = (IntDoublePair) fets.next();
-        allFeatures.add(new IntDoublePair(fet.number, 0));
-      }
-    }
-    for (int i = 0; i < nonusefulFeatures.size(); i++) {
-      for (Iterator fets = ((TreeSet) nonusefulFeatures.get(i)).iterator();
-           fets.hasNext();) {
-        IntDoublePair fet = (IntDoublePair) fets.next();
-        allFeatures.add(new IntDoublePair(fet.number, 0));
-      }
-    }
+    HashMap numbersToNames = new HashMap();
+    Field[] fields = FeatureExtractor.class.getFields();
+    FeatureExtractor useless = new FeatureExtractor();
+    for (int i = 0; i < fields.length; i++) {
+      if (fields[i].getName().startsWith("FetVar") ||
+          fields[i].getName().startsWith("FetType")) {
+        int val;
+        try { val = fields[i].getInt(useless); }
+        catch (IllegalAccessException e) {
+          throw new IOException("all fields starting with Fet must be of " +
+                                "type int\n" + e.getMessage()); }
+        for (int j = 0; j <= MaxNumVars; j++) {
+          IntDoublePair temp = new IntDoublePair(j * 10000 + val, 0);
+          allFeatures.add(temp);
+          if (j == 0)
+            numbersToNames.put(temp, fields[i].getName() + "--union");
+          else
+            numbersToNames.put(temp, fields[i].getName() + "--" + j);
+        }
+      } else if (fields[i].getName().startsWith("Fet")) {
+        try {
+          IntDoublePair temp = new IntDoublePair(fields[i].getInt(useless), 0);
+          allFeatures.add(temp);
+          numbersToNames.put(temp, fields[i].getName());
+        }
+        catch (IllegalAccessException e) {
+          throw new IOException("all fields starting with Fet must be of " +
+                                "type int\n" + e.getMessage()); }
 
+
+      }
+    }
     // Now make the .names part
     names.write("|Beginning of .names file\n");
     // names.write("GoodBad.\n\nGoodBad: 1, -1.\n");
     names.write("good, bad.\n");
-    for (Iterator all = allFeatures.iterator(); all.hasNext(); )
-      names.write(((IntDoublePair) all.next()).number + ": continuous.\n");
+    for (Iterator all = allFeatures.iterator(); all.hasNext(); ) {
+      IntDoublePair current = (IntDoublePair) all.next();
+      if (numbersToNames.containsKey(current))
+        names.write(numbersToNames.get(current) + ": continuous.\n");
+      else
+        names.write(current.number + ": continuous.\n");
+    }
     names.write("|End of .names file\n");
     names.close();
 
@@ -392,10 +415,12 @@ public final class FeatureExtractor {
      in features.
    */
   private static void printC5DataOutput (Vector features,
-                                           TreeSet allFeatures,
-                                           String label,
-                                           FileWriter output) throws IOException {
+                                         TreeSet allFeatures,
+                                         String label,
+                                         FileWriter output) throws IOException{
     DecimalFormat df = new DecimalFormat("0.0####");
+    // Create a TreeSet allFets which has all the features of
+    // the current (ith) vector and the other features filled in with 0s
     for (int i = 0; i < features.size(); i++) {
       TreeSet allFets = ((TreeSet) features.get(i));
 
@@ -412,6 +437,21 @@ public final class FeatureExtractor {
         if (!contains)
           allFets.add(current);
       }
+
+      // Debug Code that prints out features that
+      // have been forgotten in AllFeatures
+      /*      for (Iterator h = allFets.iterator(); h.hasNext();) {
+              IntDoublePair current = (IntDoublePair) h.next();
+              boolean contains = false;
+              for (Iterator j = allFeatures.iterator(); j.hasNext();) {
+              IntDoublePair jguy = (IntDoublePair) j.next();
+              if (jguy.number == current.number)
+              contains = true;
+              }
+              if (!contains)
+              System.out.println(current.number);
+              }
+      */
 
       for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
         IntDoublePair fet = (IntDoublePair) fets.next();
@@ -1797,15 +1837,16 @@ public final class FeatureExtractor {
   }
 
   /*********************************************
-   * A tool for combining multiple TrainFu files.
+   * A tool for combining multiple SVMfu and C5 files.
    *********************************************/
 
-  public static final class CombineFuFiles {
+  public static final class CombineFiles {
 
     private static String USAGE =
-      "\tArguments:\n\t-i FileName:\ta TrainFu input file\n" +
-      "\t-o FileName:\toutput file name\n" +
-      "\t[-r] repeat:\tif present then the number of positive and negative\n" +
+      "\tArguments:\n\t-i FileName:\ta C5 input file (with .data)\n" +
+      "\t-t Type:\tFormat, one of C5 or SVMfu\n" +
+      "\t-o FileName:\toutput file name (with.data)\n" +
+      "\t[-n] repeat:\tif present then the number of positive and negative\n" +
       "\t\tvectors will be roughtly normalized (by repeats).\n";
 
     static public void main(String[] args)
@@ -1817,11 +1858,14 @@ public final class FeatureExtractor {
         System.exit(0);
       }
       Vector inputs = new Vector();
-      boolean repeats = false;
+      boolean normalize = false;
       String output = null;
+      String type = null;
       for (int i = 0; i < args.length; i++) {
-        if (args[i].equals("-r"))
-          repeats = true;
+        if (args[i].equals("-n"))
+          normalize = true;
+        else if (args[i].equals("-t"))
+          type = args[++i];
         else if (args[i].equals("-i"))
           inputs.add(args[++i]);
         else if (args[i].equals("-o")) {
@@ -1834,6 +1878,8 @@ public final class FeatureExtractor {
           throw new IOException("Invalid argument: " + args[i]);
       }
       // Check if the required fields are specified.
+      if (type == null)
+        throw new IOException("You must specify a format type (C5 or SVMfu)");
       if (output == null)
         throw new IOException("You must specify an output file");
       if (inputs.size() == 0)
@@ -1842,19 +1888,27 @@ public final class FeatureExtractor {
       // Load the input files into 2 HashSets, pos and neg.
       HashSet pos = new HashSet();
       HashSet neg = new HashSet();
+
       for (Iterator i = inputs.iterator(); i.hasNext(); ) {
         BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
 
-          int posind = vector.lastIndexOf("1");
-          int negind = vector.lastIndexOf("-1");
+          if (type.equals("C5")) {
+            if (vector.indexOf("bad") > -1)
+              neg.add(vector.substring(0, vector.lastIndexOf("bad")));
+            else
+              pos.add(vector.substring(0, vector.lastIndexOf("good")));
+          } else if (type.equals("SVMfu")) {
+            int posind = vector.lastIndexOf("1");
+            int negind = vector.lastIndexOf("-1");
 
-          if (negind == posind - 1)
-            neg.add(vector.substring(0, vector.lastIndexOf("-1")));
-          else
-            pos.add(vector.substring(0, vector.lastIndexOf("1")));
+            if (negind == posind - 1)
+              neg.add(vector.substring(0, vector.lastIndexOf("-1")));
+            else
+              pos.add(vector.substring(0, vector.lastIndexOf("1")));
+          }
         }
         br.close();
       }
@@ -1866,109 +1920,37 @@ public final class FeatureExtractor {
 
       for (Iterator i = neg.iterator(); i.hasNext(); ) {
         String vector = (String) i.next();
-        if (!(pos.contains(vector)))
-          negvectors.add(vector + "-1");
+        if (!(pos.contains(vector))) {
+          if (type.equals("C5"))
+            negvectors.add(vector + "bad");
+          else if (type.equals("SVMfu"))
+            negvectors.add(vector + "-1");
+        }
       }
 
       for (Iterator i = pos.iterator(); i.hasNext(); )
-        posvectors.add(((String) i.next()) + "1");
+        if (type.equals("C5"))
+          posvectors.add(((String) i.next()) + "good");
+        else if (type.equals("SVMfu"))
+          posvectors.add(((String) i.next()) + "1");
 
       // Set the appropriate repeat values.
       int posrepeat = 1 , negrepeat = 1;
-      if (repeats)
+      if (normalize) {
+        if (posvectors.size() == 0)
+          throw new IOException("There are no positive vectors, " +
+                                "cannot normalize");
+        if (negvectors.size() == 0)
+          throw new IOException("There are no negative vectors, " +
+                                "cannot normalize");
         if (posvectors.size() > negvectors.size())
           negrepeat = posvectors.size() / negvectors.size();
         else
           posrepeat = negvectors.size() / posvectors.size();
+      }
 
       // Print the output to the output file.
       FileWriter fw = new FileWriter(output);
-      fw.write((posvectors.size() * posrepeat +
-                negvectors.size() * negrepeat) + " \n");
-
-      for (int repeat = 0; repeat < negrepeat; repeat++)
-        for (Iterator i = negvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " \n");
-      for (int repeat = 0; repeat < posrepeat; repeat++)
-        for (Iterator i = posvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " \n");
-      fw.close();
-
-      // Print a summary of positives and negatives to stdout.
-      System.out.println(posvectors.size() + "*" + posrepeat + " " +
-                         negvectors.size() + "*" + negrepeat);
-    }
-
-  }
-
-  /*********************************************
-   * A tool for normalizing a C5 file.
-   *********************************************/
-
-  public static final class NormalizeC5Files {
-
-    private static String USAGE =
-      "\tArguments:\n\t-i FileName:\ta C5 input file root\n";
-
-    static public void main(String[] args)
-      throws IOException, ClassNotFoundException {
-
-      // First parse the arguments
-      if (args.length != 2) {
-        System.out.println(USAGE);
-        System.exit(0);
-      }
-      String input = new String();
-
-      for (int i = 0; i < args.length; i++) {
-        if (args[i].equals("-i"))
-          input = args[++i] + ".data";
-        else
-          throw new IOException("Invalid argument: " + args[i]);
-      }
-
-      // Load the input files into 2 HashSets, pos and neg.
-      HashSet pos = new HashSet();
-      HashSet neg = new HashSet();
-      BufferedReader br = new BufferedReader(new FileReader(input));
-      br.readLine();
-      while (br.ready()) {
-        String vector = br.readLine();
-
-        boolean ispos = (vector.indexOf("good") > -1);
-        if (ispos == (vector.indexOf("bad") > -1))
-          throw new IOException("Invalid input data in " + input);
-
-        if (ispos)
-          pos.add(vector.substring(0, vector.lastIndexOf("good")));
-        else
-          neg.add(vector.substring(0, vector.lastIndexOf("bad")));
-      }
-      br.close();
-
-      // Now create two vectors, posvectors and negvectors, of the
-      // positive and negative TrainFu vectors respectively.
-      Vector posvectors = new Vector();
-      Vector negvectors = new Vector();
-
-      for (Iterator i = neg.iterator(); i.hasNext(); ) {
-        String vector = (String) i.next();
-        if (!(pos.contains(vector)))
-          negvectors.add(vector + "bad");
-      }
-
-      for (Iterator i = pos.iterator(); i.hasNext(); )
-        posvectors.add(((String) i.next()) + "good");
-
-      // Set the appropriate repeat values.
-      int posrepeat = 1 , negrepeat = 1;
-      if (posvectors.size() > negvectors.size())
-        negrepeat = posvectors.size() / negvectors.size();
-      else
-        posrepeat = negvectors.size() / posvectors.size();
-
-      // Print the output to the output file.
-      FileWriter fw = new FileWriter(input);
       for (int repeat = 0; repeat < negrepeat; repeat++)
         for (Iterator i = negvectors.iterator(); i.hasNext(); )
           fw.write((String) i.next() + " \n");
@@ -1983,105 +1965,32 @@ public final class FeatureExtractor {
     }
   }
 
-  /*********************************************
-   * A tool for permuting TrainFu files.
-   *********************************************/
-
-  public static final class PermuteFuFiles {
-
-    private static String USAGE =
-      "\tArguments:\n\t-i FileName:\ta TrainFu input file\n" +
-      "\t-o FileName:\toutput file name\n";
-
-    static public void main(String[] args)
-      throws IOException, ClassNotFoundException {
-
-      // First parse the arguments
-      if (args.length == 0) {
-        System.out.println(USAGE);
-        System.exit(0);
-      }
-      String input = null;
-      String output = null;
-      for (int i = 0; i < args.length; i++) {
-        if (args[i].equals("-i")) {
-          if (input == null)
-            input = args[++i];
-          else
-            throw new IOException("Multiple input files not allowed");
-        }
-        else if (args[i].equals("-o")) {
-          if (output == null)
-            output = args[++i];
-          else
-            throw new IOException("Multiple output files not allowed");
-        }
-        else
-          throw new IOException("Invalid argument: " + args[i]);
-      }
-      // Check if the required fields are specified.
-      if (output == null)
-        throw new IOException("You must specify an output file");
-      if (input == null)
-        throw new IOException("You must specify an input file");
-
-      // Load the input file into 2 Vectors, pos and neg.
-      Vector pos = new Vector();
-      Vector neg = new Vector();
-      BufferedReader br = new BufferedReader(new FileReader(input));
-      br.readLine();
-      while (br.ready()) {
-        String vector = br.readLine();
-
-        int posind = vector.lastIndexOf("1");
-        int negind = vector.lastIndexOf("-1");
-
-        if (negind == posind - 1)
-          neg.add(vector.substring(0, vector.lastIndexOf("-1")));
-        else
-          pos.add(vector.substring(0, vector.lastIndexOf("1")));
-      }
-      br.close();
-
-      // Set up output file
-      FileWriter fw = new FileWriter(output);
-      fw.write((int) Math.pow(pos.size() + neg.size(), 2) + "\n");
-
-      writeVectors(pos, pos, "1", fw);
-      writeVectors(pos, neg, "1", fw);
-      writeVectors(neg, pos, "1", fw);
-      writeVectors(neg, neg, "-1", fw);
-      fw.close();
-    }
-
-    private static void writeVectors(Vector one, Vector two,
+  private static void writeVectors(Vector one, Vector two,
                                      String label, FileWriter fw)
     throws IOException {
 
-      for (int i = 0; i < one.size(); i++)
-        for (int j = 0; j < two.size(); j++) {
-          String first = (String) one.get(i);
-          String second = (String) two.get(j);
-          String answer = first.substring(first.indexOf(" ") + 1) +
-            shift(second);
-          answer = (new StringTokenizer(answer)).countTokens() + " " + answer;
-          fw.write(answer + label + "\n");
-        }
-    }
-
-    private static String shift(String vector) {
-      String answer = new String();
-      StringTokenizer tokens = new StringTokenizer(vector);
-      tokens.nextToken();
-      while (tokens.hasMoreTokens())
-        answer += (Integer.parseInt(tokens.nextToken()) +
-                   OneMoreOrderThanLargestFeature) + " " +
-          tokens.nextToken() + " ";
-      return answer;
-    }
-
-
+    for (int i = 0; i < one.size(); i++)
+      for (int j = 0; j < two.size(); j++) {
+        String first = (String) one.get(i);
+        String second = (String) two.get(j);
+        String answer = first.substring(first.indexOf(" ") + 1) +
+          shift(second);
+        answer = (new StringTokenizer(answer)).countTokens() + " " + answer;
+        fw.write(answer + label + "\n");
+      }
   }
+
+  private static String shift(String vector) {
+    String answer = new String();
+    StringTokenizer tokens = new StringTokenizer(vector);
+    tokens.nextToken();
+    while (tokens.hasMoreTokens())
+      answer += (Integer.parseInt(tokens.nextToken()) +
+                 OneMoreOrderThanLargestFeature) + " " +
+        tokens.nextToken() + " ";
+    return answer;
+  }
+
 
   // the following line gets rid of some extra output that
   // otherwise gets dumped to System.out:
@@ -2092,194 +2001,196 @@ public final class FeatureExtractor {
   // the THRESHOLD is zero
   static double THRESHOLD = 0.0;
 
-  // A bunch of static variables, one for each feature
-  static int FetEnoughSamples = 1;
-  static int FetGetProbability = 2;
-  static int FetIsExact = 3;
-  static int FetJustified = 4;
-  static int FetIsWorthPrinting = 5;
-  static int FetHasFewModifiedSamples = 6;
-  static int FetHasNonCanonicalVariable = 7;
-  static int FetHasOnlyConstantVariables = 8;
-  static int FetIsObvious = 9;
-  static int FetIsObviousDerived = 10;
-  static int FetIsObviousImplied = 11;
-  static int FetIsControlled = 12;
-  static int FetIsImpliedPostcondition = 13;
-  static int FetIsInteresting = 14;
-  static int FetArity = 15;
-  static int FetNumVars = 16;
-  static int FetNumArrayVars = 17;
-  static int FetOneOfNum_elts = 50;
-  static int FetComparison = 51;
-  static int FetComparisonEq_probability = 52;
-  static int FetImplication = 53;
-  static int FetImplicationIff = 54;
-  static int FetUnary = 81;
-  static int FetScalar = 82;
-  static int FetSequence = 83;
-  static int FetString = 84;
-  static int FetStringSequence = 85;
-  static int FetBinary = 86;
-  static int FetTwoScalar = 88;
-  static int FetTwoSequence = 89;
-  static int FetTwoString = 90;
-  static int FetTernary = 91;
-  static int FetThreeScalar = 92;
-  static int FetModulus = 100;
-  static int FetLowerBound = 200;
-  static int FetLowerBoundCoreMin1 = 201;
-  static int FetNonZero = 300;
-  static int FetNonModulus = 400;
-  static int FetOneOfScalar = 500;
-  static int FetPositive = 600;
-  static int FetSingleFloat = 700;
-  static int FetSingleScalar = 800;
-  static int FetUpperBound = 900;
-  static int FetUpperBoundCoreMax1 = 901;
-  static int FetEltLowerBound = 1000;
-  static int FetEltNonZero = 1100;
-  static int FetEltOneOf = 1200;
-  static int FetEltUpperBound = 1300;
-  static int FetEltwiseIntComparison = 1400;
-  static int FetNoDuplicates = 1500;
-  static int FetOneOfSequence = 1600;
-  static int FetSeqIndexComparison = 1700;
-  static int FetSeqIndexNonEqual = 1800;
-  static int FetSingleFloatSequence = 1900;
-  static int FetSingleSequence = 2000;
-  static int FetOneOfString = 2200;
-  static int FetSingleString = 2300;
-  static int FetEltOneOfString = 2400;
-  static int FetOneOfStringSequence = 2500;
-  static int FetSingleStringSequence = 2600;
-  static int FetSeqIntComparison = 2800;
-  static int FetSequenceScalar = 2900;
-  static int FetSequenceScalarSeq_first = 2901;
-  static int FetSequenceScalarSeq_index = 2902;
-  static int FetSequenceScalarScl_index = 2903;
-  static int FetSequenceString = 3000;
-  static int FetSequenceStringSeq_first = 3001;
-  static int FetSequenceStringSeq_index = 3002;
-  static int FetSequenceStringScl_index = 3003;
-  static int FetIntNonEqual = 3100;
-  static int FetIntEqual = 3200;
-  static int FetNonEqualCoreMin1 = 3301;
-  static int FetNonEqualCoreMin2 = 3302;
-  static int FetNonEqualCoreMax1 = 3303;
-  static int FetNonEqualCoreMax2 = 3304;
-  static int FetFunctionUnary = 3400;
-  static int FetFunctionUnaryCoreInverse = 3401;
-  static int FetIntGreaterEqual = 3500;
-  static int FetIntGreaterThan = 3600;
-  static int FetLinearBinary = 3700;
-  static int FetLinearBinaryCoreA = 3701;
-  static int FetLinearBinaryCoreB = 3702;
-  static int FetIntLessEqual = 3800;
-  static int FetIntLessThan = 3900;
-  static int FetIntComparisonCoreCan_Be_Eq = 4001;
-  static int FetIntComparisonCoreCan_Be_Lt = 4002;
-  static int FetIntComparisonCoreCan_Be_Gt = 4003;
-  static int FetPairwiseIntComparison = 4800;
-  static int FetSeqComparison = 4900;
-  static int FetPairwiseLinearBinary = 5000;
-  static int FetSubSequence = 5100;
-  static int FetPairwiseFunctionUnary = 5200;
-  static int FetReverse = 5300;
-  static int FetStringComparison = 5500;
-  static int FetStringComparisonCoreCan_Be_Eq = 5501;
-  static int FetStringComparisonCoreCan_Be_Lt = 5502;
-  static int FetStringComparisonCoreCan_Be_Gt = 5503;
-  static int FetLinearTernary = 5700;
-  static int FetLinearTernaryCoreA = 5701;
-  static int FetLinearTernaryCoreB = 5702;
-  static int FetLinearTernaryCoreC = 5703;
-  static int FetFunctionBinary = 5800;
-  static int FetFunctionBinaryCoreVar_Order = 5801;
-  static int FetCommonFloatSequence = 5900;
-  static int FetEltLowerBoundFloat = 6000;
-  static int FetEltNonZeroFloat = 6100;
-  static int FetEltOneOfFloat = 6200;
-  static int FetEltUpperBoundFloat = 6300;
-  static int FetEltwiseFloatComparison = 6400;
-  static int FetFloatEqual = 6500;
-  static int FetFloatGreaterEqual = 6600;
-  static int FetFloatGreaterThan = 6700;
-  static int FetFloatLessEqual = 6800;
-  static int FetFloatLessThan = 6900;
-  static int FetFloatNonEqual = 7000;
-  static int FetFunctionBinaryFloat = 7100;
-  static int FetFunctionUnaryFloat = 7200;
-  static int FetLinearBinaryFloat = 7300;
-  static int FetLinearTernaryFloat = 7400;
-  static int FetLowerBoundFloat = 7500;
-  static int FetMemberFloat = 7600;
-  static int FetNoDuplicatesFloat = 7700;
-  static int FetNonZeroFloat = 7800;
-  static int FetOneOfFloat = 7900;
-  static int FetOneOfFloatNum_elts = 7901;
-  static int FetOneOfFloatSequence = 8000;
-  static int FetPairwiseFloatComparison = 8100;
-  static int FetPairwiseFunctionUnaryFloat = 8200;
-  static int FetPairwiseLinearBinaryFloat = 8300;
-  static int FetReverseFloat = 8400;
-  static int FetSeqComparisonFloat = 8500;
-  static int FetSeqFloatComparison = 8600;
-  static int FetSeqIndexComparisonFloat = 8700;
-  static int FetSeqIndexNonEqualFloat = 8800;
-  static int FetSequenceFloat = 8900;
-  static int FetSubSequenceFloat = 9200;
-  static int FetThreeFloat = 9300;
-  static int FetTwoFloat = 9400;
-  static int FetTwoSequenceFloat = 9500;
-  static int FetUpperBoundFloat = 9600;
-  static int FetFunctionUnaryCoreFloatInverse = 9701;
-  static int FetFunctionBinaryCoreFloatVar_Order = 9702;
-  static int FetLinearBinaryCoreFloatA = 9703;
-  static int FetLinearBinaryCoreFloatB = 9704;
-  static int FetLinearTernaryCoreFloatA = 9703;
-  static int FetLinearTernaryCoreFloatB = 9705;
-  static int FetLinearTernaryCoreFloatC = 9706;
-  static int FetFloatComparisonCoreCan_Be_Eq = 9707;
-  static int FetFloatComparisonCoreCan_Be_Lt = 9708;
-  static int FetFloatComparisonCoreCan_Be_Gt = 9709;
+  // A bunch of public static variables, one for each feature
+  public static int FetEnoughSamples = 1;
+  public static int FetGetProbability = 2;
+  public static int FetIsExact = 3;
+  public static int FetJustified = 4;
+  public static int FetIsWorthPrinting = 5;
+  public static int FetHasFewModifiedSamples = 6;
+  public static int FetHasNonCanonicalVariable = 7;
+  public static int FetHasOnlyConstantVariables = 8;
+  public static int FetIsObvious = 9;
+  public static int FetIsObviousDerived = 10;
+  public static int FetIsObviousImplied = 11;
+  public static int FetIsControlled = 12;
+  public static int FetIsImpliedPostcondition = 13;
+  public static int FetIsInteresting = 14;
+  public static int FetArity = 15;
+  public static int FetNumVars = 16;
+  public static int FetNumArrayVars = 17;
+  public static int FetOneOfNum_elts = 50;
+  public static int FetComparison = 51;
+  public static int FetComparisonEq_probability = 52;
+  public static int FetImplication = 53;
+  public static int FetImplicationIff = 54;
+  public static int FetUnary = 81;
+  public static int FetScalar = 82;
+  public static int FetSequence = 83;
+  public static int FetString = 84;
+  public static int FetStringSequence = 85;
+  public static int FetBinary = 86;
+  public static int FetTwoScalar = 88;
+  public static int FetTwoSequence = 89;
+  public static int FetTwoString = 90;
+  public static int FetTernary = 91;
+  public static int FetThreeScalar = 92;
+  public static int FetModulus = 100;
+  public static int FetLowerBound = 200;
+  public static int FetLowerBoundCoreMin1 = 201;
+  public static int FetNonZero = 300;
+  public static int FetNonModulus = 400;
+  public static int FetOneOfScalar = 500;
+  public static int FetPositive = 600;
+  public static int FetSingleFloat = 700;
+  public static int FetSingleScalar = 800;
+  public static int FetUpperBound = 900;
+  public static int FetUpperBoundCoreMax1 = 901;
+  public static int FetEltLowerBound = 1000;
+  public static int FetEltNonZero = 1100;
+  public static int FetEltOneOf = 1200;
+  public static int FetEltUpperBound = 1300;
+  public static int FetEltwiseIntComparison = 1400;
+  public static int FetNoDuplicates = 1500;
+  public static int FetOneOfSequence = 1600;
+  public static int FetSeqIndexComparison = 1700;
+  public static int FetSeqIndexNonEqual = 1800;
+  public static int FetSingleFloatSequence = 1900;
+  public static int FetSingleSequence = 2000;
+  public static int FetOneOfString = 2200;
+  public static int FetSingleString = 2300;
+  public static int FetEltOneOfString = 2400;
+  public static int FetOneOfStringSequence = 2500;
+  public static int FetSingleStringSequence = 2600;
+  public static int FetSeqIntComparison = 2800;
+  public static int FetSequenceScalar = 2900;
+  public static int FetSequenceScalarSeq_first = 2901;
+  public static int FetSequenceScalarSeq_index = 2902;
+  public static int FetSequenceScalarScl_index = 2903;
+  public static int FetSequenceString = 3000;
+  public static int FetSequenceStringSeq_first = 3001;
+  public static int FetSequenceStringSeq_index = 3002;
+  public static int FetSequenceStringScl_index = 3003;
+  public static int FetIntNonEqual = 3100;
+  public static int FetIntEqual = 3200;
+  public static int FetNonEqualCoreMin1 = 3301;
+  public static int FetNonEqualCoreMin2 = 3302;
+  public static int FetNonEqualCoreMax1 = 3303;
+  public static int FetNonEqualCoreMax2 = 3304;
+  public static int FetFunctionUnary = 3400;
+  public static int FetFunctionUnaryCoreInverse = 3401;
+  public static int FetIntGreaterEqual = 3500;
+  public static int FetIntGreaterThan = 3600;
+  public static int FetLinearBinary = 3700;
+  public static int FetLinearBinaryCoreA = 3701;
+  public static int FetLinearBinaryCoreB = 3702;
+  public static int FetIntLessEqual = 3800;
+  public static int FetIntLessThan = 3900;
+  public static int FetIntComparisonCoreCan_Be_Eq = 4001;
+  public static int FetIntComparisonCoreCan_Be_Lt = 4002;
+  public static int FetIntComparisonCoreCan_Be_Gt = 4003;
+  public static int FetPairwiseIntComparison = 4800;
+  public static int FetSeqComparison = 4900;
+  public static int FetPairwiseLinearBinary = 5000;
+  public static int FetSubSequence = 5100;
+  public static int FetPairwiseFunctionUnary = 5200;
+  public static int FetReverse = 5300;
+  public static int FetStringComparison = 5500;
+  public static int FetStringComparisonCoreCan_Be_Eq = 5501;
+  public static int FetStringComparisonCoreCan_Be_Lt = 5502;
+  public static int FetStringComparisonCoreCan_Be_Gt = 5503;
+  public static int FetLinearTernary = 5700;
+  public static int FetLinearTernaryCoreA = 5701;
+  public static int FetLinearTernaryCoreB = 5702;
+  public static int FetLinearTernaryCoreC = 5703;
+  public static int FetFunctionBinary = 5800;
+  public static int FetFunctionBinaryCoreVar_Order = 5801;
+  public static int FetCommonFloatSequence = 5900;
+  public static int FetEltLowerBoundFloat = 6000;
+  public static int FetEltNonZeroFloat = 6100;
+  public static int FetEltOneOfFloat = 6200;
+  public static int FetEltUpperBoundFloat = 6300;
+  public static int FetEltwiseFloatComparison = 6400;
+  public static int FetFloatEqual = 6500;
+  public static int FetFloatGreaterEqual = 6600;
+  public static int FetFloatGreaterThan = 6700;
+  public static int FetFloatLessEqual = 6800;
+  public static int FetFloatLessThan = 6900;
+  public static int FetFloatNonEqual = 7000;
+  public static int FetFunctionBinaryFloat = 7100;
+  public static int FetFunctionUnaryFloat = 7200;
+  public static int FetLinearBinaryFloat = 7300;
+  public static int FetLinearTernaryFloat = 7400;
+  public static int FetLowerBoundFloat = 7500;
+  public static int FetMemberFloat = 7600;
+  public static int FetNoDuplicatesFloat = 7700;
+  public static int FetNonZeroFloat = 7800;
+  public static int FetOneOfFloat = 7900;
+  public static int FetOneOfFloatNum_elts = 7901;
+  public static int FetOneOfFloatSequence = 8000;
+  public static int FetPairwiseFloatComparison = 8100;
+  public static int FetPairwiseFunctionUnaryFloat = 8200;
+  public static int FetPairwiseLinearBinaryFloat = 8300;
+  public static int FetReverseFloat = 8400;
+  public static int FetSeqComparisonFloat = 8500;
+  public static int FetSeqFloatComparison = 8600;
+  public static int FetSeqIndexComparisonFloat = 8700;
+  public static int FetSeqIndexNonEqualFloat = 8800;
+  public static int FetSequenceFloat = 8900;
+  public static int FetSubSequenceFloat = 9200;
+  public static int FetThreeFloat = 9300;
+  public static int FetTwoFloat = 9400;
+  public static int FetTwoSequenceFloat = 9500;
+  public static int FetUpperBoundFloat = 9600;
+  public static int FetFunctionUnaryCoreFloatInverse = 9701;
+  public static int FetFunctionBinaryCoreFloatVar_Order = 9702;
+  public static int FetLinearBinaryCoreFloatA = 9703;
+  public static int FetLinearBinaryCoreFloatB = 9704;
+  public static int FetLinearTernaryCoreFloatA = 9703;
+  public static int FetLinearTernaryCoreFloatB = 9705;
+  public static int FetLinearTernaryCoreFloatC = 9706;
+  public static int FetFloatComparisonCoreCan_Be_Eq = 9707;
+  public static int FetFloatComparisonCoreCan_Be_Lt = 9708;
+  public static int FetFloatComparisonCoreCan_Be_Gt = 9709;
 
   // 9800-9900 reserved for Ppt Features
-  static int FetPptIsExit = 9801;
-  static int FetPptIsLineNumberedExit = 9802;
-  static int FetPptNumOfExits = 9803;
+  public static int FetPptIsExit = 9801;
+  public static int FetPptIsLineNumberedExit = 9802;
+  public static int FetPptNumOfExits = 9803;
 
   // Variable Features (10000 - 49999)
   // 10000-19999 are for "invariant contains a variable that ...
   // 20000 - 29999 are for 1st variable is .... (etc. up to 3 variables)
-  //  static int FetVarInfoName = 10001;
-  static int FetVarInfoIs_Static_Constant = 10002;
-  static int FetVarInfoCanBeNull = 10003;
-  static int FetVarInfoIs_Dynamic_Constant =  10004;
-  static int FetTypeDimensions = 10005;
-  static int FetTypeIsArray = 10007;
-  static int FetTypeBaseIsArray = 10008;
-  static int FetTypePseudoDimensions = 10009;
-  static int FetTypeIsPseudoArray = 10010;
-  static int FetTypeIsPrimitive = 10011;
-  static int FetTypeBaseIsPrimitive = 10012;
-  static int FetTypeIsIntegral = 10013;
-  static int FetTypeBaseIsIntegral = 10014;
-  static int FetTypeElementIsIntegral = 10015;
-  static int FetTypeIsScalar = 10016;
-  static int FetTypeIsFloat = 10017;
-  static int FetTypeBaseIsFloat = 10018;
-  static int FetTypeIsObject = 10019;
-  static int FetTypeBaseIsObject = 10020;
-  static int FetVarInfoAuxIsParam = 10021;
-  static int FetVarInfoAuxNullTerminating = 10022;
-  static int FetVarInfoAuxHasNull = 10023;
-  static int FetVarInfoAuxHasSize = 10024;
-  static int FetVarInfoAuxHasOrder = 10025;
-  static int FetVarInfoAuxHasDuplicates = 10026;
-  static int FetVarIsPrestate = 10027;
-  static int FetVarDerivedDepth = 10028;
+  //  public static int FetVarInfoName = 10001;
+  public static int FetVarInfoIs_Static_Constant = 10002;
+  public static int FetVarInfoCanBeNull = 10003;
+  public static int FetVarInfoIs_Dynamic_Constant =  10004;
+  public static int FetTypeDimensions = 10005;
+  public static int FetTypeIsArray = 10007;
+  public static int FetTypeBaseIsArray = 10008;
+  public static int FetTypePseudoDimensions = 10009;
+  public static int FetTypeIsPseudoArray = 10010;
+  public static int FetTypeIsPrimitive = 10011;
+  public static int FetTypeBaseIsPrimitive = 10012;
+  public static int FetTypeIsIntegral = 10013;
+  public static int FetTypeBaseIsIntegral = 10014;
+  public static int FetTypeElementIsIntegral = 10015;
+  public static int FetTypeIsScalar = 10016;
+  public static int FetTypeIsFloat = 10017;
+  public static int FetTypeBaseIsFloat = 10018;
+  public static int FetTypeIsObject = 10019;
+  public static int FetTypeBaseIsObject = 10020;
+  public static int FetVarInfoAuxIsParam = 10021;
+  public static int FetVarInfoAuxNullTerminating = 10022;
+  public static int FetVarInfoAuxHasNull = 10023;
+  public static int FetVarInfoAuxHasSize = 10024;
+  public static int FetVarInfoAuxHasOrder = 10025;
+  public static int FetVarInfoAuxHasDuplicates = 10026;
+  public static int FetVarIsPrestate = 10027;
+  public static int FetVarDerivedDepth = 10028;
 
-  static int OneMoreOrderThanLargestFeature = 100000;
+  public static int MaxNumVars = 8;
+
+  public static int OneMoreOrderThanLargestFeature = 100000;
 
 }

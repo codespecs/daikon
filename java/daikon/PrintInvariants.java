@@ -274,52 +274,53 @@ public class PrintInvariants {
   // This used to be called "get_better_name".  It appears to convert
   // a JVM-style method signature to a Java-style method signature, so
   // I renamed it accordingly.  -MDE 12/2/2002
-  public static String jvm_signature_to_java_signature(PptTopLevel ppt) {
-    String better_name = ppt.name;
-    {
-      // Replace <init> with name of class
-      int init_pos = better_name.indexOf(".<init>");
-      if (init_pos != -1) {
-        String before = better_name.substring(0, init_pos);
-        String after = better_name.substring(init_pos+7);
-        String classname = before;
-        int lastdot = before.lastIndexOf('.'); // Not corrent for inners, but oh well
-        if (lastdot >= 0) {
-          classname = before.substring(lastdot+1);
-        }
-        better_name = before + "." + classname + after;
-      }
-    }
-    int open_paren_pos = better_name.indexOf("(");
-    if ((open_paren_pos != -1)
-        // if open paren is first character, don't try to be clever
-        && (open_paren_pos != 0)) {
-      int close_paren_pos = better_name.indexOf(")");
-      int colon_pos = better_name.indexOf(":::");
-      String args = better_name.substring(open_paren_pos, close_paren_pos+1);
-      String java_args = UtilMDE.arglistFromJvm(args);
-      better_name = better_name.substring(0, open_paren_pos)
-        + ((java_args != null) ? java_args : args)
-        + better_name.substring(colon_pos);
-    }
-
-    return better_name;
-  }
+  // In fact, it shouldn't be called: such manipulations are the province
+  // of the front end, not Daikon proper.  (It should also take a String,
+  // not a PptTopLevel, as an argument.)  -MDE 1/17/2003
+  // public static String jvm_signature_to_java_signature(PptTopLevel ppt) {
+  //   String better_name = ppt.name;
+  //   {
+  //     // Replace <init> with name of class
+  //     int init_pos = better_name.indexOf(".<init>");
+  //     if (init_pos != -1) {
+  //       String before = better_name.substring(0, init_pos);
+  //       String after = better_name.substring(init_pos+7);
+  //       String classname = before;
+  //       int lastdot = before.lastIndexOf('.'); // Not corrent for inners, but oh well
+  //       if (lastdot >= 0) {
+  //         classname = before.substring(lastdot+1);
+  //       }
+  //       better_name = before + "." + classname + after;
+  //     }
+  //   }
+  //   int open_paren_pos = better_name.indexOf("(");
+  //   if ((open_paren_pos != -1)
+  //       // if open paren is first character, don't try to be clever
+  //       && (open_paren_pos != 0)) {
+  //     int close_paren_pos = better_name.indexOf(")");
+  //     int colon_pos = better_name.indexOf(":::");
+  //     String args = better_name.substring(open_paren_pos, close_paren_pos+1);
+  //     String java_args = UtilMDE.arglistFromJvm(args);
+  //     better_name = better_name.substring(0, open_paren_pos)
+  //       + ((java_args != null) ? java_args : args)
+  //       + better_name.substring(colon_pos);
+  //   }
+  //   return better_name;
+  // }
 
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out)
   {
-    // System.out.println("entering print_sample_data\n");
-    String better_name = jvm_signature_to_java_signature(ppt);
+    // System.out.println("entering print_sample_data");
 
     if (Daikon.output_num_samples) {
       int num_samps = -111; // [[INCR]]
-      out.println(better_name + "  " + nplural(num_samps, "sample"));
-      // out.println("    Samples breakdown: " + tuplemod_samples_summary()); // [[INCR]]
+      out.println(ppt.name + "  " + nplural(num_samps, "sample"));
+      // out.println("    Samples breakdown: " + ppt.tuplemod_samples_summary()); // [[INCR]]
     } else {
       if (Daikon.output_style == OutputFormat.IOA) {
         out.print("% ");  // IOA comment style
       }
-      out.println(better_name);
+      out.println(ppt.name);
     }
     if (Daikon.output_num_samples
         || (Daikon.output_style == OutputFormat.ESCJAVA)
@@ -1025,7 +1026,7 @@ public class PrintInvariants {
     }
     if (debugFiltering.isDebugEnabled()) {
       debugFiltering.debug("------------------------------------------------------------------------------------------------\n");
-      debugFiltering.debug(jvm_signature_to_java_signature(ppt) + "\n\n");
+      debugFiltering.debug(ppt.name + "\n\n");
     }
 
     // Count statistics (via Global) on variables (canonical, missing, etc.)

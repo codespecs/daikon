@@ -345,9 +345,10 @@ public final class OneOfScalar
   }
 
   public String format_simplify() {
+
     sort_rep();
 
-    String varname = var().name.simplify_name();
+    String varname = var().simplify_name();
 
     String result;
 
@@ -541,6 +542,14 @@ public final class OneOfScalar
             return false;
         }
       }
+
+      // Don't consider two instances of "non-null" as exclusive.
+      if (is_hashcode && num_elts == 1
+          && other.is_hashcode && other.num_elts == 1
+          && elts[0] != 0 && other.elts[0] != 0) {
+        return false;
+      }
+
       return true;
     }
 

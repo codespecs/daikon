@@ -69,6 +69,15 @@ public class EltLowerBoundFloat
 
   public static EltLowerBoundFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
+    VarInfo x = ppt.var_infos[0];
+    if ((x.derived instanceof SequenceLength)
+         && (((SequenceLength) x.derived).shift != 0)) {
+      // Do not instantiate size(a[])-1 < 50. Instead, we rely on a
+      // simpler invariant with a different constant, like
+      // "size(a[]) < 51".
+      Global.implied_noninstantiated_invariants += 1;
+      return null;
+    }
     return new EltLowerBoundFloat(ppt);
   }
 
@@ -206,12 +215,6 @@ public class EltLowerBoundFloat
 
   public boolean isObviousDerived() {
     VarInfo v = var();
-    if (v.isDerived() && (v.derived instanceof SequenceLength)) {
-      int vshift = ((SequenceLength) v.derived).shift;
-      if (vshift != 0) {
-        return true;
-      }
-    }
 
     // For each sequence variable, if this is an obvious member/subsequence, and
     // it has the same invariant, then this one is obvious.

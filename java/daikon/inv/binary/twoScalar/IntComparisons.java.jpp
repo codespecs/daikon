@@ -199,6 +199,19 @@ public final class INTEQUAL
                           + ", seqvar2=" + seqvar2);
     }
 
+#if !(defined(EQUAL) || defined(EQUALFLOAT))
+#if 0
+    // [This comment describes the absence of certain code, so it
+    // doesn't really belong in any of the generated files]
+
+    // It messes things up to avoid instantiating a comparison between
+    // "a" and "b" here, if they're going to turn out to be equal,
+    // because we get lots of duplicate invariants that differ only in
+    // containing a or b. Plus, to boot, you also get a LinearBinary
+    // invariant with a=1 and b=0 that prints as "a == b", defeating
+    // the original purpose of suppressing a stupid-looking invariant.
+#endif
+
     { // Tests involving sequence lengths.
 
       SequenceLength sl1 = null;
@@ -215,6 +228,7 @@ public final class INTEQUAL
         return null;
       }
     }
+#endif
 
 #if 0
 This code needs to be re-inserted later, to avoid instantiation of certain

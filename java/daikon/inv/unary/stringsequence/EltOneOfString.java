@@ -375,6 +375,7 @@ public final class EltOneOfString
   }
 
   public String format_simplify() {
+
     sort_rep();
 
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
@@ -502,6 +503,7 @@ public final class EltOneOfString
             return false;
         }
       }
+
       return true;
     }
 

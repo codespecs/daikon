@@ -363,6 +363,7 @@ public final class EltOneOf
   }
 
   public String format_simplify() {
+
     sort_rep();
 
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
@@ -557,6 +558,14 @@ public final class EltOneOf
             return false;
         }
       }
+
+      // Don't consider two instances of "non-null" as exclusive.
+      if (is_hashcode && num_elts == 1
+          && other.is_hashcode && other.num_elts == 1
+          && elts[0] != 0 && other.elts[0] != 0) {
+        return false;
+      }
+
       return true;
     }
 

@@ -10,22 +10,22 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if (defined(TYPELONG))
-#define CLASSNAME TwoScalarFactory
-#define CLASSSTRING "TwoScalarFactory"
-#define ISTYPE isIntegral()
-#define TYPECOMPARISON Int
-#define FUNCTIONS Functions
-#define FUNCTIONUNARY FunctionUnary
-#define LINEARBINARY LinearBinary
+#  define CLASSNAME TwoScalarFactory
+#  define CLASSSTRING "TwoScalarFactory"
+#  define ISTYPE isIntegral()
+#  define TYPECOMPARISON Int
+#  define FUNCTIONS Functions
+#  define FUNCTIONUNARY FunctionUnary
+#  define LINEARBINARY LinearBinary
 #  define INTEQUAL IntEqual
 #elif (defined(TYPEDOUBLE))
-#define CLASSNAME TwoFloatFactory
-#define CLASSSTRING "TwoFloatFactory"
-#define ISTYPE isFloat()
-#define TYPECOMPARISON Float
-#define FUNCTIONS FunctionsFloat
-#define FUNCTIONUNARY FunctionUnaryFloat
-#define LINEARBINARY LinearBinaryFloat
+#  define CLASSNAME TwoFloatFactory
+#  define CLASSSTRING "TwoFloatFactory"
+#  define ISTYPE isFloat()
+#  define TYPECOMPARISON Float
+#  define FUNCTIONS FunctionsFloat
+#  define FUNCTIONUNARY FunctionUnaryFloat
+#  define LINEARBINARY LinearBinaryFloat
 #  define INTEQUAL FloatEqual
 #endif
 

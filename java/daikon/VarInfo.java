@@ -574,6 +574,12 @@ public final class VarInfo
     return postState != null;
   }
 
+  public boolean isPrestateDerived() {
+    if (postState != null)
+      return true;
+    return name.isAllPrestate();
+  }
+
   /* [INCR] ...
   public boolean hasExactInvariant(VarInfo other) {
     Assert.assertTrue(this.varinfo_index < other.varinfo_index);
@@ -1390,6 +1396,52 @@ public final class VarInfo
     }
 
     return true;
+  }
+
+  /**
+   * Return true if invariants about this quantity are really
+   * properties of a pointer, but derived variables can refer to
+   * properties of the thing pointed to. This distinction is important
+   * when making logical statements about the object, because in the
+   * presence of side effects, the pointed-to object can change even
+   * when the pointer doesn't. For instance, we might have "obj ==
+   * orig(obj)", but "obj.color != orig(obj.color)". In such a case,
+   * isPointer() would be true of obj, and for some forms of output
+   * we'd need to translate "obj == orig(obj)" into something like
+   * "location(obj) == location(orig(obj))".
+   */
+  public boolean isPointer() {
+    // Fot the moment, I've copied this logic from some existing code
+    // without thinking carefully through its correctness: in
+    // particular, it may a bit Java-specific. --smcc
+
+    // If the program type has a higher dimension than the rep type,
+    // we are taking a hash or something.
+    if (type.pseudoDimensions() > rep_type.pseudoDimensions()) {
+      return true;
+    }
+
+    // The dimensions are the same.  If the rep type is integral but
+    // the program type isn't primitive, we have a hash, too.
+    if (rep_type.baseIsIntegral() && !type.baseIsPrimitive()) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * A wrapper around VarInfoName.simplify_name() that also uses
+   * VarInfo information to guess whether "obj" should logically be
+   * treated as just the hash code of "obj", rather than the whole
+   * object.
+   **/
+  public String simplify_name() {
+    String s = name.simplify_name();
+    if (isPointer()) {
+      s = "(hash " + s + ")";
+    }
+    return s;
   }
 
   /* [INCR]

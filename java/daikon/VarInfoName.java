@@ -350,6 +350,14 @@ public abstract class VarInfoName
     return (new NodeFinder(this, node)).inPre();
   }
 
+  /**
+   * @return true if every variable in the name is an orig(...)
+   * variable.
+   **/
+  public boolean isAllPrestate() {
+    return new IsAllPrestateVisitor(this).result();
+  }
+
   // ============================================================
   // Special producers, or other helpers
 
@@ -1774,6 +1782,88 @@ public abstract class VarInfoName
     }
   }
 
+  // An abstract base class for visitors that compute some predicate
+  // of a conjunctive nature (true only if true on all subparts),
+  // returning null for false and an arbitrary non-null Object for
+  // true.
+  public static abstract class BooleanAndVisitor
+    extends AbstractVisitor
+  {
+    private boolean result;
+
+    public BooleanAndVisitor(VarInfoName name) {
+      result = (name.accept(this) != null);
+    }
+
+    public boolean result() {
+      return result;
+    }
+
+    public Object visitFunctionOfN(FunctionOfN o) {
+      Object retval = null;
+      for (ListIterator i = o.args.listIterator(o.args.size());
+           i.hasPrevious(); ) {
+        VarInfoName vin = (VarInfoName)i.previous();
+        retval = vin.accept(this);
+        if (retval != null)
+          return null;
+      }
+      return retval;
+    }
+
+    public Object visitSubscript(Subscript o) {
+      Object temp = o.sequence.accept(this);
+      if (temp == null) return temp;
+      temp = o.index.accept(this);
+      return temp;
+    }
+
+    public Object visitSlice(Slice o) {
+      Object temp = o.sequence.accept(this);
+      if (temp == null) return temp;
+      if (o.i != null) {
+        temp = o.i.accept(this);
+        if (temp == null) return temp;
+      }
+      if (o.j != null) {
+        temp = o.j.accept(this);
+        if (temp == null) return temp;
+      }
+      return temp;
+    }
+  }
+
+  public static class IsAllPrestateVisitor
+    extends BooleanAndVisitor
+  {
+
+    public IsAllPrestateVisitor(VarInfoName vin) { super(vin); }
+
+    public Object visitSimple(Simple o) {
+      // Any var not inside an orig() isn't prestate
+      return null;
+    }
+    public Object visitPrestate(Prestate o) {
+      // orig(...) is all prestate unless it contains post(...)
+      return (new IsAllNonPoststateVisitor(o).result())
+        ? new Boolean(true) : null;
+    }
+  }
+
+  public static class IsAllNonPoststateVisitor
+    extends BooleanAndVisitor
+  {
+    public IsAllNonPoststateVisitor(VarInfoName vin) { super(vin); }
+
+    public Object visitSimple(Simple o) {
+      // Any var not inside a post() isn't poststate
+      return new Boolean(true);
+    }
+    public Object visitPoststate(Poststate o) {
+      // If we see a post(...), we aren't all poststate.
+      return null;
+    }
+  }
 
   /**
    * Use to traverse a tree, find the first (elements ...) node, and
@@ -2020,36 +2110,72 @@ public abstract class VarInfoName
   // ============================================================
   // Quantification for formatting in ESC or Simplify
 
+  public static class SimpleNamesVisitor
+    extends AbstractVisitor
+  {
+    public SimpleNamesVisitor(VarInfoName root) {
+      Assert.assertTrue(root != null);
+      simples = new HashSet();
+      root.accept(this);
+    }
+
+    /** @see #simples() **/
+    private Set simples; // [String]
+
+    /**
+     * @return Collection of simple identifiers used in this
+     * expression, as Strings. (They can be checked for conflict with
+     * the quantifier variable name).
+     **/
+    public Set simples() {
+      return Collections.unmodifiableSet(simples);
+    }
+
+    // visitor methods that get the job done
+    public Object visitSimple(Simple o) {
+      simples.add(o.name);
+      return super.visitSimple(o);
+    }
+    public Object visitElements(Elements o) {
+      return super.visitElements(o);
+    }
+    public Object visitFunctionOf(FunctionOf o) {
+      simples.add(o.function);
+      return super.visitFunctionOf(o);
+    }
+    public Object visitFunctionOfN(FunctionOfN o) {
+      simples.add(o.function);
+      return super.visitFunctionOfN(o);
+    }
+    public Object visitSubscript(Subscript o) {
+      o.sequence.accept(this);
+      return o.index.accept(this);
+    }
+    public Object visitSlice(Slice o) {
+      if (o.i != null) { o.i.accept(this); }
+      if (o.j != null) { o.j.accept(this); }
+      return o.sequence.accept(this);
+    }
+  }
+
+
   /**
    * A quantifier visitor can be used to search a tree and return all
-   * unquantified sequences (e.g. a[] or a[i..j], and also all Simple
-   * nodes (variable names).  This is useful for restating the name in
-   * terms of a quantification.
+   * unquantified sequences (e.g. a[] or a[i..j]).
    **/
   public static class QuantifierVisitor
     extends AbstractVisitor
   {
     public QuantifierVisitor(VarInfoName root) {
       Assert.assertTrue(root != null);
-      simples = new HashSet();
       unquant = new HashSet();
       root.accept(this);
     }
 
     // state and accessors
-    /** @see #simples() **/
-    private Set simples; // [Simple]
     /** @see #unquants() **/
     private Set unquant; // [Elements || Slice]
 
-    /**
-     * @return Collection of simple identifiers used in this
-     * expression (so that they can be checked for conflict with the
-     * quantifier variable name).
-     **/
-    public Set simples() {
-      return Collections.unmodifiableSet(simples);
-    }
     /**
      * @return Collection of the nodes under the root that need
      * quantification.  Each node represents an array; in particular,
@@ -2071,7 +2197,6 @@ public abstract class VarInfoName
 
     // visitor methods that get the job done
     public Object visitSimple(Simple o) {
-      simples.add(o);
       return super.visitSimple(o);
     }
     public Object visitElements(Elements o) {
@@ -2080,7 +2205,6 @@ public abstract class VarInfoName
     }
 
     public Object visitFunctionOf(FunctionOf o) {
-      simples.add(o);
       return null;
       // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
@@ -2093,7 +2217,6 @@ public abstract class VarInfoName
      * think it's working with 2-d arrays.)
      **/
     public Object visitFunctionOfN(FunctionOfN o) {
-      simples.add(o);
       return null;
       // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
@@ -2261,7 +2384,7 @@ public abstract class VarInfoName
       result.bound_vars = new Vector();
 
       // all of the simple identifiers used by these roots
-      Set simples = new HashSet(); // [Simple]
+      Set simples = new HashSet(); // [String]
 
       // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
@@ -2271,7 +2394,7 @@ public abstract class VarInfoName
         }
 
         helper[i] = new QuantifierVisitor(roots[i]);
-        simples.addAll(helper[i].simples());
+        simples.addAll(new SimpleNamesVisitor(roots[i]).simples());
       }
 
       // choose names for the indices that don't conflict, and then
@@ -2295,8 +2418,13 @@ public abstract class VarInfoName
 
           VarInfoName uq_elt = (VarInfoName) uq.get(0);
 
-          VarInfoName idx = (new FreeVar(String.valueOf(tmp++))).intern();
-          Assert.assertTrue(!simples.contains(idx), "Index variable unexpectedly used");
+          String idx_name;
+          do {
+            idx_name = String.valueOf(tmp++);
+          } while (simples.contains(idx_name));
+          Assert.assertTrue(tmp <= 'z',
+                            "Ran out of letters in quantification");
+          VarInfoName idx = (new FreeVar(idx_name)).intern();
 
           if (QuantHelper.debug.isDebugEnabled()) {
             QuantHelper.debug.debug("idx: " + idx);

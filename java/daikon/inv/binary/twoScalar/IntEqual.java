@@ -51,23 +51,6 @@ public final class IntEqual
                           + ", seqvar2=" + seqvar2);
     }
 
-    { // Tests involving sequence lengths.
-
-      SequenceLength sl1 = null;
-      if (var1.isDerived() && (var1.derived instanceof SequenceLength))
-        sl1 = (SequenceLength) var1.derived;
-      SequenceLength sl2 = null;
-      if (var2.isDerived() && (var2.derived instanceof SequenceLength))
-        sl2 = (SequenceLength) var2.derived;
-
-      // Avoid "size(a)-1 cmp size(b)-1"; use "size(a) cmp size(b)" instead.
-      if ((sl1 != null) && (sl2 != null)
-          && ((sl1.shift == sl2.shift) && (sl1.shift != 0) || (sl2.shift != 0))) {
-        // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
-        return null;
-      }
-    }
-
     return new IntEqual(ppt);
   }
 

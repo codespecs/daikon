@@ -27,7 +27,7 @@ public class ConsequentCVFPairComparatorTester extends TestCase {
                        DiffTester.newIntVarInfo("c"),
                        DiffTester.newIntVarInfo("d"),
     };
-    PptTopLevel P = Common.makePptTopLevel("P", vars);
+    PptTopLevel P = Common.makePptTopLevel("P:::OBJECT", vars);
     PptSlice slicea = new PptSlice1(P, new VarInfo[] {vars[0]});
     PptSlice sliceb = new PptSlice1(P, new VarInfo[] {vars[1]});
     PptSlice slicec = new PptSlice1(P, new VarInfo[] {vars[2]});

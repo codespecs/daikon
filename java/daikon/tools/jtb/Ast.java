@@ -541,7 +541,18 @@ public class Ast {
 
   // Result is a Vector of PptTopLevel elements
   public static Vector getMatches(PptMap ppts, String classname, String methodname, List method_params) {
-    // System.out.println("getMatches(" + classname + ", " + methodname + ", ...)");
+    boolean debug_getMatches = false;
+
+    if (debug_getMatches) System.out.println("getMatches(" + classname + ", " + methodname + ", ...)");
+    if (methodname.equals("<init>")) {
+      int dotpos = classname.lastIndexOf('.');
+      if (dotpos == -1) {
+        methodname = classname;
+      } else {
+        methodname = classname.substring(dotpos + 1);
+      }
+      if (debug_getMatches) System.out.println("getMatches(" + classname + ", " + methodname + ", ...)");
+    }
 
     Vector result = new Vector();
 
@@ -554,24 +565,26 @@ public class Ast {
       }
     }
 
-    // System.out.println("getMatch goal = " + classname + " " + methodname);
+    if (debug_getMatches) System.out.println("getMatch goal = " + classname + " " + methodname);
     for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       PptName ppt_name = ppt.ppt_name;
-      // System.out.println("getMatch considering " + ppt_name + " (" + ppt_name.getFullClassName() + "," + ppt_name.getShortMethodName() + ")");
+      if (debug_getMatches) System.out.println("getMatch considering " + ppt_name + " (" + ppt_name.getFullClassName() + "," + ppt_name.getShortMethodName() + ")");
       if (classname.equals(ppt_name.getFullClassName())
           && methodname.equals(ppt_name.getShortMethodName())) {
-        // System.out.println("getMatch: class name and method name match");
+        if (debug_getMatches) System.out.println("getMatch: class name and method name match candidate; now check args");
         // Class name and method name match.  Now check whether args match.
         // This is complicated by the fact that JTB doesn't give us
         // fully-qualified names.
         String pptFullMethodName = ppt_name.getFullMethodName();
+        if (debug_getMatches) System.out.println("pptFullMethodName = " + pptFullMethodName);
         int lparen = pptFullMethodName.indexOf('(');
         int rparen = pptFullMethodName.indexOf(')');
         Assert.assertTrue(lparen > 0);
         Assert.assertTrue(rparen > lparen);
-        String ppt_args_string = UtilMDE.
-          arglistFromJvm(pptFullMethodName.substring(lparen, rparen+1));
+        // String ppt_args_string = UtilMDE.
+        //   arglistFromJvm(pptFullMethodName.substring(lparen, rparen+1));
+        String ppt_args_string = pptFullMethodName.substring(lparen, rparen+1);
         Assert.assertTrue(ppt_args_string.startsWith("("), ppt_args_string);
         Assert.assertTrue(ppt_args_string.endsWith(")"), ppt_args_string);
         ppt_args_string = ppt_args_string.substring(1, ppt_args_string.length()-1);
@@ -581,29 +594,31 @@ public class Ast {
           ppt_args = new String[0];
         }
         if (ppt_args.length != param_types.length) {
-          // System.out.println("arg lengths mismatch: " + ppt_args.length + ", " + param_types.length);
+          if (debug_getMatches) System.out.println("arg lengths mismatch: " + ppt_args.length + ", " + param_types.length);
           continue;
         }
         boolean unmatched = false;
         for (int i=0; i < ppt_args.length; i++) {
           String ppt_arg = ppt_args[i];
           String paramtype = param_types[i];
-          // System.out.println("Comparing " + ppt_arg + " to " + paramtype + ":");
+          if (debug_getMatches) System.out.println("Comparing " + ppt_arg + " to " + paramtype + ":");
           if (typeMatch(ppt_arg, paramtype)) {
-            // System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
+            if (debug_getMatches) System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
             continue;
           }
           // Is the below test necessary since we do arglistFromJvm above?
-          String ppt_arg_nonjvm = utilMDE.UtilMDE.classnameFromJvm(ppt_arg);
+          // String ppt_arg_nonjvm = utilMDE.UtilMDE.classnameFromJvm(ppt_arg);
+          String ppt_arg_nonjvm = ppt_arg;
           if ((ppt_arg_nonjvm != null) && typeMatch(ppt_arg_nonjvm, paramtype)) {
-            // System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
+            if (debug_getMatches) System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
             continue;
           }
+          if (debug_getMatches) System.out.println("Mismatch at arg position " + i + ": " + ppt_arg + " " + paramtype);
           unmatched = true;
           break;
         }
         if (unmatched) {
-          // System.out.println("Unmatched; continuing");
+          if (debug_getMatches) System.out.println("Unmatched; continuing");
           continue;
         }
         MergeESC.debug.debug("Ast.getMatch succeeded: " + ppt.name
@@ -612,6 +627,7 @@ public class Ast {
         result.add(ppt);
       }
     }
+    if (debug_getMatches) System.out.println("getMatch => " + result);
     return result;
   }
 

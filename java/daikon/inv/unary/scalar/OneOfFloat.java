@@ -252,26 +252,10 @@ public final class OneOfFloat
   }
 
   public String format_simplify() {
-    sort_rep();
 
-    String varname = var().name.simplify_name();
+    return "format_simplify failed: " +
+      "Simplify can't express floating point constants";
 
-    String result;
-
-    {
-      result = "";
-      for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + String.valueOf(elts[i]) + ")";
-      }
-      if (num_elts > 1) {
-        result = "(OR" + result + ")";
-      } else {
-        // chop leading space
-        result = result.substring(1);
-      }
-    }
-
-    return result;
   }
 
   public void add_modified(double v, int count) {
@@ -386,6 +370,7 @@ public final class OneOfFloat
             return false;
         }
       }
+
       return true;
     }
 

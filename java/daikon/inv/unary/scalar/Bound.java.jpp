@@ -217,6 +217,15 @@ public class LOWERBOUND
 
   public static LOWERBOUND instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
+    VarInfo x = ppt.var_infos[0];
+    if ((x.derived instanceof SequenceLength)
+         && (((SequenceLength) x.derived).shift != 0)) {
+      // Do not instantiate size(a[])-1 < 50. Instead, we rely on a
+      // simpler invariant with a different constant, like
+      // "size(a[]) < 51".
+      Global.implied_noninstantiated_invariants += 1;
+      return null;
+    }
     return new LOWERBOUND(ppt);
   }
 
@@ -390,17 +399,20 @@ public class LOWERBOUND
 
   public boolean isObviousDerived() {
     VarInfo v = var();
-    if (v.isDerived() && (v.derived instanceof SequenceLength)) {
-      int vshift = ((SequenceLength) v.derived).shift;
-      if (vshift != 0) {
-        return true;
 #if defined(LOWER) || defined(LOWERFLOAT)
-      } else if (MIN1 == 0) {
-        // vshift == 0
+    if (v.isDerived() && (v.derived instanceof SequenceLength)) {
+      // Invariants with over sequence lengths with vshift != 0 are
+      // now no longer even instantiated.  However, the commented-out
+      // assertion below would break reading old .inv files, so we'll
+      // still do the check at runtime for the moment.
+      int vshift = ((SequenceLength) v.derived).shift;
+      // Assert.assertTrue(vshift == 0);
+      if (vshift == 0 && MIN1 == 0) {
+        // "size(a[]) >= 0" is obvious.
         return true;
-#endif
       }
     }
+#endif
 
     // For each sequence variable, if this is an obvious member/subsequence, and
     // it has the same invariant, then this one is obvious.

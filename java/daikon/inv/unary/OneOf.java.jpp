@@ -979,12 +979,16 @@ public final class ONEOFSCALAR
   }
 
   public String format_simplify() {
+#if defined(FLOAT)
+    return "format_simplify failed: " +
+      "Simplify can't express floating point constants";
+#else
     sort_rep();
 #if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];
 #elif defined(IS_SCALAR)
-    String varname = var().name.simplify_name();
+    String varname = var().simplify_name();
 #endif
     String result;
 #if defined(STRING) || defined(ELTSTRING)
@@ -1080,6 +1084,7 @@ public final class ONEOFSCALAR
     result = form[0] + result + form[2];
 #endif
     return result;
+#endif
   }
 
 #if defined(IS_ELT)
@@ -1329,6 +1334,15 @@ public final class ONEOFSCALAR
             return false;
         }
       }
+#if defined(SCALAR) || defined(ELT)
+      // Don't consider two instances of "non-null" as exclusive.
+      if (is_hashcode && num_elts == 1
+          && other.is_hashcode && other.num_elts == 1
+          && elts[0] != 0 && other.elts[0] != 0) {
+        return false;
+      }
+#endif
+
       return true;
     }
 #if defined(IS_NUMERIC) || defined(IS_ELT_NUMERIC)

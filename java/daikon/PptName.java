@@ -52,27 +52,29 @@ public class PptName
     // this class/method information.
 
     fullname = name.intern();
-    int seperatorPosition = name.indexOf( FileIO.ppt_tag_separator );
-    if (seperatorPosition == -1) {
-      // probably a lisp program, which was instrumented differently
-      cls = method = point = fn_name = null;
-      return;
+    int separatorPosition = name.indexOf( FileIO.ppt_tag_separator );
+    if (separatorPosition == -1) {
+      throw new Error("no ppt_tag_separator in " + name);
+      // // probably a lisp program, which was instrumented differently
+      // cls = method = point = fn_name = null;
+      // return;
     }
-    fn_name = name.substring(0, seperatorPosition).intern();
-    point = name.substring(seperatorPosition + FileIO.ppt_tag_separator.length()).intern();
+    fn_name = name.substring(0, separatorPosition).intern();
+    point = name.substring(separatorPosition + FileIO.ppt_tag_separator.length()).intern();
 
-    int dot = fn_name.lastIndexOf('.');
     int lparen = fn_name.indexOf('(');
     if (lparen == -1) {
       cls = fn_name;
       method = null;
       return;
     }
-    if (dot == -1  ||  dot >= lparen) {
-      // probably a lisp program, which was instrumented differently
-      method = fn_name;
-      cls = null;
-      return;
+    int dot = fn_name.lastIndexOf('.', lparen);
+    if (dot == -1) {
+      throw new Error("No dot in function name " + fn_name);
+      // // probably a lisp program, which was instrumented differently
+      // method = fn_name;
+      // cls = null;
+      // return;
     }
     // now 0 <= dot < lparen
     cls = fn_name.substring(0, dot).intern();

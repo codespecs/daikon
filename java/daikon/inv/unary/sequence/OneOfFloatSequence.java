@@ -292,6 +292,7 @@ public final class OneOfFloatSequence
   }
 
   public String format_simplify() {
+
     sort_rep();
 
     String result;
@@ -380,6 +381,7 @@ public final class OneOfFloatSequence
             return false;
         }
       }
+
       return true;
     }
 

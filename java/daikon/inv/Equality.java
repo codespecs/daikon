@@ -295,7 +295,6 @@ public final class Equality
 //      return result.toString();
   }
 
-
   // When A and B are pointers, don't say (EQ A B); instead say (EQ
   // (hash A) (hash B)).  If we said the former, Simplify would
   // presume that A and B were always interchangeable, which is not

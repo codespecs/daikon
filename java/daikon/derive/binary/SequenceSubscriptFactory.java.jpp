@@ -289,20 +289,27 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       // System.out.println("For " + sclvar.name + ", " + lbs.size() + " LinearBinary invariants");
       for (int i=0; i<lbs.size(); i++) {
         LINEARBINARY lb = (LINEARBINARY) lbs.elementAt(i);
+        // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b
+        // Note that var2 comes before var1; this makes the most sense
+        // if you think of them as "y" and "x".
         if (lb.core.a == 1) {
           // Don't set unconditionally, and don't break:  we want to check
           // other variables as well.
           if (lb.core.b == -1) {
             if (lb.var1() == sclvar)
+              // j = index - 1
               suppress_minus_1 = true;
             else
+              // index = j - 1, so j = index + 1
               suppress_plus_1 = true;
           }
           if (lb.core.b == 1) {
             if (lb.var1() == sclvar)
-              suppress_minus_1 = true;
-            else
+              // j = index + 1
               suppress_plus_1 = true;
+            else
+              // index = j + 1, so j = index - 1
+              suppress_minus_1 = true;
           }
           // System.out.println("For " + sclvar.name + " suppression: "
           //                    + "minus=" + suppress_minus_1

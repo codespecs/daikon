@@ -370,7 +370,7 @@ class FormatTestCase {
     ProglangType types[] = getTypes(typeString);
     VarInfo vars[] =
       getVarInfos(classToTest, types);
-    PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test", vars));
+    PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test:::OBJECT", vars));
 
     // Create an actual instance of the class
     Invariant invariantToTest = instantiateClass(classToTest, sl);

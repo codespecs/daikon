@@ -287,6 +287,7 @@ public final class OneOfStringSequence
   }
 
   public String format_simplify() {
+
     sort_rep();
 
     String result;
@@ -375,6 +376,7 @@ public final class OneOfStringSequence
             return false;
         }
       }
+
       return true;
     }
 

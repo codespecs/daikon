@@ -1033,6 +1033,13 @@ public abstract class Invariant
   */
 
   /**
+   * @return true if this invariant is only over prestate variables .
+   */
+  public boolean isAllPrestate() {
+    return ppt.allPrestate();
+  }
+
+  /**
    * @return true if this invariant is a postcondition that is implied
    * by prestate invariants.  For example, if an entry point has the
    * invariant x+3=y, and this invariant is the corresponding exit
@@ -1049,7 +1056,7 @@ public abstract class Invariant
         // If entryInvariant with orig() applied to everything matches this invariant
         if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor)) {
           if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-            PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + PrintInvariants.jvm_signature_to_java_signature(entryInvariant.ppt.parent) + ")\n");
+            PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + entryInvariant.ppt.parent.name + ")\n");
           }
           return true;
         }

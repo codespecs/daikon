@@ -239,6 +239,15 @@ public abstract class PptSlice
   }
 
 
+  /** @return true if all of this slice's variables are orig() variables. */
+  public boolean allPrestate() {
+    for (int i = 0; i < var_infos.length; i++) {
+      if (!var_infos[i].isPrestateDerived())
+        return false;
+    }
+    return true;
+  }
+
 
   /**
    * Adds the given "slice" as one that is immediately lower in the

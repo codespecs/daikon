@@ -33,10 +33,10 @@ public class XorVisitorTester extends TestCase {
                        DiffTester.newIntVarInfo("n"),
                        DiffTester.newIntVarInfo("o"),
     };
-    PptTopLevel A = Common.makePptTopLevel("A", vars);
-    PptTopLevel B = Common.makePptTopLevel("B", vars);
-    PptTopLevel C = Common.makePptTopLevel("C", vars);
-    PptTopLevel D = Common.makePptTopLevel("D", vars);
+    PptTopLevel A = Common.makePptTopLevel("A:::OBJECT", vars);
+    PptTopLevel B = Common.makePptTopLevel("B:::OBJECT", vars);
+    PptTopLevel C = Common.makePptTopLevel("C:::OBJECT", vars);
+    PptTopLevel D = Common.makePptTopLevel("D:::OBJECT", vars);
     PptSlice slicew = new PptSlice1(A, new VarInfo[] {vars[0]});
     PptSlice slicex = new PptSlice1(A, new VarInfo[] {vars[1]});
     PptSlice slicey = new PptSlice1(A, new VarInfo[] {vars[2]});

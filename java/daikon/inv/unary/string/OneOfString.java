@@ -338,9 +338,10 @@ public final class OneOfString
   }
 
   public String format_simplify() {
+
     sort_rep();
 
-    String varname = var().name.simplify_name();
+    String varname = var().simplify_name();
 
     String result;
 
@@ -454,6 +455,7 @@ public final class OneOfString
             return false;
         }
       }
+
       return true;
     }
 

@@ -60,7 +60,7 @@ class ControlledInvariantFilter extends InvariantFilter {
         // we have a printable controller, so we shouldn't print
 
         if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-          PrintInvariants.debugFiltering.debug("\tis controlled by " + contr_inv.format() + " (from " + PrintInvariants.jvm_signature_to_java_signature(contr_inv.ppt.parent) + ")\n");
+          PrintInvariants.debugFiltering.debug("\tis controlled by " + contr_inv.format() + " (from " + contr_inv.ppt.parent.name + ")\n");
         }
         return false;
       }
