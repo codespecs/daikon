@@ -18,10 +18,10 @@ public class TwoSequenceFactory {
 
     Assert.assert(var1.rep_type.isArray() && var2.rep_type.isArray());
 
-    VarInfo super1 = var1.isObviousSubSequenceOf();
+    VarInfo super1 = var1.isDerivedSubSequenceOf();
     if (super1 == null)
       super1 = var1;
-    VarInfo super2 = var2.isObviousSubSequenceOf();
+    VarInfo super2 = var2.isDerivedSubSequenceOf();
     if (super2 == null)
       super2 = var2;
 

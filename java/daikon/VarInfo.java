@@ -346,7 +346,7 @@ public class VarInfo implements Cloneable {
 
   // Returns the VarInfo for the sequence from which this was derived,
   // or null if this wasn't derived from a sequence.
-  public VarInfo isObviousSequenceMember() {
+  public VarInfo isDerivedSequenceMember() {
     if (derived == null)
       return null;
 
@@ -367,15 +367,15 @@ public class VarInfo implements Cloneable {
     }
   }
 
-  public VarInfo isObviousSubSequenceOf() {
-    // System.out.println("isObviousSubSequenceOf(" + name + "); derived=" + derived);
+  public VarInfo isDerivedSubSequenceOf() {
+    // System.out.println("isDerivedSubSequenceOf(" + name + "); derived=" + derived);
 
     if (derived == null)
       return null;
 
     if (derived instanceof SequenceScalarSubsequence) {
       SequenceScalarSubsequence sss = (SequenceScalarSubsequence) derived;
-      // System.out.println("isObviousSubSequenceOf returning " + sss.seqvar().name);
+      // System.out.println("isDerivedSubSequenceOf returning " + sss.seqvar().name);
       return sss.seqvar();
     } else {
       return null;

@@ -11,10 +11,31 @@ public class IntComparisonCore {
   public boolean can_be_lt = false;
   public boolean can_be_gt = false;
 
+  // If set, these mean that the invariant is obvious as soon as the
+  // specified flag is set.  For instance, we might set obvious_can_be_lt
+  // for "b[0] cmp max(b)".  It would be interesting and relevant if we
+  // found those quantities equal, but if the relationship can be "<", then
+  // it is "<=" (because we know they can be "="), so it's obvious and
+  // uninteresting.
+
+  // These are final for efficiency's sake.
+  public final boolean obvious_can_be_lt;
+  public final boolean obvious_can_be_gt;
+  public final boolean obvious_can_be_le;
+  public final boolean obvious_can_be_ge;
+
   Invariant wrapper;
 
   public IntComparisonCore(Invariant wrapper_) {
+    this(wrapper_, false, false, false, false);
+  }
+
+  public IntComparisonCore(Invariant wrapper_, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
     wrapper = wrapper_;
+    obvious_can_be_lt = obvious_lt;
+    obvious_can_be_gt = obvious_gt;
+    obvious_can_be_le = obvious_le;
+    obvious_can_be_ge = obvious_ge;
   }
 
   public void add_modified(int v1, int v2, int count) {
@@ -24,7 +45,11 @@ public class IntComparisonCore {
       can_be_lt = true;
     else
       can_be_gt = true;
-    if (can_be_lt && can_be_gt) {
+    if ((can_be_lt && can_be_gt)
+        || (obvious_can_be_lt && can_be_lt)
+        || (obvious_can_be_gt && can_be_gt)
+        || (obvious_can_be_le && can_be_lt && can_be_eq)
+        || (obvious_can_be_ge && can_be_gt && can_be_eq)) {
       wrapper.destroy();
       return;
     }

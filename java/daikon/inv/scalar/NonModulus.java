@@ -9,7 +9,7 @@ class NonModulus extends SingleScalar {
   // Set elements = new HashSet();
   SortedSet elements = new TreeSet(new IntegerComparator());
 
-  class IntegerComparator implements Comparator {
+  static class IntegerComparator implements Comparator {
     public int compare(Object o1, Object o2) {
       return ((Integer)o1).intValue() - ((Integer)o2).intValue();
     }

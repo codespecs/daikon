@@ -2,6 +2,10 @@ package daikon.inv;
 
 import daikon.*;
 
+import java.util.*;
+
+import utilMDE.*;
+
 // Base implementation for Invariant objects.
 // Intended to be subclassed but not to be directly instantiated.
 // I should probably rename this to "Invariant" and get rid of that interface.o
@@ -99,10 +103,24 @@ public abstract class Invariant {
    * Intended to be overridden by subclasses.
    */
   public final boolean isObvious() {
-    // We don't need to do this because we won't add obvious-derived
-    // invariants to lists in the first place.
-    // return isObviousDerived() || isObviousImplied();
-    return isObviousImplied();
+    // Actually actually, we'll eliminate invariants as they become obvious
+    // rather than on output; the point of this is to speed up computation.
+    // // Actually, we do need to check isObviousDerived after all because we
+    // // add invariants that might be obvious, but might also turn out to be
+    // // even stronger (and so not obvious).  We don't know how the invariant
+    // // turns out until after testing it.
+    // // // We don't need to check isObviousDerived because we won't add
+    // // // obvious-derived invariants to lists in the first place.
+    return isObviousDerived() || isObviousImplied();
+  }
+
+  /**
+   * Returns true if this invariant is necessarily true, due to being implied
+   * by other (more basic or preferable to report) invariants.
+   * Intended to be overridden by subclasses.
+   */
+  public boolean isObviousDerived() {
+    return false;
   }
 
   /**
@@ -137,6 +155,39 @@ public abstract class Invariant {
   // public abstract void add(ValueTuple vt, int count);
 
   // public abstract String toString();
+
+
+  // This should perhaps be merged with some kind of PptSlice comparator.
+  /**
+   * Note: this comparator imposes orderings that are inconsistent with equals.
+   * That is, it may return 0 if the objects are not equal (but do format
+   * identically).
+   */
+  public static class InvariantComparatorForPrinting implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      Invariant inv1 = (Invariant)o1;
+      Invariant inv2 = (Invariant)o2;
+      Assert.assert(inv1.ppt.parent == inv2.ppt.parent);
+      VarInfo[] vis1 = inv1.ppt.var_infos;
+      VarInfo[] vis2 = inv2.ppt.var_infos;
+      int arity_cmp = vis1.length - vis2.length;
+      if (arity_cmp != 0)
+        return arity_cmp;
+      for (int i=0; i<vis1.length; i++) {
+        int tmp = vis1[i].varinfo_index - vis2[i].varinfo_index;
+        if (tmp != 0)
+          return tmp;
+      }
+      String format1 = inv1.format();
+      String format2 = inv2.format();
+      if ((format1 == null) || (format2 == null))
+        return 0;
+      return format1.compareTo(format2);
+    }
+  }
+
 
 }
 

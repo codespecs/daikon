@@ -11,6 +11,8 @@ import java.util.*;
 
 public class Daikon {
 
+  static final boolean disable_splitting = false;
+
   // The two arguments to daikon.Daikon are a comma-separated list of
   // declaration files, and a comma-separated list of data trace files.
   //
@@ -49,8 +51,10 @@ public class Daikon {
       String ppt_name = (String) itor.next();
       PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
       ppt.initial_processing();
-      Splitter[] pconds = ppt.getSplitters();
-      ppt.addConditions(pconds);
+      if (! disable_splitting) {
+        Splitter[] pconds = ppt.getSplitters();
+        ppt.addConditions(pconds);
+      }
       ppt.print_invariants_maybe();
     }
 

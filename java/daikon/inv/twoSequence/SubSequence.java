@@ -55,16 +55,16 @@ class SubSequence extends TwoSequence {
 
   // This is abstracted out so it can be called by SuperSequence as well.
   static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
-    // System.out.println("static SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") " + subvar.isObviousSubSequenceOf() + " " + supervar.isObviousSubSequenceOf());
+    // System.out.println("static SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() + " " + supervar.isDerivedSubSequenceOf());
 
-    VarInfo subvar_super = subvar.isObviousSubSequenceOf();
+    VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == null)
       return false;
 
     if ((subvar_super == supervar)
         // whatever we come up with, it will be obvious from the
         // IntComparison relationship over the lengths.
-        || (subvar_super == supervar.isObviousSubSequenceOf()))
+        || (subvar_super == supervar.isDerivedSubSequenceOf()))
       return true;
 
     return false;

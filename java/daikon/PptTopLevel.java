@@ -1213,7 +1213,7 @@ class PptTopLevel extends Ppt {
 
   public void addConditions(Splitter[] splits) {
     if (splits == null) {
-      System.out.println("No splits for " + name);
+      // System.out.println("No splits for " + name);
       return;
     }
 
@@ -1242,11 +1242,16 @@ class PptTopLevel extends Ppt {
         pconds[i].add(vt_trimmed.shallowcopy(), count);
     }
 
+    int parent_num_samples = num_samples();
     for (int i=0; i<num_pconds; i++) {
-      views_cond.add(pconds[i]);
+      // Don't bother with this conditioned view if it contains all or no samples.
+      int this_num_samples = pconds[i].num_samples();
+      if ((this_num_samples > 0) && (this_num_samples < parent_num_samples))
+        views_cond.add(pconds[i]);
     }
-    for (int i=0; i<num_pconds; i++) {
-      pconds[i].initial_processing();
+    for (int i=0; i<views_cond.size(); i++) {
+      PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+      pcond.initial_processing();
     }
 
   }
@@ -1270,6 +1275,17 @@ class PptTopLevel extends Ppt {
       };
     return new UtilMDE.MergedIterator(itorOfItors);
   }
+
+  static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+
+  // This is certainly not the most efficient way to do this; fix later.
+  Iterator invariants_sorted_for_printing() {
+    TreeSet ts = new TreeSet(icfp);
+    for (Iterator itor = invariants(); itor.hasNext(); )
+      ts.add(itor.next());
+    return ts.iterator();
+  }
+
 
 
   // In original (Python) implementation, known as print_invariants_ppt.
@@ -1337,7 +1353,7 @@ class PptTopLevel extends Ppt {
       }
     }
 
-    for (Iterator inv_itor = invariants() ; inv_itor.hasNext() ; ) {
+    for (Iterator inv_itor = invariants_sorted_for_printing() ; inv_itor.hasNext() ; ) {
       Invariant inv = (Invariant) inv_itor.next();
 
       // // I could imagine printing information about the PptSliceGeneric

@@ -12,7 +12,7 @@ public class SequenceScalarSubsequence extends BinaryDerivation {
   public VarInfo seqvar() { return var_info1; }
   public VarInfo sclvar() { return var_info2; }
 
-  private final int index_shift;
+  public final int index_shift;
 
   public SequenceScalarSubsequence(VarInfo vi1, VarInfo vi2, boolean less1) {
     super(vi1, vi2);

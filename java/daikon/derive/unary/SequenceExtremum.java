@@ -13,7 +13,8 @@ import utilMDE.*;
 // originally from pass1.
 public class SequenceExtremum extends UnaryDerivation {
 
-  int index;			// negative if counting from end
+  public final int index;       // negative if counting from end
+  // array length required for the subscript to be meaningful:  (ie, 1 or 2)
   int minLength;
 
   public SequenceExtremum(VarInfo vi, int index_) {
