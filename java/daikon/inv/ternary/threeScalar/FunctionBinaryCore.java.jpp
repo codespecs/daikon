@@ -144,6 +144,14 @@ public final class CLASSNAME
     values_cache.add(x, y, z);
   }
 
+  /**
+   * Don't allow suppression because it will not allow us to track equal_values
+   * and values_cache which are needed for computeProbability
+   */
+  public boolean inProcessSuppressOk() {
+    return false;
+  }
+
 
   public double computeProbability() {
     if (wrapper.falsified) {
