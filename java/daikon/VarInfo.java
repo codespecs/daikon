@@ -45,7 +45,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   // Only public so that PptTopLevel can access it.
   // Clients should use isCanonical() or canonicalRep() or equalTo().
   public VarInfo equal_to;      // the canonical representative to which
-                                // this variable is equal; may be itself.
+                                // this variable is equal; may be itself;
+                                // should not be null.
   public boolean is_dynamic_constant;  // required if dynamic_constant==null
   public Object dynamic_constant;
   VarInfo sequenceSize;         // if null, not yet computed (or this VarInfo
@@ -443,6 +444,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         PptTopLevel controller = (PptTopLevel) controllers.next();
         VarInfo controller_var = controller.findVar(name);
         if (controller_var != null) {
+          // System.out.println("Considering " + name + " in " + controller.name);
+          // This can fail if there are no :::OBJECT program points in the .dtrace file.
           Vector this_equalTo = controller_var.equal_to.equalTo();
           for (int i=0; i<this_equalTo.size(); i++) {
             controlling_equalTo.add(((VarInfo)this_equalTo.elementAt(i)).name);
