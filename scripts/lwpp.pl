@@ -454,7 +454,9 @@ sub _lackwit {
     if (is_struct_field($variable)) {
       return "";
     } else {
-      die_and_restore "FAILURE: BackEnd failed on $function:$variable";
+#      die_and_restore "FAILURE: BackEnd failed on $function:$variable";
+      print "warning: BackEnd failed on $function:$variable.  continuing.\n";
+      return "";
     }
   }
   return $result;
