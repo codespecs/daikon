@@ -458,10 +458,11 @@ doc-invariant: ../doc/invariants-doc.texinfo
 
 doc-dkconfig: ../doc/config-options.texinfo
 
-daikon/config/configurable.txt: $(JAVA_FILES)
-	javadoc -doclet daikon.config.ParameterDoclet \
-		--list $@ \
-		$(JDOC_FILES)
+# This file is no longer used; there's no point in keeping it around.
+# daikon/config/configurable.txt: $(JAVA_FILES)
+# 	javadoc -doclet daikon.config.ParameterDoclet \
+# 		--list $@ \
+# 		$(JDOC_FILES)
 
 ../doc/category-options.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDocletCategory \
