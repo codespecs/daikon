@@ -1201,11 +1201,17 @@ public final class TestUtilMDE extends TestCase {
       for (int i=0; i<100; i++) {
         BitSet b1 = randomBitSet(r.nextInt(100), r);
         BitSet b2 = randomBitSet(r.nextInt(100), r);
+        BitSet b3 = randomBitSet(r.nextInt(100), r);
         BitSet intersection = (BitSet) b1.clone();
         intersection.and(b2);
         int card = intersection.cardinality();
         for (int j=0; j<100; j++) {
           Assert.assertTrue(UtilMDE.intersectionCardinalityAtLeast(b1, b2, j) == (card >= j));
+        }
+        intersection.and(b3);
+        card = intersection.cardinality();
+        for (int j=0; j<100; j++) {
+          Assert.assertTrue(UtilMDE.intersectionCardinalityAtLeast(b1, b2, b3, j) == (card >= j));
         }
       }
     }

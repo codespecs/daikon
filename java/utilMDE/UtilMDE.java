@@ -53,6 +53,32 @@ public final class UtilMDE {
     return (intersection.cardinality() >= i);
   }
 
+  /**
+   * Returns true if the cardinality of the intersection of the two
+   * BitSets is at least the given value.
+   **/
+  public static boolean intersectionCardinalityAtLeast(BitSet a, BitSet b, BitSet c, int i) {
+    // See comments in intersectionCardinalityAtLeast(BitSet, BitSet, int).
+    // This is a copy of that.
+
+    int size = Math.min(a.length(), b.length());
+    size = Math.min(size, c.length());
+    if (size > 10*i) {
+      // The size is more than 10 times the limit.  So first try processing
+      // just a subset of the bits (4 times the limit).
+      BitSet intersection = a.get(0, 4*i);
+      intersection.and(b);
+      intersection.and(c);
+      if (intersection.cardinality() >= i) {
+        return true;
+      }
+    }
+    BitSet intersection = (BitSet) a.clone();
+    intersection.and(b);
+    intersection.and(c);
+    return (intersection.cardinality() >= i);
+  }
+
 
   ///
   /// BufferedFileReader
