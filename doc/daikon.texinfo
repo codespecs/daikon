@@ -40,9 +40,21 @@
 Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
-@contents
+@html
+<img src="images/daikon-logo.gif" alt="Daikon logo">
 
-@ifnottex
+<h1>Daikon invariant detector</h1>
+
+This is the manual for the Daikon invariant detector.
+
+@end html
+
+@c Putting this lower in the HTML version looks a little bit strange,
+@c but it's acceptable. 
+@ifnothtml
+@contents
+@end ifnothtml
+
 @node    Top, Introduction, (dir), (dir)
 @comment node-name, next,          previous, up
 
@@ -55,7 +67,12 @@ This is the manual for the Daikon invariant detector.
 * Daikon output::               
 * Bugs::                        
 * Details::                     
+* File formats::                
 
+@ifhtml
+@contents
+@end ifhtml
+@ifnothtml
 @detailmenu
  --- The Detailed Node Listing ---
 
@@ -145,13 +162,23 @@ Details
 * License::                     
 * Credits::                     
 
+File formats
+
+* Conventions::                 
+* Declaration files::           
+* Data trace files::            
+* Examples::                    
+
+Examples
+
+* Example declaration file::    
+* Example data trace file::     
+
 @end detailmenu
+@end ifnothtml
 @end menu
 
-@end ifnottex
-
 @node    Introduction, Installing, Top, Top
-@comment node-name,     next,          previous, up
 @chapter Introduction
 
 The @uref{foo/bar, ,Daikon invariant detector}
@@ -166,7 +193,6 @@ values.  Front ends (@pxref{Instrumentation}) exist for Java and for C
 and C++.
 
 @node    Installing, Detecting invariants, Introduction, Top
-@comment node-name,     next,          previous, up
 @chapter Installing Daikon
 
 In order to install Daikon, perform the following steps.
@@ -234,7 +260,6 @@ set path = (@var{parent}/daikon/bin $path)
 @end menu
 
 @node    Installing dfej, Installing dfec, Installing, Installing
-@comment node-name,     next,          previous, up
 @section Installing the Daikon front end for Java
 
 
@@ -305,7 +330,6 @@ build a new binary.
 @end enumerate
 
 @node    Installing dfec, Requirements, Installing dfej, Installing
-@comment node-name,     next,          previous, up
 @section Installing the Daikon front end for C/C++
 
 
@@ -363,7 +387,6 @@ This creates the dfec executable,  @file{release_2.44/bin/dfec}.
 @end menu
 
 @node    Requirements,  , Installing dfec, Installing
-@comment node-name,     next,          previous, up
 @section Requirements for running Daikon
 
 
@@ -384,7 +407,6 @@ detect invariants in Java programs, is written in C++, and sources are
 distributed with Daikon.)
 
 @node    Detecting invariants, Daikon output, Installing, Top
-@comment node-name,     next,          previous, up
 @chapter Using Daikon to detect invariants
 
 Detecting invariants involves three steps:
@@ -414,7 +436,6 @@ textually or via a graphical user interface.
 @end menu
 
 @node    Instrumentation, Run the instrumented program, Detecting invariants, Detecting invariants
-@comment node-name,     next,          previous, up
 @section Instrumentation
 
 Instrumentation performs two actions:
@@ -440,7 +461,6 @@ Java front end is more complete and robust than the C/C++ front end.
 @end menu
 
 @node    Java programs, C programs, Instrumentation, Instrumentation
-@comment node-name,     next,          previous, up
 @subsection Java programs
 
 Note: In order to use @file{dfej}, the Daikon front end for Java, you must
@@ -476,7 +496,6 @@ See the @file{dfej} usage message for more information.
 @end menu
 
 @node    Scope of instrumentation,  , Java programs, Java programs
-@comment node-name,     next,          previous, up
 @subsubsection Controlling what classes are instrumented
 
 Only the specified Java files are instrumented; other files are
@@ -514,7 +533,6 @@ find . -name '*.class' -print
 
 
 @node    C programs,  , Java programs, Instrumentation
-@comment node-name,     next,          previous, up
 @subsection C programs
 
 dfec works only on ANSI/ISO C, not on K&R C.  If you wish to instrument
@@ -577,7 +595,6 @@ you can run Daikon:
 @end menu
 
 @node    Limitations,  , C programs, C programs
-@comment node-name,     next,          previous, up
 @subsubsection Limitations
 
 @c 4/10/2001
@@ -623,7 +640,6 @@ containing two variables of the same name.
 
 
 @node    Run the instrumented program, Detect invariants, Instrumentation, Detecting invariants
-@comment node-name,     next,          previous, up
 @section Run the instrumented program
 
 To create data trace files, run the instrumented program over some test
@@ -656,7 +672,6 @@ This step fixes up some potential problems that may appear in the
 @end menu
 
 @node    Run Java,  , Run the instrumented program, Run the instrumented program
-@comment node-name,     next,          previous, up
 @subsection Details on running instrumented Java programs
 
 After instrumentation, there are two versions of your Java program:  the
@@ -674,7 +689,6 @@ appears early on your class path, or you can add the relevant
 @end menu
 
 @node    Java applets,  , Run Java, Run Java
-@comment node-name,     next,          previous, up
 @subsubsection Java applets
 
 In order to run an applet, you must take two additional steps.
@@ -711,7 +725,6 @@ Finally, run the applet:
 
 
 @node    Detect invariants,  , Run the instrumented program, Detecting invariants
-@comment node-name,     next,          previous, up
 @section Detect invariants in the data trace files
 
 Run the Daikon invariant detector via the command
@@ -729,7 +742,6 @@ created when instrumenting the program that is read.
 
 
 @node    Daikon output, Bugs, Detecting invariants, Top
-@comment node-name,     next,          previous, up
 @chapter Daikon output
 
 
@@ -739,7 +751,6 @@ created when instrumenting the program that is read.
 @end menu
 
 @node    Interpreting output, GUI, Daikon output, Daikon output
-@comment node-name,     next,          previous, up
 @section Interpreting Daikon output
 
 In the output, the "_orig" suffix refers to the original value of a formal
@@ -774,7 +785,6 @@ When "a" is an array, then
 
 
 @node    GUI,  , Interpreting output, Daikon output
-@comment node-name,     next,          previous, up
 @section Tree-structured invariant browser
 
 
@@ -793,7 +803,6 @@ invariants containing a certain variable).
 @end menu
 
 @node    Invoking GUI, Using GUI, GUI, GUI
-@comment node-name,     next,          previous, up
 @subsection Starting the invariant browser
 
 To use the GUI, first make a @file{.inv} file by invoking Daikon with
@@ -812,7 +821,6 @@ asks you to choose a @file{.inv} file for viewing.
 
 
 @node    Using GUI,  , Invoking GUI, GUI
-@comment node-name,     next,          previous, up
 @subsection Using the invariant browser
 
 
@@ -831,7 +839,6 @@ Display.
 @end menu
 
 @node    Invariants Display, Control panel, Using GUI, Using GUI
-@comment node-name,     next,          previous, up
 @subsubsection Invariants Display
 
 @ifnotinfo
@@ -874,7 +881,6 @@ to sort the column in reverse order.
 @end table
 
 @node    Control panel,  , Invariants Display, Using GUI
-@comment node-name,     next,          previous, up
 @subsubsection Control panel
 
 The Control Panel determines which invariants are displayed.
@@ -978,7 +984,6 @@ of the variables in the variables list.
 
 
 @node    Bugs, Details, Daikon output, Top
-@comment node-name,     next,          previous, up
 @chapter In case of trouble
 
 
@@ -993,7 +998,6 @@ of the variables in the variables list.
 @end menu
 
 @node    dfej problems, Instrumentation problems, Bugs, Bugs
-@comment node-name,     next,          previous, up
 @section Problems with dfej
 
 
@@ -1003,7 +1007,6 @@ of the variables in the variables list.
 @end menu
 
 @node    dfej compilation problems, dfej invocation problems, dfej problems, dfej problems
-@comment node-name,     next,          previous, up
 @subsection Problems compiling dfej
 
 
@@ -1025,7 +1028,6 @@ again.
 
 
 @node    dfej invocation problems,  , dfej compilation problems, dfej problems
-@comment node-name,     next,          previous, up
 @subsection Problems running dfej
 
 If you get an error like
@@ -1053,12 +1055,10 @@ your application, but not those with anonymous classes.
 
 
 @node    Instrumentation problems, Daikon problems, dfej problems, Bugs
-@comment node-name,     next,          previous, up
 @section Problems running instrumented code
 
 
 @node    Daikon problems, Other problems, Instrumentation problems, Bugs
-@comment node-name,     next,          previous, up
 @section Problems running Daikon
 
 
@@ -1069,7 +1069,6 @@ your application, but not those with anonymous classes.
 @end menu
 
 @node    Abnormal termination, Out of memory, Daikon problems, Daikon problems
-@comment node-name,     next,          previous, up
 @subsection Abnormal termination warnings
 
 
@@ -1096,7 +1095,6 @@ the nonce technique.  Otherwise, it uses the stack technique.
 
 
 @node    Out of memory,  , Abnormal termination, Daikon problems
-@comment node-name,     next,          previous, up
 @subsection Out of memory
 
 If Daikon runs out of memory, generating a message like
@@ -1119,7 +1117,6 @@ Any output generated before the out-of-memory error is perfectly valid.
 
 
 @node    Other problems, Getting help, Daikon problems, Bugs
-@comment node-name,     next,          previous, up
 @section Other problems
 
 @menu
@@ -1127,7 +1124,6 @@ Any output generated before the out-of-memory error is perfectly valid.
 @end menu
 
 @node    Large dtrace files,  , Other problems, Other problems
-@comment node-name,     next,          previous, up
 @subsection Large .dtrace files
 
 Running code instrumented by dfej can result in very large
@@ -1180,7 +1176,6 @@ files.  There are several solutions to this problem.
 
 
 @node    Getting help, Known bugs, Other problems, Bugs
-@comment node-name,     next,          previous, up
 @section Getting more help
 
 If you have any questions, can suggest ways to improve the documentation,
@@ -1216,7 +1211,6 @@ much more likely to be corrected.
 @end menu
 
 @node    Known bugs, Further reading, Getting help, Bugs
-@comment node-name,     next,          previous, up
 @section Known bugs
 
 The following problems are already known.  (You may report them again,
@@ -1242,7 +1236,6 @@ to encourage us to release the fix faster, if you like.)
 @end itemize
 
 @node    Further reading,  , Known bugs, Bugs
-@comment node-name,     next,          previous, up
 @section Further reading
 
 See the @url{http://sdg.lcs.mit.edu/daikon/, Daikon homepage}[
@@ -1258,8 +1251,7 @@ Dynamic invariant detection is further described in several papers, including:
 @end itemize
 
 
-@node    Details,  , Bugs, Top
-@comment node-name,     next,          previous, up
+@node    Details, File formats, Bugs, Top
 @chapter Details
 
 
@@ -1270,7 +1262,6 @@ Dynamic invariant detection is further described in several papers, including:
 @end menu
 
 @node    License, Credits, Details, Details
-@comment node-name,     next,          previous, up
 @section License
 
 
@@ -1294,7 +1285,6 @@ for its users.
 
 
 @node    Credits,  , License, Details
-@comment node-name,     next,          previous, up
 @section Credits
 
 The following individuals have contributed to Daikon:
@@ -1316,6 +1306,340 @@ for which we are grateful.
 
 This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
 an IBM Cooperative Fellowship, and a gift from Edison Design Group.
+
+
+@node     File formats,  , Details, Top
+@appendix File formats
+
+This chapter contains information about the file format of Daikon's data
+trace and declaration files.
+
+Data trace files contain runtime values for variables at particular program
+points.  Each record in a data trace file represents one execution of a
+program point.  The record names a program point and lists a number of
+variables and their runtime values.  This dynamic information about values
+at a program point is generated when an instrumented program is run.  By
+convention, data trace files have the suffix ".dtrace".
+
+A declaration file describes the structure of the data trace file; it lists
+the program points that may appear in the data trace file and, for each
+program point, which variables appear at that program point.  This static
+lexical information about a program point can be determined when a program
+is instrumented.  By convention, declaration files have the suffix ".decls"
+or ".decl".
+
+(Actually, both declarations and data trace records may appear together in
+a single file.  In that case, the program point information must precede
+the first appearance of values at that point, but it is not required that
+all the program point declarations appear before any values are written to
+the file.  This is intended to provide flexibility for instrumentation
+implementations.  However, it is encouraged to place declarations in
+different files than data traces.)
+
+
+@menu
+* Conventions::                 
+* Declaration files::           
+* Data trace files::            
+* Examples::                    
+@end menu
+
+@node    Conventions, Declaration files, File formats, File formats
+@section File format conventions
+
+
+Daikon files are textual, to permit easier viewing and editing by humans.
+Each record is separated by one or more blank line.
+To permit easier parsing by programs, each piece of information in a record
+is on a separate line
+
+Any line starting with a pound sign (#) is ignored as a comment (except
+inside a record, where comments are not permitted)
+
+
+@node    Declaration files, Data trace files, Conventions, File formats
+@section Declaration files
+
+
+A declaration file consists of a sequence of program point declarations
+separated by blank lines.
+
+The format of the program point information is:
+@example
+  DECLARE
+  program-point-name
+  varname1
+  declared-type1
+  representation-type1 [= constant-value1]
+  comparable1
+  varname2
+  declared-type2
+  representation-type2 [= constant-value2]
+  comparable2
+  ...
+@end example
+
+Program point information includes:
+ * name ("tag") of this program point, an arbitrary string containing no
+   tab or newline characters.  
+   By convention, the entry and exit points for a function have names of
+   a special form so that they can be associated with one another.
+   (Currently, those names end with ":::BEGIN" and ":::END".)  This
+   convention permits instrumenters not to remember the original values of
+   variables and output them at the procedure exit point.
+ * for each variable:
+    * name: an arbitrary, uninterpreted string containing no tabs or newlines.
+    * types, as a human-readable strings
+       * declared type:  this is what the programmer used in the
+         declaration of the variable.  
+	 This is currently uninterpreted (that is, the strings are compared
+	 for equality but not destructed into their constituent parts).
+       * representation type:  this describes what will appear in the data
+         trace file.  For instance, the declared type might be "char[]" but
+         the representation type might be "String".  Or, the declared type
+         might be "Object" but the representation type might be "int"
+	 (because only the object's hashcode, not the object itself, is
+         written to the data trace file).
+         The representation type is currently contrained to be integer,
+         string, or array of integer or string.
+         The representation type may optionally be followed by an equals
+	 sign and a value; in that case, the variable is known to have a
+         compile-time constant value and should be omitted from the data
+         trace file.
+      Arrays types are followed by square brackets:  "int[]", "char[][]".
+    * comparable variables, also known as "Lackwit types".  These indicate
+      which other variables are comparable to this one, which is typically
+      obtained via type-inference based analysis.  There are two formats,
+      "implicit" and "explicit", for this information.  (See below for how
+      to specify which format the information is in.)
+       * An implicit lackwit type is an arbitrary string, and comparisons
+	 succeed exactly if the two lackwit types are identical.
+       * An explicit lackwit type is a list of other variables, and
+	 comparisons succeed if each variable is in the list of the other.
+	 It takes the form of
+	  * for scalar types:  A space-separated list of all the other
+	    variables mentioned in this record that are comparable to this
+	    one.
+	  * for array types:  The lists are surrounded by parentheses, and
+	    variables are given in parentheses for indices, like so:
+            "(a b c)[(d e)][(f g h)]".
+            The elements and indices of an array are named according to 
+            %s-element and %s-index%d, where the indices are numbered
+	    starting with 1.
+          * If no information is supplied (ie, this line is blank), then
+	    the variable is compared to all other variables of the same type.
+ * Future enhancements:
+    * permit variables to be omitted if they haven't changed (but always
+      outputting the bit permits us to write a sanity checker)
+    * permit variables to appear in any order (not sure this is so worthwhile)
+    * specify which .decl files should be used (including their pathnames
+      and/or MD5 hashes)
+
+A declaration file optionally starts with a "VarComparability" record,
+which might look like the following:
+  VarComparability
+  explicit
+This controls how the comparability field in the declarations is interpreted.
+
+
+
+@node    Data trace files, Examples, Declaration files, File formats
+@section Data trace files
+
+
+The format of the value information is:
+@example
+  program-point-name
+  varname1
+  var-value-1
+  var-modified-1
+  varname2
+  var-value-2
+  var-modified-2
+  ...
+@end example
+
+Value information includes:
+ * name of the program point
+ * for each variable:
+    * name
+    * value
+       * integer: sequence of digits, optionally preceded by a minus sign
+       * string: charcters surrounded by double-quotes; internal
+	 double-quotes and backslashes are escaped by a backslash
+       * array: elements are listed on one line, separated by spaces.
+         The elements may optionally be enclosed in [square brackets]; this
+         is encouraged for clarity.
+    * modified? (0 or 1)
+      This value is 0 if the variable has not been assigned to since the
+      last time this program point was executed, and 1 if the variable has
+      been assigned to since then.  It is safe for an implementation to
+      always set it to 1.  It is also safe to always set it to 0, if the
+      modbit-munge.pl script is run on the resulting .dtrace file to fix up
+      the modbits.
+   The variables should appear in the same order as they did in the
+   declaration of the program point, without omissions or additions.
+
+As a special case, the first variable in a record may be
+"this_invocation_nonce", in which case there is no modification
+information, only a value.  The nonce is used to match up procedure entries
+(whose names end with ":::ENTER") with procedure exits (whose names end
+with ":::EXIT"); this is necessary in concurrent systems because there may
+be several invocations of a procedure active at once and they do not
+necessarily follow a stack discipline, being exited in the reverse order of
+entry.  For non-concurrent systems, this nonce is not necessary and may be
+omitted.
+
+
+@node    Examples,  , Data trace files, File formats
+@section Examples
+
+
+Here are two files, p180-15.1.1.decls and (part of) p180-15.1.1.dtrace, for
+a program which sums the values in an integer array.
+
+@menu
+* Example declaration file::    
+* Example data trace file::     
+@end menu
+
+@node    Example declaration file, Example data trace file, Examples, Examples
+@subsection Example declaration file
+
+This is the file @file{p180-15.1.1.decls}.
+
+@example
+VarComparability
+explicit
+
+DECLARE
+P180-15.1.1:::LOOP-389
+B
+int[]
+int[]
+(S B-element)[(B-index1 I N)]
+N
+int
+int
+(B-index1 I N)
+I
+int
+int
+(B-index1 I N)
+S
+int
+int
+(S B-element)
+
+DECLARE
+P180-15.1.1:::EXIT
+B
+int[]
+int[]
+(S B-element)[(B-index1 I N)]
+N
+int
+int
+(B-index1 I N)
+I
+int
+int
+(B-index1 I N)
+S
+int
+int
+(S B-element)
+
+DECLARE
+P180-15.1.1:::ENTER
+B
+int[]
+int[]
+(S B-element)[(B-index1 I N)]
+N
+int
+int
+(B-index1 I N)
+
+DECLARE
+TEST-P180-15.1.1:::EXIT
+
+DECLARE
+TEST-P180-15.1.1:::ENTER
+
+DECLARE
+TEST-P180-15.1.1-E:::EXIT
+
+DECLARE
+TEST-P180-15.1.1-E:::ENTER
+
+DECLARE
+TEST-P180-15.1.1-H:::EXIT
+
+DECLARE
+TEST-P180-15.1.1-H:::ENTER
+@end example
+
+
+@node    Example data trace file,  , Example declaration file, Examples
+@subsection Example data trace file
+
+This is the first part of file @file{p180-15.1.1.dtrace}.
+
+
+@example
+P180-15.1.1:::ENTER
+B
+92 56 -96 -49 76 92 -3 -88
+1
+N
+8
+1
+
+P180-15.1.1:::LOOP-389
+B
+92 56 -96 -49 76 92 -3 -88
+1
+N
+8
+1
+I
+0
+1
+S
+0
+1
+
+P180-15.1.1:::LOOP-389
+B
+92 56 -96 -49 76 92 -3 -88
+0
+N
+8
+0
+I
+1
+1
+S
+92
+1
+
+P180-15.1.1:::LOOP-389
+B
+92 56 -96 -49 76 92 -3 -88
+0
+N
+8
+0
+I
+2
+1
+S
+148
+1
+
+...
+@end example
 
 
 @c @node    Concept Index,  , Detecting invariants, Top
