@@ -494,7 +494,7 @@ public abstract class PptSlice
 
           slice.addInvariant(reborn);
           // Attempt to suppress the new invariant in lower levels
-          slice.parent.attemptSuppression(reborn, true);
+          // slice.parent.attemptSuppression(reborn, true);
         }
       }
     }
@@ -708,8 +708,6 @@ public abstract class PptSlice
     for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
       Invariant inv = (Invariant)overInvs.next();
       if (omitTypes['r'] && inv.isReflexive())
-        toRemove.add(inv);
-      else if (omitTypes['s'] && inv.getSuppressor() != null)
         toRemove.add(inv);
     }
     removeInvariants(toRemove);

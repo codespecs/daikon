@@ -248,14 +248,6 @@ public final class MergeInvariants {
       ppt.postProcessEquality();
     }
 
-    // Suppression
-    debugProgress.fine ("Suppression processing");
-    Daikon.dkconfig_use_suppression_optimization = true;
-    for (Iterator itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.suppressAll (false);
-    }
-
     // Implications
     stopwatch.reset();
     System.out.println("Creating implications ");
