@@ -657,7 +657,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         // Do not attempt to deal with anything but y=x+b.
         lb = null;
       } else {
-        System.out.println("jusified LinearBinary: " + lb.format());
+        // System.out.println("justified LinearBinary: " + lb.format());
         // lb.b is var2()-var1().
         index_vari_minus_seq = (vari_is_var1 ? -lb.core.b : lb.core.b);
         index_vari_minus_seq += vari_shift - varj_shift;

@@ -349,6 +349,14 @@ public final class Daikon {
         PptTopLevel exit_ppt
           = new PptTopLevel(enter_ppt.ppt_name.makeExit().getName(),
                             new VarInfo[0]);
+        // {
+        //   System.out.println("Adding " + exit_ppt.name + " because of multiple expt_ppts for " + enter_ppt.name + ":");
+        //   for (int i=0; i<exits.size(); i++) {
+        //     Ppt exit = (Ppt) exits.elementAt(i);
+        //     System.out.print(" " + exit.name);
+        //   }
+        //   System.println();
+        // }
         new_ppts.add(exit_ppt);
         exit_ppt.entry_ppt = enter_ppt;
         // exit_ppt.num_samples = enter_ppt.num_samples;
@@ -364,6 +372,5 @@ public final class Daikon {
     }
 
   }
-
 
 }

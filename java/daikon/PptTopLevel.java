@@ -1239,7 +1239,11 @@ public class PptTopLevel extends Ppt {
         // Not "inv.format" because that is null if not justified.
         // System.out.println("Is " + (IsEquality.it.accept(inv) ? "" : "not ")
         //                    + "equality: " + inv.repr());
-        if (IsEquality.it.accept(inv)) {
+        if (IsEquality.it.accept(inv)
+            // added this extra test 3/10/2001 in hopes of avoiding
+            // assertion failures below with non-transitive equals.
+            // (It didn't help, though.)
+            && (inv.justified())) {
           VarInfo var1 = binary_view.var_infos[0];
           VarInfo var2 = binary_view.var_infos[1];
           Assert.assert(var1.varinfo_index < var2.varinfo_index);
@@ -1268,13 +1272,18 @@ public class PptTopLevel extends Ppt {
           } else {
             // This is implied by the if-then sequence.
             // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
-            Assert.assert(((Daikon.check_program_types
+            if (!((Daikon.check_program_types
                             && (! var1.type.comparable(var2.type)))
-                           || (var1.equal_to == var2.equal_to))
-                          // This is ordinarily commented out, to save
-                          // time in the common case.
-                          , "Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") at " + name
-                          );
+                  || (var1.equal_to == var2.equal_to))) {
+              System.out.println("Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
+            }
+            // Assert.assert(((Daikon.check_program_types
+            //                 && (! var1.type.comparable(var2.type)))
+            //                || (var1.equal_to == var2.equal_to))
+            //               // This is ordinarily commented out, to save
+            //               // time in the common case.
+            //               , "Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name
+            //               );
             Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
             Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
           }
@@ -1862,11 +1871,19 @@ public class PptTopLevel extends Ppt {
       return;
     }
     // Do not print if this is :::EXIT22 and :::EXIT exists
-    if (Daikon.esc_output &&
-        ppt_name.isExitPoint() &&
-        (!ppt_name.exitLine().equals(""))
-        && (all_ppts.get(ppt_name.makeExit().getName()) != null)) {
-      return;
+    if (Daikon.esc_output
+        && ppt_name.isExitPoint()
+        && (!ppt_name.exitLine().equals(""))) {
+      String exitname = ppt_name.makeExit().getName();
+      PptTopLevel exit = (PptTopLevel) all_ppts.get(ppt_name.makeExit().getName());
+      // Don't suppress if the :::EXIT point has no invariants.
+      // This could happen if :::EXIT1 was executed but :::EXIT2 never was.
+      if (exit != null) {
+        if (!((exit.views.size() == 0) && (exit.implication_view.invs.size() == 0))) {
+          System.out.println("Suppressing " + name + " in favor of " + ppt_name.makeExit().getName());
+          return;
+        }
+      }
     }
 
     out.println("===========================================================================");

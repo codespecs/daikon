@@ -112,52 +112,54 @@ public final class Member extends SequenceScalar  {
     // index.  By contrast, if the scalar is max(...) or min(...), all bets
     // are off.
 
-    // the sequence is B[0..J-1] or similar.  Get information about it.
-    SequenceScalarSubsequence  seqsss = (SequenceScalarSubsequence ) seqvar.derived;
-    // System.out.println("seqvar: " + seqvar.name);
-    VarInfo seq_index = seqsss.sclvar();
-    int seq_shift = seqsss.index_shift;
-    boolean seq_from_start = seqsss.from_start;
+    if (seqvar.derived instanceof SequenceScalarSubsequence ) {
+      // the sequence is B[0..J-1] or similar.  Get information about it.
+      SequenceScalarSubsequence  seqsss = (SequenceScalarSubsequence ) seqvar.derived;
+      // System.out.println("seqvar: " + seqvar.name);
+      VarInfo seq_index = seqsss.sclvar();
+      int seq_shift = seqsss.index_shift;
+      boolean seq_from_start = seqsss.from_start;
 
-    if (sclvar.derived instanceof SequenceScalarSubscript ) {
-      // B[I] in B[0..J]
+      if (sclvar.derived instanceof SequenceScalarSubscript ) {
+        // B[I] in B[0..J]
 
-      SequenceScalarSubscript  sclsss = (SequenceScalarSubscript ) sclvar.derived;
-      VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
-      int scl_shift = sclsss.index_shift;
-      // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
-      if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
-                               seq_from_start)) {
-        return true;
-      }
-    } else if (sclvar.derived instanceof SequenceInitial) {
-      // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
+        SequenceScalarSubscript  sclsss = (SequenceScalarSubscript ) sclvar.derived;
+        VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
+        int scl_shift = sclsss.index_shift;
+        // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
+        if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
+                                 seq_from_start)) {
+          return true;
+        }
+      } else if (sclvar.derived instanceof SequenceInitial) {
+        // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
 
-      // B[0] in B[0..J]; also B[-1] in B[J..]
-      SequenceInitial sclse = (SequenceInitial) sclvar.derived;
-      int scl_index = sclse.index;
-      if (((scl_index == 0) && seq_from_start)
-          || ((scl_index == -1) && !seq_from_start))
-        // It might not be true, because the array could be empty;
-        // but if the array isn't empty, then it's obvious.
-        return true;
-    } else if ((sclvar.derived instanceof SequenceMin)
-               || (sclvar.derived instanceof SequenceMax)) {
-      if (sclvar_seq.derived instanceof SequenceScalarSubsequence) {
-        // min(B[0..I]) in B[0..J]
-        // System.out.println("seqvar_super = " + seqvar_super + ", sclseqsuper = " + sclseqsuper);
-        // System.out.println("seqvar_super = " + seqvar_super.name + ", sclseqsuper = " + sclseqsuper.name);
-        Assert.assert(seqvar_super == sclseqsuper);
-        SequenceScalarSubsequence sclsss = (SequenceScalarSubsequence) sclvar_seq.derived;
-        boolean scl_from_start = sclsss.from_start;
-        if (scl_from_start == seq_from_start) {
-          VarInfo scl_index = sclsss.sclvar();
-          int scl_shift = sclsss.index_shift;
-          boolean comparison = VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
-                                                    seq_from_start);
-          // System.out.println("comparison="+comparison+" for obvious membership: " + sclvar.name + " " + seqvar.name);
-          if (comparison) {
-            return true;
+        // B[0] in B[0..J]; also B[-1] in B[J..]
+        SequenceInitial sclse = (SequenceInitial) sclvar.derived;
+        int scl_index = sclse.index;
+        if (((scl_index == 0) && seq_from_start)
+            || ((scl_index == -1) && !seq_from_start))
+          // It might not be true, because the array could be empty;
+          // but if the array isn't empty, then it's obvious.
+          return true;
+      } else if ((sclvar.derived instanceof SequenceMin)
+                 || (sclvar.derived instanceof SequenceMax)) {
+        if (sclvar_seq.derived instanceof SequenceScalarSubsequence) {
+          // min(B[0..I]) in B[0..J]
+          // System.out.println("seqvar_super = " + seqvar_super + ", sclseqsuper = " + sclseqsuper);
+          // System.out.println("seqvar_super = " + seqvar_super.name + ", sclseqsuper = " + sclseqsuper.name);
+          Assert.assert(seqvar_super == sclseqsuper);
+          SequenceScalarSubsequence sclsss = (SequenceScalarSubsequence) sclvar_seq.derived;
+          boolean scl_from_start = sclsss.from_start;
+          if (scl_from_start == seq_from_start) {
+            VarInfo scl_index = sclsss.sclvar();
+            int scl_shift = sclsss.index_shift;
+            boolean comparison = VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
+                                                      seq_from_start);
+            // System.out.println("comparison="+comparison+" for obvious membership: " + sclvar.name + " " + seqvar.name);
+            if (comparison) {
+              return true;
+            }
           }
         }
       }
