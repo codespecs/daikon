@@ -54,6 +54,10 @@ public abstract class SplitterList {
     return (Splitter[]) ppt_splitters.get(pptname);
   }
 
+  // This returns a list of all the splitters thar are applicable to the
+  // program point named "name".  The list is constructed by looking up
+  // various parts of "name" in the SplitterList hashtable.
+
   // This routine tries the name first, then the base of the name, then the
   // class, then the empty string.  For instance, if the program point name is
   // "Foo.bar(IZ)V:::EXIT2", then it tries, in order:
@@ -63,53 +67,53 @@ public abstract class SplitterList {
   //   "Foo"
   //   ""
 
-  public static Splitter[] get(String name) {
-    String name_ = name;        // debugging
+  public static Splitter[] get(String pptName) {
+    String pptName_ = pptName;        // debugging
     Splitter[] result;
-    result = get_raw(name);
+    result = get_raw(pptName);
     if (Global.debugPptSplit)
       System.out.println("SplitterList.get found "
                          + ((result == null) ? "no" : "" + result.length)
-                         + " splitters for " + name);
+                         + " splitters for " + pptName);
     if (result != null)
       return result;
     {
-      int tag_index = name.indexOf(FileIO.ppt_tag_separator);
+      int tag_index = pptName.indexOf(FileIO.ppt_tag_separator);
       if (tag_index != -1) {
-        name = name.substring(0, tag_index);
-        result  = get_raw(name);
+        pptName = pptName.substring(0, tag_index);
+        result  = get_raw(pptName);
         if (Global.debugPptSplit)
           System.out.println("SplitterList.get found "
                              + ((result == null) ? "no" : "" + result.length)
-                             + " splitters for " + name);
+                             + " splitters for " + pptName);
         if (result != null)
           return result;
       }
     }
-    int lparen_index = name.indexOf('(');
+    int lparen_index = pptName.indexOf('(');
     {
       if (lparen_index != -1) {
-        name = name.substring(0, lparen_index);
-        result  = get_raw(name);
+        pptName = pptName.substring(0, lparen_index);
+        result  = get_raw(pptName);
         if (Global.debugPptSplit)
           System.out.println("SplitterList.get found "
                              + ((result == null) ? "no" : "" + result.length)
-                             + " splitters for " + name);
+                             + " splitters for " + pptName);
         if (result != null)
           return result;
       }
     }
     {
-      // The class name runs up to the last dot before any open parenthesis.
-      int dot_limit = (lparen_index == -1) ? name.length() : lparen_index;
-      int dot_index = name.lastIndexOf('.', dot_limit - 1);
+      // The class pptName runs up to the last dot before any open parenthesis.
+      int dot_limit = (lparen_index == -1) ? pptName.length() : lparen_index;
+      int dot_index = pptName.lastIndexOf('.', dot_limit - 1);
       if (dot_index != -1) {
-        name = name.substring(0, dot_index);
-        result = get_raw(name);
+        pptName = pptName.substring(0, dot_index);
+        result = get_raw(pptName);
         if (Global.debugPptSplit)
           System.out.println("SplitterList.get found "
                              + ((result == null) ? "no" : "" + result.length)
-                             + " splitters for " + name);
+                             + " splitters for " + pptName);
         if (result != null)
           return result;
       }
@@ -120,7 +124,7 @@ public abstract class SplitterList {
     if (Global.debugPptSplit)
       System.out.println("SplitterList.get found "
                          + ((result == null) ? "no" : "" + result.length)
-                         + " splitters for " + name);
+                         + " splitters for " + pptName);
     if (result != null)
       return result;
 
