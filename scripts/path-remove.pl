@@ -10,6 +10,7 @@
 $splitchar = ":";
 @result = ();
 while (<>) {
+      chomp;
       if (/:/) {
 	split(":");
 	$splitchar = ":";
