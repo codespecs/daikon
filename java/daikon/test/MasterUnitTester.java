@@ -47,8 +47,6 @@ public class MasterUnitTester extends TestCase {
       daikon.test.inv.unary.sequence.OneOfSequenceTester.class,
       daikon.test.LinearTernaryCoreTest.class,
       daikon.test.ProglangTypeTest.class,
-      // daikon.test.temporal.SimpleTests.class,
-      // daikon.test.temporal.TemporalTests.class,
       daikon.test.VarComparabilityTest.class,
       daikon.test.VarInfoNameTest.class,
     };

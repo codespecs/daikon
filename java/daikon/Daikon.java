@@ -20,8 +20,6 @@ import java.util.logging.Level;
 import gnu.getopt.*;
 import utilMDE.*;
 
-import daikon.temporal.TemporalInvariantManager;
-
 public final class Daikon {
 
   private static void show_banner() {
@@ -254,7 +252,6 @@ public final class Daikon {
   public static final String debug_SWITCH = "dbg";
   public static final String files_from_SWITCH = "files_from";
   public static final String noversion_SWITCH = "noversion";
-  public static final String enable_temporal_SWITCH = "enable_temporal";
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
   public static final String bottom_up_SWITCH = "bottom_up";
   public static final String disc_reason_SWITCH = "disc_reason";
@@ -440,7 +437,6 @@ public final class Daikon {
       new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(enable_temporal_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(bottom_up_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -605,8 +601,6 @@ public final class Daikon {
           break;
         } else if (noversion_SWITCH.equals(option_name)) {
           noversion_output = true;
-        } else if (enable_temporal_SWITCH.equals(option_name)) {
-            TemporalInvariantManager.active = true;
         } else if (noinvariantguarding_SWITCH.equals(option_name)) {
           noInvariantGuarding = true;
         } else if (suppress_splitter_errors_SWITCH.equals(option_name)) {

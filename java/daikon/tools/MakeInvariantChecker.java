@@ -5,7 +5,6 @@ import daikon.inv.*;
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
-import daikon.temporal.TemporalInvariantManager;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 
@@ -673,7 +672,6 @@ public final class MakeInvariantChecker {
       "import daikon.*;",
       "import daikon.inv.*;",
       "import daikon.config.Configuration;",
-      "import daikon.temporal.TemporalInvariantManager;",
       "import gnu.getopt.*;",
       "import utilMDE.*;",
       "import java.io.*;",

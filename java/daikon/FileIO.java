@@ -3,7 +3,6 @@ package daikon;
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
-import daikon.temporal.TemporalInvariantManager;
 
 
 import utilMDE.*;
@@ -529,8 +528,7 @@ public final class FileIO {
    * element of filenames.
    **/
   public static void read_data_trace_files(Collection files, // [File]
-                                           PptMap all_ppts,
-                                           TemporalInvariantManager temporal_manager)
+                                           PptMap all_ppts)
     throws IOException
   {
     // [INCR] init_call_stack_and_hashmap();
@@ -538,7 +536,7 @@ public final class FileIO {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
       try {
-        read_data_trace_file(file, all_ppts, temporal_manager);
+        read_data_trace_file(file, all_ppts);
       }
       catch (IOException e) {
         if (e.getMessage().equals("Corrupt GZIP trailer"))
@@ -559,8 +557,7 @@ public final class FileIO {
   public static int data_num_slices = 0;
 
   /** Read data from .dtrace file. **/
-  static void read_data_trace_file(File filename, PptMap all_ppts,
-                                   TemporalInvariantManager temporal_manager)
+  static void read_data_trace_file(File filename, PptMap all_ppts)
     throws IOException
   {
     int pptcount = 1;
@@ -605,8 +602,6 @@ public final class FileIO {
       }
     }
     */ // ... [INCR]
-
-    // [INCR] temporal_manager.beginExecution();
 
     // try {
       // "line_" is uninterned, "line" is interned
@@ -796,8 +791,6 @@ public final class FileIO {
           slist.add (stats);
         }
 
-        // [INCR] temporal_manager.processEvent(temporal_manager.generateSampleEvent(ppt, vt));
-
         // Feeding values to EXITnn points will automatically have
         // them flow up to the corresponding EXIT point.
         /* [INCR] ...
@@ -812,8 +805,6 @@ public final class FileIO {
         }
         */
       }
-
-      // [INCR] temporal_manager.endExecution();
     }
 
     if (Global.debugPrintDtrace) {
@@ -1250,15 +1241,15 @@ public final class FileIO {
   }
 
   public static HashMap readDataTraceFile(Collection files, // [File]
-                                           PptMap all_ppts,
-                                          TemporalInvariantManager temporal_manager, daikon.tools.DtraceProcessor dtraceProcessor)
+                                          PptMap all_ppts,
+                                          daikon.tools.DtraceProcessor dtraceProcessor)
     throws IOException
   {
 
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
       try {
-        HashMap values = readDataTraceFile(file, all_ppts, temporal_manager,dtraceProcessor);
+        HashMap values = readDataTraceFile(file, all_ppts, dtraceProcessor);
         return values;
       }
       catch (IOException e) {
@@ -1274,7 +1265,7 @@ public final class FileIO {
 
   /** Read data from .dtrace file. **/
   static HashMap readDataTraceFile(File filename, PptMap all_ppts,
-                                   TemporalInvariantManager temporal_manager, daikon.tools.DtraceProcessor dtraceProcessor)
+                                   daikon.tools.DtraceProcessor dtraceProcessor)
     throws IOException
   {
     int pptcount = 1;
