@@ -125,18 +125,16 @@ public abstract class VarInfoName
       return parse(name.substring(5, name.length() - 1)).applyPrestate();
     }
 
-    // x.y
+    // A.B, where A is complex: foo(x).y, x[7].y, etc.
     if (name.indexOf('.') != -1) {
-      // General field operator
       int dot = name.lastIndexOf('.');
       String first = name.substring(0, dot);
       String field = name.substring(dot+1);
       return parse(first).applyField(field);
     }
 
-    // x->y
+    // A->B, where A is complex: foo(x).y, x[7].y, etc.
     if (name.indexOf("->") != -1) {
-      // General field operator
       int arrow = name.lastIndexOf("->");
       String first = name.substring(0, arrow);
       String field = name.substring(arrow+2);
