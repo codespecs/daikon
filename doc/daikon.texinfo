@@ -243,6 +243,7 @@ Extending Daikon
 
 Troubleshooting
 
+* Installation problems::       
 * dfej problems::               
 * Daikon problems::             
 * Other problems::              
@@ -255,11 +256,14 @@ Problems with dfej
 * dfej compilation problems::   
 * dfej invocation problems::    
 
+Problems running dfej
+
+* Ajax errors::                 
+
 Problems running Daikon
 
 * No return from procedure::    
 * Out of memory::               
-* Ajax errors::                 
 * Simplify errors::             
 
 Other problems
@@ -349,15 +353,15 @@ plus sources for Daikon and for dfej.
 Daikon is also available via anonymous CVS.  Send email to
 @email{daikon@@pag.lcs.mit.edu} if you desire such access.
 
-@cindex @var{parent} directory
+@cindex @var{daikonparent} directory
 @item
 In the directory where you want to install Daikon (we'll call this
-the @var{parent} directory), unpack the tarfile:
+the @var{daikonparent} directory), unpack the tarfile; for example:
 @example
-tar zxvf daikon.tar.gz
+tar zxvf daikon-source.tar.gz
 @end example
 @noindent
-This creates a @file{@var{parent}/daikon/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
 @cindex C shell
@@ -366,19 +370,32 @@ This creates a @file{@var{parent}/daikon/} subdirectory.
 Set a few environment variables.  If you use the csh or tcsh shell, add the
 following to your @file{.cshrc} file:
 @example
-source @var{parent}/daikon/bin/daikon.cshrc
+source @var{daikonparent}/daikon/bin/daikon.cshrc
 @end example
 @cindex Bourne shell
 @cindex bash shell
 If you use the bash shell, add the following to your
 @file{.bash_profile} file:
 @example
-source @var{parent}/daikon/bin/daikon.bashrc
+source @var{daikonparent}/daikon/bin/daikon.bashrc
 @end example
 Also, you must edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
-to indicate the @var{parent} directory and to perform any desired
+to indicate the @var{daikonparent} directory and to perform any desired
 customizations.  (Alternately, you may place such customizations in your
 own @file{.cshrc} or @file{.bash_profile} file.)
+
+Before proceeding, you should execute the @command{source} command you
+placed in your shell initialization file, or else log out and log back
+in to achieve the same effect.
+
+@item
+If you set the environment DAIKONCLASS_SOURCES in @file{daikon.cshrc} or
+@file{daikon.bashrc}, indicating that you wish to compile the Daikon
+sources yourself, then you must now compile them.
+@example
+cd $DAIKONDIR/java
+make
+@end example
 
 @c @item
 @c Add the Daikon Java files to your Java class path.  There are two
@@ -395,7 +412,7 @@ own @file{.cshrc} or @file{.bash_profile} file.)
 @c For instance, if your shell is @command{csh}, add the following to your
 @c @file{.cshrc} file: 
 @c @example
-@c setenv CLASSPATH @var{parent}/daikon/daikon.jar:$@{CLASSPATH@}
+@c setenv CLASSPATH @var{daikonparent}/daikon/daikon.jar:$@{CLASSPATH@}
 @c @end example
 @c 
 @c @item
@@ -404,11 +421,11 @@ own @file{.cshrc} or @file{.bash_profile} file.)
 @c not need to do so), and may be used if you downloaded the source
 @c distribution.
 @c 
-@c Add the @file{@var{parent}/daikon/java/} directory to
+@c Add the @file{@var{daikonparent}/daikon/java/} directory to
 @c your classpath.  If your shell is @command{csh}, add the
 @c following to your @file{.cshrc} file.
 @c @example
-@c setenv CLASSPATH @var{parent}/daikon/java:$@{CLASSPATH@}
+@c setenv CLASSPATH @var{daikonparent}/daikon/java:$@{CLASSPATH@}
 @c @end example
 @c 
 @c The distribution includes compiled @file{.class} files, so you do not
@@ -418,13 +435,13 @@ own @file{.cshrc} or @file{.bash_profile} file.)
 @c @end itemize
 @c 
 @c @item
-@c Add the @file{@var{parent}/daikon/bin/} directory to your path.  (Your
+@c Add the @file{@var{daikonparent}/daikon/bin/} directory to your path.  (Your
 @c path is a list of directories in which the shell searches for
 @c commands; this permits you to type just the program name rather than
 @c supplying a full pathname.)  In csh, add the following to your
 @c @file{.cshrc} file:
 @c @example
-@c set path = (@var{parent}/daikon/bin $path)
+@c set path = (@var{daikonparent}/daikon/bin $path)
 @c @end example
 
 @end enumerate
@@ -478,7 +495,7 @@ make
 @end example
 @noindent
 after which file @file{src/dfej} (on Windows, @file{src/dfej.exe}) is
-the dfej executable.  Place it somewhere on your path.
+the dfej executable.  It is already on your path.
 
 If the @file{front-end/java} directory does not exist in your
 distribution, then download the Daikon source distribution from
@@ -521,9 +538,17 @@ steps.
 
 @enumerate
 @item
+Download the dfec distribution from @uref{http://pag.lcs.mit.edu/daikon/};
+choose the version for your architecture and operating system.
+@item
+Unpack the tarfile.
+@example
+cd $DAIKONDIR/front-end
+tar zxvf dfec-linux-x86.tar.gz
+@item
 Compile the Daikon C runtime library.
 @example
-cd front-end/c
+cd $DAIKONDIR/front-end/c
 make
 @end example
 @noindent
@@ -566,7 +591,7 @@ This creates the dfec executable,  @file{release_2.45/bin/dfec}.
 @c 	      <li>add the @file{java-front-end/src} directory to your path;
 @c 		  for instance, in csh place the following in your
 @c 		  @file{.cshrc} file:<br>
-@c 		  <tt>set path = (<em>parent</em>/daikon/java-front-end/src $path)</tt><br>
+@c 		  <tt>set path = (<em>daikonparent</em>/daikon/java-front-end/src $path)</tt><br>
 
 @node    Installing the Context GUI, Requirements, Installing dfec, Installing
 @section Installing the Context GUI
@@ -583,7 +608,7 @@ Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
 path.  Add the following to your @file{.emacs} or @file{prj.el} file:
 @example
   ;; Daikon Context GUI
-  (add-to-list 'load-path "@var{parent}/daikon/emacs")
+  (add-to-list 'load-path (substitute-in-file-name "$DAIKONDIR/emacs"))
   (autoload 'daikon-context-gui "daikon-context-gui" "Daikon Context GUI" t)
   (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
 @end example
@@ -679,18 +704,20 @@ You must first install Daikon if you haven't done so already; see
 cd examples/StackAr
 @end example
 
-@item Compile the original version of the program.
+@item Compile the original version of the program.  You must use the
+@option{-g} flag to include debugging information in the compiled classfiles.
 @example
-javac DataStructures/*.java
+javac -g DataStructures/*.java
 @end example
 
-These instructions assume you have the current working directory (".")
-in your CLASSPATH.
 
 @item Instrument the @file{StackAr.java} file.
 @example
 dfej DataStructures/StackAr.java
 @end example
+(These instructions assume you have the current working directory (".")
+in your CLASSPATH.  If that is not the case, then run @command{dfej
+-ajaxap=.}  instead of @command{dfej}.)
 
 We instrument only this one file because we are only interested in the
 invariants of the StackAr class, not the other classes in the program.
@@ -1034,7 +1061,7 @@ C/C++, on a single source file at a time.  @file{dfec} must be run from
 a directory that contains the file @file{daikon_runtime.h}, the header
 file for the Daikon runtime library:
 @example
-     ln -s @var{parent}/daikon/front-end/c/daikon_runtime.h .
+     ln -s $DAIKONDIR/front-end/c/daikon_runtime.h .
      dfec @var{...options...} @var{myprog}.cc
 @end example
 
@@ -1565,10 +1592,13 @@ option.
 @node    Invariant syntax,  , Variable names, Interpreting output
 @subsection Invariant syntax
 
-(We eventually hope to make Daikon produce output in JML format; when
+Daikon's default format is a mix of Java, mathematical logic, and some
+additional extensions.
+(In the future, Daikon will produce output in JML format; when
 that is the case, this section of the manual will simply refer the
 reader to the @uref{http://www.cs.iastate.edu/~leavens/JML.html, ,JML
 Manual}.  Daikon's current ESC output format is a variant of JML format.)
+
 
 @cindex has only one value, in invariant output
 
@@ -3577,6 +3607,7 @@ understand Daikon's operation; @xref{Command line options}.
 
 
 @menu
+* Installation problems::       
 * dfej problems::               
 * Daikon problems::             
 * Other problems::              
@@ -3586,8 +3617,22 @@ understand Daikon's operation; @xref{Command line options}.
 @end menu
 
 
+@node    Installation problems, dfej problems, Troubleshooting, Troubleshooting
+@section Problems installing Daikon
 
-@node    dfej problems, Daikon problems, Troubleshooting, Troubleshooting
+The tar file may appear to contain a file named @file{././@@LongLink}.
+This is inserted in a tar file when a filename is longer than a specific
+maximum length (often 100 characters).  If you see this file, then your
+version of the tar program does not recognize this indication.  It is
+possible that some filenames (including the one contained
+@file{././@@LongLink}) have been truncated.
+
+@c As of Daikon 2.3.5 (March 1, 2002), the two affected files were:
+@c daikon/java/jakarta-oro-2.0.3/docs/classes/org/apache/oro/text/regex/MalformedPatternException.class
+@c daikon/java/jakarta-oro-2.0.3/docs/classes/org/apache/oro/text/perl/MalformedPerl5PatternException.class
+
+
+@node    dfej problems, Daikon problems, Installation problems, Troubleshooting
 @section Problems with dfej
 
 @menu
@@ -3667,7 +3712,11 @@ You may be able to work around this by running dfej on other files of
 your application, but not those with anonymous classes.
 
 
-@node    Ajax errors, Simplify errors, Out of memory, Daikon problems
+@menu
+* Ajax errors::                 
+@end menu
+
+@node    Ajax errors,  , dfej invocation problems, dfej invocation problems
 @subsubsection Ajax errors
 
 @cindex Ajax, problem with
@@ -3701,7 +3750,6 @@ Ajax cannot be run, Daikon proceeds without error.
 @menu
 * No return from procedure::    
 * Out of memory::               
-* Ajax errors::                 
 * Simplify errors::             
 @end menu
 
@@ -3735,7 +3783,7 @@ technique is used is determined by the front end, which creates the
 
 
 
-@node    Out of memory, Ajax errors, No return from procedure, Daikon problems
+@node    Out of memory, Simplify errors, No return from procedure, Daikon problems
 @subsection Out of memory
 
 @cindex out of memory error
@@ -3768,7 +3816,7 @@ presently tell you how to do that.)
 Any output generated before the out-of-memory error is perfectly valid.
 
 
-@node    Simplify errors,  , Ajax errors, Daikon problems
+@node    Simplify errors,  , Out of memory, Daikon problems
 @subsection Simplify errors
 
 @cindex Simplify, could not utilize
@@ -3783,6 +3831,31 @@ order to use it.
 If Simplify is not used, certain redundant (logically implied)
 invariants may appear in Daikon's output.  The output is otherwise
 correct.
+
+
+@node    Method needs to be implemented,  , Out of memory, Daikon problems
+@subsection Method needs to be implemented
+
+@cindex method needs to be implemented warning
+@cindex needs to be implemented warning
+
+Daikon may produce output like the following (but all on one line):
+@example
+method daikon.inv.binary.twoSequence.SubSequence.format_esc()
+needs to be implemented:
+this.theArray[0..this.topOfStack] is a subsequence of
+orig(this.theArray[0..this.topOfStack])
+@end example
+@noindent
+This indicates that a particular invariant (shown on the last two lines
+above) cannot be formatted using the current formatting.  For instance,
+the subsequent invariant can be formatted using Daikon's default
+formatting (which is how it is shown above), but (as of April 2002)
+Daikon cannot output it in ESC format, so Daikon prints the above
+message instead.  The message also shows exactly what Java method needs
+to be implemented to correct the problem.  You can ignore such messages,
+or else use an output formatting that can handle those invariants.
+MergeESC (@pref{MergeESC}) automatically ignores unformattable invariants.
 
 
 @node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
@@ -4064,7 +4137,7 @@ The following individuals have contributed to Daikon:
 Daikon logo.
 
 The feedback of Daikon users has been very valuable.  We are
-particularly grateful to Rich Angros, Tadashi Araragi, Engelbert
+particularly grateful to Rich Angros, Tadashi Araragi, David Cok, Engelbert
 Hubbers, and Manos Renieris.  Many others have also been generous with
 their feedback, for which we are grateful.
 
