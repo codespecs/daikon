@@ -86,10 +86,14 @@ public class InvariantFilters {
 
   public boolean shouldKeep( Invariant invariant ) {
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug(invariant.format() + "\n\t\t(type: " + invariant.getClass().getName() +  ")\n");
+      PrintInvariants.debugFiltering.debug(invariant.format() +
+                                           "\n\t\t(type: " +
+                                           invariant.getClass().getName() +
+                                           ")\n");
     }
 
-    if (invariant instanceof GuardingImplication) invariant = ((Implication) invariant).right;
+    if (invariant instanceof GuardingImplication)
+      invariant = ((Implication) invariant).right;
 
     //  Do variable filters first since they eliminate more invariants.
     if (variableFilters.size() != 0) {
