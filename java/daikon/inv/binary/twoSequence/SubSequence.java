@@ -7,6 +7,7 @@ import daikon.inv.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
 import daikon.suppress.*;
 import daikon.inv.unary.sequence.EltOneOf;
 import daikon.VarInfoName.QuantHelper;
@@ -302,7 +303,7 @@ public class SubSequence
                   " " + supervar.isDerivedSubSequenceOf());
     }
 
-        // For unions and intersections, it probably doesn't make sense to
+     // For unions and intersections, it probably doesn't make sense to
     // do subsequence or subset detection.  This is mainly to prevent
     // invariants of the form (x subset of union(x, y)) but this means
     // we also miss those of the form (z subset of union(x,y)) which
@@ -339,25 +340,85 @@ public class SubSequence
 
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
     if (subvar_super == supervar_super) {
-      // both sequences are derived from the same supersequence
-      if ((subvar.derived instanceof SequenceScalarSubsequence)
-          && (supervar.derived instanceof SequenceScalarSubsequence)) {
-        SequenceScalarSubsequence sss1 = (SequenceScalarSubsequence) subvar.derived;
-        SequenceScalarSubsequence sss2 = (SequenceScalarSubsequence) supervar.derived;
-        VarInfo index1 = sss1.sclvar();
-        int shift1 = sss1.index_shift;
-        boolean start1 = sss1.from_start;
-        VarInfo index2 = sss2.sclvar();
-        int shift2 = sss2.index_shift;
-        boolean start2 = sss2.from_start;
-        if (start1 == start2)
-          if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
-            // System.out.println("Obvious subsequence: " + subvar.name + " " + supervar.name + "; " + index1.name + " " + index2.name);
-            return true;
+     // both sequences are derived from the same supersequence
+      if ((subvar.derived instanceof SequenceScalarSubsequence ||
+           subvar.derived instanceof SequenceScalarArbitrarySubsequence) &&
+          (supervar.derived instanceof SequenceScalarSubsequence ||
+           supervar.derived instanceof SequenceScalarArbitrarySubsequence)) {
+        VarInfo sub_left_var = null, sub_right_var = null,
+          super_left_var = null, super_right_var = null;
+        // I'm careful not to access foo_shift unless foo_var has been set
+        // to a non-null value, but Java is too stupid to recognize that.
+        int sub_left_shift = 42, sub_right_shift = 69, super_left_shift = 1492,
+          super_right_shift = 1776;
+        if (subvar.derived instanceof SequenceScalarSubsequence) {
+          SequenceScalarSubsequence sub
+            = (SequenceScalarSubsequence)subvar.derived;
+          if (sub.from_start) {
+            sub_right_var = sub.sclvar();
+            sub_right_shift = sub.index_shift;
+          } else {
+            sub_left_var = sub.sclvar();
+            sub_left_shift = sub.index_shift;
           }
+        } else if (subvar.derived instanceof SequenceScalarArbitrarySubsequence) {
+          SequenceScalarArbitrarySubsequence sub = (SequenceScalarArbitrarySubsequence)subvar.derived;
+          sub_left_var = sub.startvar();
+          sub_left_shift = (sub.left_closed ? 0 : 1);
+          sub_right_var = sub.endvar();
+          sub_right_shift = (sub.right_closed ? 0 : -1);
+        } else {
+          Assert.assertTrue(false);
+        }
+        if (supervar.derived instanceof SequenceScalarSubsequence) {
+          SequenceScalarSubsequence super_
+            = (SequenceScalarSubsequence)supervar.derived;
+          if (super_.from_start) {
+            super_right_var = super_.sclvar();
+            super_right_shift = super_.index_shift;
+          } else {
+            super_left_var = super_.sclvar();
+            super_left_shift = super_.index_shift;
+          }
+        } else if (supervar.derived instanceof SequenceScalarArbitrarySubsequence) {
+          SequenceScalarArbitrarySubsequence super_ = (SequenceScalarArbitrarySubsequence)supervar.derived;
+          super_left_var = super_.startvar();
+          super_left_shift = (super_.left_closed ? 0 : 1);
+          super_right_var = super_.endvar();
+          super_right_shift = (super_.right_closed ? 0 : -1);
+        } else {
+          Assert.assertTrue(false);
+        }
+        boolean left_included, right_included;
+        if (super_left_var == null)
+          left_included = true;
+        else if (super_left_var != null && sub_left_var == null)
+          left_included = false;
+        else
+          left_included
+            = VarInfo.compare_vars(super_left_var, super_left_shift,
+                                   sub_left_var, sub_left_shift,
+                                   true /* <= */);
+        if (super_right_var == null)
+          right_included = true;
+        else if (super_right_var != null && sub_right_var == null)
+          right_included = false;
+        else
+          right_included
+            = VarInfo.compare_vars(super_right_var, super_right_shift,
+                                   sub_right_var, sub_right_shift,
+                                   false /* >= */);
+//         System.out.println("Is " + subvar.name.name() + " contained in "
+//                            + supervar.name.name()
+//                            + "? left: " + left_included + ", right: "
+//                            + right_included);
+        if (left_included && right_included)
+          return true;
       } else if ((subvar.derived instanceof SequenceStringSubsequence)
                  && (supervar.derived instanceof SequenceStringSubsequence)) {
-        // Copied from just above
+        // Copied from (an old version) just above
+        // XXX I think this code is dead; why isn't it just produced
+        // from the above by macro expansion? -smcc
         SequenceStringSubsequence sss1 = (SequenceStringSubsequence) subvar.derived;
         SequenceStringSubsequence sss2 = (SequenceStringSubsequence) supervar.derived;
         VarInfo index1 = sss1.sclvar();
