@@ -38,7 +38,7 @@ Chicory:  classfile-based front end for Java
 
   Chicory is a new Daikon front end for Java.  Its functionality is very
   similar to that of the dfej tool, and it supports most of the same
-  command-line options.  However, Chicory has two substantial advantages
+  command-line options.  However, Chicory has three substantial advantages
   over dfej:
    * Chicory is much easier to use:  when running your Java program,
      just replace the "java" command with "java daikon.Chicory".  For
@@ -53,6 +53,8 @@ Chicory:  classfile-based front end for Java
      See the Daikon manual for more options.
    * Chicory supports all versions of Java, including Java 5.0.  By
      contrast, dfej only supports Java 1.4 and earlier.
+   * Chicory is platform-independent (and requires no special action to
+     build), since it is written in Java.
 
 Eclipse plug-in
 
