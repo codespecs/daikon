@@ -97,8 +97,13 @@ for my $file (@ARGV) {
   my $line = <SOURCE>;		# header line
   my $gotlines = 0;
   while (defined($line = <SOURCE>)) {
-    # See esc-stats.pl for definitions of the abbreviations.
+    # Cope with multiple tables in a single file.
+    if (($line ~= /^\# merged/)
+	|| ($line ~= /^TYPE/)) {
+      next;
+    }
     # print "line: $line";
+    # See esc-stats.pl for definitions of the abbreviations.
     my ($category, $evu, $evr, $enu, $enr, $iu, $ir, $a) = split(/[ \t]+/, $line);
     # ignore $category
     $verified += $evu;
