@@ -10,7 +10,24 @@ distrobution.
 In addition to the Daikon engine, you also need a front end.  Dfec is
 the front end for C.  Obtain dfec.zip and set it up as follows.
 
-First discover the include path by running g++.  At a cygwin prompt:
+(We will refer to the directory DFEC is installed in as $DFECDIR.
+This path, and all other paths discussed in these instructions, should
+be in terms of the cywgin file namespace;
+e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt).
+
+Compile the daikon runtime library.  At a cygwin prompt:
+
+$ cd $DFECDIR; gcc -c daikon_runtime.cc
+
+This generates the file daikon_runtime.o in $DFECDIR.
+
+Set the DTRACEAPPEND environment variable.  The bash syntax is shown
+here.
+
+$ export DTRACEAPPEND=1
+
+Next, we determine paths and options for your system by running g++.
+At a cygwin prompt:
 
 $ touch empty.cc
 $ g++ -v -E empty.cc
@@ -59,49 +76,9 @@ Now dfec is set up.  Let's move on to some examples
 ******************** EXAMPLES ********************
 
 Unpack the examples into a directory (which we will call $EXAMPLES).
+Also recall that the c front end (dfec) is installed in $DFECDIR.
 
 $ tar zxvf c-examples.tar.gz
-
-Remember that this path, and all other paths discussed in these
-instructions, should be in terms of the cywgin file namespace.
-(e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt).
-
-To instrument and compile a program, first copy daikon_runtime.h into
-the directory that your source file resides in.
-
-When programname.c is instrumented, it creates
-daikon-instrumented/programname.cc.  (Note that you have to specify
-the .h files so that dfec knows to correctly instrument functions
-whose prototypes appear in those headers).  For Windows, you have to
-then fix this with a sed script to put in a gcc-specific __attribute__
-for the _ctype_ variable, which is used in our test suite.  Run it
-like this:
-
-$ sed -f path/to/fix.sed daikon-instrumented/programname.cc > daikon-instrumented/programname_fixed.cc
-
-This should make it kosher.  Then, compile:
-
-$ g++ -w -o programname daikon-instrumented/programname_fixed.cc path/to/daikon_runtime.o
-
-You should then be able to run programname and get trace data.
-
-The c front end (dfec) is installed in $DFECDIR.  
-
-You must perform two steps to complete the installation of the C front
-end.
-
-0a. Compile the daikon runtime library.
-
-    cd $DFECDIR; gcc -c daikon_runtime.cc
-** Where am I typing this?  DOS?  Cygwin?
-
-    This generates the file daikon_runtime.o in $DFECDIR.
-
-0b. Set the DTRACEAPPEND environment variable.  The bash syntax is
-    shown here.
-
-    export DTRACEAPPEND=1
-
 
 To detect invariants for a program, you need to perform three basic
 tasks: instrument the target program (steps 1-3), run the instrumented
@@ -112,24 +89,39 @@ be run in exactly the same manner.
 
 1. Change to the directory containing the print_tokens program.
 
-   cd $EXAMPLES/print_tokens
+$ cd $EXAMPLES/print_tokens
 
 2. Instrument the program using dfec, the C front end.
 
-   $DFECDIR/dfec -w -I$DFECDIR print_tokens.c stream.h tokens.h
+First copy $DFECDIR/daikon_runtime.h into the directory that your
+source file resides in.
 
-** "The procedure entry point setrlimit could not be located in the dynamic link library cygwin1.dll"
-** ^^ indicates you need to upgrade cygwin
+$ cp $DFECDIR/daikon_runtime.h .
 
-   We instrument the source file and all the user-created header files
-   it depends on.  This command creates two directories, daikon-instrumented
-   and daikon-output.  It creates an instrumented and preprocessed version
-   of print_tokens.c at daikon-instrumented/print_tokens.cc.  It creates a
-   declaration file at daikon-output/print_tokens.decls.
+Then run the front-end:
+
+$ $DFECDIR/dfec -w -I$DFECDIR print_tokens.c stream.h tokens.h
+$ ${DFEC} print_tokens.c stream.h tokens.h
+
+We instrument the source file and all the user-created header files it
+depends on.  This command creates two directories, daikon-instrumented
+and daikon-output.  It creates an instrumented and preprocessed
+version of print_tokens.c at daikon-instrumented/print_tokens.cc.  It
+creates a declaration file at daikon-output/print_tokens.decls.
+
+Now, under Windows, you have to then fix the instrumented file with a
+sed script to put in a gcc-specific __attribute__ for the _ctype_
+variable, which is used in our test suite.  Run it like this:
+
+$ cd daikon-instrumented
+$ sed -f $DFECDIR/fix.sed print_tokens.cc > print_tokens_fixed.cc
+$ cd ..
+
+This fixes the above problem.
 
 3. Compile and link the instrumented program.
 
-   g++ -w -o print_tokens.exe daikon-instrumented/print_tokens.cc \
+$ g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc \
      $DFECDIR/daikon_runtime.o
 
    This creates the executable print_tokens.exe in the current directory.
