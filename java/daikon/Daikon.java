@@ -514,8 +514,12 @@ public final class Daikon {
 								&& (vars[0] == vars[1]
 									|| vars[1] == vars[2]
 									|| vars[0] == vars[2]))) {
+										
+										if(x.isActive()) {
+										
 								System.out.println(x.getClass());
 								System.out.println(x);
+										}
 							}
 						}
 					}
