@@ -55,15 +55,16 @@ public class Fmt {
               result.append (ArraysMDE.toString ((double[])arg));
             else
               result.append (arg.toString());
-          current_arg++;
           }
+          current_arg++;
         }
       }
     }
 
     if (current_arg != args.length)
-      throw new RuntimeException (spf ("spf: only %s of %s arguments used up",
-                                        i(current_arg), i(args.length)));
+      throw new RuntimeException
+        (spf ("spf: only %s of %s arguments used up: [result = %s]",
+                 i(current_arg), i(args.length), result));
 
     return (result.toString());
   }
