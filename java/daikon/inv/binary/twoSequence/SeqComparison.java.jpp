@@ -73,6 +73,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUAL SeqSeqIntEqual
   #define SEQSEQINTEQUALstring "SeqSeqIntEqual"
   #define COMPAREQUALS(a,b) (a == b)
+  #define COMPARE ==
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
   #define PAIRWISEINTEQUAL PairwiseIntEqual
@@ -80,6 +81,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUAL SeqSeqFloatEqual
   #define SEQSEQINTEQUALstring "SeqSeqFloatEqual"
   #define COMPAREQUALS(a,b) (a == b)
+  #define COMPARE ==
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
   #define PAIRWISEINTEQUAL PairwiseFloatEqual
@@ -87,6 +89,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUAL SeqSeqStringEqual
   #define SEQSEQINTEQUALstring "SeqSeqStringEqual"
   #define COMPAREQUALS(a,b) (a == b)
+  #define COMPARE ==
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
   #define PAIRWISEINTEQUAL PairwiseStringEqual
@@ -95,6 +98,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqIntLessThan"
   #define SEQCOMPAR_SWAP SeqSeqIntGreaterThan
   #define COMPAREQUALS(a,b) (a < b)
+  #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define PAIRWISEINTEQUAL PairwiseIntLessThan
@@ -103,6 +107,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqFloatLessThan"
   #define SEQCOMPAR_SWAP SeqSeqFloatGreaterThan
   #define COMPAREQUALS(a,b) (a < b)
+  #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define PAIRWISEINTEQUAL PairwiseFloatLessThan
@@ -111,6 +116,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqStringLessThan"
   #define SEQCOMPAR_SWAP SeqSeqStringGreaterThan
   #define COMPAREQUALS(a,b) (a < b)
+  #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define PAIRWISEINTEQUAL PairwiseStringLessThan
@@ -119,6 +125,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqIntGreaterThan"
   #define SEQCOMPAR_SWAP SeqSeqIntLessThan
   #define COMPAREQUALS(a,b) (a > b)
+  #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
   #define PAIRWISEINTEQUAL PairwiseIntGreaterThan
@@ -127,6 +134,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqFloatGreaterThan"
   #define SEQCOMPAR_SWAP SeqSeqFloatLessThan
   #define COMPAREQUALS(a,b) (a > b)
+  #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
@@ -135,6 +143,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqStringGreaterThan"
   #define SEQCOMPAR_SWAP SeqSeqStringLessThan
   #define COMPAREQUALS(a,b) (a > b)
+  #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
   #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
@@ -143,6 +152,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqIntLessEqual"
   #define SEQCOMPAR_SWAP SeqSeqIntGreaterEqual
   #define COMPAREQUALS(a,b) (a <= b)
+  #define COMPARE <=
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseIntLessEqual
@@ -151,6 +161,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqFloatLessEqual"
   #define SEQCOMPAR_SWAP SeqSeqFloatGreaterEqual
   #define COMPAREQUALS(a,b) (a <= b)
+  #define COMPARE <=
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseFloatLessEqual
@@ -159,6 +170,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqStringLessEqual"
   #define SEQCOMPAR_SWAP SeqSeqStringGreaterEqual
   #define COMPAREQUALS(a,b) (a <= b)
+  #define COMPARE <=
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseStringLessEqual
@@ -167,6 +179,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqIntGreaterEqual"
   #define SEQCOMPAR_SWAP SeqSeqIntLessEqual
   #define COMPAREQUALS(a,b) (a >= b)
+  #define COMPARE >=
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseIntGreaterEqual
@@ -175,6 +188,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqFloatGreaterEqual"
   #define SEQCOMPAR_SWAP SeqSeqFloatLessEqual
   #define COMPAREQUALS(a,b) (a >= b)
+  #define COMPARE >=
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterEqual
@@ -183,6 +197,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqStringGreaterEqual"
   #define SEQCOMPAR_SWAP SeqSeqStringLessEqual
   #define COMPAREQUALS(a,b) (a >= b)
+  #define COMPARE >=
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
@@ -211,12 +226,13 @@ import java.util.*;
 /**
  * Represents invariants between two PRIMITIVE sequences.  If order
  * matters for each variable (which it does by default), then the
- * sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
- * where [cmp] can be == < <= > >=.
+ * sequences are compared lexically.  Prints as 'x[] COMPARE y[] lexically'
  *
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
  * If order doesn't matter for each variable, then the sequences
  * are compared to see if they are set equivalent.  Prints as
  * "x[] == y[]"
+#endif
  *
  * If the auxillary information (eg, order matters) doesn't match then
  * no comparison is made at all.

@@ -28,6 +28,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqIntEqual
   #define SEQINTEQUALstring "SeqIntEqual"
   #define EQUALS(a,b) (a == b)
+  #define COMPARE ==
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
@@ -35,6 +36,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqFloatEqual
   #define SEQINTEQUALstring "SeqFloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
+  #define COMPARE ==
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
@@ -42,6 +44,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqIntLessThan
   #define SEQINTEQUALstring "SeqIntLessThan"
   #define EQUALS(a,b) (a < b)
+  #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
@@ -49,6 +52,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqFloatLessThan
   #define SEQINTEQUALstring "SeqFloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define COMPARE >
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
@@ -56,6 +60,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqIntLessEqual
   #define SEQINTEQUALstring "SeqIntLessEqual"
   #define EQUALS(a,b) (a <= b)
+  #define COMPARE <=
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
@@ -63,6 +68,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqFloatLessEqual
   #define SEQINTEQUALstring "SeqFloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
+  #define COMPARE <=
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
@@ -70,6 +76,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqIntGreaterThan
   #define SEQINTEQUALstring "SeqIntGreaterThan"
   #define EQUALS(a,b) (a > b)
+  #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
@@ -77,6 +84,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqFloatGreaterThan
   #define SEQINTEQUALstring "SeqFloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
@@ -84,6 +92,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqIntGreaterEqual
   #define SEQINTEQUALstring "SeqIntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
+  #define COMPARE >=
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
@@ -91,6 +100,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqFloatGreaterEqual
   #define SEQINTEQUALstring "SeqFloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
+  #define COMPARE >=
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
@@ -118,9 +128,8 @@ import java.util.logging.Level;
 
 /**
  * Represents PRIMITIVE scalars with an invariant to each element of
- * PRIMITIVE sequences.  Prints as "x[] elements [cmp] y" where x is a
- * PRIMITIVE sequence, y is a PRIMITIVE scalar, and [cmp] is one of
- * the comparators == < <= > >=
+ * PRIMITIVE sequences.  Prints as 'x[] elements COMPARE y' where x is a
+ * PRIMITIVE sequence and y is a PRIMITIVE scalar
  **/
 public final class SEQINTEQUAL
   extends SUPERCLASS
