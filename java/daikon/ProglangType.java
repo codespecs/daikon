@@ -331,9 +331,15 @@ public final class ProglangType
     }
   }
 
-  // Given a string representation of a value (of the type represented by
-  // this ProglangType), return the interpretation of that value.
-  // Canonicalize where possible.
+  /**
+   * Given a string representation of a value (of the type represented by
+   * this ProglangType), return the interpretation of that value.
+   * Canonicalize where possible.  If the type is an array and there
+   * are any nonsensical elements in the array, the entire array is
+   * considered to be nonsensical (indicated by returning null).  This
+   * is not really correct, but it is a reasonable path to take for now
+   * (jhp, Feb 12, 2005)
+   */
   public final Object parse_value(String value) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
@@ -431,6 +437,8 @@ public final class ProglangType
             if (parser.ttype == '\"') {
               v.add(parser.sval);
             } else if (parser.ttype == StreamTokenizer.TT_WORD) {
+              if (parser.sval.equals ("nonsensical"))
+                return (null);
               Assert.assertTrue(parser.sval.equals("null"));
               v.add(null);
             } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
@@ -456,7 +464,9 @@ public final class ProglangType
       if (base == BASE_INT) {
         long[] result = new long[len];
         for (int i=0; i<len; i++) {
-          if (value_strings[i].equals("null"))
+          if (value_strings[i].equals ("nonsensical"))
+            return (null);
+          else if (value_strings[i].equals("null"))
             result[i] = 0;
           else if (value_strings[i].equals("false"))
             result[i] = 0;
@@ -469,7 +479,9 @@ public final class ProglangType
       } else if (base == BASE_DOUBLE) {
         double[] result = new double[len];
         for (int i=0; i<len; i++) {
-          if (value_strings[i].equals("null"))
+          if (value_strings[i].equals ("nonsensical"))
+            return (null);
+          else if (value_strings[i].equals("null"))
             result[i] = 0;
           else if (value_strings[i].equals("NaN"))
             result[i] = Double.NaN;
