@@ -10,12 +10,8 @@ import java.util.StringTokenizer;
 public class RatPoly {
     
     // holds terms of this
-    private RatTermVec terms;
+    private RatTermVec terms;  
 
-    // CONSTANTS ARE STAFF ONLY
-    private static RatNum zero = new RatNum(0);
-    private static RatNum one = new RatNum(1);
-    
     // Definitions:
     // For a RatPoly p, let C(p,i) be "p.terms.get(i).coeff" and
     //                      E(p,i) be "p.terms.get(i).expt"
@@ -180,7 +176,7 @@ public class RatPoly {
 	for(int i=1; i<terms.size(); i++) {
 	    RatTerm rt = terms.get(i);
 	    RatNum num = rt.coeff;
-	    if (num.equals(zero)) {
+	    if (num.equals(new RatNum(0))) {
 		continue; // do nothing;
 	    } else if (num.isNegative()) {
 		sb.append("-");
@@ -210,16 +206,16 @@ public class RatPoly {
     private static void appendTerm(StringBuffer sb, RatTerm rt) {
 	RatNum c = rt.coeff;
 	int e = rt.expt;
-	if (c.equals( zero ) ) {
+	if (c.equals( new RatNum(0) ) ) {
 	    return;
 	}
 	
-	if (e == 0 || !c.equals( one ) ) {
+	if (e == 0 || !c.equals( new RatNum(1) ) ) {
 	    sb.append(c.unparse());
 	}
 
 	if (e != 0) {
-	    if (!c.equals( one )) {
+	    if (!c.equals( new RatNum(1) )) {
 		sb.append('*');		
 	    }
 	    sb.append('x');
@@ -304,7 +300,7 @@ public class RatPoly {
 	    if (rt.expt == newTerm.expt) {
 		// MATCH!
 		RatNum newCoeffValue = rt.coeff.add(newTerm.coeff);
-		if (newCoeffValue.equals( zero )) {
+		if (newCoeffValue.equals( new RatNum(0) )) {
 		    vec.remove(i);
 		    assertSorted(vec);
 		    return;
@@ -315,7 +311,7 @@ public class RatPoly {
 		}
 	    } else if (rt.expt < newTerm.expt) {
 		// we've hit a lower exponent w/o seeing a match; insert term here
-		if (!newTerm.coeff.equals(zero)) 
+		if (!newTerm.coeff.equals(new RatNum(0))) 
 		    vec.insert(newTerm, i);
 		assertSorted(vec);
 		return;
@@ -324,7 +320,7 @@ public class RatPoly {
 	
 	// if we get here, we didn't hit a lower exponent OR find a
 	// match; append onto the end of vec
-	if (!newTerm.coeff.equals(zero))
+	if (!newTerm.coeff.equals(new RatNum(0)))
 	    vec.addElement(newTerm);
 	assertSorted(vec);
     }
@@ -339,7 +335,7 @@ public class RatPoly {
 	    if (rt.expt >= lastExp) 
 		throw new RuntimeException
 		    ("unsorted vec generated! "+v.printDebug());
-	    if (rt.coeff.equals( zero )) 
+	    if (rt.coeff.equals( new RatNum(0) )) 
 		throw new RuntimeException
 		    ("vec w/ zero coeff generated! "+v.printDebug());
 
@@ -464,7 +460,7 @@ public class RatPoly {
 	    // D2: Set q[k] := u[n+k]/v[n] ...	    
 	    RatTerm u_nk = hintedGet(r_Terms, findTermIndex(r_Terms, n+k), n+k);
 	    RatNum q_k = u_nk.coeff.div(v.coeff(n));
-	    if (!q_k.equals(zero)) {
+	    if (!q_k.equals(new RatNum(0))) {
 		q_Terms.addElement(new RatTerm( q_k, k ));
 	    }
 
@@ -548,7 +544,7 @@ public class RatPoly {
 	    ts.get(i).expt == expt) {
 	    return ts.get(i);
 	} else {
-	    return new RatTerm(zero, expt);
+	    return new RatTerm(new RatNum(0), expt);
 	}
     }
     // METHOD IS STAFF ONLY
@@ -556,17 +552,17 @@ public class RatPoly {
 	if (index < ts.size()) {
 	    RatTerm t = ts.get(index);
 	    if (t.expt == term.expt) {
-		if (!term.coeff.equals(zero)) {
+		if (!term.coeff.equals(new RatNum(0))) {
 		    ts.set(term, index);
 		} else {
 		    ts.remove(index);
 		}
 	    } else {
-		if (!term.coeff.equals(zero))
+		if (!term.coeff.equals(new RatNum(0)))
 		    ts.insert(term, index);
 	    }
 	} else {
-	    if (!term.coeff.equals(zero))
+	    if (!term.coeff.equals(new RatNum(0)))
 		ts.addElement(term);
 	}
     }
@@ -677,7 +673,7 @@ public class RatPoly {
 
 
 		// accumulate terms of polynomial in 'result'
-		if (!coeff.equals(zero)) {
+		if (!coeff.equals(new RatNum(0))) {
 		    RatPoly termPoly = new RatPoly();
 		    termPoly.terms.addElement(new RatTerm(coeff, expt));
 		    result = result.add(termPoly);
@@ -766,7 +762,7 @@ public class RatPoly {
 	    if (isNegative) 
 		num = num.negate();
 	    
-	    if (!num.equals(zero)) {
+	    if (!num.equals(new RatNum(0))) {
 		RatTerm termToBuild = new RatTerm( num, expt );
 		if (termToBuild == null)
 		    throw new RuntimeException("no term to build...");
@@ -789,7 +785,7 @@ public class RatPoly {
 	    throw new RuntimeException("terms == null!");
 	}
 	for (int i=0; i < terms.size(); i++) {
-	    if (terms.get(i).coeff.equals(zero)) {
+	    if (terms.get(i).coeff.equals(new RatNum(0))) {
 		throw new RuntimeException("zero coefficient!");
 	    }
 	    if (terms.get(i).expt < 0) {
