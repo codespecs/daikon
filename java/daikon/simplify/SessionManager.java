@@ -96,8 +96,16 @@ public class SessionManager
 	    error = null;
 	    try {
 	      mgr.pending.apply(session);
+	    } catch (SimplifyError e) {
+	      // Cause a timeout exception by not setting pending to
+	      // null.  This might not be exactly the right thing to
+	      // do, but a core dump from Simplify is arguably the
+	      // same as a timeout.
+	      mgr.notify();
+	      continue;
 	    } catch (Throwable e) {
 	      error = e.toString();
+	      e.printStackTrace();
 	    }
 	    mgr.pending = null;
 	    mgr.notify();
