@@ -10,513 +10,412 @@
 
 use English;
 use strict;
-use Text::CSV; 
-use Getopt::Long;
 $WARNING=1;
 
-my $csv; # csv object
+use Text::CSV;
+use Getopt::Long;
+use checkargs;
 
 my $USAGE =
   "Usage: convertcsv.pl [options] <inputfilename>
   Options:
      -m [behavior]:  behavior for missing values in the csv file
         -m nonsensical : use Daikon \"nonsensical\" values.
-        -m old : use the last non-missing value of the variable (*DEFAULT*).
+        -m old         : use the last non-missing value of the variable
+                         (*DEFAULT*).
         -m interpolate : linearly interpolate between non-missing values.
                          If a .csv file contains variables of String type,
-                         this option will use the last non-missing value 
-                         for all String variables.                         
-        -m zero : use zero 
+                         this option will use the last non-missing value
+                         for all String variables.
+        -m zero        : use zero (or empty string, for strings)
 
-     -decl [declarationsfilename]: use the declarations in the  
+     -decl [declarationsfilename]: use the declarations in the
                           <declarationsfilename> to create the
-                          data trace file. No .decls files
+                          data trace file.  No .decls file
                           will be created.
-   
+
   Output: If <inputfilename> has a \".csv\" extension, creates
-          a declaration file and a data trace file named by 
-          substituting the \".csv\" extension by \".decls\" 
-          and \".dtrace\" respectively. 
-          If <inputfilename> does not have \".csv\" extension, 
-          creates a declaration file and a data trace file by 
-          appending \".decls\" and \".dtrace\" to <inputfilename>. 
+          a declaration file and a data trace file named by
+          substituting the \".csv\" extension by \".decls\"
+          and \".dtrace\" respectively.
+          If <inputfilename> does not have \".csv\" extension,
+          creates a declaration file and a data trace file by
+          appending \".decls\" and \".dtrace\" to <inputfilename>.
 
 ";
-
-# number of input arguments.
-my $noOfArgs = scalar(@ARGV);
 
 # by default insert the last value seen for missing values
 my $missingaction = "old";
 
-# variable $missingact is used to capture the input.
-my $missingact =""; 
-
-# name of the csv file. 
+# Name of the csv file.
 my $inputfilename;
 
-# name of the provided decls file (if any)
-my $declarationfilename = "";
+my $dtrace_file;
+# This is used in opposite senses in the two parts of this program.
+# In first part:  is set if provided on command line, undefined if not.
+# In second part:  is set if being written, undefined if not.
+my $decls_file;
 
-GetOptions( 'decl:s' => \$declarationfilename,
-            'm:s' => \$missingact                       
+GetOptions( 'decl:s' => \$decls_file,
+            'm:s' => \$missingaction
             );
 
-# now, check the value provided to "-m"
-if (($missingact eq "interpolate") ||
-    ($missingact eq "old") ||
-    ($missingact eq "zero") ||
-    ($missingact eq "nonsensical")){   
-    $missingaction = $missingact;
-}
-elsif ($missingact eq ""){
-    # no value provided, use default $missingaction = old.
-    # as set above.
-}
-else {
-    # unknown value given. Exit.
-    print "Invalid option for missing values : ".$missingact."\n\n";
-    print $USAGE;
-    exit(1);
-}
-
-# Default program point name. 
-my $programpoint = "aprogram.point".":::"."POINT";                   
-
-# variable names from the provided declaration file.
-my @actualVarNames; 
-
-# Maps variable names to the index within the csv file.
-my %varNameIndex;
-
-# 1 if a declaration file is provided.
-# 0 otherwise
-my $declarationexists=1;
-
-if ($declarationfilename ne "") {
-    # parse provided declaration file
-    my @returnvalues = parseDecl($declarationfilename);
-    $programpoint = shift(@returnvalues);
-    
-    # Names of the variables present in the declaration file.
-    @actualVarNames = @returnvalues;   
-}
-else {
-    $declarationexists = 0;
-}
-   
-
-# GetOptions removes all the options and their
-# values from @ARGV. So now, check if a <filename> 
-# is provided.
-
-# number of input arguments.
-my $noOfArgs = scalar(@ARGV);
-
-if ($noOfArgs > 0 ) {
-    $inputfilename = $ARGV[0];
-}
-else {
-    print "error: missing input filename.\n" ;
-    print $USAGE;
-    exit(1)
+# Check "$missingaction" (the value provided to "-m")
+if (($missingaction ne "interpolate") &&
+    ($missingaction ne "old") &&
+    ($missingaction ne "zero") &&
+    ($missingaction ne "nonsensical")) {
+  # unknown value given. Exit.
+  print "Invalid -m option: $missingaction\n\n";
+  print $USAGE;
+  exit(1);
 }
 
 
-
-# Create output filenames by using the inputfilename.
-# Replaces every occurence of ".csv" by ".dtrace" 
-# and ".decls" if <inputfilename> contains ".csv".
-# Appends ".decls", ".dtrace" to the <inputfilename>
-# if input filename does not have
-# ".csv" extension.
-
-# creates the dtrace file name
-my $outputfilename = $inputfilename.".dtrace";
-$outputfilename =~ s/\.csv\.dtrace$/\.dtrace/;
-# creates the declaration file name.
-my $outputdecfilename = $inputfilename.".decls"; 
-$outputdecfilename =~ s/\.csv\.decls$/\.decls/;
-
-
-open (CSVHANDLE,$inputfilename)||
-    die("Could not open $inputfilename for input.");
-open (DTRACEHANDLE, ">".$outputfilename) ||
-    die("Could not open $outputfilename for output.");
-
-if ($declarationexists == 0) {
-    open (DECLSHANDLE, ">".$outputdecfilename) ||
-        die("Could not open $outputdecfilename for output.");
+# GetOptions removes all the options and their values from @ARGV.
+# So now, check if a <filename> is provided.
+if (scalar(@ARGV) == 1) {
+  $inputfilename = $ARGV[0];
+} elsif (scalar(@ARGV) == 0) {
+  print "$0: missing input filename.\n";
+  print $USAGE;
+  exit(1);
+} else {
+  print "$0: too many input filenames supplied.\n";
+  print $USAGE;
+  exit(1);
 }
-my $zerovalue = "0\n1\n";
-my $nonsensicalvalue = "nonsensical\n2\n";
 
 
-my $firstpass = 1;
-# used as a boolean to check if
-# the firstline of the input file is read.
-# the firstline of the input file is assumed to
-# contain the variable names.
+# variable names in the declaration file (whether provided or generated).
+my @decl_varnames;
 
-my $decl = 1;
-# flag for including the "DECLARE" statement.
-# if this flag is 1, the "DECLARE" statement
-# will be included in the beginning of each
-# program point in the file.
+# Maps variable names to the index within the csv file (which is
+# the index in the @csv_varnames array).
+my %varNameCsvIndex;
 
-my $counter = 0;
-# counts the number of lines in the
-# input file. (hence, the number of program points)
+# Name of the single program point in the resulting file.
+my $programpointname;
+
+# Set filenames for output.
+$dtrace_file = "$inputfilename.dtrace";
+$dtrace_file =~ s/\.csv\.dtrace$/\.dtrace/;
+# At this point, decls_file is defined if it was provided on the command line.
+if (defined($decls_file)) {
+  ($programpointname, @decl_varnames) = parseDecl($decls_file);
+  undef $decls_file;
+} else {
+  $decls_file = "$inputfilename.decls";
+  $decls_file =~ s/\.csv\.decls$/\.decls/;
+  $programpointname = "aprogram.point:::POINT"
+}
+# At this point, decls_file is defined if it should be written.
+
+open (CSVHANDLE, $inputfilename) ||
+  die("Could not open $inputfilename for input.");
+open (DTRACEHANDLE, ">$dtrace_file") ||
+  die("Could not open $dtrace_file for output.");
+
+if (defined($decls_file)) {
+  open (DECLSHANDLE, ">$decls_file") ||
+    die("Could not open $decls_file for output.");
+}
 
 
-# Arrays for holding variable names, variable values, 
-# and values of previous iteration. 
-my @variablenames;
-my @variables;
-my @prevvalues;
+# Counts the number of lines (samples) in the input file.
+my $num_samples = 0;
 
-# Arrays for holding information needed by 
-# interpolation. (e.g. distance between existing
-# values of a variable)
-# Keys => index of a variable in a line
-# Values => arrays containing all instances of a variable 
-# (columns in the csv file)  
+
+# Arrays indexed by csv index
+my @csv_varnames;               # variable names
+my @prevvalues;                 # previous values
+my @isNumber;                   # type:  true if numeric, false if string
+
+# Contains the entire CSV file, transposed.
+# @variableArray[i] is all the values of the ith column in the CSV file.
 my %variableArray;
 
-
-my $length;
 
 # These are just variables used to store
 # strings that will be written to the output file.
 my $dtraceline;
 my $decls;
-my $replacement;
 
 # Now parse the input file and create the declartions and dtrace files.
-$csv = Text::CSV->new();
+my $csv = Text::CSV->new();
 
-my $csvstatus;
+my $varnames_input = <CSVHANDLE>;
+# capture the variable names in the global
+# variable @csv_varnames.
+getVariableNames($varnames_input);
 
-$_ = <CSVHANDLE> ;
-# capture the variable names in the global 
-# variabe @variablenames.
-getVariableNames($_);
-
-if ($declarationexists == 0){
-    @actualVarNames = @variablenames;
+for (my $i=0; $i<scalar(@csv_varnames); $i++) {
+  $prevvalues[$i] = 0;          # initialize all previous values to 0
+  $isNumber[$i] = 1;            # initialize all types to number
+  $varNameCsvIndex{$csv_varnames[$i]} = $i;
 }
 
-my @isNumber;
-$length = scalar(@actualVarNames);
-
-for (my $j = 0; $j<$length; $j++) {
-    my $activeindex = $varNameIndex{$actualVarNames[$j]};
-    $isNumber[$activeindex] = 1;
+if (defined($decls_file)) {
+  @decl_varnames = @csv_varnames;
 }
+my $num_decl_vars = scalar(@decl_varnames);
 
 
-while(<CSVHANDLE>) {
-    # open the input file.
-    my $i = 0;
-    chomp ($_); # remove the end of line.
-    
-    # if there is an extra comma at the end of the line,
-    # remove it.
-    $_ =~ s/,$//g;           
-    if ($_ ne "") {            
-        
-        $csvstatus = $csv->parse($_);# parse a CSV string into fields
-        if (!$csvstatus) {
-            die("Corrupted csv file. Exiting...");
-        }
-        @variables = $csv->fields(); # get the parsed fields            
-        
-        
-        $length = scalar(@actualVarNames);
-        
-        # There might be an issue if the csv file is
-        # not well formed. For example, if there are 
-        # more variable names than there are values
-        # in a line, append ""'s to fill in for the
-        # missing values.
-        # If reverse is true, warn the user, and
-        # truncate the line.
-        
-        my $varlength = scalar(@variables);
-        if ($length > $varlength) {
-            for (my $z = $varlength; $z < $length; $z++){
-                $variables[$z] = "";
-            }}
-        elsif ($varlength > $length) {            
-            print ("WARNING! csv file contains more variable values than declared\nvariables at line". 
-                   ($counter+1).". Truncating line ".($counter+1).".\n");
-        }
-        
-        $dtraceline = $programpoint."\n";
-        $decls = "DECLARE\n".$programpoint."\n";
-        
-        for (my $j = 0; $j<$length; $j++)
-        {                
-            my $activeindex = $varNameIndex{$actualVarNames[$j]};
+while (<CSVHANDLE>) {
+  chomp ($_);                   # remove the end of line.
 
-            if ($variables[$activeindex] eq "") {
-                if ($missingaction  eq "old") {
-                    if (isnumber($prevvalues[$activeindex])) {
-                        $replacement = $prevvalues[$activeindex]."\n"."1"."\n"; 
-                    }
-                    else {
-                        $replacement = "\"".$prevvalues[$activeindex]."\"\n"."1"."\n";
-                    }}                   
-                elsif($missingaction eq "zero") {
-                    if (isnumber($prevvalues[$activeindex])){
-                        $replacement = $zerovalue; 
-                    }
-                    else {
-                        $replacement = "\"0\"\n1\n";
-                    }}                    
-                elsif($missingaction eq "nonsensical") {
-                    $replacement = $nonsensicalvalue; 
-                }
-                elsif($missingaction eq "interpolate") {
-                    $variableArray{$activeindex}[$counter] = $variables[$activeindex];
-                    $replacement = "";
-                }
-                $dtraceline = $dtraceline.$variablenames[$activeindex]."\n".$replacement; 
-            }
-            else {
-                # capture required values for interpolation.
-                $variableArray{$activeindex}[$counter] = $variables[$activeindex];
-                if (isnumber($variables[$activeindex])) {
-                    $dtraceline = $dtraceline.$variablenames[$activeindex].
-                        "\n".$variables[$activeindex]."\n"."1"."\n";
-                }
-                else {
-                    $dtraceline = $dtraceline.$variablenames[$activeindex].
-                        "\n\"".$variables[$activeindex]."\"\n"."1"."\n";
-                }
-                $prevvalues[$activeindex]  = $variables[$activeindex];
-                }
-            print DTRACEHANDLE $dtraceline;
- 
-            if ($decl == 1) {
-                if ((isnumber($variables[$activeindex])) || ($variables[$activeindex] eq "")) {
-                    
-                }
-                else {
-                    $isNumber[$activeindex] = 0;
-                }
-                
-            }
-            $dtraceline = "";
-        }
+  # If there is an extra comma at the end of the line, remove it.
+  # (But how do we know that it is an extra?)
+  $_ =~ s/,$//g;
+  # Skip blank lines
+  if ($_ eq "") {
+    next;
+  }
 
-        print DTRACEHANDLE "\n";        
-        $counter += 1;            
-    }}
+  my $csvstatus = $csv->parse($_); # parse a CSV string into fields
+  if (!$csvstatus) {
+    die("Unparseable line in csv file $inputfilename: $_");
+  }
+  my @sample = $csv->fields();  # get the parsed fields
 
-for (my $j = 0; $j<$length; $j++) {                
-    my $activeindex = $varNameIndex{$actualVarNames[$j]};
-    if ($isNumber[$activeindex]) {
-        $decls = $decls.$variablenames[$activeindex].
-            "\n"."double\n"."double\n1\n";       
+  {
+    # Check the number of columns in the csv file.
+    my $sample_length = scalar(@sample);
+    if ($sample_length > $num_decl_vars) {
+      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
     }
-    else {
-        $decls = $decls.$variablenames[$activeindex].
-            "\n"."String\n"."String\n1\n";
+    if ($sample_length < $num_decl_vars) {
+      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
+      for (my $z = $sample_length; $z < $num_decl_vars; $z++) {
+        $sample[$z] = "";
+      }
     }
-    if ($declarationexists == 0) { print DECLSHANDLE $decls; }
-    $decls = "";
+  }
+
+  print DTRACEHANDLE "$programpointname\n";
+  for (my $j = 0; $j<$num_decl_vars; $j++) {
+    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
+    my $value = $sample[$csvindex];
+    my $modbit = 1;
+
+    if ($value =~ /^ *$/) {
+      # The value is missing (or consists only of spaces)
+      my $prevvalue = $prevvalues[$csvindex];
+      if ($missingaction eq "old") {
+        $value = $prevvalue;
+      } elsif($missingaction eq "zero") {
+        if (isnumber($prevvalue)) {
+          $value = "0";
+        } else {
+          $value = "\"\"";
+        }
+      } elsif ($missingaction eq "nonsensical") {
+        $value = "nonsensical";
+        $modbit = 2;
+      } elsif ($missingaction eq "interpolate") {
+        $variableArray{$csvindex}[$num_samples] = $value;
+      }
+    } else {
+      if (!isnumber($value)) {
+        $value = "\"$value\"";
+        $isNumber[$csvindex] = 0;
+      }
+      $prevvalues[$csvindex] = $value;
+      if ($missingaction eq "interpolate") {
+        # capture required values for interpolation.
+        $variableArray{$csvindex}[$num_samples] = $value;
+      }
+    }
+    print DTRACEHANDLE "$csv_varnames[$csvindex]\n";
+    print DTRACEHANDLE "$value\n";
+    print DTRACEHANDLE "$modbit\n";
+  }
+
+  print DTRACEHANDLE "\n";
+  $num_samples++;
 }
 
+if (defined($decls_file)) {
+  print DECLSHANDLE "DECLARE\n$programpointname\n";
+  for (my $j = 0; $j<$num_decl_vars; $j++) {
+    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
+    print DECLSHANDLE "$csv_varnames[$csvindex]\n";
+    if ($isNumber[$csvindex]) {
+      print DECLSHANDLE "double\ndouble\n";
+    } else {
+      print DECLSHANDLE "String\nString\n";
+    }
+    print DECLSHANDLE "1\n";
+  }
+}
 
 close(DECLSHANDLE);
 close(CSVHANDLE);
 close(DTRACEHANDLE);
 
-# interpolation requires extra work, as we first need
-# to find new values for missing values, then write 
-# them into the file.
-
-if ($missingaction =~ /interpolate/) { 
-    interpolate(); 
+# Interpolation requires extra work, as we first need to find new values
+# for missing values, then write them into the file.
+if ($missingaction =~ /interpolate/) {
+  interpolate();
 }
+
+exit();
+
+
+###########################################################################
+### Subroutines
+###
 
 
 # This subroutine carries out linear interpolation to
 # fill in the missing values in the csv file. Assumes
 # the initial value of a variable is zero, if it is not
 # initialized. If the last n values of a variable is missing,
-# the procedure inserts the last non-missing value for 
+# the procedure inserts the last non-missing value for
 # all n values.
+# Since the decls file is already written (and is correct),
+# it need not be rewritten.
+# TODO: integrate in earlier processing so that it does not require
+# storing the entire file in the @variableArray array.
 
-sub interpolate() {
-    open (DTRACEHANDLE, ">".$outputfilename) ||
-        die("Could not open $outputfilename for output.");
-    if ($declarationexists == 0) {
-        open (DECLSHANDLE, ">".$outputdecfilename) ||
-            die("Could not open $outputdecfilename for output.");
-    }
+sub interpolate () {
+  check_args(0, @_);
+  open (DTRACEHANDLE, "> $dtrace_file") ||
+    die("Could not open $dtrace_file for output.");
 
-    my $m;    
-
-    my $declsline = "DECLARE\n".$programpoint."\n";
-   
-    # set flag for creating a declarations file.
-    $decl = 1; 
-    for (my $k = 0; $k < $counter; $k++) {
-        $dtraceline = "\n".$programpoint."\n";        
-        for (my $j = 0; $j < $length; $j++) {                             
-            my $activeindex = $varNameIndex{$actualVarNames[$j]};
-            if ($variableArray{$activeindex}[$k] eq "") {                
-                for ($m=1; $m< $counter-$k; $m++) {
-                    if ($variableArray{$activeindex}[$k+$m] eq "") { 
-                    }
-                    else {                      
-                        for (my $n=0; $n<$m; $n++) {                            
-                            if (isnumber($variableArray{$activeindex}[$k+$n-1]) 
-                                || isnumber($variableArray{$activeindex}[$k+$m])) {                                   
-                                my $y1 = $variableArray{$activeindex}[$k+$m];
-                                my $y0 = $variableArray{$activeindex}[$k-1+$n];
-                                if ($y1 eq "") {
-                                    $y1 = 0;
-                                }
-                                if ($y0 eq "") {
-                                    $y0 = 0; 
-                                }
-                                my $gradient = ($y1-$y0)/($m+1-$n);
-                                my $yintercept = $y1-$gradient*($k+$m);
-                                $variableArray{$activeindex}[$k+$n] = $gradient*
-                                    ($k+$n)+$yintercept;
-                            }
-                            else {
-                                # if not a number cannot interpolate;
-                                # just copy the previous value.
-                                $variableArray{$activeindex}[$k+$n] = 
-                                    $variableArray{$activeindex}[$k+$n-1];
-                            }}
-                        $m = $counter;
-                    }}
-                if (($m == $counter-$k) && ($variableArray{$activeindex}[$k+$m-1] eq "")) {
-                    $variableArray{$activeindex}[$k] = $prevvalues[$activeindex];
+  for (my $k = 0; $k < $num_samples; $k++) {
+    print DTRACEHANDLE "\n$programpointname\n";
+    for (my $j = 0; $j < $num_decl_vars; $j++) {
+      my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
+      if ($variableArray{$csvindex}[$k] eq "") {
+        my $m;
+        for ($m=1; $m< $num_samples-$k; $m++) {
+          if ($variableArray{$csvindex}[$k+$m] eq "") {
+          } else {
+            for (my $n=0; $n<$m; $n++) {
+              if (isnumber($variableArray{$csvindex}[$k+$n-1])
+                  || isnumber($variableArray{$csvindex}[$k+$m])) {
+                my $y1 = $variableArray{$csvindex}[$k+$m];
+                my $y0 = $variableArray{$csvindex}[$k+$n-1];
+                if ($y1 eq "") {
+                  $y1 = 0;
                 }
+                if ($y0 eq "") {
+                  $y0 = 0;
+                }
+                my $gradient = ($y1-$y0)/($m+1-$n);
+                my $yintercept = $y1-$gradient*($k+$m);
+                $variableArray{$csvindex}[$k+$n] = $gradient*
+                  ($k+$n)+$yintercept;
+              } else {
+                # If not a number cannot interpolate;
+                # just copy the previous value.
+                $variableArray{$csvindex}[$k+$n] =
+                  $variableArray{$csvindex}[$k+$n-1];
+              }
             }
-            if (isnumber($variableArray{$activeindex}[$k])) {                            
-                # store it as a number
-                $dtraceline = $dtraceline.$variablenames[$activeindex]."\n".
-                    $variableArray{$activeindex}[$k]."\n"."1"."\n";
-                if ($decl == 1) {
-                    $declsline = $declsline.$variablenames[$activeindex]."\n".
-                        "double\ndouble\n1\n"
-                    }
-            }
-            else {              
-                # not a number so store it as a string.   
-                $dtraceline = $dtraceline.$variablenames[$activeindex].
-                    "\n\"".$variableArray{$activeindex}[$k]."\"\n"."1"."\n";
-                if ($decl == 1) {
-                    $declsline = $declsline.$variablenames[$activeindex]."\n".
-                        "String\nString\n1\n"
-                    }
-            }
-            print DTRACEHANDLE $dtraceline;
-            if ($declarationexists == 0) {
-                print DECLSHANDLE $declsline;
-            }
-            $dtraceline = "";
-            $declsline = "";
+            $m = $num_samples;
+          }
         }
-        $decl = 0;
+        if (($m == $num_samples-$k) && ($variableArray{$csvindex}[$k+$m-1] eq "")) {
+          $variableArray{$csvindex}[$k] = $prevvalues[$csvindex];
+        }
+      }
+      print DTRACEHANDLE "$csv_varnames[$csvindex]\n";
+      print DTRACEHANDLE "$variableArray{$csvindex}[$k]\n";
+      print DTRACEHANDLE "1\n";
     }
-    close(DTRACEHANDLE);
-    close(DECLSHANDLE);
+  }
+  close(DTRACEHANDLE);
 }
 
 
-# isnumber(Object)
-# Returns 0 if passed Object is not a number.
-# Returns 1 if passed Object is a number (integer, double etc.)
-sub isnumber{  
-    my ($num) = @_;   
-    if ($num =~ /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/) {
-        return 1;
-    }
-    else {
-        return 0;
-      } 
+# Returns true if string represents a number (integer, double etc.).
+sub isnumber ( $ ) {
+  my ($num) = check_args(1, @_);
+  # The regular expression is from the Perl FAQ.
+  return ($num =~ /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/);
 }
 
 
 # Removes spaces, double quotes, slashes, (square|curly|regular) brackets
 # from variable names.
-
-sub formatVarNames{
-    my ($input) = @_;
-    # To facilitate commenting out
-    # one or more of these expressions,
-    # each one was written in a separate line.
-    $input =~ s/ /_/g;
-    $input =~ s/\./_/g;
-    $input =~ s/(\"|-|\/)/_/g;
-    $input =~ s/(\(|\))//g;
-    $input =~ s/(\[|\])//g;
-    $input =~ s/(\<|\>)//g;
+# (This is presumably required by the variable name parsing code.)
+sub formatVarName ( $ ) {
+  my ($input) = check_args(1, @_);
+  my $simplified = $input;
+  # To facilitate commenting out
+  # one or more of these expressions,
+  # each one was written in a separate line.
+  $simplified =~ s/ /_/g;
+  $simplified =~ s/\./_/g;
+  $simplified =~ s/(\"|-|\/)/_/g;
+  $simplified =~ s/(\(|\))//g;
+  $simplified =~ s/(\[|\])//g;
+  $simplified =~ s/(\<|\>)//g;
+  if ($simplified eq $input) {
     return $input;
+  }
+  $simplified = $input;
+  # Quote backslashes and quotes (in that order)
+  $simplified =~ s/\\/\\\\/g;
+  $simplified =~ s/\"/\\\"/g;
+  return '"' . $simplified . '"';
 }
 
 
-# Captures the variable names in the global
-# variable @variablenames.
-sub getVariableNames{
-    $_ = @_[0];
-    chomp ($_);     # remove end of line character.
-    $_ =~ s/,$//;   # remove commas at the end of each line in 
-                    # csv file.            
-    
-    $csvstatus = $csv->parse($_);# parse a CSV string into fields
-       
-    if ($csvstatus){
-        @variablenames = $csv->fields(); # get the parsed fields        
-        my $i = 0;
-        foreach my $var (@variablenames) {
-            # Remove spaces, double quotes,slashes from the names of variables.
-            $variablenames[$i] = formatVarNames($variablenames[$i]);
-            $prevvalues[$i] = 0; # initialize all previous values to 0  
+# Captures the variable names in the global variable @csv_varnames.
+sub getVariableNames ( $ ) {
+  my ($line) = check_args(1, @_);
+  chomp ($line);                # remove end of line character.
+  $line =~ s/,$//;     # remove commas at the end of each line in csv file.
 
-            # Generate a hash that maps variable name to the index of 
-            # variable.
-            $varNameIndex{$variablenames[$i]} = $i;
-            $i += 1; 
-            
-        }}
-    else {
-        die("Corrupted csv file. Exiting...");
-    }}   
+  my $csvstatus = $csv->parse($line); # parse a CSV string into fields
+  if (!$csvstatus) {
+    die("Corrupted csv file. Exiting...");
+  }
 
-# parses the provided declaration file.
-# and returns an array containing 
-# the program point name and the names of  variables.
+  @csv_varnames = $csv->fields(); # get the parsed fields
+  my $i = 0;
+  foreach my $var (@csv_varnames) {
+    # Remove spaces, double quotes, slashes from the names of variables.
+    $csv_varnames[$i] = formatVarName($csv_varnames[$i]);
+    $i++;
+  }
 
-sub parseDecl{
-    my $inputfile = @_[0];
-    open(DECHANDLE, $inputfile) ||
-        die("Cannot open declarations file $inputfile");
-    $_ = <DECHANDLE>;
-    my $programpoint = <DECHANDLE>; 
-    chomp($programpoint);
-    my $i = 0;
-    my @varnames; 
-    my @varDecType;
-    my @varActType;
-    my @varComparable;
+}
 
-    while(<DECHANDLE>) {
-        chomp($_);
-        $varnames[$i] = $_;
-        $varDecType[$i] =<DECHANDLE>;
-        $varActType[$i] = <DECHANDLE>;
-        $varComparable[$i] = <DECHANDLE>;
-        $i = $i +1 ;
-    }
-    close(DECHANDLE);
-    return ($programpoint, @varnames);    
+
+# Parses the provided declaration file.
+# Assumes the declaration file contains no blank lines or comments,
+# and that it contains only one program point.
+# Returns an array containing the program point name and the names of
+# variables.
+sub parseDecl ( $ ) {
+  my ($inputfile) = check_args(1, @_);
+  open(DECLHANDLE, $inputfile) ||
+    die("Cannot open declarations file $inputfile");
+  my $declare = <DECLHANDLE>;
+  if ($declare ne "DECLARE\n") {
+    die "Didn't see \"DECLARE\" as first line of declaration file $inputfile";
+  }
+  my $ppt = <DECLHANDLE>;
+  chomp($ppt);
+  my $i = 0;
+  my @varnames;
+  my @varDecType;
+  my @varActType;
+  my @varComparable;
+
+  while (<DECLHANDLE>) {
+    chomp($_);
+    $varnames[$i] = $_;
+    $varDecType[$i] = <DECLHANDLE>;
+    $varActType[$i] = <DECLHANDLE>;
+    $varComparable[$i] = <DECLHANDLE>;
+    $i++;
+  }
+  close(DECLHANDLE);
+  return ($ppt, @varnames);
+
 }
