@@ -7,7 +7,8 @@ import daikon.temporal.TemporalInvariantManager;
 
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.io.*;
 import java.util.*;
@@ -160,8 +161,8 @@ public final class FileIO {
                                             PptMap all_ppts)
     throws IOException
   {
-    if (debugRead.isDebugEnabled()) {
-      debugRead.debug("read_declaration_file " + filename
+    if (debugRead.isLoggable(Level.FINE)) {
+      debugRead.fine ("read_declaration_file " + filename
                       + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
                       + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
@@ -174,8 +175,8 @@ public final class FileIO {
 
     // line == null when we hit end of file
     for ( ; line != null; line = reader.readLine()) {
-      if (debugRead.isDebugEnabled())
-        debugRead.debug("read_declaration_file line: " + line);
+      if (debugRead.isLoggable(Level.FINE))
+        debugRead.fine ("read_declaration_file line: " + line);
       if (line.equals("") || isComment(line))
         continue;
       if (line.equals(declaration_header)) {
@@ -215,8 +216,8 @@ public final class FileIO {
 
       // Not a declaration.
       // Read the rest of this entry (until we find a blank line).
-      if (debugRead.isDebugEnabled())
-        debugRead.debug("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
+      if (debugRead.isLoggable(Level.FINE))
+        debugRead.fine ("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
       while ((line != null) && (!line.equals("")) && (!isComment(line))) {
         System.out.println("Unrecognized paragraph contains line = `" + line + "'");
         System.out.println("" + (line != null) + " " + (line.equals("")) + " " + (isComment(line)));
@@ -275,33 +276,37 @@ public final class FileIO {
     // The var_infos that will populate the new program point
     List var_infos = new ArrayList();
 
-    // Rename EXITnn to EXIT
-    {
-      PptName parsed_name = new PptName(ppt_name);
-      if (parsed_name.isExitPoint()) {
-        PptName new_name = parsed_name.makeExit();
-        // Punt if we already read a different EXITnn
-        if (all_ppts.get(new_name) != null) {
-          String line = file.readLine();
-          while ((line != null) && !line.equals("")) {
-            // This fails if some lines of a declaration (e.g., the
-            // comparability field) are empty.
-            line = file.readLine();
+    // Enable this code when Daikon supports handling of multiple exit
+    // points via a variable rather than via separate ppts
+    if (false) {
+    //     Rename EXITnn to EXIT
+      {
+        PptName parsed_name = new PptName(ppt_name);
+        if (parsed_name.isExitPoint()) {
+          PptName new_name = parsed_name.makeExit();
+          // Punt if we already read a different EXITnn
+          if (all_ppts.get(new_name) != null) {
+            String line = file.readLine();
+            while ((line != null) && !line.equals("")) {
+              // This fails if some lines of a declaration (e.g., the
+              // comparability field) are empty.
+              line = file.readLine();
+            }
+            return null;
           }
-          return null;
-        }
-        // Override what was read from file
-        ppt_name = new_name.name().intern();
-        // Add the pseudo-variable $return_line
-        if (false) {
-          // Skip this for now; we're not sure how to make it work
-          ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
-          ProglangType file_rep_type = ProglangType.INT;
-          VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
-          VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
-                                     prog_type, file_rep_type, comparability,
-                                     VarInfoAux.getDefault());
-          var_infos.add(line);
+          // Override what was read from file
+          ppt_name = new_name.name().intern();
+          // Add the pseudo-variable $return_line
+          if (false) {
+            // Skip this for now; we're not sure how to make it work
+            ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
+            ProglangType file_rep_type = ProglangType.INT;
+            VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
+            VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
+                                       prog_type, file_rep_type, comparability,
+                                       VarInfoAux.getDefault());
+            var_infos.add(line);
+          }
         }
       }
     }
@@ -551,6 +556,7 @@ public final class FileIO {
   // for debugging only, but now also used for Daikon progress output.
   public static LineNumberReader data_trace_reader;
   public static File data_trace_filename;
+  public static int data_num_slices = 0;
 
   /** Read data from .dtrace file. **/
   static void read_data_trace_file(File filename, PptMap all_ppts,
@@ -559,12 +565,10 @@ public final class FileIO {
   {
     int pptcount = 1;
 
-    if (debugRead.isDebugEnabled()) {
-      debugRead.debug("read_data_trace_file " + filename
-                      + ((Daikon.ppt_regexp != null) ? " " +
-                         Daikon.ppt_regexp.getPattern() : "")
-                      + ((Daikon.ppt_omit_regexp != null) ? " " +
-                         Daikon.ppt_omit_regexp.getPattern() : ""));
+    if (debugRead.isLoggable(Level.FINE)) {
+      debugRead.fine ("read_data_trace_file " + filename
+                      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+                      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
@@ -626,15 +630,30 @@ public final class FileIO {
         }
 
         String ppt_name = line; // already interned
-        { // Rename EXITnn to EXIT
-          PptName parsed = new PptName(ppt_name);
-          if (parsed.isExitPoint()) {
-            ppt_name = parsed.makeExit().name().intern();
+        {
+          try {
+            PptName parsed = new PptName(ppt_name);
+            // Enable the code below when Daikon stops using different
+            // ppts for different exits
+            if (false) {
+              // Rename EXITnn to EXIT
+              if (parsed.isExitPoint()) {
+                ppt_name = parsed.makeExit().name().intern();
+              }
+            }
+          } catch (Error e) {
+            throw new Error("Illegal program point name \"" + ppt_name + "\""
+                            + " at " + data_trace_filename
+                            + " line " + reader.getLineNumber());
           }
         }
 
         if (pptcount++ % 10000 == 0)
             System.out.print(":");
+
+        if (Daikon.debugTrace.isLoggable(Level.FINE)) {
+          data_num_slices = all_ppts.countSlices();
+        }
 
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
         Assert.assertTrue(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
@@ -727,8 +746,8 @@ public final class FileIO {
         // XXX (for now, until front ends are changed)
         // No, always do this, because exit ppts have all the interesting values,
         // and doing anything else is redundant.
-        if (! ppt.ppt_name.isExitPoint()) {
-          // return;
+        if (Daikon.use_dataflow_hierarchy && !ppt.ppt_name.isExitPoint()) {
+          return;
         }
 
         // // Add invocation counts
@@ -750,9 +769,9 @@ public final class FileIO {
         // Causes interning
         vt = new ValueTuple(vt.vals, vt.mods);
 
-        if (debugRead.isDebugEnabled()) {
-          debugRead.debug("Adding ValueTuple to " + ppt.name);
-          debugRead.debug("  length is " + vt.vals.length);
+        if (debugRead.isLoggable(Level.FINE)) {
+          debugRead.fine ("Adding ValueTuple to " + ppt.name);
+          debugRead.fine ("  length is " + vt.vals.length);
         }
         ppt.add_and_flow(vt, 1);
 
@@ -1209,9 +1228,6 @@ public final class FileIO {
     // } catch (OptionalDataException e) {    // already extends IOException
   }
 
-
-
-
   public static HashMap readDataTraceFile(Collection files, // [File]
                                            PptMap all_ppts,
                                           TemporalInvariantManager temporal_manager, daikon.tools.DtraceProcessor dtraceProcessor)
@@ -1352,20 +1368,5 @@ public final class FileIO {
     data_trace_reader = null;
     return values;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
