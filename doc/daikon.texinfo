@@ -5159,7 +5159,7 @@ files.  There are several solutions to this problem.
 
 
 @enumerate
-First there is one technique that will not change your resulting invariant 
+First, there is one technique that will not change your resulting invariant 
 files.
 @item 
 Daikon may take a long time to run if it is not capable of loading the entire
@@ -5175,9 +5175,10 @@ Daikon on each @file{.dtrace} file, use the union function of
 @ref{Invariant Diff} to combine the resulting @file{.inv} files into one.
 @end enumerate
 
+
+@enumerate
 Second, you can try a number of techniques that can slightly modify your 
 resulting invariant files.
-@enumerate
 @item 
 You can terminate the instrumented program when it has created a
 sufficiently large @file{.dtrace} file.  If you interrupt the program
