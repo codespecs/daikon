@@ -499,12 +499,7 @@ Then, run the GUI with the <tt>.inv</tt> file as an argument:
 
 <pre>    java daikon.gui.InvariantsGUI foo.inv</pre>
 
-Click on various program points in the tree to see tables of invariants for
-those program points.  You may use the <tt>Ctrl</tt> and <tt>Shift</tt>
-keys to make an arbitrary selection of program points. <p>
-
-You can sort a column in a table by clicking on the column header.
-Shift-click to sort the column in reverse order. <p>
+For instructions on how to use the GUI, see the <a href="gui.html">Daikon GUI manual</a>.
 
 Please <a href="mailto:mhao@mit.edu">contact us</a> with any
 questions, comments, or suggestions on the GUI.<p>
