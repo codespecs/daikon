@@ -519,7 +519,9 @@ sub check_uri ($$$;$)
   my $response = &get_document('GET', $uri, $doc_count, \%redirects);
 
   # Can we check the resource? If not, we exit here...
-  return -1 if defined($response->{Stop});
+  if (defined($response->{Stop})) {
+    return -1;
+  }
 
   if ($first) {
     # Use the first URI as the recursion base unless specified otherwise.
@@ -530,7 +532,9 @@ sub check_uri ($$$;$)
   } else {
     # Before fetching the document, we don't know if we'll be within the
     # recursion scope or not (think redirects).
-    return -1 unless &in_recursion_scope($response->{absolute_uri});
+    if (! &in_recursion_scope($response->{absolute_uri})) {
+      return -1;
+    }
   }
 
   # Define the document header, and perhaps print it.
@@ -625,6 +629,9 @@ sub check_uri ($$$;$)
     foreach my $lines (keys %{$p->{Links}{$link}}) {
       my $canonical = URI->new($abs_link_uri->canonical());
       my $url = $canonical->scheme().':'.$canonical->opaque();
+      # Remove repeated slashes, to avoid re-checking or infinite recursion.
+      # Don't match the double slashes in "http://", however.
+      $url =~ s|([^:])//|$1/|g;
       my $fragment = $canonical->fragment();
       if (! $fragment) {
         # Document without fragment
