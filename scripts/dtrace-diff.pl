@@ -8,45 +8,47 @@ use English;
 # use strict;
 $WARNING = 1;
 
-($decls, $dta, $dtb) = @ARGV;
+($declsname, $dtaname, $dtbname) = @ARGV;
 
 #load decls file
-$gdeclshash = load_decls($decls);
+$gdeclshash = load_decls($declsname);
 
 #dump it
 #dump_decls($gdeclshash);
 
 #compare the dtraces
-cmp_dtracen($gdeclshash, $dta, $dtb);
+cmp_dtracen($gdeclshash, $dtaname, $dtbname);
 
 sub getline {
-#gets a line from the filehandle $1
-    my $fh = shift;
+#gets a line from the filehandle/count $1
+    my $fhobj = shift;
+    my $fh = $$fhobj[0];
     my $l;
     do {
 	$l = <$fh>;
-	if ($l) {chomp $l;}
+	if ($l) {chomp $l; ($$fhobj[1])++;}
     } while ($l && ($l =~ m|^\#|));
     return $l;
 }
 
 sub load_decls {
 #loads the decls file given by $1 into a hash, returns a ref
-    my $decls = shift;
-    open DECLS, $decls or die "couldn't open decls \"$decls\"\n";
+    my $declsname = shift;
+    open DECLS, $declsname or die "couldn't open decls \"$decls\"\n";
+    my $decls = [DECLS, 0];
     my $declshash = {};
     my $ppt_seen = 0;
-    while (defined (my $l = getline(DECLS))) {
+    while (defined (my $l = getline($decls))) {
         $l =~ s://.*::; # strip any comments on this line
 	if ($l eq "DECLARE") {
-	    my $currppt = getline(DECLS);
+	    my $currppt = getline($decls);
 	    my $lhashref = {};
-	    while (my $varname = getline(DECLS)) {
-		(defined (my $dtype = getline(DECLS)))
+	    while (my $varname = getline($decls)) {
+		(defined (my $dtype = getline($decls)))
 		    or die "malformed decls file";
-		(defined (my $rtype = getline(DECLS)))
+		(defined (my $rtype = getline($decls)))
 		    or die "malformed decls file";
-		(defined (my $ltype = getline(DECLS)))
+		(defined (my $ltype = getline($decls)))
 		    or die "malformed decls file";
 		$$lhashref{$varname} = [$dtype, $rtype, $ltype];
 	    }
@@ -56,13 +58,13 @@ sub load_decls {
 	    #it's ok to have a VarComparability as the first thing
 	    #in the decls file.  Read the type of comparability,
 	    #then move on.
-	    $l = getline(DECLS);
+	    $l = getline($decls);
 	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
 	    #it's ok to have a ListImplementors in the decls file.
 	    #Read the type of comparability, then move on.
-	    $l = getline(DECLS);
+	    $l = getline($decls);
 	} elsif ($l) {
-	    die "malformed decls file: $l";
+	    die "malformed decls file: \"$l\" at line" . $$decls[1];
 	}
     }
     close DECLS;
@@ -79,6 +81,8 @@ sub load_ppt {
     (defined $pptname)
 	or return undef;
 
+    my $pptline = $$dtfh[1]-1;
+
     my $ppthash = {};
 
     while (my $varname = getline($dtfh)) {
@@ -94,15 +98,17 @@ sub load_ppt {
 	$$ppthash{$varname} = [$varval, $modbit];
     }
 
-    return [$pptname, $ppthash];
+    return [$pptname, $pptline, $ppthash];
 }
 
 sub print_ppt {
 #prints a ppt for debugging purposes
     my $ppt = shift;
     my $pptname = $$ppt[0];
-    my $ppth = $$ppt[1];
+    my $pptline = $$ppt[1];
+    my $ppth = $$ppt[2];
     print "Name - \"${pptname}\"\n";
+    print "Line number ${pptline}\n";
     foreach my $var (keys %$ppth) {
 	my $val = $$ppth{$var};
 	print "  variable \"${var}\" = (\"" . $$val[0] . "\", "
@@ -116,8 +122,8 @@ sub cmp_ppts {
     my $ppta = shift;
     my $pptb = shift;
     if ($$ppta[0] ne $$pptb[0]) {
-	print "ppt name difference: ${dta}=\"" . $$ppta[0] .
-	    "\", ${dtb}=\"" . $$pptb[0] . "\"\n";
+	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] .
+	    "\", ${dtbname}=\"" . $$pptb[0] . "\"\n";
 	return;
     }
     my $pptname = $$ppta[0];
@@ -126,7 +132,7 @@ sub cmp_ppts {
 	print "ppt name not in decls: \"${pptname}\"\n";
 	return;
     }
-    my $ha = $$ppta[1];  my $hb = $$pptb[1];
+    my $ha = $$ppta[2];  my $hb = $$pptb[2];
     foreach my $varname (keys %$ppt) {
 	my $varl = $$ppt{$varname};
 	my $la = $$ha{$varname};
@@ -135,9 +141,9 @@ sub cmp_ppts {
 	if ((not defined $la) && (not defined $lb)) {
 	    print "${varname} \@ ${pptname} undefined in both dtrace files\n";
 	} elsif (not defined $la) {
-	    print "${varname} \@ ${pptname} undefined in ${dta}\n";
+	    print "${varname} \@ ${pptname} undefined in ${dtaname}\n";
 	} elsif (not defined $lb) {
-	    print "${varname} \@ ${pptname} undefined in ${dtb}\n";
+	    print "${varname} \@ ${pptname} undefined in ${dtbname}\n";
 	} elsif ($$varl[1] eq "double") {
 	    if (($$la[0] eq "uninit")||($$lb[0] eq "uninit")) {
 		$difference = !($$la[0] eq $$lb[0]);
@@ -148,13 +154,13 @@ sub cmp_ppts {
 	    }
 	    if ($difference) {
 		print "${varname} \@ ${pptname} floating-point difference:\n"
-		    . "  \"" . $$la[0] . "\" in ${dta}\n"
-			. "  \"" . $$lb[0] . "\" in ${dtb}\n";
+		    . "  \"" . $$la[0] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
+			. "  \"" . $$lb[0] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
 	    }
 	    if ($$la[1] ne $$lb[1]) {
 		print "${varname} \@ ${pptname} modbit difference:\n"
-		    . "  \"" . $$la[1] . "\" in ${dta}\n"
-			. "  \"" . $$lb[1] . "\" in ${dtb}\n";
+		    . "  \"" . $$la[1] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
+			. "  \"" . $$lb[1] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
 	    }
 	} else {
 	    if ($$varl[1] =~ /^hashcode/) {
@@ -165,13 +171,13 @@ sub cmp_ppts {
 	    }
 	    if ($$la[0] ne $$lb[0]) {
 		print "${varname} \@ ${pptname} difference:\n"
-		    . "  \"" . $$la[0] . "\" in ${dta}\n"
-			. "  \"" . $$lb[0] . "\" in ${dtb}\n";
+		    . "  \"" . $$la[0] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
+			. "  \"" . $$lb[0] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
 	    }
 	    if ($$la[1] ne $$lb[1]) {
 		print "${varname} \@ ${pptname} modbit difference:\n"
-		    . "  \"" . $$la[1] . "\" in ${dta}\n"
-			. "  \"" . $$lb[1] . "\" in ${dtb}\n";
+		    . "  \"" . $$la[1] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
+			. "  \"" . $$lb[1] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
 	    }
 	}
     }
@@ -180,20 +186,23 @@ sub cmp_ppts {
 sub cmp_dtracen {
 #opens the dtrace files named by $2 and $3, compares them using decls hash $1
     my $declshash = shift;
-    my $dta = shift;
-    my $dtb = shift;
-    open DTA, $dta or die "couldn't open dtrace \"$dta\"\n";
-    open DTB, $dtb or die "couldn't open dtrace \"$dtb\"\n";
+    my $dtaname = shift;
+    my $dtbname = shift;
+    open DTA, $dtaname or die "couldn't open dtrace \"$dtaname\"\n";
+    open DTB, $dtbname or die "couldn't open dtrace \"$dtbname\"\n";
+
+    $dta = [DTA, 0];
+    $dtb = [DTB, 0];
 
   PPT: while (1) {
-      my $ppta = load_ppt(DTA); my $pptb = load_ppt(DTB);
+      my $ppta = load_ppt($dta); my $pptb = load_ppt($dtb);
       if ((not defined $ppta) && (not defined $pptb)) {
 	  last PPT;
       } elsif (not defined $ppta) {
-	  print "dtrace file $dta ends before $dtb.\n";
+	  print "dtrace file $dtaname ends before $dtbname.\n";
 	  last PPT;
       } elsif (not defined $pptb) {
-	  print "dtrace file $dtb ends before $dta.\n";
+	  print "dtrace file $dtbname ends before $dtaname.\n";
 	  last PPT;
       } else {
 	  cmp_ppts($declshash, $ppta, $pptb);
