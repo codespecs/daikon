@@ -269,7 +269,7 @@ public final class INTEQUAL
     }
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
-#if 0
+  #if 0
     // [This comment describes the absence of certain code, so it
     // doesn't really belong in any of the generated files]
 
@@ -279,10 +279,14 @@ public final class INTEQUAL
     // containing a or b. Plus, to boot, you also get a LinearBinary
     // invariant with a=1 and b=0 that prints as "a == b", defeating
     // the original purpose of suppressing a stupid-looking invariant.
-#endif
+  #endif
+
+  #if 0
+    // This code is also removed because these sorts of static checks
+    // can't be reliability performed with equality sets (just because
+    // the leader is size-1 doesn't imply that each member is size-1
 
     { // Tests involving sequence lengths.
-
       SequenceLength sl1 = null;
       if (var1.isDerived() && (var1.derived instanceof SequenceLength))
         sl1 = (SequenceLength) var1.derived;
@@ -291,12 +295,16 @@ public final class INTEQUAL
         sl2 = (SequenceLength) var2.derived;
 
       // Avoid "size(a)-1 cmp size(b)-1"; use "size(a) cmp size(b)" instead.
-      if ((sl1 != null) && (sl2 != null)
-          && ((sl1.shift == sl2.shift) && (sl1.shift != 0) || (sl2.shift != 0))) {
+      if ((sl1 != null) && (sl2 != null) &&
+          ((sl1.shift == sl2.shift) && (sl1.shift != 0) || (sl2.shift != 0))) {
         // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
+        Debug.log (debug, INTEQUAL.class, ppt,
+               "Not instantiating, compare of form size(a)-1 op size(b)-1"
+               + " var1= " + var1.name.name() + " var2= " + var2.name.name());
         return null;
       }
     }
+  #endif
 #endif
 
 #if 0
@@ -1028,6 +1036,98 @@ invariants.
     }
     return (sl);
   }
+  /**
+   * Suppression in the form y = x-1 + b ==> y EQUALSstring x
+   * (where b EQUALSstring 1).
+   */
+  public static SuppressionLink lb_offset_suppress (Invariant arg,
+                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression by LinearBinary (x = size(y)-1 + c)");
+
+    boolean v1_shift = false;
+    VarInfo v1 = inv.var1();
+    VarInfo v2 = inv.var2();
+    SequenceLength v1_size = null;
+    if (v1.isDerived() && (v1.derived instanceof SequenceLength))
+      v1_size = (SequenceLength) v1.derived;
+    SequenceLength v2_size = null;
+    if (v2.isDerived() && (v2.derived instanceof SequenceLength))
+      v2_size = (SequenceLength) v2.derived;
+
+    // If neither is a size(array[]) this doesn't apply
+    if ((v1_size == null) && (v2_size == null))
+      return (null);
+
+    // Determine which var (if any) is shifted (shift == -1).  We are
+    // only interested in cases where only one of the arguments is
+    // shifted.  If both are shifted, then there should be a
+    // suppression directly from the same comparison on the unshifted
+    // versions.
+    if ((v1_size != null) && (v2_size != null)) {
+      if (v1_size.isSameFormula (v2_size))
+        return (null);
+      v1_shift = v1_size.shift == -1;
+    } else if ((v1_size != null) && (v1_size.shift == -1)) {
+      v1_shift = true;
+    } else if ((v2_size != null) && (v2_size.shift == -1)) {
+      v1_shift = false;
+    } else {
+      return (null);
+    }
+
+    // Setup to look for LinearBinary on the unshifted variable
+    supTemplate.resetResults();
+    supTemplate.invTypes[0] = LINEARBINARY.class;
+    if (v1_shift) {
+      SequenceLength sl = new SequenceLength (v1_size.base, 0);
+      VarInfo v = sl.getVarInfo();
+      v = inv.ppt.parent.findVar (v.name);
+      supTemplate.varInfos[0][0] = v;
+      supTemplate.varInfos[0][1] = v2;
+    } else {
+      SequenceLength sl = new SequenceLength (v2_size.base, 0);
+      VarInfo v = sl.getVarInfo();
+      v = inv.ppt.parent.findVar (v.name);
+      supTemplate.varInfos[0][0] = v1;
+      supTemplate.varInfos[0][1] = v;
+    }
+
+    // look for invariants that match our template
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+
+      LINEARBINARY lb = (LINEARBINARY) supTemplate.results[0];
+
+      // If the invariant isn't active, we can't use it
+      if (!lb.isActive())
+        return (null);
+
+      // Only 'a == 1' implies a less than or greater than relationship
+      if (lb.core.a != 1.0)
+        return (null);
+
+      // b determines whether we are greater than or less than
+      if (v1_shift) {
+        if (EQUALS (lb.core.b, -1))
+          return (null);
+      } else {
+        if (EQUALS (lb.core.b, 1))
+          return (null);
+      }
+
+      if (logOn() || debug.isLoggable(Level.FINE)) {
+        arg.log (debug, " Suppressed by " + lb.format() + " v1_shift = "
+                + v1_shift + " equals = " + EQUALSstring);
+      }
+    }
+    return (sl);
+  }
 
 #endif
 
@@ -1451,13 +1551,16 @@ invariants.
 #elif defined (LESSTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHAN) || defined (GREATERTHANFLOAT)
 
   // Create a suppression factory for linear binary, constant, and pairwise
-  #define FACTORY_CNT       2
+  #define FACTORY_CNT       3
   #define FACTORY1          lb_suppress
   #define FACTORY1_INV_CNT  1
   #define FACTORY1_VAR_INFO {new VarInfo[2]}
   #define FACTORY2          pairwise_suppress
   #define FACTORY2_INV_CNT  1
   #define FACTORY2_VAR_INFO {new VarInfo[2]}
+  #define FACTORY3          lb_offset_suppress
+  #define FACTORY3_INV_CNT  1
+  #define FACTORY3_VAR_INFO {new VarInfo[2]}
   // #define FACTORY3          bound_suppress
   // #define FACTORY3_INV_CNT  2
   // #define FACTORY3_VAR_INFO {new VarInfo[1], new VarInfo[1]}
