@@ -164,7 +164,7 @@ avoid-jpp:
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
-JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@) || (rm -f $@ && false)
+JAVA_CPP ?= (rm -f $@; java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ | grep Can && (rm -f $@ && false) || chmod -w $@)
 # Like the above, but also makes a backup file
 # JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 
