@@ -9,9 +9,10 @@
 @c I can't get this to work.  Dunno why
 @c @alias directory = file
 
-@macro daikonurl{}
-http://sdg.lcs.mit.edu/daikon/
-@end macro
+@c texi2html doesn't work if I use this macro
+@c @macro daikonurl{}
+@c http://sdg.lcs.mit.edu/daikon/
+@c @end macro
 
 @macro daikonemail{}
 @email{daikon@@sdg.lcs.mit.edu}
@@ -153,7 +154,7 @@ Details
 @comment node-name,     next,          previous, up
 @chapter Introduction
 
-The @uref{@daikonurl{}, ,Daikon invariant detector}
+The @uref{foo/bar, ,Daikon invariant detector}
 reports properties that are likely to hold at certain points in a
 program.  The reported properties are arithmetic equations such as you
 might write in an assert statement or a formal specification; for
@@ -176,12 +177,12 @@ written in Java).
 @enumerate
 @item
 Download Daikon from
-from @uref{@daikonurl{}download/}.
+from @uref{http://sdg.lcs.mit.edu/daikon/download/}.
 
 There are two distributions to choose from.
-The pre-compiled distribution, @uref{@daikonurl{}download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}}, permits you to run Daikon and to detect
+The pre-compiled distribution, @uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}}, permits you to run Daikon and to detect
 invariants, but does not permit you to modify Daikon or to rebuild it.
-The source distribution, @uref{@daikonurl{}download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}}, plus sources for Daikon and for dfej.
+The source distribution, @uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}}, plus sources for Daikon and for dfej.
 
 Daikon is also available via anonymous CVS.  Send email to
 @daikonemail{} if you desire such access.
@@ -253,7 +254,7 @@ setenv CLASSPATH $@{CLASSPATH@}:$HOME/java/jdk/jre/lib/rt.jar
 Obtain or build an executable for dfej, the Daikon front end for Java.
 
 The easiest approach is to download a precompiled version of @file{dfej}
-from @url{@daikonurl{}download/}.  Place that executable somewhere on
+from @url{http://sdg.lcs.mit.edu/daikon/download/}.  Place that executable somewhere on
 your path, and you are ready to run dfej.  (If no executable is
 available for your architecture, send mail to @daikonemail{} and we may
 be able to produce an executable for you.)
@@ -274,7 +275,7 @@ the dfej executable.  Place it somewhere on your path.
 
 If the @file{front-end/java} directory does not exist in your
 distribution, then download the Daikon source distribution from
-@uref{@daikonurl{}}.
+@uref{http://sdg.lcs.mit.edu/daikon/}.
 
 If you are running under Solaris, you may need to edit
 @file{Makefile} to indicate use of the @file{libw} library; change
@@ -326,7 +327,7 @@ when compiling C and C++ programs in which you wish to detect invariants.
 Obtain a dfec executable.
 
 The easiest approach is to download a
-precompiled version from @url{@daikonurl{}download/}.  Place that
+precompiled version from @url{http://sdg.lcs.mit.edu/daikon/download/}.  Place that
 executable somewhere on your path.  (If no executable is available for
 your architecture, send mail to @daikonemail{} and we may be able to
 produce an executable for you.)
@@ -1193,7 +1194,7 @@ Your bug report will be most helpful if you include:
 @item the contents of the @file{VERSION} file, which indicates the
       release date of your copy of Daikon.  If you are not using the
       most recent version, it is best if you download a newer version
-      from @uref{@daikonurl{}} to see whether your problem has already
+      from @uref{http://sdg.lcs.mit.edu/daikon/} to see whether your problem has already
       been corrected.
 @item a description of exactly what you did and exactly what went wrong.
       For instance, a transcript of your commands and the system's output
@@ -1243,7 +1244,7 @@ to encourage us to release the fix faster, if you like.)
 @comment node-name,     next,          previous, up
 @section Further reading
 
-See the @url{@daikonurl{}, Daikon homepage}[
+See the @url{http://sdg.lcs.mit.edu/daikon/, Daikon homepage}[
 
 Dynamic invariant detection is further described in several papers, including:
 @itemize @bullet
