@@ -7,15 +7,14 @@ import daikon.inv.filter.*;
 
 import java.util.*;
 
-class SimplifyFilter extends InvariantFilter {
-  String description = "Eliminate invariants based on Simplify (slow)";
+public class SimplifyFilter extends InvariantFilter {
+  public static String description = "Eliminate invariants based on Simplify (slow)";
 
   public String getDescription() {
     return description;
   }
 
-  // Need this reference for MyTester
-  InvariantFilters filters;
+  InvariantFilters filters;	// need this reference for MyTester
 
   public SimplifyFilter( InvariantFilters filters ) {
     this.filters = filters;
