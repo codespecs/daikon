@@ -540,7 +540,8 @@ public final class FileIO {
       try {
         read_data_trace_file(file, all_ppts);
       }
-      catch (IOException e) {        if (e.getMessage().equals("Corrupt GZIP trailer")) {
+      catch (IOException e) {
+        if (e.getMessage().equals("Corrupt GZIP trailer")) {
           System.out.print(file.getName() + " has a corrupt gzip trailer.  " +
                            "All possible data was recovered.\n");
         } else {
@@ -886,7 +887,7 @@ public final class FileIO {
 
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.
-  static void read_vals_and_mods_from_trace_file(LineNumberReader reader,
+  private static void read_vals_and_mods_from_trace_file(LineNumberReader reader,
                                                       String filename,
                                                       PptTopLevel ppt,
                                                       Object[] vals,
