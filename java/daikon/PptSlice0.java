@@ -80,10 +80,6 @@ public class PptSlice0
     }
   }
 
-  void init_po() {
-    throw new Error("Shouldn't get called");
-  }
-
   public void checkRep() {
     if (invariantsSeen != null && invs.size() != invariantsSeen.size()) {
       Assert.assertTrue(invs.size() == invariantsSeen.size(),
