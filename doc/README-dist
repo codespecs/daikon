@@ -1,13 +1,20 @@
-If you have any questions, can suggest ways to improve the documentation,
-find bugs in the system, or have suggestions for its improvement, please
-let me know and I'll do my best to help.
+THE INVARIANT DETECTION ENGINE
 
-The invariant detector is further described in the paper ``Dynamically
-Discovering Likely Program Invariants to Support Program Evolution'' by
-Michael D. Ernst, Jake Cockrell, William G. Griswold, and David Notkin, in
-Proceedings of the 19th International Conference on Software Engineering
-(ICSE '99), Los Angeles, CA, May 19-21, 1999.  This paper is available at
-http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html
+The invariant detection engine reports properties that are likely to hold
+at certain program points.  The reported properties are the kind of
+arithmetic equations that you might write in an assert statement or a
+formal specification, such as "x > abs(y)" or "x = 3*y + 4*z - 7" or "x = 0
+(mod 4)".  These invariants can be useful in program understanding and a
+host of other applications.  The technique is to run the program and
+examine the values it computes, looking for patterns and relationships
+among those values.  Front ends exist for C, C++, and Lisp; a Java version
+is in progress.
+
+Table of contents of this document:
+ * Installing the invariant detection engine
+ * Using the invariant detection engine
+ * Manifest (list of files in the distribution)
+ * Getting more help
 
 
 Installing the invariant detection engine
@@ -23,9 +30,10 @@ Installing the invariant detection engine
    In sh:
      INVARIANTS_HOME=/directory/goes/here
      export INVARIANTS_HOME
-4. If you want to detect invariants in C code, download the appropriate
+4. Adjust the path to Perl for the 'instrumentor' script to work.
+5. If you want to detect invariants in C code, download the appropriate
    version of the C front end and rename it to edgcpfe.
-5. If you don't already have the Python programming language installed,
+6. If you don't already have the Python programming language installed,
    download it from http://www.python.org/.
 
 
@@ -53,13 +61,11 @@ C front end:
      * creates declaration files named <filename>.c.decls
     You may wish to perform this operation with a copy of your program,
     to safeguard your original source code.
-    Note that you may need to adjust the path to Perl for the
-    'instrumentor' script to work.  We are using Perl version 5.004_02.
- c. Create or modify a Makefile.  Either:
+ b. Create or modify a Makefile.  Either:
      * add "dump_trace.o" to the list of OBJECTS that need to be
        created in your makefile, or
      * add your source files to Makefile-sample
- d. Build your program in the usual way, perhaps by running "make"; this
+ c. Build your program in the usual way, perhaps by running "make"; this
     creates an instrumented executable.
 
 Lisp front end:
@@ -130,3 +136,52 @@ parameter, for parameters possibly modified in the function body.
 the instrumentation was inserted; invariants are program-point-specific.
 There is some redundancy in the output (e.g., both "Z = max(Y, X)" and
 "Z = max(X, Y)" are reported, as are both "Y > X" and "X < Y").
+
+
+Manifest (list of files in the distribution)
+============================================
+
+User documentation
+  README	This file
+
+C front end (you will also need the edgcpfe executable; see "Installation")
+  dump_trace.c		Writing data values to a data trace
+  dump_trace.h		Header files for the above
+  Makefile-sample	Sample Makefile for linking in the above
+  instrumentor		Script for running instrumenter on multiple C files
+  label.txt		Auxiliary file for output filename selection at runtime
+
+Lisp front end
+  load-all.lisp		Shell for loading other Lisp files
+  instrument.lisp	Instrumenting Lisp programs to write data traces
+  data-trace.lisp	Writing data values to a data trace
+
+Lisp example files
+  gries.lisp		Programs from Gries's "The Science of Programming"
+  gries-helper.lisp	Support for Gries-style synax and for testing
+  gries-instrumented.lisp	Instrumented version of gries.lisp
+  inv-medic.lisp	Support for finding invariants in the Medic program
+
+Invariant detection engine
+  invariants.py		The invariant detector itself
+  util.py		Utility functions used by the invariant detector
+  invariants.py.doc	Internal documentation on data structures and design
+
+Miscellaneous files
+  Makefile		Makefile for the invariant detection system
+  VERSION		Timestamp of this distribution
+
+
+Getting more help
+=================
+
+If you have any questions, can suggest ways to improve the documentation,
+find bugs in the system, or have suggestions for its improvement, please
+send email to mernst@cs.washington.edu and I will do my best to help.
+
+The invariant detector is further described in the paper ``Dynamically
+Discovering Likely Program Invariants to Support Program Evolution'' by
+Michael D. Ernst, Jake Cockrell, William G. Griswold, and David Notkin, in
+Proceedings of the 19th International Conference on Software Engineering
+(ICSE '99), Los Angeles, CA, May 19-21, 1999.  This paper is available at
+http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html
