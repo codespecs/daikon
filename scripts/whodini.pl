@@ -120,6 +120,7 @@ my @sourcefiles = @ARGV;
 
 {
     my $ok = defined($txtescfile) && (-f $txtescfile);
+    $ok &&= scalar(@sourcefiles);
     for my $sourcefile (@sourcefiles) {
 	$ok &&= (-f $sourcefile) && ($sourcefile =~ /\.java$/);
     }
