@@ -20,6 +20,7 @@
     || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
   #define PRIMITIVE long
   #define IS_NUMERIC 1
+  #define IS_INT 1
   #define ISTYPE isIntegral()
   #define SUPERCLASS TwoScalar
   #define MEMBER Member
@@ -39,6 +40,7 @@
     || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) \
     || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define IS_NUMERIC 1
+  #define IS_FLOAT 1
   #define PRIMITIVE double
   #define ISTYPE isFloat()
   #define SUPERCLASS TwoFloat
@@ -344,6 +346,52 @@ public final class INTEQUAL
    super(ppt);
   }
 
+  /**
+   * Returns the prototype invariant for INTEQUAL
+   */
+  public static INTEQUAL get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new INTEQUAL (null);
+  }
+
+  /**
+   * Returns whether or not the specified types are valid for INTEQUAL.
+   */
+  public boolean valid_types (ProglangType[] rep_types) {
+
+    if (rep_types.length != 2)
+      return (false);
+
+    #if defined(IS_INT)
+      if (!rep_types[0].isScalar() || !rep_types[1].isScalar())
+        return (false);
+      #if defined (EQUAL)
+        return (true);
+      #elif defined (NONEQUAL)
+        if (dkconfig_integral_only)
+          return (rep_types[0].isIntegral() && rep_types[1].isIntegral());
+        return (true);
+      #else
+        return (rep_types[0].isIntegral() && rep_types[1].isIntegral());
+      #endif
+    #elif defined (IS_FLOAT)
+      if (!rep_types[0].isFloat() || !rep_types[1].isFloat())
+        return (false);
+      return (true);
+    #else
+      if ((rep_types[0] != ProglangType.STRING)
+          || (rep_types[1] != ProglangType.STRING))
+        return (false);
+      return (true);
+    #endif
+  }
+
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  // JHP: clean up instantiation checks and remove valid_types()
   public static INTEQUAL instantiate(PptSlice ppt) {
 
     if (logOn() || debug.isLoggable(Level.FINE)) {
@@ -539,6 +587,8 @@ invariants.
 #endif
 
 
+  // JHP: this should be removed in favor of checks in PptTopLevel
+  // such as is_equal, is_lessequal, etc.
   // Look up a previously instantiated INTEQUAL relationship.
   // Should this implementation be made more efficient?
   public static INTEQUAL find(PptSlice ppt) {
@@ -548,9 +598,16 @@ invariants.
       if (inv instanceof INTEQUAL)
         return (INTEQUAL) inv;
     }
+
+    // If the invariant is suppressed, create it
+    if ((suppressions != null) && suppressions.suppressed (ppt)) {
+      INTEQUAL inv = (INTEQUAL) suppressee.instantiate (ppt);
+      // Fmt.pf ("%s is suppressed in ppt %s", inv.format(), ppt.name());
+      return (inv);
+    }
+
     return null;
   }
-
 
   public String repr() {
     return INTEQUALstring + varNames();
@@ -589,6 +646,18 @@ invariants.
         return Invariant.formatFuzzy("gt", var1(), var2(), format);
       #elif defined(GREATEREQUALFLOAT)
         return Invariant.formatFuzzy("gte", var1(), var2(), format);
+      #elif defined(EQUALSTRING)
+        return var1name + ".equals(" + var2name + ")";
+      #elif defined(NONEQUALSTRING)
+        return "!" + var1name + ".equals(" + var2name + ")";
+      #elif defined (LESSTHANSTRING)
+        return var1name + ".compareTo(" + var2name +") < 0";
+      #elif defined (LESSEQUALSTRING)
+        return var1name + ".compareTo(" + var2name +") <= 0";
+      #elif defined (GREATERTHANSTRING)
+        return var1name + ".compareTo(" + var2name +") > 0";
+      #elif defined (GREATEREQUALSTRING)
+        return var1name + ".compareTo(" + var2name +") >= 0";
       #else
         return var1name + " " + EQUALSstring + " " + var2name;
       #endif
@@ -827,6 +896,7 @@ invariants.
       #endif
 
       #if defined(LESSEQUAL_OP) || defined (GREATEREQUAL_OP)
+        // && !defined(LESSEQUAL) && !defined(GREATEREQUAL)
         // If we know x=y, then any x<=y or x>=y comparison is uninteresting
         EQUAL_CLASS ie = EQUAL_CLASS.find(ppt);
         if ((ie != null) /* && ie.enoughSamples() */ ) {
@@ -838,6 +908,7 @@ invariants.
       #endif
 
       #if defined(LESSEQUAL_OP)
+        // && !defined(LESSEQUAL)
         // If we know x<y, then x<=y is uninteresting
         LESS_THAN_CLASS ilt = LESS_THAN_CLASS.find(ppt);
         if ((ilt != null) /* && ilt.enoughSamples() */ ) {
@@ -849,6 +920,7 @@ invariants.
       #endif
 
       #if defined(GREATEREQUAL_OP)
+        // && !defined(GREATEREQUAL)
         // If we know x>y, then x>=y is uninteresting
         GREATER_THAN_CLASS igt = GREATER_THAN_CLASS.find(ppt);
         if ((igt != null) /* && igt.enoughSamples() */ ) {
@@ -1125,6 +1197,56 @@ invariants.
 
     return null;
   } // isObviousDynamically
+
+  /**
+   * Returns a list of non-instantiating suppressions for this invariant.
+   */
+  public static NISuppressionSet static_get_ni_suppressions() {
+    return (suppressions);
+  }
+  public NISuppressionSet get_ni_suppressions() {
+    return (suppressions);
+  }
+
+  /** definition of this invariant (the suppressee) **/
+  private static NISuppressee suppressee
+    = new NISuppressee (INTEQUAL.class, 2);
+
+  // suppressor definitions (used in suppressions below)
+  private static NISuppressor v1_eq_v2
+    = new NISuppressor (0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_gt_v2
+    = new NISuppressor (0, 1, GREATER_THAN_CLASS.class);
+  private static NISuppressor v1_lt_v2
+    = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+
+  // NI Suppressions for each type of comparison
+  #if defined(GREATEREQUAL_OP)
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+
+        // v1 == v2 => v1 >= v2
+        new NISuppression (v1_eq_v2, suppressee),
+
+        // v1 > v2 => v1 >= v2
+        new NISuppression (v1_gt_v2, suppressee),
+
+      });
+  // NI Suppressions for each type of comparison
+  #elif defined(LESSEQUAL_OP)
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+
+        // v1 == v2 => v1 <= v2
+        new NISuppression (v1_eq_v2, suppressee),
+
+        // v1 < v2 => v1 <= v2
+        new NISuppression (v1_lt_v2, suppressee),
+
+      });
+  #else
+    private static NISuppressionSet suppressions = null;
+  #endif
 
 #if defined(EQUAL) || defined(EQUALFLOAT)
 #endif
