@@ -46,7 +46,6 @@ public final class TwoSequenceFactory {
       } else {
         // NonEqual.instantiate(ppt);
         result.add(SubSequence.instantiate(ppt));
-        result.add(SuperSequence.instantiate(ppt));
 
         result.add(PairwiseIntComparison.instantiate(ppt));
         result.add(PairwiseLinearBinary.instantiate(ppt));
