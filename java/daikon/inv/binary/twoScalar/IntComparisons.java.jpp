@@ -373,14 +373,7 @@ public final class INTEQUAL
                 && vis[1].file_rep_type.isIntegral());
       #endif
     #else
-    // for strings, only check equality unless both vars are integral
-    #if defined (IS_STRING) && !defined (EQUALSTRING)
-      if (!(vis[0].type.isIntegral() && vis[1].type.isIntegral()))
-        return false;
       return (true);
-     #else
-      return (true);
-     #endif
     #endif
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
@@ -546,7 +539,7 @@ public final class INTEQUAL
 
     // If the invariant is suppressed, create it
     if ((suppressions != null) && suppressions.suppressed (ppt)) {
-      INTEQUAL inv = (INTEQUAL) suppressee.instantiate (ppt);
+      INTEQUAL inv = (INTEQUAL) proto.instantiate_dyn (ppt);
       // Fmt.pf ("%s is suppressed in ppt %s", inv.format(), ppt.name());
       return (inv);
     }
@@ -1060,58 +1053,40 @@ public final class INTEQUAL
   }
 #endif
 
-  /**
-   * Returns a list of non-instantiating suppressions for this invariant.
-   */
-  public static NISuppressionSet static_get_ni_suppressions() {
-    return (suppressions);
-  }
+  /** NI suppressions, initialized in get_ni_suppressions() **/
+  private static NISuppressionSet suppressions = null;
+
+  /** Returns the non-instantiating suppressions for this invariant. **/
   public NISuppressionSet get_ni_suppressions() {
+    if (suppressions == null) {
+      NISuppressee suppressee = new NISuppressee (INTEQUAL.class, 2);
+
+      // suppressor definitions (used in suppressions below)
+      NISuppressor v1_eq_v2 = new NISuppressor (0, 1, EQUAL_CLASS.class);
+      NISuppressor v1_gt_v2 = new NISuppressor (0, 1, GREATER_THAN_CLASS.class);
+      NISuppressor v1_lt_v2 = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+
+      suppressions = new NISuppressionSet (new NISuppression[] {
+        #if defined(GREATEREQUAL_OP)
+          // v1 == v2 => v1 >= v2
+          new NISuppression (v1_eq_v2, suppressee),
+          // v1 > v2 => v1 >= v2
+          new NISuppression (v1_gt_v2, suppressee),
+        #elif defined(LESSEQUAL_OP)
+          // v1 == v2 => v1 <= v2
+          new NISuppression (v1_eq_v2, suppressee),
+          // v1 < v2 => v1 <= v2
+          new NISuppression (v1_lt_v2, suppressee),
+        #elif defined(NONEQUAL_OP)
+          // v1 < v2 => v1 != v2
+          new NISuppression (v1_lt_v2, suppressee),
+          // v1 > v2 => v1 != v2
+          new NISuppression (v1_gt_v2, suppressee),
+        #endif
+        });
+    }
     return (suppressions);
   }
 
-  /** definition of this invariant (the suppressee) **/
-  private static NISuppressee suppressee
-    = new NISuppressee (INTEQUAL.class, 2);
-
-  // suppressor definitions (used in suppressions below)
-  private static NISuppressor
-    v1_eq_v2 = new NISuppressor (0, 1, EQUAL_CLASS.class),
-    v1_gt_v2 = new NISuppressor (0, 1, GREATER_THAN_CLASS.class),
-    v1_lt_v2 = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
-
-  #if defined(GREATEREQUAL_OP)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
-
-        // v1 == v2 => v1 >= v2
-        new NISuppression (v1_eq_v2, suppressee),
-
-        // v1 > v2 => v1 >= v2
-        new NISuppression (v1_gt_v2, suppressee),
-
-      });
-  #elif defined(LESSEQUAL_OP)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
-
-        // v1 == v2 => v1 <= v2
-        new NISuppression (v1_eq_v2, suppressee),
-
-        // v1 < v2 => v1 <= v2
-        new NISuppression (v1_lt_v2, suppressee),
-
-      });
-  #elif defined(NONEQUAL_OP)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
-        // v1 < v2 => v1 != v2
-        new NISuppression (v1_lt_v2, suppressee),
-        // v1 > v2 => v1 != v2
-        new NISuppression (v1_gt_v2, suppressee),
-      });
-  #else
-    private static NISuppressionSet suppressions = null;
-  #endif
 
 }
