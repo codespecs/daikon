@@ -14,6 +14,9 @@ import daikon.*;
 public abstract class EltwiseIntComparison
   extends SingleScalarSequence
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030109L;
 
   public static boolean dkconfig_enabled = true;
