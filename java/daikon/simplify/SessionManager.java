@@ -23,17 +23,34 @@ public class SessionManager
   // The error message returned by the worked thread, or null
   private String error = null;
   
-  // enable to dump input and output to the console
-  private static final boolean debug_mgr = false;
+  // Enable to dump input and output to the console
+  // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
+  //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
+  private static final boolean debug_mgr;
+  static {
+    debug_mgr = (System.getProperty("DEBUG_SIMPLIFY") != null);
+    // debug_mgr = true;
+    if (debug_mgr) {
+      System.err.println("DEBUG_SIMPLIFY is on");
+    }
+  }
+  private static void debugln(String s) {
+    if (!debug_mgr) return;
+    System.err.println(s);
+    System.err.flush();
+  }
 
   public SessionManager() {
+    debugln("Creating SessionManager");
     worker = new Worker();
     worker.setDaemon(true);
+    debugln("Starting worker thread");
     worker.start();
     // We need to pause until the worked thread is blocked on the wait
     // call.  The next line does this, but is a really bad approach.
     // We need to figure out something better.
     try { Thread.currentThread().sleep(50); } catch (InterruptedException e) { }
+    debugln("SessionManager created");
   }
 
   /**
