@@ -463,7 +463,7 @@ list_java_files:
 daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.java
 	${JAVAC_COMMAND} $<
 	rm -f $@
-	${JAVAC_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
+	${JAVA} daikon.test.split.SplitterFactoryTestUpdater
 	chmod -w $@
 
 ## I don't understand why this is necessary, but it seems to be
