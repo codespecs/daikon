@@ -137,7 +137,7 @@ its original task, it also writes variable values to a data trace file.
 </pre>
       Only the specified Java files will be instrumented; other files will
       be run uninstrumented.  This permits you to control the scope of
-      invariant detection.<p>
+      invariant detection.  See the dfej usage message for more information.<p>
 
       The Daikon Java front end:
       <ol>
