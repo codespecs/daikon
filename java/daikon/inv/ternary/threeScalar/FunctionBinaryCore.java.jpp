@@ -321,6 +321,8 @@ public final class CLASSNAME
         func = "gcd";
       else if (methodname[0].equals("java.lang.Math.pow("))
         func = "pow";
+      else if (methodname[0].equals("utilMDE.MathMDE.logicalXor("))
+        func = "|java-logical-xor|";
     } else {
       Assert.assertTrue(methodname[0].equals(""));
       Assert.assertTrue(methodname[2].equals(""));
