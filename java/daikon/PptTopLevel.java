@@ -1457,14 +1457,14 @@ public class PptTopLevel extends Ppt {
   /// Hiding object invariants
   ///
 
-  public boolean isObjectInvariant(Invariant inv)
+  public Invariant findMatchingObjectInvariant(Invariant inv)
   {
     Assert.assert(inv.ppt.parent == this);
 
     // Our invariants can't be implied by object invariants unless
     // this ppt is contributing to some object invariant
     if (object_ppt == null) {
-      return false;
+      return null;
     }
 
     // Try to match inv against all object invariants
@@ -1522,11 +1522,11 @@ public class PptTopLevel extends Ppt {
       }
 
       // the type, formula, and vars all matched
-      return true;
+      return obj_inv;
     }
 
     // no more candidates in set of object invs
-    return false;
+    return null;
   }
 
 
@@ -1816,10 +1816,12 @@ public class PptTopLevel extends Ppt {
 
       String inv_rep = inv.format();
       if (inv_rep != null) {
-	if (Daikon.suppress_object_invariants_in_public_methods &&
-	    isObjectInvariant(inv)) {
-	  // TODO: Fix global statistics for this?
-	  continue;
+	if (Daikon.suppress_object_invariants_in_public_methods) {
+	  Invariant obj_inv = findMatchingObjectInvariant(inv);
+	  if (obj_inv != null) { // TODO: && will_print(obj_inv)
+	    // TODO: Fix global statistics for this?
+	    continue;
+	  }
 	}
 	System.out.println(inv_rep + num_values_samples);
 	if (Global.debugPrintInvariants) {
