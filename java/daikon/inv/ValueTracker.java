@@ -17,7 +17,8 @@ public class ValueTracker
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030811L;
+  // static final long serialVersionUID = 20030811L;
+  static final long serialVersionUID = 20020122L;
 
   public final int max_values;
 
