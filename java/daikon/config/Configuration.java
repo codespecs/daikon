@@ -5,12 +5,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import utilMDE.Assert;
 
 public final class Configuration
+  implements Serializable
 {
 
   // ============================== STATIC COMPONENT ==============================
@@ -58,6 +60,23 @@ public final class Configuration
       apply(statement);
     }
     statements = copy;
+  }
+
+  /**
+   * Take the settings given in the argument and call
+   * this.apply(String) for each of them.  This essentially overlaps
+   * the settings given in the argument over this (appending them to
+   * this in the process).  This method intended for loading a saved
+   * configuration from a file, since calling this method with the
+   * Configuration singleton makes no sense.
+   **/
+  public void overlap(Configuration config) {
+    Assert.assert(config != null);
+    Iterator iter = config.statements.iterator();
+    while (iter.hasNext()) {
+      String statement = (String) iter.next();
+      this.apply(statement);
+    }
   }
 
   // ============================== ADT COMPONENT ==============================
@@ -182,6 +201,8 @@ public final class Configuration
     // record the application
     String classname = field.getDeclaringClass().getName();
     String fieldname = field.getName();
+    Assert.assert(fieldname.startsWith(PREFIX)); // remove the prefix
+    fieldname = fieldname.substring(PREFIX.length());
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
   }
