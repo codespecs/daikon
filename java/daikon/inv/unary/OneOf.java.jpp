@@ -203,11 +203,13 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
+import java.io.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
+#if defined(BASE_STRING)
+  import java.util.regex.*;
+#endif
 import java.util.*;
-import java.io.*;
 
 // This subsumes an "exact" invariant that says the value is always exactly
 // a specific value.  Do I want to make that a separate invariant
@@ -580,15 +582,15 @@ public final class ONEOFSCALAR
         Assert.assertTrue(num_elts == 1);
         INT value = elts[0];
         if (value.length == 0) {
-          return "$noprint("+varname + " = [])";
+          return "$noprint(" + varname + " = [])";
         } else if ((value.length == 1) && (value[0] == 0)) {
-          return "("+varname+ " = null)";
+          return "(" + varname + " = null)";
         } else if (no_nulls(0)) {
-          return "$noprint("+varname + " contains no nulls and has only one value, of length " + value.length+")";
+          return "$noprint(" + varname + " contains no nulls and has only one value, of length " + value.length + ")";
         } else if (all_nulls(0)) {
-          return "$noprint("+varname + " contains only nulls and has only one value, of length " + value.length+")";
+          return "$noprint(" + varname + " contains only nulls and has only one value, of length " + value.length + ")";
         } else {
-          return "$noprint("+varname + " has only one value, of length " + value.length+")";
+          return "$noprint(" + varname + " has only one value, of length " + value.length + ")";
         }
       } else {
         return varname + " = " + TOSTRING(elts[0]);
@@ -862,17 +864,30 @@ public final class ONEOFSCALAR
   }
 
 #if defined(BASE_STRING)
+  private static Pattern dollar_char_pat = Pattern.compile("\\$([A-Za-z])");
+
   private static String format_esc_string2type(String str) {
     if ((str == null) || "null".equals(str)) {
       return "\\typeof(null)";
-    } else if (str.startsWith("[")) {
-      return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
-    } else {
-      if (str.startsWith("\"") && str.endsWith("\"")) {
-        str = str.substring(1, str.length()-1);
-      }
-      return "\\type(" + str + ")";
     }
+    String type_str;
+    if (str.startsWith("[")) {
+      type_str = UtilMDE.classnameFromJvm(str);
+    } else {
+      type_str = str;
+      if (type_str.startsWith("\"") && type_str.endsWith("\"")) {
+        type_str = type_str.substring(1, type_str.length()-1);
+      }
+    }
+
+    // Inner classes
+    // type_str = type_str.replace('$', '.');
+    // For named inner classes, convert "$" to ".".
+    // For anonymous inner classes, leave as "$".
+    Matcher m = dollar_char_pat.matcher(type_str);
+    type_str = m.replaceAll(".$1");
+
+    return "\\type(" + type_str + ")";
   }
 #endif
 
@@ -946,9 +961,6 @@ public final class ONEOFSCALAR
         if (i != 0) { result += " || "; }
         result += varname + " == " + format_esc_string2type(elts[i]);
       }
-
-      // Inner classes
-      result = result.replace('$', '.');
     }
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
   #if defined(SCALAR) || defined(ELT)
