@@ -152,9 +152,10 @@ cvs-test:
 # distribution on the website, updates webpages, tests the distributionn,
 # etc.  If you only want ot make a new .tar file, do "make
 # daikon-source.tar".
-# The "MAKEFLAGS=" argument discards any "-k" argument.
+# The "MAKEFLAGS=" argument discards any "-k" argument.  (It doesn't seem
+# to work, so supply explicit "-S" flag instead.)
 dist: 
-	$(MAKE) MAKEFLAGS= dist-and-test
+	$(MAKE) -S dist-and-test
 
 # Both make and test the distribution.
 # (Must make it first in order to test it!)
