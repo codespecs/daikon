@@ -491,7 +491,8 @@ initialization file, or else log out and log back in to achieve the
 same effect.
 
 @item
-Build various executables used by Daikon.
+Build various executables used by Daikon.  (This step is optional; you
+can look in the Makefile to see what will get made.)
 @example
 cd $DAIKONDIR
 make
@@ -574,11 +575,10 @@ to
 LDFLAGS=-L. -lw -o $(EXECUTABLE)
 @end example
 
-If you are running under Microsoft Windows, you should install the
-@uref{http://sources.redhat.com/cygwin/,Cygwin toolset}; see
-@ref{Windows requirements}.  Without Cygwin, compiling dfej under
-Windows is likely to be much more difficult.
-
+@c If you are running under Microsoft Windows, you should install the
+@c @uref{http://sources.redhat.com/cygwin/,Cygwin toolset}; see
+@c @ref{Windows requirements}.  Without Cygwin, compiling dfej under
+@c Windows is likely to be much more difficult.
 
 @c (or, alternately, at
 @c @uref{ftp://ftp.freesoftware.com/pub/sourceware/cygwin/latest/setup.exe}).
@@ -735,17 +735,54 @@ distributed with Daikon.)
 @cindex Microsoft Windows
 @cindex Cygwin toolset
 
-If you are running Daikon under Windows, we strongly recommend that you
-install the @uref{http://sources.redhat.com/cygwin/,Cygwin toolset},
+If you are running Daikon under Windows, you have two options:  using
+native Windows utilities and using the Cygwin environment.  These
+are described below.
+
+(Daikon and most of its related programs, such as dfej, run
+under Windows as command-line applications.  You should invoke them
+from a command shell --- either an Windows command shell or a cygwin
+command shell, as described above --- rather than by double-clicking
+their icons.  In any event, double-clicking would not supply the
+proper arguments to the program.)
+
+The first option is to run Daikon using native Windows NT utilities,
+along with the @file{daikonenv.bat} batch file to set up the
+environment propertly.
+
+The second option is to run Daikon using the
+@uref{http://sources.redhat.com/cygwin/,Cygwin toolset},
 which contains everything you need to compile and run Unix programs
 under Windows.  You can install Cygwin by simply running the program
 found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
-Note that Daikon and most of its related programs (such as dfej) run
-under Windows as command-line applications:  you should invoke
-them from a command shell rather than (for instance) simply by
-double-clicking their icons.  (In any event, double-clicking would not
-supply the proper arguments to the program.)
+There is an incompatibility between Cygwin and programs compiled for
+Windows.  (The incompatibility does not exist if the program was
+compiled for Cygwin).  The incompatibility is that Windows programs
+use the semicolon (@samp{;}) as their path separator (for instance,
+for CLASSPATH), but Unix and Cygwin programs use the colon (@samp{:})
+as their path separator.
+
+The @file{cygwin-runner.pl} script in the @file{bin/} directory may
+help you run windows-native Java tools from within the Cygwin
+environment.  It translates Unix @samp{:}-separated pathlists to
+Windows @samp{;}-separated pathlists, changes filenames to their 8.3
+``old style'' name (e.g., @file{My Documents} to @file{MYDOCU~1}),
+changes forward slashes to backslashes, and translates paths with
+Cygwin mount points to simple @file{C:\}-like paths.
+
+For now, @file{cygwin-runner.pl} doesn't touch environment variables,
+but you can still use it for classpath by getting your CLASSPATH onto
+the command line explicitly:
+@example
+  $ dfej -classpath $CLASSPATH DataStructures/StackAr.java
+@end example
+(It would be nice to patch cygwin-runner to translate
+environment variables, too.  For example, always translate CLASSPATH, or
+always translate anything listed in CYGWIN_RUNNER_ENV (e.g.
+CYGWIN_RUNNER_ENV="PATH:CLASSPATH:PWD") so users can set CYGWIN_RUNNER_ENV
+in their dotfiles or various wrappers.)
+
 
 @c ** Commented out with the elimination of the need for modbit-munge
 @c You may also need to install
@@ -1957,14 +1994,28 @@ source rather than a single location.
 @cindex OBJECT program point
 @cindex :::CLASS program point
 @cindex CLASS program point
+@cindex object invariants
+@cindex representation invariants
+@cindex class invariants
 
 Two other program point tags are @code{:::OBJECT} and @code{:::CLASS}.
 The former indicates object invariants (sometimes called representation
 invariants or class invariants) that always hold for any object of the
 given class, from the point of view of a client or user.  These
 properties hold at entry to and exit from every public method of the
-class.  The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only
+class (except not the entry to constructors, when fields are not yet
+initialized).
+The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only
 for static variables, which have only one value for all objects.
+
+@cindex private methods
+
+(By contrast, ESC/Java and JML make class invariants hold even at the
+entry and exit of priavte methods.  Their designers believe that most
+private methods preserve the class invariant and are called only when
+the class invariant holds.  ESC/Java and JML require an explicit
+"helper" annotation to indicate a private method for which the class
+invariant does not hold.)
 
 The Java instrumenter dfej selects names for program points that include
 an indication of the argument and return types for each method.  These
@@ -5937,33 +5988,39 @@ its users.
 @cindex contributors to Daikon
 
 The following individuals have contributed to Daikon:
- Yuriy Brun,
- Jake Cockrell,
- Adam Czeisler,
- Alan Donovan,
- Nii Dodoo,
- Alan Dunn,
- Michael Ernst,
- William Griswold,
- Melissa Hao,
- Michael Harder,
- Lee Lin,
- Greg Jay,
- Josh Kataoka,
- Vikash Mansinghka,
- Stephen McCamant,
- Samir Meghani,
- Jeremy Nimmer,
- Toh Ne@w{ }Win,
- David Notkin,
- Iuliu Vasilescu.
+Yuriy Brun,
+Jake Cockrell,
+Adam Czeisler,
+Alan Donovan,
+Nii Dodoo,
+Alan Dunn,
+Michael Ernst,
+William Griswold,
+Melissa Hao,
+Michael Harder,
+Lee Lin,
+Greg Jay,
+Josh Kataoka,
+Vikash Mansinghka,
+Stephen McCamant,
+Samir Meghani,
+Jeremy Nimmer,
+Toh Ne@w{ }Win,
+David Notkin,
+Iuliu Vasilescu.
 
 Craig Kaplan carved the Daikon logo.
 
 The feedback of Daikon users has been very valuable.  We are
-particularly grateful to Rich Angros, Tadashi Araragi, David Cok, Engelbert
-Hubbers, and Manos Renieris.  Many others have also been generous with
-their feedback, for which we are grateful.
+particularly grateful to
+Rich Angros,
+Tadashi Araragi,
+David Cok,
+Engelbert Hubbers,
+Scott McMaster,
+Manos Renieris.
+Many others have also been generous with their feedback, for which we
+are also grateful.
 
 @c This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
 @c an IBM Cooperative Fellowship, and a gift from Edison Design Group.
