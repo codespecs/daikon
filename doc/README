@@ -1,0 +1,6 @@
+Perhaps the manual should be moved out of this directory and put in
+a directory of its own, parallel to www.  Or perhaps not:  the manual is
+the primary documentation, after all.
+
+VERSION describes the NEXT version of Daikon to be released.  That is, it
+is typically incremented by 1 as compared to the distributed release.
