@@ -4,6 +4,7 @@ import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
+import daikon.inv.filter.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.string.*;
 import daikon.inv.unary.sequence.*;
@@ -1989,6 +1990,35 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.
    **/
   public void mark_implied_via_simplify() {
+    // Create the list of invariants from this ppt which are
+    // expressible in Simplify
+    Invariant[] invs;
+    {
+      // Replace parwise equality with an equivalence sets
+      Collection all = InvariantFilters.addEqualityInvariants(invariants_vector());
+      Vector printing = new Vector(); // [Invariant]
+      for (Iterator _invs = all.iterator(); _invs.hasNext(); ) {
+	Invariant inv = (Invariant) _invs.next();
+	if (inv.isWorthPrinting()) {
+	  String fmt = inv.format_simplify();
+	  if (fmt.indexOf("format_simplify") < 0) {
+	    printing.add(inv);
+	  }
+	}
+      }
+      invs = (Invariant[]) printing.toArray(new Invariant[printing.size()]);
+    }
+
+    // For efficiency, bail if we don't have any invariants to mark as implied
+    if (invs.length == 0) {
+      return;
+    }
+
+    // Come up with a "desirability" ordering of the printing and
+    // expressible invariants, so that we can remove the least
+    // desirable first.  For now just use the ICFP.
+    Arrays.sort(invs, icfp);
+
     // Form the closure of the controllers
     Set closure = new HashSet();
     {
@@ -2004,14 +2034,20 @@ public class PptTopLevel extends Ppt {
     }
 
     // Create the conjunction of the closures' invariants to form a
-    // background environment for the prover
+    // background environment for the prover.  Ignore implications,
+    // since in the current scheme, implications came from controlled
+    // program points, and we don't necessarily want to lose the
+    // unconditoinal version of the invariant at the conditional ppt.
     StringBuffer all_cont = new StringBuffer();
     all_cont.append("(AND true \n");
     for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) ppts.next();
       all_cont.append("\t(AND true \n");
-      for (Iterator invs = ppt.invariants_vector().iterator(); invs.hasNext(); ) {
-	Invariant inv = (Invariant) invs.next();
+      for (Iterator _invs = ppt.invariants_vector().iterator(); _invs.hasNext(); ) {
+	Invariant inv = (Invariant) _invs.next();
+	if (inv instanceof Implication) {
+	  continue;
+	}	
 	if (!inv.isWorthPrinting()) {
 	  continue;
 	}
@@ -2036,28 +2072,6 @@ public class PptTopLevel extends Ppt {
       prover = null;
       return;
     }
-
-    // Create the list of invariants from this ppt which are
-    // expressible in Simplify
-    Invariant[] invs;
-    {
-      Vector printing = new Vector(); // [Invariant]
-      for (Iterator _invs = invariants_vector().iterator(); _invs.hasNext(); ) {
-	Invariant inv = (Invariant) _invs.next();
-	if (inv.isWorthPrinting()) {
-	  String fmt = inv.format_simplify();
-	  if (fmt.indexOf("format_simplify") < 0) {
-	    printing.add(inv);
-	  }
-	}
-      }
-      invs = (Invariant[]) printing.toArray(new Invariant[printing.size()]);
-    }
-
-    // Come up with a "desirability" ordering of the printing and
-    // expressible invariants, so that we can remove the least
-    // desirable first.  For now just use the ICFP.
-    Arrays.sort(invs, icfp);
 
     // Work from back to front, and flag things which are redundant
     boolean[] present = new boolean[invs.length];
