@@ -1698,12 +1698,12 @@ the data trace files.  For instance, these declaration files describe
 the names of procedures and variables that appear in the data trace file.
 @end itemize
 
-Three instrumenters are part of Daikon:  @command{dfej} for Java programs,
-@command{dfec} for C and C++, and @command{dfepl} for Perl.  The
-letters @command{dfe} in the names stand for ``Daikon front end'', and
-@command{j}, @command{c}, and @command{pl} abbreviate ``Java'',
-``C'', and ``Perl''.  The Java front end is robust; the C front end
-is moderately robust, and the C++ and Perl front ends are experimental.
+Five instrumenters are part of Daikon:  Chicory and @command{dfej} for
+Java programs, Kvasir and @command{dfec} for C and C++, and
+@command{dfepl} for Perl.  The letters @command{dfe} in some of the
+names stand for ``Daikon front end'', and @command{j}, @command{c}, and
+@command{pl} abbreviate ``Java'', ``C'', and ``Perl''.
+For more details about these instrumenters, @xref{Front ends}.
 
 A front end for the IOA programming language is distributed separately
 (see @uref{http://theory.csail.mit.edu/tds/ioa.html}).
@@ -3269,6 +3269,21 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 @node    Front ends, Enhancing Daikon output, GUIs, Top
 @chapter Front ends
 
+@cindex front end
+
+The Daikon invariant detector is a machine learning tool that finds
+patterns (invariants) in data.  That data can come from any source, but
+Daikon is typically used to find invariants over variable values in
+running programs.  A front end is a tool that converts data from some
+other format into Daikon's input format; for instance, a front end might
+cause a program to output a @file{.dtrace} file that Daikon can process.
+
+This chapter describes several front ends that are part of Daikon.  It
+is relatively easy to build your own front end, if these do not serve
+your purpose; we are aware of a number of users who have done so.  For
+more information about building a new front end, @xref{File formats},
+and @xref{Instrumentation}.
+
 
 @menu
 * Java front end Chicory::      
@@ -3594,10 +3609,10 @@ Render linked lists as vectors (default).
 Suppose you have a class one of whose fields is of the class's own type,
 such as
 @example
-class Link {
+class Link @{
   Object value;
   Link next;
-}
+@}
 @end example
 Then if the @option{--linked-list} option is set, the Daikon front end
 will output a list consisting of all the elements reachable via
