@@ -281,22 +281,35 @@ public final class UtilMDE {
   }
 
 
-  // Returns true if:
-  // 1. The file exists and is writable
-  // OR
-  // 2. The file can be created
+  /**
+   * Returns true if:
+   * 1. the file exists and is writable, or
+   * 2. the file can be created
+   **/
   public static boolean canCreateAndWrite(File file) {
-    try {
-      if (file.exists()) {
-        return file.canWrite();
-      } else {
-        file.createNewFile();
-        file.delete();
-        return true;
+    if (file.exists()) {
+      return file.canWrite();
+    } else {
+      File directory = file.getParentFile();
+      if (directory == null) {
+        directory = new File(".");
       }
-    } catch (IOException e) {
-      return false;
+      // Does this test need "directory.canRead()" also?
+      return directory.canWrite();
     }
+
+    /// Old implementation; is this equivalent to the new one, above??
+    // try {
+    //   if (file.exists()) {
+    //     return file.canWrite();
+    //   } else {
+    //     file.createNewFile();
+    //     file.delete();
+    //     return true;
+    //   }
+    // } catch (IOException e) {
+    //   return false;
+    // }
   }
 
 
