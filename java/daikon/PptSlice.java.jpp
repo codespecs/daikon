@@ -1015,6 +1015,9 @@ public final class PPTSLICE1
     // global ppt.
     PptSlice gslice = find_global_slice (vis_sorted);
 
+    // The new slice should not already exist.
+    Assert.assertTrue(parent.findSlice(vis_sorted) == null);
+
     // Why not just clone?  Because then index order wouldn't be
     // preserved
     PPTSLICE1 result = new PPTSLICE1 (this.parent, vis_sorted);
