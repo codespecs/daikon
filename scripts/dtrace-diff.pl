@@ -34,20 +34,19 @@ exit($errors_found ? 2 : $differences_found ? 1 : 0);
 ###
 
 sub getline ( $ ) {
-# gets a line from the filehandle/count $1
-    my ($fhobj) = @_;
-    my $fh = $$fhobj[0];
+# gets a (non-comment, non-blank) line from the filehandle $1
+    my ($fh) = @_;
     my $l;
     do {
 	$l = <$fh>;
-	if ($l) {chomp $l; ($$fhobj[1])++;}
+	if ($l) { chomp $l; }
     } while ($l && ($l =~ m|^\#|));
     return $l;
 }
 
 sub gzopen ( $$ ) {
 # takes a fh and a filename, opens it (using zcat if necessary), and returns
-# a reference to a filehandle/linenumber object.
+# a filehandle.
     my ($fh, $fn) = @_;
     if ($fn =~ /\.gz$/) {
         my $gzcat = `which gzcat 2>&1`;
@@ -60,7 +59,7 @@ sub gzopen ( $$ ) {
 	$fn = "$gzcat " . $fn . "|";
     }
     open ($fh, $fn) or die "couldn't open \"$fn\"\n";
-    return [$fh, 0];
+    return $fh;
 }
 
 
@@ -97,7 +96,7 @@ sub load_decls ( $ ) {
 	    #Read the type of comparability, then move on.
 	    $l = getline($decls);
 	} elsif ($l) {
-	    die "malformed decls file: \"$l\" at line" . $$decls[1];
+	    die "malformed decls file: \"$l\" at line $INPUT_LINE_NUMBER of $mydeclsname";
 	}
     }
     close \*DECLS;
@@ -114,7 +113,7 @@ sub load_ppt ( $$ ) {
     (defined $pptname)
 	or return undef;
 
-    my $pptline = $$dtfh[1]-1;
+    my $pptline = $INPUT_LINE_NUMBER;
 
     my $ppthash = {};
 
