@@ -19,3 +19,20 @@ unless the file is maintained by someone else."
       ;; (string-match "local/src/emacs-19" (buffer-file-name))
       ;; (string-match "lib/emacs/local-lisp/w3" (buffer-file-name)))
       ))
+
+(defun remove-trailing-whitespace ()
+  "Remove trailing whitespace from all lines in the file.  Does not modify point."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    ;; Don't use this; in some modes (eg C mode), it removes blank lines.
+    ;; Also, don't use replace-regexp, as it messages "Done."
+    ;; (replace-regexp "\\s +$" "" nil)
+    (while (re-search-forward "[\t ]+$" nil t)
+      ;; Don't remove whitespace immediately following a comment starter.
+      (let ((match-begin (match-beginning 0)))
+	(if (or (= match-begin (point-min))
+		(not (= ?< (char-syntax (char-after (1- match-begin))))))
+	    (replace-match "")))))
+  ;; Return nil so this can be used as a write-{file,contents}-hook
+  nil)
