@@ -40,7 +40,7 @@
 
 @sp 1
 @c Daikon version 2.3.2 date
-@center December  5, 2001
+@center December  7, 2001
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -59,7 +59,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.2, released December  5, 2001.
+It describes Daikon version 2.3.2, released December  7, 2001.
 
 @end html
 
@@ -668,7 +668,7 @@ in your CLASSPATH.
 
 @item Instrument the @file{StackAr.java} file.
 @example
-dfej DataStructures/StackAr.java
+dfej -noajax DataStructures/StackAr.java
 @end example
 
 We instrument only this one file because we are only interested in the
@@ -696,6 +696,7 @@ original version of all other files):
 java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 @end example
 
+(On Windows, use ``;'' as the path separator.)
 This will generate a trace file at
 @file{daikon-output/StackAr.dtrace}.  This could take anywhere from
 a few seconds to a few minutes, depending on the speed of your
@@ -720,7 +721,7 @@ cd daikon-output
 @item Run Daikon on the trace file.
 
 @example
-java daikon.Daikon -noajax -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
 @end example
 
 The invariants are printed to standard output, and a binary
@@ -764,7 +765,7 @@ The steps above can be divided into three stages:
 @example
 cd examples/StackAr
 javac DataStructures/*.java
-dfej DataStructures/StackAr.java
+dfej -noajax DataStructures/StackAr.java
 javac daikon-instrumented/DataStructures/StackAr.java
 @end example
 
@@ -775,6 +776,8 @@ javac daikon-instrumented/DataStructures/StackAr.java
 java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 @end example
 
+(On Windows, use ``;'' as the path separator.)
+
 @c cd daikon-output
 @c modbit-munge.pl StackAr.dtrace
 @c @end example
@@ -782,7 +785,7 @@ java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -noajax -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
 java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
 @end example
 
@@ -878,7 +881,7 @@ Run this sample using the following steps:
 @example
 cd examples/QueueAr
 javac DataStructures/*.java
-dfej DataStructures/QueueAr.java
+dfej -noajax DataStructures/QueueAr.java
 javac daikon-instrumented/DataStructures/QueueAr.java
 @end example
 
@@ -890,10 +893,12 @@ java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.QueueArTester
 @c modbit-munge.pl QueueAr.dtrace
 @end example
 
+(On Windows, use ``;'' as the path separator.)
+
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -noajax -o QueueAr.inv DataStructures/QueueAr.decls QueueAr.dtrace
+java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls QueueAr.dtrace
 java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 @end example
 
@@ -1250,8 +1255,18 @@ Write output in ESC-like format.
 Write output in Simplify format.
 
 @item --output_num_samples
+@cindex samples breakdown output
+@cindex mux output
 Output numbers of values and samples for invariants and program points;
 this is a debugging flag.
+
+The ``Samples breakdown'' output indicates how many samples in the
+@file{.dtrace} file had a modified value (``m''), had an unmodified
+value (``u''), and had a missing value (``x'').  The summary uses a
+capital letter if the sample had any of the corresponding type of
+variable, and a lower-case letter if it had none.  These types affect
+statistical tests that determine whether a particular invariant (that
+was true over all the test runs) is printed.
 @end table
 
 
@@ -1415,6 +1430,13 @@ properties hold at entry to and exit from every public method of the
 class.  The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only
 for static variables, which have only one value for all objects.
 
+The Java instrumenter dfej selects names for program points that include
+an indication of the argument and return types for each method.  These
+signatures are presented in the JVML format:  one character for each
+primitive type (@samp{B} for byte, @samp{C} for character, @samp{Z} for
+boolean, etc.); @samp{L}@var{classname}@samp{;} for object types; and a
+@samp{[} prefix for each level of array nesting.
+
 
 @node    Variable names, Invariant syntax, Program points, Interpreting output
 @subsection Variable names
@@ -1457,7 +1479,26 @@ sequence of characters
 @node    Invariant syntax,  , Variable names, Interpreting output
 @subsection Invariant syntax
 
-(Eventually, see the JML manual.)
+(Eventually, see the JML manual, when all output is done in JML form.)
+
+@cindex has only one value, in invariant output
+
+The output "@var{var} has only one value" means that every time that
+variable @var{var} was encountered, it had the same value.  However,
+that value is not interesting to report.  Typically this means that
+@var{var} always referred to the same object.  Users may care that the
+variable was never rebound to a different object, but it would not be
+helpful to print out what the hashcode or address of that object
+happened to be at runtime.  "@var{var} has only one value" differs from
+saying that var is unmodified.  
+
+A variable can have only one value but not be reported as unmodified
+because the variable is not a parameter to a procedure --- for instance,
+if a routine always returns the same object, or in a class invariant.  A
+variable can be reported as unmodified but not have only one value
+because the variable is never modified during any execution of the
+procedure, but has different values on different invocations of the
+procedure.
 
 
 @node    Printing invariants, Invariant Diff, Interpreting output, Daikon output
@@ -2134,14 +2175,26 @@ from the @file{parent/foo} directory, the instrumented version of
 is not consistent with the package structure.)
 @end quotation
 
+@item -noajax
 @cindex AJAX_DIR environment variable
 @cindex environment variable AJAX_DIR
-@item -noajax
-Do not fill in the variable comparability information in the
-@file{.decls} file.  By default, the Ajax module
-"ComparablePairsDescFileReader" does this rewriting.
-Use of Ajax also requires environment variable AJAX_DIR to be set to a
-directory containing various Ajax helper files.
+Do not use the Ajax module "ComparablePairsDescFileReader" to update the
+variable comparability information in the @file{.decls} file.  The
+comparability information can indicate which variables should not be
+compared to one another.  (For instance, the number of people that a
+recipe serves should not be compared to the page number in a cookbook
+where the recipe is found, even if both are integers.)  Use of Ajax to
+update this information is entirely optional; its effect is to suppress
+invariants over incomparable variables.  These comparisons are almost
+always nonsensical, so the result is fewer irrelevant invariants in the
+Daikon output.
+
+Use of Ajax requires environment variable AJAX_DIR to be set to a
+directory containing various Ajax helper files (such as
+@file{main-harness.csal}, @file{tweaked-classes.zip}, etc.).  The proper
+directory is @file{java/ajax-ship} in the Daikon distribution and is set
+by the provided @file{daikon.cshrc} and @file{daikon.bashrc}
+initialization files.
 
 @item -ajaxap=@var{apdir}
 This is the directory in which the Ajax comparability module looks
@@ -3227,6 +3280,10 @@ class Example @{
 @node    Troubleshooting, Details, Extending Daikon, Top
 @chapter Troubleshooting
 
+@cindex troubleshooting
+@cindex warning messages
+@cindex error messages
+
 This chapter gives solutions for certain problems you might have with
 Daikon; it also tells you how to report bugs in a useful manner.
 
@@ -3324,19 +3381,19 @@ your application, but not those with anonymous classes.
 * Out of memory::               
 @end menu
 
-@node    Abnormal termination, Out of memory, Daikon problems, Daikon problems
-@subsection Abnormal termination warnings
+@node    No return from procedure, Out of memory, Daikon problems, Daikon problems
+@subsection No return from procedure
 
-@cindex abnormal termination warning
+@cindex no return from procedure, warning
+@cindex return from procedure, warning
 
-Daikon sometimes issues a warning that it has detected abnormal termination
-of the target program.  This means that the @file{.dtrace} file contains more
-entry records than exit records for the given procedure.
-Some functions that were entered were never recorded to have exited:
-either they threw an exception, skipping the instrumentation code that
-would have recorded normal termination, or the target program's run was
-interrupted.
-
+Daikon sometimes issues a warning that a procedure in the target program
+was entered but never exited (that is, the target program abnormally
+terminated).  Thus, the @file{.dtrace} file contains more entry records
+than exit records for the given procedure.  Some procedures that were
+entered were never recorded to have exited: either they threw an
+exception, skipping the instrumentation code that would have recorded
+normal termination, or the target program's run was interrupted.
 
 In some cases, exceptional exit from a procedure can cause
 @code{orig(@var{x})} values to be incorrect.  This depends on the
@@ -3384,6 +3441,34 @@ you may wish to suppress their creation.  (This manual does not
 presently tell you how to do that.)
 
 Any output generated before the out-of-memory error is perfectly valid.
+
+
+@node    Simplify errors,  , Abnormal termination, Daikon problems
+@subsection Simplify errors
+
+@cindex Ajax, problem with
+
+The warning ``Problem with Ajax!  Using original .decls files instead''
+indicats that the Ajax variable comparator could not run.  Ajax
+ordinarily indicates which variables are comparable to which other
+variables.  This information can reduce the amount of spurious output
+from Daikon by preventing it from making spurious comparisons and
+reporting irrelevant output.  If Ajax cannot be run, then a more
+primitive method of determining comparability is used instead.  Even if
+Ajax cannot be run, Daikon proceeds without error.
+
+
+
+@node    Simplify errors,  , Abnormal termination, Daikon problems
+@subsection Simplify errors
+
+@cindex Simplify, could not utilize
+
+The warning ``Could not utilize Simpilify'' indicates that the Simplify
+theorem-prover could not be run.  As a consequence, certain redundant
+(logically implied) invariants may appear in the output.  The output is
+otherwise correct.
+
 
 
 @node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
@@ -3571,7 +3656,7 @@ The Daikon invariant detector is named after an Asian radish.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.2, released December  5, 2001.
+This manual describes Daikon version 2.3.2, released December  7, 2001.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
