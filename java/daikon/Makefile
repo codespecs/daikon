@@ -42,7 +42,7 @@ Diff.class: Diff.java
 
 # It's good to do this occasionally, because it costs little to regenerate
 # .class files and it's bad to continue to use an orphaned class file
-# (whose source file was renamed).  Or, run "orphaned_class_files".
+# (whose source file was renamed).  Or, run "orphaned-class-files".
 clean:
 	rm -f `find . -name "*.class" -print`
 
