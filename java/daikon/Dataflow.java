@@ -136,6 +136,7 @@ public class Dataflow
                                          VarInfo[] higher,
                                          VarInfoName.Transformer higher_xform)
   {
+    debug.debug ("Setup_po_same_name");
     for (int i=0; i<higher.length; i++) {
       VarInfo higher_vi = higher[i];
       VarInfoName higher_vi_name = higher_xform.transform(higher_vi.name);
@@ -781,7 +782,7 @@ public class Dataflow
       out.println(ppt.name);
       for (int i=0; i < ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
-        out.println(vi.name.toString());
+        out.println(vi.name.name());
         out.println("  Declared type: " + vi.type.format() );
         out.println("  File rep type: " + vi.file_rep_type.format() );
         out.println("  Internal type: " + vi.rep_type.format() );
@@ -791,7 +792,7 @@ public class Dataflow
         for (Iterator vs = vi.po_higher().iterator(); vs.hasNext(); ) {
           VarInfo v = (VarInfo) vs.next();
           int nonce = vi.po_higher_nonce()[count++];
-          out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
+          out.println("    " + nonce + ": " + v.name.name() + " in " + v.ppt.name);
         }
         { // stats
           Integer _count = new Integer(count);
@@ -806,7 +807,7 @@ public class Dataflow
         for (Iterator vs = vi.po_lower().iterator(); vs.hasNext(); ) {
           VarInfo v = (VarInfo) vs.next();
           int nonce = vi.po_lower_nonce()[count++];
-          out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
+          out.println("    " + nonce + ": " + v.name.name() + " in " + v.ppt.name);
         }
         { // stats
           Integer _count = new Integer(count);
