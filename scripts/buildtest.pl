@@ -36,6 +36,11 @@ my $CVS_REP = "/g4/projects/invariants/.CVS/";
 my $CVS_TAG = "ENGINE_V2_PATCHES";
 $ENV{"JAVAC"} = "javac -g";
 
+# Whether or not to run Make in two-job mode
+# my $J2 = "$J2";
+my $J2 = "";
+
+# The success of each step in the build/test process
 my %success = ();
 
 mkdir($DAIKONPARENT) or die "can't make directory $DAIKONPARENT: $!\n";
@@ -78,7 +83,7 @@ if ($success{"dfej_configure"}) {
   $success{"dfej_complie"} = dfej_compile();
 }
 
-# print the output files for any steps that failed
+# Print the output files for any steps that failed.
 my @failed_steps = ();
 foreach my $step (sort keys %success) {
   if (!$success{$step}) {
@@ -132,6 +137,8 @@ foreach my $subdir ("daikon", "diff", "dfec") {
 
 
 # SUBROUTINES
+
+# Check the invariants module out from CVS
 sub daikon_checkout {
   print_log("Checking out Daikon...");
   `cvs -d $CVS_REP co invariants &> daikon_checkout.out`;
@@ -145,6 +152,7 @@ sub daikon_checkout {
 }
 
 
+# Check the dfej module out from CVS
 sub dfej_checkout {
   print_log("Checking out dfej...");
   `cvs -d $CVS_REP co dfej &> dfej_checkout.out`;
@@ -158,6 +166,7 @@ sub dfej_checkout {
 }
 
 
+# Update the daikon directory to the ENGINE_V2_PATCHES tag
 sub daikon_update {
   print_log("Updating Daikon...");
   my $daikon_dir = "invariants/java/daikon";
@@ -174,6 +183,7 @@ sub daikon_update {
 }
 
 
+# Run 'configure' on dfej
 sub dfej_configure {
   print_log("Configuring dfej...");
   chdir("dfej") or die "Can't chdir to dfej: $!\n";
@@ -189,6 +199,7 @@ sub dfej_configure {
 }
 
 
+# Compile daikon using javac
 sub daikon_compile {
   print_log("Compiling Daikon...");
   `make -C $INV/java all_directly &> daikon_compile.out`;
@@ -202,9 +213,10 @@ sub daikon_compile {
 }
 
 
+# Compile dfej using gcc
 sub dfej_compile {
   print_log("Compiling dfej...");
-  `make -j2 -C dfej/src &> dfej_compile.out`;
+  `make $J2 -C dfej/src &> dfej_compile.out`;
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
     return 0;
@@ -215,6 +227,7 @@ sub dfej_compile {
 }
 
 
+# Run the daikon JUnit unit tests
 sub daikon_unit_test {
   print_log("Daikon unit tests...");
   my $command = "make -C $INV/java/daikon junit " .
@@ -230,6 +243,8 @@ sub daikon_unit_test {
 }
 
 
+# Run the daikon system tests.  Scan the output for any nonzero
+# ".diff" filesizes.
 sub daikon_system_test {
   # Standard test suite
   my $TEST_SUITE = "text-diff";
@@ -246,7 +261,7 @@ sub daikon_system_test {
     return 0;
   }
 
-  $command = "make -j2 -C $INV/tests/daikon-tests $TEST_SUITE " .
+  $command = "make $J2 -C $INV/tests/daikon-tests $TEST_SUITE " .
     "&> daikon_system_test.out";
   `$command`;
   if ($CHILD_ERROR) {
@@ -275,10 +290,11 @@ sub daikon_system_test {
 }
 
 
+# Run the diff system tests.  Scan the output for any "FAILED" tests.
 sub diff_system_test {
   print_log("Diff system tests...");
 
-  my $command = "make -j2 -C $INV/tests/diff-tests " .
+  my $command = "make $J2 -C $INV/tests/diff-tests " .
     "&> diff_system_test.out";
   `$command`;
   if ($CHILD_ERROR) {
@@ -307,16 +323,18 @@ sub diff_system_test {
 }
 
 
-# Use the version of dfec in invariants/front-end/c.  Could build dfec
-# from source instead.
+# Run the dfec system tests.  Scans the output for any "FAILED" tests.
+# Uses the version of dfec in invariants/front-end/c.  Could build
+# dfec from source instead.
 sub dfec_system_test {
   # Standard test suite
-  my $TEST_SUITE = "summary-no-space";
+  my $TEST_SUITE = "summary";
   # Short test suites
+  # my $TEST_SUITE = "summary-no-space";
   # my $TEST_SUITE = "print_tokens";
   print_log("Dfec System Tests...");
 
-  my $command = "make -j2 -C $INV/tests/dfec-tests $TEST_SUITE " .
+  my $command = "make $J2 -C $INV/tests/dfec-tests $TEST_SUITE " .
     "&> dfec_system_test.out";
   `$command`;
   if ($CHILD_ERROR) {
@@ -345,7 +363,7 @@ sub dfec_system_test {
 }
 
 
-# Appends its arguments to the log file.  If the quiet option was no
+# Appends its arguments to the log file.  If the quiet option was *not*
 # specified, also prints its arguments to STDOUT.
 sub print_log {
   print LOG @_;
