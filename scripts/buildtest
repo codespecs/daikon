@@ -7,7 +7,7 @@
 # 2. Login as user 'daikonbuildtest'
 # 3. `mkdir $HOME/build $HOME/research`
 # 4. `cd $HOME/research`
-# 5. `cvs -d /g4/projects/invariants/.CVS/ co invariants/scripts`
+# 5. `cvs -d $CVS_REPOSITORY co invariants/scripts`
 # 6. `crontab $HOME/research/invariants/scripts/buildtest.crontab`
 cd $HOME/build
-exec /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --quiet $*
+exec /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --quiet --test_kvasir $*
