@@ -1,7 +1,26 @@
 Daikon todo list.
-Time-stamp: <2004-02-04 14:43:02 jhp>
+Time-stamp: <2004-03-25 12:16:40 jhp>
 
 Outstanding Issues
+
+  jhp     03/25/04      LinearTernary ignores some initial points
+
+    LinearTernary chooses the 3 most separated points to define the
+    plane.  In the routine maxsep_triples, it writes these three points
+    into the first 3 slots of def_points.  These slots are used to
+    define the coefficients of the equation.  Unfortunately it does
+    not move the unused points into the upper parts of def_points, so
+    they are never checked for validity!
+
+  jhp     02/20/04      Check for \n in all of daikon
+
+    Java strings should not include \n as line separator.  They
+    should instead use the line.separator system property.  Failure
+    to do this can lead to errors on windows based systems.
+
+    The command: rgrep '\\n' | grep -v '\\\\' | grep -v ' *//'
+    found 181 instances of non-commented \n in the daikon source
+    code (rgrep does a recursive grep on .java and .jpp files).
 
   jhp     02/04/04      add checks for debug settings
 
