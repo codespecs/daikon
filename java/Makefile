@@ -183,6 +183,8 @@ AUTO_GENERATED_FILES = \
 	daikon/derive/unary/SequenceInitialFloat.java \
 	daikon/derive/unary/SequenceInitialFactory.java \
 	daikon/derive/unary/SequenceInitialFactoryFloat.java \
+	daikon/inv/binary/twoSequence/SeqComparisonString.java \
+	daikon/inv/binary/twoSequence/TwoSequenceString.java \
 
 ###########################################################################
 ### Compilation targets
@@ -741,6 +743,9 @@ daikon/inv/binary/twoSequence/SeqComparison.java: daikon/inv/binary/twoSequence/
 daikon/inv/binary/twoSequence/SeqComparisonFloat.java: daikon/inv/binary/twoSequence/SeqComparison.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
+daikon/inv/binary/twoSequence/SeqComparisonString.java: daikon/inv/binary/twoSequence/SeqComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=TYPESTRING)
+
 daikon/inv/binary/twoSequence/Reverse.java: daikon/inv/binary/twoSequence/Reverse.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
@@ -782,6 +787,9 @@ daikon/inv/binary/twoSequence/TwoSequence.java: daikon/inv/binary/twoSequence/Tw
 
 daikon/inv/binary/twoSequence/TwoSequenceFloat.java: daikon/inv/binary/twoSequence/TwoSequence.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+
+daikon/inv/binary/twoSequence/TwoSequenceString.java: daikon/inv/binary/twoSequence/TwoSequence.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=TYPESTRING)
 
 daikon/inv/binary/twoSequence/TwoSequenceFactory.java: daikon/inv/binary/twoSequence/TwoSequenceFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
