@@ -38,7 +38,7 @@ WWW_DIR := /home/httpd/html/daikon/
 # This is the current directory!  Maybe I don't need a variable for it.
 #INV_DIR := $(MERNST_DIR)/research/invariants
 INV_DIR := $(shell pwd)
-JDK ?= /g2/jdk
+JDKDIR ?= /g2/jdk
 
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
@@ -67,8 +67,8 @@ CVS_REPOSITORY := /g4/projects/invariants/.CVS/
 # It seems like these should come from their standard locations (jhp)
 #RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
 #TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
-RTJAR := $(JDK)/jre/lib/rt.jar
-TOOLSJAR := $(JDK)/lib/tools.jar
+RTJAR := $(JDKDIR)/jre/lib/rt.jar
+TOOLSJAR := $(JDKDIR)/lib/tools.jar
 
 JUNIT_VERSION := junit3.8.1
 
@@ -332,37 +332,37 @@ www-dist:
 
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
-	-rm -rf $@ /tmp/daikon-jar
-	mkdir /tmp/daikon-jar
-	cd java && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
-	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
+	-rm -rf $@ /tmp/${USER}/daikon-jar
+	mkdir /tmp/${USER}/daikon-jar
+	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
+	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
-	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
-	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
-	#  mv /tmp/daikon-jar/OROMatcher-1.1.0a/com /tmp/daikon-jar
-	#  rm -rf /tmp/daikon-jar/OROMatcher-1.1.0a
+	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
+	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/${USER}/daikon-jar
+	#  mv /tmp/${USER}/daikon-jar/OROMatcher-1.1.0a/com /tmp/${USER}/daikon-jar
+	#  rm -rf /tmp/${USER}/daikon-jar/OROMatcher-1.1.0a
 	# jar does not seem to accept the -C argument.  MDE 6/14/2001
-	# jar xf java/lib/jakarta-oro.jar -C /tmp/daikon-jar
-	# jar xf java/lib/java-getopt.jar -C /tmp/daikon-jar
-	# jar xf java/lib/junit.jar -C /tmp/daikon-jar
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
-	# (cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
-	(cd java; cp -f --parents --target-directory=/tmp/daikon-jar $(DAIKON_RESOURCE_FILES))
-	cd /tmp/daikon-jar && jar cf $@ *
-	mv /tmp/daikon-jar/$@ $@
-	rm -rf /tmp/daikon-jar
+	# jar xf java/lib/jakarta-oro.jar -C /tmp/${USER}/daikon-jar
+	# jar xf java/lib/java-getopt.jar -C /tmp/${USER}/daikon-jar
+	# jar xf java/lib/junit.jar -C /tmp/${USER}/daikon-jar
+	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
+	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
+	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
+	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
+	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
+	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
+	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
+	cd /tmp/${USER}/daikon-jar && jar cf $@ *
+	mv /tmp/${USER}/daikon-jar/$@ $@
+	rm -rf /tmp/${USER}/daikon-jar
 
 java/lib/ajax.jar: $(AJAX_JAVA_FILES)
-	-rm -rf $@ /tmp/ajax-jar
-	mkdir /tmp/ajax-jar
-	javac -g -d /tmp/ajax-jar $(AJAX_JAVA_FILES)
-	cd /tmp/ajax-jar && jar cf ajax.jar *
-	mv /tmp/ajax-jar/ajax.jar $@
-	rm -rf /tmp/ajax-jar
+	-rm -rf $@ /tmp/${USER}/ajax-jar
+	mkdir /tmp/${USER}/ajax-jar
+	javac -g -d /tmp/${USER}/ajax-jar $(AJAX_JAVA_FILES)
+	cd /tmp/${USER}/ajax-jar && jar cf ajax.jar *
+	mv /tmp/${USER}/ajax-jar/ajax.jar $@
+	rm -rf /tmp/${USER}/ajax-jar
 
 # This rule creates the files that comprise the distribution, but does
 # not copy them anywhere.
