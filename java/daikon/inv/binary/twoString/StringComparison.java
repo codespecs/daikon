@@ -133,24 +133,26 @@ public final class StringComparison
     return null;
   }
 
-
-
   public String repr() {
     return "StringComparison" + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
-    String name1 = var1().name.name_using(format);
-    String name2 = var2().name.name_using(format);
+    String name1;
+    String name2;
     String comparator = core.format_comparator(format);
 
     if (format == OutputFormat.JAVA || format == OutputFormat.JML) {
+      name1 = var1().name.JMLElementCorrector().name_using(format);
+      name2 = var2().name.JMLElementCorrector().name_using(format);
       if (comparator.equals("==")) {
         return name1 + ".equals(" + name2 + ")";
       } else {
         return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
       }
     } else {
+      name1 = var1().name.name_using(format);
+      name2 = var2().name.name_using(format);
       return name1 + " " + comparator + " " + var2().name;
     }
     // return format_unimplemented(format);
