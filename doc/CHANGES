@@ -7,7 +7,12 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
-2.3.11 (8 July 2002):
+2.3.12 (11 July 2002):
+
+Daikon reports invariants over floating-point numbers.  Previously, it
+silently ignored floating-point numbers.
+
+2.3.11 (9 July 2002):
 
 The runcluster.pl program performs cluster analysis (a machine learning
 technique) to produce splitter info files.  This is in addition to other

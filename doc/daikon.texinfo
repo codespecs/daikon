@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.11
+@center Daikon version 2.3.12
 
 @sp 1
-@c Daikon version 2.3.11 date
-@center July  9, 2002
+@c Daikon version 2.3.12 date
+@center July 11, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.11, released July  9, 2002.
+It describes Daikon version 2.3.12, released July 11, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.11, released July  9, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.11, released July  9, 2002.
+It describes Daikon version 2.3.12, released July 11, 2002.
 @end ifnottex
 
 @menu
@@ -4255,7 +4255,7 @@ Simplify format (for use by the Simplify theorem-prover).
 To support a new output format, you need to do two things:
 @itemize @bullet
 @item
-(This description will change in Daikon version 2.3.11.)
+(This description will change in Daikon version 2.3.12.)
 Add, to every subclass of @samp{Invariant}, a
 @samp{format_@var{newtype}()} method.  Each subclass of Invariant
 already has three such methods --- @samp{format()}, @samp{format_esc()},
@@ -4774,7 +4774,7 @@ To make Daikon ignore some program points, use its
   --ppt @var{ppt_regexp}
 @end example
 @noindent
-argument (@pxref{Command line options for Daikon}).
+argument (@pxref{Command line options}).
 With the @option{-ppt} flag, only program points matching
 the regular expression are processed.  This can take the place of the
 @command{trace-purge-fns.pl} script.
@@ -4861,23 +4861,13 @@ much more likely to be corrected.
 
 The following problems are already known.  (You may report them again,
 to encourage us to release the fix faster, if you like.)
-@itemize @bullet
-@item C/C++ front end:
-@itemize @bullet
-@item
-@cindex shadowed variables in C
-Produces bad @file{.dtrace} and @file{.decls} files when a local
-variable shadows a global one.
-@end itemize
-@item Daikon:
-@itemize @bullet
-@item
-@cindex floating-point values
-Floating-point values are often ignored; the infrastructure is
-there, but I haven't gotten around to writing code to test for
-specific invariants.
-@end itemize
-@end itemize
+
+[There are no outstanding user-reported problems at this time.]
+
+@c @itemize @bullet
+@c @item C/C++ front end:
+@c @item Daikon:
+@c @end itemize
 
 @node    Further reading,  , Known bugs, Troubleshooting
 @section Further reading
@@ -4904,7 +4894,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.11, released July  9, 2002.
+This manual describes Daikon version 2.3.12, released July 11, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
