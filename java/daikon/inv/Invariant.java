@@ -156,7 +156,7 @@ public abstract class Invariant implements java.io.Serializable {
   }
 
   /**
-   * Subclasses should override.  An exact invariant indicates taht given
+   * Subclasses should override.  An exact invariant indicates that given
    * all but one variable value, the last one can be computed.  (I think
    * that's correct, anyway.)  Examples are IntComparison (when only
    * equality is possible), LinearBinary, FunctionUnary.
