@@ -143,14 +143,13 @@ public final class Daikon {
   public static boolean dkconfig_df_bottom_up = true;
 
   /**
-   * Whether any top-down processing is in effect.  If so, then an
-   * invariant may not see every sample, and certain statistics such as
-   * ValueTracker and tm_total are not valid.
+   * False if any top-down processing is in effect.
+   * If so, then an invariant may not see every sample, and certain
+   * statistics such as ValueTracker and tm_total are not valid.
    * TODO: When Jeff checks in his code with PptMap.global, then this
    * variable's setting needs to be updated.
    **/
-  public static boolean slices_see_all_points = true;
-
+  public static boolean slices_see_all_samples = true;
 
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
@@ -353,6 +352,10 @@ public final class Daikon {
 
     // Only for assertion checks
     isInferencing = true;
+    slices_see_all_samples = (dkconfig_df_bottom_up
+                              // TODO: Jeff should uncomment
+                              // && all_ppts.getGlobal() != null
+                              );
 
     // Infer invariants
     process_data(all_ppts, dtrace_files);

@@ -41,24 +41,22 @@ This has a small execution cost -- see Vector values_order.
 package daikon;
 
 import daikon.inv.*;
-
-  import daikon.inv.unary.*;
-  import daikon.inv.unary.scalar.*;
-  import daikon.inv.unary.string.*;
-  import daikon.inv.unary.sequence.*;
-  import daikon.inv.unary.stringsequence.*;
-  import daikon.inv.binary.*;
-  import daikon.inv.binary.twoScalar.*;
-  import daikon.inv.binary.twoSequence.*;
-  import daikon.inv.binary.twoString.*;
-  import daikon.inv.binary.sequenceScalar.*;
-  import daikon.inv.ternary.*;
-  import daikon.inv.ternary.threeScalar.*;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import daikon.inv.unary.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.stringsequence.*;
+import daikon.inv.binary.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.binary.twoString.*;
+import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.ternary.*;
+import daikon.inv.ternary.threeScalar.*;
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import utilMDE.*;
 
@@ -104,11 +102,25 @@ public final class PPTSLICE1
 #endif
 #endif
 
-  // These two fields are not valid when top-down processing is in effect.
-  // In other words, they are valid for V2; and in in V3, they are valid if
-  // dkconfig_df_bottom_up is set and no global program point exists.
-  VALUETRACKER1 values_cache;
-  int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
+  // These two fields are valid only Daikon.slices_see_all_samples is true.
+  /** Records the distinct values (tuples) seen at this slice. **/
+  private VALUETRACKER1 values_cache;
+  private int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
+  /** Number of modified samples observed. **/
+  private int mod_samples = 0;
+  /** Number of unmodified samples observed. **/
+  private int unmod_samples = 0;
+
+  public void repCheck() {
+    super.repCheck();
+    if (num_samples() != mod_samples + unmod_samples) {
+      throw new Error("mismatch: " + num_samples() + " == " + mod_samples
+                      + " + " + unmod_samples + "; " + ArraysMDE.toString(tm_total));
+    }
+    if (num_mod_samples() != mod_samples) {
+      throw new Error("mismatch: " + num_mod_samples() + " == " + mod_samples);
+    }
+  }
 
 
   /**
@@ -328,23 +340,25 @@ public final class PPTSLICE1
    * Set the number of samples for this slice to be at least count.
    **/
   public void set_samples (int count) {
-    if (tm_total[0] < count) tm_total[0] = count;
-    if (tm_total[1] < count) tm_total[1] = count;
-#if defined(ARITY2) || defined(ARITY3)
-    if (tm_total[2] < count) tm_total[2] = count;
-    if (tm_total[3] < count) tm_total[3] = count;
-#endif
-#if defined(ARITY3)
-    if (tm_total[4] < count) tm_total[4] = count;
-    if (tm_total[5] < count) tm_total[5] = count;
-    if (tm_total[6] < count) tm_total[6] = count;
-    if (tm_total[7] < count) tm_total[7] = count;
-#endif
+    repCheck();
+    int old_num_samples = num_samples();
+    if (old_num_samples >= count) return;
+    // Distribute the new samples equally among the buckets.
+    double ratio = ((double)count)/old_num_samples;
+    for (int i=0; i<NUM_TM; i++) {
+      tm_total[i] *= ratio;
+    }
+    // Put any extras in bucket 0.
+    tm_total[0] = count - num_mod_samples();
+    mod_samples *= ratio;
+    unmod_samples = count - mod_samples;
+    repCheck();
   }
 
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of samples observed at this slice. **/
   public int num_samples() {
+    // return mod_samples + unmod_samples;
 #if defined(ARITY1)
     int result = tm_total[0] + tm_total[1];
 #elif defined(ARITY2)
@@ -428,6 +442,7 @@ public final class PPTSLICE1
 
   // The number of modified, non-missing samples.
   public int num_mod_samples() {
+    // return mod_samples;
 #if defined(ARITY1)
     int result = tm_total[1];
 #elif defined(ARITY2)
@@ -439,34 +454,6 @@ public final class PPTSLICE1
     Assert.assertTrue(result >= 0);
     return result;
   }
-
-#if defined(ARITY1)
-  public String tuplemod_samples_summary() {
-    Assert.assertTrue(! no_invariants);
-    return "U=" + tm_total[0]
-      + ", M=" + tm_total[1];
-  }
-#elif defined(ARITY2)
-  public String tuplemod_samples_summary() {
-    Assert.assertTrue(! no_invariants);
-    return "UU=" + tm_total[0]
-      + ", UM=" + tm_total[1]
-      + ", MU=" + tm_total[2]
-      + ", MM=" + tm_total[3];
-  }
-#elif defined(ARITY3)
-  public String tuplemod_samples_summary() {
-    Assert.assertTrue(! no_invariants);
-    return "UUU=" + tm_total[0]
-      + ", UUM=" + tm_total[1]
-      + ", UMU=" + tm_total[2]
-      + ", UMM=" + tm_total[3]
-      + ", MUU=" + tm_total[4]
-      + ", MUM=" + tm_total[5]
-      + ", MMU=" + tm_total[6]
-      + ", MMM=" + tm_total[7];
-  }
-#endif
 
   // public int num_missing() { return values_cache.num_missing; }
 
@@ -515,6 +502,7 @@ public final class PPTSLICE1
     for (int i=0; i<invs.size(); i++) {
       Assert.assertTrue(invs.get(i) != null);
     }
+    repCheck();
 
     // if (Global.debugInfer.isLoggable(Level.FINE)) {
     //   Global.debugInfer.fine (PPTSLICE1STRING + ".add(" + full_vt + ", " + count + ")" + " for " + name());
@@ -646,7 +634,13 @@ public final class PPTSLICE1
 #if defined (ARITY1)
   public void add_val (Object val1, int mod1, int count) {
 
+    repCheck();
     tm_total[mod1] += count;
+    if (mod1 == ValueTuple.MODIFIED)
+      mod_samples += count;
+    else
+      unmod_samples += count;
+    repCheck();
 
     Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
                       && mod1 != ValueTuple.MISSING_NONSENSICAL);
@@ -681,9 +675,15 @@ public final class PPTSLICE1
                        && mod1 != ValueTuple.MISSING_NONSENSICAL)
                        && (mod2 != ValueTuple.MISSING_FLOW
                        && mod2 != ValueTuple.MISSING_NONSENSICAL));
+    repCheck();
 
     int mod_index = mod1 * 2 + mod2;
     tm_total[mod_index] += count;
+    if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED)
+      mod_samples += count;
+    else
+      unmod_samples += count;
+    repCheck();
     if (Debug.logDetail())
       Debug.log (getClass(), this, "mod1 = " + mod1 + " mod2 = " + mod2
                  + " count = " + count);
@@ -762,8 +762,14 @@ public final class PPTSLICE1
                         && (mod3 != ValueTuple.MISSING_FLOW
                         && mod3 != ValueTuple.MISSING_NONSENSICAL));
 
+    repCheck();
     int mod_index = mod1 * 4 + mod2 * 2 + mod3;
     tm_total[mod_index] += count;
+    if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED || mod3 == ValueTuple.MODIFIED)
+      mod_samples += count;
+    else
+      unmod_samples += count;;
+    repCheck();
 
     if (! Invariant.dkconfig_use_confidence) {
       if (values_cache != null) {
@@ -1023,6 +1029,8 @@ public final class PPTSLICE1
     PPTSLICE1 result = new PPTSLICE1 (this.parent, newVarInfos);
 
     // Set sample counts
+    result.mod_samples = this.mod_samples;
+    result.unmod_samples = this.unmod_samples;
     for (int i = 0; i < tm_total.length; i++) {
       result.tm_total[i] = this.tm_total[i];
     }
@@ -1160,6 +1168,8 @@ public final class PPTSLICE1
       }
 
       // Update sample count info
+      mod_samples += cslice.mod_samples;
+      unmod_samples += cslice.unmod_samples;
       for (int j = 0; j < tm_total.length; j++) {
         tm_total[j] += cslice.tm_total[j];
       }
@@ -1284,6 +1294,7 @@ public final class PPTSLICE1
         }
       }
     }
+    repCheck();
   }
 
   /**

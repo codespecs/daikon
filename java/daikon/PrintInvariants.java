@@ -604,7 +604,6 @@ public class PrintInvariants {
     if (Daikon.output_num_samples) {
       // int num_samps = -111; // [[INCR]]
       out.println(ppt.name() + "  " + nplural(ppt.num_samples(), "sample"));
-      // out.println("    Samples breakdown: " + ppt.tuplemod_samples_summary()); // [[INCR]]
     } else {
       if (Daikon.output_style == OutputFormat.IOA) {
         out.print("% ");  // IOA comment style
@@ -1456,8 +1455,6 @@ public class PrintInvariants {
       // if (debugPrint.isLoggable(Level.FINE)) {
       //  debugPrint.fine ("Slice: " + slice.varNames() + "  "
       //                   + slice.num_samples() + " samples");
-      //  debugPrint.fine ("    Samples breakdown: "
-      //                   + slice.tuplemod_samples_summary());
       //  slice.values_cache.dump();
       // }
       // Assert.assertTrue(slice.check_modbits());
@@ -1501,16 +1498,12 @@ public class PrintInvariants {
   // public void print_invariants() {
   //   System.out.println(name + "  "
   //                      + num_samples() + " samples");
-  //   System.out.println("    Samples breakdown: "
-  //                      + values.tuplemod_samples_summary());
   //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
   //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
   //     PptSlice slice = (PptSlice) itor2.next();
   //     if (debugPrint.isLoggable(Level.FINE)) {
   //       System.out.println("Slice: " + slice.varNames() + "  "
   //                          + slice.num_samples() + " samples");
-  //       System.out.println("    Samples breakdown: "
-  //                          + slice.values_cache.tuplemod_samples_summary());
   //     }  //     Invariants invs = slice.invs;
   //     int num_invs = invs.size();
   //     for (int i=0; i<num_invs; i++) {

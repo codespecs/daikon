@@ -152,7 +152,6 @@ public class PptTopLevel
   private int values_num_samples;
   // [INCR] private int values_num_mod_samples;
   // [INCR] private int values_num_values;
-  // [INCR] private String values_tuplemod_samples_summary;
 
   /**
    * All the Views (that is, slices) on this are stored as values in

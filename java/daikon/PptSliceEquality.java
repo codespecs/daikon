@@ -40,9 +40,6 @@ public class PptSliceEquality
   public int num_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_mod_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_values() { if (true) throw new Error(); return Integer.MAX_VALUE; }
-  public String tuplemod_samples_summary() {
-    throw new Error();
-  }
 
   /**
    * Encapsulates a VarInfo and its Comparability so that the two can

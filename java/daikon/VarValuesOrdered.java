@@ -59,19 +59,6 @@ public final class VarValuesOrdered {
     return result;
   }
 
-  public String tuplemod_samples_summary() {
-    StringBuffer sb = new StringBuffer();
-    for (int tm=0; tm<ValueTuple.TUPLEMOD_VALUES; tm++) {
-      if (tm != 0)
-        sb.append("; ");
-      sb.append(ValueTuple.tuplemodToStringBrief(tm));
-      sb.append("=");
-      sb.append(tuplemod_samples[tm]);
-    }
-    return sb.toString();
-  }
-
-
   Set valueSet() {
     return values_set;
   }
