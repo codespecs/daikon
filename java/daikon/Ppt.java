@@ -223,6 +223,18 @@ public abstract class Ppt
     return (VarInfo[]) result.toArray(new VarInfo[result.size()]);
   }
 
+  public boolean containsVar (VarInfo vi) {
+    // There's gotta be a faster way of doing this.  I don't want to
+    // use a HashSet for var_infos because various things clobber
+    // this.var_infos.
+    int result = 0;
+    for (int i = 0; i < var_infos.length; i++) {
+      if (var_infos[i] == vi) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // It might make more sense to put the sorting into
   // PptMap.sortedIterator(), for example, but it's in here for now
