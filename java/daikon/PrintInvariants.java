@@ -198,17 +198,75 @@ public class PrintInvariants {
   ///////////////////////////////////////////////////////////////////////////
   //
 
+  // The following code is a little odd because it is trying to match the
+  // output format of V2.  In V2, combined exit points are printed after
+  // the original exit points (rather than before as they are following
+  // the PptMap sort order).
+  //
+  // Also, V2 only prints out a single ppt when there is only one
+  // exit point.  This seems correct.  Probably a better solution to
+  // this would be to not create the combined exit point at all when there
+  // is only a single exit.  Its done here instead so as not to futz with
+  // the partial order stuff.
+  //
+  // All of this can (and should be) improved when V2 is dropped.
+
   public static void print_invariants(PptMap ppts) {
-    // Retrieve Ppt objects in sorted order.
+
     PrintWriter pw = new PrintWriter(System.out, true);
-    // PptMap iterator uses a custom comparator for a specific ordering
-    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      // if (ppt.has_samples() &&  // [[INCR]]
-      if (! Daikon.no_text_output) {
-        print_invariants_maybe(ppt, pw, ppts);
+    PptTopLevel combined_exit = null;
+    boolean enable_exit_swap = true;
+
+    if (Daikon.no_text_output)
+      return;
+
+    // Retrieve Ppt objects in sorted order.  Put them in an array list
+    // so that it is easier to look behind and ahead.
+    ArrayList ppt_list = new ArrayList();
+    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; )
+      ppt_list.add ((PptTopLevel) itor.next());
+
+    for (int i = 0 ; i < ppt_list.size(); i++) {
+      PptTopLevel ppt = (PptTopLevel) ppt_list.get(i);
+
+      // If this point is not an exit point, print out any retained combined
+      // exit point
+      if (enable_exit_swap && !ppt.ppt_name.isExitPoint()) {
+        if (combined_exit != null)
+          print_invariants_maybe(combined_exit, pw, ppts);
+        combined_exit = null;
       }
+
+      // Just cache the combined exit point for now, print it after the
+      // EXITnn points.
+      if (enable_exit_swap && ppt.ppt_name.isCombinedExitPoint()) {
+        combined_exit = ppt;
+        continue;
+      }
+
+      // If there is only one exit point, just show the combined one (since
+      // the EXITnn point will be empty)  This is accomplished by skipping this
+      // point if it is an EXITnn point and the previous point was a combined
+      // exit point and the next one is not an EXITnn point.
+      if (enable_exit_swap && (i > 0) && ppt.ppt_name.isExitPoint()) {
+        PptTopLevel prev = (PptTopLevel) ppt_list.get(i-1);
+        if (prev.ppt_name.isCombinedExitPoint()) {
+          if ((i + 1) >= ppt_list.size())
+            continue;
+          PptTopLevel next = (PptTopLevel) ppt_list.get (i+1);
+          if (!next.ppt_name.isExitPoint())
+            continue;
+        }
+      }
+
+      // if (ppt.has_samples() &&  // [[INCR]]
+      print_invariants_maybe(ppt, pw, ppts);
     }
+
+    // print a last remaining combined exit point (if any)
+    if (enable_exit_swap && combined_exit != null)
+      print_invariants_maybe(combined_exit, pw, ppts);
+
     pw.flush();
   }
 
