@@ -24,7 +24,7 @@ import java.util.*;
 public class LowerBound  extends SingleScalar {
 
   // min1  <  min2  <  min3 
-  long min1  = Long.MAX_VALUE ;
+  public long min1  = Long.MAX_VALUE ;
   int num_min1  = 0;
   long min2  = Long.MAX_VALUE ;
   int num_min2  = 0;

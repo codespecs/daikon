@@ -24,7 +24,7 @@ import java.util.*;
 public class UpperBound  extends SingleScalar {
 
   // max1  >  max2  >  max3 
-  long max1  = Long.MIN_VALUE ;
+  public long max1  = Long.MIN_VALUE ;
   int num_max1  = 0;
   long max2  = Long.MIN_VALUE ;
   int num_max2  = 0;

@@ -75,7 +75,7 @@ import java.util.*;
 public class LOWERBOUND extends SingleScalar {
 
   // MIN1 LT MIN2 LT MIN3
-  long MIN1 = LONGMAX;
+  public long MIN1 = LONGMAX;
   int NUM_MIN1 = 0;
   long MIN2 = LONGMAX;
   int NUM_MIN2 = 0;
