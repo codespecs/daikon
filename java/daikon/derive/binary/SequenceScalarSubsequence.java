@@ -86,22 +86,33 @@ public final class SequenceScalarSubsequence  extends BinaryDerivation {
   }
 
   protected VarInfo makeVarInfo() {
-    String index_shift_string = ((index_shift == 0)
-				 ? ""
-				 : ((index_shift < 0)
-				    ? Integer.toString(index_shift)
-				    : "+" + index_shift));
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
-    String name = addSubscript(seqvar.name,
-                               (from_start
-                                ? "0.." + sclvar.name + index_shift_string
-                                : sclvar.name + index_shift_string + ".."));
-    String esc_name = addSubscript_esc(seqvar.esc_name,
-                               (from_start
-                                ? "0.." + sclvar.esc_name + index_shift_string
-                                : sclvar.esc_name + index_shift_string + ".."));
-    return new VarInfo(name, esc_name, seqvar.type, seqvar.rep_type, seqvar.comparability);
+
+    VarInfoName name;
+    if (from_start) {
+      if (index_shift == 0) {
+	// q[0..c]
+	name = seqvar.name.applySlice(null, sclvar.name);
+      } else if (index_shift == -1) {
+	// q[0..c-1]
+	name = seqvar.name.applySlice(null, sclvar.name.applyDecrement());
+      } else {
+	throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
+      }
+    } else {
+      if (index_shift == 0) {
+	// q[c..]
+	name = seqvar.name.applySlice(sclvar.name, null);
+      } else if (index_shift == 1) {
+	// q[c+1..]
+	name = seqvar.name.applySlice(sclvar.name.applyIncrement(), null);
+      } else {
+	throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
+      }
+    }
+	
+    return new VarInfo(name, seqvar.type, seqvar.rep_type, seqvar.comparability);
   }
 
 }

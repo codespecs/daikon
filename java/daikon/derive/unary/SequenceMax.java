@@ -25,12 +25,11 @@ public final class SequenceMax extends UnaryDerivation {
   }
 
   protected VarInfo makeVarInfo() {
-    String name = "max(" + base.name + ")";
-    String esc_name = "max(" + base.esc_name + ")";
+    VarInfoName name = base.name.applyFunction("max");
     ProglangType ptype = base.type.elementType();
     ProglangType rtype = base.rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(name, esc_name, ptype, rtype, comp);
+    return new VarInfo(name, ptype, rtype, comp);
   }
 
 }

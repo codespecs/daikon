@@ -75,15 +75,18 @@ public final class SequenceInitial extends UnaryDerivation {
   }
 
   protected VarInfo makeVarInfo() {
-    String name = BinaryDerivation.addSubscript(base.name, "" + index);
-    String esc_index = ((index < 0)
-                        ? (base.esc_name + ".length" + index)
-                        : "" + index);
-    String esc_name = BinaryDerivation.addSubscript_esc(base.esc_name, esc_index);
+
+    VarInfoName name = base.name.applySubscript(VarInfoName.parse(String.valueOf(index)));
+//      String name = BinaryDerivation.addSubscript(base.name, "" + index);
+//      String esc_index = ((index < 0)
+//                          ? (base.esc_name + ".length" + index)
+//                          : "" + index);
+//      String esc_name = BinaryDerivation.addSubscript_esc(base.esc_name, esc_index);
+
     ProglangType ptype = base.type.elementType();
     ProglangType rtype = base.rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(name, esc_name, ptype, rtype, comp);
+    return new VarInfo(name, ptype, rtype, comp);
   }
 
 }

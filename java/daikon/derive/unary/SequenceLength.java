@@ -52,13 +52,20 @@ public final class SequenceLength extends UnaryDerivation {
   }
 
   protected VarInfo makeVarInfo() {
-    String shift_string = (shift==0) ? "" : ""+shift;
-    String name = "size(" + base.name + ")" + shift_string;
-    String esc_name = base.esc_name + ".length" + shift_string;
+    VarInfoName name = base.name.applySize();
+    switch (shift) {
+    case 0:
+      break;
+    case -1:
+      name = name.applyDecrement();
+      break;
+    default:
+      throw new UnsupportedOperationException("Unsupported shift: " + shift);
+    }
     ProglangType ptype = ProglangType.INT;
     ProglangType rtype = ProglangType.INT;
     VarComparability comp = base.comparability.indexType(0);
-    return new VarInfo(name, esc_name, ptype, rtype, comp);
+    return new VarInfo(name, ptype, rtype, comp);
   }
 
 }
