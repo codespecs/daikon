@@ -24,6 +24,10 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define VALUETRACKER ValueTracker
   #define INT(x) Int ## x
   #define LINEARBINARY LinearBinary
+  #define PAIRWISE_COMPARE PairwiseIntComparison
+  #define SEQ_COMPARISON SeqComparison
+  #define SEQ_SUBSCRIPT SequenceScalarSubscript
+  #define NO_DUPS NoDuplicates
 #else
   #define PRIMITIVE double
   #define ISTYPE isFloat()
@@ -32,6 +36,10 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define VALUETRACKER FloatValueTracker
   #define INT(x) Float ## x
   #define LINEARBINARY LinearBinaryFloat
+  #define PAIRWISE_COMPARE PairwiseFloatComparison
+  #define SEQ_COMPARISON SeqComparisonFloat
+  #define SEQ_SUBSCRIPT SequenceFloatSubscript
+  #define NO_DUPS NoDuplicatesFloat
 #endif
 
 #if defined(EQUAL)
@@ -150,6 +158,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
+import daikon.derive.binary.*;
 import daikon.suppress.*;
 
 import utilMDE.*;
@@ -200,6 +209,11 @@ public final class INTEQUAL
   }
 
   public static INTEQUAL instantiate(PptSlice ppt) {
+
+    if (logOn() || debug.isDebugEnabled() || ppt.debugged) {
+      Debug.log (debug, INTEQUAL.class, ppt, "Attempt Instantiate");
+    }
+
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -221,10 +235,10 @@ public final class INTEQUAL
   #endif
 #endif
 
-    if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug(INTEQUALstring + ".instantiate(" + ppt.name + ")"
-                          + ", seqvar1=" + seqvar1
-                          + ", seqvar2=" + seqvar2);
+    if (logOn() || debug.isDebugEnabled() || ppt.debugged) {
+      Debug.log (debug, INTEQUAL.class, ppt,
+             "seqvar1=" + ((seqvar1 == null) ? "null" : seqvar1.name.name())
+         + ", seqvar2=" + ((seqvar2 == null) ? "null" : seqvar2.name.name()));
     }
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
@@ -394,11 +408,12 @@ invariants.
   }
 
   public void add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    // if (ppt.debugged) {
-    //   System.out.println(INTEQUALstring + ppt.varNames() + ".add_modified("
-    //                      + v1 + "," + v2 + ", count=" + count + ")");
-    // }
+    // if (logDetail() || debug.isDebugEnabled())
+    //   log (debug, "add_modified (" + v1 + ", " + v2 + ",  " + count + ")");
     if (!(EQUALS(v1, v2))) {
+      if (logOn() || debug.isDebugEnabled())
+        log (debug, "destroy in add_modified (" + v1 + ", " + v2 + ",  "
+            + count + ")");
       destroyAndFlow();
       return;
     }
@@ -862,90 +877,367 @@ invariants.
 
 #if defined (LESSTHAN) || defined (GREATERTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHANFLOAT)
 
-  private static SuppressionFactory[] suppressionFactories = null;
-
-  public SuppressionFactory[] getSuppressionFactories() {
-    if (suppressionFactories == null) {
-      SuppressionFactory[] supers = super.getSuppressionFactories();
-      suppressionFactories = new SuppressionFactory[supers.length + 1];
-      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
-      suppressionFactories[supers.length]
-            = ComparisonsSuppressionFactory1.getInstance();
-    }
-    return suppressionFactories;
-  }
-
   /**
    * Suppression in the form y = x + b ==> y EQUALS x (where b EQUALS 0).
    */
-  public static class ComparisonsSuppressionFactory1
-    extends SuppressionFactory {
+  public static SuppressionLink lb_suppress (Invariant arg,
+                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
 
-    public static final Logger debug = Logger.getLogger
-                ("daikon.suppress.factories.ComparisonsSuppressionFactory");
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
 
-    private static final ComparisonsSuppressionFactory1 theInstance
-      = new ComparisonsSuppressionFactory1();
+    if (logOn())
+      inv.log ("Considering suppression by LinearBinary (x = y + c)");
 
-    private ComparisonsSuppressionFactory1() {
-      supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[1];
-      supTemplate.varInfos = new VarInfo[][] {new VarInfo[2]};
-    }
+    // Setup to look for LinearBinary over our variables
+    supTemplate.resetResults();
+    supTemplate.invTypes[0] = LINEARBINARY.class;
+    supTemplate.varInfos[0][0] = inv.var1();
+    supTemplate.varInfos[0][1] = inv.var2();
 
-    public static SuppressionFactory getInstance() {
-      return theInstance;
-    }
+    //look for invariants that match our template
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
 
-    private Object readResolve() {
-      return theInstance;
-    }
+      LINEARBINARY lb = (LINEARBINARY) supTemplate.results[0];
 
-    private transient SuppressionTemplate supTemplate;
+      // If the invariant isn't active, we can't use it
+      if (!lb.isActive())
+        return (null);
 
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
+      // Only 'a == 1' implies a less than or greater than relationship
+      if (lb.core.a != 1.0)
+        return (null);
 
-      //we should only be called with our own invariant
-      Assert.assertTrue (arg instanceof INTEQUAL);
-      INTEQUAL inv = (INTEQUAL) arg;
+      // b determines whether we are greater than or less than
+      if (EQUALS (lb.core.b, 0))
+        return (null);
 
-      //setup to look for LinearBinary over our variables
-      supTemplate.resetResults();
-      supTemplate.invTypes[0] = LINEARBINARY.class;
-      supTemplate.varInfos[0][0] = inv.var1();
-      supTemplate.varInfos[0][1] = inv.var2();
-
-      //look for invariants that match our template
-      SuppressionLink sl = byTemplate (supTemplate, inv);
-      if (sl != null) {
-        LINEARBINARY lb = (LINEARBINARY) supTemplate.results[0];
-        if (debug.isDebugEnabled()) {
-          debug.debug (EQUALSstring + " suppression possiblity " + lb.repr());
-        }
-
-        // JHP force this to fail for now, so I can diff stuff
-        if (true)
-          return (null);
-
-        //if the invariant isn't active, we can't use it
-        if (!lb.isActive())
-          return (null);
-
-        //only 'a == 1' implies a less than or greater than relationship
-        if (lb.core.a != 1.0)
-          return (null);
-
-        //b determines whether we are greater than or less than
-        if (EQUALS (lb.core.b, 0))
-          return (null);
-
-        if (debug.isDebugEnabled()) {
-          debug.debug (EQUALSstring + " Suppressed by " + lb.repr());
-        }
+      if (logOn() || debug.isDebugEnabled()) {
+        arg.log (debug, " Suppressed by " + lb.format());
       }
-      return (sl);
     }
+    return (sl);
   }
+
+#endif
+
+#if !defined (NOTEQUAL) && !defined (NOTEQUALFLOAT)
+  /**
+   * Suppress 'x[n] cmp y[n]' by 'x[] cmp y[]'
+   */
+  public static SuppressionLink pairwise_suppress(Invariant arg,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression by 'x[] cmp y[] (elementwise)'");
+
+    // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same subscript
+    VarInfo v1 = inv.var1();
+    VarInfo v2 = inv.var2();
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    if ((der1.sclvar() != der2.sclvar())
+        || (der1.index_shift != der2.index_shift))
+      return (null);
+
+    // Build a template for PAIRWISE_COMPARE
+    supTemplate.invTypes[0] = PAIRWISE_COMPARE.class;
+    supTemplate.varInfos[0][0] = der1.seqvar();
+    supTemplate.varInfos[0][1] = der2.seqvar();
+
+    // matching invariants must also match our comparison
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+      boolean match = false;
+      PAIRWISE_COMPARE pw = (PAIRWISE_COMPARE) supTemplate.results[0];
+      #if defined (LESSTHAN) || defined (LESSTHANFLOAT)
+        match = pw.core.can_be_lt && !pw.core.can_be_eq;
+      #elif defined (LESSEQUAL) || defined (LESSEQUALFLOAT)
+        match = pw.core.can_be_lt && pw.core.can_be_eq;
+      #elif defined (GREATERTHAN) || defined (GREATERTHANFLOAT)
+        match = pw.core.can_be_gt && !pw.core.can_be_eq;
+      #elif defined (GREATEREQUAL) || defined (GREATEREQUALFLOAT)
+        match = pw.core.can_be_gt && pw.core.can_be_eq;
+      #elif defined (EQUAL) || defined (EQUALFLOAT)
+        match = pw.core.can_be_eq && !pw.core.can_be_lt && !pw.core.can_be_gt;
+      #endif
+      if (logOn())
+        inv.log ((match ? "" : "Not ") + "suppressed by '" + pw.format() +"'");
+      if (!match)
+        sl = null;
+    }
+    return (sl);
+  }
+#endif
+
+#if defined(EQUAL)
+
+  /**
+   * Suppress 'size(x[]) == size(y[])' by 'x[] == y[]'
+   */
+
+  public static SuppressionLink seqlen_suppress (Invariant arg,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression of 'size(x[]) == size(y[])' "
+                + "by 'x[] == y[]'");
+
+    // Make sure v1 and v2 are size(array)
+    VarInfo v1 = inv.var1();
+    if (!v1.isDerived() || !(v1.derived instanceof SequenceLength))
+      return (null);
+    VarInfo v2 = inv.var2();
+    if (!v2.isDerived() || !(v2.derived instanceof SequenceLength))
+      return (null);
+
+    // Build a template for arr1 == arr2 of the correct type
+    supTemplate.resetResults();
+    VarInfo bv1 = v1.derived.getBases()[0];
+    VarInfo bv2 = v2.derived.getBases()[0];
+    if (bv1.rep_type.baseIsString())
+      supTemplate.invTypes[0] = SeqComparisonString.class;
+    else if (bv1.rep_type.baseIsFloat())
+      supTemplate.invTypes[0] = SeqComparisonFloat.class;
+    else
+      supTemplate.invTypes[0] = SeqComparison.class;
+    supTemplate.varInfos[0][0] = bv1;
+    supTemplate.varInfos[0][1] = bv2;
+    if (logOn())
+      inv.log ("Suppression Template - " + supTemplate.searchString());
+
+    // Invariants must match and represent equality
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+      boolean is_eq = false;
+      Invariant seqcomp = supTemplate.results[0];
+      if (seqcomp instanceof SeqComparison)
+        is_eq = ((SeqComparison) seqcomp).isEqual();
+      else if (seqcomp instanceof SeqComparisonFloat)
+        is_eq = ((SeqComparisonFloat) seqcomp).isEqual();
+      else
+        is_eq = ((SeqComparisonString) seqcomp).isEqual();
+      if (logOn())
+        inv.log ("Invariant " + (is_eq ? "" : "not ") + "suppressed by '"
+                              + seqcomp.format() + "'");
+      if (!is_eq)
+        sl = null;
+    } else {
+       inv.log ("invariant not suppressed (SeqComparison not found)");
+    }
+    return (sl);
+  }
+
+  /**
+   * Suppress 'x[a]) == y[a])' by 'x[] == y[]' when a is the same variable
+   */
+
+  public static SuppressionLink seq_equal_suppress (Invariant arg,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression of 'x[a] == y[a])' "
+                + "by 'x[] == y[]'");
+
+    // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same subscript
+    VarInfo v1 = inv.var1();
+    VarInfo v2 = inv.var2();
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    if ((der1.sclvar() != der2.sclvar())
+        || (der1.index_shift != der2.index_shift))
+      return (null);
+
+    // Build a template for lexical comparison
+    supTemplate.invTypes[0] = SEQ_COMPARISON.class;
+    supTemplate.varInfos[0][0] = der1.seqvar();
+    supTemplate.varInfos[0][1] = der2.seqvar();
+
+    // Matching invariants must represent equality
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+      SEQ_COMPARISON seq = (SEQ_COMPARISON) supTemplate.results[0];
+      if (logOn())
+        inv.log ((seq.isEqual() ? "" : "Not ") + "suppressed by '"
+                + seq.format() +"'");
+      if (!seq.isEqual())
+        sl = null;
+    }
+    return (sl);
+  }
+  /**
+   * Suppress 'x[a]) == y[b])' by 'x[] == y[]' and 'a == b'
+   */
+
+  public static SuppressionLink seq_sub_equal_suppress (Invariant arg,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression of 'x[a] == y[b])' "
+                + "by 'x[] == y[]' and 'a == b'");
+
+    // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same shift
+    VarInfo v1 = inv.var1();
+    VarInfo v2 = inv.var2();
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    if (der1.index_shift != der2.index_shift)
+      return (null);
+
+    // Build a template for sequences being equal
+    supTemplate.invTypes[0] = SEQ_COMPARISON.class;
+    supTemplate.varInfos[0][0] = der1.seqvar();
+    supTemplate.varInfos[0][1] = der2.seqvar();
+
+    // Built a template for the subscripts being equal
+    supTemplate.invTypes[1] = INTEQUAL.class;
+    supTemplate.varInfos[1][0] = der1.sclvar();
+    supTemplate.varInfos[1][1] = der2.sclvar();
+
+    // Matching sequence invariants must represent equality.  The INTEQUAL
+    // invariant for the subscripts only exists if they are equal.
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+      SEQ_COMPARISON seq = (SEQ_COMPARISON) supTemplate.results[0];
+      if (logOn()) {
+        Invariant eq = supTemplate.results[1];
+        inv.log ((seq.isEqual() ? "" : "Not ") + "suppressed by '"
+                + seq.format() +"'" + " and '" + eq.format() + "'");
+      }
+      if (!seq.isEqual())
+        sl = null;
+    }
+    return (sl);
+  }
+
+#endif
+
+#if defined(NONEQUAL) || defined(NONEQUALFLOAT)
+
+  /**
+   * Suppress invariants of the form 'x[n] != x[p]' by the
+   * 'x[] contains no duplicates' invariant.
+   */
+
+  public static SuppressionLink nodups_suppress (Invariant arg,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression by NoDuplicates");
+
+    // Make sure v1 and v2 are SEQ_SUBSCRIPT from the same array
+    VarInfo v1 = inv.var1();
+    VarInfo v2 = inv.var2();
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    if (der1.seqvar() != der2.seqvar())
+      return (null);
+
+    // Build a template for NO_DUPS
+    supTemplate.invTypes[0] = NO_DUPS.class;
+    supTemplate.varInfos[0][0] = der1.seqvar();
+
+    // Any match suppresses
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    return (sl);
+  }
+#endif
+
+#ifdef 0
+  // The following creates the correct factories based on the comparison
+  // type.  This is the only place where it is necessary to know all of the
+  // suppressions that can be used on a particular type.  The code above can
+  // safely define suppressions independent of one another
+#endif
+
+#if defined(NONEQUAL) || defined(NONEQUALFLOAT)
+
+  // Create a suppression factory for nodups
+  #define FACTORY_CNT       1
+  #define FACTORY1          nodups_suppress
+  #define FACTORY1_INV_CNT  1
+  #define FACTORY1_VAR_INFO {new VarInfo[1]}
+
+  #include "daikon/inv/suppressionFactory.java.jpp"
+
+#elif defined (LESSTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHAN) || defined (GREATERTHANFLOAT)
+
+  // Create a suppression factory for linear binary and pairwise
+  #define FACTORY_CNT       2
+  #define FACTORY1          lb_suppress
+  #define FACTORY1_INV_CNT  1
+  #define FACTORY1_VAR_INFO {new VarInfo[2]}
+  #define FACTORY2          pairwise_suppress
+  #define FACTORY2_INV_CNT  1
+  #define FACTORY2_VAR_INFO {new VarInfo[2]}
+  #include "daikon/inv/suppressionFactory.java.jpp"
+
+#elif defined (LESSEQUAL) || defined (LESSEQUALFLOAT) || defined (GREATEREQUAL) || defined (GREATEREQUALFLOAT)
+
+  // Create a suppression factory for pairwise
+  #define FACTORY_CNT       1
+  #define FACTORY1          pairwise_suppress
+  #define FACTORY1_INV_CNT  1
+  #define FACTORY1_VAR_INFO {new VarInfo[2]}
+  #include "daikon/inv/suppressionFactory.java.jpp"
+
+#elif defined (EQUAL)
+
+  // Create suppression factory for pairwise, seqlen, seq_equal, seq_sub_equal
+  #define FACTORY_CNT       4
+  #define FACTORY1          pairwise_suppress
+  #define FACTORY1_INV_CNT  1
+  #define FACTORY1_VAR_INFO {new VarInfo[2]}
+  #define FACTORY2          seqlen_suppress
+  #define FACTORY2_INV_CNT  1
+  #define FACTORY2_VAR_INFO {new VarInfo[2]}
+  #define FACTORY3          seq_equal_suppress
+  #define FACTORY3_INV_CNT  1
+  #define FACTORY3_VAR_INFO {new VarInfo[2]}
+  #define FACTORY4          seq_sub_equal_suppress
+  #define FACTORY4_INV_CNT  2
+  #define FACTORY4_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+
+  #include "daikon/inv/suppressionFactory.java.jpp"
+
 #endif
 
 }
