@@ -112,11 +112,9 @@ public abstract class BinaryDerivation
     return base1.canBeMissing || base2.canBeMissing;
   }
 
-  /* [INCR]
   public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.
     return !(base1.isCanonical() && base2.isCanonical());
   }
-  */
 
 }

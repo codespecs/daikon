@@ -51,11 +51,9 @@ public abstract class UnaryDerivation
     return new VarInfo[] { base() };
   }
 
-  /* [INCR]
   public boolean isDerivedFromNonCanonical() {
     return ! base.isCanonical();
   }
-  */
 
   public int derivedDepth() {
     return 1 + base.derivedDepth();
