@@ -432,6 +432,11 @@ public final class PptSlice1
       Assert.assertTrue (permutation[i] != -1);
     }
 
+    // Set sample counts
+    for (int i = 0; i < tm_total.length; i++) {
+      result.tm_total[i] = this.tm_total[i];
+    }
+
     // re-parent the invariants and copy them out
     List newInvs = new LinkedList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -442,10 +447,6 @@ public final class PptSlice1
       Assert.assertTrue (newInv != inv);
       Assert.assertTrue (newInv.ppt == result);
       Assert.assertTrue (inv.ppt == this);
-    }
-    // Set sample counts
-    for (int i = 0; i < tm_total.length; i++) {
-      result.tm_total[i] = this.tm_total[i];
     }
 
     result.invs.addAll (newInvs);
@@ -493,6 +494,11 @@ public final class PptSlice1
       Assert.assertTrue (permutation[i] != -1);
     }
 
+    // Set sample counts
+    for (int i = 0; i < tm_total.length; i++) {
+      result.tm_total[i] = this.tm_total[i];
+    }
+
     // re-parent the invariants and copy them out
     List newInvs = new LinkedList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -509,10 +515,6 @@ public final class PptSlice1
       Assert.assertTrue (newInv != inv);
       Assert.assertTrue (newInv.ppt == result);
       Assert.assertTrue (inv.ppt == this);
-    }
-    // Set sample counts
-    for (int i = 0; i < tm_total.length; i++) {
-      result.tm_total[i] = this.tm_total[i];
     }
 
     result.invs.addAll (newInvs);
