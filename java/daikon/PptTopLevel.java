@@ -5,6 +5,8 @@ import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.inv.*;
+import daikon.inv.unary.*;
+import daikon.inv.unary.scalar.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.inv.unary.*;
@@ -119,6 +121,9 @@ public class PptTopLevel
   public static final Logger debugMerge =
     Logger.getLogger ("daikon.PptTopLevel.merge");
 
+  /** Debug tracer for global ppt **/
+  public static final Logger debugGlobal =
+    Logger.getLogger ("daikon.PptTopLevel.global");
 
   // These used to appear in Ppt, were moved down to PptToplevel
   public final String name;
@@ -187,6 +192,41 @@ public class PptTopLevel
    *  merge multiple times
    */
   public boolean invariants_merged = false;
+
+  /**
+   * VarInfo index transform from this point to the ppt containing
+   * all of the global variables.  The index into global transform is
+   * the value_index in global ppt.  The result (global_transform[index])
+   * is the value_index of the corresponding variable in this ppt
+   *
+   * Ther are two transforms for each exit point. Orig variables are
+   * handled by global_transform_orig and post variables are handled
+   * by global_transform_post.  This is necessary because bottom up
+   * only processes numbered exit points, so both the orig and the post
+   * value must be separately applied to the global ppt.
+   */
+  public int[] global_transform_orig = null;
+  /** @see #global_transform_orig */
+  public int[] global_transform_post = null;
+
+  /** Global ppt (if any) **/
+  public static PptTopLevel global = null;
+
+  /** list of weakened invariants at the global ppt */
+  public static List weakened_invs = new ArrayList();
+
+  public static int weakened_start_index = 0;
+
+  /**
+   * Set of all PptTopLevels where the ordering provided by the
+   * links is sorted from the smallest offset to the largest offset
+   * This takes advantage of LinkedHashSet predictable ordering over
+   * elements (insertion-order)
+   */
+  public static Set /* PptTopLevel */ weakened_offsets = new LinkedHashSet();
+
+  /** offset of this ppt into the list of weakened invariants **/
+  public int weakened_offset = 0;
 
   /**
    * Together, dataflow_ppts and dataflow_tranforms describe how
@@ -323,6 +363,18 @@ public class PptTopLevel
     mbtracker = new ModBitTracker(num_tracevars);
   }
 
+
+  public static void init (PptMap all_ppts) {
+
+    // Init the set of ppts used to track the index into the weakened invs
+    // list.  The initial order is irrelevant since each needs to start
+    // at the beginning of the weakened_invs list.
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      if (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint())
+        weakened_offsets.add (ppt);
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Accessing data
@@ -686,7 +738,8 @@ public class PptTopLevel
    * and afterward, derivation_index == (n, a, b).
    * @return Vector of VarInfo
    * */
-  /* [INCR] ... we longer need to do this in stages
+
+  /* // [INCR] ... we longer need to do this in stages
   public Vector __derive() {
     Assert.assertTrue(ArraysMDE.sorted_descending(derivation_indices));
 
@@ -1246,6 +1299,38 @@ public class PptTopLevel
   }
 
   /**
+   * Add the sample both to this point and to the global ppt (if
+   * any).  Any invariants weakened at the global ppt are added to
+   * the list of all weakened invariants  @see #add_bottom_up
+   **/
+  public void add_global_bottom_up (ValueTuple vt, int count){
+
+    // If there is a global ppt
+    if (global != null) {
+
+      // Create an orig version of the sample and apply it to the global ppt
+      ValueTuple orig_vt = transform_sample (global, global_transform_orig,
+                                             vt);
+      weakened_invs.addAll (global.add_bottom_up (orig_vt, count));
+
+      // Create a post version of the sample and apply it to the global ppt
+      ValueTuple post_vt = transform_sample (global, global_transform_post,
+                                             vt);
+      weakened_invs.addAll (global.add_bottom_up (post_vt, count));
+    }
+
+    // Add any invariants that have weakened since the last time this ppt
+    // was processed to this ppt.
+    add_weakened_global_invs();
+
+    // Add the sample to this ppt
+    add_bottom_up (vt, count);
+
+    check_vs_global();
+
+  }
+
+  /**
    * Add the sample to the equality sets and invariants at this
    * program point.  This version is specific to the bottom up
    * processing mechanism.  Any invariants that were suppressed by
@@ -1258,8 +1343,10 @@ public class PptTopLevel
    *
    * @param vt the set of values for this to see
    * @param count the number of samples that vt represents
+   *
+   * @return the set of all invariants weakened or falsified by this sample
    **/
-  public void add_bottom_up (ValueTuple vt, int count) {
+  public Set /* Invariant */ add_bottom_up (ValueTuple vt, int count){
     // Doable, but commented out for efficiency
     // repCheck();
 
@@ -1359,15 +1446,9 @@ public class PptTopLevel
     // list of weakened/destroyed invariants.  If the weakened
     // invariants suppressed any other invariants, each of the
     // suppressees must be checked.  First try and resuppress it.  If
-    // that fails, add its ppt to the list of slices to recheck.
-    // Continue iteratively until there are no more slices to check.
-    //
-    // Note that by keeping track of slices to recheck (rather than
-    // invariants) that samples may get applied to the same invariant
-    // more than once (every invariant in the rechecked slice is
-    // handed the sample, not just the ones that were previously
-    // suppressed).  This should be fixed, but it was the current
-    // V3 behavior, so we don't want to spend time on it now.
+    // that fails, add it to a list of unsuppressed invariants.  and
+    // add the sample to those invariants.  Continue iteratively until
+    // there are no more slices to check.
 
     // Add the sample to each slice and keep track of any weakened or
     // destroyed invariants
@@ -1379,12 +1460,16 @@ public class PptTopLevel
         continue;
       weakened_invs.addAll (view.add(vt, count));
     }
+    Set all_weakened_invs = new LinkedHashSet();
 
     // List of unsuppressed invariants
     List unsuppressed_invs = new ArrayList();
 
     // while new weakened invariants are left, process them
     while (weakened_invs.size() > 0) {
+
+      // Keep track of all of weakened invariants
+      all_weakened_invs.addAll (weakened_invs);
 
       // foreach weakened/destroyed invariant
       for (Iterator itor = weakened_invs.iterator(); itor.hasNext(); ) {
@@ -1437,6 +1522,17 @@ public class PptTopLevel
       weakened_invs.addAll (inv_add (unsuppressed_invs, vt, count));
     }
 
+    // Remove slices from the list if all of their invariants have died
+    for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
+      PptSlice view = (PptSlice) itor.next();
+      if (view.invs.size() == 0) {
+        itor.remove();
+        if (Global.debugInfer.isLoggable(Level.FINE))
+          Global.debugInfer.fine ("add(ValueTulple,int): slice died: "
+                                  + name() + view.varNames());
+      }
+    }
+
     // Add sample to all conditional ppts.  This is probably not fully
     // implemented in V3
     for (Iterator itor = views_cond.iterator() ; itor.hasNext() ; ) {
@@ -1444,6 +1540,8 @@ public class PptTopLevel
       pptcond.add(vt, count);
       // TODO: Check for no more invariants on pptcond?
     }
+
+    return (all_weakened_invs);
   }
 
   /*
@@ -1508,16 +1606,6 @@ public class PptTopLevel
       }
     }
 
-    // Remove slices from the list if all of their invariants have died
-    for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
-      PptSlice view = (PptSlice) itor.next();
-      if (view.invs.size() == 0) {
-        itor.remove();
-        if (Global.debugInfer.isLoggable(Level.FINE))
-          Global.debugInfer.fine ("add(ValueTulple,int): slice died: "
-                                  + name() + view.varNames());
-      }
-    }
   */
 
   /**
@@ -1599,6 +1687,118 @@ public class PptTopLevel
     return (result);
   }
 
+  /**
+   * Adds all global invariants that have been weakened since the last
+   * time it was called to this ppt.  Resets the weakened index so
+   * that we won't process the same invariants more than once
+   */
+
+  private void add_weakened_global_invs() {
+
+    // Loop through each weakened invariant since the last time we were called
+    for (int i = weakened_offset; i < weakened_invs.size(); i++) {
+      Invariant global_inv = (Invariant) weakened_invs.get (i);
+
+      // add via the orig transform
+      add_weakened_global_inv (global_inv, global_transform_orig);
+
+      // add via the post transform
+      add_weakened_global_inv (global_inv, global_transform_post);
+    }
+
+    weakened_offset = weakened_invs.size();
+
+    // Put this ppt at the end of the list of offsets
+    weakened_offsets.remove (this);
+    weakened_offsets.add (this);
+
+    // If all of the ppts have processed the invariants at the beginning
+    // of the weakened list, remove those invariants
+    Iterator it = weakened_offsets.iterator();
+    PptTopLevel first = (PptTopLevel) it.next();
+    if (first.weakened_offset > weakened_start_index) {
+      debugGlobal.fine ("Removing flowed invs " + weakened_start_index + " to "
+                        + first.weakened_offset);
+      debugGlobal.fine ("First ppt = " + first.name());
+      int cnt = first.weakened_offset - weakened_start_index;
+      for (int i = weakened_start_index; i < first.weakened_offset; i++)
+        weakened_invs.set (i, null);
+      weakened_start_index = first.weakened_offset;
+    }
+  }
+
+  /**
+   * Adds the specified global invariant to this ppt using the specified
+   * transform for its variables.  If the slice for the invariant does not
+   * currently exist, it is added.
+   */
+  private void add_weakened_global_inv (Invariant global_inv, int[] transform){
+
+    // don't flow an invariant more than once (weakening)
+    if (global_inv.flowed)
+      return;
+    global_inv.flowed = true;
+
+    // Note that it is not necessary to check flowable here.  The invariant
+    // will already exist at the lower ppt if it is unflowable.  The
+    // only exception to that is LinearBinary and LinearTernary will
+    // remove themselves from the lower point if their equations
+    // match the global ppt when their equation becomes defined.  In that
+    // case we SHOULD flow the invariant since it is still true at
+    // the lower point.  In all other cases, there will be a local
+    // version of the the invariant which will correctly stop the
+    // flow.
+
+    // Transform the invariants global variables to local ones.  If any
+    // are not canonical, don't copy the invariant.  This occurs if the
+    // equality sets at the global ppt are different from the local one.
+    // If the local equality set splits, we'll get those invariants when
+    // copying.
+    PptSlice global_slice = global_inv.ppt;
+    VarInfo vis[] = new VarInfo[global_slice.var_infos.length];
+    for (int j = 0; j < vis.length; j++ ) {
+      VarInfo v = global_slice.var_infos[j];
+      vis[j] = var_infos[transform[v.varinfo_index]];
+      if (!vis[j].isCanonical())
+        return;
+    }
+
+    // We only need to flow invariants if this is a slice with all globals.
+    // If there are any locals involved, we've already (or will) created
+    // all of the invariants.  Locals can be involved because of equality
+    // sets (the global is in an equality set with a local)
+    if (!is_slice_global (vis))
+      return;
+
+    // Order the variables for this ppt
+    VarInfo[] vis_sorted = (VarInfo[]) vis.clone();
+    Arrays.sort (vis_sorted, VarInfo.IndexComparator.getInstance());
+
+    // Look up the local slice.  If the slice doesn't already exist,
+    // don't create it.  It must be over dynamic constants.  When the slice
+    // is created, dynamic constants will create exactly those invariants
+    // that  don't exist at the  global level (ie, exactly those that
+    // have flowed
+    PptSlice local_slice = findSlice (vis_sorted);
+    if (local_slice == null)
+      return;
+
+    // build the global to local permute and use it to copy the invariant
+    int[] permute = build_permute (vis, vis_sorted);
+    Invariant local_inv = global_inv.clone_and_permute (permute);
+    local_inv.falsified = false;
+
+    // Add the invariant to the local slice unless it is already there
+    if (!local_slice.contains_inv (local_inv)) {
+      local_inv.ppt = local_slice;
+      local_slice.addInvariant (local_inv);
+      local_inv.log ("Added inv '" + local_inv + "' from global inv"
+                     + global_inv + " gfalse = " + global_inv.falsified);
+    } else {
+      Assert.assertTrue (local_slice.invs.size() > 0);
+    }
+  }
+
   /** returns the number of suppressed invariants at this ppt **/
   public int suppressed_invariant_cnt() {
 
@@ -1664,6 +1864,42 @@ public class PptTopLevel
   static class Cnt {
     public int cnt = 0;
   }
+
+  /**
+   * Debug print to the specified logger information about each variable
+   * in this ppt.  Currently only prints integer and float information
+   * using the bound invariants
+   */
+  public void debug_unary_info (Logger debug) {
+
+    for (Iterator j = views_iterator(); j.hasNext(); ) {
+      PptSlice slice = (PptSlice) j.next();
+      if (!(slice instanceof PptSlice1))
+        continue;
+      LowerBound lb = null;
+      LowerBoundFloat lbf = null;
+      UpperBound ub = null;
+      UpperBoundFloat ubf = null;
+      for (int k = 0; k < slice.invs.size(); k++) {
+        Invariant inv = (Invariant) slice.invs.get (k);
+        if (inv instanceof LowerBound)
+          lb = (LowerBound) inv;
+        else if (inv instanceof LowerBoundFloat)
+          lbf = (LowerBoundFloat) inv;
+        else if (inv instanceof UpperBound)
+          ub = (UpperBound) inv;
+        else if (inv instanceof UpperBoundFloat)
+          ubf = (UpperBoundFloat) inv;
+      }
+      if (lb != null)
+        debug.fine (lb.core.min1 + " <= " + slice.var_infos[0].name.name()
+                    + " <= " + ub.core.max1);
+      else if (lbf != null)
+        debug.fine (lbf.core.min1 + " <= " + slice.var_infos[0].name.name()
+                    + " <= " + ubf.core.max1);
+    }
+  }
+
 
   /**
    * Returns how many invariants there are of each invariant class.  The
@@ -1818,10 +2054,14 @@ public class PptTopLevel
     if (Daikon.dkconfig_df_bottom_up && cslice != null) {
       System.out.println ("Trying to add slice " + slice);
       System.out.println ("but, slice " + cslice + " already exists");
+      for (int i = 0; i < cslice.invs.size(); i++)
+        System.out.println (" -- inv " + (Invariant) cslice.invs.get(i));
       Assert.assertTrue (cslice == null);
     }
 
     views.put(sliceIndex(slice.var_infos),slice);
+    if (Debug.logOn())
+      slice.log ("Adding slice");
   }
 
   /**
@@ -2285,10 +2525,12 @@ public class PptTopLevel
   /**
    * Returns whether or not the specified unary slice should be
    * created.  The variable must be a leader, not a constant, and
-   * not always mising
+   * not always missing
    */
   public boolean is_slice_ok (VarInfo var1) {
 
+    if (Daikon.use_dynamic_constant_optimization && constants == null)
+      return (false);
     if ((constants != null) && (constants.is_constant (var1)))
       return (false);
     if ((constants != null) && constants.is_missing (var1))
@@ -2423,6 +2665,60 @@ public class PptTopLevel
     }
 
     return (true);
+  }
+
+  /**
+   * Returns whether or not the specified slice is made up of only
+   * variables linked to those in the global ppt (ie, whether they are
+   * globals)
+   */
+  public boolean is_slice_global (VarInfo[] vis) {
+    if (vis.length == 1)
+      return (is_slice_global (vis[0]));
+    else if (vis.length == 2)
+      return (is_slice_global (vis[0], vis[1]));
+    else
+      return (is_slice_global (vis[0], vis[1], vis[2]));
+  }
+
+  /**
+   * Returns whether or not this slice is made up of only variables linked
+   * to those in the global ppt (ie, whether they are globals)
+   */
+  public boolean is_slice_global (VarInfo vi) {
+
+    return (vi.is_global());
+  }
+
+  /**
+   * Returns whether or not this slice is made up of only variables linked
+   * to those in the global ppt (ie, whether they are globals).  They must
+   * also follow the same transform (global or orig)
+   */
+  public boolean is_slice_global (VarInfo vi1, VarInfo vi2) {
+
+    if (vi1.is_orig_global() && vi2.is_orig_global())
+      return (true);
+
+    if (vi1.is_post_global() && vi2.is_post_global())
+      return (true);
+
+    return (false);
+  }
+  /**
+   * Returns whether or not this slice is made up of only variables linked
+   * to those in the global ppt (ie, whether they are globals).  They must
+   * also follow the same transform (global or orig)
+   */
+  public boolean is_slice_global (VarInfo vi1, VarInfo vi2, VarInfo vi3) {
+
+    if (vi1.is_orig_global() && vi2.is_orig_global() && vi3.is_orig_global())
+      return (true);
+
+    if (vi1.is_post_global() && vi2.is_post_global() && vi3.is_post_global())
+      return (true);
+
+    return (false);
   }
 
   /**
@@ -4766,6 +5062,34 @@ public class PptTopLevel
     invariants_merged = false;
   }
 
+  /**
+   * Builds a permutation from vis1 to vis2. The result is
+   * vis1[i] = vis2[permute[i]]
+   */
+  public static int[] build_permute (VarInfo[] vis1, VarInfo[] vis2) {
+
+    int[] permute = new int[vis1.length];
+    boolean[] matched = new boolean[vis1.length];
+    Arrays.fill (matched, false);
+
+    for (int j = 0; j < vis1.length; j++) {
+      for (int k = 0; k < vis2.length; k++) {
+        if ((vis1[j] == vis2[k]) && (!matched[k])) {
+          permute[j] = k;
+          matched[k] = true;  // don't match the same one twice
+          break;
+        }
+      }
+    }
+
+    // Check results
+    for (int j = 0; j < vis1.length; j++)
+      Assert.assertTrue (vis1[j] == vis2[permute[j]]);
+
+    return (permute);
+  }
+
+
   public void debug_print_slice_info (Logger debug, String descr,
                                       List /*PptSlice*/ slices) {
 
@@ -4788,6 +5112,403 @@ public class PptTopLevel
           debug.fine (" : " + inv.format() + " suppressed by : "
                       + inv.getSuppressor());
       }
+    }
+  }
+
+  /**
+   * Insures that there are no invariants at this level that are duplicated
+   * at the global level
+   */
+  public boolean check_vs_global () {
+
+    if (global == null)
+      return (true);
+
+    boolean ok = true;
+    for (Iterator j = views_iterator(); j.hasNext(); ) {
+      PptSlice slice = (PptSlice) j.next();
+      PptSlice gslice = slice.find_global_slice (slice.var_infos);
+      if (gslice == null)
+        continue;
+      for (int k = 0; k < slice.invs.size(); k++) {
+        Invariant inv = (Invariant) slice.invs.get(k);
+        Invariant ginv = gslice.find_inv_exact (inv);
+        if ((ginv != null) && inv.isActive() && ginv.isActive()) {
+          String cname = inv.getClass().getName();
+          if ((cname.indexOf ("Bound") == -1)
+            && (cname.indexOf("OneOf") == -1)) {
+            System.out.println ("inv " + inv + " in slice " + name() +
+                              " also appears at the global slice as " + ginv);
+            ok = false;
+          }
+        }
+      }
+    }
+    return (ok);
+  }
+
+  /**
+   * Create the transforms between this point and the global ppt.
+   * These transforms allow samples to be quickly created for the
+   * global point and also allow invariants to be easily permutted
+   * between the two points
+   */
+
+  public void init_global_transforms (PptTopLevel global) {
+
+    // We use this during post processing at all points, so the
+    // following check is commented out.
+    // Make sure this is a numbered exit point.
+    //Assert.assertTrue (ppt_name.isExitPoint()
+    //                   && !ppt_name.isCombinedExitPoint());
+
+    // Look for matching names for each global variable in the child
+    global_transform_post = new int[global.var_infos.length];
+    Arrays.fill (global_transform_post, -1);
+    for (int i = 0; i < global.var_infos.length; i++) {
+      VarInfo vp = global.var_infos[i];
+      for (int j = 0; j < var_infos.length; j++) {
+        VarInfo vc = var_infos[j];
+        if (vp.name == vc.name) {
+          Assert.assertTrue (vp.varinfo_index == vp.value_index);
+          Assert.assertTrue (vc.varinfo_index == vc.value_index);
+          global_transform_post[vp.varinfo_index] = vc.varinfo_index;
+          vc.global_index = (short) vp.varinfo_index;
+          break;
+        }
+      }
+    }
+
+    // Look for orig versions of each non-derived global variable in the child
+    global_transform_orig = new int[global.var_infos.length];
+    Arrays.fill (global_transform_orig, -1);
+    for (int i = 0; i < global.var_infos.length; i++) {
+      VarInfo vp = global.var_infos[i];
+      if (vp.derived != null)
+        continue;
+      VarInfoName orig_name = vp.name.applyPrestate().intern();
+      for (int j = 0; j < var_infos.length; j++) {
+        VarInfo vc = var_infos[j];
+        if (orig_name == vc.name) {
+          Assert.assertTrue (vp.varinfo_index == vp.value_index);
+          Assert.assertTrue (vc.varinfo_index == vc.value_index);
+          global_transform_orig[vp.varinfo_index] = vc.varinfo_index;
+          vc.global_index = (short) vp.varinfo_index;
+          break;
+        }
+      }
+    }
+
+    // Look for orig versions of derived variables in the child.  This is
+    // done by finding the base of each derived variable and looking for
+    // a child variable with the same bases and the same equation.  This
+    // is necessary because derivations are done AFTER orig variables so
+    // applying the prestate name (as done above) won't work (the resulting
+    // variable is really the same but the name is constructed differently)
+
+    // TODO
+
+    // Debug print the transforms
+    if (debugGlobal.isLoggable(Level.FINE)) {
+      debugGlobal.fine ("orig transform at " + name());
+      for (int i = 0; i < global_transform_orig.length; i++) {
+        if (global_transform_orig[i] == -1)
+          debugGlobal.fine ("-- " + global.var_infos[i].name.name()
+                            + " : NO MATCH");
+        else
+          debugGlobal.fine ("-- " + global.var_infos[i].name.name() + " : " +
+                            var_infos[global_transform_orig[i]].name.name());
+      }
+      debugGlobal.fine ("post transform at " + name());
+      for (int i = 0; i < global_transform_post.length; i++) {
+        if (global_transform_post[i] == -1)
+          debugGlobal.fine ("-- " + global.var_infos[i].name.name()
+                            + " : NO MATCH");
+        else
+          debugGlobal.fine ("-- " + global.var_infos[i].name.name() + " : " +
+                            var_infos[global_transform_post[i]].name.name());
+      }
+    }
+  }
+
+  /**
+   * Transform a sample to the global ppt using the specified transform.
+   * transform[i] returns the value_index in this ppt that corresponds to
+   * index i in the global ppt
+   **/
+  public ValueTuple transform_sample (PptTopLevel global, int[] transform,
+                                      ValueTuple vt) {
+
+    Object[] vals = new Object[global.var_infos.length];
+    int[] mods = new int [global.var_infos.length];
+    Arrays.fill (mods, ValueTuple.MISSING_FLOW);
+    for (int i = 0; i < transform.length; i++) {
+      if (transform[i] != -1) {
+        vals[i] = vt.vals[transform[i]];
+        mods[i] = vt.mods[transform[i]];
+      }
+    }
+    return (new ValueTuple (vals, mods));
+  }
+
+  /**
+   * Returns the local variable that corresponds to the specified global
+   * variable via the post transform
+   */
+  public VarInfo local_postvar (VarInfo global) {
+
+    return var_infos[global_transform_post[global.varinfo_index]];
+  }
+
+  /**
+   * Returns the local variable that corresponds to the specified global
+   * variable via the orig transform
+   */
+  public VarInfo local_origvar (VarInfo global) {
+
+    return var_infos[global_transform_orig[global.varinfo_index]];
+  }
+
+  public static void count_unique_slices (Logger debug, PptMap all_ppts) {
+
+    Map slices = new LinkedHashMap (10000);
+
+    int slice_cnt = 0;
+    int ppt_cnt = 0;
+
+    // Loop through each ppt
+    for (Iterator ii = all_ppts.pptIterator() ; ii.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) ii.next();
+      if (ppt == all_ppts.getGlobal())
+        continue;
+      if (!ppt.ppt_name.isExitPoint())
+        continue;
+      if (ppt.ppt_name.isCombinedExitPoint())
+        continue;
+      ppt_cnt++;
+
+      // Loop through each ternary slice
+      slice_loop:
+      for (Iterator jj = ppt.views_iterator(); jj.hasNext(); ) {
+        PptSlice slice = (PptSlice) jj.next();
+        if (slice.arity != 3)
+          continue;
+        for (int kk = 0; kk < slice.var_infos.length; kk++) {
+          if (!slice.var_infos[kk].is_global()) {
+            continue slice_loop;
+          }
+        }
+
+        slice_cnt++;
+        SliceMatch sm_new = new SliceMatch (slice);
+        SliceMatch sm_old = (SliceMatch) slices.get (sm_new);
+        if (sm_old != null)
+          sm_old.all_slices.add (slice);
+        else
+          slices.put (sm_new, sm_new);
+      }
+    }
+
+    int max_out = 1000;
+    System.out.println (slice_cnt + " slices considered over " + ppt_cnt
+            + " ppts, " + slices.size() + " unique slices in map");
+    for (Iterator ii = slices.values().iterator(); ii.hasNext(); ) {
+      SliceMatch sm = (SliceMatch) ii.next();
+      debug.fine ("Slice occurs " + sm.all_slices.size() + " times");
+      for (int jj = 0; jj < sm.all_slices.size(); jj++) {
+        PptSlice slice = (PptSlice) sm.all_slices.get(jj);
+        debug.fine (": " + slice);
+        for (int kk = 0; kk < slice.invs.size(); kk++) {
+          Invariant inv = (Invariant) slice.invs.get(kk);
+          debug.fine (": : " + inv.format());
+        }
+      }
+      if (--max_out <= 0)
+        break;
+    }
+  }
+
+  public static void count_unique_inv_lists (Logger debug, PptMap all_ppts) {
+
+    Map slices = new LinkedHashMap (10000);
+
+    int inv_list_cnt = 0;
+    int ppt_cnt = 0;
+
+    // Loop through each ppt
+    for (Iterator ii = all_ppts.pptIterator() ; ii.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) ii.next();
+      if (ppt == all_ppts.getGlobal())
+        continue;
+      if (!ppt.ppt_name.isExitPoint())
+        continue;
+      if (ppt.ppt_name.isCombinedExitPoint())
+        continue;
+      ppt_cnt++;
+
+      // Loop through each ternary slice
+      for (Iterator jj = ppt.views_iterator(); jj.hasNext(); ) {
+        PptSlice slice = (PptSlice) jj.next();
+        if (slice.arity != 3)
+          continue;
+
+        inv_list_cnt++;
+        InvListMatch invs_new = new InvListMatch (slice.invs);
+        InvListMatch invs_old = (InvListMatch) slices.get (invs_new);
+        if (invs_old != null)
+          invs_old.all_invs.add (slice.invs);
+        else
+          slices.put (invs_new, invs_new);
+      }
+    }
+
+    int max_out = 100;
+    System.out.println (inv_list_cnt + " slices considered over " + ppt_cnt
+            + " ppts, " + slices.size() + " unique slices in map");
+    if (true)
+      return;
+    for (Iterator ii = slices.values().iterator(); ii.hasNext(); ) {
+      InvListMatch ilm = (InvListMatch) ii.next();
+      if (ilm.all_invs.size() > 1)
+        continue;
+      debug.fine ("Slice occurs " + ilm.all_invs.size() + " times");
+      for (int jj = 0; jj < ilm.all_invs.size(); jj++) {
+        Invariants invs = (Invariants) ilm.all_invs.get(jj);
+        PptSlice slice = ((Invariant) invs.get(0)).ppt;
+        debug.fine (": " + slice);
+        for (int kk = 0; kk < invs.size(); kk++) {
+          Invariant inv = (Invariant) invs.get(kk);
+          debug.fine (": : " + inv.format());
+        }
+      }
+      if (--max_out <= 0)
+        break;
+    }
+  }
+
+  /**
+   * Provides hashcode/equal functions for slices over global variables
+   * regardless of what ppt they are in.
+   */
+  public static class SliceMatch {
+
+    PptSlice slice = null;
+    public List all_slices = new ArrayList();
+
+    public SliceMatch (PptSlice slice) {
+      this.slice = slice;
+      all_slices.add (slice);
+    }
+
+    public boolean equals (Object obj) {
+      if (!(obj instanceof SliceMatch))
+        return (false);
+
+      SliceMatch sm = (SliceMatch) obj;
+      PptSlice s1 = slice;
+      PptSlice s2 = sm.slice;
+
+      // Make sure they both refer to the same gobal variables via the same
+      // transform
+      if (s1.var_infos.length != s2.var_infos.length)
+        return (false);
+      for (int ii = 0; ii < s1.var_infos.length; ii++) {
+        VarInfo v1 = s1.var_infos[ii];
+        VarInfo v2 = s2.var_infos[ii];
+        if (!v1.is_global() || !v2.is_global())
+          return (false);
+        if (v1.global_var() != v2.global_var())
+          return (false);
+        if (v1.is_post_global() != v2.is_post_global())
+          return (false);
+      }
+
+      // Make sure that each invariant matches exactly
+      if (s1.invs.size() != s2.invs.size())
+        return (false);
+      for (int ii = 0; ii < s1.invs.size(); ii++) {
+        Invariant inv1 = (Invariant) s1.invs.get (ii);
+        Invariant inv2 = (Invariant) s2.invs.get (ii);
+        if (inv1.getClass() != inv2.getClass())
+          return (false);
+        if (!inv1.isSameFormula (inv2))
+          return (false);
+      }
+
+      return (true);
+    }
+
+    public int hashCode() {
+
+      int code = 0;
+
+      // include a hash over the equivalent global vars
+      for (int ii = 0; ii < slice.var_infos.length; ii++) {
+        VarInfo gvar = slice.var_infos[ii].global_var();
+        if (gvar == null)
+          code += slice.var_infos[ii].hashCode();
+        else
+          code += gvar.hashCode();
+      }
+
+      // hash over the invariants.  This should be better for function
+      // binary invariants
+      for (int ii = 0; ii < slice.invs.size(); ii++) {
+        code += slice.invs.get(ii).getClass().hashCode();
+      }
+
+      return (code);
+    }
+  }
+
+  /**
+   * Provides hashcode/equal functions for invariant lists regardless
+   * of their ppt.
+   */
+  public static class InvListMatch {
+
+    Invariants invs = null;
+    public List all_invs = new ArrayList();
+
+    public InvListMatch (Invariants invs) {
+      this.invs = invs;
+      all_invs.add (invs);
+    }
+
+    public boolean equals (Object obj) {
+      if (!(obj instanceof InvListMatch))
+        return (false);
+
+      InvListMatch ilm = (InvListMatch) obj;
+      Invariants invs1 = invs;
+      Invariants invs2 = ilm.invs;
+
+      // Make sure that each invariant matches exactly
+      if (invs1.size() != invs2.size())
+        return (false);
+      for (int ii = 0; ii < invs1.size(); ii++) {
+        Invariant inv1 = (Invariant) invs1.get (ii);
+        Invariant inv2 = (Invariant) invs2.get (ii);
+        if (inv1.getClass() != inv2.getClass())
+          return (false);
+        if (!inv1.isSameFormula (inv2))
+          return (false);
+      }
+
+      return (true);
+    }
+
+    public int hashCode() {
+
+      int code = 0;
+
+      // hash over the invariants.  This should be better for function
+      // binary invariants
+      for (int ii = 0; ii < invs.size(); ii++) {
+        code += invs.get(ii).getClass().hashCode();
+      }
+
+      return (code);
     }
   }
 
@@ -4826,6 +5547,12 @@ public class PptTopLevel
     /** number of suppressed invariants **/
     public int suppress_cnt = 0;
 
+    /** total number of global invariants that have flowed **/
+    public int tot_invs_flowed = 0;
+
+    /** global invariants still in the list to flow **/
+    public int invs_to_flow = 0;
+
     /** program point of the stat **/
     public PptTopLevel ppt;
 
@@ -4861,6 +5588,8 @@ public class PptTopLevel
       instantiated_slice_cnt = ppt.instantiated_slice_cnt;
       instantiated_inv_cnt = ppt.instantiated_inv_cnt;
       suppress_cnt = ppt.suppressed_invariant_cnt();
+      tot_invs_flowed = weakened_invs.size();
+      invs_to_flow = weakened_invs.size() - weakened_start_index;
       if (ppt.constants != null)
         constant_leader_cnt = ppt.constants.constant_leader_cnt();
       this.time = time;
@@ -4900,6 +5629,8 @@ public class PptTopLevel
                         + instantiated_slice_cnt + "/"
                         + instantiated_inv_cnt + " : "
                         + suppress_cnt + " : "
+                        + tot_invs_flowed + "/"
+                        + invs_to_flow + ": "
                         + memory + ": "
                         + time);
       if (cnt_inv_classes) {
