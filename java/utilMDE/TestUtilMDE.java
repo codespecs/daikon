@@ -116,7 +116,12 @@ public final class TestUtilMDE {
     // public static int sum(int[] a)
     assert(0 == ArraysMDE.sum(new int[0]));
     assert(10 == ArraysMDE.sum(new int[] {10}));
-    assert(271 == ArraysMDE.sum(new int[] {17, 22, 98, 191, -57}));
+    assert(10 == ArraysMDE.sum(new int[] {1, 2, 3, 4}));
+
+    // public static int sum(int[][] a)
+    assert(0 == ArraysMDE.sum(new int[0][0]));
+    assert(78  == ArraysMDE.sum
+           (new int[][] {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}));
 
     // public static int element_range(int[] a)
     assert(ArraysMDE.element_range(new int[] { 1,2,3 }) == 2);
