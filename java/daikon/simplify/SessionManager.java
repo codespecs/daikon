@@ -20,12 +20,20 @@ public class SessionManager
   /** How long to wait for a reply for each command. */
   private int msec = 500;
 
+  // The error message returned by the worked thread, or null
+  private String error = null;
+  
+  // enable to dump input and output to the console
   private static final boolean debug_mgr = false;
 
   public SessionManager() {
     worker = new Worker();
     worker.setDaemon(true);
     worker.start();
+    // We need to pause until the worked thread is blocked on the wait
+    // call.  The next line does this, but is a really bad approach.
+    // We need to figure out something better.
+    try { Thread.currentThread().sleep(50); } catch (InterruptedException e) { }
   }
 
   /**
@@ -39,6 +47,7 @@ public class SessionManager
     Assert.assert(pending == null, "Cannot queue requests");
     if (debug_mgr) {
       System.err.println("Running command " + command);
+      System.err.flush();
     }
     synchronized (this) {
       // place the command in the slot
@@ -47,10 +56,14 @@ public class SessionManager
       this.notify();
       // wait for worker to finish
       try { this.wait(msec); } catch (InterruptedException e) { }
-      // ok iff the command was nulled out
+      // command finished iff the command was nulled out
       if (pending != null) {
 	session_done();
 	throw new TimeoutException();
+      }
+      // check for error
+      if (error != null) {
+	throw new SimplifyError(error);
       }
     }
   }
@@ -80,7 +93,12 @@ public class SessionManager
 	while (session != null) {
 	  try { mgr.wait(); } catch (InterruptedException e) { }
 	  if (session != null && mgr.pending != null) {
-	    mgr.pending.apply(session);
+	    error = null;
+	    try {
+	      mgr.pending.apply(session);
+	    } catch (Throwable e) {
+	      error = e.toString();
+	    }
 	    mgr.pending = null;
 	    mgr.notify();
 	  }
