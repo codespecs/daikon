@@ -447,75 +447,62 @@ public final class Equality
       debugPostProcess.debug ("  var1: " + sliceVars[0].name.name());
     }
     for (int i = 0; i < vars.length; i++) {
-//       sliceVars[0] = vars[i];
-//       for (int j = i+1; j < vars.length; j++) {
-//        Assert.assertTrue (vars[i] != vars[j]);
-        sliceVars[1] = vars[i];
-        if (sliceVars[1] == sliceVars[0]) continue;
+      sliceVars[1] = vars[i];
+      if (sliceVars[1] == sliceVars[0]) continue;
+      if (debugPostProcess.isDebugEnabled()) {
+        debugPostProcess.debug ("  var2: " + sliceVars[1].name.name());
+      }
+
+      PptSlice newSlice = parent.get_or_instantiate_slice (sliceVars);
+
+      newSlice.set_samples (this.numSamples());
+      Invariant invEquals = null;
+
+      // This is almost directly copied from PptSlice2's instantiation
+      // of factories
+      if (rep_is_scalar) {
+        invEquals = IntEqual.instantiate (newSlice);
+        debugPostProcess.debug ("  intEqual");
+      } else if ((rep == ProglangType.STRING)) {
+        invEquals = StringComparison.instantiate (newSlice, true);
+        debugPostProcess.debug ("  seqEqual");
+      } else if ((rep == ProglangType.INT_ARRAY)) {
+        invEquals = SeqComparison.instantiate (newSlice, true, true);
+        debugPostProcess.debug ("  seqEqual");
+      } else if ((rep == ProglangType.STRING_ARRAY)) {
+        //           invEquals = StringComparison.instantiate (newSlice, true);
+        //           if (invEquals != null) {
+        //             ((SeqComparison) invEquals).can_be_eq = true;
+        //           }
+        debugPostProcess.debug ("  stringEqual");
+      } else if (Daikon.dkconfig_enable_floats
+                 && rep_is_float) {
+        invEquals = FloatEqual.instantiate (newSlice);
+        debugPostProcess.debug ("  floatEqual");
+      } else if (Daikon.dkconfig_enable_floats
+                 && (rep == ProglangType.DOUBLE_ARRAY)) {
+        debugPostProcess.debug ("  seqFloatEqual");
+        invEquals = SeqComparisonFloat.instantiate (newSlice, true, true);
+      } else {
+        // Do nothing; do not even complain
+      }
+
+      if (invEquals != null) {
         if (debugPostProcess.isDebugEnabled()) {
-          debugPostProcess.debug ("  var2: " + sliceVars[1].name.name());
+          debugPostProcess.debug ("  adding invariant: " + invEquals.repr());
         }
-
-        PptSlice newSlice = parent.get_or_instantiate_slice (sliceVars);
-
-        newSlice.set_samples (this.numSamples());
-        Invariant invEquals = null;
-
-        // This is almost directly copied from PptSlice2's instantiation
-        // of factories
-        if (rep_is_scalar) {
-          invEquals = IntEqual.instantiate (newSlice);
-          debugPostProcess.debug ("  intEqual");
-        } else if ((rep == ProglangType.STRING)) {
-          invEquals = StringComparison.instantiate (newSlice, true);
-          debugPostProcess.debug ("  seqEqual");
-        } else if ((rep == ProglangType.INT_ARRAY)) {
-          invEquals = SeqComparison.instantiate (newSlice, true);
-          if (invEquals != null) {
-            ((SeqComparison) invEquals).can_be_eq = true;
-          }
-          debugPostProcess.debug ("  seqEqual");
-        } else if ((rep == ProglangType.STRING_ARRAY)) {
-//           invEquals = StringComparison.instantiate (newSlice, true);
-//           if (invEquals != null) {
-//             ((SeqComparison) invEquals).can_be_eq = true;
-//           }
-          debugPostProcess.debug ("  stringEqual");
-        } else if (Daikon.dkconfig_enable_floats
-                   && rep_is_float) {
-          invEquals = FloatEqual.instantiate (newSlice);
-          debugPostProcess.debug ("  floatEqual");
-        } else if (Daikon.dkconfig_enable_floats
-                   && (rep == ProglangType.DOUBLE_ARRAY)) {
-          debugPostProcess.debug ("  seqFloatEqual");
-          invEquals = SeqComparisonFloat.instantiate (newSlice, true);
-          if (invEquals != null) {
-            ((SeqComparisonFloat) invEquals).can_be_eq = true;
+        SuppressionLink sl = SelfSuppressionFactory.getInstance().generateSuppressionLink (invEquals);
+        if (sl != null) {
+          if (debugPostProcess.isDebugEnabled()) {
+            debugPostProcess.debug ("  suppressed by another equality: " +
+                                    sl);
           }
         } else {
-          // Do nothing; do not even complain
+          newSlice.addInvariant (invEquals);
         }
-
-        if (invEquals != null) {
-          if (debugPostProcess.isDebugEnabled()) {
-            debugPostProcess.debug ("  adding invariant: " + invEquals.repr());
-          }
-          SuppressionTemplate template = new SuppressionTemplate();
-          template.invTypes = new Class[] {invEquals.getClass()};
-          template.varInfos = new VarInfo[][]
-            {new VarInfo[] {sliceVars[0], sliceVars[1]}};
-          newSlice.parent.fillSuppressionTemplate (template);
-          if (template.filled) {
-            if (debugPostProcess.isDebugEnabled()) {
-              debugPostProcess.debug ("  suppressed by another equality: " +
-                           template.results[0].repr());
-            }
-
-          } else {
-            newSlice.addInvariant (invEquals);
-          }
-        }
-//       }
+      } else {
+        newSlice.parent.removeSlice (newSlice);
+      }
     }
   }
 
