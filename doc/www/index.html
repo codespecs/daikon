@@ -65,6 +65,52 @@ Some example uses of invariants are:
 </ul>
 <p>
 
+As an example of Daikon's use, a programmer might run it on a program and
+see, at a procedure entry,
+<pre>
+  w >= 0
+  x < 10
+  y = w + x
+  z = 0 (mod 4)
+</pre>
+<ul>
+<li>
+Seeing the "w >= 0" invariant, the programmer might remark, "I already knew
+that w is non-negative; that doesn't help me any."  (However, examining
+this invariant consumes little of the programmer's time.)
+<li>
+Seeing the "x < 10" invariant, the programmer might realize after a
+moment's thought that the test suite is deficient:  it never manipulates
+data structures containing more than 9 elements.  This invariant has
+indicated not only a problem with the test suite, but exactly how to fix
+it.
+<li>
+Seeing the "y = w + x" invariant, the programmer might suddenly understand
+the operation of the algorithm or why certain parts of the program are
+coded in the way they are.  This can prevent long sessions of puzzlement
+over the system, and inserting the invariant as a comment can prevent
+others from going through the same confusion.
+<li>
+Seeing the "z = 0 (mod 4)" invariant, the programmer might be confused
+about why z is always a multiple of 4.  The programmer has two options.
+<ol>
+  <li>
+The programmer can examine the program and test
+   suite to understand why this is so.  (Perhaps z holds a pointer value or
+   is some other kind of specialized index; perhaps it is a capacity that
+   is always increased by a multiple of 4; perhaps there is some odd
+   property of the test suite.)  This gives the programmer a much better
+   understanding of the operation of the program.
+  <li>
+The other option is for the programmer not to investigate this property
+   further -- perhaps it is not directly relevant to the current task --
+   but to be careful not to make changes that violate that property.
+   Violating the property could introduce errors if other parts of the code
+   depend on it.
+</ol>
+</ul>
+
+
 Preliminary experiments have been very encouraging.  When provided with
 formally specified programs, the prototype invariant detector, Daikon,
 recovered the properties in the formal specifications (and even found some
