@@ -1,5 +1,5 @@
-#if !(defined(SCALAR) || defined(STRING) || defined(SEQUENCE) || defined(ELT))
-#error "One of SCALAR, STRING, SEQUENCE, or ELT should be defined"
+#if !(defined(SCALAR) || defined(STRING) || defined(SEQUENCE) || defined(STRINGSEQUENCE) || defined(ELT) || defined(ELTSTRING))
+#error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
 
 #if defined(SCALAR)
@@ -26,6 +26,14 @@
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name
+#elif defined(STRINGSEQUENCE)
+#define SCALARPKG stringsequence
+#define INT String[]
+#define ONEOFSCALAR OneOfStringSequence
+#define ONEOFSCALARSTR "OneOfStringSequence"
+#define SINGLESCALAR SingleStringSequence
+#define TOSTRING(x) ArraysMDE.toString(x)
+#define NAME var().name
 #elif defined(ELT)
 #define SCALARPKG sequence
 #define INT long
@@ -34,16 +42,16 @@
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) x
 #define NAME var().name + " elements"
-#elif defined(ELT)
+#elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
 #define INT String
 #define ONEOFSCALAR EltOneOfString
 #define ONEOFSCALARSTR "EltOneOfString"
-#define SINGLESCALAR SingleSequenceString
+#define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
 #define NAME var().name + " elements"
 #else
-#error "One of SCALAR, STRING, SEQUENCE, or ELT should be defined"
+#error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
 
 package daikon.inv.unary.SCALARPKG;
@@ -76,8 +84,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   ONEOFSCALAR(PptSlice ppt) {
     super(ppt);
-#ifdef SEQUENCE
+#if defined(SEQUENCE)
     elts = new long[LIMIT][];    // elements are interned, so can test with ==
+                                // (in the general online case, not worth interning)
+#elif defined(STRINGSEQUENCE)
+    elts = new String[LIMIT][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)
 #else
     elts = new INT[LIMIT];
@@ -106,8 +117,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
 
-#ifdef SEQUENCE
+#if defined(SEQUENCE)
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
+#define COMPARATOR_ARG , comparator
+#elif defined(STRINGSEQUENCE)
+  static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical();
 #define COMPARATOR_ARG , comparator
 #else
 #define COMPARATOR_ARG
@@ -146,10 +160,14 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
 
-#ifdef ELT
+#if defined(ELT)
   public void add_modified(long[] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
       long v = a[ai];
+#elif defined(ELTSTRING)
+  public void add_modified(String[] a, int count) {
+    for (int ai=0; ai<a.length; ai++) {
+      String v = a[ai];
 #else
   public void add_modified(INT v, int count) {
 #ifndef SCALAR
@@ -165,7 +183,10 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
     elts[num_elts] = v;
     num_elts++;
-#ifdef ELT
+#if defined(ELT)
+    }
+  }
+#elif defined(ELTSTRING)
     }
   }
 #else

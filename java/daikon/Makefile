@@ -12,6 +12,8 @@ AUTO_GENERATED_FILES = \
 	inv/unary/string/OneOfString.java \
 	inv/unary/sequence/OneOfSequence.java \
 	inv/unary/sequence/EltOneOf.java \
+	inv/unary/stringsequence/EltOneOfString.java \
+	inv/unary/stringsequence/OneOfStringSequence.java \
 	PptSlice1.java \
 	PptSlice2.java \
 	PptSlice3.java
@@ -132,8 +134,11 @@ inv/unary/sequence/OneOfSequence.java: inv/OneOf-cpp.java
 inv/unary/sequence/EltOneOf.java: inv/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ELT)
 
-inv/unary/sequence/EltOneOfString.java: inv/OneOf-cpp.java
+inv/unary/stringsequence/EltOneOfString.java: inv/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ELTSTRING)
+
+inv/unary/stringsequence/OneOfStringSequence.java: inv/OneOf-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=STRINGSEQUENCE)
 
 PptSlice1.java: PptSlice-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)

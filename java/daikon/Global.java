@@ -172,7 +172,8 @@ public final class Global {
   // used only if debugPptSliceSpecific is set
   public final static String[][] debuggedPptSliceSpecific
     = { { "arg", "orig(arg)" },
-        { "inCentralCommandMediator.mAspectLegend", "inCentralCommandMediator.mAspectBrowser" }
+        { "inCentralCommandMediator.mAspectLegend", "inCentralCommandMediator.mAspectBrowser" },
+        { "list.class" },
     };
 
   // This may be expensive and so should only be called infrequently.

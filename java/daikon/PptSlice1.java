@@ -5,6 +5,7 @@ import daikon.inv.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.string.*;
 import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.stringsequence.*;
 
 import java.util.*;
 
@@ -71,7 +72,7 @@ public final class PptSlice1  extends PptSlice {
     } else if (rep_type == ProglangType.STRING) {
       new_invs = SingleStringFactory.instantiate(this, pass);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
-      // new_invs = SingleStringSequenceFactory.instantiate(this, pass);
+      new_invs = SingleStringSequenceFactory.instantiate(this, pass);
     } else {
       // Do nothing; do not even complain
     }
@@ -236,8 +237,14 @@ public final class PptSlice1  extends PptSlice {
         SingleSequence inv = (SingleSequence)invs.elementAt(i);
         inv.add(value, mod1, count);
       }
+    } else if (rep == ProglangType.STRING_ARRAY) {
+      String[] value = (String[]) val1;
+      for (int i=0; i<num_invs; i++) {
+        SingleStringSequence inv = (SingleStringSequence)invs.elementAt(i);
+        inv.add(value, mod1, count);
+      }
     } else {
-      throw new Error("unrecognized representation " + rep);
+      throw new Error("unrecognized representation " + rep.format());
     }
 
     undefer_invariant_removal();
@@ -330,7 +337,7 @@ public final class PptSlice1  extends PptSlice {
             break;
         }
       } else {
-        throw new Error("unrecognized representation " + rep);
+        throw new Error("unrecognized representation " + rep.format());
       }
 
     }

@@ -23,7 +23,7 @@ import java.util.*;
 
 class LowerBound  extends SingleScalar {
 
-  // min1  <  min2  <  min3
+  // min1  <  min2  <  min3 
   long min1  = Long.MAX_VALUE ;
   int num_min1  = 0;
   long min2  = Long.MAX_VALUE ;
@@ -50,12 +50,12 @@ class LowerBound  extends SingleScalar {
     // does not include result of getProbability because this
     // is called from computeProbability for debugging purposes.
     return "LowerBound"  + varNames() + ": "
-      + "min1=" + min1
-      + ", num_min1=" + num_min1
-      + ", min2=" + min2
-      + ", num_min2=" + num_min2
-      + ", min3=" + min3
-      + ", num_min3=" + num_min3
+      + "min1=" + min1 
+      + ", num_min1=" + num_min1 
+      + ", min2=" + min2 
+      + ", num_min2=" + num_min2 
+      + ", min3=" + min3 
+      + ", num_min3=" + num_min3 
       + ", max=" + max ;
   }
 
