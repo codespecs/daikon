@@ -2575,9 +2575,6 @@ also be run stand-alone. This provides the user the ability to browse
 the invariants without having to load up the text editor in case the
 user wants to do a quick lookup on invariants.
 
-The Daikon Context GUI was written at UCSD by Greg Jay (gjay@@ucsd.edu)
-and Bill Griswold (wgg@@cs.ucsd.edu).
-
 @menu
 * Context GUI with Emacs::      
 @end menu

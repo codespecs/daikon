@@ -27,7 +27,7 @@ its setup has been somewhat simplified.
 The --no_suppress_cont option to Daikon and to PrintInvariants displays
 invariants even if they are implied by controlling program points.
 
-The -y option to Diff, includes (statistically) unjustified invariants.
+The -y option to Diff includes (statistically) unjustified invariants.
  
 To customize the behavior of the C runtime system (for instance, to produce
 gzipped .dtrace files or to customize the runtime's behavior when it
