@@ -1971,6 +1971,16 @@ public class PptTopLevel extends Ppt {
   private static SessionManager prover;
   public static int prover_instantiate_count = 0;
 
+  // I want to eventually move this into a properties file (external
+  // to this source code).
+  private static final String UNIVERSAL_BACKGROUND_PREDICATE =
+    "(AND " +
+    "(EQ (typeof null) |T_null|) " +
+    "(EQ |T_null| (orig |T_null|)) " +
+    "(FORALL (|x|) (PATS (orig (arrayLength |x|))) (IMPLIES (EQ |x| (orig |x|)) (EQ (arrayLength |x|) (orig (arrayLength |x|))))) " +
+    "(FORALL (|x|) (PATS (orig (- (arrayLength |x|) 1))) (IMPLIES (EQ |x| (orig |x|)) (EQ (- (arrayLength |x|) 1) (orig (- (arrayLength |x|) 1))))) " +
+    ")";
+
   // Start up simplify, and send the universal backgound
   private static void ensure_prover_started() {
     if (prover == null) {
@@ -1980,7 +1990,7 @@ public class PptTopLevel extends Ppt {
 	System.out.print("...");
       }
       try {
-	prover.request(new CmdAssume("(EQ (typeof null) |T_null|)"));
+	prover.request(new CmdAssume(UNIVERSAL_BACKGROUND_PREDICATE));
       } catch (TimeoutException e) {
 	throw new RuntimeException("Timeout on universal background " + e);
       }
