@@ -976,7 +976,7 @@ public class PptTopLevel extends Ppt {
           Assert.assert(inv instanceof OneOf);
           OneOf one_of = (OneOf) inv;
           if (one_of.num_elts() == 1) {
-            System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
+            // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
             one_of.var().dynamic_constant = one_of.elt();
           }
         }
@@ -1539,7 +1539,9 @@ public class PptTopLevel extends Ppt {
 
       // This should be a symbolic constant, not an integer literal.
       if (((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() < 5) {
-        System.out.println("  [Only " + ((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() + " modified non-missing samples (" + ((PptSliceGeneric)inv.ppt).num_samples() + " total samples): " + inv.repr() + " ]");
+        if (Global.debugPrintInvariants) {
+          System.out.println("  [Only " + ((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() + " modified non-missing samples (" + ((PptSliceGeneric)inv.ppt).num_samples() + " total samples): " + inv.repr() + " ]");
+        }
         continue;
       }
 
