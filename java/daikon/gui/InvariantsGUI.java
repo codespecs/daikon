@@ -765,7 +765,6 @@ class InvariantTableModel extends AbstractTableModel {
     public InvariantTableModel( List invariants, InvariantFilters invariantFilters ) {
 	allInvariants = invariants;
 	updateInvariantList( invariantFilters );
-	//	System.out.println( "Finished InvariantTableModel() constructor" );
     }
 
     public int getRowCount() { return filteredInvariants.size(); }
@@ -790,7 +789,6 @@ class InvariantTableModel extends AbstractTableModel {
     }
 
     public void updateInvariantList( InvariantFilters invariantFilters ) {
-	//	System.out.println( "updateInvariantList() started" );
 	filteredInvariants = new ArrayList();
 	for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
 	    Invariant invariant = (Invariant) iter.next();
@@ -800,7 +798,6 @@ class InvariantTableModel extends AbstractTableModel {
 	filteredInvariants = InvariantFilters.addEqualityInvariants( filteredInvariants );
 
 	fireTableDataChanged();
-	//	System.out.println( "updateInvariantList() ended" );
     }
 }
 

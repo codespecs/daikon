@@ -113,7 +113,7 @@ public class InvariantFilters {
   //  invariants are inserted into the beginning.  These Equality invariants are useful
   //  when it comes to displaying invariants.
   public static List addEqualityInvariants( List invariants ) {
-    List equivalentSets = new ArrayList();     // A list of Set's of equivalent variables
+    Set equivalentSets = new HashSet();	       // A set of Set's of equivalent variables
     List ppts = new ArrayList();	       // A PptSlice for each set.  Equality needs a PptSlice
 					       // so it can report num_values() and num_samples().
     
@@ -126,6 +126,7 @@ public class InvariantFilters {
 	boolean inEquivalentSets = false;      // Are either of the variables in an existing set?
 	String variable1 = ((Comparison) invariant).var1().name;
 	String variable2 = ((Comparison) invariant).var2().name;
+
 	for (Iterator iter2 = equivalentSets.iterator(); iter2.hasNext(); ) {
 	  Set equivalentSet = (Set) iter2.next();
 	  boolean containsVariable1 = equivalentSet.contains( variable1 );
@@ -146,7 +147,17 @@ public class InvariantFilters {
 	}
       }
     }
-    
+
+    // Sometimes we'll end up with two sets that are equivalent -- ie, they contain the
+    // same variables.  This can happen when there are more than three variables involved.
+    // Say we have "a == b", "b == c", "c == d".  If we encounter the first and the third
+    // invariants first, they will be put into two seperate sets.  Each set will develop
+    // independently and end up having a, b, c, and d.
+    // To get around this we create a new HashSet, in which the constructor adds each set
+    // one-by-one.  A set will not be added if equals a previously added set.  (Two sets
+    // are equal if they contain the same elements.)
+    equivalentSets = new HashSet( equivalentSets );
+
     // Add equivalent sets as equivalent invariants.
     Iterator pptIter = ppts.iterator();
     for (Iterator iter = equivalentSets.iterator(); iter.hasNext(); )
