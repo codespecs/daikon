@@ -233,7 +233,13 @@ class ComparablePairsDescFile {
                         return;
                     }
 
-                    int lastDot = methodName.lastIndexOf('.');
+                    // This differs from firstParen, below, which is computed
+                    // on a substring of (what is now) methodName.
+                    int argStart = methodName.indexOf('(');
+                    if (argStart == -1) {
+                        argStart = methodName.length()-1;
+                    }
+                    int lastDot = methodName.lastIndexOf('.', argStart);
                     String className = methodName.substring(0, lastDot);
 
                     JBCClass c = owner.getAppLoader().getClass(className);
@@ -247,9 +253,69 @@ class ComparablePairsDescFile {
                     methodName = methodName.replace('/', '.');
 
                     int firstParen = methodName.indexOf('(');
+                    int lastParen = methodName.lastIndexOf(')');
                     JBCMethod method;
 
-                    if (firstParen >= 0) {
+                    // There are three possibilities for the format of
+                    // the methodName string.
+                    //  Case 1: no argument types (no parens).
+                    //  Case 2: only the argument types (in Java format).
+                    //  Case 3: argument and return types (in JVML format).
+                    if (firstParen == -1) {
+                      //  Case 1: no argument types (no parens).
+                      method = null;
+                      for (Enumeration e = c.getMethods(); e.hasMoreElements();) {
+			JBCMethod m = (JBCMethod)e.nextElement();
+
+                        if (m.getMethodName().equals(methodName)) {
+                          method = m;
+                          break;
+			}
+		      }
+
+		      if (method == null) {
+                        badDescFile("Method not found: " + methodName
+					   + " in class " + className);
+                        return;
+		      }
+		    } else if (lastParen == methodName.length()-1) {
+                      //  Case 2: only the argument types (in Java format).
+                      String methodArgsJava = methodName.substring(firstParen);
+                      String methodArgsJvml = arglistToJvm(methodArgsJava);
+                      // JBC seems to use dots, not slashes.  (Why?)
+                      methodArgsJvml = methodArgsJvml.replace('/', '.');
+                      // System.out.println("Java format: " + methodName);
+                      // System.out.println("  JVML args: " + methodArgsJvml);
+
+		      methodName = methodName.substring(0, firstParen);
+                      if (className.endsWith("." + methodName)) {
+                          methodName = "<init>";
+                          // System.out.println("JVML format: " + methodName);
+                      }
+
+                      method = null;
+                      for (Enumeration e = c.getMethods(); e.hasMoreElements();) {
+			JBCMethod m = (JBCMethod)e.nextElement();
+
+                        // System.out.println("Considering " + m.getMethodName() + "  (goal = " + methodName + ")");
+                        if (m.getMethodName().equals(methodName)) {
+                          // System.out.println("  checking MethodTypeName = " + m.getMethodTypeName() + "  (goal = \"" + methodArgsJvml + "\")");
+                          if (m.getMethodTypeName().startsWith(methodArgsJvml)) {
+                            // System.out.println("    Success!");
+                            method = m;
+                            break;
+                          }
+			}
+		      }
+
+		      if (method == null) {
+                        badDescFile("Method not found: " + methodName
+					   + " (arglist \"" + methodArgsJvml
+                                           + "\") in class " + className);
+                        return;
+		      }
+                    } else {
+                      //  Case 3: argument and return types (in JVML format).
                       String methodSignature = methodName.substring(firstParen);
 
 		      methodName = methodName.substring(0, firstParen);
@@ -261,16 +327,6 @@ class ComparablePairsDescFile {
 					   + " (signature \"" + methodSignature
                                            + "\") in class " + className);
                         return;
-		      }
-		    } else {
-                      method = null;
-                      for (Enumeration e = c.getMethods(); e.hasMoreElements();) {
-			JBCMethod m = (JBCMethod)e.nextElement();
-
-                        if (m.getMethodName().equals(methodName)) {
-                          method = m;
-                          break;
-			}
 		      }
 		    }
 
@@ -703,4 +759,63 @@ class ComparablePairsDescFile {
             w.write("\n");
         }
     }
+
+  // Convert from Java to JVML representations.
+  // Lifted from utilMDE.UtilMDE.
+
+  private static HashMap primitiveClassesJvm = new HashMap(8);
+  static {
+    primitiveClassesJvm.put("boolean", "Z");
+    primitiveClassesJvm.put("byte", "B");
+    primitiveClassesJvm.put("char", "C");
+    primitiveClassesJvm.put("double", "D");
+    primitiveClassesJvm.put("float", "F");
+    primitiveClassesJvm.put("int", "I");
+    primitiveClassesJvm.put("long", "J");
+    primitiveClassesJvm.put("short", "S");
+  }
+
+  /*
+   * Convert a fully-qualified classname from Java format to JVML format.
+   * For example, convert "java.lang.Object[]" to "[Ljava/lang/Object;".
+   **/
+  public static String classnameToJvm(String classname) {
+    int dims = 0;
+    while (classname.endsWith("[]")) {
+      dims++;
+      classname = classname.substring(0, classname.length()-2);
+    }
+    String result = (String) primitiveClassesJvm.get(classname);
+    if (result == null) {
+      result = "L" + classname + ";";
+    }
+    for (int i=0; i<dims; i++) {
+      result = "[" + result;
+    }
+    return result.replace('.', '/');
+  }
+
+  /*
+   * Convert a fully-qualified argument list from Java format to JVML format.
+   * For example, convert "(java.lang.Integer[], int, java.lang.Integer[][])"
+   * to "([Ljava/lang/Integer;I[[Ljava/lang/Integer;)".
+   **/
+  public static String arglistToJvm(String arglist) {
+    if (! (arglist.startsWith("(") && arglist.endsWith(")"))) {
+      throw new Error("Malformed arglist: " + arglist);
+    }
+    String result = "(";
+    String comma_sep_args = arglist.substring(1, arglist.length()-1);
+    StringTokenizer args_tokenizer
+      = new StringTokenizer(comma_sep_args, ",", false);
+    for ( ; args_tokenizer.hasMoreTokens(); ) {
+      String arg = args_tokenizer.nextToken().trim();
+      result += classnameToJvm(arg);
+    }
+    result += ")";
+    // System.out.println("arglistToJvm: " + arglist + " => " + result);
+    return result;
+  }
+
+
 }
