@@ -69,6 +69,9 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
 
   public BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2) {
 
+    Debug debug = new Debug (getClass(), vi1.ppt, new VarInfo[] {vi1, vi2});
+    debug.log ("Considering Binary Derivation");
+
     // check if the derivations are globally disabled
     boolean enable_subscript = SEQUENCESCALARSUBSCRIPT.dkconfig_enabled;
     boolean enable_subsequence = SEQUENCESCALARSUBSEQUENCE.dkconfig_enabled;
