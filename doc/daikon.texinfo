@@ -747,8 +747,14 @@ their icons.  In any event, double-clicking would not supply the
 proper arguments to the program.)
 
 The first option is to run Daikon using native Windows NT utilities,
-along with the @file{daikonenv.bat} batch file to set up the
-environment propertly.
+Before running Daikon, you must invoke the @file{daikonenv.bat} batch
+file (once) in the Windows command shell to set up the environment
+properly.
+
+@c Scott McMaster says:
+@c   I believe there's a way to invoke the command window and run the
+@c batch file automatically from a shortcut.  One could also invoke it
+@c out of autoexec.
 
 The second option is to run Daikon using the
 @uref{http://sources.redhat.com/cygwin/,Cygwin toolset},
@@ -878,7 +884,7 @@ original version of all other files):
 java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 @end example
 
-(On Windows, use ``;'' as the path separator.)
+(On Windows, use @samp{;%CLASSPATH%} instead of @samp{:$CLASSPATH}.)
 
 This will generate a trace file at
 @file{daikon-output/StackAr.dtrace}.  This could take anywhere from
@@ -2011,7 +2017,7 @@ for static variables, which have only one value for all objects.
 @cindex private methods
 
 (By contrast, ESC/Java and JML make class invariants hold even at the
-entry and exit of priavte methods.  Their designers believe that most
+entry and exit of private methods.  Their designers believe that most
 private methods preserve the class invariant and are called only when
 the class invariant holds.  ESC/Java and JML require an explicit
 "helper" annotation to indicate a private method for which the class
@@ -2650,7 +2656,7 @@ invariants.
 
 Start the Context GUI by typing @kbd{M-x daikon-context-gui}
 while visiting a Java or C file in Emacs.  When prompted, select the
-apropiate @file{.inv} file, containing the invariants.
+appropriate @file{.inv} file, containing the invariants.
 
 @item
 Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
@@ -6015,6 +6021,7 @@ The feedback of Daikon users has been very valuable.  We are
 particularly grateful to
 Rich Angros,
 Tadashi Araragi,
+Seung Mo Cho,
 David Cok,
 Engelbert Hubbers,
 Scott McMaster,
