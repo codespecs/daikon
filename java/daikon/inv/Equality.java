@@ -151,8 +151,9 @@ public final class Equality
   // Printing
 
   public String repr() {
-    return "Equality: leader: " + leader().name.name() + " with " +
-      format_daikon() + " samples: " + numSamples();
+    return "Equality: size=" + size()
+      + " leader: " + leader().name.name() + " with "
+      + format_daikon() + " samples: " + numSamples();
   }
 
   public String format_using(OutputFormat format) {
@@ -491,7 +492,7 @@ public final class Equality
   }
 
   /**
-   * Switch the leader of this invariant, if possible, to a more canonical 
+   * Switch the leader of this invariant, if possible, to a more canonical
    * VarInfo:  a VarInfo that is not isDerived() is better than one that is;
    * one that is not isDerivedParamAndUninteresting() is better than one that
    * is; and other things being equal, choose the least complex name.
