@@ -1,15 +1,14 @@
 package daikon;
 
-import utilMDE.Assert;
-
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.io.IOException;
+import utilMDE.Assert;
 
 /**
  * PptName is an immutable ADT that represents naming data associated with a
  * given program point, such as the class or method.
- * 
+ *
  * <p> Examples below are as if the full value of this PptName were
  * "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
  **/
@@ -21,12 +20,13 @@ public class PptName
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // cannot be "final", because they must be re-interned upon deserialization
+  // Any of these except fullname can be null.  All but fullname are derived from fullname.
+  // These cannot be "final", because they must be re-interned upon deserialization.
   private String fullname;   // interned full program point name
-  private String fn_name;    // interned, nullable; derived from fullname
-  private String cls;        // interned fully-qualified class name, nullable; derived from fullname
-  private String method;     // interned method signature, including types, nullable; derived from fullname
-  private String point;      // interned post-separator (separator is ":::"), nullable; derived from fullname
+  private String fn_name;    // interned; derived from fullname
+  private String cls;        // interned fully-qualified class name; derived from fullname
+  private String method;     // interned method signature, including types; derived from fullname
+  private String point;      // interned post-separator (separator is ":::"); derived from fullname
 
   // Represenatation invariant:
   //
@@ -34,7 +34,7 @@ public class PptName
   // then all of the other fields are null.  Otherwise, fn_name is the
   // part of fullname before the ::: and point is the part after.  If
   // fn_name does not contain '(' then class is the same as fn_name
-  // and method is full.  If fn_name does contain a '(' and a '.' then
+  // and method is null.  If fn_name does contain a '(' and a '.' that
   // comes before it, then class is the portion before the dot and
   // method if the portion after; otherwise (fn_name contains '(' but
   // no dot) class is null and method is the same as fn_name.
@@ -56,7 +56,7 @@ public class PptName
     if (seperatorPosition == -1) {
       // probably a lisp program, which was instrumented differently
       cls = method = point = fn_name = null;
-      return;			
+      return;
     }
     fn_name = name.substring(0, seperatorPosition).intern();
     point = name.substring(seperatorPosition + FileIO.ppt_tag_separator.length()).intern();
@@ -173,7 +173,7 @@ public class PptName
    * @return same as getFullMethodName(), except without the return
     * type information.
     * May be null.
-    * e.g. "pop()"    
+    * e.g. "pop()"
     **/
   public String getFullMethodNameWithoutReturn()
   {
