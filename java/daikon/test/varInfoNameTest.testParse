@@ -31,6 +31,16 @@ parse p this.field[]
 quantify_esc_name p
 quantify_simplify_name p
 
+;# this.field.again
+parse p this.field.again
+esc_name p
+simplify_name p
+
+;# this.field.again[]
+parse p this.field.again[]
+quantify_esc_name p
+quantify_simplify_name p
+
 ;# this.field.class
 parse p this.field.class
 esc_name p
@@ -51,3 +61,12 @@ parse p x[].field.foo
 quantify_esc_name p
 quantify_simplify_name p
 
+;# return
+parse p return
+esc_name p
+simplify_name p
+
+;# return.field
+parse p return.field
+esc_name p
+simplify_name p
