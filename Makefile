@@ -437,8 +437,8 @@ daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILE
 	# Need to extract a jar file in the zip file, then unjar that.
 	# (src.jar only contains .java files, not .class files.)
 	mkdir /tmp/daikon/tmp-junit
-	unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/src.jar -d /tmp/daikon/tmp-junit
-	(cd /tmp/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
+	unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/cpl-v10.html $(JUNIT_VERSION)/src.jar -d /tmp/daikon/tmp-junit
+	(cd /tmp/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; mv $(JUNIT_VERSION)/cpl-v10.html junit; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
 	rm -rf /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/java/junit; javac -g `find . -name '*.java'`)
 
