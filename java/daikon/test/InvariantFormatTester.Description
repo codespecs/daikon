@@ -1,43 +1,77 @@
 Files should be formatted in the following manner:
 
-InvariantFormatTester.<format name>:
+InvariantFormatTest.commands:
 
 <fully qualified class name>
 <type string>
-<goal string>
+<goal string>+ <- 1 or more goal strings
 <sample>* <- 0 or more samples
 
-The file format should be the same regardless of blank or commented lines
-except in the samples area. No blank lines or comments should appear after the goal
-string before the first sample or between parts of samples (these lines are used
-currently to determine where samples lists end). This will be remedied in a
-future version of the tester.
+The file format should be the same regardless of blank or commented
+lines except in the samples area. No blank lines or comments should
+appear after the goal string before the first sample or between parts
+of samples (these lines are used currently to determine where samples
+lists end). This will be remedied in a future version of the tester.
 
-Type string:
-A type string must consist of one or more of the following:
-"int","double","string","int_array","double_array","string_array", seperated by
-spaces (without the quotes)
-This string represents the types that an invariant is supposed to compare
-For instance, a binary integer comparison would have type string "int int".
-A pairwise sequence comparison would have type string "int_array int_array"
+Type string: A type string must consist of one or more of the
+following:
+"int","double","string","int_array","double_array","string_array",
+seperated by spaces (without the quotes) This string represents the
+types that an invariant is supposed to compare For instance, a binary
+integer comparison would have type string "int int".  A pairwise
+sequence comparison would have type string "int_array int_array"
 
-Goal string:
-The goal string must start with the prefix "Goal: " (don't actually type the quotes)
-and must represent the invariant result exactly as printed, even white space is significant
-(as proper formatting should be correct down to the whitespace). The first variable
-(the one corresponding to the first type in the type string) corresponds with "a", the second
-with "b" and so on. Format the type string accordingly. (In samples, the value of "a" is read
-first, possibly followed by "b", and then possibly "c", depending on the arity of the
-invariant.)
+Goal string: The goal string must start with the prefix "Goal " (don't
+actually type the quotes), and then continue with "(<format type>): ",
+where format type is the format in which the invariant will
+print. After this the representation of the invariant must occur. It
+must represent the invariant result exactly as printed, even white
+space is significant (as proper formatting should be correct down to
+the whitespace). The first variable (the one corresponding to the
+first type in the type string) corresponds with "a", the second with
+"b" and so on. Format the type string accordingly. (In samples, the
+value of "a" is read first, possibly followed by "b", and then
+possibly "c", depending on the arity of the invariant.)
 
-Samples:
-Values formatted according to the type string, one value per line
-Make sure that the samples provided are actually instances of that particular invariant
-(That is, if the desired invariant is "a < b", then the first number of each sample
-better be less than the second)
-Also be sure to have enough samples to ensure the invariant is apparent (and probable) to
-Daikon (6-8 will do for most binary integer comparisons, 1-3 for array-based comparisons)
-Example: Formatting for samples of a binary integer comparison
+Example:
+Type string, Goals
+ |             |
+\|/            |
+int           \|/
+Goal (daikon): a >= -6
+Goal (java): a >= -6
+Goal (esc): a >= -6
+Goal (ioa): a >= -6
+Goal (jml): a >= -6
+Goal (simplify): (>= |a| -6)
+
+Note that the spacing on the goal lines is exact, that is, no extra spaces are allowed and no spaces are allowed to be missing. So the exact format is again:
+
+Goal<1 space>(<format name>):<1 space><goal text>
+
+Samples: Values formatted according to the type string, one value per
+line Make sure that the samples provided are actually instances of
+that particular invariant (That is, if the desired invariant is "a < b",
+then the first number of each sample better be less than the
+second) Also be sure to have enough samples to ensure the invariant is
+apparent (and probable) to Daikon (6-8 will do for most binary integer
+comparisons, 1-3 for array-based comparisons) Example: Formatting for
+samples of a binary integer comparison
+
+Arrays and strings must be formatted according to the Daikon dtrace
+file convention (see the Daikon manual for full description). This
+states that arrays must be surrounded in brackets (start with "[", end
+with "]"), and entries must be seperated by a space. String must be
+enclosed in quotes ("). Quotes within a string can be represented by
+the following sequence: \"
+
+Examples:
+
+[1 2 3 4 5] - an array with the elements 1, 2, 3, 4, 5
+"aString" - a string
+"a string" - also legal as a string
+"\"" - the string with the value "
+["a" "b" "c"] - an array of strings
 
 int int        <- type string
 Goal: a < b    <- goal string, no comment/blank lines after this
@@ -46,7 +80,7 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 2              <-|__ Pair of values (a = 2 , b = 3)
 3              <-|
 
-Please see the included files (InvariantFormatTester.<format>) for
+Please see the included file (InvariantFormatTest.commands) for
 further examples and modify them to more fully cover other output formats.
 
 The output of a test run can be converted into goals by using the --generate_goals
@@ -57,12 +91,20 @@ java daikon.test.InvariantFormatTester --generate_goals
 Note that this test is included in the set of tests performed by the master tester, and
 so it is not necessary to seperately run this test except to generate goal files.
 
-When creating a new invariant to test with this framework, you must create a (public) constructor
-for that invariant to be constructed from a PptSlice (restatement: a method "public <invariant name>(PptSlice)"
-must exist) or else this framework will not be able to instantiate the invariant.
+When creating a new invariant to test with this framework, you must
+create a (public) constructor for that invariant to be constructed
+from a PptSlice (restatement: a method "public <invariant
+name>(PptSlice)" must exist) or else this framework will not be able
+to instantiate the invariant.
 
-Furthermore, this framework cannot parse complex types from files unless they contain a
-"public (Object) valueOf(String s)" function. Otherwise the program has no was of knowing how
-to create such an object from a string. All primitives and the String type are already recognized.
+Furthermore, this framework cannot parse complex types from files
+unless they contain a "public (Object) valueOf(String s)"
+function. Otherwise the program has no was of knowing how to create
+such an object from a string. All primitives and the String type are
+already recognized.
 
 If you have further questions or comments (or bug reports), email amdunn@mit.edu
+
+
+
+

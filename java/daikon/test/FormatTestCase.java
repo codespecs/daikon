@@ -13,6 +13,7 @@ import java.io.*;
 
 import java.lang.reflect.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -30,8 +31,8 @@ class FormatTestCase {
    * An inner class that represents a particular test on the invariant
    * represented by a FormatTestCase object. This is used so this code
    * can easily be extended to incorporating more than one test case
-   * under an invariant heading, but so far it has not been used to
-   * do so.
+   * under an invariant heading, such as what is currently done in the
+   * main code with having multiple goal outputs per invariant.
    */
   static class SingleOutputTestCase {
 
@@ -61,24 +62,34 @@ class FormatTestCase {
     private String resultCache;
 
     /**
-     * This constructor initializes all of the fields without any checking
-     * for legality (that should be done by the callers)
+     * A string containing the format that this particular test case represented
+     */
+    private String formatString;
+
+    /**
+     * This constructor initializes all of the fields without any
+     * checking for legality (that should be done by the callers)
      *
      * @param outputProducer the output producing function (should return a String)
-     * @param outputProducerArgs the arguments to be passed to the outputProducer method
+     * @param outputProducerArgs the arguments to be passed to the outputProducer
+     *        method
      * @param goalOutput the desired output of the outputProducer function (that
      *        would mean the test was passed
-     * @param goalLineNumber the line number in the input file in which the goal should occur
+     * @param goalLineNumber the line number in the input file in which the goal
+     * should occur
+     * @param formatString the format that this test case belongs to
      */
     public SingleOutputTestCase(Method outputProducer,
 				Object[] outputProducerArgs,
 				String goalOutput,
-				int goalLineNumber) {
+				int goalLineNumber,
+				String formatString) {
       this.outputProducer = outputProducer;
       this.outputProducerArgs = outputProducerArgs;
       this.goalOutput = goalOutput;
       this.goalLineNumber = goalLineNumber;
       resultCache = null;
+      this.formatString = formatString;
     }
 
     /**
@@ -91,7 +102,7 @@ class FormatTestCase {
       try {
 	if (resultCache == null)
 	  resultCache = (String)outputProducer.invoke(inv,outputProducerArgs);
-      return resultCache;
+	return resultCache;
       }
       catch (IllegalAccessException e) {
 	throw new RuntimeException(e.toString());
@@ -123,6 +134,15 @@ class FormatTestCase {
     }
 
     /**
+     * This function returns the format string of which the test case is a part
+     *
+     * @return the format string of which the test case is a part
+     */
+    public String getFormatString() {
+      return formatString;
+    }
+
+    /**
      * This function creates a String representing the differences between the
      * goal output and the actual output
      *
@@ -141,7 +161,7 @@ class FormatTestCase {
   /**
    * Prefix to each goal line in the file for identitication
    */
-  private static final String GOAL_PREFIX = "Goal: ";
+  private static final String GOAL_PREFIX = "Goal";
 
   /**
    * A list of all of the test cases that are to be performed on the contained
@@ -190,7 +210,9 @@ class FormatTestCase {
     String currentLineOfText = null;
     int currentLine = theInputFile.getLineNumber();
 
+    // System.out.println("Generating goal output");
     for (int i=0; i<testCases.size(); i++) {
+      // System.out.println("Goal output gen: " + i);
       current = (SingleOutputTestCase)testCases.get(i);
       currentGoalLineNumber = current.getGoalLineNumber();
       for (int j=currentLine; j<currentGoalLineNumber; j++) {
@@ -198,7 +220,10 @@ class FormatTestCase {
 	if (parseGoal(currentLineOfText) == null)
 	  output.append(currentLineOfText + "\n");
       }
-      output.append(GOAL_PREFIX + current.createTestOutput(invariantToTest));
+      output.append(GOAL_PREFIX + " (" + current.getFormatString() + "): " +
+		    current.createTestOutput(invariantToTest));
+      if (i != testCases.size()-1)
+	output.append("\n");
       currentLine = currentGoalLineNumber;
     }
 
@@ -211,11 +236,14 @@ class FormatTestCase {
    * @return true if the test case is passed, false otherwise
    */
   public boolean passes() {
+    boolean passTest = true;
+    boolean currentResult;
+
     for (int i=0; i<testCases.size(); i++) {
-      if (!((SingleOutputTestCase)testCases.get(i)).performTest(invariantToTest))
-	return false;
+      currentResult = ((SingleOutputTestCase)testCases.get(i)).performTest(invariantToTest);
+      passTest = passTest &&  currentResult;
     }
-    return true;
+    return passTest;
   }
 
   /**
@@ -227,10 +255,12 @@ class FormatTestCase {
    */
   public String createDiffString() {
     StringBuffer result = new StringBuffer();
+    String currentDiffString;
 
     for (int i=0; i<testCases.size(); i++) {
-      result.append(((SingleOutputTestCase)testCases.get(i)).createDiffString());
-      if (i != testCases.size())
+      currentDiffString = ((SingleOutputTestCase)testCases.get(i)).createDiffString();
+      result.append(currentDiffString);
+      if (i != testCases.size() && currentDiffString != "")
 	result.append("\n\n");
     }
 
@@ -260,10 +290,32 @@ class FormatTestCase {
    * @returns the actual result String represented by the goal statement or
    *          null if the String isn't actually a goal statement
    */
-  public static String parseGoal(String goalString) {
+  static String parseGoal(String goalString) {
     if (goalString.startsWith(GOAL_PREFIX)) {
       return goalString.substring(GOAL_PREFIX.length(),goalString.length());
     }
+    return null;
+  }
+
+  static String getFormat(String partialGoalString) {
+    try {
+      return partialGoalString.substring(partialGoalString.indexOf('(')+1,
+					 partialGoalString.indexOf(')'));
+    }
+    catch (IndexOutOfBoundsException e) {
+    }
+
+    return null;
+  }
+
+  static String getGoalOutput(String partialGoalString) {
+    try {
+      return partialGoalString.substring(partialGoalString.indexOf(':')+2,
+					 partialGoalString.length());
+    }
+    catch (IndexOutOfBoundsException e) {
+    }
+
     return null;
   }
 
@@ -272,16 +324,17 @@ class FormatTestCase {
    * from file
    *
    * @param commands a buffer representing the data to be converted
-   * @param format a String representing the desired test format
    * @param generateGoals true if goal generation is desired, false if goal testing
    *        is desired
    */
-  public static FormatTestCase instantiate(LineNumberReader commands, String format, boolean generateGoals) {
+  public static FormatTestCase instantiate(LineNumberReader commands, boolean generateGoals) {
     List testCases = new Vector();
 
     String className = InvariantFormatTester.getNextRealLine((BufferedReader)commands);
 
     if (className == null) return null;
+
+    // System.out.println("On class " + className);
 
     Class classToTest = getClass(className); // Load the class from file
 
@@ -297,8 +350,9 @@ class FormatTestCase {
     // appear
     String typeString = InvariantFormatTester.getNextRealLine((BufferedReader)commands);
 
+    ProglangType types[] = getTypes(typeString);
     VarInfo vars[] =
-      getVarInfos(classToTest, getTypes(typeString));
+      getVarInfos(classToTest, types);
     PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test", vars));
 
     // Create an actual instance of the class
@@ -308,47 +362,110 @@ class FormatTestCase {
       throw new RuntimeException("Could not instantiate invariant");
 
     String goalOutput = "";
-
-    if (!generateGoals) {
-      goalOutput = parseGoal(InvariantFormatTester.getNextRealLine(commands));
-      if (goalOutput == null) {
-	throw new RuntimeException("Bad format of goal data");
-      }
-    }
+    String currentLine = null;
 
     int goalLineNumber = commands.getLineNumber();
+
+    Method outputProducer = null;
+    Object outputProducerArgs[] = null;
+    String format = null;
+
+    Iterator formatStrings = null;
+
+    // If not generating goals get the goal lines from the file
+    // If generating goals get the formats from the list of formats
+    if (!generateGoals) {
+      goalOutput = parseGoal(InvariantFormatTester.getNextRealLine(commands));
+      if (goalOutput == null)
+	throw new RuntimeException("Bad format of goal data");
+    } else {
+      formatStrings = InvariantFormatTester.TEST_FORMAT_LIST.iterator();
+    }
+
+    while (goalOutput != null) {
+      if (generateGoals) {
+	if (!formatStrings.hasNext()) {
+	  goalOutput = null;
+	} else {
+	  format = (String)formatStrings.next();
+	  goalOutput = "init"; // Need something non-whitespace
+	}
+      } else {
+	format = getFormat(goalOutput);
+	goalOutput = getGoalOutput(goalOutput);
+
+	if (format == null || goalOutput == null) {
+	  throw new RuntimeException("Goal string formatted incorrectly");
+	}
+	goalLineNumber++;
+      }
+
+      // System.out.println("Possibly add a test case:");
+      // System.out.println("Goal output = " + goalOutput);
+
+      // Get the method used to perform the formatting
+      if (goalOutput != null && !InvariantFormatTester.isWhitespace(goalOutput)) {
+	// System.out.println("Using format: " + format);
+
+	try {
+	  outputProducer = classToTest.getMethod("format_" + format, null);
+	  outputProducerArgs = null;
+	}
+	catch (NoSuchMethodException e) {
+	  try {
+	    outputProducer =
+	      classToTest.getMethod("format_using", new Class [] {OutputFormat.class});
+	    outputProducerArgs = new Object [] {getOutputFormat(format)};
+	  }
+	  catch (NoSuchMethodException e2) {
+	    throw new RuntimeException("Could not find format method");
+	  }
+	}
+
+	// System.out.println("Adding a test case");
+
+	// System.out.println("Method name: " + outputProducer.getName());
+	// System.out.println("Goal output: " + goalOutput);
+	// System.out.println("Goal line number: " + goalLineNumber);
+	// System.out.println("Format string: " + format);
+
+	// Add a test case for the invariant for the proper format
+	testCases.add(new SingleOutputTestCase(outputProducer, outputProducerArgs, goalOutput, goalLineNumber, format));
+
+	try {
+	  if (!generateGoals) {
+	    currentLine = commands.readLine();
+	    // System.out.println("In goal section, currentLine = " + currentLine);
+	    goalOutput = parseGoal(currentLine);
+	  }
+	}
+	catch (IOException e) {
+	  throw new RuntimeException("Error in reading command file");
+	}
+      }
+    }
 
     List samples = new Vector();
 
     // Get samples if they are needed to determine invariant data
     // e.g. to determine the exact nature of a linear relationship
     // between variables x and y we need two data points
-    getSamples(classToTest, (BufferedReader)commands, samples, generateGoals);
+    if (currentLine == null || !InvariantFormatTester.isWhitespace(currentLine)) {
+      // System.out.println("On file line " + commands.getLineNumber());
+      // System.out.println("Right before getSamples, currentLine = " + currentLine);
+      // System.out.println("Right before getSamples, goalOutput = " + goalOutput);
+
+      // If generating goals, goalOutput will have the proper first line
+      // Otherwise, currentLine will have the proper first sample line
+      if (generateGoals)
+	getSamples(types, (BufferedReader)commands, samples, generateGoals, goalOutput);
+      else
+	getSamples(types, (BufferedReader)commands, samples, generateGoals, currentLine);
+    }
 
     // Use the add_modified function of the appropriate invariant to
     // add the data to the instance
     populateWithSamples(invariantToTest, samples);
-
-    Method outputProducer = null;
-    Object outputProducerArgs[];
-
-    // Get the method used to perform the formatting
-    try {
-      outputProducer = classToTest.getMethod("format_" + format, null);
-      outputProducerArgs = null;
-    }
-    catch (NoSuchMethodException e) {
-      try {
-	outputProducer =
-	  classToTest.getMethod("format_using", new Class [] {OutputFormat.class});
-	outputProducerArgs = new Object [] {getOutputFormat(format)};
-      }
-      catch (NoSuchMethodException e2) {
-	throw new RuntimeException("Could not find format method");
-      }
-    }
-
-    testCases.add(new SingleOutputTestCase(outputProducer, outputProducerArgs, goalOutput, goalLineNumber));
 
     return new FormatTestCase(testCases, invariantToTest);
   }
@@ -471,7 +588,8 @@ class FormatTestCase {
    * used.
    *
    * @param format a string representing the format
-   * @return an OutputFormat object representing the output type if format corresponds to any known formats
+   * @return an OutputFormat object representing the output type if
+   *         format corresponds to any known formats
    *         null otherwise
    */
   private static OutputFormat getOutputFormat(String format) {
@@ -500,47 +618,60 @@ class FormatTestCase {
    * @param commands the input file for the commands
    * @param samples the list to which the samples are to be added
    */
-  private static void getSamples(Class classToTest, BufferedReader commands, List samples) {
-    getSamples(classToTest, commands, samples, false);
+//    private static void getSamples(Class classToTest, BufferedReader commands, List samples) {
+//      getSamples(classToTest, commands, samples, false, null);
+//    }
+
+//    private static void getSamples(Class classToTest, BufferedReader commands, List samples, boolean generateGoals) {
+//      getSamples(classToTest, commands, samples, generateGoals, null);
+//    }
+
+//    private static void getSamples(Class classToTest, BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
+
+  private static void getSamples(ProglangType types[], BufferedReader commands, List samples) {
+    getSamples(types, commands, samples, false, null);
   }
 
-  private static void getSamples(Class classToTest, BufferedReader commands, List samples, boolean generateGoals) {
-    Class paramTypes[] = getAddModified(classToTest).getParameterTypes();
+  private static void getSamples(ProglangType types[], BufferedReader commands, List samples, boolean generateGoals) {
+    getSamples(types, commands, samples, generateGoals, null);
+  }
 
+  private static void getSamples(ProglangType types[], BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
     Object sample[];
 
     String currentLine;
 
+    currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
+		                       firstLine);
+
+    // System.out.println("firstLine in getSamples: " + firstLine);
+    // System.out.println("currentLine line in getSamples: " + currentLine);
+
     try {
-      currentLine = commands.readLine(); // Get first line
-      if (generateGoals && parseGoal(currentLine) != null) { // Not a great solution... think of another way if possible
-	currentLine = commands.readLine();
+      while (currentLine != null && !InvariantFormatTester.isWhitespace(currentLine)) {
+	while (InvariantFormatTester.isComment(currentLine) ||
+	       (generateGoals && parseGoal(currentLine) != null)) {
+	  currentLine = commands.readLine();
+	  // System.out.println("In getSamples early part, currentLine = " + currentLine);
+	}
+	// System.out.println("Current line: " + currentLine);
+	if (!InvariantFormatTester.isComment(currentLine) &&
+	    !InvariantFormatTester.isWhitespace(currentLine)) {
+	  // System.out.println(InvariantFormatTester.isComment(currentLine));
+	  sample = new Object [types.length];
+	  for (int i=0; i<types.length; i++) {
+	    // Parse each line according to a type in the paramTypes array
+	    // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
+	    sample[i] = types[i].parse_value(currentLine);
+	    currentLine = commands.readLine();
+	  }
+	  samples.add(sample);
+	  // System.out.println("Debug: current sample: sample[" + i + "] == " + sample[i]);
+	}
       }
     }
     catch (IOException e) {
       throw new RuntimeException(e.toString());
-    }
-
-    while (currentLine != null && !InvariantFormatTester.isWhitespace(currentLine)) {
-      // System.out.println("Current line: " + currentLine);
-      if (!InvariantFormatTester.isComment(currentLine)) {
-	sample = new Object [paramTypes.length-1];
-	for (int i=0; i<paramTypes.length-1; i++) {
-	  // Parse each line according to a type in the paramTypes array
-	  parse(paramTypes[i], i, sample, currentLine);
-
-	  currentLine = ";";
-	  try {
-	    while (InvariantFormatTester.isComment(currentLine))
-	      currentLine = commands.readLine();
-	  }
-	  catch (IOException e) {
-	    throw new RuntimeException(e.toString());
-	  }
-	  // System.out.println("Debug: current sample: sample[" + i + "] == " + sample[i]);
-	}
-	samples.add(sample);
-      }
     }
   }
 
@@ -560,12 +691,12 @@ class FormatTestCase {
     String arrayFunctionName;
     Method arrayFunction;
 
-    //      System.out.println("Parse called");
+    // System.out.println("Parse called");
 
-    //      System.out.println(type.getName());
-    //      System.out.println(sampleIndex);
-    //      System.out.println(sample.length);
-    //      System.out.println(toBeParsed);
+    // System.out.println(type.getName());
+    // System.out.println(sampleIndex);
+    // System.out.println(sample.length);
+    // System.out.println(toBeParsed);
 
     try {
       if (type.isPrimitive()) { // Primitive types

@@ -28,11 +28,9 @@ import utilMDE.Intern;
  * This is a tester for the formatting of invariants in different
  * modes that is configurable by file input. It can test practically
  * any invariant in the Daikon system given the appropriate commands.
- * The tester is first configured by the InvariantFormatTester.conig
- * file, which details the different formatting modes to be tested,
- * and then accepts commands from the
- * InvariantFormatTest.<format_name> files for input and desired
- * results. More detail on the expected formats of these files is in
+ * The test are configured from the InvariantFormatTest.commands file
+ * and errors that occur are written to the InvariantFormatTest.diffs
+ * file. More detail on the expected formats of these files is in
  * InvariantFormatTester.Description.
  */
 public class InvariantFormatTester extends TestCase
@@ -43,6 +41,17 @@ public class InvariantFormatTester extends TestCase
    * point it is essentially arbitrary, but a length had to be chosen
    */
   private static final int MAX_FILE_SIZE = 262144;
+
+  /**
+   * Indicates a string that when it starts a line signifies that the
+   * line is a comment
+   */
+  public static final String COMMENT_STARTER_STRING = ";";
+
+  /**
+   * A list containing all of the test formats
+   */
+  public static final List TEST_FORMAT_LIST = getTestFormatList();
 
   /**
    * Allows for the configuring of Daikon options
@@ -86,11 +95,30 @@ public class InvariantFormatTester extends TestCase
    * This constructor allows the test to be created from the
    * MasterTester class.
    *
-   * @param name the desired name of the test case */
+   * @param name the desired name of the test case
+   */
   public InvariantFormatTester(String name) {
     super(name);
     config = Configuration.getInstance();
     generateGoals = goalGenerationForNext;
+  }
+
+  /**
+   * This function produces the format list for intialization of the
+   * static format list variable
+   */
+  static List getTestFormatList() {
+    List result = new Vector();
+
+    // Add test formats - hard coded in
+    result.add("daikon");
+    result.add("java");
+    result.add("esc");
+    result.add("ioa");
+    result.add("jml");
+    result.add("simplify");
+
+    return result;
   }
 
   /**
@@ -104,41 +132,46 @@ public class InvariantFormatTester extends TestCase
     // should all be comparable)
     Daikon.ignore_comparability = true;
 
-    // Get the configuration file, each line details a format
-    InputStream configFile =
-      InvariantFormatTester.class.getResourceAsStream("InvariantFormatTester.config");
+    // Not being configured by a config file anymore
 
-    if (configFile == null) {
-      throw new RuntimeException("Configuration file not found," +
-				 " invariant format test cannot be performed");
-    }
+//      // Get the configuration file, each line details a format
+//      InputStream configFile =
+//        InvariantFormatTester.class.getResourceAsStream("InvariantFormatTester.config");
 
-    BufferedReader inputReader =
-      new BufferedReader(new InputStreamReader(configFile));
-    String currentLine = "";
+//      if (configFile == null) {
+//        throw new RuntimeException("Configuration file not found," +
+//                                   " invariant format test cannot be performed");
+//      }
 
-    boolean noTestFailed = true;
-    boolean runResult;
+//      BufferedReader inputReader =
+//        new BufferedReader(new InputStreamReader(configFile));
+//      String currentLine = "";
 
-    try {
+//      boolean noTestFailed = true;
+//      boolean runResult;
 
-      while (currentLine != null) {
-	currentLine = inputReader.readLine();
-	if (currentLine != null) {
-	  runResult = run(currentLine); // Perform one format's test
+//      try {
 
-	  // Note: do not write: noTestFailed = noTestFailed && run(currentLine)
-	  // or else run will not execute when a test has already failed
-	  noTestFailed = noTestFailed && runResult;
-	}
-      }
-    }
-    catch (IOException e) {
-      throw new RuntimeException(e.toString());
-    }
+//        while (currentLine != null) {
+//          currentLine = inputReader.readLine();
+//          if (currentLine != null) {
+//            runResult = run(); // Perform one format's test
 
-    if (!noTestFailed) {
-      fail("At least one test failed.");
+//            // Note: do not write: noTestFailed = noTestFailed && run(currentLine)
+//            // or else run will not execute when a test has already failed
+//            noTestFailed = noTestFailed && runResult;
+//          }
+//        }
+//      }
+//      catch (IOException e) {
+//        throw new RuntimeException(e.toString());
+//      }
+
+    // run the actual test
+
+    if (!execute()) {
+      fail("At least one test failed." +
+	   " Inspect InvariantFormatTest.diffs for error report.");
     }
   }
 
@@ -169,115 +202,108 @@ public class InvariantFormatTester extends TestCase
    * This function performs the testing for a particular format
    * indicated by the format string. It subsequently sets up
    * appropriate input and output streams for the format test,
-   * performs the test, and the compares the test results to the goals
-   * If the goals differ from the actual results the test
+   * performs the test, and the compares the test results to the
+   * goals.  If the goals differ from the actual results the test
    * fails.
-   *
-   * @param format a string representing the format to be tested
    */
-  private boolean run(String format) {
+  private boolean execute() {
     // Calculate input file locations
-    // Change ".java" to ".testJava" or else other programs will think it is a
-    // java source file
-    String inputFile = "InvariantFormatTest." +
-      (format.equalsIgnoreCase("java") ? "testJava" : format);
-    String diffsFile = inputFile + ".diffs";
+    String inputFile = "InvariantFormatTest.commands";
+    String diffsFile = "InvariantFormatTest.diffs";
     InputStream inputStream =
       InvariantFormatTester.class.getResourceAsStream(inputFile);
 
     if (inputStream == null) {
       // Missing commands file
-      System.out.println("Input file for " + format +
-			 " invariant format test missing. (Should be in file " +
-			 inputFile + ")");
-      System.out.print("Skipping " + format + " ");
+      System.out.println("Input file for invariant format tests missing." +
+			 " (Should be in file " + inputFile + ")");
+      System.out.print("Skipping ");
       if (!generateGoals)
-	System.out.print("invariant format test");
+	System.out.print("invariant format tests");
       else
 	System.out.print("goal generation");
-      System.out.println(" due to missing files.");
-    }
-
-    LineNumberReader commandReader =
-      new LineNumberReader(new InputStreamReader(inputStream));
-
-    OutputStream out = new ByteArrayOutputStream();
-    boolean result;
-
-    try {
-      result = performTest(commandReader, new PrintStream(out), format);
-    }
-    catch (RuntimeException e) {
-      System.err.println("Error detected on line " +
-			 commandReader.getLineNumber() + " of " +
-			 inputFile + ":");
-      throw e;
-    }
-
-    try {
-      inputStream.close();
-    }
-    catch (IOException e) {
-      // Can't write the goals into the commands file if it can't be cleared,
-      // otherwise not important
-      if (generateGoals)
-	throw new RuntimeException("Can't close commands file," +
-				   " and so goals cannot be written in");
-    }
-
-    String output = out.toString();
-
-    if (generateGoals) {
-      File theOutputFile = new File(inputFile);
-      theOutputFile.delete();
-
-      try {
-	theOutputFile.createNewFile();
-      }
-      catch (IOException e) {
-	throw new RuntimeException("Cannot recreate the commands file," +
-				   " file is now deleted (get it from CVS)");
-      }
-
-      FileWriter goalGenerationOutput;
-
-      try {
-	goalGenerationOutput = new FileWriter(theOutputFile);
-      }
-      catch (IOException e) {
-	throw new RuntimeException("Cannot write output into the recreated commands file," +
-				   " file is now deleted (get it from CVS)");
-      }
-
-      try {
-	goalGenerationOutput.write(output, 0, output.length());
-	goalGenerationOutput.close();
-      }
-      catch (IOException e) {
-	throw new RuntimeException("Could not output generated goals");
-      }
-
-      System.out.println(format + " goals generated");
+      System.out.println(" due to missing file.");
     } else {
-      File theOutputFile = new File(diffsFile);
-      theOutputFile.delete();
 
-      if (!result) {
+      LineNumberReader commandReader =
+	new LineNumberReader(new InputStreamReader(inputStream));
+
+      OutputStream out = new ByteArrayOutputStream();
+      boolean result;
+
+      try {
+	result = performTest(commandReader, new PrintStream(out));
+      }
+      catch (RuntimeException e) {
+	System.err.println("Error detected on line " +
+			   commandReader.getLineNumber() + " of " +
+			   inputFile + ":");
+	throw e;
+      }
+
+      try {
+	inputStream.close();
+      }
+      catch (IOException e) {
+	// Can't write the goals into the commands file if it can't be cleared,
+	// otherwise not important
+	if (generateGoals)
+	  throw new RuntimeException("Can't close commands file," +
+				   " and so goals cannot be written in");
+      }
+
+      String output = out.toString();
+
+      if (generateGoals) {
+	File theOutputFile = new File(inputFile);
+	theOutputFile.delete();
+
 	try {
-	  theOutputFile.createNewFile();
-
-	  FileWriter diffsOutput = new FileWriter(theOutputFile);
-
-	  diffsOutput.write(output, 0, output.length());
-	  diffsOutput.close();
+	theOutputFile.createNewFile();
 	}
 	catch (IOException e) {
-	  throw new RuntimeException("Could not output generated diffs");
+	  throw new RuntimeException("Cannot recreate the commands file," +
+				     " file is now deleted (get it from CVS)");
 	}
 
-	System.out.println("The " + format + " test failed. Check " + diffsFile +
-			   " for error listing.");
-	return false;
+	FileWriter goalGenerationOutput;
+
+	try {
+	  goalGenerationOutput = new FileWriter(theOutputFile);
+	}
+	catch (IOException e) {
+	  throw new RuntimeException("Cannot write output into the recreated commands file," +
+				     " file is now deleted (get it from CVS)");
+	}
+
+	try {
+	  goalGenerationOutput.write(output, 0, output.length());
+	  goalGenerationOutput.close();
+	}
+	catch (IOException e) {
+	  throw new RuntimeException("Could not output generated goals");
+	}
+
+	System.out.println("Goals generated");
+      } else {
+	File theOutputFile = new File(diffsFile);
+	theOutputFile.delete();
+
+	if (!result) {
+	  try {
+	    theOutputFile.createNewFile();
+
+	    FileWriter diffsOutput = new FileWriter(theOutputFile);
+
+	    diffsOutput.write(output, 0, output.length());
+	    diffsOutput.close();
+	  }
+	  catch (IOException e) {
+	    throw new RuntimeException("Could not output generated diffs");
+	  }
+
+	  return false;
+	}
       }
     }
     return true;
@@ -289,12 +315,11 @@ public class InvariantFormatTester extends TestCase
    *
    * @param commands the input that decides which tests to perform
    * @param output the place to where the test output is written
-   * @param format the format string that represents the test
    */
-  private boolean performTest(LineNumberReader commands, PrintStream output, String format) {
+  private boolean performTest(LineNumberReader commands, PrintStream output) {
     List invariantTestCases = new Vector();
     FormatTestCase currentCase;
-    boolean stop = false,noTestFailed = true;
+    boolean stop = false, noTestFailed = true;
 
     // Need to be able to go to beginning of buffer for combining goals with the input
     if (generateGoals) {
@@ -308,7 +333,7 @@ public class InvariantFormatTester extends TestCase
 
     while (!stop) {
       // Create a new test case
-      currentCase = FormatTestCase.instantiate(commands, format, generateGoals);
+      currentCase = FormatTestCase.instantiate(commands, generateGoals);
       if (currentCase == null)
 	stop = true;
       else {
@@ -330,10 +355,16 @@ public class InvariantFormatTester extends TestCase
 	throw new RuntimeException("Cannot reset to mark, thus cannot write goals");
       }
 
+      String debugTemp;
+
       try {
 	for (int i=0; i<invariantTestCases.size(); i++) {
 	  currentCase = (FormatTestCase)invariantTestCases.get(i);
-	  output.println(currentCase.generateGoalOutput(commands));
+	  // System.out.println("Goal output #" + i);
+	  debugTemp = currentCase.generateGoalOutput(commands);
+	  // System.out.println(debugTemp);
+
+	  output.println(debugTemp);
 	}
 
 	String currentLineOfText = commands.readLine();
@@ -359,7 +390,7 @@ public class InvariantFormatTester extends TestCase
    *         false otherwise
    */
   static boolean isComment(String line) {
-    return line.startsWith(";");
+    return line.startsWith(COMMENT_STARTER_STRING);
   }
 
   /**
