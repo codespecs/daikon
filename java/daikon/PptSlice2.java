@@ -204,7 +204,7 @@ public final class PptSlice2
     VarInfo vi2 = var_infos[1];
 
     int mod1 = full_vt.getModified(vi1);
-    if (mod1 == ValueTuple.MISSING) {
+    if (mod1 == ValueTuple.MISSING_FLOW || mod1 == ValueTuple.MISSING_NONSENSICAL) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
       return emptyList;
     }
@@ -215,7 +215,7 @@ public final class PptSlice2
     }
 
     int mod2 = full_vt.getModified(vi2);
-    if (mod2 == ValueTuple.MISSING) {
+    if (mod2 == ValueTuple.MISSING_FLOW || mod2 == ValueTuple.MISSING_NONSENSICAL) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
       return emptyList;
     }
@@ -261,8 +261,8 @@ public final class PptSlice2
                       && ((mod1 == ValueTuple.UNMODIFIED)
                           || (mod1 == ValueTuple.MODIFIED))));
 
-    Assert.assertTrue((mod1 != ValueTuple.MISSING)
-                  && (mod2 != ValueTuple.MISSING));
+    Assert.assertTrue((mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL)
+                  && (mod2 != ValueTuple.MISSING_FLOW && mod2 != ValueTuple.MISSING_NONSENSICAL));
     int mod_index = mod1 * 2 + mod2;
     boolean string1 = vi1.rep_type == ProglangType.STRING;
     boolean string2 = vi2.rep_type == ProglangType.STRING;

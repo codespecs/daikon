@@ -47,10 +47,12 @@ public abstract class Derivation
    * @param vt The set of values in a program point that will be
    * used to derive the value.
    **/
-  // I don't provide separate computeModified and computeValue functions:
-  // they aren't so useful, and the same computation must usually be done
-  // in both functions.
-  public abstract ValueAndModified computeValueAndModified(ValueTuple vt);
+  // I don't provide separate computeModified and computeValue
+  // functions: they aren't so useful, and the same computation must
+  // usually be done in both functions.  
+  // A value whose derivation doesn't make sense is considered
+  // MISSING_NONSENSICAL, not MISSING_FLOW.
+  public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
   /**
    * Get the VarInfo that this would represent.  However,

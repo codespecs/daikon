@@ -186,7 +186,7 @@ public final class PptSlice1
     VarInfo vi1 = var_info;
 
     int mod1 = full_vt.getModified(vi1);
-    if (mod1 == ValueTuple.MISSING) {
+    if (mod1 == ValueTuple.MISSING_FLOW || mod1 == ValueTuple.MISSING_NONSENSICAL) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
       return emptyList;
     }
@@ -230,7 +230,7 @@ public final class PptSlice1
                       && ((mod1 == ValueTuple.UNMODIFIED)
                           || (mod1 == ValueTuple.MODIFIED))));
 
-    Assert.assertTrue(mod1 != ValueTuple.MISSING);
+    Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL);
     ProglangType rep = vi1.rep_type;
     boolean rep_is_scalar = rep.isScalar();
     if (rep_is_scalar) {

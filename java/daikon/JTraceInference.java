@@ -252,7 +252,7 @@ class JTraceInference extends Thread
 
 		mods[val_index] = mod;
 //      oldvalue_reps[val_index] = value_rep;
-		if (ValueTuple.modIsMissing(mod)) {
+		if (ValueTuple.modIsMissingNonSensical(mod)) {
 		    vals[val_index] = null;
 		} else {
 		    // XXX type check required!

@@ -854,7 +854,8 @@ public final class VarInfo
   }
   public boolean isUnmodified(ValueTuple vt) { return ValueTuple.modIsUnmodified(getModified(vt)); }
   public boolean isModified(ValueTuple vt) { return ValueTuple.modIsModified(getModified(vt)); }
-  public boolean isMissing(ValueTuple vt) { return ValueTuple.modIsMissing(getModified(vt)); }
+  public boolean isMissingNonSensical(ValueTuple vt) { return ValueTuple.modIsMissingNonSensical(getModified(vt)); }
+  public boolean isMissingFlow(ValueTuple vt) { return ValueTuple.modIsMissingFlow(getModified(vt)); }
 
   /**
    * Get the value of this variable from a particular sample (ValueTuple)

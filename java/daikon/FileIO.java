@@ -913,7 +913,10 @@ public final class FileIO {
       //                   + "\n  for variable " + vi.name
       //                   + " for program point " + ppt.name);
 
-      if (mod != ValueTuple.MISSING) {
+      // MISSING_FLOW is only found during flow algorithm
+      Assert.assertTrue (mod != ValueTuple.MISSING_FLOW, "Data trace value can't be missing due to flow");
+
+      if (mod != ValueTuple.MISSING_NONSENSICAL) {
         // Set the modbit now, depending on whether the value of the variable
         // has been changed or not.
         if (value_rep.equals(oldvalue_reps[val_index])) {
@@ -934,7 +937,7 @@ public final class FileIO {
         Global.dtraceWriter.println(mod);
       }
 
-      if (ValueTuple.modIsMissing(mod)) {
+      if (ValueTuple.modIsMissingNonSensical(mod)) {
         if (!(value_rep.equals("missing") || value_rep.equals("uninit"))) {
           System.out.println("\nModbit indicates missing value for variable " + vi.name + " with value \"" + value_rep + "\";\n  text of value should be \"missing\" or \"uninit\" at " + data_trace_filename + " line " + reader.getLineNumber());
           System.exit(1);
@@ -1059,7 +1062,7 @@ public final class FileIO {
           mods[ppt.num_tracevars+i] = mod;
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
-          if (ValueTuple.modIsMissing(mods[ppt.num_tracevars+i])) {
+          if (ValueTuple.modIsMissingNonSensical(mods[ppt.num_tracevars+i])) {
             Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
           }
         }

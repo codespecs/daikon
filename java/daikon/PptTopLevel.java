@@ -698,7 +698,7 @@ public class PptTopLevel
       int ppt_num_vals = ppt.var_infos.length - ppt.num_static_constant_vars;
       Object[] vals = new Object[ppt_num_vals];
       int[] mods = new int[ppt_num_vals];
-      Arrays.fill(mods, ValueTuple.MISSING);
+      Arrays.fill(mods, ValueTuple.MISSING_FLOW);
       for (int j=0; j < transform.length; j++) {
         int tj = transform[j];
         if (tj == -1) continue;

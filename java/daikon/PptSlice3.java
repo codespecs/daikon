@@ -187,7 +187,7 @@ public final class PptSlice3
     VarInfo vi3 = var_infos[2];
 
     int mod1 = full_vt.getModified(vi1);
-    if (mod1 == ValueTuple.MISSING) {
+    if (mod1 == ValueTuple.MISSING_FLOW || mod1 == ValueTuple.MISSING_NONSENSICAL) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
       return emptyList;
     }
@@ -198,7 +198,7 @@ public final class PptSlice3
     }
 
     int mod2 = full_vt.getModified(vi2);
-    if (mod2 == ValueTuple.MISSING) {
+    if (mod2 == ValueTuple.MISSING_FLOW || mod2 == ValueTuple.MISSING_NONSENSICAL) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
       return emptyList;
     }
@@ -209,7 +209,7 @@ public final class PptSlice3
     }
 
     int mod3 = full_vt.getModified(vi3);
-    if (mod3 == ValueTuple.MISSING) {
+    if (mod3 == ValueTuple.MISSING_FLOW || mod3 == ValueTuple.MISSING_NONSENSICAL) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
       return emptyList;
     }
@@ -257,9 +257,9 @@ public final class PptSlice3
                       && ((mod1 == ValueTuple.UNMODIFIED)
                           || (mod1 == ValueTuple.MODIFIED))));
 
-    Assert.assertTrue((mod1 != ValueTuple.MISSING)
-                  && (mod2 != ValueTuple.MISSING)
-                  && (mod3 != ValueTuple.MISSING));
+    Assert.assertTrue((mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL)
+                  && (mod2 != ValueTuple.MISSING_FLOW && mod2 != ValueTuple.MISSING_NONSENSICAL)
+                  && (mod3 != ValueTuple.MISSING_FLOW && mod3 != ValueTuple.MISSING_NONSENSICAL));
     int mod_index = mod1 * 4 + mod2 * 2 + mod3;
     ProglangType rep1 = vi1.file_rep_type;
     ProglangType rep2 = vi2.file_rep_type;
