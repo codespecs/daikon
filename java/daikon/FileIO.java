@@ -234,7 +234,7 @@ public final class FileIO {
       rep_type_string = rep_type_string.substring(0, equals_index);
     }
     ProglangType prog_type = ProglangType.parse(proglang_type_string);
-    ProglangType rep_type = ProglangType.parse(rep_type_string);
+    ProglangType rep_type = ProglangType.rep_parse(rep_type_string);
     if (static_constant_value_string != null) {
       static_constant_value = rep_type.parse_value(static_constant_value_string);
       // Why can't the value be null?

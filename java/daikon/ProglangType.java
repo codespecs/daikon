@@ -63,10 +63,6 @@ public final class ProglangType implements java.io.Serializable {
    **/
   private ProglangType(String basetype, int dims) {
     Assert.assert(basetype == basetype.intern());
-    // Don't do this here; it messes up interning.
-    // // Oooh, hack.  Yuck.
-    // if (basetype == "boolean")  // interned
-    //   basetype = "int";
     base = basetype;
     dimensions = dims;
   }
@@ -89,6 +85,19 @@ public final class ProglangType implements java.io.Serializable {
     return intern(new_base, dims);
   }
 
+  /** Like parse, but does certain conversions for representation types. **/
+  public static ProglangType rep_parse(String rep) {
+    ProglangType candidate = parse(rep);
+    if (candidate.base == "boolean") {  // interned
+      return intern("int", candidate.dimensions);
+    } else if (candidate.base == "float") { // interned
+      return intern("double", candidate.dimensions);
+    } else {
+      return candidate;
+    }
+  }
+
+
   public boolean equals(Object o) {
     return this == o;
   }
@@ -101,11 +110,6 @@ public final class ProglangType implements java.io.Serializable {
   // t_base should be interned
   private static ProglangType find(String t_base, int t_dims) {
     Assert.assert(t_base == t_base.intern());
-    if (t_base == "boolean") {  // interned
-      t_base = "int";
-    } else if (t_base == "float") { // interned
-      t_base = "double";
-    }
 
     // System.out.println("ProglangType.find(" + t_base + ", " + t_dims + ")");
     // System.out.println("All known types:");
