@@ -18,7 +18,7 @@ use strict;
 $WARNING = 0;
 
 my $DERIVE_CONDITIONS = 0; # by default, don't derive conditions
-my $out = "cluster.spinfo"; 
+my $out;
 my $inv_file;
 my $cond_cluster_num; # the cluster number of the current condition
 
@@ -42,7 +42,11 @@ if ($inv_file =~ /^\s*$/) {
 
 
 open (IN, $inv_file) || die "couldn't open $inv_file\n";
-open (OUT, ">$out") || die "couldn't open $out for output\n";
+if (defined($out)) {
+    open (OUT, ">$out") || die "couldn't open $out for output\n";
+} else {
+    open (OUT, ">&1") || die "couldn't open standard output\n";
+}
 
 my %pptname_to_conds = ();
 my %allconds = ();
