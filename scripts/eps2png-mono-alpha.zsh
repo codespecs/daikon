@@ -16,9 +16,32 @@
 psfile=$1
 width=$2
 temp=/tmp/eps2png$$.pgm
-# We need at least version 2.38, not 2.37.5 as in RedHat.
-pnmtopng=/g6/users/smcc/bin/pnmtopng
+# Default to whatever's on our path
+pnmtopng=`which pnmtopng`
+PATH=/afs/csail/group/pag/software/bin:$PATH
+if [ -x /g6/users/smcc/bin/pnmtopng ]; then
+    # We need at least version 2.38, not 2.37.5 as in Red Hat.
+    pnmtopng=/g6/users/smcc/bin/pnmtopng
+elif [ -x `which pnmtopng-2.38` ]; then
+    # This is what we've called it on our Debian boxes, which as of
+    # now also have a broken version in /usr/bin (Debian bug #274907)
+    pnmtopng=`which pnmtopng-2.38`
+fi
+# echo Using $pnmtopng
 
-pstopnm -portrait -stdout -xsize $[4 * $width] $psfile | pnmcrop | pnmscale 0.25 | pnmmargin -white 20 | ppmtopgm >$temp
-$pnmtopng -alpha <(pnminvert $temp) <(pbmmake -black $(pnmfile $temp | perl -ne 'print "$1 $2" if /(\d+) by (\d+)/')) | perl -0777 -pe 's/sBIT\x1\cH\204\.\375M/bKGD\0\377\207\217\314\277/' >${psfile%.eps}.png
+if [ ! -x $pnmtopng ]; then
+    echo "Can't find pnmtopng!" >&2
+    exit 1;
+fi
+
+pstopnm -portrait -stdout -xsize $[4 * $width] $psfile \
+  | pnmcrop \
+  | pnmscale 0.25 \
+  | pnmmargin -white 20 \
+  | ppmtopgm >$temp && \
+$pnmtopng -alpha <(pnminvert $temp) \
+  <(pbmmake -black $(pnmfile $temp \
+                     | perl -ne 'print "$1 $2" if /(\d+) by (\d+)/')) \
+  | perl -0777 -pe 's/sBIT\x1\cH\204\.\375M/bKGD\0\377\207\217\314\277/' \
+  >${psfile%.eps}.png && \
 rm $temp
