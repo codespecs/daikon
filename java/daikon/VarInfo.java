@@ -626,6 +626,13 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     }
   }
 
+  public boolean isDerivedSequenceMinMaxSum() {
+    return (derived != null)
+      && ((derived instanceof SequenceMax) ||
+	  (derived instanceof SequenceMin) ||
+	  (derived instanceof SequenceSum));
+  }
+
   public VarInfo isDerivedSubSequenceOf() {
     // System.out.println("isDerivedSubSequenceOf(" + name + "); derived=" + derived);
 
