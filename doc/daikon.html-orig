@@ -45,7 +45,9 @@ Table of contents:
 <h2><a name="install">Installing Daikon</a></h2>
 
 <ol>
-  <li>Download the <tt><a href="http://www.cs.washington.edu/homes/mernst/daikon/download/daikon.tar.gz">daikon.tar.gz</a></tt> file.
+  <li>Download the <tt><a href="http://www.cs.washington.edu/homes/mernst/daikon/download/daikon.tar.gz">daikon.tar.gz</a></tt>
+      file from
+      <a href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>.
   <li>In the directory where you want to install Daikon, unpack the tarfile:
 <pre>
        tar zxvf daikon.tar.gz

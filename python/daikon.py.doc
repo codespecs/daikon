@@ -1,5 +1,5 @@
 This file contains implementation and design notes on the invariant
-engine.  For user documentation, see the README file in the distribution.
+engine.  For user documentation, see the daikon.html file in the distribution.
 
 Contents:
  * File format for data trace files

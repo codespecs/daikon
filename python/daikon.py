@@ -39,10 +39,9 @@ false = (1==0)
 # But if they're indented, maybe my future tools for variable decls won't work.
 if not locals().has_key("fn_var_infos"):
     ### User configuration variables
-    # These first two used to default to true, for speed; but I've set them
-    # back to false, for completeness.
-    no_ternary_invariants = false
-    no_invocation_counts = false
+    # Set these to true for speed, to false for completeness.
+    no_ternary_invariants = true
+    no_invocation_counts = true
     collect_stats = true                # performance statistics
     lackwit_type_format = "explicit"    # types list the comparable values
     # lackwit_type_format = "implicit"  # types name a symbol
@@ -3530,13 +3529,16 @@ def tri_linear_relationship(triple1, triple2, triple3):
     if (y2 == y3) or (x2 == x3):
         return (0,0,0)
 
-    y1323 = float(y1-y3)/(y2-y3)
-    a_numerator = z3-z1+(z2-z3)*y1323
-    a_denominator = x3-x1+(x2-x3)*y1323
+    try:
+        y1323 = float(y1-y3)/(y2-y3)
+        a_numerator = z3-z1+(z2-z3)*y1323
+        a_denominator = x3-x1+(x2-x3)*y1323
 
-    x1323 = float(x1-x3)/(x2-x3)
-    b_numerator = z3-z1+(z2-z3)*x1323
-    b_denominator = y3-y1+(y2-y3)*x1323
+        x1323 = float(x1-x3)/(x2-x3)
+        b_numerator = z3-z1+(z2-z3)*x1323
+        b_denominator = y3-y1+(y2-y3)*x1323
+    except OverflowError:
+        return (0,0,0)
 
     if (a_denominator == 0) or (b_denominator == 0):
         return (0,0,0)
@@ -4598,36 +4600,78 @@ def var_index(varname, fnname):
 
 
 def replace_vars_by_vals_indexed(condition, function):
-    """For each word in condition (a Python expression), if it is a variable in
-    function, then replace it by the string "vals[i]" where i is the index of
-    that variable in the function.
+    """For each expression in CONDITION (a Python expression) which is a
+    variable in FUNCTION, replace it by the string "vals[i]" where i is
+    the index of that variable in the function.
 
     Actually returns a tuple of the new condition and the max var index seen.
     The latter is useful for error-checking.
     """
 
-    ## It's a bit of a shame to repeatedly split the condition on
-    ## subsequent calls to this function.  Perhaps permit the condition to
-    ## already be a list, but probably not worth losing sleep over.
-    # I want to use re.split(r'\b', but that doesn't work.  Why??
-    # '(\W+)' does what I would think it would do...
-    ## This isn't quite right, because of how it treats "a*b == c".  Fix later.
-    # The capturing parentheses ensure that the punctuation does appear
-    # in the list returned by split.
-    condition_words = re.split('(\*?\w+)', condition)
+    # print "Entered replace_vars_by_vals_indexed: ", condition
 
-    result_words = []
+    # There will be trouble if anything matches "vals" (the replacement).
+
     max_var_idx = -1
+    result = condition
 
-    for i in range(0,len(condition_words)):
-        var_idx = var_index(condition_words[i], function)
-        if var_idx != None:
+    # Sort the names by length; we want the longest matches first, because
+    # shorter names may be substrings of longer ones.
+    var_names = []
+    for i in range(0, len(fn_var_infos[function])):
+        var_names.append((fn_var_infos[function][i].name), i)
+    var_names.sort(lambda t1,t2:-cmp(len(t1[0]), len(t2[0])))
+
+    for (var_name, var_idx) in var_names:
+        var_regexp = re.compile(r'(\b|\W)(' + re.escape(var_name) + r')(\b|\W)', re.IGNORECASE)
+
+        match = var_regexp.search(result)
+        while match:
+            # print "match for ", var_name, ": ", match
             ## Assumes modification info is in the key (modinkey is true)
-            result_words.append("(vals[%s][0])" % (var_idx,))
+            result = result[:match.start(2)] + "(vals[%s][0])" % (var_idx,) + result[match.end(2):]
+            # print "new result:" , result
             max_var_idx = max(max_var_idx, var_idx)
-        else:
-            result_words.append(condition_words[i])
-    return (string.join(result_words, ""), max_var_idx)
+            match = var_regexp.search(result)
+
+    # print "Exiting replace_vars_by_vals_indexed: ", result
+    return (result, max_var_idx)
+
+
+## This implementation is no good because it doesn't deal with variables
+## whose names contain word delimiters, such as "cursor.type".
+# def replace_vars_by_vals_indexed(condition, function):
+#     """For each word in condition (a Python expression), if it is a variable in
+#     function, then replace it by the string "vals[i]" where i is the index of
+#     that variable in the function.
+# 
+#     Actually returns a tuple of the new condition and the max var index seen.
+#     The latter is useful for error-checking.
+#     """
+# 
+#     ## It's a bit of a shame to repeatedly split the condition on
+#     ## subsequent calls to this function.  Perhaps permit the condition to
+#     ## already be a list, but probably not worth losing sleep over.
+#     # I want to use re.split(r'\b', but that doesn't work.  Why??
+#     # '(\W+)' does what I would think it would do...
+#     ## This isn't quite right, because it splits "a*b == c" into "a" "*b" ...
+#     ## Fix later.
+#     # The capturing parentheses ensure that the punctuation does appear
+#     # in the list returned by split.
+#     condition_words = re.split('(\*?\w+)', condition)
+# 
+#     result_words = []
+#     max_var_idx = -1
+# 
+#     for i in range(0,len(condition_words)):
+#         var_idx = var_index(condition_words[i], function)
+#         if var_idx != None:
+#             ## Assumes modification info is in the key (modinkey is true)
+#             result_words.append("(vals[%s][0])" % (var_idx,))
+#             max_var_idx = max(max_var_idx, var_idx)
+#         else:
+#             result_words.append(condition_words[i])
+#     return (string.join(result_words, ""), max_var_idx)
 
 
 
@@ -4703,6 +4747,28 @@ def prune_database(condition, fn_regexp=None):
             # I should probably catch errors here
             if not eval(cond, globals(), locals()):
                 del fn_var_values[fn][vals]
+
+
+def eliminate_ppt(fn_regexp, keep_matches=false):
+    """Eliminate most mentions of program points matching the regular expression.
+    If keep_matches is true, then program points matching the regular
+    expression are retained rather than eliminated."""
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
+    if not fn_regexp:
+        raise "Bad fn_regexp argument to eliminate_ppt"
+    for fn in fn_var_infos.keys():
+        match = fn_regexp.search(fn)
+        if ((match and not keep_matches)
+            or (keep_matches and not match)):
+            del fn_var_infos[fn]
+            del fn_truevars[fn]
+            del fn_var_values[fn]
+            del fn_samples[fn]
+            if fn_derived_from.has_key(fn):
+                del fn_derived_from[fn]
+            # blech
+            if functions.count(fn) > 0:
+                functions.remove(fn)
 
 
 ###########################################################################
