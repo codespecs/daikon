@@ -8,3 +8,5 @@ OneOfScalar.java
 OneOfFloat.java
 NonZero.java
 NonZeroFloat.java
+RangeFloat.java
+RangeInt.java
