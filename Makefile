@@ -246,9 +246,13 @@ update-dist-dir: dist-ensure-directory-exists
 	cd java/daikon && $(MAKE) junit
 	$(MAKE) dist-dfej-linux-x86
 	$(MAKE) dist-dfej-windows
+	$(MAKE) dist-java-doc
 	$(MAKE) update-dist-doc
 	$(MAKE) www-dist
 	$(MAKE) update-dist-version-file
+
+dist-java-doc:
+	make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc
 
 doc-all:
 	# "make" in doc directory may fail the first time, but do show output.
@@ -604,7 +608,7 @@ $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe: dfej/src/*.cpp dfej/src/*.h
 	(cd $(MINGW_DFEJ_LOC)/build_mingw_dfej && export PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:${PATH} && $(MAKE))
 	# -rename .mingw-saved.o .o dfej/src/*.mingw-saved.o
 
-dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe
+dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe mingw_exe
 	cp -pf $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
 	chmod +r $(DIST_BIN_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
