@@ -89,7 +89,6 @@ public final class OneOfStringSequence
       throw new Error("Represents " + num_elts + " elements");
 
     return elts[0];
-
   }
 
   static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical();
@@ -104,7 +103,6 @@ public final class OneOfStringSequence
     sort_rep();
 
     return elts[0];
-
   }
 
   public Object max_elt() {
@@ -113,7 +111,6 @@ public final class OneOfStringSequence
     sort_rep();
 
     return elts[num_elts-1];
-
   }
 
   // Assumes the other array is already sorted
@@ -172,7 +169,6 @@ public final class OneOfStringSequence
     if (num_elts == 1) {
 
       return varname + " == " + ArraysMDE.toString( elts[0] ) ;
-
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -313,7 +309,7 @@ public final class OneOfStringSequence
 
     // We are significantly changing our state (not just zeroing in on
     // a constant), so we have to flow a copy before we do so.
-    flowClone();
+    if (num_elts > 0) flowClone();
 
     elts[num_elts] = v;
     num_elts++;
@@ -324,7 +320,6 @@ public final class OneOfStringSequence
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
-
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }

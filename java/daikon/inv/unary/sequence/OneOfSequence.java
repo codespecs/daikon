@@ -87,6 +87,10 @@ public final class OneOfSequence
       result.elts[i] = (long[] ) elts[i].clone();
     }
 
+    result.num_elts = this.num_elts;
+    result.is_boolean = this.is_boolean;
+    result.is_hashcode = this.is_hashcode;
+
     return result;
   }
 
@@ -99,7 +103,6 @@ public final class OneOfSequence
       throw new Error("Represents " + num_elts + " elements");
 
     return elts[0];
-
   }
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
@@ -114,7 +117,6 @@ public final class OneOfSequence
     sort_rep();
 
     return elts[0];
-
   }
 
   public Object max_elt() {
@@ -123,7 +125,6 @@ public final class OneOfSequence
     sort_rep();
 
     return elts[num_elts-1];
-
   }
 
   // Assumes the other array is already sorted
@@ -443,7 +444,7 @@ public final class OneOfSequence
 
     // We are significantly changing our state (not just zeroing in on
     // a constant), so we have to flow a copy before we do so.
-    flowClone();
+    if (num_elts > 0) flowClone();
 
     elts[num_elts] = v;
     num_elts++;
@@ -454,7 +455,6 @@ public final class OneOfSequence
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
-
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }

@@ -175,6 +175,11 @@ public final class ONEOFSCALAR
       result.elts[i] = (INT) elts[i].clone();
     }
 #endif
+#if defined(SEQUENCE) || defined(SCALAR) || defined(ELT)
+    result.num_elts = this.num_elts;
+    result.is_boolean = this.is_boolean;
+    result.is_hashcode = this.is_hashcode;
+#endif
     return result;
   }
 
@@ -1026,7 +1031,7 @@ public final class ONEOFSCALAR
 #endif
     // We are significantly changing our state (not just zeroing in on
     // a constant), so we have to flow a copy before we do so.
-    flowClone();
+    if (num_elts > 0) flowClone();
 
     elts[num_elts] = v;
     num_elts++;
