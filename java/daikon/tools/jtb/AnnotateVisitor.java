@@ -234,9 +234,19 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   // CP: is there a better way?
   String signature(PptMap ppts, Node n) {
-    Vector matching_ppts = Ast.getMatches(ppts, n);
-    Assert.assertTrue(!matching_ppts.isEmpty());
-    return ((PptTopLevel)matching_ppts.firstElement()).ppt_name.getSignature();
+    try { // sometimes Ast.getMatches() fails, or
+          // matching_ppts.isEmpty()==true. In such cases (for now),
+          // just return a dummy signature.
+      Vector matching_ppts = Ast.getMatches(ppts, n);
+      //Assert.assertTrue(!matching_ppts.isEmpty(), "Node: " + n + ", PptMap: " + ppts);
+      if(!matching_ppts.isEmpty()) {
+        return ((PptTopLevel)matching_ppts.firstElement()).ppt_name.getSignature();
+      } else {
+        return "(no program points found)";
+      }
+    } catch (Throwable e) {
+      return "(signature computation error)";
+    }
   }
 
   // Node n is a MethodDeclaration or a ConstructorDeclaration
