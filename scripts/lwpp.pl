@@ -296,15 +296,18 @@ sub print_vars_and_comp {
 }
 
 
-# returns true if the variable is an array element
+#  For array elements, dfec outputs "foo[]".  Lackwit accepts as input
+#  "foo[]" and "foo[0]", but outputs "foo[0]".  Array elements output
+#  by Lackwit are immediately converted to the "foo_element" form.
+#  is_array_element and array_base are only called on variables from
+#  the decls file, so they only need to handle the "foo[]" case.
 sub is_array_element {
   my ($variable) = @_;
-  return $variable =~ /\[\]/ || $variable =~ /\[0\]/;
+  return $variable =~ /\[\]$/;
 }
-
 sub array_base {
   my ($variable) = @_;
-  $variable =~ s/\[\]//;
+  $variable =~ s/\[\]$//;
   return $variable;
 }
 
