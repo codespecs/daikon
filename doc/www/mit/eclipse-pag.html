@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>Eclipse Setup for PAG Members</title>
+</head>
+
+<body>
+<h1>Eclipse Setup for PAG Members</h1>
+
+<P>This guide tells you how to:
+
+<ol>
+<li><a href="#startup">Start up Eclipse on PAG machines</a>
+<li><a href="#existing-projects">Work on Daikon and other existing coding projects in Eclipse</a>
+<li><a href="#debugger">Use the Eclipse debugger</a>
+<li><a href="#cvs">Use CVS with Eclipse</a>
+</ol>
+
+<h2><a name="startup">Start up Eclipse</a></h2>
+
+<p>All the PAG machines should have Eclipse installed. You simply run
+the command 'eclipse' at the command shell.</p>
+
+<p>There is one big catch; take note of where you launch Eclipse and
+ALWAYS launch Eclipse from the same location. For example, you might
+want to alias run-eclipse with '<tt>cd $HOME; eclipse</tt>'.
+For convenience, this is already done for you if you source the pag-daikon
+startup scripts.
+</P>
+
+<P>There are ways around the launch location inconvenience, such as
+the -data switch, but the alias trick should be the simplest and least
+confusing workaround.</p>
+
+<h2><a name="existing-projects">Work on existing coding projects</a></h2>
+
+<p>(This is the most annoying and error prone part.  I will add screenshots
+soon.)
+
+<p>Before working on code in Eclipse, you must import the code into
+the Eclipse workspace.  You also need to set up various compilation
+settings and specify jars and classes that should be in the
+compilation classpath.  (By default, Eclipse does not use your
+environment Classpath.)</p>
+
+<ol>
+<li>Change to the Java perspective by selecting "Java Perspective" in
+the perspective menu on the far-left tool panel.  You should see some
+of the windows move around to a structure similar to the screenshot
+below.  <br><br> 
+
+<li> Select the menu item File->New->Project <br><br>
+
+<li> On the popup window, select Java Project and click Next <br><br>
+
+<li> Call the project 'Daikon' or some other appropriate name and
+click Next.  <br><br> 
+
+<li> On the next window, create a new folder in
+the project called 'src', and answer Yes to the next dialog box asking
+you to confirm a change in the build directory. Select Ok and you
+should see the new Project as a small folder icon in the package
+explorer.  <br><br> 
+
+<li> Select the menu item File->Import <br><br>
+
+<li> On the next popup window, select "File System" and click
+Next. Browse to the folder containing your source code.  Using the
+standard PAG setup, the folder should be $INV/java. The import
+destination should be Daikon/src.  Check the boxes for including
+daikon, jtb, and utilMDE.  <br><br>
+
+<li> Finally, add the required jars for Daikon by right-clicking on
+the project and selecting the Properties menu.
+Select "Java Build Path", then "Libraries", then "Add External
+Jars" and add tools.jar, junit.jar, jakarta-oro.jar, and
+java-getopt.jar.  (See your CLASSPATH environment variable for full
+pathnames to these files.)
+</ol>
+
+<h2><a name="debugger">Using the Eclipse debugger</a></h2>
+
+<p>TODO, but pretty self-explanatory.
+
+<h2><a name="cvs">Using CVS with Eclipse</a></h2>
+
+<p>TODO, although you can just do all the editing, compiling, and
+running from the Eclipse IDE while doing CVS commands from the shell
+or whatever current system you use.
+
+<hr>
+<a href="./">Using Daikon at MIT</a><p>
+
+<address>
+  <a href="http://pag.lcs.mit.edu/~leelin/">Lee Lin</a>
+</address>
+
+</body>
+</html>
