@@ -63,6 +63,8 @@ public final class Diff {
     "invPairComparator";
   private static final String IGNORE_UNJUSTIFIED_SWITCH =
     "ignore_unjustified";
+  private static final String IGNORE_NUMBERED_EXITS_SWITCH =
+    "ignore_exitNN";
 
 
 
@@ -78,14 +80,20 @@ public final class Diff {
   private Comparator invPairComparator;
 
   private boolean examineAllPpts;
+  private boolean ignoreNumberedExits;
 
   public Diff() {
-    this(false);
+    this(false, false);
     setAllInvComparators(new Invariant.ClassVarnameComparator());
   }
 
   public Diff(boolean examineAllPpts) {
+    this (examineAllPpts, false);
+  }
+
+  public Diff (boolean examineAllPpts, boolean ignoreNumberedExits) {
     this.examineAllPpts = examineAllPpts;
+    this.ignoreNumberedExits = ignoreNumberedExits;
   }
 
   /**
@@ -108,6 +116,7 @@ public final class Diff {
     boolean xor = false;
     boolean union = false;
     boolean examineAllPpts = false;
+    boolean ignoreNumberedExits = false;
     boolean printEmptyPpts = false;
     boolean verbose = false;
     boolean continuousJustification = false;
@@ -130,6 +139,8 @@ public final class Diff {
       new LongOpt(INV_PAIR_COMPARATOR_SWITCH,
                   LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(IGNORE_UNJUSTIFIED_SWITCH,
+                  LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(IGNORE_NUMBERED_EXITS_SWITCH,
                   LongOpt.NO_ARGUMENT, null, 0),
     };
 
@@ -162,6 +173,9 @@ public final class Diff {
         } else if (IGNORE_UNJUSTIFIED_SWITCH.equals(optionName)) {
           optionSelected = true;
           includeUnjustified = false;
+          break;
+        } else if (IGNORE_NUMBERED_EXITS_SWITCH.equals(optionName)) {
+          ignoreNumberedExits = true;
           break;
         } else {
           throw new RuntimeException("Unknown long option received: " +
@@ -262,7 +276,7 @@ public final class Diff {
     if (logging)
       System.err.println("Invariant Diff: Creating Diff Object");
 
-    Diff diff = new Diff(examineAllPpts);
+    Diff diff = new Diff(examineAllPpts, ignoreNumberedExits);
 
     // Set the comparators based on the command-line options
 
@@ -549,6 +563,9 @@ public final class Diff {
 
     for (Iterator i = ppts.iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
+      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint())
+        continue;
+
       // List invs = ppt.getInvariants();
       List invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);
       map.put(ppt, invs);
