@@ -54,6 +54,7 @@ all_via_daikon:	Runtime.class Diff.class ${AUTO_GENERATED_FILES}
 all_directly: ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC} '*.java ...'
 	@${JAVAC} ${JAVA_FILES}
+	@chmod -w ${AUTO_GENERATED_FILES}
 
 all_force:	all_directly
 
