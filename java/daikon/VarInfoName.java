@@ -21,12 +21,17 @@ public abstract class VarInfoName
   /**
    * Given the standard String representation of a variable name (from
    * a decls file), return the corresponding VarInfoName.  This cannot
-   * handle generalized expressions, to name.equals(parse(e.name()))
+   * handle generalized expressions, so name.equals(parse(e.name()))
    * is not certain to be true.
    **/
   public static VarInfoName parse(String name) {
+    // x.class
+    if (name.endsWith(".class")) {
+      return parse(name.substring(0, name.length()-6)).applyTypeOf();
+    }
+
     // x or this.x
-    if ((name.indexOf('[') < 0) && (name.indexOf('(') < 0)) {
+    if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
       // checking for only leagal characters would be more robust
       return (new Simple(name)).intern();
     }
@@ -36,22 +41,17 @@ public abstract class VarInfoName
       return parse(name.substring(0, name.length()-2)).applyElements();
     }
 
-    // x.class
-    if (name.endsWith(".class")) {
-      return parse(name.substring(0, name.length()-6)).applyTypeOf();
-    }
-
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
 
   /**
-   * @return the string representation of this name, in the default
-   * output format
+   * @return the string representation (interned) of this name, in the
+   * default output format
    **/
   public String name() {
     if (name_cached == null) {
-      name_cached = name_impl();
+      name_cached = name_impl().intern();
     }
     return name_cached;
   }
@@ -59,12 +59,12 @@ public abstract class VarInfoName
   protected abstract String name_impl();
 
   /**
-   * @return the string representation of this name, in the esc style
-   * output format
+   * @return the string representation (interned) of this name, in the
+   * esc style output format
    **/
   public String esc_name() {
     if (esc_name_cached == null) {
-      esc_name_cached = esc_name_impl();
+      esc_name_cached = esc_name_impl().intern();
     }
     return esc_name_cached;
   }
@@ -72,12 +72,12 @@ public abstract class VarInfoName
   protected abstract String esc_name_impl();
 
   /**
-   * @return the string representation of this name, in the Simplify
-   * tool output format
+   * @return the string representation (interned) of this name, in the
+   * Simplify tool output format
    **/
   public String simplify_name() {
     if (simplify_name_cached == null) {
-      simplify_name_cached = simplify_name_impl();
+      simplify_name_cached = simplify_name_impl().intern();
     }
     return simplify_name_cached;
   }
@@ -140,6 +140,8 @@ public abstract class VarInfoName
       return "return".equals(name) ? "\\result" : name;
     }
     protected String simplify_name_impl() {
+      // Field access with dots ("getters") are like lambda
+      // applications so this.foo turns into (select foo this)
       String working = name;
       String prefix = "";
       String suffix = "";
@@ -159,8 +161,8 @@ public abstract class VarInfoName
   }
 
   /**
-   * Returns a name for the size of this object (this object should be
-   * a sequence).  Form is like "size(this)" or "this.length".
+   * Returns a name for the size of this (this object should be a
+   * sequence).  Form is like "size(this)" or "this.length".
    **/
   public VarInfoName applySize() {
     return (new SizeOf(this)).intern();
