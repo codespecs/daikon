@@ -138,6 +138,7 @@ function process_line ($line, $tb) {
 }
 
   if ($file) {
+    $file = str_replace ("~jhp/", "/afs/csail.mit.edu/u/j/jhp/", $file);
     if (strpos ($file, "daikon") === false) {
       echo "<b>Error: </b> file '$file' is an invalid daikon output file<br>";
       echo "email jhp@csail.mit.edu if this is unexpected";
