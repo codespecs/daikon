@@ -53,6 +53,20 @@ public final class FileIO {
   public final static String class_static_tag = ppt_tag_separator + class_static_suffix;
 
 
+  /// Settings
+
+  /* Expected behavior when changing modbits:
+    -changed       Set modbits to 1 iff the printed representation has changed.
+
+    -addchanged    Set modbits to 1 if the printed representation has changed.
+                   Leave other modbits as is.  This is the default.
+
+    Set this boolean to true if you want the "addchanged" behavior. Set to
+    False if you want the "changed" behavior
+  */
+  public static boolean dkconfig_add_changed = true;
+
+
   /// Variables
 
   // I'm not going to make this static because then it doesn't get restored
@@ -888,7 +902,7 @@ public final class FileIO {
         // Set the modbit now, depending on whether the value of the variable
         // has been changed or not.
         if (value_rep.equals(oldvalue_reps[val_index])) {
-          if (!Global.addChanged) {
+          if (!dkconfig_add_changed) {
             mod = ValueTuple.UNMODIFIED;
           }
         } else {

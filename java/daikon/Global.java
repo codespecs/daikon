@@ -42,17 +42,6 @@ public final class Global {
 
   public final static Random random = new Random();
 
-  /* Expected behavior when changing modbits:
-    -changed       Set modbits to 1 iff the printed representation has changed.
-
-    -addchanged    Set modbits to 1 if the printed representation has changed.
-                   Leave other modbits as is.  This is the default.
-
-    Set this boolean to true if you want the "addchanged" behavior. Set to
-    False if you want the "changed" behavior
-  */
-  public final static boolean addChanged = true;
-
   //splitting
   public final static boolean allSplitters = true;
   ///////////////////////////////////////////////////////////////////////////
