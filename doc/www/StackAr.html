@@ -1,0 +1,183 @@
+<html>
+<head>
+<TITLE>Sample output from Daikon dynamic invariant detector</TITLE>
+<link rev="made" href="mailto:mernst@lcs.mit.edu">
+</head>
+<body>
+
+<h1>Sample output from Daikon dynamic invariant detector</h1>
+
+This is a simple example of Daikon's ouput.  The colored annotations
+starting with <FONT COLOR="red"><tt>@</tt></FONT> were automatically
+detected by Daikon and automatically inserted in the source code.
+
+<hr>
+
+<pre>
+package DataStructures;
+
+// StackAr class
+//
+// CONSTRUCTION: with or without a capacity; default is 10
+//
+// ******************PUBLIC OPERATIONS*********************
+// void push( x )         --&gt; Insert x
+// void pop( )            --&gt; Remove most recently inserted item
+// Object top( )          --&gt; Return most recently inserted item
+// Object topAndPop( )    --&gt; Return and remove most recently inserted item
+// boolean isEmpty( )     --&gt; Return true if empty; else false
+// boolean isFull( )      --&gt; Return true if full; else false
+// void makeEmpty( )      --&gt; Remove all items
+// ******************ERRORS********************************
+// Overflow and Underflow thrown as needed
+
+/**
+ * Array-based implementation of the stack.
+ * @author Mark Allen Weiss
+ */
+public class StackAr
+{
+    <font color="red">//@ invariant this.theArray != null;</font>
+    <font color="red">//@ invariant \typeof(this.theArray) == \type(java.lang.Object[]);</font>
+    <font color="red">//@ invariant this.topOfStack &gt;= -1;</font>
+    <font color="red">//@ invariant this.topOfStack &lt;= this.theArray.length-1;</font>
+    <font color="red">//@ invariant (\forall int i; (this.topOfStack+1 &lt;= i && i &lt;= this.theArray.length-1) ==&gt; (this.theArray[i] == null));</font>
+    <font color="red">//@ invariant (\forall int i; (0 &lt;= i && i &lt;= this.topOfStack) ==&gt; (this.theArray[i] != null));</font>
+    <font color="red">//@ invariant theArray.owner == this;</font>
+
+
+    <font color="red">//@ requires capacity &gt;= 0;</font>
+    <font color="red">//@ ensures \old(capacity) == this.theArray.length;</font>
+    <font color="red">//@ ensures this.topOfStack == -1;</font>
+    /**
+     * Construct the stack.
+     * @param capacity the capacity.
+     */
+    public StackAr( int capacity )
+    {
+        theArray = new Object[ capacity ];
+        <font color="red">//@ set theArray.owner = this;</font>
+        topOfStack = -1;
+    }
+
+    <font color="red">//@ ensures (\result == false)  ==  (this.topOfStack &gt;= 0);</font>
+    <font color="red">//@ ensures (\result == true)  ==  (this.topOfStack == -1);</font>
+    /**
+     * Test if the stack is logically empty.
+     * @return true if empty, false otherwise.
+     * @observer // annotation added by Jeremy
+     */
+    public boolean isEmpty( )
+    {
+        return topOfStack == -1;
+    }
+
+    <font color="red">//@ ensures (this.topOfStack &lt; this.theArray.length-1)  ==  (\result == false);</font>
+    /**
+     * Test if the stack is logically full.
+     * @return true if full, false otherwise.
+     * @observer // annotation added by Jeremy
+     */
+    public boolean isFull( )
+    {
+        return topOfStack == theArray.length - 1;
+    }
+
+
+    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
+    <font color="red">//@ ensures (\forall int i, j; (\old(this.topOfStack)+1 &lt;= i && i &lt;= this.theArray.length-1 && \old(this.topOfStack+1) &lt;= j && j &lt;= \old(this.theArray.length-1) && (i-(\old(this.topOfStack)+1)) == (j-(\old(this.topOfStack+1)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
+    <font color="red">//@ ensures this.topOfStack == -1;</font>
+    /**
+     * Make the stack logically empty.
+     */
+    public void makeEmpty( )
+    {
+        java.util.Arrays.fill(theArray, 0, topOfStack + 1, null);
+        topOfStack = -1;
+    }
+
+    <font color="red">//@ ensures (\result != null)  ==  (this.topOfStack &gt;= 0);</font>
+    <font color="red">//@ ensures (this.topOfStack &gt;= 0)  ==&gt;  (\result == this.theArray[this.topOfStack]);</font>
+    /**
+     * Get the most recently inserted item in the stack.
+     * Does not alter the stack.
+     * @return the most recently inserted item in the stack, or null, if empty.
+     * @observer // annotation added by Jeremy
+     */
+    public Object top( )
+    {
+        if( isEmpty( ) )
+            return null;
+        return theArray[ topOfStack ];
+    }
+
+    <font color="red">//@ requires this.topOfStack &gt;= 0;</font>
+    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
+    <font color="red">//@ ensures (\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= \old(this.topOfStack)-1 && i == j) ==&gt; ( this.theArray[i] == this.theArray[j] ))(\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= \old(this.topOfStack-1) && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ))(\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= \old(this.topOfStack-1) && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
+    <font color="red">//@ ensures \old(this.topOfStack) == this.topOfStack + 1;</font>
+    /**
+     * Remove the most recently inserted item from the stack.
+     * @exception Underflow if stack is already empty.
+     */
+    public void pop( ) throws Underflow
+    {
+        if( isEmpty( ) )
+            throw new Underflow( );
+        theArray[ topOfStack-- ] = null;
+    }
+
+    <font color="red">//@ requires x != null;</font>
+    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
+    <font color="red">//@ ensures \old(x) == this.theArray[this.topOfStack];</font>
+    <font color="red">//@ ensures (\forall int i, j; (this.topOfStack+1 &lt;= i && i &lt;= this.theArray.length-1 && \old(this.topOfStack+2) &lt;= j && j &lt;= \old(this.theArray.length-1) && (i-(this.topOfStack+1)) == (j-(\old(this.topOfStack+2)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
+    <font color="red">//@ ensures (\forall int i, j; (0 &lt;= i && i &lt;= \old(this.topOfStack) && 0 &lt;= j && j &lt;= \old(this.topOfStack) && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
+    <font color="red">//@ ensures \old(this.topOfStack) == this.topOfStack - 1;</font>
+    /**
+     * Insert a new item into the stack, if not already full.
+     * @param x the item to insert.
+     * @exception Overflow if stack is already full.
+     */
+    public void push( Object x ) throws Overflow
+    {
+        if( isFull( ) )
+            throw new Overflow( );
+        theArray[ ++topOfStack ] = x;
+    }
+
+    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
+    <font color="red">//@ ensures (\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= this.topOfStack && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
+    <font color="red">//@ ensures (\forall int i, j; (\old(this.topOfStack)+1 &lt;= i && i &lt;= this.theArray.length-1 && \old(this.topOfStack+1) &lt;= j && j &lt;= \old(this.theArray.length-1) && (i-(\old(this.topOfStack)+1)) == (j-(\old(this.topOfStack+1)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
+    <font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==  (\result != null);</font>
+    <font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==&gt;  (\old(this.topOfStack) == this.topOfStack + 1);</font>
+    <font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==&gt;  (\result == \old(this.theArray[this.topOfStack]));</font>
+    <font color="red">//@ ensures this.topOfStack &lt;= \old(this.topOfStack);</font>
+    /**
+     * Return and remove most recently inserted item from the stack.
+     * @return most recently inserted item, or null, if stack is empty.
+     */
+    public Object topAndPop( )
+    {
+        if( isEmpty( ) )
+            return null;
+        Object topItem = top( );
+        theArray[ topOfStack-- ] = null;
+        return topItem;
+    }
+
+    <font color="red">/*@ spec_public */</font> private Object [ ] theArray;
+    <font color="red">/*@ spec_public */</font> private int        topOfStack;
+
+} 
+</pre>
+
+<hr>
+
+<a href="./">Daikon homepage</a><p>
+
+<address>
+<a href="http://pag.lcs.mit.edu/~mernst/">Michael Ernst</a>
+<a href="mailto:mernst@lcs.mit.edu">&lt;mernst@lcs.mit.edu&gt;</a>
+</address>
+
+</body>
+</html>
