@@ -11,7 +11,7 @@ JAVAC ?= jikes -g +E +F
 ### end of user customications
 
 
-JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
+JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 UTILMDE_TAG_FILES := $(shell find ${UTILMDE_DIR} \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 TAG_FILES := ${DAIKON_TAG_FILES} ${UTILMDE_TAG_FILES}
