@@ -99,6 +99,7 @@ sub compile {
     my(@args) = @_;
     my @output_style = ();
     my @accessors = ();
+    my @depths = ();
     return sub {
 	# Parse and remove any Daikon-specific args from @args
 	for my $i (0 .. $#args) {
@@ -122,6 +123,10 @@ sub compile {
 		# -O: control how generated code outputs results
 		@output_style = @args[$i + 1 .. $i + 9];
 		@args[$i .. $i + 9] = (undef) x (1 + 9);
+	    } elsif ($args[$i] eq "-D") {
+		# -D: set data structure tracing depths
+		@depths = @args[$i + 1 .. $i + 3];
+		@args[$i .. $i + 3] = (undef) x (1 + 3);
 	    }
 	}
 	@args = grep(defined($_), @args);
@@ -132,6 +137,11 @@ sub compile {
 	if (@output_style) {
 	    print "BEGIN { daikon_runtime::set_output_style(";
 	    print join(", ", map(qq/"$_"/, @output_style));
+	    print "); }\n";
+	}
+	if (@depths) {
+	    print "BEGIN { daikon_runtime::set_depths(";
+	    print join(", ", @depths);
 	    print "); }\n";
 	}
 	$self->deparse_program();
