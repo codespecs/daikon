@@ -21,7 +21,7 @@
 @c Another solution would be to use "makeinfo -E" (then process the
 @c resulting file with "makeinfo --html").
 @macro daikonemail{}
-@email{daikon-developers@@pag.csail.mit.edu}
+@email{daikon-developers@@lists.csail.mit.edu}
 @end macro
 
 @c @setchapternewpage odd
@@ -435,18 +435,18 @@ implementation and about debugging flags.
 
 The following mailing lists (and their archives) are available:
 @table @samp
-@item daikon-announce@@pag.csail.mit.edu
+@item daikon-announce@@lists.csail.mit.edu
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
 To subscribe, visit @uref{http://pag.csail.mit.edu/daikon/download/} or
 @uref{http://pag.csail.mit.edu/mailman/listinfo/daikon-announce}.
-@item daikon-discuss@@pag.csail.mit.edu
+@item daikon-discuss@@lists.csail.mit.edu
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
 @uref{http://pag.csail.mit.edu/daikon/download/} or
 @uref{http://pag.csail.mit.edu/mailman/listinfo/daikon-discuss}.
-@item daikon-developers@@pag.csail.mit.edu
+@item daikon-developers@@lists.csail.mit.edu
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
 you may send mail to the list asking to be added.
@@ -483,7 +483,7 @@ wget http://pag.csail.mit.edu/daikon/download/daikon.zip
 @cindex anonymous CVS access to Daikon sources
 Daikon is also available via anonymous CVS@.  If you desire such
 access, send email to the
-@email{daikon-developers@@pag.csail.mit.edu} mailing list.
+@email{daikon-developers@@lists.csail.mit.edu} mailing list.
 
 You may wish to subscribe to one of the mailing lists (@pxref{Mailing
 lists}), in order to be notified of new releases or join discussions
@@ -596,7 +596,7 @@ Place that executable in directory
 @file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
 your path), then run @command{rehash}.  Now you are ready to run dfej.
 (If no executable is available for your architecture, send mail to
-@email{daikon-developers@@pag.csail.mit.edu} and we may be able to produce an
+@email{daikon-developers@@lists.csail.mit.edu} and we may be able to produce an
 executable for you.)
 
 @item
@@ -730,7 +730,7 @@ programs, @pxref{Daikon runtime customization}.
 License restrictions prohibit us from distributing the source for dfec,
 except to other parties who hold a license to the EDG (Edison Design
 Group) C front end.  If you hold such a license, send mail to
-@email{daikon-developers@@pag.csail.mit.edu} to obtain a patch to the
+@email{daikon-developers@@lists.csail.mit.edu} to obtain a patch to the
 EDG front end.  To build dfec for yourself, perform the following steps:
 @enumerate
 @item Unpack your EDG source code (which you obtained from EDG).
@@ -7122,7 +7122,7 @@ your system administrator to do so.
 If you have any questions, can suggest ways to improve the
 documentation, find bugs in the system, or have suggestions for its
 improvement, please send email to
-@email{daikon-developers@@pag.csail.mit.edu}.  While Daikon is a
+@email{daikon-developers@@lists.csail.mit.edu}.  While Daikon is a
 research prototype, we will try to assist you and to correct any
 problems, so please don't hesitate to ask for help or report
 difficulties.  Additionally, if you can contribute enhancements or bug
@@ -7357,7 +7357,7 @@ daikon-announce list will inform you of new versions, enhancements,
 and bug fixes.  On the daikon-discuss mailing list, you can obtain
 help from, and offer help to, other users.  We would also appreciate a
 brief description of how you are using Daikon, sent to
-@email{daikon-developers@@pag.csail.mit.edu}.  We are curious about how
+@email{daikon-developers@@lists.csail.mit.edu}.  We are curious about how
 users exploit Daikon, and we are eager for anecdotes about its
 successes and failures, so that we can make Daikon more effective for
 its users.

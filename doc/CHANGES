@@ -407,9 +407,9 @@ Daikon can detect invariants in Perl programs.  See the "Perl examples" and
 "Instrumenting Perl programs" sections of the manual.
 
 Three new mailing lists have been set up:
-  daikon-announce@pag.csail.mit.edu
-  daikon-discuss@pag.csail.mit.edu
-  daikon-developers@pag.csail.mit.edu
+  daikon-announce@lists.csail.mit.edu
+  daikon-discuss@lists.csail.mit.edu
+  daikon-developers@lists.csail.mit.edu
 To subscribe, visit http://pag.csail.mit.edu/mailman/listinfo.
 
 The Context GUI now shares the same look and feel as the Tree GUI.
