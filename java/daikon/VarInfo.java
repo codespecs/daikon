@@ -8,6 +8,7 @@ import daikon.inv.binary.twoScalar.*;
 import utilMDE.*;
 
 import java.util.*;
+import java.io.*;
 
 public final class VarInfo implements Cloneable, java.io.Serializable {
 
@@ -1073,6 +1074,15 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
     // Can't find post-state equivalent.
     return null;
+  }
+
+  // Interning is lost when an object is serialized and deserialized.
+  // Manually re-intern any interned fields upon deserialization.
+  private void readObject(ObjectInputStream in) throws
+  IOException, ClassNotFoundException {
+    in.defaultReadObject();
+    name = name.intern();
+    esc_name = esc_name.intern();
   }
 
 

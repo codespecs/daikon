@@ -1,6 +1,6 @@
 package daikon;
 
-import java.io.Serializable;
+import java.io.*;
 import utilMDE.*;
 
 /**
@@ -12,10 +12,11 @@ public class PptName
 {
 
   // any of these can be null
-  private final String cls;
-  private final String method;
-  private final String point;
-  private final String fullname;
+  // cannot be "final", because they must be re-interned upon deserialization
+  private String cls;        // interned
+  private String method;     // interned
+  private String point;      // interned
+  private String fullname;   // interned
 
   // ==================== CONSTRUCTORS ====================
 
@@ -305,5 +306,17 @@ public class PptName
       ((point == null) ? 0 : point.hashCode()) +
       0;
   }
+
+  // Interning is lost when an object is serialized and deserialized.
+  // Manually re-intern any interned fields upon deserialization.
+  private void readObject(ObjectInputStream in) throws
+  IOException, ClassNotFoundException {
+    in.defaultReadObject();
+    cls = cls.intern();
+    method = method.intern();
+    point = point.intern();
+    fullname = fullname.intern();
+  }
+
 
 }

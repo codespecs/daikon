@@ -1,6 +1,7 @@
 package daikon;
 
 import java.util.*;
+import java.io.*;
 
 import com.oroinc.text.regex.*;
 
@@ -191,5 +192,18 @@ public final class VarComparabilityExplicit extends VarComparability implements 
 
     return true;
   }
+  
+  // Interning is lost when an object is serialized and deserialized.
+  // Manually re-intern any interned fields upon deserialization.
+  private void readObject(ObjectInputStream in) throws
+  IOException, ClassNotFoundException {
+    in.defaultReadObject();
+
+    Intern.internStrings(base);
+    for (int i=0; i<dimensions; i++) {
+      Intern.internStrings(indices[i]);
+    }
+  }
+
 
 }
