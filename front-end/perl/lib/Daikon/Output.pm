@@ -9,7 +9,7 @@ use vars qw(@ISA @EXPORT_OK);
 @ISA = 'Exporter';
 @EXPORT_OK = qw(declare_var output_var);
 
-use Daikon::PerlType qw(parse_type is_zero);
+use Daikon::PerlType qw(parse_type is_zero read_types_into);
 
 # Convert an integer (given a reference to it) to a string form,
 # warning if it wasn't really an integer.
@@ -106,9 +106,8 @@ sub daikon_output_spec {
     my($t, $single) = @_;
     if ($t eq "int") {
         return ["", "", "int", "int", \&output_int];
-    } elsif ($t eq "bool") {
-        return ["", "", "boolean", "boolean",
-                sub { ${$_[0]} ? "true" : "false"}];
+    } elsif ($t eq "bit") {
+        return ["", "", "int", "int", \&output_int];
     } elsif ($t eq "num") {
         return ["", "", "double", "double", \&output_num];
     } elsif ($t eq "str") {
@@ -175,16 +174,15 @@ sub daikon_output_spec {
         } elsif ($t->[0] eq "object") {
             if ($single) {
                 return ["\\", "", "Object", "int",
-                        sub { output_int(\ (address($_[0]))); }];
+                        sub { output_int(\ (address(${$_[0]}))); }];
             } else {
                 my @specs;
-                # Seeing the address of an object has not yet proven to be
-                # useful, and it doesn't look quite right in the
-                # current nomenclature.
-#               push @specs, ["", "", "Object",
-#                             "int", sub { output_int(\ (address($_[0]))); }];
-                push @specs, ["", ".Class", "String",
-                              "java.lang.String", sub { '"'. ref($_[0]).'"' }];
+                # When this was enabled, I'd picked ".Class" to look
+                # distinct from usual field names that are
+                # lowercase. But Daikon treats ".class" specially, so
+                # maybe it should be that.
+#                push @specs, ["", ".Class", "String",
+#                             "java.lang.String", sub { '"'. ref($_[0]).'"' }];
                 for my $k (keys %{$t->[1]}) {
                     for my $spec (daikon_output_spec($t->[1]{$k})) {
                         my($prefix, $suffix, $type, $rep_type, $output)
@@ -222,7 +220,7 @@ sub daikon_output_spec {
 #           }
 
             if ($t->[1] eq "top") {
-                return ["", "", "Object", "int",
+                return ["", "", "Object", "hashcode",
                         sub { output_int(\ (address($_[0]))); }];
             } else {
                 my @specs;
@@ -231,7 +229,37 @@ sub daikon_output_spec {
                     push @specs, [$prefix, '.deref'.$suffix, $type, $rep_type,
                                   sub { $output->(${$_[0]}) }];
                 }
+                push @specs, ["", "", "Object", "hashcode",
+                              sub { output_int(\ (address(${$_[0]}))); }];
                 return $single ? $specs[0] : @specs;
+            }
+        } elsif ($t->[0] eq "maybe") {
+            my $is_def = ["", ".is_defined", "boolean", "boolean",
+                          sub { defined(${$_[0]}) ? "true" : "false"}];
+            if ($t->[1] eq "bottom") {
+                # 'nothing' is always either the empty string or the
+                # undefined value, so the only interesting information
+                # is whether it's defined.
+                return $is_def;
+            }
+            my $is_empty = ["", ".is_empty", "boolean", "boolean",
+                            sub { length(${$_[0]})==0 ? "true" : "false"}];
+            my @extra_specs = ($is_def, $is_empty);
+            if ($t->[1] eq "bit") {
+                # Boolean is a special case, since we want 'bit's to
+                # show up as integers, but 'bool's to show up as
+                # booleans.
+                my $bool = ["", "", "boolean", "boolean",
+                            sub { ${$_[0]} ? "true" : "false"}];
+                return $single ? $bool : ($bool, @extra_specs);
+            } elsif ($t->[1] eq "str") {
+                my @specs = daikon_output_spec($t->[1], $single);
+                # is_empty isn't needed, since the empty string is a
+                # regular string.
+                return $single ? $specs[0] : (@specs, $is_def);
+            } else {
+                my @specs = daikon_output_spec($t->[1], $single);
+                return $single ? $specs[0] : (@specs, @extra_specs);
             }
         }
     }
@@ -243,7 +271,7 @@ sub daikon_output_spec {
 my %specs;
 
 # Format a variable declaration for a .decls file, given the name for
-# the variable and list of specification. Returns a list of lines.
+# the variable and list of specifications. Returns a list of lines.
 sub declare_var_spec {
     my($varname, @specs) = @_;
     my @lines = ();
@@ -251,11 +279,18 @@ sub declare_var_spec {
     for my $spec (@specs) {
         my($prefix, $suffix, $type, $rep_type, undef) = @$spec;
         my $name = "$prefix$varname$suffix";
+        my $is_param = "";
+        if ($varname ne "return" and $name !~ /\.deref/) {
+            # It might be more elegant to do this by counting
+            # dereferences as part of the spec, rather than text
+            # matching the name. It would be more work, though.
+            $is_param = " # isParam = true";
+        }
         $name =~ s/\.deref\././g;
         push @lines, "$name\n"; # Variable name
-        push @lines, "$type\n";
+        push @lines, "$type$is_param\n";
         push @lines, "$rep_type\n";
-        push @lines, "22\n"; # comparability
+        push @lines, "22\n"; # comparability: not available
     }
     return @lines;
 }
@@ -296,6 +331,47 @@ sub output_var {
         $specs{$type} = [daikon_output_spec(parse_type($type, 0))];
     }
     output_var_spec($fh, $varname, $value, @{$specs{$type}});
+}
+
+# Write the type information in $types_r and $order_r into a decls
+# file open on $out_fh.
+sub types_info_to_decls {
+    my($types_r, $order_r, $out_fh) = @_;
+    print $out_fh "\nVarComparability\nnone\n\n";
+    for my $ppt_name (sort keys %$types_r) {
+        next unless $ppt_name =~ /_[sl]\(\)/;
+        next if $ppt_name =~ /EXIT$/;
+        my $union_ppt = $ppt_name;
+        $union_ppt =~ s/_[sl]\(\)/()/;
+        $union_ppt =~ s/:::.*$/:::UNION/;
+        (my $exit_union_ppt = $ppt_name) =~ s/:::EXIT(\d+)/:::EXIT/;
+        my @lines = ("DECLARE\n");
+        push @lines, "$ppt_name\n";
+        my $vars_ref = $types_r->{$ppt_name};
+        for my $var (@{$order_r->{$ppt_name}}) {
+            my $ppt;
+            if ($var eq "return") {
+                $ppt = $exit_union_ppt;
+            } else {
+                $ppt = $union_ppt;
+            }
+            my @specs = daikon_output_spec($types_r->{$ppt}{$var});
+            push @lines, declare_var_spec($var, @specs);
+        }
+        print $out_fh @lines;
+        print $out_fh "\n";
+    }
+}
+
+sub types_file_to_decls_file {
+    my($types_fname, $decls_fname) = @_;
+    open(TYPES, "<$types_fname") or die "Can't open $types_fname: $!";
+    my(%types, %order);
+    read_types_into(\*TYPES, \%types, \%order);
+    close TYPES;
+    open(DECLS, ">$decls_fname") or die "Can't open $decls_fname: $!";
+    types_info_to_decls(\%types, \%order, \*DECLS);
+    close DECLS;
 }
 
 1;
