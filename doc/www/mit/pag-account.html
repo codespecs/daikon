@@ -26,17 +26,16 @@ Create a new account on pag like so:
 <pre>
 su
 useradd -d /g6/users/<em>username</em> -u <em>UID</em> <em>username</em>
-<em># Add to "invariants" and "pag" groups</em>
+<em>echo "## Add to 'invariants' and 'pag' groups</em>
 emacs /etc/group
 (cd /var/yp; make)
-yppasswd <em>username</em>
-<em># Add to "daikon" mailing list</em>
+<em>echo "## Add to 'daikon' mailing list</em>
 emacs /etc/aliases
 newaliases
 cd ~<em>username</em>
-echo "Adjust directory permissions"
+echo "## Adjust directory permissions"
 chmod og+rx .
-echo "Set up dotfiles"
+<em>echo "## Set up dotfiles"</em>
 echo "" >> .bashrc
 cat /g2/users/mernst/research/invariants/doc/www/mit/.bashrc >> .bashrc
 cp -pf /g2/users/mernst/research/invariants/doc/www/mit/.cshrc .
@@ -46,10 +45,11 @@ echo "" >> .emacs
 cat /g2/users/mernst/research/invariants/doc/www/mit/.emacs >> .emacs
 chown <em>username</em> .cshrc .cvsrc .emacs
 chgrp <em>username</em> .cshrc .cvsrc .emacs
-echo "Set up email forwarding to Athena"
+<em>echo "## Set up email forwarding to Athena"</em>
 echo <em>username</em>@mit.edu > .forward
 chown <em>username</em> .cshrc .cvsrc .emacs .forward
 chgrp <em>username</em> .cshrc .cvsrc .emacs .forward
+yppasswd <em>username</em>
 exit
 </pre>
 </blockquote>

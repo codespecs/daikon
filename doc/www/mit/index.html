@@ -85,6 +85,7 @@ and some details of the Daikon implementation, see the following papers:
   manioc
   meoptiplex
   potato
+  rutabaga
   scallion
   shallot
   turnip
@@ -93,7 +94,8 @@ available:
   celeriac
   finnochio
   kumara
-  rutabaga
+  lotus
+  peanut
 already taken:
   carrot
   onion
@@ -103,6 +105,7 @@ taken, but possibly available ("ping" fails):
 -->
 
 You should most likely perform your work on one of these client machines:  
+  rutabaga,
   beet, daikon, manioc, turnip,
   scallion, yam,
   shallot, cassava, potato,
@@ -525,6 +528,10 @@ All perl scripts should
       which automatically do the checking.  To use them, put <tt>use
       util_daikon;</tt> near the top of your Perl script (after the <tt>use
       strict;</tt> block).
+  <li>Avoid system() and backticks when possible; instead, use Perl
+      procedures, which tend to be more portable, more efficient, and
+      usually clearer.  For instance, don't do <tt>@files = split('\n', `ls
+      *.c`);</tt>; instead, use <tt>@files = glob("*.c");</tt>.
 </ol>
 <p>
 
