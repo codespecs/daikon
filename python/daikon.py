@@ -75,7 +75,7 @@ if not locals().has_key("fn_var_infos"):
     ## Function variables
     # Used to add invocation count variables for each program function.
     # (What do we do now, if not that??)
-    # Note the function name does not include the suffix ':::END' or ':::EXIT'
+    # Note the function name does not include the suffix ':::EXIT'
     functions = []
     fn_invocations = {}       # from function name to invocation count
     # From function name to stack of parameter values.
@@ -733,7 +733,7 @@ def dict_of_tuples_modinkey_to_tuple_of_dicts_modinval(dot, tuple_len=None):
                 this_dict_elt[1] = this_dict_elt[1] + count
     return result
 # dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
-# dict_of_tuples_modinkey_to_tuple_of_dicts(invariants.fn_var_values['P180-15.1.1:::END'])
+# dict_of_tuples_modinkey_to_tuple_of_dicts(invariants.fn_var_values['P180-15.1.1:::EXIT'])
 
 def dict_of_sequences_to_element_dict(dot):
     """Input: a dictionary mapping instances of a sequence (tuples) to a count.
@@ -876,7 +876,7 @@ def dict_of_tuples_modinkey_to_tuple_of_dicts(dot, tuple_len=None):
                 this_dict_elt[1] = this_dict_elt[1] + count
     return result
 # dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
-# dict_of_tuples_modinkey_to_tuple_of_dicts(daikon.fn_var_values['P180-15.1.1:::END'])
+# dict_of_tuples_modinkey_to_tuple_of_dicts(daikon.fn_var_values['P180-15.1.1:::EXIT'])
 
 def dict_of_sequences_to_element_dict(dot):
     """Input: a dictionary mapping instances of a sequence (tuples) to a count.
@@ -1658,7 +1658,7 @@ def process_declaration(file, this_fn_var_infos, fn_regexp=None):
     if debug_read:
         print "process_declaration", program_point
     (tag_sans_suffix, tag_suffix) = (string.split(program_point, ":::", 1) + [""])[0:2]
-    if (tag_suffix == "ENTER") or (tag_suffix == "BEGIN"):
+    if tag_suffix == "ENTER":
         functions.append(tag_sans_suffix)
 
     assert not this_fn_var_infos.has_key(program_point)
@@ -1716,15 +1716,11 @@ def after_processing_all_declarations():
     # Add "_orig"inal values
     for ppt in fns_to_process:
         (ppt_sans_suffix, ppt_suffix) = (string.split(ppt, ":::", 1) + [""])[0:2]
-        if ((ppt_suffix != "END") and (ppt_suffix != "EXIT")
+        if ((ppt_suffix != "EXIT")
             and (ppt_suffix[0:4] != "EXIT")):
             continue
         these_var_infos = fn_var_infos[ppt]
-        # "BEGIN" and "END" correspond; "ENTER" and "EXIT" correspond.
-        if (ppt_suffix == "END"):
-            begin_ppt = ppt_sans_suffix + ":::BEGIN"
-        else:
-            begin_ppt = ppt_sans_suffix + ":::ENTER"
+        begin_ppt = ppt_sans_suffix + ":::ENTER"
         for vi in fn_var_infos[begin_ppt][0:fn_truevars[begin_ppt]]:
             these_var_infos.append(var_info(vi.name + "_orig", vi.type, lackwit_make_alias(vi.name, vi.lackwit_type), len(these_var_infos)))
 
@@ -1796,8 +1792,8 @@ def read_data_trace_file(filename, fn_regexp=None):
         #         else:
         (tag_sans_suffix, tag_suffix) = (string.split(tag, ":::", 1) + [""])[0:2]
 
-        # Increment function invocation count if ':::BEGIN'
-        if (not no_invocation_counts) and ((tag_suffix == "ENTER") or (tag_suffix == "BEGIN")):
+        # Increment function invocation count if ':::ENTER'
+        if (not no_invocation_counts) and (tag_suffix == "ENTER"):
             fn_invocations[tag_sans_suffix] = fn_invocations[tag_sans_suffix] + 1
 
         ## Read the variable values
@@ -1905,13 +1901,12 @@ def read_data_trace_file(filename, fn_regexp=None):
 
         ## Original values.
         # If beginning of function, store the original param val
-        if (tag_suffix == "ENTER") or (tag_suffix == "BEGIN"):
+        if tag_suffix == "ENTER":
             params_to_orig_val_stack = fn_to_orig_param_vals[tag_sans_suffix]
             params_to_orig_val_stack.append(these_values)
         # If end of function call, pop previous original param value and
         # add to current parameter values.
-        if ((tag_suffix == "EXIT") or (tag_suffix == "END")
-            or (tag_suffix[0:4] == "EXIT")):
+        if ((tag_suffix == "EXIT") or (tag_suffix[0:4] == "EXIT")):
             params_to_orig_val_stack = fn_to_orig_param_vals[tag_sans_suffix]
             # Equivalently, in Python 1.5.2:
             #   these_values = these_values + params_to_orig_val_stack.pop()
@@ -4598,8 +4593,8 @@ def var_index(varname, fnname):
     except ValueError:
         return None
 ## Testing
-# daikon.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
-# daikon.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
+# daikon.var_index("lj", 'makepat:::EXIT(arg_0[],start,delim,pat_100[])')
+# daikon.var_index("lj", 'makepat:::EXIT(arg_0[],start,delim,pat_100[])')
 
 
 def replace_vars_by_vals_indexed(condition, function):
@@ -4646,7 +4641,7 @@ def find_violations(condition, fn_regexp=None):
     variable names (that is, the variable names used in the program).
     Example calls:
       find_violations("lj <= j", "makepat:::EXIT")
-      find_violations("*j_orig == *j - 1", "plclose:::END")
+      find_violations("*j_orig == *j - 1", "plclose:::EXIT")
     """
 
     fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
@@ -4688,7 +4683,7 @@ def prune_database(condition, fn_regexp=None):
     variable names (that is, the variable names used in the program).
     Example calls:
       prune_database("lj <= j", "makepat:::EXIT")
-      prune_database("*j_orig == *j - 1", "plclose:::END")
+      prune_database("*j_orig == *j - 1", "plclose:::EXIT")
     """
 
     fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)

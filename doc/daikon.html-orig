@@ -268,10 +268,8 @@ To do all this from a single shell command, do the following:
 
 In the output, the "_orig" suffix refers to the original value of a formal
 parameter, for parameters possibly modified in the function body.
-":::BEGIN", ":::END", and ":::LOOP" are tags identifying at which program
-the instrumentation was inserted; invariants are program-point-specific.
-There is some redundancy in the output (e.g., both "Z = max(Y, X)" and
-"Z = max(X, Y)" are reported, as are both "Y > X" and "X < Y").
+":::ENTER", ":::EXIT", and ":::LOOP" are tags identifying at which program
+the instrumentation was inserted; invariants are program-point-specific.<p>
 
 
 <h2><a name="manifest">Manifest (list of files in the distribution)</a></h2>
