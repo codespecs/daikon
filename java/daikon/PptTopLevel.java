@@ -10,6 +10,7 @@ import daikon.inv.string.*;
 import daikon.inv.twoScalar.*;
 import daikon.inv.twoSequence.*;
 import daikon.split.*;
+import daikon.split.dsaa.*;
 import daikon.split.griesLisp.*;
 import daikon.split.weissDsaaMDE.*;
 
@@ -1314,7 +1315,8 @@ public class PptTopLevel extends Ppt {
   // it doesn't need to be unless GiesLisp has been instantiated already.)
   static {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
-    // This for does work, though.
+    // This does work, though.
+    new SplitterList4Dsaa();
     new GriesLisp();
     new WeissDsaaMDE();
   }
@@ -1551,8 +1553,8 @@ public class PptTopLevel extends Ppt {
           PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
           PptSliceGeneric slice1 = ppt_tl.findSlice(vi);
           if (slice1 != null) {
-            int num_values = slice1.num_values()
-            int num_samples = slice1.num_samples()
+            int num_values = slice1.num_values();
+            int num_samples = slice1.num_samples();
             sb.append("\t\t(" + num_values + " value"
                       + ((num_values == 1) ? "" : "s") + ", "
                       + num_samples + " sample"

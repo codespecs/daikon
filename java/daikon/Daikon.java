@@ -44,10 +44,20 @@ public class Daikon {
    */
   public static void main(String[] args) {
 
+    // First check that all the file names are OK, so we don't do lots of
+    // processing only to bail out at the end.
+    for (int i=0; i<args.length; i++) {
+      String file = args[i];
+      if (! (file.endsWith(".decls") || file.endsWith(".dtrace"))) {
+        throw new Error("Unrecognized file suffix: " + file);
+      }
+    }
+
     PptMap all_ppts = new PptMap();
 
     int num_decl_files = 0;
     int num_dtrace_files = 0;
+
     try {
       for (int i=0; i<args.length; i++) {
         String file = args[i];
