@@ -218,6 +218,7 @@ public final class UtilMDE {
     }
 
     public Object next() {
+      hasNext();                // for side effect
       return current.next();
     }
 

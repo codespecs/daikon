@@ -5,6 +5,6 @@ package utilMDE;
  * This is inspired by java.io.FilenameFilter.
  */
 public interface Filter {
-  /** Tests if a specified Object satisfies the filter. */
+  /** Tests whether a specified Object satisfies the filter. */
   boolean accept(Object o);
 }
