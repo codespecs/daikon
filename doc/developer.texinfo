@@ -1,0 +1,1044 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename developer.info
+@settitle The Daikon Invariant Detector Developer Manual
+@c %**end of header
+
+@c To update all the nodes and menus all at once:   C-u C-c C-u m
+@c You shouldn't need to do that, though; the Makefile does it for you.
+
+@macro daikonemail{}
+@email{daikon-developers@@pag.lcs.mit.edu}
+@end macro
+
+@c @setchapternewpage odd
+
+@c avoid black boxes marking overfull hboxes in TeX output
+@finalout
+
+@titlepage
+@sp 10
+@c Could also use @title, @subtitle, @author here.
+@center @titlefont{Daikon Invariant Detector Developer Manual}
+
+@sp 2
+@center Daikon version 2.4.9
+
+@sp 1
+@c Daikon version 2.4.9 date
+@center June 2, 2003
+
+@sp 5
+@c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
+@c and HTML don't get the title page)
+@image{images/daikon-logo,4in,}
+
+@c The following two commands start the copyright page.
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1998-2003
+@c Copyright @copyright{} 1998-2001 Michael Ernst
+@end titlepage
+
+@html
+<img src="images/daikon-logo.gif" alt="Daikon logo">
+@end html
+@c Why is this here? It duplicates the stuff further down.
+@c @html
+@c <h1>Daikon Invariant Detector User Manual</h1>
+@c
+@c This is the developer manual for the Daikon invariant detector.
+@c It describes Daikon version 2.4.9, released June 2 2003.
+@c @end html
+
+@c Putting this lower in the HTML version looks a little bit strange,
+@c but it's acceptable. 
+@ifnothtml
+@contents
+@end ifnothtml
+
+@node    Top, Introduction, (dir), (dir)
+@comment node-name, next,          previous, up
+
+@ifnottex
+@c Unfortunately, the Daikon logo doesn't look good in ASCII.
+@c @ifinfo
+@c @image{images/daikon-logo,4in,}
+@c 
+@c @end ifinfo
+This is the developer manual for the Daikon invariant detector.
+It describes Daikon version 2.4.9, released June 2, 2003.  
+@end ifnottex
+
+@menu
+* Introduction::                
+* Daikon technologies::         
+* Extending Daikon::            
+* Debugging Daikon::
+* Index::                       
+
+@ifhtml
+@contents
+@end ifhtml
+@ifnothtml
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+Introduction
+
+* Mailing lists::               
+
+Daikon technologies
+
+* Dataflow hierarchy::          
+* Equality optimization::       
+* Suppression optimization::    
+
+Extending Daikon
+
+* Compiling Daikon::            
+* New invariants::              
+* Invariant Suppression::
+* New derived variables::       
+* New formatting for invariants::  
+* New front ends::              
+* New suppressors::             
+
+Debugging Daikon
+
+* General Logging::
+* Track logging::
+* Adding Track logging::
+* Track log output::
+
+@end detailmenu
+@end ifnothtml
+@end menu
+
+@node    Introduction, Daikon technologies, Top, Top
+@chapter Introduction
+
+The @uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}
+reports likely program invariants.  An invariants is a property that
+holds a a certain point or points in a program; these are often seen in
+assert statements, documentation, and formal specifications.  Examples
+include arithmetic equations such as "x > abs(y)", "x = 3*y + 4*z - 7",
+or "x = 0 (mod 4)", and properties over arrays and other collections,
+including those accessed via pointers.  Daikon also reports implications
+(invariants whose truth depends on some other property), such as "p !=
+null => p.content in collection".
+
+Invariants can be useful in program understanding and a host of other
+applications.  Daikon operates by running the program and examining the
+values it computes, looking for patterns and relationships among those
+values.  Front ends (@pxref{Instrumentation,,,daikon}) 
+exist for the Java, C,
+C++, @uref{http://theory.lcs.mit.edu/tds/ioa/, ,IOA}, and Perl
+languages.  Front ends also exist for other applications, such as the
+@uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
+checker}.  It is easy to extend Daikon to other applications.
+
+Daikon is freely available for most uses; for details, see 
+@ref{License,,,daikon}.
+
+Another excellent source of information for Daikon is its Java class
+documentation.  This is available on the
+@uref{http://pag.lcs.mit.edu/daikon/download,download page} for both
+Daikon @uref{http://pag.lcs.mit.edu/daikon/download/jdoc_v2,V2} and
+Daikon @uref{http://pag.lcs.mit.edu/daikon/download/jdoc_v3,V3}.
+
+@menu
+* Mailing lists::               
+@end menu
+
+@node    Mailing lists,  , Introduction, Introduction
+@section Mailing lists
+@cindex mailing lists
+@cindex daikon-announce mailing list
+@cindex daikon-discuss mailing list
+@cindex daikon-developers mailing list
+
+The following mailing lists (and their archives) are available:
+@itemize
+@item daikon-announce@@pag.lcs.mit.edu
+A low-volume, announcement-only list.  For example,
+announcements of new releases are sent to this list.
+To subscribe, visit @uref{http://pag.lcs.mit.edu/daikon/download/}.
+@item daikon-discuss@@pag.lcs.mit.edu
+A moderated list for the community of Daikon users.  Use it to share
+tips and successes, and to get help with questions or problems (after
+checking the documentation).  To subscribe, visit
+@uref{http://pag.lcs.mit.edu/daikon/download/}.
+@item daikon-developers@@pag.lcs.mit.edu
+This list goes to the Daikon maintainers.  Use it for bug reports,
+suggestions, and the like.
+@end itemize
+
+@node    Daikon technologies, Extending Daikon, Introduction, Top
+@chapter Daikon technologies
+
+@menu
+* Dataflow hierarchy::          
+* Equality optimization::       
+* Suppression optimization::    
+@end menu
+
+This chapter describes some of the techniques used in Daikon to make
+it efficient in terms of time and space needed.  These techniques can
+be enabled or disabled at the Daikon command line, as described in
+ @ref{Command line options,,,daikon}.
+
+@c @node    Elimination of redundant invariants, Daikon technologies, Top
+@c @section Elimination of redundant invariants
+
+The major way Daikon optimizes its use of computer resources is to
+avoid performing work for redundant invariants.  For example, if
+Daikon does not check a redundant invariant for some data samples,
+some time can be saved.  If Daikon does not instantiate redundant
+invariants, then space and time can be saved.  Some invariants are
+redundant @emph{statically} --- that is, their redundancy can be known
+without any sample data.  For example, "A[i] is an element of A[]" can
+be known statically.  Other invariants are redundant
+@emph{dynamically} --- Daikon can only know they are redundant after
+some or all sample data is seen.  The next three sections show ways
+that Daikon is optimized based on saving work for dynamically
+redundant invariants.
+
+More detail can be found in Chapter 7, ``Scalability'', of
+@cite{Automatic Generation and Checking of Program Specifications}
+(Technical report MIT-LCS-TR-852, at
+@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}),
+Jeremy W. Nimmer's Master's thesis.  and in Chapter 5, ``Enabling
+Incremental Dynamic Invariant Detection'', ofToh Ne Win's Master's
+thesis (Technical report to be filed, at
+@uref{http://pag.lcs.mit.edu/~tohn/home/research/thesis/thesis.pdf}).
+
+
+@node    Dataflow hierarchy, Equality optimization, Daikon technologies, Daikon technologies
+@section Dataflow hierarchy
+
+Dataflow hierarchy is a means to relate variables in different program
+points in a partial ordering.  Variables in program point X are
+related to variables in another program point Y by a "flow" relation
+if every sample seen of X's variables is also meant to be seen at Y.
+Y is called a parent program point of X.  For example, all the field
+variables in the ENTRY program point of a method in class C relate to
+the field variables in the CLASS program point of C.  This is because
+the state of C, when in context at the entry ENTRY program point, is
+also in context at the CLASS program point.  Any invariant that holds
+true on a parent program point must hold on the child program point.
+The purpose of dataflow hierarchy is to reduce the presence of
+redundant invariants by only keeping invariants at the highest parent
+at which they apply.  This saves both time and space.
+
+There are many ways that program points can be connected.  Daikon
+provides for four ways.  First, CLASS program points are parents of
+all their method program points.  Second, between two classes that are
+related by inheritance, corresponding program points relate --- for
+example, java.util.Vector:::CLASS is a child of
+java.util.List:::Class.  Third, when a program point contains
+variables of a type whose CLASS program point is also available to
+Daikon, the former program point's variables relate to the latter
+program point's CLASS method.  For example, if X:::y is of type Y, and
+Y contains fields a and b, X:::y, X:::y.a and X:::y.b relate to
+Y:::this, Y:::b and Y:::a.  Fourth, variables at ENTER program
+points are related to the "orig" versions at EXIT program points.
+
+When using Daikon, the above four ways of relations in the dataflow
+hierarchy will result in some true invariants that are not reported at
+some program points.  However, the invariant will be present in some
+parent program point.  Dataflow hierarchy is enabled by default, but
+can be disabled by the --nohierarchy flag.  When dataflow is enabled,
+the only samples that are examined by Daikon are the EXIT program
+points (plus "orig" variables) since these contain a complete view of
+the data.
+
+@node    Equality optimization, Suppression optimization, Dataflow hierarchy, Daikon technologies
+@section Equality optimization
+
+When N variables are equal within a program point there will be
+N(N-1)/2 pairwise invariants to represent the equality within the
+equal variables, and N copies of every other invariant.  For example,
+if a, b, and c are equal, then "a == b", "a == c", "b == c" will be
+reported as pairwise invariants, and "odd(a)", "odd(b)" and "odd(c)"
+will be reported.  If the variables will always be equal, then
+reporting N times the invariants is wasteful.  Daikon thus treats
+equality specially.
+
+Each group of variables that are equal from the start of inferencing
+are placed in @emph{equality sets}.  An equality set can hold an
+arbitrary number of variables, and replaces the O(N^2) pairwise
+equality invariants.  Every equality set has a leader or
+@emph{canonical} representation by a variable in the set.
+Non-equality invariants are only instantiated and checked on the
+leader.  When printing invariants, Daikon reports only invariants on
+the leader.  The user can easily determine that "odd(a)" and "a == b"
+imply "odd(b)".  Equality can be turned off at the command line with
+the --noequality flag.
+
+@node    Suppression optimization,  , Equality optimization, Daikon technologies
+@section Suppression optimization
+
+Suppression optimization allows for elimination of redundancy based on
+how a set of invariants might imply an invariant.  For example, "a[]
+contains no duplicates" implies "a[i..j] contains no duplicates".  We
+say that a set of @emph{suppressors} suppress a @emph{suppressee}
+invariant.  Suppression also works across the program point hierarchy:
+suppressors can exist in parent program points.  Suppressed invariants
+are not eliminated during inferencing, but tagged as suppressed.  They
+are not checked against samples while suppressed.  The only way an
+invariant becomes unsuppressed is if one of its suppressors becomes
+falsified, in which case the implication for supression no longer
+holds.
+
+Thus when certain invariants are not found in Daikon, they may be
+hidden due to suppression.  Suppression is off by default, but it can
+be enabled by the --suppress command line flag.
+
+@node    Extending Daikon, Debugging Daikon, Daikon technologies, Top
+@chapter Extending Daikon
+
+@cindex extending Daikon
+@cindex changing Daikon
+@cindex customizing Daikon
+@cindex modifying Daikon
+
+This chapter describes how to customize or modify Daikon.
+
+Readers are also referred to Chapter 7, ``Implementation'', of
+@cite{Dynamically Discovering Likely Program Invariants} by Michael
+D. Ernst, PhD dissertation, University of Washington Department of
+Computer Science and Engineering, Seattle, Washington, USA, August 2000.
+This document is available online at
+@uref{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
+
+For Daikon version
+@c line break to avoid automatically updating the version number
+3, also see 
+Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
+of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
+This document is available, as 
+technical report MIT-LCS-TR-852, at
+@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}.
+
+
+@menu
+* Compiling Daikon::            
+* New invariants::              
+* Invariant Suppression::
+* New derived variables::       
+* New formatting for invariants::  
+* New front ends::              
+* New suppressors::             
+@end menu
+
+@node    Compiling Daikon, New invariants, Extending Daikon, Extending Daikon
+@section Compiling Daikon
+@cindex compiling daikon
+
+To compile Daikon, type @command{make} in any directory under
+@file{daikon/java/}.  The distribution includes compiled
+@file{.class} files, so you do not need to compile them yourself unless
+you make changes.
+
+@cindex .jpp files
+@cindex jpp files
+
+In order to compile Daikon, you need the C preprocessor
+@command{cpp}, which is used to convert each @file{.jpp} file in the
+distribution into multiple @file{.java} files, which are then compiled.
+If you do not have @command{cpp} (or @command{gcc}, which can emulate
+@command{cpp} via @command{gcc -E}), you may run @command{make avoid-jpp}, in
+which case changes to @code{.jpp} files will not be reflected in the
+@file{.java} files or the compiled @file{.class} files.  (The purpose
+of the @file{.jpp} files is to avoid code duplication by placing
+common code in a single file, then generating other files that need to
+include that common code.)
+
+@cindex Jikes compiler
+@cindex javac compiler, overriding
+@cindex Java compiler, specifying
+You may wish to create a @file{Makefile.user} file in the @file{daikon/}
+directory to set your Java compiler.  For instance, it might contain
+@example
+  JAVAC ?= jikes -g +E +F
+@end example
+
+For more information about compiling Daikon, see the comments in the Makefiles.
+
+
+@node    New invariants, Invariant Suppression, Compiling Daikon, Extending Daikon
+@section New invariants
+
+You can easily write your own invariants and have Daikon check them,
+in addition to all the other invariants that are already part of Daikon.
+Adding a new invariant to Daikon requires writing one Java class, adding
+a line to another file (a factory class) to inform Daikon of the new
+class, and recompiling Daikon.
+
+The file @file{java/daikon/inv/unary/scalar/Positive.java} in the
+Daikon distribution contains a sample invariant.  This invariant is
+true if the variable is always positive (greater than zero).  This
+invariant is subsumed by other invariants in the system; it is provided
+only as a pedagogical example.  To enable the invariant, uncomment the
+appropriate line in @file{SingleScalarFactory.java}, then recompile
+Daikon.
+
+
+A Java class defining an invariant is a concrete subclass of one of
+the following abstract classes:
+@itemize @bullet
+@item
+@samp{SingleScalar}, for invariants over a single numeric (scalar) variable,
+such as "x != 0".
+@item
+@samp{TwoScalar}, for invariants over two numeric variables, such as "y
+= abs(x)".
+@item
+@samp{ThreeScalar}, for invariants over three numeric variables, such as
+"z = ax + by + c".
+@item
+@samp{SingleSequence}, for invariants over one sequence (array)
+variable, such as "a[] contains no duplicates".
+@item
+@samp{TwoSequence}, for invariants over two sequences, such as "a[] is a
+subsequence of b[]".
+@item
+@samp{SequenceScalar}, for invariants over a scalar and a sequence, such
+as "x is a member of a[]".
+@end itemize
+@noindent
+A complete list of the types appears in classes @samp{PptSlice1},
+@samp{PptSlice2}, and @samp{PptSlice3}, in their respective
+@samp{instantiate_invariants} methods.
+
+Daikon's invariants are first instantiated, then are presented samples
+(tuples of values for all the variables of interest to the invariant;
+this might be a 1-tuple, a 2-tuple, or a 3-tuple) in turn.  If any
+sample falsifies the invariant, the invariant destroys itself.  All
+remaining invariants at the end of the program run can be reported as
+likely to be true.
+
+The key methods of the new invariant are
+@table @samp
+@item @r{constructor}
+Creates a new invariant object.  Its typical implementation is
+@example
+  super(ppt);
+@end example
+@item instantiate
+returns either a new invariant object or null.  For instance,
+@samp{instantiate} might check whether particular conditions that are
+required for the invariant to be sensible hold.  Its typical
+implementation is
+@example
+  return new @var{InvName}(ppt);
+@end example
+@item add_modified
+presents a tuple of values to the invariant.  The @samp{count} variable
+indicates how many samples have this value.  For example, three calls to
+@samp{add_modified} with a @samp{count} parameter of 1 is equivalent to
+one call to @samp{add_modified} with a @samp{count} parameter of 3.
+@item computeProbability
+returns the probability that the observed data could have happened by
+chance alone.  The result usually falls between 0 and 1, where 1 means
+the values seen so far certainly happened by chance and 0 means they
+could never have happened by chance.  The method may also return one of
+the following constants in the @samp{Invariant} class (which see for
+documentation): @samp{PROBABILITY_JUSTIFIED},
+@samp{PROBABILITY_UNJUSTIFIED}, @samp{PROBABILITY_UNKNOWN},
+@samp{PROBABILITY_NEVER}.
+
+For example, suppose your new invariant has a 50% chance of being true
+by chance for each sample.  ("x is even" is an example of such an
+invariant.)  Then a reasonable body for @samp{computeProbability} would
+be
+@example
+  return Math.pow(.5, ppt.num_values());
+@end example
+@noindent
+If 5 values had been seen, then this implementation would return 1/32,
+which is the likelihood that all 5 values seen so far were even purely
+by chance.  Invariants are only printed if their probabilities are small
+enough (by default, less than .01).
+@item format
+returns a high-level printed representation of the
+invariant, for user output.  The @samp{repr} formatting routines
+produces low-level, detailed output for debugging.  When first writing
+an invariant, you can make @samp{repr}, @samp{format_esc}, and
+@samp{format_simplify} all simply call @samp{format}, then fix up the
+implementations later as needed.
+@end table
+
+After the invariant is written, add a call to its @samp{instantiate}
+method in pass 2 of the @samp{instantiate} method of the appropriate
+factory; for instance, add a line like
+@example
+  result.add(MyInvariant.instantiate(ppt));
+@end example
+@noindent
+to @samp{SingleScalarFactory.instantiate}.
+
+@node   Invariant Suppression, New derived variables, New invariants, Extending Daikon
+@section Invariant Suppression
+
+This section explains the relation between four different ways Daikon
+reduces the number of invariants that are checked or printed:
+isObviousStatically, isObviousDynamically, suppression and
+non-instantiation
+
+@emph{Similarities}: They are all means of handling invariants that provide
+no useful information to the user.  The invariants may be redundant,
+or they may be obvious because of their value.
+
+@emph{Differences}: They are used in different places in the code, and have
+different meanings in Daikon.  However, their meanings are not
+mutually exclusive, so some places of use in the code can be
+interchanged.
+
+@itemize
+
+@item isObviousStatically
+
+  An invariant statically obvious if it is true from a fact that can
+  be known from just the program's code.  IsObviousStatically handles
+  any invariants that are statically true.  IsObviousStatically is
+  called at the beginning of inferencing for non-instantiation (see
+  below) and at the end for printing.
+
+@item isObviousDynamically
+
+  An invariant dyanmically obvious if it is true from a fact that can
+  requires sample data.  IsObviousDynamically handles any invariants
+  that are dynamically true.  IsObviousDynamically is only called
+  after inferencing, for it would not be sound to call it before all
+  data samples have been seen. IsObviousDynamically can use facts on
+  the invariant itself, or search for other invariants to support the
+  obviousness of the invariant.
+
+@item Non-instantiation
+
+  Preventing the creation of an invariant because it is statically
+  obvious.  With equality, non-instantiation can only happen if all
+  equality permutations are statically obvious.
+
+@item Suppression
+
+  Mechanism for having an invariant implied by another set of
+  invariants not checked.  It is the sound method to avoid the
+  checking of such invariants during inferencing.
+
+@end itemize
+
+How these relate:
+
+isObviousStatically is the way that non-instantiation is determined.
+
+isObviousDynamically can do everything suppression does, once
+inferencing is done.  A set of suppressors makes an invariant
+obviously true dynamically.  However, isObviousDynamically is not
+sound for during inferencing, unlike suppression.
+
+Suppression is limited to a specific set of dynamic obviousness, the
+ones involving other invariants.  Dynamic obviousness also includes
+singletons like "size(x[]) >= 0".
+
+The last question to ask is: "Can suppression handle everything
+isObviousDynamically can?"
+
+The short answer is, "No."  Supression is efficient because it saves
+time during inferencing.  However, it is not adequate.  There are two
+issues.
+
+First, for invariants that cache data, it is unsound to run
+suppression during inferencing.  However, running suppression only
+after inferncing (like with isObviousDynamically) would solve this
+issue.
+
+Second, there are invariants that are obvious by themselves.  For
+these, supperssion has no solution.  However, suppression augmented
+with the erasure of such invariants (i.e. immediate destruction) would
+be adequate.
+
+@node    New derived variables, New formatting for invariants, Invariant Suppression, Extending Daikon
+@section New derived variables
+
+@cindex derived variable
+@cindex variable, derived
+
+A derived variable is an expression that does not appear in the source
+code as a variable, but that Daikon treats as a variable for purposes
+of invariant detection.  For instance, if there exists an array
+@samp{a} and an integer @samp{i}, then Daikon introduces the derived
+variable @samp{a[i]}.  This permits detection invariants over this
+quantity.
+
+(Describing how to create new variety of derived variable is still to
+be written.  For now, see the derived variables that appear in
+@file{$DAIKONDIR/java/daikon/derive/}.)
+
+
+@node    New formatting for invariants, New front ends, New derived variables, Extending Daikon
+@section New formatting for invariants
+
+@cindex output format, defining new
+
+Daikon can print invariants in five formats:  its native format, Java
+format, IOA format (for use with the IOA programming language), ESC
+format (which is a subset of the JML specification language), and
+Simplify format (for use by the Simplify theorem-prover).
+
+To support a new output format, you need to do three things:
+@itemize @bullet
+@item
+@c Add, to every subclass of @samp{Invariant}, a
+@c @samp{format_@var{newtype}()} method.  Each subclass of Invariant
+@c already has three such methods --- @samp{format()}, @samp{format_esc()},
+@c and @samp{format_simplify()} --- for you to crib from.
+Add a new static final field to the enumeration
+daikon.inv.Invariant.OutputFormat.
+@item
+Edit, in every subclass of @samp{Invariant}, the
+@samp{format_using} method to handle the new OutputFormat.
+@item
+Edit @samp{PrintInvariants.print_invariants()} to enable selecting your
+new output format.
+@end itemize
+
+
+@node    New front ends, New suppressors, New formatting for invariants, Extending Daikon
+@section New front ends
+
+@cindex front end, writing
+
+A front end for Daikon converts data into a form Daikon can process,
+producing files in Daikon's input format --- @file{.decls} files and
+@file{.dtrace} files.
+(Typically, Daikon front ends arrange to obtain information from
+program executions, though front ends have been also been built for
+stock data, weather forecasts, and truck weight data, among others.
+In other words, it is possible to produce Daikon input from sources
+other than program executions, but this section focuses on the latter.)
+
+A front end for Daikon takes as input a target program to be analyzed.
+The front end produces two outputs:  a @file{.decls} file and an
+instrumented program.  Executing the instrumented program produces a
+@file{.dtrace} file containing records for all the program points that
+appear in the @file{.dtrace} file.
+For more information about these files, see @ref{File formats,,,daikon}.
+
+Conceptually, instrumentation is very simple.
+This section gives an example of how an instrumenter for Java might
+work; other languages are analogous.
+Suppose we wish to instrument file @file{Example.java}.
+@example
+class Example @{
+  // Return either the square of x or the square of (x+1).
+  int squar(int x, boolean b) @{
+    if (b)
+      x++;
+    return x*x;
+  @}
+@}
+@end example
+
+The @file{.decls} file might look like the following.
+@example
+DECLARE
+Example.squar:::ENTER
+x
+int
+int
+1
+b
+boolean
+int
+2
+
+DECLARE
+Example.squar:::EXIT
+x
+int
+int
+1
+b
+boolean
+int
+2
+return
+int
+int
+1
+@end example
+
+The instrumented @file{.java} file might look like the following.
+@example
+class Example @{
+  static @{
+    daikon.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
+  @}
+
+  // Return either the square of x or the square of (x+1).
+  int squar(int x, boolean b) @{
+    synchronized (daikon.Runtime.dtrace) @{
+      daikon.Runtime.dtrace.println();
+      daikon.Runtime.dtrace.println("Example.squar:::ENTER");
+      daikon.Runtime.dtrace.println("x");
+      daikon.Runtime.dtrace.println(x);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+      daikon.Runtime.dtrace.println("b");
+      daikon.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+    @}
+
+    if (b)
+      x++;
+
+    int daikon_return_value = x*x;
+    synchronized (daikon.Runtime.dtrace) @{
+      daikon.Runtime.dtrace.println();
+      daikon.Runtime.dtrace.println("Example.squar:::EXIT");
+      daikon.Runtime.dtrace.println("x");
+      daikon.Runtime.dtrace.println(x);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+      daikon.Runtime.dtrace.println("b");
+      daikon.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+      daikon.Runtime.dtrace.println("return");
+      daikon.Runtime.dtrace.println(daikon_return_value);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+    @}
+
+    return daikon_return_value;
+  @}
+@}
+@end example
+
+
+
+@node New suppressors,  , New front ends, Extending Daikon
+@section New suppressors
+
+As mentioned in @ref{Daikon technologies} one way to make Daikon more
+efficient, and to reduce clutter in output to the user, is to reduce
+the number of redundant invariants of various kinds.  This section
+describes how to add a new suppressor relation, such that if invariant
+A implies B, B is not checked as long as A holds, saving time.
+Suppression implications use some terminology.  A @emph{suppressor} is
+one of a set of invariants that imply and suppress a
+@emph{suppressee}.  A @emph{suppression factory} is the Java class
+that handles the finding of suppressors for a suppressee.  There is
+one suppression factory for each kind of suppression relation (i.e.,
+each unique tuple of suppressors and suppressees).  A
+@emph{suppression link} is what a suppression factory produces and
+serves as the data structure to track the suppression relation.  When
+writing new suppressors, the programmer only needs to write new
+suppression factories and install them properly.  The Daikon system
+manages the suppression link objects.
+
+The steps to do this are as follows:
+
+@enumerate
+@item
+In the daikon.inv package, find the invariant type that is to be
+suppressed by a set of suppressor invariants.  Suppression factories
+are connected, in code and in operation, to the invariants they
+suppress.
+
+@item
+Add an inner class to the suppressor invariant that inherits from
+daikon.suppress.SuppressionFactory.  It must support the method:
+
+  @samp{public abstract SuppressionLink generateSuppressionLink (Invariant inv)}
+
+where "inv" is the suppressee.  During inferencing, Daikon will pass
+potential suppressees to the generateSuppressionLink method and the
+method will tell Daikon whether suppression can occur.
+
+@item
+Create logic to support the searching of the desired suppressors.  The
+factory itself may not search for suppressors, but must use
+@emph{suppression templates}, which tell Daikon what kinds of
+invariants to look for.  The suppression factory should create a
+template with the right specifications filled in, and then pass the
+template to the method:
+
+  @samp{public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate)}
+
+in daikon.PptTopLevel.  If a template fill is successful, the template
+will contain the suppressors, and the method will return true.  The
+generateSuppressionLink method should return @samp{null} if the
+template fill was unsuccessful.
+
+@item
+Install the suppression factory by adding a single static instance of
+it to the list of factories returned by the @samp{getSuppressionFactories}
+method of the suppressor.
+
+@end enumerate
+
+More detailed instructions can be found in the
+@uref{http://pag.lcs.mit.edu/daikon/download/jdoc_v3/daikon/suppress/package-summary.html,Javadoc}
+of the @samp{daikon.suppress} package.
+
+@node    Debugging Daikon, Index, Extending Daikon, Top
+@chapter Debugging Daikon
+
+@menu
+* General Logging::
+* Track logging::
+* Adding Track logging::
+* Track log output::
+@end menu
+
+This chapter describes some techniques that can be used for debugging
+Daikon. Because Daikon processes large amounts of data, debugging problems 
+with a debugger can be difficult.  The following logging techniques provide
+alternatives to using a debugger.
+
+@node General Logging, Track logging, Debugging Daikon, Debugging Daikon
+@section General Logging
+
+[Fill this section in after we have switched to java logging]
+
+@node Track logging, Adding Track logging, General Logging, Debugging Daikon
+@section Track logging
+
+Often it is desirable to print information only about one or more specific 
+invariants.  This is distinct from general logging because it concentrates
+on specific invariants rather than a particular class or portion of Daikon.
+This is referred to as @emph{Track} logging because it tracks particular
+values across Daikon.
+
+Track logging is specified by three pieces of information: 
+
+   @itemize @bullet
+   
+   @item The class name of the invariant (e.g., @code{IntEqual})
+
+   @item The program point of interest (e.g., 
+   @code{DataStructures.StackAr.makeEmpty()V:::ENTER})
+
+   @item The variables that are used in the invariant (e.g., @code{return},
+   @code{size(this.s[])})
+
+   @end itemize
+
+These items are specified in the String arrays @code{debugTrackClass},
+@code{debugTrackPpt} and @code{debugTrackVars} in Debug.java.  The class,
+program point, and each of the variables (in order) must match in order
+for information concerning the invariant to be printed.  Multiple items
+can be specified in each array.  Information will be printed if any of
+the items match.  For example, 
+
+@example
+    public static String[] debugTrackClass = @{
+      "LowerBound",
+      "UpperBound",
+    @}
+@end example
+
+will match Invariants of either @code{LowerBound} or @code{UpperBound}.
+
+Matching is a simple substring comparison.  The specified item must be
+a substring of the actual item.  For instance, the above example
+will match not only @code{LowerBound} and @code{UpperBound}, but also 
+@code{EltUpperBound}, @code{EltUpperBoundFloat}, @code{UpperBoundFloat},
+@code{EltLowerBound}, @code{EltLowerBoundFloat}, and @code{LowerBoundFloat}.
+
+Program points and variables are specified exactly as they are seen in
+normal Daikon invariant output.  Specifically, @code{Ppt.name} and
+@code{VarInfo.name.name()} are used to generate the names for comparisons.
+
+Invariants are not the only classes that can be tracked.  Any class
+name is a valid entry.  Thus, for example, to print information about
+derived sequence variables from sequence @code{this.theArray[]} and
+scalar @code{x} at program point
+@code{DataStructures.DisjSets.find(int):::EXIT}, the tracking
+information would be setup as follows:
+
+@example
+  public static String[] debugTrackClass = @{
+     "SequenceScalarSubscriptFactory",
+  @};
+
+  public static String[] debugTrackPpt = @{
+    "DataStructures.DisjSets.find(int):::EXIT"
+  @};
+
+  public static String[][] debugTrackVars = @{
+    @{ "this.theArray[]",  "x" @},
+    @{ "x",                "this.theArray[]" @},
+  @};
+
+@end example
+
+Track logging must be enabled.  This is done by enabling the underlying
+logger (@code{daikon.Debug}) via daikon's @code{-debug} switch (e.g.,
+@code{-debug daikon.Debug}).  There are also two configuration options
+that can customize the output.  The option @code{daikon.Debug.showTraceback}
+will output a stack trace on each log statement.  The option 
+@code{daikon.Debug.logDetail} will caused more detailed (and often
+voluminous) output to be printed.  See @ref{Configuration options,,,daikon}
+in the users manual for more information.
+
+Convenience methods are available for track logging invariants.  In this
+case the class name, ppt, and variable information are all taken from the
+invariant.  The available methods are:
+
+@example
+    logOn()
+    logDetail()
+    log (String)
+    log (Logger, String)
+@end example
+
+These correspond to the @code{Debug} methods described above.  They are
+the recommended way to log information concerning invariants.
+
+Note that all interesting information is not necessarily currently logged.
+It will often be necessary to add new logging statements for the specific
+information of interest.  This is covered in the next section
+
+More detailed information can be found in the Javadoc for @uref{http://pag.lcs.mit.edu/daikon/download/jdoc/daikon/Debug.html,daikon.Debug} and
+@uref{http://pag.lcs.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,
+daikon.inv.Invariant}.
+
+@node Adding Track logging, Track log output, Track logging, Debugging Daikon
+@section Adding Track logging
+
+As indicated in the previous section, @emph{Track} logging is based
+around the class name, program point name, and variables of interest.
+Track logging methods accept these parameters and a string to be printed.
+Debug.java implements the following basic log methods:
+
+@example
+    log (String)
+    log (Class, Ppt, String)
+    log (Class, Ppt, Varinfo[], String)
+@end example
+
+The first uses a cached version of the Class, Ppt, and VarInfo.  The
+second uses the specified variables and the VarInfo information from Ppt.
+The third specifies each variable explicitly.
+
+When logging is not enabled, calling the logging functions can take a 
+significant amount of time (because the parameters need to be evaluated and
+passed).  To minimize this, a function @code{logOn()} is provided to see 
+if logging is enabled.  It is recommended that code of the following form
+be used for efficiency:
+
+@example
+    if (Debug.logOn())
+      Debug.log (getClass(), ppt, "Entering routine foo");
+@end example
+
+Track logging also can work with other loggers.  Each of the logging
+methods has an alternative version that also accepts a logger as the
+first argument.  In this case, normal track logging is performed if
+the class, ppt, and vars match.  If they don't match, the same
+information is logged via the specified logger.  For example:
+
+@example
+    if (Debug.logOn || logger.isDebugEnabled())
+      Debug.log (logger, getClass(), ppt, "Entering routine foo");
+@end example
+
+The above will print if either the tracking information matches or if the
+specified logger is enabled.
+
+Track logging also provides one additional level of detail.  The function
+@code{logDetail()} returns whether or not more detailed information
+should be printed.  This should be used for information which is not
+normally interesting or especially voluminious output.  Often statements
+using @code{logDetail()} should be commented out when not in active use.
+
+
+@node Track log output,  , Adding Track logging, Debugging Daikon
+@section Track log output
+
+Each call to a track log method will produce output in the same basic
+format. Space for three variables is always maintained for consistency:
+
+@example
+    @ daikon.Debug: <class>: <ppt>: <var1>: <var2>: <var3>: <msg>
+@end example
+
+If @code{showTrackback} is enabled, the traceback will follow each 
+line of debug output.
+
+Unfortunately, in ascii text, the above can be a little difficult to read
+because it normally doesn't line up very well.  A simple translator to
+HTML exists that can be used to provide HTML formatted output.  This tool
+is not completely tested, but seems to work reasonably well in most
+situations.  The following instructions only apply to MIT, but the tool
+is shipped in the scripts directory and can easily be setup elsewhere
+as well.
+
+Use the url @uref{http://pag/daikon/mit/log2html.php} to access log2html.
+It will ask you for a file of daikon output.  One good way to create this
+file is to use the tee command.  For example:
+
+@example
+    daikon [diakon args] | tee ~/daikon.out
+@end example
+
+Then specify that file to log2html.  Note that you must expand ~ yourself
+since the webserver doesn't know who you are.  The result will contain
+tables with the log output in them (all other output is unchanged).  Table
+columns are based on the ': ' separator in the ascii output.  If traceback
+is enabled, another column is added showing where the log method was
+called.  For example, the traceback column might contain:
+
+@example
+    +PptSlice1.addInvariant
+@end example
+
+If you put your cursor over @code{PptSlice1.addInvariant} it will show
+the exact line number in the source file where the log method was
+called as part of the href.  If you click on the traceback it will
+create an output file of type application/emacs that contains an
+emacsclient command to edit the related source file.  Most browsers
+can be setup to execute a command to process these files (in Mozilla
+this is done in the 'Navigator/Helper Applications' section of
+preferences.  The script @file{$inv/scripts/browser_emacs} will
+correctly handle files of this type and bring up the appropriate file
+in emacs.  This could easily be changed to support other editors.
+Note that as currently implemented this creates a possible security
+hole (malicious non-editor commands could be executed) as no checking
+is done on the validity of the command.
+
+Clicking on the leading plus of the traceback information will show
+the entire traceback.  For example:
+
+@example
+   -PptSlice1.addInvariant
+    PptSlice.flow_and_remove_falsified
+    PptSlice1.add
+    PptTopLevel.add
+    PptTopLevel.add_and_flow
+    FileIO.process_sample
+    FileIO.read_data_trace_file
+    FileIO.read_data_trace_files
+    Daikon.process_data
+    Daikon.main
+@end example
+
+The same capabilities (showing the line number, bringing up the buffer
+in emacs) exist on each of the frames in the traceback.  The detailed
+traceback can be hidden by clicking on the leading - on the first
+frame.  Note that the current state of what tracebacks are expanded is
+kept in a file named the same as your daikon output file with
+@file{.state} appended.  For example, the state file for
+@file{~/daikon.out} is @file{~/daikon.out.state}.  This file must be
+writable for log2html.php to work correctly.
+
+@node     Index,  , Debugging Daikon, Top
+@unnumbered Index
+
+@printindex cp
+
+
+@bye
+
