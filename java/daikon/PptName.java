@@ -293,6 +293,14 @@ public class PptName
   }
 
   /**
+   * @return true iff this name refers to an actual (not combined)
+   * procedure exit point (eg, EXIT22)
+   */
+  public boolean isNumberedExitPoint() {
+    return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
+  }
+
+  /**
    * @return true iff this name refers to a procedure exit point
    **/
   public boolean isEnterPoint()
