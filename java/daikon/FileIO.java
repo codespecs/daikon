@@ -1258,8 +1258,8 @@ public final class FileIO {
   {
     int pptcount = 1;
     HashMap values = new HashMap ();
-    if (debugRead.isDebugEnabled()) {
-      debugRead.debug("read_data_trace_file " + filename
+    if (debugRead.isLoggable(Level.FINE)) {
+      debugRead.fine ("read_data_trace_file " + filename
                       + ((Daikon.ppt_regexp != null) ? " " +
                          Daikon.ppt_regexp.getPattern() : "")
                       + ((Daikon.ppt_omit_regexp != null) ? " " +
