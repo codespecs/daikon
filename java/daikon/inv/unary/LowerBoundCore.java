@@ -7,7 +7,7 @@ import daikon.derive.unary.*;
 import java.util.*;
 
 // *****
-// Automatically generated from Bound-cpp.java
+// Automatically generated from Bound.java.cpp
 // *****
 
 // One reason not to combine LowerBound and Upperbound is that they have

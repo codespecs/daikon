@@ -8,8 +8,9 @@
 JAVAC ?= jikes -g +E +F
 
 
-ALL_JAVA_FILES := $(shell find . -name '*.java' -print)
-JAVA_FILES := $(shell find . -name '*-cpp.java' -prune -o -name '*.java' -print)
+JAVA_FILES := $(shell find . -name '*.java' -print)
+JAVA_CPP_FILES := $(shell find . -name '.java.cpp' -print)
+ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 AUTO_GENERATED_FILES = \
 	MathMDE.java
 
@@ -33,19 +34,28 @@ tags:
 test:	clean all
 	set JAVA_COMPILER=NONE; java utilMDE.TestUtilMDE
 
-# I do this in another directory to prevent javadoc from getting confused
-# by the -cpp.java files, which aren't legal Java source.
 doc: $(JAVA_FILES)
-	rm -rf /tmp/utilMDE-doc
-	mkdir -p /tmp/utilMDE-doc/utilMDE
-	cp -p $(JAVA_FILES) /tmp/utilMDE-doc/utilMDE
 	mkdir -p doc
-	javadoc -sourcepath /tmp/utilMDE-doc -d doc utilMDE
+	javadoc -d doc utilMDE
 	# makes "doc" (the target of this rule) look up to date
 	touch doc
 	jdk-add-munged-anchor-names-no-bak doc/utilMDE/*.html
 	@echo "Run jdk-index-to-alist (see ~/bin/share/jdk-index-to-alist)"
-	rm -rf /tmp/utilMDE-doc
+
+# Old version
+# # I do this in another directory to prevent javadoc from getting confused
+# # by the -cpp.java files, which aren't legal Java source.
+# doc: $(JAVA_FILES)
+# 	rm -rf /tmp/utilMDE-doc
+# 	mkdir -p /tmp/utilMDE-doc/utilMDE
+# 	cp -p $(JAVA_FILES) /tmp/utilMDE-doc/utilMDE
+# 	mkdir -p doc
+# 	javadoc -sourcepath /tmp/utilMDE-doc -d doc utilMDE
+# 	# makes "doc" (the target of this rule) look up to date
+# 	touch doc
+# 	jdk-add-munged-anchor-names-no-bak doc/utilMDE/*.html
+# 	@echo "Run jdk-index-to-alist (see ~/bin/share/jdk-index-to-alist)"
+# 	rm -rf /tmp/utilMDE-doc
 
 audit:
 	(cd ..; maudit utilMDE)
@@ -74,7 +84,7 @@ showvars:
 
 JAVA_CPP = java-cpp.pl $< -DDEFINEDVAR > $@
 
-MathMDE.java: MathMDE-cpp.java MathMDE-gcd-cpp.java MathMDE-modulus-cpp.java MathMDE-nonmodulus-cpp.java  MathMDE-help-cpp.java MathMDE-helpend-cpp.java
+MathMDE.java: MathMDE.java.cpp MathMDE-gcd.java.cpp MathMDE-modulus.java.cpp MathMDE-nonmodulus.java.cpp  MathMDE-help.java.cpp MathMDE-helpend.java.cpp
 	-mv -f $@ $@-bak
 	java-cpp.pl $< > $@
 	chmod -w $@

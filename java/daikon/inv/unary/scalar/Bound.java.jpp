@@ -1,4 +1,5 @@
 #if 0
+-*- Java -*-
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
@@ -88,7 +89,7 @@ import utilMDE.*;
 import java.util.*;
 
 // *****
-// Automatically generated from Bound-cpp.java
+// Automatically generated from Bound.java.cpp
 // *****
 
 // One reason not to combine LowerBound and Upperbound is that they have

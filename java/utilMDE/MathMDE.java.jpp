@@ -1,4 +1,5 @@
 #if 0
+-*- Java -*-
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
@@ -10,7 +11,7 @@ package utilMDE;
 import java.util.*;
 
 // *****
-// Automatically generated from MathMDE-cpp.java
+// Automatically generated from MathMDE.java.cpp
 // *****
 
 
@@ -136,13 +137,13 @@ public final class MathMDE {
   ///
 
 #define INT int
-#include "MathMDE-gcd-cpp.java"
+#include "MathMDE-gcd.java.cpp"
 #undef INT
 
   // gcd -- version for manipulating long (rather than int) values
 
 #define INT long
-#include "MathMDE-gcd-cpp.java"
+#include "MathMDE-gcd.java.cpp"
 #undef INT
 
 
@@ -151,13 +152,13 @@ public final class MathMDE {
   ///
 
 #define PARAM_INT
-#include "MathMDE-modulus-cpp.java"
+#include "MathMDE-modulus.java.cpp"
 #undef PARAM_INT
 
   // modulus for long (as opposed to int) values
 
 #define PARAM_LONG
-#include "MathMDE-modulus-cpp.java"
+#include "MathMDE-modulus.java.cpp"
 #undef PARAM_LONG
 
 
@@ -166,13 +167,13 @@ public final class MathMDE {
   ///
 
 #define PARAM_INT
-#include "MathMDE-nonmodulus-cpp.java"
+#include "MathMDE-nonmodulus.java.cpp"
 #undef PARAM_INT
 
   // non-modulus for long (as opposed to int) values
 
 #define PARAM_LONG
-#include "MathMDE-nonmodulus-cpp.java"
+#include "MathMDE-nonmodulus.java.cpp"
 #undef PARAM_LONG
 
 

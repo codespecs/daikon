@@ -1,4 +1,5 @@
 #if 0
+-*- Java -*-
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
@@ -27,7 +28,7 @@ import daikon.derive.*;
 import utilMDE.*;
 
 // *****
-// Automatically generated from SequenceSubsequence-cpp.java
+// Automatically generated from SequenceSubsequence.java.cpp
 // *****
 
 public final class SEQUENCESCALARSUBSEQUENCE extends BinaryDerivation {

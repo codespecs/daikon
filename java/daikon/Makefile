@@ -5,14 +5,16 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
-UTILMDE_DIR ?= $(HOME)/java/utilMDE
+UTILMDE_DIR ?= ../utilMDE
 JAVAC ?= jikes -g +E +F
 
 ### end of user customications
 
 
-JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
-TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -print)
+JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
+DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.cpp' -print)
+UTILMDE_TAG_FILES := $(shell find ${UTILMDE_DIR} \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.cpp' -print)
+TAG_FILES := ${DAIKON_TAG_FILES} ${UTILMDE_TAG_FILES}
 # Should these really be targets in the below, or should I use "make
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
 # are up-to-date.
@@ -94,12 +96,10 @@ TAGS:	tags
 # I could make this ../*.py, but probably don't want to include that old code.
 tags:
 	@echo etags '*.java ...'
-	@etags ${TAG_FILES} $(UTILMDE_DIR)/*.java
+	@etags -l java ${TAG_FILES}
 
-doc: $(JAVA_FILES)
-	javadoc -d doc `find -name '*.java' -exec dirname {} \; | sort | uniq | perl -p -e 's/^./daikon/g' | perl -p -e 's:/:.:g'`
-	jdk-add-munged-anchor-names doc/daikon/*.html
-	@echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
+doc:
+	cd .. && $(MAKE) doc
 
 lint:	jlint
 
@@ -147,73 +147,73 @@ JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< >| $@; chmod -w $@)
 # JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 
 
-PptSlice1.java: PptSlice-cpp.java
+PptSlice1.java: PptSlice.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
 
-PptSlice2.java: PptSlice-cpp.java
+PptSlice2.java: PptSlice.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY2)
 
-PptSlice3.java: PptSlice-cpp.java
+PptSlice3.java: PptSlice.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY3)
 
-inv/unary/LowerBoundCore.java: inv/unary/BoundCore-cpp.java
+inv/unary/LowerBoundCore.java: inv/unary/BoundCore.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
-inv/unary/UpperBoundCore.java: inv/unary/BoundCore-cpp.java
+inv/unary/UpperBoundCore.java: inv/unary/BoundCore.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=UPPER)
 
-inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound-cpp.java
+inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
-inv/unary/scalar/UpperBound.java: inv/unary/scalar/Bound-cpp.java
+inv/unary/scalar/UpperBound.java: inv/unary/scalar/Bound.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=UPPER)
 
-inv/unary/scalar/OneOfScalar.java: inv/unary/OneOf-cpp.java
+inv/unary/scalar/OneOfScalar.java: inv/unary/OneOf.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-inv/unary/string/OneOfString.java: inv/unary/OneOf-cpp.java
+inv/unary/string/OneOfString.java: inv/unary/OneOf.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-inv/unary/sequence/OneOfSequence.java: inv/unary/OneOf-cpp.java
+inv/unary/sequence/OneOfSequence.java: inv/unary/OneOf.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=SEQUENCE)
 
-inv/unary/sequence/EltOneOf.java: inv/unary/OneOf-cpp.java
+inv/unary/sequence/EltOneOf.java: inv/unary/OneOf.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=ELT)
 
-inv/unary/sequence/EltLowerBound.java: inv/unary/scalar/Bound-cpp.java
+inv/unary/sequence/EltLowerBound.java: inv/unary/scalar/Bound.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=ELTLOWER)
 
-inv/unary/sequence/EltUpperBound.java: inv/unary/scalar/Bound-cpp.java
+inv/unary/sequence/EltUpperBound.java: inv/unary/scalar/Bound.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=ELTUPPER)
 
-inv/unary/stringsequence/EltOneOfString.java: inv/unary/OneOf-cpp.java
+inv/unary/stringsequence/EltOneOfString.java: inv/unary/OneOf.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=ELTSTRING)
 
-inv/unary/stringsequence/OneOfStringSequence.java: inv/unary/OneOf-cpp.java
+inv/unary/stringsequence/OneOfStringSequence.java: inv/unary/OneOf.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=STRINGSEQUENCE)
 
-inv/binary/sequenceScalar/Member.java: inv/binary/Member-cpp.java
+inv/binary/sequenceScalar/Member.java: inv/binary/Member.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-inv/binary/sequenceString/Member.java: inv/binary/Member-cpp.java
+inv/binary/sequenceString/Member.java: inv/binary/Member.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-derive/binary/SequenceScalarSubscript.java: derive/binary/SequenceSubscript-cpp.java
+derive/binary/SequenceScalarSubscript.java: derive/binary/SequenceSubscript.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-derive/binary/SequenceStringSubscript.java: derive/binary/SequenceSubscript-cpp.java
+derive/binary/SequenceStringSubscript.java: derive/binary/SequenceSubscript.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-derive/binary/SequenceScalarSubsequence.java: derive/binary/SequenceSubsequence-cpp.java
+derive/binary/SequenceScalarSubsequence.java: derive/binary/SequenceSubsequence.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-derive/binary/SequenceStringSubsequence.java: derive/binary/SequenceSubsequence-cpp.java
+derive/binary/SequenceStringSubsequence.java: derive/binary/SequenceSubsequence.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-derive/binary/SequenceScalarSubscriptFactory.java: derive/binary/SequenceSubscriptFactory-cpp.java
+derive/binary/SequenceScalarSubscriptFactory.java: derive/binary/SequenceSubscriptFactory.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscriptFactory-cpp.java
+derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscriptFactory.java.cpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 ## I decided against this.  It gave little enough help, and it cluttered
@@ -223,25 +223,25 @@ derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscri
 ## Vector subdirectory (that was ignored by tags, etc.).
 
 # This one is just for testing
-IntegerVector.java: VectorTemplate-cpp.java
+IntegerVector.java: VectorTemplate.java.cpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=IntegerVector -DELTTYPE=Integer")
 
-PptVector.java: VectorTemplate-cpp.java
+PptVector.java: VectorTemplate.java.cpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptVector -DELTTYPE=Ppt")
 
-PptTopLevelVector.java: VectorTemplate-cpp.java
+PptTopLevelVector.java: VectorTemplate.java.cpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptTopLevelVector -DELTTYPE=PptTopLevel")
 
-PptConditionalVector.java: VectorTemplate-cpp.java
+PptConditionalVector.java: VectorTemplate.java.cpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptConditionalVector -DELTTYPE=PptConditional")
 
-VarInfoVector.java: VectorTemplate-cpp.java
+VarInfoVector.java: VectorTemplate.java.cpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=VarInfoVector -DELTTYPE=VarInfo")
 
-inv/InvariantVector.java: VectorTemplate-cpp.java
+inv/InvariantVector.java: VectorTemplate.java.cpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.inv -DELTVECTOR=InvariantVector -DELTTYPE=Invariant")
 
-derive/DerivationVector.java:  VectorTemplate-cpp.java
+derive/DerivationVector.java:  VectorTemplate.java.cpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.derive -DELTVECTOR=DerivationVector -DELTTYPE=Derivation")
 
 

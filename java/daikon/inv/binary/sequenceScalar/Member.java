@@ -10,7 +10,7 @@ import java.util.*;
 import utilMDE.*;
 
 // *****
-// Automatically generated from Member-cpp.java
+// Automatically generated from Member.java.cpp
 // *****
 
 public final class Member extends SequenceScalar  {

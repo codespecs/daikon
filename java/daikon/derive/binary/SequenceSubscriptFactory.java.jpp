@@ -1,4 +1,5 @@
 #if 0
+-*- Java -*-
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
@@ -36,7 +37,7 @@ import utilMDE.*;
 import java.util.*;
 
 // *****
-// Automatically generated from SequenceSubscriptFactory-cpp.java
+// Automatically generated from SequenceSubscriptFactory.java.cpp
 // *****
 
 // This controls derivations which use the scalar as an index into the
