@@ -127,7 +127,7 @@ public class PptSplitter implements Serializable {
     // Add the point
     ppt_cond.add_bottom_up (vt, count);
 
-    if (Debug.logOn() && Debug.ppt_match (ppt_cond))
+    if (Debug.logDetail() && Debug.ppt_match (ppt_cond))
       System.out.println ("Adding sample to " + ppt_cond + " with vars "
                           + Debug.related_vars (ppt_cond, vt));
 
