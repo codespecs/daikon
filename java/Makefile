@@ -20,11 +20,11 @@ JAVA ?= java
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
-# In practice, this is good enough, however.
+# Therefore, this assignment uses "=" instead of ":=".
 # Creates a symlink to ajax if it does not exist, so the ajax .java
 # files get compiled as well.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
-JAVA_FILES := $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
+JAVA_FILES = $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
 TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
