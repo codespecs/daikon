@@ -479,6 +479,7 @@ sub kvasir_checkout {
   symlink("valgrind-kvasir", "kvasir");
   chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
   `cvs -d $CVS_REP co kvasir 2>&1 | tee -a $log`;
+  `cvs -d $CVS_REP co kvasircomp 2>&1 | tee -a $log`;
   chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
   `chmod -R a+r $INV/valgrind-kvasir 2>&1 | tee -a $log`;
   if (-e "$INV/kvasir/kvasir/Makefile.in") {
