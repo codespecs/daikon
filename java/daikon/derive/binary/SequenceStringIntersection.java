@@ -69,7 +69,7 @@ public final class SequenceStringIntersection
   protected VarInfo makeVarInfo() {
     debug.debug ("Computing varInfo");
 
-    VarInfoName name = base1.name.applyIntersection(base2.name);
+    VarInfoName name = base1.name.applyIntersection(base2.name).applyElements();
     ProglangType type = base1.type;
     ProglangType file_rep_type = base1.file_rep_type;
     VarComparability compar = base1.comparability.elementType();
