@@ -94,6 +94,18 @@ public class StatisticsVisitor implements NodeVisitor {
     return differingUninterestingTernary;
   }
 
+  // The total number of missing invariants
+  public int getMissing() {
+    return getMissingNullary() + getMissingUnary() +
+      getMissingBinary() + getMissingTernary();
+  }
+
+  // The total number of differing invariants
+  public int getDiffering() {
+    return getDifferingNullary() + getDifferingUnary() +
+      getDifferingBinary() + getDifferingTernary();
+  }
+
 
   public void visitRootNode(RootNode node) { }
 
