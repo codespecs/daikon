@@ -33,6 +33,7 @@ public class PptRelation implements Serializable {
   public static final String ENTER_EXIT    = "enter -> exit";
   public static final String EXIT_EXITNN   = "exit -> exitNN";
   public static final String MERGE_CHILD   = "merge -> child";
+  public static final String PPT_PPTCOND   = "ppt -> ppt_cond";
 
   private static final Logger debug = Logger.getLogger("daikon.PptRelation");
 
@@ -406,13 +407,36 @@ public class PptRelation implements Serializable {
    * exit points are often referred to as exitNN where NN is the line
    * number of the exit point).
    */
-
   static public PptRelation newCombinedExitExitNNRel (PptTopLevel parent,
                                                       PptTopLevel child) {
 
     Assert.assertTrue ((parent != null) && (child != null));
 
     PptRelation rel = new PptRelation (parent, child, EXIT_EXITNN);
+
+    // Create the parent-child variable map.  This one is easy as the
+    // variables should match exactly
+    Assert.assertTrue (parent.var_infos.length == child.var_infos.length);
+    for (int i = 0; i < parent.var_infos.length; i++) {
+      VarInfo vc = child.var_infos[i];
+      VarInfo vp = parent.var_infos[i];
+      Assert.assertTrue (vc.name.name().equals (vp.name.name()));
+      rel.child_to_parent_map.put (vc, vp);
+      rel.parent_to_child_map.put (vp, vc);
+    }
+    return (rel);
+  }
+
+  /**
+   * Returns a relation in the ppt hierarchy from a ppt to a
+   * PptConditional for that point.
+   */
+  static public PptRelation newPptPptConditional (PptTopLevel parent,
+                                                  PptTopLevel child) {
+
+    Assert.assertTrue ((parent != null) && (child != null));
+
+    PptRelation rel = new PptRelation (parent, child, PPT_PPTCOND);
 
     // Create the parent-child variable map.  This one is easy as the
     // variables should match exactly
@@ -463,6 +487,27 @@ public class PptRelation implements Serializable {
       }
       rel.child_to_parent_map.put (vc, vp);
       rel.parent_to_child_map.put (vp, vc);
+    }
+    return (rel);
+  }
+
+  /**
+   * Copies the relation from its current ppts to the specified
+   * ppts.  The new ppts must have the same variables in the same
+   * order as do the original ones
+   */
+  public PptRelation copy (PptTopLevel parent, PptTopLevel child) {
+
+    PptRelation rel = new PptRelation (parent, child, relationship);
+    for (Iterator ii = child_to_parent_map.keySet().iterator(); ii.hasNext();){
+      VarInfo vc = (VarInfo) ii.next();
+      VarInfo vp = (VarInfo) child_to_parent_map.get (vc);
+      VarInfo new_vc = child.var_infos[vc.varinfo_index];
+      VarInfo new_vp = parent.var_infos[vp.varinfo_index];
+      Assert.assertTrue (new_vc.name.equals (vc.name));
+      Assert.assertTrue (new_vp.name.equals (vp.name));
+      rel.child_to_parent_map.put (new_vc, new_vp);
+      rel.parent_to_child_map.put (new_vp, new_vc);
     }
     return (rel);
   }
@@ -566,6 +611,28 @@ public class PptRelation implements Serializable {
              + " with connections [" + rel.parent_to_child_var_string() +"]");
         } else
           debug.fine (dstr + " No object ppt");
+      }
+
+      // Connect any conditional ppt variables.  Only connect to the
+      // first splitter, since each splitter should yield the same
+      // results at the parent (since each splitter sees the same
+      // points)  This should only happen at the leaves (numbered
+      // exit points) since all other points should be built from
+      // their other children.  But since we need the relation
+      // from the child's point of view when printing, we create
+      // under all cases and then remove it from non-leaves children
+      // list.  This doesn't seem like the best solution.
+      if (ppt.has_splitters()) {
+        PptSplitter ppt_split = (PptSplitter) ppt.splitters.get (0);
+        for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
+          rel = newPptPptConditional (ppt, ppt_split.ppts[ii]);
+          debug.fine (" -- Connected down to ppt conditional " +
+                      ppt_split.ppts[ii].name() + " with connections [" +
+                      rel.parent_to_child_var_string() + "]");
+          if (!ppt.ppt_name.isNumberedExitPoint()) {
+            ppt.children.remove (rel);
+          }
+        }
       }
     }
 
