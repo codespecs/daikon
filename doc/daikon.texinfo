@@ -48,7 +48,8 @@
 @center April 24, 2003
 
 @sp 5
-@c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
+@c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
+@c and HTML don't get the title page)
 @image{images/daikon-logo,4in,}
 
 @c The following two commands start the copyright page.
@@ -60,13 +61,14 @@ Copyright @copyright{} 1998-2003
 
 @html
 <img src="images/daikon-logo.gif" alt="Daikon logo">
-
-<h1>Daikon Invariant Detector User Manual</h1>
-
-This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.4.6, released April 24, 2003.
-
 @end html
+@c Why is this here? It duplicates the stuff further down.
+@c @html
+@c <h1>Daikon Invariant Detector User Manual</h1>
+@c
+@c This is the user manual for the Daikon invariant detector.
+@c It describes Daikon version 2.4.6, released April 24, 2003.
+@c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
 @c but it's acceptable. 
@@ -78,6 +80,11 @@ It describes Daikon version 2.4.6, released April 24, 2003.
 @comment node-name, next,          previous, up
 
 @ifnottex
+@c Unfortunately, the Daikon logo doesn't look good in ASCII.
+@c @ifinfo
+@c @image{images/daikon-logo,4in,}
+@c 
+@c @end ifinfo
 This is the user manual for the Daikon invariant detector.
 It describes Daikon version 2.4.6, released April 24, 2003.
 @end ifnottex
@@ -387,7 +394,7 @@ Invariants can be useful in program understanding and a host of other
 applications.  Daikon operates by running the program and examining the
 values it computes, looking for patterns and relationships among those
 values.  Front ends (@pxref{Instrumentation}) exist for the Java, C,
-C++, @uref{IOA, , http://theory.lcs.mit.edu/tds/ioa/}, and Perl
+C++, @uref{http://theory.lcs.mit.edu/tds/ioa/, ,IOA}, and Perl
 languages.  Front ends also exist for other applications, such as the
 @uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
 checker}.  It is easy to extend Daikon to other applications.
@@ -436,15 +443,16 @@ in the file @file{doc/CHANGES} in the distribution.
 @enumerate
 @item
 Download Daikon from
-from @uref{http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz}.
+@uref{http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz}.
 One way to do this is
 @example
 wget http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz
 @end example
 
 @cindex anonymous CVS access to Daikon sources
-Daikon is also available via anonymous CVS.  Send email to
-@email{daikon-developers@@pag.lcs.mit.edu} if you desire such access.
+Daikon is also available via anonymous CVS.  If you desire such
+access, send email to the
+@email{daikon-developers@@pag.lcs.mit.edu} mailing list..
 
 You may wish to subscribe to one of the mailing lists (@pxref{Mailing
 lists}), in order to be notified of new releases or join discussions
@@ -709,8 +717,10 @@ Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
 path.  Add the following to your @file{.emacs} or @file{prj.el} file:
 @example
   ;; Daikon Context GUI
-  (add-to-list 'load-path (substitute-in-file-name "$DAIKONDIR/emacs"))
-  (autoload 'daikon-context-gui "daikon-context-gui" "Daikon Context GUI" t)
+  (add-to-list 'load-path
+               (substitute-in-file-name "$DAIKONDIR/emacs"))
+  (autoload 'daikon-context-gui "daikon-context-gui"
+            "Daikon Context GUI" t)
   (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
 @end example
 @end enumerate
@@ -780,8 +790,8 @@ The values for these registry entries are ASCII key codes.  Tab is 9.
 
 
 
-The second option is to run Daikon using the
-@uref{http://sources.redhat.com/cygwin/,Cygwin toolset}, which
+The second option is to run Daikon using the Cygwin toolset
+(available at @uref{http://sources.redhat.com/cygwin/}), which
 contains everything you need to compile and run Unix programs under
 Windows.  You can install Cygwin by simply running the program found
 at @uref{http://sources.redhat.com/cygwin/setup.exe}.  If you use
@@ -918,7 +928,8 @@ javac daikon-instrumented/DataStructures/StackAr.java
 original version of all other files):
 
 @example
-java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.StackArTester
 @end example
 
 (On Windows, use @samp{;%CLASSPATH%} instead of @samp{:$CLASSPATH}.)
@@ -947,7 +958,8 @@ cd daikon-output
 @item Run Daikon on the trace file.
 
 @example
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+     StackAr.dtrace
 @end example
 
 The invariants are printed to standard output, and a binary
@@ -974,7 +986,8 @@ into the Java source program.
 
 @example
 cd ..
-java daikon.tools.jtb.MergeESC daikon-output/StackAr.inv DataStructures/StackAr.java
+java daikon.tools.jtb.MergeESC daikon-output/StackAr.inv \
+     DataStructures/StackAr.java
 @end example
 
 Now examine file @file{DataStructures/StackAr.java-escannotated}.
@@ -1016,7 +1029,8 @@ javac daikon-instrumented/DataStructures/StackAr.java
 
 @item Trace file generation (step 5)
 @example
-java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.StackArTester
 @end example
 
 (On Windows, use ``;'' as the path separator.)
@@ -1028,7 +1042,8 @@ java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+     StackAr.dtrace
 java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
 @end example
 
@@ -1131,7 +1146,8 @@ javac daikon-instrumented/DataStructures/QueueAr.java
 @c @item Trace file generation (steps 5-7)
 @item Trace file generation (step 5)
 @example
-java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.QueueArTester
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.QueueArTester
 @c cd daikon-output
 @c modbit-munge.pl QueueAr.dtrace
 @end example
@@ -1141,7 +1157,8 @@ java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.QueueArTester
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls QueueAr.dtrace
+java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls \
+     QueueAr.dtrace
 java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 @end example
 
@@ -1191,7 +1208,8 @@ Under Windows, you must insert in the source file a gcc-specific
 our test suite.  Run the following commands:
 @example
 alias fix="sed -f $DFECDIR/fix.sed"
-(cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
+(cd daikon-instrumented; fix print_tokens.cc \
+                         > print_tokens_fixed.cc)
 @end example
 @end quotation
 
@@ -1199,13 +1217,17 @@ alias fix="sed -f $DFECDIR/fix.sed"
 executable @file{print_tokens} in the current directory.
 
 @example
-g++ -g -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
+g++ -g -w -o print_tokens \
+    daikon-instrumented/print_tokens_fixed.cc \
+    $DFECDIR/daikon_runtime.o
 @end example
 @quotation
 Note for Windows users:  Name the executable @file{print_tokens.exe}, not
 @file{print_tokens}:
 @example
-g++ -g -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
+g++ -g -w -o print_tokens.exe \
+    daikon-instrumented/print_tokens_fixed.cc \
+    $DFECDIR/daikon_runtime.o
 @end example
 @end quotation
 
@@ -1234,7 +1256,8 @@ These commands create a data trace file at
 @item Run Daikon on the trace file.
 @example
 java -Xmx256m daikon.Daikon -o print_tokens.inv \
-     daikon-output/print_tokens.decls daikon-output/print_tokens.dtrace
+     daikon-output/print_tokens.decls \
+     daikon-output/print_tokens.dtrace
 @end example
 @noindent
 The invariants are printed to standard out, and a binary representation
@@ -1267,7 +1290,8 @@ Instrumentation (Steps 1-3)
 @example
 cd $DAIKONDIR/examples/c-examples/print_tokens
 dfec print_tokens.c stream.h tokens.h
-g++ -g -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
+g++ -g -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc \
+    $DFECDIR/daikon_runtime.o
 @end example
 
 Trace File Generation (Step 4)
@@ -1279,7 +1303,8 @@ sh tests.sh
 Invariant Detection (Step 5)
 @example
 java -Xmx256m daikon.Daikon -o print_tokens.inv \
-     daikon-output/print_tokens.decls daikon-output/print_tokens.dtrace
+     daikon-output/print_tokens.decls \
+     daikon-output/print_tokens.dtrace
 @end example
 
 
@@ -1313,7 +1338,8 @@ the middle of a data structure.
 Finally, run Daikon using the truncated trace file (step 5).
 @example
 java -Xmx256m daikon.Daikon -o rijndael.inv \
-      daikon-output/rijndael.decls daikon-output/rijndael.truncated.dtrace
+     daikon-output/rijndael.decls \
+     daikon-output/rijndael.truncated.dtrace
 @end example
 
 @node Perl examples,  , C examples, Example use
@@ -1321,11 +1347,6 @@ java -Xmx256m daikon.Daikon -o rijndael.inv \
 
 The Daikon distribution includes sample Perl programs suitable for use
 with Daikon in the @file{examples/perl-examples} directory.
-@footnote{Note for Daikon version 2.4.6, released April 24, 2003.
-The Perl support is stable and usable, but we intend to further improve and
-simplify its interface with future releases.  Please provide feedback
-to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
-suggestions, and problems.}
 
 To use the Daikon Perl front end, you need to have installed Daikon
 (see @ref{Installing Daikon}), and you need version 5.8 or later of
@@ -1337,8 +1358,10 @@ types of their variables. Using the Perl front end is a two-pass
 process: first you must run the annotated program so that the runtime
 system can dynamically infer the kind of data stored in each variable,
 and then you must re-annotate and re-run the program with the added
-type information. Here are step-by-step instructions for a sample
-program:
+type information. 
+
+Here are step-by-step instructions for examining a simple module,
+@file{Birthday.pm}, as used by a test script @file{test-bday.pl}.
 
 @enumerate
 @item Change to the directory containing the @file{Birthday.pm}
@@ -1352,53 +1375,57 @@ cd examples/perl-examples
 dfepl Birthday.pm
 @end example
 
-This command creates a directory @file{daikon-instrumented}, and puts
+This command creates a directory @file{daikon-untyped}, and puts
 the instrumented version of @file{Birthday.pm} into
-@file{daikon-instrumented/Birthday.pm}. Note than unlike the C or Java
-front ends, it does not create a @file{.decls} file yet.
+@file{daikon-untyped/Birthday.pm}. As the directory name implies, this
+instrumented version doesn't contain type information.
 
 @item Run a test suite using the instrumented @file{Birthday.pm}
 file.
 @example
-dtrace-perl test_bday.pl 5
+dtype-perl test_bday.pl 10
 @end example
 
-The @file{dtrace-perl} is a script that runs Perl with the appropriate
+The @file{dtype-perl} is a script that runs Perl with the appropriate
 command line options to find the modules used by the Daikon Perl
 runtime tracing modules, and to use the instrumented versions of
-modules in preference to their original ones. The number 5 is an
-argument to the @file{test_bday.pl} script telling it to run a
-relatively short test.
+modules in @file{daikon-untyped} in preference to their original
+ones. The number 10 is an argument to the @file{test_bday.pl} script
+telling it to run a relatively short test.
 
-Besides the results of the tests, this will also generate a file
+This will also generate a file
 @file{daikon-instrumented/Birthday.types} recording the type of each
 variable seen during the execution of the instrumented program.
 
 @item Re-annotate the module using the type information.
 @example
-dfepl Birthday.pm -T
+dfepl -T Birthday.pm
 @end example
 
 This step repeats step 2, except that the @option{-T} flag to
 @command{dfepl} tells it to use the type information generated in the
-previous step.
+previous step, and to put the output in the directory
+@file{daikon-instrumented}. @command{dfepl} also uses converts the
+type information into a file @file{daikon-output/Birthday.decls}
+suitable for containing subroutine declarations suitable for Daikon.
 
 @item Run the full test suite with the type-instrumented
 @file{Birthday.pm}.
 @example
-dtrace-perl test_bday.pl 50
+dtrace-perl test_bday.pl 30
 @end example
 
 Here we run another test suite, which happens to be the same
-@file{test_bday.pl}, but running for longer. (If you are impatient,
-low on disk space, or using a slow computer, you can replace 50 with a
-smaller number).
+@file{test_bday.pl}, but running for longer. (The example will also
+work with a smaller number). The script @command{dtrace-perl} is
+similar to @command{dtype-perl} mentioned earlier, but looks for
+instrumented source files in @command{daikon-instrumented}.
 
-This creates a directory @file{daikon-output} and files
-@file{Birthday.decls} and @file{Birthday.dtrace} within it. The
-@file{Birthday.decls} file declares each traced subroutine encountered
-during the test, and @file{Birthday.dtrace} is a trace file containing
-the values of variables at each invocation.
+This creates @file{daikon-output/test_bday-combined.dtrace}, a trace
+file containing the values of variables at each invocation. (The
+filename is formed from the name of the test program, with
+@file{-combined} appended because it contains the trace information
+from all the instrumented modules invoked from the program).
 
 @item Change to the @file{daikon-output} directory to analyze the
 output.
@@ -1408,7 +1435,8 @@ cd daikon-output
 
 @item Run Daikon on the trace file
 @example
-java daikon.Daikon -o Birthday.inv Birthday.decls Birthday.dtrace
+java daikon.Daikon -o Birthday.inv Birthday.decls \
+     test_bday-combined.dtrace
 @end example
 
 The invariants are printed to the standard output, and a binary
@@ -1423,6 +1451,32 @@ java daikon.gui.treeGUI.InvariantsGUI Birthday.inv
 Invariants produced from Perl programs can be examined using the same
 tools as other Daikon invariants. 
 @end enumerate
+
+In the example above, the script @file{test_bday.pl} was not itself
+instrumented; it was only used to test the instrumented code.  The
+Perl front-end can also be used to instrument stand-alone Perl
+programs. The following sequence of commands, similar to those above,
+show how Daikon can be used with the stand-alone program
+@file{standalone.pl}, also in the @file{examples/perl-examples}
+directory.
+
+@example
+dfepl standalone.pl
+dtype-perl daikon-untyped/standalone.pl
+dfepl -T standalone.pl
+dtrace-perl daikon-instrumented/standalone.pl
+cd daikon-output
+java daikon.Daikon -o standalone.inv standalone-main.decls \
+     standalone-combined.dtrace
+@end example
+
+Note two differences when running a stand-alone program.  First, the
+instrumented versions of the program, in the @file{daikon-untyped} or
+@file{daikon-instrumented} directory, are run directly.  Second, the
+declarations file is named after the package in which the subroutines
+were declared, but since every stand-alone program uses the
+@code{main} package, the name of the program is prepended to the
+@file{.decls} file name to avoid collisions.
 
 @node    Detecting invariants, Daikon output, Example use, Top
 @chapter Using Daikon to detect invariants
@@ -1477,7 +1531,7 @@ the names of procedures and variables that appear in the data trace file.
 Three instrumenters are part of Daikon:  @command{dfej} for Java programs,
 @command{dfec} for C and C++, and @command{dfepl} for Perl. The
 letters @command{dfe} in the names stand for ``Daikon front-end'', and
-@command{c}, @command{j}, and @command{pl} abbreviate ``Java'',
+@command{j}, @command{c}, and @command{pl} abbreviate ``Java'',
 ``C/C++'', and ``Perl''. The Java front end is robust; the C front end
 is moderately robust, and the C++ and Perl front ends are experimental.
 
@@ -1523,7 +1577,7 @@ For more information about dfej, see @ref{Java front end dfej}.
 To instrument C/C++ source, invoke @command{dfec} on all the source and
 header files at once:
 @example
-     dfec @var{...options...} @var{myprog}.c
+dfec @var{...options...} @var{myprog}.c
 @end example
 @strong{Important:}  dfec may only be run on ANSI/ISO C, not on K&R C
 or other dialects (@pxref{C program requirements})
@@ -1536,7 +1590,8 @@ it with the object file for the Daikon runtime library and the stdc++
 library.  By default, dfec places instrumented source in the
 @file{daikon-instrumented/} directory.
 @example
-      g++ -g -o @var{myprog} daikon-instrumented/@var{myprog}.cc $DFECDIR/daikon_runtime.o
+g++ -g -o @var{myprog} daikon-instrumented/@var{myprog}.cc \
+    $DFECDIR/daikon_runtime.o
 @end example
 @noindent
 In addition, you may want to specify the @option{-w} flag to g++, to
@@ -1601,11 +1656,6 @@ Perl programs must be instrumented twice. First they must be
 instrumented without type information.  Then, once the first
 instrumented version has been run to produce type information, they
 must be instrumented again taking the type information into account.
-@footnote{Note for Daikon version 2.4.6, released April 24, 2003.
-The Perl support is stable and usable, but we intend to further improve and
-simplify its interface with future releases.  Please provide feedback
-to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
-suggestions, and problems.}
 
 To instrument a stand-alone Perl program, invoke @command{dfepl} with
 the name of the program as an argument.
@@ -1628,8 +1678,9 @@ dfepl Acme/Trampoline.pm Acme/Date.pm
 dfepl .
 @end example
 
-Once type information is available, add the @option{-T} or @option{-t}
-options to the instrumentation command.
+Once type information is available, run the instrumentation command
+again with the @option{-T} or @option{-t} options added to use the
+produced type information.
 
 For more information about dfepl, see @ref{Perl front end dfepl}.
 
@@ -1682,8 +1733,11 @@ Make sure that the @file{daikon-instrumented/} directory appears on
 your class path before the directory containing the original Java
 code.  You can do this by running the program from that directory, if
 @file{.} (the current directory) appears early on your class path, or
-you can add the relevant @file{daikon-instrumented/} directory to your
-class path explicitly.
+you can add the @file{daikon-instrumented/} directory to your class
+path explicitly.  (To be able to run the instrumented program from a
+directory other than the parent of the @file{daikon-instrumented/}
+directory, an absolute path to the @file{daikon-instrumented/} should
+be used).
 
 
 @menu
@@ -1828,11 +1882,11 @@ redundant invariants.
 Suppress display of obvious postconditions on prestate.
 
 @item --suppress_redundant
-Suppress display of logically redundant invariants, using Simplify.
-Simplify must be separately obtained (from
+Suppress display of logically redundant invariants, using the Simplify
+automatic theorem prover.  Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.
-
+                                   
 @item --prob_limit @var{val}
 Set the probability limit for justifying invariants.  @var{pct} must be
 between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
@@ -1896,10 +1950,13 @@ Log4j package.
 @section All-in-one script daikon.pl
 
 The @command{daikon.pl} script automates all steps of the invariant
-detection process:  instrumentation, trace file generation, invariant
-display.  Currently, this script only works on Unix.
-This script is not the preferred way to run Daikon, but some
-users may find it helpful.
+detection process:  instrumentation, trace file generation, and
+invariant display.  However, it has several limitations: it only works
+with programs written in Java, it doesn't allow all of the optional
+features of Daikon to be controlled, and it depends on external
+programs that may not be present on non-Unix systems. It is not
+the preferred way to run Daikon, but some users may find it helpful
+for quick testing, or for use from automated scripts.
 
 Running @command{daikon.pl} without without any arguments will display usage information:
 @example
@@ -2281,8 +2338,8 @@ redundant invariants.
 Suppress display of obvious postconditions on prestate.
 
 @item --suppress_redundant
-Suppress display of logically redundant invariants, using Simplify.
-Simplify must be separately obtained (from
+Suppress display of logically redundant invariants, using the Simplify
+automatic theorem prover.  Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.
 
@@ -2821,22 +2878,23 @@ The Daikon front end for Java has two effects:
 @node    dfej options, Scope of instrumentation, Java front end dfej, Java front end dfej
 @subsection dfej options
 
-The simplest way to invoke dfej is simply to supply it a list of Java files:
+The simplest way to invoke dfej is simply to supply it with a list of
+Java files:
 @example
       dfej @var{filename1}.java @var{filename2}.java @var{...}
 @end example
 
 dfej also accepts the following options, which should be provided before
 the first Java file name.
-
+@c
 @c The options can be divided into the following
 @c categories:
 @c @table @b
 @c @item where (in what directory) to produce output
 @c 
 @c @end table
-
-Details of the options are as follows.  
+@c
+@c Details of the options are as follows.  
 When conflicting options are specified (for instance, both
 @option{+daikon_functions} and @option{-daikon_functions}, or both
 @option{-declsfiledir} and @option{-declsfiledirflat}), the last one
@@ -2925,19 +2983,21 @@ name exactly matches one of the omitting criteria.
 For example, to avoid detecting invariants over an iterator class, you
 can call dfej like so:
 @example
-  dfej '-daikon_omit=HashSetLinear$HslIterator' HashSetLinear.java
+dfej '-daikon_omit=HashSetLinear$HslIterator' \
+     HashSetLinear.java
 @end example
 
 As another example, to avoid detecting invariants over a particular
 method, you could use:
 @example
-  dfej '-daikon_omit=StackAr.topAndPop()Ljava/lang/Object;' StackAr.java
+dfej '-daikon_omit=StackAr.topAndPop()Ljava/lang/Object;' \
+     StackAr.java
 @end example
 
 Finally, to avoid detecting invariants at a particular program point,
 try:
 @example
-  dfej '-daikon_omit=StackAr.<init>(I)V:::EXIT33' StackAr.java
+dfej '-daikon_omit=StackAr.<init>(I)V:::EXIT33' StackAr.java
 @end example
 
 The argument is treated as a literal string by default.  However, if
@@ -2959,8 +3019,9 @@ daikon.util, you can call dfej like so:
 @cindex dtrace file name
 @cindex file name, for dtrace file
 @item -tracefilename=@var{filename}
-Specifies the default name for the @file{.dtrace} file (default
-@file{daikon-output/@var{CLASSNAME}.dtrace}).  The filename is relative
+Specifies the default name for the trace output (@file{.dtrace}) file
+(default @file{daikon-output/@var{CLASSNAME}.dtrace}).
+The filename is relative
 to the current directory at runtime, or is absolute.  If the DTRACEFILE
 environment variable is set when the instrumented program is run, it
 overrides this default.  Furthermore, if the DTRACEAPPEND environment
@@ -3164,7 +3225,8 @@ comment immediately before the declared type (but after any modifiers like
     ListNode next;
 
     ListNode( /*refined_type: Integer*/ Object theElement ) @{ ... @}
-    ListNode( /*refined_type: Integer*/ Object theElement, ListNode n ) @{ ... @}
+    ListNode( /*refined_type: Integer*/ Object theElement,
+              ListNode n ) @{ ... @}
   @}
 @end example
 
@@ -3252,7 +3314,7 @@ code or definitions to be instrumented (header files typically end in
 @file{.h}).  All files to be included
 in a single executable must be instrumented simultaneously; for example,
 @example
-  dfec file1.c file2.c file1.h file2.h
+dfec file1.c file2.c file1.h file2.h
 @end example
 
 Even if you do not wish to detect invariants in one of the files, it must be run
@@ -3281,12 +3343,13 @@ step should include @file{daikon_runtime.o}, and the compiler should be
 @command{g++}, since the instrumented files are C++ files.
 For instance,
 @example
-  gcc -g -o @var{exefile} myprog.c
+gcc -g -o @var{exefile} myprog.c
 @end example
 @noindent
 would become
 @example
-  g++ -g -o @var{exefile} daikon-instrumented/myprog.cc $DFECDIR/daikon_runtime.o
+g++ -g -o @var{exefile} daikon-instrumented/myprog.cc\
+     $DFECDIR/daikon_runtime.o
 @end example
 
 @cindex DTRACEFILE environment variable
@@ -3301,7 +3364,8 @@ Given the @file{myprog.decls} file that dfec created and the
 @file{myprog.dtrace} file that running the instrumented program created,
 you can run Daikon:
 @example
-  java daikon.Daikon daikon-output/myprog.decls daikon-output/myprog.dtrace
+java daikon.Daikon daikon-output/myprog.decls \
+     daikon-output/myprog.dtrace
 @end example
 
 @menu
@@ -3331,7 +3395,7 @@ paths or @command{gcc} defaults to using header files
 that cannot be processed by @command{dfec}.
 For example,
 @example
-  dfec -I/usr/local/.../2.95.3/include myprog.c
+dfec -I/usr/local/.../2.95.3/include myprog.c
 @end example
 @c  @noindent
 @c  To determine your system include path, run
@@ -3369,7 +3433,7 @@ Defines the preprocessor macro @var{macro} to be @var{value}.
 @cindex dtrace file name
 @cindex file name, for dtrace file
 @item --tracefilename=@var{filename}
-Specifies the default name for the @file{.dtrace} file (default
+Specifies the default name for the trace output (@file{.dtrace}) file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
 the instrumented program file that contains the main() function).
 A relative filename is interpreted with respect
@@ -3507,10 +3571,10 @@ address-of-array operations in the older, pcc-style manner.
 @cindex dfec customizations
 @cindex Daikon C runtime customizations
 @cindex daikon_runtime.h file
-Many Daikon customization options appear in file
-@file{$DAIKONDIR/front-end/c/daikon_runtime.h}.
-The comments in @file{daikon_runtime.h} explain how to enable and use
-each option.
+Many customization options for the Daikon C front end appear in the
+file @file{$DAIKONDIR/front-end/c/daikon_runtime.h}.
+Each option in the file has a comment explaining its function and how
+to enable it.
 Some examples of the options are:
 
 @itemize @bullet
@@ -3871,7 +3935,7 @@ Add a @code{#include} directive for @file{<bar.h>} to @file{daikon_runtime.cc},
 in the section with the other overloaded functions.
 That section starts with this text:
 @example
-/* functions that we're overloading with DAIKON_* implementations: */
+/* functions to overload with DAIKON_* implementations: */
 #include <string.h>
 @end example
 
@@ -3888,7 +3952,8 @@ resolved through a macro definition explained below), and the argument and
 return value types must be changed as well to reflect the use of
 smartpointers.  In this example, @code{foo()} as above would be declared as
 @example
-int DAIKON_foo(DaikonSmartPointer<char> arg1, DaikonSmartPointer<char> arg2);
+int DAIKON_foo(DaikonSmartPointer<char> arg1,
+               DaikonSmartPointer<char> arg2);
 @end example
 
 @item
@@ -3896,7 +3961,8 @@ Add a macro definition and a function declaration to @file{daikon_runtime.h}.
 There is a large section of these near the end of the file.  In the case of
 @code{foo()} above, we would need to insert:
 @example
-extern int DAIKON_foo(DaikonSmartPointer<char> arg1, DaikonSmartPointer<char> arg2);
+extern int DAIKON_foo(DaikonSmartPointer<char> arg1,
+                      DaikonSmartPointer<char> arg2);
 #define foo DAIKON_foo
 @end example
 @noindent
@@ -3937,38 +4003,46 @@ about a number of erroneous C constructs that @command{gcc} and other
 compilers accept.
 
 @cindex ANSI C
+@cindex ISO C
+@cindex C89 standard
+@cindex C99 standard
 @cindex K&R C
 @cindex C prototypes
 @cindex prototypes, C
 @cindex protoize tool
+@cindex function declarations, C
+@cindex declaration formats, of C functions
 
-To convert K&R prototypes to ANSI/ISO prototypes, use the
+To convert K&R function declarations to ANSI/ISO prototypes, use the
 @command{protoize} program; even if you believe your code to be
 ANSI/ISO C, you may wish to check that @command{protoize} has no
-effect.  Protoize is
-distributed with gcc, among other places; you can find documentation
-at @uref{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
-Even after running @command{protoize}, you may need to perform further
-fixups by hand.  A common problem is function prototypes with no
-arguments; in K&R C, the function definition may have any number of
-arguments, but in ANSI/ISO C, that indicates the function takes no
-arguments.
+effect.  Protoize is distributed with gcc, among other places; you can
+find documentation at
+@uref{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.  Even
+after running @command{protoize}, you may need to perform further
+fixups by hand. A common problem is function declarations of the form
+@code{f()} that specify no parameters.  In K&R C, the corresponding
+definition was allowed to have any number of arguments, but such
+declarations are obsolescent under the ANSI/ISO C standard, and in C++
+they always denote a function that takes no arguments.  To specify a
+prototype in ANSI/ISO C for a function that takes no arguments, write
+@code{f(void)}.
 
 If you do not understand a dfec error message that indicates a problem
 with your source code, you may wish to check your code for ANSI/ISO
 compliance by compiling it with @command{gcc -g -Wall -ansi
 -pedantic}.  Removing all warnings produced by @command{gcc} will
 reduce the number of warning messages produced by dfec.  (Lack of
-errors from that command does not guarantee your code is ANSI C, or
-that your code is acceptable to dfec.  However, errors from that
-command do indicate that your code is not ANSI C@.)
+errors from that command does not guarantee your code is ANSI/ISO C,
+or that your code is acceptable to dfec.  However, errors from that
+command do indicate that your code is not ANSI/ISO C@.)
 
 @command{dfec} does not accept every legal ANSI/ISO C program.  Here
 are the exceptions.
 @enumerate
 @item
 @command{dfec} only instruments programs that are both legal C
-and legal C++.  However, most ANSI C programs are also legal C++
+and legal C++.  However, most ANSI/ISO C programs are also legal C++
 programs.  Programs that define symbols that are C++ keywords, such as
 @samp{bool}, require that these symbols be changed to another name
 that does not conflict with the C++ namespace (for example,
@@ -4019,8 +4093,8 @@ contains the following test on line 179 (in textutils version 2.0):
   (current_pos = lseek (fd, (off_t) 0, SEEK_CUR)) != -1
 @end example
 @noindent
-However, Linux's header files defines @samp{off_t} as @samp{__quad_t},
-and @file{/usr/include/bits/types.h} defines @samp{__quad_t} as
+However, Linux's header files define @samp{off_t} as @samp{__quad_t},
+and @file{bits/types.h} in turn defines @samp{__quad_t} as
 follows:
 @example
   #ifdef __GNUC__
@@ -4091,26 +4165,26 @@ gcc under directory @file{/tmp/build-gcc-2.95.3/gcc-installation}.
 You may wish to adjust those directory names.
 
 @example
-  cd /tmp
-  mkdir build-gcc-2.95.3
-  cd build-gcc-2.95.3
-  wget ftp://prep.ai.mit.edu/pub/gnu/gcc/gcc-2.95.3.tar.gz
-  gunzip gcc-2.95.3.tar.gz
-  tar xf gcc-2.95.3.tar
-  mkdir gcc-2.95.3-build
-  cd gcc-2.95.3-build
-  ../gcc-2.95.3/configure --prefix=/tmp/build-gcc-2.95.3/gcc-installation
-  make bootstrap
-  make install
+cd /tmp
+mkdir build-gcc-2.95.3
+cd build-gcc-2.95.3
+wget ftp://prep.ai.mit.edu/pub/gnu/gcc/gcc-2.95.3.tar.gz
+gunzip gcc-2.95.3.tar.gz
+tar xf gcc-2.95.3.tar
+mkdir gcc-2.95.3-build
+cd gcc-2.95.3-build
+../gcc-2.95.3/configure --prefix=/tmp/build-gcc-2.95.3/gcc-installation
+make bootstrap
+make install
 @end example
 
 To test the installation, do the following:
 @example
-  which gcc
-  gcc -v
-  set path = (/tmp/build-gcc-2.95.3/gcc-installation $path)
-  which gcc
-  gcc -v
+which gcc
+gcc -v
+set path = (/tmp/build-gcc-2.95.3/gcc-installation $path)
+which gcc
+gcc -v
 @end example
 
 Now you can just use it; "gcc" refers to the new version.  You should
@@ -4132,28 +4206,101 @@ equivalent file.
 This section contains details about dfepl, the Daikon front end for
 Perl. For a brief introduction to dfepl, see @ref{Perl examples} and
 @ref{Instrumenting Perl programs}.
-@footnote{Note for Daikon version 2.4.6, released April 24, 2003.
-The Perl support is stable and usable, but we intend to further improve and
-simplify its interface with future releases.  Please provide feedback
-to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
-suggestions, and problems.}
 
 dfepl works with Perl versions 5.8 and later. (To be precise, Perl
 programs instrumented with dfepl can also be run with Perl 5.6, but
 the instrumentation engine, which is itself written in Perl, requires
-version 5.8).
+version 5.8). dfepl reads the source code for Perl modules or
+programs, and writes out instrumented versions of that code that
+keep track of function parameters, and make calls to routines in the
+@file{daikon_runtime} package whenever an instrumented subroutine is
+entered or exited.
+
+The instrumentation engine recognizes parameters as those variables
+that are declared with @code{my(...)} or @code{local(...)} and, in the
+same expression, assigned to from a value related to the argument
+array @code{@@_}, but only among the first contiguous series of such
+assignments in the body of a subroutine. This will capture the most
+common assignment idioms, such as @code{my $self = shift;} (where
+@code{shift} is short for @code{shift @@_}), @code{my $x = $_[0];}, and
+@code{my($x, $y, @@a) = @@_;}, but the arguments to subroutines which
+access them only directly through @code{@@_}, or that perform other
+operations before reading their arguments, will not be recognized.
+
+If the uninstrumented code requested warnings via the @code{use
+warnings} pragma or by adding the @code{-w} flag on the @code{#!}
+line, the instrumented code will also request warnings. In this case,
+or if @code{-w} is specified on the command line when running it, the
+instrumented code may produce warnings that the original code did
+not.  There are several situations in which the instrumented code
+produced by dfepl, while functionally equivalent to the original,
+generates more warnings.  The most common such problem, which arises
+from code that captures the scalar-context return value of a
+subroutine that returns a list, has been avoided in the current
+version by disabling the warning in question.  Other warnings which
+are known to be produced innocuously in this way include
+@code{Ambiguous call resolved as CORE::foo(), qualify as such or use
+&} (caused by code that uses @code{CORE::} to distinguish a built-in
+function from a user subroutine of the same name), and @code{Constant
+subroutine foo redefined} (caused by loading both instrumented and
+uninstrumented versions of a file).  Though some such warnings
+represent deficiencies in the instrumentation engine, they can be
+safely ignored when they occur.
+
+Because Perl programs do not contain static type information to
+distinguish, for instance, between strings and numbers, the Perl
+front-end incorporates an additional dynamic analysis to infer these
+types.  This type guessing, which occurs as a first pass before the
+program can be instrumented to produce output for Daikon, operates in
+a manner somewhat analogous to Daikon itself: watching the execution
+of a program, the runtime system chooses the most restrictive type for
+a variable that is not contradicted during that execution.  These
+types indicate, for instance, whether a scalar value always holds an
+integer, a possibly fractional numeric value, or a reference to
+another object.  It should not be necessary to examine or modify this
+type information directly, but for the curious, the syntax of the type
+information is described in comments in the @file{Daikon::PerlType}
+module.
+
+The safest course is to infer types for variables using exactly the
+same program executions (e.g., test cases) which will later be used to
+generate traces for Daikon, as this guarantees that the type
+information will match the actual data written to the trace file.
+However, because the type-guessing-instrumented versions of programs
+run fairly slowly in the current version, you may be tempted to use a
+subset of the input data for type guessing.  Doing so is possible, but
+it will only work correctly if the smaller tests exercise all of the
+instrumented subroutines and exit points with all the types of data
+they will later be used with. If the trace runtime tries to output a
+data value that doesn't match the inferred type, the value may
+silently be converted according to Perl's usual conventions (for
+instance, a non-numeric string may be treated as the number zero), or
+it may cause an error during tracing (for instance, trying to
+dereference a supposed array reference that isn't).  Also, if a
+subroutine exit point is traced but was never encountered during type
+guessing, the generated @file{.decls} and @file{.dtrace} files will be
+incompatible in a way that will cause Daikon to abort with an error
+message of the form ``Program point foo():::EXIT22 appears in dtrace
+file but not in any decl file''.
+
+The workflow of instrumenting Perl code with dfepl is summarized in
+the following diagram:
+@*
+@center @image{images/dfepl-flow,4in,}
 
 The @command{dfepl} command works by reading one or more Perl programs
-or modules, and writing instrumented versions of those files, by
-default to a subdirectory named @file{daikon-instrumented}. When run,
-these programs or modules will themselves write more files: if
-they were instrumented without type information, they will write files
-containing dynamically inferred type information (with the extension
-@file{.types}), by default to the @file{daikon-instrumented}
-directory. If the files were instrumented with type information, then
-they will instead output declaration and trace files, with extensions
-@file{.decls} and @file{.dtrace}, by default to a directory named
-@file{daikon-output}.
+or modules, and writing out new versions of those files, instrumented
+to capture information about their execution, by default to another
+directory.  dfepl is used in two passes: first, before type
+information is available, instrumented versions are written to a
+@file{daikon-untyped}.  These untyped programs, when run, will write
+files containing dynamically inferred type information (with the
+extension @file{.types}), by default to the @file{daikon-instrumented}
+directory.  When dfepl is rerun with this type information, it
+produces type-aware instrumented code in the
+@file{daikon-instrumented} directory, which when run produces
+execution traces in files with the extension @file{.dtrace} in the a
+directory @file{daikon-output}.
 
 @menu
 * dfepl options::               
@@ -4166,20 +4313,22 @@ they will instead output declaration and trace files, with extensions
 @item --absolute
 @itemx --noabsolute
 @option{--absolute} stores the absolute path to the output directories
-(by default named @file{daikon-instrumented} and @file{daikon-output})
-in the instrumented programs, so that no matter where the instrumented
-program is run, the output will go to a fixed location. If these
-directories are specified as relative paths (as is the default), the
-absolute path will always be based on the directory that was the
-working directory when @command{dfepl} was run. @option{--noabsolute}
-specifies the opposite, causing the output paths to be interpreted
-relative to the current working directory each time the instrumented
-program is invoked. The default, when neither option is specified, is
-for @file{.types} files to use an absolute path, but all others to use
-relative path, so that the @file{.types} files will always be in the
-same place as the instrumented source files that generated them, but
-the @file{daikon-output} directory will always be created in the
-current directory when the program runs.
+(by default named @file{daikon-untyped}, @file{daikon-instrumented} or
+@file{daikon-output}) in the instrumented programs, so that no matter
+where the instrumented program is run, the output will go to a fixed
+location. Even if these directories are given as relative paths (as is
+the default), @option{--absolute} specifies that they should always be
+taken as relative to the directory that was the working directory when
+@command{dfepl} was run.
+
+@option{--noabsolute} specifies the opposite, causing the output paths
+to be interpreted relative to the current working directory each time
+the instrumented program is invoked. The default, when neither option
+is specified, is for @file{.types} files to use an absolute path, but
+all others to use relative path, so that the @file{.types} files will
+always be in the same place as the instrumented source files that
+generated them, but the @file{daikon-output} directory will be created
+in the current directory when the program runs.
 
 @item --accessor-depth=@var{num}
 Controls the number of nested invocations of object accessor methods
@@ -4193,13 +4342,11 @@ accessor depths is generally not advisable, especially with many
 accessor methods, as the number of variables examined can be too many
 for Daikon to process efficiently.
 
-By default, the Daikon Perl trace runtime will examine only a single
-level of accessors.
+By default, the Daikon Perl trace runtime will examine at most a
+single level of accessors.
 
-@item --accessors-dir
+@item -A
 @itemx --accessors-dir=@var{directory}
-@itemx -A
-@itemx -A @var{directory}
 Look for files containing accessor lists in @var{directory}, or the
 current directory if @var{directory} is omitted. For a class
 @code{Acme::Foo}, accessors are methods that return information about
@@ -4212,23 +4359,6 @@ listing the names of each accessor method, one per line with no other
 punctuation, named @file{Acme/Foo.accessors} in the same directory as
 @file{Acme/Foo.pm}.
 
-@item --decls-append
-@itemx --nodecls-append
-When @option{--decls-append} is specified, the instrumented program
-will append a new set of declarations to the appropriate
-@file{.decls} file each time it runs. When
-@option{--nodecls-append} is specified, it will overwrite the file
-instead. 
-
-The current version of the Daikon Perl tracing runtime does not know
-how to add only new declarations to a @file{.decls} file. In
-particular, it can add conflicting declarations that will cause Daikon
-to fail with odd error messages. Thus the current default is not to
-append, but this will be changed once appending correctly is
-supported. This choice can also be overridden, when the
-program is run, to always append by setting the environment variable
-@code{DECLSAPPEND} to 1.
-
 @item --decls-basedir=@var{directory}
 Put generated declaration files in @var{directory} and its
 subdirectories. The default is @file{daikon-output}.
@@ -4237,10 +4367,11 @@ subdirectories. The default is @file{daikon-output}.
 @var{style} should be one of @option{combined}, @option{flat}, or
 @option{tree}. A style of @option{combined} specifies that the
 declarations for all packages should be merged, in a file named
-@file{combined.decls}. A style of @option{flat} specifies that the
-declarations for each package should be in a separate file named after
-the package, but that these files should go in a single directory; for
-instance, the declarations for @code{Acme::Trampoline} and
+@file{prog-combined.decls} where @file{prog} is the name of the
+program. A style of @option{flat} specifies that the declarations for
+each package should be in a separate file named after the package, but
+that these files should go in a single directory; for instance, the
+declarations for @code{Acme::Trampoline} and
 @code{Acme::Skates::Rocket} would go in files named
 @file{Acme::Trampoline.decls} and @file{Acme::Skates::Rocket.decls}. A
 style of @option{tree} specifies that each package should have its own
@@ -4249,7 +4380,9 @@ directories whose structure matches the structure of their package
 names; in the example above, the files would be
 @file{Acme/Trampoline.decls} and @file{Acme/Skates/Rocket.decls}.
 
-The default is @option{tree}.
+The default is @option{tree}.  Note that @option{--decls-style} and
+@option{--types-style} are currently constrained to be the same; if
+one is specified, the other will use the same value.
 
 @item --dtrace-append
 @itemx --nodtrace-append
@@ -4271,7 +4404,8 @@ subdirectories. The default is @file{daikon-output}.
 @var{style} should be one of @option{combined}, @option{flat}, or
 @option{tree}. A style of @option{combined} specifies that the traces
 for all packages should be merged, in a file named
-@file{combined.dtrace}. A style of @option{flat} specifies that the
+@file{prog-combined.dtrace}, where @file{prog} is the name of the
+program. A style of @option{flat} specifies that the
 traces for each package should be in a separate file named after the
 package, but that these files should go in a single directory; for
 instance, the declarations for @code{Acme::Trampoline} and
@@ -4284,25 +4418,37 @@ the structure of their package names; in the example above, the files
 would be @file{Acme/Trampoline.dtrace} and
 @file{Acme/Skates/Rocket.dtrace}.
 
-The default is @option{tree}.
+The default is @option{combined}.
 
 @item --instr-basedir=@var{directory}
 @itemx --instrsourcedir=@var{directory}
 Put instrumented source files in @var{directory} and its
-subdirectories. The default is @file{daikon-instrumented}.
+subdirectories. The default is @file{daikon-untyped}, or
+@file{daikon-instrumented} if type information is available.
 
 @item --list-depth=@var{DEPTH}
 Consider as many as @var{DEPTH} of the first elements of a list to be
-distinct entities. When subroutines return a list of values, each
-value may have a distinct meaning, or the list may be homogeneous.
-When trying to assign types to the elements of a list, the Daikon Perl
-trace runtime will try making separate guesses about the types of the
-elements of a short list, but it would be inefficient to make retain
-this distinction for many elements. This parameter controls how many
-elements of a list will be examined individually; all the others will
-be treated uniformly.
+distinct entities, for the purpose of guessing their types. When
+subroutines return a list of values, each value may have a distinct
+meaning, or the list may be homogeneous. When trying to assign types
+to the elements of a list, the Daikon Perl trace runtime will try
+making separate guesses about the types of the elements of a short
+list, but it would be inefficient to make retain this distinction for
+many elements. This parameter controls how many elements of a list
+will be examined individually; all the others will be treated
+uniformly.
 
 The default is 3.
+
+@item --output-dir=@var{directory}
+Put all of the files that are the output of the tracing process (and
+therefore input to the Daikon invariant detection engine) in
+@var{directory} and its subdirectories. This option is a shorthand
+equivalent to setting both @option{--decls-basedir} and
+@option{--dtrace-basedir} to the same value.
+
+The default behavior is as if @option{--output-dir=daikon-output} had
+been specified.
 
 @item --perl=@var{path}
 Use @var{path} as the location of Perl when calling the annotation
@@ -4354,16 +4500,18 @@ instead.
 The default behavior is to append. If @option{--notypes-append} is
 specified, however, this choice can also be overridden, when the
 program is run, to append by setting the environment variable
-@code{TYPESAPPEND} to 1.
+@code{TYPESAPPEND} to 1. There is no way to use environment variables
+to force the runtime to overwrite a types file, but an equivalent
+effect can be obtained by simply removing the previous types file
+before each run.
 
-@item --types-dir
+@item -T
 @itemx --types-dir=@var{directory}
-@itemx -T
-@itemx -T @var{directory}
 Look for @file{.types} files in @var{directory}, or
 @file{daikon-instrumented} if @var{directory} is omitted. When
-instrumenting @code{Acme::Trampoline}, @command{dfepl} will look for
-files named @file{combined.types}, @file{Acme::Trampoline.types}, and
+instrumenting a module @code{Acme::Trampoline}, used in a program
+@file{coyote.pl},  @command{dfepl} will look for
+files named @file{coyote-combined.types}, @file{Acme::Trampoline.types}, and
 @file{Acme/Trampoline.types}, corresponding to the possible choices of
 @option{--types-style}. Once discovered, the files are used in the
 same way as for @option{-t}.
@@ -4393,7 +4541,8 @@ is, usually @file{daikon-instrumented}.
 @var{style} should be one of @option{combined}, @option{flat}, or
 @option{tree}. A style of @option{combined} specifies that the types
 for all packages should be merged, in a file named
-@file{combined.types}. A style of @option{flat} specifies that the
+@file{prog-combined.types}, where @file{prog} is the name of the
+program.  A style of @option{flat} specifies that the
 types for each package should be in a separate file named after the
 package, but that these files should go in a single directory; for
 instance, the declarations for @code{Acme::Trampoline} and
@@ -4406,7 +4555,9 @@ the structure of their package names; in the example above, the files
 would be @file{Acme/Trampoline.types} and
 @file{Acme/Skates/Rocket.types}.
 
-The default is @option{tree}.
+The default is @option{tree}. Note that @option{--types-style} and
+@option{--decls-style} are currently constrained to be the same; if
+one is specified, the other will use the same value.
 
 @item --verbose
 @itemx -v
@@ -4431,7 +4582,6 @@ by Daikon, run the @command{convertcsv.pl} program found in the
 produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
 @command{convertcsv.pl} without any arguments in order to see a usage
 message.
-
 
 @node    Enhancing Daikon output, Tools, Front ends, Top
 @chapter Enhancing Daikon output
@@ -4739,7 +4889,8 @@ class simpleStack @{
     currentSize = 0;
   @}
  
-  /** Adds an element to the back of the stack, if the stack is not full.
+  /** Adds an element to the back of the stack, if the stack is
+    * not full.
     * Returns true if this succeeds, false otherwise.  **/
   public String push(int x) @{
     if ( !isFull() && x >= 0) @{
@@ -4860,13 +5011,15 @@ expand CPP commands into legal C, run either @command{cpp -P} or
 @example
 cpp -P foo.c foo.c-expanded
 cpp -P bar.c bar.c-expanded
-java daikon.tools.jtb.cparser.CreateSpinfoC foo.c-expanded bar.c-expanded
+java daikon.tools.jtb.cparser.CreateSpinfoC \
+     foo.c-expanded bar.c-expanded
 @end example
 @noindent
 
 If you get an error such as
 @example
-... Lexical error at line 5, column 1.  Encountered: "#" (35), after : ""
+... Lexical error at line 5, column 1.
+Encountered: "#" (35), after : ""
 @end example
 @noindent
 then you forgot to run cpp before running CreateSpinfoC.
@@ -4947,7 +5100,7 @@ source code as ESC/JML annotations.  These annotations are comments that
 can be automatically verified or otherwise manipulated by other tools.
 Invoke MergeESC like this:
 @example
-  java daikon.tools.jtb.MergeESC Myprog.inv Myprog.java Myprog2.java ...
+java daikon.tools.jtb.MergeESC Myprog.inv Myprog.java Myprog2.java ...
 @end example
 
 The first argument is a Daikon @file{.inv} file produced by running
@@ -5036,8 +5189,8 @@ Adding a new invariant to Daikon requires writing one Java class, adding
 a line to another file (a factory class) to inform Daikon of the new
 class, and recompiling Daikon.
 
-You can find a simple example of an invariant in file
-@file{java/daikon/inv/unary/scalar/Positive.java}.  This invariant is
+The file @file{java/daikon/inv/unary/scalar/Positive.java} in the
+Daikon distribution contains a sample invariant.  This invariant is
 true if the variable is always positive (greater than zero).  This
 invariant is subsumed by other invariants in the system; it is provided
 only as a pedagogical example.  To enable the invariant, uncomment the
@@ -5350,7 +5503,8 @@ that file without the @option{-Wall} flag.
 
 If you get an error like
 @example
-stream.cpp: In method `void LexStream::ProcessInputUnicode (const char *, long int)':
+stream.cpp: In method `void LexStream::ProcessInputUnicode
+                                       (const char *, long int)':
 stream.cpp:901: cannot convert `const char **' to `char **' for
 argument `2' to `iconv (void *, char **, size_t *, char **, size_t *)'
 @end example
@@ -5402,7 +5556,8 @@ JDKDIR environment variable correctly.  Also see @ref{Installing dfej}.
 
 If you get a warning like
 @example
-     *** Warning: the file "/cygdrive/c/jswdk-1.0.1/jspengine.jar" is not a valid zip file.
+*** Warning: the file "/cygdrive/c/jswdk-1.0.1/jspengine.jar"
+    is not a valid zip file.
 @end example
 @noindent
 then you have set your CLASSPATH incorrectly:  it names a nonexistent
@@ -5414,8 +5569,9 @@ on the operation of dfej, however.
 
 While compiling files instrumented by dfej, if you get an error like
 @example
-    Duplicate declaration of local variable "this_invocation_nonce".
-    Duplicate declaration of method "daikonPrintArrayMissing" in type "StackAr".
+Duplicate declaration of local variable "this_invocation_nonce".
+Duplicate declaration of method "daikonPrintArrayMissing"
+    in type "StackAr".
 @end example
 @noindent
 then you have instrumented an already-instrumented file.  Remove the
@@ -5725,7 +5881,7 @@ be necessary to increase this limit as well, with the
 of which at most 256 can be used for the permanent generation, you
 would run Java like so:
 @example
-        java -Xmx=512m -XX:MaxPermSize=256m
+        java -Xmx512m -XX:MaxPermSize=256m
 @end example
 
 Another possible problem is the creation of too many derived variables.
@@ -6224,6 +6380,20 @@ enhancements to the authors for inclusion in a future release under
 these same conditions.  If you do not agree to this license, please do
 not use or examine the software.  Other licensing terms are available;
 send mail to @email{mernst@@pag.lcs.mit.edu}.
+
+Note that the front ends discussed in this manual are separate
+programs, and some are made available under different licenses.  All
+of the software in the main Daikon distribution is made available
+under the same license as the Daikon tool proper, or a less
+restrictive license.  However, because the front ends are separate
+programs not derived from the Daikon invariant detection tool, you are
+neither required nor entitled to use the Daikon invariant detector
+itself under these other licenses.
+
+The Daikon Perl front end dfepl may be used and distributed under the
+regular Daikon license or, at your option, either the GNU General
+Public License or the Perl Artistic License (that is, under the same
+terms as Perl itself).
 
 If you use Daikon, please subscribe to the daikon-announce and
 daikon-discuss mailing lists (@pxref{Mailing lists}).  The
