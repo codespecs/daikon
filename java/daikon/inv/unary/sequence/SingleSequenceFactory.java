@@ -23,7 +23,7 @@ public final class SingleSequenceFactory {
     } else if (pass == 2) {
       EltOneOf eoo = EltOneOf.find(ppt);
       if (!((eoo != null) && (eoo.num_elts() == 1))) {
-        result.add(EltIntComparison.instantiate(ppt));
+        result.add(EltwiseIntComparison.instantiate(ppt));
         result.add(EltNonZero.instantiate(ppt));
         result.add(EltLowerBound.instantiate(ppt));
         result.add(EltUpperBound.instantiate(ppt));

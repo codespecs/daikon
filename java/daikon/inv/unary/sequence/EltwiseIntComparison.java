@@ -8,9 +8,9 @@ import utilMDE.*;
 
 
 // This compares adjacent elements in the sequence.
-public class EltIntComparison extends SingleSequence {
+public class EltwiseIntComparison extends SingleSequence {
 
-  final static boolean debugEltIntComparison = false;
+  final static boolean debugEltwiseIntComparison = false;
 
   public final boolean only_check_eq;
 
@@ -18,20 +18,20 @@ public class EltIntComparison extends SingleSequence {
   boolean can_be_lt = false;
   boolean can_be_gt = false;
 
-  protected EltIntComparison(PptSlice ppt, boolean only_eq) {
+  protected EltwiseIntComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
     only_check_eq = only_eq;
   }
 
-  public static EltIntComparison instantiate(PptSlice ppt) {
+  public static EltwiseIntComparison instantiate(PptSlice ppt) {
     // Don't compute ordering relationships over object addresses for
     // elements of a Vector.  (But do compute equality/constant!)
     boolean only_eq = ! ppt.var_infos[0].type.baseIsIntegral();
-    return new EltIntComparison(ppt, only_eq);
+    return new EltwiseIntComparison(ppt, only_eq);
   }
 
   public String repr() {
-    return "EltIntComparison" + varNames() + ": "
+    return "EltwiseIntComparison" + varNames() + ": "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
@@ -43,7 +43,7 @@ public class EltIntComparison extends SingleSequence {
     // Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
     String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
     String comparison = (can_be_eq ? "=" : "");
-    if (debugEltIntComparison) {
+    if (debugEltwiseIntComparison) {
       System.out.println(repr()
 			 + "; inequality=\"" + inequality + "\""
 			 + ",comparison=\"" + comparison + "\"");
@@ -95,7 +95,7 @@ public class EltIntComparison extends SingleSequence {
 
   public boolean isSameFormula(Invariant o)
   {
-    EltIntComparison other = (EltIntComparison) o;
+    EltwiseIntComparison other = (EltwiseIntComparison) o;
     return
       (can_be_eq == other.can_be_eq) &&
       (can_be_gt == other.can_be_gt) &&
@@ -104,8 +104,8 @@ public class EltIntComparison extends SingleSequence {
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof EltIntComparison) {
-      EltIntComparison other = (EltIntComparison) o;
+    if (o instanceof EltwiseIntComparison) {
+      EltwiseIntComparison other = (EltwiseIntComparison) o;
       return (! ((can_be_eq && other.can_be_eq)
                  || (can_be_gt && other.can_be_gt)
                  || (can_be_lt && other.can_be_lt)));
