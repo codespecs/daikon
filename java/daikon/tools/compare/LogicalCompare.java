@@ -30,11 +30,12 @@ public class LogicalCompare {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.get(i);
-      if (inv.format_using(OutputFormat.SIMPLIFY).indexOf("format_simplify") == -1)
+      String simp = inv.format_using(OutputFormat.SIMPLIFY);
+      if (simp.indexOf("format_simplify") == -1 &&
+          simp.indexOf("OutputFormat:Simplify") == -1)
         new_invs.add(inv);
       else
-        System.out.println("Can't handle " + inv.format() + ": " +
-                           inv.format_using(OutputFormat.SIMPLIFY));
+        System.out.println("Can't handle " + inv.format() + ": " + simp);
     }
     return new_invs;
   }
@@ -116,10 +117,11 @@ public class LogicalCompare {
     CmdCheck cc = new CmdCheck(inv.format_using(OutputFormat.SIMPLIFY));
     //System.out.print("[");
     try {
+      Assert.assertTrue(cc != null);
       simplifySession.request(cc);
       //System.out.print("]");
     } catch (TimeoutException e) {
-      Assert.assertTrue(false, "Unexpected timeout");
+      Assert.assertTrue(false, "Unexpected timeout on " + inv.format());
       return null;
     }
     if (cc.valid) {
@@ -242,6 +244,7 @@ public class LogicalCompare {
     throws FileNotFoundException, IOException, ClassNotFoundException
   {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    //LogHelper.setPriority("daikon.simplify", LogHelper.DEBUG);
     String app_filename = args[0];
     String test_filename = args[1];
     String enter_ppt_name = args[2];
@@ -274,6 +277,7 @@ public class LogicalCompare {
     t_post = filterSimplifyFormat(t_post);
 
     simplifySession = SessionManager.attemptProverStartup();
+    simplifySession.setTimeout(1000*60); // one minute
     Assert.assertTrue(simplifySession != null);
 
     System.out.println("Apre (real) is:");
