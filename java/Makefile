@@ -50,6 +50,7 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/scalar/LowerBoundFloat.java \
 	daikon/inv/unary/scalar/UpperBoundFloat.java \
 	daikon/inv/unary/scalar/OneOfScalar.java \
+	daikon/inv/unary/scalar/OneOfFloat.java \
 	daikon/inv/unary/string/OneOfString.java \
 	daikon/inv/unary/sequence/OneOfSequence.java \
 	daikon/inv/unary/sequence/OneOfFloatSequence.java \
@@ -459,6 +460,9 @@ daikon/inv/unary/scalar/UpperBoundFloat.java: daikon/inv/unary/scalar/Bound.java
 
 daikon/inv/unary/scalar/OneOfScalar.java: daikon/inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+daikon/inv/unary/scalar/OneOfFloat.java: daikon/inv/unary/OneOf.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=FLOAT)
 
 daikon/inv/unary/string/OneOfString.java: daikon/inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
