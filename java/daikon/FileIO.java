@@ -45,6 +45,7 @@ public final class FileIO {
   // a number may follow it.
   public final static String exit_tag = ppt_tag_separator + "EXIT";
   public final static String object_tag = ppt_tag_separator + "OBJECT";
+  public final static String class_static_tag = ppt_tag_separator + "CLASS";
 
 
 /// Variables
@@ -299,7 +300,7 @@ public final class FileIO {
 
     for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.compute_object_ppt(all_ppts);
+      ppt.add_controlling_ppts(all_ppts);
       ppt.compute_entry_ppt(all_ppts);
       if (ppt.entry_ppt != null) {
         ppt.add_orig_vars(ppt.entry_ppt);
