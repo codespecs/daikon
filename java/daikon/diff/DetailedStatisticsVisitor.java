@@ -13,15 +13,16 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
   private static final int LABEL_WIDTH = 7;
 
   // Types of invariants
-  public static final int NUM_TYPES = 5;
-  public static final int TYPE_NULLARY = 0;
-  public static final int TYPE_UNARY_INTERESTING = 1;
-  public static final int TYPE_UNARY_UNINTERESTING = 2;
-  public static final int TYPE_BINARY = 3;
-  public static final int TYPE_TERNARY = 4;
+  public static final int NUM_TYPES = 6;
+  public static final int TYPE_NULLARY_INTERESTING = 0;
+  public static final int TYPE_NULLARY_UNINTERESTING = 1;
+  public static final int TYPE_UNARY_INTERESTING = 2;
+  public static final int TYPE_UNARY_UNINTERESTING = 3;
+  public static final int TYPE_BINARY = 4;
+  public static final int TYPE_TERNARY = 5;
 
   public static final String[] TYPE_LABELS =
-  { "Null", "UInt", "U!Int", "Bin", "Ter" };
+  { "NInt", "N!Int", "UInt", "U!Int", "Bin", "Ter" };
 
   // Relationships between invariants
   public static final int NUM_RELATIONSHIPS = 12;
@@ -56,21 +57,57 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
 
   // Table of frequencies, indexed by type of invariant, and
   // relationship between the invariants
-  private int[][] freq = new int[NUM_TYPES][NUM_RELATIONSHIPS];
+  private double[][] freq = new double[NUM_TYPES][NUM_RELATIONSHIPS];
 
+  private boolean continuousJustification;
+
+  public DetailedStatisticsVisitor(boolean continuousJustification) {
+    this.continuousJustification = continuousJustification;
+  }
 
   public void visitRootNode(RootNode node) { }
 
   public void visitPptNode(PptNode node) { }
 
   public void visitInvNode(InvNode node) {
-    Invariant inv1 = node.getInv1();
-    Invariant inv2 = node.getInv2();
+    addFrequency(node.getInv1(), node.getInv2());
+  }
 
+  public void addFrequency(Invariant inv1, Invariant inv2) {
+    if (continuousJustification) {
+      addFrequencyContinuous(inv1, inv2);
+    } else {
+      addFrequencyBinary(inv1, inv2);
+    }
+  }
+
+  public void addFrequencyBinary(Invariant inv1, Invariant inv2) {
+    int type = determineType(inv1, inv2);
+    int relationship = determineRelationship(inv1, inv2);
+    freq[type][relationship]++;
+  }
+
+  public void addFrequencyContinuous(Invariant inv1, Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
 
-    freq[type][relationship]++;
+    switch (relationship) {
+    case REL_SAME_JUST1_UNJUST2: case REL_SAME_UNJUST1_JUST2:
+      freq[type][relationship] += calculateProbabilityDifference(inv1, inv2);
+      break;
+    default:
+      freq[type][relationship]++;      
+    }
+    
+  }
+
+  public static double calculateProbabilityDifference(Invariant inv1,
+                                                      Invariant inv2) {
+    Assert.assert(inv1 != null && inv2 != null);
+    double prob1 = Math.min(inv1.getProbability(), 1);
+    double prob2 = Math.min(inv2.getProbability(), 1);
+    double diff = Math.abs(prob1 - prob2);
+    return diff;
   }
 
   public static int determineType(Invariant inv1, Invariant inv2) {
@@ -79,19 +116,18 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
     // Set inv to a non-null invariant
     Invariant inv = (inv1 != null) ? inv1 : inv2;
 
+    // If either invariant is interesting, the pair is interesting
+    boolean interesting = ((inv1 != null && inv1.isInteresting()) ||
+                           (inv2 != null && inv2.isInteresting()));
+
     int arity = inv.ppt.arity;
     switch (arity) {
     case 0:
-      type = TYPE_NULLARY;
+      type = interesting ? TYPE_NULLARY_INTERESTING :
+        TYPE_NULLARY_UNINTERESTING;
       break;
     case 1:
-      // If either invariant is interesting, the pair is interesting
-      if ((inv1 != null && inv1.isInteresting()) ||
-          (inv2 != null && inv2.isInteresting())) {
-        type = TYPE_UNARY_INTERESTING;
-      } else {
-        type = TYPE_UNARY_UNINTERESTING;
-      }
+      type = interesting ? TYPE_UNARY_INTERESTING : TYPE_UNARY_UNINTERESTING;
       break;
     case 2:
       type = TYPE_BINARY;
@@ -173,10 +209,10 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
     for (int type = 0; type < NUM_TYPES; type++) {
       pw.print(UtilMDE.rpad(TYPE_LABELS[type], LABEL_WIDTH));
       for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
-        int f = freq[type][rel];
+        double f = freq[type][rel];
         pw.print(UtilMDE.rpad(f, FIELD_WIDTH));
       }
-      int s = ArraysMDE.sum(freq[type]); 
+      double s = ArraysMDE.sum(freq[type]); 
       pw.print(UtilMDE.rpad(s, FIELD_WIDTH));
       pw.println();
     }
@@ -200,7 +236,7 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
 
   // Use this method instead of making the array public, to preserve
   // abstraction
-  public int freq(int type, int relationship) {
+  public double freq(int type, int relationship) {
     return freq[type][relationship];
   }
 
