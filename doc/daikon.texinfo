@@ -1287,7 +1287,9 @@ You may want to specify one or more command-line options;
 see @ref{dfec command-line arguments}.
 If the @command{dfec} command produces errors, first check whether running
 @command{gcc -g -Wall -ansi -pedantic} on the code produces errors; if so,
-fix them before proceeding to use @command{dfec}.
+fix them before proceeding to use @command{dfec}.  (Lack of errors
+from that command does not guarantee your code is ANSI C, but errors
+from that command do indicate that your code is not ANSI C@.)
 
 After dfec is run, you must compile the instrumented source, linking
 it with the object file for the Daikon runtime library and the stdc++
@@ -1768,41 +1770,47 @@ for each level of array nesting.
 @node    Variable names, Invariant syntax, Program points, Interpreting output
 @subsection Variable names
 
-@cindex @code{orig()} variable (pre-state value)
-@cindex @code{.class} variable
-@cindex @code{.toString} variable
-@cindex @code{-1} array index (counts from end of array)
-@cindex negative array index (counts from end of array)
-@cindex @code{a[]} variable (array contents)
-
 Here is an incomplete list of the conventions used by Daikon for
 variable names.
 
 @itemize @bullet
 @item
+@cindex @code{orig()} variable (pre-state value)
 @code{orig(x)} refers to the value of formal parameter @code{x} upon
 entry to a procedure (because the procedure body might modify the value
 of @code{x}).  These variables appear only at @code{:::EXIT} program
 points.
 @item
-@code{a} is the identity of @code{a} --- think of it as a
+@code{a} (for an array, class, or other non-primitive variable
+@code{a}) is the identity of @code{a} --- think of it as a
 comparison over hash codes
 @item
+@cindex @code{.class} variable
 @code{a.class} is the runtime type of @code{a}, which may
 differ from its declared type
 @c "a.class" is omitted for arrays of primitive type
 @item
+@cindex @code{a[]} variable (array contents)
 @code{a[]} is the contents of array @code{a}, namely a sequence of
-elements; "a=b" implies "a[]=b[]" but the reverse is not true
+elements.  "a=b" implies "a[]=b[]" but the reverse is not true.
+However, "a=orig(a)" does not imply "a[]=orig(a[])".
 @item
 @code{a[].class} is an array of types, representing the run-time classes
 of the contents of @code{a}; it is omitted for arrays of primitive type
 @item
+@cindex @code{-1} array index (counts from end of array)
+@cindex negative array index (counts from end of array)
 @code{a[-1]} denotes the last element of array @code{a};
 it is syntactic sugar for @code{a[a.length-1]}.
 @item
+@cindex @code{.toString} variable
 @code{s.toString} is the string value of String @code{s}, namely a
 sequence of characters
+@item
+@cindex @code{::} variable (C global)
+@code{::a} is the global variable @code{a}.  It contains the colons to
+differentiate it from @code{a} as a procedure parameter, so that
+different properties can be reported over the two different variables.
 @end itemize
 
 Daikon does not produce output for local variables, only for variables
@@ -3349,12 +3357,17 @@ compilers accept.
 @cindex prototypes, C
 
 To convert K&R prototypes to ANSI/ISO prototypes, use the
-@command{protoize} program (distributed with gcc, among other places);
-you may wish to check that it has no effect on your code.  To check
-your code for ANSI/ISO compliance, compile it with @command{gcc -g
--Wall -ansi -pedantic}.  Removing all warnings produced by
-@command{gcc} will reduce the number of confusing warning messages
-produced by dfec.
+@command{protoize} program; you may wish to check that it has no
+effect even if you believe your code to be ANSI/ISO C@.  Protize is
+distributed with gcc, among other places; you can find documentation
+at @url{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
+
+To check your code for ANSI/ISO compliance, compile it with
+@command{gcc -g -Wall -ansi -pedantic}.  Removing all warnings
+produced by @command{gcc} will reduce the number of confusing warning
+messages produced by dfec.  (Lack of errors from that command does not
+guarantee your code is ANSI C, but errors from that command do
+indicate that your code is not ANSI C@.)
 
 @command{dfec} does not accept every legal ANSI/ISO C program.  Here
 are the exceptions.
@@ -3381,6 +3394,10 @@ smart pointer tracking).  User code is so instrumented, but
 library functions are not,
 so you should use the declaration in @file{stdlib.h} rather than
 repeating it in your own code.
+@item
+dfec redefines certain functions defined in system headers.  If your
+program tries to define these as macros or otherwise uses them in a
+non-standard way, you may experience trouble.
 @end enumerate
 
 
@@ -4341,12 +4358,20 @@ together, etc.)@ should not be compared to one another, because those
 variables are likely to be entirely unrelated and any properties over
 them are incidental and uninformative.
 
-As of December 2001, Ajax cannot deal with JDK 1.2 (or later) libraries,
-and it sometimes has other problems.  If Ajax cannot be run, then a more
-primitive method of determining comparability is used instead.  Even if
-Ajax cannot be run, Daikon proceeds without error.
+If Ajax cannot be run, then a more primitive method of determining
+comparability is used instead.  Even if Ajax cannot be run, Daikon
+proceeds without error.
 
-@cindex Invalid class loading, warning
+@cindex No such method in call, Ajax error
+@cindex ajax.jbc.InvalidClassDataError
+@cindex InvalidClassDataError, Ajax
+
+As of July 2002, Ajax cannot deal with JDK 1.2 (or later) libraries.
+For instance, Ajax issues the error ``ajax.jbc.InvalidClassDataError:
+No such method in call'' for methods such as
+java.lang.Math.toDegrees(Double) that do not appear in JDK 1.1.
+
+@cindex Invalid class loading, Ajax warning
 
 Ajax may produce the warning message ``Invalid class loading ...'';
 you will notice this if environment variable DFEJ_VERBOSE is set.
