@@ -377,7 +377,19 @@ tags:
 	@echo etags '*.java ...'
 	@etags -l java ${TAG_FILES}
 
-## Static checks of the code
+###
+### Static checks of the code
+###
+
+findbugs: .findbugs-output
+
+.findbugs-output: ../daikon.jar
+	rm -f findbugs-output
+	~/tmp/findbugs-0.7.4/bin/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
+
+# This target doesn't seem to work.  Why?
+../daikon.jar:
+	cd .. && $(MAKE) daikon.jar
 
 lint:	jlint
 
@@ -390,7 +402,9 @@ jlint:
 audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
-## Testing
+###
+### Testing
+###
 
 test: tests
 
@@ -413,7 +427,9 @@ junit:
 	@echo java daikon.test.MasterUnitTester
 	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
 
-## Documentation
+###
+### Documentation
+###
 
 .PHONY: doc
 
@@ -474,14 +490,19 @@ doc-dkconfig: ../doc/config-options.texinfo
 
 doc-category: ../doc/category-options.texinfo
 
-## Switching between version 2 and version 3 (temporary)
+###
+### Switching between version 2 and version 3 (temporary)
+###
 
 # Recurse to the directory above this since regression tests need to be
 # switched too
 use-%:
 	cd .. && $(MAKE) $@
 
-## For debugging the Makefile.
+###
+### For debugging the Makefile.
+###
+
 showvars:
 	@echo JAVAC = ${JAVAC}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}

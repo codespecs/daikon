@@ -1,0 +1,21 @@
+<!-- This file specifies what findbugs should exclude when checking. -->
+
+<FindBugsFilter>
+  <!-- Ignore libraries that are distributed with Daikon. -->
+  <Match classregex="ajax.*" />
+  <Match classregex="org.apache.log4j.*" />
+  <Match classregex="jtb.*" />
+  <Match classregex="daikon.tools.jtb.cparser.*" />
+  <Match classregex="junit.*" />
+
+
+  <!-- Ignore certain violations:
+	EI[2] (expose internal representation)
+	LI (lazy update)
+  -->
+  <Match classregex=".*" >
+    <BugCode name="EI,EI2,LI" />
+  </Match>
+
+
+</FindBugsFilter>
