@@ -59,20 +59,19 @@ public class ExtractConsequent {
       "Usage: java daikon.ExtractConsequent [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
-      "  --" + Daikon.suppress_cont_SWITCH,
-      "      Suppress display of implied invariants (by controlling ppt).",
-      "  --" + Daikon.suppress_post_SWITCH,
-      "      Suppress display of obvious postconditions on prestate.",
       "  --" + Daikon.suppress_redundant_SWITCH,
-      "      Suppress display of logically redundant invariants."}, lineSep);
+      "      Suppress display of logically redundant invariants.",
+      "  --" + Daikon.debugAll_SWITCH,
+      "      Turn on all debug switches",
+      "  --" + Daikon.debug_SWITCH + " <logger>",
+      "      Turn on the specified debug logger",
+    }, lineSep);
 
   public static void main(String[] args)
     throws FileNotFoundException, IOException, ClassNotFoundException
   {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -88,10 +87,6 @@ public class ExtractConsequent {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           System.exit(1);
-        } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
-          Daikon.suppress_implied_controlled_invariants = true;
-        } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
-          Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
