@@ -76,15 +76,26 @@ public class PrintAllVisitor implements NodeVisitor {
       print(inv.repr_prob());
     } else {
       print(inv.format());
-      printProbability(inv);      
+      printProbabilityAndPrintability(inv);
     }
   }
 
-  private void printProbability(Invariant inv) {
+  private void printProbabilityAndPrintability(Invariant inv) {
     print(" {");
+
     double prob = inv.getProbability();
-    String probString = PROBABILITY_FORMAT.format(prob);
+    String probString;
+    if (0 < prob && prob < .0001) {
+      probString = ".0001";
+    } else {
+      probString = PROBABILITY_FORMAT.format(prob);
+    }
     print(probString);
+    if (inv.isWorthPrinting()) {
+      print("+");
+    } else {
+      print("-");
+    }
     print("}");
   }
 
