@@ -7,6 +7,16 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.13 (17 July 2002):
+
+Fix bug when running from daikon.jar.
+
+Improvements to detection of floating-point invariants.
+
+Manual gives example of use of orig variables, explains what to do when
+Daikon runs slowly, discusses Ajax "too many levels of symbolic links"
+error.
+ 
 2.3.12 (11 July 2002):
 
 Daikon reports invariants over floating-point numbers.  Previously, it

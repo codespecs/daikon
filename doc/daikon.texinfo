@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.12
+@center Daikon version 2.3.13
 
 @sp 1
-@c Daikon version 2.3.12 date
-@center July 11, 2002
+@c Daikon version 2.3.13 date
+@center July 17, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.12, released July 11, 2002.
+It describes Daikon version 2.3.13, released July 17, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.12, released July 11, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.12, released July 11, 2002.
+It describes Daikon version 2.3.13, released July 17, 2002.
 @end ifnottex
 
 @menu
@@ -430,6 +430,10 @@ placed in your shell initialization file, or else log out and log back
 in to achieve the same effect.
 
 @item
+@cindex DAIKONCLASS_SOURCES environment variable
+@cindex environment variable DAIKONCLASS_SOURCES
+@cindex @file{daikon.jar}, running from
+@cindex @file{.class} files, running from
 If you set the environment variable DAIKONCLASS_SOURCES in
 @file{daikon.cshrc} or @file{daikon.bashrc}, indicating that you wish to
 compile the Daikon sources yourself, then you must now compile them.
@@ -4319,7 +4323,8 @@ Simplify format (for use by the Simplify theorem-prover).
 To support a new output format, you need to do two things:
 @itemize @bullet
 @item
-(This description will change in Daikon version 2.3.12.)
+(This description will change in Daikon version
+3.)
 Add, to every subclass of @samp{Invariant}, a
 @samp{format_@var{newtype}()} method.  Each subclass of Invariant
 already has three such methods --- @samp{format()}, @samp{format_esc()},
@@ -4596,18 +4601,14 @@ to handle JDK 1.2 libraries.
 @cindex classpath cycles
 @cindex Too many levels of symbolic links, Ajax exception
 
+Due to a bug in Java 1.3,
 Ajax may throw a RuntimeException with a message stating
-that there are too many levels of symbolic links.  This can be caused
+``Too many levels of symbolic links''.  This can be caused
 by cycles in the classpath (for example, a link from a directory to
 itself).  To locate the problem link, rerun the the the failing command
-as before, except with "strace " in front of it, as shown here:
-@example
-  wc ~/.emacs         
-@end example
-would become
-@example
-  strace wc ~/.emacs
-@end example
+as before, but prefixed by ``strace ''.  If the original command had
+been @samp{wc ~/.emacs}, then you would instead run 
+@samp{strace wc ~/.emacs}.
 Search the resulting output for the exception stack trace, containing
 the message, "Too many levels of symbolic links".  On the line just
 before the stack trace begins should appear the name of the link being
@@ -4615,8 +4616,8 @@ processed.  For example,
 @example
 lstat("a/sources/sources", st_mode=S_IFLNK|0777, st_size=53, ...) = 0
 @end example
-Removing the link identified, in this case a/sources/sources, should solve
-the problem.
+Removing the link identified, in this case @file{.../sources/sources},
+should solve the problem.
 
 
 @node    dfec problems, Daikon problems, dfej problems, Troubleshooting
@@ -4954,7 +4955,8 @@ Your bug report will be most helpful if you include:
 @itemize @bullet
 @item
 the version of Daikon, which appears in the file @file{daikon/README}
-and is also printed when you run Daikon.
+and is also printed when you run Daikon; also, whether you are running
+from the @file{.class} files or from the @file{.jar} file.
 If you are not using the most recent version, download a newer version
 from @uref{http://pag.lcs.mit.edu/daikon/} to see whether your problem
 has already been corrected.
@@ -5020,7 +5022,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.12, released July 11, 2002.
+This manual describes Daikon version 2.3.13, released July 17, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
