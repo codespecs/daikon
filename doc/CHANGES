@@ -9,6 +9,19 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.18 (2 November 2002):
+
+Improved directions for building dfec (if you have a license to the EDG
+C/C++ front end).  dfec has also been updated to use EDG 3.0 instead of EDG
+2.45.  dfec is substantially more robust; most C programs and many C++
+programs should be instrumented without difficulty.
+
+Fixed a small problem in the example sections of the manual.
+
+Explained a JTB ParseException error and how to work around it.
+
+----------------
+
 2.3.17 (9 October 2002):
 
 Version numbers were wrong in last release; re-release to fix the problem.
