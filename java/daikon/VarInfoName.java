@@ -543,7 +543,7 @@ public abstract class VarInfoName
    * Caller is subscripting an orig(a[]) array.  Take the requested
    * index and make it useful in that context.
    **/
-  private static VarInfoName indexToPrestate(VarInfoName index) {
+  static VarInfoName indexToPrestate(VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])
     // 2 orig(a[]) . index       -> orig(a[post(index)])
     if (index instanceof Prestate) {
@@ -581,7 +581,7 @@ public abstract class VarInfoName
 
   // Given a sequence and subscript index, convert the index to an
   // explicit form if necessary (e.g. a[-1] becomes a[a.length-1])
-  private static VarInfoName indexExplicit(Elements sequence, VarInfoName index) {
+  static VarInfoName indexExplicit(Elements sequence, VarInfoName index) {
     if (!index.isLiteralConstant()) {
       return index;
     }
@@ -1145,7 +1145,7 @@ public abstract class VarInfoName
       Assert.assert(roots != null);
 
       if (debug_quantify) {
-	System.out.println("roots: " + Arrays.asList(roots).toString());
+	System.out.println("roots: " + Arrays.asList(roots));
       }
 
       // create empty result
