@@ -161,10 +161,10 @@ public class ClassFileParser implements ClassData, DataConstants {
             throw failErr("File truncated");
         }
     }
-    
+
     String getNonnullStringAt(int itemNum) {
         String s = getStringAt(itemNum);
-        
+
         if (s == null) {
             throw failErr("Null string in unexpected place");
         } else {
@@ -381,7 +381,7 @@ public class ClassFileParser implements ClassData, DataConstants {
 
                 if (attributeName.equals("LineNumberTable")) {
                     classFile.readInt();
-                    
+
                     for (int j = classFile.readUnsignedShort(); j > 0; j--) {
                         int startPC = classFile.readUnsignedShort();
                         int lineNum = classFile.readUnsignedShort();
@@ -433,7 +433,7 @@ public class ClassFileParser implements ClassData, DataConstants {
 
                 if (attributeName.equals("LocalVariableTable")) {
                     classFile.readInt();
-                        
+
                     for (int j = classFile.readUnsignedShort(); j > 0; j--) {
                         int startPC = classFile.readUnsignedShort();
                         int length = classFile.readUnsignedShort();
@@ -458,16 +458,21 @@ public class ClassFileParser implements ClassData, DataConstants {
     }
 
     protected void prepareClassFile() throws IOException {
-        if (classFile.readInt() != 0xCAFEBABE) {
-            throw fail("Invalid magic number");
+        int magicNumber = classFile.readInt();
+        if (magicNumber != 0xCAFEBABE) {
+            throw fail("Invalid magic number " + magicNumber);
         }
 
-        if (classFile.readUnsignedShort() > 3) {
-            throw fail("Unknown class file minor version");
+        int minorVersion = classFile.readUnsignedShort();
+        if (minorVersion > 3) {
+            throw fail("Unknown class file minor version " + minorVersion);
         }
 
-        if (classFile.readUnsignedShort() != 45) {
-            throw fail("Unknown class file major version");
+        int majorVersion = classFile.readUnsignedShort();
+        if ((majorVersion != 45)
+            // live dangerously, permit version 47 (JDK 1.3?)
+            && (majorVersion != 47)) {
+            throw fail("Unknown class file major version " + majorVersion);
         }
 
         constantPoolOffsets = new int[classFile.readUnsignedShort()];
@@ -487,7 +492,7 @@ public class ClassFileParser implements ClassData, DataConstants {
         if ((accessFlags & ACC_INTERFACE) != 0) {
             accessFlags |= ACC_ABSTRACT;
         }
-     
+
         classNameCPItem = classFile.readUnsignedShort();
         superClassNameCPItem = classFile.readUnsignedShort();
 
@@ -653,7 +658,7 @@ public class ClassFileParser implements ClassData, DataConstants {
                     if ((accessFlags & (ACC_NATIVE | ACC_ABSTRACT)) == 0 && codeOffset == -1) {
                         throw failErr("No Code attribute found");
                     }
-                    
+
                     methods[i] = new ClassFileParserMethod(this,
                         accessFlags, nameIndex, descriptorIndex, maxStackWords,
                         maxLocalWords, codeOffset, codeAttributesOffset,
