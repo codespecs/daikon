@@ -13,6 +13,9 @@ import utilMDE.*;
 // This also serves as NonNull.
 
 public class NonZero extends SingleScalar {
+
+  private static boolean debugNonZero = false;
+
   long min = Long.MAX_VALUE;
   long max = Long.MIN_VALUE;
 
@@ -27,6 +30,10 @@ public class NonZero extends SingleScalar {
   }
 
   public static NonZero instantiate(PptSlice ppt) {
+    if (debugNonZero || ppt.debugged) {
+      System.out.println("NonZero.instantiate(" + ppt.name + ")");
+    }
+
     NonZero result = new NonZero(ppt);
     if (! ppt.var_infos[0].type.isIntegral()) {
       result.pointer_type = true;

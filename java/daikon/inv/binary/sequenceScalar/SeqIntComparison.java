@@ -3,6 +3,7 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
+import java.util.*;
 import utilMDE.*;
 
 // I should perhaps reimplement this, using IntComparisonCore.
@@ -96,8 +97,20 @@ public final class SeqIntComparison extends SequenceScalar {
     return false;
   }
 
-  // Below are from IntComparison
+  // Look up a previously instantiated invariant.
+  public static SeqIntComparison find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 2);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof SeqIntComparison)
+        return (SeqIntComparison) inv;
+    }
+    return null;
+  }
 
+
+
+  // Copied from IntComparison.
   // public boolean isExclusiveFormula(Invariant other)
   // {
   //   if (other instanceof IntComparison) {
@@ -106,11 +119,11 @@ public final class SeqIntComparison extends SequenceScalar {
   //   if (other instanceof NonEqual) {
   //     return isExact();
   //   }
-
   //   return false;
   // }
 
 
+  // Copied from IntComparison.
   // public boolean isObviousImplied() {
   //   if (isExact()) {
   //     return false;
@@ -134,7 +147,7 @@ public final class SeqIntComparison extends SequenceScalar {
   //       // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
   //       return true;
   //     }
-
+  //
   //     // This might never get invoked, as equality is printed out specially.
   //     VarInfo s1 = (sl1 == null) ? null : sl1.base;
   //     VarInfo s2 = (sl2 == null) ? null : sl2.base;
@@ -143,7 +156,7 @@ public final class SeqIntComparison extends SequenceScalar {
   //       // lengths of equal arrays being compared
   //       return true;
   //     }
-
+  //
   //     if (core.can_be_lt && (!core.can_be_eq)) {
   //       if ((sl2 != null) && (sl2.shift == 0)) {
   //         // "x < size(a)"  ("x <= size(a)-1" or "x < size(a)-1" would be more informative)
@@ -162,7 +175,7 @@ public final class SeqIntComparison extends SequenceScalar {
   //       }
   //     }
   //   }
-
+  //
   //   return false;
   // }
 
