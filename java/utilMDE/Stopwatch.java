@@ -68,7 +68,7 @@ public final class Stopwatch {
     if (startTime != 0) {
       runningMillis += (System.currentTimeMillis() - startTime);
     }
-    return Stopwatch.timeFormat[digits].format(runningMillis) + "s";
+    return Stopwatch.timeFormat[digits].format(runningMillis / 1000.0) + "s";
   }
 
 }
