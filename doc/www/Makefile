@@ -3,9 +3,5 @@ default:
 	@echo "  dist"
 
 # Not the default to avoid accidentally installing new webpages.
-dist:
+www-dist:
 	cd .. && $(MAKE) www-dist
-
-www: dist
-
-www-dist: www
