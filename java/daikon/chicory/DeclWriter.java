@@ -376,6 +376,10 @@ public class DeclWriter extends DaikonWriter
             if (!Modifier.isStatic(classField.getModifiers()) && dontPrintInst)
                 continue;
             
+            //don't print arrays of the same static field
+            if(Modifier.isStatic(classField.getModifiers()) && inArray)
+                continue;
+            
             if (!isFieldVisible (current_class, classField))
             {
                 // System.out.printf ("skipping not visible field %s, in %s\n",

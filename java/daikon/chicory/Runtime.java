@@ -383,17 +383,27 @@ private static StreamRedirectThread out_thread;
    * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
    **/
   public static String classnameFromJvm(String classname) {
+            
+      //System.out.println(classname);
+      
     int dims = 0;
     while (classname.startsWith("[")) {
       dims++;
       classname = classname.substring(1);
     }
+    
     String result;
+    //array of reference type
     if (classname.startsWith("L") && classname.endsWith(";")) {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
-    } else {
-      result = (String) primitiveClassesFromJvm.get(classname);
+    } 
+    else {
+        if(dims > 0) //array of primitives
+            result = (String) primitiveClassesFromJvm.get(classname);
+        else //just a primitive
+            result = classname;
+      
       if (result == null) {
         // As a failsafe, use the input; perhaps it is in Java, not JVML,
         // format.
