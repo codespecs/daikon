@@ -133,7 +133,12 @@ unless (which('jikes')) {
 }
 
 # check the program make sure it starts out with no errors
-$error = system("jikes -classpath $cp_dot -depend -nowrite $nowarn $mainsrc");
+# Also, ensure that .class files exist for Ajax's use
+if ($ajax) {
+  $error = system("jikes -classpath $cp_dot -depend -g $nowarn $mainsrc");
+} else {
+  $error = system("jikes -classpath $cp_dot -depend -nowrite $nowarn $mainsrc");
+}
 die ("Fix compiler errors before running daikon") if $error;
 
 # come up with a list of files which we need to care about
@@ -265,11 +270,11 @@ while (1) {
     $outerr = !($dtrace && $decls);
     last if $outerr;
 
-    # run modbit-munge
-    print "Running modbit-munge...\n" if $verbose;
-    $mboutput = `modbit-munge.pl $dtrace 2>&1`;
-    $mberr = $?;
-    last if $mberr;
+#      # run modbit-munge
+#      print "Running modbit-munge...\n" if $verbose;
+#      $mboutput = `modbit-munge.pl $dtrace 2>&1`;
+#      $mberr = $?;
+#      last if $mberr;
 
     # run daikon
     print "Running invariant detector...\n" if $verbose;
@@ -288,6 +293,8 @@ while (1) {
 
 if (! $nocleanup) {
   system("rm -rf $working") && die("Could not remove working dir");
+} else {
+  print "Leaving $working in place\n";
 }
 
 if ($dfejerr) {
@@ -319,10 +326,10 @@ if ($outerr) {
   }
   die("missing output files");
 }
-if ($mberr) {
-  print $mboutput;
-  die("modbit error");
-}
+#  if ($mberr) {
+#    print $mboutput;
+#    die("modbit error");
+#  }
 if ($dkerr) {
   die("daikon error");
 }
