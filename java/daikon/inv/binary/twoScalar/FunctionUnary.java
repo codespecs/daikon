@@ -8,7 +8,7 @@ import java.lang.reflect.*;
 public class FunctionUnary extends TwoScalar {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   FunctionUnaryCore core;
