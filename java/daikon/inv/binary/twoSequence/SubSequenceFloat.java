@@ -244,7 +244,7 @@ public class SubSequenceFloat
       changed = true;
     }
     if (var2_in_var1 && (ArraysMDE.indexOf(a1, a2) == -1)) {
-      new_var1_in_var2 = false;
+      new_var2_in_var1 = false;
       changed = true;
     }
 
