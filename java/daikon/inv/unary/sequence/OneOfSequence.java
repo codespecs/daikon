@@ -488,6 +488,8 @@ public final class OneOfSequence
     OneOfSequence  other = (OneOfSequence) o;
     if (num_elts != other.num_elts)
       return false;
+    if (num_elts == 0 && other.num_elts == 0)
+      return true;
 
     sort_rep();
     other.sort_rep();

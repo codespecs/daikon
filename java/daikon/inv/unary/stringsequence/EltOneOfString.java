@@ -468,6 +468,8 @@ public final class EltOneOfString
     EltOneOfString  other = (EltOneOfString) o;
     if (num_elts != other.num_elts)
       return false;
+    if (num_elts == 0 && other.num_elts == 0)
+      return true;
 
     sort_rep();
     other.sort_rep();
