@@ -11,7 +11,7 @@ import jtb.visitor.*;
 import java.util.regex.*;
 
 /**
- * FileWriter writes the splitter java file's contents to a string buffer
+ * SplitterJavaSource writes the splitter java file's contents to a string buffer
  * for a given condition, Ppt and StatementReplacer.
  */
 class SplitterJavaSource {
@@ -40,12 +40,12 @@ class SplitterJavaSource {
   private static final String lineSep = System.getProperty("line.separator");
 
   /**
-   * Creates a new instance of SplitterFileWriter.
+   * Creates a new instance of SplitterJavaSource.
    * @param splitObj the SplitterObject for which this splitter java file is
    *  be written.
    * @param pptName the name of the Ppt to which splitObj belongs.
    * @param fileName the name of the file that should be written by the new
-   *  SplitterFileWriter.
+   *  SplitterJavaSource.
    * @param varInfos the varInfos for this the Ppt to which splitObj belongs.
    * @param statementReplacer a statementReplacer for the .spinfo file from
    *  which splitObj is being created from.
