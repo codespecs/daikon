@@ -106,6 +106,11 @@ public abstract class VarInfoName
   }
 
   // ============================================================
+  // Helpful constants
+
+  public static final VarInfoName ZERO = parse("0");
+
+  // ============================================================
   // Interesting observers
 
   /**
@@ -1009,13 +1014,12 @@ public abstract class VarInfoName
       if (needy instanceof Elements) {
 	Elements sequence = (Elements) needy;
 	replace_with = sequence.applySubscript(index);
-	lower = parse("0");
+	lower = ZERO;
 	upper = sequence.applySize().applyDecrement();
       } else if (needy instanceof Slice) {
 	Slice slice = (Slice) needy;
 	replace_with = slice.sequence.applySubscript(index);
-	lower = (slice.i != null) ? slice.i :
-	  parse("0");
+	lower = (slice.i != null) ? slice.i : ZERO;
 	upper = (slice.j != null) ? slice.j :
 	  slice.sequence.applySize().applyDecrement();
       } else {
@@ -1154,15 +1158,27 @@ public abstract class VarInfoName
 	  if (elementwise && (i >= 1)) {
 	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
 	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
-	    conditions.append(" && (");
-	    conditions.append(_idx);
-	    conditions.append("-(");
-	    conditions.append(_low);
-	    conditions.append(")) == (");
-	    conditions.append(idx);
-	    conditions.append("-(");
-	    conditions.append(low);
-	    conditions.append("))");
+	    conditions.append(" && ");
+	    if (ZERO.equals(_low)) {
+	      conditions.append(_idx);
+	    } else {
+	      conditions.append("(");
+	      conditions.append(_idx);
+	      conditions.append("-(");
+	      conditions.append(_low);
+	      conditions.append("))");
+	    }
+	    conditions.append(" == ");
+	    if (ZERO.equals(low)) {
+	      conditions.append(idx);
+	    } else {
+	      conditions.append("(");
+	      conditions.append(idx);
+	      conditions.append("-(");
+	      conditions.append(low);
+	      conditions.append("))");
+	    }
+	    conditions.append(")");
 	  }
 	}
       }
