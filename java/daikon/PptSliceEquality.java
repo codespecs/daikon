@@ -195,10 +195,10 @@ public class PptSliceEquality
   //        - Get the new leaders
   //        - Create new slices and invariants (call CopyInvsFromLeader)
   //
-  public List add(ValueTuple vt, int count) {
+  public List/*Invariant*/  add(ValueTuple vt, int count) {
 
     LinkedList /*[Equality]*/ allNewInvs = new LinkedList();
-    LinkedList /*[Equality]*/ weakenedInvs = new LinkedList();
+    LinkedList /*Invariant*/ weakenedInvs = new LinkedList();
 
     // Loop through each existing equality invariant
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -235,13 +235,10 @@ public class PptSliceEquality
         }
 
         // Create new slices and invariants for each new leader
-        copyInvsFromLeader (inv.leader(), newInvsLeaders);
+        weakenedInvs.addAll (copyInvsFromLeader (inv.leader(),newInvsLeaders));
 
         // Keep track of all of the new invariants created.
         allNewInvs.addAll (newInvs);
-
-        // If any equality members were lost, the invariant is weakened
-        weakenedInvs.add (inv);
       }
     }
 
@@ -360,7 +357,10 @@ public class PptSliceEquality
    * @post Adds the newly instantiated invariants and slices to
    * this.parent.
    **/
-  private void copyInvsFromLeader (VarInfo leader, List newVis) {
+  private List /*Invariant*/ copyInvsFromLeader (VarInfo leader, List newVis) {
+
+
+    List falsified_invs = new ArrayList();
     List newSlices = new LinkedList();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
@@ -397,9 +397,12 @@ public class PptSliceEquality
           Invariant inv = (Invariant) j.next();
           if (inv.isObviousStatically_AllInEquality()) {
             //            inv.destroyAndFlow();
-            inv.ppt.addToFlow(inv);
-            inv.falsified = true;
-            inv.ppt.addToChanged(inv);
+            inv.falsify();
+            falsified_invs.add (inv);
+            if (!Daikon.dkconfig_df_bottom_up) {
+              inv.ppt.addToChanged(inv);
+              inv.ppt.addToFlow(inv);
+            }
           }
         }
         if (slice.invs.size() == 0) i.remove();
@@ -425,6 +428,7 @@ public class PptSliceEquality
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("  new slices count:" + parent.views_size());
     }
+    return (falsified_invs);
   }
 
   /**
