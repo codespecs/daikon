@@ -92,17 +92,36 @@ public final class OneOfString  extends SingleString  implements OneOf {
   }
 
   public String format() {
+    String varname = var().name ;
     if (num_elts == 1) {
 
-      return var().name  + " = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
+      return varname + " = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
 
     } else {
-      return var().name  + " one of " + subarray_rep();
+      return varname + " one of " + subarray_rep();
     }
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+
+    String varname = var().esc_name() ;
+
+    String result = "";
+
+    // Format   \typeof(theArray) = "[Ljava.lang.Object;"
+    //   as     \typeof(theArray) == \type(java.lang.Object[])
+    if (varname.startsWith("\\typeof")) {
+      for (int i=0; i<num_elts; i++) {
+        if (i>0) result += " || ";
+        result += varname + " == " +
+                 ((elts[i].equals("null"))
+                  ? "\\typeof(null)"
+                  : "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")");
+      }
+    }
+
+    return result;
+
   }
 
   public void add_modified(String  v, int count) {

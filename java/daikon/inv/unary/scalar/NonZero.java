@@ -47,9 +47,8 @@ public class NonZero extends SingleScalar {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    return var().esc_name() + " != " + (pointer_type ? "null" : "0");
   }
-
 
   public void add_modified(long v, int count) {
     // The min and max tests will simultaneoulsy succeed exactly once (for

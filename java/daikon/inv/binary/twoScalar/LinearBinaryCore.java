@@ -127,7 +127,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
     // For efficiency, I could use a single StringBuffer here.
     String b_rep = (b<0) ? (" - " + -b) : (b>0) ? (" + " + b) : "";
     String a_rep = (a==1) ? "" : ("" + a + " * ");
-    return y + " = " + a_rep + x + b_rep;
+    return y + " == " + a_rep + x + b_rep;
   }
 
   public boolean isSameFormula(LinearBinaryCore other)

@@ -56,7 +56,8 @@ public class Implication extends Invariant {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
+    return "(" + predicate.format_esc() + ")" + arrow + "(" + consequent.format_esc() + ")";
   }
 
   public boolean isSameFormula(Invariant other) {

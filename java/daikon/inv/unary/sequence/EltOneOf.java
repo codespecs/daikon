@@ -94,17 +94,30 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   }
 
   public String format() {
+    String varname = var().name + " elements" ;
     if (num_elts == 1) {
 
-      return var().name + " elements = " + ((!var().type.elementType().isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
+      return varname + " = " + ((!var().type.elementType().isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
 
     } else {
-      return var().name + " elements one of " + subarray_rep();
+      return varname + " one of " + subarray_rep();
     }
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+
+    String[] esc_forall = var().esc_forall();
+    String varname = esc_forall[1];
+
+    String result = "";
+
+    for (int i=0; i<num_elts; i++) {
+      if (i>0) result += " || ";
+      result += varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
+    }
+
+    return esc_forall[0] + "(" + result + ")";
+
   }
 
   public void add_modified(long[] a, int count) {

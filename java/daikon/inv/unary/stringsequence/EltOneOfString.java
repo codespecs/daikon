@@ -92,17 +92,30 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
   }
 
   public String format() {
+    String varname = var().name + " elements" ;
     if (num_elts == 1) {
 
-      return var().name + " elements = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
+      return varname + " = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
 
     } else {
-      return var().name + " elements one of " + subarray_rep();
+      return varname + " one of " + subarray_rep();
     }
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+
+    String[] esc_forall = var().esc_forall();
+    String varname = esc_forall[1];
+
+    String result = "";
+
+    for (int i=0; i<num_elts; i++) {
+      if (i>0) result += " || ";
+      result += varname + " == \"" + UtilMDE.quote( elts[i] ) + "\"" ;
+    }
+
+    return esc_forall[0] + "(" + result + ")";
+
   }
 
   public void add_modified(String[] a, int count) {

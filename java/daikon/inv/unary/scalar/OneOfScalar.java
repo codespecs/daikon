@@ -100,28 +100,40 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   }
 
   public String format() {
+    String varname = var().name ;
     if (num_elts == 1) {
 
       if (is_boolean) {
         Assert.assert((elts[0] == 0) || (elts[0] == 1));
-        return var().name  + " = " + ((elts[0] == 0) ? "false" : "true");
+        return varname + " = " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
-          return var().name  + " = null";
+          return varname + " = null";
         } else {
-          return var().name  + " has only one value (hashcode=" + elts[0] + ")";
+          return varname + " has only one value (hashcode=" + elts[0] + ")";
         }
       } else {
-        return var().name  + " = " +  elts[0]  ;
+        return varname + " = " +  elts[0]  ;
       }
 
     } else {
-      return var().name  + " one of " + subarray_rep();
+      return varname + " one of " + subarray_rep();
     }
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+
+    String varname = var().esc_name() ;
+
+    String result = "";
+
+    for (int i=0; i<num_elts; i++) {
+      if (i>0) result += " || ";
+      result += varname + " == " +  elts[i]  ;
+    }
+
+    return result;
+
   }
 
   public void add_modified(long  v, int count) {
