@@ -161,36 +161,32 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     boolean suppress_minus_1 = false;
     boolean suppress_plus_1 = false;
 
-    // This ought to be abstracted out.
+    // This ought to be abstracted out, maybe
     {
       Assert.assert(sclvar.ppt == seqvar.ppt);
-      for (Iterator itor = sclvar.ppt.views_iterator() ; itor.hasNext() ; ) {
-        PptSlice view = (PptSlice) itor.next();
-        // Don't check view.usesVar(sclvar), because we are only looking
-        // for interactions between sclvar and lower-numbered
-        // variables, so sclvar will be the second variable.
-        if ((view.arity == 2) && view.usesVar(sclvar)) {
-          LinearBinary lb = LinearBinary.find(view);
-          if ((lb != null) && (lb.core.a == 1)) {
-            // Don't set unconditionally, and don't break:  we want to check
-            // other variables as well.
-            if (lb.core.b == -1) {
-              if (view.var_infos[1] == sclvar)
-                suppress_plus_1 = true;
-              else
-                suppress_minus_1 = true;
-            }
-            if (lb.core.b == 1) {
-              if (view.var_infos[1] == sclvar)
-                suppress_minus_1 = true;
-              else
-                suppress_plus_1 = true;
-            }
-            // System.out.println("For " + sclvar.name + " suppression: "
-            //                    + "minus=" + suppress_minus_1
-            //                    + " plus=" + suppress_plus_1
-            //                    + " because of " + lb.format());
+      Vector lbs = LinearBinary.findAll(sclvar);
+      // System.out.println("For " + sclvar.name + ", " + lbs.size() + " LinearBinary invariants");
+      for (int i=0; i<lbs.size(); i++) {
+        LinearBinary lb = (LinearBinary) lbs.elementAt(i);
+        if (lb.core.a == 1) {
+          // Don't set unconditionally, and don't break:  we want to check
+          // other variables as well.
+          if (lb.core.b == -1) {
+            if (lb.var1() == sclvar)
+              suppress_minus_1 = true;
+            else
+              suppress_plus_1 = true;
           }
+          if (lb.core.b == 1) {
+            if (lb.var1() == sclvar)
+              suppress_minus_1 = true;
+            else
+              suppress_plus_1 = true;
+          }
+          // System.out.println("For " + sclvar.name + " suppression: "
+          //                    + "minus=" + suppress_minus_1
+          //                    + " plus=" + suppress_plus_1
+          //                    + " because of " + lb.format());
         }
       }
     }

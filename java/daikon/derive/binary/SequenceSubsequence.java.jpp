@@ -111,7 +111,7 @@ public final class SEQUENCESCALARSUBSEQUENCE extends BinaryDerivation {
                                (from_start
                                 ? "0.." + sclvar.name + index_shift_string
                                 : sclvar.name + index_shift_string + ".."));
-    String esc_name = addSubscript(seqvar.esc_name,
+    String esc_name = addSubscript_esc(seqvar.esc_name,
                                (from_start
                                 ? "0.." + sclvar.esc_name + index_shift_string
                                 : sclvar.esc_name + index_shift_string + ".."));

@@ -321,10 +321,7 @@ public class PptTopLevel extends Ppt {
       VarInfo vi = begin_vis[i];
       if (vi.isStaticConstant() || vi.isDerived())
 	continue;
-      new_vis[new_vis_index] = new VarInfo("orig(" + vi.name + ")",
-                                           "\\old(" + vi.esc_name + ")",
-                                           vi.type, vi.rep_type,
-                                           vi.comparability.makeAlias(vi.name));
+      new_vis[new_vis_index] = VarInfo.origVarInfo(vi);
       new_vis_index++;
     }
     Assert.assert(new_vis_index == num_orig_vars);
@@ -1267,6 +1264,7 @@ public class PptTopLevel extends Ppt {
             // in which we are examining pairs.
             var1.equal_to = var1;
             var2.equal_to = var1;
+            // System.out.println("Make " + var1.name + " canonical over " + var2.name + " at " + name);
           } else {
             // This is implied by the if-then sequence.
             // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
@@ -1948,9 +1946,11 @@ public class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       // This test is purely an optimization.
-      if (! vi.name.startsWith("orig(")) {
-        VarInfo vi_orig = findVar("orig(" + vi.name + ")");
+      if (! vi.isOrigVar()) {
+        VarInfo vi_orig = findVar(VarInfo.makeOrigName(vi.name));
         if (vi_orig != null) {
+          // Assert.assert(vi_orig.postState.name.equals(vi.name), "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
+          // Assert.assert(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           if (vi.equal_to == vi_orig.equal_to) {
             unmodified_vars.add(vi);
             unmodified_orig_vars.add(vi_orig);

@@ -544,7 +544,7 @@ public abstract class Invariant implements java.io.Serializable {
   private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
     new DefaultIsSameInvariantNameExtractor() {
 	public String getFromFirst(VarInfo var)
-	{ return "orig(" + super.getFromFirst(var) + ")"; }
+	{ return VarInfo.makeOrigName(super.getFromFirst(var)); }
       };
 
 

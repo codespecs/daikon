@@ -35,6 +35,14 @@ public class LinearBinary extends TwoScalar {
     return core.format(var1().esc_name, var2().esc_name);
   }
 
+  public String format_reversed() {
+    return core.format_reversed(var1().name, var2().name);
+  }
+
+  public String format_esc_reversed() {
+    return core.format_reversed(var1().esc_name, var2().esc_name);
+  }
+
   public void add_modified(long x, long y, int count) {
     core.add_modified(x, y, count);
   }
@@ -88,5 +96,20 @@ public class LinearBinary extends TwoScalar {
     return null;
   }
 
+  // Returns a vector of LinearBinary objects.
+  // This ought to produce an iterator instead.
+  public static Vector findAll(VarInfo vi) {
+    Vector result = new Vector();
+    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
+      PptSlice view = (PptSlice) itor.next();
+      if ((view.arity == 2) && view.usesVar(vi)) {
+        LinearBinary lb = LinearBinary.find(view);
+        if (lb != null) {
+          result.add(lb);
+        }
+      }
+    }
+    return result;
+  }
 
 }

@@ -53,6 +53,7 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
   }
 
   public static String addSubscript(String base, String subscript) {
+    // This logic may belong elsewhere (and the heuristics are incorrect anyway).
     String suffix = "";
     if (base.endsWith("[]")) {
       base = base.substring(0, base.length()-2);
@@ -74,7 +75,35 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
                      + subscript.substring(oldcloseparen+1));
         subold = subscript.indexOf("\\old(");
       }
+    } else {
+      throw new Error("what base? addSubscript(" + base + ", " + subscript + ")");
     }
+    Assert.assert(subscript.indexOf("]") == -1);
+    Assert.assert(suffix.indexOf("]") == -1);
+    return base + "[" + subscript + "]" + suffix;
+  }
+
+  // The caller must assure that if the base is \old, so is the subscript.
+  public static String addSubscript_esc(String base, String subscript) {
+    // This logic may belong elsewhere (and the heuristics are incorrect anyway).
+    String suffix = "";
+    Assert.assert (! base.endsWith("[]"));
+
+    if (base.startsWith("\\old(") && base.endsWith(")")) {
+      base = base.substring(0, base.length()-1);
+      suffix = ")";
+      int subold = subscript.indexOf("\\old(");
+      while (subold != -1) {
+        int oldcloseparen = subscript.indexOf(")", subold);
+        Assert.assert(oldcloseparen != -1);
+        subscript = (subscript.substring(0, subold)
+                     + subscript.substring(subold+5, oldcloseparen)
+                     + subscript.substring(oldcloseparen+1));
+        subold = subscript.indexOf("\\old(");
+      }
+    }
+    Assert.assert(subscript.indexOf("]") == -1);
+    Assert.assert(suffix.indexOf("]") == -1);
     return base + "[" + subscript + "]" + suffix;
   }
 

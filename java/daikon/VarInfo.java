@@ -51,6 +51,9 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   VarInfo sequenceSize;         // if null, not yet computed (or this VarInfo
                                 //   is not a sequence)
 
+  // DO NOT TEST EQUALITY!  ONLY USE ITS .name SLOT!!   -MDE 3/9/2001
+  public VarInfo postState;     // non-null if this is an orig() variable
+
   // Does not include equal_to, which is dealt with elsewhere.
   // An invariant is only listed on the first VarInfo, not all VarInfos.
   public Vector exact_nonunary_invariants;
@@ -101,6 +104,16 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   public VarInfo(VarInfo vi) {
     this(vi.name, vi.esc_name, vi.type, vi.rep_type, vi.comparability, vi.is_static_constant, vi.static_constant_value);
+    postState = vi.postState;
+  }
+
+  public static VarInfo origVarInfo(VarInfo vi) {
+    VarInfo result = new VarInfo(VarInfo.makeOrigName(vi.name),
+                                 VarInfo.makeOrigName_esc(vi.esc_name),
+                                 vi.type, vi.rep_type,
+                                 vi.comparability.makeAlias(vi.name));
+    result.postState = vi;
+    return result;
   }
 
   // I *think* I don't need to implement VarInfo.clone(), as the java.lang.Object
@@ -221,6 +234,34 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       throw new Error("Variable " + name + " is not constant");
     }
   }
+
+  // Returns true if this in an "orig()" variable
+  public boolean isOrigVar() {
+    return postState != null;
+  }
+  public static String makeOrigName(String s) {
+    return "orig(" + s + ")";
+  }
+  public static String makeOrigName_esc(String s) {
+    return "\\old(" + s + ")";
+  }
+  public static String unOrigName(String s) {
+    int origpos = s.indexOf("orig(");
+    Assert.assert(origpos != -1);
+    int rparenpos = s.lastIndexOf(")");
+    return s.substring(0, origpos)
+      + s.substring(origpos+5, rparenpos)
+      + s.substring(rparenpos+1);
+  }
+  public static String unOrigName_esc(String s) {
+    int origpos = s.indexOf("\\old(");
+    Assert.assert(origpos != -1);
+    int rparenpos = s.lastIndexOf(")");
+    return s.substring(0, origpos)
+      + s.substring(origpos+5, rparenpos)
+      + s.substring(rparenpos+1);
+  }
+
 
   public boolean hasExactInvariant(VarInfo other) {
     Assert.assert(this.varinfo_index < other.varinfo_index);
@@ -406,9 +447,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         String sansclassname = null;
         if (vi.name.endsWith(".class")) {
           sansclassname = vi.name.substring(0, vi.name.length() - 6);
-        } else if (vi.name.endsWith(".class)") && vi.name.startsWith("orig(")) {
+        } else if (vi.isOrigVar()
+                   && vi.postState.name.endsWith(".class")) {
           // parent of "orig(x.class)" is "orig(x)"
-          sansclassname = vi.name.substring(0, vi.name.length() - 7) + ")";
+          String post_name = vi.postState.name;
+          sansclassname = VarInfo.makeOrigName(post_name.substring(0, post_name.length() - 6));
         }
         if (sansclassname != null) {
           // System.out.println("Considering .class: " + vi.name + "sansclass=" + sansclassname);
@@ -442,12 +485,16 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         String seq_object_name = null;
         if (seq_contents_name.endsWith("[]")) {
           seq_object_name = seq_contents_name.substring(0, seq_contents_name.length()-2);
-        } else if (seq_contents_name.startsWith("orig(")
-                   && seq_contents_name.endsWith("[])")) {
-          seq_object_name = seq_contents_name.substring(0, seq_contents_name.length()-3)
-                             + ")";
+        } else if (seq_contents.isOrigVar()
+                   && seq_contents.postState.name.endsWith("[]")) {
+          String post_name = seq_contents.postState.name;
+          seq_object_name = VarInfo.makeOrigName(post_name.substring(0, post_name.length()-2));
+        } else if (seq_contents.isOrigVar()
+                   && seq_contents.postState.name.endsWith("[].class")) {
+          continue;
         } else {
-          throw new Error("What object name? " + seq_contents_name);
+          throw new Error("What object name? " + seq_contents_name
+                          + (seq_contents.isOrigVar() ? " : " + seq_contents.postState.name : ""));
         }
         VarInfo seq_object = ppt.findVar(seq_object_name);
         if (! seq_object.isCanonical())
@@ -456,7 +503,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       // For esc_output, omit noting that varibles are unmodified.
       // Add any additional special cases here.
       if (Daikon.esc_output) {
-        if (vi.name.equals("orig(" + this.name + ")")) {
+        if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
         }
       }
@@ -801,6 +848,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
       // "orig(var)" -> "\old(var)"
       if (result.startsWith("orig(")) {
+        System.out.println("I didn't expect this to happen: esc_name(" + result + ")");
         pre_wrapper += "\\old(";
         int rparen_pos = result.lastIndexOf(")");
         post_wrapper = result.substring(rparen_pos) + post_wrapper;
@@ -831,8 +879,9 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
 
   /**
-   * @return three-element array indicating upper and lower bounds of the
-   * range of this array variable, and a canonical element at index i.
+   * @return three-element array indicating upper and lower (inclusive)
+   * bounds of the range of this array variable, and a canonical element at
+   * index i.
    **/
   public String[] index_range() {
     String working_name = esc_name;
@@ -908,7 +957,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       int i_pos = elt2.lastIndexOf("[i]");
       elt2 = elt2.substring(0, i_pos+2)
         + "-" + index_range1[0] + "+" + index_range2[0] + "]"
-        + elt2.substring(i_pos+2);
+        + elt2.substring(i_pos+3);
     }
     return new String[] {
       esc_forall1[0],
@@ -916,5 +965,76 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       elt2,
     };
   }
+
+  // public static boolean isOrigVarName(String s) {
+  //   return ((s.startsWith("orig(") && s.endsWith(")"))
+  //           || (s.startsWith("\\old(") && s.endsWith(")")));
+  // }
+
+  // takes an "orig()" var and gives a pair of [name, esc_name] for a
+  // variable or expression in the post-state which is equal to this one.
+  public String[] postStateEquivalent() {
+    return otherStateEquivalent(true);
+  }
+
+  public String[] preStateEquivalent() {
+    return otherStateEquivalent(false);
+  }
+
+  public String[] otherStateEquivalent(boolean post) {
+
+    // Below is equivalent to:
+    // Assert.assert(post == isOrigVar());
+    if (post != isOrigVar()) {
+      throw new Error("Shouldn't happen (should it?): "
+                      + (post ? "post" : "pre") + "StateEquivalent(" + name + ")");
+      // return new String[] { name, esc_name };
+    }
+
+    Assert.assert(isCanonical());
+    Vector equal_vars = equalTo();
+    for (int i=0; i<equal_vars.size(); i++) {
+      VarInfo vi = (VarInfo)equal_vars.elementAt(i);
+      if (post != vi.isOrigVar()) {
+        // System.out.println("postStateEquivalent(" + name + ") = " + vi.name);
+        return new String[] { vi.name, vi.esc_name };
+      }
+    }
+
+    // Didn't find an exactly equal variable; try LinearBinary.
+    // (Should also try other exact invariants.)
+    {
+      Vector lbs = LinearBinary.findAll(this);
+      for (int i=0; i<lbs.size(); i++) {
+        LinearBinary lb = (LinearBinary) lbs.elementAt(i);
+        String lb_format = null;
+        String lb_format_esc = null;
+        if (this.equals(lb.var2())
+            && (post != lb.var1().isOrigVar())) {
+          lb_format = lb.format();
+          lb_format_esc = lb.format_esc();
+        } else if (this.equals(lb.var1())
+                   && (post != lb.var2().isOrigVar())) {
+          Assert.assert((lb.core.a == 1) || (lb.core.a == -1));
+          lb_format = lb.format_reversed();
+          lb_format_esc = lb.format_esc_reversed();
+        }
+        if (lb_format != null) {
+          int eq_pos;
+          eq_pos = lb_format.indexOf(" == "); // "interned"
+          Assert.assert(eq_pos != -1);
+          lb_format = lb_format.substring(eq_pos + 4);
+          eq_pos = lb_format_esc.indexOf(" == "); // "interned"
+          Assert.assert(eq_pos != -1);
+          lb_format_esc = lb_format_esc.substring(eq_pos + 4);
+          return new String[] { lb_format, lb_format_esc };
+        }
+      }
+    }
+
+    // Can't find post-state equivalent.
+    return null;
+  }
+
 
 }

@@ -10,8 +10,8 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
     if (! vi.rep_type.isArray())
       return null;
     if (vi.name.endsWith(".class")
-        || (vi.name.startsWith("orig(")
-            && vi.name.endsWith(".class)"))) {
+        || (vi.isOrigVar()
+            && vi.postState.name.endsWith(".class)"))) {
       return null;
     }
 

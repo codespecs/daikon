@@ -123,11 +123,21 @@ public final class LinearBinaryCore implements java.io.Serializable {
       + ",values_seen=" + values_seen;
   }
 
-  public String format(String x, String y) {
+  public static String format(String x, String y, long a, long b) {
     // For efficiency, I could use a single StringBuffer here.
     String b_rep = (b<0) ? (" - " + -b) : (b>0) ? (" + " + b) : "";
     String a_rep = (a==1) ? "" : ("" + a + " * ");
     return y + " == " + a_rep + x + b_rep;
+  }
+
+  public String format(String x, String y) {
+    return format(x, y, a, b);
+  }
+
+  // Format as "x = cy+d" instead of as "y = ax+b".
+  public String format_reversed(String x, String y) {
+    Assert.assert(a == 1 || a == -1);
+    return format(y, x, a, -b/a);
   }
 
   public boolean isSameFormula(LinearBinaryCore other)
