@@ -2,16 +2,19 @@ package daikon.diff;
 
 import utilMDE.Assert;
 import daikon.inv.Invariant;
+import java.io.*;
 
 public class StatisticsVisitor implements NodeVisitor {
   
   private int identicalUnary = 0;
   private int missingUnary = 0;
-  private int differingUnary = 0;
+  private int differingInterestingUnary = 0;
+  private int differingUninterestingUnary = 0;
 
   private int identicalBinary = 0;
   private int missingBinary = 0;
-  private int differingBinary = 0;
+  private int differingInterestingBinary = 0;
+  private int differingUninterestingBinary = 0;
 
   private int identicalTernary = 0;
   private int missingTernary = 0;
@@ -24,7 +27,13 @@ public class StatisticsVisitor implements NodeVisitor {
     return missingUnary;
   }
   public int getDifferingUnary() {
-    return differingUnary;
+    return differingInterestingUnary + differingUninterestingUnary;
+  }
+  public int getDifferingInterestingUnary() {
+    return differingInterestingUnary;
+  }
+  public int getDifferingUninterestingUnary() {
+    return differingUninterestingUnary;
   }
 
 
@@ -35,7 +44,13 @@ public class StatisticsVisitor implements NodeVisitor {
     return missingBinary;
   }
   public int getDifferingBinary() {
-    return differingBinary;
+    return differingInterestingBinary + differingUninterestingBinary;
+  }
+  public int getDifferingInterestingBinary() {
+    return differingInterestingBinary;
+  }
+  public int getDifferingUninterestingBinary() {
+    return differingUninterestingBinary;
   }
 
 
@@ -112,10 +127,18 @@ public class StatisticsVisitor implements NodeVisitor {
   private void processDiffering(Invariant inv1, Invariant inv2, int arity) {
     switch(arity) {
     case 1:
-      differingUnary++;
+      if (interestingDifference(inv1, inv2)) {
+        differingInterestingUnary++;
+      } else {
+        differingUninterestingUnary++;
+      }
       break;
     case 2:
-      differingBinary++;
+      if (interestingDifference(inv1, inv2)) {
+        differingInterestingBinary++;
+      } else {
+        differingUninterestingBinary++;
+      }
       break;
     case 3:
       differingTernary++;
@@ -125,5 +148,34 @@ public class StatisticsVisitor implements NodeVisitor {
       break;
     }
   }
-  
+
+  // Returns true if the difference between the two invariants is
+  // considered "interesting".  All differences are interesting,
+  // except: LowerBound, UpperBound, OneOf
+  private static boolean interestingDifference(Invariant inv1, Invariant inv2) {
+    return true;
+  }
+
+  public String format() {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    
+    pw.println("Identical unary:   " + getIdenticalUnary());
+    pw.println("Missing unary:     " + getMissingUnary());
+    pw.println("Differing unary:   " + getDifferingUnary());
+    pw.println("  interesting:     " + getDifferingInterestingUnary());
+    pw.println("  uninteresting:   " + getDifferingUninterestingUnary());
+    pw.println();
+    pw.println("Identical binary:  " + getIdenticalBinary());
+    pw.println("Missing binary:    " + getMissingBinary());
+    pw.println("Differing binary:  " + getDifferingBinary());
+    pw.println("  interesting:     " + getDifferingInterestingBinary());
+    pw.println("  uninteresting:   " + getDifferingUninterestingBinary());
+    pw.println();
+    pw.println("Identical ternary: " + getIdenticalTernary());
+    pw.println("Missing ternary:   " + getMissingTernary());
+    pw.println("Differing ternary: " + getDifferingTernary());
+
+    return sw.toString();
+  }
 }
