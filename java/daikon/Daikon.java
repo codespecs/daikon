@@ -1177,7 +1177,7 @@ public final class Daikon {
   // Guard the invariants at all PptTopLevels. Note that this changes
   // the contents of the PptTopLevels, and the changes made should
   // probably not be written out to an inv file (save the file before
-  // this is called)
+  // this is called).
   public static void guardInvariants(PptMap allPpts) {
     for (Iterator i=allPpts.asCollection().iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel)i.next();
