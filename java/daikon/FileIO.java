@@ -627,9 +627,15 @@ public final class FileIO {
 
         String ppt_name = line; // already interned
         { // Rename EXITnn to EXIT
-          PptName parsed = new PptName(ppt_name);
-          if (parsed.isExitPoint()) {
-            ppt_name = parsed.makeExit().name().intern();
+          try {
+            PptName parsed = new PptName(ppt_name);
+            if (parsed.isExitPoint()) {
+              ppt_name = parsed.makeExit().name().intern();
+            }
+          } catch (Error e) {
+            throw new Error("Illegal program point name \"" + ppt_name + "\""
+                            + " at " + data_trace_filename
+                            + " line " + reader.getLineNumber());
           }
         }
 
