@@ -36,6 +36,10 @@ import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import java.util.*;
 
+// *****
+// Automatically generated from Member-cpp.java
+// *****
+
 public final class Member extends SEQUENCESCALAR {
 
   public final static boolean debugMember = false;
