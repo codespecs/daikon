@@ -5,7 +5,6 @@ package daikon;
 
 import daikon.split.*;
 import daikon.split.misc.*;
-import daikon.newsplit.*;
 import daikon.inv.Invariant;
 
 import java.util.*;
@@ -565,7 +564,7 @@ public final class Daikon {
   }
 
   static public void create_splitters(PptMap all_ppts)throws IOException{
-    
+
     Vector sps = new Vector();
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       sps = SplitterFactory.read_spinfofile((String)i.next(), all_ppts);

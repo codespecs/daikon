@@ -12,10 +12,6 @@ import daikon.inv.unary.stringsequence.*;
 import daikon.inv.ternary.threeScalar.*;
 import daikon.simplify.*;
 import daikon.split.*;
-//import daikon.split.dsaa.*;
-//import daikon.split.griesLisp.*;
-//import daikon.split.weissDsaaMDE.*;
-import daikon.newsplit.*;
 import daikon.split.misc.*;
 
 import java.io.*;
