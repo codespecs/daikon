@@ -8,6 +8,8 @@
 #            (cluster == <num>) == <consequent>
 # are extracted and written into the splitter info file.
 
+die("Do not use this program; use daikon.tools.ExtractConsequent instead");
+
 my $usage = "extract_implications.pl [--derive-conditions] [-o <output-file>] <input_file>";
 # if you want extra conditions to be derived from the conditions in the
 # input file, call with the flag --derived_conditions. The default output file is

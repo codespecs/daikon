@@ -195,12 +195,6 @@ $invfile =~ /(.*)\.inv/;
 #$command = "java daikon.PrintInvariants --suppress_redundant --java_output $invfile > $textout";
 #print "\n$command\n";
 #system_or_die($command);
-
-##clean up results
-#$command = "$ENV{INV}/scripts/extract_implications.pl -o cluster-$algorithm-$ncluster.spinfo $textout";
-#print "\n$command\n";
-#system_or_die($command);
-#unlink($textout);
 ####################
 
 ###
