@@ -18,8 +18,8 @@ $WARNING = 0;			# "-w" flag
 
 sub usage() {
     print STDERR
-	"Usage: extract_vars.pl [OPTIONS] DTRACE_FILES DECL_FILES",
-	"\n",
+	"Usage: extract_vars.pl [OPTIONS] DTRACE_FILES DECL_FILES\n",
+	"Reads compressed (gzipped) or uncompressed dtrace files\n",
 	"Options:\n",
 	" -a, --algorithm ALG\n",
 	"        ALG specifies an implemtation of a clustering algorithm.\n",
@@ -88,7 +88,13 @@ foreach my $decls_file (@decls_files) {
 }
 
 foreach my $dtrace_file (@dtrace_files) {
-    open (DTRACE, $dtrace_file) || &dieusage("dtrace file not found\n");
+    
+    if ($dtrace_file =~ /\.gz/) {
+	open (DTRACE, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat\n");
+    } else {
+	open (DTRACE, $dtrace_file) || &dieusage("couldn't open dtrace file $dtrace_file\n");
+    }
+
     print "opened $dtrace_file\n";
     while (<DTRACE>) {
 	my $line = $_;
@@ -166,6 +172,8 @@ sub sample_large_ppts() {
 	#if the number of samples is too large, sample.
 	if ($nsamples > $maxsamples) {
 	    my @samples = &get_random_numbers($maxsamples, $nsamples);
+	    my $length = scalar(@samples);
+
 	    #open a file and print, but first clobber the original one
 	    my $pptfilename = &cleanup_pptname($pptname);
 	    my $old = "$pptfilename.daikon_temp";
@@ -208,13 +216,17 @@ sub sample_large_ppts() {
 # array in the format [pptname, invocation_nonce, @variable_values]
 sub read_execution($) {
     my @vararray = ();
+    my @objarray;
+    
     my $pptname = $_[0];
     #the pptname is the first element in the array. The variables follow it
     push @vararray, $pptname;
     
     #find out what the Object variables are for this ppt
-    my @objarray = $pptname_to_objectvars{$pptname};
-    
+    if (exists $pptname_to_objectvars{$pptname}) {
+	@objarray = @{$pptname_to_objectvars{$pptname}};
+    }
+
     my ($varname, $value);
 
     $varname = <DTRACE>;
@@ -236,20 +248,21 @@ sub read_execution($) {
 	
 	# see if the variable is an Object variable
 	my $object = 0;
-	# to fix: use an associative array
-	foreach my $variablename (@objarray){
-	    if($variablename eq $varname){
-		$object = 1;
+	if (defined @objarray) {
+	    foreach my $variablename (@objarray){
+		if($variablename eq $varname){
+		    $object = 1;
+		}
 	    }
 	}
 	
 	if ($object) {
 	    if ($value =~ /null/) {
-		$value =~ s/null/20/;
+		$value =~ -5;
 	    } elsif ($value =~ /missing/) {
 		$value = 0;
 	    } else {
-		$value = -20;
+		$value = 10;
 	    }
 	}
 	
@@ -259,7 +272,6 @@ sub read_execution($) {
 	$value =~ s/missing/-11111/;
 	$value =~ s/NaN/1e10/;
 	my $mod = <DTRACE>;
-	chomp ($mod);
 		    
 	# extract variables to be clustered.
 	# Omit Object variables, .class, array[] or a string
