@@ -21,12 +21,12 @@ import java.io.Serializable;
  **/
 
 public abstract class Splitter
-  implements Serializable
+  //  implements Serializable
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  // static final long serialVersionUID = 20020122L;
 
   /**
    * Creates a splitter "factory" that should only be used for creating new
