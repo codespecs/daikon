@@ -1043,8 +1043,13 @@ public class Ast {
     // These might differ, because return values appear in ppt.name() but not in invs[1].
     // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name()), "Different names: " + invs[1] + ", " + ppt.name());
 
+    //      for (int i = 0; i < invs.length; i++) {
+    //        System.out.println (invs[i]);
+    //      }
+
+
     if (Daikon.output_style == OutputFormat.JAVA) {
-      return ArraysMDE.subarray(invs, 2, invs.length-1-3);
+      return ArraysMDE.subarray(invs, 2, invs.length-1-2);
     } else {
       Assert.assertTrue(invs[2].startsWith("    Variables:"),
                         "String doesn't start with `Variables:' " + invs[2]);
