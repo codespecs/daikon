@@ -44,7 +44,7 @@ public class Implication
     }
     //eliminate some "uninteresting" implications, like OneOf predicates and
     //consequents, which are usually not interesting.
-    // JWN adds: Why not use the isInteresting method?  Is it Because
+    // JWN adds: Why not use the isInteresting method?  Is it because
     // you still want Bound invariants?
     if (predicate instanceof OneOf) {
       if ( ((OneOf) predicate).num_elts() > 1)

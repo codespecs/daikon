@@ -129,9 +129,7 @@ import daikon.derive.*;
 import daikon.derive.unary.*;
 
 import utilMDE.*;
-
 import org.apache.log4j.Category;
-
 import java.util.*;
 
 public final class INTEQUAL
@@ -151,6 +149,13 @@ public final class INTEQUAL
 
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar." + INTEQUALstring);
+
+#if (defined(NONEQUAL))
+  /**
+   * Boolean.  True iff INTEQUAL invariants should be considered.
+   **/
+  public static boolean dkconfig_integral_only = true;
+#endif
 
 #ifdef TRACK_NUM_VALUES
   private VALUETRACKER values_cache = new VALUETRACKER(8);
@@ -175,11 +180,18 @@ public final class INTEQUAL
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
+#if (defined(NONEQUAL))
+    if (dkconfig_integral_only == true) {
+      if (! (var1.file_rep_type.ISTYPE && var2.file_rep_type.ISTYPE)) {
+        return null;
+      }
+    }
+#else
     if (! (var1.file_rep_type.ISTYPE && var2.file_rep_type.ISTYPE)) {
       return null;
     }
 #endif
-
+#endif
 
     if (debug.isDebugEnabled() || ppt.debugged) {
       debug.debug(INTEQUALstring + ".instantiate(" + ppt.name + ")"

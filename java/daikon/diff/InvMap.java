@@ -59,10 +59,9 @@ public class InvMap implements Serializable {
 
   // Returns a sorted iterator over the Ppts using c as the comparator
   public Iterator pptSortedIterator(Comparator c) {
-    int size = size();
-    Collections.sort(ppts, c);
-    Assert.assertTrue(size == size());
-    return ppts.iterator();
+    List ppts_copy = new ArrayList(ppts);
+    Collections.sort(ppts_copy, c);
+    return ppts_copy.iterator();
   }
 
   /**

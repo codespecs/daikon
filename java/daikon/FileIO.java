@@ -908,9 +908,10 @@ public final class FileIO {
       }
 
       if (!VarInfoName.parse(line).equals(vi.name)) {
-        throw new FileIOException("Expected variable " + vi.name.name() + ", got " + line
-                        + " for program point " + ppt.name,
-                        reader, data_trace_filename);
+        throw new FileIOException("Expected variable " + vi.name.name()
+                                  + ", got " + line
+                                  + " for program point " + ppt.name,
+                                  reader, data_trace_filename);
 
       }
       line = reader.readLine();
@@ -987,10 +988,11 @@ public final class FileIO {
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep);
         } catch (Exception e) {
-          throw new FileIOException("Error while parsing value " + value_rep +
-                                    " for variable " + vi.name.name() + " of type " +
-                                    vi.rep_type + ": " + e.toString(),
-                                    reader, filename);
+          throw new FileIOException(
+            "Error while parsing value " + value_rep +
+            " for variable " + vi.name.name() + " of type " +
+            vi.rep_type + ": " + e.toString(), reader, filename
+            );
         }
       }
       val_index++;

@@ -190,6 +190,7 @@ public final class OneOfStringSequence
 
   public String format_java() {
     //have to take a closer look at this!
+    sort_rep();
 
     String result;
 
@@ -201,6 +202,7 @@ public final class OneOfStringSequence
 
   /* IOA */
   public String format_ioa() {
+    sort_rep();
 
     String result;
 
@@ -234,6 +236,7 @@ public final class OneOfStringSequence
   }
 
   public String format_esc() {
+    sort_rep();
 
     String result;
 
@@ -284,6 +287,7 @@ public final class OneOfStringSequence
   }
 
   public String format_simplify() {
+    sort_rep();
 
     String result;
 

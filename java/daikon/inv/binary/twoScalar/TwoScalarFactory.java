@@ -6,6 +6,7 @@ import daikon.*;
 import daikon.inv.*;
 
 import utilMDE.*;
+import org.apache.log4j.Category;
 
 import org.apache.log4j.Category;
 

@@ -236,6 +236,7 @@ public final class OneOfSequence
 
   public String format_java() {
     //have to take a closer look at this!
+    sort_rep();
 
     String result;
 
@@ -279,6 +280,7 @@ public final class OneOfSequence
 
   /* IOA */
   public String format_ioa() {
+    sort_rep();
 
     String result;
 
@@ -315,6 +317,7 @@ public final class OneOfSequence
   }
 
   public String format_esc() {
+    sort_rep();
 
     String result;
 
@@ -323,7 +326,7 @@ public final class OneOfSequence
 
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assertTrue(num_elts == 1, "bad num_elts " + num_elts + " " + repr());
+      Assert.assertTrue(num_elts == 1);
       long[]  value = elts[0];
       if (var().type.isArray()) {
         if (var().name.isApplySizeSafe()) {
@@ -395,6 +398,7 @@ public final class OneOfSequence
   }
 
   public String format_simplify() {
+    sort_rep();
 
     String result;
 

@@ -242,8 +242,11 @@ public abstract class Invariant
   protected abstract double computeProbability();
 
   public boolean justified() {
-    return (!falsified) && enoughSamples()
-      && (getProbability() <= dkconfig_probability_limit);
+    return
+      (!falsified)  &&
+      enoughSamples() &&
+      (getProbability() <= dkconfig_probability_limit)
+      ;
   }
 
   /**

@@ -12,9 +12,7 @@ import daikon.derive.*;
 import daikon.derive.unary.*;
 
 import utilMDE.*;
-
 import org.apache.log4j.Category;
-
 import java.util.*;
 
 public final class FloatNonEqual
@@ -105,10 +103,6 @@ public final class FloatNonEqual
 
   public String repr() {
     return "FloatNonEqual"  + varNames();
-  }
-
-  public String format() {
-    return var1().name.name() + " != " + var2().name.name();
   }
 
   public String format_using(OutputFormat format) {

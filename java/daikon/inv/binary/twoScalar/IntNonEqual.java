@@ -12,9 +12,7 @@ import daikon.derive.*;
 import daikon.derive.unary.*;
 
 import utilMDE.*;
-
 import org.apache.log4j.Category;
-
 import java.util.*;
 
 public final class IntNonEqual
@@ -34,6 +32,11 @@ public final class IntNonEqual
 
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.IntNonEqual");
+
+  /**
+   * Boolean.  True iff IntNonEqual  invariants should be considered.
+   **/
+  public static boolean dkconfig_integral_only = true;
 
   private ValueTracker  values_cache = new ValueTracker (8);
 
@@ -55,8 +58,10 @@ public final class IntNonEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral() )) {
-      return null;
+    if (dkconfig_integral_only == true) {
+      if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral() )) {
+        return null;
+      }
     }
 
     if (debug.isDebugEnabled() || ppt.debugged) {

@@ -100,9 +100,6 @@ public final class SequencesPredicateFloat
    * derived value from.
    **/
   public ValueAndModified computeValueAndModifiedImpl (ValueTuple full_vt) {
-    int mod1 = base1.getModified(full_vt);
-    int mod2 = base2.getModified(full_vt);
-
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
 
@@ -139,9 +136,11 @@ public final class SequencesPredicateFloat
     Assert.assertTrue(length1 == length2);
 
     int mod = ValueTuple.UNMODIFIED;
+    int mod1 = var1().getModified(full_vt);
+    int mod2 = var2().getModified(full_vt);
     if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (mod1 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
     if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
     if (mod2 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
     /*
      * v1\v2  Unm  Mod  Mis

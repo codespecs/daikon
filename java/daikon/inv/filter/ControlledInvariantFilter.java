@@ -44,7 +44,7 @@ class ControlledInvariantFilter extends InvariantFilter {
     /* [INCR]
     Vector contr_invs = inv.find_controlling_invariants_sorted();
 
-    if ((contr_invs.size() == 0) && (PrintInvariants.debugFiltering.isDebugEnabled())) {
+    if((contr_invs.size() == 0) && (PrintInvariants.debugFiltering.isDebugEnabled())) {
       PrintInvariants.debugFiltering.debug("\t" + inv.format() + " has no controlling invariants.\n");
     }
 
@@ -59,7 +59,7 @@ class ControlledInvariantFilter extends InvariantFilter {
       if (isWorthPrinting_sansControlledCheck(contr_inv)) {
         // we have a printable controller, so we shouldn't print
 
-	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	if(PrintInvariants.debugFiltering.isDebugEnabled()) {
 	  PrintInvariants.debugFiltering.debug("\tis controlled by " + contr_inv.format() + " (from " + PrintInvariants.get_better_name(contr_inv.ppt.parent) + ")\n");
 	}
         return false;

@@ -71,12 +71,12 @@ public final class CLASSNAME {
       {"", " * ", ""},
       // plus: subsumed by LinearTernary.
 #if defined(LONG)
-      {"", " & ", ""},
-      {"", " && ", ""},
-      {"", " ^ ", ""},
-      {"", " ^ ", ""},
-      {"", " | ", ""},
-      {"", " || ", ""},
+      {"", " & ", ""},          // bitwise and
+      {"", " && ", ""},         // logical and
+      {"", " ^ ", ""},          // bitwise xor
+      {"", " ^ ", ""},          // logical xor
+      {"", " | ", ""},          // bitwise or
+      {"", " || ", ""},         // logical or
 #endif
       /// Non-operators.
       {"java.lang.Math.min(", ", ", ")"},
@@ -89,17 +89,17 @@ public final class CLASSNAME {
 
     binaryNonSymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)
-      {"", " / ", ""},
+      {"", " / ", ""},          // divide
 #if defined(LONG)
-      {"", " % ", ""},
+      {"", " % ", ""},          // mod
       // minus: subsumed by LinearTernary
       // (Are the shifts also subsumed by LinearTernary?)
-      {"", " << ", ""},
-      {"", " >> ", ""},
-      {"", " >>> ", ""},
+      {"", " << ", ""},         // left shift
+      {"", " >> ", ""},         // signed right shift
+      {"", " >>> ", ""},        // unsigned right shift
       /// Non-operators.
 #endif
-      {"Math.pow(", ", ", ""},
+      {"java.lang.Math.pow(", ", ", ")"},       // exponentiation
       // MathMDE_cmp = "utilMDE.MathMDE.cmp(int,int)"
       // MathMDE_cmp = "utilMDE.MathMDE.round(int,int)"
     };
@@ -157,9 +157,6 @@ public final class CLASSNAME {
     System.out.println("returning 0 binary");
     return 0;
   }
-
-  // public static int lookup(String[] methodname) {
-  // }
 
   // don't permit instantiation
   private CLASSNAME() { }

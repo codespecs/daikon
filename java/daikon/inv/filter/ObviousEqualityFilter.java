@@ -53,22 +53,22 @@ class ObviousEqualityFilter extends InvariantFilter {
     VarInfo canonical = v1.canonicalRep();
 
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("\tin ObviousEquality filter\n");
-      PrintInvariants.debugFiltering.debug("\t\tv1  is " + v1.name.name() + "\n");
-      PrintInvariants.debugFiltering.debug("\t\tv2  is " + v2.name.name() + "\n");
-      PrintInvariants.debugFiltering.debug("\t\tcan is " + canonical.name.name() + "\n");
+      PrintInvariants.debugFiltering.debug("in ObviousEquality filter\n");
+      PrintInvariants.debugFiltering.debug("\tv1  is " + v1.name.name() + "\n");
+      PrintInvariants.debugFiltering.debug("\tv2  is " + v2.name.name() + "\n");
+      PrintInvariants.debugFiltering.debug("\tcan is " + canonical.name.name() + "\n");
     }
 
     if (!canonical.equalToNonobvious().contains(v1) && !canonical.equals(v1)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\tit was obvious that " + canonical.name.name() + " == " + v1.name.name() + "\n");
+	PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v1.name.name() + "\n");
       }
       return true;
     }
 
     if (!canonical.equalToNonobvious().contains(v2) && !canonical.equals(v2)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\tit was obvious that " + canonical.name.name() + " == " + v2.name.name() + "\n");
+	PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v2.name.name() + "\n");
       }
       return true;
     }

@@ -28,7 +28,7 @@ public abstract class Scope extends EventReceptor
     Scope()
     {
 	super();
-	
+
 	mEventsSeen = new EventRecord();
 
 	mChildScopes = new Vector();
@@ -43,7 +43,7 @@ public abstract class Scope extends EventReceptor
     Object generateStateSnapshot()
     {
 	ScopeState out = new ScopeState();
-	
+
 	out.eventsSeen = mEventsSeen.duplicate();
 	out.isActive = isActive;
 	out.enteredBefore = enteredBefore;
@@ -174,7 +174,7 @@ public abstract class Scope extends EventReceptor
 	    {
 		((EventReceptor)i.next()).parentScopeEntering();
 	    }
-    }		
+    }
 
     void exit()
     {
@@ -234,7 +234,7 @@ public abstract class Scope extends EventReceptor
 	if (!isActive())
 	    return out;
 
-	//Recurse first, damn you	
+	//Recurse first, damn you
 	//Is this correct (in particular re children with stuff
 	//depending on things which begin or close this scope)
 	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
@@ -268,7 +268,7 @@ public abstract class Scope extends EventReceptor
 	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		EventReceptor r = (EventReceptor)i.next();
-	    
+
 		//		//Add "before e, r" for each child scope r
 		//		ScopeBefore newBeforeE = new ScopeBefore(e);
 
@@ -303,7 +303,7 @@ public abstract class Scope extends EventReceptor
 		//		ScopeBefore newBeforeE = new ScopeBefore(e);
 
 		newBeforeE.addChild(r.produceDuplicate());
-		
+
 		//		newKids.add(newBeforeE);
 	    }
 
@@ -316,7 +316,7 @@ public abstract class Scope extends EventReceptor
     {
 	return toString(0);
     }
-    
+
     public abstract String getNameString();
 
     private static String makeSpacing(int l)
@@ -327,10 +327,10 @@ public abstract class Scope extends EventReceptor
 	    {
 		space.append("    ");
 	    }
-    
+
 	return space.toString();
     }
-	
+
     public String toString(int level)
     {
 	StringBuffer res = new StringBuffer();
@@ -420,6 +420,8 @@ class ScopeGlobal extends Scope
 
 	if (doDynamicInstantiation)
 	    {
+		newStuffHashes = new Vector();
+
 		for(Iterator i = basicEvents.iterator(); i.hasNext(); )
 		    {
 			newStuffHashes.add(generateNewCandidates((Event)i.next()));
@@ -429,7 +431,7 @@ class ScopeGlobal extends Scope
 	sendEventToKids(sampleEvent);
 
 	if (doDynamicInstantiation)
-	    {		
+	    {
 		for(Iterator i = newStuffHashes.iterator(); i.hasNext(); )
 		    {
 			Hashtable res = (Hashtable)i.next();
@@ -493,11 +495,11 @@ class ScopeBefore extends Scope
 class ScopeAfter extends Scope
 {
     Event mEvent;
-    
+
     ScopeAfter(Event e)
     {
 	super();
-	
+
 	mEvent = e;
     }
 
@@ -525,7 +527,7 @@ class ScopeAfter extends Scope
     {
 	return "(AFTER " + mEvent.toString() + "):";
     }
-}			
+}
 
 //FIXME: MAJOR: Semantics are wrong. Scope should be limited to smallest
 //space between A and B (i.e. AAB only in scope between the second A and the
@@ -574,7 +576,7 @@ class ScopeBetween extends Scope
 
 	return res;
     }
-    
+
     void rollback()
     {
 	for(Iterator i = kidsCreated.iterator(); i.hasNext(); )
@@ -600,7 +602,7 @@ class ScopeBetween extends Scope
 	if (isActive())
 	    {
 		//Parent scope is closing. This means we never saw our close event,
-		//so we never actually were active. ha! we were just kidding		
+		//so we never actually were active. ha! we were just kidding
 		rollback();
 	    }
 	//	else
@@ -688,12 +690,9 @@ class ScopeAfterUntil extends Scope
     {
 	return new ScopeAfterUntil(mEventA, mEventB);
     }
-	
+
     public String getNameString()
     {
 	return "(AFTER " + mEventA.toString() + " UNTIL " + mEventB.toString() + "):";
-    }	
+    }
 }
-
-	
-    

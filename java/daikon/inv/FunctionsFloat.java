@@ -58,9 +58,9 @@ public final class FunctionsFloat  {
 
     binaryNonSymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)
-      {"", " / ", ""},
+      {"", " / ", ""},          // divide
 
-      {"Math.pow(", ", ", ""},
+      {"java.lang.Math.pow(", ", ", ")"},       // exponentiation
       // MathMDE_cmp = "utilMDE.MathMDE.cmp(int,int)"
       // MathMDE_cmp = "utilMDE.MathMDE.round(int,int)"
     };
@@ -92,9 +92,6 @@ public final class FunctionsFloat  {
     System.out.println("returning 0 binary");
     return 0;
   }
-
-  // public static int lookup(String[] methodname) {
-  // }
 
   // don't permit instantiation
   private FunctionsFloat () { }

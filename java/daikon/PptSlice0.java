@@ -2,6 +2,9 @@ package daikon;
 
 import daikon.inv.*;
 
+import java.util.Iterator;
+import java.util.HashSet;
+
 import utilMDE.*;
 
 import java.util.*;
@@ -20,14 +23,60 @@ public class PptSlice0
      super(parent, new VarInfo[0]);
   }
 
+  // We trade space for time by keeping a hash table of all the
+  // implications (they're also stored as a vector in invs) so we can
+  // efficiently avoid adding implications more than once.
+  // - I had to make this transient because when it wasn't, the hash
+  // set tried to get the hash codes of all the invariants when it
+  // read them in, but their format methods croaked when they couldn't
+  // get their varInfos -smcc
+
+  // Really a HashSet<ImplicationByFormatWrapper>
+  private /* [INCR] transient */ HashSet invariantsSeen = new HashSet();
+
   void init_po() {
     throw new Error("Shouldn't get called");
   }
 
   public void addInvariant(Invariant inv) {
     Assert.assertTrue(inv != null);
-    // Assert.assertTrue(inv instanceof Implication);
+    // The assertion on the next line used to be commented out; why? -smcc
+    Assert.assertTrue(inv instanceof Implication);
     invs.add(inv);
+    invariantsSeen.add(new ImplicationByFormatWrapper((Implication)inv));
+  }
+
+  public boolean hasImplication(Implication imp) {
+    return invariantsSeen.contains(new ImplicationByFormatWrapper(imp));
+  }
+
+  // We'd like to use a more sophisticated equality check and hashCode
+  // for implications when they appear in the invariantsSeen HashSet,
+  // but not anywhere else, so we make wrapper objects with the
+  // desired methods to go directly in the set.
+  private static final class ImplicationByFormatWrapper {
+    static final long serialVersionUID = 20021113L;
+
+    private Implication theImp;
+
+    public ImplicationByFormatWrapper(Implication theImp) {
+      this.theImp = theImp;
+    }
+
+    public boolean equals(Object o) {
+      if (o == null || !(o instanceof ImplicationByFormatWrapper))
+        return false;
+      ImplicationByFormatWrapper other = (ImplicationByFormatWrapper)o;
+      // It seems like a bit of a hack to use format() this way, but the
+      // check this is replacing (used to be in makeImplication())
+      // compared two invariants by their format() values, so I'm
+      // assuming there's some good reason -SMcC
+      return theImp.format().equals(other.theImp.format());
+    }
+
+    public int hashCode() {
+      return theImp.format().hashCode();
+    }
   }
 
   // I need to figure out how to set these.

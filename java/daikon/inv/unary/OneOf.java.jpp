@@ -462,6 +462,7 @@ public final class ONEOFSCALAR
 
   public String format_java() {
     //have to take a closer look at this!
+    sort_rep();
 #if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
     String varname = form[1];
@@ -567,6 +568,7 @@ public final class ONEOFSCALAR
 
   /* IOA */
   public String format_ioa() {
+    sort_rep();
 #if defined(IS_ELT)
     VarInfoName.QuantHelper.IOAQuantification quant =
       new VarInfoName.QuantHelper.IOAQuantification (new VarInfo[] {var()});
@@ -699,6 +701,7 @@ public final class ONEOFSCALAR
 #endif
 
   public String format_esc() {
+    sort_rep();
 #if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
     String varname = form[1];
@@ -787,7 +790,7 @@ public final class ONEOFSCALAR
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else if (num_elts == 0) {
         // Do nothing
-        return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"        
+        return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else {
         throw new Error ("Contains more than 2 elements");
       }
@@ -976,6 +979,7 @@ public final class ONEOFSCALAR
   }
 
   public String format_simplify() {
+    sort_rep();
 #if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];
@@ -1022,7 +1026,7 @@ public final class ONEOFSCALAR
         Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       } else if (num_elts == 0) {
-        return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"          
+        return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
       } else {
         throw new Error ("Contains more than 2 elements");
       }

@@ -12,9 +12,7 @@ import daikon.derive.*;
 import daikon.derive.unary.*;
 
 import utilMDE.*;
-
 import org.apache.log4j.Category;
-
 import java.util.*;
 
 public final class FloatGreaterEqual

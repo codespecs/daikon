@@ -185,6 +185,7 @@ public final class OneOfString
 
   public String format_java() {
     //have to take a closer look at this!
+    sort_rep();
 
     String varname = var().name.java_name();
 
@@ -218,6 +219,7 @@ public final class OneOfString
 
   /* IOA */
   public String format_ioa() {
+    sort_rep();
 
     String varname = var().name.ioa_name();
 
@@ -272,6 +274,7 @@ public final class OneOfString
   }
 
   public String format_esc() {
+    sort_rep();
 
     String varname = var().name.esc_name();
 
@@ -335,6 +338,7 @@ public final class OneOfString
   }
 
   public String format_simplify() {
+    sort_rep();
 
     String varname = var().name.simplify_name();
 

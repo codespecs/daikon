@@ -211,6 +211,7 @@ public final class EltOneOf
 
   public String format_java() {
     //have to take a closer look at this!
+    sort_rep();
 
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
     String varname = form[1];
@@ -248,6 +249,7 @@ public final class EltOneOf
 
   /* IOA */
   public String format_ioa() {
+    sort_rep();
 
     VarInfoName.QuantHelper.IOAQuantification quant =
       new VarInfoName.QuantHelper.IOAQuantification (new VarInfo[] {var()});
@@ -280,6 +282,7 @@ public final class EltOneOf
   }
 
   public String format_esc() {
+    sort_rep();
 
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
     String varname = form[1];
@@ -360,6 +363,7 @@ public final class EltOneOf
   }
 
   public String format_simplify() {
+    sort_rep();
 
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];

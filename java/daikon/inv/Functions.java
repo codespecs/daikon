@@ -51,12 +51,12 @@ public final class Functions  {
       {"", " * ", ""},
       // plus: subsumed by LinearTernary.
 
-      {"", " & ", ""},
-      {"", " && ", ""},
-      {"", " ^ ", ""},
-      {"", " ^ ", ""},
-      {"", " | ", ""},
-      {"", " || ", ""},
+      {"", " & ", ""},          // bitwise and
+      {"", " && ", ""},         // logical and
+      {"", " ^ ", ""},          // bitwise xor
+      {"", " ^ ", ""},          // logical xor
+      {"", " | ", ""},          // bitwise or
+      {"", " || ", ""},         // logical or
 
       /// Non-operators.
       {"java.lang.Math.min(", ", ", ")"},
@@ -69,17 +69,17 @@ public final class Functions  {
 
     binaryNonSymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)
-      {"", " / ", ""},
+      {"", " / ", ""},          // divide
 
-      {"", " % ", ""},
+      {"", " % ", ""},          // mod
       // minus: subsumed by LinearTernary
       // (Are the shifts also subsumed by LinearTernary?)
-      {"", " << ", ""},
-      {"", " >> ", ""},
-      {"", " >>> ", ""},
+      {"", " << ", ""},         // left shift
+      {"", " >> ", ""},         // signed right shift
+      {"", " >>> ", ""},        // unsigned right shift
       /// Non-operators.
 
-      {"Math.pow(", ", ", ""},
+      {"java.lang.Math.pow(", ", ", ")"},       // exponentiation
       // MathMDE_cmp = "utilMDE.MathMDE.cmp(int,int)"
       // MathMDE_cmp = "utilMDE.MathMDE.round(int,int)"
     };
@@ -123,9 +123,6 @@ public final class Functions  {
     System.out.println("returning 0 binary");
     return 0;
   }
-
-  // public static int lookup(String[] methodname) {
-  // }
 
   // don't permit instantiation
   private Functions () { }

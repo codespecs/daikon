@@ -16,12 +16,12 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("\t\tEntering UmVEF.shouldDiscard\n");
+      PrintInvariants.debugFiltering.debug("\tEntering UmVEF.shouldDiscard\n");
     }
 
     if (!IsEqualityComparison.it.accept(invariant)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\t\tUnmodVarEqF thinks this isn't an equality comparison\n");
+	PrintInvariants.debugFiltering.debug("\tUnmodVarEqF thinks this isn't an equality comparison\n");
       }
       return false;
     }
@@ -31,23 +31,23 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
     VarInfo var2 = comp.var2();
 
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("\tcompared " + var1.name.applyPrestate() + " to " + var2.name.toString() + "\n");
+      PrintInvariants.debugFiltering.debug("compared " + var1.name.applyPrestate() + " to " + var2.name.toString() + "\n");
     }
 
     if (var1.name.applyPrestate().equals(var2.name)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\t\t(yes...)\n");
+	PrintInvariants.debugFiltering.debug("\t(yes...)\n");
       }
       return(true);
     }
 
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("\tcompared " + var2.name.applyPrestate() + " to " + var1.name.toString() + "\n");
+      PrintInvariants.debugFiltering.debug("compared " + var2.name.applyPrestate() + " to " + var1.name.toString() + "\n");
     }
 
     if (var2.name.applyPrestate().equals(var1.name)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\t\t(yes...)\n");
+	PrintInvariants.debugFiltering.debug("\t(yes...)\n");
       }
       return(true);
     }

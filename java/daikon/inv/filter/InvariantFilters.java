@@ -173,18 +173,18 @@ public class InvariantFilters {
     //  Property filters.
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+      if(PrintInvariants.debugFiltering.isDebugEnabled()) {
 	PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName() +" \n");
       }
       if (filter.shouldDiscard( invariant )) {
-	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	if(PrintInvariants.debugFiltering.isDebugEnabled()) {
 	  PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName() +" \n");
 	  PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
 	}
 	return false;
       }
     }
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+    if(PrintInvariants.debugFiltering.isDebugEnabled()) {
       PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)\n");
       PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
     }
@@ -199,7 +199,7 @@ public class InvariantFilters {
     InvariantFilter answer = null;
     for(Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if (filter.getDescription().equals(description)) {
+      if(filter.getDescription().equals(description)) {
 	answer = filter;
       }
     }
