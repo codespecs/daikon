@@ -5,6 +5,7 @@ import junit.framework.*;
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
+import daikon.test.*;
 
 public class XorVisitorTester extends TestCase {
 
@@ -32,10 +33,10 @@ public class XorVisitorTester extends TestCase {
                        DiffTester.newIntVarInfo("n"),
                        DiffTester.newIntVarInfo("o"),
     };
-    PptTopLevel A = new PptTopLevel("A", vars);
-    PptTopLevel B = new PptTopLevel("B", vars);
-    PptTopLevel C = new PptTopLevel("C", vars);
-    PptTopLevel D = new PptTopLevel("D", vars);
+    PptTopLevel A = Common.makePptTopLevel("A", vars);
+    PptTopLevel B = Common.makePptTopLevel("B", vars);
+    PptTopLevel C = Common.makePptTopLevel("C", vars);
+    PptTopLevel D = Common.makePptTopLevel("D", vars);
     PptSlice slicew = new PptSlice1(A, new VarInfo[] {vars[0]});
     PptSlice slicex = new PptSlice1(A, new VarInfo[] {vars[1]});
     PptSlice slicey = new PptSlice1(A, new VarInfo[] {vars[2]});
