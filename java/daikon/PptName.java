@@ -124,6 +124,16 @@ public class PptName
     return FileIO.class_static_suffix.equals(point);
   }
 
+  /**
+   * @return something interesting and descriptive about the point in
+   * question, along the lines of "ENTER" or "EXIT" or somesuch.  The
+   * semantics of this method are not yet decided, so don't try to do
+   * aynthing useful with this result.
+   **/
+  public String getPoint() {
+    return point;
+  }
+
   public boolean equals(Object o)
   {
     return (o instanceof PptName) && equals((PptName) o);
