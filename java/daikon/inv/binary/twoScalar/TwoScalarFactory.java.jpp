@@ -37,7 +37,8 @@ import daikon.*;
 import daikon.inv.*;
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 
@@ -54,8 +55,8 @@ public final class CLASSNAME {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Trying to instantiate for " + ppt.ppt_name + ": " + var1.name  + " and " + var2.name);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Trying to instantiate for " + ppt.ppt_name + ": " + var1.name  + " and " + var2.name);
     }
 
     // Assert.assertTrue((! var1.rep_type.isArray()) && (! var2.rep_type.isArray()));
@@ -67,7 +68,7 @@ public final class CLASSNAME {
     Assert.assertTrue(var2.rep_type.isFloat());
 #endif
     if (! var1.compatible(var2)) {
-      debug.debug ("Not comparable, returning");
+      debug.fine ("Not comparable, returning");
       return null;
     }
 

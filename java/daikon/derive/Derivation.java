@@ -2,7 +2,8 @@ package daikon.derive;
 
 import daikon.*;
 import java.io.Serializable;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Structure that represents a derivation; can generate values and

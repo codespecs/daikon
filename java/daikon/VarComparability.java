@@ -2,7 +2,8 @@ package daikon;
 
 import utilMDE.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 

@@ -45,7 +45,8 @@ import daikon.inv.binary.twoScalar.*;
 
 import utilMDE.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 
@@ -79,10 +80,10 @@ public final class CLASSNAME {
     if (super2 == null)
       super2 = var2;
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Instantiating for ppt " + ppt.name);
-      debug.debug ("name1 " + super1.repr());
-      debug.debug ("name2 " + super2.repr());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Instantiating for ppt " + ppt.name);
+      debug.fine ("name1 " + super1.repr());
+      debug.fine ("name2 " + super2.repr());
     }
 
 

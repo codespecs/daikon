@@ -41,7 +41,8 @@ import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
 import java.util.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Represents two LONG sequences where one of the sequences is a
@@ -82,16 +83,16 @@ public class SUBSET
     if ((SUBSET.isObviousSubSet(var1, var2))
         || (SUBSET.isObviousSubSet(var2, var1))) {
       Global.implied_noninstantiated_invariants++;
-      if (debug.isDebugEnabled()) {
-        debug.debug (var1 + ", " + var2);
-        debug.debug ("Obvious derived, returning null");
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine (var1 + ", " + var2);
+        debug.fine ("Obvious derived, returning null");
       }
       return null;
     }
 
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Instantiating " + var1.name + " and " + var2.name);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Instantiating " + var1.name + " and " + var2.name);
     }
 
     return new SUBSET(ppt);
@@ -176,14 +177,14 @@ public class SUBSET
     boolean new_var1_in_var2 = var1_in_var2;
     boolean new_var2_in_var1 = var2_in_var1;
     boolean changed = false;
-    if (debug.isDebugEnabled()) {
-      debug.debug (a1);
-      debug.debug (a2);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine (ArraysMDE.toString(a1));
+      debug.fine (ArraysMDE.toString(a2));
     }
 
     if (new_var1_in_var2 && (!IS_SUBSET(a1, a2))) {
       new_var1_in_var2 = false;
-      debug.debug ("Falsified 1");
+      debug.fine ("Falsified 1");
       if (!new_var2_in_var1) {
         destroyAndFlow();
         return;
@@ -194,7 +195,7 @@ public class SUBSET
     }
     if (new_var2_in_var1 && (!IS_SUBSET(a2, a1))) {
       new_var2_in_var1 = false;
-      debug.debug ("Falsified 2");
+      debug.fine ("Falsified 2");
       if (!new_var1_in_var2) {
         destroyAndFlow();
         return;
@@ -246,13 +247,13 @@ public class SUBSET
     // x[0..j].  Not necessarily obvious.
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == supervar) {
-      debug.debug ("  returning true because subvar_super == supervar");
+      debug.fine ("  returning true because subvar_super == supervar");
       return true;
     }
 
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
     if (subvar_super != null && subvar_super == supervar_super) {
-      debug.debug ("  returning true because subvar_super == supervar_super");
+      debug.fine ("  returning true because subvar_super == supervar_super");
       return true;
     }
 

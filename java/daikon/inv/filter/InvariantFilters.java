@@ -1,10 +1,9 @@
 package daikon.inv.filter;
 
 import utilMDE.Assert;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
@@ -152,7 +151,7 @@ public class InvariantFilters {
   public boolean shouldKeep( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
 
-    if (invariant.logOn() || df.isDebugEnabled()) {
+    if (invariant.logOn() || df.isLoggable(Level.FINE)) {
       invariant.log (df, "filtering");
     }
 
@@ -191,16 +190,16 @@ public class InvariantFilters {
     invariant.log ("Processing " + propertyFilters.size() + " Prop filters");
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if (invariant.logDetail() || df.isDebugEnabled()) {
+      if (invariant.logDetail() || df.isLoggable(Level.FINE)) {
         invariant.log (df, "applying " + filter.getClass().getName());
       }
       if (filter.shouldDiscard( invariant )) {
-        if (invariant.logOn() || df.isDebugEnabled())
+        if (invariant.logOn() || df.isLoggable(Level.FINE))
           invariant.log (df, "failed " + filter.getClass().getName());
         return false;
       }
     }
-    if (df.isDebugEnabled()) {
+    if (df.isLoggable(Level.FINE)) {
       invariant.log (df, "accepted by InvariantFilters");
     }
     return true;
@@ -357,8 +356,8 @@ public class InvariantFilters {
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
-        if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-          PrintInvariants.debugFiltering.debug("Found invariant which says " + invariant.format());
+        if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+          PrintInvariants.debugFiltering.fine ("Found invariant which says " + invariant.format());
         }
         // System.out.println("Found equality invariant: " + invariant.format() + " " + invariant.ppt.name);
         // System.out.println("    " + invariant.repr());

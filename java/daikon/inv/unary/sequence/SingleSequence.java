@@ -7,7 +7,8 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.derive.binary.SequenceSubsequence;
 import daikon.suppress.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 
 /**
@@ -79,15 +80,15 @@ public abstract class SingleSequence
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       SingleSequence inv = (SingleSequence) arg;
 
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Attempting derived subsequence for: " + inv.repr());
-        debug.debug ("  in ppt " + inv.ppt.parent.name);
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Attempting derived subsequence for: " + inv.repr());
+        debug.fine ("  in ppt " + inv.ppt.parent.name);
       }
 
       VarInfo orig = inv.var().isDerivedSubSequenceOf();
       if (orig != null) {
-        if (debug.isDebugEnabled()) {
-          debug.debug ("  with orig " + orig.name.name());
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine ("  with orig " + orig.name.name());
         }
 
 
@@ -101,18 +102,18 @@ public abstract class SingleSequence
         inv.ppt.parent.fillSuppressionTemplate (supTemplate);
         if (supTemplate.filled) {
           SingleSequence  suppressor = (SingleSequence) supTemplate.results[0];
-          if (debug.isDebugEnabled()) {
-            debug.debug ("  Successful template fill for " + inv.format());
-            debug.debug ("             with              " + suppressor.format());
+          if (debug.isLoggable(Level.FINE)) {
+            debug.fine ("  Successful template fill for " + inv.format());
+            debug.fine ("             with              " + suppressor.format());
           }
           if (suppressor.isSameFormula(inv)) {
-            if (debug.isDebugEnabled()) {
-              debug.debug ("  Generating link");
+            if (debug.isLoggable(Level.FINE)) {
+              debug.fine ("  Generating link");
             }
             return linkFromTemplate (supTemplate, inv);
           } else {
-            if (debug.isDebugEnabled()) {
-              debug.debug ("  But no link made");
+            if (debug.isLoggable(Level.FINE)) {
+              debug.fine ("  But no link made");
             }
           }
         }
@@ -133,8 +134,8 @@ public abstract class SingleSequence
 
         VarInfo otherVar = inv.ppt.parent.var_infos[iVarInfos];
         if (otherVar.type == thisVar.type && otherVar != thisVar) {
-          if (debug.isDebugEnabled()) {
-            debug.debug ("  Possibly interesting var: " + otherVar.name.name());
+          if (debug.isLoggable(Level.FINE)) {
+            debug.fine ("  Possibly interesting var: " + otherVar.name.name());
           }
           // Two things to check: obvious subsets, like A[0..i-1] subseq A[0..i]
           // and non obvious ones detected dynamically
@@ -154,8 +155,8 @@ public abstract class SingleSequence
               inv.ppt.parent.fillSuppressionTemplate (similarTemplate);
               if (similarTemplate.filled &&
                   similarTemplate.results[0].isSameFormula(inv)) {
-                if (debug.isDebugEnabled()) {
-                  debug.debug ("  Filling with obvious subset");
+                if (debug.isLoggable(Level.FINE)) {
+                  debug.fine ("  Filling with obvious subset");
                 }
                 return linkFromTemplate (similarTemplate, inv);
               }
@@ -209,8 +210,8 @@ public abstract class SingleSequence
                 suppressors.add (similarTemplate.results[0]);
                 suppressors.add (subseqTemplate.results[0]);
                 // Now we have to add both invariants to the suppressor
-                if (debug.isDebugEnabled()) {
-                  debug.debug ("  Filling with non obvious subset");
+                if (debug.isLoggable(Level.FINE)) {
+                  debug.fine ("  Filling with non obvious subset");
                 }
 
                 return new SuppressionLink (this,

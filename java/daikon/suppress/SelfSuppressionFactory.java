@@ -7,7 +7,8 @@ import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
@@ -46,9 +47,9 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
   private transient SuppressionTemplate supTemplate;
 
   public SuppressionLink generateSuppressionLink (Invariant inv) {
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Attempting on: " + inv.repr());
-      debug.debug ("  in ppt     : " + inv.ppt.parent.ppt_name);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Attempting on: " + inv.repr());
+      debug.fine ("  in ppt     : " + inv.ppt.parent.ppt_name);
     }
     if (inv.logOn())
       inv.log ("Attempting self suppression with sample count: " + inv.ppt.num_samples());

@@ -33,7 +33,8 @@ import daikon.inv.binary.twoScalar.LinearBinaryCore;
 import utilMDE.*;
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 public final class CLASSNAME
@@ -128,8 +129,8 @@ public final class CLASSNAME
         // a LinearBinary or a constant, so let me just destroy myself
         values_seen = Integer.MAX_VALUE;
         a = b = c = 0;
-        if (debug.isDebugEnabled()) {
-          debug.debug ("  Ternary invariant destroyed because a or b = 0");
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine ("  Ternary invariant destroyed because a or b = 0");
         }
         return;
       } else {
@@ -239,8 +240,8 @@ public final class CLASSNAME
           for (int i=0; i<MINTRIPLES; i++) { // values_seen == MINTRIPLES
             if (!EQUAL (def_points[i].z,
                         a*def_points[i].x + b*def_points[i].y + c)) {
-              if (debug.isDebugEnabled()) {
-                debug.debug("Suppressing " + CLASSSTRING + " at index " + i + ": "
+              if (debug.isLoggable(Level.FINE)) {
+                debug.fine ("Suppressing " + CLASSSTRING + " at index " + i + ": "
                             + def_points[i].z + " != "
                             + a + "*" + def_points[i].x
                             + "+" + b + "*" + def_points[i].y + "+" + c);
@@ -261,8 +262,8 @@ public final class CLASSNAME
 
         // Try to find small changes that will fit better.
         if (!try_new_equation (x, y, z)) {
-          if (debug.isDebugEnabled()) {
-            debug.debug("Suppressing " + CLASSSTRING + " (" +
+          if (debug.isLoggable(Level.FINE)) {
+            debug.fine ("Suppressing " + CLASSSTRING + " (" +
                         wrapper.format() + ") at new value: "
                         + y + " != " + a + "*" + x + "+" + b);
           }
@@ -309,8 +310,8 @@ public final class CLASSNAME
       a = (min_a + max_a) / 2;
       b = (min_b + max_b) / 2;
       c = (min_c + max_c) / 2;
-      if (debug.isDebugEnabled())
-        debug.debug (wrapper.ppt.name + ": Trying new a (" + a +
+      if (debug.isLoggable(Level.FINE))
+        debug.fine (wrapper.ppt.name + ": Trying new a (" + a +
                      "), b (" + b + ") and c (" + c + ")");
 
       // if the new coefficients are 'equal' to their min and max and
@@ -320,8 +321,8 @@ public final class CLASSNAME
           Global.fuzzy.eq(b, min_b) && Global.fuzzy.eq(b, max_b) &&
           Global.fuzzy.eq(c, min_c) && Global.fuzzy.eq(c, max_c) &&
           EQUAL (z, a*x+b*y+c)) {
-        if (debug.isDebugEnabled())
-          debug.debug (wrapper.ppt.name + ": New a (" + a + ") and b ("
+        if (debug.isLoggable(Level.FINE))
+          debug.fine (wrapper.ppt.name + ": New a (" + a + ") and b ("
                        + b + ")");
         return (true);
       } else {

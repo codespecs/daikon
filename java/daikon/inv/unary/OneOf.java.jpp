@@ -187,7 +187,8 @@ import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 import java.io.*;
@@ -299,8 +300,8 @@ public final class ONEOFSCALAR
 
   public static ONEOFSCALAR instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    if (debug.isDebugEnabled())
-      debug.debug (ONEOFSCALAR_STRING + " instantiate " + ppt.name);
+    if (debug.isLoggable(Level.FINE))
+      debug.fine (ONEOFSCALAR_STRING + " instantiate " + ppt.name);
 
     return new ONEOFSCALAR(ppt);
   }
@@ -1253,7 +1254,7 @@ public final class ONEOFSCALAR
       }
     }
     if (num_elts == dkconfig_size) {
-      if (logOn() || debug.isDebugEnabled())
+      if (logOn() || debug.isLoggable(Level.FINE))
         log (debug, "destroy of '" + format() + "' add_modified (" + v + ")");
       destroyAndFlow();
       return;
@@ -1403,7 +1404,7 @@ public final class ONEOFSCALAR
         ONEOFSCALAR other = (ONEOFSCALAR) inv;
         if (isSameFormula(other)
           && SubSequence.isObviousSubSequenceDynamically(this, v, other.var())) {
-          debug.debug ("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
+          debug.fine ("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
           return true;
         }
       }

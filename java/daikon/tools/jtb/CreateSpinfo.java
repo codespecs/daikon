@@ -2,7 +2,8 @@ package daikon.tools.jtb;
 
 import java.io.*;
 import gnu.getopt.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import daikon.*;
 import jtb.syntaxtree.*;
 import jtb.JavaParser;
@@ -69,7 +70,7 @@ public class CreateSpinfo {
         if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel (g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
@@ -150,7 +151,7 @@ public class CreateSpinfo {
       e.printStackTrace();
       System.exit(1);
     }
-    debug.debug("CreateSpinfo: processing file " + javaFileName);
+    debug.fine ("CreateSpinfo: processing file " + javaFileName);
     ConditionExtractor extractor = new ConditionExtractor();
     root.accept(extractor);
     // transform conditions

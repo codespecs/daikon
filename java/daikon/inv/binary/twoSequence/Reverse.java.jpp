@@ -30,7 +30,8 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.Assert;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Represents two PRIMITIVE sequences where one is in the reverse order
@@ -64,8 +65,8 @@ public class CLASSNAME
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Not instantitating for " + CLASSSTRING + " because order has no meaning: " +
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Not instantitating for" + CLASSSTRING + " because order has no meaning: " +
                      result.var1().name + " and " + result.var2().name);
       }
       return null;

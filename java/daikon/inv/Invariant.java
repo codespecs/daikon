@@ -8,7 +8,8 @@ import daikon.inv.filter.*;
 import daikon.suppress.*;
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 import java.io.Serializable;
 
@@ -322,7 +323,7 @@ public abstract class Invariant
     if (logOn())
       log ("destroy");
     falsified = true;
-    if (logOn() || PptSlice.debugFlow.isDebugEnabled())
+    if (logOn() || PptSlice.debugFlow.isLoggable(Level.FINE))
       log (PptSlice.debugFlow, "Destroyed " + format());
 
     // [INCR] Commented out because removeInvariant removes this from
@@ -368,8 +369,8 @@ public abstract class Invariant
    * this to list of falsified or weakened invariants.
    **/
   public void destroyAndFlow () {
-    if (debugFlow.isDebugEnabled() || this.logOn()) {
-      debugFlow.debug(repr() + " at " + ppt.parent.name +
+    if (debugFlow.isLoggable(Level.FINE) || this.logOn()) {
+      debugFlow.fine (repr() + " at " + ppt.parent.name +
                       " added to destroyed.");
       this.log(repr() + " at " + ppt.parent.name +
                " added to destroyed.");
@@ -390,14 +391,14 @@ public abstract class Invariant
   public void cloneAndFlow() {
     // We must still do this to check suppression
     ppt.addToChanged (this);
-    if (debugFlow.isDebugEnabled() || this.logOn()) {
-      debugFlow.debug(repr() + " at " + ppt.parent.name + " added to changed.");
+    if (debugFlow.isLoggable(Level.FINE) || this.logOn()) {
+      debugFlow.fine (repr() + " at " + ppt.parent.name + " added to changed.");
       this.log(repr() + " at " + ppt.parent.name + " added to changed.");
     }
 
     if (!flowed) {
-      if (debugFlow.isDebugEnabled() || this.logOn()) {
-        debugFlow.debug(repr() + " at " + ppt.parent.name + " added to flowed.");
+      if (debugFlow.isLoggable(Level.FINE) || this.logOn()) {
+        debugFlow.fine (repr() + " at " + ppt.parent.name + " added to flowed.");
         this.log(repr() + " at " + ppt.parent.name + " added to flowed.");
       }
       flowClone();
@@ -456,8 +457,8 @@ public abstract class Invariant
 
     if (logOn())
       result.log ("Created via transfer");
-    //if (debug.isDebugEnabled())
-    //    debug.debug ("Invariant.transfer to " + new_ppt.name + " "
+    //if (debug.isLoggable(Level.FINE))
+    //    debug.fine ("Invariant.transfer to " + new_ppt.name + " "
     //                 + result.repr());
 
     return result;
@@ -632,8 +633,8 @@ public abstract class Invariant
    * requested format.  Made public so cores can call it.
    **/
   public String format_unimplemented(OutputFormat request) {
-    if ((request == OutputFormat.IOA) && debugPrint.isDebugEnabled()) {
-      debugPrint.debug ("Format_ioa: " + this.toString());
+    if ((request == OutputFormat.IOA) && debugPrint.isLoggable(Level.FINE)) {
+      debugPrint.fine ("Format_ioa: " + this.toString());
     }
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
@@ -703,8 +704,8 @@ public abstract class Invariant
    * the given requested format.  Made public so cores can call it.
    **/
   public String format_inexpressible(OutputFormat request) {
-    if ((request == OutputFormat.IOA) && debugPrint.isDebugEnabled()) {
-      debugPrint.debug ("Format_ioa: " + this.toString());
+    if ((request == OutputFormat.IOA) && debugPrint.isLoggable(Level.FINE)) {
+      debugPrint.fine ("Format_ioa: " + this.toString());
     }
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
@@ -877,8 +878,8 @@ public abstract class Invariant
     VarInfo[] vars1 = inv1.ppt.var_infos;
     VarInfo[] vars2 = inv2.ppt.var_infos;
 
-//      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-//        PrintInvariants.debugFiltering.debug("\t\t----------------\n");
+//      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+//        PrintInvariants.debugFiltering.fine ("\t\t----------------\n");
 //      }
 
     Assert.assertTrue(vars1.length == vars2.length); // due to inv type match already
@@ -908,8 +909,8 @@ public abstract class Invariant
         VarInfo elt = (VarInfo) iter.next();
         VarInfoName name = name_extractor.getFromSecond(elt);
 
-//      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-//       PrintInvariants.debugFiltering.debug("\t\t" + name.toString() + " <--> " + all_vars_names1.toString() + "\n");
+//      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+//       PrintInvariants.debugFiltering.fine ("\t\t" + name.toString() + " <--> " + all_vars_names1.toString() + "\n");
 //      }
 
         intersection = all_vars_names1.contains(name);
@@ -925,9 +926,9 @@ public abstract class Invariant
     // System.out.println("TRUE: isSameInvariant(" + inv1.format() + ", " + inv2.format() + ")");
 
     // the type, formula, and vars all matched
-//      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-//        PrintInvariants.debugFiltering.debug("\tdecided " + this.format() + "\n");
-//        PrintInvariants.debugFiltering.debug("\t is the same as " + inv2.format() + "\n");
+//      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+//        PrintInvariants.debugFiltering.fine ("\tdecided " + this.format() + "\n");
+//        PrintInvariants.debugFiltering.fine ("\t is the same as " + inv2.format() + "\n");
 //      }
     return true;
   }
@@ -1094,8 +1095,8 @@ public abstract class Invariant
                       );
     if (this instanceof Comparison) {
       //      Assert.assertTrue(! IsEqualityComparison.it.accept(this));
-      if (debugPrint.isDebugEnabled())
-        debugPrint.debug("  [over constants:  " + this.repr_prob() + " ]");
+      if (debugPrint.isLoggable(Level.FINE))
+        debugPrint.fine ("  [over constants:  " + this.repr_prob() + " ]");
       return true;
     }
     return false;
@@ -1188,13 +1189,13 @@ public abstract class Invariant
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
-      if (debugIsObvious.isDebugEnabled()) {
+      if (debugIsObvious.isLoggable(Level.FINE)) {
         StringBuffer sb = new StringBuffer();
         sb.append ("  isObviousStatically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
           sb.append (assigned[i].name.name() + " ");
         }
-        debugIsObvious.debug (sb.toString());
+        debugIsObvious.fine (sb.toString());
       }
 
       if (isObviousStatically (assigned)) {
@@ -1234,8 +1235,8 @@ public abstract class Invariant
     // // // obvious-derived invariants to lists in the first place.
     if (isObviousStatically_SomeInEquality() != null ||
         isObviousDynamically_SomeInEquality() != null) {
-      if (debugPrint.isDebugEnabled())
-        debugPrint.debug("  [obvious:  " + repr_prob() + " ]");
+      if (debugPrint.isLoggable(Level.FINE))
+        debugPrint.fine ("  [obvious:  " + repr_prob() + " ]");
       return true;
     }
     return false;
@@ -1310,13 +1311,13 @@ public abstract class Invariant
                                                              int position) {
     if (position == vis.length) {
       // base case
-      if (debugIsObvious.isDebugEnabled()) {
+      if (debugIsObvious.isLoggable(Level.FINE)) {
         StringBuffer sb = new StringBuffer();
         sb.append ("  isObviousDynamically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
           sb.append (assigned[i].name.name() + " ");
         }
-        debugIsObvious.debug (sb.toString());
+        debugIsObvious.fine (sb.toString());
       }
       if (isObviousDynamically (assigned)) {
         return assigned;
@@ -1381,8 +1382,8 @@ public abstract class Invariant
         Invariant entryInvariant = (Invariant) entryInvariants.next();
         // If entryInvariant with orig() applied to everything matches this invariant
         if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor)) {
-          if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-            PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + entryInvariant.ppt.parent.name + ")\n");
+          if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+            PrintInvariants.debugFiltering.fine ("\tImplied by precond: " + entryInvariant.format() + " (from " + entryInvariant.ppt.parent.name + ")\n");
           }
           return true;
         }
@@ -1403,8 +1404,8 @@ public abstract class Invariant
           // If entry_inv with orig() applied to everything matches this
           if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
             if (entry_inv.isWorthPrinting_sansControlledCheck()) {
-              if (debugIsWorthPrinting.isDebugEnabled()) {
-                debugIsWorthPrinting.debug("isWorthPrinting_PostconditionPrestate => false for " + format());
+              if (debugIsWorthPrinting.isLoggable(Level.FINE)) {
+                debugIsWorthPrinting.fine ("isWorthPrinting_PostconditionPrestate => false for " + format());
               }
               return false;
             }
@@ -1444,7 +1445,7 @@ public abstract class Invariant
     // suppress this invariant).
     Vector results = new Vector();
 
-    if (logOn() || debugIsWorthPrinting.isDebugEnabled()) {
+    if (logOn() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
       log (debugIsWorthPrinting, "find_controlling_invariants: " + format());
     }
     PptTopLevel pptt = ppt.parent;
@@ -1453,7 +1454,7 @@ public abstract class Invariant
     Iterator controllers = pptt.controlling_ppts.pptIterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
-      if (logOn() || debugIsWorthPrinting.isDebugEnabled()) {
+      if (logOn() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
         log (debugIsWorthPrinting, "Looking for controller of " + format()
              + " in " + controller.name);
       }
@@ -1461,14 +1462,14 @@ public abstract class Invariant
       while (candidates.hasNext()) {
         Invariant cand_inv = (Invariant) candidates.next();
         if (isSameInvariant(cand_inv)) {
-          if (logOn() || debugIsWorthPrinting.isDebugEnabled()) {
+          if (logOn() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
             log (debugIsWorthPrinting, "Controller found: "
                  + cand_inv.format() + " [worth printing: "
                  + cand_inv.isWorthPrinting() + "]]");
           }
           results.add(cand_inv);
         }
-        if (logDetail() || debugIsWorthPrinting.isDebugEnabled()) {
+        if (logDetail() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
           log (debugIsWorthPrinting, "Failed candidate: " + cand_inv.format());
         }
       }
@@ -1636,33 +1637,33 @@ public abstract class Invariant
   public Invariant createGuardingPredicate() {
     VarInfo varInfos[] = ppt.var_infos;
 
-    if (debugGuarding.isDebugEnabled()) {
-      debugGuarding.debug("Guarding predicate being created for: ");
-      debugGuarding.debug(this.format_using(OutputFormat.JML));
+    if (debugGuarding.isLoggable(Level.FINE)) {
+      debugGuarding.fine ("Guarding predicate being created for: ");
+      debugGuarding.fine (this.format_using(OutputFormat.JML));
     }
 
     // Find which VarInfos must be guarded
     List mustBeGuarded = getGuardingList(varInfos);
 
     if (mustBeGuarded.isEmpty()) {
-      if (debugGuarding.isDebugEnabled()) {
-        debugGuarding.debug ("Left predicate is empty, returning");
+      if (debugGuarding.isLoggable(Level.FINE)) {
+        debugGuarding.fine ("Left predicate is empty, returning");
       }
       return null;
     }
 
     // Hard to decide what PptSlice to associate with
     // VarInfo temp = (VarInfo)i.next();
-    // debugGuarding.debug("First VarInfo: " + temp);
+    // debugGuarding.fine ("First VarInfo: " + temp);
     Invariant guardingPredicate = ((VarInfo)mustBeGuarded.get(0)).createGuardingPredicate(ppt.parent);
-    // debugGuarding.debug(guardingPredicate.format_using(OutputFormat.DAIKON));
+    // debugGuarding.fine (guardingPredicate.format_using(OutputFormat.DAIKON));
     Assert.assertTrue(guardingPredicate != null);
 
     for (int i=1; i<mustBeGuarded.size(); i++) {
       VarInfo current = (VarInfo)mustBeGuarded.get(i);
-      // debugGuarding.debug("Another VarInfo: " + current);
+      // debugGuarding.fine ("Another VarInfo: " + current);
       Invariant currentGuard = current.createGuardingPredicate(ppt.parent);
-      // debugGuarding.debug(currentGuard.toString());
+      // debugGuarding.fine (currentGuard.toString());
 
       Assert.assertTrue(currentGuard != null);
 
@@ -1690,9 +1691,9 @@ public abstract class Invariant
     List guardingList = new GuardingVariableList();
 
     for (int i=0; i<varInfos.length; i++) {
-      // debugGuarding.debug(varInfos[i]);
+      // debugGuarding.fine (varInfos[i]);
       guardingList.addAll(varInfos[i].getGuardingList());
-      // debugGuarding.debug(guardingSet.toString());
+      // debugGuarding.fine (guardingSet.toString());
     }
 
     return guardingList;

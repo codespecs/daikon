@@ -6,7 +6,8 @@ import daikon.*;
 import daikon.split.*;
 import daikon.split.misc.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * This factory creates Splitters from map files.  The splitters
@@ -52,7 +53,7 @@ public class ContextSplitterFactory
       String filename = file.getName();
 
       System.out.print(".");  // show progress
-      debug.debug("Reading mapfile " + filename);
+      debug.fine ("Reading mapfile " + filename);
 
       PptNameAndSplitters[] splitters;
       try {
@@ -273,7 +274,7 @@ public class ContextSplitterFactory
           ids_array[k] = ((Long) ids.get(k)).longValue();
         }
 
-        debug.debug("Creating splitter for " + callee_ppt_name
+        debug.fine ("Creating splitter for " + callee_ppt_name
                     + " with ids " +  ids
                     + " named " + caller_condition);
 

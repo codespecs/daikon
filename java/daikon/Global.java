@@ -5,7 +5,8 @@ package daikon;
 import java.io.*;
 import java.util.*;
 import org.apache.oro.text.regex.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import utilMDE.*;
 
 public final class Global {
@@ -164,7 +165,7 @@ public final class Global {
   static {
     // Set up debug traces.
     // Better to do this here than in each separate program.
-    LogHelper.setupLogs(debugAll ? LogHelper.DEBUG : LogHelper.INFO);
+    LogHelper.setupLogs(debugAll ? LogHelper.FINE : LogHelper.INFO);
   }
 
   /** Debug tracer for debugging statistics output **/

@@ -7,6 +7,7 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.PrintInvariants;
 
 import utilMDE.Assert;
+import java.util.logging.Level;
 
 class ObviousEqualityFilter extends InvariantFilter {
   public String getDescription() {
@@ -66,23 +67,23 @@ class ObviousEqualityFilter extends InvariantFilter {
 
     VarInfo canonical = v1.canonicalRep();
 
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("in ObviousEquality filter\n");
-      PrintInvariants.debugFiltering.debug("\tv1  is " + v1.name.name() + "\n");
-      PrintInvariants.debugFiltering.debug("\tv2  is " + v2.name.name() + "\n");
-      PrintInvariants.debugFiltering.debug("\tcan is " + canonical.name.name() + "\n");
+    if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+      PrintInvariants.debugFiltering.fine ("in ObviousEquality filter\n");
+      PrintInvariants.debugFiltering.fine ("\tv1  is " + v1.name.name() + "\n");
+      PrintInvariants.debugFiltering.fine ("\tv2  is " + v2.name.name() + "\n");
+      PrintInvariants.debugFiltering.fine ("\tcan is " + canonical.name.name() + "\n");
     }
 
     if (!canonical.equalToNonobvious().contains(v1) && !canonical.equals(v1)) {
-      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v1.name.name() + "\n");
+      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+        PrintInvariants.debugFiltering.fine ("it was obvious that " + canonical.name.name() + " == " + v1.name.name() + "\n");
       }
       return true;
     }
 
     if (!canonical.equalToNonobvious().contains(v2) && !canonical.equals(v2)) {
-      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v2.name.name() + "\n");
+      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+        PrintInvariants.debugFiltering.fine ("it was obvious that " + canonical.name.name() + " == " + v2.name.name() + "\n");
       }
       return true;
     }

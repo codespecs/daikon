@@ -1,11 +1,11 @@
 package daikon;
 
-import java.util.*;
-import java.io.*;
-
+import utilMDE.*;
 import org.apache.oro.text.regex.*;
 
-import utilMDE.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
 
 
 /**
@@ -137,8 +137,8 @@ public final class VarComparabilityExplicit
     String rep_ = rep;          // for debugging
 
     if (vartype.isArray()) {
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Parsing array " + rep + " " + vartype.toString());
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Parsing array " + rep + " " + vartype.toString());
       }
       // The VarComparability is of the form
       //  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]

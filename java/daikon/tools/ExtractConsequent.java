@@ -3,7 +3,8 @@ package daikon.tools;
 import java.util.*;
 import java.io.*;
 import java.lang.Math;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import gnu.getopt.*;
 import utilMDE.UtilMDE;
 import org.apache.oro.text.regex.*;
@@ -100,7 +101,7 @@ public class ExtractConsequent {
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

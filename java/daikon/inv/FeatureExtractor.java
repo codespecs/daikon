@@ -1046,7 +1046,7 @@ public final class FeatureExtractor {
   // the following line gets rid of some extra output that
   // otherwise gets dumped to System.out:
   static {
-    LogHelper.setupLogs(false ? LogHelper.DEBUG : LogHelper.INFO);
+    LogHelper.setupLogs(false ? LogHelper.FINE : LogHelper.INFO);
   }
 
   // the THRESHOLD is zero

@@ -5,7 +5,8 @@ import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 
 
@@ -50,10 +51,10 @@ public final class SequencesConcatFactory extends BinaryDerivationFactory {
     // Assert.assertTrue(var1.isCanonical()); // [INCR]
     // Assert.assertTrue(var2.isCanonical()); // [INCR]
 
-    if (debug.isDebugEnabled()) {
-      debug.debug (var1.ppt + ": " + var1.name + " and " + var2.name + " are worth deriving from");
-      debug.debug ("Types are: " + var1.type + " " + var2.type);
-      debug.debug ("Comparabilities are: " + var1.comparability + " " + var2.comparability);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine (var1.ppt + ": " + var1.name + " and " + var2.name + " are worth deriving from");
+      debug.fine ("Types are: " + var1.type + " " + var2.type);
+      debug.fine ("Comparabilities are: " + var1.comparability + " " + var2.comparability);
     }
 
     return new BinaryDerivation[] {

@@ -11,7 +11,8 @@ import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 import java.io.*;
@@ -239,8 +240,8 @@ public final class VarInfo
     this.static_constant_value = static_constant_value;
     this.aux = aux;
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Var " + name + " aux: " + aux);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Var " + name + " aux: " + aux);
     }
 
     // Indicates that these haven't yet been set to reasonable values.
@@ -467,8 +468,8 @@ public final class VarInfo
 
     }
 
-    if (Dataflow.debugInit.isDebugEnabled())
-      Dataflow.debugInit.debug ("addHigherPO " + higher.name.name()
+    if (Dataflow.debugInit.isLoggable(Level.FINE))
+      Dataflow.debugInit.fine ("addHigherPO " + higher.name.name()
                                 + " to " + name.name());
 
     // We remove this assertion because it could be that A has a member a
@@ -714,10 +715,10 @@ public final class VarInfo
     if (baseMaybe != null) {
       VarInfoName base = (VarInfoName) baseMaybe;
       derivedParamCached = this.ppt.findVar(base);
-      if (Global.debugSuppressParam.isDebugEnabled()) {
-        Global.debugSuppressParam.debug (name.name() + " is a derived param");
-        Global.debugSuppressParam.debug ("derived from " + base.name());
-        Global.debugSuppressParam.debug (paramVars);
+      if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
+        Global.debugSuppressParam.fine (name.name() + " is a derived param");
+        Global.debugSuppressParam.fine ("derived from " + base.name());
+        Global.debugSuppressParam.fine (paramVars.toString());
       }
       result = true;
     }
@@ -767,7 +768,7 @@ public final class VarInfo
    **/
   public boolean isDerivedParamAndUninteresting() {
     // if (isDerivedParamAndUninterestingCached != null) {
-    //  PrintInvariants.debugFiltering.debug("\t\t\tusing cached " + isDerivedParamAndUninterestingCached.toString() + "\n");
+    //  PrintInvariants.debugFiltering.fine ("\t\t\tusing cached " + isDerivedParamAndUninterestingCached.toString() + "\n");
     //  return isDerivedParamAndUninterestingCached.booleanValue();
     // }
     if (isDerivedParamAndUninterestingCached != null) {
@@ -782,10 +783,10 @@ public final class VarInfo
 
 
   private boolean _isDerivedParamAndUninteresting() {
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("isDPAU: name is " + name.name() + "\n");
-      PrintInvariants.debugFiltering.debug("  isPrestate is " + String.valueOf(isPrestate()) + "\n");
-      PrintInvariants.debugFiltering.debug("  name is prestate " + String.valueOf(name instanceof VarInfoName.Prestate) + "\n");
+    if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+      PrintInvariants.debugFiltering.fine ("isDPAU: name is " + name.name() + "\n");
+      PrintInvariants.debugFiltering.fine ("  isPrestate is " + String.valueOf(isPrestate()) + "\n");
+      PrintInvariants.debugFiltering.fine ("  name is prestate " + String.valueOf(name instanceof VarInfoName.Prestate) + "\n");
     }
 
     if (isPrestate() || name instanceof VarInfoName.Prestate) {
@@ -795,13 +796,13 @@ public final class VarInfo
     }
 
     if (aux.getFlag(VarInfoAux.IS_PARAM)) {
-      PrintInvariants.debugFiltering.debug("  not interesting, IS_PARAM == true for " + name.name() + "\n");
+      PrintInvariants.debugFiltering.fine ("  not interesting, IS_PARAM == true for " + name.name() + "\n");
       return true;
     }
-    if (Global.debugSuppressParam.isDebugEnabled()) {
-      Global.debugSuppressParam.debug ("Testing isDerivedParamAndUninteresting for: " + name.name());
-      Global.debugSuppressParam.debug (aux);
-      Global.debugSuppressParam.debug ("At ppt " + ppt.name);
+    if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
+      Global.debugSuppressParam.fine ("Testing isDerivedParamAndUninteresting for: " + name.name());
+      Global.debugSuppressParam.fine (aux.toString());
+      Global.debugSuppressParam.fine ("At ppt " + ppt.name);
     }
     if (isDerivedParam()) {
       // I am uninteresting if I'm a derived param from X and X's
@@ -812,8 +813,8 @@ public final class VarInfo
         VarInfoName base = ((VarInfoName.TypeOf) name).term;
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
-          Global.debugSuppressParam.debug ("TypeOf returning true");
-          PrintInvariants.debugFiltering.debug("  not interesting, first dpf case\n");
+          Global.debugSuppressParam.fine ("TypeOf returning true");
+          PrintInvariants.debugFiltering.fine ("  not interesting, first dpf case\n");
           return true;
         }
       }
@@ -821,8 +822,8 @@ public final class VarInfo
         VarInfoName base = ((VarInfoName.SizeOf) name).sequence.term;
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
-          Global.debugSuppressParam.debug ("SizeOf returning true");
-          PrintInvariants.debugFiltering.debug("  not interesting, second dpf case\n");
+          Global.debugSuppressParam.fine ("SizeOf returning true");
+          PrintInvariants.debugFiltering.fine ("  not interesting, second dpf case\n");
           return true;
         }
       }
@@ -844,29 +845,29 @@ public final class VarInfo
 
       // Henceforth only interesting if it's true that base = orig(base)
       if (base.name.name().equals("this")) return false;
-      Global.debugSuppressParam.debug("Base is " + base.name.name());
+      Global.debugSuppressParam.fine ("Base is " + base.name.name());
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
-        Global.debugSuppressParam.debug ("No orig variable for base, returning true ");
-        PrintInvariants.debugFiltering.debug("  not interesting, no orig variable for base\n");
+        Global.debugSuppressParam.fine ("No orig variable for base, returning true ");
+        PrintInvariants.debugFiltering.fine ("  not interesting, no orig variable for base\n");
         return true; // There can't be an equal invariant without orig
       }
       if (base.isEqualTo(origBase)) {
-        Global.debugSuppressParam.debug ("Saw equality.  Derived worth printing.");
+        Global.debugSuppressParam.fine ("Saw equality.  Derived worth printing.");
         return false;
       } else {
-         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
-         PrintInvariants.debugFiltering.debug("  didn't see equality in base\n");
+         Global.debugSuppressParam.fine ("Didn't see equality in base, so uninteresting");
+         PrintInvariants.debugFiltering.fine ("  didn't see equality in base\n");
         return true;
       }
       //       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
       //       if (slice == null) {
-      //         Global.debugSuppressParam.debug ("No slice for equality in base, so uninteresting");
-      //         PrintInvariants.debugFiltering.debug("  equal inv in null slice\n");
+      //         Global.debugSuppressParam.fine ("No slice for equality in base, so uninteresting");
+      //         PrintInvariants.debugFiltering.fine ("  equal inv in null slice\n");
       //         return true; // There can't be an equal invariant in a null slice
       //       }
-      //       if (Global.debugSuppressParam.isDebugEnabled()) {
-      //         Global.debugSuppressParam.debug ("Parent and orig slice for finding equality: " + slice.name);
+      //       if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
+      //         Global.debugSuppressParam.fine ("Parent and orig slice for finding equality: " + slice.name);
       //       }
       //       boolean seenEqual = false;
       //       for (Iterator iInvs = slice.invs.iterator(); iInvs.hasNext(); ) {
@@ -874,14 +875,14 @@ public final class VarInfo
       //         if (IsEqualityComparison.it.accept(sliceInv)) seenEqual = true;
       //       }
       //       if (!seenEqual) {
-      //         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
-      //         PrintInvariants.debugFiltering.debug("  didn't see equality in base\n");
+      //         Global.debugSuppressParam.fine ("Didn't see equality in base, so uninteresting");
+      //         PrintInvariants.debugFiltering.fine ("  didn't see equality in base\n");
       //         return true;
       //       }
 
 
     } else {
-      Global.debugSuppressParam.debug ("  Not a derived param.");
+      Global.debugSuppressParam.fine ("  Not a derived param.");
     }
     return false;
   }
@@ -1102,8 +1103,8 @@ public final class VarInfo
       if (vi.equal_to != this)
         continue;
       if (controlling_equalTo.contains(vi.name)) {
-        if (PrintInvariants.debugPrintEquality.isDebugEnabled()) {
-          PrintInvariants.debugPrintEquality.debug ("Obviously equal because of controlling ppt: " + vi.name.name());
+        if (PrintInvariants.debugPrintEquality.isLoggable(Level.FINE)) {
+          PrintInvariants.debugPrintEquality.fine ("Obviously equal because of controlling ppt: " + vi.name.name());
         }
         continue;
       }
@@ -1521,7 +1522,7 @@ public final class VarInfo
       int begin = type.base().indexOf('(');
       int end = type.base().indexOf(',');
       result = type.base().substring(begin+1, end);
-      daikon.inv.Invariant.debugPrint.debug ("domainTypeIOA: " + result);
+      daikon.inv.Invariant.debugPrint.fine ("domainTypeIOA: " + result);
       return result;
     } else {
       // Always the same domain otherwise
@@ -1781,12 +1782,12 @@ public final class VarInfo
    * over time (?).
    **/
   public void simplify_expression() {
-    if (debugSimplifyExpression.isDebugEnabled())
-      debugSimplifyExpression.debug("** Simplify: " + name);
+    if (debugSimplifyExpression.isLoggable(Level.FINE))
+      debugSimplifyExpression.fine ("** Simplify: " + name);
 
     if (!isDerived()) {
-      if (debugSimplifyExpression.isDebugEnabled())
-        debugSimplifyExpression.debug("** Punt because not derived variable");
+      if (debugSimplifyExpression.isLoggable(Level.FINE))
+        debugSimplifyExpression.fine ("** Punt because not derived variable");
       return;
     }
 
@@ -1801,7 +1802,7 @@ public final class VarInfo
       }
     }
     if (postexpr == null) {
-      if (debugSimplifyExpression.isDebugEnabled()) debugSimplifyExpression.debug("** Punt because no post()");
+      if (debugSimplifyExpression.isLoggable(Level.FINE)) debugSimplifyExpression.fine ("** Punt because no post()");
       return;
     }
 
@@ -1825,8 +1826,8 @@ public final class VarInfo
     // expression.
     VarInfo postvar = post_context.findVar(postexpr.term);
     if (postvar == null) {
-      if (debugSimplifyExpression.isDebugEnabled())
-        debugSimplifyExpression.debug("** Punt because no VarInfo for postvar " + postexpr.term);
+      if (debugSimplifyExpression.isLoggable(Level.FINE))
+        debugSimplifyExpression.fine ("** Punt because no VarInfo for postvar " + postexpr.term);
       return;
     }
     VarInfoName pre_expr = postvar.preStateEquivalent();
@@ -1841,12 +1842,12 @@ public final class VarInfo
         }
       }
       name = (new VarInfoName.Replacer(postexpr, pre_expr)).replace(name);
-      if (debugSimplifyExpression.isDebugEnabled())
-        debugSimplifyExpression.debug("** Replaced with: " + name);
+      if (debugSimplifyExpression.isLoggable(Level.FINE))
+        debugSimplifyExpression.fine ("** Replaced with: " + name);
     }
 
-    if (debugSimplifyExpression.isDebugEnabled())
-      debugSimplifyExpression.debug("** Nothing to do (no state equlivalent)");
+    if (debugSimplifyExpression.isLoggable(Level.FINE))
+      debugSimplifyExpression.fine ("** Nothing to do (no state equlivalent)");
   }
 
   /**
@@ -2165,11 +2166,11 @@ public final class VarInfo
       }
     }
     List result = (List)name.accept(new GuardingVisitor());
-    if (Invariant.debugGuarding.isDebugEnabled()) {
-      Invariant.debugGuarding.debug ("VarInfo.getGuardingList: ");
-      Invariant.debugGuarding.debug ("  this: " + this.name.name());
-      // Invariant.debugGuarding.debug ("        " + this.repr());
-      Invariant.debugGuarding.debug (result);
+    if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+      Invariant.debugGuarding.fine ("VarInfo.getGuardingList: ");
+      Invariant.debugGuarding.fine ("  this: " + this.name.name());
+      // Invariant.debugGuarding.fine ("        " + this.repr());
+      Invariant.debugGuarding.fine (result.toString());
     }
 
     return result;

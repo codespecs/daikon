@@ -3,7 +3,8 @@ package daikon;
 import daikon.inv.*;
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 
 /**
@@ -86,20 +87,20 @@ public class PptSliceEquality
    **/
   void instantiate_invariants() {
     // Start with everything comparable being equal.
-    if (debug.isDebugEnabled()) {
-      debug.debug ("InstantiateInvariants: " + parent.ppt_name + " vars:") ;
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("InstantiateInvariants: " + parent.ppt_name + " vars:") ;
     }
     Map multiMap = new HashMap(); /* comparable -> List[VarInfo]*/
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       VarInfoAndComparability viac = new VarInfoAndComparability(vi);
       addToBindingList (multiMap, viac, vi);
-      if (debug.isDebugEnabled()) {
-        debug.debug ("  " + vi.name.name());
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("  " + vi.name.name());
       }
     }
-    if (debug.isDebugEnabled()) {
-      debug.debug (new Integer(multiMap.keySet().size()));
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine (Integer.toString(multiMap.keySet().size()));
     }
     Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
@@ -110,8 +111,8 @@ public class PptSliceEquality
 
       Equality eq = new Equality (list, this);
       newInvs[invCount] = eq;
-      if (debug.isDebugEnabled()) {
-        debug.debug (" Created: " + eq);
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine (" Created: " + eq);
       }
       invCount ++;
     }
@@ -130,26 +131,26 @@ public class PptSliceEquality
   public List add(ValueTuple vt, int count) {
     LinkedList /*[Equality]*/ allNewInvs = new LinkedList();
     LinkedList /*[Equality]*/ weakenedInvs = new LinkedList();
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Doing add for " + parent.ppt_name + " count: " +
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Doing add for " + parent.ppt_name + " count: " +
                    count + " starting invs:");
       for (Iterator i = invs.iterator(); i.hasNext(); ) {
         Equality inv = (Equality) i.next();
-        debug.debug ("  " + inv.toString());
+        debug.fine ("  " + inv.toString());
       }
     }
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Equality inv = (Equality) i.next();
       List/*[VarInfo]*/ nonEqualVis = inv.add (vt, count);
       if (nonEqualVis.size() > 0) {
-        if (debug.isDebugEnabled()) {
-          debug.debug ("  Unequal VarInfos split off from " +
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine ("  Unequal VarInfos split off from " +
                        inv + " with count " + inv.numSamples());
-          debug.debug ("  leader value: " +
+          debug.fine ("  leader value: " +
                        ValueTuple.valToString(inv.leader().getValue(vt)));
           for (Iterator j = nonEqualVis.iterator(); j.hasNext(); ) {
             VarInfo vi = (VarInfo) j.next();
-            debug.debug ("  " + vi.name.name() +
+            debug.fine ("  " + vi.name.name() +
                          " value: " + ValueTuple.valToString(vi.getValue(vt)) +
                          " mod: " + vi.getModified(vt)
                          );
@@ -173,8 +174,8 @@ public class PptSliceEquality
     }
     invs.addAll (allNewInvs);
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Finished add for " + parent.ppt_name);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Finished add for " + parent.ppt_name);
     }
     return weakenedInvs;
   }
@@ -225,8 +226,8 @@ public class PptSliceEquality
       } else {
         eq.setSamples (leader.numSamples());
       }
-      if (debug.isDebugEnabled()) {
-        debug.debug ("  created new inv: " + eq + " samples: " + eq.numSamples());
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("  created new inv: " + eq + " samples: " + eq.numSamples());
       }
       resultArray[resultCount] = eq;
       resultCount++;
@@ -277,9 +278,9 @@ public class PptSliceEquality
    **/
   private void copyInvsFromLeader (VarInfo leader, List newVis, int count) {
     List newSlices = new LinkedList();
-    if (debug.isDebugEnabled()) {
-      debug.debug ("copyInvsFromLeader  leader:" + leader.name.name());
-      debug.debug ("  orig slices count:" + parent.views_size());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("copyInvsFromLeader  leader:" + leader.name.name());
+      debug.fine ("  orig slices count:" + parent.views_size());
     }
     int newSamples = leader.equalitySet.numSamples() - count;
 
@@ -288,9 +289,9 @@ public class PptSliceEquality
     for (Iterator i = parent.views_iterator(); i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
       // For each slice that contains leader
-      if (debug.isDebugEnabled()) {
-        debug.debug ("  Slice is: " + slice.toString());
-        debug.debug ("  With invs: " + slice.invs);
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("  Slice is: " + slice.toString());
+        debug.fine ("  With invs: " + slice.invs);
       }
 
       if (slice.containsVar(leader)) {
@@ -318,8 +319,8 @@ public class PptSliceEquality
     }
     parent.repCheck();
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("  new slices count:" + parent.views_size());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("  new slices count:" + parent.views_size());
     }
   }
 
@@ -362,8 +363,8 @@ public class PptSliceEquality
         // If slice is already there, no need to clone.
         PptSlice newSlice = slice.cloneAndPivot(soFar);
         List invs = newSlice.invs;
-        if (debug.isDebugEnabled()) {
-          debug.debug ("  created new slice: " + newSlice.toString());
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine ("  created new slice: " + newSlice.toString());
         }
         for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
           Invariant inv = (Invariant) iInvs.next();
@@ -372,7 +373,7 @@ public class PptSliceEquality
           }
         }
         if (newSlice.invs.size() == 0) {
-          debug.debug ("  slice not added because 0 invs");
+          debug.fine ("  slice not added because 0 invs");
         } else {
           newSlices.add (newSlice);
         }

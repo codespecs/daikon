@@ -44,7 +44,8 @@ import daikon.inv.unary.scalar.*; // for LowerBound
 
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 
 // This controls derivations which use the scalar as an index into the
@@ -91,9 +92,9 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
       if (!(derivation instanceof SequencesPredicate)) return null;
     }
 
-    if (debug.isDebugEnabled()) {
-      debug.debug("Instantiatiating " + seq1.name + " and " + seq2.name);
-      debug.debug("  in " + seq1.ppt.ppt_name);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Instantiatiating " + seq1.name + " and " + seq2.name);
+      debug.fine ("  in " + seq1.ppt.ppt_name);
     }
 
 

@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import utilMDE.Assert;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * A Check command takes a given proposition and asks the Session to
@@ -43,8 +44,8 @@ public class CmdCheck
         // read the answer
         // first, the real result
         result = s.output.readLine();
-        if (debug.isDebugEnabled()) {
-          debug.debug ("First line: " + result);
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine ("First line: " + result);
         }
         if (result == null) {
           throw new SimplifyError("Probable core dump");

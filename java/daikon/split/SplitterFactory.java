@@ -7,7 +7,8 @@ import daikon.split.misc.*;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * This class creates Splitters from a .spinfo file. The public method is
@@ -1461,7 +1462,7 @@ public class SplitterFactory {
    * Print out a message if the debugPptSplit variable is set to "true"
    **/
   static void debugPrintln(String s) {
-    Global.debugSplit.debug (s);
+    Global.debugSplit.fine (s);
   }
 
 

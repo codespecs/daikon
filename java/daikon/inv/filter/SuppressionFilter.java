@@ -5,6 +5,7 @@ import daikon.inv.filter.*;
 import daikon.VarInfo;
 import daikon.PrintInvariants;
 import daikon.VarInfoAux;
+import java.util.logging.Level;
 
 /**
  * Filter for not printing invariants suppressed during checking.
@@ -16,7 +17,7 @@ public class SuppressionFilter extends InvariantFilter {
 
   boolean shouldDiscardInvariant( Invariant inv ) {
     if (inv.getSuppressor() != null) {
-      if (inv.logOn() || PrintInvariants.debugFiltering.isDebugEnabled()) {
+      if (inv.logOn() || PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         inv.log (PrintInvariants.debugFiltering,
                  "suppressed by: " + inv.getSuppressor());
       }

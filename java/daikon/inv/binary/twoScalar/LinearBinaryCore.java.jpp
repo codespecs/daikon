@@ -30,7 +30,8 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.io.Serializable;
 
 public final class CLASSNAME
@@ -125,8 +126,8 @@ public final class CLASSNAME
   public void add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
 
     if (values_seen < MINPAIRS) {
-      if (debug.isDebugEnabled()) {
-        debug.debug ("min point: " + wrapper.ppt.name +": " + x + ", " + y);
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("min point: " + wrapper.ppt.name +": " + x + ", " + y);
       }
       // We delay computation of a and b until we have seen several pairs
       // so that we can compute a and b based on a far-separated pair.  If
@@ -169,13 +170,13 @@ public final class CLASSNAME
         max_a = a;
         min_b = b;
         max_b = b;
-        if (debug.isDebugEnabled())
-            debug.debug (wrapper.ppt.name + ": Initial a (" + a +
+        if (debug.isLoggable(Level.FINE))
+            debug.fine (wrapper.ppt.name + ": Initial a (" + a +
                          ") and b (" + b + ")");
 
         // Check all values against a and b.
         if (a == 0) {
-          debug.debug("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") because a == 0");
+          debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") because a == 0");
           values_seen--;
           wrapper.destroyAndFlow();
           return;
@@ -190,10 +191,10 @@ public final class CLASSNAME
           // reasonable compromise
           if ((!EQUAL (y_cache[i],  a*x_cache[i]+b))
               && (!EQUAL (x_cache[i], ((y_cache[i] - b) / a)))) {
-            if (debug.isDebugEnabled()) {
-              debug.debug("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") at index " + i + ": "
+            if (debug.isLoggable(Level.FINE)) {
+              debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") at index " + i + ": "
                           + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
-              debug.debug("    ");
+              debug.fine ("    ");
             }
             values_seen--;
             wrapper.destroyAndFlow();
@@ -234,8 +235,8 @@ public final class CLASSNAME
         //pick a new a and b as the average of their endpoints
         new_a = (min_a + max_a) / 2;
         new_b = (min_b + max_b) / 2;
-        if (debug.isDebugEnabled())
-            debug.debug (wrapper.ppt.name + ": Trying new a (" + new_a +
+        if (debug.isLoggable(Level.FINE))
+            debug.fine (wrapper.ppt.name + ": Trying new a (" + new_a +
                          ") and b (" + new_b + ")");
 
         // if the new a and b are 'equal' to min/max a and b and
@@ -246,12 +247,12 @@ public final class CLASSNAME
             EQUAL (y, new_a*x + new_b)) {
           a = new_a;
           b = new_b;
-          if (debug.isDebugEnabled())
-            debug.debug (wrapper.ppt.name + ": New a (" + a + ") and b ("
+          if (debug.isLoggable(Level.FINE))
+            debug.fine (wrapper.ppt.name + ": New a (" + a + ") and b ("
                          + b + ")");
         } else {
-          if (debug.isDebugEnabled()) {
-            debug.debug("Suppressing " + CLASSSTRING + " (" +
+          if (debug.isLoggable(Level.FINE)) {
+            debug.fine ("Suppressing " + CLASSSTRING + " (" +
                         wrapper.format() + ") at new value: "
                         + y + " != " + a + "*" + x + "+" + b);
           }
@@ -306,8 +307,8 @@ public final class CLASSNAME
     if (x1 - x0 == 0) {         // not "x0 == x1", due to roundoff
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
-      if (debug.isDebugEnabled()) {
-        debug.debug("Suppressing " + CLASSSTRING + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Suppressing " + CLASSSTRING + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
       return false;
     }

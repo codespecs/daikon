@@ -3,7 +3,8 @@ package daikon;
 import java.io.*;
 import java.util.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * A collection of code that configures and assists the dataflow
@@ -39,7 +40,7 @@ public class Dataflow
   public static void main(String[] args)
     throws Exception
   {
-    debug.setLevel(LogHelper.DEBUG);
+    debug.setLevel(LogHelper.FINE);
 
     String outf = "Dataflow_testing.txt";
     File[] files = new File[args.length];
@@ -130,8 +131,8 @@ public class Dataflow
    **/
   private static void init_partial_order(PptTopLevel ppt, PptMap all_ppts)
   {
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("Initializing partial order for ppt " + ppt.ppt_name);
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("Initializing partial order for ppt " + ppt.ppt_name);
     }
 
     // Set up OBJECT and CLASS relationships
@@ -144,10 +145,10 @@ public class Dataflow
     relate_types_to_object_ppts(ppt, all_ppts);
 
 
-    if (debugInit.isDebugEnabled()) {
+    if (debugInit.isLoggable(Level.FINE)) {
       for (int i=0; i< ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
-        debugInit.debug ("  Parents for " + vi.name.name() + ":" +
+        debugInit.fine ("  Parents for " + vi.name.name() + ":" +
                          vi.po_higher());
       }
     }
@@ -184,7 +185,7 @@ public class Dataflow
                                          VarInfo[] higher,
                                          VarInfoName.Transformer higher_xform)
   {
-    debugInit.debug ("Setup_po_same_name");
+    debugInit.fine ("Setup_po_same_name");
     for (int i=0; i<higher.length; i++) {
       VarInfo higher_vi = higher[i];
       VarInfoName higher_vi_name = higher_xform.transform(higher_vi.name);
@@ -192,10 +193,10 @@ public class Dataflow
         VarInfo lower_vi = lower[j];
         VarInfoName lower_vi_name = lower_xform.transform(lower_vi.name);
         if (higher_vi_name == lower_vi_name) { // VarInfoNames are interned
-          if (debugInit.isDebugEnabled()) {
-            debugInit.debug ("Lower and higher: " + lower_vi_name.name()
+          if (debugInit.isLoggable(Level.FINE)) {
+            debugInit.fine ("Lower and higher: " + lower_vi_name.name()
                 + " " + higher_vi_name.name());
-            debugInit.debug ("Lower and higher ppt: " + lower_vi.ppt.name
+            debugInit.fine ("Lower and higher ppt: " + lower_vi.ppt.name
                 + " " + higher_vi.ppt.name);
 
           }
@@ -223,7 +224,7 @@ public class Dataflow
     List newPpts = new LinkedList();
 
     for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();    
+      PptTopLevel ppt = (PptTopLevel) i.next();
     }
 
     for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
@@ -237,7 +238,7 @@ public class Dataflow
       PptName exitnn_name = exitnn_ppt.ppt_name;
       PptName exit_name = ppt.ppt_name.makeExit();
       PptTopLevel exit_ppt = ppts.get(exit_name);
-      
+
       // Create the exit, if necessary
       if (exit_ppt == null) {
         VarInfo[] exit_vars = VarInfo.arrayclone_simple(ppt.var_infos);
@@ -279,15 +280,15 @@ public class Dataflow
    **/
   private static void relate_object_procedure_ppts(PptTopLevel ppt, PptMap ppts)
   {
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("Realting object and procedure ppts for " + ppt.ppt_name);
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("Realting object and procedure ppts for " + ppt.ppt_name);
     }
     PptName ppt_name = ppt.ppt_name;
     // Find the ppt that controls this one.
     // CLASS controls OBJECT, and OBJECT controls ENTER/EXIT.
     PptTopLevel controlling_ppt = null;
     if (ppt_name.isObjectInstanceSynthetic()) {
-      debugInit.debug ("This is an OBJECT ppt");
+      debugInit.fine ("This is an OBJECT ppt");
       controlling_ppt = ppts.get(ppt_name.makeClassStatic());
     } else {
       boolean enter = ppt_name.isEnterPoint();
@@ -306,13 +307,13 @@ public class Dataflow
 
 
     if (controlling_ppt != null) {
-      if (debugInit.isDebugEnabled()) {
-        debugInit.debug ("Controlling ppt is " + controlling_ppt.ppt_name);
+      if (debugInit.isLoggable(Level.FINE)) {
+        debugInit.fine ("Controlling ppt is " + controlling_ppt.ppt_name);
       }
       setup_po_same_name(ppt.var_infos, controlling_ppt.var_infos);
     } else {
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("Controlling ppt is null");
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("Controlling ppt is null");
     }
     }
   }
@@ -328,8 +329,8 @@ public class Dataflow
       return;
     }
 
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("Doing create and relate orig vars for: " + exit_ppt.ppt_name);
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("Doing create and relate orig vars for: " + exit_ppt.ppt_name);
     }
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
@@ -380,8 +381,8 @@ public class Dataflow
    **/
   private static void relate_types_to_object_ppts(PptTopLevel ppt, PptMap ppts)
   {
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("Doing relate types to objects: " + ppt.ppt_name);
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("Doing relate types to objects: " + ppt.ppt_name);
     }
 
 
@@ -393,18 +394,18 @@ public class Dataflow
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
       VarInfo vi = vis[i];
-      if (debugInit.isDebugEnabled()) {
-        debugInit.debug ("Processing VarInfo: " + vi.name.name());
+      if (debugInit.isLoggable(Level.FINE)) {
+        debugInit.fine ("Processing VarInfo: " + vi.name.name());
       }
 
       if (vi.name.equals(VarInfoName.THIS)) {
-        debugInit.debug ("Skipping because name is 'this': " + vi.name.name());
+        debugInit.fine ("Skipping because name is 'this': " + vi.name.name());
         continue;
       }
 
       // Arguments are the things with no controller yet
       if (vi.po_higher().size() == 0) {
-        debugInit.debug ("  which is an orphan");
+        debugInit.fine ("  which is an orphan");
         orphans.add(vi);
         if (! vi.type.isPseudoArray()) {
           PptName objname = new PptName(vi.type.base(), // class
@@ -414,14 +415,14 @@ public class Dataflow
           Assert.assertTrue(objname.isObjectInstanceSynthetic());
           PptTopLevel object_ppt = ppts.get(objname);
           if (object_ppt != null) {
-            debugInit.debug ("  whose type is known (success)");
+            debugInit.fine ("  whose type is known (success)");
             known.put(vi, object_ppt);
           } else {
-            debugInit.debug ("  but whose type is not known");
+            debugInit.fine ("  but whose type is not known");
             // TODO: Note that orphan has no relatives, for later hook?
           }
         } else {
-          debugInit.debug ("  but type won't be known because it's a pseudoarray");
+          debugInit.fine ("  but type won't be known because it's a pseudoarray");
         }
       }
     }
@@ -447,22 +448,22 @@ public class Dataflow
     // checks for matches between A:::a and B:::a.  This transformer
     // explicitly rejects variables whose name is exactly 'this'
 
-    if (debugInit.isDebugEnabled()) {
+    if (debugInit.isLoggable(Level.FINE)) {
       String orphan_str = "";
       for (Iterator ii = orphans.iterator(); ii.hasNext(); )
         orphan_str += ((VarInfo)ii.next()).name.name() + " ";
       String known_str = "";
       for (Iterator it = known.keySet().iterator(); it.hasNext(); )
         known_str += ((VarInfo) it.next()).name.name() + " ";
-      debugInit.debug ("Entering second stage, orphans: " + orphan_str
+      debugInit.fine ("Entering second stage, orphans: " + orphan_str
                         + " known = " + known_str);
       }
 
     VarInfo[] orphans_array = (VarInfo[]) orphans.toArray(new VarInfo[orphans.size()]);
     for (Iterator it = known.keySet().iterator(); it.hasNext(); ) {
       final VarInfo known_vi = (VarInfo) it.next();
-      if (debugInit.isDebugEnabled()) {
-        debugInit.debug ("  known vi is: " + known_vi.name.name());
+      if (debugInit.isLoggable(Level.FINE)) {
+        debugInit.fine ("  known vi is: " + known_vi.name.name());
       }
 
       PptTopLevel object_ppt = (PptTopLevel) known.get(known_vi);
@@ -489,19 +490,19 @@ public class Dataflow
    **/
   private static void create_derived_variables(PptTopLevel ppt, PptMap all_ppts) {
     int first_new = ppt.var_infos.length;
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("  Creating derived vars for " + ppt.ppt_name);
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("  Creating derived vars for " + ppt.ppt_name);
     }
 
     ppt.create_derived_variables();
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("  Created derived vars for " + ppt.ppt_name);
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("  Created derived vars for " + ppt.ppt_name);
     }
 
     relate_derived_variables(ppt, first_new, ppt.var_infos.length);
 
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("  Related derived vars for " + ppt.ppt_name);
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("  Related derived vars for " + ppt.ppt_name);
     }
   }
 
@@ -514,7 +515,7 @@ public class Dataflow
                                               int lower,
                                               int upper)
   {
-    debug.debug("relate_derived_variables on " + ppt.name);
+    debug.fine ("relate_derived_variables on " + ppt.name);
 
     // For all immediately higher groups of variables
     PptsAndInts flow = compute_ppt_flow(ppt,
@@ -522,7 +523,7 @@ public class Dataflow
                                         true   // higher
                                         );
     int size = flow.ppts.length - 1; // -1 because don't want self
-    debug.debug("size = " + size);
+    debug.fine ("size = " + size);
     for (int i = 0; i < size; i++) {
       PptTopLevel flow_ppt = flow.ppts[i];
       int[] flow_ints = flow.ints[i];
@@ -547,14 +548,14 @@ public class Dataflow
       }
       if (nonce == -1) throw new IllegalStateException("Mapless path");
 
-      debug.debug(" nonce = " + nonce);
+      debug.fine (" nonce = " + nonce);
 
       // For all derived variables to relate
     forall_derived_vars:
       for (int j = lower; j < upper; j++) {
         VarInfo vi = ppt.var_infos[j];
         Assert.assertTrue(vi.isDerived());
-        debug.debug("  vi = " + vi.name);
+        debug.fine ("  vi = " + vi.name);
         // Obtain the bases of derived varable
         VarInfo[] bases = vi.derived.getBases();
         // See where this path maps them
@@ -563,7 +564,7 @@ public class Dataflow
           VarInfo base = bases[k];
           int newindex = flow_ints[base.varinfo_index];
           if (newindex == -1) {
-            debug.debug("  vars not mapped in path: vi = " + vi.name
+            debug.fine ("  vars not mapped in path: vi = " + vi.name
                         + "; bases = " + Ppt.varNames(bases));
             continue forall_derived_vars;
           }
@@ -583,7 +584,7 @@ public class Dataflow
           }
         }
         if (vi_higher == null) {
-          debug.debug("  No match found for " + vi.derived.getClass()
+          debug.fine ("  No match found for " + vi.derived.getClass()
                       + " using " + Ppt.varNames(basemap));
           continue forall_derived_vars;
         }
@@ -755,15 +756,15 @@ public class Dataflow
                                               boolean all_steps,
                                               boolean higher)
   {
-    if (debugInit.isDebugEnabled()) {
-      debugInit.debug ("compute_ppt_flow for " + ppt.name + " all_steps = "
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("compute_ppt_flow for " + ppt.name + " all_steps = "
                        + all_steps + " higher = " + higher);
       String vars = "";
       for (Iterator ii = start.iterator(); ii.hasNext(); ) {
         VarAndSource vs = (VarAndSource) ii.next();
         vars += vs.var.name.name() + "[" + vs.source + "] ";
       }
-      debugInit.debug ("vars = " + vars);
+      debugInit.fine ("vars = " + vars);
     }
 
     // We could assert that start's VarInfos are from ppt, and that
@@ -813,16 +814,16 @@ public class Dataflow
         dataflow_transforms.add(flow_transform);
 
         // Debug print flow_ppt, flow_ppt vars, transforms, and head list
-        if (debugInit.isDebugEnabled()) {
-          debugInit.debug ("  Add flow ppt: " + flow_ppt.name);
+        if (debugInit.isLoggable(Level.FINE)) {
+          debugInit.fine ("  Add flow ppt: " + flow_ppt.name);
           String vars = "";
           for (int ii = 0; ii < flow_ppt.var_infos.length; ii++)
             vars += flow_ppt.var_infos[ii].name.name() + " ";
-          debugInit.debug ("  With vars: " + vars);
-          debugInit.debug ("  Add transforms: "
+          debugInit.fine ("  With vars: " + vars);
+          debugInit.fine ("  Add transforms: "
                             + ArraysMDE.toString (flow_transform));
           vars = "";
-          debugInit.debug ("  head var list: " + head);
+          debugInit.fine ("  head var list: " + head);
         }
 
         // Extend head using all higher (or lower) nonces
@@ -834,8 +835,8 @@ public class Dataflow
           for (int nonce_idx = 0; nonce_idx < higher_vis.size(); nonce_idx++) {
             VarInfo higher_vi = (VarInfo) higher_vis.get(nonce_idx);
             Integer higher_nonce = new Integer(higher_nonces[nonce_idx]);
-            if (debugInit.isDebugEnabled()) {
-              debugInit.debug ("  var " + vs + " po " + higher_vi.name.name()
+            if (debugInit.isLoggable(Level.FINE)) {
+              debugInit.fine ("  var " + vs + " po " + higher_vi.name.name()
                                + "[nonce = " + higher_nonce + "]");
             }
             // newpath has type List[VarAndSource].
@@ -852,8 +853,8 @@ public class Dataflow
           List newpath = (List) nonce_to_vars.get(nonce);
           Assert.assertTrue(newpath != null);
           worklist.add(newpath);
-          if (debugInit.isDebugEnabled())
-            debugInit.debug ("  Added new worklist: " + newpath);
+          if (debugInit.isLoggable(Level.FINE))
+            debugInit.fine ("  Added new worklist: " + newpath);
         }
 
         // Put in a null to signal that all of the fields of the original

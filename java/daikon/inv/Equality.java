@@ -10,7 +10,8 @@ import daikon.inv.binary.twoSequence.SeqComparisonString;
 import daikon.suppress.*;
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 
 
@@ -83,8 +84,8 @@ public final class Equality
    **/
   public Equality(Collection variables, PptSlice ppt) {
     super(ppt);
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Creating at " + ppt.parent.ppt_name + " vars: ");
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Creating at " + ppt.parent.ppt_name + " vars: ");
     }
 
     numSamples = 0;
@@ -97,8 +98,8 @@ public final class Equality
     Assert.assertTrue (vars.size() == variables.size());
     for (Iterator i = variables.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
-      if (debug.isDebugEnabled()) {
-        debug.debug ("  " + vi.name.name());
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("  " + vi.name.name());
       }
       Assert.assertTrue(vi.ppt == leader.ppt);
       Assert.assertTrue(vi.comparableNWay (leader));
@@ -365,8 +366,8 @@ public final class Equality
     }
 
     List result = new LinkedList();
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Doing add at " + this.ppt.parent.ppt_name + " for " + this);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Doing add at " + this.ppt.parent.ppt_name + " for " + this);
     }
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
@@ -376,10 +377,10 @@ public final class Equality
       // test also takes into account missing values, since they are
       // null.
       if (leaderValue == viValue) continue;
-      //       if (debug.isDebugEnabled()) {
-      //         debug.debug("  vi name: " + vi.name.name());
-      //         debug.debug("  vi value: " + viValue);
-      //         debug.debug("  le value: " + leaderValue);
+      //       if (debug.isLoggable(Level.FINE)) {
+      //         debug.fine ("  vi name: " + vi.name.name());
+      //         debug.fine ("  vi value: " + viValue);
+      //         debug.fine ("  le value: " + leaderValue);
       //       }
       result.add (vi);
       i.remove();
@@ -407,22 +408,22 @@ public final class Equality
     if (this.numSamples() == 0) return; // All were missing or not present
     PptTopLevel parent = this.ppt.parent;
     VarInfo[] vars = (VarInfo[]) this.vars.toArray(new VarInfo[0]);
-    if (debugPostProcess.isDebugEnabled()) {
-      debugPostProcess.debug ("Doing postProcess: " + this.format_daikon());
-      debugPostProcess.debug ("  at: " + this.ppt.parent.ppt_name);
+    if (debugPostProcess.isLoggable(Level.FINE)) {
+      debugPostProcess.fine ("Doing postProcess: " + this.format_daikon());
+      debugPostProcess.fine ("  at: " + this.ppt.parent.ppt_name);
     }
     VarInfo leader = leader();
     ProglangType rep = leader.rep_type;
     boolean rep_is_scalar = rep.isScalar();
     boolean rep_is_float = rep.isFloat();
 
-    if (debugPostProcess.isDebugEnabled()) {
-      debugPostProcess.debug ("  var1: " + leader.name.name());
+    if (debugPostProcess.isLoggable(Level.FINE)) {
+      debugPostProcess.fine ("  var1: " + leader.name.name());
     }
     for (int i = 0; i < vars.length; i++) {
       if (vars[i] == leader) continue;
-      if (debugPostProcess.isDebugEnabled()) {
-        debugPostProcess.debug ("  var2: " + vars[i].name.name());
+      if (debugPostProcess.isLoggable(Level.FINE)) {
+        debugPostProcess.fine ("  var2: " + vars[i].name.name());
       }
 
       PptSlice newSlice = parent.get_or_instantiate_slice (leader, vars[i]);
@@ -436,28 +437,28 @@ public final class Equality
       // of factories
       if (rep_is_scalar) {
         invEquals = IntEqual.instantiate (newSlice);
-        debugPostProcess.debug ("  intEqual");
+        debugPostProcess.fine ("  intEqual");
       } else if ((rep == ProglangType.STRING)) {
         invEquals = StringComparison.instantiate (newSlice, true);
-        debugPostProcess.debug ("  stringEqual");
+        debugPostProcess.fine ("  stringEqual");
         ((StringComparison) invEquals).core.can_be_eq = true;
       } else if ((rep == ProglangType.INT_ARRAY)) {
         invEquals = SeqComparison.instantiate (newSlice, true);
         ((SeqComparison) invEquals).can_be_eq = true;
-        debugPostProcess.debug ("  seqEqual");
+        debugPostProcess.fine ("  seqEqual");
       } else if ((rep == ProglangType.STRING_ARRAY)) {
         // JHP commented out to see what diffs are coming from here (5/3/3)
 //         invEquals = SeqComparisonString.instantiate (newSlice, true);
 //         if (invEquals != null) {
 //           ((SeqComparisonString) invEquals).can_be_eq = true;
 //         }
-//         debugPostProcess.debug ("  seqStringEqual");
+//         debugPostProcess.fine ("  seqStringEqual");
       } else if (Daikon.dkconfig_enable_floats) {
         if (rep_is_float) {
           invEquals = FloatEqual.instantiate (newSlice);
-          debugPostProcess.debug ("  floatEqual");
+          debugPostProcess.fine ("  floatEqual");
         } else if (rep == ProglangType.DOUBLE_ARRAY) {
-          debugPostProcess.debug ("  seqFloatEqual");
+          debugPostProcess.fine ("  seqFloatEqual");
           invEquals = SeqComparisonFloat.instantiate (newSlice, true);
           ((SeqComparisonFloat) invEquals).can_be_eq = true;
         }
@@ -466,13 +467,13 @@ public final class Equality
       }
 
       if (invEquals != null) {
-        if (debugPostProcess.isDebugEnabled()) {
-          debugPostProcess.debug ("  adding invariant: " + invEquals.repr());
+        if (debugPostProcess.isLoggable(Level.FINE)) {
+          debugPostProcess.fine ("  adding invariant: " + invEquals.repr());
         }
         SuppressionLink sl = SelfSuppressionFactory.getInstance().generateSuppressionLink (invEquals);
         if (sl != null) {
-          if (debugPostProcess.isDebugEnabled()) {
-            debugPostProcess.debug ("  suppressed by another equality: " +
+          if (debugPostProcess.isLoggable(Level.FINE)) {
+            debugPostProcess.fine ("  suppressed by another equality: " +
                                     sl);
           }
         } else {

@@ -6,7 +6,8 @@ import daikon.inv.*;
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Computes statistics about the differences between the sets of
@@ -160,12 +161,12 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     boolean interesting = ((inv1 != null && inv1.isInteresting()) ||
                            (inv2 != null && inv2.isInteresting()));
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("visit: "
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("visit: "
                     + ((inv1 != null) ? inv1.ppt.parent.ppt_name.toString() : "NULL") + " "
                     + ((inv1 != null) ? inv1.repr() : "NULL") + " - "
                     + ((inv2 != null) ? inv2.repr() : "NULL"));
-      debug.debug ("Interesting: " + interesting);
+      debug.fine ("Interesting: " + interesting);
     }
 
 
@@ -187,8 +188,8 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     default:
       throw new Error("Invalid arity: " + arity);
     }
-    if (debug.isDebugEnabled()) {
-      debug.debug ("  type: " + type);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("  type: " + type);
     }
     return type;
   }

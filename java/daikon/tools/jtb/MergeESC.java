@@ -9,7 +9,8 @@ import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.visitor.*;
 import gnu.getopt.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.io.*;
 
 /**
@@ -98,7 +99,7 @@ class MergeESC {
         if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel (g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);
         } else if (useJML_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
           setLightweight = false;
@@ -169,7 +170,7 @@ class MergeESC {
       // outputFile.getParentFile().mkdirs();
       Writer output = new FileWriter(outputFile);
 
-      debug.debug("Processing file " + javafile);
+      debug.fine ("Processing file " + javafile);
 
       // Annotate the file
       Ast.applyVisitorInsertComments(input, output,

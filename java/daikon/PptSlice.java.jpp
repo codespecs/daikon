@@ -53,7 +53,8 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.ternary.threeScalar.*;
 #endif
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 
@@ -112,7 +113,7 @@ public final class PPTSLICE1
     // values_cache = new HashMap();
     // values_order  = new Vector();
     */ // [INCR]
-    if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled())
+    if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("Created " + PPTSLICE1STRING + " " + this.name);
 
     // Make the caller do this, because
@@ -142,7 +143,7 @@ public final class PPTSLICE1
     // if (isControlled()) return;
 
     // Instantiate invariants
-    if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled())
+    if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("instantiate_invariants for " + name + ": originally " + invs.size() + " invariants in " + invs);
 
     Vector new_invs = null;
@@ -237,10 +238,10 @@ public final class PPTSLICE1
       }
     }
 
-    if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled()) {
+    if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE)) {
       debug.info("after instantiate_invariants " + PPTSLICE1STRING + " " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
-    if ((this.debugged  || debugSpecific.isDebugEnabled()) && (invs.size() > 0)) {
+    if ((this.debugged  || debugSpecific.isLoggable(Level.FINE)) && (invs.size() > 0)) {
       debug.info("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
         Invariant inv = (Invariant) invs.get(i);
@@ -343,8 +344,8 @@ public final class PPTSLICE1
    * flowed.
    **/
   public List add(ValueTuple full_vt, int count) {
-    //     if (debugFlow.isDebugEnabled()) {
-    //       debugFlow.debug ("<< Doing add for " + this.toString());
+    //     if (debugFlow.isLoggable(Level.FINE)) {
+    //       debugFlow.fine ("<< Doing add for " + this.toString());
     //       StringBuffer sb = new StringBuffer();
     //       for (int i = 0; i < var_infos.length; i++) {
     //         VarInfo vi = var_infos[i];
@@ -352,7 +353,7 @@ public final class PPTSLICE1
     //         sb.append (" ");
     //         sb.append (ValueTuple.valToString (val));
     //       }
-    //       debugFlow.debug ("    with values:" + sb);
+    //       debugFlow.fine ("    with values:" + sb);
     //     }
 
     Assert.assertTrue(! no_invariants);
@@ -362,8 +363,8 @@ public final class PPTSLICE1
       Assert.assertTrue(invs.get(i) != null);
     }
 
-    // if (Global.debugInfer.isDebugEnabled()) {
-    //   Global.debugInfer.debug (PPTSLICE1STRING + ".add(" + full_vt + ", " + count + ")" + " for " + name);
+    // if (Global.debugInfer.isLoggable(Level.FINE)) {
+    //   Global.debugInfer.fine (PPTSLICE1STRING + ".add(" + full_vt + ", " + count + ")" + " for " + name);
     // }
 
     // Do not bother putting values into a slice if missing.
@@ -683,7 +684,7 @@ public final class PPTSLICE1
       invariant.log ("instantiated");
     invs.add(invariant);
     Global.instantiated_invariants++;
-    if (Global.debugStatistics.isDebugEnabled() || this.debugged || debugSpecific.isDebugEnabled())
+    if (Global.debugStatistics.isLoggable(Level.FINE) || this.debugged || debugSpecific.isLoggable(Level.FINE))
       debug.info("instantiated_invariant: " + invariant.format()
                  // [INCR] + "; " + "already_seen_all=" + already_seen_all
                  );
@@ -1098,8 +1099,8 @@ public final class PPTSLICE1
     }
 
     result.invs.addAll (newInvs);
-    if (PptSliceEquality.debug.isDebugEnabled()) {
-      PptSliceEquality.debug.debug ("cloneAndPivot: newInvs " + invs);
+    if (PptSliceEquality.debug.isLoggable(Level.FINE)) {
+      PptSliceEquality.debug.fine ("cloneAndPivot: newInvs " + invs);
     }
     result.repCheck();
     return result;

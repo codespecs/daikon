@@ -4,7 +4,8 @@ import java.util.*;
 import daikon.*;
 import utilMDE.*;
 import org.apache.oro.text.regex.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 // SplitterList maps from a program point name to an array of Splitter
 // objects that should be used when splitting that program point.
@@ -48,12 +49,12 @@ public abstract class SplitterList
     //   Assert.assertTrue(splits[i].instantiated() == false);
     // }
 
-    if ((Global.debugSplit != null) && Global.debugSplit.isDebugEnabled()) {
+    if ((Global.debugSplit != null) && Global.debugSplit.isLoggable(Level.FINE)) {
       String[] splits_strings = new String[splits.length];
       for (int i=0; i<splits.length; i++) {
         splits_strings[i] = splits[i].condition();
       }
-      Global.debugSplit.debug("Registering splitters for " + pptname + ":"
+      Global.debugSplit.fine ("Registering splitters for " + pptname + ":"
                               + utilMDE.ArraysMDE.toString(splits_strings));
     }
 
@@ -204,15 +205,15 @@ public abstract class SplitterList
           }
         }
       } catch (Exception e) {
-        if (Global.debugSplit.isDebugEnabled()) {
-          Global.debugSplit.debug("Error matching regex for " + pptName + "\n" + e.toString());
+        if (Global.debugSplit.isLoggable(Level.FINE)) {
+          Global.debugSplit.fine ("Error matching regex for " + pptName + "\n" + e.toString());
         }
       }
     }
 
     if (splitterArrays.size() == 0) {
-      if (Global.debugSplit.isDebugEnabled()) {
-        Global.debugSplit.debug("SplitterList.get found no splitters for " + pptName);
+      if (Global.debugSplit.isLoggable(Level.FINE)) {
+        Global.debugSplit.fine ("SplitterList.get found no splitters for " + pptName);
       }
       return null;
     } else {
@@ -223,8 +224,8 @@ public abstract class SplitterList
           splitters.addElement(tempsplitters[j]);
         }
       }
-      if (Global.debugSplit.isDebugEnabled()) {
-        Global.debugSplit.debug("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
+      if (Global.debugSplit.isLoggable(Level.FINE)) {
+        Global.debugSplit.fine ("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
       }
       return (Splitter[])splitters.toArray(new Splitter[0]);
     }

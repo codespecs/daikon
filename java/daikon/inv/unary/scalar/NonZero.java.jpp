@@ -50,7 +50,8 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;
 
 import java.util.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import utilMDE.*;
 
 // This also serves as NonNull.
@@ -106,8 +107,8 @@ public class NONZERO
     if (!dkconfig_enabled)
       return null;
 
-    if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug(NONZEROSTRING + ".instantiate(" + ppt.name + ")");
+    if (debug.isLoggable(Level.FINE) || ppt.debugged) {
+      debug.fine (NONZEROSTRING + ".instantiate(" + ppt.name + ")");
     }
 
     NONZERO result = new NONZERO(ppt);
@@ -164,7 +165,7 @@ public class NONZERO
 
   public void add_modified(PRIMITIVE v, int count) {
     if (v == 0) {
-      if (logOn() || debug.isDebugEnabled() || ppt.debugged) {
+      if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
         log (debug, "destroy (value = " + v + ")");
       }
       destroyAndFlow();

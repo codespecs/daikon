@@ -4,7 +4,8 @@ import daikon.inv.Invariant.OutputFormat;
 
 import utilMDE.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.lang.ref.WeakReference;
 import java.io.Serializable;
@@ -187,8 +188,8 @@ public abstract class VarInfoName
    * IOA style output format
    **/
   public String ioa_name() {
-    if (debug.isDebugEnabled()) {
-      debug.debug ("ioa_name: " + this.toString());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("ioa_name: " + this.toString());
     }
 
     if (ioa_name_cached == null) {
@@ -2328,8 +2329,8 @@ public abstract class VarInfoName
     //  ary[row][]               ==> { ary[row][] }
     //  ary[][]                  ==> { ary[], ary[][] }
     public Set unquants() {
-      if (QuantHelper.debug.isDebugEnabled()) {
-        QuantHelper.debug.debug("unquants: " + unquant);
+      if (QuantHelper.debug.isLoggable(Level.FINE)) {
+        QuantHelper.debug.fine ("unquants: " + unquant);
       }
       return Collections.unmodifiableSet(unquant);
     }
@@ -2559,8 +2560,8 @@ public abstract class VarInfoName
     public static QuantifyReturn quantify(VarInfoName[] roots) {
       Assert.assertTrue(roots != null);
 
-      if (QuantHelper.debug.isDebugEnabled()) {
-        QuantHelper.debug.debug("roots: " + Arrays.asList(roots));
+      if (QuantHelper.debug.isLoggable(Level.FINE)) {
+        QuantHelper.debug.fine ("roots: " + Arrays.asList(roots));
       }
 
       // create empty result
@@ -2574,8 +2575,8 @@ public abstract class VarInfoName
       // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
       for (int i=0; i < roots.length; i++) {
-        if (QuantHelper.debug.isDebugEnabled()) {
-          QuantHelper.debug.debug("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
+        if (QuantHelper.debug.isLoggable(Level.FINE)) {
+          QuantHelper.debug.fine ("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
         }
 
         helper[i] = new QuantifierVisitor(roots[i]);
@@ -2591,9 +2592,9 @@ public abstract class VarInfoName
           // nothing needs quantification
           result.root_primes[i] = roots[i];
         } else {
-          if (QuantHelper.debug.isDebugEnabled()) {
-            QuantHelper.debug.debug("root: " + roots[i]);
-            QuantHelper.debug.debug("uq_elts: " + uq.toString());
+          if (QuantHelper.debug.isLoggable(Level.FINE)) {
+            QuantHelper.debug.fine ("root: " + roots[i]);
+            QuantHelper.debug.fine ("uq_elts: " + uq.toString());
           }
 
           // We assume that the input was one unquantified sequence
@@ -2611,8 +2612,8 @@ public abstract class VarInfoName
                             "Ran out of letters in quantification");
           VarInfoName idx = (new FreeVar(idx_name)).intern();
 
-          if (QuantHelper.debug.isDebugEnabled()) {
-            QuantHelper.debug.debug("idx: " + idx);
+          if (QuantHelper.debug.isLoggable(Level.FINE)) {
+            QuantHelper.debug.fine ("idx: " + idx);
           }
 
           // call replace and unpack results

@@ -4,7 +4,8 @@ import daikon.*;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public final class SequenceLengthFactory extends UnaryDerivationFactory {
 
@@ -61,8 +62,8 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       return null;
     }
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Instantiating for " + vi.name + " in " + vi.ppt);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Instantiating for " + vi.name + " in " + vi.ppt);
     }
 
     if (vi.aux.getFlag(VarInfoAux.NULL_TERMINATING)) {

@@ -1,6 +1,7 @@
 package daikon.diff;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import daikon.inv.Invariant;
 import java.io.*;
 
@@ -46,24 +47,24 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
         rel == DetailedStatisticsVisitor.REL_DIFF_UNJUST1_UNJUST2 ||
         rel == DetailedStatisticsVisitor.REL_MISS_UNJUST1 ||
         rel == DetailedStatisticsVisitor.REL_MISS_UNJUST2) {
-      if (debug.isDebugEnabled()) {
-        debug.debug (" Returning false");
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine (" Returning false");
       }
-      
+
       return false;
     }
 
     if ((inv1 == null || !inv1.isWorthPrinting()) &&
         (inv2 == null || !inv2.isWorthPrinting())) {
-      if (debug.isDebugEnabled()) {
-        debug.debug (" Returning false");
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine (" Returning false");
       }
       return false;
     }
 
-    
-      if (debug.isDebugEnabled()) {
-        debug.debug (" Returning true");
+
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine (" Returning true");
       }
 
     return true;

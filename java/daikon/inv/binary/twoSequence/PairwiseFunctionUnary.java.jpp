@@ -33,6 +33,7 @@ import daikon.inv.Invariant;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import java.lang.reflect.*;
+import java.util.logging.Level;
 
 /**
  * Represents an invariant between corresponding elements of two
@@ -73,8 +74,8 @@ public class CLASSNAME
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Not instantitating for because order has no meaning: " +
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Not instantitating for because order has no meaning: " +
                      result.var1().name + " and " + result.var2().name);
       }
       return null;

@@ -36,7 +36,8 @@ import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import daikon.derive.unary.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 
 
@@ -78,11 +79,11 @@ public final class CLASSNAME
 
   public static CLASSNAME instantiate(PptSlice ppt) {
 
-    if (debug.isDebugEnabled())
-      debug.debug ("Attempting instantiate of " + ppt.name);
+    if (debug.isLoggable(Level.FINE))
+      debug.fine ("Attempting instantiate of " + ppt.name);
 
     if (!dkconfig_enabled) {
-      debug.debug ("No instantiate -- not configured");
+      debug.fine ("No instantiate -- not configured");
       return null;
     }
 
@@ -104,7 +105,7 @@ public final class CLASSNAME
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
     if (! elt_type.BASEISTYPE) {
-      debug.debug ("No instantiate -- !elt_type.BASEISTYPE");
+      debug.fine ("No instantiate -- !elt_type.BASEISTYPE");
       return null;
     }
 
@@ -121,13 +122,13 @@ public final class CLASSNAME
     if (! VarComparability.comparable (
                 VarInfoName.parse ("seqvar.name.elementName"), elt_compar,
                 VarInfoName.parse ("seqvar.name.indexName0"), index_compar)) {
-      debug.debug ("No instantiate -- elt compr = " + elt_compar
+      debug.fine ("No instantiate -- elt compr = " + elt_compar
                    + " index_compar = " + index_compar);
       return null;
     }
 
-    if (debug.isDebugEnabled())
-      debug.debug ("Instantiated");
+    if (debug.isLoggable(Level.FINE))
+      debug.fine ("Instantiated");
     return new CLASSNAME(ppt);
   }
 

@@ -30,7 +30,8 @@ import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public final class CLASSNAME
   implements Serializable, Cloneable

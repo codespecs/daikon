@@ -2,7 +2,8 @@ package daikon.simplify;
 
 import java.io.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import utilMDE.Assert;
 
 /**
@@ -30,10 +31,10 @@ public class SessionManager
   //    // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
   //    //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
 
-  private static final boolean debug_mgr = debug.isDebugEnabled();
+  private static final boolean debug_mgr = debug.isLoggable(Level.FINE);
   public static void debugln(String s) {
     if (! debug_mgr) return;
-    debug.debug(s);
+    debug.fine (s);
   }
 
   public SessionManager() {
@@ -59,7 +60,7 @@ public class SessionManager
   {
     Assert.assertTrue(worker != null, "Cannot use closed SessionManager");
     Assert.assertTrue(pending == null, "Cannot queue requests");
-    if (debug.isDebugEnabled()) {
+    if (debug.isLoggable(Level.FINE)) {
       System.err.println("Running command " + command + "\n called from\n");
       Throwable t = new Throwable();
       t.printStackTrace();

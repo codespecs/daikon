@@ -7,7 +7,8 @@ import daikon.temporal.TemporalInvariantManager;
 
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.io.*;
 import java.util.*;
@@ -160,8 +161,8 @@ public final class FileIO {
                                             PptMap all_ppts)
     throws IOException
   {
-    if (debugRead.isDebugEnabled()) {
-      debugRead.debug("read_declaration_file " + filename
+    if (debugRead.isLoggable(Level.FINE)) {
+      debugRead.fine ("read_declaration_file " + filename
                       + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
                       + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
@@ -174,8 +175,8 @@ public final class FileIO {
 
     // line == null when we hit end of file
     for ( ; line != null; line = reader.readLine()) {
-      if (debugRead.isDebugEnabled())
-        debugRead.debug("read_declaration_file line: " + line);
+      if (debugRead.isLoggable(Level.FINE))
+        debugRead.fine ("read_declaration_file line: " + line);
       if (line.equals("") || isComment(line))
         continue;
       if (line.equals(declaration_header)) {
@@ -215,8 +216,8 @@ public final class FileIO {
 
       // Not a declaration.
       // Read the rest of this entry (until we find a blank line).
-      if (debugRead.isDebugEnabled())
-        debugRead.debug("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
+      if (debugRead.isLoggable(Level.FINE))
+        debugRead.fine ("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
       while ((line != null) && (!line.equals("")) && (!isComment(line))) {
         System.out.println("Unrecognized paragraph contains line = `" + line + "'");
         System.out.println("" + (line != null) + " " + (line.equals("")) + " " + (isComment(line)));
@@ -564,12 +565,10 @@ public final class FileIO {
   {
     int pptcount = 1;
 
-    if (debugRead.isDebugEnabled()) {
-      debugRead.debug("read_data_trace_file " + filename
-                      + ((Daikon.ppt_regexp != null) ? " " +
-                         Daikon.ppt_regexp.getPattern() : "")
-                      + ((Daikon.ppt_omit_regexp != null) ? " " +
-                         Daikon.ppt_omit_regexp.getPattern() : ""));
+    if (debugRead.isLoggable(Level.FINE)) {
+      debugRead.fine ("read_data_trace_file " + filename
+                      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+                      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
@@ -652,7 +651,7 @@ public final class FileIO {
         if (pptcount++ % 10000 == 0)
             System.out.print(":");
 
-        if (Daikon.debugTrace.isDebugEnabled()) {
+        if (Daikon.debugTrace.isLoggable(Level.FINE)) {
           data_num_slices = all_ppts.countSlices();
         }
 
@@ -770,9 +769,9 @@ public final class FileIO {
         // Causes interning
         vt = new ValueTuple(vt.vals, vt.mods);
 
-        if (debugRead.isDebugEnabled()) {
-          debugRead.debug("Adding ValueTuple to " + ppt.name);
-          debugRead.debug("  length is " + vt.vals.length);
+        if (debugRead.isLoggable(Level.FINE)) {
+          debugRead.fine ("Adding ValueTuple to " + ppt.name);
+          debugRead.fine ("  length is " + vt.vals.length);
         }
         ppt.add_and_flow(vt, 1);
 

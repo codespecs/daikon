@@ -41,7 +41,8 @@ import daikon.inv.binary.twoSequence.*;
 
 import utilMDE.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 
@@ -95,7 +96,7 @@ public final class CLASSNAME
       result.override_range = 3;
      }
 
-    if (debug.isDebugEnabled()) {
+    if (debug.isLoggable(Level.FINE)) {
       System.out.println(CLASSSTRING + ".instantiate: " + result.format());
     }
     return result;
@@ -288,8 +289,8 @@ public final class CLASSNAME
     // subsequence relationship between that array and this one.
 
     VarInfo v1 = vis[0];
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Testing isObviousDynamically for " + v1.name.name());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Testing isObviousDynamically for " + v1.name.name());
     }
 
     PptTopLevel parent = ppt.parent;
@@ -297,8 +298,8 @@ public final class CLASSNAME
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof CLASSNAME) && (inv != this) && inv.enoughSamples()) {
         VarInfo v2 = inv.ppt.var_infos[0];
-        if (debug.isDebugEnabled()) {
-          debug.debug ("  Have to test: " + inv.repr());
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine ("  Have to test: " + inv.repr());
         }
 
         // First see if the subsequence relationship can be determined from the VarInfos
@@ -320,7 +321,7 @@ public final class CLASSNAME
             if (this_var_first
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
-              debug.debug ("  True from subsequence search");
+              debug.fine ("  True from subsequence search");
               return true;
             }
           }

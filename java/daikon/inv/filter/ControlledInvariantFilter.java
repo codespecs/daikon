@@ -1,9 +1,10 @@
 package daikon.inv.filter;
 
+import daikon.PrintInvariants;
 import daikon.inv.*;
 import daikon.inv.filter.*;
+import java.util.logging.Level;
 import java.util.Vector;
-import daikon.PrintInvariants;
 import java.util.Iterator;
 
 class ControlledInvariantFilter extends InvariantFilter {
@@ -25,10 +26,10 @@ class ControlledInvariantFilter extends InvariantFilter {
 
   private boolean isWorthPrinting(Invariant inv)
   {
-    // if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-    //  PrintInvariants.debugFiltering.debug("\tCalling IWP on " + inv.format() + " for reference\n");
+    // if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+    //  PrintInvariants.debugFiltering.fine ("\tCalling IWP on " + inv.format() + " for reference\n");
     //  inv.isWorthPrinting();
-    //  PrintInvariants.debugFiltering.debug("\tdone\n");
+    //  PrintInvariants.debugFiltering.fine ("\tdone\n");
     // }
 
 
@@ -44,8 +45,8 @@ class ControlledInvariantFilter extends InvariantFilter {
     /* [INCR]
     Vector contr_invs = inv.find_controlling_invariants_sorted();
 
-    if ((contr_invs.size() == 0) && (PrintInvariants.debugFiltering.isDebugEnabled())) {
-      PrintInvariants.debugFiltering.debug("\t" + inv.format() + " has no controlling invariants.\n");
+    if ((contr_invs.size() == 0) && (PrintInvariants.debugFiltering.isLoggable(Level.FINE))) {
+      PrintInvariants.debugFiltering.fine ("\t" + inv.format() + " has no controlling invariants.\n");
     }
 
     Vector processed = new Vector();
@@ -53,14 +54,14 @@ class ControlledInvariantFilter extends InvariantFilter {
       Invariant contr_inv = (Invariant) contr_invs.remove(0);
 
       processed.add(contr_inv);
-      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("\tconsidering controlling inv " + contr_inv.format() + "\n");
+      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+        PrintInvariants.debugFiltering.fine ("\tconsidering controlling inv " + contr_inv.format() + "\n");
       }
       if (isWorthPrinting_sansControlledCheck(contr_inv)) {
         // we have a printable controller, so we shouldn't print
 
-        if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-          PrintInvariants.debugFiltering.debug("\tis controlled by " + contr_inv.format() + " (from " + contr_inv.ppt.parent.name + ")\n");
+        if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
+          PrintInvariants.debugFiltering.fine ("\tis controlled by " + contr_inv.format() + " (from " + contr_inv.ppt.parent.name + ")\n");
         }
         return false;
       }
@@ -90,30 +91,30 @@ class ControlledInvariantFilter extends InvariantFilter {
       return isWorthPrinting(impl.predicate()) && isWorthPrinting(impl.consequent());
     }
 
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+    if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
       if (inv.hasFewModifiedSamples()) {
-        PrintInvariants.debugFiltering.debug("\t\thas few modified samples " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\thas few modified samples " + inv.format() + "\n");
       }
       if (!inv.enoughSamples()) {
-        PrintInvariants.debugFiltering.debug("\t\tnot enough samples " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\tnot enough samples " + inv.format() + "\n");
       }
       /* [INCR]
       if (inv.hasNonCanonicalVariable()) {
-        PrintInvariants.debugFiltering.debug("\t\thas non canonical var " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\thas non canonical var " + inv.format() + "\n");
       }
       if (inv.hasOnlyConstantVariables()) {
-        PrintInvariants.debugFiltering.debug("\t\thas only constant vars " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\thas only constant vars " + inv.format() + "\n");
       }
       */ // [INCR]
       if (inv.isObvious()) {
-        PrintInvariants.debugFiltering.debug("\t\tis obvious " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\tis obvious " + inv.format() + "\n");
       }
       if (!inv.justified()) {
-        PrintInvariants.debugFiltering.debug("\t\tnot justified " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\tnot justified " + inv.format() + "\n");
       }
       /* [INCR]
       if (!inv.isWorthPrinting_PostconditionPrestate()) {
-        PrintInvariants.debugFiltering.debug("\t\tisn't worth printing postcond/prestate " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\tisn't worth printing postcond/prestate " + inv.format() + "\n");
       }
       */ // [INCR]
     }

@@ -613,7 +613,7 @@ public class Ast {
           if (debug_getMatches) System.out.println("Unmatched; continuing");
           continue;
         }
-        MergeESC.debug.debug("Ast.getMatch succeeded: " + ppt.name
+        MergeESC.debug.fine ("Ast.getMatch succeeded: " + ppt.name
                              + " to " + classname + "." + methodname
                              + "(" + UtilMDE.join(param_types, ",") + ")");
         result.add(ppt);

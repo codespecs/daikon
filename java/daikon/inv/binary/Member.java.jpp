@@ -76,7 +76,8 @@ import daikon.derive.ternary.*;
 import daikon.suppress.*;
 import java.util.*;
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Represents SCALAR scalars that are always members of SCALAR sequences.
@@ -118,8 +119,8 @@ public final class CLASSNAME
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Member instantiated: "
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Member instantiated: "
                    + sclvar.name + " in " + seqvar.name);
     }
     return new CLASSNAME(ppt, seq_first);
@@ -544,8 +545,8 @@ public final class CLASSNAME
 
   public void add_modified(SCALAR[] a, SCALAR i, int count) {
     if (INDEXOF(a, i) == -1) {
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Member destroyed:  " + format() + " because " + i +
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Member destroyed:  " + format() + " because " + i +
                      " not in " + ArraysMDE.toString(a));
       }
       destroyAndFlow();
@@ -651,10 +652,10 @@ public final class CLASSNAME
           SubSet subSet = (SubSet) supTemplate.results[0];
           if ((subSet.var1_in_var2 && subSet.var1() == transSclSequence) ||
               (subSet.var2_in_var1 && subSet.var2() == transSclSequence)) {
-            if (debug.isDebugEnabled()) {
-              debug.debug ("Suppressed by subset: " + subSet.repr());
-              debug.debug ("  sclSeq " + transSclSequence.name.name());
-              debug.debug ("  seqVar " + transSeqvar.name.name());
+            if (debug.isLoggable(Level.FINE)) {
+              debug.fine ("Suppressed by subset: " + subSet.repr());
+              debug.fine ("  sclSeq " + transSclSequence.name.name());
+              debug.fine ("  seqVar " + transSeqvar.name.name());
             }
             return sl;
           }
@@ -709,12 +710,12 @@ public final class CLASSNAME
       CLASSNAME inv = (CLASSNAME) arg;
       VarInfo sclvar = inv.sclvar();
       VarInfo sclSequence = sclvar.isDerivedSequenceMember();
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Trying for: " + inv.repr());
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Trying for: " + inv.repr());
       }
 
       if (sclSequence == null) {
-        debug.debug ("  Sclvar is not from a sequence");
+        debug.fine ("  Sclvar is not from a sequence");
         return null;
       }
       SEQUENCESCALARSUBSCRIPT sssc = (SEQUENCESCALARSUBSCRIPT) inv.sclvar().derived;
@@ -722,21 +723,21 @@ public final class CLASSNAME
       VarInfo seqvar = inv.seqvar();
       VarInfo origSeqvar = seqvar.isDerivedSubSequenceOf();
       if (origSeqvar == null) {
-        debug.debug ("  Seqvar is not a subsequence derived var");
+        debug.fine ("  Seqvar is not a subsequence derived var");
         return null;
       }
       if (sclSequence != origSeqvar) {
-        debug.debug ("  Not from the same sequences");
+        debug.fine ("  Not from the same sequences");
         return null;
 
       }
       SEQUENCESCALARSUBSEQUENCE ssss = (SEQUENCESCALARSUBSEQUENCE) seqvar.derived;
       VarInfo rightIndex = ssss.sclvar();
-      if (debug.isDebugEnabled()) {
-        debug.debug ("  Attempting to find <= template for: ");
-        debug.debug ("  " + leftIndex.name.name());
-        debug.debug ("  " + rightIndex.name.name());
-        debug.debug ("  In inv: " + inv.repr());
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("  Attempting to find <= template for: ");
+        debug.fine ("  " + leftIndex.name.name());
+        debug.fine ("  " + rightIndex.name.name());
+        debug.fine ("  In inv: " + inv.repr());
       }
       if (leftIndex == rightIndex) {
         return null;

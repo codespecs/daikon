@@ -9,7 +9,8 @@ import java.util.*;
 import java.util.zip.*;
 import utilMDE.*;
 import gnu.getopt.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Diff is the main class for the invariant diff program.  The
@@ -121,7 +122,7 @@ public final class Diff {
     boolean optionSelected = false;
 
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
-//     daikon.LogHelper.setLevel ("daikon.diff", daikon.LogHelper.DEBUG);
+//     daikon.LogHelper.setLevel ("daikon.diff", daikon.LogHelper.FINE);
 
     LongOpt[] longOpts = new LongOpt[] {
       new LongOpt(INV_SORT_COMPARATOR1_SWITCH,
@@ -487,8 +488,8 @@ public final class Diff {
         root.accept(v);
         InvMap resultMap = v.getResult();
         UtilMDE.writeObject(resultMap, outputFile);
-        if (debug.isDebugEnabled()) {
-          debug.debug ("Result: " + resultMap.toString());
+        if (debug.isLoggable(Level.FINE)) {
+          debug.fine ("Result: " + resultMap.toString());
         }
 
         // System.out.println("Output written to: " + outputFile);

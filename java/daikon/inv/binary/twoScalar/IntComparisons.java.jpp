@@ -162,7 +162,8 @@ import daikon.derive.binary.*;
 import daikon.suppress.*;
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.*;
 
 /**
@@ -210,7 +211,7 @@ public final class INTEQUAL
 
   public static INTEQUAL instantiate(PptSlice ppt) {
 
-    if (logOn() || debug.isDebugEnabled() || ppt.debugged) {
+    if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
       Debug.log (debug, INTEQUAL.class, ppt, "Attempt Instantiate");
     }
 
@@ -235,7 +236,7 @@ public final class INTEQUAL
   #endif
 #endif
 
-    if (logOn() || debug.isDebugEnabled() || ppt.debugged) {
+    if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
       Debug.log (debug, INTEQUAL.class, ppt,
              "seqvar1=" + ((seqvar1 == null) ? "null" : seqvar1.name.name())
          + ", seqvar2=" + ((seqvar2 == null) ? "null" : seqvar2.name.name()));
@@ -293,8 +294,8 @@ invariants.
       VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debug.isDebugEnabled() || ppt.debugged) {
-        debug.debug(INTEQUALstring + ".instantiate: "
+      if (debug.isLoggable(Level.FINE) || ppt.debugged) {
+        debug.fine (INTEQUALstring + ".instantiate: "
                             + "min1=" + min1
                             + ", max1=" + max1
                             + ", min2=" + min2
@@ -408,10 +409,10 @@ invariants.
   }
 
   public void add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    // if (logDetail() || debug.isDebugEnabled())
+    // if (logDetail() || debug.isLoggable(Level.FINE))
     //   log (debug, "add_modified (" + v1 + ", " + v2 + ",  " + count + ")");
     if (!(EQUALS(v1, v2))) {
-      if (logOn() || debug.isDebugEnabled())
+      if (logOn() || debug.isLoggable(Level.FINE))
         log (debug, "destroy in add_modified (" + v1 + ", " + v2 + ",  "
             + count + ")");
       destroyAndFlow();
@@ -478,7 +479,7 @@ invariants.
 
   // // Temporary, for debugging
   // public void destroy() {
-  //   if (debug.isDebugEnabled() || ppt.debugged) {
+  //   if (debug.isLoggable(Level.FINE) || ppt.debugged) {
   //     System.out.println(INTEQUALstring + ".destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
@@ -914,7 +915,7 @@ invariants.
       if (EQUALS (lb.core.b, 0))
         return (null);
 
-      if (logOn() || debug.isDebugEnabled()) {
+      if (logOn() || debug.isLoggable(Level.FINE)) {
         arg.log (debug, " Suppressed by " + lb.format());
       }
     }

@@ -4,7 +4,8 @@ import daikon.*;
 import java.io.Serializable;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import utilMDE.*;
 
@@ -155,7 +156,7 @@ public class Debug {
    */
 
   public static boolean logDetail () {
-    return (dkconfig_logDetail && debugTrack.isDebugEnabled());
+    return (dkconfig_logDetail && debugTrack.isLoggable(Level.FINE));
   }
 
   /**
@@ -165,7 +166,7 @@ public class Debug {
    */
 
   public static boolean logOn() {
-    return debugTrack.isDebugEnabled();
+    return debugTrack.isLoggable(Level.FINE);
   }
 
   /**
@@ -235,7 +236,7 @@ public class Debug {
       return;
 
     // If debug isn't turned on, there is nothing to do
-    if (!debug.isDebugEnabled())
+    if (!debug.isLoggable(Level.FINE))
       return;
 
     // Get the non-qualified class name
@@ -254,7 +255,7 @@ public class Debug {
     for (int i = vis.length; i < 3; i++)
       vars += ": ";
 
-    debug.debug (class_str + ": " + ppt.ppt_name.getFullNamePoint()
+    debug.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
                  + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
@@ -300,7 +301,7 @@ public class Debug {
   public static boolean log (Class inv_class, Ppt ppt, VarInfo vis[],
                              String msg) {
 
-    if (!debugTrack.isDebugEnabled())
+    if (!debugTrack.isLoggable(Level.FINE))
       return (false);
 
     // Make sure the class matches
@@ -375,7 +376,7 @@ public class Debug {
     for (int i = vis.length; i < 3; i++)
       vars += ": ";
 
-    debugTrack.debug (class_str + ": " + ppt.ppt_name.getFullNamePoint()
+    debugTrack.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
                        + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");

@@ -39,7 +39,8 @@ import daikon.*;
 import daikon.derive.*;
 
 import utilMDE.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -68,7 +69,7 @@ public final class SCALARSEQUENCESINTERSECTION
   }
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
-    debug.debug("Computing value and modified");
+    debug.fine ("Computing value and modified");
 
     int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING_NONSENSICAL)
@@ -105,7 +106,7 @@ public final class SCALARSEQUENCESINTERSECTION
   }
 
   protected VarInfo makeVarInfo() {
-    debug.debug ("Computing varInfo");
+    debug.fine ("Computing varInfo");
 
     VarInfoName name = base1.name.applyIntersection(base2.name).applyElements();
     ProglangType type = base1.type;

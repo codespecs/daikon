@@ -4,7 +4,8 @@ import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.suppress.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 
@@ -150,8 +151,8 @@ public abstract class PptSlice
     // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
     debugged = (Global.isDebuggedPptSlice(this));
 
-    if (debugGeneral.isDebugEnabled()) {
-      debugGeneral.debug(Arrays.asList(var_infos));
+    if (debugGeneral.isLoggable(Level.FINE)) {
+      debugGeneral.fine (ArraysMDE.toString(var_infos));
     }
   }
 
@@ -235,8 +236,8 @@ public abstract class PptSlice
         boolean flows = (var_flow_to != -1);
         all = all && flows;
       }
-      if (Global.debugInfer.isDebugEnabled()) {
-        Global.debugInfer.debug
+      if (Global.debugInfer.isLoggable(Level.FINE)) {
+        Global.debugInfer.fine
           ("isControlled: "
            + name + " controlled by " + higher.ppts[i].name + "? : "
            + (all ? "yes" : "no"));
@@ -428,16 +429,16 @@ public abstract class PptSlice
 
     // Flow newly-generated stuff
     if (invs_to_flow.size() == 0) {
-      if (debugFlow.isDebugEnabled()) {
-        debugFlow.debug ("No invariants to flow for " + this);
+      if (debugFlow.isLoggable(Level.FINE)) {
+        debugFlow.fine ("No invariants to flow for " + this);
       }
       List result = new ArrayList (invs_changed);
       return result;
     } else {
-      if (debugFlow.isDebugEnabled()) {
-        debugFlow.debug (">> Flowing and removing falsified for: " + this);
-        debugFlow.debug ("  To remove: " + to_remove);
-        debugFlow.debug ("  To flow: " + invs_to_flow);
+      if (debugFlow.isLoggable(Level.FINE)) {
+        debugFlow.fine (">> Flowing and removing falsified for: " + this);
+        debugFlow.fine ("  To remove: " + to_remove);
+        debugFlow.fine ("  To flow: " + invs_to_flow);
       }
     }
 
@@ -528,8 +529,8 @@ public abstract class PptSlice
             inv.destroy();
           }
           // debug
-          if (debugFlow.isDebugEnabled()) {
-            debugFlow.debug(" " + inv.format() + " flowing from " +
+          if (debugFlow.isLoggable(Level.FINE)) {
+            debugFlow.fine (" " + inv.format() + " flowing from " +
                             parent.name + " to " + lower.name);
           }
           // If its class does not already exist in lower
@@ -544,14 +545,14 @@ public abstract class PptSlice
           //            if (item.getClass() == inv.getClass()) {
           Invariant alreadyThere = Invariant.find (inv.getClass(), slice);
           if (alreadyThere != null) {
-            if (debugFlow.isDebugEnabled())
-              debugFlow.debug("  except it was already there: " + alreadyThere.format());
+            if (debugFlow.isLoggable(Level.FINE))
+              debugFlow.fine ("  except it was already there: " + alreadyThere.format());
             continue for_each_invariant;
           }
           // Let it be reborn
           Invariant reborn = inv.resurrect(slice, permutation);
-          if (debugFlow.isDebugEnabled()) {
-            debugFlow.debug("  rebirthing invariant");
+          if (debugFlow.isLoggable(Level.FINE)) {
+            debugFlow.fine ("  rebirthing invariant");
           }
 
           slice.addInvariant(reborn);
@@ -724,20 +725,20 @@ public abstract class PptSlice
   public void guardInvariants() {
     List invariantsToGuard = new ArrayList();
 
-    if (debugGuarding.isDebugEnabled()) {
-      debugGuarding.debug("PptSlice.guardInvariants init: " + this.parent.ppt_name);
-      debugGuarding.debug("  I have " + invs.size() + " invariants");
+    if (debugGuarding.isLoggable(Level.FINE)) {
+      debugGuarding.fine ("PptSlice.guardInvariants init: " + this.parent.ppt_name);
+      debugGuarding.fine ("  I have " + invs.size() + " invariants");
       for (int i=0; i<var_infos.length; i++) {
         try {
-          debugGuarding.debug("  var_info[" + i +
+          debugGuarding.fine ("  var_info[" + i +
                               "] name in JML = " +
                               var_infos[i].name.name_using(OutputFormat.JML));
         } catch (UnsupportedOperationException e) {
-          debugGuarding.debug("  Part of PptSlice cannot be JML formatted.");
+          debugGuarding.fine ("  Part of PptSlice cannot be JML formatted.");
         }
       }
-      //      debugGuarding.debug("In guardInvariants, the VarInfos for the PptSlice: ");
-      //       debugGuarding.debug(Arrays.asList(var_infos).toString());
+      //      debugGuarding.fine ("In guardInvariants, the VarInfos for the PptSlice: ");
+      //       debugGuarding.fine (Arrays.asList(var_infos).toString());
     }
 
     // If this slice is to be deleted, then don't guard it
@@ -745,23 +746,23 @@ public abstract class PptSlice
 
     for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
       Invariant inv = (Invariant)overInvs.next();
-      if (debugGuarding.isDebugEnabled()) {
-        debugGuarding.debug("  Trying to add implication for: " + inv.repr());
+      if (debugGuarding.isLoggable(Level.FINE)) {
+        debugGuarding.fine ("  Trying to add implication for: " + inv.repr());
       }
       if (inv.isGuardingPredicate) {
-        debugGuarding.debug("  Continuing: this is a guarding predicate");
+        debugGuarding.fine ("  Continuing: this is a guarding predicate");
         continue;
       }
       Invariant guardingPredicate = inv.createGuardingPredicate();
       Invariant guardingImplication;
-      if (debugGuarding.isDebugEnabled()) {
+      if (debugGuarding.isLoggable(Level.FINE)) {
         if (guardingPredicate != null) {
-          debugGuarding.debug("  Predicate: " +
+          debugGuarding.fine ("  Predicate: " +
                               guardingPredicate.format_using(OutputFormat.JML));
-          debugGuarding.debug("  Consequent: " +
+          debugGuarding.fine ("  Consequent: " +
                               inv.format_using(OutputFormat.JML));
         } else {
-          debugGuarding.debug("  No implication needed");
+          debugGuarding.fine ("  No implication needed");
         }
       }
 
@@ -772,10 +773,10 @@ public abstract class PptSlice
         parent.joiner_view.addInvariant(guardingImplication);
         invariantsToGuard.add(inv);
 
-        if (debugGuarding.isDebugEnabled()) {
-          debugGuarding.debug("Adding " +
+        if (debugGuarding.isLoggable(Level.FINE)) {
+          debugGuarding.fine ("Adding " +
                            guardingImplication.format_using(OutputFormat.JML));
-          debugGuarding.debug("Removing " +
+          debugGuarding.fine ("Removing " +
                            inv.format_using(OutputFormat.JML));
         }
       }

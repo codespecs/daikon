@@ -1,8 +1,9 @@
 package daikon;
 
-import java.util.*;
 import java.io.*;
-import org.apache.log4j.Logger;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -103,7 +104,7 @@ public final class VarInfoAux
         token = ((char) tok.ttype + "").intern();
       }
 
-      debug.debug ("Token info: " + tokInfo + " " + token);
+      debug.fine ("Token info: " + tokInfo + " " + token);
 
       if (token == ",") {       // interned
         if (!seenEqual)
@@ -132,9 +133,9 @@ public final class VarInfoAux
     // Interning
     VarInfoAux result = new VarInfoAux(map);
     result = result.intern();
-    if (debug.isDebugEnabled()) {
-      debug.debug("New parse " + result);
-      debug.debug ("Intern table size: " + new Integer(theMap.size()));
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("New parse " + result);
+      debug.fine ("Intern table size: " + new Integer(theMap.size()));
     }
     return result;
   }

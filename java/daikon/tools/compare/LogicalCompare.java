@@ -2,7 +2,8 @@ package daikon.tools.compare;
 
 import java.util.*;
 import java.io.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.*;
@@ -40,7 +41,8 @@ import daikon.simplify.*;
 
 import java.util.*;
 import java.io.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.*;
@@ -292,7 +294,7 @@ public class LogicalCompare {
            SimplifyError
   {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    // LogHelper.setPriority("daikon.simplify", LogHelper.DEBUG);
+    // LogHelper.setPriority("daikon.simplify", LogHelper.FINE);
     daikon.inv.Invariant.dkconfig_simplify_define_predicates = true;
 
     String app_filename = args[0];

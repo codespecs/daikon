@@ -42,7 +42,8 @@ import daikon.suppress.*;
 
 import utilMDE.Assert;
 import java.util.Iterator;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Represents an invariant between corresponding elements of two
@@ -124,8 +125,8 @@ public class CLASSNAME
     // Don't instantiate if the variables can't have order
     if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Not instantitating for because order has no meaning: " +
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Not instantitating for because order has no meaning: " +
                      var1.name + " and " + var2.name);
       }
       return true;

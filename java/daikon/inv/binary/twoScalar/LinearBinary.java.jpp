@@ -61,7 +61,7 @@ public class CLASSNAME
   public static CLASSNAME instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     if (ppt.debugged) {
-      ppt.debug.debug(CLASSSTRING + ".instantiate(" + ppt.name + ")");
+      ppt.debug.fine (CLASSSTRING + ".instantiate(" + ppt.name + ")");
     }
     return new CLASSNAME(ppt);
   }

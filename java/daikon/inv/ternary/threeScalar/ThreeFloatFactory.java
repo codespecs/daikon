@@ -8,7 +8,8 @@ import utilMDE.*;
 import java.util.*;
 
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 public final class ThreeFloatFactory {
@@ -37,17 +38,17 @@ public final class ThreeFloatFactory {
                   && (var2.rep_type == ProglangType.DOUBLE)
                   && (var3.rep_type == ProglangType.DOUBLE));
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Instantiating for " + ppt.name);
-      debug.debug ("Vars: " + var1.name + " " + var2.name + " " + var3.name);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Instantiating for " + ppt.name);
+      debug.fine ("Vars: " + var1.name + " " + var2.name + " " + var3.name);
     }
 
     if (! var1.compatible(var2)) {
-      debug.debug ("Not comparable 1 to 2.  Returning");
+      debug.fine ("Not comparable 1 to 2.  Returning");
       return null;
     }
     if (! var2.compatible(var3)) {
-      debug.debug ("Not comparable 2 to 3.  Returning");
+      debug.fine ("Not comparable 2 to 3.  Returning");
       return null;
     }
     // Check transitivity of "compatible" relationship.
@@ -81,8 +82,8 @@ public final class ThreeFloatFactory {
         }
       }
       result.add(LinearTernaryFloat.instantiate(ppt));
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Instantiated invs " + result);
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine ("Instantiated invs " + result);
       }
       return result;
     }

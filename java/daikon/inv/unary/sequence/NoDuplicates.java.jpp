@@ -45,7 +45,8 @@ import daikon.derive.binary.SEQUENCESJOIN;
 
 import utilMDE.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.*;
 
@@ -102,8 +103,8 @@ public class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
-    if (debug.isDebugEnabled()) {
-      debug.debug(repr());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine (repr());
     }
 
     if (format == OutputFormat.DAIKON) {
@@ -134,8 +135,8 @@ public class CLASSNAME
 
   /* IOA */
   public String format_ioa() {
-    if (debugPrint.isDebugEnabled()) {
-      debugPrint.debug ("Format_ioa: " + this.toString());
+    if (debugPrint.isLoggable(Level.FINE)) {
+      debugPrint.fine ("Format_ioa: " + this.toString());
     }
 
     // We first see if we can special case for certain types of variables
@@ -235,9 +236,9 @@ public class CLASSNAME
     for (int i=1; i<a.length; i++) {
       for (int j = 0; j < i; j++) {
         if (EQUAL (a[i], a[j])) {
-          if (debug.isDebugEnabled()) {
-            debug.debug ("Destroying myself with: " + var().name.repr());
-            debug.debug (ArraysMDE.toString(a));
+          if (debug.isLoggable(Level.FINE)) {
+            debug.fine ("Destroying myself with: " + var().name.repr());
+            debug.fine (ArraysMDE.toString(a));
           }
           destroyAndFlow();
           return;

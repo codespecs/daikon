@@ -32,7 +32,8 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 
 import java.util.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public final class CLASSNAME {
 
@@ -46,8 +47,8 @@ public final class CLASSNAME {
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
   public static Vector instantiate(PptSlice ppt) {
-    if (debug.isDebugEnabled()) {
-      debug.debug(CLASSSTRING + " instantiate " + ppt.name);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine (CLASSSTRING + " instantiate " + ppt.name);
     }
 
     boolean seq_first;
@@ -73,7 +74,7 @@ public final class CLASSNAME {
     }
 
     if (! seqvar.eltsCompatible(sclvar)) {
-      debug.debug("Elements not compatible, returning");
+      debug.fine ("Elements not compatible, returning");
       return null;
     }
 

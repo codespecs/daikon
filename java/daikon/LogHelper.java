@@ -1,14 +1,6 @@
 package daikon;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
-import org.apache.log4j.Layout;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
-
-import java.io.*;
+import java.util.logging.*;
 
 /**
  * Standard methods for setting up logging with Log4j.
@@ -20,29 +12,77 @@ import java.io.*;
 public class LogHelper {
 
   // Class variables so user doesn't have to use log4j.Level
-  public static final Level DEBUG = Level.DEBUG;
+  public static final Level FINE = Level.FINE;
   public static final Level INFO = Level.INFO;
-  public static final Level WARN = Level.WARN;
-  public static final Level ERROR = Level.ERROR;
-  public static final Level FATAL = Level.FATAL;
+  public static final Level WARNING = Level.WARNING;
+  public static final Level SEVERE = Level.SEVERE;
 
   /**
    * Sets up global logs with a given priority and logging output
-   * pattern.  Creates one ConsoleAppender at root to receive default
+   * pattern.  Creates one ConsoleHandler at root to receive default
    * messages, setting priority to INFO.  Removes previous appenders
    * at root.
    **/
-  public static void setupLogs(Level l, String pattern) {
-    // Example: "@daikon.Daikon: This is a message \n"
-    Layout layout = new PatternLayout(pattern);
+  public static void setupLogs(Level l, Formatter formatter) {
     // Send debug and other info messages to System.err
-    Appender app = new ConsoleAppender (layout, ConsoleAppender.SYSTEM_ERR);
+    Handler app = new ConsoleHandler();
+    app.setFormatter(formatter);
 
-    Logger.getRoot().removeAllAppenders();
-    Logger.getRoot().addAppender(app);
-    Logger.getRoot().setLevel(l);
-    Logger.getRoot().debug("Installed logger at level " + l);
+    // Logger.global.removeAllAppenders();
+    {
+      Handler[] handlers = Logger.global.getHandlers();
+      for (int i=0; i<handlers.length; i++) {
+        Logger.global.removeHandler(handlers[i]);
+      }
+    }
+
+    Logger.global.addHandler(app);
+    Logger.global.setLevel(l);
+    Logger.global.fine ("Installed logger at level " + l);
   }
+
+  // Statically initialized to save runtime
+  private static String padding_arrays[] = new String[] {
+    "",
+    " ",
+    "  ",
+    "   ",
+    "    ",
+    "     ",
+    "      ",
+    "       ",
+    "        ",
+    "         ",
+    "          ",
+    "           ",
+    "            ",
+    "             ",
+    "              ",
+    "               ",
+    "                ",
+    "                 ",
+    "                  ",
+    "                   ",
+  };
+
+  public static class DaikonLogFormatter extends SimpleFormatter {
+    public String format(LogRecord record) {
+      // // By default, take up 20 spaces min, and 20 spaces max for
+      // // %c = Logger. %m = message, %n = newline
+      // // Example: "@daikon.Daikon: This is a message \n"
+      // setupLogs (l, "@ %20.20c: %m%n");
+
+      String loggerName = record.getLoggerName();
+      int loggerNameLength = loggerName.length();
+      if (loggerNameLength > 20) {
+        loggerName = loggerName.substring(0, 20);
+      } else if (loggerNameLength < 20) {
+        loggerName = loggerName + padding_arrays[20 - loggerNameLength];
+      }
+      return loggerName + record.getMessage();
+    }
+  }
+
 
   /**
    * Default method for setting up global logs.
@@ -53,12 +93,10 @@ public class LogHelper {
 
   /**
    * Sets up global logs with a given priority.
-   * Creates one ConsoleAppender.  Removes previous appenders at root.
+   * Creates one ConsoleHandler.  Removes previous appenders at root.
    **/
   public static void setupLogs(Level l) {
-    setupLogs (l, "@ %20.20c: %m%n");
-    // By default, take up 20 spaces min, and 20 spaces max for
-    // %c = Logger. %m = message, %n = newline
+    setupLogs (l, new DaikonLogFormatter());
   }
 
   /**

@@ -15,7 +15,8 @@ import java.text.DateFormat;
 import java.lang.Thread;
 
 import org.apache.oro.text.regex.*;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import gnu.getopt.*;
 import utilMDE.*;
 
@@ -268,7 +269,7 @@ public final class Daikon {
     }
 
     // Set up debug traces; note this comes after reading command line options.
-    LogHelper.setupLogs(Global.debugAll ? LogHelper.DEBUG : LogHelper.INFO);
+    LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
     if (! noversion_output) {
       System.out.println(release_string);
@@ -434,7 +435,7 @@ public final class Daikon {
         } else if (debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
         } else if (no_text_output_SWITCH.equals(option_name)) {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {
@@ -603,12 +604,12 @@ public final class Daikon {
     try {
       System.out.print("Reading declaration files ");
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
-      if (debugTrace.isDebugEnabled()) {
-        debugTrace.debug ("Initializing partial order");
+      if (debugTrace.isLoggable(Level.FINE)) {
+        debugTrace.fine ("Initializing partial order");
       }
       Dataflow.init_partial_order(all_ppts);
-      if (debugTrace.isDebugEnabled()) {
-        debugTrace.debug ("Partial order initialized");
+      if (debugTrace.isLoggable(Level.FINE)) {
+        debugTrace.fine ("Partial order initialized");
       }
       all_ppts.trimToSize();
       System.out.print(" (read ");
@@ -620,7 +621,7 @@ public final class Daikon {
       e.printStackTrace();
       throw new Error(e.toString());
     } finally {
-      debugTrace.debug("Time spent on read_declaration_files: " + elapsedTime());
+      debugTrace.fine ("Time spent on read_declaration_files: " + elapsedTime());
     }
   }
 
@@ -641,7 +642,7 @@ public final class Daikon {
         e.printStackTrace();
         throw new Error(e.toString());
       } finally {
-        debugTrace.debug("Time spent on load_spinfo_files: " + elapsedTime());
+        debugTrace.fine ("Time spent on load_spinfo_files: " + elapsedTime());
       }
     }
   }
@@ -658,7 +659,7 @@ public final class Daikon {
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(map_files.size(), "file"));
       System.out.println(")");
-      debugTrace.debug("Time spent on load_map_files: " + elapsedTime());
+      debugTrace.fine ("Time spent on load_map_files: " + elapsedTime());
     }
   }
 
@@ -679,8 +680,8 @@ public final class Daikon {
         pconds = SplitterList.get(ppt.name);
       }
       if (pconds != null) {
-        if (Global.debugSplit.isDebugEnabled()) {
-          Global.debugSplit.debug("Got "
+        if (Global.debugSplit.isLoggable(Level.FINE)) {
+          Global.debugSplit.fine ("Got "
                                   + UtilMDE.nplural(pconds.length, "splitter")
                                   + " for " + ppt.name);
         }
@@ -701,12 +702,12 @@ public final class Daikon {
       while (true) {
         System.out.print("\r[" + (df.format(new Date())) + "]: " + message());
         try {
-          if (debugTrace.isDebugEnabled()) {
-            debugTrace.debug ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
-            debugTrace.debug ("Used memory: " +
+          if (debugTrace.isLoggable(Level.FINE)) {
+            debugTrace.fine ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
+            debugTrace.fine ("Used memory: " +
                               (java.lang.Runtime.getRuntime().totalMemory()
                                - java.lang.Runtime.getRuntime().freeMemory()));
-            debugTrace.debug ("Active slices: " + FileIO.data_num_slices);
+            debugTrace.fine ("Active slices: " + FileIO.data_num_slices);
 
             // We sleep shorter so we can get more information.
             sleep(500);
@@ -774,7 +775,7 @@ public final class Daikon {
       e.printStackTrace();
       throw new Error(e.toString());
     } finally {
-      debugTrace.debug("Time spent on read_data_trace_files: " + elapsedTime());
+      debugTrace.fine ("Time spent on read_data_trace_files: " + elapsedTime());
     }
 
     if (monitor != null) {

@@ -9,7 +9,8 @@ import java.io.ObjectStreamException;
 import java.io.InvalidObjectException;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
