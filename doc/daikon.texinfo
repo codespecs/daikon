@@ -219,7 +219,8 @@ Context GUI
 Front ends
 
 * Java front end dfej::         
-* C front end dfec::            
+* Binary C front end Kvasir::   
+* Source-based C front end dfec::  
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
 
@@ -229,7 +230,11 @@ Java front end dfej
 * Scope of instrumentation::    
 * Refined runtime types::       
 
-C front end dfec
+Binary C front end Kvasir
+
+* Using Kvasir::                
+
+Source-based C front end dfec
 
 * dfec command-line arguments::  
 * Daikon runtime customization::  
@@ -641,9 +646,10 @@ LDFLAGS=-L. -lw -o $(EXECUTABLE)
 @cindex installing dfec
 @cindex dfec installation
 
-For instructions on detecting invariants in C programs, @xref{C
-front end dfec}.  If you wish to detect invariants in C programs,
-first perform the following installation steps.
+For instructions on detecting invariants in C programs,
+@xref{Source-based C front end dfec}.  If you wish to detect
+invariants in C programs, first perform the following installation
+steps.
 
 @enumerate
 @item
@@ -1642,7 +1648,7 @@ file.
 @end itemize
 
 For more information about dfec, including more detailed documentation
-on its command-line options, see @ref{C front end dfec}.
+on its command-line options, see @ref{Source-based C front end dfec}.
 
 
 @c <ol>
@@ -2984,12 +2990,13 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 
 @menu
 * Java front end dfej::         
-* C front end dfec::            
+* Binary C front end Kvasir::   
+* Source-based C front end dfec::  
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
 @end menu
 
-@node    Java front end dfej, C front end dfec, Front ends, Front ends
+@node    Java front end dfej, Binary C front end Kvasir, Front ends, Front ends
 @section Java front end dfej
 
 @cindex front end for Java
@@ -3486,10 +3493,82 @@ comment immediately before the declared type (but after any modifiers like
 @c   			  The current version does not require Python.
 @c @end example
 
+@node Binary C front end Kvasir, Source-based C front end dfec, Java front end dfej, Front ends
+@section Binary C front end Kvasir
 
+Daikon's older C front end, known as dfec, works by rewriting the
+source code for your C program. To avoid some of the limitations of
+this approach, Daikon's new front end for C, named Kvasir, instead
+works by examining the operation of an unmodified binary at
+runtime. Kvasir is named after the Norse god of beet juice (and
+knowledge).
 
-@node    C front end dfec, Perl front end dfepl, Java front end dfej, Front ends
-@section C front end dfec
+Kvasir is based on the Valgrind dynamic program supervision framework
+(which is best known for its memory error detection tool). Using
+Valgrind allows Kvasir to interrupt your program's execution, read its
+variables, and examine its memory usage, all transparently to the
+program. Also, rather than using your program's source code to find
+the names and types of functions and variables, Kvasir obtains them
+from debugging information included in an executable in a standard
+format. These differences should make Kvasir much easier to use than
+the source-rewriting-based dfec, as well as allowing it to operate on
+larger programs.
+
+However, Kvasir has some limitations of its own. Because Kvasir uses
+Valgrind, it shares Valgrind's limitation of working only under the
+Linux operating system, and only on Intel 386-compatible processors
+(the so-called IA-32 architecture) such as the Intel Pentium and the
+AMD Athlon.  Furthermore, requires that your program have debugging
+information available in the DWARF-2 format, as produced by recent
+versions of GCC. Two other limitations are not fundamental, but apply
+to the current version: first, the programs used by Kvasir should be
+compiled without optimization; and second, the programs should be
+written in C. (In the future, Kvasir may support C++ and other
+languages that follow C calling conventions.)
+
+@c Be sure to remove this once it becomes our of date
+As of Daikon version 3.0.5, Kvasir is still in an early stage of
+development. While it works well on many programs, it does not yet
+support all of the options that the older dfec did, nor all of its
+features. The most important limitation of the current version is that
+it does not support arrays: arrays are instead treated as pointers, so
+that only the directly pointed-to value is printed.
+
+@menu
+* Using Kvasir::                
+@end menu
+
+@node Using Kvasir,  , Binary C front end Kvasir, Binary C front end Kvasir
+@subsection Using Kvasir
+
+The first step in using Kvasir is to compile your program using the
+DWARF-2 format of debugging information, and without optimization.
+In most recent versions of GCC (at least 2.95 and higher), DWARF-2
+debugging information can be produced by supplying the
+@code{-gdwarf-2} command line option. In more recent versions of GCC 3,
+DWARF-2 is in fact the default format for debugging information.
+Also, remove any optimization flags, such as @code{-O} or @code{-O2},
+and any flags that affect calling conventions, such as
+@code{-fomit-frame-pointer}. Except for these changes, you should be
+able to compile and link your program normally.
+
+In the second step of using Kvasir, run your program as you normally
+would, but prepend the command @code{kvasir-dfec} to the beginning.
+For instance, if you would normally run your program with the command 
+@example
+./program -option input.file
+@end example
+just say
+@example
+kvasir-dfec ./program -option input.file
+@end example
+As well as running your program (more slowly that usual), this command
+will also create a directory @file{daikon-output} in the current
+directory containing @file{program.decls} and @file{program.dtrace}
+files suitable as input to Daikon.
+
+@node    Source-based C front end dfec, Perl front end dfepl, Binary C front end Kvasir, Front ends
+@section Source-based C front end dfec
 
 @cindex front end for C
 @cindex C front end
@@ -3590,7 +3669,7 @@ java daikon.Daikon daikon-output/myprog.decls \
 * dfec requirements::           
 @end menu
 
-@node    dfec command-line arguments, Daikon runtime customization, C front end dfec, C front end dfec
+@node    dfec command-line arguments, Daikon runtime customization, Source-based C front end dfec, Source-based C front end dfec
 @subsection dfec command-line arguments
 
 This section describes dfec's command-line options.
@@ -3779,7 +3858,7 @@ address-of-array operations in the older, pcc-style manner.
 @end table
 
 
-@node    Daikon runtime customization, Pointer type disambiguation, dfec command-line arguments, C front end dfec
+@node    Daikon runtime customization, Pointer type disambiguation, dfec command-line arguments, Source-based C front end dfec
 @subsection Daikon runtime customization
 
 @cindex dfec customizations
@@ -3808,7 +3887,7 @@ You can turn specific Daikon warnings on and off.
 
 
 
-@node    Pointer type disambiguation, Instrumentation scope, Daikon runtime customization, C front end dfec
+@node    Pointer type disambiguation, Instrumentation scope, Daikon runtime customization, Source-based C front end dfec
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -4032,7 +4111,7 @@ orig(*bar) == 6
 @end example
 
 
-@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, C front end dfec
+@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, Source-based C front end dfec
 @subsection Instrumentation scope
 
 @cindex instrumentation scope
@@ -4194,7 +4273,7 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements,  , Instrumentation scope, C front end dfec
+@node    dfec requirements,  , Instrumentation scope, Source-based C front end dfec
 @subsection dfec requirements
 
 @command{dfec} does not output the contents of C unions.  This section
@@ -4543,8 +4622,7 @@ equivalent file.
   export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
 @end example
 
-
-@node Perl front end dfepl, CSV front end convertcsv.pl, C front end dfec, Front ends
+@node Perl front end dfepl, CSV front end convertcsv.pl, Source-based C front end dfec, Front ends
 @section Perl front end dfepl
 
 @cindex front end for Perl
@@ -7023,6 +7101,23 @@ The Daikon Perl front end dfepl may be used and distributed under the
 regular Daikon license or, at your option, either the GNU General
 Public License or the Perl Artistic License (that is, under the same
 terms as Perl itself).
+
+The Daikon dynamic C front end Kvasir is based in part on the Valgrind
+dynamic program supervision framework, copyright 2000-2004 Julian
+Seward, the Sparrow Valgrind tool, copyright 2002 Nicholas Nethercote,
+the MemCheck Valgrind tool, copyright 2000-2004 Julian Seward, and the
+readelf program of the GNU Binutils, copyright 1998-2003 the Free
+Software Foundation, Inc. Kvasir is free software; you can
+redistribute it and/or modify it under the terms of the GNU General
+Public License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+Kvasir is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details. You should have received a copy of the GNU General
+Public License along with Kvasir; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
 
 If you use Daikon, please subscribe to the daikon-announce and
 daikon-discuss mailing lists (@pxref{Mailing lists}).  The
