@@ -69,8 +69,6 @@ public final class Global {
   public static int can_be_missing_variables = 0;
   public static int canonical_variables = 0;
 
-  public static boolean old_tracker = false;
-
   /// Variable derivation
   public static int nonsensical_suppressed_derived_variables = 0;
   public static int tautological_suppressed_derived_variables = 0;

@@ -20,7 +20,6 @@ public class ValueTracker
   // remove fields, you should change this number to the current date.
   // static final long serialVersionUID = 20030811L;
   static final long serialVersionUID = 20020122L;
-
   public final int max_values;
 
   // 8 was chosen because the only Invariants that use this,
@@ -168,8 +167,7 @@ public class ValueTracker
   protected void add_prim(long v1) {
     if (values_cache == null) return;
     // if ((v1 == 0) || (v1 == -1)) return;
-    if (!Global.old_tracker)
-      v1 = v1 + 10; // Do this so that -1 and 0 don't both hash to the same value
+    v1 = v1 + 10; // Do this so that -1 and 0 don't both hash to the same value
     add_prim(hashLong(v1));
   }
 
@@ -181,27 +179,17 @@ public class ValueTracker
   protected void add_prim(int v1) {
     if (values_cache == null) return;
 
-    for (int i = 0; i < ((Global.old_tracker) ? max_values : values_end); i++) {
+    for (int i = 0; i < values_end; i++) {
       double elt = values_cache[i];
-      if (Global.old_tracker) {
-        if (elt == 0) {
-          values_cache[i] = v1;
-          return;
-        }
-      }
       if (elt == v1) {
         return;
       }
     }
 
-    if (!Global.old_tracker) {
-      values_cache[values_end++] = v1;
+    values_cache[values_end++] = v1;
 
-      if (values_end == max_values)
-        values_cache = null;
-    } else {
+    if (values_end == max_values)
       values_cache = null;
-    }
   }
 
   public void elt_add(int v1) {
@@ -293,27 +281,17 @@ public class ValueTracker
   protected void add_prim(double v1) {
     if (values_cache == null) return;
 
-    for (int i = 0; i < ((Global.old_tracker) ? max_values : values_end); i++) {
+    for (int i = 0; i < values_end; i++) {
       double elt = values_cache[i];
-      if (Global.old_tracker) {
-        if (elt == 0) {
-          values_cache[i] = v1;
-          return;
-        }
-      }
       if (elt == v1) {
         return;
       }
     }
 
-    if (!Global.old_tracker) {
       values_cache[values_end++] = v1;
 
       if (values_end == max_values)
         values_cache = null;
-    } else {
-      values_cache = null;
-    }
   }
 
   public void elt_add(double v1) {
