@@ -6,6 +6,7 @@ import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.scalar.*;
 import daikon.inv.sequence.*;
+import daikon.inv.string.*;
 import daikon.inv.twoScalar.*;
 import daikon.inv.twoSequence.*;
 import daikon.split.*;
@@ -234,7 +235,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  static PptTopLevel entry_ppt(PptTopLevel ppt, PptMap all_ppts) {
+  static String entry_ppt_name(PptTopLevel ppt) {
 
     // Don't do this, because it returns a value for :::LOOP, etc.
     // if (ppt.name.endsWith(FileIO.enter_tag))
@@ -255,7 +256,13 @@ public class PptTopLevel extends Ppt {
     int match_begin = match.beginOffset(0);
     String fn_name = ppt.name.substring(0, match_begin);
 
-    String entry_ppt_name = (fn_name + FileIO.enter_tag).intern();
+    return (fn_name + FileIO.enter_tag).intern();
+
+  }
+
+  static PptTopLevel entry_ppt(PptTopLevel ppt, PptMap all_ppts) {
+
+    String entry_ppt_name = entry_ppt_name(ppt);
 
     return (PptTopLevel) all_ppts.get(entry_ppt_name);
   }
@@ -1111,7 +1118,8 @@ public class PptTopLevel extends Ppt {
         Assert.assert(unary_view.invs.size() == 1);
         Invariant inv = (Invariant) unary_view.invs.elementAt(0);
         Assert.assert((inv instanceof OneOfScalar)
-                      || (inv instanceof OneOfSequence));
+                      || (inv instanceof OneOfSequence)
+                      || (inv instanceof OneOfString));
       } else {
         // The old one was a failure (and so saw only a subset of all the
         // values); recreate it.

@@ -65,6 +65,10 @@ public class NonEqual extends TwoScalar {
       return Invariant.PROBABILITY_UNKNOWN;
     else {
       int overlap = Math.min(max1, max2) - Math.max(min1, min2);
+      // Looks like we're comparing pointers.  Fix this later.
+      if (overlap < 0)
+        return 0;
+
       Assert.assert(overlap >= 0);
       overlap++;
       int range1 = max1 - min1 + 1;

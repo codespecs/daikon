@@ -18,9 +18,11 @@ import utilMDE.*;
 // known_types = integral_types + ("pointer", "address")
 
 public final class ProglangType {
-  // Use .equals(), not ==, to copmare to these types.
+  // Use .equals(), not ==, to compare to these types.
   public static ProglangType INT = new ProglangType("int", 0);
+  public static ProglangType STRING = new ProglangType("String", 0);
   public static ProglangType INT_ARRAY = new ProglangType("int", 1);
+  public static ProglangType STRING_ARRAY = new ProglangType("String", 1);
 
   private String base;		// interned name of base type
   public String base() { return base; }
@@ -39,6 +41,9 @@ public final class ProglangType {
    */
   private ProglangType(String basetype, int dims) {
     Assert.assert(basetype == basetype.intern());
+    // Oooh, hack.  Yuck.
+    if (basetype == "boolean")
+      basetype = "int";
     base = basetype;
     dimensions = dims;
   }
@@ -159,6 +164,9 @@ public final class ProglangType {
   public final static String TYPE_POINTER = "pointer";
   public final static String TYPE_STRING = "String";
 
+  final static Integer Zero = new Integer(0); // avoid duplicate allocations
+  final static Integer One = new Integer(0); // avoid duplicate allocations
+
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
   // Canonicalize where possible.
@@ -175,6 +183,15 @@ public final class ProglangType {
       } else if ((base == TYPE_ADDRESS) || (base == TYPE_POINTER)) {
 	return Integer.valueOf(value, 16);
       } else if ((base == TYPE_CHAR) || (base == TYPE_INT)) {
+        // Is this still necessary?
+        // Hack for Java objects, fix later I guess.
+        if (value.equals("null"))
+          return Zero;
+        // Hack for booleans
+        if (value.equals("false"))
+          return Zero;
+        if (value.equals("true"))
+          return One;
 	return Integer.valueOf(value);
 	// Old implementation
 	// if type(value) == types.IntType:

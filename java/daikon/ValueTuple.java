@@ -149,7 +149,7 @@ public class ValueTuple implements Cloneable {
 
   static int parseModified(String raw) {
     int result = new Integer(raw).intValue();
-    Assert.assert((result == 0) || (result == 1));
+    Assert.assert((result == 0) || (result == 1) || (result == 2));
     return result;
   }
 

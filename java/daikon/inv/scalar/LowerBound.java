@@ -3,6 +3,8 @@ package daikon.inv.scalar;
 import daikon.*;
 import daikon.inv.*;
 
+import java.util.*;
+
 // LowerBound >= 0 is implied by the variable being the length of an array or list.
 //         self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
 // That affects only printing, I think.
@@ -111,7 +113,20 @@ class LowerBound extends SingleScalar {
       return 0;
     }
 
-    boolean uniform_justified = (((min3 - min2) == (min2 - min1))
+    int modulus = 1;
+    {
+      for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+        Invariant inv = (Invariant) itor.next();
+        if ((inv instanceof Modulus) && inv.justified()) {
+          modulus = ((Modulus) inv).modulus;
+          break;
+        }
+      }
+    }
+
+
+    boolean uniform_justified = (((min3 - min2) == modulus)
+                                 && ((min2 - min1) == modulus)
                                  && (num_min1 > avg_samples_per_val/2)
                                  && (num_min2 > avg_samples_per_val/2)
                                  && (num_min3 > avg_samples_per_val/2));

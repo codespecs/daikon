@@ -84,7 +84,8 @@ class FileIO {
 	e.printStackTrace();
 	throw new Error(e.toString());
       }
-    after_processing_all_declarations(all_ppts);
+    // Now done by read_declaration_file
+    // after_processing_all_declarations(all_ppts);
   }
 
   /**
@@ -96,7 +97,7 @@ class FileIO {
   }
 
 
-  // Yes, this prohibits concurrency.  Big deal.
+  // Yes, this static variable prohibits concurrency.  Big deal.
   static int varcomp_format = VarComparability.NONE;
 
   // Maybe the caller should deal with converting this into a regular
@@ -107,12 +108,14 @@ class FileIO {
    *        If a string, it is converted into a case-insensitive regular
    *        expression, and only program points matching it are considered.
    */
-  static void read_declaration_file(String filename, PptMap all_ppts, Pattern fn_regexp) throws IOException {
+  static Vector read_declaration_file(String filename, PptMap all_ppts, Pattern fn_regexp) throws IOException {
 
     // Get all function names to add checks on ftn invocation counts
 
     if (Global.debugRead)
       System.out.println("read_declaration_file " + filename + " " + ((fn_regexp != null) ? fn_regexp.getPattern() : ""));
+
+    Vector new_ppts = new Vector();
 
     BufferedReader reader = UtilMDE.BufferedFileReader(filename);
     String line = reader.readLine();
@@ -124,8 +127,8 @@ class FileIO {
       if (line.equals("") || line.startsWith("//"))
 	continue;
       if (line.equals(declaration_header)) {
-	Ppt ppt = read_declaration(reader, all_ppts, fn_regexp);
-	all_ppts.put(ppt.name, ppt);
+	Ppt ppt = read_declaration(reader, all_ppts, fn_regexp, filename);
+        new_ppts.add(ppt);
 	continue;
       }
       if (line.equals("VarComparability")) {
@@ -154,6 +157,12 @@ class FileIO {
       }
       continue;
     }
+    for (int i=0; i<new_ppts.size(); i++) {
+      Ppt ppt = (Ppt) new_ppts.elementAt(i);
+      all_ppts.put(ppt.name, ppt);
+    }
+    after_processing_all_declarations(new_ppts, all_ppts);
+    return new_ppts;
   }
 
 
@@ -161,7 +170,7 @@ class FileIO {
   // This has certain parallels with read_data_trace file; but I think
   // separating the implementations is clearer, even if there's a bit of
   // duplication.
-  static Ppt read_declaration(BufferedReader file, PptMap all_ppts, Object fn_regexp) throws IOException {
+  static Ppt read_declaration(BufferedReader file, PptMap all_ppts, Object fn_regexp, String filename) throws IOException {
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
     // if (fn_regexp and not fn_regexp.search(ppt_name)):
@@ -189,7 +198,7 @@ class FileIO {
       String rep_type_string = file.readLine();
       String comparability_string = file.readLine();
       if ((proglang_type_string == null) || (rep_type_string == null) || (comparability_string == null))
-	throw new Error("End of file while reading variable " + varname + " in declaration of program point " + ppt_name);
+	throw new Error("End of file " + filename + " while reading variable " + varname + " in declaration of program point " + ppt_name);
       int equals_index = proglang_type_string.indexOf(" = ");
       // static_constant_value is a future enhancement
       String static_constant_value_string = null;
@@ -240,6 +249,24 @@ class FileIO {
 
 
 
+  // Only processes the ppts in the given Vector.
+  static void after_processing_all_declarations(Vector ppts, PptMap all_ppts) {
+
+    /// Add _orig vars.
+
+    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      PptTopLevel entry_ppt = ppt.entry_ppt(all_ppts);
+      if (entry_ppt != null) {
+	entry_ppts.put(ppt, entry_ppt);
+        ppt.add_orig_vars(entry_ppt);
+      }
+    }
+  }
+
+
+/// Old version.
+/// This should probably call the new version.
 // I ought to be able to call this individually for each program point,
 // after processing its declarations, right?  Yes for adding _orig
 // variables (but only after reading the corresponding entry program
@@ -449,7 +476,7 @@ class FileIO {
       System.out.println("read_data_trace_file " + filename + " " + fn_regexp);
     }
 
-    BufferedReader reader = UtilMDE.BufferedFileReader(filename);
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
 
     // init_ftn_call_ct();          // initialize function call counts to 0
     call_stack = new Stack();
@@ -503,16 +530,19 @@ class FileIO {
 	line = reader.readLine();
 	String value_rep = line;
 	line = reader.readLine();
-	Assert.assert(line.equals("1") || line.equals("0"));
+	Assert.assert(line.equals("0") || line.equals("1") || line.equals("2"));
 	String mod_string = line;
 	int mod = ValueTuple.parseModified(line);
 	mods[val_index] = mod;
         if (ValueTuple.modIsMissing(mod)) {
+          Assert.assert(value_rep.equals("missing"));
           vals[val_index] = null;
           // This might not be the correct index to use
           vis[val_index].canBeMissing = true;
         } else {
           vals[val_index] = vi.rep_type.parse_value(value_rep);
+          // Testing, to catch a particular value once upon a time.
+          // Assert.assert(! vals[val_index].equals("null"));
         }
 	val_index++;
       }
@@ -540,11 +570,17 @@ class FileIO {
               // exceptional exit at runtime and keep looking down the stack
               // for the proper matching function entry.
               throw new Error("Unexpected function name " + invoc.fn_name
-                              + ", expected " + fn_name);
+                              + ", expected " + fn_name + " at " + filename + " line " + reader.getLineNumber());
             Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars);
             for (int i=0; i<ppt.num_orig_vars; i++) {
               vals[ppt.num_tracevars+i] = invoc.vals[i];
               mods[ppt.num_tracevars+i] = invoc.mods[i];
+              // Possibly more efficient to set this all at once, late in
+              // the game; but this gets it done.
+              if (ValueTuple.modIsMissing(mods[ppt.num_tracevars+i])) {
+                vis[ppt.num_tracevars+i].canBeMissing = true;
+                Assert.assert(vals[ppt.num_tracevars+i] == null);
+              }
             }
           }
 	}

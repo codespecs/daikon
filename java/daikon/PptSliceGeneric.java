@@ -4,6 +4,7 @@ package daikon;
 import daikon.inv.*;
 import daikon.inv.scalar.*;
 import daikon.inv.twoScalar.*;
+import daikon.inv.string.*;
 import daikon.inv.sequence.*;
 import daikon.inv.twoSequence.*;
 import daikon.inv.sequenceScalar.*;
@@ -65,27 +66,46 @@ public class PptSliceGeneric extends PptSlice {
     if (Global.debugPptSliceGeneric)
       System.out.println("instantiate_invariants (pass " + pass + ") for " + name + ": originally " + invs.size() + " invariants in " + invs);
     if (arity == 1) {
-      if (var_infos[0].type.isArray()) {
-        SingleSequenceFactory.instantiate(this, pass);
-      } else {
+      ProglangType rep_type = var_infos[0].rep_type;
+      if (rep_type.equals(ProglangType.INT)) {
         SingleScalarFactory.instantiate(this, pass);
+      } else if (rep_type.equals(ProglangType.INT_ARRAY)) {
+        SingleSequenceFactory.instantiate(this, pass);
+      } else if (rep_type.equals(ProglangType.STRING)) {
+        SingleStringFactory.instantiate(this, pass);
+      } else if (rep_type.equals(ProglangType.STRING_ARRAY)) {
+        // SingleStringSequenceFactory.instantiate(this, pass);
+      } else {
+        // Do nothing; don't even complain
       }
     } else if (arity == 2) {
-      boolean array1 = var_infos[0].type.isArray();
-      boolean array2 = var_infos[1].type.isArray();
-      if (array1 && array2) {
-        TwoSequenceFactory.instantiate(this, pass);
-      } else if (array1 || array2) {
-        SequenceScalarFactory.instantiate(this, pass);
-      } else {
+      ProglangType rep1 = var_infos[0].rep_type;
+      ProglangType rep2 = var_infos[1].rep_type;
+      if (rep1.equals(ProglangType.INT)
+          && rep2.equals(ProglangType.INT)) {
         TwoScalarFactory.instantiate(this, pass);
+      } else if (rep1.equals(ProglangType.INT)
+          && rep2.equals(ProglangType.INT_ARRAY)) {
+        SequenceScalarFactory.instantiate(this, pass);
+      } else if (rep1.equals(ProglangType.INT_ARRAY)
+          && rep2.equals(ProglangType.INT)) {
+        SequenceScalarFactory.instantiate(this, pass);
+      } else if (rep1.equals(ProglangType.INT_ARRAY)
+          && rep2.equals(ProglangType.INT_ARRAY)) {
+        TwoSequenceFactory.instantiate(this, pass);
+      } else {
+        // Do nothing; don't even complain
       }
     } else if (arity == 3) {
-      boolean array1 = var_infos[0].type.isArray();
-      boolean array2 = var_infos[1].type.isArray();
-      boolean array3 = var_infos[2].type.isArray();
-      if (! (array1 || array2 || array3)) {
+      ProglangType rep1 = var_infos[0].rep_type;
+      ProglangType rep2 = var_infos[1].rep_type;
+      ProglangType rep3 = var_infos[2].rep_type;
+      if (rep1.equals(ProglangType.INT)
+          && rep2.equals(ProglangType.INT)
+          && rep3.equals(ProglangType.INT)) {
         ThreeScalarFactory.instantiate(this, pass);
+      } else {
+        // Do nothing; don't even complain
       }
     } else {
       throw new Error("bad arity");
@@ -185,22 +205,33 @@ public class PptSliceGeneric extends PptSlice {
     int num_invs = invs.size();
     if (arity == 1) {
       VarInfo vi = var_infos[0];
-      if (vi.rep_type.isArray()) {
-        for (int i=0; i<num_invs; i++) {
-          SingleSequence inv = (SingleSequence)invs.elementAt(i);
-          int mod = vi.getModified(full_vt);
-          if (mod == ValueTuple.MISSING)
-            continue;
-          int[] value = (int[])vi.getValue(full_vt);
-          inv.add(value, mod, count);
-        }
-      } else {
+      ProglangType rep = vi.rep_type;
+      if (rep.equals(ProglangType.INT)) {
         for (int i=0; i<num_invs; i++) {
           SingleScalar inv = (SingleScalar)invs.elementAt(i);
           int mod = vi.getModified(full_vt);
           if (mod == ValueTuple.MISSING)
             continue;
           int value = vi.getIntValue(full_vt);
+          inv.add(value, mod, count);
+        }
+      } else if (rep.equals(ProglangType.STRING)) {
+        for (int i=0; i<num_invs; i++) {
+          // System.out.println("Trying " + invs.elementAt(i));
+          SingleString inv = (SingleString) invs.elementAt(i);
+          int mod = vi.getModified(full_vt);
+          if (mod == ValueTuple.MISSING)
+            continue;
+          String value = vi.getStringValue(full_vt);
+          inv.add(value, mod, count);
+        }
+      } else if (rep.equals(ProglangType.INT_ARRAY)) {
+        for (int i=0; i<num_invs; i++) {
+          SingleSequence inv = (SingleSequence)invs.elementAt(i);
+          int mod = vi.getModified(full_vt);
+          if (mod == ValueTuple.MISSING)
+            continue;
+          int[] value = (int[])vi.getValue(full_vt);
           inv.add(value, mod, count);
         }
       }

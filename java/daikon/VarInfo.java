@@ -79,6 +79,11 @@ public class VarInfo implements Cloneable {
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
     // didn't.
+    Assert.assert(rep_type_.equals(ProglangType.INT)
+                  || rep_type_.equals(ProglangType.STRING)
+                  || rep_type_.equals(ProglangType.INT_ARRAY)
+                  || rep_type_.equals(ProglangType.STRING_ARRAY));
+
     name = name_.intern();
     type = type_;
     rep_type = rep_type_;
@@ -229,6 +234,7 @@ public class VarInfo implements Cloneable {
     else
       return vt.getValue(value_index);
   }
+
   public int getIntValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null)
@@ -237,6 +243,10 @@ public class VarInfo implements Cloneable {
       // return 0;
       return 222222;
     return ((Integer)raw).intValue();
+  }
+
+  public String getStringValue(ValueTuple vt) {
+    return (String) getValue(vt);
   }
 
   public int[] getIntArrayValue(ValueTuple vt) {
