@@ -680,7 +680,7 @@ the class, ppt, and vars match.  If they don't match, the same
 information is logged via the specified logger.  For example:
 
 @example
-    if (Debug.logOn || logger.isDebugEnabled()) @{
+    if (Debug.logOn || logger.isLoggable (Level.FINE)) @{
       Debug.log (logger, getClass(), ppt, "Entering routine foo");
     @}
 @end example
