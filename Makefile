@@ -192,7 +192,7 @@ dist-ensure-directory-exists: $(DIST_DIR)
 # ("doc/CHANGES" goes even before that, because
 # update-doc-dist-date-and-version changes its modification date.)
 
-dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-version clean-java compile-java prev-versions $(DIST_DIR_PATHS)
+dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-version clean-java compile-java prev-release-contents $(DIST_DIR_PATHS)
 	$(MAKE) update-dist-dir
 	$(MAKE) -n dist-dfej
 
@@ -648,7 +648,7 @@ use-%: daikon-is-symlink
 	[ -e tests.$* ]
 	rm -f java/daikon
 	ln -s ../daikon.$* java/daikon
-	$(MAKE) compile tags >& /dev/null &
+	$(MAKE) tags >& /dev/null &
 	rm -f tests
 	ln -s tests.$* tests
 
