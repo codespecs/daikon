@@ -20,6 +20,8 @@ use Getopt::Long ();
 use File::Path 'mkpath';
 use File::Basename;
 use File::Spec::Functions 'rel2abs';
+use File::Find;
+use Cwd 'getcwd';
 
 my $verbose = 0;
 my $perl = $^X;
@@ -43,9 +45,14 @@ my $decls_append = 1;
 my $dtrace_append = 0;
 
 my $absolute = undef;
+my $instr_absolute = undef;
 my $types_absolute = undef;
 my $decls_absolute = undef;
 my $dtrace_absolute = undef;
+
+my $reference_depth = 3;
+my $accessor_depth = 1.5;
+my $list_depth = 3;
 
 sub careful_system {
     my @cmd = @_;
@@ -61,8 +68,21 @@ sub careful_system {
 
 sub file_id {
     my($fname) = @_;
-    my($dev, $inode) = stat($fname);
+    my($dev, $inode) = stat($fname) or die "Couldn't stat $fname: $!\n";
     return "$dev:$inode";
+}
+
+my @found_modules = ();
+
+sub is_module {
+    my ($dev,$ino,$mode,$nlink,$uid,$gid);
+
+    if ((($dev,$ino,$mode,$nlink,$uid,$gid) = lstat($_)) &&
+	-f _ && /^.*\.pm\z/s) {
+	push @found_modules, $File::Find::name;
+	print "Found module $File::Find::name\n" if $verbose;
+	return 1;
+    }
 }
 
 unless (exists $ENV{"INV"}) {
@@ -93,6 +113,9 @@ my $parsed =
 			 "accessors-dir|A:s" => \$accessors_search,
 			 "verbose|v+" => \$verbose,
 			 "absolute!" => \$absolute,
+			 "reference-depth=f", => \$reference_depth,
+			 "accessor-depth=f", => \$accessor_depth,
+			 "list-depth=n", => \$list_depth,
 # This is probably more control than anyone needs
 # 			 "types-absolute!" => \$types_absolute,
 # 			 "decls-absolute!" => \$decls_absolute,
@@ -105,14 +128,20 @@ exit(1) unless $parsed;
 $types_basedir = $instr_basedir if not defined($types_basedir);
 
 if (defined $absolute) {
+    $instr_absolute = $absolute unless defined $instr_absolute;
     $types_absolute = $absolute unless defined $types_absolute;
     $decls_absolute = $absolute unless defined $decls_absolute;
     $dtrace_absolute = $absolute unless defined $dtrace_absolute;
 }
 
+$instr_absolute = 0 unless defined $instr_absolute;
 $types_absolute = 1 unless defined $types_absolute;
 $decls_absolute = 0 unless defined $decls_absolute;
 $dtrace_absolute = 0 unless defined $dtrace_absolute;
+
+if ($instr_absolute) {
+    $instr_basedir = rel2abs($instr_basedir);
+}
 
 if ($types_absolute) {
     $types_basedir = rel2abs($types_basedir);
@@ -142,6 +171,18 @@ unless ($dtrace_style =~ /^tree|flat|combined\z/) {
     die "dtrace-style should be one of tree, flat, or combined\n";
 }
 
+if ($reference_depth < 0) {
+    die "reference_depth should be non-negative\n";
+}
+
+if ($accessor_depth < 0) {
+    die "accessor_depth should be non-negative\n";
+}
+
+if ($list_depth < 0) {
+    die "list_depth should be non-negative\n";
+}
+
 if (defined($types_search) and $types_search eq "") {
     $types_search = $types_basedir;
 }
@@ -150,17 +191,10 @@ if (defined($accessors_search) and $accessors_search eq "") {
     $accessors_search = ".";
 }
 
-if (! -d $instr_basedir) {
-    mkdir($instr_basedir) or die "Can't create directory $instr_basedir: $!\n";
-}
-
-my $inplace = file_id($instr_basedir) eq file_id(".");
-
 if ($verbose) {
     print STDERR "Verbosity level $verbose\n";
     print STDERR "Instrumented sources in $instr_basedir\n";
     print STDERR "Reading types from @types_files\n" if @types_files;
-    print STDERR "Annotating in place? ", $inplace ? "yes" : "no", "\n";
     print STDERR "Looking for types in $types_search\n" if $types_search;
     print STDERR "Looking for accessors in $accessors_search\n"
       if $accessors_search;
@@ -177,13 +211,34 @@ for my $tfile (@types_files) {
 my $output_opt = ",-O,$types_basedir,$types_style,$types_append";
 $output_opt .= ",$decls_basedir,$decls_style,$decls_append";
 $output_opt .= ",$dtrace_basedir,$dtrace_style,$dtrace_append";
+$output_opt .= ",-D,$reference_depth,$accessor_depth,$list_depth";
 
 $types = ",-t" . $types if $types;
 my $deparse_opt = "-MO=DeparseDaikon$types$output_opt";
 my $perl_lib = "-I$ENV{INV}/front-end/perl/lib";
 
-for my $prog (@ARGV) {
+sub process_file_relative_to {
+    my($prog, $dir) = @_;
     my $from;
+
+    my $olddir = undef;
+    if ($dir ne ".") {
+	$olddir = getcwd();
+	chdir($dir);
+	print "Changing to directory $dir\n";
+    }
+
+    $prog =~ s,\Q$dir\E[/]?,,;
+
+    if (! -d $instr_basedir) {
+        mkdir($instr_basedir)
+          or die "Can't create directory $instr_basedir: $!\n";
+    }
+
+    my $inplace = file_id($instr_basedir) eq file_id(".");
+    print STDERR "Annotating in place? ", $inplace ? "yes" : "no", "\n"
+      if $verbose;
+
     if ($inplace) {
 	$from = "$prog.uninst";
 	if (! -e $from) {
@@ -234,4 +289,21 @@ for my $prog (@ARGV) {
     }
     careful_system($perl, $perl_lib, "$deparse_opt,-o,$outfile$more_opts",
 		   $from);
+    if (defined($olddir)) {
+	print "Changing back to $olddir\n";
+	chdir($olddir);
+    }
 }
+
+for my $arg (@ARGV) {
+    if (-f $arg) {
+	process_file_relative_to($arg, ".");
+    } elsif (-d $arg) {
+	File::Find::find({wanted => \&is_module}, $arg);
+	for my $file (@found_modules) {
+	    process_file_relative_to($file, $arg);
+	}
+	@found_modules = ();
+    }
+}
+
