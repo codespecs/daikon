@@ -11,7 +11,7 @@ import daikon.Global;
 //   add takes one, two, or three Objects; is defined in ValueTracker[123],
 //     and calls add_val
 //   add_val takes Objects, casts them to their actual types, hashes them
-//     to an integer, and calls add_prim on them; is defined abstract in
+//     to an integer, and calls add_int on them; is defined abstract in
 //     ValueTracker[123] and is defined in subtypes.
 //   add_int inserts an int
 
@@ -221,6 +221,7 @@ public class ValueTracker
 
     public Object clone() {
       ValueTrackerOneArray result = (ValueTrackerOneArray) super.clone();
+      Assert.assertTrue(result.no_dup_elt_count == this.no_dup_elt_count);
       if (seq_index_cache != null) {
         result.seq_index_cache = (int[]) seq_index_cache.clone();
       }
@@ -440,24 +441,6 @@ public class ValueTracker
     }
   }
 
-  public static class ValueTrackerFloatArrayFloat extends ValueTracker2 {
-    // We are Serializable, so we specify a version to allow changes to
-    // method signatures without breaking serialization.  If you add or
-    // remove fields, you should change this number to the current date.
-    static final long serialVersionUID = 20031017L;
-
-    public ValueTrackerFloatArrayFloat(int max_values) {
-      super(max_values);
-    }
-    protected void add_val(Object v1, Object v2) {
-      double[] a = (double[]) v1;
-      double d = ((Double) v2).doubleValue();
-      for (int i = 0; i < a.length; i++) {
-        add_int(UtilMDE.hash(a[i], d));
-      }
-    }
-  }
-
   // SeqIntComparison Invariants are the only ones so far that use this, so
   // I matched this method up with SeqIntComparison's old notions of
   // "values" (if a sample is a[] and b, then each pair {a[i],b} is a
@@ -474,6 +457,24 @@ public class ValueTracker
     protected void add_val(Object v1, Object v2) {
       long[] a = (long[]) v1;
       long d = ((Long) v2).longValue();
+      for (int i = 0; i < a.length; i++) {
+        add_int(UtilMDE.hash(a[i], d));
+      }
+    }
+  }
+
+  public static class ValueTrackerFloatArrayFloat extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
+    public ValueTrackerFloatArrayFloat(int max_values) {
+      super(max_values);
+    }
+    protected void add_val(Object v1, Object v2) {
+      double[] a = (double[]) v1;
+      double d = ((Double) v2).doubleValue();
       for (int i = 0; i < a.length; i++) {
         add_int(UtilMDE.hash(a[i], d));
       }
@@ -545,28 +546,6 @@ public class ValueTracker
 
   }
 
-  public static class ValueTrackerTwoFloatArray extends ValueTrackerTwoArray {
-    // We are Serializable, so we specify a version to allow changes to
-    // method signatures without breaking serialization.  If you add or
-    // remove fields, you should change this number to the current date.
-    static final long serialVersionUID = 20031017L;
-
-    public ValueTrackerTwoFloatArray(int max_values) {
-      super(max_values);
-    }
-    protected void add_val(Object v1, Object v2) {
-      double[] a1 = (double[]) v1;
-      double[] a2 = (double[]) v2;
-      add_int(UtilMDE.hash(a1, a2));
-
-      if (elt_values_cache == null) return;
-      if (a1.length != a2.length) return;
-      for (int i=0; i < a1.length; i++) {
-        elt_add(UtilMDE.hash(a1[i], a2[i]));
-      }
-    }
-  }
-
   public static class ValueTrackerTwoScalarArray extends ValueTrackerTwoArray {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -579,6 +558,28 @@ public class ValueTracker
     protected void add_val(Object v1, Object v2) {
       long[] a1 = (long[]) v1;
       long[] a2 = (long[]) v2;
+      add_int(UtilMDE.hash(a1, a2));
+
+      if (elt_values_cache == null) return;
+      if (a1.length != a2.length) return;
+      for (int i=0; i < a1.length; i++) {
+        elt_add(UtilMDE.hash(a1[i], a2[i]));
+      }
+    }
+  }
+
+  public static class ValueTrackerTwoFloatArray extends ValueTrackerTwoArray {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
+    public ValueTrackerTwoFloatArray(int max_values) {
+      super(max_values);
+    }
+    protected void add_val(Object v1, Object v2) {
+      double[] a1 = (double[]) v1;
+      double[] a2 = (double[]) v2;
       add_int(UtilMDE.hash(a1, a2));
 
       if (elt_values_cache == null) return;
