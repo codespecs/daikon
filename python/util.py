@@ -66,6 +66,8 @@ def gcd_list(nums):
     for n in nums:
         # First call is a bit of a waste, since the two arguments are identical
         result = gcd(result, n)
+        if result == 1:
+            return result
     return result
 
 def _test_gcd_list():
@@ -301,6 +303,9 @@ integers are equal to 0 mod 1 is not returned (None is returned instead)."""
     ## I think I don't need to sort
     # nums = list(nums)			# convert arg if it's a tuple
     # nums.sort()
+
+    ## Rather than computing the entire list_differences, I could inline
+    ## and bail out early.  Perhaps not worth it for now.
     modulus = abs(gcd_list(list_differences(nums)))
     if modulus == 1:
         return None
