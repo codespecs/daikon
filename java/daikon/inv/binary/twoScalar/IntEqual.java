@@ -193,9 +193,10 @@ public final class IntEqual
     return false;
   }
 
-  public boolean isObviousDynamically() {
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    
 
     // a+c=b+c is implied, because a=b must have also been reported.
     return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&

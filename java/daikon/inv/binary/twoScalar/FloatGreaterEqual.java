@@ -215,22 +215,28 @@ public final class FloatGreaterEqual
     return false;
   }
 
-  public boolean isObviousDynamically() {
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    
 
-    { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
-      FloatEqual ie = FloatEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */ ) {
-        return true;
-      }
-    }
+    PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
+    if (ppt != null) {
 
-    { // If we know x>y, then x>=y is uninteresting
-      FloatGreaterThan igt = FloatGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
-        return true;
+      { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
+        FloatEqual ie = FloatEqual.find(ppt);
+        if ((ie != null) /* && ie.enoughSamples() */ ) {
+          return true;
+        }
       }
+
+      { // If we know x>y, then x>=y is uninteresting
+        FloatGreaterThan igt = FloatGreaterThan.find(ppt);
+        if ((igt != null) /* && igt.enoughSamples() */ ) {
+          return true;
+        }
+      }
+
     }
 
 // #ifndef EQUAL
@@ -383,7 +389,7 @@ public final class FloatGreaterEqual
 //       }
 //     }
 
-    return false;
+    return super.isObviousDynamically (vis);
   } // isObviousImplied
 
 }

@@ -215,9 +215,15 @@ public final class IntGreaterThan
     return false;
   }
 
-  public boolean isObviousDynamically() {
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    
+
+    PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
+    if (ppt != null) {
+
+    }
 
 // #ifndef EQUAL
 //     { // Check for comparisons against constants
@@ -377,7 +383,7 @@ public final class IntGreaterThan
 //       }
 //     }
 
-    return false;
+    return super.isObviousDynamically (vis);
   } // isObviousImplied
 
 }

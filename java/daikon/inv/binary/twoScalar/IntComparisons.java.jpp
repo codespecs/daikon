@@ -489,113 +489,118 @@ invariants.
     return false;
   }
 
-  public boolean isObviousDynamically() {
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    
 #if (defined(EQUAL) || defined(EQUALFLOAT))
     // a+c=b+c is implied, because a=b must have also been reported.
     return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
               ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
 #else
+
+    PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
+    if (ppt != null) {
 #ifdef NONEQUAL
-    { // If we know x<y or x>y, then x!=y is uninteresting
-      IntLessThan ilt = IntLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-        return true;
+      { // If we know x<y or x>y, then x!=y is uninteresting
+        IntLessThan ilt = IntLessThan.find(ppt);
+        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+          return true;
+        }
+        IntGreaterThan igt = IntGreaterThan.find(ppt);
+        if ((igt != null) /* && igt.enoughSamples() */ ) {
+          return true;
+        }
       }
-      IntGreaterThan igt = IntGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
-        return true;
-      }
-    }
 #endif
 
 #ifdef NONEQUALFLOAT
-    { // If we know x<y or x>y, then x!=y is uninteresting
-      FloatLessThan ilt = FloatLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-        return true;
+      { // If we know x<y or x>y, then x!=y is uninteresting
+        FloatLessThan ilt = FloatLessThan.find(ppt);
+        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+          return true;
+        }
+        FloatGreaterThan igt = FloatGreaterThan.find(ppt);
+        if ((igt != null) /* && igt.enoughSamples() */ ) {
+          return true;
+        }
       }
-      FloatGreaterThan igt = FloatGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
-        return true;
-      }
-    }
 #endif
 
 #if defined(LESSEQUAL) || defined(GREATEREQUAL)
-    { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
-      IntEqual ie = IntEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */ ) {
-        return true;
+      { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
+        IntEqual ie = IntEqual.find(ppt);
+        if ((ie != null) /* && ie.enoughSamples() */ ) {
+          return true;
+        }
       }
-    }
 #endif
 
 #if defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT)
-    { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
-      FloatEqual ie = FloatEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */ ) {
-        return true;
+      { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
+        FloatEqual ie = FloatEqual.find(ppt);
+        if ((ie != null) /* && ie.enoughSamples() */ ) {
+          return true;
+        }
       }
-    }
 #endif
 
 #if defined(LESSEQUAL)
-    { // If we know x<y, then x<=y is uninteresting
-      IntLessThan ilt = IntLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-        return true;
+      { // If we know x<y, then x<=y is uninteresting
+        IntLessThan ilt = IntLessThan.find(ppt);
+        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+          return true;
+        }
       }
-    }
 #endif
 #if defined(LESSEQUALFLOAT)
-    { // If we know x<y, then x<=y is uninteresting
-      FloatLessThan ilt = FloatLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-        return true;
+      { // If we know x<y, then x<=y is uninteresting
+        FloatLessThan ilt = FloatLessThan.find(ppt);
+        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+          return true;
+        }
       }
-    }
 #endif
 
 #if defined(GREATEREQUAL)
-    { // If we know x>y, then x>=y is uninteresting
-      IntGreaterThan igt = IntGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
-        return true;
+      { // If we know x>y, then x>=y is uninteresting
+        IntGreaterThan igt = IntGreaterThan.find(ppt);
+        if ((igt != null) /* && igt.enoughSamples() */ ) {
+          return true;
+        }
       }
-    }
 #endif
 
 #if defined(GREATEREQUALFLOAT)
-    { // If we know x>y, then x>=y is uninteresting
-      FloatGreaterThan igt = FloatGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
-        return true;
+      { // If we know x>y, then x>=y is uninteresting
+        FloatGreaterThan igt = FloatGreaterThan.find(ppt);
+        if ((igt != null) /* && igt.enoughSamples() */ ) {
+          return true;
+        }
       }
-    }
 #endif
 
 
 #if defined(LESS) || defined(GREATER)
-    { // If we know y=x+c, then any x<y or x>y comparison is uninteresting
-      LinearBinary lb = LinearBinary.find(ppt);
-      if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
-        Assert.assertTrue(lb.core.b != 0);
-        return true;
+      { // If we know y=x+c, then any x<y or x>y comparison is uninteresting
+        LinearBinary lb = LinearBinary.find(ppt);
+        if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
+          Assert.assertTrue(lb.core.b != 0);
+          return true;
+        }
       }
-    }
 #endif
 
 #if defined(LESSFLOAT) || defined(GREATERFLOAT)
-    { // If we know y=x+c, then any x<y or x>y comparison is uninteresting
-      LinearBinaryFloat lb = LinearBinaryFloat.find(ppt);
-      if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
-        Assert.assertTrue(lb.core.b != 0);
-        return true;
+      { // If we know y=x+c, then any x<y or x>y comparison is uninteresting
+        LinearBinaryFloat lb = LinearBinaryFloat.find(ppt);
+        if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
+          Assert.assertTrue(lb.core.b != 0);
+          return true;
+        }
       }
-    }
 #endif
+    }
 
 // #ifndef EQUAL
 //     { // Check for comparisons against constants
@@ -764,7 +769,7 @@ invariants.
 //       }
 //     }
 
-    return false;
+    return super.isObviousDynamically (vis);
 #endif  // #if !defined(EQUAL)
   } // isObviousImplied
 

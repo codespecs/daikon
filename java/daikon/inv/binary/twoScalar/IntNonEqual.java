@@ -219,19 +219,25 @@ public final class IntNonEqual
     return false;
   }
 
-  public boolean isObviousDynamically() {
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    
 
-    { // If we know x<y or x>y, then x!=y is uninteresting
-      IntLessThan ilt = IntLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-        return true;
+    PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
+    if (ppt != null) {
+
+      { // If we know x<y or x>y, then x!=y is uninteresting
+        IntLessThan ilt = IntLessThan.find(ppt);
+        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+          return true;
+        }
+        IntGreaterThan igt = IntGreaterThan.find(ppt);
+        if ((igt != null) /* && igt.enoughSamples() */ ) {
+          return true;
+        }
       }
-      IntGreaterThan igt = IntGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
-        return true;
-      }
+
     }
 
 // #ifndef EQUAL
@@ -384,7 +390,7 @@ public final class IntNonEqual
 //       }
 //     }
 
-    return false;
+    return super.isObviousDynamically (vis);
   } // isObviousImplied
 
 }
