@@ -44,6 +44,11 @@ public abstract class Invariant
   public static final Category debugPrint = Category.getInstance ("daikon.print");
 
   /**
+   * Debug tracer for invariant flow.
+   **/
+  public static final Category debugFlow = Category.getInstance ("daikon.flow.flow");
+
+  /**
    * Debug tracer for printing equality invariants
    **/
   public static final Category debugPrintEquality = Category.getInstance ("daikon.print.equality");
@@ -299,7 +304,7 @@ public abstract class Invariant
   }
 
   /**
-   * Essentially the same as flow(this).  Useful way to flow oneself
+ * Essentially the same as flow(this).  Useful way to flow oneself
    * without much hassle (as long as internal state is still OK).
    * Nice point of control in case we later have to tweak things when
    * flowing ourselves.
@@ -326,6 +331,9 @@ public abstract class Invariant
    * this to list of falsified or weakened invariants.
    **/
   public void destroyAndFlow () {
+    if (debugFlow.isDebugEnabled()) {
+      debugFlow.debug(repr() + " at " + ppt.parent.name + " added to destroy.");
+    }
     flowThis();
     destroy();
     ppt.addToChanged (this);
@@ -339,6 +347,9 @@ public abstract class Invariant
    * former is needed for flow, the latter for suppression.
    **/
   public void cloneAndFlow() {
+    if (debugFlow.isDebugEnabled()) {
+      debugFlow.debug(repr() + " at " + ppt.parent.name + " added to flowed.");
+    }
     flowClone();
     ppt.addToChanged (this);
   }
@@ -360,6 +371,43 @@ public abstract class Invariant
   }
 
   /**
+   * Take an invariant and transfer it into a new PptSlice.
+   * @param new_ppt must have the same arity and types
+   * @param permutation gives the varinfo array index mapping in the
+   * new ppt
+   **/
+  public Invariant transfer(PptSlice new_ppt,
+                            int[] permutation
+                            )
+  {
+    // Check some sanity conditions
+    Assert.assertTrue(new_ppt.arity == ppt.arity);
+    Assert.assertTrue(permutation.length == ppt.arity);
+    for (int i=0; i < ppt.arity; i++) {
+      VarInfo oldvi = ppt.var_infos[i];
+      VarInfo newvi = new_ppt.var_infos[permutation[i]];
+      if (oldvi.type != newvi.type) {
+        System.err.println ("Error, incompatible types for transfer: " +
+                            oldvi.name.name() + " and " + newvi.name.name());
+      }
+      Assert.assertTrue(oldvi.type == newvi.type);
+      Assert.assertTrue(oldvi.rep_type == newvi.rep_type);
+      Assert.assertTrue(oldvi.file_rep_type == newvi.file_rep_type);
+    }
+
+    Invariant result;
+    // Clone it
+    result = (Invariant) this.clone();
+
+    // Fix up the fields
+    result.ppt = new_ppt;
+    // Let subclasses fix what they need to
+    result = result.resurrect_done(permutation);
+
+    return result;
+  }
+
+  /**
    * Take a falsified invariant and resurrect it in a new PptSlice.
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping
@@ -375,7 +423,10 @@ public abstract class Invariant
     for (int i=0; i < ppt.arity; i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
-      Assert.assertTrue(oldvi.type == newvi.type);
+      if (oldvi.type != newvi.type) {
+        System.err.println ("Error, incompatible types for resurrection: " +
+                            oldvi.name.name() + " and " + newvi.name.name());
+      }
       Assert.assertTrue(oldvi.rep_type == newvi.rep_type);
       Assert.assertTrue(oldvi.file_rep_type == newvi.file_rep_type);
     }
@@ -558,6 +609,12 @@ public abstract class Invariant
         inv1 = ((GuardingImplication)inv1).right;
       if (inv2 instanceof GuardingImplication)
         inv2 = ((GuardingImplication)inv2).right;
+
+      // Put equality invariants first
+      if ((inv1 instanceof Comparison) && (! (inv2 instanceof Comparison)))
+        return -1;
+      if ((! (inv1 instanceof Comparison)) && (inv2 instanceof Comparison))
+        return 1;
 
       // Assert.assertTrue(inv1.ppt.parent == inv2.ppt.parent);
       VarInfo[] vis1 = inv1.ppt.var_infos;
