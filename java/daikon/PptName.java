@@ -251,6 +251,28 @@ public class PptName
   }
 
   /**
+   * Get fully qualified name for the program point without any variable
+   * information.
+   * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT85
+   */
+
+  public String getFullNamePoint() {
+
+    String ppt_str = "";
+    String my_method = getNameWithoutPoint();
+    if (my_method != null)
+      ppt_str += my_method;
+    if (point != null) {
+      int paren = point.indexOf ("(");
+      if (paren > 0)
+        ppt_str += ":::" + point.substring (0, paren);
+      else
+        ppt_str += ":::" + point;
+    }
+    return (ppt_str.intern());
+  }
+
+  /**
    * @return true iff this name refers to a synthetic object instance
    * program point
    **/
