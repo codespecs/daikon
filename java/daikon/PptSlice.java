@@ -373,7 +373,10 @@ public abstract class PptSlice
   // I don't just use ppt.invs.remove because I want to be able to defer
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
-    Assert.assertTrue(! no_invariants);
+
+    if (Debug.logDetail())
+      log ("Removing invariant '" + inv.format() + "'");
+    Assert.assertTrue(! no_invariants, "no_invariants at " + this);
     Assert.assertTrue(invs.contains(inv));
     boolean removed = invs.remove(inv);
     Assert.assertTrue(removed);
@@ -381,7 +384,8 @@ public abstract class PptSlice
     Global.falsified_invariants++;
     if (invs.size() == 0) {
       no_invariants = true;
-      // System.out.println("Removing view " + this.name + " because removed last invariant " + inv.format());
+      if (Debug.logDetail())
+        log ("last invariant removed");
     }
   }
 
@@ -920,6 +924,10 @@ public abstract class PptSlice
     throw new Error("Shouldn't get called");
   }
 
+  public PptSlice copy_new_invs (PptTopLevel ppt, VarInfo[] vis) {
+    throw new Error("Shouldn't get called");
+  }
+
   /**
    * For debugging only.
    **/
@@ -929,6 +937,104 @@ public abstract class PptSlice
       sb.append (" " + var_infos[i].name.name());
     }
     return this.getClass().getName() + ": " + parent.ppt_name + " " + sb + " samples: " + num_samples();
+  }
+  /**
+   * Returns whether or not this slice already contains the specified
+   * invariant.  Whether not invariants match is determine by Invariant.match()
+   * This will return true for invariants of the same kind with different
+   * formulas (eg, one_of, bound, linearbinary)
+   */
+  public boolean contains_inv (Invariant inv) {
+
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant mine = (Invariant) i.next();
+      if (mine.match (inv))
+        return (true);
+    }
+    return (false);
+  }
+
+  /**
+   * Returns whether or not this slice contains an exact match
+   * for the specified invariant.  An exact match requires that the
+   * invariants be of the same class and have the same formula
+   */
+  public boolean contains_inv_exact (Invariant inv) {
+
+    return (find_inv_exact(inv) != null);
+  }
+
+  /**
+   * Returns the invariant that matches the specified invariant if it
+   * exists.  Otherwise returns null.  An exact match requires that
+   * the invariants be of the same class and have the same formula
+   */
+  public Invariant find_inv_exact (Invariant inv) {
+
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant mine = (Invariant) i.next();
+      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv))
+        return (mine);
+    }
+    return (null);
+  }
+
+
+  public void clone_values_cache_from (PptSlice slice, int[] permute) {
+    throw new Error("Shouldn't get called");
+  }
+
+  public void log (String msg) {
+
+    Debug.log (getClass(), this, msg);
+  }
+
+  /**
+   * Finds the global slice that corresponds the the slice identified
+   * by local_vis.  Returns null if there is no corresponding slice.
+   * Note that each local variable must have the same transform to the
+   * global ppt for there to be a matching global slice.
+   **/
+  public PptSlice find_global_slice (VarInfo[] local_vis) {
+
+    // Each var must have the same global transform in order for there
+    // to be a matching global slice
+    boolean post_xform = local_vis[0].is_post_global();
+    if (!local_vis[0].is_global())
+      return (null);
+    for (int i = 1; i < local_vis.length; i++) {
+      if (!local_vis[i].is_global()
+          || (post_xform != local_vis[i].is_post_global()))
+        return (null);
+    }
+
+    // Transform each local to the global ppt.  The global must be
+    // a leader if the local one is.
+    VarInfo[] global_vis = new VarInfo[local_vis.length];
+    for (int i = 0; i < local_vis.length; i++) {
+      global_vis[i] = local_vis[i].global_var();
+      Assert.assertTrue (global_vis[i].isCanonical());
+    }
+
+    // As long as the variables are in the same order at the Global ppt,
+    // there should be no permutation necessary between the global
+    // and local slice (and thus global_vis should already be sorted)
+    for (int i = 0; i < arity - 1; i++) {
+      if (global_vis[i].varinfo_index > global_vis[i+1].varinfo_index) {
+        System.out.println ("localvars = " + VarInfo.toString(local_vis));
+        System.out.println ("Globalvars = " + VarInfo.toString(global_vis));
+        for (int j = 0; j < arity; j++)
+          System.out.print (local_vis[j].varinfo_index + "/"
+                            + global_vis[j].varinfo_index + " ");
+        System.out.println ();
+        Assert.assertTrue (global_vis[i].varinfo_index
+                           <= global_vis[i+1].varinfo_index);
+      }
+    }
+
+    // Look for this slice at the global ppt and return it
+    PptSlice slice = PptTopLevel.global.findSlice (global_vis);
+    return (slice);
   }
 
 }
