@@ -37,7 +37,7 @@
 @c Copyright 1990 Free Software Foundation, Inc.
 @c @end ifinfo
 
-@c avoid black boxes marking overfull hboxes in TeX output
+@c Avoid black boxes marking overfull hboxes in TeX output.
 @finalout
 
 @titlepage
@@ -60,7 +60,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2003
+Copyright @copyright{} 1998-2005
 @c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
@@ -97,9 +97,9 @@ It describes Daikon version 4.0.0, released February 7, 2005.
 @menu
 * Introduction::                
 * Installing Daikon::           
+* Example usage::               
 * Running Daikon::              
 * Daikon output::               
-* GUIs::                        
 * Front ends::                  
 * Enhancing Daikon output::     
 * Tools::                       
@@ -132,20 +132,16 @@ Windows requirements for running Daikon
 
 * Cygwin environment variables::  
 
-Running Daikon
+Example usage for Java, C, and Perl
 
 * Detecting invariants in Java programs::  
 * Detecting invariants in C programs::  
 * Detecting invariants in Perl programs::  
-* Detect invariants::           
 
 Detecting invariants in Java programs
 
+* Eclipse plug-in::             
 * StackAr example::             
-* Understanding the invariants::  
-
-StackAr example
-
 * Understanding the invariants::  
 
 Detecting invariants in C programs
@@ -158,7 +154,7 @@ Detecting invariants in Perl programs
 * Instrumenting Perl programs::  
 * Perl examples::               
 
-Detect invariants in the data trace files
+Running Daikon
 
 * Command line options::        
 
@@ -181,46 +177,34 @@ Variable names
 
 * orig variable example::       
 
-GUIs for displaying invariants
-
-* Eclipse plug-in::             
-* Tree GUI::                    
-* Context GUI::                 
-
-Tree-structured invariant browser
-
-* Invoking Tree GUI::           
-* Invariants Display::          
-* Control panel::               
-
-Control panel
-
-* Property filters::            
-* Variable filters::            
-
-Context GUI
-
-* Context GUI with Emacs::      
-* Installing the Context GUI::  
-
 Front ends
 
 * Java front end Chicory::      
-* Source-based Java front end dfej::  
 * C front end Kvasir::          
-* Source-based C front end dfec::  
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
+* Source-based Java front end dfej::  
+* Source-based C front end dfec::  
 
 Java front end Chicory
 
 * Chicory options::             
 
+C front end Kvasir
+
+* Using Kvasir::                
+* Kvasir options::              
+* Kvasir limitations::          
+* Installing Kvasir::           
+
+Perl front end dfepl
+
+* dfepl options::               
+
 Source-based Java front end dfej
 
 * Instrumenting Java programs::  
 * StackAr example with dfej::   
-* Step-by-step instructions::   
 * dfej options::                
 * Run Java::                    
 * Scope of instrumentation::    
@@ -234,12 +218,6 @@ StackAr example with dfej
 * Automating the process::      
 * Second Java example::         
 
-Step-by-step instructions
-
-* Summary of Daikon use::       
-* Automating the process::      
-* Second Java example::         
-
 Details on running instrumented Java programs
 
 * Java applets::                
@@ -247,13 +225,6 @@ Details on running instrumented Java programs
 All-in-one script daikon.pl
 
 * daikon.pl arguments::         
-
-C front end Kvasir
-
-* Using Kvasir::                
-* Kvasir options::              
-* Kvasir limitations::          
-* Installing Kvasir::           
 
 Source-based C front end dfec
 
@@ -289,10 +260,6 @@ Installing dfec, the source-based Daikon front end for C
 
 * dfec EDG sources::            
 
-Perl front end dfepl
-
-* dfepl options::               
-
 Enhancing Daikon output
 
 * Configuration options::       
@@ -326,7 +293,7 @@ Enhancing conditional invariant detection
 * Cluster analysis for splitters::  
 * Random selection for splitters::  
 
-Tools
+Tools for manipulating invariants
 
 * Annotate::                    
 * Runtime-check instrumenter::  
@@ -339,15 +306,31 @@ Runtime-check instrumenter (runtimechecker)
 
 Troubleshooting
 
-* dfej problems::               
-* dfec problems::               
 * Daikon problems::             
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
-* Tree GUI font errors::        
+* dfej problems::               
+* dfec problems::               
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
+
+Problems running Daikon
+
+* No return from procedure::    
+* Out of memory::               
+* Simplify errors::             
+* Contradictory invariants::    
+* Method needs to be implemented::  
+* JVM initialization error::    
+* Daikon runs slowly::          
+
+Large data trace (.dtrace) files
+
+* Reducing program points::     
+* Reducing variables::          
+* Reducing executions::         
+* Reading trace data on the fly::  
 
 Problems with dfej
 
@@ -374,23 +357,6 @@ Problems compiling and linking instrumented programs
 * Compiler problems::           
 * Linker problems::             
 
-Problems running Daikon
-
-* No return from procedure::    
-* Out of memory::               
-* Simplify errors::             
-* Contradictory invariants::    
-* Method needs to be implemented::  
-* JVM initialization error::    
-* Daikon runs slowly::          
-
-Large data trace (.dtrace) files
-
-* Reducing program points::     
-* Reducing variables::          
-* Reducing executions::         
-* Reading trace data on the fly::  
-
 Details
 
 * History::                     
@@ -403,13 +369,13 @@ File formats
 * Conventions::                 
 * Declaration files::           
 * Data trace files::            
-* Examples::                    
+* Example files::               
 
 Declaration files
 
 * pptname format::              
 
-Examples
+Example files
 
 * Example declaration file::    
 * Example data trace file::     
@@ -496,7 +462,7 @@ you may send mail to the list asking to be added.
 @end table
 
 
-@node    Installing Daikon, Running Daikon, Introduction, Top
+@node    Installing Daikon, Example usage, Introduction, Top
 @chapter Installing Daikon
 @cindex installing Daikon
 
@@ -524,7 +490,7 @@ For example, you could use one of the following sets of commands:
 @example
 cd @var{daikonparent}
 wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
-tar zxvf daikon.tar.gz
+tar zxf daikon.tar.gz
 @end example
 @noindent
 or
@@ -565,7 +531,7 @@ source $DAIKONPARENT/daikon/bin/daikon.bashrc
 @end itemize
 @noindent
 
-After editing your shell initialization file, either execute commands
+After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
 effect.
 
@@ -605,9 +571,10 @@ discussions with other Daikon users and developers.
 Other sections of the manual give installation instructions for several
 special-purpose components of Daikon:  the C front end Kvasir
 (@pxref{Installing Kvasir}), the source-based Java front end dfej
-(@pxref{Installing dfej}), the source-based C front end dfec
-(@pxref{Installing dfec}), and the Context GUI (@pxref{Installing the
-Context GUI}).  Most users will not need to read those instructions,
+(@pxref{Installing dfej}), and the source-based C front end dfec
+(@pxref{Installing dfec})
+@c , and the Context GUI (@pxref{Installing the Context GUI}).
+Most users will not need to read those instructions,
 however.
 
 
@@ -630,8 +597,9 @@ wish to analyze C or C++ programs, you need a C or C++ compiler such as
 
 If you wish to edit the Daikon sources, then re-compile Daikon, you will
 need the C preprocessor, @command{cpp}.  If you have a C compiler, you
-almost certainly have @command{cpp}.  (Alternately, you can use
-@command{gcc -E}.)
+almost certainly have @command{cpp}.
+@c This is true, but it's extraneous and not-so-helpful detail.
+@c (Alternately, you can use @command{gcc -E}.)
 
 @menu
 * Windows requirements::        
@@ -645,12 +613,12 @@ almost certainly have @command{cpp}.  (Alternately, you can use
 @cindex Cygwin toolset
 
 If you are running Daikon under Microsoft Windows, you have two
-options:  using native Windows utilities and using the Cygwin
+options:  using native Windows utilities, or using the Cygwin
 environment.  These are described below.
 
 (Daikon and most of its related programs, such as dfej, run under
 Windows as command-line applications.  You should invoke them from a
-command shell --- either an Windows command shell or a cygwin command
+command shell --- either an Windows command shell or a Cygwin command
 shell --- rather than by double-clicking their icons.  In any event,
 double-clicking would not supply the proper arguments to the program.)
 
@@ -719,34 +687,22 @@ CYGWIN_RUNNER_ENV="PATH:CLASSPATH:PWD") so users can set CYGWIN_RUNNER_ENV
 in their dotfiles or various wrappers.)
 
 
-@c ** Commented out with the elimination of the need for modbit-munge
-@c You may also need to install
-@c @uref{http://www.activestate.com/ASPN,ActiveState Perl} in order to run
-@c the @command{modbit-munge.pl} script.  A user reports that Cygwin perl
-@c does not deal properly with files whose lines are separated by
-@c "@samp{\r\n}", which is the DOS default.  It deals fine with files whose
-@c lines are separated with "@samp{\n}", which is the Unix default.  By
-@c contrast, ActiveState Perl deals properly with both varieties.  You can
-@c download ActiveState Perl from
-@c @uref{http://www.activestate.com/ASPN/Downloads/ActivePerl/index/}.
-
-
-@node    Running Daikon, Daikon output, Installing Daikon, Top
-@chapter Running Daikon
+@node    Example usage, Running Daikon, Installing Daikon, Top
+@chapter Example usage for Java, C, and Perl
 
 Detecting invariants involves two steps:
 @enumerate
 @item
 Obtain a data trace file by running your program under the control of a
 front end (also known as an instrumenter) that records information about
-varible values.  You can run your program over an input of your own
+variable values.  You can run your program over an input of your own
 choosing, such as regression tests or a typical user input session.
 
 @item
 Run the Daikon invariant detector over the data trace files
-(@pxref{Detect invariants}).  This detects invariants in the data trace
-files.  You can display the invariants textually or via a graphical user
-interface.
+(@pxref{Running Daikon}).  This detects invariants in the recorded
+information.  You can view the invariants textually, or process them
+with an additional program.
 @end enumerate
 @noindent
 Often, you can run a single command that performs both steps.
@@ -763,10 +719,9 @@ longer supported.
 * Detecting invariants in Java programs::  
 * Detecting invariants in C programs::  
 * Detecting invariants in Perl programs::  
-* Detect invariants::           
 @end menu
 
-@node    Detecting invariants in Java programs, Detecting invariants in C programs, Running Daikon, Running Daikon
+@node    Detecting invariants in Java programs, Detecting invariants in C programs, Example usage, Example usage
 @section Detecting invariants in Java programs
 
 In order to detect invariants in a Java program, you run the
@@ -787,29 +742,51 @@ java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 
 
 @menu
+* Eclipse plug-in::             
 * StackAr example::             
 * Understanding the invariants::  
 @end menu
 
-@node    StackAr example, Understanding the invariants, Detecting invariants in Java programs, Detecting invariants in Java programs
+@node    Eclipse plug-in, StackAr example, Detecting invariants in Java programs, Detecting invariants in Java programs
+@subsection Eclipse plug-in
+@cindex Eclipse plug-in
+@cindex GUI, Eclipse
+
+Daikon is integrated with the 
+@uref{http://eclipse.org/, ,
+Eclipse} IDE (Integrated Development Environment) for Java.
+The Daikon plug-in provides a convenient way to instrument files,
+obtain trace information, analyze those traces,
+and create appropriately annotated Java source code.
+For
+details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
+documentation}.
+
+As of this writing (February 11, 2005), the plug-in only works with 
+Daikon 3 (for instance, version 3.1.7), not with Daikon 4.  Support for
+Daikon 4 is underway.
+
+
+@node    StackAr example, Understanding the invariants, Eclipse plug-in, Detecting invariants in Java programs
 @subsection StackAr example
 
-The Daikon distribution contains some example programs that will help
+The Daikon distribution contains some sample programs that will help
 you get practice in running Daikon.
 
-To detect invariants in the StackAr program, perform the following steps
+To detect invariants in the StackAr sample program, perform the following steps.
 
 @enumerate
-@item Compile the program with debugging symbols enabled --- the
-@option{-g} switch to @command{javac}.  (The program and test suite
-appear in the @file{DataStructures} subdirectory directory.)
+@item
+Compile the program with the @option{-g} switch to enable debugging
+symbols.  (The program and test suite appear in the
+@file{DataStructures} subdirectory directory.)
 @example
 cd examples/StackAr
 javac -g DataStructures/*.java
 @end example
 
 @item Run the program under the control of the Chicory front end, in
-order to create a @file{StackAr.dtrace} file.
+order to create a @file{StackArTester.dtrace.gz} file.
 
 @example
 java daikon.Chicory DataStructures.StackArTester
@@ -818,17 +795,20 @@ java daikon.Chicory DataStructures.StackArTester
 @item Run Daikon on the trace file.
 
 @example
-java daikon.Daikon -o StackAr.inv StackAr.dtrace
+java daikon.Daikon -o StackAr.inv StackArTester.dtrace.gz
 @end example
 
-Alternately, you can combine thie step and the previous one into a
+Alternately, you can combine this step and the previous one into a
 single command:
 @example
-java daikon.Chicory DataStructures.StackArTester
+java daikon.Chicory --daikon DataStructures.StackArTester
 @end example
 
 In either case, the invariants are printed to standard output, and a binary
 representation of the invariants is written to @file{StackAr.inv}.
+(As of February 13, 2005, the @file{StackAr.inv} file is not created
+unless you give an optional flag to the @option{--daikon} argument;
+@xref{Chicory options}.)
 
 @item Examine the invariants.
 
@@ -859,26 +839,23 @@ java daikon.tools.jtb.Annotate daikon-output/StackAr.inv \
 Now examine file @file{DataStructures/StackAr.java-escannotated}.
 For more information about the Annotate program, @xref{Annotate}.
 
-@item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
-contains a tree that hierarchically organizes program points according
-to their class and method.  Using the GUI, you can look at invariants
-for only the methods and program points you care about.
+@c @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
+@c contains a tree that hierarchically organizes program points according
+@c to their class and method.  Using the GUI, you can look at invariants
+@c for only the methods and program points you care about.
+@c 
+@c @example
+@c java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
+@c @end example
 
-@example
-java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
-@end example
-
-@item Use the Daikon Context GUI to browse the invariants.  As you move
-the cursor in an editor window, the Context GUI displays the invariants
-applicable to the current location (class or method).  For details on
-running the Context GUI, see @ref{Context GUI}.  
+@c @item Use the Daikon Context GUI to browse the invariants.  As you move
+@c the cursor in an editor window, the Context GUI displays the invariants
+@c applicable to the current location (class or method).  For details on
+@c running the Context GUI, see @ref{Context GUI}.  
 
 @end itemize
 @end enumerate
 
-@menu
-* Understanding the invariants::  
-@end menu
 
 @node    Understanding the invariants,  , StackAr example, Detecting invariants in Java programs
 @subsection Understanding the invariants
@@ -888,14 +865,16 @@ For more help interpreting invariants, see @ref{Interpreting output}.
 
 The StackAr example is an array-based stack implementation.  Take a
 look at @file{DataStructures/StackAr.java} to get a sense of the
-implementation.  Now, look at the first section of Daikon output.  In
-the Tree GUI, expand the node labeled @command{StackAr}, then select the
-node labeled @command{StackAr:Object}.
+implementation.  Now, look at the first section of Daikon output.
 
-@emph{(Note: The invariants displayed in the Tree GUI may be different than the
-invariants written to standard out by Daikon.  This is because the
-invariants are being filtered differently.  We are currently working
-to resolve this issue.)}
+@c   In
+@c the Tree GUI, expand the node labeled @command{StackAr}, then select the
+@c node labeled @command{StackAr:Object}.
+@c 
+@c @emph{(Note: The invariants displayed in the Tree GUI may be different than the
+@c invariants written to standard out by Daikon.  This is because the
+@c invariants are being filtered differently.  We are currently working
+@c to resolve this issue.)}
 
 @example
 ======================================================================
@@ -916,13 +895,14 @@ of the array.  Finally, the elements of the array are non-null if
 their index is no more than @code{topOfStack} and are null
 otherwise.
 
-Next, look at the invariants for the @code{top()} method.  In
-the Tree GUI, expand the node labeled @command{top()Ljava/lang/Object;}.
+Next, look at the invariants for the @code{top()} method.
+@c In
+@c the Tree GUI, expand the node labeled @command{top()Ljava/lang/Object;}.
 @code{top()} has two different exit points, at lines 78 and 79
 in the original source.  There is a set of invariants for each exit
 point, as well as a set of invariants that hold for all exit points.
-Look at the invariants when @code{top()} returns at line 79.  In
-the Tree GUI, select the node labeled @command{EXIT79}.
+Look at the invariants when @code{top()} returns at line 79.
+@c In the Tree GUI, select the node labeled @command{EXIT79}.
 
 @example
 ======================================================================
@@ -946,7 +926,7 @@ last invariant is not particularly interesting.
 
 
 
-@node    Detecting invariants in C programs, Detecting invariants in Perl programs, Detecting invariants in Java programs, Running Daikon
+@node    Detecting invariants in C programs, Detecting invariants in Perl programs, Detecting invariants in Java programs, Example usage
 @section Detecting invariants in C programs
 
 The C front end is named Kvasir.
@@ -984,10 +964,11 @@ In order to detect invariants over C programs, you must first install
 Kvasir; see @ref{Installing Kvasir}.
 
 To detect invariants for a program with Kvasir, you need to perform
-two basic tasks:  run the program under Kvasir to create a data strace
+two basic tasks:  run the program under Kvasir to create a data trace
 file (steps 1--2), and run
 Daikon over the data trace file to produce invariants (steps 3--4).
-The following instructions are for the wordplay example.
+The following instructions are for the wordplay example, which is a
+program for finding anagrams.
 
 @enumerate
 @item Change to the directory containing the program.
@@ -1005,21 +986,19 @@ of @file{.c} files separately, and then linking them together; in such
 a program, specify @option{-gdwarf-2} for each source file containing
 code you wish invariants about.
 
-@item Run the program using the kvasir-dtrace script.
+@item Run the program just as you normally would, but prepend
+@command{kvasir-dtrace} to the command line.
 @example
-kvasir-dtrace ./wordplay -f words.txt daikondynamicinvariantdetector
+kvasir-dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
 @end example
 
-Run the program just as you normally would, but prepend
-@command{kvasir-dtrace} to the front of the command line.  Any options to
-the program can be specified as usual; here, for instance, we give
-commands to look for anagrams of the phrase ``Daikon Dynamic Invariant
-Detector'' using words from the file @file{words.txt}.
-Note that we
-specified the program as @file{./wordplay}, rather than simply
-@file{wordplay}, to unambiguously specify that the program in the current
-directory was meant.
-Kvasir will not search for a program on your @code{PATH}.
+Any options to the program can be specified as usual; here, for
+instance, we give commands to look for anagrams of the phrase ``Daikon
+Dynamic Invariant Detector'' using words from the file @file{words.txt}.
+This command line specified the program as @command{./wordplay}, to
+unambiguously specify that the program in the current directory was
+meant; had we used simply @command{wordplay} instead, Kvasir would have
+search for a program named @command{wordplay} on your @code{PATH}.
 
 Executing under Kvasir, the program runs normally, but Kvasir will
 executes additional checks and collects trace information (for this
@@ -1048,12 +1027,12 @@ example uses a configuration option to disable the use of derived
 variables; it can also run without that option, but takes significantly
 longer.
 
-@item Examine the invariants.  As described in @xref{Step-by-step
-instructions}, there are several ways to do this:
+@item Examine the invariants.  As described in @xref{StackAr example},
+there are several ways to do this:
 @itemize 
 @item Examine the output from running Daikon.
 @item Use the PrintInvariants program to display the invariants.
-@item Use the Daikon Tree GUI to browse the invariants.  (Deprecated.)
+@c @item Use the Daikon Tree GUI to browse the invariants.  (Deprecated.)
 @end itemize
 @noindent
 For help understanding the invariants, see @ref{Interpreting output}.
@@ -1072,7 +1051,7 @@ resource usage.
 Since the default memory size used by Java virtual machines varies, we
 suggest that the examples be run with at least 256 megabytes of
 memory, specified for many JVMs by the option @option{-Xmx256m}.
-The schedule example uses even more space: we suggest specifying
+The @command{schedule} example uses even more space: we suggest specifying
 @option{-Xmx768m}, and avoiding the example altogether unless you
 workstation has at least a gigabyte of physical memory.  For more
 information about specifying the memory usage for Daikon, see
@@ -1105,7 +1084,7 @@ and long program runs, see @ref{Large dtrace files}.
 
 
 
-@node    Detecting invariants in Perl programs, Detect invariants, Detecting invariants in C programs, Running Daikon
+@node    Detecting invariants in Perl programs,  , Detecting invariants in C programs, Example usage
 @section Detecting invariants in Perl programs
 
 The Daikon front end for Perl is called dfepl.
@@ -1115,8 +1094,7 @@ process: first you must run the annotated program so that the runtime
 system can dynamically infer the kind of data stored in each variable,
 and then you must re-annotate and re-run the program with the added
 type information.
-This is necessary because Perl programs don't declare the
-types of their variables. 
+This is necessary because Perl programs do not contain type declarations. 
 
 dfepl requires version 5.8 or later of Perl.
 
@@ -1251,7 +1229,10 @@ The invariants are printed to the standard output, and a binary
 representation of them is also written in the @file{Birthday.inv}
 file.
 
-@item Examine the invariants.
+@item Examine the invariants.  They are printed to standard out, and
+they are also saved to file @file{Birthday.inv}, which you can
+manipulate with the PrintInvariants program and other Daikon tools.
+For example:
 @example
 java daikon.gui.treeGUI.InvariantsGUI Birthday.inv
 @end example
@@ -1287,22 +1268,32 @@ were declared, but since every stand-alone program uses the
 @file{.decls} file name to avoid collisions.
 
 
-@node    Detect invariants,  , Detecting invariants in Perl programs, Running Daikon
-@section Detect invariants in the data trace files
+@node    Running Daikon, Daikon output, Example usage, Top
+@chapter Running Daikon
 
 Run the Daikon invariant detector via the command
 @example
-    java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...} @var{spinfo-files...}
+java daikon.Daikon @i{[@var{flags}]} @var{dtrace-files...} @i{[@var{decl-files...}]} @var{spinfo-files...}
 @end example
 @noindent
 (For help in interpreting the output, @xref{Interpreting output}.)
 
+@itemize
+@item
+The @var{dtrace-files} are data trace (@file{.dtrace}) files containing
+variable values from an execution of the target program.
+@item
 The @var{decl-files} are declaration (@file{.decl}) files created at
-instrumentation time.
-The @var{dtrace-files} are data trace (@file{.dtrace}) files created by
-running the instrumented program.
-The @var{spinfo-files} are splitter info (@file{.spinfo}) files created
-automatically or by hand.
+instrumentation time.  These files are optional, because their content
+may appear in @file{.dtrace} files; for instance, the
+Chicory front end (@pxref{Java front end Chicory}) never creates
+@file{.decl} files.
+@item
+The @var{spinfo-files} are splitter info (@file{.spinfo}) files that
+enable detection of conditional invariants (@pxref{Conditional
+invariants}); these are optional and may be created automatically or by hand.
+@end itemize
+@noindent
 The files may appear in any order;
 the file type is determined by whether the file name contains
 @file{.decls}, @file{.dtrace}, or @file{.spinfo}.
@@ -1321,8 +1312,8 @@ The optional flags are described in @ref{Command line options}.
 * Command line options::        
 @end menu
 
-@node    Command line options,  , Detect invariants, Detect invariants
-@subsection Command line options for Daikon
+@node    Command line options,  , Running Daikon, Running Daikon
+@section Command line options for Daikon
 @cindex command line options for Daikon
 @cindex flags for Daikon
 
@@ -1366,6 +1357,8 @@ They can be divided into the following categories:
 @option{--disc_reason}
 @option{--mem_stat}
 @end table
+
+The arguments are described in detail in the following table.
 
 
 @c Unfortunately, @option{} adds quotes in the Info and printed output
@@ -1542,14 +1535,14 @@ Turns on debugging information on the specified class, variables, and
 ppt.  In contrast to the @option{--dbg} option, track logging follows
 a particular invariant through Daikon.  Multiple @option{--track} options
 can be specified.  Each item (class, variables, and ppt) is optional.  
-Multiple classes can be specified separted by vertical bars (|).  Matching
+Multiple classes can be specified separated by vertical bars (|).  Matching
 is a simple substring (not a regular expression) comparison.  Each item
 must match in order for a printout to occur.  See the Daikon Developer
 Manual for more information.
 
 @item --disc_reason @var{inv_class}<@var{var1},@var{var2},...>@@@var{ppt}
 Prints all discarded invariants of class @var{inv_class} at the ppt
-specified that involve exactly the vars given, as well as a short reason
+specified that involve exactly the variables given, as well as a short reason
 and discard code explaining why they were not worthy of print.  Any of 
 the three parts of the optarg may be made a wildcard by excluding it.
 For example, @samp{@var{inv_class}} and
@@ -1566,7 +1559,7 @@ current directory.
 
 
 
-@node    Daikon output, GUIs, Running Daikon, Top
+@node    Daikon output, Front ends, Running Daikon, Top
 @chapter Daikon output
 
 
@@ -1612,7 +1605,7 @@ Daikon can produce output in a variety of formats.  Each of the format
 names can be specified as an argument to the @option{--format} argument
 of Daikon (@pxref{Command line options}), PrintInvariants
 (@pxref{Printing invariants}), and Annotate (@pxref{Annotate}).
-When passed on the command line, the format name are case-insensitive:
+When passed on the command line, the format names are case-insensitive:
 @option{--format JML} and @option{--format jml} have the same effect.
 
 @cindex invariant output format
@@ -2212,286 +2205,260 @@ interface, and accept objects of type Invariant.
 @end table
 
 
-@node    GUIs, Front ends, Daikon output, Top
-@chapter GUIs for displaying invariants
-
-By default, Daikon outputs a textual list of invariants; this list may
-be very long.  Daikon's graphical user interfaces (GUIs) are designed to
-make the task of browsing invariants easier.
-
-There are two GUIs to choose from.  The Tree GUI that lets users browse
-the hierarchy of invariants directly.  The Context GUI lets users browse
-the code in a text editor; the Context GUI concurrently displays the
-invariants for the browsed code.
-
-
-@menu
-* Eclipse plug-in::             
-* Tree GUI::                    
-* Context GUI::                 
-@end menu
-
-@node    Eclipse plug-in, Tree GUI, GUIs, GUIs
-@section Eclipse plug-in
-@cindex Eclipse plug-in
-@cindex GUI, Eclipse
-
-Daikon is integrated with the 
-@uref{http://eclipse.org/, ,
-Eclipse} IDE (Integrated Development Environment) for Java.  For
-details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
-documentation}.
-
-As of this writing (February 11, 2005), the plug-in only works with 
-Daikon 3 (for instance, version 3.1.7), not with Daikon 4.  Support for
-Daikon 4 is underway.
+@c @node    GUIs, Front ends, Daikon output, Top
+@c @chapter GUIs for displaying invariants
+@c 
+@c By default, Daikon outputs a textual list of invariants; this list may
+@c be very long.  Daikon's graphical user interfaces (GUIs) are designed to
+@c make the task of browsing invariants easier.  However, we recommend
+@c viewing the textual output or using one of the other Daikon tools
+@c (@pxref{Tools}) rather than using one of the GUIs.
+@c @c There are two GUIs to choose from.  The Tree GUI that lets users browse
+@c @c the hierarchy of invariants directly.
+@c The Context GUI lets users browse
+@c the code in a text editor; the Context GUI concurrently displays the
+@c invariants for the browsed code.
+@c 
+@c The Eclipse plug-in is not a GUI per se; rather, it helps to automate
+@c various Daikon-related tasks such as instrumenting programs, running
+@c them, and inserting invariants into source code as comments.
+@c 
+@c 
+@c @menu
+@c * Eclipse plug-in::             
+@c * Context GUI::                 
+@c @end menu
 
 
-@node    Tree GUI, Context GUI, Eclipse plug-in, GUIs
-@section Tree-structured invariant browser
-@cindex Tree GUI
-@cindex GUI, tree
-
-The Tree GUI contains a tree that
-hierarchically organizes program points according to their class and
-method.  Using the Tree GUI, you can look at invariants for only the methods
-and program points you care about.  You can also sort invariants by a
-property (e.g., probability) or filter invariants (e.g., only look at
-invariants containing a certain variable).
-
-This invariant browser consists of two windows.  The main window is the
-Invariants Display, which gives a tree-structured view of program
-points; you can navigate through the program points and view invariants.
-The other window is the Filter Control Panel, where you can control
-which invariants from each program point are displayed in the Invariants
-Display.
-
-@menu
-* Invoking Tree GUI::           
-* Invariants Display::          
-* Control panel::               
-@end menu
-
-@node    Invoking Tree GUI, Invariants Display, Tree GUI, Tree GUI
-@subsection Starting the invariant browser
-
-To use the Tree GUI, first make a @file{.inv} file by invoking Daikon with
-the @option{-o} option; for instance, to create @file{foo.inv}, run
-@example
-java daikon.Daikon -o foo.inv @var{decl-files...} @var{trace-files...}
-@end example
-
-Then, run the Tree GUI with the @file{.inv} file as an argument:
-@example
-java daikon.gui.treeGUI.InvariantsGUI foo.inv
-@end example
-
-If you run the Tree GUI with no arguments, it presents a file browser that
-asks you to choose a @file{.inv} file for viewing.
-
-
-@node    Invariants Display, Control panel, Invoking Tree GUI, Tree GUI
-@subsection Invariants Display
-
-@ifnotinfo
-@image{images/gui-InvariantsDisplay-small,3in,}
-@c </td>
-@c <td width=20></td>
-@c <td><img src="gui-InvariantsDisplay-small.gif" width=298 height=348></td>
-@c </tr></table>
-@end ifnotinfo
-
-@table @strong
-@item File menu
-
-The @command{Load file} menu option brings up a file browser that you
-can use to select another @file{.inv} file.  The @command{Quit} menu
-options lets you quit the Tree GUI@.
-
-@item Program point tree
-The top part of the Invariants Display consists of the Program point
-tree --- a hierarchy of program points broken down by class and method.
-Click on various program points in the tree to see tables of invariants
-for those program points.  You may use the @key{Ctrl} and @key{Shift}
-keys to make an arbitrary selection of program points.  Selecting a
-class or method automatically selects all the program points
-associated with that method or class.
-
-@item Invariant tables
-Invariant tables that display the actual invariants appear at the bottom
-of the Invariants Display.
-
-@itemize @bullet
-@item
-Use @key{Alt} along with the @key{up} or @key{down} arrow keys to scroll
-by a table at a time.
-@item
-Sort a column in a table by clicking on the column header.  Shift-click
-to sort the column in reverse order.
-@end itemize
-
-@end table
-
-@node    Control panel,  , Invariants Display, Tree GUI
-@subsection Control panel
-
-The Control Panel determines which invariants are displayed.
-@c As of 2/2002
-(This picture of the Control Panel is slightly out of date; it needs to
-be updated.)
-
-@c Force a paragraph break so the image is on its own line.
-@*
-
-@ifnotinfo
-@c @ifhtml
-@c <p>
-@c @end ifhtml
-@image{images/gui-ControlPanel,3in,}
-@c <center><table><tr><td>
-@c <img src="gui-ControlPanel.gif" width=411 height=425>
-@c </td></tr></table></center><p>
-@end ifnotinfo
-
-
-@menu
-* Property filters::            
-* Variable filters::            
-@end menu
-
-@node    Property filters, Variable filters, Control panel, Control panel
-@subsubsection Property filters
-@cindex property filters
-
-Property filters narrow down the list of invariants that are displayed.
-You can adjust which Property filters are being applied.  By default,
-all Property filters are enabled.
-
-For information about property filters, see @ref{Invariant filters}.
-
-@node    Variable filters,  , Property filters, Control panel
-@subsubsection Variable filters
-@cindex variable filters
-
-Variable filters let you display only the invariants that contain
-certain variables.  The left-hand box displays the variables that you
-are interested in.  By default, the box is empty and invariants containing
-any variables are displayed.  There are two ways to add variables to the
-variables list:
-@enumerate
-@item 
-Type the name of the variable into the @command{Add variable}
-textfield, and click the @command{Add variable} button (or just press
-@key{enter}).
-@item
-Each Invariant table in the Invariants Display has a @command{Show
-variables} button.  Click on that button to see a list of variables for
-that program point.  Select any set of variables and click the
-@command{Filter on selected variables} button.
-@end enumerate
-
-To remove variables from the variables list, select the variables in
-question and click on the @command{Remove selected
-variables} button.
-
-If you click on the @command{any variable} checkbox,
-invariants are displayed if they contain any of the variables in the
-variables list.  If you click on the @command{all
-variables} checkbox, invariants are displayed if they contain all
-of the variables in the variables list.
+@c @node    Tree GUI, Context GUI, Eclipse plug-in, GUIs
+@c @section Tree-structured invariant browser
+@c @cindex Tree GUI
+@c @cindex GUI, tree
+@c 
+@c The Tree GUI contains a tree that
+@c hierarchically organizes program points according to their class and
+@c method.  Using the Tree GUI, you can look at invariants for only the methods
+@c and program points you care about.  You can also sort invariants by a
+@c property (e.g., probability) or filter invariants (e.g., only look at
+@c invariants containing a certain variable).
+@c 
+@c This invariant browser consists of two windows.  The main window is the
+@c Invariants Display, which gives a tree-structured view of program
+@c points; you can navigate through the program points and view invariants.
+@c The other window is the Filter Control Panel, where you can control
+@c which invariants from each program point are displayed in the Invariants
+@c Display.
+@c 
+@c @menu
+@c * Invoking Tree GUI::           
+@c * Invariants Display::          
+@c * Control panel::               
+@c @end menu
+@c 
+@c @node    Invoking Tree GUI, Invariants Display, Tree GUI, Tree GUI
+@c @subsection Starting the invariant browser
+@c 
+@c To use the Tree GUI, first make a @file{.inv} file by invoking Daikon with
+@c the @option{-o} option; for instance, to create @file{foo.inv}, run
+@c @example
+@c java daikon.Daikon -o foo.inv @var{decl-files...} @var{trace-files...}
+@c @end example
+@c 
+@c Then, run the Tree GUI with the @file{.inv} file as an argument:
+@c @example
+@c java daikon.gui.treeGUI.InvariantsGUI foo.inv
+@c @end example
+@c 
+@c If you run the Tree GUI with no arguments, it presents a file browser that
+@c asks you to choose a @file{.inv} file for viewing.
+@c 
+@c 
+@c @node    Invariants Display, Control panel, Invoking Tree GUI, Tree GUI
+@c @subsection Invariants Display
+@c 
+@c @ifnotinfo
+@c @image{images/gui-InvariantsDisplay-small,3in,}
+@c @end ifnotinfo
+@c 
+@c @table @strong
+@c @item File menu
+@c 
+@c The @command{Load file} menu option brings up a file browser that you
+@c can use to select another @file{.inv} file.  The @command{Quit} menu
+@c options lets you quit the Tree GUI@.
+@c 
+@c @item Program point tree
+@c The top part of the Invariants Display consists of the Program point
+@c tree --- a hierarchy of program points broken down by class and method.
+@c Click on various program points in the tree to see tables of invariants
+@c for those program points.  You may use the @key{Ctrl} and @key{Shift}
+@c keys to make an arbitrary selection of program points.  Selecting a
+@c class or method automatically selects all the program points
+@c associated with that method or class.
+@c 
+@c @item Invariant tables
+@c Invariant tables that display the actual invariants appear at the bottom
+@c of the Invariants Display.
+@c 
+@c @itemize @bullet
+@c @item
+@c Use @key{Alt} along with the @key{up} or @key{down} arrow keys to scroll
+@c by a table at a time.
+@c @item
+@c Sort a column in a table by clicking on the column header.  Shift-click
+@c to sort the column in reverse order.
+@c @end itemize
+@c 
+@c @end table
+@c 
+@c @node    Control panel,  , Invariants Display, Tree GUI
+@c @subsection Control panel
+@c 
+@c The Control Panel determines which invariants are displayed.
+@c @c As of 2/2002
+@c (This picture of the Control Panel is slightly out of date; it needs to
+@c be updated.)
+@c 
+@c @c Force a paragraph break so the image is on its own line.
+@c @*
+@c 
+@c @ifnotinfo
+@c @image{images/gui-ControlPanel,3in,}
+@c @end ifnotinfo
+@c 
+@c 
+@c @menu
+@c * Property filters::            
+@c * Variable filters::            
+@c @end menu
+@c 
+@c @node    Property filters, Variable filters, Control panel, Control panel
+@c @subsubsection Property filters
+@c @cindex property filters
+@c 
+@c Property filters narrow down the list of invariants that are displayed.
+@c You can adjust which Property filters are being applied.  By default,
+@c all Property filters are enabled.
+@c 
+@c For information about property filters, see @ref{Invariant filters}.
+@c 
+@c @node    Variable filters,  , Property filters, Control panel
+@c @subsubsection Variable filters
+@c @cindex variable filters
+@c 
+@c Variable filters let you display only the invariants that contain
+@c certain variables.  The left-hand box displays the variables that you
+@c are interested in.  By default, the box is empty and invariants containing
+@c any variables are displayed.  There are two ways to add variables to the
+@c variables list:
+@c @enumerate
+@c @item 
+@c Type the name of the variable into the @command{Add variable}
+@c text field, and click the @command{Add variable} button (or just press
+@c @key{enter}).
+@c @item
+@c Each Invariant table in the Invariants Display has a @command{Show
+@c variables} button.  Click on that button to see a list of variables for
+@c that program point.  Select any set of variables and click the
+@c @command{Filter on selected variables} button.
+@c @end enumerate
+@c 
+@c To remove variables from the variables list, select the variables in
+@c question and click on the @command{Remove selected
+@c variables} button.
+@c 
+@c If you click on the @command{any variable} checkbox,
+@c invariants are displayed if they contain any of the variables in the
+@c variables list.  If you click on the @command{all
+@c variables} checkbox, invariants are displayed if they contain all
+@c of the variables in the variables list.
 
 
 
-@node    Context GUI,  , Tree GUI, GUIs
-@section Context GUI
-@cindex Context GUI
-@cindex GUI, context
-
-The Daikon Context GUI displays invariants for the Java or C code displayed
-in a text editor or code browser; as the cursor moves, the invariant
-display is updated.
-(Before using the Context GUI, you must follow the installation
-instructions; @pxref{Installing the Context GUI}.)
-
-@c Force a paragraph break so the image is on its own line.
-@*
-
-@ifnotinfo
-@c @ifhtml
-@c <p>
-@c @end ifhtml
-@image{images/context-gui,5in,}
-@c <center><table><tr><td>
-@c <img src="context-gui.jpg" width=411 height=425>
-@c </td></tr></table></center><p>
-@end ifnotinfo
-
-Currently, the Context GUI is integrated with the Emacs text editor.
-However, users can extend it to other Java or C editors.  The Context GUI can
-also be run stand-alone.  This provides the user the ability to browse
-the invariants without having to load up the text editor in case the
-user wants to do a quick lookup on invariants.
-
-@menu
-* Context GUI with Emacs::      
-* Installing the Context GUI::  
-@end menu
-
-@node    Context GUI with Emacs, Installing the Context GUI, Context GUI, Context GUI
-@subsection Running the Context GUI with Emacs
-@cindex Emacs, with Context GUI
-
-In order to use the Context GUI, perform the following steps:
-@enumerate
-@item
-Use the Daikon invariant detector to create a @file{.inv} file containing the
-invariants.
-@example
-  java daikon.Daikon -o foo.inv decl-files... trace-files...
-@end example
-
-
-
-@item
-
-Start the Context GUI by typing @kbd{M-x daikon-context-gui}
-while visiting a Java or C file in Emacs.  When prompted, select the
-appropriate @file{.inv} file, containing the invariants.
-
-@item
-Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
-
-@end enumerate
-
-
-
-@node    Installing the Context GUI,  , Context GUI with Emacs, Context GUI
-@subsection Installing the Context GUI
-
-If you wish to run the Daikon Context GUI (@pxref{Context GUI}), perform
-the following two steps:
-
-@enumerate
-@item
-If you wish to use the Context GUI with Java code, then
-download and install JDE, the Java Development Environment for Emacs,
-from @uref{http://jdee.sunsite.dk/}.
-If you wish to use the Context GUI with C code, no extra packages are needed.
-@item
-Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
-path.  Add the following to your @file{.emacs} or @file{prj.el} file:
-@example
-  ;; Daikon Context GUI
-  (add-to-list 'load-path
-               (substitute-in-file-name "$DAIKONDIR/emacs"))
-  (autoload 'daikon-context-gui "daikon-context-gui"
-            "Daikon Context GUI" t)
-  (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
-@end example
-@end enumerate
+@c @node    Context GUI,  , Eclipse plug-in, GUIs
+@c @section Context GUI
+@c @cindex Context GUI
+@c @cindex GUI, context
+@c 
+@c The Daikon Context GUI displays invariants for the Java or C code displayed
+@c in a text editor or code browser; as the cursor moves, the invariant
+@c display is updated.
+@c (Before using the Context GUI, you must follow the installation
+@c instructions; @pxref{Installing the Context GUI}.)
+@c 
+@c @c Force a paragraph break so the image is on its own line.
+@c @*
+@c 
+@c @ifnotinfo
+@c @image{images/context-gui,5in,}
+@c @end ifnotinfo
+@c 
+@c Currently, the Context GUI is integrated with the Emacs text editor.
+@c However, users can extend it to other Java or C editors.  The Context GUI can
+@c also be run stand-alone.  This provides the user the ability to browse
+@c the invariants without having to load up the text editor in case the
+@c user wants to do a quick lookup on invariants.
+@c 
+@c @menu
+@c * Context GUI with Emacs::      
+@c * Installing the Context GUI::  
+@c @end menu
+@c 
+@c @node    Context GUI with Emacs, Installing the Context GUI, Context GUI, Context GUI
+@c @subsection Running the Context GUI with Emacs
+@c @cindex Emacs, with Context GUI
+@c 
+@c In order to use the Context GUI, perform the following steps:
+@c @enumerate
+@c @item
+@c Use the Daikon invariant detector to create a @file{.inv} file containing the
+@c invariants.
+@c @example
+@c   java daikon.Daikon -o foo.inv decl-files... trace-files...
+@c @end example
+@c 
+@c 
+@c 
+@c @item
+@c 
+@c Start the Context GUI by typing @kbd{M-x daikon-context-gui}
+@c while visiting a Java or C file in Emacs.  When prompted, select the
+@c appropriate @file{.inv} file, containing the invariants.
+@c 
+@c @item
+@c Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
+@c 
+@c @end enumerate
+@c 
+@c 
+@c 
+@c @node    Installing the Context GUI,  , Context GUI with Emacs, Context GUI
+@c @subsection Installing the Context GUI
+@c 
+@c If you wish to run the Daikon Context GUI (@pxref{Context GUI}), perform
+@c the following two steps:
+@c 
+@c @enumerate
+@c @item
+@c If you wish to use the Context GUI with Java code, then
+@c download and install JDE, the Java Development Environment for Emacs,
+@c from @uref{http://jdee.sunsite.dk/}.
+@c If you wish to use the Context GUI with C code, no extra packages are needed.
+@c @item
+@c Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
+@c path.  Add the following to your @file{.emacs} or @file{prj.el} file:
+@c @example
+@c   ;; Daikon Context GUI
+@c   (add-to-list 'load-path
+@c                (substitute-in-file-name "$DAIKONDIR/emacs"))
+@c   (autoload 'daikon-context-gui "daikon-context-gui"
+@c             "Daikon Context GUI" t)
+@c   (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
+@c @end example
+@c @end enumerate
 
 
-@node    Front ends, Enhancing Daikon output, GUIs, Top
+@node    Front ends, Enhancing Daikon output, Daikon output, Top
 @chapter Front ends
 
 @cindex front end
@@ -2512,14 +2479,14 @@ and @xref{Front ends}.
 
 @menu
 * Java front end Chicory::      
-* Source-based Java front end dfej::  
 * C front end Kvasir::          
-* Source-based C front end dfec::  
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
+* Source-based Java front end dfej::  
+* Source-based C front end dfec::  
 @end menu
 
-@node    Java front end Chicory, Source-based Java front end dfej, Front ends, Front ends
+@node    Java front end Chicory, C front end Kvasir, Front ends, Front ends
 @section Java front end Chicory
 
 @cindex front end for Java
@@ -2577,10 +2544,12 @@ Chicory is invoked as follows:
 @example
 java daikon.Chicory @var{classname} @var{args}");
 @end example
+@noindent
 where
 @example
 java @var{classname} @var{args}
 @end example
+@noindent
 is a valid invocation of Java.
 
 This section lists the optional command-line arguments to Chicory, which
@@ -2639,7 +2608,7 @@ parameter.
 @item --ppt-select-pattern=@var{ppt_regexp}
 Only produce trace output for matching classes/procedures.  Cannot be used
 in conjunction with @option{--ppt-omit-pattern}.  May be supplied multiple
-times.  The argument provided must be a regex.  It will match if matches any
+times.  The argument provided must be a regular expression.  It will match if matches any
 portion of the program point name.  Note that currently only classes are
 matched, not each full ppt name.  Thus, either all of a classes methods are
 traced or none of  them are.
@@ -2741,7 +2710,741 @@ passing the specified arguments, if any, to Daikon.
 
 
 
-@node    Source-based Java front end dfej, C front end Kvasir, Java front end Chicory, Front ends
+@node C front end Kvasir, Perl front end dfepl, Java front end Chicory, Front ends
+@section C front end Kvasir
+
+@cindex Kvasir (binary front end for C)
+@cindex front end for C
+@cindex C front end
+
+Daikon's front end for C, named Kvasir, instead works by examining the
+operation of an unmodified binary at runtime.  (By contrast, Daikon's
+older C front end, known as dfec (@pxref{Source-based C front end
+dfec}), works by rewriting the source code for your C program.)  Kvasir
+is named after the Norse god of knowledge and beet juice.
+
+Kvasir is based on the Valgrind dynamic program supervision framework
+(which is best known for its memory error detection tool).  Using
+Valgrind allows Kvasir to interrupt your program's execution, read its
+variables, and examine its memory usage, all transparently to the
+program.  Also, rather than using your program's source code to find
+the names and types of functions and variables, Kvasir obtains them
+from debugging information included in the executable in a standard
+format.  These differences should make Kvasir both much easier to use and
+more robust than the source-rewriting-based dfec.
+
+However, Kvasir has some limitations of its own.  Because Kvasir uses
+Valgrind, it shares Valgrind's limitation of working only under the
+Linux operating system, and only on Intel 386-compatible processors
+(the so-called IA-32 architecture) such as the Intel Pentium and the
+AMD Athlon.  Furthermore, Kvasir requires that your program have debugging
+information available in the DWARF-2 format, as produced by recent
+versions of GCC@.  Two other limitations are not fundamental, but apply
+to the current version: first, the programs used by Kvasir should be
+compiled without optimization; and second, the programs should be
+written in C@.  (In the future, Kvasir will support C++ and possibly other
+languages that follow C calling conventions; send mail to 
+@email{daikon-developers@@lists.csail.mit.edu} if this functionality is
+important to you.)
+
+For information about installing Kvasir, see @ref{Installing Kvasir}.
+
+@menu
+* Using Kvasir::                
+* Kvasir options::              
+* Kvasir limitations::          
+* Installing Kvasir::           
+@end menu
+
+@node Using Kvasir, Kvasir options, C front end Kvasir, C front end Kvasir
+@subsection Using Kvasir
+
+The first step in using Kvasir is to compile your program using the
+DWARF-2 format of debugging information, and without optimization.
+In most recent versions of GCC (at least 2.95 and higher), DWARF-2
+debugging information can be produced by supplying the
+@option{-gdwarf-2} command line option.  In more recent versions of GCC 3,
+DWARF-2 is in fact the default format for debugging information.
+Also, remove any optimization flags, such as @option{-O} or @option{-O2},
+and any flags that affect calling conventions, such as
+@option{-fomit-frame-pointer}.  Except for these changes, you should be
+able to compile and link your program normally.
+
+In the second step of using Kvasir, run your program as you normally
+would, but prepend the command @command{kvasir-dtrace} to the beginning.
+For instance, if you would normally run your program with the command 
+@example
+./program -option input.file
+@end example
+just say
+@example
+kvasir-dtrace ./program -option input.file
+@end example
+@noindent
+As well as running your program (more slowly than usual), this command
+also creates a directory @file{daikon-output} in the current
+directory containing @file{program.decls} and @file{program.dtrace}
+files suitable as input to Daikon.
+
+A number of options to Kvasir may be supplied between
+@command{kvasir-dtrace} and the name of your program; see below for a
+list.
+
+Note that Kvasir uses a different scheme for naming variables than dfec
+or the Java front end do.  Because C does not have classes, the `class'
+portion of a program point name (before the last period) instead holds
+the file in which a function was defined, for file-static functions, or
+is simply a single period for global functions. (Thus, global function
+names start with two periods, like @samp{..main():::ENTER}.) In
+variable names, by contrast, the period is used to represent the field
+selection operator, so a slash is used instead: global variables are
+prefixed with a slash, and file-static variables are prefixed with their
+filename (with periods converted into underscores) and then a slash.
+
+@node Kvasir options, Kvasir limitations, Using Kvasir, C front end Kvasir
+@subsection Kvasir options
+
+@table @option
+
+@item --asserts-aborts
+@itemx --no-asserts-aborts
+
+Enable (disable) Kvasir's internal consistency checks.  By default, they
+are disabled. 
+
+@item --debug
+@itemx --no-debug
+
+Enable (disable) progress messages meant for debugging problems with
+Kvasir itself.  By default, they are disabled.  This option is intended
+mainly for Kvasir's developers.
+
+@item --decls-file=@var{filename.decls}
+
+Write the @file{.decls} file listing the names of functions and
+variables to the specified file name.  The default is
+@file{daikon-output/@var{programname}.decls}, where @var{programname}
+is the name of the program.
+
+@item --decls-only
+
+Exit after writing the @file{.decls} file; don't run the program or
+generate trace information.  Since the @file{.decls} file is the same for
+any run of a program, it can be generated once and then reused on later
+runs, as long as no new program points are added and each program point
+has the same set of variables.
+
+@item --limit-static-vars
+
+Limits the output of static variables in the @file{.decls} and @file{.dtrace} 
+files. File-static variables are only observed at program points for functions 
+which belong to the same file as the variable.  Static variables 
+declared within a particular function are only observed at program points 
+for that function.  This is a heuristic to reduce the amount of Kvasir
+output without greatly reducing the amount of useful output.
+
+@item --dtrace-append
+
+Append new trace information to the end of an existing @file{.dtrace}
+file.  The default is to overwrite a pre-existing @file{.dtrace} file.
+
+@item --dtrace-file=@var{filename.dtrace}
+
+Write the @file{.dtrace} trace file giving the values of variables to
+the specified file name.  The default is
+@file{daikon-output/@var{programname}.dtrace}, where @var{programname}
+is the name of the program.  A filename of @file{-} may be used to
+specify the standard output; in this case, the regular standard output
+of the program will be redirected back to the terminal, to avoid
+intermixing it with the trace output.  If the given filename ends in
+@file{.gz}, then @option{--dtrace-gzip} is enabled and the
+@file{.dtrace} file will be compressed.
+
+@item --dtrace-gzip
+
+Compress trace information with the @command{gzip} program before writing
+it to the @file{.dtrace} file.  You must have the @command{gzip} program
+available.
+
+@item --dump-ppt-file=@var{filename}
+@itemx --dump-var-file=@var{filename}
+
+Print a list of all the program points (respectively all the variables)
+in the program to the specified file.  An edited version of this file can
+then be used with the @option{--ppt-list-file} (respectively
+@option{--var-list-file}) option.
+
+@item --ignore-globals
+
+Omit any global or static variables from the @file{.decls} and
+@file{.dtrace} files.  Leaving these out can significantly improve Kvasir
+and Daikon's performance, at the expense of missing properties involving
+them.  The default is to keep global and static variables.
+
+@item --output-fifo
+
+Create the output @file{.decls} and @file{.dtrace} files as FIFOs (also
+known as `named pipes').  Kvasir will then open first the @file{.decls}
+FIFO and then the @file{.dtrace} FIFO, blocking until another program
+(such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
+avoids the need for large trace files, but FIFOs are not supported by
+some file systems, including AFS@.
+
+@item --ppt-list-file=@var{filename}
+@itemx --var-list-file=@var{filename}
+
+Trace only the program points (respectively variables) listed in the
+given file.  Other program points (respectively variables) will be
+omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
+way to produce such files is by editing the output produced by the
+@option{--dump-ppt-file} (respectively @option{--dump-var-file}) option
+described above.
+
+@item --program-stdout=@var{filename}
+@itemx --program-stderr=@var{filename}
+
+Redirect the standard output (respectively standard error) stream of the
+program being traced to the specified path.  By default, the standard
+output and standard error streams will be left pointing to the same
+locations specified by the shell, except that if @option{--dtrace-file=-}
+is specified, then the default behavior is as if
+@option{--program-stdout=/dev/tty} were specified, since mixing the
+program's output and Kvasir's trace output is not advisable.
+If the same filename is given for both options, the streams will be
+interleaved in the same way as if by the Bourne shell construction
+@code{2>&1}.
+
+Also as in the shell, @var{filename} can be an ampersand followed by an
+integer, to redirect to a numbered file descriptor.  For instance, to
+redirect the program's standard output and error, and Kvasir's standard
+error, to a single file, you can say @option{--program-stdout='&2'
+--program-stderr='&2' 2>@var{filename}}.
+
+@item --disambig-file=@var{filename}
+Specifies the filename for the pointer type disambiguation file.
+If this file exists, Kvasir uses it to make decisions about how 
+to output the referents of pointer variables.  If the file does not exist, 
+then Kvasir creates it, specifying default instrumentation behavior for all
+pointer types.  It may then be edited and used on subsequent runs.
+(NOTE: Pointer type disambiguation functionality is not yet completed.)
+
+@item --disambig
+Tells Kvasir to create or read pointer type disambiguation with the
+default filename, which is @file{@var{myprog}.disambig} in the same
+directory as the target program.
+(NOTE: Pointer type disambiguation functionality is not yet completed.)
+
+@end table
+
+@node Kvasir limitations, Installing Kvasir, Kvasir options, C front end Kvasir
+@subsection Kvasir limitations
+
+This subsection lists some of the known limitations of the
+current Kvasir release; if you encounter any problems other than listed
+here, please report them as bugs (@pxref{Reporting bugs}).  The
+limitations are listed roughly in decreasing order of severity.
+
+@itemize @bullet
+
+@item
+Kvasir-traced programs a while (often a good fraction of a second)
+to start.  When tracing short-lived programs, this overhead can
+dominate Kvasir's per-instruction runtime overhead.
+
+@item
+Kvasir does not support C++ (dfec had small but unreliable C++ support).
+We want to first gauge the demand for this feature.
+Please send email to @email{daikon-developers@@lists.csail.mit.edu} if you
+feel that this addition will benefit your experience with Daikon.
+
+@item
+Kvasir always prints the contents of structures according to their
+compile-time type.  Programs that use generic pointers and structural
+equivalence to simulate object-orientation will have derived-`class'
+fields missing when a structure is passed via a base-`class' pointer.
+
+@item
+Kvasir's support for outputting arrays is not yet complete. 
+It still does not have the functionality to print out multidimensional 
+arrays with all of their elements or the option to flatten 
+multidimensional arrays into multiple single-dimensional arrays.
+
+@item
+Not all of the options of the source-based dfec are supported.
+Variable comparability information is not supported.
+(dfec used the Lackwit tool, but it did not scale and often produced
+incorrect output.)
+The depth to which nested structures
+are explored is fixed.  Of the environment variables obeyed by dfec,
+only @code{DTRACEAPPEND} is recognized.
+
+@item
+Kvasir behaves somewhat differently with different versions of GCC@.
+We have had the best results with versions 3.3 (which we use for
+testing) and 3.4.  If feasible, we recommend that you use
+Kvasir with such a relatively recent version of GCC@.  Incompatibilities
+between Kvasir and the debugging information produced by older GCC
+versions can lead to incorrect output and, in some cases for version
+2.95, can cause Kvasir to crash.
+
+@item
+On some platforms (including, as of December 2004, recent versions of
+Debian), Kvasir crashes if run on statically-linked binaries.  To avoid
+this problem, do not use the @option{-static} flag when linking programs
+for use Kvasir.  If you want to link statically with a particular
+library, supply the path to its static version (@file{libfoo.a})
+directly to @command{gcc} instead.
+
+@item
+Kvasir is incompatible with some compiler optimizations.  It is
+definitely incompatible with the @option{-fomit-frame-pointer}
+optimization, and it may have trouble with other optimizations as
+well.  We recommend that you compile programs for Kvasir without
+optimization.
+
+@end itemize
+
+
+@node    Installing Kvasir,  , Kvasir limitations, C front end Kvasir
+@subsection Installing Kvasir
+
+@cindex installing Kvasir
+@cindex Kvasir installation
+
+@c Kvasir is the recommended C front end for use on Linux/x86.
+The source
+code for Kvasir is included in the main Daikon distribution, and is
+compiled by default on Linux/x86 based systems.
+
+To compile and install Kvasir, give the command @code{make kvasir}
+from the top-level Daikon directory:
+Other sections of the manual give installation instructions for several
+special-purpose components of Daikon:  the C front end Kvasir
+(@pxref{Installing Kvasir}), the source-based Java front end dfej
+(@pxref{Installing dfej}), and the source-based C front end dfec
+(@pxref{Installing dfec}).
+@c , and the Context GUI (@pxref{Installing the Context GUI}).
+Most users will not need to read those instructions,
+however.
+
+@example
+cd $DAIKONDIR
+make kvasir
+@end example
+
+This will check that you have the appropriate prerequisites (such as
+GCC), configure Kvasir for your machine, compile it, and install
+it in the directory @file{kvasir/inst}.
+
+Once Kvasir has been installed, it can be used via the
+@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
+you have set up the Daikon environment according to the instructions
+above, it should already be in your @code{PATH}.  For instructions on using
+Kvasir, see @ref{C front end Kvasir}.
+
+
+@node Perl front end dfepl, CSV front end convertcsv.pl, C front end Kvasir, Front ends
+@section Perl front end dfepl
+
+@cindex front end for Perl
+@cindex Perl front end
+@cindex dfepl (Daikon front end for Perl)
+
+This section contains details about dfepl, the Daikon front end for
+Perl.  For a brief introduction to dfepl, see @ref{Perl examples} and
+@ref{Instrumenting Perl programs}.
+
+dfepl works with Perl versions 5.8 and later. (To be precise, Perl
+programs instrumented with dfepl can also be run with Perl 5.6, but
+the instrumentation engine, which is itself written in Perl, requires
+version 5.8).  dfepl reads the source code for Perl modules or
+programs, and writes out instrumented versions of that code that
+keep track of function parameters, and make calls to routines in the
+@file{daikon_runtime} package whenever an instrumented subroutine is
+entered or exited.
+
+The instrumentation engine recognizes parameters as those variables
+that are declared with @code{my(...)} or @code{local(...)} and, in the
+same expression, assigned to from a value related to the argument
+array @code{@@_}, but only among the first contiguous series of such
+assignments in the body of a subroutine.  This will capture the most
+common assignment idioms, such as @code{my $self = shift;} (where
+@code{shift} is short for @code{shift @@_}), @code{my $x = $_[0];}, and
+@code{my($x, $y, @@a) = @@_;}, but the arguments to subroutines which
+access them only directly through @code{@@_}, or that perform other
+operations before reading their arguments, will not be recognized.
+
+If the uninstrumented code requested warnings via the @code{use
+warnings} pragma or by adding the @option{-w} flag on the @code{#!}
+line, the instrumented code will also request warnings.  In this case,
+or if @option{-w} is specified on the command line when running it, the
+instrumented code may produce warnings that the original code did
+not.  There are several situations in which the instrumented code
+produced by dfepl, while functionally equivalent to the original,
+generates more warnings.  The most common such problem, which arises
+from code that captures the scalar-context return value of a
+subroutine that returns a list, has been avoided in the current
+version by disabling the warning in question.  Other warnings which
+are known to be produced innocuously in this way include
+@code{Ambiguous call resolved as CORE::foo(), qualify as such or use
+&} (caused by code that uses @code{CORE::} to distinguish a built-in
+function from a user subroutine of the same name), and @code{Constant
+subroutine foo redefined} (caused by loading both instrumented and
+uninstrumented versions of a file).  Though some such warnings
+represent deficiencies in the instrumentation engine, they can be
+safely ignored when they occur.
+
+Because Perl programs do not contain static type information to
+distinguish, for instance, between strings and numbers, the Perl
+front end incorporates an additional dynamic analysis to infer these
+types.  This type guessing, which occurs as a first pass before the
+program can be instrumented to produce output for Daikon, operates in
+a manner somewhat analogous to Daikon itself: watching the execution
+of a program, the runtime system chooses the most restrictive type for
+a variable that is not contradicted during that execution.  These
+types indicate, for instance, whether a scalar value always holds an
+integer, a possibly fractional numeric value, or a reference to
+another object.  It should not be necessary to examine or modify this
+type information directly, but for the curious, the syntax of the type
+information is described in comments in the @file{Daikon::PerlType}
+module.
+
+The safest course is to infer types for variables using exactly the
+same program executions (e.g., test cases) which will later be used to
+generate traces for Daikon, as this guarantees that the type
+information will match the actual data written to the trace file.
+However, because the type-guessing-instrumented versions of programs
+run fairly slowly in the current version, you may be tempted to use a
+subset of the input data for type guessing.  Doing so is possible, but
+it will only work correctly if the smaller tests exercise all of the
+instrumented subroutines and exit points with all the types of data
+they will later be used with.  If the trace runtime tries to output a
+data value that doesn't match the inferred type, the value may
+silently be converted according to Perl's usual conventions (for
+instance, a non-numeric string may be treated as the number zero), or
+it may cause an error during tracing (for instance, trying to
+dereference a supposed array reference that isn't).  Also, if a
+subroutine exit point is traced but was never encountered during type
+guessing, the generated @file{.decls} and @file{.dtrace} files will be
+incompatible in a way that will cause Daikon to abort with an error
+message of the form ``Program point foo():::EXIT22 appears in dtrace
+file but not in any decl file''.
+
+The workflow of instrumenting Perl code with dfepl is summarized in
+the following diagram:
+@*
+@center @image{images/dfepl-flow,4in,}
+
+The @command{dfepl} command works by reading one or more Perl programs
+or modules, and writing out new versions of those files, instrumented
+to capture information about their execution, by default to another
+directory.  dfepl is used in two passes: first, before type
+information is available, instrumented versions are written to a
+directory @file{daikon-untyped}.  These untyped programs, when run,
+will write
+files containing dynamically inferred type information (with the
+extension @file{.types}), by default to the @file{daikon-instrumented}
+directory.  When dfepl is rerun with this type information, it
+produces type-aware instrumented code in the
+@file{daikon-instrumented} directory, which when run produces
+execution traces in files with the extension @file{.dtrace} in the a
+directory @file{daikon-output}.
+
+@menu
+* dfepl options::               
+@end menu
+
+@node dfepl options,  , Perl front end dfepl, Perl front end dfepl
+@subsection dfepl options
+
+@table @option
+@item --absolute
+@itemx --no-absolute
+@option{--absolute} stores the absolute path to the output directories
+(by default named @file{daikon-untyped}, @file{daikon-instrumented} or
+@file{daikon-output}) in the instrumented programs, so that no matter
+where the instrumented program is run, the output will go to a fixed
+location.  Even if these directories are given as relative paths (as is
+the default), @option{--absolute} specifies that they should always be
+taken as relative to the directory that was the working directory when
+@command{dfepl} was run.
+
+@option{--no-absolute} specifies the opposite, causing the output paths
+to be interpreted relative to the current working directory each time
+the instrumented program is invoked.  The default, when neither option
+is specified, is for @file{.types} files to use an absolute path, but
+all others to use relative path, so that the @file{.types} files will
+always be in the same place as the instrumented source files that
+generated them, but the @file{daikon-output} directory will be created
+in the current directory when the program runs.
+
+@item --accessor-depth=@var{num}
+Controls the number of nested invocations of object accessor methods
+to examine.  For instance, suppose that the @code{Person} class has a
+method @code{mother()} that returns another person (and has been
+specified to @command{dfepl} as an accessor), and that @code{$me} is
+an instrumented variable.  If the accessor depth is 1, only
+@code{$me->mother()} will be examined.  If the depth is 2,
+@code{$me->mother()->mother()} will also be examined.  Specifying large
+accessor depths is generally not advisable, especially with many
+accessor methods, as the number of variables examined can be too many
+for Daikon to process efficiently.
+
+By default, the Daikon Perl trace runtime will examine at most a
+single level of accessors.
+
+@item -A
+@itemx --accessors-dir=@var{directory}
+Look for files containing accessor lists in @var{directory}, or the
+current directory if @var{directory} is omitted.  For a class
+@code{Acme::Foo}, accessors are methods that return information about
+an object but do not modify it.  @command{dfepl} cannot determine on
+its own which methods are accessors, but when a list of them is
+provided, it can call an object's accessors when examining a variable
+of that class to obtain more information about the object.  To tell
+@code{dfepl} about the accessors for @code{Acme::Foo}, make a file
+listing the names of each accessor method, one per line with no other
+punctuation, named @file{Acme/Foo.accessors} in the same directory as
+@file{Acme/Foo.pm}.
+
+@item --decls-dir=@var{directory}
+Put generated declaration files in @var{directory} and its
+subdirectories.  The default is @file{daikon-output}.
+
+@item --decls-style=@var{style}
+@var{style} should be one of @option{combined}, @option{flat}, or
+@option{tree}.  A style of @option{combined} specifies that the
+declarations for all packages should be merged, in a file named
+@file{prog-combined.decls} where @file{prog} is the name of the
+program.  A style of @option{flat} specifies that the declarations for
+each package should be in a separate file named after the package, but
+that these files should go in a single directory; for instance, the
+declarations for @code{Acme::Trampoline} and
+@code{Acme::Skates::Rocket} would go in files named
+@file{Acme::Trampoline.decls} and @file{Acme::Skates::Rocket.decls}.  A
+style of @option{tree} specifies that each package should have its own
+declarations file, and that those files should be arranged in
+directories whose structure matches the structure of their package
+names; in the example above, the files would be
+@file{Acme/Trampoline.decls} and @file{Acme/Skates/Rocket.decls}.
+
+The default is @option{tree}.  Note that @option{--decls-style} and
+@option{--types-style} are currently constrained to be the same; if
+one is specified, the other will use the same value.
+
+@item --dtrace-append
+@itemx --no-dtrace-append
+When @option{--dtrace-append} is specified, the instrumented program
+will append trace information to the appropriate
+@file{.dtrace} file each time it runs.  When
+@option{--no-dtrace-append} is specified, it will overwrite the file
+instead. 
+
+The default behavior is to overwrite.  This choice can also be
+overridden, when the program is run, to always append by setting the
+environment variable @code{DTRACEAPPEND} to 1.
+
+@item --dtrace-dir=@var{directory}
+Put generated trace files in @var{directory} and its
+subdirectories.  The default is @file{daikon-output}.
+
+@item --dtrace-style=@var{style}
+@var{style} should be one of @option{combined}, @option{flat}, or
+@option{tree}.  A style of @option{combined} specifies that the traces
+for all packages should be merged, in a file named
+@file{prog-combined.dtrace}, where @file{prog} is the name of the
+program.  A style of @option{flat} specifies that the
+traces for each package should be in a separate file named after the
+package, but that these files should go in a single directory; for
+instance, the declarations for @code{Acme::Trampoline} and
+@code{Acme::Skates::Rocket} would go in files named
+@file{Acme::Trampoline.dtrace} and
+@file{Acme::Skates::Rocket.dtrace}.  A style of @option{tree} specifies
+that each package should have its own trace file, and that
+those files should be arranged in directories whose structure matches
+the structure of their package names; in the example above, the files
+would be @file{Acme/Trampoline.dtrace} and
+@file{Acme/Skates/Rocket.dtrace}.
+
+The default is @option{combined}.
+
+@item --help
+Print a short options summary.
+
+@item --instr-dir=@var{directory}
+@c dfec option -- do not rename (yet)
+@itemx --instrsourcedir=@var{directory}
+Put instrumented source files in @var{directory} and its
+subdirectories.  The default is @file{daikon-untyped}, or
+@file{daikon-instrumented} if type information is available.
+
+@item --list-depth=@var{DEPTH}
+Consider as many as @var{DEPTH} of the first elements of a list to be
+distinct entities, for the purpose of guessing their types.  When
+subroutines return a list of values, each value may have a distinct
+meaning, or the list may be homogeneous.  When trying to assign types
+to the elements of a list, the Daikon Perl trace runtime will try
+making separate guesses about the types of the elements of a short
+list, but it would be inefficient to make retain this distinction for
+many elements.  This parameter controls how many elements of a list
+will be examined individually; all the others will be treated
+uniformly.
+
+The default is 3.
+
+@item --output-dir=@var{directory}
+Put all of the files that are the output of the tracing process (and
+therefore input to the Daikon invariant detection engine) in
+@var{directory} and its subdirectories.  This option is a shorthand
+equivalent to setting both @option{--decls-dir} and
+@option{--dtrace-dir} to the same value.
+
+The default behavior is as if @option{--output-dir=daikon-output} had
+been specified.
+
+@item --perl=@var{path}
+Use @var{path} as the location of Perl when calling the annotation
+back end (a module named @code{B::DeparseDaikon}), rather than the
+version of Perl under which @command{dfepl} itself is running, which
+is probably the first @command{perl} that occurs on your path.  For
+instance, if the first version of @command{perl} on your path isn't
+version 5.8 or later, you should this option to specify another
+@command{perl} program that is.
+
+@item --nesting-depth=@var{num}
+When examining nested data structures, traverse as many as @var{num}
+nested references.  For instance, suppose that @code{@@a} is the array
+
+@example
+@@a = (@{1 => [2, 3]@}, @{5 => [4, 2]@})
+@end example
+
+If the depth is 0, then when examining @code{@@a}, Daikon's Perl trace
+runtime will consider it to be an array whose elements are references,
+but it won't examine what those references point to.  If the depth is
+1, it will consider it to be an array of references to hashes whose
+keys are integers and whose values are references, but it won't
+examine what @emph{those} references point to.  Finally, if the depth
+is 2 or more, it will consider @code{@@a} to be an array of references
+to hashes whose keys are integers and whose values are references to
+arrays of integers.
+
+The default nesting depth is 3.
+
+When referenced objects have accessor methods, or when accessors
+return references, the @option{--accessor-depth} and
+@option{--nesting-depth} options interact.  Specifically, if these
+depths are A and R, the behavior is as if the runtime has a budget of
+1 unit, which it can use either on accessors which cost 1/A or
+references which cost 1/R@.  It may thus sometimes be useful to specify
+fractional values for @option{--accessor-depth} and
+@option{--nesting-depth}; in fact, the default accessor depth is
+1.5.
+
+@item --types-append
+@itemx --no-types-append
+When @option{--types-append} is specified, the instrumented program
+will append type information to the appropriate
+@file{.types} file each time it runs.  When
+@option{--no-types-append} is specified, it will overwrite the file
+instead. 
+
+The default behavior is to append.  If @option{--no-types-append} is
+specified, however, this choice can also be overridden, when the
+program is run, to append by setting the environment variable
+@code{TYPESAPPEND} to 1.  There is no way to use environment variables
+to force the runtime to overwrite a types file, but an equivalent
+effect can be obtained by simply removing the previous types file
+before each run.
+
+@item -T
+@itemx --types-dir=@var{directory}
+Look for @file{.types} files in @var{directory}, or
+@file{daikon-instrumented} if @var{directory} is omitted.  When
+instrumenting a module @code{Acme::Trampoline}, used in a program
+@file{coyote.pl},  @command{dfepl} will look for
+files named @file{coyote-combined.types}, @file{Acme::Trampoline.types}, and
+@file{Acme/Trampoline.types}, corresponding to the possible choices of
+@option{--types-style}.  Once discovered, the files are used in the
+same way as for @option{-t}.
+
+@item --types-file=@var{file}
+@itemx -t @var{file}
+Include type information from @var{file} when instrumenting programs
+or modules.  Since Daikon needs to know the types of variables when
+they are declared, useful @file{.decls} and @file{.dtrace} files can
+only be produced by source code instrumented with type
+information.  Since Perl programs don't include this information to
+begin with, and it would be cumbersome to produce by hand, type
+information must usually be produced by running a version of the
+program that has itself been annotated, but without type
+information.  The Daikon Perl trace runtime will automatically decide
+whether to output types, or declarations and traces, depending on
+whether the source was instrumented without or with types.  This option
+may occur multiple times, to read information from multiple types
+files (irrelevant type information will be ignored).
+
+@item --types-basedir=@var{directory}
+Put files containing type information in @var{directory} and its
+subdirectories.  By default, this is whatever @option{--instr-dir}
+is, usually @file{daikon-instrumented}.
+
+@item --types-style=@var{style}
+@var{style} should be one of @option{combined}, @option{flat}, or
+@option{tree}.  A style of @option{combined} specifies that the types
+for all packages should be merged, in a file named
+@file{prog-combined.types}, where @file{prog} is the name of the
+program.  A style of @option{flat} specifies that the
+types for each package should be in a separate file named after the
+package, but that these files should go in a single directory; for
+instance, the declarations for @code{Acme::Trampoline} and
+@code{Acme::Skates::Rocket} would go in files named
+@file{Acme::Trampoline.types} and
+@file{Acme::Skates::Rocket.types}.  A style of @option{tree} specifies
+that each package should have its own trace file, and that
+those files should be arranged in directories whose structure matches
+the structure of their package names; in the example above, the files
+would be @file{Acme/Trampoline.types} and
+@file{Acme/Skates/Rocket.types}.
+
+The default is @option{tree}.  Note that @option{--types-style} and
+@option{--decls-style} are currently constrained to be the same; if
+one is specified, the other will use the same value.
+
+@item --verbose
+@itemx -v
+Print additional information about what @command{dfepl} is doing,
+including external commands invoked.
+@end table
+
+
+@node CSV front end convertcsv.pl, Source-based Java front end dfej, Perl front end dfepl, Front ends
+@section Comma-separated-value front end convertcsv.pl
+
+@cindex csv files
+@cindex comma-delimited files
+@cindex comma-separated-value files
+@cindex tab-separated files
+@cindex Excel files
+@cindex spreadsheet files
+
+Daikon can process data from spreadsheets such as Excel.  In order to
+use such files, first save them in comma-separated-value, also known
+as csv or comma-delimited, format.
+Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
+@file{.decls} file) to be used by Daikon by running the
+@command{convertcsv.pl} program found in the @file{$DAIKONDIR/bin}
+directory.  For example,
+@example
+  convertcsv.pl myfile.csv
+@end example
+@noindent
+produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
+@command{convertcsv.pl} without any arguments in order to see a usage
+message.
+
+
+@node    Source-based Java front end dfej, Source-based C front end dfec, CSV front end convertcsv.pl, Front ends
 @section Source-based Java front end dfej
 
 @cindex front end for Java, source-based
@@ -2774,11 +3477,7 @@ The Chicory front end for Java (@pxref{Java front end Chicory}) works on
 all versions of the Java language, including Java 5.0.
 Another advantage of Chicory is that Chicory is much easier to use.
 Finally, Chicory is platform-independent (and requires no special action to
-build), since it is written in Java.  On the other hand,
-dfej's advantage over Chicory is in terms of performance:  code
-instrumented by dfej tends to run slightly faster than code instrumented by
-Chicory.  Since Chicory is about as fast as Daikon itself (and Chicory's
-speed will increase in future releases), Chicory is not the bottleneck.
+build), since it is written in Java.  
 Thus, we recommend the use of Chicory over dfej in most circumstances.
 For more details on Chicory, see @ref{Java front end Chicory}.
 
@@ -2799,7 +3498,6 @@ the names of procedures and variables that appear in the data trace file.
 @menu
 * Instrumenting Java programs::  
 * StackAr example with dfej::   
-* Step-by-step instructions::   
 * dfej options::                
 * Run Java::                    
 * Scope of instrumentation::    
@@ -2834,7 +3532,7 @@ in a @file{daikon-output/} directory.
 For more information about dfej, see @ref{Source-based Java front end dfej}.
 
 
-@node    StackAr example with dfej, Step-by-step instructions, Instrumenting Java programs, Source-based Java front end dfej
+@node    StackAr example with dfej, dfej options, Instrumenting Java programs, Source-based Java front end dfej
 @subsection StackAr example with dfej
 
 @c We recommend you run Daikon on Unix, but it can also be run on Windows.
@@ -2915,15 +3613,6 @@ the output.
 cd daikon-output
 @end example
 
-@c @item Due to a bug in the Java front end, there can be problems in the
-@c trace file.  Run the @command{modbit-munge} script to fix these problems:
-@c @table @r
-@c @item Unix
-@c @t{modbit-munge.pl StackAr.dtrace}
-@c @item Windows
-@c @t{modbit-munge.bat StackAr.dtrace}
-@c @end table
-
 @item Run Daikon on the trace file.
 
 @example
@@ -2969,10 +3658,6 @@ java -classpath "daikon-instrumented:$CLASSPATH" \
 
 (On Windows, use ``;'' as the path separator.)
 
-@c cd daikon-output
-@c modbit-munge.pl StackAr.dtrace
-@c @end example
-
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
@@ -2984,159 +3669,7 @@ java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
 @end itemize
 
 
-@node    Step-by-step instructions, dfej options, StackAr example with dfej, Source-based Java front end dfej
-@subsection Step-by-step instructions
-
-@c We recommend you run Daikon on Unix, but it can also be run on Windows.
-
-You need to perform three basic tasks:  instrument the target program
-(steps 1-4), run the instrumented program to create a data trace file
-(steps 5-7), and run Daikon over the data trace file to produce
-invariants (steps 8-9).
-
-You must first install Daikon if you haven't done so already; see
-@ref{Installing Daikon}.  If you have any trouble with these
-instructions, see @ref{Troubleshooting}, or try the @ref{Index}.
-
-
-@enumerate
-@item Change to the directory containing the StackAr program.  (The
-directory contains the @file{DataStructures} directory.)
-@example
-cd examples/StackAr
-@end example
-
-@item Compile the original version of the program.  You must use the
-@option{-g} flag to include debugging information in the compiled classfiles.
-You may compile with any Java compiler you like (such as javac), but
-your code must be compilable with the @command{jikes} Java compiler (see
-@uref{http://www.ibm.com/developerworks/oss/jikes/}).
-@example
-javac -g DataStructures/*.java
-@end example
-
-
-@item Instrument the @file{StackAr.java} file.
-@example
-dfej DataStructures/StackAr.java
-@end example
-@noindent
-(These instructions assume you have the current working directory (".")
-in your CLASSPATH@.  If that is not the case, then run @command{dfej
--ajaxap=.}  instead of @command{dfej}.)
-
-We instrument only this one file because we are only interested in the
-invariants of the StackAr class, not the other classes in the program.
-
-This command creates two directories, @file{daikon-instrumented} and
-@file{daikon-output}.  It creates an instrumented version of
-@file{StackAr.java} at @file{daikon-instrumented/DataStructures/StackAr.java}.
-It creates a declaration file at
-@file{daikon-output/DataStructures/StackAr.decls}.
-
-@item Compile the instrumented version of StackAr.java.
-@c I think this comment about "." on the classpath is correct.  -MDE 8/26/01
-(This step requires "." to be on your classpath.)
-
-@example
-javac daikon-instrumented/DataStructures/StackAr.java
-@end example
-
-@item Run the StackAr test suite, using the instrumented
-@file{StackAr.class} class file instead of the original (but the
-original version of all other files):
-
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.StackArTester
-@end example
-
-(On Windows, use @samp{;%CLASSPATH%} instead of @samp{:$CLASSPATH}.)
-
-This will generate a trace file at
-@file{daikon-output/StackAr.dtrace}.  This could take anywhere from
-a few seconds to a few minutes, depending on the speed of your
-computer.
-
-@item Change to the @file{daikon-output} directory to analyze
-the output.
-
-@example
-cd daikon-output
-@end example
-
-@c @item Due to a bug in the Java front end, there can be problems in the
-@c trace file.  Run the @command{modbit-munge} script to fix these problems:
-@c @table @r
-@c @item Unix
-@c @t{modbit-munge.pl StackAr.dtrace}
-@c @item Windows
-@c @t{modbit-munge.bat StackAr.dtrace}
-@c @end table
-
-@item Run Daikon on the trace file.
-
-@example
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
-     StackAr.dtrace
-@end example
-
-The invariants are printed to standard output, and a binary
-representation of the invariants is written to
-@file{StackAr.inv}.
-
-@item Examine the invariants.  There are five ways to do this.
-@itemize @bullet
-@item Examine the output from running Daikon.  (You may find it
-convenient to capture the output in a file; add @command{> StackAr.txt}
-to the end of the command that runs Daikon.)
-
-@item Use the PrintInvariants program to display the invariants.
-
-@example
-java daikon.PrintInvariants StackAr.inv
-@end example
-
-For more options to the PrintInvariants program, @xref{Printing
-invariants}.
-
-@item Use the Annotate program to insert the invariants as comments
-into the Java source program.
-
-@example
-cd ..
-java daikon.tools.jtb.Annotate daikon-output/StackAr.inv \
-     DataStructures/StackAr.java
-@end example
-
-Now examine file @file{DataStructures/StackAr.java-escannotated}.
-For more information about the Annotate program, @xref{Annotate}.
-
-@item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
-contains a tree that hierarchically organizes program points according
-to their class and method.  Using the GUI, you can look at invariants
-for only the methods and program points you care about.
-
-@example
-java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
-@end example
-
-@item Use the Daikon Context GUI to browse the invariants.  As you move
-the cursor in an editor window, the Context GUI displays the invariants
-applicable to the current location (class or method).  For details on
-running the Context GUI, see @ref{Context GUI}.  
-
-@end itemize
-
-@end enumerate
-
-@menu
-* Summary of Daikon use::       
-* Automating the process::      
-* Second Java example::         
-@end menu
-
-@node    Summary of Daikon use, Automating the process, Step-by-step instructions, Step-by-step instructions
+@node    Summary of Daikon use, Automating the process, StackAr example with dfej, StackAr example with dfej
 @subsubsection Summary of Daikon use
 
 The steps above can be divided into three stages:
@@ -3160,10 +3693,6 @@ java -classpath "daikon-instrumented:$CLASSPATH" \
 
 (On Windows, use ``;'' as the path separator.)
 
-@c cd daikon-output
-@c modbit-munge.pl StackAr.dtrace
-@c @end example
-
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
@@ -3175,7 +3704,7 @@ java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
 @end itemize
 
 
-@node    Automating the process, Second Java example, Summary of Daikon use, Step-by-step instructions
+@node    Automating the process, Second Java example, Summary of Daikon use, StackAr example with dfej
 @subsubsection Automating the process
 
 The script @command{daikon.pl} automates all steps of the invariant
@@ -3187,11 +3716,11 @@ daikon.pl DataStructures.StackArTester
 @end example
 
 This command instruments your program, generates a trace file, and
-displays the invariants in the Tree GUI@.  Currently, this script only works
-on Unix.  For more details, @xref{All-in-one script}.
+displays the invariants in the (deprecated) Tree GUI@.  Currently, this
+script only works on Unix.  For more details, @xref{All-in-one script}.
 
 
-@node    Second Java example,  , Automating the process, Step-by-step instructions
+@node    Second Java example,  , Automating the process, StackAr example with dfej
 @subsubsection A second Java example
 
 A second example is located in the @file{examples/QueueAr} subdirectory.
@@ -3211,8 +3740,6 @@ javac daikon-instrumented/DataStructures/QueueAr.java
 @example
 java -classpath "daikon-instrumented:$CLASSPATH" \
      DataStructures.QueueArTester
-@c cd daikon-output
-@c modbit-munge.pl QueueAr.dtrace
 @end example
 
 (On Windows, use ``;'' as the path separator.)
@@ -3227,7 +3754,7 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 
 @end itemize
 
-@node    dfej options, Run Java, Step-by-step instructions, Source-based Java front end dfej
+@node    dfej options, Run Java, StackAr example with dfej, Source-based Java front end dfej
 @subsection dfej options
 
 The simplest way to invoke dfej is simply to supply it with a list of
@@ -3451,8 +3978,8 @@ java -classpath daikon-instrumented:$CLASSPATH \
 @end example
 
 
-@node    Run Java, Scope of instrumentation, dfej options, Source-based Java front end dfej
-@subsection Details on running instrumented Java programs
+@node    Run dfej Java, Scope of instrumentation, dfej options, Source-based Java front end dfej
+@subsection Details on running dfej-instrumented Java programs
 
 After instrumentation, there are two versions of your Java program:
 the original version, which is unmodified, and the instrumented
@@ -3553,9 +4080,6 @@ uninstrumented classes may not be detected.  This can affect Daikon's
 statistical tests, but in practice usually has little impact.  The program 
 makes approximations to the missing modification information.
 
-@c (The @command{modbit-munge.pl} script makes approximations to the missing
-@c modification information.
-
 
 @node    Refined runtime types, Installing dfej, Scope of instrumentation, Source-based Java front end dfej
 @subsection Refined runtime types
@@ -3590,50 +4114,6 @@ comment immediately before the declared type (but after any modifiers like
 @end example
 
 
-
-@c 
-@c <hr>
-@c <h1><a name="manifest">Manifest (list of files in the distribution)</a></h1>
-@c 
-@c @example
-@c User documentation
-@c   daikon.html		This file; the main Daikon documentation
-@c   README		Says to see daikon.html instead
-@c   daikon.gif		The Daikon logo
-@c 
-@c Java front end
-@c   java-front-end/	A modified version of the <a href="http://oss.software.ibm.com/developerworks/opensource/jikes/project/">Jikes Java compiler</a>
-@c     src/                Source code
-@c       dfej              The main executable (Daikon front end for Java);
-@c                           you must build this yourself (see <a href="#build-dfej">instructions</a>)
-@c 
-@c C front end
-@c   c-front-end/
-@c     dump_trace.c	Writing data values to a data trace
-@c     dump_trace.h	Header files for the above
-@c     Makefile-sample	Sample Makefile for linking in the above
-@c     dfec		Script for instrumenting C files (you also
-@c                           need the edgcpfe executable; see "<a
-@c                           href="#install">Installing Daikon</a>")
-@c     dfec.sh		Version of dfec written in shell script, not Perl
-@c     label.txt		Auxiliary file for output filename selection at runtime
-@c 
-@c Invariant detector
-@c   java/			Source code for Daikon, which is written in Java
-@c     Daikon.java         The entry point for Daikon
-@c 
-@c Auxiliary programs
-@c   bin/			Helper scripts and programs
-@c 
-@c Miscellaneous files
-@c   Makefile		Makefile for the invariant detection system
-@c   VERSION		Timestamp of this distribution
-@c   dtrace-format.txt	Documentation of the trace file format; somewhat old
-@c   daikon-python/        An old version of Daikon, written in Python.
-@c   			  The current version does not require Python.
-@c @end example
-
-
 @node    Installing dfej, All-in-one script, Refined runtime types, Source-based Java front end dfej
 @subsection Installing dfej, the Daikon front end for Java
 
@@ -3663,8 +4143,11 @@ executable for you.)
 @item
 You can build dfej from the sources, which are included in
 the Daikon source distribution.  
+(dfej is written in C++, so you need a C++ compiler such as
+@uref{http://gcc.gnu.org/,, gcc}.)
 After building, file @file{src/dfej} (on Windows, @file{src/dfej.exe}) is
-the dfej executable.  It is already on your path.
+the dfej executable.  If you followed the installation instructions
+(@pxref{Installing Daikon}), it is already on your path.
 
 @itemize
 @item
@@ -3745,34 +4228,6 @@ You must supply at least the name of a "main" class that provides
 the method @code{public static void main(String[] args)}.
 @command{daikon.pl} runs this class to exercise your program.
 
-@c <!--
-@c <h2><a xname="example">Example</a></h2>
-@c 
-@c You can try an example provided by the staff:
-@c <pre>
-@c   athena% cd ~/6.170
-@c   athena% mkdir daikon-testing; cd daikon-testing
-@c   athena% cp -rp /mit/6.170/handouts/daikon/example .
-@c   athena% daikon --verbose xxx
-@c </pre>
-@c This will run <tt>xxx</tt>, detect invariants for the program, and
-@c display the daikon Tree GUI to browse the results.  See the <a
-@c href="#interpret-output">interpreting the output</a> section below for
-@c details on the meaning of the invariants.
-@c 
-@c <p>Each run of daikon creates two files: an <tt>.inv</tt> file that
-@c contains the invariants in a special format, and a
-@c <tt>.src.tar.gz</tt> file that contains a snapshot of the program
-@c source.  You may specify names for these files using the <tt>--output
-@c <i>file</i></tt> parameter to daikon.  For example <tt>--output
-@c mytest</tt> will create <tt>mytest.inv</tt> and
-@c <tt>mytest.src.tar.gz</tt>.
-@c 
-@c <p>If your main class requires arguments, you may place them after the
-@c class name, just as if you were running <tt>java</tt> instead of
-@c <tt>daikon</tt>.
-@c -->
-
 @menu
 * daikon.pl arguments::         
 @end menu
@@ -3835,339 +4290,7 @@ Print extra debugging information.
 @end table
 
 
-
-
-@node C front end Kvasir, Source-based C front end dfec, Source-based Java front end dfej, Front ends
-@section C front end Kvasir
-
-@cindex Kvasir (binary front end for C)
-@cindex front end for C
-@cindex C front end
-
-Daikon's front end for C, named Kvasir, instead works by examining the
-operation of an unmodified binary at runtime.  (By contrast, Daikon's
-older C front end, known as dfec (@pxref{Source-based C front end
-dfec}), works by rewriting the source code for your C program.)  Kvasir
-is named after the Norse god of knowledge and beet juice.
-
-Kvasir is based on the Valgrind dynamic program supervision framework
-(which is best known for its memory error detection tool).  Using
-Valgrind allows Kvasir to interrupt your program's execution, read its
-variables, and examine its memory usage, all transparently to the
-program.  Also, rather than using your program's source code to find
-the names and types of functions and variables, Kvasir obtains them
-from debugging information included in the executable in a standard
-format.  These differences should make Kvasir both much easier to use and
-more robust than the source-rewriting-based dfec.
-
-However, Kvasir has some limitations of its own.  Because Kvasir uses
-Valgrind, it shares Valgrind's limitation of working only under the
-Linux operating system, and only on Intel 386-compatible processors
-(the so-called IA-32 architecture) such as the Intel Pentium and the
-AMD Athlon.  Furthermore, Kvasir requires that your program have debugging
-information available in the DWARF-2 format, as produced by recent
-versions of GCC@.  Two other limitations are not fundamental, but apply
-to the current version: first, the programs used by Kvasir should be
-compiled without optimization; and second, the programs should be
-written in C@.  (In the future, Kvasir will support C++ and possibly other
-languages that follow C calling conventions; send mail to 
-@email{daikon-developers@@lists.csail.mit.edu} if this functionality is
-important to you.)
-
-For information about installing Kvasir, see @ref{Installing Kvasir}.
-
-@menu
-* Using Kvasir::                
-* Kvasir options::              
-* Kvasir limitations::          
-* Installing Kvasir::           
-@end menu
-
-@node Using Kvasir, Kvasir options, C front end Kvasir, C front end Kvasir
-@subsection Using Kvasir
-
-The first step in using Kvasir is to compile your program using the
-DWARF-2 format of debugging information, and without optimization.
-In most recent versions of GCC (at least 2.95 and higher), DWARF-2
-debugging information can be produced by supplying the
-@option{-gdwarf-2} command line option.  In more recent versions of GCC 3,
-DWARF-2 is in fact the default format for debugging information.
-Also, remove any optimization flags, such as @option{-O} or @option{-O2},
-and any flags that affect calling conventions, such as
-@option{-fomit-frame-pointer}.  Except for these changes, you should be
-able to compile and link your program normally.
-
-In the second step of using Kvasir, run your program as you normally
-would, but prepend the command @command{kvasir-dtrace} to the beginning.
-For instance, if you would normally run your program with the command 
-@example
-./program -option input.file
-@end example
-just say
-@example
-kvasir-dtrace ./program -option input.file
-@end example
-@noindent
-As well as running your program (more slowly than usual), this command
-also creates a directory @file{daikon-output} in the current
-directory containing @file{program.decls} and @file{program.dtrace}
-files suitable as input to Daikon.
-
-A number of options to Kvasir may be supplied between
-@command{kvasir-dtrace} and the name of your program; see below for a
-list.
-
-Note that Kvasir uses a different scheme for naming variables than dfec
-or the Java front end do.  Because C does not have classes, the `class'
-portion of a program point name (before the last period) instead holds
-the file in which a function was defined, for file-static functions, or
-is simply a single period for global functions. (Thus, global function
-names start with two periods, like @samp{..main():::ENTER}.) In
-variable names, by contrast, the period is used to represent the field
-selection operator, so a slash is used instead: global variables are
-prefixed with a slash, and file-static variables are prefixed with their
-filename (with periods converted into underscores) and then a slash.
-
-@node Kvasir options, Kvasir limitations, Using Kvasir, C front end Kvasir
-@subsection Kvasir options
-
-@table @option
-
-@item --asserts-aborts
-@itemx --no-asserts-aborts
-
-Enable (disable) Kvasir's internal consistency checks.  By default, they
-are disabled. 
-
-@item --debug
-@itemx --no-debug
-
-Enable (disable) progress messages meant for debugging problems with
-Kvasir itself.  By default, they are disabled.  This option is intended
-mainly for Kvasir's developers.
-
-@item --decls-file=@var{filename.decls}
-
-Write the @file{.decls} file listing the names of functions and
-variables to the specified file name.  The default is
-@file{daikon-output/@var{programname}.decls}, where @var{programname}
-is the name of the program.
-
-@item --decls-only
-
-Exit after writing the @file{.decls} file; don't run the program or
-generate trace information.  Since the @file{.decls} file is the same for
-any run of a program, it can be generated once and then reused on later
-runs, as long as no new program points are added and each program point
-has the same set of variables.
-
-@item --limit-static-vars
-
-Limits the output of static variables in the @file{.decls} and @file{.dtrace} 
-files. File-static variables are only observed at program points for functions 
-which belong to the same file as the variable.  Static variables 
-declared within a particular function are only observed at program points 
-for that function.  This is a heuristic to reduce the amount of Kvasir
-output without greatly reducing the amount of useful output.
-
-@item --dtrace-append
-
-Append new trace information to the end of an existing @file{.dtrace}
-file.  The default is to overwrite a pre-existing @file{.dtrace} file.
-
-@item --dtrace-file=@var{filename.dtrace}
-
-Write the @file{.dtrace} trace file giving the values of variables to
-the specified file name.  The default is
-@file{daikon-output/@var{programname}.dtrace}, where @var{programname}
-is the name of the program.  A filename of @file{-} may be used to
-specify the standard output; in this case, the regular standard output
-of the program will be redirected back to the terminal, to avoid
-intermixing it with the trace output. If the given filename ends in '.gz', 
-then @option{--dtrace-gzip} is enabled and the @file{.dtrace} file will be compressed.
-
-@item --dtrace-gzip
-
-Compress trace information with the @command{gzip} program before writing
-it to the @file{.dtrace} file.  You must have the @command{gzip} program
-available.
-
-@item --dump-ppt-file=@var{filename}
-@itemx --dump-var-file=@var{filename}
-
-Print a list of all the program points (respectively all the variables)
-in the program to the specified file.  An edited version of this file can
-then be used with the @option{--ppt-list-file} (respectively
-@option{--var-list-file}) option.
-
-@item --ignore-globals
-
-Omit any global or static variables from the @file{.decls} and
-@file{.dtrace} files.  Leaving these out can significantly improve Kvasir
-and Daikon's performance, at the expense of missing properties involving
-them.  The default is to keep global and static variables.
-
-@item --output-fifo
-
-Create the output @file{.decls} and @file{.dtrace} files as FIFOs (also
-known as `named pipes').  Kvasir will then open first the @file{.decls}
-FIFO and then the @file{.dtrace} FIFO, blocking until another program
-(such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
-avoids the need for large trace files, but FIFOs are not supported by
-some file systems, including AFS@.
-
-@item --ppt-list-file=@var{filename}
-@itemx --var-list-file=@var{filename}
-
-Trace only the program points (respectively variables) listed in the
-given file.  Other program points (respectively variables) will be
-omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
-way to produce such files is by editing the output produced by the
-@option{--dump-ppt-file} (respectively @option{--dump-var-file}) option
-described above.
-
-@item --program-stdout=@var{filename}
-@itemx --program-stderr=@var{filename}
-
-Redirect the standard output (respectively standard error) stream of the
-program being traced to the specified path.  By default, the standard
-output and standard error streams will be left pointing to the same
-locations specified by the shell, except that if @option{--dtrace-file=-}
-is specified, then the default behavior is as if
-@option{--program-stdout=/dev/tty} were specified, since mixing the
-program's output and Kvasir's trace output is not advisable.
-If the same filename is given for both options, the streams will be
-interleaved in the same way as if by the Bourne shell construction
-@code{2>&1}.
-
-Also as in the shell, @var{filename} can be an ampersand followed by an
-integer, to redirect to a numbered file descriptor.  For instance, to
-redirect the program's standard output and error, and Kvasir's standard
-error, to a single file, you can say @option{--program-stdout='&2'
---program-stderr='&2' 2>@var{filename}}.
-
-@item --disambig-file=@var{filename}
-Specifies the filename for the pointer type disambiguation file.
-If this file exists, Kvasir uses it to make decisions about how 
-to output the referents of pointer variables.  If the file does not exist, 
-then Kvasir creates it, specifying default instrumentation behavior for all
-pointer types.  It may then be edited and used on subsequent runs.
-(NOTE: Pointer type disambiguation functionality is not yet completed.)
-
-@item --disambig
-Tells Kvasir to create or read pointer type disambiguation with the
-default filename, which is @file{@var{myprog}.disambig} in the same
-directory as the target program.
-(NOTE: Pointer type disambiguation functionality is not yet completed.)
-
-@end table
-
-@node Kvasir limitations, Installing Kvasir, Kvasir options, C front end Kvasir
-@subsection Kvasir limitations
-
-This subsection lists some of the known limitations of the
-current Kvasir release; if you encounter any problems other than listed
-here, please report them as bugs (@pxref{Reporting bugs}).  The
-limitations are listed roughly in decreasing order of severity.
-
-@itemize @bullet
-
-@item
-Kvasir-traced programs a while (often a good fraction of a second)
-to start.  When tracing short-lived programs, this overhead can
-dominate Kvasir's per-instruction runtime overhead.
-
-@item
-Kvasir does not support C++ (dfec had small but unreliable C++ support).
-We want to first gauge the demand for this feature.
-Please send email to @email{daikon-developers@@lists.csail.mit.edu} if you
-feel that this addition will benefit your experience with Daikon.
-
-@item
-Kvasir always prints the contents of structures according to their
-compile-time type.  Programs that use generic pointers and structural
-equivalence to simulate object-orientation will have derived-`class'
-fields missing when a structure is passed via a base-`class' pointer.
-
-@item
-Kvasir's support for outputting arrays is not yet complete. 
-It still does not have the functionality to print out multidimensional 
-arrays with all of their elements or the option to flatten 
-multidimensional arrays into multiple single-dimensional arrays.
-
-@item
-Not all of the options of the source-based dfec are supported.
-Variable comparability information is not supported.
-(dfec used the Lackwit tool, but it did not scale and often produced
-incorrect output.)
-The depth to which nested structures
-are explored is fixed.  Of the environment variables obeyed by dfec,
-only @code{DTRACEAPPEND} is recognized.
-
-@item
-Kvasir behaves somewhat differently with different versions of GCC@.
-We have had the best results with versions 3.3 (which we use for
-testing) and 3.4.  If feasible, we recommend that you use
-Kvasir with such a relatively recent version of GCC@.  Incompatibilities
-between Kvasir and the debugging information produced by older GCC
-versions can lead to incorrect output and, in some cases for version
-2.95, can cause Kvasir to crash.
-
-@item
-On some platforms (including, as of December 2004, recent versions of
-Debian), Kvasir crashes if run on statically-linked binaries.  To avoid
-this problem, do not use the @option{-static} flag when linking programs
-for use Kvasir.  If you want to link statically with a particular
-library, supply the path to its static version (@file{libfoo.a})
-directly to @command{gcc} instead.
-
-@item
-Kvasir is incompatible with some compiler optimizations.  It is
-definitely incompatible with the @option{-fomit-frame-pointer}
-optimization, and it may have trouble with other optimizations as
-well.  We recommend that you compile programs for Kvasir without
-optimization.
-
-@end itemize
-
-
-@node    Installing Kvasir,  , Kvasir limitations, C front end Kvasir
-@subsection Installing Kvasir
-
-@cindex installing Kvasir
-@cindex Kvasir installation
-
-Kvasir is the recommended C front end for use on Linux/x86.  The source
-code for Kvasir is included in the main Daikon distribution, but it is
-not compiled by default.
-
-To compile and install Kvasir, give the command @code{make kvasir}
-from the top-level Daikon directory:
-Other sections of the manual give installation instructions for several
-special-purpose components of Daikon:  the C front end Kvasir
-(@pxref{Installing Kvasir}), the source-based Java front end dfej
-(@pxref{Installing dfej}), the source-based C front end dfec
-(@pxref{Installing dfec}), and the Context GUI (@pxref{Installing the
-Context GUI}).  Most users will not need to read those instructions,
-however.
-
-@example
-cd $DAIKONDIR
-make kvasir
-@end example
-
-This will check that you have the appropriate prerequisites (such as
-GCC), configure Kvasir for your machine, compile it, and install
-it in the directory @file{kvasir/inst}.
-
-Once Kvasir has been installed, it can be used via the
-@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
-you have set up the Daikon environment according to the instructions
-above, it should already be in your @code{PATH}.  For instructions on using
-Kvasir, see @ref{C front end Kvasir}.
-
-
-@node    Source-based C front end dfec, Perl front end dfepl, C front end Kvasir, Front ends
+@node    Source-based C front end dfec,  , Source-based Java front end dfej, Front ends
 @section Source-based C front end dfec
 
 @cindex dfec (Daikon front end for C)
@@ -4343,37 +4466,6 @@ For more information about dfec, including more detailed documentation
 on its command-line options, see @ref{Source-based C front end dfec}.
 
 
-@c <ol>
-@c      <tt>dfec</tt> is written in Perl.  If Perl is not available, you may
-@c      instead use <tt>dfec.sh</tt>, which is written in sh shell script.<p>
-@c 
-@c      The Daikon C front end:
-@c      <ol>
-@c        <li>copies your original files to @file{<i>myprog1.c</i>.uninst},
-@c 	   etc.<br>
-@c        <li>overwrites the original files with instrumented versions
-@c        <li>creates declaration files named @file{<i>myprog1.c</i>.decls}, etc.
-@c      </ol>
-@c      You may wish to perform this operation with a copy of your program,
-@c      to safeguard your original source code.<p>
-@c 
-@c      If you supply the @option{-d <i>directory</i>} argument (before
-@c      the file names), then the instrumented source files are placed in the
-@c      specified directory instead (and no backup files need be made).
-@c  <li>Create or modify a @file{Makefile}.  Either:
-@c    <ul>
-@c      <li>If you have no @file{Makefile}, copy @file{Makefile-sample}
-@c          to @file{Makefile} and add the names of your source files to its
-@c          <tt>OBJS</tt>, and edit its <tt>EXEC</tt> executable name.
-@c      <li>If you have a @file{Makefile}, add @file{dump_trace.o} to the
-@c          list of object files that need to be created (and linked to create
-@c          your executable).
-@c    </ul>
-@c  <li>Create an instrumented executable by building your program in the
-@c      usual way (perhaps by running <tt>make</tt> or <tt>cc</tt> or <tt>gcc</tt>).
-@c </ol>
-
-
 @node    dfec examples, dfec command-line arguments, Instrumenting C programs with dfec, Source-based C front end dfec
 @subsection dfec examples
 
@@ -4462,7 +4554,7 @@ several ways to do this:
 @itemize 
 @item Examine the output from running Daikon.
 @item Use the PrintInvariants program to display the invariants.
-@item Use the Daikon Tree GUI to browse the invariants.
+@c @item Use the Daikon Tree GUI to browse the invariants.
 @item Use the Daikon Context GUI to browse the invariants.
 @end itemize
 @noindent
@@ -5543,413 +5635,6 @@ recommend the use of EDG version 3.0, because the version of dfec built
 using EDG 2.45 contains some known bugs that are corrected in the
 version of dfec that is built using EDG 3.0.)
 
-@c how to put something on your path:
-@c 	      <li>copy or link the @command{dfej} program to a directory on
-@c 	          your path, or
-@c 	      <li>add the @file{java-front-end/src} directory to your path;
-@c 		  for instance, in csh place the following in your
-@c 		  @file{.cshrc} file:<br>
-@c 		  <tt>set path = (<em>daikonparent</em>/daikon/java-front-end/src $path)</tt><br>
-
-
-@node Perl front end dfepl, CSV front end convertcsv.pl, Source-based C front end dfec, Front ends
-@section Perl front end dfepl
-
-@cindex front end for Perl
-@cindex Perl front end
-@cindex dfepl (Daikon front end for Perl)
-
-This section contains details about dfepl, the Daikon front end for
-Perl.  For a brief introduction to dfepl, see @ref{Perl examples} and
-@ref{Instrumenting Perl programs}.
-
-dfepl works with Perl versions 5.8 and later. (To be precise, Perl
-programs instrumented with dfepl can also be run with Perl 5.6, but
-the instrumentation engine, which is itself written in Perl, requires
-version 5.8).  dfepl reads the source code for Perl modules or
-programs, and writes out instrumented versions of that code that
-keep track of function parameters, and make calls to routines in the
-@file{daikon_runtime} package whenever an instrumented subroutine is
-entered or exited.
-
-The instrumentation engine recognizes parameters as those variables
-that are declared with @code{my(...)} or @code{local(...)} and, in the
-same expression, assigned to from a value related to the argument
-array @code{@@_}, but only among the first contiguous series of such
-assignments in the body of a subroutine.  This will capture the most
-common assignment idioms, such as @code{my $self = shift;} (where
-@code{shift} is short for @code{shift @@_}), @code{my $x = $_[0];}, and
-@code{my($x, $y, @@a) = @@_;}, but the arguments to subroutines which
-access them only directly through @code{@@_}, or that perform other
-operations before reading their arguments, will not be recognized.
-
-If the uninstrumented code requested warnings via the @code{use
-warnings} pragma or by adding the @option{-w} flag on the @code{#!}
-line, the instrumented code will also request warnings.  In this case,
-or if @option{-w} is specified on the command line when running it, the
-instrumented code may produce warnings that the original code did
-not.  There are several situations in which the instrumented code
-produced by dfepl, while functionally equivalent to the original,
-generates more warnings.  The most common such problem, which arises
-from code that captures the scalar-context return value of a
-subroutine that returns a list, has been avoided in the current
-version by disabling the warning in question.  Other warnings which
-are known to be produced innocuously in this way include
-@code{Ambiguous call resolved as CORE::foo(), qualify as such or use
-&} (caused by code that uses @code{CORE::} to distinguish a built-in
-function from a user subroutine of the same name), and @code{Constant
-subroutine foo redefined} (caused by loading both instrumented and
-uninstrumented versions of a file).  Though some such warnings
-represent deficiencies in the instrumentation engine, they can be
-safely ignored when they occur.
-
-Because Perl programs do not contain static type information to
-distinguish, for instance, between strings and numbers, the Perl
-front end incorporates an additional dynamic analysis to infer these
-types.  This type guessing, which occurs as a first pass before the
-program can be instrumented to produce output for Daikon, operates in
-a manner somewhat analogous to Daikon itself: watching the execution
-of a program, the runtime system chooses the most restrictive type for
-a variable that is not contradicted during that execution.  These
-types indicate, for instance, whether a scalar value always holds an
-integer, a possibly fractional numeric value, or a reference to
-another object.  It should not be necessary to examine or modify this
-type information directly, but for the curious, the syntax of the type
-information is described in comments in the @file{Daikon::PerlType}
-module.
-
-The safest course is to infer types for variables using exactly the
-same program executions (e.g., test cases) which will later be used to
-generate traces for Daikon, as this guarantees that the type
-information will match the actual data written to the trace file.
-However, because the type-guessing-instrumented versions of programs
-run fairly slowly in the current version, you may be tempted to use a
-subset of the input data for type guessing.  Doing so is possible, but
-it will only work correctly if the smaller tests exercise all of the
-instrumented subroutines and exit points with all the types of data
-they will later be used with.  If the trace runtime tries to output a
-data value that doesn't match the inferred type, the value may
-silently be converted according to Perl's usual conventions (for
-instance, a non-numeric string may be treated as the number zero), or
-it may cause an error during tracing (for instance, trying to
-dereference a supposed array reference that isn't).  Also, if a
-subroutine exit point is traced but was never encountered during type
-guessing, the generated @file{.decls} and @file{.dtrace} files will be
-incompatible in a way that will cause Daikon to abort with an error
-message of the form ``Program point foo():::EXIT22 appears in dtrace
-file but not in any decl file''.
-
-The workflow of instrumenting Perl code with dfepl is summarized in
-the following diagram:
-@*
-@center @image{images/dfepl-flow,4in,}
-
-The @command{dfepl} command works by reading one or more Perl programs
-or modules, and writing out new versions of those files, instrumented
-to capture information about their execution, by default to another
-directory.  dfepl is used in two passes: first, before type
-information is available, instrumented versions are written to a
-directory @file{daikon-untyped}.  These untyped programs, when run,
-will write
-files containing dynamically inferred type information (with the
-extension @file{.types}), by default to the @file{daikon-instrumented}
-directory.  When dfepl is rerun with this type information, it
-produces type-aware instrumented code in the
-@file{daikon-instrumented} directory, which when run produces
-execution traces in files with the extension @file{.dtrace} in the a
-directory @file{daikon-output}.
-
-@menu
-* dfepl options::               
-@end menu
-
-@node dfepl options,  , Perl front end dfepl, Perl front end dfepl
-@subsection dfepl options
-
-@table @option
-@item --absolute
-@itemx --no-absolute
-@option{--absolute} stores the absolute path to the output directories
-(by default named @file{daikon-untyped}, @file{daikon-instrumented} or
-@file{daikon-output}) in the instrumented programs, so that no matter
-where the instrumented program is run, the output will go to a fixed
-location.  Even if these directories are given as relative paths (as is
-the default), @option{--absolute} specifies that they should always be
-taken as relative to the directory that was the working directory when
-@command{dfepl} was run.
-
-@option{--no-absolute} specifies the opposite, causing the output paths
-to be interpreted relative to the current working directory each time
-the instrumented program is invoked.  The default, when neither option
-is specified, is for @file{.types} files to use an absolute path, but
-all others to use relative path, so that the @file{.types} files will
-always be in the same place as the instrumented source files that
-generated them, but the @file{daikon-output} directory will be created
-in the current directory when the program runs.
-
-@item --accessor-depth=@var{num}
-Controls the number of nested invocations of object accessor methods
-to examine.  For instance, suppose that the @code{Person} class has a
-method @code{mother()} that returns another person (and has been
-specified to @command{dfepl} as an accessor), and that @code{$me} is
-an instrumented variable.  If the accessor depth is 1, only
-@code{$me->mother()} will be examined.  If the depth is 2,
-@code{$me->mother()->mother()} will also be examined.  Specifying large
-accessor depths is generally not advisable, especially with many
-accessor methods, as the number of variables examined can be too many
-for Daikon to process efficiently.
-
-By default, the Daikon Perl trace runtime will examine at most a
-single level of accessors.
-
-@item -A
-@itemx --accessors-dir=@var{directory}
-Look for files containing accessor lists in @var{directory}, or the
-current directory if @var{directory} is omitted.  For a class
-@code{Acme::Foo}, accessors are methods that return information about
-an object but do not modify it.  @command{dfepl} cannot determine on
-its own which methods are accessors, but when a list of them is
-provided, it can call an object's accessors when examining a variable
-of that class to obtain more information about the object.  To tell
-@code{dfepl} about the accessors for @code{Acme::Foo}, make a file
-listing the names of each accessor method, one per line with no other
-punctuation, named @file{Acme/Foo.accessors} in the same directory as
-@file{Acme/Foo.pm}.
-
-@item --decls-dir=@var{directory}
-Put generated declaration files in @var{directory} and its
-subdirectories.  The default is @file{daikon-output}.
-
-@item --decls-style=@var{style}
-@var{style} should be one of @option{combined}, @option{flat}, or
-@option{tree}.  A style of @option{combined} specifies that the
-declarations for all packages should be merged, in a file named
-@file{prog-combined.decls} where @file{prog} is the name of the
-program.  A style of @option{flat} specifies that the declarations for
-each package should be in a separate file named after the package, but
-that these files should go in a single directory; for instance, the
-declarations for @code{Acme::Trampoline} and
-@code{Acme::Skates::Rocket} would go in files named
-@file{Acme::Trampoline.decls} and @file{Acme::Skates::Rocket.decls}.  A
-style of @option{tree} specifies that each package should have its own
-declarations file, and that those files should be arranged in
-directories whose structure matches the structure of their package
-names; in the example above, the files would be
-@file{Acme/Trampoline.decls} and @file{Acme/Skates/Rocket.decls}.
-
-The default is @option{tree}.  Note that @option{--decls-style} and
-@option{--types-style} are currently constrained to be the same; if
-one is specified, the other will use the same value.
-
-@item --dtrace-append
-@itemx --no-dtrace-append
-When @option{--dtrace-append} is specified, the instrumented program
-will append trace information to the appropriate
-@file{.dtrace} file each time it runs.  When
-@option{--no-dtrace-append} is specified, it will overwrite the file
-instead. 
-
-The default behavior is to overwrite.  This choice can also be
-overridden, when the program is run, to always append by setting the
-environment variable @code{DTRACEAPPEND} to 1.
-
-@item --dtrace-dir=@var{directory}
-Put generated trace files in @var{directory} and its
-subdirectories.  The default is @file{daikon-output}.
-
-@item --dtrace-style=@var{style}
-@var{style} should be one of @option{combined}, @option{flat}, or
-@option{tree}.  A style of @option{combined} specifies that the traces
-for all packages should be merged, in a file named
-@file{prog-combined.dtrace}, where @file{prog} is the name of the
-program.  A style of @option{flat} specifies that the
-traces for each package should be in a separate file named after the
-package, but that these files should go in a single directory; for
-instance, the declarations for @code{Acme::Trampoline} and
-@code{Acme::Skates::Rocket} would go in files named
-@file{Acme::Trampoline.dtrace} and
-@file{Acme::Skates::Rocket.dtrace}.  A style of @option{tree} specifies
-that each package should have its own trace file, and that
-those files should be arranged in directories whose structure matches
-the structure of their package names; in the example above, the files
-would be @file{Acme/Trampoline.dtrace} and
-@file{Acme/Skates/Rocket.dtrace}.
-
-The default is @option{combined}.
-
-@item --help
-Print a short options summary.
-
-@item --instr-dir=@var{directory}
-@c dfec option -- do not rename (yet)
-@itemx --instrsourcedir=@var{directory}
-Put instrumented source files in @var{directory} and its
-subdirectories.  The default is @file{daikon-untyped}, or
-@file{daikon-instrumented} if type information is available.
-
-@item --list-depth=@var{DEPTH}
-Consider as many as @var{DEPTH} of the first elements of a list to be
-distinct entities, for the purpose of guessing their types.  When
-subroutines return a list of values, each value may have a distinct
-meaning, or the list may be homogeneous.  When trying to assign types
-to the elements of a list, the Daikon Perl trace runtime will try
-making separate guesses about the types of the elements of a short
-list, but it would be inefficient to make retain this distinction for
-many elements.  This parameter controls how many elements of a list
-will be examined individually; all the others will be treated
-uniformly.
-
-The default is 3.
-
-@item --output-dir=@var{directory}
-Put all of the files that are the output of the tracing process (and
-therefore input to the Daikon invariant detection engine) in
-@var{directory} and its subdirectories.  This option is a shorthand
-equivalent to setting both @option{--decls-dir} and
-@option{--dtrace-dir} to the same value.
-
-The default behavior is as if @option{--output-dir=daikon-output} had
-been specified.
-
-@item --perl=@var{path}
-Use @var{path} as the location of Perl when calling the annotation
-back end (a module named @code{B::DeparseDaikon}), rather than the
-version of Perl under which @command{dfepl} itself is running, which
-is probably the first @command{perl} that occurs on your path.  For
-instance, if the first version of @command{perl} on your path isn't
-version 5.8 or later, you should this option to specify another
-@command{perl} program that is.
-
-@item --nesting-depth=@var{num}
-When examining nested data structures, traverse as many as @var{num}
-nested references.  For instance, suppose that @code{@@a} is the array
-
-@example
-@@a = (@{1 => [2, 3]@}, @{5 => [4, 2]@})
-@end example
-
-If the depth is 0, then when examining @code{@@a}, Daikon's Perl trace
-runtime will consider it to be an array whose elements are references,
-but it won't examine what those references point to.  If the depth is
-1, it will consider it to be an array of references to hashes whose
-keys are integers and whose values are references, but it won't
-examine what @emph{those} references point to.  Finally, if the depth
-is 2 or more, it will consider @code{@@a} to be an array of references
-to hashes whose keys are integers and whose values are references to
-arrays of integers.
-
-The default nesting depth is 3.
-
-When referenced objects have accessor methods, or when accessors
-return references, the @option{--accessor-depth} and
-@option{--nesting-depth} options interact.  Specifically, if these
-depths are A and R, the behavior is as if the runtime has a budget of
-1 unit, which it can use either on accessors which cost 1/A or
-references which cost 1/R@.  It may thus sometimes be useful to specify
-fractional values for @option{--accessor-depth} and
-@option{--nesting-depth}; in fact, the default accessor depth is
-1.5.
-
-@item --types-append
-@itemx --no-types-append
-When @option{--types-append} is specified, the instrumented program
-will append type information to the appropriate
-@file{.types} file each time it runs.  When
-@option{--no-types-append} is specified, it will overwrite the file
-instead. 
-
-The default behavior is to append.  If @option{--no-types-append} is
-specified, however, this choice can also be overridden, when the
-program is run, to append by setting the environment variable
-@code{TYPESAPPEND} to 1.  There is no way to use environment variables
-to force the runtime to overwrite a types file, but an equivalent
-effect can be obtained by simply removing the previous types file
-before each run.
-
-@item -T
-@itemx --types-dir=@var{directory}
-Look for @file{.types} files in @var{directory}, or
-@file{daikon-instrumented} if @var{directory} is omitted.  When
-instrumenting a module @code{Acme::Trampoline}, used in a program
-@file{coyote.pl},  @command{dfepl} will look for
-files named @file{coyote-combined.types}, @file{Acme::Trampoline.types}, and
-@file{Acme/Trampoline.types}, corresponding to the possible choices of
-@option{--types-style}.  Once discovered, the files are used in the
-same way as for @option{-t}.
-
-@item --types-file=@var{file}
-@itemx -t @var{file}
-Include type information from @var{file} when instrumenting programs
-or modules.  Since Daikon needs to know the types of variables when
-they are declared, useful @file{.decls} and @file{.dtrace} files can
-only be produced by source code instrumented with type
-information.  Since Perl programs don't include this information to
-begin with, and it would be cumbersome to produce by hand, type
-information must usually be produced by running a version of the
-program that has itself been annotated, but without type
-information.  The Daikon Perl trace runtime will automatically decide
-whether to output types, or declarations and traces, depending on
-whether the source was instrumented without or with types.  This option
-may occur multiple times, to read information from multiple types
-files (irrelevant type information will be ignored).
-
-@item --types-basedir=@var{directory}
-Put files containing type information in @var{directory} and its
-subdirectories.  By default, this is whatever @option{--instr-dir}
-is, usually @file{daikon-instrumented}.
-
-@item --types-style=@var{style}
-@var{style} should be one of @option{combined}, @option{flat}, or
-@option{tree}.  A style of @option{combined} specifies that the types
-for all packages should be merged, in a file named
-@file{prog-combined.types}, where @file{prog} is the name of the
-program.  A style of @option{flat} specifies that the
-types for each package should be in a separate file named after the
-package, but that these files should go in a single directory; for
-instance, the declarations for @code{Acme::Trampoline} and
-@code{Acme::Skates::Rocket} would go in files named
-@file{Acme::Trampoline.types} and
-@file{Acme::Skates::Rocket.types}.  A style of @option{tree} specifies
-that each package should have its own trace file, and that
-those files should be arranged in directories whose structure matches
-the structure of their package names; in the example above, the files
-would be @file{Acme/Trampoline.types} and
-@file{Acme/Skates/Rocket.types}.
-
-The default is @option{tree}.  Note that @option{--types-style} and
-@option{--decls-style} are currently constrained to be the same; if
-one is specified, the other will use the same value.
-
-@item --verbose
-@itemx -v
-Print additional information about what @command{dfepl} is doing,
-including external commands invoked.
-@end table
-
-@node CSV front end convertcsv.pl,  , Perl front end dfepl, Front ends
-@section Comma-separated-value front end convertcsv.pl
-
-@cindex csv files
-@cindex comma-delimited files
-@cindex comma-separated-value files
-@cindex tab-separated files
-@cindex Excel files
-@cindex spreadsheet files
-
-Daikon can process data from spreadsheets such as Excel.  In order to
-use such files, first save them in comma-separated-value, also known
-as csv or comma-delimited, format.
-Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
-@file{.decls} file) to be used by Daikon by running the
-@command{convertcsv.pl} program found in the @file{$DAIKONDIR/bin}
-directory.  For example,
-@example
-  convertcsv.pl myfile.csv
-@end example
-@noindent
-produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
-@command{convertcsv.pl} without any arguments in order to see a usage
-message.
 
 @node    Enhancing Daikon output, Tools, Front ends, Top
 @chapter Enhancing Daikon output
@@ -6535,7 +6220,7 @@ properties that held at the call site.
 
 
 @node    Tools, Troubleshooting, Enhancing Daikon output, Top
-@chapter Tools
+@chapter Tools for manipulating invariants
 
 This chapter gives information about tools that are part of the Daikon
 distribution and are not described elsewhere in the manual.
@@ -6597,8 +6282,8 @@ and an invariant for method @code{foo(int x)} prints as
 /*@ requires x != 0; */
 @end example
 
-Then the results of print_invariant will look something like this (all in one line;
-we break it up here for clarity):
+Then the results of print_invariant will look something like this (all
+in one line; we break it up here for clarity):
 
 @example
 /*@ requires <INVINFO>
@@ -6615,7 +6300,7 @@ comment.  To make it legal again, you must replace the XML tags with
 the string between the <INV> tag.
 
 Also note the extra information printed with the invariant: the number
-of samples from which the invariant was devied, the Daikon
+of samples from which the invariant was inferred, the Daikon
 representation (i.e., the Daikon output format), the Java class that
 the invariant corresponds to, and the method that the invariant
 belongs to (@code{null} for object invariants).
@@ -7001,505 +6686,18 @@ Daikon; it also tells you how to report bugs in a useful manner.
 
 
 @menu
-* dfej problems::               
-* dfec problems::               
 * Daikon problems::             
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
-* Tree GUI font errors::        
+* dfej problems::               
+* dfec problems::               
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
 @end menu
 
 
-@node    dfej problems, dfec problems, Troubleshooting, Troubleshooting
-@section Problems with dfej
-
-@menu
-* dfej installation problems::  
-* dfej invocation problems::    
-* dfej javac problems::         
-@end menu
-
-@node    dfej installation problems, dfej invocation problems, dfej problems, dfej problems
-@subsection Problems installing dfej
-
-gcc 2.95.2 on Linux raises an internal error when compiling
-@file{stream.cpp} using the @option{-Wall} flag.  You can simply compile
-that file without the @option{-Wall} flag.
-
-@cindex cannot convert `const char **' to `char **'
-
-If you get an error like
-@example
-stream.cpp: In method `void LexStream::ProcessInputUnicode
-                                       (const char *, long int)':
-stream.cpp:901: cannot convert `const char **' to `char **' for
-argument `2' to `iconv (void *, char **, size_t *, char **, size_t *)'
-@end example
-@noindent
-then
-@c undefine preprocessor macro @code{HAVE_ICONV_H}
-define preprocessor macro @code{HAVE_ERROR_CALL_ICONV_CONST}
-and try compiling again --- that is, run the command that failed, but
-add the @samp{-DHAVE_ERROR_CALL_ICONV_CONST} command-line argument.
-(This has been reported on Red Hat Linux 7.@i{x}.)
-
-@c reported 12/19/2001 by Tao Xie
-Also reported on Red Hat Linux 7.0 is the following error:
-@example
-daikon-context.cpp:466: no matching function for call to `pair<Ast *, 
-Ast *>::pair (Ast *&, void *)'
-@end example
-@noindent
-We do not yet have a fix, but if you find one, please let us know.
-
-
-@node    dfej invocation problems, dfej javac problems, dfej installation problems, dfej problems
-@subsection Problems running dfej
-
-@cindex dfej, runs slowly
-
-You may find that dfej runs very slowly, even on small programs.  dfej
-itself finishes quite quickly, but it calls the external Ajax program,
-which is extremely slow.  If you disable Ajax with the
-@option{--no-ajax} argument to dfej, then Daikon may output slightly
-more irrelevant invariants, but dfej will run much faster.
-
-@cindex could not find package named, dfej error
-
-If you get an error like
-@example
-% dfej MyProg.java
-MyProg.java:0:0:0:0: Error: Could not find package named: 
-                ./java/util
-MyProg.java:0:0:0:0: Error: Could not find package named: 
-                ./java/lang
-@end example
-@noindent
-then you need to add @file{rt.jar} to your
-CLASSPATH@.  This should be automatic, if you are using the
-@file{daikon.bashrc} or @file{daikon.cshrc} file and have set the
-JDKDIR environment variable correctly.  Also see @ref{Installing dfej}.
-
-@cindex zip file, invalid
-
-If you get an error like
-@example
-MyProg.java:0:0:0:0: Error: Could not find package named:
-                MyProg.MyPackage
-@end example
-@noindent
-then the root of your packages in not in your classpath.  For example,
-if you have a package A in directory @file{src/A} and a class A.B, then you
-have to add the superdirectory of A (@file{src}) to your classpath so that
-dfej can find package A@.  For example,
-@example
-dfej -classpath src:$CLASSPATH src/A/B.java
-@end example
-@noindent
-Note that this behavior is identical to that of jikes, but differs
-from javac.
-
-If you get a warning like
-@example
-*** Warning: the file "/cygdrive/c/jswdk-1.0.1/jspengine.jar"
-    is not a valid zip file.
-@end example
-@noindent
-then you have set your CLASSPATH incorrectly:  it names a nonexistent
-file or a file that is not a @file{.jar} Java archive.  You should adjust
-your CLASSPATH to remove the offending file.  This warning has no effect
-on the operation of dfej, however.
-
-@cindex SOURCEPATH environment variable
-@cindex environment variable SOURCEPATH
-
-The behavior of dfej is controlled by many environment variables;
-unexpected behavior may result from your settings for these
-environment variables.  For example, if SOURCEPATH is set, then dfej
-searches the indicated path for source files (ignoring class files in
-those directories); this may cause processing of files that you had
-not intended dfej to examine.
-
-
-@menu
-* Ajax errors::                 
-@end menu
-
-@node    Ajax errors,  , dfej invocation problems, dfej invocation problems
-@subsubsection Ajax errors
-
-@cindex Ajax, problem with
-
-The warning ``Problem with Ajax; using original .decls files instead''
-indicates that the Ajax variable comparator could not run.
-
-Ajax
-indicates which variables are comparable to which other variables.  This
-information can reduce the amount of spurious output from Daikon by
-preventing it from making spurious comparisons and reporting irrelevant
-output.  For example, two integer variables that never appear together
-in an expression (and that don't appear with variables that appear
-together, etc.)@ should not be compared to one another, because those
-variables are likely to be entirely unrelated and any properties over
-them are incidental and uninformative.
-
-Use of Ajax is optional and can be disabled via the
-@option{--no-ajax} argument to dfej (@pxref{dfej options}).
-If Ajax cannot be run, then a more primitive method of determining
-comparability is used instead.  Even if Ajax cannot be run, Daikon
-proceeds without error.
-
-@cindex No such method in call, Ajax error
-@cindex ajax.jbc.InvalidClassDataError
-@cindex InvalidClassDataError, Ajax
-
-Ajax cannot deal with binary .class files of version later that 1.1.
-Thus, before running ajax, compile all your code using @command{javac
--target 1.1} to create correct format .class files.  Note that all the
-.jar files and other class files in your classpath used by the code
-also need to be compiled using @command{javac -target 1.1} in order
-for ajax to be able to execute.
-
-As of July 2002, Ajax cannot deal with JDK 1.2 (or later) libraries.
-For instance, Ajax issues the error ``ajax.jbc.InvalidClassDataError:
-No such method in call'' for methods such as
-java.lang.Math.toDegrees(Double) that do not appear in JDK 1.1.
-
-@cindex Invalid class loading, Ajax warning
-
-Ajax may produce the warning message ``Invalid class loading ...'';
-you will notice this if environment variable DFEJ_VERBOSE is set.
-You may safely ignore this message if Ajax does not produce any
-further warnings or errors.  The message results from Ajax's inability
-to handle JDK 1.2 libraries.
-
-@cindex classpath cycles
-@cindex Too many levels of symbolic links, Ajax exception
-
-Due to a bug in Java 1.3,
-Ajax may throw a RuntimeException with a message stating
-``Too many levels of symbolic links''.  This can be caused
-by cycles in the classpath (for example, a link from a directory to
-itself).  To locate the problem link, rerun the the the failing command
-as before, but prefixed by ``strace ''.  If the original command had
-been @samp{wc ~/.emacs}, then you would instead run 
-@samp{strace wc ~/.emacs}.
-Search the resulting output for the exception stack trace, containing
-the message, "Too many levels of symbolic links".  On the line just
-before the stack trace begins should appear the name of the link being
-processed.  For example,
-@example
-lstat("a/sources/sources", st_mode=S_IFLNK|0777, st_size=53, ...) = 0
-@end example
-@noindent
-Removing the link identified, in this case @file{.../sources/sources},
-should solve the problem.
-
-
-
-@node    dfej javac problems,  , dfej invocation problems, dfej problems
-@subsection Problems compiling dfej output
-
-@cindex javac errors on dfej output
-
-@cindex duplicate definition, in instrumented Java file
-
-While compiling files instrumented by dfej, if you get an error like
-@example
-Duplicate declaration of local variable "this_invocation_nonce".
-Duplicate declaration of method "daikonPrintArrayMissing"
-    in type "StackAr".
-@end example
-@noindent
-then you have instrumented an already-instrumented file.  Remove the
-instrumented version and re-run dfej on the original version.  (If you
-are using the Daikon regression tests, run @command{make clean}.)
-
-@cindex package and variable with same name
-@cindex variable and package with same name
-
-You should avoid giving a package and a variable the same name,
-because of a problem with the standard javac compiler that is exposed
-when dfej instruments inner classes.  Suppose that a package and a
-variable are both named @samp{link}.  When the compiler sees
-@samp{link.foo}, it doesn't know whether to interpret that as field
-@samp{foo} of the variable @samp{link}, or as class @samp{foo} of the
-package @samp{link}.  The compiler should just try both, but it
-doesn't:  it only tries the variable.
-
-In the future, we plan to make dfej to work around this javac problem.  
-In the meanwhile, you can avoid the problem by not using the same name for a
-package and a variable.  Reusing such names is considered bad style anyway,
-because the name @samp{link.foo} is ambiguous to people as well as to the
-compiler.
-
-
-@node    dfec problems, Daikon problems, dfej problems, Troubleshooting
-@section Problems with dfec
-
-If you have trouble while instrumenting a C program, or while
-compiling the instrumented program, first make sure that the program
-being instrumented satisfies dfec's requirements: @xref{C program requirements}.
-
-Problems with dfec can be divided into those encountered when running
-dfec; those encountered when compiling and linking the instrumented code; and
-those encountered when running the instrumented code.
-
-@menu
-* dfec instrumentation problems::  
-* Compilation and linking of instrumented code problems::  
-* Running instrumented code problems::  
-@end menu
-
-
-@node    dfec instrumentation problems, Compilation and linking of instrumented code problems, dfec problems, dfec problems
-@subsection Problems running dfec
-
-dfec errors in system files, such as
-@file{.../gcc-3.2.1/include/c++/3.2.1/cstdlib}, or in the Daikon C
-runtime, @file{daikon_runtime.h}, are likely to indicate that you are
-using an unsupported version of gcc.  In particular, when you run
-dfec, the version of gcc on your path should be 2.95.2, 2.95.3, or
-2.96; @xref{gcc version}.
-
-@cindex ?: operator, types of operands
-
-dfec is sometimes confused by the conditional expression (@samp{?:})
-operator, saying that the two sides are of different types.  If either
-of the reported types involve ``DaikonSmartPointer'', then the problem
-may be that the compiler could interconvert the two different types in
-the original code, but after dfec instrumented those types, the
-resulting ones were no longer interconvertible.  You have
-two options.  The first option is to
-rewrite the expression using a conditional statement (@samp{if
-... else}).
-@c Take care, because in C it is illegal to insert statements in the middle
-@c of a list of declarations.
-The second option is to add an appropriate cast to give the two
-arms of the conditional expression the same type.  For example, change
-the second line of
-@example
-  char * mystring = ...;
-  foo ? "literal" : mystring;
-@end example
-@noindent
-to
-@example
-  foo ? (char *)"literal" : mystring;
-@end example
-@noindent
-or perhaps to
-@example
-  foo ? strdup("literal") : mystring;
-@end example
-@noindent
-(though the latter introduces a small memory leak).
-
-@menu
-* Lackwit problems::            
-@end menu
-
-@node    Lackwit problems,  , dfec instrumentation problems, dfec instrumentation problems
-@subsubsection Lackwit problems
-
-@cindex Lackwit error, identifier undefined
-@cindex identifier undefined, Lackwit error
-@cindex undefined identifier, Lackwit error
-
-By default, dfec runs the Lackwit variable comparability analysis
-package.  Use of Lackwit is optional, but it can make invariant
-detection more accurate and efficient.  Lackwit errors are non-fatal
-to dfec, which can continue even if Lackwit fails.  (Lackwit is
-pickier than dfec, so it may fail when dfec does not.)
-
-If Lackwit (but not dfec proper) gives errors of the form
-``identifier "strcat" is undefined'', then you have failed to include
-the proper header file.  In this case, you should add @samp{#include
-<string.h>} to the program to make the program valid ANSI C@.  dfec
-does not produce this particular error, because it includes
-@file{daikon_runtime.h}, which itself includes @file{string.h}.
-
-@cindex lwpp-init.pl error
-
-If Lackwit gives an error of the form
-@example
-sh: lwpp-init.pl: not found
-@end example
-@noindent
-then you have not correctly installed the dfec distribution
-(@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
-in the directory referred to by environment variable DFECDIR@.  (That
-directory is placed on your path by the standard Daikon dotfiles.)
-
-Note, lackwit may have different preprocessor parameters set than
-@command{gcc} or @command{g++} (and @command{dfec}) do.  As a result,
-you may get errors about undefined function definitions with
-@command{lackwit}, but not with @command{dfec} proper.  Check if the
-preprocessor is following the wrong branch, and adjust your code to
-follow the right branch.  
-
-@node    Compilation and linking of instrumented code problems, Running instrumented code problems, dfec instrumentation problems, dfec problems
-@subsection Problems compiling and linking instrumented programs
-
-This section discusses errors encountered when compiling instrumented
-code (with g++) and linking the resulting compiled files.  (In some
-cases, compiling and linking may be performed by a single command line
-invocation, but the two steps are still logically distinct.)
-
-  In Emacs, run this command from the @file{.cc} file
-buffer to comment out the @samp{#line} directives:
-@example
-(replace-regexp "^\\(#line.*\\)$" "/* \\1 */" nil nil nil)
-@end example
-
-
-@menu
-* Compiler problems::           
-* Linker problems::             
-@end menu
-
-@node    Compiler problems, Linker problems, Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
-@subsubsection Compiler problems
-
-When compiling the instrumented code (e.g., @samp{g++ myfile.cc},
-where @file{myfile.cc} was created by dfec from @file{myfile.c}), g++
-produces error messages referring to lines of the original file
-@file{myfile.c}.  Often this indicates the problem, but in other
-cases, you may wish to know which line in the @file{.cc} file is the
-wrong one.  In that case, remove or comment out all the @samp{#line}
-directives from the @file{.cc} file and re-compile.  For example, run
-this command in the @file{daikon-instrumented} directory:
-@example
-  perl -pi -e 's|^(#line.*)$|/* $1 */|' myfile.cc
-@end example
-
-
-@cindex DaikonSmartPointer errors in compilation of instrumented code
-@cindex function not defined errors in compilation of instrumented code
-
-@c Can this happen, if the original g++ compilation worked?
-A ``function not defined'' error may indicate a type mismatch in the
-original code.  Code shold not declare a parameter but omit the
-correspondng argument at the function call.  The solution is to make
-the function declaration consistent with the use.
-
-@cindex template-argument uses local type errors
-@cindex local type in template-argument error
-
-An error of the form ``template-argument ... uses local type'' is
-probably due to use of a nested (local) structure declaration; raise
-the declaration to top level in your C program.
-
-An error of the form @samp{`__T142459136' was not declared in this
-scope} likely means that you simultaneously declared and used an enum
-or other type.  Separate the declaration from the use.
-
-
-@node    Linker problems,  , Compiler problems, Compilation and linking of instrumented code problems
-@subsubsection Linker problems
-
-This section discusses problems that may occur when linking files that
-have been instrumented by dfec.  For more details,
-@xref{Instrumentation scope}.
-
-@cindex undefined symbol error
-@cindex error, undefined symbol
-@cindex ld error
-@cindex symbol referencing errors
-@cindex DaikonSmartPointer link errors
-
-A linker error involving DaikonSmartPointer, such as
-@example
-Undefined                       first referenced
- symbol                             in file
-foo(DaikonSmartPointer<Bar>)/var/tmp/ccPtoCZc.o
-ld: fatal: Symbol referencing errors. No output written to MyProgram
-@end example
-@noindent
-means that
-instrumented (or partially instrumented) code contains a declaration
-of @samp{foo(bar *)}, but the definition appears in uninstrumented
-code.  The instrumented version uses smart pointers, but the
-uninstrumented version does not.  You should supply the @file{.c} file
-containing the definition to @command{dfec} (preceded by @option{-l}
-if you do not wish to fully instrument the file).
-
-If you cannot specify the @file{.c} containing the definition of
-@samp{foo()} to dfec (for instance, if it appears in a pre-compiled
-library), then no code supplied to dfec should contain a declaration
-for @samp{foo()}.   The declaration should occur in a @file{.h} file
-that your code @samp{#include}s, but that is not specified on the dfec
-command line.
-
-Other linker problems may indicate a mismatch between part of
-your code that was compiled with gcc and part of it that was compiled
-with g++.  gcc creates files using ``C linkage'', and g++ creates
-files using ``C++ linkage''; the two are not compatible.  (It is
-possible to direct g++ to use C linkage in certain circumstances;
-@xref{Instrumentation scope}.)
-While g++ can compile and link in the same step,
-you should never provide the link step (the one that creates an
-executable) with uninstrumented C code.  You should only provide the
-link invocation of g++ with either
-@itemize @bullet
-@item
-@file{.cc} files (or their @file{.o} versions) that were output
-by dfec, or
-@item
-@file{.o} or @file{.a} files for (completely) uninstrumented code;
-these files should be created by calling gcc, never
-g++.
-@end itemize
-
-
-@node    Running instrumented code problems,  , Compilation and linking of instrumented code problems, dfec problems
-@subsection Problems running instrumented code
-
-@cindex daikon_runtime error
-@cindex error, daikon_runtime
-@cindex attempted to access index error
-@cindex error, attempted to access index
-
-A program instrumented by dfec may produce a message such as
-@example
-daikon_runtime: attempted to access index 5 of a 4-length array!
-@end example
-@noindent
-Such a message indicates that there is an error in your program.  Your
-program attempts to read or write memory beyond the end of an array.
-You should fix this error before proceeding to try to detect
-invariants.  If you do not do so, then the program's results cannot be
-relied on, because the erroneous array access might corrupt (or access
-meaningless values from) other variables, the Daikon runtime data
-structures, or your program's stack.  When this occurs, the Daikon
-runtime immediately halts your program to let you know where the error
-occurred and to prevent memory corruption.  The Daikon runtime's
-discovery of these errors, while not directly related to invariant
-detection, is a pleasant side effect of using Daikon.  You also might
-want to consider using the Valgrind tool for Linux on x86 processors
-(@uref{http://valgrind.kde.org/}), which can help you correct
-memory errors; this reduces the number of warnings/errors produced by
-the Daikon runtime, and it also improves your code.
-
-@cindex daikon_runtime.h file
-@cindex customizing the Daikon C runtime
-
-The Daikon runtime's behavior when a program
-contains a memory error is customizable.
-For instance, it can halt immediately; it
-can allocate extra buffer space around arrays (but cannot do so around
-dynamically allocated (malloced) blocks, because the type is not known
-at the time of the malloc call) and only halt if the program goes
-beyond those bounds; or the checking can be turned off entirely, which
-is extremely dangerous.  These and many other customizations for the
-Daikon C runtime library are described in the @file{daikon_runtime.h}
-file.
-
-
-@node    Daikon problems, Large dtrace files, dfec problems, Troubleshooting
+@node    Daikon problems, Large dtrace files, Troubleshooting, Troubleshooting
 @section Problems running Daikon
 
 You may find the debugging flags @option{--debug} and @option{--dbg
@@ -7540,7 +6738,7 @@ illegal, and so should not be factored into the method preconditions.
 @cindex this_invocation_nonce
 
 In some cases, exceptional exit from a procedure can cause procedure
-entries and exits (in the trace file) to be incorrectly mached up; if
+entries and exits (in the trace file) to be incorrectly matched up; if
 they are incorrectly matched, then the @code{orig(@var{x})} values may
 be incorrect.  Daikon has two techniques for associate procedure exits
 with entries --- the nonce technique and the stack technique.  If a
@@ -7694,7 +6892,7 @@ Daikon cannot output it in ESC format, so Daikon prints the above
 message instead.  The message also shows exactly what Java method needs
 to be implemented to correct the problem.  You can ignore such messages,
 or else use an output formatting that can handle those invariants.
-Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
+Annotate (@pxref{Annotate}) automatically ignores unformatable invariants.
 
 
 @node    JVM initialization error, Daikon runs slowly, Method needs to be implemented, Daikon problems
@@ -7720,7 +6918,7 @@ uses of Vector by MyVector, and then instrument MyVector.
 
 Daikon's runtime and space depend on the particular data that it analyzes.
 Informally, invariant detection time can be characterized as O((vars^3 *
-falsetime + trueinvs * testsuite) * procedures), where vars is the number
+falsetime + trueinvs * testsuite) * procedures), where @var{vars} is the number
 of variables @emph{at a program point}, falsetime is the (small constant)
 time to falsify a potential invariant, trueinvs is the (small) number of
 true invariants at a program point, testsuite is the size of the test
@@ -7995,7 +7193,7 @@ trace data to the standard output (being careful not to overwrite the
 @file{.decls} file), which is then piped to Daikon which reads it from
 the standard input.
 
-@node    Parsing Java 5.0 code, Tree GUI font errors, Large dtrace files, Troubleshooting
+@node    Parsing Java 5.0 code, dfej problems, Large dtrace files, Troubleshooting
 @section Parsing Java 5.0 code
 
 The Annotate (@pxref{Annotate}) and runtimechecker (@pxref{Runtime-check
@@ -8003,42 +7201,528 @@ instrumenter}) tools use an external library (JTB,
 @uref{http://compilers.cs.ucla.edu/jtb/}) for parsing Java code.  That
 external library has an error in parsing logical shift operators such as
 @code{x << y} or @code{x >> y}.  Therefore, such invariants (along with
-a few other invariants that cannot be propertly formatted as Java code)
+a few other invariants that cannot be properly formatted as Java code)
 are suppressed from the output of these tools.  (Annotate inserts them
 as comments, and runtimechecker silently ignores them.)
 
 
-@node    Tree GUI font errors, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
-@section Tree GUI font errors
+@c @node    Tree GUI font errors, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
+@c @section Tree GUI font errors
+@c 
+@c @cindex font not found
+@c 
+@c When running the Tree GUI on Linux, you may get font errors such as the following:
+@c 
+@c @example
+@c Font specified in font.properties not found
+@c   [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
+@c @end example
+@c 
+@c These errors are harmless; the Tree GUI will still run correctly.  To
+@c prevent these errors from appearing in the future, take the following
+@c steps:
+@c 
+@c @itemize @bullet
+@c @item
+@c Find out where your JDK root directory is.  In general, the JDK root directory
+@c is where you run java from: @file{@var{JDK_ROOT}/bin/java}.
+@c @item
+@c Edit @file{@var{JDK_ROOT}/jre/lib/font.properties}, and comment out all lines
+@c with the offending fonts.  For example, to eliminate the error messages
+@c shown above, one would comment out all lines containing "fontspecific".
+@c @end itemize
+@c 
+@c If you don't have permission to edit @file{font.properties}, ask
+@c your system administrator to do so.
 
-@cindex font not found
 
-When running the Tree GUI on Linux, you may get font errors such as the following:
+@node    dfej problems, dfec problems, Parsing Java 5.0 code, Troubleshooting
+@section Problems with dfej
 
+@menu
+* dfej installation problems::  
+* dfej invocation problems::    
+* dfej javac problems::         
+@end menu
+
+@node    dfej installation problems, dfej invocation problems, dfej problems, dfej problems
+@subsection Problems installing dfej
+
+gcc 2.95.2 on Linux raises an internal error when compiling
+@file{stream.cpp} using the @option{-Wall} flag.  You can simply compile
+that file without the @option{-Wall} flag.
+
+@cindex cannot convert `const char **' to `char **'
+
+If you get an error like
 @example
-Font specified in font.properties not found
-  [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
+stream.cpp: In method `void LexStream::ProcessInputUnicode
+                                       (const char *, long int)':
+stream.cpp:901: cannot convert `const char **' to `char **' for
+argument `2' to `iconv (void *, char **, size_t *, char **, size_t *)'
+@end example
+@noindent
+then
+@c undefine preprocessor macro @code{HAVE_ICONV_H}
+define preprocessor macro @code{HAVE_ERROR_CALL_ICONV_CONST}
+and try compiling again --- that is, run the command that failed, but
+add the @samp{-DHAVE_ERROR_CALL_ICONV_CONST} command-line argument.
+(This has been reported on Red Hat Linux 7.@i{x}.)
+
+@c reported 12/19/2001 by Tao Xie
+Also reported on Red Hat Linux 7.0 is the following error:
+@example
+daikon-context.cpp:466: no matching function for call to `pair<Ast *, 
+Ast *>::pair (Ast *&, void *)'
+@end example
+@noindent
+We do not yet have a fix, but if you find one, please let us know.
+
+
+@node    dfej invocation problems, dfej javac problems, dfej installation problems, dfej problems
+@subsection Problems running dfej
+
+@cindex dfej, runs slowly
+
+You may find that dfej runs very slowly, even on small programs.  dfej
+itself finishes quite quickly, but it calls the external Ajax program,
+which is extremely slow.  If you disable Ajax with the
+@option{--no-ajax} argument to dfej, then Daikon may output slightly
+more irrelevant invariants, but dfej will run much faster.
+
+@cindex could not find package named, dfej error
+
+If you get an error like
+@example
+% dfej MyProg.java
+MyProg.java:0:0:0:0: Error: Could not find package named: 
+                ./java/util
+MyProg.java:0:0:0:0: Error: Could not find package named: 
+                ./java/lang
+@end example
+@noindent
+then you need to add @file{rt.jar} to your
+CLASSPATH@.  This should be automatic, if you are using the
+@file{daikon.bashrc} or @file{daikon.cshrc} file and have set the
+JDKDIR environment variable correctly.  Also see @ref{Installing dfej}.
+
+@cindex zip file, invalid
+
+If you get an error like
+@example
+MyProg.java:0:0:0:0: Error: Could not find package named:
+                MyProg.MyPackage
+@end example
+@noindent
+then the root of your packages in not in your classpath.  For example,
+if you have a package A in directory @file{src/A} and a class A.B, then you
+have to add the superdirectory of A (@file{src}) to your classpath so that
+dfej can find package A@.  For example,
+@example
+dfej -classpath src:$CLASSPATH src/A/B.java
+@end example
+@noindent
+Note that this behavior is identical to that of jikes, but differs
+from javac.
+
+If you get a warning like
+@example
+*** Warning: the file "/cygdrive/c/jswdk-1.0.1/jspengine.jar"
+    is not a valid zip file.
+@end example
+@noindent
+then you have set your CLASSPATH incorrectly:  it names a nonexistent
+file or a file that is not a @file{.jar} Java archive.  You should adjust
+your CLASSPATH to remove the offending file.  This warning has no effect
+on the operation of dfej, however.
+
+@cindex SOURCEPATH environment variable
+@cindex environment variable SOURCEPATH
+
+The behavior of dfej is controlled by many environment variables;
+unexpected behavior may result from your settings for these
+environment variables.  For example, if SOURCEPATH is set, then dfej
+searches the indicated path for source files (ignoring class files in
+those directories); this may cause processing of files that you had
+not intended dfej to examine.
+
+
+@menu
+* Ajax errors::                 
+@end menu
+
+@node    Ajax errors,  , dfej invocation problems, dfej invocation problems
+@subsubsection Ajax errors
+
+@cindex Ajax, problem with
+
+The warning ``Problem with Ajax; using original .decls files instead''
+indicates that the Ajax variable comparator could not run.
+
+Ajax
+indicates which variables are comparable to which other variables.  This
+information can reduce the amount of spurious output from Daikon by
+preventing it from making spurious comparisons and reporting irrelevant
+output.  For example, two integer variables that never appear together
+in an expression (and that don't appear with variables that appear
+together, etc.)@ should not be compared to one another, because those
+variables are likely to be entirely unrelated and any properties over
+them are incidental and uninformative.
+
+Use of Ajax is optional and can be disabled via the
+@option{--no-ajax} argument to dfej (@pxref{dfej options}).
+If Ajax cannot be run, then a more primitive method of determining
+comparability is used instead.  Even if Ajax cannot be run, Daikon
+proceeds without error.
+
+@cindex No such method in call, Ajax error
+@cindex ajax.jbc.InvalidClassDataError
+@cindex InvalidClassDataError, Ajax
+
+Ajax cannot deal with binary .class files of version later that 1.1.
+Thus, before running ajax, compile all your code using @command{javac
+-target 1.1} to create correct format .class files.  Note that all the
+.jar files and other class files in your classpath used by the code
+also need to be compiled using @command{javac -target 1.1} in order
+for ajax to be able to execute.
+
+As of July 2002, Ajax cannot deal with JDK 1.2 (or later) libraries.
+For instance, Ajax issues the error ``ajax.jbc.InvalidClassDataError:
+No such method in call'' for methods such as
+java.lang.Math.toDegrees(Double) that do not appear in JDK 1.1.
+
+@cindex Invalid class loading, Ajax warning
+
+Ajax may produce the warning message ``Invalid class loading ...'';
+you will notice this if environment variable DFEJ_VERBOSE is set.
+You may safely ignore this message if Ajax does not produce any
+further warnings or errors.  The message results from Ajax's inability
+to handle JDK 1.2 libraries.
+
+@cindex classpath cycles
+@cindex Too many levels of symbolic links, Ajax exception
+
+Due to a bug in Java 1.3,
+Ajax may throw a RuntimeException with a message stating
+``Too many levels of symbolic links''.  This can be caused
+by cycles in the classpath (for example, a link from a directory to
+itself).  To locate the problem link, rerun the the the failing command
+as before, but prefixed by ``strace ''.  If the original command had
+been @samp{wc ~/.emacs}, then you would instead run 
+@samp{strace wc ~/.emacs}.
+Search the resulting output for the exception stack trace, containing
+the message, "Too many levels of symbolic links".  On the line just
+before the stack trace begins should appear the name of the link being
+processed.  For example,
+@example
+lstat("a/sources/sources", st_mode=S_IFLNK|0777, st_size=53, ...) = 0
+@end example
+@noindent
+Removing the link identified, in this case @file{.../sources/sources},
+should solve the problem.
+
+
+
+@node    dfej javac problems,  , dfej invocation problems, dfej problems
+@subsection Problems compiling dfej output
+
+@cindex javac errors on dfej output
+
+@cindex duplicate definition, in instrumented Java file
+
+While compiling files instrumented by dfej, if you get an error like
+@example
+Duplicate declaration of local variable "this_invocation_nonce".
+Duplicate declaration of method "daikonPrintArrayMissing"
+    in type "StackAr".
+@end example
+@noindent
+then you have instrumented an already-instrumented file.  Remove the
+instrumented version and re-run dfej on the original version.  (If you
+are using the Daikon regression tests, run @command{make clean}.)
+
+@cindex package and variable with same name
+@cindex variable and package with same name
+
+You should avoid giving a package and a variable the same name,
+because of a problem with the standard javac compiler that is exposed
+when dfej instruments inner classes.  Suppose that a package and a
+variable are both named @samp{link}.  When the compiler sees
+@samp{link.foo}, it doesn't know whether to interpret that as field
+@samp{foo} of the variable @samp{link}, or as class @samp{foo} of the
+package @samp{link}.  The compiler should just try both, but it
+doesn't:  it only tries the variable.
+
+In the future, we plan to make dfej to work around this javac problem.  
+In the meanwhile, you can avoid the problem by not using the same name for a
+package and a variable.  Reusing such names is considered bad style anyway,
+because the name @samp{link.foo} is ambiguous to people as well as to the
+compiler.
+
+
+@node    dfec problems, Reporting bugs, dfej problems, Troubleshooting
+@section Problems with dfec
+
+If you have trouble while instrumenting a C program, or while
+compiling the instrumented program, first make sure that the program
+being instrumented satisfies dfec's requirements: @xref{C program requirements}.
+
+Problems with dfec can be divided into those encountered when running
+dfec; those encountered when compiling and linking the instrumented code; and
+those encountered when running the instrumented code.
+
+@menu
+* dfec instrumentation problems::  
+* Compilation and linking of instrumented code problems::  
+* Running instrumented code problems::  
+@end menu
+
+
+@node    dfec instrumentation problems, Compilation and linking of instrumented code problems, dfec problems, dfec problems
+@subsection Problems running dfec
+
+dfec errors in system files, such as
+@file{.../gcc-3.2.1/include/c++/3.2.1/cstdlib}, or in the Daikon C
+runtime, @file{daikon_runtime.h}, are likely to indicate that you are
+using an unsupported version of gcc.  In particular, when you run
+dfec, the version of gcc on your path should be 2.95.2, 2.95.3, or
+2.96; @xref{gcc version}.
+
+@cindex ?: operator, types of operands
+
+dfec is sometimes confused by the conditional expression (@samp{?:})
+operator, saying that the two sides are of different types.  If either
+of the reported types involve ``DaikonSmartPointer'', then the problem
+may be that the compiler could interconvert the two different types in
+the original code, but after dfec instrumented those types, the
+resulting ones were no longer interconvertible.  You have
+two options.  The first option is to
+rewrite the expression using a conditional statement (@samp{if
+... else}).
+@c Take care, because in C it is illegal to insert statements in the middle
+@c of a list of declarations.
+The second option is to add an appropriate cast to give the two
+arms of the conditional expression the same type.  For example, change
+the second line of
+@example
+  char * mystring = ...;
+  foo ? "literal" : mystring;
+@end example
+@noindent
+to
+@example
+  foo ? (char *)"literal" : mystring;
+@end example
+@noindent
+or perhaps to
+@example
+  foo ? strdup("literal") : mystring;
+@end example
+@noindent
+(though the latter introduces a small memory leak).
+
+@menu
+* Lackwit problems::            
+@end menu
+
+@node    Lackwit problems,  , dfec instrumentation problems, dfec instrumentation problems
+@subsubsection Lackwit problems
+
+@cindex Lackwit error, identifier undefined
+@cindex identifier undefined, Lackwit error
+@cindex undefined identifier, Lackwit error
+
+By default, dfec runs the Lackwit variable comparability analysis
+package.  Use of Lackwit is optional, but it can make invariant
+detection more accurate and efficient.  Lackwit errors are non-fatal
+to dfec, which can continue even if Lackwit fails.  (Lackwit is
+pickier than dfec, so it may fail when dfec does not.)
+
+If Lackwit (but not dfec proper) gives errors of the form
+``identifier "strcat" is undefined'', then you have failed to include
+the proper header file.  In this case, you should add @samp{#include
+<string.h>} to the program to make the program valid ANSI C@.  dfec
+does not produce this particular error, because it includes
+@file{daikon_runtime.h}, which itself includes @file{string.h}.
+
+@cindex lwpp-init.pl error
+
+If Lackwit gives an error of the form
+@example
+sh: lwpp-init.pl: not found
+@end example
+@noindent
+then you have not correctly installed the dfec distribution
+(@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
+in the directory referred to by environment variable DFECDIR@.  (That
+directory is placed on your path by the standard Daikon dotfiles.)
+
+Note, lackwit may have different preprocessor parameters set than
+@command{gcc} or @command{g++} (and @command{dfec}) do.  As a result,
+you may get errors about undefined function definitions with
+@command{lackwit}, but not with @command{dfec} proper.  Check if the
+preprocessor is following the wrong branch, and adjust your code to
+follow the right branch.  
+
+@node    Compilation and linking of instrumented code problems, Running instrumented code problems, dfec instrumentation problems, dfec problems
+@subsection Problems compiling and linking instrumented programs
+
+This section discusses errors encountered when compiling instrumented
+code (with g++) and linking the resulting compiled files.  (In some
+cases, compiling and linking may be performed by a single command line
+invocation, but the two steps are still logically distinct.)
+
+  In Emacs, run this command from the @file{.cc} file
+buffer to comment out the @samp{#line} directives:
+@example
+(replace-regexp "^\\(#line.*\\)$" "/* \\1 */" nil nil nil)
 @end example
 
-These errors are harmless; the Tree GUI will still run correctly.  To
-prevent these errors from appearing in the future, take the following
-steps:
 
+@menu
+* Compiler problems::           
+* Linker problems::             
+@end menu
+
+@node    Compiler problems, Linker problems, Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
+@subsubsection Compiler problems
+
+When compiling the instrumented code (e.g., @samp{g++ myfile.cc},
+where @file{myfile.cc} was created by dfec from @file{myfile.c}), g++
+produces error messages referring to lines of the original file
+@file{myfile.c}.  Often this indicates the problem, but in other
+cases, you may wish to know which line in the @file{.cc} file is the
+wrong one.  In that case, remove or comment out all the @samp{#line}
+directives from the @file{.cc} file and re-compile.  For example, run
+this command in the @file{daikon-instrumented} directory:
+@example
+  perl -pi -e 's|^(#line.*)$|/* $1 */|' myfile.cc
+@end example
+
+
+@cindex DaikonSmartPointer errors in compilation of instrumented code
+@cindex function not defined errors in compilation of instrumented code
+
+@c Can this happen, if the original g++ compilation worked?
+A ``function not defined'' error may indicate a type mismatch in the
+original code.  Code should not declare a parameter but omit the
+corresponding argument at the function call.  The solution is to make
+the function declaration consistent with the use.
+
+@cindex template-argument uses local type errors
+@cindex local type in template-argument error
+
+An error of the form ``template-argument ... uses local type'' is
+probably due to use of a nested (local) structure declaration; raise
+the declaration to top level in your C program.
+
+An error of the form @samp{`__T142459136' was not declared in this
+scope} likely means that you simultaneously declared and used an enum
+or other type.  Separate the declaration from the use.
+
+
+@node    Linker problems,  , Compiler problems, Compilation and linking of instrumented code problems
+@subsubsection Linker problems
+
+This section discusses problems that may occur when linking files that
+have been instrumented by dfec.  For more details,
+@xref{Instrumentation scope}.
+
+@cindex undefined symbol error
+@cindex error, undefined symbol
+@cindex ld error
+@cindex symbol referencing errors
+@cindex DaikonSmartPointer link errors
+
+A linker error involving DaikonSmartPointer, such as
+@example
+Undefined                       first referenced
+ symbol                             in file
+foo(DaikonSmartPointer<Bar>)/var/tmp/ccPtoCZc.o
+ld: fatal: Symbol referencing errors. No output written to MyProgram
+@end example
+@noindent
+means that
+instrumented (or partially instrumented) code contains a declaration
+of @samp{foo(bar *)}, but the definition appears in uninstrumented
+code.  The instrumented version uses smart pointers, but the
+uninstrumented version does not.  You should supply the @file{.c} file
+containing the definition to @command{dfec} (preceded by @option{-l}
+if you do not wish to fully instrument the file).
+
+If you cannot specify the @file{.c} containing the definition of
+@samp{foo()} to dfec (for instance, if it appears in a pre-compiled
+library), then no code supplied to dfec should contain a declaration
+for @samp{foo()}.   The declaration should occur in a @file{.h} file
+that your code @samp{#include}s, but that is not specified on the dfec
+command line.
+
+Other linker problems may indicate a mismatch between part of
+your code that was compiled with gcc and part of it that was compiled
+with g++.  gcc creates files using ``C linkage'', and g++ creates
+files using ``C++ linkage''; the two are not compatible.  (It is
+possible to direct g++ to use C linkage in certain circumstances;
+@xref{Instrumentation scope}.)
+While g++ can compile and link in the same step,
+you should never provide the link step (the one that creates an
+executable) with uninstrumented C code.  You should only provide the
+link invocation of g++ with either
 @itemize @bullet
 @item
-Find out where your JDK root directory is.  In general, the JDK root directory
-is where you run java from: @file{@var{JDK_ROOT}/bin/java}.
+@file{.cc} files (or their @file{.o} versions) that were output
+by dfec, or
 @item
-Edit @file{@var{JDK_ROOT}/jre/lib/font.properties}, and comment out all lines
-with the offending fonts.  For example, to eliminate the error messages
-shown above, one would comment out all lines containing "fontspecific".
+@file{.o} or @file{.a} files for (completely) uninstrumented code;
+these files should be created by calling gcc, never
+g++.
 @end itemize
 
-If you don't have permission to edit @file{font.properties}, ask
-your system administrator to do so.
+
+@node    Running instrumented code problems,  , Compilation and linking of instrumented code problems, dfec problems
+@subsection Problems running instrumented code
+
+@cindex daikon_runtime error
+@cindex error, daikon_runtime
+@cindex attempted to access index error
+@cindex error, attempted to access index
+
+A program instrumented by dfec may produce a message such as
+@example
+daikon_runtime: attempted to access index 5 of a 4-length array!
+@end example
+@noindent
+Such a message indicates that there is an error in your program.  Your
+program attempts to read or write memory beyond the end of an array.
+You should fix this error before proceeding to try to detect
+invariants.  If you do not do so, then the program's results cannot be
+relied on, because the erroneous array access might corrupt (or access
+meaningless values from) other variables, the Daikon runtime data
+structures, or your program's stack.  When this occurs, the Daikon
+runtime immediately halts your program to let you know where the error
+occurred and to prevent memory corruption.  The Daikon runtime's
+discovery of these errors, while not directly related to invariant
+detection, is a pleasant side effect of using Daikon.  You also might
+want to consider using the Valgrind tool for Linux on x86 processors
+(@uref{http://valgrind.kde.org/}), which can help you correct
+memory errors; this reduces the number of warnings/errors produced by
+the Daikon runtime, and it also improves your code.
+
+@cindex daikon_runtime.h file
+@cindex customizing the Daikon C runtime
+
+The Daikon runtime's behavior when a program
+contains a memory error is customizable.
+For instance, it can halt immediately; it
+can allocate extra buffer space around arrays (but cannot do so around
+dynamically allocated (malloced) blocks, because the type is not known
+at the time of the malloc call) and only halt if the program goes
+beyond those bounds; or the checking can be turned off entirely, which
+is extremely dangerous.  These and many other customizations for the
+Daikon C runtime library are described in the @file{daikon_runtime.h}
+file.
 
 
-@node    Reporting bugs, Known bugs, Tree GUI font errors, Troubleshooting
+@node    Reporting bugs, Known bugs, dfec problems, Troubleshooting
 @section Reporting bugs
 
 @cindex reporting bugs
@@ -8048,7 +7732,7 @@ If you have any questions, can suggest ways to improve the
 documentation, find bugs in the system, or have suggestions for its
 improvement, please send email to
 @email{daikon-developers@@lists.csail.mit.edu}.  (If you can't figure
-out how to do somthing or do not understand why Daikon works the way it
+out how to do something or do not understand why Daikon works the way it
 does, that is a bug, too --- in the Daikon documentation.  Please report
 those as well.)
 We will try to assist you and to correct any
@@ -8178,17 +7862,13 @@ and about debugging flags.
 @cindex history of Daikon
 
 This manual describes Daikon version 4.0.0, released February 7, 2005.
-A list of revisions since mid-2001 can be found in file
+A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
 
-There have been three major implementations of Daikon, with different
-features and capabilities.  Readers of technical papers may be confused
-by the apparently different claims about Daikon's capabilities.  These
-apparent contradictions result from the papers referring to the current
-version of Daikon at the time of publication.  This section of the
-manual clarifies the development of the Daikon tool in order to reduce
-such confusion.
+There have been four major releases of Daikon, with different features
+and capabilities.  User experiences and technical papers should be
+judged based on the version of Daikon current at the time of use.
 
 @cindex Lisp front end
 @cindex front end for Lisp
@@ -8212,13 +7892,11 @@ points for object invariants as well as procedure entries and exits.
 
 Daikon 2 was a complete rewrite in the Java programming language and was
 the first version to contain a substantive manual.  Daikon 2 uses the
-same Java front end as did Daikon 1, though with certain enhancements.
-(Actually, there have been 5 Java front ends; the first two were
-binary re-writers; the next two were source code re-writers; and the
-last (experimental as of January 2003) one is a binary rewriter.)
-Its C front end is rewritten from scratch; it instruments only
-procedure entries and exits.  A front end also exists for the IOA
-programming language, but is not included in the Daikon distribution.
+same source-based Java front end as did Daikon 1, though with certain
+enhancements.  Its C front end was rewritten from scratch; it
+instruments only procedure entries and exits.  A front end also exists
+for the IOA programming language, but is not included in the Daikon
+distribution.
 
 Daikon 3 is a redesign of the invariant detection engine to work
 incrementally --- that is, to examine each sample (execution of a
@@ -8229,6 +7907,13 @@ was prohibitive, particularly since data trace files may be gigabytes
 in size.  Daikon 3 also introduces the idea of a @emph{dataflow
 hierarchy}, a way to relate and connect program points based on their
 variables.
+
+Daikon 4 includes new binary front ends for Java and for C.  These front
+ends make Daikon much easier to use.  Daikon 4 makes @file{.decls} files
+optional; program point declarations are permitted to appear in
+@file{.dtrace} files.  Daikon 4 is released under more liberal licensing
+conditions that place no restrictions on use.
+
 
 @node    License, Mailing lists reminder, History, Details
 @section License
@@ -8453,7 +8138,7 @@ such as Java that support dynamic linking, and to permit Daikon to
 incrementally process @file{.dtrace} files as they are generated instead of
 requiring the application to run to completion in order to collect a
 complete set of declarations before any Daikon processing can begin.
-However, for staticallly linked languages it is usually better to
+However, for statically linked languages it is usually better to
 place declarations and data trace records in separate files.)
 
 
@@ -8461,7 +8146,7 @@ place declarations and data trace records in separate files.)
 * Conventions::                 
 * Declaration files::           
 * Data trace files::            
-* Examples::                    
+* Example files::               
 @end menu
 
 @node    Conventions, Declaration files, File formats, File formats
@@ -8753,7 +8438,7 @@ rather than for just one method:
 @end example
 
 
-@node    Data trace files, Examples, Declaration files, File formats
+@node    Data trace files, Example files, Declaration files, File formats
 @section Data trace files
 
 @cindex data trace file format
@@ -8817,9 +8502,6 @@ never-before-seen value).
 The special value 2 should be used only (and always) when the value
 field is "nonsensical".
 
-@c if the
-@c modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
-@c the modbits.
 @end itemize
 
 The variables should appear in the same order as they did in the
@@ -8840,8 +8522,8 @@ entry.  For non-concurrent systems, this nonce is not necessary and may be
 omitted.
 
 
-@node    Examples,  , Data trace files, File formats
-@section Examples
+@node    Example files,  , Data trace files, File formats
+@section Example files
 
 
 Here are two files, p180-15.1.1.decls and (part of) p180-15.1.1.dtrace, for
@@ -8852,7 +8534,7 @@ a program that sums the values in an integer array.
 * Example data trace file::     
 @end menu
 
-@node    Example declaration file, Example data trace file, Examples, Examples
+@node    Example declaration file, Example data trace file, Example files, Example files
 @subsection Example declaration file
 
 This is part of the file @file{StackAr.decls}, a declaration file for
@@ -8946,7 +8628,7 @@ int
 @end example
 
 
-@node    Example data trace file,  , Example declaration file, Examples
+@node    Example data trace file,  , Example declaration file, Example files
 @subsection Example data trace file
 
 This is part of file @file{StackAr.dtrace}, which you can create by
@@ -9102,3 +8784,69 @@ this.topOfStack
 
 
 @bye
+
+@c  LocalWords:  texinfo setfilename daikon settitle MDE texi html daikonurl sp
+@c  LocalWords:  inlined makeinfo daikonemail setchapternewpage ifinfo hboxes
+@c  LocalWords:  finalout titlepage titlefont eps pdf txt png jpg vskip pt img
+@c  LocalWords:  filll src alt ifnothtml dir ifnottex GUIs ifhtml detailmenu pl
+@c  LocalWords:  Cygwin StackAr Diff orig dfepl CSV convertcsv dfej dfec gcc cd
+@c  LocalWords:  applets EDG spinfo InvariantChecker LogicalCompare dtrace inv
+@c  LocalWords:  runtimechecker javac Lackwit pptname uref abs lst treenode IOA
+@c  LocalWords:  myArray PathFinder pxref cindex samp classpath xref var wget
+@c  LocalWords:  daikonparent zxvf noindent csh tcsh cshrc setenv zxf DAIKONDIR
+@c  LocalWords:  DAIKONCLASS bashrc java cpp daikonenv HKEY AutoRun pathlists
+@c  LocalWords:  CompletionChar PathCompletionChar subsubsection MYDOCU ENV arg
+@c  LocalWords:  DataStructures dotfiles ActiveState mypackage MyClass emph Xmx
+@c  LocalWords:  StackArTester PrintInvariants theArray topOfStack Ljava gdwarf
+@c  LocalWords:  kvasir decls Valgrind config Rijndael rijndaeltest perl bday
+@c  LocalWords:  dtype standalone decl asis noversion num conf nohierarchy ppt
+@c  LocalWords:  dbg mem stat postprocessed itemx mux pre val classname regexp
+@c  LocalWords:  ListImplementors dataflow getLogger JML jml hashcode DBC Jtest
+@c  LocalWords:  Parasoft's Quant ESC prestate int seq elt Javadoc JVML param
+@c  LocalWords:  DerivedParameterFilter ObviousFilter args ParentFilter isEmpty
+@c  LocalWords:  OnlyConstantVariablesFilter SimplifyFilter UnjustifiedFilter
+@c  LocalWords:  UnmodifiedVariableEqualityFilter diff OneOf InvMap repr gui td
+@c  LocalWords:  invSortComparator invPairComparator daikonHelp ifnotinfo gif
+@c  LocalWords:  InvariantsDisplay Ctrl ControlPanel checkbox kbd JDE prj jde
+@c  LocalWords:  autoload myA myList hashcodes MyA HashSetLinear HslIterator IA
+@c  LocalWords:  topAndPop init util DTRACEFILE DTRACEAPPEND Valgrind's AMD gz
+@c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo FIFOs AFS csv
+@c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst pragma prog
+@c  LocalWords:  workflow accessor instr instrsourcedir TYPESAPPEND basedir cp
+@c  LocalWords:  myfile dfej's classfiles jikes ajaxap QueueAr QueueArTester ln
+@c  LocalWords:  classhier decldir instrdir uninst ajax csal apdir ajaxcp cpdir
+@c  LocalWords:  ComparablePairsDescFileReader runnables ajaxdumpdir dumpdir rm
+@c  LocalWords:  DTRACELIMIT DTRACELIMITTERMINATE DDTRACELIMIT applet xargs mv
+@c  LocalWords:  DDTRACELIMITTERMINATE javaPolicy appletviewer MyProgram exe lw
+@c  LocalWords:  datatypes intValue ListNode theElement precompiled Solaris cc
+@c  LocalWords:  libw LDFLAGS xname textfile nogui daikonarg nocleanup tarfile
+@c  LocalWords:  TODO DFECDIR exefile tracefilename stdc dfec's preprocessed wc
+@c  LocalWords:  ctype sed declsfiledir declsfiledirflat searchpath includepath
+@c  LocalWords:  GNUG disambigfilename mdas memset subarrays lackwit unsetting
+@c  LocalWords:  postprocessing structs pcc gzipped zlib baz ints std min rray
+@c  LocalWords:  ointer ifdef endif DaikonSmartPointer DaikonSmartArray malloc
+@c  LocalWords:  mystring strcpy strcat smartpointers basemap namespace ansi eq
+@c  LocalWords:  protoize fallback fixups const asm inline typeid typename bool
+@c  LocalWords:  bitand bitor compl wchar xor unportable enums enum stdlib env
+@c  LocalWords:  getenv bitfields bitfield realloc memcpy textutils pos lseek
+@c  LocalWords:  fd Linux's GNUC mkdir tmp gunzip xf li dkconfig CreateSpinfo
+@c  LocalWords:  ParameterDoclet CreateSpinfoC un biconditional addAll isFull
+@c  LocalWords:  smallexample simpleStack currentSize jtb ParseException kmeans
+@c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS MergeESC pp
+@c  LocalWords:  escannotated jmlannotated dbcannotated Annnotate xml INVINFO
+@c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg cfg
+@c  LocalWords:  callMethod isDaikonInstrumented getDaikonInvariants INVS ijmp
+@c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt JDKDIR MyPackage
+@c  LocalWords:  superdirectory SOURCEPATH InvalidClassDataError strace lstat
+@c  LocalWords:  RuntimeException IFLNK interconvert interconvertible strdup ld
+@c  LocalWords:  lwpp ine runtime's malloced MaxPermSize JVM's MyVector perc vv
+@c  LocalWords:  falsetime trueinvs testsuite MergeInvariants fns untruncate
+@c  LocalWords:  subsubheading bzip fontspecific sublicense NONINFRINGEMENT Cok
+@c  LocalWords:  getopt Renn Nethercote MemCheck readelf Binutils Yuriy Brun
+@c  LocalWords:  Cockrell Czeisler Demsky Nii Dodoo Fellheimer Griswold Guo Hao
+@c  LocalWords:  Kataoka Loosemore Vikash Mansinghka Samir Meghani Jelani Toh
+@c  LocalWords:  Nimmer Shih Iuliu Vasilescu Xiao Kaplan Angros Tadashi Araragi
+@c  LocalWords:  Seung Cho Hardojo Engelbert Hubbers McMaster Orso Manos Wacha
+@c  LocalWords:  Renieris NTT varname VarInfoName hasDuplicates hasOrder len
+@c  LocalWords:  hasNull nullTerminated isParam hashCode VarComparability
+@c  LocalWords:  makeEmpty topLevel bottomLevel pptInfo MyInteger printindex
