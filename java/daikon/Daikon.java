@@ -1,4 +1,5 @@
 // Main routine for Daikon invariant detector
+// For documentation, see file doc/daikon.html in the distribution.
 
 package daikon;
 
@@ -433,7 +434,7 @@ public final class Daikon {
     //   ppt_tl.print_invariants_maybe();
     // }
 
-    
+
     if (inv_file != null) {
       try {
         OutputStream inv_ostream = new FileOutputStream(inv_file);
