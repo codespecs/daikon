@@ -46,10 +46,10 @@ public class ExplicitVarComparability extends VarComparability {
     indexTypes = new ExplicitVarComparability[dimensions];
   }
 
-  public static ExplicitVarComparability makeAlias(VarInfo vi) {
+  public static VarComparability makeAlias(VarInfo vi) {
     return vi.comparability.makeAlias(vi.name);
   }
-  public ExplicitVarComparability makeAlias(String name) {
+  public VarComparability makeAlias(String name) {
     return new ExplicitVarComparability(base, indices, dimensions, name);
   }
 
@@ -57,14 +57,14 @@ public class ExplicitVarComparability extends VarComparability {
     return (base == null);
   }
 
-  public ExplicitVarComparability elementType() {
+  public VarComparability elementType() {
     if (cached_element_type == null) {
       cached_element_type = new ExplicitVarComparability(base, indices, dimensions-1, alias);
     }
     return cached_element_type;
   }
 
-  public ExplicitVarComparability indexType(int dim) {
+  public VarComparability indexType(int dim) {
     if (indexTypes[dim] == null) {
       indexTypes[dim] = new ExplicitVarComparability(indices[dim], null, 0,
 						((alias == null)
@@ -74,7 +74,7 @@ public class ExplicitVarComparability extends VarComparability {
     return indexTypes[dim];
   }
 
-  static ExplicitVarComparability parse(String rep_, ProglangType vartype) {
+  static VarComparability parse(String rep_, ProglangType vartype) {
     String rep = rep_;
 
     PatternMatcher re_matcher = Global.regexp_matcher;

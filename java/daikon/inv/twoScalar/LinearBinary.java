@@ -1,7 +1,6 @@
 package daikon.inv.twoScalar;
 
 import daikon.*;
-import daikon.inv.*;
 
 class LinearBinary extends TwoScalar {
 

@@ -129,6 +129,7 @@ public class VarComparabilityExplicit extends VarComparability {
 	try {
 	  dims_regexps.add(Global.regexp_compiler.compile(regexp.toString()));
 	} catch (Exception e) {
+          e.printStackTrace();
 	  throw new Error(e.toString());
 	}
       }

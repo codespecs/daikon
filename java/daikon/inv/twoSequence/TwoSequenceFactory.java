@@ -3,8 +3,6 @@ package daikon.inv.twoSequence;
 import daikon.*;
 import daikon.inv.*;
 
-import java.lang.reflect.*;
-
 import utilMDE.*;
 
 import java.util.*;
@@ -34,12 +32,17 @@ public class TwoSequenceFactory {
 
     Vector result = new Vector();
     if (pass == 1) {
-      if (super1 != super2) {
+      if (super1 == super2) {
+        Global.implied_false_noninstantiated_invariants++;
+      } else {
         result.add(SeqComparison.instantiate(ppt));
       }
     } else if (pass == 2) {
       result.add(Reverse.instantiate(ppt));
-      if (super1 != super2) {
+      if (super1 == super2) {
+        Global.subexact_noninstantiated_invariants += 2;
+        Global.implied_false_noninstantiated_invariants += 2 + 2 * Functions.unaryFunctions.length;
+      } else {
         // NonEqual.instantiate(ppt);
         result.add(SubSequence.instantiate(ppt));
         result.add(SuperSequence.instantiate(ppt));
@@ -50,10 +53,14 @@ public class TwoSequenceFactory {
           boolean invert = (i==1);
           VarInfo arg = (invert ? var1 : var2);
           // Don't bother to check arg.isConstant():  we really want to
-          // know whether the elements of arg are constant
-          result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.Math_abs, invert));
-          result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_negate, invert));
-          result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert));
+          // know whether the elements of arg are constant.
+          for (int j=0; j<Functions.unaryFunctions.length; j++) {
+            result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.unaryFunctions[j], invert));
+          }
+          // Old version that didn't loop over Functions.unaryFunctions.
+          // result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.Math_abs, invert));
+          // result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_negate, invert));
+          // result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert));
         }
       }
     }

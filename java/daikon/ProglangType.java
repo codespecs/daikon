@@ -89,7 +89,8 @@ public final class ProglangType {
   }
 
   // t_base should be interned
-  private static ProglangType find(String t_base, int t_dims) {
+  private static ProglangType find(String t_base_, int t_dims) {
+    String t_base = t_base_;
     Assert.assert(t_base == t_base.intern());
     if (t_base == "boolean") { // interned
       t_base = "int";
@@ -260,9 +261,11 @@ public final class ProglangType {
       //   }
       // } else {
 
+      value = value.trim();
+
       // Deal with [] surrounding Java array output
       if (value.startsWith("[") && value.endsWith("]")) {
-        value = value.substring(1, value.length() - 1);
+        value = value.substring(1, value.length() - 1).trim();
       }
 
       // This isn't right if a string contains embedded spaces.

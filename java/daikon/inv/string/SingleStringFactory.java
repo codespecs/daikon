@@ -18,7 +18,9 @@ public class SingleStringFactory {
     if (pass == 1) {
       result.add(OneOfString.instantiate(ppt));
     } else if (pass == 2) {
-      // if (! var.isConstant()) {
+      // if (var.isConstant()) {
+      //   Global.subexact_noninstantiated_invariants += 5;
+      // } else {
       //   LowerBound.instantiate(ppt);
       //   Modulus.instantiate(ppt);
       //   NonModulus.instantiate(ppt);

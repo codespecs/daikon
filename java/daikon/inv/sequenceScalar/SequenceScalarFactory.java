@@ -2,8 +2,6 @@ package daikon.inv.sequenceScalar;
 
 import daikon.*;
 
-import java.lang.reflect.*;
-
 import java.util.*;
 
 public class SequenceScalarFactory {
@@ -37,6 +35,7 @@ public class SequenceScalarFactory {
 
     Vector result = new Vector();
     if (pass == 2) {
+      // I could check that the length of the sequence isn't always 0.
       result.add(Member.instantiate(ppt, seq_first));
     }
     return result;

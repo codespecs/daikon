@@ -39,6 +39,8 @@ public abstract class Invariant {
   // user-settable rather than final.
   public final static double probability_limit = .01;
 
+  public final static int min_mod_non_missing_samples = 5;
+
   // // Do I want to have this cache at all?  It may not be that expensive
   // // to compute from scratch, and I may not be interested in it that often.
   // protected double probability_cache = 0;

@@ -1,7 +1,6 @@
 package daikon;
 
 import daikon.split.*;
-import daikon.split.griesLisp.*;
 
 // All information about a single program point.
 // A Ppt may also represent just part of the data: a disjunction.

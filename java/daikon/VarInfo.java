@@ -80,11 +80,13 @@ public class VarInfo implements Cloneable {
   }
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_, Object static_constant_value_) {
-    // Watch out:  some Lisp .decls files have other (unsupported) types.
+    // Watch out:  some Lisp and C .decls files have other (unsupported) types.
+    Assert.assert(rep_type_ != null);
     Assert.assert((rep_type_ == ProglangType.INT)
                   || (rep_type_ == ProglangType.STRING)
                   || (rep_type_ == ProglangType.INT_ARRAY)
-                  || (rep_type_ == ProglangType.STRING_ARRAY));
+                  || (rep_type_ == ProglangType.STRING_ARRAY),
+                  "Unsupported representation type " + rep_type_.format() + " for variable " + name_);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller

@@ -9,11 +9,16 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     // System.out.println("SequenceExtremumFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
 
+    if (vi.rep_type != ProglangType.INT_ARRAY)
+      return null;
+
     // System.out.println("SequenceExtremum.applicable(" + vi.name + ") = "
     //                    + SequenceExtremum.applicable(vi));
 
-    if (!SequenceExtremum.applicable(vi))
+    if (!SequenceExtremum.applicable(vi)) {
+      Global.tautological_suppressed_derived_variables += 4;
       return null;
+    }
 
     // by default, we use the indices 0, 1, -1, -2.
     int lowerbound = -2;
@@ -23,9 +28,10 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     VarInfo lengthvar = vi.sequenceSize();
     if (lengthvar.isConstant()) {
       int length_constant = ((Integer) lengthvar.constantValue()).intValue();
-      if (length_constant == 0)
-        return new UnaryDerivation[] { };
-      else if (length_constant <= 4) {
+      if (length_constant == 0) {
+        Global.tautological_suppressed_derived_variables += 4;
+        return null;
+      } else if (length_constant <= 4) {
         lowerbound = 0;
         upperbound = length_constant - 1;
       }
@@ -36,7 +42,8 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     if (vi.name.indexOf("~ll~") != -1) {
       suppress_zero = true;
       if ((lowerbound == 0) && (upperbound == 0))
-        return new UnaryDerivation[] { };
+        Global.tautological_suppressed_derived_variables += 4;
+        return null;
     }
 
     int num_invs = upperbound - lowerbound + 1 - (suppress_zero ? 1 : 0);
@@ -60,6 +67,8 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     //               + ",lowerbound=" + lowerbound
     //               + ", upperbound=" + upperbound
     //               + ", suppress_zero=" + suppress_zero);
+
+    Global.tautological_suppressed_derived_variables += 4 - num_invs;
     return result;
   }
 
