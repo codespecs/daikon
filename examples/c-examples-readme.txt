@@ -3,17 +3,34 @@ use of Daikon and the C front end.
 
 STEP-BY-STEP INSTRUCTIONS
 
-First, install the Daikon invariant detector.  This is well-documented
-in the daikon manual.  Download and install the most recent
-distribution.
+******************** INSTALLATION ********************
 
-In addition to the Daikon engine, you also need a front end.  Dfec is
-the front end for C.  Obtain dfec.zip and set it up as follows.
+(1) First, install the Daikon invariant detector.  This is
+well-documented in the daikon manual.  Download and install the most
+recent distribution from http://sdg.lcs.mit.edu/daikon/download/
+The pre-compiled version (daikon-jar.tar.gz) is fine.
 
-(We will refer to the directory DFEC is unzipped in as $DFECDIR.
-This path, and all other paths discussed in these instructions, should
-be in terms of the cygwin file namespace;
-e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt).
+Unzip the .tar.gz file.  At a cygwin prompt:
+
+$ tar zxvf daikon-jar.tar.gz
+
+Now, set your CLASSPATH variable.  Since this variable is used by Java
+(compiled for windows) and not cygwin, it need to be in the Windows
+namespace.  You set it via the regular windows mechanisms (control
+panels, user preferences), or else at a cygwin prompt via:
+
+$ export CLASSPATH=C:\\place-unzipped\\daikon\\daikon.jar
+
+We use \\ as the path separartor, which the shell reads as a single
+backslash (\), since this is a windows path.
+
+(2) In addition to the Daikon engine, you also need a front end.  Dfec
+is the front end for C.  Obtain dfec.zip and set it up as follows.
+
+(We will refer to the directory DFEC is unzipped in as $DFECDIR.  This
+path, and all other paths discussed in these instructions, should be
+in terms of the cygwin file namespace unless explicitly noted
+otherwise; e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt).
 
 Compile the daikon runtime library.  At a cygwin prompt:
 
@@ -135,8 +152,6 @@ $ sh tests.sh
 
 This creates a data trace file at daikon-output/print_tokens.dtrace.
 
-==== BEFORE HERE IS "OK" ACCORDING TO JEREMY
-
 5. Run Daikon on the trace file.
 
 $ java -Xmx256m daikon.Daikon -o print_tokens.inv \
@@ -206,7 +221,7 @@ First, it is recommended that you set the TRACE_KAT_MCT variable when
 you run the C front end, so you will see some output when running the
 test suite.
 
-2.  $DFEC-DTRACE_KAT_MCT rijndael.c \
+2.  $DFEC -DTRACE_KAT_MCT rijndael.c \
       rijndael-alg-ref.h rijndael-api-ref.h
 
 Second, you will need to manually reduce the size of the dtrace file.
