@@ -37,8 +37,9 @@ sub load_decls {
     my $decls = shift;
     open DECLS, $decls or die "couldn't open decls \"$decls\"\n";
     my $declshash = {};
-    my $firstppt = 1;
+    my $ppt_seen = 0;
     while (defined (my $l = getline(DECLS))) {
+        $l =~ s://.*::; # strip any comments on this line
 	if ($l eq "DECLARE") {
 	    my $currppt = getline(DECLS);
 	    my $lhashref = {};
@@ -52,15 +53,19 @@ sub load_decls {
 		$$lhashref{$varname} = [$dtype, $rtype, $ltype];
 	    }
 	    $$declshash{$currppt} = $lhashref;
-	} elsif (($l eq "VarComparability") && $firstppt) {
+	    $ppt_seen = 1;
+	} elsif (($l eq "VarComparability") && !$ppt_seen) {
 	    #it's ok to have a VarComparability as the first thing
 	    #in the decls file.  Read the type of comparability,
 	    #then move on.
 	    $l = getline(DECLS);
+	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
+	    #it's ok to have a ListImplementors in the decls file.
+	    #Read the type of comparability, then move on.
+	    $l = getline(DECLS);
 	} elsif ($l) {
-	    die "malformed decls file";
+	    die "malformed decls file: $l";
 	}
-	$firstppt = 0;
     }
     close DECLS;
     return $declshash;
@@ -79,10 +84,13 @@ sub load_ppt {
     my $ppthash = {};
 
     while (my $varname = getline($dtfh)) {
-	(defined (my $varval = getline($dtfh)))
+        my $modbit, $varval;
+	(defined ($varval = getline($dtfh)))
 	    or die "malformed dtrace file";
-	(defined (my $modbit = getline($dtfh)))
+	unless ($varname eq 'this_invocation_nonce') {
+	(defined ($modbit = getline($dtfh)))
 	    or die "malformed dtrace file";
+        }
 	die "duplicate entry in dtracefile for var $varname at $pptname\n"
 	    if (defined $$ppthash{$varname});
 	$$ppthash{$varname} = [$varval, $modbit];
@@ -132,8 +140,6 @@ sub cmp_ppts {
 	    print "${varname} \@ ${pptname} undefined in ${dta}\n";
 	} elsif (not defined $lb) {
 	    print "${varname} \@ ${pptname} undefined in ${dtb}\n";
-	} elsif ($$varl[1] eq "hashcode") {
-	    #it's a hashcode - we don't care if they're different
 	} elsif ($$varl[1] eq "double") {
 	    $difference = abs($$la[0] - $$lb[0]);
 	    if (($difference <= 0.00001) && ($difference > 0)) {
@@ -147,6 +153,12 @@ sub cmp_ppts {
 			. "  \"" . $$lb[1] . "\" in ${dtb}\n";
 	    }
 	} else {
+	    if ($$varl[1] =~ /^hashcode/) {
+	        # It's a hashcode, or array of hashcodes; we only care
+	        # about which ones are null or not.
+	        $$la[0] =~ s/\d*[1-9]\d*/non-null/g; # match numbers except 0
+	        $$lb[0] =~ s/\d*[1-9]\d*/non-null/g; # match numbers except 0
+	    }
 	    if ($$la[0] ne $$lb[0]) {
 		print "${varname} \@ ${pptname} difference:\n"
 		    . "  \"" . $$la[0] . "\" in ${dta}\n"
