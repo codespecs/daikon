@@ -1,5 +1,3 @@
-
-
 package utilMDE;
 import java.util.*;
 
@@ -91,7 +89,7 @@ public final class MathMDE {
    * Returns of value of the first argument raised to the
    * power of the second argument.
    * @see{Math.pow(double, double)}
-   */
+   **/
   public static int pow(int base, int expt) throws ArithmeticException {
     return pow_fast(base, expt);
   }
@@ -154,7 +152,7 @@ public final class MathMDE {
   /**
    * Return the gcd (greatest common divisor) of the differences
    * between the elements of int  array a.
-   */
+   **/
   public static int  gcd_differences(int [] a) {
     if (a.length < 2) {
       return 0;
@@ -199,7 +197,7 @@ public final class MathMDE {
   /**
    * Return the gcd (greatest common divisor) of the differences
    * between the elements of long  array a.
-   */
+   **/
   public static long  gcd_differences(long [] a) {
     if (a.length < 2) {
       return 0;
@@ -217,8 +215,6 @@ public final class MathMDE {
   /// Modulus
   ///
 
-
-
   /** Return z such that (z == x mod y) and (0 <= z < abs(y)). */
   public static final int  mod_positive(int  x, int  y) {
     int  result = x % y;
@@ -231,7 +227,7 @@ public final class MathMDE {
    * Return an array of two integers (r,m) such that each number in NUMS is equal to r (mod m).
    * The largest possible modulus is used, and the trivial constraint that all
    * integers are equal to 0 mod 1 is not returned (null is returned instead).
-   */
+   **/
   public static int [] modulus(int [] nums) {
     if (nums.length < 3)
     return null;
@@ -252,7 +248,7 @@ public final class MathMDE {
    * This can be more efficient than modulus(int []) if the int [] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
-   */
+   **/
   public static int [] modulus_int (Iterator itor) {
     if (!itor.hasNext())
       return null;
@@ -284,7 +280,7 @@ public final class MathMDE {
    *
    * This "_strict" version requires its input to be sorted, and no element
    * may be missing.
-   */
+   **/
   public static int [] modulus_strict(int [] nums) {
     if (nums.length < 3)
     return null;
@@ -307,7 +303,7 @@ public final class MathMDE {
    *
    * This "_strict" version requires its input to be sorted, and no element
    * may be missing.
-   */
+   **/
   public static int [] modulus_strict_int (Iterator itor) {
     if (!itor.hasNext())
       return null;
@@ -333,8 +329,6 @@ public final class MathMDE {
 
   // modulus for long (as opposed to int) values
 
-
-
   /** Return z such that (z == x mod y) and (0 <= z < abs(y)). */
   public static final long  mod_positive(long  x, long  y) {
     long  result = x % y;
@@ -347,7 +341,7 @@ public final class MathMDE {
    * Return an array of two integers (r,m) such that each number in NUMS is equal to r (mod m).
    * The largest possible modulus is used, and the trivial constraint that all
    * integers are equal to 0 mod 1 is not returned (null is returned instead).
-   */
+   **/
   public static long [] modulus(long [] nums) {
     if (nums.length < 3)
     return null;
@@ -368,7 +362,7 @@ public final class MathMDE {
    * This can be more efficient than modulus(long []) if the long [] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
-   */
+   **/
   public static long [] modulus_long (Iterator itor) {
     if (!itor.hasNext())
       return null;
@@ -400,7 +394,7 @@ public final class MathMDE {
    *
    * This "_strict" version requires its input to be sorted, and no element
    * may be missing.
-   */
+   **/
   public static long [] modulus_strict(long [] nums) {
     if (nums.length < 3)
     return null;
@@ -423,7 +417,7 @@ public final class MathMDE {
    *
    * This "_strict" version requires its input to be sorted, and no element
    * may be missing.
-   */
+   **/
   public static long [] modulus_strict_long (Iterator itor) {
     if (!itor.hasNext())
       return null;
@@ -451,14 +445,12 @@ public final class MathMDE {
   /// Non-Modulus
   ///
 
-
-
   /**
    * Return an array containing all the numbers *not* in its argument array
    * but in the argument's range; that is, bigger than its argument's
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
-   */
+   **/
   public static int [] missing_numbers(int [] nums) {
     Arrays.sort(nums);
     int  min = nums[0];
@@ -492,7 +484,7 @@ public final class MathMDE {
    * but in the argument's range; that is, bigger than its argument's
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
-   */
+   **/
   static final class MissingNumbersIteratorInt  implements Iterator {
     int [] nums;
     Iterator nums_itor;
@@ -560,7 +552,7 @@ public final class MathMDE {
   /**
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
-   */
+   **/
   public static int [] nonmodulus_strict(int [] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
@@ -578,7 +570,7 @@ public final class MathMDE {
   /**
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
-   */
+   **/
   public static int [] nonmodulus_strict_int (Iterator nums) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.
@@ -608,7 +600,7 @@ public final class MathMDE {
    * but for every number in NUMS, at least one is equal to every non-r remainder.
    * The modulus is chosen as small as possible, but no greater than half the
    * range of the input numbers (else null is returned).
-   */
+   **/
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulus_strict instead.
   public static int [] nonmodulus_nonstrict(int [] nums) {
@@ -646,14 +638,12 @@ public final class MathMDE {
 
   // non-modulus for long (as opposed to int) values
 
-
-
   /**
    * Return an array containing all the numbers *not* in its argument array
    * but in the argument's range; that is, bigger than its argument's
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
-   */
+   **/
   public static long [] missing_numbers(long [] nums) {
     Arrays.sort(nums);
     long  min = nums[0];
@@ -687,7 +677,7 @@ public final class MathMDE {
    * but in the argument's range; that is, bigger than its argument's
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
-   */
+   **/
   static final class MissingNumbersIteratorLong  implements Iterator {
     long [] nums;
     Iterator nums_itor;
@@ -755,7 +745,7 @@ public final class MathMDE {
   /**
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
-   */
+   **/
   public static long [] nonmodulus_strict(long [] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
@@ -773,7 +763,7 @@ public final class MathMDE {
   /**
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
-   */
+   **/
   public static long [] nonmodulus_strict_long (Iterator nums) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.
@@ -803,7 +793,7 @@ public final class MathMDE {
    * but for every number in NUMS, at least one is equal to every non-r remainder.
    * The modulus is chosen as small as possible, but no greater than half the
    * range of the input numbers (else null is returned).
-   */
+   **/
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulus_strict instead.
   public static long [] nonmodulus_nonstrict(long [] nums) {
