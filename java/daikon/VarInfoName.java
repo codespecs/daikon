@@ -1086,7 +1086,7 @@ public abstract class VarInfoName
       for (int i=0; i < roots.length; i++) {
 	List uq = new ArrayList(helper[i].unquants());
 	if (uq.size() == 0) {
-	  // nothing needs qnautification
+	  // nothing needs quantification
 	  result.root_primes[i] = roots[i];
 	} else {
 	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
@@ -1107,7 +1107,7 @@ public abstract class VarInfoName
 	  VarInfoName lower = replace_result[1];
 	  VarInfoName upper = replace_result[2];
 
-	  result.root_primes[i] = replace_result[i]; 
+	  result.root_primes[i] = root_prime;
 	  result.bound_vars.add(new VarInfoName[] { idx, lower, upper });
 	}
       }
