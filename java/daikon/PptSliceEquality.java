@@ -128,55 +128,65 @@ public class PptSliceEquality
    * the instantiation of other invariants.
    * @return a List of invariants that have been weakened
    **/
+  // The basic approach is as follows:
+  //    - Loop through each equality set
+  //        - look for any variables that are no longer equal
+  //        - Create new equality sets (call createEqualityInvs)
+  //        - Get the new leaders
+  //        - Create new slices and invariants (call CopyInvsFromLeader)
+  //
   public List add(ValueTuple vt, int count) {
+
     LinkedList /*[Equality]*/ allNewInvs = new LinkedList();
     LinkedList /*[Equality]*/ weakenedInvs = new LinkedList();
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Doing add for " + parent.ppt_name + " count: " +
-                   count + " starting invs:");
-      for (Iterator i = invs.iterator(); i.hasNext(); ) {
-        Equality inv = (Equality) i.next();
-        debug.fine ("  " + inv.toString());
-      }
-    }
+
+    // Loop through each existing equality invariant
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Equality inv = (Equality) i.next();
+
+      // Add this sample to the invariant and track any vars that fall
+      // out of the set.
       List/*[VarInfo]*/ nonEqualVis = inv.add (vt, count);
+
+      // If some vars fell out
       if (nonEqualVis.size() > 0) {
-        if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("  Unequal VarInfos split off from " +
-                       inv + " with count " + inv.numSamples());
-          debug.fine ("  leader value: " +
-                       ValueTuple.valToString(inv.leader().getValue(vt)));
-          for (Iterator j = nonEqualVis.iterator(); j.hasNext(); ) {
-            VarInfo vi = (VarInfo) j.next();
-            debug.fine ("  " + vi.name.name() +
-                         " value: " + ValueTuple.valToString(vi.getValue(vt)) +
-                         " mod: " + vi.getModified(vt)
-                         );
-          }
-        }
-        // At this point, VarInfos in nonEqualVis still have their
-        // equality field set to their old sets
+
+        // Create new equality sets for all of the non-equal vars
         List /*[Equality]*/ newInvs =
           createEqualityInvs (nonEqualVis, vt, inv, count);
-        // Now they don't anymore
+
+        // Get a list of all of the new leaders
         List newInvsLeaders = new ArrayList (newInvs.size());
         for (Iterator iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
           Equality eq = (Equality) iNewInvs.next();
           newInvsLeaders.add (eq.leader());
         }
+
+        //Debug print the new leaders
+        if (Debug.logOn()) {
+          for (int j = 0; j < newInvsLeaders.size(); j++) {
+            Debug.log (getClass(), parent, new VarInfo[]
+              {(VarInfo) newInvsLeaders.get(j)},
+              "Split off from previous leader " + inv.leader().name.name()
+              + ": new set = " + (Equality) newInvs.get(j)
+              + ": old set = " + inv);
+          }
+        }
+
+        // Create new slices and invariants for each new leader
         copyInvsFromLeader (inv.leader(), newInvsLeaders, count);
+
+        // Keep track of all of the new invariants created.
         allNewInvs.addAll (newInvs);
 
+        // If any equality members were lost, the invariant is weakened
         weakenedInvs.add (inv);
       }
     }
+
+    // Add all of the new equality sets to our list
     invs.addAll (allNewInvs);
 
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Finished add for " + parent.ppt_name);
-    }
     return weakenedInvs;
   }
 
@@ -357,15 +367,24 @@ public class PptSliceEquality
                                          PptSlice slice, List newSlices,
                                          int position, int loop,
                                          VarInfo[] soFar) {
+
+    // Track debug if any variables are in newVis
+    Debug dlog = null;
+    if (Debug.logOn())
+      dlog = new Debug (getClass(), parent, newVis);
+
     if (position >= slice.var_infos.length) {
       // Done with assigning positions and recursion
       if (parent.findSlice_unordered (soFar) == null) {
         // If slice is already there, no need to clone.
         PptSlice newSlice = slice.cloneAndPivot(soFar);
-        List invs = newSlice.invs;
-        if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("  created new slice: " + newSlice.toString());
+        // Debug.debugTrack.fine ("LeaderHelper: Created Slice " + newSlice);
+        if (Debug.logOn()) {
+          dlog.log ("Created slice " + newSlice + " Leader equality set = "
+                    + soFar[0].equalitySet);
+          Debug.log (getClass(), newSlice, "Created this slice");
         }
+        List invs = newSlice.invs;
         for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
           Invariant inv = (Invariant) iInvs.next();
           if (inv.isObviousStatically_AllInEquality()) {
@@ -373,10 +392,15 @@ public class PptSliceEquality
           }
         }
         if (newSlice.invs.size() == 0) {
-          debug.fine ("  slice not added because 0 invs");
+          Debug.log (debug, getClass(), newSlice, soFar,
+                     "slice not added because 0 invs");
         } else {
           newSlices.add (newSlice);
         }
+      } else {
+        if (Debug.logOn())
+          dlog.log ("Slice already existed " +
+                    parent.findSlice_unordered (soFar));
       }
       return;
     } else {
