@@ -24,8 +24,8 @@ public final class SingleSequenceFactory {
 
       result.add(EltIntComparison.instantiate(ppt));
       result.add(EltOneOf.instantiate(ppt));
-      result.add(EltNonZero.instantiate(ppt));
-      result.add(NoDuplicates.instantiate(ppt));
+      // result.add(EltNonZero.instantiate(ppt));
+      // result.add(NoDuplicates.instantiate(ppt));
     }
     return result;
   }
