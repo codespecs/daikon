@@ -177,6 +177,7 @@ TAGS:
 ### Test the distribution
 ###
 
+# These should be in /scratch (which tends to have more space), not in /tmp.
 DISTTESTDIR := /tmp/daikon.dist
 DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
 
