@@ -42,6 +42,7 @@ NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 DIST_DIR_2 := $(DIST_DIR)
 
 CVS_REP := /g4/projects/invariants/.CVS/
+RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
 
 # for "chgrp"
 INV_GROUP := invariants
@@ -97,10 +98,10 @@ dist-test-no-update-dist: dist-ensure-directory-exists
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
-	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:/g2/users/mernst/java/jdk/jre/lib/rt.jar; rm `find . -name '*.class'`; make)
+	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:$(RTJAR); rm `find . -name '*.class'`; make)
 
-# I would rather define this inside the cvs-test rule, but I'm having
-# trouble with that (I don't know how to make it work).
+# I would rather define this inside the cvs-test rule.  (In that case I
+# must use "$$FOO", not $(FOO), to refer to it.)
 TESTCVS=/scratch/$(USER)/daikon.cvs
 TESTCVSJAVA=$(TESTCVS)/invariants/java
 
@@ -108,7 +109,7 @@ cvs-test:
 	-rm -rf $(TESTCVS)
 	mkdir -p $(TESTCVS)
 	cd $(TESTCVS) && cvs -Q -d $(CVS_REP) co invariants
-	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:/g2/users/mernst/java/jdk/jre/lib/rt.jar
+	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR)
 
 
 ###########################################################################
@@ -168,9 +169,9 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 	# jar xf java/lib/jakarta-oro.jar -C /tmp/daikon-jar
 	# jar xf java/lib/java-getopt.jar -C /tmp/daikon-jar
 	# jar xf java/lib/junit.jar -C /tmp/daikon-jar
-	(cd /tmp/daikon-jar; jar xf java/lib/jakarta-oro.jar)
-	(cd /tmp/daikon-jar; jar xf java/lib/java-getopt.jar)
-	(cd /tmp/daikon-jar; jar xf java/lib/junit.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	cd /tmp/daikon-jar && jar cf $@ *
 	mv /tmp/daikon-jar/$@ $@
 	rm -rf /tmp/daikon-jar
