@@ -313,8 +313,15 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     return false;
   }
 
+  // OneOf invariants that indicate a small set of possible values are
+  // uninteresting.  OneOf invariants that indicate exactly one value
+  // are interesting.
   public boolean isInteresting() {
-    return false;
+    if (num_elts() > 1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   // Look up a previously instantiated invariant.
