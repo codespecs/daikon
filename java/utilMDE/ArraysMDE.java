@@ -1100,15 +1100,14 @@ public final class ArraysMDE {
 
 
   /**
-   * @return true iff a does not contain duplicate ints
+   * @return true iff a does not contain duplicate elements
    * using O(n) time and O(n) space.
    */
-  public static boolean no_dups (int[] a) {
+  public static boolean noDuplicates (int[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
       // could be optimzed not to add the last element,
       // but that would make the code much less readable.
-
       Integer n = new Integer (a[i]);
       if (hs.contains(n)) { return false; }
       hs.add (n);
@@ -1118,16 +1117,15 @@ public final class ArraysMDE {
 
 
   /**
-   * @return true iff a does not contain duplicate ints
+   * @return true iff a does not contain duplicate elements
    * using O(n) time and O(n) space. Equality checking
-   * uses the .equals() method for java.lang.Double
+   * uses the .equals() method for java.lang.Double.
    */
-  public static boolean no_dups (double[] a) {
+  public static boolean noDuplicates (double[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
       // could be optimzed not to create the last element,
       // but that would make the code much less readable.
-
       Double n = new Double (a[i]);
       if (hs.contains(n)) { return false; }
       hs.add (n);
@@ -1137,15 +1135,14 @@ public final class ArraysMDE {
 
 
   /**
-   * @return true iff a does not contain duplicate ints
+   * @return true iff a does not contain duplicate elements
    * using O(n) time and O(n) space.
    */
-  public static boolean no_dups (long[] a) {
+  public static boolean noDuplicates (long[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
       // could be optimzed not to create the last element,
       // but that would make the code much less readable.
-
       Long n = new Long (a[i]);
       if (hs.contains(n)) { return false; }
       hs.add (n);
@@ -1155,10 +1152,10 @@ public final class ArraysMDE {
 
 
    /**
-   * @return true iff a does not contain duplicate ints
+   * @return true iff a does not contain duplicate elements
    * using O(n) time and O(n) space.
    */
-  public static boolean no_dups (String[] a) {
+  public static boolean noDuplicates (String[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
       if (hs.contains(a[i])) { return false; }
@@ -1169,6 +1166,20 @@ public final class ArraysMDE {
     return true;
   }
 
+  /**
+   * @return true iff a does not contain duplicate elements
+   * using O(n) time and O(n) space.
+   */
+  public static boolean noDuplicates (Object[] a) {
+    HashSet hs = new HashSet ();
+    for (int i = 0; i < a.length; i++) {
+      if (hs.contains(a[i])) { return false; }
+      // could be optimzed not to add the last element,
+      // but that would make the code much less readable.
+      hs.add (a[i]);
+    }
+    return true;
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
