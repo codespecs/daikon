@@ -11,7 +11,7 @@ import utilMDE.*;
 // I should probably rename this to "Invariant" and get rid of that interface.o
 
 public abstract class Invariant implements java.io.Serializable {
-  public PptSlice ppt;			// includes values, number of samples, VarInfos, etc.
+  public PptSlice ppt;      // includes values, number of samples, VarInfos, etc.
 
   // Has to be public so wrappers can read it.
   /**
@@ -147,7 +147,82 @@ public abstract class Invariant implements java.io.Serializable {
   }
 
   /**
-   * Returns true if this invariant is necessarily true, due to derived
+   * @return true if this invariant has a small modified sample count
+   **/
+  public boolean hasFewModifiedSamples() {
+    int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
+    if ((this instanceof OneOf)  &&  (((OneOf) this).num_elts() > num_mod_non_missing_samples)) {
+      // TODO: JWN says "Shouldn't this be an assertion or something?"
+      // MDE: The
+      System.out.println("Modbit problem:  more values (" + ((OneOf) this).num_elts() +
+                         ") than modified samples (" + num_mod_non_missing_samples + ")");
+    }
+
+    // We print a OneOf invariant even if there are few modified samples.  If the variable
+    // takes on only one value, maybe it is only set once (or a few times).
+    if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)  &&  (! (this instanceof OneOf))) {
+      if (Global.debugPrintInvariants)
+        System.out.println("  [Only " + ppt.num_mod_non_missing_samples() +
+                           " modified non-missing samples (" + ppt.num_samples() +
+                           " total samples): " + repr() + " ]");
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @return true if this invariant has any non-canonical variables
+   **/
+  public boolean hasNonCanonicalVariables() {
+    VarInfo varInfos[] = ppt.var_infos;
+    for (int i=0; i < varInfos.length; i++) {
+      if (! varInfos[i].isCanonical()) {
+        if (Global.debugPrintInvariants) {
+          System.out.println("  [Suppressing " + repr() + " because " + varInfos[i].name + " is non-canonical]");
+        }
+        if (Global.debugPptTopLevel) {
+          System.out.println("  [not all vars canonical:  " + repr() + " ]");
+          System.out.print("    [Canonicalness:");
+          for (int j=0; j < varInfos.length; j++)
+            System.out.print(" " + varInfos[j].isCanonical());
+          System.out.println("]");
+          // Eventually this may be able to happen again, because we will
+          // instantiate all invariants simultaneously, so we don't yet know
+          // which of the new variables is canonical.
+          throw new Error("this shouldn't happen");
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @return true if this invariant only has constant variables and is a comparison
+   **/
+  public boolean hasOnlyConstantVariables() {
+    VarInfo[] varInfos = ppt.var_infos;
+    for (int i=0; i < varInfos.length; i++) {
+      if (! varInfos[i].isConstant())
+        return false;
+    }
+    
+    // At this point, we know all variables are constant.
+    Assert.assert(this instanceof OneOf  ||  this instanceof Comparison
+                  // , "Unexpected invariant with all vars constant: "
+                  // + inv + "  " + inv.repr() + "  " + inv.format()
+                  );
+    if (this instanceof Comparison) {
+				//      Assert.assert(! IsEquality.it.accept(this));
+      if (Global.debugPrintInvariants)
+        System.out.println("  [over constants:  " + this.repr() + " ]");
+      return true;
+    } else
+      return false;
+  }
+
+  /**
+   * @return true if this invariant is necessarily true, due to derived
    * variables, other invariants, etc.
    * Intended to be overridden by subclasses.
    **/
@@ -160,11 +235,16 @@ public abstract class Invariant implements java.io.Serializable {
     // // turns out until after testing it.
     // // // We don't need to check isObviousDerived because we won't add
     // // // obvious-derived invariants to lists in the first place.
-    return isObviousDerived() || isObviousImplied();
+    if (isObviousDerived() || isObviousImplied()) {
+      if (Global.debugPrintInvariants)
+        System.out.println("  [obvious:  " + repr() + " ]");
+      return true;
+    }
+    return false;
   }
 
   /**
-   * Returns true if this invariant is necessarily true, due to being implied
+   * @return true if this invariant is necessarily true, due to being implied
    * by other (more basic or preferable to report) invariants.
    * Intended to be overridden by subclasses.
    **/
@@ -173,7 +253,7 @@ public abstract class Invariant implements java.io.Serializable {
   }
 
   /**
-   * Returns true if this invariant is necessarily true, due to being implied
+   * @return true if this invariant is necessarily true, due to being implied
    * by other (more basic or preferable to report) invariants.
    * Intended to be overridden by subclasses.
    **/
@@ -181,6 +261,62 @@ public abstract class Invariant implements java.io.Serializable {
     return false;
   }
 
+  /**
+   * @return true if this invariant is unjustified
+   **/
+  public boolean isUnjustified() {
+    if (! justified()) {
+      if (Global.debugPrintInvariants)
+        System.out.println("  [not justified:  " + repr() + " ]");
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @return true if this invariant is controlled by another invariant
+   **/
+//    public boolean isControlled() {
+//      Invariant controller = ppt.find_controlling_invariant( this );
+//      if (controller != null) {
+//        if (Global.debugPrintInvariants) {
+//          System.out.println("  [is controlled:  " + repr() + " ]");
+//        }
+//        return true;
+//      }
+//      return false;
+//    }
+
+//    private final static Invariant.IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
+//      new Invariant.DefaultIsSameInvariantNameExtractor() {
+//          public String getFromFirst(VarInfo var)
+//          { return "orig(" + super.getFromFirst(var) + ")"; }
+//        };
+
+//    /**
+//     * @return true if this invariant
+//     **/
+//    private boolean isWorthPrinting_PostconditionPrestate(Invariant inv, boolean add_to_stats)
+//    {
+//      if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
+//        if (entry_ppt != null) {
+//          Iterator entry_invs = entry_ppt.invariants_vector().iterator();
+//          while (entry_invs.hasNext()) {
+//            Invariant entry_inv = (Invariant) entry_invs.next();
+//            // If entry_inv with orig() applied to everything matches inv
+//            if (entry_inv.isSameInvariant(inv, preToPostIsSameInvariantNameExtractor)) {
+//              if (entry_ppt.isWorthPrinting(entry_inv)) {
+//                if (add_to_stats) {
+//                  // TODO: Fix global statistics for this?
+//                }
+//                return false;
+//              }
+//            }
+//          }
+//        }
+//      }
+//      return true;
+//    }
 
 
   // Not used as of 1/31/2000.
@@ -290,7 +426,7 @@ public abstract class Invariant implements java.io.Serializable {
    * names.
    **/
   public boolean isSameInvariant(Invariant inv2,
-				 IsSameInvariantNameExtractor name_extractor)
+                                 IsSameInvariantNameExtractor name_extractor)
   {
     Invariant inv1 = this;
 
@@ -316,7 +452,7 @@ public abstract class Invariant implements java.io.Serializable {
       
       // Do the easy check first
       if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
-	continue;
+        continue;
       }
 
       // The names "match" iff there is an intersection of the names
@@ -327,21 +463,21 @@ public abstract class Invariant implements java.io.Serializable {
       all_vars2.add(var2.canonicalRep());
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
-	VarInfo elt = (VarInfo) iter.next();
-	String name = name_extractor.getFromFirst(elt);
-	all_vars_names1.add(name);
+        VarInfo elt = (VarInfo) iter.next();
+        String name = name_extractor.getFromFirst(elt);
+        all_vars_names1.add(name);
       }
       boolean intersection = false;
       for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
-	VarInfo elt = (VarInfo) iter.next();
-	String name = name_extractor.getFromSecond(elt);
-	intersection = all_vars_names1.contains(name);
-	if (intersection) {
-	  break;
-	}
+        VarInfo elt = (VarInfo) iter.next();
+        String name = name_extractor.getFromSecond(elt);
+        intersection = all_vars_names1.contains(name);
+        if (intersection) {
+          break;
+        }
       }
       if (!intersection) {
-	return false;
+        return false;
       }
     }
 
@@ -368,23 +504,23 @@ public abstract class Invariant implements java.io.Serializable {
     throw new Error("Unimplemented invariant diff for " + this.getClass() + " and " + other.getClass() + ": " + this.format() + " " + other.format());
   }
 
-//     # Possibly add an optional "args=None" argument, for formatting.
-//     def diff(self, other):
-//         """Returns None or a description of the difference."""
-//         # print "diff(invariant)"
-//         inv1 = self
-//         inv2 = other
-//         assert inv1.__class__ == inv2.__class__
-//         if inv1.is_unconstrained() and inv2.is_unconstrained():
-//             return None
-//         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
-//             return "One is unconstrained but the other is not"
-//         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
-//             return "Different small number of values"
-//         if inv1.can_be_None ^ inv2.can_be_None:
-//             return "One can be None but the other cannot"
-//         # return "invariant.diff: no differences"	# debugging
-//         return None
+  //     # Possibly add an optional "args=None" argument, for formatting.
+  //     def diff(self, other):
+  //         """Returns None or a description of the difference."""
+  //         # print "diff(invariant)"
+  //         inv1 = self
+  //         inv2 = other
+  //         assert inv1.__class__ == inv2.__class__
+  //         if inv1.is_unconstrained() and inv2.is_unconstrained():
+  //             return None
+  //         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
+  //             return "One is unconstrained but the other is not"
+  //         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
+  //             return "Different small number of values"
+  //         if inv1.can_be_None ^ inv2.can_be_None:
+  //             return "One can be None but the other cannot"
+  //         # return "invariant.diff: no differences"  # debugging
+  //         return None
 
 
 }
@@ -399,7 +535,7 @@ public abstract class Invariant implements java.io.Serializable {
 //                     and self.var_infos):
 //                     some_nonderived = false
 //                     for vi in self.var_infos:
-//                     	some_nonderived = some_nonderived or not vi.is_derived
+//                      some_nonderived = some_nonderived or not vi.is_derived
 //                     if some_nonderived:
 //                         return "%s = uninit" % (args,)
 //             elif len(self.one_of) == 1:
