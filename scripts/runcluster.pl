@@ -13,6 +13,7 @@ my $ncluster = 4; # the number of clusters
 my $algorithm = "km";
 my $usage = "Usage: runcluster.pl [-k <num_clusters>] [-algorithm (hierarchical | km)] <dtrace_files> <decls_files>";
 
+my $options;
 my $command;
 
 
@@ -23,7 +24,7 @@ while (scalar(@ARGV) > 0) {
 	$ncluster = $ARGV[1];
 	shift @ARGV;
 	shift @ARGV;
-    } elsif ($ARGV[0] eq '-algorithm') {
+    } elsif ($ARGV[0] =~ /-alg/) {
 	$algorithm = $ARGV[1];
 	shift @ARGV;
 	shift @ARGV;
@@ -45,22 +46,31 @@ print "runcluster.pl: -k $ncluster -algorithm $algorithm $decls_file $dtrace_fil
 
 #extract the variables from the dtrace file
 print "\nextracting variables from dtrace file ...\n";
-$command = "perl $ENV{INV}/scripts/extract_vars.pl $decls_file $dtrace_file";
+
+if ($algorithm eq 'xm') {
+    $options = " -output xm ";
+}
+
+$command = "perl $ENV{INV}/scripts/extract_vars.pl $options $decls_file $dtrace_file";
 print "$command\n";
 system($command);
 
 $command = "";
-#this is a hack. careful!
-my @to_cluster = glob("*\\.daikon_temp");
+my @to_cluster = glob("*\\.daikon_temp *.daikon_temp.samp");
 
 foreach my $filename (@to_cluster) {
     my $outfile = "$filename.cluster";
     #this is for kmeans clustering
     if ($algorithm eq "km") {
 	$command = $command . " $ENV{INV}/tools/kmeans/kmeans $filename $ncluster > $outfile; ";
-    } else {
+    } elsif ($algorithm eq "hierarchical") {
 	#this is for hierarchical clustering
 	$command = $command . " difftbl $filename | cluster -w | clgroup -n $ncluster > $outfile; ";
+    } elsif ($algorithm eq "xm") {
+	my $exec = "$ENV{INV}/tools/xmeans/kmeans/kmeans ";
+	$command = $command. " $exec makeuni in  $filename; ";
+	$command = $command. " $exec kmeans -k 1 -method blacklist -max_leaf_size 45 -min_box_width 0.04 -cutoff_factor 0.5 -max_iter 180 -num_splits 6 -max_ctrs 15 -in $filename -printclusters out.clust; ";
+	$command = $command. " $exec membership in out.clust > $outfile ; rm out.clust ;";
     }
 }
 
@@ -72,7 +82,7 @@ system($command);
 #rewrite dtrace file
 print "\nrewriting dtrace file ...\n";
 my @clustered_files = glob("*\\.cluster");
-$command = "perl $ENV{INV}/scripts/write_dtrace.pl $dtrace_file " . join(' ', @clustered_files);
+$command = "perl $ENV{INV}/scripts/write_dtrace.pl $options $dtrace_file " . join(' ', @clustered_files);
 print "$command\n";
 system($command);
 
@@ -92,6 +102,11 @@ print "$command\n";
 system($command);
 # print "decls-add-cluster finished\n";
 
+if ($algorithm eq 'xm') {
+    open (MAX, "daikon_temp.maxcluster") || die "file with max clusters (xmeans) not found\n";
+    $ncluster = <MAX>;
+}
+
 #write spinfo file
 my $spinfo_file = "daikon_temp.spinfo";
 print "\nwriting spinfo file $spinfo_file ...\n";
@@ -108,7 +123,7 @@ close SPINFO;
 $dtrace_file =~ /(.*)\.dtrace/;
 my $new_dtrace = "$1_daikon_temp.dtrace";
 my $invfile = "$algorithm-$ncluster.inv";
-$command = "java -Xmx512m daikon.Daikon -o $invfile --no_text_output --suppress_redundant --suppress_post $spinfo_file $decls_new $new_dtrace";
+$command = "java -Xmx1024m daikon.Daikon -o $invfile --no_text_output --suppress_redundant --suppress_post $spinfo_file $decls_new $new_dtrace";
 print "$command\n";
 system($command);
 

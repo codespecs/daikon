@@ -5,7 +5,7 @@
 #                  algoritm implementations.
 
 # todo: document the daikon_cluster thing for clustering tempfiles.
-my $usage = "extract_vars.pl  <dtracefile>.dtrace <decls1>.decls <decls2>.decls ...";
+my $usage = "extract_vars.pl  -output <seq|xm> <dtracefile>.dtrace <decls1>.decls <decls2>.decls ...";
 
 use English;
 use strict;
@@ -33,13 +33,15 @@ my %pptname_to_varnames = (); # keep track of the variable names to be clustered
 #tie %pptname_to_varnames, "Tie::IxHash";
 
 #define the output format. Important: Only one of these should be set to 1. Others set to zero
-my $output_xmeans = 1;
-my $output_seq = 0;
-my $output_column = 0;
+my $output = 'seq';
 
 while ( scalar(@ARGV) > 0) {
     if ($ARGV[0] eq '-algorithm') {
 	$algorithm = $ARGV[1];
+	shift @ARGV;
+	shift @ARGV;
+    } elsif ($ARGV[0] eq '-output') {
+	$output = $ARGV[1];
 	shift @ARGV;
 	shift @ARGV;
     } elsif ($ARGV[0] =~ /\.decls/){
@@ -81,9 +83,9 @@ sub read_decls_file {
 	    if ($pptname !~ /ENTER/) { 
 		my $pptfilename = &cleanup_pptname($pptname);
 		$pptfilename = $pptfilename.".daikon_temp";
-		if ($output_seq) {
+		if ($output eq 'seq') {
 		    &open_file_for_output_seq($pptname, $pptfilename);
-		} elsif ($output_xmeans) {
+		} elsif ($output eq 'xm') {
 		    &open_file_for_output_xmeans($pptname, $pptfilename);
 		} else {
 		    die "No output format defined. Set one of the \$output_xxx variables\n";
@@ -102,18 +104,15 @@ while (<DTRACE>) {
     if ($line =~ /:::/) {
 	$pptname = $line;
 	chomp ($pptname);
-	#extract the variables out of only the EXIT program points.
-	#(take this out if you want everything). Also if the filehandle
-	#doesn't exist, then we didn't come across this program point in
-	#the decls file, so ignore
+	
 	if( $pptname =~ /:::ENTER/ || !(exists $pptname_to_fhandles{$pptname})) {
 	    &skip_till_next(*DTRACE);
 	} else {	
 	    my @variables = &read_execution($pptname);
 	    push @{$pptname_to_vararrays{$pptname}}, @variables;
-	    if ($output_seq) {
+	    if ($output eq 'seq') {
 		&output_seq(@variables);
-	    } elsif ($output_xmeans) {
+	    } elsif ($output eq 'xm') {
 		&output_xmeans(@variables);
 	    }
 	}
@@ -124,6 +123,15 @@ while (<DTRACE>) {
 foreach my $pptname (keys %pptname_to_fhandles) {
     *FH = $pptname_to_fhandles{$pptname};
     close FH;
+}
+
+foreach my $pptname (keys %pptname_to_nvars) {
+    if (!exists $pptname_to_vararrays{$pptname}) {
+	my $to_delete = &cleanup_pptname($pptname);
+	$to_delete = "$to_delete.daikon_temp";
+	unlink ($to_delete);
+	print "deleting $to_delete because no data\n";
+    }
 }
 
 &sample_large_ppts;
@@ -142,7 +150,7 @@ sub sample_large_ppts {
 	    } elsif ($num > 10) {
 		$nvars_to_maxsamples{$num} = 550;
 	    } 
-	} elsif ($algorithm eq 'km') {
+	} elsif ($algorithm eq 'km' || $algorithm eq 'xm') {
 	    $nvars_to_maxsamples{$num} = 4000;
 	}
     	
@@ -160,9 +168,9 @@ sub sample_large_ppts {
 	    my $old = "$pptfilename.daikon_temp";
 	    unlink $old;
 	    my $new_filename = $pptfilename.".daikon_temp.samp";
-	    if ($output_seq) {
+	    if ($output eq 'seq') {
 		&open_file_for_output_seq($pptname, $new_filename);
-	    } elsif ($output_xmeans) {
+	    } elsif ($output eq 'xm') {
 		&open_file_for_output_xmeans($pptname, $new_filename);
 	    } else {
 		die "no  output format chosen!!\n";
@@ -182,15 +190,14 @@ sub sample_large_ppts {
 		for (my $j = $start; $j <= $end; $j++) {
 		    push @invocation_slice, $pptname_to_vararrays{$pptname}[$j];
 		}
-		if ($output_seq) {
+		if ($output eq 'seq') {
 		    &output_seq(@invocation_slice);
-		} elsif ($output_xmeans) {
+		} elsif ($output eq 'xm') {
 		    &output_xmeans(@invocation_slice);
 		} else {
 		    die " no output format chosen!!\n";
 		}
 	    }
-	    close SAMP;
 	}
     }
 }
@@ -227,6 +234,7 @@ sub read_execution {
 	$value =~ s/true/10/;
 	$value =~ s/null/0/;
 	$value =~ s/missing/-11111/;
+	$value =~ s/NaN/1e10/;
 	$mod = <DTRACE>;
 	chomp ($mod);
 	# see if the variable is an Object variable
@@ -295,8 +303,8 @@ sub open_file_for_output_seq {
     # prep the file for writing the variable values. Now it just prints the number of variables
     # at this program point
     my ($pptname, $pptfilename, @vararray, $fhandle);
-    $pptname = @_[0];
-    $pptfilename = @_[1];
+    $pptname = $_[0];
+    $pptfilename = $_[1];
     #create a filehandle for this program point
     
     my $nvars = $pptname_to_nvars{$pptname};
@@ -309,22 +317,34 @@ sub open_file_for_output_seq {
     }
 }
     
+my %pptname_to_nonce_translation = (); # This is for xmeans output. For each execution 
+                                       # it stores a translation between the sequence 
+                                       # number execution and the invocation nonce.
+
 sub open_file_for_output_xmeans {
     # ** customized for output to the xmeans algorithm
     
     #prep the file for writing the variable values
-    my ($pptname, $pptfilename, @vararray, $fhandle);
+    my ($pptname, $pptfilename, @vararray, $fhandle, $fhandle2);
     
-    $pptname = @_[0];
-    $pptfilename = @_[1];
+    $pptname = $_[0];
+    $pptfilename = $_[1];
     
-    #create a filehandle for this program point
+    #create a filehandle for this program point and for translation table
     my $nvars = $pptname_to_nvars{$pptname};
     if ($nvars > 0) {
+	
+	my $trans = $pptfilename.".trans";
+	local *TRANS;
+	open (TRANS, ">$trans") || die " couldn't open translation file $trans\n";
+	$fhandle2 = *TRANS;
+	$pptname_to_nonce_translation{$pptname} = $fhandle2;
+
 	local *FNAME;
 	open(FNAME, ">$pptfilename") || die "couldn't open $pptfilename for writing\n";
 	$fhandle = *FNAME;
 	$pptname_to_fhandles{$pptname} = $fhandle;
+	
 	
 	print $fhandle "#Generated by extract_vars.pl\n\n";
 	for (my $i = 0; $i < $nvars; $i++) {
@@ -344,6 +364,7 @@ sub output_xmeans {
     my $output_nvars = $pptname_to_nvars{$output_pptname};
     my $output_string;
     local *FH = $pptname_to_fhandles{$output_pptname};
+    local *FH2 = $pptname_to_nonce_translation{$output_pptname};
     
     ### ignore the invocation nonce!! (xmeans)
     for (my $k = 1; $k < $output_nvars+1; $k++) {
@@ -351,6 +372,7 @@ sub output_xmeans {
     }
     chop $output_string;
     print FH "$output_string\n";
+    print FH2 "$output_vararray[1]\n"; # print the invocation nonce to the translation table.
 }
 
 

@@ -6,24 +6,55 @@
 # as key the program point name, and as value an array whose index is the
 # invocation nonce and the value cluster number of that point.
 
+
+# todo: document translation for xm (sequence in dtrace file -> invocation nonce)
 use English;
 use strict;
 $WARNING = 0;			# "-w" flag
+
+my $usage = "write_dtrace.pl [-output <seq|xm>] <dtrace file> \@decls_files\n";
 
 my %pptname_to_cluster = ();
 my ($dtrace_file, $ppt_stem);
 my %pptname_to_nonces = (); #used to keep track of an invocation nonce for ppts 
                       #which don't have them.
 
-#substitute this with your own read_cluster_info procedure.
-my $pptname_to_cluster = &read_cluster_info_seq;
+my %pptname_to_cluster = ();
 
-if( $ARGV[0] =~/(.*)\.dtrace/ ){
-    $ppt_stem = $1;
-    $dtrace_file = $ARGV[0];
-} else {
-    print "First argument must be a dtrace file. Must end in .dtrace";
-    exit(0);
+my $maxcluster = 0; # the highest cluster number. This is needed when we are using
+                    # xmeans so that we can know how many clusters to split the dtrace
+                    # file into.
+
+my @cluster_files = ();
+my $output = "km";
+
+while ( scalar(@ARGV) > 0) {
+    if ($ARGV[0] eq '-output') {
+	$output = $ARGV[1];
+	shift @ARGV;
+	shift @ARGV;
+    } elsif ( $ARGV[0] =~/(.*)\.dtrace/ ){
+	if (defined($dtrace_file)) {
+	    die("extract_vars.pl: multiple dtrace files supplied: $dtrace_file\n$usage");
+	}
+	$dtrace_file = $ARGV[0];
+	$ppt_stem = $1;
+	shift @ARGV;
+    } else {
+	push @cluster_files, $ARGV[0];
+	shift @ARGV;
+    }
+}
+
+if (!defined($dtrace_file)) {
+    die "write_dtrace.pl: no dtrace file supplied \n";
+}
+
+#substitute this with your own read_cluster_info procedure.
+if ($output eq 'km' || $output eq 'hierarchical') {
+    %pptname_to_cluster = &read_cluster_info_seq(@cluster_files);
+} elsif ($output eq 'xm') {
+    %pptname_to_cluster = &read_cluster_info_xm(@cluster_files);
 }
 
 open (DTRACE_IN, $dtrace_file) || die "dtrace file not found \n";
@@ -39,6 +70,12 @@ while (<DTRACE_IN>) {
 	chomp ($pptname);
 	&insert_cluster_info($pptname);
     } 
+}
+
+
+if ($output eq 'xm') {
+    open (MAX, ">daikon_temp.maxcluster") || die "couldn't open file to output max cluster\n";
+    print MAX "$maxcluster";
 }
 
 sub insert_cluster_info {
@@ -129,10 +166,9 @@ sub read_cluster_info_seq {
 # by cluster. there is a blank line separating clusters.
     my ($filename, $line, $cluster);
     my @temparray = (); #holds the cluster information
-    my $numfiles = scalar(@ARGV) - 1;
-    for (my $i = 1; $i < $numfiles+1; $i++) {
-	$filename = $ARGV[$i];
-	
+    $cluster == 0;
+    my @filenames = @_; # cluster files
+    foreach $filename (@filenames) {	
 	open (FILE, $filename) || die "can't open $filename to read cluster info\n";
 	$cluster = 1;
 	#read the file with the cluster information
@@ -154,7 +190,66 @@ sub read_cluster_info_seq {
 	
 	$pptname_to_cluster{$filename} = [@temparray];
     }
-    return $pptname_to_cluster;
+    return %pptname_to_cluster;
+}
+
+my %pptname_to_nonce_translation = ();
+
+sub read_cluster_info_xm {
+# @ARGV[1....] are the files with the cluster information
+# the file format is just a list of invocation nonces (one per line), grouped
+# by cluster. there is a blank line separating clusters.
+
+    my ($filename, $line, $cluster);
+    my @temparray = (); #holds the translation information
+    my @nonce_to_cluster = ();
+    $cluster = 0;
+    my @filenames = @_; # cluster files
+    foreach $filename (@filenames) {
+	my $trans_filename = $filename;
+	$trans_filename =~ s/.cluster//;
+	open (TRANS, "$trans_filename.trans") || die "write_dtrace: couldn't open translation file ($filename.trans) for $filename\n";
+	my $sequence_number = 0;
+	while (<TRANS>) {
+	    if ($_ =~ /^\s*(\d*)\s*$/) {
+		my $trans = $1;
+		$temparray[$sequence_number] = $trans;
+		$sequence_number++;
+	    } else {
+		next;
+	    }
+	}
+
+	open (FILE, $filename) || die "can't open $filename to read cluster info\n";
+	$cluster = 1;
+	#read the file with the cluster information
+	while( $line = <FILE>) {
+	    if($line =~ /^\s*$/) {
+		#if you hit a blank like, then we've come to the end of one cluster.
+		#increase the cluster number by 1
+		$cluster++;
+	    } elsif ($line =~ /^\s*(\d*)\s*$/) {
+		chomp($line);
+		my $nonce = $temparray[$line];
+		$nonce_to_cluster[$nonce] = $cluster;
+		#print "$nonce -> $cluster\n";
+		if ($cluster > $maxcluster) {
+		    $maxcluster = $cluster;
+		}
+		
+	    } else {
+		next;
+	    }
+	}
+	$filename =~ s/ENTER.*//;
+	$filename =~ s/EXIT.*//;
+	$filename =~ s/.cluster//;
+	$filename =~ s/.samp//;
+	$filename =~ s/.daikon_temp.*//;
+	
+	$pptname_to_cluster{$filename} = [@nonce_to_cluster];
+    }
+    return %pptname_to_cluster;
 }
 
 BEGIN {
