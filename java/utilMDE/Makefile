@@ -18,9 +18,11 @@ default: all
 
 all: ${AUTO_GENERATED_FILES}
 	${JAVAC} ${JAVA_FILES}
+	$(MAKE) test
 
 all_javac: ${AUTO_GENERATED_FILES}
 	javac -g ${JAVAC_EXTRA_ARGS} ${JAVA_FILES}
+	$(MAKE) test
 
 clean:
 	rm -f *.class
@@ -33,7 +35,8 @@ tags:
 
 # Run Jikes unconditionally.
 # This "set" form doesn't seem to work for me (maybe needs to be export?).
-test:	clean all
+# Used to depend on targets "clean all", but I want to run this in "all".
+test:
 	set JAVA_COMPILER=NONE; java utilMDE.TestUtilMDE
 
 doc: $(JAVA_FILES)
