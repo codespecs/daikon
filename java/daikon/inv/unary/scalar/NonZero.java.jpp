@@ -15,12 +15,13 @@ The correct way to build the system is to run 'make'.
   #define MEMBER Member
   #define MEMBERSTRING "Member"
   #define ELTNONZERO EltNonZero
-  #define SEQINDEXNONEQUAL SeqIndexNonEqual
+  #define SEQINDEXNONEQUAL SeqIndexIntNonEqual
   #define SEQUENCEINITIAL SequenceInitial
   #define PRIMITIVE long
   #define WRAPPER Long
   #define WRAP_VALUE longValue
   #define INTERN(v) Intern.internedLong(v)
+  #define VALUE_SET ValueSet.ValueSetScalar
 #elif defined(FLOAT)
   #define NONZERO NonZeroFloat
   #define SINGLESCALAR SingleFloat
@@ -28,12 +29,13 @@ The correct way to build the system is to run 'make'.
   #define MEMBER MemberFloat
   #define MEMBERSTRING MemberFloat
   #define ELTNONZERO EltNonZeroFloat
-  #define SEQINDEXNONEQUAL SeqIndexNonEqualFloat
+  #define SEQINDEXNONEQUAL SeqIndexFloatNonEqual
   #define SEQUENCEINITIAL SequenceInitialFloat
   #define PRIMITIVE double
   #define WRAPPER Long
   #define WRAP_VALUE doubleValue
   #define INTERN(v) Intern.internedDouble(v)
+  #define VALUE_SET ValueSet.ValueSetFloat
 #else
   #error "One of SCALAR or FLOAT must be defined"
 #endif
@@ -84,20 +86,8 @@ public class NONZERO
   /** Debug tracer **/
   public static final Logger debug = Logger.getLogger("daikon.inv.unary.scalar." + NONZEROSTRING);
 
-  /** Smallest value seen so far. **/
-  PRIMITIVE min = WRAPPER.MAX_VALUE;
-  /** Largest value seen so far. **/
-  PRIMITIVE max = WRAPPER.MIN_VALUE;
   /** Maximum value ever used for max-min in confidence calculation. **/
-  long range_max = 50;
-
-  // If nonzero, use this as the range instead of the actual range.
-  // This lets one use a specified confidence of nonzeroness (say, 9/10
-  // for pointers).
-  long override_range = 0;
-#ifdef SCALAR
-  boolean pointer_type = false;
-#endif
+  static long range_max = 50;
 
   private NONZERO(PptSlice ppt) {
     super(ppt);
@@ -113,23 +103,12 @@ public class NONZERO
 
     NONZERO result = new NONZERO(ppt);
 
-#ifdef SCALAR
-    if (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE) {
-      result.pointer_type = true;
-      result.override_range = 3;
-    }
-#endif
     return result;
-  }
-
-  public String repr() {
-    return NONZEROSTRING + varNames() + ": "
-      + !falsified + ",min=" + min + ",max=" + max;
   }
 
   private String zero(OutputFormat format) {
 #ifdef SCALAR
-    if (pointer_type) {
+    if (is_pointer()) {
       if (format == OutputFormat.IOA)
         return "nil";
       else
@@ -174,18 +153,19 @@ public class NONZERO
 
   public InvariantStatus add_modified(PRIMITIVE v, int count) {
     InvariantStatus status = check_modified(v, count);
-//     if ((logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) &&
-//         status == InvariantStatus.FALSIFIED) {
-//       log (debug, "destroy (value = " + v + ")");
-//     }
-    // The min and max tests will simultaneously succeed exactly once (for
-    // the first value).
-    if (v < min) min = v;
-    if (v > max) max = v;
-
-    if (logDetail() && status == InvariantStatus.NO_CHANGE)
+    if (status == InvariantStatus.FALSIFIED) {
+      if (logOn())
+        log (debug, "falsified (value = " + v + ")");
+    } else if (logDetail())
       log ("add_modified (" + v + ")");
     return status;
+  }
+
+  /**
+   * Returns whether or not the variable is a pointer
+   */
+  private boolean is_pointer() {
+    return (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE);
   }
 
   protected double computeConfidence() {
@@ -195,14 +175,19 @@ public class NONZERO
   // used by computeConfidence
   protected double computeProbability() {
     Assert.assertTrue(! falsified);
-    // This method works by looking at all sample values and calculating
-    // the probability that they were all non-zero by chance (assuming a
-    // uniform distribution).  If override_range==0, the range used is the
-    // observed range from sample data.  Otherwise, the override_range is
-    // used.  Further observed constraints are used to change the returned
-    // probability, such as all samples being congruent some modulus.
-    if ((override_range == 0) && ((min > 0) || (max < 0))) {
-      //in this case we have something stronger: namely x<0 or x>0
+    // This method works by looking at all sample values and
+    // calculating the probability that they were all non-zero by
+    // chance (assuming a uniform distribution).  If the variable is
+    // not a pointer, the range used is the observed range from sample
+    // data.  Further observed constraints are used to change the
+    // returned probability, such as all samples being congruent some
+    // modulus.
+
+    VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
+
+    // If greater than or less than 0, the bounds invariant will be more
+    // interesting
+    if (!is_pointer() && ((vs.min() > 0) || (vs.max() < 0))) {
 
       // Maybe just use 0 as the min or max instead, and see what happens:
       // see whether the "nonzero" invariant holds anyway.  (Perhaps only
@@ -212,8 +197,8 @@ public class NONZERO
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
       PRIMITIVE range;
-      if (override_range != 0) {
-        range = override_range;
+      if (is_pointer()) {
+        range = 3;
       } else {
         long modulus = 1;
         {
@@ -225,7 +210,7 @@ public class NONZERO
         // Perhaps I ought to check that it's possible (given the modulus
         // constraints) for the value to be zero; otherwise, the modulus
         // constraint implies non-zero.
-        range = (max - min + 1) / modulus;
+        range = (vs.max() - vs.min() + 1) / modulus;
       }
       if ((range_max != 0) && (range > range_max)) {
         range = range_max;
@@ -344,43 +329,5 @@ public class NONZERO
     }
     return false;
   }
-
-  /**
-   * Merge the invariants in invs to form a new invariant.  Each must be
-   * a NONZERO invariant.  This code takes the min/max values
-   * in each invariant, applies them to a new parent invariant and
-   * returns the merged invariant.
-   *
-   * @param invs    List of invariants to merge.  The invariants must all be
-   *                of the same type and should come from the children of
-   *                ppt.  They should also all be permuted to match the variable
-   *                order in ppt.
-   * @param ppt     program point that will contain the new invariant
-   */
-  public Invariant merge (List invs, PptSlice ppt) {
-
-    // Create the initial parent invariant
-    NONZERO result = instantiate (ppt);
-    Assert.assertTrue (result != null);
-
-    // Loop through the child invariants
-    for (int i = 0; i < invs.size(); i++ ) {
-
-      // Get this invariant
-      NONZERO inv = (NONZERO) invs.get (i);
-
-      // If this invariant received any samples, pass its min/max to
-      // add_modified
-      if (inv.min != WRAPPER.MAX_VALUE)
-        result.add_modified (inv.min, 1);
-      if (inv.max != WRAPPER.MIN_VALUE)
-      result.add_modified (inv.max, 1);
-    }
-
-    result.log ("Merged '" + result.format() + "' from " + invs.size()
-                + " child invariants");
-    return (result);
-  }
-
 
 }
