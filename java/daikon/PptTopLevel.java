@@ -97,10 +97,11 @@ public class PptTopLevel extends Ppt {
   // we just want "Sort" instead of "Sort:::CLASS".  For other Ppt's, we want
   // "EXIT184" instead of "Sort.swapReferences([Ljava/lang/Object;II)V:::EXIT184"
   public String toString() {
-    if (name.indexOf( "CLASS" ) != -1)  // if this is a class Ppt
-      return name.substring( 0, name.indexOf( FileIO.ppt_tag_separator ));
-    else
-      return name.substring( name.indexOf( FileIO.ppt_tag_separator ) + FileIO.ppt_tag_separator.length());
+      PptName pptName = new PptName( name );
+      if (pptName.isObjectInstanceSynthetic()  ||  pptName.isClassStaticSynthetic())
+	  return pptName.getFullClassName();
+      else
+	  return pptName.getPoint();
   }
 
 
