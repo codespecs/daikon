@@ -2,6 +2,8 @@
 
 import math, types, re
 
+true = (1==1)
+false = (1==0)
 
 ###########################################################################
 ### Numbers
@@ -145,6 +147,19 @@ def same_elements(seq1, seq2):
     s2.sort()
     return s1 == s2
 
+def sub_sequence_of(seq1, seq2):
+    """Return true if seq1 is a subsequence of seq2."""
+    if len(seq1) > len(seq2):
+        return false
+    result = false
+    # For each slice of seq2 with length equal to seq1, test for subset
+    subsequence_range = range(0, len(seq2) - len(seq1) + 1)
+    for i in subsequence_range:
+        if seq1 == seq2[i:len(seq1)+i]:
+            result = true
+            break
+    return result
+    
 
 ###########################################################################
 ### Lists of numbers
