@@ -485,7 +485,10 @@ public final class ONEOFSCALAR
     if (num_elts == 1) {
 #if defined(SCALAR) || defined(ELT)
       if (is_boolean) {
-        Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
+        if ((elts[0] != 0) && (elts[0] != 1))
+            System.out.println ("WARNING:: Variable "
+            + varname + " is of type boolean, but has non boolean value: "
+            + elts[0]);
         return varname + " == " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
