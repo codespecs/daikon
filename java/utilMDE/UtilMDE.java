@@ -1056,6 +1056,20 @@ public final class UtilMDE {
 
 
   ///
+  /// Collections
+  ///
+
+  /**
+   * Returns the sorted version of the list.  Does not alter the list.
+   **/
+  public static List sortList (List l, Comparator c) {
+    Object[] buf = new Object[l.size()];
+    buf = l.toArray(buf);
+    Arrays.sort (buf, c);
+    return Arrays.asList(buf);
+  }
+
+  ///
   /// Vector
   ///
 
@@ -1070,6 +1084,7 @@ public final class UtilMDE {
 
   // Rather than writing something like VectorToStringArray, use
   //   v.toArray(new String[0])
+
 
 
 }
