@@ -75,7 +75,12 @@ public abstract class VarInfoName
    **/
   public String esc_name() {
     if (esc_name_cached == null) {
-      esc_name_cached = esc_name_impl().intern();
+      try {
+	esc_name_cached = esc_name_impl().intern();
+      } catch (RuntimeException e) {
+	System.err.println("name = " + name());
+	throw e;
+      }
     }
     return esc_name_cached;
   }
@@ -88,7 +93,12 @@ public abstract class VarInfoName
    **/
   public String simplify_name() {
     if (simplify_name_cached == null) {
-      simplify_name_cached = simplify_name_impl().intern();
+      try {
+	simplify_name_cached = simplify_name_impl().intern();
+      } catch (RuntimeException e) {
+	System.err.println("name = " + name());
+	throw e;
+      }
     }
     return simplify_name_cached;
   }
@@ -279,7 +289,7 @@ public abstract class VarInfoName
       return name_impl();
     }
     protected String simplify_name_impl() {
-      return "(" + function + " " + argument.simplify_name() + ")";
+      return "(format_simplify needs to be changed: " + function + ")";
     }
     public Object accept(Visitor v) {
       return v.visitFunctionOf(this);
@@ -287,14 +297,15 @@ public abstract class VarInfoName
   }
 
   /**
-   *
+   * Returns a 'getter' operation for some field of this name, like
+   * a[i].foo if this is a[i].
    **/
   public VarInfoName applyField(String field) {
     return (new Field(this, field)).intern();
   }
 
   /**
-   *
+   * A 'getter' operation for some field, like a[i].foo
    **/
   public static class Field extends VarInfoName {
     public final VarInfoName term;
