@@ -1,2 +1,2 @@
 default %:
-	cd .. && $(MAKE) -s --no-print-directory $@
+	cd .. && $(MAKE) $@
