@@ -541,6 +541,11 @@ public final class UtilMDE {
   // Note that this differs from the result of Long.hashCode (which see)
   // But it doesn't map -1 and 0 to the same value.
   public static final int hash(long l) {
+    // If possible, use the value itself.
+    if (l >= Integer.MIN_VALUE && l <= Integer.MAX_VALUE) {
+      return (int) l;
+    }
+
     int result = 17;
     int hibits = (int) (l >> 32);
     int lobits = (int) l;
