@@ -712,8 +712,8 @@ public abstract class Invariant
    * @return true if this Invariant can be properly formatted for Java output.
    **/
   public boolean isValidExpression(OutputFormat format) {
-    if (format == OutputFormat.ESCJAVA) {
-      return isValidEscExpression();
+    if ((format == OutputFormat.ESCJAVA) && (! isValidEscExpression())) {
+      return false;
     }
 
     String s = format_using(format);
