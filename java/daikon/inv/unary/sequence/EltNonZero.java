@@ -96,7 +96,7 @@ public final class EltNonZero extends SingleSequence {
         // {
         //   for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
         //     Invariant inv = (Invariant) itor.next();
-        //     if ((inv instanceof Modulus) && inv.justified()) {
+        //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
         //       modulus = ((Modulus) inv).modulus;
         //       break;
         //     }
@@ -141,7 +141,7 @@ public final class EltNonZero extends SingleSequence {
     PptTopLevel parent = (PptTopLevel)ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltNonZero) && (inv != this) && inv.justified()) {
+      if ((inv instanceof EltNonZero) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         if (SubSequence.isObviousDerived(v1, v2)) {

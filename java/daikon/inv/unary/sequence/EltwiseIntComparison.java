@@ -60,7 +60,7 @@ public class EltwiseIntComparison extends SingleSequence {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long[] a, int count) {
@@ -118,7 +118,7 @@ public class EltwiseIntComparison extends SingleSequence {
 
   public boolean isObviousImplied() {
     EltOneOf eoo = EltOneOf.find(ppt);
-    if ((eoo != null) && eoo.justified() && (eoo.num_elts() == 1)) {
+    if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
       return true;
     }
     return false;

@@ -146,7 +146,7 @@ public final class SeqIndexNonEqual extends SingleSequence {
         // I'm not sure exactly how this can be null, but it can.
         if (other_slice != null) {
           SeqIndexNonEqual other_sine = SeqIndexNonEqual.find(other_slice);
-          if ((other_sine != null) && other_sine.justified()) {
+          if ((other_sine != null) && other_sine.enoughSamples()) {
             return true;
           }
         }

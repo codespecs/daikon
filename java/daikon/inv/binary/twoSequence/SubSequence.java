@@ -54,7 +54,7 @@ public class SubSequence extends TwoSequence {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {
@@ -205,7 +205,7 @@ public class SubSequence extends TwoSequence {
             // }
             if (ss_ppt != null) {
               SubSequence ss = SubSequence.find(ss_ppt);
-              if ((ss != null) && ss.justified()) {
+              if ((ss != null) && ss.enoughSamples()) {
                 return true;
               }
             }

@@ -81,16 +81,15 @@ public final class FileIO {
   }
 
   /**
-   * Calls @link{read_declaration_file(String, fn_regexp)} for each element
+   * Calls @link{read_declaration_file(String)} for each element
    * of files.  See the definition of that function.
    **/
-  static void read_declaration_files(Collection files, PptMap all_ppts,
-                                     Pattern fn_regexp) {
+  static void read_declaration_files(Collection files, PptMap all_ppts) {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       String file = (String) i.next();
       System.out.print(".");  // show progress
       try {
-	read_declaration_file(file, all_ppts, fn_regexp);
+	read_declaration_file(file, all_ppts);
       } catch (IOException e) {
 	e.printStackTrace();
 	throw new Error(e.toString());
@@ -101,13 +100,14 @@ public final class FileIO {
 
   /**
    * @param filename
-   * @param fn_regexp Only program points matching fn_regexp are considered.
    * @return a vector of PptTopLevel objects
    **/
-  static Vector read_declaration_file(String filename, PptMap all_ppts, Pattern fn_regexp) throws IOException {
+  static Vector read_declaration_file(String filename, PptMap all_ppts) throws IOException {
 
     if (Global.debugRead)
-      System.out.println("read_declaration_file " + filename + " " + ((fn_regexp != null) ? fn_regexp.getPattern() : ""));
+      System.out.println("read_declaration_file " + filename
+                         + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+                         + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
 
     Vector new_ppts = new Vector();
 
@@ -124,8 +124,8 @@ public final class FileIO {
       if (line.equals("") || line.startsWith("//") || line.startsWith("#"))
 	continue;
       if (line.equals(declaration_header)) {
-	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, fn_regexp, filename);
-        // ppt can be null if this declaration was skipped because of fn_regexp.
+	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, filename);
+        // ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
         if (ppt != null) {
           new_ppts.add(ppt);
         }
@@ -168,7 +168,7 @@ public final class FileIO {
 
 
   // The "DECLARE" line has alredy been read.
-  static PptTopLevel read_declaration(LineNumberReader file, PptMap all_ppts, int varcomp_format, Pattern fn_regexp, String filename) throws IOException {
+  static PptTopLevel read_declaration(LineNumberReader file, PptMap all_ppts, int varcomp_format, String filename) throws IOException {
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
 
@@ -179,11 +179,15 @@ public final class FileIO {
                       + " line " + file.getLineNumber());
     }
 
-    if ((fn_regexp != null)
-        && ! Global.regexp_matcher.contains(ppt_name, fn_regexp)) {
+    if (((Daikon.ppt_omit_regexp != null)
+         && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
+        || ((Daikon.ppt_regexp != null)
+            && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
       // System.out.println("Discarding non-matching program point " + ppt_name);
       // Discard this declaration
       String line = file.readLine();
+      // This fails if some lines of a declaration (e.g., the comparability
+      // field) are empty.
       while ((line != null) && !line.equals("")) {
         line = file.readLine();
       }
@@ -205,6 +209,12 @@ public final class FileIO {
                           + " found at file " + filename
                           + " line " + file.getLineNumber());
         }
+      }
+      // Can't do this test in read_VarInfo, it seems, because of the test
+      // against null above.
+      if ((Daikon.var_omit_regexp != null)
+          && Global.regexp_matcher.contains(vi.name.name(), Daikon.var_omit_regexp)) {
+        continue;
       }
       var_infos.add(vi);
     }
@@ -521,15 +531,14 @@ public final class FileIO {
    * Calls @link{read_data_trace_file(String,PptMap,Pattern)} for each
    * element of filenames.
    **/
-  static void read_data_trace_files(Collection files, PptMap all_ppts,
-                                    Pattern fn_regexp) throws IOException {
+  static void read_data_trace_files(Collection files, PptMap all_ppts) throws IOException {
 
     init_call_stack_and_hashmap();
 
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       System.out.print(".");
       String file = (String) i.next();
-      read_data_trace_file(file, all_ppts, fn_regexp);
+      read_data_trace_file(file, all_ppts);
     }
 
     process_unmatched_procedure_entries();
@@ -548,11 +557,12 @@ public final class FileIO {
   /**
    * Read data from .dtrace file.
    **/
-  static void read_data_trace_file(String filename, PptMap all_ppts, Pattern fn_regexp) throws IOException {
+  static void read_data_trace_file(String filename, PptMap all_ppts) throws IOException {
 
     if (Global.debugRead) {
-      System.out.println("read_data_trace_file " + filename + " "
-                         + ((fn_regexp != null) ? fn_regexp.getPattern() : ""));
+      System.out.println("read_data_trace_file " + filename
+                         + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+                         + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
@@ -560,9 +570,8 @@ public final class FileIO {
     data_trace_filename = filename;
 
     //used for debugging: write new data trace file
-    FileWriter writer = null;
     if (Global.debugPrintDtrace) {
-      writer = new FileWriter(new File(filename + ".debug"));
+      Global.dtraceWriter = new FileWriter(new File(filename + ".debug"));
     }
     // init_ftn_call_ct();          // initialize function call counts to 0
 
@@ -597,8 +606,10 @@ public final class FileIO {
         String line = line_.intern();
 
         if ((line == declaration_header)
-            || ((fn_regexp != null)
-                && !Global.regexp_matcher.contains(line, fn_regexp))) {
+            || ((Daikon.ppt_omit_regexp != null)
+                && Global.regexp_matcher.contains(line, Daikon.ppt_omit_regexp))
+            || ((Daikon.ppt_regexp != null)
+                && ! Global.regexp_matcher.contains(line, Daikon.ppt_regexp))) {
           // Discard this entire program point information
           while ((line != null) && !line.equals(""))
             line = reader.readLine();
@@ -649,7 +660,7 @@ public final class FileIO {
         }
 
         // Fills up vals and mods arrays by side effect.
-        read_vals_and_mods_from_data_trace_file(reader, ppt, vals, mods, writer);
+        read_vals_and_mods_from_data_trace_file(reader, ppt, vals, mods);
 
         // Now add some additional variable values that don't appear directly
         // in the data trace file but aren't traditional derived variables.
@@ -770,7 +781,7 @@ public final class FileIO {
   }
 
   // This procedure fills up vals and mods by side effect.
-  static void read_vals_and_mods_from_data_trace_file(LineNumberReader reader, PptTopLevel ppt, Object[] vals, int[] mods, FileWriter writer) throws IOException {
+  static void read_vals_and_mods_from_data_trace_file(LineNumberReader reader, PptTopLevel ppt, Object[] vals, int[] mods) throws IOException {
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
@@ -784,11 +795,11 @@ public final class FileIO {
     }
 
     if (Global.debugPrintDtrace) {
-      writer.write(ppt.name + "\n");
+      Global.dtraceWriter.write(ppt.name + "\n");
 
       if (to_write_nonce) {
-	writer.write(nonce_string + "\n");
-	writer.write(nonce_value + "\n");
+	Global.dtraceWriter.write(nonce_string + "\n");
+	Global.dtraceWriter.write(nonce_value + "\n");
 	to_write_nonce = false;
       }
     }
@@ -819,6 +830,15 @@ public final class FileIO {
                         + "\n  Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name);
       }
+
+      while ((Daikon.var_omit_regexp != null)
+             && (line != null)
+             && Global.regexp_matcher.contains(line, Daikon.var_omit_regexp)) {
+        line = reader.readLine(); // value
+        line = reader.readLine(); // modbit
+        line = reader.readLine(); // next variable name
+      }
+
       if (!VarInfoName.parse(line).equals(vi.name)) {
         throw new Error("Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name
@@ -868,9 +888,9 @@ public final class FileIO {
       oldvalue_reps[val_index] = value_rep;
 
       if (Global.debugPrintDtrace) {
-	writer.write(vi.name + "\n");
-	writer.write(value_rep + "\n");
-	writer.write(mod + "\n");
+	Global.dtraceWriter.write(vi.name + "\n");
+	Global.dtraceWriter.write(value_rep + "\n");
+	Global.dtraceWriter.write(mod + "\n");
       }
 
       if (ValueTuple.modIsMissing(mod)) {
@@ -890,7 +910,7 @@ public final class FileIO {
     ppt_to_value_reps.put(ppt, oldvalue_reps);
 
     if (Global.debugPrintDtrace) {
-      writer.write("\n");
+      Global.dtraceWriter.write("\n");
     }
 
     String blank_line = reader.readLine();

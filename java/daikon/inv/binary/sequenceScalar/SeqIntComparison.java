@@ -86,8 +86,6 @@ public final class SeqIntComparison extends SequenceScalar {
   }
 
   public String format() {
-    // Don't do this; format() shouldn't check justification (in general...).
-    // Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
     String comparator = core.format_comparator();
     return seqvar().name.name() + " elements " + comparator + " " + sclvar().name;
   }
@@ -101,7 +99,7 @@ public final class SeqIntComparison extends SequenceScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long [] a, long x, int count) {
@@ -186,7 +184,7 @@ public final class SeqIntComparison extends SequenceScalar {
     {
       PptSlice1 seqslice = pptt.findSlice(seqvar);
       EltOneOf eoo = EltOneOf.find(seqslice);
-      if ((eoo != null) && eoo.justified() && (eoo.num_elts() == 1)) {
+      if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
         return true;
       }
     }
@@ -200,7 +198,7 @@ public final class SeqIntComparison extends SequenceScalar {
         PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar());
         if (other_slice != null) {
           SeqIntComparison other_sic = SeqIntComparison.find(other_slice);
-          if ((other_sic != null) && other_sic.justified()) {
+          if ((other_sic != null) && other_sic.enoughSamples()) {
             return true;
           }
         }

@@ -52,6 +52,10 @@ public class LinearBinary extends TwoScalar {
     core.add_modified(x, y, count);
   }
 
+  public boolean enoughSamples() {
+    return core.enoughSamples();
+  }
+
   protected double computeProbability() {
     return core.computeProbability();
   }

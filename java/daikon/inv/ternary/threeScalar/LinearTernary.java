@@ -196,6 +196,10 @@ public class LinearTernary extends ThreeScalar {
     core.add_modified(x, y, z, count);
   }
 
+  public boolean enoughSamples() {
+    return core.enoughSamples();
+  }
+
   protected double computeProbability() {
     return core.computeProbability();
   }

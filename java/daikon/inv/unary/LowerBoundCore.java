@@ -24,7 +24,8 @@ import java.util.*;
 
 public class LowerBoundCore  implements java.io.Serializable {
 
-  final static int required_samples_at_bound = 3;
+  final static int required_samples = 5; // for enoughSamples
+  final static int required_samples_at_bound = 3; // for justification
 
   // min1  <  min2  <  min3 
   public long min1  = Long.MAX_VALUE ;
@@ -87,6 +88,10 @@ public class LowerBoundCore  implements java.io.Serializable {
     }
   }
 
+  public boolean enoughSamples() {
+    return samples > required_samples;
+  }
+
   public double computeProbability() {
     if (num_min1  < required_samples_at_bound)
       return Invariant.PROBABILITY_UNKNOWN;
@@ -96,7 +101,7 @@ public class LowerBoundCore  implements java.io.Serializable {
     // {
     //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
     //     Invariant inv = (Invariant) itor.next();
-    //     if ((inv instanceof Modulus) && inv.justified()) {
+    //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
     //       modulus = ((Modulus) inv).modulus;
     //       break;
     //     }

@@ -56,7 +56,7 @@ public final class TwoScalarFactory {
         // Skip if there is already a > or linear relationship over the
         // variables; a>b implies a!=b.
         IntComparison ic = IntComparison.find(ppt);
-        if ((ic != null) && ic.justified() && (! ic.isExact())) {
+        if ((ic != null) && ic.enoughSamples() && (! ic.isExact())) {
           // System.out.println("Torpedoing NonEqual on the basis of " + ic.format());
           Global.subexact_noninstantiated_invariants += 1;
         } else {

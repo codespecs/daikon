@@ -136,7 +136,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   public String format_simplify() {
     String varname = var().name.simplify_name();
     return "(" + GTSTR + "= " + varname + " " + MIN1 + ")";
-  }  
+  }
 #else
   // ELTLOWEr || ELTUPPEr
   public String format() {
@@ -155,7 +155,7 @@ public class LOWERBOUND extends SINGLESCALAR {
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ var().name });
     return form[0] + "(" + GTSTR + "= " + form[1] + " " + MIN1 + ")" + form[2];
-  }  
+  }
 #endif
 
   public void add_modified(LONG value, int count) {
@@ -170,6 +170,10 @@ public class LOWERBOUND extends SINGLESCALAR {
         return;
     }
 #endif
+  }
+
+  public boolean enoughSamples() {
+    return core.enoughSamples();
   }
 
   protected double computeProbability() {
@@ -214,7 +218,7 @@ public class LOWERBOUND extends SINGLESCALAR {
         if (other_slice != null) {
           ELTLOWERBOUND eb = ELTLOWERBOUND.find(other_slice);
           if ((eb != null)
-              && eb.justified()
+              && eb.enoughSamples()
               && eb.MIN1 == MIN1) {
             return true;
           }

@@ -90,7 +90,7 @@ public class NonZero extends SingleScalar {
         {
           for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
             Invariant inv = (Invariant) itor.next();
-            if ((inv instanceof Modulus) && inv.justified()) {
+            if ((inv instanceof Modulus) && inv.enoughSamples()) {
               modulus = ((Modulus) inv).modulus;
               break;
             }
@@ -120,7 +120,7 @@ public class NonZero extends SingleScalar {
     PptTopLevel parent = (PptTopLevel)ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltNonZero) && inv.justified()) {
+      if ((inv instanceof EltNonZero) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         // System.out.println("NonZero.isObviousImplied: calling Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
@@ -147,7 +147,7 @@ public class NonZero extends SingleScalar {
             PptSlice1 other_slice = pptt.findSlice(vi);
             if (other_slice != null) {
               SeqIndexNonEqual sine = SeqIndexNonEqual.find(other_slice);
-              if ((sine != null) && sine.justified()) {
+              if ((sine != null) && sine.enoughSamples()) {
                 return true;
               }
             }

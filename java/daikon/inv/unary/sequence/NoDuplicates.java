@@ -40,7 +40,7 @@ public class NoDuplicates extends SingleSequence {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long[] a, int count) {
@@ -70,7 +70,7 @@ public class NoDuplicates extends SingleSequence {
     PptTopLevel parent = (PptTopLevel)ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof NoDuplicates) && (inv != this) && inv.justified()) {
+      if ((inv instanceof NoDuplicates) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         if (SubSequence.isObviousDerived(v1, v2)) {

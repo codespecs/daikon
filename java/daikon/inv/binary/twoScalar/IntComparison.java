@@ -237,12 +237,12 @@ public final class IntComparison extends TwoScalar implements Comparison {
         if (nonconstslice != null) {
           if (can_be_lt) {
             UpperBound ub = UpperBound.find(nonconstslice);
-            if ((ub != null) && ub.justified() && ub.core.max1 < valconst) {
+            if ((ub != null) && ub.enoughSamples() && ub.core.max1 < valconst) {
               return true;
             }
           } else if (can_be_gt) {
             LowerBound lb = LowerBound.find(nonconstslice);
-            if ((lb != null) && lb.justified() && lb.core.min1 > valconst) {
+            if ((lb != null) && lb.enoughSamples() && lb.core.min1 > valconst) {
               return true;
             }
           }
@@ -251,7 +251,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
     }
     {
       LinearBinary lb = LinearBinary.find(ppt);
-      if ((lb != null) && (lb.core.a == 1) && lb.justified()) {
+      if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
         Assert.assert(lb.core.b != 0);
         return true;
       }
@@ -318,9 +318,9 @@ public final class IntComparison extends TwoScalar implements Comparison {
           ub = EltUpperBound.find(parent.findSlice(ss1.base));
           shorter2 = true;
         }
-        if ((lb != null) && (!lb.justified()))
+        if ((lb != null) && (!lb.enoughSamples()))
           lb = null;
-        if ((ub != null) && (!ub.justified()))
+        if ((ub != null) && (!ub.enoughSamples()))
           ub = null;
         // We are comparing sum(a) to sum(b).
         boolean shorter_can_be_lt;
@@ -360,10 +360,10 @@ public final class IntComparison extends TwoScalar implements Comparison {
           if (other_slice != null) {
             SeqIntComparison sic = SeqIntComparison.find(other_slice);
             if ((sic != null)
-                && sic.justified()
-                && sic.core.can_be_eq == this.core.can_be_eq
-                && sic.core.can_be_lt == this.core.can_be_lt
-                && sic.core.can_be_gt == this.core.can_be_gt) {
+                && sic.enoughSamples()
+                && (sic.core.can_be_eq == this.core.can_be_eq)
+                && (sic.core.can_be_lt == this.core.can_be_lt)
+                && (sic.core.can_be_gt == this.core.can_be_gt)) {
               // This DOES happen; verify by running on replace.c
               // System.out.println("Surprise:  this can happen (var1 in IntComparison).");
               // new Error().printStackTrace();
@@ -376,10 +376,10 @@ public final class IntComparison extends TwoScalar implements Comparison {
           if (other_slice != null) {
             SeqIntComparison sic = SeqIntComparison.find(other_slice);
             if ((sic != null)
-                && sic.justified()
-                && sic.core.can_be_eq == this.core.can_be_eq
-                && sic.core.can_be_lt == this.core.can_be_gt
-                && sic.core.can_be_gt == this.core.can_be_lt) {
+                && sic.enoughSamples()
+                && (sic.core.can_be_eq == this.core.can_be_eq)
+                && (sic.core.can_be_lt == this.core.can_be_gt)
+                && (sic.core.can_be_gt == this.core.can_be_lt)) {
               // This DOES happen
               // System.out.println("Surprise:  this can happen (var2 in IntComparison).");
               // new Error().printStackTrace();

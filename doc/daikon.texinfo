@@ -1093,10 +1093,21 @@ This section describes the optional flags.
 @c which is not necessary in a table.
 @table @t
 @item -h
+@item --help
 Print usage message.
 
-@item -r @var{ppt_regexp}
-Only process program points matching the regexp.
+@item --ppt @var{ppt_regexp}
+Only process program points whose names match the regular expression,
+which uses Perl syntax.
+
+@item --ppt_omit @var{ppt_regexp}
+Do not process program points whose names match the regular expression,
+which uses Perl syntax.  This takes priority over the
+@option{--ppt_omit} argument.
+
+@item --var_omit @var{var_regexp}
+Ignore variables (whether in the trace file or derived) whose names
+match the regular expression, which uses Perl syntax.
 
 @item -o @var{inv_file}
 Serialize invariants to the specified file; they can later be
@@ -1104,7 +1115,7 @@ postprocessed, compared, etc.
 
 @item --no_text_output
 Don't print invariants as text output.  This option should be used in
-conjunction with the @var{-o} option.
+conjunction with the @option{-o} option.
 
 @item --suppress_cont
 Suppress display of implied invariants (by controlling ppt).

@@ -114,6 +114,10 @@ public final class LinearBinaryCore implements java.io.Serializable {
 
   }
 
+  public boolean enoughSamples() {
+    return values_seen >= MINPAIRS;
+  }
+
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;

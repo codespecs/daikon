@@ -58,7 +58,7 @@ public class UpperBound  extends SingleScalar  {
   public String format_simplify() {
     String varname = var().name.simplify_name();
     return "(<= " + varname + " " + core.max1  + ")";
-  }  
+  }
 
   public void add_modified(long  value, int count) {
     // System.out.println("UpperBound"  + varNames() + ": "
@@ -66,6 +66,10 @@ public class UpperBound  extends SingleScalar  {
 
     core.add_modified(value, count);
 
+  }
+
+  public boolean enoughSamples() {
+    return core.enoughSamples();
   }
 
   protected double computeProbability() {
@@ -104,7 +108,7 @@ public class UpperBound  extends SingleScalar  {
         if (other_slice != null) {
           EltUpperBound  eb = EltUpperBound .find(other_slice);
           if ((eb != null)
-              && eb.justified()
+              && eb.enoughSamples()
               && eb. core.max1  == core.max1 ) {
             return true;
           }

@@ -58,7 +58,7 @@ public class LowerBound  extends SingleScalar  {
   public String format_simplify() {
     String varname = var().name.simplify_name();
     return "(>= " + varname + " " + core.min1  + ")";
-  }  
+  }
 
   public void add_modified(long  value, int count) {
     // System.out.println("LowerBound"  + varNames() + ": "
@@ -66,6 +66,10 @@ public class LowerBound  extends SingleScalar  {
 
     core.add_modified(value, count);
 
+  }
+
+  public boolean enoughSamples() {
+    return core.enoughSamples();
   }
 
   protected double computeProbability() {
@@ -108,7 +112,7 @@ public class LowerBound  extends SingleScalar  {
         if (other_slice != null) {
           EltLowerBound  eb = EltLowerBound .find(other_slice);
           if ((eb != null)
-              && eb.justified()
+              && eb.enoughSamples()
               && eb. core.min1  == core.min1 ) {
             return true;
           }

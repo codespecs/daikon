@@ -2,6 +2,7 @@
 
 package daikon;
 
+import java.io.*;
 import java.util.*;
 import org.apache.oro.text.regex.*;
 
@@ -175,8 +176,6 @@ public final class Global {
   //print out a new dtrace file with changed modbits
   public final static boolean debugPrintDtrace = false;
 
-
-
   // public final static boolean debugRead = true;
   // public final static boolean debugPptTopLevel = true;
   // public final static boolean debugDerive = true;
@@ -206,6 +205,10 @@ public final class Global {
       { "min(this.diskLocation[0..toPeg])", "min(this.diskLocation[])" },
       { "min(this.diskLocation[])", "min(this.diskLocation[0..toPeg])" },
     };
+
+  // used only if debugPrintDtrace is true.  User need not set this.
+  public static FileWriter dtraceWriter = null;
+
 
   // This may be expensive and so should only be called infrequently.
   public final static boolean isDebuggedPptSlice(PptSlice slice) {

@@ -63,7 +63,7 @@ public class EltLowerBound  extends SingleSequence  {
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ var().name });
     return form[0] + "(>= " + form[1] + " " + core.min1  + ")" + form[2];
-  }  
+  }
 
   public void add_modified(long[]  value, int count) {
     // System.out.println("EltLowerBound"  + varNames() + ": "
@@ -75,6 +75,10 @@ public class EltLowerBound  extends SingleSequence  {
         return;
     }
 
+  }
+
+  public boolean enoughSamples() {
+    return core.enoughSamples();
   }
 
   protected double computeProbability() {
@@ -113,7 +117,7 @@ public class EltLowerBound  extends SingleSequence  {
         if (other_slice != null) {
           EltLowerBound  eb = EltLowerBound .find(other_slice);
           if ((eb != null)
-              && eb.justified()
+              && eb.enoughSamples()
               && eb. core.min1  == core.min1 ) {
             return true;
           }

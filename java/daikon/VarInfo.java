@@ -698,7 +698,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     LinearBinary lb = LinearBinary.find(indices_ppt);
     long index_vari_minus_seq = -2222;          // valid only if lb != null
     if (lb != null) {
-      if (!lb.justified()) {
+      if (!lb.enoughSamples()) {
         lb = null;
       } else if (lb.core.a != 1) {
         // Do not attempt to deal with anything but y=x+b.
@@ -721,7 +721,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     boolean vari_can_be_eq = false;		// valid only if ic != null
     boolean vari_can_be_gt = false;		// valid only if ic != null
     if (ic != null) {
-      if (! ic.justified()) {
+      if (! ic.enoughSamples()) {
         ic = null;
       } else {
         // System.out.println("justified IntComparison: " + ic.format());

@@ -63,7 +63,7 @@ public class EltUpperBound  extends SingleSequence  {
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ var().name });
     return form[0] + "(<= " + form[1] + " " + core.max1  + ")" + form[2];
-  }  
+  }
 
   public void add_modified(long[]  value, int count) {
     // System.out.println("EltUpperBound"  + varNames() + ": "
@@ -75,6 +75,10 @@ public class EltUpperBound  extends SingleSequence  {
         return;
     }
 
+  }
+
+  public boolean enoughSamples() {
+    return core.enoughSamples();
   }
 
   protected double computeProbability() {
@@ -113,7 +117,7 @@ public class EltUpperBound  extends SingleSequence  {
         if (other_slice != null) {
           EltUpperBound  eb = EltUpperBound .find(other_slice);
           if ((eb != null)
-              && eb.justified()
+              && eb.enoughSamples()
               && eb. core.max1  == core.max1 ) {
             return true;
           }

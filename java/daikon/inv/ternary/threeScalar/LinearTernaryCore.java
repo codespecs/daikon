@@ -225,6 +225,10 @@ public final class LinearTernaryCore implements java.io.Serializable {
 
 
 
+  public boolean enoughSamples() {
+    return values_seen >= MINTRIPLES;
+  }
+
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;

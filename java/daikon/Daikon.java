@@ -15,6 +15,8 @@ import utilMDE.*;
 public final class Daikon {
   public static final String lineSep = Global.lineSep;
 
+  // All these variables really need to be organized better.
+
   public final static boolean disable_splitting = false;
   // public final static boolean disable_splitting = true;
 
@@ -44,7 +46,7 @@ public final class Daikon {
   // warnings and the modbit problem can cause an error later.
   public final static boolean disable_modbit_check_error = false;
 
-  // When true, don't print textual output.  
+  // When true, don't print textual output.
   public static boolean no_text_output = false;
 
   // When true, don't print invariants when their controlling ppt
@@ -74,7 +76,11 @@ public final class Daikon {
   public static boolean output_num_samples = false;
   // public static boolean output_num_samples = true;
 
+  // Controls which program points/variables are used/ignored.
   public static Pattern ppt_regexp;
+  public static Pattern ppt_omit_regexp;
+  public static Pattern var_omit_regexp;
+
   // I appear to need both of these variables.  Or do I?  I don't know.
   public static FileOutputStream inv_ostream;
   public static ObjectOutputStream inv_oostream;
@@ -105,6 +111,10 @@ public final class Daikon {
       System.exit(1);
     }
 
+    final String help_SWITCH = "help";
+    final String ppt_regexp_SWITCH = "ppt";
+    final String ppt_omit_regexp_SWITCH = "ppt_omit";
+    final String var_omit_regexp_SWITCH = "var_omit";
     final String no_text_output_SWITCH = "no_text_output";
     final String suppress_cont_SWITCH = "suppress_cont";
     final String suppress_post_SWITCH = "suppress_post";
@@ -113,6 +123,10 @@ public final class Daikon {
     final String simplify_output_SWITCH = "simplify_output";
     final String output_num_samples_SWITCH = "output_num_samples";
     LongOpt[] longopts = new LongOpt[] {
+      new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -121,14 +135,53 @@ public final class Daikon {
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
-    Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
+    Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch(c) {
       case 0:
 	// got a long option
 	String option_name = longopts[g.getLongind()].getName();
-	if (no_text_output_SWITCH.equals( option_name )) {
+        if (help_SWITCH.equals(option_name)) {
+          System.out.println(usage);
+          System.exit(1);
+        } else if (ppt_regexp_SWITCH.equals(option_name)) {
+          if (ppt_regexp != null)
+            throw new Error("multiple --" + ppt_regexp_SWITCH
+                            + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            // System.out.println("Regexp = " + regexp_string);
+            ppt_regexp = Global.regexp_compiler.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e.toString());
+          }
+          break;
+        } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
+          if (ppt_omit_regexp != null)
+            throw new Error("multiple --" + ppt_omit_regexp_SWITCH
+                            + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            // System.out.println("Regexp = " + regexp_string);
+            ppt_omit_regexp = Global.regexp_compiler.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e.toString());
+          }
+          break;
+        } else if (var_omit_regexp_SWITCH.equals(option_name)) {
+          if (var_omit_regexp != null)
+            throw new Error("multiple --" + var_omit_regexp_SWITCH
+                            + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            // System.out.println("Regexp = " + regexp_string);
+            var_omit_regexp = Global.regexp_compiler.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e.toString());
+          }
+          break;
+	} else if (no_text_output_SWITCH.equals(option_name)) {
 	  no_text_output = true;
 	} else if (suppress_cont_SWITCH.equals(option_name)) {
 	  suppress_implied_controlled_invariants = true;
@@ -150,19 +203,6 @@ public final class Daikon {
         System.out.println(usage);
         System.exit(1);
         break;
-      case 'r':
-        // I should permit multiple regexps; also negated regexps.
-        if (ppt_regexp != null)
-          throw new Error("multiple regular expressions supplied on command line");
-        try {
-          String regexp_string = g.getOptarg();
-          // System.out.println("Regexp = " + regexp_string);
-          ppt_regexp = Global.regexp_compiler.compile(regexp_string);
-        } catch (Exception e) {
-          throw new Error(e.toString());
-        }
-        break;
-        //
       case 'o':
         if (inv_ostream != null)
           throw new Error("multiple serialization output files supplied on command line");
@@ -212,12 +252,12 @@ public final class Daikon {
 
     try {
       System.out.print("Reading declaration files ");
-      FileIO.read_declaration_files(decl_files, all_ppts, ppt_regexp);
+      FileIO.read_declaration_files(decl_files, all_ppts);
       System.out.println();
       add_combined_exits(all_ppts);
 
       System.out.print("Reading data trace files ");
-      FileIO.read_data_trace_files(dtrace_files, all_ppts, ppt_regexp);
+      FileIO.read_data_trace_files(dtrace_files, all_ppts);
       System.out.println();
     } catch (IOException e) {
       System.out.println();

@@ -24,7 +24,8 @@ import java.util.*;
 
 public class UpperBoundCore  implements java.io.Serializable {
 
-  final static int required_samples_at_bound = 3;
+  final static int required_samples = 5; // for enoughSamples
+  final static int required_samples_at_bound = 3; // for justification
 
   // max1  >  max2  >  max3 
   public long max1  = Long.MIN_VALUE ;
@@ -87,6 +88,10 @@ public class UpperBoundCore  implements java.io.Serializable {
     }
   }
 
+  public boolean enoughSamples() {
+    return samples > required_samples;
+  }
+
   public double computeProbability() {
     if (num_max1  < required_samples_at_bound)
       return Invariant.PROBABILITY_UNKNOWN;
@@ -96,7 +101,7 @@ public class UpperBoundCore  implements java.io.Serializable {
     // {
     //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
     //     Invariant inv = (Invariant) itor.next();
-    //     if ((inv instanceof Modulus) && inv.justified()) {
+    //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
     //       modulus = ((Modulus) inv).modulus;
     //       break;
     //     }

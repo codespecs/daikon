@@ -52,6 +52,10 @@ public abstract class Invariant implements java.io.Serializable {
    **/
   public final static int min_mod_non_missing_samples = 5;
 
+  public boolean enoughSamples() {
+    return true;
+  }
+
   // If probability == PROBABILITY_NEVER, then this invariant can be eliminated.
   public double getProbability() {
     if (no_invariant)
@@ -79,7 +83,7 @@ public abstract class Invariant implements java.io.Serializable {
   protected abstract double computeProbability();
 
   public boolean justified() {
-    return (!no_invariant) && (getProbability() <= probability_limit);
+    return (!no_invariant) && enoughSamples() && (getProbability() <= probability_limit);
   }
 
   /**
@@ -431,6 +435,7 @@ public abstract class Invariant implements java.io.Serializable {
   final public boolean isWorthPrinting_sansControlledCheck() {
     return
       ((! hasFewModifiedSamples())
+       && enoughSamples()       // perhaps replaces hasFewModifiedSamples
        && (! hasNonCanonicalVariable())
        && (! hasOnlyConstantVariables())
        && (! isObvious())
@@ -441,6 +446,7 @@ public abstract class Invariant implements java.io.Serializable {
   final public String isWorthPrinting_sansControlledCheck_debug() {
     return
       "" + (! hasFewModifiedSamples())
+      + " " + enoughSamples()
       + " " + (! hasNonCanonicalVariable())
       + " " + (! hasOnlyConstantVariables())
       + " " + (! isObvious())
@@ -648,7 +654,7 @@ public abstract class Invariant implements java.io.Serializable {
     public int compare(Object o1, Object o2) {
       Invariant inv1 = (Invariant) o1;
       Invariant inv2 = (Invariant) o2;
-      
+
       if (inv1 instanceof Implication && inv2 instanceof Implication)
         return compareImplications((Implication) inv1, (Implication) inv2);
 
@@ -658,7 +664,7 @@ public abstract class Invariant implements java.io.Serializable {
 
       return compareVariables(inv1, inv2);
     }
-    
+
     // Returns 0 if the invariants are of the same class.  Else,
     // returns the comparison of the class names.
     private int compareClass(Invariant inv1, Invariant inv2) {
@@ -670,17 +676,17 @@ public abstract class Invariant implements java.io.Serializable {
         return classname1.compareTo(classname2);
       }
     }
-    
+
     // Returns 0 if the invariants have the same variable names.
     // Else, returns the comparison of the first variable names that
     // differ.  Requires that the invariants be of the same class.
     private int compareVariables(Invariant inv1, Invariant inv2) {
       VarInfo[] vars1 = inv1.ppt.var_infos;
       VarInfo[] vars2 = inv2.ppt.var_infos;
-      
+
       // due to inv type match already
       Assert.assert(vars1.length == vars2.length);
-      
+
       for (int i=0; i < vars1.length; i++) {
         VarInfo var1 = vars1[i];
         VarInfo var2 = vars2[i];

@@ -519,7 +519,12 @@ public class PptTopLevel extends Ppt {
         UnaryDerivation[] uderivs = d.instantiate(vi);
         if (uderivs != null) {
           for (int udi=0; udi<uderivs.length; udi++) {
-            result.add(uderivs[udi]);
+            UnaryDerivation uderiv = uderivs[udi];
+            if ((Daikon.var_omit_regexp != null)
+                && Global.regexp_matcher.contains(uderiv.getVarInfo().name.name(), Daikon.var_omit_regexp)) {
+              continue;
+            }
+            result.add(uderiv);
           }
         }
       }
@@ -562,7 +567,12 @@ public class PptTopLevel extends Ppt {
           BinaryDerivation[] bderivs = d.instantiate(vi1, vi2);
           if (bderivs != null) {
             for (int bdi=0; bdi<bderivs.length; bdi++) {
-              result.add(bderivs[bdi]);
+              BinaryDerivation bderiv = bderivs[bdi];
+              if ((Daikon.var_omit_regexp != null)
+                  && Global.regexp_matcher.contains(bderiv.getVarInfo().name.name(), Daikon.var_omit_regexp)) {
+                continue;
+              }
+              result.add(bderiv);
             }
           }
 	}
@@ -1271,8 +1281,7 @@ public class PptTopLevel extends Ppt {
         // System.out.println("Is " + (IsEqualityComparison.it.accept(inv) ? "" : "not ")
         //                    + "equality: " + inv.repr());
         if (IsEqualityComparison.it.accept(inv)
-            //  && (inv.justified())
-            ) {
+            && inv.enoughSamples()) {
           VarInfo var1 = binary_view.var_infos[0];
           VarInfo var2 = binary_view.var_infos[1];
           Assert.assert(var1.varinfo_index < var2.varinfo_index);
@@ -1338,13 +1347,8 @@ public class PptTopLevel extends Ppt {
       PptSlice nonunary_view = (PptSlice) nonunary_views.elementAt(j);
       for (int k=0; k<nonunary_view.invs.size(); k++) {
         Invariant inv = (Invariant) nonunary_view.invs.elementAt(k);
-        if (inv.isExact() && inv.justified()) {
+        if (inv.isExact() && inv.enoughSamples()) {
           nonunary_view.var_infos[0].exact_nonunary_invariants.add(inv);
-        } else if (inv.isExact()) {
-          // The inv.format() is going to return null
-          // because the invariant is not justified!
-          // This is debugging output; do not use in production code!
-          // System.out.println("Exact but not justified: " + inv.format());
         }
       }
       nonunary_view.clear_cache();
@@ -1884,6 +1888,7 @@ public class PptTopLevel extends Ppt {
 
 
   // Different_invariants and same_invariants should be merged.
+  // They are used by the code that adds implications.
 
 
   // Determine which elements of invs1 differ from elements of invs2.
@@ -1947,7 +1952,7 @@ public class PptTopLevel extends Ppt {
       if (pair.a != null && pair.b != null) {
         Invariant inv1 = (Invariant) pair.a;
         Invariant inv2 = (Invariant) pair.b;
-        if (inv1.justified() && inv2.justified()) {
+        if (inv1.enoughSamples() && inv2.enoughSamples()) {
           result.add(inv1);
         }
       }
@@ -2282,7 +2287,7 @@ public class PptTopLevel extends Ppt {
 	// Vector equal_vars = vi.equalTo();
 	// Vector obviously_equal = new Vector(equal_vars);
 	// obviously_equal.removeAll(vi.equalToNonobvious());
-	
+
         if (equal_vars.size() > 0) {
 	  switch (Daikon.output_style) {
           case Daikon.OUTPUT_STYLE_ESC:
@@ -2391,7 +2396,7 @@ public class PptTopLevel extends Ppt {
 	inv_rep = inv.format_simplify();
 	break;
       default:
-	throw new IllegalStateException("Unknown output mode");	
+	throw new IllegalStateException("Unknown output mode");
       }
       if (Daikon.output_num_samples) {
         inv_rep += num_values_samples;

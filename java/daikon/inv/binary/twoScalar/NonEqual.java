@@ -114,7 +114,7 @@ public final class NonEqual extends TwoScalar {
           PptSlice1 other_slice = pptt.findSlice(seq);
           if (other_slice != null) {
             SeqIndexNonEqual sine = SeqIndexNonEqual.find(other_slice);
-            if ((sine != null) && sine.justified()) {
+            if ((sine != null) && sine.enoughSamples()) {
               // System.out.println("Didn't realize SeqIndexNonEqual would be justified before NonEqual existed.");
               return true;
             }
