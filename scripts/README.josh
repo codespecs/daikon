@@ -1,0 +1,44 @@
+12/14/1999 by Josh
+
+I have added five files in this directory. All of them are required
+for generating splitters.
+
+rmcomm
+  Usage: rmcomm < originalsourcecode > outputfile
+  This command removes all comment lines from a Java source code which
+  is given through the standard input stream and output the resulted
+  source code to the standard output stream.
+  'originalsorucecode' is the original source code which may contains
+  some comment lines. This results in getting a comment line free
+  source code as 'outputfile.'
+
+extractconds.pl
+  Usage: extractconds.pl javasourcecode
+  This Perl script extracts conditional expressions from a Java source
+  code. This generates a file which contains conditional
+  expressions. e.g. if you pass a filename 'foo.java' as an argument,
+  you will get a file named 'foo.java.conds' which contains
+  conditional expressions in 'foo.java.'
+
+gensplitter.pl
+  Usage: gensplitter.pl javasourcecode [packagename]
+  This Perl script generates splitters corresponding with conditional
+  expressions which appear in a *.conds file. This script takes two
+  argument; one is required and the other is optional. The first
+  argument is a source code name which you want to process. You have
+  to have created corresponding *.conds file by using extractconds.pl
+  script before you run this script with a certain source code.
+  You can specify a 'packagename' as a second argument when you have
+  to designate a particular package name for generated splitters.
+
+splitter.sh
+  Usage: splitter.sh javasourcecode [packagename]
+  This shell script generates splitters corresponding with a source
+  code which should be given as an argument. Actually this simply
+  performs rmcomm, extractoconds.pl, and gensplitter.pl in this
+  order.
+  You can specify a 'packagename' as a second argument when you have
+  to designate a particular package name for generated splitters.
+
+gensplitterinit.pl
+  * Now preparing *
