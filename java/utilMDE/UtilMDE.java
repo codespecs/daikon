@@ -79,6 +79,70 @@ public final class UtilMDE {
       return Class.forName(className);
   }
 
+  private static HashMap primitiveClassesJvm = new HashMap(8);
+  static {
+    primitiveClassesJvm.put("boolean", "Z");
+    primitiveClassesJvm.put("byte", "B");
+    primitiveClassesJvm.put("char", "C");
+    primitiveClassesJvm.put("double", "D");
+    primitiveClassesJvm.put("float", "F");
+    primitiveClassesJvm.put("int", "I");
+    primitiveClassesJvm.put("long", "L");
+    primitiveClassesJvm.put("short", "S");
+  }
+
+  /** Convert a string of the form "java.lang.Object[]" to "[Ljava.lang.Object;" **/
+  public static String classnameToJvm(String classname) {
+    int dims = 0;
+    while (classname.endsWith("[]")) {
+      dims++;
+      classname = classname.substring(0, classname.length()-2);
+    }
+    String result = (String) primitiveClassesJvm.get(classname);
+    if (result == null) {
+      result = "L" + classname + ";";
+    }
+    for (int i=0; i<dims; i++) {
+      result = "[" + result;
+    }
+    return result;
+  }
+
+  private static HashMap primitiveClassesFromJvm = new HashMap(8);
+  static {
+    primitiveClassesFromJvm.put("Z", "boolean");
+    primitiveClassesFromJvm.put("B", "byte");
+    primitiveClassesFromJvm.put("C", "char");
+    primitiveClassesFromJvm.put("D", "double");
+    primitiveClassesFromJvm.put("F", "float");
+    primitiveClassesFromJvm.put("I", "int");
+    primitiveClassesFromJvm.put("L", "long");
+    primitiveClassesFromJvm.put("S", "short");
+  }
+
+  /** Convert a string of the form "[Ljava.lang.Object;" to "java.lang.Object[]" **/
+  public static String classnameFromJvm(String classname) {
+    int dims = 0;
+    while (classname.startsWith("[")) {
+      dims++;
+      classname = classname.substring(1);
+    }
+    String result;
+    if (classname.startsWith("L") && classname.endsWith(";")) {
+      result = classname.substring(1, classname.length() - 1);
+    } else {
+      result = (String) primitiveClassesFromJvm.get(classname);
+      if (result == null) {
+        throw new Error("Malformed base class: " + classname);
+      }
+    }
+    for (int i=0; i<dims; i++) {
+      result += "[]";
+    }
+    return result;
+  }
+
+
   ///
   /// Classpath
   ///
