@@ -2429,7 +2429,7 @@ public class PptTopLevel
           boolean is_unmodified = false; // vi.equal_to == vi_orig.equal_to // [INCR] XXX
           if (! is_unmodified) {
             java.lang.reflect.Field f = vi.name.resolveField(this);
-            System.out.println("Field for " + name + " " + vi.name.name() + ": " + f);
+            //            System.out.println("Field for " + name + " " + vi.name.name() + ": " + f);
             if ((f != null)
                 && java.lang.reflect.Modifier.isFinal(f.getModifiers())) {
               is_unmodified = true;
