@@ -22,6 +22,7 @@ class ControlledInvariantFilter extends InvariantFilter {
   // of them are worth printing.  If any are, then this invariant does not need
   // to be printed.
   boolean shouldDiscardInvariant( Invariant invariant ) {
+    /* // [INCR]
     if (invariant.find_controlling_invariants().size() == 0)
       return false;
 
@@ -41,11 +42,13 @@ class ControlledInvariantFilter extends InvariantFilter {
       if (shouldKeep)
 	return true;
     }
+    */
     return false;
   }
 
   // This recursive method returns all controlling invariants, including
   // parents, parents of parents, etc.
+  /* [INCR]
   Vector getAllControllingInvariants( Invariant invariant ) {
     Vector parents = invariant.find_controlling_invariants();
     Vector allControllingInvariants = new Vector();
@@ -58,4 +61,5 @@ class ControlledInvariantFilter extends InvariantFilter {
       }
     return allControllingInvariants;
   }
+  */
 }
