@@ -4797,6 +4797,8 @@ inside a record, where comments are not permitted)
 @node    Declaration files, Data trace files, Conventions, File formats
 @section Declaration files
 
+@cindex declaration file format
+@cindex .decls file format
 
 A declaration file consists of a sequence of program point declarations
 separated by blank lines.
@@ -4810,7 +4812,7 @@ The format of the program point information is:
   representation-type1 [= constant-value1]
   comparable1
   varname2
-  declared-type2 [# auxiliary-information1]
+  declared-type2 [# auxiliary-information2]
   representation-type2 [= constant-value2]
   comparable2
   ...
@@ -4860,22 +4862,22 @@ user-defined or language-specific types can be arbitrary strings.
 auxiliary information: optionally, Daikon can be given information
 about the meaning of the variable to help it better interpret the
 values it later sees.  Information is provided as a comma-separated
-list of items, with each item in the form of "key = value".  Auxiliary
-information that Daikon does not use is ignored.  All values are
+list of items, with each item in the form of "key = value".  Unrecognized
+keys are silently ignored.  All values are
 either "true" or "false".  Mainly, this information is used for
-collections, which are presented to Daikon as arrays. Valid keys are:
+collections, which are presented to Daikon as arrays.  Valid keys are:
 
 @itemize @bullet
 
 @item
 hasDuplicates: whether a collection can contain duplicates.  If it
-can't, Daikon does not check for some invariants that only have
+cannot, Daikon does not check for some invariants that only have
 meaning for collections that can contain duplicate elements.
 
 @item
 hasOrder: whether order has meaning for a collection.  If order does
 not have meaning in a collection, then Daikon does not check for
-element wise comparisons between it and other collections.  
+element-wise comparisons between it and other collections.  
 
 @item
 hasNull: whether zero has the special meaning null for the variable or
@@ -4886,7 +4888,7 @@ elements in a collection are null.
 nullTerminated: whether a collection has a value (usually null) that
 ends its representation.  If it does, then Daikon looks at the
 collection's size and at the collection's size-1 as "interesting"
-values.  If it doesn't, then Daikon only looks at the collection's
+values.  If it does not, then Daikon only looks at the collection's
 size.
 
 @item
@@ -4919,7 +4921,7 @@ sign and a value; in that case, the variable is known to have a
 compile-time constant value and should be omitted from the data
 trace file.
 @end itemize
-Arrays types are followed by square brackets:  "int[]", "char[][]".
+Array types are followed by square brackets:  "int[]", "char[][]".
 @item
 comparable variables.  These indicate
 which other variables are comparable to this one, which is typically
@@ -5023,6 +5025,8 @@ rather than for just one method:
 @node    Data trace files, Examples, Declaration files, File formats
 @section Data trace files
 
+@cindex data trace file format
+@cindex .dtrace file format
 
 The format of the value information is:
 @example
