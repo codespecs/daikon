@@ -4,30 +4,30 @@ import daikon.*;
 import daikon.inv.*;
 
 
-// similar to NonNull; if I change this, consider changing it, too
+// Similar to NonNull; if I change this, consider changing it, too.
+// Actually, I should just abstract out the common code.
+
 class NonZero extends SingleScalar {
   int min = Integer.MAX_VALUE;
   int max = Integer.MIN_VALUE;
 
-  boolean can_be_zero = false;
-
-  public NonZero(PptSlice ppt_) {
+  private NonZero(PptSlice ppt_) {
     super(ppt_);
   }
 
-//   NonZero(Ppt ppt_, VarInfo var_info_) {
-//     super(ppt_, var_info_);
-//   }
+  public static NonZero instantiate(PptSlice ppt) {
+    return new NonZero(ppt);
+  }
 
   public String repr() {
     double probability = getProbability();
     return "NonZero(" + var().name + "): "
-      + !can_be_zero + ",min=" + min + ",max=" + max
+      + !no_invariant + ",min=" + min + ",max=" + max
       + "; probability = " + probability;
   }
 
   public String format() {
-    if ((!can_be_zero) && justified())
+    if ((!no_invariant) && justified())
       return var().name + " != 0";
     else
       return null;
@@ -35,18 +35,19 @@ class NonZero extends SingleScalar {
 
 
   public void add_modified(int v, int count) {
-    if (can_be_zero)
-      return;
     // The min and max tests will simultaneoulsy succeed exactly once (for
     // the first value).
+    if (v == 0) {
+      no_invariant = true;
+      return;
+    }
     if (v < min) min = v;
     if (v > max) max = v;
-    if (v == 0) can_be_zero = true;
-    probability_cache_accurate = false;
+    // probability_cache_accurate = false;
   }
 
   protected double computeProbability() {
-    if (can_be_zero)
+    if (no_invariant)
       return Invariant.PROBABILITY_NEVER;
     // Maybe just use 0 as the min or max instead, and see what happens:
     // see whether the "nonzero" invariant holds anyway.  In that case,

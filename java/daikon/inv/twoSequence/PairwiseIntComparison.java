@@ -12,9 +12,13 @@ class PairwiseIntComparison extends TwoSequence {
 
   IntComparisonCore core;
 
-  PairwiseIntComparison(PptSlice ppt_) {
+  protected PairwiseIntComparison(PptSlice ppt_) {
     super(ppt_);
-    core = new IntComparisonCore();
+    core = new IntComparisonCore(this);
+  }
+
+  public static PairwiseIntComparison instantiate(PptSlice ppt) {
+    return new PairwiseIntComparison(ppt);
   }
 
   public String repr() {
@@ -51,12 +55,6 @@ class PairwiseIntComparison extends TwoSequence {
 
 
   public void add_modified(int[] a1, int[] a2, int count) {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-
-    if (can_be_lt && can_be_gt)
-      return;
     int len = Math.min(a1.length, a2.length);
     for (int i=0; i<len; i++) {
       int v1 = a1[i];
@@ -70,39 +68,3 @@ class PairwiseIntComparison extends TwoSequence {
   }
 
 }
-
-
-
-/// "Obvious" comparisons
-
-// self.comparison_obvious = None
-// # These variables are set to the name of the sequence, or None.
-// # Avoid regular expressions wherever possible.
-// min1 = (var1[0:4] == "min(") and var1[4:-1]
-// max1 = (var1[0:4] == "max(") and var1[4:-1]
-// # I think "find" does a regexp operation, unfortunately
-// aref1 = string.find(var1, "[")
-// if aref1 == -1:
-//     aref1 = None
-// else:
-//     aref1 = var1[0:aref1]
-// if min1 or max1 or aref1:
-//     min2 = (var2[0:4] == "min(") and var2[4:-1]
-//     max2 = (var2[0:4] == "max(") and var2[4:-1]
-//     aref2 = string.find(var2, "[")
-//     if aref2 == -1:
-//         aref2 = None
-//     else:
-//         aref2 = var2[0:aref2]
-//     if min1 and max2 and min1 == max2:
-//         self.comparison_obvious = "<="
-//     elif min1 and aref2 and min1 == aref2:
-//         self.comparison_obvious = "<="
-//     elif max1 and min2 and max1 == min2:
-//         self.comparison_obvious = ">="
-//     elif max1 and aref2 and max1 == aref2:
-//         self.comparison_obvious = ">="
-//     elif aref1 and min2 and aref1 == min2:
-//         self.comparison_obvious = ">="
-//     elif aref1 and max2 and aref1 == max2:
-//         self.comparison_obvious = "<="

@@ -9,7 +9,8 @@ public class LinearCore {
 
   // y == ax + b;
   public int a, b;
-  public boolean no_invariant = false;
+
+  Invariant wrapper;
 
   int values_seen = 0;
 
@@ -18,15 +19,11 @@ public class LinearCore {
   int[] x_cache = new int[MINPAIRS];
   int[] y_cache = new int[MINPAIRS];
 
-  public LinearCore() {
-    super();
+  public LinearCore(Invariant wrapper_) {
+    wrapper = wrapper_;
   }
 
   public void add_modified(int x, int y, int count) {
-    if (no_invariant) {
-      return;
-    }
-
     if (values_seen < MINPAIRS) {
       for (int i=0; i<values_seen; i++)
 	if ((x_cache[i] == i) && (y_cache[i] == y))
@@ -54,11 +51,11 @@ public class LinearCore {
 	// Set a and b based on that pair
 	set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
 	// Check all values against a and b.
-        if (!no_invariant) {
+        if (!wrapper.no_invariant) {
           for (int i=0; i<MINPAIRS; i++) {
             // I should permit a fudge factor here.
             if (y_cache[i] != a*x_cache[i]+b) {
-              no_invariant = true;
+              wrapper.no_invariant = true;
               if (debugLinearCore) {
                 System.out.println("Suppressing " + "LinearCore" + " at index " + i + ": "
                                    + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
@@ -71,7 +68,7 @@ public class LinearCore {
     } else {
       // Check the new value against a and b.
       if (y != a*x+b) {
-	no_invariant = true;
+	wrapper.no_invariant = true;
         if (debugLinearCore) {
           System.out.println("Suppressing " + "LinearCore" + " at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
@@ -85,7 +82,7 @@ public class LinearCore {
 
   void set_bi_linear(int x0, int x1, int y0, int y1) {
     if (x0 == x1) {
-      no_invariant = true;
+      wrapper.no_invariant = true;
       if (debugLinearCore) {
         System.out.println("Suppressing " + "LinearCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
@@ -101,7 +98,7 @@ public class LinearCore {
   }
 
   public double computeProbability() {
-    if (no_invariant)
+    if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
     if (values_seen < MINPAIRS)
       return Invariant.PROBABILITY_UNKNOWN;

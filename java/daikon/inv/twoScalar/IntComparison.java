@@ -2,6 +2,7 @@ package daikon.inv.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.derive.unary.*;
 
 
 // Also see NonEqual, NonAliased
@@ -11,9 +12,28 @@ class IntComparison extends TwoScalar implements Comparison {
 
   IntComparisonCore core;
 
-  IntComparison(PptSlice ppt_) {
+  protected IntComparison(PptSlice ppt_) {
     super(ppt_);
-    core = new IntComparisonCore();
+    core = new IntComparisonCore(this);
+  }
+
+  public static IntComparison instantiate(PptSlice ppt) {
+    VarInfo var1 = ppt.var_infos[0];
+    VarInfo var2 = ppt.var_infos[1];
+    VarInfo seqvar1 = var1.isObviousSequenceMember();
+    // System.out.println("IntComparison.instantiate(" + ppt.name + ")"
+    //                    + ", seqvar1=" + seqvar1
+    //                    + ", seqvar2=" + var2.isObviousSequenceMember());
+    if ((seqvar1 != null) && (seqvar1 == var2.isObviousSequenceMember())) {
+      if ((var1.derived instanceof SequenceMax)
+          || (var1.derived instanceof SequenceMin)
+          || (var2.derived instanceof SequenceMax)
+          || (var2.derived instanceof SequenceMin)) {
+        return null;
+      }
+    }
+
+    return new IntComparison(ppt);
   }
 
   public String repr() {
@@ -73,36 +93,3 @@ class IntComparison extends TwoScalar implements Comparison {
 
 
 
-/// "Obvious" comparisons
-
-// self.comparison_obvious = None
-// # These variables are set to the name of the sequence, or None.
-// # Avoid regular expressions wherever possible.
-// min1 = (var1[0:4] == "min(") and var1[4:-1]
-// max1 = (var1[0:4] == "max(") and var1[4:-1]
-// # I think "find" does a regexp operation, unfortunately
-// aref1 = string.find(var1, "[")
-// if aref1 == -1:
-//     aref1 = None
-// else:
-//     aref1 = var1[0:aref1]
-// if min1 or max1 or aref1:
-//     min2 = (var2[0:4] == "min(") and var2[4:-1]
-//     max2 = (var2[0:4] == "max(") and var2[4:-1]
-//     aref2 = string.find(var2, "[")
-//     if aref2 == -1:
-//         aref2 = None
-//     else:
-//         aref2 = var2[0:aref2]
-//     if min1 and max2 and min1 == max2:
-//         self.comparison_obvious = "<="
-//     elif min1 and aref2 and min1 == aref2:
-//         self.comparison_obvious = "<="
-//     elif max1 and min2 and max1 == min2:
-//         self.comparison_obvious = ">="
-//     elif max1 and aref2 and max1 == aref2:
-//         self.comparison_obvious = ">="
-//     elif aref1 and min2 and aref1 == min2:
-//         self.comparison_obvious = ">="
-//     elif aref1 and max2 and aref1 == max2:
-//         self.comparison_obvious = "<="

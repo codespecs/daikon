@@ -27,7 +27,7 @@ public class SequenceScalarFactory {
       }
     }
 
-    new Member(ppt, seq_first);
+    Member.instantiate(ppt, seq_first);
   }
 
   private SequenceScalarFactory() {

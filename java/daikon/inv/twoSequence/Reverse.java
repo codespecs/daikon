@@ -5,21 +5,24 @@ import daikon.inv.*;
 
 class Reverse extends TwoSequence {
 
-  boolean nonreverse = false;
-
-  Reverse(PptSlice ppt_) {
+  protected Reverse(PptSlice ppt_) {
     super(ppt_);
   }
+
+  public static Reverse instantiate(PptSlice ppt) {
+    return new Reverse(ppt);
+  }
+
 
   public String repr() {
     double probability = getProbability();
     return "Reverse" + varNames() + ": "
-      + "nonreverse=" + nonreverse
+      + "no_invariant=" + no_invariant
       + "; probability = " + probability;
   }
 
   public String format() {
-    if ((!nonreverse) && justified()) {
+    if ((!no_invariant) && justified()) {
       return var1().name + " is the reverse of " + var2().name;
     } else {
       return null;
@@ -28,23 +31,21 @@ class Reverse extends TwoSequence {
 
 
   public void add_modified(int[] a1, int[] a2, int count) {
-    if (nonreverse)
-      return;
     if (a1.length != a2.length) {
-      nonreverse = true;
+      no_invariant = true;
       return;
     }
     int len = a1.length;
     for (int i=0, j=len-1; i<len; i++, j--)
       if (a1[i] != a2[j]) {
-        nonreverse = true;
+        no_invariant = true;
         return;
       }
   }
 
 
   protected double computeProbability() {
-    if (nonreverse)
+    if (no_invariant)
       return Invariant.PROBABILITY_NEVER;
     else
       return 0;

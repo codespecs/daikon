@@ -6,29 +6,28 @@ import utilMDE.*;
 
 
 // Similar to NonAliased; if I change this, consider changing it, too.
+// Better, abstract out their common parts.
 public class NonEqual extends TwoScalar {
   int min1 = Integer.MAX_VALUE;
   int min2 = Integer.MAX_VALUE;
   int max1 = Integer.MIN_VALUE;
   int max2 = Integer.MIN_VALUE;
 
-  boolean can_be_equal = false;
-
   // Get this from the Ppt
   // int samples = 0;
 
-  NonEqual(PptSlice ppt_) {
+  protected NonEqual(PptSlice ppt_) {
     super(ppt_);
   }
 
-//   NonEqual(Ppt ppt_, VarInfo var_info1_, VarInfo var_info2_) {
-//     super(ppt_, var_info1_, var_info2_);
-//   }
+  public static NonEqual instantiate(PptSlice ppt) {
+    return new NonEqual(ppt);
+  }
 
   public String repr() {
     double probability = getProbability();
     return "NonEqual" + varNames() + ": "
-      + "can_be_equal=" + can_be_equal
+      + "no_invariant=" + no_invariant
       + ",min1=" + min1
       + ",min2=" + min2
       + ",max1=" + max1
@@ -37,7 +36,7 @@ public class NonEqual extends TwoScalar {
   }
 
   public String format() {
-    if ((!can_be_equal) && justified()) {
+    if ((!no_invariant) && justified()) {
       return var1().name + " != " + var2().name;
     } else {
       return null;
@@ -46,11 +45,9 @@ public class NonEqual extends TwoScalar {
 
 
   public void add_modified(int v1, int v2, int count) {
-    if (can_be_equal)
-      return;
-    probability_cache_accurate = false;
+    // probability_cache_accurate = false;
     if (v1 == v2) {
-      can_be_equal = true;
+      no_invariant = true;
       return;
     }
     if (v1 < min1) min1 = v1;
@@ -62,7 +59,7 @@ public class NonEqual extends TwoScalar {
 
 
   protected double computeProbability() {
-    if (can_be_equal)
+    if (no_invariant)
       return Invariant.PROBABILITY_NEVER;
     else if ((min1 > max2) || (max1 < min2))
       return Invariant.PROBABILITY_UNKNOWN;
@@ -83,4 +80,3 @@ public class NonEqual extends TwoScalar {
     }
   }
 }
-

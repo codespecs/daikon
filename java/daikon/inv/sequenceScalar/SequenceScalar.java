@@ -12,10 +12,10 @@ public abstract class SequenceScalar extends Invariant {
 
   // By convention, the sequence is always passed in first
   public boolean seq_first;  // true if seq_index == 0 and scl_index == 1
-  public int seq_index;                // 0 or 1
-  public int scl_index;                // 0 or 1
+  final public int seq_index;                // 0 or 1
+  final public int scl_index;                // 0 or 1
 
-  public SequenceScalar(PptSlice ppt_, boolean seq_first_) {
+  protected SequenceScalar(PptSlice ppt_, boolean seq_first_) {
     super(ppt_);
     seq_first = seq_first_;
     if (seq_first) {
@@ -41,12 +41,19 @@ public abstract class SequenceScalar extends Invariant {
     Assert.assert((mod2 == ValueTuple.MODIFIED)
 		  || (mod2 == ValueTuple.UNMODIFIED));
     if ((mod1 == ValueTuple.MODIFIED)
-	|| (mod2 == ValueTuple.MODIFIED))
-      add_modified(v1, v2, count);
-    else
+	|| (mod2 == ValueTuple.MODIFIED)) {
+      if (! no_invariant) {
+        add_modified(v1, v2, count);
+      }
+    } else {
       add_unmodified(v1, v2, count);
+    }
   }
 
+  /**
+   * This method need not check for no_invariant;
+   * that is done by the caller.
+   */
   public abstract void add_modified(int[] v1, int v2, int count);
 
   /**
@@ -56,16 +63,5 @@ public abstract class SequenceScalar extends Invariant {
   public void add_unmodified(int v1[], int v2, int count) {
     return;
   }
-
-
-//   public SequenceScalar(PptSlice ppt_, VarInfo var_info1_, VarInfo var_info2_) {
-//     super(ppt_);
-//     var_info1 = var_info1_;
-//     var_info2 = var_info2_;
-//   }
-//
-//   public boolean usesVar(VarInfo vi) {
-//     return (var_info1 == vi) || (var_info2 == vi);
-//   }
 
 }

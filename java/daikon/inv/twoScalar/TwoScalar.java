@@ -10,7 +10,7 @@ import utilMDE.*;
 
 public abstract class TwoScalar extends Invariant {
 
-  public TwoScalar(PptSlice ppt_) {
+  protected TwoScalar(PptSlice ppt_) {
     super(ppt_);
   }
 
@@ -23,17 +23,26 @@ public abstract class TwoScalar extends Invariant {
   }
 
   public void add(int v1, int mod1, int v2, int mod2, int count) {
+    // Tests for whether a value is missing should be performed before
+    // making this call, so as to reduce overall work.
     Assert.assert((mod1 == ValueTuple.MODIFIED)
-		  || (mod1 == ValueTuple.UNMODIFIED));
+                  || (mod1 == ValueTuple.UNMODIFIED));
     Assert.assert((mod2 == ValueTuple.MODIFIED)
-		  || (mod2 == ValueTuple.UNMODIFIED));
+                  || (mod2 == ValueTuple.UNMODIFIED));
     if ((mod1 == ValueTuple.MODIFIED)
-	|| (mod2 == ValueTuple.MODIFIED))
-      add_modified(v1, v2, count);
-    else
+	|| (mod2 == ValueTuple.MODIFIED)) {
+      if (! no_invariant) {
+        add_modified(v1, v2, count);
+      }
+    } else {
       add_unmodified(v1, v2, count);
+    }
   }
 
+  /**
+   * This method need not check for no_invariant;
+   * that is done by the caller.
+   */
   public abstract void add_modified(int v1, int v2, int count);
 
   /**
@@ -43,16 +52,5 @@ public abstract class TwoScalar extends Invariant {
   public void add_unmodified(int v1, int v2, int count) {
     return;
   }
-
-
-//   public TwoScalar(PptSlice ppt_, VarInfo var_info1_, VarInfo var_info2_) {
-//     super(ppt_);
-//     var_info1 = var_info1_;
-//     var_info2 = var_info2_;
-//   }
-//
-//   public boolean usesVar(VarInfo vi) {
-//     return (var_info1 == vi) || (var_info2 == vi);
-//   }
 
 }

@@ -9,6 +9,8 @@ import daikon.*;
 public abstract class Invariant {
   public PptSlice ppt;			// includes values, number of samples, VarInfos, etc.
 
+  public boolean no_invariant = false;
+
   // Subclasses should set these; Invariant never does.
 
   // The probability that this could have happened by chance alone.
@@ -28,33 +30,40 @@ public abstract class Invariant {
   // user-settable rather than final.
   public final static double probability_limit = .01;
 
-  // Do I want to have this cache at all?  It may not be that expensive
-  // to compute from scratch, and I may not be interested in it that often.
-  protected double probability_cache = 0;
-  protected boolean probability_cache_accurate = false;
+  // // Do I want to have this cache at all?  It may not be that expensive
+  // // to compute from scratch, and I may not be interested in it that often.
+  // protected double probability_cache = 0;
+  // protected boolean probability_cache_accurate = false;
 
   // If confidence == 0, then this invariant can be eliminated.
   public double getProbability() {
-    if (!probability_cache_accurate) {
-      probability_cache = computeProbability();
-      probability_cache_accurate = true;
-    }
-    return probability_cache;
+    return computeProbability();
+    // if (!probability_cache_accurate) {
+    //   probability_cache = computeProbability();
+    //   probability_cache_accurate = true;
+    // }
+    // return probability_cache;
   }
   protected abstract double computeProbability();
 
   public boolean justified() {
-    return (getProbability() <= probability_limit);
+    return (!no_invariant) && (getProbability() <= probability_limit);
   }
 
   // Implementations of this need to examine all the data values already
-  // in the ppt.
-  public Invariant(PptSlice ppt_) {
+  // in the ppt.  Or, don't put too much work in the constructor and instead
+  // have the caller do that.
+  protected Invariant(PptSlice ppt_) {
     ppt = ppt_;
-    probability_cache_accurate = false;
+    // probability_cache_accurate = false;
     ppt.invs.add(this);
     // System.out.println("Added invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
   }
+
+  // Regrettably, I can't declare a static abstract method.
+  // // The return value is probably ignored.  The new Invariant installs
+  // // itself on the PptSlice, and that's what really matters (right?).
+  // public static abstract Invariant instantiate(PptSlice ppt);
 
   public boolean usesVar(VarInfo vi) {
     return ppt.usesVar(vi);
@@ -78,9 +87,23 @@ public abstract class Invariant {
    * variables, other invariants, etc.
    * Intended to be overridden by subclasses.
    */
-  public boolean isObvious() {
+  public final boolean isObvious() {
+    // We don't need to do this because we won't add obvious-derived
+    // invariants to lists in the first place.
+    // return isObviousDerived() || isObviousImplied();
+    return isObviousImplied();
+  }
+
+  /**
+   * Returns true if this invariant is necessarily true, due to being implied
+   * by other (more basic or preferable to report) invariants.
+   * Intended to be overridden by subclasses.
+   */
+  public boolean isObviousImplied() {
     return false;
   }
+
+
 
   /**
    * Returns true if this invariant implies the argument invariant.

@@ -16,7 +16,7 @@ public class SingleSequenceFactory {
     if (ppt.var_infos[0].type.dimensions() == 0)
       return;
 
-    new EltIntComparison(ppt);
+    EltIntComparison.instantiate(ppt);
   }
 
   private SingleSequenceFactory() {

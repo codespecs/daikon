@@ -23,18 +23,17 @@ public class FunctionCore {
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
   public boolean inverse;
 
-  public boolean no_invariant = false;
   int values_seen = 0;
 
-  public FunctionCore(Method function_, boolean inverse_) {
+  Invariant wrapper;
+
+  public FunctionCore(Invariant wrapper_, Method function_, boolean inverse_) {
+    wrapper = wrapper_;
     function = function_;
     inverse = inverse_;
   }
 
   public void add_modified(int x_int, int y_int, int count) {
-    if (no_invariant) {
-      return;
-    }
 
     Integer x = new Integer(x_int);
     Integer y = new Integer(y_int);
@@ -42,19 +41,19 @@ public class FunctionCore {
     try {
       if (inverse) {
 	if (! x.equals(function.invoke(null, new Object[] { y })))
-	  no_invariant = true;
+	  wrapper.no_invariant = true;
       } else {
 	if (! y.equals(function.invoke(null, new Object[] { x })))
-	  no_invariant = true;
+	  wrapper.no_invariant = true;
       }
     } catch (Exception e) {
-      no_invariant = true;
+      wrapper.no_invariant = true;
     }
   }
 
 
   public double computeProbability() {
-    if (no_invariant)
+    if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
     if (values_seen < 5)
       return Invariant.PROBABILITY_UNKNOWN;

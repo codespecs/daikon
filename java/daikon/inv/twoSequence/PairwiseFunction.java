@@ -22,9 +22,13 @@ class PairwiseFunction extends TwoSequence {
 
   FunctionCore core;
 
-  public PairwiseFunction(PptSlice ppt_, Method function_, boolean inverse_) {
+  protected PairwiseFunction(PptSlice ppt_, Method function_, boolean inverse_) {
     super(ppt_);
-    core = new FunctionCore(function_, inverse_);
+    core = new FunctionCore(this, function_, inverse_);
+  }
+
+  public static PairwiseFunction instantiate(PptSlice ppt, Method function, boolean inverse) {
+    return new PairwiseFunction(ppt, function, inverse);
   }
 
   public String repr() {
@@ -53,14 +57,6 @@ class PairwiseFunction extends TwoSequence {
 
 
   public void add_modified(int[] x_arr, int[] y_arr, int count) {
-    boolean no_invariant = true;
-    Method function = core.function;
-    boolean inverse = core.inverse;
-
-    if (no_invariant) {
-      return;
-    }
-
     int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {
@@ -69,13 +65,11 @@ class PairwiseFunction extends TwoSequence {
 
       core.add_modified(x, y, count);
     }
-
   }
 
 
   protected double computeProbability() {
     return core.computeProbability();
   }
-
 
 }

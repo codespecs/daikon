@@ -13,22 +13,25 @@ public class IntComparisonCore {
   public boolean can_be_lt = false;
   public boolean can_be_gt = false;
 
-  public IntComparisonCore() {
+  Invariant wrapper;
+
+  public IntComparisonCore(Invariant wrapper_) {
+    wrapper = wrapper_;
   }
 
   public void add_modified(int v1, int v2, int count) {
-    if (can_be_lt && can_be_gt)
-      return;
     if (v1 == v2)
       can_be_eq = true;
     else if (v1 < v2)
       can_be_lt = true;
     else
       can_be_gt = true;
+    // Could set no_invariant here.
+    wrapper.no_invariant = (can_be_lt && can_be_gt);
   }
 
   public double computeProbability() {
-    if (can_be_lt && can_be_gt) {
+    if (wrapper.no_invariant) {
       return Invariant.PROBABILITY_NEVER;
     } else {
       // I don't know how to compute a better probability for this.

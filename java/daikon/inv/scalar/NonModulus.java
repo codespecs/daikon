@@ -20,14 +20,13 @@ class NonModulus extends SingleScalar {
   private boolean no_result = false;
   private boolean results_accurate = false;
 
-  public NonModulus(PptSlice ppt_) {
+  private NonModulus(PptSlice ppt_) {
     super(ppt_);
   }
 
-// Old version
-//   public NonModulus(Ppt ppt_, VarInfo var_info_) {
-//     super(ppt_, var_info_);
-//   }
+  public static NonModulus instantiate(PptSlice ppt) {
+    return new NonModulus(ppt);
+  }
 
   public String repr() {
     double probability = getProbability();

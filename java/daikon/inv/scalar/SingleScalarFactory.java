@@ -16,11 +16,11 @@ public class SingleScalarFactory {
     if (!(ppt.var_infos[0].type.dimensions() == 0))
       return;
 
-    new LowerBound(ppt);
-    new Modulus(ppt);
-    new NonModulus(ppt);
-    new NonZero(ppt);
-    new UpperBound(ppt);
+    LowerBound.instantiate(ppt);
+    Modulus.instantiate(ppt);
+    NonModulus.instantiate(ppt);
+    NonZero.instantiate(ppt);
+    UpperBound.instantiate(ppt);
   }
 
   private SingleScalarFactory() {

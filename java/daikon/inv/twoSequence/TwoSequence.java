@@ -10,7 +10,7 @@ import utilMDE.*;
 
 public abstract class TwoSequence extends Invariant {
 
-  public TwoSequence(PptSlice ppt_) {
+  protected TwoSequence(PptSlice ppt_) {
     super(ppt_);
   }
 
@@ -28,10 +28,13 @@ public abstract class TwoSequence extends Invariant {
     Assert.assert((mod2 == ValueTuple.MODIFIED)
 		  || (mod2 == ValueTuple.UNMODIFIED));
     if ((mod1 == ValueTuple.MODIFIED)
-	|| (mod2 == ValueTuple.MODIFIED))
-      add_modified(v1, v2, count);
-    else
+	|| (mod2 == ValueTuple.MODIFIED)) {
+      if (! no_invariant) {
+        add_modified(v1, v2, count);
+      }
+    } else {
       add_unmodified(v1, v2, count);
+    }
   }
 
   public abstract void add_modified(int[] v1, int[] v2, int count);

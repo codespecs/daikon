@@ -16,16 +16,16 @@ public class TwoScalarFactory {
 	  && (ppt.var_infos[1].type.dimensions() == 0)))
       return;
 
-    new IntComparison(ppt);
+    IntComparison.instantiate(ppt);
     for (int i=0; i<2; i++) {
       boolean b = (i==1);
-      new Function(ppt, Functions.Math_abs, b);
-      new Function(ppt, Functions.MathMDE_negate, b);
-      new Function(ppt, Functions.MathMDE_bitwiseComplement, b);
+      Function.instantiate(ppt, Functions.Math_abs, b);
+      Function.instantiate(ppt, Functions.MathMDE_negate, b);
+      Function.instantiate(ppt, Functions.MathMDE_bitwiseComplement, b);
     }
-    new Linear(ppt);
+    Linear.instantiate(ppt);
     // new NonAliased(ppt);
-    new NonEqual(ppt);
+    NonEqual.instantiate(ppt);
   }
 
   private TwoScalarFactory() {

@@ -14,22 +14,19 @@ class LowerBound extends SingleScalar {
   // min1 < min2 < min3
   int min1 = Integer.MAX_VALUE;
   int num_min1 = 0;
-  int mod_min1 = 0;
   int min2 = Integer.MAX_VALUE;
   int num_min2 = 0;
-  int mod_min2 = 0;
   int min3 = Integer.MAX_VALUE;
   int num_min3 = 0;
-  int mod_min3 = 0;
   int max = Integer.MIN_VALUE;
 
-  LowerBound(PptSlice ppt_) {
+  private LowerBound(PptSlice ppt_) {
     super(ppt_);
   }
 
-//   LowerBound(Ppt ppt_, VarInfo var_info_) {
-//     super(ppt_, var_info_);
-//   }
+  public static LowerBound instantiate(PptSlice ppt) {
+    return new LowerBound(ppt);
+  }
 
   public String repr() {
     double probability = getProbability();
@@ -43,13 +40,10 @@ class LowerBound extends SingleScalar {
     return "LowerBound" + varNames() + ": "
       + "min1=" + min1
       + ", num_min1=" + num_min1
-      + ", mod_min1=" + mod_min1
       + ", min2=" + min2
       + ", num_min2=" + num_min2
-      + ", mod_min2=" + mod_min2
       + ", min3=" + min3
       + ", num_min3=" + num_min3
-      + ", mod_min3=" + mod_min3
       + ", max=" + max;
   }
 
@@ -60,33 +54,27 @@ class LowerBound extends SingleScalar {
       return null;
   }
 
-  public void add(int value, int modified, int count) {
-    probability_cache_accurate = false;
+  public void add_modified(int value, int count) {
+    // probability_cache_accurate = false;
 
     // System.out.println("LowerBound" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
 
-    int mod_count = (modified == ValueTuple.MODIFIED) ? count : 0;
     int v = value;
 
     if (v > max) max = v;
 
     if (v == min1) {
       num_min1 += count;
-      mod_min1 += mod_count;
     } else if (v < min1) {
       min3 = min2;
       num_min3 = num_min2;
-      mod_min3 = mod_min2;
       min2 = min1;
       num_min2 = num_min1;
-      mod_min2 = mod_min1;
       min1 = v;
       num_min1 = count;
-      mod_min1 = mod_count;
     } else if (v == min2) {
       num_min2 += count;
-      mod_min2 += mod_count;
     } else if (v < min2) {
       min3 = min2;
       num_min3 = num_min2;
@@ -94,15 +82,10 @@ class LowerBound extends SingleScalar {
       num_min2 = count;
     } else if (v == min3) {
       num_min3 += count;
-      mod_min3 += mod_count;
     } else if (v < min3) {
       min3 = v;
       num_min3 = count;
     }
-  }
-
-  public void add_modified(int value, int count) {
-    add(value, ValueTuple.MODIFIED, count);
   }
 
   protected double computeProbability() {
@@ -123,11 +106,22 @@ class LowerBound extends SingleScalar {
     double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) / range;
 
     // System.out.println("  [Need to fix computation of LowerBound.computeProbability()]");
-    boolean truncated_justified = mod_min1 > 5*avg_samples_per_val;
+    boolean truncated_justified = num_min1 > 5*avg_samples_per_val;
+    if (truncated_justified) {
+      return 0;
+    }
+
     boolean uniform_justified = (((min3 - min2) == (min2 - min1))
-                                 && (mod_min1 > avg_samples_per_val/2)
-                                 && (mod_min2 > avg_samples_per_val/2)
-                                 && (mod_min3 > avg_samples_per_val/2));
+                                 && (num_min1 > avg_samples_per_val/2)
+                                 && (num_min2 > avg_samples_per_val/2)
+                                 && (num_min3 > avg_samples_per_val/2));
+    // Refine the uniformity test:
+    // Permit min1, min2, min3 to be non-consecutive
+    // only if there is a modulus invariant over the variable.
+    if (uniform_justified && (min3 - min1 != 2)) {
+      // Look for a modulus invariant...
+    }
+
     // System.out.println("LowerBound.computeProbability(): ");
     // System.out.println("  " + repr_long());
     // System.out.println("  ppt=" + ppt
@@ -140,9 +134,9 @@ class LowerBound extends SingleScalar {
     // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
     //                    + pptsg.values_cache.tuplemod_samples_summary());
 
-    if (truncated_justified || uniform_justified)
+    if (uniform_justified)
       return 0;
-    else
-      return 1;
+
+    return 1;
   }
 }

@@ -9,9 +9,13 @@ class Function extends TwoScalar {
 
   FunctionCore core;
 
-  public Function(PptSlice ppt_, Method function_, boolean inverse_) {
+  protected Function(PptSlice ppt_, Method function_, boolean inverse_) {
     super(ppt_);
-    core = new FunctionCore(function_, inverse_);
+    core = new FunctionCore(this, function_, inverse_);
+  }
+
+  public static Function instantiate(PptSlice ppt, Method function, boolean inverse) {
+    return new Function(ppt, function, inverse);
   }
 
   public String repr() {

@@ -9,7 +9,7 @@ import utilMDE.*;
 
 public abstract class SingleScalar extends Invariant {
 
-  public SingleScalar(PptSlice ppt_) {
+  protected SingleScalar(PptSlice ppt_) {
     super(ppt_);
     // System.out.println("Created SingleScalar invariant " + this + " at " + ppt_);
   }
@@ -24,12 +24,19 @@ public abstract class SingleScalar extends Invariant {
   public void add(int value, int modified, int count) {
     Assert.assert((modified == ValueTuple.MODIFIED)
 		  || (modified == ValueTuple.UNMODIFIED));
-    if (modified == ValueTuple.MODIFIED)
-      add_modified(value, count);
-    else
+    if (modified == ValueTuple.MODIFIED) {
+      if (! no_invariant) {
+        add_modified(value, count);
+      }
+    } else {
       add_unmodified(value, count);
+    }
   }
 
+  /**
+   * This method need not check for no_invariant;
+   * that is done by the caller.
+   */
   public abstract void add_modified(int value, int count);
 
   /**

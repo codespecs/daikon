@@ -10,9 +10,13 @@ class PairwiseLinear extends TwoSequence {
 
   LinearCore core;
 
-  public PairwiseLinear(PptSlice ppt_) {
+  protected PairwiseLinear(PptSlice ppt_) {
     super(ppt_);
-    core = new LinearCore();
+    core = new LinearCore(this);
+  }
+
+  public static PairwiseLinear instantiate(PptSlice ppt) {
+    return new PairwiseLinear(ppt);
   }
 
   // Need to add these two methods for all subclasses of Invariant
@@ -28,14 +32,13 @@ class PairwiseLinear extends TwoSequence {
     int b = core.b;
     double probability = getProbability();
     return "PairwiseLinear" + varNames() + ": "
-      + "no_invariant=" + core.no_invariant
+      + "no_invariant=" + no_invariant
       + ",a=" + core.a
       + ",b=" + core.b
       + "; probability = " + probability;
   }
 
   public String format() {
-    boolean no_invariant = core.no_invariant;
     int a = core.a;
     int b = core.b;
 
@@ -51,14 +54,6 @@ class PairwiseLinear extends TwoSequence {
   }
 
   public void add_modified(int[] x_arr, int[] y_arr, int count) {
-    boolean no_invariant = core.no_invariant;
-    int a = core.a;
-    int b = core.b;
-
-    if (no_invariant) {
-      return;
-    }
-
     int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {

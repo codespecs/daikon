@@ -13,15 +13,15 @@ class Modulus extends SingleScalar {
 
   // an arbitrarily-chosen value used for computing the differences among
   // all the values.
-  int value1 = 0;
+  int value1 = 2222;
 
-  Modulus(PptSlice ppt_) {
+  private Modulus(PptSlice ppt_) {
     super(ppt_);
   }
 
-//   Modulus(Ppt ppt_, VarInfo var_info_) {
-//     super(ppt_, var_info_);
-//   }
+  public static Modulus instantiate(PptSlice ppt) {
+    return new Modulus(ppt);
+  }
 
   public String repr() {
     double probability = getProbability();
@@ -54,15 +54,19 @@ class Modulus extends SingleScalar {
     } else {
       int new_modulus = MathMDE.gcd(modulus, value1 - value);
       if (new_modulus != modulus) {
-	remainder = remainder % new_modulus;
-	modulus = new_modulus;
+        if (new_modulus == 1) {
+          no_invariant = true;
+        } else {
+          remainder = remainder % new_modulus;
+          modulus = new_modulus;
+        }
       }
-      probability_cache_accurate = false;
+      // probability_cache_accurate = false;
     }
-    if (modulus == 1) {
-      probability_cache = Invariant.PROBABILITY_NEVER;
-      probability_cache_accurate = true;
-    }
+    // if (modulus == 1) {
+    //   probability_cache = Invariant.PROBABILITY_NEVER;
+    //   probability_cache_accurate = true;
+    // }
   }
 
   protected double computeProbability() {

@@ -9,9 +9,13 @@ class Linear extends TwoScalar {
 
   LinearCore core;
 
-  public Linear(PptSlice ppt_) {
+  protected Linear(PptSlice ppt_) {
     super(ppt_);
-    core = new LinearCore();
+    core = new LinearCore(this);
+  }
+
+  public static Linear instantiate(PptSlice ppt) {
+    return new Linear(ppt);
   }
 
   // Need to add these two methods for all subclasses of Invariant
@@ -25,7 +29,6 @@ class Linear extends TwoScalar {
   public String repr() {
     int a = core.a;
     int b = core.b;
-    boolean no_invariant = core.no_invariant;
 
     double probability = getProbability();
     return "Linear" + varNames() + ": "
@@ -38,7 +41,6 @@ class Linear extends TwoScalar {
   public String format() {
     int a = core.a;
     int b = core.b;
-    boolean no_invariant = core.no_invariant;
 
     if ((!no_invariant) && justified()) {
       String x = var1().name;
