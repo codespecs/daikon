@@ -126,12 +126,25 @@ public final class UtilMDE {
    * gzipped files) after the first gzipped file.
    **/
   public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
+    return LineNumberFileReader(new File(filename));
+  }
+
+  /**
+   * Returns a LineNumberReader for the file, accounting for the possibility
+   * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static LineNumberReader LineNumberFileReader(File file) throws FileNotFoundException, IOException {
     Reader file_reader;
-    if (filename.endsWith(".gz")) {
-      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)),
+    if (file.getName().endsWith(".gz")) {
+      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(file)),
                                           "ISO-8859-1");
     } else {
-      file_reader = new InputStreamReader(new FileInputStream(filename),
+      file_reader = new InputStreamReader(new FileInputStream(file),
                                           "ISO-8859-1");
     }
     return new LineNumberReader(file_reader);
