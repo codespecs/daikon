@@ -26,7 +26,6 @@ if ($?DAIKONCLASS_SOURCES) then
     setenv CPADD ${DAIKONDIR}/java
   endif
 endif
-endif
 if ($?CLASSPATH) then
   setenv CLASSPATH ${CPADD}:${CLASSPATH}
 else

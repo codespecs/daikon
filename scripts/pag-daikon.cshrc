@@ -29,10 +29,16 @@ setenv pag ${PAG}
 ## Set this directory to the directory containing the JDK.
 if (! $?JDKDIR) setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
 
+# Remove duplicates so path and classpath don't get too long
+if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
+setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
+
 setenv PATH /usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
 
+if ($?debuglogin) echo "about to source daikon.cshrc: ${INV}/scripts/daikon.cshrc"
 source ${INV}/scripts/daikon.cshrc
+if ($?debuglogin) echo "sourced daikon.cshrc"
 
 setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
