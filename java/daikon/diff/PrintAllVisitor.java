@@ -41,13 +41,13 @@ public class PrintAllVisitor implements NodeVisitor {
     if (node.getInv1() == null) {
       pw.print((String) null);
     } else {
-      pw.print(node.getInv1().repr_prob());
+      pw.print(node.getInv1().format());
     }
     pw.print(", ");
     if (node.getInv2() == null) {
       pw.print((String) null);
     } else {
-      pw.print(node.getInv2().repr_prob());
+      pw.print(node.getInv2().format());
     }
     pw.println(">");
   }
