@@ -5,6 +5,7 @@
 ## Set DAIKONPARENT to the directory containing "daikon/".
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
 if (! $?DAIKONDIR) setenv DAIKONDIR $DAIKONPARENT/daikon
+if (! $?DFECDIR) setenv DFECDIR $DAIKONDIR/front-end/c
 
 ## Set this directory to the directory containing the JDK.
 if (! $?JDKDIR) setenv JDKDIR /g2/jdk
@@ -31,7 +32,7 @@ else
 endif
 
 ## Add the Daikon binaries to your path
-set path = ($DAIKONDIR/bin $DAIKONDIR/front-end/java/src $DAIKONDIR/front-end/c $JDKDIR/bin $path)
+set path = ($DAIKONDIR/bin $DAIKONDIR/front-end/java/src $DFECDIR $JDKDIR/bin $path)
 
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 ## Daikon front end for Java), rt.jar must be on your classpath.
@@ -56,4 +57,4 @@ setenv AJAX_DIR $DAIKONDIR/java/ajax-ship
 
 ## Uncomment this if you install Lackwit.
 # ## Indicates where Lackwit can find its libraries (and binaries).
-# setenv LACKWIT_HOME $DAIKONDIR/front-end/c/lackwit
+# setenv LACKWIT_HOME $DFECDIR/lackwit
