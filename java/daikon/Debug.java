@@ -284,7 +284,7 @@ public class Debug {
 
   /**
    * Determines whether or not detailed info (such as from add_modified)
-   * is printed
+   * is printed.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logDetail()

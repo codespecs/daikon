@@ -78,7 +78,7 @@ public class PptTopLevel
   /**
    * Boolean.  If true, flow global invariants that are falsified
    * immediately to all children as opposed to waiting for the next sample
-   * to arrive at that child
+   * to arrive at that child.
    */
   public static boolean dkconfig_flow_globals_immed = false;
 

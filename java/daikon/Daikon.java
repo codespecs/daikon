@@ -48,7 +48,7 @@ public final class Daikon {
 
   /**
    * Boolean.  Just print the total number of possible invariants
-   * and exit
+   * and exit.
    */
   public static boolean dkconfig_calc_possible_invs;
 
@@ -61,7 +61,7 @@ public final class Daikon {
 
   /**
    * Boolean.  Controls whether or not total samples read and processed
-   * are printed at the end of processing
+   * are printed at the end of processing.
    */
   public static boolean dkconfig_print_sample_totals = false;
 
@@ -168,7 +168,7 @@ public final class Daikon {
    * hierarchy.  This mechanism builds invariants initially
    * only at the leaves of the partial order.  Upper points are
    * calculated by joining the invariants from each of their children
-   * points
+   * points.
    **/
   public static boolean dkconfig_df_bottom_up = true;
 
@@ -845,6 +845,7 @@ public final class Daikon {
    * The number of columns of progress information to display. In many
    * Unix shells, this can be set to an appropriate value by
    * --config_option daikon.Daikon.progress_display_width=$COLUMNS
+   * .
    **/
   public static int dkconfig_progress_display_width = 80;
 

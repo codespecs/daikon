@@ -85,7 +85,7 @@ public final class FileIO {
 
   /**
    * Integer.  Maximum number of lines to read from the dtrace file.  If
-   * 0, reads the entire file
+   * 0, reads the entire file.
    */
   public static int dkconfig_max_line_number = 0;
 
