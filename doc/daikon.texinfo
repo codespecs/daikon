@@ -4775,11 +4775,11 @@ The format of the program point information is:
   DECLARE
   program-point-name
   varname1
-  declared-type1
+  declared-type1 [# auxiliary-information1]
   representation-type1 [= constant-value1]
   comparable1
   varname2
-  declared-type2
+  declared-type2 [# auxiliary-information1]
   representation-type2 [= constant-value2]
   comparable2
   ...
@@ -4817,14 +4817,48 @@ with "[]".  For instance, "a" might stand for the array object itself
 (appearing in the trace file as a unique ID or hashcode), and "a[]" would
 stand for the array contents (appearing in the trace file as a sequence
 of values).
+
 @item
-declared type:  this is what the programmer used in the
-declaration of the variable.  
-This is currently uninterpreted, except that array types must be
-suffixed by the proper number of "[]" to indicate their dimensionality.
-Names for standard types should use Java's names (e.g., "int",
-"boolean", etc.), but names for user-defined or language-specific types
-can be arbitrary strings.
+declared type: this is what the programmer used in the declaration of
+the variable.  Array types must be suffixed by the proper number of
+"[]" to indicate their dimensionality.  Names for standard types
+should use Java's names (e.g., "int", "boolean", etc.), but names for
+user-defined or language-specific types can be arbitrary strings.
+
+@item
+auxiliary information: optionally, Daikon can be given information
+about the meaning of the variable to help it better interpret the
+values it later sees.  Information is provided as a comma-separated
+list of items, with each item in the form of "key = value".  Auxiliary
+information that Daikon does not use is ignored.  All values are
+either "true" or "false".  Mainly, this information is used for
+collections, which are presented to Daikon as arrays. Valid keys are:
+
+@itemize @bullet
+
+@item
+hasDuplicates: whether a collection can contain duplicates.  If it
+can't, Daikon does not check for some invariants that only have
+meaning for collections that can contain duplicate elements.
+
+@item
+hasOrder: whether order has meaning for a collection.  If order does
+not have meaning in a collection, then Daikon does not check for
+element wise comparisons between it and other collections.  
+
+@item
+hasNull: whether zero has the special meaning null for the variable or
+collection.  If it does, then Daikon checks for whether a value or the
+elements in a collection are null.
+
+@item
+nullTerminated: whether a collection has a value (usually null) that
+ends its representation.  If it does, then Daikon looks at the
+collection's size and at the collection's size-1 as "interesting"
+values.  If it doesn't, then Daikon only looks at the collection's
+size.
+@end itemize
+
 @item
 representation type:  this describes what will appear in the data
 trace file.  For instance, the declared type might be "char[]" but

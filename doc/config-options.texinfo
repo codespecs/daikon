@@ -59,9 +59,19 @@
   Boolean.  True iff SequencesJoin derived variables should be generated.
   The default value is `false'.
 
+@item daikon.derive.binary.SequencesPredicate.boolOnly
+  Boolean.  True if we should only generate derivations on boolean
+ predicates.
+  The default value is `true'.
+
 @item daikon.derive.binary.SequencesPredicate.enabled
   Boolean.  True iff SequencesPredicate derived variables should be generated.
   The default value is `false'.
+
+@item daikon.derive.binary.SequencesPredicate.fieldOnly
+  Boolean.  True if we should only generate derivations on fields
+ of the same data structure.
+  The default value is `true'.
 
 @item daikon.derive.unary.SequenceInitial.enabled
   Boolean.  True iff SequenceInitial derived variables should be generated.
@@ -106,10 +116,6 @@
   Boolean.  True iff FunctionUnary invariants should be considered.
   The default value is `true'.
 
-@item daikon.inv.binary.twoScalar.IntComparison.enabled
-  Boolean.  True iff IntComparison invariants should be considered.
-  The default value is `true'.
-
 @item daikon.inv.binary.twoScalar.IntEqual.enabled
   Boolean.  True iff IntEqual  invariants should be considered.
   The default value is `true'.
@@ -138,15 +144,6 @@
   Boolean.  True iff LinearBinary invariants should be considered.
   The default value is `true'.
 
-@item daikon.inv.binary.twoScalar.NonEqual.enabled
-  Boolean.  True iff NonEqual invariants should be considered.
-  The default value is `true'.
-
-@item daikon.inv.binary.twoScalar.NonEqual.integral_only
-  Boolean.  True iff only integer expressions should be compared
- for inequality (as opposed to also comparing pointer values).
-  The default value is `false'.
-
 @item daikon.inv.binary.twoSequence.PairwiseFunctionUnary.enabled
   Boolean.  True iff PairwiseFunctionUnary invariants should be considered.
   The default value is `true'.
@@ -171,6 +168,10 @@
   Boolean.  True iff SubSequence invariants should be considered.
   The default value is `true'.
 
+@item daikon.inv.binary.twoSequence.SubSet.enabled
+  Boolean.  True iff SubSet invariants should be considered.
+  The default value is `false'.
+
 @item daikon.inv.binary.twoString.StringComparison.enabled
   Boolean.  True iff StringComparison invariants should be considered.
   The default value is `true'.
@@ -190,17 +191,17 @@
 @item daikon.inv.unary.scalar.LowerBound.maximal_interesting
   Long integer.  Together with minimal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting
- minimal_interesting to -1 and this to 2 would only permit output
- of LowerBound  invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ LowerBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.scalar.LowerBound.minimal_interesting
   Long integer.  Together with maximal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting this to -1 and
- maximal_interesting to 2 would only permit output of LowerBound 
- invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ LowerBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.scalar.Modulus.enabled
@@ -231,17 +232,17 @@
 @item daikon.inv.unary.scalar.UpperBound.maximal_interesting
   Long integer.  Together with minimal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting
- minimal_interesting to -1 and this to 2 would only permit output
- of UpperBound  invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ UpperBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.scalar.UpperBound.minimal_interesting
   Long integer.  Together with maximal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting this to -1 and
- maximal_interesting to 2 would only permit output of UpperBound 
- invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ UpperBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.CommonSequence.enabled
@@ -255,17 +256,17 @@
 @item daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
   Long integer.  Together with minimal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting
- minimal_interesting to -1 and this to 2 would only permit output
- of EltLowerBound  invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ EltLowerBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.sequence.EltLowerBound.minimal_interesting
   Long integer.  Together with maximal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting this to -1 and
- maximal_interesting to 2 would only permit output of EltLowerBound 
- invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ EltLowerBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.EltNonZero.enabled
@@ -288,17 +289,17 @@
 @item daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
   Long integer.  Together with minimal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting
- minimal_interesting to -1 and this to 2 would only permit output
- of EltUpperBound  invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ EltUpperBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
   Long integer.  Together with maximal_interesting, specifies the
  range of the computed constant that is "intersting" --- the range
- that should be reported.  For instance, setting this to -1 and
- maximal_interesting to 2 would only permit output of EltUpperBound 
- invariants whose cutoff was one of (-1,0,1,2).
+ that should be reported.  For instance, setting minimal_interesting
+ to -1 and maximal_interesting to 2 would only permit output of
+ EltUpperBound  invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.EltwiseIntComparison.enabled
