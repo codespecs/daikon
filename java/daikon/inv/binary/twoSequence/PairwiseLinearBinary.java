@@ -162,8 +162,8 @@ public class PairwiseLinearBinary
   }
 
   public boolean isObviousImplied() {
-    if (core.a == 1 && core.b == 0)
-      return true;
+    if (core.a == 0) return true;                // Constant
+    if (core.a == 1 && core.b == 0) return true; // Equality
     return false;
   }
 }
