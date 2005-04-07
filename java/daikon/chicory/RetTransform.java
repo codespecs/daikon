@@ -173,8 +173,6 @@ public class RetTransform implements ClassFileTransformer {
       // Get the class information
       ClassGen cg = new ClassGen (c);
 
-      //TODO REMOVE
-      //cg.addMethod(createClinit(cg, fullClassName));
 
       // Convert reach non-void method to save its result in a local
       // before returning
@@ -206,6 +204,19 @@ public class RetTransform implements ClassFileTransformer {
           }
       }
 
+      //check for static initializer
+      boolean hasInit = false;
+      for(Method meth: cg.getMethods())
+      {
+          if(meth.getName().equals("<clinit>"))
+              hasInit=true;
+      }
+      
+      //if not found, add our own!
+      if(!hasInit)
+          cg.addMethod(createClinit(cg, fullClassName));
+      
+      
       JavaClass njc = cg.getJavaClass();
       if (debug)
         njc.dump ("/tmp/ret/" + njc.getClassName() + ".class");
@@ -220,17 +231,196 @@ public class RetTransform implements ClassFileTransformer {
    
   }
 
+  
   /**
+   * @param cg
+   * @param mg
+   * @param fullClassName
+   */
+  private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName)
+  {
+      InstructionList invokeList = call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
+      
+      InstructionList newList = mg.getInstructionList();
+      mg.update();
+      
+      
+      InstructionList il = mg.getInstructionList();
+      MethodContext context = new MethodContext(cg,mg);
+      
+      for (InstructionHandle ih = il.getStart(); ih != null; ) {
+          InstructionList new_il = null;
+          Instruction inst = ih.getInstruction();
+
+          // Get the translation for this instruction (if any)
+          new_il = xform_clinit (cg, cg.getConstantPool(), fullClassName, inst, context);
+
+          // Remember the next instruction to process
+          InstructionHandle next_ih = ih.getNext();
+
+          // If this instruction was modified, replace it with the new
+          // instruction list. If this instruction was the target of any
+          // jumps, replace it with the first instruction in the new list
+          if (new_il != null) {
+            if (true) {
+              try
+            {
+                new_il.delete (new_il.getEnd());
+            }
+            catch (TargetLostException e)
+            {
+                throw new Error ("unexpected lost target exception " + e);
+            }
+              InstructionHandle new_start = il.insert (ih, new_il);
+              //out.format ("old start = %s, new_start = %s\n", ih, new_start);
+              il.redirectBranches (ih, new_start);
+
+              // Fix up line numbers to point at the new code
+              if (ih.hasTargeters()) {
+                for (InstructionTargeter it : ih.getTargeters()) {
+                  if (it instanceof LineNumberGen) {
+                    it.updateTarget (ih, new_start);
+                  }
+                }
+              }
+
+              ih = next_ih;
+              continue;
+            }
+            
+            if (debug)
+              out.format ("Replacing %s by %s\n", ih, new_il);
+            
+            il.append (ih, new_il);
+            InstructionTargeter[] targeters = ih.getTargeters();
+            if (targeters != null) {
+              // out.format ("targeters length = %d\n", targeters.length);
+              for (int j = 0; j < targeters.length; j++)
+                targeters[j].updateTarget (ih, ih.getNext());
+            }
+            try {
+              il.delete (ih);
+            } catch (TargetLostException e) {
+              throw new Error ("unexpected lost target exception " + e);
+            }
+          }
+          // Go on to the next instruction in the list
+          ih = next_ih;
+        }
+      
+      
+
+      
+      mg.setInstructionList (newList);
+      
+      
+      
+      for (Attribute a : mg.getCodeAttributes()) {
+          if (is_local_variable_type_table (a)) {
+              mg.removeCodeAttribute (a);
+          }
+        }
+      
+      // Update the max stack and Max Locals
+      mg.setMaxLocals();
+      mg.setMaxStack();
+      mg.update();
+      
+      return mg.getMethod();
+  }
+  
+  
+  /**
+ * @param fullClassName
+ * @param inst
+ * @param context
+ * @return
+ */
+    private InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp, String fullClassName, Instruction inst, MethodContext context)
+    {
+        switch (inst.getOpcode())
+        {
+
+            case Constants.ARETURN :
+            case Constants.DRETURN :
+            case Constants.FRETURN :
+            case Constants.IRETURN :
+            case Constants.LRETURN :
+            case Constants.RETURN :
+                break;
+
+            default :
+                return (null);
+        }
+
+        InstructionList il = new InstructionList();
+        il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
+        il.append(inst);
+        return (il);
+    }
+
+/**
  * @param cg
  * @param fullClassName
  * @return
  */
 private Method createClinit(ClassGen cg, String fullClassName)
 {
-    MethodGen newMethGen = new MethodGen(0, Type.VOID, new Type[0], new String[0], "<clinit>",
-            fullClassName, new InstructionList(), cg.getConstantPool());
+    /*System.out.println(mg.getAccessFlags());
+    System.out.println(mg.getReturnType());
+    System.out.println(mg.getArgumentTypes());   
+    System.out.println(mg.getName());   
+    System.out.println(mg.getClassName()); */
     
+    InstructionFactory factory = new InstructionFactory(cg);
+    
+    
+    InstructionList il = new InstructionList();
+    il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName, factory));
+    il.append(InstructionFactory.createReturn(Type.VOID)); //need to return!
+    
+    MethodGen newMethGen = new MethodGen(8, Type.VOID, new Type[0], new String[0], "<clinit>",
+            fullClassName, il, cg.getConstantPool());
+    newMethGen.update();
+    
+    for (Attribute a : newMethGen.getCodeAttributes()) {
+        if (is_local_variable_type_table (a)) {
+            newMethGen.removeCodeAttribute (a);
+        }
+      }
+    
+    //MethodContext context = new MethodContext (cg, newMethGen);
+    //InstructionFactory ifact = context.ifact;
+    
+    //il.append (ifact.createConstant (0));
+    //newMethGen.setInstructionList(il);
+    //newMethGen.update();
+
+      // Update the max stack and Max Locals
+    newMethGen.setMaxLocals();
+    newMethGen.setMaxStack();
+    newMethGen.update();
+      
+      
     return newMethGen.getMethod();
+}
+
+/**
+ * @param cg
+ * @param fullClassName
+ * @param factory
+ * @return
+ */
+private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName, InstructionFactory factory)
+{
+    InstructionList invokeList = new InstructionList();
+    
+    invokeList.append(new PUSH(cp, fullClassName));
+    invokeList.append(factory.createInvoke(runtime_classname, "initNotify",
+            Type.VOID, new Type[] {Type.STRING}, Constants.INVOKESTATIC));
+    
+    //System.out.println(fullClassName + " --- " + invokeList.size());
+    return invokeList;
 }
 
 /**
@@ -271,7 +461,11 @@ private Method createClinit(ClassGen cg, String fullClassName)
 
         // skip the class init method
         if (mg.getName().equals ("<clinit>"))
-          continue;
+          {
+            cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
+            cg.update();
+            continue;
+          }
 
         // Get the instruction list and skip methods with no instructions
         InstructionList il = mg.getInstructionList();
@@ -419,7 +613,7 @@ private Method createClinit(ClassGen cg, String fullClassName)
     return class_info;
   }
 
-  /**
+/**
    * Transforms return instructions to first assign the result to a local
    * variable (return__$trace2_val) and then do the return.  Also, calls
    * Runtime.exit() immediately before the return.

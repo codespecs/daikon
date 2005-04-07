@@ -2,8 +2,6 @@ Todo list sorted in approximate order of importance.
 
 Add your name/initials to an item when you are actively working on it.
 When the task is complete, move it to the bottom of the file.
-
-  - Fix problem in which we force class initialization with calls to Field.get(null) (for static fields)
   
   - Fix issue which occurs when classfile does not include line number
     information.  Dtrace/decls info should be syntactically correct.
@@ -83,6 +81,18 @@ When the task is complete, move it to the bottom of the file.
     be writing this kind of code anyway.
 
 Completed Tasks (add new ones at the top)
+
+  - Fix problem in which we force class initialization with calls to Field.get(null) (for static fields)
+  
+  4/7/05 [etf]: I remedied this in the following way:
+  1.  all calls to class.ForName have the initialization parameter set to false
+  2.  we are VERY careful about static fields.  the behavior is:
+  	  a. for hardcoded static final primitives (from constant pool), we print these in the decls file
+  	     by LOOKING UP the hardcoded constant value which was stored during the transform stage
+  	  b. for all other types of statics:  First CHECK IF THE CLASS HAS BEEN INITIALIZED.  if it has,
+  	  proceed as normal.  if it has not, return NonsensicalValue.  We determine if classes have been
+  	  initialized by adding code to the <clinit> method (or creating it if it doesn't exist) which
+  	  basically says "I'm initialized" to the rest of the system.
 
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means

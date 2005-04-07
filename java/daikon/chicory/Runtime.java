@@ -79,6 +79,9 @@ public class Runtime
 
     /** Dtrace writer setup for writing to the trace file **/
     public static DTraceWriter dtrace_writer = null;
+    
+    /** Which static initializers have been run**/
+    private static Set <String> initSet = new HashSet();
 
     // Constructor
     private Runtime()
@@ -193,6 +196,17 @@ public class Runtime
         //System.out.println ("enter MethodInfo : " + mi.member);
         dtrace_writer.methodEntry(mi, nonce, obj, args);
 
+    }
+    
+    public static void initNotify(String name)
+    {
+        //System.out.println("initialized ---> " + name);
+        initSet.add(name);
+    }
+    
+    public static boolean isInitialized(String name)
+    {
+        return initSet.contains(name);
     }
 
     /**
