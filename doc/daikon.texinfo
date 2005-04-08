@@ -3125,6 +3125,16 @@ only observed at program points for that function.  This is a
 heuristic to reduce the amount of Kvasir output without greatly
 reducing the amount of useful output.
 
+@item --bit-level-precision
+
+When activated, forces more stringent checking of value validity on the
+bit-level, which in some cases could result in more accurate output at
+the expense of speed.  This is useful when your program performs
+lots of bit-level operations, but is unnecessary for most programs.
+(Note: If you have trouble getting floating point values to print out
+properly, try this option.  It seems to work well in practice.)
+This option is fairly untested at the moment.
+
 @item --nesting-depth=@var{N}
 
 For recursively-defined structures (structs or classes with members that
