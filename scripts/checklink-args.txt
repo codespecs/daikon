@@ -1,4 +1,4 @@
---exclude-docs /~adonovan/|mernst/(public_html/)?(ir95|advice/conference/)|daikon/download/jdoc
+--exclude-docs /~adonovan/|mernst/(public_html/)?(ir95|advice/conference/)|daikon/download/jdoc|bugzilla/
 --exclude-redirect-prefix http://pag.csail.mit.edu/->http://www.pag.csail.mit.edu/
 --exclude-redirect-prefix http://texi2html.cvshome.org/->https://texi2html.cvshome.org/
 --exclude-redirect http://pag.csail.mit.edu/~cpacheco/->http://people.csail.mit.edu/people/cpacheco/
