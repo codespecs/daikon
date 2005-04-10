@@ -2982,12 +2982,11 @@ programs,,,./developer,Daikon Developer Manual}.
 @node Using Kvasir, Kvasir options, Kvasir, Kvasir
 @subsection Using Kvasir
 
-The first step in using Kvasir is to compile your program using the
-DWARF-2 format of debugging information, and without optimization.
-In most recent versions of GCC (at least 2.95 and higher), DWARF-2
-debugging information can be produced by supplying the
-@option{-gdwarf-2} command line option.  In more recent versions of GCC 3,
-DWARF-2 is in fact the default format for debugging information.
+Before using Kvasir, you must compile your program without optimization,
+and with the DWARF-2 format of debugging information.
+DWARF-2 is the default format for debugging information in GCC 3, and
+otherwise is produced by supplying the
+@option{-gdwarf-2} command line option.
 Also, remove any optimization flags, such as @option{-O} or @option{-O2},
 and any flags that affect calling conventions, such as
 @option{-fomit-frame-pointer}.  Except for these changes, you should be
