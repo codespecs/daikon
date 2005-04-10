@@ -1,12 +1,15 @@
 #!/usr/bin/perl -wpi.bak
 # update-link-dates
 # Michael Ernst <mernst@alum.mit.edu>
-# Time-stamp: <2003-01-24 20:59:25 mernst>
+# Time-stamp: <2004-05-04 23:32:02 mernst>
 
 # usage:
 #   update-link-dates file [...]
 # For any text of the form <a href="FILE">text</a> (14 Mar 1967),
 # update the date text, but don't update the file's modification date.
+# Also update the file size, if it is mentioned in the parenthetical text.
+# For examples, see http://pag.csail.mit.edu/~mernst/software/ and
+# http://pag.csail.mit.edu/daikon/download/.
 
 # To do:
 #   Need to operate by paragraphs, not by lines.
