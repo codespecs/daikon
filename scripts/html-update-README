@@ -1,0 +1,13 @@
+The "html-update" package contains three small scripts that you may find
+helpful for automatically updating your webpages.
+
+html-toc automatically creates a table of contents for a webpage.
+	Users do not typically call this script directly.
+html-update-toc calls html-toc, and, if the generated table of contents
+	differs from the webpage's table of contents, updates the webpage.
+update-link-dates finds and updates webpage text that refers to the date
+	and/or size of a linked-to file.  Requires checkargs.pm.
+
+For an example of use of both html-update-toc and update-link-dates, see
+http://pag.csail.mit.edu/~mernst/software/.  For an example of the size
+feature of update-link-dates, see http://pag.csail.mit.edu/daikon/download/.
