@@ -103,9 +103,12 @@ not industrial or academic secrets.
 Sun Microsystems
 <dd>
 Sudheendra Hangal (who is also responsible for the DIDUCE invariant
-detector) and colleagues are building an invariant detector for hardware
+detector) and colleagues have built an invariant detector named IODINE for
+hardware
 designs.  The goal is to execute test vectors or real loads on a simulator
-in order to learn emergent properties of the design.
+in order to learn emergent properties of the design.  See the paper
+"IODINE: A tool to automatically infer dynamic invariants for hardware
+designs" in the Design Automation Conference, DAC 2005.
 
 <dt>
 Microsoft
@@ -190,6 +193,15 @@ writing and debugging algebraic specifications" (appears in ICSE 2004) --
 describe an application of dynamic invariant detection to algebraic
 specifications.  Algebraic specifications are equations between terms, such
 as "pop(push(s,i).state).retval = i" and "pop(push(s,i).state).state = s".
+
+<dt>
+Virginia
+<dd>
+David Evans and Jinlin Yang are building 
+<a href="http://www.cs.virginia.edu/terracotta/">Terracotta</a>,
+a dynamic analysis tool for automatically inferring temporal properties.
+It takes the program's execution traces as input and outputs a set of
+likely temporal properties.
 
 </dl>
 
