@@ -4,6 +4,8 @@ import java.io.PrintStream;
 import java.lang.reflect.*;
 import java.util.*;
 
+import daikon.Chicory;
+
 /**
  * @author Eric Fellheimer
  *         <p>
@@ -579,11 +581,14 @@ public class DTraceWriter extends DaikonWriter
         Class fieldType = classField.getType();
         
         
-        //don't force initialization!!!!!!!!!
+        if(Chicory.checkStaticInit)
+        {
+        //don't force initialization!
         if(!Runtime.isInitialized(classField.getDeclaringClass().getName()))
         {
             //System.out.println("SKIPPING " + classField.getDeclaringClass().getName() + " --- " + classField.getName());
             return nonsenseValue;
+        }
         }
         
         if (fieldType.equals(int.class))

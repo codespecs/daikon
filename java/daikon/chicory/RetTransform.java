@@ -204,17 +204,20 @@ public class RetTransform implements ClassFileTransformer {
           }
       }
 
-      //check for static initializer
-      boolean hasInit = false;
-      for(Method meth: cg.getMethods())
-      {
-          if(meth.getName().equals("<clinit>"))
-              hasInit=true;
-      }
-      
-      //if not found, add our own!
-      if(!hasInit)
-          cg.addMethod(createClinit(cg, fullClassName));
+      if (Chicory.checkStaticInit)
+            {
+                //check for static initializer
+                boolean hasInit = false;
+                for (Method meth : cg.getMethods())
+                {
+                    if (meth.getName().equals("<clinit>"))
+                        hasInit = true;
+                }
+
+                //if not found, add our own!
+                if (!hasInit)
+                    cg.addMethod(createClinit(cg, fullClassName));
+            }
       
       
       JavaClass njc = cg.getJavaClass();
@@ -459,13 +462,16 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
                     }
                 }
 
-        // skip the class init method
-        if (mg.getName().equals ("<clinit>"))
-          {
-            cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
-            cg.update();
+        // check for the class init method
+        if (mg.getName().equals("<clinit>"))
+        {
+                    if (Chicory.checkStaticInit)
+                    {
+                        cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
+                        cg.update();
+                    }
             continue;
-          }
+        }
 
         // Get the instruction list and skip methods with no instructions
         InstructionList il = mg.getInstructionList();
