@@ -78,6 +78,9 @@ public class Chicory {
   /**socket port to communicate with Daikon**/
   private int daikonPort = -1;
 
+  /** flag to use if we want to turn on the static initialization checks**/
+  public static final boolean checkStaticInit = false;
+
   /**
    * Entry point of Chicory <p>
    * @param args see usage for argument descriptions
@@ -216,12 +219,12 @@ public class Chicory {
 
          else if (arg.equals("--daikon-online")) {
         daikon_cmd_online = "daikon.Daikon +";
-        premain_args.add(arg);
+        //premain_args.add(arg);
         premain_args.add("--daikon-port=8111"); //TODO get port from daikon!
 
       } else if (arg.startsWith ("--daikon-online=")) {
-        daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon=".length()) + "+";
-        premain_args.add(arg);
+        daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon-online=".length()) + " +";
+        //premain_args.add(arg);
         premain_args.add("--daikon-port=8111"); //TODO get port from daikon!
 
       } else if (arg.equals("--verbose")) {
@@ -337,7 +340,17 @@ public class Chicory {
         = new StreamRedirectThread("stdout", daikon_proc.getInputStream(), System.out);
       err_thread.start();
       out_thread.start();
-        }
+      
+      /*try
+            {
+                Thread.sleep(1000); //give time to daikon to start server
+            }
+            catch (InterruptedException e1)
+            {
+                // TODO BETTER WAY TO DO THIS
+                e1.printStackTrace();
+            }
+        }*/
 
 
     // Build the command line to execute the target with the javaagent
