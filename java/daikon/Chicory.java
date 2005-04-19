@@ -349,8 +349,9 @@ public class Chicory {
             {
                 // TODO BETTER WAY TO DO THIS
                 e1.printStackTrace();
-            }
-        }*/
+            }*/
+        }
+        
 
 
     // Build the command line to execute the target with the javaagent
