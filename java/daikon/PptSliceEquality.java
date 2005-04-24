@@ -316,7 +316,8 @@ public class PptSliceEquality
                 vi.name.name(), "" + vt.getModified(vi), parent.name());
           VarInfo rv = parent.find_var_by_name ("return");
           Fmt.pf ("return value = " + Debug.toString (rv.getValue(vt)));
-          Fmt.pf("At line number " + FileIO.data_trace_reader.getLineNumber());
+          Fmt.pf("At line number "
+		 + FileIO.data_trace_state.reader.getLineNumber());
         }
         addToBindingList (multiMap, vi.getValue(vt), vi);
       }

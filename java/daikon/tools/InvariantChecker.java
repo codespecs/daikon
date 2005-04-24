@@ -305,7 +305,7 @@ public class InvariantChecker {
           InvariantStatus status = inv.add_sample (vt, 1);
           if (status != InvariantStatus.NO_CHANGE) {
             // Invariant pre_inv = inv;
-            LineNumberReader lnr = FileIO.data_trace_reader;
+            LineNumberReader lnr = FileIO.data_trace_state.reader;
             String line = (lnr == null) ? "?"
                         : String.valueOf(lnr.getLineNumber());
             output_stream.println ("At ppt " + ppt.name + ", Invariant '"

@@ -1527,28 +1527,28 @@ public final class Daikon {
           "Used memory: "
             + (java.lang.Runtime.getRuntime().totalMemory()
               - java.lang.Runtime.getRuntime().freeMemory()));
-        debugTrace.fine("Active slices: " + FileIO.data_num_slices);
+        debugTrace.fine("Active slices: " + FileIO.data_trace_state.num_slices);
       }
     }
     private String message() {
-      String filename = FileIO.data_trace_filename;
-      if (filename == null) {
+      if (FileIO.data_trace_state == null) {
         if (Daikon.progress == null) {
           return "[no status]";
         } else {
           return Daikon.progress;
         }
       }
-      LineNumberReader lnr = FileIO.data_trace_reader;
+      String filename = FileIO.data_trace_state.filename;
+      LineNumberReader lnr = FileIO.data_trace_state.reader;
       String line;
       if (lnr == null) {
         line = "?";
       } else {
         long lineNum = lnr.getLineNumber();
         line = String.valueOf(lineNum);
-        if (FileIO.data_trace_total_lines > 0) {
+        if (FileIO.data_trace_state.total_lines > 0) {
           double frac =
-            lineNum / (double) FileIO.data_trace_total_lines;
+            lineNum / (double) FileIO.data_trace_state.total_lines;
           String percent = pctFmt.format(frac);
           line = line + ", " + percent;
         }

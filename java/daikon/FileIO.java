@@ -569,12 +569,6 @@ public final class FileIO {
     return count;
   }
 
-  // We stash values here to be examined/printed later.  Used to be
-  // for debugging only, but now also used for Daikon progress output.
-  public static LineNumberReader data_trace_reader;
-  public static String data_trace_filename;
-  public static long data_trace_total_lines;
-  public static int data_num_slices = 0;
 
   /**
    * Class used to specify the processor to use for sample data.  By
@@ -590,12 +584,100 @@ public final class FileIO {
     }
   }
 
+
   /** Read data from .dtrace file using standard data processor. **/
   static void read_data_trace_file(String filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
     read_data_trace_file(filename, all_ppts, processor, false);
   }
+
+  /**
+   * Class used to encapsulate state information while parsing
+   * decl/dtrace files.
+   */
+
+  public enum ParseStatus {
+    NULL,		// haven't read anything yet
+    DECL,		// got a decl
+    SAMPLE,		// got a sample
+    COMPARABILITY,	// got a VarComparability declaration
+    LIST,		// got a ListImplementors declaration
+    EOF,		// found EOF
+    ERROR,		// got some kind of error
+    TRUNCATED		// dkconfig_max_line_number reached
+  };
+
+  public static class ParseState {
+    public String filename;
+    public boolean is_decl_file;
+    public LineNumberReader reader;
+    public File file;
+    public long total_lines;
+    public int num_slices;
+    public int varcomp_format;
+    public ParseStatus status;
+
+    public ParseState (String raw_filename,
+		       boolean decl_file_p) 
+      throws IOException {
+      // Pretty up raw_filename for use in messages
+      file = new File(raw_filename);
+      if (raw_filename.equals("-")) {
+	filename = "standard input";
+      } else {
+	// Remove directory parts, to make it shorter
+	filename = file.getName();
+      }
+
+      is_decl_file = decl_file_p;
+      
+      // Do we need to count the lines in the file?
+      total_lines = 0;
+      boolean count_lines = dkconfig_count_lines;
+      if (is_decl_file) {
+	count_lines = false;
+      } else if (dkconfig_dtrace_line_count != 0) {
+	total_lines = dkconfig_dtrace_line_count;
+	count_lines = false;
+      } else if (filename.equals("-")) {
+	count_lines = false;
+      } else if (Daikon.dkconfig_progress_delay == -1) {
+	count_lines = false;
+      } else if ((new File(filename)).length() == 0) {
+	// Either it's actually empty, or it's something like a pipe.
+	count_lines = false;
+      }
+      if (count_lines) {
+	Daikon.progress = "Checking size of " + filename;
+	total_lines = count_lines(raw_filename);
+      }
+
+      // Open the reader stream
+      if (raw_filename.equals("-")) {
+	// "-" means read from the standard input stream
+	Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
+	reader = new LineNumberReader(file_reader);
+      }
+      else if (raw_filename.equals("+")) //socket comm with Chicory
+	{
+	  InputStream chicoryInput = connectToChicory();
+	  InputStreamReader chicReader = new InputStreamReader(chicoryInput);
+	  reader = new LineNumberReader(chicReader);
+	}
+      else {
+	reader = UtilMDE.LineNumberFileReader(raw_filename);
+      }
+
+      num_slices = 0;
+      varcomp_format = VarComparability.IMPLICIT;
+      status = ParseStatus.NULL;
+    }
+  }
+
+  // We stash values here to be examined/printed later.  Used to be
+  // for debugging only, but now also used for Daikon progress output.
+  public static ParseState data_trace_state = null;
 
   static InputStream connectToChicory()
   {
@@ -645,52 +727,10 @@ public final class FileIO {
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-    LineNumberReader reader;
-    if (filename.equals("-")) {
-      // "-" means read from the standard input stream
-      Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
-      reader = new LineNumberReader(file_reader);
-    }
-    else if (filename.equals("+")) //socket comm with Chicory
-    {
-        InputStream chicoryInput = connectToChicory();
-        InputStreamReader chicReader = new InputStreamReader(chicoryInput);
-        reader = new LineNumberReader(chicReader);
-    }
-    else {
-      reader = UtilMDE.LineNumberFileReader(filename);
-    }
 
-    boolean count_lines = dkconfig_count_lines;
-    if (is_decl_file) {
-      count_lines = false;
-    } else if (dkconfig_dtrace_line_count != 0) {
-      data_trace_total_lines = dkconfig_dtrace_line_count;
-      count_lines = false;
-    } else if (filename.equals("-")) {
-      count_lines = false;
-    } else if (Daikon.dkconfig_progress_delay == -1) {
-      count_lines = false;
-    } else if ((new File(filename)).length() == 0) {
-      // Either it's actually empty, or it's something like a pipe.
-      count_lines = false;
-    }
-
-    String nice_filename; /* For use in messages to user */
-    File file = new File(filename);
-    if (filename.equals("-")) {
-      nice_filename = "standard input";
-    } else {
-      // Remove directory parts, to make it shorter
-      nice_filename = file.getName();
-    }
-
-    if (count_lines) {
-      Daikon.progress = "Checking size of " + nice_filename;
-      data_trace_total_lines = count_lines(filename);
-    }
-    data_trace_reader = reader;
-    data_trace_filename = nice_filename;
+    data_trace_state = new ParseState(filename, is_decl_file);
+    LineNumberReader reader = data_trace_state.reader;
+    File file = data_trace_state.file;
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
@@ -698,12 +738,9 @@ public final class FileIO {
              = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
 
-    // Default VarComparability
-    int varcomp_format = VarComparability.IMPLICIT;
-
     // "line_" is uninterned, "line" is interned
     for (String line_ = reader.readLine(); line_ != null;
-                                              line_ = reader.readLine()) {
+	 line_ = reader.readLine()) {
       if (line_.equals("") || isComment(line_)) {
         continue;
       }
@@ -718,7 +755,7 @@ public final class FileIO {
       // First look for declarations in the dtrace stream
       if (line == declaration_header) {
         PptTopLevel ppt =
-          read_declaration(reader, all_ppts, varcomp_format, file);
+          read_declaration(reader, all_ppts, data_trace_state.varcomp_format, file);
         // ppt can be null if this declaration was skipped because of
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (ppt != null) {
@@ -728,7 +765,8 @@ public final class FileIO {
         continue;
       }
       if (line.equals("VarComparability")) {
-	varcomp_format = read_var_comparability (reader, file);
+	data_trace_state.varcomp_format
+	  = read_var_comparability (reader, file);
         continue;
       }
       if (line.equals("ListImplementors")) {
@@ -778,18 +816,19 @@ public final class FileIO {
         PptName parsed = new PptName(ppt_name);
       } catch (Error e) {
         throw new Error("Illegal program point name \"" + ppt_name + "\""
-                        + " at " + data_trace_filename
+                        + " at " + data_trace_state.filename
                         + " line " + reader.getLineNumber());
       }
 
       if (Daikon.debugTrace.isLoggable(Level.FINE)) {
-        data_num_slices = all_ppts.countSlices();
+        data_trace_state.num_slices = all_ppts.countSlices();
       }
 
       PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
       if (ppt == null) {
         throw new Error("Program point " + ppt_name
-                        + " appears in dtrace file " + data_trace_filename
+                        + " appears in dtrace file "
+			+ data_trace_state.filename
                         + " at line " + reader.getLineNumber()
                         + " but not in any decl file");
       }
@@ -885,10 +924,8 @@ public final class FileIO {
       Global.dtraceWriter.close();
     }
 
-    Daikon.progress = "Finished reading " + nice_filename;
-
-    data_trace_filename = null;
-    data_trace_reader = null;
+    Daikon.progress = "Finished reading " + data_trace_state.filename;
+    data_trace_state = null;
   }
 
   static java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
@@ -1104,7 +1141,7 @@ public final class FileIO {
       if (line == null) {
         throw new EOFException(
           "Unexpected end of file at "
-            + data_trace_filename
+            + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
             + "  Expected variable "
@@ -1121,7 +1158,8 @@ public final class FileIO {
         line = reader.readLine(); // value
         line = reader.readLine(); // modbit
         if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
-          throw new FileIOException("Bad modbit", reader, data_trace_filename);
+          throw new FileIOException("Bad modbit", reader,
+				    data_trace_state.filename);
         }
         line = reader.readLine(); // next variable name
       }
@@ -1135,13 +1173,13 @@ public final class FileIO {
             + " for program point "
             + ppt.name(),
           reader,
-          data_trace_filename);
+          data_trace_state.filename);
       }
       line = reader.readLine();
       if (line == null) {
         throw new EOFException(
           "Unexpected end of file at "
-            + data_trace_filename
+            + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
             + "  Expected value for variable "
@@ -1156,7 +1194,7 @@ public final class FileIO {
       if (line == null) {
         throw new EOFException(
           "Unexpected end of file at "
-            + data_trace_filename
+            + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
             + "  Expected modbit for variable "
@@ -1168,11 +1206,11 @@ public final class FileIO {
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new FileIOException("Bad modbit `" + line + "'",
-                                  reader, data_trace_filename);
+                                  reader, data_trace_state.filename);
       }
       int mod = ValueTuple.parseModified(line);
 
-      // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber());
+      // System.out.println("Mod is " + mod + " at " + data_trace_state.filename + " line " + reader.getLineNumber());
       // System.out.pringln("  for variable " + vi.name.name()
       //                   + " for program point " + ppt.name());
 
@@ -1215,7 +1253,7 @@ public final class FileIO {
             "Modbit indicates missing value for variable "
               + vi.name.name() + " with value \"" + value_rep + "\";" + lineSep
             + "  text of value should be \"nonsensical\" or \"uninit\" at "
-              + data_trace_filename + " line " + reader.getLineNumber());
+              + data_trace_state.filename + " line " + reader.getLineNumber());
         } else {
           // Keep track of variables that can be missing
           vi.canBeMissing = true;
@@ -1236,7 +1274,7 @@ public final class FileIO {
                 "Var %s in ppt %s at line %s is null and not missing",
                 vi.name.name(),
                 ppt.name(),
-                "" + FileIO.data_trace_reader.getLineNumber());
+                "" + FileIO.data_trace_state.reader.getLineNumber());
           }
         } catch (Exception e) {
           throw new FileIOException(
@@ -1311,12 +1349,12 @@ public final class FileIO {
                 + fn_name
                 + ", expected to first exit from "
                 + invoc.ppt.ppt_name.getNameWithoutPoint()
-                + ((data_trace_filename == null)
+                + ((data_trace_state.filename == null)
                   ? ""
                   : "; at "
-                    + data_trace_filename
+                    + data_trace_state.filename
                     + " line "
-                    + data_trace_reader.getLineNumber()));
+                    + data_trace_state.reader.getLineNumber()));
             invoc = (Invocation) call_stack.pop();
           }
         } else {
@@ -1329,9 +1367,9 @@ public final class FileIO {
                 + " to match "
                 + ppt.name()
                 + " ending at "
-                + data_trace_filename
+                + data_trace_state.filename
                 + " line "
-                + data_trace_reader.getLineNumber());
+                + data_trace_state.reader.getLineNumber());
           }
           invoc = (Invocation) call_hashmap.get(nonce);
           call_hashmap.remove(nonce);

@@ -413,7 +413,7 @@ public class Debug {
     }
 
     // Figure out the line number if possible
-    LineNumberReader lnr = FileIO.data_trace_reader;
+    LineNumberReader lnr = FileIO.data_trace_state.reader;
     String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
     line = " line=" + line;
 
@@ -505,7 +505,7 @@ public class Debug {
     }
 
     // Figure out the line number if possible
-    LineNumberReader lnr = FileIO.data_trace_reader;
+    LineNumberReader lnr = FileIO.data_trace_state.reader;
     String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
     line = " line=" + line;
 
