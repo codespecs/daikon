@@ -73,7 +73,7 @@ public final class Daikon {
 
   /**
    * Integer. Percentage of program points to process.  All program points
-   * are sorted and
+   * are sorted by name, and all samples for
    * the first <code>ppt_perc</code> program points are processed.
    * A percentage of 100 matches all program points.
    */
