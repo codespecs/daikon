@@ -602,11 +602,7 @@ public final class Daikon {
       Global.output_statistics();
     }
     if (dkconfig_print_sample_totals)
-      System.out.println(
-        FileIO.samples_processed
-          + " samples processed of "
-          + FileIO.samples_considered
-          + " total samples");
+      System.out.println(FileIO.samples_processed + " samples processed");
 
     // print statistics concerning what invariants are printed
     if (debugStats.isLoggable(Level.FINE)) {
@@ -1527,7 +1523,9 @@ public final class Daikon {
           "Used memory: "
             + (java.lang.Runtime.getRuntime().totalMemory()
               - java.lang.Runtime.getRuntime().freeMemory()));
-        debugTrace.fine("Active slices: " + FileIO.data_trace_state.num_slices);
+	if (FileIO.data_trace_state != null)
+	  debugTrace.fine("Active slices: " +
+			  FileIO.data_trace_state.all_ppts.countSlices());
       }
     }
     private String message() {

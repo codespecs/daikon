@@ -44,16 +44,6 @@ public final class FileIO {
 
   private static final String lineSep = Global.lineSep;
 
-  /** Total number of samples read in. */
-  public static int samples_considered = 0;
-
-  /**
-   * Total number of samples passed to process_sample().  This should
-   * exactly match the number processed except for dataflow optimizations
-   * in process_sample() (which have the end result of processing the
-   * sample without the work).
-   */
-  public static int samples_processed = 0;
 
   /// Settings
 
@@ -604,22 +594,26 @@ public final class FileIO {
     COMPARABILITY,	// got a VarComparability declaration
     LIST,		// got a ListImplementors declaration
     EOF,		// found EOF
-    ERROR,		// got some kind of error
+    ERROR,		// continuable error; fatal errors thrown as exceptions
     TRUNCATED		// dkconfig_max_line_number reached
   };
 
   public static class ParseState {
     public String filename;
     public boolean is_decl_file;
+    public PptMap all_ppts;
     public LineNumberReader reader;
     public File file;
     public long total_lines;
-    public int num_slices;
     public int varcomp_format;
     public ParseStatus status;
+    public PptTopLevel ppt;	// returned when state=DECL or SAMPLE
+    public Integer nonce;	// returned when state=SAMPLE
+    public ValueTuple vt;	// returned when state=SAMPLE
 
     public ParseState (String raw_filename,
-		       boolean decl_file_p) 
+		       boolean decl_file_p,
+		       PptMap ppts) 
       throws IOException {
       // Pretty up raw_filename for use in messages
       file = new File(raw_filename);
@@ -631,6 +625,7 @@ public final class FileIO {
       }
 
       is_decl_file = decl_file_p;
+      all_ppts = ppts;
       
       // Do we need to count the lines in the file?
       total_lines = 0;
@@ -669,15 +664,11 @@ public final class FileIO {
 	reader = UtilMDE.LineNumberFileReader(raw_filename);
       }
 
-      num_slices = 0;
       varcomp_format = VarComparability.IMPLICIT;
       status = ParseStatus.NULL;
+      ppt = null;
     }
   }
-
-  // We stash values here to be examined/printed later.  Used to be
-  // for debugging only, but now also used for Daikon progress output.
-  public static ParseState data_trace_state = null;
 
   static InputStream connectToChicory()
   {
@@ -712,12 +703,22 @@ public final class FileIO {
 
   }
 
+
+  /** Stash state here to be examined/printed by other parts of Daikon. */
+  public static ParseState data_trace_state = null;
+
+  /**
+   * Total number of samples passed to process_sample().
+   * Not part of data_trace_state because it's global over all files
+   * processed by Daikon.
+   */
+  public static int samples_processed = 0;
+
+
   /** Read data from .dtrace file. **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor, boolean is_decl_file)
     throws IOException {
-
-    int pptcount = 1;
 
     if (debugRead.isLoggable(Level.FINE)) {
       debugRead.fine ("read_data_trace_file " + filename
@@ -727,10 +728,7 @@ public final class FileIO {
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-
-    data_trace_state = new ParseState(filename, is_decl_file);
-    LineNumberReader reader = data_trace_state.reader;
-    File file = data_trace_state.file;
+    data_trace_state = new ParseState(filename, is_decl_file, all_ppts);
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
@@ -738,40 +736,94 @@ public final class FileIO {
              = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
 
+    while (true) {
+      read_data_trace_record (data_trace_state);
+      if (data_trace_state.status == ParseStatus.SAMPLE) {
+	// Keep track of the total number of samples we have seen.
+	samples_processed++;
+	// Add orig and derived variables; pass to inference (add_and_flow)
+	try {
+	  processor.process_sample (data_trace_state.all_ppts,
+				    data_trace_state.ppt,
+				    data_trace_state.vt,
+				    data_trace_state.nonce);
+	} catch (Error e) {
+	  if (! dkconfig_continue_after_file_exception) {
+	    throw e;
+	  } else {
+	    System.out.println ();
+	    System.out.println ("WARNING: Error while processing "
+				+ "trace file - record ignored");
+	    System.out.print ("Ignored backtrace:");
+	    e.printStackTrace(System.out);
+	    System.out.println ();
+	  }
+	}
+      }
+      else if ((data_trace_state.status == ParseStatus.EOF)
+	       || (data_trace_state.status == ParseStatus.TRUNCATED)) {
+	break;
+      }
+      else
+	;  // don't need to do anything explicit for other records found
+    }
+	       
+    if (Global.debugPrintDtrace) {
+      Global.dtraceWriter.close();
+    }
+
+    Daikon.progress = "Finished reading " + data_trace_state.filename;
+    data_trace_state = null;
+  }
+
+
+  // read a single record (declaration or sample) from a dtrace file.
+  public static void read_data_trace_record (ParseState state)
+    throws IOException {
+
+    LineNumberReader reader = state.reader;
+
     // "line_" is uninterned, "line" is interned
     for (String line_ = reader.readLine(); line_ != null;
 	 line_ = reader.readLine()) {
       if (line_.equals("") || isComment(line_)) {
         continue;
       }
-
+      
       // stop at a specified point in the file
       if ((dkconfig_max_line_number > 0)
           && (reader.getLineNumber() > dkconfig_max_line_number))
-        break;
-
+	{
+	  state.status = ParseStatus.TRUNCATED;
+	  return;
+	}
+      
       String line = line_.intern();
-
+      
       // First look for declarations in the dtrace stream
       if (line == declaration_header) {
-        PptTopLevel ppt =
-          read_declaration(reader, all_ppts, data_trace_state.varcomp_format, file);
+        state.ppt =
+          read_declaration(reader, state.all_ppts, state.varcomp_format,
+			   state.file);
         // ppt can be null if this declaration was skipped because of
         // --ppt-select-pattern or --ppt-omit-pattern.
-        if (ppt != null) {
-          all_ppts.add(ppt);
-          Daikon.init_ppt(ppt, all_ppts);
-        }
-        continue;
+        if (state.ppt != null) {
+          state.all_ppts.add(state.ppt);
+          Daikon.init_ppt(state.ppt, state.all_ppts);
+	}
+	state.status = ParseStatus.DECL;
+	return;
       }
       if (line.equals("VarComparability")) {
 	data_trace_state.varcomp_format
-	  = read_var_comparability (reader, file);
-        continue;
+	  = read_var_comparability (reader, state.file);
+        state.status = ParseStatus.COMPARABILITY;
+	return;
       }
       if (line.equals("ListImplementors")) {
-	read_list_implementors (reader, file);
-        continue;
+	read_list_implementors (reader, state.file);
+	state.status = ParseStatus.LIST;
+	return;
       }
       if (!ppt_included (line)) {
         while ((line != null) && !line.equals(""))
@@ -782,12 +834,12 @@ public final class FileIO {
       // If we got here, we're looking at a sample and not a declaration.
       // For compatibility with previous implementation, if this is a
       // declaration file, skip over samples.
-      if (is_decl_file) {
+      if (state.is_decl_file) {
 	if (debugRead.isLoggable(Level.FINE))
 	  debugRead.fine("Skipping paragraph starting at line "
 			 + reader.getLineNumber()
 			 + " of file "
-			 + filename
+			 + state.filename
 			 + ": "
 			 + line);
 	while ((line != null) && (!line.equals("")) && (!isComment(line))) {
@@ -807,8 +859,6 @@ public final class FileIO {
 	continue;
       }
 
-      // Keep track of the total number of samples we have seen.
-      samples_considered++;
 
       // Parse the ppt name
       String ppt_name = line; // already interned
@@ -816,19 +866,14 @@ public final class FileIO {
         PptName parsed = new PptName(ppt_name);
       } catch (Error e) {
         throw new Error("Illegal program point name \"" + ppt_name + "\""
-                        + " at " + data_trace_state.filename
+                        + " at " + state.filename
                         + " line " + reader.getLineNumber());
       }
 
-      if (Daikon.debugTrace.isLoggable(Level.FINE)) {
-        data_trace_state.num_slices = all_ppts.countSlices();
-      }
-
-      PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
+      PptTopLevel ppt = (PptTopLevel) state.all_ppts.get(ppt_name);
       if (ppt == null) {
         throw new Error("Program point " + ppt_name
-                        + " appears in dtrace file "
-			+ data_trace_state.filename
+                        + " appears in dtrace file " + state.filename
                         + " at line " + reader.getLineNumber()
                         + " but not in any decl file");
       }
@@ -872,7 +917,7 @@ public final class FileIO {
       // Read a single record from the trace file;
       // fills up vals and mods arrays by side effect.
       try {
-        read_vals_and_mods_from_trace_file (reader, filename,
+        read_vals_and_mods_from_trace_file (reader, state.filename,
                                             ppt, vals, mods);
       } catch (IOException e) {
         String nextLine = reader.readLine();
@@ -880,11 +925,12 @@ public final class FileIO {
           System.out.println ();
           System.out.println ("WARNING: Unexpected EOF while processing "
                         + "trace file - last record of trace file ignored");
-          break;
+	  state.status = ParseStatus.EOF;
+	  return;
         } else if (dkconfig_continue_after_file_exception) {
           System.out.println ();
           System.out.println ("WARNING: IOException while processing "
-                        + "trace file - record ignored");
+			      + "trace file - record ignored");
           System.out.print ("Ignored backtrace:");
           e.printStackTrace(System.out);
           System.out.println ();
@@ -899,34 +945,17 @@ public final class FileIO {
         }
       }
 
-      ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
-
-      // Add orig and derived variables; pass to inference (add_and_flow)
-      try {
-        processor.process_sample (all_ppts, ppt, vt, nonce);
-      } catch (Error e) {
-        if (! dkconfig_continue_after_file_exception) {
-          throw e;
-        } else {
-          System.out.println ();
-          System.out.println ("WARNING: Error while processing "
-                        + "trace file - record ignored");
-          System.out.print ("Ignored backtrace:");
-          e.printStackTrace(System.out);
-          System.out.println ();
-        }
-      }
-      // Debug.check (all_ppts, " ppt = " + ppt.name()
-      //             + " " + Debug.related_vars (ppt, vt));
+      state.ppt = ppt;
+      state.nonce = nonce;
+      state.vt = ValueTuple.makeUninterned(vals, mods);
+      state.status = ParseStatus.SAMPLE;
+      return;
     }
 
-    if (Global.debugPrintDtrace) {
-      Global.dtraceWriter.close();
-    }
-
-    Daikon.progress = "Finished reading " + data_trace_state.filename;
-    data_trace_state = null;
+    state.status = ParseStatus.EOF;
+    return;
   }
+
 
   static java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
   static PptTopLevel.Stats stats = new PptTopLevel.Stats();
@@ -942,10 +971,6 @@ public final class FileIO {
                                     PptTopLevel ppt,
                                     ValueTuple vt,
                                     Integer nonce) {
-
-    // We consider a sample processed even if we don't do any actual
-    // processing below becaue of the dataflow optimizations.
-    samples_processed++;
 
     // Add orig variables.  This must be above the check below because
     // it saves away the orig values from enter points for later use
@@ -977,7 +1002,6 @@ public final class FileIO {
 
     // If we are only reading the sample, don't process them
     if (dkconfig_read_samples_only) {
-      samples_processed++;
       return;
     }
 
