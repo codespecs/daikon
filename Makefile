@@ -531,6 +531,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 
 	## Make the source distribution proper
 	rm -rf `find /tmp/daikon -name CVS`
+	(cd /tmp && chmod -R a+rX daikon)
 	(cd /tmp; tar cf daikon.tar daikon)
 	gzip -c /tmp/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
 	# cp -pf /tmp/daikon.tar
@@ -690,7 +691,6 @@ dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej \
 # Copies PAG specific files to the website and group area
 WWW_PAG_FILES := doc/www/mit/eclipse-pag.html \
 				 doc/www/mit/index.html \
-				 doc/www/mit/pag-account.html \
 				 scripts/log2html.php \
 				 scripts/emacs_launch.php
 GROUP_FILES   := scripts/pag-daikon.bashrc scripts/pag-daikon.cshrc
