@@ -463,7 +463,7 @@ Follow the Texinfo conventions for marking up text.  In particular:
 
 <ul>
 
-<p><li> Don't use regular double quotes (") in running text.  Instead, use 
+<p><li> Don't use regular double quotes (&quot;) in running text.  Instead, use 
 two single backquotes and two regular quotes, ``like this''.  Emacs will
 do this substitution for you if you are using its Texinfo mode.
 </p>
@@ -557,12 +557,12 @@ target.
 
 <ol>
 
-    <li> It is suggested that you use the <tt>daikonuser</tt> account to
-    publish a distribution.  This ensures that everything has been committed
-    to CVS and that nothing extraneous in your account gets included in the
-    distribution.  Ask a senior group member for the password.  Note that all of
-    the following instructions should work from other accounts as
-    well. </p>
+    <li> It is suggested that you use the <tt>daikonuser</tt> account
+    to publish a distribution.  This ensures that everything has been
+    committed to CVS and that nothing extraneous in your account gets
+    included in the distribution.  Ask a senior group member for the
+    password.  Note that all of the following instructions should work
+    from other accounts as well. </p>
 
     <pre>
         su - daikonuser
@@ -585,7 +585,7 @@ target.
         make -C $inv/java compile
         make -C $inv/doc
         make -C $inv/dfej
-	make -C $inv kvasir
+        make -C $inv kvasir
         make -C $inv/kvasir all install
     </pre> </p>
 
@@ -604,7 +604,7 @@ target.
     </pre> </p>
 
     (To run the tests using dfej, define DFEJ_EXECUTABLE to
-    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1.)
+    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1.) <p>
 
     <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
     in this version.  A good way to determine what has changed is to diff
@@ -634,9 +634,10 @@ target.
 	make update-doc-dist-date-and-version
     </pre>
 
-    <li> Build everything to be distributed and copy it to the
-    staging area ($inv/dist).  The final output will be a list
-    of files that were added/removed since the last release.</p>
+    <li> Build everything to be distributed and copy it to the staging
+    area (www.pag.csai.mit.edu/daikon/staging-daikon).  The final
+    output will be a list of files that were added/removed since the
+    last release.</p>
 
     <pre>
         make staging

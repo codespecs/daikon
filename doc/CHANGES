@@ -17,6 +17,30 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.1.1 (May 1 2005)
+
+Kvasir
+
+  User Changes:
+
+    Added --bit-level-precision command-line option for more accurate output of
+    variables involved in bit-level operations.
+
+  Bug fixes:
+
+    Kvasir achieves better accuracy because it is now able to find
+    arrays and other structs nested within structs (which are local
+    and global variables) and only prints out initialized data within
+    arrays.
+
+Chicory
+
+  Bug fixes:
+
+    Chicory no longer changes the order in which classes are initialized.
+
+---------------------------------
+
 4.1.0 (Apr 1 2005)
 
 Daikon
