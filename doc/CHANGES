@@ -39,6 +39,14 @@ Chicory
 
     Chicory no longer changes the order in which classes are initialized.
 
+Dfej
+
+  User changes:  
+
+    Because of their size, the C examples for dfej are no longer included 
+    in the distribution.  Examples for Kvasir (the recommended C front end)
+    are still available.
+
 ---------------------------------
 
 4.1.0 (Apr 1 2005)
