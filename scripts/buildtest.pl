@@ -475,13 +475,10 @@ sub kvasir_checkout {
   print_log("Checking out Kvasir...");
   my $log = "$DAIKONPARENT/kvasir_checkout.out";
   chdir($INV) or die "can't chdir to $INV: $!\n";
-  `cvs -d $CVS_REP co valgrind-kvasir 2>&1 | tee $log`;
-  symlink("valgrind-kvasir", "kvasir");
-  chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
-  `cvs -d $CVS_REP co kvasir 2>&1 | tee -a $log`;
-  `cvs -d $CVS_REP co kvasircomp 2>&1 | tee -a $log`;
+  `cvs -d $CVS_REP co valgrind-3 2>&1 | tee $log`;
+  symlink("valgrind-3/valgrind", "kvasir");
   chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
-  `chmod -R a+r $INV/valgrind-kvasir 2>&1 | tee -a $log`;
+  `chmod -R a+r $INV/valgrind-3 2>&1 | tee -a $log`;
   if (-e "$INV/kvasir/kvasir/Makefile.in") {
     print_log("OK\n");
   } else {
@@ -492,8 +489,10 @@ sub kvasir_checkout {
 sub kvasir_compile {
   print_log("Compiling Kvasir...");
   my $log = "$DAIKONPARENT/kvasir_compile.out";
+  chdir("$INV/valgrind-3/vex") or die "can't chdir to $INV/valgrind-3/vex: $!\n";
+  `make 2>&1 | tee $log`;
   chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
-  qx[./configure --prefix=`pwd`/inst 2>&1 | tee $log];
+  qx[./configure --prefix=`pwd`/inst --with-vex=`pwd`/../vex 2>&1 | tee -a $log];
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
     chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";

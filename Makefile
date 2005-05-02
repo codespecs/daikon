@@ -132,29 +132,33 @@ javadoc:
 
 ### Kvasir (C front end)
 
-kvasir/kvasir/Makefile.in:
-	cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
-	ln -s valgrind-kvasir kvasir
-	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasir
-	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasircomp
+valgrind-3/auto-everything.sh:
+	cvs -d $(CVS_REPOSITORY) co -P valgrind-3
 	touch $@
 
-kvasir/config.status: kvasir/kvasir/Makefile.in
-	cd kvasir && ./configure --prefix=`pwd`/inst
+kvasir/kvasir/Makefile.in: valgrind-3/auto-everything.sh
+	ln -s valgrind-3/valgrind/ kvasir
+	touch $@
+
+valgrind-3/vex/libvex.a:
+	cd valgrind-3/vex && make
+
+kvasir/config.status: kvasir/kvasir/Makefile.in valgrind-3/vex/libvex.a
+	cd kvasir && ./configure --prefix=`pwd`/inst --with-vex=`pwd`/../vex
 
 kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
 	cd kvasir && $(MAKE)
 
-kvasir/kvasir/vgskin_kvasir.so: kvasir/coregrind/valgrind $(wildcard kvasir/kvasir/*.[ch]) $(wildcard kvasir/kvasir/memcheck/*.[ch])
+kvasir/kvasir/vgtool_kvasir.so: kvasir/coregrind/valgrind $(wildcard kvasir/kvasir/*.[ch])
 	cd kvasir/kvasir && $(MAKE)
 
 kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
 	cd kvasir && $(MAKE) install
 
-kvasir/inst/lib/valgrind/vgskin_kvasir.so: kvasir/kvasir/vgskin_kvasir.so
+kvasir/inst/lib/valgrind/vgtool_kvasir.so: kvasir/kvasir/vgtool_kvasir.so
 	cd kvasir/kvasir && $(MAKE) install
 
-kvasir: kvasir/inst/bin/valgrind kvasir/inst/lib/valgrind/vgskin_kvasir.so
+kvasir: kvasir/inst/bin/valgrind kvasir/inst/lib/valgrind/vgtool_kvasir.so
 
 build-kvasir: kvasir
 
@@ -332,8 +336,8 @@ update-doc-dist-date:
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/developer.texinfo doc/README-dist doc/README-dist-doc doc/www/download/index.html
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
-	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/kvasir/memcheck/mc_main.c
-	cvs ci -m "Update version number for new Daikon distribution" kvasir/kvasir/memcheck/mc_main.c
+	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/kvasir/mc_main.c
+	cvs ci -m "Update version number for new Daikon distribution" kvasir/kvasir/mc_main.c
 	touch doc/CHANGES
 
 # Update the version number.
