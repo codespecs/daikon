@@ -51,7 +51,7 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 
 
 # build the windows version of dfej here
-MINGW_DFEJ_LOC := $(INV_DIR)
+MINGW_DFEJ_LOC := $(INV_IR)
 
 MINGW_TOOLS := /afs/csail/group/pag/software/pkg/mingw32-linux-x86-glibc-2.1
 
@@ -423,10 +423,12 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir /tmp/daikon/examples/perl-examples
 	cp -p examples/perl-examples/{Birthday.{pm,accessors},{test_bday,standalone}.pl} /tmp/daikon/examples/perl-examples
 
+	# Removed since dfec is no longer our suggested C front end and Kvasir
+	# has its own examples (below).
 	# C example files for dfec
-	cp examples/c-examples.tar.gz /tmp/daikon/examples
-	cd /tmp/daikon/examples && tar zxf c-examples.tar.gz
-	rm /tmp/daikon/examples/c-examples.tar.gz
+	#cp examples/c-examples.tar.gz /tmp/daikon/examples
+	#cd /tmp/daikon/examples && tar zxf c-examples.tar.gz
+	#rm /tmp/daikon/examples/c-examples.tar.gz
 
 	# C example files for Kvasir
 	mkdir /tmp/daikon/examples/kvasir-examples
