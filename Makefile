@@ -51,7 +51,7 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 
 
 # build the windows version of dfej here
-MINGW_DFEJ_LOC := $(INV_IR)
+MINGW_DFEJ_LOC := $(INV_DIR)
 
 MINGW_TOOLS := /afs/csail/group/pag/software/pkg/mingw32-linux-x86-glibc-2.1
 
