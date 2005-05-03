@@ -79,7 +79,7 @@ public class Runtime
 
     /** Dtrace writer setup for writing to the trace file **/
     public static DTraceWriter dtrace_writer = null;
-    
+
     /** Which static initializers have been run**/
     private static Set <String> initSet = new HashSet();
 
@@ -197,13 +197,13 @@ public class Runtime
         dtrace_writer.methodEntry(mi, nonce, obj, args);
 
     }
-    
+
     public static void initNotify(String name)
     {
         //System.out.println("initialized ---> " + name);
         initSet.add(name);
     }
-    
+
     public static boolean isInitialized(String name)
     {
         return initSet.contains(name);
@@ -398,27 +398,27 @@ private static StreamRedirectThread out_thread;
    * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
    **/
   public static String classnameFromJvm(String classname) {
-            
+
       //System.out.println(classname);
-      
+
     int dims = 0;
     while (classname.startsWith("[")) {
       dims++;
       classname = classname.substring(1);
     }
-    
+
     String result;
     //array of reference type
     if (classname.startsWith("L") && classname.endsWith(";")) {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
-    } 
+    }
     else {
         if(dims > 0) //array of primitives
             result = (String) primitiveClassesFromJvm.get(classname);
         else //just a primitive
             result = classname;
-      
+
       if (result == null) {
         // As a failsafe, use the input; perhaps it is in Java, not JVML,
         // format.
@@ -501,8 +501,8 @@ private static StreamRedirectThread out_thread;
         dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
         dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
         // 8192 is the buffer size in BufferedReader
-        
-        
+
+
         Socket daikonSocket = null;
         try
         {
@@ -520,7 +520,7 @@ private static StreamRedirectThread out_thread;
             System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
             System.exit(1);
         }
-        
+
         try
         {
             dtrace = new PrintStream(daikonSocket.getOutputStream());
@@ -688,8 +688,8 @@ private static StreamRedirectThread out_thread;
     }
 
     /**
-     * @param declaringClass
-     * @return
+     * @param type: declaring class
+     * @return ClassInfo
      */
     public static ClassInfo getClassInfoFromClass(Class type)
     {
@@ -699,12 +699,12 @@ private static StreamRedirectThread out_thread;
         {
             if(cinfo.clazz == null)
                 cinfo.get_reflection();
-            
+
             if(cinfo.clazz.equals(type))
                 return cinfo;
         }
         }
-        
+
         throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
     }
 
