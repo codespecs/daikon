@@ -137,7 +137,7 @@ valgrind-3/auto-everything.sh:
 	touch $@
 
 kvasir/kvasir/Makefile.in: valgrind-3/auto-everything.sh
-	ln -s valgrind-3/valgrind/ kvasir
+	ln -nsf valgrind-3/valgrind kvasir
 	touch $@
 
 valgrind-3/vex/libvex.a:
