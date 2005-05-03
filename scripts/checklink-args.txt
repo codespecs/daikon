@@ -1,7 +1,8 @@
 --exclude-docs /~adonovan/|mernst/(public_html/)?(ir95|advice/conference/)|daikon/download/jdoc|bugzilla/
 --exclude-redirect-prefix http://pag.csail.mit.edu/->http://www.pag.csail.mit.edu/
 --exclude-redirect-prefix http://texi2html.cvshome.org/->https://texi2html.cvshome.org/
---exclude-redirect http://pag.csail.mit.edu/~cpacheco/->http://people.csail.mit.edu/people/cpacheco/
+--exclude-redirect-prefix http://pag.csail.mit.edu/~->http://people.csail.mit.edu/
+--exclude-redirect-prefix http://www.csail.mit.edu/~->http://people.csail.mit.edu/
 --exclude-redirect http://pag.csail.mit.edu/~smcc/->http://people.csail.mit.edu/people/smcc/
 --exclude-redirect http://pag/daikon/mit/log2html.php->http://www.pag.csail.mit.edu/daikon/mit/log2html.php
 --exclude-redirect http://www.cs.cmu.edu/~dpelleg/kmeans.html->http://www-2.cs.cmu.edu/~dpelleg/kmeans.html
@@ -10,6 +11,7 @@
 --exclude-redirect http://www.ibm.com/developerworks/oss/jikes/->http://www-124.ibm.com/developerworks/oss/jikes/
 --exclude-redirect http://www.jmlspecs.org/->http://www.cs.iastate.edu/~leavens/JML/
 --exclude-redirect http://www.cs.utexas.edu/->http://www.cs.utexas.edu/home/department/welcome.html
+--exclude-redirect http://www.computer.org/tse/->http://www.computer.org/portal/site/transactions/index.jsp?pageID=tse_home/
 --exclude-broken -1:http://whereis.mit.edu/map-jpg?selection=32&Buildings=go 
 --exclude-broken 403:http://www.cs.washington.edu/orgs/student-affairs/gsc/jobs/
 --exclude-broken 403:http://www.elsevier.nl/locate/disc/
