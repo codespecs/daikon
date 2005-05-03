@@ -20,7 +20,7 @@
 
 This is the distribution site for the Daikon invariant
 detector.<br>
-The current release is Daikon version 4.1.0, released April 1, 2005.
+The current release is Daikon version 4.1.1, released May 1, 2005.
 (<a href="doc/CHANGES">CHANGES file</a>)
 <p>
 
@@ -34,25 +34,13 @@ In addition to the below downloads, also see the
     get started with invariant detection.<br>
     Choose a format (both have the same contents):
     <ul>
-      <li>Gzipped tar file: <a href="daikon.tar.gz">daikon.tar.gz</a> (21 Jan 2003, 15 Mbytes)
-      <li>Zip file: <a href="daikon.zip">daikon.zip</a> (21 Jan 2003, 15 Mbytes)
+      <li>Gzipped tar file: <a href="daikon.tar.gz">daikon.tar.gz</a> (1 May 2005, 16 Mbytes)
+      <li>Zip file: <a href="daikon.zip">daikon.zip</a> (1 May 2005, 19 Mbytes)
     </ul>
       Download either the tar file or the zip file, whichever you prefer.
       The Daikon distribution includes everything you need to start using
       Daikon:  source files, compiled files (including <a
       href="daikon.jar">daikon.jar</a>), documentation, examples, and more.
-    <p>
-  <li><b>Eclipse plug-in</b>: 
-     The Daikon plug-in for Eclipse provides the
-      functionality of instrumenting files, obtaining trace information,
-      analyzing those traces, and creating appropriately annotated Java
-      source code.
-      See the Daikon plug-in <a href="doc/daikonHelp.html">documentation</a> for <a
-      href="doc/daikonHelp.html#Installation">installation instructions</a>.
-      The plug-in documentation is also available through the Eclipse Help
-      facility, and source code is publicly available.<br>
-      <b>Warning</b>:  The plug-in works with Daikon version 3, not Daikon
-      version 4.
     <p>
   <li><b>Front ends</b><br>
     Most people find that all the <a
@@ -88,7 +76,7 @@ In addition to the below downloads, also see the
               <a href="binaries/dfej.zip">zipped</a> (1 Jan 2005, 20 Mbytes)
 	  <!-- <li><a href="binaries/dfej-cygwin.exe">x86 Cygwin</a> (29 Mar 2004, 12 Mbytes) -->
 	  <!-- <li><a href="binaries/dfej-solaris">SPARC Solaris</a> (29 Mar 2004, 2.4 Mbytes) -->
-	  <!-- <li><a href="binaries/dfej-macosx">POWER MacOSX</a> (14 Apr 2004, 18 Mbytes) -->
+	  <li><a href="binaries/dfej-macosx">POWER MacOSX</a> (14 Apr 2004, 18 Mbytes)
 	</ul>
       <li><b>C front end, <tt>dfec</tt></b><br>
         The dfec front end (for C source code) is an alternative to Kvasir,
@@ -100,17 +88,39 @@ In addition to the below downloads, also see the
         dfec C front end.  Send mail to <a
 	href="mailto:daikon-developers@lists.csail.mit.edu">daikon-developers@pag.csail.mit.edu</a> to
 	request a binary for another system if it is not on this list.
+<!-- To build for a new architecture:
+  cd /tmp/$USER
+  wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
+  tar zxf daikon.tar.gz
+  cd daikon/front-end/java
+  ./configure
+  make
+  # The binary is the file src/dfej
+-->	
         <br>
 	The dfec distribution is a tar file containing prebuilt binary; see
 	<a href="doc/daikon.html#Installing-dfec">"Installing dfec"</a> in
         the Daikon manual.
 	<ul>
-	  <li><a href="binaries/dfec-linux-x86.tar.gz">x86 Red Hat Linux</a> (11 Sep 2002, 4.3 Mbytes)
+	  <li><a href="binaries/dfec-linux-x86.tar.gz">x86 Red Hat Linux</a> (28 Oct 2004, 4.8 Mbytes)
 	  <!-- <li><a href="binaries/dfec-cygwin.zip">x86 Cygwin</a> (00 Mth 0000, 00 Mbytes) -->
 	  <!-- <li><a href="binaries/dfec-windows.tgz">x86 Windows (Win32)</a> (00 Mth 0000) -->
-	  <li><a href="binaries/dfec-solaris.tar.gz">SPARC Solaris</a> (11 Sep 2002, 7.1 Mbytes)
+	  <li><a href="binaries/dfec-solaris.tar.gz">SPARC Solaris</a> (28 Oct 2004, 8.8 Mbytes)
 	</ul>
     </ul>
+    <p>
+  <li><b>Eclipse plug-in</b>: 
+     The Daikon plug-in for Eclipse provides the
+      functionality of instrumenting files, obtaining trace information,
+      analyzing those traces, and creating appropriately annotated Java
+      source code.
+      See the Daikon plug-in <a href="doc/daikonHelp.html">documentation</a> for <a
+      href="doc/daikonHelp.html#Installation">installation instructions</a>.
+      The plug-in documentation is also available through the Eclipse Help
+      facility, and source code is publicly available.<br>
+      <b>Warning</b>:  The plug-in works with Daikon version 3, not Daikon
+      version 4.  Until the plug-in is ported to Daikon version 4, we
+      recommend use of the command-line tools, rather than the plug-in.
     <p>
   <li><b>Daikon 3.1.7</b>:  Daikon 3.1.7 (the last 3.x release) is made
     available for historical purposes, and for those who are unable to run
