@@ -7573,6 +7573,23 @@ searches the indicated path for source files (ignoring class files in
 those directories); this may cause processing of files that you had
 not intended dfej to examine.
 
+@cindex dfej option, invalid
+@cindex decls-dir= option (to dfej) invalid
+@cindex instr-dir= option (to dfej) invalid
+@cindex dtrace-file= option (to dfej) invalid
+@cindex --decls-dir= option (to dfej) invalid
+@cindex --instr-dir= option (to dfej) invalid
+@cindex --dtrace-file= option (to dfej) invalid
+
+If you get a warning like
+@example
+Warning: "--decls-dir=../DaikonInstrumented/output" is an invalid option
+@end example
+@noindent
+then you are running dfej version 3, but you are trying to supply
+arguments that are recognized by dfej version 4.  (For instance, perhaps
+you are using the Eclipse plug-in with an out-of-date version of dfej.
+To fix the problem, download or build a current version of dfej.
 
 @menu
 * Ajax errors::                 
