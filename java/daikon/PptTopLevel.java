@@ -128,10 +128,10 @@ public class PptTopLevel extends Ppt {
   public DynamicConstants constants = null;
 
   // Invariant:  num_declvars == num_tracevars + num_orig_vars
-  int num_declvars; // number of variables in the decl file
-  int num_tracevars; // number of variables in the trace file
-  int num_orig_vars; // number of _orig vars
-  int num_static_constant_vars; // these don't appear in the trace file
+  public int num_declvars; // number of variables in the decl file
+  public int num_tracevars; // number of variables in the trace file
+  public int num_orig_vars; // number of _orig vars
+  public int num_static_constant_vars; // these don't appear in the trace file
 
   private int values_num_samples;
 

@@ -160,7 +160,7 @@ public final class FileIO {
   }
 
   /** Read one decls file; add it to all_ppts. **/
-  private static void read_declaration_file(File filename, PptMap all_ppts)
+  public static void read_declaration_file(File filename, PptMap all_ppts)
     throws IOException {
     if(Daikon.using_DaikonSimple) {
       Processor processor = new DaikonSimple.SimpleProcessor();
@@ -610,6 +610,7 @@ public final class FileIO {
     public PptTopLevel ppt;	// returned when state=DECL or SAMPLE
     public Integer nonce;	// returned when state=SAMPLE
     public ValueTuple vt;	// returned when state=SAMPLE
+    public long lineNum;
 
     public ParseState (String raw_filename,
 		       boolean decl_file_p,
@@ -789,10 +790,11 @@ public final class FileIO {
       if (line_.equals("") || isComment(line_)) {
         continue;
       }
+      state.lineNum = reader.getLineNumber();
       
       // stop at a specified point in the file
       if ((dkconfig_max_line_number > 0)
-          && (reader.getLineNumber() > dkconfig_max_line_number))
+          && (state.lineNum > dkconfig_max_line_number))
 	{
 	  state.status = ParseStatus.TRUNCATED;
 	  return;
