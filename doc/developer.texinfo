@@ -1574,7 +1574,7 @@ let us know why you need it and what you want to use it for.  Also, we
 request that you keep us appraised of any problems that you encounter or
 discoveries that you make, and that you let us know of any publications
 so that we can publicize them at
-@uref{http://www.pag.csail.mit.edu/daikon/pubs/#daikon-testsubject}.
+@uref{http://pag.csail.mit.edu/daikon/pubs/#daikon-testsubject}.
 Also, please do not redistribute the repository without prior permission
 from us.
 
