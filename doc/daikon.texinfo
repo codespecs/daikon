@@ -7588,7 +7588,7 @@ Warning: "--decls-dir=../DaikonInstrumented/output" is an invalid option
 @noindent
 then you are running dfej version 3, but you are trying to supply
 arguments that are recognized by dfej version 4.  (For instance, perhaps
-you are using the Eclipse plug-in with an out-of-date version of dfej.
+you are using the Eclipse plug-in with an out-of-date version of dfej.)
 To fix the problem, download or build a current version of dfej.
 
 @menu
