@@ -46,6 +46,10 @@ public class InstrumentHandler extends CommandHandler {
         return false;
     }
 
+    // If true, the instrumenter also outputs checker classes (classes that define
+    // invariant-checking methods outside the instrumented class).
+    private static boolean createCheckerClasses = false;
+
     private static final String lineSep = System.getProperty("line.separator");
 
     private static final Logger debug = Logger.getLogger("daikon.tools.runtimechecker.InstrumentHandler");
@@ -55,14 +59,21 @@ public class InstrumentHandler extends CommandHandler {
     protected static int maxInvariantsPP = -1;
 
     private static final String make_all_fields_public_SWITCH = "make_all_fields_public";
+    private static final String output_only_high_conf_invariants_SWITCH = "output_only_high_conf_invariants";
+    private static final String create_checker_classes_SWITCH = "create_checker_classes";
     private static final String directory_SWITCH = "directory";
+    private static final String checkers_directory_SWITCH = "checker_classes_directory";
 
     private String instrumented_directory = "instrumented-classes";
+    private String checkersOutputDirName = "checker-classes";
 
     // Whether should print debugging information as it is executing.
     private static String debug_SWITCH = "debug";
 
     public boolean handle(String[] args) {
+
+        Daikon.output_format = daikon.inv.OutputFormat.JAVA;
+        daikon.PrintInvariants.wrap_xml = true;
 
         if (!args[0].equals("instrument")) {
             System.err.println("Command (first argument) to instrumenter was not recognized.");
@@ -81,18 +92,7 @@ public class InstrumentHandler extends CommandHandler {
         // Create instrumented-classes dir.
         File outputDir = new File(instrumented_directory);
 
-// I'm not sure the point of this.  It's always a generated file in any
-// event.  I've removed it for my convenience, but you can add it back if
-// you have an option to disable it.
-// -MDE
-//         // If instrumented_directory already exists, tell user to remove it, and
-//         // exit.
-//         if (outputDir.exists()) {
-//             System.err
-//                 .println("The directory \"" + instrumented_directory + "\" already exists.");
-//             System.err.println("Please remove it before instrumenting.");
-//             return false;
-//         }
+        File checkersOutputDir = new File(checkersOutputDirName);
 
         System.out.println("Reading invariant file: " + arguments.invFile);
         PptMap ppts = null;
@@ -113,50 +113,73 @@ public class InstrumentHandler extends CommandHandler {
         //compile(arguments.javaFileNames, "");
 
         // Create filenames including temp directory and pakage directories.
-        List<ParseResults> parseResults = ParseResults.parse(arguments.javaFileNames);
-
-
-        List<String> instrumentedFileNames = new ArrayList<String>();
+        List<ParseResults> parseResults = ParseResults.parse(arguments.javaFileNames,
+                                                             true /* discard comments */);
 
         for (Iterator i = parseResults.iterator(); i.hasNext();) {
             ParseResults oneFile = (ParseResults) i.next();
 
-
             System.out.println("Instrumenting " + oneFile.fileName);
+
+            List<CheckerClass> checkerClasses = new ArrayList<CheckerClass>();
 
             for (int j = 0 ; j < oneFile.roots.size() ; j++) {
 
                 TypeDeclaration decl = oneFile.roots.get(j);
 
-                decl.accept(new InstrumentVisitor(ppts, decl));
+                InstrumentVisitor v = new InstrumentVisitor(ppts, decl);
 
+                decl.accept(v);
+
+                if (createCheckerClasses) {
+                    v.add_checkers_for_nondeclared_members();
+                    checkerClasses.addAll(v.checkerClasses.getCheckerClasses());
+                }
             }
-
-            File instrumentedFileDir = new File(outputDir.getPath()
-                    + File.separator
-                    + oneFile.packageName.replaceAll("\\.", File.separator));
-
-            if (!instrumentedFileDir.exists()) {
-                instrumentedFileDir.mkdirs();
-            }
-
-            String instrumentedFileName = oneFile.fileName;
-
-            File instrumentedFile = new File(instrumentedFileDir,
-                    instrumentedFileName);
-
-            debug.fine("instrumented file name: " + instrumentedFile.getPath());
-            instrumentedFileNames.add(instrumentedFile.getPath());
-
-            System.out.println("Writing " + instrumentedFile);
 
             try {
-                Writer output = new FileWriter(instrumentedFile);
 
+                File instrumentedFileDir = new File(outputDir.getPath()
+                                                    + File.separator
+                                                    + oneFile.packageName.replace(".", File.separator));
+
+                if (!instrumentedFileDir.exists()) {
+                    instrumentedFileDir.mkdirs();
+                }
+
+                File checkerClassesDir = new File(checkersOutputDirName
+                                                  + File.separator
+                                                  + oneFile.packageName.replace(".", File.separator));
+
+
+                if (!checkerClassesDir.exists()) {
+                    checkerClassesDir.mkdirs();
+                }
+
+                // Output instrumented class
+                String instrumentedFileName = oneFile.fileName;
+                File instrumentedFile = new File(instrumentedFileDir, instrumentedFileName);
+                debug.fine("instrumented file name: " + instrumentedFile.getPath());
+                System.out.println("Writing " + instrumentedFile);
+                Writer output = new FileWriter(instrumentedFile);
                 oneFile.compilationUnit.accept(new TreeFormatter());
-                oneFile.compilationUnit.accept(new TreeDumper(output));
+                TreeDumper dumper = new TreeDumper(output);
+                dumper.printSpecials(false);
+                oneFile.compilationUnit.accept(dumper);
 
                 output.close();
+
+                // Output checker classes
+                for (CheckerClass cls : checkerClasses) {
+                    String checkerClassFileName = cls.getCheckerClassName() + ".java";
+                    File checkerClassFile = new File(checkerClassesDir, checkerClassFileName);
+                    System.out.println("Writing " + checkerClassFile);
+                    output = new FileWriter(checkerClassFile);
+                    CompilationUnit cu = cls.getCompilationUnit();
+                    cu.accept(new TreeFormatter());
+                    cu.accept(new TreeDumper(output));
+                }
+
             } catch (IOException e) {
                 System.err
                         .println("While trying to write instrumented file, an IOException "
@@ -186,9 +209,15 @@ public class InstrumentHandler extends CommandHandler {
                         0),
                 new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                         null, 0),
+                new LongOpt(output_only_high_conf_invariants_SWITCH,
+                        LongOpt.NO_ARGUMENT, null, 0),
                 new LongOpt(make_all_fields_public_SWITCH,
                         LongOpt.NO_ARGUMENT, null, 0),
+                new LongOpt(create_checker_classes_SWITCH,
+                        LongOpt.NO_ARGUMENT, null, 0),
                 new LongOpt(directory_SWITCH,
+                        LongOpt.REQUIRED_ARGUMENT, null, 0),
+                new LongOpt(checkers_directory_SWITCH,
                         LongOpt.REQUIRED_ARGUMENT, null, 0),
                 new LongOpt(debug_SWITCH, LongOpt.NO_ARGUMENT, null, 0) };
         Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
@@ -201,10 +230,16 @@ public class InstrumentHandler extends CommandHandler {
 
                 if (debug_SWITCH.equals(option_name)) {
                     debug.setLevel(Level.FINE);
+                } else if (create_checker_classes_SWITCH.equals(option_name)) {
+                    createCheckerClasses = true;
+                } else if (output_only_high_conf_invariants_SWITCH.equals(option_name)) {
+                    InstrumentVisitor.outputOnlyHighConfInvariants = true;
                 } else if (make_all_fields_public_SWITCH.equals(option_name)) {
                     InstrumentVisitor.makeAllFieldsPublic = true;
                 } else if (directory_SWITCH.equals(option_name)) {
                     instrumented_directory = g.getOptarg();
+                } else if (checkers_directory_SWITCH.equals(option_name)) {
+                    checkersOutputDirName = g.getOptarg();
                 } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
                     Global.debugAll = true;
                 } else if (Daikon.debug_SWITCH.equals(option_name)) {

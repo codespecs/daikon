@@ -103,7 +103,10 @@ public class Property implements Serializable {
         public static final Kind exit = new Kind("postcondition", "<EXIT>");
 
         public static final Kind objectInvariant = new Kind("obj invariant",
-                "<OBJECT>");
+                                                            "<OBJECT>");
+
+        public static final Kind classInvariant = new Kind("class invariant",
+                                                            "<CLASS>");
 
         // See documentation for Serializable.
         private Object readResolve() throws ObjectStreamException {
@@ -111,6 +114,8 @@ public class Property implements Serializable {
                 return enter;
             } else if (name.equals("postcondition")) {
                 return exit;
+            } else if (name.equals("class invariant")) {
+                return classInvariant;
             } else {
                 Assert.assertTrue(name.equals("obj invariant"));
                 return objectInvariant;
@@ -216,9 +221,10 @@ public class Property implements Serializable {
             k = Kind.enter;
         } else if (annoString.matches(".*<EXIT>.*")) {
             k = Kind.exit;
-        } else if (annoString.matches(".*<OBJECT>.*")
-                || annoString.matches(".*<CLASS>.*")) {
+        } else if (annoString.matches(".*<OBJECT>.*")) {
             k = Kind.objectInvariant;
+        } else if (annoString.matches(".*<CLASS>.*")) {
+            k = Kind.classInvariant;
         } else {
             throw new MalformedPropertyException(annoString);
         }
@@ -234,6 +240,7 @@ public class Property implements Serializable {
             anno.invRep = annoString.replaceFirst(".*<INV>(.*)</INV>.*", "$1")
                     .trim();
         }
+
         if (annoString.matches(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*")) {
             anno.daikonClass = annoString.replaceFirst(
                     ".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1").trim();
@@ -400,17 +407,90 @@ public class Property implements Serializable {
             // true properties
         } else if ((daikonClass != null)
                 && ((this.daikonClass.indexOf("SeqIndex") != -1)
-                        || (this.daikonClass.indexOf("EltOneOf") != -1)
-                        || (this.daikonClass
-                                .indexOf("daikon.inv.unary.sequence.NoDuplicates") != -1)
-                        || (this.daikonClass
-                                .indexOf("daikon.inv.unary.scalar.OneOf") != -1)
-                        || (this.daikonClass
-                                .indexOf("daikon.inv.binary.twoSequence") != -1) || (this.daikonClass
-                        .indexOf("(lexically)") != -1))) {
+                    || (this.daikonClass.indexOf("EltOneOf") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.NoDuplicates") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.scalar.OneOf") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.OneOfFloatSequence") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.OneOfSequence") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexFloatNonEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoScalar.NumericFloat") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoScalar.NumericInt") != -1)
+
+                    // Ignore invariants over two sequences.
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseFloatEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseFloatGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseFloatGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseFloatLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseFloatLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseIntEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseIntGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseIntGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseIntLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseIntLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseLinearBinary") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseLinearBinaryFloat") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseNumericFloat") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.PairwiseNumericInt") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.Reverse") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.ReverseFloat") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqFloatEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqFloatGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqFloatGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqFloatLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqFloatLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqIntEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqIntLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqIntLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqStringEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqStringGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqStringGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqStringLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SeqSeqStringLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SubSequence") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SubSequenceFloat") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SubSet") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SubSetFloat") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SuperSet") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.twoSequence.SuperSetFloat") != -1)
+
+                    // Ignore invariants having to do with a sequence and its indices
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexFloatEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexFloatGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexFloatGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexFloatLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexFloatLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexFloatNonEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexIntEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexIntGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexIntGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexIntLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexIntLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.unary.sequence.SeqIndexIntNonEqual") != -1)
+
+                    // These often lead to bogus linear equations.
+                    || (this.daikonClass.indexOf("daikon.inv.ternary.threeScalar.FunctionBinary") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.ternary.threeScalar.FunctionBinaryFloat") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.ternary.threeScalar.LinearTernary") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.ternary.threeScalar.LinearTernaryFloat") != -1)
+
+                    // Ignore invariants that compare all elements in a sequences against some value.
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqFloatEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqFloatGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqFloatGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqFloatLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqFloatLessThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqIntEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqIntGreaterThan") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqIntLessEqual") != -1)
+                    || (this.daikonClass.indexOf("daikon.inv.binary.sequenceScalar.SeqIntLessThan") != -1)
+                    || (this.daikonClass.indexOf("(lexically)") != -1))) {
             ret = 0.19;
 
-        } else if (kind == Kind.objectInvariant) {
+        } else if (kind == Kind.objectInvariant || kind == Kind.classInvariant) {
             ret = 1.0;
 //         } else if (properties != null
 //                 && (properties.methodAnnos(this.method()).length < ANNOS_PER_METHOD_FOR_GOOD_QUALITY)) {

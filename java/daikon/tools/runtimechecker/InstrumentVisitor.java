@@ -1,6 +1,6 @@
 package daikon.tools.runtimechecker;
 
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -23,11 +23,23 @@ import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.FunctionBinary;
 import daikon.tools.jtb.*;
 
+import java.lang.reflect.*;
+
 /**
  * Visitor that instruments a Java source file (i.e. adds code at
  * certain places) to check invariant violations at runtime.
  */
 public class InstrumentVisitor extends DepthFirstVisitor {
+
+
+    // If false, all invariants will be output. If true, only
+    // invariants with high confidence will be output.
+    public static boolean outputOnlyHighConfInvariants = false;
+
+    // Properties under this threshold will be considered minor; at or
+    // above threshold will be considered major.
+    // See daikon.tools.runtimechecker.Property.calculateConfidence()
+    public static double confidenceThreshold = 0.5;
 
     // If true, the instrumenter will make all fields of the class
     // visible. The reason for doing this is so that invariants over
@@ -36,6 +48,16 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     // The map containing the invariants.
     private final PptMap pptmap;
+
+    // The AST of the class FooPropertyChecks, where Foo is the class
+    // that we're instrumenting.
+    public CheckerClasses checkerClasses;
+
+    // The methods and constructors that were visited (in other words,
+    // those explicitly declared in the source).
+    public List<Method> visitedMethods = new ArrayList<Method>();
+    public List<Constructor> visitedConstructors = new ArrayList<Constructor>();
+
 
     // [[ TODO: I'm using xmlString() because it will definitely give
     // different values for different Properties. But if Properties
@@ -54,6 +76,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * contained in pptmap.
      */
     public InstrumentVisitor(PptMap pptmap, TypeDeclaration root) {
+
+        this.checkerClasses = new CheckerClasses();
+
         this.pptmap = pptmap;
         this.pptMatcher = new PptNameMatcher(root);
 
@@ -69,7 +94,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             for (Iterator invI = invList.iterator() ; invI.hasNext() ; ) {
                 Invariant inv = (Invariant)invI.next();
 
-		xmlStringToIndex.put(xmlString(inv), Integer.toString(varNumCounter));
+		xmlStringToIndex.put(toProperty(inv).xmlString(), Integer.toString(varNumCounter));
 		varNumCounter++;
 	    }
 	}
@@ -138,6 +163,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      */
     public void visit(ClassOrInterfaceBody clazz) {
 
+        checkerClasses.addCheckerClass(clazz);
+
         // Fix any line/col inconsistencies first
         clazz.accept(new TreeFormatter());
 
@@ -154,11 +181,20 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         ClassOrInterfaceBodyDeclaration objInvDecl = checkObjectInvariants_instrumentDeclaration(classname);
         Ast.addDeclaration(clazz, objInvDecl);
 
+        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
+                                                                                                 false /* check minor properties */));
+        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
+                                                                                                 true /* check major properties */));
+
         boolean isNested = false;
         boolean isStatic = false;
         Node dParent = ucd.getParent();
         if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
             ClassOrInterfaceBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
+            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
+                                                                                                   false /* check minor properties */));
+            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
+                                                                                                   true /* check minor properties */));
             Ast.addDeclaration(clazz, classInvDecl);
             Ast.addDeclaration(clazz, getInvariantsDecl());
             Ast.addDeclaration(clazz, isInstrumentedDecl());
@@ -175,6 +211,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * on exit.
      */
     public void visit(ConstructorDeclaration ctor) {
+
+        visitedConstructors.add(Ast.getConstructor(ctor));
 
         // Fix any line/col inconsistencies first
         ctor.accept(new TreeFormatter());
@@ -200,25 +238,40 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Check class invariants.
         code.append("checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onEntry);");
 
-        // Check preconditions.
-        checkPreconditions(code, matching_ppts, pptmap);
+        String name = Ast.getName(ctor);
+        List parameters = new ArrayList();
+        List typesAndParameters = new ArrayList();
+        for (Iterator i = Ast.getParametersNoImplicit(ctor).iterator(); i.hasNext();) {
+            FormalParameter param = (FormalParameter) i.next();
+            parameters.add(Ast.getName(param));
+            typesAndParameters.add(Ast.print(param));
+        }
+
+        checkerClasses
+            .addDeclaration(ctor, checkPreconditions_checker_constructor(matching_ppts, pptmap, name, typesAndParameters,
+                                                                         false /* check minor properties*/));
+        checkerClasses
+            .addDeclaration(ctor, checkPreconditions_checker_constructor(matching_ppts, pptmap, name, typesAndParameters,
+                                                                         true /* check major properties*/));
+
+        checkerClasses
+            .addDeclaration(ctor, checkPostconditions_checker_constructor(matching_ppts, pptmap, name, typesAndParameters,
+                                                                          false /* check minor properties*/));
+
+        checkerClasses
+            .addDeclaration(ctor, checkPostconditions_checker_constructor(matching_ppts, pptmap, name, typesAndParameters,
+                                                                          true /* check major properties*/));
+
 
         // Check preconditions.
-        for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = (PptTopLevel) i.next();
-            if (ppt.ppt_name.isEnterPoint()) {
-                List<Invariant> preconditions = filterInvariants(Ast
-                        .getInvariants(ppt, pptmap));
-                appendInvariantChecks(preconditions, code, "daikon.tools.runtimechecker.Violation.Time.onEntry");
-            }
-        }
+        checkPreconditions(code, matching_ppts, pptmap);
 
         // Call original constructor code, wrapped in a try clause so that
         // we can evaluate object/class invariants before exiting, even
         // if an exception is thrown.
         code.append("boolean methodThrewSomething_instrument = false;");
 
-        code.append("try {");
+        //code.append("try {");
 
         // Insert original constructor code.
         // [[ TODO: should I use the daikon dumper that Mike found? ]]
@@ -250,6 +303,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         // Fix any line/col inconsistencies first
         method.accept(new TreeFormatter());
+
+        visitedMethods.add(Ast.getMethod(method));
 
         super.visit(method);
 
@@ -283,10 +338,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String name = Ast.getName(method);
         String returnType = Ast.getReturnType(method);
         String maybeReturn = (returnType.equals("void") ? "" : "return");
+        List typesAndParameters = new ArrayList();
         List parameters = new ArrayList();
         for (Iterator i = Ast.getParameters(method).iterator(); i.hasNext();) {
             FormalParameter param = (FormalParameter) i.next();
             parameters.add(Ast.getName(param));
+            typesAndParameters.add(Ast.print(param));
         }
 
         StringBuffer code = new StringBuffer();
@@ -304,17 +361,22 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Check class invariants.
         code.append("checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onEntry);");
 
-        checkPreconditions(code, matching_ppts, pptmap);
+        checkerClasses
+            .addDeclaration(method, checkPreconditions_checker_method(matching_ppts, pptmap, name, typesAndParameters,
+                                                                      false /* check minor properties */));
+        checkerClasses
+            .addDeclaration(method, checkPreconditions_checker_method(matching_ppts, pptmap, name, typesAndParameters,
+                                                                      true /* check major properties */));
 
-        // Check preconditions.
-        for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = (PptTopLevel) i.next();
-            if (ppt.ppt_name.isEnterPoint()) {
-                List<Invariant> preconditions = filterInvariants(Ast
-                        .getInvariants(ppt, pptmap));
-                appendInvariantChecks(preconditions, code, "daikon.tools.runtimechecker.Violation.Time.onEntry");
-            }
-        }
+        checkerClasses
+            .addDeclaration(method, checkPostconditions_checker_method(matching_ppts, pptmap, name, returnType, typesAndParameters,
+                                                                       false /* check minor properties */));
+
+        checkerClasses
+            .addDeclaration(method, checkPostconditions_checker_method(matching_ppts, pptmap, name, returnType, typesAndParameters,
+                                                                       true /* check major properties */));
+
+        checkPreconditions(code, matching_ppts, pptmap);
 
         // Call original method, wrapped in a try clause so that we
         // can evaluate object/class invariants before exiting.
@@ -340,7 +402,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             code.append(";");
         }
 
-        code.append("try {");
+        //code.append("try {");
 
         if (!returnType.equals("void")) {
             code.append("retval_instrument = ");
@@ -407,7 +469,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
             String javarep = inv.format_using(OutputFormat.JAVA);
 
-            String xmlString = xmlString(inv);
+            Property property = toProperty(inv);
+
+            String xmlString = property.xmlString();
 
             // [[ TODO : explain this. ]]
             // [[ TODO : move this to filterInvariants method. ]]
@@ -425,30 +489,74 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                 javarep = javarep.replaceAll("\\\\result", "retval_instrument");
             }
 
+            String addViolationToListCode =
+                "daikon.tools.runtimechecker.Runtime.violationsAdd" +
+                "(daikon.tools.runtimechecker.Violation.get(daikonProperties[" +
+                xmlStringToIndex.get(xmlString) +
+                "], " + vioTime + "));";
+
             code.append("try {" + daikon.Global.lineSep + "");
             code.append("daikon.tools.runtimechecker.Runtime.numEvaluations++;");
             code.append("if (!(" + daikon.Global.lineSep + "");
             code.append(javarep);
             code.append(")) {");
-            code.append("daikon.tools.runtimechecker.Runtime.violationsAdd(daikon.tools.runtimechecker.Violation.get(daikonProperties[");
-	    code.append(xmlStringToIndex.get(xmlString) + "], " + vioTime);
-            code.append("));");
+            code.append(addViolationToListCode);
             code.append("}");
-            code.append("} catch (RuntimeException t_instrument) {"
-                    + daikon.Global.lineSep + "");
-            code
-                    .append("  daikon.tools.runtimechecker.Runtime.internalInvariantEvaluationErrors.add(t_instrument);");
-            //code.append("  throw t_instrument;");
-            code
-                    .append("} catch (Error t_instrument) {" + daikon.Global.lineSep
-                            + "");
-            code
-                    .append("  daikon.tools.runtimechecker.Runtime.internalInvariantEvaluationErrors.add(t_instrument);");
-            //code.append("  throw t_instrument;");
-            code.append("}" + daikon.Global.lineSep + "");
+            code.append("} catch (ThreadDeath t_instrument) {" + daikon.Global.lineSep + "");
+            code.append("throw t_instrument;");
+            code.append("} catch (Throwable t_instrument) {" + daikon.Global.lineSep + "");
+            // don't catch anything. The assumption is that invariant-checking code
+            // never leads to an exception.
+            code.append("}");
+//             code.append(addViolationToListCode);
+//             code.append("} catch (Error t_instrument) {" + daikon.Global.lineSep + "");
+//             code.append(addViolationToListCode);
+//             code.append("}" + daikon.Global.lineSep + "");
         }
     }
 
+    private void appendInvariantChecks_checker(List<InvProp> ips, StringBuffer code) {
+
+        for (InvProp ip : ips) {
+
+            Invariant inv = ip.invariant;
+            Property property = ip.property;
+
+            Assert.assertTrue(property.xmlString().equals(toProperty(inv).xmlString()));
+
+            String javarep = inv.format_using(OutputFormat.JAVA);
+
+            String daikonrep = inv.format_using(OutputFormat.DAIKON);
+
+            String xmlString = property.xmlString();
+
+            // [[ TODO : explain this. ]]
+            // [[ TODO : move this to filterInvariants method. ]]
+            if (xmlString.indexOf("orig(") != -1) {
+                continue;
+            }
+
+            if (javarep.indexOf("unimplemented") != -1) {
+                // [[ TODO: print a warning that some invariants were
+                // unimplemented. ]]
+                continue;
+            }
+
+            if (javarep.indexOf("\\result") != -1) {
+                javarep = javarep.replaceAll("\\\\result", "checker_returnval");
+            }
+
+            code.append("// Check: " + daikonrep + daikon.Global.lineSep);
+            code.append("junit.framework.Assert.assertTrue(");
+            code.append(fixForExternalUse(javarep));
+            code.append(");");
+        }
+    }
+
+    private static String fixForExternalUse(String inv) {
+        inv = inv.replace("this", "thiz");
+        return inv;
+    }
 
     /**
      * @return
@@ -528,10 +636,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                                                             .toString());
     }
 
+    private ClassOrInterfaceBodyDeclaration checkObjectInvariants_instrumentDeclaration(String classname) {
 
-
-    private ClassOrInterfaceBodyDeclaration checkObjectInvariants_instrumentDeclaration(
-            String classname) {
         StringBuffer code = new StringBuffer();
         code
                 .append("private void checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time) {");
@@ -552,8 +658,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     private ClassOrInterfaceBodyDeclaration checkClassInvariantsInstrumentDeclaration(
             String classname) {
         StringBuffer code = new StringBuffer();
-        code
-                .append("private static void checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time) {");
+        code.append("private static void checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time) {");
         String classPptname = classname + ":::CLASS";
         PptTopLevel classPpt = pptmap.get(classPptname);
         if (classPpt != null) {
@@ -566,6 +671,50 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                                                             new Class[] { Boolean.TYPE },
                                                             new Object[] { Boolean.valueOf(false) },  // isInterface == false
                                                             code.toString());
+    }
+
+    private StringBuffer checkObjectInvariants_instrumentDeclaration_checker(
+            String classname, boolean majorProperties) {
+        StringBuffer code = new StringBuffer();
+        code.append("public static void check" +
+                    (majorProperties ? "Major" : "Minor") +
+                    "ObjectInvariants(Object thiz) {");
+        String objectPptname = classname + ":::OBJECT";
+        PptTopLevel objectPpt = pptmap.get(objectPptname);
+        if (objectPpt != null) {
+            List<Invariant> objectInvariants = filterInvariants(Ast.getInvariants(objectPpt, pptmap));
+            List<InvProp> finalList = null;
+            if (majorProperties) {
+                finalList = getMajor(objectInvariants);
+            } else {
+                finalList = getMinor(objectInvariants);
+            }
+            appendInvariantChecks_checker(finalList, code);
+        }
+        code.append("}" + daikon.Global.lineSep);
+        return code;
+    }
+
+    private StringBuffer checkClassInvariantsInstrumentDeclaration_checker(
+            String classname, boolean majorProperties) {
+        StringBuffer code = new StringBuffer();
+        code.append("public static void check" +
+                    (majorProperties ? "Major" : "Minor") +
+                    "ClassInvariants() {");
+        String classPptname = classname + ":::CLASS";
+        PptTopLevel classPpt = pptmap.get(classPptname);
+        if (classPpt != null) {
+            List<Invariant> classInvariants = filterInvariants(Ast.getInvariants(classPpt, pptmap));
+            List<InvProp> finalList = null;
+            if (majorProperties) {
+                finalList = getMajor(classInvariants);
+            } else {
+                finalList = getMinor(classInvariants);
+            }
+            appendInvariantChecks_checker(finalList, code);
+        }
+        code.append("}" + daikon.Global.lineSep + "");
+        return code;
     }
 
     /**
@@ -588,6 +737,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                 FunctionBinary fb = (FunctionBinary)inv;
                 if (fb.isLshift() || fb.isRshiftSigned() || fb.isRshiftUnsigned()) {
                     // System.err.println("Warning: shift operation skipped: " + inv.format_using(OutputFormat.JAVA));
+                    continue;
+                }
+            }
+
+            if (outputOnlyHighConfInvariants) {
+                if (toProperty(inv).calculateConfidence() < 0.5) {
                     continue;
                 }
             }
@@ -630,47 +785,46 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             List<PptTopLevel> matching_ppts, PptMap pptmap,
 	   List<String> declaredThrowables, boolean isStatic) {
 
-	List<String> declaredThrowablesLocal = new ArrayList(declaredThrowables);
-	declaredThrowablesLocal.remove("java.lang.RuntimeException");
-	declaredThrowablesLocal.remove("RuntimeException");
-	declaredThrowablesLocal.remove("java.lang.Error");
-	declaredThrowablesLocal.remove("Error");
-
+// 	List<String> declaredThrowablesLocal = new ArrayList(declaredThrowables);
+// 	declaredThrowablesLocal.remove("java.lang.RuntimeException");
+// 	declaredThrowablesLocal.remove("RuntimeException");
+// 	declaredThrowablesLocal.remove("java.lang.Error");
+// 	declaredThrowablesLocal.remove("Error");
 
         // Count this program point exit.
         code.append("daikon.tools.runtimechecker.Runtime.numNormalPptExits++;");
 
-        // [[ TODO: Figure out what could go wrong here (e.g. what if
-        // method declaration says "throws Throwable") and prepare for
-        // it. ]]
-        for (Iterator i = declaredThrowablesLocal.iterator(); i.hasNext();) {
-            String declaredThrowable = (String) i.next();
-            code.append("} catch (" + declaredThrowable + " t_instrument) {");
-            // Count this program point exit.
-            code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
-            code.append("  methodThrewSomething_instrument = true;");
-            code.append("  throw t_instrument;");
-        }
+//         // [[ TODO: Figure out what could go wrong here (e.g. what if
+//         // method declaration says "throws Throwable") and prepare for
+//         // it. ]]
+//         for (Iterator i = declaredThrowablesLocal.iterator(); i.hasNext();) {
+//             String declaredThrowable = (String) i.next();
+//             code.append("} catch (" + declaredThrowable + " t_instrument) {");
+//             // Count this program point exit.
+//             code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
+//             code.append("  methodThrewSomething_instrument = true;");
+//             code.append("  throw t_instrument;");
+//         }
 
-	code.append("} catch (java.lang.RuntimeException t_instrument) {");
-	code.append("  methodThrewSomething_instrument = true;");
-        // Count this program point exit.
-        code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
-	code.append("  throw t_instrument;");
-	code.append("} catch (java.lang.Error t_instrument) {");
-        // Count this program point exit.
-        code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
-	code.append("  methodThrewSomething_instrument = true;");
-	code.append("  throw t_instrument;");
+// 	code.append("} catch (java.lang.RuntimeException t_instrument) {");
+// 	code.append("  methodThrewSomething_instrument = true;");
+//         // Count this program point exit.
+//         code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
+// 	code.append("  throw t_instrument;");
+// 	code.append("} catch (java.lang.Error t_instrument) {");
+//         // Count this program point exit.
+//         code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
+// 	code.append("  methodThrewSomething_instrument = true;");
+// 	code.append("  throw t_instrument;");
 
-        code.append("} finally {");
+//         code.append("} finally {");
 
         // If method didn't throw an exception, it completed
         // normally--check method postconditions (If the method didn't
         // complete normally, it makes no sense to check postconditions,
         // because Daikon only reports normal-exit postconditions.)
 
-        code.append(" if (!methodThrewSomething_instrument) {");
+//         code.append(" if (!methodThrewSomething_instrument) {");
 
         // Check postconditions.
         for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
@@ -682,7 +836,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                 appendInvariantChecks(postconditions, code, "daikon.tools.runtimechecker.Violation.Time.onExit");
             }
         }
-        code.append("}");
+//         code.append("}");
 
         // Check object invariants.
         if (!isStatic) {
@@ -691,7 +845,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Check class invariants.
         code.append("checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onExit);");
 
-        code.append("}"); // this closes the finally clause
+//         code.append("}"); // this closes the finally clause
     }
 
     private void checkPreconditions(StringBuffer code,
@@ -706,7 +860,143 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         }
     }
 
-    private static String xmlString(Invariant inv) {
+    private StringBuffer checkPreconditions_checker_method(List<PptTopLevel> matching_ppts, PptMap pptmap,
+                                                           String methodName, List/*String*/ parameters,
+                                                           boolean majorProperties) {
+
+        StringBuffer code = new StringBuffer();
+        code.append("public static void check" +
+                    (majorProperties ? "Major" : "Minor") +
+                    "Preconditions_" +
+                    methodName + "(" +
+                    "Object thiz" +
+                    (parameters.size() > 0 ? ", " : "") +
+                    UtilMDE.join(parameters, ", ") +
+                    ") {");
+
+        for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
+            PptTopLevel ppt = (PptTopLevel) i.next();
+            if (ppt.ppt_name.isEnterPoint()) {
+                List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
+                List<InvProp> finalList = null;
+                if (majorProperties) {
+                    finalList = getMajor(preconditions);
+                } else {
+                    finalList = getMinor(preconditions);
+                }
+                appendInvariantChecks_checker(finalList, code);
+            }
+        }
+
+        code.append("}");
+        return code;
+    }
+
+
+
+    private StringBuffer checkPostconditions_checker_method(List<PptTopLevel> matching_ppts, PptMap pptmap,
+                                                            String methodName, String returnType,
+                                                            List/*String*/ parameters, boolean majorProperties) {
+
+        StringBuffer code = new StringBuffer();
+        code.append("public static void check" +
+                    (majorProperties ? "Major" : "Minor") +
+                    "Postconditions_" +
+                    methodName + "(" +
+                    "Object thiz " +
+                    (returnType.equals("void") ? "" : ", " + returnType + " checker_returnval") +
+                    (parameters.size() > 0 ? ", " : "") +
+                    UtilMDE.join(parameters, ", ") +
+                    ") {");
+
+        for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
+            PptTopLevel ppt = (PptTopLevel) i.next();
+            if (ppt.ppt_name.isExitPoint()
+		&& ppt.ppt_name.isCombinedExitPoint()) {
+                List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
+                List<InvProp> finalList = null;
+                if (majorProperties) {
+                    finalList = getMajor(postconditions);
+                } else {
+                    finalList = getMinor(postconditions);
+                }
+                appendInvariantChecks_checker(finalList, code);
+            }
+        }
+
+        code.append("}");
+        return code;
+    }
+
+
+
+
+    private StringBuffer checkPreconditions_checker_constructor(List<PptTopLevel> matching_ppts, PptMap pptmap,
+                                                                String methodName, List/*String*/ parameters,
+                                                                boolean majorProperties) {
+
+        StringBuffer code = new StringBuffer();
+        code.append("public static void check" +
+                    (majorProperties ? "Major" : "Minor") +
+                    "Preconditions_" +
+                    methodName + "(" +
+                    UtilMDE.join(parameters, ", ") +
+                    ") {");
+
+        for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
+            PptTopLevel ppt = (PptTopLevel) i.next();
+            if (ppt.ppt_name.isEnterPoint()) {
+                List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
+                List<InvProp> finalList = null;
+                if (majorProperties) {
+                    finalList = getMajor(preconditions);
+                } else {
+                    finalList = getMinor(preconditions);
+                }
+                appendInvariantChecks_checker(finalList, code);
+            }
+        }
+
+        code.append("}");
+        return code;
+    }
+
+
+
+    private StringBuffer checkPostconditions_checker_constructor(List<PptTopLevel> matching_ppts, PptMap pptmap,
+                                                                 String methodName,  List/*String*/ parameters,
+                                                                 boolean majorProperties) {
+
+        StringBuffer code = new StringBuffer();
+        code.append("public static void check" +
+                    (majorProperties ? "Major" : "Minor") +
+                    "Postconditions_" +
+                    methodName + "(" +
+                    "Object thiz " +
+                    (parameters.size() > 0 ? ", " : "") +
+                    UtilMDE.join(parameters, ", ") +
+                    ") {");
+
+        for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
+            PptTopLevel ppt = (PptTopLevel) i.next();
+            if (ppt.ppt_name.isExitPoint()
+		&& ppt.ppt_name.isCombinedExitPoint()) {
+                List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
+                List<InvProp> finalList = null;
+                if (majorProperties) {
+                    finalList = getMajor(postconditions);
+                } else {
+                    finalList = getMinor(postconditions);
+                }
+                appendInvariantChecks_checker(finalList, code);
+            }
+        }
+
+        code.append("}");
+        return code;
+    }
+
+    private static Property toProperty(Invariant inv) {
         StringBuffer code = new StringBuffer();
 
         String daikonrep = inv.format_using(OutputFormat.DAIKON);
@@ -744,7 +1034,165 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature()
                     + "</METHOD>");
         code.append("</INVINFO>");
-        return code.toString();
+
+        try {
+            return Property.get(code.toString());
+        } catch (MalformedPropertyException e) {
+            throw new Error(e);
+        }
     }
 
+    /**
+     * A pair consisting of an Invariant and its corresponding Property.
+     */
+    private static class InvProp {
+        public InvProp(Invariant inv, Property p) {
+            this.invariant = inv;
+            this.property = p;
+        }
+        public Invariant invariant;
+        public Property property;
+    }
+
+    /**
+     * Returns the invariants (and their properties) that have
+     * confidence values at or above confidenceThreshold.
+     */
+    List<InvProp> getMajor(List<Invariant> invs) {
+
+        List<InvProp> ret = new ArrayList<InvProp>();
+        for (Invariant i : invs) {
+            Property p = toProperty(i);
+            if (p.confidence >= confidenceThreshold) {
+                ret.add(new InvProp(i, p));
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Returns the invariants (and their properties) that have
+     * confidence values below confidenceThreshold.
+     */
+    List<InvProp> getMinor(List<Invariant> invs) {
+
+        List<InvProp> ret = new ArrayList<InvProp>();
+        for (Invariant i : invs) {
+            Property p = toProperty(i);
+            if (p.confidence < confidenceThreshold) {
+                ret.add(new InvProp(i, p));
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Add checker methods with empty bodies for all public
+     * methods and constuctors not explicitly declared.
+     */
+    public void add_checkers_for_nondeclared_members() {
+
+        for (CheckerClass cc : checkerClasses.classes) {
+
+            Class c = Ast.getClass(cc.fclassbody);
+
+            // Check that all declared methods were in fact visited.
+            for (Method m : c.getDeclaredMethods()) {
+                if (!visitedMethods.contains(m)) {
+                    Assert.assertTrue(false,
+                                      "m=" + m + ", visitedMethods=" + visitedMethods);
+                }
+            }
+
+            // FIXME consider implicit constructors when doing check.
+            // Check that all declared constructors were in fact visited.
+//             for (Constructor cons : c.getDeclaredConstructors()) {
+//                 if (!visitedConstructors.contains(cons)) {
+//                     Assert.assertTrue(cons.equals(getDefaultConstructor(c)),
+//                                       "cons=" + cons + ", visitedConstructors=" + visitedConstructors);
+//                 }
+//             }
+
+            for (Method m : c.getMethods()) {
+                if (!visitedMethods.contains(m)) {
+                    cc.addDeclaration(createEmptyDeclaration(m));
+                }
+            }
+
+            for (Constructor cons : c.getConstructors()) {
+                if (!visitedConstructors.contains(cons)) {
+                    cc.addDeclaration(createEmptyDeclaration(cons));
+                }
+            }
+        }
+    }
+
+    private StringBuffer createEmptyDeclaration(Method m) {
+
+        List<String> parameters = new ArrayList<String>();
+        int paramCounter = 0;
+        for (Class c : m.getParameterTypes()) {
+            parameters.add(Ast.classnameForSourceOutput(c) + " param" + paramCounter++);
+        }
+
+        StringBuffer code = new StringBuffer();
+
+        for (String s : new String[] { "Major", "Minor" }) {
+            code.append("public static void check" + s + "Preconditions_" +
+                        m.getName() + "(" +
+                        "Object thiz" +
+                        (parameters.size() > 0 ? ", " : "") +
+                        UtilMDE.join(parameters, ", ") +
+                        ") { /* no properties for this member */ }");
+
+            code.append("public static void check" + s + "Postconditions_" +
+                        m.getName() + "(" +
+                        "Object thiz " +
+                        (m.getReturnType().equals(Void.TYPE)
+                         ? ""
+                         : (", " + Ast.classnameForSourceOutput(m.getReturnType())
+                            + " checker_returnval")) +
+                        (parameters.size() > 0 ? ", " : "") +
+                        UtilMDE.join(parameters, ", ") +
+                        ") { /* no properties for this member */ }");
+        }
+
+        return code;
+    }
+
+    private StringBuffer createEmptyDeclaration(Constructor c) {
+
+        List<String> parameters = new ArrayList<String>();
+        int paramCounter = 0;
+        for (Class cls : c.getParameterTypes()) {
+            parameters.add(Ast.classnameForSourceOutput(cls) + " param" + paramCounter++);
+        }
+
+        StringBuffer code = new StringBuffer();
+
+        Package pacg = c.getDeclaringClass().getPackage();
+        String packageName = (pacg == null ? "" : pacg.getName());
+        int packageNameLength = (packageName.equals("") ? 0 : packageName.length()+1 /* account for ending dot */);
+        String className = c.getDeclaringClass().getName();
+        Assert.assertTrue(className.startsWith(packageName));
+        String baseClassName = className.substring(packageNameLength);
+
+        for (String s : new String[] { "Major", "Minor" }) {
+
+            code.append("public static void check" + s + "Preconditions_" +
+                        baseClassName + "(" +
+                        UtilMDE.join(parameters, ", ") +
+                        ") { /* no properties for this member */ }");
+
+            code.append("public static void check" + s + "Postconditions_" +
+                        baseClassName + "(" +
+                        "Object thiz " +
+                        (parameters.size() > 0 ? ", " : "") +
+                        UtilMDE.join(parameters, ", ") +
+                        ") { /* no properties for this member */ }");
+
+        }
+
+        return code;
+    }
 }

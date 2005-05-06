@@ -273,6 +273,19 @@ public class Violation implements Serializable {
     }
 
     /**
+     * Returns all violations in <code>vios</code> with the given king.
+     */
+    public static Violation[] withKind(Violation[] vios, Property.Kind kind) {
+        List<Violation> ret = new ArrayList<Violation>();
+        for (int i = 0; i < vios.length; i++) {
+            if (kind == vios[i].property().kind()) {
+                ret.add(vios[i]);
+            }
+        }
+        return ret.toArray(new Violation[] {});
+    }
+
+    /**
      * <p>
      * Looks for legal XML representation of violations in the given string, and
      * returns all violations that are successfully parsed.
