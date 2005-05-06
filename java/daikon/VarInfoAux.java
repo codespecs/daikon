@@ -58,6 +58,15 @@ public final class VarInfoAux
   public static final String HAS_SIZE = "hasSize";
 
   /**
+   * Java-specific. The package name of the class that declares this
+   * variable, if the variable is a field. If it's not a field of some
+   * class, the value of this key is "no_package_name_string".
+   */
+  public static final String PACKAGE_NAME = "declaringClassPackageName";
+
+  public static final String NO_PACKAGE_NAME = "no_package_name_string";
+
+  /**
    * Whether null has a special meaning for this variable or its members.
    **/
   public static final String HAS_NULL = "hasNull";
@@ -173,7 +182,7 @@ public final class VarInfoAux
   /**
    * Contains the actual hashMap for this.
    **/
-  private Map map;
+  private Map<String, String> map;
 
 
   /**
@@ -185,7 +194,7 @@ public final class VarInfoAux
    * Make the default map here.
    **/
   private VarInfoAux () {
-    HashMap defaultMap = new HashMap();
+    HashMap<String, String> defaultMap = new HashMap<String,String>();
     // The following are default values.
     defaultMap.put (HAS_DUPLICATES, TRUE);
     defaultMap.put (HAS_ORDER, TRUE);
@@ -193,6 +202,7 @@ public final class VarInfoAux
     defaultMap.put (HAS_NULL, TRUE);
     defaultMap.put (NULL_TERMINATING, TRUE);
     defaultMap.put (IS_PARAM, FALSE);
+    defaultMap.put (PACKAGE_NAME, NO_PACKAGE_NAME);
     this.map = defaultMap;
     this.isInterned = false;
   }
@@ -255,6 +265,13 @@ public final class VarInfoAux
     return result;
   }
 
+
+  /**
+   * Returns the value for the given key.
+   **/
+  public String getValue(String key) {
+    return map.get(key);
+  }
 
   public boolean getFlag(String key) {
     Object value = map.get(key);

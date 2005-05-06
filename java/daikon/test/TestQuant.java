@@ -37,19 +37,20 @@ public final class TestQuant extends TestCase {
     return retval;
   }
 
-  public static void test_min() {
-    assertTrue(Quant.min(new int[] { 1,2,3 }) == 1);
-    assertTrue(Quant.min(new int[] { 2,33,1 }) == 1);
-    assertTrue(Quant.min(new int[] { 3,-2,1 }) == -2);
-    assertTrue(Quant.min(new int[] { 3 }) == 3);
-  }
+// These methods aren't used to express any invariants; no need for them.
+//   public static void test_min() {
+//     assertTrue(Quant.min(new int[] { 1,2,3 }) == 1);
+//     assertTrue(Quant.min(new int[] { 2,33,1 }) == 1);
+//     assertTrue(Quant.min(new int[] { 3,-2,1 }) == -2);
+//     assertTrue(Quant.min(new int[] { 3 }) == 3);
+//   }
 
-  public static void test_max() {
-    assertTrue(Quant.max(new int[] { 1,2,3 }) == 3);
-    assertTrue(Quant.max(new int[] { 2,33,1 }) == 33);
-    assertTrue(Quant.max(new int[] { 3,-2,1 }) == 3);
-    assertTrue(Quant.max(new int[] { 3 }) == 3);
-  }
+//   public static void test_max() {
+//     assertTrue(Quant.max(new int[] { 1,2,3 }) == 3);
+//     assertTrue(Quant.max(new int[] { 2,33,1 }) == 33);
+//     assertTrue(Quant.max(new int[] { 3,-2,1 }) == 3);
+//     assertTrue(Quant.max(new int[] { 3 }) == 3);
+//   }
 
   public static void test_concat() {
     assert_arrays_equals(Quant.concat(new int[] {}, new int[] {}), new int[] {});
@@ -215,11 +216,11 @@ public final class TestQuant extends TestCase {
   public static void test_slice() {
     assert_arrays_equals(Quant.slice(new int[] {}, 0, 0), new int[] {});
     assert_arrays_equals(Quant.slice(new int[] { 1 }, 0, 0), new int[] { 1 });
-    assert_arrays_equals(Quant.slice(new int[] { 1 }, 0, 1), new int[] { 1 });
+    assert_arrays_equals(Quant.slice(new int[] { 1 }, 0, 1), new int[] { });
     assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 0, 0), new int[] { 1 });
     assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 0, 1), new int[] { 1, 2 });
     assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 0, 2), new int[] { 1, 2, 3 });
-    assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 0, 3), new int[] { 1, 2, 3 });
+    assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 0, 3), new int[] { });
     assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 1, 1), new int[] { 2 });
     assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 1, 2), new int[] { 2, 3 });
     assert_arrays_equals(Quant.slice(new int[] { 1, 2, 3 }, 2, 2), new int[] { 3 });
@@ -741,18 +742,47 @@ public final class TestQuant extends TestCase {
     assertTrue(Quant.pairwiseBitwiseSubset(new int[] { 5, 5 }, new int[] { 4, 3 }) == false );
   }
 
-  public static class Foo1 { public Bar1 x; }
-  public static class Bar1 { public Baz1 y; }
+  public static class Foo1 { public Bar1 x; public static Bar1 xstatic; }
+  public static class Bar1 {
+    private Baz1 y;
+    public void set_y(Baz1 o) { y = o; }
+    public Baz1f yf;
+  }
   public static class Baz1 { public int[] z; }
+  public static class Baz1f { public int z; }
 
-  public static class Foo2 { public Object[] x; }
+  public static class Foo2 {
+    public Object[] x;
+    private static Object xstatic;
+    public static void set_xstatic(Object o) { xstatic = o; }
+  }
+  public static class Foo2f {
+    private Object x;
+    public void set_x(Object o) { x = o; }
+  }
 
-  public static class Foo3 { public Bar3[] x; }
+  public static class Foo3 {
+    private Bar3[] x;
+    public void set_x(Bar3[] o) { x = o; }
+  }
+  public static class Foo3f { public Bar3 x; }
   public static class Bar3 { public Baz3 y; }
   public static class Baz3 { public int z; }
 
+  public static class Foo3a {
+    private java.util.List/*Bar3a*/ x;
+    public void set_x(java.util.List/*Bar3a*/ o) { x = o; }
+  }
+  public static class Foo3af { public Bar3a x; }
+  public static class Bar3a { public Baz3a y; }
+  public static class Baz3a { public int z; }
+
   public static class Foo4 { public Bar4 x; }
-  public static class Bar4 { public Baz4[] y; }
+  public static class Bar4 {
+    private Baz4[] y;
+    public void set_y(Baz4[] o) { y = o; }
+  }
+  public static class Bar4f { public Baz4 y; }
   public static class Baz4 { public String z; }
 
   public static void testCollect() {
@@ -770,6 +800,15 @@ public final class TestQuant extends TestCase {
     Foo3 f3 = new Foo3(); f3.x = new Bar3[] { b3, b4, b5 };
     assert_arrays_equals(Quant.collectint(f3, "x.y.z"), new int[] { 7, 8, 9 });
 
+    Bar3a b3a = new Bar3a(); b3a.y = new Baz3a(); b3a.y.z = 7;
+    Bar3a b4a = new Bar3a(); b4a.y = new Baz3a(); b4a.y.z = 8;
+    Bar3a b5a = new Bar3a(); b5a.y = new Baz3a(); b5a.y.z = 9;
+    Foo3a f3a = new Foo3a(); f3a.x = new java.util.ArrayList/*Bar3a*/();
+    f3a.x.add(b3a);
+    f3a.x.add(b4a);
+    f3a.x.add(b5a);
+    assert_arrays_equals(Quant.collectint(f3a, "x.y.z"), new int[] { 7, 8, 9 });
+
     Baz4 z1 = new Baz4(); z1.z = "hi1";
     Baz4 z2 = new Baz4(); z2.z = "hi2";
     Foo4 f4 = new Foo4(); f4.x = new Bar4() ; f4.x.y = new Baz4[] { z1, z2 };
@@ -777,5 +816,39 @@ public final class TestQuant extends TestCase {
     String[] a4 = new String[] { "hi1", "hi2" };
     assertTrue(a3[0].equals(a4[0]) && a3[1].equals(a4[1]));
   }
+
+
+  public static void testCollect_field() {
+
+    Foo1 f1 = new Foo1(); f1.x = new Bar1(); f1.x.yf = new Baz1f(); f1.x.yf.z = 7;
+
+    junit.framework.Assert.assertEquals(Quant.collectint_field(f1, "x.yf.z"), 7);
+
+    Foo2f f2 = new Foo2f(); f2.x = "hi";
+    Object a1 = Quant.collectObject_field(f2, "x");
+    junit.framework.Assert.assertEquals(a1, "hi");
+
+    Bar3 b3 = new Bar3(); b3.y = new Baz3(); b3.y.z = 7;
+    Bar3 b4 = new Bar3(); b4.y = new Baz3(); b4.y.z = 8;
+    Bar3 b5 = new Bar3(); b5.y = new Baz3(); b5.y.z = 9;
+    junit.framework.Assert.assertEquals(Quant.collectint_field(b3, "y.z"), 7);
+    junit.framework.Assert.assertEquals(Quant.collectint_field(b4, "y.z"), 8);
+    junit.framework.Assert.assertEquals(Quant.collectint_field(b5, "y.z"), 9);
+
+    Baz4 z1 = new Baz4(); z1.z = "hi1";
+    Baz4 z2 = new Baz4(); z2.z = "hi2";
+    junit.framework.Assert.assertEquals(Quant.collectString_field(z1, "z"), "hi1");
+    junit.framework.Assert.assertEquals(Quant.collectString_field(z2, "z"), "hi2");
+
+    Foo1.xstatic = new Bar1(); Foo1.xstatic.yf = new Baz1f(); Foo1.xstatic.yf.z = 7;
+
+    junit.framework.Assert.assertEquals(Quant.collectint_field(Foo1.class, "xstatic.yf.z"), 7);
+
+    Foo2.set_xstatic("hi");
+    a1 = Quant.collectObject_field(Foo2.class, "xstatic");
+    junit.framework.Assert.assertEquals(a1, "hi");
+
+  }
+
 
 }

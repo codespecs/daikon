@@ -19,6 +19,28 @@ import java.lang.reflect.*;
  * equality, this is always "==" equality (even for Objects and
  * Strings).
  *
+ * Important note: These is more than one way in which the helper
+ * library could handle illegal arguments being passed to the
+ * routines. For example, if an invariant that translates into
+ *
+ * getElement_int(a, size(int[] a)) == 2
+ *
+ * is evaluated for a == null, should the evaluation of the invariant
+ * return false, or should it throw an exception?
+ *
+ * The current design decision is the library should not throw any
+ * exceptions, even if it is passed an illegal argument. For every
+ * method, if the arguments are illegal, the method returns a default
+ * "bad" value. Choosing a bad value is is easy for some types
+ * (e.g. Double.NaN for methods that return double), but more
+ * difficult for other types (e.g. what should "bad" means for a
+ * method that returns a boolean?)
+ *
+ * The design decision above means that some combination of "bad"
+ * values could end up causing an invariant to evaluate to true where
+ * it should have evaluated to false. For most types, this should
+ * happen infrequently because the bad values chosen are pretty
+ * extreme.
  */
 public final class Quant {
   private Quant() { throw new Error("do not instantiate"); }
@@ -63,137 +85,153 @@ public final class Quant {
 #include "daikon/QuantBody.java.jpp"
 #undef STRING
 
+  // The current implemenation considers an invariant false if the
+  // invariant talks about a collection (array or AbstractCollection)
+  // and the collection is null.
+
   // These methods handle calls to quant methods that instead of passing
-  // an array, pass a java.util.List. They do so by converting the list
+  // an array, pass a java.util.AbstractCollection. They do so by converting the list
   // to an array.
   // @see #noDups(Object[])
 
   /** @see #noDups(Object[])
    */
-  /*@ pure */ public static boolean noDups(java.util.List seq) {
-    return noDups((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
+  /*@ pure */ public static boolean noDups(Object seq) {
+    if (seq == null) { return false; }
+    return noDups(toObjArray(seq));
   }
 
   /** @see #typeArray(Object[])
    */
-  /*@ pure */ public static String[] typeArray(java.util.List seq) {
-    return typeArray((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
+  /*@ pure */ public static String[] typeArray(Object seq) {
+    if (seq == null) { return null; }
+    return typeArray(toObjArray(seq));
   }
 
   /** @see #eltwiseEqual(Object[])
    */
-  /*@ pure */ public static boolean eltwiseEqual(java.util.List seq) {
-    return eltwiseEqual((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
+  /*@ pure */ public static boolean eltwiseEqual(Object seq) {
+    if (seq == null) { return false; }
+    return eltwiseEqual(toObjArray(seq));
   }
 
   /** @see #eltwiseNotEqual(Object[])
    */
-  /*@ pure */ public static boolean eltwiseNotEqual(java.util.List seq) {
-    return eltwiseNotEqual((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
+  /*@ pure */ public static boolean eltwiseNotEqual(Object seq) {
+    if (seq == null) { return false; }
+    return eltwiseNotEqual(toObjArray(seq));
   }
 
   /** @see #concat(Object[], Object[])
    */
-  /*@ pure */ public static java.lang.Object[] concat(java.util.List seq1, java.util.List seq2) {
-    return concat((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                  (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+  /*@ pure */ public static java.lang.Object[] concat(Object seq1, Object seq2) {
+    if (seq1 == null) { return null; }
+    if (seq2 == null) { return null; }
+    return concat(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #union(Object[], Object[])
-   */}
-  /*@ pure */ public static java.lang.Object[] union(java.util.List seq1, java.util.List seq2) {
-    return union((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                 (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static java.lang.Object[] union(Object seq1, Object seq2) {
+    if (seq1 == null) { return null; }
+    if (seq2 == null) { return null; }
+    return union(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #intersection(Object[], Object[])
-   */}
-  /*@ pure */ public static java.lang.Object[] intersection(java.util.List seq1, java.util.List seq2) {
-    return intersection((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                        (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static java.lang.Object[] intersection(Object seq1, Object seq2) {
+    if (seq1 == null) { return null; }
+    if (seq2 == null) { return null; }
+    return intersection(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #setDiff(Object[], Object[])
-   */}
-  /*@ pure */ public static java.lang.Object[] setDiff(java.util.List seq1, java.util.List seq2) {
-    return setDiff((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                   (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static java.lang.Object[] setDiff(Object seq1, Object seq2) {
+    if (seq1 == null) { return null; }
+    if (seq2 == null) { return null; }
+    return setDiff(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #setEqual(Object[], Object[])
-   */}
-  /*@ pure */ public static boolean setEqual(java.util.List seq1, java.util.List seq2) {
-    return setEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                    (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static boolean setEqual(Object seq1, Object seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return setEqual(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #isReverse(Object[], Object[], Object[])
-   */}
-  /*@ pure */ public static boolean isReverse(java.util.List seq1, java.util.List seq2) {
-    return isReverse((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                     (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
-
-  /** @see #eltsOneOf(Object[], Object[])
-   */}
-  /*@ pure */ public static boolean eltsOneOf(java.util.List seq1, java.util.List seq2) {
-    return eltsOneOf((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                     (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static boolean isReverse(Object seq1, Object seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return isReverse(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #pairwiseEqual(Object[], Object[])
-   */}
-  /*@ pure */ public static boolean pairwiseEqual(java.util.List seq1, java.util.List seq2) {
-    return pairwiseEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                         (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static boolean pairwiseEqual(Object seq1, Object seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return pairwiseEqual(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #pairwiseNotEqual(Object[], Object[])
-   */}
-  /*@ pure */ public static boolean pairwiseNotEqual(java.util.List seq1, java.util.List seq2) {
-    return pairwiseNotEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                            (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static boolean pairwiseNotEqual(Object seq1, Object seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return pairwiseNotEqual(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #lexEqual(Object[], Object[])
-   */}
-  /*@ pure */ public static boolean lexEqual(java.util.List seq1, java.util.List seq2) {
-    return lexEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                    (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static boolean lexEqual(Object seq1, Object seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return lexEqual(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #lexNotEqual(Object[], Object[])
-   */}
-  /*@ pure */ public static boolean lexNotEqual(java.util.List seq1, java.util.List seq2) {
-    return lexNotEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
-                       (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-
+   */
+  /*@ pure */ public static boolean lexNotEqual(Object seq1, Object seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return lexNotEqual(toObjArray(seq1), toObjArray(seq2));
+  }
 
   /** @see #memberOf(Object, Object[])
-   */}
-  /*@ pure */ public static boolean memberOf(java.lang.Object elt, java.util.List arr) {
-    return memberOf(elt, (java.lang.Object[])arr.toArray(new java.lang.Object[]{}));
+   */
+  /*@ pure */ public static boolean memberOf(java.lang.Object elt, Object arr) {
+    if (arr == null) { return false; }
+    return memberOf(elt, toObjArray(arr));
   }
 
   /** @see #slice(Object[], int, int)
    */
-  /*@ pure */ public static java.lang.Object[] slice(java.util.List seq, int start , int end) {
-    return slice((java.lang.Object[])seq.toArray(new java.lang.Object[]{}), start, end);
+  /*@ pure */ public static java.lang.Object[] slice(Object seq, int start , int end) {
+    if (seq == null) { return null; }
+    return slice(toObjArray(seq), start, end);
   }
 
   /** @see #eltsEqual(Object[], Object)
    */
-  /*@ pure */ public static boolean eltsEqual(java.util.List arr, java.lang.Object elt) {
-    return eltsEqual((java.lang.Object[])arr.toArray(new java.lang.Object[]{}), elt);
+  /*@ pure */ public static boolean eltsEqual(Object arr, java.lang.Object elt) {
+    if (arr == null) { return false; }
+    return eltsEqual(toObjArray(arr), elt);
   }
 
   /** @see #eltsNotEqual(Object[], Object)
    */
-  /*@ pure */ public static boolean eltsNotEqual(java.util.List arr, java.lang.Object elt) {
-    return eltsNotEqual((java.lang.Object[])arr.toArray(new java.lang.Object[]{}), elt);
+  /*@ pure */ public static boolean eltsNotEqual(Object arr, java.lang.Object elt) {
+    if (arr == null) { return false; }
+    return eltsNotEqual(toObjArray(arr), elt);
   }
 
   /*@ pure */ public static boolean isIntegralType(Class c) {
+    if (c == null) { return false; }
     return
       (c.equals(Byte.TYPE) ||
        c.equals(Short.TYPE) ||
@@ -202,13 +240,29 @@ public final class Quant {
   }
 
   /*@ pure */ public static boolean isRealType(Class c) {
+    if (c == null) { return false; }
     return
       (c.equals(Float.TYPE) ||
        c.equals(Double.TYPE));
   }
 
   /*@ pure */ public static boolean isNumericType(Class c) {
+    if (c == null) { return false; }
     return isIntegralType(c) || isRealType(c);
+  }
+
+  public static Object[] toObjArray(Object o) {
+    if (o == null) { return null; }
+    Object[] arr1 = null;
+    if (o instanceof java.util.AbstractCollection) {
+      java.util.AbstractCollection seqC = (java.util.AbstractCollection)o;
+      arr1 = seqC.toArray(new java.lang.Object[]{});
+    } else if (o.getClass().isArray()) {
+      arr1 = (Object[])o;
+    } else {
+      arr1 = null;
+    }
+    return arr1;
   }
 
 }

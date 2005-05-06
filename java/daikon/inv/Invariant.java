@@ -82,7 +82,7 @@ public abstract class Invariant
   /**
    * A boolean value.  If true, Daikon's Simplify output (printed when
    * the <samp>--format simplify</samp> flag is enabled, and used internally by
-   * <samp>--suppress_redundant</samp>) 
+   * <samp>--suppress_redundant</samp>)
    * will include new predicates representing
    * some complex relationships in invariants, such as lexical
    * ordering among sequences.  If false, some complex relationships
@@ -101,7 +101,7 @@ public abstract class Invariant
    * result in floats that are relatively farther apart being treated
    * as equal.  A value of 0 essentially disables fuzzy comparisons.
    * Specifically, if <code>abs (1 - f1/f2)</code> is less than or equal
-   * to this value, then the two doubles (<code>f1</code> and <code>f2</code>) 
+   * to this value, then the two doubles (<code>f1</code> and <code>f2</code>)
    * will be treated as equal by
    * Daikon.
    */
@@ -736,6 +736,7 @@ public abstract class Invariant
           || (s.indexOf("warning: method") != -1)
           || (s.indexOf("inexpressible") != -1)
           || (s.indexOf("unimplemented") != -1)
+          || (s.indexOf("Infinity") != -1)
           || anontype_pat.matcher(s).find()) {
         return false;
       }

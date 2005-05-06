@@ -389,8 +389,15 @@ public final class Equality
             .append(Invariant.formatFuzzy("eq", leader, var, format))
             .append(")");
         } else {
-          result.append("(").append(leaderName).append(" == "); // "interned"
-          result.append(var.name.name_using(format, var)).append(")");
+          if ((leaderName.indexOf("daikon.Quant.collectObject") != -1)
+              ||
+              (var.name.name_using(format, var).indexOf("daikon.Quant.collectObject") != -1)) {
+            result.append("(warning: it is meaningless to compare hashcodes for values "
+                          + "obtained through daikon.Quant.collect... methods.");
+          } else {
+            result.append("(").append(leaderName).append(" == "); // "interned"
+            result.append(var.name.name_using(format, var)).append(")");
+          }
         }
       }
       if (i.hasNext()) result.append(" && ");
