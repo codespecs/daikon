@@ -15,14 +15,12 @@ High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
     simple at that point.
     [Sandra]
 
-    
   - Add a Java 5.0 test to the test suite.   This will checkout not
     only Chicory, but annotate as well.  Carlos suggested the files
     in ~jhp/tmp/bst.tar
         
   - Implement online mode 
     [etf]
-
 
 Longer-term issues
       
@@ -74,13 +72,14 @@ Longer-term issues
 Completed Tasks (add new ones at the top)
 
   - Daikon output is handled via StreamRedirectThread.  Daikon writes
-    out progress indications that are designed to write over one another.
-    They are all on separate lines when run through Chicory.  Run Daikon
-    standalone and through Chicory to see the difference.
-    [etf]
-    5/6/05: I fixed this by reading the stream in byte by byte (as opposed to
-    line by line) and flushing after each one.  Thus, carriage returns will
-    appear how they are intended to.  This is a little inefficient, but more correct.
+    out progress indications that are designed to write over one
+    another.  They are all on separate lines when run through Chicory.
+    Run Daikon standalone and through Chicory to see the difference.
+    [etf] 
+    5/6/05: I fixed this by reading the stream in byte by byte
+    (as opposed to line by line) and flushing after each one.  Thus,
+    carriage returns will appear how they are intended to.  This is a
+    little inefficient, but more correct.
 
   - Restructure code so we don't calculate the same thing on each
     method entry/exit, but just once when processing the class.  This
@@ -88,21 +87,23 @@ Completed Tasks (add new ones at the top)
     for instance, what variables are instrumented or their order we
     only have to change it in one place.
     [etf]
-    5/6/05: The DeclWriter now creates a tree data structure representing the traversal
-    pattern.  Each node is a subtype of DaikonInfo.  The DTraceWriter traverses
-    this tree to print a program point.  Overall, a much better solution than how
-    we were doing it before.
+    5/6/05: The DeclWriter now creates a tree data structure
+    representing the traversal pattern.  Each node is a subtype of
+    DaikonInfo.  The DTraceWriter traverses this tree to print a
+    program point.  Overall, a much better solution than how we were
+    doing it before.
 
-
-  - Fix problem in which we force class initialization with calls to Field.get(null) (for static fields)
+  - Fix problem in which we force class initialization with calls to
+    Field.get(null) (for static fields)
   
   - Fix issue which occurs when classfile does not include line number
     information.  Dtrace/decls info should be syntactically correct.
     Currently, dtrace exit points do not have corresponding declarations
     (different, invalid line numbers)
-    5/6/05 [etf] I fixed this about a month ago, with only one lingering issue: if there
-    are multiple return statements on the same line, they often show up as
-    different line number points in the decls/dtrace file (but do not cause any sort of crash)
+    5/6/05 [etf] I fixed this about a month ago, with only one
+    lingering issue: if there are multiple return statements on the
+    same line, they often show up as different line number points in
+    the decls/dtrace file (but do not cause any sort of crash)
   
   4/7/05 [etf]: I remedied this in the following way:
   1.  all calls to class.ForName have the initialization parameter set to false
@@ -121,11 +122,11 @@ Completed Tasks (add new ones at the top)
     their current usage.
     [etf]
     
-    4/3/0 [etf]: I have checked in a change which makes these switches work.  Please refer to the
-    Daikon manual for detailed information about how it works.  In a nutshell, the commands
-    work by checking each regex against the class name, method name, AND program point name, and
-    "matching" if any of these match.
-    
+    4/3/0 [etf]: I have checked in a change which makes these switches
+    work.  Please refer to the Daikon manual for detailed information
+    about how it works.  In a nutshell, the commands work by checking
+    each regex against the class name, method name, AND program point
+    name, and "matching" if any of these match.
     
   - Fix bug which occurs for unnamed packages:
     For instance, if Bug.java is the following file:
@@ -175,8 +176,7 @@ Completed Tasks (add new ones at the top)
     
     feb 16 2005 etf - Implemented this and tested it
     
-    
-   - Fix the output/err stream redirection to flush on each line feed
+  - Fix the output/err stream redirection to flush on each line feed
     so we see results in real time.
     2/9/05: fixed this by using BufferedInput and PrintStream
 
@@ -206,7 +206,6 @@ Completed Tasks (add new ones at the top)
     Another interesting solution would be to accept floating point
     values as a valid hashcode in Daikon (note that integer values
     work fine right now).  
-    [etf will work on this]
     
     2/10/05 etf: dTraceWriter.getValue now changes primitives to 
     PrimitiveWrappers.  printValue now correctly prints PrimitiveWrappers
