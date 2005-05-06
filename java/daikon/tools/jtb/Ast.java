@@ -640,7 +640,7 @@ public class Ast {
   /// Reflection
   ///
 
-  static Class getClass(Node n) {
+  public static Class getClass(Node n) {
     String ast_classname = getClassName(n);
     if (ast_classname.indexOf("$inner") != -1) {
       return null;
@@ -648,7 +648,7 @@ public class Ast {
     return getClass(ast_classname);
   }
 
-  static Class getClass(String s) {
+  public static Class getClass(String s) {
     try {
       Class c = Class.forName(s);
       Assert.assertTrue(c != null);
@@ -676,23 +676,31 @@ public class Ast {
     }
   }
 
-  static Method getMethod(MethodDeclaration methoddecl) {
+  public static Method getMethod(MethodDeclaration methoddecl) {
     Class c = getClass(methoddecl);
     return getMethod(c, methoddecl);
   }
 
-  static Method getMethod(Class c, MethodDeclaration methoddecl) {
+  public static Method getMethod(Class c, MethodDeclaration methoddecl) {
     String ast_methodname = getName(methoddecl);
     List ast_params = getParameters(methoddecl);
 
-    Method[] meths = c.getMethods();
+    List<Method> publicMethods = Arrays.asList(c.getMethods());
+    List<Method> declaredMethods = Arrays.asList(c.getDeclaredMethods());
+    List<Method> allMethods = new ArrayList<Method>(publicMethods);
+    allMethods.addAll(declaredMethods);
+
+    Method[] meths = allMethods.toArray(new Method[0]);
 
     for (int i=0; i<meths.length; i++) {
+
+
       Method meth = meths[i];
       // System.out.println("getMethod(" + c.getName() + ", " + getName(methoddecl) + ") checking " + meth.getName());
-      if (! meth.getName().equals(ast_methodname)) {
+      if (! typeMatch(meth.getName(), ast_methodname)) {
         continue;
       }
+
       Class[] params = meth.getParameterTypes();
       if (paramsMatch(params, ast_params)) {
         // System.out.println("getMatch succeeded: " + ppt.name());
@@ -702,20 +710,28 @@ public class Ast {
     return null;
   }
 
-  static Constructor getConstructor(ConstructorDeclaration constructordecl) {
+  public static Constructor getConstructor(ConstructorDeclaration constructordecl) {
     Class c = getClass(constructordecl);
     return getConstructor(c, constructordecl);
   }
 
-  static Constructor getConstructor(Class c, ConstructorDeclaration constructordecl) {
+  public static Constructor getConstructor(Class c, ConstructorDeclaration constructordecl) {
     String ast_constructorname = getName(constructordecl);
+
     List ast_params = getParameters(constructordecl);
 
-    Constructor[] constrs = c.getConstructors();
+
+    List<Constructor> publicConstructors = Arrays.asList(c.getConstructors());
+    List<Constructor> declaredConstructors = Arrays.asList(c.getDeclaredConstructors());
+    List<Constructor> allConstructors = new ArrayList<Constructor>(publicConstructors);
+    allConstructors.addAll(declaredConstructors);
+
+    Constructor[] constrs = allConstructors.toArray(new Constructor[0]);
 
     for (int i=0; i<constrs.length; i++) {
+
       Constructor constr = constrs[i];
-      if (! constr.getName().equals(ast_constructorname)) {
+      if (! typeMatch(constr.getName(), ast_constructorname)) {
         continue;
       }
       Class[] params = constr.getParameterTypes();
@@ -728,6 +744,7 @@ public class Ast {
   }
 
   public static boolean paramsMatch(Class[] params, List ast_params) {
+
     if (params.length != ast_params.size()) {
       return false;
     }
@@ -736,9 +753,9 @@ public class Ast {
     int j=0;
     for (Iterator itor = ast_params.iterator(); itor.hasNext(); j++) {
       String ast_param = getType((FormalParameter) itor.next());
-      String param = params[j].getName();
-      // System.out.println("Comparing " + param + " to " + ast_param + ":");
-      if (! typeMatch(param, ast_param)) {
+      Class param = params[j];
+      //System.out.println("Comparing " + param + " to " + ast_param + ":");
+      if (! typeMatch(classnameForSourceOutput(param), ast_param)) {
         return false;
       }
     }
@@ -934,6 +951,22 @@ public class Ast {
     GetParametersVisitor v = new GetParametersVisitor();
     MethodDeclarator d = m.f2;
     d.accept(v);
+    return v.parameters;
+  }
+
+  // Returns the parameters of the constructor, as a list of
+  // FormalParameter objects. Does not include implicit parameters for
+  // inner classes.
+  public static List getParametersNoImplicit(ConstructorDeclaration cd) {
+    class GetParametersVisitor extends DepthFirstVisitor {
+      public List parameters = new ArrayList();
+      public void visit(FormalParameter p) {
+        parameters.add(p);
+      }
+    }
+    GetParametersVisitor v = new GetParametersVisitor();
+    FormalParameters fp = cd.f2;
+    fp.accept(v);
     return v.parameters;
   }
 
@@ -1255,5 +1288,18 @@ public class Ast {
     NodeListOptional opt = (NodeListOptional)seq.elementAt(1);
     return opt.present();
   }
+
+  public static String classnameForSourceOutput(Class c) {
+
+        Assert.assertTrue(!c.equals(Void.TYPE));
+
+        if (c.isPrimitive()) {
+            return c.getName();
+        } else if (c.isArray()) {
+            return UtilMDE.classnameFromJvm(c.getName());
+        } else {
+            return c.getName();
+        }
+    }
 
 }

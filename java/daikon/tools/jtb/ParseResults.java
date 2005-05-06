@@ -32,11 +32,29 @@ public class ParseResults {
    * If one of the files declares an interfaces, an error will occur.
    */
   public static List<ParseResults> parse(List<String> javaFileNames) {
+    return parse(javaFileNames, false);
+  }
+
+  public static List<ParseResults> parse(List<String> javaFileNames, boolean discardComments) {
 
     List<ParseResults> retval = new ArrayList<ParseResults>();
 
     for (Iterator i = javaFileNames.iterator(); i.hasNext();) {
       String javaFileName = (String) i.next();
+      ParseResults results = parse(javaFileName, discardComments);
+      retval.add(results);
+    }
+
+    return retval;
+  }
+
+
+  public static ParseResults parse(String javaFileName) {
+    return parse(javaFileName, false);
+  }
+
+  public static ParseResults parse(String javaFileName, boolean discardComments) {
+
       ParseResults results = new ParseResults();
 
       CompilationUnit compilationUnit = null;
@@ -56,6 +74,24 @@ public class ParseResults {
         JavaParser parser = new JavaParser(input);
         compilationUnit = parser.CompilationUnit();
         input.close();
+
+        // To discard comments, we dump the AST without special
+        // tokens, and then we read it again in the same way as
+        // before.
+        if (discardComments) {
+          Writer output = new StringWriter();
+          TreeDumper dumper = new TreeDumper(output);
+          dumper.printSpecials(false); // Do not print specials <==> discard comments
+          compilationUnit.accept(new TreeFormatter());
+          compilationUnit.accept(dumper);
+          output.close();
+
+          input = new StringReader(output.toString());
+          parser = new JavaParser(input);
+          compilationUnit = parser.CompilationUnit();
+          input.close();
+        }
+
       } catch (Exception e) {
         e.printStackTrace();
         throw new Error(e);
@@ -96,9 +132,7 @@ public class ParseResults {
         results.roots.add(typeDeclaration);
       }
 
-      // Add to the list of ParseResults that we'll return.
-      retval.add(results);
+      return results;
     }
-    return retval;
-  }
+
 }
