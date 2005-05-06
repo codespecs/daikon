@@ -415,7 +415,7 @@ private Method createClinit(ClassGen cg, String fullClassName)
  * @return
  */
 private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName, InstructionFactory factory)
-{
+{ 
     InstructionList invokeList = new InstructionList();
     
     invokeList.append(new PUSH(cp, fullClassName));

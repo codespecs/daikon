@@ -505,7 +505,7 @@ public class DaikonWriter
      * Returns the class name of the specified class in 'java' format
      * (ie, as the class would have been declared in java source code)
      */
-    public String stdClassName (Class type)
+    public static String stdClassName (Class type)
     {
         return Runtime.classnameFromJvm (type.getName());
     }

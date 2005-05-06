@@ -35,6 +35,13 @@ public class MethodInfo {
 
   /** Tells whether each exit point in method is instrumented, based on filters **/
   public List <Boolean> is_included;
+  
+  /**Traversal pattern for this class**/
+  public RootInfo traversalEnter;
+  
+  /**Traversal pattern for exit points**/
+  public Map<Integer, RootInfo> traversalExit;
+  
   /**
    * Creates a MethodInfo with the specified class, arg_names, and
    * exit locations
@@ -50,6 +57,8 @@ public class MethodInfo {
     this.arg_type_strings = arg_type_strings;
     this.exit_locations = exit_locations;
     this.is_included = is_included;
+    
+    this.traversalExit = new HashMap<Integer, RootInfo>();
   }
 
   private static HashMap primitive_classes = new HashMap(8);
