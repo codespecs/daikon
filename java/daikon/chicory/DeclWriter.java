@@ -218,7 +218,6 @@ public class DeclWriter extends DaikonWriter
     {
         outFile.println(declareHeader);
         outFile.println(name);
-
         // Print arguments
         printLocalVars(method, argnames, "", daikonDepth);
 
@@ -377,11 +376,11 @@ public class DeclWriter extends DaikonWriter
 
             if (!Modifier.isStatic(classField.getModifiers()) && dontPrintInst)
                 continue;
-            
+
             //don't print arrays of the same static field
             if(Modifier.isStatic(classField.getModifiers()) && inArray)
                 continue;
-            
+
             if (!isFieldVisible (current_class, classField))
             {
                 // System.out.printf ("skipping not visible field %s, in %s\n",
@@ -575,6 +574,7 @@ public class DeclWriter extends DaikonWriter
         {
             outFile.print(offset + name);
         }
+
         else if (Modifier.isStatic(modifiers))
         {
             offset = offset + field.getDeclaringClass().getName() + ".";
@@ -591,27 +591,35 @@ public class DeclWriter extends DaikonWriter
         String type_name = stdClassName (type);
         // System.out.printf ("transformed type name from %s to %s\n",
         //                    type.getName(), type_name);
-        outFile.println (type_name + arr_str);
+
+        // Print declared type, followed by auxiliary information
+        outFile.print (type_name + arr_str);
+
+        // Print auxiliary information
+        appendAuxInfo(field);
+
+        outFile.println();
+
         outFile.print(getRepName(type, inArray) + arr_str);
-        
+
         if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)
             && type.isPrimitive() && !inArray)
         {
             ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
             String value = cinfo.staticMap.get(name);
-            
+
             if(value == null)
             {
                 //don't print anything
                 //because this field wasn't declared with an actual "hardcoded" constant
-                
+
                 //System.out.println("WARNING: Static final primitive field " + name + ": could not determine value");
             }
             else
             {
                 outFile.println(" = " + value);
             }
-            
+
             /*
             try
             {
@@ -619,10 +627,12 @@ public class DeclWriter extends DaikonWriter
                 // class initialization!!
                 if(!field.isAccessible())
                     field.setAccessible(true);
+
                 //TODO is there a work-around for forced initialization?
                 //only use const value lookup in decls
                 //in dtrace: check if initialized
                 //(put code in all <clinit>
+
                 Object val = field.get(null);
                 outFile.println(" = " + val.toString());
 
@@ -643,6 +653,26 @@ public class DeclWriter extends DaikonWriter
         checkForRuntimeClass(type, name, offset); //.class var
         checkForString(type, name, offset);
         return offset;
+    }
+
+    // Appends as auxiliary information:
+    // * the package name of the declaring class
+    // * whether the type is static
+    private void appendAuxInfo(Field field) {
+
+        Class type = field.getType();
+        int modifiers = field.getModifiers();
+
+        Package p = field.getDeclaringClass().getPackage();
+        String pkgName = (p == null ? null : p.getName());
+
+        //System.out.printf("Package name for type  %s is %s\n", type, pkgName);
+
+        String staticString = (Modifier.isStatic(modifiers)) ? "true" : "false";
+        outFile.print(" # ");
+        if (pkgName != null) {
+            outFile.print("declaringClassPackageName=" + pkgName + ", ");
+        }
     }
 
     //checks the given type to see if it is a string
