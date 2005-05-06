@@ -8,6 +8,7 @@ High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
   - Add dtrace goal files (perhaps limited to some reasonable number
     of lines) to the regression tests.  This will allow us to see
     more quickly when a Chicory change causes dtrace diffs.
+    (possibly wait for dtrace-diff)
     
   - Write a new dtrace-diff program in Java.  There is probably already
     Java code that can read a dtrace file.  The diff should be very
@@ -18,14 +19,7 @@ High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
   - Add a Java 5.0 test to the test suite.   This will checkout not
     only Chicory, but annotate as well.  Carlos suggested the files
     in ~jhp/tmp/bst.tar
-    
         
-  - Daikon output is handled via StreamRedirectThread.  Daikon writes
-    out progress indications that are designed to write over one another.
-    They are all on separate lines when run through Chicory.  Run Daikon
-    standalone and through Chicory to see the difference.
-    [etf]
-    
   - Implement online mode 
     [etf]
 
@@ -78,6 +72,15 @@ Longer-term issues
     be writing this kind of code anyway.
 
 Completed Tasks (add new ones at the top)
+
+  - Daikon output is handled via StreamRedirectThread.  Daikon writes
+    out progress indications that are designed to write over one another.
+    They are all on separate lines when run through Chicory.  Run Daikon
+    standalone and through Chicory to see the difference.
+    [etf]
+    5/6/05: I fixed this by reading the stream in byte by byte (as opposed to
+    line by line) and flushing after each one.  Thus, carriage returns will
+    appear how they are intended to.  This is a little inefficient, but more correct.
 
   - Restructure code so we don't calculate the same thing on each
     method entry/exit, but just once when processing the class.  This
