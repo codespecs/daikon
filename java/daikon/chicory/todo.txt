@@ -2,45 +2,42 @@ Todo list sorted in approximate order of importance.
 
 Add your name/initials to an item when you are actively working on it.
 When the task is complete, move it to the bottom of the file.
-  
-  - Fix issue which occurs when classfile does not include line number
-    information.  Dtrace/decls info should be syntactically correct.
-    Currently, dtrace exit points do not have corresponding declarations
-    (different, invalid line numbers)
+
+High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
+
+  - Add dtrace goal files (perhaps limited to some reasonable number
+    of lines) to the regression tests.  This will allow us to see
+    more quickly when a Chicory change causes dtrace diffs.
     
+  - Write a new dtrace-diff program in Java.  There is probably already
+    Java code that can read a dtrace file.  The diff should be very
+    simple at that point.
+    [Sandra]
+
+    
+  - Add a Java 5.0 test to the test suite.   This will checkout not
+    only Chicory, but annotate as well.  Carlos suggested the files
+    in ~jhp/tmp/bst.tar
+    
+        
+  - Daikon output is handled via StreamRedirectThread.  Daikon writes
+    out progress indications that are designed to write over one another.
+    They are all on separate lines when run through Chicory.  Run Daikon
+    standalone and through Chicory to see the difference.
+    [etf]
+    
+  - Implement online mode 
+    [etf]
+
+
+Longer-term issues
+      
   - Add --exception switch to allow instrumentation of exceptions
 
   - Add new option to Chicory to only output a given percentage of all
     observed records.  This will permit faster execution on large
     programs.
-
-  - Add a Java 5.0 test to the test suite.   This will checkout not
-    only Chicory, but annotate as well.  Carlos suggested the files
-    in ~jhp/tmp/bst.tar
-
-  - Add dtrace goal files (perhaps limited to some reasonable number
-    of lines) to the regression tests.  This will allow us to see
-    more quickly when a Chicory change causes dtrace diffs.
-
-  - Write a new dtrace-diff program in Java.  There is probably already
-    Java code that can read a dtrace file.  The diff should be very
-    simple at that point.
-
-  - Daikon output is handled via StreamRedirectThread.  Daikon writes
-    out progress indications that are designed to write over one another.
-    They are all on separate lines when run through Chicory.  Run Daikon
-    standalone and through Chicory to see the difference.
-
-  - Implement online mode 
-    [etf]
-
-  - Restructure code so we don't calculate the same thing on each
-    method entry/exit, but just once when processing the class.  This
-    is not so much an optimization as a code cleanup so if we change,
-    for instance, what variables are instrumented or their order we
-    only have to change it in one place.
-    [etf]
-
+    
   - Produce output not merely about the concrete representation of a data
     structure, but also about its abstract state, by creating new synthetic
     variables whose values come from the results of calling pure
@@ -82,7 +79,27 @@ When the task is complete, move it to the bottom of the file.
 
 Completed Tasks (add new ones at the top)
 
+  - Restructure code so we don't calculate the same thing on each
+    method entry/exit, but just once when processing the class.  This
+    is not so much an optimization as a code cleanup so if we change,
+    for instance, what variables are instrumented or their order we
+    only have to change it in one place.
+    [etf]
+    5/6/05: The DeclWriter now creates a tree data structure representing the traversal
+    pattern.  Each node is a subtype of DaikonInfo.  The DTraceWriter traverses
+    this tree to print a program point.  Overall, a much better solution than how
+    we were doing it before.
+
+
   - Fix problem in which we force class initialization with calls to Field.get(null) (for static fields)
+  
+  - Fix issue which occurs when classfile does not include line number
+    information.  Dtrace/decls info should be syntactically correct.
+    Currently, dtrace exit points do not have corresponding declarations
+    (different, invalid line numbers)
+    5/6/05 [etf] I fixed this about a month ago, with only one lingering issue: if there
+    are multiple return statements on the same line, they often show up as
+    different line number points in the decls/dtrace file (but do not cause any sort of crash)
   
   4/7/05 [etf]: I remedied this in the following way:
   1.  all calls to class.ForName have the initialization parameter set to false
