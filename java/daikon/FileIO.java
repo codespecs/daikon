@@ -817,8 +817,7 @@ public final class FileIO {
 	return;
       }
       if (line.equals("VarComparability")) {
-	data_trace_state.varcomp_format
-	  = read_var_comparability (reader, state.file);
+	state.varcomp_format = read_var_comparability (reader, state.file);
         state.status = ParseStatus.COMPARABILITY;
 	return;
       }

@@ -75,6 +75,7 @@ public class DtraceDiff {
     }
     if ((dtracefile1 == null) || (dtracefile2 == null))
       throw new daikon.Daikon.TerminationMessage(usage);
+    dtraceDiff (declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
 
   public static void dtraceDiff (String declsfile1,
@@ -141,7 +142,7 @@ public class DtraceDiff {
 					   vis1[i].constantValue(),
 					   vis2[i].constantValue()))
 		    || ((vis1[i].type != vis2[i].type) ||
-			(vis1[i].file_rep_type != vis2[i].type)))
+			(vis1[i].file_rep_type != vis2[i].file_rep_type)))
 		  ppt_var_decl_error (vis1[i], state1, dtracefile1,
 				      vis2[i], state2, dtracefile2);
 	      }
@@ -290,7 +291,7 @@ public class DtraceDiff {
     throw new Error ("Value of variable " + vi1.name() +
 		     " in program point " + state1.ppt.name +
 		     " at line " + state1.lineNum +
-		     " does not match corresponding value at line " +
+		     " does not match corresponding value in sample at line " +
 		     state2.lineNum +
 		     " in " + dtracefile2);
   }
