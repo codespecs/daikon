@@ -92,9 +92,6 @@ Completed Tasks (add new ones at the top)
     DaikonInfo.  The DTraceWriter traverses this tree to print a
     program point.  Overall, a much better solution than how we were
     doing it before.
-
-  - Fix problem in which we force class initialization with calls to
-    Field.get(null) (for static fields)
   
   - Fix issue which occurs when classfile does not include line number
     information.  Dtrace/decls info should be syntactically correct.
@@ -105,6 +102,8 @@ Completed Tasks (add new ones at the top)
     same line, they often show up as different line number points in
     the decls/dtrace file (but do not cause any sort of crash)
   
+ - Fix problem in which we force class initialization with calls to
+    Field.get(null) (for static fields)
   4/7/05 [etf]: I remedied this in the following way:
   1.  all calls to class.ForName have the initialization parameter set to false
   2.  we are VERY careful about static fields.  the behavior is:
