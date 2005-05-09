@@ -297,10 +297,22 @@ Installing dfec, the source-based Daikon front end for C
 
 * dfec EDG sources::            
 
+Tools for use with Daikon
+
+* Tools for manipulating invariants::  
+* DtraceDiff utility::          
+
 Tools for manipulating invariants
 
 * Printing invariants::         
 * Invariant Diff::              
+* Annotate::                    
+* Runtime-check instrumenter::  
+* InvariantChecker::            
+* LogicalCompare::              
+
+Invariant Diff
+
 * Annotate::                    
 * Runtime-check instrumenter::  
 * InvariantChecker::            
@@ -5982,12 +5994,22 @@ longer supported.
 
 
 @node    Tools, Troubleshooting, Front ends, Top
-@chapter Tools for manipulating invariants
+@chapter Tools for use with Daikon
+
+This chapter describes various tools that are included with the Daikon
+distribution.
+@menu
+* Tools for manipulating invariants::  
+* DtraceDiff utility::          
+@end menu
+
+@node Tools for manipulating invariants, DtraceDiff utility, Tools, Tools
+@section Tools for manipulating invariants
 
 @cindex .inv files, tools for manipulating
 @cindex inv files, tools for manipulating
 
-This chapter gives information about tools that manipulate invariants
+This section gives information about tools that manipulate invariants
 (in the form of @file{.inv} files).
 
 
@@ -6001,8 +6023,8 @@ This chapter gives information about tools that manipulate invariants
 @end menu
 
 
-@node    Printing invariants, Invariant Diff, Tools, Tools
-@section Printing invariants
+@node    Printing invariants, Invariant Diff, Tools for manipulating invariants, Tools for manipulating invariants
+@subsection Printing invariants
 
 @cindex printing invariants
 @cindex PrintInvariants program
@@ -6048,8 +6070,8 @@ Track information on specified invariant class, variables and program point.
 
 @end table
 
-@node    Invariant Diff, Annotate, Printing invariants, Tools
-@section Invariant Diff
+@node    Invariant Diff, Annotate, Printing invariants, Tools for manipulating invariants
+@subsection Invariant Diff
 
 @cindex invariant diff
 @cindex diff, over invariants
@@ -6165,7 +6187,6 @@ the pair tree.  The specified class must implement the Comparator
 interface, and accept objects of type Invariant.
 
 @end table
-
 
 @c @node    GUIs, Front ends, Daikon output, Top
 @c @chapter GUIs for displaying invariants
@@ -6420,8 +6441,15 @@ interface, and accept objects of type Invariant.
 @c @end enumerate
 
 
-@node    Annotate, Runtime-check instrumenter, Invariant Diff, Tools
-@section Annotate
+@menu
+* Annotate::                    
+* Runtime-check instrumenter::  
+* InvariantChecker::            
+* LogicalCompare::              
+@end menu
+
+@node    Annotate, Runtime-check instrumenter, Invariant Diff, Tools for manipulating invariants
+@subsection Annotate
 
 @cindex Annotate tool
 @cindex MergeESC tool, see Annotate tool
@@ -6504,8 +6532,8 @@ may produce illegal Java in the annotated file, if the source file to be
 annotated includes logical shift operators. @xref{Known bugs}.
 
 
-@node    Runtime-check instrumenter, InvariantChecker, Annotate, Tools
-@section Runtime-check instrumenter (runtimechecker)
+@node    Runtime-check instrumenter, InvariantChecker, Annotate, Tools for manipulating invariants
+@subsection Runtime-check instrumenter (runtimechecker)
 
 @cindex runtime-check instrumenter
 @cindex runtimechecker instrumenter
@@ -6574,7 +6602,7 @@ The throwable is not rethrown.
 @end menu
 
 @node    Accessing violations,  , Runtime-check instrumenter, Runtime-check instrumenter
-@subsection Accessing violations
+@subsubsection Accessing violations
 
 The instrumented class handles violations silently:
 it simply adds them to a list in the class
@@ -6634,8 +6662,8 @@ An error in the new parser
 may produce illegal Java in the instrumented file, if the source file to
 be instrumented includes logical shift operators. @xref{Known bugs}.
 
-@node    InvariantChecker, LogicalCompare, Runtime-check instrumenter, Tools
-@section InvariantChecker
+@node    InvariantChecker, LogicalCompare, Runtime-check instrumenter, Tools for manipulating invariants
+@subsection InvariantChecker
 
 @cindex InvariantChecker tool
 
@@ -6673,8 +6701,8 @@ These switches are the same as for Daikon.  They are described in
 
 @end table
 
-@node LogicalCompare,  , InvariantChecker, Tools
-@section LogicalCompare
+@node LogicalCompare,  , InvariantChecker, Tools for manipulating invariants
+@subsection LogicalCompare
 
 @cindex LogicalCompare tool
 @cindex implication checking tool
@@ -6868,6 +6896,77 @@ does not include time spent de-serializing the @file{.inv} input
 files.
 
 @end table
+
+
+@node  DtraceDiff utility,  , Tools for manipulating invariants, Tools
+@section DtraceDiff utility
+
+DtraceDiff is a utility for comparing data trace (@file{.dtrace}) files.
+It checks that the same program points are visited in the same order in
+both files, and that the number, names, types, and values of variables
+at each program point are the same.  The differences are found using a
+content-based, rather than text-based, comparison of the two files.
+
+DtraceDiff stops by signalling an error when it finds a difference
+between the two data trace files.  (Once execution paths have
+diverged, continuing to emit record-by-record differences is likely to
+produce output that is far too voluminous to be useful.)  It also
+signals an error when it detects incompatible program point
+declarations or when one file is shorter than the other.
+
+DtraceDiff is invoked as follows:
+@example
+java daikon.tools.DtraceDiff [@var{flags}] \
+   [@var{declsfiles1}] @var{dtracefile1}  [@var{declsfiles2}] @var{dtracefile2}
+@end example
+
+Corresponding declarations (@file{.decls}) files can optionally be
+specified on the command line before each of the two @file{.dtrace}
+files.  Multiple @file{.decls} files can be specified.  If no
+@file{.decls} file is specified, DtraceDiff assumes that the
+declarations are included in the @file{.dtrace} file instead.
+
+DtraceDiff supports the following Daikon command-line flags:
+
+@table @option
+@item --help
+Print usage message.
+
+@item --config @var{filename}
+Load the configuration settings specified in the given file.
+@xref{Configuration options}, for details.
+
+@item --config_option @var{name}=@var{value}
+Specify a single configuration setting.
+@xref{Configuration options}, for details.
+
+@item --ppt-select-pattern=@var{ppt_regexp}
+Only process program points whose names match the regular expression,
+which uses Perl syntax.
+
+@item --ppt-omit-pattern=@var{ppt_regexp}
+Do not process program points whose names match the regular expression,
+which uses Perl syntax.  This takes priority over the
+@option{--ppt-select-pattern} argument.
+
+@item --var-omit-pattern=@var{var_regexp}
+Ignore variables (whether in the trace file or derived) whose names
+match the regular expression, which uses Perl syntax.
+
+@end table
+
+DtraceDiff uses appropriate comparisons for the type of the variables in
+each program point being compared.  In particular:
+
+@itemize @bullet
+@item Hashcode (pointer or address) values may differ from one run of
+the same program to the next, and there may not be a one-to-one mapping
+of hashcode values between different program executions, so the
+comparison function only looks for null versus non-null pointer values.
+
+@item Floating-point values are subject to roundoff error from printing and
+reading, so they are compared with a ``fuzzy'' rather than exact equality test.
+@end itemize
 
 @node    Troubleshooting, Details, Tools, Top
 @chapter Troubleshooting

@@ -17,6 +17,30 @@ Further documentation can be found in:
 
 ===========================================================================
 
+
+DtraceDiff
+
+  New:
+
+    This is a new utility to compare data trace (.dtrace) files using a
+    content-based, rather than text-based, comparison.
+
+    Invoke it like
+      java daikon.tools.DtraceDiff [DECLS1]... DTRACE1 [DECLS2]... DTRACE2
+    See the usage message or Daikon manual for information about additional
+    command-line options.
+
+    DtraceDiff stops by signalling an error when it finds a difference
+    between the two data trace files.  (Once execution paths have
+    diverged, continuing to emit record-by-record differences is likely to
+    produce output that is far too voluminous to be useful.)  It also
+    signals an error when it detects incompatible program point
+    declarations or when one file is shorter than the other.
+
+
+---------------------------------
+
+
 4.1.1 (May 1 2005)
 
 Kvasir
