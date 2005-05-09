@@ -12,13 +12,10 @@ import java.util.logging.Logger;
 /**
  * Represents the comparability of variables, including methods to
  * determine if two VarComparabilities are comparable.
- * VarComparability types have three formats: implicit, explicit, and none.<p>
+ * VarComparability types have two formats: implicit and none.<p>
  *
  * A VarComparabilityImplicit is an arbitrary string, and comparisons
  * succeed exactly if the two VarComparabilitys are identical.<p>
- *
- * A VarComparabilityExplicit is a list of other variable names, and
- * comparisons succeed if each variable is in the list of the other.<p>
  *
  * VarComparabilityNone means no comparability information was provided.<p>
  **/
@@ -31,13 +28,12 @@ public abstract class VarComparability {
 
   public static final int NONE = 0;
   public static final int IMPLICIT = 1;
-  public static final int EXPLICIT = 2;
 
   /**
    * Create a VarComparability representing the given arguments with
    * respect to a variable.
-   * @param format the type of comparability, either NONE, IMPLICIT or EXPLICIT
-   * @param rep if an explicit type, a regular expression indicating
+   * @param format the type of comparability, either NONE or IMPLICIT
+   * @param rep a regular expression indicating
    * how to match.  The form is "(a)[b][c]..." where each variable is
    * string (or number) that is a UID for a basic type.  a is the type
    * of the element, b is the type of the first index, c the type of
@@ -49,8 +45,6 @@ public abstract class VarComparability {
       return VarComparabilityNone.parse(rep, vartype);
     } else if (format == IMPLICIT) {
       return VarComparabilityImplicit.parse(rep, vartype);
-    } else if (format == EXPLICIT) {
-      return VarComparabilityExplicit.parse(rep, vartype);
     } else {
       throw new Error("bad format argument " + format
                       + " should have been in {0, 1, 2}");
@@ -68,13 +62,7 @@ public abstract class VarComparability {
    **/
   public static VarComparability makeComparabilitySameIndices (String elemTypeName,
                                                                VarComparability old) {
-    if (old instanceof VarComparabilityExplicit) {
-      String[] elems = new String[] {elemTypeName};
-      Intern.internStrings (elems);
-      return new VarComparabilityExplicit (elems, ((VarComparabilityExplicit) old).indices,
-                                           ((VarComparabilityExplicit) old).dimensions,
-                                           null);
-    } else if (old instanceof VarComparabilityNone) {
+    if (old instanceof VarComparabilityNone) {
       return VarComparabilityNone.it;
     } else {
       throw new Error ("Not implemented for implicity comparables");
@@ -122,10 +110,6 @@ public abstract class VarComparability {
         return VarComparabilityImplicit.comparable
           (viname1, (VarComparabilityImplicit)type1,
            viname2, (VarComparabilityImplicit)type2);
-    } else if (type1 instanceof VarComparabilityExplicit) {
-      return VarComparabilityExplicit.comparable
-        (viname1, (VarComparabilityExplicit)type1,
-         viname2, (VarComparabilityExplicit)type2);
     } else {
       throw new Error("Unrecognized subtype of VarComparability: " + type1);
     }

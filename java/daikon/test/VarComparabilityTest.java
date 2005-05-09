@@ -18,7 +18,6 @@ public class VarComparabilityTest extends TestCase {
 
   static final int NONE = VarComparability.NONE;
   static final int IMPLICIT = VarComparability.IMPLICIT;
-  static final int EXPLICIT = VarComparability.EXPLICIT;
 
   boolean comp(VarComparability v1, VarComparability v2) {
     return VarComparability.comparable(v1, v2);

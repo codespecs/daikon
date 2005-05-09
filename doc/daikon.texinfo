@@ -8714,7 +8714,7 @@ obtained via type-inference based analysis.
 
 A comparability for a non-compound type is an integer.  Comparisons
 succeed exactly if either integer is negative or if both integers are
-the same.  An implicit comparability for an array type may contain an
+the same.  A comparability for an array type may contain an
 integer for each index and for the contents; for instance, @samp{5[22][17]}
 for a two-dimensional array.  Comparisons succeed if comparisons over
 each component succeed.
@@ -8817,11 +8817,14 @@ StackAr:::OBJECT
 
 There is a special @code{VarComparability} declaration that controls how
 the comparability field in program point declarations is interpreted.
-The default @code{VarComparability} is @code{implicit}.  You can override it as
+The default @code{VarComparability} is @code{implicit}, which means
+ordinary comparability as described in @ref{Program point declarations}.
+(The name @code{implict} is retained for historical reasons.)
+You can override it as
 follows:
 @example
 VarComparability
-explicit
+none
 @end example
 @noindent
 As with all records in Daikon input files, a

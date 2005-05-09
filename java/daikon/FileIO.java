@@ -398,8 +398,6 @@ public final class FileIO {
       varcomp_format = VarComparability.NONE;
     } else if (line.equals("implicit")) {
       varcomp_format = VarComparability.IMPLICIT;
-    } else if (line.equals("explicit")) {
-      varcomp_format = VarComparability.EXPLICIT;
     } else {
       throw new FileIOException("Unrecognized VarComparability",
 				reader,
@@ -614,7 +612,7 @@ public final class FileIO {
 
     public ParseState (String raw_filename,
 		       boolean decl_file_p,
-		       PptMap ppts) 
+		       PptMap ppts)
       throws IOException {
       // Pretty up raw_filename for use in messages
       file = new File(raw_filename);
@@ -627,7 +625,7 @@ public final class FileIO {
 
       is_decl_file = decl_file_p;
       all_ppts = ppts;
-      
+
       // Do we need to count the lines in the file?
       total_lines = 0;
       boolean count_lines = dkconfig_count_lines;
@@ -768,7 +766,7 @@ public final class FileIO {
       else
 	;  // don't need to do anything explicit for other records found
     }
-	       
+
     if (Global.debugPrintDtrace) {
       Global.dtraceWriter.close();
     }
@@ -791,7 +789,7 @@ public final class FileIO {
         continue;
       }
       state.lineNum = reader.getLineNumber();
-      
+
       // stop at a specified point in the file
       if ((dkconfig_max_line_number > 0)
           && (state.lineNum > dkconfig_max_line_number))
@@ -799,9 +797,9 @@ public final class FileIO {
 	  state.status = ParseStatus.TRUNCATED;
 	  return;
 	}
-      
+
       String line = line_.intern();
-      
+
       // First look for declarations in the dtrace stream
       if (line == declaration_header) {
         state.ppt =
