@@ -140,19 +140,19 @@ kvasir/kvasir/Makefile.in: valgrind-3/auto-everything.sh
 	ln -nsf valgrind-3/valgrind kvasir
 	touch $@
 
-valgrind-3/vex/libvex.a:
+valgrind-3/vex/libvex.a: valgrind-3/auto-everything.sh $(wildcard valgrind-3/vex/priv/guest-x86/*.[ch] valgrind-3/vex/priv/guest-generic/*.[ch] valgrind-3/vex/priv/host-x86/*.[ch] valgrind-3/vex/priv/host-generic/*.[ch] valgrind-3/vex/priv/ir/*.[ch] valgrind-3/vex/priv/main/*.[ch] valgrind-3/vex/pub/*.[ch])
 	cd valgrind-3/vex && make
 
-kvasir/config.status: kvasir/kvasir/Makefile.in valgrind-3/vex/libvex.a
+kvasir/config.status: kvasir/kvasir/Makefile.in valgrind-3/vex/pub/libvex.h
 	cd kvasir && ./configure --prefix=`pwd`/inst --with-vex=`pwd`/../vex
 
-kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
+kvasir/coregrind/stage2: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch]) valgrind-3/vex/libvex.a
 	cd kvasir && $(MAKE)
 
-kvasir/kvasir/vgtool_kvasir.so: kvasir/coregrind/valgrind $(wildcard kvasir/kvasir/*.[ch])
+kvasir/kvasir/vgtool_kvasir.so: kvasir/coregrind/stage2 $(wildcard kvasir/kvasir/*.[ch]) valgrind-3/vex/libvex.a
 	cd kvasir/kvasir && $(MAKE)
 
-kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
+kvasir/inst/bin/valgrind: kvasir/coregrind/stage2
 	cd kvasir && $(MAKE) install
 
 kvasir/inst/lib/valgrind/vgtool_kvasir.so: kvasir/kvasir/vgtool_kvasir.so
