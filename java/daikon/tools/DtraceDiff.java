@@ -40,6 +40,22 @@ public class DtraceDiff {
   }
 
   /**
+   * This entry point is useful for testing.  It returns a boolean to indicate
+   * return status instead of croaking with an error.
+   **/
+
+  public static boolean mainTester (String[] args) {
+    try {
+      mainHelper(args);
+      return true;
+    } catch (daikon.Daikon.TerminationMessage e) {
+      return true;
+    } catch (Error e) {
+      return false;
+    }
+  }
+
+  /**
    * This does the work of main, but it never calls System.exit, so it
    * is appropriate to be called progrmmatically.
    * Termination of the program with a message to the user is indicated by
