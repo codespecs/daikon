@@ -70,6 +70,15 @@ In addition to the below downloads, also see the
 	distribution, but we provide a prebuilt binary for convenience.<br>
 	Download the binary to local directory $DAIKONDIR/front-end/java/src, 
 	then rename to <tt>dfej</tt> if appropriate.<br>
+<!-- To build for a new architecture:
+  cd /tmp/$USER
+  wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
+  tar zxf daikon.tar.gz
+  cd daikon/front-end/java
+  ./configure
+  make
+  # The binary is the file src/dfej
+-->	
 	<ul>
 	  <li><a href="binaries/dfej-linux-x86">x86 Linux</a> (1 Jan 2005, 15 Mbytes)
 	  <li><a href="binaries/dfej.exe">x86 Windows (Win32)</a> (1 Jan 2005, 20 Mbytes)
@@ -88,19 +97,12 @@ In addition to the below downloads, also see the
         dfec C front end.  Send mail to <a
 	href="mailto:daikon-developers@lists.csail.mit.edu">daikon-developers@pag.csail.mit.edu</a> to
 	request a binary for another system if it is not on this list.
-<!-- To build for a new architecture:
-  cd /tmp/$USER
-  wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
-  tar zxf daikon.tar.gz
-  cd daikon/front-end/java
-  ./configure
-  make
-  # The binary is the file src/dfej
--->	
         <br>
 	The dfec distribution is a tar file containing prebuilt binary; see
 	<a href="doc/daikon.html#Installing-dfec">"Installing dfec"</a> in
-        the Daikon manual.
+        the Daikon manual.  A set of example programs on which you can run
+        dfec is available; send email to <a
+	href="mailto:daikon-developers@lists.csail.mit.edu">daikon-developers@pag.csail.mit.edu</a> to request it.
 	<ul>
 	  <li><a href="binaries/dfec-linux-x86.tar.gz">x86 Red Hat Linux</a> (28 Oct 2004, 4.8 Mbytes)
 	  <!-- <li><a href="binaries/dfec-cygwin.zip">x86 Cygwin</a> (00 Mth 0000, 00 Mbytes) -->
