@@ -5,6 +5,9 @@ import java.io.*;
 import java.util.*;
 import utilMDE.*;
 import daikon.*;
+import daikon.config.Configuration;
+import java.util.regex.*;
+import gnu.getopt.*;
 
 /** This tool is used to find the differences between two dtrace files
  *  based on analysis of the files' content, rather than a straight textual
@@ -19,12 +22,26 @@ public class DtraceDiff {
   private static String usage =
     UtilMDE.join(
       new String[] {
-        "Usage: DtraceDiff [DECLS1] DTRACE1 [DECLS2] DTRACE2",
+        "Usage: DtraceDiff [OPTION]... [DECLS1]... DTRACE1 [DECLS2]... DTRACE2",
 	"DTRACE1 and DTRACE2 are the data trace files to be compared.",
-	"You may optionally specify a corresponding DECLS file for each one.",
-	"If a DECLS file is omitted from the command line, it is assumed",
-	"that the declarations are included in the data trace file instead."
-        },
+	"You may optionally specify corresponding DECLS files for each one.",
+	"If no DECLS file is specified, it is assumed that the declarations",
+	"are included in the data trace file instead.",
+	"OPTIONs are:",
+	"  -h, --" + Daikon.help_SWITCH,
+	"      Display this usage message",
+	"  --" + Daikon.ppt_regexp_SWITCH,
+	"      Only include ppts matching regexp",
+	"  --" + Daikon.ppt_omit_regexp_SWITCH,
+	"      Omit all ppts matching regexp",
+	"  --" + Daikon.var_omit_regexp_SWITCH,
+	"      Omit all variables matching regexp",
+	"  --" + Daikon.config_SWITCH,
+	"      Specify a configuration file ",
+	"  --" + Daikon.config_option_SWITCH,
+	"      Specify a configuration option ",
+	"See the Daikon manual for more information."
+      },
       lineSep);
 
 
@@ -64,27 +81,120 @@ public class DtraceDiff {
    * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(final String[] args) {
-    String declsfile1 = null;
+    Set declsfile1 = new HashSet();
     String dtracefile1 = null;
-    String declsfile2 = null;
+    Set declsfile2 = new HashSet();
     String dtracefile2 = null;
-    // *** ToDo:  Make this recognize some of the standard Daikon options
-    // *** like FileIO.max_line_number and the regexp stuff.  The support
-    // *** is already built into FileIO.java, just need to parse the options.
-    if ((args.length < 2) || (args.length > 4)) {
-      throw new daikon.Daikon.TerminationMessage(usage);
+
+    LongOpt[] longopts = new LongOpt[] {
+      // Process only part of the trace file
+      new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      // Configuration options
+      new LongOpt(Daikon.config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+    };
+
+    Getopt g = new Getopt("daikon.tools.DtraceDiff", args, "h:", longopts);
+    int c;
+    while ((c = g.getopt()) != -1) {
+      switch(c) {
+	
+	// long option
+      case 0:
+        String option_name = longopts[g.getLongind()].getName();
+        if (Daikon.help_SWITCH.equals(option_name)) {
+          System.out.println(usage);
+          throw new Daikon.TerminationMessage();
+	} else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
+	  if (Daikon.ppt_regexp != null)
+	    throw new Error("multiple --"
+			    + Daikon.ppt_regexp_SWITCH
+			    + " regular expressions supplied on command line");
+	  try {
+	    String regexp_string = g.getOptarg();
+	    // System.out.println("Regexp = " + regexp_string);
+	    Daikon.ppt_regexp = Pattern.compile(regexp_string);
+	  } catch (Exception e) {
+	    throw new Error(e.toString());
+	  }
+	  break;
+	} else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
+	  if (Daikon.ppt_omit_regexp != null)
+	    throw new Error("multiple --"
+			    + Daikon.ppt_omit_regexp_SWITCH
+			    + " regular expressions supplied on command line");
+	  try {
+	    String regexp_string = g.getOptarg();
+	    // System.out.println("Regexp = " + regexp_string);
+	    Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
+	  } catch (Exception e) {
+	    throw new Error(e.toString());
+	  }
+	  break;
+	} else if (Daikon.var_omit_regexp_SWITCH.equals(option_name)) {
+	  if (Daikon.var_omit_regexp != null)
+	    throw new Error("multiple --"
+			    + Daikon.var_omit_regexp_SWITCH
+			    + " regular expressions supplied on command line");
+	  try {
+	    String regexp_string = g.getOptarg();
+	    // System.out.println("Regexp = " + regexp_string);
+	    Daikon.var_omit_regexp = Pattern.compile(regexp_string);
+	  } catch (Exception e) {
+	    throw new Error(e.toString());
+	  }
+	  break;
+	} else if (Daikon.config_SWITCH.equals(option_name)) {
+	  String config_file = g.getOptarg();
+	  try {
+	    InputStream stream =
+	      new FileInputStream(config_file);
+	    Configuration.getInstance().apply(stream);
+	  } catch (IOException e) {
+	    throw new RuntimeException("Could not open config file "
+				       + config_file);
+	  }
+	  break;
+	} else if (Daikon.config_option_SWITCH.equals(option_name)) {
+	  String item = g.getOptarg();
+	  Configuration.getInstance().apply(item);
+	  break;
+        } else {
+          throw new RuntimeException("Unknown long option received: " +
+                                     option_name);
+        }
+	
+	//short options
+      case 'h':
+	System.out.println(usage);
+	throw new Daikon.TerminationMessage();
+	
+      case '?':
+        break; // getopt() already printed an error
+	
+      default:
+        System.out.println("getopt() returned " + c);
+        break;
+      }
     }
-    for (int i = 0; i < args.length; i++) {
+    
+    for (int i = g.getOptind(); i < args.length; i++) {
       if (args[i].indexOf(".decls") != -1) {
 	if (dtracefile1 == null)
-	  declsfile1 = args[i];
+	  declsfile1.add(new File(args[i]));
+	else if (dtracefile2 == null)
+	  declsfile2.add(new File(args[i]));
 	else
-	  declsfile2 = args[i];
+	  throw new daikon.Daikon.TerminationMessage(usage);
       } else if (args[i].indexOf(".dtrace") != -1) {
 	if (dtracefile1  == null)
 	  dtracefile1 = args[i];
-	else
+	else if (dtracefile2 == null)
 	  dtracefile2 = args[i];
+	else
+	  throw new daikon.Daikon.TerminationMessage(usage);
       } else {
 	throw new daikon.Daikon.TerminationMessage(usage);
       }
@@ -94,19 +204,15 @@ public class DtraceDiff {
     dtraceDiff (declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
 
-  public static void dtraceDiff (String declsfile1,
+  public static void dtraceDiff (Set declsfile1,
 				 String dtracefile1,
-				 String declsfile2,
+				 Set declsfile2,
 				 String dtracefile2) {
     try {
       Map pptmap = new HashMap();  // map ppts1 -> ppts2
-      PptMap ppts1 = new PptMap ();
-      PptMap ppts2 = new PptMap ();
-      
-      if (declsfile1 != null)
-	FileIO.read_declaration_file (new File(declsfile1), ppts1);
-      if (declsfile2 != null)
-	FileIO.read_declaration_file (new File(declsfile2), ppts2);
+      PptMap ppts1 = FileIO.read_declaration_files(declsfile1);
+      PptMap ppts2 = FileIO.read_declaration_files(declsfile2);
+
       FileIO.ParseState state1 =
 	new FileIO.ParseState (dtracefile1, false, ppts1);
       FileIO.ParseState state2 =
@@ -184,6 +290,9 @@ public class DtraceDiff {
 	  else
 	    return;  // EOF on both files ==> normal return
 	}
+	else if ((state1.status == FileIO.ParseStatus.TRUNCATED)
+		 || (state1.status == FileIO.ParseStatus.TRUNCATED))
+	  return;  // either file reached truncation limit, return quietly
 	else if (state1.status == FileIO.ParseStatus.EOF)
 	  throw new Error(dtracefile1 + " is shorter than " + dtracefile2);
 	else
