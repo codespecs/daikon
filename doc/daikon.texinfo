@@ -5379,7 +5379,7 @@ You can allocate extra space at the ends of arrays, so that your
 program can continue despite (some) memory errors.  You can customize
 what error code is returned if your program contains a memory error
 and is terminated by the dfec runtime.  You can (dangerously) tell
-the dfec untime not to check for specific memory errors.
+the dfec runtime not to check for specific memory errors.
 @item
 You can turn specific dfec warnings on and off.
 @end itemize
@@ -7432,7 +7432,7 @@ ignore any variable matching the following regular expression.
 You can reduce the number of variables that are output by instrumented
 code.  Do this by reducing the class/structure instrumentation depth.
 @itemize
-@item With Chidory, use the @option{--nesting-depth=@var{N}} option.
+@item With Chicory, use the @option{--nesting-depth=@var{N}} option.
 @item With dfej, use the @option{--nesting-depth=@var{N}} option.
 @item With Kvasir, use the @option{--struct-depth=@var{N}} or the 
 @option{--nesting-depth=@var{N}} option.
@@ -8712,15 +8712,22 @@ comparable variables.  These indicate
 which other variables are comparable to this one, which is typically
 obtained via type-inference based analysis.
 
-A comparability for a non-compound type is an integer.  Comparisons
-succeed exactly if either integer is negative or if both integers are
-the same.  A comparability for an array type may contain an
+A comparability for a non-array type is a signed integer.  Two variables
+at the same program point
+are considered comparable if both integers are the same, or if either
+integer is negative.are 
+A comparability for an array type may contain an
 integer for each index and for the contents; for instance, @samp{5[22][17]}
 for a two-dimensional array.  Comparisons succeed if comparisons over
 each component succeed.
 
-If no information is supplied (i.e., this line is blank), then
-the variable is compared to all other variables of the same type.
+Variables at different program points are never compared to one another.
+Use of the same number at different program points does not indicate any
+relationship between the variables, and a given variable may have a
+different comparability integer at different program points.
+
+If no comparability information is supplied (i.e., this line is blank), then
+the variable is considered comparable to all other variables of the same type.
 
 As an example, in the following code:
 @example
@@ -8819,7 +8826,7 @@ There is a special @code{VarComparability} declaration that controls how
 the comparability field in program point declarations is interpreted.
 The default @code{VarComparability} is @code{implicit}, which means
 ordinary comparability as described in @ref{Program point declarations}.
-(The name @code{implict} is retained for historical reasons.)
+(The name @code{implicit} is retained for historical reasons.)
 You can override it as
 follows:
 @example
@@ -9252,7 +9259,7 @@ this.topOfStack
 @c  LocalWords:  lwpp ine runtime's malloced MaxPermSize JVM's MyVector perc vv
 @c  LocalWords:  falsetime trueinvs testsuite MergeInvariants fns untruncate mx
 @c  LocalWords:  subsubheading bzip fontspecific sublicense NONINFRINGEMENT Cok
-@c  LocalWords:  getopt Renn Nethercote MemCheck readelf Binutils Yuriy Brun
+@c  LocalWords:  getopt Renn Nethercote MemCheck readelf Binutils Yuriy Brun ps
 @c  LocalWords:  Cockrell Czeisler Demsky Nii Dodoo Fellheimer Griswold Guo Hao
 @c  LocalWords:  Kataoka Loosemore Vikash Mansinghka Samir Meghani Jelani Toh
 @c  LocalWords:  Nimmer Shih Iuliu Vasilescu Xiao Kaplan Angros Tadashi Araragi
@@ -9261,6 +9268,7 @@ this.topOfStack
 @c  LocalWords:  hasNull nullTerminated isParam hashCode VarComparability IDE
 @c  LocalWords:  makeEmpty topLevel bottomLevel pptInfo MyInteger printindex
 @c  LocalWords:  cygwin basename globalVar staticVar funcStaticVar myName foo
-@c  LocalWords:  TerminationMessage HotSpot daikonPrintArrayMissing javacc
-@c  LocalWords:  sourcing toString struct uninstrumented Garbervetsky
-@c  LocalWords:  UnsupportedClassVersionError
+@c  LocalWords:  TerminationMessage HotSpot daikonPrintArrayMissing javacc invs
+@c  LocalWords:  sourcing toString struct uninstrumented Garbervetsky classfile
+@c  LocalWords:  UnsupportedClassVersionError DtraceDiff VerifyError procedurei
+@c  LocalWords:  replacementi junit declsfiles dtracefile PublicTest BCEL bcel
