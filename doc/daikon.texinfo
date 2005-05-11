@@ -2941,6 +2941,10 @@ After creating a data trace (@file{.dtrace}) file, run Daikon on it,
 passing the specified arguments, if any, to Daikon.
 (Not supported by dfej, only Chicory.)
 
+This option supplies Daikon with a single trace from a one execution of
+your program.  When Daikon is invoked from the command line, it can be
+supplied as many trace files as desired.
+
 @end table
 
 
