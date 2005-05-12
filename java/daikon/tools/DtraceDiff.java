@@ -253,9 +253,9 @@ public class DtraceDiff {
 	    if (foundppt == null) {
 	      if (!ppt1.name.equals(ppt2.name))
 		ppt_mismatch_error (state1, dtracefile1,  state2, dtracefile2);
-	      if (ppt1.num_tracevars != ppt2.num_tracevars)
-		ppt_decl_error (state1, dtracefile1, state2, dtracefile2);
-	      for (int i = 0; i < ppt1.num_tracevars; i++) {
+	      for (int i = 0;
+		   (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars);
+		   i++) {
 		// *** what about comparability and aux info?
 		if ((!vis1[i].name().equals(vis2[i].name()))
 		    || (vis1[i].is_static_constant != vis2[i].is_static_constant)
@@ -268,6 +268,8 @@ public class DtraceDiff {
 		  ppt_var_decl_error (vis1[i], state1, dtracefile1,
 				      vis2[i], state2, dtracefile2);
 	      }
+	      if (ppt1.num_tracevars != ppt2.num_tracevars)
+		ppt_decl_error (state1, dtracefile1, state2, dtracefile2);
 	      pptmap.put(ppt1, ppt2);
 	    } else if (foundppt != ppt2) {
 	      ppt_mismatch_error (state1, dtracefile1, state2, dtracefile2);
@@ -402,8 +404,9 @@ public class DtraceDiff {
     throw new Error ("Declaration of variable " + vi1.name() +
 		     " in program point " + state1.ppt.name +
 		     " referenced at line " + state1.lineNum +
-		     " does not match corresponding declaration referenced at line " +
-		     state2.lineNum +
+		     " does not match corresponding declaration of " +
+		     vi2.name() +
+		     " referenced at line " + state2.lineNum +
 		     " in " + dtracefile2);
   }
 
