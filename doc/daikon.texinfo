@@ -908,7 +908,7 @@ implementation.  Now, look at the first section of Daikon output.
 ======================================================================
 StackAr:::OBJECT
 this.theArray != null
-this.theArray.class == "[Ljava.lang.Object;"
+this.theArray.class == "java.lang.Object[]"
 this.topOfStack >= -1
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
@@ -2899,13 +2899,13 @@ java daikon.Chicory '--ppt-omit-pattern=HashSetLinear\$HslIterator' ...
 
 @item omit a single method:
 @example
-java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()Ljava/lang/Object;' \
+java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()' \
      ...
 @end example
 
 @item omit a single program point:
 @example
-java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' ...
+java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
 @end example
 
 @end itemize
@@ -8782,11 +8782,11 @@ Instrumenting code creates a @file{.decls} file that contains program
 point names such as:
 
 @example
-StackAr.makeEmpty()V:::ENTER
-StackAr.makeEmpty()V:::EXIT54
-StackAr.top()Ljava/lang/Object;:::ENTER
-StackAr.top()Ljava/lang/Object;:::EXIT64
-StackAr.top()Ljava/lang/Object;:::EXIT65
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+DataStructures.StackAr.push(java.lang.Object):::EXIT99
+PolyCalc.RatNum.RatNum(int, int):::ENTER
+PolyCalc.RatNum.RatNum(int, int):::EXIT55
+PolyCalc.RatNum.RatNum(int, int):::EXIT67
 @end example
 
 This section describes the format of these program point names.  Someone
@@ -8963,7 +8963,7 @@ the @file{StackAr.java} program (@pxref{StackAr example}).
 
 @example
 DECLARE
-StackAr.push(Ljava/lang/Object;)V:::ENTER
+StackAr.push(java.lang.Object):::ENTER
 x
 Object
 int
@@ -8994,7 +8994,7 @@ int
 0
 
 DECLARE
-StackAr.push(Ljava/lang/Object;)V:::EXIT96
+StackAr.push(java.lang.Object):::EXIT96
 x
 Object
 int
@@ -9063,7 +9063,7 @@ by ellipses.
 @example
 ...
 
-StackAr.push(Ljava/lang/Object;)V:::ENTER
+StackAr.push(java.lang.Object):::ENTER
 this_invocation_nonce
 55
 x
@@ -9076,7 +9076,7 @@ this.theArray
 3852104
 1
 this.theArray.class
-"[Ljava.lang.Object;"
+"java.lang.Object[]"
 1
 this.theArray[]
 [null]
@@ -9093,7 +9093,7 @@ this.theArray
 3852104
 1
 this.theArray.class
-"[Ljava.lang.Object;"
+"java.lang.Object[]"
 1
 this.theArray[]
 [null]
@@ -9107,7 +9107,7 @@ this.topOfStack
 
 ...
 
-StackAr.push(Ljava/lang/Object;)V:::EXIT96
+StackAr.push(java.lang.Object):::EXIT96
 this_invocation_nonce
 55
 x
@@ -9120,7 +9120,7 @@ this.theArray
 3852104
 1
 this.theArray.class
-"[Ljava.lang.Object;"
+"java.lang.Object[]"
 1
 this.theArray[]
 [1217030]
@@ -9137,7 +9137,7 @@ this.theArray
 3852104
 1
 this.theArray.class
-"[Ljava.lang.Object;"
+"java.lang.Object[]"
 1
 this.theArray[]
 [1217030]
@@ -9151,7 +9151,7 @@ this.topOfStack
 
 ...
 
-StackAr.push(Ljava/lang/Object;)V:::ENTER
+StackAr.push(java.lang.Object):::ENTER
 this_invocation_nonce
 94
 x
@@ -9164,7 +9164,7 @@ this.theArray
 350965
 1
 this.theArray.class
-"[Ljava.lang.Object;"
+"java.lang.Object[]"
 1
 this.theArray[]
 [null]
@@ -9181,7 +9181,7 @@ this.theArray
 350965
 1
 this.theArray.class
-"[Ljava.lang.Object;"
+"java.lang.Object[]"
 1
 this.theArray[]
 [null]
