@@ -48,6 +48,10 @@ import sys
 f = open(sys.argv[1], 'r')
 allLines = [line.strip() for line in f.readlines()]
 
+# Skip comparability declaration, if any
+if allLines[0] == "VarComparability":
+    allLines = allLines[3:]
+
 # Break each program point declaration up into separate lists.
 # Program points are separated by "DECLARE" statements
 # Key: program point name
@@ -59,7 +63,7 @@ tempAllPpts = [] # Temporary before placing in allPpts
 for line in allLines:
     if line == "DECLARE":
         tempAllPpts.append([]) # Start a new list
-    elif line != "":       # Don't add blank lines
+    elif line != "" and line[0] != "#":   # Don't add blank lines or comments
         tempAllPpts[-1].append(line) # Append line to the last entry
 
 # Init allPpts from tempAllPpts
