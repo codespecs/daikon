@@ -36,12 +36,20 @@
 # int # isParam=true
 # int
 # 2
+# d
+# int # isParam=true
+# int
+# -1
 
 # Output:
 
 # ..add():::ENTER
 # a b
 # c
+# -1: d
+
+# Prints out a '-1: ' prefix in front of the special comparability set
+# with a number of -1
 
 import sys
 
@@ -100,7 +108,12 @@ for pptName in sortedPptKeys:
 
     while len(sortedVars) > 0:
         varName = sortedVars[0]
-        print varName,
+
+        if var2comp[varName] == '-1': # Remember that everything is a string
+            print '-1:', varName,
+        else:
+            print varName,
+
         compNum = var2comp[varName]
 
         if compNum:
