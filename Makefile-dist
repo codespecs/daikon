@@ -18,9 +18,10 @@ endif
 	$(MAKE) -C clean
 
 kvasir:
-	cd kvasir && ./configure --prefix=`pwd`/inst
-	cd kvasir && make
-	cd kvasir && make install
+	cd kvasir/vex && make
+	cd kvasir/valgrind && ./configure --prefix=`pwd`/../inst --with-vex=`pwd`/../vex
+	cd kvasir/valgrind && make
+	cd kvasir/valgrind && make install
 
 dfej: java-front-end
 
