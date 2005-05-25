@@ -237,6 +237,8 @@ staging: doc/CHANGES
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
 	$(MAKE) daikon.tar
+	gzip -c /tmp/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
+	cp -pf /tmp/daikon.zip $(STAGING_DIR)/download/daikon.zip
 	mv daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
 	@echo "]2;Building Java doc"
@@ -245,7 +247,6 @@ staging: doc/CHANGES
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	install -d $(STAGING_DIR)/download/doc
-	cp -pf eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html doc
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
 	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc
@@ -397,7 +398,6 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 # checkout.
 daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
-	install -d $(STAGING_DIR)
 	-rm -rf /tmp/daikon
 	mkdir /tmp/daikon
 
@@ -519,14 +519,13 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(cd /tmp/daikon/front-end/perl; $(RM_TEMP_FILES) )
 
 	# Kvasir C front end
-	cd /tmp/daikon; cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
-	mv /tmp/daikon/valgrind-kvasir /tmp/daikon/kvasir
-	cd /tmp/daikon/kvasir; cvs -d $(CVS_REPOSITORY) co -P kvasir
-	cd /tmp/daikon/kvasir; cvs -d $(CVS_REPOSITORY) co -P kvasircomp
-	find /tmp/daikon/kvasir -name '.cvsignore' | xargs rm
-	find /tmp/daikon/kvasir -name 'CVS' -type d | xargs rm -rf
-	find /tmp/daikon/kvasir/kvasir -name '*.txt' -type f | xargs rm
-	rm -rf /tmp/daikon/kvasir/kvasir/unittest-files
+	@# "rsync -C" means "copy, ignoring the same files CVS would"
+	rsync -rCp valgrind-3/ /tmp/daikon/kvasir
+	@# CVS-only build script
+	rm -f /tmp/daikon/kvasir/auto-everything.sh
+	@# Internal developer documentation
+	rm -rf /tmp/daikon/kvasir/valgrind/kvasir/doc
+	(cd /tmp/daikon/kvasir; $(RM_TEMP_FILES) )
 
 	# Jar file needed for Chicory front end
 	cp -p java/ChicoryPremain.jar /tmp/daikon/java
@@ -539,11 +538,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp && chmod -R a+rX daikon)
 	(cd /tmp; tar cf daikon.tar daikon)
-	gzip -c /tmp/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
 	# cp -pf /tmp/daikon.tar
 	rm -f /tmp/daikon.zip
 	(cd /tmp; zip -r daikon daikon)
-	cp -pf /tmp/daikon.zip $(STAGING_DIR)/download/daikon.zip
 
 # Rule for daikon.tar.gz
 %.gz : %
