@@ -9,6 +9,7 @@ import daikon.inv.*;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.*;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -1326,13 +1327,16 @@ public final class VarInfo implements Cloneable, Serializable {
     // Can only compare in the same ppt because otherwise
     // comparability info may not make sense.
     Assert.assertTrue(var1.ppt == var2.ppt);
+    
     if (!comparable2Way(var2)) {
       return false;
     }
+    
     if ((!Daikon.ignore_comparability)
       && (!VarComparability.comparable(var1, var2))) {
       return false;
     }
+    
     return true;
   }
 
@@ -1371,14 +1375,35 @@ public final class VarInfo implements Cloneable, Serializable {
    **/
   public boolean comparable2Way(VarInfo var2) {
     VarInfo var1 = this;
+    
+    // the check ensures that a scalar or string and elements of an array of the same type are
+    // labelled as comparable
+    if (Daikon.check_program_types && (var1.file_rep_type.isArray() && !var2.file_rep_type.isArray())) {
+      
+      if (var1.eltsCompatible(var2))
+        return true;
+    }
+    
+    // the check ensures that a scalar or string and elements of an array of the same type are
+    // labelled as comparable
+    if (Daikon.check_program_types && (!var1.file_rep_type.isArray() && var2.file_rep_type.isArray())) {
+      
+      if (var2.eltsCompatible(var1)) 
+        return true;
+
+    }
+    
+    
     if (Daikon.check_program_types
       && (!var1.type.comparableOrSuperclassEitherWay(var2.type))) {
       return false;
     }
+    
     if (Daikon.check_program_types
       && (var1.file_rep_type != var2.file_rep_type)) {
       return false;
     }
+    
     return true;
   }
 

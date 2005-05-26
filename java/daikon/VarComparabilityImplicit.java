@@ -140,6 +140,12 @@ public final class VarComparabilityImplicit
               && comparable(type1.elementType(),
                             type2.elementType()));
     }
+    
+    // the check ensures that a scalar or string and elements of an array of the same type are
+    // labelled as comparable
+    if (((type1.dimensions > 0) && (type2.dimensions == 0)) || ((type1.dimensions == 0) && (type2.dimensions > 0)))
+      return type1.base == type2.base;
+    
     if ((type1.dimensions == 0) && (type2.dimensions == 0))
       return type1.base == type2.base;
     // One array, one non-array, and the non-array isn't universally comparable.
