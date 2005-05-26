@@ -1274,22 +1274,6 @@ public class PptTopLevel extends Ppt {
         "Done with create_derived_variables, " + var_infos.length + " vars");
   }
 
-  /**
-   * This function is called to jump-start processing; it creates all
-   * the views (and thus candidate invariants), but does not check
-   * those invariants.
-   **/
-  public void instantiate_views_and_invariants() {
-    if (debug.isLoggable(Level.FINE))
-      debug.fine("instantiate_views_and_invariants for " + name());
-
-    // Now make all of the views (and thus candidate invariants)
-    instantiate_views(0, var_infos.length);
-
-    if (debug.isLoggable(Level.FINE))
-      debug.fine("Done with instantiate_views_and_invariants");
-  }
-
   ///////////////////////////////////////////////////////////////////////////
   /// Creating invariants
   ///
@@ -1911,14 +1895,12 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Install views and the invariants.  We create NO views over static
+   * This function creates all the views (and thus candidate invariants),
+   * but does not check those invariants. We create NO views over static
    * constant variables, but everything else is fair game.  We don't
    * create views over variables which have a higher (controlling)
    * view.  This function does NOT cause invariants over the new views
-   * to be checked (but it does create invariants).  The installed
-   * views and invariants will all have at least one element with
-   * index i such that vi_index_min <= i < vi_index_limit.  (However,
-   * we also assume that vi_index_limit == var_infos.length.)
+   * to be checked (but it does create invariants).
    **/
 
   // Note that some slightly inefficient code has been added to aid
@@ -1928,43 +1910,39 @@ public class PptTopLevel extends Ppt {
   // for each possible combination, simplifying determining why certain
   // slices were not created.
 
-  private void instantiate_views(int vi_index_min,
-                                 int vi_index_limit) {
+  public void instantiate_views_and_invariants() {
 
-    // This test prevents instantiate views for variables one at a time.
-    Assert.assertTrue(var_infos.length == vi_index_limit);
-
-    if (vi_index_min == vi_index_limit)
-      return;
+    if (debug.isLoggable(Level.FINE))
+      debug.fine("instantiate_views_and_invariants for " + name());
 
     // used only for debugging
     int old_num_vars = var_infos.length;
     int old_num_views = views.size();
     boolean debug_on = debug.isLoggable(Level.FINE);
 
-    /// 1. all unary views
+    // / 1. all unary views
 
     // Unary slices/invariants.
-    Vector unary_views = new Vector(vi_index_limit - vi_index_min);
-    for (int i = vi_index_min; i < vi_index_limit; i++) {
+    Vector unary_views = new Vector(var_infos.length);
+    for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
 
       if (Debug.logOn())
-        Debug.log(
-          getClass(),
-          this,
-          Debug.vis(vi),
-          " Instantiate Slice, ok=" + is_slice_ok(vi));
-      //System.out.println (" Instantiate Slice " + name() + " var = "
-      //                    + vi.name.name() + "ok=" + is_slice_ok (vi));
+        Debug.log(getClass(), this, Debug.vis(vi), " Instantiate Slice, ok="
+            + is_slice_ok(vi));
+
+      // we do not call is_var_ok_unary on vi here because
+      // is_slice_ok does the same thing    
       if (!is_slice_ok(vi))
         continue;
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
       // if (vi.isStaticConstant()) continue;
+
       PptSlice1 slice1 = new PptSlice1(this, vi);
       slice1.instantiate_invariants();
+
       if (Debug.logOn() || debug_on)
         Debug.log(debug, getClass(), slice1, "Created unary slice");
       unary_views.add(slice1);
@@ -1972,56 +1950,33 @@ public class PptTopLevel extends Ppt {
     addViews(unary_views);
     unary_views = null;
 
-    /// 2. all binary views
+    // / 2. all binary views
 
     // Binary slices/invariants.
     Vector binary_views = new Vector();
-    for (int i1 = 0; i1 < vi_index_limit; i1++) {
+    for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
-      if (!var1.isCanonical() && !(Debug.logOn() || debug_on)) {
+
+      if (!is_var_ok_binary(var1))
         continue;
-      }
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
       // if (var1.isStaticConstant()) continue;
-      boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-      int i2_min = (target1 ? i1 : Math.max(i1, vi_index_min));
-      for (int i2 = i2_min; i2 < vi_index_limit; i2++) {
+
+      for (int i2 = i1; i2 < var_infos.length; i2++) {
         VarInfo var2 = var_infos[i2];
 
-        if (!var1.isCanonical()) {
-          if (Debug.logOn() || debug_on)
-            Debug.log(
-              debug,
-              getClass(),
-              this,
-              Debug.vis(var1, var2),
-              "Binary slice not created, var1 is not a leader");
+        if (!is_var_ok_binary(var2))
           continue;
-        }
-        if (!var2.isCanonical()) {
-          if (Debug.logOn() || debug_on)
-            Debug.log(
-              debug,
-              getClass(),
-              this,
-              Debug.vis(var1, var2),
-              "Binary slice not created, var2 is not a leader");
-          continue;
-        }
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var2.isStaticConstant()) continue;
         if (!is_slice_ok(var1, var2)) {
           if (Debug.logOn() || debug_on)
-            Debug.log(
-              debug,
-              getClass(),
-              this,
-              Debug.vis(var1, var2),
-              "Binary slice not created, is_slice_ok == false");
+            Debug.log(debug, getClass(), this, Debug.vis(var1, var2),
+                "Binary slice not created, is_slice_ok == false");
           continue;
         }
         PptSlice2 slice2 = new PptSlice2(this, var1, var2);
@@ -2041,40 +1996,31 @@ public class PptTopLevel extends Ppt {
     }
 
     Vector ternary_views = new Vector();
-    for (int i1 = 0; i1 < vi_index_limit; i1++) {
+    for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
-      if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
+      if (!is_var_ok_ternary(var1))
         continue;
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
       // if (var1.isStaticConstant()) continue;
-      // For now, only ternary invariants not involving any arrays
-      if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
-        continue;
 
-      boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-      for (int i2 = i1; i2 < vi_index_limit; i2++) {
+      for (int i2 = i1; i2 < var_infos.length; i2++) {
         VarInfo var2 = var_infos[i2];
-        if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
+
+        if (!is_var_ok_ternary(var2))
           continue;
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var2.isStaticConstant()) continue;
-        // For now, only ternary invariants not involving any arrays
-        if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
-          continue;
 
-        boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
-        int i3_min = ((target1 || target2) ? i2 : Math.max(i2, vi_index_min));
-        for (int i3 = i3_min; i3 < vi_index_limit; i3++) {
-          Assert.assertTrue(
-            ((i1 >= vi_index_min) && (i1 < vi_index_limit))
-              || ((i2 >= vi_index_min) && (i2 < vi_index_limit))
-              || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
-          Assert.assertTrue((i1 <= i2) && (i2 <= i3));
+        for (int i3 = i2; i3 < var_infos.length; i3++) {
+
           VarInfo var3 = var_infos[i3];
+
+          if (!is_var_ok_ternary(var3))
+            continue;
 
           if (!is_slice_ok(var1, var2, var3))
             continue;
@@ -2092,11 +2038,87 @@ public class PptTopLevel extends Ppt {
     if (debug.isLoggable(Level.FINE))
       debug.fine(views.size() - old_num_views + " new views for " + name());
 
+    if (debug.isLoggable(Level.FINE))
+      debug.fine("Done with instantiate_views_and_invariants");
+
     // This method didn't add any new variables.
     Assert.assertTrue(old_num_vars == var_infos.length);
     repCheck();
   }
+  
+  /**
+   * Returns whether the variable should be involved in an unary slice. The
+   * variable must be a leader, not a constant, and not always missing.  
+   */
+  private boolean is_var_ok_unary(VarInfo var) {
 
+    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+      return (false);
+
+    if (is_constant(var))
+      return (false);
+
+    if (is_missing(var))
+      return (false);
+
+    if (!var.isCanonical())
+      return (false);
+
+    return (true);
+  }
+  
+  /**
+   * Returns whether the variable should be involved in a binary slice.  
+   * The variable must be a leader and not always missing.    
+   * The function allows early termination when looking at combinations of
+   * variables for creating slices.  For example, if variable x is not
+   * suitable for binary slices, then we do not need to look at
+   * x with any other variable in a binary slice (fail fast).
+   */
+  private boolean is_var_ok_binary(VarInfo var) {
+
+    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+      return (false);
+
+    if (is_missing(var))
+      return (false);
+
+    if (!var.isCanonical())
+      return (false);
+
+    return (true);
+  }
+  
+  /**
+   * Returns whether the variable should be involved in a ternary slice. In
+   * addition to the requirements of variables in the binary slices, for ternary
+   * slices, the variable must be an integer or float and must not be an array.
+   * The function allows early termination when looking at combinations of
+   * variables for creating slices.  For example, if variable x is not
+   * suitable for binary slices, then we do not need to look at
+   * x with any other variable in a binary slice (fail fast).
+   * 
+   * @see #is_var_ok_binary(VarInfo)
+   */
+  private boolean is_var_ok_ternary(VarInfo var) {
+    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+      return (false);
+
+    if (!is_var_ok_binary(var))
+      return false;
+
+    // arrays are not allowed in ternary invariants
+    if (var.rep_type.isArray())
+      return (false);
+
+    // For now, variable must be integral or float
+    if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat())
+      return (false);
+    
+    return (true);
+  }
+  
+  
   /**
    * Returns whether or not the specified slice should be created.
    */
@@ -2111,44 +2133,38 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Returns whether or not the specified unary slice should be
-   * created.  The variable must be a leader, not a constant, and
-   * not always missing.
+   * created. The slice should not be created if the
+   * variable does not meet qualifications for the unary slice.
+   * 
+   * @see #is_var_ok_unary(VarInfo)
    */
   public boolean is_slice_ok(VarInfo var1) {
 
-    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
-      return (false);
-    if (is_constant(var1))
-      return (false);
-    if (is_missing(var1))
-      return (false);
-    if (!var1.isCanonical())
-      return (false);
-
-    return (true);
+    return is_var_ok_unary(var1);
   }
 
   /**
    * Returns whether or not the specified binary slice should be created.
-   * Checks to sinsure that var1 and var2 are not both constants and
-   * if they are in the same equality set, that there are at least 2
-   * variables in the equality set.  Also makes sure that neither var1
-   * or var2 is always missing.
+   * The slice should not be created if any of the following are true:
+   * 
+   * - One of the variables does not meet qualifications for the binary slice  
+   * - Variables are not compatible
+   * - Both variables are constant.
+   * 
+   * @see #is_var_ok_binary(VarInfo)
    */
   public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
 
-    // Both vars must be leaders
-    if (!var1.isCanonical() || !var2.isCanonical())
+    if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2))
       return (false);
-
+   
     // Check to see if the new slice would be over all constants
     if (is_constant(var1) && is_constant(var2))
       return (false);
-
-    // Each variable must not be always missing
-    if (is_missing(var1) || is_missing(var2))
+    
+    if (!var1.compatible(var2))
       return (false);
-
+    
     // Don't create a slice with the same variables if the equality
     // set only contains 1 variable
     // This is not turned on for now since suppressions need invariants
@@ -2162,18 +2178,19 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified ternary slice should be created.
-   * The slice should not be created if any of the following are true
-   *    - Any var is always missing
-   *    - Any var is not canonical
-   *    - Any var is an array
-   *    - Any of the vars are not comparable with the others
-   *    - All of the vars are constants
-   *    - Any var is not (integral or float)
-   *    - Each var is the same and its equality set has only two variables
-   *    - Two of the vars are the same and its equality has only one variable
-   *      (this last one is currently disabled as x = func(x,y) might still
-   *      be interesting even if x is the same.
+   * Returns whether or not the specified ternary slice should be created 
+   * by checking the variables' qualifications.  In addition,
+   * The slice should not be created if any of the following are true:
+   * 
+   * - One of the variables does not meet qualifications for the ternary slice
+   * - All of the vars are constants
+   * - Any var is not (integral or float)
+   * - Each var is the same and its equality set has only two variables
+   * - Two of the vars are the same and its equality has only one variable
+   *   (this last one is currently disabled as x = func(x,y) might still
+   *   be interesting even if x is the same.
+   *   
+   * @see #is_var_ok_ternary(VarInfo)
    */
   public boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
@@ -2181,47 +2198,13 @@ public class PptTopLevel extends Ppt {
     if (Debug.logOn() || debug.isLoggable(Level.FINE))
       dlog = new Debug(getClass(), this, Debug.vis(v1, v2, v3));
 
-    // Each variable must not be always missing
-    if (is_missing(v1) || is_missing(v2) || is_missing(v3))
+    if (!is_var_ok_ternary(v1) || !is_var_ok_ternary(v2)
+        || !is_var_ok_ternary(v3))
       return (false);
 
     // At least one variable must not be a constant
     if (is_constant(v1) && is_constant(v2) && is_constant(v3))
       return false;
-
-    // Each variable must be canonical (leader)
-    if (!v1.isCanonical()) {
-      if (dlog != null)
-        dlog.log(debug, "Ternary slice not created, var1 not lead");
-      return (false);
-    }
-    if (!v2.isCanonical()) {
-      if (dlog != null)
-        dlog.log(debug, "Ternary slice not created, var2 not lead");
-      return (false);
-    }
-    if (!v3.isCanonical()) {
-      if (dlog != null)
-        dlog.log(debug, "Ternary slice not created, var3 not lead");
-      return (false);
-    }
-
-    // For now, each variable must also not be an array (ternary only)
-    if (v1.rep_type.isArray()) {
-      if (dlog != null)
-        dlog.log(debug, "Ternary slice not created, var1 is an array");
-      return (false);
-    }
-    if (v2.rep_type.isArray()) {
-      if (dlog != null)
-        dlog.log(debug, "Ternary slice not created, var2 is an array");
-      return (false);
-    }
-    if (v3.rep_type.isArray()) {
-      if (dlog != null)
-        dlog.log(debug, "Ternary slice not created, var3 is an array");
-      return (false);
-    }
 
     // Vars must be compatible
     if (!v1.compatible(v2) || !v1.compatible(v3) || !v2.compatible(v3)) {
@@ -2229,21 +2212,6 @@ public class PptTopLevel extends Ppt {
         dlog.log(debug, "Ternary slice not created, vars not compatible");
       return (false);
     }
-
-    // For now, each variable must be integral or float.  We only need
-    // to check the first variable since comparability will handle the
-    // others
-    if (!v1.file_rep_type.isIntegral() && !v1.file_rep_type.isFloat()) {
-      if (dlog != null)
-        dlog.log(
-          debug,
-          "Ternary slice not created, vars are neither " + "integral or float");
-      return (false);
-    }
-    Assert.assertTrue(
-      v2.file_rep_type.isIntegral() || v2.file_rep_type.isFloat());
-    Assert.assertTrue(
-      v3.file_rep_type.isIntegral() || v3.file_rep_type.isFloat());
 
     // Don't create a reflexive slice (all vars the same) if there are
     // only two vars in the equality set
@@ -4225,8 +4193,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-	* Increments the number of samples processed by the program point by 1
-	*/
+  * Increments the number of samples processed by the program point by 1
+  */
   public void incSampleNumber() {
     values_num_samples++;
   }
