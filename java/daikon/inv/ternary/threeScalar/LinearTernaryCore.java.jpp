@@ -46,6 +46,12 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/**
+ * The LinearTernaryCore class is acts as the backend for the
+ * invariant (ax + by + cz + d = 0) by processing samples and
+ * computing constants.  The resulting constants a, b, c, and
+ *  mutually relatively prime, and the constant a is always p
+ **/
 
 public final class CLASSNAME
   implements Serializable, Cloneable
@@ -63,11 +69,11 @@ public final class CLASSNAME
   public double min_a, max_a, min_b, max_b, min_c, max_c, min_d, max_d;
   public double separation = 0;
 
-  //indcates whether a line exists in the 3D space instead of a plane (-1 means no line exists)
-  //determines which values in constants is valid; see calc_bi_linear()
+  // indicates whether a line exists in the 3D space instead of a plane (-1 means no line exists)
+  // determines which values in constants is valid; see calc_bi_linear()
   public int line_flag = -1;
 
-  //constants and coefficients for a line in 3D space
+  // constants and coefficients for a line in 3D space
   public double[] constants = new double[4];
 
   // Inner class to store points in for more convenient access.
@@ -168,7 +174,7 @@ public final class CLASSNAME
        // c = c / div;
        // d = d / div;
 
-      //we still need to guarantee the canonical form of coefficients (e.g. positive x coeff)
+      // we still need to guarantee the canonical form of coefficients (e.g. positive x coeff)
        if (a < 0) {
        a = a/-1.0;
        b = b/-1.0;
@@ -186,14 +192,14 @@ public final class CLASSNAME
         Point p = def_points[i];
         if (p == null)
           continue;
-        wrapper.log ("orig def_points["+i+"] = " + p);
+        //wrapper.log ("orig def_points["+i+"] = " + p);
         temp[permutation[0]] = p.x;
         temp[permutation[1]] = p.y;
         temp[permutation[2]] = p.z;
         p.x = temp[0];
         p.y = temp[1];
         p.z = temp[2];
-        wrapper.log ("permuted def_points["+i+"] = " + p);
+        //wrapper.log ("permuted def_points["+i+"] = " + p);
       }
     }
     // Assert that caches sync with a,b,c?
@@ -350,7 +356,7 @@ public final class CLASSNAME
     // calling addToFlow.  A proper clone, etc. should be created and
     // dealt with.  This will complicate the logic below, I'll bet.
 
-   // if (Debug.logDetail())
+  //  if (Debug.logDetail())
       wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z + " to invariant");
 
     if (values_seen < MINTRIPLES) {
@@ -386,7 +392,7 @@ public final class CLASSNAME
         }
       } else  {
 
-        // still haven't still enough values
+        // still haven't seen enough values
         return InvariantStatus.NO_CHANGE;
       }
     } else {
@@ -462,7 +468,7 @@ public final class CLASSNAME
     Point[] dummy = new Point[def_point.length];
     for (int i = 0; i < def_point.length; i++)
       dummy[i] = def_point[i];
-      
+
   // Find the three points with the maximum separation
         maxsep_triples (dummy);
         if (dummy[0] == null) {
@@ -470,10 +476,6 @@ public final class CLASSNAME
           // first
           return InvariantStatus.FALSIFIED;
         } else {
-
-    wrapper.log("Definitive point1: " + dummy[0]);
-    wrapper.log("Definitive point2: " + dummy[1]);
-    wrapper.log("Definitive point3: " + dummy[2]);
     }
 
         // calculate the coefficients of the equation (a, b, c, d)
@@ -483,7 +485,8 @@ public final class CLASSNAME
         b = coef[1];
         c = coef[2];
         d = coef[3];
-
+				wrapper.log("Calculated tri linear coeff: ("+ a +
+                    "), b (" + b + "), c (" + c + "), and d (" + d + ")");
         // If one of these coefficients is zero (except for d), this should be a
         // LinearBinary, not a LinearTernary, term.  (It might not show up
         // as LinearBinary because there might not have been enough samples;
@@ -503,12 +506,13 @@ public final class CLASSNAME
         // Check all values against a, b, and c.
         if (!wrapper.is_false()) {
           for (int i=0; i<values_seen; i++) {
-          wrapper.log("values seen: " + values_seen);
+          //wrapper.log("values seen: " + values_seen);
             // Global.fuzzy.eq works by comparing ratios between numbers,
             // so comparing the sum of everything to 0 won't work.
-            wrapper.log("point: " + def_point[i].x + " " + def_point[i].y + " " + def_point[i].z);
-            wrapper.log("compare: " + -c * def_point[i].z);
-            wrapper.log( "to: " + (a*def_point[i].x + b*def_point[i].y + d));
+          //  wrapper.log("point: " + def_point[i].x + " " + def_point[i].y + " " + def_point[i].z);
+          //  wrapper.log("compare: " + -c * def_point[i].z);
+          //  wrapper.log( "to: " + (a*def_point[i].x + b*def_point[i].y + d));
+
             if (!EQUAL (-c * def_point[i].z,
                         a*def_point[i].x + b*def_point[i].y + d)) {
               if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
@@ -822,7 +826,8 @@ public final class CLASSNAME
       if (wrapper.logOn() || debug.isLoggable(Level.FINE))
         wrapper.log (debug, wrapper.ppt.name() + ": Trying new a (" + a +
                     "), b (" + b + "), c (" + c + "), and d (" + d + ")");
-
+	    wrapper.log ("min max: Trying new a (" + a +
+                    "), b (" + b + "), c (" + c + "), and d (" + d + ")");
       // if the new coefficients are 'equal' to their min and max and
       // this point fits, then this new equation is good enough both
       // for existing points and the new point.
@@ -1016,7 +1021,7 @@ public final class CLASSNAME
 
     // call gcd function to get the greatest common divisor of the output
     // and put the coefficients in lowest terms
-    double myGCD = MathMDE.gcd(MathMDE.gcd((int)i_var, (int)j_var) , MathMDE.gcd((int)k_var, (int)Stand_const));
+    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
 
     double standard_i_var = 0;
     double standard_j_var = 0;
@@ -1028,7 +1033,11 @@ public final class CLASSNAME
     // divide all terms by -1.  Also reduce all terms by dividing by
     // the gcd.  If the gcd is 1, no harm done -- divide by 1.
     // ensures postive x coefficient
-
+    if(wrapper != null) {
+		wrapper.log("Preliminary: " + i_var + " " + j_var + " GCD: " + MathMDE.gcd(i_var, j_var));
+		wrapper.log("Preliminary: " + k_var + " " + Stand_const + " GCD: " + MathMDE.gcd(k_var, Stand_const));
+		wrapper.log("GCD: " + myGCD);
+		}
     if (i_var == 0) {
       standard_i_var = 0;
       standard_j_var = (j_var)/(myGCD);
@@ -1049,8 +1058,8 @@ public final class CLASSNAME
     double[] coef = new double[] {standard_i_var,
                                   standard_j_var,
                                   standard_k_var, standard_Stand_const };
-                               
-                              
+
+
     return coef;
 
   }
@@ -1182,7 +1191,7 @@ public final class CLASSNAME
   // In this class for convenience (avoid prefixing "LinearBinaryCore").
   static String formatTerm(OutputFormat format, double coeff, VarInfoName var, VarInfo vi, boolean first) {
     return LinearBinaryCore.formatTerm(format, coeff, var, vi, first);
-    
+
   }
 
   public String format_using(OutputFormat format,
