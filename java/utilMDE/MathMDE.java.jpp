@@ -232,6 +232,9 @@ public final class MathMDE {
 #include "MathMDE-gcd.java.jpp"
 #undef INT
 
+#define INT double
+#include "MathMDE-gcd.java.jpp"
+#undef INT
 
   ///
   /// Modulus
