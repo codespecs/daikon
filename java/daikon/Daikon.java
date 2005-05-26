@@ -624,7 +624,7 @@ public final class Daikon {
   // Read in the command line options
   // Return an array of {decls, dtrace, spinfo, map} files; each array
   // element is a set.
-  private static Set[] read_options(String[] args) {
+  protected static Set[] read_options(String[] args) {
     if (args.length == 0) {
       System.out.println(
         "Daikon error: no files supplied on command line.");
