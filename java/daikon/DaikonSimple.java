@@ -314,22 +314,22 @@ public static void mainHelper(final String[] args) throws IOException,
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 
-      if (is_var_ok(var1))
+      if (!is_var_ok(var1))
         continue;
 
       for (int i2 = i1; i2 < ppt.var_infos.length; i2++) {
         VarInfo var2 = ppt.var_infos[i2];
 
-        if (is_var_ok(var2))
+        if (!is_var_ok(var2))
           continue;
 
         for (int i3 = i2; i3 < ppt.var_infos.length; i3++) {
           VarInfo var3 = ppt.var_infos[i3];
 
-          if (is_var_ok(var3))
+          if (!is_var_ok(var3))
             continue;
 
-          if (!is_slice_ok(var1, var2, var3, ppt)) {
+          if (!is_slice_ok(var1, var2, var3)) {
             continue;
           }
           PptSlice3 slice3 = new PptSlice3(ppt, var1, var2, var3);
@@ -352,7 +352,7 @@ public static void mainHelper(final String[] args) throws IOException,
   // can not be an array.
   public static boolean is_var_ok(VarInfo var) {
 
-    return var.file_rep_type.isIntegral() || var.file_rep_type.isFloat()
+    return (var.file_rep_type.isIntegral() || var.file_rep_type.isFloat())
         && !var.rep_type.isArray();
 
   }
@@ -390,11 +390,10 @@ public static void mainHelper(final String[] args) throws IOException,
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo, VarInfo)
    *  
    */
-  public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3,
-      PptTopLevel ppt) {
+  public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
     // Vars must be compatible
-    return (v1.compatible(v2) && !v1.compatible(v3) && v2.compatible(v3));
+    return (v1.compatible(v2) && v1.compatible(v3) && v2.compatible(v3));
   }
 
   /**
