@@ -17,6 +17,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+Chicory
+
+   User Changes:
+   
+    Added --daikon-online option.  Behavior is similar to that of the --daikon option, 
+    but instead of writing and reading back a dtrace file, Chicory and Daikon communicate
+    directly via a socket.
 
 DtraceDiff
 
