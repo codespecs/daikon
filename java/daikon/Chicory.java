@@ -605,7 +605,7 @@ public class Chicory {
       System.err.println("  --dtrace-file=<file>               Write the dtrace file to this filename.  Usually ends with .dtrace");
       System.err.println("  --output-dir=<directory>           Write the dtrace files to this directory (default is current directory)");
       System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args");
-      System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args in online mode via socket communication");
+      System.err.println("  --daikon-online[=<daikon-args>]    Run daikon with no additional args in online mode via socket communication");
       System.err.println("  --help                             Print this help message");
       System.err.println("<class> is the program to trace.  Must exist in the classpath given");
       System.err.println("<args> are the arguments to <class>");
