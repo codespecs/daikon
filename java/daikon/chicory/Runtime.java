@@ -192,9 +192,12 @@ public class Runtime
          StackTraceElement ste = ste_arr[1];
          System.out.printf ("%s.%s():::ENTER\n\n", ste.getClassName(), ste.getMethodName());*/
 
+        synchronized(all_classes)
+         {
         MethodInfo mi = methods.get(mi_index);
         //System.out.println ("enter MethodInfo : " + mi.member);
         dtrace_writer.methodEntry(mi, nonce, obj, args);
+	 }
 
     }
 
@@ -241,9 +244,13 @@ public class Runtime
          println (ret_val);
          println ();
          */
+
+	synchronized(all_classes)
+	    {
         MethodInfo mi = methods.get(mi_index);
         dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, lineNum);
         // System.out.println ("enter MethodInfo : " + mi.member);
+	    }
 
     }
 
