@@ -81,6 +81,8 @@ public class Chicory {
   /** flag to use if we want to turn on the static initialization checks**/
   public static final boolean checkStaticInit = false;
 
+  private static final boolean RemoteDebug = false;
+
   /**
    * Entry point of Chicory <p>
    * @param args see usage for argument descriptions
@@ -219,15 +221,12 @@ public class Chicory {
 
          else if (arg.equals("--daikon-online")) {
         daikon_cmd_online = "daikon.Daikon +";
-        //premain_args.add(arg);
-        premain_args.add("--daikon-port=8111"); //TODO get port from daikon!
 
-      } else if (arg.startsWith ("--daikon-online=")) {
+      } 
+      else if (arg.startsWith ("--daikon-online=")) {
         daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon-online=".length()) + " +";
-        //premain_args.add(arg);
-        premain_args.add("--daikon-port=8111"); //TODO get port from daikon!
 
-      } else if (arg.equals("--verbose")) {
+      }else if (arg.equals("--verbose")) {
         verbose = true;
         premain_args.add(arg);
 
@@ -331,25 +330,52 @@ public class Chicory {
     terminate = System.getProperty(traceLimTermString);
 
     //run Daikon if we're in online mode
-    if(daikon_cmd_online != null)
+        StreamRedirectThread daikon_err = null, daikon_out = null;
+        if (daikon_cmd_online != null)
         {
-        runDaikon(true);
-        StreamRedirectThread err_thread
-        = new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
-      StreamRedirectThread out_thread
-        = new StreamRedirectThread("stdout", daikon_proc.getInputStream(), System.out);
-      err_thread.start();
-      out_thread.start();
-      
-      /*try
+            runDaikon(true);
+
+            daikon_err = new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
+            daikon_err.start();
+
+            InputStream daikonStdOut = daikon_proc.getInputStream();
+            BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut));
+
+            //online mode code
+            for (int i = 0; i < 100; i++)
             {
-                Thread.sleep(1000); //give time to daikon to start server
+                String line;
+                try
+                {
+                    line = daikonReader.readLine();
+                }
+                catch (IOException e1)
+                {
+                    line = null;
+                }
+
+                if (line == null)
+                {
+                    throw new RuntimeException("Did not receive socket port from Daikon!");
+                }
+                else
+                {
+                    //if (!line.startsWith("DaikonChicoryOnlinePort="))
+                        System.out.println(line);
+
+                    if (line.startsWith("DaikonChicoryOnlinePort="))
+                    {
+                        String portStr = line.substring("DaikonChicoryOnlinePort=".length());
+                        //System.out.println("GOT PORT STRING " + portStr);
+                        premain_args.add("--daikon-port=" + portStr);
+                        break;
+                    }
+                }
             }
-            catch (InterruptedException e1)
-            {
-                // TODO BETTER WAY TO DO THIS
-                e1.printStackTrace();
-            }*/
+
+            //continue reading daikon output in separate thread
+            daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
+            daikon_out.start();
         }
         
 
@@ -357,9 +383,18 @@ public class Chicory {
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<String>();
     cmdlist.add ("java");
+    
+    if(RemoteDebug)
+    {
+        //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
+        cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
+        //cmdlist.add("-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
+    }
+    
     cmdlist.add ("-cp");
     cmdlist.add (cp);
     cmdlist.add ("-ea");
+    
     if(dtraceLim != null)
         cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
     if(terminate != null)
@@ -387,13 +422,8 @@ public class Chicory {
     }
     int result = redirect_wait (chicory_proc);
 
-    // If no daikon command specified, show results and exit
-    if (daikon_cmd == null) {
-      if (result != 0)
-        System.out.printf ("Warning: Target exited with %d status\n", result);
-      System.exit (result);
-    }
-
+    if(daikon_cmd != null)
+    {
     // Terminate if target didn't end properly
     if (result != 0) {
       System.out.printf ("Warning: Target exited with %d status\n", result);
@@ -404,6 +434,39 @@ public class Chicory {
     runDaikon(false);
     result = waitForDaikon();
     System.exit(result);
+    }
+    else if (daikon_cmd_online != null)
+    {
+        // Wait for the process to terminate and return the results
+        result = -1;
+        while (true) {
+          try {
+            result = daikon_proc.waitFor();
+            break;
+          } catch (InterruptedException e) {
+            System.out.printf ("unexpected interrupt %s while waiting for "
+                               + "target to finish", e);
+          }
+        }
+
+        // Make sure all output is forwarded before we finish
+        try {
+            daikon_err.join();
+            daikon_out.join();
+        } catch (InterruptedException e) {
+          System.out.printf ("unexpected interrupt %s while waiting for "
+                               + "threads to join", e);
+        }
+        
+        System.exit(result);
+    }
+    else
+    {
+        // If no daikon command specified, show results and exit
+        if (result != 0)
+            System.out.printf ("Warning: Target exited with %d status\n", result);
+          System.exit (result);
+    }
   }
 
 
@@ -436,8 +499,6 @@ public class Chicory {
     //cmdstr = "java -Xmx500m -cp " + cp + " -ea " + daikon_cmd + " " + output_dir+"/"+trace_file_name;
 
 
-   //cmdstr = "java daikon.Daikon -o felly.inv -"; //TODO remove!
-
     //System.out.println("daikon command is " + daikon_cmd);
     //System.out.println("daikon command cmdstr " + cmdstr);
 
@@ -458,6 +519,7 @@ public class Chicory {
     int result = redirect_wait (daikon_proc);
     return result;
   }
+
 
   public int redirect_wait (Process p) {
 
@@ -543,6 +605,7 @@ public class Chicory {
       System.err.println("  --dtrace-file=<file>               Write the dtrace file to this filename.  Usually ends with .dtrace");
       System.err.println("  --output-dir=<directory>           Write the dtrace files to this directory (default is current directory)");
       System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args");
+      System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args in online mode via socket communication");
       System.err.println("  --help                             Print this help message");
       System.err.println("<class> is the program to trace.  Must exist in the classpath given");
       System.err.println("<args> are the arguments to <class>");

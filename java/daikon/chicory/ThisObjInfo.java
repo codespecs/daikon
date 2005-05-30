@@ -19,7 +19,6 @@ public class ThisObjInfo extends DaikonInfo
      */
     public Object getChildValue(Object val)
     {
-        // TODO Auto-generated method stub
         return null;
     }
 

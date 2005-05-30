@@ -698,7 +698,7 @@ public class DeclWriter extends DaikonWriter
                 if(!field.isAccessible())
                     field.setAccessible(true);
 
-                //TODO is there a work-around for forced initialization?
+                //is there a work-around for forced initialization?
                 //only use const value lookup in decls
                 //in dtrace: check if initialized
                 //(put code in all <clinit>

@@ -24,10 +24,10 @@ public class Runtime
      * each enter/exit and the decl information for any new classes are
      * printed out and the class is then removed from the list
      */
-    public static List<ClassInfo> new_classes = new ArrayList<ClassInfo>(); // new ArrayList<ClassInfo>();
+    public static List<ClassInfo> new_classes = new ArrayList<ClassInfo>();
 
     /** List of all instrumented classes **/
-    public static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();// new ArrayList<ClassInfo>();
+    public static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
 
     /** flag that indicates when the first class has been processed**/
     public static boolean first_class = true;
@@ -502,12 +502,12 @@ private static StreamRedirectThread out_thread;
         dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
         // 8192 is the buffer size in BufferedReader
 
-
         Socket daikonSocket = null;
         try
         {
             daikonSocket = new Socket();
             daikonSocket.bind(null);
+            //System.out.println("Attempting to connect to Daikon on port --- " + port);
             daikonSocket.connect(new InetSocketAddress(InetAddress.getLocalHost(), port), 5000);
         }
         catch (UnknownHostException e)
@@ -662,7 +662,6 @@ private static StreamRedirectThread out_thread;
      */
     public static void endDaikon()
     {
-
         try
         {
             int status = chicory_proc.waitFor();
@@ -670,7 +669,6 @@ private static StreamRedirectThread out_thread;
         }
         catch (InterruptedException e1)
         {
-            // TODO REMOVE Auto-generated catch block
             e1.printStackTrace();
         }
 
@@ -693,16 +691,25 @@ private static StreamRedirectThread out_thread;
      */
     public static ClassInfo getClassInfoFromClass(Class type)
     {
-        synchronized(all_classes)
+        try
         {
-        for(ClassInfo cinfo : all_classes)
+        synchronized (Runtime.all_classes)
         {
-            if(cinfo.clazz == null)
-                cinfo.get_reflection();
+            for (ClassInfo cinfo : Runtime.all_classes)
+            {
+                if (cinfo.clazz == null)
+                    cinfo.get_reflection();
 
-            if(cinfo.clazz.equals(type))
-                return cinfo;
+                if (cinfo.clazz.equals(type))
+                    return cinfo;
+            }
         }
+        }
+        catch(ConcurrentModificationException e)
+        {
+            //occurs if cinfo.get_reflection() causes a new class to be loaded
+            //which causes all_classes to change
+            return getClassInfoFromClass(type);
         }
 
         throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");

@@ -445,7 +445,9 @@ public class DaikonWriter
             // System.out.printf ("comparing %s vs %s\n", ci.class_name,
             //                    fclass.getName());
             if (ci.class_name.equals (fclass.getName()))
+                {
                 return (true);
+                }
         }
         }
 

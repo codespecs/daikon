@@ -11,7 +11,6 @@ import java.util.logging.Level;
 
 import java.io.*;
 import java.net.*;
-import java.net.ServerSocket;
 import java.util.*;
 
 public final class FileIO {
@@ -618,7 +617,11 @@ public final class FileIO {
       file = new File(raw_filename);
       if (raw_filename.equals("-")) {
 	filename = "standard input";
-      } else {
+      } 
+      else if (raw_filename.equals("+")){
+          filename = "chicory socket";
+      }
+      else {
 	// Remove directory parts, to make it shorter
 	filename = file.getName();
       }
@@ -669,38 +672,50 @@ public final class FileIO {
     }
   }
 
-  static InputStream connectToChicory()
-  {
-      ServerSocket daikonServer = null;
-      try
+  private static InputStream connectToChicory()
     {
-        daikonServer = new ServerSocket(8111); //TODO get random free port, and notify chicory of the value
-    }
-    catch (IOException e)
-    {
-        throw new RuntimeException("Unable to create server: " + e.getMessage());
-    }
+    
+      
+        ServerSocket daikonServer = null;
+        try
+        {
+            daikonServer = new ServerSocket(0); //bind to any free port
+            
+            //tell Chicory what port we have!
+            System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
+            
+            daikonServer.setReceiveBufferSize(64000);
 
-    Socket chicSocket = null;
-    try
-    {
-        chicSocket = daikonServer.accept();
-    }
-    catch (IOException e)
-    {
-        throw new RuntimeException("Unable to connect to Chicory: " + e.getMessage());
-    }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to create server: " + e.getMessage());
+        }
+        
+        Socket chicSocket = null;
+        try
+        {
+            daikonServer.setSoTimeout(5000);
+            
+            //System.out.println("waiting for chicory connection on port " + daikonServer.getLocalPort());
+            chicSocket = daikonServer.accept();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to connect to Chicory: " + e.getMessage());
+        }
+        
+        
+        try
+        {
+            return chicSocket.getInputStream();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to get Chicory's input stream: " + e.getMessage());
+        }
 
-    try
-    {
-        return chicSocket.getInputStream();
     }
-    catch (IOException e)
-    {
-        throw new RuntimeException("Unable to get Chicory's input stream: " + e.getMessage());
-    }
-
-  }
 
 
   /** Stash state here to be examined/printed by other parts of Daikon. */
