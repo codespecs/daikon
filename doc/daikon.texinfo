@@ -3086,6 +3086,18 @@ any run of a program, it can be generated once and then reused on later
 runs, as long as no new program points are added and each program point
 has the same set of variables.
 
+@item --with-dyncomp
+
+Run Kvasir with a prototype implementation of the DynComp dynamic
+comparability analysis tool to generate .decls files with variable
+comparability information in the format specified in the @ref{Program
+point declarations} section.  Variable comparability information can
+speed up the performance of Daikon and allow it to generate a more
+focused and relevant set of invariants.  This is a first prototype and
+is currently under active development.  (This option may be used
+concurrently with @option{--decls-only} to only generate a .decls file
+without .dtrace.)
+
 @item --dtrace-append
 
 Append new trace information to the end of an existing @file{.dtrace}
