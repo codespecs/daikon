@@ -9,15 +9,6 @@ High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
     of lines) to the regression tests.  This will allow us to see
     more quickly when a Chicory change causes dtrace diffs.
     (possibly wait for dtrace-diff)
-    
-  - Write a new dtrace-diff program in Java.  There is probably already
-    Java code that can read a dtrace file.  The diff should be very
-    simple at that point.
-    [Sandra]
-
-  - Add a Java 5.0 test to the test suite.   This will checkout not
-    only Chicory, but annotate as well.  Carlos suggested the files
-    in ~jhp/tmp/bst.tar
         
 
 Longer-term issues
@@ -68,6 +59,16 @@ Longer-term issues
     be writing this kind of code anyway.
 
 Completed Tasks (add new ones at the top)
+
+  - Write a new dtrace-diff program in Java.  There is probably already
+    Java code that can read a dtrace file.  The diff should be very
+    simple at that point.
+    [Sandra]
+
+  - Add a Java 5.0 test to the test suite.   This will checkout not
+    only Chicory, but annotate as well.  Carlos suggested the files
+    in ~jhp/tmp/bst.tar
+    [etf] 5/31/05: Added BinaryTree test under $inv/tests/daikon-tests.
 
   - Implement online mode 
     [etf]
