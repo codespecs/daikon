@@ -2945,6 +2945,12 @@ This option supplies Daikon with a single trace from a one execution of
 your program.  When Daikon is invoked from the command line, it can be
 supplied as many trace files as desired.
 
+@item --daikon-online
+@itemx --daikon-online=@var{args}
+This option produces behavior very similar to @option{--daikon}.  The difference is that with @option{--daikon-online}, Daikon processes the data trace information as Chicory produces it.  Daikon and Chicory use socket communication in this mode.  Thus, there is no intermediate .dtrace file created when using @option{--daikon-online}.
+
+Just like with the @option{--daikon} option, Daikon is only given a single trace from one execution of your program.
+
 @end table
 
 
