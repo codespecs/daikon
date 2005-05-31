@@ -33,6 +33,13 @@ Kvasir
     concurrently with the--decls-only option to only generate a .decls
     file without .dtrace.)
 
+   Implementation Changes:
+
+    Ported Kvasir to use a development version of Valgrind 3.0 instead
+    of the release version of Valgrind 2.2.  This should not have any
+    user-visible effects at the moment, but will make possible ports
+    to other architectures in the future.
+
 Chicory
 
    User Changes:
