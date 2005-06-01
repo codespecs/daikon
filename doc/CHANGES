@@ -7,9 +7,12 @@ This file lists significant user-visible changes to Daikon.
 Further documentation can be found in:
  * the Daikon Manual.  Its source is file daikon.texinfo; formatted, it
    appears as daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
+   It is available online at
+   http://pag.csail.mit.edu/daikon/download/doc/daikon.html .
  * the Daikon Developer Manual.  Its source is file developer.texinfo;
    formatted, it appears as developer.html, developer.info, developer.dvi,
-   developer.ps, or developer.pdf.
+   developer.ps, or developer.pdf.  It is available online at
+   http://pag.csail.mit.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not
    distributed with Daikon, but you can build it by executing the command
      make -C $DAIKONDIR/java doc
@@ -21,52 +24,50 @@ Further documentation can be found in:
 
 Kvasir
 
-   User Changes:
+  User Changes:
 
-    Added --with-dyncomp option which allows Kvasir to run with a
-    prototype implementation of the DynComp dynamic comparability
-    analysis tool to generate .decls files with variable comparability
-    information.  Variable comparability information can speed up the
-    performance of Daikon and allow it to generate a more focused and
-    relevant set of invariants.  This is a first prototype and is
-    currently under active development.  (This option may be used
-    concurrently with the--decls-only option to only generate a .decls
-    file without .dtrace.)
+    New --with-dyncomp option adds variable comparability information
+    to .decls files.  Variable comparability information indicates
+    which variables should (and should not) be compared to one another
+    when inferring invariants; it can make Daikon run faster and avoid
+    generating irrelevant invariants.  This option may be used with
+    the --decls-only option to generate a .decls file without a
+    .dtrace file.
 
-   Implementation Changes:
+  Implementation Changes:
 
-    Ported Kvasir to use a development version of Valgrind 3.0 instead
-    of the release version of Valgrind 2.2.  This should not have any
-    user-visible effects at the moment, but will make possible ports
-    to other architectures in the future.
+    Kvasir now uses a development version of Valgrind 3.0 instead of
+    the release version of Valgrind 2.2.  This should have no
+    user-visible effects.
 
 Chicory
 
-   User Changes:
+  User Changes:
    
-    Added --daikon-online option.  Behavior is similar to that of the --daikon option, 
-    but instead of writing and reading back a dtrace file, Chicory and Daikon communicate
-    directly via a socket.
+    Added --daikon-online option.  Behavior is similar to that of the
+    --daikon option, but instead of writing and reading back a dtrace
+    file, Chicory and Daikon communicate directly via a socket.  This
+    can avoid creation of large temporary .dtrace files on disk, and
+    can make Daikon run faster.
 
 DtraceDiff
 
   New:
 
-    This is a new utility to compare data trace (.dtrace) files using a
-    content-based, rather than text-based, comparison.
+    This is a new utility to compare data trace (.dtrace) files using
+    a content-based, rather than text-based, comparison.
 
     Invoke it like
       java daikon.tools.DtraceDiff [DECLS1]... DTRACE1 [DECLS2]... DTRACE2
-    See the usage message or Daikon manual for information about additional
-    command-line options.
+    See the usage message or Daikon manual for information about
+    additional command-line options.
 
     DtraceDiff stops by signalling an error when it finds a difference
     between the two data trace files.  (Once execution paths have
-    diverged, continuing to emit record-by-record differences is likely to
-    produce output that is far too voluminous to be useful.)  It also
-    signals an error when it detects incompatible program point
-    declarations or when one file is shorter than the other.
-
+    diverged, continuing to emit record-by-record differences is
+    likely to produce output that is far too voluminous to be useful.)
+    It also signals an error when it detects incompatible program
+    point declarations or when one file is shorter than the other.
 
 ---------------------------------
 
@@ -247,7 +248,7 @@ Daikon
   the Chicory and Kvasir front ends (for Java and C, respectively) are
   preferred over the older dfej and dfec front ends.
 
-  A number of problems with the Chicory instrumentor were fixed.  In
+  A number of problems with the Chicory instrumenter were fixed.  In
   particular, files necessary to run Chicory (when not running from
   source) were added to the distribution.
 
