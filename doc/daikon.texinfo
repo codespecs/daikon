@@ -329,6 +329,7 @@ Troubleshooting
 * Parsing Java 5.0 code::       
 * Chicory problems::            
 * dfej problems::               
+* Eclipse plug-in problems::    
 * dfec problems::               
 * Reporting bugs::              
 * Known bugs::                  
@@ -795,6 +796,8 @@ documentation}.
 As of this writing (February 11, 2005), the plug-in only works with 
 Daikon 3 (for instance, version 3.1.7), not with Daikon 4.  Support for
 Daikon 4 is underway.
+
+For brief troubleshooting information, see @ref{Eclipse plug-in problems}.
 
 
 @node    StackAr example, Understanding the invariants, Eclipse plug-in, Detecting invariants in Java programs
@@ -7007,6 +7010,7 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * Parsing Java 5.0 code::       
 * Chicory problems::            
 * dfej problems::               
+* Eclipse plug-in problems::    
 * dfec problems::               
 * Reporting bugs::              
 * Known bugs::                  
@@ -7581,7 +7585,7 @@ ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
 BCEL on your classpath.)
 
 
-@node    dfej problems, dfec problems, Chicory problems, Troubleshooting
+@node    dfej problems, Eclipse plug-in problems, Chicory problems, Troubleshooting
 @section Problems with dfej
 
 @menu
@@ -7701,6 +7705,8 @@ not intended dfej to examine.
 @cindex --decls-dir= option (to dfej) invalid
 @cindex --instr-dir= option (to dfej) invalid
 @cindex --dtrace-file= option (to dfej) invalid
+@cindex Eclipse plug-in, with wrong version of dfej
+@cindex dfej, wrong version for Eclipse plug-in
 
 If you get a warning like
 @example
@@ -7850,7 +7856,21 @@ internally by the JVM@.  Users can create a new class MyVector, replace
 uses of Vector by MyVector, and then instrument MyVector.
 
 
-@node    dfec problems, Reporting bugs, dfej problems, Troubleshooting
+@node    Eclipse plug-in problems, dfec problems, dfej problems, Troubleshooting
+@section Problems with dfec
+
+@cindex Eclipse plug-in, troubleshooting
+
+If you have trouble with the Eclipse plug-in, one good way to debug the
+difficulty is to run the command-line tools (because the plug-in does
+nothing more than run those tools for you).  If the command-line
+versions work properly, then you have isolated the bug to the plug-in.
+If the command-line versions do not work properly, then you can submit a
+more specific bug report that is easier for the developers to reproduce
+and correct.
+
+
+@node    dfec problems, Reporting bugs, Eclipse plug-in problems, Troubleshooting
 @section Problems with dfec
 
 If you have trouble while instrumenting a C program, or while
