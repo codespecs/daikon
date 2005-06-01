@@ -444,11 +444,6 @@ public final class Daikon {
 
     // Create the list of all invariant types
     setup_proto_invs();
-//    for(Iterator i = proto_invs.iterator(); i.hasNext();) {
-//      System.out.println(i.next().getClass());
-//    }
-//
-//    System.exit(0);
 
     if (PrintInvariants.print_discarded_invariants) {
       DiscReasonMap.initialize();
@@ -533,51 +528,36 @@ public final class Daikon {
       || Daikon.output_format == OutputFormat.ESCJAVA)
       && !dkconfig_noInvariantGuarding)
       guardInvariants(all_ppts);
-   // System.exit(0);
+
     // print out the invariants for each program point
     if (Daikon.dkconfig_undo_opts) {
+      // Print out the invariants for each program point (sort first)
+      for (Iterator<PptTopLevel> t = all_ppts.pptIterator(); t.hasNext();) {
+        PptTopLevel ppt = t.next();
 
-      Iterator t = all_ppts.pptIterator();
+        // We do not need to print out program points that have not seen
+        // any samples.
+        if (ppt.num_samples() == 0) {
+          continue;
+        }
+        List<Invariant> invs = PrintInvariants.sort_invariant_list(ppt.invariants_vector());
+        List<Invariant> filtered_invs = filter_invs(invs);
 
-      while (t.hasNext()) {
-        PptTopLevel ppt = (PptTopLevel) t.next();
+        // Sometimes the program points actually differ in number of
+        // samples seen due to differences in how Daikon and DaikonSimple
+        // see the variable hierarchy.
+        System.out.println(
+        "====================================================");
+        System.out.println(ppt.name());
+        System.out.println(ppt.num_samples());
 
-        if (ppt.num_samples() != 0) {
-          List invs =
-            PrintInvariants.sort_invariant_list(
-              ppt.invariants_vector());
-          Iterator i = invs.iterator();
-
-          System.out.println(
-            "====================================================");
-          System.out.println(ppt.name());
-          System.out.println(ppt.num_samples());
-          while (i.hasNext()) {
-            Invariant x = (Invariant) i.next();
-            VarInfo[] vars = x.ppt.var_infos;
-
-            //this is the easiest non-intrusive way to filter out the invs
-            //filter out reflexive invariants in the binary invs
-            if (!((x.ppt instanceof PptSlice2)
-              && vars[0] == vars[1])) {
-
-              //  filter out the reflexive and partially reflexive invs in the
-              //ternary slices
-              if (!((x.ppt instanceof PptSlice3)
-                && (vars[0] == vars[1]
-                  || vars[1] == vars[2]
-                  || vars[0] == vars[2]))) {
-
-                    if (x.isActive()) {
-
-                System.out.println(x.getClass());
-                System.out.println(x);
-                    }
-              }
-            }
-          }
+        for (Iterator<Invariant> i = filtered_invs.iterator(); i.hasNext();) {
+            Invariant inv = i.next();
+            System.out.println(inv.getClass());
+            System.out.println(inv);
         }
       }
+      
       // exit the program
       return;
     }
@@ -1279,7 +1259,39 @@ public final class Daikon {
     }
   }
 
+  // The function filters out the reflexive invs in binary slices,
+  // reflexive and partially reflexive invs in ternary slices
+  // and also filters out the invariants that have not seen enough
+  // samples in ternary slices.
+  private static List<Invariant> filter_invs(List<Invariant> invs) {
+    List<Invariant> new_list = new ArrayList<Invariant>();
 
+    for (Iterator<Invariant> i = invs.iterator(); i.hasNext();) {
+      Invariant inv = i.next();
+      VarInfo[] vars = inv.ppt.var_infos;
+
+      // This check is the most non-intrusive way to filter out the invs
+      // Filter out reflexive invariants in the binary invs
+      if (!((inv.ppt instanceof PptSlice2) && vars[0] == vars[1])) {
+
+        // Filter out the reflexive and partially reflexive invs in the
+        // ternary slices
+        if (!((inv.ppt instanceof PptSlice3) && (vars[0] == vars[1]
+            || vars[1] == vars[2] || vars[0] == vars[2]))) {
+          if (inv.ppt.num_values() != 0) {
+
+            // filters out "warning- too few samples for
+            // daikon.inv.ternary.threeScalar.LinearTernary invariant"
+            if (inv.isActive()) {
+              new_list.add(inv);
+            }
+          }
+        }
+      }
+    }
+
+    return new_list;
+  }
   /**
    * Add orig() variables to the given EXIT/EXITnn point, Does nothing if
    * exit_ppt is not an EXIT/EXITnn.
