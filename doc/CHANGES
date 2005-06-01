@@ -69,8 +69,17 @@ DtraceDiff
     It also signals an error when it detects incompatible program
     point declarations or when one file is shorter than the other.
 
----------------------------------
+Daikon:
 
+  Implementation Changes:
+
+    Java-family formats now use reflection to access fields.  This
+    makes it possible to access non-public fields.  The Quant helper
+    methods do not throw execptions when given illegal arguments.
+
+    Runtime-check instrumenter can emit "invariant-checker" classes.
+
+---------------------------------
 
 4.1.1 (May 1 2005)
 
@@ -78,8 +87,8 @@ Kvasir
 
   User Changes:
 
-    Added --bit-level-precision command-line option for more accurate output of
-    variables involved in bit-level operations.
+    Added --bit-level-precision command-line option for more accurate
+    output of variables involved in bit-level operations.
 
   Bug fixes:
 
