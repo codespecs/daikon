@@ -1195,6 +1195,8 @@ are any differences between the expected results and the ones you get,
 don't check in your changes until you understand which is the desired
 behavior and possibly update the goals.
 
+The Daikon distribution contains unit tests, but not regression tests
+(which would make the distribution much larger).
 
 Note on Kvasir tests: The Kvasir (Daikon C front-end) tests appear in the 
 @file{$inv/tests/kvasir-tests} directory. These tests run Daikon to ensure 
