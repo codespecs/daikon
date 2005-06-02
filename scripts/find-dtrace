@@ -1,0 +1,13 @@
+#! /bin/csh -f
+# prints the full path of the dtrace file for the specified program.
+# Looks first in the $inv/tests/daikon-tests/<prog> directory and then
+# in /scratch/$user/tests/daikon-tests/<prog>_chicory.
+set prog = $1
+if (-e $inv/tests/daikon-tests/$prog/$prog.dtrace.gz) then
+  echo $inv/tests/daikon-tests/$prog/$prog.dtrace.gz \
+    $inv/tests/daikon-tests/$prog/*.decls
+else
+  echo /scratch/$USER/tests/daikon-tests/${prog}_chicory/$prog.dtrace.gz
+endif
+
+  
