@@ -20,6 +20,9 @@ public class DaikonWriter
 
     /** the class of the method currently being processed **/
     protected Class current_class;
+    
+    /** Print visibility info in the program point **/
+    private static final boolean showDeclVisibility = false;
 
     public DaikonWriter(String[] excludes, List includes)
     {
@@ -212,6 +215,28 @@ public class DaikonWriter
         name = name.replaceAll (",", ", ");
         
         //System.out.println("---> " + name + ":::" + point);
+        
+        if(showDeclVisibility)
+        {
+            int mod = method.getModifiers();
+            
+            if(Modifier.isPublic(mod))
+            {
+                name = "public " + name;
+            }
+            else if(Modifier.isPrivate(mod))
+            {   
+                name = "private " + name;
+            }
+            else if(Modifier.isPrivate(mod))
+            {
+                name = "protected " + name;
+            }
+            else
+            {
+                throw new RuntimeException("Bad Modifier for visibility for method " + method);
+            }
+        }
         
         return (name + ":::" + point);
     }
