@@ -11,6 +11,8 @@ AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 
 01 1 * * * cd $HOME/research/invariants/scripts; $AFS cvs -Q up
 02 1 * * * $AFS crontab $HOME/research/invariants/scripts/buildtest.crontab
-55 1 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
-0 2 * * * $AFS $HOME/research/invariants/scripts/buildtest 
+## Temporarily commented out 6/6/2005, because we are running experiments and
+## don't want these contending for CPU.
+# 55 1 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
+# 0 2 * * * $AFS $HOME/research/invariants/scripts/buildtest
 #02 15 * * * $AFS $HOME/research/invariants/scripts/buildtest
