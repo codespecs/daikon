@@ -162,7 +162,7 @@ public final class Quant {
     return setEqual(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #isReverse(Object[], Object[], Object[])
+  /** @see #isReverse(Object[], Object[])
    */
   /*@ pure */ public static boolean isReverse(Object seq1, Object seq2) {
     if (seq1 == null) { return false; }

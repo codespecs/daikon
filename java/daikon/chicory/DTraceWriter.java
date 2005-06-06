@@ -82,13 +82,13 @@ public class DTraceWriter extends DaikonWriter
          if (shouldExcludeClass(method.getDeclaringClass().getName()))
          return;
          */
-        
+
         if(Runtime.dtrace_closed)
             return;
 
         Member member = mi.member;
-        
-        
+
+
         RootInfo root = mi.traversalEnter;
         if(root == null)
             throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
@@ -104,7 +104,7 @@ public class DTraceWriter extends DaikonWriter
         outFile.println(DaikonWriter.methodEntryName(member));
         printNonce(nonceVal);
         traversePattern(mi, root, args, obj, nonsenseValue);
-        
+
         outFile.println();
 
         Runtime.incrementRecords();
@@ -119,13 +119,13 @@ public class DTraceWriter extends DaikonWriter
 
         if(Runtime.dtrace_closed)
             return;
-        
+
         Member member = mi.member;
-        
+
         RootInfo root = mi.traversalExit.get(lineNum);
         if(root == null)
             throw new RuntimeException("Traversal pattern not initialized for method " + mi.method_name + " at line " + lineNum);
-        
+
         //make sure the line number is valid
         //i.e., it is one of the exit locations in the MethodInfo for this method
         //System.out.printf("reached line num " + lineNum + " at method " + mi.method_name + "\n");
@@ -137,8 +137,8 @@ public class DTraceWriter extends DaikonWriter
         outFile.println(DaikonWriter.methodExitName(member, lineNum));
         printNonce(nonceVal);
         traversePattern(mi, root, args,  obj, ret_val);
-        
-        
+
+
         outFile.println();
 
         Runtime.incrementRecords();
@@ -153,14 +153,14 @@ public class DTraceWriter extends DaikonWriter
 
     //prints the method's return value and all relevant variables
     //uses the traversal pattern data structure of DaikonInfo subtypes
-    private void traversePattern(MethodInfo mi, RootInfo root, 
+    private void traversePattern(MethodInfo mi, RootInfo root,
             Object[] args,
             Object thisObj,
             Object ret_val)
-    {     
+    {
         Object val;
         int whichArg = 0;
-        
+
         for(DaikonInfo child: root)
         {
             if(child instanceof ReturnInfo)
@@ -182,14 +182,14 @@ public class DTraceWriter extends DaikonWriter
             }
             else
             {
-                throw new RuntimeException("Unknown DaikonInfo subtype " + child.getClass() + 
+                throw new RuntimeException("Unknown DaikonInfo subtype " + child.getClass() +
                         " in traversePattern in DTraceWriter for info named " + child.getName());
             }
-            
+
             traverseValue(mi, child, val);
         }
     }
-    
+
     //traverse from the traversal pattern data structure and recurse
     private void traverseValue(MethodInfo mi, DaikonInfo curInfo, Object val)
     {
@@ -230,11 +230,6 @@ public class DTraceWriter extends DaikonWriter
         return fieldVals;
     }
 
-    /**
-     * @param field
-     * @param theObj
-     * @return
-     */
     public static Object getValue(Field classField, Object theObj)
     {
         //if we dont have a real object, return NonsensicalValue
@@ -406,11 +401,6 @@ public class DTraceWriter extends DaikonWriter
     }
 
 
-    /**
-     * @param declaringClass
-     * @param classField
-     * @return
-     */
     public static Object getStaticValue(Field classField)
     {
         //Class declaringClass = declareInfo.clazz;
@@ -419,8 +409,8 @@ public class DTraceWriter extends DaikonWriter
             classField.setAccessible(true);
 
         Class fieldType = classField.getType();
-        
-        
+
+
         if(Chicory.checkStaticInit)
         {
         //don't force initialization!
@@ -430,7 +420,7 @@ public class DTraceWriter extends DaikonWriter
             return nonsenseValue;
         }
         }
-        
+
         if (fieldType.equals(int.class))
         {
             try
@@ -568,10 +558,6 @@ public class DTraceWriter extends DaikonWriter
         }
     }
 
-    /**
-     * @param arrayVal
-     * @return
-     */
     public static List getListFromArray(Object arrayVal)
     {
         if (!arrayVal.getClass().isArray())
@@ -642,7 +628,8 @@ public class DTraceWriter extends DaikonWriter
 
     /*
      * Returns a list of Strings which are the names of the runtime types in the
-     * theVals param @param theVals List of ObjectReferences @return
+     * theVals param
+     * @param theVals List of ObjectReferences
      */
     public static List getTypeNameList(List theVals)
     {
@@ -670,10 +657,6 @@ public class DTraceWriter extends DaikonWriter
         return typeNames;
     }
 
-    /**
-     * @param type
-     * @return
-     */
     public static Class removeWrappers(Object val, Class declared, boolean runtime)
     {
         if (!(val instanceof Runtime.PrimitiveWrapper))
