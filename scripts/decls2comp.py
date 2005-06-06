@@ -51,6 +51,12 @@
 # Prints out a '-1: ' prefix in front of the special comparability set
 # with a number of -1
 
+# Note: Lackwit produces comparability numbers for arrays in the
+# following format: '9[10]' - we are going to ignore what is between
+# the brackets so we will treat it as '9'
+import re
+LWArrayRExp = re.compile('\[.\]')
+
 import sys
 
 f = open(sys.argv[1], 'r')
@@ -96,7 +102,14 @@ for pptName in sortedPptKeys:
     # int
     # 1
     while i < len(v):
-        var2comp[v[i]] = v[i+3]
+        curComp = v[i+3]
+        
+        isArrayMatch = LWArrayRExp.search(curComp)
+        if isArrayMatch:
+            var2comp[v[i]] = curComp[:isArrayMatch.start()]
+        else:
+            var2comp[v[i]] = curComp
+            
         i += 4
 
     # Now we can do the real work of grouping variables together
