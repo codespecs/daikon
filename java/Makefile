@@ -1256,35 +1256,6 @@ daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/Sequen
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 
-## I decided against this.  It gave little enough help, and it cluttered
-## the directories enough (and could be slightly confusing about what those
-## new types really do), that I will hold off on this for now.  Perhaps it
-## would be more reasonable if all of the specialized files were in one
-## Vector subdirectory (that was ignored by tags, etc.).
-
-# This one is just for testing
-IntegerVector.java: VectorTemplate.java.jpp
-	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=IntegerVector -DELTTYPE=Integer")
-
-daikon/PptVector.java: daikon/VectorTemplate.java.jpp
-	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptVector -DELTTYPE=Ppt")
-
-daikon/PptTopLevelVector.java: daikon/VectorTemplate.java.jpp
-	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptTopLevelVector -DELTTYPE=PptTopLevel")
-
-daikon/PptConditionalVector.java: daikon/VectorTemplate.java.jpp
-	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptConditionalVector -DELTTYPE=PptConditional")
-
-daikon/VarInfoVector.java: daikon/VectorTemplate.java.jpp
-	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=VarInfoVector -DELTTYPE=VarInfo")
-
-daikon/inv/InvariantVector.java: daikon/VectorTemplate.java.jpp
-	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.inv -DELTVECTOR=InvariantVector -DELTTYPE=Invariant")
-
-daikon/derive/DerivationVector.java: daikon/ VectorTemplate.java.jpp
-	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.derive -DELTVECTOR=DerivationVector -DELTTYPE=Derivation")
-
-
 ###########################################################################
 ### Delete-on-error
 ###
