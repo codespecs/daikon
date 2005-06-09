@@ -19,3 +19,5 @@ AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 # 55 1 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
 # 0 2 * * * $AFS $HOME/research/invariants/scripts/buildtest
 #02 15 * * * $AFS $HOME/research/invariants/scripts/buildtest
+
+# MERNST
