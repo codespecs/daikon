@@ -3097,7 +3097,7 @@ has the same set of variables.
 
 @item --with-dyncomp
 
-Run Kvasir with a prototype implementation of the DynComp dynamic
+Run Kvasir with the DynComp dynamic
 comparability analysis tool to generate .decls files with variable
 comparability information in the format specified in the @ref{Program
 point declarations} section.  Variable comparability information can
@@ -3615,7 +3615,7 @@ dominate Kvasir's per-instruction runtime overhead.  In order to make Kvasir
 run faster, try the @option{--ignore-globals} or @option{--limit-static-vars} 
 options in order to limit the amount of generated output.
 However, please keep in mind that, when running simultaneously with
-Daikon using the @option{--output-fifo} option, Kvasir can generate
+Daikon using the @option{--output-fifo} option (see @ref{Online execution}), Kvasir can generate
 output data much faster than Daikon can process it.  Thus, it is not the
 performance bottleneck in the entire invariant detection system.
 
@@ -3649,12 +3649,6 @@ arrays with all of their elements or the option to flatten
 multidimensional arrays into multiple single-dimensional arrays.
 
 @item
-Not all of the options of the source-based C front end dfec are supported.
-Variable comparability information is not supported.
-Of the environment variables obeyed by dfec,
-only @env{DTRACEAPPEND} is recognized by Kvasir.
-
-@item
 Kvasir behaves somewhat differently with different versions of GCC@.
 We have had the best results with GCC versions 3.3 (which we use for
 testing) and 3.4.  If feasible, we recommend that you use
@@ -3670,6 +3664,11 @@ this problem, do not use the @option{-static} flag when linking programs
 for use Kvasir.  If you want to link statically with a particular
 library, supply the path to its static version (@file{libfoo.a})
 directly to GCC instead.
+
+@item
+Not all of the options of the source-based C front end dfec are supported.
+Of the environment variables obeyed by dfec,
+only @env{DTRACEAPPEND} is recognized by Kvasir.
 
 @item
 Kvasir is incompatible with some compiler optimizations.  It is
