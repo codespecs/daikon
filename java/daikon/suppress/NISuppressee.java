@@ -216,7 +216,6 @@ public class NISuppressee {
       sinv.log ("Unspecified variable = " + v.name.name());
       created_list.add (sinv);
     }
-
     return (created_list);
   }
 
