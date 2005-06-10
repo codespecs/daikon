@@ -131,7 +131,8 @@ function process_line ($line, $tb) {
       echo "<pre>\n";
       $start_table = 0;
     }
-    echo "$line\n";
+    $out = str_replace ("<", "&lt;", $line);
+    echo "$out\n";
     if (count ($tb))
       echo implode ("\n", $tb);
   }
