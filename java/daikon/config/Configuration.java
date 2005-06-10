@@ -65,6 +65,7 @@ public final class Configuration
   }
 
   public static class ConfigException extends RuntimeException {
+    public ConfigException(String s, Throwable t) { super (s, t); }
     public ConfigException(String s) { super(s); }
     public ConfigException() { super(); }
     // We are Serializable, so we specify a version to allow changes to
@@ -162,7 +163,7 @@ public final class Configuration
     try {
       clazz = Class.forName(classname);
     } catch (ClassNotFoundException e) {
-      throw new ConfigException("No class " + classname);
+      throw new ConfigException("No class " + classname, e);
     } catch (LinkageError e) {
       throw new ConfigException("No class (" + e + ") " + classname);
     }
@@ -232,8 +233,8 @@ public final class Configuration
       throw new ConfigException("Unsupported type " + type.getName());
     }
 
-    //Fmt.pf ("setting %s.%s to %s", field.getDeclaringClass(),
-    //          field.getName(), value);
+    // Fmt.pf ("setting %s.%s to %s", field.getDeclaringClass(),
+    //         field.getName(), value);
 
     try {
       field.set(null, value);
