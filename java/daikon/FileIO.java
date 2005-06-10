@@ -840,10 +840,12 @@ public final class FileIO {
 	return;
       }
       if (!ppt_included (line)) {
+        // System.out.printf ("skipping ppt %s\n", line);
         while ((line != null) && !line.equals(""))
           line = reader.readLine();
         continue;
       }
+      // System.out.printf ("Not skipping ppt  %s\n", line);
 
       // If we got here, we're looking at a sample and not a declaration.
       // For compatibility with previous implementation, if this is a

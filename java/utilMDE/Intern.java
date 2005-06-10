@@ -389,12 +389,18 @@ public final class Intern {
    * Arrays are compared according to their elements.
    **/
   public static long[] intern(long[] a) {
+    //System.out.printf ("intern %s %s long[] %s\n", a.getClass(),
+    //                   a, Arrays.toString (a));
     Object lookup = internedLongArrays.get(a);
     if (lookup != null) {
       WeakReference ref = (WeakReference)lookup;
-      return (long[])ref.get();
+      Object ret = ref.get();
+      //System.out.printf ("found ref %s %s\n", ret,
+      //                   Arrays.toString((long[])ret));
+      return (long[])ret;
     } else {
       internedLongArrays.put(a, new WeakReference(a));
+      // System.out.printf ("added a to table\n");
       return a;
     }
   }
