@@ -412,7 +412,8 @@ public class PptRelation implements Serializable {
       } else {
         VarInfoName orig_name = vp.name.applyPrestate().intern();
         boolean found = rel.relate(vp, orig_name);
-        Assert.assertTrue(found);
+        assert found : String.format ("vp %s orig_name %s parent %s child %s",
+                                      vp, orig_name, parent, child);
       }
     }
 

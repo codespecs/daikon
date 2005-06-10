@@ -300,7 +300,8 @@ public final class PPTSLICE1 extends PptSlice {
     #endif
 
     Object val1 = full_vt.getValue(vi1);
-    Assert.assertTrue (Intern.isInterned (val1));
+    assert Intern.isInterned (val1) : "obj " + val1 + " class "
+      + val1.getClass();
 
     #if defined(ARITY2) || defined(ARITY3)
       Object val2 = full_vt.getValue(vi2);

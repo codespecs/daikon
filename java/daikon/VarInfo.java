@@ -194,7 +194,8 @@ public final class VarInfo implements Cloneable, Serializable {
     Assert.assertTrue(
       legalFileRepType(file_rep_type),
       "Unsupported representation type "
-        + file_rep_type.format()
+      + file_rep_type.format() + "/" + file_rep_type.getClass() + " "
+      + ProglangType.HASHCODE.getClass()
         + " for variable "
         + name);
     // Ensure that the type and rep type are somewhat consistent
