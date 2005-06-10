@@ -565,20 +565,18 @@ target.
     from other accounts as well. </p>
 
     <pre>
-        su - daikonuser
-    </pre>
+        su - daikonuser </pre>
 
     <li> Update daikon in daikonuser to the most recent version. </p>
 
     <pre>
         cd $inv
         cvs -q update -d
-        cvs -q diff
-    </pre>
+        cvs -q diff    </pre>
 
-    The <tt>cvs -q diff</tt> command should produce no output.
+    <p>The <tt>cvs -q diff</tt> command should produce no output. </p>
 
-    <li> Rebuild everything. </p>
+    <li> <p> Rebuild everything. </p>
 
     <pre>
         make -C $inv/java clean
@@ -591,8 +589,7 @@ target.
 
     <li> Run the kvasir regression tests <p>
     <pre>
-        make -C $inv/tests/kvasir-tests
-    </pre>
+        make -C $inv/tests/kvasir-tests    </pre>
 
     <li> Run the regression tests.  These will use Chicory as the
     front end.  All of
@@ -600,11 +597,10 @@ target.
 
     <pre>
         make -C $inv/tests clean
-        make -C $inv/tests diffs
-    </pre> </p>
+        make -C $inv/tests diffs </pre> 
 
-    (To run the tests using dfej, define DFEJ_EXECUTABLE to
-    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1.) <p>
+    <p>(To run the tests using dfej, define DFEJ_EXECUTABLE to
+    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1.) </p>
 
     <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
     in this version.  A good way to determine what has changed is to diff
@@ -613,35 +609,31 @@ target.
 
     <pre>
         cd $inv/doc
-        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo
-    </pre> <p>
+        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo </pre> 
 
-    Another good source of information is to examine the cvs logs over the
+    <p>Another good source of information is to examine the cvs logs over the
     last month: </p>
 
     <pre>
 	cd $inv/java
-	cvs -q log -d "><em>2004-12-01</em>" -N | cvs-log-summarize.pl
-    </pre>
+	cvs -q log -d "><em>2004-12-01</em>" -N | cvs-log-summarize.pl    </pre>
 
-    <li> Set the distribution date and version number.  The date will
+    <li> <p> Set the distribution date and version number.  The date will
     be set to today, but can be overridden by redefining environment
     variable TODAY (e.g., 'TODAY=November 1 2004').  The version is
     specified in the file $inv/doc/VERSION </p>
 
     <pre>
 	cd $inv
-	make update-doc-dist-date-and-version
-    </pre>
+	make update-doc-dist-date-and-version    </pre>
 
-    <li> Build everything to be distributed and copy it to the staging
+    <li> <p>Build everything to be distributed and copy it to the staging
     area (www.pag.csai.mit.edu/daikon/staging-daikon).  The final
     output will be a list of files that were added/removed since the
     last release.</p>
 
     <pre>
-        make staging
-    </pre>
+        make staging    </pre>
 
     <li> Test the distribution in the staging area.  The last part of
     the test runs Chicory/Daikon on the StackAr example in the
