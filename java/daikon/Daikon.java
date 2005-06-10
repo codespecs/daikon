@@ -40,6 +40,13 @@ public final class Daikon {
     throw new Error("do not instantiate");
   }
 
+  /**
+   * The amount of time to wait between updates of the progress
+   * display, measured in milliseconds. A value of -1 means not to
+   * print the progress display at all.
+   **/
+  public static int dkconfig_progress_delay = 1000;
+
   public final static String release_version = "4.1.2";
   public final static String release_date = "June 1, 2005";
   public static final String release_string =
@@ -557,7 +564,7 @@ public final class Daikon {
             System.out.println(inv);
         }
       }
-      
+
       // exit the program
       return;
     }
@@ -656,6 +663,7 @@ public final class Daikon {
         case 0 :
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
+
           // Control output
           if (help_SWITCH.equals(option_name)) {
             System.out.println(usage);
@@ -1441,13 +1449,6 @@ public final class Daikon {
 
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
-
-  /**
-   * The amount of time to wait between updates of the progress
-   * display, measured in milliseconds. A value of -1 means not to
-   * print the progress display at all.
-   **/
-  public static int dkconfig_progress_delay = 1000;
 
   /** Indicate progress for FileIOProgress. **/
   public static String progress = "";
