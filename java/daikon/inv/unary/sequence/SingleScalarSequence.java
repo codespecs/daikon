@@ -38,6 +38,8 @@ public abstract class SingleScalarSequence
   public InvariantStatus add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    assert Intern.isInterned(val) : "not interned: " + val + "/"
+      + val.getClass();
     Assert.assertTrue(Intern.isInterned(val));
     // System.out.println("SingleScalarSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     long[] value = (long[]) val;
