@@ -188,6 +188,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
    */
   public String format_using(OutputFormat format) {
 
+    if (ppt == null)
+      return (String.format ("proto ppt [class %s] format %s", getClass(),
+                             get_format_str (format)));
     String fmt_str = get_format_str (format);
     String v1 = null;
     String v2 = null;
