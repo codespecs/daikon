@@ -113,11 +113,18 @@ public class NIS {
       Invariant inv = (Invariant) i.next();
       NISuppressionSet ss = inv.get_ni_suppressions();
       if (ss != null) {
-        for (int j = 0; j < ss.suppression_set.length; j++)
+        for (int j = 0; j < ss.suppression_set.length; j++) {
+          NISuppression sup = ss.suppression_set[j];
+          if (true) {
+          assert inv.getClass() == sup.suppressee.sup_class : "class "
+            + inv.getClass() + " doesn't match " + sup + "/"
+            + sup.suppressee.sup_class;
           Assert.assertTrue (inv.getClass()
                             == ss.suppression_set[j].suppressee.sup_class,
                            "class " + inv.getClass() + " doesn't match "
                             + ss.suppression_set[j]);
+          }
+        }
         all_suppressions.add (ss);
       }
     }
@@ -337,11 +344,14 @@ public class NIS {
 
     // If there are no falsified invariants, there is nothing to do
     int false_cnt = 0;
+    int inv_cnt = 0;
     for (Iterator i = ppt.invariants_iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       if (inv.is_false())
         false_cnt++;
+      inv_cnt++;
     }
+    // System.out.printf ("Invariants for ppt %s: %d\n", ppt, inv_cnt);
     if (false_cnt == 0)
       return;
     if (debugAnt.isLoggable (Level.FINE))
