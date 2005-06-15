@@ -6,11 +6,19 @@ import java.util.regex.*;
 import java.util.regex.Pattern;
 import java.lang.reflect.*;
 
+/**
+ * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
+ *
+ */
 public class DaikonWriter
 {
 
     //include/exclude patterns
+	
+	/** Used to filter instrumentation **/
     private String[] excludeStrings;
+	
+	/** Only instrument whats in this list **/
     private List includeOnly;
 
     /**
@@ -47,6 +55,13 @@ public class DaikonWriter
         return methodName(method, "ENTER");
     }
     
+	/**
+	 * Given information about a method, returns the decorated 
+	 * method entry name for Daikon
+	 * 
+	 * @param types Argument types
+	 * @return the decorated method entry name for Daikon
+	 */
     public static String methodEntryName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor)
     {
         //System.out.printf("(bytecodes)  %s ----  %s\n", name, short_name);
@@ -79,6 +94,14 @@ public class DaikonWriter
         return methodName(method, "EXIT" + lineNum);
     }
     
+	/**
+	 * Given information about a method, returns the decorated 
+	 * method exit name for Daikon
+	 * 
+	 * @param types Argument types
+	 * @param lineNum The line number of the exit point of the method
+	 * @return the decorated method entry name for Daikon
+	 */
     public static String methodExitName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor, int lineNum)
     {
         return methodName(fullClassName, types, name, short_name, isConstructor, "EXIT" + lineNum);
@@ -86,6 +109,7 @@ public class DaikonWriter
 
     
     /**
+     * Prints the decorated method name and appends the point string
      * 
      * @param name What member.toString() returns
      * @param short_name What member.name() returns
