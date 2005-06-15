@@ -4,6 +4,8 @@ import java.util.*;
 
 
 /**
+ * The StringInfo class is a subtype of DaikonInfo used for variable types which are 
+ * strings.
  */
 public class StringInfo extends DaikonInfo
 {   
@@ -18,7 +20,10 @@ public class StringInfo extends DaikonInfo
     }
     
     
-    
+	/**
+	 * Returns a String which contains a string representation of val, used for
+	 * dtrace information.
+	 */
     public String getValueString(Object val)
     {
         if(isArray)
@@ -31,6 +36,12 @@ public class StringInfo extends DaikonInfo
         }
     }
     
+	/**
+	 * Returns a space-separated String of the elements in theValues.  If theValues
+	 * is null, returns "null." If theValues is nonsensical, returns "nonsensical".
+	 * @param theValues A list of values, each is a String
+	 * @return a space-separated String of the elements in theValues
+	 */
     public static String showStringList(List /* <String> */theValues)
     {
         StringBuffer buf = new StringBuffer();
@@ -74,6 +85,9 @@ public class StringInfo extends DaikonInfo
     }
     
    
+	/**
+	 * Similar to showStringList, but used for non-array objects.
+	 */
     public String getValueStringNonArr(Object val)
     {
         String retString;
@@ -96,7 +110,8 @@ public class StringInfo extends DaikonInfo
         return retString;
     }
     
-    private String showString(String stringRef)
+    //encodes a string: surrounds in quotes and removes line breaks
+	private String showString(String stringRef)
     {
         return ("\"" + encodeString(stringRef) + "\"");
     }
