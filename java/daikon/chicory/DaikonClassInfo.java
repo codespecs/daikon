@@ -7,13 +7,16 @@ package daikon.chicory;
 import java.util.List;
 
 /**
- * @author Eric Fellheimer
+ * The DaikonClassInfo class is a subtype of DaikonInfo used for variable types which
+ * represent the runtime type of a variable.
  */
 public class DaikonClassInfo extends DaikonInfo
 {
 
     /**
-     * @param theName
+     * Constructs a DaikonClassInfo object
+     * @param theName The name of the variable
+     * @param isArr True iff the variable represents an array of runtime classes
      */
     public DaikonClassInfo(String theName, boolean isArr)
     {
@@ -21,8 +24,7 @@ public class DaikonClassInfo extends DaikonInfo
     }
 
     public Object getChildValue(Object value)
-    {
-        
+    {   
         return value;
     }
 
@@ -38,6 +40,11 @@ public class DaikonClassInfo extends DaikonInfo
         }
     }
     
+	/**
+	 * Get a String representation of the given Object's runtime type
+	 * @param val The Object whose runtime class we wish to get a String representation of
+	 * @return String representation of the given Object's runtime type
+	 */
     public String getValueStringNonArr(Object val)
     {
         String valString;
