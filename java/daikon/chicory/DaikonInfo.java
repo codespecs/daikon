@@ -6,18 +6,40 @@ import java.util.*;
 
 
 /**
+ * The DaikonInfo class is used to create a tree structure of the variables in 
+ * the target application.  It is built in the DeclWriter and traversed in the DTraceWriter.
+ * There is such a tree structure associated with every program point.  This architecture makes it
+ * possible to avoid the issue of "traversal pattern duplication" in which both the 
+ * DeclWriter and DTraceWriter must traverse the target application's variables identically.
+ * 
+ *  Each DaikonInfo object is a node of the tree.  Each node can have any non-negative
+ *  number of child nodes.  DaikonInfo is an abstract class.  Its subtypes are designed
+ *  to accomodate specific types of variables, such as arguments, arrays, etc. 
  */
 public abstract class DaikonInfo implements Iterable<DaikonInfo>
 {
+	/** The variable name **/
     private String name;
+	
+	/** The child nodes **/
     private List<DaikonInfo> children;
+	
+	/** True iff this variable is an array **/
     protected boolean isArray;
     
+	/** Constructs a non-array type DaikonInfo object 
+	 * @param theName The name of the variable
+	 */
     public DaikonInfo(String theName)
     {
         this(theName, false);
     }
     
+	/**
+	 * Constructs a DaikonInfo object
+	 * @param theName The variable's name
+	 * @param arr True iff the variable is an array
+	 */
     public DaikonInfo(String theName, boolean arr)
     {
         name = theName;
@@ -32,7 +54,8 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
     }
     
     /**
-     * @param info
+     * Add a child to this node
+     * @param info The child object, must be non-null.
      */
     public void addChild(DaikonInfo info)
     {
@@ -47,6 +70,12 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         return getString(new StringBuffer("--")).toString();
     }
     
+	/**
+	 * Return a StringBuffer which contains all ancestors of this node.
+	 * Longer indentations correspond to further distance in the tree.
+	 * @param offset The offset to begin each line with.
+	 * @return StringBuffer which contains all ancestors of this node
+	 */
     public StringBuffer getString(StringBuffer offset)
     {
         StringBuffer theBuf = new StringBuffer();
@@ -64,7 +93,8 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
     }
 
     /**
-     * @return
+     * Return an iterator over all the node's children
+     * @return an iterator over all the node's children
      */
     public Iterator<DaikonInfo> iterator()
     {
@@ -72,10 +102,17 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
     }
 
     /**
-     * @param val
+     * Given an object value corresponding to the parent of this DaikonInfo variable, 
+     * return the value of this DaikonInfo variable. 
+     * @param val The parent object
      */
     public abstract Object getChildValue(Object val);
     
+	/**
+	 * Returns a String representation of this object suitable for a .decls file
+	 * @param val The object whose value to print
+	 * @return a String representation of this object suitable for a .decls file
+	 */
     public String getValueString(Object val)
     {
         if(isArray)
@@ -114,7 +151,7 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         return showValue(val, hashArr) + "\n";
     }
     
-//  prints the value
+	//prints the value
     //doesn't print endline
     //if hashArray is true, it prints the "hash value" of the array
     //and not its separate values
@@ -187,7 +224,7 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
             return Integer.toString(System.identityHashCode(theObject));
     }
     
-    private String printList(List /* <Value> */theValues)
+    private String printList(List /*<Object>*/ theValues)
     {
         String retString = showList(theValues) + "\n";
 
@@ -199,8 +236,8 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         return retString;
     }
     
-//  prints out a list of values as if it were an array
-    protected String showList(List /* <Object>*/theValues)
+	//prints out a list of values as if it were an array
+    protected String showList(List /*<Object>*/ theValues)
     {
         if (theValues == null)
         {
