@@ -665,7 +665,7 @@ private static StreamRedirectThread out_thread;
     }
 
     /**
-     *
+     * Wait for Daikon to terminate
      */
     public static void endDaikon()
     {
