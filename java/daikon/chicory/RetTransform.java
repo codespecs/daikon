@@ -26,6 +26,13 @@ import sun.nio.cs.ext.ISCII91;
 
 import daikon.Chicory;
 
+/**
+ *
+ *  The RetTransform class is responsible for modifying another class' bytecode.
+ *  Specifically, its main task is to add "hooks" into the other class at method entries
+ *  and exits for instrumentation purposes.
+ *
+ */
 public class RetTransform implements ClassFileTransformer {
 
   boolean debug = false;
@@ -127,6 +134,10 @@ public class RetTransform implements ClassFileTransformer {
 
   }
 
+  /**
+   * Given another class, return a transformed version of the class which
+   * contains "hooks" at method entries and exits
+   */
   public byte[] transform (ClassLoader loader, String className,
                            Class<?> classBeingRedefined,
                            ProtectionDomain protectionDomain,
@@ -234,12 +245,7 @@ public class RetTransform implements ClassFileTransformer {
    
   }
 
-  
-  /**
-   * @param cg
-   * @param mg
-   * @param fullClassName
-   */
+  //used to add a "hook" into the <clinit> static initializer
   private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName)
   {
       InstructionList invokeList = call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
@@ -332,88 +338,78 @@ public class RetTransform implements ClassFileTransformer {
       return mg.getMethod();
   }
   
-  
-  /**
- * @param fullClassName
- * @param inst
- * @param context
- * @return
- */
-    private InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp, String fullClassName, Instruction inst, MethodContext context)
-    {
-        switch (inst.getOpcode())
-        {
 
-            case Constants.ARETURN :
-            case Constants.DRETURN :
-            case Constants.FRETURN :
-            case Constants.IRETURN :
-            case Constants.LRETURN :
-            case Constants.RETURN :
-                break;
+ 
+  //called by addInvokeToClinit to add in a hook at return opcodes
+  private InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp,
+			String fullClassName, Instruction inst, MethodContext context) {
+		switch (inst.getOpcode()) {
 
-            default :
-                return (null);
-        }
+		case Constants.ARETURN:
+		case Constants.DRETURN:
+		case Constants.FRETURN:
+		case Constants.IRETURN:
+		case Constants.LRETURN:
+		case Constants.RETURN:
+			break;
 
-        InstructionList il = new InstructionList();
-        il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
-        il.append(inst);
-        return (il);
-    }
+		default:
+			return (null);
+		}
 
-/**
- * @param cg
- * @param fullClassName
- * @return
- */
-private Method createClinit(ClassGen cg, String fullClassName)
-{
-    /*System.out.println(mg.getAccessFlags());
-    System.out.println(mg.getReturnType());
-    System.out.println(mg.getArgumentTypes());   
-    System.out.println(mg.getName());   
-    System.out.println(mg.getClassName()); */
-    
-    InstructionFactory factory = new InstructionFactory(cg);
-    
-    
-    InstructionList il = new InstructionList();
-    il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName, factory));
-    il.append(InstructionFactory.createReturn(Type.VOID)); //need to return!
-    
-    MethodGen newMethGen = new MethodGen(8, Type.VOID, new Type[0], new String[0], "<clinit>",
-            fullClassName, il, cg.getConstantPool());
-    newMethGen.update();
-    
-    for (Attribute a : newMethGen.getCodeAttributes()) {
-        if (is_local_variable_type_table (a)) {
-            newMethGen.removeCodeAttribute (a);
-        }
-      }
-    
-    //MethodContext context = new MethodContext (cg, newMethGen);
-    //InstructionFactory ifact = context.ifact;
-    
-    //il.append (ifact.createConstant (0));
-    //newMethGen.setInstructionList(il);
-    //newMethGen.update();
+		InstructionList il = new InstructionList();
+		il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
+		il.append(inst);
+		return (il);
+	}
 
-      // Update the max stack and Max Locals
-    newMethGen.setMaxLocals();
-    newMethGen.setMaxStack();
-    newMethGen.update();
-      
-      
-    return newMethGen.getMethod();
-}
 
-/**
- * @param cg
- * @param fullClassName
- * @param factory
- * @return
- */
+    //created a <clinit> method if none exists, to guarantee we always have this hook  
+  	private Method createClinit(ClassGen cg, String fullClassName) {
+		/*
+		 * System.out.println(mg.getAccessFlags());
+		 * System.out.println(mg.getReturnType());
+		 * System.out.println(mg.getArgumentTypes());
+		 * System.out.println(mg.getName());
+		 * System.out.println(mg.getClassName());
+		 */
+
+		InstructionFactory factory = new InstructionFactory(cg);
+
+		InstructionList il = new InstructionList();
+		il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName,
+				factory));
+		il.append(InstructionFactory.createReturn(Type.VOID)); // need to
+																// return!
+
+		MethodGen newMethGen = new MethodGen(8, Type.VOID, new Type[0],
+				new String[0], "<clinit>", fullClassName, il, cg
+						.getConstantPool());
+		newMethGen.update();
+
+		for (Attribute a : newMethGen.getCodeAttributes()) {
+			if (is_local_variable_type_table(a)) {
+				newMethGen.removeCodeAttribute(a);
+			}
+		}
+
+		// MethodContext context = new MethodContext (cg, newMethGen);
+		// InstructionFactory ifact = context.ifact;
+
+		// il.append (ifact.createConstant (0));
+		// newMethGen.setInstructionList(il);
+		// newMethGen.update();
+
+		// Update the max stack and Max Locals
+		newMethGen.setMaxLocals();
+		newMethGen.setMaxStack();
+		newMethGen.update();
+
+		return newMethGen.getMethod();
+	}
+
+
+	//created the InstructionList to insert for adding the <clinit> hookd
 private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName, InstructionFactory factory)
 { 
     InstructionList invokeList = new InstructionList();
@@ -924,6 +920,10 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     return (il);
   }
 
+  /**
+   * Returns true iff mgen is a constructor
+   * @return true iff mgen is a constructor
+   */
   private boolean is_constructor (MethodGen mgen) {
 
     if (mgen.getName().equals ("<init>") || mgen.getName().equals ("")) {
@@ -933,6 +933,10 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
       return (false);
   }
   
+  /**
+   * Return an array of strings, each corresponding to mgen's argument types
+   * @return an array of strings, each corresponding to mgen's argument types
+   */
   String[] getArgTypes(MethodGen mgen)
   {
       Type[] arg_types = mgen.getArgumentTypes();
@@ -951,6 +955,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
       return arg_type_strings;
   }
 
+  //creates a MethodInfo struct corresponding to mgen
   private MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen)
     {
         // Get the argument names for this method
