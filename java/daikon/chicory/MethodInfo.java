@@ -73,6 +73,7 @@ public class MethodInfo {
     primitive_classes.put("S", Short.TYPE);
   }
 
+  /** Populates this class with data from reflection **/
   public void get_reflection () {
 
     // Get the Class for each argument type
@@ -109,6 +110,10 @@ public class MethodInfo {
     }
   }
 
+  /**
+   * Returns true iff this method is a constructor
+   * @return true iff this method is a constructor
+   */
   public boolean is_constructor() {
     return (method_name.equals ("<init>") || method_name.equals(""));
   }
