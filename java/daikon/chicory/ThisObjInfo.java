@@ -5,10 +5,11 @@ import java.lang.reflect.Field;
 
 
 /**
+ * The ThisObjInfo class is a subtype of DaikonInfo used for variable types which
+ * represent the "this" object.s
  */
 public class ThisObjInfo extends DaikonInfo
 {
-    
     public ThisObjInfo()
     {
         super("this");
