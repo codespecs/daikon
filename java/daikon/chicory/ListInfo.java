@@ -8,27 +8,27 @@ import java.lang.reflect.*;
 import java.util.List;
 
 
+
 /**
- * @author Eric Fellheimer
- *
+ * The ListInfo class is a subtype of DaikonInfo used for variable types which
+ * implement java.util.List
  */
 public class ListInfo extends DaikonInfo
 {
 
     private Class listType;
     
-    /**
-     * @param theName
-     */
     public ListInfo(String theName, Class theType)
     {
         super(theName, true);
         listType = theType;
     }
 
-    
+	//use the "toArray" method to get an array
+	//convert the array to a List
     public Object getChildValue(Object value)
     {
+		
         Method arrayMethod = null;
         try
         {
@@ -44,6 +44,8 @@ public class ListInfo extends DaikonInfo
         if (value != null && !(value instanceof NonsensicalObject))
         {
 
+			//TODO why can't we just cast to List and call toArray directly?
+			
             try
             {
                 arrayVal = arrayMethod.invoke(value, new Object[0]);

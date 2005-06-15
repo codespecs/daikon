@@ -6,15 +6,13 @@ package daikon.chicory;
 
 
 /**
- * @author Eric Fellheimer
- *
+ * This subclass of DaikonInfo is used as a "placeholder." It contains no variable
+ * information directly, but provides useful information to the DTraceWriter during
+ * traversal.
  */
 public class HolderInfo extends DaikonInfo
 {
 
-    /**
-     * @param theName
-     */
     public HolderInfo()
     {
         super(null);
