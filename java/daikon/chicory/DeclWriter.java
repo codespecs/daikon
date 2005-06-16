@@ -6,6 +6,13 @@ import java.lang.reflect.*;
 
 import sun.misc.Unsafe;
 
+/**
+ * 
+ * DeclWriter writes the .decls file to a stream.  As it does this, it
+ * constructs traversal pattern trees (see {@link DaikonInfo})  for each
+ * program point.  These are later used by the {@link DTraceWriter}.
+ *
+ */
 public class DeclWriter extends DaikonWriter
 {
     // Notes:
@@ -22,28 +29,28 @@ public class DeclWriter extends DaikonWriter
     //  Class.getName() returns fully specified dot separated names with
     //  JVM array designations (eg, [Ljava.lang.String;)
 
-    //default string for comparability info
+    /**default string for comparability info**/
     private static final String compareInfoDefault = "22";
 
-    //header string before each new method entry or exit point
+    /**header string before each new method entry or exit point**/
     public static final String declareHeader = "DECLARE";
 
-    //used to assert that a given variable is a parameter to a method
+    /**used to assert that a given variable is a parameter to a method**/
     private static final String isParamString = " # isParam=true";
 
-    //stores a mapping from methods to all of the method's exit Locations
+    /**stores a mapping from methods to all of the method's exit Locations**/
     private Map /* <Method, Set <Integer>> */methodToExitLocs;
 
-    //map method to its argument names
+    /**map method to its argument names**/
     private Map /* <Method, List<String>> */methodToArgNames;
 
-    //keep track of Ppts we've already emitted
+    /**keep track of Ppts we've already emitted**/
     private Set /* <String> */emittedPpts;
 
-    //stream to write to
+    /**stream to write to**/
     private PrintStream outFile;
 
-    //levels of recursion
+    /**levels of recursion**/
     protected int daikonDepth;
 
     //certain class names
@@ -123,7 +130,6 @@ public class DeclWriter extends DaikonWriter
      * get this out of the java.lang.reflect interface so it has to
      * come in from outside.
      */
-
     public void registerArgNames(Member method, List argnames)
     {
         methodToArgNames.put(method, argnames);
@@ -139,7 +145,6 @@ public class DeclWriter extends DaikonWriter
      *		Class whose declarations should be printed.
      *
      */
-
     public void printDeclClass (ClassInfo cinfo)
     {
         // Note current class
@@ -186,7 +191,6 @@ public class DeclWriter extends DaikonWriter
      * has not already been emitted.  This can be called externally to print
      * Ppt decls one-at-a-time.
      */
-
     public void printMethodEntry(ClassInfo cinfo, DaikonInfo curParent, Member method, List argnames)
     {
         String name = methodEntryName(method);
@@ -328,9 +332,12 @@ public class DeclWriter extends DaikonWriter
     }
 
 
-    //prints the decls info for a method
-    //called by printMethodEntry (printMethodExit does this directly so it
-    // can place the return after the arguments (to match dfej)
+
+	/**
+	 *    prints the decls info for a method
+	 *    called by printMethodEntry (printMethodExit does this directly so it
+	 *    can place the return after the arguments (to match dfej)
+	 */
     private void printMethod(ClassInfo cinfo, DaikonInfo curParent, Member method, boolean shouldPrintClass, List argnames)
     {
         printLocalVars(curParent, method, argnames, "", daikonDepth);
