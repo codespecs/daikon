@@ -345,7 +345,9 @@ public class DeclWriter extends DaikonWriter
             printClassVars(cinfo, curParent, Modifier.isStatic(method.getModifiers()), method.getDeclaringClass(), "", daikonDepth, false);
     }
 
-    //print local variables (the arguments) of a method
+    /**
+     * Print local variables (the arguments) of a method
+     */
     private void printLocalVars(DaikonInfo curParent, Member method, List argnames, String offset, int depth)
     {
         Class[] arguments = (method instanceof Constructor) ? ((Constructor) method).getParameterTypes() : ((Method) method).getParameterTypes();
@@ -359,7 +361,9 @@ public class DeclWriter extends DaikonWriter
         }
     }
 
-    //print class variables for the given type
+    /**
+     * Print class variables for the given type
+     */
     private void printClassVars(ClassInfo cinfo, DaikonInfo curParent, boolean dontPrintInst, Class type, String offset, int depth, boolean inArray)
     {        
         DaikonInfo thisInfo;
@@ -524,7 +528,9 @@ public class DeclWriter extends DaikonWriter
         }
     }
 
-    //prints the decl info for a single local variable
+    /**
+     * Prints the decl info for a single local variable
+     */
     private DaikonInfo printDeclVar(DaikonInfo curParent, Class type, String name, String offset, int depth)
     {
         outFile.println(offset + name);
@@ -548,8 +554,12 @@ public class DeclWriter extends DaikonWriter
         return newChild;
     }
 
-    // Determines if type has exactly 1 non-static field of same type
-    // (implicit list) and prints asociated decls.
+    /**
+     *
+     *Determines if type has exactly 1 non-static field of same type
+     *(implicit list) and prints asociated decls.
+     *
+     **/
     private void checkForImplicitList(Class type, String name, String offset, int depth)
     {
         //disable this method until dtracewriter finishes analogous method
@@ -586,8 +596,10 @@ public class DeclWriter extends DaikonWriter
         }
     }
 
-    // Determines if type implements list
-    // and prints associated decls, if necessary
+	/**
+	 * Determines if type implements list
+	 * and prints associated decls, if necessary
+	 */
     private void checkForListDecl(DaikonInfo curParent, Class type, String name, String offset,
                                   boolean inArray)
     {
@@ -616,7 +628,9 @@ public class DeclWriter extends DaikonWriter
         }
     }
 
-    //prints the decl info for a single class variable
+    /**
+     * Prints the decl info for a single class variable
+     */
     private DaikonInfo printDeclVar(DaikonInfo curParent, Field field, String offset, int depth,
                                 boolean inArray, StringBuffer buf)
     {
@@ -741,8 +755,8 @@ public class DeclWriter extends DaikonWriter
     }
 
     // Appends as auxiliary information:
-    // * the package name of the declaring class
-    // * whether the type is static
+    // the package name of the declaring class
+    // whether the type is static
     private void appendAuxInfo(Field field) {
 
         Class type = field.getType();
@@ -760,8 +774,11 @@ public class DeclWriter extends DaikonWriter
         }
     }
 
-    //checks the given type to see if it is a string
-    //if so, it prints out the correct decs info
+
+	/**
+	 * checks the given type to see if it is a string
+	 * if so, it prints out the correct decs info
+	 */
     private void checkForString(DaikonInfo curParent, Class type, String name, String offset)
     {
         if (!type.getName().equals(stringClassName))
@@ -785,9 +802,11 @@ public class DeclWriter extends DaikonWriter
 
     }
 
-    //checks the given type to see if it requires a .class
-    //addition to the decls file
-    //if so, it prints out the correct .class variable info
+    /**
+     * checks the given type to see if it requires a .class
+     * addition to the decls file
+     * if so, it prints out the correct .class variable info
+     */
     private void checkForRuntimeClass(DaikonInfo curParent, Class type, String name, String offset)
     {
         if (!shouldAddRuntimeClass(type))
