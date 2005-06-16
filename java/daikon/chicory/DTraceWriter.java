@@ -7,12 +7,8 @@ import java.util.*;
 import daikon.Chicory;
 
 /**
- * @author Eric Fellheimer
- *         <p>
- *         DTraceListener extends TraceListener. It provides the means to
- *         produce a .dtrace file from the events it receives. It prints the
- *         dtrace file throughout the lifetime of the remote application it is
- *         "listening" to
+ *  DTraceWriter writes .dtrace program points to an output stream.
+ *  It uses the traversal pattern trees created by the {@link DeclWriter}.
  */
 
 public class DTraceWriter extends DaikonWriter
@@ -29,21 +25,22 @@ public class DTraceWriter extends DaikonWriter
     //          - checkForVarRecursion: recursive check on on argument
     //        - traceClassVars: prints fields in a class
 
-    //turns off multi-dimensional array printing
+    /** turns off multi-dimensional array printing*/
     private static final boolean NoMultiDim = true;
 
-    private static String noStackErrorMsg = "Could not find stack frame in the thread map";
 
-    //instance of a nonsensical value
+    /**instance of a nonsensical value*/
     private static NonsensicalObject nonsenseValue = NonsensicalObject.getInstance();
-    //instance of a nonsensical list
+    /**instance of a nonsensical list*/
     private static List nonsenseList = NonsensicalList.getInstance();
 
     //certain class names
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
+	/**Where to print output*/
     private PrintStream outFile;
+	/**Maximum recursion depth*/
     private int daikonDepth;
 
     /**
@@ -151,8 +148,11 @@ public class DTraceWriter extends DaikonWriter
         outFile.println(val);
     }
 
-    //prints the method's return value and all relevant variables
-    //uses the traversal pattern data structure of DaikonInfo subtypes
+    /** 
+     * prints the method's return value and all relevant variables
+     * uses the traversal pattern data structure of DaikonInfo subtypes
+     *
+    */
     private void traversePattern(MethodInfo mi, RootInfo root,
             Object[] args,
             Object thisObj,
@@ -161,6 +161,7 @@ public class DTraceWriter extends DaikonWriter
         Object val;
         int whichArg = 0;
 
+		//go through all of the node's children
         for(DaikonInfo child: root)
         {
             if(child instanceof ReturnInfo)
@@ -173,6 +174,7 @@ public class DTraceWriter extends DaikonWriter
             }
             else if(child instanceof ArgInfo)
             {
+				//keep track of how many args we've reached so far
                 val = args[whichArg];
                 whichArg++;
             }
@@ -210,7 +212,7 @@ public class DTraceWriter extends DaikonWriter
 
     //input: List of ObjectReferences whose type has field field
     //output: List of values of field for each object in theObjects
-    public static List getFieldValues(Field field, List /* <Object> */theObjects)
+    public static List getFieldValues(Field field, List /*<Object>*/ theObjects)
     {
         if (theObjects == null || theObjects instanceof NonsensicalList)
             return nonsenseList;
@@ -230,6 +232,14 @@ public class DTraceWriter extends DaikonWriter
         return fieldVals;
     }
 
+	/**
+	 * Get the value of a certain field in theObj.
+	 * @param classField which field we are interested in
+	 * @param theObj The object whose field we are examining.
+	 * TheoObj must be null, Nonsensical, or of a type which 
+	 * contains the field classField
+	 * @return The value of the classField field in theObj
+	 */
     public static Object getValue(Field classField, Object theObj)
     {
         //if we dont have a real object, return NonsensicalValue
@@ -401,6 +411,9 @@ public class DTraceWriter extends DaikonWriter
     }
 
 
+	/**
+	 * Similar to getValue, but used for static fields
+	 */
     public static Object getStaticValue(Field classField)
     {
         //Class declaringClass = declareInfo.clazz;
@@ -558,6 +571,11 @@ public class DTraceWriter extends DaikonWriter
         }
     }
 
+	/**
+	 * Return a List derived from an aray
+	 * @param arrayVal Must be an array type
+	 * @return a List (with correct primitive wrappers) corresponding to the array
+	 */
     public static List getListFromArray(Object arrayVal)
     {
         if (!arrayVal.getClass().isArray())
@@ -626,10 +644,12 @@ public class DTraceWriter extends DaikonWriter
         outFile.println("2");
     }
 
-    /*
+    /**
      * Returns a list of Strings which are the names of the runtime types in the
      * theVals param
      * @param theVals List of ObjectReferences
+     * @return a list of Strings which are the names of the runtime types in the
+     * theVals param
      */
     public static List getTypeNameList(List theVals)
     {
@@ -657,6 +677,13 @@ public class DTraceWriter extends DaikonWriter
         return typeNames;
     }
 
+	/**
+	 * Get the "actual" type of val
+	 * @param val The object whose type we are examining
+	 * @param declared the declared type of the variable corresponding to val
+	 * @param runtime Should we use the runtime type or declared type?
+	 * @return The variable's type, with primitive wrappers removed
+	 */
     public static Class removeWrappers(Object val, Class declared, boolean runtime)
     {
         if (!(val instanceof Runtime.PrimitiveWrapper))
