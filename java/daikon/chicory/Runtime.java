@@ -693,11 +693,12 @@ private static StreamRedirectThread out_thread;
     }
 
     /**
+     * Gets the ClassInfo structure corresponding to type
      * @param type: declaring class
-     * @return ClassInfo
+     * @return ClassInfo structure corresponding to type
      */
     public static ClassInfo getClassInfoFromClass(Class type)
-    {
+	{
         try
         {
         synchronized (Runtime.all_classes)
