@@ -19,6 +19,16 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+4.1.3 (July 1 2005)
+
+Kvasir
+
+  User Changes:
+
+    The DynComp variable comparability analysis tool (invoked by using
+    the --with-dyncomp option) has been under heavy development for
+    the past month and now generates much more precise comparability 
+    sets than Version 4.1.2.
 
 4.1.2 (June 1 2005)
 
