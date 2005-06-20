@@ -1033,9 +1033,9 @@ world writable for log2html to work correctly.
 This chapter describes some of the techniques used in Daikon to make
 it efficient in terms of time and space needed.  These techniques can
 be enabled or disabled at the Daikon command line, as described in
-@ref{Command line options,,,./daikon,Daikon User Manual}.
+@ref{Command line options,,Running Daikon,./daikon,Daikon User Manual}.
 
-@node   Avoiding work for redundant invariants, Dataflow hierarchy, Daikon internals, Daikon internals
+@node    Avoiding work for redundant invariants, Dataflow hierarchy, Daikon internals, Daikon internals
 @section Avoiding work for redundant invariants
 
 @cindex non-instantiation of invariants
