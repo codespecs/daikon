@@ -329,7 +329,7 @@ public class Chicory {
     dtraceLim = System.getProperty(traceLimString);
     terminate = System.getProperty(traceLimTermString);
 
-    //run Daikon if we're in online mode
+        //run Daikon if we're in online mode
         StreamRedirectThread daikon_err = null, daikon_out = null;
         if (daikon_cmd_online != null)
         {
@@ -479,13 +479,6 @@ public class Chicory {
       if (cp == null)
         cp = ".";
 
-    // Run Daikon on the results
-      /*String tmp = String.format  ("java -Xmx500m -cp %s -ea %s %s/%s",
-              cp, daikon_cmd, output_dir, trace_file_name);
-      System.out.printf("TMP: %s\n", tmp);
-
-      System.out.println("cp = " + cp);*/
-
       String cmdstr;
         if (isOnline)
         {
@@ -521,6 +514,7 @@ public class Chicory {
   }
 
 
+  /** Wait for stream redirect threads to complete **/
   public int redirect_wait (Process p) {
 
     // Create the redirect theads and start them
@@ -622,77 +616,6 @@ public class Chicory {
       return (System.currentTimeMillis() - start);
   }
 
-  //public void runDaikon(String daikonArgs)
-  //{
-      /*
-       String tFileName;
-       String dFileName;
-       try
-       {
-       tFileName = (new File(outputDir, traceFileName)).getCanonicalPath();
-       dFileName = (new File(outputDir, declFileName)).getCanonicalPath();
-       }
-       catch (IOException e)
-       {
-       throw new Error("Could not find decls or dtrace file: " + e);
-       }
-
-       String daikonArgArr[];
-
-       if (daikonArgs == null)
-       daikonArgArr = new String[0];
-       else
-       daikonArgArr = parseDaikonArgs(daikonArgs);
-
-       try
-       {
-       String commands[] = new String[4 + daikonArgArr.length];
-
-       int length = commands.length;
-
-       commands[0] = "java";
-       commands[1] = "daikon.Daikon";
-
-       System.arraycopy(daikonArgArr, 0, commands, 2, daikonArgArr.length);
-
-       commands[length - 2] = dFileName;
-       commands[length - 1] = tFileName;
-
-       System.out.println("Executing Daikon...");
-       for (int i = 0; i < commands.length; i++)
-       System.out.print(commands[i] + " ");
-       System.out.println();
-
-       Process ls_proc = Runtime.getRuntime().exec(commands);
-       //Process ls_proc = Runtime.getRuntime().exec("cmd");
-
-       StreamRedirectThread daikonErrThread = new StreamRedirectThread("daikon error reader", ls_proc.getErrorStream(), System.err);
-       StreamRedirectThread daikonOutThread = new StreamRedirectThread("daikon output reader", ls_proc.getInputStream(), System.out);
-
-       daikonErrThread.start();
-       daikonOutThread.start();
-
-       // Shutdown begins when event thread terminates
-       try
-       {
-       daikonErrThread.join(); // Make sure output is forwarded
-       daikonOutThread.join(); // before we exit
-
-       //System.out.println("\nDaikon completed!");
-       }
-       catch (InterruptedException exc)
-       {
-       // we don't interrupt
-       }
-
-       }
-       catch (IOException e1)
-       {
-       System.out.println("could not run Daikon: " + e1);
-       }
-       */
-  //}
-
   /** convert a list of arguments into a command line string **/
   public String args_to_string(List<String> args)
   {
@@ -709,12 +632,12 @@ public class Chicory {
       return arg.split(" ");
   }
 
-/**
- * @return The local socket port on which Daikon is listening
- */
-public int getDaikonPort()
-{
+  /**
+  * @return The local socket port on which Daikon is listening
+  */
+  public int getDaikonPort()
+  {
     return daikonPort;
-}
+  }
 
 }
