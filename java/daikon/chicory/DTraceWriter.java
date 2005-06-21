@@ -52,6 +52,8 @@ public class DTraceWriter extends DaikonWriter
      *            Tree recursion to traverse for each variable
      * @param excludes
      *            Formatted strings can include wildcards
+     * @param includes
+     *  		  List of formatted strings for including in the instrumentations
      */
     public DTraceWriter(PrintStream writer, int depth, String[] excludes, List includes)
     {
@@ -65,38 +67,20 @@ public class DTraceWriter extends DaikonWriter
     }
 
     /**
-     * Instruments the method entry event in the dtrace file
+     * Prints the method entry program point in the dtrace file
      */
     public void methodEntry(MethodInfo mi, int nonceVal, Object obj, Object[] args)
     {
-        // Thread thread = Thread.currentThread();
-
-        // these can be removed, this is done in transform now
-        /*
-         if (!shouldInstrumentMethod(method))
-         return;
-
-         if (shouldExcludeClass(method.getDeclaringClass().getName()))
-         return;
-         */
-
+		//don't print 
         if(Runtime.dtrace_closed)
             return;
 
         Member member = mi.member;
 
-
+		//get the root of the method's traversal pattern
         RootInfo root = mi.traversalEnter;
         if(root == null)
             throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
-
-        //System.out.println("ENTER method " + method);
-        //System.out.println(stackFrame);
-
-
-        // Print args and this.  The nonsenseValue argument indicates
-        // that no return value should be printed.  We can't use null
-        // since that is a valid return value.
 
         outFile.println(DaikonWriter.methodEntryName(member));
         printNonce(nonceVal);
@@ -108,24 +92,22 @@ public class DTraceWriter extends DaikonWriter
     }
 
     /**
-     * Instruments the method exit event in the dtrace file
+     * Prints the method exit program point in the dtrace file
      */
     public void methodExit(MethodInfo mi, int nonceVal, Object obj, Object[] args, Object ret_val, int lineNum)
     {
-        // Thread thread = Thread.currentThread();
-
         if(Runtime.dtrace_closed)
             return;
 
         Member member = mi.member;
-
+        
+		//gets the traversal pattern root for this method exit
         RootInfo root = mi.traversalExit.get(lineNum);
         if(root == null)
             throw new RuntimeException("Traversal pattern not initialized for method " + mi.method_name + " at line " + lineNum);
 
         //make sure the line number is valid
         //i.e., it is one of the exit locations in the MethodInfo for this method
-        //System.out.printf("reached line num " + lineNum + " at method " + mi.method_name + "\n");
         if (mi.exit_locations == null || !mi.exit_locations.contains(lineNum))
         {
             throw new RuntimeException("The line number " + lineNum + " is not found in the MethodInfo for method " + mi.method_name + "\nNo exit locations found in exit_locations set!");
@@ -134,7 +116,6 @@ public class DTraceWriter extends DaikonWriter
         outFile.println(DaikonWriter.methodExitName(member, lineNum));
         printNonce(nonceVal);
         traversePattern(mi, root, args,  obj, ret_val);
-
 
         outFile.println();
 
@@ -149,8 +130,16 @@ public class DTraceWriter extends DaikonWriter
     }
 
     /** 
-     * prints the method's return value and all relevant variables
-     * uses the traversal pattern data structure of DaikonInfo subtypes
+     * Prints the method's return value and all relevant variables.
+     * Uses the traversal pattern data structure of DaikonInfo subtypes
+     * @param mi The method whose program point we are printing
+     * @param root The root of the program point's traversal pattern
+     * @param args The arguments to the method corrsponding to mi.
+     *             Must be in the same order as the .decls info is in
+     *             (Which is the declared order in the source code)
+     * @param thisObj The value of the "this" object at this point in the execution
+     * @param ret_val The value returned from this method, only used for
+     *                exit program points.
      *
     */
     private void traversePattern(MethodInfo mi, RootInfo root,
@@ -159,6 +148,8 @@ public class DTraceWriter extends DaikonWriter
             Object ret_val)
     {
         Object val;
+		
+		//a count of how many method arguments processed so far
         int whichArg = 0;
 
 		//go through all of the node's children
@@ -180,6 +171,7 @@ public class DTraceWriter extends DaikonWriter
             }
             else if(child instanceof HolderInfo)
             {
+				//HolderInfo does not correspond to an actual value
                 val = null;
             }
             else
@@ -201,18 +193,24 @@ public class DTraceWriter extends DaikonWriter
             outFile.println(curInfo.getValueString(val));
         }
 
-        Object childVal;
+		//go through all of the current node's children
+		//and recurse on their values
         for (DaikonInfo child : curInfo)
         {
+			Object childVal;
+			
             childVal = child.getChildValue(val);
             traverseValue(mi, child, childVal);
         }
 
     }
 
-    //input: List of ObjectReferences whose type has field field
-    //output: List of values of field for each object in theObjects
-    public static List getFieldValues(Field field, List /*<Object>*/ theObjects)
+	/**
+	 * Returns a list of values of the field for each Object in theObjects
+	 * @param theObjects List of Objects, each must have the Field field
+	 * @param field Which field of theObjects we are probing
+	 */
+    public static List /* <Object> */ getFieldValues(Field field, List /*<Object>*/ theObjects)
     {
         if (theObjects == null || theObjects instanceof NonsensicalList)
             return nonsenseList;
@@ -251,30 +249,12 @@ public class DTraceWriter extends DaikonWriter
         if (!classField.isAccessible())
             classField.setAccessible(true);
 
-        /*if (true)
-        {
-            try {
-                Object val = classField.get (theObj);
-                // System.out.printf ("val for %s = %s\n", classField, val);
-
-            } catch (Exception e) {
-                System.out.printf ("looking in object of class %s %s\n",
-                                   theObj.getClass(), theObj);
-                throw new Error ("can't access field " + classField + ": " + e);
-            }
-        }*/
-
-        // System.out.printf ("Field %s has type %s\n", classField, fieldType);
-        // It seems easier (and it seems to work) to pass the normal
-        // Integer, Float, etc wrappes back and let them be handled there
-        // rather than wrapping them in our wrappers.
         if (fieldType.equals(int.class))
         {
             try
             {
                 Runtime.IntWrap val
                     = new Runtime.IntWrap(classField.getInt(theObj));
-                //System.out.printf ("field %s has val %s\n", classField, val);
                 return val;
             }
             catch (IllegalArgumentException e)
@@ -305,8 +285,6 @@ public class DTraceWriter extends DaikonWriter
         {
             try
             {
-                // System.out.printf ("val for %s = %b\n", classField,
-                //                   classField.getBoolean(theObj));
                 return new Runtime.BooleanWrap(classField.getBoolean(theObj));
             }
             catch (IllegalArgumentException e)
@@ -416,8 +394,6 @@ public class DTraceWriter extends DaikonWriter
 	 */
     public static Object getStaticValue(Field classField)
     {
-        //Class declaringClass = declareInfo.clazz;
-
         if (!classField.isAccessible())
             classField.setAccessible(true);
 
@@ -426,12 +402,11 @@ public class DTraceWriter extends DaikonWriter
 
         if(Chicory.checkStaticInit)
         {
-        //don't force initialization!
-        if(!Runtime.isInitialized(classField.getDeclaringClass().getName()))
-        {
-            //System.out.println("SKIPPING " + classField.getDeclaringClass().getName() + " --- " + classField.getName());
-            return nonsenseValue;
-        }
+            //don't force initialization!
+            if(!Runtime.isInitialized(classField.getDeclaringClass().getName()))
+            {
+                return nonsenseValue;
+            }
         }
 
         if (fieldType.equals(int.class))
@@ -588,6 +563,9 @@ public class DTraceWriter extends DaikonWriter
 
         for (int i = 0; i < len; i++)
         {
+			//have to wrap primitives in our wrappers
+			//otherwise, couldn't distinguish from a wrapped object in the
+			//target app
             if (arrType.equals(int.class))
             {
                 arrList.add(new Runtime.IntWrap(Array.getInt(arrayVal, i)));
@@ -631,13 +609,14 @@ public class DTraceWriter extends DaikonWriter
     }
 
 
-    //removes endlines in string
+    //removes endlines in string and fixes other formatting issues
+	//see Runtime.quote
     private static String encodeString(String input)
     {
         return Runtime.quote(input);
     }
 
-    //prints nonsensical and corresponding modified integer
+    //prints nonsensical and corresponding "modified" integer
     private void printNonsensical()
     {
         outFile.println("nonsensical");
@@ -651,12 +630,12 @@ public class DTraceWriter extends DaikonWriter
      * @return a list of Strings which are the names of the runtime types in the
      * theVals param
      */
-    public static List getTypeNameList(List theVals)
+    public static List /*<String>*/ getTypeNameList(List /*<Object>*/theVals)
     {
         if (theVals == null || theVals instanceof NonsensicalList)
             return nonsenseList;
 
-        List typeNames = new ArrayList(theVals.size());
+        List /*<String>*/ typeNames = new ArrayList /*<String>*/(theVals.size());
 
         for (Iterator iter = theVals.iterator(); iter.hasNext();)
         {
