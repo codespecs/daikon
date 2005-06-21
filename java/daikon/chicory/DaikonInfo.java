@@ -65,6 +65,9 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         children.add(info);
     }
     
+	/**
+	 * Returns a string representation of this node and all of its children
+	 */
     public String toString()
     {
         return getString(new StringBuffer("--")).toString();
@@ -74,7 +77,7 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
 	 * Return a StringBuffer which contains all ancestors of this node.
 	 * Longer indentations correspond to further distance in the tree.
 	 * @param offset The offset to begin each line with.
-	 * @return StringBuffer which contains all ancestors of this node
+	 * @return StringBuffer which contains all children of this node
 	 */
     public StringBuffer getString(StringBuffer offset)
     {
@@ -125,6 +128,7 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         }
     }
     
+	//printValString with array hashing on
     private String printValString(Object theValue)
     {
         return printValString(theValue, true);
@@ -174,6 +178,7 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         }
         else if (!hashArray && (type.isArray()))
         {
+			//show the full array
             return showArray(theValue);
         }
 
@@ -181,16 +186,9 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         {
             return ("nonsensical");
         }
-        /*else if (theValue instanceof Number)
-        {
-            outFile.print (theValue.toString());
-        }
-        else if (theValue instanceof Boolean)
-        {
-            outFile.print (theValue.toString());
-        }*/
         else
         {
+			//basically, show the hashcode of theValue
             return showObject(theValue);
         }
     }
@@ -224,6 +222,7 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
             return Integer.toString(System.identityHashCode(theObject));
     }
     
+	//print the list of values and the "modified" value
     private String printList(List /*<Object>*/ theValues)
     {
         String retString = showList(theValues) + "\n";
@@ -256,6 +255,8 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         {
             Object elementVal = iter.next();
             
+			//hash arrays...
+			//don't want to print arrays within arrays
             buf.append(showValue(elementVal, true));
 
             //put space between elements in array
