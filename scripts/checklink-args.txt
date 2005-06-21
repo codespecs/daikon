@@ -15,6 +15,7 @@
 --exclude-broken -1:http://whereis.mit.edu/map-jpg?selection=32&Buildings=go 
 --exclude-broken 403:http://www.cs.washington.edu/orgs/student-affairs/gsc/jobs/
 --exclude-broken 403:http://www.elsevier.nl/locate/disc/
+--exclude-broken 404:http://www.eclipse.org/legal/Eclipse%20EPL%202003_11_10%20Final_files/filelist.xml
 --exclude-broken 405:http://www.amazon.com/exec/obidos/tg/detail/-/0321205758/103-2932545-5299831?v=glance
 --exclude-broken 500:http://conferences.iee.org/icse2004/
 --exclude-broken 500:https://web.mit.edu/21.guide/www/l-rec-ob.htm
