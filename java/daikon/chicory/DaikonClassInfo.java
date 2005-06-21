@@ -23,6 +23,7 @@ public class DaikonClassInfo extends DaikonInfo
         super(theName, isArr);
     }
 
+	//.class variables are derived, so just keep the parent value
     public Object getChildValue(Object value)
     {   
         return value;
@@ -32,6 +33,7 @@ public class DaikonClassInfo extends DaikonInfo
     {
         if(isArray)
         {
+			//a list of the runtime type of each value in the array
             return StringInfo.showStringList(DTraceWriter.getTypeNameList((List) val));
         }
         else
@@ -41,7 +43,8 @@ public class DaikonClassInfo extends DaikonInfo
     }
     
 	/**
-	 * Get a String representation of the given Object's runtime type
+	 * Get a String representation of the given Object's runtime type and the
+	 * corresponding "modified" value
 	 * @param val The Object whose runtime class we wish to get a String representation of
 	 * @return String representation of the given Object's runtime type
 	 */
@@ -55,14 +58,6 @@ public class DaikonClassInfo extends DaikonInfo
         }
         else
         {
-            // JHP 2/6/05: The removeWrappers call does not appear to be
-            // necessary. Also getCanonicalName() returns null in some
-            // circumstances, which is incorrect.
-            //if (name.equals ("return"))
-            //    System.out.printf ("%s.class of %s [%s]\n", name,
-            //             val.getClass().getSimpleName(),
-            //             removeWrappers(val, type, true));
-            // outFile.println("\"" + removeWrappers(val, type, true).getCanonicalName() + "\"");
             valString = ("\"" + DTraceWriter.stdClassName(val.getClass()) + "\"") + "\n1";
         }
         
