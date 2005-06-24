@@ -3102,10 +3102,32 @@ comparability analysis tool to generate .decls files with variable
 comparability information in the format specified in the @ref{Program
 point declarations} section.  Variable comparability information can
 speed up the performance of Daikon and allow it to generate a more
-focused and relevant set of invariants.  This is a first prototype and
-is currently under active development.  (This option may be used
+focused and relevant set of invariants.  This option may be used
 concurrently with @option{--decls-only} to only generate a .decls file
-without .dtrace.)
+without .dtrace.
+
+@item --no-dyncomp-gc
+
+By default, DynComp runs with a garbage collector for the tag metadata
+that it uses, but this can cause your program to slow down if it runs
+too often.  This option turns off the garbage collector.
+
+@item --gc-num-tags=@var{N}
+
+The DynComp garbage collector runs once after every 5,000,000 tags have
+been assigned.  This option tells the garbage collector to run once
+after every @var{N} tags have been assigned.  Making the value of
+@var{N} larger allows your program to run faster (because the garbage
+collector runs less frequently), but may cause your program to run out
+of memory faster as well.
+
+@item --dyncomp-fast-mode
+
+This option applies an approximation for handling literal values which
+greatly speeds up the performance of DynComp and drastically lowers its
+memory usage, but at the expense of a slight loss in precision of the
+generated comparability sets.  If you cannot get DynComp to successfully
+run on a large program, try turning on this option.
 
 @item --dtrace-append
 
@@ -3548,6 +3570,36 @@ $DAIKON bzip2.dtrace
 The two commands (before and after the ampersand) could also be run in
 two different terminals.
 
+When running Kvasir with DynComp (using the @file{--with-dyncomp}
+option), Kvasir generates the .decls file after it generates the .dtrace
+file, so it is not possible to perform online execution using one run.
+The recommended way to perform online execution with DynComp is to run
+it once and only generate a .decls file with comparability information,
+then run Kvasir again without DynComp and pipe the .dtrace data directly
+into Daikon while using the .decls file generated from the previous run:
+
+@example
+kvasir-dtrace --with-dyncomp --decls-only ./foo
+@end example
+
+This should generate a .decls file with comparability information
+named @file{daikon-output/foo.decls}.
+
+@example
+kvasir-dtrace --decls-file=/dev/null --dtrace-file=- ./foo | java daikon.Daikon daikon-output/foo.decls -
+@end example
+
+When you run Kvasir the second time, you don't need to run DynComp
+again since you are only interested in the .dtrace file.  Notice that
+the .decls output is directed to @file{/dev/null} and the .dtrace output
+is directed to standard out (@file{--dtrace-file=-}).  You can simply
+pipe that .dtrace output out to Daikon, which is invoked using the
+.decls file (with comparability information) generated during your
+previous run.
+
+A general warning about online execution: If your program outputs text
+to standard output and the .dtrace data is also redirected to standard
+output, then the two may conflict and confuse Daikon.
 
 @node    Installing Kvasir, Kvasir limitations, Online execution, Kvasir
 @subsection Installing Kvasir

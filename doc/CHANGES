@@ -31,6 +31,18 @@ Kvasir
     the past month and now generates much more precise comparability 
     sets than Version 4.1.2.
 
+    Added a --dyncomp-fast-mode command-line option in order to have 
+    DynComp run faster and use less memory at the expense of slightly
+    less precision by performing an approximation for the handling of 
+    literal values.
+
+    Added a tag garbage collector to DynComp, which should avoid problems 
+    with running out of memory on larger programs.  The --no-dyncomp-gc
+    option turns off the garbage collector, and the --gc-num-tags=N option
+    tells DynComp to garbage collect after every N tags have been assigned
+    (default is 5,000,000).  If your program still runs out of memory
+    while running Kvasir with DynComp, try the --dyncomp-fast-mode option.
+
 ---------------------------------
 
 4.1.2 (June 1 2005)
