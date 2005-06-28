@@ -15,7 +15,7 @@ public class ReturnInfo extends DaikonVariableInfo
     
     public Object getMyValFromParentVal(Object value)
     {
-        return null;
+        throw new RuntimeException("Don't call getMyValFromParentVal on ReturnInfo objects");
     }
     
 }

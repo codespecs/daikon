@@ -25,9 +25,6 @@ public class DaikonWriter
      * Controls whether modifiers and the return type are included in the decl output
      */
     protected static final boolean no_modifiers_ppt = true;
-
-    /** the class of the method currently being processed **/
-    protected Class current_class;
     
     /** Print visibility info in the program point **/
     private static final boolean showDeclVisibility = false;
