@@ -9,7 +9,7 @@ import sun.misc.Unsafe;
 /**
  * 
  * DeclWriter writes the .decls file to a stream.  As it does this, it
- * constructs traversal pattern trees (see {@link DaikonInfo})  for each
+ * constructs traversal pattern trees (see {@link DaikonInfo})  for eachs
  * program point.  These are later used by the {@link DTraceWriter}.
  *
  */
@@ -39,13 +39,13 @@ public class DeclWriter extends DaikonWriter
     private static final String isParamString = " # isParam=true";
 
     /**stores a mapping from methods to all of the method's exit Locations**/
-    private Map /* <Method, Set <Integer>> */ methodToExitLocs;
+    private Map <Method, Set <Integer>> methodToExitLocs;
 
     /**map method to its argument names**/
-    private Map /* <Method, List<String>> */ methodToArgNames;
+    private Map <Method, List<String>> methodToArgNames;
 
     /**keep track of Ppts we've already emitted**/
-    private Set /* <String> */ emittedPpts;
+    private Set <String> emittedPpts;
 
     /**stream to write to**/
     private PrintStream outFile;
@@ -58,7 +58,7 @@ public class DeclWriter extends DaikonWriter
     protected static final String stringClassName = "java.lang.String";
 
     /**
-     * Initializes the DeclWriter, preparing it to receive messages.
+     * Constructs a DeclWriter, preparing it to receive messages.
      *
      * @param writer
      *            Stream to write to
@@ -75,13 +75,15 @@ public class DeclWriter extends DaikonWriter
         super(excludes, includes);
 
         outFile = writer;
+        
         if (depth <= 0)
-            throw new Error("Daikon depth must be positive");
+            throw new RuntimeException("Daikon depth must be positive");
+        
         daikonDepth = depth;
 
-        methodToExitLocs = new HashMap();
-        methodToArgNames = new HashMap();
-        emittedPpts = new HashSet();
+        methodToExitLocs = new HashMap <Method, Set<Integer> > ();
+        methodToArgNames = new HashMap <Method, List<String> >();
+        emittedPpts = new HashSet <String> ();
     }
 
     /**
@@ -96,28 +98,28 @@ public class DeclWriter extends DaikonWriter
     {
         outFile.println("// Declarations for " + className);
         outFile.println("// Declarations written " + (new Date()));
-        outFile.print("\n\n");
+        outFile.print(DaikonWriter.lineSep + DaikonWriter.lineSep);
 
         outFile.println("VarComparability");
-        outFile.println("none\n");
+        outFile.println("none" + DaikonWriter.lineSep);
 
         outFile.println("ListImplementors");
-        outFile.println("java.util.List\n\n");
+        outFile.println("java.util.List" + DaikonWriter.lineSep + DaikonWriter.lineSep);
     }
 
     /**
      * Register an exit point for a method or constructor.  If you're printing
-     * decls in whole-class mode, you should call this first for every exit
-     * point, otherwise no method exit Ppt decls will get generated.
+     * decls in whole-class mode, you should call this before printDeclClass 
+     * for every exit point, otherwise no method exit Ppt decls will get generated.
      */
     public void registerExit(Member method, int exitLoc)
     {
-        Set exitLocs = (Set) methodToExitLocs.get(method);
+        Set<Integer> exitLocs = methodToExitLocs.get(method);
         //create new set for this method if it does not exist yet
         if (exitLocs == null)
         {
-            exitLocs = new HashSet();
-            methodToExitLocs.put(method, exitLocs);
+            exitLocs = new HashSet<Integer> ();
+            methodToExitLocs.put((Method) method, exitLocs);
         }
         exitLocs.add(new Integer(exitLoc));
     }
@@ -127,9 +129,9 @@ public class DeclWriter extends DaikonWriter
      * get this out of the java.lang.reflect interface so it has to
      * come in from outside.
      */
-    public void registerArgNames(Member method, List argnames)
+    public void registerArgNames(Member method, List <String> argnames)
     {
-        methodToArgNames.put(method, argnames);
+        methodToArgNames.put((Method) method, argnames);
     }
 
     /**
@@ -147,8 +149,6 @@ public class DeclWriter extends DaikonWriter
         // Note current class
         current_class = cinfo.clazz;
         
-        RootInfo root;
-        
 
         // Print all methods and constructors
         for (MethodInfo mi : cinfo.get_method_infos())
@@ -161,20 +161,22 @@ public class DeclWriter extends DaikonWriter
                 continue;
 
 			//initialize the root node for this program point
-            root = new RootInfo();
-            mi.traversalEnter = root;
-            printMethodEntryInternal(cinfo, root, member, methodEntryName(member), argnames);
+            RootInfo entryRoot;
+            entryRoot = new RootInfo();
+            mi.traversalEnter = entryRoot;
+            printMethodEntryInternal(cinfo, entryRoot, member, methodEntryName(member), argnames);
 
             //print exit program point for EACH exit location in the method
             //(that was encountered during this execution of the program)
-            Set <Integer> theExits = new HashSet<Integer>(mi.exit_locations);
+            Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
             for (Integer exitLoc : theExits)
             {
 				//initialize root node for this exit program point
-                root = new RootInfo();
-                mi.traversalExit.put(exitLoc, root);
+                RootInfo exitRoot;
+                exitRoot = new RootInfo();
+                mi.traversalExit.put(exitLoc, exitRoot);
                 String name = methodExitName(member, exitLoc.intValue());
-                printMethodExitInternal(cinfo, root, member, name, argnames);
+                printMethodExitInternal(cinfo, exitRoot, member, name, argnames);
             }
         }
 
@@ -187,7 +189,7 @@ public class DeclWriter extends DaikonWriter
      * has not already been emitted.  This can be called externally to print
      * Ppt decls one-at-a-time.
      */
-    public void printMethodEntry(ClassInfo cinfo, DaikonInfo curParent, Member method, List argnames)
+    public void printMethodEntry(ClassInfo cinfo, DaikonInfo curNode, Member method, List argnames)
     {
         String name = methodEntryName(method);
         if (emittedPpts.contains(name))
@@ -195,16 +197,16 @@ public class DeclWriter extends DaikonWriter
         emittedPpts.add(name);
         if (!Modifier.isStatic(method.getModifiers()))
             printObject(cinfo, method.getDeclaringClass());
-        printMethodEntryInternal(cinfo, curParent, method, name, argnames);
+        printMethodEntryInternal(cinfo, curNode, method, name, argnames);
     }
 
-    private void printMethodEntryInternal(ClassInfo cinfo, DaikonInfo curParent, Member method, String name, List argnames)
+    private void printMethodEntryInternal(ClassInfo cinfo, DaikonInfo curNode, Member method, String name, List argnames)
     {
         outFile.println(declareHeader);
         outFile.println(name);
 		
         //don't print class vars at method entries for constructors
-        printMethod(cinfo, curParent, method, !(method instanceof Constructor), argnames);
+        printMethod(cinfo, curNode, method, argnames);
 		
         outFile.println();
     }
@@ -214,22 +216,22 @@ public class DeclWriter extends DaikonWriter
      * has not already been emitted.  This can be called externally to print
      * Ppt decls one-at-a-time.
      */
-    public void printMethodExit(ClassInfo cinfo, DaikonInfo curParent, Member method, int exitLoc, List argnames)
+    public void printMethodExit(ClassInfo cinfo, DaikonInfo curNode, Member method, int exitLoc, List argnames)
     {
         String name = methodExitName(method, exitLoc);
         if (emittedPpts.contains(name))
             return;
         emittedPpts.add(name);
-        printMethodExitInternal(cinfo, curParent, method, name, argnames);
+        printMethodExitInternal(cinfo, curNode, method, name, argnames);
     }
 
-    private void printMethodExitInternal(ClassInfo cinfo, DaikonInfo curParent, Member method, String name, List argnames)
+    private void printMethodExitInternal(ClassInfo cinfo, DaikonInfo curNode, Member method, String name, List argnames)
     {
         outFile.println(declareHeader);
         outFile.println(name);
 		
         // Print arguments
-        printLocalVars(curParent, method, argnames, "", daikonDepth);
+        printLocalVars(curNode, method, argnames, "", daikonDepth);
 
         //print return type information for methods only and not constructors
         if (method instanceof Method)
@@ -244,19 +246,19 @@ public class DeclWriter extends DaikonWriter
              
 				//add a new ReturnInfo object to the traversal pattern
                 DaikonInfo retInfo = new ReturnInfo();
-                curParent.addChild(retInfo);
+                curNode.addChild(retInfo);
 
                 checkForListDecl(retInfo, returnType, "return", "", false);
                 checkForImplicitList(returnType, "return", "", daikonDepth);
                 checkForRuntimeClass(retInfo, returnType, "return", ""); //.class var
                 checkForString(retInfo, returnType, "return", "");
 
-                checkForVarRecursion(returnType, retInfo, "return", "", daikonDepth, false);
+                exploreFurtherDepth(returnType, retInfo, "return", "", daikonDepth, false);
             }
         }
 
         // Print class variables
-        printClassVars( cinfo, curParent, Modifier.isStatic(method.getModifiers()),
+        printClassVars( cinfo, curNode, Modifier.isStatic(method.getModifiers()),
                         method.getDeclaringClass(), "", daikonDepth, false);
 
         outFile.println();
@@ -314,15 +316,14 @@ public class DeclWriter extends DaikonWriter
             }
 
             Class fieldType = classField.getType();
-            String newOffset;
             StringBuffer buf = new StringBuffer();
 			
 			//don't worry about populating traversal pattern here...
 			//just pass in new RootInfo()
             DaikonInfo newChild = printDeclVar(new RootInfo(), classField, "", daikonDepth,
                                             false, buf);
-            newOffset = buf.toString();
-            checkForVarRecursion(fieldType, newChild, classField.getName(), newOffset,
+            String newOffset = buf.toString();
+            exploreFurtherDepth(fieldType, newChild, classField.getName(), newOffset,
                                  daikonDepth, false);
         }
 
@@ -335,17 +336,20 @@ public class DeclWriter extends DaikonWriter
 	 *    called by printMethodEntry (printMethodExit does this directly so it
 	 *    can place the return after the arguments to match dfej)
 	 */
-    private void printMethod(ClassInfo cinfo, DaikonInfo curParent, Member method, boolean shouldPrintClass, List argnames)
+    private void printMethod(ClassInfo cinfo, DaikonInfo curNode, Member method, 
+            List argnames)
     {
-        printLocalVars(curParent, method, argnames, "", daikonDepth);
+        boolean shouldPrintClass = !(method instanceof Constructor);
+        
+        printLocalVars(curNode, method, argnames, "", daikonDepth);
         if (shouldPrintClass)
-            printClassVars(cinfo, curParent, Modifier.isStatic(method.getModifiers()), method.getDeclaringClass(), "", daikonDepth, false);
+            printClassVars(cinfo, curNode, Modifier.isStatic(method.getModifiers()), method.getDeclaringClass(), "", daikonDepth, false);
     }
 
     /**
-     * Print local variables (the arguments) of a method
+     * Print local variables (the parameters) of a method
      */
-    private void printLocalVars(DaikonInfo curParent, Member method, List argnames, String offset, int depth)
+    private void printLocalVars(DaikonInfo curNode, Member method, List argnames, String offset, int depth)
     {
         Class[] arguments = (method instanceof Constructor) ? ((Constructor) method).getParameterTypes() : ((Method) method).getParameterTypes();
         Iterator argnamesiter = argnames.iterator();
@@ -353,15 +357,15 @@ public class DeclWriter extends DaikonWriter
         {
             Class type = arguments[i];
             String name = (String) argnamesiter.next();
-            DaikonInfo theChild = printDeclVar(curParent, type, name, offset, depth);
-            checkForVarRecursion(type, theChild, name, offset, depth, false);
+            DaikonInfo theChild = printDeclVar(curNode, type, name, offset, depth);
+            exploreFurtherDepth(type, theChild, name, offset, depth, false);
         }
     }
 
     /**
      * Print class variables (ie, the fields) for the given type
      */
-    private void printClassVars(ClassInfo cinfo, DaikonInfo curParent, boolean dontPrintInst, Class type, String offset, int depth, boolean inArray)
+    private void printClassVars(ClassInfo cinfo, DaikonInfo curNode, boolean dontPrintInst, Class type, String offset, int depth, boolean inArray)
     {        
 		//DaikonInfo corresponding to the "this" object
         DaikonInfo thisInfo;
@@ -377,7 +381,7 @@ public class DeclWriter extends DaikonWriter
             outFile.println(getRepName(type, false));
             outFile.println(compareInfoDefault);
             
-            curParent.addChild(thisInfo);
+            curNode.addChild(thisInfo);
 
             //.class variable
             if (shouldAddRuntimeClass(type))
@@ -392,10 +396,10 @@ public class DeclWriter extends DaikonWriter
             }
         }
         else
-            thisInfo = curParent;
+            thisInfo = curNode;
         
 
-        if (shouldExcludeClass(type.getName()))
+        if (shouldFilterClass(type.getName()))
         {
             return;
         }
@@ -422,22 +426,24 @@ public class DeclWriter extends DaikonWriter
             StringBuffer buf = new StringBuffer();
             DaikonInfo newChild = printDeclVar(thisInfo, classField, offset, depth, inArray, buf);
             String newOffset = buf.toString();
-            checkForVarRecursion(fieldType, newChild, classField.getName(), newOffset, depth, inArray);
+            exploreFurtherDepth(fieldType, newChild, classField.getName(), newOffset, depth, inArray);
         }
     }
 
-    //check for recursion of a variable based on depth and type
-	//for example: "recurse" on a hashcode array object to print the actual array of values
-	//or recurse on hashcode variable a to print its fields
-	//also accounts for derived variables (.class, .tostring)
-    private void checkForVarRecursion(Class type, DaikonInfo curParent, String name, String offset,
-                                      int depth, boolean inArray)
+    /**
+     *     Explores the traversal pattern tree one level deeper (see {@link DaikonInfo}).
+     *     For example: "recurse" on a hashcode array object to print the actual array of values
+     *     or recurse on hashcode variable to print its fields.
+     *     Also accounts for derived variables (.class, .tostring). 
+     */
+    private void exploreFurtherDepth(Class type, DaikonInfo curNode, String name, String offset,
+                                      int depthRemaining, boolean inArray)
     {
         if (type.isPrimitive())
             return;
         else if (type.isArray())
         {
-            //don't go into multi-dimensional array
+            // don't go into more than one dimension of a multi-dimensional array
             if (inArray)
                 return;
 
@@ -450,9 +456,9 @@ public class DeclWriter extends DaikonWriter
                 outFile.println(compareInfoDefault); //no comparability info yet
      
                 DaikonInfo newChild = new ArrayInfo(offset + name + "[]");
-                curParent.addChild(newChild);
+                curNode.addChild(newChild);
             }
-            //multi-dimensional arrays (not currently used)
+            // multi-dimensional arrays (not currently used)
             else if (arrayType.isArray())
             {
                 outFile.println(offset + name + "[]");
@@ -461,9 +467,9 @@ public class DeclWriter extends DaikonWriter
                 outFile.println(compareInfoDefault); //no comparability info yet
                 
                 DaikonInfo newChild = new ArrayInfo(offset + name + "[]");
-                curParent.addChild(newChild);
+                curNode.addChild(newChild);
                 
-                checkForVarRecursion(arrayType, newChild, "", offset + name + "[]", depth, true);
+                exploreFurtherDepth(arrayType, newChild, "", offset + name + "[]", depthRemaining, true);
             }
 			//regular class (while in array)
             else
@@ -474,7 +480,7 @@ public class DeclWriter extends DaikonWriter
                 outFile.println(compareInfoDefault); //no comparability info yet
                 
                 DaikonInfo newChild = new ArrayInfo(offset + name + "[]");
-                curParent.addChild(newChild);
+                curNode.addChild(newChild);
 
                 // print out the class of each element in the array.  For
                 // some reason dfej doesn't include this on returned arrays
@@ -483,10 +489,10 @@ public class DeclWriter extends DaikonWriter
                 if (!name.equals ("return") && !offset.equals (""))
                   checkForRuntimeClass (newChild, type, name + "[]", offset);
 
-                if (!shouldExcludeClass(arrayType.getName()))
+                if (!shouldFilterClass(arrayType.getName()))
                 {
                     checkForString(newChild, arrayType, name + "[]", offset);
-                    printClassVars(null, newChild, false, arrayType, offset + name + "[].", depth - 1, true);
+                    printClassVars(null, newChild, false, arrayType, offset + name + "[].", depthRemaining - 1, true);
                 }
                 else
                 {
@@ -499,21 +505,22 @@ public class DeclWriter extends DaikonWriter
         // regular old class type
         else
         {
-            if (depth <= 0)
+            if (depthRemaining <= 0)
             {
                 //don't recurse any more!
                 return;
             }
-            if (shouldEnterClass (type))
-                printClassVars(null, curParent, false, type, offset + name + ".", depth - 1,
+            if (notSystemClass (type))
+                printClassVars(null, curNode, false, type, offset + name + ".", depthRemaining - 1,
                                inArray);
         }
     }
 
     /**
      * Prints the decl info for a single local variable (usually a method argument)
+     * @return The newly created DaikonInfo object, whose parent is curNode
      */
-    private DaikonInfo printDeclVar(DaikonInfo curParent, Class type, String name, String offset, int depth)
+    private DaikonInfo printDeclVar(DaikonInfo curNode, Class type, String name, String offset, int depth)
     {
         outFile.println(offset + name);
         outFile.print(stdClassName(type));
@@ -523,8 +530,8 @@ public class DeclWriter extends DaikonWriter
         outFile.println(compareInfoDefault); //no comparability info right now
         
         //traversal
-        DaikonInfo newChild = new ArgInfo(offset + name);
-        curParent.addChild(newChild);
+        DaikonInfo newChild = new ParameterInfo(offset + name);
+        curNode.addChild(newChild);
             
 
         checkForListDecl(newChild, type, name, offset, false); //implements java.util.List
@@ -573,7 +580,7 @@ public class DeclWriter extends DaikonWriter
             //outFile.println(compareInfoDefault);
 
             //TODO get actual DaikonInfo here
-            checkForVarRecursion(type, new RootInfo(), name, offset, depth - 1, true);
+            exploreFurtherDepth(type, new RootInfo(), name, offset, depth - 1, true);
         }
     }
 
@@ -581,7 +588,7 @@ public class DeclWriter extends DaikonWriter
 	 * Determines if type implements list
 	 * and prints associated decls, if necessary
 	 */
-    private void checkForListDecl(DaikonInfo curParent, Class type, String name, String offset,
+    private void checkForListDecl(DaikonInfo curNode, Class type, String name, String offset,
                                   boolean inArray)
     {
         if (inArray || type.isPrimitive() || type.isArray())
@@ -596,7 +603,7 @@ public class DeclWriter extends DaikonWriter
             
             
             DaikonInfo child = new ListInfo(offset + name + "[]", type);
-            curParent.addChild(child);
+            curNode.addChild(child);
 
             //.class var
             outFile.println(offset + name + "[].class");
@@ -605,14 +612,14 @@ public class DeclWriter extends DaikonWriter
             outFile.println(compareInfoDefault);
             
             DaikonInfo childClass = new DaikonClassInfo(offset + name + "[].class", true);
-            curParent.addChild(childClass);
+            curNode.addChild(childClass);
         }
     }
 
     /**
      * Prints the decl info for a single class variable (a field)
      */
-    private DaikonInfo printDeclVar(DaikonInfo curParent, Field field, String offset, int depth,
+    private DaikonInfo printDeclVar(DaikonInfo curNode, Field field, String offset, int depth,
                                 boolean inArray, StringBuffer buf)
     {
         String arr_str = "";
@@ -631,7 +638,6 @@ public class DeclWriter extends DaikonWriter
         {
             outFile.print(offset + name);
         }
-
         else if (Modifier.isStatic(modifiers))
         {
             offset = offset + field.getDeclaringClass().getName() + ".";
@@ -659,11 +665,11 @@ public class DeclWriter extends DaikonWriter
         
         
         //don't put info directly off the root
-        if(curParent instanceof RootInfo)
+        if(curNode instanceof RootInfo)
         {
             DaikonInfo holder = new HolderInfo();
-            curParent.addChild(holder);
-            curParent = holder;
+            curNode.addChild(holder);
+            curNode = holder;
         }
         
         if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)
@@ -672,27 +678,26 @@ public class DeclWriter extends DaikonWriter
             ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
             String value = cinfo.staticMap.get(name);
 
-            if(value == null)
+            if(value != null)
             {
-                //don't print anything
-                //because this field wasn't declared with an actual "hardcoded" constant
+                outFile.print(" = " + value);
             }
-            else
-            {
-                outFile.println(" = " + value);
-            }        
+            //else
+            //{
+                //don't print anything
+                //because this field wasn't declared with an actual "hardcoded" constant   
+            //}
             
             //in this case, we don't want to print this variable to the dtrace file
-            curParent = new RootInfo();
+            curNode = new RootInfo();
         }
-        else
-            outFile.println();
-
+        
+        outFile.println();
         outFile.println(compareInfoDefault); //no comparability info right now
 
         
         DaikonInfo newField = new ObjectInfo(offset + name, field, inArray);
-        curParent.addChild(newField);
+        curNode.addChild(newField);
 
         checkForListDecl(newField, type, name, offset, inArray);
         checkForImplicitList(type, name, offset, depth);
@@ -708,8 +713,6 @@ public class DeclWriter extends DaikonWriter
     // the package name of the declaring class
     // whether the type is static
     private void appendAuxInfo(Field field) {
-
-        Class type = field.getType();
         int modifiers = field.getModifiers();
 
         Package p = field.getDeclaringClass().getPackage();
@@ -729,7 +732,7 @@ public class DeclWriter extends DaikonWriter
 	 * checks the given type to see if it is a string
 	 * if so, it prints out the correct decls info (a .toString var)
 	 */
-    private void checkForString(DaikonInfo curParent, Class type, String name, String offset)
+    private void checkForString(DaikonInfo curNode, Class type, String name, String offset)
     {
         if (!type.getName().equals(stringClassName))
             return;
@@ -748,7 +751,7 @@ public class DeclWriter extends DaikonWriter
         //add daikoninfo type
         DaikonInfo stringInfo = new StringInfo(offset + name + ".toString",
                 (offset+name).contains("[]"));
-        curParent.addChild(stringInfo);
+        curNode.addChild(stringInfo);
 
     }
 
@@ -757,7 +760,7 @@ public class DeclWriter extends DaikonWriter
      * addition to the decls file
      * if so, it prints out the correct .class variable info
      */
-    private void checkForRuntimeClass(DaikonInfo curParent, Class type, String name, String offset)
+    private void checkForRuntimeClass(DaikonInfo curNode, Class type, String name, String offset)
     {
         if (!shouldAddRuntimeClass(type))
             return;
@@ -777,7 +780,7 @@ public class DeclWriter extends DaikonWriter
         //add daikoninfo type
         DaikonInfo classInfo = new DaikonClassInfo(offset + name + ".class",
                 (offset+name).contains("[]"));
-        curParent.addChild(classInfo);
+        curNode.addChild(classInfo);
     }
 
 }

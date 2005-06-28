@@ -1,24 +1,26 @@
 
 package daikon.chicory;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 
 /**
- * The DaikonInfo class is used to create a tree structure of the variables in 
- * the target application.  It is built in the DeclWriter and traversed in the DTraceWriter.
+ * Each DaikonInfo object is a node  in the tree structure of the variables in 
+ * the target application.  The tree structure is built in the 
+ * DeclWriter and traversed in the DTraceWriter.
  * There is such a tree structure associated with every program point.  This architecture makes it
  * possible to avoid the issue of "traversal pattern duplication" in which both the 
  * DeclWriter and DTraceWriter must traverse the target application's variables identically.
+ * In general, the variable a will be the parent of the variables a.b and a.c in the tree, where b and c
+ * are fields in a's class.
  * 
- *  Each DaikonInfo object is a node of the tree.  Each node can have any non-negative
- *  number of child nodes.  DaikonInfo is an abstract class.  Its subtypes are designed
- *  to accomodate specific types of variables, such as arguments, arrays, etc. 
+ * Each node can have any non-negative
+ * number of child nodes.  DaikonInfo is an abstract class.  Its subtypes are designed
+ * to represent specific types of variables, such as arguments, arrays, etc. 
  */
 public abstract class DaikonInfo implements Iterable<DaikonInfo>
 {
-	/** The variable name **/
+	/** The variable name, if appropriate to the subtype **/
     private String name;
 	
 	/** The child nodes **/
@@ -54,13 +56,14 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
     }
     
     /**
-     * Add a child to this node
+     * Add a child to this node.
+     * Should only be called while the traversal tree is being constructed.
+     * 
      * @param info The child object, must be non-null.
      */
     public void addChild(DaikonInfo info)
-    {
-        if(info == null)
-            throw new RuntimeException("info cannot be null in DaikonInfo.addChild()");
+    {	
+		assert info!=null : "info cannot be null in DaikonInfo.addChild()";
         
         children.add(info);
     }
@@ -79,11 +82,11 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
 	 * @param offset The offset to begin each line with.
 	 * @return StringBuffer which contains all children of this node
 	 */
-    public StringBuffer getString(StringBuffer offset)
+    private StringBuffer getString(StringBuffer offset)
     {
         StringBuffer theBuf = new StringBuffer();
         
-        theBuf.append(offset  + name + "\n");
+        theBuf.append(offset + name + DaikonWriter.lineSep);
         
         StringBuffer childOffset = new StringBuffer(offset);
         childOffset.append("--");
@@ -97,48 +100,51 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
 
     /**
      * Return an iterator over all the node's children
-     * @return an iterator over all the node's children
+     * Don't modify the list of children through the iterator,
+     * as an unmodifiable list is used to generator the iterator.
      */
     public Iterator<DaikonInfo> iterator()
     {
-        return children.iterator();
+        return Collections.unmodifiableList(children).iterator();
     }
 
     /**
      * Given an object value corresponding to the parent of this DaikonInfo variable, 
-     * return the value of this DaikonInfo variable. 
+     * return the value (of the corresponding value in the target application)
+     * of this DaikonInfo variable. 
+     * 
+     * For instance, if the variable a has a field b, then calling
+     * getMyValParentVal(val_of_a) will return the value of a.b
+     * 
      * @param val The parent object
      */
-    public abstract Object getChildValue(Object val);
+    public abstract Object getMyValFromParentVal(Object val);
     
 	/**
 	 * Returns a String representation of this object suitable for a .decls file
 	 * @param val The object whose value to print
-	 * @return a String representation of this object suitable for a .decls file
 	 */
-    public String getValueString(Object val)
+    public String getDeclValueString(Object val)
     {
         if(isArray)
         {
-            return printList((List) val);
+            return getValueStringOfListWithMod((List) val);
         }
         else   
         {
-        return printValString(val, true);
+            return getValueStrignOfObjectWithMod(val, true);
         }
     }
     
-	//printValString with array hashing on
-    private String printValString(Object theValue)
+	/**
+	 *
+	 * Gets the value of an object and concatenates
+	 * the associated "modified" integer.
+	 * If val == null prints nonsensical
+	 */
+    protected String getValueStrignOfObjectWithMod(Object theValue, boolean hashArray)
     {
-        return printValString(theValue, true);
-    }
-    
-    //prints the value and the associated changed integer
-    //if val == null prints nonsensical
-    protected String printValString(Object theValue, boolean hashArray)
-    {
-        String retString = showValueEndLine(theValue, hashArray);
+        String retString = getValueStringOfObjectEndLine(theValue, hashArray);
 
         if (theValue instanceof NonsensicalObject)
             retString += "2";
@@ -148,18 +154,20 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         return retString;
     }
     
-    //print a value, followed by an endline
-    //(showValue does not print an endline after it completes)
-    private String showValueEndLine(Object val, boolean hashArr)
+	/**
+	 * Get a value of an object (as a string), followed by an endline 
+	 */
+    private String getValueStringOfObjectEndLine(Object val, boolean hashArr)
     {
-        return showValue(val, hashArr) + "\n";
+        return getValueStringOfObject(val, hashArr) + DaikonWriter.lineSep;
     }
     
-	//prints the value
-    //doesn't print endline
-    //if hashArray is true, it prints the "hash value" of the array
-    //and not its separate values
-    private String showValue(Object theValue, boolean hashArray)
+	/**
+	 * Gets the value, but with no endline.
+	 * If hashArray is true, it prints the "hash code" of the array
+	 * and not its separate values.
+	 */
+    private String getValueStringOfObject(Object theValue, boolean hashArray)
     {
         if (theValue == null)
         {
@@ -168,18 +176,16 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
 
         Class type = theValue.getClass();
 
-        if (type.isPrimitive())
+		assert !(type.isPrimitive()) : "Objects cannot be primitive";
+		
+        if (theValue instanceof Runtime.PrimitiveWrapper)
         {
-            throw new RuntimeException("Objects cannot be primitive");
-        }
-        else if (theValue instanceof Runtime.PrimitiveWrapper)
-        {
-            return showPrimitive(theValue);
+            return getPrimitiveValueString(theValue);
         }
         else if (!hashArray && (type.isArray()))
         {
 			//show the full array
-            return showArray(theValue);
+            return getValueStringOfArray(theValue);
         }
 
         else if (theValue instanceof NonsensicalObject)
@@ -189,30 +195,37 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         else
         {
 			//basically, show the hashcode of theValue
-            return showObject(theValue);
+            return getObjectHashCode(theValue);
         }
     }
     
-    //print values for primitive (wrapped) objects
-    private String showPrimitive(Object obj)
-    {
-        if (!(obj instanceof Runtime.PrimitiveWrapper))
-            throw new RuntimeException("Objects passed to showPrimitive must implement PrimitiveWrapper\nThis object is type: " + obj.getClass().getName());
+	/**
+	 * Get value string for a primitive (wrapped) object
+	 */
+    private String getPrimitiveValueString(Object obj)
+    {		
+		assert (obj instanceof Runtime.PrimitiveWrapper) : "Objects passed to showPrimitive must implement PrimitiveWrapper" + DaikonWriter.lineSep +"This object is type: " + obj.getClass().getName();
 
         //use wrapper classes toString methods to print value
         return (obj.toString());
     }
     
-    //shows the values in an array
-    private String showArray(Object array)
+    
+	/**
+	 * Gets a string representation of the values in an array 
+	 */
+    private String getValueStringOfArray(Object array)
     {
-        List theList = DTraceWriter.getListFromArray(array);
-        return showList(theList);
+        List <Object> theList = DTraceWriter.getListFromArray(array);
+        return getValueStringOfList(theList);
     }
     
-    //prints the Object's unique ID
-    //in other words, a "hash code"
-    private String showObject(Object theObject)
+	/**
+	 *
+	 *  Gets the Object's unique ID as a string.
+	 *  In other words, a "hash code"
+	 */
+    private String getObjectHashCode(Object theObject)
     {
         if (theObject == null)
             return ("null");
@@ -222,10 +235,14 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
             return Integer.toString(System.identityHashCode(theObject));
     }
     
-	//print the list of values and the "modified" value
-    private String printList(List /*<Object>*/ theValues)
+	/**
+	 *
+	 * 	Gets the list of values (as a string) from getValueStringOfList
+	 *  and concatenates the "modified" value
+	 */
+    private String getValueStringOfListWithMod(List <Object> theValues)
     {
-        String retString = showList(theValues) + "\n";
+        String retString = getValueStringOfList(theValues) + DaikonWriter.lineSep;
 
         if (theValues instanceof NonsensicalList)
             retString += ("2");
@@ -235,8 +252,13 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         return retString;
     }
     
-	//prints out a list of values as if it were an array
-    protected String showList(List /*<Object>*/ theValues)
+	/** 
+	 * Returns a string representation of the values
+	 * of a list of values as if it were an array
+	 * 
+	 * @param theValues The values to print out
+	 */ 
+    protected String getValueStringOfList(List <Object> theValues)
     {
         if (theValues == null)
         {
@@ -251,13 +273,13 @@ public abstract class DaikonInfo implements Iterable<DaikonInfo>
         StringBuffer buf = new StringBuffer();
         
         buf.append("[");
-        for (Iterator iter = theValues.iterator(); iter.hasNext();)
+        for (Iterator <Object> iter = theValues.iterator(); iter.hasNext();)
         {
             Object elementVal = iter.next();
             
 			//hash arrays...
 			//don't want to print arrays within arrays
-            buf.append(showValue(elementVal, true));
+            buf.append(getValueStringOfObject(elementVal, true));
 
             //put space between elements in array
             if (iter.hasNext())

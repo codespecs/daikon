@@ -37,7 +37,6 @@ public class RetTransform implements ClassFileTransformer {
 
   boolean debug = false;
   boolean log_on = false;
-  Chicory chicory = null;
 
   /** current Constant Pool * */
   static ConstantPoolGen pgen = null;
@@ -46,10 +45,9 @@ public class RetTransform implements ClassFileTransformer {
   int cur_method_info_index = 0;
 
   /** the location of the runtime support class **/
-  private final String runtime_classname = "daikon.chicory.Runtime";
+  private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  public RetTransform (Chicory chicory) {
-    this.chicory = chicory;
+  public RetTransform () {
   }
 
   private void log (String format, Object... args) {
@@ -184,7 +182,7 @@ public class RetTransform implements ClassFileTransformer {
       // Get the class information
       ClassGen cg = new ClassGen (c);
 
-
+      InstructionFactory ifact = new InstructionFactory (cg);
       // Convert reach non-void method to save its result in a local
       // before returning
       ClassInfo c_info = save_ret_value (cg, fullClassName, loader);
@@ -247,9 +245,9 @@ public class RetTransform implements ClassFileTransformer {
 
   //used to add a "hook" into the <clinit> static initializer
   private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName)
-  {
-      InstructionList invokeList = call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
-      
+  {     
+	  call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
+	  
       InstructionList newList = mg.getInstructionList();
       mg.update();
       

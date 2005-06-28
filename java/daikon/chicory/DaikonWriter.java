@@ -19,20 +19,29 @@ public class DaikonWriter
     private String[] excludeStrings;
 	
 	/** Only instrument whats in this list **/
-    private List includeOnly;
+    private List<String> includeOnly;
 
     /**
-     * Controls whether modifiers and the return type are included in
+     * Controls whether modifiers and the return type are included in the decl output
      */
-    protected static boolean no_modifiers_ppt = true;
+    protected static final boolean no_modifiers_ppt = true;
 
     /** the class of the method currently being processed **/
     protected Class current_class;
     
     /** Print visibility info in the program point **/
     private static final boolean showDeclVisibility = false;
+	
+	/** Platform dependent line separator.  Should be "\n" on Unix **/
+	public static final String lineSep;
+	
+	static
+	{
+		lineSep = System.getProperty("line.separator");
+		assert lineSep != null : "Line separator cannot be null";
+	}
 
-    public DaikonWriter(String[] excludes, List includes)
+    public DaikonWriter(String[] excludes, List <String> includes)
     {
         if (excludes == null)
             throw new RuntimeException("Excludes may not be null");
@@ -119,18 +128,7 @@ public class DaikonWriter
      * @return Same thing as methodName(Member, point)
      */
     private static String methodName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor, String point)
-    {
-        /*Matcher matcher = Pattern.compile(" .*(.*)").matcher(name);
-        
-        if(!matcher.find())
-            throw new RuntimeException("Could not find parentheses expression in: " + name);
-        
-        int parenInd = matcher.start();
-        
-        System.out.println("before " + name);
-        name = name.substring(0, parenInd) + fullClassName + "." + name.substring(parenInd);
-        System.out.println("after " + name);*/
-        
+    {        
         String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
         name = name.replace("<init>", className);
         short_name = short_name.replace("<init>", className);
@@ -265,32 +263,16 @@ public class DaikonWriter
         return (name + ":::" + point);
     }
 
-    //replaces last occurrence of pattern with replace in the given string
-    private static String replaceInString(String pattern, String string, String replace)
-    {
-        StringBuffer toRet = new StringBuffer();
-
-        int loc = string.lastIndexOf(pattern);
-
-        if (loc == -1)
-            return string;
-
-        toRet.append(string.substring(0, loc));
-        toRet.append(replace);
-        toRet.append(string.substring(loc + pattern.length(), string.length()));
-
-        return toRet.toString();
-    }
-
     /**
-     * Give a type, gets the representation type to be used in Daikon.
-     * For example, the representation type of a class object is "hashcode"
+     * Given a type, gets the representation type to be used in Daikon.
+     * For example, the representation type of a class object is "hashcode."
+     * 
      * @param type The type of the variable
      * @param inArray Whether the variable is being output as an array
      * (true) or as a pointer (false).
      * @return The representation type as a string
      */
-    public static String getRepName(Class type, boolean inArray)
+    public static String getRepName(Class type, boolean asArray)
     {
         if (type == null)
         {
@@ -309,8 +291,10 @@ public class DaikonWriter
         }
         else if (type.getName().equals("java.lang.String"))
         {
-            if (inArray)
+            // if we are printing the actual array, the rep type is "java.lang.String"
+            if (asArray)
                 return "java.lang.String";
+            // otherwise, it is just a hashcode
             else
                 return "hashcode";
         }
@@ -322,6 +306,8 @@ public class DaikonWriter
 
     /**
      * Returns the correctly formulated ":::OBJECT" name of the class
+     * (ie, the program point name)
+     * 
      * @param type the ClassType type
      * @return the correctly formulated String
      */
@@ -363,11 +349,12 @@ public class DaikonWriter
 
     /**
      * Returns whether or not the fields of the specified class
-     * should be included.  Right now, any system classes are
+     * should be included, based on whether the Class type
+     * is a system class or not.  Right now, any system classes are
      * excluded, but a better way of determining this is probably
      * necessary
      */
-    public boolean shouldEnterClass (Class type)
+    public boolean notSystemClass (Class type)
     {
         String class_name = type.getName();
         // System.out.printf ("type name is %s\n", class_name);
@@ -378,18 +365,17 @@ public class DaikonWriter
     }
 
     /**
-     * Tells whether given class should be excluded from trace
+     * Tells whether given class should be excluded from trace,
+     * based on the includeOnly and excludeStrings variables
      *
      * @return true iff we should exclude the given class (by name)
      */
-    public boolean shouldExcludeClass(String name)
+    public boolean shouldFilterClass(String name)
     {
         if (includeOnly != null)
         {
-            for (Iterator iter = includeOnly.iterator(); iter.hasNext();)
+            for (String incString: includeOnly)
             {
-                String incString = (String) iter.next();
-
                 if (Pattern.matches(incString, name))
                     return false;
             }
@@ -397,9 +383,9 @@ public class DaikonWriter
             return true;
         }
 
-        for (int i = 0; i < excludeStrings.length; i++)
+        for (String exString: excludeStrings)
         {
-            if (Pattern.matches(excludeStrings[i], name))
+            if (Pattern.matches(exString, name))
             {
                 return true;
             }
@@ -473,7 +459,7 @@ public class DaikonWriter
     }
 
     /**
-     * Returns whether or not the specified field is visible from the object
+     * Returns whether or not the specified field is visible from the Class
      * current.  All fields within instrumented classes are considered
      * visible from everywhere (to match dfej behavior)
      */
@@ -486,7 +472,7 @@ public class DaikonWriter
         if (current.equals (fclass))
             return (true);
 
-        // If the field is in any instrumnted class it is always visible
+        // If the field is in any instrumented class it is always visible
         synchronized(Runtime.all_classes)
         {
         for (ClassInfo ci : Runtime.all_classes)
@@ -505,7 +491,7 @@ public class DaikonWriter
         if (true)
             return (false);
 
-        // If the field is in the same package, its visible if it is
+        // If the field is in the same package, it's visible if it is
         // not private or protected
         if (current.getPackage().equals (fclass.getPackage())) {
             if (Modifier.isPrivate (modifiers)
@@ -526,6 +512,9 @@ public class DaikonWriter
      *
      * @param type
      *            The ClassType to check for implicit list
+     *            
+     * @return    The field in the class which is the "linked list field",
+     *            or null if no such field exists.
      */
     public Field isImplicitLinkedList(Class type)
     {

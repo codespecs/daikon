@@ -40,8 +40,6 @@ public class DTraceWriter extends DaikonWriter
 
 	/**Where to print output*/
     private PrintStream outFile;
-	/**Maximum recursion depth*/
-    private int daikonDepth;
 
     /**
      * Initializes the DeclListener, preparing it to receive messages.
@@ -55,15 +53,10 @@ public class DTraceWriter extends DaikonWriter
      * @param includes
      *  		  List of formatted strings for including in the instrumentations
      */
-    public DTraceWriter(PrintStream writer, int depth, String[] excludes, List includes)
+    public DTraceWriter(PrintStream writer, String[] excludes, List includes)
     {
         super(excludes, includes);
-
         outFile = writer;
-
-        if (depth <= 0)
-            throw new Error("Daikon depth must be positive");
-        daikonDepth = depth;
     }
 
     /**
@@ -84,7 +77,7 @@ public class DTraceWriter extends DaikonWriter
 
         outFile.println(DaikonWriter.methodEntryName(member));
         printNonce(nonceVal);
-        traversePattern(mi, root, args, obj, nonsenseValue);
+        traverse(mi, root, args, obj, nonsenseValue);
 
         outFile.println();
 
@@ -115,7 +108,7 @@ public class DTraceWriter extends DaikonWriter
 
         outFile.println(DaikonWriter.methodExitName(member, lineNum));
         printNonce(nonceVal);
-        traversePattern(mi, root, args,  obj, ret_val);
+        traverse(mi, root, args,  obj, ret_val);
 
         outFile.println();
 
@@ -131,9 +124,9 @@ public class DTraceWriter extends DaikonWriter
 
     /** 
      * Prints the method's return value and all relevant variables.
-     * Uses the traversal pattern data structure of DaikonInfo subtypes
+     * Uses the tree of DaikonInfo objects.
      * @param mi The method whose program point we are printing
-     * @param root The root of the program point's traversal pattern
+     * @param root The root of the program point's tree.
      * @param args The arguments to the method corrsponding to mi.
      *             Must be in the same order as the .decls info is in
      *             (Which is the declared order in the source code)
@@ -142,19 +135,20 @@ public class DTraceWriter extends DaikonWriter
      *                exit program points.
      *
     */
-    private void traversePattern(MethodInfo mi, RootInfo root,
+    private void traverse(MethodInfo mi, RootInfo root,
             Object[] args,
             Object thisObj,
             Object ret_val)
-    {
-        Object val;
-		
+    {		
 		//a count of how many method arguments processed so far
         int whichArg = 0;
 
 		//go through all of the node's children
         for(DaikonInfo child: root)
         {
+            
+            Object val;
+            
             if(child instanceof ReturnInfo)
             {
                 val = ret_val;
@@ -163,7 +157,7 @@ public class DTraceWriter extends DaikonWriter
             {
                 val = thisObj;
             }
-            else if(child instanceof ArgInfo)
+            else if(child instanceof ParameterInfo)
             {
 				//keep track of how many args we've reached so far
                 val = args[whichArg];
@@ -190,7 +184,7 @@ public class DTraceWriter extends DaikonWriter
         if (!(curInfo instanceof HolderInfo))
         {
             outFile.println(curInfo.getName());
-            outFile.println(curInfo.getValueString(val));
+            outFile.println(curInfo.getDeclValueString(val));
         }
 
 		//go through all of the current node's children
@@ -199,7 +193,7 @@ public class DTraceWriter extends DaikonWriter
         {
 			Object childVal;
 			
-            childVal = child.getChildValue(val);
+            childVal = child.getMyValFromParentVal(val);
             traverseValue(mi, child, childVal);
         }
 
@@ -210,16 +204,15 @@ public class DTraceWriter extends DaikonWriter
 	 * @param theObjects List of Objects, each must have the Field field
 	 * @param field Which field of theObjects we are probing
 	 */
-    public static List /* <Object> */ getFieldValues(Field field, List /*<Object>*/ theObjects)
+    public static List <Object> getFieldValues(Field field, List <Object> theObjects)
     {
         if (theObjects == null || theObjects instanceof NonsensicalList)
             return nonsenseList;
 
-        List fieldVals = new ArrayList();
-
-        for (Iterator iter = theObjects.iterator(); iter.hasNext();)
+        List <Object> fieldVals = new ArrayList <Object> ();
+        
+        for(Object theObj : theObjects)
         {
-            Object theObj = iter.next();
 
             if (theObj == null)
                 fieldVals.add(nonsenseValue);
@@ -240,7 +233,7 @@ public class DTraceWriter extends DaikonWriter
 	 */
     public static Object getValue(Field classField, Object theObj)
     {
-        //if we dont have a real object, return NonsensicalValue
+        // if we don't have a real object, return NonsensicalValue
         if ((theObj == null) || (theObj instanceof NonsensicalObject))
             return nonsenseValue;
 
@@ -609,7 +602,7 @@ public class DTraceWriter extends DaikonWriter
     }
 
 
-    //removes endlines in string and fixes other formatting issues
+    //quotes endlines in string and quotes other formatting issues
 	//see Runtime.quote
     private static String encodeString(String input)
     {
@@ -630,34 +623,37 @@ public class DTraceWriter extends DaikonWriter
      * @return a list of Strings which are the names of the runtime types in the
      * theVals param
      */
-    public static List /*<String>*/ getTypeNameList(List /*<Object>*/theVals)
+    public static List <String> getTypeNameList(List <Object> theVals)
     {
         if (theVals == null || theVals instanceof NonsensicalList)
             return nonsenseList;
 
-        List /*<String>*/ typeNames = new ArrayList /*<String>*/(theVals.size());
+        List <String> typeNames = new ArrayList <String> (theVals.size());
 
-        for (Iterator iter = theVals.iterator(); iter.hasNext();)
+        for(Object ref: theVals)
         {
-            Object ref = iter.next();
             Class type = null;
 
             if (ref != null)
+            {
                 type = ref.getClass();
-
-            type = removeWrappers(ref, type, true);
-
-            if (type == null)
-                typeNames.add(null);
-            else
+                type = removeWrappers(ref, type, true);
                 typeNames.add(type.getCanonicalName());
+            }
+            else
+                typeNames.add(null);
+                
         }
 
         return typeNames;
     }
 
 	/**
-	 * Get the "actual" type of val
+	 * Get the type of val, removing any PrimitiveWrapper if it exists
+     * For example, if we execute removeWRappers(val, boolean.class, true)
+     * and (val instanceof Runtime.PrimitiveWrapper), then the method returns
+     * boolean.class
+     * 
 	 * @param val The object whose type we are examining
 	 * @param declared the declared type of the variable corresponding to val
 	 * @param runtime Should we use the runtime type or declared type?

@@ -1,8 +1,5 @@
 package daikon.chicory;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 
 /**
  *  The ArrayInfo class is a subtype of DaikonInfo used for variable types which are 
@@ -19,7 +16,7 @@ public class ArrayInfo extends DaikonInfo
         super(theName, true);
     }
     
-    public Object getChildValue(Object value)
+    public Object getMyValFromParentVal(Object value)
     {
         if(value == null)
         {
@@ -34,6 +31,4 @@ public class ArrayInfo extends DaikonInfo
         else
             return DTraceWriter.getListFromArray(value);
     }
-   
-
 }

@@ -12,73 +12,73 @@ import java.util.*;
  */
 public class Runtime
 {
-
     /** Unique id for method entry/exit (so they can be matched up) **/
     public static int nonce = 0;
-
+    
     /** debug flag **/
-    public static boolean debug = false;
+    public static final boolean debug = false;
+	
 
     /**
      * List of classes recently transformed.  This list is examined in
      * each enter/exit and the decl information for any new classes are
      * printed out and the class is then removed from the list
      */
-    public static List<ClassInfo> new_classes = new ArrayList<ClassInfo>();
+    public static final List<ClassInfo> new_classes = new ArrayList<ClassInfo>();
 
     /** List of all instrumented classes **/
-    public static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+    public static  final List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
 
     /** flag that indicates when the first class has been processed**/
-    public static boolean first_class = true;
+    static boolean first_class = true;
 
     /** List of all instrumented methods **/
-    public static List<MethodInfo> methods = new ArrayList<MethodInfo>();
+    public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
 
     //
     // Control over what classes (ppts) are instrumented
     //
     /** Ppts to omit (regular expression) **/
-    public static List<String> daikon_omit_regex = new ArrayList();
+    static List<String> daikon_omit_regex = new ArrayList();
 
     /** Ppts to include (regular expression) **/
-    public static List<String> daikon_include_regex = new ArrayList();
+    static List<String> daikon_include_regex = new ArrayList();
 
     //
     // Setups that control what information is written
     //
     /** Render linked lists as vectors **/
-    public static boolean linked_lists = true;
+    static boolean linked_lists = true;
 
     /** Depth to wich to examine structure components **/
-    public static int nesting_depth = 2;
+    static int nesting_depth = 2;
 
     //
     // Dtrace file vars
     //
     /** Max number of records in dtrace file **/
-    public static long dtraceLimit = Long.MAX_VALUE;
+    static long dtraceLimit = Long.MAX_VALUE;
 
     /** Number of records printed to date **/
-    public static long printedRecords = 0;
+    static long printedRecords = 0;
 
     /** Terminate the program when the dtrace limit is reached **/
-    public static boolean dtraceLimitTerminate = false;
+    static boolean dtraceLimitTerminate = false;
 
     /** Dtrace output stream **/
-    public static PrintStream dtrace;
+    static PrintStream dtrace;
 
     /** set to true when the dtrace stream is closed **/
-    public static boolean dtrace_closed = false;
+    static boolean dtrace_closed = false;
 
     /** true if no dtrace is being generated.  **/
-    public static boolean no_dtrace = false;
+    static boolean no_dtrace = false;
 
     /** Decl writer setup for writing to the trace file **/
-    public static DeclWriter decl_writer = null;
+    static DeclWriter decl_writer = null;
 
     /** Dtrace writer setup for writing to the trace file **/
-    public static DTraceWriter dtrace_writer = null;
+    static DTraceWriter dtrace_writer = null;
 
     /** Which static initializers have been run**/
     private static Set <String> initSet = new HashSet();
@@ -166,8 +166,6 @@ public class Runtime
             printf("exit ste[1] = %s\n", ste[1]);
         }
     }
-
-    private static long c  = 0;
 
     /**
      * Called when a method is entered.

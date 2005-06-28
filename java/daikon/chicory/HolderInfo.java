@@ -21,7 +21,7 @@ public class HolderInfo extends DaikonInfo
     /* (non-Javadoc)
      * @see daikon.chicory.DaikonInfo#getChildValue(java.lang.Object)
      */
-    public Object getChildValue(Object val)
+    public Object getMyValFromParentVal(Object val)
     {
         return null;
     }

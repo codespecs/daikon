@@ -6,7 +6,7 @@ import java.util.*;
  * NonsensicalList is similar to NonsensicalObject but it is used for 
  * arrays whose value is nonsensical.
  */
-public class NonsensicalList extends AbstractList implements List
+public class NonsensicalList extends AbstractList <Object> implements List <Object>
 {
 
     /**

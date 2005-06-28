@@ -22,7 +22,7 @@ public class ObjectInfo extends DaikonInfo
     }
 
 
-    public Object getChildValue(Object val)
+    public Object getMyValFromParentVal(Object val)
     {
         if(isArray)
         {

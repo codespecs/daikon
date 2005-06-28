@@ -26,7 +26,7 @@ public class ListInfo extends DaikonInfo
 
 	//use the "toArray" method to get an array
 	//convert the array to a List
-    public Object getChildValue(Object value)
+    public Object getMyValFromParentVal(Object value)
     {
 		
         Method arrayMethod = null;

@@ -7,7 +7,7 @@ package daikon.chicory;
 import java.util.List;
 
 /**
- * The DaikonClassInfo class is a subtype of DaikonInfo used for variable types which
+ * The DaikonClassInfo class is a subtype of DaikonInfo used for variables which
  * represent the runtime type of a variable.
  */
 public class DaikonClassInfo extends DaikonInfo
@@ -24,12 +24,12 @@ public class DaikonClassInfo extends DaikonInfo
     }
 
 	//.class variables are derived, so just keep the parent value
-    public Object getChildValue(Object value)
+    public Object getMyValFromParentVal(Object value)
     {   
         return value;
     }
 
-    public String getValueString(Object val)
+    public String getDeclValueString(Object val)
     {
         if(isArray)
         {
@@ -54,11 +54,11 @@ public class DaikonClassInfo extends DaikonInfo
 
         if (val == null || val instanceof NonsensicalObject)
         {
-            valString = "nonsensical\n2";
+            valString = "nonsensical" + DaikonWriter.lineSep +"2";
         }
         else
         {
-            valString = ("\"" + DTraceWriter.stdClassName(val.getClass()) + "\"") + "\n1";
+            valString = ("\"" + DTraceWriter.stdClassName(val.getClass()) + "\"") + DaikonWriter.lineSep + "1";
         }
         
         return valString;

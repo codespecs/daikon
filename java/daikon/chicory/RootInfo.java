@@ -15,7 +15,7 @@ public class RootInfo extends DaikonInfo
         super(null);
     }
     
-    public Object getChildValue(Object value)
+    public Object getMyValFromParentVal(Object value)
     {
         return null;
     }

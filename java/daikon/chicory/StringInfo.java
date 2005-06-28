@@ -14,7 +14,7 @@ public class StringInfo extends DaikonInfo
         super(theName, arr);
     }
 
-    public Object getChildValue(Object value)
+    public Object getMyValFromParentVal(Object value)
     {
         return value;
     }
@@ -24,7 +24,7 @@ public class StringInfo extends DaikonInfo
 	 * Returns a String which contains a string representation of val, used for
 	 * dtrace information.
 	 */
-    public String getValueString(Object val)
+    public String getDeclValueString(Object val)
     {
         if(isArray)
         {

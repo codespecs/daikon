@@ -14,8 +14,6 @@ public class ChicoryPremain {
     // System.out.format ("In premain, agentargs ='%s', " +
     //                   "Instrumentation = '%s'\n", agentArgs, inst);
 
-    int local = Runtime.nonce;
-
     // Parse our arguments using Chicory's argument parser
     String[] args = agentArgs.split ("  *");
     Chicory chicory = new Chicory();
@@ -48,11 +46,11 @@ public class ChicoryPremain {
                                           Runtime.nesting_depth, new String[0],
                                           null);
     Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace,
-                                          Runtime.nesting_depth, new String[0],
+                                          new String[0],
                                           null);
 
     // Setup the transformer
-    RetTransform transformer = new RetTransform (chicory);
+    RetTransform transformer = new RetTransform ();
     inst.addTransformer (transformer);
   }
 

@@ -6,8 +6,6 @@ import java.io.*;
 class Test {
 
   int t1 = 55;
-  Object[] objarr;
-  private boolean btest = false;
 
   //public Test() {
   // }
@@ -25,7 +23,7 @@ class Test {
     double d = t.sample2();
     out.println ("sample return [62.4] = " + d);
 
-    d = t.test_d (1.0, 5.0);
+    t.test_d (1.0, 5.0);
   }
 
   public Test[] test_array() {

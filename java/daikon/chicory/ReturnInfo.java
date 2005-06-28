@@ -13,7 +13,7 @@ public class ReturnInfo extends DaikonInfo
         super("return");
     }
     
-    public Object getChildValue(Object value)
+    public Object getMyValFromParentVal(Object value)
     {
         return null;
     }

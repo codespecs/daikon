@@ -36,10 +36,20 @@ public class MethodInfo {
   /** Tells whether each exit point in method is instrumented, based on filters **/
   public List <Boolean> is_included;
   
-  /**Traversal pattern for this class**/
+  /**
+   * The root of the variable tree for the method entry program point.
+   * 
+   * Set by DeclWriter and read by DTraceWriter.
+   **/
   public RootInfo traversalEnter;
   
-  /**Traversal pattern for exit points**/
+  /**
+   * The root of the variable tree for the method exit program point(s).
+   * There is one for each line number at which an exit occurs in the
+   * source program.
+   * 
+   * Set by DeclWriter and read by DTraceWriter.
+   **/
   public Map<Integer, RootInfo> traversalExit;
   
   /**
