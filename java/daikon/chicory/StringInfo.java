@@ -4,10 +4,10 @@ import java.util.*;
 
 
 /**
- * The StringInfo class is a subtype of DaikonInfo used for variable types which are 
+ * The StringInfo class is a subtype of DaikonVariableInfo used for variable types which are 
  * strings.
  */
-public class StringInfo extends DaikonInfo
+public class StringInfo extends DaikonVariableInfo
 {   
     public StringInfo(String theName, boolean arr)
     {

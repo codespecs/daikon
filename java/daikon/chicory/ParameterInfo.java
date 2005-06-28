@@ -3,7 +3,7 @@ package daikon.chicory;
 
 
 /**
- * The ParameterInfo class is a subtype of DaikonInfo used for variable types which are 
+ * The ParameterInfo class is a subtype of DaikonVariableInfo used for variable types which are 
  * arguments to procedures.
  * 
  * This class takes "precedence" over when a seeming conflict could arise.  For instance, consider:
@@ -12,7 +12,7 @@ package daikon.chicory;
  * because the arrays are really treated as hash codes at the first level, so such a parameter needs
  * no array-specific processing (at this level of the tree at least).
  */
-public class ParameterInfo extends DaikonInfo
+public class ParameterInfo extends DaikonVariableInfo
 {
 
     /**

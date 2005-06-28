@@ -10,10 +10,10 @@ import java.util.List;
 
 
 /**
- * The ListInfo class is a subtype of DaikonInfo used for variable types which
+ * The ListInfo class is a subtype of DaikonVariableInfo used for variable types which
  * implement java.util.List
  */
-public class ListInfo extends DaikonInfo
+public class ListInfo extends DaikonVariableInfo
 {
 
     private Class listType;

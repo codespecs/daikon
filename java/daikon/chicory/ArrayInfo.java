@@ -2,10 +2,10 @@ package daikon.chicory;
 
 
 /**
- *  The ArrayInfo class is a subtype of DaikonInfo used for variable types which are 
+ *  The ArrayInfo class is a subtype of DaikonVariableInfo used for variable types which are 
  * arrays (ie, their name ends with "[]").
  */
-public class ArrayInfo extends DaikonInfo
+public class ArrayInfo extends DaikonVariableInfo
 {
 	/**
 	 * Constructs an ArrayInfo object with the specified name

@@ -7,10 +7,10 @@ package daikon.chicory;
 import java.util.List;
 
 /**
- * The DaikonClassInfo class is a subtype of DaikonInfo used for variables which
+ * The DaikonClassInfo class is a subtype of DaikonVariableInfo used for variables which
  * represent the runtime type of a variable.
  */
-public class DaikonClassInfo extends DaikonInfo
+public class DaikonClassInfo extends DaikonVariableInfo
 {
 
     /**

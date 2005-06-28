@@ -124,7 +124,7 @@ public class DTraceWriter extends DaikonWriter
 
     /** 
      * Prints the method's return value and all relevant variables.
-     * Uses the tree of DaikonInfo objects.
+     * Uses the tree of DaikonVariableInfo objects.
      * @param mi The method whose program point we are printing
      * @param root The root of the program point's tree.
      * @param args The arguments to the method corrsponding to mi.
@@ -144,7 +144,7 @@ public class DTraceWriter extends DaikonWriter
         int whichArg = 0;
 
 		//go through all of the node's children
-        for(DaikonInfo child: root)
+        for(DaikonVariableInfo child: root)
         {
             
             Object val;
@@ -170,7 +170,7 @@ public class DTraceWriter extends DaikonWriter
             }
             else
             {
-                throw new RuntimeException("Unknown DaikonInfo subtype " + child.getClass() +
+                throw new RuntimeException("Unknown DaikonVariableInfo subtype " + child.getClass() +
                         " in traversePattern in DTraceWriter for info named " + child.getName());
             }
 
@@ -179,7 +179,7 @@ public class DTraceWriter extends DaikonWriter
     }
 
     //traverse from the traversal pattern data structure and recurse
-    private void traverseValue(MethodInfo mi, DaikonInfo curInfo, Object val)
+    private void traverseValue(MethodInfo mi, DaikonVariableInfo curInfo, Object val)
     {
         if (!(curInfo instanceof HolderInfo))
         {
@@ -189,7 +189,7 @@ public class DTraceWriter extends DaikonWriter
 
 		//go through all of the current node's children
 		//and recurse on their values
-        for (DaikonInfo child : curInfo)
+        for (DaikonVariableInfo child : curInfo)
         {
 			Object childVal;
 			

@@ -6,11 +6,11 @@ package daikon.chicory;
 
 
 /**
- * This subclass of DaikonInfo is used as a "placeholder." It contains no variable
+ * This subclass of DaikonVariableInfo is used as a "placeholder." It contains no variable
  * information directly, but provides useful information to the DTraceWriter during
  * traversal.
  */
-public class HolderInfo extends DaikonInfo
+public class HolderInfo extends DaikonVariableInfo
 {
 
     public HolderInfo()
@@ -19,7 +19,7 @@ public class HolderInfo extends DaikonInfo
     }
 
     /* (non-Javadoc)
-     * @see daikon.chicory.DaikonInfo#getChildValue(java.lang.Object)
+     * @see daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
      */
     public Object getMyValFromParentVal(Object val)
     {

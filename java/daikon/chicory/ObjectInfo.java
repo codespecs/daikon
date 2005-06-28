@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 
 /**
- * The OjbectInfo class is a subtype of DaikonInfo used for variable types which are 
+ * The OjbectInfo class is a subtype of DaikonVariableInfo used for variable types which are 
  * class fields.
  */
-public class ObjectInfo extends DaikonInfo
+public class ObjectInfo extends DaikonVariableInfo
 {
 	/** The corresponding Field **/
     private Field field;
