@@ -288,9 +288,10 @@ public final class FeatureExtractor {
     // and a Map of numbers to names
     TreeSet allFeatures = new TreeSet();
     HashMap numbersToNames = new HashMap();
-    for (Iterator i = lookup.keySet().iterator(); i.hasNext();) {
-      Object key = i.next();
-      int num = ((Integer) lookup.get(key)).intValue();
+    for (Iterator i = lookup.entrySet().iterator(); i.hasNext();) {
+      Map.Entry entry = (Map.Entry) i.next();
+      Object key = entry.getKey();
+      int num = ((Integer) entry.getValue()).intValue();
       IntDoublePair pair = new IntDoublePair(num, 0);
       allFeatures.add(pair);
       String name;
@@ -864,6 +865,7 @@ public final class FeatureExtractor {
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
+          assert vector != null;
 
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
@@ -994,6 +996,7 @@ public final class FeatureExtractor {
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
+          assert vector != null;
 
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
@@ -1022,6 +1025,7 @@ public final class FeatureExtractor {
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
+          assert vector != null;
 
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
@@ -1086,7 +1090,7 @@ public final class FeatureExtractor {
     tokens.nextToken();
     while (tokens.hasMoreTokens()) {
       answer.append((Integer.parseInt(tokens.nextToken()) +
-                     OneMoreOrderThanLargestFeature));
+                     oneMoreOrderThanLargestFeature));
       answer.append(" ");
       answer.append(tokens.nextToken());
       answer.append(" ");
@@ -1104,7 +1108,7 @@ public final class FeatureExtractor {
   // the THRESHOLD is zero
   static double THRESHOLD = 0.0;
 
-  public static int OneMoreOrderThanLargestFeature = 100000;
+  public static int oneMoreOrderThanLargestFeature = 100000;
 
   public static HashSet TYPES = new HashSet();
   public static HashSet BANNED_METHODS = new HashSet();
