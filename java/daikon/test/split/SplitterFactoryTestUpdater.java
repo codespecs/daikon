@@ -116,7 +116,6 @@ public class SplitterFactoryTestUpdater {
     String[] fileNames = tempDir.list();
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
-        StringBuffer command = new StringBuffer();
         String fileName  = fileNames[i];
         moveFile(tempDir.getPath() + "/" + fileName,
                  targetDir + fileName + ".goal");
@@ -138,7 +137,7 @@ public class SplitterFactoryTestUpdater {
   private static void writeTestClass() {
     String code = getTestClassText();
     try {
-      BufferedWriter writer = UtilMDE.BufferedFileWriter(splitDir + "SplitterFactoryTest.java");
+      BufferedWriter writer = UtilMDE.bufferedFileWriter(splitDir + "SplitterFactoryTest.java");
       writer.write(code);
       writer.flush();
     } catch (IOException e) {
@@ -265,8 +264,8 @@ public class SplitterFactoryTestUpdater {
     code.append("   */" + lineSep);
     code.append("  private static boolean equalFiles(String file1, String file2) {" + lineSep);
     code.append("    try {" + lineSep);
-    code.append("      LineNumberReader reader1 = UtilMDE.LineNumberFileReader(file1);" + lineSep);
-    code.append("      LineNumberReader reader2 = UtilMDE.LineNumberFileReader(file2);" + lineSep);
+    code.append("      LineNumberReader reader1 = UtilMDE.lineNumberFileReader(file1);" + lineSep);
+    code.append("      LineNumberReader reader2 = UtilMDE.lineNumberFileReader(file2);" + lineSep);
     code.append("      String line1 = reader1.readLine().trim();" + lineSep);
     code.append("      String line2 = reader2.readLine().trim();" + lineSep);
     code.append("      while(line1 != null && line2 != null) {" + lineSep);

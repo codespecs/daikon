@@ -1076,8 +1076,10 @@ public final class ONEOFSCALAR
 
     String result;
 
+#if !defined(SEQUENCE)
     // Setting up the name of the unary variable
     String varname = var().name.name_using(format, var());
+#endif
 
 #if defined(ELTSTRING)
     if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)

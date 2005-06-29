@@ -1021,7 +1021,7 @@ public final class TestUtilMDE extends TestCase {
     java.awt.Point pOrig = new java.awt.Point(1,2);
     boolean exceptionCaught = false;
     try {
-      Object pIntern = Intern.intern((Object) pOrig);
+      Intern.intern((Object) pOrig); // performed for side effect
     } catch (IllegalArgumentException e) {
       exceptionCaught = true;
     }
@@ -1366,9 +1366,9 @@ public final class TestUtilMDE extends TestCase {
       }
     }
 
-    // public static BufferedReader BufferedFileReader(String filename)
-    // public static LineNumberReader LineNumberFileReader(String filename)
-    // public static BufferedWriter BufferedFileWriter(String filename) throws IOException
+    // public static BufferedReader bufferedFileReader(String filename)
+    // public static LineNumberReader lineNumberFileReader(String filename)
+    // public static BufferedWriter bufferedFileWriter(String filename) throws IOException
     // public static Class classForName(String className)
 
     // public static String classnameToJvm(String classname)
@@ -1923,7 +1923,7 @@ public final class TestUtilMDE extends TestCase {
 
     //make sure that NaNs are not equal
     assertTrue (!ff.eq (Double.NaN, Double.NaN));
-    
+
     //make sure that various unusual values are equal
     assertTrue (ff.eq (Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     assertTrue (ff.eq (Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));

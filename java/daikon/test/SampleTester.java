@@ -163,7 +163,7 @@ public class SampleTester extends TestCase {
     }
 
     this.fname = fname;
-    fp = UtilMDE.LineNumberFileReader(fname);
+    fp = UtilMDE.lineNumberFileReader(fname);
     for (String line = fp.readLine(); line != null; line = fp.readLine()) {
 
       // Remove comments and skip blank lines

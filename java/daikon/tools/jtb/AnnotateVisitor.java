@@ -521,8 +521,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     String ensures_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@post" : "ensures");
     String requires_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@pre" : "requires");
 
-    HashMap exceptions = get_exceptions(ppts, n);
-
     if (!lightweight) {
       addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_END_COMMENT, true);
     }

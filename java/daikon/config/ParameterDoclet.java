@@ -34,19 +34,19 @@ public class ParameterDoclet
       if ("--texinfo".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(UtilMDE.bufferedFileWriter(fname));
         pd.writeTexInfo(outf);
         outf.close();
       } else if ("--text".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(UtilMDE.bufferedFileWriter(fname));
         pd.writeText(outf);
         outf.close();
       } else if ("--list".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(UtilMDE.bufferedFileWriter(fname));
         pd.writeList(outf);
         outf.close();
       }
@@ -220,7 +220,7 @@ public class ParameterDoclet
 	String field = (String) i.next();
 	String desc = (String) categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
-	
+
 	// @item [field]
 	//  [desc]
 	out.println("@item " + field);
@@ -258,7 +258,7 @@ public class ParameterDoclet
 	String field = (String) i.next();
 	String desc = (String) categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
-	
+
 	// [field]
 	//   [desc]
 	out.println("  " + field);

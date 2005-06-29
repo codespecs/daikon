@@ -113,7 +113,7 @@ public class ContextSplitterFactory
     ArrayList result = new ArrayList();
 
     try {
-      LineNumberReader reader = UtilMDE.LineNumberFileReader(mapfile.toString());
+      LineNumberReader reader = UtilMDE.lineNumberFileReader(mapfile.toString());
       String reader_line;
       while ((reader_line = reader.readLine()) != null) {
         String line = reader_line;

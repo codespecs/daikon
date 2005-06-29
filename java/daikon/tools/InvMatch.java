@@ -91,7 +91,6 @@ public class InvMatch {
     // Fmt.pf ("lt : " + xlate);
 
     // Try to matchup the program points
-    Map var_map = new LinkedHashMap();
     List valid_translations = match_ppt (ppt35, ppt40);
 
     // Dump all of the valid translations

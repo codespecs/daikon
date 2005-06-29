@@ -199,10 +199,11 @@ public class MatchCountVisitor extends PrintAllVisitor {
     // need to make sure that it is an integer vs. floating
     // point number
 
+
     // could be float, look for "."
     if (numLiteral.indexOf (".") > -1) {
       float fnum = Float.parseFloat (numLiteral);
-      // for now, accept all floats
+      // for now, accept all floats (ie, ignore return value of parseFloat)
       return true;
     }
     // not float, must be int

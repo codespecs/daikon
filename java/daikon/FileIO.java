@@ -549,7 +549,7 @@ public final class FileIO {
 
   /** Count the number of lines in the specified file **/
   private static long count_lines(String filename) throws IOException {
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
+    LineNumberReader reader = UtilMDE.lineNumberFileReader(filename);
     long count = 0;
     while (reader.readLine() != null)
       count++;
@@ -663,7 +663,7 @@ public final class FileIO {
 	  reader = new LineNumberReader(chicReader);
 	}
       else {
-	reader = UtilMDE.LineNumberFileReader(raw_filename);
+	reader = UtilMDE.lineNumberFileReader(raw_filename);
       }
 
       varcomp_format = VarComparability.IMPLICIT;
@@ -862,14 +862,12 @@ public final class FileIO {
 	  System.out.println("Unrecognized paragraph contains line = `"
 			     + line
 			     + "'");
-	  System.out.println(""
+	  System.out.println(" line: null="
 			     + (line != null)
-			     + " "
+			     + " empty="
 			     + (line.equals(""))
-			     + " "
+			     + " comment="
 			     + (isComment(line)));
-	  if (line == null)
-	    throw new IllegalStateException();
 	  line = reader.readLine();
 	}
 	continue;
@@ -879,7 +877,7 @@ public final class FileIO {
       // Parse the ppt name
       String ppt_name = line; // already interned
       try {
-        PptName parsed = new PptName(ppt_name);
+        new PptName(ppt_name);
       } catch (Error e) {
         throw new Error("Illegal program point name \"" + ppt_name + "\""
                         + " at " + state.filename
@@ -1139,8 +1137,8 @@ public final class FileIO {
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
-    String[] oldvalue_reps;
-    if ((oldvalue_reps = (String[]) ppt_to_value_reps.get(ppt)) == null) {
+    String[] oldvalue_reps = (String[]) ppt_to_value_reps.get(ppt);
+    if (oldvalue_reps == null) {
       // We've not encountered this program point before.  The nulls in
       // this array will compare non-equal to whatever is in the trace
       // file, which is the desired behavior.
@@ -1188,7 +1186,7 @@ public final class FileIO {
             + "  Expected variable "
             + vi.name.name()
             + ", got "
-            + line
+            + "null" // line
             + " for program point "
             + ppt.name());
       }
@@ -1226,7 +1224,7 @@ public final class FileIO {
             + "  Expected value for variable "
             + vi.name.name()
             + ", got "
-            + line
+            + "null" // line
             + " for program point "
             + ppt.name());
       }
@@ -1241,7 +1239,7 @@ public final class FileIO {
             + "  Expected modbit for variable "
             + vi.name.name()
             + ", got "
-            + line
+            + "null" // line
             + " for program point "
             + ppt.name());
       }

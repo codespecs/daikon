@@ -149,10 +149,10 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     //    bufPrint(">");
 
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
-    String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
 
+    // String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
+    // String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
     //    bufPrint(" (" + typeLabel + "," + relLabel + ")");
 
     bufPrintln();

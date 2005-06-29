@@ -470,7 +470,6 @@ public class PptSplitter implements Serializable {
     VarInfo[] leaders = parent.equality_view.get_leaders_sorted();
 
     // Create unary views
-    List unary_slices = new ArrayList();
     for (int i = 0; i < leaders.length; i++) {
       if (parent.is_slice_ok (leaders[i])) {
         result.add (new VarInfo[] {leaders[i]});
@@ -478,7 +477,6 @@ public class PptSplitter implements Serializable {
     }
 
     // Create binary views
-    List binary_slices = new ArrayList();
     for (int i = 0; i < leaders.length; i++) {
       for (int j = i; j < leaders.length; j++) {
         if (parent.is_slice_ok (leaders[i], leaders[j]))
@@ -489,7 +487,6 @@ public class PptSplitter implements Serializable {
 /// Expensive!
 /// ??? MDE
     // Create ternary views
-    List ternary_slices = new ArrayList();
     for (int i = 0; i < leaders.length; i++) {
       for (int j = i; j < leaders.length; j++) {
         for (int k = j; k < leaders.length; k++) {

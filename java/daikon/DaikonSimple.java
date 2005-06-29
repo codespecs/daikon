@@ -82,7 +82,10 @@ public class DaikonSimple {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
-      System.err.println(e.getMessage());
+      String message = e.getMessage();
+      if (message != null) {
+        System.err.println(message);
+      }
       System.exit(1);
     }
     // Any exception other than Daikon.TerminationMessage gets propagated.
@@ -122,7 +125,7 @@ public static void mainHelper(final String[] args) throws IOException,
     Daikon.using_DaikonSimple = true;
 
     // Read command line options
-    Set[] files = Daikon.read_options(args);
+    Set[] files = Daikon.read_options(args, usage);
 
     // DaikonSimple does not supply nor use the spinfo_files and map_files
     Assert.assertTrue(files.length == 4);
@@ -535,8 +538,6 @@ public static void mainHelper(final String[] args) throws IOException,
       // Loop through each slice
       for (Iterator i = ppt.views_iterator(); i.hasNext();) {
         PptSlice slice = (PptSlice) i.next();
-        List to_remove = new ArrayList();
-        List result = new ArrayList();
         Iterator k = slice.invs.iterator();
         boolean missing = false;
 

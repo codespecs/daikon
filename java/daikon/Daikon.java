@@ -423,7 +423,7 @@ public final class Daikon {
    **/
   public static void mainHelper(final String[] args) {
     // Read command line options
-    Set[] files = read_options(args);
+    Set[] files = read_options(args, usage);
     Assert.assertTrue(files.length == 4);
     Set decls_files = files[0]; // [File]
     Set dtrace_files = files[1]; // [String]
@@ -611,7 +611,7 @@ public final class Daikon {
   // Read in the command line options
   // Return an array of {decls, dtrace, spinfo, map} files; each array
   // element is a set.
-  protected static Set[] read_options(String[] args) {
+  protected static Set[] read_options(String[] args, String usage) {
     if (args.length == 0) {
       System.out.println(
         "Daikon error: no files supplied on command line.");
@@ -689,7 +689,7 @@ public final class Daikon {
           } else if (files_from_SWITCH.equals(option_name)) {
             try {
               BufferedReader files_from =
-                UtilMDE.BufferedFileReader(g.getOptarg());
+                UtilMDE.bufferedFileReader(g.getOptarg());
               String filename;
               while ((filename = files_from.readLine())
                 != null) {
@@ -1903,7 +1903,7 @@ public final class Daikon {
         File file = (File) i.next();
 
         // Open the file
-        LineNumberReader fp = UtilMDE.LineNumberFileReader(file);
+        LineNumberReader fp = UtilMDE.lineNumberFileReader(file);
 
         // Read each ppt name from the file
         for (String line = fp.readLine();

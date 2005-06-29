@@ -137,11 +137,8 @@ public class ExtractConsequent {
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
                                                 true // use saved config
                                                 );
-    ppt_map = ppts;
     extract_consequent(ppts);
   }
-
-  private static PptMap ppt_map = null;
 
   public static void extract_consequent(PptMap ppts) {
     // Retrieve Ppt objects in sorted order.

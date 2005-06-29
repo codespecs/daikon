@@ -86,7 +86,7 @@ public class SplitterFactory {
    */
 
   public static void load_splitters (PptTopLevel ppt,
-				     List /* SpinfoFileParser */ splitters) 
+				     List /* SpinfoFileParser */ splitters)
   {
     for (Iterator spi = splitters.iterator(); spi.hasNext(); ) {
       SpinfoFileParser fileParser = (SpinfoFileParser)spi.next();
@@ -120,7 +120,7 @@ public class SplitterFactory {
     }
   }
 
-  
+
   // Accessible for the purpose of testing.
   public static String getTempDir() {
     if (tempdir == null) {
@@ -172,7 +172,7 @@ public class SplitterFactory {
       String fileAddress = tempdir + fileName;
       splitObj.setClassName(fileName);
       try {
-        BufferedWriter writer = UtilMDE.BufferedFileWriter(fileAddress + ".java");
+        BufferedWriter writer = UtilMDE.bufferedFileWriter(fileAddress + ".java");
         if (dkconfig_delete_splitters_on_exit) {
           (new File (fileAddress + ".java")).deleteOnExit();
           (new File (fileAddress + ".class")).deleteOnExit();
@@ -221,7 +221,7 @@ public class SplitterFactory {
       if (matchPptRegex(regex, ppt))
 	return true;
     }
-    
+
     // look for corresponding EXIT ppt. This is because the exit ppt usually has
     // more relevant variables in scope (eg. return, hashcodes) than the enter.
     String regex;

@@ -80,7 +80,7 @@ public class PptNameMatcher {
 //     param.accept(new TreeDumper());
 
 
-        ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementVector.get(0);
+        // ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementVector.get(0);
         ClassOrInterfaceType tOrig = (ClassOrInterfaceType)singleElementVectorOrig.get(0);
         Assert.assertTrue(tOrig.unGenerifiedVersionOfThis != null);
         singleElementVector.set(0, tOrig.unGenerifiedVersionOfThis);

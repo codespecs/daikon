@@ -32,7 +32,7 @@ public class VarComparabilityTest extends TestCase {
     VarComparability v1a = parsei("1");
     VarComparability v2 = parsei("2");
     VarComparability v_1 = parsei("-1");
-    VarComparability v_1a = parsei("-1");
+    // VarComparability v_1a = parsei("-1");
     VarComparability v_2 = parsei("-2");
     VarComparability v_3 = parsei("-3");
 

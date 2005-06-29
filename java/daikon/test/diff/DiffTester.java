@@ -453,7 +453,8 @@ public class DiffTester extends TestCase {
   }
 
   public void testNullaryInvs() {
-    RootNode root = diffSome.diffPptMap(imps1, imps2);
+    // executed for side effect
+    diffSome.diffPptMap(imps1, imps2);
   }
 
   public void testNonModulus() {
@@ -473,7 +474,7 @@ public class DiffTester extends TestCase {
     v.add(slice);
     map.add(ppt);
 
-    RootNode diff = diffSome.diffPptMap(map, map);
+    diffSome.diffPptMap(map, map);
   }
 
   // Runs diff on a PptMap containing a PptConditional, with

@@ -104,7 +104,7 @@ public final class UtilMDE {
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
-  public static BufferedReader BufferedFileReader(String filename) throws FileNotFoundException, IOException {
+  public static BufferedReader bufferedFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
     if (filename.endsWith(".gz")) {
       file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)),
@@ -126,8 +126,8 @@ public final class UtilMDE {
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
-  public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
-    return LineNumberFileReader(new File(filename));
+  public static LineNumberReader lineNumberFileReader(String filename) throws FileNotFoundException, IOException {
+    return lineNumberFileReader(new File(filename));
   }
 
   /**
@@ -139,7 +139,7 @@ public final class UtilMDE {
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
-  public static LineNumberReader LineNumberFileReader(File file) throws FileNotFoundException, IOException {
+  public static LineNumberReader lineNumberFileReader(File file) throws FileNotFoundException, IOException {
     Reader file_reader;
     if (file.getName().endsWith(".gz")) {
       file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(file)),
@@ -160,9 +160,9 @@ public final class UtilMDE {
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
-  public static BufferedWriter BufferedFileWriter(String filename) throws IOException {
+  public static BufferedWriter bufferedFileWriter(String filename) throws IOException {
 
-    return BufferedFileWriter (filename, false);
+    return bufferedFileWriter (filename, false);
   }
 
   /**
@@ -176,7 +176,7 @@ public final class UtilMDE {
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
-  public static BufferedWriter BufferedFileWriter(String filename, boolean append) throws IOException {
+  public static BufferedWriter bufferedFileWriter(String filename, boolean append) throws IOException {
     Writer file_writer;
     if (filename.endsWith(".gz")) {
       file_writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(filename, append)));

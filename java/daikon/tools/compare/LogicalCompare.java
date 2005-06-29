@@ -512,7 +512,7 @@ public class LogicalCompare {
   private static void readExtraAssumptions(String filename) {
     File file = new File(filename);
     try {
-      LineNumberReader reader = UtilMDE.LineNumberFileReader(file);
+      LineNumberReader reader = UtilMDE.lineNumberFileReader(file);
       String line;
       String ppt_name = null;
       while ((line = reader.readLine()) != null) {

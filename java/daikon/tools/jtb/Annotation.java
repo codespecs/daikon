@@ -155,7 +155,7 @@ public class Annotation {
       return new Annotation[] {
       };
     }
-    Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
+    //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
     Set annos = new HashSet();
     for (Iterator i = annoStrings.iterator(); i.hasNext();) {
       String location = (String) i.next();

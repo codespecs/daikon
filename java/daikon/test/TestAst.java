@@ -76,8 +76,6 @@ public final class TestAst extends TestCase {
     InputStream sourceIn = this.getClass().getResourceAsStream("GenericTestClass.java");
     JavaParser parser = new JavaParser(sourceIn);
 
-    StringWriter sw = new StringWriter();
-
     CompilationUnit compilationUnit = null;
 
     try {

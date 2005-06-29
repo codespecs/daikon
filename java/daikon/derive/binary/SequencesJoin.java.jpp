@@ -193,8 +193,6 @@ public final class CLASSNAME
       debug.fine ("New decl type is " + decltype.toString());
     }
 
-    VarComparability indexType = var1.comparability.indexType(0);
-
     // Generate a new comparability based on base comparabilities' indices
     VarComparability comparability =
       VarComparability.makeComparabilitySameIndices (newTypeName,

@@ -373,7 +373,6 @@ public final class PrintInvariants {
     add_filter_reasons(ppt, ppts);
 
     String toPrint = "";
-    Iterator fullInvItor = ppt.invariants_iterator();
     String dashes = "--------------------------------------------"
                   + "-------------------------------" + lineSep;
 

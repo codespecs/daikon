@@ -405,7 +405,6 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
-    InvariantStatus finalStatus = InvariantStatus.NO_CHANGE;
     for (int i=0; i<a.length; i++) {
       if (!EQUALS (a[i], i))
         return InvariantStatus.FALSIFIED;

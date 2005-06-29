@@ -81,12 +81,6 @@ public class ModBitTrackerTest extends TestCase {
   }
 
   // Make numvars different unique random BitSets, each of size
-  // numsamples+numvars.
-  BitSet[] makeBitSets(int numvars, int numsamples) {
-    return makeBitSets(numvars, 0);
-  }
-
-  // Make numvars different unique random BitSets, each of size
   // numsamples+numvars.  Then add duplicate_factor more BitSets (e.g., if
   // duplicate_factor is 1, then double the number of BitSets), where each
   // of the additional ones is a duplicate of one of the unique ones.

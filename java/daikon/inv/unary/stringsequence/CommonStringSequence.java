@@ -123,7 +123,6 @@ public class CommonStringSequence
           tmp[size++] = a[i];
 
       if (size==0) {
-        VarInfo var = var();
         return InvariantStatus.FALSIFIED;
       }
       intersect = ArraysMDE.subarray(tmp, 0, size);

@@ -314,7 +314,6 @@ public final class PPTSLICE1 extends PptSlice {
     #endif
 
     // Supply the new values to all the invariant objects.
-    int num_invs = invs.size();
     Assert.assertTrue((mod1 == vi1.getModified(full_vt))
                   || ((vi1.getModified(full_vt) == ValueTuple.STATIC_CONSTANT)
                       && ((mod1 == ValueTuple.UNMODIFIED)

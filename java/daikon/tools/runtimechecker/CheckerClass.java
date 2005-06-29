@@ -31,11 +31,9 @@ public class CheckerClass {
   String name;
   StringBuffer code;
   ClassOrInterfaceBody fclassbody;
-  List<String> declarations;
 
   public CheckerClass(ClassOrInterfaceBody clazz) {
     this.fclassbody = clazz;
-    this.declarations = new ArrayList<String>();
 
     // The getClassName method may return some $'s and .'s.
     // Since this is going to become a class name, remove them.

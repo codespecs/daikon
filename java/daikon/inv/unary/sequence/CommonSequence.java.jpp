@@ -205,7 +205,6 @@ public class CLASSNAME
         }
       }
       if (size==0) {
-        VarInfo var = var(); // DEAD CODE?
         return InvariantStatus.FALSIFIED;
       }
 

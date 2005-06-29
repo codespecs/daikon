@@ -47,8 +47,6 @@ public class LinearTernaryCoreTest
   }
 
   public void test_set_tri_linear() {
-    LinearTernaryCore ltc = new LinearTernaryCore(null);
-
     one_test_set_tri_linear(new int[][] { { 1, 2, 1 },
                                           { 2, 1, 7 },
                                           { 3, 3, 7 } },

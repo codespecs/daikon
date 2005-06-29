@@ -69,13 +69,12 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     if (inv2 != null /*&& inv2.justified()*/ && !filterOut (inv2)) {
       String thisPptName2 = inv2.ppt.name();
-      key2 = thisPptName2 + "$" + inv2.format();
-
 
       // Looks like implications work on EXIT points, do they work
       // on ENTER points?
-      //        if (key2.indexOf ("ENTER") == -1)
-      // targSet.add (key2);
+      // key2 = thisPptName2 + "$" + inv2.format();
+      // if (key2.indexOf ("ENTER") == -1)
+      //   targSet.add (key2);
 
       // Don't allow implications in goal, as suggested by
       // Iuliu

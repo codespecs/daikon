@@ -560,7 +560,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       }
       Object[] params = getParams(tokens);
       InvariantStatus goalStatus = parseStatus(tokens.nextToken().trim());
-      String goalFormat = tokens.nextToken().trim();
+      tokens.nextToken();       // executed for side effect
       Assert.assertTrue(! tokens.hasMoreTokens());
       InvariantStatus resultStatus = null;
       if (isCheckCommand(command)) {

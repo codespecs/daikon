@@ -26,7 +26,7 @@ public class DtracePartitioner
   public DtracePartitioner (String filename) {
     try {
       this.fileName = filename;
-      br = UtilMDE.BufferedFileReader (fileName);
+      br = UtilMDE.bufferedFileReader (fileName);
 
     } catch (IOException e) {e.printStackTrace(); }
   }
@@ -135,7 +135,7 @@ public class DtracePartitioner
       // look for EXIT half of invocations and augment
       // the values of nonceMap so that the map eventually
       // maps nonces --> full invocations with ENTER / EXIT
-      br = UtilMDE.BufferedFileReader(fileName);
+      br = UtilMDE.bufferedFileReader(fileName);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
         if (nextInvo.indexOf ("EXIT") == -1) continue;

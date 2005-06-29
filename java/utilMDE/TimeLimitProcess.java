@@ -109,7 +109,7 @@ public class TimeLimitProcess {
   /**
    * This TimerTask destroys the process that is passed to it.
    **/
-  private class TPTimerTask extends TimerTask {
+  private static class TPTimerTask extends TimerTask {
     TimeLimitProcess tp;
     public TPTimerTask(TimeLimitProcess tp) {
       this.tp = tp;

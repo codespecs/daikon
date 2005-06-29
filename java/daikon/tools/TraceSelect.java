@@ -15,7 +15,6 @@ public class TraceSelect {
   public static boolean DO_DIFFS = false;
 
   private static int num_reps;
-  private static String firstPart;
 
   private static String filePrefix;
   private static String fileName = null;
@@ -195,7 +194,7 @@ public class TraceSelect {
         sampleNames[num_reps] = filePrefix + ".inv";
 
         PrintWriter pwOut = new PrintWriter
-          (UtilMDE.BufferedFileWriter (filePrefix));
+          (UtilMDE.bufferedFileWriter (filePrefix));
 
         for (int i = 0; i < al.size(); i++) {
           pwOut.println (al.get(i));
@@ -296,7 +295,6 @@ public class TraceSelect {
     int index = strFileName.indexOf ('.');
     if (index >= 0) {
       product.append(strFileName.substring (0, index));
-      firstPart = strFileName.substring(0, index);
       product.append(num_reps);
       if (index  != strFileName.length())
         product.append (strFileName.substring (index));

@@ -68,9 +68,9 @@ public class DtraceNonceFixer {
       (args[0] + "_fixed");
 
     try {
-      BufferedReader br = UtilMDE.BufferedFileReader (args[0]);
+      BufferedReader br = UtilMDE.bufferedFileReader (args[0]);
       PrintWriter out =
-        new PrintWriter (UtilMDE.BufferedFileWriter (outputFilename));
+        new PrintWriter (UtilMDE.bufferedFileWriter (outputFilename));
 
 
       // maxNonce - the biggest nonce ever found in the file
@@ -107,9 +107,9 @@ public class DtraceNonceFixer {
         (args[0] + "_all_fixed.gz") :
         (args[0] + "_all_fixed");
 
-      br = UtilMDE.BufferedFileReader (outputFilename);
+      br = UtilMDE.bufferedFileReader (outputFilename);
       out =
-        new PrintWriter (UtilMDE.BufferedFileWriter (allFixedFilename));
+        new PrintWriter (UtilMDE.bufferedFileWriter (allFixedFilename));
 
       while (br.ready()) {
         String nextInvo = grabNextInvocation (br);

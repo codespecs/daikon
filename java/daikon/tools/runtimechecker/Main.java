@@ -59,7 +59,7 @@ public class Main extends CommandHandler {
             if (!success) {
                 System.err.println("The instrumenter failed.");
                 h.usageMessage();
-                System.exit(1); // supply appropriate error code
+                System.exit(1);
             } else {
             }
         }

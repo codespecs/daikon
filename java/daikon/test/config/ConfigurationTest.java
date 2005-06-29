@@ -18,7 +18,8 @@ public class ConfigurationTest
 
   // Mostly useful to check that our resource files are bound correctly
   public void testGetInstance() {
-    Configuration gotten = Configuration.getInstance();
+    // Executed for side effect.
+    Configuration.getInstance();
   }
 
 }

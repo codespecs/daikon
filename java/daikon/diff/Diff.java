@@ -466,7 +466,6 @@ public final class Diff {
       // now take the final result for the MultiDiffVisitor
       // and use it along side a null empty map
       PptMap map1 = v1.currMap;
-      PptMap map2 = new PptMap();
 
       v1.printAll();
       return;

@@ -44,6 +44,7 @@ public final class SplitterExample
   }
 
   public void makeDummyInvariant(DummyInvariant inv) {
+    assert dummyInvFactory == null;
     dummyInvFactory = inv;
   }
 

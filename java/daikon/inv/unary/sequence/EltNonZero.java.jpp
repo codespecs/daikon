@@ -193,8 +193,6 @@ public final class CLASSNAME
 
   /* modeled after format_jml, kind of */
   public String format_java_family(OutputFormat format) {
-    VarInfoName viname = var().name;
-
     String retval =
       "daikon.Quant.eltsNotEqual(" + var().name.name_using(format, var())
       + (is_pointer() ? ", null" : ", 0") + ")";

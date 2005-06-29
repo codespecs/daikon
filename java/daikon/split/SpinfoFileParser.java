@@ -53,7 +53,7 @@ public class SpinfoFileParser {
     this.tempDir = tempDir;
     this.spinfoFileName = spinfoFile.toString();
     try {
-      LineNumberReader reader = UtilMDE.LineNumberFileReader(spinfoFile);
+      LineNumberReader reader = UtilMDE.lineNumberFileReader(spinfoFile);
       parseFile(reader);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);

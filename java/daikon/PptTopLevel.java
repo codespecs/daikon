@@ -1335,7 +1335,6 @@ public class PptTopLevel extends Ppt {
       System.out.println ("but, slice " + cslice + " already exists");
       for (int i = 0; i < cslice.invs.size(); i++)
         System.out.println(" -- inv " + (Invariant) cslice.invs.get(i));
-      Assert.assertTrue(cslice != null);
     }
 
     views.put(sliceIndex(slice.var_infos), slice);

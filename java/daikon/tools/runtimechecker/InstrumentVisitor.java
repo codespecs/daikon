@@ -188,7 +188,6 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         boolean isNested = false;
         boolean isStatic = false;
-        Node dParent = ucd.getParent();
         if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
             ClassOrInterfaceBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
             checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
