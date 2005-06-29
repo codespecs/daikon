@@ -61,7 +61,7 @@
 
 
 /**
- * Represents the invariant <samp>result = FUNCTION (arg1, arg2)</samp> 
+ * Represents the invariant <samp>result = FUNCTION (arg1, arg2)</samp>
  * over three PRIMITIVE scalars.
  */
 public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
@@ -115,6 +115,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   public void set_function_id (int function_id) {
+    assert CNAME(FUNCTION,PERM_NAME).function_id == -1;
     CNAME(FUNCTION,PERM_NAME).function_id = function_id;
   }
 
