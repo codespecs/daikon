@@ -29,7 +29,7 @@ public class DaikonClassInfo extends DaikonVariableInfo
         return value;
     }
 
-    public String getDeclValueString(Object val)
+    public String getDTraceValueString(Object val)
     {
         if(isArray)
         {

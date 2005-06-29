@@ -24,7 +24,7 @@ public class StringInfo extends DaikonVariableInfo
 	 * Returns a String which contains a string representation of val, used for
 	 * dtrace information.
 	 */
-    public String getDeclValueString(Object val)
+    public String getDTraceValueString(Object val)
     {
         if(isArray)
         {

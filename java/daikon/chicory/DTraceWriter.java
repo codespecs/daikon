@@ -163,10 +163,12 @@ public class DTraceWriter extends DaikonWriter
                 val = args[whichArg];
                 whichArg++;
             }
-            else if(child instanceof HolderInfo)
+            else if (child instanceof FieldInfo)
             {
-				//HolderInfo does not correspond to an actual value
-                val = null;
+               // can only occur for static fields
+               // non-static fields will appear as children of "this"
+                
+               val = child.getMyValFromParentVal(null);
             }
             else
             {
@@ -181,12 +183,9 @@ public class DTraceWriter extends DaikonWriter
     //traverse from the traversal pattern data structure and recurse
     private void traverseValue(MethodInfo mi, DaikonVariableInfo curInfo, Object val)
     {
-        if (!(curInfo instanceof HolderInfo))
-        {
-            outFile.println(curInfo.getName());
-            outFile.println(curInfo.getDeclValueString(val));
-        }
-
+        outFile.println(curInfo.getName());
+        outFile.println(curInfo.getDTraceValueString(val));
+        
 		//go through all of the current node's children
 		//and recurse on their values
         for (DaikonVariableInfo child : curInfo)

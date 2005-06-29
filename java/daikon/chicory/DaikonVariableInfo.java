@@ -121,10 +121,10 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     public abstract Object getMyValFromParentVal(Object val);
     
 	/**
-	 * Returns a String representation of this object suitable for a .decls file
+	 * Returns a String representation of this object suitable for a .dtrace file
 	 * @param val The object whose value to print
 	 */
-    public String getDeclValueString(Object val)
+    public String getDTraceValueString(Object val)
     {
         if(isArray)
         {

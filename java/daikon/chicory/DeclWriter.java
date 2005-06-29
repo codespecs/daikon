@@ -289,7 +289,7 @@ public class DeclWriter extends DaikonWriter
         // only print these points if we have at least one static field
         int static_fields = 0;
         for (Field f : fields)
-            if (Modifier.isStatic(f.getModifiers()))
+            if (Modifier.isStatic(f.getModifiers()) && isFieldVisible (cinfo.clazz, f))
                 static_fields++;
         if (static_fields == 0)
             return;
@@ -297,11 +297,9 @@ public class DeclWriter extends DaikonWriter
         outFile.println (declareHeader);
         outFile.println (name);
 
-        for (int i = 0; i < fields.length; i++)
+        for (Field classField: fields)
         {
-            Field classField = fields[i];
-
-			//only process static fields
+            // only process static fields
             if (!Modifier.isStatic(classField.getModifiers()))
                 continue;
 
@@ -314,8 +312,8 @@ public class DeclWriter extends DaikonWriter
             Class fieldType = classField.getType();
             StringBuffer buf = new StringBuffer();
 			
-			//don't worry about populating traversal pattern here...
-			//just pass in new RootInfo()
+			// don't worry about populating traversal pattern here...
+			// just pass in new RootInfo()
             DaikonVariableInfo newChild = printDeclVar(cinfo, new RootInfo(), classField, "", daikonDepth,
                                             false, buf);
             String newOffset = buf.toString();
@@ -408,7 +406,7 @@ public class DeclWriter extends DaikonWriter
             if (!Modifier.isStatic(classField.getModifiers()) && dontPrintInst)
                 continue;
 
-            //don't print arrays of the same static field
+            // don't print arrays of the same static field
             if(Modifier.isStatic(classField.getModifiers()) && inArray)
                 continue;
 
@@ -622,9 +620,14 @@ public class DeclWriter extends DaikonWriter
         if (inArray)
             arr_str = "[]";
 
+        boolean changedAccess = false;
+        
         //we want to access all fields...
         if(!field.isAccessible())
+        {
+            changedAccess = true;
             field.setAccessible(true);
+        }
 
         Class type = field.getType();
         String name = field.getName();
@@ -656,17 +659,8 @@ public class DeclWriter extends DaikonWriter
         appendAuxInfo(field);
 
         outFile.println();
-
         outFile.print(getRepName(type, inArray) + arr_str);
         
-        
-        //don't put info directly off the root
-        if(curNode instanceof RootInfo)
-        {
-            DaikonVariableInfo holder = new HolderInfo();
-            curNode.addChild(holder);
-            curNode = holder;
-        }
         
         if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)
             && type.isPrimitive() && !inArray)
@@ -680,8 +674,8 @@ public class DeclWriter extends DaikonWriter
             }
             //else
             //{
-                //don't print anything
-                //because this field wasn't declared with an actual "hardcoded" constant   
+                // don't print anything
+                // because this field wasn't declared with an actual "hardcoded" constant   
             //}
             
             //in this case, we don't want to print this variable to the dtrace file
@@ -692,7 +686,7 @@ public class DeclWriter extends DaikonWriter
         outFile.println(compareInfoDefault); //no comparability info right now
 
         
-        DaikonVariableInfo newField = new ObjectInfo(offset + name, field, inArray);
+        DaikonVariableInfo newField = new FieldInfo(offset + name, field, inArray);
         curNode.addChild(newField);
 
         checkForListDecl(newField, type, name, offset, inArray);
@@ -701,6 +695,11 @@ public class DeclWriter extends DaikonWriter
         checkForString(newField, type, name, offset);
         
         buf.append(offset);
+        
+        if(changedAccess)
+        {
+            field.setAccessible(false);
+        }
         
         return newField;
     }
