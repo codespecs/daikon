@@ -1078,7 +1078,7 @@ public final class ONEOFSCALAR
 
     // Setting up the name of the unary variable
     String varname = var().name.name_using(format, var());
-    String type = var().type.base(); // CP: still wondering, see diary comment *1*
+
 #if defined(ELTSTRING)
     if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)
         && varname.endsWith("[]")) {

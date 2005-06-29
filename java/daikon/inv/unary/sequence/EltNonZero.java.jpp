@@ -193,7 +193,6 @@ public final class CLASSNAME
 
   /* modeled after format_jml, kind of */
   public String format_java_family(OutputFormat format) {
-    VarInfo v = ppt.var_infos[0];
     VarInfoName viname = var().name;
 
     String retval =
