@@ -692,7 +692,7 @@ private static StreamRedirectThread out_thread;
 
     /**
      * Gets the ClassInfo structure corresponding to type
-     * @param type: declaring class
+     * @param type declaring class
      * @return ClassInfo structure corresponding to type
      */
     public static ClassInfo getClassInfoFromClass(Class type)
