@@ -268,8 +268,9 @@ public final class Diff {
         break;
       case 'z':
         treeManip = true;
-        // no break on purpose, only makes sense
-        // if -p is also on -LL
+        // Only makes sense if -p is also on.
+        examineAllPpts = true;
+        break;
       case 'p':
         examineAllPpts = true;
         break;
