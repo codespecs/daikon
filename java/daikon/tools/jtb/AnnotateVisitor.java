@@ -705,33 +705,31 @@ public class AnnotateVisitor extends DepthFirstVisitor {
             }
           }
 
-          if (fieldname != null) {
-            // System.out.println("In statement, fieldname = " + fieldname);
-            if ((fieldname != null)
-                && (isOwned(fieldname)
-                    || isNotContainsNull(fieldname)
-                    || isElementType(fieldname))) {
-              ConstructorDeclaration cd
-                = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
-              MethodDeclaration md
-                = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
-              if ((cd != null)
-                  || ((md != null) && (! Ast.contains(md.f0, "static")))) {
-                Node parent = Ast.getParent(Statement.class, n);
-                // If parent isn't in a block (eg, if parent
-                // is sole element in then or else clause), then this is wrong.
-                // It's safe, however.  But does it cause syntax errors if an
-                // else clause follows a then clause without braces?
-                if (isOwned(fieldname)) {
-                  if (lightweight)
-                    addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
-                }
-                if (isNotContainsNull(fieldname)) {
-                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false;"));
-                }
-                if (isElementType(fieldname)) {
-                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".elementType = " + elementType(fieldname) + ";"));
-                }
+          // System.out.printf("In statement, fieldname = %s", fieldname);
+          if ((fieldname != null)
+              && (isOwned(fieldname)
+                  || isNotContainsNull(fieldname)
+                  || isElementType(fieldname))) {
+            ConstructorDeclaration cd
+              = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
+            MethodDeclaration md
+              = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
+            if ((cd != null)
+                || ((md != null) && (! Ast.contains(md.f0, "static")))) {
+              Node parent = Ast.getParent(Statement.class, n);
+              // If parent isn't in a block (eg, if parent
+              // is sole element in then or else clause), then this is wrong.
+              // It's safe, however.  But does it cause syntax errors if an
+              // else clause follows a then clause without braces?
+              if (isOwned(fieldname)) {
+                if (lightweight)
+                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
+              }
+              if (isNotContainsNull(fieldname)) {
+                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false;"));
+              }
+              if (isElementType(fieldname)) {
+                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".elementType = " + elementType(fieldname) + ";"));
               }
             }
           }
