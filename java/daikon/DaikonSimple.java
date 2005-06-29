@@ -32,7 +32,7 @@ import static daikon.Global.*;
  * parallel those of Daikon but oftentimes certain checks are eliminated from
  * DaikonSimple's methods because there is less filtering of invariants and
  * variables.
- * 
+ *
  * DaikonSimple was written to check the implementation of the optimizations in
  * Daikon. DaikonSimple does not use an optimizations, and its processing will
  * produce a complete set of true invariants. Daikon does have flags to "turn
@@ -93,10 +93,10 @@ public class DaikonSimple {
    * This does the work of main, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically. Termination of the program with a
    * message to the user is indicated by throwing Daikon.TerminationMessage.
-   * 
+   *
    * Difference from Daikon's mainHelper: turn off optimization flags (equality,
    * dynamic constants, NIS suppression).
-   * 
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    * @see daikon.Daikon#mainHelper(String[])
@@ -115,7 +115,7 @@ public static void mainHelper(final String[] args) throws IOException,
     NIS.dkconfig_enabled = false;
 
     // The flag tells FileIO to use DaikonSimple
-    // specific methods (e.g. FileIO.read_declaration_file). 
+    // specific methods (e.g. FileIO.read_declaration_file).
     // When FileIO reads and processes
     // samples, it must use the SimpleProcessor rather than the
     // default Processor.
@@ -123,7 +123,7 @@ public static void mainHelper(final String[] args) throws IOException,
 
     // Read command line options
     Set[] files = Daikon.read_options(args);
-    
+
     // DaikonSimple does not supply nor use the spinfo_files and map_files
     Assert.assertTrue(files.length == 4);
     Set decls_files = files[0]; // [File]
@@ -161,9 +161,9 @@ public static void mainHelper(final String[] args) throws IOException,
       // The dkconfig_quiet printing is used for creating diffs between DaikonSimple
       // and Daikon's output.  The second kind of printing is used for
       // debugging.  Since the names of the program points are the same for both
-      // Daikon and DaikonSimple, diffing the two output will result in 
+      // Daikon and DaikonSimple, diffing the two output will result in
       // only differences in the invariants, but we can not see at which program
-      // points these differing invariants appear.  Using the second kind of printing, 
+      // points these differing invariants appear.  Using the second kind of printing,
       // Daikon's output does not have the '+' in the program point name, so in addition
       // to the invariants showing up in the diff, we will also see the program point
       // names.
@@ -228,13 +228,13 @@ public static void mainHelper(final String[] args) throws IOException,
   /**
    * Install views and the invariants. Duplicated from PptTopLevel's version
    * because DaikonSimple needs to use its own version of slice checking code.
-   * 
+   *
    * Difference from PptTopLevel's version: 1. canonical (leader of equality
    * set) check of variables is turned off because every variable is in its own
    * equality set 2. debugging information turned off because DaikonSimple's
    * code is more contained 3. less constraints on the slices
-   * 
-   * @see Daikon.PptTopLevel#instantiate_views_and_invariants()
+   *
+   * @see daikon.PptTopLevel#instantiate_views_and_invariants()
    */
 
   // Note that some slightly inefficient code has been added to aid
@@ -360,14 +360,14 @@ public static void mainHelper(final String[] args) throws IOException,
   /**
    * Returns whether or not the specified binary slice should be created. The
    * slice should not be created if the vars not compatible.
-   * 
+   *
    * Since we are trying to create all of the invariants, the variables does not
    * have to be a leader and can be a constant. Note that the always missing
    * check is only applicable when the dynamic constants optimization is turned
    * on (so we do not do the check here).
-   * 
+   *
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo)
-   * 
+   *
    */
   public static boolean is_slice_ok(VarInfo v1, VarInfo v2) {
 
@@ -376,19 +376,19 @@ public static void mainHelper(final String[] args) throws IOException,
 
   /**
    * Returns whether or not the specified ternary slice should be created. The
-   * slice should not be created if any of the following are true 
-   * - Any var is an array 
-   * - Any of the vars are not compatible with the others 
+   * slice should not be created if any of the following are true
+   * - Any var is an array
+   * - Any of the vars are not compatible with the others
    * - Any var is not (integral or float)
-   * 
+   *
    * Since we are trying to create all of the invariants, the variables does not
    * have to be a leader and can be a constant. Note that the always missing
    * check is only applicable when the dynamic constants optimization is turned
    * on (so we do not do the check here). In addition, we do want to create the
    * reflexive ones and partially reflexive invariants.
-   * 
+   *
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo, VarInfo)
-   *  
+   *
    */
   public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
@@ -398,9 +398,9 @@ public static void mainHelper(final String[] args) throws IOException,
 
   /**
    * The Call class helps the SimpleProcessor keep track of matching enter and
-   * exit program points and also object program points.  Each Call object 
+   * exit program points and also object program points.  Each Call object
    * represents one entry in the dtrace file, i.e. enter, exit, object entry.
-   *  
+   *
    */
   static final class Call {
 
@@ -417,7 +417,7 @@ public static void mainHelper(final String[] args) throws IOException,
 
   /**
    * The SimpleProcessor class processes each sample in the dtrace file.
-   *  
+   *
    */
   public static class SimpleProcessor extends FileIO.Processor {
     PptMap all_ppts = null;
@@ -578,7 +578,7 @@ public static void mainHelper(final String[] args) throws IOException,
         }
 
         // update num_samples and num_values of a slice manually
-        // because DaikonSimple does not call any of PptTopLevel's 
+        // because DaikonSimple does not call any of PptTopLevel's
         // add methods
         for (int j = 0; j < vt.vals.length; j++) {
           if (!vt.isMissing(j)) {
