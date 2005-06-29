@@ -17,15 +17,6 @@ public class DeclWriter extends DaikonWriter
 {
     // Notes:
     //
-    //  - printLocalVars() processes each argument via printDeclVar() and
-    //    checkForVarRecursion()
-    //    - printDeclVar (4 args): prints decl info for a single argument.
-    //      No Recursion
-    //      - checkForImplicitList(): prints closure info for Classes with
-    //        an field of the same type within them
-    //      - checkForListDecl(): Treats classes that implement list as arrays
-    //    - checkForVarRecursion(): expands arrays and classes
-    //
     //  Class.getName() returns fully specified dot separated names with
     //  JVM array designations (eg, [Ljava.lang.String;)
 
@@ -53,7 +44,7 @@ public class DeclWriter extends DaikonWriter
     /**levels of recursion**/
     protected int daikonDepth;
 
-    //certain class names
+    //certain hardcoded class names
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
@@ -106,6 +97,8 @@ public class DeclWriter extends DaikonWriter
      * Register an exit point for a method or constructor.  If you're printing
      * decls in whole-class mode, you should call this before printDeclClass 
      * for every exit point, otherwise no method exit Ppt decls will get generated.
+     * 
+     * @param exitLoc The line number in the source program where this exit occurs
      */
     public void registerExit(Member method, int exitLoc)
     {

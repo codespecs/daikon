@@ -8,9 +8,8 @@ import daikon.Chicory;
 
 /**
  *  DTraceWriter writes .dtrace program points to an output stream.
- *  It uses the traversal pattern trees created by the {@link DeclWriter}.
+ *  It uses the traversal trees created by the {@link DeclWriter}.
  */
-
 public class DTraceWriter extends DaikonWriter
 {
     // Notes:
@@ -42,7 +41,7 @@ public class DTraceWriter extends DaikonWriter
     private PrintStream outFile;
 
     /**
-     * Initializes the DeclListener, preparing it to receive messages.
+     * Initializes the DTraceWriter
      *
      * @param writer
      *            Stream to write to
@@ -163,8 +162,9 @@ public class DTraceWriter extends DaikonWriter
             }
             else
             {
-                throw new RuntimeException("Unknown DaikonVariableInfo subtype " + child.getClass() +
-                        " in traversePattern in DTraceWriter for info named " + child.getName());
+                assert false: "Unknown DaikonVariableInfo subtype " + child.getClass() +
+                        " in traversePattern in DTraceWriter for info named " + child.getName();
+                val = null;
             }
 
             traverseValue(mi, child, val);
@@ -292,150 +292,63 @@ public class DTraceWriter extends DaikonWriter
 
         Class fieldType = classField.getType();
 
-
-        if(Chicory.checkStaticInit)
+        if (Chicory.checkStaticInit)
         {
             // don't force initialization!
-            if(!Runtime.isInitialized(classField.getDeclaringClass().getName()))
+            if (!Runtime
+                    .isInitialized(classField.getDeclaringClass().getName()))
             {
                 return nonsenseValue;
             }
         }
 
-        if (fieldType.equals(int.class))
+        try
         {
-            try
+            if (fieldType.equals(int.class))
             {
                 return new Runtime.IntWrap(classField.getInt(null));
+
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(long.class))
-        {
-            try
+            else if (fieldType.equals(long.class))
             {
                 return new Runtime.LongWrap(classField.getLong(null));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(boolean.class))
-        {
-            try
+            else if (fieldType.equals(boolean.class))
             {
                 return new Runtime.BooleanWrap(classField.getBoolean(null));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(float.class))
-        {
-            try
+            else if (fieldType.equals(float.class))
             {
                 return new Runtime.FloatWrap(classField.getFloat(null));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(byte.class))
-        {
-            try
+            else if (fieldType.equals(byte.class))
             {
                 return new Runtime.ByteWrap(classField.getByte(null));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(char.class))
-        {
-            try
+            else if (fieldType.equals(char.class))
             {
                 return new Runtime.CharWrap(classField.getChar(null));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(short.class))
-        {
-            try
+            else if (fieldType.equals(short.class))
             {
                 return new Runtime.ShortWrap(classField.getShort(null));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(double.class))
-        {
-            try
+            else if (fieldType.equals(double.class))
             {
                 return new Runtime.DoubleWrap(classField.getDouble(null));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else
-        {
-            try
+            else
             {
                 return classField.get(null);
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw new Error(e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new Error(e);
         }
     }
 

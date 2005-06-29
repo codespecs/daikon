@@ -77,7 +77,8 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     }
     
 	/**
-	 * Return a StringBuffer which contains all ancestors of this node.
+	 * Return a StringBuffer which contains the name of this node
+     * and all ancestors of this node.
 	 * Longer indentations correspond to further distance in the tree.
 	 * @param offset The offset to begin each line with.
 	 * @return StringBuffer which contains all children of this node
@@ -140,7 +141,6 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 	 *
 	 * Gets the value of an object and concatenates
 	 * the associated "modified" integer.
-	 * If val == null prints nonsensical
 	 */
     protected String getValueStrignOfObjectWithMod(Object theValue, boolean hashArray)
     {
@@ -187,7 +187,6 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 			//show the full array
             return getValueStringOfArray(theValue);
         }
-
         else if (theValue instanceof NonsensicalObject)
         {
             return ("nonsensical");
