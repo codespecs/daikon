@@ -93,7 +93,7 @@ public final class OutputFormat
     Hashtable definitiontable=new Hashtable(); /*Ppt->Definition*/
     int tagnumber=0;
     boolean forceset=false;
-    Hashtable quantifiers=new Hashtable();
+    HashMap quantifiers=new LinkedHashMap(); // LinkedHashMap for deterministic output
 
     /** Creates a copy of the current Repair object state.  This copy
      * can be used to revert the state if a problem with the current
@@ -139,7 +139,7 @@ public final class OutputFormat
 
     /** This method resets the quantifier table. */
     public void reset() {
-      quantifiers=new Hashtable();
+      quantifiers=new LinkedHashMap();
       forceset=false;
     }
 
@@ -252,8 +252,10 @@ public final class OutputFormat
     /** This method generates the current quantifier string. */
     public String getQuantifiers() {
       String str="";
-      for(Iterator it=quantifiers.keySet().iterator();it.hasNext();) {
-        String key=(String)it.next();
+      for(Iterator it=quantifiers.entrySet().iterator();it.hasNext();) {
+        Map.Entry entry = (Map.Entry) it.next();
+        String key = (String) entry.getKey();
+        String value = (String) entry.getValue();
         if (!str.equals(""))
           str+=",";
         str+="forall "+key+" in "+((String)quantifiers.get(key));
