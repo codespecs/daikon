@@ -64,15 +64,10 @@ public class DeclWriter extends DaikonWriter
      *            Stream to write to
      * @param depth
      *            Depth of tree recursion to traverse for each variable
-     * @param excludes
-     *            Formatted strings can include wildcards
-     * @param includes
-     *		     Include only list
      */
-    public DeclWriter(PrintStream writer, int depth, String[] excludes,
-                      List includes)
+    public DeclWriter(PrintStream writer, int depth)
     {
-        super(excludes, includes);
+        super();
 
         outFile = writer;
         
@@ -391,12 +386,6 @@ public class DeclWriter extends DaikonWriter
         }
         else
             thisInfo = curNode;
-        
-
-        if (shouldFilterClass(type.getName()))
-        {
-            return;
-        }
 
         Field[] fields = type.getDeclaredFields();
         for (int i = 0; i < fields.length; i++)
@@ -483,17 +472,10 @@ public class DeclWriter extends DaikonWriter
                 if (!name.equals ("return") && !offset.equals (""))
                   checkForRuntimeClass (newChild, type, name + "[]", offset);
 
-                if (!shouldFilterClass(arrayType.getName()))
-                {
-                    checkForString(newChild, arrayType, name + "[]", offset);
-                    printClassVars(cinfo, newChild, false, arrayType, offset + name + "[].", depthRemaining - 1, true);
-                }
-                else
-                {
-                    //.class vars
-                    checkForRuntimeClass(newChild, type, name + "[]", offset);
-                    checkForString(newChild, arrayType, name + "[]", offset);
-                }
+
+                checkForString(newChild, arrayType, name + "[]", offset);
+                printClassVars(cinfo, newChild, false, arrayType, offset + name + "[].", depthRemaining - 1, true);
+                
             }
         }
         // regular old class type

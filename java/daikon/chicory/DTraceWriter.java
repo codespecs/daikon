@@ -48,14 +48,10 @@ public class DTraceWriter extends DaikonWriter
      *            Stream to write to
      * @param depth
      *            Tree recursion to traverse for each variable
-     * @param excludes
-     *            Formatted strings can include wildcards
-     * @param includes
-     *  		  List of formatted strings for including in the instrumentations
      */
-    public DTraceWriter(PrintStream writer, String[] excludes, List includes)
+    public DTraceWriter(PrintStream writer)
     {
-        super(excludes, includes);
+        super();
         outFile = writer;
     }
 
@@ -451,53 +447,81 @@ public class DTraceWriter extends DaikonWriter
     public static List getListFromArray(Object arrayVal)
     {
         if (!arrayVal.getClass().isArray())
-            throw new RuntimeException("The object --- " + arrayVal + " --- is not an array");
+            throw new RuntimeException("The object --- " + arrayVal
+                    + " --- is not an array");
 
         int len = Array.getLength(arrayVal);
         List arrList = new ArrayList(len);
 
         Class arrType = arrayVal.getClass().getComponentType();
 
-        for (int i = 0; i < len; i++)
+        // have to wrap primitives in our wrappers
+        // otherwise, couldn't distinguish from a wrapped object in the
+        // target app
+        if (arrType.equals(int.class))
         {
-			//have to wrap primitives in our wrappers
-			//otherwise, couldn't distinguish from a wrapped object in the
-			//target app
-            if (arrType.equals(int.class))
+            for (int i = 0; i < len; i++)
             {
                 arrList.add(new Runtime.IntWrap(Array.getInt(arrayVal, i)));
             }
-            else if (arrType.equals(long.class))
+        }
+        else if (arrType.equals(long.class))
+        {
+            for (int i = 0; i < len; i++)
             {
                 arrList.add(new Runtime.LongWrap(Array.getLong(arrayVal, i)));
             }
-            else if (arrType.equals(boolean.class))
+        }
+        else if (arrType.equals(boolean.class))
+        {
+            for (int i = 0; i < len; i++)
             {
-                arrList.add(new Runtime.BooleanWrap(Array.getBoolean(arrayVal, i)));
+                arrList.add(new Runtime.BooleanWrap(Array.getBoolean(arrayVal,
+                        i)));
             }
-            else if (arrType.equals(float.class))
+        }
+        else if (arrType.equals(float.class))
+        {
+            for (int i = 0; i < len; i++)
             {
                 arrList.add(new Runtime.FloatWrap(Array.getFloat(arrayVal, i)));
             }
-            else if (arrType.equals(byte.class))
+        }
+        else if (arrType.equals(byte.class))
+        {
+            for (int i = 0; i < len; i++)
             {
                 arrList.add(new Runtime.ByteWrap(Array.getByte(arrayVal, i)));
             }
-            else if (arrType.equals(char.class))
+        }
+        else if (arrType.equals(char.class))
+        {
+            for (int i = 0; i < len; i++)
             {
                 arrList.add(new Runtime.CharWrap(Array.getChar(arrayVal, i)));
             }
-            else if (arrType.equals(short.class))
+        }
+        else if (arrType.equals(short.class))
+        {
+            for (int i = 0; i < len; i++)
             {
                 arrList.add(new Runtime.ShortWrap(Array.getShort(arrayVal, i)));
             }
-            else if (arrType.equals(double.class))
+        }
+        else if (arrType.equals(double.class))
+        {
+            for (int i = 0; i < len; i++)
             {
-                arrList.add(new Runtime.DoubleWrap(Array.getDouble(arrayVal, i)));
+                arrList
+                        .add(new Runtime.DoubleWrap(Array
+                                .getDouble(arrayVal, i)));
             }
-            else
+        }
+        else
+        {
+            for (int i = 0; i < len; i++)
             {
-                //non-primitives
+                // non-primitives
                 arrList.add(Array.get(arrayVal, i));
             }
         }
@@ -506,8 +530,8 @@ public class DTraceWriter extends DaikonWriter
     }
 
 
-    //quotes endlines in string and quotes other formatting issues
-	//see Runtime.quote
+    // quotes endlines in string and quotes other formatting issues
+	// see Runtime.quote
     private static String encodeString(String input)
     {
         return Runtime.quote(input);

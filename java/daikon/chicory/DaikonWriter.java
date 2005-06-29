@@ -12,15 +12,6 @@ import java.lang.reflect.*;
  */
 public class DaikonWriter
 {
-
-    //include/exclude patterns
-	
-	/** Used to filter instrumentation **/
-    private String[] excludeStrings;
-	
-	/** Only instrument whats in this list **/
-    private List<String> includeOnly;
-
     /**
      * Controls whether modifiers and the return type are included in the decl output
      */
@@ -38,16 +29,8 @@ public class DaikonWriter
 		assert lineSep != null : "Line separator cannot be null";
 	}
 
-    public DaikonWriter(String[] excludes, List <String> includes)
+    public DaikonWriter()
     {
-        if (excludes == null)
-            throw new RuntimeException("Excludes may not be null");
-        excludeStrings = excludes;
-
-        if (includes == null || includes.isEmpty())
-            includeOnly = null;
-        else
-            includeOnly = includes;
     }
 
     /**
@@ -359,35 +342,6 @@ public class DaikonWriter
             return (false);
         else
             return (true);
-    }
-
-    /**
-     * Tells whether given class should be excluded from trace,
-     * based on the includeOnly and excludeStrings variables
-     *
-     * @return true iff we should exclude the given class (by name)
-     */
-    public boolean shouldFilterClass(String name)
-    {
-        if (includeOnly != null)
-        {
-            for (String incString: includeOnly)
-            {
-                if (Pattern.matches(incString, name))
-                    return false;
-            }
-
-            return true;
-        }
-
-        for (String exString: excludeStrings)
-        {
-            if (Pattern.matches(exString, name))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     //the following comments are taken from dfej

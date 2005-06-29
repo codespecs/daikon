@@ -43,11 +43,8 @@ public class ChicoryPremain {
     // implemented in the transform, so they don't need to be handled
     // here.
     Runtime.decl_writer = new DeclWriter (Runtime.dtrace,
-                                          Runtime.nesting_depth, new String[0],
-                                          null);
-    Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace,
-                                          new String[0],
-                                          null);
+                                          Runtime.nesting_depth);
+    Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace);
 
     // Setup the transformer
     RetTransform transformer = new RetTransform ();
