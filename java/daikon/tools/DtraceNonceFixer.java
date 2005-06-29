@@ -93,7 +93,7 @@ public class DtraceNonceFixer {
           }
         }
         int newNonce = non + correctionFactor;
-        maxNonce = (newNonce > maxNonce) ? newNonce : maxNonce;
+        maxNonce = Math.max(maxNonce, newNonce);
         if (non != -1) {
           out.println (spawnWithNewNonce (nextInvo, newNonce));
         }
