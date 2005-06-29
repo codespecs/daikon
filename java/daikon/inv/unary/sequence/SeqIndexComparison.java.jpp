@@ -233,12 +233,20 @@ public class CLASSNAME extends SUPERCLASS {
   /** returns the ni-suppressions for CLASSNAME **/
   public NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
+      #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
       NISuppressee suppressee = new NISuppressee (CLASSNAME.class, 1);
+      #endif
 
       // suppressor definitions (used in suppressions below)
+      #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
       NISuppressor v1_eq_v2 = new NISuppressor (0, SEQ_INDEX_EQUAL.class);
+      #endif
+      #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
       NISuppressor v1_gt_v2 = new NISuppressor (0,SEQ_INDEX_GREATERTHAN.class);
+      #endif
+      #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
       NISuppressor v1_lt_v2 = new NISuppressor (0, SEQ_INDEX_LESSTHAN.class);
+      #endif
 
       suppressions = new NISuppressionSet(new NISuppression[]{
         #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
