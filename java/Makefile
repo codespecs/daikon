@@ -422,14 +422,18 @@ tags:
 findbugs: .findbugs-output
 .PHONY: findbugs
 
+# Takes about 20 minutes on manioc as of June 2005.
 .findbugs-output: ../daikon.jar
 	$(MAKE) findbugs-nocompile
 
+# WARNING: This does not use the class files, but the .jar file.
+# So make sure it's up to date before using this
 findbugs-nocompile:
 	rm -f .findbugs-output
 	~mernst/bin/share/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
-# This target is aimed at M-x compile in Emacs
+# This target is aimed at M-x compile in Emacs.  The output is misleading
+# if the .findbugs-output file might be old, or the daikon.jar file is old.
 findbugs-cat:
 	cat .findbugs-output
 
