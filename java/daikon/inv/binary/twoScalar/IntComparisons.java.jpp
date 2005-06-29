@@ -97,7 +97,9 @@
   #define EQUALS(a,b) ((a != null) && (b != null) && (a == b))
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
-// #define PAIRWISE_COMPARE PairwiseStringEqual
+#if 0
+  // #define PAIRWISE_COMPARE PairwiseStringEqual
+#endif
   #define DEBUGINTEQUAL debugStringEqual
   #define SEQINTEQUAL seqStringEqual
 
@@ -153,7 +155,9 @@
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) < 0))
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
+#if 0
   // #define PAIRWISE_COMPARE PairwiseStringLessThan
+#endif
   #define DEBUGINTEQUAL debugStringLessThan
   #define SEQINTEQUAL seqStringLessThan
 
@@ -184,7 +188,9 @@
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) <= 0))
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
+#if 0
   // #define PAIRWISE_COMPARE PairwiseStringLessEqual
+#endif
   #define DEBUGINTEQUAL debugStringLessEqual
   #define SEQINTEQUAL seqStringLessEqual
 
@@ -215,7 +221,9 @@
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) > 0))
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
+#if 0
   // #define PAIRWISE_COMPARE PairwiseStringGreaterThan
+#endif
   #define DEBUGINTEQUAL debugStringGreaterThan
   #define SEQINTEQUAL seqStringGreaterThan
 
@@ -248,7 +256,9 @@
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
   #define INVEQUALSstring "<="
+#if 0
   // #define PAIRWISE_COMPARE PairwiseStringGreaterEqual
+#endif
   #define DEBUGINTEQUAL debugStringGreaterEqual
   #define SEQINTEQUAL seqStringGreaterEqual
 #else
@@ -864,10 +874,14 @@ public final class INTEQUAL
       return super_result;
     }
 
+    #if defined (IS_NUMERIC)
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
+    #endif
 
+    #if 0
     // If arithmetic equal
+    #endif
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       // a+c=b+c is implied, because a=b must have also been reported.
       if ((var1.name instanceof VarInfoName.Add)
@@ -879,9 +893,6 @@ public final class INTEQUAL
           "since a==b is reported.");
         }
     #endif
-
-    // Find the slice that corresponds to vis
-    PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
 
     DiscardInfo di = null;
 
@@ -942,16 +953,12 @@ public final class INTEQUAL
         if ((sl2 != null) && (sl2.shift == 0)) {
           // "x < size(a)"
           // ("x <= size(a)-1" or "x < size(a)-1" would be more informative)
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
           String discardString = "Invariants of the form x < size(a) "
                                + "suppressed since x <= size(a)-1 or "
                                + "x < size(a)-1 is preferred";
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         } else if ((sl1 != null) && (sl1.shift == -1)) {
           // "size(a)-1 < x"  ("size(a) <= x" would be more informative)
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
           String discardString = "Invariants of the form size(a)-1 < x are "
                                + "suppressed since size(a) <= x is preferred";
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
@@ -959,15 +966,11 @@ public final class INTEQUAL
       #elif defined(GREATERTHAN_OP)
         if ((sl1 != null) && (sl1.shift == 0)) {
           // "size(a) > x"  ("size(a) >= x" would be more informative)
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
           String discardString = "Invariants of the form size(a)-1 > x are "
                                + "suppressed since size(a) >= x is preferred";
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         } else if ((sl2 != null) && (sl2.shift == -1)) {
           // "x > size(a)-1"  ("x >= size(a)" would be more informative)
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
           String discardString = "Invariants of the form x > size(a)-1 are "
                                + "suppressed sinec x >= size(a) is preferred";
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
@@ -1130,12 +1133,20 @@ public final class INTEQUAL
   /** Returns the non-instantiating suppressions for this invariant. **/
   public NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
-      NISuppressee suppressee = new NISuppressee (INTEQUAL.class, 2);
+      #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
+        NISuppressee suppressee = new NISuppressee (INTEQUAL.class, 2);
+      #endif
 
       // suppressor definitions (used in suppressions below)
+      #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP)
       NISuppressor v1_eq_v2 = new NISuppressor (0, 1, EQUAL_CLASS.class);
+      #endif
+      #if defined(GREATEREQUAL_OP) || defined(NONEQUAL_OP)
       NISuppressor v1_gt_v2 = new NISuppressor (0, 1, GREATER_THAN_CLASS.class);
+      #endif
+      #if defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
       NISuppressor v1_lt_v2 = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+      #endif
 
       suppressions = new NISuppressionSet (new NISuppression[] {
         #if defined(GREATEREQUAL_OP)

@@ -93,7 +93,7 @@ import java.util.logging.Level;
 import java.util.*;
 
 /**
- * Represents two sequences of PRIMITIVE values where one sequence is a 
+ * Represents two sequences of PRIMITIVE values where one sequence is a
  * subsequence of the other.  Prints as
  * <samp>x[] is a subsequence of y[]</samp>.
  **/
@@ -420,7 +420,8 @@ public class CLASSNAME
 
     // a[i+a..j+b] cmp a[i+c..j+d]
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
-    if (subvar_super != null && subvar_super == supervar_super) {
+    // we know subvar_super != null due to check above
+    if (subvar_super == supervar_super) {
       // both sequences are derived from the same supersequence
       if ((subvar.derived instanceof SEQUENCESCALARSUBSEQUENCE ||
            subvar.derived instanceof ARBITRARYSUBSEQUENCE) &&
@@ -744,7 +745,7 @@ public class CLASSNAME
         boolean left_included, right_included;
         if (super_left_var == null)
           left_included = true;
-        else if (super_left_var != null && sub_left_var == null)
+        else if (sub_left_var == null) // we know super_left_var != null here
           left_included = false;
         else
           left_included
@@ -753,7 +754,7 @@ public class CLASSNAME
                                    true /* <= */);
         if (super_right_var == null)
           right_included = true;
-        else if (super_right_var != null && sub_right_var == null)
+        else if (sub_right_var == null) // we know super_right_var != null here
           right_included = false;
         else
           right_included

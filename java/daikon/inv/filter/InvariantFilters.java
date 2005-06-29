@@ -49,7 +49,7 @@ public class InvariantFilters {
   List variableFilters = new ArrayList();
 
   public InvariantFilters() {
-    
+
     addPropertyFilter( new UnjustifiedFilter());
     addPropertyFilter( new ParentFilter());
     addPropertyFilter( new ObviousFilter());
@@ -82,7 +82,7 @@ public class InvariantFilters {
 
 
   public InvariantFilter shouldKeepVarFilters( Invariant invariant ) {
-    Logger df = PrintInvariants.debugFiltering;
+    // Logger df = PrintInvariants.debugFiltering;
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;

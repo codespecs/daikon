@@ -73,8 +73,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * Represents SCALAR scalars that are always members of a sequence of SCALAR 
- * values.  
+ * Represents SCALAR scalars that are always members of a sequence of SCALAR
+ * values.
  * Prints as <samp>x in y[]</samp> where <samp>x</samp> is a SCALAR scalar
  * and <samp>y[]</samp> is a sequence of SCALAR.
  **/
@@ -374,9 +374,6 @@ public final class CLASSNAME
     if (super_result != null) {
       return super_result;
     }
-
-    VarInfo scl_var = sclvar (vis);
-    VarInfo seq_var = seqvar (vis);
 
     // Check for subscript in subsequence
     DiscardInfo di = subscript_in_subsequence (vis);

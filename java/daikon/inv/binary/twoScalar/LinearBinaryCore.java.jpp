@@ -658,9 +658,9 @@ public final class CLASSNAME
     } else {
       sign = " + ";
     }
-    
+
     //we want to ensure that the positive value is used because the sign has already been determined
-  
+
     String coeff_string = (ncoeff == (int)ncoeff) ? "" + Math.abs((int)ncoeff) : "" + Math.abs(ncoeff);
     if (var == null)
       return sign + coeff_string;
@@ -684,9 +684,6 @@ public final class CLASSNAME
       return wrapper.format_too_few_samples(format, "0 * " + x + "+ 0 * " + y + " + 0 == 0");
     }
 
-
-    String xname = x.name_using(format, vix);
-    String yname = y.name_using(format, viy);
 
     if (format.isJavaFamily()) {
 
