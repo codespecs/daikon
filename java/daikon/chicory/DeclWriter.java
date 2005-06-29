@@ -351,7 +351,7 @@ public class DeclWriter extends DaikonWriter
         {
             Class type = arguments[i];
             String name = (String) argnamesiter.next();
-            DaikonVariableInfo theChild = printDeclVar(cinfo, curNode, type, name, offset, depth);
+            DaikonVariableInfo theChild = printDeclVar(cinfo, curNode, type, name, offset, depth, i);
             exploreFurtherDepth(cinfo, type, theChild, name, offset, depth, false);
         }
     }
@@ -486,7 +486,7 @@ public class DeclWriter extends DaikonWriter
                 if (!shouldFilterClass(arrayType.getName()))
                 {
                     checkForString(newChild, arrayType, name + "[]", offset);
-                    printClassVars(null, newChild, false, arrayType, offset + name + "[].", depthRemaining - 1, true);
+                    printClassVars(cinfo, newChild, false, arrayType, offset + name + "[].", depthRemaining - 1, true);
                 }
                 else
                 {
@@ -501,11 +501,11 @@ public class DeclWriter extends DaikonWriter
         {
             if (depthRemaining <= 0)
             {
-                //don't recurse any more!
+                // don't recurse any more!
                 return;
             }
             if (notSystemClass (type))
-                printClassVars(null, curNode, false, type, offset + name + ".", depthRemaining - 1,
+                printClassVars(cinfo, curNode, false, type, offset + name + ".", depthRemaining - 1,
                                inArray);
         }
     }
@@ -514,7 +514,7 @@ public class DeclWriter extends DaikonWriter
      * Prints the decl info for a single local variable (usually a method argument)
      * @return The newly created DaikonVariableInfo object, whose parent is curNode
      */
-    private DaikonVariableInfo printDeclVar(ClassInfo cinfo, DaikonVariableInfo curNode, Class type, String name, String offset, int depth)
+    private DaikonVariableInfo printDeclVar(ClassInfo cinfo, DaikonVariableInfo curNode, Class type, String name, String offset, int depth, int argNum)
     {
         outFile.println(offset + name);
         outFile.print(stdClassName(type));
@@ -524,7 +524,7 @@ public class DeclWriter extends DaikonWriter
         outFile.println(compareInfoDefault); //no comparability info right now
         
         //traversal
-        DaikonVariableInfo newChild = new ParameterInfo(offset + name);
+        DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum);
         curNode.addChild(newChild);
             
 
