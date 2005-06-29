@@ -14,14 +14,31 @@ package daikon.chicory;
  */
 public class ParameterInfo extends DaikonVariableInfo
 {
+    /**
+     * The argument number for this parameter.
+     * For instance, consider the method void x(int a, double b, Object c).
+     * Then a, b, and c have argument numbers 0, 1 and 2 respectively.
+     * 
+     */
+    private final int argNum;
 
     /**
      * Constructs an ParameterInfo object with the specified name
      * @param theName The variable name (used in the decl file)
      */
-    public ParameterInfo(String theName)
+    public ParameterInfo(String theName, int theArgNum)
     {
         super(theName);
+        
+        argNum = theArgNum;
+    }
+    
+    /**
+     * Returns the argument number for this parameter
+     */
+    public int getArgNum()
+    {
+        return argNum;
     }
     
     public Object getMyValFromParentVal(Object value)

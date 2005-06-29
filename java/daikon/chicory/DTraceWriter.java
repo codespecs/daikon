@@ -140,9 +140,6 @@ public class DTraceWriter extends DaikonWriter
             Object thisObj,
             Object ret_val)
     {		
-		//a count of how many method arguments processed so far
-        int whichArg = 0;
-
 		//go through all of the node's children
         for(DaikonVariableInfo child: root)
         {
@@ -159,9 +156,7 @@ public class DTraceWriter extends DaikonWriter
             }
             else if(child instanceof ParameterInfo)
             {
-				//keep track of how many args we've reached so far
-                val = args[whichArg];
-                whichArg++;
+                val = args[((ParameterInfo)child).getArgNum()];
             }
             else if (child instanceof FieldInfo)
             {
@@ -241,149 +236,59 @@ public class DTraceWriter extends DaikonWriter
         if (!classField.isAccessible())
             classField.setAccessible(true);
 
-        if (fieldType.equals(int.class))
+        try
         {
-            try
+            if (fieldType.equals(int.class))
             {
-                Runtime.IntWrap val
-                    = new Runtime.IntWrap(classField.getInt(theObj));
-                return val;
+                return new Runtime.IntWrap(classField.getInt(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(long.class))
-        {
-            try
+            else if (fieldType.equals(long.class))
             {
                 return new Runtime.LongWrap(classField.getLong(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(boolean.class))
-        {
-            try
+            else if (fieldType.equals(boolean.class))
             {
                 return new Runtime.BooleanWrap(classField.getBoolean(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(float.class))
-        {
-            try
+            else if (fieldType.equals(float.class))
             {
                 return new Runtime.FloatWrap(classField.getFloat(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(byte.class))
-        {
-            try
+            else if (fieldType.equals(byte.class))
             {
                 return new Runtime.ByteWrap(classField.getByte(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(char.class))
-        {
-            try
+            else if (fieldType.equals(char.class))
             {
                 return new Runtime.CharWrap(classField.getChar(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(short.class))
-        {
-            try
+            else if (fieldType.equals(short.class))
             {
                 return new Runtime.ShortWrap(classField.getShort(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else if (fieldType.equals(double.class))
-        {
-            try
+            else if (fieldType.equals(double.class))
             {
                 return new Runtime.DoubleWrap(classField.getDouble(theObj));
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
-        }
-        else
-        {
-            try
+            else
             {
                 return classField.get(theObj);
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new Error(e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new Error(e);
-            }
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw new Error(e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new Error(e);
         }
     }
 
 
 	/**
-	 * Similar to getValue, but used for static fields
-	 */
+     * Similar to getValue, but used for static fields
+     */
     public static Object getStaticValue(Field classField)
     {
         if (!classField.isAccessible())
@@ -394,7 +299,7 @@ public class DTraceWriter extends DaikonWriter
 
         if(Chicory.checkStaticInit)
         {
-            //don't force initialization!
+            // don't force initialization!
             if(!Runtime.isInitialized(classField.getDeclaringClass().getName()))
             {
                 return nonsenseValue;
