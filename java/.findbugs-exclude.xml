@@ -24,6 +24,13 @@
     <BugCode name="ES" />
   </Match>
 
+  <Match classregex=".*" >
+    <Method name="set_function_id"/>
+    <BugPattern name="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+  </Match>
+
+
+
 <!-- I should make the test for ES finer, like the below. -->
 <!-- Or, I could write a better ES checker that understands interning. -->
      <!-- Match all doublecheck violations in these methods of "AnotherClass". -->
@@ -64,6 +71,11 @@
   <Match class="utilMDE.UtilMDE$NullableStringComparator">
     <Method name="compare" params="java.lang.Object,java.lang.Object" returns="int" />
     <BugCode name="NP" />
+  </Match>
+
+  <Match class="daikon.suppress.NIS">
+    <Method name="merge_always_comparable" params="java.util.Map" returns="void" />
+    <BugCode name="WMI_WRONG_MAP_ITERATOR" />
   </Match>
 
 </FindBugsFilter>
