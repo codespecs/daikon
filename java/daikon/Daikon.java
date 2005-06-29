@@ -1768,9 +1768,10 @@ public final class Daikon {
       }
       Fmt.pf ("  vars       = " + ppt.var_infos.length);
       Fmt.pf ("  leaders    = " + leader_cnt);
-      for (Iterator j = type_map.keySet().iterator(); j.hasNext(); ) {
-        ProglangType file_rep_type = (ProglangType) j.next();
-        Count cnt = (Count) type_map.get (file_rep_type);
+      for (Iterator j = type_map.entrySet().iterator(); j.hasNext(); ) {
+        Map.Entry/*<ProglangType,Count>*/ e = (Map.Entry) j.next();
+        ProglangType file_rep_type = (ProglangType) e.getKey();
+        Count cnt = (Count) e.getValue();
         Fmt.pf ("  %s  = %s", file_rep_type, "" + cnt.val);
       }
     }

@@ -164,20 +164,22 @@ public class ExtractConsequent {
           pptNamesIter.hasNext() ; ) {
       String pptname = (String) pptNamesIter.next();
       HashMap cluster_to_conditions = (HashMap) pptname_to_conditions.get(pptname);
-      for ( Iterator predIter = (cluster_to_conditions.keySet()).iterator() ;
+      for ( Iterator predIter = cluster_to_conditions.entrySet().iterator() ;
             predIter.hasNext() ; ) {
-        String predicate = (String) predIter.next();
-        Map conditions = (Map) cluster_to_conditions.get(predicate);
+        Map.Entry entry = (Map.Entry) predIter.next();
+        String predicate = (String) entry.getKey();
+        Map conditions = (Map) entry.getValue();
         StringBuffer conjunctionJava = new StringBuffer();
         StringBuffer conjunctionDaikon = new StringBuffer();
         StringBuffer conjunctionIOA = new StringBuffer();
         StringBuffer conjunctionESC = new StringBuffer();
         StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
         int count = 0;
-        for (Iterator condsIter = conditions.keySet().iterator();
+        for (Iterator condsIter = conditions.entrySet().iterator();
              condsIter.hasNext(); count++) {
-          String condIndex = (String)condsIter.next();
-          HashedConsequent cond = (HashedConsequent)conditions.get(condIndex);
+          Map.Entry entry2 = (Map.Entry) condsIter.next();
+          String condIndex = (String) entry2.getKey();
+          HashedConsequent cond = (HashedConsequent) entry2.getValue();
           if (cond.fakeFor != null) {
             count--;
             continue;

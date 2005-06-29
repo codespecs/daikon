@@ -1932,7 +1932,7 @@ public class PptTopLevel extends Ppt {
             + is_slice_ok(vi));
 
       // we do not call is_var_ok_unary on vi here because
-      // is_slice_ok does the same thing    
+      // is_slice_ok does the same thing
       if (!is_slice_ok(vi))
         continue;
 
@@ -2045,10 +2045,10 @@ public class PptTopLevel extends Ppt {
     Assert.assertTrue(old_num_vars == var_infos.length);
     repCheck();
   }
-  
+
   /**
    * Returns whether the variable should be involved in an unary slice. The
-   * variable must be a leader, not a constant, and not always missing.  
+   * variable must be a leader, not a constant, and not always missing.
    */
   private boolean is_var_ok_unary(VarInfo var) {
 
@@ -2066,10 +2066,10 @@ public class PptTopLevel extends Ppt {
 
     return (true);
   }
-  
+
   /**
-   * Returns whether the variable should be involved in a binary slice.  
-   * The variable must be a leader and not always missing.    
+   * Returns whether the variable should be involved in a binary slice.
+   * The variable must be a leader and not always missing.
    * The function allows early termination when looking at combinations of
    * variables for creating slices.  For example, if variable x is not
    * suitable for binary slices, then we do not need to look at
@@ -2088,7 +2088,7 @@ public class PptTopLevel extends Ppt {
 
     return (true);
   }
-  
+
   /**
    * Returns whether the variable should be involved in a ternary slice. In
    * addition to the requirements of variables in the binary slices, for ternary
@@ -2097,7 +2097,7 @@ public class PptTopLevel extends Ppt {
    * variables for creating slices.  For example, if variable x is not
    * suitable for binary slices, then we do not need to look at
    * x with any other variable in a binary slice (fail fast).
-   * 
+   *
    * @see #is_var_ok_binary(VarInfo)
    */
   private boolean is_var_ok_ternary(VarInfo var) {
@@ -2114,11 +2114,11 @@ public class PptTopLevel extends Ppt {
     // For now, variable must be integral or float
     if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat())
       return (false);
-    
+
     return (true);
   }
-  
-  
+
+
   /**
    * Returns whether or not the specified slice should be created.
    */
@@ -2135,7 +2135,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified unary slice should be
    * created. The slice should not be created if the
    * variable does not meet qualifications for the unary slice.
-   * 
+   *
    * @see #is_var_ok_unary(VarInfo)
    */
   public boolean is_slice_ok(VarInfo var1) {
@@ -2146,25 +2146,25 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not the specified binary slice should be created.
    * The slice should not be created if any of the following are true:
-   * 
-   * - One of the variables does not meet qualifications for the binary slice  
+   *
+   * - One of the variables does not meet qualifications for the binary slice
    * - Variables are not compatible
    * - Both variables are constant.
-   * 
+   *
    * @see #is_var_ok_binary(VarInfo)
    */
   public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
 
     if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2))
       return (false);
-   
+
     // Check to see if the new slice would be over all constants
     if (is_constant(var1) && is_constant(var2))
       return (false);
-    
+
     if (!var1.compatible(var2))
       return (false);
-    
+
     // Don't create a slice with the same variables if the equality
     // set only contains 1 variable
     // This is not turned on for now since suppressions need invariants
@@ -2178,10 +2178,10 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified ternary slice should be created 
+   * Returns whether or not the specified ternary slice should be created
    * by checking the variables' qualifications.  In addition,
    * The slice should not be created if any of the following are true:
-   * 
+   *
    * - One of the variables does not meet qualifications for the ternary slice
    * - All of the vars are constants
    * - Any var is not (integral or float)
@@ -2189,7 +2189,7 @@ public class PptTopLevel extends Ppt {
    * - Two of the vars are the same and its equality has only one variable
    *   (this last one is currently disabled as x = func(x,y) might still
    *   be interesting even if x is the same.
-   *   
+   *
    * @see #is_var_ok_ternary(VarInfo)
    */
   public boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
@@ -3572,9 +3572,11 @@ public class PptTopLevel extends Ppt {
 
     // Remove the NI suppressed invariants in the children that we
     // previously created
-    for (Iterator i = suppressed_invs.keySet().iterator(); i.hasNext();) {
-      PptTopLevel child = (PptTopLevel) i.next();
-      child.remove_invs((List) suppressed_invs.get(child));
+    for (Iterator i = suppressed_invs.entrySet().iterator(); i.hasNext();) {
+      Map.Entry entry = (Map.Entry) i.next();
+      PptTopLevel child = (PptTopLevel) entry.getKey();
+      List suppressed_list = (List) entry.getValue();
+      child.remove_invs(suppressed_list);
     }
 
   }

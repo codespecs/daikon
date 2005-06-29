@@ -64,9 +64,10 @@ public class CoverageStats
     // Compute coverage
     Map all = new HashMap();
     Map covered = new HashMap();
-    for (Iterator i = hits.keySet().iterator(); i.hasNext(); ) {
-      String file = (String) i.next();
-      Set lines = (Set) hits.get(file);
+    for (Iterator i = hits.entrySet().iterator(); i.hasNext(); ) {
+      Map.Entry entry = (Map.Entry) i.next();
+      String file = (String) entry.getKey();
+      Set lines = (Set) entry.getValue();
       if (! relevant.contains(file)) continue;
       if (! all.containsKey(file)) all.put(file, new HashSet());
       ((Set) all.get(file)).addAll(lines);
@@ -74,8 +75,9 @@ public class CoverageStats
       ((Set) covered.get(file)).addAll(lines);
     }
     for (Iterator i = misses.keySet().iterator(); i.hasNext(); ) {
-      String file = (String) i.next();
-      Set lines = (Set) misses.get(file);
+      Map.Entry entry = (Map.Entry) i.next();
+      String file = (String) entry.getKey();
+      Set lines = (Set) entry.getValue();
       if (! relevant.contains(file)) continue;
       if (! all.containsKey(file)) all.put(file, new HashSet());
       ((Set) all.get(file)).addAll(lines);

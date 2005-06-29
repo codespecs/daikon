@@ -617,7 +617,7 @@ public final class FileIO {
       file = new File(raw_filename);
       if (raw_filename.equals("-")) {
 	filename = "standard input";
-      } 
+      }
       else if (raw_filename.equals("+")){
           filename = "chicory socket";
       }
@@ -674,16 +674,16 @@ public final class FileIO {
 
   private static InputStream connectToChicory()
     {
-    
-      
+
+
         ServerSocket daikonServer = null;
         try
         {
             daikonServer = new ServerSocket(0); //bind to any free port
-            
+
             //tell Chicory what port we have!
             System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
-            
+
             daikonServer.setReceiveBufferSize(64000);
 
         }
@@ -691,12 +691,12 @@ public final class FileIO {
         {
             throw new RuntimeException("Unable to create server: " + e.getMessage());
         }
-        
+
         Socket chicSocket = null;
         try
         {
             daikonServer.setSoTimeout(5000);
-            
+
             //System.out.println("waiting for chicory connection on port " + daikonServer.getLocalPort());
             chicSocket = daikonServer.accept();
         }
@@ -704,8 +704,8 @@ public final class FileIO {
         {
             throw new RuntimeException("Unable to connect to Chicory: " + e.getMessage());
         }
-        
-        
+
+
         try
         {
             return chicSocket.getInputStream();
@@ -1119,9 +1119,10 @@ public final class FileIO {
       }
     }
 
-    for (Iterator i = counter.keySet().iterator(); i.hasNext();) {
-      Invocation invok = (Invocation) i.next();
-      Integer count = (Integer) counter.get(invok);
+    for (Iterator i = counter.entrySet().iterator(); i.hasNext();) {
+      Map.Entry entry = (Map.Entry) i.next();
+      Invocation invok = (Invocation) entry.getKey();
+      Integer count = (Integer) entry.getValue();
       System.out.println(
         UtilMDE.nplural(count.intValue(), "instance") + " of:");
       System.out.println(invok.format());

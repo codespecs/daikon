@@ -1338,9 +1338,10 @@ public final class PrintInvariants {
 
     log.fine (ppt.name() + ": " + invs_array.length);
 
-    for (Iterator i = filter_map.keySet().iterator(); i.hasNext(); ) {
-      Class filter_class = (Class) i.next();
-      Map inv_map = (Map) filter_map.get (filter_class);
+    for (Iterator i = filter_map.entrySet().iterator(); i.hasNext(); ) {
+      Map.Entry entry = (Map.Entry) i.next();
+      Class filter_class = (Class) entry.getKey();
+      Map inv_map = (Map) entry.getValue();
       int total = 0;
       for (Iterator j = inv_map.keySet().iterator(); j.hasNext(); ) {
         Integer cnt = (Integer) inv_map.get (j.next());
@@ -1350,9 +1351,10 @@ public final class PrintInvariants {
         log.fine (" : Accepted Invariants : " + total);
       else
         log.fine (" : " + filter_class.getName() + ": " + total);
-      for (Iterator j = inv_map.keySet().iterator(); j.hasNext(); ) {
-        Class inv_class = (Class) j.next();
-        Integer cnt = (Integer) inv_map.get (inv_class);
+      for (Iterator j = inv_map.entrySet().iterator(); j.hasNext(); ) {
+        Map.Entry entry2 = (Map.Entry) j.next();
+        Class inv_class = (Class) entry2.getKey();
+        Integer cnt = (Integer) entry2.getValue();
         log.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());
       }
     }
