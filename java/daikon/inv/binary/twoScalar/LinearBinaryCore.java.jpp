@@ -684,6 +684,12 @@ public final class CLASSNAME
       return wrapper.format_too_few_samples(format, "0 * " + x + "+ 0 * " + y + " + 0 == 0");
     }
 
+    // the repair format output changes if these lines are removed, even
+    // though the code is dead.  This is because formatting via repair has
+    // side effects.  This should be fixed, so that these dead lines of
+    // code can be removed.
+    String xname = x.name_using(format, vix);
+    String yname = y.name_using(format, viy);
 
     if (format.isJavaFamily()) {
 
