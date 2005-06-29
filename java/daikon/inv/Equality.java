@@ -243,7 +243,6 @@ public final class Equality
     List invalid_equiv = new ArrayList(); // [VarInfo]
 
     List equal_vars = new Vector();
-    List obviously_equal = new Vector();
 
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo other = (VarInfo) i.next();
@@ -289,10 +288,6 @@ public final class Equality
       } else {
         result = result + leader.name.esc_name() + " == " + other.name.esc_name();
       }
-
-      // if (obviously_equal.contains(other)) {
-      //   result += "    (obviously)";
-      // }
 
     }
     return result;
