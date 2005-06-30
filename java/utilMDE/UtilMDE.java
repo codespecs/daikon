@@ -411,6 +411,53 @@ public final class UtilMDE {
   /// File
   ///
 
+  /** Count the number of lines in the specified file **/
+  public static long count_lines(String filename) throws IOException {
+    LineNumberReader reader = UtilMDE.lineNumberFileReader(filename);
+    long count = 0;
+    while (reader.readLine() != null)
+      count++;
+    return count;
+  }
+
+  /**
+   * Returns true iff files have the same contents.
+   */
+  public static boolean equalFiles(String file1, String file2) {
+    return equalFiles(file1, file2, false);
+  }
+
+  /**
+   * Returns true iff files have the same contents.
+   * @param trimLines if true, call String.trim on each line before comparing
+   */
+  public static boolean equalFiles(String file1, String file2, boolean trimLines) {
+    try {
+      LineNumberReader reader1 = UtilMDE.lineNumberFileReader(file1);
+      LineNumberReader reader2 = UtilMDE.lineNumberFileReader(file2);
+      String line1 = reader1.readLine();
+      String line2 = reader2.readLine();
+      while (line1 != null && line2 != null) {
+        if (trimLines) {
+          line1 = line1.trim();
+          line2 = line2.trim();
+        }
+        if (! (line1.equals(line2))) {
+          return false;
+        }
+        line1 = reader1.readLine();
+        line2 = reader2.readLine();
+      }
+      if (line1 == null && line2 == null) {
+        return true;
+      }
+      return false;
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+  }
+
+
   // Someone must have already written this.  Right?
 
   // Deals with exactly one "*" in name.
@@ -528,6 +575,27 @@ public final class UtilMDE {
     File tmpDir = new File(tmpDirPath);
     tmpDir.mkdirs();
     return tmpDir;
+  }
+
+
+  /**
+   * Deletes the directory at dirName and all its files.
+   * Fails if dirName has any subdirectories.
+   */
+  public static void deleteDir(String dirName) {
+    deleteDir(new File(dirName));
+  }
+
+  /**
+   * Deletes the directory at dirName and all its files.
+   * Fails if dirName has any subdirectories.
+   */
+  public static void deleteDir(File dir) {
+    File[] files = dir.listFiles();
+    for (int i = 0; i < files.length; i++) {
+      files[i].delete();
+    }
+    dir.delete();
   }
 
 
