@@ -1681,7 +1681,11 @@ HTTP Message: %s%s%s</dd>
              # List of redirects
              $redirected ? join("\n-> ", @redirects_urls) . $redirmsg : $u,
              # List of lines
-             $lines_list ? "Line$s: $lines_list" : '',
+             ## The list of line numbers is confusing, as it includes all
+             ## external URLs containing "#", not just the erroneous ones.
+             ## So omit it. -MDE
+             ## $lines_list ? "Line$s: $lines_list" : '',
+             '',
              # Original HTTP reply
              $results->{$u}{location}{orig},
              # Final HTTP reply
