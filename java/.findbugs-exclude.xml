@@ -26,7 +26,7 @@
 
   <!-- The error message is not informative enough about what classes are involved -->
   <Match classregex=".*" >
-    <BugCode name="CD_CIRCULAR_DEPENDENCY" />
+    <BugPattern name="CD_CIRCULAR_DEPENDENCY" />
   </Match>
 
 
@@ -75,21 +75,31 @@
 
   <Match class="daikon.suppress.NIS">
     <Method name="merge_always_comparable" params="java.util.Map" returns="void" />
-    <BugCode name="WMI_WRONG_MAP_ITERATOR" />
+    <BugPattern name="WMI_WRONG_MAP_ITERATOR" />
   </Match>
 
   <Match classregex=".*" >
     <Method name="set_function_id"/>
-    <BugCode name="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    <BugPattern name="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
   </Match>
 
-  <Match class="daikon.FileIO" >
+  <Match class="utilMDE.UtilMDE" >
     <Method name="count_lines" params="java.lang.String" returns="long"/>
-    <BugCode name="RV_DONT_JUST_NULL_CHECK_READLINE"/>
+    <BugPattern name="RV_DONT_JUST_NULL_CHECK_READLINE"/>
   </Match>
 
   <Match class="daikon.Chicory" >
-    <BugCode name="DM_EXIT"/>
+    <BugPattern name="DM_EXIT"/>
+  </Match>
+
+  <Match class="daikon.diff.MatchCountVisitor" >
+    <Method name="acceptableNumber" params="java.lang.String" returns="boolean"/>
+    <BugPattern name="DLS_DEAD_LOCAL_STORE"/>
+  </Match>
+
+  <Match class="daikon.tools.runtimechecker.Mail"/>
+    <Method name="nonStaticMain"/>
+    <BugPattern name="DM_EXIT"/>
   </Match>
 
 </FindBugsFilter>
