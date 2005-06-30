@@ -916,7 +916,7 @@ public final class FileIO {
       if ("this_invocation_nonce".equals(nonce_name_maybe)) {
 
           String nonce_name = reader.readLine();
-          Assert.assertTrue(nonce_name.equals("this_invocation_nonce"));
+          Assert.assertTrue(nonce_name != null && nonce_name.equals("this_invocation_nonce"));
           String nonce_number = reader.readLine();
           if (nonce_number == null) {
             throw new FileIOException("File ended while trying to read nonce",

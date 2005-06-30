@@ -74,7 +74,7 @@ public class ParameterDoclet
 
   // ============================== NON-STATIC METHODS ==============================
 
-  class DocCategory {
+  static class DocCategory {
     public String prefixPattern;
     public String fieldName;
     public String description;

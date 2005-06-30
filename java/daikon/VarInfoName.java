@@ -3246,7 +3246,7 @@ public abstract class VarInfoName
       private static final String quantifierExistential = "\\E ";
       private static final String quantifierUniversal = "\\A ";
 
-      private VarInfo[] sets;
+      // private VarInfo[] sets;
       private VarInfoName[] setNames;
       private String quantifierExp;
       private QuantifyReturn qret;
@@ -3263,7 +3263,7 @@ public abstract class VarInfoName
       public IOAQuantification (VarInfo[] sets) {
         Assert.assertTrue(sets != null);
 
-        this.sets = sets;
+        // this.sets = sets;
         numVars = sets.length;
 
         setNames = new VarInfoName[sets.length];

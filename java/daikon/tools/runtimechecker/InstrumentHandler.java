@@ -92,8 +92,6 @@ public class InstrumentHandler extends CommandHandler {
         // Create instrumented-classes dir.
         File outputDir = new File(instrumented_directory);
 
-        File checkersOutputDir = new File(checkersOutputDirName);
-
         System.out.println("Reading invariant file: " + arguments.invFile);
         PptMap ppts = null;
         try {

@@ -252,7 +252,7 @@ public class SplitterFactoryTestUpdater {
     code.append("      }" + lineSep);
     code.append("      Daikon.dkconfig_suppressSplitterErrors = true;" + lineSep);
     code.append("      Daikon.create_splitters(spFiles);" + lineSep);
-    code.append("      PptMap allPpts = FileIO.read_declaration_files(declsFiles);" + lineSep);
+    code.append("      FileIO.read_declaration_files(declsFiles); // invoked for side effect" + lineSep);
     code.append("      tempDir = SplitterFactory.getTempDir();" + lineSep);
     code.append("    } catch(IOException e) {" + lineSep);
     code.append("        throw new RuntimeException(e);" + lineSep);

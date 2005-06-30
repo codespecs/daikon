@@ -901,7 +901,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
         System.out.println("Warning: Annotate: skipping Variable " + varname + " at " + ppt);
       } else {
-        Assert.assertTrue(vi != null);
+        // vi != null
         PptSlice1 slice = ppt.findSlice(vi);
         if (slice != null) {
           EltNonZero enz = EltNonZero.find(slice);
@@ -941,7 +941,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         // not computed by Daikon.
         System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
       } else {
-        Assert.assertTrue(vi != null);
+        // vi != null
         PptSlice1 slice = ppt.findSlice(vi);
         if (slice != null) {
           // System.out.println("Slice for " + vi.name.name());

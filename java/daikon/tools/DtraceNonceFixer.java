@@ -205,10 +205,11 @@ public class DtraceNonceFixer {
     StringBuffer sb = new StringBuffer();
     while (br.ready()) {
       String line = br.readLine();
-      if (line.trim().equals ("")) {
+      line = line.trim();
+      if (line.equals ("")) {
         break;
       }
-      sb.append(line.trim()).append (lineSep);
+      sb.append(line).append (lineSep);
     }
     return sb.toString();
   }

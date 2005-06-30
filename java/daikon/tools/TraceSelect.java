@@ -21,8 +21,8 @@ public class TraceSelect {
 
   // Just a quick command line cache
   private static String[] argles;
-  // stores the invokations in Strings
-  private static ArrayList invokeBuffer;
+  // // stores the invocations in Strings
+  // private static ArrayList invokeBuffer;
 
   private static int numPerSample;
 
@@ -151,7 +151,7 @@ public class TraceSelect {
 
     try {
 
-      invokeBuffer = new ArrayList();
+      // invokeBuffer = new ArrayList();
       //	    fileName = args[1];
 
       System.out.println ("*******Processing********");

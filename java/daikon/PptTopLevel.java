@@ -4108,25 +4108,24 @@ public class PptTopLevel extends Ppt {
       int slice_cnt = 0;
       int instantiated_slice_cnt = 0;
       long memory = 0;
-      if (slist != null) {
-        sample_cnt = slist.size();
-        total_sample_cnt += sample_cnt;
-        for (int j = 0; j < slist.size(); j++) {
-          Stats stats = (Stats) slist.get(j);
-          avg_equality_cnt += stats.set_cnt;
-          avg_var_cnt += stats.var_cnt;
-          equality_set_cnt += stats.set_cnt;
-          vars_cnt += stats.var_cnt;
-          time += stats.time;
-          avg_inv_cnt += stats.inv_cnt;
-          slice_cnt += stats.slice_cnt;
-          instantiated_inv_cnt += stats.instantiated_inv_cnt;
-          instantiated_slice_cnt += stats.instantiated_slice_cnt;
-          memory += stats.memory;
-        }
-        avg_equality_cnt = avg_equality_cnt / sample_cnt;
-        avg_var_cnt = avg_var_cnt / sample_cnt;
+      sample_cnt = slist.size();
+      total_sample_cnt += sample_cnt;
+      for (int j = 0; j < slist.size(); j++) {
+        Stats stats = (Stats) slist.get(j);
+        avg_equality_cnt += stats.set_cnt;
+        avg_var_cnt += stats.var_cnt;
+        equality_set_cnt += stats.set_cnt;
+        vars_cnt += stats.var_cnt;
+        time += stats.time;
+        avg_inv_cnt += stats.inv_cnt;
+        slice_cnt += stats.slice_cnt;
+        instantiated_inv_cnt += stats.instantiated_inv_cnt;
+        instantiated_slice_cnt += stats.instantiated_slice_cnt;
+        memory += stats.memory;
       }
+      avg_equality_cnt = avg_equality_cnt / sample_cnt;
+      avg_var_cnt = avg_var_cnt / sample_cnt;
+
       if (avg_equality_cnt > 0)
         avg_vars_per_equality = avg_var_cnt / avg_equality_cnt;
       log.fine(
