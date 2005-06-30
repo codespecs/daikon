@@ -163,9 +163,9 @@ public final class Configuration
     try {
       clazz = Class.forName(classname);
     } catch (ClassNotFoundException e) {
-      throw new ConfigException("No class " + classname, e);
+      throw new ConfigException("Configuration option attempts to use nonexistent class " + classname, e);
     } catch (LinkageError e) {
-      throw new ConfigException("No class (" + e + ") " + classname);
+      throw new ConfigException("Configuration option attempts to use class with lnkage error " + classname + daikon.Global.lineSep + e);
     }
 
     apply(clazz, fieldname, value);
@@ -180,9 +180,9 @@ public final class Configuration
     try {
       field = clazz.getDeclaredField(PREFIX + fieldname);
     } catch (SecurityException e) {
-      throw new ConfigException("No access to field " + fieldname + " in class " + clazz.getName());
+      throw new ConfigException("Configuration option " + clazz.getName() + "." + fieldname + " is inaccessible");
     } catch (NoSuchFieldException e) {
-      throw new ConfigException("No such field " + fieldname + " in class " + clazz.getName());
+      throw new ConfigException("Unknown configuration option " + clazz.getName() + "." + fieldname);
     }
 
     apply(field, value);
@@ -198,39 +198,41 @@ public final class Configuration
     if (type.equals(Boolean.TYPE) || type.equals(Boolean.class)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
         value = Boolean.TRUE;
-      } else {
+      } else if (unparsed.equals("0") || unparsed.equalsIgnoreCase("false")) {
         value = Boolean.FALSE;
+      } else {
+        throw new ConfigException("Badly formatted boolean argument " + unparsed + " for configuration option " + field.getName());
       }
     } else if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
       try {
         // decode instead of valueOf to handle "0x" and other styles
         value = Integer.decode(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Unsupported int " + unparsed);
+        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
     } else if (type.equals(Long.TYPE) || type.equals(Long.class)) {
       try {
         // decode instead of valueOf to handle "0x" and other styles
         value = Long.decode(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Unsupported long " + unparsed);
+        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
     } else if (type.equals(Float.TYPE) || type.equals(Float.class)) {
       try {
         value = Float.valueOf(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Unsupported float " + unparsed);
+        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
     } else if (type.equals(Double.TYPE) || type.equals(Double.class)) {
       try {
         value = Double.valueOf(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Unsupported double " + unparsed);
+        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
     } else if (type.getName().equals("java.lang.String")) {
       value = unparsed;
     } else {
-      throw new ConfigException("Unsupported type " + type.getName());
+      throw new ConfigException("Internal error: Unsupported type " + type.getName() + " for configuration option " + field.toString());
     }
 
     // Fmt.pf ("setting %s.%s to %s", field.getDeclaringClass(),
@@ -239,7 +241,7 @@ public final class Configuration
     try {
       field.set(null, value);
     } catch (IllegalAccessException e) {
-      throw new ConfigException("Cannot access " + field);
+      throw new ConfigException("Inaccessible configuration option " + field.toString());
     }
 
     // record the application

@@ -115,7 +115,7 @@ public final class Daikon {
    * derived variables can be enabled or disabled individually using
    * configuration options under <samp>daikon.derive</samp>.
    **/
-  public static boolean  dkconfig_disable_derived_variables = false;
+  public static boolean dkconfig_disable_derived_variables = false;
 
   /**
    * Boolean.  Controls whether or not processing information is printed out.
@@ -840,7 +840,11 @@ public final class Daikon {
             break;
           } else if (config_option_SWITCH.equals(option_name)) {
             String item = g.getOptarg();
-            Configuration.getInstance().apply(item);
+            try {
+              Configuration.getInstance().apply(item);
+            } catch (daikon.config.Configuration.ConfigException e) {
+              throw new Daikon.TerminationMessage(e.getMessage());
+            }
             break;
           }
           else if (debugAll_SWITCH.equals(option_name)) {
