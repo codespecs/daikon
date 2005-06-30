@@ -57,7 +57,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     if (inv1 != null && !(inv1.ppt.parent instanceof PptConditional)) { return; }
 
     String key1 = "";
-    String key2 = "";
+    // String key2 = "";
 
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
       String thisPptName1 = inv1.ppt.name();

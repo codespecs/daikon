@@ -58,7 +58,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("muldiv.spinfo", "BigFloat.decls");
     moveFiles();
     writeTestClass();
-    deleteDir(tempDir); // file's delete requires a dir be empty
+    UtilMDE.deleteDir(tempDir); // file's delete requires a dir be empty
   }
 
   /**
@@ -262,40 +262,6 @@ public class SplitterFactoryTestUpdater {
     code.append("  /**" + lineSep);
     code.append("   * Returns true iff files are the same. (ignoring extra white space)" + lineSep);
     code.append("   */" + lineSep);
-    code.append("  private static boolean equalFiles(String file1, String file2) {" + lineSep);
-    code.append("    try {" + lineSep);
-    code.append("      LineNumberReader reader1 = UtilMDE.lineNumberFileReader(file1);" + lineSep);
-    code.append("      LineNumberReader reader2 = UtilMDE.lineNumberFileReader(file2);" + lineSep);
-    code.append("      String line1 = reader1.readLine().trim();" + lineSep);
-    code.append("      String line2 = reader2.readLine().trim();" + lineSep);
-    code.append("      while(line1 != null && line2 != null) {" + lineSep);
-    code.append("        if (! (line1.trim().equals(line2.trim()))) {" + lineSep);
-    code.append("          return false;" + lineSep);
-    code.append("        }" + lineSep);
-    code.append("        line1 = reader1.readLine();" + lineSep);
-    code.append("        line2 = reader2.readLine();" + lineSep);
-    code.append("      }" + lineSep);
-    code.append("      if (line1 == null && line2 == null) {" + lineSep);
-    code.append("        return true;" + lineSep);
-    code.append("      }" + lineSep);
-    code.append("        return false;" + lineSep);
-    code.append("      } catch (IOException e) {" + lineSep);
-    code.append("        throw new RuntimeException(e);" + lineSep);
-    code.append("      }" + lineSep);
-    code.append("  }" + lineSep);
-    code.append(lineSep);
-    code.append("  /**" + lineSep);
-    code.append("   * Deletes the directory at dirName and all its files; there may be no" + lineSep);
-    code.append("   * directory is dirName." + lineSep);
-    code.append("   */" + lineSep);
-    code.append("  private static void deleteDir(String dirName) {" + lineSep);
-    code.append("    File dir = new File(dirName);" + lineSep);
-    code.append("    File[] files = dir.listFiles();" + lineSep);
-    code.append("    for (int i = 0; i < files.length; i++) {" + lineSep);
-    code.append("      files[i].delete();" + lineSep);
-    code.append("    }" + lineSep);
-    code.append("    dir.delete();" + lineSep);
-    code.append("  }" + lineSep);
     code.append(lineSep);
 
     appendTests(code);
@@ -354,7 +320,7 @@ public class SplitterFactoryTestUpdater {
       code.append("test" + className);
       code.append("() {");
       code.append(lineSep);
-      code.append("    assertTrue(equalFiles(" + lineSep);
+      code.append("    assertTrue(UtilMDE.equalFiles(" + lineSep);
       code.append("      tempDir +\"");
       code.append(className);
       code.append(".java\", ");
@@ -381,18 +347,6 @@ public class SplitterFactoryTestUpdater {
       code.append("\"));");
       code.append(lineSep);
     }
-  }
-
-  /**
-   * Deletes the specified directory and all of its files.  There can
-   * be no subdirectories under dir.
-   */
-  private static void deleteDir(File dir) {
-    File[] files = dir.listFiles();
-    for (int i = 0; i < files.length; i++) {
-      files[i].delete();
-    }
-    dir.delete();
   }
 
 }

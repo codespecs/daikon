@@ -658,33 +658,6 @@ class FormatTestCase {
   }
 
 
-  /**
-   * This function fills the samples list with samples that can be
-   * used by the populateWithSamples function to add data to the
-   * Invariant. It reads the appropriate sample data from the commands
-   * reader and parses the data appropriately
-   *
-   * @param commands the input file for the commands
-   * @param samples the list to which the samples are to be added
-   **/
-//    private static void getSamples(Class classToTest, BufferedReader commands, List samples) {
-//      getSamples(classToTest, commands, samples, false, null);
-//    }
-
-//    private static void getSamples(Class classToTest, BufferedReader commands, List samples, boolean generateGoals) {
-//      getSamples(classToTest, commands, samples, generateGoals, null);
-//    }
-
-//    private static void getSamples(Class classToTest, BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
-
-  private static void getSamples(ProglangType[] types, BufferedReader commands, List samples) {
-    getSamples(types, commands, samples, false, null);
-  }
-
-  // private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals) {
-  //   getSamples(types, commands, samples, generateGoals, null);
-  // }
-
   private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
     String currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
                                        firstLine);

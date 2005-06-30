@@ -209,7 +209,6 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       Assert.assertTrue( classNode != null );
       DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-      Assert.assertTrue( methodName != null );
       String programPointName = pptName.getPoint();
       DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
       Assert.assertTrue( programPointNode == null );

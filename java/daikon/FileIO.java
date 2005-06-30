@@ -178,7 +178,14 @@ public final class FileIO {
                                              int varcomp_format,
                                              File filename) throws IOException {
     // We have just read the "DECLARE" line.
-    String ppt_name = file.readLine().intern();
+    String ppt_name = file.readLine();
+    if (ppt_name == null) {
+      throw new FileIOException(
+        "File ends with \"DECLARE\" with no following program point name",
+        file,
+        filename);
+    }
+    ppt_name = ppt_name.intern();
 
     // This program point name has already been encountered.
     if (all_ppts.containsName(ppt_name)) {
@@ -277,10 +284,10 @@ public final class FileIO {
     String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
     String comparability_string = file.readLine();
-    if ((varname == null)
-      || (proglang_type_string_and_aux == null)
-      || (file_rep_type_string == null)
-      || (comparability_string == null))
+    if ( // (varname == null) || // just cheeck varname above
+        (proglang_type_string_and_aux == null)
+        || (file_rep_type_string == null)
+        || (comparability_string == null))
       throw new Error(
         "End of file "
           + filename
@@ -392,6 +399,11 @@ public final class FileIO {
     throws IOException {
     int varcomp_format;
     String line = reader.readLine();
+    if (line == null) {
+      throw new FileIOException("Found end of file, expected comparability",
+                                reader,
+                                filename);
+    }
     if (line.equals("none")) {
       varcomp_format = VarComparability.NONE;
     } else if (line.equals("implicit")) {
@@ -546,16 +558,6 @@ public final class FileIO {
     process_unmatched_procedure_entries();
   }
 
-  /** Count the number of lines in the specified file **/
-  private static long count_lines(String filename) throws IOException {
-    LineNumberReader reader = UtilMDE.lineNumberFileReader(filename);
-    long count = 0;
-    while (reader.readLine() != null)
-      count++;
-    return count;
-  }
-
-
   /**
    * Class used to specify the processor to use for sample data.  By
    * default, the internal process_sample routine will be called.
@@ -646,7 +648,7 @@ public final class FileIO {
       }
       if (count_lines) {
 	Daikon.progress = "Checking size of " + filename;
-	total_lines = count_lines(raw_filename);
+	total_lines = UtilMDE.count_lines(raw_filename);
       }
 
       // Open the reader stream
@@ -862,7 +864,7 @@ public final class FileIO {
 			     + line
 			     + "'");
 	  System.out.println(" line: null="
-			     + (line != null)
+			     + false // (line != null)
 			     + " empty="
 			     + (line.equals(""))
 			     + " comment="
@@ -915,7 +917,13 @@ public final class FileIO {
 
           String nonce_name = reader.readLine();
           Assert.assertTrue(nonce_name.equals("this_invocation_nonce"));
-          nonce = new Integer(reader.readLine());
+          String nonce_number = reader.readLine();
+          if (nonce_number == null) {
+            throw new FileIOException("File ended while trying to read nonce",
+                                      reader,
+                                      state.file);
+          }
+          nonce = new Integer(nonce_number);
 
           if (Global.debugPrintDtrace) {
             to_write_nonce = true;
@@ -1194,9 +1202,10 @@ public final class FileIO {
       while ((line != null)
              && !line.equals("")
              && !var_included(line)) {
-        line = reader.readLine(); // value
+        line = reader.readLine(); // value (discard it)
         line = reader.readLine(); // modbit
-        if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
+        if (line == null
+            || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
           throw new FileIOException("Bad modbit", reader,
 				    data_trace_state.filename);
         }
