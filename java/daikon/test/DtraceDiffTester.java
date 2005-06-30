@@ -56,6 +56,7 @@ public class DtraceDiffTester extends TestCase {
 		    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
     assertTrue(diff("--ppt-select-pattern", "six170.Hanoi.moveDisk*",
 		    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
+    // needs to test --var-select-pattern
   }
 
 }

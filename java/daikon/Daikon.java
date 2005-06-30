@@ -248,6 +248,7 @@ public final class Daikon {
   // Controls which program points/variables are used/ignored.
   public static Pattern ppt_regexp;
   public static Pattern ppt_omit_regexp;
+  public static Pattern var_regexp;
   public static Pattern var_omit_regexp;
 
   /**
@@ -326,6 +327,7 @@ public final class Daikon {
   // Process only part of the trace file
   public static final String ppt_regexp_SWITCH = "ppt-select-pattern";
   public static final String ppt_omit_regexp_SWITCH = "ppt-omit-pattern";
+  public static final String var_regexp_SWITCH = "var-select-pattern";
   public static final String var_omit_regexp_SWITCH = "var-omit-pattern";
   // Configuration options
   public static final String config_SWITCH = "config";
@@ -644,6 +646,7 @@ public final class Daikon {
         // Process only part of the trace file
         new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(var_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         // Configuration options
         new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -787,6 +790,21 @@ public final class Daikon {
               String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               ppt_omit_regexp =
+                Pattern.compile(regexp_string);
+            } catch (Exception e) {
+              throw new Error(e.toString());
+            }
+            break;
+          } else if (var_regexp_SWITCH.equals(option_name)) {
+            if (var_regexp != null)
+              throw new Error(
+                "multiple --"
+                  + var_regexp_SWITCH
+                  + " regular expressions supplied on command line");
+            try {
+              String regexp_string = g.getOptarg();
+              // System.out.println("Regexp = " + regexp_string);
+              var_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
               throw new Error(e.toString());

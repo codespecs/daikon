@@ -176,7 +176,7 @@ public final class FileIO {
   private static PptTopLevel read_declaration(LineNumberReader file,
                                              PptMap all_ppts,
                                              int varcomp_format,
-                                             File filename) throws IOException{
+                                             File filename) throws IOException {
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
 
@@ -212,8 +212,7 @@ public final class FileIO {
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
       // against null above.
-      if ((Daikon.var_omit_regexp != null)
-          && Daikon.var_omit_regexp.matcher(vi.name.name()).find()) {
+      if (!var_included (vi.name.name())) {
         continue;
       }
       var_infos.add(vi);
@@ -1128,7 +1127,8 @@ public final class FileIO {
   }
 
   // This procedure reads a single record from a trace file and
-  // fills up vals and mods by side effect.
+  // fills up vals and mods by side effect.  The ppt name and
+  // invocation nonce (if any) have already been read.
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
                          PptTopLevel ppt, Object[] vals, int[] mods)
@@ -1191,9 +1191,9 @@ public final class FileIO {
             + ppt.name());
       }
 
-      while ((Daikon.var_omit_regexp != null)
-             && (line != null)
-             && Daikon.var_omit_regexp.matcher(line).find()) {
+      while ((line != null)
+             && !line.equals("")
+             && !var_included(line)) {
         line = reader.readLine(); // value
         line = reader.readLine(); // modbit
         if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
@@ -1342,9 +1342,9 @@ public final class FileIO {
     // Expecting the end of a block of values.
     String line = reader.readLine();
     // First, we might get some variables that ought to be omitted.
-    while ((Daikon.var_omit_regexp != null)
-           && (line != null)
-           && Daikon.var_omit_regexp.matcher(line).find()) {
+    while ((line != null)
+           && !line.equals("")
+           && !var_included(line)) {
       line = reader.readLine(); // value
       line = reader.readLine(); // modbit
       line = reader.readLine(); // next variable name
@@ -1557,9 +1557,24 @@ public final class FileIO {
             && !Daikon.ppt_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_max_name != null)
             && ((Daikon.ppt_max_name.compareTo(ppt_name) < 0)
-                && (ppt_name.indexOf(global_suffix) == -1))))
+                && (ppt_name.indexOf(global_suffix) == -1)))) {
       return (false);
-    else
+    } else {
       return (true);
+    }
   }
+
+  public static boolean var_included(String var_name) {
+    assert ! var_name.equals("");
+    if (((Daikon.var_omit_regexp != null)
+         && Daikon.var_omit_regexp.matcher(var_name).find())
+        || ((Daikon.var_regexp != null)
+            && !Daikon.var_regexp.matcher(var_name).find())) {
+      return (false);
+    } else {
+      return true;
+    }
+  }
+
+
 }

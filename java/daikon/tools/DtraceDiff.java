@@ -11,7 +11,7 @@ import gnu.getopt.*;
 
 /** This tool is used to find the differences between two dtrace files
  *  based on analysis of the files' content, rather than a straight textual
- *  comparison.  
+ *  comparison.
  */
 
 
@@ -34,6 +34,8 @@ public class DtraceDiff {
 	"      Only include ppts matching regexp",
 	"  --" + Daikon.ppt_omit_regexp_SWITCH,
 	"      Omit all ppts matching regexp",
+	"  --" + Daikon.var_regexp_SWITCH,
+	"      Only include variables matching regexp",
 	"  --" + Daikon.var_omit_regexp_SWITCH,
 	"      Omit all variables matching regexp",
 	"  --" + Daikon.config_SWITCH,
@@ -90,6 +92,7 @@ public class DtraceDiff {
       // Process only part of the trace file
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.var_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       // Configuration options
       new LongOpt(Daikon.config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -100,7 +103,7 @@ public class DtraceDiff {
     int c;
     while ((c = g.getopt()) != -1) {
       switch(c) {
-	
+
 	// long option
       case 0:
         String option_name = longopts[g.getLongind()].getName();
@@ -129,6 +132,19 @@ public class DtraceDiff {
 	    String regexp_string = g.getOptarg();
 	    // System.out.println("Regexp = " + regexp_string);
 	    Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
+	  } catch (Exception e) {
+	    throw new Error(e.toString());
+	  }
+	  break;
+	} else if (Daikon.var_regexp_SWITCH.equals(option_name)) {
+	  if (Daikon.var_regexp != null)
+	    throw new Error("multiple --"
+			    + Daikon.var_regexp_SWITCH
+			    + " regular expressions supplied on command line");
+	  try {
+	    String regexp_string = g.getOptarg();
+	    // System.out.println("Regexp = " + regexp_string);
+	    Daikon.var_regexp = Pattern.compile(regexp_string);
 	  } catch (Exception e) {
 	    throw new Error(e.toString());
 	  }
@@ -165,21 +181,21 @@ public class DtraceDiff {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
         }
-	
+
 	//short options
       case 'h':
 	System.out.println(usage);
 	throw new Daikon.TerminationMessage();
-	
+
       case '?':
         break; // getopt() already printed an error
-	
+
       default:
         System.out.println("getopt() returned " + c);
         break;
       }
     }
-    
+
     for (int i = g.getOptind(); i < args.length; i++) {
       if (args[i].indexOf(".decls") != -1) {
 	if (dtracefile1 == null)
@@ -424,5 +440,5 @@ public class DtraceDiff {
 		     " in " + dtracefile2);
   }
 
-    
+
 }
