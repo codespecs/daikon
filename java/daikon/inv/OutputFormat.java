@@ -94,6 +94,8 @@ public final class OutputFormat
     int tagnumber=0;
     boolean forceset=false;
     HashMap quantifiers=new LinkedHashMap(); // LinkedHashMap for deterministic output
+    HashSet usednames=new HashSet();
+
 
     /** Creates a copy of the current Repair object state.  This copy
      * can be used to revert the state if a problem with the current
@@ -102,6 +104,7 @@ public final class OutputFormat
     public Repair createCopy(Ppt ppt) {
       Repair repair=new Repair();
       repair.settable.putAll(settable);
+      repair.usednames.addAll(usednames);
       repair.relationtable.putAll(relationtable);
       repair.definitiontable.putAll(definitiontable);
       repair.tagnumber=tagnumber;
@@ -141,6 +144,7 @@ public final class OutputFormat
     public void reset() {
       quantifiers=new LinkedHashMap();
       forceset=false;
+      varcount=0;
     }
 
     /** The repair system is designed to capture equality constriants
@@ -178,9 +182,9 @@ public final class OutputFormat
         String relationname=(String)relationtable.get(t);
         return relationname;
       }
-      String relationname=generateRelationName(vin2.name());
+      String relationname=generateRelationName(vin2.name(),ppt);
 
-      String rangeset=generateSetName("R"+vin2.name());
+      String rangeset=generateSetName("R"+vin2.name(),ppt);
       String newrule="[forall s in "+intervalset+"], true => <s,"+vin2.name()+"[s]> in "+relationname+";";
       String newrule2="[forall s in "+intervalset+"], true => "+vin2.name()+"[s] in "+rangeset+";";
 
@@ -204,7 +208,7 @@ public final class OutputFormat
         String setname=(String)settable.get(t);
         return setname;
       }
-      String setname=generateSetName("Range");
+      String setname=generateSetName("Range",ppt);
       String newrule="[for i="+lower.name()+" to "+upper.name()+"], true => i in "+setname+";";
       String setdef="set "+setname+"(int);";
       appendModelRule(ppt,newrule);
@@ -242,7 +246,10 @@ public final class OutputFormat
 
     int varcount=0;
     public String getQuantifierVar(String var) {
-      return var+(varcount++);
+      if (!quantifiers.containsKey(var)) {
+        return var;
+      } else
+        return var+(varcount++);
     }
 
     public String getQuantifierVar() {
@@ -277,8 +284,8 @@ public final class OutputFormat
       Tuple t=new Tuple(set,field,ppt);
       if (relationtable.containsKey(t))
         return (String)relationtable.get(t);
-      String relationname=generateRelationName(field);
-      String rangeset=generateSetName("R"+field);
+      String relationname=generateRelationName(field,ppt);
+      String rangeset=generateSetName("R"+field,ppt);
       String newrule="[forall s in "+set+"], true => <s,s."+field+"> in "+relationname+";";
       String newrule2="[forall s in "+set+"], true => s."+field+" in "+rangeset+";";
       Definition d=(Definition)definitiontable.get(ppt);
@@ -299,13 +306,13 @@ public final class OutputFormat
       Tuple t=new Tuple(programvar,ppt);
       if (relationtable.containsKey(t))
         return (String)relationtable.get(t);
-      String relationname=generateRelationName(programvar);
+      String relationname=generateRelationName(programvar,ppt);
 
       Tuple t2=new Tuple(programvar,ppt);
       boolean generatesetdef=true;
       if (settable.containsKey(t2))
         generatesetdef=false;
-      String setname=generateSetName(programvar);
+      String setname=generateSetName(programvar,ppt);
       String newrule="[forall s in Special], true => <s,"+programvar+"> in "+relationname+";";
 
       appendModelRule(ppt,newrule);
@@ -360,6 +367,8 @@ public final class OutputFormat
         return setname;
       else {
         String quantifiervar=getQuantifierVar(escapeString(programvar));
+        if (!quantifiers.containsKey(escapeString(programvar)))
+          quantifiervar=escapeString(programvar);
         appendQuantifier(quantifiervar,setname);
         return quantifiervar;
       }
@@ -375,7 +384,7 @@ public final class OutputFormat
         String setname=(String)settable.get(t);
         return setname;
       }
-      String setname=generateSetName(programvar);
+      String setname=generateSetName(programvar,ppt);
       String newrule="[], true => "+programvar+" in "+setname+";";
       String setdef="set "+setname+"("+getTypedef(ppt, programvar)+");";
       appendModelRule(ppt,newrule);
@@ -504,19 +513,40 @@ public final class OutputFormat
 
     /** This method generates a set name from a program variable. */
 
-    private String generateSetName(String programvar) {
-      String setname="S"+programvar+tagnumber;
-      tagnumber++;
+    private String generateSetName(String programvar, Ppt p) {
+      String setnameprefix="S"+programvar;
+      String setname=setnameprefix;
+      tagnumber=0;
+      while(true) {
+        Tuple t=new Tuple(setname, p);
+        if (usednames.contains(t)) {
+          tagnumber++;
+          setname=setnameprefix+tagnumber;
+        } else {
+          usednames.add(t);
+          break;
+        }
+      }
       return escapeString(setname);
     }
 
     /** This method generates a relation name from a program
      * variable. */
-
-    private String generateRelationName(String fieldvar) {
-      String setname="R"+fieldvar+tagnumber;
-      tagnumber++;
-      return escapeString(setname);
+    private String generateRelationName(String fieldvar, Ppt p) {
+      String relnameprefix="R"+fieldvar;
+      String relname=relnameprefix;
+      tagnumber=0;
+      while(true) {
+        Tuple t=new Tuple(relname, p);
+        if (usednames.contains(t)) {
+          tagnumber++;
+          relname=relnameprefix+tagnumber;
+        } else {
+          usednames.add(t);
+          break;
+        }
+      }
+      return escapeString(relname);
     }
 
     /** This method appents a set or relation definition for a given
