@@ -5,8 +5,11 @@
 # The input to this script is the output of "cvs log".
 # "cvs log" gives information about each file in turn.
 # This script rearranges the output so that it is given checkin-by-checkin.
-# In particular, for each distinct checkin (within a short period of time,
-# by the same author), a list of files and checkin messages is presented.
+
+# This script groups any sequence of CVS checkins by the same author with
+# no more thna 2 minutes separating them (but not necessarily with
+# identical checkin messages).  For each such sequence of CVS checkins, a
+# list of files and checkin messages is presented.
 
 use strict;
 use English;
@@ -14,6 +17,8 @@ $WARNING = 1;
 
 # use Date::Calc;
 use Date::Manip;
+
+my $max_checkin_separation = 2; # in minutes
 
 # Record separator (a string, not a regexp).
 # We'll hope none of these appear in commit messages.
@@ -82,7 +87,8 @@ for my $commit_record (@commit_records) {
   my $delta_minutes = $1;
   # print "Delta: $delta; minutes: $delta_minutes\n";
 
-  if (($current_author eq $author) && ($delta_minutes < 2)) {
+  if (($current_author eq $author)
+      && ($delta_minutes < $max_checkin_separation)) {
     append_commit_record($file, $date, $message);
     next;
   }
