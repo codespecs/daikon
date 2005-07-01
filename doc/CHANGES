@@ -113,7 +113,7 @@ Daikon:
 
     Java-family formats now use reflection to access fields.  This
     makes it possible to access non-public fields.  The Quant helper
-    methods do not throw execptions when given illegal arguments.
+    methods do not throw exceptions when given illegal arguments.
 
     Runtime-check instrumenter can emit "invariant-checker" classes.
 
