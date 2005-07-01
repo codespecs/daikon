@@ -14,10 +14,10 @@ public class Runtime
 {
     /** Unique id for method entry/exit (so they can be matched up) **/
     public static int nonce = 0;
-    
+
     /** debug flag **/
     public static final boolean debug = false;
-	
+
 
     /**
      * List of classes recently transformed.  This list is examined in
@@ -335,172 +335,6 @@ public class Runtime
         }
     }
 
-  // Lifted directly from utilMDE/UtilMDE.java, where it is called
-  // escapeNonJava(), but repeated here to make this class self-contained.
-  /** Quote \, ", \n, and \r characters in the target; return a new string. **/
-  public static String quote(String orig) {
-    StringBuffer sb = new StringBuffer();
-    // The previous escape (or escaped) character was seen right before
-    // this position.  Alternately:  from this character forward, the string
-    // should be copied out verbatim (until the next escaped character).
-    int post_esc = 0;
-    int orig_len = orig.length();
-    for (int i=0; i<orig_len; i++) {
-      char c = orig.charAt(i);
-      switch (c) {
-      case '\"':
-      case '\\':
-        if (post_esc < i) {
-          sb.append(orig.substring(post_esc, i));
-        }
-        sb.append('\\');
-        post_esc = i;
-        break;
-      case '\n':                // not lineSep
-        if (post_esc < i) {
-          sb.append(orig.substring(post_esc, i));
-        }
-        sb.append("\\n");       // not lineSep
-        post_esc = i+1;
-        break;
-      case '\r':
-        if (post_esc < i) {
-          sb.append(orig.substring(post_esc, i));
-        }
-        sb.append("\\r");
-        post_esc = i+1;
-        break;
-      default:
-        // Do nothing; i gets incremented.
-      }
-    }
-    if (sb.length() == 0)
-      return orig;
-    sb.append(orig.substring(post_esc));
-    return sb.toString();
-  }
-
-  private static HashMap primitiveClassesFromJvm = new HashMap(8);
-
-private static Process chicory_proc;
-
-private static StreamRedirectThread err_thread;
-
-private static StreamRedirectThread out_thread;
-  static {
-    primitiveClassesFromJvm.put("Z", "boolean");
-    primitiveClassesFromJvm.put("B", "byte");
-    primitiveClassesFromJvm.put("C", "char");
-    primitiveClassesFromJvm.put("D", "double");
-    primitiveClassesFromJvm.put("F", "float");
-    primitiveClassesFromJvm.put("I", "int");
-    primitiveClassesFromJvm.put("J", "long");
-    primitiveClassesFromJvm.put("S", "short");
-  }
-
-  /**
-   * Convert a classname from JVML format to Java format.
-   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
-   **/
-  public static String classnameFromJvm(String classname) {
-
-      //System.out.println(classname);
-
-    int dims = 0;
-    while (classname.startsWith("[")) {
-      dims++;
-      classname = classname.substring(1);
-    }
-
-    String result;
-    //array of reference type
-    if (classname.startsWith("L") && classname.endsWith(";")) {
-      result = classname.substring(1, classname.length() - 1);
-      result = result.replace('/', '.');
-    }
-    else {
-        if(dims > 0) //array of primitives
-            result = (String) primitiveClassesFromJvm.get(classname);
-        else //just a primitive
-            result = classname;
-
-      if (result == null) {
-        // As a failsafe, use the input; perhaps it is in Java, not JVML,
-        // format.
-        result = classname;
-        // throw new Error("Malformed base class: " + classname);
-      }
-    }
-    for (int i=0; i<dims; i++) {
-      result += "[]";
-    }
-    return result;
-  }
-
-  public static interface PrimitiveWrapper
-  {
-  }
-
-  //
-  // Wrappers for the various primitive types
-  //
-  /** wrapper used for boolean arguments **/
-  public static class BooleanWrap implements PrimitiveWrapper{
-    boolean val;
-    public BooleanWrap (boolean val) { this.val = val; }
-    public String toString() {return Boolean.toString(val);}
-  }
-
-  /** wrapper used for int arguments **/
-  public static class ByteWrap implements PrimitiveWrapper{
-    byte val;
-    public ByteWrap (byte val) { this.val = val; }
-    public String toString() {return Byte.toString(val);}
-  }
-
-  /** wrapper used for int arguments **/
-  public static class CharWrap implements PrimitiveWrapper{
-    char val;
-    public CharWrap (char val) { this.val = val; }
-    // Print characters as integers.
-    public String toString() {return Integer.toString(val);}
-  }
-
-  /** wrapper used for int arguments **/
-  public static class FloatWrap implements PrimitiveWrapper{
-    float val;
-    public FloatWrap (float val) { this.val = val; }
-    public String toString() {return Float.toString(val);}
-  }
-
-  /** wrapper used for int arguments **/
-  public static class IntWrap implements PrimitiveWrapper{
-    int val;
-    public IntWrap (int val) { this.val = val; }
-    public String toString() {return Integer.toString(val);}
-  }
-
-  /** wrapper used for int arguments **/
-  public static class LongWrap implements PrimitiveWrapper{
-    long val;
-    public LongWrap (long val) { this.val = val; }
-    public String toString() {return Long.toString(val);}
-  }
-
-  /** wrapper used for int arguments **/
-  public static class ShortWrap implements PrimitiveWrapper{
-    short val;
-    public ShortWrap (short val) { this.val = val; }
-    public String toString() {return Short.toString(val);}
-  }
-
-  /** wrapper used for double arguments **/
-  public static class DoubleWrap implements PrimitiveWrapper{
-    double val;
-    public DoubleWrap (double val) { this.val = val; }
-    public String toString() {return Double.toString(val);}
-  }
-
     public static void setDtraceOnlineMode(int port)
     {
         dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
@@ -655,6 +489,13 @@ private static StreamRedirectThread out_thread;
         });
     }
 
+    private static Process chicory_proc;
+
+    private static StreamRedirectThread err_thread;
+
+    private static StreamRedirectThread out_thread;
+
+
     static void setDaikonInfo(StreamRedirectThread err, StreamRedirectThread out, Process proc)
     {
         chicory_proc = proc;
@@ -721,5 +562,175 @@ private static StreamRedirectThread out_thread;
         throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
     }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Wrappers for the various primitive types
+  ///
+
+  public static interface PrimitiveWrapper
+  {
+  }
+
+  /** wrapper used for boolean arguments **/
+  public static class BooleanWrap implements PrimitiveWrapper{
+    boolean val;
+    public BooleanWrap (boolean val) { this.val = val; }
+    public String toString() {return Boolean.toString(val);}
+  }
+
+  /** wrapper used for int arguments **/
+  public static class ByteWrap implements PrimitiveWrapper{
+    byte val;
+    public ByteWrap (byte val) { this.val = val; }
+    public String toString() {return Byte.toString(val);}
+  }
+
+  /** wrapper used for int arguments **/
+  public static class CharWrap implements PrimitiveWrapper{
+    char val;
+    public CharWrap (char val) { this.val = val; }
+    // Print characters as integers.
+    public String toString() {return Integer.toString(val);}
+  }
+
+  /** wrapper used for int arguments **/
+  public static class FloatWrap implements PrimitiveWrapper{
+    float val;
+    public FloatWrap (float val) { this.val = val; }
+    public String toString() {return Float.toString(val);}
+  }
+
+  /** wrapper used for int arguments **/
+  public static class IntWrap implements PrimitiveWrapper{
+    int val;
+    public IntWrap (int val) { this.val = val; }
+    public String toString() {return Integer.toString(val);}
+  }
+
+  /** wrapper used for int arguments **/
+  public static class LongWrap implements PrimitiveWrapper{
+    long val;
+    public LongWrap (long val) { this.val = val; }
+    public String toString() {return Long.toString(val);}
+  }
+
+  /** wrapper used for int arguments **/
+  public static class ShortWrap implements PrimitiveWrapper{
+    short val;
+    public ShortWrap (short val) { this.val = val; }
+    public String toString() {return Short.toString(val);}
+  }
+
+  /** wrapper used for double arguments **/
+  public static class DoubleWrap implements PrimitiveWrapper{
+    double val;
+    public DoubleWrap (double val) { this.val = val; }
+    public String toString() {return Double.toString(val);}
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Copied code
+  ///
+
+  // Lifted directly from utilMDE/UtilMDE.java, where it is called
+  // escapeNonJava(), but repeated here to make this class self-contained.
+  /** Quote \, ", \n, and \r characters in the target; return a new string. **/
+  public static String quote(String orig) {
+    StringBuffer sb = new StringBuffer();
+    // The previous escape (or escaped) character was seen right before
+    // this position.  Alternately:  from this character forward, the string
+    // should be copied out verbatim (until the next escaped character).
+    int post_esc = 0;
+    int orig_len = orig.length();
+    for (int i=0; i<orig_len; i++) {
+      char c = orig.charAt(i);
+      switch (c) {
+      case '\"':
+      case '\\':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append('\\');
+        post_esc = i;
+        break;
+      case '\n':                // not lineSep
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append("\\n");       // not lineSep
+        post_esc = i+1;
+        break;
+      case '\r':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append("\\r");
+        post_esc = i+1;
+        break;
+      default:
+        // Do nothing; i gets incremented.
+      }
+    }
+    if (sb.length() == 0)
+      return orig;
+    sb.append(orig.substring(post_esc));
+    return sb.toString();
+  }
+
+  private static HashMap primitiveClassesFromJvm = new HashMap(8);
+  static {
+    primitiveClassesFromJvm.put("Z", "boolean");
+    primitiveClassesFromJvm.put("B", "byte");
+    primitiveClassesFromJvm.put("C", "char");
+    primitiveClassesFromJvm.put("D", "double");
+    primitiveClassesFromJvm.put("F", "float");
+    primitiveClassesFromJvm.put("I", "int");
+    primitiveClassesFromJvm.put("J", "long");
+    primitiveClassesFromJvm.put("S", "short");
+  }
+
+  /**
+   * Convert a classname from JVML format to Java format.
+   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
+   **/
+  public static String classnameFromJvm(String classname) {
+
+      //System.out.println(classname);
+
+    int dims = 0;
+    while (classname.startsWith("[")) {
+      dims++;
+      classname = classname.substring(1);
+    }
+
+    String result;
+    //array of reference type
+    if (classname.startsWith("L") && classname.endsWith(";")) {
+      result = classname.substring(1, classname.length() - 1);
+      result = result.replace('/', '.');
+    }
+    else {
+        if(dims > 0) //array of primitives
+            result = (String) primitiveClassesFromJvm.get(classname);
+        else //just a primitive
+            result = classname;
+
+      if (result == null) {
+        // As a failsafe, use the input; perhaps it is in Java, not JVML,
+        // format.
+        result = classname;
+        // throw new Error("Malformed base class: " + classname);
+      }
+    }
+    for (int i=0; i<dims; i++) {
+      result += "[]";
+    }
+    return result;
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// end of copied code
+  ///
 
 }
