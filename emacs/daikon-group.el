@@ -158,6 +158,7 @@ Remake it first if it is more than a week old."
     (let* ((info-buffer (get-buffer "*info*"))
            (info-already-visiting
             (and (buffer-live-p info-buffer)
+		 Info-current-file
                  (with-current-buffer info-buffer
                    (save-match-data
                      (string-match (concat "/" basename ".info$")
