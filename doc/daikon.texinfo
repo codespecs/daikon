@@ -1470,6 +1470,7 @@ See @ref{ListImplementors declaration}.
 
 @item --nohierarchy
 @cindex hierarchy, disabling
+@cindex unmatched entries, not ignoring
 Avoid connecting program points in a dataflow hierarchy.  For example,
 Daikon normally connects the @code{:::ENTER} program points of class methods
 with the class's @code{:::CLASS} program point, so that any invariant 
@@ -1477,7 +1478,9 @@ that holds on the @code{:::CLASS} program point is considered to hold
 true on the @code{:::ENTER}
 program point.  With no hierarchy, each program point is treated
 independently.  This is for using Daikon on applications that do not
-have a concept of hierarchy.  
+have a concept of hierarchy.  It can also be useful when you wish to
+process unmatched enter point samples from a trace file thatis missing
+some exit point samples.
 
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using the Simplify
@@ -1495,6 +1498,11 @@ options.
 @node Processing only part of the trace file, Daikon configuration options, Options to control invariant detection, Running Daikon
 @section Processing only part of the trace file
 
+Using @option{--ppt-select-pattern} and @option{--ppt-omit-pattern} can
+save time even if there are no samples for the excluded program points,
+as Daikon can skip the declarations and need not initializing data
+structures that would be used if samples were encountered.
+
 @table @option
 @item --ppt-select-pattern=@var{ppt_regexp}
 Only process program points whose names match the regular expression,
@@ -1505,9 +1513,14 @@ Do not process program points whose names match the regular expression,
 which uses Perl syntax.  This takes priority over the
 @option{--ppt-select-pattern} argument.
 
+@item --var-select-pattern=@var{ppt_regexp}
+Only process variables (whether in the trace file or derived) whose
+names match the regular expression, which uses Perl syntax.
+
 @item --var-omit-pattern=@var{var_regexp}
 Ignore variables (whether in the trace file or derived) whose names
-match the regular expression, which uses Perl syntax.
+match the regular expression, which uses Perl syntax.  This takes
+priority over the @option{--var-select-pattern} argument.
 
 @end table
 
@@ -7025,9 +7038,14 @@ Do not process program points whose names match the regular expression,
 which uses Perl syntax.  This takes priority over the
 @option{--ppt-select-pattern} argument.
 
+@item --var-select-pattern=@var{ppt_regexp}
+Only process variables (whether in the trace file or derived) whose
+names match the regular expression, which uses Perl syntax.
+
 @item --var-omit-pattern=@var{var_regexp}
 Ignore variables (whether in the trace file or derived) whose names
-match the regular expression, which uses Perl syntax.
+match the regular expression, which uses Perl syntax.  This takes
+priority over the @option{--var-select-pattern} argument.
 
 @end table
 
@@ -7466,7 +7484,8 @@ files in the first place (rather than cutting the @file{.dtrace} files
 down afterward).
 @itemize
 @item With Chicory or dfej, use the @option{--ppt-omit-pattern} or
-@option{--ppt-select-pattern} options (@pxref{Chicory options}) to
+@option{--ppt-select-pattern} options (@pxref{Processing only part of
+the trace file}, @pxref{Chicory options}) to
 restrict which program points are traced.  Running the
 instrumented program will result in a smaller @file{.dtrace} file that
 contains fewer records.
@@ -7502,12 +7521,17 @@ that use a lot of memory (such as some arrays).
 @item
 You can make Daikon ignore certain variables rather than modifying
 the @file{.dtrace} file directly.  Analogously with the
-@option{--ppt-omit-pattern} flag, the @option{--var-omit-pattern} flag makes Daikon
-ignore any variable matching the following regular expression.
+@option{--ppt-select-pattern} and @option{--ppt-omit-pattern} flags, the
+@option{--var-select-pattern} and @option{--var-omit-pattern} flags
+restrict which variables Daikon processes
+(@pxref{Processing only part of
+the trace file}, @pxref{Chicory options}).
 
 @item
 You can reduce the number of variables that are output by instrumented
-code.  Do this by reducing the class/structure instrumentation depth.
+code --- for instance, output @samp{a} and @samp{a.b} but not
+@samp{a.b.c}.  Do this by reducing the class/structure instrumentation
+depth.
 @itemize
 @item With Chicory, use the @option{--nesting-depth=@var{N}} option.
 @item With dfej, use the @option{--nesting-depth=@var{N}} option.
