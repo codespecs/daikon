@@ -162,6 +162,16 @@ kvasir: kvasir/inst/bin/valgrind kvasir/inst/lib/valgrind/vgtool_kvasir.so
 
 build-kvasir: kvasir
 
+### Rebuild everything; used for monthly releases, for example
+
+rebuild-everything:
+	${MAKE} -C $inv/java clean
+	${MAKE} -C $inv/java compile
+	${MAKE} -C $inv/doc
+	${MAKE} -C $inv/dfej
+	${MAKE} -C $inv kvasir
+	${MAKE} -C $inv/kvasir all install
+
 ### Testing the code
 
 test:
