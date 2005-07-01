@@ -10,15 +10,10 @@ import java.lang.reflect.*;
  * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
  *
  */
-public class DaikonWriter
+public abstract class DaikonWriter
 {
-    /**
-     * Controls whether modifiers and the return type are included in the decl output
-     */
+    /** Controls whether modifiers and the return type are included in the decl output **/
     protected static final boolean no_modifiers_ppt = true;
-    
-    /** Print visibility info in the program point **/
-    private static final boolean showDeclVisibility = false;
 	
 	/** Platform dependent line separator.  Should be "\n" on Unix **/
 	public static final String lineSep;
@@ -34,7 +29,7 @@ public class DaikonWriter
     }
 
     /**
-     * Given a method, returns the decorated method entry name for Daikon
+     * Given a method, returns the method entry program point name for Daikon
      * @param method non-null method
      * @return the decorated method entry name for Daikon
      */
@@ -45,7 +40,7 @@ public class DaikonWriter
     }
     
 	/**
-	 * Given information about a method, returns the decorated 
+	 * Given a method, returns the method entry program point name for Daikon
 	 * method entry name for Daikon
 	 * 
 	 * @param types Argument types
@@ -61,7 +56,7 @@ public class DaikonWriter
     /**
      * Determines if this field warrants an [ = val ] entry in decls file
      *
-     * @param field - requires field != null
+     * @param field requires field != null
      * @return true iff field warrants an [ = val ] entry in the decls files
      */
     protected boolean staticConstField(Field field)
@@ -73,8 +68,8 @@ public class DaikonWriter
     }
 
     /**
-     * Given a method, returns the decorated method exit name for Daikon
-     * @param method non-null method
+     * Given a method, returns the method exit program point name for Daikon
+     * @param method require method != null
      * @param lineNum The line number of the exit point of the method
      * @return the decorated method exit name for Daikon
      */
@@ -84,8 +79,7 @@ public class DaikonWriter
     }
     
 	/**
-	 * Given information about a method, returns the decorated 
-	 * method exit name for Daikon
+     * Given a method, returns the method exit program point name for Daikon
 	 * 
 	 * @param types Argument types
 	 * @param lineNum The line number of the exit point of the method
@@ -98,149 +92,127 @@ public class DaikonWriter
 
     
     /**
-     * Prints the decorated method name and appends the point string
+     * Constructs the program point name (which includes the point string at the end)
      * 
-     * @param name What member.toString() returns
-     * @param short_name What member.name() returns
+     * @param fullClassName packageName.className
+     * @param types String representation of the declared types of the parameters
+     *          for example: {"int", "java.lang.Object", "float"}
+     * @param name The method with modifiers and parameters
+     * @param short_name Just the method's name
+     * 
+     * So a corresponding name/short_name pair could be:
+     *     name: public static void DataStructures.StackArTester.doNew(int size) 
+     *     short_name: doNew
+     * 
      * @param isConstructor Is the method a constructor
      * @param point Usually "EXIT" or "ENTER"
-     * @param fullClassName packageName.className
      * @return Same thing as methodName(Member, point)
      */
-    private static String methodName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor, String point)
+    private static String methodName(String fullClassName, String[] types, String name, 
+            String short_name, boolean isConstructor, String point)
     {        
+        //System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n", fullClassName, name, short_name);
+        
         String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+        
+        // replace <init>'s with the actual class name
+        // so "public void <init>" becomes "public void StackAr" for example
         name = name.replace("<init>", className);
         short_name = short_name.replace("<init>", className);
         
-        //System.out.println("before " + name);
-        name = name.replace(short_name + "(", fullClassName + "." + short_name + "(");
-        //System.out.println("after " + name);
-        
-        String ppt = fullClassName + "." + short_name + "(";
+        // build up the string to go inside the parens
+        StringBuilder paramTypes = new StringBuilder();
         for(int i = 0; i < types.length; i++) 
         {
-            ppt += types[i];
+            paramTypes.append(types[i]);
             
             if(i != types.length - 1)
-                ppt += ", ";
+                paramTypes.append(", ");
         }
-        ppt += ")" + ":::" + point;
-
+        name = name.replaceFirst("\\(.*\\)", "(" + paramTypes + ")" );
         
-        if (isConstructor)
-        {
-            // For some reason dfej repeats the name of the class for
-            // constructors (eg, DataStructures.StackAr() becomes
-            // DataStructures.StackAr.StackAr().  Mimic that behavior
-
-            int lastPeriod = short_name.lastIndexOf(".");
-            // System.out.printf ("short name=%s, name=%s, lastPeriod=%s\n",
-              //                 short_name, name, lastPeriod);
-            
-            
-            if (lastPeriod < 0)
-            {
-                name = name.replace (short_name + "(",
-                                 short_name + "." + short_name + "(");
-            }
-            else
-            {
-                short_name = short_name.substring(lastPeriod + 1);
-                name = name.replace ("." + short_name + "(",
-                                 "." + short_name + "." + short_name + "(");
-            }
-        }
-
-        // System.out.println ("method name = " + name);
-
-        // Remove the modifiers and the type
-        if (no_modifiers_ppt)
-        {
-            name = name.replaceFirst (" throws.*", "");
-            String[] parts = name.split ("  *");
-            name = parts[parts.length-1];
-        }
-        name = name.replaceAll (",", ", ");
-        
-        //TODO fix up this method, make it cleaner
-        return ppt;
-        //return (name + ":::" + point);
+        return methodName(name, short_name, isConstructor, point);
     }
     
     
     /**
-     * Prints the decorated method name and appends the point string
+     * Constructs the program point name (which includes the point string at the end)
+     * 
      * @param method non-null method
-     * @param point The point in the method, usually EXIT or ENTRY
-     * @return the decorated method name appended the point string
+     * @param point The point in the method, usually "EXIT" or "ENTRY"
+     * @return the program point name which includes the point string
      */
     private static String methodName(Member method, String point)
     {
         String name = method.toString();
         String short_name = method.getName();
-
+        boolean isConstructor = method instanceof Constructor;
         
-        if (method instanceof Constructor)
+        
+        return methodName(name, short_name, isConstructor, point);
+    }
+    
+    /**
+     * 
+     * Constructs the program point name (which includes the point string at the end)
+     * 
+     * @param name Looks like: "public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception"
+     * @param short_name Looks like: "push"
+     * @param isConstructor
+     * @param point Usually "ENTER" or "EXIT"
+     */
+    private static String methodName(String name, String short_name, boolean isConstructor, String point)
+    {
+
+        //System.out.printf("%s ---- %s %n", name, short_name);
+        
+        if (isConstructor)
         {          
-            // For some reason dfej repeats the name of the class for
-            // constructors (eg, DataStructures.StackAr() becomes
-            // DataStructures.StackAr.StackAr().  Mimic that behavior
-
-            int lastPeriod = short_name.lastIndexOf(".");
-            // System.out.printf ("short name=%s, name=%s, lastPeriod=%s\n",
-              //                 short_name, name, lastPeriod);
-            
-            
-            if (lastPeriod < 0)
-            {
-                name = name.replace (short_name + "(",
-                                 short_name + "." + short_name + "(");
-            }
-            else
-            {
-                short_name = short_name.substring(lastPeriod + 1);
-                name = name.replace ("." + short_name + "(",
-                                 "." + short_name + "." + short_name + "(");
-            }
+            name = fixDuplicateConstructorName(name, short_name);
         }
-
-        // System.out.println ("method name = " + name);
         
         // Remove the modifiers and the type
         if (no_modifiers_ppt)
         {
+            // at this point, name might look something like:
+            // public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception
+            
+            // get ride of throws and everything after it (and space right before it)
             name = name.replaceFirst (" throws.*", "");
+            
+            // get rid of modifiers before the method name (public boolean in above example)
             String[] parts = name.split ("  *");
             name = parts[parts.length-1];
         }
         name = name.replaceAll (",", ", ");
+               
+        return (name + ":::" + point);
+    }
+    
+    /**
+     *
+     * For some reason dfej repeats the name of the class for
+     * constructors (eg, DataStructures.StackAr() becomes
+     * DataStructures.StackAr.StackAr().  Mimic that behavior
+     s* 
+     */
+    private static String fixDuplicateConstructorName(String name, String short_name)
+    {
+        int lastPeriod = short_name.lastIndexOf(".");           
         
-        //System.out.println("---> " + name + ":::" + point);
-        
-        if(showDeclVisibility)
+        if (lastPeriod < 0)
         {
-            int mod = method.getModifiers();
-            
-            if(Modifier.isPublic(mod))
-            {
-                name = "public " + name;
-            }
-            else if(Modifier.isPrivate(mod))
-            {   
-                name = "private " + name;
-            }
-            else if(Modifier.isPrivate(mod))
-            {
-                name = "protected " + name;
-            }
-            else
-            {
-                throw new RuntimeException("Bad Modifier for visibility for method " + method);
-            }
+            name = name.replace (short_name + "(",
+                             short_name + "." + short_name + "(");
+        }
+        else
+        {
+            short_name = short_name.substring(lastPeriod + 1);
+            name = name.replace ("." + short_name + "(",
+                             "." + short_name + "." + short_name + "(");
         }
         
-        return (name + ":::" + point);
+        return name;
     }
 
     /**

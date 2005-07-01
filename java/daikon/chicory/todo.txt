@@ -12,6 +12,13 @@ High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
         
 
 Longer-term issues
+
+  - Currently, the DaikonVariableInfo trees are created at the same time as the decls info is ouptut.
+    This should be changed so that the trees are created first, then used to print out the decls info (similar
+    to how the DTraceWriter uses the DaikonVariableInfo objects to traverse the tree).
+    Tree creation should be done in the RootInfo constructor, making the trees immutable.
+    Will need to add fields in DaikonVariableInfo such as (declsShouldIgnore, dTraceShouldIgnore) so that,
+    for instance, dtrace traversal doesn't print the static final primitive variable that the declwriter would.
       
   - Add --exception switch to allow instrumentation of exceptions
 

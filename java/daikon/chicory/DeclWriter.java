@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
-import sun.misc.Unsafe;
 
 /**
  * 
@@ -494,7 +493,7 @@ public class DeclWriter extends DaikonWriter
         outFile.println(offset + name);
         outFile.print(stdClassName(type));
         outFile.print(isParamString);
-        outFile.print("\n");
+        outFile.print(DaikonWriter.lineSep);
         outFile.println(getRepName(type, false));
         outFile.println(compareInfoDefault); //no comparability info right now
         

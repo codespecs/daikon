@@ -98,7 +98,7 @@ public class DTraceWriter extends DaikonWriter
         //i.e., it is one of the exit locations in the MethodInfo for this method
         if (mi.exit_locations == null || !mi.exit_locations.contains(lineNum))
         {
-            throw new RuntimeException("The line number " + lineNum + " is not found in the MethodInfo for method " + mi.method_name + "\nNo exit locations found in exit_locations set!");
+            throw new RuntimeException("The line number " + lineNum + " is not found in the MethodInfo for method " + mi.method_name + DaikonWriter.lineSep + "No exit locations found in exit_locations set!");
         }
 
         outFile.println(DaikonWriter.methodExitName(member, lineNum));

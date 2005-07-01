@@ -49,13 +49,13 @@ public class StringInfo extends DaikonVariableInfo
         if (theValues == null)
         {
             //buf.append("null");
-            return "null\n1";
+            return "null" + DaikonWriter.lineSep + "1";
         }
 
         if (theValues instanceof NonsensicalList)
         {
             //buf.append("nonsensical");
-            return "nonsensical\n2";
+            return "nonsensical" + DaikonWriter.lineSep + "2";
         }
         
         
@@ -77,9 +77,9 @@ public class StringInfo extends DaikonVariableInfo
         buf.append("]");
         
         if (theValues instanceof NonsensicalList)
-            buf.append("\n2");
+            buf.append(DaikonWriter.lineSep + "2");
         else
-            buf.append("\n1");
+            buf.append(DaikonWriter.lineSep + "1");
         
         return buf.toString();
     }
@@ -93,13 +93,13 @@ public class StringInfo extends DaikonVariableInfo
         String retString;
         
         if (val == null)
-            retString = ("null\n");
+            retString = ("null" + DaikonWriter.lineSep);
         else if (val instanceof NonsensicalObject)
-            retString = ("nonsensical\n");
+            retString = ("nonsensical" + DaikonWriter.lineSep);
         else
         {
             retString = showString((String) val);
-            retString += "\n";
+            retString += DaikonWriter.lineSep;
         }
 
         if (val instanceof NonsensicalObject)
