@@ -37,7 +37,7 @@ public class DTraceWriter extends DaikonWriter
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
-	/**Where to print output*/
+    /**Where to print output*/
     private PrintStream outFile;
 
     /**
@@ -57,13 +57,13 @@ public class DTraceWriter extends DaikonWriter
      */
     public void methodEntry(MethodInfo mi, int nonceVal, Object obj, Object[] args)
     {
-		//don't print
+        //don't print
         if(Runtime.dtrace_closed)
             return;
 
         Member member = mi.member;
 
-		//get the root of the method's traversal pattern
+        //get the root of the method's traversal pattern
         RootInfo root = mi.traversalEnter;
         if(root == null)
             throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
@@ -87,7 +87,7 @@ public class DTraceWriter extends DaikonWriter
 
         Member member = mi.member;
 
-		//gets the traversal pattern root for this method exit
+        //gets the traversal pattern root for this method exit
         RootInfo root = mi.traversalExit.get(lineNum);
         if(root == null)
             throw new RuntimeException("Traversal pattern not initialized for method " + mi.method_name + " at line " + lineNum);
@@ -133,7 +133,7 @@ public class DTraceWriter extends DaikonWriter
             Object thisObj,
             Object ret_val)
     {
-		//go through all of the node's children
+        //go through all of the node's children
         for(DaikonVariableInfo child: root)
         {
 
@@ -175,11 +175,11 @@ public class DTraceWriter extends DaikonWriter
         outFile.println(curInfo.getName());
         outFile.println(curInfo.getDTraceValueString(val));
 
-		//go through all of the current node's children
-		//and recurse on their values
+        //go through all of the current node's children
+        //and recurse on their values
         for (DaikonVariableInfo child : curInfo)
         {
-			Object childVal;
+            Object childVal;
 
             childVal = child.getMyValFromParentVal(val);
             traverseValue(mi, child, childVal);
@@ -187,11 +187,11 @@ public class DTraceWriter extends DaikonWriter
 
     }
 
-	/**
-	 * Returns a list of values of the field for each Object in theObjects
-	 * @param theObjects List of Objects, each must have the Field field
-	 * @param field Which field of theObjects we are probing
-	 */
+    /**
+     * Returns a list of values of the field for each Object in theObjects
+     * @param theObjects List of Objects, each must have the Field field
+     * @param field Which field of theObjects we are probing
+     */
     public static List <Object> getFieldValues(Field field, List <Object> theObjects)
     {
         if (theObjects == null || theObjects instanceof NonsensicalList)
@@ -211,14 +211,14 @@ public class DTraceWriter extends DaikonWriter
         return fieldVals;
     }
 
-	/**
-	 * Get the value of a certain field in theObj.
-	 * @param classField which field we are interested in
-	 * @param theObj The object whose field we are examining.
-	 * TheoObj must be null, Nonsensical, or of a type which
-	 * contains the field classField
-	 * @return The value of the classField field in theObj
-	 */
+    /**
+     * Get the value of a certain field in theObj.
+     * @param classField which field we are interested in
+     * @param theObj The object whose field we are examining.
+     * TheoObj must be null, Nonsensical, or of a type which
+     * contains the field classField
+     * @return The value of the classField field in theObj
+     */
     public static Object getValue(Field classField, Object theObj)
     {
         // if we don't have a real object, return NonsensicalValue
@@ -280,7 +280,7 @@ public class DTraceWriter extends DaikonWriter
     }
 
 
-	/**
+    /**
      * Similar to getValue, but used for static fields
      */
     public static Object getStaticValue(Field classField)
@@ -350,11 +350,11 @@ public class DTraceWriter extends DaikonWriter
         }
     }
 
-	/**
-	 * Return a List derived from an aray
-	 * @param arrayVal Must be an array type
-	 * @return a List (with correct primitive wrappers) corresponding to the array
-	 */
+    /**
+     * Return a List derived from an aray
+     * @param arrayVal Must be an array type
+     * @return a List (with correct primitive wrappers) corresponding to the array
+     */
     public static List getListFromArray(Object arrayVal)
     {
         if (!arrayVal.getClass().isArray())
@@ -442,7 +442,7 @@ public class DTraceWriter extends DaikonWriter
 
 
     // quotes endlines in string and quotes other formatting issues
-	// see Runtime.quote
+    // see Runtime.quote
     private static String encodeString(String input)
     {
         return Runtime.quote(input);
@@ -487,17 +487,17 @@ public class DTraceWriter extends DaikonWriter
         return typeNames;
     }
 
-	/**
-	 * Get the type of val, removing any PrimitiveWrapper if it exists
+    /**
+     * Get the type of val, removing any PrimitiveWrapper if it exists
      * For example, if we execute removeWRappers(val, boolean.class, true)
      * and (val instanceof Runtime.PrimitiveWrapper), then the method returns
      * boolean.class
      *
-	 * @param val The object whose type we are examining
-	 * @param declared the declared type of the variable corresponding to val
-	 * @param runtime Should we use the runtime type or declared type?
-	 * @return The variable's type, with primitive wrappers removed
-	 */
+     * @param val The object whose type we are examining
+     * @param declared the declared type of the variable corresponding to val
+     * @param runtime Should we use the runtime type or declared type?
+     * @return The variable's type, with primitive wrappers removed
+     */
     public static Class removeWrappers(Object val, Class declared, boolean runtime)
     {
         if (!(val instanceof Runtime.PrimitiveWrapper))

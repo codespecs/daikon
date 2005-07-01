@@ -195,7 +195,7 @@ public class Runtime
         MethodInfo mi = methods.get(mi_index);
         //System.out.println ("enter MethodInfo : " + mi.member);
         dtrace_writer.methodEntry(mi, nonce, obj, args);
-	 }
+     }
 
     }
 
@@ -243,12 +243,12 @@ public class Runtime
          println ();
          */
 
-	synchronized(all_classes)
-	    {
+    synchronized(all_classes)
+        {
         MethodInfo mi = methods.get(mi_index);
         dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, lineNum);
         // System.out.println ("enter MethodInfo : " + mi.member);
-	    }
+        }
 
     }
 
@@ -537,7 +537,7 @@ public class Runtime
      * @return ClassInfo structure corresponding to type
      */
     public static ClassInfo getClassInfoFromClass(Class type)
-	{
+    {
         try
         {
         synchronized (Runtime.all_classes)

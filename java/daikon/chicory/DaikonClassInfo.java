@@ -23,9 +23,9 @@ public class DaikonClassInfo extends DaikonVariableInfo
         super(theName, isArr);
     }
 
-	//.class variables are derived, so just keep the parent value
+    //.class variables are derived, so just keep the parent value
     public Object getMyValFromParentVal(Object value)
-    {   
+    {
         return value;
     }
 
@@ -33,7 +33,7 @@ public class DaikonClassInfo extends DaikonVariableInfo
     {
         if(isArray)
         {
-			//a list of the runtime type of each value in the array
+            //a list of the runtime type of each value in the array
             return StringInfo.showStringList(DTraceWriter.getTypeNameList((List) val));
         }
         else
@@ -41,13 +41,13 @@ public class DaikonClassInfo extends DaikonVariableInfo
             return getValueStringNonArr(val);
         }
     }
-    
-	/**
-	 * Get a String representation of the given Object's runtime type and the
-	 * corresponding "modified" value
-	 * @param val The Object whose runtime class we wish to get a String representation of
-	 * @return String representation of the given Object's runtime type
-	 */
+
+    /**
+     * Get a String representation of the given Object's runtime type and the
+     * corresponding "modified" value
+     * @param val The Object whose runtime class we wish to get a String representation of
+     * @return String representation of the given Object's runtime type
+     */
     public String getValueStringNonArr(Object val)
     {
         String valString;
@@ -60,7 +60,7 @@ public class DaikonClassInfo extends DaikonVariableInfo
         {
             valString = ("\"" + DTraceWriter.stdClassName(val.getClass()) + "\"") + DaikonWriter.lineSep + "1";
         }
-        
+
         return valString;
     }
 }

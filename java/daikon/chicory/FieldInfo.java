@@ -6,14 +6,14 @@ import java.util.*;
 
 
 /**
- * The OjbectInfo class is a subtype of DaikonVariableInfo used for variable types which are 
+ * The OjbectInfo class is a subtype of DaikonVariableInfo used for variable types which are
  * class fields.
  */
 public class FieldInfo extends DaikonVariableInfo
 {
-	/** The corresponding Field **/
+    /** The corresponding Field **/
     private Field field;
-    
+
     public FieldInfo(String theName, Field theField, boolean isArr)
     {
        super(theName, isArr);
@@ -40,4 +40,3 @@ public class FieldInfo extends DaikonVariableInfo
         }
     }
 }
-

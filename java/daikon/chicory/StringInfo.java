@@ -4,11 +4,11 @@ import java.util.*;
 
 
 /**
- * The StringInfo class is a subtype of DaikonVariableInfo used for variable types which are 
+ * The StringInfo class is a subtype of DaikonVariableInfo used for variable types which are
  * strings.
  */
 public class StringInfo extends DaikonVariableInfo
-{   
+{
     public StringInfo(String theName, boolean arr)
     {
         super(theName, arr);
@@ -18,12 +18,12 @@ public class StringInfo extends DaikonVariableInfo
     {
         return value;
     }
-    
-    
-	/**
-	 * Returns a String which contains a string representation of val, used for
-	 * dtrace information.
-	 */
+
+
+    /**
+     * Returns a String which contains a string representation of val, used for
+     * dtrace information.
+     */
     public String getDTraceValueString(Object val)
     {
         if(isArray)
@@ -35,17 +35,17 @@ public class StringInfo extends DaikonVariableInfo
             return getValueStringNonArr(val);
         }
     }
-    
-	/**
-	 * Returns a space-separated String of the elements in theValues.  If theValues
-	 * is null, returns "null." If theValues is nonsensical, returns "nonsensical".
-	 * @param theValues A list of values, each is a String
-	 * @return a space-separated String of the elements in theValues
-	 */
+
+    /**
+     * Returns a space-separated String of the elements in theValues.  If theValues
+     * is null, returns "null." If theValues is nonsensical, returns "nonsensical".
+     * @param theValues A list of values, each is a String
+     * @return a space-separated String of the elements in theValues
+     */
     public static String showStringList(List /* <String> */theValues)
     {
         StringBuffer buf = new StringBuffer();
-        
+
         if (theValues == null)
         {
             //buf.append("null");
@@ -57,8 +57,8 @@ public class StringInfo extends DaikonVariableInfo
             //buf.append("nonsensical");
             return "nonsensical" + DaikonWriter.lineSep + "2";
         }
-        
-        
+
+
 
         buf.append("[");
         for (Iterator iter = theValues.iterator(); iter.hasNext();)
@@ -75,23 +75,23 @@ public class StringInfo extends DaikonVariableInfo
                 buf.append(" ");
         }
         buf.append("]");
-        
+
         if (theValues instanceof NonsensicalList)
             buf.append(DaikonWriter.lineSep + "2");
         else
             buf.append(DaikonWriter.lineSep + "1");
-        
+
         return buf.toString();
     }
-    
-   
-	/**
-	 * Similar to showStringList, but used for non-array objects.
-	 */
+
+
+    /**
+     * Similar to showStringList, but used for non-array objects.
+     */
     public String getValueStringNonArr(Object val)
     {
         String retString;
-        
+
         if (val == null)
             retString = ("null" + DaikonWriter.lineSep);
         else if (val instanceof NonsensicalObject)
@@ -106,12 +106,12 @@ public class StringInfo extends DaikonVariableInfo
             retString += ("2");
         else
             retString += ("1");
-        
+
         return retString;
     }
-    
+
     //encodes a string: surrounds in quotes and removes line breaks
-	private String showString(String stringRef)
+    private String showString(String stringRef)
     {
         return ("\"" + encodeString(stringRef) + "\"");
     }

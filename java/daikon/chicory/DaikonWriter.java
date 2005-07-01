@@ -15,14 +15,14 @@ public abstract class DaikonWriter
     /** Controls whether modifiers and the return type are included in the decl output **/
     protected static final boolean no_modifiers_ppt = true;
 
-	/** Platform dependent line separator.  Should be "\n" on Unix **/
-	public static final String lineSep;
+    /** Platform dependent line separator.  Should be "\n" on Unix **/
+    public static final String lineSep;
 
-	static
-	{
-		lineSep = System.getProperty("line.separator");
-		assert lineSep != null : "Line separator cannot be null";
-	}
+    static
+    {
+        lineSep = System.getProperty("line.separator");
+        assert lineSep != null : "Line separator cannot be null";
+    }
 
     public DaikonWriter()
     {
@@ -39,13 +39,13 @@ public abstract class DaikonWriter
         return methodName(method, "ENTER");
     }
 
-	/**
-	 * Given a method, returns the method entry program point name for Daikon
-	 * method entry name for Daikon
-	 *
-	 * @param types Argument types
-	 * @return the decorated method entry name for Daikon
-	 */
+    /**
+     * Given a method, returns the method entry program point name for Daikon
+     * method entry name for Daikon
+     *
+     * @param types Argument types
+     * @return the decorated method entry name for Daikon
+     */
     public static String methodEntryName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor)
     {
         //System.out.printf("(bytecodes)  %s ----  %s\n", name, short_name);
@@ -78,13 +78,13 @@ public abstract class DaikonWriter
         return methodName(method, "EXIT" + lineNum);
     }
 
-	/**
+    /**
      * Given a method, returns the method exit program point name for Daikon
-	 *
-	 * @param types Argument types
-	 * @param lineNum The line number of the exit point of the method
-	 * @return the decorated method entry name for Daikon
-	 */
+     *
+     * @param types Argument types
+     * @param lineNum The line number of the exit point of the method
+     * @return the decorated method entry name for Daikon
+     */
     public static String methodExitName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor, int lineNum)
     {
         return methodName(fullClassName, types, name, short_name, isConstructor, "EXIT" + lineNum);

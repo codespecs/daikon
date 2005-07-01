@@ -55,7 +55,7 @@ public class RetTransform implements ClassFileTransformer {
       return;
     System.out.printf (format, args);
   }
-  
+
   //uses Runtime.Daikon_omit_regex and Runtime.daikon_include_regex
   //to see if the given ppt should be "filtered out"
   private boolean shouldFilter(String className, String methodName, String pptName)
@@ -77,14 +77,14 @@ public class RetTransform implements ClassFileTransformer {
             Matcher mPpt = pattern.matcher(pptName);
             Matcher mClass = pattern.matcher(className);
             Matcher mMethod = pattern.matcher(methodName);
-            
+
             if (mPpt.find() || mClass.find() || mMethod.find())
             {
                 log("not instrumenting %s, it matches regex %s\n", pptName, regex);
                 shouldExclude = true;
-                
+
                 //System.out.println("filtering 1 true on --- " + pptName);
-                
+
                 //omit takes priority over include
                 return true;
             }
@@ -105,28 +105,28 @@ public class RetTransform implements ClassFileTransformer {
                 {
                     System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
                 }
-                
+
                 Matcher mPpt = pattern.matcher(pptName);
                 Matcher mClass = pattern.matcher(className);
                 Matcher mMethod = pattern.matcher(methodName);
-                
+
                 //System.out.println("--->" + regex);
 
                 if (mPpt.find() || mClass.find() || mMethod.find())
                 {
                     //System.out.printf ("instrumenting %s, it matches regex %s\n", pptName, regex);
                     log("instrumenting %s, it matches regex %s\n", pptName, regex);
-                    
+
                     //System.out.println("filtering 2 false on --- " + pptName);
                     return false; //don't filter out
                 }
             }
         }
-        
+
         //if we're here, this ppt not explicitly included or excluded
         //so keep unless there were items in the "include only" list
         boolean ret = (Runtime.daikon_include_regex.size() > 0);
-        
+
         //System.out.println("filtering 3: " + ret + " on --- " + pptName);
         return ret;
 
@@ -161,8 +161,8 @@ public class RetTransform implements ClassFileTransformer {
     if (className.startsWith ("daikon/chicory")
         && !className.equals ("daikon/chicory/Test"))
       return (null);
-  
-    
+
+
     if (debug)
             out.format("transforming class %s\n", className);
 
@@ -186,7 +186,7 @@ public class RetTransform implements ClassFileTransformer {
       // Convert reach non-void method to save its result in a local
       // before returning
       ClassInfo c_info = save_ret_value (cg, fullClassName, loader);
-      
+
       //get constant static fields!
       Field[] fields = cg.getFields();
       for(Field field: fields)
@@ -195,7 +195,7 @@ public class RetTransform implements ClassFileTransformer {
           {
               ConstantValue value = field.getConstantValue();
               String valString;
-              
+
               if(value == null)
                   {
                   //System.out.println("WARNING FROM " + field.getName());
@@ -207,7 +207,7 @@ public class RetTransform implements ClassFileTransformer {
                   valString = value.toString();
                   //System.out.println("GOOD FROM " + field.getName() + " --- " + valString);
                   }
-              
+
               if(valString != null)
                   c_info.staticMap.put(field.getName(), valString);
           }
@@ -227,12 +227,12 @@ public class RetTransform implements ClassFileTransformer {
                 if (!hasInit)
                     cg.addMethod(createClinit(cg, fullClassName));
             }
-      
-      
+
+
       JavaClass njc = cg.getJavaClass();
       if (debug)
         njc.dump ("/tmp/ret/" + njc.getClassName() + ".class");
-      
+
       return (cg.getJavaClass().getBytes());
 
     } catch (Throwable e) {
@@ -240,21 +240,21 @@ public class RetTransform implements ClassFileTransformer {
       e.printStackTrace();
       return (null);
     }
-   
+
   }
 
   //used to add a "hook" into the <clinit> static initializer
   private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName)
-  {     
-	  call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
-	  
+  {
+      call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
+
       InstructionList newList = mg.getInstructionList();
       mg.update();
-      
-      
+
+
       InstructionList il = mg.getInstructionList();
       MethodContext context = new MethodContext(cg,mg);
-      
+
       for (InstructionHandle ih = il.getStart(); ih != null; ) {
           InstructionList new_il = null;
           Instruction inst = ih.getInstruction();
@@ -294,10 +294,10 @@ public class RetTransform implements ClassFileTransformer {
               ih = next_ih;
               continue;
             }
-            
+
             if (debug)
               out.format ("Replacing %s by %s\n", ih, new_il);
-            
+
             il.append (ih, new_il);
             InstructionTargeter[] targeters = ih.getTargeters();
             if (targeters != null) {
@@ -314,108 +314,108 @@ public class RetTransform implements ClassFileTransformer {
           // Go on to the next instruction in the list
           ih = next_ih;
         }
-      
-      
 
-      
+
+
+
       mg.setInstructionList (newList);
-      
-      
-      
+
+
+
       for (Attribute a : mg.getCodeAttributes()) {
           if (is_local_variable_type_table (a)) {
               mg.removeCodeAttribute (a);
           }
         }
-      
+
       // Update the max stack and Max Locals
       mg.setMaxLocals();
       mg.setMaxStack();
       mg.update();
-      
+
       return mg.getMethod();
   }
-  
 
- 
+
+
   //called by addInvokeToClinit to add in a hook at return opcodes
   private InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp,
-			String fullClassName, Instruction inst, MethodContext context) {
-		switch (inst.getOpcode()) {
+            String fullClassName, Instruction inst, MethodContext context) {
+        switch (inst.getOpcode()) {
 
-		case Constants.ARETURN:
-		case Constants.DRETURN:
-		case Constants.FRETURN:
-		case Constants.IRETURN:
-		case Constants.LRETURN:
-		case Constants.RETURN:
-			break;
+        case Constants.ARETURN:
+        case Constants.DRETURN:
+        case Constants.FRETURN:
+        case Constants.IRETURN:
+        case Constants.LRETURN:
+        case Constants.RETURN:
+            break;
 
-		default:
-			return (null);
-		}
+        default:
+            return (null);
+        }
 
-		InstructionList il = new InstructionList();
-		il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
-		il.append(inst);
-		return (il);
-	}
-
-
-    //created a <clinit> method if none exists, to guarantee we always have this hook  
-  	private Method createClinit(ClassGen cg, String fullClassName) {
-		/*
-		 * System.out.println(mg.getAccessFlags());
-		 * System.out.println(mg.getReturnType());
-		 * System.out.println(mg.getArgumentTypes());
-		 * System.out.println(mg.getName());
-		 * System.out.println(mg.getClassName());
-		 */
-
-		InstructionFactory factory = new InstructionFactory(cg);
-
-		InstructionList il = new InstructionList();
-		il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName,
-				factory));
-		il.append(InstructionFactory.createReturn(Type.VOID)); // need to
-																// return!
-
-		MethodGen newMethGen = new MethodGen(8, Type.VOID, new Type[0],
-				new String[0], "<clinit>", fullClassName, il, cg
-						.getConstantPool());
-		newMethGen.update();
-
-		for (Attribute a : newMethGen.getCodeAttributes()) {
-			if (is_local_variable_type_table(a)) {
-				newMethGen.removeCodeAttribute(a);
-			}
-		}
-
-		// MethodContext context = new MethodContext (cg, newMethGen);
-		// InstructionFactory ifact = context.ifact;
-
-		// il.append (ifact.createConstant (0));
-		// newMethGen.setInstructionList(il);
-		// newMethGen.update();
-
-		// Update the max stack and Max Locals
-		newMethGen.setMaxLocals();
-		newMethGen.setMaxStack();
-		newMethGen.update();
-
-		return newMethGen.getMethod();
-	}
+        InstructionList il = new InstructionList();
+        il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
+        il.append(inst);
+        return (il);
+    }
 
 
-	//created the InstructionList to insert for adding the <clinit> hookd
+    //created a <clinit> method if none exists, to guarantee we always have this hook
+      private Method createClinit(ClassGen cg, String fullClassName) {
+        /*
+         * System.out.println(mg.getAccessFlags());
+         * System.out.println(mg.getReturnType());
+         * System.out.println(mg.getArgumentTypes());
+         * System.out.println(mg.getName());
+         * System.out.println(mg.getClassName());
+         */
+
+        InstructionFactory factory = new InstructionFactory(cg);
+
+        InstructionList il = new InstructionList();
+        il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName,
+                factory));
+        il.append(InstructionFactory.createReturn(Type.VOID)); // need to
+                                                                // return!
+
+        MethodGen newMethGen = new MethodGen(8, Type.VOID, new Type[0],
+                new String[0], "<clinit>", fullClassName, il, cg
+                        .getConstantPool());
+        newMethGen.update();
+
+        for (Attribute a : newMethGen.getCodeAttributes()) {
+            if (is_local_variable_type_table(a)) {
+                newMethGen.removeCodeAttribute(a);
+            }
+        }
+
+        // MethodContext context = new MethodContext (cg, newMethGen);
+        // InstructionFactory ifact = context.ifact;
+
+        // il.append (ifact.createConstant (0));
+        // newMethGen.setInstructionList(il);
+        // newMethGen.update();
+
+        // Update the max stack and Max Locals
+        newMethGen.setMaxLocals();
+        newMethGen.setMaxStack();
+        newMethGen.update();
+
+        return newMethGen.getMethod();
+    }
+
+
+    //created the InstructionList to insert for adding the <clinit> hookd
 private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName, InstructionFactory factory)
-{ 
+{
     InstructionList invokeList = new InstructionList();
-    
+
     invokeList.append(new PUSH(cp, fullClassName));
     invokeList.append(factory.createInvoke(runtime_classname, "initNotify",
             Type.VOID, new Type[] {Type.STRING}, Constants.INVOKESTATIC));
-    
+
     //System.out.println(fullClassName + " --- " + invokeList.size());
     return invokeList;
 }
@@ -432,7 +432,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
     boolean shouldInclude = false;
-    
+
     try {
       InstructionFactory ifact = new InstructionFactory (cg);
       pgen = cg.getConstantPool();
@@ -442,7 +442,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
       for (int i = 0; i < methods.length; i++) {
         MethodGen mg = new MethodGen (methods[i], cg.getClassName(), pgen);
         MethodContext context = new MethodContext (cg, mg);
-        
+
         if (debug)
                 {
                     out.format("  Method = %s\n", mg);
@@ -479,24 +479,24 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         // and exit line numbers (information not available via reflection)
         // and add it to the list for this class.
         MethodInfo mi = (create_method_info (class_info, mg));
-        
+
         if(mi == null) //method filtered out!
             continue;
-        
+
         shouldInclude = true; //at least one method not filtered out
-        
+
         method_infos.add (mi);
-        
+
         cur_method_info_index = Runtime.methods.size();
         Runtime.methods.add (mi);
 
         // Add nonce local to matchup enter/exits
         add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName(), is_constructor(mg))));
 
-        
+
         Iterator <Boolean> shouldIncIter = mi.is_included.iterator();
         Iterator <Integer> exitIter = mi.exit_locations.iterator();
-        
+
         // Loop through each instruction
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
           InstructionList new_il = null;
@@ -530,10 +530,10 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
               ih = next_ih;
               continue;
             }
-            
+
             if (debug)
               out.format ("Replacing %s by %s\n", ih, new_il);
-            
+
             il.append (ih, new_il);
             InstructionTargeter[] targeters = ih.getTargeters();
             if (targeters != null) {
@@ -597,10 +597,10 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     // Add the class and method information to runtime so it is available
     // as enter/exit ppts are processed.
     class_info.set_method_infos (method_infos);
-    
+
     if(shouldInclude)
     {
-    synchronized (Runtime.new_classes) 
+    synchronized (Runtime.new_classes)
     {
     synchronized (Runtime.all_classes)
     {
@@ -609,7 +609,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     }
     }
     }
-    
+
     return class_info;
   }
 
@@ -618,8 +618,8 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
    * variable (return__$trace2_val) and then do the return.  Also, calls
    * Runtime.exit() immediately before the return.
    */
-  private InstructionList xform_inst (String fullClassName, Instruction inst, MethodContext c, 
-          Iterator <Boolean> shouldIncIter, Iterator <Integer> exitIter) 
+  private InstructionList xform_inst (String fullClassName, Instruction inst, MethodContext c,
+          Iterator <Boolean> shouldIncIter, Iterator <Integer> exitIter)
   {
 
     switch (inst.getOpcode()) {
@@ -640,7 +640,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         throw new RuntimeException("Not enough entries in shouldIncIter");
 
     boolean shouldInclude = shouldIncIter.next();
-    
+
     if(!shouldInclude)
         return null;
 
@@ -651,10 +651,10 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
       il.append (c.ifact.createDup (type.getSize()));
       il.append (c.ifact.createStore (type, return_loc.getIndex()));
     }
-    
+
     if(!exitIter.hasNext())
         throw new RuntimeException("Not enough exit locations in the exitIter");
-    
+
     il.append (call_enter_exit (c, "exit", exitIter.next()));
     il.append (inst);
     return (il);
@@ -746,7 +746,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     // istore <lv> (pop original value of nonce into this_invocation_nonce)
     nl.append (c.ifact.createStore (Type.INT, nonce_lv.getIndex()));
 
-    
+
     if(shouldCallEnter)
     {
     // call Runtime.enter()
@@ -843,7 +843,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
        param_index += at.getSize();
      }
 
-     // If this is an exit, push the return value and line number.  
+     // If this is an exit, push the return value and line number.
      // The return value
      // is stored in the local "return__$trace2_val"  If the return
      // value is a primitive, wrap it in the appropriate runtime wrapper
@@ -859,8 +859,8 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
            il.append (ifact.createLoad (Type.OBJECT, return_local.getIndex()));
          }
        }
-       
-       
+
+
        //push line number
        //System.out.println(c.mgen.getName() + " --> " + line);
        il.append (ifact.createConstant (line));
@@ -930,7 +930,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     } else
       return (false);
   }
-  
+
   /**
    * Return an array of strings, each corresponding to mgen's argument types
    * @return an array of strings, each corresponding to mgen's argument types
@@ -949,7 +949,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
               */
           arg_type_strings[ii] = t.toString();
       }
-      
+
       return arg_type_strings;
   }
 
@@ -970,9 +970,9 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
                     arg_names[ii] = lvs[ii + param_offset].getName();
             }
         }
-        
+
         boolean shouldInclude = false;
-        
+
         //see if we should filter the entry point
         if(!shouldFilter(class_info.class_name, mgen.getName(),
                 DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), is_constructor(mgen))))
@@ -993,7 +993,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         // Loop through each instruction and find the line number for each
         // return opcode
         List<Integer> exit_locs = new ArrayList<Integer>();
-        
+
         //tells whether each exit loc in the method is included or not (based on filters)
         List<Boolean> isIncluded = new ArrayList<Boolean>();
 
@@ -1042,18 +1042,18 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
                     }
 
                     last_line_number = line_number;
-                    
+
                     if(!shouldFilter(class_info.class_name, mgen.getName(),
                             DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), is_constructor(mgen), line_number)))
                     {
                         shouldInclude = true;
                         exit_locs.add(new Integer(line_number));
-                        
+
                         isIncluded.add(true);
                     }
                     else
                         isIncluded.add(false);
-                    
+
                     break;
 
                 default :
