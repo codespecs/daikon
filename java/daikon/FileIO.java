@@ -50,12 +50,6 @@ public final class FileIO {
   // daikon.config.Configuration interface.
 
   /**
-   * Boolean.  If true, prints the unmatched procedure entries
-   * verbosely.
-   **/
-  public static boolean dkconfig_verbose_unmatched_procedure_entries = false;
-
-  /**
    * Boolean.  When false, set modbits to 1 iff the printed
    * representation has changed.  When true, set modbits to 1 if the
    * printed representation has changed; leave other modbits as is.
@@ -80,8 +74,16 @@ public final class FileIO {
    */
   public static boolean dkconfig_read_samples_only = false;
 
-  /** Boolean.  When true, don't print unmatched procedure entries. **/
-  public static boolean dkconfig_unmatched_procedure_entries_quiet = true;
+  /** Boolean.  When true, don't print a warning about unmatched procedure
+   * entries, which are ignored by Daikon.
+   **/
+  public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
+
+  /**
+   * Boolean.  If true, prints the unmatched procedure entries
+   * verbosely.
+   **/
+  public static boolean dkconfig_verbose_unmatched_procedure_entries = false;
 
   /**
    * Boolean.  When true, suppress exceptions related to file reading.
@@ -456,6 +458,15 @@ public final class FileIO {
 
     // Print the Invocation on two lines, indented by two spaces
     String format() {
+      return format(true);
+    }
+
+    // Print the Invocation on one or two lines, indented by two spaces
+    String format(boolean show_values) {
+      if (! show_values) {
+        return "  " + ppt.ppt_name.getNameWithoutPoint();
+      }
+
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
 
@@ -1063,12 +1074,14 @@ public final class FileIO {
     if (dkconfig_unmatched_procedure_entries_quiet)
       return;
 
+    int unmatched_count = call_stack.size() + call_hashmap.size();
+
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.println(
         "No return from procedure observed "
-          + UtilMDE.nplural((call_stack.size() + call_hashmap.size()), "time")
-          + ".");
+          + UtilMDE.nplural(unmatched_count, "time")
+          + ".  Unmatched entries are ignored!");
       if (!call_hashmap.isEmpty()) {
         System.out.println("Unterminated calls:");
         if (dkconfig_verbose_unmatched_procedure_entries) {
@@ -1085,7 +1098,9 @@ public final class FileIO {
       }
 
       if (!call_stack.empty()) {
-        System.out.println("Remaining call stack:");
+        System.out.println("Remaining call " +
+                           UtilMDE.nplural(unmatched_count, "stack")
+                           + " summarized below.");
         if (dkconfig_verbose_unmatched_procedure_entries) {
           print_invocations_verbose(call_stack);
         } else {
@@ -1130,7 +1145,7 @@ public final class FileIO {
       Integer count = (Integer) entry.getValue();
       System.out.println(
         UtilMDE.nplural(count.intValue(), "instance") + " of:");
-      System.out.println(invok.format());
+      System.out.println(invok.format(false));
     }
   }
 
