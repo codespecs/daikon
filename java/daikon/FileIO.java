@@ -75,7 +75,8 @@ public final class FileIO {
   public static boolean dkconfig_read_samples_only = false;
 
   /** Boolean.  When true, don't print a warning about unmatched procedure
-   * entries, which are ignored by Daikon.
+   * entries, which are ignored by Daikon (unless the --nohierarchy switch
+   * is provided).
    **/
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
 
@@ -1092,10 +1093,13 @@ public final class FileIO {
 
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
-      System.out.println(
+      System.out.print(
         "No return from procedure observed "
-          + UtilMDE.nplural(unmatched_count, "time")
-          + ".  Unmatched entries are ignored!");
+          + UtilMDE.nplural(unmatched_count, "time") + ".");
+      if (Daikon.use_dataflow_hierarchy) {
+        System.out.print("  Unmatched entries are ignored!");
+      }
+      System.out.println();
       if (!call_hashmap.isEmpty()) {
         System.out.println("Unterminated calls:");
         if (dkconfig_verbose_unmatched_procedure_entries) {
@@ -1121,8 +1125,11 @@ public final class FileIO {
           print_invocations_grouped(call_stack);
         }
       }
-      System.out.println("End of report for procedures not returned from.  "
-                         + "Unmatched entries are ignored!");
+      System.out.println("End of report for procedures not returned from.");
+      if (Daikon.use_dataflow_hierarchy) {
+        System.out.print("  Unmatched entries are ignored!");
+      }
+      System.out.println();
     }
   }
 

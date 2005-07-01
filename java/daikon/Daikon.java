@@ -1669,7 +1669,12 @@ public final class Daikon {
       throw new Daikon.TerminationMessage(message);
     }
 
-    if (FileIO.samples_processed == 0) {
+    // System.out.println("samples processed: " + FileIO.samples_processed);
+    // if  {
+    int unmatched_count = FileIO.call_stack.size() + FileIO.call_hashmap.size();
+    if ((use_dataflow_hierarchy
+         && FileIO.samples_processed == unmatched_count)
+        || (FileIO.samples_processed == 0)) {
       throw new Daikon.TerminationMessage("No samples found for any of "
                                           + UtilMDE.nplural(all_ppts.size(),
                                                             "program point"));
