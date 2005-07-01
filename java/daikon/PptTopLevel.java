@@ -2413,6 +2413,11 @@ public class PptTopLevel extends Ppt {
     if (Daikon.dkconfig_disable_splitting)
       return;
 
+    // Will this code be a problem at a parent point if one of its children
+    // has no samples and thus no implications?
+    if (num_samples() == 0)
+      return;
+
     // Add implications from each splitter
     if (splitters != null) {
       for (int i = 0; i < splitters.size(); i++) {

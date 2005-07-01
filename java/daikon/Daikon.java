@@ -250,6 +250,7 @@ public final class Daikon {
   public static Pattern ppt_omit_regexp;
   public static Pattern var_regexp;
   public static Pattern var_omit_regexp;
+  public static Set/*<String>*/ ppts_with_no_vars = new HashSet/*<String>*/();
 
   /**
    * When true, perform detailed internal checking.
@@ -1383,7 +1384,7 @@ public final class Daikon {
         debugTrace.fine("Initializing partial order");
       }
       fileio_progress.clear();
-      if (!Daikon.dkconfig_quiet) {
+      if (!Daikon.dkconfig_quiet && decl_files.size() > 0) {
         System.out.print(" (read ");
         System.out.print(UtilMDE.nplural(decl_files.size(), "decls file"));
         System.out.println(")");
@@ -1399,26 +1400,25 @@ public final class Daikon {
     }
   }
 
-  private static void load_spinfo_files(
-    Set spinfo_files // [File]
-  ) {
+  private static void load_spinfo_files(Set/*<File>*/ spinfo_files) {
+    if (dkconfig_disable_splitting || spinfo_files.isEmpty()) {
+      return;
+    }
     stopwatch.reset();
-    if (!dkconfig_disable_splitting && spinfo_files.size() > 0) {
-      try {
-        System.out.print("Reading splitter info files ");
-        create_splitters(spinfo_files);
-        System.out.print(" (read ");
-        System.out.print(
-          UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
-        System.out.println(")");
-      } catch (IOException e) {
-        System.out.println();
-        e.printStackTrace();
-        throw new Error(e.toString());
-      } finally {
-        debugProgress.fine(
-          "Time spent on load_spinfo_files: " + stopwatch.format());
-      }
+    try {
+      System.out.print("Reading splitter info files ");
+      create_splitters(spinfo_files);
+      System.out.print(" (read ");
+      System.out.print(
+                       UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.println(")");
+    } catch (IOException e) {
+      System.out.println();
+      e.printStackTrace();
+      throw new Error(e.toString());
+    } finally {
+      debugProgress.fine("Time spent on load_spinfo_files: "
+                         + stopwatch.format());
     }
   }
 
@@ -1652,6 +1652,29 @@ public final class Daikon {
           "" + FileIO.samples_processed));
     }
 
+    if (all_ppts.size() == 0) {
+      String message = "No program point declarations were found.";
+      if (FileIO.omitted_declarations != 0) {
+        message += lineSep + "  " + FileIO.omitted_declarations + " "
+          + ((FileIO.omitted_declarations == 1)
+             ? "declaration was"
+             : "declarations were")
+          + " omitted by regexps (e.g., --ppt-select-pattern).";
+      }
+      if (! ppts_with_no_vars.isEmpty()) {
+        message += lineSep + "  "
+          + UtilMDE.nplural(ppts_with_no_vars.size(), "declaration")
+          + " had no varibles (e.g., --var-select-pattern).";
+      }
+      throw new Daikon.TerminationMessage(message);
+    }
+
+    if (FileIO.samples_processed == 0) {
+      throw new Daikon.TerminationMessage("No samples found for any of "
+                                          + UtilMDE.nplural(all_ppts.size(),
+                                                            "program point"));
+    }
+
     // ppt_stats (all_ppts);
 
     //     if (debugStats.isLoggable (Level.FINE)) {
@@ -1740,7 +1763,7 @@ public final class Daikon {
     stopwatch.reset();
     fileio_progress.clear();
     if (!Daikon.dkconfig_quiet) {
-      System.out.println("Creating implications ");
+      System.out.println("Creating implications");
     }
     debugProgress.fine("Adding Implications ... ");
     for (Iterator itor = all_ppts.pptIterator(); itor.hasNext();) {

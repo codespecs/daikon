@@ -115,6 +115,11 @@ public final class FileIO {
   private static boolean to_write_nonce = false;
   private static String nonce_value, nonce_string;
 
+  // (This implementation as a public static variable is a bit unclean.)
+  // Number of ignored declarations.
+  public static int omitted_declarations = 0;
+  // Also see Daikon.ppts_with_no_vars
+
   // Logging Categories
 
   /** Debug tracer for reading. **/
@@ -204,6 +209,7 @@ public final class FileIO {
       while ((line != null) && !line.equals("")) {
         line = file.readLine();
       }
+      omitted_declarations++;
       return null;
     }
 
@@ -227,6 +233,14 @@ public final class FileIO {
       var_infos.add(vi);
     }
 
+    // An entry point may have no variables even if the exit point does.
+    // Before printing final statistics/warnings, we should remove entry
+    // points such that every corresponding exit has no variables.
+    if (var_infos.isEmpty() && !ppt_name.endsWith(enter_tag)) {
+      Daikon.ppts_with_no_vars.add(ppt_name);
+      return null;
+    }
+
     VarInfo[] vi_array = (VarInfo[])
                             var_infos.toArray(new VarInfo[var_infos.size()]);
 
@@ -236,33 +250,33 @@ public final class FileIO {
     // the ppt name is truncated before putting it in the pptMap because the visibility
     // information is only present in the decls file and not the dtrace file
 
-//    if(ppt_name.startsWith("public")) {
-//      int position = ppt_name.indexOf("public");
-//      ppt_name = ppt_name.substring(7);
-//      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-//      newppt.ppt_name.setVisibility("public");
-//      return newppt;
-//    }
-//    if(ppt_name.startsWith("private")) {
-//      int position = ppt_name.indexOf("private");
-//      ppt_name = ppt_name.substring(8);
-//      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-//      newppt.ppt_name.setVisibility("private");
-//      return newppt;
-//    }
-//    if(ppt_name.startsWith("protected")) {
-//      int position = ppt_name.indexOf("protected");
-//      ppt_name = ppt_name.substring(10);
-//      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-//      newppt.ppt_name.setVisibility("protected");
-//      return newppt;
-//    }
+    //    if(ppt_name.startsWith("public")) {
+    //      int position = ppt_name.indexOf("public");
+    //      ppt_name = ppt_name.substring(7);
+    //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
+    //      newppt.ppt_name.setVisibility("public");
+    //      return newppt;
+    //    }
+    //    if(ppt_name.startsWith("private")) {
+    //      int position = ppt_name.indexOf("private");
+    //      ppt_name = ppt_name.substring(8);
+    //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
+    //      newppt.ppt_name.setVisibility("private");
+    //      return newppt;
+    //    }
+    //    if(ppt_name.startsWith("protected")) {
+    //      int position = ppt_name.indexOf("protected");
+    //      ppt_name = ppt_name.substring(10);
+    //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
+    //      newppt.ppt_name.setVisibility("protected");
+    //      return newppt;
+    //    }
 
     //TODO: add a new config variable to turn this accessibility flag processing on?
     PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-   // newppt.ppt_name.setVisibility("package-protected");
+    // newppt.ppt_name.setVisibility("package-protected");
     return newppt;
-    //return new PptTopLevel(ppt_name, vi_array);
+    // return new PptTopLevel(ppt_name, vi_array);
   }
 
   // So that warning message below is only printed once
@@ -1098,16 +1112,17 @@ public final class FileIO {
       }
 
       if (!call_stack.empty()) {
-        System.out.println("Remaining call " +
-                           UtilMDE.nplural(unmatched_count, "stack")
-                           + " summarized below.");
         if (dkconfig_verbose_unmatched_procedure_entries) {
+          System.out.println("Remaining " +
+                             UtilMDE.nplural(unmatched_count, "stack")
+                             + " call summarized below.");
           print_invocations_verbose(call_stack);
         } else {
           print_invocations_grouped(call_stack);
         }
       }
-      System.out.println("End of report for procedures not returned from.");
+      System.out.println("End of report for procedures not returned from.  "
+                         + "Unmatched entries are ignored!");
     }
   }
 
@@ -1575,8 +1590,9 @@ public final class FileIO {
 
     // System.out.println ("ppt_name = '" + ppt_name + "' max name = '"
     //                     + Daikon.ppt_max_name + "'");
-    if (((Daikon.ppt_omit_regexp != null)
-         && Daikon.ppt_omit_regexp.matcher(ppt_name).find())
+    if (Daikon.ppts_with_no_vars.contains(ppt_name)
+        || ((Daikon.ppt_omit_regexp != null)
+            && Daikon.ppt_omit_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_regexp != null)
             && !Daikon.ppt_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_max_name != null)
