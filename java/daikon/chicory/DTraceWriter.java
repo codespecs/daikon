@@ -45,8 +45,6 @@ public class DTraceWriter extends DaikonWriter
      *
      * @param writer
      *            Stream to write to
-     * @param depth
-     *            Tree recursion to traverse for each variable
      */
     public DTraceWriter(PrintStream writer)
     {
@@ -59,7 +57,7 @@ public class DTraceWriter extends DaikonWriter
      */
     public void methodEntry(MethodInfo mi, int nonceVal, Object obj, Object[] args)
     {
-		//don't print 
+		//don't print
         if(Runtime.dtrace_closed)
             return;
 
@@ -88,7 +86,7 @@ public class DTraceWriter extends DaikonWriter
             return;
 
         Member member = mi.member;
-        
+
 		//gets the traversal pattern root for this method exit
         RootInfo root = mi.traversalExit.get(lineNum);
         if(root == null)
@@ -117,7 +115,7 @@ public class DTraceWriter extends DaikonWriter
         outFile.println(val);
     }
 
-    /** 
+    /**
      * Prints the method's return value and all relevant variables.
      * Uses the tree of DaikonVariableInfo objects.
      * @param mi The method whose program point we are printing
@@ -134,13 +132,13 @@ public class DTraceWriter extends DaikonWriter
             Object[] args,
             Object thisObj,
             Object ret_val)
-    {		
+    {
 		//go through all of the node's children
         for(DaikonVariableInfo child: root)
         {
-            
+
             Object val;
-            
+
             if(child instanceof ReturnInfo)
             {
                 val = ret_val;
@@ -157,7 +155,7 @@ public class DTraceWriter extends DaikonWriter
             {
                // can only occur for static fields
                // non-static fields will appear as children of "this"
-                
+
                val = child.getMyValFromParentVal(null);
             }
             else
@@ -176,13 +174,13 @@ public class DTraceWriter extends DaikonWriter
     {
         outFile.println(curInfo.getName());
         outFile.println(curInfo.getDTraceValueString(val));
-        
+
 		//go through all of the current node's children
 		//and recurse on their values
         for (DaikonVariableInfo child : curInfo)
         {
 			Object childVal;
-			
+
             childVal = child.getMyValFromParentVal(val);
             traverseValue(mi, child, childVal);
         }
@@ -200,7 +198,7 @@ public class DTraceWriter extends DaikonWriter
             return nonsenseList;
 
         List <Object> fieldVals = new ArrayList <Object> ();
-        
+
         for(Object theObj : theObjects)
         {
 
@@ -217,7 +215,7 @@ public class DTraceWriter extends DaikonWriter
 	 * Get the value of a certain field in theObj.
 	 * @param classField which field we are interested in
 	 * @param theObj The object whose field we are examining.
-	 * TheoObj must be null, Nonsensical, or of a type which 
+	 * TheoObj must be null, Nonsensical, or of a type which
 	 * contains the field classField
 	 * @return The value of the classField field in theObj
 	 */
@@ -483,7 +481,7 @@ public class DTraceWriter extends DaikonWriter
             }
             else
                 typeNames.add(null);
-                
+
         }
 
         return typeNames;
@@ -494,7 +492,7 @@ public class DTraceWriter extends DaikonWriter
      * For example, if we execute removeWRappers(val, boolean.class, true)
      * and (val instanceof Runtime.PrimitiveWrapper), then the method returns
      * boolean.class
-     * 
+     *
 	 * @param val The object whose type we are examining
 	 * @param declared the declared type of the variable corresponding to val
 	 * @param runtime Should we use the runtime type or declared type?

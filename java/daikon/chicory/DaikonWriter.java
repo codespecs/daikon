@@ -14,10 +14,10 @@ public abstract class DaikonWriter
 {
     /** Controls whether modifiers and the return type are included in the decl output **/
     protected static final boolean no_modifiers_ppt = true;
-	
+
 	/** Platform dependent line separator.  Should be "\n" on Unix **/
 	public static final String lineSep;
-	
+
 	static
 	{
 		lineSep = System.getProperty("line.separator");
@@ -34,15 +34,15 @@ public abstract class DaikonWriter
      * @return the decorated method entry name for Daikon
      */
     public static String methodEntryName(Member method)
-    {       
+    {
         //System.out.printf("(NORM)  %s ----  %s\n", method.toString(), method.getName());
         return methodName(method, "ENTER");
     }
-    
+
 	/**
 	 * Given a method, returns the method entry program point name for Daikon
 	 * method entry name for Daikon
-	 * 
+	 *
 	 * @param types Argument types
 	 * @return the decorated method entry name for Daikon
 	 */
@@ -52,7 +52,7 @@ public abstract class DaikonWriter
         return methodName(fullClassName, types, name, short_name, isConstructor, "ENTER");
     }
 
-    
+
     /**
      * Determines if this field warrants an [ = val ] entry in decls file
      *
@@ -77,10 +77,10 @@ public abstract class DaikonWriter
     {
         return methodName(method, "EXIT" + lineNum);
     }
-    
+
 	/**
      * Given a method, returns the method exit program point name for Daikon
-	 * 
+	 *
 	 * @param types Argument types
 	 * @param lineNum The line number of the exit point of the method
 	 * @return the decorated method entry name for Daikon
@@ -90,54 +90,54 @@ public abstract class DaikonWriter
         return methodName(fullClassName, types, name, short_name, isConstructor, "EXIT" + lineNum);
     }
 
-    
+
     /**
      * Constructs the program point name (which includes the point string at the end)
-     * 
+     *
      * @param fullClassName packageName.className
      * @param types String representation of the declared types of the parameters
      *          for example: {"int", "java.lang.Object", "float"}
      * @param name The method with modifiers and parameters
      * @param short_name Just the method's name
-     * 
+     *
      * So a corresponding name/short_name pair could be:
-     *     name: public static void DataStructures.StackArTester.doNew(int size) 
+     *     name: public static void DataStructures.StackArTester.doNew(int size)
      *     short_name: doNew
-     * 
+     *
      * @param isConstructor Is the method a constructor
      * @param point Usually "EXIT" or "ENTER"
      * @return Same thing as methodName(Member, point)
      */
-    private static String methodName(String fullClassName, String[] types, String name, 
+    private static String methodName(String fullClassName, String[] types, String name,
             String short_name, boolean isConstructor, String point)
-    {        
+    {
         //System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n", fullClassName, name, short_name);
-        
+
         String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-        
+
         // replace <init>'s with the actual class name
         // so "public void <init>" becomes "public void StackAr" for example
         name = name.replace("<init>", className);
         short_name = short_name.replace("<init>", className);
-        
+
         // build up the string to go inside the parens
         StringBuilder paramTypes = new StringBuilder();
-        for(int i = 0; i < types.length; i++) 
+        for(int i = 0; i < types.length; i++)
         {
             paramTypes.append(types[i]);
-            
+
             if(i != types.length - 1)
                 paramTypes.append(", ");
         }
         name = name.replaceFirst("\\(.*\\)", "(" + paramTypes + ")" );
-        
+
         return methodName(name, short_name, isConstructor, point);
     }
-    
-    
+
+
     /**
      * Constructs the program point name (which includes the point string at the end)
-     * 
+     *
      * @param method non-null method
      * @param point The point in the method, usually "EXIT" or "ENTRY"
      * @return the program point name which includes the point string
@@ -147,15 +147,15 @@ public abstract class DaikonWriter
         String name = method.toString();
         String short_name = method.getName();
         boolean isConstructor = method instanceof Constructor;
-        
-        
+
+
         return methodName(name, short_name, isConstructor, point);
     }
-    
+
     /**
-     * 
+     *
      * Constructs the program point name (which includes the point string at the end)
-     * 
+     *
      * @param name Looks like: "public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception"
      * @param short_name Looks like: "push"
      * @param isConstructor
@@ -165,41 +165,41 @@ public abstract class DaikonWriter
     {
 
         //System.out.printf("%s ---- %s %n", name, short_name);
-        
+
         if (isConstructor)
-        {          
+        {
             name = fixDuplicateConstructorName(name, short_name);
         }
-        
+
         // Remove the modifiers and the type
         if (no_modifiers_ppt)
         {
             // at this point, name might look something like:
             // public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception
-            
+
             // get ride of throws and everything after it (and space right before it)
             name = name.replaceFirst (" throws.*", "");
-            
+
             // get rid of modifiers before the method name (public boolean in above example)
             String[] parts = name.split ("  *");
             name = parts[parts.length-1];
         }
         name = name.replaceAll (",", ", ");
-               
+
         return (name + ":::" + point);
     }
-    
+
     /**
      *
      * For some reason dfej repeats the name of the class for
      * constructors (eg, DataStructures.StackAr() becomes
      * DataStructures.StackAr.StackAr().  Mimic that behavior
-     s* 
+     s*
      */
     private static String fixDuplicateConstructorName(String name, String short_name)
     {
-        int lastPeriod = short_name.lastIndexOf(".");           
-        
+        int lastPeriod = short_name.lastIndexOf(".");
+
         if (lastPeriod < 0)
         {
             name = name.replace (short_name + "(",
@@ -211,16 +211,16 @@ public abstract class DaikonWriter
             name = name.replace ("." + short_name + "(",
                              "." + short_name + "." + short_name + "(");
         }
-        
+
         return name;
     }
 
     /**
      * Given a type, gets the representation type to be used in Daikon.
      * For example, the representation type of a class object is "hashcode."
-     * 
+     *
      * @param type The type of the variable
-     * @param inArray Whether the variable is being output as an array
+     * @param asArray Whether the variable is being output as an array
      * (true) or as a pointer (false).
      * @return The representation type as a string
      */
@@ -259,7 +259,7 @@ public abstract class DaikonWriter
     /**
      * Returns the correctly formulated ":::OBJECT" name of the class
      * (ie, the program point name)
-     * 
+     *
      * @param type the ClassType type
      * @return the correctly formulated String
      */
@@ -435,7 +435,7 @@ public abstract class DaikonWriter
      *
      * @param type
      *            The ClassType to check for implicit list
-     *            
+     *
      * @return    The field in the class which is the "linked list field",
      *            or null if no such field exists.
      */
