@@ -457,7 +457,7 @@ public final class FileIO {
   /// invocation tracking for dtrace files entry/exit grouping
   ///
 
-  static final class Invocation {
+  static final class Invocation implements Comparable {
     PptTopLevel ppt; // used in printing and in suppressing duplicates
     // Rather than a valuetuple, place its elements here.
     Object[] vals;
@@ -534,6 +534,10 @@ public final class FileIO {
         return this.format().equals(((FileIO.Invocation) other).format());
       else
         return false;
+    }
+
+    public int compareTo(Object other) {
+      return ppt.name().compareTo(((Invocation)other).ppt.name());
     }
 
     public int hashCode() {
@@ -1104,6 +1108,7 @@ public final class FileIO {
         System.out.println("Unterminated calls:");
         if (dkconfig_verbose_unmatched_procedure_entries) {
           // Print the invocations in sorted order.
+          // (Does this work?  The keys are integers. -MDE 7/1/2005.)
           TreeSet keys = new TreeSet(call_hashmap.keySet());
           ArrayList invocations = new ArrayList();
           for (Iterator itor = keys.iterator(); itor.hasNext();) {
@@ -1142,7 +1147,7 @@ public final class FileIO {
   }
 
   /**
-   * Print the invocations in the collection, in no particular order, but
+   * Print the invocations in the collection, in order, and
    * suppressing duplicates.
    **/
   static void print_invocations_grouped(Collection invocations) {
@@ -1161,13 +1166,13 @@ public final class FileIO {
       }
     }
 
-    for (Iterator i = counter.entrySet().iterator(); i.hasNext();) {
-      Map.Entry entry = (Map.Entry) i.next();
-      Invocation invok = (Invocation) entry.getKey();
-      Integer count = (Integer) entry.getValue();
-      System.out.println(
-        UtilMDE.nplural(count.intValue(), "instance") + " of:");
-      System.out.println(invok.format(false));
+    // Print the invocations in sorted order.
+    TreeSet keys = new TreeSet(counter.keySet());
+    for (Iterator i = keys.iterator(); i.hasNext();) {
+      Invocation invok = (Invocation) i.next();
+      Integer count = (Integer) counter.get(invok);
+      System.out.println(invok.format(false) + " : "
+                         + UtilMDE.nplural(count.intValue(), "invocation"));
     }
   }
 
