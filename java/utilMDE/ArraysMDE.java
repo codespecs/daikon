@@ -722,8 +722,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static Object[] concat(Object[] a, Object[] b) {
     if (a == null && b == null) return null;
@@ -737,8 +739,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static String[] concat(String[] a, String[] b) {
     if (a == null && b == null) return null;
@@ -753,8 +757,10 @@ public final class ArraysMDE {
 
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static byte[] concat(byte[] a, byte[] b) {
     if (a == null && b == null) return null;
@@ -768,8 +774,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static boolean[] concat(boolean[] a, boolean[] b) {
     if (a == null && b == null) return null;
@@ -783,8 +791,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static char[] concat(char[] a, char[] b) {
     if (a == null && b == null) return null;
@@ -799,8 +809,10 @@ public final class ArraysMDE {
 
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static double[] concat(double[] a, double[] b) {
     if (a == null && b == null) return null;
@@ -814,8 +826,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static float[] concat(float[] a, float[] b) {
     if (a == null && b == null) return null;
@@ -829,8 +843,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static int[] concat(int[] a, int[] b) {
     if (a == null && b == null) return null;
@@ -844,8 +860,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static long[] concat(long[] a, long[] b) {
     if (a == null && b == null) return null;
@@ -859,8 +877,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
    **/
   public static short[] concat(short[] a, short[] b) {
     if (a == null && b == null) return null;
