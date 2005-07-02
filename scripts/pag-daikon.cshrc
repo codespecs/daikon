@@ -38,9 +38,11 @@ setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
 
 if ($?debuglogin) echo "about to source daikon.cshrc: ${INV}/scripts/daikon.cshrc"
 source ${INV}/scripts/daikon.cshrc
-if ($?debuglogin) echo "sourced daikon.cshrc"
+if ($?debuglogin) echo "sourced daikon.cshrc from pag-daikon.cshrc"
 
 setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
+
+setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 
 setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
 setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}
