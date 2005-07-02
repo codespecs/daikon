@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * Utilities for manipulating arrays.
  * This complements @link{java.util.Arrays}.
+ * Also, some routines also handle Collections.
  **/
 public final class ArraysMDE {
   private ArraysMDE() { throw new Error("do not instantiate"); }
@@ -311,7 +312,7 @@ public final class ArraysMDE {
    *    testing for equality using the equals method.
    * @return the first index whose element is equal to the specified element,
    *    or -1 if no such element is found in the array.
-   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.util.List#indexOf(java.lang.Object)
    **/
   public static int indexOf(Object[] a, Object elt) {
     for (int i=0; i<a.length; i++)
@@ -326,11 +327,38 @@ public final class ArraysMDE {
    * @return the first index i containing the specified element,
    *    such that minindex <= i < indexlimit,
    *    or -1 if the element is not found in that section of the array.
-   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.util.List#indexOf(java.lang.Object)
    **/
   public static int indexOf(Object[] a, Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt.equals(a[i]))
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first occurence of the given element in the list,
+   *    testing for equality using the equals method.
+   *    Identical to List.indexOf, but included for completeness.
+   * @return the first index whose element is equal to the specified element,
+   *    or -1 if no such element is found in the list.
+   * @see java.util.List#indexOf(java.lang.Object)
+   **/
+  public static int indexOf(List a, Object elt) {
+    return a.indexOf(elt);
+  }
+
+  /**
+   * Searches for the first occurence of the given element in the list,
+   *    testing for equality using the equals method.
+   * @return the first index i containing the specified element,
+   *    such that minindex <= i < indexlimit,
+   *    or -1 if the element is not found in that section of the list.
+   * @see java.util.List#indexOf(java.lang.Object)
+   **/
+  public static int indexOf(List a, Object elt, int minindex, int indexlimit) {
+    for (int i=minindex; i<indexlimit; i++)
+      if (elt.equals(a.get(i)))
         return i;
     return -1;
   }
@@ -360,6 +388,35 @@ public final class ArraysMDE {
   public static int indexOfEq(Object[] a, Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a[i])
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first occurence of the given element in the list,
+   *    testing for equality using == (not the equals method).
+   * @return the first index containing the specified element,
+   *    or -1 if the element is not found in the list.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   **/
+  public static int indexOfEq(List a, Object elt) {
+    for (int i=0; i<a.size(); i++)
+      if (elt == a.get(i))
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first occurence of the given element in the list,
+   *    testing for equality using == (not the equals method).
+   * @return the first index i containing the specified element,
+   *    such that minindex <= i < indexlimit,
+   *    or -1 if the element is not found in that section of the list.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   **/
+  public static int indexOfEq(List a, Object elt, int minindex, int indexlimit) {
+    for (int i=minindex; i<indexlimit; i++)
+      if (elt == a.get(i))
         return i;
     return -1;
   }
@@ -502,6 +559,102 @@ public final class ArraysMDE {
   }
 
   /**
+   * Searches for the first subsequence of the list that matches the given array elementwise,
+   *    testing for equality using the equals method.
+   * @return the first index at which the second array starts in the first list,
+   *    or -1 if no such element is found in the list.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.lang.String#indexOf(java.lang.String)
+   **/
+  public static int indexOf(List a, Object[] sub) {
+    int a_index_max = a.size() - sub.length + 1;
+    for (int i=0; i<=a_index_max; i++)
+      if (isSubarray(a, sub, i))
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first subsequence of the list that matches the given array elementwise,
+   *    testing for equality using == (not the equals method).
+   * @return the first index at which the second array starts in the first list,
+   *    or -1 if the element is not found in the list.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.lang.String#indexOf(java.lang.String)
+   **/
+  public static int indexOfEq(List a, Object[] sub) {
+    int a_index_max = a.size() - sub.length + 1;
+    for (int i=0; i<=a_index_max; i++)
+      if (isSubarrayEq(a, sub, i))
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first subsequence of the array that matches the given list elementwise,
+   *    testing for equality using the equals method.
+   * @return the first index at which the second list starts in the first array,
+   *    or -1 if no such element is found in the array.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.lang.String#indexOf(java.lang.String)
+   **/
+  public static int indexOf(Object[] a, List sub) {
+    int a_index_max = a.length - sub.size() + 1;
+    for (int i=0; i<=a_index_max; i++)
+      if (isSubarray(a, sub, i))
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first subsequence of the array that matches the given list elementwise,
+   *    testing for equality using == (not the equals method).
+   * @return the first index at which the second list starts in the first array,
+   *    or -1 if the element is not found in the array.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.lang.String#indexOf(java.lang.String)
+   **/
+  public static int indexOfEq(Object[] a, List sub) {
+    int a_index_max = a.length - sub.size() + 1;
+    for (int i=0; i<=a_index_max; i++)
+      if (isSubarrayEq(a, sub, i))
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first subsequence of the list that matches the given list elementwise,
+   *    testing for equality using the equals method.
+   * @return the first index at which the second list starts in the first list,
+   *    or -1 if no such element is found in the list.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.lang.String#indexOf(java.lang.String)
+   **/
+  public static int indexOf(List a, List sub) {
+    int a_index_max = a.size() - sub.size() + 1;
+    for (int i=0; i<=a_index_max; i++)
+      if (isSubarray(a, sub, i))
+        return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first subsequence of the list that matches the given list elementwise,
+   *    testing for equality using == (not the equals method).
+   * @return the first index at which the second list starts in the first list,
+   *    or -1 if the element is not found in the list.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.lang.String#indexOf(java.lang.String)
+   **/
+  public static int indexOfEq(List a, List sub) {
+    int a_index_max = a.size() - sub.size() + 1;
+    for (int i=0; i<=a_index_max; i++)
+      if (isSubarrayEq(a, sub, i))
+        return i;
+    return -1;
+  }
+
+  /**
    * Searches for the first subsequence of the array that matches the given array elementwise.
    * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
@@ -593,6 +746,18 @@ public final class ArraysMDE {
     Object[] result = new Object[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
+  }
+
+  /**
+   * Return a sublist of the given list.
+   * @param a the original list
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
+  public static List subarray(List a, int startindex, int length) {
+    return a.subList(startindex, startindex+length);
   }
 
   /**
@@ -735,6 +900,69 @@ public final class ArraysMDE {
 
     System.arraycopy(a, 0, result, 0, a.length);
     System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static Object[] concat(Object[] a, List b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b.toArray(new Object[]{});
+    if (b == null) return a;
+    Object[] result = new Object[a.length + b.size()];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    // System.arraycopy(b, 0, result, a.length, b.size());
+    for (int i=0; i<b.size(); i++) {
+      result[i+a.length] = b.get(i);
+    }
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static Object[] concat(List a, Object[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a.toArray(new Object[]{});
+    Object[] result = new Object[a.size() + b.length];
+
+    // System.arraycopy(a, 0, result, 0, a.size());
+    for (int i=0; i<a.size(); i++) {
+      result[i] = a.get(i);
+    }
+    System.arraycopy(b, 0, result, a.size(), b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static Object[] concat(List a, List b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b.toArray(new Object[]{});
+    if (b == null) return a.toArray(new Object[]{});
+    Object[] result = new Object[a.size() + b.size()];
+
+    // System.arraycopy(a, 0, result, 0, a.length);
+    for (int i=0; i<a.size(); i++) {
+      result[i] = a.get(i);
+    }
+    // System.arraycopy(b, 0, result, a.length, b.length);
+    for (int i=0; i<b.size(); i++) {
+      result[i+a.size()] = b.get(i);
+    }
     return result;
   }
 
@@ -936,6 +1164,114 @@ public final class ArraysMDE {
 
   /**
    * Determines whether the second array is a subarray of the first,
+   *    starting at the specified index of the first,
+   *    testing for equality using the equals method.
+   * @return the first index at which the second array starts in the first array,
+   *    or -1 if no such element is found in the array.
+   **/
+  public static boolean isSubarray(Object[] a, List sub, int a_offset) {
+    int a_len = a.length - a_offset;
+    int sub_len = sub.size();
+    if (a_len < sub_len)
+      return false;
+    for (int i=0; i<sub_len; i++)
+      if (! sub.get(i).equals(a[a_offset+i]))
+        return false;
+    return true;
+  }
+
+  /**
+   * Determines whether the second array is a subarray of the first,
+   *    starting at the specified index of the first,
+   *    testing for equality using == (not the equals method).
+   * @return the first index at which the second array starts in the first array,
+   *    or -1 if the element is not found in the array.
+   **/
+  public static boolean isSubarrayEq(Object[] a, List sub, int a_offset) {
+    int a_len = a.length - a_offset;
+    int sub_len = sub.size();
+    if (a_len < sub_len)
+      return false;
+    for (int i=0; i<sub_len; i++)
+      if (sub.get(i) != a[a_offset+i])
+        return false;
+    return true;
+  }
+
+  /**
+   * Determines whether the second array is a subarray of the first,
+   *    starting at the specified index of the first,
+   *    testing for equality using the equals method.
+   * @return the first index at which the second array starts in the first array,
+   *    or -1 if no such element is found in the array.
+   **/
+  public static boolean isSubarray(List a, Object[] sub, int a_offset) {
+    int a_len = a.size() - a_offset;
+    int sub_len = sub.length;
+    if (a_len < sub_len)
+      return false;
+    for (int i=0; i<sub_len; i++)
+      if (! sub[i].equals(a.get(a_offset+i)))
+        return false;
+    return true;
+  }
+
+  /**
+   * Determines whether the second array is a subarray of the first,
+   *    starting at the specified index of the first,
+   *    testing for equality using == (not the equals method).
+   * @return the first index at which the second array starts in the first array,
+   *    or -1 if the element is not found in the array.
+   **/
+  public static boolean isSubarrayEq(List a, Object[] sub, int a_offset) {
+    int a_len = a.size() - a_offset;
+    int sub_len = sub.length;
+    if (a_len < sub_len)
+      return false;
+    for (int i=0; i<sub_len; i++)
+      if (sub[i] != a.get(a_offset+i))
+        return false;
+    return true;
+  }
+
+  /**
+   * Determines whether the second array is a subarray of the first,
+   *    starting at the specified index of the first,
+   *    testing for equality using the equals method.
+   * @return the first index at which the second array starts in the first array,
+   *    or -1 if no such element is found in the array.
+   **/
+  public static boolean isSubarray(List a, List sub, int a_offset) {
+    int a_len = a.size() - a_offset;
+    int sub_len = sub.size();
+    if (a_len < sub_len)
+      return false;
+    for (int i=0; i<sub_len; i++)
+      if (! sub.get(i).equals(a.get(a_offset+i)))
+        return false;
+    return true;
+  }
+
+  /**
+   * Determines whether the second array is a subarray of the first,
+   *    starting at the specified index of the first,
+   *    testing for equality using == (not the equals method).
+   * @return the first index at which the second array starts in the first array,
+   *    or -1 if the element is not found in the array.
+   **/
+  public static boolean isSubarrayEq(List a, List sub, int a_offset) {
+    int a_len = a.size() - a_offset;
+    int sub_len = sub.size();
+    if (a_len < sub_len)
+      return false;
+    for (int i=0; i<sub_len; i++)
+      if (sub.get(i) != a.get(a_offset+i))
+        return false;
+    return true;
+  }
+
+  /**
+   * Determines whether the second array is a subarray of the first,
    *    starting at the specified index of the first.
    * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
@@ -1050,6 +1386,52 @@ public final class ArraysMDE {
           sb.append('\"');
         } else {
           sb.append(a[i]);
+        }
+      }
+    }
+    sb.append("]");
+    return sb.toString();
+  }
+
+  /**
+   * Return a string representation of the array.
+   * The representation is patterned after that of java.util.Vector.
+   * @see java.util.Vector#toString
+   **/
+  public static String toString(List a) {
+    return toString(a, false);
+  }
+
+  /**
+   * Return a string representation of the array.
+   * The representation is patterned after that of java.util.Vector.
+   * @see java.util.Vector#toString
+   **/
+  public static String toStringQuoted(List a) {
+    return toString(a, true);
+  }
+
+  /**
+   * Return a string representation of the array.
+   * The representation is patterned after that of java.util.Vector.
+   * @see java.util.Vector#toString
+   **/
+  public static String toString(List a, boolean quoted) {
+    if (a == null) {
+      return "null";
+    }
+    StringBuffer sb = new StringBuffer();
+    sb.append("[");
+    if (a.size() > 0) {
+      sb.append(a.get(0));
+      for (int i=1; i<a.size(); i++) {
+        sb.append(", ");
+        if (quoted) {
+          sb.append('\"');
+          sb.append(UtilMDE.escapeNonJava((String)a.get(i)));
+          sb.append('\"');
+        } else {
+          sb.append(a.get(i));
         }
       }
     }
@@ -1186,6 +1568,8 @@ public final class ArraysMDE {
       return toString((long[]) obj);
     } else if (obj instanceof Object[]) {
       return toString((Object[]) obj);
+    } else if (obj instanceof List) {
+      return toString((List) obj);
     } else {
       throw new IllegalArgumentException("Argument is " + ((obj == null) ? "null" :
                                          "of class " + obj.getClass().getName()));
@@ -1208,6 +1592,8 @@ public final class ArraysMDE {
       return ((long[]) obj).length;
     } else if (obj instanceof Object[]) {
       return ((Object[]) obj).length;
+    } else if (obj instanceof List) {
+      return ((List) obj).size();
     } else {
       throw new IllegalArgumentException("Argument is " + ((obj == null) ? "null" :
                                          "of class " + obj.getClass().getName()));
@@ -1254,7 +1640,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (boolean[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       Boolean n = Boolean.valueOf (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1270,7 +1656,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (byte[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       Byte n = new Byte (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1286,7 +1672,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (char[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       Character n = new Character (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1302,7 +1688,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (float[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       Float n = new Float (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1318,7 +1704,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (short[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       Short n = new Short (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1334,7 +1720,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (int[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       Integer n = new Integer (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1352,7 +1738,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (double[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to create the last element,
+      // Could be optimized not to create the last element,
       // but that would make the code much less readable.
       Double n = new Double (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1369,7 +1755,7 @@ public final class ArraysMDE {
   public static boolean noDuplicates (long[] a) {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
-      // could be optimzed not to create the last element,
+      // Could be optimized not to create the last element,
       // but that would make the code much less readable.
       Long n = new Long (a[i]);
       if (hs.contains(n)) { return false; }
@@ -1387,7 +1773,7 @@ public final class ArraysMDE {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
       if (hs.contains(a[i])) { return false; }
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       hs.add (a[i]);
     }
@@ -1402,9 +1788,24 @@ public final class ArraysMDE {
     HashSet hs = new HashSet ();
     for (int i = 0; i < a.length; i++) {
       if (hs.contains(a[i])) { return false; }
-      // could be optimzed not to add the last element,
+      // Could be optimized not to add the last element,
       // but that would make the code much less readable.
       hs.add (a[i]);
+    }
+    return true;
+  }
+
+  /**
+   * @return true iff a does not contain duplicate elements
+   * using O(n) time and O(n) space.
+   */
+  public static boolean noDuplicates (List a) {
+    HashSet hs = new HashSet ();
+    for (int i = 0; i < a.size(); i++) {
+      if (hs.contains(a.get(i))) { return false; }
+      // Could be optimized not to add the last element,
+      // but that would make the code much less readable.
+      hs.add (a.get(i));
     }
     return true;
   }
@@ -1873,8 +2274,26 @@ public final class ArraysMDE {
     return true;
   }
 
+  /**
+   * @return true iff some element of a is null (false if a is zero-sized)
+   **/
+  public static boolean any_null(List a) {
+    if (a.size() == 0)
+      return false;
+    // The cast ensures that the right version of IndexOfEq gets called.
+    return indexOfEq(a, (Object) null) >= 0;
+  }
 
-
+  /**
+   * @return true iff all elements of a are null (unspecified result if a is zero-sized)
+   **/
+  public static boolean all_null(List a) {
+    for (int i=0; i<a.size(); i++) {
+      if (! (a.get(i) == null))
+        return false;
+    }
+    return true;
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
