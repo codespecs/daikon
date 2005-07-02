@@ -10,8 +10,8 @@ import java.util.*;
  *
  * Floating point numbers are compared for equality by dividing them by
  * one another and comparing the ratio.  By default they must be within
- * 0.0001 (0.01%) to be considered equal.  Note that zero is never equal
- * to a non-zero number using this method. <p>
+ * 0.0001 (0.01%) to be considered equal; set this value with set_rel_diff.
+ * Note that zero is never equal to a non-zero number using this method. <p>
  *
  * Additionally two NaN values are always considered equal. <p>
  **/
