@@ -5,18 +5,19 @@ import java.util.*;
 
 
 /**
- * Each DaikonVariableInfo object is a node  in the tree structure of the variables in
- * the target application.  The tree structure is built in the
- * DeclWriter and traversed in the DTraceWriter.
- * There is such a tree structure associated with every program point.  This architecture makes it
- * possible to avoid the issue of "traversal pattern duplication" in which both the
- * DeclWriter and DTraceWriter must traverse the target application's variables identically.
- * In general, the variable a will be the parent of the variables a.b and a.c in the tree, where b and c
- * are fields in a's class.
+ * Each DaikonVariableInfo object is a node in the tree structure of the
+ * variables in the target application.  The tree structure is built in the
+ * DeclWriter and traversed in the DTraceWriter.  There is such a tree
+ * structure associated with every program point.  This architecture makes
+ * it possible to avoid the issue of "traversal pattern duplication" in
+ * which both the DeclWriter and DTraceWriter must traverse the target
+ * application's variables identically.  In general, the variable a will be
+ * the parent of the variables a.b and a.c in the tree, where b and c are
+ * fields in a's class.
  *
- * Each node can have any non-negative
- * number of child nodes.  DaikonVariableInfo is an abstract class.  Its subtypes are designed
- * to represent specific types of variables, such as arguments, arrays, etc.
+ * Each node can have any non-negative number of child nodes.
+ * DaikonVariableInfo is an abstract class.  Its subtypes are designed to
+ * represent specific types of variables, such as arguments, arrays, etc.
  */
 public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 {
