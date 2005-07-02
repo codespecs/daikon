@@ -5,7 +5,7 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
-JAVA ?= java
+JAVA ?= java -ea
 JAVAC ?= javac -g
 # JAVAC ?= jikes -g +E +F
 

@@ -10,7 +10,7 @@ JAVAC ?= javac
 JAVAC_ARGS ?= -g -J-Xmx800m
 JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 JAR ?= jar
-JAVA ?= java
+JAVA ?= java -ea
 
 ### end of user customizations
 
@@ -402,10 +402,10 @@ very_clean: dist_clean
 	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 run:	all
-	java daikon.Daikon
+	${JAVA} daikon.Daikon
 
 run_gui:	all
-	java daikon.gui.InvariantsGUI /g1/users/mhao/daikon/inv_files/dsaa.inv 2>&1 | grep -v Font
+	${JAVA} daikon.gui.InvariantsGUI /g1/users/mhao/daikon/inv_files/dsaa.inv 2>&1 | grep -v Font
 
 etags:	tags
 
@@ -446,7 +446,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
 .checkstyle-sunchecks-output: ${AUTO_GENERATED_FILES}
-	  java \
+	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
 	    -Dbasedir=/g2/users/mernst/java/checkstyle-3.4/docs \
@@ -455,7 +455,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 	    -r daikon | tee .checkstyle-sunchecks-output
 
 .checkstyle-cschecks-output: ${AUTO_GENERATED_FILES}
-	  java \
+	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
 	    -Dtranslation.severity=error \
@@ -505,7 +505,7 @@ junit:
 ### Clover
 ###
 CLOVER := $(HOME)/clover
-CLOVER_CMD := java -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
+CLOVER_CMD := ${JAVA} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
 CLOVER_CP := $(subst $(INV)/java,$(CLOVER)/java,$(CLASSPATH))
 CLOVER_CP := $(CLOVER_CP):$(CLOVER)/clover-1.3.1/lib/clover.jar
