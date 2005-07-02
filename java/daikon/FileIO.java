@@ -1130,7 +1130,7 @@ public final class FileIO {
           print_invocations_grouped(call_stack);
         }
       }
-      System.out.println("End of report for procedures not returned from.");
+      System.out.print("End of report for procedures not returned from.");
       if (Daikon.use_dataflow_hierarchy) {
         System.out.print("  Unmatched entries are ignored!");
       }
