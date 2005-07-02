@@ -5,45 +5,100 @@ package daikon;
 import java.util.*;
 import java.lang.reflect.*;
 
-/** A library of auxiliary routines used by the Java family of output
+/**
+ * The Quant library provides routines that operate on arrays and
+ * collections.
+ *
+ * These routines are used by the Java family of output
  * formats. This allows invariants to be output as snippets of
  * executable (Java) code. For example, an invariant like
- *
+ * <pre>
  *  a[] elements >= 1
- *
- * is output (in the Java, JML and DBC formats) as something like
- *
+ * </pre>
+ * is output (in the Java, JML, and DBC formats) as something like
+ * <pre>
  *  daikon.Quant.eltsGTE(a, 1)
+ * </pre>
  *
- * Note: Whenever a method involves comparing two elements for
- * equality, this is always "==" equality (even for Objects and
- * Strings).
+ * <h3>Naming</h3>
  *
- * Important note: These is more than one way in which the helper
- * library could handle illegal arguments being passed to the
- * routines. For example, if an invariant that translates into
+ * The library methods have names of the following forms, where OP
+ * indicates an operation:  Equal, NotEqual, GT (greater than), GTE
+ * (greater than or equal to), LT, LTE.
+ * <ul>
+ * <li>pairwiseOP.  Apply OP to corresponding elements of two arrays:
+ *     a[0] OP b[0], a[1] OP b[1], etc.
+ * <li>eltsOP.  Apply OP to each element of one array, and a scalar:
+ *     a[0] OP x, a[1] OP x, etc.
+ * <li>eltwiseOP:  Apply OP to adjacent elements of one array:
+ *     a[0] OP a[1], a[1] OP a[2], etc.
+ * <li>lexOP:  Determine lexical ordering:
+ *     compare two arrays pairwise, stopping as soon as the result is known.
+ * <li>indexOP:  Apply op to array elements and their indices:
+       a[0] OP 0, a[1] OP 1, etc.
+ * </ul>
  *
- * getElement_int(a, size(int[] a)) == 2
+ * <h3>Equality semantics</h3>
  *
- * is evaluated for a == null, should the evaluation of the invariant
- * return false, or should it throw an exception?
+ * Whenever a method involves comparing two elements for equality, this is
+ * always "==" equality (even for Objects and Strings).
  *
- * The current design decision is the library should not throw any
- * exceptions, even if it is passed an illegal argument. For every
- * method, if the arguments are illegal, the method returns a default
- * "bad" value. Choosing a bad value is is easy for some types
- * (e.g. Double.NaN for methods that return double), but more
- * difficult for other types (e.g. what should "bad" means for a
- * method that returns a boolean?)
+ * <h3>No exceptions thrown</h3>
  *
- * The design decision above means that some combination of "bad"
- * values could end up causing an invariant to evaluate to true where
- * it should have evaluated to false. For most types, this should
- * happen infrequently because the bad values chosen are pretty
- * extreme.
+ * The library strives not to throw exceptions, even if illegal arguments
+ * are passed to the routines.  This has two consequences.<p>
+ *
+ * First, each predicate (boolean method) returns false when invoked on an
+ * illegal argument such as a null collection (array or
+ * AbstractCollection).<p>
+ *
+ * Second, each accessor method returns a default "bad" value if inovked on
+ * an illegal argument.  For example, the default value for the double type
+ * is Double.NaN.<p>
+ *
+ * The rationale for the decision to never throw exceptions is that we wish
+ * to be able to invoke the Quant methods at run time without distrubing
+ * execution of a program, and without forcing clients to write a try
+ * .. catch block around each invocation.<p>
+ *
+ * A downside of the decision is that if the default value is returned, it
+ * may be impossible for a client to determine whether the method really
+ * returned that value, or whether the invocation involved an illegal
+ * argument.  To avoid this problem, it is generally better to use a Quant
+ * library predicate rather than returning a value and then testing it
+ * externally.
  */
 public final class Quant {
   private Quant() { throw new Error("do not instantiate"); }
+
+  public static utilMDE.FuzzyFloat fuzzy = new utilMDE.FuzzyFloat();
+
+  /** Returns the size of the array or collection.
+   * If the argument is null or not an array or collection, returns a
+   * default value (Integer.MAX_VALUE).
+   */
+  public static int size(Object o) {
+    if (o == null) { return Integer.MAX_VALUE; } // return default value
+    java.lang.Class c = o.getClass();
+    if (c.isArray()) {
+      return java.lang.reflect.Array.getLength(o);
+    } else if (java.util.AbstractCollection.class.isInstance(o)) {
+      return ((java.util.AbstractCollection)o).size();
+    } else {
+      return Integer.MAX_VALUE; // return default value
+    }
+  }
+
+  /** True iff the sequence contains no null elements. */
+  /*@ pure */ public static boolean eltsNonNull(Object[] seq1) {
+    if (seq1 == null) { return false; }
+    for (int i = 0 ; i < seq1.length ; i++) {
+      if (seq1[i] == null) {
+        return false;
+      }
+    }
+    return true;
+  }
 
 #define BOOLEAN
 #include "daikon/QuantBody.java.jpp"
@@ -85,14 +140,14 @@ public final class Quant {
 #include "daikon/QuantBody.java.jpp"
 #undef STRING
 
-  // The current implemenation considers an invariant false if the
-  // invariant talks about a collection (array or AbstractCollection)
-  // and the collection is null.
+  ///////////////////////////////////////////////////////////////////////////
+  /// Collection methods (dispatch to array methods)
+  //
 
-  // These methods handle calls to quant methods that instead of passing
-  // an array, pass a java.util.AbstractCollection. They do so by converting the list
-  // to an array.
-  // @see #noDups(Object[])
+  // These methods handle calls to quant methods that instead of passing an
+  // array, pass a java.util.AbstractCollection.  Each method handles
+  // arrays or AbstractCollections.  They converts any AbstractCollection to
+  // an array, then invoke the array version of the method.
 
   /** @see #noDups(Object[])
    */
