@@ -18,7 +18,7 @@ use Cwd;
 
 # Process the command-line args
 my $usage = "Usage: buildtest.pl [--quiet] [--test_kvasir]\n"
-  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej] [--use_ver2]\n";
+  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # These flags permit only part of the tests to be run; good for debugging.
@@ -27,9 +27,8 @@ my $skip_daikon_build = 0;
 my $skip_daikon = 0;
 my $skip_dfec = 0;
 my $skip_dfej = 0;
+# When on, test Kvasir
 my $test_kvasir = 0;
-# When on, use version 3 of Daikon
-my $use_ver2 = 0;
 
 while (scalar(@ARGV) > 0) {
   my $arg = shift @ARGV;
@@ -49,8 +48,6 @@ while (scalar(@ARGV) > 0) {
     $test_kvasir = 1;
   } elsif ($arg eq "--skip_kvasir") {
     $test_kvasir = 0;
-  } elsif ($arg eq "--use_ver2") {
-    $use_ver2 = 1;
   } else {
     die "Unrecognized argument $arg\n$usage\n";
   }
@@ -65,20 +62,11 @@ $ENV{"DAIKONPARENT"} = $DAIKONPARENT;
 
 # Set other initial variables
 my $CVS_REP = "/afs/csail.mit.edu/group/pag/projects/invariants/.CVS";
-my $CVS_TAG = "ENGINE_V2_PATCHES";
 $ENV{"JAVAC"} = "javac -g";
 
 # Whether or not to run Make in two-job mode
 # my $J2 = "-j2";
 my $J2 = "";
-
-# Run java using the -classic switch, to workaround JVM exit deadlock
-# bug.  The bug is present in version 1.3.1_02; have not tested with 1.4.
-# A similar bug has been reported against solaris:
-# http://developer.java.sun.com/developer/bugParade/bugs/4305128.html
-
-# Commented out 2002-Aug-13 because -classic apparently causes outOfMemoryError's
-# my $RUN_JAVA = '\'java -classic -Xmx256m\'';
 
 # The success of each step in the build/test process
 my %success = ();
@@ -247,11 +235,7 @@ sub daikon_update {
   print_log("Updating Daikon...");
   my $daikon_dir = "invariants/java/daikon";
   chdir($daikon_dir) or die "can't chdir to $daikon_dir: $!\n";
-  if ($use_ver2) {
-      `cvs -d $CVS_REP up -r $CVS_TAG &> ../../../daikon_update.out`;
-  } else {
-      `cvs -d $CVS_REP up &> ../../../daikon_update.out`;
-  }
+  `cvs -d $CVS_REP up &> ../../../daikon_update.out`;
   chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
@@ -268,11 +252,7 @@ sub tests_update {
   print_log("Updating tests...");
   my $tests_dir = "invariants/tests";
   chdir($tests_dir) or die "can't chdir to $tests_dir: $!\n";
-  if ($use_ver2) {
-      `cvs -d $CVS_REP up -r $CVS_TAG &> ../../tests_update.out`;
-  } else {
-      `cvs -d $CVS_REP up &> ../../tests_update.out`;
-  }
+  `cvs -d $CVS_REP up &> ../../tests_update.out`;
   chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
@@ -388,6 +368,7 @@ sub daikon_system_test {
 
   foreach my $line (split /\n/,$result) {
     next if ($line =~ /^make/);
+    next if ($line =~ /^All tests succeeded.$/);
     if (!($line =~ /^0\s/)) {
       print_log("FAILED\n");
       return 0;
