@@ -104,26 +104,32 @@ The correct way to build the system is to run 'make'.
   #define NUMERIC
 #endif
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Methods for #_TYPE (from QuantBody.java.jpp)
+  ///
+
+
   /** Returns the ith element of the array or collection argument.
    * If the argument is null or not an array or collection, returns a
    * default value (BAD_VALUE).
    **/
-public static _TYPE GET_ELEMENT (Object o, long i) {
-  if (o == null) { return BAD_VALUE; } // return default value
-  java.lang.Class c = o.getClass();
-  if (c.isArray()) {
-    return ARRAY_GET_NAME (o, (int)i);
-  } else if (o instanceof java.util.AbstractCollection) {
-    return ARRAY_GET_NAME (((java.util.AbstractCollection)o).toArray(), (int)i);
-  } else {
-    return BAD_VALUE; // return default value
+  public static _TYPE GET_ELEMENT (Object o, long i) {
+    if (o == null) { return BAD_VALUE; } // return default value
+    java.lang.Class c = o.getClass();
+    if (c.isArray()) {
+      return ARRAY_GET_NAME (o, (int)i);
+    } else if (o instanceof java.util.AbstractCollection) {
+      return ARRAY_GET_NAME (((java.util.AbstractCollection)o).toArray(), (int)i);
+    } else {
+      return BAD_VALUE; // return default value
+    }
   }
-}
 
-public static _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
-  if (arr == null) { return BAD_VALUE; } // return default value
-  return arr[(int)i];
-}
+  public static _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
+    if (arr == null) { return BAD_VALUE; } // return default value
+    return arr[(int)i];
+  }
 
 #if (defined(FLOAT) || defined(DOUBLE))
 
@@ -392,36 +398,36 @@ The test is ensures that it only appears once in the output.
 #if 0
 #ifdef NUMERIC
 
-// These methods aren't used to express any invariants; no need for them.
-//   /**
-//    * Requires: seq.length > 0
-//    * Returns the minimum element in the array.
-//    */
-//   /*@ pure */ public static _TYPE min(_TYPE[] seq) {
-//      //Assert.assertTrue(seq.length > 0);
-//     _TYPE retval = seq[0];
-//     for (int i = 1 ; i < seq.length ; i++) {
-//       if (lt(seq[i], retval)) {
-//         retval = seq[i];
-//       }
-//     }
-//     return retval;
-//   }
+  // These methods aren't used to express any invariants; no need for them.
+  //   /**
+  //    * Requires: seq.length > 0
+  //    * Returns the minimum element in the array.
+  //    */
+  //   /*@ pure */ public static _TYPE min(_TYPE[] seq) {
+  //      //Assert.assertTrue(seq.length > 0);
+  //     _TYPE retval = seq[0];
+  //     for (int i = 1 ; i < seq.length ; i++) {
+  //       if (lt(seq[i], retval)) {
+  //         retval = seq[i];
+  //       }
+  //     }
+  //     return retval;
+  //   }
 
-//   /**
-//    * Requires: seq.length > 0
-//    * Returns the minimum element in the array.
-//    */
-//   /*@ pure */ public static _TYPE max(_TYPE[] seq) {
-//      //Assert.assertTrue(seq.length > 0);
-//     _TYPE retval = seq[0];
-//     for (int i = 1 ; i < seq.length ; i++) {
-//       if (gt(seq[i], retval)) {
-//         retval = seq[i];
-//       }
-//     }
-//     return retval;
-//   }
+  //   /**
+  //    * Requires: seq.length > 0
+  //    * Returns the minimum element in the array.
+  //    */
+  //   /*@ pure */ public static _TYPE max(_TYPE[] seq) {
+  //      //Assert.assertTrue(seq.length > 0);
+  //     _TYPE retval = seq[0];
+  //     for (int i = 1 ; i < seq.length ; i++) {
+  //       if (gt(seq[i], retval)) {
+  //         retval = seq[i];
+  //       }
+  //     }
+  //     return retval;
+  //   }
 
 #endif
 #endif 0
@@ -454,12 +460,12 @@ The test is ensures that it only appears once in the output.
   }
 #endif
 
-/**
- * Returns an array that is equivalent to the set union of seq1 and seq2.
- * This method gives no assurances about the order or repetition of elements:
- * elements may be repeated, and their order may be different from the
- * order of elements in seq1 and seq2.
- */
+  /**
+   * Returns an array that is equivalent to the set union of seq1 and seq2.
+   * This method gives no assurances about the order or repetition of elements:
+   * elements may be repeated, and their order may be different from the
+   * order of elements in seq1 and seq2.
+   */
   /*@ pure */ public static _TYPE[] union(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
@@ -474,19 +480,19 @@ The test is ensures that it only appears once in the output.
   }
 #endif
 
-/**
- * Returns an array that is equivalent to the set intersection of seq1 and seq2.
- * This method gives no assurances about the order or repetition of elements:
- * elements may be repeated, and their order may be different from the
- * order of elements in seq1 and seq2.
- */
+  /**
+   * Returns an array that is equivalent to the set intersection of seq1 and seq2.
+   * This method gives no assurances about the order or repetition of elements:
+   * elements may be repeated, and their order may be different from the
+   * order of elements in seq1 and seq2.
+   */
   /*@ pure */ public static _TYPE[] intersection(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     _TYPE[] intermediate = new _TYPE[Math.min(seq1.length, seq2.length)];
     int length = 0;
     for (int i = 0 ; i < seq1.length ; i++) {
-      if ( memberOf(seq1[i], seq2) ) {
+      if (memberOf(seq1[i], seq2) ) {
         intermediate[length++] = seq1[i];
       }
     }
@@ -500,7 +506,7 @@ The test is ensures that it only appears once in the output.
     CAST_TYPE[] intermediate = new CAST_TYPE[Math.min(seq1.length, seq2.length)];
     int length = 0;
     for (int i = 0 ; i < seq1.length ; i++) {
-      if ( memberOf(seq1[i], seq2) ) {
+      if (memberOf(seq1[i], seq2) ) {
         intermediate[length++] = seq1[i];
       }
     }
@@ -549,12 +555,12 @@ The test is ensures that it only appears once in the output.
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     for (int i = 0; i < seq1.length ; i++) {
-      if ( !memberOf(seq1[i], seq2) ) {
+      if (!memberOf(seq1[i], seq2) ) {
         return false;
       }
     }
     for (int i = 0; i < seq2.length ; i++) {
-      if ( !memberOf(seq2[i], seq1) ) {
+      if (!memberOf(seq2[i], seq1) ) {
         return false;
       }
     }
@@ -566,12 +572,12 @@ The test is ensures that it only appears once in the output.
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     for (int i = 0; i < seq1.length ; i++) {
-      if ( !memberOf(seq1[i], seq2) ) {
+      if (!memberOf(seq1[i], seq2) ) {
         return false;
       }
     }
     for (int i = 0; i < seq2.length ; i++) {
-      if ( !memberOf(seq2[i], seq1) ) {
+      if (!memberOf(seq2[i], seq1) ) {
         return false;
       }
     }
@@ -679,23 +685,6 @@ The test is ensures that it only appears once in the output.
  /**
   * Returns true iff elt is in array arr.
   */
-#if (defined(BYTE) || defined(SHORT) || defined(INT) || defined(LONG))
-  /*@ pure */ public static boolean memberOf(long elt, _TYPE[] arr) {
-    if (arr == null) { return false; }
-    for (int i = 0 ; i < arr.length ; i++) {
-      if (eq(arr[i], elt)) { return true; }
-    }
-    return false;
-  }
-#elif (defined(FLOAT) || defined(DOUBLE))
-  /*@ pure */ public static boolean memberOf(double elt, _TYPE[] arr) {
-    if (arr == null) { return false; }
-    for (int i = 0 ; i < arr.length ; i++) {
-      if (eq(arr[i], elt)) { return true; }
-    }
-    return false;
-  }
-#elif (defined(BOOLEAN) || defined(CHAR) || defined(OBJECT) || defined(STRING))
   /*@ pure */ public static boolean memberOf(_TYPE elt, _TYPE[] arr) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
@@ -703,7 +692,29 @@ The test is ensures that it only appears once in the output.
     }
     return false;
   }
+
+#ifdef COMPATIBLE
+  /*@ pure */ public static boolean memberOf(_TYPE elt, COMPATIBLE[] arr) {
+    if (arr == null) { return false; }
+    for (int i = 0 ; i < arr.length ; i++) {
+      if (eq(arr[i], elt)) { return true; }
+    }
+    return false;
+  }
 #endif
+
+#if (defined(BYTE) || defined(SHORT))
+  /*@ pure */ public static boolean memberOf(long elt, _TYPE[] arr) {
+    if (arr == null) { return false; }
+    for (int i = 0 ; i < arr.length ; i++) {
+      if (eq(arr[i], elt)) { return true; }
+    }
+    return false;
+  }
+#endif
+
+
+
 
 #if 0
 This has nothing to do with INT.
@@ -724,24 +735,39 @@ The test is ensures that it only appears once in the output.
       //throw new IllegalArgumentException("both arguments must be arrays.");
       return false;
     }
+    // We know that the two arguments are arrays of different types; if
+    // they had been of the same type, then one of the more specific
+    // overriding versions of this method would have been called.
+
+    // This implementation simply calls either eltsOneOf(long[], long[]) or
+    // eltsOneOf(double[], double[]).
+
     Class eltsType = elts.getClass().getComponentType();
     Class arrType = arr.getClass().getComponentType();
     if (isIntegralType(eltsType) && isIntegralType(arrType)) {
+      // Both arrays are int/long
       // Cast both arrays to long and call eltsOneOf(long[],long[])
-      long[] elts_long = new long[Array.getLength(elts)];
-      for (int i = 0 ; i < elts_long.length ; i++) {
-        elts_long[i] = Array.getLong(elts, i);
+      long[] elts_long;
+      if (eltsType == Long.class) {
+        elts_long = (long[]) elts;
+      } else {
+        elts_long = new long[Array.getLength(elts)];
+        for (int i = 0 ; i < elts_long.length ; i++) {
+          elts_long[i] = Array.getLong(elts, i);
+        }
       }
-      long[] arr_long = new long[Array.getLength(arr)];
-      for (int i = 0 ; i < arr_long.length ; i++) {
-        arr_long[i] = Array.getLong(arr, i);
+      long[] arr_long;
+      if (arrType == Long.class) {
+        arr_long = (long[]) arr;
+      } else {
+        arr_long = new long[Array.getLength(arr)];
+        for (int i = 0 ; i < arr_long.length ; i++) {
+          arr_long[i] = Array.getLong(arr, i);
+        }
       }
       return eltsOneOf(elts_long, arr_long);
-    } else {
-      if (!(isNumericType(eltsType) && isNumericType(arrType))) {
-        //throw new IllegalArgumentException("both arguments must be arrays of numeric types.");
-        return false;
-      }
+    } else if (isNumericType(eltsType) && isNumericType(arrType)) {
+      // At least one array is float/double.
       // Cast both arrays to double and call eltsOneOf(double[],double[])
       double[] elts_double = new double[Array.getLength(elts)];
       for (int i = 0 ; i < elts_double.length ; i++) {
@@ -752,13 +778,28 @@ The test is ensures that it only appears once in the output.
         arr_double[i] = Array.getDouble(arr, i);
       }
       return eltsOneOf(elts_double, arr_double);
+    } else {
+      // throw new IllegalArgumentException("both arguments must be arrays of numeric types.");
+      return false;
     }
+
   }
 
 #endif
 
-#if (defined(BOOLEAN) || defined(CHAR) || defined(DOUBLE) || defined(LONG) || defined(OBJECT) || defined(STRING))
   /*@ pure */ public static boolean eltsOneOf(_TYPE[] elt, _TYPE[] arr) {
+    if (elt == null) { return false; }
+    if (arr == null) { return false; }
+    for (int c = 0 ; c < elt.length ; c++) {
+      if (!memberOf(elt[c], arr)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+#ifdef COMPATIBLE
+  /*@ pure */ public static boolean eltsOneOf(_TYPE[] elt, COMPATIBLE[] arr) {
     if (elt == null) { return false; }
     if (arr == null) { return false; }
     for (int c = 0 ; c < elt.length ; c++) {
@@ -1645,17 +1686,17 @@ The test is ensures that it only appears once in the output.
     } catch (Exception e) {
       return null;
 #if 0
-//        String exceptionMessage = null;
-//        if (e instanceof NoSuchFieldException) {
-//           exceptionMessage = "daikon.Quant.fieldArray: NoSuchFieldException: ";
-//        } else if (e instanceof NullPointerException) {
-//           exceptionMessage = "daikon.Quant.fieldArray: NoSuchFieldException: ";
-//        } else if (e instanceof SecurityException) {
-//           exceptionMessage = "daikon.Quant.fieldArray: SecurityException: ";
-//        } else {
-//           exceptionMessage = "daikon.Quant.fieldArray: Exception: ";
-//        }
-//        throw new RuntimeException(exceptionMessage);
+      //  String exceptionMessage = null;
+      //  if (e instanceof NoSuchFieldException) {
+      //     exceptionMessage = "daikon.Quant.fieldArray: NoSuchFieldException: ";
+      //  } else if (e instanceof NullPointerException) {
+      //     exceptionMessage = "daikon.Quant.fieldArray: NoSuchFieldException: ";
+      //  } else if (e instanceof SecurityException) {
+      //     exceptionMessage = "daikon.Quant.fieldArray: SecurityException: ";
+      //  } else {
+      //     exceptionMessage = "daikon.Quant.fieldArray: Exception: ";
+      //  }
+      //  throw new RuntimeException(exceptionMessage);
 #endif
     }
 

@@ -49,8 +49,7 @@ import java.lang.reflect.*;
  * are passed to the routines.  This has two consequences.<p>
  *
  * First, each predicate (boolean method) returns false when invoked on an
- * illegal argument such as a null collection (array or
- * AbstractCollection).<p>
+ * illegal argument such as a null collection (array or Collection).<p>
  *
  * Second, each accessor method returns a default "bad" value if inovked on
  * an illegal argument.  For example, the default value for the double type
@@ -77,16 +76,26 @@ public final class Quant {
    * If the argument is null or not an array or collection, returns a
    * default value (Integer.MAX_VALUE).
    */
+  // Not called from Quant; provided only for external use.
   public static int size(Object o) {
     if (o == null) { return Integer.MAX_VALUE; } // return default value
     java.lang.Class c = o.getClass();
     if (c.isArray()) {
       return java.lang.reflect.Array.getLength(o);
-    } else if (java.util.AbstractCollection.class.isInstance(o)) {
-      return ((java.util.AbstractCollection)o).size();
+    } else if (o instanceof Collection) {
+      return ((Collection)o).size();
     } else {
       return Integer.MAX_VALUE; // return default value
     }
+  }
+
+  /** Returns the size of the collection.
+   * If the argument is null, returns a default value (Integer.MAX_VALUE).
+   */
+  // Not called from Quant; provided only for external use.
+  public static int size(Collection o) {
+    if (o == null) { return Integer.MAX_VALUE; } // return default value
+    return o.size();
   }
 
   /** True iff the sequence contains no null elements. */
@@ -140,14 +149,15 @@ public final class Quant {
 #include "daikon/QuantBody.java.jpp"
 #undef STRING
 
+
   ///////////////////////////////////////////////////////////////////////////
   /// Collection methods (dispatch to array methods)
   //
 
   // These methods handle calls to quant methods that instead of passing an
-  // array, pass a java.util.AbstractCollection.  Each method handles
-  // arrays or AbstractCollections.  They converts any AbstractCollection to
-  // an array, then invoke the array version of the method.
+  // Object[] array, pass a Collection.  Each method handles arrays or
+  // Collections.  They convert any Collection to an array, then invoke the
+  // Object[] version of the method.
 
   /** @see #noDups(Object[])
    */
@@ -266,7 +276,7 @@ public final class Quant {
 
   /** @see #slice(Object[], int, int)
    */
-  /*@ pure */ public static java.lang.Object[] slice(Object seq, int start , int end) {
+  /*@ pure */ public static java.lang.Object[] slice(Object seq, int start, int end) {
     if (seq == null) { return null; }
     return slice(toObjArray(seq), start, end);
   }
@@ -306,18 +316,18 @@ public final class Quant {
     return isIntegralType(c) || isRealType(c);
   }
 
+  /** Returns an Object[] array, either by casting or by conversion from an
+   * AbstractCollection.
+   */
   public static Object[] toObjArray(Object o) {
     if (o == null) { return null; }
-    Object[] arr1 = null;
     if (o instanceof java.util.AbstractCollection) {
-      java.util.AbstractCollection seqC = (java.util.AbstractCollection)o;
-      arr1 = seqC.toArray(new java.lang.Object[]{});
+      return ((AbstractCollection)o).toArray(new java.lang.Object[]{});
     } else if (o.getClass().isArray()) {
-      arr1 = (Object[])o;
+      return (Object[])o;
     } else {
-      arr1 = null;
+      return null;
     }
-    return arr1;
   }
 
 }
