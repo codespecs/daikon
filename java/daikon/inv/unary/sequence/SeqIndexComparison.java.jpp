@@ -38,6 +38,7 @@
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
+  #define EQUALSQUANTstring "Equal"
 #elif defined(EQUALFLOAT)
   #define CLASSNAME SeqIndexFloatEqual
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
@@ -46,6 +47,7 @@
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
+  #define EQUALSQUANTstring "Equal"
 #elif defined(NONEQUAL)
   #define CLASSNAME SeqIndexIntNonEqual
   #define EQUALS(a,b) (a != b)
@@ -54,6 +56,7 @@
   #define EQUALSstring "!="
   #define EQUALSIOAstring "~="
   #define EQUALSSIMPLIFYstring "NEQ"
+  #define EQUALSQUANTstring "NotEqual"
 #elif defined(NONEQUALFLOAT)
   #define CLASSNAME SeqIndexFloatNonEqual
   #define EQUALS(a,b) (Global.fuzzy.ne (a, b))
@@ -62,6 +65,7 @@
   #define EQUALSstring "!="
   #define EQUALSIOAstring "~="
   #define EQUALSSIMPLIFYstring "NEQ"
+  #define EQUALSQUANTstring "NotEqual"
 #elif defined(LESSTHAN)
   #define CLASSNAME SeqIndexIntLessThan
   #define CLASS_SWAP SeqIndexIntGreaterThan
@@ -70,6 +74,7 @@
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
+  #define EQUALSQUANTstring "Lt"
 #elif defined(LESSTHANFLOAT)
   #define CLASSNAME SeqIndexFloatLessThan
   #define CLASS_SWAP SeqIndexFloatGreaterThan
@@ -78,6 +83,7 @@
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
+  #define EQUALSQUANTstring "Lt"
 #elif defined(LESSEQUAL)
   #define CLASSNAME SeqIndexIntLessEqual
   #define CLASS_SWAP SeqIndexIntGreaterEqual
@@ -86,6 +92,7 @@
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
+  #define EQUALSQUANTstring "Lte"
 #elif defined(LESSEQUALFLOAT)
   #define CLASSNAME SeqIndexFloatLessEqual
   #define CLASS_SWAP SeqIndexFloatGreaterEqual
@@ -94,6 +101,7 @@
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
+  #define EQUALSQUANTstring "Lte"
 #elif defined(GREATERTHAN)
   #define CLASSNAME SeqIndexIntGreaterThan
   #define CLASS_SWAP SeqIndexIntLessThan
@@ -102,6 +110,7 @@
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
+  #define EQUALSQUANTstring "Gt"
 #elif defined(GREATERTHANFLOAT)
   #define CLASSNAME SeqIndexFloatGreaterThan
   #define CLASS_SWAP SeqIndexFloatLessThan
@@ -110,6 +119,7 @@
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
+  #define EQUALSQUANTstring "Gt"
 #elif defined(GREATEREQUAL)
   #define CLASSNAME SeqIndexIntGreaterEqual
   #define CLASS_SWAP SeqIndexIntLessEqual
@@ -118,6 +128,7 @@
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
+  #define EQUALSQUANTstring "Gte"
 #elif defined(GREATEREQUALFLOAT)
   #define CLASSNAME SeqIndexFloatGreaterEqual
   #define CLASS_SWAP SeqIndexFloatLessEqual
@@ -126,6 +137,7 @@
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
+  #define EQUALSQUANTstring "Gte"
 #else
   #error "EQUAL, NONEQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, NONEQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
 #endif
@@ -281,7 +293,7 @@ public class CLASSNAME extends SUPERCLASS {
     if (format.isJavaFamily()) return format_java_family(format);
 
     // TODO: Eliminate the unnecessary format_xxx() below if the
-    // format_dbc() can handle all the Java family output.
+    // format_java_family() can handle all the Java family output.
 
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.REPAIR) return format_repair();
@@ -340,67 +352,40 @@ public class CLASSNAME extends SUPERCLASS {
     VarInfoName.QuantHelper.IOAQuantification quant =
             new VarInfoName.QuantHelper.IOAQuantification (var ());
 
-    String comparator = EQUALSIOAstring;
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarName(0).ioa_name() + " " + comparator + " " +
+      " => " + quant.getVarName(0).ioa_name() + " " + EQUALSIOAstring + " " +
       quant.getVarIndexedString(0) + quant.getClosingExp();
   }
 
   // Bad code here: if the first index is changed from i this breaks
   public String format_esc() {
-    String comparator = EQUALSstring;
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " " + comparator + " i)" + form[2];
+    return form[0] + "(" + form[1] + " " + EQUALSstring + " i)" + form[2];
   }
 
 //   public String format_jml() {
-//     String comparator = EQUALSstring;
-
 //     VarInfoName.QuantHelper.QuantifyReturn qret
 //         = VarInfoName.QuantHelper.quantify(new VarInfoName[] { var().name });
-
+//
 //     String[] form = VarInfoName.QuantHelper.format_jml(qret);
-
+//
 //     VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
-
-//     return form[0] + form[1] + " " + comparator + " " + index1.name()
+//
+//     return form[0] + form[1] + " " + EQUALSstring + " " + index1.name()
 //            + form[2];
 //   }
 
   public String format_java_family(OutputFormat format) {
-    String comparator = EQUALSstring;
-    String comparatorDBC = "";
-    if (comparator.equals("==")) {
-      comparatorDBC = "equal";
-    } else if (comparator.equals("<")) {
-      comparatorDBC = "lt";
-    } else if (comparator.equals("<=")) {
-      comparatorDBC = "lte";
-    } else if (comparator.equals(">")) {
-      comparatorDBC = "gt";
-    } else if (comparator.equals(">=")) {
-      comparatorDBC = "gte";
-    } else if (comparator.equals("!=")) {
-      comparatorDBC = "notEqual";
-    } else {
-      comparatorDBC = "?comparatorDBC?";
-    }
-    return "daikon.Quant." + comparatorDBC + "Index(" + var().name.name_using(format, var()) + ")";
+    return "daikon.Quant.elts" + EQUALSQUANTstring + "Index(" + var().name.name_using(format, var()) + ")";
   }
 
   public String format_simplify() {
-    String comparator = EQUALSSIMPLIFYstring;
-    if ("==".equals(comparator)) {
-      comparator = "EQ";
-    } else if (comparator.equals("?cmp?")) {
-      return format_too_few_samples(OutputFormat.SIMPLIFY, null);
-    }
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
         { var().name }, false, false, false, true);
-    return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")"
+    return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")"
       + form[3];
   }
 

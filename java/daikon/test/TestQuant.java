@@ -109,21 +109,49 @@ public final class TestQuant extends TestCase {
   }
 
   public static void test_subsetOf() {
-    assertTrue(Quant.subsetOf(new int[] {}, new int[] {}) == true);
-    assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] {}) == false);
-    assertTrue(Quant.subsetOf(new int[] { }, new int[] { 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { -1 }, new int[] { -1, 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { -1, 0, 1 }, new int[] { -1, 1 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { -1, 1 }, new int[] { -1, 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { -1, 2, 3, 4 }, new int[] { 5 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { -1, }, new int[] { 2, 3, 4, 5 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] { -1, 1 }) == true);
     assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] { 1 }) == true);
-    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 }) == true);
     assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] { 1, 2, 3 }) == true);
-    assertTrue(Quant.subsetOf(new int[] { 2, 1 }, new int[] { 1, 2, 3 }) == true);
-    assertTrue(Quant.subsetOf(new int[] { 3, 1 }, new int[] { 1, 2, 3 }) == true);
-    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2, 3, 1 }) == true);
-    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2, 3 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] {}) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2 }, new int[] { 1 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2 }, new int[] { 1, 2, 3}) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2 }, new int[] {}) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 }) == true);
     assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2, 3 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2, 3, 1 }) == true);
     assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 3, 2, 1 }) == true);
     assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 3, 4, 5 }) == false);
-    assertTrue(Quant.subsetOf(new int[] { -1, }, new int[] { 2, 3, 4, 5 }) == false);
-    assertTrue(Quant.subsetOf(new int[] { -1, 2, 3, 4 }, new int[] { 5 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 2, 1 }, new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 2, 3 }, new int[] { 3, 3, 3, 3}) == false);
+    assertTrue(Quant.subsetOf(new int[] { 3, 1 }, new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 3, 3 }, new int[] { 3, 3, 3, 3}) == true);
+    assertTrue(Quant.subsetOf(new int[] { }, new int[] { -1, 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { }, new int[] { 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { }, new int[] { 2, 3, 1}) == true);
+    assertTrue(Quant.subsetOf(new int[] { }, new int[] { }) == true);
+  }
+
+  public static void test_subsetOf_different_types() {
+    assertTrue(Quant.subsetOf(new byte[] {}, new int[] {}) == true);
+    assertTrue(Quant.subsetOf(new long[] {}, new long[] {}) == true);
+    assertTrue(Quant.subsetOf(new byte[] { 1 }, new long[] {}) == false);
+    assertTrue(Quant.subsetOf(new short[] { 1, 2 }, new short[] {}) == false);
+    assertTrue(Quant.subsetOf(new long[] { }, new short[] { 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1 }, new short[] { 1 }) == true);
+    assertTrue(Quant.subsetOf(new float[] { 1, 2 }, new double[] { 1 }) == false);
+    assertTrue(Quant.subsetOf(new double[] { }, new double[] { -1, 1 }) == true);
+    assertTrue(Quant.subsetOf(new float[] { 1 }, new float[] { -1, 1 }) == true);
+    assertTrue(Quant.subsetOf(new double[] { -1 }, new float[] { -1, 1 }) == true);
+    assertTrue(Quant.subsetOf(new byte[] { -1, 1 }, new short[] { -1, 1 }) == true);
+    assertTrue(Quant.subsetOf(new short[] { -1, 0, 1 }, new byte[] { -1, 1 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2 }, new byte[] { 1, 2, 3}) == true);
+    assertTrue(Quant.subsetOf(new long[] { }, new short[] { 2, 3, 1}) == true);
   }
 
   public static void test_isReverse() {
@@ -176,41 +204,6 @@ public final class TestQuant extends TestCase {
     assertTrue(Quant.memberOf(-1, new int[] { -1, 1, 2, 3, 4, 5, 6}) == true);
     assertTrue(Quant.memberOf(1, new int[] { -1, 1, 2, 3, 4, 5, 6}) == true);
     assertTrue(Quant.memberOf(6, new int[] { -1, 1, 2, 3, 4, 5, 6}) == true);
-  }
-
-  public static void test_eltsOneOf() {
-    assertTrue(Quant.eltsOneOf(new int[] {}, new int[] {}) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { 1 }, new int[] {}) == false);
-    assertTrue(Quant.eltsOneOf(new int[] { 1, 2 }, new int[] {}) == false);
-    assertTrue(Quant.eltsOneOf(new int[] { }, new int[] { 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { 1 }, new int[] { 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { 1, 2 }, new int[] { 1 }) == false);
-    assertTrue(Quant.eltsOneOf(new int[] { }, new int[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { 1 }, new int[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { -1 }, new int[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { -1, 1 }, new int[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { -1, 0, 1 }, new int[] { -1, 1 }) == false);
-    assertTrue(Quant.eltsOneOf(new int[] { 1, 2 }, new int[] { 1, 2, 3}) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { }, new int[] { 2, 3, 1}) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { 2, 3 }, new int[] { 3, 3, 3, 3}) == false);
-    assertTrue(Quant.eltsOneOf(new int[] { 3, 3 }, new int[] { 3, 3, 3, 3}) == true);
-  }
-
-  public static void test_eltsOneOf_different_types() {
-    assertTrue(Quant.eltsOneOf(new byte[] {}, new int[] {}) == true);
-    assertTrue(Quant.eltsOneOf(new long[] {}, new long[] {}) == true);
-    assertTrue(Quant.eltsOneOf(new byte[] { 1 }, new long[] {}) == false);
-    assertTrue(Quant.eltsOneOf(new short[] { 1, 2 }, new short[] {}) == false);
-    assertTrue(Quant.eltsOneOf(new long[] { }, new short[] { 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new int[] { 1 }, new short[] { 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new float[] { 1, 2 }, new double[] { 1 }) == false);
-    assertTrue(Quant.eltsOneOf(new double[] { }, new double[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new float[] { 1 }, new float[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new double[] { -1 }, new float[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new byte[] { -1, 1 }, new short[] { -1, 1 }) == true);
-    assertTrue(Quant.eltsOneOf(new short[] { -1, 0, 1 }, new byte[] { -1, 1 }) == false);
-    assertTrue(Quant.eltsOneOf(new int[] { 1, 2 }, new byte[] { 1, 2, 3}) == true);
-    assertTrue(Quant.eltsOneOf(new long[] { }, new short[] { 2, 3, 1}) == true);
   }
 
   public static void test_slice() {
@@ -529,100 +522,100 @@ public final class TestQuant extends TestCase {
     assertTrue(Quant.eltwiseGTE(new int[] { -1, 1, 2, 3, 4, 5, 6}) == false);
   }
 
-  public static void test_equalIndex() {
-    assertTrue(Quant.equalIndex(new int[] {}) == true);
-    assertTrue(Quant.equalIndex(new int[] { 0 }) == true);
-    assertTrue(Quant.equalIndex(new int[] { 1 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { -1 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { -1, -1, 1 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { -1, 0, 1 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { -1, 1, 1 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { 0, 0, 2 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { 0, 1, 2 }) == true);
-    assertTrue(Quant.equalIndex(new int[] { 0, 2, 2 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { 1, 1, 3 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { 1, 2, 3 }) == false);
-    assertTrue(Quant.equalIndex(new int[] { 1, 3, 3 }) == false);
+  public static void test_eltsEqualIndex() {
+    assertTrue(Quant.eltsEqualIndex(new int[] {}) == true);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 0 }) == true);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 1 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { -1 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { -1, -1, 1 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { -1, 0, 1 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { -1, 1, 1 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 0, 0, 2 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 0, 1, 2 }) == true);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 0, 2, 2 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 1, 1, 3 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 1, 2, 3 }) == false);
+    assertTrue(Quant.eltsEqualIndex(new int[] { 1, 3, 3 }) == false);
   }
 
-  public static void test_notEqualIndex() {
-    assertTrue(Quant.notEqualIndex(new int[] {}) == true);
-    assertTrue(Quant.notEqualIndex(new int[] { 0 }) == false);
-    assertTrue(Quant.notEqualIndex(new int[] { 1 }) == true);
-    assertTrue(Quant.notEqualIndex(new int[] { -1 }) == true);
-    assertTrue(Quant.notEqualIndex(new int[] { -1, -1, 1 }) == true);
-    assertTrue(Quant.notEqualIndex(new int[] { -1, 0, 1 }) == true);
-    assertTrue(Quant.notEqualIndex(new int[] { -1, 1, 1 }) == false);
-    assertTrue(Quant.notEqualIndex(new int[] { 0, 0, 2 }) == false);
-    assertTrue(Quant.notEqualIndex(new int[] { 0, 1, 2 }) == false);
-    assertTrue(Quant.notEqualIndex(new int[] { 0, 2, 2 }) == false);
-    assertTrue(Quant.notEqualIndex(new int[] { 1, 1, 3 }) == false);
-    assertTrue(Quant.notEqualIndex(new int[] { 1, 2, 3 }) == true);
-    assertTrue(Quant.notEqualIndex(new int[] { 1, 3, 3 }) == true);
+  public static void test_eltsNotEqualIndex() {
+    assertTrue(Quant.eltsNotEqualIndex(new int[] {}) == true);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 0 }) == false);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 1 }) == true);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { -1 }) == true);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { -1, -1, 1 }) == true);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { -1, 0, 1 }) == true);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { -1, 1, 1 }) == false);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 0, 0, 2 }) == false);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 0, 1, 2 }) == false);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 0, 2, 2 }) == false);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 1, 1, 3 }) == false);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.eltsNotEqualIndex(new int[] { 1, 3, 3 }) == true);
   }
 
-  public static void test_gteIndex() {
-    assertTrue(Quant.gteIndex(new int[] {}) == true);
-    assertTrue(Quant.gteIndex(new int[] { 0 }) == true);
-    assertTrue(Quant.gteIndex(new int[] { 1 }) == true);
-    assertTrue(Quant.gteIndex(new int[] { -1 }) == false);
-    assertTrue(Quant.gteIndex(new int[] { -1, -1, 1 }) == false);
-    assertTrue(Quant.gteIndex(new int[] { -1, 0, 1 }) == false);
-    assertTrue(Quant.gteIndex(new int[] { -1, 1, 1 }) == false);
-    assertTrue(Quant.gteIndex(new int[] { 0, 0, 2 }) == false);
-    assertTrue(Quant.gteIndex(new int[] { 0, 1, 2 }) == true);
-    assertTrue(Quant.gteIndex(new int[] { 0, 2, 2 }) == true);
-    assertTrue(Quant.gteIndex(new int[] { 1, 1, 3 }) == true);
-    assertTrue(Quant.gteIndex(new int[] { 1, 2, 3 }) == true);
-    assertTrue(Quant.gteIndex(new int[] { 1, 3, 3 }) == true);
+  public static void test_eltsGteIndex() {
+    assertTrue(Quant.eltsGteIndex(new int[] {}) == true);
+    assertTrue(Quant.eltsGteIndex(new int[] { 0 }) == true);
+    assertTrue(Quant.eltsGteIndex(new int[] { 1 }) == true);
+    assertTrue(Quant.eltsGteIndex(new int[] { -1 }) == false);
+    assertTrue(Quant.eltsGteIndex(new int[] { -1, -1, 1 }) == false);
+    assertTrue(Quant.eltsGteIndex(new int[] { -1, 0, 1 }) == false);
+    assertTrue(Quant.eltsGteIndex(new int[] { -1, 1, 1 }) == false);
+    assertTrue(Quant.eltsGteIndex(new int[] { 0, 0, 2 }) == false);
+    assertTrue(Quant.eltsGteIndex(new int[] { 0, 1, 2 }) == true);
+    assertTrue(Quant.eltsGteIndex(new int[] { 0, 2, 2 }) == true);
+    assertTrue(Quant.eltsGteIndex(new int[] { 1, 1, 3 }) == true);
+    assertTrue(Quant.eltsGteIndex(new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.eltsGteIndex(new int[] { 1, 3, 3 }) == true);
   }
 
-  public static void test_gtIndex() {
-    assertTrue(Quant.gtIndex(new int[] {}) == true);
-    assertTrue(Quant.gtIndex(new int[] { 0 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { 1 }) == true);
-    assertTrue(Quant.gtIndex(new int[] { -1 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { -1, -1, 1 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { -1, 0, 1 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { -1, 1, 1 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { 0, 0, 2 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { 0, 1, 2 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { 0, 2, 2 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { 1, 1, 3 }) == false);
-    assertTrue(Quant.gtIndex(new int[] { 1, 2, 3 }) == true);
-    assertTrue(Quant.gtIndex(new int[] { 1, 3, 3 }) == true);
+  public static void test_eltsGtIndex() {
+    assertTrue(Quant.eltsGtIndex(new int[] {}) == true);
+    assertTrue(Quant.eltsGtIndex(new int[] { 0 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { 1 }) == true);
+    assertTrue(Quant.eltsGtIndex(new int[] { -1 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { -1, -1, 1 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { -1, 0, 1 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { -1, 1, 1 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { 0, 0, 2 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { 0, 1, 2 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { 0, 2, 2 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { 1, 1, 3 }) == false);
+    assertTrue(Quant.eltsGtIndex(new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.eltsGtIndex(new int[] { 1, 3, 3 }) == true);
   }
 
-  public static void test_lteIndex() {
-    assertTrue(Quant.lteIndex(new int[] {}) == true);
-    assertTrue(Quant.lteIndex(new int[] { 0 }) == true);
-    assertTrue(Quant.lteIndex(new int[] { 1 }) == false);
-    assertTrue(Quant.lteIndex(new int[] { -1 }) == true);
-    assertTrue(Quant.lteIndex(new int[] { -1, -1, 1 }) == true);
-    assertTrue(Quant.lteIndex(new int[] { -1, 0, 1 }) == true);
-    assertTrue(Quant.lteIndex(new int[] { -1, 1, 1 }) == true);
-    assertTrue(Quant.lteIndex(new int[] { 0, 0, 2 }) == true);
-    assertTrue(Quant.lteIndex(new int[] { 0, 1, 2 }) == true);
-    assertTrue(Quant.lteIndex(new int[] { 0, 2, 2 }) == false);
-    assertTrue(Quant.lteIndex(new int[] { 1, 1, 3 }) == false);
-    assertTrue(Quant.lteIndex(new int[] { 1, 2, 3 }) == false);
-    assertTrue(Quant.lteIndex(new int[] { 1, 3, 3 }) == false);
+  public static void test_eltsLteIndex() {
+    assertTrue(Quant.eltsLteIndex(new int[] {}) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { 0 }) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { 1 }) == false);
+    assertTrue(Quant.eltsLteIndex(new int[] { -1 }) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { -1, -1, 1 }) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { -1, 0, 1 }) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { -1, 1, 1 }) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { 0, 0, 2 }) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { 0, 1, 2 }) == true);
+    assertTrue(Quant.eltsLteIndex(new int[] { 0, 2, 2 }) == false);
+    assertTrue(Quant.eltsLteIndex(new int[] { 1, 1, 3 }) == false);
+    assertTrue(Quant.eltsLteIndex(new int[] { 1, 2, 3 }) == false);
+    assertTrue(Quant.eltsLteIndex(new int[] { 1, 3, 3 }) == false);
   }
 
-  public static void test_ltIndex() {
-    assertTrue(Quant.ltIndex(new int[] {}) == true);
-    assertTrue(Quant.ltIndex(new int[] { 0 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { 1 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { -1 }) == true);
-    assertTrue(Quant.ltIndex(new int[] { -1, -1, 1 }) == true);
-    assertTrue(Quant.ltIndex(new int[] { -1, 0, 1 }) == true);
-    assertTrue(Quant.ltIndex(new int[] { -1, 1, 1 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { 0, 0, 2 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { 0, 1, 2 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { 0, 2, 2 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { 1, 1, 3 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { 1, 2, 3 }) == false);
-    assertTrue(Quant.ltIndex(new int[] { 1, 3, 3 }) == false);
+  public static void test_eltsLtIndex() {
+    assertTrue(Quant.eltsLtIndex(new int[] {}) == true);
+    assertTrue(Quant.eltsLtIndex(new int[] { 0 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { 1 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { -1 }) == true);
+    assertTrue(Quant.eltsLtIndex(new int[] { -1, -1, 1 }) == true);
+    assertTrue(Quant.eltsLtIndex(new int[] { -1, 0, 1 }) == true);
+    assertTrue(Quant.eltsLtIndex(new int[] { -1, 1, 1 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { 0, 0, 2 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { 0, 1, 2 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { 0, 2, 2 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { 1, 1, 3 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { 1, 2, 3 }) == false);
+    assertTrue(Quant.eltsLtIndex(new int[] { 1, 3, 3 }) == false);
   }
 
   public static void test_lexEqual() {

@@ -1124,7 +1124,8 @@ public final class ONEOFSCALAR
         }
     } else {
       Assert.assertTrue(num_elts > 1);
-      result = "daikon.Quant.eltsOneOf(" + varname + ", " + oneOfArray + ")";
+      // eltsOneOf == subsetOf
+      result = "daikon.Quant.subsetOf(" + varname + ", " + oneOfArray + ")";
     }
 
 #elif defined(IS_SCALAR)

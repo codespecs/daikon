@@ -34,7 +34,7 @@ import java.lang.reflect.*;
  *     a[0] OP a[1], a[1] OP a[2], etc.
  * <li>lexOP:  Determine lexical ordering:
  *     compare two arrays pairwise, stopping as soon as the result is known.
- * <li>indexOP:  Apply op to array elements and their indices:
+ * <li>eltsOPindex:  Apply op to array elements and their indices:
        a[0] OP 0, a[1] OP 1, etc.
  * </ul>
  *

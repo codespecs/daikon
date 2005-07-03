@@ -3399,7 +3399,7 @@ public abstract class VarInfoName
      * look something like this:
      *
      *   Quant.eltsEqual(this.theArray, null)
-     *   Quant.eltsOneOf(this.arr, new int[] { 1, 2, 3 })
+     *   Quant.subsetOf(this.arr, new int[] { 1, 2, 3 })
      *
      */
     //     /**

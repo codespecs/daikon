@@ -147,11 +147,11 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 daikon.inv.unary.sequence.EltOneOf
 int_array
 Goal (daikon): a[] elements one of { 4, 5, 6 }
-Goal (java): daikon.Quant.eltsOneOf(a, new long[] { 4, 5, 6 })
+Goal (java): daikon.Quant.subsetOf(a, new long[] { 4, 5, 6 })
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] == 4 || a[i] == 5 || a[i] == 6))
 Goal (ioa): \A i : Int (i \in a => (i = 4) \/ (i = 5) \/ (i = 6))
-Goal (jml): daikon.Quant.eltsOneOf(a, new long[] { 4, 5, 6 })
-Goal (dbc): daikon.Quant.eltsOneOf(a, new long[] { 4, 5, 6 })
+Goal (jml): daikon.Quant.subsetOf(a, new long[] { 4, 5, 6 })
+Goal (dbc): daikon.Quant.subsetOf(a, new long[] { 4, 5, 6 })
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (OR (EQ (select (select elems |a|) |i|) 4) (EQ (select (select elems |a|) |i|) 5) (EQ (select (select elems |a|) |i|) 6))))
 [4 5 6 5 4 5 6 5 4 4 4 5 5 5 6 6 6]
 
@@ -199,11 +199,11 @@ Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLen
 daikon.inv.unary.sequence.SeqIndexIntGreaterThan
 int_array
 Goal (daikon): a[i] > i
-Goal (java): daikon.Quant.gtIndex(a)
+Goal (java): daikon.Quant.eltsGtIndex(a)
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > i))
 Goal (ioa): \A i : Int (i \in a => i > a[i])
-Goal (jml): daikon.Quant.gtIndex(a)
-Goal (dbc): daikon.Quant.gtIndex(a)
+Goal (jml): daikon.Quant.eltsGtIndex(a)
+Goal (dbc): daikon.Quant.eltsGtIndex(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) |i|)))
 [5 10 15 20 25 30 35 40]
 
@@ -211,11 +211,11 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 daikon.inv.unary.sequence.SeqIndexIntNonEqual
 int_array
 Goal (daikon): a[i] != i
-Goal (java): daikon.Quant.notEqualIndex(a)
+Goal (java): daikon.Quant.eltsNotEqualIndex(a)
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != i))
 Goal (ioa): \A i : Int (i \in a => i ~= a[i])
-Goal (jml): daikon.Quant.notEqualIndex(a)
-Goal (dbc): daikon.Quant.notEqualIndex(a)
+Goal (jml): daikon.Quant.eltsNotEqualIndex(a)
+Goal (dbc): daikon.Quant.eltsNotEqualIndex(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) |i|)))
 [5 10 15 20 25 30 35 40]
 
@@ -241,11 +241,11 @@ Goal (simplify): (EQ |a| |_string_testString|)
 daikon.inv.unary.stringsequence.EltOneOfString
 string_array
 Goal (daikon): a[] elements one of { "gnirtStset", "testString" }
-Goal (java): daikon.Quant.eltsOneOf(a, new String[] { "gnirtStset", "testString" })
+Goal (java): daikon.Quant.subsetOf(a, new String[] { "gnirtStset", "testString" })
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (warning: method daikon.inv.unary.stringsequence.EltOneOfString.format(OutputFormat:ESC/Java) needs to be implemented: a[] elements one of { "gnirtStset", "testString" }))
 Goal (ioa): \A i : Int (i \in a => i = "gnirtStset") \/ (i = "testString")))
-Goal (jml): daikon.Quant.eltsOneOf(a, new String[] { "gnirtStset", "testString" })
-Goal (dbc): daikon.Quant.eltsOneOf(a, new String[] { "gnirtStset", "testString" })
+Goal (jml): daikon.Quant.subsetOf(a, new String[] { "gnirtStset", "testString" })
+Goal (dbc): daikon.Quant.subsetOf(a, new String[] { "gnirtStset", "testString" })
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (OR (EQ (select (select elems |a|) |i|) |_string_gnirtStset|) (EQ (select (select elems |a|) |i|) |_string_testString|))))
 ["testString" "testString" "gnirtStset" "gnirtStset" "testString" "gnirtStset"]
 

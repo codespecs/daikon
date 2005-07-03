@@ -629,6 +629,78 @@ The test is ensures that it only appears once in the output.
 #endif
 
 
+#if 0
+This has nothing to do with INT.
+The test is ensures that it only appears once in the output.
+#endif
+#if (defined(INT))
+  /** True iff all elements in elts occur once or more in arr;
+   * that is, elts is a subset of arr.
+   *
+   * Meaning (in pseudo-FOL):
+   *
+   * forall i in { 0..elt.length-1 } : elt[i] element_of arr
+   *
+   */
+  /*@ pure */ public static boolean subsetOf(Object elts, Object arr) {
+    if (arr == null) { return false; }
+    if (elts == null) { return false; }
+    if (!(elts.getClass().isArray() && arr.getClass().isArray())) {
+      //throw new IllegalArgumentException("both arguments must be arrays.");
+      return false;
+    }
+    // We know that the two arguments are arrays of different types; if
+    // they had been of the same type, then one of the more specific
+    // overriding versions of this method would have been called.
+
+    // This implementation simply calls either subsetOf(long[], long[]) or
+    // subsetOf(double[], double[]).
+
+    Class eltsType = elts.getClass().getComponentType();
+    Class arrType = arr.getClass().getComponentType();
+    if (isIntegralType(eltsType) && isIntegralType(arrType)) {
+      // Both arrays are int/long
+      // Cast both arrays to long and call subsetOf(long[],long[])
+      long[] elts_long;
+      if (eltsType == Long.class) {
+        elts_long = (long[]) elts;
+      } else {
+        elts_long = new long[Array.getLength(elts)];
+        for (int i = 0 ; i < elts_long.length ; i++) {
+          elts_long[i] = Array.getLong(elts, i);
+        }
+      }
+      long[] arr_long;
+      if (arrType == Long.class) {
+        arr_long = (long[]) arr;
+      } else {
+        arr_long = new long[Array.getLength(arr)];
+        for (int i = 0 ; i < arr_long.length ; i++) {
+          arr_long[i] = Array.getLong(arr, i);
+        }
+      }
+      return subsetOf(elts_long, arr_long);
+    } else if (isNumericType(eltsType) && isNumericType(arrType)) {
+      // At least one array is float/double.
+      // Cast both arrays to double and call subsetOf(double[],double[])
+      double[] elts_double = new double[Array.getLength(elts)];
+      for (int i = 0 ; i < elts_double.length ; i++) {
+        elts_double[i] = Array.getDouble(elts, i);
+      }
+      double[] arr_double = new double[Array.getLength(arr)];
+      for (int i = 0 ; i < arr_double.length ; i++) {
+        arr_double[i] = Array.getDouble(arr, i);
+      }
+      return subsetOf(elts_double, arr_double);
+    } else {
+      // throw new IllegalArgumentException("both arguments must be arrays of numeric types.");
+      return false;
+    }
+
+  }
+
+#endif
+
   /**
    * True iff seq1 is a subset of seq2, when the sequences are
    * considered as sets.
@@ -644,22 +716,6 @@ The test is ensures that it only appears once in the output.
     return true;
   }
 
-#if (defined(OBJECT))
-  /*@ pure */ public static boolean subsetOf(Collection seq1, _TYPE[] seq2) {
-    if (seq1 == null) { return false; }
-    if (seq2 == null) { return false; }
-    return subsetOf(seq1.toArray(new _TYPE[]{}), seq2);
-  }
-#endif
-
-#if (defined(OBJECT))
-  /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, Collection seq2) {
-    if (seq1 == null) { return false; }
-    if (seq2 == null) { return false; }
-    return subsetOf(seq1, seq2.toArray(new _TYPE[]{}));
-  }
-#endif
-
 #ifdef COMPATIBLE
   /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return false; }
@@ -670,6 +726,20 @@ The test is ensures that it only appears once in the output.
       }
     }
     return true;
+  }
+#endif
+
+#if (defined(OBJECT))
+  /*@ pure */ public static boolean subsetOf(Collection seq1, _TYPE[] seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return subsetOf(seq1.toArray(new _TYPE[]{}), seq2);
+  }
+
+  /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, Collection seq2) {
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
+    return subsetOf(seq1, seq2.toArray(new _TYPE[]{}));
   }
 #endif
 
@@ -713,103 +783,6 @@ The test is ensures that it only appears once in the output.
   }
 #endif
 
-
-
-
-#if 0
-This has nothing to do with INT.
-The test is ensures that it only appears once in the output.
-#endif
-#if (defined(INT))
-  /** True iff all elements in elt occur once or more in arr.
-   *
-   * Meaning (in pseudo-FOL):
-   *
-   * forall i in { 0..elt.length-1 } : elt[i] element_of arr
-   *
-   */
-  /*@ pure */ public static boolean eltsOneOf(Object elts, Object arr) {
-    if (arr == null) { return false; }
-    if (elts == null) { return false; }
-    if (!(elts.getClass().isArray() && arr.getClass().isArray())) {
-      //throw new IllegalArgumentException("both arguments must be arrays.");
-      return false;
-    }
-    // We know that the two arguments are arrays of different types; if
-    // they had been of the same type, then one of the more specific
-    // overriding versions of this method would have been called.
-
-    // This implementation simply calls either eltsOneOf(long[], long[]) or
-    // eltsOneOf(double[], double[]).
-
-    Class eltsType = elts.getClass().getComponentType();
-    Class arrType = arr.getClass().getComponentType();
-    if (isIntegralType(eltsType) && isIntegralType(arrType)) {
-      // Both arrays are int/long
-      // Cast both arrays to long and call eltsOneOf(long[],long[])
-      long[] elts_long;
-      if (eltsType == Long.class) {
-        elts_long = (long[]) elts;
-      } else {
-        elts_long = new long[Array.getLength(elts)];
-        for (int i = 0 ; i < elts_long.length ; i++) {
-          elts_long[i] = Array.getLong(elts, i);
-        }
-      }
-      long[] arr_long;
-      if (arrType == Long.class) {
-        arr_long = (long[]) arr;
-      } else {
-        arr_long = new long[Array.getLength(arr)];
-        for (int i = 0 ; i < arr_long.length ; i++) {
-          arr_long[i] = Array.getLong(arr, i);
-        }
-      }
-      return eltsOneOf(elts_long, arr_long);
-    } else if (isNumericType(eltsType) && isNumericType(arrType)) {
-      // At least one array is float/double.
-      // Cast both arrays to double and call eltsOneOf(double[],double[])
-      double[] elts_double = new double[Array.getLength(elts)];
-      for (int i = 0 ; i < elts_double.length ; i++) {
-        elts_double[i] = Array.getDouble(elts, i);
-      }
-      double[] arr_double = new double[Array.getLength(arr)];
-      for (int i = 0 ; i < arr_double.length ; i++) {
-        arr_double[i] = Array.getDouble(arr, i);
-      }
-      return eltsOneOf(elts_double, arr_double);
-    } else {
-      // throw new IllegalArgumentException("both arguments must be arrays of numeric types.");
-      return false;
-    }
-
-  }
-
-#endif
-
-  /*@ pure */ public static boolean eltsOneOf(_TYPE[] elt, _TYPE[] arr) {
-    if (elt == null) { return false; }
-    if (arr == null) { return false; }
-    for (int c = 0 ; c < elt.length ; c++) {
-      if (!memberOf(elt[c], arr)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-#ifdef COMPATIBLE
-  /*@ pure */ public static boolean eltsOneOf(_TYPE[] elt, COMPATIBLE[] arr) {
-    if (elt == null) { return false; }
-    if (arr == null) { return false; }
-    for (int c = 0 ; c < elt.length ; c++) {
-      if (!memberOf(elt[c], arr)) {
-        return false;
-      }
-    }
-    return true;
-  }
-#endif
 
   /**
    * Returns a subsequence of seq with first elements seq[start] and
@@ -1203,6 +1176,7 @@ The test is ensures that it only appears once in the output.
 
   /**
    * Returns true iff seq1 is lexically equal to seq2.
+   * For equality, "lexically" and "pairwise" are the same.
    */
   /*@ pure */ public static boolean lexEqual(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
@@ -1281,8 +1255,8 @@ The test is ensures that it only appears once in the output.
    * Returns true iff seq1 is lexically <= to seq2.
    */
   /*@ pure */ public static boolean lexLTE(_TYPE[] seq1, _TYPE[] seq2) {
-  if (seq1 == null) { return false; }
-  if (seq2 == null) { return false; }
+    if (seq1 == null) { return false; }
+    if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
     for (int i = 0 ; i < minlength ; i++) {
       if (gt(seq1[i], seq2[i])) {
@@ -1524,7 +1498,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] == i
    *
    */
-  /*@ pure */ public static boolean equalIndex(_TYPE[] seq) {
+  /*@ pure */ public static boolean eltsEqualIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (ne(seq[i], i)) {
@@ -1541,7 +1515,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] != i
    *
    */
-  /*@ pure */ public static boolean notEqualIndex(_TYPE[] seq) {
+  /*@ pure */ public static boolean eltsNotEqualIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (eq(seq[i], i)) {
@@ -1558,7 +1532,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] < i
    *
    */
-  /*@ pure */ public static boolean ltIndex(_TYPE[] seq) {
+  /*@ pure */ public static boolean eltsLtIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (gte(seq[i], i)) {
@@ -1575,7 +1549,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] <= i
    *
    */
-  /*@ pure */ public static boolean lteIndex(_TYPE[] seq) {
+  /*@ pure */ public static boolean eltsLteIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (gt(seq[i], i)) {
@@ -1592,7 +1566,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] > i
    *
    */
-  /*@ pure */ public static boolean  gtIndex(_TYPE[] seq) {
+  /*@ pure */ public static boolean  eltsGtIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (lte(seq[i], i)) {
@@ -1609,7 +1583,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] >= i
    *
    */
-  /*@ pure */ public static boolean gteIndex(_TYPE[] seq) {
+  /*@ pure */ public static boolean eltsGteIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (lt(seq[i], i)) {
