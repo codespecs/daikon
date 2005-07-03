@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2004-12-03 16:10:10 jhp>
+# Time-stamp: <2005-07-02 12:03:43 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -28,6 +28,8 @@ $WARNING = 1;			# "-w" command-line switch
 
 my $debug = 0;
 # $debug = 1;
+my $cleanup_tmpfiles = 1;
+# $cleanup_tmpfiles = 0;
 
 my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
     die "Cannot determine system temporary directory, stopped";
@@ -71,7 +73,7 @@ my $file_handle_nonce = 'fh00';
   my $system_result = system($cpp_command);
   if ($system_result != 0) {
     rewrite_errors($tmpfile_err, $filename);
-    if (! $debug) {
+    if (! $debug && $cleanup_tmpfiles) {
       # unlink($tmpfile_in);
       unlink($tmpfile_out);
       # unlink($tmpfile_err);
@@ -80,9 +82,11 @@ my $file_handle_nonce = 'fh00';
   }
 
   unescape_comments($tmpfile_out);
-  unlink($tmpfile_in);
-  unlink($tmpfile_out);
-  unlink($tmpfile_err);
+  if ($cleanup_tmpfiles) {
+    unlink($tmpfile_in);
+    unlink($tmpfile_out);
+    unlink($tmpfile_err);
+  }
 }
 
 exit();
@@ -155,7 +159,8 @@ sub separate_spaces {
 sub unescape_comments ( $ ) {
   my ($filename) = @_;
 
-  # This causes strings to potentially have many trailing blanks.
+  # Read by paragraphs, eliminating empty paragraphs.
+  # This causes records read from file to potentially have many trailing blanks.
   $INPUT_RECORD_SEPARATOR = "";
 
   open(CPPFILE, $filename)
@@ -167,7 +172,7 @@ sub unescape_comments ( $ ) {
   my $next_post_else_space = "";
 
   while (<CPPFILE>) {
-    # print STDERR "// top of unescape_comments loop: $_";
+    # print STDERR "// top of unescape_comments loop: <<<$_>>>";
 
     s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
     s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
@@ -238,7 +243,12 @@ sub unescape_comments ( $ ) {
     ## Remove extra vertical space
     # compress out duplicate blank lines
     s/\n\n\n+/\n\n/g;
-    # This does not work:  it applies to *every* paragraph.
+    # Also remove blank lines before the start of the file.
+    # This substitution can only succeed for the very first record that is
+    # read, or for paragraphs that are completely eliminated.
+    s/^\n+//;
+
+    # This does not work:  it matches to *every* paragraph.
     # # compress out blank lines at end (due to the above, this can be simpler)
     # s/\n\n\z/\n/;
     # Remove newline after "if" statement
