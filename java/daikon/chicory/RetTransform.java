@@ -590,7 +590,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
 
       cg.update();
     } catch (Exception e) {
-      out.format  ("Unexpected exception encountered: " + e);
+      out.format ("Unexpected exception encountered: " + e);
       e.printStackTrace();
     }
 
