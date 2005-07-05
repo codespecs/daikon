@@ -122,6 +122,7 @@ public abstract class DaikonWriter
 
         // build up the string to go inside the parens
         StringBuilder paramTypes = new StringBuilder();
+        paramTypes.append("(");
         for(int i = 0; i < types.length; i++)
         {
             paramTypes.append(types[i]);
@@ -129,7 +130,11 @@ public abstract class DaikonWriter
             if(i != types.length - 1)
                 paramTypes.append(", ");
         }
-        name = name.replaceFirst("\\(.*\\)", "(" + paramTypes + ")" );
+        paramTypes.append(")");
+        // Quote dollar signs, which replaceFirst would interpreted as a
+        // group reference.
+        String paramTypesString = paramTypes.toString().replace("$", "\\$");
+        name = name.replaceFirst("\\(.*\\)", paramTypesString);
 
         return methodName(name, short_name, isConstructor, point);
     }
