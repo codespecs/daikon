@@ -35,8 +35,6 @@ class StatementReplacer extends DepthFirstVisitor {
    */
   private boolean matchFound;
 
-  private static final String lineSep = System.getProperty("line.separator");
-
   /**
    * Creates a new instance of StatementReplacer that makes the
    * replacements specified by the ReplaceStatements of replaceStatements.

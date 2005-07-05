@@ -17,8 +17,6 @@ import java.util.logging.Level;
 public class InvariantChecker {
   private InvariantChecker() { throw new Error("do not instantiate"); }
 
-  private static final String lineSep = Global.lineSep;
-
   public static final Logger debug
     = Logger.getLogger ("daikon.tools.InvariantChecker");
 
@@ -32,7 +30,7 @@ public class InvariantChecker {
   private static final String output_SWITCH = "output";
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage: java daikon.PrintInvariants [OPTION]... <inv_file> "
         + "<dtrace_file>",
       "  -h, --" + Daikon.help_SWITCH,
@@ -45,8 +43,8 @@ public class InvariantChecker {
       "  --" + Daikon.debug_SWITCH + " logger",
       "      Turns on the specified debug logger",
       "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
-      "      Print debug info on the specified invariant class, vars, and ppt",
-    }, lineSep);
+      "      Print debug info on the specified invariant class, vars, and ppt"
+      );
 
   public static File inv_file = null;
   public static List dtrace_files = new ArrayList();
@@ -148,7 +146,7 @@ public class InvariantChecker {
       String filename = file.toString();
       if (filename.indexOf(".inv") != -1) {
         if (inv_file != null) {
-          throw new Daikon.TerminationMessage ("multiple inv files specified" + lineSep + usage);
+          throw new Daikon.TerminationMessage ("multiple inv files specified", usage);
         }
         inv_file = file;
       } else if (filename.indexOf(".dtrace") != -1) {

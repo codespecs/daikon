@@ -41,12 +41,11 @@ public class CreateSpinfo {
     Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",
       "  -o outputfile   Put all output in specified file",
-      "  -h              Display this usage message",
-    },
-                 lineSep);
+      "  -h              Display this usage message"
+      );
 
 
   public static void main (String[] args) throws IOException {
@@ -118,8 +117,8 @@ public class CreateSpinfo {
     int argindex = g.getOptind();
     if (argindex >= args.length) {
       throw new Daikon.TerminationMessage(
-         "Error: No .java file arguments supplied." + lineSep
-         + usage);
+         "Error: No .java file arguments supplied.",
+         usage);
     }
     if (outputfilename != null) {
       Writer output = new FileWriter(outputfilename);

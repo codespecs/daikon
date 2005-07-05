@@ -23,17 +23,14 @@ import utilMDE.UtilMDE;
 public final class UnionInvariants {
   private UnionInvariants() { throw new Error("do not instantiate"); }
 
-  private static final String lineSep = Global.lineSep;
-
   // Non-empty program points in the input files must be distinct.
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage: java daikon.UnionInvariants [OPTION]... FILE.inv[.gz] [FILE.inv[.gz] ...]",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
       "  --" + Daikon.suppress_redundant_SWITCH,
-      "      Suppress display of logically redundant invariants.",
-    }, lineSep);
+      "      Suppress display of logically redundant invariants.");
 
   public static void main(final String[] args) throws Exception {
     try {

@@ -779,11 +779,13 @@ public abstract class VarInfoName
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
     Elements elems = (new ElementsFinder(this)).elems();
-    Assert.assertTrue(elems != null,
+    if (elems == null) {
+      throw new Error(
      "applySize should have elements to use in " + name() + ";" + Global.lineSep
        + "that is, " + name() + " does not appear to be a sequence/collection." + Global.lineSep
        + "Perhaps its name should be suffixed by \"[]\"?" + Global.lineSep
        + " this.class = " + getClass().getName());
+    }
     Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
     return r.replace(this).intern();
   }
@@ -1391,9 +1393,8 @@ public abstract class VarInfoName
 
       if (format == OutputFormat.JAVA) {
         return
-          "daikon.Quant.collect"
-          + collectType
-          + (v.type.pseudoDimensions() == 0 ? "_field" : "")
+          // On one line to enable searches for "collect.*_field".
+          "daikon.Quant.collect" + collectType + (v.type.pseudoDimensions() == 0 ? "_field" : "")
           + "(" + packageNamePrefix + object + ", " + "\"" + fields + "\"" + ")";
       } else {
         return

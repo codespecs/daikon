@@ -72,8 +72,6 @@ public class Annotate {
   //    simply omitted.
   //  * With -s flag, use // comments; by default, use /* comments.
 
-  private static final String lineSep = System.getProperty("line.separator");
-
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.Annotate");
 
   public static final String wrapXML_SWITCH = "wrap_xml";
@@ -81,7 +79,7 @@ public class Annotate {
   public static final String no_reflection_SWITCH = "no_reflection";
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
       "  -h   Display this usage message",
       "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
@@ -101,8 +99,7 @@ public class Annotate {
       "                  to access information about an instrumented class. This means",
       "                  that in the JML and ESC formats, no \"also\" annotations",
       "                  will be inserted."
-    },
-                 lineSep);
+      );
 
   public static void main(String[] args) throws Exception {
     try {
@@ -213,18 +210,20 @@ public class Annotate {
     // The index of the first non-option argument -- the name of the file
     int argindex = g.getOptind();
 
-    // This undocumented command is for testing purposes. It takes as input a bunch of java
-    // files, and creates new versions of the files (sufixed with "random-tabs") that
-    // have some randomly-inserted tabs in whitespace areas. These modified java files
-    // are used when testing Annotate (see regressiont tests) because Annotate should
-    // leave the tabs alone, or in the case of annotations that span their own line,
-    // the annotation should contain the same initial whitespace as the first non-comment
-    // line below (e.g a method invariant for a method whose declaration has been typed
-    // with a tab preceding it should have a tab preceding the annotation).
+    // This undocumented command is for testing purposes. It takes as input
+    // a bunch of java files, and creates new versions of the files
+    // (sufixed with "random-tabs") that have some randomly-inserted tabs
+    // in whitespace areas. These modified java files are used when testing
+    // Annotate (see regressiont tests) because Annotate should leave the
+    // tabs alone, or in the case of annotations that span their own line,
+    // the annotation should contain the same initial whitespace as the
+    // first non-comment line below (e.g a method invariant for a method
+    // whose declaration has been typed with a tab preceding it should have
+    // a tab preceding the annotation).
     if ("insert-tabs-for-testing".equals(args[argindex])) {
       for (int i = argindex+1 ; i < args.length ; i++) {
         if (!args[i].endsWith(".java")) {
-          throw new Daikon.TerminationMessage("Error in insert-tabs-for-testing command: all arguments should be .java files." + lineSep + usage);
+          throw new Daikon.TerminationMessage("Error in insert-tabs-for-testing command: all arguments should be .java files.", usage);
         }
         createNewFileWithRandomTabsInserted(args[i], 0.5, 0.5, 1); // arbitrary hardcoded numbers.
       }
@@ -232,12 +231,12 @@ public class Annotate {
     }
 
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied." + lineSep + usage);
+      throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied.", usage);
     }
     String invfile = args[argindex];
     argindex++;
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage("Error: No .java file arguments supplied." + lineSep + usage);
+      throw new Daikon.TerminationMessage("Error: No .java file arguments supplied.", usage);
     }
     PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile),
                                                 true // use saved config
@@ -291,8 +290,8 @@ public class Annotate {
                                        maxInvariantsPP));
       } catch (Error e) {
         if (e.getMessage() != null && e.getMessage().startsWith("Didn't find class ")) {
-          throw new Daikon.TerminationMessage(e.getMessage() + "." + lineSep
-            + "Be sure to compile Java classes before calling Annotate.");
+          throw new Daikon.TerminationMessage(e.getMessage() + ".",
+            "Be sure to compile Java classes before calling Annotate.");
         }
         throw e;
       }

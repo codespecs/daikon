@@ -36,8 +36,7 @@ public final class FeatureExtractor {
   //   -p             do not output if no positive feature vectors are present
 
   private static String USAGE =
-    UtilMDE.join(
-      new String[] {
+    UtilMDE.joinLines(
         "Arguments:",
         "-u FileName:\tan invMap inv file with useful invariants",
         "-n FileName:\tan invMap inv file with nonuseful invariants",
@@ -45,9 +44,7 @@ public final class FeatureExtractor {
         "-t Type:\tType is one of {SVMlight, SVMfu, C5}",
         "-s FileName:\tname of output file for invariant descriptions",
         "[-r] repeats:\tnumber of combinations of feature vectors (DISABLED)",
-        "[-p] \t\tdo not output if no positive feature vectors are present"
-      },
-      lineSep);
+        "[-p] \t\tdo not output if no positive feature vectors are present");
 
 
   public static void main(String[] args)
@@ -282,7 +279,7 @@ public final class FeatureExtractor {
                                     File outputFile, File namesFile,
                                     HashMap lookup)
     throws IOException {
-    FileWriter names = new FileWriter(namesFile);
+    PrintStream names = new PrintStream(namesFile);
 
     // First create a TreeSet of all the Feature Numbers and 0 as value
     // and a Map of numbers to names
@@ -309,20 +306,20 @@ public final class FeatureExtractor {
     //    System.out.println(numbersToNames.get(new IntDoublePair(2784, 0.0)));
 
     // Now make the .names part
-    names.write("|Beginning of .names file" + lineSep);
-    // names.write("GoodBad." + lineSep + lineSep + "GoodBad: 1, -1." + lineSep);
-    names.write("good, bad." + lineSep);
+    names.println("|Beginning of .names file");
+    // names.println("GoodBad."); names.println(); names.println("GoodBad: 1, -1.");
+    names.println("good, bad.");
     for (Iterator all = allFeatures.iterator(); all.hasNext(); ) {
       IntDoublePair current = (IntDoublePair) all.next();
       if (numbersToNames.containsKey(current)) {
         String currentName = (String) numbersToNames.get(current);
         if (currentName.endsWith("Bool"))
-          names.write(currentName + ":0.0, 1.0." + lineSep);
+          names.println(currentName + ":0.0, 1.0.");
         else if (currentName.endsWith("Float"))
-          names.write(currentName + ": continuous." + lineSep);
+          names.println(currentName + ": continuous.");
         else if (currentName.endsWith("Int"))
-          //          names.write(currentName + ": discrete." + lineSep);
-          names.write(currentName + ": continuous." + lineSep);
+          //          names.println(currentName + ": discrete.");
+          names.println(currentName + ": continuous.");
         else throw new IOException("All feature names must end with one of " +
                                    "Float, Bool, or Int." + lineSep + "Error: " +
                                    currentName + lineSep);
@@ -330,12 +327,12 @@ public final class FeatureExtractor {
       else
         throw new IOException("Feature " + current.number +
                               " not included in .names file");
-      //names.write(current.number + ": continuous." + lineSep);
+      //names.println(current.number + ": continuous.");
     }
-    names.write("|End of .names file" + lineSep);
+    names.println("|End of .names file");
     names.close();
 
-    FileWriter output = new FileWriter(outputFile);
+    PrintStream output = new PrintStream(new FileOutputStream(outputFile));
     // Now for each invariant, print out the features C5.0 style
     // first useful
     printC5DataOutput(usefulFeatures, allFeatures, "good", output);
@@ -350,7 +347,7 @@ public final class FeatureExtractor {
   private static void printC5DataOutput (ArrayList features,
                                          TreeSet allFeatures,
                                          String label,
-                                         FileWriter output) throws IOException {
+                                         PrintStream output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     // Create a TreeSet allFets which has all the features of
     // the current (ith) vector and the other features filled in with 0s
@@ -404,9 +401,9 @@ public final class FeatureExtractor {
 
       for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
         IntDoublePair fet = (IntDoublePair) fets.next();
-        output.write(df.format(fet.value) + ",");
+        output.print(df.format(fet.value) + ",");
       }
-      output.write(label + lineSep);
+      output.println(label);
     }
   }
 
@@ -417,7 +414,7 @@ public final class FeatureExtractor {
                                      ArrayList usefulStrings,
                                      ArrayList nonusefulStrings,
                                      File outputFile) throws IOException {
-    FileWriter output = new FileWriter(outputFile);
+    PrintStream output = new PrintStream(new FileOutputStream(outputFile));
     // Now add all the features in SVM-Light format to output
     // first the useful
     printSVMDataOutput(usefulFeatures, usefulStrings, "+1 ", output);
@@ -431,18 +428,18 @@ public final class FeatureExtractor {
 
   private static void printSVMDataOutput(ArrayList features, ArrayList strings,
                                          String label,
-                                         FileWriter output) throws IOException {
+                                         PrintStream output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
-      output.write(label);
+      output.print(label);
       for (Iterator fets = ((TreeSet) features.get(i)).iterator();
            fets.hasNext();) {
         IntDoublePair fet = (IntDoublePair) fets.next();
         if (fet.value > THRESHOLD)
-          output.write(fet.number + ":" + df.format(fet.value) + " ");
+          output.print(fet.number + ":" + df.format(fet.value) + " ");
       }
-      output.write(lineSep);
-      output.write("#  " + ((String) strings.get(i)) + lineSep);
+      output.println();
+      output.println("#  " + ((String) strings.get(i)));
     }
   }
 
@@ -451,10 +448,10 @@ public final class FeatureExtractor {
   private static void printSVMfuOutput(ArrayList usefulFeatures,
                                        ArrayList nonusefulFeatures,
                                        File outputFile) throws IOException {
-    FileWriter output = new FileWriter(outputFile);
+    PrintStream output = new PrintStream(new FileOutputStream(outputFile));
     // Now add all the features in SVMfu format to output
     // first size
-    output.write((usefulFeatures.size() + nonusefulFeatures.size()) + lineSep);
+    output.println((usefulFeatures.size() + nonusefulFeatures.size()));
     // first the useful
     printSVMfuDataOutput(usefulFeatures, "1 ", output);
     // and now non useful
@@ -466,17 +463,16 @@ public final class FeatureExtractor {
   // feature vectors in features.
 
   private static void printSVMfuDataOutput(ArrayList features, String label,
-                                           FileWriter output) throws IOException {
+                                           PrintStream output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
-      output.write(((TreeSet) features.get(i)).size() * 2 + " ");
+      output.print(((TreeSet) features.get(i)).size() * 2 + " ");
       for (Iterator fets = ((TreeSet) features.get(i)).iterator();
            fets.hasNext();) {
         IntDoublePair fet = (IntDoublePair) fets.next();
-        output.write(fet.number + " " + df.format(fet.value) + " ");
+        output.print(fet.number + " " + df.format(fet.value) + " ");
       }
-      output.write(label);
-      output.write(lineSep);
+      output.println(label);
     }
   }
 
@@ -485,11 +481,11 @@ public final class FeatureExtractor {
   private static void writeInvariantDescriptions(ArrayList usefulStrings,
                                        ArrayList nonusefulStrings,
                                        File outputFile) throws IOException {
-    FileWriter output = new FileWriter(outputFile);
+    PrintStream output = new PrintStream(new FileOutputStream(outputFile));
     for (int i = 0; i < usefulStrings.size(); i++)
-      output.write((String) usefulStrings.get(i) + lineSep);
+      output.println((String) usefulStrings.get(i));
     for (int i = 0; i < nonusefulStrings.size(); i++)
-      output.write((String) nonusefulStrings.get(i) + lineSep);
+      output.println((String) nonusefulStrings.get(i));
     output.close();
   }
 
@@ -512,10 +508,10 @@ public final class FeatureExtractor {
     }
     br.close();
 
-    FileWriter fw = new FileWriter(output);
+    PrintStream ps = new PrintStream(new FileOutputStream(output));
     for (Iterator i = outputData.iterator(); i.hasNext(); )
-      fw.write((String) i.next() + lineSep);
-    fw.close();
+      ps.println((String) i.next());
+    ps.close();
   }
 
   // compacts an SVMfu file to remove repeats.
@@ -528,11 +524,11 @@ public final class FeatureExtractor {
       vectors.add(br.readLine());
     br.close();
 
-    FileWriter fw = new FileWriter(output);
-    fw.write(vectors.size() + lineSep);
+    PrintStream ps = new PrintStream(new FileOutputStream(output));
+    ps.println(vectors.size());
     for (Iterator i = vectors.iterator(); i.hasNext(); )
-      fw.write((String) i.next() + lineSep);
-    fw.close();
+      ps.println((String) i.next());
+    ps.close();
   }
 
   // Reads an InvMap from a file that contains a serialized InvMap.
@@ -644,7 +640,7 @@ public final class FeatureExtractor {
         if ((Invariant.class.isAssignableFrom(current)) ||
             (Ppt.class.isAssignableFrom(current)) ||
             (VarInfo.class.isAssignableFrom(current))) {
-          //          System.out.print("Class " + name + " loaded" + lineSep);
+          //          System.out.println("Class " + name + " loaded");
           answer.add(current);
         }
       }
@@ -789,16 +785,13 @@ public final class FeatureExtractor {
   public static final class CombineFiles {
 
     private static String USAGE =
-      UtilMDE.join(
-      new String[] {
+      UtilMDE.joinLines(
         "Arguments:",
         "-i FileName:\ta SVMfu or C5 input file (with .data)",
         "-t Type:\tFormat, one of C5 or SVMfu",
         "-o FileName:\toutput file name (with.data)",
         "[-n] repeat:\tif present then the number of positive and negative",
-        "\tvectors will be roughtly normalized (by repeats)."
-      },
-      lineSep);
+        "\tvectors will be roughtly normalized (by repeats).");
 
     public static void main(String[] args)
       throws IOException, ClassNotFoundException {
@@ -922,19 +915,19 @@ public final class FeatureExtractor {
       }
 
       // Print the output to the output file.
-      FileWriter fw = new FileWriter(output);
+      PrintStream ps = new PrintStream(new FileOutputStream(output));
       // first calculate size and write the header for SVMfu
       int size = negrepeat * negvectors.size() + posrepeat * posvectors.size();
       if (type.equals("SVMfu"))
-        fw.write(size + lineSep);
+        ps.println(size);
       // now write the data
       for (int repeat = 0; repeat < negrepeat; repeat++)
         for (Iterator i = negvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " " + lineSep);
+          ps.println((String) i.next() + " ");
       for (int repeat = 0; repeat < posrepeat; repeat++)
         for (Iterator i = posvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " " + lineSep);
-      fw.close();
+          ps.println((String) i.next() + " ");
+      ps.close();
 
       // Print a summary of positives and negatives to stdout.
       System.out.println(posvectors.size() + "*" + posrepeat + " " +
@@ -949,14 +942,11 @@ public final class FeatureExtractor {
   public static final class ClassifyInvariants {
 
     private static String USAGE =
-    UtilMDE.join(
-      new String[] {
+    UtilMDE.joinLines(
         "Arguments:",
         "-d FileName:\tSVMfu or C5 training data (with .data)",
         "-s FileName:\tSVMfu or C5 test data (with .data)",
-        "-t Type:\tFormat, one of C5 or SVMfu"
-      },
-      lineSep);
+        "-t Type:\tFormat, one of C5 or SVMfu");
 
     public static void main(String[] args)
       throws IOException, ClassNotFoundException {
@@ -1054,14 +1044,14 @@ public final class FeatureExtractor {
 //       posvectors.add(((String) i.next()) + "1");
 
 //     // Print the output to the output file.
-//     FileWriter fw = new FileWriter(output);
+//     PrintStream ps = new PrintStream(new FileOutputStream(output));
 //     for (int repeat = 0; repeat < negrepeat; repeat++)
 //       for (Iterator i = negvectors.iterator(); i.hasNext(); )
-//         fw.write((String) i.next() + " " + lineSep);
+//         ps.println((String) i.next() + " ");
 //     for (int repeat = 0; repeat < posrepeat; repeat++)
 //       for (Iterator i = posvectors.iterator(); i.hasNext(); )
-//         fw.write((String) i.next() + " " + lineSep);
-//     fw.close();
+//         ps.println((String) i.next() + " ");
+//     ps.close();
 
 //     // Print a summary of positives and negatives to stdout.
 //     System.out.println(posvectors.size() + "*" + posrepeat + " " +
@@ -1070,7 +1060,7 @@ public final class FeatureExtractor {
   }
 
   private static void writeArrayLists(ArrayList one, ArrayList two,
-                                     String label, FileWriter fw)
+                                     String label, PrintStream ps)
     throws IOException {
 
     for (int i = 0; i < one.size(); i++)
@@ -1080,7 +1070,7 @@ public final class FeatureExtractor {
         String answer = first.substring(first.indexOf(" ") + 1) +
           shift(second);
         answer = (new StringTokenizer(answer)).countTokens() + " " + answer;
-        fw.write(answer + label + lineSep);
+        ps.println(answer + label);
       }
   }
 

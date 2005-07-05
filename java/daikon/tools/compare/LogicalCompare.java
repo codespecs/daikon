@@ -44,7 +44,7 @@ public class LogicalCompare {
   private static LemmaStack lemmas;
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
       "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
       "  -h, --help",
@@ -76,8 +76,8 @@ public class LogicalCompare {
       "  --filters [bBoOmjpis]",
       "      Control which invariants are removed from consideration",
       "  --assume FILE",
-      "      Read extra assumptions from FILE",
-    }, Global.lineSep);
+      "      Read extra assumptions from FILE"
+      );
 
   // Filter options
   // b        discard uninteresting-constant bounds
@@ -688,7 +688,7 @@ public class LogicalCompare {
     int num_args = args.length - g.getOptind();
 
     if (num_args < 2) {
-      throw new Daikon.TerminationMessage("Must have at least two non-option arguments" + daikon.Global.lineSep + usage);
+      throw new Daikon.TerminationMessage("Must have at least two non-option arguments", usage);
     }
 
     String app_filename = args[g.getOptind() + 0];
@@ -773,7 +773,7 @@ public class LogicalCompare {
 
       }
     } else {
-      throw new Daikon.TerminationMessage("Too many arguments" + daikon.Global.lineSep + usage);
+      throw new Daikon.TerminationMessage("Too many arguments", usage);
     }
   }
 }

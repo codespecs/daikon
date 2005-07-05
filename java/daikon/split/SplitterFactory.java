@@ -49,11 +49,6 @@ public class SplitterFactory {
 
   private static FileCompiler fileCompiler; // lazily initialized
 
-  // It would be better for SplitterFactory to use PrintWriters (or
-  // PrintStreams) backed by ByteArrayOutputStreams, rather than
-  // StringBuffers; that would eliminate the line separator ugliness.
-  private static String lineSep = System.getProperty("line.separator");
-
   /**
    * guid is a counter that increments every time a file is written.  It is
    * used to ensure that every file written has a unique name.

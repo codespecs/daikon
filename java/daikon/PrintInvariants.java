@@ -107,7 +107,7 @@ public final class PrintInvariants {
   static { daikon.Runtime.no_dtrace = true; }
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
@@ -116,8 +116,7 @@ public final class PrintInvariants {
       "  --" + Daikon.suppress_redundant_SWITCH,
       "      Suppress display of logically redundant invariants.",
       "  --" + Daikon.output_num_samples_SWITCH,
-      "      Output numbers of values and samples for invariants and " +
-      "program points; for debugging.",
+      "      Output number of values and samples for invariants and ppts; for debugging.",
       "  --" + Daikon.config_option_SWITCH + " config_var=val",
       "      Sets the specified configuration variable.  ",
       "  --" + Daikon.debugAll_SWITCH,
@@ -125,8 +124,8 @@ public final class PrintInvariants {
       "  --" + Daikon.debug_SWITCH + " logger",
       "      Turns on the specified debug logger",
       "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
-      "      Print debug info on the specified invariant class, vars, and ppt",
-    }, lineSep);
+      "      Print debug info on the specified invariant class, vars, and ppt"
+      );
 
   public static void main(final String[] args)
     throws FileNotFoundException, StreamCorruptedException,

@@ -50,8 +50,6 @@ public class InstrumentHandler extends CommandHandler {
     // invariant-checking methods outside the instrumented class).
     private static boolean createCheckerClasses = false;
 
-    private static final String lineSep = System.getProperty("line.separator");
-
     private static final Logger debug = Logger.getLogger("daikon.tools.runtimechecker.InstrumentHandler");
 
     // If the --max_invariants_pp option is given, this variable is set

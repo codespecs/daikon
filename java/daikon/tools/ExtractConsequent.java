@@ -50,7 +50,7 @@ public class ExtractConsequent {
   private static HashMap pptname_to_conditions = new HashMap();
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage: java daikon.ExtractConsequent [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
@@ -59,8 +59,8 @@ public class ExtractConsequent {
       "  --" + Daikon.debugAll_SWITCH,
       "      Turn on all debug switches",
       "  --" + Daikon.debug_SWITCH + " <logger>",
-      "      Turn on the specified debug logger",
-    }, lineSep);
+      "      Turn on the specified debug logger");
+
 
   public static void main(String[] args)
     throws FileNotFoundException, IOException, ClassNotFoundException
@@ -131,7 +131,7 @@ public class ExtractConsequent {
     // The index of the first non-option argument -- the name of the file
     int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
-      throw new Daikon.TerminationMessage("Wrong number of arguments." + lineSep + usage);
+      throw new Daikon.TerminationMessage("Wrong number of arguments.", usage);
     }
     String filename = args[fileIndex];
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),

@@ -29,14 +29,11 @@ public class DtraceNonceFixer {
   private static final String lineSep = System.getProperty("line.separator");
 
   private static String usage =
-    UtilMDE.join(
-      new String[] {
+    UtilMDE.joinLines(
         "Usage: DtraceNonceFixer FILENAME",
-        "FILENAME is the dtrace file that will be modified so that the invocation",
-        "nonces are consistent.  The output file will be FILENAME_fixed and another",
-        "output included nonces for OBJECT and CLASS invocations called FILENAME_all_fixed "
-        },
-      lineSep);
+        "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
+        "The output file will be FILENAME_fixed and another output included",
+        "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed");
 
 
   public static void main (String[] args) {

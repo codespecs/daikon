@@ -10,8 +10,6 @@ import utilMDE.*;
 public final class MergeInvariants {
   private MergeInvariants() { throw new Error("do not instantiate"); }
 
-  private static final String lineSep = Global.lineSep;
-
   public static final Logger debug = Logger.getLogger("daikon.MergeInvariants");
 
   public static final Logger debugProgress
@@ -22,7 +20,7 @@ public final class MergeInvariants {
   private static Stopwatch stopwatch = new Stopwatch();
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
@@ -34,9 +32,7 @@ public final class MergeInvariants {
       "      Specify a class, varinfos, and ppt to debug track.  Format"
              + "is class<var1,var2,var3>@ppt",
       "   -o ",
-      "      Specify an output inv file.  If not specified, the results "
-             + "are printed"},
-      lineSep);
+      "      Specify an output inv file.  If not specified, the results are printed");
 
   public static void main(final String[] args)
     throws FileNotFoundException, StreamCorruptedException,

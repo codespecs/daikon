@@ -17,11 +17,8 @@ import gnu.getopt.*;
 
 public class DtraceDiff {
 
-  private static final String lineSep = System.getProperty("line.separator");
-
   private static String usage =
-    UtilMDE.join(
-      new String[] {
+    UtilMDE.joinLines(
         "Usage: DtraceDiff [OPTION]... [DECLS1]... DTRACE1 [DECLS2]... DTRACE2",
 	"DTRACE1 and DTRACE2 are the data trace files to be compared.",
 	"You may optionally specify corresponding DECLS files for each one.",
@@ -43,8 +40,7 @@ public class DtraceDiff {
 	"  --" + Daikon.config_option_SWITCH,
 	"      Specify a configuration option ",
 	"See the Daikon manual for more information."
-      },
-      lineSep);
+        );
 
 
   public static void main (String[] args) {

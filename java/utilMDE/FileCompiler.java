@@ -14,7 +14,6 @@ public final class FileCompiler {
   public static Runtime runtime = java.lang.Runtime.getRuntime();
   /** Matches the names of Java source files, without directory name. **/
   static Pattern java_filename_pattern;
-  private static String lineSep = System.getProperty("line.separator");
   /** External command used to compile Java files. **/
   private String compiler;
   private long timeLimit;

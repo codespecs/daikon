@@ -14,6 +14,8 @@ import java.lang.reflect.*;
 public final class UtilMDE {
   private UtilMDE() { throw new Error("do not instantiate"); }
 
+  private static final String lineSep = System.getProperty("line.separator");
+
   ///
   /// Array
   ///
@@ -1254,8 +1256,17 @@ public final class UtilMDE {
 
   /**
    * Concatenate the string representations of the objects, placing the
+   * system-specific line separator between them.
+   * @see ArraysMDE#toString(int[])
+   **/
+  public static String joinLines(Object... a) {
+    return join(a, lineSep);
+  }
+
+  /**
+   * Concatenate the string representations of the objects, placing the
    * delimiter between them.
-   * @see java.util.Vector#toString
+   * @see java.util.List#toString
    **/
   public static String join(List v, String delim) {
     if (v.size() == 0) return "";
@@ -1265,6 +1276,15 @@ public final class UtilMDE {
     for (int i=1; i<v.size(); i++)
       sb.append(delim).append(v.get(i));
     return sb.toString();
+  }
+
+  /**
+   * Concatenate the string representations of the objects, placing the
+   * system-specific line separator between them.
+   * @see java.util.List#toString
+   **/
+  public static String joinLines(List<String> v, String delim) {
+    return join(v, lineSep);
   }
 
   // Inspired by the 'quote' function in Ajax (but independent code).

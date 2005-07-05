@@ -37,14 +37,13 @@ public final class Diff {
 
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage:",
       "    java daikon.diff.Diff [flags...] file1 [file2]",
       "  file1 and file2 are serialized invariants produced by Daikon.",
       "  If file2 is not specified, file1 is compared with the empty set.",
       "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/."},
-                 Global.lineSep);
+      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/.");
 
   // added to disrupt the tree when bug hunting -LL
   private static boolean treeManip = false;

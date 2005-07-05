@@ -146,11 +146,11 @@ public class SpinfoFileParser {
     while (! isBlank(methodDeclaration)) {
       String returnStatement = spinfoFile.readLine();
       if (isBlank(returnStatement)) {
-        throw new RuntimeException("MalFormed .spinfo file in: " +
-                                   spinfoFileName + lineSep +
-                                   (spinfoFile.getLineNumber() - 1) + lineSep +
-                                   methodDeclaration + lineSep +
-                                   "Each replace statement must be a pair of lines.");
+        throw new RuntimeException(
+          "MalFormed .spinfo file in: " + spinfoFileName + lineSep +
+          (spinfoFile.getLineNumber() - 1) + lineSep +
+          methodDeclaration + lineSep +
+          "Each replace statement must be a pair of lines.");
       }
       ReplaceStatement replaceStatement =
         new ReplaceStatement(methodDeclaration.trim(), returnStatement.trim());

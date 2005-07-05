@@ -36,8 +36,9 @@ public class TraceSelect {
   private static String[] sampleNames;
 
   private static final String usage =
-    "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]..." + daikon.Global.lineSep
-    + "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace";
+    UtilMDE.joinLines(
+    "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
+    "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
   public static void main (String[] args) {
     try {
@@ -61,7 +62,7 @@ public class TraceSelect {
   public static void mainHelper(final String[] args) {
     argles = args;
     if (args.length == 0) {
-      throw new daikon.Daikon.TerminationMessage("No arguments found." + daikon.Global.lineSep + usage);
+      throw new daikon.Daikon.TerminationMessage("No arguments found.", usage);
     }
 
     num_reps = Integer.parseInt (args[0]);

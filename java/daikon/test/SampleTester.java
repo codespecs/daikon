@@ -25,8 +25,6 @@ import junit.framework.*;
  **/
 public class SampleTester extends TestCase {
 
-  public static final String lineSep = Global.lineSep;
-
   public static final Logger debug
                                 = Logger.getLogger("daikon.test.SampleTester");
   public static final Logger debug_progress
@@ -40,7 +38,7 @@ public class SampleTester extends TestCase {
   VarInfo[] vars;
 
   private static String usage =
-    UtilMDE.join(new String[] {
+    UtilMDE.joinLines(
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
@@ -49,10 +47,8 @@ public class SampleTester extends TestCase {
       "  --" + Daikon.debug_SWITCH,
       "      Specify a logger to enable",
       "  --" + Daikon.track_SWITCH,
-      "      Specify a class, varinfos, and ppt to debug track.  Format"
-             + "is class<var1,var2,var3>@ppt",
-      },
-      lineSep);
+      "      Specify a class, varinfos, and ppt to debug track.",
+      "      Format is class<var1,var2,var3>@ppt");
 
   public static void main(String[] args) throws IOException {
 

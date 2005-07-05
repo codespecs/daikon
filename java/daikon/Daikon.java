@@ -374,8 +374,7 @@ public final class Daikon {
   private static Stopwatch stopwatch = new Stopwatch();
 
   static String usage =
-    UtilMDE
-      .join(new String[] {
+    UtilMDE.joinLines(
       release_string,
       "Daikon invariant detector, copyright 1998-2005",
       // " by Michael Ernst <mernst@csail.mit.edu>",
@@ -386,8 +385,8 @@ public final class Daikon {
       "  Each file is a declaration file or a data trace file; the file type",
       "  is determined by the file name (containing \".decls\" or \".dtrace\").",
       "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/." },
-      lineSep);
+      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/."
+      );
 
   /**
    * Thrown to indicate that main should not print a stack trace, but only
@@ -396,6 +395,7 @@ public final class Daikon {
    **/
   public static class TerminationMessage extends RuntimeException {
     public TerminationMessage(String s) { super(s); }
+    public TerminationMessage(Object... s) { super(UtilMDE.joinLines(s)); }
     public TerminationMessage() { super(); }
   }
 
@@ -896,7 +896,7 @@ public final class Daikon {
           throw new Daikon.TerminationMessage();
           //
         default :
-          System.out.print("getopt() returned " + c + lineSep);
+          System.out.println("getopt() returned " + c);
           break;
       }
     }
