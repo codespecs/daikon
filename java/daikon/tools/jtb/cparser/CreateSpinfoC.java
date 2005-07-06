@@ -66,7 +66,7 @@ public class CreateSpinfoC {
       }
     catch (ParseException e)
       {
-        System.out.println("CreateSpinfoC  Encountered errors during parse.");
+        System.out.println("CreateSpinfoC encountered errors during parse.");
         System.out.println(e.getMessage());
       }
   }
