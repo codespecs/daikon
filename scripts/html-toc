@@ -2,7 +2,7 @@
 # html-toc
 # Generate (to standard out) table of contents for an HTML document.
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2004-02-05 17:30:45 mernst>
+# Time-stamp: <2005-07-04 15:09:16 mernst>
 
 # See html-update-toc for documentation.
 # (Typically, you will not run this program, but will use html-update-toc
@@ -37,6 +37,9 @@ sub exit_level {
 while (<>) {
   if (/^<!--/) {
     next;
+  } elsif (/<!-- omit from toc -->|<omit from toc>/) {
+    # Check <omit from toc> because sometimes, a HTML comment is not appropriate.
+    next;
   } elsif (/<h([1-9])><a\s+name\s*=\s*\"(.*)\">(.*)<\/a>(.*)<\/h([1-9])>/i) {
     if ($debug) { print STDERR "match 3: <$1><$2><$3><$4><$5>\n"; }
     if ($1 ne $5) {
@@ -70,20 +73,16 @@ while (<>) {
     $output .= ((" " x ($level * 4 - 2)) . "<li><a href=\"#$anchorname\">$sectitle</a>\n");
     if ($level == 1) { $num_named_1++; }
   } elsif (/<h([1-9])>(.*)<\/h([1-9])>/) {
-    if (/<!-- omit from toc -->/) {
-      next;
-    }
-    # for situations where a comment is not appropriate
-    if (/<omit from toc>/) {
-      next;
-    }
     if ($1 == 1) {
       $num_unnamed_1++;
     }
-    $errors .= "Warning: No <a name=...> tag in header: $_";
+    $errors .= "$ARGV:$.: No <a name=...> tag: $_";
   } elsif (/<h([1-9])>/) {
-    $errors .= "Warning: No </h$1> tag found on line: $_";
+    $errors .= "$ARGV:$.: No </h$1> tag: $_";
   }
+} continue {
+  # Reset line numbers; example from "eof" text in "man perlfunc".
+  close ARGV  if eof;     # Not eof()!
 }
 
 while ($level > 0) {
