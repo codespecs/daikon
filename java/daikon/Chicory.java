@@ -222,7 +222,7 @@ public class Chicory {
          else if (arg.equals("--daikon-online")) {
         daikon_cmd_online = "daikon.Daikon +";
 
-      } 
+      }
       else if (arg.startsWith ("--daikon-online=")) {
         daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon-online=".length()) + " +";
 
@@ -377,24 +377,24 @@ public class Chicory {
             daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
             daikon_out.start();
         }
-        
+
 
 
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<String>();
     cmdlist.add ("java");
-    
+
     if(RemoteDebug)
     {
         //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
         cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
         //cmdlist.add("-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
     }
-    
+
     cmdlist.add ("-cp");
     cmdlist.add (cp);
     cmdlist.add ("-ea");
-    
+
     if(dtraceLim != null)
         cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
     if(terminate != null)
@@ -457,7 +457,7 @@ public class Chicory {
           System.out.printf ("unexpected interrupt %s while waiting for "
                                + "threads to join", e);
         }
-        
+
         System.exit(result);
     }
     else
@@ -570,7 +570,7 @@ public class Chicory {
           if (outFile == null) { throw new RuntimeException("This can't happen."); }
           outFile.close();
 
-          throw new Error("File creation of file " + fileName + " failed with exception " + e.getMessage());
+          throw new Error("File creation of file " + fileName + " failed", e);
       }
       return outFile;
   }

@@ -131,7 +131,7 @@ public class Violation implements Serializable {
         try {
             anno = Property.get(annoString);
         } catch (MalformedPropertyException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage(), e);
         }
 
         Time t = null;

@@ -844,7 +844,7 @@ public final class Daikon {
             try {
               Configuration.getInstance().apply(item);
             } catch (daikon.config.Configuration.ConfigException e) {
-              throw new Daikon.TerminationMessage(e.getMessage());
+              throw new Daikon.TerminationMessage(e);
             }
             break;
           }
@@ -866,7 +866,7 @@ public final class Daikon {
             try {
               PrintInvariants.discReasonSetup(g.getOptarg());
             } catch (IllegalArgumentException e) {
-              throw new Daikon.TerminationMessage(e.getMessage());
+              throw new Daikon.TerminationMessage(e);
             }
           } else if (mem_stat_SWITCH.equals(option_name)) {
             use_mem_monitor = true;

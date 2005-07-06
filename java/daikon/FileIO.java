@@ -366,7 +366,7 @@ public final class FileIO {
       rep_type = file_rep_type.fileTypeToRepType();
       aux = VarInfoAux.parse(aux_string);
     } catch (IOException e) {
-      throw new FileIOException(e.getMessage(), file, filename);
+      throw new FileIOException(file, filename, e);
     }
 
     if (static_constant_value_string != null) {
@@ -720,7 +720,7 @@ public final class FileIO {
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Unable to create server: " + e.getMessage());
+            throw new RuntimeException("Unable to create server", e);
         }
 
         Socket chicSocket = null;
@@ -733,7 +733,7 @@ public final class FileIO {
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Unable to connect to Chicory: " + e.getMessage());
+            throw new RuntimeException("Unable to connect to Chicory", e);
         }
 
 
@@ -743,7 +743,7 @@ public final class FileIO {
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Unable to get Chicory's input stream: " + e.getMessage());
+            throw new RuntimeException("Unable to get Chicory's input stream", e);
         }
 
     }

@@ -71,6 +71,7 @@ class StatementReplacer extends DepthFirstVisitor {
         replacedExpression = Ast.print(root);
         replacements++;
       } catch (IllegalStateException e) {
+        // ParseException does not accept optional "cause" argument
         throw new ParseException(e.getMessage());
       }
     } while ((replacements < MAXREPLACEMENTS)
@@ -125,7 +126,7 @@ class StatementReplacer extends DepthFirstVisitor {
         } catch (ParseException e) {
          // need to throw an unchecked Exception since visit
          // cannot throw a checked Exception.
-         throw new IllegalStateException(e.getMessage());
+         throw new IllegalStateException(e.getMessage(), e);
         }
       }
     }
