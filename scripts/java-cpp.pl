@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2005-07-02 12:03:43 mernst>
+# Time-stamp: <2005-07-04 11:40:12 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -271,7 +271,8 @@ sub unescape_comments ( $ ) {
     if (/\} else\n\n\z/) {
       s/\n\n\z//;
       $next_post_else_space = "\n\n";
-      $next_post_else_space = "POST_ELSE_SPACE for <<<$_>>>\n";
+      # Is the below for debugging?
+      # $next_post_else_space = "POST_ELSE_SPACE for <<<$_>>>\n";
     }
 
     # Skip if nothing to print (e.g., this paragraph was just a "# 22" line)
