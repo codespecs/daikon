@@ -96,10 +96,8 @@ public class InstrumentHandler extends CommandHandler {
             ppts = FileIO.read_serialized_pptmap(new File(arguments.invFile),
                     true /* use saved config */);
         } catch (IOException e) {
-            System.err
-                    .println("While trying to read invariant file, an IOException "
-                            + "occurred. Here is the message and stack trace: "
-                            + e.getMessage());
+            System.err.println("Exception while reading invariant file " + arguments.invFile);
+            System.err.println(e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -177,10 +175,8 @@ public class InstrumentHandler extends CommandHandler {
                 }
 
             } catch (IOException e) {
-                System.err
-                        .println("While trying to write instrumented file, an IOException "
-                                + "occurred. Here is the message and stack trace: "
-                                + e.getMessage());
+                System.err.println("Exception while instrumenting " + oneFile.fileName);
+                System.err.println(e.getMessage());
                 e.printStackTrace();
                 return false;
             }
