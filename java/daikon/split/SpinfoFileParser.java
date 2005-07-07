@@ -173,7 +173,7 @@ public class SpinfoFileParser {
                                    List<List<String>> pptSections,
                                    String pptName)
     throws IOException {
-    List<String> pptSection = new ArrayList();
+    List<String> pptSection = new ArrayList<String>();
     pptSection.add(pptName);
     String line = spinfoFile.readLine();
     while ((line != null) && (! line.trim().equals(""))) {
@@ -192,12 +192,12 @@ public class SpinfoFileParser {
    *  SplitterObjects for one of lists of ppt statements found in pptSections.
    */
   private SplitterObject[][] createSplitterObjects(List<List<String>> pptSections) {
-    List<SplitterObject[]> splittersForAllPpts = new ArrayList();
+    List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
     for (int i = 0; i < pptSections.size(); i++) {
-      List<String> pptSection = (List) pptSections.get(i);
-      List<SplitterObject> splittersForThisPpt = new ArrayList();
+      List<String> pptSection = pptSections.get(i);
+      List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();
       if (pptSection.size() > 0) {
-        String pptName = ((String) pptSection.get(0)).trim();
+        String pptName = pptSection.get(0).trim();
         SplitterObject splitObj = null;
         for (int j = 1; j < pptSection.size(); j++) {
           String pptStatement = (String) pptSection.get(j);

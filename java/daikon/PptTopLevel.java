@@ -2581,7 +2581,7 @@ public class PptTopLevel extends Ppt {
       Collections.sort(all_noeq, icfp);
       List all = InvariantFilters.addEqualityInvariants(all_noeq);
       Collections.sort(all, icfp);
-      Vector printing = new Vector(); // [Invariant]
+      Vector<Invariant> printing = new Vector<Invariant>();
       for (Iterator _invs = all.iterator(); _invs.hasNext();) {
         Invariant inv = (Invariant) _invs.next();
         if (test.include(inv)) { // think: inv.isWorthPrinting()

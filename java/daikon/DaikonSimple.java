@@ -129,8 +129,8 @@ public static void mainHelper(final String[] args) throws IOException,
 
     // DaikonSimple does not supply nor use the spinfo_files and map_files
     Assert.assertTrue(files.length == 4);
-    Set decls_files = files[0]; // [File]
-    Set dtrace_files = files[1]; // [String]
+    Set<File> decls_files = files[0];
+    Set<String> dtrace_files = files[1];
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       throw new Daikon.TerminationMessage(
           "No .decls or .dtrace files specified");

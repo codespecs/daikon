@@ -51,7 +51,7 @@ public class CoverageStats
       m.invoke(null, new Object[] { gretelFile });
     }
 
-    Map hits, misses; // [StringFilename -> Set[Integer]]
+    Map<String,Set<Integer>> hits, misses;
     // hits = getHits(); misses = getMisses();
     {
       Method m;
@@ -64,10 +64,10 @@ public class CoverageStats
     // Compute coverage
     Map all = new HashMap();
     Map covered = new HashMap();
-    for (Iterator i = hits.entrySet().iterator(); i.hasNext(); ) {
-      Map.Entry entry = (Map.Entry) i.next();
-      String file = (String) entry.getKey();
-      Set lines = (Set) entry.getValue();
+    for (Iterator<Map.Entry<String,Set<Integer>>> i = hits.entrySet().iterator(); i.hasNext(); ) {
+      Map.Entry<String,Set<Integer>> entry = i.next();
+      String file = entry.getKey();
+      Set<Integer> lines = entry.getValue();
       if (! relevant.contains(file)) continue;
       if (! all.containsKey(file)) all.put(file, new HashSet());
       ((Set) all.get(file)).addAll(lines);

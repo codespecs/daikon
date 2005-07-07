@@ -39,7 +39,7 @@ class TokenReplacer extends DepthFirstVisitor {
    * @param newVars the variable names, as Strings, that oldVars
    *  are replaced with.
    */
-  private TokenReplacer(List oldVars, List newVars) {
+  private TokenReplacer(List<String> oldVars, List<String> newVars) {
     super();
     this.oldVars = oldVars;
     this.newVars = newVars;
@@ -58,7 +58,7 @@ class TokenReplacer extends DepthFirstVisitor {
    * @return expression with all instances of an element of oldVars replaced
    *  by the corresponding element of newVars.
    */
-  public static String replaceTokens(String expression, List oldVars, List newVars)
+  public static String replaceTokens(String expression, List<String> oldVars, List<String> newVars)
     throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     TokenReplacer tokenReplacer = new TokenReplacer(oldVars, newVars);

@@ -334,7 +334,7 @@ class SplitterJavaSource {
    * See isNormalVar() for details.
    */
   private static VarInfo[] filterNonVars(VarInfo[] varInfos) {
-    List filteredList = new ArrayList();
+    List<VarInfo> filteredList = new ArrayList<VarInfo>();
     for (int i = 0; i < varInfos.length; i++) {
       if (isNormalVar(varInfos[i])) {
         filteredList.add(varInfos[i]);
@@ -736,7 +736,7 @@ class SplitterJavaSource {
                                                             String condition,
                                                             String className)
     throws ParseException {
-    List variableManagerList = new ArrayList();
+    List<VariableManager> variableManagerList = new ArrayList<VariableManager>();
     List classVars = findPossibleClassVariables(condition);
     for (int i = 0; i < varInfos.length; i++) {
       VarInfo varInfo = varInfos[i];
@@ -767,11 +767,11 @@ class SplitterJavaSource {
    *    arrays appear with "[]" at the end if their elements or accessed
    *    in the condition.
    */
-  private static List findPossibleClassVariables(String condition)
+  private static List<String> findPossibleClassVariables(String condition)
     throws ParseException {
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
     // System.out.println("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
-    List variables = new ArrayList();
+    List<String> variables = new ArrayList<String>();
     final int IDENTIFIER = 71;
     final int LPAREN = 74;
     final int DOT = 82;
@@ -835,7 +835,7 @@ class SplitterJavaSource {
       int RPAREN = 75;
       int LBRACKET = 78;
       int RBRACKET = 79;
-      Stack inArrayIndex = new Stack();
+      Stack<Boolean> inArrayIndex = new Stack<Boolean>();
       inArrayIndex.push(Boolean.FALSE);
       NodeToken[] tokens = TokenExtractor.extractTokens(condition);
       for (int i = 0; i < tokens.length; i++) {

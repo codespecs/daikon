@@ -94,7 +94,7 @@ public class SplitterFactory {
 	  if (matchPpt(ppt_name, ppt)) {
             // Writes, compiles, and loads the splitter .java files.
 	    loadSplitters(splitterObjects[i], ppt, statementReplacer);
-	    Vector sp = new Vector();
+	    Vector<Splitter> sp = new Vector<Splitter>();
 	    for (int k = 0; k < numsplitters; k++) {
 	      if (splitterObjects[i][k].splitterExists()) {
 		sp.addElement(splitterObjects[i][k].getSplitter());
@@ -181,7 +181,7 @@ public class SplitterFactory {
         debugPrintln(ioe.toString());
       }
     }
-    List<String> fileNames = new ArrayList();
+    List<String> fileNames = new ArrayList<String>();
     for (int i = 0; i < splitterObjects.length; i++) {
       fileNames.add(splitterObjects[i].getFullSourcePath());
     }

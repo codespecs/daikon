@@ -20,8 +20,7 @@ public class VarInfoNameDriver {
     run(System.in, System.out);
   }
 
-  // [String -> Handler]
-  private static final Map handlers = new HashMap();
+  private static final Map handlers = new HashMap<String,Handler>();
 
   public static void run(InputStream commands, PrintStream output) {
     try {
@@ -35,7 +34,7 @@ public class VarInfoNameDriver {
     throws IOException
   {
     BufferedReader commands = new BufferedReader(new InputStreamReader(_commands));
-    Map variables = new HashMap(); // [String -> Object]
+    Map<String,Object> variables = new HashMap<String,Object>();
 
     String command;
     while ((command = commands.readLine()) != null) {

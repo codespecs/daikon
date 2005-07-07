@@ -151,8 +151,7 @@ public final class FileIO {
    * listed in the argument; connection information (controlling
    * variables and entry ppts) is set correctly upon return.
    **/
-  public static PptMap read_declaration_files(Collection files // [File]
-  ) throws IOException {
+  public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
     // Read all decls, creating PptTopLevels and VarInfos
     for (Iterator i = files.iterator(); i.hasNext();) {

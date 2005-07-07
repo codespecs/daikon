@@ -41,7 +41,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @param replaceStatements a list of ReplaceStatements specifying the
    *  replacements to be made by this.
    */
-  public StatementReplacer(List replaceStatements) {
+  public StatementReplacer(List<ReplaceStatement> replaceStatements) {
     statementMap = new ReplaceStatementMap(replaceStatements);
   }
 
@@ -139,7 +139,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @param params the MethodParameters' whose names are desired.
    */
   private List<String> getParameterNames(ReplaceStatement.MethodParameter[] params) {
-    List args = new ArrayList();
+    List<String> args = new ArrayList<String>();
     for (int i = 0; i < params.length; i++) {
       args.add(params[i].name);
     }
@@ -212,8 +212,8 @@ class StatementReplacer extends DepthFirstVisitor {
    * @param n the "this" method call from which the arguments should be extracted.
    * @return a list of arguments from the method call n.
    */
-  private List getArgs(PrimaryExpression n) {
-    List<String> args = new ArrayList();
+  private List<String> getArgs(PrimaryExpression n) {
+    List<String> args = new ArrayList<String>();
     int index = n.f1.size()- 1;
     if (index > 1) {
      index = 1;
@@ -239,8 +239,8 @@ class StatementReplacer extends DepthFirstVisitor {
    * @param n the "non-this" method call from which the arguments should be extracted.
    * @return a list of arguments from the method call n.
    */
-  private List getNonThisArgs(PrimaryExpression n) {
-    List<String> args = new ArrayList();
+  private List<String> getNonThisArgs(PrimaryExpression n) {
+    List<String> args = new ArrayList<String>();
     int index = 0;
     Arguments argumentNode =
       (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;

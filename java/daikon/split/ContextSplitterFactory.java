@@ -39,7 +39,7 @@ public class ContextSplitterFactory
    * Read all the map files in the given collection, create callsite
    * splitters from them, and put the splitters into SplitterList.
    **/
-  public static void load_mapfiles_into_splitterlist(Collection files, // [File]
+  public static void load_mapfiles_into_splitterlist(Collection<File> files,
                                                      int grain
                                                      ) {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
@@ -110,7 +110,7 @@ public class ContextSplitterFactory
   public static MapfileEntry[] parse_mapfile(File mapfile)
     throws IOException
   {
-    ArrayList result = new ArrayList();
+    ArrayList<MapfileEntry> result = new ArrayList<MapfileEntry>();
 
     try {
       LineNumberReader reader = UtilMDE.lineNumberFileReader(mapfile.toString());
@@ -203,7 +203,7 @@ public class ContextSplitterFactory
     // (~pptname) for the callee.  Second key is an idenfier for the
     // caller (based on granularity).  The value is a set of Integers
     // giving the ids that are associated with that callgraph edge.
-    Map callee2caller2ids = new HashMap();
+    Map<String,Map<String,Set<Long>>> callee2caller2ids = new HashMap<String,Map<String,Set<Long>>>();
 
     // For each entry
     for (int i=0; i < entries.length; i++) {
@@ -231,35 +231,35 @@ public class ContextSplitterFactory
       }
 
       // Place the ID into the mapping
-      Map caller2ids = (Map) callee2caller2ids.get(callee_ppt_name);
+      Map<String,Set<Long>> caller2ids = callee2caller2ids.get(callee_ppt_name);
       if (caller2ids == null) {
-        caller2ids = new HashMap();
+        caller2ids = new HashMap<String,Set<Long>>();
         callee2caller2ids.put(callee_ppt_name, caller2ids);
       }
-      Set ids = (Set) caller2ids.get(caller_condition);
+      Set<Long> ids = caller2ids.get(caller_condition);
       if (ids == null) {
-        ids = new TreeSet();
+        ids = new TreeSet<Long>();
         caller2ids.put(caller_condition, ids);
       }
       ids.add(new Long(entry.id));
     } // for all entries
 
-    ArrayList result = new ArrayList(); // [PptNameAndSplitters]
+    ArrayList<PptNameAndSplitters> result = new ArrayList<PptNameAndSplitters>();
 
     // For each callee
-    for (Iterator i = callee2caller2ids.entrySet().iterator(); i.hasNext(); ) {
-      Map.Entry ipair = (Map.Entry) i.next();
-      String callee_ppt_name = (String) ipair.getKey();
-      Map caller2ids = (Map) ipair.getValue();
+    for (Iterator<Map.Entry<String,Map<String,Set<Long>>>> i = callee2caller2ids.entrySet().iterator(); i.hasNext(); ) {
+      Map.Entry<String,Map<String,Set<Long>>> ipair = i.next();
+      String callee_ppt_name = ipair.getKey();
+      Map<String,Set<Long>> caller2ids = ipair.getValue();
 
       // 'splitters' collects all splitters for one callee_ppt_name
-      Collection splitters = new ArrayList(); // [Splitter]
+      Collection<Splitter> splitters = new ArrayList<Splitter>();
 
       // For each caller of that callee
-      for (Iterator j = caller2ids.entrySet().iterator(); j.hasNext(); ) {
-        Map.Entry jpair = (Map.Entry) j.next();
-        String caller_condition = (String) jpair.getKey();
-        List ids = new ArrayList((Set) jpair.getValue());
+      for (Iterator<Map.Entry<String,Set<Long>>> j = caller2ids.entrySet().iterator(); j.hasNext(); ) {
+        Map.Entry<String,Set<Long>> jpair = j.next();
+        String caller_condition = jpair.getKey();
+        List<Long> ids = new ArrayList<Long>(jpair.getValue());
 
         // Make a splitter
         long[] ids_array = new long[ids.size()];

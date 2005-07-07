@@ -31,8 +31,7 @@ public abstract class SplitterList
    **/
   public static boolean dkconfig_all_splitters = true;
 
-  // maps from string to Splitter[]
-  private static final HashMap ppt_splitters = new HashMap();
+  private static final HashMap<String,Splitter[]> ppt_splitters = new HashMap<String,Splitter[]>();
 
   /**
    * Associate an array of splitters with the program point pptname.
@@ -177,7 +176,7 @@ public abstract class SplitterList
    */
   public static Splitter[] get(String pptName) {
     Iterator itor = ppt_splitters.keySet().iterator();
-    Vector splitterArrays = new Vector();
+    Vector<Splitter[]> splitterArrays = new Vector<Splitter[]>();
 
     while (itor.hasNext()) {
       // a PptName, assumed to begin with "ClassName.functionName"
@@ -203,7 +202,7 @@ public abstract class SplitterList
       }
       return null;
     } else {
-      Vector splitters = new Vector();
+      Vector<Splitter> splitters = new Vector<Splitter>();
       for (int i = 0; i < splitterArrays.size(); i++) {
         Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
         for (int j = 0; j < tempsplitters.length; j++) {
@@ -223,7 +222,7 @@ public abstract class SplitterList
    * @return an array of splitters
    */
   public static Splitter[] get_all( ) {
-    Vector splitters = new Vector();
+    Vector<Splitter> splitters = new Vector<Splitter>();
     Iterator all_splitters = ppt_splitters.values().iterator();
     while (all_splitters.hasNext()) {
       Splitter[] splitter_array = (Splitter[])all_splitters.next();

@@ -1421,8 +1421,7 @@ public final class Daikon {
     }
   }
 
-  private static void load_map_files(PptMap all_ppts, Set map_files // [File]
-  ) {
+  private static void load_map_files(PptMap all_ppts, Set<File> map_files) {
     stopwatch.reset();
     if (!dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");

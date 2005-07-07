@@ -9,11 +9,9 @@ import java.util.*;
 class ReplaceStatementMap {
 
   /**
-   * Contains the ReplaceStatements of this.
-   * Keys = ReplaceStatement.getName()
-   * Values = ReplaceStatement
+   * Contains the ReplaceStatements of this, indexed by their names
    */
-  private Map map;
+  private Map<String,ReplaceStatement> map;
 
   /**
    * Creates a new instance of ReplaceStatementMap of the replaceStatements
@@ -21,11 +19,10 @@ class ReplaceStatementMap {
    * @param replaceStatements a list of ReplaceStatements that specifies the
    *  the ReplaceStatements of this.
    */
-  ReplaceStatementMap(List replaceStatements) {
-    map = new HashMap();
+  ReplaceStatementMap(List<ReplaceStatement> replaceStatements) {
+    map = new HashMap<String,ReplaceStatement>();
     for (int i = 0; i < replaceStatements.size(); i++) {
-      ReplaceStatement replaceStatement =
-        (ReplaceStatement) replaceStatements.get(i);
+      ReplaceStatement replaceStatement = replaceStatements.get(i);
       map.put(replaceStatement.getName(), replaceStatement);
     }
   }

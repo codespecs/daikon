@@ -2838,7 +2838,7 @@ public abstract class VarInfoName
     }
 
     /** @see #simples() **/
-    private Set simples; // [String]
+    private Set<String> simples;
 
     /**
      * @return Collection of simple identifiers used in this
@@ -2892,7 +2892,7 @@ public abstract class VarInfoName
 
     // state and accessors
     /** @see #unquants() **/
-    private Set unquant; // [Elements || Slice]
+    private Set/*<Elements || Slice>*/ unquant;
 
     /**
      * @return Collection of the nodes under the root that need
@@ -3177,7 +3177,7 @@ public abstract class VarInfoName
       result.bound_vars = new Vector();
 
       // all of the simple identifiers used by these roots
-      Set simples = new HashSet(); // [String]
+      Set<String> simples = new HashSet<String>();
 
       // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];

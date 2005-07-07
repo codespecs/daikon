@@ -239,8 +239,8 @@ public final class Equality
   public String format_esc() {
     String result = "";
 
-    List valid_equiv = new ArrayList(); // [VarInfo]
-    List invalid_equiv = new ArrayList(); // [VarInfo]
+    List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
+    List<VarInfo> invalid_equiv = new ArrayList<VarInfo>();
 
     List equal_vars = new Vector();
 
