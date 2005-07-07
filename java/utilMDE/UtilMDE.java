@@ -194,7 +194,7 @@ public final class UtilMDE {
   /// Class
   ///
 
-  private static HashMap primitiveClasses = new HashMap(8);
+  private static HashMap<String,Class> primitiveClasses = new HashMap<String,Class>(8);
   static {
     primitiveClasses.put("boolean", Boolean.TYPE);
     primitiveClasses.put("byte", Byte.TYPE);
@@ -211,14 +211,14 @@ public final class UtilMDE {
    * represents a primitive type, too.
    **/
   public static Class classForName(String className) throws ClassNotFoundException {
-    Object result = primitiveClasses.get(className);
+    Class result = primitiveClasses.get(className);
     if (result != null)
-      return (Class) result;
+      return result;
     else
       return Class.forName(className);
   }
 
-  private static HashMap primitiveClassesJvm = new HashMap(8);
+  private static HashMap<String,String> primitiveClassesJvm = new HashMap<String,String>(8);
   static {
     primitiveClassesJvm.put("boolean", "Z");
     primitiveClassesJvm.put("byte", "B");
@@ -240,7 +240,7 @@ public final class UtilMDE {
       dims++;
       classname = classname.substring(0, classname.length()-2);
     }
-    String result = (String) primitiveClassesJvm.get(classname);
+    String result = primitiveClassesJvm.get(classname);
     if (result == null) {
       result = "L" + classname + ";";
     }
@@ -256,7 +256,7 @@ public final class UtilMDE {
    * primitive_name is not a valid name
    */
   public static String primitive_name_to_jvm (String primitive_name) {
-    return (String) primitiveClassesJvm.get (primitive_name);
+    return primitiveClassesJvm.get (primitive_name);
   }
 
   /**
@@ -281,7 +281,7 @@ public final class UtilMDE {
     return result;
   }
 
-  private static HashMap primitiveClassesFromJvm = new HashMap(8);
+  private static HashMap<String,String> primitiveClassesFromJvm = new HashMap<String,String>(8);
   static {
     primitiveClassesFromJvm.put("Z", "boolean");
     primitiveClassesFromJvm.put("B", "byte");
@@ -307,7 +307,7 @@ public final class UtilMDE {
     if (classname.startsWith("L") && classname.endsWith(";")) {
       result = classname.substring(1, classname.length() - 1);
     } else {
-      result = (String) primitiveClassesFromJvm.get(classname);
+      result = primitiveClassesFromJvm.get(classname);
       if (result == null) {
         throw new Error("Malformed base class: " + classname);
       }
