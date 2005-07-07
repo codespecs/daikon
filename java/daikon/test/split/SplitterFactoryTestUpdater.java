@@ -9,7 +9,7 @@ import daikon.*;
 /**
  * This class's main method can be used to update both the
  * target files of SplitterFactoryTest and the code of the
- * SplitterFactoryTest it self.
+ * SplitterFactoryTest itself.
  *
  * To use this program to update SplitterFactoryTest
  * and the target files, run "rm *.java.goal" while in the
@@ -19,7 +19,7 @@ import daikon.*;
  * main method one should re-compile the SplitterFactoryTest.
  *
  * To add additional tests to this test program, place the .spinfo
- * and decls files into the target directory then add a call to
+ * and decls files into the "targets" directory then add a call to
  * generateSplitters with the new files.  generateSplitters is
  * overloaded; therefore if there are only one .spinfo file and
  * only decls file then only the names of those two files need to be
