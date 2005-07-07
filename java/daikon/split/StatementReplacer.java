@@ -100,7 +100,7 @@ class StatementReplacer extends DepthFirstVisitor {
     if (! matchFound) {
       ReplaceStatement replaceStatement = null;
       NodeToken firstToken = null;
-      List /*String*/ newArgs = null;
+      List<String> newArgs = null;
       if (isNonThisMethod(n)) {
          replaceStatement = statementMap.get(getNonThisName(n));
          firstToken = ((Name) n.f0.f0.choice).f0;
@@ -111,7 +111,7 @@ class StatementReplacer extends DepthFirstVisitor {
         newArgs = getArgs(n);
       }
       if (replaceStatement != null && firstToken != null) {
-        List /*String*/ oldArgs = getParameterNames(replaceStatement.getParameters());
+        List<String> oldArgs = getParameterNames(replaceStatement.getParameters());
         String newReturnStatement;
         try {
           newReturnStatement =
@@ -138,7 +138,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * MethodParameters of params.
    * @param params the MethodParameters' whose names are desired.
    */
-  private List /*String*/ getParameterNames(ReplaceStatement.MethodParameter[] params) {
+  private List<String> getParameterNames(ReplaceStatement.MethodParameter[] params) {
     List args = new ArrayList();
     for (int i = 0; i < params.length; i++) {
       args.add(params[i].name);
@@ -213,7 +213,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @return a list of arguments from the method call n.
    */
   private List getArgs(PrimaryExpression n) {
-    List /*String*/ args = new ArrayList();
+    List<String> args = new ArrayList();
     int index = n.f1.size()- 1;
     if (index > 1) {
      index = 1;
@@ -240,7 +240,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @return a list of arguments from the method call n.
    */
   private List getNonThisArgs(PrimaryExpression n) {
-    List /*String*/ args = new ArrayList();
+    List<String> args = new ArrayList();
     int index = 0;
     Arguments argumentNode =
       (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;

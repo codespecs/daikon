@@ -17,10 +17,10 @@ import daikon.tools.jtb.*;
 class TokenReplacer extends DepthFirstVisitor {
 
   /** The old variable names that should be replaced by the new variable names. */
-  private List /*String*/ oldVars;
+  private List<String> oldVars;
 
   /** The new variable names with which the old variable names should be replaced. */
-  private List /*String*/ newVars;
+  private List<String> newVars;
 
   // newVars and oldVars must be order s.t. ith element of newVars is the
   // the replacement for the ith element of oldVars.
@@ -34,7 +34,7 @@ class TokenReplacer extends DepthFirstVisitor {
   /**
    * Creates a new TokenReplacer with ith element of oldVars being
    * replaced with ith element of new newVars.
-   * @param oldVars the variable names, as Strings,  that should
+   * @param oldVars the variable names, as Strings, that should
    *  be replaced by newVars.
    * @param newVars the variable names, as Strings, that oldVars
    *  are replaced with.
@@ -51,7 +51,7 @@ class TokenReplacer extends DepthFirstVisitor {
    * will be replaced by the ith element of newVars.
    * @param expression a segment of valid java code in which instances of
    *  oldVars should be replaced by the corresponding element of newVars.
-   * @param oldVars the variable names, as Strings,  that should
+   * @param oldVars the variable names, as Strings, that should
    *  be replaced by newVars.
    * @param newVars the variable names, as Strings, that oldVars
    *  are replaced with.

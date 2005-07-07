@@ -126,9 +126,9 @@ public class NISuppressee {
    * invariant created for each. @return a list of all of the created
    * invariants.
    */
-  public List/*Invariant*/ instantiate_all (VarInfo[] vis, PptTopLevel ppt) {
+  public List<Invariant> instantiate_all (VarInfo[] vis, PptTopLevel ppt) {
 
-    List/*Invariant*/ created_list = new ArrayList();
+    List<Invariant> created_list = new ArrayList();
 
     // Check for empty slots in vis, fail if there is more than one
     int missing_index = -1;
@@ -173,9 +173,9 @@ public class NISuppressee {
    * filled by all leaders that can correctly fill the slot and SupInv
    * created for each. @return a list describing all of the invariants
    */
-  public List/*Invariant*/ find_all (VarInfo[] vis, PptTopLevel ppt) {
+  public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt) {
 
-    List/*Invariant*/ created_list = new ArrayList();
+    List<NIS.SupInv> created_list = new ArrayList();
 
     // Check for empty slots in vis, fail if there is more than one
     int missing_index = -1;

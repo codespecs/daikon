@@ -37,7 +37,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public static final String JML_START_COMMENT = "/*@" + lineSep;
   public static final String JML_END_COMMENT = "@*/" + lineSep;
 
-  public List/*String*/ javaFileLines;
+  public List<String> javaFileLines;
 
   public PptMap ppts;
   public boolean slashslash;       // whether to use // or /* style comments
@@ -97,7 +97,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     this.pptMatcher = new PptNameMatcher(root);
 
     // Read in the java file into a list of Strings.
-    this.javaFileLines = new ArrayList/*String*/();
+    this.javaFileLines = new ArrayList<String>();
     BufferedReader reader = null;
     try {
       reader = new BufferedReader(new FileReader(javafilename));
@@ -1018,7 +1018,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   private static class InvariantsAndModifiedVars {
-    public List/*Invariant*/ invariants;
+    public List<Invariant> invariants;
     public String modifiedVars;
   }
 

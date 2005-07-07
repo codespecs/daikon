@@ -154,7 +154,7 @@ public class PptSplitter implements Serializable {
     Assert.assertTrue (ppts.length == 2);
 
     // Create any NIS suppressed invariants in each conditional
-    List /*Invariant*/ suppressed_invs[] = new ArrayList[ppts.length];
+    List<Invariant> suppressed_invs[] = new ArrayList[ppts.length];
     for (int i = 0; i < ppts.length; i++)
       suppressed_invs[i] = NIS.create_suppressed_invs (ppts[i]);
 
@@ -244,7 +244,7 @@ public class PptSplitter implements Serializable {
 
         // Look for an equality invariant in the non-canonical slice (if any).
         // Note that only an equality invariant can exist in a non-canonical
-        // slice.  If it does exist,  we want it rather than the canonical
+        // slice.  If it does exist, we want it rather than the canonical
         // form (which for equality invariants will always be of the form
         // 'a == a').
         Invariant eq_inv = null;

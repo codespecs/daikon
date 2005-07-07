@@ -145,7 +145,7 @@ public final class FileCompiler {
         errors.add(m.group(1));
       }
       // Collect all the files that were not compiled into retry
-      List /*String*/ retry = new ArrayList();
+      List<String> retry = new ArrayList();
       String filenames = "";
       for (int i = 0; i < fileNames.size(); i++) {
         String sourceFileName = ((String) fileNames.get(i)).trim();

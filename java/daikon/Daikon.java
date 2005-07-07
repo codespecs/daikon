@@ -347,7 +347,7 @@ public final class Daikon {
   public static Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
-  public static List /*Invariant*/
+  public static List<Invariant>
   proto_invs = new ArrayList();
 
   /** Debug tracer. **/
@@ -1890,7 +1890,7 @@ public final class Daikon {
       File filename = (File) i.next();
       SpinfoFileParser p = SplitterFactory.parse_spinfofile (filename);
       parsedSplitters.add(p);
-      }
+    }
   }
 
 
@@ -2032,8 +2032,7 @@ public final class Daikon {
 
 
       Iterator sets = sliceEquality.invs.iterator();
-      List /*[Equality]*/
-      allNewInvs = new ArrayList();
+      List<Equality> allNewInvs = new ArrayList();
 
       // get the new leaders
       while (sets.hasNext()) {

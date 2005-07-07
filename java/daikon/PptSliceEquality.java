@@ -222,10 +222,10 @@ public class PptSliceEquality
   //        - Get the new leaders
   //        - Create new slices and invariants (call CopyInvsFromLeader)
   //
-  public List/*Invariant*/  add(ValueTuple vt, int count) {
+  public List<Invariant>  add(ValueTuple vt, int count) {
 
-    LinkedList /*[Equality]*/ allNewInvs = new LinkedList();
-    LinkedList /*Invariant*/ weakenedInvs = new LinkedList();
+    LinkedList<Equality> allNewInvs = new LinkedList();
+    LinkedList<Invariant> weakenedInvs = new LinkedList();
 
     // Loop through each existing equality invariant
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -233,13 +233,13 @@ public class PptSliceEquality
 
       // Add this sample to the invariant and track any vars that fall
       // out of the set.
-      List/*[VarInfo]*/ nonEqualVis = inv.add (vt, count);
+      List<VarInfo> nonEqualVis = inv.add (vt, count);
 
       // If some vars fell out
       if (nonEqualVis.size() > 0) {
 
         // Create new equality sets for all of the non-equal vars
-        List /*[Equality]*/ newInvs =
+        List<Equality> newInvs =
           createEqualityInvs (nonEqualVis, vt, inv, count);
 
         // Get a list of all of the new non-missing leaders
@@ -298,7 +298,7 @@ public class PptSliceEquality
    * pre vis.size() > 0
    * post result.size() > 0
    **/
-  private List/*[Equality]*/ createEqualityInvs (List vis, ValueTuple vt,
+  private List<Equality> createEqualityInvs (List vis, ValueTuple vt,
                                                  Equality leader, int count
                                                  ) {
     Assert.assertTrue (vis.size() > 0);
@@ -368,8 +368,7 @@ public class PptSliceEquality
       * pre vis.size() > 0
       * post result.size() > 0
       */
-     public List /*[Equality]*/
-     createEqualityInvs(List vis, Equality leader) {
+     public List<Equality> createEqualityInvs(List vis, Equality leader) {
        Assert.assertTrue(vis.size() > 0);
 
        // Why use an array?  Because we'll be sorting shortly
@@ -430,7 +429,7 @@ public class PptSliceEquality
    * post: Adds the newly instantiated invariants and slices to
    * this.parent.
    **/
-  public List /*Invariant*/ copyInvsFromLeader (VarInfo leader, List newVis) {
+  public List<Invariant> copyInvsFromLeader (VarInfo leader, List newVis) {
 
 
     List falsified_invs = new ArrayList();

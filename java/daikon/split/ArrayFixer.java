@@ -27,10 +27,10 @@ class ArrayFixer extends DepthFirstVisitor {
   //    column shifting being needed, applies only to specified line
 
   /**  All possible variable names in the conditional. */
-  private String[] /*String*/ varNames;
+  private String[] varNames;
 
   /** All possible varInfos for the variables in the conditions. */
-  private VarInfo[] /*VarInfo*/ varInfos;
+  private VarInfo[] varInfos;
   // varNames and varInfo must be the same length and be in the same order.
 
   /** the token previously visited. */

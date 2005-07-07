@@ -92,6 +92,7 @@ public class SplitterFactory {
 	if (numsplitters != 0) {
 	  String ppt_name = splitterObjects[i][0].getPptName();
 	  if (matchPpt(ppt_name, ppt)) {
+            // Writes, compiles, and loads the splitter .java files.
 	    loadSplitters(splitterObjects[i], ppt, statementReplacer);
 	    Vector sp = new Vector();
 	    for (int k = 0; k < numsplitters; k++) {
@@ -135,7 +136,7 @@ public class SplitterFactory {
 
 
   /**
-   * Writes, compiles, and loads the splitter java files for each
+   * Writes, compiles, and loads the splitter .java files for each
    * splitterObject in splitterObjects.
    * @param splitterObjects are the splitterObjects for ppt
    * @param ppt the Ppt for these splitterObjects
@@ -180,7 +181,7 @@ public class SplitterFactory {
         debugPrintln(ioe.toString());
       }
     }
-    List /*String*/ fileNames = new ArrayList();
+    List<String> fileNames = new ArrayList();
     for (int i = 0; i < splitterObjects.length; i++) {
       fileNames.add(splitterObjects[i].getFullSourcePath());
     }
@@ -191,7 +192,7 @@ public class SplitterFactory {
     }
   }
 
-  private static void compileFiles(List /*String*/ fileNames) {
+  private static void compileFiles(List<String> fileNames) {
     // We delay setting fileCompiler until now because we want to permit
     // the user to set the dkconfig_compiler variable.  Note that our
     // timeout is specified in seconds, but the parameter to FileCompiler

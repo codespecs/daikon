@@ -20,10 +20,10 @@ public class ClassInfo {
 
   /** list of methods in the class **/
   public List<MethodInfo> method_infos;
-  
+
   /** this class's classloader**/
   private ClassLoader loader;
-  
+
   /** Mapping from field name to string representation of its value**/
   //only for static final primitives
   //which are declared by a CONSTANT VALUE in the code
@@ -49,15 +49,15 @@ public class ClassInfo {
    * for each method
    */
   public void get_reflection() {
-     
+
     // get the reflection class
     try {
       //clazz = Class.forName (class_name);
       //change class loading
-        
+
         //TODO referring class?
       clazz = Class.forName (class_name, false, loader);
-      
+
     } catch (Exception e) {
       throw new Error (e);
     }
@@ -75,7 +75,7 @@ public class ClassInfo {
       for (int ii = 0; ii < mi.arg_names.length; ii++) {
         if (ii > 0)
           ps.printf (", ");
-        ps.printf ("%s [%s] %s",  mi.arg_type_strings[ii], mi.arg_types[ii],
+        ps.printf ("%s [%s] %s", mi.arg_type_strings[ii], mi.arg_types[ii],
                    mi.arg_names[ii]);
       }
       ps.printf ("\n    exits: ");

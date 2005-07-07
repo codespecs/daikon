@@ -763,8 +763,8 @@ public final class TestQuant extends TestCase {
   public static class Baz3 { public int z; }
 
   public static class Foo3a {
-    private java.util.List/*Bar3a*/ x;
-    public void set_x(java.util.List/*Bar3a*/ o) { x = o; }
+    private java.util.List<Bar3a> x;
+    public void set_x(java.util.List<Bar3a> o) { x = o; }
   }
   public static class Foo3af { public Bar3a x; }
   public static class Bar3a { public Baz3a y; }
@@ -796,7 +796,7 @@ public final class TestQuant extends TestCase {
     Bar3a b3a = new Bar3a(); b3a.y = new Baz3a(); b3a.y.z = 7;
     Bar3a b4a = new Bar3a(); b4a.y = new Baz3a(); b4a.y.z = 8;
     Bar3a b5a = new Bar3a(); b5a.y = new Baz3a(); b5a.y.z = 9;
-    Foo3a f3a = new Foo3a(); f3a.x = new java.util.ArrayList/*Bar3a*/();
+    Foo3a f3a = new Foo3a(); f3a.x = new java.util.ArrayList<Bar3a>();
     f3a.x.add(b3a);
     f3a.x.add(b4a);
     f3a.x.add(b5a);

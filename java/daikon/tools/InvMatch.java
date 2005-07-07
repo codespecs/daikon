@@ -104,7 +104,7 @@ public class InvMatch {
       }
     }
 
-    List /*InvTranslate*/ best_translation
+    List<InvTranslate> best_translation
       = best_translation (valid_translations);
     Fmt.pf (Global.lineSep + "Best Translation");
     for (Iterator i = best_translation.iterator(); i.hasNext(); ) {
@@ -121,14 +121,14 @@ public class InvMatch {
    * A set of translations is consistent if all of the variable mappings
    * are consistent (ie, no variable maps to more than one variable).
    */
-  static List /*list<InvTranslate>*/ match_ppt (PptTopLevel ppt1,
-                                                PptTopLevel ppt2) {
+  static List<List<InvTranslate>> match_ppt (PptTopLevel ppt1,
+                                             PptTopLevel ppt2) {
 
-    List /*List<InvTranslate>*/ xlate_list = new ArrayList();
+    List<List<InvTranslate>> xlate_list = new ArrayList();
 
     for (Iterator i = ppt1.invariants_iterator(); i.hasNext(); ) {
       Invariant inv1 = (Invariant) i.next();
-      List /*InvTranslate*/ inv_xlate_list = new ArrayList();
+      List<InvTranslate> inv_xlate_list = new ArrayList();
       xlate_list.add (inv_xlate_list);
       for (Iterator j = ppt2.invariants_iterator(); j.hasNext(); ) {
         Invariant inv2 = (Invariant) j.next();
@@ -144,7 +144,7 @@ public class InvMatch {
     if (true) {
       Iterator invi = ppt1.invariants_iterator();
       for (Iterator i = xlate_list.iterator(); i.hasNext(); ) {
-        List /*InvTranslate*/ inv_xlate_list = (List) i.next();
+        List<InvTranslate> inv_xlate_list = (List) i.next();
         Invariant inv = (Invariant) invi.next();
         Fmt.pf ("%s translations:", inv.format());
         for (Iterator j = inv_xlate_list.iterator(); j.hasNext(); ) {
@@ -214,11 +214,11 @@ public class InvMatch {
     return (true);
   }
 
-  public static List /*InvTranslate*/ best_translation
-            (List /*List<InvTranslate>*/ valid_translations) {
+  public static List<InvTranslate> best_translation
+            (List<List<InvTranslate>> valid_translations) {
 
     // Determine the best translation and print it out.
-    List/*InvTranslate*/ best_translation = null;
+    List<InvTranslate> best_translation = null;
     int best_quality = 0;
     for (Iterator i = valid_translations.iterator(); i.hasNext(); ) {
       List current_translation = (List) i.next();

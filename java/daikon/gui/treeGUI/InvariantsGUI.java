@@ -254,7 +254,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   }
 
   protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
-    UIManager.put( "Button.font",   new FontUIResource( ((FontUIResource) UIManager.get( "Button.font" )).deriveFont( Font.PLAIN )));
+    UIManager.put( "Button.font", new FontUIResource( ((FontUIResource) UIManager.get( "Button.font" )).deriveFont( Font.PLAIN )));
     UIManager.put( "CheckBox.font", new FontUIResource( ((FontUIResource) UIManager.get( "CheckBox.font" )).deriveFont( Font.PLAIN )));
     UIManager.put( "RadioButton.font", new FontUIResource( ((FontUIResource) UIManager.get( "RadioButton.font" )).deriveFont( Font.PLAIN )));
 

@@ -783,7 +783,7 @@ public class PptRelation implements Serializable {
         PptSplitter ppt_split = (PptSplitter) ii.next();
 
         // list of children that match this splitter
-        List /*SplitChild*/
+        List<SplitChild>
         split_children = new ArrayList();
 
         // Create a list of children for this splitter

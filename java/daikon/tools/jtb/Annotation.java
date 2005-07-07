@@ -149,7 +149,7 @@ public class Annotation {
    * none, one, or several annotations.  Malformed annotations are
    * ignored.
    */
-  public static Annotation[] findAnnotations(List /*String*/ annoStrings) {
+  public static Annotation[] findAnnotations(List<String> annoStrings) {
 
     if (annoStrings == null) {
       return new Annotation[] {
@@ -338,8 +338,7 @@ public class Annotation {
    * The annotations in <code>annas</code> of kind <code>kind</code>.
    */
   public static Annotation[] getKind(Annotation[] annas, Kind kind) {
-    List /*Annotation*/
-      retval = new ArrayList();
+    List<Annotation> retval = new ArrayList();
     for (int i = 0; i < annas.length; i++) {
       if (kind == annas[i].kind) {
         retval.add(annas[i]);

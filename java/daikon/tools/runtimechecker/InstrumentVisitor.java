@@ -860,7 +860,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
 
     private StringBuffer checkPreconditions_checker_method(List<PptTopLevel> matching_ppts, PptMap pptmap,
-                                                           String methodName, List/*String*/ parameters,
+                                                           String methodName, List<String> parameters,
                                                            boolean majorProperties) {
 
         StringBuffer code = new StringBuffer();
@@ -895,7 +895,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     private StringBuffer checkPostconditions_checker_method(List<PptTopLevel> matching_ppts, PptMap pptmap,
                                                             String methodName, String returnType,
-                                                            List/*String*/ parameters, boolean majorProperties) {
+                                                            List<String> parameters, boolean majorProperties) {
 
         StringBuffer code = new StringBuffer();
         code.append("public static void check" +
@@ -931,7 +931,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
 
     private StringBuffer checkPreconditions_checker_constructor(List<PptTopLevel> matching_ppts, PptMap pptmap,
-                                                                String methodName, List/*String*/ parameters,
+                                                                String methodName, List<String> parameters,
                                                                 boolean majorProperties) {
 
         StringBuffer code = new StringBuffer();
@@ -963,7 +963,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
 
     private StringBuffer checkPostconditions_checker_constructor(List<PptTopLevel> matching_ppts, PptMap pptmap,
-                                                                 String methodName,  List/*String*/ parameters,
+                                                                 String methodName, List<String> parameters,
                                                                  boolean majorProperties) {
 
         StringBuffer code = new StringBuffer();

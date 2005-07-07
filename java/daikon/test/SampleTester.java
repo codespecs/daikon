@@ -396,7 +396,7 @@ public class SampleTester extends TestCase {
    * arguments are the variables.  This needs to be expanded to specify
    * more information for invariants with state.
    */
-  private boolean proc_inv_assert (List /*String*/ args) {
+  private boolean proc_inv_assert (List<String> args) {
 
     if ((args.size() < 2) || (args.size() > 4))
       parse_error ("bad argument count (" + args.size() +
@@ -448,7 +448,7 @@ public class SampleTester extends TestCase {
    * argumens (each of which should be a valid variable name for this ppt).
    * always returns true.
    */
-  private boolean proc_show_invs_assert (List /*String*/ args) {
+  private boolean proc_show_invs_assert (List<String> args) {
 
     if ((args.size() < 1) || (args.size() > 3))
       parse_error ("bad argument count (" + args.size() +
@@ -484,7 +484,7 @@ public class SampleTester extends TestCase {
    * Each argument is variable name and at least one variable number must be
    * specified.
    */
-  private boolean proc_constant_assert (List /*String*/ args) {
+  private boolean proc_constant_assert (List<String> args) {
 
     if (args.size() < 1)
       parse_error ("Must be at least one argument for constant assertion");

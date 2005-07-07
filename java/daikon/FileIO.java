@@ -1568,8 +1568,7 @@ public final class FileIO {
           PptTopLevel nppt = new PptTopLevel(ppt.name, ppt.var_infos);
           nppt.set_sample_number(ppt.num_samples());
           ppts.add(nppt);
-          List /*Invariants*/
-          inv_list = invs.get(ppt);
+          List<Invariant> inv_list = invs.get(ppt);
           for (Iterator j = inv_list.iterator(); j.hasNext();) {
             Invariant inv = (Invariant) j.next();
             PptSlice slice = nppt.get_or_instantiate_slice(inv.ppt.var_infos);

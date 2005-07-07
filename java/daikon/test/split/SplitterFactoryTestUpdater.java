@@ -33,9 +33,9 @@ public class SplitterFactoryTestUpdater {
   private static String targetDir = "daikon/test/split/targets/";
   private static String splitDir = "daikon/test/split/";
 
-  private static List /*List of Strings*/ spinfoFileLists = new ArrayList();
-  private static List /*List of Strings*/ declsFileLists = new ArrayList();
-  private static List /*String*/ classNames = new ArrayList();
+  private static List<List<String>> spinfoFileLists = new ArrayList();
+  private static List<List<String>> declsFileLists = new ArrayList();
+  private static List<String> classNames = new ArrayList();
 
   private static File tempDir = null;
 
@@ -79,8 +79,8 @@ public class SplitterFactoryTestUpdater {
    * @param decls the decls files that should be used in generating the
    *  splitter java files.
    */
-  private static void generateSplitters(List /*String*/ spinfos,
-                                        List /*String*/ decls) {
+  private static void generateSplitters(List<String> spinfos,
+                                        List<String> decls) {
     Set /*File*/ declsFileSet = new HashSet();
     Set /*File*/ spinfoFiles = new HashSet();
     for (int i = 0; i < spinfos.size(); i++) {
@@ -234,7 +234,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  /**");
     ps.println("   * Sets up the test by generating the needed splitter java files.");
     ps.println("   */");
-    ps.println("  private static void createSplitterFiles(List /*String*/ spinfos, List /*String*/ decls) {");
+    ps.println("  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
     ps.println("    List declsFiles = new ArrayList();");
     ps.println("    for (int i = 0; i < decls.size(); i++) {");
     ps.println("      declsFiles.add(new File((String) decls.get(i)));");
@@ -285,8 +285,8 @@ public class SplitterFactoryTestUpdater {
    */
   public static void appendSetUpTest(PrintStream ps) {
     ps.println("  private static void setUpTests() {");
-    ps.println("    List /*String*/ spinfoFiles;");
-    ps.println("    List /*String*/ declsFiles;");
+    ps.println("    List<String> spinfoFiles;");
+    ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
       List spinfoFiles = (List) spinfoFileLists.get(i);
       ps.println("    spinfoFiles = new ArrayList();");

@@ -67,7 +67,7 @@ public class NIS {
     suppressor_map = new LinkedHashMap(256);
 
   /** List of all suppressions */
-  static List/*NISuppressionSet*/ all_suppressions = new ArrayList();
+  static List<NISuppressionSet> all_suppressions = new ArrayList();
 
   /**
    * List of invariants that are unsuppressed by the current sample.
@@ -138,11 +138,11 @@ public class NIS {
     // If any suppressor is itself suppressed, augment the suppressions
     // where the suppressor is used with the suppressor's suppressions.
     for (Iterator i = suppressor_map.values().iterator(); i.hasNext(); ) {
-      List /*NISuppressionSet*/ ss_list = (List) i.next();
+      List<NISuppressionSet> ss_list = (List) i.next();
       for (Iterator j = ss_list.iterator(); j.hasNext(); ) {
         NISuppressionSet ss = (NISuppressionSet) j.next();
         NISuppressee suppressee = ss.get_suppressee();
-        List /*NISuppressionSet*/ suppressor_ss_list
+        List<NISuppressionSet> suppressor_ss_list
           = (List) suppressor_map.get (suppressee.sup_class);
         if (suppressor_ss_list == null)
           continue;
@@ -382,7 +382,7 @@ public class NIS {
     if (false) {
       for (Iterator i = comp_ants.values().iterator(); i.hasNext(); ) {
         Antecedents ants = (Antecedents) i.next();
-        List/*Invariants*/ eq_invs = ants.get (IntEqual.class);
+        List<Invariant> eq_invs = ants.get (IntEqual.class);
         if ((eq_invs != null) && (eq_invs.size() > 1000)) {
           Map var_map = new LinkedHashMap();
           Fmt.pf ("ppt %s, comparability %s has %s equality invariants",
@@ -530,7 +530,7 @@ public class NIS {
    * places them in their associated slices.
    * @return a list of created invariants.
    */
-  public static List/*Invariant*/ create_suppressed_invs (PptTopLevel ppt) {
+  public static List<Invariant> create_suppressed_invs (PptTopLevel ppt) {
 
     // Find all antecedents and organize them by their variables comparability
     Map /* VarComparability->Antecedents */ comp_ants = new LinkedHashMap();
@@ -851,7 +851,7 @@ public class NIS {
         false_cnt++;
 
       // Add the invariant to the map for its class
-      List /*Invariant*/ antecedents = get (inv.getClass());
+      List<Invariant> antecedents = get (inv.getClass());
       if (antecedents == null) {
         antecedents = new ArrayList();
         antecedent_map.put (inv.getClass(), antecedents);
@@ -880,7 +880,7 @@ public class NIS {
      * Returns a list of all of the antecedent invariants of the specified
      * class.  Returns NULL if there are none of that class
      */
-    public List /*Invariant*/ get (Class cls) {
+    public List<Invariant> get (Class cls) {
 
       return (List) antecedent_map.get (cls);
     }
@@ -895,7 +895,7 @@ public class NIS {
       for (Iterator i = antecedent_map.keySet().iterator(); i.hasNext(); ) {
         Class iclass = (Class) i.next();
         out += UtilMDE.unqualified_name (iclass) + " : ";
-        List /*Invariant*/ ilist = (List) antecedent_map.get (iclass);
+        List<Invariant> ilist = (List) antecedent_map.get (iclass);
         for (Iterator j = ilist.iterator(); j.hasNext(); ) {
           Invariant inv = (Invariant) j.next();
           if (inv.is_false())

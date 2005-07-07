@@ -674,7 +674,7 @@ public class CLASSNAME
             if (seqinv.num_elts() == 1) {
               Object elt = seqinv.elt();
               if (elt instanceof long[] && ((long[]) elt).length == 0) {
-                Debug.log (debug, inv.getClass(), inv.ppt,  vis,
+                Debug.log (debug, inv.getClass(), inv.ppt, vis,
                                 "ObvSubSeq- True from subvar being []");
                 return true;
               }

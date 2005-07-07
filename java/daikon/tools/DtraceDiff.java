@@ -264,7 +264,7 @@ public class DtraceDiff {
 	    PptTopLevel foundppt = (PptTopLevel) pptmap.get(ppt1);
 	    if (foundppt == null) {
 	      if (!ppt1.name.equals(ppt2.name))
-		ppt_mismatch_error (state1, dtracefile1,  state2, dtracefile2);
+		ppt_mismatch_error (state1, dtracefile1, state2, dtracefile2);
 	      for (int i = 0;
 		   (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars);
 		   i++) {

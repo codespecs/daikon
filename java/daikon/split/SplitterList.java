@@ -169,7 +169,7 @@ public abstract class SplitterList
   //   }
   //////////////////////
 
-  /*
+  /**
    * Return the splitters associated with this program point name.
    * The resulting splitters are factories, not instantiated splitters.
    * @param pptName
@@ -217,7 +217,7 @@ public abstract class SplitterList
     }
   }
 
-  /*
+  /**
    * Return all the splitters in this program,
    * The resulting splitters are factories, not instantiated splitters.
    * @return an array of splitters

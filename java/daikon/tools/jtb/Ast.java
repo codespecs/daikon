@@ -1103,7 +1103,7 @@ public class Ast {
    * PrintInvariants.print_invariants call it. ]]
    *
    **/
-  public static List/*Invariant*/ getInvariants(PptTopLevel ppt, PptMap ppt_map) {
+  public static List<Invariant> getInvariants(PptTopLevel ppt, PptMap ppt_map) {
 
     // make names easier to read before printing
     ppt.simplify_variable_names();

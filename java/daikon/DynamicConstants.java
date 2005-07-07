@@ -63,14 +63,14 @@ public class DynamicConstants implements Serializable {
                           = Logger.getLogger ("daikon.DynamicConstants");
 
   /** List of dynamic constants. **/
-  List /*Constant*/ con_list = new ArrayList();
+  List<Constant> con_list = new ArrayList();
 
   /** List of variables that have always been missing. **/
-  List /*Constant*/ missing_list = new ArrayList();
+  List<Constant> missing_list = new ArrayList();
 
   /** List of all variables. **/
   Constant[] all_vars;
-  List /*Constant*/ all_list = new ArrayList();
+  List<Constant> all_list = new ArrayList();
 
   /** Program point of these constants. **/
   PptTopLevel ppt = null;
@@ -212,8 +212,8 @@ public class DynamicConstants implements Serializable {
    */
   public void add (ValueTuple vt, int count) {
 
-    List /*Constant*/ non_missing = new ArrayList();
-    List /*Constant*/ non_con = new ArrayList();
+    List<Constant> non_missing = new ArrayList();
+    List<Constant> non_con = new ArrayList();
 
     // Check each constant, destroy any that are missing or different
     for (Iterator i = con_list.iterator(); i.hasNext(); ) {
@@ -355,8 +355,8 @@ public class DynamicConstants implements Serializable {
    * Creates all new views required for the newly non constants (noncons)
    * and the newly non-missing (non_missing).
    */
-  public void instantiate_new_views (List /*Constant*/ noncons,
-                                     List /*Constant*/ non_missing) {
+  public void instantiate_new_views (List<Constant> noncons,
+                                     List<Constant> non_missing) {
 
     if (Debug.logOn()) {
       for (int i = 0; i < noncons.size(); i++) {
@@ -411,8 +411,8 @@ public class DynamicConstants implements Serializable {
    *    binary:  list1-vars X list2-vars
    *    ternary: list1-vars X list2-vars X list2-vars
    */
-  private void instantiate_views (List /*Constant*/ list1,
-                                  List /*Constant*/ list2) {
+  private void instantiate_views (List<Constant> list1,
+                                  List<Constant> list2) {
 
     // Get list1 leaders
     Set leaders1 = new LinkedHashSet();
@@ -614,8 +614,8 @@ public class DynamicConstants implements Serializable {
 
   }
 
-  public void instantiate_constant_suppressions (List /*Constant*/ new_noncons,
-                                                 List /*Constant*/ all) {
+  public void instantiate_constant_suppressions (List<Constant> new_noncons,
+                                                 List<Constant> all) {
 
     // Find all of the variable (non-constant) non-missing
     // integral/float leaders
@@ -865,7 +865,7 @@ public class DynamicConstants implements Serializable {
    * invariants are created and returned, but not added to the
    * ppt.
    */
-  public List/*PptSlice*/ create_constant_invs() {
+  public List<PptSlice> create_constant_invs() {
 
     // Turn off track logging so that we don't get voluminous messages
     // each time this is called
@@ -874,7 +874,7 @@ public class DynamicConstants implements Serializable {
       LogHelper.setLevel ("daikon.Debug", Level.OFF);
 
     // Get constant leaders
-    List/*Constant*/ leaders = new ArrayList(100);
+    List<Constant> leaders = new ArrayList(100);
     for (int i = 0; i < con_list.size(); i++) {
       Constant con = (Constant) con_list.get(i);
       if (!con.vi.isCanonical())
@@ -882,7 +882,7 @@ public class DynamicConstants implements Serializable {
       leaders.add (con);
     }
 
-    List/*PptSlice*/new_views = new ArrayList(100);
+    List<PptSlice>new_views = new ArrayList(100);
     int mod = ValueTuple.MODIFIED;
 
     // Unary slices/invariants

@@ -101,7 +101,7 @@ public class DTraceWriter extends DaikonWriter
 
         outFile.println(DaikonWriter.methodExitName(member, lineNum));
         printNonce(nonceVal);
-        traverse(mi, root, args,  obj, ret_val);
+        traverse(mi, root, args, obj, ret_val);
 
         outFile.println();
 

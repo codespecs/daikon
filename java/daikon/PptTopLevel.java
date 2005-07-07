@@ -985,9 +985,7 @@ public class PptTopLevel extends Ppt {
    * has already been added to the slice containing each invariant.  Otherwise
    * the statistics kept in the slice will be incorrect.
    */
-  public List /*Invariant */
-  inv_add(List /*Invariant*/
-  inv_list, ValueTuple vt, int count) {
+  public List<Invariant> inv_add(List<Invariant> inv_list, ValueTuple vt, int count) {
 
     // Slices containing these invariants
     Set slices = new LinkedHashSet();
@@ -1350,8 +1348,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Remove a list of invariants
    */
-  public void remove_invs(List /*Invariant*/
-  rm_list) {
+  public void remove_invs(List<Invariant> rm_list) {
     for (Iterator i = rm_list.iterator(); i.hasNext();) {
       Invariant inv = (Invariant) i.next();
       inv.ppt.removeInvariant(inv);
@@ -3791,8 +3788,7 @@ public class PptTopLevel extends Ppt {
 
     System.out.println("Removing child invariants at " + name());
 
-    List /*PptSlice*/
-    slices_to_remove = new ArrayList();
+    List<PptSlice> slices_to_remove = new ArrayList();
 
     // Loop through each slice
     for (Iterator i = views_iterator(); i.hasNext();) {
@@ -3872,7 +3868,7 @@ public class PptTopLevel extends Ppt {
 
   /** Debug print slice/inv count information to the specified logger **/
   public void debug_print_slice_info (Logger log, String descr,
-                                      List /*PptSlice*/ slices) {
+                                      List<PptSlice> slices) {
 
     int inv_cnt = 0;
     for (int i = 0; i < slices.size(); i++)
