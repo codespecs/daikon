@@ -34,7 +34,9 @@
 ;;; Java and C mode
 ;;;
 
-(load "c-set-basic-offset")
+;; Use guess-offset in favor of c-set-basic-offset
+(require 'guess-offset)
+;; (load "c-set-basic-offset")
 (load "remove-trailing-whitespace")
 (defun unset-indent-tabs-mode ()
   (setq indent-tabs-mode nil))
