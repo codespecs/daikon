@@ -186,8 +186,7 @@ public class InvariantChecker {
 
     PptMap all_ppts = null;
 
-    /** nonce -> EnterCall **/
-    Map call_map = new LinkedHashMap();
+    Map<Integer,EnterCall> call_map = new LinkedHashMap<Integer,EnterCall>();
 
     /**
      * process the sample by checking it against each existing invariant

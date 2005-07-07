@@ -250,7 +250,7 @@ public final class Daikon {
   public static Pattern ppt_omit_regexp;
   public static Pattern var_regexp;
   public static Pattern var_omit_regexp;
-  public static Set/*<String>*/ ppts_with_no_vars = new HashSet/*<String>*/();
+  public static Set<String> ppts_with_no_vars = new HashSet<String>();
 
   /**
    * When true, perform detailed internal checking.
@@ -347,8 +347,7 @@ public final class Daikon {
   public static Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
-  public static List<Invariant>
-  proto_invs = new ArrayList();
+  public static ArrayList<Invariant> proto_invs = new ArrayList<Invariant>();
 
   /** Debug tracer. **/
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
@@ -428,10 +427,10 @@ public final class Daikon {
     // Read command line options
     Set[] files = read_options(args, usage);
     Assert.assertTrue(files.length == 4);
-    Set decls_files = files[0]; // [File]
-    Set dtrace_files = files[1]; // [String]
-    Set spinfo_files = files[2]; // [File]
-    Set map_files = files[3]; // [File]
+    Set<File> decls_files = files[0];
+    Set<String> dtrace_files = files[1];
+    Set<File> spinfo_files = files[2];
+    Set<File> map_files = files[3];
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       System.out.println("No .decls or .dtrace files specified");
       throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
@@ -622,10 +621,10 @@ public final class Daikon {
       throw new Daikon.TerminationMessage();
     }
 
-    Set decl_files = new HashSet(); /* of Files */
-    Set dtrace_files = new HashSet(); /* of Strings, either file names or "-"*/
-    Set spinfo_files = new HashSet(); /* of Files */
-    Set map_files = new HashSet(); /* of Files */
+    HashSet<File> decl_files = new HashSet<File>();
+    HashSet<String> dtrace_files = new HashSet<String>(); /* either file names or "-"*/
+    HashSet<File> spinfo_files = new HashSet<File>();
+    HashSet<File> map_files = new HashSet<File>();
 
     LongOpt[] longopts =
       new LongOpt[] {
@@ -712,7 +711,7 @@ public final class Daikon {
                 if (filename.indexOf(".decls") != -1) {
                   decl_files.add(file);
                 } else if (filename.indexOf(".dtrace") != -1) {
-                  dtrace_files.add(file);
+                  dtrace_files.add(filename);
                 } else if (filename.indexOf(".spinfo") != -1) {
                   spinfo_files.add(file);
                 } else if (filename.indexOf(".map") != -1) {
@@ -1400,7 +1399,7 @@ public final class Daikon {
     }
   }
 
-  private static void load_spinfo_files(Set/*<File>*/ spinfo_files) {
+  private static void load_spinfo_files(Set<File> spinfo_files) {
     if (dkconfig_disable_splitting || spinfo_files.isEmpty()) {
       return;
     }

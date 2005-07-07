@@ -425,7 +425,7 @@ public static void mainHelper(final String[] args) throws IOException,
   public static class SimpleProcessor extends FileIO.Processor {
     PptMap all_ppts = null;
 
-    /** nonce -> List[Call, Call] * */
+    /** nonce -> List<Call,Call> * */
     // The first Call is the enter entry and the second is the object entry
     Map<Integer, List<Call>> call_map = new LinkedHashMap<Integer, List<Call>>();
 

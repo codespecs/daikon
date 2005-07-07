@@ -308,7 +308,7 @@ public class Annotation {
 
 
   // Maps into all the Annotation objects created.
-  private static HashMap /*Integer -> Annotation*/
+  private static HashMap<Integer,Annotation>
     annotationsMap = new HashMap();
 
   private Annotation(Kind kind, String daikonRep, String method) {

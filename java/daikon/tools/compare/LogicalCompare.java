@@ -93,7 +93,7 @@ public class LogicalCompare {
   private static boolean[] filters = new boolean[128];
 
   private static Vector filterInvariants(Vector invs, boolean isPost) {
-    Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
+    Vector<Invariant> new_invs = new Vector<Invariant>();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
       Invariant guarded_inv = inv;
@@ -176,8 +176,8 @@ public class LogicalCompare {
 
   // Translate a vector of Invariants into a vector of Lemmas, without
   // changing the invariants.
-  private static Vector translateStraight(Vector/*<Invariant>*/ invs) {
-    Vector/*<Lemma>*/ lems = new Vector();
+  private static Vector translateStraight(Vector<Invariant> invs) {
+    Vector<Lemma> lems = new Vector();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
       lems.add(new InvariantLemma(inv));
@@ -188,8 +188,8 @@ public class LogicalCompare {
   // Translate a vector of Invariants into a vector of Lemmas,
   // discarding any invariants that represent only facts about a
   // routine's prestate.
-  private static Vector translateRemovePre(Vector/*<Invariant>*/ invs) {
-    Vector/*<Lemma>*/ lems = new Vector();
+  private static Vector translateRemovePre(Vector<Invariant> invs) {
+    Vector<Lemma> lems = new Vector();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
       if (!inv.isAllPrestate())
@@ -202,8 +202,8 @@ public class LogicalCompare {
   // orig(...) to each variable so that the invariant will be true
   // about the precondition of a routine when it is examined in the
   // poststate context.
-  private static Vector translateAddOrig(Vector/*<Invariant>*/ invs) {
-    Vector/*<Lemma>*/ lems = new Vector();
+  private static Vector translateAddOrig(Vector<Invariant> invs) {
+    Vector<Lemma> lems = new Vector();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
       lems.add(InvariantLemma.makeLemmaAddOrig(inv));
@@ -213,7 +213,7 @@ public class LogicalCompare {
 
 //   // Print a vector of invariants and their Simplify translations, for
 //   // debugging purposes.
-//   private static void printInvariants(Vector/*<Invariant>*/ invs) {
+//   private static void printInvariants(Vector<Invariant> invs) {
 //     for (int i = 0; i < invs.size(); i++) {
 //       Invariant inv = (Invariant)invs.elementAt(i);
 //       System.out.println("   " + inv.format());
@@ -278,7 +278,7 @@ public class LogicalCompare {
           if (identical) {
             System.out.println("Identical");
           } else {
-            Vector/*<Lemma>*/ assume = lemmas.minimizeProof(inv);
+            Vector<Lemma> assume = lemmas.minimizeProof(inv);
             System.out.println();
             for (int j = 0; j < assume.size(); j++)
               System.out.println(((Lemma)assume.elementAt(j)).summarize());
@@ -463,9 +463,9 @@ public class LogicalCompare {
     if (opt_show_count)
       System.out.println("Strong preconditions consist of "
                          + t_pre.size() + " invariants.");
-    Vector/*<Lemma>*/ pre_assumptions = new Vector();
+    Vector<Lemma> pre_assumptions = new Vector();
     pre_assumptions.addAll(translateStraight(a_pre));
-    Vector/*<Lemma>*/ pre_conclusions = new Vector();
+    Vector<Lemma> pre_conclusions = new Vector();
     pre_conclusions.addAll(translateStraight(t_pre));
     Collections.sort(pre_conclusions);
 
@@ -480,9 +480,9 @@ public class LogicalCompare {
                        + "=============================");
 
 
-    Vector/*<Lemma>*/ post_assumptions_safe = new Vector();
-    Vector/*<Lemma>*/ post_assumptions_unsafe = new Vector();
-    Vector/*<Lemma>*/ post_conclusions = new Vector();
+    Vector<Lemma> post_assumptions_safe = new Vector();
+    Vector<Lemma> post_assumptions_unsafe = new Vector();
+    Vector<Lemma> post_conclusions = new Vector();
 
     post_assumptions_unsafe.addAll(translateAddOrig(a_pre));
     post_assumptions_safe.addAll(translateStraight(t_post));

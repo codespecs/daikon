@@ -54,7 +54,7 @@ public class PptMap
    * @return an iterator over the PptTopLevels in this, sorted by
    * Ppt.NameComparator on their names.  This is good for consistency.
    **/
-  public Iterator pptIterator() {
+  public Iterator<PptTopLevel> pptIterator() {
     TreeSet sorted = new TreeSet(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
     // Use a (live) view iterator to get concurrent modification

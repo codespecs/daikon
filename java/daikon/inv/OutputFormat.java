@@ -88,9 +88,9 @@ public final class OutputFormat
         repair=new Repair();
       return repair;
     }
-    Hashtable settable=new Hashtable(); /*Tuple->String*/
-    Hashtable relationtable=new Hashtable(); /*Tuple->String*/
-    Hashtable definitiontable=new Hashtable(); /*Ppt->Definition*/
+    Hashtable<Tuple,String> settable=new Hashtable<Tuple,String>();
+    Hashtable<Tuple,String> relationtable=new Hashtable<Tuple,String>();
+    Hashtable<Ppt,Definition> definitiontable=new Hashtable<Ppt,Definition>();
     int tagnumber=0;
     boolean forceset=false;
     HashMap quantifiers=new LinkedHashMap(); // LinkedHashMap for deterministic output

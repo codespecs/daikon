@@ -42,7 +42,7 @@ public class InvTranslate {
   public PptTopLevel ppt = null;
 
   /** Map of variables from inv to inv **/
-  Map /*string->string*/ var_map = new LinkedHashMap();
+  Map<String,String> var_map = new LinkedHashMap<String,String>();
 
   /** source invariant **/
   Invariant inv1;

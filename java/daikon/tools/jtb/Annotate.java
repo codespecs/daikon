@@ -312,7 +312,7 @@ public class Annotate {
     try {
       File f = new File(filename);
       r = new BufferedReader(new FileReader(filename));
-      w = new PrintWriter(new FileWriter(new File(f.getParent(), f.getName() + "-random-tabs")), true /*autoflush*/);
+      w = new PrintWriter(new FileWriter(new File(f.getParent(), f.getName() + "-random-tabs")), /*autoflush=*/true);
     } catch (FileNotFoundException e) {
       throw new Error(e);
     } catch (IOException e) {

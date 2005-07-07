@@ -63,7 +63,7 @@ public class NIS {
    * Map from invariant class to a list of all of the suppression sets
    * that contain a suppressor of that class.
    */
-  static Map/*invariant class -> List<NISuppressionSet>*/
+  static Map<Class,List<NISuppressionSet>>
     suppressor_map = new LinkedHashMap(256);
 
   /** List of all suppressions */
@@ -364,7 +364,7 @@ public class NIS {
       ppt.debug_invs (debugAnt);
 
     // Find all antecedents and organize them by their variables comparability
-    Map /* VarComparability->Antecedents */ comp_ants = new LinkedHashMap();
+    Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap();
     store_antecedents_by_comparability (ppt.views_iterator(), comp_ants);
     if (ppt.constants != null)
       store_antecedents_by_comparability
@@ -437,7 +437,7 @@ public class NIS {
     // Loop through each suppression creating each invariant that
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately
-    Set /*SupInv*/ unsuppressed_invs = new LinkedHashSet();
+    Set<SupInv> unsuppressed_invs = new LinkedHashSet();
     for (Iterator i = all_suppressions.iterator(); i.hasNext(); ) {
       NISuppressionSet ss = (NISuppressionSet) i.next();
       for (Iterator j = ss.iterator(); j.hasNext(); ) {
@@ -501,7 +501,7 @@ public class NIS {
    * antecedents.
    */
   static void merge_always_comparable
-                        (Map /*VarComparability->Antecedents*/ comp_ants) {
+                        (Map<VarComparability,Antecedents> comp_ants) {
 
     // Find the antecedents that are always comparable (if any)
     Antecedents compare_all = null;
@@ -533,7 +533,7 @@ public class NIS {
   public static List<Invariant> create_suppressed_invs (PptTopLevel ppt) {
 
     // Find all antecedents and organize them by their variables comparability
-    Map /* VarComparability->Antecedents */ comp_ants = new LinkedHashMap();
+    Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap();
     store_antecedents_by_comparability (ppt.views_iterator(), comp_ants);
 
     // Add always-comparable antecedents to each of the other maps.
@@ -542,7 +542,7 @@ public class NIS {
     // Loop through each suppression creating each invariant that
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately.
-    Set /*SupInv*/ suppressed_invs = new LinkedHashSet();
+    Set<SupInv> suppressed_invs = new LinkedHashSet();
     for (Iterator i = all_suppressions.iterator(); i.hasNext(); ) {
       NISuppressionSet ss = (NISuppressionSet) i.next();
       for (Iterator j = ss.iterator(); j.hasNext(); ) {
@@ -576,7 +576,7 @@ public class NIS {
    */
   static void store_antecedents_by_comparability
                            (Iterator slice_iterator,
-                            Map /*VarComparability->Antecedents*/ comp_ants) {
+                            Map<VarComparability,Antecedents> comp_ants) {
 
     for (Iterator i = slice_iterator; i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
@@ -606,7 +606,7 @@ public class NIS {
    * class. @return the number of false antecedents found.
    */
   static int find_antecedents (Iterator slice_iterator,
-                    Map /*Invariant.class->List<Invariant> */ antecedent_map) {
+                    Map<Class,List<Invariant>> antecedent_map) {
 
     int false_cnt = 0;
 
@@ -804,7 +804,7 @@ public class NIS {
      * antecedent invariants of that class.  Allows fast access to
      * invariants by type
      */
-    Map /*Invariant.class->List<Invariant> */ antecedent_map;
+    Map<Class,List<Invariant>> antecedent_map;
 
     /** Number of antecedents that are false **/
     int false_cnt = 0;

@@ -146,12 +146,10 @@ public class PptTopLevel extends Ppt {
    * the HashMap.  Indexed by a Arrays.asList array list of Integers
    * holding varinfo_index values
    **/
-  private Map /*[Integer[]->PptSlice]*/
-  views;
+  private Map<List<Integer>,PptSlice> views;
 
   /** List of all of the splitters for this ppt. */
-  public /*PptSplitter*/
-  ArrayList splitters = null;
+  public ArrayList<PptSplitter> splitters = null;
 
   /**
    * Iterator for all of the conditional ppts.  Returns each PptConditional
@@ -801,7 +799,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
-  public Set /* Invariant */ add_bottom_up (ValueTuple vt, int count) {
+  public Set<Invariant> add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
 
@@ -1310,7 +1308,7 @@ public class PptTopLevel extends Ppt {
    * Given an array of VarInfos, return a List representing that array,
    * to be used as an index in the views hashtable.
    */
-  private List sliceIndex(VarInfo[] vis) {
+  private List<Integer> sliceIndex(VarInfo[] vis) {
     Integer[] a = new Integer[vis.length];
     for (int i = 0; i < vis.length; i++) {
       a[i] = new Integer(vis[i].varinfo_index);
@@ -3496,8 +3494,7 @@ public class PptTopLevel extends Ppt {
     // remember the list for each child.  The same ppt can be a child
     // more than once (with different variable relations), but we only
     // need to created the suppressed invariants once.
-    Map /*ppt->List<Invariant>*/
-    suppressed_invs = new LinkedHashMap();
+    Map<PptTopLevel,List<Invariant>> suppressed_invs = new LinkedHashMap();
     for (int i = 0; i < children.size(); i++) {
       PptRelation rel = (PptRelation) children.get(i);
       PptTopLevel child = rel.child;

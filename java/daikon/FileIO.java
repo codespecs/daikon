@@ -551,11 +551,11 @@ public final class FileIO {
 
   // I could save some Object overhead by using two parallel stacks
   // instead of Invocation objects; but that's not worth it.
-  static Stack/*Invocation*/ call_stack = new Stack();
-  static HashMap/*Integer->Invocation*/ call_hashmap = new HashMap();
+  static Stack<Invocation> call_stack = new Stack();
+  static HashMap<Integer,Invocation> call_hashmap = new HashMap();
 
   /** Reads data trace files using the default sample processor. **/
-  public static void read_data_trace_files(Collection /*String*/ files,
+  public static void read_data_trace_files(Collection<String> files,
                                            PptMap all_ppts) throws IOException {
 
     Processor processor = new Processor();
@@ -567,7 +567,7 @@ public final class FileIO {
    * Calls @link{read_data_trace_file(File,PptMap,Pattern,false)} for each
    * element of filenames.
    **/
-  public static void read_data_trace_files(Collection /*String*/ files,
+  public static void read_data_trace_files(Collection<String> files,
                                            PptMap all_ppts, Processor processor) throws IOException {
     for (Iterator i = files.iterator(); i.hasNext();) {
       String filename = (String) i.next();

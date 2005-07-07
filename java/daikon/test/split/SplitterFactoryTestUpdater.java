@@ -33,9 +33,9 @@ public class SplitterFactoryTestUpdater {
   private static String targetDir = "daikon/test/split/targets/";
   private static String splitDir = "daikon/test/split/";
 
-  private static List<List<String>> spinfoFileLists = new ArrayList();
-  private static List<List<String>> declsFileLists = new ArrayList();
-  private static List<String> classNames = new ArrayList();
+  private static ArrayList<ArrayList<File>> spinfoFileLists = new ArrayList<ArrayList<File>>();
+  private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<ArrayList<File>>();
+  private static ArrayList<String> classNames = new ArrayList<String>();
 
   private static File tempDir = null;
 
@@ -65,9 +65,9 @@ public class SplitterFactoryTestUpdater {
    * one decls files is to be used.  See generateSplitters(List, List).
    */
   private static void generateSplitters(String spinfoFile, String declsFile) {
-    List spinfo = new ArrayList();
+    List<String> spinfo = new ArrayList<String>();
     spinfo.add(spinfoFile);
-    List decls = new ArrayList();
+    List<String> decls = new ArrayList<String>();
     decls.add(declsFile);
     generateSplitters(spinfo, decls);
   }
@@ -81,20 +81,20 @@ public class SplitterFactoryTestUpdater {
    */
   private static void generateSplitters(List<String> spinfos,
                                         List<String> decls) {
-    Set /*File*/ declsFileSet = new HashSet();
-    Set /*File*/ spinfoFiles = new HashSet();
+    HashSet<File> declsFileSet = new HashSet<File>();
+    HashSet<File> spinfoFiles = new HashSet<File>();
     for (int i = 0; i < spinfos.size(); i++) {
       String spinfoFile = (String) spinfos.get(i);
       spinfoFile = targetDir + spinfoFile;
       spinfoFiles.add(new File(spinfoFile));
     }
-    spinfoFileLists.add(new ArrayList(spinfoFiles));
+    spinfoFileLists.add(new ArrayList<File>(spinfoFiles));
     for (int i = 0; i < decls.size(); i++) {
       String declsFile = (String) decls.get(i);
       declsFile = targetDir + declsFile;
       declsFileSet.add(new File(declsFile));
     }
-    declsFileLists.add(new ArrayList(declsFileSet));
+    declsFileLists.add(new ArrayList<File>(declsFileSet));
     try {
       Daikon.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
@@ -308,12 +308,17 @@ public class SplitterFactoryTestUpdater {
    * to code.
    */
   private static void appendTests(PrintStream ps) {
+    ps.println("  public static void assertEqualFiles(String f1, String f2) {");
+    ps.println("    assertTrue(\"Files \" + f1 + \" and \" + f2 + \" differ.\",");
+    ps.println("               UtilMDE.equalFiles(f1, f2));");
+    ps.println("  }");
+    ps.println();
     for (int i = 0; i < classNames.size(); i++) {
       String className = (String) classNames.get(i);
       ps.println("  public static void test" + className + "() {");
-      ps.println("    assertTrue(UtilMDE.equalFiles(");
+      ps.println("    assertEqualFiles(");
       ps.println("      tempDir +\"" + className + ".java\", ");
-      ps.println("      \"" + targetDir + className + ".java.goal\"));");
+      ps.println("      \"" + targetDir + className + ".java.goal\");");
       ps.println("  }");
       ps.println();
     }

@@ -2403,7 +2403,7 @@ public abstract class VarInfoName
     extends AbstractVisitor
   {
     // state and accessors
-    private final Set/*VarInfoName*/ goals;
+    private final Set<VarInfoName> goals;
 
 
     /**

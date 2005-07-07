@@ -167,7 +167,7 @@ public final class VarInfoAux
   /**
    * Map for interning.
    **/
-  private static Map/*[VarInfoAux->VarInfoAux]*/ theMap = null;
+  private static Map<VarInfoAux,VarInfoAux> theMap = null;
 
 
 

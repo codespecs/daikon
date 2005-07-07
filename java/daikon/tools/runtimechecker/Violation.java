@@ -231,7 +231,7 @@ public class Violation implements Serializable {
      * with confidence greater than or equal to <code>thresh</code>.
      */
     public static Violation[] viosWithConfGEQ(Violation[] vios, double thresh) {
-        List/*<Violation>*/ ret = new ArrayList/*<Violation>*/();
+        List<Violation> ret = new ArrayList<Violation>();
         for (int i = 0; i < vios.length; i++) {
             Violation v = vios[i];
             Property a = v.property;
@@ -247,7 +247,7 @@ public class Violation implements Serializable {
      * with confidence less than <code>thresh</code>.
      */
     public static Violation[] viosWithConfLT(Violation[] vios, double thresh) {
-        List/*<Violation>*/ ret = new ArrayList/*<Violation>*/();
+        List<Violation> ret = new ArrayList<Violation>();
         for (int i = 0; i < vios.length; i++) {
             Violation v = vios[i];
             Property a = v.property;
@@ -262,7 +262,7 @@ public class Violation implements Serializable {
      * Returns all violations in <code>vios</code> with the given time.
      */
     public static Violation[] withTime(Violation[] vios, Time time) {
-        List/*<Violation>*/ ret = new ArrayList/*<Violation>*/();
+        List<Violation> ret = new ArrayList<Violation>();
         for (int i = 0; i < vios.length; i++) {
             Violation v = vios[i];
             if (v.time == time) {
@@ -297,7 +297,7 @@ public class Violation implements Serializable {
         if (vioString == null || vioString.equals("")) {
             return new Violation[] {};
         }
-        Set/*<Violation>*/ vios = new HashSet/*<Violation>*/();
+        Set<Violation> vios = new HashSet<Violation>();
         String[] cutUp = vioString.split("<VIOLATION>");
         for (int splits = 0; splits < cutUp.length; splits++) {
             try {
@@ -325,7 +325,7 @@ public class Violation implements Serializable {
      * them by time!) and violations of high-confidence properties are
      * prepended with "H".
      */
-    public static String toNiceString(String prefix, Set/*<Violation>*/ vios,
+    public static String toNiceString(String prefix, Set<Violation> vios,
             double confidenceThreshold) {
 
         // TODO; It is bizarre that withTime requires conversion to an array.

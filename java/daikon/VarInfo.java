@@ -437,8 +437,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (aux.getFlag(VarInfoAux.IS_PARAM) && !isPrestate())
       result = true;
 
-    Set paramVars /*VarInfoName*/
-    = ppt.getParamVars();
+    Set<VarInfoName> paramVars = ppt.getParamVars();
 
     VarInfoName.Finder finder = new VarInfoName.Finder(paramVars);
     Object baseMaybe = finder.getPart(name);

@@ -197,13 +197,13 @@ public class PptSplitter implements Serializable {
     debug.fine ("Adding Implications for " + parent.name);
 
     // Maps permuted invariants to their original invariants
-    Map /*Invariant->Invariant*/ orig_invs = new LinkedHashMap();
+    Map<Invariant,Invariant> orig_invs = new LinkedHashMap();
 
-    Vector/*Invariant*/ same_invs_vec = new Vector();
+    Vector<Invariant> same_invs_vec = new Vector();
 
-    Vector /*Invariant[2]*/ exclusive_invs_vec = new Vector();
+    Vector<Invariant[]> exclusive_invs_vec = new Vector();
 
-    Vector /*Invariant[2]*/ different_invs_vec = new Vector();
+    Vector<Invariant[]> different_invs_vec = new Vector();
 
 /// ??? MDE
     // Loop through each possible parent slice
@@ -580,7 +580,7 @@ public class PptSplitter implements Serializable {
    * Result elements are Invariants (from the invs1 list)
    * All the arguments should be over the same program point.
    */
-  Vector /*Invariant*/ same_invariants(Invariants invs1, Invariants invs2) {
+  Vector<Invariant> same_invariants(Invariants invs1, Invariants invs2) {
 
     SortedSet ss1 = new TreeSet(icfp);
     ss1.addAll(invs1);

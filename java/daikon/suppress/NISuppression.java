@@ -143,7 +143,7 @@ public class NISuppression {
    *                            this set.
    * @param ants                Antecedents organized by class
    */
-  public void find_suppressed_invs (Set/*SupInv*/ suppressed_invs,
+  public void find_suppressed_invs (Set<NIS.SupInv> suppressed_invs,
                                     NIS.Antecedents ants) {
 
     // debug = suppressee.sup_class.getName().indexOf("NonZero") != -1;
@@ -178,7 +178,7 @@ public class NISuppression {
    *                            are falsified.
    * @param ants                Antecedents organized by class
    */
-  public void find_unsuppressed_invs (Set/*SupInv*/ unsuppressed_invs,
+  public void find_unsuppressed_invs (Set<NIS.SupInv> unsuppressed_invs,
                                       NIS.Antecedents ants) {
 
     // debug = suppressee.sup_class.getName().indexOf("SeqIntLessEqual") != -1;
@@ -238,7 +238,7 @@ public class NISuppression {
    * @see #find_unsuppressed_invs (Set, List, VarInfo[], int, boolean)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
    */
-  private void find_suppressed_invs (Set/*SupInv*/ unsuppressed_invs,
+  private void find_suppressed_invs (Set<NIS.SupInv> unsuppressed_invs,
                                      List<Invariant>antecedents[],
                                      VarInfo vis[], int idx) {
 
@@ -303,7 +303,7 @@ public class NISuppression {
    * @see find_unsuppressed_invs (Set, List, VarInfo[], int)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
    */
-  private void find_unsuppressed_invs (Set/*SupInv*/ unsuppressed_invs,
+  private void find_unsuppressed_invs (Set<NIS.SupInv> unsuppressed_invs,
                                        List<Invariant>antecedents[],
                                        VarInfo vis[], int idx,
                                        boolean false_antecedents) {

@@ -72,7 +72,7 @@ public final class Equality
    * change over time as this invariant weakens.  Sorted by index
    * until pivoting.
    **/
-  private TreeSet/*VarInfo*/ vars;
+  private TreeSet<VarInfo> vars;
 
   /** Returns the number of variables in the set. **/
   public int size() {

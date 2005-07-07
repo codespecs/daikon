@@ -122,7 +122,7 @@ public class PptSliceEquality
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("InstantiateInvariants: " + parent.name() + " vars:") ;
     }
-    Map multiMap = new LinkedHashMap(); /* comparable -> List[VarInfo]*/
+    LinkedHashMap<VarInfoAndComparability,List<VarInfo>> multiMap = new LinkedHashMap<VarInfoAndComparability,List<VarInfo>>();
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       VarInfoAndComparability viac = new VarInfoAndComparability(vi);
@@ -161,7 +161,7 @@ public class PptSliceEquality
    * each member of a pair is equal to the other.
    */
 
-  public void instantiate_from_pairs (Set /* VarInfo.Pairs */ eset) {
+  public void instantiate_from_pairs (Set<VarInfo.Pair> eset) {
 
     // Build a map from each variable to all those that are equal to it
     Map varmap = new LinkedHashMap();
@@ -302,7 +302,7 @@ public class PptSliceEquality
                                                  Equality leader, int count
                                                  ) {
     Assert.assertTrue (vis.size() > 0);
-    Map multiMap = new HashMap(); /* value -> List[VarInfo]*/
+    HashMap<Object,List<VarInfo>> multiMap = new HashMap<Object,List<VarInfo>>(); /* key is a value */
     List out_of_bounds = new ArrayList();
     for (Iterator i = vis.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();

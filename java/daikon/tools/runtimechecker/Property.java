@@ -289,7 +289,7 @@ public class Property implements Serializable {
      * none, one, or several properties. Ignores malformed properties.
      */
     public static Property[] findProperties(String annoString) {
-        List/*<String>*/ l = new ArrayList/*<String>*/();
+        List<String> l = new ArrayList<String>();
         l.add(annoString);
         return findProperties(l);
     }
@@ -299,13 +299,13 @@ public class Property implements Serializable {
      * strings. Each string in <code>annoStrings</code> may contain none, one,
      * or several properties. Malformed properties are ignored.
      */
-    public static Property[] findProperties(List/*<String>*/ annoStrings) {
+    public static Property[] findProperties(List<String> annoStrings) {
 
         if (annoStrings == null) {
             return new Property[] {};
         }
         //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
-        Set/*<Property>*/ annos = new HashSet/*<Property>*/();
+        Set<Property> annos = new HashSet<Property>();
         for (Iterator i = annoStrings.iterator(); i.hasNext();) {
             String location = (String) i.next();
             if (location == null || location.equals("")) {
@@ -360,7 +360,7 @@ public class Property implements Serializable {
      * The properties in <code>annas</code> with the given kind.
      */
     public static Property[] getKind(Property[] annas, Kind kind) {
-        List/*<Property>*/ retval = new ArrayList/*<Property>*/();
+        List<Property> retval = new ArrayList<Property>();
         for (int i = 0; i < annas.length; i++) {
             if (kind == annas[i].kind) {
                 retval.add(annas[i]);

@@ -63,7 +63,7 @@ public class LemmaStack {
   }
 
   /** Assume a list of lemmas. */
-  private void assumeAll(Vector/*<Lemma>*/ invs) throws TimeoutException {
+  private void assumeAll(Vector<Lemma> invs) throws TimeoutException {
     for (int i = 0; i < invs.size(); i++) {
       assume((Lemma)invs.elementAt(i));
     }
@@ -81,7 +81,7 @@ public class LemmaStack {
   /** Pop a bunch of lemmas off Simplify's stack. Since it's a stack,
    * it only works to unassume the things you most recently assumed,
    * but we aren't smart enough to check that. */
-  private void unAssumeAll(Vector/*<Lemma>*/ invs) {
+  private void unAssumeAll(Vector<Lemma> invs) {
     for (int i = 0; i < invs.size(); i++) {
       unAssume();
     }
@@ -249,7 +249,7 @@ public class LemmaStack {
         }
       }
     } while (reduced);
-    Vector/*<Lemma>*/ new_invs = new Vector/*<Lemma>*/();
+    Vector<Lemma> new_invs = new Vector<Lemma>();
     for (int i = 0; i < invs.length; i++) {
       if (!excluded[i])
         new_invs.add(invs[i]);
