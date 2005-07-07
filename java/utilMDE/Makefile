@@ -7,6 +7,7 @@
 
 JAVA ?= java -ea
 JAVAC ?= javac -g
+# JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
 
 
