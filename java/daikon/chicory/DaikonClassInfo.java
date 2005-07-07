@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * The DaikonClassInfo class is a subtype of DaikonVariableInfo used for variables which
- * represent the runtime type of a variable.
+ * represent the runtime type of a variable (ie, ".class" variables).
  */
 public class DaikonClassInfo extends DaikonVariableInfo
 {
@@ -34,7 +34,7 @@ public class DaikonClassInfo extends DaikonVariableInfo
         if(isArray)
         {
             //a list of the runtime type of each value in the array
-            return StringInfo.showStringList(DTraceWriter.getTypeNameList((List) val));
+            return StringInfo.getStringList(DTraceWriter.getTypeNameList((List) val));
         }
         else
         {
@@ -46,7 +46,7 @@ public class DaikonClassInfo extends DaikonVariableInfo
      * Get a String representation of the given Object's runtime type and the
      * corresponding "modified" value
      * @param val The Object whose runtime class we wish to get a String representation of
-     * @return String representation of the given Object's runtime type
+     * @return String representation of the given Object's runtime type, and the "modified" value (modbit)
      */
     public String getValueStringNonArr(Object val)
     {

@@ -63,24 +63,16 @@ public class RetTransform implements ClassFileTransformer {
       boolean shouldExclude = false;
 
         // Don't instrument class if it matches an excluded regular expression
-        for (String regex : Runtime.daikon_omit_regex)
+        for (Pattern pattern : Runtime.daikon_omit_regex)
         {
-            Pattern pattern = null;
-            try
-            {
-                pattern = Pattern.compile(regex);
-            }
-            catch (Exception e)
-            {
-                System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
-            }
+
             Matcher mPpt = pattern.matcher(pptName);
             Matcher mClass = pattern.matcher(className);
             Matcher mMethod = pattern.matcher(methodName);
 
             if (mPpt.find() || mClass.find() || mMethod.find())
             {
-                log("not instrumenting %s, it matches regex %s\n", pptName, regex);
+                log("not instrumenting %s, it matches regex %s%n", pptName, pattern);
                 shouldExclude = true;
 
                 //System.out.println("filtering 1 true on --- " + pptName);
@@ -94,17 +86,8 @@ public class RetTransform implements ClassFileTransformer {
         // classes that match them
         if (Runtime.daikon_include_regex.size() > 0)
         {
-            for (String regex : Runtime.daikon_include_regex)
+            for (Pattern pattern: Runtime.daikon_include_regex)
             {
-                Pattern pattern = null;
-                try
-                {
-                    pattern = Pattern.compile(regex);
-                }
-                catch (Exception e)
-                {
-                    System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
-                }
 
                 Matcher mPpt = pattern.matcher(pptName);
                 Matcher mClass = pattern.matcher(className);
@@ -114,8 +97,8 @@ public class RetTransform implements ClassFileTransformer {
 
                 if (mPpt.find() || mClass.find() || mMethod.find())
                 {
-                    //System.out.printf ("instrumenting %s, it matches regex %s\n", pptName, regex);
-                    log("instrumenting %s, it matches regex %s\n", pptName, regex);
+                    //System.out.printf ("instrumenting %s, it matches regex %s%n", pptName, regex);
+                    log("instrumenting %s, it matches regex %s%n", pptName, pattern);
 
                     //System.out.println("filtering 2 false on --- " + pptName);
                     return false; //don't filter out
@@ -150,7 +133,7 @@ public class RetTransform implements ClassFileTransformer {
       //String fullClassName = className;
 
     if (debug)
-      out.format ("In Transform: class = %s\n", className);
+      out.format ("In Transform: class = %s%n", className);
 
     // Don't instrument standard classes
     if (className.startsWith ("java/") || className.startsWith ("com/")
@@ -164,7 +147,7 @@ public class RetTransform implements ClassFileTransformer {
 
 
     if (debug)
-            out.format("transforming class %s\n", className);
+            out.format("transforming class %s%n", className);
 
         // Parse the bytes of the classfile, die on any errors
         JavaClass c = null;
@@ -279,7 +262,7 @@ public class RetTransform implements ClassFileTransformer {
                 throw new Error ("unexpected lost target exception " + e);
             }
               InstructionHandle new_start = il.insert (ih, new_il);
-              //out.format ("old start = %s, new_start = %s\n", ih, new_start);
+              //out.format ("old start = %s, new_start = %s%n", ih, new_start);
               il.redirectBranches (ih, new_start);
 
               // Fix up line numbers to point at the new code
@@ -296,12 +279,12 @@ public class RetTransform implements ClassFileTransformer {
             }
 
             if (debug)
-              out.format ("Replacing %s by %s\n", ih, new_il);
+              out.format ("Replacing %s by %s%n", ih, new_il);
 
             il.append (ih, new_il);
             InstructionTargeter[] targeters = ih.getTargeters();
             if (targeters != null) {
-              // out.format ("targeters length = %d\n", targeters.length);
+              // out.format ("targeters length = %d%n", targeters.length);
               for (int j = 0; j < targeters.length; j++)
                 targeters[j].updateTarget (ih, ih.getNext());
             }
@@ -445,14 +428,14 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
 
         if (debug)
                 {
-                    out.format("  Method = %s\n", mg);
+                    out.format("  Method = %s%n", mg);
                     Attribute[] attributes = mg.getCodeAttributes();
                     for (Attribute a : attributes)
                     {
                         int con_index = a.getNameIndex();
                         Constant c = pgen.getConstant(con_index);
                         String att_name = ((ConstantUtf8) c).getBytes();
-                        out.format("attribute: %s [%s]\n", a, att_name);
+                        out.format("attribute: %s [%s]%n", a, att_name);
                     }
                 }
 
@@ -473,7 +456,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
           continue;
 
         if (debug)
-          out.format ("Original code: %s\n", mg.getMethod().getCode());
+          out.format ("Original code: %s%n", mg.getMethod().getCode());
 
         // Create a MethodInfo that describes this methods arguments
         // and exit line numbers (information not available via reflection)
@@ -491,7 +474,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         Runtime.methods.add (mi);
 
         // Add nonce local to matchup enter/exits
-        add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName(), is_constructor(mg))));
+        add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName())));
 
 
         Iterator <Boolean> shouldIncIter = mi.is_included.iterator();
@@ -515,7 +498,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
             if (true) {
               new_il.delete (new_il.getEnd());
               InstructionHandle new_start = il.insert (ih, new_il);
-              //out.format ("old start = %s, new_start = %s\n", ih, new_start);
+              //out.format ("old start = %s, new_start = %s%n", ih, new_start);
               il.redirectBranches (ih, new_start);
 
               // Fix up line numbers to point at the new code
@@ -532,12 +515,12 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
             }
 
             if (debug)
-              out.format ("Replacing %s by %s\n", ih, new_il);
+              out.format ("Replacing %s by %s%n", ih, new_il);
 
             il.append (ih, new_il);
             InstructionTargeter[] targeters = ih.getTargeters();
             if (targeters != null) {
-              // out.format ("targeters length = %d\n", targeters.length);
+              // out.format ("targeters length = %d%n", targeters.length);
               for (int j = 0; j < targeters.length; j++)
                 targeters[j].updateTarget (ih, ih.getNext());
             }
@@ -574,16 +557,16 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         // Update the method in the class
         cg.replaceMethod (methods[i], mg.getMethod());
         if (debug)
-          out.format ("Modified code: %s\n", mg.getMethod().getCode());
+          out.format ("Modified code: %s%n", mg.getMethod().getCode());
 
         // verify the new method
         // StackVer stackver = new StackVer();
         // VerificationResult vr = stackver.do_stack_ver (mg);
-        // log ("vr for method %s = %s\n", mg.getName(), vr);
+        // log ("vr for method %s = %s%n", mg.getName(), vr);
         // if (vr.getStatus() != VerificationResult.VERIFIED_OK) {
         //  System.out.printf ("Warning BCEL Verify failed for method %s: %s",
         //                     mg.getName(), vr);
-        //  System.out.printf ("Code: \n%s\n", mg.getMethod().getCode());
+        //  System.out.printf ("Code: %n%s%n", mg.getMethod().getCode());
         // System.exit(1);
         // }
       }
@@ -685,7 +668,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         + return_local.getType();
 
     if (return_local == null) {
-      // log ("Adding return local of type %s\n", return_type);
+      // log ("Adding return local of type %s%n", return_type);
       return_local = mgen.addLocalVariable ("return__$trace2_val", return_type,
                                             null, null);
     }
@@ -778,9 +761,9 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     // there shouldn't be jumps to the first opcode of the method
     InstructionTargeter[] targeters = start.getTargeters();
     if (targeters.length > 0) {
-      // out.format ("%d targets point to %s\n", targeters.length, start);
+      // out.format ("%d targets point to %s%n", targeters.length, start);
       for (InstructionTargeter it : targeters) {
-        // out.format ("    targeter: %s\n", it);
+        // out.format ("    targeter: %s%n", it);
         assert !(it instanceof BranchInstruction) : "target " + it;
         if (it instanceof CodeExceptionGen) {
 
@@ -925,7 +908,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
   private boolean is_constructor (MethodGen mgen) {
 
     if (mgen.getName().equals ("<init>") || mgen.getName().equals ("")) {
-      // log ("method '%s' is a constructor\n", mgen.getName());
+      // log ("method '%s' is a constructor%n", mgen.getName());
       return (true);
     } else
       return (false);
@@ -975,7 +958,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
 
         //see if we should filter the entry point
         if(!shouldFilter(class_info.class_name, mgen.getName(),
-                DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), is_constructor(mgen))))
+                DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName())))
             shouldInclude = true;
 
         // Get the argument types for this method
@@ -997,7 +980,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         //tells whether each exit loc in the method is included or not (based on filters)
         List<Boolean> isIncluded = new ArrayList<Boolean>();
 
-        // log ("Looking for exit points in %s\n", mgen.getName());
+        // log ("Looking for exit points in %s%n", mgen.getName());
         InstructionList il = mgen.getInstructionList();
         int line_number = 0;
         int last_line_number = 0;
@@ -1016,8 +999,8 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
                     if (it instanceof LineNumberGen)
                     {
                         LineNumberGen lng = (LineNumberGen) it;
-                        // log ("  line number at %s: %d\n", ih, lng.getSourceLine());
-                        //System.out.printf("  line number at %s: %d\n", ih, lng.getSourceLine());
+                        // log ("  line number at %s: %d%n", ih, lng.getSourceLine());
+                        //System.out.printf("  line number at %s: %d%n", ih, lng.getSourceLine());
                         line_number = lng.getSourceLine();
                         foundLine = true;
                     }
@@ -1032,19 +1015,19 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
                 case Constants.IRETURN :
                 case Constants.LRETURN :
                 case Constants.RETURN :
-                    // log ("Exit at line %d\n", line_number);
+                    // log ("Exit at line %d%n", line_number);
 
                     //only do incremental lines if we don't have the line generator
                     if (line_number == last_line_number && foundLine == false)
                     {
-                        //System.out.printf("Could not find line... at %d\n", line_number);
+                        //System.out.printf("Could not find line... at %d%n", line_number);
                         line_number++;
                     }
 
                     last_line_number = line_number;
 
                     if(!shouldFilter(class_info.class_name, mgen.getName(),
-                            DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), is_constructor(mgen), line_number)))
+                            DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), line_number)))
                     {
                         shouldInclude = true;
                         exit_locs.add(new Integer(line_number));

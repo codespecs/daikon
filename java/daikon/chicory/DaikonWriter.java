@@ -27,6 +27,20 @@ public abstract class DaikonWriter
     public DaikonWriter()
     {
     }
+    
+    /**
+     * Determines if this field warrants an [ = val ] entry in decls file
+     *
+     * @param field requires field != null
+     * @return true iff field warrants an [ = val ] entry in the decls files
+     */
+    protected static boolean isStaticConstField(Field field)
+    {
+        Class type = field.getType();
+        int mod = field.getModifiers();
+
+        return Modifier.isFinal(mod) && Modifier.isStatic(mod) && type.isPrimitive();
+    }
 
     /**
      * Given a method, returns the method entry program point name for Daikon
@@ -35,7 +49,7 @@ public abstract class DaikonWriter
      */
     public static String methodEntryName(Member method)
     {
-        //System.out.printf("(NORM)  %s ----  %s\n", method.toString(), method.getName());
+        //System.out.printf("(NORM)  %s ----  %s%n", method.toString(), method.getName());
         return methodName(method, "ENTER");
     }
 
@@ -46,25 +60,10 @@ public abstract class DaikonWriter
      * @param types Argument types
      * @return the decorated method entry name for Daikon
      */
-    public static String methodEntryName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor)
+    public static String methodEntryName(String fullClassName, String[] types, String name, String short_name)
     {
-        //System.out.printf("(bytecodes)  %s ----  %s\n", name, short_name);
-        return methodName(fullClassName, types, name, short_name, isConstructor, "ENTER");
-    }
-
-
-    /**
-     * Determines if this field warrants an [ = val ] entry in decls file
-     *
-     * @param field requires field != null
-     * @return true iff field warrants an [ = val ] entry in the decls files
-     */
-    protected boolean staticConstField(Field field)
-    {
-        Class type = field.getType();
-        int mod = field.getModifiers();
-
-        return Modifier.isFinal(mod) && Modifier.isStatic(mod) && type.isPrimitive();
+        //System.out.printf("(bytecodes)  %s ----  %s%n", name, short_name);
+        return methodName(fullClassName, types, name, short_name, "ENTER");
     }
 
     /**
@@ -85,9 +84,9 @@ public abstract class DaikonWriter
      * @param lineNum The line number of the exit point of the method
      * @return the decorated method entry name for Daikon
      */
-    public static String methodExitName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor, int lineNum)
+    public static String methodExitName(String fullClassName, String[] types, String name, String short_name, int lineNum)
     {
-        return methodName(fullClassName, types, name, short_name, isConstructor, "EXIT" + lineNum);
+        return methodName(fullClassName, types, name, short_name, "EXIT" + lineNum);
     }
 
 
@@ -98,27 +97,28 @@ public abstract class DaikonWriter
      * @param types String representation of the declared types of the parameters
      *          for example: {"int", "java.lang.Object", "float"}
      * @param name The method with modifiers and parameters
-     * @param short_name Just the method's name
+     * @param short_name Just the method's name (except it is "<init>" for constructors)
      *
      * So a corresponding name/short_name pair could be:
      *     name: public static void DataStructures.StackArTester.doNew(int size)
      *     short_name: doNew
-     *
-     * @param isConstructor Is the method a constructor
+     *     
      * @param point Usually "EXIT" or "ENTER"
      * @return Same thing as methodName(Member, point)
      */
     private static String methodName(String fullClassName, String[] types, String name,
-            String short_name, boolean isConstructor, String point)
+            String short_name, String point)
     {
         //System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n", fullClassName, name, short_name);
 
         String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
 
+        boolean isConstructor = name.equals("<init>") || name.equals("");
+        
         // replace <init>'s with the actual class name
         // so "public void <init>" becomes "public void StackAr" for example
         name = name.replace("<init>", className);
-        short_name = short_name.replace("<init>", className);
+        short_name = className;
 
         // build up the string to go inside the parens
         StringBuilder paramTypes = new StringBuilder();
@@ -168,7 +168,6 @@ public abstract class DaikonWriter
      */
     private static String methodName(String name, String short_name, boolean isConstructor, String point)
     {
-
         //System.out.printf("%s ---- %s %n", name, short_name);
 
         if (isConstructor)
@@ -179,13 +178,13 @@ public abstract class DaikonWriter
         // Remove the modifiers and the type
         if (no_modifiers_ppt)
         {
-            // at this point, name might look something like:
+            // At this point, name might look something like:
             // public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception
 
-            // get ride of throws and everything after it (and space right before it)
+            // Get ride of throws and everything after it (and space right before it)
             name = name.replaceFirst (" throws.*", "");
 
-            // get rid of modifiers before the method name (public boolean in above example)
+            // Get rid of modifiers before the method name (public boolean in above example)
             String[] parts = name.split ("  *");
             name = parts[parts.length-1];
         }
@@ -196,37 +195,45 @@ public abstract class DaikonWriter
 
     /**
      *
-     * For some reason dfej repeats the name of the class for
+     * Dfej repeats the name of the class for
      * constructors (eg, DataStructures.StackAr() becomes
-     * DataStructures.StackAr.StackAr().  Mimic that behavior
-     s*
+     * DataStructures.StackAr.StackAr().  This makes it clear
+     * that SomePackage.ClassName.ClassName and SomePackage.ClassName.OtherMethod  
+     * are in the same class. Mimic that behavior.
+     *
      */
-    private static String fixDuplicateConstructorName(String name, String short_name)
+    private static String fixDuplicateConstructorName(String name,
+            String short_name)
     {
+        // assert short_name.lastIndexOf(".") == -1 : "short_name: " + short_name
+        //       + " should not contain a period ('.') character. ";
+
         int lastPeriod = short_name.lastIndexOf(".");
 
-        if (lastPeriod < 0)
+        if (lastPeriod == -1)
         {
-            name = name.replace (short_name + "(",
-                             short_name + "." + short_name + "(");
+            return name.replace(short_name + "(", short_name + "." + short_name
+                    + "(");
         }
         else
         {
+            // This case could occur for constructor names given as PackageName.ClassName
+            
             short_name = short_name.substring(lastPeriod + 1);
-            name = name.replace ("." + short_name + "(",
-                             "." + short_name + "." + short_name + "(");
+            return name.replace("." + short_name + "(", "." + short_name + "."
+                    + short_name + "(");
         }
-
-        return name;
     }
 
     /**
-     * Given a type, gets the representation type to be used in Daikon.
-     * For example, the representation type of a class object is "hashcode."
-     *
-     * @param type The type of the variable
-     * @param asArray Whether the variable is being output as an array
-     * (true) or as a pointer (false).
+     * Given a type, gets the representation type to be used in Daikon. For
+     * example, the representation type of a class object is "hashcode."
+     * 
+     * @param type
+     *            The type of the variable
+     * @param asArray
+     *            Whether the variable is being output as an array (true) or as
+     *            a pointer (false).
      * @return The representation type as a string
      */
     public static String getRepName(Class type, boolean asArray)
@@ -282,12 +289,10 @@ public abstract class DaikonWriter
     {
         //System.out.println(type);
         Class[] interfaces = type.getInterfaces();
-        for (int i = 0; i < interfaces.length; i++)
+        for (Class inter: interfaces)
         {
-            Class inter = interfaces[i];
-
             //System.out.println("implements: " + inter.getName());
-            if (inter.getName().equals("java.util.List"))
+            if (inter.equals(java.util.List.class))
                 return true;
         }
         return false;
@@ -314,7 +319,7 @@ public abstract class DaikonWriter
     public boolean notSystemClass (Class type)
     {
         String class_name = type.getName();
-        // System.out.printf ("type name is %s\n", class_name);
+        // System.out.printf ("type name is %s%n", class_name);
         if (class_name.startsWith ("java."))
             return (false);
         else
@@ -366,7 +371,7 @@ public abstract class DaikonWriter
         }
         else if (Modifier.isAbstract(type.getModifiers()))
         {
-            // System.out.printf ("Type [%s] is abstract %Xh %Xh %s\n", type,
+            // System.out.printf ("Type [%s] is abstract %Xh %Xh %s%n", type,
             //                   type.getModifiers(), Modifier.ABSTRACT,
             //                   Modifier.toString (type.getModifiers()));
             return true;
@@ -405,7 +410,7 @@ public abstract class DaikonWriter
         {
         for (ClassInfo ci : Runtime.all_classes)
         {
-            // System.out.printf ("comparing %s vs %s\n", ci.class_name,
+            // System.out.printf ("comparing %s vs %s%n", ci.class_name,
             //                    fclass.getName());
             if (ci.class_name.equals (fclass.getName()))
                 {
@@ -444,15 +449,12 @@ public abstract class DaikonWriter
      * @return    The field in the class which is the "linked list field",
      *            or null if no such field exists.
      */
-    public Field isImplicitLinkedList(Class type)
+    public Field checkImplicitLinkedList(Class type)
     {
         Field linkField = null;
-        Field[] fields = type.getFields();
 
-        for (int i = 0; i < fields.length; i++)
+        for (Field field: type.getFields())
         {
-            Field field = fields[i];
-
             if (!Modifier.isStatic(field.getModifiers()))
             {
                 if (field.getType().equals(type))

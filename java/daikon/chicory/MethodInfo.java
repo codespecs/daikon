@@ -18,13 +18,19 @@ public class MethodInfo {
   /** Reflection information on this method **/
   public Member member = null;
 
-  /** Method name **/
+  /** 
+   * Method name. 
+   * For example: "public static void sort(int[] arr)" would have method_name "sort"
+   **/
   public String method_name;
 
   /** Array of argument names for this method **/
   public String[] arg_names;
 
-  /** Array of argument types for this method **/
+  /** 
+   * Array of argument types for this method (fully qualified).
+   * For example:  "public static void examineObject(Object x)" would have arg_types {"java.lang.Object"}
+   **/
   public String[] arg_type_strings;
 
   /** Array of argument types as classes for this method **/
@@ -84,7 +90,7 @@ public class MethodInfo {
   }
 
   /** Populates this class with data from reflection **/
-  public void get_reflection () {
+  public void initViaReflection () {
 
     // Get the Class for each argument type
     arg_types = new Class[arg_names.length];

@@ -1,14 +1,19 @@
 package daikon.chicory;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 import java.io.*;
 import java.net.*;
 import java.net.Socket;
 import java.util.*;
 
+import daikon.Chicory;
+
 /**
- * Runtime support for chicory daikon front end
+ * Runtime support for chicory daikon front end.
+ * This class is a collection of methods.  It should
+ * never be instantiated.
  */
 public class Runtime
 {
@@ -22,12 +27,12 @@ public class Runtime
     /**
      * List of classes recently transformed.  This list is examined in
      * each enter/exit and the decl information for any new classes are
-     * printed out and the class is then removed from the list
+     * printed out and the class is then removed from the list.
      */
-    public static final List<ClassInfo> new_classes = new ArrayList<ClassInfo>();
+    public static final List<ClassInfo> new_classes = new LinkedList<ClassInfo>();
 
     /** List of all instrumented classes **/
-    public static  final List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+    public static final List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
 
     /** flag that indicates when the first class has been processed**/
     static boolean first_class = true;
@@ -39,10 +44,10 @@ public class Runtime
     // Control over what classes (ppts) are instrumented
     //
     /** Ppts to omit (regular expression) **/
-    static List<String> daikon_omit_regex = new ArrayList();
+    static List<Pattern> daikon_omit_regex = new ArrayList<Pattern>();
 
     /** Ppts to include (regular expression) **/
-    static List<String> daikon_include_regex = new ArrayList();
+    static List<Pattern> daikon_include_regex = new ArrayList<Pattern>();
 
     //
     // Setups that control what information is written
@@ -68,10 +73,10 @@ public class Runtime
     /** Dtrace output stream **/
     static PrintStream dtrace;
 
-    /** set to true when the dtrace stream is closed **/
+    /** Set to true when the dtrace stream is closed **/
     static boolean dtrace_closed = false;
 
-    /** true if no dtrace is being generated.  **/
+    /** True if no dtrace is being generated.  **/
     static boolean no_dtrace = false;
 
     /** Decl writer setup for writing to the trace file **/
@@ -80,8 +85,11 @@ public class Runtime
     /** Dtrace writer setup for writing to the trace file **/
     static DTraceWriter dtrace_writer = null;
 
-    /** Which static initializers have been run**/
-    private static Set <String> initSet = new HashSet();
+    /** 
+     * Which static initializers have been run.
+     * Each element of the Set is a fully qualified class name.
+     **/
+    private static Set <String> initSet = new HashSet<String>();
 
     // Constructor
     private Runtime()
@@ -143,38 +151,15 @@ public class Runtime
         }
     }
 
-    /** called as a placeholder when a method is entered **/
-    public static void enter()
-    {
-        if (debug)
-        {
-            Throwable stack = new Throwable("enter");
-            stack.fillInStackTrace();
-            StackTraceElement[] ste = stack.getStackTrace();
-            printf("enter ste[1] = %s\n", ste[1]);
-        }
-    }
-
-    /** called as a placeholder when a method is exited **/
-    public static void exit()
-    {
-        if (debug)
-        {
-            Throwable stack = new Throwable("exit");
-            stack.fillInStackTrace();
-            StackTraceElement[] ste = stack.getStackTrace();
-            printf("exit ste[1] = %s\n", ste[1]);
-        }
-    }
 
     /**
      * Called when a method is entered.
      *
-     * @param obj - Object of the method that was entered.  Null if method is
+     * @param obj - Receiver of the method that was entered.  Null if method is
      *              static
-     * @param nonce - nonce identifying which enter/exit pair this is
-     * @param mi_index - index in methods of the MethodInfo for this method
-     * @param args - array of arguments to method
+     * @param nonce - Nonce identifying which enter/exit pair this is
+     * @param mi_index - Index in methods of the MethodInfo for this method
+     * @param args - Array of arguments to method
      */
     public static void enter(Object obj, int nonce, int mi_index, Object[] args)
     {
@@ -188,68 +173,68 @@ public class Runtime
          stack.fillInStackTrace();
          StackTraceElement[] ste_arr = stack.getStackTrace();
          StackTraceElement ste = ste_arr[1];
-         System.out.printf ("%s.%s():::ENTER\n\n", ste.getClassName(), ste.getMethodName());*/
+         System.out.printf ("%s.%s():::ENTER%n%n", ste.getClassName(), ste.getMethodName());*/
 
-        synchronized(all_classes)
-         {
-        MethodInfo mi = methods.get(mi_index);
-        //System.out.println ("enter MethodInfo : " + mi.member);
-        dtrace_writer.methodEntry(mi, nonce, obj, args);
-     }
+        synchronized (all_classes)
+        {
+            MethodInfo mi = methods.get(mi_index);
+            dtrace_writer.methodEntry(mi, nonce, obj, args);
+        }
 
     }
-
-    public static void initNotify(String name)
-    {
-        //System.out.println("initialized ---> " + name);
-        initSet.add(name);
-    }
-
-    public static boolean isInitialized(String name)
-    {
-        return initSet.contains(name);
-    }
-
+    
     /**
      * Called when a method is exited.
      *
-     * @param obj     - Object of the method that was entered.  Null if method is
-     *                  static
-     * @param nonce    - nonce identifying which enter/exit pair this is
-     * @param mi_index - index in methods of the MethodInfo for this method
-     * @param args     - array of arguments to method
-     * @param ret_val  - return value of method.  null if method is void
+     * @param obj        -  Receiver of the method that was entered.  Null if method is
+     *                      static
+     * @param nonce       - Nonce identifying which enter/exit pair this is
+     * @param mi_index    - Index in methods of the MethodInfo for this method
+     * @param args        - Array of arguments to method
+     * @param ret_val     - Return value of method.  null if method is void
+     * @param exitLineNum - The line number at which this method exited
      */
-    public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int lineNum)
+    public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum)
     {
-
         if (new_classes.size() > 0)
             process_new_classes();
 
-        /*
-         printf ("%s.%s():::EXIT%d\n", ste.getClassName(), ste.getMethodName(),
-         ste.getLineNumber());
-         printf ("this_invocation_nonce\n");
-         println (nonce);
-         println ("this");
-         println (System.identityHashCode (obj));
-         for (int ii = 0; ii < args.length; ii++) {
-         Object arg = args[ii];
-         printf ("arg%d\n", ii);
-         println (arg);
-         }
-         println ("return");
-         println (ret_val);
-         println ();
-         */
 
-    synchronized(all_classes)
+        synchronized (all_classes)
         {
-        MethodInfo mi = methods.get(mi_index);
-        dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, lineNum);
-        // System.out.println ("enter MethodInfo : " + mi.member);
+            MethodInfo mi = methods.get(mi_index);
+            dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, exitLineNum);
         }
 
+    }
+
+    /**
+     * Called by classes when they have finished initialization
+     * (ie, their static initializer has completed).
+     * 
+     * This functionality must be enabled by the flag Chicory.checkStaticInit.
+     * When enabled, this method should only be called by the hooks created in the
+     * RetTransform class.
+     * 
+     * @param className Fully qualified class name
+     */
+    public static void initNotify(String className)
+    {
+        assert !initSet.contains(className) : className + " already exists in initSet";
+        
+        //System.out.println("initialized ---> " + name);
+        initSet.add(className);
+    }
+
+    /**
+     * Return true iff the class with fully qualified name className
+     * has been initialized.
+     * 
+     * @param className Fully qualified class name
+     */
+    public static boolean isInitialized(String className)
+    {
+        return initSet.contains(className);
     }
 
     /**
@@ -262,13 +247,13 @@ public class Runtime
       // very careful, as the call to get_reflection or printDeclClass
       // may load other classes (which then get added to the list).
       synchronized (new_classes) {
-        // System.out.printf ("Processing %d new classes\n",
+        // System.out.printf ("Processing %d new classes%n",
         //                 new_classes.size());
         while (new_classes.size() > 0) {
           ClassInfo class_info = new_classes.get (0);
           new_classes.remove (0);
           if (debug)
-            System.out.printf ("processing class %s\n", class_info.class_name);
+            System.out.printf ("processing class %s%n", class_info.class_name);
           if (first_class) {
             decl_writer.printHeaderInfo (class_info.class_name);
             first_class = false;
@@ -287,9 +272,9 @@ public class Runtime
         printedRecords++;
 
         // This should only print a percentage if dtraceLimit is not its
-        // default vale.
+        // default value.
         // if(printedRecords%1000 == 0)
-        //     System.out.printf("printed=%d, percent printed=%f\n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
+        //     System.out.printf("printed=%d, percent printed=%f%n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
 
         if (printedRecords >= dtraceLimit)
         {
@@ -299,7 +284,7 @@ public class Runtime
 
     /** Indicates that no more output should be printed to the dtrace file.
      *  The file is closed and iff dtraceLimitTerminate is true the program
-     * is terminated
+     * is terminated.
      */
     public static void noMoreOutput()
     {
@@ -339,7 +324,6 @@ public class Runtime
     {
         dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
         dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
-        // 8192 is the buffer size in BufferedReader
 
         Socket daikonSocket = null;
         try
@@ -356,7 +340,7 @@ public class Runtime
         }
         catch (IOException e)
         {
-            System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
+            System.out.println("IOException, could not connect to Daikon : " + e.getMessage() + ". Exiting");
             System.exit(1);
         }
 
@@ -383,6 +367,8 @@ public class Runtime
     /** Specify the dtrace file to which to write **/
     public static void setDtrace(String filename, boolean append)
     {
+        // Copied from daikon.Runtime
+        
         if (no_dtrace)
         {
             throw new Error("setDtrace called when no_dtrace was specified");
@@ -402,10 +388,10 @@ public class Runtime
             }
             dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
             dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
-            // 8192 is the buffer size in BufferedReader
 
             //System.out.println("limit = " + dtraceLimit + " terminate " + dtraceLimitTerminate);
 
+            // 8192 is the buffer size in BufferedReader
             BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
             dtrace = new PrintStream(bos);
         }
@@ -433,6 +419,7 @@ public class Runtime
      **/
     public static void setDtraceMaybe(String default_filename)
     {
+        // Copied from daikon.Runtime
         // System.out.println ("Setting dtrace maybe: " + default_filename);
         if ((dtrace == null) && (!no_dtrace))
         {
@@ -444,6 +431,8 @@ public class Runtime
 
     private static boolean supportsAddShutdownHook()
     {
+        // Copied from daikon.Runtime
+
         try
         {
             Class rt = java.lang.Runtime.class;
@@ -458,10 +447,12 @@ public class Runtime
 
     /**
      * Add a shutdown hook to close the PrintStream when the program
-     * exits
+     * exits.
      */
     private static void addShutdownHook()
     {
+        // Copied from daikon.Runtime
+        
         java.lang.Runtime.getRuntime().addShutdownHook(new Thread()
         {
 
@@ -554,8 +545,8 @@ public class Runtime
         }
         catch(ConcurrentModificationException e)
         {
-            //occurs if cinfo.get_reflection() causes a new class to be loaded
-            //which causes all_classes to change
+            // occurs if cinfo.get_reflection() causes a new class to be loaded
+            // which causes all_classes to change
             return getClassInfoFromClass(type);
         }
 
@@ -564,8 +555,9 @@ public class Runtime
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Wrappers for the various primitive types
-  ///
+  /// Wrappers for the various primitive types.
+  /// Used to distinguish wrappers created by user code
+  /// from wrappers created by Chicory.
 
   public static interface PrimitiveWrapper
   {

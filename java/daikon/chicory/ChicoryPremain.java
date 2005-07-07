@@ -12,7 +12,7 @@ public class ChicoryPremain {
   public static void premain (String agentArgs, Instrumentation inst) {
 
     // System.out.format ("In premain, agentargs ='%s', " +
-    //                   "Instrumentation = '%s'\n", agentArgs, inst);
+    //                   "Instrumentation = '%s'%n", agentArgs, inst);
 
     // Parse our arguments using Chicory's argument parser
     String[] args = agentArgs.split ("  *");

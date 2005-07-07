@@ -28,7 +28,7 @@ public class StringInfo extends DaikonVariableInfo
     {
         if(isArray)
         {
-            return showStringList((List)val);
+            return getStringList((List)val);
         }
         else
         {
@@ -42,7 +42,7 @@ public class StringInfo extends DaikonVariableInfo
      * @param theValues A list of values, each is a String
      * @return a space-separated String of the elements in theValues
      */
-    public static String showStringList(List /* <String> */theValues)
+    public static String getStringList(List /* <String> */theValues)
     {
         StringBuffer buf = new StringBuffer();
 
@@ -98,7 +98,7 @@ public class StringInfo extends DaikonVariableInfo
             retString = ("nonsensical" + DaikonWriter.lineSep);
         else
         {
-            retString = showString((String) val);
+            retString = getString((String) val);
             retString += DaikonWriter.lineSep;
         }
 
@@ -111,7 +111,7 @@ public class StringInfo extends DaikonVariableInfo
     }
 
     //encodes a string: surrounds in quotes and removes line breaks
-    private String showString(String stringRef)
+    private String getString(String stringRef)
     {
         return ("\"" + encodeString(stringRef) + "\"");
     }

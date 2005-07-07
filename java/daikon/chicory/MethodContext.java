@@ -1,12 +1,6 @@
 package daikon.chicory;
 
-import static java.lang.System.out;
-//import com.sun.org.apache.bcel.internal.*;
-//import com.sun.org.apache.bcel.internal.classfile.*;
-//import com.sun.org.apache.bcel.internal.generic.*;
 
-import org.apache.bcel.*;
-import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 
 

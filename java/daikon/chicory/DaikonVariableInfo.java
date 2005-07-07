@@ -58,7 +58,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
     /**
      * Add a child to this node.
-     * Should only be called while the traversal tree is being constructed.
+     * Should only be called while the tree is being constructed.
      *
      * @param info The child object, must be non-null.
      */
@@ -74,7 +74,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      */
     public String toString()
     {
-        return getString(new StringBuffer("--")).toString();
+        return getStringBuffer(new StringBuffer("--")).toString();
     }
 
     /**
@@ -84,7 +84,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      * @param offset The offset to begin each line with.
      * @return StringBuffer which contains all children of this node
      */
-    private StringBuffer getString(StringBuffer offset)
+    private StringBuffer getStringBuffer(StringBuffer offset)
     {
         StringBuffer theBuf = new StringBuffer();
 
@@ -94,16 +94,16 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         childOffset.append("--");
         for(DaikonVariableInfo info: children)
         {
-            theBuf.append(info.getString(childOffset));
+            theBuf.append(info.getStringBuffer(childOffset));
         }
 
         return theBuf;
     }
 
     /**
-     * Return an iterator over all the node's children
+     * Return an iterator over all the node's children.
      * Don't modify the list of children through the iterator,
-     * as an unmodifiable list is used to generator the iterator.
+     * as an unmodifiable list is used to generate the iterator.
      */
     public Iterator<DaikonVariableInfo> iterator()
     {
@@ -118,9 +118,9 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      * For instance, if the variable a has a field b, then calling
      * getMyValParentVal(val_of_a) will return the value of a.b
      *
-     * @param val The parent object
+     * @param parentVal The parent object
      */
-    public abstract Object getMyValFromParentVal(Object val);
+    public abstract Object getMyValFromParentVal(Object parentVal);
 
     /**
      * Returns a String representation of this object suitable for a .dtrace file
@@ -145,7 +145,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      */
     protected String getValueStrignOfObjectWithMod(Object theValue, boolean hashArray)
     {
-        String retString = getValueStringOfObjectEndLine(theValue, hashArray);
+        String retString =getValueStringOfObject(theValue, hashArray) + DaikonWriter.lineSep;
 
         if (theValue instanceof NonsensicalObject)
             retString += "2";
@@ -153,14 +153,6 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             retString += "1";
 
         return retString;
-    }
-
-    /**
-     * Get a value of an object (as a string), followed by an endline
-     */
-    private String getValueStringOfObjectEndLine(Object val, boolean hashArr)
-    {
-        return getValueStringOfObject(val, hashArr) + DaikonWriter.lineSep;
     }
 
     /**

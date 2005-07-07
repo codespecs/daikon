@@ -15,10 +15,10 @@ class Test {
     Test t = new Test();
     t.t1 = 5;
     int i = t.sample(0);
-    out.format ("sample return [35]   = %d\n", i);
+    out.format ("sample return [35]   = %d%n", i);
 
     t = t.sample1();
-    out.format ("sample return [32]   = %d\n", t.t1);
+    out.format ("sample return [32]   = %d%n", t.t1);
 
     double d = t.sample2();
     out.println ("sample return [62.4] = " + d);

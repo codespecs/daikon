@@ -8,7 +8,7 @@ import daikon.Chicory;
 
 /**
  *  DTraceWriter writes .dtrace program points to an output stream.
- *  It uses the traversal trees created by the {@link DeclWriter}.
+ *  It uses the trees created by the {@link DeclWriter}.
  */
 public class DTraceWriter extends DaikonWriter
 {
@@ -305,7 +305,6 @@ public class DTraceWriter extends DaikonWriter
             if (fieldType.equals(int.class))
             {
                 return new Runtime.IntWrap(classField.getInt(null));
-
             }
             else if (fieldType.equals(long.class))
             {
@@ -440,13 +439,6 @@ public class DTraceWriter extends DaikonWriter
         return arrList;
     }
 
-
-    // quotes endlines in string and quotes other formatting issues
-    // see Runtime.quote
-    private static String encodeString(String input)
-    {
-        return Runtime.quote(input);
-    }
 
     //prints nonsensical and corresponding "modified" integer
     private void printNonsensical()

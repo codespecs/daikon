@@ -3,6 +3,8 @@ package daikon;
 import java.lang.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import daikon.chicory.*;
 
@@ -26,10 +28,10 @@ public class Chicory {
   public int nesting_depth = 2;
 
   /** Ppts to omit (regular expression) **/
-  public List<String> daikon_omit_regex = new ArrayList<String>();
+  public List<Pattern> daikon_omit_regex = new ArrayList<Pattern>();
 
   /** Ppts to include (regular expression) **/
-  public List<String> daikon_include_regex = new ArrayList<String>();
+  public List<Pattern> daikon_include_regex = new ArrayList<Pattern>();
 
   /** Print progress information **/
   public static boolean verbose = true;
@@ -167,7 +169,16 @@ public class Chicory {
           usage("Empty omit string");
           System.exit(1);
         }
-        daikon_omit_regex.add(omit);
+        
+        try
+        {
+            daikon_omit_regex.add(Pattern.compile(omit));
+        }
+        catch (PatternSyntaxException e)
+        {
+            System.out.println("WARNING: Error during regular expression compilation: " + e.getMessage());
+        }
+        
         premain_args.add(arg);
 
       } else if (arg.startsWith("--ppt-select-pattern=")) {
@@ -180,7 +191,16 @@ public class Chicory {
           usage("Empty select string");
           System.exit(1);
         }
-        daikon_include_regex.add(include);
+        
+        try
+        {
+            daikon_include_regex.add(Pattern.compile(include));
+        }
+        catch (PatternSyntaxException e)
+        {
+            System.out.println("WARNING: Error during regular expression compilation: " + e.getMessage());
+        }
+        
         premain_args.add(arg);
 
       } else if (arg.startsWith("--dtrace-file=")) {
