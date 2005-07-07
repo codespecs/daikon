@@ -1638,7 +1638,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (boolean[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Boolean> hs = new HashSet<Boolean> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to add the last element,
       // but that would make the code much less readable.
@@ -1654,7 +1654,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (byte[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Byte> hs = new HashSet<Byte> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to add the last element,
       // but that would make the code much less readable.
@@ -1670,7 +1670,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (char[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Character> hs = new HashSet<Character> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to add the last element,
       // but that would make the code much less readable.
@@ -1686,7 +1686,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (float[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Float> hs = new HashSet<Float> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to add the last element,
       // but that would make the code much less readable.
@@ -1702,7 +1702,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (short[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Short> hs = new HashSet<Short> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to add the last element,
       // but that would make the code much less readable.
@@ -1718,7 +1718,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (int[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Integer> hs = new HashSet<Integer> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to add the last element,
       // but that would make the code much less readable.
@@ -1736,7 +1736,7 @@ public final class ArraysMDE {
    * uses the .equals() method for java.lang.Double.
    */
   public static boolean noDuplicates (double[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Double> hs = new HashSet<Double> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to create the last element,
       // but that would make the code much less readable.
@@ -1753,7 +1753,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (long[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Long> hs = new HashSet<Long> ();
     for (int i = 0; i < a.length; i++) {
       // Could be optimized not to create the last element,
       // but that would make the code much less readable.
@@ -1770,7 +1770,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (String[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<String> hs = new HashSet<String> ();
     for (int i = 0; i < a.length; i++) {
       if (hs.contains(a[i])) { return false; }
       // Could be optimized not to add the last element,
@@ -1785,7 +1785,7 @@ public final class ArraysMDE {
    * using O(n) time and O(n) space.
    */
   public static boolean noDuplicates (Object[] a) {
-    HashSet hs = new HashSet ();
+    HashSet<Object> hs = new HashSet<Object> ();
     for (int i = 0; i < a.length; i++) {
       if (hs.contains(a[i])) { return false; }
       // Could be optimized not to add the last element,
@@ -1912,7 +1912,7 @@ public final class ArraysMDE {
    * constant time membership tests.
    **/
   public static boolean isSubset(long[] smaller, long[] bigger) {
-    Set setBigger = new HashSet();
+    Set<Long> setBigger = new HashSet<Long>();
 
     for (int i = 0; i < bigger.length; i++) {
       setBigger.add(new Long(bigger[i]));
@@ -1936,7 +1936,7 @@ public final class ArraysMDE {
    * constant time membership tests.
    **/
   public static boolean isSubset(double[] smaller, double[] bigger) {
-    Set setBigger = new HashSet();
+    Set<Double> setBigger = new HashSet<Double>();
 
     for (int i = 0; i < bigger.length; i++) {
       setBigger.add(new Double(bigger[i]));
@@ -1959,7 +1959,7 @@ public final class ArraysMDE {
    * constant time membership tests.
    **/
   public static boolean isSubset(String[] smaller, String[] bigger) {
-    Set setBigger = new HashSet();
+    Set<String> setBigger = new HashSet<String>();
 
     for (int i = 0; i < bigger.length; i++) {
       setBigger.add(bigger[i]);

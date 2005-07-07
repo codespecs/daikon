@@ -11,17 +11,22 @@ import java.util.*;
  * same order.
  *
  * It's not clear that this is always the right thing to do; you might
- * find it more convenient to use use set intersection/difference.  */
-public class OrderedPairIterator implements java.util.Iterator {
+ * find it more convenient to use use set intersection/difference.
+ */
+// T need not extend Comparable<T>, because a comparator can be passed in.
+public class OrderedPairIterator<T> implements java.util.Iterator<Pair<T,T>> {
 
-  Iterator itor1, itor2;
-  Object next1, next2;
-  Comparator comparator;
+  Iterator<T> itor1, itor2;
+  T next1, next2;
+  Comparator<? super T> comparator;
 
-  public OrderedPairIterator(Iterator itor1, Iterator itor2) {
+  // Perhaps change Iterator<T> to Iterator<T extends Comparable<T>>,
+  // for this constructor only?  (Merely making that change yields a
+  // compilation error, so something cleverer is required.)
+  public OrderedPairIterator(Iterator<T> itor1, Iterator<T> itor2) {
     this(itor1, itor2, null);
   }
-  public OrderedPairIterator(Iterator itor1, Iterator itor2, Comparator comparator) {
+  public OrderedPairIterator(Iterator<T> itor1, Iterator<T> itor2, Comparator<T> comparator) {
     this.itor1 = itor1;
     this.itor2 = itor2;
     setnext1();
@@ -36,26 +41,26 @@ public class OrderedPairIterator implements java.util.Iterator {
   // }
   public boolean hasNext() { return ((next1 != null) || (next2 != null)); }
   /** Return an element of the first iterator, paired with null. */
-  private Pair return1() {
-    Pair result = new Pair(next1, null);
+  private Pair<T,T> return1() {
+    Pair<T,T> result = new Pair<T,T>(next1, (T)null);
     setnext1();
     return result;
   }
   /** Return a pair of null and an element of the second iterator. */
-  private Pair return2() {
-    Pair result = new Pair(null, next2);
+  private Pair<T,T> return2() {
+    Pair<T,T> result = new Pair<T,T>((T)null, next2);
     setnext2();
     return result;
   }
   /** Return a pair containing an element from each iterator. */
-  private Pair returnboth() {
-    Pair result = new Pair(next1, next2);
+  private Pair<T,T> returnboth() {
+    Pair<T,T> result = new Pair<T,T>(next1, next2);
     setnext1();
     setnext2();
     return result;
   }
 
-  public Object next() {
+  public Pair<T,T> next() {
     if (next1 == null) {
       if (next2 == null) {
         throw new NoSuchElementException();

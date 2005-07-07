@@ -587,7 +587,7 @@ public class PptSplitter implements Serializable {
     SortedSet ss2 = new TreeSet(icfp);
     ss2.addAll(invs2);
     Vector result = new Vector();
-    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(),
+    for (OrderedPairIterator opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {
       Pair pair = (Pair) opi.next();

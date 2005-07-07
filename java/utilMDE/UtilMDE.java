@@ -613,13 +613,13 @@ public final class UtilMDE {
    * If the key isn't in the HashMap, it is added.
    * Throws an error if the key is in the HashMap but maps to a non-Integer.
    **/
-  public static Object incrementHashMap(HashMap hm, Object key, int count) {
-    Object old = hm.get(key);
+  public static <T> Integer incrementHashMap(HashMap<T,Integer> hm, T key, int count) {
+    Integer old = hm.get(key);
     int new_total;
     if (old == null) {
       new_total = count;
     } else {
-      new_total = ((Integer) old).intValue() + count;
+      new_total = old.intValue() + count;
     }
     return hm.put(key, new Integer(new_total));
   }
@@ -934,7 +934,7 @@ public final class UtilMDE {
    * there are fewer.  It examines every element of the iterator, but does
    * not keep them all in memory.
    **/
-  public static List randomElements(Iterator itor, int num_elts) {
+  public static <T> List<T> randomElements(Iterator<T> itor, int num_elts) {
     return randomElements(itor, num_elts, r);
   }
   private static Random r = new Random();
@@ -945,12 +945,12 @@ public final class UtilMDE {
    * there are fewer.  It examines every element of the iterator, but does
    * not keep them all in memory.
    **/
-  public static List randomElements(Iterator itor, int num_elts, Random random) {
+  public static <T> List<T> randomElements(Iterator<T> itor, int num_elts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == num_elts:
     //   n n/2 n/3 n/4 n/5 ...
 
-    RandomSelector rs = new RandomSelector (num_elts, random);
+    RandomSelector<T> rs = new RandomSelector<T> (num_elts, random);
 
     while (itor.hasNext()) {
       rs.accept (itor.next());
@@ -959,7 +959,7 @@ public final class UtilMDE {
 
 
     /*
-    ArrayList result = new ArrayList(num_elts);
+    ArrayList<T> result = new ArrayList<T>(num_elts);
     int i=1;
     for (int n=0; n<num_elts && itor.hasNext(); n++, i++) {
       result.add(itor.next());
@@ -982,7 +982,7 @@ public final class UtilMDE {
   ///
 
   // maps from a string of arg names to an array of Class objects.
-  static HashMap args_seen = new HashMap();
+  static HashMap<String,Class[]> args_seen = new HashMap<String,Class[]>();
 
   public static Method methodForName(String method)
     throws ClassNotFoundException, NoSuchMethodException, SecurityException {
@@ -1206,7 +1206,7 @@ public final class UtilMDE {
    * @see #split(String s, String delim)
    **/
   public static String[] split(String s, char delim) {
-    Vector result = new Vector();
+    Vector<String> result = new Vector<String>();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
       result.add(s.substring(0, delimpos));
       s = s.substring(delimpos+1);
@@ -1229,7 +1229,7 @@ public final class UtilMDE {
     if (delimlen == 0) {
       throw new Error("Second argument to split was empty.");
     }
-    Vector result = new Vector();
+    Vector<String> result = new Vector<String>();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
       result.add(s.substring(0, delimpos));
       s = s.substring(delimpos+delimlen);
@@ -1665,6 +1665,7 @@ public final class UtilMDE {
    * spurious "at utilMDE.UtilMDE.backTrace(UtilMDE.java:1491)" in output.
    * @see #backTrace(Throwable)
    **/
+  @Deprecated
   public static String backTrace() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -1682,12 +1683,12 @@ public final class UtilMDE {
 
   /**
    * Returns the sorted version of the list.  Does not alter the list.
+   * Simply calls Collections.sort(List<T>, Comparator<? super T>).
    **/
-  public static List sortList (List l, Comparator c) {
-    Object[] buf = new Object[l.size()];
-    buf = l.toArray(buf);
-    Arrays.sort (buf, c);
-    return Arrays.asList(buf);
+  public static <T> List<T> sortList (List<T> l, Comparator<? super T> c) {
+    List<T> result = new ArrayList<T>(l);
+    Collections.sort(result, c);
+    return result;
   }
 
   ///
@@ -1695,8 +1696,8 @@ public final class UtilMDE {
   ///
 
   /** Returns a vector containing the elements of the enumeration. */
-  public static Vector makeVector(Enumeration e) {
-    Vector result = new Vector();
+  public static <T> Vector makeVector(Enumeration<T> e) {
+    Vector<T> result = new Vector<T>();
     while (e.hasMoreElements()) {
       result.addElement(e.nextElement());
     }
@@ -1721,21 +1722,21 @@ public final class UtilMDE {
    *    {b, b}, {b, c},
    *    {c, c}
    */
-  public static List create_combinations (int dims, int start, List objs) {
+  public static <T> ArrayList<ArrayList<T>> create_combinations (int dims, int start, List<T> objs) {
 
-    List results = new ArrayList();
+    ArrayList<ArrayList<T>> results = new ArrayList<ArrayList<T>>();
 
     for (int i = start; i < objs.size(); i++) {
       if (dims == 1) {
-        List simple = new ArrayList();
+        ArrayList<T> simple = new ArrayList<T>();
         simple.add (objs.get(i));
         results.add (simple);
       } else {
-        List combos = create_combinations (dims-1, i, objs);
-        for (Iterator j = combos.iterator(); j.hasNext(); ) {
-          List simple = new ArrayList();
+        ArrayList<ArrayList<T>> combos = create_combinations (dims-1, i, objs);
+        for (Iterator<ArrayList<T>> j = combos.iterator(); j.hasNext(); ) {
+          ArrayList<T> simple = new ArrayList<T>();
           simple.add (objs.get(i));
-          simple.addAll ((List) j.next());
+          simple.addAll (j.next());
           results.add (simple);
         }
       }
@@ -1758,22 +1759,22 @@ public final class UtilMDE {
    *    {1, 1}  {1, 2},
    *    {2, 2}
    */
-  public static List create_combinations (int arity, int start, int cnt) {
+  public static ArrayList<ArrayList<Integer>> create_combinations (int arity, int start, int cnt) {
 
-    List results = new ArrayList();
+    ArrayList<ArrayList<Integer>> results = new ArrayList<ArrayList<Integer>>();
 
     // Return a list with one zero length element if arity is zero
     if (arity == 0) {
-      results.add (new ArrayList());
+      results.add (new ArrayList<Integer>());
       return (results);
     }
 
     for (int i = start; i <= cnt; i++) {
-      List combos = create_combinations (arity-1, i, cnt);
-      for (Iterator j = combos.iterator(); j.hasNext(); ) {
-        List simple = new ArrayList();
+      ArrayList<ArrayList<Integer>> combos = create_combinations (arity-1, i, cnt);
+      for (Iterator<ArrayList<Integer>> j = combos.iterator(); j.hasNext(); ) {
+        ArrayList<Integer> simple = new ArrayList<Integer>();
         simple.add (new Integer(i));
-        simple.addAll ((List) j.next());
+        simple.addAll (j.next());
         results.add (simple);
       }
     }

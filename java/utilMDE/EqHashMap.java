@@ -104,6 +104,7 @@ import java.util.*;
  * @deprecated  As of JDK 1.4, replaced by IdentityHashMap
  */
 
+@Deprecated
 public final class EqHashMap extends AbstractMap implements Map, Cloneable,
 					 java.io.Serializable {
     /**

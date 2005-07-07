@@ -50,7 +50,7 @@ import java.util.*;
  *
  **/
 
-public class RandomSelector {
+public class RandomSelector<T> {
 
     // Rep Invariant: values != null && values.size() <= num_elts &&
     //                ((num_elts == -1 && coin_toss_mode == true) ||
@@ -68,7 +68,7 @@ public class RandomSelector {
     private int num_elts = -1;
     private int observed;
     private Random generator;
-    private ArrayList values;
+    private ArrayList<T> values;
     private boolean coin_toss_mode = false;
     private double keep_probability = -1.0;
 
@@ -90,7 +90,7 @@ public class RandomSelector {
      * Sets 'number_to_take' = num_elts
      **/
     public RandomSelector (int num_elts, Random r) {
-        values = new ArrayList();
+        values = new ArrayList<T>();
         this.num_elts = num_elts;
         observed = 0;
         generator = r;
@@ -101,7 +101,7 @@ public class RandomSelector {
      * @param r The seed to give for random number generation.
      **/
     public RandomSelector (double keep_probability, Random r) {
-        values = new ArrayList();
+        values = new ArrayList<T>();
         this.keep_probability = keep_probability;
         coin_toss_mode = true;
         observed = 0;
@@ -120,7 +120,7 @@ public class RandomSelector {
      * probability equal to 'keep_probability'.
      *
      **/
-    public void accept (Object next) {
+    public void accept (T next) {
 
         // if we are in coin toss mode, then we want to keep
         // with probability == keep_probability.
@@ -150,9 +150,9 @@ public class RandomSelector {
     }
 
     /** Returns current_values, modifies none.  **/
-    public List getValues() {
+    public List<T> getValues() {
         // avoid concurrent mod errors and rep exposure
-        ArrayList ret = new ArrayList();
+        ArrayList<T> ret = new ArrayList<T>();
         ret.addAll (values);
         return ret;
     }

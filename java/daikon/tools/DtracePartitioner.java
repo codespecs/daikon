@@ -11,7 +11,7 @@ import utilMDE.*;
  */
 
 public class DtracePartitioner
-  implements Partitioner, Iterator
+  implements Partitioner<String,String>, Iterator<String>
 {
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -45,7 +45,7 @@ public class DtracePartitioner
 
 
 
-  public Object next() {
+  public String next() {
     try {
       String ret = grabNextInvocation ();
       if (ret.indexOf ("EXIT") != -1) {
@@ -79,13 +79,9 @@ public class DtracePartitioner
   /** Returns the program point name given by the input invocation.
    *  Throws RuntimeException if invocation is not instanceof String.
    */
-  public Object assignToBucket (Object invocation) {
-    if (!(invocation instanceof String)) {
-      throw new RuntimeException ("Input to this method should be a String");
-    }
-    String s = (String) invocation;
-    if (s.indexOf (lineSep) == -1) return null;
-    return s.substring (0, s.indexOf (lineSep));
+  public String assignToBucket (String invocation) {
+    if (invocation.indexOf (lineSep) == -1) return null;
+    return invocation.substring (0, invocation.indexOf (lineSep));
   }
 
   // TODO: this should be a Javadoc link

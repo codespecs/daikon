@@ -5,11 +5,11 @@ package utilMDE;
  * class represented by that Object. See MultiRandSelector.
  */
 
-public interface Partitioner {
+public interface Partitioner<ELEMENT,CLASS> {
 
   /** @param obj the Object to be assigned to a bucket
    *  @return A key representing the bucket containing obj
    */
-    public Object assignToBucket (Object obj);
+    public CLASS assignToBucket (ELEMENT obj);
 
 }

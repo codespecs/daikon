@@ -23,65 +23,65 @@ import java.util.*;
  *
  *
  **/
-public class MultiRandSelector {
+public class MultiRandSelector<T> {
 
     private int num_elts = -1;
     private boolean coin_toss_mode;
     private double keep_probability = -1.0;
     private Random seed;
-    private Partitioner eq;
+    private Partitioner<T,T> eq;
 
-    private HashMap map;
+    private HashMap<T,RandomSelector<T>> map;
 
   /** @param num_elts the number of elements to select from each
    *  bucket
    *  @param eq partioner that determines how to partition the objects from
    *  the iteration.
    */
-    public MultiRandSelector (int num_elts, Partitioner eq) {
+    public MultiRandSelector (int num_elts, Partitioner<T,T> eq) {
         this (num_elts, new Random(), eq);
     }
 
-    public MultiRandSelector (double keep_prob, Partitioner eq) {
+    public MultiRandSelector (double keep_prob, Partitioner<T,T> eq) {
         this (keep_prob, new Random(), eq);
     }
 
     public MultiRandSelector (int num_elts, Random r,
-                              Partitioner eq) {
+                              Partitioner<T,T> eq) {
 
         this.num_elts = num_elts;
         seed = r;
         this.eq = eq;
-        map = new HashMap();
+        map = new HashMap<T,RandomSelector<T>>();
     }
 
     public MultiRandSelector (double keep_prob, Random r,
-                              Partitioner eq) {
+                              Partitioner<T,T> eq) {
         this.keep_probability = keep_prob;
         coin_toss_mode = true;
         seed = r;
         this.eq = eq;
-        map = new HashMap();
+        map = new HashMap<T,RandomSelector<T>>();
     }
 
-    public void acceptIter (Iterator iter) {
+    public void acceptIter (Iterator<T> iter) {
         while (iter.hasNext()) {
             accept (iter.next());
         }
     }
 
 
-  /**
-   */
-    public void accept (Object next) {
-        Object equivClass = eq.assignToBucket (next);
+    /**
+     */
+    public void accept (T next) {
+        T equivClass = eq.assignToBucket (next);
         if (equivClass == null)
             return;
-        RandomSelector delegation = (RandomSelector) map.get (equivClass);
+        RandomSelector<T> delegation = map.get (equivClass);
         if (delegation == null) {
             delegation = (coin_toss_mode) ?
-                new RandomSelector (keep_probability, seed) :
-                new RandomSelector (num_elts, seed);
+                new RandomSelector<T> (keep_probability, seed) :
+                new RandomSelector<T> (num_elts, seed);
             map.put (equivClass, delegation);
         }
         delegation.accept (next);
@@ -89,15 +89,15 @@ public class MultiRandSelector {
 
     // TODO: is there any reason not to simply return a copy?
     /** NOT safe from concurrent modification. */
-    public Map values () {
+    public Map<T,RandomSelector<T>> values () {
         return map;
     }
 
     /** Returns an iterator of all objects selected. */
-    public Iterator valuesIter() {
-        ArrayList ret = new ArrayList();
+    public Iterator<T> valuesIter() {
+        ArrayList<T> ret = new ArrayList<T>();
         for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
-            RandomSelector rs = (RandomSelector) map.get (i.next());
+            RandomSelector<T> rs = map.get (i.next());
             ret.addAll (rs.getValues());
         }
         return ret.iterator();

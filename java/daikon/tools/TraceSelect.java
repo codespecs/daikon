@@ -173,7 +173,7 @@ public class TraceSelect {
 
         DtracePartitioner dec =
           new DtracePartitioner (fileName);
-        MultiRandSelector mrs = new MultiRandSelector (numPerSample,
+        MultiRandSelector<String> mrs = new MultiRandSelector<String> (numPerSample,
                                                        dec);
 
 
