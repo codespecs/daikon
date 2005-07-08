@@ -61,6 +61,9 @@ public class MasterUnitTester extends TestCase {
       daikon.test.TestQuant.class,
       daikon.test.TestAnnotate.class,
       daikon.test.DtraceDiffTester.class
+      // I'm having trouble with this, need to fix, reinstate, and not call
+      // specially from Makefile.  -MDE 7/8/2005
+      // daikon.test.split.SplitterFactoryTest.class
     };
 
     for (int i=0; i<classes.length; i++) {

@@ -500,6 +500,10 @@ check-serialize:
 junit:
 	@echo java daikon.test.MasterUnitTester
 	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
+	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
+	@# but I'm having trouble with that.  -MDE 7/8/2005
+	@echo java daikon.test.split.SplitterFactoryTest
+	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover

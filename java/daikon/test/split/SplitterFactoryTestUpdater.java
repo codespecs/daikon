@@ -12,8 +12,9 @@ import daikon.*;
  * SplitterFactoryTest itself.
  *
  * To use this program to update SplitterFactoryTest
- * and the target files, run "rm *.java.goal" while in the
- * target directory ($inv/java/daikon/test/split/target).
+ * and the target files, run
+ * <pre>    rm $inv/java/daikon/test/split/targets/*.java.goal
+ *      rm $inv/java/daikon/test/split/SplitterFactoryTest.java</pre>
  * Then simply run the main method with out any arguments
  * in the $INV/java directory. After running the
  * main method one should re-compile the SplitterFactoryTest.
@@ -44,7 +45,7 @@ public class SplitterFactoryTestUpdater {
   /**
    * If one has changed the test cases used below, for best results run
    * "rm *.java.goal" while in the targets directory before running this
-   * method. Creates new splitter java files, move the new files into
+   * method. Creates new splitter java files, moves the new files into
    * target directory, rewrites the code of SplitterFactoryTest
    * to use the new files.  One should recompile SplitterFactoryTest
    * after running this method.
@@ -57,7 +58,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("muldiv.spinfo", "BigFloat.decls");
     moveFiles();
     writeTestClass();
-    UtilMDE.deleteDir(tempDir); // file's delete requires a dir be empty
+    // UtilMDE.deleteDir(tempDir); // file's delete requires a dir be empty
   }
 
   /**
@@ -108,26 +109,37 @@ public class SplitterFactoryTestUpdater {
    * Moves the generated splitter files from the tempDir to the target Dir.
    */
   private static void moveFiles() {
-    // TODO: Should this reuse the field "tempDir" rather than declaring a
-    // new local variable?
-    File tempDir = new File(SplitterFactory.getTempDir());
-    SplitterFactoryTestUpdater.tempDir = tempDir;
+    tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
-        String fileName  = fileNames[i];
-        moveFile(tempDir.getPath() + "/" + fileName,
-                 targetDir + fileName + ".goal");
+        String fileName = fileNames[i];
+	String fromName = tempDir.getPath() + File.separator + fileName;
+	String toName = targetDir + fileName + ".goal";
+	boolean moveSuccess = moveFile(fromName, toName);
+	if (! moveSuccess) {
+          // This is consistently failing for me; not sure why.  -MDE 7/8/2005
+          System.out.printf("Failed to move %s to %s%n", fromName, toName);
+	}
+        String javaFileName = new File(fileName).getName();
         String className =
-          fileName.substring(fileName.lastIndexOf('/') + 1 ,
-                             fileName.length()-".java".length());
+          javaFileName.substring(0, javaFileName.length()-".java".length());
         classNames.add(className);
       }
     }
   }
 
-  private static void moveFile(String from, String to) {
-      (new File(from)).renameTo(new File(to));
+  private static boolean moveFile(String fromName, String toName) {
+    File from = new File(fromName);
+    File to = new File(toName);
+    if (! from.canRead()) {
+      throw new Error("Cannot read " + fromName);
+    }
+    if (! to.canWrite()) {
+      throw new Error("Cannot write " + toName);
+    }
+    // if (to.exists()) { to.delete(); }
+    return from.renameTo(to);
   }
 
   /**
@@ -136,6 +148,9 @@ public class SplitterFactoryTestUpdater {
   private static void writeTestClass() {
     String code = getTestClassText();
     try {
+      // Delete the file, in case it is unwriteable (in which case deleting
+      // works, but overwriting does not).
+      new File(splitDir + "SplitterFactoryTest.java").delete();
       BufferedWriter writer = UtilMDE.bufferedFileWriter(splitDir + "SplitterFactoryTest.java");
       writer.write(code);
       writer.flush();
@@ -235,11 +250,11 @@ public class SplitterFactoryTestUpdater {
     ps.println("   * Sets up the test by generating the needed splitter java files.");
     ps.println("   */");
     ps.println("  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
-    ps.println("    List declsFiles = new ArrayList();");
+    ps.println("    List<File> declsFiles = new ArrayList<File>();");
     ps.println("    for (int i = 0; i < decls.size(); i++) {");
     ps.println("      declsFiles.add(new File((String) decls.get(i)));");
     ps.println("    }");
-    ps.println("    Set spFiles = new HashSet();");
+    ps.println("    Set<File> spFiles = new HashSet<File>();");
     ps.println("    for (int i = 0; i < spinfos.size(); i++) {");
     ps.println("      spFiles.add(new File((String) spinfos.get(i)));");
     ps.println("    }");
@@ -255,10 +270,6 @@ public class SplitterFactoryTestUpdater {
     ps.println("        throw new RuntimeException(e);");
     ps.println("    }");
     ps.println("   }");
-    ps.println();
-    ps.println("  /**");
-    ps.println("   * Returns true iff files are the same. (ignoring extra white space)");
-    ps.println("   */");
     ps.println();
 
     appendTests(ps);
@@ -288,13 +299,13 @@ public class SplitterFactoryTestUpdater {
     ps.println("    List<String> spinfoFiles;");
     ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
-      List spinfoFiles = (List) spinfoFileLists.get(i);
-      ps.println("    spinfoFiles = new ArrayList();");
+      List<File> spinfoFiles = spinfoFileLists.get(i);
+      ps.println("    spinfoFiles = new ArrayList<String>();");
       for (int j = 0; j < spinfoFiles.size(); j++) {
         ps.println("    spinfoFiles.add(\"" + spinfoFiles.get(j) + "\");");
       }
-      List declsFiles = (List) declsFileLists.get(i);
-      ps.println("    declsFiles = new ArrayList();");
+      List<File> declsFiles = declsFileLists.get(i);
+      ps.println("    declsFiles = new ArrayList<String>();");
       for (int j = 0; j < declsFiles.size(); j++) {
         ps.println("    declsFiles.add(\"" + declsFiles.get(j) + "\");");
       }
@@ -308,17 +319,24 @@ public class SplitterFactoryTestUpdater {
    * to code.
    */
   private static void appendTests(PrintStream ps) {
+    ps.println("  /**");
+    ps.println("   * Returns true iff files are the same (ignoring extra white space).");
+    ps.println("   */");
+    ps.println();
     ps.println("  public static void assertEqualFiles(String f1, String f2) {");
     ps.println("    assertTrue(\"Files \" + f1 + \" and \" + f2 + \" differ.\",");
     ps.println("               UtilMDE.equalFiles(f1, f2));");
     ps.println("  }");
     ps.println();
+    ps.println("  public static void assertEqualFiles(String f1) {");
+    ps.println("    assertEqualFiles(tempDir + f1,");
+    ps.println("                     \"daikon/test/split/targets/\" + f1 + \".goal\");");
+    ps.println("  }");
+    ps.println();
     for (int i = 0; i < classNames.size(); i++) {
       String className = (String) classNames.get(i);
       ps.println("  public static void test" + className + "() {");
-      ps.println("    assertEqualFiles(");
-      ps.println("      tempDir +\"" + className + ".java\", ");
-      ps.println("      \"" + targetDir + className + ".java.goal\");");
+      ps.println("    assertEqualFiles(\"" + className + ".java\");");
       ps.println("  }");
       ps.println();
     }
