@@ -59,7 +59,6 @@ public class StringInfo extends DaikonVariableInfo
         }
 
 
-
         buf.append("[");
         for (Iterator iter = theValues.iterator(); iter.hasNext();)
         {
