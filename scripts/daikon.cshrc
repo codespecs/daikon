@@ -34,7 +34,13 @@ endif
 
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 ## Daikon front end for Java), rt.jar must be on your classpath.
-if ("$OSTYPE" != "darwin") then
+setenv darwinos 0
+if ($?OSTYPE) then
+  if ("$OSTYPE" != "darwin")
+    setenv darwinos 1
+  endif
+endif
+if (! $darwinos) then
   if ($?debuglogin) echo "daikon.cshrc about to set classpath (#1)"
   if ($?debuglogin) echo "CLASSPATH: $CLASSPATH"
   setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
