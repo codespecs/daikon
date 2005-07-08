@@ -42,7 +42,7 @@ public class StringInfo extends DaikonVariableInfo
      * @param theValues A list of values, each is a String
      * @return a space-separated String of the elements in theValues
      */
-    public static String getStringList(List/*<String>*/ theValues)
+    public static String getStringList(List<String> theValues)
     {
         StringBuffer buf = new StringBuffer();
 
