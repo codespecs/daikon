@@ -11,7 +11,7 @@ import java.util.regex.*;
  * SplitterJavaSource writes the splitter Java file's contents to a string
  * buffer for a given condition, Ppt, and StatementReplacer.
  */
-class SplitterJavaSource {
+class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** The text contents of the splitter file, a java class. */
   private StringBuffer fileText = new StringBuffer();
@@ -737,7 +737,7 @@ class SplitterJavaSource {
                                                             String className)
     throws ParseException {
     List<VariableManager> variableManagerList = new ArrayList<VariableManager>();
-    List classVars = findPossibleClassVariables(condition);
+    List<String> classVars = findPossibleClassVariables(condition);
     for (int i = 0; i < varInfos.length; i++) {
       VarInfo varInfo = varInfos[i];
       try {
@@ -757,7 +757,7 @@ class SplitterJavaSource {
    * Returns true if the variable represented by varInfo
    * is used in this splitting condition.
    */
-  private static boolean isNeeded(String name, List vars) {
+  private static boolean isNeeded(String name, List<String> vars) {
     return vars.contains(name);
   }
 
@@ -772,10 +772,6 @@ class SplitterJavaSource {
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
     // System.out.println("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
     List<String> variables = new ArrayList<String>();
-    final int IDENTIFIER = 71;
-    final int LPAREN = 74;
-    final int DOT = 82;
-    final int THIS = 54;
     if (tokens.length >= 1) {
       if (tokens[0].kind == IDENTIFIER &&
           (tokens.length <= 1 || tokens[1].kind != LPAREN)) {

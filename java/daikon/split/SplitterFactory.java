@@ -81,7 +81,7 @@ public class SplitterFactory {
    */
 
   public static void load_splitters (PptTopLevel ppt,
-				     List /* SpinfoFileParser */ splitters)
+				     List<SpinfoFileParser> splitters)
   {
     for (Iterator spi = splitters.iterator(); spi.hasNext(); ) {
       SpinfoFileParser fileParser = (SpinfoFileParser)spi.next();
