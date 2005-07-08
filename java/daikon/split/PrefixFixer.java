@@ -11,8 +11,8 @@ import jtb.ParseException;
  * For example "prefix.x" would go to "prefix_x", "y.prefix.x"
  * would go to "y_prefix_x", and "y.x.methodName()" would be go to
  * y_x.methodName(). Prefixes that are java reserved words are not
- * effected. For example "this.x" yields "this.x". Finally, if the suffix
- * is "length", then it is not effected.  For example "x.y.length" yields
+ * affected. For example "this.x" yields "this.x". Finally, if the suffix
+ * is "length", then it is not affected.  For example "x.y.length" yields
  * "x_y.length".
  */
 class PrefixFixer extends DepthFirstVisitor {
@@ -49,7 +49,7 @@ class PrefixFixer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by users of this class;
-   * however, must be public to full-fill the visitor interface.
+   * however, must be public to fulfill the visitor interface.
    * Replaces the token image with "" if it is a prefix or a "."
    * following a prefix. Appends to the tokenImage and "_" to the
    * next token's image.
