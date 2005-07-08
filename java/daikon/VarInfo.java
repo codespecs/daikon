@@ -1792,8 +1792,7 @@ public final class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns a string containing the names of the vars in the list. **/
-  public static String toString(List /* VarInfo */
-  vlist) {
+  public static String toString(List<VarInfo> vlist) {
 
     if (vlist == null)
       return ("null");

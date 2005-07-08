@@ -189,7 +189,7 @@ public class InstrumentHandler extends CommandHandler {
     private static class Arguments {
         public String invFile;
 
-        public List/* String */javaFileNames;
+        public List<String> javaFileNames;
     }
 
     private static Arguments errorWhileReadingArguments = new Arguments();
@@ -265,7 +265,7 @@ public class InstrumentHandler extends CommandHandler {
             System.out.println("Error: No .java file arguments supplied.");
             return errorWhileReadingArguments;
         }
-        List/* String */javaFileNames = new ArrayList();
+        List<String> javaFileNames = new ArrayList();
         for (; argindex < args.length; argindex++) {
             String javafile = args[argindex];
             if (!javafile.endsWith(".java")) {

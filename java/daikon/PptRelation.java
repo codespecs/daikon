@@ -214,7 +214,7 @@ public class PptRelation implements Serializable {
    * which allows the pair to be looked up (which is not possible with
    * a set).
    */
-  public Map /*VarInfo.Pair*/ get_child_equalities_as_parent() {
+  public Map<VarInfo.Pair,VarInfo.Pair> get_child_equalities_as_parent() {
 
     debug.fine(
       "get_child_equalities for "
@@ -223,7 +223,7 @@ public class PptRelation implements Serializable {
         + parent.name()
         + " "
         + relationship);
-    Map emap = new LinkedHashMap();
+    Map<VarInfo.Pair,VarInfo.Pair> emap = new LinkedHashMap<VarInfo.Pair,VarInfo.Pair>();
 
     if (child.equality_view == null)
       System.out.println(

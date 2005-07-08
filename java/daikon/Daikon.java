@@ -1880,7 +1880,7 @@ public final class Daikon {
    * Create user defined splitters
    */
 
-  private static List /* SpinfoFileParser */ parsedSplitters = new ArrayList();
+  private static List<SpinfoFileParser> parsedSplitters = new ArrayList();
 
   public static void create_splitters(Set spinfo_files)
     throws IOException {

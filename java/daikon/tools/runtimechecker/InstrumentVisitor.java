@@ -332,7 +332,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Find declared throwables.
         List<String> declaredThrowables = getDeclaredThrowables(method.f3);
 
-        List/* PptTopLevel */matching_ppts = pptMatcher.getMatches(pptmap, method);
+        List<PptTopLevel> matching_ppts = pptMatcher.getMatches(pptmap, method);
 
         String name = Ast.getName(method);
         String returnType = Ast.getReturnType(method);

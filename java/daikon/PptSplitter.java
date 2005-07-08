@@ -207,7 +207,7 @@ public class PptSplitter implements Serializable {
 
 /// ??? MDE
     // Loop through each possible parent slice
-    List /*VarInfo[]*/ slices = possible_slices();
+    List<VarInfo[]> slices = possible_slices();
 
     for (Iterator itor = slices.iterator(); itor.hasNext(); ) {
       VarInfo[] vis = (VarInfo[]) itor.next();
@@ -462,9 +462,9 @@ public class PptSplitter implements Serializable {
    * because there may be implications created from invariants in child
    * slices that only exist in one child.
    **/
-  private List /*VarInfo[]*/ possible_slices() {
+  private List<VarInfo[]> possible_slices() {
 
-    List /*VarInfo[]*/ result = new ArrayList();
+    List<VarInfo[]> result = new ArrayList();
 
     // Get an array of leaders at the parent to build slices over
     VarInfo[] leaders = parent.equality_view.get_leaders_sorted();

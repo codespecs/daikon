@@ -202,10 +202,10 @@ public class PptTopLevel extends Ppt {
   }
 
   /** All children relations in the variable/ppt hierarchy. */
-  public List /* PptRelation */ children = new ArrayList();
+  public List<PptRelation> children = new ArrayList();
 
   /** All parent relations in the variable/ppt hierarchy. */
-  public List /* PptRelation */ parents = new ArrayList();
+  public List<PptRelation> parents = new ArrayList();
 
   /**
    *  Flag that indicates whether or not invariants have been merged
