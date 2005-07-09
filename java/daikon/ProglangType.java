@@ -357,6 +357,9 @@ public final class ProglangType
         }
         if (! (value.startsWith("\"") && value.endsWith("\""))) {
           System.out.println("Unquoted string value: " + value);
+          Throwable stack = new Throwable("unquoted string");
+          stack.fillInStackTrace();
+          stack.printStackTrace();
         }
         // Assert.assertTrue(value.startsWith("\"") && value.endsWith("\""));
         if (value.startsWith("\"") && value.endsWith("\""))
