@@ -27,11 +27,10 @@ import sun.nio.cs.ext.ISCII91;
 import daikon.Chicory;
 
 /**
- *
- *  The RetTransform class is responsible for modifying another class' bytecode.
- *  Specifically, its main task is to add "hooks" into the other class at method entries
- *  and exits for instrumentation purposes.
- *
+ * The RetTransform class is responsible for modifying another class'
+ * bytecode.  Specifically, its main task is to add "hooks" into the
+ * other class at method entries and exits for instrumentation
+ * purposes.
  */
 public class RetTransform implements ClassFileTransformer {
 
@@ -135,9 +134,11 @@ public class RetTransform implements ClassFileTransformer {
     if (debug)
       out.format ("In Transform: class = %s%n", className);
 
-    // Don't instrument standard classes
-    if (className.startsWith ("java/") || className.startsWith ("com/")
-        || className.startsWith ("sun/"))
+    // Don't instrument standard classes (but allow instrumentation of
+    // the javac compiler)
+    if ((className.startsWith ("java/") || className.startsWith ("com/")
+         || className.startsWith ("sun/"))
+        && !className.startsWith ("com/sun/tools/javac"))
       return (null);
 
     // Don't intrument our code
@@ -463,9 +464,12 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         // and add it to the list for this class.
         MethodInfo mi = (create_method_info (class_info, mg));
 
-        if(mi == null) //method filtered out!
+        if(mi == null)  //method filtered out!
             continue;
 
+        if (!shouldInclude && ChicoryPremain.debug)
+          out.format ("Class %s included [%s]%n", cg.getClassName(),
+                      mi);
         shouldInclude = true; //at least one method not filtered out
 
         method_infos.add (mi);
