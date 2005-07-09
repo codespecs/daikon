@@ -9,6 +9,8 @@ import daikon.Chicory;
 
 public class ChicoryPremain {
 
+  public static boolean debug = false;
+
   public static void premain (String agentArgs, Instrumentation inst) {
 
     // System.out.format ("In premain, agentargs ='%s', " +
@@ -18,10 +20,11 @@ public class ChicoryPremain {
     String[] args = agentArgs.split ("  *");
     Chicory chicory = new Chicory();
     chicory.parse_args (args, true);
+    debug = chicory.debug;
 
     // Open the dtrace file
     if(chicory.getDaikonPort() != -1)
-    {       
+    {
         Runtime.setDtraceOnlineMode(chicory.getDaikonPort());
     }
     else if (chicory.trace_file_name == null) {
