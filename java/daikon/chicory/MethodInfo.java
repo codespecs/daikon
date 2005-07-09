@@ -18,8 +18,8 @@ public class MethodInfo {
   /** Reflection information on this method **/
   public Member member = null;
 
-  /** 
-   * Method name. 
+  /**
+   * Method name.
    * For example: "public static void sort(int[] arr)" would have method_name "sort"
    **/
   public String method_name;
@@ -27,7 +27,7 @@ public class MethodInfo {
   /** Array of argument names for this method **/
   public String[] arg_names;
 
-  /** 
+  /**
    * Array of argument types for this method (fully qualified).
    * For example:  "public static void examineObject(Object x)" would have arg_types {"java.lang.Object"}
    **/
@@ -41,23 +41,23 @@ public class MethodInfo {
 
   /** Tells whether each exit point in method is instrumented, based on filters **/
   public List <Boolean> is_included;
-  
+
   /**
    * The root of the variable tree for the method entry program point.
-   * 
+   *
    * Set by DeclWriter and read by DTraceWriter.
    **/
   public RootInfo traversalEnter;
-  
+
   /**
    * The root of the variable tree for the method exit program point(s).
    * There is one for each line number at which an exit occurs in the
    * source program.
-   * 
+   *
    * Set by DeclWriter and read by DTraceWriter.
    **/
   public Map<Integer, RootInfo> traversalExit;
-  
+
   /**
    * Creates a MethodInfo with the specified class, arg_names, and
    * exit locations
@@ -73,7 +73,7 @@ public class MethodInfo {
     this.arg_type_strings = arg_type_strings;
     this.exit_locations = exit_locations;
     this.is_included = is_included;
-    
+
     this.traversalExit = new HashMap<Integer, RootInfo>();
   }
 
@@ -98,7 +98,7 @@ public class MethodInfo {
       try {
         String aname = arg_type_strings[ii];
         Class c = (Class) primitive_classes.get (aname);
-        
+
         if (c == null)
         {
           //c = Class.forName (aname);
@@ -106,7 +106,7 @@ public class MethodInfo {
           //TODO referring class?
           c = Class.forName (aname, false, this.class_info.clazz.getClassLoader());
         }
-        
+
         arg_types[ii] = c;
       } catch (Exception e) {
         throw new Error ("can't find class for " + arg_type_strings[ii]
@@ -132,6 +132,16 @@ public class MethodInfo {
    */
   public boolean is_constructor() {
     return (method_name.equals ("<init>") || method_name.equals(""));
+  }
+
+  public String toString() {
+    String out = method_name + "(";
+    for (int ii = 0; ii < arg_names.length; ii++) {
+      if (ii > 0)
+        out += ", ";
+      out += arg_type_strings[ii] + " " + arg_names[ii];
+    }
+    return (out + ")");
   }
 
 }
