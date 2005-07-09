@@ -43,6 +43,9 @@ public class DeclWriter extends DaikonWriter
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
+    /** debug information about daikon variables  **/
+    private boolean debug_vars = false;
+
     /**
      * Constructs a DeclWriter, preparing it to receive messages.
      *
@@ -123,7 +126,11 @@ public class DeclWriter extends DaikonWriter
             //initialize the root node for this program point
             RootInfo entryRoot = new RootInfo();
             mi.traversalEnter = entryRoot;
-            printMethodEntry(cinfo, entryRoot, member, methodEntryName(member), argnames);
+            printMethodEntry (cinfo, entryRoot, member,
+                              methodEntryName(member), argnames);
+            if (debug_vars)
+                System.out.printf ("variables for %s:%n%s%n", member,
+                                   entryRoot);
 
             //print exit program point for EACH exit location in the method
             //(that was encountered during this execution of the program)
@@ -174,7 +181,7 @@ public class DeclWriter extends DaikonWriter
                 // add a new ReturnInfo object to the traversal tree
                 DaikonVariableInfo retInfo = new ReturnInfo();
                 curNode.addChild(retInfo);
-                
+
                 checkForDerivedVariables(retInfo, returnType, "return", "", /*inArray = */ false);
 
                 printChildren(cinfo, returnType, retInfo, "return", "", daikonDepth, false);
@@ -257,7 +264,7 @@ public class DeclWriter extends DaikonWriter
     /**
      *    Prints the decls info for a method's local variables (parameters) and class variables.
      *    The .decls headers are not printed from this method, however.
-     *    
+     *
      *    Called by printMethodEntry (printMethodExit does this directly so it
      *    can place the return after the arguments to match dfej).
      */
@@ -269,7 +276,7 @@ public class DeclWriter extends DaikonWriter
 
         printLocalVars(cinfo, curNode, method, argnames, /*offset = */ "", daikonDepth);
         if (shouldPrintClass)
-            printClassVars(cinfo, curNode, Modifier.isStatic(method.getModifiers()), 
+            printClassVars(cinfo, curNode, Modifier.isStatic(method.getModifiers()),
                     method.getDeclaringClass(), /*offset = */ "", daikonDepth, /*inArray = */ false);
     }
 
@@ -292,7 +299,7 @@ public class DeclWriter extends DaikonWriter
     /**
      * Print class variables (ie, the fields) for the given type and attach new nodes as children of curNode
      */
-    private void printClassVars(ClassInfo cinfo, DaikonVariableInfo curNode, boolean dontPrintInstanceVars, 
+    private void printClassVars(ClassInfo cinfo, DaikonVariableInfo curNode, boolean dontPrintInstanceVars,
             Class type, String offset, int depth, boolean inArray)
     {
         //DaikonVariableInfo corresponding to the "this" object
@@ -327,33 +334,54 @@ public class DeclWriter extends DaikonWriter
             thisInfo = curNode;
 
         Field[] fields = type.getDeclaredFields();
+        if (debug_vars)
+            System.out.printf ("%s: [%s] %d dontPrintInstanceVars = %b, "
+                               + "inArray = %b%n", type, offset, fields.length,
+                               dontPrintInstanceVars, inArray);
         for (int i = 0; i < fields.length; i++)
         {
-            Field classField = fields[i];
 
-            if (!Modifier.isStatic(classField.getModifiers()) && dontPrintInstanceVars)
+            Field classField = fields[i];
+            if (debug_vars)
+                System.out.printf ("considering field %s%n", classField);
+
+            if (!Modifier.isStatic(classField.getModifiers()) &&
+                dontPrintInstanceVars){
+                if (debug_vars)
+                    System.out.printf ("--field !static and instance var %b%n",
+                                   dontPrintInstanceVars);
                 continue;
+            }
 
             // don't print arrays of the same static field
-            if(Modifier.isStatic(classField.getModifiers()) && inArray)
+            if(Modifier.isStatic(classField.getModifiers()) && inArray) {
+                if (debug_vars)
+                    System.out.printf ("--field static and inArray%n");
                 continue;
+            }
 
             if (!isFieldVisible (cinfo.clazz, classField))
             {
+                if (debug_vars)
+                    System.out.printf ("--field not visible%n");
                 continue;
             }
 
             Class fieldType = classField.getType();
 
             StringBuffer buf = new StringBuffer();
-            DaikonVariableInfo newChild = printDeclVar(cinfo, thisInfo, classField, offset, depth, inArray, buf);
+            DaikonVariableInfo newChild = printDeclVar(cinfo, thisInfo,
+                                     classField, offset, depth, inArray, buf);
+            if (debug_vars)
+                System.out.printf ("--Created DaikonVariable %s%n", newChild);
             String newOffset = buf.toString();
-            printChildren(cinfo, fieldType, newChild, classField.getName(), newOffset, depth, inArray);
+            printChildren(cinfo, fieldType, newChild, classField.getName(),
+                          newOffset, depth, inArray);
         }
     }
-    
+
     /**
-     * 
+     *
      * Checks for "derived" Chicory variables: .class, .tostring, and java.util.List implementors
      * and adds appropriate .decls information.
      */
@@ -361,10 +389,10 @@ public class DeclWriter extends DaikonWriter
             String offset, boolean inArray)
     {
         checkForListDecl(node, type, name, offset, inArray); // implements java.util.List?
-        
+
         //Not fully implemented yet, don't call
         //checkForImplicitList(cinfo, type, name, offset, depth);
-        
+
         checkForRuntimeClass(node, type, name, offset); //.class var
         checkForString(node, type, name, offset); //.tostring var
     }
@@ -372,16 +400,16 @@ public class DeclWriter extends DaikonWriter
     /**
      *     Explores the tree one level deeper (see {@link DaikonVariableInfo}).
      *     This method adds child nodes to curNode.
-     *     
+     *
      *     For example: "recurse" on a hashcode array object to print the actual array of values
      *     or recurse on hashcode variable to print its fields.
      *     Also accounts for derived variables (.class, .tostring) and "recurses" on arrays (that is,
      *     adds a variable to print out the arrays's elements as opposed to just the hashcode of the array).
-     *     
+     *
      *     @param name The name of the variable currently being examined, such as "ballCount"
      *     @param offset The representation of the variables we have previously examined.
      *                   For examples, offset could be "this." in which case offset + name would be
-     *                   "this.ballCount."  
+     *                   "this.ballCount."
      */
     private void printChildren(ClassInfo cinfo, Class type, DaikonVariableInfo curNode, String name, String offset,
                                       int depthRemaining, boolean inArray)
@@ -432,7 +460,7 @@ public class DeclWriter extends DaikonWriter
                 // Print out the class of each element in the array.  For
                 // some reason dfej doesn't include this on returned arrays
                 // or parameters.
-                // The offset will only be equal to "" 
+                // The offset will only be equal to ""
                 // if we are examining a local variable (parameter).
                 if (!name.equals ("return") && !offset.equals (""))
                   checkForRuntimeClass (newChild, type, name + "[]", offset);
@@ -473,7 +501,7 @@ public class DeclWriter extends DaikonWriter
         // add this variable to the tree as a child of curNode
         DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum);
         curNode.addChild(newChild);
-        
+
         checkForDerivedVariables(newChild, type, name, offset, false);
 
         return newChild;
@@ -589,7 +617,7 @@ public class DeclWriter extends DaikonWriter
             offset = "this.";
         }
         outFile.println(offset + name);
-        
+
         String type_name = stdClassName (type);
 
         // Print declared type, followed by auxiliary information
@@ -598,18 +626,23 @@ public class DeclWriter extends DaikonWriter
         // Print auxiliary information
         appendAuxInfo(field);
         outFile.println();
-        
+
         outFile.print(getRepName(type, inArray) + arr_str);
-        
+
         boolean addFieldToTree = true;
         if (DaikonWriter.isStaticConstField(field) && !inArray)
         {
             ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
             String value = cinfo.staticMap.get(name);
 
+            // System.out.printf ("static final value = %s%n", value);
+
+            // in this case, we don't want to print this variable to
+            // the dtrace file
             if(value != null)
             {
                 outFile.print(" = " + value);
+                addFieldToTree = false;
             }
             //else
             //{
@@ -617,8 +650,6 @@ public class DeclWriter extends DaikonWriter
                 // because this field wasn't declared with an actual "hardcoded" constant
             //}
 
-            // in this case, we don't want to print this variable to the dtrace file
-            addFieldToTree = false;
         }
 
         outFile.println();
@@ -658,6 +689,7 @@ public class DeclWriter extends DaikonWriter
         if (pkgName != null) {
             outFile.print("declaringClassPackageName=" + pkgName + ", ");
         }
+        // outFile.printf ("%s, ", field);
     }
 
 
