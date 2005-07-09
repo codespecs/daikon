@@ -39,6 +39,9 @@ public class Chicory {
   /** Main debug switch **/
   public boolean debug = false;
 
+  /** Size of the heap for the target program **/
+  public String heap_size = "128M";
+
   /** Path to java agent jar file that performs the transformation **/
   File premain_path = null;
 
@@ -121,6 +124,7 @@ public class Chicory {
 
       if (arg.equals("--debug")) {
         debug = true;
+        premain_args.add (arg);
 
       } else if (arg.startsWith("--nesting-depth=")) {
         String depthStr = arg.substring("--nesting-depth=".length());
@@ -169,7 +173,7 @@ public class Chicory {
           usage("Empty omit string");
           System.exit(1);
         }
-        
+
         try
         {
             daikon_omit_regex.add(Pattern.compile(omit));
@@ -178,7 +182,7 @@ public class Chicory {
         {
             System.out.println("WARNING: Error during regular expression compilation: " + e.getMessage());
         }
-        
+
         premain_args.add(arg);
 
       } else if (arg.startsWith("--ppt-select-pattern=")) {
@@ -191,7 +195,7 @@ public class Chicory {
           usage("Empty select string");
           System.exit(1);
         }
-        
+
         try
         {
             daikon_include_regex.add(Pattern.compile(include));
@@ -200,7 +204,7 @@ public class Chicory {
         {
             System.out.println("WARNING: Error during regular expression compilation: " + e.getMessage());
         }
-        
+
         premain_args.add(arg);
 
       } else if (arg.startsWith("--dtrace-file=")) {
@@ -226,6 +230,8 @@ public class Chicory {
           usage("output directory not writable: " + output_dir);
         premain_args.add(arg);
 
+      } else if (arg.startsWith ("--heap_size=")) {
+        heap_size = arg.substring ("--heap_size=".length());
       } else if (arg.equals("--help")) {
         usage();
         System.exit(0);
@@ -414,6 +420,7 @@ public class Chicory {
     cmdlist.add ("-cp");
     cmdlist.add (cp);
     cmdlist.add ("-ea");
+    cmdlist.add ("-Xmx" + heap_size);
 
     if(dtraceLim != null)
         cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
@@ -620,6 +627,7 @@ public class Chicory {
       System.err.println("  --output-dir=<directory>           Write the dtrace files to this directory (default is current directory)");
       System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args");
       System.err.println("  --daikon-online[=<daikon-args>]    Run daikon with no additional args in online mode via socket communication");
+      System.err.println("  --heap_size=<heapsize>             Use the specified heap size for the targer program");
       System.err.println("  --help                             Print this help message");
       System.err.println("<class> is the program to trace.  Must exist in the classpath given");
       System.err.println("<args> are the arguments to <class>");
