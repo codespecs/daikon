@@ -36,7 +36,7 @@ endif
 ## Daikon front end for Java), rt.jar must be on your classpath.
 setenv darwinos 0
 if ($?OSTYPE) then
-  if ("$OSTYPE" != "darwin")
+  if ("$OSTYPE" != "darwin") then
     setenv darwinos 1
   endif
 endif
