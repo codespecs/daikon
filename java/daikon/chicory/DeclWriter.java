@@ -704,7 +704,7 @@ public class DeclWriter extends DaikonWriter
 
         String postString = ""; //either array braces or an empty string
 
-        if (name.endsWith("[]"))
+        if (name.contains("[]"))
             postString = "[]";
 
         outFile.println(offset + name + ".toString");

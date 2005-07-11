@@ -163,10 +163,6 @@ public class Runtime
      */
     public static void enter(Object obj, int nonce, int mi_index, Object[] args)
     {
-
-        if (new_classes.size() > 0)
-            process_new_classes();
-
         // System.out.println ("in enter");
 
          /*Throwable stack = new Throwable ("enter");
@@ -177,6 +173,10 @@ public class Runtime
 
         synchronized (all_classes)
         {
+            if (new_classes.size() > 0)
+                process_new_classes();
+            
+            
             MethodInfo mi = methods.get(mi_index);
             dtrace_writer.methodEntry(mi, nonce, obj, args);
         }
@@ -196,12 +196,13 @@ public class Runtime
      */
     public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum)
     {
-        if (new_classes.size() > 0)
-            process_new_classes();
-
 
         synchronized (all_classes)
         {
+            if (new_classes.size() > 0)
+                process_new_classes();
+            
+            
             MethodInfo mi = methods.get(mi_index);
             dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, exitLineNum);
         }

@@ -22,7 +22,7 @@ import java.util.*;
 public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 {
     /** The variable name, if appropriate to the subtype **/
-    private String name;
+    private final String name;
 
     /** The child nodes **/
     private List<DaikonVariableInfo> children;
@@ -45,7 +45,15 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      */
     public DaikonVariableInfo(String theName, boolean arr)
     {
-        name = theName;
+        // Intern the names because there will be many of the
+        // same variable names at different program points within
+        // the same class
+        if(theName == null)
+            name = null;
+        else
+            name = theName.intern();
+            
+        
         children = new ArrayList <DaikonVariableInfo> ();
 
         isArray = arr;
