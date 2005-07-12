@@ -2936,7 +2936,7 @@ java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
 @item --dtrace-file=@var{filename}
 Specifies the default name for the trace output (@file{.dtrace}) file.
 If no explicit trace file name or directory is specified on the command line,
-the default is @file{daikon-output/@var{CLASSNAME}.dtrace}; however,
+the default is @file{./@var{CLASSNAME}.dtrace}; however,
 if the @env{DTRACEFILE}
 environment variable is set when the instrumented program is run, it
 overrides this default.  Furthermore, if the @env{DTRACEAPPEND} environment
@@ -2960,6 +2960,22 @@ passing the specified arguments, if any, to Daikon.
 This option supplies Daikon with a single trace from a one execution of
 your program.  When Daikon is invoked from the command line, it can be
 supplied as many trace files as desired.
+
+@item --premain=@var{path}
+Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
+Chicory requires this jar file in order to execute.  By default Chicory
+looks for the jar file in the classpath and in @file{$(DAIKONDIR)/java}
+(where @file{DAIKONDIR} is an environment variable that points to the
+complete installation of Daikon).  
+
+Chicory can also use the @file{daikon.jar} file for this purpose.  If it
+doesn't find @file{ChicoryPremain.jar} above, it will use daikon.jar
+itself (if a file named 'daikon.jar' appears in the classpath).  If
+the daikon jar file is not named @file{daikon.jar}, you can use this
+switch to specify its name.  For example:
+@example
+--premain=C:\lib\daikon-4.1.3.jar
+@end example
 
 @item --daikon-online
 @itemx --daikon-online=@var{args}
