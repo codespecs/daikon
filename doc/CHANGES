@@ -20,6 +20,14 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.1.4 (August 1 2005)
+
+  Documentation Changes
+
+    Documented --premain switch to Chicory.
+    The default output file for Chicory is . (not ./daikon-output)
+
+
 4.1.3 (July 1 2005)
 
 Daikon
