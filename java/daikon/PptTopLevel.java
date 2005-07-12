@@ -3262,6 +3262,9 @@ public class PptTopLevel extends Ppt {
     }
 
     //Fmt.pf ("Merging ppt " + name + " with " + children.size() + " children");
+    Daikon.debugProgress.fine ("Merging ppt " + name + " with " +
+                               children.size() + " children, "
+                               + var_infos.length + " variables");
     if (debugMerge.isLoggable(Level.FINE))
       debugMerge.fine("Processing ppt " + name());
 

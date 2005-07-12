@@ -618,6 +618,7 @@ public class PptRelation implements Serializable {
       PptTopLevel ppt = (PptTopLevel) i.next();
       PptName pname = ppt.ppt_name;
       PptRelation rel = null;
+      Daikon.debugProgress.fine ("Processing ppt " + pname);
       debug.fine("Processing ppt " + pname);
 
       // If this is an object ppt, parent is the class point

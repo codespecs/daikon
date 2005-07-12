@@ -1704,10 +1704,12 @@ public final class Daikon {
 
     stopwatch.reset();
 
+    debugProgress.fine("Create Combined Exits ... ");
     create_combined_exits(all_ppts);
 
     // Post process dynamic constants
     if (dkconfig_use_dynamic_constant_optimization) {
+      debugProgress.fine("Constant Post Processing ... ");
       for (Iterator itor = all_ppts.ppt_all_iterator();
         itor.hasNext();
         ) {
