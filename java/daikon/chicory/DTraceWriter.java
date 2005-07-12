@@ -40,6 +40,9 @@ public class DTraceWriter extends DaikonWriter
     /**Where to print output*/
     private PrintStream outFile;
 
+    /** debug information about daikon variables  **/
+    private boolean debug_vars = false;
+
     /**
      * Initializes the DTraceWriter
      *
@@ -68,6 +71,13 @@ public class DTraceWriter extends DaikonWriter
         if(root == null)
             throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
 
+        if (debug_vars) {
+            System.out.printf ("Entering %s%n%s%n",
+                               DaikonWriter.methodEntryName (member), root);
+            Throwable stack = new Throwable("enter traceback");
+            stack.fillInStackTrace();
+            stack.printStackTrace(System.out);
+        }
         outFile.println(DaikonWriter.methodEntryName(member));
         printNonce(nonceVal);
         traverse(mi, root, args, obj, nonsenseValue);
@@ -175,6 +185,13 @@ public class DTraceWriter extends DaikonWriter
         outFile.println(curInfo.getName());
         outFile.println(curInfo.getDTraceValueString(val));
 
+        if (debug_vars) {
+            String out = curInfo.getDTraceValueString(val);
+            if (out.length() > 20)
+                out = out.substring (0, 20);
+            System.out.printf ("  --variable %s [%d]= %s%n", curInfo.getName(),
+                               curInfo.children.size(), out);
+        }
         //go through all of the current node's children
         //and recurse on their values
         for (DaikonVariableInfo child : curInfo)

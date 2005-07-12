@@ -154,6 +154,8 @@ public class DeclWriter extends DaikonWriter
         outFile.println(declareHeader);
         outFile.println(name);
 
+        if (debug_vars)
+            System.out.printf ("Processing %s Entry%n", name);
         printMethodVars(cinfo, curNode, method, argnames);
 
         outFile.println();
@@ -486,8 +488,10 @@ public class DeclWriter extends DaikonWriter
     }
 
     /**
-     * Prints the decl info for a single local variable (usually a method argument)
-     * @return The newly created DaikonVariableInfo object, whose parent is curNode
+     * Prints the decl info for a single local variable (usually a
+     * method argument)
+     * @return The newly created DaikonVariableInfo object, whose
+     * parent is curNode
      */
     private DaikonVariableInfo printDeclVar(ClassInfo cinfo, DaikonVariableInfo curNode, Class type, String name, String offset, int depth, int argNum)
     {
@@ -660,6 +664,9 @@ public class DeclWriter extends DaikonWriter
         if(addFieldToTree)
         {
             curNode.addChild(newField);
+            if (debug_vars)
+                System.out.printf ("Added field %s to node %s%n", newField,
+                                   curNode);
         }
 
         checkForDerivedVariables(newField, type, name, offset, inArray);
