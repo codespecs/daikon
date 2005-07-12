@@ -84,7 +84,7 @@ public class Chicory {
   private int daikonPort = -1;
 
   /** flag to use if we want to turn on the static initialization checks**/
-  public static final boolean checkStaticInit = false;
+  public static final boolean checkStaticInit = true;
 
   private static final boolean RemoteDebug = false;
 
