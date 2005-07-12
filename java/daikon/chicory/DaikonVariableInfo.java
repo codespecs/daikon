@@ -25,7 +25,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     private final String name;
 
     /** The child nodes **/
-    private List<DaikonVariableInfo> children;
+    public List<DaikonVariableInfo> children;
 
     /** True iff this variable is an array **/
     protected final boolean isArray;
