@@ -53,10 +53,10 @@ public class PptRelation implements Serializable {
   public PptTopLevel child;
 
   /** Map from parent vars to matching child vars. */
-  Map parent_to_child_map;
+  Map<VarInfo,VarInfo> parent_to_child_map;
 
   /** Map from child vars to matching parent vars. */
-  Map child_to_parent_map;
+  Map<VarInfo,VarInfo> child_to_parent_map;
 
   /**
    * Boolean.  Controls whether the object-user relation is created in the
@@ -73,8 +73,8 @@ public class PptRelation implements Serializable {
 
     this.parent = parent;
     this.child = child;
-    parent_to_child_map = new LinkedHashMap();
-    child_to_parent_map = new LinkedHashMap();
+    parent_to_child_map = new LinkedHashMap<VarInfo,VarInfo>();
+    child_to_parent_map = new LinkedHashMap<VarInfo,VarInfo>();
     // rel_type is one of the above relationship types because this is a
     // private constructor, called only within this file.
     relationship = rel_type;
@@ -109,9 +109,8 @@ public class PptRelation implements Serializable {
   public String parent_to_child_var_string() {
 
     StringBuffer var_str = new StringBuffer();
-    for (Iterator<VarInfo> i = parent_to_child_map.keySet().iterator(); i.hasNext();) {
-      VarInfo pv = i.next();
-      VarInfo cv = (VarInfo) parent_to_child_map.get(pv);
+    for (VarInfo pv : parent_to_child_map.keySet()) {
+      VarInfo cv = parent_to_child_map.get(pv);
       if (var_str.length() > 0)
         var_str.append(", ");
       var_str.append(pv.name.name() + "->" + cv.name.name());
@@ -187,7 +186,7 @@ public class PptRelation implements Serializable {
    */
 
   public VarInfo parentVar(VarInfo childVar) {
-    return (VarInfo) child_to_parent_map.get(childVar);
+    return child_to_parent_map.get(childVar);
   }
 
   /**
@@ -196,7 +195,7 @@ public class PptRelation implements Serializable {
    */
 
   public VarInfo childVar(VarInfo parentVar) {
-    return (VarInfo) parent_to_child_map.get(parentVar);
+    return parent_to_child_map.get(parentVar);
   }
 
   /**
@@ -582,11 +581,8 @@ public class PptRelation implements Serializable {
   public PptRelation copy(PptTopLevel new_parent, PptTopLevel new_child) {
 
     PptRelation rel = new PptRelation(new_parent, new_child, relationship);
-    for (Iterator<VarInfo> ii = child_to_parent_map.keySet().iterator();
-      ii.hasNext();
-      ) {
-      VarInfo vc = ii.next();
-      VarInfo vp = (VarInfo) child_to_parent_map.get(vc);
+    for (VarInfo vc : child_to_parent_map.keySet()) {
+      VarInfo vp = child_to_parent_map.get(vc);
       VarInfo new_vc = new_child.var_infos[vc.varinfo_index];
       VarInfo new_vp = new_parent.var_infos[vp.varinfo_index];
       Assert.assertTrue(new_vc.name.equals(vc.name));

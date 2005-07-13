@@ -201,8 +201,7 @@ public class InvMatch {
       InvTranslate xlate = i.next();
       if (xlate == null)
         continue;
-      for (Iterator<String> j = xlate.var_map.keySet().iterator(); j.hasNext(); ) {
-        String key = j.next();
+      for (String key : xlate.var_map.keySet()) {
         String val = (String) xlate.var_map.get (key);
         String cur_val = (String) var_map.get (key);
         if (cur_val == null)

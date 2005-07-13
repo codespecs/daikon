@@ -47,7 +47,7 @@ public class ExtractConsequent {
       HashMaps whose keys are predicate names (Strings) and whose values are
        HashMaps whose keys are Strings (normalized java-format invariants)
          and whose values are HashedConsequent objects. */
-  private static HashMap pptname_to_conditions = new HashMap();
+  private static Map<String,Map<String,Map<String,HashedConsequent>>> pptname_to_conditions = new HashMap<String,Map<String,Map<String,HashedConsequent>>>();
 
   private static String usage =
     UtilMDE.joinLines(
@@ -143,8 +143,8 @@ public class ExtractConsequent {
   public static void extract_consequent(PptMap ppts) {
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
-    Comparator comparator = new Ppt.NameComparator();
-    TreeSet ppts_sorted = new TreeSet(comparator);
+    Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
+    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<PptTopLevel>(comparator);
     ppts_sorted.addAll(ppts.asCollection());
 
     for (Iterator<PptTopLevel> itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
@@ -156,27 +156,25 @@ public class ExtractConsequent {
 
     // All conditions at a program point.  A TreeSet to enable
     // deterministic output.
-    TreeSet allConds = new TreeSet();
+    TreeSet<String> allConds = new TreeSet<String>();
     for ( Iterator<String> pptNamesIter = (pptname_to_conditions.keySet()).iterator() ;
           pptNamesIter.hasNext() ; ) {
       String pptname = pptNamesIter.next();
-      HashMap cluster_to_conditions = (HashMap) pptname_to_conditions.get(pptname);
-      for ( Iterator<Map.Entry> predIter = cluster_to_conditions.entrySet().iterator() ;
-            predIter.hasNext() ; ) {
-        Map.Entry entry = predIter.next();
-        String predicate = (String) entry.getKey();
-        Map conditions = (Map) entry.getValue();
+
+      Map<String,Map<String,HashedConsequent>> cluster_to_conditions = pptname_to_conditions.get(pptname);
+      for ( Map.Entry<String,Map<String,HashedConsequent>> entry : cluster_to_conditions.entrySet()) {
+        String predicate = entry.getKey();
+        Map<String,HashedConsequent> conditions = entry.getValue();
         StringBuffer conjunctionJava = new StringBuffer();
         StringBuffer conjunctionDaikon = new StringBuffer();
         StringBuffer conjunctionIOA = new StringBuffer();
         StringBuffer conjunctionESC = new StringBuffer();
         StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
         int count = 0;
-        for (Iterator<Map.Entry> condsIter = conditions.entrySet().iterator();
-             condsIter.hasNext(); count++) {
-          Map.Entry entry2 = condsIter.next();
-          String condIndex = (String) entry2.getKey();
-          HashedConsequent cond = (HashedConsequent) entry2.getValue();
+        for (Map.Entry<String,HashedConsequent> entry2 : conditions.entrySet()) {
+          count++;
+          String condIndex = entry2.getKey();
+          HashedConsequent cond = entry2.getValue();
           if (cond.fakeFor != null) {
             count--;
             continue;
@@ -371,15 +369,15 @@ public class ExtractConsequent {
                                           HashedConsequent consequent,
                                           String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new HashMap());
+      pptname_to_conditions.put(pptname, new HashMap<String,Map<String,HashedConsequent>>());
     }
 
-    HashMap cluster_to_conditions = (HashMap) pptname_to_conditions.get(pptname);
+    Map<String,Map<String,HashedConsequent>> cluster_to_conditions = pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashMap());
+      cluster_to_conditions.put(predicate, new HashMap<String,HashedConsequent>());
     }
 
-    HashMap conditions = (HashMap)cluster_to_conditions.get(predicate);
+    Map<String,HashedConsequent> conditions = cluster_to_conditions.get(predicate);
     if (conditions.containsKey(index)) {
       HashedConsequent old = (HashedConsequent)conditions.get(index);
       if (old.fakeFor != null && consequent.fakeFor == null) {

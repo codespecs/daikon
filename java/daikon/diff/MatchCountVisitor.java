@@ -25,7 +25,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
   // invariants found matching
   private HashSet recall = new HashSet();
 
-  private HashMap goodMap = new HashMap();
+  private HashMap<String,HashSet> goodMap = new HashMap<String,HashSet>();
 
 
   private Invariant dummy = null;
@@ -86,7 +86,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
       String thisPptName1 = tmpStr1.substring (0,
                                                tmpStr1.lastIndexOf (";condition"));
       String predicate = extractPredicate (tmpStr1);
-      HashSet bucket = (HashSet) goodMap.get (thisPptName1);
+      HashSet bucket = goodMap.get (thisPptName1);
       if (bucket == null) {
         bucket = new HashSet();
         goodMap.put (thisPptName1, bucket);
@@ -228,11 +228,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
   /** Prints the results of the correct set in a human-readable format */
   public void printFinal () {
-    for (Iterator<String> i = goodMap.keySet().iterator(); i.hasNext(); ) {
-      String ppt = i.next();
+    for (String ppt : goodMap.keySet()) {
       System.out.println ();
       System.out.println ("*****************" + ppt);
-      for (Iterator j = ((HashSet) goodMap.get(ppt)).iterator();
+      for (Iterator j = goodMap.get(ppt).iterator();
            j.hasNext();) {
         System.out.println (j.next());
       }

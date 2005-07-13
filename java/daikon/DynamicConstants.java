@@ -273,14 +273,12 @@ public class DynamicConstants implements Serializable {
     instantiate_new_views (non_con, non_missing);
 
     // Turn off previous_constant on all newly non-constants
-    for (Iterator<Constant> i = non_con.iterator(); i.hasNext(); ) {
-      Constant con = i.next();
+    for (Constant con : non_con) {
       con.previous_constant = false;
     }
 
     // Turn off previous_missing on all newly non-missing
-    for (Iterator<Constant> i = non_missing.iterator(); i.hasNext(); ) {
-      Constant con = i.next();
+    for (Constant con : non_missing) {
       con.previous_missing = false;
     }
   }
@@ -415,7 +413,7 @@ public class DynamicConstants implements Serializable {
                                   List<Constant> list2) {
 
     // Get list1 leaders
-    Set leaders1 = new LinkedHashSet();
+    Set<Constant> leaders1 = new LinkedHashSet<Constant>();
     for (int i = 0; i < list1.size(); i++) {
       Constant con = (Constant) list1.get(i);
       if (con.vi.isCanonical())
@@ -423,7 +421,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // Get list2 leaders
-    Set leaders2 = new LinkedHashSet();
+    Set<Constant> leaders2 = new LinkedHashSet<Constant>();
     for (int i = 0; i < list2.size(); i++) {
       Constant con = (Constant) list2.get(i);
       if (con.vi.isCanonical())
@@ -438,13 +436,12 @@ public class DynamicConstants implements Serializable {
     }
 
     // any new views created
-    Vector new_views = new Vector();
+    Vector<PptSlice> new_views = new Vector<PptSlice>();
 
     int mod = ValueTuple.MODIFIED;
 
     // Unary slices/invariants
-    for (Iterator<Constant> i = leaders1.iterator(); i.hasNext(); ) {
-      Constant con = i.next();
+    for (Constant con: leaders1) {
       if (Debug.logOn())
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Considering slice");
       if (!ppt.is_slice_ok (con.vi))
@@ -462,10 +459,8 @@ public class DynamicConstants implements Serializable {
     // Binary slices/invariants.  Note that if a variable is in both
     // leader lists, it is only added when it is in order (to prevent
     // creating the slice twice)
-    for (Iterator<Constant> i = leaders1.iterator(); i.hasNext(); ) {
-      Constant con1 = i.next();
-      for (Iterator<Constant> j = leaders2.iterator(); j.hasNext(); ) {
-        Constant con2 = j.next();
+    for (Constant con1 : leaders1) {
+      for (Constant con2 : leaders2) {
         Constant c1 = con1;
         Constant c2 = con2;
         Debug.log (getClass(), ppt, Debug.vis(c1.vi, c2.vi),
@@ -494,15 +489,12 @@ public class DynamicConstants implements Serializable {
     // Ternary slices/invariants.  Note that if a variable is in both
     // leader lists, it is only added when it is in order (to prevent
     // creating the slice twice)
-    for (Iterator<Constant> i = leaders1.iterator(); i.hasNext(); ) {
-      Constant con1 = i.next();
-      for (Iterator<Constant> j = leaders2.iterator(); j.hasNext(); ) {
-        Constant con2 = j.next();
+    for (Constant con1 : leaders1) {
+      for (Constant con2 : leaders2) {
         if ((con2.vi.varinfo_index < con1.vi.varinfo_index)
             && leaders1.contains (con2))
           continue;
-        for (Iterator<Constant> k = leaders2.iterator(); k.hasNext(); ) {
-          Constant con3 = k.next();
+        for (Constant con3 : leaders2) {
           if ((con3.vi.varinfo_index < con2.vi.varinfo_index) ||
               ((con3.vi.varinfo_index < con1.vi.varinfo_index)
                && leaders1.contains (con3)))
@@ -572,8 +564,7 @@ public class DynamicConstants implements Serializable {
 
       String leader1_str = "";
       int leader1_cnt = 0;
-      for (Iterator<Constant> i = leaders1.iterator(); i.hasNext(); ) {
-        Constant con1 = i.next();
+      for (Constant con1 : leaders1) {
         if (con1.vi.file_rep_type == ProglangType.INT) {
           leader1_str += con1.vi.name.name() + " ";
           leader1_cnt++;
@@ -582,8 +573,7 @@ public class DynamicConstants implements Serializable {
 
       String leader2_str = "";
       int leader2_cnt = 0;
-      for (Iterator<Constant> i = leaders2.iterator(); i.hasNext(); ) {
-        Constant con1 = i.next();
+      for (Constant con1 : leaders2) {
         if (con1.vi.file_rep_type == ProglangType.INT) {
           leader2_str += con1.vi.name.name() + " ";
           leader2_cnt++;
@@ -596,11 +586,9 @@ public class DynamicConstants implements Serializable {
     // Remove any falsified invariants from the new views.  Don't
     // call remove_falsified() since that has side-effects (such as
     // NIS processing on the falsified invariants) that we don't want.
-    for (Iterator<PptSlice> i = new_views.iterator(); i.hasNext(); ) {
-      PptSlice slice = i.next();
-      List to_remove = new ArrayList();
-      for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = j.next();
+    for (PptSlice slice : new_views) {
+      List<Invariant> to_remove = new ArrayList<Invariant>();
+      for (Invariant inv : slice.invs) {
         if (inv.is_false()) {
           to_remove.add(inv);
         }
@@ -620,8 +608,7 @@ public class DynamicConstants implements Serializable {
     // Find all of the variable (non-constant) non-missing
     // integral/float leaders
     List vars = new ArrayList();
-    for (Iterator<Constant> i = all.iterator(); i.hasNext(); ) {
-      Constant con = i.next();
+    for (Constant con : all) {
       if (con.always_missing || con.previous_missing)
         continue;
       if (con.constant || con.previous_constant)
@@ -637,8 +624,7 @@ public class DynamicConstants implements Serializable {
 
     // Find all of the new non-constant integer/float leaders
     List new_leaders = new ArrayList();
-    for (Iterator<Constant> i = new_noncons.iterator(); i.hasNext(); ) {
-      Constant con = i.next();
+    for (Constant con : new_noncons) {
       if (!con.vi.isCanonical())
         continue;
       if (!con.vi.file_rep_type.isIntegral() &&!con.vi.file_rep_type.isFloat())
@@ -781,8 +767,7 @@ public class DynamicConstants implements Serializable {
     if (slice == null)
       return (null);
 
-    for (Iterator<Invariant> ii = slice.invs.iterator(); ii.hasNext(); ) {
-      Invariant inv = ii.next();
+    for (Invariant inv : slice.invs) {
       // debug.fine ("inv = " + inv.getClass());
       if ((inv.getClass() == LinearBinary.class)
           || (inv.getClass() == LinearBinaryFloat.class))
@@ -832,8 +817,7 @@ public class DynamicConstants implements Serializable {
     // (if the existing list is not cleared, constant slices will not
     // be created)
     List noncons = con_list;
-    for (Iterator<Constant> i = con_list.iterator(); i.hasNext(); ) {
-      Constant con = i.next();
+    for (Constant con : con_list) {
       con.constant = false;
       con.previous_constant = true;
     }
@@ -886,8 +870,7 @@ public class DynamicConstants implements Serializable {
     int mod = ValueTuple.MODIFIED;
 
     // Unary slices/invariants
-    for (Iterator<Constant> i = leaders.iterator(); i.hasNext(); ) {
-      Constant con = i.next();
+    for (Constant con : leaders) {
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
       slice1.instantiate_invariants();
       // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name.name(), con.val,
@@ -917,8 +900,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // Remove any falsified invariants from the new views.
-    for (Iterator<PptSlice> i = new_views.iterator(); i.hasNext(); ) {
-      PptSlice slice = i.next();
+    for (PptSlice slice : new_views) {
       for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
         Invariant inv = j.next();
         if (inv.is_false()) {

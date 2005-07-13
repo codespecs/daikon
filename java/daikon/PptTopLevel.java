@@ -1203,15 +1203,15 @@ public class PptTopLevel extends Ppt {
    * map is from the invariant class to an integer cnt of the number of
    * that class
    */
-  public Map invariant_cnt_by_class() {
+  public Map<Class,Cnt> invariant_cnt_by_class() {
 
-    Map inv_map = new LinkedHashMap();
+    Map<Class,Cnt> inv_map = new LinkedHashMap<Class,Cnt>();
 
     for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
       PptSlice slice = j.next();
       for (int k = 0; k < slice.invs.size(); k++) {
         Invariant inv = (Invariant) slice.invs.get(k);
-        Cnt cnt = (Cnt) inv_map.get(inv.getClass());
+        Cnt cnt = inv_map.get(inv.getClass());
         if (cnt == null) {
           cnt = new Cnt();
           inv_map.put(inv.getClass(), cnt);
@@ -2460,9 +2460,8 @@ public class PptTopLevel extends Ppt {
 
     // Pivot invariants to new equality leaders if needed, if old
     // leaders would prevent printing.
-    for (Iterator<Equality> i = equalityInvs.iterator(); i.hasNext();) {
-      Equality inv = i.next();
-      inv.pivot();
+    for (Invariant inv : equalityInvs) {
+      ((Equality) inv).pivot();
     }
 
     // Now pivot the other invariants
@@ -2507,9 +2506,8 @@ public class PptTopLevel extends Ppt {
 
     // Add specific equality invariants for each member of the
     // equality set
-    for (Iterator<Equality> i = equalityInvs.iterator(); i.hasNext();) {
-      Equality inv = i.next();
-      inv.postProcess();
+    for (Invariant inv : equalityInvs) {
+      ((Equality) inv).postProcess();
     }
 
   }
@@ -2806,7 +2804,7 @@ public class PptTopLevel extends Ppt {
       }
       System.err.println(
         "Warning: " + ppt_name + " invariants are contradictory, axing some");
-      Map demerits = new TreeMap();
+      Map<Lemma,Integer> demerits = new TreeMap<Lemma,Integer>();
       int worstWheel = 0;
       do {
         // But try to recover anyway
@@ -2832,23 +2830,21 @@ public class PptTopLevel extends Ppt {
             demerits.put(problem, new Integer(1));
         }
         int max_demerits = -1;
-        Vector worst = new Vector();
-        Iterator<Map.Entry> it = demerits.entrySet().iterator();
-        while (it.hasNext()) {
-          Map.Entry ent = it.next();
-          int value = ((Integer) ent.getValue()).intValue();
+        Vector<Lemma> worst = new Vector<Lemma>();
+        for (Map.Entry<Lemma,Integer> ent : demerits.entrySet()) {
+          int value = ent.getValue().intValue();
           if (value == max_demerits) {
             worst.add(ent.getKey());
           } else if (value > max_demerits) {
             max_demerits = value;
-            worst = new Vector();
+            worst = new Vector<Lemma>();
             worst.add(ent.getKey());
           }
         }
         int offsetFromEnd = worstWheel % worst.size();
         worstWheel = (3 * worstWheel + 1) % 10000019;
         int index = worst.size() - 1 - offsetFromEnd;
-        Lemma bad = (Lemma) worst.elementAt(index);
+        Lemma bad = worst.elementAt(index);
         demerits.remove(bad);
         proverStack.popToMark(backgroundMark);
         boolean isInvariant = false;
@@ -3378,7 +3374,7 @@ public class PptTopLevel extends Ppt {
 
     // Get all of the binary relationships from the first child's
     // equality sets.
-    Map emap = null;
+    Map<VarInfo.Pair,VarInfo.Pair> emap = null;
     int first_child = 0;
     for (first_child = 0; first_child < children.size(); first_child++) {
       PptRelation c1 = (PptRelation) children.get(first_child);
@@ -3415,8 +3411,9 @@ public class PptTopLevel extends Ppt {
     }
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Found equality pairs ");
-      for (Iterator i = emap.keySet().iterator(); i.hasNext();)
-        debugMerge.fine("-- " + (VarInfo.Pair) i.next());
+      for (VarInfo.Pair vp : emap.keySet()) {
+        debugMerge.fine("-- " + vp);
+      }
     }
 
     // Build actual equality sets that match the pairs we found
@@ -3570,9 +3567,8 @@ public class PptTopLevel extends Ppt {
 
     // Remove the NI suppressed invariants in the children that we
     // previously created
-    for (Iterator<Map.Entry<PptTopLevel,List<Invariant>>> i = suppressed_invs.entrySet().iterator(); i.hasNext();) {
-      Map.Entry<PptTopLevel,List<Invariant>> entry = i.next();
-      PptTopLevel child = (PptTopLevel) entry.getKey();
+    for (Map.Entry<PptTopLevel,List<Invariant>> entry : suppressed_invs.entrySet()) {
+      PptTopLevel child = entry.getKey();
       List<Invariant> suppressed_list = entry.getValue();
       child.remove_invs(suppressed_list);
     }
@@ -3966,7 +3962,7 @@ public class PptTopLevel extends Ppt {
     int const_inv_cnt = 0;
     int constant_leader_cnt = 0;
     public static boolean cnt_inv_classes = false;
-    Map inv_map = null;
+    Map<Class,Cnt> inv_map = null;
     public static boolean show_invs = false;
     public static boolean show_tern_slices = false;
 
@@ -4035,8 +4031,7 @@ public class PptTopLevel extends Ppt {
                         + memory + ": "
                         + time);
       if (cnt_inv_classes) {
-        for (Iterator<Class> i = inv_map.keySet().iterator(); i.hasNext();) {
-          Class inv_class = i.next();
+        for (Class inv_class : inv_map.keySet()) {
           Cnt cnt = (Cnt) inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);
         }

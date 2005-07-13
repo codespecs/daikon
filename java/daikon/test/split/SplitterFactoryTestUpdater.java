@@ -190,19 +190,15 @@ public class SplitterFactoryTestUpdater {
     ps.println(" * Note that it is normal for some classes not to compile during this test.");
     ps.println(" *");
     ps.println(" * These tests assume that the goal files are contained in the directory:");
-    ps.println(" * \"daikon/test/split/targets\"");
+    ps.println(" * \"" + targetDir + "\"");
     ps.println(" * These tests ignore extra white spaces.");
     ps.println(" */");
-    ps.println(" public class SplitterFactoryTest extends TestCase {");
+    ps.println("public class SplitterFactoryTest extends TestCase {");
     ps.println("  // Because the SplitterFactory sequentially numbers the");
     ps.println("  // java files it produces, changing the order that the setUpTests");
     ps.println("  // commands are run will cause the tests to fail.");
-    ps.println("  //");
-    ps.println("  // javaFiles are the names of the files created by SplitterFactory");
-    ps.println("  // targetFiles are the names of the files that the created files");
-    ps.println("  // are to by checked for equality.");
     ps.println();
-    ps.println("  private static String targetDir = \"daikon/test/split/targets/\";");
+    ps.println("  private static String targetDir = \"" + targetDir + "\";");
     ps.println();
     ps.println("  private static String tempDir = null;");
     ps.println();
@@ -211,30 +207,30 @@ public class SplitterFactoryTestUpdater {
     ps.println("    private static String usage =");
     ps.println("      UtilMDE.joinLines(");
     ps.println("        \"Usage:  java daikon.tools.CreateSpinfo FILE.java ...\",");
-    ps.println("        \"  -s save  Do not delete the splitter java files from the temp directory\",");
+    ps.println("        \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
     ps.println("        \"  -h       Display this usage message\"");
     ps.println("      );");
     ps.println();
     ps.println("  public static void main(String[] args) {");
-    ps.println("      Getopt g =");
-    ps.println("        new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
-    ps.println("      int c;");
-    ps.println("      while ((c = g.getopt()) != -1) {");
-    ps.println("        switch(c) {");
-    ps.println("        case 's':");
-    ps.println("          saveFiles = true;");
-    ps.println("          break;");
-    ps.println("        case 'h':");
-    ps.println("          System.out.println(usage);");
-    ps.println("          System.exit(1);");
-    ps.println("          break;");
-    ps.println("        case '?':");
-    ps.println("          break;");
-    ps.println("        default:");
-    ps.println("          System.out.println(\"getopt() returned \" + c);");
-    ps.println("          break;");
-    ps.println("        }");
+    ps.println("    Getopt g =");
+    ps.println("      new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
+    ps.println("    int c;");
+    ps.println("    while ((c = g.getopt()) != -1) {");
+    ps.println("      switch(c) {");
+    ps.println("      case 's':");
+    ps.println("        saveFiles = true;");
+    ps.println("        break;");
+    ps.println("      case 'h':");
+    ps.println("        System.out.println(usage);");
+    ps.println("        System.exit(1);");
+    ps.println("        break;");
+    ps.println("      case '?':");
+    ps.println("        break;");
+    ps.println("      default:");
+    ps.println("        System.out.println(\"getopt() returned \" + c);");
+    ps.println("        break;");
     ps.println("      }");
+    ps.println("    }");
     ps.println("    junit.textui.TestRunner.run(suite());");
     ps.println("  }");
     ps.println();
@@ -244,6 +240,17 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  public SplitterFactoryTest(String name) {");
     ps.println("    super(name);");
+    ps.println("  }");
+    ps.println();
+    ps.println("  /**");
+    ps.println("   * Sets up the test by generating the needed splitter java files.");
+    ps.println("   */");
+    ps.println("  private static void createSplitterFiles(String spinfo, String decl) {");
+    ps.println("    List<String> spinfoFiles = new ArrayList<String>();");
+    ps.println("    spinfoFiles.add(spinfo);");
+    ps.println("    List<String> declsFiles = new ArrayList<String>();");
+    ps.println("    declsFiles.add(decl);");
+    ps.println("    createSplitterFiles(spinfoFiles, declsFiles);");
     ps.println("  }");
     ps.println();
     ps.println("  /**");
@@ -299,17 +306,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("    List<String> spinfoFiles;");
     ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
-      List<File> spinfoFiles = spinfoFileLists.get(i);
-      ps.println("    spinfoFiles = new ArrayList<String>();");
-      for (int j = 0; j < spinfoFiles.size(); j++) {
-        ps.println("    spinfoFiles.add(\"" + spinfoFiles.get(j) + "\");");
-      }
-      List<File> declsFiles = declsFileLists.get(i);
-      ps.println("    declsFiles = new ArrayList<String>();");
-      for (int j = 0; j < declsFiles.size(); j++) {
-        ps.println("    declsFiles.add(\"" + declsFiles.get(j) + "\");");
-      }
-      ps.println("    createSplitterFiles(spinfoFiles, declsFiles);");
+        ps.println("    createSplitterFiles(\"" + spinfoFileLists.get(i).get(0)
+                   + "\", \"" + declsFileLists.get(i).get(0) + "\");");
     }
     ps.println("  }");
   }
@@ -330,7 +328,7 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  public static void assertEqualFiles(String f1) {");
     ps.println("    assertEqualFiles(tempDir + f1,");
-    ps.println("                     \"daikon/test/split/targets/\" + f1 + \".goal\");");
+    ps.println("                     targetDir + f1 + \".goal\");");
     ps.println("  }");
     ps.println();
     for (int i = 0; i < classNames.size(); i++) {
@@ -350,7 +348,6 @@ public class SplitterFactoryTestUpdater {
     for (int i = 0; i < classNames.size(); i++) {
       String className = (String) classNames.get(i);
       ps.println("    suite.addTest(new SplitterFactoryTest(\"test" + className + "\"));");
-      ps.println();
     }
   }
 

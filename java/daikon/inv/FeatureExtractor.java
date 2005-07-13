@@ -277,7 +277,7 @@ public final class FeatureExtractor {
   private static void printC5Output(ArrayList usefulFeatures,
                                     ArrayList nonusefulFeatures,
                                     File outputFile, File namesFile,
-                                    HashMap lookup)
+                                    HashMap<Object,Integer> lookup)
     throws IOException {
     PrintStream names = new PrintStream(namesFile);
 
@@ -285,10 +285,9 @@ public final class FeatureExtractor {
     // and a Map of numbers to names
     TreeSet allFeatures = new TreeSet();
     HashMap numbersToNames = new HashMap();
-    for (Iterator<Map.Entry> i = lookup.entrySet().iterator(); i.hasNext();) {
-      Map.Entry entry = i.next();
+    for (Map.Entry<Object,Integer> entry : lookup.entrySet()) {
       Object key = entry.getKey();
-      int num = ((Integer) entry.getValue()).intValue();
+      int num = entry.getValue().intValue();
       IntDoublePair pair = new IntDoublePair(num, 0);
       allFeatures.add(pair);
       String name;

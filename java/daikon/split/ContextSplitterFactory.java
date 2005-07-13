@@ -247,8 +247,7 @@ public class ContextSplitterFactory
     ArrayList<PptNameAndSplitters> result = new ArrayList<PptNameAndSplitters>();
 
     // For each callee
-    for (Iterator<Map.Entry<String,Map<String,Set<Long>>>> i = callee2caller2ids.entrySet().iterator(); i.hasNext(); ) {
-      Map.Entry<String,Map<String,Set<Long>>> ipair = i.next();
+    for (Map.Entry<String,Map<String,Set<Long>>> ipair : callee2caller2ids.entrySet()) {
       String callee_ppt_name = ipair.getKey();
       Map<String,Set<Long>> caller2ids = ipair.getValue();
 
@@ -256,8 +255,7 @@ public class ContextSplitterFactory
       Collection<Splitter> splitters = new ArrayList<Splitter>();
 
       // For each caller of that callee
-      for (Iterator<Map.Entry<String,Set<Long>>> j = caller2ids.entrySet().iterator(); j.hasNext(); ) {
-        Map.Entry<String,Set<Long>> jpair = j.next();
+      for (Map.Entry<String,Set<Long>> jpair : caller2ids.entrySet()) {
         String caller_condition = jpair.getKey();
         List<Long> ids = new ArrayList<Long>(jpair.getValue());
 

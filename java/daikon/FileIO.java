@@ -154,8 +154,7 @@ public final class FileIO {
   public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
     // Read all decls, creating PptTopLevels and VarInfos
-    for (Iterator<File> i = files.iterator(); i.hasNext();) {
-      File file = i.next();
+    for (File file : files) {
       Daikon.progress = "Reading " + file;
       if (!Daikon.dkconfig_quiet) {
         System.out.print("."); // show progress
@@ -568,8 +567,7 @@ public final class FileIO {
    **/
   public static void read_data_trace_files(Collection<String> files,
                                            PptMap all_ppts, Processor processor) throws IOException {
-    for (Iterator<String> i = files.iterator(); i.hasNext();) {
-      String filename = i.next();
+    for (String filename : files) {
       try {
         read_data_trace_file(filename, all_ppts, processor, false);
       } catch (IOException e) {
@@ -1068,14 +1066,12 @@ public final class FileIO {
 
   /** Returns non-null if this procedure has an unmatched entry. **/
   static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
-    for (Iterator<Invocation> i = call_hashmap.values().iterator(); i.hasNext();) {
-      Invocation invok = i.next();
+    for (Invocation invok : call_hashmap.values()) {
       if (invok.ppt == ppt) {
         return true;
       }
     }
-    for (Iterator<Invocation> i = call_stack.iterator(); i.hasNext();) {
-      Invocation invok = i.next();
+    for (Invocation invok : call_stack) {
       if (invok.ppt == ppt) {
         return true;
       }

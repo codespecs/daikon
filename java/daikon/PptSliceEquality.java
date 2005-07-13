@@ -228,8 +228,8 @@ public class PptSliceEquality
     LinkedList<Invariant> weakenedInvs = new LinkedList();
 
     // Loop through each existing equality invariant
-    for (Iterator<Equality> i = invs.iterator(); i.hasNext(); ) {
-      Equality inv = i.next();
+    for (Invariant invar : invs) {
+      Equality inv = (Equality) invar;
 
       // Add this sample to the invariant and track any vars that fall
       // out of the set.
@@ -326,8 +326,7 @@ public class PptSliceEquality
     Equality[] resultArray = new Equality[multiMap.values().size()
                                           + out_of_bounds.size()];
     int resultCount = 0;
-    for (Iterator<Map.Entry<Object,List<VarInfo>>> i = multiMap.entrySet().iterator(); i.hasNext(); ) {
-      Map.Entry<Object,List<VarInfo>> entry = i.next();
+    for (Map.Entry<Object,List<VarInfo>> entry : multiMap.entrySet()) {
       Object key = entry.getKey();
       List<VarInfo> list = entry.getValue();
       Assert.assertTrue (list.size() > 0);
@@ -352,7 +351,7 @@ public class PptSliceEquality
 
     // Sort for determinism
     Arrays.sort (resultArray, EqualityComparator.theInstance);
-    List result = Arrays.asList (resultArray);
+    List<Equality> result = Arrays.asList (resultArray);
     Assert.assertTrue (result.size() > 0);
     return result;
   }
@@ -603,8 +602,7 @@ public class PptSliceEquality
 
   public String toString() {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
-    for (Iterator<Equality> i = invs.iterator(); i.hasNext(); ) {
-      Equality inv = i.next();
+    for (Invariant inv : invs) {
       result.append (inv.repr());
       result.append (lineSep);
     }

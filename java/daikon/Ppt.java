@@ -122,16 +122,14 @@ public abstract class Ppt
   // If the name is the same, return 0, otherwise
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
-  public static final class NameComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-
-      if ((o1 instanceof PptTopLevel) && (o2 instanceof PptTopLevel)) {
-        PptTopLevel p1 = (PptTopLevel) o1;
-        PptTopLevel p2 = (PptTopLevel) o2;
+  public static final class NameComparator implements Comparator<PptTopLevel> {
+    public int compare(PptTopLevel p1, PptTopLevel p2) {
+      if (p1 == p2) {
+        return 0;
       }
 
-      String name1 = ((Ppt) o1).name();
-      String name2 = ((Ppt) o2).name();
+      String name1 = p1.name();
+      String name2 = p2.name();
 
       String swapped1 = swap(name1, '.', ':');
       String swapped2 = swap(name2, '.', ':');

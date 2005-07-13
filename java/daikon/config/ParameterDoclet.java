@@ -216,8 +216,7 @@ public class ParameterDoclet
 
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
-      for (Iterator<String> i = keys.iterator(); i.hasNext(); ) {
-	String field = i.next();
+      for (String field : keys) {
 	String desc = (String) categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
 
@@ -254,8 +253,7 @@ public class ParameterDoclet
 
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
-      for (Iterator<String> i = keys.iterator(); i.hasNext(); ) {
-	String field = i.next();
+      for (String field : keys) {
 	String desc = (String) categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
 
@@ -273,8 +271,7 @@ public class ParameterDoclet
     for (int c = 0; c < categories.length; c++) {
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
-      for (Iterator<String> i = keys.iterator(); i.hasNext(); ) {
-	String field = i.next();
+      for (String field : keys) {
 	out.println(field);
       }
     }

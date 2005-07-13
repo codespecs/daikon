@@ -18,7 +18,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
     protected PptMap currMap;
     private HashSet programPointsList;
-    private HashMap freqList;
+    private HashMap<String,Integer> freqList;
     private HashSet justifiedList;
     private int total = 0;
     private static boolean spinfoMode = false;
@@ -29,7 +29,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         super (System.out, false);
         currMap = firstMap;
         programPointsList = new HashSet();
-        freqList = new HashMap();
+        freqList = new HashMap<String,Integer>();
         justifiedList = new HashSet();
     }
 
@@ -59,7 +59,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
             programPointsList.add (thisPptName);
             String key = thisPptName + "$" + inv1.format_using(OutputFormat.JAVA);
-            Integer val = (Integer) freqList.get (key);
+            Integer val = freqList.get (key);
             if (val == null) {
                 // Use one as default, obviously
                 freqList.put (key, new Integer (1));
@@ -97,9 +97,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         // This gets all of the output in the format:
         // inv.ppt.name() + "$" + inv1.format_java() + " Count = " + freq
-        for (Iterator<String> i = freqList.keySet().iterator(); i.hasNext(); ) {
-            String str = i.next();
-            int freq = ((Integer) freqList.get(str)).intValue();
+        for (String str : freqList.keySet()) {
+            int freq = freqList.get(str).intValue();
             if (freq < total && justifiedList.contains (str)) {
                 bigList.add (str + " Count =  " + freq);
                 // System.out.println (str + " Count =  " + freq);
@@ -117,7 +116,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // mapping:  program point names ->
         //                      ArrayList of inv.format_java() with frequency
 
-        HashMap lastMap = new HashMap();
+        HashMap<String,ArrayList> lastMap = new HashMap<String,ArrayList>();
         // One pass to fill each mapping with an empty ArrayList
         for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
             String key = i.next();
@@ -136,10 +135,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         }
 
         // print it all
-        for (Iterator<Map.Entry> i = lastMap.entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry entry = i.next();
-            String key = (String) entry.getKey();
-            ArrayList al = (ArrayList) entry.getValue();
+        for (Map.Entry<String,ArrayList> entry : lastMap.entrySet()) {
+            String key = entry.getKey();
+            ArrayList al = entry.getValue();
             // don't print anything if there are no selective invariants
             if (al.size() == 0) continue;
             System.out.println ();
@@ -164,9 +162,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         // This gets all of the output in the format:
         // inv.ppt.name() + "$" + inv1.format_java()
-        for (Iterator<String> i = freqList.keySet().iterator(); i.hasNext(); ) {
-            String str = i.next();
-            int freq = ((Integer) freqList.get(str)).intValue();
+        for (String str : freqList.keySet()) {
+            int freq = freqList.get(str).intValue();
             if (freq < total && justifiedList.contains (str)) {
                 // just want the String on its own line
                 bigList.add (str);

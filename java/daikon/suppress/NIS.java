@@ -384,7 +384,7 @@ public class NIS {
         Antecedents ants = i.next();
         List<Invariant> eq_invs = ants.get (IntEqual.class);
         if ((eq_invs != null) && (eq_invs.size() > 1000)) {
-          Map var_map = new LinkedHashMap();
+          Map<VarInfo,Count> var_map = new LinkedHashMap<VarInfo,Count>();
           Fmt.pf ("ppt %s, comparability %s has %s equality invariants",
                   ppt.name, ants.comparability, "" + eq_invs.size());
           for (Iterator<Invariant> j = eq_invs.iterator(); j.hasNext(); ) {
@@ -409,8 +409,7 @@ public class NIS {
             cnt.val++;
           }
           Fmt.pf ("%s distinct variables", "" + var_map.size());
-          for (Iterator<VarInfo> j = var_map.keySet().iterator(); j.hasNext(); ) {
-            VarInfo key = j.next();
+          for (VarInfo key : var_map.keySet()) {
             Count cnt = (Count) var_map.get (key);
             Fmt.pf (" %s %s %s ", key.comparability, key.name.name(),
                     "" + cnt.val);
@@ -505,8 +504,7 @@ public class NIS {
 
     // Find the antecedents that are always comparable (if any)
     Antecedents compare_all = null;
-    for (Iterator<VarComparability> i = comp_ants.keySet().iterator(); i.hasNext(); ) {
-      VarComparability vc = i.next();
+    for (VarComparability vc : comp_ants.keySet()) {
       if (vc.alwaysComparable()) {
         compare_all = (Antecedents) comp_ants.get (vc);
         break;
@@ -663,8 +661,7 @@ public class NIS {
     if (!log.isLoggable(Level.FINE))
       return;
 
-    for (Iterator<Class> i = suppressor_map.keySet().iterator(); i.hasNext(); ) {
-      Class sclass = i.next();
+    for (Class sclass : suppressor_map.keySet()) {
       List suppression_set_list = (List) suppressor_map.get (sclass);
       for (ListIterator<NISuppressionSet> j = suppression_set_list.listIterator(); j.hasNext();) {
         NISuppressionSet ss = j.next();
@@ -892,8 +889,7 @@ public class NIS {
 
       String out = "Comparability " + comparability + " : ";
 
-      for (Iterator<Class> i = antecedent_map.keySet().iterator(); i.hasNext(); ) {
-        Class iclass = i.next();
+      for (Class iclass : antecedent_map.keySet()) {
         out += UtilMDE.unqualified_name (iclass) + " : ";
         List<Invariant> ilist = (List) antecedent_map.get (iclass);
         for (Iterator<Invariant> j = ilist.iterator(); j.hasNext(); ) {

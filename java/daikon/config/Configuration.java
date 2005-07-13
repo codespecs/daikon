@@ -97,9 +97,7 @@ public final class Configuration
    **/
   public void overlap(Configuration config) {
     Assert.assertTrue(config != null);
-    Iterator<String> iter = config.statements.iterator();
-    while (iter.hasNext()) {
-      String statement = iter.next();
+    for (String statement : config.statements) {
       this.apply(statement);
     }
   }

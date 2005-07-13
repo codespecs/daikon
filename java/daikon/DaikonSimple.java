@@ -186,8 +186,7 @@ public static void mainHelper(final String[] args) throws IOException,
       // see the variable hierarchy.
       System.out.println(ppt.num_samples());
 
-      for (Iterator<Invariant> i = filtered_invs.iterator(); i.hasNext();) {
-          Invariant inv = i.next();
+      for (Invariant inv : filtered_invs) {
           System.out.println(inv.getClass());
           System.out.println(inv);
       }
@@ -201,8 +200,7 @@ public static void mainHelper(final String[] args) throws IOException,
   private static List<Invariant> filter_invs(List<Invariant> invs) {
     List<Invariant> new_list = new ArrayList<Invariant>();
 
-    for (Iterator<Invariant> i = invs.iterator(); i.hasNext();) {
-      Invariant inv = i.next();
+    for (Invariant inv : invs) {
       VarInfo[] vars = inv.ppt.var_infos;
 
       // This check is the most non-intrusive way to filter out the invs
@@ -497,8 +495,7 @@ public static void mainHelper(final String[] args) throws IOException,
         Assert.assertTrue(nonce != null);
         List<Call> value = call_map.get(nonce);
         call_map.remove(nonce);
-        for (Iterator<Call> i = value.iterator(); i.hasNext();) {
-          Call ec = i.next();
+        for (Call ec : value) {
           add(ec.ppt, ec.vt);
         }
         wait = false;

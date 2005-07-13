@@ -210,12 +210,11 @@ public class Debug {
 
     for (int i = 0; i < vis.size(); i++) {
       VarInfo v = (VarInfo) vis.get(i);
-      Set evars = null;
+      Set<VarInfo> evars = null;
       if (v.equalitySet != null)
         evars = v.equalitySet.getVars();
       if (evars != null) {
-        for (Iterator<VarInfo> iter = evars.iterator(); iter.hasNext(); ) {
-          VarInfo ev = iter.next();
+        for (VarInfo ev : evars) {
           for (int k = 0; k < debugTrackVars.length; k++) {
             if (ev.name().equals (debugTrackVars[k][0]))
               return (v);
@@ -572,13 +571,12 @@ public class Debug {
       // Loop through each variable in this set of debug variables
       for (int j = 0; j < cv.length; j++) {
         boolean this_match = false;
-        Set evars = null;
 
         // Loop through each variable at this point
         eachvis: for (int k = 0; k < vis.length; k++) {
 
           // Get the matching equality set
-          evars = null;
+          Set<VarInfo> evars = null;
           if (vis[k].equalitySet != null)
             evars = vis[k].equalitySet.getVars();
 
@@ -586,8 +584,7 @@ public class Debug {
           if ((evars != null) && vis[k].isCanonical()) {
 
             // Loop through each variable in the equality set
-            for (Iterator<VarInfo> iter = evars.iterator(); iter.hasNext(); ) {
-              VarInfo v = iter.next();
+            for (VarInfo v : evars) {
               if (!used[k] &&
                   (cv[j].equals ("*") || cv[j].equals (v.name.name()))) {
                 used[k] = true;

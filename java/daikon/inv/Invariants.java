@@ -11,7 +11,7 @@ import java.util.*;
  * convenience methods.
  **/
 public final class Invariants
-  extends ArrayList
+  extends ArrayList<Invariant>
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -52,7 +52,7 @@ public final class Invariants
     // System.out.printf ("removeMany in %s\n", this.getClass());
     HashSet removeSet = new HashSet(toRemove);
     ArrayList copy = new ArrayList();
-    Iterator it = this.iterator();
+    Iterator<Invariant> it = this.iterator();
     while (it.hasNext()) {
       Object inv = it.next();
       if (!removeSet.contains(inv)) {

@@ -73,9 +73,8 @@ public class PptSlice0
   private void initInvariantsSeen() {
     if (invariantsSeen == null) {
       invariantsSeen = new HashSet();
-      for (Iterator<Implication> itor = invs.iterator(); itor.hasNext(); ) {
-        Implication inv = itor.next();
-        invariantsSeen.add(new ImplicationByFormatWrapper(inv));
+      for (Invariant inv : invs) {
+        invariantsSeen.add(new ImplicationByFormatWrapper((Implication) inv));
       }
     }
   }

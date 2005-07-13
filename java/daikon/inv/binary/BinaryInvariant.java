@@ -126,13 +126,13 @@ public abstract class BinaryInvariant extends Invariant {
     }
 
     // Loop through each invariant, looking for the matching class
-    for (Iterator<BinaryInvariant> i = ppt.invs.iterator(); i.hasNext(); ) {
-      BinaryInvariant inv = i.next();
-      if (inv.getClass() == cls) {
-        if (inv.is_symmetric() || swap_class)
-          return (inv);
-        else if (inv.get_swap() == fswap)
-          return (inv);
+    for (Invariant inv : ppt.invs) {
+      BinaryInvariant bi = (BinaryInvariant) inv;
+      if (bi.getClass() == cls) {
+        if (bi.is_symmetric() || swap_class)
+          return (bi);
+        else if (bi.get_swap() == fswap)
+          return (bi);
       }
     }
 

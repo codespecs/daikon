@@ -93,7 +93,7 @@ public final class OutputFormat
     Hashtable<Ppt,Definition> definitiontable=new Hashtable<Ppt,Definition>();
     int tagnumber=0;
     boolean forceset=false;
-    HashMap quantifiers=new LinkedHashMap(); // LinkedHashMap for deterministic output
+    HashMap<String,String> quantifiers=new LinkedHashMap<String,String>(); // LinkedHashMap for deterministic output
     HashSet usednames=new HashSet();
 
 
@@ -259,10 +259,9 @@ public final class OutputFormat
     /** This method generates the current quantifier string. */
     public String getQuantifiers() {
       String str="";
-      for(Iterator<Map.Entry> it=quantifiers.entrySet().iterator();it.hasNext();) {
-        Map.Entry entry = it.next();
-        String key = (String) entry.getKey();
-        String value = (String) entry.getValue();
+      for(Map.Entry<String,String> entry : quantifiers.entrySet()) {
+        String key = entry.getKey();
+        String value = entry.getValue();
         if (!str.equals(""))
           str+=",";
         str+="forall "+key+" in "+((String)quantifiers.get(key));

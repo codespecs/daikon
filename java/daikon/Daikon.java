@@ -556,8 +556,7 @@ public final class Daikon {
         System.out.println(ppt.name());
         System.out.println(ppt.num_samples());
 
-        for (Iterator<Invariant> i = filtered_invs.iterator(); i.hasNext();) {
-            Invariant inv = i.next();
+        for (Invariant inv : filtered_invs) {
             System.out.println(inv.getClass());
             System.out.println(inv);
         }
@@ -1292,8 +1291,7 @@ public final class Daikon {
   private static List<Invariant> filter_invs(List<Invariant> invs) {
     List<Invariant> new_list = new ArrayList<Invariant>();
 
-    for (Iterator<Invariant> i = invs.iterator(); i.hasNext();) {
-      Invariant inv = i.next();
+    for (Invariant inv : invs) {
       VarInfo[] vars = inv.ppt.var_infos;
 
       // This check is the most non-intrusive way to filter out the invs
@@ -1620,8 +1618,7 @@ public final class Daikon {
         System.out.println();
       }
       // System.out.print("Creating implications "); // XXX untested code
-      // for (Iterator<PptTopLevel> itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
-      //   PptTopLevel ppt = itor.next();
+      // for (PptTopLevel ppt : all_ppts) {
       //   System.out.print('.');
       //   ppt.addImplications();
       // }
@@ -1800,7 +1797,7 @@ public final class Daikon {
       Fmt.pf ("%s", ppt.name());
       Fmt.pf ("  samples    = " + ppt.num_samples());
       Fmt.pf ("  invariants = " + ppt.invariant_cnt());
-      Map type_map = new LinkedHashMap();
+      Map<ProglangType,Count> type_map = new LinkedHashMap<ProglangType,Count>();
       int leader_cnt = 0;
       for (int j = 0; j < ppt.var_infos.length; j++) {
         VarInfo v = ppt.var_infos[j];
@@ -1814,8 +1811,7 @@ public final class Daikon {
       }
       Fmt.pf ("  vars       = " + ppt.var_infos.length);
       Fmt.pf ("  leaders    = " + leader_cnt);
-      for (Iterator<Map.Entry<ProglangType,Count>> j = type_map.entrySet().iterator(); j.hasNext(); ) {
-        Map.Entry<ProglangType,Count> e = j.next();
+      for (Map.Entry<ProglangType,Count> e : type_map.entrySet()) {
         ProglangType file_rep_type = e.getKey();
         Count cnt = e.getValue();
         Fmt.pf ("  %s  = %s", file_rep_type, "" + cnt.val);
@@ -1878,12 +1874,11 @@ public final class Daikon {
    * Create user defined splitters
    */
 
-  private static List<SpinfoFileParser> parsedSplitters = new ArrayList();
+  private static List<SpinfoFileParser> parsedSplitters = new ArrayList<SpinfoFileParser>();
 
-  public static void create_splitters(Set spinfo_files)
+  public static void create_splitters(Set<File> spinfo_files)
     throws IOException {
-    for (Iterator<File> i = spinfo_files.iterator(); i.hasNext();) {
-      File filename = i.next();
+    for (File filename : spinfo_files) {
       SpinfoFileParser p = SplitterFactory.parse_spinfofile (filename);
       parsedSplitters.add(p);
     }
@@ -1897,8 +1892,7 @@ public final class Daikon {
    * this is called).
    */
   public static void guardInvariants(PptMap allPpts) {
-    for (Iterator<PptTopLevel> i = allPpts.asCollection().iterator(); i.hasNext();) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : allPpts.asCollection()) {
       if (ppt.num_samples() == 0)
         continue;
       // Make sure isDerivedParam is set before guarding.  Otherwise
@@ -1920,8 +1914,7 @@ public final class Daikon {
   private static void processOmissions(PptMap allPpts) {
     if (omit_types['0'])
       allPpts.removeUnsampled();
-    for (Iterator<PptTopLevel> i = allPpts.asCollection().iterator(); i.hasNext();) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : allPpts.asCollection()) {
       ppt.processOmissions(omit_types);
     }
   }
@@ -1931,7 +1924,7 @@ public final class Daikon {
    * of ppts (presuming that only those ppts <= max_ppt will be
    * processed).
    */
-  private static String setup_ppt_perc(Collection decl_files, int ppt_perc) {
+  private static String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100))
@@ -1945,8 +1938,7 @@ public final class Daikon {
 
     // Read all of the ppt names out of the decl files
     try {
-      for (Iterator<File> i = decl_files.iterator(); i.hasNext();) {
-        File file = i.next();
+      for (File file : decl_files) {
 
         // Open the file
         LineNumberReader fp = UtilMDE.lineNumberFileReader(file);
@@ -2027,12 +2019,12 @@ public final class Daikon {
        }
 
 
-      Iterator<Equality> sets = sliceEquality.invs.iterator();
+      Iterator<Invariant> sets = sliceEquality.invs.iterator();
       List<Equality> allNewInvs = new ArrayList<Equality>();
 
       // get the new leaders
       while (sets.hasNext()) {
-        Equality eq = sets.next();
+        Equality eq = (Equality) sets.next();
         VarInfo leader = eq.leader();
         Iterator<VarInfo> varsIt = eq.getVars().iterator();
         List<VarInfo> vars = new ArrayList<VarInfo>();
@@ -2047,7 +2039,7 @@ public final class Daikon {
         if (vars.size() > 0) {
 
           // Create new equality sets for all of the non-equal vars
-          List newInvs = sliceEquality.createEqualityInvs(vars, eq);
+          List<Equality> newInvs = sliceEquality.createEqualityInvs(vars, eq);
 
           // Create new slices and invariants for each new leader
          // copyInvsFromLeader(sliceEquality, leader, vars);

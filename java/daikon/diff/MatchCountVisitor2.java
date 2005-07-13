@@ -31,7 +31,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
 
 
-  private HashMap goodMap = new HashMap();
+  private HashMap<String,HashSet> goodMap = new HashMap<String,HashSet>();
 
 
 
@@ -309,8 +309,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
 
 
-    for (Iterator<String> i = goodMap.keySet().iterator(); i.hasNext(); ) {
-      String ppt = i.next();
+    for (String ppt : goodMap.keySet()) {
       System.out.println ();
       System.out.println ("*****************" + ppt);
       for (Iterator j = ((HashSet) goodMap.get(ppt)).iterator();

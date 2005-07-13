@@ -42,7 +42,7 @@ public class PptMap
    * @return unstably-ordered collection of PptTopLevels
    * @see #pptIterator()
    **/
-  public Collection asCollection() {
+  public Collection<PptTopLevel> asCollection() {
     return Collections.unmodifiableCollection(nameToPpt.values());
   }
 
