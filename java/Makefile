@@ -285,7 +285,11 @@ default: all
 compile: all
 
 # "-S" means do not continue after errors.
-all: all_directly junit chicory
+all: all_stop_on_error
+
+# Don't bother to run the unit tests if the compilation failed.
+all_stop_on_error:
+	$(MAKE) --stop all_directly junit chicory
 
 ## In general, don't use this; it misses some files
 all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
