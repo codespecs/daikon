@@ -10,7 +10,7 @@ import jtb.visitor.*;
  * comments, but instead corrects positioning fields of all the tokens
  * in the tree to accomodate already-inserted comments, while
  * modifying the formatting as little as possible.  (It edits the
- * {begin,end}{Line,Column} fields).
+ * {begin,end}{Line,Column} fields.)
  * <p>
  *
  * Each inserted comment either affects only the rest of its line
@@ -24,13 +24,14 @@ import jtb.visitor.*;
 public class InsertCommentFormatter
   extends DepthFirstVisitor
 {
+  private boolean debug = false;
 
-  private Vector comments;
+  private Vector<NodeToken> comments;
   private int columnshift = 0;
   private int lineshift = 0;
   private int columnshiftline = -1; // the line currently being column-shifted.
 
-  // column shifting only applies to a single line, then is turned off again.
+  // Column shifting only applies to a single line, then is turned off again.
   // States for the variables:
   // columnshift == 0, columnshiftline == -1:
   //    no column shifting being done
@@ -42,7 +43,7 @@ public class InsertCommentFormatter
 
   private static final String lineSep = System.getProperty("line.separator");
 
-  public InsertCommentFormatter(Vector comments) {
+  public InsertCommentFormatter(Vector<NodeToken> comments) {
     this.comments = comments;
   }
 
@@ -60,15 +61,14 @@ public class InsertCommentFormatter
   }
 
   public void visit(NodeToken n) {
-    // System.out.println("Visit (at " + n.beginLine + "," + n.beginColumn + ") " + n.tokenImage);
+    if (debug) { System.out.println("Visit (at " + n.beginLine + "," + n.beginColumn + ") (in comments = " + comments.contains(n) + ") " + n.tokenImage); }
 
     // See comment at use of this variable below
     boolean prev_is_double_slash_comment = false;
 
     // Handle special tokens first
-    if ( n.numSpecials() > 0 )
-      for ( Enumeration e = n.specialTokens.elements(); e.hasMoreElements(); ) {
-        NodeToken s = (NodeToken)e.nextElement();
+    if ( n.numSpecials() > 0 )  // handles case when n.specialTokens is null
+      for ( NodeToken s : n.specialTokens ) {
         visit(s);
         prev_is_double_slash_comment = s.tokenImage.startsWith("//");
       }
@@ -89,7 +89,7 @@ public class InsertCommentFormatter
       n.endLine += lineshift;
       n.beginColumn += columnshift;
       n.endColumn += columnshift;
-      // System.out.println("Shifted by " + lineshift + "," + columnshift + ": " + n.tokenImage);
+      if (debug) { System.out.println("Shifted by " + lineshift + "," + columnshift + ": <<<" + n.tokenImage.trim() + ">>>"); }
     }
     // Special-case the situation of ending a file with a "//"-style
     // comment that does not start at the beginning of its line; in that
@@ -109,7 +109,7 @@ public class InsertCommentFormatter
       columnshift += numColumns(n);
       lineshift += numLines(n);
     }
-    // System.out.println("End visit (at " + n.beginLine + "," + n.beginColumn + ") " + n.tokenImage);
+    if (debug) { System.out.println("End visit (at " + n.beginLine + "," + n.beginColumn + ") " + n.tokenImage); }
 
   }
 }

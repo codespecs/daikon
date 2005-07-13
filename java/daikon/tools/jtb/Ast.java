@@ -41,7 +41,7 @@ public class Ast {
     PrintWriter writer = null;
     writer = new PrintWriter(output, true);
     for (int i = 0 ; i < visitor.javaFileLines.size() ; i++) {
-      writer.println((String)visitor.javaFileLines.get(i));
+      writer.println(visitor.javaFileLines.get(i));
     }
     writer.close();
 
@@ -454,13 +454,17 @@ public class Ast {
     addComment(n, comment, false);
   }
 
-  // Add the comment to the first regular token in the tree
-  // If first is true, then it is inserted before all other special tokens;
-  // otherwise, it is inserted after them.
-
-  // Postcondition (make sure you preserve it if you modify this method):
-  // comment.beginLine and comment.beginColumn have been assigned the line
-  // and column number where this comment will go.
+  /**
+   * Add the comment to the first regular token in the tree, as a "special
+   * token" (comment).
+   *
+   * If first is true, then it is inserted before all other special tokens;
+   * otherwise, it is inserted after them.
+   *
+   * Postcondition (make sure you preserve it if you modify this method):
+   * comment.beginLine and comment.beginColumn have been assigned the line
+   * and column number where this comment will go.
+   **/
   public static void addComment(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
@@ -476,7 +480,7 @@ public class Ast {
           if (first && (node.numSpecials() > 0)) {
             comment.beginLine = node.getSpecialAt(0).beginLine;
             comment.beginColumn = node.getSpecialAt(0).beginColumn;
-            // System.out.println("Set from special <" + node.getSpecialAt(0) + ">");
+            // System.out.println("Set from special <<<" + node.getSpecialAt(0).trim() + ">>>");
           } else {
             comment.beginLine = node.beginLine;
             comment.beginColumn = node.beginColumn;
@@ -490,17 +494,36 @@ public class Ast {
         }
       }
     }
+
+    // String briefComment = comment.toString();
+    // if (briefComment.length() > 70)
+    //     briefComment = briefComment.substring(0,70) + "...";
+    // System.out.printf("addComment at %d:%d, first=%b%n  <<<%s>>>%n",
+    //                    comment.beginLine, comment.beginColumn, first, briefComment);
+
     n.accept(new AddCommentVisitor(comment, first));
   }
 
+  // This seems to set the beginLine and beginColumn for the comment, but
+  // how is the comment inserted into the tree?  The lines that ought to do
+  // that are commented out (without explanation).  The explanation is that
+  // despite the comment, this does NOT do insertion.  It just determines
+  // where the insertion ought to occur.  The change forces the client to
+  // do the insertion.  This should be documented/fixed.  -MDE 7/13/2003
 
-  // Add the comment to the first regular token in the tree
-  // If first is true, then it is inserted before all other special tokens;
-  // otherwise, it is inserted after them.
-
-  // Postcondition (make sure you preserve it if you modify this method):
-  // comment.beginLine and comment.beginColumn have been assigned the line
-  // and column number where this comment will go.
+  /**
+   * Add the comment to the first regular token in the tree.
+   * If first is true, then it is inserted before all other special tokens;
+   * otherwise, it is inserted after them.
+   *
+   * Exception:  If first is true, may heuristically place the comment it
+   * in the middle of the list of special tokens (comments), in order to
+   * place it at the same column as the real node.
+   *
+   * Postcondition (make sure you preserve it if you modify this method):
+   * comment.beginLine and comment.beginColumn have been assigned the line
+   * and column number where this comment will go.
+   **/
   public static void findLineAndCol(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
@@ -513,20 +536,31 @@ public class Ast {
       public void visit(NodeToken node) {
         if (! seenToken) {
           seenToken = true;
-          if (first && (node.numSpecials() > 0)) {
+          if (first && (node.numSpecials() > 1)
+              && (node.getSpecialAt(0).beginColumn != node.getSpecialAt(node.numSpecials()-1).beginColumn)) {
+            // There are multiple comments, and the first and last ones
+            // start at different columns.  Search from the end, finding
+            // the first one with a different column.
+            int i = node.numSpecials()-1;
+            while (node.getSpecialAt(i-1).beginColumn == node.getSpecialAt(i).beginColumn) {
+              i--;
+            }
+            comment.beginLine = node.getSpecialAt(i).beginLine;
+            comment.beginColumn = node.getSpecialAt(i).beginColumn;
+            //addNthSpecial(node, comment, i);
+          } else if (first && (node.numSpecials() > 0)) {
             comment.beginLine = node.getSpecialAt(0).beginLine;
             comment.beginColumn = node.getSpecialAt(0).beginColumn;
-            // System.out.println("Set from special <" + node.getSpecialAt(0) + ">");
+            // System.out.println("findLineAndCol: set from special <<<" + node.getSpecialAt(0) + ">>>");
+            //addFirstSpecial(node, comment);
           } else {
             comment.beginLine = node.beginLine;
             comment.beginColumn = node.beginColumn;
+            //node.addSpecial(comment);
           }
-          // if (first) {
-          //   //addFirstSpecial(node, comment);
-          // } else {
-          //   //node.addSpecial(comment);
-          // }
-          // System.out.println("comment (" + comment.beginLine + "," + comment.beginColumn + ") = " + comment.tokenImage + "; node (" + node.beginLine + "," + node.beginColumn + ")= " + node.tokenImage);
+          // System.out.printf("comment placed at (%d,%d) = <<<%s>>> for node (%d,%d)= <<<%s>>>%n",
+          //                   comment.beginLine, comment.beginColumn, comment.tokenImage.trim(),
+          //                   node.beginLine, node.beginColumn, node.tokenImage.trim());
         }
       }
     }
@@ -534,12 +568,22 @@ public class Ast {
   }
 
 
-  // Adds the comment to the first regular token in the tree, *before* all
-  // other special tokens.
-  public static void addFirstSpecial(NodeToken n, NodeToken s) {
-    if ( n.specialTokens == null ) n.specialTokens = new Vector();
-    n.specialTokens.insertElementAt(s, 0);
+  /**
+   * Adds the comment to the first regular token in the tree, before the
+   * ith special token.
+   **/
+  public static void addNthSpecial(NodeToken n, NodeToken s, int i) {
+    if ( n.specialTokens == null ) n.specialTokens = new Vector<NodeToken>();
+    n.specialTokens.insertElementAt(s, i);
     s.setParent(n);
+  }
+
+  /**
+   * Adds the comment to the first regular token in the tree, *before* all
+   * other special tokens.
+   **/
+  public static void addFirstSpecial(NodeToken n, NodeToken s) {
+    addNthSpecial(n, s, 0);
   }
 
 
@@ -959,7 +1003,7 @@ public class Ast {
   // inner classes.
   public static List getParametersNoImplicit(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List parameters = new ArrayList();
+      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
       public void visit(FormalParameter p) {
         parameters.add(p);
       }
@@ -975,7 +1019,7 @@ public class Ast {
   // parameters.
   public static List getParameters(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List parameters = new ArrayList();
+      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
       public void visit(FormalParameter p) {
         parameters.add(p);
       }
@@ -1031,7 +1075,7 @@ public class Ast {
   public static Set getVariableNames(Node expr) {
 
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
-      public Set symbolNames = new HashSet();
+      public Set<String> symbolNames = new HashSet<String>();
 
       public void visit(Name n) {
         Node gp = n.getParent().getParent();
@@ -1113,7 +1157,7 @@ public class Ast {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List invs_vector = new LinkedList(ppt.getInvariants());
+    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
 
     Invariant[] invs_array =
       (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
@@ -1121,7 +1165,7 @@ public class Ast {
 
     Global.non_falsified_invariants += invs_array.length;
 
-    List accepted_invariants = new Vector();
+    List<Invariant> accepted_invariants = new Vector<Invariant>();
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];

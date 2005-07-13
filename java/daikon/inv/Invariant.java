@@ -897,12 +897,10 @@ public abstract class Invariant
   /**
    * Compare based on arity, then printed representation.
    **/
-  public static final class InvariantComparatorForPrinting implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
+    public int compare(Invariant inv1, Invariant inv2) {
+      if (inv1 == inv2)
         return 0;
-      Invariant inv1 = (Invariant)o1;
-      Invariant inv2 = (Invariant)o2;
 
       // Guarding implications should compare as if they were without the
       // guarding predicate

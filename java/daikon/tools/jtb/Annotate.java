@@ -98,7 +98,10 @@ public class Annotate {
       "                  method. If this flag is given, Annotate will not use reflection",
       "                  to access information about an instrumented class. This means",
       "                  that in the JML and ESC formats, no \"also\" annotations",
-      "                  will be inserted."
+      "                  will be inserted.",
+      "  --dbg CATEGORY",
+      "  --debug",
+      "                  Enable one or all logger, analogously to the Daikon optin"
       );
 
   public static void main(String[] args) throws Exception {
@@ -207,7 +210,7 @@ public class Annotate {
       }
     }
 
-    // The index of the first non-option argument -- the name of the file
+    // The index of the first non-option argument -- the name of the .inv file
     int argindex = g.getOptind();
 
     // This undocumented command is for testing purposes. It takes as input
@@ -239,7 +242,7 @@ public class Annotate {
       throw new Daikon.TerminationMessage("Error: No .java file arguments supplied.", usage);
     }
     PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile),
-                                                true // use saved config
+                                                /*use saved config=*/true
                                                 );
 
     Daikon.suppress_implied_controlled_invariants = true;
@@ -267,22 +270,22 @@ public class Annotate {
       debug.fine ("Processing file " + javafilename);
 
       // Annotate the file
-    Reader input = null;
-    try {
-      input = new FileReader(javafilename);
-    } catch (FileNotFoundException e) {
-      throw new Error(e);
-    }
+      Reader input = null;
+      try {
+        input = new FileReader(javafilename);
+      } catch (FileNotFoundException e) {
+        throw new Error(e);
+      }
 
-    JavaParser parser = new JavaParser(input);
-    Node root = null;
-    try {
-      root = parser.CompilationUnit();
-    }
-    catch (ParseException e) {
-      e.printStackTrace();
-      throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
-    }
+      JavaParser parser = new JavaParser(input);
+      Node root = null;
+      try {
+        root = parser.CompilationUnit();
+      }
+      catch (ParseException e) {
+        e.printStackTrace();
+        throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
+      }
 
       try {
         Ast.applyVisitorInsertComments(javafilename, root, output,

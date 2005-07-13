@@ -30,7 +30,16 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 // For each field assignment:
 //  * add owner annotations
 
+// The overall strategy is to read the Java file into a list of strings
+// (javaFileLines) and then to manipulate that list directly.  It doesn't
+// insert the comments into the JTB tree.
+
+// TODO:  Unlike InsertCommentFormatter, this does not keep track of column
+// shifts.  (It does handle line shifts.)  This needs to be fixed.
+
 public class AnnotateVisitor extends DepthFirstVisitor {
+
+  private static final boolean debug = false;
 
   private static final String lineSep = System.getProperty("line.separator");
 
@@ -147,21 +156,24 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     NodeToken nt = new NodeToken(comment);
     Ast.findLineAndCol(n, nt, first);
     addedComments.add(nt);
-    //System.out.println("comment.beginLine:" + nt.beginLine);
-    //System.out.println("comment.beginColumn:" + nt.beginColumn);
-    int line = nt.beginLine - 1; /* because in jtb lines start at 1 */
-    String lineString = (String)javaFileLines.get(line);
+    if (debug) {
+      System.out.printf("addComment at %d:%d : %s%n",
+                        nt.beginLine, nt.beginColumn, comment.trim());
+    }
+    int linenumber = nt.beginLine - 1; /* because in jtb lines start at 1 */
+    String lineString = javaFileLines.get(linenumber);
     int column = getTabbedIndex(nt.beginColumn - 1, /* because in jtb cols start at 1 */
                                 lineString);
     StringBuffer sb = new StringBuffer();
     sb.append(lineString.substring(0, column));
     sb.append(comment);
     if (comment.endsWith("\n")) {
-      // Insert the whitespace precedgin the line
-      sb.append(precedingWhitespace(lineString.substring(0,column)));
+      // Insert the whitespace preceding the line
+      sb.append(precedingWhitespace(lineString.substring(0, column)));
     }
     sb.append(lineString.substring(column));
-    javaFileLines.set(line, sb.toString());
+    javaFileLines.set(linenumber, sb.toString());
+    if (debug) { System.out.printf("addComment result: <<<%s>>>%n", sb.toString()); }
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -261,7 +273,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
     }
     if (object_ppt == null) {
-      // System.out.println("No object program point found for " + classname);
+      if (debug) { System.out.println("No object program point found for " + classname); }
     } else {
       InvariantsAndModifiedVars obj_invs = invariants_for(object_ppt, ppts);
       String inv_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@invariant" : "invariant");

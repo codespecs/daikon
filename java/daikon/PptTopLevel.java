@@ -202,10 +202,10 @@ public class PptTopLevel extends Ppt {
   }
 
   /** All children relations in the variable/ppt hierarchy. */
-  public List<PptRelation> children = new ArrayList();
+  public List<PptRelation> children = new ArrayList<PptRelation>();
 
   /** All parent relations in the variable/ppt hierarchy. */
-  public List<PptRelation> parents = new ArrayList();
+  public List<PptRelation> parents = new ArrayList<PptRelation>();
 
   /**
    *  Flag that indicates whether or not invariants have been merged
@@ -267,7 +267,7 @@ public class PptTopLevel extends Ppt {
       Assert.assertTrue((vi.value_index == -1) || (!vi.is_static_constant));
     }
 
-    views = new LinkedHashMap();
+    views = new LinkedHashMap<List<Integer>,PptSlice>();
 
     num_declvars = var_infos.length;
     num_tracevars = val_idx;
@@ -838,7 +838,7 @@ public class PptTopLevel extends Ppt {
       NIS.clear_stats();
 
     // Set of invariants weakened by this sample
-    Set weakened_invs = new LinkedHashSet();
+    Set<Invariant> weakened_invs = new LinkedHashSet<Invariant>();
 
     // Instantiate slices and invariants if this is the first sample
     if (values_num_samples == 0) {
@@ -2993,14 +2993,14 @@ public class PptTopLevel extends Ppt {
   /**
    * For some clients, this method may be more efficient than getInvariants.
    **/
-  public Iterator views_iterator() {
+  public Iterator<PptSlice> views_iterator() {
     // assertion only true when guarding invariants
     // Assert.assertTrue(views.contains(joiner_view));
     return viewsAsCollection().iterator();
   }
 
   /** Iterate over all of the invariants at this ppt **/
-  public Iterator invariants_iterator() {
+  public Iterator<Invariant> invariants_iterator() {
     return new UtilMDE.MergedIterator(views_iterator_iterator());
   }
 
@@ -3056,7 +3056,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  public static final Comparator icfp =
+  public static final Comparator<Invariant> icfp =
     new Invariant.InvariantComparatorForPrinting();
 
   static Comparator arityVarnameComparator

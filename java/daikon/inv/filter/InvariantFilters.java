@@ -246,7 +246,7 @@ public class InvariantFilters {
    * The Equality invariants are inserted into the beginning.  Equality
    * invariants are useful when it comes to displaying invariants.
    **/
-  public static List addEqualityInvariants( List invariants ) {
+  public static List<Invariant> addEqualityInvariants( List invariants ) {
 
     return invariants;
 
