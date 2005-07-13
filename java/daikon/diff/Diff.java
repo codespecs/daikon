@@ -585,8 +585,8 @@ public final class Diff {
     SortedSet ppts = new TreeSet(PPT_COMPARATOR);
     ppts.addAll(pptMap.asCollection());
 
-    for (Iterator i = ppts.iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = ppts.iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint())
         continue;
 
@@ -595,8 +595,8 @@ public final class Diff {
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
-        for (Iterator i2 = ppt.cond_iterator(); i2.hasNext(); ) {
-          PptConditional pptCond = (PptConditional) i2.next();
+        for (Iterator<PptConditional> i2 = ppt.cond_iterator(); i2.hasNext(); ) {
+          PptConditional pptCond = i2.next();
           List invsCond = UtilMDE.sortList (pptCond.getInvariants(),
                                           PptTopLevel.icfp);
           // List invsCond = pptCond.getInvariants();
@@ -628,9 +628,9 @@ public final class Diff {
                              boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator opi = new OrderedPairIterator(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
+    Iterator<Pair> opi = new OrderedPairIterator(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
     while (opi.hasNext()) {
-      Pair ppts = (Pair) opi.next();
+      Pair ppts = opi.next();
       PptTopLevel ppt1 = (PptTopLevel) ppts.a;
       PptTopLevel ppt2 = (PptTopLevel) ppts.b;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
@@ -710,8 +710,8 @@ public final class Diff {
       HashSet repeatFilter = new HashSet();
       ArrayList ret = new ArrayList ();
       invs1 = (List) map1.get(ppt1);
-      for (Iterator j = invs1.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant)  j.next();
+      for (Iterator<Invariant> j = invs1.iterator(); j.hasNext(); ) {
+        Invariant inv = j.next();
         if (/*inv.justified() && */inv instanceof Implication) {
           Implication imp = (Implication) inv;
           if (!repeatFilter.contains (imp.consequent().format_using(OutputFormat.JAVA))) {
@@ -769,10 +769,10 @@ public final class Diff {
       }
     }
 
-    Iterator opi = new OrderedPairIterator(invs1.iterator(), invs2.iterator(),
+    Iterator<Pair> opi = new OrderedPairIterator(invs1.iterator(), invs2.iterator(),
                                            invPairComparator);
     while (opi.hasNext()) {
-      Pair invariants = (Pair) opi.next();
+      Pair invariants = opi.next();
       Invariant inv1 = (Invariant) invariants.a;
       Invariant inv2 = (Invariant) invariants.b;
       if (!includeUnjustified) {
@@ -804,8 +804,8 @@ public final class Diff {
 
     String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
-    for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext(); ) {
-      String somePptName = (String) i.next();
+    for ( Iterator<String> i = manip.nameStringSet().iterator(); i.hasNext(); ) {
+      String somePptName = i.next();
       // A conditional Ppt always contains the normal Ppt
       if (targ.equals (somePptName)) {
         PptTopLevel repl = manip.get (somePptName);
@@ -825,8 +825,8 @@ public final class Diff {
 
     //    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
-    for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext(); ) {
-      String somePptName = (String) i.next();
+    for ( Iterator<String> i = manip.nameStringSet().iterator(); i.hasNext(); ) {
+      String somePptName = i.next();
       // A conditional Ppt always contains the normal Ppt
       if (targetName.equals (somePptName)) {
         PptTopLevel repl = manip.get (somePptName);

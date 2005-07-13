@@ -560,8 +560,8 @@ public final class INTEQUAL
   // Should this implementation be made more efficient?
   public static INTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof INTEQUAL)
         return (INTEQUAL) inv;
     }

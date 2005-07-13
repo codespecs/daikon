@@ -241,8 +241,8 @@ public class CLASSNAME
   // Look up a previously instantiated invariant.
   public static CLASSNAME find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof CLASSNAME)
         return (CLASSNAME) inv;
     }
@@ -253,8 +253,8 @@ public class CLASSNAME
   // This ought to produce an iterator instead.
   public static Vector findAll(VarInfo vi) {
     Vector result = new Vector();
-    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
-      PptSlice view = (PptSlice) itor.next();
+    for (Iterator<PptSlice> itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
+      PptSlice view = itor.next();
       if ((view.arity() == 2) && view.usesVar(vi)) {
         CLASSNAME lb = CLASSNAME.find(view);
         if (lb != null) {

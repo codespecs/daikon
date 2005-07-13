@@ -137,8 +137,8 @@ public class PptSliceEquality
     Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
     int invCount = 0;
-    for (Iterator i = multiMap.values().iterator(); i.hasNext(); ) {
-      List list = (List) i.next();
+    for (Iterator<List<VarInfo>> i = multiMap.values().iterator(); i.hasNext(); ) {
+      List<VarInfo> list = i.next();
       varCount += list.size();
 
       Equality eq = new Equality (list, this);
@@ -166,8 +166,8 @@ public class PptSliceEquality
     // Build a map from each variable to all those that are equal to it
     Map varmap = new LinkedHashMap();
     Map sample_cnt_map = new LinkedHashMap();
-    for (Iterator i = eset.iterator(); i.hasNext(); ) {
-      VarInfo.Pair cp = (VarInfo.Pair) i.next();
+    for (Iterator<VarInfo.Pair> i = eset.iterator(); i.hasNext(); ) {
+      VarInfo.Pair cp = i.next();
       ArrayList vlist = (ArrayList) varmap.get (cp.v1);
       if (vlist == null) {
         vlist = new ArrayList();
@@ -228,8 +228,8 @@ public class PptSliceEquality
     LinkedList<Invariant> weakenedInvs = new LinkedList();
 
     // Loop through each existing equality invariant
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Equality inv = (Equality) i.next();
+    for (Iterator<Equality> i = invs.iterator(); i.hasNext(); ) {
+      Equality inv = i.next();
 
       // Add this sample to the invariant and track any vars that fall
       // out of the set.
@@ -244,8 +244,8 @@ public class PptSliceEquality
 
         // Get a list of all of the new non-missing leaders
         List newInvsLeaders = new ArrayList (newInvs.size());
-        for (Iterator iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
-          Equality eq = (Equality) iNewInvs.next();
+        for (Iterator<Equality> iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
+          Equality eq = iNewInvs.next();
           if ((parent.constants == null) || !parent.constants.is_missing (eq.leader()))
             newInvsLeaders.add (eq.leader());
         }
@@ -304,8 +304,8 @@ public class PptSliceEquality
     Assert.assertTrue (vis.size() > 0);
     HashMap<Object,List<VarInfo>> multiMap = new HashMap<Object,List<VarInfo>>(); /* key is a value */
     List out_of_bounds = new ArrayList();
-    for (Iterator i = vis.iterator(); i.hasNext(); ) {
-      VarInfo vi = (VarInfo) i.next();
+    for (Iterator<VarInfo> i = vis.iterator(); i.hasNext(); ) {
+      VarInfo vi = i.next();
       if (vi.missingOutOfBounds())
         out_of_bounds.add (vi);
       else if (vt.isMissing (vi)) {
@@ -326,10 +326,10 @@ public class PptSliceEquality
     Equality[] resultArray = new Equality[multiMap.values().size()
                                           + out_of_bounds.size()];
     int resultCount = 0;
-    for (Iterator i = multiMap.entrySet().iterator(); i.hasNext(); ) {
-      Map.Entry entry = (Map.Entry) i.next();
+    for (Iterator<Map.Entry<Object,List<VarInfo>>> i = multiMap.entrySet().iterator(); i.hasNext(); ) {
+      Map.Entry<Object,List<VarInfo>> entry = i.next();
       Object key = entry.getKey();
-      List list = (List) entry.getValue();
+      List<VarInfo> list = entry.getValue();
       Assert.assertTrue (list.size() > 0);
       Equality eq = new Equality (list, this);
       if (key == dummyMissing) {
@@ -374,7 +374,7 @@ public class PptSliceEquality
        // Why use an array?  Because we'll be sorting shortly
        Equality[] resultArray = new Equality[vis.size()];
        int resultCount = 0;
-       Iterator i = vis.iterator();
+       Iterator<PptSlice> i = vis.iterator();
        while (i.hasNext()) {
          List list = new ArrayList();
          list.add(i.next());
@@ -445,8 +445,8 @@ public class PptSliceEquality
     // of replacing leader with different members of newVis.
 
     // Loop through each slice
-    for (Iterator i = parent.views_iterator(); i.hasNext(); ) {
-      PptSlice slice = (PptSlice) i.next();
+    for (Iterator<PptSlice> i = parent.views_iterator(); i.hasNext(); ) {
+      PptSlice slice = i.next();
 
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("  Slice is: " + slice.toString());
@@ -465,8 +465,8 @@ public class PptSliceEquality
         // This is called here because breaking up the equality set may
         // cause some invariants to become statically obvious (because
         // they will now be the only item in their set)
-        for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-          Invariant inv = (Invariant) j.next();
+        for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
+          Invariant inv = j.next();
           if (!Daikon.dkconfig_undo_opts) {
             if (inv.isObviousStatically_AllInEquality()) {
               inv.falsify();
@@ -479,8 +479,8 @@ public class PptSliceEquality
     }
 
     // Add each new slice with invariants
-    for (Iterator itor = newSlices.iterator(); itor.hasNext(); ) {
-      PptSlice slice = (PptSlice) itor.next();
+    for (Iterator<PptSlice> itor = newSlices.iterator(); itor.hasNext(); ) {
+      PptSlice slice = itor.next();
       if (slice.invs.size() == 0) {
         continue;
       }
@@ -550,8 +550,8 @@ public class PptSliceEquality
             Debug.log (getClass(), newSlice, "Created this slice");
           }
           List invs = newSlice.invs;
-          for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
-            Invariant inv = (Invariant) iInvs.next();
+          for (Iterator<Invariant> iInvs = invs.iterator(); iInvs.hasNext(); ) {
+            Invariant inv = iInvs.next();
             if (!Daikon.dkconfig_undo_opts) {
               if (inv.isObviousStatically_AllInEquality()) {
                 iInvs.remove();
@@ -594,8 +594,8 @@ public class PptSliceEquality
   }
 
   public void repCheck() {
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       inv.repCheck();
       Assert.assertTrue (inv.ppt == this);
     }
@@ -603,8 +603,8 @@ public class PptSliceEquality
 
   public String toString() {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Equality inv = (Equality) i.next();
+    for (Iterator<Equality> i = invs.iterator(); i.hasNext(); ) {
+      Equality inv = i.next();
       result.append (inv.repr());
       result.append (lineSep);
     }

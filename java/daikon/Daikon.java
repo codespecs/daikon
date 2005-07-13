@@ -471,16 +471,12 @@ public final class Daikon {
     if (dkconfig_calc_possible_invs) {
       fileio_progress.shouldStop = true;
       int total_invs = 0;
-      for (Iterator itor = all_ppts.ppt_all_iterator();
-        itor.hasNext();
-        ) {
-        PptTopLevel ppt = (PptTopLevel) itor.next();
-        System.out.println(
-          "Processing "
-            + ppt.name()
-            + " with "
-            + ppt.var_infos.length
-            + " variables");
+      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
+           itor.hasNext();
+           ) {
+        PptTopLevel ppt = itor.next();
+        System.out.printf("Processing %s with %d variables",
+                          ppt.name(), ppt.var_infos.length);
         int inv_cnt = 0;
         if (ppt.var_infos.length > 1600) {
           System.out.println("Skipping, too many variables!");
@@ -595,10 +591,10 @@ public final class Daikon {
 
     // print statistics concerning what invariants are printed
     if (debugStats.isLoggable(Level.FINE)) {
-      for (Iterator itor = all_ppts.ppt_all_iterator();
-        itor.hasNext();
-        ) {
-        PptTopLevel ppt = (PptTopLevel) itor.next();
+      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
+           itor.hasNext();
+           ) {
+        PptTopLevel ppt = itor.next();
         PrintInvariants.print_filter_stats(debugStats, ppt, all_ppts);
       }
     }
@@ -1175,8 +1171,8 @@ public final class Daikon {
     }
 
     // Remove any elements that are not enabled
-    for (Iterator i = proto_invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       Assert.assertTrue (inv != null);
       if (!inv.enabled())
         i.remove();
@@ -1190,8 +1186,8 @@ public final class Daikon {
   public static void createUpperPpts (PptMap all_ppts) {
 
     // Process each ppt that doesn't have a parent
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       if (ppt.parents.size() == 0) {
         ppt.mergeInvs();
       }
@@ -1226,8 +1222,8 @@ public final class Daikon {
 
     // Recursively initialize ppts created by splitters
     if (ppt.has_splitters()) {
-      for (Iterator ii = ppt.cond_iterator(); ii.hasNext(); ) {
-	PptTopLevel ppt_cond = (PptTopLevel) ii.next();
+      for (Iterator<PptTopLevel> ii = ppt.cond_iterator(); ii.hasNext(); ) {
+	PptTopLevel ppt_cond = ii.next();
 	init_ppt (ppt_cond, all_ppts);
       }
     }
@@ -1243,8 +1239,8 @@ public final class Daikon {
     // are iterating over it, so store them temporarily in this map.
     PptMap exit_ppts = new PptMap();
 
-    for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       // skip unless its an EXITnn
       if (! (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint())) {
         continue;
@@ -1283,8 +1279,8 @@ public final class Daikon {
     }
 
     // Now add the newly created Ppts to the global map.
-    for (Iterator i = exit_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = exit_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       ppts.add(ppt);
     }
   }
@@ -1624,8 +1620,8 @@ public final class Daikon {
         System.out.println();
       }
       // System.out.print("Creating implications "); // XXX untested code
-      // for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
-      //   PptTopLevel ppt = (PptTopLevel) itor.next();
+      // for (Iterator<PptTopLevel> itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      //   PptTopLevel ppt = itor.next();
       //   System.out.print('.');
       //   ppt.addImplications();
       // }
@@ -1685,8 +1681,8 @@ public final class Daikon {
     //     }
 
     // Print equality set info
-    //     for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-    //       PptTopLevel ppt = (PptTopLevel) i.next();
+    //     for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
+    //       PptTopLevel ppt = i.next();
     //       Fmt.pf ("ppt: %s", ppt.name);
     //       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
     //       continue;
@@ -1710,10 +1706,10 @@ public final class Daikon {
     // Post process dynamic constants
     if (dkconfig_use_dynamic_constant_optimization) {
       debugProgress.fine("Constant Post Processing ... ");
-      for (Iterator itor = all_ppts.ppt_all_iterator();
+      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
         itor.hasNext();
         ) {
-        PptTopLevel ppt = (PptTopLevel) itor.next();
+        PptTopLevel ppt = itor.next();
         if (ppt.constants != null)
           ppt.constants.post_process();
       }
@@ -1734,10 +1730,10 @@ public final class Daikon {
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization && !Daikon.dkconfig_undo_opts) {
       debugProgress.fine("Equality Post Process ... ");
-      for (Iterator itor = all_ppts.ppt_all_iterator();
+      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
         itor.hasNext();
         ) {
-        PptTopLevel ppt = (PptTopLevel) itor.next();
+        PptTopLevel ppt = itor.next();
         ppt.postProcessEquality();
       }
       debugProgress.fine("Equality Post Process ... done");
@@ -1751,10 +1747,10 @@ public final class Daikon {
 
     // Debug print information about equality sets
     if (debugEquality.isLoggable(Level.FINE)) {
-      for (Iterator itor = all_ppts.ppt_all_iterator();
+      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
         itor.hasNext();
         ) {
-        PptTopLevel ppt = (PptTopLevel) itor.next();
+        PptTopLevel ppt = itor.next();
         debugEquality.fine(ppt.name() + ": " + ppt.equality_sets_txt());
       }
     }
@@ -1771,8 +1767,8 @@ public final class Daikon {
       System.out.println("Creating implications");
     }
     debugProgress.fine("Adding Implications ... ");
-    for (Iterator itor = all_ppts.pptIterator(); itor.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext();) {
+      PptTopLevel ppt = itor.next();
       // debugProgress.fine ("  Adding Implications for " + ppt.name);
       ppt.addImplications();
     }
@@ -1795,8 +1791,8 @@ public final class Daikon {
 
     int all_ppt_cnt = 0;
     int ppt_w_sample_cnt = 0;
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       all_ppt_cnt++;
       if (ppt.num_samples() == 0)
         continue;
@@ -1818,10 +1814,10 @@ public final class Daikon {
       }
       Fmt.pf ("  vars       = " + ppt.var_infos.length);
       Fmt.pf ("  leaders    = " + leader_cnt);
-      for (Iterator j = type_map.entrySet().iterator(); j.hasNext(); ) {
-        Map.Entry/*<ProglangType,Count>*/ e = (Map.Entry) j.next();
-        ProglangType file_rep_type = (ProglangType) e.getKey();
-        Count cnt = (Count) e.getValue();
+      for (Iterator<Map.Entry<ProglangType,Count>> j = type_map.entrySet().iterator(); j.hasNext(); ) {
+        Map.Entry<ProglangType,Count> e = j.next();
+        ProglangType file_rep_type = e.getKey();
+        Count cnt = e.getValue();
         Fmt.pf ("  %s  = %s", file_rep_type, "" + cnt.val);
       }
     }
@@ -1836,8 +1832,8 @@ public final class Daikon {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
     stopwatch.reset();
-    for (Iterator itor = all_ppts.ppt_all_iterator(); itor.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator(); itor.hasNext();) {
+      PptTopLevel ppt = itor.next();
       ppt.mark_implied_via_simplify(all_ppts);
       System.out.print(".");
       System.out.flush();
@@ -1886,8 +1882,8 @@ public final class Daikon {
 
   public static void create_splitters(Set spinfo_files)
     throws IOException {
-    for (Iterator i = spinfo_files.iterator(); i.hasNext();) {
-      File filename = (File) i.next();
+    for (Iterator<File> i = spinfo_files.iterator(); i.hasNext();) {
+      File filename = i.next();
       SpinfoFileParser p = SplitterFactory.parse_spinfofile (filename);
       parsedSplitters.add(p);
     }
@@ -1901,8 +1897,8 @@ public final class Daikon {
    * this is called).
    */
   public static void guardInvariants(PptMap allPpts) {
-    for (Iterator i = allPpts.asCollection().iterator(); i.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = allPpts.asCollection().iterator(); i.hasNext();) {
+      PptTopLevel ppt = i.next();
       if (ppt.num_samples() == 0)
         continue;
       // Make sure isDerivedParam is set before guarding.  Otherwise
@@ -1924,8 +1920,8 @@ public final class Daikon {
   private static void processOmissions(PptMap allPpts) {
     if (omit_types['0'])
       allPpts.removeUnsampled();
-    for (Iterator i = allPpts.asCollection().iterator(); i.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = allPpts.asCollection().iterator(); i.hasNext();) {
+      PptTopLevel ppt = i.next();
       ppt.processOmissions(omit_types);
     }
   }
@@ -1945,12 +1941,12 @@ public final class Daikon {
       return null;
 
     // Keep track of all of the ppts in a set ordered by the ppt name
-    Set ppts = new TreeSet();
+    Set<String> ppts = new TreeSet<String>();
 
     // Read all of the ppt names out of the decl files
     try {
-      for (Iterator i = decl_files.iterator(); i.hasNext();) {
-        File file = (File) i.next();
+      for (Iterator<File> i = decl_files.iterator(); i.hasNext();) {
+        File file = i.next();
 
         // Open the file
         LineNumberReader fp = UtilMDE.lineNumberFileReader(file);
@@ -1985,12 +1981,12 @@ public final class Daikon {
           + " over "
           + ppts.size()
           + " results in 0 ppts to process");
-    for (Iterator i = ppts.iterator(); i.hasNext();) {
-      String ppt_name = (String) i.next();
+    for (Iterator<String> i = ppts.iterator(); i.hasNext();) {
+      String ppt_name = i.next();
       if (--ppt_cnt <= 0) {
         String last_ppt_name = ppt_name;
         while (i.hasNext()) {
-          ppt_name = (String) i.next();
+          ppt_name = i.next();
           if ((last_ppt_name.indexOf("EXIT") != -1)
             && (ppt_name.indexOf("EXIT") == -1))
             return (last_ppt_name);
@@ -2010,18 +2006,18 @@ public final class Daikon {
   private static void undoOpts(PptMap all_ppts) {
 
     //undo suppressions
-    Iterator suppress_it = all_ppts.ppt_all_iterator();
+    Iterator<PptTopLevel> suppress_it = all_ppts.ppt_all_iterator();
 
     while (suppress_it.hasNext()) {
-      PptTopLevel p = (PptTopLevel) suppress_it.next();
+      PptTopLevel p = suppress_it.next();
       NIS.create_suppressed_invs(p);
     }
 
     //undo equality sets
-    Iterator equality_it = all_ppts.ppt_all_iterator();
+    Iterator<PptTopLevel> equality_it = all_ppts.ppt_all_iterator();
     while (equality_it.hasNext()) {
 
-      PptTopLevel ppt = (PptTopLevel) equality_it.next();
+      PptTopLevel ppt = equality_it.next();
       PptSliceEquality sliceEquality = ppt.equality_view;
 
       // some program points have no equality sets?
@@ -2031,18 +2027,18 @@ public final class Daikon {
        }
 
 
-      Iterator sets = sliceEquality.invs.iterator();
-      List<Equality> allNewInvs = new ArrayList();
+      Iterator<Equality> sets = sliceEquality.invs.iterator();
+      List<Equality> allNewInvs = new ArrayList<Equality>();
 
       // get the new leaders
       while (sets.hasNext()) {
-        Equality eq = (Equality) sets.next();
+        Equality eq = sets.next();
         VarInfo leader = eq.leader();
-        Iterator varsIt = eq.getVars().iterator();
-        List vars = new ArrayList();
+        Iterator<VarInfo> varsIt = eq.getVars().iterator();
+        List<VarInfo> vars = new ArrayList<VarInfo>();
 
         while (varsIt.hasNext()) {
-          VarInfo var = (VarInfo) varsIt.next();
+          VarInfo var = varsIt.next();
           if (!var.equals(leader)) {
             vars.add(var);
           }

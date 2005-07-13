@@ -817,21 +817,21 @@ public final class UtilMDE {
    * Iterators, in turn.  The argument is an Iterator of Iterators.
    * Like MergedIterator2, but generlaized to arbitrary number of iterators.
    **/
-  public static final class MergedIterator implements Iterator {
-    Iterator itorOfItors;
-    public MergedIterator(Iterator itorOfItors) { this.itorOfItors = itorOfItors; }
+  public static final class MergedIterator<T> implements Iterator<T> {
+    Iterator<Iterator<T>> itorOfItors;
+    public MergedIterator(Iterator<Iterator<T>> itorOfItors) { this.itorOfItors = itorOfItors; }
 
     // an empty iterator to prime the pump
-    Iterator current = Collections.EMPTY_SET.iterator();
+    Iterator<T> current = Collections.EMPTY_SET.iterator();
 
     public boolean hasNext() {
       while ((!current.hasNext()) && (itorOfItors.hasNext())) {
-        current = (Iterator) itorOfItors.next();
+        current = itorOfItors.next();
       }
       return current.hasNext();
     }
 
-    public Object next() {
+    public T next() {
       hasNext();                // for side effect
       return current.next();
     }

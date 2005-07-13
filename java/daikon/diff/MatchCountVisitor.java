@@ -228,8 +228,8 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
   /** Prints the results of the correct set in a human-readable format */
   public void printFinal () {
-    for (Iterator i = goodMap.keySet().iterator(); i.hasNext(); ) {
-      String ppt = (String) i.next();
+    for (Iterator<String> i = goodMap.keySet().iterator(); i.hasNext(); ) {
+      String ppt = i.next();
       System.out.println ();
       System.out.println ("*****************" + ppt);
       for (Iterator j = ((HashSet) goodMap.get(ppt)).iterator();

@@ -261,7 +261,7 @@ import java.util.*;
  * <samp>x[] == y[]</samp>.
 #endif
  *
- * If the auxiliary information (e.g., order matters) 
+ * If the auxiliary information (e.g., order matters)
  * doesn't match between two variables, then this invariant cannot
  * apply to those variables.
  **/
@@ -690,8 +690,8 @@ public class SEQSEQINTEQUAL
   // Look up a previously instantiated invariant.
   public static SEQSEQINTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof SEQSEQINTEQUAL)
         return (SEQSEQINTEQUAL) inv;
     }

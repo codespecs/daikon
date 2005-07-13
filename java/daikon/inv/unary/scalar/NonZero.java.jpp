@@ -287,8 +287,8 @@ public class NONZERO
     // For every ELTNONZERO at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = parent.invariants_iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if ((inv instanceof ELTNONZERO) && inv.enoughSamples()) {
         VarInfo v2 = inv.ppt.var_infos[0];
         // System.out.println(NONZEROSTRING + ".isObviousImplied: calling " + MEMBERSTRING + ".isObviousMember(" + var.name + ", " + v2.name + ")");

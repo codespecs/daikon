@@ -97,8 +97,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         // This gets all of the output in the format:
         // inv.ppt.name() + "$" + inv1.format_java() + " Count = " + freq
-        for (Iterator i = freqList.keySet().iterator(); i.hasNext(); ) {
-            String str = (String) i.next();
+        for (Iterator<String> i = freqList.keySet().iterator(); i.hasNext(); ) {
+            String str = i.next();
             int freq = ((Integer) freqList.get(str)).intValue();
             if (freq < total && justifiedList.contains (str)) {
                 bigList.add (str + " Count =  " + freq);
@@ -119,8 +119,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         HashMap lastMap = new HashMap();
         // One pass to fill each mapping with an empty ArrayList
-        for (Iterator i = programPointsList.iterator(); i.hasNext(); ) {
-            String key = (String) i.next();
+        for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
+            String key = i.next();
             lastMap.put (key, new ArrayList());
         }
 
@@ -136,8 +136,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         }
 
         // print it all
-        for (Iterator i = lastMap.entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) i.next();
+        for (Iterator<Map.Entry> i = lastMap.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry entry = i.next();
             String key = (String) entry.getKey();
             ArrayList al = (ArrayList) entry.getValue();
             // don't print anything if there are no selective invariants
@@ -164,8 +164,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         // This gets all of the output in the format:
         // inv.ppt.name() + "$" + inv1.format_java()
-        for (Iterator i = freqList.keySet().iterator(); i.hasNext(); ) {
-            String str = (String) i.next();
+        for (Iterator<String> i = freqList.keySet().iterator(); i.hasNext(); ) {
+            String str = i.next();
             int freq = ((Integer) freqList.get(str)).intValue();
             if (freq < total && justifiedList.contains (str)) {
                 // just want the String on its own line
@@ -181,8 +181,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         HashMap lastMap = new HashMap();
         // One pass to fill each mapping with an empty ArrayList
-        for (Iterator i = programPointsList.iterator(); i.hasNext(); ) {
-            String key = (String) i.next();
+        for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
+            String key = i.next();
             lastMap.put (key, new ArrayList());
         }
 
@@ -203,8 +203,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // to each other when they are from the same method
         Collections.sort (theKeys);
         String lastPpt = "";
-        for (Iterator i = theKeys.iterator(); i.hasNext(); ) {
-            String key = (String) i.next();
+        for (Iterator<String> i = theKeys.iterator(); i.hasNext(); ) {
+            String key = i.next();
             ArrayList al = (ArrayList) lastMap.get(key);
             // don't print anything if there are no selective invariants
 

@@ -41,8 +41,8 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
         super.visit(node);
         // clear all of the old ppts
 
-        for (Iterator i = node.children(); i.hasNext(); ) {
-            InvNode child = (InvNode) i.next();
+        for (Iterator<InvNode> i = node.children(); i.hasNext(); ) {
+            InvNode child = i.next();
             if (child.getInv1() != null) {
                 child.getInv1().ppt.invs.clear();
             }

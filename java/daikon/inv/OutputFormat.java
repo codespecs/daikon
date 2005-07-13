@@ -259,8 +259,8 @@ public final class OutputFormat
     /** This method generates the current quantifier string. */
     public String getQuantifiers() {
       String str="";
-      for(Iterator it=quantifiers.entrySet().iterator();it.hasNext();) {
-        Map.Entry entry = (Map.Entry) it.next();
+      for(Iterator<Map.Entry> it=quantifiers.entrySet().iterator();it.hasNext();) {
+        Map.Entry entry = it.next();
         String key = (String) entry.getKey();
         String value = (String) entry.getValue();
         if (!str.equals(""))

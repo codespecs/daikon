@@ -392,9 +392,9 @@ public final class EqHashMap extends AbstractMap implements Map, Cloneable,
      * @param t Mappings to be stored in this map.
      */
     public void putAll(Map t) {
-	Iterator i = t.entrySet().iterator();
+	Iterator<Map.Entry> i = t.entrySet().iterator();
 	while (i.hasNext()) {
-	    Map.Entry e = (Map.Entry) i.next();
+	    Map.Entry e = i.next();
 	    put(e.getKey(), e.getValue());
 	}
     }

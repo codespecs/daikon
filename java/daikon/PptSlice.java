@@ -177,8 +177,8 @@ public abstract class PptSlice
   protected void remove_falsified () {
 
     // Remove the dead invariants
-    for (Iterator iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
-      Invariant inv = (Invariant) iFalsified.next();
+    for (Iterator<Invariant> iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
+      Invariant inv = iFalsified.next();
       if (inv.is_false()) {
         iFalsified.remove();
         NIS.falsified (inv);
@@ -371,8 +371,8 @@ public abstract class PptSlice
    */
   public void repCheck() {
 
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       inv.repCheck();
       Assert.assertTrue (inv.ppt == this);
     }
@@ -415,8 +415,8 @@ public abstract class PptSlice
    */
   public boolean contains_inv (Invariant inv) {
 
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant mine = (Invariant) i.next();
+    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
+      Invariant mine = i.next();
       if (mine.match (inv))
         return (true);
     }
@@ -440,8 +440,8 @@ public abstract class PptSlice
    */
   public Invariant find_inv_exact (Invariant inv) {
 
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant mine = (Invariant) i.next();
+    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
+      Invariant mine = i.next();
       if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv))
         return (mine);
     }
@@ -454,8 +454,8 @@ public abstract class PptSlice
    */
   public Invariant find_inv_by_class (Class cls) {
 
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       if ((inv.getClass() == cls))
         return (inv);
     }

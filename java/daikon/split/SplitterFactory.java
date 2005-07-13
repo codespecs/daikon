@@ -127,9 +127,9 @@ public class SplitterFactory {
 
   private static void printAll(PptMap map) {
     System.out.println("start");
-    Iterator it = map.pptIterator();
+    Iterator<PptTopLevel> it = map.pptIterator();
     while (it.hasNext()) {
-      PptTopLevel ppt = (PptTopLevel) it.next();
+      PptTopLevel ppt = it.next();
       System.out.println("PPT: " + ppt.name());
     }
   }

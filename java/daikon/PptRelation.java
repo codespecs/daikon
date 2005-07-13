@@ -109,8 +109,8 @@ public class PptRelation implements Serializable {
   public String parent_to_child_var_string() {
 
     StringBuffer var_str = new StringBuffer();
-    for (Iterator i = parent_to_child_map.keySet().iterator(); i.hasNext();) {
-      VarInfo pv = (VarInfo) i.next();
+    for (Iterator<VarInfo> i = parent_to_child_map.keySet().iterator(); i.hasNext();) {
+      VarInfo pv = i.next();
       VarInfo cv = (VarInfo) parent_to_child_map.get(pv);
       if (var_str.length() > 0)
         var_str.append(", ");
@@ -582,10 +582,10 @@ public class PptRelation implements Serializable {
   public PptRelation copy(PptTopLevel new_parent, PptTopLevel new_child) {
 
     PptRelation rel = new PptRelation(new_parent, new_child, relationship);
-    for (Iterator ii = child_to_parent_map.keySet().iterator();
+    for (Iterator<VarInfo> ii = child_to_parent_map.keySet().iterator();
       ii.hasNext();
       ) {
-      VarInfo vc = (VarInfo) ii.next();
+      VarInfo vc = ii.next();
       VarInfo vp = (VarInfo) child_to_parent_map.get(vc);
       VarInfo new_vc = new_child.var_infos[vc.varinfo_index];
       VarInfo new_vp = new_parent.var_infos[vp.varinfo_index];
@@ -614,8 +614,8 @@ public class PptRelation implements Serializable {
    */
   public static void init_hierarchy(PptMap all_ppts) {
 
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
+      PptTopLevel ppt = i.next();
       PptName pname = ppt.ppt_name;
       PptRelation rel = null;
       Daikon.debugProgress.fine ("Processing ppt " + pname);
@@ -771,8 +771,8 @@ public class PptRelation implements Serializable {
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
 
     // Loop over each ppt and process each non-leaf with splitters
-    for (Iterator pi = all_ppts.pptIterator(); pi.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) pi.next();
+    for (Iterator<PptTopLevel> pi = all_ppts.pptIterator(); pi.hasNext();) {
+      PptTopLevel ppt = pi.next();
       if (ppt.ppt_name.isNumberedExitPoint())
         continue;
       if (!ppt.has_splitters())
@@ -780,8 +780,8 @@ public class PptRelation implements Serializable {
 
       // Loop over each splitter
       splitter_loop : for (
-        Iterator ii = ppt.splitters.iterator(); ii.hasNext();) {
-        PptSplitter ppt_split = (PptSplitter) ii.next();
+        Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext();) {
+        PptSplitter ppt_split = ii.next();
 
         // list of children that match this splitter
         List<SplitChild>
@@ -792,8 +792,8 @@ public class PptRelation implements Serializable {
           PptRelation rel = (PptRelation) ppt.children.get(jj);
           if (!rel.child.has_splitters())
             break;
-          for (Iterator kk = rel.child.splitters.iterator(); kk.hasNext();) {
-            PptSplitter csplit = (PptSplitter) kk.next();
+          for (Iterator<PptSplitter> kk = rel.child.splitters.iterator(); kk.hasNext();) {
+            PptSplitter csplit = kk.next();
             if (ppt_split.splitter == csplit.splitter) {
               split_children.add(new SplitChild(rel, csplit));
               continue child_loop;
@@ -812,8 +812,8 @@ public class PptRelation implements Serializable {
         // Build the PptRelations for each child.  The PptRelation from
         // the conditional point is of the same type as the original
         // relation from parent to child
-        for (Iterator jj = split_children.iterator(); jj.hasNext();) {
-          SplitChild sc = (SplitChild) jj.next();
+        for (Iterator<SplitChild> jj = split_children.iterator(); jj.hasNext();) {
+          SplitChild sc = jj.next();
           ppt_split.add_relation(sc.rel, sc.ppt_split);
         }
       }
@@ -822,8 +822,8 @@ public class PptRelation implements Serializable {
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
-      for (Iterator i = all_ppts.pptIterator(); i.hasNext();) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
+      for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
+        PptTopLevel ppt = i.next();
         if (ppt.parents.size() == 0)
           ppt.debug_print_tree(debug, 0, null);
       }
@@ -831,8 +831,8 @@ public class PptRelation implements Serializable {
 
     // Debug print the equality sets for each ppt
     if (debug.isLoggable(Level.FINE)) {
-      for (Iterator i = all_ppts.pptIterator(); i.hasNext();) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
+      for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
+        PptTopLevel ppt = i.next();
         debug.fine(ppt.name() + " equality sets: " + ppt.equality_sets_txt());
       }
     }

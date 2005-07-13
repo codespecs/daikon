@@ -78,10 +78,10 @@ public final class Configuration
 
   public void replay() {
     // Make a copy of the statements, since apply mutates the list.
-    List copy = new ArrayList(statements);
-    Iterator iter = copy.iterator();
+    List<String> copy = new ArrayList(statements);
+    Iterator<String> iter = copy.iterator();
     while (iter.hasNext()) {
-      String statement = (String) iter.next();
+      String statement = iter.next();
       apply(statement);
     }
     statements = copy;
@@ -97,16 +97,16 @@ public final class Configuration
    **/
   public void overlap(Configuration config) {
     Assert.assertTrue(config != null);
-    Iterator iter = config.statements.iterator();
+    Iterator<String> iter = config.statements.iterator();
     while (iter.hasNext()) {
-      String statement = (String) iter.next();
+      String statement = iter.next();
       this.apply(statement);
     }
   }
 
   // ============================== ADT COMPONENT ==============================
 
-  private List statements = new ArrayList();
+  private List<String> statements = new ArrayList<String>();
 
   public void apply(InputStream input) {
     Assert.assertTrue(input != null);

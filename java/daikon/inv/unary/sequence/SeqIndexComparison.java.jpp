@@ -470,8 +470,8 @@ public class CLASSNAME extends SUPERCLASS {
   // Look up a previously instantiated invariant.
   public static CLASSNAME find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof CLASSNAME)
         return (CLASSNAME) inv;
     }

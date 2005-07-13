@@ -288,11 +288,11 @@ public class DeclWriter extends DaikonWriter
     private void printLocalVars(ClassInfo cinfo, DaikonVariableInfo curNode, Member method, List argnames, String offset, int depth)
     {
         Class[] arguments = (method instanceof Constructor) ? ((Constructor) method).getParameterTypes() : ((Method) method).getParameterTypes();
-        Iterator argnamesiter = argnames.iterator();
+        Iterator<String> argnamesiter = argnames.iterator();
         for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++)
         {
             Class type = arguments[i];
-            String name = (String) argnamesiter.next();
+            String name = argnamesiter.next();
             DaikonVariableInfo theChild = printDeclVar(cinfo, curNode, type, name, offset, depth, i);
             printChildren(cinfo, type, theChild, name, offset, depth, false);
         }

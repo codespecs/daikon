@@ -191,13 +191,13 @@ import java.util.*;
 
 #if defined (IS_SCALAR)
   /**
-   * Represents the invariant <samp>x GTE c</samp>, where <samp>c</samp> 
+   * Represents the invariant <samp>x GTE c</samp>, where <samp>c</samp>
    * is a constant and <samp>x</samp> is a LONG scalar.
    **/
 #else
   /**
    * Represents the invariant that each element of a sequence of PRIMITIVE
-   * values is GREATER than or equal to a constant. Prints as 
+   * values is GREATER than or equal to a constant. Prints as
    * <samp>x[] elements GTE c</samp>.
    */
 #endif
@@ -562,8 +562,8 @@ public class LOWERBOUND
 #endif
 #ifdef IS_ELT
     // Look for the same property over a supersequence of this one.
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
-      Invariant inv = (Invariant) inv_itor.next();
+    for (Iterator<Invariant> inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+      Invariant inv = inv_itor.next();
       if (inv == this) {
         continue;
       }
@@ -646,8 +646,8 @@ public class LOWERBOUND
   // Look up a previously instantiated invariant.
   public static LOWERBOUND find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof LOWERBOUND)
         return (LOWERBOUND) inv;
     }

@@ -182,8 +182,8 @@ public final class MergeInvariants {
 
       // Remove all of the slices, equality sets, to start
       debugProgress.fine ("Cleaning ppt map in preparation for merge");
-      for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
+      for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = i.next();
         ppt.clean_for_merge();
       }
 
@@ -205,16 +205,16 @@ public final class MergeInvariants {
     // so that the normal processing will create the invariants at
     // upper points.
     debugProgress.fine ("Building hierarchy between leaves of the maps");
-    for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       if (!ppt.ppt_name.isExitPoint())
         continue;
       if (ppt.ppt_name.isCombinedExitPoint())
         continue;
       // Remove any relations down to conditionals, since we want to
       // build the ppt from the matching points in the specified maps
-      for (Iterator j = ppt.children.iterator(); j.hasNext(); ) {
-        PptRelation rel = (PptRelation) j.next();
+      for (Iterator<PptRelation> j = ppt.children.iterator(); j.hasNext(); ) {
+        PptRelation rel = j.next();
         if (rel.getRelationType() == PptRelation.PPT_PPTCOND)
           j.remove();
       }
@@ -243,8 +243,8 @@ public final class MergeInvariants {
     // Debug print the hierarchy is a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("PPT Hierarchy");
-      for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
+      for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = i.next();
         if (ppt.parents.size() == 0)
           ppt.debug_print_tree (debug, 0, null);
       }
@@ -256,8 +256,8 @@ public final class MergeInvariants {
 
     // Equality post processing
     debugProgress.fine ("Equality Post Processing");
-    for (Iterator itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = itor.next();
       ppt.postProcessEquality();
     }
 
@@ -265,8 +265,8 @@ public final class MergeInvariants {
     stopwatch.reset();
     System.out.println("Creating implications ");
     debugProgress.fine ("Adding Implications ... ");
-    for (Iterator itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = itor.next();
       if (ppt.num_samples() > 0)
         ppt.addImplications();
     }
@@ -275,15 +275,15 @@ public final class MergeInvariants {
 
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information
-    for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       if (!ppt.ppt_name.isExitPoint())
         continue;
       if (ppt.ppt_name.isCombinedExitPoint())
         continue;
       ppt.children.clear();
-      for (Iterator conds = ppt.cond_iterator(); conds.hasNext(); ) {
-        PptConditional cond = (PptConditional) conds.next();
+      for (Iterator<PptConditional> conds = ppt.cond_iterator(); conds.hasNext(); ) {
+        PptConditional cond = conds.next();
         cond.children.clear();
       }
     }

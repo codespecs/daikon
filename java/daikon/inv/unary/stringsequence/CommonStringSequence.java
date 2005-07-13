@@ -90,7 +90,9 @@ public class CommonStringSequence
   }
 
   public InvariantStatus check_modified(String[] a, int count) {
-    if (intersect==null) {
+    if (a == null) {
+      return InvariantStatus.FALSIFIED;
+    } else if (intersect==null) {
       return InvariantStatus.NO_CHANGE;
     } else {
       String[] tmp = new String[intersect.length];
@@ -110,7 +112,9 @@ public class CommonStringSequence
 
 
   public InvariantStatus add_modified(String[] a, int count) {
-    if (intersect==null) {
+    if (a == null) {
+      return InvariantStatus.FALSIFIED;
+    } else if (intersect==null) {
       intersect = a;
       return InvariantStatus.NO_CHANGE;
     } else {

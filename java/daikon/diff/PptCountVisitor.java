@@ -67,8 +67,8 @@ public class PptCountVisitor extends PrintAllVisitor {
     int reportCnt = 0;
     int totalCnt = 0;
 
-    for (Iterator i = input.children(); i.hasNext(); ) {
-      InvNode node = (InvNode) i.next();
+    for (Iterator<InvNode> i = input.children(); i.hasNext(); ) {
+      InvNode node = i.next();
       Invariant inv1 = node.getInv1();
       Invariant inv2 = node.getInv2();
 
@@ -90,8 +90,8 @@ public class PptCountVisitor extends PrintAllVisitor {
     int targetCnt = 0;
     int totalCnt = 0;
 
-    for (Iterator i = input.children(); i.hasNext(); ) {
-      InvNode node = (InvNode) i.next();
+    for (Iterator<InvNode> i = input.children(); i.hasNext(); ) {
+      InvNode node = i.next();
       Invariant inv1 = node.getInv1();
       Invariant inv2 = node.getInv2();
 
@@ -304,8 +304,8 @@ public class PptCountVisitor extends PrintAllVisitor {
   public void printFinal () {
 
     System.out.println ("CORRECT_FOUND: ");
-    for (Iterator i = targSet.iterator(); i.hasNext(); ) {
-      String str = (String) i.next();
+    for (Iterator<String> i = targSet.iterator(); i.hasNext(); ) {
+      String str = i.next();
       if (correctSet.contains (str)) {
         System.out.println (str);
       }
@@ -315,8 +315,8 @@ public class PptCountVisitor extends PrintAllVisitor {
     System.out.println ();
     System.out.println ();
     System.out.println ("NOT_FOUND: ");
-    for (Iterator i = targSet.iterator(); i.hasNext(); ) {
-      String str = (String) i.next();
+    for (Iterator<String> i = targSet.iterator(); i.hasNext(); ) {
+      String str = i.next();
       if (!correctSet.contains (str)) {
         System.out.println (str);
       }
@@ -326,15 +326,15 @@ public class PptCountVisitor extends PrintAllVisitor {
     System.out.println ();
     System.out.println ();
     System.out.println ("WRONG_REPORTS: ");
-    for (Iterator i = incorrectSet.iterator(); i.hasNext(); ) {
-      String str = (String) i.next();
+    for (Iterator<String> i = incorrectSet.iterator(); i.hasNext(); ) {
+      String str = i.next();
       System.out.println (str);
     }
 
 
 
-    for (Iterator i = goodMap.keySet().iterator(); i.hasNext(); ) {
-      String ppt = (String) i.next();
+    for (Iterator<String> i = goodMap.keySet().iterator(); i.hasNext(); ) {
+      String ppt = i.next();
       System.out.println ();
       System.out.println ("*****************" + ppt);
       for (Iterator j = ((HashSet) goodMap.get(ppt)).iterator();

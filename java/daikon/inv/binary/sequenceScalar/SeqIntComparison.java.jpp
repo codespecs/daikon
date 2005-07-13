@@ -377,8 +377,8 @@ public final class SEQINTEQUAL
   // Look up a previously instantiated invariant.
   public static SEQINTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof SEQINTEQUAL)
         return (SEQINTEQUAL) inv;
     }
@@ -409,8 +409,8 @@ public final class SEQINTEQUAL
     // doesn't need to explicitly ignore oher members of the equality set
     // because those members won't have any invariants over them.
     PptTopLevel pptt = ppt.parent;
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
-      Invariant inv = (Invariant) inv_itor.next();
+    for (Iterator<Invariant> inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+      Invariant inv = inv_itor.next();
       if (inv == this) {
         continue;
       }

@@ -154,8 +154,8 @@ public final class FileIO {
   public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
     // Read all decls, creating PptTopLevels and VarInfos
-    for (Iterator i = files.iterator(); i.hasNext();) {
-      File file = (File) i.next();
+    for (Iterator<File> i = files.iterator(); i.hasNext();) {
+      File file = i.next();
       Daikon.progress = "Reading " + file;
       if (!Daikon.dkconfig_quiet) {
         System.out.print("."); // show progress
@@ -568,8 +568,8 @@ public final class FileIO {
    **/
   public static void read_data_trace_files(Collection<String> files,
                                            PptMap all_ppts, Processor processor) throws IOException {
-    for (Iterator i = files.iterator(); i.hasNext();) {
-      String filename = (String) i.next();
+    for (Iterator<String> i = files.iterator(); i.hasNext();) {
+      String filename = i.next();
       try {
         read_data_trace_file(filename, all_ppts, processor, false);
       } catch (IOException e) {
@@ -1068,14 +1068,14 @@ public final class FileIO {
 
   /** Returns non-null if this procedure has an unmatched entry. **/
   static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
-    for (Iterator i = call_hashmap.values().iterator(); i.hasNext();) {
-      Invocation invok = (Invocation) i.next();
+    for (Iterator<Invocation> i = call_hashmap.values().iterator(); i.hasNext();) {
+      Invocation invok = i.next();
       if (invok.ppt == ppt) {
         return true;
       }
     }
-    for (Iterator i = call_stack.iterator(); i.hasNext();) {
-      Invocation invok = (Invocation) i.next();
+    for (Iterator<Invocation> i = call_stack.iterator(); i.hasNext();) {
+      Invocation invok = i.next();
       if (invok.ppt == ppt) {
         return true;
       }
@@ -1139,8 +1139,8 @@ public final class FileIO {
 
   /** Print all the invocations in the collection, in order. **/
   static void print_invocations_verbose(Collection invocations) {
-    for (Iterator i = invocations.iterator(); i.hasNext();) {
-      Invocation invok = (Invocation) i.next();
+    for (Iterator<Invocation> i = invocations.iterator(); i.hasNext();) {
+      Invocation invok = i.next();
       System.out.println(invok.format());
     }
   }
@@ -1153,8 +1153,8 @@ public final class FileIO {
     // Maps an Invocation to its frequency
     Map counter = new HashMap();
 
-    for (Iterator i = invocations.iterator(); i.hasNext();) {
-      Invocation invok = (Invocation) i.next();
+    for (Iterator<Invocation> i = invocations.iterator(); i.hasNext();) {
+      Invocation invok = i.next();
       invok = invok.canonicalize();
       if (counter.containsKey(invok)) {
         Integer oldCount = (Integer) counter.get(invok);
@@ -1167,8 +1167,8 @@ public final class FileIO {
 
     // Print the invocations in sorted order.
     TreeSet keys = new TreeSet(counter.keySet());
-    for (Iterator i = keys.iterator(); i.hasNext();) {
-      Invocation invok = (Invocation) i.next();
+    for (Iterator<Invocation> i = keys.iterator(); i.hasNext();) {
+      Invocation invok = i.next();
       Integer count = (Integer) counter.get(invok);
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));
@@ -1562,14 +1562,14 @@ public final class FileIO {
       } else if (obj instanceof InvMap) {
         InvMap invs = (InvMap) obj;
         PptMap ppts = new PptMap();
-        for (Iterator i = invs.pptIterator(); i.hasNext();) {
-          PptTopLevel ppt = (PptTopLevel) i.next();
+        for (Iterator<PptTopLevel> i = invs.pptIterator(); i.hasNext();) {
+          PptTopLevel ppt = i.next();
           PptTopLevel nppt = new PptTopLevel(ppt.name, ppt.var_infos);
           nppt.set_sample_number(ppt.num_samples());
           ppts.add(nppt);
           List<Invariant> inv_list = invs.get(ppt);
-          for (Iterator j = inv_list.iterator(); j.hasNext();) {
-            Invariant inv = (Invariant) j.next();
+          for (Iterator<Invariant> j = inv_list.iterator(); j.hasNext();) {
+            Invariant inv = j.next();
             PptSlice slice = nppt.get_or_instantiate_slice(inv.ppt.var_infos);
             inv.ppt = slice;
             slice.addInvariant(inv);

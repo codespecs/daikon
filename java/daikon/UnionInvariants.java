@@ -126,8 +126,8 @@ public final class UnionInvariants {
       System.out.print("Invoking Simplify to identify redundant invariants...");
       System.out.flush();
       long start = System.currentTimeMillis();
-      for (Iterator i = result.pptIterator() ; i.hasNext() ; ) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
+      for (Iterator<PptTopLevel> i = result.pptIterator() ; i.hasNext() ; ) {
+        PptTopLevel ppt = i.next();
         ppt.mark_implied_via_simplify(result);
       }
       long end = System.currentTimeMillis();
@@ -148,8 +148,8 @@ public final class UnionInvariants {
   public static void union(PptMap collector,  // mutated
                            PptMap source      // unmodified (but aliased into)
                            ) {
-    for (Iterator i = source.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = source.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
 
       if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0))
         continue;

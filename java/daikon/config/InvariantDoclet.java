@@ -49,13 +49,13 @@ public class InvariantDoclet
   // ======================== NON-STATIC METHODS ==============================
 
   protected RootDoc root;   // root document
-  protected TreeMap cmap;   // map of classdoc to derived classes for the class
+  protected TreeMap<ClassDoc,Set<ClassDoc>> cmap;   // map of classdoc to derived classes for the class
   protected boolean dump_class_tree = false;
 
 
   public InvariantDoclet(RootDoc doc) {
     root = doc;
-    cmap = new TreeMap();
+    cmap = new TreeMap<ClassDoc,Set<ClassDoc>>();
   }
 
   /**
@@ -77,7 +77,7 @@ public class InvariantDoclet
       ClassDoc cd = clazzes[i];
       ClassDoc super_c = cd.superclass();
       if (super_c != null) {
-        TreeSet derived = (TreeSet) cmap.get  (super_c);
+        TreeSet derived = (TreeSet) cmap.get (super_c);
         if (derived == null) {
            // System.out.println ("NO SUPER: " + cd + " s: " + super_c);
         } else {
@@ -89,11 +89,11 @@ public class InvariantDoclet
 
     if (dump_class_tree) {
       //loop through each class in order
-      for (Iterator itor = cmap.entrySet().iterator(); itor.hasNext(); ) {
+      for (Iterator<Map.Entry<ClassDoc,Set<ClassDoc>>> itor = cmap.entrySet().iterator(); itor.hasNext(); ) {
 
         //get the classdoc
-        Map.Entry entry = (Map.Entry) itor.next();
-        ClassDoc cd = (ClassDoc) entry.getKey();
+        Map.Entry<ClassDoc,Set<ClassDoc>> entry = itor.next();
+        ClassDoc cd = entry.getKey();
 
         //if this is a top level class
         if ((cd.superclass() == null) || (cmap.get (cd.superclass()) == null)) {
@@ -163,9 +163,9 @@ public class InvariantDoclet
     out.println (comment);
 
     //put out each derived class
-    TreeSet derived = (TreeSet) cmap.get (cd);
-    for (Iterator itor = derived.iterator(); itor.hasNext(); ) {
-      ClassDoc dc = (ClassDoc) itor.next();
+    Set<ClassDoc> derived = cmap.get (cd);
+    for (Iterator<ClassDoc> itor = derived.iterator(); itor.hasNext(); ) {
+      ClassDoc dc = itor.next();
       process_class_tree_txt (out, dc, indent + 1);
     }
   }
@@ -193,8 +193,8 @@ public class InvariantDoclet
 
     TreeSet list = new TreeSet();
     gather_derived_classes (cd, list);
-    for (Iterator itor = list.iterator(); itor.hasNext(); ) {
-      ClassDoc dc = (ClassDoc) itor.next();
+    for (Iterator<ClassDoc> itor = list.iterator(); itor.hasNext(); ) {
+      ClassDoc dc = itor.next();
       if (dc.isAbstract())
         continue;
       if (dc.qualifiedName().indexOf (".test.") != -1)
@@ -212,7 +212,7 @@ public class InvariantDoclet
       comment = UtilMDE.replaceString (comment, "</samp>", "}");
       comment = UtilMDE.replaceString (comment, "<code>", "@code{");
       comment = UtilMDE.replaceString (comment, "</code>", "}");
-      
+
 
       if (dc.name().startsWith ("FunctionBinary")) {
         String[] parts = dc.name().split ("[._]");
@@ -296,12 +296,12 @@ public class InvariantDoclet
    * @param list    The list to add classes to.  Should start out empty
    */
 
-  public void gather_derived_classes (ClassDoc cd, TreeSet list) {
+  public void gather_derived_classes (ClassDoc cd, TreeSet<ClassDoc> list) {
 
     // System.out.println ("Processing " + cd);
     TreeSet derived = (TreeSet) cmap.get (cd);
-    for (Iterator itor = derived.iterator(); itor.hasNext(); ) {
-      ClassDoc dc = (ClassDoc) itor.next();
+    for (Iterator<ClassDoc> itor = derived.iterator(); itor.hasNext(); ) {
+      ClassDoc dc = itor.next();
       list.add (dc);
       gather_derived_classes (dc, list);
     }

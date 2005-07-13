@@ -239,8 +239,8 @@ public class NISuppressor {
       // for our purposes (we will process it later, when it is removed)
       PptSlice slice = ppt.findSlice (v1);
       if (slice != null) {
-        for (Iterator i = slice.invs.iterator(); i.hasNext(); ) {
-          Invariant slice_inv = (Invariant) i.next();
+        for (Iterator<Invariant> i = slice.invs.iterator(); i.hasNext(); ) {
+          Invariant slice_inv = i.next();
           if (match_true (slice_inv))
             return (state = NIS.VALID);
         }
@@ -303,8 +303,8 @@ public class NISuppressor {
       // for our purposes (we will process it later, when it is removed)
       PptSlice slice = ppt.findSlice (v1, v2);
       if (slice != null) {
-        for (Iterator i = slice.invs.iterator(); i.hasNext(); ) {
-          Invariant slice_inv = (Invariant) i.next();
+        for (Iterator<Invariant> i = slice.invs.iterator(); i.hasNext(); ) {
+          Invariant slice_inv = i.next();
           // NIS.debug.fine (": processing inv " + slice_inv.format());
           if (match_true (slice_inv)) {
             if (NIS.debug.isLoggable (Level.FINE))

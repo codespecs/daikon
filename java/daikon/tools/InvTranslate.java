@@ -113,8 +113,8 @@ public class InvTranslate {
   public String toString () {
 
     String out = "";
-    for (Iterator i = var_map.keySet().iterator(); i.hasNext(); ) {
-      String key = (String) i.next();
+    for (Iterator<String> i = var_map.keySet().iterator(); i.hasNext(); ) {
+      String key = i.next();
       String value = (String) var_map.get (key);
       if (out != "")
         out += ", ";

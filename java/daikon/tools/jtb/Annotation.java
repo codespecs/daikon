@@ -138,7 +138,7 @@ public class Annotation {
    * or several annotations.  Malformed annotations are ignored.
    */
   public static Annotation[] findAnnotations(String annoString) {
-    List l = new ArrayList();
+    List<String> l = new ArrayList<String>();
     l.add(annoString);
     return findAnnotations(l);
   }
@@ -156,9 +156,9 @@ public class Annotation {
       };
     }
     //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
-    Set annos = new HashSet();
-    for (Iterator i = annoStrings.iterator(); i.hasNext();) {
-      String location = (String) i.next();
+    Set<Annotation> annos = new HashSet<Annotation>();
+    for (Iterator<String> i = annoStrings.iterator(); i.hasNext();) {
+      String location = i.next();
       if (location == null || location.equals("")) {
         continue;
       }
@@ -309,7 +309,7 @@ public class Annotation {
 
   // Maps into all the Annotation objects created.
   private static HashMap<Integer,Annotation>
-    annotationsMap = new HashMap();
+    annotationsMap = new HashMap<Integer,Annotation>();
 
   private Annotation(Kind kind, String daikonRep, String method) {
     this.kind = kind;
@@ -338,7 +338,7 @@ public class Annotation {
    * The annotations in <code>annas</code> of kind <code>kind</code>.
    */
   public static Annotation[] getKind(Annotation[] annas, Kind kind) {
-    List<Annotation> retval = new ArrayList();
+    List<Annotation> retval = new ArrayList<Annotation>();
     for (int i = 0; i < annas.length; i++) {
       if (kind == annas[i].kind) {
         retval.add(annas[i]);

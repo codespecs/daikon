@@ -1712,8 +1712,8 @@ public final class ONEOFSCALAR
     // For every ELTONEOF at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = parent.invariants_iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if ((inv instanceof ELTONEOF) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
@@ -1746,8 +1746,8 @@ public final class ONEOFSCALAR
     VarInfo v = vis[0];
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
-      Invariant inv = (Invariant) inv_itor.next();
+    for (Iterator<Invariant> inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+      Invariant inv = inv_itor.next();
       if (inv == this) {
         continue;
       }
@@ -1949,8 +1949,8 @@ public final class ONEOFSCALAR
   // Look up a previously instantiated invariant.
   public static ONEOFSCALAR find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof ONEOFSCALAR)
         return (ONEOFSCALAR) inv;
     }

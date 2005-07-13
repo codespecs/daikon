@@ -276,9 +276,9 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   public void printFinal () {
     finish();
     System.out.println ("CORRECT_FOUND: ");
-    for (Iterator i = targSet.iterator(); i.hasNext(); ) {
-      // for (Iterator i = correctSet.iterator(); i.hasNext(); ) {
-      String str = (String) i.next();
+    for (Iterator<String> i = targSet.iterator(); i.hasNext(); ) {
+      // for (Iterator<String> i = correctSet.iterator(); i.hasNext(); ) {
+      String str = i.next();
       if (correctSet.contains (str)) {
         System.out.println (str);
       }
@@ -288,8 +288,8 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     System.out.println ();
     System.out.println ();
     System.out.println ("NOT FOUND: ");
-    for (Iterator i = targSet.iterator(); i.hasNext(); ) {
-      String str = (String) i.next();
+    for (Iterator<String> i = targSet.iterator(); i.hasNext(); ) {
+      String str = i.next();
       if (!correctSet.contains (str)) {
         System.out.println (str);
       }
@@ -300,8 +300,8 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     System.out.println ();
     System.out.println ("WRONG_REPORTS: ");
     //        for (Iterator i = incorrectSet.iterator(); i.hasNext(); ) {
-    for (Iterator i = cnt.iterator(); i.hasNext(); ) {
-      String str = (String) i.next();
+    for (Iterator<String> i = cnt.iterator(); i.hasNext(); ) {
+      String str = i.next();
       if (!correctSet.contains (str)) {
         System.out.println (str);
       }
@@ -309,8 +309,8 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
 
 
-    for (Iterator i = goodMap.keySet().iterator(); i.hasNext(); ) {
-      String ppt = (String) i.next();
+    for (Iterator<String> i = goodMap.keySet().iterator(); i.hasNext(); ) {
+      String ppt = i.next();
       System.out.println ();
       System.out.println ("*****************" + ppt);
       for (Iterator j = ((HashSet) goodMap.get(ppt)).iterator();

@@ -159,7 +159,7 @@ import java.util.logging.Level;
 /**
  * Represents an invariant between corresponding elements of two
  * sequences of PRIMITIVE values.  The length of the sequences must match for
- * the invariant to hold.  A comparison is made over each 
+ * the invariant to hold.  A comparison is made over each
  * <samp>(x[i], y[i])</samp> pair.
  * Thus, <samp>x[0]</samp> is compared to <samp>y[0]</samp>,
  * <samp>x[1]</samp> to <samp>y[1]</samp>, and so forth.
@@ -405,7 +405,7 @@ public class PAIRWISEINTEQUAL
       // destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
-    
+
 
     int len = a1.length;
     // int len = Math.min(a1.length, a2.length);
@@ -457,8 +457,8 @@ public class PAIRWISEINTEQUAL
   // Look up a previously instantiated invariant.
   public static PAIRWISEINTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof PAIRWISEINTEQUAL)
         return (PAIRWISEINTEQUAL) inv;
     }

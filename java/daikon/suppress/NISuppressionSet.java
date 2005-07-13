@@ -44,8 +44,8 @@ public class NISuppressionSet {
       NISuppression suppression = suppression_set[i];
 
       // Loop through each suppressor in the suppression
-      for (Iterator j = suppression.suppressor_iterator(); j.hasNext(); ) {
-        NISuppressor suppressor = (NISuppressor) j.next();
+      for (Iterator<NISuppressor> j = suppression.suppressor_iterator(); j.hasNext(); ) {
+        NISuppressor suppressor = j.next();
 
         // If we have seen this suppressor already, skip it
         if (all_suppressors.contains (suppressor.get_inv_class()))
@@ -329,8 +329,8 @@ public class NISuppressionSet {
 
     // Make sure the invariant isn't already in the new_invs list
     if (Daikon.dkconfig_internal_check) {
-      for (Iterator i = new_invs.iterator(); i.hasNext(); ) {
-        Invariant new_inv = (Invariant) i.next();
+      for (Iterator<Invariant> i = new_invs.iterator(); i.hasNext(); ) {
+        Invariant new_inv = i.next();
         if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
           Assert.assertTrue (false, Fmt.spf ("inv %s:%s already in new_invs "
                         + "(slice %s)", inv.getClass(), inv.format(), slice));

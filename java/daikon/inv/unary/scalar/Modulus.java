@@ -7,7 +7,7 @@ import utilMDE.*;
 import java.util.Iterator;
 
 /**
- * Represents the invariant <samp>x == r (mod m)</samp> where <samp>x</samp> 
+ * Represents the invariant <samp>x == r (mod m)</samp> where <samp>x</samp>
  * is a long scalar variable, <samp>r</samp> is the (constant) remainder,
  * and <samp>m</samp> is the (constant) modulus.
  **/
@@ -248,8 +248,8 @@ public class Modulus
   // Look up a previously instantiated invariant.
   public static Modulus find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof Modulus)
         return (Modulus) inv;
     }

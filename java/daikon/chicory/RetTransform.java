@@ -990,12 +990,12 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         int last_line_number = 0;
         boolean foundLine;
 
-        for (Iterator ii = il.iterator(); ii.hasNext();)
+        for (Iterator<InstructionHandle> ii = il.iterator(); ii.hasNext();)
         {
 
             foundLine = false;
 
-            InstructionHandle ih = (InstructionHandle) ii.next();
+            InstructionHandle ih = ii.next();
             if (ih.hasTargeters())
             {
                 for (InstructionTargeter it : ih.getTargeters())

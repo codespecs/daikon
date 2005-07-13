@@ -150,8 +150,8 @@ public class LIMITEDSIZEINTSET
    **/
   public static LIMITEDSIZEINTSET merge (int max_values, List /* LIMITEDSIZEINTSET */ slist) {
     LIMITEDSIZEINTSET result = new LIMITEDSIZEINTSET(max_values);
-    for (Iterator itor = slist.iterator(); itor.hasNext(); ) {
-      LIMITEDSIZEINTSET s = (LIMITEDSIZEINTSET) itor.next();
+    for (Iterator<LIMITEDSIZEINTSET> itor = slist.iterator(); itor.hasNext(); ) {
+      LIMITEDSIZEINTSET s = itor.next();
       result.addAll(s);
     }
     return result;

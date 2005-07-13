@@ -56,12 +56,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public int maxInvariantsPP;
 
 
-  public Vector addedComments = new Vector(); // elements are NodeTokens
+  public Vector<NodeToken> addedComments = new Vector<NodeToken>();
 
   private String[] ownedFieldNames;  // list of fields in this and related classes
   private String[] finalFieldNames;  // list of fields in this and related classes
   private String[] notContainsNullFieldNames;  // list of fields in this and related classes
-  private HashMap elementTypeFieldNames; // list of fields in this and related classes
+  private HashMap<String,String> elementTypeFieldNames; // list of fields in this and related classes
 
   private PptNameMatcher pptMatcher;
 
@@ -191,7 +191,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   private String elementType(String fieldname) {
-    return (String)elementTypeFieldNames.get(fieldname);
+    return elementTypeFieldNames.get(fieldname);
   }
 
   // ClassDeclaration is a top-level (non-nested) construct.  Collect all
@@ -238,7 +238,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     String[] old_owned = ownedFieldNames;
     String[] old_final = finalFieldNames;
     String[] old_notContainsNull = notContainsNullFieldNames;
-    HashMap old_elementType = elementTypeFieldNames;
+    HashMap<String,String> old_elementType = elementTypeFieldNames;
     { // set fieldNames slots
       CollectFieldsVisitor cfv = new CollectFieldsVisitor();
       n.accept(cfv);
@@ -246,7 +246,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       finalFieldNames = cfv.finalFieldNames();
       if (object_ppt == null) {
         notContainsNullFieldNames = new String[0];
-        elementTypeFieldNames = new HashMap();
+        elementTypeFieldNames = new HashMap<String,String>();
       } else {
         notContainsNullFieldNames = not_contains_null_fields(object_ppt, cfv);
         elementTypeFieldNames = element_type_fields(object_ppt, cfv);
@@ -304,8 +304,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       throw new Error("Node must be MethodDeclaration or ConstructorDeclaration");
     }
 
-    for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = matching_ppts.iterator(); itor.hasNext(); ) {
+      PptTopLevel ppt = itor.next();
       String prefix;
       if (ppt.ppt_name.isEnterPoint()) {
         requires_invs = invariants_for(ppt, ppts);
@@ -321,30 +321,31 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
 
-  HashMap get_exceptions(PptMap ppts, ConstructorDeclaration n) {
-    HashMap result = new HashMap();
-
-    List<PptTopLevel>  matching_ppts = pptMatcher.getMatches(ppts, n);
-
-    for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      String prefix;
-      if (ppt.ppt_name.isThrowsPoint()) {
-        String exceptionName = "Not getting called"; // ppt.ppt_name.dontKnowHowToDoThis();
-        Collection exceptionInvariants;
-
-        if (result.containsValue(exceptionName)) {
-          exceptionInvariants = (Collection)result.get(exceptionName);
-          exceptionInvariants.add(ppt.getInvariants());
-        } else {
-          exceptionInvariants = new Vector(ppt.getInvariants());
-          result.put(exceptionName, exceptionInvariants);
-        }
-      }
-    }
-
-    return result;
-  }
+  // Does not appear to be used (and doesn't typecheck, anyway). -MDE 7/12/2005
+  // HashMap<String,Collection<Invariant>> get_exceptions(PptMap ppts, ConstructorDeclaration n) {
+  //   HashMap<String,Collection<Invariant>> result = new HashMap<String,Collection<Invariant>>();
+  //
+  //   List<PptTopLevel> matching_ppts = pptMatcher.getMatches(ppts, n);
+  //
+  //   for (Iterator<PptTopLevel> itor = matching_ppts.iterator(); itor.hasNext(); ) {
+  //     PptTopLevel ppt = itor.next();
+  //     String prefix;
+  //     if (ppt.ppt_name.isThrowsPoint()) {
+  //       String exceptionName = "Not getting called"; // ppt.ppt_name.dontKnowHowToDoThis();
+  //       Collection<Invariant> exceptionInvariants;
+  //
+  //       if (result.containsValue(exceptionName)) {
+  //         exceptionInvariants = result.get(exceptionName);
+  //         exceptionInvariants.add(ppt.getInvariants());
+  //       } else {
+  //         exceptionInvariants = new Vector<Invariant>(ppt.getInvariants());
+  //         result.put(exceptionName, exceptionInvariants);
+  //       }
+  //     }
+  //   }
+  //
+  //   return result;
+  // }
 
   public void insertAlso(Node n) {
     addComment(n, "@ also" + lineSep, true);
@@ -883,7 +884,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // ppt is an :::OBJECT or :::CLASS program point.
   String[] not_contains_null_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
     // System.out.println("not_contains_null_fields(" + ppt + ")");
-    Vector result = new Vector();
+    Vector<String> result = new Vector<String>();
     String[] fields = cfv.allFieldNames();
     for (int i=0; i<fields.length; i++) {
       String field = fields[i];
@@ -920,9 +921,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // Returns a HashMap fields with ".elementType == \type(...)" invariants,
   // mapping the field to the type.
   // ppt is an :::OBJECT or :::CLASS program point.
-  HashMap element_type_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
+  HashMap<String,String> element_type_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
     // System.out.println("not_contains_null_fields(" + ppt + ")");
-    HashMap result = new HashMap();
+    HashMap<String,String> result = new HashMap<String,String>();
     String[] fields = cfv.allFieldNames();
     for (int i=0; i<fields.length; i++) {
       String field = fields[i];
@@ -1077,328 +1078,3 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
 }
-
-
-
-// These are the inexpressible invariants; that is, ESC does not support
-// them even though JML does.
-// sub is_non_supported_invariant( $ ) {
-//   my ($inv) = @_;
-//   return (($inv =~ /format_esc/)
-//           || ($inv =~ /"null"/)
-//           || ($inv =~ /\[\] ==/)
-//           || ($inv =~ /~/)
-//           || ($inv =~ /\bmax\(/)
-//           || ($inv =~ /\bmin\(/)
-//           || ($inv =~ /\bsum\(/)
-//           || ($inv =~ /\\new\(/)
-//           || ($inv =~ / has only one value/)
-//           || ($inv =~ /\\old\([^\)]*\\old\(/)
-//           || ($inv =~ /\\typeof\([^ ]*\.length/));
-// }
-
-
-// ###########################################################################
-// ### Main processing
-// ###
-//
-// END {
-//
-//   for my $javafile (@javafiles) {
-//     my @fields = ();                # only non-primitive fields
-//     my @owned_fields = ();        # only array fields
-//     my @final_fields = ();        # only non-primitive final fields
-//     ... set the above fields ...
-//
-//     my $classname = $javafile;
-//     $classname =~ s|\.java$||;  # remove .java
-//     $classname =~ s|^\./||;     # in case there is a ./ prefix
-//     $classname =~ s|/|.|g;      # all / to .
-//
-//     open(IN, "$javafile") or die "Cannot open $javafile: $!";
-//     open(OUT, ">$javafile-escannotated") or die "Cannot open $javafile-escannotated: $!";
-//
-//     while (defined($line = <IN>)) {
-// ...
-//             # Skip @requires clauses for overridden methods which already
-//             # have them; ESC doesn't allow them and they perhaps shouldn't hold.
-//             my $no_requires = (($ppt =~ /\.equals\s*\(\s*java\.lang\.Object\b/)
-//                                || ($ppt =~ /\.toString\s*\(\s*\)/));
-//             # add more tests here
-//             my $overriding = ($no_requires || 0);
-//             # print "overriding=$overriding for $ppt\n";
-//             my $requires = ($overriding ? "also_requires" : "requires");
-//             my $ensures = ($overriding ? "also_ensures" : "ensures");
-//             my $modifies = ($overriding ? "also_modifies" : "modifies");
-
-//             if ($ppt =~ /:::ENTER/) {
-//               if (! $no_requires) {
-//                 for my $inv (split("\n", $raw{$ppt})) {
-//                   if (is_non_supported_invariant($inv)) {
-//                     if ($merge_unexpressible) {
-//                       print OUT esc_comment("! $requires " . $inv);
-//                     }
-//                   } else {
-//                     print OUT esc_comment("@ $requires " . $inv);
-//                   }
-//                 }
-//               }
-//             } elsif ($ppt =~ /:::EXIT/) {
-//               my $ppt_combined = $ppt;
-//               $ppt_combined =~ s/(:::EXIT)[0-9]+$/$1/;
-//               # If this is :::EXIT22 but :::EXIT exists, suppress this.
-//               if (($ppt eq $ppt_combined)
-//                   || (! exists($raw{$ppt_combined}))) {
-//                 for my $inv (split("\n", $raw{$ppt})) {
-//                   } elsif ($inv =~ /^The invariant on the following line means:/) {
-//                     print OUT esc_comment(" $inv");
-//                   } elsif (is_non_supported_invariant($inv)) {
-//                     if ($merge_unexpressible) {
-//                       print OUT esc_comment("! $ensures " . $inv);
-//                     }
-//                   } else {
-//                     print OUT esc_comment("@ $ensures " . $inv);
-//                   }
-//                 }
-//               } else {
-//                 # print OUT "Suppressing $ppt because of $ppt_combined\n";
-//               }
-//             } else {
-//               die "What ppt? $ppt";
-//             }
-//           }
-//         }
-//
-//         next;
-//       }
-//
-//     }
-//
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    /// Old parsing code
-    ///
-
-// # Given an arglist string, return a list of arg strings; basically just
-// # splits on commas.
-// sub args_to_list( $ ) {
-//   my ($args) = @_;
-//   if (!defined($args)) {
-//     confess "undefined args";
-//   }
-//   $args =~ s/^\s*\(\s*//;
-//   $args =~ s/\s*\)\s*$//;
-//   $args =~ s/\s+([\[\]])/$1/g;        # remove space before array brackets
-//   # remove "final" and such
-//   @args = split(/\s*,\s*/, $args);
-//   return @args;
-// }
-//
-// # Given an arglist string, return a string with a list of types.
-// sub simplify_args( $ ) {
-//   my ($args) = @_;
-//   my @args = args_to_list($args);
-//   my @newargs = ();
-//   for my $arg (@args) {
-//     # print "before: $arg\n";
-//     $arg =~ s/(^|\s)(\w+[\[\]]*)\s+\w+([\[\]]*)$/$1$2/;
-//     # print "after: $arg\n";
-//     push @newargs, $arg;
-//   }
-//   $newargs = "(" . join(", ", @newargs) . ")";
-//   return $newargs;
-// }
-//
-// ## I'm not sure of the point of the approximate matching.
-// ## Maybe string equal would be good enough, if I also used simplify_args.
-// # Return true if the arguments are the same modulo whitespace;
-// # also, names are permitted to match only up to a prefix.
-// sub approx_argsmatch($$) {
-//   my ($args1, $args2) = @_;
-//   my @args1 = args_to_list($args1);
-//   my @args2 = args_to_list($args2);
-//
-//   # Compare
-//   if (scalar(@args1) != scalar(@args2)) {
-//     return 0;
-//   }
-//   for my $i (0..$#args1) {
-//     if (! approx_argmatch($args1[$i], $args2[$i])) {
-//       return 0;
-//     }
-//   }
-//   return 1;
-// }
-//
-//
-// # Return true if the arguments are the same or one is a prefix of the other.
-// sub approx_argmatch($$) {
-//   my ($x, $y) = @_;
-//   if ($x eq $y) {
-//     return 1;
-//   }
-//   if (($x eq "") || ($y eq "")) {
-//     return 0;
-//   }
-//
-//   # Ensure $x is not longer than $y.
-//   if (length($x) > length($y)) {
-//     ($x, $y) = ($y, $x);
-//   }
-//   if ($x eq substr($y, length($y)-length($x))) {
-//     return 1;
-//   }
-//   return 0;
-// }
-
-
-// # Given a program point name, return the canonical method name
-// sub ppt_to_meth( $ ) {
-//   my ($ppt) = @_;
-//
-//   my $methodname = $ppt;
-//   # Change "Foo.<init>" to "Foo.Foo".
-//   $methodname =~ s/^(\w+)\.<init>\($/$1.$1\(/;
-//
-//   # Replace arglist by canonicalized version
-//   if (($methodname !~ /:::(OBJECT|CLASS)/)
-//       && ($methodname !~ s/\(([^\(\)]*)\).*$/&simplify_args($1)/)) {
-//     die "Can't parse methodname: $methodname";
-//   }
-//
-//   return $methodname;
-// }
-//
-//
-// # Look for the curly brace "{" that begins the method body.
-// # Returns a list of ($prebrace, $postbrace, $need_newline).
-// sub parse_method_header( $ ) {
-//   my ($line) = @_;
-//   my ($prebrace, $postbrace, $need_newline);
-//
-//   # This is because "$)" in regexp screws up Emacs parser.
-//   my $eolre = "\\n?\$";
-//
-//   if ($line =~ /^\s*\{.*$eolre/o) {
-//     # Found an open curly brace on this line, following only space.
-//     # I'm not sure how this can happen; after all, this line matched a
-//     # method declaration.
-//     die("How can this happen? line = `$line'");
-//
-//     $prebrace = "";
-//     $postbrace = $line;
-//     $need_newline = 0;
-//   } elsif ($line =~ /\babstract\b/i) {
-//     $prebrace = "";
-//     $postbrace = $line;
-//     $need_newline = 0;
-//   } elsif ($line =~ /^(.*)(\{.*$eolre)/o) {
-//     $prebrace = $1;
-//     $postbrace = $2;
-//     $need_newline = 1;
-//   } elsif ($line !~ /\)/) {
-//     die "Put all args on same line as declaration:  $line";
-//   } else {
-//     my $nextline;
-//     while (defined($nextline = <IN>)) {
-//       if ($nextline =~ m:^\s*(/[/*]|\*):) {
-//         # Line starts with "//" or "/*", or "*" which might be comment continuation
-//         $line .= $nextline;
-//       } elsif ($nextline =~ /^\s*\{.*$eolre/o) {
-//         $prebrace = $line;
-//         $postbrace = $nextline;
-//         $need_newline = 0;
-//         last;
-//       } elsif ($nextline =~ /^(.*)(\{.*$eolre)/o) {
-//         $prebrace = $line . $1;
-//         $postbrace = $2;
-//         $need_newline = 1;
-//         last;
-//       } else {
-//         die "Didn't find open curly brace in method definition:\n$line\n$nextline";
-//       }
-//     }
-//   }
-//   return ($prebrace, $postbrace, $need_newline);
-// }
-
-
-///////////////////////////////////////////////////////////////////////////
-/// Other code
-
-//   # maps from method name to canonical program point name
-//   my %meth_ppt = ();
-//   for my $ppt (keys %raw) {
-//     my $methodname = ppt_to_meth($ppt);
-//     $meth_ppt{$methodname} = $ppt;
-//     # print "method: $methodname\n";
-//     # print "ppt: $ppt\n";
-//     # print $raw{$ppt};
-//   }
-
-
-
-//   // Special case for main method:  add "arg != null" and
-//   // "\nonnullelements(arg)".
-//   String[] add_main_requires(String[] requires_invs, Node n) {
-//     if (! (n instanceof MethodDeclaration)) {
-//       return requires_invs;
-//     }
-
-//     MethodDeclaration md = (MethodDeclaration) n;
-//     if (!Ast.isMain(md)) {
-//       return requires_invs;
-//     }
-//     FormalParameter fp = (FormalParameter) Ast.getParameters(md).get(0);
-//     String param = Ast.getName(fp);
-//     String nonnull_inv = param + " != null";
-//     String nonnullelements_inv = "\\nonnullelements(" + param + ")";
-//     int num_invs = 2;
-
-//     // Null out the invariants if they already exist
-//     if (requires_invs == null) {
-//       requires_invs = new String[0];
-//     } else {
-//       if (ArraysMDE.indexOf(requires_invs, nonnull_inv) != -1) {
-//         nonnull_inv = null;
-//         num_invs--;
-//       }
-//       if (ArraysMDE.indexOf(requires_invs, nonnullelements_inv) != -1) {
-//         nonnullelements_inv = null;
-//         num_invs--;
-//       }
-//       if (num_invs == 0) {
-//         return requires_invs;
-//       }
-//     }
-//     Assert.assertTrue(requires_invs != null);
-
-//     // Allocate space
-//     int old_size = requires_invs.length;
-//     String[] new_requires_invs = new String[old_size+num_invs];
-//     System.arraycopy(requires_invs, 0, new_requires_invs, 0, old_size);
-//     requires_invs = new_requires_invs;
-
-//     // Add the invariants
-//     if (nonnull_inv != null) {
-//       num_invs--;
-//       requires_invs[old_size + num_invs] = nonnull_inv;
-//       // System.out.println("Filled in " + (old_size + num_invs));
-//     }
-//     if (nonnullelements_inv != null) {
-//       num_invs--;
-//       requires_invs[old_size + num_invs] = nonnullelements_inv;
-//       // System.out.println("Filled in " + (old_size + num_invs));
-//     }
-//     Assert.assertTrue(num_invs == 0);
-//     for (int i=0; i<requires_invs.length; i++) {
-//       if (requires_invs[i] == null) {
-//         System.out.println("Null invariant at index " + i + "/" + requires_invs.length);
-//         System.exit(1);
-//       }
-//     }
-//     Assert.assertTrue(ArraysMDE.indexOfEq(requires_invs, (Object)null) == -1);
-
-//     return requires_invs;
-//   }

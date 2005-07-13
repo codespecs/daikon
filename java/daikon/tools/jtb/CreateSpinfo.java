@@ -239,9 +239,9 @@ public class CreateSpinfo {
       output.write("REPLACE" + lineSep);
       List methodsList = new ArrayList(replaceStatements.keySet());
       Collections.sort(methodsList);
-      Iterator methodIterator = methodsList.iterator();
+      Iterator<String> methodIterator = methodsList.iterator();
       while (methodIterator.hasNext()) {
-	String declaration = (String) methodIterator.next();
+	String declaration = methodIterator.next();
 	output.write(declaration + lineSep);
 	output.write(removeNewlines((String) replaceStatements.get(declaration)) + lineSep);
       }
@@ -250,9 +250,9 @@ public class CreateSpinfo {
     List method_conds;
     List methodsList = new ArrayList(conditions.keySet());
     Collections.sort(methodsList);
-    Iterator methods = methodsList.iterator();
+    Iterator<String> methods = methodsList.iterator();
     while (methods.hasNext()) {
-      String method = (String) methods.next();
+      String method = methods.next();
       method_conds = (List) conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {

@@ -194,8 +194,8 @@ public class NISuppression {
     for (int i = 0; i < antecedents.length; i++) {
       List a = antecedents[i];
       int false_cnt = 0;
-      for (Iterator j = a.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
+      for (Iterator<Invariant> j = a.iterator(); j.hasNext(); ) {
+        Invariant inv = j.next();
         if (inv.is_false())
           false_cnt++;
       }
@@ -244,8 +244,8 @@ public class NISuppression {
 
     // Loop through each antecedent that matches the current suppressor
     NISuppressor s = suppressors[idx];
-    for (Iterator i = antecedents[idx].iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = antecedents[idx].iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       PptTopLevel ppt = inv.ppt.parent;
 
       // See if this antecedent can be used with the ones we have found so far
@@ -262,8 +262,8 @@ public class NISuppression {
 
         // Check to insure that none of the invariants already exists
         if (Daikon.dkconfig_internal_check) {
-          for (Iterator j = new_invs.iterator(); j.hasNext(); ) {
-            NIS.SupInv supinv = (NIS.SupInv) j.next();
+          for (Iterator<NIS.SupInv> j = new_invs.iterator(); j.hasNext(); ) {
+            NIS.SupInv supinv = j.next();
             Invariant cinv = supinv.already_exists();
             if (cinv != null) {
               NISuppressionSet ss = cinv.get_ni_suppressions();
@@ -313,8 +313,8 @@ public class NISuppression {
 
     // Loop through each antecedent that matches the current suppressor
     NISuppressor s = suppressors[idx];
-    for (Iterator i = antecedents[idx].iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = antecedents[idx].iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       PptTopLevel ppt = inv.ppt.parent;
 
       // If this is the last suppressor, no previous antecedents were
@@ -349,8 +349,8 @@ public class NISuppression {
 
         // Check to insure that none of the invariants already exists
         if (Daikon.dkconfig_internal_check) {
-          for (Iterator j = new_invs.iterator(); j.hasNext(); ) {
-            NIS.SupInv supinv = (NIS.SupInv) j.next();
+          for (Iterator<NIS.SupInv> j = new_invs.iterator(); j.hasNext(); ) {
+            NIS.SupInv supinv = j.next();
             Invariant cinv = supinv.already_exists();
             if (cinv != null)
               Assert.assertTrue (false, "inv " + cinv.format() + " of class "
@@ -579,8 +579,8 @@ public class NISuppression {
     String out = "suppression " + this + sep;
     for (int i = 0; i < antecedents.length; i++) {
       out += "antecedents for suppressor " + i + sep;
-      for (Iterator j = antecedents[i].iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
+      for (Iterator<Invariant> j = antecedents[i].iterator(); j.hasNext(); ) {
+        Invariant inv = j.next();
         out += "    " + inv.format() + (inv.is_false() ? " [false]" : " t") + sep;
       }
     }

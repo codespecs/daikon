@@ -432,8 +432,8 @@ public class SampleTester extends TestCase {
       return (false);
 
     // Look for a matching invariant in the slices invariant list
-    for (Iterator i = slice.invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = slice.invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       if (inv.getClass() == cls)
         return (true);
       if ((format != null) && format.equals (inv.format()))
@@ -472,8 +472,8 @@ public class SampleTester extends TestCase {
     }
 
     // Look for a matching invariant in the slices invariant list
-    for (Iterator i = slice.invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = slice.invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       Fmt.pf ("found %s: %s", inv.getClass(), inv.format());
     }
     return (true);
@@ -489,8 +489,8 @@ public class SampleTester extends TestCase {
     if (args.size() < 1)
       parse_error ("Must be at least one argument for constant assertion");
 
-    for (Iterator i = args.iterator(); i.hasNext(); ) {
-      String arg = (String) i.next();
+    for (Iterator<String> i = args.iterator(); i.hasNext(); ) {
+      String arg = i.next();
       VarInfo v = ppt.find_var_by_name (arg);
       if (v == null)
         parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",

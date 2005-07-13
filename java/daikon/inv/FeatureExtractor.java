@@ -285,8 +285,8 @@ public final class FeatureExtractor {
     // and a Map of numbers to names
     TreeSet allFeatures = new TreeSet();
     HashMap numbersToNames = new HashMap();
-    for (Iterator i = lookup.entrySet().iterator(); i.hasNext();) {
-      Map.Entry entry = (Map.Entry) i.next();
+    for (Iterator<Map.Entry> i = lookup.entrySet().iterator(); i.hasNext();) {
+      Map.Entry entry = i.next();
       Object key = entry.getKey();
       int num = ((Integer) entry.getValue()).intValue();
       IntDoublePair pair = new IntDoublePair(num, 0);
@@ -309,8 +309,8 @@ public final class FeatureExtractor {
     names.println("|Beginning of .names file");
     // names.println("GoodBad."); names.println(); names.println("GoodBad: 1, -1.");
     names.println("good, bad.");
-    for (Iterator all = allFeatures.iterator(); all.hasNext(); ) {
-      IntDoublePair current = (IntDoublePair) all.next();
+    for (Iterator<IntDoublePair> all = allFeatures.iterator(); all.hasNext(); ) {
+      IntDoublePair current = all.next();
       if (numbersToNames.containsKey(current)) {
         String currentName = (String) numbersToNames.get(current);
         if (currentName.endsWith("Bool"))
@@ -357,8 +357,8 @@ public final class FeatureExtractor {
       // Debugging code to detect duplicates within allFets
       //
       //  HashSet temp = new HashSet();
-      //  for (Iterator iter = allFets.iterator(); iter.hasNext();) {
-      //  IntDoublePair meh = (IntDoublePair) iter.next();
+      //  for (Iterator<IntDoublePair> iter = allFets.iterator(); iter.hasNext();) {
+      //  IntDoublePair meh = iter.next();
       //  if (temp.contains(new Integer(meh.number)))
       //  throw new RuntimeException(lineSep + "Found duplicate feature: "+meh.number);
       //  temp.add(new Integer(meh.number));
@@ -367,11 +367,11 @@ public final class FeatureExtractor {
 
       // check which features are missing and add IntDoublePairs
       // with those features set to 0
-      for (Iterator h = allFeatures.iterator(); h.hasNext();) {
-        IntDoublePair current = (IntDoublePair) h.next();
+      for (Iterator<IntDoublePair> h = allFeatures.iterator(); h.hasNext();) {
+        IntDoublePair current = h.next();
         boolean contains = false;
-        for (Iterator j = allFets.iterator(); j.hasNext();) {
-          IntDoublePair jguy = (IntDoublePair) j.next();
+        for (Iterator<IntDoublePair> j = allFets.iterator(); j.hasNext();) {
+          IntDoublePair jguy = j.next();
           if (jguy.number == current.number)
             contains = true;
         }
@@ -382,12 +382,12 @@ public final class FeatureExtractor {
       // Debug Code that prints out features that
       // have been forgotten in AllFeatures
 
-//       for (Iterator h = allFets.iterator(); h.hasNext();) {
-//         IntDoublePair current = (IntDoublePair) h.next();
+//       for (Iterator<IntDoublePair> h = allFets.iterator(); h.hasNext();) {
+//         IntDoublePair current = h.next();
 //         boolean contains = false;
 
-//         for (Iterator j = allFeatures.iterator(); j.hasNext();) {
-//           IntDoublePair jguy = (IntDoublePair) j.next();
+//         for (Iterator<IntDoublePair> j = allFeatures.iterator(); j.hasNext();) {
+//           IntDoublePair jguy = j.next();
 //           if (jguy.number == current.number)
 //             contains = true;
 //         }
@@ -399,8 +399,8 @@ public final class FeatureExtractor {
                         lineSep + "Expected number of features: "+allFeatures.size() +
                         lineSep + "Actual number of features: "+allFets.size());
 
-      for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
-        IntDoublePair fet = (IntDoublePair) fets.next();
+      for (Iterator<IntDoublePair> fets = allFets.iterator(); fets.hasNext(); ) {
+        IntDoublePair fet = fets.next();
         output.print(df.format(fet.value) + ",");
       }
       output.println(label);
@@ -432,9 +432,9 @@ public final class FeatureExtractor {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       output.print(label);
-      for (Iterator fets = ((TreeSet) features.get(i)).iterator();
+      for (Iterator<IntDoublePair> fets = ((TreeSet) features.get(i)).iterator();
            fets.hasNext();) {
-        IntDoublePair fet = (IntDoublePair) fets.next();
+        IntDoublePair fet = fets.next();
         if (fet.value > THRESHOLD)
           output.print(fet.number + ":" + df.format(fet.value) + " ");
       }
@@ -467,9 +467,9 @@ public final class FeatureExtractor {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       output.print(((TreeSet) features.get(i)).size() * 2 + " ");
-      for (Iterator fets = ((TreeSet) features.get(i)).iterator();
+      for (Iterator<IntDoublePair> fets = ((TreeSet) features.get(i)).iterator();
            fets.hasNext();) {
-        IntDoublePair fet = (IntDoublePair) fets.next();
+        IntDoublePair fet = fets.next();
         output.print(fet.number + " " + df.format(fet.value) + " ");
       }
       output.println(label);
@@ -681,9 +681,9 @@ public final class FeatureExtractor {
       VarInfo[] varInfos = ((Invariant) inv).ppt.var_infos;
       for (int i = 0; i < varInfos.length; i++) {
 
-        for (Iterator it = getReflectFeatures(varInfos[i],lookup).iterator();
+        for (Iterator<IntDoublePair> it = getReflectFeatures(varInfos[i],lookup).iterator();
              it.hasNext();) {
-          IntDoublePair current = (IntDoublePair) it.next();
+          IntDoublePair current = it.next();
           answer.add(new IntDoublePair(current.number + i + 1, current.value));
           answer.add(current);
         }
@@ -717,8 +717,8 @@ public final class FeatureExtractor {
     //cleanup answer
     TreeSet final_answer = new TreeSet();
     HashSet index = new HashSet();
-    for (Iterator iter = answer.iterator(); iter.hasNext();) {
-      IntDoublePair current = (IntDoublePair) iter.next();
+    for (Iterator<IntDoublePair> iter = answer.iterator(); iter.hasNext();) {
+      IntDoublePair current = iter.next();
       if (!(index.contains(new Integer(current.number))))
         final_answer.add(current);
       index.add(new Integer(current.number));
@@ -883,8 +883,8 @@ public final class FeatureExtractor {
       ArrayList posvectors = new ArrayList();
       ArrayList negvectors = new ArrayList();
 
-      for (Iterator i = neg.iterator(); i.hasNext(); ) {
-        String vector = (String) i.next();
+      for (Iterator<String> i = neg.iterator(); i.hasNext(); ) {
+        String vector = i.next();
         if (!(pos.contains(vector))) {
           if (type.equals("C5"))
             negvectors.add(vector + "bad");

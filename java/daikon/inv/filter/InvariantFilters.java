@@ -86,8 +86,8 @@ public class InvariantFilters {
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;
-        for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-          InvariantFilter filter = (InvariantFilter) iter.next();
+        for (Iterator<InvariantFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
+          InvariantFilter filter = iter.next();
           if (! filter.shouldDiscard( invariant )) {
             hasAnyVariable = true;
           }
@@ -98,8 +98,8 @@ public class InvariantFilters {
           return (InvariantFilter) variableFilters.get(0);
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
-        for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-          InvariantFilter filter = (InvariantFilter) iter.next();
+        for (Iterator<InvariantFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
+          InvariantFilter filter = iter.next();
           if (filter.shouldDiscard( invariant )) {
             if (invariant.logOn())
               invariant.log ("Failed ALL_VARIABLES filter"
@@ -114,8 +114,8 @@ public class InvariantFilters {
 
   public InvariantFilter shouldKeepPropFilters( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
-    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
-      InvariantFilter filter = (InvariantFilter) iter.next();
+    for (Iterator<InvariantFilter> iter = propertyFilters.iterator(); iter.hasNext(); ) {
+      InvariantFilter filter = iter.next();
       if (invariant.logDetail() || df.isLoggable(Level.FINE)) {
         invariant.log (df, "applying " + filter.getClass().getName());
       }
@@ -160,8 +160,8 @@ public class InvariantFilters {
 
   private InvariantFilter find(String description) {
     InvariantFilter answer = null;
-    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
-      InvariantFilter filter = (InvariantFilter) iter.next();
+    for (Iterator<InvariantFilter> iter = propertyFilters.iterator(); iter.hasNext(); ) {
+      InvariantFilter filter = iter.next();
       if (filter.getDescription().equals(description)) {
         answer = filter;
       }
@@ -182,15 +182,15 @@ public class InvariantFilters {
   }
 
   public void turnFiltersOn() {
-    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
-      InvariantFilter filter = (InvariantFilter) iter.next();
+    for (Iterator<InvariantFilter> iter = propertyFilters.iterator(); iter.hasNext(); ) {
+      InvariantFilter filter = iter.next();
       filter.turnOn();
     }
   }
 
   public void turnFiltersOff() {
-    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
-      InvariantFilter filter = (InvariantFilter) iter.next();
+    for (Iterator<InvariantFilter> iter = propertyFilters.iterator(); iter.hasNext(); ) {
+      InvariantFilter filter = iter.next();
       filter.turnOff();
     }
   }
@@ -200,8 +200,8 @@ public class InvariantFilters {
   }
 
   public boolean containsVariableFilter( String variable ) {
-    for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-      VariableFilter vf = (VariableFilter) iter.next();
+    for (Iterator<VariableFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
+      VariableFilter vf = iter.next();
       if (vf.getVariable().equals( variable )) {
         return true;
       }
@@ -211,8 +211,8 @@ public class InvariantFilters {
 
   public void removeVariableFilter( String variable ) {
     boolean foundOnce = false;
-    for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-      VariableFilter vf = (VariableFilter) iter.next();
+    for (Iterator<VariableFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
+      VariableFilter vf = iter.next();
       if (vf.getVariable().equals( variable )) {
         iter.remove();
         foundOnce = true;

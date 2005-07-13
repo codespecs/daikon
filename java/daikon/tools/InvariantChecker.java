@@ -231,8 +231,8 @@ public class InvariantChecker {
 
       // Add the sample to any splitters
       if (ppt.has_splitters()) {
-        for (Iterator ii = ppt.splitters.iterator(); ii.hasNext(); ) {
-          PptSplitter ppt_split = (PptSplitter) ii.next();
+        for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
+          PptSplitter ppt_split = ii.next();
           PptConditional ppt_cond = ppt_split.choose_conditional (vt);
           if (ppt_cond != null)
             add (ppt_cond, vt);
@@ -264,8 +264,8 @@ public class InvariantChecker {
 
       // Loop through each slice
       slice_loop:
-      for (Iterator i = ppt.views_iterator(); i.hasNext(); ) {
-        PptSlice slice = (PptSlice) i.next();
+      for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
+        PptSlice slice = i.next();
         if (debug_detail.isLoggable (Level.FINE))
           debug_detail.fine (": processing slice " + slice + "vars: "
                            + Debug.toString (slice.var_infos, vt));
@@ -289,8 +289,8 @@ public class InvariantChecker {
         }
 
         // Loop through each invariant
-        for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-          Invariant inv = (Invariant) j.next();
+        for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
+          Invariant inv = j.next();
           if (debug_detail.isLoggable (Level.FINE))
             debug_detail.fine (": : Processing invariant: " + inv);
           if (!inv.isActive()) {

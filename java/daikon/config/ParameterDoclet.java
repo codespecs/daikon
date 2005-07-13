@@ -214,10 +214,10 @@ public class ParameterDoclet
       out.println("@table @option");
       out.println();
 
-      List keys = new ArrayList(categories[c].fields.keySet());
+      List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
-      for (Iterator i = keys.iterator(); i.hasNext(); ) {
-	String field = (String) i.next();
+      for (Iterator<String> i = keys.iterator(); i.hasNext(); ) {
+	String field = i.next();
 	String desc = (String) categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
 
@@ -252,10 +252,10 @@ public class ParameterDoclet
       out.println(categories[c].description);
       out.println();
 
-      List keys = new ArrayList(categories[c].fields.keySet());
+      List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
-      for (Iterator i = keys.iterator(); i.hasNext(); ) {
-	String field = (String) i.next();
+      for (Iterator<String> i = keys.iterator(); i.hasNext(); ) {
+	String field = i.next();
 	String desc = (String) categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
 
@@ -271,10 +271,10 @@ public class ParameterDoclet
 
   public void writeList(PrintWriter out) {
     for (int c = 0; c < categories.length; c++) {
-      List keys = new ArrayList(categories[c].fields.keySet());
+      List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
-      for (Iterator i = keys.iterator(); i.hasNext(); ) {
-	String field = (String) i.next();
+      for (Iterator<String> i = keys.iterator(); i.hasNext(); ) {
+	String field = i.next();
 	out.println(field);
       }
     }

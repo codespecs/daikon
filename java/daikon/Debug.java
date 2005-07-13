@@ -214,8 +214,8 @@ public class Debug {
       if (v.equalitySet != null)
         evars = v.equalitySet.getVars();
       if (evars != null) {
-        for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
-          VarInfo ev = (VarInfo) iter.next();
+        for (Iterator<VarInfo> iter = evars.iterator(); iter.hasNext(); ) {
+          VarInfo ev = iter.next();
           for (int k = 0; k < debugTrackVars.length; k++) {
             if (ev.name().equals (debugTrackVars[k][0]))
               return (v);
@@ -586,8 +586,8 @@ public class Debug {
           if ((evars != null) && vis[k].isCanonical()) {
 
             // Loop through each variable in the equality set
-            for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
-              VarInfo v = (VarInfo) iter.next();
+            for (Iterator<VarInfo> iter = evars.iterator(); iter.hasNext(); ) {
+              VarInfo v = iter.next();
               if (!used[k] &&
                   (cv[j].equals ("*") || cv[j].equals (v.name.name()))) {
                 used[k] = true;
@@ -638,10 +638,10 @@ public class Debug {
 
     boolean found = false;
 
-    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      for (Iterator j = ppt.views_iterator(); j.hasNext(); ) {
-        PptSlice slice = (PptSlice) j.next();
+    for (Iterator<PptTopLevel> i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
+      for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext(); ) {
+        PptSlice slice = j.next();
         for (int k = 0; k < slice.invs.size(); k++ ) {
           Invariant inv = (Invariant) slice.invs.get(k);
           if (inv.log (msg + ": found #" + k + "= " + inv.format() +

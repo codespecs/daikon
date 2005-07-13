@@ -109,8 +109,8 @@ public class NIS {
       return;
 
     // Get all defined suppressions.
-    for (Iterator i = Daikon.proto_invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = Daikon.proto_invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       NISuppressionSet ss = inv.get_ni_suppressions();
       if (ss != null) {
         for (int j = 0; j < ss.suppression_set.length; j++) {
@@ -130,24 +130,24 @@ public class NIS {
     }
 
     // map suppressor classes to suppression sets
-    for (Iterator i = all_suppressions.iterator(); i.hasNext(); ) {
-      NISuppressionSet suppression_set = (NISuppressionSet) i.next();
+    for (Iterator<NISuppressionSet> i = all_suppressions.iterator(); i.hasNext(); ) {
+      NISuppressionSet suppression_set = i.next();
       suppression_set.add_to_suppressor_map (suppressor_map);
     }
 
     // If any suppressor is itself suppressed, augment the suppressions
     // where the suppressor is used with the suppressor's suppressions.
-    for (Iterator i = suppressor_map.values().iterator(); i.hasNext(); ) {
-      List<NISuppressionSet> ss_list = (List) i.next();
-      for (Iterator j = ss_list.iterator(); j.hasNext(); ) {
-        NISuppressionSet ss = (NISuppressionSet) j.next();
+    for (Iterator<List<NISuppressionSet>> i = suppressor_map.values().iterator(); i.hasNext(); ) {
+      List<NISuppressionSet> ss_list = i.next();
+      for (Iterator<NISuppressionSet> j = ss_list.iterator(); j.hasNext(); ) {
+        NISuppressionSet ss = j.next();
         NISuppressee suppressee = ss.get_suppressee();
         List<NISuppressionSet> suppressor_ss_list
           = (List) suppressor_map.get (suppressee.sup_class);
         if (suppressor_ss_list == null)
           continue;
-        for (Iterator k = suppressor_ss_list.iterator(); k.hasNext(); ) {
-          NISuppressionSet suppressor_ss = (NISuppressionSet) k.next();
+        for (Iterator<NISuppressionSet> k = suppressor_ss_list.iterator(); k.hasNext(); ) {
+          NISuppressionSet suppressor_ss = k.next();
           suppressor_ss.recurse_definitions (ss);
           // Fmt.pf ("New recursed suppressions: " + suppressor_ss);
         }
@@ -182,8 +182,8 @@ public class NIS {
     }
 
     // Process each suppression set
-    for (Iterator i = ss_list.iterator(); i.hasNext(); ) {
-      NISuppressionSet ss = (NISuppressionSet) i.next();
+    for (Iterator<NISuppressionSet> i = ss_list.iterator(); i.hasNext(); ) {
+      NISuppressionSet ss = i.next();
       ss.clear_state();
       if (debug.isLoggable (Level.FINE))
         debug.fine ("processing suppression set " + ss + " over falsified inv "
@@ -214,8 +214,8 @@ public class NIS {
                        + " new invariants");
 
     // Loop through each invariant
-    for (Iterator i = new_invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = new_invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       if (inv.is_false())
         Assert.assertTrue (!inv.is_false(), Fmt.spf ("inv %s in ppt %s is "
             + " false before sample is applied ", inv.format(), inv.ppt));
@@ -256,8 +256,8 @@ public class NIS {
     // there are recursive suppressions and the new suppressor wasn't
     // yet created above when the invariant was first checked to see
     // if it was suppressed.
-    for (Iterator i = new_invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = new_invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       // inv.log ("Considering whether still suppressed in second pass");
       if (inv.is_ni_suppressed()) {
         still_suppressed_cnt++;
@@ -345,8 +345,8 @@ public class NIS {
     // If there are no falsified invariants, there is nothing to do
     int false_cnt = 0;
     int inv_cnt = 0;
-    for (Iterator i = ppt.invariants_iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = ppt.invariants_iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       if (inv.is_false())
         false_cnt++;
       inv_cnt++;
@@ -370,8 +370,8 @@ public class NIS {
       store_antecedents_by_comparability
         (ppt.constants.create_constant_invs().iterator(), comp_ants);
     if (debugAnt.isLoggable (Level.FINE)) {
-      for (Iterator i = comp_ants.values().iterator(); i.hasNext(); ) {
-        Antecedents ants = (Antecedents) i.next();
+      for (Iterator<Antecedents> i = comp_ants.values().iterator(); i.hasNext(); ) {
+        Antecedents ants = i.next();
         debugAnt.fine (ants.toString());
       }
     }
@@ -380,14 +380,14 @@ public class NIS {
     merge_always_comparable (comp_ants);
 
     if (false) {
-      for (Iterator i = comp_ants.values().iterator(); i.hasNext(); ) {
-        Antecedents ants = (Antecedents) i.next();
+      for (Iterator<Antecedents> i = comp_ants.values().iterator(); i.hasNext(); ) {
+        Antecedents ants = i.next();
         List<Invariant> eq_invs = ants.get (IntEqual.class);
         if ((eq_invs != null) && (eq_invs.size() > 1000)) {
           Map var_map = new LinkedHashMap();
           Fmt.pf ("ppt %s, comparability %s has %s equality invariants",
                   ppt.name, ants.comparability, "" + eq_invs.size());
-          for (Iterator j = eq_invs.iterator(); j.hasNext(); ) {
+          for (Iterator<Invariant> j = eq_invs.iterator(); j.hasNext(); ) {
             IntEqual inv = (IntEqual) j.next();
             VarInfo v1 = inv.ppt.var_infos[0];
             VarInfo v2 = inv.ppt.var_infos[1];
@@ -409,8 +409,8 @@ public class NIS {
             cnt.val++;
           }
           Fmt.pf ("%s distinct variables", "" + var_map.size());
-          for (Iterator j = var_map.keySet().iterator(); j.hasNext(); ) {
-            VarInfo key = (VarInfo) j.next();
+          for (Iterator<VarInfo> j = var_map.keySet().iterator(); j.hasNext(); ) {
+            VarInfo key = j.next();
             Count cnt = (Count) var_map.get (key);
             Fmt.pf (" %s %s %s ", key.comparability, key.name.name(),
                     "" + cnt.val);
@@ -421,15 +421,15 @@ public class NIS {
 
     // Remove any Antecedents without any falsified invariants.  They can't
     // possibly create any newly unsuppressed invariants
-    for (Iterator i = comp_ants.values().iterator(); i.hasNext(); ) {
-      Antecedents ants = (Antecedents) i.next();
+    for (Iterator<Antecedents> i = comp_ants.values().iterator(); i.hasNext(); ) {
+      Antecedents ants = i.next();
       // Fmt.pf ("ants = " + ants);
       if (ants.false_cnt == 0)
         i.remove();
     }
     if (debugAnt.isLoggable (Level.FINE)) {
-      for (Iterator i = comp_ants.values().iterator(); i.hasNext(); ) {
-        Antecedents ants = (Antecedents) i.next();
+      for (Iterator<Antecedents> i = comp_ants.values().iterator(); i.hasNext(); ) {
+        Antecedents ants = i.next();
         debugAnt.fine (ants.toString());
       }
     }
@@ -438,13 +438,13 @@ public class NIS {
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately
     Set<SupInv> unsuppressed_invs = new LinkedHashSet();
-    for (Iterator i = all_suppressions.iterator(); i.hasNext(); ) {
-      NISuppressionSet ss = (NISuppressionSet) i.next();
-      for (Iterator j = ss.iterator(); j.hasNext(); ) {
-        NISuppression sup = (NISuppression) j.next();
+    for (Iterator<NISuppressionSet> i = all_suppressions.iterator(); i.hasNext(); ) {
+      NISuppressionSet ss = i.next();
+      for (Iterator<NISuppression> j = ss.iterator(); j.hasNext(); ) {
+        NISuppression sup = j.next();
         suppressions_processed++;
-        for (Iterator k = comp_ants.values().iterator(); k.hasNext(); ) {
-          Antecedents ants = (Antecedents) k.next();
+        for (Iterator<Antecedents> k = comp_ants.values().iterator(); k.hasNext(); ) {
+          Antecedents ants = k.next();
           sup.find_unsuppressed_invs (unsuppressed_invs, ants);
         }
       }
@@ -457,8 +457,8 @@ public class NIS {
     // by a different suppression.  Skip any that will be falsified by
     // the sample.  Checking the sample is faster than checking suppression
     // and removes the invariant more often, so it is checked first
-    for (Iterator i = unsuppressed_invs.iterator(); i.hasNext(); ) {
-      SupInv supinv = (SupInv) i.next();
+    for (Iterator<SupInv> i = unsuppressed_invs.iterator(); i.hasNext(); ) {
+      SupInv supinv = i.next();
       new_invs_cnt++;
       if (supinv.check (vt) == InvariantStatus.FALSIFIED) {
         supinv.log ("unsuppressed inv falsified by sample");
@@ -505,8 +505,8 @@ public class NIS {
 
     // Find the antecedents that are always comparable (if any)
     Antecedents compare_all = null;
-    for (Iterator i = comp_ants.keySet().iterator(); i.hasNext(); ) {
-      VarComparability vc = (VarComparability) i.next();
+    for (Iterator<VarComparability> i = comp_ants.keySet().iterator(); i.hasNext(); ) {
+      VarComparability vc = i.next();
       if (vc.alwaysComparable()) {
         compare_all = (Antecedents) comp_ants.get (vc);
         break;
@@ -515,8 +515,8 @@ public class NIS {
 
     // Add always comparable antecedents to each of the other maps.
     if ((compare_all != null) && (comp_ants.size() > 1)) {
-      for (Iterator i = comp_ants.values().iterator(); i.hasNext(); ) {
-        Antecedents ants = (Antecedents) i.next();
+      for (Iterator<Antecedents> i = comp_ants.values().iterator(); i.hasNext(); ) {
+        Antecedents ants = i.next();
         if (ants.alwaysComparable())
           continue;
         ants.add (compare_all);
@@ -543,12 +543,12 @@ public class NIS {
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately.
     Set<SupInv> suppressed_invs = new LinkedHashSet();
-    for (Iterator i = all_suppressions.iterator(); i.hasNext(); ) {
-      NISuppressionSet ss = (NISuppressionSet) i.next();
-      for (Iterator j = ss.iterator(); j.hasNext(); ) {
-        NISuppression sup = (NISuppression) j.next();
-        for (Iterator k = comp_ants.values().iterator(); k.hasNext(); ) {
-          Antecedents ants = (Antecedents) k.next();
+    for (Iterator<NISuppressionSet> i = all_suppressions.iterator(); i.hasNext(); ) {
+      NISuppressionSet ss = i.next();
+      for (Iterator<NISuppression> j = ss.iterator(); j.hasNext(); ) {
+        NISuppression sup = j.next();
+        for (Iterator<Antecedents> k = comp_ants.values().iterator(); k.hasNext(); ) {
+          Antecedents ants = k.next();
           sup.find_suppressed_invs (suppressed_invs, ants);
         }
       }
@@ -556,8 +556,8 @@ public class NIS {
 
     // Create each invariant and add it to its slice.
     List created_invs = new ArrayList (suppressed_invs.size());
-    for (Iterator i = suppressed_invs.iterator(); i.hasNext(); ) {
-      SupInv supinv = (SupInv) i.next();
+    for (Iterator<SupInv> i = suppressed_invs.iterator(); i.hasNext(); ) {
+      SupInv supinv = i.next();
       Invariant inv = supinv.instantiate (ppt);
       if (inv != null) {
         if (Daikon.dkconfig_internal_check)
@@ -578,10 +578,10 @@ public class NIS {
                            (Iterator slice_iterator,
                             Map<VarComparability,Antecedents> comp_ants) {
 
-    for (Iterator i = slice_iterator; i.hasNext(); ) {
-      PptSlice slice = (PptSlice) i.next();
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
+    for (Iterator<PptSlice> i = slice_iterator; i.hasNext(); ) {
+      PptSlice slice = i.next();
+      for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
+        Invariant inv = j.next();
         if (!is_suppressor (inv.getClass()))
           continue;
         if (inv.is_false())
@@ -605,15 +605,15 @@ public class NIS {
    * map with a list of all of the antecedent invariants for each
    * class. @return the number of false antecedents found.
    */
-  static int find_antecedents (Iterator slice_iterator,
+  static int find_antecedents (Iterator<PptSlice> slice_iterator,
                     Map<Class,List<Invariant>> antecedent_map) {
 
     int false_cnt = 0;
 
     while (slice_iterator.hasNext()) {
-      PptSlice slice = (PptSlice) slice_iterator.next();
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
+      PptSlice slice = slice_iterator.next();
+      for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
+        Invariant inv = j.next();
         if (!is_suppressor (inv.getClass()))
           continue;
         if (inv.is_false())
@@ -636,10 +636,10 @@ public class NIS {
   public static void remove_suppressed_invs (PptTopLevel ppt) {
 
     // Fmt.pf ("Removing suppressed invariants for " + ppt.name);
-    for (Iterator i = ppt.views_iterator(); i.hasNext(); ) {
-      PptSlice slice = (PptSlice) i.next();
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
+    for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
+      PptSlice slice = i.next();
+      for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
+        Invariant inv = j.next();
         if (inv.is_ni_suppressed()) {
           inv.log ("Removed because suppressed " + inv.format());
           j.remove();
@@ -663,11 +663,11 @@ public class NIS {
     if (!log.isLoggable(Level.FINE))
       return;
 
-    for (Iterator i = suppressor_map.keySet().iterator(); i.hasNext(); ) {
-      Class sclass = (Class) i.next();
+    for (Iterator<Class> i = suppressor_map.keySet().iterator(); i.hasNext(); ) {
+      Class sclass = i.next();
       List suppression_set_list = (List) suppressor_map.get (sclass);
-      for (ListIterator j = suppression_set_list.listIterator(); j.hasNext();) {
-        NISuppressionSet ss = (NISuppressionSet) j.next();
+      for (ListIterator<NISuppressionSet> j = suppression_set_list.listIterator(); j.hasNext();) {
+        NISuppressionSet ss = j.next();
         if (j.previousIndex() > 0)
           log.fine (Fmt.spf ("        : %s", ss));
         else
@@ -867,10 +867,10 @@ public class NIS {
      */
     public void add (Antecedents ants) {
 
-      for (Iterator i = ants.antecedent_map.values().iterator(); i.hasNext();){
-        List invs = (List) i.next();
-        for (Iterator j = invs.iterator(); j.hasNext(); ) {
-          Invariant inv = (Invariant) j.next();
+      for (Iterator<List<Invariant>> i = ants.antecedent_map.values().iterator(); i.hasNext();){
+        List<Invariant> invs = i.next();
+        for (Iterator<Invariant> j = invs.iterator(); j.hasNext(); ) {
+          Invariant inv = j.next();
           add (inv);
         }
       }
@@ -892,12 +892,12 @@ public class NIS {
 
       String out = "Comparability " + comparability + " : ";
 
-      for (Iterator i = antecedent_map.keySet().iterator(); i.hasNext(); ) {
-        Class iclass = (Class) i.next();
+      for (Iterator<Class> i = antecedent_map.keySet().iterator(); i.hasNext(); ) {
+        Class iclass = i.next();
         out += UtilMDE.unqualified_name (iclass) + " : ";
         List<Invariant> ilist = (List) antecedent_map.get (iclass);
-        for (Iterator j = ilist.iterator(); j.hasNext(); ) {
-          Invariant inv = (Invariant) j.next();
+        for (Iterator<Invariant> j = ilist.iterator(); j.hasNext(); ) {
+          Invariant inv = j.next();
           if (inv.is_false())
             out += inv.format() + "[FALSE] ";
           else

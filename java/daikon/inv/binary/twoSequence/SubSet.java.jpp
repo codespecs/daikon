@@ -60,7 +60,7 @@ import java.util.logging.Level;
 
 /**
  * Represents two sequences of LONG values where one of the sequences is a
- * subset of the other; that is each element of one sequence appears in the 
+ * subset of the other; that is each element of one sequence appears in the
  * other.
  * Prints as either <samp>x[] is a subset of y[]</samp> or as
  * <samp>x[] is a superset of y[]</samp>.
@@ -358,8 +358,8 @@ public class SUBSET
   // Look up a previously instantiated SubSet relationship.
   public static SUBSET find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof SUBSET)
         return (SUBSET) inv;
     }

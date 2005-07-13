@@ -147,8 +147,8 @@ public class ExtractConsequent {
     TreeSet ppts_sorted = new TreeSet(comparator);
     ppts_sorted.addAll(ppts.asCollection());
 
-    for (Iterator itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = itor.next();
       extract_consequent_maybe(ppt, ppts);
     }
 
@@ -157,13 +157,13 @@ public class ExtractConsequent {
     // All conditions at a program point.  A TreeSet to enable
     // deterministic output.
     TreeSet allConds = new TreeSet();
-    for ( Iterator pptNamesIter = (pptname_to_conditions.keySet()).iterator() ;
+    for ( Iterator<String> pptNamesIter = (pptname_to_conditions.keySet()).iterator() ;
           pptNamesIter.hasNext() ; ) {
-      String pptname = (String) pptNamesIter.next();
+      String pptname = pptNamesIter.next();
       HashMap cluster_to_conditions = (HashMap) pptname_to_conditions.get(pptname);
-      for ( Iterator predIter = cluster_to_conditions.entrySet().iterator() ;
+      for ( Iterator<Map.Entry> predIter = cluster_to_conditions.entrySet().iterator() ;
             predIter.hasNext() ; ) {
-        Map.Entry entry = (Map.Entry) predIter.next();
+        Map.Entry entry = predIter.next();
         String predicate = (String) entry.getKey();
         Map conditions = (Map) entry.getValue();
         StringBuffer conjunctionJava = new StringBuffer();
@@ -172,9 +172,9 @@ public class ExtractConsequent {
         StringBuffer conjunctionESC = new StringBuffer();
         StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
         int count = 0;
-        for (Iterator condsIter = conditions.entrySet().iterator();
+        for (Iterator<Map.Entry> condsIter = conditions.entrySet().iterator();
              condsIter.hasNext(); count++) {
-          Map.Entry entry2 = (Map.Entry) condsIter.next();
+          Map.Entry entry2 = condsIter.next();
           String condIndex = (String) entry2.getKey();
           HashedConsequent cond = (HashedConsequent) entry2.getValue();
           if (cond.fakeFor != null) {

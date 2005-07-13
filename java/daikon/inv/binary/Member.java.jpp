@@ -331,7 +331,9 @@ public final class CLASSNAME
 #endif
 
   public InvariantStatus check_modified(SCALAR[] a, SCALAR i, int count) {
-    if (INDEXOF(a, i) == -1) {
+    if (a == null) {
+      return InvariantStatus.FALSIFIED;
+    } else if (INDEXOF(a, i) == -1) {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;

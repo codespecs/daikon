@@ -20,8 +20,8 @@ public class PptMap
   }
 
   public void addAll(List ppts) {
-    for (Iterator iPpt = ppts.iterator(); iPpt.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) iPpt.next();
+    for (Iterator<PptTopLevel> iPpt = ppts.iterator(); iPpt.hasNext(); ) {
+      PptTopLevel ppt = iPpt.next();
       add (ppt);
     }
   }
@@ -88,7 +88,7 @@ public class PptMap
     // Use a (live) view iterator to get concurrent modification
     // exceptions, and an iterator over sorted to get consistency.
     final Iterator iter_view = nameToPpt.values().iterator();
-    final Iterator iter_sort = sorted.iterator();
+    final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator() {
         Iterator cond_iterator = null;
         public boolean hasNext() {
@@ -102,7 +102,7 @@ public class PptMap
           if ((cond_iterator != null) && cond_iterator.hasNext())
             return (cond_iterator.next());
           iter_view.next(); // to check for concurrent modifications
-          PptTopLevel ppt = (PptTopLevel) iter_sort.next();
+          PptTopLevel ppt = iter_sort.next();
           if ((ppt != null) && ppt.has_splitters())
             cond_iterator = ppt.cond_iterator();
           return (ppt);
@@ -115,8 +115,8 @@ public class PptMap
 
   /** Iterate over the PptTopLevels and trim them. */
   public void trimToSize() {
-    for (Iterator i = nameToPpt.values().iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = nameToPpt.values().iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       ppt.trimToSize();
     }
   }
@@ -125,8 +125,8 @@ public class PptMap
    * Check the rep invariant of this.  Throws an Error if incorrect.
    **/
   public void repCheck() {
-    for (Iterator i = this.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = this.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       ppt.repCheck();
     }
   }
@@ -136,8 +136,8 @@ public class PptMap
    **/
   public int countSlices() {
     int result = 0;
-    for (Iterator i = this.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = this.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       result += ppt.numViews();
     }
     return result;

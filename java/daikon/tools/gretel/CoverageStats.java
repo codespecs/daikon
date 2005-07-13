@@ -74,10 +74,10 @@ public class CoverageStats
       if (! covered.containsKey(file)) covered.put(file, new HashSet());
       ((Set) covered.get(file)).addAll(lines);
     }
-    for (Iterator i = misses.keySet().iterator(); i.hasNext(); ) {
-      Map.Entry entry = (Map.Entry) i.next();
-      String file = (String) entry.getKey();
-      Set lines = (Set) entry.getValue();
+    for (Iterator<Map.Entry<String,Set<Integer>>> i = misses.entrySet().iterator(); i.hasNext(); ) {
+      Map.Entry<String,Set<Integer>> entry = i.next();
+      String file = entry.getKey();
+      Set<Integer> lines = entry.getValue();
       if (! relevant.contains(file)) continue;
       if (! all.containsKey(file)) all.put(file, new HashSet());
       ((Set) all.get(file)).addAll(lines);

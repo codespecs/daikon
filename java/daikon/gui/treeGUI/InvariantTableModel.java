@@ -52,8 +52,8 @@ class InvariantTableModel extends AbstractTableModel {
 
   public void updateInvariantList( InvariantFilters invariantFilters ) {
     filteredInvariants = new ArrayList();
-    for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
-      Invariant invariant = (Invariant) iter.next();
+    for (Iterator<Invariant> iter = allInvariants.iterator(); iter.hasNext(); ) {
+      Invariant invariant = iter.next();
       if (invariantFilters.shouldKeep( invariant ) == null)
 	filteredInvariants.add( invariant );
     }

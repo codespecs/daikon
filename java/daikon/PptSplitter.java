@@ -209,8 +209,8 @@ public class PptSplitter implements Serializable {
     // Loop through each possible parent slice
     List<VarInfo[]> slices = possible_slices();
 
-    for (Iterator itor = slices.iterator(); itor.hasNext(); ) {
-      VarInfo[] vis = (VarInfo[]) itor.next();
+    for (Iterator<VarInfo[]> itor = slices.iterator(); itor.hasNext(); ) {
+      VarInfo[] vis = itor.next();
 
       int num_children = ppts.length;
       // Each element is an invariant from the indexth child, permuted to
@@ -323,15 +323,15 @@ public class PptSplitter implements Serializable {
     if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
       debug.fine ("Found " + exclusive_invs_vec.size()
                   + " exclusive conditions ");
-      for (Iterator i = exclusive_invs_vec.iterator(); i.hasNext(); ) {
-        Invariant[] invs = (Invariant[]) i.next();
+      for (Iterator<Invariant[]> i = exclusive_invs_vec.iterator(); i.hasNext(); ) {
+        Invariant[] invs = i.next();
         invs[0].log ("exclusive condition with " + invs[1].format());
         invs[1].log ("exclusive condition with " + invs[0].format());
         debug.fine ("-- " + invs[0] + " -- " + invs[1]);
       }
       debug.fine ("Found " + different_invs_vec.size() + " different invariants ");
-      for (Iterator i = different_invs_vec.iterator(); i.hasNext(); ) {
-        Invariant[] invs = (Invariant[]) i.next();
+      for (Iterator<Invariant[]>  i = different_invs_vec.iterator(); i.hasNext(); ) {
+        Invariant[] invs = i.next();
         if (invs[0] != null)
           invs[0].log (invs[0] + " differs from "  + invs[1]);
         if (invs[1] != null)
@@ -378,13 +378,13 @@ public class PptSplitter implements Serializable {
     // Remove exclusive invariants from the different invariants list
     // It would be better not to have added them in the first place,
     // but this is easier for now.
-    for (Iterator ii = different_invs_vec.iterator(); ii.hasNext(); ) {
-      Invariant[] diff_invs = (Invariant[]) ii.next();
+    for (Iterator<Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
+      Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
         Assert.assertTrue (diff_invs[1] == null);
         // debug.fine ("Considering inv0 " + diff_invs[0]);
-        for (Iterator jj = exclusive_invs_vec.iterator(); jj.hasNext(); ) {
-          Invariant[] ex_invs = (Invariant[]) jj.next();
+        for (Iterator<Invariant[]> jj = exclusive_invs_vec.iterator(); jj.hasNext(); ) {
+          Invariant[] ex_invs = jj.next();
           if (ex_invs[0] == diff_invs[0]) {
             debug.fine ("removed exclusive invariant " + ex_invs[0]);
             ii.remove();
@@ -394,8 +394,8 @@ public class PptSplitter implements Serializable {
       } else {
         Assert.assertTrue (diff_invs[1] != null);
         // debug.fine ("Considering inv1 " + diff_invs[1]);
-        for (Iterator jj = exclusive_invs_vec.iterator(); jj.hasNext(); ) {
-          Invariant[] ex_invs = (Invariant[]) jj.next();
+        for (Iterator<Invariant[]> jj = exclusive_invs_vec.iterator(); jj.hasNext(); ) {
+          Invariant[] ex_invs = jj.next();
           if (ex_invs[1] == diff_invs[1]) {
             debug.fine ("removed exclusive invariant " + ex_invs[1]);
             ii.remove();
@@ -410,8 +410,8 @@ public class PptSplitter implements Serializable {
     // If all are either obvious or suppressed, we just pick the first
     // one in the list
     Invariant[] con_invs = new Invariant[2];
-    for (Iterator ii = exclusive_invs_vec.iterator(); ii.hasNext(); ) {
-      Invariant[] invs = (Invariant[]) ii.next();
+    for (Iterator<Invariant[]> ii = exclusive_invs_vec.iterator(); ii.hasNext(); ) {
+      Invariant[] invs = ii.next();
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
           Invariant orig = (Invariant) orig_invs.get (invs[jj]);
@@ -503,9 +503,9 @@ public class PptSplitter implements Serializable {
   // Could be used in assertion that all invariants are at same point.
   private boolean at_same_ppt(Invariants invs1, Invariants invs2) {
     PptSlice ppt = null;
-    Iterator itor = new UtilMDE.MergedIterator2(invs1.iterator(), invs2.iterator());
+    Iterator<Invariant> itor = new UtilMDE.MergedIterator2(invs1.iterator(), invs2.iterator());
     for (; itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+      Invariant inv = itor.next();
       if (ppt == null) {
         ppt = inv.ppt;
       } else {
@@ -561,10 +561,10 @@ public class PptSplitter implements Serializable {
     SortedSet ss2 = new TreeSet(icfp);
     ss2.addAll(invs2);
     Vector result = new Vector();
-    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(),
+    for (OrderedPairIterator<Pair> opi = new OrderedPairIterator(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {
-      Pair pair = (Pair) opi.next();
+      Pair pair = opi.next();
       if ((pair.a == null) || (pair.b == null)
           // || (icfp.compare(pair.a, pair.b) != 0)
           ) {
@@ -587,10 +587,10 @@ public class PptSplitter implements Serializable {
     SortedSet ss2 = new TreeSet(icfp);
     ss2.addAll(invs2);
     Vector result = new Vector();
-    for (OrderedPairIterator opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
+    for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {
-      Pair pair = (Pair) opi.next();
+      Pair pair = opi.next();
       if (pair.a != null && pair.b != null) {
         Invariant inv1 = (Invariant) pair.a;
         Invariant inv2 = (Invariant) pair.b;

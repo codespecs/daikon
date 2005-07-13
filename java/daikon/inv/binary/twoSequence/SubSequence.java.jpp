@@ -320,6 +320,9 @@ public class CLASSNAME
 
   public InvariantStatus check_modified (PRIMITIVE[] a1, PRIMITIVE[] a2,
                                         int count) {
+    if ((a1 == null) || (a2 == null))
+      return InvariantStatus.FALSIFIED;
+
     #if defined(SUB)
       int result = INDEX_OF (a2, a1);
     #else
@@ -524,8 +527,8 @@ public class CLASSNAME
   // Look up a previously instantiated SubSequence relationship.
   public static CLASSNAME find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv instanceof CLASSNAME)
         return (CLASSNAME) inv;
     }

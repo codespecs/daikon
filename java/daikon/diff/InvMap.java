@@ -84,12 +84,12 @@ public class InvMap implements Serializable {
 
   public String toString() {
     String result = "";
-    for (Iterator i = pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
+    for (Iterator<PptTopLevel> i = pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
       result += ppt.name() + Global.lineSep;
       List invs = get(ppt);
-      for (Iterator i2 = invs.iterator(); i2.hasNext(); ) {
-        Invariant inv = (Invariant) i2.next();
+      for (Iterator<Invariant> i2 = invs.iterator(); i2.hasNext(); ) {
+        Invariant inv = i2.next();
         result += "  " + inv.format() + Global.lineSep;
       }
     }

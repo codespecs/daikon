@@ -95,11 +95,11 @@ public class InvMatch {
 
     // Dump all of the valid translations
     Fmt.pf ("Valid Translations:");
-    for (Iterator i = valid_translations.iterator(); i.hasNext(); ) {
-      List current_translation = (List) i.next();
+    for (Iterator<List> i = valid_translations.iterator(); i.hasNext(); ) {
+      List current_translation = i.next();
       Fmt.pf ("  Translation: ");
-      for (Iterator j = current_translation.iterator(); j.hasNext(); ) {
-        InvTranslate xlate = (InvTranslate) j.next();
+      for (Iterator<InvTranslate> j = current_translation.iterator(); j.hasNext(); ) {
+        InvTranslate xlate = j.next();
         Fmt.pf ("    %s", xlate);
       }
     }
@@ -107,8 +107,8 @@ public class InvMatch {
     List<InvTranslate> best_translation
       = best_translation (valid_translations);
     Fmt.pf (Global.lineSep + "Best Translation");
-    for (Iterator i = best_translation.iterator(); i.hasNext(); ) {
-      InvTranslate xlate = (InvTranslate) i.next();
+    for (Iterator<InvTranslate> i = best_translation.iterator(); i.hasNext(); ) {
+      InvTranslate xlate = i.next();
       Fmt.pf ("  %s", xlate);
     }
 
@@ -126,12 +126,12 @@ public class InvMatch {
 
     List<List<InvTranslate>> xlate_list = new ArrayList();
 
-    for (Iterator i = ppt1.invariants_iterator(); i.hasNext(); ) {
-      Invariant inv1 = (Invariant) i.next();
+    for (Iterator<Invariant> i = ppt1.invariants_iterator(); i.hasNext(); ) {
+      Invariant inv1 = i.next();
       List<InvTranslate> inv_xlate_list = new ArrayList();
       xlate_list.add (inv_xlate_list);
-      for (Iterator j = ppt2.invariants_iterator(); j.hasNext(); ) {
-        Invariant inv2 = (Invariant) j.next();
+      for (Iterator<Invariant> j = ppt2.invariants_iterator(); j.hasNext(); ) {
+        Invariant inv2 = j.next();
         InvTranslate xlate = new InvTranslate();
         xlate.translate (inv1, inv2);
         if (xlate.quality > 0)
@@ -142,13 +142,13 @@ public class InvMatch {
 
     // Debug print all of the translations
     if (true) {
-      Iterator invi = ppt1.invariants_iterator();
-      for (Iterator i = xlate_list.iterator(); i.hasNext(); ) {
-        List<InvTranslate> inv_xlate_list = (List) i.next();
-        Invariant inv = (Invariant) invi.next();
+      Iterator<Invariant> invi = ppt1.invariants_iterator();
+      for (Iterator<List<InvTranslate>> i = xlate_list.iterator(); i.hasNext(); ) {
+        List<InvTranslate> inv_xlate_list = i.next();
+        Invariant inv = invi.next();
         Fmt.pf ("%s translations:", inv.format());
-        for (Iterator j = inv_xlate_list.iterator(); j.hasNext(); ) {
-          InvTranslate xlate = (InvTranslate) j.next();
+        for (Iterator<InvTranslate> j = inv_xlate_list.iterator(); j.hasNext(); ) {
+          InvTranslate xlate = j.next();
           Fmt.pf ("  %s", xlate);
         }
       }
@@ -176,8 +176,8 @@ public class InvMatch {
                                      List xlate_list, int index) {
 
     List inv_xlate_list = (List) xlate_list.get (index);
-    for (Iterator i = inv_xlate_list.iterator(); i.hasNext(); ) {
-      InvTranslate xlate = (InvTranslate) i.next();
+    for (Iterator<InvTranslate> i = inv_xlate_list.iterator(); i.hasNext(); ) {
+      InvTranslate xlate = i.next();
 
       List new_translation = new ArrayList();
       new_translation.addAll (current_translation);
@@ -197,12 +197,12 @@ public class InvMatch {
 
     Map var_map = new LinkedHashMap();
 
-    for (Iterator i = translation_list.iterator(); i.hasNext(); ) {
-      InvTranslate xlate = (InvTranslate) i.next();
+    for (Iterator<InvTranslate> i = translation_list.iterator(); i.hasNext(); ) {
+      InvTranslate xlate = i.next();
       if (xlate == null)
         continue;
-      for (Iterator j = xlate.var_map.keySet().iterator(); j.hasNext(); ) {
-        String key = (String) j.next();
+      for (Iterator<String> j = xlate.var_map.keySet().iterator(); j.hasNext(); ) {
+        String key = j.next();
         String val = (String) xlate.var_map.get (key);
         String cur_val = (String) var_map.get (key);
         if (cur_val == null)
@@ -220,11 +220,11 @@ public class InvMatch {
     // Determine the best translation and print it out.
     List<InvTranslate> best_translation = null;
     int best_quality = 0;
-    for (Iterator i = valid_translations.iterator(); i.hasNext(); ) {
-      List current_translation = (List) i.next();
+    for (Iterator<List<InvTranslate>> i = valid_translations.iterator(); i.hasNext(); ) {
+      List<InvTranslate> current_translation = i.next();
       int quality = 0;
-      for (Iterator j = current_translation.iterator(); j.hasNext(); ) {
-        InvTranslate xlate = (InvTranslate) j.next();
+      for (Iterator<InvTranslate> j = current_translation.iterator(); j.hasNext(); ) {
+        InvTranslate xlate = j.next();
         if (xlate != null)
           quality += xlate.quality;
       }

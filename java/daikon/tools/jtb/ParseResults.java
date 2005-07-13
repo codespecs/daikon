@@ -39,8 +39,8 @@ public class ParseResults {
 
     List<ParseResults> retval = new ArrayList<ParseResults>();
 
-    for (Iterator i = javaFileNames.iterator(); i.hasNext();) {
-      String javaFileName = (String) i.next();
+    for (Iterator<String> i = javaFileNames.iterator(); i.hasNext();) {
+      String javaFileName = i.next();
       ParseResults results = parse(javaFileName, discardComments);
       retval.add(results);
     }

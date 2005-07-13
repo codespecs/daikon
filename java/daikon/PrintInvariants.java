@@ -259,8 +259,8 @@ public final class PrintInvariants {
     // Debug print the hierarchy is a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Printing PPT Hierarchy");
-      for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
-        PptTopLevel my_ppt = (PptTopLevel) i.next();
+      for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel my_ppt = i.next();
         if (my_ppt.parents.size() == 0)
           my_ppt.debug_print_tree (debug, 0, null);
       }
@@ -318,8 +318,8 @@ public final class PrintInvariants {
     ppts_sorted.addAll(ppts.asCollection());
 
     // Iterate over the PptTopLevels in ppts
-    for (Iterator itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = itor.next();
       StringBuffer toPrint = new StringBuffer();
       toPrint.append(print_reasons_from_ppt(ppt,ppts));
 
@@ -336,10 +336,10 @@ public final class PrintInvariants {
    * Add discard reasons for invariants that are filtered out
    */
   private static void add_filter_reasons(PptTopLevel ppt, PptMap ppts) {
-    Iterator fullInvItor = ppt.invariants_iterator();
+    Iterator<Invariant> fullInvItor = ppt.invariants_iterator();
     InvariantFilters fi = InvariantFilters.defaultFilters();
     while (fullInvItor.hasNext()) {
-      Invariant nextInv = (Invariant) fullInvItor.next();
+      Invariant nextInv = fullInvItor.next();
       InvariantFilter varFilter = fi.shouldKeepVarFilters(nextInv);
       if (varFilter != null) {
         DiscReasonMap.put(nextInv, DiscardCode.findCode(varFilter),
@@ -381,20 +381,20 @@ public final class PrintInvariants {
       toPrint += (ppt.name() + lineSep);
     }
 
-    Iterator matchesIter = DiscReasonMap.returnMatches_from_ppt
+    Iterator<DiscardInfo> matchesIter = DiscReasonMap.returnMatches_from_ppt
                 (new InvariantInfo(ppt.name(), discVars, discClass)).iterator();
 
     StringBuffer sb = new StringBuffer();
     while (matchesIter.hasNext()) {
-      DiscardInfo nextInfo = (DiscardInfo) matchesIter.next();
+      DiscardInfo nextInfo = matchesIter.next();
       sb.append(dashes + nextInfo.format() + lineSep);
     }
 
     // In case the user is interested in conditional ppt's
     if (Daikon.dkconfig_output_conditionals
           && Daikon.output_format == OutputFormat.DAIKON) {
-      for (Iterator i = ppt.cond_iterator(); i.hasNext() ; ) {
-        PptConditional pcond = (PptConditional) i.next();
+      for (Iterator<PptConditional> i = ppt.cond_iterator(); i.hasNext() ; ) {
+        PptConditional pcond = i.next();
         sb.append(print_reasons_from_ppt(pcond,ppts));
       }
     }
@@ -501,8 +501,8 @@ public final class PrintInvariants {
     // so that it is easier to look behind and ahead.
     PptTopLevel[] ppts = new PptTopLevel [all_ppts.size()];
     int ii = 0;
-    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; )
-      ppts[ii++] = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator() ; itor.hasNext() ; )
+      ppts[ii++] = itor.next();
 
     for (int i = 0 ; i < ppts.length; i++) {
       PptTopLevel ppt = ppts[i];
@@ -535,8 +535,8 @@ public final class PrintInvariants {
           if (((i + 1) >= ppts.length) || !ppts[i+1].ppt_name.isExitPoint()) {
 //             if (Daikon.dkconfig_output_conditionals
 //                 && Daikon.output_format == OutputFormat.DAIKON) {
-//               for (Iterator j = ppt.cond_iterator(); j.hasNext() ; ) {
-//                 PptConditional pcond = (PptConditional) j.next();
+//               for (Iterator<PptConditional> j = ppt.cond_iterator(); j.hasNext() ; ) {
+//                 PptConditional pcond = j.next();
 //                 print_invariants_maybe(pcond, pw, all_ppts);
 //               }
 //             }
@@ -603,8 +603,8 @@ public final class PrintInvariants {
 
     if (Daikon.dkconfig_output_conditionals
         && Daikon.output_format == OutputFormat.DAIKON) {
-      for (Iterator j = ppt.cond_iterator(); j.hasNext() ; ) {
-        PptConditional pcond = (PptConditional) j.next();
+      for (Iterator<PptConditional> j = ppt.cond_iterator(); j.hasNext() ; ) {
+        PptConditional pcond = j.next();
         print_invariants_maybe(pcond, out, all_ppts);
       }
     }
@@ -1017,8 +1017,8 @@ public final class PrintInvariants {
 
     if (PptSplitter.debug.isLoggable (Level.FINE)) {
       PptSplitter.debug.fine ("Joiner View for ppt " + ppt.name);
-      for (Iterator ii = ppt.joiner_view.invs.iterator(); ii.hasNext(); ) {
-        Invariant inv = (Invariant) ii.next();
+      for (Iterator<Invariant> ii = ppt.joiner_view.invs.iterator(); ii.hasNext(); ) {
+        Invariant inv = ii.next();
         PptSplitter.debug.fine ("-- " + inv.format());
       }
     }
@@ -1168,8 +1168,8 @@ public final class PrintInvariants {
   public static void print_all_ternary_invs (PptMap all_ppts) {
 
     // loop through each ppt
-    for (Iterator itor = all_ppts.pptIterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
+    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext(); ) {
+      PptTopLevel ppt = itor.next();
 
       // if (ppt.num_samples() == 0)
       //  continue;
@@ -1180,16 +1180,16 @@ public final class PrintInvariants {
       int inv_cnt = 0;
       int total_slice_cnt = 0;
       int total_inv_cnt = 0;
-      for (Iterator si = ppt.views_iterator(); si.hasNext(); ) {
-        PptSlice slice = (PptSlice) si.next();
+      for (Iterator<PptSlice> si = ppt.views_iterator(); si.hasNext(); ) {
+        PptSlice slice = si.next();
         total_slice_cnt++;
         total_inv_cnt += slice.invs.size();
         if (slice.arity() != 3)
           continue;
         slice_cnt++;
         inv_cnt += slice.invs.size();
-        for (Iterator ii = slice.invs.iterator(); ii.hasNext(); ) {
-          Invariant inv = (Invariant) ii.next();
+        for (Iterator<Invariant> ii = slice.invs.iterator(); ii.hasNext(); ) {
+          Invariant inv = ii.next();
           if (inv.getClass().getName().indexOf ("Ternary") > 0) {
             lt_cnt++;
           }
@@ -1204,8 +1204,8 @@ public final class PrintInvariants {
               ", total_inv_cnt = " + total_inv_cnt);
 
       // Loop through each ternary slice
-      for (Iterator si = ppt.views_iterator(); si.hasNext(); ) {
-        PptSlice slice = (PptSlice) si.next();
+      for (Iterator<PptSlice> si = ppt.views_iterator(); si.hasNext(); ) {
+        PptSlice slice = si.next();
         if (slice.arity() != 3)
           continue;
         VarInfo[] vis = slice.var_infos;
@@ -1220,8 +1220,8 @@ public final class PrintInvariants {
         Fmt.pf ("  Slice %s - %s invariants", var_str, "" + slice.invs.size());
 
         // Loop through each invariant (skipping ternary ones)
-        for (Iterator ii = slice.invs.iterator(); ii.hasNext(); ) {
-          Invariant inv = (Invariant) ii.next();
+        for (Iterator<Invariant> ii = slice.invs.iterator(); ii.hasNext(); ) {
+          Invariant inv = ii.next();
           if (inv.getClass().getName().indexOf ("Ternary") > 0) {
             continue;
           }
@@ -1285,8 +1285,8 @@ public final class PrintInvariants {
     if (slice == null)
       return;
 
-    for (Iterator ii = slice.invs.iterator(); ii.hasNext(); ) {
-      Invariant inv = (Invariant) ii.next();
+    for (Iterator<Invariant> ii = slice.invs.iterator(); ii.hasNext(); ) {
+      Invariant inv = ii.next();
       Fmt.pf ("%s%s [%s]", indent, inv.format(),
               UtilMDE.unqualified_name(inv.getClass()));
     }
@@ -1336,8 +1336,8 @@ public final class PrintInvariants {
 
     log.fine (ppt.name() + ": " + invs_array.length);
 
-    for (Iterator i = filter_map.entrySet().iterator(); i.hasNext(); ) {
-      Map.Entry entry = (Map.Entry) i.next();
+    for (Iterator<Map.Entry> i = filter_map.entrySet().iterator(); i.hasNext(); ) {
+      Map.Entry entry = i.next();
       Class filter_class = (Class) entry.getKey();
       Map inv_map = (Map) entry.getValue();
       int total = 0;
@@ -1349,8 +1349,8 @@ public final class PrintInvariants {
         log.fine (" : Accepted Invariants : " + total);
       else
         log.fine (" : " + filter_class.getName() + ": " + total);
-      for (Iterator j = inv_map.entrySet().iterator(); j.hasNext(); ) {
-        Map.Entry entry2 = (Map.Entry) j.next();
+      for (Iterator<Map.Entry> j = inv_map.entrySet().iterator(); j.hasNext(); ) {
+        Map.Entry entry2 = j.next();
         Class inv_class = (Class) entry2.getKey();
         Integer cnt = (Integer) entry2.getValue();
         log.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());

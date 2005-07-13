@@ -1322,10 +1322,10 @@ public final class TestUtilMDE extends TestCase {
 
   }
 
-  public static void compareOrderedPairIterator(OrderedPairIterator opi, int[][] ints) {
+  public static void compareOrderedPairIterator(OrderedPairIterator<Pair> opi, int[][] ints) {
     int pairno = 0;
     while (opi.hasNext()) {
-      Pair pair = (Pair) opi.next();
+      Pair pair = opi.next();
       // System.out.println("Iterator: <" + pair.a + "," + pair.b + ">, array: <" + ints[pairno][0] + "," + ints[pairno][1] + ">");
       assertTrue((pair.a == null) || (((Integer)(pair.a)).intValue() == ints[pairno][0]));
       assertTrue((pair.b == null) || (((Integer)(pair.b)).intValue() == ints[pairno][1]));

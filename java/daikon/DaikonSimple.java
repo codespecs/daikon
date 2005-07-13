@@ -536,9 +536,9 @@ public static void mainHelper(final String[] args) throws IOException,
       ppt.incSampleNumber();
 
       // Loop through each slice
-      for (Iterator i = ppt.views_iterator(); i.hasNext();) {
-        PptSlice slice = (PptSlice) i.next();
-        Iterator k = slice.invs.iterator();
+      for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext();) {
+        PptSlice slice = i.next();
+        Iterator<Invariant> k = slice.invs.iterator();
         boolean missing = false;
 
         for (int j = 0; j < slice.var_infos.length; j++) {
@@ -552,7 +552,7 @@ public static void mainHelper(final String[] args) throws IOException,
           //  If any variables are out of bounds, remove the invariants
           if (v.missingOutOfBounds()) {
             while (k.hasNext()) {
-              Invariant inv = (Invariant) k.next();
+              Invariant inv = k.next();
               k.remove();
             }
             missing = true;
@@ -569,7 +569,7 @@ public static void mainHelper(final String[] args) throws IOException,
         //keep a list of the falsified invariants
         if (!missing) {
           while (k.hasNext()) {
-            Invariant inv = (Invariant) k.next();
+            Invariant inv = k.next();
             Invariant pre_inv = (Invariant) inv.clone();
             InvariantStatus status = inv.add_sample(vt, 1);
             if (status == InvariantStatus.FALSIFIED) {

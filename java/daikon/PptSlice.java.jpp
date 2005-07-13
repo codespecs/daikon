@@ -147,8 +147,8 @@ public final class PPTSLICE1 extends PptSlice {
     #endif
 
     // Instantiate each invariant that is valid over those types
-    for (Iterator i = Daikon.proto_invs.iterator(); i.hasNext(); ) {
-      Invariant proto = (Invariant) i.next();
+    for (Iterator<Invariant> i = Daikon.proto_invs.iterator(); i.hasNext(); ) {
+      Invariant proto = i.next();
 
       // Skip invariant if the types are not appropriate
       if (!proto.valid_types (var_infos) || !proto.instantiate_ok(var_infos)){
@@ -507,8 +507,8 @@ public final class PPTSLICE1 extends PptSlice {
 
     // re-parent the invariants and copy them out.
     List newInvs = new LinkedList();
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = i.next();
       Assert.assertTrue (inv.ppt == this);
       Invariant newInv = inv.transfer (result, permutation);
       newInvs.add (newInv);
@@ -703,8 +703,8 @@ public final class PPTSLICE1 extends PptSlice {
     // appeared at each valid child.  Note that some invariants will
     // not exist at the parent even if they exist at each child (eg,
     // LinearBinary)
-    for (Iterator j = inv_map.values().iterator(); j.hasNext(); ) {
-      ArrayList child_invs = (ArrayList) j.next();
+    for (Iterator<ArrayList> j = inv_map.values().iterator(); j.hasNext(); ) {
+      ArrayList child_invs = j.next();
       if (child_invs.size() > valid_child_count) {
         // this shouldn't happen
         System.out.println ("Found " + child_invs.size() + " invariants at "

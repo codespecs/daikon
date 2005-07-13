@@ -1091,14 +1091,14 @@ public abstract class Invariant
       all_vars1.add(var1);
       all_vars1.add(var2);
       Vector all_vars_names1 = new Vector(all_vars1.size());
-      for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
-        VarInfo elt = (VarInfo) iter.next();
+      for (Iterator<VarInfo> iter = all_vars1.iterator(); iter.hasNext(); ) {
+        VarInfo elt = iter.next();
         VarInfoName viname = name_extractor.getFromFirst(elt);
         all_vars_names1.add(viname);
       }
       boolean intersection = false;
-      for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
-        VarInfo elt = (VarInfo) iter.next();
+      for (Iterator<VarInfo> iter = all_vars2.iterator(); iter.hasNext(); ) {
+        VarInfo elt = iter.next();
         VarInfoName viname = name_extractor.getFromSecond(elt);
 
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
@@ -1144,8 +1144,8 @@ public abstract class Invariant
   // This implementation should be made more efficient, because it's used in
   // suppression.  We should somehow index invariants by their type.
   public static Invariant find(Class invclass, PptSlice ppt) {
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
+    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = itor.next();
       if (inv.getClass() == invclass)
         return inv;
     }
@@ -1288,9 +1288,9 @@ public abstract class Invariant
 
       return isObviousStatically(assigned);
     } else {
-      for (Iterator iSet = vis[position].get_equalitySet_vars ().iterator();
+      for (Iterator<VarInfo> iSet = vis[position].get_equalitySet_vars ().iterator();
            iSet.hasNext(); ) {
-        VarInfo vi = (VarInfo) iSet.next();
+        VarInfo vi = iSet.next();
         assigned[position] = vi;
         DiscardInfo temp =
           isObviousStatically_SomeInEqualityHelper (vis, assigned, position + 1);
@@ -1431,9 +1431,9 @@ public abstract class Invariant
       return isObviousDynamically (assigned);
     } else {
       // recursive case
-      for (Iterator iSet = vis[position].get_equalitySet_vars ().iterator();
+      for (Iterator<VarInfo> iSet = vis[position].get_equalitySet_vars ().iterator();
            iSet.hasNext(); ) {
-        VarInfo vi = (VarInfo) iSet.next();
+        VarInfo vi = iSet.next();
         assigned[position] = vi;
         DiscardInfo temp =
           isObviousDynamically_SomeInEqualityHelper (vis, assigned, position + 1);
