@@ -27,6 +27,10 @@ Further documentation can be found in:
     Documented --premain switch to Chicory.
     The default output file for Chicory is . (not ./daikon-output)
 
+  Chicory Changes
+
+    Don't access static variables in classes that are not initialized.
+    instead note them as nonsensical.
 
 4.1.3 (July 1 2005)
 
