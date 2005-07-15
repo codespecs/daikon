@@ -1831,6 +1831,52 @@ public final class TestUtilMDE extends TestCase {
   }
 
   /**
+   * These tests could be much more thorough.  Basically all that is tested
+   * is that identity is used rather than a normal hash.  The tests will
+   * fail however, if WeakHashMap is swapped for WeakIdentityHashMap.
+   */
+  public static void testWeakIdentityHashMap() {
+
+    String s1 = "one";
+    String s2 = "two";
+    String s3 = "three";
+
+    WeakIdentityHashMap<String,Integer> m
+      = new WeakIdentityHashMap<String,Integer>();
+    // WeakHashMap<String,Integer> m = new WeakHashMap<String,Integer>();
+
+    m.put (s1, 1);
+    m.put (s2, 2);
+    m.put (s3, 3);
+
+    String s1a = new String(s1);
+    String s2a = new String(s2);
+    String s3a = new String(s3);
+
+    m.put (s1a, 1);
+    m.put (s2a, 2);
+    m.put (s3a, 3);
+
+    Assert.assertTrue (m.get(s1) == 1);
+    Assert.assertTrue (m.get(s2) == 2);
+    Assert.assertTrue (m.get(s3) == 3);
+    Assert.assertTrue (m.get(s1a) == 1);
+    Assert.assertTrue (m.get(s2a) == 2);
+    Assert.assertTrue (m.get(s3a) == 3);
+
+    m.remove (s1);
+    m.remove (s2);
+    m.remove (s3);
+    Assert.assertTrue (m.get(s1) == null);
+    Assert.assertTrue (m.get(s2) == null);
+    Assert.assertTrue (m.get(s3) == null);
+    Assert.assertTrue (m.get(s1a) == 1);
+    Assert.assertTrue (m.get(s2a) == 2);
+    Assert.assertTrue (m.get(s3a) == 3);
+
+  }
+
+  /**
    * Tests whether CountingPrintWriter
    * counts the bytes printed, written for
    * different types (boolean, int, float etc.).
