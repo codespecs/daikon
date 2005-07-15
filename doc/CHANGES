@@ -32,7 +32,14 @@ Further documentation can be found in:
     Don't access static variables in classes that are not initialized.
     instead note them as nonsensical.
 
+----------------
+
 4.1.3 (July 1 2005)
+
+The dynamic comparability analysis in Kvasir has been improved (it
+indicates which variables interact with one another).  Switch
+--var-select-pattern has been added to Daikon, and a variety of bugs have
+been fixed and enhancements performed.
 
 Daikon
 
@@ -71,6 +78,10 @@ Kvasir
 ---------------------------------
 
 4.1.2 (June 1 2005)
+
+Kvasir can now produce variable comparability information, Chicory can now
+run Daikon online (without writing any files to disk), and the new
+DtraceDiff program can be used to compare Daikon trace files.
 
 Kvasir
 
@@ -133,6 +144,9 @@ Daikon:
 
 4.1.1 (May 1 2005)
 
+This is primarily a maintenance release with bug fixes to Kvasir and
+Chicory.
+
 Kvasir
 
   User changes:
@@ -164,6 +178,12 @@ Dfec
 ---------------------------------
 
 4.1.0 (Apr 1 2005)
+
+Daikon now supports C++:  it is possible to infer invariants over C++
+programs, using the Kvasir front end.  (Kvasir works on Linux/x86 systems.)
+As usual, many bugs have been corrected, and in particular, Kvasir has been
+made much more robust.  The Daikon manual has been copy-edited and
+reorganized for clarity.
 
 Daikon
 
@@ -224,6 +244,10 @@ Kvasir
 ---------------------------------
 
 4.0.3 (Mar 1 2005)
+
+This version includes significant improvements to the manual, enhancements
+to Kvasir, and bug fixes.  Version 3.1.10 of the Daikon plug-in for Eclipse
+is also now available.
 
 Daikon
 
@@ -520,6 +544,9 @@ dfepl
 ---------------------------------
 
 3.1.7 (Jan 1 2005)
+
+This version includes some improvements to the website, documentation
+enhancements and several bug fixes.
 
 Daikon
 
