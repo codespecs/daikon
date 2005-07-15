@@ -35,7 +35,7 @@ import java.lang.reflect.*;
  * <li>lexOP:  Determine lexical ordering:
  *     compare two arrays pairwise, stopping as soon as the result is known.
  * <li>eltsOPindex:  Apply op to array elements and their indices:
-       a[0] OP 0, a[1] OP 1, etc.
+ *     a[0] OP 0, a[1] OP 1, etc.
  * </ul>
  *
  * <h3>Equality semantics</h3>
