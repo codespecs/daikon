@@ -504,8 +504,12 @@ check-serialize:
 junit:
 	@echo java daikon.test.MasterUnitTester
 	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
+
+junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
-	@# but I'm having trouble with that.  -MDE 7/8/2005
+	@# but I'm having trouble with that, apparently due to hard-coded
+	@# directory paths.  And these tests are slow, so we want them to
+	@# be separate anyway.
 	@echo java daikon.test.split.SplitterFactoryTest
 	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.split.SplitterFactoryTest
 
