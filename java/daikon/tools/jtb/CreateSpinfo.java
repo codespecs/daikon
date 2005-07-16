@@ -35,8 +35,6 @@ public class CreateSpinfo {
 //  The method printSpinfoFile prints out these expressions and
 //  replace statements in splitter info file format.
 
-  private static final String lineSep = System.getProperty("line.separator");
-
   public static final Logger debug =
     Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
@@ -121,7 +119,7 @@ public class CreateSpinfo {
          usage);
     }
     if (outputfilename != null) {
-      Writer output = new FileWriter(outputfilename);
+      PrintWriter output = new PrintWriter(new FileWriter(outputfilename));
       for ( ; argindex < args.length; argindex++) {
         String javaFileName = args[argindex];
         writeSplitters(javaFileName, output);
@@ -132,7 +130,7 @@ public class CreateSpinfo {
       for ( ; argindex < args.length; argindex++) {
         String javaFileName = args[argindex];
         String spinfoFileName = spinfoFileName(javaFileName);
-        Writer output = new FileWriter(spinfoFileName);
+        PrintWriter output = new PrintWriter(new FileWriter(spinfoFileName));
         writeSplitters(javaFileName, output);
         output.flush();
         output.close();
@@ -166,12 +164,12 @@ public class CreateSpinfo {
 
 
   /**
-   * Write splitters for the Java file to the Writer as a spinfo file.
+   * Write splitters for the Java file to the PrintWriter as a spinfo file.
    * @param javaFileName the name of the java file from which this
    *  spinfo file is being made.
-   * @param output the Writer to which this spinfo file is being wrote.
+   * @param output the PrintWriter to which this spinfo file is being wrote.
    */
-  private static void writeSplitters(String javaFileName, Writer output)
+  private static void writeSplitters(String javaFileName, PrintWriter output)
     throws IOException {
     Reader input = new FileReader(javaFileName);
     JavaParser parser = new JavaParser(input);
@@ -186,7 +184,7 @@ public class CreateSpinfo {
     ConditionExtractor extractor = new ConditionExtractor();
     root.accept(extractor);
     // conditions: method name (String) to conditional expressions (String)
-    Map conditions = extractor.getConditionMap();
+    Map<String,List<String>> conditions = extractor.getConditionMap();
     // replaceStatements: method declaration (String) to method body (String)
     Map replaceStatements = extractor.getReplaceStatements();
     String packageName = extractor.getPackageName();
@@ -199,13 +197,11 @@ public class CreateSpinfo {
    * added which is identical to the initial condition with the exception
    * that it is prefixed with "orig(" and suffixed with ")".
    */
-  private static void addOrigConditions(Map conditionMap) {
-    Iterator methods = conditionMap.keySet().iterator();
-    while (methods.hasNext()) {
-      List conditions = (List) conditionMap.get(methods.next());
+  private static void addOrigConditions(Map<String,List<String>> conditionMap) {
+    for (List<String> conditions : conditionMap.values() ) {
       int size = conditions.size();
       for (int i = 0; i < size; i++) {
-        conditions.add(addOrig((String) conditions.get(i)));
+        conditions.add(addOrig(conditions.get(i)));
       }
     }
   }
@@ -220,7 +216,7 @@ public class CreateSpinfo {
   /**
    * Writes the spinfo file specified by conditions, replaceStatements, and
    * package name to output.
-   * @param output the Writer to which the spinfo file is to be written.
+   * @param output the PrintWriter to which the spinfo file is to be written.
    * @param conditions the conditions to be included in the spinfo file.
    *  conditions should be a map from method names to the conditional
    *  expressions for that method to split upon.
@@ -230,22 +226,20 @@ public class CreateSpinfo {
    * @param packageName the package name of the java file for which this
    *  spinfo file is being written.
    */
-  private static void printSpinfoFile(Writer output,
+  private static void printSpinfoFile(PrintWriter output,
                                       Map conditions,
-                                      Map replaceStatements,
+                                      Map<String,String> replaceStatements,
                                       String packageName)
     throws IOException {
     if (!replaceStatements.values().isEmpty()) {
-      output.write("REPLACE" + lineSep);
-      List methodsList = new ArrayList(replaceStatements.keySet());
+      output.println("REPLACE");
+      List<String> methodsList = new ArrayList<String>(replaceStatements.keySet());
       Collections.sort(methodsList);
-      Iterator<String> methodIterator = methodsList.iterator();
-      while (methodIterator.hasNext()) {
-	String declaration = methodIterator.next();
-	output.write(declaration + lineSep);
-	output.write(removeNewlines((String) replaceStatements.get(declaration)) + lineSep);
+      for (String declaration : methodsList) {
+	output.println(declaration);
+	output.println(removeNewlines(replaceStatements.get(declaration)));
       }
-      output.write(lineSep);
+      output.println();
     }
     List method_conds;
     List methodsList = new ArrayList(conditions.keySet());
@@ -259,11 +253,11 @@ public class CreateSpinfo {
 	if (packageName != null) {
 	  method = packageName + "." + method;
         }
-	output.write("PPT_NAME " + method + lineSep);
+	output.println("PPT_NAME " + method);
 	for (int i = 0; i < method_conds.size(); i++) {
-	  output.write(removeNewlines((String) method_conds.get(i)) + lineSep);
+	  output.println(removeNewlines((String) method_conds.get(i)));
 	}
-	output.write(lineSep);
+	output.println();
       }
     }
   }
@@ -273,17 +267,11 @@ public class CreateSpinfo {
    * around a line separator replaced by a single space.
    */
   private static String removeNewlines(String target) {
-    StringBuffer stringBuffer = new StringBuffer(target);
-    int index = stringBuffer.indexOf(lineSep);
-    while (index != -1) {
-      int endIndex = index + 1;
-      while(Character.isWhitespace(stringBuffer.charAt(endIndex))) {
-        endIndex++;
-      }
-      stringBuffer.replace(index, endIndex, " ");
-      index = stringBuffer.indexOf(lineSep);
+    String[] lines = UtilMDE.splitLines(target);
+    for (int i=0; i<lines.length; i++) {
+      lines[i] = lines[i].trim();
     }
-    return stringBuffer.toString();
+    return UtilMDE.join(lines, " ");
   }
 
 }

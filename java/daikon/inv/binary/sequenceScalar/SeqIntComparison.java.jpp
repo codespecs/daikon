@@ -252,7 +252,7 @@ public final class SEQINTEQUAL
     return (null);
   }
 
-  public Object clone() {
+  public SEQINTEQUAL clone() {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }

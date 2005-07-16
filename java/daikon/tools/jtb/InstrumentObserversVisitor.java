@@ -132,7 +132,7 @@ public class InstrumentObserversVisitor
       wrapper.accept(new TreeFormatter(2, 0));
       ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
       ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration)
-        Ast.create("ClassOrInterfaceBodyDeclaration", Ast.print(wrapper));
+        Ast.create("ClassOrInterfaceBodyDeclaration", Ast.format(wrapper));
       Ast.addDeclaration(c, d);
       MethodDeclaration generated_method = (MethodDeclaration) d.f0.choice;
       if (i == 1) {

@@ -40,7 +40,7 @@ class NullReplacer extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     NullReplacer replacer = new NullReplacer();
     root.accept(replacer);
-    return Ast.print(root);
+    return Ast.format(root);
   }
 
   /**

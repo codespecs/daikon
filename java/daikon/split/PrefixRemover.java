@@ -56,7 +56,7 @@ class PrefixRemover extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     PrefixRemover remover = new PrefixRemover(prefix);
     root.accept(remover);
-    return Ast.print(root);
+    return Ast.format(root);
   }
 
   /**

@@ -64,7 +64,7 @@ class TokenReplacer extends DepthFirstVisitor {
     TokenReplacer tokenReplacer = new TokenReplacer(oldVars, newVars);
     root.accept(tokenReplacer);
     tokenReplacer.replaceLastToken();
-    return Ast.print(root);
+    return Ast.format(root);
   }
 
   /**

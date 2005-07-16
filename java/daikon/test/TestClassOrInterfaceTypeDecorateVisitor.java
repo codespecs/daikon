@@ -37,18 +37,18 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
         if (m != null) {
           b.append("Method: ");
           m.f0.accept(new TreeFormatter());
-          b.append(Ast.print(m.f0));
+          b.append(Ast.format(m.f0));
           m.f1.accept(new TreeFormatter());
-          b.append(Ast.print(m.f1));
+          b.append(Ast.format(m.f1));
           m.f2.accept(new TreeFormatter());
-          b.append(Ast.print(m.f2));
+          b.append(Ast.format(m.f2));
           b.append("\n");
         }
         generifieds.get(i).accept(new TreeFormatter());
-        b.append("  " + Ast.print(generifieds.get(i)));
+        b.append("  " + Ast.format(generifieds.get(i)));
         b.append("  -->");
         ungenerifieds.get(i).accept(new TreeFormatter());
-        b.append("  " + Ast.print(ungenerifieds.get(i)));
+        b.append("  " + Ast.format(ungenerifieds.get(i)));
         b.append("\n");
       }
       return b.toString();

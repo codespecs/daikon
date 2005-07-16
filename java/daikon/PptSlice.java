@@ -144,10 +144,10 @@ public abstract class PptSlice
   // This can be called with very long lists by the conditionals code.
   // At least until that's fixed, it's important for it not to be
   // quadratic.
-  public void removeInvariants(List to_remove) {
+  public void removeInvariants(List<Invariant> to_remove) {
     if (to_remove.size() < 10) {
       for (int i=0; i<to_remove.size(); i++) {
-        removeInvariant((Invariant) to_remove.get(i));
+        removeInvariant(to_remove.get(i));
       }
     } else {
       int removed = invs.removeMany(to_remove);
@@ -342,7 +342,7 @@ public abstract class PptSlice
 
   public boolean containsOnlyGuardingPredicates() {
     for (int i=0; i<invs.size(); i++) {
-      if (!((Invariant)invs.get(i)).isGuardingPredicate)
+      if (!invs.get(i).isGuardingPredicate)
         return false;
     }
     return true;

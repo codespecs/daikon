@@ -632,14 +632,14 @@ public class SEQSEQINTEQUAL
         if (slice != null) {
           for (Iterator i = slice.invs.iterator(); i.hasNext(); )
             debug.log ("-- invariant " + ((Invariant) i.next()).format());
-          List found = new ArrayList();
+          List<Invariant> found = new ArrayList<Invariant>();
           found.add (SEQSEQ_EQ.find(slice));
           found.add (SEQSEQ_LT.find(slice));
           found.add (SEQSEQ_GT.find(slice));
           found.add (SEQSEQ_LE.find(slice));
           found.add (SEQSEQ_GE.find(slice));
           for (int i = 0; i < found.size(); i++) {
-            Invariant inv = (Invariant) found.get (i);
+            Invariant inv = found.get (i);
             if (inv != null) {
               if (logOn())
                 debug.log ("Obvious Dynamic from " + inv.format() +

@@ -68,7 +68,7 @@ class StatementReplacer extends DepthFirstVisitor {
       Node root = Visitors.getJtbTree(expression);
       try {
         root.accept(this);
-        replacedExpression = Ast.print(root);
+        replacedExpression = Ast.format(root);
         replacements++;
       } catch (IllegalStateException e) {
         // ParseException does not accept optional "cause" argument
@@ -168,7 +168,7 @@ class StatementReplacer extends DepthFirstVisitor {
    */
   private String getNonThisName(PrimaryExpression n) {
     Name nameNode = (Name) n.f0.f0.choice;
-    return Ast.print(nameNode);
+    return Ast.format(nameNode);
   }
 
   /**
@@ -177,7 +177,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @param n a "this" method call.
    */
   private String getThisName(PrimaryExpression n) {
-    return Ast.print(n.f0) + Ast.print(n.f1.elementAt(0));
+    return Ast.format(n.f0) + Ast.format(n.f1.elementAt(0));
   }
 
   /**
@@ -222,11 +222,11 @@ class StatementReplacer extends DepthFirstVisitor {
       (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
     if (argumentNode.f1.present()) {
       ArgumentList argListNode = (ArgumentList) argumentNode.f1.node;
-      args.add(addParens(Ast.print(argListNode.f0)));
+      args.add(addParens(Ast.format(argListNode.f0)));
       if (argListNode.f1.present()) {
         NodeListOptional additionalArgsNode = argListNode.f1;
         for (int i = 0; i < additionalArgsNode.size(); i++) {
-          args.add(addParens(Ast.print(additionalArgsNode.elementAt(i))));
+          args.add(addParens(Ast.format(additionalArgsNode.elementAt(i))));
         }
       }
     }
@@ -246,11 +246,11 @@ class StatementReplacer extends DepthFirstVisitor {
       (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
     if (argumentNode.f1.present()) {
       ArgumentList argListNode = (ArgumentList) argumentNode.f1.node;
-      args.add(Ast.print(argListNode.f0));
+      args.add(Ast.format(argListNode.f0));
       if (argListNode.f1.present()) {
         NodeListOptional additionalArgsNode = argListNode.f1;
         for (int i = 0; i < additionalArgsNode.size(); i++) {
-          args.add(Ast.print(additionalArgsNode.elementAt(i)));
+          args.add(Ast.format(additionalArgsNode.elementAt(i)));
         }
       }
     }

@@ -186,10 +186,10 @@ public final class FeatureExtractor {
 
   // Takes a vector of invariants and returns a vector of
   // the string representations of those invariants in the same order
-  private static ArrayList getStrings(ArrayList invs) {
+  private static ArrayList getStrings(ArrayList<Invariant> invs) {
     ArrayList answer = new ArrayList();
     for (int i = 0; i < invs.size(); i++) {
-      Invariant current = (Invariant) invs.get(i);
+      Invariant current = invs.get(i);
       answer.add(current.ppt.parent.name + ":::" + current.format());
     }
     return answer;
@@ -247,23 +247,23 @@ public final class FeatureExtractor {
       for (Iterator goodppts =
              FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
            goodppts.hasNext(); ) {
-        List temp = ((PptTopLevel) goodppts.next()).getInvariants();
+        List<Invariant> temp = ((PptTopLevel) goodppts.next()).getInvariants();
         for (int j = 0; j < temp.size(); j++)
-          good.add(((Invariant) temp.get(j)).repr());
+          good.add(temp.get(j).repr());
       }
 
       // bad contains actual invariants in Buggy.inv
-      ArrayList bad = new ArrayList();
-      for (Iterator badppts =
+      ArrayList<Invariant> bad = new ArrayList<Invariant>();
+      for (Iterator<PptTopLevel> badppts =
              FileIO.read_serialized_pptmap(new File(args[i+1]),false).pptIterator();
            badppts.hasNext(); ) {
-        List temp = ((PptTopLevel) badppts.next()).getInvariants();
+        List<Invariant> temp = badppts.next().getInvariants();
         for (int j = 0; j < temp.size(); j++)
-          bad.add((Invariant) temp.get(j));
+          bad.add(temp.get(j));
       }
 
       for (int j = 0; j < bad.size(); j++) {
-        if (good.contains(((Invariant) bad.get(j)).repr()))
+        if (good.contains(bad.get(j).repr()))
           answer[1].add(bad.get(j));
         else
           answer[0].add(bad.get(j));

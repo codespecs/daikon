@@ -189,13 +189,13 @@ public class Debug {
    * a debug object that will print if any of the variables in vis are
    * being tracked (and c and ppt match)
    */
-  public Debug (Class c, Ppt ppt, List vis) {
+  public Debug (Class c, Ppt ppt, List<VarInfo> vis) {
 
     VarInfo v = visTracked (vis);
     if (v != null) {
       set (c, ppt, new VarInfo[] {v});
     } else if (vis.size() > 0) {
-      set (c ,ppt, new VarInfo[] {(VarInfo) vis.get(0)});
+      set (c, ppt, new VarInfo[] {vis.get(0)});
     } else {
       set (c, ppt, null);
     }
@@ -206,10 +206,10 @@ public class Debug {
    * any match, returns that variable.  Null is returned if there are no
    * matches.
    */
-  public VarInfo visTracked (List vis) {
+  public VarInfo visTracked (List<VarInfo> vis) {
 
     for (int i = 0; i < vis.size(); i++) {
-      VarInfo v = (VarInfo) vis.get(i);
+      VarInfo v = vis.get(i);
       Set<VarInfo> evars = null;
       if (v.equalitySet != null)
         evars = v.equalitySet.getVars();
@@ -640,7 +640,7 @@ public class Debug {
       for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext(); ) {
         PptSlice slice = j.next();
         for (int k = 0; k < slice.invs.size(); k++ ) {
-          Invariant inv = (Invariant) slice.invs.get(k);
+          Invariant inv = slice.invs.get(k);
           if (inv.log (msg + ": found #" + k + "= " + inv.format() +
                        " in slice " + slice))
             found = true;

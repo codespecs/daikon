@@ -176,7 +176,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // mapping:  program point names ->
         //                      ArrayList of inv.format_java() with frequency
 
-        HashMap lastMap = new HashMap();
+        HashMap<String,ArrayList> lastMap = new HashMap<String,ArrayList>();
         // One pass to fill each mapping with an empty ArrayList
         for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
             String key = i.next();
@@ -195,14 +195,13 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         }
 
         // print it all
-        ArrayList theKeys = new ArrayList (lastMap.keySet());
+        ArrayList<String> theKeys = new ArrayList<String> (lastMap.keySet());
         // sort them so that multiple exits will end up being adjacent
         // to each other when they are from the same method
         Collections.sort (theKeys);
         String lastPpt = "";
-        for (Iterator<String> i = theKeys.iterator(); i.hasNext(); ) {
-            String key = i.next();
-            ArrayList al = (ArrayList) lastMap.get(key);
+        for (String key : theKeys) {
+            ArrayList al = lastMap.get(key);
             // don't print anything if there are no selective invariants
 
             if (al.size() == 0) continue;

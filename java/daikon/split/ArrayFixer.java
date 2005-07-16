@@ -79,7 +79,7 @@ class ArrayFixer extends DepthFirstVisitor {
     ArrayFixer fixer = new ArrayFixer(names, varInfos);
     root.accept(fixer);
     fixer.fixLastToken();
-    return Ast.print(root);
+    return Ast.format(root);
   }
 
   /**

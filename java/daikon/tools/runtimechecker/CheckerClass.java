@@ -44,12 +44,12 @@ public class CheckerClass {
     NodeOptional no = (NodeOptional)clazzCU.f0;
     String packageName = null;
     if (no.present()) {
-      packageName = Ast.print(((PackageDeclaration)no.node).f1).trim();
+      packageName = Ast.format(((PackageDeclaration)no.node).f1).trim();
     } else {
       packageName = "";
     }
 
-    String imports = Ast.print(clazzCU.f1);
+    String imports = Ast.format(clazzCU.f1);
 
     code = new StringBuffer();
     if (!packageName.equals("")) {

@@ -227,8 +227,8 @@ public final class ValueTuple implements Cloneable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
+  public ValueTuple clone() throws CloneNotSupportedException {
+    return (ValueTuple) super.clone();
   }
 
   /**

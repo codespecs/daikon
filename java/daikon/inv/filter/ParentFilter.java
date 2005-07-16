@@ -14,7 +14,7 @@ public class ParentFilter extends InvariantFilter {
   }
 
   /**
-   * Boolean. If true, ParentFilter is initially turned on. 
+   * Boolean. If true, ParentFilter is initially turned on.
    */
   public static boolean dkconfig_enabled = true;
 
@@ -57,7 +57,7 @@ public class ParentFilter extends InvariantFilter {
 
       // Look for a matching invariant in the parent slice
       for (int j = 0; j < pslice.invs.size(); j++) {
-        Invariant pinv = (Invariant) pslice.invs.get (j);
+        Invariant pinv = pslice.invs.get (j);
         if (pinv.getClass() != inv.getClass())
           continue;
         if (pinv.isSameFormula (inv)) {

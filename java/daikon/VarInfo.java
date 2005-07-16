@@ -248,8 +248,8 @@ public final class VarInfo implements Cloneable, Serializable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
+  public VarInfo clone() throws CloneNotSupportedException {
+    return (VarInfo) super.clone();
   }
 
   /** Create the prestate, or "orig()", version of the variable. **/

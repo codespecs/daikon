@@ -651,7 +651,7 @@ public final class OutputFormat
         modelrule+=mr+"\n";
       }
 
-      public Object clone() {
+      public Definition clone() {
         Definition newd;
         try {
           newd=(Definition)super.clone();
@@ -665,7 +665,7 @@ public final class OutputFormat
       }
 
       // Old implementation
-      // public Object clone() {
+      // public Definition clone() {
       //   Definition newd=new Definition();
       //   newd.setrelation=setrelation;
       //   newd.modelrule=modelrule;

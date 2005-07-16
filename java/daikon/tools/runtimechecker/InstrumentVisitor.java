@@ -243,7 +243,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         for (Iterator<FormalParameter> i = Ast.getParametersNoImplicit(ctor).iterator(); i.hasNext();) {
             FormalParameter param = i.next();
             parameters.add(Ast.getName(param));
-            typesAndParameters.add(Ast.print(param));
+            typesAndParameters.add(Ast.format(param));
         }
 
         checkerClasses
@@ -342,7 +342,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         for (Iterator<FormalParameter> i = Ast.getParameters(method).iterator(); i.hasNext();) {
             FormalParameter param = i.next();
             parameters.add(Ast.getName(param));
-            typesAndParameters.add(Ast.print(param));
+            typesAndParameters.add(Ast.format(param));
         }
 
         StringBuffer code = new StringBuffer();
@@ -438,9 +438,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
 
         StringBuffer modifiers_declaration_stringbuffer  = new StringBuffer();
-        modifiers_declaration_stringbuffer.append(Ast.print(modifiers));
+        modifiers_declaration_stringbuffer.append(Ast.format(modifiers));
         modifiers_declaration_stringbuffer.append(" ");
-        modifiers_declaration_stringbuffer.append(Ast.print(wrapper));
+        modifiers_declaration_stringbuffer.append(Ast.format(wrapper));
 
         ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration) Ast.create(
                 "ClassOrInterfaceBodyDeclaration",

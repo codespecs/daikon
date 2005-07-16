@@ -24,7 +24,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
     private HashSet repeatFilter = new HashSet();
 
     // Accumulation of extracted consequents
-    private Vector accum = new Vector();
+    private Vector<Invariant> accum = new Vector();
 
 
     public ConsequentExtractorVisitor () {
@@ -49,13 +49,13 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
         }
         /*
         for (int i = 0; i < accum.size(); i++) {
-            Invariant inv = (Invariant) accum.get(i);
+            Invariant inv = accum.get(i);
             inv.ppt.invs.clear();
         }
         */
         // Now add back everything in accum
         for (int i = 0; i < accum.size(); i++) {
-            Invariant inv = (Invariant) accum.get(i);
+            Invariant inv = accum.get(i);
             inv.ppt.addInvariant (inv);
         }
         System.out.println ("NONCE: " + nonce);

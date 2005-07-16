@@ -77,7 +77,7 @@ public final class CLASSNAME
     this.wrapper = wrapper;
   }
 
-  public Object clone() {
+  public CLASSNAME clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       if (x_cache != null)

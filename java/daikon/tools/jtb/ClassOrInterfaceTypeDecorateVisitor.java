@@ -245,11 +245,11 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     for (Map.Entry<String,Stack<ClassOrInterfaceType>> entry : shadowingMap.entrySet()) {
       if (entry.getKey().equals(n.f0.tokenImage)) {
         ClassOrInterfaceType c = entry.getValue().peek();
-        //System.out.println("c:" + Ast.print(c));
+        //System.out.println("c:" + Ast.format(c));
         Vector<Node> cSequence = c.f2.nodes;
         //System.out.print("cSequence:");
         for (Node n2 : cSequence) {
-          //System.out.print(Ast.print(n2) + " ");
+          //System.out.print(Ast.format(n2) + " ");
         }
         // Prepend all-but-first identifiers to the list of identifiers in f2.
         // Prepending in reverse order ensures the right prepending order.

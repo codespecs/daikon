@@ -121,8 +121,8 @@ public final class CLASSNAME
     public boolean equals (PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
       return ((this.x == x) && (this.y == y) && (this.z == z));
     }
-    protected Object clone() throws CloneNotSupportedException {
-      return super.clone();
+    protected Point clone() throws CloneNotSupportedException {
+      return (Point) super.clone();
     }
     public String toString() {
       return ("(" + x + ", " + y + " ," + z + ")");
@@ -147,7 +147,7 @@ public final class CLASSNAME
     this.wrapper = wrapper;
   }
 
-  public Object clone() {
+  public CLASSNAME clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       result.def_points = new Point[MINTRIPLES];

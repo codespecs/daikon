@@ -196,7 +196,7 @@ public final class FileIO {
     // This program point name has already been encountered.
     if (all_ppts.containsName(ppt_name)) {
       throw new FileIOException(
-        "Duplicate declaration of program point",
+        "Duplicate declaration of program point \"" + ppt_name + "\"",
         file,
         filename);
     }
@@ -1104,8 +1104,8 @@ public final class FileIO {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           // Print the invocations in sorted order.
           // (Does this work?  The keys are integers. -MDE 7/1/2005.)
-          TreeSet keys = new TreeSet(call_hashmap.keySet());
-          ArrayList invocations = new ArrayList();
+          TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
+          ArrayList<Invocation> invocations = new ArrayList<Invocation>();
           for (Iterator itor = keys.iterator(); itor.hasNext();) {
             invocations.add(call_hashmap.get(itor.next()));
           }
@@ -1146,14 +1146,13 @@ public final class FileIO {
    * suppressing duplicates.
    **/
   static void print_invocations_grouped(Collection invocations) {
-    // Maps an Invocation to its frequency
-    Map counter = new HashMap();
+    Map<Invocation,Integer> counter = new HashMap<Invocation,Integer>();
 
     for (Iterator<Invocation> i = invocations.iterator(); i.hasNext();) {
       Invocation invok = i.next();
       invok = invok.canonicalize();
       if (counter.containsKey(invok)) {
-        Integer oldCount = (Integer) counter.get(invok);
+        Integer oldCount = counter.get(invok);
         Integer newCount = new Integer(oldCount.intValue() + 1);
         counter.put(invok, newCount);
       } else {
@@ -1162,10 +1161,9 @@ public final class FileIO {
     }
 
     // Print the invocations in sorted order.
-    TreeSet keys = new TreeSet(counter.keySet());
-    for (Iterator<Invocation> i = keys.iterator(); i.hasNext();) {
-      Invocation invok = i.next();
-      Integer count = (Integer) counter.get(invok);
+    TreeSet<Invocation> keys = new TreeSet(counter.keySet());
+    for (Invocation invok : keys) {
+      Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));
     }

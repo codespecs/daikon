@@ -57,7 +57,7 @@ public class PptNameMatcher {
         // Make a copy of param (because we may modify it: we may
         // remove some generics stuff).
         //p.accept(new TreeFormatter());
-        FormalParameter param = (FormalParameter)Ast.create("FormalParameter", Ast.print(p));
+        FormalParameter param = (FormalParameter)Ast.create("FormalParameter", Ast.format(p));
 
 
 

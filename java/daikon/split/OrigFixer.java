@@ -44,7 +44,7 @@ class OrigFixer extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     OrigFixer fixer = new OrigFixer();
     root.accept(fixer);
-    return Ast.print(root);
+    return Ast.format(root);
   }
 
   /**

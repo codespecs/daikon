@@ -243,7 +243,7 @@ public final class PPTSLICE1 extends PptSlice {
       if (var_infos[i].missingOutOfBounds()) {
         List result = new ArrayList();
         for (int j = 0; j < invs.size(); j++) {
-          Invariant inv = (Invariant) invs.get(j);
+          Invariant inv = invs.get(j);
           if (PrintInvariants.print_discarded_invariants)
             DiscReasonMap.put(inv, DiscardCode.bad_sample,
                   var_infos[i].name.name() + " array index was out of bounds");
@@ -556,7 +556,7 @@ public final class PPTSLICE1 extends PptSlice {
     }
 
     // List of all invariants found over all of the children
-    List all_invs = new ArrayList();
+    List<Invariant> all_invs = new ArrayList<Invariant>();
 
     // Keep count of the number of valid children processed.  An invariant
     // must be found at each valid child in order to exist at the parent.
@@ -652,7 +652,7 @@ public final class PPTSLICE1 extends PptSlice {
       // Add each invariant (permuted to match the parent varinfos)
       // to our list of invariants.
       for (int j = 0; j < cslice.invs.size(); j++) {
-        Invariant orig_inv = (Invariant) cslice.invs.get (j);
+        Invariant orig_inv = cslice.invs.get (j);
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
         if (inv.logOn()) {
@@ -683,7 +683,7 @@ public final class PPTSLICE1 extends PptSlice {
     // same 'type' for the purpose of merging invariants.
     Map inv_map = new LinkedHashMap();
     for (int i = 0; i < all_invs.size(); i++) {
-      Invariant inv = (Invariant) all_invs.get (i);
+      Invariant inv = all_invs.get (i);
       Invariant.Match imatch = new Invariant.Match (inv);
       ArrayList invs = (ArrayList) inv_map.get (imatch);
       if (inv.logOn()) {
@@ -704,19 +704,19 @@ public final class PPTSLICE1 extends PptSlice {
     // not exist at the parent even if they exist at each child (eg,
     // LinearBinary)
     for (Iterator<ArrayList> j = inv_map.values().iterator(); j.hasNext(); ) {
-      ArrayList child_invs = j.next();
+      ArrayList<Invariant> child_invs = j.next();
       if (child_invs.size() > valid_child_count) {
         // this shouldn't happen
         System.out.println ("Found " + child_invs.size() + " invariants at "
                          + name() + " (" + valid_child_count + " children)");
         for (int k = 0; k < child_invs.size(); k++ )
           System.out.println ("-- Invariant = "
-                            + ((Invariant) child_invs.get(k)).format()
-                            + " @" + ((Invariant) child_invs.get(k)).ppt);
+                            + child_invs.get(k).format()
+                            + " @" + child_invs.get(k).ppt);
         Assert.assertTrue (child_invs.size() <= valid_child_count);
       }
       if (child_invs.size() == valid_child_count) {
-        Invariant first = (Invariant) child_invs.get(0);
+        Invariant first = child_invs.get(0);
         if (Debug.logOn())
           first.log ("Attempting merge of " + child_invs.size()
                      + " invariants into ppt " + name());
@@ -729,7 +729,7 @@ public final class PPTSLICE1 extends PptSlice {
         }
       } else {
         if (Debug.logOn()) {
-          Invariant inv = (Invariant) child_invs.get(0);
+          Invariant inv = child_invs.get(0);
           inv.log ("Not merging invariant into " + name()
                    + ", Found " + child_invs.size() + "child invariants in "
                     + valid_child_count + " children");

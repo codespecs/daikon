@@ -217,8 +217,8 @@ public final class VarInfoAux
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
+  public VarInfoAux clone() throws CloneNotSupportedException {
+    return (VarInfoAux) super.clone();
   }
 
   public String toString() {

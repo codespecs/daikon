@@ -529,7 +529,7 @@ public class DynamicConstants implements Serializable {
       for (int i = 0; i < new_views.size(); i++) {
         PptSlice slice = (PptSlice) new_views.get (i);
         for (int j = 0; j < slice.invs.size(); j++) {
-          Invariant inv = (Invariant) slice.invs.get (j);
+          Invariant inv = slice.invs.get (j);
           inv.log ("created, falsified = " + inv.is_false());
           if (!inv.is_false())
             true_inv_cnt[slice.arity()]++;

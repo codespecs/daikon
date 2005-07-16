@@ -19,7 +19,7 @@ class InvariantTableModel extends AbstractTableModel {
     new DecimalFormat("0.####");
 
   List allInvariants;
-  List filteredInvariants;	// only filtered invariants are displayed
+  List<Invariant> filteredInvariants;	// only filtered invariants are displayed
 
   public InvariantTableModel( List invariants, InvariantFilters invariantFilters ) {
     allInvariants = invariants;
@@ -34,7 +34,7 @@ class InvariantTableModel extends AbstractTableModel {
 
   public Object getValueAt( int row, int column ) {
     Assert.assertTrue( column >= 0  &&  column <= 4 );
-    Invariant invariant = (Invariant) filteredInvariants.get( row );
+    Invariant invariant = filteredInvariants.get( row );
     if (column == 0)        return invariant.format();
     else if (column == 1)           return new Double(Double.NaN);
     else if (column == 2)           return new Integer( invariant.ppt.num_samples());

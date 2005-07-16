@@ -62,7 +62,7 @@ public final class TestAst extends TestCase {
     if (result == false) {
       // Format so we can print an error message.
       decl.accept(new TreeFormatter());
-      declString = Ast.print(decl);
+      declString = Ast.format(decl);
     }
     assertTrue("pptName: " + pptName +
                "\ndoesn't match method declaration:\n----------\n"

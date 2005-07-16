@@ -356,7 +356,7 @@ public final class ONEOFSCALAR
   }
 #endif
 
-  public Object clone() {
+  public ONEOFSCALAR clone() {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = (INT[]) elts.clone();
 #ifdef IS_SEQUENCE

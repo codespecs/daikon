@@ -278,7 +278,7 @@ public class LOWERBOUND
     return new LOWERBOUND (slice);
   }
 
-  public Object clone() {
+  public LOWERBOUND clone() {
     LOWERBOUND result = (LOWERBOUND) super.clone();
     result.core = (LOWERBOUNDCORE) core.clone();
     result.core.wrapper = result;

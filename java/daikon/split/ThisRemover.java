@@ -44,7 +44,7 @@ class ThisRemover extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     ThisRemover remover = new ThisRemover();
     root.accept(remover);
-    return Ast.print(root);
+    return Ast.format(root);
   }
 
   /**

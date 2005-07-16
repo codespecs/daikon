@@ -84,7 +84,7 @@ public class CLASSNAME
     return new CLASSNAME (slice);
   }
 
-  public Object clone() {
+  public CLASSNAME clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = (CORECLASS) core.clone();
     result.core.wrapper = result;

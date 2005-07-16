@@ -175,12 +175,10 @@ public abstract class SplitterList
    * @return an array of splitters
    */
   public static Splitter[] get(String pptName) {
-    Iterator itor = ppt_splitters.keySet().iterator();
     Vector<Splitter[]> splitterArrays = new Vector<Splitter[]>();
 
-    while (itor.hasNext()) {
-      // a PptName, assumed to begin with "ClassName.functionName"
-      String name = (String)itor.next();
+    for (String name : ppt_splitters.keySet()) {
+      // name is a ppt name, assumed to begin with "ClassName.functionName"
       if (pptName.indexOf(name) != -1) {
         Splitter[] result = get_raw(name);
         if (result != null) {

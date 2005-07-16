@@ -44,7 +44,7 @@ class PrefixFixer extends DepthFirstVisitor {
     PrefixFixer fixer = new PrefixFixer();
     root.accept(fixer);
     fixer.fixLastToken();
-    return Ast.print(root);
+    return Ast.format(root);
   }
 
   /**

@@ -893,7 +893,7 @@ public class PptTopLevel extends Ppt {
               + slice.var_infos[0].equalitySet.shortString());
         if (false) {
           for (int k = 0; k < slice.invs.size(); k++) {
-            Invariant inv = (Invariant) slice.invs.get(k);
+            Invariant inv = slice.invs.get(k);
             debugInstantiate.fine("-- invariant " + inv.format());
           }
         }
@@ -993,7 +993,7 @@ public class PptTopLevel extends Ppt {
 
     // Loop through each invariant
     inv_loop : for (int i = 0; i < inv_list.size(); i++) {
-      Invariant inv = (Invariant) inv_list.get(i);
+      Invariant inv = inv_list.get(i);
       if (Debug.logDetail())
         inv.log("Processing in inv_add");
 
@@ -1171,7 +1171,7 @@ public class PptTopLevel extends Ppt {
       UpperBound ub = null;
       UpperBoundFloat ubf = null;
       for (int k = 0; k < slice.invs.size(); k++) {
-        Invariant inv = (Invariant) slice.invs.get(k);
+        Invariant inv = slice.invs.get(k);
         if (inv instanceof LowerBound)
           lb = (LowerBound) inv;
         else if (inv instanceof LowerBoundFloat)
@@ -1210,7 +1210,7 @@ public class PptTopLevel extends Ppt {
     for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
       PptSlice slice = j.next();
       for (int k = 0; k < slice.invs.size(); k++) {
-        Invariant inv = (Invariant) slice.invs.get(k);
+        Invariant inv = slice.invs.get(k);
         Cnt cnt = inv_map.get(inv.getClass());
         if (cnt == null) {
           cnt = new Cnt();
@@ -1327,7 +1327,7 @@ public class PptTopLevel extends Ppt {
       System.out.println ("Trying to add slice " + slice);
       System.out.println ("but, slice " + cslice + " already exists");
       for (int i = 0; i < cslice.invs.size(); i++)
-        System.out.println(" -- inv " + (Invariant) cslice.invs.get(i));
+        System.out.println(" -- inv " + cslice.invs.get(i));
     }
 
     views.put(sliceIndex(slice.var_infos), slice);
@@ -3396,14 +3396,17 @@ public class PptTopLevel extends Ppt {
     // Loop through the remaining children, intersecting the equal
     // variables and incrementing the sample count as we go
     for (int i = first_child + 1; i < children.size(); i++) {
-      PptRelation rel = (PptRelation) children.get(i);
+      PptRelation rel = children.get(i);
       if (rel.child.num_samples() == 0)
         continue;
-      Map eq_new = rel.get_child_equalities_as_parent();
+      Map<VarInfo.Pair,VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
+      // Cannot use foreach loop, due to desire to remove from emap.
       for (Iterator<VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
         VarInfo.Pair curpair = j.next();
-        VarInfo.Pair newpair = (VarInfo.Pair) eq_new.get(curpair);
+        VarInfo.Pair newpair = eq_new.get(curpair);
         if (newpair == null)
+          // Equivalent to emap.remove(...), but that could throw a
+          // ConcurrentModificationException, so must remove via the iterator.
           j.remove();
         else
           curpair.samples += newpair.samples;
@@ -3618,7 +3621,7 @@ public class PptTopLevel extends Ppt {
 
       // Copy each child invariant to the parent
       for (int j = 0; j < cslice.invs.size(); j++) {
-        Invariant child_inv = (Invariant) cslice.invs.get(j);
+        Invariant child_inv = cslice.invs.get(j);
         Invariant parent_inv = child_inv.clone_and_permute(permute);
         parent_inv.ppt = pslice;
         pslice.invs.add(parent_inv);
@@ -4041,7 +4044,7 @@ public class PptTopLevel extends Ppt {
         for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext();) {
           PptSlice slice = j.next();
           for (int k = 0; k < slice.invs.size(); k++) {
-            Invariant inv = (Invariant) slice.invs.get(k);
+            Invariant inv = slice.invs.get(k);
             String falsify = "";
             if (inv.is_false())
               falsify = "(falsified) ";

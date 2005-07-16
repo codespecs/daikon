@@ -50,7 +50,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f2 -> ";"
    */
   public void visit(PackageDeclaration n) {
-    packageName = Ast.print(n.f1);
+    packageName = Ast.format(n.f1);
     super.visit(n);
   }
 
@@ -64,7 +64,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(ClassOrInterfaceDeclaration n) {
 
     if (!Ast.isInterface(n)) { // Not sure if this is needed; added during JTB udpate.
-      className = Ast.print(n.f1);
+      className = Ast.format(n.f1);
     }
     super.visit(n);
   }
@@ -81,9 +81,9 @@ class ConditionExtractor extends DepthFirstVisitor {
      * f3 -> ";"
      */
 
-    String resultType = Ast.print(n.f0);
+    String resultType = Ast.format(n.f0);
     if (resultType.equals("boolean")) {
-      addCondition(Ast.print(n.f1.f0) + " ==  true");  // <--
+      addCondition(Ast.format(n.f1.f0) + " ==  true");  // <--
     }
     super.visit(n);
   }
@@ -119,8 +119,8 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(MethodDeclarator n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
-    curMethodName = className + "." + Ast.print(n.f0);
-    addMethod (Ast.print(n), curMethodName);
+    curMethodName = className + "." + Ast.format(n.f0);
+    addMethod (Ast.format(n), curMethodName);
     super.visit(n);
   }
 
@@ -137,8 +137,8 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(ConstructorDeclaration n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
-    curMethodName = className + "." + Ast.print(n.f1);
-    addMethod(className + Ast.print(n), curMethodName);
+    curMethodName = className + "." + Ast.format(n.f1);
+    addMethod(className + Ast.format(n), curMethodName);
     resultTypes.push("constructor");
     super.visit(n);
     resultTypes.pop();
@@ -159,7 +159,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * conditions out of them
    */
   public void visit(SwitchStatement n) {
-    String switchExpression = Ast.print(n.f2);
+    String switchExpression = Ast.format(n.f2);
     Collection caseValues = getCaseValues(n.f5);
      // a condition for the default case. A 'not' of all the different cases.
     StringBuffer defaultString = new StringBuffer();
@@ -190,7 +190,7 @@ class ConditionExtractor extends DepthFirstVisitor {
       NodeSequence ns = (NodeSequence) e.nextElement();
       SwitchLabel sl = (SwitchLabel) ns.elementAt(0);
       ns = (NodeSequence) sl.f0.choice;
-      values.add(Ast.print(ns.elementAt(1)));
+      values.add(Ast.format(ns.elementAt(1)));
     }
     return values;
   }
@@ -205,7 +205,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    */
   /* Extract the condition in an 'if' statement */
   public void visit(IfStatement n) {
-    addCondition(Ast.print(n.f2));
+    addCondition(Ast.format(n.f2));
     super.visit(n);
 }
 
@@ -219,7 +219,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   /* Extract the condition in an 'while' statement */
   public void visit(WhileStatement n) {
     super.visit(n);
-    addCondition(Ast.print(n.f2));
+    addCondition(Ast.format(n.f2));
   }
 
   /**
@@ -234,7 +234,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   /* Extract the condition in an 'DoStatement' statement */
   public void visit(DoStatement n) {
     super.visit(n);
-    addCondition(Ast.print(n.f4));
+    addCondition(Ast.format(n.f4));
   }
 
    /**
@@ -248,7 +248,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(ForStatement n) {
     super.visit(n);
     if (n.f2.which == 1) {
-      addCondition(Ast.print(((NodeSequence)n.f2.choice).elementAt(2)));
+      addCondition(Ast.format(((NodeSequence)n.f2.choice).elementAt(2)));
     }
 
   }
@@ -285,7 +285,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     // then it's a one-liner. Save the statement
     if (n.f0.choice instanceof ReturnStatement) {
       ReturnStatement rs = ((ReturnStatement) n.f0.choice);
-      String returnExpression = Ast.print(rs.f1);
+      String returnExpression = Ast.format(rs.f1);
       if (enterMethod) {
         addReplaceStatement( returnExpression );
         enterMethod = false;

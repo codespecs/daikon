@@ -262,7 +262,7 @@ public class PptSplitter implements Serializable {
                       cvis_non_canonical[kk].equalitySet.shortString());
               throw new Error("nc_slice.invs.size() == " + nc_slice.invs.size());
             }
-            eq_inv = (Invariant) nc_slice.invs.get (0);
+            eq_inv = nc_slice.invs.get (0);
             debug.fine ("Found eq inv " + eq_inv);
           }
         }
@@ -284,7 +284,7 @@ public class PptSplitter implements Serializable {
         // This permits them to be directly compared to one another.
         int[] permute = PptTopLevel.build_permute (cvis_sorted, cvis);
         for (int j = 0; j < cslice.invs.size(); j++) {
-          Invariant orig_inv = (Invariant) cslice.invs.get (j);
+          Invariant orig_inv = cslice.invs.get (j);
           Invariant inv = orig_inv.clone_and_permute (permute);
           inv.ppt = pslice;
           invs[childno].add (inv);
@@ -414,7 +414,7 @@ public class PptSplitter implements Serializable {
       Invariant[] invs = ii.next();
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
-          Invariant orig = (Invariant) orig_invs.get (invs[jj]);
+          Invariant orig = orig_invs.get (invs[jj]);
           if ((orig.isObvious() == null) && !orig.is_ni_suppressed())
             con_invs[jj] = invs[jj];
         }
@@ -528,8 +528,8 @@ public class PptSplitter implements Serializable {
     Vector result = new Vector();
     for (int i1=0; i1 < invs1.size(); i1++) {
       for (int i2=0; i2 < invs2.size(); i2++) {
-        Invariant inv1 = (Invariant) invs1.get(i1);
-        Invariant inv2 = (Invariant) invs2.get(i2);
+        Invariant inv1 = invs1.get(i1);
+        Invariant inv2 = invs2.get(i2);
         // // This is a debugging tool, to make sure that various versions
         // // of isExclusiveFormula remain coordinated.  (That's also one
         // // reason we don't break out of the loop early:  also, there will
@@ -608,13 +608,13 @@ public class PptSplitter implements Serializable {
    **/
   public void add_implication (PptTopLevel ppt, Invariant predicate,
                                Invariant consequent, boolean iff,
-                               Map orig_invs) {
+                               Map<Invariant,Invariant> orig_invs) {
 
     Assert.assertTrue (predicate != null);
     Assert.assertTrue (consequent != null);
 
-    Invariant orig_pred = (Invariant) orig_invs.get (predicate);
-    Invariant orig_cons = (Invariant) orig_invs.get (consequent);
+    Invariant orig_pred = orig_invs.get (predicate);
+    Invariant orig_cons = orig_invs.get (consequent);
     Assert.assertTrue (orig_pred != null);
     Assert.assertTrue (orig_cons != null);
 

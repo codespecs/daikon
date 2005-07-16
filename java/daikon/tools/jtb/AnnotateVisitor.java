@@ -286,18 +286,21 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     elementTypeFieldNames = old_elementType;
   }
 
+  // Given that this method works not on FieldDeclaration, but its grandparent,
+  // it should likely be moved to a method with a different formal parameter.
   public void visit(FieldDeclaration n) {
     super.visit(n);             // call "accept(this)" on each field
 
     // Nothing to do for Jtest DBCJAVA format
     if (Daikon.output_format == OutputFormat.DBCJAVA) { return; }
 
-    if (! Ast.contains(n.f0, "public")) {
+    if (! Ast.contains(n.getParent().getParent(), "public")) {
+
 //       n.accept(new TreeFormatter());
-//       String nString = Ast.print(n);
+//       String nString = Ast.format(n);
 //       System.out.println("@@@");
 //       Node n2 = n.getParent().getParent(); n2.accept(new TreeFormatter());
-//       System.out.println("@@@" + Ast.print(n2));
+//       System.out.println("@@@" + Ast.format(n2));
       addComment(n.getParent().getParent(), "/*@ spec_public */ ");
     }
   }
@@ -607,7 +610,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (pureInJML(n)) {
         doInsert = false;
       } else {
-        //System.out.println("^^^CURRLINE:" + Ast.printCurrentLine(n) + "^^^");
+        //System.out.println("^^^CURRLINE:" + Ast.formatCurrentLine(n) + "^^^");
         inv = "assignable \\everything";
       }
     } else if (Daikon.output_format == OutputFormat.DBCJAVA) {
@@ -649,7 +652,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     for (int i = maxIndex-1 ; i >= 0 ; i--) {
-      Invariant inv = (Invariant)invs.invariants.get(i);
+      Invariant inv = invs.invariants.get(i);
       if (! inv.isValidExpression(Daikon.output_format)) {
         // inexpressible invariant
         if (insert_inexpressible) {
@@ -1016,7 +1019,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // PrintInvariants.print_modified_vars(ppt, pw) returns possibly
     // several lines. In such a case, we're only interested in the second
     // one, which contains the "modified" or "assignable" clause.
-    String[] splitModVars = retval.modifiedVars.split(lineSep);
+    String[] splitModVars = utilMDE.UtilMDE.splitLines(retval.modifiedVars);
     if (splitModVars.length > 1) {
       for (int i = 0 ; i < splitModVars.length ; i++) {
         if (splitModVars[i].startsWith("modifies ") ||

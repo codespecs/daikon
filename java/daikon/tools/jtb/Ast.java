@@ -75,12 +75,12 @@ public class Ast {
   /// Printing and parsing
   ///
 
-  // Prints an AST to a String.
+  // Fromats an AST as a String.
   // This version does not reformat the tree (which blows away formatting
   // information).  The call to "removeWhitespace" may do the wrong thing
   // for embedded strings, however.  In any event, the result is not
   // intended for direct human consumption.
-  public static String print(Node n) {
+  public static String format(Node n) {
     StringWriter w = new StringWriter();
     n.accept(new SimpleTreeDumper(w));
     // This is incorrect. A "//" comment ending in a period, for example, will
@@ -90,28 +90,28 @@ public class Ast {
     return removeWhitespace(quickFixForInternalComment(w.toString()));
   }
 
-    // This translates a line that looks like this:
-    //    a statement; // a comment
-    // into
-    //    a statement; // a comment //
-    public static String quickFixForInternalComment(String s) {
-	StringBuffer b = new StringBuffer();
-	String[] split = s.split(lineSep);
-	for (int i = 0 ; i < split.length ; i++) {
-	    String line = split[i];
-	    b.append(line);
-	    if (line.indexOf("//") != -1) {
-		b.append("//");
-		b.append(lineSep);
-		b.append("/* */");
-	    }
-	    b.append(lineSep);
-	}
-	return b.toString();
+  // This translates a line that looks like this:
+  //  a statement; // a comment
+  // into
+  //  a statement; // a comment //
+  public static String quickFixForInternalComment(String s) {
+    StringBuffer b = new StringBuffer();
+    String[] split = UtilMDE.splitLines(s);
+    for (int i = 0 ; i < split.length ; i++) {
+      String line = split[i];
+      b.append(line);
+      if (line.indexOf("//") != -1) {
+        b.append("//");
+        b.append(lineSep);
+        b.append("/* */");
+      }
+      b.append(lineSep);
     }
+    return b.toString();
+  }
 
-  // Prints the line enclosing a node
-  public static String printCurrentLine(Node n) {
+  // Formats the line enclosing a node
+  public static String formatCurrentLine(Node n) {
     Node current = n;
     while (current.getParent() != null &&
            print(current.getParent()).indexOf(lineSep) < 0) {
@@ -119,6 +119,19 @@ public class Ast {
     }
     return print(current);
   }
+
+  /** @deprecated Use format(Node) instead **/
+  @Deprecated
+  public static String print(Node n) {
+    return format(n);
+  }
+
+  /** @deprecated Use formatCurrentLine(Node) instead **/
+  @Deprecated
+  public static String printCurrentLine(Node n) {
+    return formatCurrentLine(n);
+  }
+
 
   // Creates an AST from a String
   public static Node create(String type, String stringRep) {
@@ -148,8 +161,8 @@ public class Ast {
 
   public static boolean isAccessModifier(String s) {
     return (s.equals("public") ||
-	    s.equals("protected") ||
-	    s.equals("private"));
+            s.equals("protected") ||
+            s.equals("private"));
   }
 
   public static String getName(FormalParameter p) {

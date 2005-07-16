@@ -157,10 +157,7 @@ public class ExtractConsequent {
     // All conditions at a program point.  A TreeSet to enable
     // deterministic output.
     TreeSet<String> allConds = new TreeSet<String>();
-    for ( Iterator<String> pptNamesIter = (pptname_to_conditions.keySet()).iterator() ;
-          pptNamesIter.hasNext() ; ) {
-      String pptname = pptNamesIter.next();
-
+    for ( String pptname : pptname_to_conditions.keySet() ) {
       Map<String,Map<String,HashedConsequent>> cluster_to_conditions = pptname_to_conditions.get(pptname);
       for ( Map.Entry<String,Map<String,HashedConsequent>> entry : cluster_to_conditions.entrySet()) {
         String predicate = entry.getKey();

@@ -418,7 +418,7 @@ public abstract class Invariant
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  public Object clone() {
+  public Invariant clone() {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -581,10 +581,10 @@ public abstract class Invariant
    * @return the merged invariant or null if the invariants didn't represent
    * the same invariant.
    */
-  public Invariant merge (List invs, PptSlice parent_ppt) {
+  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
-    Invariant first = (Invariant) invs.get(0);
-    Invariant result = (Invariant) first.clone();
+    Invariant first = invs.get(0);
+    Invariant result = first.clone();
     result.ppt = parent_ppt;
     result.log ("Merged '" + result.format() + "' from " + invs.size()
                 + " child invariants " /* + first.ppt.name() */);
@@ -593,7 +593,7 @@ public abstract class Invariant
     if (Assert.enabled) {
       Match m = new Match (result);
       for (int i = 1; i < invs.size(); i++ )
-        Assert.assertTrue (m.equals (new Match ((Invariant) invs.get(i))));
+        Assert.assertTrue (m.equals (new Match (invs.get(i))));
     }
 
     return (result);
@@ -1699,7 +1699,7 @@ public abstract class Invariant
     if (mustBeGuarded.size() > 1) {
       Invariants joinerViewInvs = ppt.parent.joiner_view.invs;
       for (int i=0; i<joinerViewInvs.size(); i++) {
-        Invariant currentInv = (Invariant)joinerViewInvs.get(i);
+        Invariant currentInv = joinerViewInvs.get(i);
         if (currentInv.isSameInvariant(guardingPredicate)) {
           return currentInv;
         }
