@@ -1240,6 +1240,19 @@ public final class UtilMDE {
     return result_array;
   }
 
+  // Perhaps this should try all possible line separators, not just the one
+  // for this specific operating system, in case it was fed files created
+  // elsewhere.
+  /**
+   * Return an array of Strings, one for each line in the argument.
+   * Always returns an array of length at least 1 (it might contain only the
+   * empty string).
+   * @see #split(String s, char delim)
+   **/
+  public static String[] splitLines(String s) {
+    return split(s, lineSep);
+  }
+
   /**
    * Concatenate the string representations of the objects, placing the
    * delimiter between them.
