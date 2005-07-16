@@ -311,7 +311,7 @@ sub dfej_compile {
 # Run the daikon JUnit unit tests
 sub daikon_unit_test {
   print_log("Daikon unit tests...");
-  my $command = "make -C $INV/java/daikon junit " .
+  my $command = "make -C $INV/java/daikon junit-all " .
     "&> daikon_unit_test.out";
   `$command`;
   if ($CHILD_ERROR) {
