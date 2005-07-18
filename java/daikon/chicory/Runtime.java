@@ -151,6 +151,20 @@ public class Runtime
         }
     }
 
+    
+    private static boolean invokingPure = false;
+    public static boolean dontProcessPpts()
+    {
+        return invokingPure;
+    }
+    public static void startPure()
+    {
+        invokingPure = true;
+    }
+    public static void endPure()
+    {
+        invokingPure = false;
+    }
 
     /**
      * Called when a method is entered.
@@ -163,13 +177,8 @@ public class Runtime
      */
     public static void enter(Object obj, int nonce, int mi_index, Object[] args)
     {
-        // System.out.println ("in enter");
-
-         /*Throwable stack = new Throwable ("enter");
-         stack.fillInStackTrace();
-         StackTraceElement[] ste_arr = stack.getStackTrace();
-         StackTraceElement ste = ste_arr[1];
-         System.out.printf ("%s.%s():::ENTER%n%n", ste.getClassName(), ste.getMethodName());*/
+        if(dontProcessPpts())
+            return;
 
         synchronized (all_classes)
         {
@@ -196,7 +205,9 @@ public class Runtime
      */
     public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum)
     {
-
+        if(dontProcessPpts())
+            return;
+        
         synchronized (all_classes)
         {
             if (new_classes.size() > 0)

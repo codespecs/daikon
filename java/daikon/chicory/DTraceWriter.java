@@ -171,7 +171,8 @@ public class DTraceWriter extends DaikonWriter
             else
             {
                 assert false: "Unknown DaikonVariableInfo subtype " + child.getClass() +
-                        " in traversePattern in DTraceWriter for info named " + child.getName();
+                        " in traversePattern in DTraceWriter for info named " + child.getName() + 
+                        " in class " + "for method " + mi;
                 val = null;
             }
 
@@ -218,7 +219,6 @@ public class DTraceWriter extends DaikonWriter
 
         for(Object theObj : theObjects)
         {
-
             if (theObj == null)
                 fieldVals.add(nonsenseValue);
             else

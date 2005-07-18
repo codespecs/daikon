@@ -1,9 +1,7 @@
 package daikon.chicory;
 
-import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
-
 /**
  * Keeps information about a method that is useful for writing out
  * decl and/or dtrace information.  Original information is filled
@@ -57,6 +55,14 @@ public class MethodInfo {
    * Set by DeclWriter and read by DTraceWriter.
    **/
   public Map<Integer, RootInfo> traversalExit;
+  
+  /**
+   * Whether or not the method is pure (has no side-effects).
+   * Will only be set to true if the --purity-analysis switch is given
+   * to Chicory, and the method returns some value and takes no parameters.
+   * Only set during initViaReflection() method
+   */
+  private boolean isPure;
 
   /**
    * Creates a MethodInfo with the specified class, arg_names, and
@@ -124,6 +130,26 @@ public class MethodInfo {
     } catch (Exception e) {
       throw new Error ("can't find method " + method_name + " : " + e);
     }
+    
+    
+    if(ChicoryPremain.shouldDoPurity())
+    {
+        int mod = member.getModifiers();
+        
+        
+        // Only consider purity on non-abstract, non-static, non-constructor
+        // methods which return a value and take no parameters!
+        if(!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) && 
+                !(member instanceof Constructor) && 
+                !((Method) member).getReturnType().equals(Void.TYPE) &&
+                ((Method) member).getParameterTypes().length == 0)
+        {
+            if(ChicoryPremain.isMethodPure(member))
+            {
+                isPure = true;
+            }
+        }
+    }
   }
 
   /**
@@ -142,6 +168,11 @@ public class MethodInfo {
       out += arg_type_strings[ii] + " " + arg_names[ii];
     }
     return (out + ")");
+  }
+  
+  public boolean isPure() 
+  {
+      return isPure;
   }
 
 }

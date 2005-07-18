@@ -137,6 +137,7 @@ public class RetTransform implements ClassFileTransformer {
     // Don't instrument standard classes (but allow instrumentation of
     // the javac compiler)
     if ((className.startsWith ("java/") || className.startsWith ("com/")
+         || className.startsWith("javax/")
          || className.startsWith ("sun/"))
         && !className.startsWith ("com/sun/tools/javac"))
       return (null);

@@ -88,6 +88,14 @@ public class Chicory {
 
   private static final boolean RemoteDebug = false;
 
+  /** Flag to initiate a purity analysis and use results to create additional variables **/
+  private boolean purityAnalysis = false;
+
+  /** The name of the file to read for a list of pure methods.  Should be 1 method per line.
+   *  Each method should be in the same format as format ouput by the purity analysis.
+   */
+  private String purityFileName;
+
   /**
    * Entry point of Chicory <p>
    * @param args see usage for argument descriptions
@@ -111,11 +119,28 @@ public class Chicory {
     System.out.printf(format, args);
   }
 
+  /** Return true iff argument was given to run a purity analysis
+   *  Only run after running parse_args
+   */
+  public boolean doPurity()
+  {
+      return purityAnalysis;
+  }
+  
+  /**
+   * Return true iff a file name was specified to supply pure method names
+   */
+  public String getPurityFileName()
+  {
+      return purityFileName;
+  }
+  
   /**
    * Parse the command line arguments, setting fields accordingly.  If
    * agent is true, only allows agent arguments
    */
   public void parse_args(String[] args, boolean agent) {
+      
 
     int inx;
     for (inx = 0; inx < args.length; ++inx) {
@@ -252,7 +277,18 @@ public class Chicory {
       else if (arg.startsWith ("--daikon-online=")) {
         daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon-online=".length()) + " +";
 
-      }else if (arg.equals("--verbose")) {
+      }
+      else if (arg.equals("--purity-analysis"))
+      {
+          premain_args.add(arg);
+          purityAnalysis = true;
+      }
+      else if (arg.startsWith("--purity-file="))
+      {
+          premain_args.add(arg);
+          purityFileName = arg.substring("--purity-file=".length());
+      }
+      else if (arg.equals("--verbose")) {
         verbose = true;
         premain_args.add(arg);
 
@@ -260,13 +296,21 @@ public class Chicory {
         verbose = false;
         premain_args.add(arg);
 
-      } else if (arg.startsWith("-")) {
+      }
+      else if (arg.startsWith("--target-program="))
+      {
+          target_program = arg.substring ("--target-program=".length());
+      }
+      else if (arg.startsWith("-")) {
         usage("Unexpected argument: " + arg);
         System.exit(1);
 
-      } else { // must be the start of the target program arguments
+      }
+      else { // must be the start of the target program arguments
 
-        target_program = arg;
+          target_program = arg;
+          premain_args.add("--target-program=" + target_program);
+        
         for (; inx < args.length; inx++)
           target_args.add(args[inx]);
       }
@@ -426,8 +470,23 @@ public class Chicory {
         cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
     if(terminate != null)
         cmdlist.add("-D" + traceLimTermString + "=" + terminate );
+    
+    Properties props = System.getProperties();
+    for(Object key: props.keySet())
+    {
+        Object value = props.get(key);
+        
+        assert value instanceof String: "All properties should be strings";
+        
+        if(((String)key).contains("harpoon"))
+            cmdlist.add("-D" + key + "=" + value);
+    }
+    
+    
     cmdlist.add (String.format("-javaagent:%s=%s", premain_path,
                                args_to_string(premain_args)));
+    
+    
     for (String target_arg : target_args)
       cmdlist.add (target_arg);
     if (verbose)

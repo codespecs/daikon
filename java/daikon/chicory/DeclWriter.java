@@ -380,6 +380,46 @@ public class DeclWriter extends DaikonWriter
             printChildren(cinfo, fieldType, newChild, classField.getName(),
                           newOffset, depth, inArray);
         }
+        
+        // If appropriate, print out decls information for pure methods
+        // and add to the tree
+        // Check dontPrintInstanceVars is basically checking if the program point method
+        // (not the pure method) is static.  If it is, don't continue because we can't
+        // call instance methods (all pure methods we consider are instance methods)
+        // from static methods
+        if (ChicoryPremain.shouldDoPurity() && !dontPrintInstanceVars)
+        {
+            ClassInfo typeInfo = null;
+
+            try
+            {
+                typeInfo = Runtime.getClassInfoFromClass(type);
+            }
+            catch (RuntimeException e)
+            {
+                // Could not find the class... no further purity analysis
+                typeInfo = null;
+            }
+
+            if (typeInfo != null)
+            {
+                for (MethodInfo meth : typeInfo.method_infos)
+                {
+                    if (meth.isPure())
+                    {
+                        StringBuffer buf = new StringBuffer();
+                        DaikonVariableInfo newChild = printPureMethodDecl(
+                                cinfo, thisInfo, meth, offset, depth, inArray,
+                                buf);
+                        String newOffset = buf.toString();
+                        printChildren(cinfo, ((Method) meth.member)
+                                .getReturnType(), newChild, meth.member
+                                .getName(), newOffset, depth, inArray);
+
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -679,6 +719,71 @@ public class DeclWriter extends DaikonWriter
         }
 
         return newField;
+    }
+    
+    /**
+     * Prints the decl info for a pure method
+     */
+    
+    //TODO factor out shared code with printDeclVar
+    private DaikonVariableInfo printPureMethodDecl(ClassInfo curClass, DaikonVariableInfo curNode, 
+            MethodInfo minfo, String offset, int depth,
+            boolean inArray, StringBuffer buf)
+    {
+        String arr_str = "";
+        if (inArray)
+            arr_str = "[]";
+
+        Method meth = (Method) minfo.member;
+        
+        
+        boolean changedAccess = false;
+
+        //we want to access all fields...
+        if(!meth.isAccessible())
+        {
+            changedAccess = true;
+            meth.setAccessible(true);
+        }
+
+        Class type = meth.getReturnType();
+        
+        String name = meth.getName() + "()";
+        int modifiers = meth.getModifiers();
+
+        if (offset.length() > 0) // offset already starts with "this"
+        {
+        }
+        else
+        {
+            offset = "this.";
+        }
+        outFile.println(offset + name);
+
+        String type_name = stdClassName (type);
+
+        outFile.println (type_name + arr_str);
+        outFile.println(getRepName(type, inArray) + arr_str);
+        outFile.println(compareInfoDefault); //no comparability info right now
+
+
+        DaikonVariableInfo newPure = new PureMethodInfo(offset + name, minfo,
+                inArray);
+
+        curNode.addChild(newPure);
+        if (debug_vars)
+            System.out.printf("Added pure method %s to node %s%n", newPure, curNode);
+
+        checkForDerivedVariables(newPure, type, name, offset, inArray);
+
+        buf.append(offset);
+
+        if(changedAccess)
+        {
+            meth.setAccessible(false);
+        }
+
+        return newPure;
     }
 
     // Appends as auxiliary information:
