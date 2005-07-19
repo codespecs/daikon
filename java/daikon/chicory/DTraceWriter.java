@@ -378,7 +378,7 @@ public class DTraceWriter extends DaikonWriter
                     + " --- is not an array");
 
         int len = Array.getLength(arrayVal);
-        List arrList = new ArrayList(len);
+        List<Object> arrList = new ArrayList<Object>(len);
 
         Class arrType = arrayVal.getClass().getComponentType();
 

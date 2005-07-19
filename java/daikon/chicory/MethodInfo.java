@@ -83,7 +83,7 @@ public class MethodInfo {
     this.traversalExit = new HashMap<Integer, RootInfo>();
   }
 
-  private static HashMap primitive_classes = new HashMap(8);
+  private static HashMap<String, Class> primitive_classes = new HashMap<String, Class>(8);
   static {
     primitive_classes.put("Z", Boolean.TYPE);
     primitive_classes.put("B", Byte.TYPE);

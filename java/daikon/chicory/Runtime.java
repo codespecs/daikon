@@ -682,7 +682,7 @@ public class Runtime
     return sb.toString();
   }
 
-  private static HashMap primitiveClassesFromJvm = new HashMap(8);
+  private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<String, String>(8);
   static {
     primitiveClassesFromJvm.put("Z", "boolean");
     primitiveClassesFromJvm.put("B", "byte");

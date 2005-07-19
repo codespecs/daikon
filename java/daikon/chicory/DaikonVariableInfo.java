@@ -138,7 +138,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     {
         if(isArray)
         {
-            return getValueStringOfListWithMod((List) val);
+            return getValueStringOfListWithMod((List<Object>) val);
         }
         else
         {
