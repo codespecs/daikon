@@ -22,15 +22,24 @@ Further documentation can be found in:
 
 4.1.4 (August 1 2005)
 
+Daikon
+
   Documentation Changes
 
     Documented --premain switch to Chicory.
-    The default output file for Chicory is . (not ./daikon-output)
+    The default output file for Chicory is . (not ./daikon-output).
+
+  Bug fixes
+
+    Fixed several bugs in Annotate, the program that inserts Daikon's
+    output into source code as comments.  This eliminates errors reported
+    by the JML syntax checker (available at http://www.jmlspecs.org/).
 
   Chicory Changes
 
     Don't access static variables in classes that are not initialized.
-    instead note them as nonsensical.
+    Instead, the trace file notes them as nonsensical until they are
+    initialized.
 
 ----------------
 
