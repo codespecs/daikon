@@ -565,16 +565,17 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   }
 
-
+  // This is a hack that indicates whether an "assignable \everything"
+  // clause would be legal for the given method.
   public boolean pureInJML(Node n) {
     String name = null;
     if (n instanceof MethodDeclaration) {
       name = ((MethodDeclaration)n).f2.f0.toString();
-      // have to do this because ... ?
-      if (name.equals("hasNext") ||
-          name.equals("hasMoreElements") ||
+      if (name.equals("clone") ||
           name.equals("equals") ||
-          name.equals("clone")) {
+          name.equals("hashCode") ||
+          name.equals("hasMoreElements") ||
+          name.equals("hasNext")) {
         return true;
       }
     }
@@ -607,12 +608,27 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     boolean doInsert = true;
 
     if (Daikon.output_format == OutputFormat.JML) {
-      if (pureInJML(n)) {
-        doInsert = false;
-      } else {
-        //System.out.println("^^^CURRLINE:" + Ast.formatCurrentLine(n) + "^^^");
-        inv = "assignable \\everything";
-      }
+      // Currently, AnnotateVisitor currently does not produce sensible
+      // "assignable" clauses for JML.
+      //  * One possible default is "assignable \everything".  However, that
+      //    is incorrect when the method is pure (that is, it overrides a
+      //    method that is annotated as pure, such as hashCode).
+      //  * Another possible default is to omit the assignable clause
+      //    entirely.  Since "assignable \everything" is the JML default, this
+      //    omission strategy works both when the method is pure and when it
+      //    is not.  Thus, we use this strategy.  Thanks to Christoph
+      //    Csnallner for this idea.
+      // In the future, AnnotateVisitor should produce "assignable" clauses.
+      doInsert = false;
+
+      /// Old version that put in "assignable \everything" unless a
+      /// heuristic indiated the method was pure.
+      // if (pureInJML(n)) {
+      //   doInsert = false;
+      // } else {
+      //   //System.out.println("^^^CURRLINE:" + Ast.formatCurrentLine(n) + "^^^");
+      //   inv = "assignable \\everything";
+      // }
     } else if (Daikon.output_format == OutputFormat.DBCJAVA) {
       // Modifies/assignable has no translation in Jtest DBC
       doInsert = false;
