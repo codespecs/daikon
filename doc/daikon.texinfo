@@ -7648,6 +7648,29 @@ as comments, and runtimechecker silently ignores them.)
 @node    Chicory problems, dfej problems, Parsing Java 5.0 code, Troubleshooting
 @section Problems with Chicory
 
+Before reporting or investigating a problem with Chicory, always check
+that the program executes properly when not being run under Chicory's
+control.
+
+For example, if a command such as 
+@example
+java daikon.Chicory DataStructures.StackArTester
+@end example
+@noindent
+fails with an error, then first try
+@example
+java DataStructures.StackArTester
+@end example
+@noindent
+which is likely to fail with the same error.
+
+If the latter command also fails, the problem is not with Chicory.
+First solve your Java problem, then once again attempt to use Chicory.
+
+If the latter command does not fail, then you have found a bug in
+Chicory; please report it if it is not already explained in this manual.
+
+
 @menu
 * VerifyError constant pool index error::  
 @end menu
@@ -7660,7 +7683,7 @@ as comments, and runtimechecker silently ignores them.)
 @cindex illegal constant pool index error, when running Chicory
 @cindex constant pool index error, when running Chicory
 
-Chicory throws an error such as the following:
+If Chicory throws an error such as the following:
 @example
 Exception in thread "main" java.lang.VerifyError: 
   (class: ps1/PublicTest, method: <init> signature: (Ljava/lang/String;)V)
@@ -8583,6 +8606,7 @@ B. Thomas Adler,
 Rich Angros,
 Tadashi Araragi,
 Seung Mo Cho,
+Christoph Csallner,
 Dorothy Curtis,
 Diego Garbervetsky,
 Madeline Hardojo,
