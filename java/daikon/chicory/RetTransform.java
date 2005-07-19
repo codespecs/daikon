@@ -453,11 +453,9 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         }
         
         // If method is synthetic...
-        if((mg.getAccessFlags() & Constants.ACC_SYNTHETIC) == 0)
+        if((Constants.ACC_SYNTHETIC & mg.getAccessFlags()) > 0)
         {
-            // Don't instrument non-constructor synthetic methods!
-            if(!is_constructor(mg))
-                continue;
+            continue;
         }
 
         // Get the instruction list and skip methods with no instructions
