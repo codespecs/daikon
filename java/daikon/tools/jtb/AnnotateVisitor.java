@@ -980,7 +980,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
           {
             EltOneOfString eoos = EltOneOfString.find(slice);
             // System.out.println("eoos: " + (eoos == null ? "null" : format((Invariant)eoos)));
-            if (eoos != null) {
+            if ((eoos != null) && (eoos.num_elts() == 1)) {
               String eoos_format = format((Invariant)eoos);
               int et_pos = eoos_format.indexOf(".elementType == \\type(");
               if (et_pos != -1) {
