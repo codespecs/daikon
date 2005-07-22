@@ -2983,6 +2983,52 @@ This option produces behavior very similar to @option{--daikon}.  The difference
 
 Just like with the @option{--daikon} option, Daikon is only given a single trace from one execution of your program.
 
+@item --purity-file=@var{file}
+Specifies a @file{*.pure} file to read.  It may be specified as a full path or just a file name.  If a configuration directory is
+specified via @option{--configs=@var{directory}}, then Chicory looks for @var{file} in @var{directory}.  Otherwise, it searches for @var{file}
+in the current directory.
+
+Pure methods are defined as methods which do not induce side-effects.  Thus, invoking a pure method at any time in an application should
+not change the execution of the rest of the application.  For example, almost all implementations of @code{toString()} methods are pure.
+Thus, if we took an existing application and added calls to @code{toString()} on various objects, its input-output relationship should not
+change.
+
+Chicory will use this behavior to its advantage, although currently it only supports pure methods which take no parameters (and return
+some value).  When appropriate, Chicory will add variables corresponding to the values of pure method invocations.  Here is an example:
+
+@example
+class Point
+@{
+   private int x, y;
+   public int radiusSquared() 
+   @{ 
+       return x*x + y*y;
+   @}
+@}
+@end example
+
+If a user tells Chicory that @code{radiusSquared()} is pure via the @option{--purity-file=@var{file}} switch, then Chicory will
+add a @code{radiusSquared()} variable just like it will add @code{x} and @code{y} variables.  Doing so may improve the richness
+of Daikon invariants returned.  For instance, if a point is constantly changing but remains on some circle, then Daikon
+ought return an invariant that the point's radius remains constant if Chicory knows that @code{radiusSquared()} is a pure method.
+
+The purity file has a simple format: there is exactly one method on each line.  The format of each method is outline clearly in the
+Sun JDK API: 
+    "The string is formatted as the method access modifiers, if any, followed by the method return type, 
+    followed by a space, followed by the class declaring the method, followed by a period, followed by 
+    the method name, followed by a parenthesized, comma-separated list of the method's formal parameter 
+    types. If the method throws checked exceptions, the parameter list is followed by a space, followed 
+    by the word throws followed by a comma-separated list of the thrown exception types. For example:
+    @example 
+    public boolean java.lang.Object.equals(java.lang.Object)
+    @end example
+    The access modifiers are placed in canonical order as specified by "The Java Language Specification". 
+    This is public, protected or private first, and then other modifiers in the following order: abstract, 
+    static, final, synchronized native."
+
+@item --configs=@var{directory}
+Chicory will use this location to search for configuartion files.  Currently, this only includes @file{*.pure} files.
+
 @end table
 
 
