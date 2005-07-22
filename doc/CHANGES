@@ -40,6 +40,13 @@ Daikon
     Don't access static variables in classes that are not initialized.
     Instead, the trace file notes them as nonsensical until they are
     initialized.
+    
+    Added the --purity-file=<file> switch.  Chicory will read <file> for
+    pure methods (methods which do not induce side effects).  It will then
+    invoke these methods, using their return values as normal variables.
+    That is, if a class has variables int a, b, c, and pure method int x(), then
+    Chicory will produce variables a,b,c and x() for Objects of this type.
+    
 
 ----------------
 
