@@ -270,7 +270,7 @@ public class Runtime
             decl_writer.printHeaderInfo (class_info.class_name);
             first_class = false;
           }
-          class_info.get_reflection();
+          class_info.initViaReflection();
           // class_info.dump (System.out);
           decl_writer.printDeclClass (class_info);
 
@@ -548,7 +548,7 @@ public class Runtime
             for (ClassInfo cinfo : Runtime.all_classes)
             {
                 if (cinfo.clazz == null)
-                    cinfo.get_reflection();
+                    cinfo.initViaReflection();
 
                 if (cinfo.clazz.equals(type))
                     return cinfo;

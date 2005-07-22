@@ -20,6 +20,14 @@ public class ChicoryPremain {
   /** True iff Chicory should add variables based on pure methods during instrumentation **/
   private static boolean doPurity = false; 
 
+  /**
+   * This method is the entry point of the java agent.
+   * Its main purpose is to set up the transformer so that when classes from
+   * the target app are loaded, they are first transformed.
+   * 
+   * This method also sets up some other initialization tasks: it connects to Daikon
+   * over a port if necessary, or reads in a purity analysis.
+   */
   public static void premain (String agentArgs, Instrumentation inst) {
 
     //System.out.format ("In premain, agentargs ='%s', " +
@@ -55,14 +63,16 @@ public class ChicoryPremain {
     
     if(chicory.doPurity())
     {
-        doPurity = true;
-        runPurityAnalysis(chicory.target_program);
-        writePurityFile(chicory.target_program + ".pure");
+        throw new RuntimeException("Executing a purity analysis is currently disabled");
+        
+        //runPurityAnalysis(chicory.target_program);
+        //writePurityFile(chicory.target_program + ".pure", chicory.getConfigDir());
+        //doPurity = true;
     }
     else if(chicory.getPurityFileName() != null)
     {
+        readPurityFile(chicory.getPurityFileName(), chicory.getConfigDir());
         doPurity = true;
-        readPurityFile(chicory.getPurityFileName());
     }
 
     // Setup the declaration and dtrace writer.  The include/exclude filter are
@@ -78,9 +88,24 @@ public class ChicoryPremain {
   }
   
   /**
-   * Reads purityFileName 
+   * Reads purityFileName.  Each line should contain exactly one method.
+   * Care must be taken to supply the correct format.
+   * 
+   * From the Sun JDK API:
+   * 
+   * "The string is formatted as the method access modifiers, if any, followed by the method return type, 
+   * followed by a space, followed by the class declaring the method, followed by a period, followed by 
+   * the method name, followed by a parenthesized, comma-separated list of the method's formal parameter 
+   * types. If the method throws checked exceptions, the parameter list is followed by a space, followed 
+   * by the word throws followed by a comma-separated list of the thrown exception types. For example:
+   * 
+   * public boolean java.lang.Object.equals(java.lang.Object)
+   * 
+   * The access modifiers are placed in canonical order as specified by "The Java Language Specification". 
+   * This is public, protected or private first, and then other modifiers in the following order: abstract, 
+   * static, final, synchronized native."
    */
-   private static void readPurityFile(String purityFileName)
+   private static void readPurityFile(String purityFileName, String pathLoc)
    {
         pureMethods = new HashSet<String>();
 
@@ -88,7 +113,7 @@ public class ChicoryPremain {
         try
         {
             reader = new BufferedReader(new FileReader(
-                    purityFileName));
+                    new File(pathLoc, purityFileName)));
         }
         catch (FileNotFoundException e)
         {
@@ -111,7 +136,7 @@ public class ChicoryPremain {
             }
             
             if(line != null)
-                pureMethods.add(line);
+                pureMethods.add(line.trim());
         }
         while(line != null);
         
@@ -125,12 +150,16 @@ public class ChicoryPremain {
 
     }
 
-   private static void writePurityFile(String fileName)
+   /**
+    * Write a *.pure file to the given location
+    * @param fileName Where to write the file to (full path)
+    */
+   private static void writePurityFile(String fileName, String parentDir)
     {
         PrintWriter pureFileWriter = null;
         try
         {
-            pureFileWriter = new PrintWriter(fileName);
+            pureFileWriter = new PrintWriter(new File(parentDir, fileName));
         }
         catch (FileNotFoundException e)
         {
@@ -152,37 +181,54 @@ public class ChicoryPremain {
    * Populates the pureMethods Set with pure (non side-effecting) methods.
    * @param targetApp Name of the class whose main method is the entry point of the application
    */
-  private static void runPurityAnalysis(String targetApp)
-  {
-      //Example args: --pa:assignable -q  -c DataStructures.StackAr
-      String[] args = new String[] {"--pa:assignable", "-c", targetApp};
-      
-      //Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);
-      
-      pureMethods = new HashSet<String> ();
-      //for(HMethod meth: pureHMethods)
-      {
-      //    pureMethods.add(meth.toString());
-      }
-  }
+//  private static void runPurityAnalysis(String targetApp)
+//  {
+//      //Example args: --pa:assignable -q  -c DataStructures.StackAr
+//      String[] args = new String[] {"--pa:assignable", "-c", targetApp};
+//      
+//      Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);
+//      
+//      pureMethods = new HashSet<String> ();
+//      for(HMethod meth: pureHMethods)
+//      {
+//          pureMethods.add(meth.toString());
+//      }
+//  }
   
+  /**
+   * Return true iff Chicory has run a purity analysis or read a *.pure file 
+   */
   public static boolean shouldDoPurity()
   {
       return doPurity;
   }
 
+  /**
+   * Checks if member is one of the pure methods found in a purity analysis
+   * or supplied from a *.pure file. 
+   * 
+   * @return true iff member is a pure method
+   */
   public static boolean isMethodPure(Member member)
   {
       assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
       
+      //TODO just use Set.contains(member.toString()) ?
       for(String methName: pureMethods)
       {
-          //TODO a more robust check for equality than string comparison?
           if(methName.equals(member.toString()))
               return true;
       }
       
       return false;
+  }
+  
+  /**
+   * Return an unmodifiable Set of the pure methods
+   */
+  public static Set<String> getPureMethods()
+  {
+      return Collections.unmodifiableSet(pureMethods);
   }
 
 

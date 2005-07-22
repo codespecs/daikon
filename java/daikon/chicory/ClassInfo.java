@@ -48,7 +48,7 @@ public class ClassInfo {
    * Gets the reflection object Class for this class and the Method objects
    * for each method
    */
-  public void get_reflection() {
+  public void initViaReflection() {
 
     // get the reflection class
     try {
@@ -64,6 +64,44 @@ public class ClassInfo {
 
     for (MethodInfo mi : method_infos)
       mi.initViaReflection();
+    
+    if(ChicoryPremain.shouldDoPurity())
+    {
+        for(String pureMeth: ChicoryPremain.getPureMethods())
+        {
+            if(isInThisClass(pureMeth))
+            {
+                boolean foundMatch = false;
+                for(MethodInfo mi: method_infos)
+                {
+                    //System.out.println(mi.member.toString() + "\n" + pureMeth + "\n\n");
+                    if(mi.member.toString().trim().equals(pureMeth))
+                    {
+                        foundMatch = true;
+                        break;
+                    }
+                }
+                
+                if(!foundMatch)
+                {
+                    // pureMeth must not actually be in this class
+                    throw new Error(String.format("Could not find pure method \"%s\" in class %s", pureMeth, getClass().toString()));
+                }
+            }
+        }
+    }
+  }
+  
+  /**
+   * Determines if fully qualified method name is in this class
+   * Example methodName: public static String doStuff(int, java.lang.Object)
+   */
+  private boolean isInThisClass(String methodName)
+  {
+      // A heuristical way to determine if the method is in this class.
+      // Match anything of the form: ____class_name____(____
+      // Where ____ corresponds to any sequence of characters
+      return methodName.matches(".*" + class_name + ".*\\(.*");
   }
 
   /** dumps all of the class info to the specified stream **/

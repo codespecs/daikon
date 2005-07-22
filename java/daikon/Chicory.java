@@ -97,6 +97,11 @@ public class Chicory {
   private String purityFileName;
 
   /**
+   * The path to the configurations files
+   */
+  private String configDir = null;
+
+  /**
    * Entry point of Chicory <p>
    * @param args see usage for argument descriptions
    */
@@ -133,6 +138,14 @@ public class Chicory {
   public String getPurityFileName()
   {
       return purityFileName;
+  }
+  
+  /**
+   * Get config dir
+   */
+  public String getConfigDir()
+  {
+      return configDir;
   }
   
   /**
@@ -180,7 +193,7 @@ public class Chicory {
                 }
 
             }
-          else if (arg.equals("--linked-lists")) {
+       else if (arg.equals("--linked-lists")) {
         linked_lists = true;
         premain_args.add(arg);
 
@@ -277,6 +290,11 @@ public class Chicory {
       else if (arg.startsWith ("--daikon-online=")) {
         daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon-online=".length()) + " +";
 
+      }
+      else if (arg.startsWith("--configs="))
+      {
+          premain_args.add(arg);
+          configDir = arg.substring("--configs=".length());
       }
       else if (arg.equals("--purity-analysis"))
       {
@@ -673,6 +691,7 @@ public class Chicory {
   {
       if (msg != null)
           System.err.println(msg);
+      
       System.err.println("Usage: java daikon.Chicory <options> <class> <args>");
       System.err.println("<options> are:");
       //System.err.println("  -all                             Include system classes in output");
@@ -686,7 +705,9 @@ public class Chicory {
       System.err.println("  --output-dir=<directory>           Write the dtrace files to this directory (default is current directory)");
       System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args");
       System.err.println("  --daikon-online[=<daikon-args>]    Run daikon with no additional args in online mode via socket communication");
-      System.err.println("  --heap_size=<heapsize>             Use the specified heap size for the targer program");
+      System.err.println("  --configs=<directory>              Look for configuration files (such as *.pure files) in this location");
+      System.err.println("  --purity-file=<file>               Read pure methods from this file.  Will look in current directory if --configs=<directory> not given");
+      System.err.println("  --heap_size=<heapsize>             Use the specified heap size for the target program");
       System.err.println("  --help                             Print this help message");
       System.err.println("<class> is the program to trace.  Must exist in the classpath given");
       System.err.println("<args> are the arguments to <class>");

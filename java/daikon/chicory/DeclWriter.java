@@ -588,7 +588,7 @@ public class DeclWriter extends DaikonWriter
 //            //outFile.println(getRepName(type) + "[]");
 //            //outFile.println(compareInfoDefault);
 //
-//            //TODO get actual DaikonVariableInfo here
+//            //get actual DaikonVariableInfo here
 //            printChildren(cinfo, type, new RootInfo(), name, offset, depth - 1, true);
 //        }
 //    }

@@ -52,7 +52,7 @@ public class StringInfo extends DaikonVariableInfo
             return "null" + DaikonWriter.lineSep + "1";
         }
 
-        if (theValues instanceof NonsensicalList)
+        if (theValues instanceof NonsensicalList || theValues instanceof NonsensicalObject)
         {
             //buf.append("nonsensical");
             return "nonsensical" + DaikonWriter.lineSep + "2";
@@ -62,12 +62,14 @@ public class StringInfo extends DaikonVariableInfo
         buf.append("[");
         for (Iterator<String> iter = theValues.iterator(); iter.hasNext();)
         {
-            String str = iter.next();
+            Object str = iter.next();
 
             if (str == null)
                 buf.append(str);
+            else if(str instanceof NonsensicalObject || str instanceof NonsensicalList)
+                buf.append("nonsensical");
             else
-                buf.append("\"" + encodeString(str) + "\"");
+                buf.append("\"" + encodeString((String) str) + "\"");
 
             // Put space between elements in array
             if (iter.hasNext())
