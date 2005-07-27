@@ -1,9 +1,5 @@
 package daikon.chicory;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import java.util.regex.Pattern;
 import java.lang.reflect.*;
 
 /**
@@ -30,6 +26,7 @@ public abstract class DaikonWriter
     public DaikonWriter()
     {
     }
+    
     
     /**
      * Determines if this field warrants an [ = val ] entry in decls file
@@ -394,53 +391,6 @@ public abstract class DaikonWriter
             return false;
     }
 
-    /**
-     * Returns whether or not the specified field is visible from the Class
-     * current.  All fields within instrumented classes are considered
-     * visible from everywhere (to match dfej behavior)
-     */
-    public boolean isFieldVisible (Class current, Field field)
-    {
-        Class fclass = field.getDeclaringClass();
-        int modifiers = field.getModifiers();
-
-        // If the field is within the current class, it is always visible
-        if (current.equals (fclass))
-            return (true);
-
-        // If the field is in any instrumented class it is always visible
-        synchronized(Runtime.all_classes)
-        {
-        for (ClassInfo ci : Runtime.all_classes)
-        {
-            // System.out.printf ("comparing %s vs %s%n", ci.class_name,
-            //                    fclass.getName());
-            if (ci.class_name.equals (fclass.getName()))
-                {
-                return (true);
-                }
-        }
-        }
-
-        // Otherwise we consider the variable not to be visible, even
-        // though it is.  This mimics dfej behavior
-        if (true)
-            return (false);
-
-        // If the field is in the same package, it's visible if it is
-        // not private or protected
-        if (current.getPackage().equals (fclass.getPackage())) {
-            if (Modifier.isPrivate (modifiers)
-                 || Modifier.isProtected (modifiers))
-                return (false);
-            else
-                return (true);
-        }
-
-        // The field must be in an unrelated class, it must be marked
-        // public to be visible
-        return (Modifier.isPublic (modifiers));
-    }
 
     /**
      * Determines implicit linked list with following rule: if class x contains

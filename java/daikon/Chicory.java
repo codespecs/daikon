@@ -35,6 +35,11 @@ public class Chicory {
 
   /** Print progress information **/
   public static boolean verbose = true;
+  
+  /**
+   * See StdVisibility in the DeclWriter class
+   */
+  public static boolean StdVisibility = false;
 
   /** Main debug switch **/
   public boolean debug = false;
@@ -74,8 +79,6 @@ public class Chicory {
 
   /** daikon process for --daikon switch **/
   public Process daikon_proc;
-
-  // private List<String> cmdList;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
@@ -314,6 +317,11 @@ public class Chicory {
         verbose = false;
         premain_args.add(arg);
 
+      }
+      else if (arg.startsWith("--std-vis"))
+      {
+          StdVisibility = true;
+          premain_args.add(arg);
       }
       else if (arg.startsWith("--target-program="))
       {
