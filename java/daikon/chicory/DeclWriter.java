@@ -907,7 +907,7 @@ public class DeclWriter extends DaikonWriter
 
         // If the field is in the same package, it's visible if it is
         // not private or protected
-        if (current.getPackage().equals (fclass.getPackage())) {
+        if (current.getPackage() != null && current.getPackage().equals (fclass.getPackage())) {
             if (Modifier.isPrivate (modifiers)
                  || Modifier.isProtected (modifiers))
                 return (false);
