@@ -715,6 +715,7 @@ public class Chicory {
       System.err.println("  --daikon-online[=<daikon-args>]    Run daikon with no additional args in online mode via socket communication");
       System.err.println("  --configs=<directory>              Look for configuration files (such as *.pure files) in this location");
       System.err.println("  --purity-file=<file>               Read pure methods from this file.  Will look in current directory if --configs=<directory> not given");
+      System.err.println("  --std-vis                          Only look at visible fields (example: ignore private field in another class)");
       System.err.println("  --heap_size=<heapsize>             Use the specified heap size for the target program");
       System.err.println("  --help                             Print this help message");
       System.err.println("<class> is the program to trace.  Must exist in the classpath given");
