@@ -46,6 +46,10 @@ Daikon
     invoke these methods, using their return values as normal variables.
     That is, if a class has variables int a, b, c, and pure method int x(), then
     Chicory will produce variables a,b,c and x() for Objects of this type.
+
+    Added --std-vis switch.  When on, Chicory will only traverse fields which
+    are visible from a given program point.  For instance, a program point from
+    class A will not include private fields from class B.
     
 
 ----------------
