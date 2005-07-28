@@ -20,6 +20,11 @@ public class FieldInfo extends DaikonVariableInfo
        field = theField;
     }
 
+    public FieldInfo (String parent_name, Field theField)
+    {
+        this (parent_name + "." + theField.getName(), theField,
+              theField.getType().isArray());
+    }
 
     public Object getMyValFromParentVal(Object val)
     {
@@ -38,5 +43,11 @@ public class FieldInfo extends DaikonVariableInfo
                 return DTraceWriter.getValue(field, val);
             }
         }
+    }
+
+    /** Processes any children of this field and adds them to the tree **/
+    public void process (int depth, boolean in_arr)
+    {
+        process_children (field.getType(), depth, in_arr);
     }
 }
