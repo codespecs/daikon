@@ -3,7 +3,7 @@ package daikon.chicory;
 import java.util.*;
 
 /**
- * NonsensicalList is similar to NonsensicalObject but it is used for 
+ * NonsensicalList is similar to NonsensicalObject but it is used for
  * arrays whose value is nonsensical.
  */
 public class NonsensicalList extends AbstractList implements List
@@ -30,6 +30,11 @@ public class NonsensicalList extends AbstractList implements List
     public int size()
     {
         return -1;
+    }
+
+    public String toString()
+    {
+        return "NonsensicalList";
     }
 
     private final static NonsensicalList theList = new NonsensicalList();
