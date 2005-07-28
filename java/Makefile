@@ -328,6 +328,23 @@ chicory-test : ChicoryPremain.jar
 	$(JAVA) -ea daikon.Chicory --verbose --debug --output-dir=/tmp \
 	  daikon.chicory.Test
 
+#
+# Dynamic Comparability
+#
+DCOMP_JAVA_FILES := $(shell find daikon/dcomp -name '*.java') \
+					$(shell find daikon/chicory -name '*.java')
+DCOMP_CLASS_FILES := $(patsubst %.java,%.class,$(DCOMP_JAVA_FILES))
+
+dcomp : dcomp_premain.jar
+dcomp_premain.jar : $(DCOMP_JAVA_FILES) daikon/dcomp/manifest.txt
+	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
+	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
+	  daikon/dcomp/Premain.class
+
+dcomp-test : dcomp_premain.jar
+	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
+	$(JAVA) -javaagent:dcomp_premain.jar daikon/dcomp/Test
+
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ${AUTO_GENERATED_FILES}
@@ -394,6 +411,7 @@ clean:
 	-rm -f `find daikon -follow -name "*.class" -print`
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
 	-rm -f ChicoryPremain.jar
+	-rm -f dcomp_premain.jar
 
 dist_clean: clean
 	-rm -f TAGS
