@@ -1,18 +1,23 @@
 
 package daikon.chicory;
 
-import java.lang.reflect.Field;
-
-
 /**
- * The ThisObjInfo class is a subtype of DaikonVariableInfo used for variable types which
- * represent the "this" object.s
+ * The ThisObjInfo class is a subtype of DaikonVariableInfo used for
+ * variable types which represent the "this" object.s
  */
 public class ThisObjInfo extends DaikonVariableInfo
 {
+    public Class type;
+
     public ThisObjInfo()
     {
         super("this");
+    }
+
+    public ThisObjInfo (Class type)
+    {
+        super ("this");
+        this.type = type;
     }
 
     /* (non-Javadoc)
@@ -23,5 +28,15 @@ public class ThisObjInfo extends DaikonVariableInfo
         return null;
     }
 
-    
+    /**
+     * Process this by adding all of its fields as children
+     */
+    public void process (int depth)
+    {
+        process_children (type, depth, false);
+    }
+
+
+
+
 }
