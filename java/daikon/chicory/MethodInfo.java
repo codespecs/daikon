@@ -17,8 +17,8 @@ public class MethodInfo {
   public Member member = null;
 
   /**
-   * Method name.
-   * For example: "public static void sort(int[] arr)" would have method_name "sort"
+   * Method name.  For example: "public static void sort(int[] arr)"
+   * would have method_name "sort"
    **/
   public String method_name;
 
@@ -26,8 +26,9 @@ public class MethodInfo {
   public String[] arg_names;
 
   /**
-   * Array of argument types for this method (fully qualified).
-   * For example:  "public static void examineObject(Object x)" would have arg_types {"java.lang.Object"}
+   * Array of argument types for this method (fully qualified).  For
+   * example: "public static void examineObject(Object x)" would have
+   * arg_types {"java.lang.Object"}
    **/
   public String[] arg_type_strings;
 
@@ -37,7 +38,9 @@ public class MethodInfo {
   /** exit locations for this method **/
   public List <Integer> exit_locations;
 
-  /** Tells whether each exit point in method is instrumented, based on filters **/
+  /**
+   * Tells whether each exit point in method is instrumented, based on
+   * filters **/
   public List <Boolean> is_included;
 
   /**
@@ -45,17 +48,15 @@ public class MethodInfo {
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public RootInfo traversalEnter;
+  public RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
-   * There is one for each line number at which an exit occurs in the
-   * source program.
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public Map<Integer, RootInfo> traversalExit;
-  
+  public RootInfo traversalExit = null;
+
   /**
    * Whether or not the method is pure (has no side-effects).
    * Will only be set to true if the --purity-analysis switch is given
@@ -79,11 +80,10 @@ public class MethodInfo {
     this.arg_type_strings = arg_type_strings;
     this.exit_locations = exit_locations;
     this.is_included = is_included;
-
-    this.traversalExit = new HashMap<Integer, RootInfo>();
   }
 
-  private static HashMap<String, Class> primitive_classes = new HashMap<String, Class>(8);
+  private static HashMap<String,Class> primitive_classes
+    = new HashMap<String,Class>(8);
   static {
     primitive_classes.put("Z", Boolean.TYPE);
     primitive_classes.put("B", Byte.TYPE);
@@ -130,17 +130,17 @@ public class MethodInfo {
     } catch (Exception e) {
       throw new Error ("can't find method " + method_name + " : " + e);
     }
-    
-    
+
+
     if(ChicoryPremain.shouldDoPurity())
     {
         int mod = member.getModifiers();
-        
-        
+
+
         // Only consider purity on non-abstract, non-static, non-constructor
         // methods which return a value and take no parameters!
-        if(!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) && 
-                !(member instanceof Constructor) && 
+        if(!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&
+                !(member instanceof Constructor) &&
                 !((Method) member).getReturnType().equals(Void.TYPE) &&
                 ((Method) member).getParameterTypes().length == 0)
         {
@@ -160,6 +160,25 @@ public class MethodInfo {
     return (method_name.equals ("<init>") || method_name.equals(""));
   }
 
+  /**
+   * Initialize the enter and exit daikon variable trees (traversalEnter and
+   * traversalExit).  The reflection information must have already been
+   * initialized.
+   */
+  public void init_traversal (int depth) {
+
+    traversalEnter = new RootInfo();
+    traversalEnter.enter_process (this, depth);
+    System.out.printf ("Method %s.%s: %n ", class_info.clazz.getName(), this);
+    System.out.printf ("Enter daikon variable tree%n%s%n",
+                       traversalEnter.treeString());
+    traversalExit = new RootInfo();
+    traversalExit.exit_process (this, depth);
+    System.out.printf ("Exit daikon variable tree%n%s%n",
+                       traversalExit.treeString());
+  }
+
+
   public String toString() {
     String out = method_name + "(";
     for (int ii = 0; ii < arg_names.length; ii++) {
@@ -169,8 +188,8 @@ public class MethodInfo {
     }
     return (out + ")");
   }
-  
-  public boolean isPure() 
+
+  public boolean isPure()
   {
       return isPure;
   }
