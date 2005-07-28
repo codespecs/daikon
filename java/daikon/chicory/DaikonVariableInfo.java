@@ -1,6 +1,7 @@
 
 package daikon.chicory;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 
@@ -52,8 +53,8 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             name = null;
         else
             name = theName.intern();
-            
-        
+
+
         children = new ArrayList <DaikonVariableInfo> ();
 
         isArray = arr;
@@ -78,9 +79,15 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     }
 
     /**
-     * Returns a string representation of this node and all of its children
+     * Returns a string representation of this node
      */
     public String toString()
+    {
+        return getClass().getName() + ":" + getName();
+    }
+
+    /** Returns a string representative of this node and its children **/
+    public String treeString()
     {
         return getStringBuffer(new StringBuffer("--")).toString();
     }
@@ -289,4 +296,52 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
         return buf.toString();
     }
+
+    /**
+     * Process the children of the specified type and add them to the
+     * tree.
+     *
+     * @param type Type of the variable whose children should be processed.
+     *             Can be any valid type (including arrays and primitives)
+     * @param depth Number of times to recurse proessing children
+     * @param in_arr True if we are processing an array at this level
+     *               or higher.  Required because we do not process arrays
+     *               nested in arrays.
+     */
+    protected void process_children (Class type, int depth, boolean in_arr)
+    {
+        if (type.isPrimitive())
+            return;
+        else if (type.isArray())
+        {
+            // Don't attempt arrays in arrays
+            if (in_arr)
+                return;
+
+            // Add the contents of the array
+            Class array_type = type.getComponentType();
+            ArrayInfo ai = new ArrayInfo (getName(), array_type);
+            addChild (ai);
+            ai.process (depth-1);
+        }
+        else // must be a class
+        {
+            if (depth <= 0)
+                return;
+
+            // Don't include fields in system variables
+            if (DaikonWriter.systemClass (type))
+                return;
+
+            // Add each field
+            Field[] fields = type.getDeclaredFields();
+            for (Field field : fields)
+            {
+                FieldInfo field_var = new FieldInfo (getName(), field);
+                field_var.process (depth-1, in_arr);
+                addChild (field_var);
+            }
+        }
+    }
+
 }
