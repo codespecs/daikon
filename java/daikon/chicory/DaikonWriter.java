@@ -26,8 +26,7 @@ public abstract class DaikonWriter
     public DaikonWriter()
     {
     }
-    
-    
+
     /**
      * Determines if this field warrants an [ = val ] entry in decls file
      *
@@ -102,7 +101,7 @@ public abstract class DaikonWriter
      * So a corresponding name/short_name pair could be:
      *     name: public static void DataStructures.StackArTester.doNew(int size)
      *     short_name: doNew
-     *     
+     *
      * @param point Usually "EXIT" or "ENTER"
      * @return Same thing as methodName(Member, point)
      */
@@ -114,7 +113,7 @@ public abstract class DaikonWriter
         String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
 
         boolean isConstructor = name.equals("<init>") || name.equals("");
-        
+
         // replace <init>'s with the actual class name
         // so "public void <init>" becomes "public void StackAr" for example
         name = name.replace("<init>", className);
@@ -198,7 +197,7 @@ public abstract class DaikonWriter
      * Dfej repeats the name of the class for
      * constructors (eg, DataStructures.StackAr() becomes
      * DataStructures.StackAr.StackAr().  This makes it clear
-     * that SomePackage.ClassName.ClassName and SomePackage.ClassName.OtherMethod  
+     * that SomePackage.ClassName.ClassName and SomePackage.ClassName.OtherMethod
      * are in the same class. Mimic that behavior.
      *
      */
@@ -218,7 +217,7 @@ public abstract class DaikonWriter
         else
         {
             // This case could occur for constructor names given as PackageName.ClassName
-            
+
             short_name = short_name.substring(lastPeriod + 1);
             return name.replace("." + short_name + "(", "." + short_name + "."
                     + short_name + "(");
@@ -228,7 +227,7 @@ public abstract class DaikonWriter
     /**
      * Given a type, gets the representation type to be used in Daikon. For
      * example, the representation type of a class object is "hashcode."
-     * 
+     *
      * @param type
      *            The type of the variable
      * @param asArray
@@ -316,14 +315,14 @@ public abstract class DaikonWriter
      * excluded, but a better way of determining this is probably
      * necessary
      */
-    public boolean notSystemClass (Class type)
+    public static boolean systemClass (Class type)
     {
         String class_name = type.getName();
         // System.out.printf ("type name is %s%n", class_name);
         if (class_name.startsWith ("java."))
-            return (false);
-        else
             return (true);
+        else
+            return (false);
     }
 
     //the following comments are taken from dfej
