@@ -19,7 +19,7 @@ public class ClassInfo {
   public Class clazz;
 
   /** list of methods in the class **/
-  public List<MethodInfo> method_infos;
+  public List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
   /** this class's classloader**/
   private ClassLoader loader;
