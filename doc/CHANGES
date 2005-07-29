@@ -24,6 +24,12 @@ Further documentation can be found in:
 
 Daikon
 
+  User Changes
+
+    Daikon runs on MacOS (the Apple Macintosh).  This is not due to a
+    change in Daikon, but because Apple has finally released a Java 1.5
+    JVM.
+
   Documentation Changes
 
     Documented --premain switch to Chicory.
