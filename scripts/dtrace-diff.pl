@@ -224,6 +224,8 @@ sub cmp_ppts ( $$$ ) {
   	    my $difference;
 	    if (($$la[0] eq "uninit")||($$lb[0] eq "uninit")) {
 		$difference = !($$la[0] eq $$lb[0]);
+	    } elsif (($$la[0] eq "nonsensical")||($$lb[0] eq "nonsensical")) {
+		$difference = !($$la[0] eq $$lb[0]);
 	    } elsif (($$la[0] eq "nan")||($$lb[0] eq "nan")) {
 		$difference = !($$la[0] eq $$lb[0]);
             } elsif (($$la[0] == 0)) {
