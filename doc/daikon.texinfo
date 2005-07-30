@@ -230,6 +230,7 @@ C front end Kvasir
 
 * Using Kvasir::                
 * Kvasir options::              
+* Tracing only part of a program::  
 * Pointer type disambiguation::  
 * Online execution::            
 * Installing Kvasir::           
@@ -3081,6 +3082,7 @@ programs,,,./developer,Daikon Developer Manual}.
 @menu
 * Using Kvasir::                
 * Kvasir options::              
+* Tracing only part of a program::  
 * Pointer type disambiguation::  
 * Online execution::            
 * Installing Kvasir::           
@@ -3145,7 +3147,7 @@ point and variable within a C program has a unique name when presented
 to Daikon.
 
 
-@node Kvasir options, Pointer type disambiguation, Using Kvasir, Kvasir
+@node Kvasir options, Tracing only part of a program, Using Kvasir, Kvasir
 @subsection Kvasir options
 
 @table @option
@@ -3235,14 +3237,6 @@ Compress trace information with the gzip program before writing
 it to the @file{.dtrace} file.  You must have the gzip program
 available.
 
-@item --dump-ppt-file=@var{filename}
-@itemx --dump-var-file=@var{filename}
-
-Print a list of all the program points (respectively all the variables)
-in the program to the specified file.  An edited version of this file can
-then be used with the @option{--ppt-list-file} (respectively
-@option{--var-list-file}) option.
-
 @item --ignore-globals
 
 Omit any global or static variables from the @file{.decls} and
@@ -3311,7 +3305,24 @@ given file.  Other program points (respectively variables) will be
 omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
 way to produce such files is by editing the output produced by the
 @option{--dump-ppt-file} (respectively, @option{--dump-var-file}) option
-described above.
+described above.  (@pxref{Tracing only part of a program} section
+for detailed instructions on using these options.)
+
+@item --dump-ppt-file=@var{filename}
+@itemx --dump-var-file=@var{filename}
+
+Print a list of all the program points (respectively all the variables)
+in the program to the specified file.  An edited version of this file can
+then be used with the @option{--ppt-list-file} (respectively
+@option{--var-list-file}) option.
+(@pxref{Tracing only part of a program} section
+for detailed instructions on using these options.)
+Note: Do not use these options with the
+@option{--with-dyncomp} option because the behavior is undefined.
+Running Kvasir with these 
+options will initialize but not actually execute the target program, so
+the dynamic comparability analysis cannot be performed in the first
+place.
 
 @item --program-stdout=@var{filename}
 @itemx --program-stderr=@var{filename}
@@ -3352,7 +3363,193 @@ target program. This is equivalent to
 
 @end table
 
-@node    Pointer type disambiguation, Online execution, Kvasir options, Kvasir
+@node    Tracing only part of a program, Pointer type disambiguation, Kvasir options, Kvasir
+@subsection Tracing only part of a program
+
+When Kvasir is run on a target program of significant size, often times
+too much output is generated, which causes an enormous performance
+slowdown of both Kvasir outputting the trace file and also Daikon trying
+to process the trace file.  It is often desirable to only trace a
+specific portion of the target program, program points and variables
+that are of interest for a particular invariant detection application.
+For instance, one may only be interested in tracking changes in a
+particular global data structure during calls to a specific set of
+functions (program points), and thus have no need for information about
+any other program points or variables in the trace file.  The
+@option{--ppt-list-file} and @option{--var-list-file} options can be
+used to achieve such selective tracing.
+
+The program point list file (abbreviated as @file{ppt-list-file})
+consists of a newline-separated list of names of program points that the
+user wants Kvasir to trace.  Every name corresponds to both the entrance
+(@code{:::ENTER}) and exit (@code{:::EXIT}) program points corresponding
+to that name and is printed out in the exact same format that Kvasir
+uses for that program point in the trace file (@pxref{Using Kvasir}
+section for the program point naming scheme).  In the special case of
+certain C++ functions, Kvasir needs to have the mangled versions of the
+names in order to optimize the performance of selective tracing.  Those
+entries are listed in the @file{ppt-list-file} as three space-delimited
+tokens: The string literal ``@code{(mangled)}'', the C++ mangled name,
+and the actual name that Kvasir outputs to the trace file.  Here is an
+example of a @file{ppt-list-file} which contains both regular and C++
+names:
+
+@example
+FunctionNamesTest.c.staticFoo()
+(mangled) _Z17firstFileFunctioni ..firstFileFunction(int)
+..main()
+second_file.c.staticFoo()
+(mangled) _Z18secondFileFunctionv ..secondFileFunction()
+@end example
+
+It is very important to follow this format in the @file{ppt-list-file}
+because Kvasir performs string comparisons to determine which program
+points to trace.  Thus, it is often easier to have Kvasir generate a
+@file{ppt-list-file} file that contains a list of all program points in a
+target program by using the @option{--dump-ppt-file} option, and then
+either comment out (by using the @code{'#'} comment character at the
+beginning of the line) or delete lines in that file for program points
+not to be traced or create a new @file{ppt-list-file} using the names in
+the Kvasir-generated file.  This prevents typos and the tedium of
+manually typing up program point names (which is nearly impossible in
+the case of mangled C++ names).  In fact, the @file{ppt-list-file}
+presented in the above example was generated from a test program named
+@code{FunctionNamesTest} by using the following command:
+
+@example
+kvasir-dtrace --dump-ppt-file=FunctionNamesTest.ppts  ./FunctionNamesTest
+@end example
+
+That file represents all the program points that Kvasir would
+normally trace.  If the user wanted to only trace the @code{main()}
+function, he could comment out all other lines by placing a single
+@code{'#'} character at the beginning of each line to be commented out,
+as demonstrated here:
+
+@example
+#FunctionNamesTest.c.staticFoo()
+#(mangled) _Z17firstFileFunctioni ..firstFileFunction(int)
+..main()
+#second_file.c.staticFoo()
+#(mangled) _Z18secondFileFunctionv ..secondFileFunction()
+@end example
+@noindent
+When running Kvasir with the @option{--ppt-list-file} option using this
+as the @file{ppt-list-file}, Kvasir only stops the execution of the target program at the
+entrance and exit of @code{main()} in order to output values to the
+.dtrace file.  In order to reduce the file size, when running Kvasir
+with the @option{--ppt-list-file} option, the .decls file only contains
+program point declarations for those listed in the @file{ppt-list-file}
+(@code{..main():::ENTER} and @code{..main():::EXIT} in this case) because
+no other declarations are necessary.
+
+The variable list file (abbreviated as @file{var-list-file}) contains
+all of the variables that the user wants Kvasir to output.  There is one
+section for global variables and a section for variables associated with
+each program point (function formal parameters).  Again, the best way to
+create a @file{var-list-file} is to have Kvasir generate a file with all
+variables using the @option{--dump-var-file} option and then modifying
+that file for one's particular needs by either deleting or
+commenting out lines (again using the @code{'#'} comment character).  For example,
+executing
+
+@example
+kvasir-dtrace --dump-var-file=FunctionNamesTest.vars  ./FunctionNamesTest
+@end example
+
+@noindent
+will generate the following @file{var-list-file} named
+@code{FunctionNamesTest.vars}:
+
+@example
+----SECTION----
+globals
+/globalIntArray
+/globalIntArray[]
+/anotherGlobalIntArray
+/anotherGlobalIntArray[]
+
+
+----SECTION----
+FunctionNamesTest.c.staticFoo()
+x
+y
+
+
+----SECTION----
+..firstFileFunction(int)
+blah
+
+
+----SECTION----
+..main()
+argc
+argv
+argv[]
+return
+
+
+----SECTION----
+second_file.c.staticFoo()
+x
+y
+
+
+----SECTION----
+..secondFileFunction()
+@end example
+
+The file format is quite straightforward.  Each section is marked by a
+special string ``@code{----SECTION----}'' on a line by itself followed
+immediately by a line that either denotes the program point name
+(formatted like how it appears in the .decls and .dtrace files) or the
+special string ``@code{globals}''.  This is followed by a
+newline-delimited list of all variables to be outputted for that
+particular program point.  (Global variables listed in the
+@code{globals} section are outputted for all program points.)
+For clarity, one or more blank lines should separate neighboring sections,
+although the ``@code{----SECTION----}'' string literal on a line by itself is the only
+required delimiter.  If an entire section is missing, then no variables
+for that program point (or no global variables, if it is the special
+global section) are traced.
+
+The variables listed in this file are written exactly as they appear in
+the .decls and .dtrace file (@pxref{Using Kvasir} section
+for the variable naming scheme).  In the program that generated the
+output for the above example, @code{int*
+globalIntArray} is a global integer pointer variable.  For that
+variable, Kvasir generates two Daikon variables: @code{/globalIntArray}
+to represent the hashcode pointer value, and @code{/globalIntArray[]} to
+represent the array of integers referred-to by that pointer.  The
+latter is a derived-variable that can be thought of as the child of
+@code{/globalIntArray}.  If the entry for @code{/globalIntArray} is
+commented-out or missing, then Kvasir will not output any values for
+@code{/globalIntArray} or for any of its children, which in this case is
+@code{/globalIntArray[]}.  If a struct or struct pointer variable is
+commented-out or missing, then none of its members are traced.  Thus, a
+general rule about variable entries in the @file{var-list-file} is that
+if a parent variable is not present, then neither it nor its children
+are traced.
+
+In order to limit both the number of program points traced as well as
+the variables traced at those program points, the user can run Kvasir
+with both the @option{--ppt-list-file} and @option{--var-list-file}
+options with the appropriate @file{ppt-list-file} and
+@file{var-list-file}, respectively.  The @file{var-list-file} only needs
+to contain a section for global variables and sections for all program
+points to be traced because variable listings for program points not to
+be traced are irrelevant (their presence in the @file{var-list-file}
+does not affect correctness but does cause an unnecessary
+performance and memory inefficiency).
+
+If the @option{--dump-var-file} option is used in conjunction with the
+@option{--ppt-list-file} option, then the only sections generated in the
+@file{var-list-file} will be the global section and sections for all
+program points explicitly mentioned in the @file{ppt-list-file}.  This
+is helpful for generating a smaller @file{var-list-file} for use with an
+already-existent @file{ppt-list-file}.
+
+@node    Pointer type disambiguation, Online execution, Tracing only part of a program, Kvasir
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -7559,8 +7756,9 @@ the trace file}, @pxref{Chicory options}) to
 restrict which program points are traced.  Running the
 instrumented program will result in a smaller @file{.dtrace} file that
 contains fewer records.
-@item With Kvasir, use the @option{-ppt-list-file} option to specify a list
-of program points that should be traced.
+@item With Kvasir, use the @option{--ppt-list-file} option to specify a list
+of program points that should be traced (@pxref{Tracing only part of a
+program} section for more details).
 @item With dfec, split your program into multiple files, then
 instrument only some of them (see below).
 @end itemize
@@ -7609,6 +7807,13 @@ depth.
 @option{--nesting-depth=@var{N}} option.
 @item With dfec, use the @option{--struct-depth=@var{N}} option.
 @end itemize
+
+@item
+With Kvasir, you can either ignore all global and/or static variables with the
+@option{--ignore-globals} and @option{--ignore-static-vars} options or manually
+specify a subset of variables to trace using the
+@option{--var-list-file} option (@pxref{Tracing only part of a program}
+section for details)
 
 @item 
 You can pare down an existing @file{.dtrace} file using the
