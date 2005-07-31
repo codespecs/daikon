@@ -239,6 +239,7 @@ C front end Kvasir
 Pointer type disambiguation
 
 * Pointer type disambiguation example::  
+* Using pointer type disambiguation with partial program tracing::  
 
 Perl front end dfepl
 
@@ -3349,9 +3350,10 @@ Specifies the name of the pointer type disambiguation file
 (@pxref{Pointer type disambiguation}).
 If this file exists, Kvasir uses it to make decisions about how 
 to output the referents of pointer variables.  If the file does not exist, 
-then Kvasir creates it, inferring whether pointers should output as one 
-element or an array of elements.  
-This file may then be edited and used on subsequent runs.
+then Kvasir creates it.  This file may then be edited and used on
+subsequent runs. This option initializes but does not fully execute the
+target program (unless it is run with the @option{--smart-disambig}
+option).
 
 @item --disambig
 Tells Kvasir to create or read pointer type disambiguation 
@@ -3360,6 +3362,18 @@ which is @file{@var{myprog}.disambig} in the same
 directory as the target program, where @var{myprog} is the name of the 
 target program. This is equivalent to 
 @samp{--disambig-file=@file{@var{myprog}.disambig}}.
+
+@item --smart-disambig
+This option should be used in addition to either the @option{--disambig}
+or @option{--disambig-file} options (it does nothing by itself).  If the
+.disambig file specified by the option does not exist, then Kvasir
+executes the target program, observes whether each pointer refers to
+either one element or an array of elements, and creates a disambiguation
+file that contains suggestions for the disambiguation types of each
+pointer variable.  This potentially provides more accuracy than using
+either the @option{--disambig} or @option{--disambig-file} options alone,
+but at the expense of a longer run time.  (If the .disambig file already
+exists, then this option provides no extra functionality.)
 
 @end table
 
@@ -3584,11 +3598,12 @@ Information about whether each pointer refers to an array or a single
 element can be specified in a ``disambig file'' that resides in the
 same directory as the target program (by default).  The @option{--disambig} 
 option instructs Kvasir to read this file if it exists.  (If it does not exist, 
-Kvasir produces the file automatically and heuristically infers whether each 
+Kvasir produces the file automatically and, if invoked along with the
+@option{--smart-disambig} option, heuristically infers whether each 
 pointer variable refers to single or multiple elements. Thus, users can
 edit this file for use on subsequent runs rather than having to create it 
 from scratch.)  The disambig file lists all the program points and user-defined 
-types, and under each, a list of all the relevant variables along with their 
+types, and under each, a list of certain types of variables along with their 
 custom disambiguation types as shown below.  
 The list of disambiguation options is:
 
@@ -3614,10 +3629,11 @@ For pointers to (or arrays of) @code{char} and @code{unsigned char}:
 'P': a single integer.
 @end enumerate
 @item 
-For pointers to (or arrays of) all other variable types (Kvasir automatically infers a default 'A' or 'P' for each variable during the generation of a @file{.disambig} file):
+For pointers to (or arrays of) all other variable types (if invoked
+along with @option{--smart-disambig}, Kvasir automatically infers a default 'A' or 'P' for each variable during the generation of a @file{.disambig} file):
 @enumerate
 @item
-'A': an array.  (For an array of structs, an array will be output for each scalar field of the struct.  Aggregate children (arrays, other structs) will not be output.)
+'A': an array.  (Default) (For an array of structs, an array will be output for each scalar field of the struct.  Aggregate children (arrays, other structs) will not be output.)
 @item
 'P': a pointer to a single element.  (For a pointer to a struct, each field will be output as a single instance, and child aggregate types will be output recursively. This extra information obtained from struct pointers is a powerful consequence of pointer type disambiguation.)
 @end enumerate
@@ -3638,9 +3654,10 @@ retain their default values.
 
 @menu
 * Pointer type disambiguation example::  
+* Using pointer type disambiguation with partial program tracing::  
 @end menu
 
-@node    Pointer type disambiguation example,  , Pointer type disambiguation, Pointer type disambiguation
+@node    Pointer type disambiguation example, Using pointer type disambiguation with partial program tracing, Pointer type disambiguation, Pointer type disambiguation
 @subsubsection Pointer type disambiguation example
 
 This example demonstrates the power of pointer type disambiguation in creating 
@@ -3728,18 +3745,18 @@ Kvasir with the @option{--disambig} option, we create the
 Kvasir to change how the pointer is output.  (We run Kvasir twice on the same
 program, but we edit the @file{.disambig} file in between the runs.)
 @example
-kvasir-dtrace @var{...options...} --disambig @var{myprog}.c
+kvasir-dtrace @var{...options...} --disambig --smart-disambig @var{myprog}.c
 @end example
 
 This creates the @file{@var{myprog}.disambig} file.  It contains, at the top:
 
 @example
---------ENTRY--------
+----SECTION----
 ..foo():::ENTER
 bar
 P
 
---------ENTRY--------
+----SECTION----
 ..foo():::EXIT0
 bar
 P
@@ -3748,11 +3765,17 @@ P
 This means that at the two program points corresponding to the entry and
 exit of @code{foo()}, the variable @code{bar} is treated as a
 @samp{P}ointer type. 
+Since we have used the @option{--smart-disambig} option,
 Kvasir automatically inferred Pointer instead of Array for @code{bar} 
 because it observed that @code{bar} only pointed to one element during the 
 execution of the target program which generated the @file{.disambig} file. 
 This heuristic allows users to use 
 @file{.disambig} files more effectively with less manual editing.
+Without @option{--smart-disambig}, Kvasir does not execute the program
+to make such inferences, which allows .disambig files to be generated
+faster, but leaves the default disambiguation types for all entries (in
+this case, @code{bar} would have the default array type of
+@code{'A'}).
 
 Then, running Kvasir again with the @option{--disambig}
 option causes Kvasir to open the existing
@@ -3788,6 +3811,100 @@ size(bar.numbers[]) in bar.numbers[]
 size(bar.numbers[])-1 in bar.numbers[]
 @end example
 
+@node    Using pointer type disambiguation with partial program tracing,  , Pointer type disambiguation example, Pointer type disambiguation
+@subsubsection Using pointer type disambiguation with partial program tracing
+
+It is possible to use pointer type disambiguation while only tracing
+selected program points and/or variables in a target program, combining
+the functionality described in the @ref{Pointer type disambiguation} and
+@ref{Tracing only part of a program} sections.  This section describes
+the interaction of the @file{ppt-list-file}, @file{var-list-file}, and
+.disambig files.
+
+The interaction between selective program point tracing (via
+the @file{ppt-list-file}) and pointer type disambiguation is fairly
+straightforward:  If the user creates a .disambig file while running
+Kvasir with a @file{ppt-list-file} that only specifies certain program
+points, the generated .disambig file will only contain sections for
+those program points (as well as the global section and sections for
+each struct type).  If the user reads in a .disambig file while running
+Kvasir with a @file{ppt-list-file}, then disambiguation information is
+applied for all variables at the program points to be traced.
+
+The interaction between selective variable tracing (via the
+@file{var-list-file}) and pointer type disambiguation is a bit more
+complicated.  This is because the @file{var-list-file} lists variables
+as they appear in the .decls and .dtrace files, but using a .disambig
+file can actually change the way that variable names are printed out in
+the .decls and .dtrace files.  For example, consider the test program
+from the @ref{Pointer type disambiguation example}.  The @code{struct
+record* bar} parameter of @code{foo()} is treated like an array by
+default.  Hence, the .decls, .dtrace, and @file{var-list-file} will list
+the following variables derived from this parameter:
+
+@example
+bar
+bar[].name
+bar[].numbers[0]
+bar[].numbers[0][]
+bar[].numbers[1]
+bar[].numbers[1][]
+bar[].numbers[2]
+bar[].numbers[2][]
+bar[].numbers[3]
+bar[].numbers[3][]
+bar[].numbers[4]
+bar[].numbers[4][]
+@end example
+
+However, if we use a disambiguation file to denote @code{bar} as a
+pointer to a single element, then the .decls and .dtrace files will
+instead list the following variables:
+
+@example
+bar
+bar->name
+bar->numbers
+bar->numbers[]
+@end example
+
+Notice how the latter variable list is more compact and reflects the
+fact that @code{bar} is a pointer to a single struct.  Thus, the
+flattening of the @code{numbers[5]} static array member variable is no
+longer necessary (it was necessary without disambiguation because Daikon
+does not support nested arrays of arrays, which can occur if @code{bar}
+were itself an array since @code{numbers[5]} is already an array).
+
+Notice that, with the exception of the base variable @code{bar}, all
+other variable names differ when running without and with
+disambiguation.  Thus, if you used a @file{var-list-file} generated on a
+run without the disambiguation information while running Kvasir with the
+disambiguation information, the names will not match up at all, and you
+will not get the proper selective variable tracing behavior.
+
+The suggested way to use selective variable tracing with pointer type
+disambiguation is as follows:
+
+@enumerate
+@item First create the proper .disambig file by using either
+@option{--disambig} or @option{--disambig-file}.  Modify the variable
+entries in that file to suit your needs.
+@item Now create a @file{var-list-file} by using
+@option{--dump-var-file} while running Kvasir with the .disambig file
+that you have just created.  This ensures that the variables listed in
+@file{var-list-file} will have the proper names for use with that
+particular .disambig file.  Modify the Kvasir-generated
+@file{var-list-file} to suit your needs.
+@item Finally, run Kvasir with the @option{--var-list-file} option using
+the @file{var-list-file} that you have just created and either the
+@option{--disambig} or @option{--disambig-file} option with the proper
+.disambig file.  This will perform the desired function: selective
+variable tracing along with disambiguation for all of the traced
+variables. 
+@end enumerate
+
+For maximum control of the output, you can use selective program point
+tracing, variable tracing, and disambiguation together all at once.
 
 @node Online execution, Installing Kvasir, Pointer type disambiguation, Kvasir
 @subsection Online execution
