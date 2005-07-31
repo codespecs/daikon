@@ -57,6 +57,27 @@ Daikon
     are visible from a given program point.  For instance, a program point from
     class A will not include private fields from class B.
     
+Kvasir
+
+  User changes:
+
+    The selective program point and variable tracing functionality
+    (--ppt-list-file and --var-list-file options, respectively) now
+    work more efficiently and reliably than before, and can integrate
+    with the pointer type disambiguation functionality (--disambig).
+
+    Grant the user the ability to comment-out lines in the program point
+    and variable list files by placing a '#' character at the beginning
+    of lines.
+
+    Added a --smart-disambig option to allow Kvasir to heuristically
+    infer pointer type information when generating a disambiguation file.
+
+  Documentation Changes
+
+    Added "Tracing only part of a program" and "Using pointer type 
+    disambiguation with partial program tracing" entries to the Kvasir
+    section of the Daikon User Manual.
 
 ----------------
 
