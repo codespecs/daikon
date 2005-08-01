@@ -26,9 +26,4 @@ public class ReturnInfo extends DaikonVariableInfo
         throw new RuntimeException("Don't call getMyValFromParentVal on ReturnInfo objects");
     }
 
-    /** Processes any children of the return and adds them to the tree **/
-    public void process (int depth)
-    {
-        process_children (return_type, depth, false);
-    }
 }

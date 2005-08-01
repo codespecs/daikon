@@ -65,11 +65,4 @@ public class ParameterInfo extends DaikonVariableInfo
         throw new RuntimeException("Parameters have no parent value");
     }
 
-    /** Processes any children of this parameter and adds them to the tree **/
-    public void process (int depth)
-    {
-        process_children (argType, depth, false);
-    }
-
-
 }

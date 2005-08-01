@@ -1,8 +1,10 @@
 
 package daikon.chicory;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.util.*;
+
+import daikon.Chicory;
 
 
 /**
@@ -30,6 +32,40 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
     /** True iff this variable is an array **/
     protected final boolean isArray;
+    
+    /** Print debug information about the variables **/
+    protected final boolean debug_vars = false;
+    
+    /**default string for comparability info**/
+    private static final String compareInfoDefaultString = "22";
+    
+    /**used to assert that a given variable is a parameter to a method**/
+    private static final String isParamString = " # isParam=true";
+    
+    // Certain hardcoded class names
+    protected static final String classClassName = "java.lang.Class";
+    protected static final String stringClassName = "java.lang.String";
+    
+    /**
+     * The three strings needed for the .decls info, in addition to the variable name
+     * are typeName, repTypeName, and compareInfoString.
+     */
+    protected String typeName;
+    protected String repTypeName;
+    protected String compareInfoString = compareInfoDefaultString;
+    
+    /** True iff the DeclWriter should print this variable **/
+    protected boolean declShouldPrint = true;
+    
+    /** True iff the DTraceWriter should print this variable **/
+    protected boolean dtraceShouldPrint = true;
+    
+    /**
+     * If false, use standard dfej behavior (any field in an instrumented class is visible)
+     * If true, use standard java behavior (if the field is in a class in a different package,
+     * it is only visible if public, etc.)
+     */
+    public static boolean StdVisibility = false;
 
     /** Constructs a non-array type DaikonVariableInfo object
      * @param theName The name of the variable
@@ -54,12 +90,14 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         else
             name = theName.intern();
 
-
         children = new ArrayList <DaikonVariableInfo> ();
-
         isArray = arr;
-    }
+        
+     }
 
+    /**
+     * Returns the name of this variable.
+     */
     public String getName()
     {
         return name;
@@ -69,17 +107,22 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      * Add a child to this node.
      * Should only be called while the tree is being constructed.
      *
-     * @param info The child object, must be non-null.
+     * @param info The child object, must be non-null.  The child's fields name,
+     * typeName, repTypeName, and compareInofString should also be non-null.
      */
-    public void addChild(DaikonVariableInfo info)
+    protected void addChild(DaikonVariableInfo info)
     {
         assert info!=null : "info cannot be null in DaikonVariableInfo.addChild()";
+        assert info.name != null : "Child's name should not be null";
+        assert info.typeName != null : "Child's type name should not be null";
+        assert info.repTypeName != null : "Child's representation type name should not be null";
+        assert info.compareInfoString != null : "Child's comparability information should not be null";
 
         children.add(info);
     }
 
     /**
-     * Returns a string representation of this node
+     * Returns a string representation of this node.
      */
     public String toString()
     {
@@ -96,6 +139,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      * Return a StringBuffer which contains the name of this node
      * and all ancestors of this node.
      * Longer indentations correspond to further distance in the tree.
+     * 
      * @param offset The offset to begin each line with.
      * @return StringBuffer which contains all children of this node
      */
@@ -244,7 +288,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
     /**
      *
-     *     Gets the list of values (as a string) from getValueStringOfList
+     *  Gets the list of values (as a string) from getValueStringOfList
      *  and concatenates the "modified" value
      */
     private String getValueStringOfListWithMod(List <Object> theValues)
@@ -297,51 +341,781 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         return buf.toString();
     }
 
+    
     /**
-     * Process the children of the specified type and add them to the
-     * tree.
-     *
-     * @param type Type of the variable whose children should be processed.
-     *             Can be any valid type (including arrays and primitives)
-     * @param depth Number of times to recurse proessing children
-     * @param in_arr True if we are processing an array at this level
-     *               or higher.  Required because we do not process arrays
-     *               nested in arrays.
+     * Add the parameters of the given method to this node.
      */
-    protected void process_children (Class type, int depth, boolean in_arr)
+    protected void addParameters(ClassInfo cinfo,
+                       Member method, List argnames, String offset, int depth,
+                       Set <Class> staticTraversedClasses)
     {
-        if (type.isPrimitive())
-            return;
-        else if (type.isArray())
+        Class[] arguments = (method instanceof Constructor)
+            ? ((Constructor) method).getParameterTypes()
+            : ((Method) method).getParameterTypes();
+            
+        Iterator<String> argnamesiter = argnames.iterator();
+        for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++)
         {
-            // Don't attempt arrays in arrays
-            if (in_arr)
-                return;
-
-            // Add the contents of the array
-            Class array_type = type.getComponentType();
-            ArrayInfo ai = new ArrayInfo (getName(), array_type);
-            addChild (ai);
-            ai.process (depth-1);
+            Class type = arguments[i];
+            String name = argnamesiter.next();
+            DaikonVariableInfo theChild = addDeclVar(cinfo, type,
+                                                       name, offset, depth, i);
+            theChild.addChildNodes(cinfo, type, name, offset, depth, staticTraversedClasses);
         }
-        else // must be a class
+    }
+    
+    /**
+     * Adds class variables (ie, the fields) for the given type and
+     * attach new nodes as children of this node.
+     */
+    protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
+            Class type, String offset, int depth,
+            Set <Class> staticTraversedClasses)
+    {
+        //DaikonVariableInfo corresponding to the "this" object
+        DaikonVariableInfo thisInfo;
+
+        //must be first level of recursion to print "this" field
+        if (!dontPrintInstanceVars && offset.equals(""))
         {
-            if (depth <= 0)
-                return;
+            thisInfo = new ThisObjInfo();
+            
+            thisInfo.typeName = type.getName() + isParamString;
+            thisInfo.repTypeName = getRepName(type, false);
+            addChild(thisInfo);
 
-            // Don't include fields in system variables
-            if (DaikonWriter.systemClass (type))
-                return;
-
-            // Add each field
-            Field[] fields = type.getDeclaredFields();
-            for (Field field : fields)
+            //.class variable
+            if (shouldAddRuntimeClass(type))
             {
-                FieldInfo field_var = new FieldInfo (getName(), field);
-                field_var.process (depth-1, in_arr);
-                addChild (field_var);
+                DaikonVariableInfo thisClass = new DaikonClassInfo("this.class", false);
+                
+                thisClass.typeName = classClassName;
+                thisClass.repTypeName = stringClassName;
+                thisInfo.addChild(thisClass);
+            }
+        }
+        else
+            thisInfo = this;
+
+        Field[] fields = type.getDeclaredFields();
+        
+        if (debug_vars)
+            System.out.printf ("%s: [%s] %d dontPrintInstanceVars = %b, "
+                               + "inArray = %b%n", type, offset, fields.length,
+                               dontPrintInstanceVars, isArray);
+        
+        
+        boolean addStatics = !Chicory.shouldWatchStatics();
+        if(Chicory.shouldWatchStatics() && !isArray && !staticTraversedClasses.contains(type))
+        {
+            staticTraversedClasses.add(type);
+            addStatics = true;
+        }
+        
+        for (int i = 0; i < fields.length; i++)
+        {
+
+            Field classField = fields[i];
+            
+            if (debug_vars)
+                System.out.printf ("considering field %s%n", classField);
+
+            if (!Modifier.isStatic(classField.getModifiers()) &&
+                dontPrintInstanceVars)
+            {
+                if (debug_vars)
+                    System.out.printf ("--field !static and instance var %b%n",
+                                   dontPrintInstanceVars);
+                continue;
+            }
+
+            // Don't print arrays of the same static field
+            if(Modifier.isStatic(classField.getModifiers()) && isArray) 
+            {
+                if (debug_vars)
+                    System.out.printf ("--field static and inArray%n");
+                continue;
+            }
+            
+            // Don't print statics for class if already did so
+            if(Modifier.isStatic(classField.getModifiers()) && !addStatics) 
+            {
+                if (debug_vars)
+                    System.out.printf ("--already printed statics for %s%n", type);
+                
+                continue;
+            }
+            
+
+            if (!isFieldVisible (cinfo.clazz, classField))
+            {
+                if (debug_vars)
+                    System.out.printf ("--field not visible%n");
+                continue;
+            }
+
+            Class fieldType = classField.getType();
+
+            StringBuffer buf = new StringBuffer();
+            DaikonVariableInfo newChild = thisInfo.addDeclVar(classField, offset, buf);
+            
+            if (debug_vars)
+                System.out.printf ("--Created DaikonVariable %s%n", newChild);
+            
+            String newOffset = buf.toString();
+            newChild.addChildNodes(cinfo, fieldType, classField.getName(),
+                          newOffset, depth, staticTraversedClasses);
+        }
+       
+
+        // If appropriate, print out decls information for pure methods
+        // and add to the tree
+        // Check dontPrintInstanceVars is basically checking if the program point method
+        // (not the pure method) is static.  If it is, don't continue because we can't
+        // call instance methods (all pure methods we consider are instance methods)
+        // from static methods
+        if (ChicoryPremain.shouldDoPurity() && !dontPrintInstanceVars)
+        {
+            ClassInfo typeInfo = null;
+
+            try
+            {
+                typeInfo = Runtime.getClassInfoFromClass(type);
+            }
+            catch (RuntimeException e)
+            {
+                // Could not find the class... no further purity analysis
+                typeInfo = null;
+            }
+
+            if (typeInfo != null)
+            {
+                for (MethodInfo meth : typeInfo.method_infos)
+                {
+                    if (meth.isPure())
+                    {
+                        StringBuffer buf = new StringBuffer();
+                        DaikonVariableInfo newChild = thisInfo.addPureMethodDecl(
+                                cinfo, meth, offset, depth,
+                                buf);
+                        String newOffset = buf.toString();
+                        newChild.addChildNodes(cinfo, ((Method) meth.member)
+                                .getReturnType(), meth.member
+                                .getName(), newOffset, depth, staticTraversedClasses);
+
+                    }
+                }
             }
         }
     }
+    
+    /**
+     * Adds the decl info for a single parameter as a child of this node.  
+     * Also adds "derived" variables
+     * such as the runtime .class variable.
+     * 
+     * @return The newly created DaikonVariableInfo object, whose
+     * parent is this.
+     */
+    protected DaikonVariableInfo addDeclVar(ClassInfo cinfo, Class type, String name, String offset, int depth, int argNum)
+    {
+        // add this variable to the tree as a child of curNode
+        DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum);
+        
+        newChild.typeName = stdClassName(type) + isParamString;
+        newChild.repTypeName = getRepName(type, false);
+        
+        addChild(newChild);
 
+        newChild.checkForDerivedVariables(type, name, offset);
+
+        return newChild;
+    }
+    
+
+    /**
+     * Adds the decl info for a pure method.
+     */
+    //TODO factor out shared code with printDeclVar
+    protected DaikonVariableInfo addPureMethodDecl(ClassInfo curClass,
+            MethodInfo minfo, String offset, int depth,
+            StringBuffer buf)
+    {
+        String arr_str = "";
+        if (isArray)
+            arr_str = "[]";
+
+        Method meth = (Method) minfo.member;
+
+
+        boolean changedAccess = false;
+
+        //we want to access all fields...
+        if(!meth.isAccessible())
+        {
+            changedAccess = true;
+            meth.setAccessible(true);
+        }
+
+        Class type = meth.getReturnType();
+
+        String theName = meth.getName() + "()";
+
+        if (offset.length() > 0) // offset already starts with "this"
+        {
+        }
+        else
+        {
+            offset = "this.";
+        }
+
+        DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
+                isArray);
+
+        String type_name = stdClassName (type);
+        newPure.typeName = type_name + arr_str;
+        newPure.repTypeName = getRepName(type, isArray) + arr_str;
+
+        addChild(newPure);
+
+        newPure.checkForDerivedVariables(type, theName, offset);
+
+        buf.append(offset);
+
+        if(changedAccess)
+        {
+            meth.setAccessible(false);
+        }
+
+        return newPure;
+    }
+    
+    /**
+     * Adds the decl info for a single class variable (a field) 
+     * as a child of this node.  Also adds "derived" variables
+     * such as the runtime .class variable.
+     * 
+     * @return The newly created DaikonVariableInfo object, whose
+     * parent is this.
+     */
+    protected DaikonVariableInfo addDeclVar(Field field, String offset,
+                                StringBuffer buf)
+    {
+        String arr_str = "";
+        if (isArray)
+            arr_str = "[]";
+
+        boolean changedAccess = false;
+
+        //we want to access all fields...
+        if(!field.isAccessible())
+        {
+            changedAccess = true;
+            field.setAccessible(true);
+        }
+
+        Class type = field.getType();
+        String theName = field.getName();
+        int modifiers = field.getModifiers();
+
+        if (offset.length() > 0) // offset already starts with "this"
+        {
+        }
+        else if (Modifier.isStatic(modifiers))
+        {
+            offset = offset + field.getDeclaringClass().getName() + ".";
+        }
+        // instance field, first recursion step
+        else
+        {
+            offset = "this.";
+        }
+
+        String type_name = stdClassName (type) + arr_str;
+
+        // Print auxiliary information.
+        type_name += appendAuxInfo(field);
+
+        DaikonVariableInfo newField = new FieldInfo(offset + theName, field, isArray);
+        
+        newField.typeName = type_name;
+        newField.repTypeName = getRepName(type, isArray) + arr_str;
+
+        if (DaikonWriter.isStaticConstField(field) && !isArray)
+        {
+            ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
+            String value = cinfo.staticMap.get(theName);
+
+            // System.out.printf ("static final value = %s%n", value);
+
+            // in this case, we don't want to print this variable to
+            // the dtrace file
+            if(value != null)
+            {
+                newField.repTypeName += " = " + value;
+                newField.dtraceShouldPrint = false;
+            }
+            //else
+            //{
+                // don't print anything
+                // because this field wasn't declared with an actual "hardcoded" constant
+            //}
+
+        }
+
+        addChild(newField);
+        if (debug_vars)
+            System.out.printf ("Added field %s to node %s%n", newField,
+                               this);
+
+
+        newField.checkForDerivedVariables(type, theName, offset);
+
+        buf.append(offset);
+
+        if(changedAccess)
+        {
+            field.setAccessible(false);
+        }
+
+        return newField;
+    }
+    
+    /**
+     * Returns the class name of the specified class in 'java' format
+     * (ie, as the class would have been declared in java source code)
+     */
+    public static String stdClassName (Class type)
+    {
+        return Runtime.classnameFromJvm (type.getName());
+    }
+    
+    /**
+     * Given a type, gets the representation type to be used in Daikon. For
+     * example, the representation type of a class object is "hashcode."
+     *
+     * @param type
+     *            The type of the variable
+     * @param asArray
+     *            Whether the variable is being output as an array (true) or as
+     *            a pointer (false).
+     * @return The representation type as a string
+     */
+    public static String getRepName(Class type, boolean asArray)
+    {
+        if (type == null)
+        {
+            return "hashcode";
+        }
+        else if (type.isPrimitive())
+        {
+            if (type.equals(Double.TYPE))
+                return "double";
+            else if (type.equals(Float.TYPE))
+                return "double";
+            else if (type.equals (Boolean.TYPE))
+                return "boolean";
+            else
+                return "int";
+        }
+        else if (type.getName().equals("java.lang.String"))
+        {
+            // if we are printing the actual array, the rep type is "java.lang.String"
+            if (asArray)
+                return "java.lang.String";
+            // otherwise, it is just a hashcode
+            else
+                return "hashcode";
+        }
+        else
+        {
+            return "hashcode";
+        }
+    }
+    
+    /**
+     * Determines if type needs a corresponding .class runtime class variable
+     *
+     * @param type
+     *            The variable's Type
+     */
+    protected static boolean shouldAddRuntimeClass(Class type)
+    {
+        // For some reason, abstacts seems to be set on arrays
+        // and primitives.  This is a temporary fix to get things
+        // close.
+        if (type.isPrimitive())
+            return (false);
+        if (type.isArray())
+        {
+            Class theType = type.getComponentType();
+            return !(theType.isPrimitive());
+        }
+
+        if (type.getName().equals("java.lang.Object")) //Objects
+        {
+            // System.out.println ("type is object " + type);
+            return true;
+        }
+        else if (Modifier.isAbstract(type.getModifiers()))
+        {
+            // System.out.printf ("Type [%s] is abstract %Xh %Xh %s%n", type,
+            //                   type.getModifiers(), Modifier.ABSTRACT,
+            //                   Modifier.toString (type.getModifiers()));
+            return true;
+        }
+        else if (type.isInterface())
+        {
+            // System.out.println ("type is interface " + type);
+            return true;
+        }
+        else if (type.isArray()) //arrays of non-primitive types
+        {
+            // System.out.println ("type is array " + type);
+            Class theType = type.getComponentType();
+            return !(theType.isPrimitive());
+        }
+        else
+            return false;
+    }
+
+    /**
+     * Returns whether or not the specified field is visible from the Class
+     * current.  All fields within instrumented classes are considered
+     * visible from everywhere (to match dfej behavior)
+     */
+    public static boolean isFieldVisible (Class current, Field field)
+    {
+        Class fclass = field.getDeclaringClass();
+        int modifiers = field.getModifiers();
+
+        // If the field is within the current class, it is always visible
+        if (current.equals (fclass))
+            return (true);
+
+        if (!StdVisibility)
+        {
+            // If the field is in any instrumented class it is always visible
+            synchronized (Runtime.all_classes)
+            {
+                for (ClassInfo ci : Runtime.all_classes)
+                {
+                    // System.out.printf ("comparing %s vs %s%n", ci.class_name,
+                    // fclass.getName());
+                    if (ci.class_name.equals(fclass.getName()))
+                    {
+                        return (true);
+                    }
+                }
+            }
+        }
+
+        // Otherwise we consider the variable not to be visible, even
+        // though it is.  This mimics dfej behavior
+        if (!StdVisibility)
+            return (false);
+
+        // If the field is in the same package, it's visible if it is
+        // not private or protected
+        if (current.getPackage() != null && current.getPackage().equals (fclass.getPackage())) {
+            if (Modifier.isPrivate (modifiers)
+                 || Modifier.isProtected (modifiers))
+                return (false);
+            else
+                return (true);
+        }
+
+        // The field must be in an unrelated class, it must be marked
+        // public to be visible
+        return (Modifier.isPublic (modifiers));
+    }
+    
+    
+    // Appends as auxiliary information:
+    // the package name of the declaring class
+    private String appendAuxInfo(Field field) 
+    {
+        // int modifiers = field.getModifiers();
+
+        Package p = field.getDeclaringClass().getPackage();
+        String pkgName = (p == null ? null : p.getName());
+
+        //System.out.printf("Package name for type  %s is %s%n", type, pkgName);
+        
+        StringBuilder ret = new StringBuilder();
+
+        // String staticString = (Modifier.isStatic(modifiers)) ? "true" : "false";
+        ret.append(" # ");
+        if (pkgName != null) {
+            ret.append("declaringClassPackageName=" + pkgName + ", ");
+        }
+        
+        return ret.toString();
+    }
+    
+    /**
+    *
+    * Checks for "derived" Chicory variables: .class, .tostring, and java.util.List implementors
+    * and adds appropriate children to this node.
+    */
+   protected void checkForDerivedVariables(Class type, String theName,
+           String offset)
+   {
+       checkForListDecl(type, theName, offset); // implements java.util.List?
+
+       //Not fully implemented yet, don't call
+       //checkForImplicitList(cinfo, type, name, offset, depth);
+
+       checkForRuntimeClass(type, theName, offset); //.class var
+       checkForString(type, theName, offset); //.tostring var
+   }
+   
+   /**
+    * Determines if type implements list
+    * and prints associated decls, if necessary
+    */
+   protected void checkForListDecl(Class type, String theName, String offset)
+   {
+       if (isArray || type.isPrimitive() || type.isArray())
+           return;
+
+       if (implementsList(type))
+       {
+           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", type);
+           
+           child.typeName = type.getName();
+           child.repTypeName = "hashcode[]";
+           
+           addChild(child);
+
+           //.class var
+           DaikonVariableInfo childClass = new DaikonClassInfo(offset + theName + "[].class", true);
+           
+           childClass.typeName = classClassName + "[]";
+           childClass.repTypeName = stringClassName + "[]" ;
+           
+           addChild(childClass);
+       }
+   }
+   
+   /**
+    * Checks the given type to see if it requires a .class
+    * addition to the decls file.
+    * If so, it adds the correct child to this node.
+    */
+   protected void checkForRuntimeClass(Class type, String theName, String offset)
+   {
+       if (!shouldAddRuntimeClass(type))
+           return;
+
+       String postString = ""; //either array braces or an empty string
+
+       if (theName.contains("[]") || offset.contains ("[]"))
+           postString = "[]";
+       
+       //add daikoninfo type
+       DaikonVariableInfo classInfo = new DaikonClassInfo(offset + theName + ".class",
+               (offset+theName).contains("[]"));
+       
+       classInfo.typeName = classClassName + postString;
+       classInfo.repTypeName = stringClassName + postString;
+       
+       addChild(classInfo);
+   }
+   
+   /**
+    * Checks the given type to see if it is a string.
+    * If so, it adds the correct child to this node.
+    */
+   private void checkForString(Class type, String theName, String offset)
+   {
+       if (!type.equals(String.class))
+           return;
+
+       String postString = ""; //either array braces or an empty string
+
+       if ((offset + theName).contains("[]"))
+           postString = "[]";
+
+       // add DaikonVariableInfo type
+       DaikonVariableInfo stringInfo = new StringInfo(offset + theName + ".toString",
+               (offset+theName).contains("[]"));
+       
+       stringInfo.typeName = stringClassName + postString;
+       stringInfo.repTypeName = stringClassName + postString;
+       
+       addChild(stringInfo);
+
+   }
+   
+   /**
+    * Returns true iff type implements the List interface.
+    * 
+    * @param type
+    * @return true iff type implements the List interface
+    */
+   public static boolean implementsList(Class type)
+   {
+       //System.out.println(type);
+       Class[] interfaces = type.getInterfaces();
+       for (Class inter: interfaces)
+       {
+           //System.out.println("implements: " + inter.getName());
+           if (inter.equals(java.util.List.class))
+               return true;
+       }
+       return false;
+   }
+   
+   /**
+    * Explores the tree one level deeper (see {@link
+    * DaikonVariableInfo}).  This method adds child nodes to this node.
+    *
+    * For example: "recurse" on a hashcode array object to print the
+    * actual array of values or recurse on hashcode variable to print
+    * its fields.  Also accounts for derived variables (.class,
+    * .tostring) and "recurses" on arrays (that is, adds a variable
+    * to print out the arrays's elements as opposed to just the
+    * hashcode of the array).
+    *
+    * @param theName The name of the variable currently being examined,
+    *             such as "ballCount"
+    * @param offset The representation of the variables we have
+    *                previously examined.  For examples, offset could
+    *                be "this." in which case offset + name would be
+    *                "this.ballCount."
+    */
+   protected void addChildNodes(ClassInfo cinfo, Class type, String theName, 
+           String offset, int depthRemaining,
+           Set <Class> staticTraversedClasses)
+   {       
+       if (type.isPrimitive())
+           return;
+       else if (type.isArray())
+       {         
+           // don't go into more than one dimension of a multi-dimensional array
+           if (isArray)
+               return;
+
+           Class arrayType = type.getComponentType();
+           if (arrayType.isPrimitive())
+           {
+               DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
+               
+               newChild.typeName = arrayType.getName() + "[]";
+               newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               
+               addChild(newChild);
+           }
+           // multi-dimensional arrays (not currently used)
+           else if (arrayType.isArray())
+           {
+               DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
+               
+               newChild.typeName = arrayType.getName() + "[]";
+               newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               
+               addChild(newChild);
+
+               newChild.addChildNodes(cinfo, arrayType, "", offset + theName + "[]", depthRemaining, staticTraversedClasses);
+           }
+           // array is 1-dimensional and element type is a regular class
+           else
+           {
+               DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
+               
+               newChild.typeName = arrayType.getName() + "[]";
+               newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               
+               addChild(newChild);
+
+               // Print out the class of each element in the array.  For
+               // some reason dfej doesn't include this on returned arrays
+               // or parameters.
+               // The offset will only be equal to ""
+               // if we are examining a local variable (parameter).
+               if (!theName.equals ("return") && !offset.equals (""))
+                 newChild.checkForRuntimeClass (type, theName + "[]", offset);
+
+
+               newChild.checkForString(arrayType, theName + "[]", offset);
+               newChild.addClassVars(cinfo, false, arrayType, offset + theName + "[].", depthRemaining - 1, staticTraversedClasses);
+
+           }
+       }
+       // regular old class type
+       else
+       {
+           if (depthRemaining <= 0)
+           {
+               // don't recurse any more!
+               return;
+           }
+           if (!systemClass (type))
+               addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1, staticTraversedClasses);
+       }
+   }
+   
+   /**
+    * Returns whether or not the fields of the specified class
+    * should be included, based on whether the Class type
+    * is a system class or not.  Right now, any system classes are
+    * excluded, but a better way of determining this is probably
+    * necessary
+    */
+   public static boolean systemClass (Class type)
+   {
+       String class_name = type.getName();
+       // System.out.printf ("type name is %s%n", class_name);
+       if (class_name.startsWith ("java.") || class_name.startsWith("javax."))
+           return (true);
+       else
+           return (false);
+   }
+   
+   /**
+    * Returns the declared type name of this variable.
+    */
+   public String getTypeName()
+   {
+       assert typeName != null: "Type name cannot be null";
+       
+       return typeName;
+   }
+   
+   /**
+    * Returns the representation type name of this variable.
+    */
+   public String getRepTypeName()
+   {
+       assert typeName != null: "Representation type name cannot be null";
+       
+       return repTypeName;
+   }
+   
+   /**
+    * Returns the comparability information for this variable.
+    */
+   public String getCompareString()
+   {
+       assert typeName != null: "Coparability info cannot be null";
+       
+       return compareInfoString;
+   }
+   
+   /**
+    * Return true iff the DeclWriter should print this node.
+    */
+   public boolean declShouldPrint()
+   {
+       return declShouldPrint;
+   }
+   
+   /**
+    * Return true iff the DTraceWriter should print this node.
+    */
+   public boolean dTraceShouldPrint()
+   {
+       return dtraceShouldPrint;
+   }
 }

@@ -1,6 +1,11 @@
 package daikon.chicory;
 
 import java.lang.reflect.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import daikon.Chicory;
 
 /**
  *  This is a subtype of DaikonVariableInfo and is used as a
@@ -9,68 +14,138 @@ import java.lang.reflect.*;
  */
 public class RootInfo extends DaikonVariableInfo
 {
-    public RootInfo()
+    private RootInfo()
     {
         //the root needs no name
         super(null);
     }
 
+    @Override
     public Object getMyValFromParentVal(Object value)
     {
         return null;
     }
 
     /**
-     * Adds the children for a method entry point.  These are 'this'
-     * and the parameters
+     * Creates a RootInfo object for a method entry program point.
      */
-    public void enter_process (MethodInfo mi, int depth)
+    public static RootInfo enter_process (MethodInfo mi, int depth)
     {
-        // If this is not a constructor, add the class and its children
-        if (!(mi.member instanceof Constructor))
+        RootInfo root = new RootInfo();
+        
+        
+        Set<Class> staticTraversedClasses = null;
+        if(Chicory.shouldWatchStatics())
         {
-            ThisObjInfo this_obj = new ThisObjInfo (mi.class_info.clazz);
-            addChild (this_obj);
-            this_obj.process (depth);
+            staticTraversedClasses = new HashSet <Class> ();
         }
-
-        // Add each parameter
-        for (int ii = 0; ii < mi.arg_names.length; ii++) {
-            ParameterInfo pi = new ParameterInfo (mi, ii);
-            addChild (pi);
-            pi.process (depth);
-        }
+        
+        root.addParameters(mi.class_info, mi.member, Arrays.asList(mi.arg_names), /*offset = */ "", 
+                depth, staticTraversedClasses);
+        
+        if (!(mi.member instanceof Constructor))
+            root.addClassVars(mi.class_info, Modifier.isStatic(mi.member.getModifiers()),
+                    mi.member.getDeclaringClass(), /*offset = */ "", 
+                    depth, staticTraversedClasses);
+        
+        return root;
     }
 
     /**
-     * Adds the children for a method exit point.  These are 'this',
-     * the parameters, and the return value
+     * Creates a RootInfo object for a method exit program point.
      */
-    public void exit_process (MethodInfo mi, int depth)
+    public static RootInfo exit_process(MethodInfo mi, int depth)
     {
-        // Add the class and its children
-        ThisObjInfo this_obj = new ThisObjInfo (mi.class_info.clazz);
-        addChild (this_obj);
-        this_obj.process (depth);
-
-        // Add each parameter
-        for (int ii = 0; ii < mi.arg_names.length; ii++) {
-            ParameterInfo pi = new ParameterInfo (mi, ii);
-            addChild (pi);
-            pi.process (depth);
+        RootInfo root = new RootInfo();
+        
+        Set<Class> staticTraversedClasses = null;
+        if(Chicory.shouldWatchStatics())
+        {
+            staticTraversedClasses = new HashSet <Class> ();
         }
 
-        // Add the return value (if not a constructor and not void)
+        // Print arguments
+        root.addParameters(mi.class_info, mi.member, Arrays.asList(mi.arg_names), /*offset = */ "", 
+                depth, staticTraversedClasses);
+
+        // Print return type information for methods only and not constructors
         if (mi.member instanceof Method)
         {
-            Class return_type = ((Method) mi.member).getReturnType();
-            if (!return_type.equals (Void.TYPE))
+            Class returnType = ((Method) mi.member).getReturnType();
+            if (!(returnType.equals(Void.TYPE)))
             {
-                ReturnInfo ret_info = new ReturnInfo (return_type);
-                addChild (ret_info);
-                ret_info.process (depth);
+                // add a new ReturnInfo object to the traversal tree
+                DaikonVariableInfo retInfo = new ReturnInfo();
+                
+                retInfo.typeName = stdClassName(returnType);
+                retInfo.repTypeName = getRepName(returnType, false);
+                root.addChild(retInfo);
+                
+                retInfo.checkForDerivedVariables(returnType, "return", "");
+
+                retInfo.addChildNodes(mi.class_info, returnType, "return", "",
+                        depth, staticTraversedClasses);
             }
         }
+        
+        // Print class variables
+        root.addClassVars(mi.class_info,
+                Modifier.isStatic(mi.member.getModifiers()), mi.member
+                        .getDeclaringClass(), "", depth, staticTraversedClasses);
+
+        return root;
+    }
+
+    /**
+     * Creates a RootInfo object for an object program point.
+     * This will include the class' fields and the "this" object.
+     */
+    public static RootInfo getObjectPpt(ClassInfo cinfo, int depth)
+    {
+        RootInfo root = new RootInfo();
+        
+        Set<Class> staticTraversedClasses = null;
+        if(Chicory.shouldWatchStatics())
+        {
+            staticTraversedClasses = new HashSet <Class> ();
+        }
+        
+        root.addClassVars(cinfo, /*dontPrintInstanceVars = */ false,
+                cinfo.clazz, /*offset = */ "", depth, staticTraversedClasses);
+        
+        return root;
+    }
+    
+    /**
+     * Creates a RootInfo object for a class program point.
+     * This will just include static fields.
+     */
+    public static RootInfo getClassPpt(ClassInfo cinfo, int depth)
+    {
+        RootInfo root = new RootInfo();
+        
+        Set<Class> staticTraversedClasses = null;
+        if(Chicory.shouldWatchStatics())
+        {
+            staticTraversedClasses = new HashSet <Class> ();
+        }
+        
+        root.addClassVars(cinfo, /*dontPrintInstanceVars = */ true,
+                cinfo.clazz, /*offset = */ "", depth, staticTraversedClasses);
+        
+        return root;
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

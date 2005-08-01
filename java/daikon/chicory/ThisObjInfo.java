@@ -28,15 +28,4 @@ public class ThisObjInfo extends DaikonVariableInfo
         return null;
     }
 
-    /**
-     * Process this by adding all of its fields as children
-     */
-    public void process (int depth)
-    {
-        process_children (type, depth, false);
-    }
-
-
-
-
 }

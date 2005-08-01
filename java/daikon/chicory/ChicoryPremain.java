@@ -78,8 +78,7 @@ public class ChicoryPremain {
     // Setup the declaration and dtrace writer.  The include/exclude filter are
     // implemented in the transform, so they don't need to be handled
     // here.
-    Runtime.decl_writer = new DeclWriter (Runtime.dtrace,
-                                          Runtime.nesting_depth, Chicory.StdVisibility);
+    Runtime.decl_writer = new DeclWriter (Runtime.dtrace);
     Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace);
 
     // Setup the transformer

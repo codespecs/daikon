@@ -23,7 +23,7 @@ public abstract class DaikonWriter
         assert lineSep != null : "Line separator cannot be null";
     }
 
-    public DaikonWriter()
+    protected DaikonWriter()
     {
     }
 
@@ -223,80 +223,7 @@ public abstract class DaikonWriter
                     + short_name + "(");
         }
     }
-
-    /**
-     * Given a type, gets the representation type to be used in Daikon. For
-     * example, the representation type of a class object is "hashcode."
-     *
-     * @param type
-     *            The type of the variable
-     * @param asArray
-     *            Whether the variable is being output as an array (true) or as
-     *            a pointer (false).
-     * @return The representation type as a string
-     */
-    public static String getRepName(Class type, boolean asArray)
-    {
-        if (type == null)
-        {
-            return "hashcode";
-        }
-        else if (type.isPrimitive())
-        {
-            if (type.equals(Double.TYPE))
-                return "double";
-            else if (type.equals(Float.TYPE))
-                return "double";
-            else if (type.equals (Boolean.TYPE))
-                return "boolean";
-            else
-                return "int";
-        }
-        else if (type.getName().equals("java.lang.String"))
-        {
-            // if we are printing the actual array, the rep type is "java.lang.String"
-            if (asArray)
-                return "java.lang.String";
-            // otherwise, it is just a hashcode
-            else
-                return "hashcode";
-        }
-        else
-        {
-            return "hashcode";
-        }
-    }
-
-    /**
-     * Returns the correctly formulated ":::OBJECT" name of the class
-     * (ie, the program point name)
-     *
-     * @param type the ClassType type
-     * @return the correctly formulated String
-     */
-    public static String classObjectName(Class type)
-    {
-        return (type.getName() + ":::OBJECT");
-    }
-
-    /**
-     * Returns true iff type implements the List interface
-     * @param type
-     * @return true iff type implements the List interface
-     */
-    public static boolean implementsList(Class type)
-    {
-        //System.out.println(type);
-        Class[] interfaces = type.getInterfaces();
-        for (Class inter: interfaces)
-        {
-            //System.out.println("implements: " + inter.getName());
-            if (inter.equals(java.util.List.class))
-                return true;
-        }
-        return false;
-    }
-
+    
     /**
      * Determines if the given method should be instrumented
      */
@@ -306,121 +233,6 @@ public abstract class DaikonWriter
         if (Modifier.isAbstract(modifiers) || Modifier.isNative(modifiers) || method.getName().equals("<clinit>"))
             return false;
         return true;
-    }
-
-    /**
-     * Returns whether or not the fields of the specified class
-     * should be included, based on whether the Class type
-     * is a system class or not.  Right now, any system classes are
-     * excluded, but a better way of determining this is probably
-     * necessary
-     */
-    public static boolean systemClass (Class type)
-    {
-        String class_name = type.getName();
-        // System.out.printf ("type name is %s%n", class_name);
-        if (class_name.startsWith ("java."))
-            return (true);
-        else
-            return (false);
-    }
-
-    //the following comments are taken from dfej
-
-    // Return true if the object's Class/type should be printed as well as its
-    // hashvalue.
-    // Outputting the ".class" field for every variable might lead to many
-    // uninteresting invariants, such as "myFoo.class == Foo", so this test is
-    // intended to reduce the number of variables that are output.
-    //
-    // This implementation outputs the type of variables that are
-    // (heuristically) likely to be used generically (that is, to be used at
-    // other than their declared type: Object, abstract classes, interfaces,
-    // and arrays of non-primitive elements.
-    // Additionally, if the class of variable lst implements List, then
-    // lst[].class is also output (without calling this procedure).
-    //
-    // Another reasonable implementation would be "return true iff this is
-    // not a final class".
-    // Or "return true iff this class is subclassed in this program"
-
-    /**
-     * Determines if type needs a corresponding .class runtime class variable
-     *
-     * @param type
-     *            The variable's Type
-     */
-    protected static boolean shouldAddRuntimeClass(Class type)
-    {
-        // For some reason, abstacts seems to be set on arrays
-        // and primitives.  This is a temporary fix to get things
-        // close.
-        if (type.isPrimitive())
-            return (false);
-        if (type.isArray())
-        {
-            Class theType = type.getComponentType();
-            return !(theType.isPrimitive());
-        }
-
-        if (type.getName().equals("java.lang.Object")) //Objects
-        {
-            // System.out.println ("type is object " + type);
-            return true;
-        }
-        else if (Modifier.isAbstract(type.getModifiers()))
-        {
-            // System.out.printf ("Type [%s] is abstract %Xh %Xh %s%n", type,
-            //                   type.getModifiers(), Modifier.ABSTRACT,
-            //                   Modifier.toString (type.getModifiers()));
-            return true;
-        }
-        else if (type.isInterface())
-        {
-            // System.out.println ("type is interface " + type);
-            return true;
-        }
-        else if (type.isArray()) //arrays of non-primitive types
-        {
-            // System.out.println ("type is array " + type);
-            Class theType = type.getComponentType();
-            return !(theType.isPrimitive());
-        }
-        else
-            return false;
-    }
-
-
-    /**
-     * Determines implicit linked list with following rule: if class x contains
-     * exactly 1 non-static field which of type x, then it is an implicit list
-     *
-     * @param type
-     *            The ClassType to check for implicit list
-     *
-     * @return    The field in the class which is the "linked list field",
-     *            or null if no such field exists.
-     */
-    public Field checkImplicitLinkedList(Class type)
-    {
-        Field linkField = null;
-
-        for (Field field: type.getFields())
-        {
-            if (!Modifier.isStatic(field.getModifiers()))
-            {
-                if (field.getType().equals(type))
-                {
-                    //need exactly 1, not more than 1
-                    if (linkField != null)
-                        return null;
-                    else
-                        linkField = field;
-                }
-            }
-        }
-
-        return linkField;
     }
 
     /**

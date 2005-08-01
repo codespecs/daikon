@@ -1,14 +1,11 @@
 package daikon.chicory;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 import java.io.*;
 import java.net.*;
 import java.net.Socket;
 import java.util.*;
-
-import daikon.Chicory;
 
 /**
  * Runtime support for chicory daikon front end.
@@ -272,6 +269,14 @@ public class Runtime
           }
           class_info.initViaReflection();
           // class_info.dump (System.out);
+          
+          // Create tree structure for all method entries/exits in the class
+          for(MethodInfo mi: class_info.method_infos)
+          {
+              mi.traversalEnter = RootInfo.enter_process(mi, Runtime.nesting_depth);
+              mi.traversalExit = RootInfo.exit_process(mi, Runtime.nesting_depth);
+          }
+          
           decl_writer.printDeclClass (class_info);
 
         }

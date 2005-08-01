@@ -12,40 +12,8 @@ High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
         
 
 Longer-term issues
-
-  - Currently, the DaikonVariableInfo trees are created at the same time as the decls info is ouptut.
-    This should be changed so that the trees are created first, then used to print out the decls info (similar
-    to how the DTraceWriter uses the DaikonVariableInfo objects to traverse the tree).
-    Tree creation should be done in the RootInfo constructor, making the trees immutable.
-    Will need to add fields in DaikonVariableInfo such as (declsShouldIgnore, dTraceShouldIgnore) so that,
-    for instance, dtrace traversal doesn't print the static final primitive variable that the declwriter would.
       
   - Add --exception switch to allow instrumentation of exceptions
-
-  - Add new option to Chicory to only output a given percentage of all
-    observed records.  This will permit faster execution on large
-    programs.
-    
-  - Produce output not merely about the concrete representation of a data
-    structure, but also about its abstract state, by creating new synthetic
-    variables whose values come from the results of calling pure
-    (non-side-effecting) methods.  For example, if we have
-      class Point {
-        double x;
-        double y;
-        double rho() { return Math.sqrt(x*x+y*y); }
-        double theta() { return Math.atan2(x, y); }
-      }
-    then we could imagine reporting properties such as 
-    "myPoint.theta() < 6.28".  There are existing purity analyses that we
-    could use to determine which methods are safe to call; reusing such an
-    analysis could make this extension pretty easy.
-
-  - Related to outputting getter methods, add a flag to Chicory to indicate
-    whether private variables/fields should ever be output.  Don't do this
-    until we do output getter methods, or Daikon's output will become very
-    uninformative:  right now, the usefulness of Daikon's output depends
-    heavily on producing properties over private variables.
 
   - Consider choosing a new file representation that would be both more
     compact and faster to read and write.  For instance, there is no need
@@ -66,6 +34,42 @@ Longer-term issues
     be writing this kind of code anyway.
 
 Completed Tasks (add new ones at the top)
+  - Add new option to Chicory to only output a given percentage of all
+    observed records.  This will permit faster execution on large
+    programs.
+    [etf] 8/1/05: Completed.  See --trace-percent=<integer> flag.  Method entries/exits
+    are excluded in pairs to avoid nonce mismatch issues in Daikon.
+
+  - Related to outputting getter methods, add a flag to Chicory to indicate
+    whether private variables/fields should ever be output.  Don't do this
+    until we do output getter methods, or Daikon's output will become very
+    uninformative:  right now, the usefulness of Daikon's output depends
+    heavily on producing properties over private variables.
+    [etf] 8/1/05: Completed. See --std-vis flag.
+
+  - Currently, the DaikonVariableInfo trees are created at the same time as the decls info is ouptut.
+    This should be changed so that the trees are created first, then used to print out the decls info (similar
+    to how the DTraceWriter uses the DaikonVariableInfo objects to traverse the tree).
+    Tree creation should be done in the RootInfo constructor, making the trees immutable.
+    Will need to add fields in DaikonVariableInfo such as (declsShouldIgnore, dTraceShouldIgnore) so that,
+    for instance, dtrace traversal doesn't print the static final primitive variable that the declwriter would.
+    [etf] 8/1/05: Complete
+    
+  - Produce output not merely about the concrete representation of a data
+    structure, but also about its abstract state, by creating new synthetic
+    variables whose values come from the results of calling pure
+    (non-side-effecting) methods.  For example, if we have
+      class Point {
+        double x;
+        double y;
+        double rho() { return Math.sqrt(x*x+y*y); }
+        double theta() { return Math.atan2(x, y); }
+      }
+    then we could imagine reporting properties such as 
+    "myPoint.theta() < 6.28".  There are existing purity analyses that we
+    could use to determine which methods are safe to call; reusing such an
+    analysis could make this extension pretty easy.
+    [etf] 8/1/05: Completed.  See --purity-file switches in documentation.
 
   - Write a new dtrace-diff program in Java.  There is probably already
     Java code that can read a dtrace file.  The diff should be very

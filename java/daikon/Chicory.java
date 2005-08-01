@@ -1,6 +1,5 @@
 package daikon;
 
-import java.lang.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -88,11 +87,21 @@ public class Chicory {
 
   /** flag to use if we want to turn on the static initialization checks**/
   public static final boolean checkStaticInit = true;
+  
+  /** Percentage of dtrace program points to report.  Each is chosen randomly at runtime **/ 
+  private static int recordPct = -1;
 
   private static final boolean RemoteDebug = false;
 
   /** Flag to initiate a purity analysis and use results to create additional variables **/
   private boolean purityAnalysis = false;
+  
+  /** 
+   * Flag to "watch" how we recurse on static types.  If true, don't recurse on the same
+   * static type.
+   */
+  private static boolean watchStatics = false;
+  
 
   /** The name of the file to read for a list of pure methods.  Should be 1 method per line.
    *  Each method should be in the same format as format ouput by the purity analysis.
@@ -126,7 +135,25 @@ public class Chicory {
       return;
     System.out.printf(format, args);
   }
+  
+  /**
+   * Return true iff we should watch how static variable recursion
+   */
+  public static boolean shouldWatchStatics()
+  {
+      return watchStatics;
+  }
 
+  /**
+   * Percentage of dtrace program points to report.  Each is chosen randomly at runtime.
+   * @return -1 if not using this feature (equivalent to 100%), the percentage otherwise.  
+   *
+   */
+  public static int recordPct()
+  {
+      return recordPct;
+  }
+  
   /** Return true iff argument was given to run a purity analysis
    *  Only run after running parse_args
    */
@@ -304,6 +331,31 @@ public class Chicory {
           premain_args.add(arg);
           purityAnalysis = true;
       }
+      else if(arg.equals("--watch-static-recursion"))
+      {
+          premain_args.add(arg);
+          watchStatics = true;
+      }
+      else if (arg.startsWith("--trace-percent="))
+      {
+          String pctStr = arg.substring("--trace-percent=".length());
+          try
+          {
+              recordPct = Integer.parseInt(pctStr);
+          }
+          catch (NumberFormatException e)
+          {
+              usage("Invalid percent: " + pctStr);
+              System.exit(1);
+          }
+          if (recordPct < 0 || recordPct > 100)
+          {
+              usage("Percent string " + pctStr + " should be an integer between 0 and 100 (inclusive)");
+              System.exit(1);
+          }
+          premain_args.add(arg);
+
+      }
       else if (arg.startsWith("--purity-file="))
       {
           premain_args.add(arg);
@@ -321,6 +373,8 @@ public class Chicory {
       else if (arg.startsWith("--std-vis"))
       {
           StdVisibility = true;
+          DaikonVariableInfo.StdVisibility = true;
+          
           premain_args.add(arg);
       }
       else if (arg.startsWith("--target-program="))
@@ -716,6 +770,7 @@ public class Chicory {
       System.err.println("  --configs=<directory>              Look for configuration files (such as *.pure files) in this location");
       System.err.println("  --purity-file=<file>               Read pure methods from this file.  Will look in current directory if --configs=<directory> not given");
       System.err.println("  --std-vis                          Only look at visible fields (example: ignore private field in another class)");
+      System.err.println("  --trace-percent=<integer>          Print this percentage of records (default 100)");
       System.err.println("  --heap_size=<heapsize>             Use the specified heap size for the target program");
       System.err.println("  --help                             Print this help message");
       System.err.println("<class> is the program to trace.  Must exist in the classpath given");

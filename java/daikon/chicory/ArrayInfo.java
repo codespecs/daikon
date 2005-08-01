@@ -1,6 +1,5 @@
 package daikon.chicory;
 
-import java.lang.reflect.Field;
 
 /**
  *  The ArrayInfo class is a subtype of DaikonVariableInfo used for
@@ -27,7 +26,7 @@ public class ArrayInfo extends DaikonVariableInfo
     }
 
     public Object getMyValFromParentVal(Object value)
-    {
+    {        
         if(value == null)
         {
             return null;
@@ -41,12 +40,5 @@ public class ArrayInfo extends DaikonVariableInfo
         else
             return DTraceWriter.getListFromArray(value);
     }
-
-    /** Processes any children of this array and adds them to the tree **/
-    public void process (int depth)
-    {
-        process_children (array_type, depth, true);
-    }
-
 
 }

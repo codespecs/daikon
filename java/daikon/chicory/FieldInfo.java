@@ -19,11 +19,13 @@ public class FieldInfo extends DaikonVariableInfo
        super(theName, isArr);
        field = theField;
     }
-
-    public FieldInfo (String parent_name, Field theField)
+    
+    /**
+     * Returns true iff the corresponding field is static.
+     */
+    public boolean isStatic()
     {
-        this (parent_name + "." + theField.getName(), theField,
-              theField.getType().isArray());
+        return Modifier.isStatic(field.getModifiers());
     }
 
     public Object getMyValFromParentVal(Object val)
@@ -43,11 +45,5 @@ public class FieldInfo extends DaikonVariableInfo
                 return DTraceWriter.getValue(field, val);
             }
         }
-    }
-
-    /** Processes any children of this field and adds them to the tree **/
-    public void process (int depth, boolean in_arr)
-    {
-        process_children (field.getType(), depth, in_arr);
     }
 }
