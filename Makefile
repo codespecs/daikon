@@ -165,12 +165,12 @@ build-kvasir: kvasir
 ### Rebuild everything; used for monthly releases, for example
 
 rebuild-everything:
-	${MAKE} -C $inv/java clean
-	${MAKE} -C $inv/java compile
-	${MAKE} -C $inv/doc
-	${MAKE} -C $inv/dfej
-	${MAKE} -C $inv kvasir
-	${MAKE} -C $inv/kvasir all install
+	${MAKE} -C $(inv)/java clean
+	${MAKE} -C $(inv)/java compile
+	${MAKE} -C $(inv)/doc
+	${MAKE} -C $(inv)/dfej
+	${MAKE} -C $(inv)/kvasir
+	${MAKE} -C $(inv)/kvasir all install
 
 ### Testing the code
 
@@ -371,7 +371,7 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
 	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' all_directly
-	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
+	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar:${INV_DIR}/java/lib/bcel.jar' all_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
 	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/${USER}/daikon-jar
