@@ -6,7 +6,7 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 
-import edu.mit.csail.pag.testfactoring.instrument.BCELUtil;
+import utilMDE.BCELUtil;
 
 import daikon.chicory.MethodInfo;
 import daikon.chicory.ClassInfo;
@@ -24,6 +24,8 @@ class DCInstrument {
   private ClassLoader loader;
 
   private Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
+  private Type[] two_ints = new Type[] {Type.INT, Type.INT};
+  private Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
 
   /**
    * Initialize with the original class and whether or not the class
@@ -268,6 +270,49 @@ class DCInstrument {
       return (object_comparison ((BranchInstruction) inst, "object_ne",
                                  Constants.IFNE));
 
+    case Constants.GETFIELD: {
+      return load_store_field ((GETFIELD) inst, "push_field_tag");
+    }
+
+    case Constants.PUTFIELD: {
+      return load_store_field ((PUTFIELD) inst, "pop_field_tag");
+    }
+
+    case Constants.BIPUSH:
+    case Constants.ICONST_0:
+    case Constants.ICONST_1:
+    case Constants.ICONST_2:
+    case Constants.ICONST_3:
+    case Constants.ICONST_4:
+    case Constants.ICONST_5: {
+      InstructionList il = new InstructionList();
+      il.append(ifact.createInvoke (DCRuntime.class.getName(), "push_const",
+                            Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
+      il.append (inst);
+      return (il);
+    }
+
+    // Primitive Binary operators.  Each is augmented with a call to
+    // DCRuntime.binary_tag_op that merges the tags and updates the tag
+    // Stack.
+    case Constants.IADD:
+    case Constants.IAND:
+    case Constants.IDIV:
+    case Constants.IMUL:
+    case Constants.IOR:
+    case Constants.IREM:
+    case Constants.ISHL:
+    case Constants.ISHR:
+    case Constants.ISUB:
+    case Constants.IUSHR:
+    case Constants.IXOR: {
+      InstructionList il = new InstructionList();
+      il.append(ifact.createInvoke (DCRuntime.class.getName(), "binary_tag_op",
+                            Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
+      il.append (inst);
+      return (il);
+    }
+
     // Prefix the return with a call to exit that passes the object,
     // method info index, return value, and parameters.
     case Constants.ARETURN:
@@ -311,6 +356,57 @@ class DCInstrument {
     il.append (ifact.createBranchInstruction (boolean_if,
                                               branch.getTarget()));
     return (il);
+  }
+
+  /**
+   * Handles load and store field instructions.  The instructions must
+   * be augmented to either push (load) or pop (store) the tag on the
+   * tag stack.  This is accomplished by calling the specified method
+   * in DCRuntime and passing that method the object containing the
+   * the field and the offset of that field within the object
+   */
+  InstructionList load_store_field (FieldInstruction f, String method) {
+
+    Type field_type = f.getFieldType (pool);
+    if (field_type instanceof ReferenceType)
+      return (null);
+    ObjectType obj_type = (ObjectType) f.getClassType (pool);
+    InstructionList il = new InstructionList();
+    il.append (ifact.createDup (obj_type.getSize()));
+    int field_num = get_field_num (f.getFieldName(pool), obj_type);
+    il.append (ifact.createConstant (field_num));
+    il.append (ifact.createInvoke (DCRuntime.class.getName(), method,
+                                  Type.VOID, object_int,
+                                  Constants.INVOKESTATIC));
+    il.append (f);
+    return (il);
+  }
+
+  /**
+   * Returns the number of the specified field in the primitive fields
+   * of obj_type
+   */
+  int get_field_num (String name, ObjectType obj_type) {
+
+    // Look up the class using this classes class loader.  This may
+    // not be the best way to accomplish this.
+    Class obj_class = null;
+    try {
+      obj_class = Class.forName (obj_type.getClassName(), false, loader);
+    } catch (Exception e) {
+      throw new Error ("can't find class " + obj_type.getClassName(), e);
+    }
+
+    // Loop through all of the fields, counting the number of primitive fields
+    int fcnt = 0;
+    for (java.lang.reflect.Field f : obj_class.getDeclaredFields()) {
+      if (f.getName().equals (name))
+        return (fcnt);
+      if (f.getType().isPrimitive())
+        fcnt++;
+    }
+    assert false : "Can't find " + name + " in " + obj_class;
+    return (-1);
   }
 
   /**
