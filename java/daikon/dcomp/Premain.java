@@ -8,7 +8,7 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 
-import edu.mit.csail.pag.testfactoring.instrument.BCELUtil;
+import utilMDE.BCELUtil;
 
 public class Premain {
 
