@@ -1,10 +1,12 @@
 package daikon.dcomp;
 
 import java.util.*;
+import java.lang.reflect.*;
 
 import daikon.chicory.*;
+import utilMDE.WeakIdentityHashMap;
 
-class DCRuntime {
+public final class DCRuntime {
 
   /** List of all instrumented methods **/
   public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
@@ -20,8 +22,21 @@ class DCRuntime {
   private static final NonsensicalObject nonsensical
     = NonsensicalObject.getInstance();
 
+  /** Object used to represent nonsensical list values **/
   private static final NonsensicalList nonsensical_list
     = NonsensicalList.getInstance();
+
+  /** Tag stack **/
+  public static Stack tag_stack = new Stack();
+
+  public static boolean debug_primitive = true;
+
+  /**
+   * Map from each object to the tags used for each primitive value in
+   * the object
+   */
+  public static WeakIdentityHashMap<Object,Object[]> field_map
+    = new WeakIdentityHashMap<Object,Object[]>();
 
   /**
    * List of all classes encountered.  These are the classes that will
@@ -306,5 +321,79 @@ class DCRuntime {
     // Process the children
     for (DaikonVariableInfo child : dv)
       add_variable (sets, child);
+  }
+
+  public static void push_field_tag (Object obj, int field_num) {
+
+    if (debug_primitive)
+      System.out.printf ("push_field_tag %s [%s] %d)%n", obj,
+                         obj.getClass().getName(), field_num);
+
+    Object[] obj_tags = field_map.get (obj);
+    if (obj_tags != null)
+      tag_stack.push (obj_tags[field_num]);
+    else
+      tag_stack.push (null);
+  }
+
+  /**
+   * Pops the tag from the top of the tag stack and stores it in the
+   * tag storage for the specified field of the specified object.  If
+   * tag storage was not previously allocated, it is allocated now
+   */
+  public static void pop_field_tag (Object obj, int field_num) {
+
+    if (debug_primitive)
+      System.out.printf ("pop_field_tag (%s [%s] %d)%n", obj,
+                         obj.getClass().getName(), field_num);
+
+    // Look for the tag storage for this object
+    Object[] obj_tags = field_map.get (obj);
+
+    // If none has been allocated, determine how many locations are
+    // required (the number of primitive fields), allocate the space,
+    // and associate it with the object.
+    if (obj_tags == null) {
+      Class obj_class = obj.getClass();
+      int fcnt = 0;
+      for (Field f : obj.getClass().getDeclaredFields()) {
+        if (f.getType().isPrimitive())
+          fcnt++;
+      }
+      assert field_num < fcnt : obj.getClass() + " " + field_num + " " + fcnt;
+      obj_tags = new Object[fcnt];
+      field_map.put (obj, obj_tags);
+    }
+
+    // Pop the tag off of the stack and assign into the tag storage for
+    // this field.
+    obj_tags[field_num] = tag_stack.pop();
+  }
+
+  /**
+   * Handle a binary operation on the two items at the top of the tag
+   * stack.  Binary operations pop the two items off of the top of the
+   * stack perform an operation and push the result back on the stack.
+   * The tags of the two items on the top of the stack must thus be
+   * merged and a representative tag pushed back on the stack.
+   */
+  public static void binary_tag_op () {
+    if (debug_primitive)
+      System.out.printf ("binary tag op%n");
+    Object tag1 = tag_stack.pop();
+    TagEntry.union (tag1, tag_stack.peek());
+  }
+
+  /**
+   * Allocate a new tag for the constant and push it on the tag stack.
+   * Note that this allocates a new tag each time the constant is pushed.
+   * If the same code is executed multiple time (eg, in a loop), and
+   * different values interact with the constant each time, those values
+   * will not end up comparable to each other.
+   */
+  public static void push_const() {
+    if (debug_primitive)
+      System.out.printf ("pushing literal constant%n");
+    tag_stack.push (new Object());
   }
 }
