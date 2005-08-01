@@ -24,8 +24,16 @@ Further documentation can be found in:
 
 Kvasir and Chicory have been enhanced with new command line options,
 improved performance and documentation.  Kvasir can more efficiently
-trace a subset of a program.  Chicory supports pure functions as 
-additional Daikon variables.
+trace a subset of a program.  Chicory supports pure functions as
+additional Daikon variables.  Also, Daikon problems are now tracked in
+a Bugzilla database.
+
+General
+
+  Daikon problems are now tracked in the Bugzilla database at at:
+  http://pag.csail.mit.edu/bugzilla/.  There are separate products for
+  Daikon and Kvasir.  Problems with Chicory and other front ends
+  should be submitted against the Daikon product.
 
 Daikon
 
