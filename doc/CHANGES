@@ -22,6 +22,11 @@ Further documentation can be found in:
 
 4.1.4 (August 1 2005)
 
+Kvasir and Chicory have been enhanced with new command line options,
+improved performance and documentation.  Kvasir can more efficiently
+trace a subset of a program.  Chicory supports pure functions as 
+additional Daikon variables.
+
 Daikon
 
   User Changes
@@ -30,33 +35,48 @@ Daikon
     change in Daikon, but because Apple has finally released a Java 1.5
     JVM.
 
-  Documentation Changes
-
-    Documented --premain switch to Chicory.
-    The default output file for Chicory is . (not ./daikon-output).
-
   Bug fixes
 
     Fixed several bugs in Annotate, the program that inserts Daikon's
     output into source code as comments.  This eliminates errors reported
     by the JML syntax checker (available at http://www.jmlspecs.org/).
 
-  Chicory Changes
+Chicory 
 
-    Don't access static variables in classes that are not initialized.
-    Instead, the trace file notes them as nonsensical until they are
-    initialized.
-    
-    Added the --purity-file=<file> switch.  Chicory will read <file> for
-    pure methods (methods which do not induce side effects).  It will then
-    invoke these methods, using their return values as normal variables.
-    That is, if a class has variables int a, b, c, and pure method int x(), then
-    Chicory will produce variables a,b,c and x() for Objects of this type.
+  User changes:
+
+    The values of static variables in classes that are not initialized
+    are no longer included in the trace file.  Instead, the trace file
+    notes them as nonsensical until the class is initialized.
+
+    Added the --purity-file=<file> switch.  Chicory will read <file>
+    for pure methods (methods which do not induce side effects).  It
+    will then invoke these methods, using their return values as
+    normal variables.  That is, if a class has variables int a, b, c,
+    and pure method int x(), then Chicory will produce variables a,b,c
+    and x() for Objects of this type.
 
     Added --std-vis switch.  When on, Chicory will only traverse fields which
     are visible from a given program point.  For instance, a program point from
     class A will not include private fields from class B.
     
+    Added --heap_size switch to specify the maximum heap size of the target
+    program.
+
+    See the Chicory section of the Daikon user manual for more information.
+
+  Bug Fixes
+
+    Overriding methods that return a subtype of the original method no
+    longer produce duplicate decl information.
+
+    Arrays of objects with String fields are now handled correctly.
+
+  Documentation changes:
+
+    Documented --premain switch to Chicory.  Noted that the default output file
+    for Chicory is . (not ./daikon-output).
+
 Kvasir
 
   User changes:
