@@ -3909,8 +3909,13 @@ disambiguation is as follows:
 
 @enumerate
 @item First create the proper .disambig file by using either
-@option{--disambig} or @option{--disambig-file}.  Modify the variable
-entries in that file to suit your needs.
+@option{--disambig} or @option{--disambig-file}.
+You can use @option{--ppt-list-file} as well to only create the
+.disambig file for certain program points, but do NOT use
+@option{--var-list-file} to try to create a .disambig only for certain
+variables; this feature does not work yet.
+Modify the variable
+entries in the Kvasir-generated .disambig file to suit your needs.
 @item Now create a @file{var-list-file} by using
 @option{--dump-var-file} while running Kvasir with the .disambig file
 that you have just created.  This ensures that the variables listed in
