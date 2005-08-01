@@ -30,9 +30,10 @@ class Test {
 
     t1 (a1, a2, a3, a4);
 
-    System.out.printf ("Value Sets:%n%s%n", TagEntry.dump());
+    System.out.println ("Value Sets:");
+    System.out.println (TagEntry.dump());
 
-    System.out.printf ("Comparability Info:%n");
+    System.out.println ("Comparability Info:");
     DCRuntime.print_all_comparable();
 
   }
@@ -40,29 +41,29 @@ class Test {
   public static void t1 (A a1, A a2, A a3, A a4) {
 
     if (a1 == a2)
-      out.printf ("a1 == a2%n");
+      out.println ("a1 == a2");
     else
-      out.printf ("a1 != a2%n");
+      out.println ("a1 != a2");
 
     if (a1 != a2)
-      out.printf ("a1 != a2%n");
+      out.println ("a1 != a2");
     else
-      out.printf ("a1 == a2%n");
+      out.println ("a1 == a2");
 
     if (a1 == a1)
-      out.printf ("a1 == a1%n");
+      out.println ("a1 == a1");
     else
-      out.printf ("a1 != a1%n");
+      out.println ("a1 != a1");
 
     if (a2 != a2)
-      out.printf ("a2 != a2%n");
+      out.println ("a2 != a2");
     else
-      out.printf ("a2 == a2%n");
+      out.println ("a2 == a2");
 
     if (a3 == a3)
-      out.printf ("a3 == a3%n");
+      out.println ("a3 == a3");
     if (a4 == a4)
-      out.printf ("a4 == a4%n");
+      out.println ("a4 == a4");
 
   }
 }
