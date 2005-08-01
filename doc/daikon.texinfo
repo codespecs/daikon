@@ -3030,14 +3030,20 @@ Sun JDK API:
     static, final, synchronized native."
 
 @item --configs=@var{directory}
-Chicory will use this location to search for configuartion files.  Currently, this only includes @file{*.pure} files.
+Chicory will use this location to search for configuration files.
+Currently, this only includes @file{*.pure} files.
 
 @item --std-vis
-When this switch is on, Chicory will only traverse fields which
-are visible from a given program point.  For instance, a program point from
-class A will not include private fields from class B.  Of course, it will include
-public fields from class  B if it examines some variable of type B.
+When this switch is on, Chicory will only traverse fields which are
+visible from a given program point.  For instance, a program point from
+class A will not include private fields from class B.  Of course, it
+will include public fields from class B if it examines some variable of
+type B.
 
+@item --heap_size=@var{max_heap}
+Specifies the maximum size, in bytes, of the memory allocation pool for
+the target program.  The size is specified in the same manner as the
+-Xmx switch to java.
 
 @end table
 
