@@ -3839,20 +3839,6 @@ applied for all variables at the program points to be traced.  This can
 be much faster and generate a much smaller disambiguation file, one that
 only contains information about the program points of interest.
 
-However, one idiosyncratic behavior is that the disambiguation file is
-created upon the entry to the first program point to be traced, not at
-the beginning of the program (except when the @option{--smart-disambig}
-option is turned on, in which case it generates the file at the end of
-execution).  Thus, if you are using Kvasir with a program that requires
-user interaction and are only interested in tracing a function that is
-called after a sequence of user-inputted commands, when you run Kvasir
-to generate a .disambig file with the @option{--ppt-list-file} option,
-the .disambig file will be created at the first time that a program
-point listed in the @file{ppt-list-file} is encountered, not at the
-beginning of the program's execution, so you need to key in that
-sequence of commands before the .disambig file will be generated and the
-program exits.
-
 The interaction between selective variable tracing (via the
 @file{var-list-file}) and pointer type disambiguation is a bit more
 complicated.  This is because the @file{var-list-file} lists variables
