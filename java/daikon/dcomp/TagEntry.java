@@ -59,6 +59,7 @@ class TagEntry extends WeakReference<Object> {
    * first time either of the objects was seen, create an entry for it.
    */
   public static void union (Object obj1, Object obj2) {
+    assert (obj1 != null) && (obj2 != null);
     System.out.printf ("union of '%s' and '%s'%n", obj1, obj2);
     union (get_entry (obj1).find(), get_entry (obj2).find());
   }
@@ -69,6 +70,7 @@ class TagEntry extends WeakReference<Object> {
    */
   public static TagEntry get_entry (Object obj) {
 
+    assert obj != null;
     TagEntry entry = object_map.get(obj);
     if (entry == null)
       entry = create (obj);
@@ -95,6 +97,7 @@ class TagEntry extends WeakReference<Object> {
    * in a set by itself.
    */
   public static Object find (Object obj) {
+    assert obj != null;
     TagEntry entry = object_map.get (obj);
     if (entry == null)
       return obj;
