@@ -61,7 +61,7 @@ public abstract class DaikonWriter
      */
     public static String methodEntryName(String fullClassName, String[] types, String name, String short_name)
     {
-        //System.out.printf("(bytecodes)  %s ----  %s%n", name, short_name);
+        // System.out.printf("(bytecodes)  %s ----  %s%n", name, short_name);
         return methodName(fullClassName, types, name, short_name, "ENTER");
     }
 
@@ -88,19 +88,20 @@ public abstract class DaikonWriter
         return methodName(fullClassName, types, name, short_name, "EXIT" + lineNum);
     }
 
-
     /**
-     * Constructs the program point name (which includes the point string at the end)
+     * Constructs the program point name (which includes the point
+     * string at the end)
      *
      * @param fullClassName packageName.className
-     * @param types String representation of the declared types of the parameters
-     *          for example: {"int", "java.lang.Object", "float"}
+     * @param types String representation of the declared types of the
+     *          parameters.  for example: {"int", "java.lang.Object", "float"}
      * @param name The method with modifiers and parameters
-     * @param short_name Just the method's name (except it is "<init>" for constructors)
+     * @param short_name Just the method's name (except it is "<init>"
+     * for constructors)
      *
      * So a corresponding name/short_name pair could be:
-     *     name: public static void DataStructures.StackArTester.doNew(int size)
-     *     short_name: doNew
+     *    name: public static void DataStructures.StackArTester.doNew(int size)
+     *    short_name: doNew
      *
      * @param point Usually "EXIT" or "ENTER"
      * @return Same thing as methodName(Member, point)
@@ -127,20 +128,22 @@ public abstract class DaikonWriter
             paramTypes.append(types[i]);
 
             if(i != types.length - 1)
-                paramTypes.append(", ");
+                paramTypes.append(",");
         }
         paramTypes.append(")");
         // Quote dollar signs, which replaceFirst would interpreted as a
         // group reference.
         String paramTypesString = paramTypes.toString().replace("$", "\\$");
         name = name.replaceFirst("\\(.*\\)", paramTypesString);
+        // System.out.printf ("params = %s, newname = %s, short_name = %s%n",
+        //                   paramTypesString, name, short_name);
 
         return methodName(name, short_name, isConstructor, point);
     }
 
-
     /**
-     * Constructs the program point name (which includes the point string at the end)
+     * Constructs the program point name (which includes the point
+     * string at the end)
      *
      * @param method non-null method
      * @param point The point in the method, usually "EXIT" or "ENTRY"
@@ -157,8 +160,8 @@ public abstract class DaikonWriter
     }
 
     /**
-     *
-     * Constructs the program point name (which includes the point string at the end)
+     * Constructs the program point name (which includes the point
+     * string at the end)
      *
      * @param name Looks like: "public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception"
      * @param short_name Looks like: "push"
@@ -167,7 +170,7 @@ public abstract class DaikonWriter
      */
     private static String methodName(String name, String short_name, boolean isConstructor, String point)
     {
-        //System.out.printf("%s ---- %s %n", name, short_name);
+        // System.out.printf("%s ---- %s %n", name, short_name);
 
         if (isConstructor)
         {
@@ -223,7 +226,7 @@ public abstract class DaikonWriter
                     + short_name + "(");
         }
     }
-    
+
     /**
      * Determines if the given method should be instrumented
      */
