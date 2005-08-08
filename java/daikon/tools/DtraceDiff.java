@@ -361,8 +361,14 @@ public class DtraceDiff {
 	if (v1.length != v2.length)
 	  return false;
 	for (int i = 0; i<v1.length; i++)
-	  if (!v1[i].equals(v2[i]))
-	    return false;
+	  {
+	    if ((v1[i] == null) && (v2[i] == null))
+	      ;
+	    else if ((v1[i] == null) || (v2[i] == null))
+	      return false;
+	    else if (!v1[i].equals(v2[i]))
+	      return false;
+	  }
 	return true;
       }
     } else {
