@@ -22,7 +22,8 @@ import daikon.Chicory;
  * DaikonVariableInfo is an abstract class.  Its subtypes are designed to
  * represent specific types of variables, such as arguments, arrays, etc.
  */
-public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
+public abstract class DaikonVariableInfo
+    implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo>
 {
     /** The variable name, if appropriate to the subtype **/
     private final String name;
@@ -32,38 +33,40 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
     /** True iff this variable is an array **/
     protected final boolean isArray;
-    
+
     /** Print debug information about the variables **/
     protected final boolean debug_vars = false;
-    
+
     /**default string for comparability info**/
     private static final String compareInfoDefaultString = "22";
-    
+
     /**used to assert that a given variable is a parameter to a method**/
     private static final String isParamString = " # isParam=true";
-    
+
     // Certain hardcoded class names
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
-    
+
     /**
-     * The three strings needed for the .decls info, in addition to the variable name
-     * are typeName, repTypeName, and compareInfoString.
+     * The three strings needed for the .decls info, in addition to
+     * the variable name are typeName, repTypeName, and
+     * compareInfoString.
      */
     protected String typeName;
     protected String repTypeName;
     protected String compareInfoString = compareInfoDefaultString;
-    
+
     /** True iff the DeclWriter should print this variable **/
     protected boolean declShouldPrint = true;
-    
+
     /** True iff the DTraceWriter should print this variable **/
     protected boolean dtraceShouldPrint = true;
-    
+
     /**
-     * If false, use standard dfej behavior (any field in an instrumented class is visible)
-     * If true, use standard java behavior (if the field is in a class in a different package,
-     * it is only visible if public, etc.)
+     * If false, use standard dfej behavior (any field in an
+     * instrumented class is visible) If true, use standard java
+     * behavior (if the field is in a class in a different package, it
+     * is only visible if public, etc.)
      */
     public static boolean StdVisibility = false;
 
@@ -92,7 +95,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
         children = new ArrayList <DaikonVariableInfo> ();
         isArray = arr;
-        
+
      }
 
     /**
@@ -107,8 +110,9 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      * Add a child to this node.
      * Should only be called while the tree is being constructed.
      *
-     * @param info The child object, must be non-null.  The child's fields name,
-     * typeName, repTypeName, and compareInofString should also be non-null.
+     * @param info The child object, must be non-null.  The child's
+     * fields name, typeName, repTypeName, and compareInofString
+     * should also be non-null.
      */
     protected void addChild(DaikonVariableInfo info)
     {
@@ -139,7 +143,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
      * Return a StringBuffer which contains the name of this node
      * and all ancestors of this node.
      * Longer indentations correspond to further distance in the tree.
-     * 
+     *
      * @param offset The offset to begin each line with.
      * @return StringBuffer which contains all children of this node
      */
@@ -341,7 +345,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         return buf.toString();
     }
 
-    
+
     /**
      * Add the parameters of the given method to this node.
      */
@@ -352,7 +356,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         Class[] arguments = (method instanceof Constructor)
             ? ((Constructor) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
-            
+
         Iterator<String> argnamesiter = argnames.iterator();
         for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++)
         {
@@ -363,7 +367,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             theChild.addChildNodes(cinfo, type, name, offset, depth, staticTraversedClasses);
         }
     }
-    
+
     /**
      * Adds class variables (ie, the fields) for the given type and
      * attach new nodes as children of this node.
@@ -379,7 +383,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         if (!dontPrintInstanceVars && offset.equals(""))
         {
             thisInfo = new ThisObjInfo();
-            
+
             thisInfo.typeName = type.getName() + isParamString;
             thisInfo.repTypeName = getRepName(type, false);
             addChild(thisInfo);
@@ -388,7 +392,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             if (shouldAddRuntimeClass(type))
             {
                 DaikonVariableInfo thisClass = new DaikonClassInfo("this.class", false);
-                
+
                 thisClass.typeName = classClassName;
                 thisClass.repTypeName = stringClassName;
                 thisInfo.addChild(thisClass);
@@ -398,25 +402,25 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             thisInfo = this;
 
         Field[] fields = type.getDeclaredFields();
-        
+
         if (debug_vars)
             System.out.printf ("%s: [%s] %d dontPrintInstanceVars = %b, "
                                + "inArray = %b%n", type, offset, fields.length,
                                dontPrintInstanceVars, isArray);
-        
-        
+
+
         boolean addStatics = !Chicory.shouldWatchStatics();
         if(Chicory.shouldWatchStatics() && !isArray && !staticTraversedClasses.contains(type))
         {
             staticTraversedClasses.add(type);
             addStatics = true;
         }
-        
+
         for (int i = 0; i < fields.length; i++)
         {
 
             Field classField = fields[i];
-            
+
             if (debug_vars)
                 System.out.printf ("considering field %s%n", classField);
 
@@ -430,22 +434,22 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             }
 
             // Don't print arrays of the same static field
-            if(Modifier.isStatic(classField.getModifiers()) && isArray) 
+            if(Modifier.isStatic(classField.getModifiers()) && isArray)
             {
                 if (debug_vars)
                     System.out.printf ("--field static and inArray%n");
                 continue;
             }
-            
+
             // Don't print statics for class if already did so
-            if(Modifier.isStatic(classField.getModifiers()) && !addStatics) 
+            if(Modifier.isStatic(classField.getModifiers()) && !addStatics)
             {
                 if (debug_vars)
                     System.out.printf ("--already printed statics for %s%n", type);
-                
+
                 continue;
             }
-            
+
 
             if (!isFieldVisible (cinfo.clazz, classField))
             {
@@ -458,15 +462,15 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
             StringBuffer buf = new StringBuffer();
             DaikonVariableInfo newChild = thisInfo.addDeclVar(classField, offset, buf);
-            
+
             if (debug_vars)
                 System.out.printf ("--Created DaikonVariable %s%n", newChild);
-            
+
             String newOffset = buf.toString();
             newChild.addChildNodes(cinfo, fieldType, classField.getName(),
                           newOffset, depth, staticTraversedClasses);
         }
-       
+
 
         // If appropriate, print out decls information for pure methods
         // and add to the tree
@@ -508,12 +512,12 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             }
         }
     }
-    
+
     /**
-     * Adds the decl info for a single parameter as a child of this node.  
+     * Adds the decl info for a single parameter as a child of this node.
      * Also adds "derived" variables
      * such as the runtime .class variable.
-     * 
+     *
      * @return The newly created DaikonVariableInfo object, whose
      * parent is this.
      */
@@ -521,17 +525,17 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     {
         // add this variable to the tree as a child of curNode
         DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum);
-        
+
         newChild.typeName = stdClassName(type) + isParamString;
         newChild.repTypeName = getRepName(type, false);
-        
+
         addChild(newChild);
 
         newChild.checkForDerivedVariables(type, name, offset);
 
         return newChild;
     }
-    
+
 
     /**
      * Adds the decl info for a pure method.
@@ -589,12 +593,12 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
         return newPure;
     }
-    
+
     /**
-     * Adds the decl info for a single class variable (a field) 
+     * Adds the decl info for a single class variable (a field)
      * as a child of this node.  Also adds "derived" variables
      * such as the runtime .class variable.
-     * 
+     *
      * @return The newly created DaikonVariableInfo object, whose
      * parent is this.
      */
@@ -637,7 +641,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         type_name += appendAuxInfo(field);
 
         DaikonVariableInfo newField = new FieldInfo(offset + theName, field, isArray);
-        
+
         newField.typeName = type_name;
         newField.repTypeName = getRepName(type, isArray) + arr_str;
 
@@ -680,7 +684,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
         return newField;
     }
-    
+
     /**
      * Returns the class name of the specified class in 'java' format
      * (ie, as the class would have been declared in java source code)
@@ -689,7 +693,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     {
         return Runtime.classnameFromJvm (type.getName());
     }
-    
+
     /**
      * Given a type, gets the representation type to be used in Daikon. For
      * example, the representation type of a class object is "hashcode."
@@ -732,7 +736,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
             return "hashcode";
         }
     }
-    
+
     /**
      * Determines if type needs a corresponding .class runtime class variable
      *
@@ -829,11 +833,11 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         // public to be visible
         return (Modifier.isPublic (modifiers));
     }
-    
-    
+
+
     // Appends as auxiliary information:
     // the package name of the declaring class
-    private String appendAuxInfo(Field field) 
+    private String appendAuxInfo(Field field)
     {
         // int modifiers = field.getModifiers();
 
@@ -841,7 +845,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         String pkgName = (p == null ? null : p.getName());
 
         //System.out.printf("Package name for type  %s is %s%n", type, pkgName);
-        
+
         StringBuilder ret = new StringBuilder();
 
         // String staticString = (Modifier.isStatic(modifiers)) ? "true" : "false";
@@ -849,10 +853,10 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
         if (pkgName != null) {
             ret.append("declaringClassPackageName=" + pkgName + ", ");
         }
-        
+
         return ret.toString();
     }
-    
+
     /**
     *
     * Checks for "derived" Chicory variables: .class, .tostring, and java.util.List implementors
@@ -869,7 +873,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
        checkForRuntimeClass(type, theName, offset); //.class var
        checkForString(type, theName, offset); //.tostring var
    }
-   
+
    /**
     * Determines if type implements list
     * and prints associated decls, if necessary
@@ -882,22 +886,22 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
        if (implementsList(type))
        {
            DaikonVariableInfo child = new ListInfo(offset + theName + "[]", type);
-           
+
            child.typeName = type.getName();
            child.repTypeName = "hashcode[]";
-           
+
            addChild(child);
 
            //.class var
            DaikonVariableInfo childClass = new DaikonClassInfo(offset + theName + "[].class", true);
-           
+
            childClass.typeName = classClassName + "[]";
            childClass.repTypeName = stringClassName + "[]" ;
-           
+
            addChild(childClass);
        }
    }
-   
+
    /**
     * Checks the given type to see if it requires a .class
     * addition to the decls file.
@@ -912,17 +916,17 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
 
        if (theName.contains("[]") || offset.contains ("[]"))
            postString = "[]";
-       
+
        //add daikoninfo type
        DaikonVariableInfo classInfo = new DaikonClassInfo(offset + theName + ".class",
                (offset+theName).contains("[]"));
-       
+
        classInfo.typeName = classClassName + postString;
        classInfo.repTypeName = stringClassName + postString;
-       
+
        addChild(classInfo);
    }
-   
+
    /**
     * Checks the given type to see if it is a string.
     * If so, it adds the correct child to this node.
@@ -940,17 +944,17 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
        // add DaikonVariableInfo type
        DaikonVariableInfo stringInfo = new StringInfo(offset + theName + ".toString",
                (offset+theName).contains("[]"));
-       
+
        stringInfo.typeName = stringClassName + postString;
        stringInfo.repTypeName = stringClassName + postString;
-       
+
        addChild(stringInfo);
 
    }
-   
+
    /**
     * Returns true iff type implements the List interface.
-    * 
+    *
     * @param type
     * @return true iff type implements the List interface
     */
@@ -966,7 +970,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
        }
        return false;
    }
-   
+
    /**
     * Explores the tree one level deeper (see {@link
     * DaikonVariableInfo}).  This method adds child nodes to this node.
@@ -985,14 +989,14 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
     *                be "this." in which case offset + name would be
     *                "this.ballCount."
     */
-   protected void addChildNodes(ClassInfo cinfo, Class type, String theName, 
+   protected void addChildNodes(ClassInfo cinfo, Class type, String theName,
            String offset, int depthRemaining,
            Set <Class> staticTraversedClasses)
-   {       
+   {
        if (type.isPrimitive())
            return;
        else if (type.isArray())
-       {         
+       {
            // don't go into more than one dimension of a multi-dimensional array
            if (isArray)
                return;
@@ -1001,20 +1005,20 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
            if (arrayType.isPrimitive())
            {
                DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
-               
+
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
-               
+
                addChild(newChild);
            }
            // multi-dimensional arrays (not currently used)
            else if (arrayType.isArray())
            {
                DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
-               
+
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
-               
+
                addChild(newChild);
 
                newChild.addChildNodes(cinfo, arrayType, "", offset + theName + "[]", depthRemaining, staticTraversedClasses);
@@ -1023,10 +1027,10 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
            else
            {
                DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
-               
+
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
-               
+
                addChild(newChild);
 
                // Print out the class of each element in the array.  For
@@ -1055,7 +1059,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
                addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1, staticTraversedClasses);
        }
    }
-   
+
    /**
     * Returns whether or not the fields of the specified class
     * should be included, based on whether the Class type
@@ -1072,37 +1076,37 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
        else
            return (false);
    }
-   
+
    /**
     * Returns the declared type name of this variable.
     */
    public String getTypeName()
    {
        assert typeName != null: "Type name cannot be null";
-       
+
        return typeName;
    }
-   
+
    /**
     * Returns the representation type name of this variable.
     */
    public String getRepTypeName()
    {
        assert typeName != null: "Representation type name cannot be null";
-       
+
        return repTypeName;
    }
-   
+
    /**
     * Returns the comparability information for this variable.
     */
    public String getCompareString()
    {
        assert typeName != null: "Coparability info cannot be null";
-       
+
        return compareInfoString;
    }
-   
+
    /**
     * Return true iff the DeclWriter should print this node.
     */
@@ -1110,7 +1114,7 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
    {
        return declShouldPrint;
    }
-   
+
    /**
     * Return true iff the DTraceWriter should print this node.
     */
@@ -1118,4 +1122,17 @@ public abstract class DaikonVariableInfo implements Iterable<DaikonVariableInfo>
    {
        return dtraceShouldPrint;
    }
+
+    /**
+     * Compares based on the name of the variable
+     */
+    public int compareTo (DaikonVariableInfo dv)
+    {
+        return name.compareTo (dv.name);
+    }
+
+    public boolean isArray()
+    {
+        return isArray;
+    }
 }
