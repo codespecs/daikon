@@ -123,7 +123,9 @@ public class MethodInfo {
 
     // Look up the method
     try {
-      if (is_constructor())
+      if (is_class_init())
+        member = null;
+      else if (is_constructor())
         member = class_info.clazz.getDeclaredConstructor (arg_types);
       else
         member = class_info.clazz.getDeclaredMethod (method_name, arg_types);
@@ -160,6 +162,11 @@ public class MethodInfo {
     return (method_name.equals ("<init>") || method_name.equals(""));
   }
 
+  /** Returns whether or not this method is a class initializer **/
+  public boolean is_class_init() {
+    return (method_name.equals ("<clinit>"));
+  }
+
   /**
    * Initialize the enter and exit daikon variable trees (traversalEnter and
    * traversalExit).  The reflection information must have already been
@@ -171,7 +178,7 @@ public class MethodInfo {
     System.out.printf ("Method %s.%s: %n ", class_info.clazz.getName(), this);
     System.out.printf ("Enter daikon variable tree%n%s%n",
                        traversalEnter.treeString());
-    
+
     traversalExit = RootInfo.exit_process (this, depth);
     System.out.printf ("Exit daikon variable tree%n%s%n",
                        traversalExit.treeString());
