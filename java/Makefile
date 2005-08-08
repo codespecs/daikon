@@ -334,6 +334,7 @@ chicory-test : ChicoryPremain.jar
 DCOMP_JAVA_FILES := $(shell find daikon/dcomp -name '*.java') \
 					$(shell find daikon/chicory -name '*.java')
 DCOMP_CLASS_FILES := $(patsubst %.java,%.class,$(DCOMP_JAVA_FILES))
+DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 
 dcomp : dcomp_premain.jar
 dcomp_premain.jar : $(DCOMP_JAVA_FILES) daikon/dcomp/manifest.txt
@@ -343,7 +344,14 @@ dcomp_premain.jar : $(DCOMP_JAVA_FILES) daikon/dcomp/manifest.txt
 
 dcomp-test : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA) -javaagent:dcomp_premain.jar daikon/dcomp/Test
+	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS)" daikon/dcomp/Test
+	-diff -u daikon/dcomp/std_dcomp_out.goal /tmp/dcomp_out.txt \
+	  > daikon/dcomp/std_dcomp_out.diff
+	@cat daikon/dcomp/std_dcomp_out.diff
+	@find daikon/dcomp -name '*.diff' -printf "%8s    %p\n"
+
+dcomp-update-goals :
+	cp /tmp/dcomp_out.txt daikon/dcomp/std_dcomp_out.goal
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
