@@ -3,6 +3,8 @@ package daikon.dcomp;
 import java.lang.instrument.*;
 import java.security.*;
 import java.io.*;
+import java.util.*;
+import java.util.regex.*;
 
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
@@ -16,11 +18,20 @@ public class Premain {
   public static File debug_bin_dir = new File (debug_dir, "bin");
   public static File debug_orig_dir = new File (debug_dir, "orig");
   public static boolean debug = true;
+  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
   public static void premain (String agentArgs, Instrumentation inst) {
 
     System.out.format ("In dcomp premain, agentargs ='%s', " +
                        "Instrumentation = '%s'\n", agentArgs, inst);
+
+    String[] args = agentArgs.split ("  *");
+    String error_msg = parse_args (args);
+    if (error_msg != null) {
+      usage (error_msg);
+      System.exit (1);
+    }
 
     debug_bin_dir.mkdirs();
     debug_orig_dir.mkdirs();
@@ -82,6 +93,7 @@ public class Premain {
       } catch (Throwable t) {
         System.out.printf ("Unexected error: %s%n", t);
         t.printStackTrace();
+        System.exit (1);
         return (null);
       }
       if (debug) {
@@ -97,4 +109,42 @@ public class Premain {
     }
   }
 
+  static String parse_args (String[] args) {
+
+    for (int ii = 0; ii < args.length; ii++) {
+
+      String arg = args[ii];
+      if (arg.startsWith ("--ppt-select-pattern=")) {
+        String include = arg.substring ("--ppt-select-pattern=".length());
+        if (include.length() == 0)
+          return ("Empty ppt-select-pattern string");
+        try {
+          ppt_select_pattern.add (Pattern.compile (include));
+        } catch (Exception e) {
+          return String.format ("Can't compile pattern %s: %s%n", include, e);
+        }
+      } else if (arg.startsWith ("--ppt-omit-pattern=")) {
+        String omit = arg.substring ("--ppt-omit-pattern=".length());
+        if (omit.length() == 0)
+          return ("Empty ppt-omit-pattern string");
+        try {
+          ppt_omit_pattern.add (Pattern.compile (omit));
+        } catch (Exception e) {
+          return String.format ("Can't compile pattern %s: %s%n", omit, e);
+        }
+      } else {
+        return ("Unexpected argument " + arg);
+      }
+    }
+    return (null);
+  }
+
+  public static void usage (String msg) {
+
+    System.out.println (msg);
+    System.out.println ("dcomp <options>");
+    System.out.println ("Options:");
+    System.out.println ("  --ppt-select-pattern=<regex>");
+    System.out.println ("  --ppt-omit-pattern=<regex>");
+  }
 }
