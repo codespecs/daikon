@@ -32,22 +32,27 @@ public class RootInfo extends DaikonVariableInfo
     public static RootInfo enter_process (MethodInfo mi, int depth)
     {
         RootInfo root = new RootInfo();
-        
-        
+
+        // Don't build a tree for class initializers.
+        if (mi.is_class_init())
+            return (root);
+
         Set<Class> staticTraversedClasses = null;
         if(Chicory.shouldWatchStatics())
         {
             staticTraversedClasses = new HashSet <Class> ();
         }
-        
-        root.addParameters(mi.class_info, mi.member, Arrays.asList(mi.arg_names), /*offset = */ "", 
-                depth, staticTraversedClasses);
-        
+
+        root.addParameters(mi.class_info, mi.member,
+                           Arrays.asList(mi.arg_names), /*offset = */ "",
+                           depth, staticTraversedClasses);
+
         if (!(mi.member instanceof Constructor))
-            root.addClassVars(mi.class_info, Modifier.isStatic(mi.member.getModifiers()),
-                    mi.member.getDeclaringClass(), /*offset = */ "", 
-                    depth, staticTraversedClasses);
-        
+            root.addClassVars(mi.class_info,
+                              Modifier.isStatic(mi.member.getModifiers()),
+                              mi.member.getDeclaringClass(), /*offset = */ "",
+                              depth, staticTraversedClasses);
+
         return root;
     }
 
@@ -57,7 +62,11 @@ public class RootInfo extends DaikonVariableInfo
     public static RootInfo exit_process(MethodInfo mi, int depth)
     {
         RootInfo root = new RootInfo();
-        
+
+        // Don't build a tree for class initializers.
+        if (mi.is_class_init())
+            return (root);
+
         Set<Class> staticTraversedClasses = null;
         if(Chicory.shouldWatchStatics())
         {
@@ -65,7 +74,7 @@ public class RootInfo extends DaikonVariableInfo
         }
 
         // Print arguments
-        root.addParameters(mi.class_info, mi.member, Arrays.asList(mi.arg_names), /*offset = */ "", 
+        root.addParameters(mi.class_info, mi.member, Arrays.asList(mi.arg_names), /*offset = */ "",
                 depth, staticTraversedClasses);
 
         // Print return type information for methods only and not constructors
@@ -76,18 +85,18 @@ public class RootInfo extends DaikonVariableInfo
             {
                 // add a new ReturnInfo object to the traversal tree
                 DaikonVariableInfo retInfo = new ReturnInfo();
-                
+
                 retInfo.typeName = stdClassName(returnType);
                 retInfo.repTypeName = getRepName(returnType, false);
                 root.addChild(retInfo);
-                
+
                 retInfo.checkForDerivedVariables(returnType, "return", "");
 
                 retInfo.addChildNodes(mi.class_info, returnType, "return", "",
                         depth, staticTraversedClasses);
             }
         }
-        
+
         // Print class variables
         root.addClassVars(mi.class_info,
                 Modifier.isStatic(mi.member.getModifiers()), mi.member
@@ -103,19 +112,19 @@ public class RootInfo extends DaikonVariableInfo
     public static RootInfo getObjectPpt(ClassInfo cinfo, int depth)
     {
         RootInfo root = new RootInfo();
-        
+
         Set<Class> staticTraversedClasses = null;
         if(Chicory.shouldWatchStatics())
         {
             staticTraversedClasses = new HashSet <Class> ();
         }
-        
+
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ false,
                 cinfo.clazz, /*offset = */ "", depth, staticTraversedClasses);
-        
+
         return root;
     }
-    
+
     /**
      * Creates a RootInfo object for a class program point.
      * This will just include static fields.
@@ -123,29 +132,17 @@ public class RootInfo extends DaikonVariableInfo
     public static RootInfo getClassPpt(ClassInfo cinfo, int depth)
     {
         RootInfo root = new RootInfo();
-        
+
         Set<Class> staticTraversedClasses = null;
         if(Chicory.shouldWatchStatics())
         {
             staticTraversedClasses = new HashSet <Class> ();
         }
-        
+
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ true,
                 cinfo.clazz, /*offset = */ "", depth, staticTraversedClasses);
-        
+
         return root;
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
