@@ -65,4 +65,8 @@ public class ParameterInfo extends DaikonVariableInfo
         throw new RuntimeException("Parameters have no parent value");
     }
 
+    public Class getType()
+    {
+        return (argType);
+    }
 }
