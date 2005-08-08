@@ -6,20 +6,34 @@ import java.util.*;
 
 
 /**
- * The OjbectInfo class is a subtype of DaikonVariableInfo used for variable types which are
- * class fields.
+ * The OjbectInfo class is a subtype of DaikonVariableInfo used for
+ * variable types which are class fields.
  */
 public class FieldInfo extends DaikonVariableInfo
 {
     /** The corresponding Field **/
     private Field field;
 
+    /** The offset of this field in its containing class **/
+    private int field_num;
+
     public FieldInfo(String theName, Field theField, boolean isArr)
     {
        super(theName, isArr);
        field = theField;
+
+       // Calculate the offset of this field in its class
+       field_num = 0;
+       for (Field f : field.getDeclaringClass().getDeclaredFields())
+       {
+           if (f.equals (field))
+               return;
+           if (f.getType().isPrimitive())
+               field_num++;
+       }
+       assert false : "Can't find " + field + " in "+field.getDeclaringClass();
     }
-    
+
     /**
      * Returns true iff the corresponding field is static.
      */
@@ -45,5 +59,20 @@ public class FieldInfo extends DaikonVariableInfo
                 return DTraceWriter.getValue(field, val);
             }
         }
+    }
+
+    public Field getField()
+    {
+        return field;
+    }
+
+    public Class getType()
+    {
+        return (field.getType());
+    }
+
+    public int get_field_num()
+    {
+        return (field_num);
     }
 }
