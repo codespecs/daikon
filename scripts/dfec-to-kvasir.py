@@ -10,15 +10,20 @@
 # Created on 2005-08-09 by Philip Guo
 
 # Usage:
-# ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls
+# ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls output.decls output.vars
 
 import sys
 
 dfecF = open(sys.argv[1], 'r')
 DfecAllLines = [line.strip() for line in dfecF.readlines()]
+dfecF.close()
 
 kvasirF = open(sys.argv[2], 'r')
 KvasirAllLines = [line.strip() for line in kvasirF.readlines()]
+kvasirF.close()
+
+outputDeclsF = open(sys.argv[3], 'w')
+outputVarsF = open(sys.argv[4], 'w')
 
 import re
 DfecGlobalRE = re.compile('^::')
@@ -60,6 +65,15 @@ def ConvertKvasirVarName(var):
         return '/' + var.split('/')[1]
     else:
         return var
+
+# Kvasir does not support comparability for array indices
+# so strip those off.
+# e.g. '104[105]' becomes '104'
+def StripCompNumber(comp_num):
+    if '[' in comp_num:
+        return comp_num[:comp_num.find('[')]
+    else:
+        return comp_num
 
 # Dfec and Kvasir program point name differences:
 
@@ -187,7 +201,7 @@ for line in DfecAllLines:
     elif myState == State.CompNum:
         # strip off array index comparability numbers
         # e.g. '217[337]' should become '217'
-        curVarMap[curVarName] = line[:line.find('[')]
+        curVarMap[curVarName] = StripCompNumber(line)
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
@@ -200,6 +214,11 @@ for line in DfecAllLines:
 # Value: A list of 3-tuples:
 #          Each tuple is: (variable name, decType, repType)
 KvasirPptMap = {}
+
+# A list of the same strings which are keys to KvasirPptMap
+# This is desirable because we want to output the program points
+# in the same order as they were read in
+KvasirPptNames = []
 
 myState = State.Uninit
 
@@ -214,6 +233,8 @@ for line in KvasirAllLines:
             
     elif myState == State.PptName:
         curVarList = []
+        # Remember to add an entry to both the list and the map        
+        KvasirPptNames.append(line)
         KvasirPptMap[line] = curVarList
         myState = State.VarName
         
@@ -224,7 +245,7 @@ for line in KvasirAllLines:
             myState = State.Uninit
         else:
             curVarList.append([])
-            curVarList[-1].append(ConvertDfecVarName(line))
+            curVarList[-1].append(line)
             myState = State.DecType
         
     elif myState == State.DecType:
@@ -274,12 +295,14 @@ for ppt in KvasirPptMap:
 
         curResultVarList = []
 
+#        print ppt
+
         # Now iterate through the Kvasir variable list:
         for entry in KvasirVarList:
             var = entry[0]
             decType = entry[1]
             repType = entry[2]
-                      
+
             # If repType == "java.lang.String", then look
             # up the entry for the variable + '[]' because
             # Dfec has separate variables for the pointer
@@ -294,19 +317,72 @@ for ppt in KvasirPptMap:
                 # Throw the comparability number on the end
                 # of the entry for that variable
                 curResultVarList.append([var, decType, repType, DfecVarMap[varToLookup]])
+                if DfecVarMap[varToLookup] == "":
+                    print "EMPTY COMP. NUMBER!", var, varToLookup
+
+                # Only for debugging
+#                DfecVarMap.pop(varToLookup)
 
         ResultMap[ppt] = curResultVarList
+
+# This is important to see how much of the intersection between
+# Dfec and Kvasir variables that we've successfully picked up:
+
+#        print "Leftovers", DfecVarMap.keys()            
+#        print "# vars in Dfec:  ", len(DfecVarMap.keys())
+#        print "# vars in Kvasir:", len(KvasirVarList)
+#        print "# vars in result:", len(curResultVarList)
+#        print
+
+# Output the resulting .decls file and the var list file:
+
+# Globals section ... let's just take the first program point and use
+# the global vars in that one for the globals section.  This makes the
+# assumption that the same global variables appear everywhere at all
+# program points ... will have to investigate further later ...
+
+outputVarsF.write("----SECTION----\n")
+outputVarsF.write("globals\n")
+
+exampleVarList = ResultMap[KvasirPptNames[0]]
+
+for varEntry in exampleVarList:
+    if '/' in varEntry[0]: # only print out globals and file-statics
+        outputVarsF.write(varEntry[0])
+        outputVarsF.write("\n")
+
+outputVarsF.write("\n")
+
             
-        print ppt
-        print "# vars in Dfec:  ", len(DfecVarMap.keys())
-        print "# vars in Kvasir:", len(KvasirVarList)
-        print "# vars in result:", len(curResultVarList)
-        print
+# Read these names from KvasirPptNames to preserve ordering
+for ppt in KvasirPptNames:
+    outputDeclsF.write("DECLARE\n")
+    outputDeclsF.write(ppt)
+    outputDeclsF.write("\n")
 
+    outputVarsF.write("----SECTION----\n")
+    outputVarsF.write(ppt)
+    outputVarsF.write("\n")
 
-#for e in ResultMap.keys():
-#    print ResultMap[e]
+    for varEntry in ResultMap[ppt]:
+        for line in varEntry:
+            outputDeclsF.write(line)
+            outputDeclsF.write("\n")
 
+        # Don't print out globals or file-static vars in the
+        # var-list-file for individual program points
+        if not ('/' in varEntry[0]):
+            outputVarsF.write(varEntry[0])
+            outputVarsF.write("\n")
+
+    outputDeclsF.write("\n")
+    outputVarsF.write("\n")
+    
 #print '# Dfec ppts:', len(DfecPptMap.keys())
 #print '# Kvasir ppts:', len(KvasirPptMap.keys())
 #print '# Common ppts:', len(ResultMap.keys())
+
+
+
+outputDeclsF.close()
+outputVarsF.close()
