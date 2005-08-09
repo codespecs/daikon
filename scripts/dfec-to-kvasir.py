@@ -1,7 +1,13 @@
 #!/usr/bin/python
 
-# Lackwit to DynComp (by Philip Guo)
-# Tries to transform Lackwit's output into something that DynComp likes
+
+# Takes a .decls file that Dfec produced (with comparability info),
+# a .decls file that Kvasir produced, and outputs to stdout a .decls
+# file that contains the intersection of Dfec and Kvasir program
+# points and variables in a format that is compatible with Kvasir,
+# but with comparability numbers from the Dfec .decls file.
+
+# Created on 2005-08-09 by Philip Guo
 
 # Usage:
 # ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls
@@ -43,6 +49,17 @@ def ConvertDfecVarName(var):
     globalConverted = DfecGlobalRE.sub('/', var)
     return globalConverted.replace('->', '[].')
 
+# Ok, we are going to just strip off everything before
+# the '/', if there is one, because Dfec does not print
+# out the function name for function-static variables
+# e.g. 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'
+def ConvertKvasirVarName(var):
+    if var[0] == '/':
+        return var
+    elif '/' in var:
+        return '/' + var.split('/')[1]
+    else:
+        return var
 
 # Dfec and Kvasir program point name differences:
 
@@ -54,6 +71,10 @@ def ConvertDfecVarName(var):
 # regard to the number behind it.  However, Dfec can have
 # more than 1 exit while Kvasir can only have 1.  Hmmm,
 # what do we do about that?
+# (Right now, we just keep 'EXIT' without the number before
+#  putting it in the hashtable.  Thus, only one EXIT ppt
+#  is kept for each function ... I'm just not sure which
+#  one, though, but that's ok)
 
 # Dfec's names for C functions have crap in between the parens
 # while Kvasir's doesn't.  Let's just not worry about what's
@@ -66,9 +87,6 @@ def ConvertDfecVarName(var):
 # Input:  'std.ccladd(int;int;)void:::ENTER'
 # Output: ('ccladd', 'ENTER')
 
-EnterRE = re.compile('ENTER$')
-ExitRE = re.compile('EXIT.*$') # Remember that you can have multiple exits
-
 def StripDfecPptName(ppt):
     fnname, enterOrExit = ppt.split(':::')
     if fnname[:4] == 'std.':
@@ -76,8 +94,16 @@ def StripDfecPptName(ppt):
     # Find the first '(' and end the function name there
     fnname = fnname[:fnname.index('(')]
 
+    # Just return 'ENTER' or 'EXIT' with no numbers
+    # (This means that we can only keep one exit ppt)
+    if enterOrExit[1] == 'N':
+        enterOrExit = 'ENTER'
+    else:
+        enterOrExit = 'EXIT'
+
     # Return a pair of the function name and 'ENTER' or 'EXITxxx'
     return (fnname, enterOrExit)
+
 
 def StripKvasirPptName(ppt):
     fnname, enterOrExit = ppt.split(':::')
@@ -85,16 +111,23 @@ def StripKvasirPptName(ppt):
     # For globals, grab everything from '..' to '('
     # e.g. for '..main():::ENTER'
     # we want 'main'
-    if fnname[:4] == '..':
-        fnname = fnname[4:fnname.index('(')]
+    if fnname[:2] == '..':
+        fnname = fnname[2:fnname.find('(')]
 
     # For file-static names, we need to take everything between
     # the LAST period ('.') and the '('
     # e.g. for 'flex.c.yy_push_state():::EXIT0',
     # we want 'yy_push_state'
-    
-    # Find the first '(' and end the function name there
+    else:
+        fnname = fnname[fnname.rfind('.')+1:fnname.find('(')]
 
+    # Just return 'ENTER' or 'EXIT' with no numbers
+    # (This means that we can only keep one exit ppt)
+    if enterOrExit[1] == 'N':
+        enterOrExit = 'ENTER'
+    else:
+        enterOrExit = 'EXIT'
+        
     # Return a pair of the function name and 'ENTER' or 'EXITxxx'
     return (fnname, enterOrExit)
    
@@ -114,13 +147,13 @@ myState = State.Uninit
 
 
 # Run the state machine to build up a map (DfecPptMap)
-# where the keys are program point names
-# and the values are lists of 4-element list of variable entries.
-#   The 4 entries in each variable list are:
-#     VarName, DecType, RepType, and CompNum
+# where the keys are program point names (stripped using StripDfecPptName)
+# and the values are maps where the keys are variable names and the
+# values are comparability numbers
 DfecPptMap = {}
 
-curVarList = 0 # The current variable list that we are operating on
+curVarMap = 0 # The current variable map
+curVarName = ""
 
 for line in DfecAllLines:
 
@@ -132,8 +165,8 @@ for line in DfecAllLines:
             myState = State.PptName
             
     elif myState == State.PptName:
-        curVarList = []
-        DfecPptMap[StripDfecPptName(line)] = curVarList
+        curVarMap = {}
+        DfecPptMap[StripDfecPptName(line)] = curVarMap
         myState = State.VarName
         
     elif myState == State.VarName:
@@ -142,20 +175,19 @@ for line in DfecAllLines:
         elif line == "":
             myState = State.Uninit
         else:
-            curVarList.append([])
-            curVarList[-1].append(ConvertDfecVarName(line))
+            curVarName = ConvertDfecVarName(line)
             myState = State.DecType
         
     elif myState == State.DecType:
-        curVarList[-1].append(line)
         myState = State.RepType
         
     elif myState == State.RepType:
-        curVarList[-1].append(line)
         myState = State.CompNum
         
     elif myState == State.CompNum:
-        curVarList[-1].append(line)
+        # strip off array index comparability numbers
+        # e.g. '217[337]' should become '217'
+        curVarMap[curVarName] = line[:line.find('[')]
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
@@ -164,6 +196,9 @@ for line in DfecAllLines:
         myState = State.VarName
 
 
+# Key: program point name
+# Value: A list of 3-tuples:
+#          Each tuple is: (variable name, decType, repType)
 KvasirPptMap = {}
 
 myState = State.Uninit
@@ -201,7 +236,6 @@ for line in KvasirAllLines:
         myState = State.CompNum
         
     elif myState == State.CompNum:
-        curVarList[-1].append(line)
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
@@ -225,5 +259,54 @@ for line in KvasirAllLines:
 
 ResultMap = {}
 
-for key in DfecPptMap:
-    print key
+for ppt in KvasirPptMap:
+    stripped = StripKvasirPptName(ppt)
+    if stripped in DfecPptMap:
+        KvasirVarList = KvasirPptMap[ppt]
+        DfecVarMap = DfecPptMap[stripped]
+
+#        print "KvasirVarList:"
+#        print KvasirVarList
+#        print "DfecVarMap:"
+#        print DfecVarMap
+#        print
+#        print
+
+        curResultVarList = []
+
+        # Now iterate through the Kvasir variable list:
+        for entry in KvasirVarList:
+            var = entry[0]
+            decType = entry[1]
+            repType = entry[2]
+                      
+            # If repType == "java.lang.String", then look
+            # up the entry for the variable + '[]' because
+            # Dfec has separate variables for the pointer
+            # and content of strings
+            varToLookup = var
+            if repType == "java.lang.String":
+                varToLookup += '[]'
+
+            varToLookup = ConvertKvasirVarName(varToLookup)
+
+            if varToLookup in DfecVarMap:
+                # Throw the comparability number on the end
+                # of the entry for that variable
+                curResultVarList.append([var, decType, repType, DfecVarMap[varToLookup]])
+
+        ResultMap[ppt] = curResultVarList
+            
+        print ppt
+        print "# vars in Dfec:  ", len(DfecVarMap.keys())
+        print "# vars in Kvasir:", len(KvasirVarList)
+        print "# vars in result:", len(curResultVarList)
+        print
+
+
+#for e in ResultMap.keys():
+#    print ResultMap[e]
+
+#print '# Dfec ppts:', len(DfecPptMap.keys())
+#print '# Kvasir ppts:', len(KvasirPptMap.keys())
+#print '# Common ppts:', len(ResultMap.keys())
