@@ -3,14 +3,6 @@ Todo list sorted in approximate order of importance.
 Add your name/initials to an item when you are actively working on it.
 When the task is complete, move it to the bottom of the file.
 
-High Priority Tasks for Chicory (reorganized 5/6/05 by etf)
-
-  - Add dtrace goal files (perhaps limited to some reasonable number
-    of lines) to the regression tests.  This will allow us to see
-    more quickly when a Chicory change causes dtrace diffs.
-    (possibly wait for dtrace-diff)
-        
-
 Longer-term issues
       
   - Add --exception switch to allow instrumentation of exceptions
@@ -34,6 +26,13 @@ Longer-term issues
     be writing this kind of code anyway.
 
 Completed Tasks (add new ones at the top)
+
+  - Add dtrace goal files (perhaps limited to some reasonable number
+    of lines) to the regression tests.  This will allow us to see
+    more quickly when a Chicory change causes dtrace diffs.
+    (possibly wait for dtrace-diff)
+    [etf] 8/9/05: Completed.
+
   - Add new option to Chicory to only output a given percentage of all
     observed records.  This will permit faster execution on large
     programs.
