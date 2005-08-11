@@ -71,5 +71,5 @@ for ppt in pptInfoDict:
 #    print "Average set size: ", avgForPpt
 
 
-print
-print "Total average set size: ", ((sumOfAvgs) / float(numPpts))
+#print
+print ((sumOfAvgs) / float(numPpts))

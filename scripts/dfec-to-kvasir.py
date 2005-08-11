@@ -444,11 +444,23 @@ for ppt in KvasirPptNames:
         f.write(ppt)
         f.write("\n")
 
-    outputVarsF.write("----SECTION----\n")
-    outputVarsF.write(ppt)
-    outputVarsF.write("\n")
+    # Only print the :::EXIT program point to the var list file
+    # because then we can grab the return value 'return'
 
-    for varEntry in ResultMap[ppt]: 
+    # Remember that we need to print program points in the form of
+    # '..main()' and NOT '..main():::ENTER' and '..main():::EXIT0'
+    isExit = False
+
+    fnname, enterOrExit = ppt.split(':::')
+    if enterOrExit[:4] == "EXIT":
+        isExit = True
+
+    if isExit:
+        outputVarsF.write("----SECTION----\n")
+        outputVarsF.write(fnname)
+        outputVarsF.write("\n")
+
+    for varEntry in ResultMap[ppt]:
 
         for f in allDeclsFiles:
             # Variable name            
@@ -478,15 +490,16 @@ for ppt in KvasirPptNames:
 
         # Don't print out globals or file-static vars in the
         # var-list-file for individual program points
-        if not ('/' in varEntry[0]):
+        if isExit and not ('/' in varEntry[0]):
             outputVarsF.write(varEntry[0])
             outputVarsF.write("\n")
 
     # Newline separating neighboring program points
     for f in allDeclsFiles:
         f.write("\n")
-        
-    outputVarsF.write("\n")
+
+    if isExit:
+        outputVarsF.write("\n")
     
     
 #print '# Dfec ppts:', len(DfecPptMap.keys())
