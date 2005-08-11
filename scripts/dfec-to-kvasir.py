@@ -6,19 +6,24 @@
 
 # Takes a .decls file that Dfec produced (with Lackwit comparability),
 # a .decls file that Kvasir produced (with DynComp comparability), and
-# outputs 2 .decls file that contain the intersection of Dfec and
+# outputs 4 .decls file that contain the intersection of Dfec and
 # Kvasir program points and variables in a format that is compatible
-# with Kvasir, one with comparability numbers from Lackwit
-# (kvasir-with-lackwit.decls) and the other from DynComp
-# (kvasir-with-dyncomp.decls), and also outputs a variable list file
-# (intersection.vars) so that Kvasir can be run and trace data can be
-# collected only for those variables.
+# with Kvasir:
+#
+# kvasir-with-lackwit.decls: comparability numbers from Lackwit
+# kvasir-with-dyncomp.decls: comparability numbers from DynComp
+# kvasir-with-declared-types.decls: comparability numbers inferred from declared types
+# kvasir-no-comp.decls: no comparability numbers (this is the same thing that
+#                       --var-list-file=intersection.vars would generate)
+#
+# and outputs a variable list file (intersection.vars) so that Kvasir
+# can be run and trace data can be collected only for those variables.
 
 # Created on 2005-08-09 by Philip Guo
 
-# Usage: (Takes in 5 filenames as params.  The first 2 files are inputs
-#         and the latter 3 are outputs.)
-# ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls kvasir-with-lackwit.decls kvasir-with-dyncomp.decls intersection.vars
+# Usage: (Takes in 7 filenames as params.  The first 2 files are inputs
+#         and the latter 5 are outputs.)
+# ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls kvasir-with-lackwit.decls kvasir-with-dyncomp.decls kvasir-with-declared-types.decls kvasir-no-comp.decls intersection.vars
 
 # If everything goes correctly, kvasir-with-lackwit.decls and
 # kvasir-with-dyncomp.decls should only differ in their comparability
@@ -40,7 +45,11 @@ kvasirF.close()
 
 outputLackwitDeclsF = open(sys.argv[3], 'w')
 outputDynCompDeclsF = open(sys.argv[4], 'w')
-outputVarsF = open(sys.argv[5], 'w')
+
+outputDecTypesDeclsF = open(sys.argv[5], 'w')
+outputNoCompDeclsF = open(sys.argv[6], 'w')
+
+outputVarsF = open(sys.argv[7], 'w')
 
 
 
@@ -229,8 +238,12 @@ for line in DfecAllLines:
 
 
 # Key: program point name
-# Value: A list of 4-element sub-lists
-#          Each sub-list is: (variable name, decType, repType, kvasirCompNum)
+# Value: A list of 5-element sub-lists
+#          Each sub-list is:
+#            (variable name, decType, repType, kvasirCompNum, declaredTypeCompNum)
+# declaredTypeCompNum is calculated later in the next step by assigning
+# each variable of the same declared type at a particular program point
+# the SAME number
 KvasirPptMap = {}
 
 # A list of the same strings which are keys to KvasirPptMap
@@ -284,6 +297,27 @@ for line in KvasirAllLines:
         myState = State.VarName
 
 
+# Now we are going to initialize the declaredTypeCompNum of each entry
+# within KvasirPptMap.  All variables with identical declared type
+# strings will have the same comparability number at each program
+# point.
+for ppt in KvasirPptMap:
+    curCompNum = 1 # Start at 1 and monotonically increase
+    
+    # Key: declared type; Value: comp. num associated with that type    
+    decTypesMap = {}
+
+    curVarList = KvasirPptMap[ppt]
+
+    for elt in curVarList:
+        curDecType = elt[1]
+        if curDecType in decTypesMap:
+            elt.append(decTypesMap[curDecType]) # Use the stored comp. num
+        else:
+            elt.append(curCompNum) # Use a fresh new comp. num
+            decTypesMap[curDecType] = curCompNum # and add the entry to the map
+            curCompNum += 1 # Don't forget to increment this!
+
 
 # Now both DfecPptMap and KvasirPptMap should be initialized.  We want
 # to now iterate through KvasirPptMap, translate program
@@ -323,6 +357,7 @@ for ppt in KvasirPptMap:
             decType = entry[1]
             repType = entry[2]
             kvasirCompNum = entry[3]
+            decTypeCompNum = entry[4]
 
             # If repType == "java.lang.String", then look
             # up the entry for the variable + '[]' because
@@ -341,9 +376,11 @@ for ppt in KvasirPptMap:
                 # Make this a tuple 'cause it should be immutable:
                 # Each entry should be the following:
                 #  (variable name, dec. type, rep. type,
-                #                 (Lackwit comp. num, Kvasir comp. num)
+                #           (Lackwit comp. num, Kvasir comp. num, dec. type comp num)
                 curResultVarList.append((var, decType, repType,
-                                         (DfecVarMap[varToLookup], kvasirCompNum)))
+                                         (DfecVarMap[varToLookup],
+                                          kvasirCompNum,
+                                          decTypeCompNum)))
                 if DfecVarMap[varToLookup] == "":
                     print "EMPTY COMP. NUMBER!", var, varToLookup
 
@@ -387,52 +424,57 @@ KvasirPptNames = [name for
                   name in KvasirPptNames
                   if (StripKvasirPptName(name) in DfecPptMap)]
 
-# Read these names from KvasirPptNames to preserve ordering
-for ppt in KvasirPptNames:
-    outputLackwitDeclsF.write("DECLARE\n")
-    outputLackwitDeclsF.write(ppt)
-    outputLackwitDeclsF.write("\n")
 
-    outputDynCompDeclsF.write("DECLARE\n")
-    outputDynCompDeclsF.write(ppt)
-    outputDynCompDeclsF.write("\n")
+#
+
+outputNoCompDeclsF.write("VarComparability\nnone\n\n");
+
+
+allDeclsFiles = [outputLackwitDeclsF,
+                 outputDynCompDeclsF,
+                 outputDecTypesDeclsF,
+                 outputNoCompDeclsF]
+
+# Output the various .decls files
+# (Read these names from KvasirPptNames to preserve ordering)
+for ppt in KvasirPptNames:
+    
+    for f in allDeclsFiles:
+        f.write("DECLARE\n")
+        f.write(ppt)
+        f.write("\n")
 
     outputVarsF.write("----SECTION----\n")
     outputVarsF.write(ppt)
     outputVarsF.write("\n")
 
     for varEntry in ResultMap[ppt]: 
-        # Variable name       
-        outputLackwitDeclsF.write(varEntry[0])
-        outputLackwitDeclsF.write("\n")
 
-        outputDynCompDeclsF.write(varEntry[0])
-        outputDynCompDeclsF.write("\n")
+        for f in allDeclsFiles:
+            # Variable name            
+            f.write(varEntry[0])
+            f.write("\n")
 
-        # Declared type
-        outputLackwitDeclsF.write(varEntry[1])
-        outputLackwitDeclsF.write("\n")
+            # Declared type
+            f.write(varEntry[1])
+            f.write("\n")
 
-        outputDynCompDeclsF.write(varEntry[1])
-        outputDynCompDeclsF.write("\n")
+            # Representation type
+            f.write(varEntry[2])
+            f.write("\n")
 
-        # Representation type
-        outputLackwitDeclsF.write(varEntry[2])
-        outputLackwitDeclsF.write("\n")
-
-        outputDynCompDeclsF.write(varEntry[2])
-        outputDynCompDeclsF.write("\n")
-
-        # Comparability number
-        # Here is where we differ:
+        # Comparability number - this is where the action is!
         # For Lackwit, we choose the car of the tuple,
-        # For DynComp, we choose the cadr
         outputLackwitDeclsF.write(varEntry[3][0])
-        outputLackwitDeclsF.write("\n")
-
+        # For DynComp, we choose the cadr       
         outputDynCompDeclsF.write(varEntry[3][1])
-        outputDynCompDeclsF.write("\n")
+        # For dec. type, we choose the caddr
+        outputDecTypesDeclsF.write(str(varEntry[3][2]))
+        # For no comparability, simply print out '22'
+        outputNoCompDeclsF.write("22")
 
+        for f in allDeclsFiles:
+            f.write("\n")
 
         # Don't print out globals or file-static vars in the
         # var-list-file for individual program points
@@ -441,8 +483,9 @@ for ppt in KvasirPptNames:
             outputVarsF.write("\n")
 
     # Newline separating neighboring program points
-    outputLackwitDeclsF.write("\n")
-    outputDynCompDeclsF.write("\n")    
+    for f in allDeclsFiles:
+        f.write("\n")
+        
     outputVarsF.write("\n")
     
     
@@ -452,6 +495,7 @@ for ppt in KvasirPptNames:
 
 
 
-outputLackwitDeclsF.close()
-outputDynCompDeclsF.close()
+for f in allDeclsFiles:
+    f.close()
+
 outputVarsF.close()
