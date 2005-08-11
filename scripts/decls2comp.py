@@ -14,6 +14,11 @@
 # by spaces.  All program points are also sorted by alphabetical
 # order. Output is written to stdout by default
 
+# Usage: ./decls2comp.py input.decls 'no-hashcodes' [optional]
+# Running this with the 'no-hashcodes' string as the 2nd arg results
+# in the tool ignoring all variables of rep. type 'hashcode' or
+# 'hashcode[]', etc...
+
 # Prog pt name
 # All variable names in one comp set
 # All variable names in another comp set
@@ -51,13 +56,24 @@
 # Prints out a '-1: ' prefix in front of the special comparability set
 # with a number of -1
 
+import sys
+
 # Note: Lackwit produces comparability numbers for arrays in the
 # following format: '9[10]' - we are going to ignore what is between
 # the brackets so we will treat it as '9'
 import re
 LWArrayRExp = re.compile('\[.\]')
 
-import sys
+ignoreHashcodes = False
+
+if ((len(sys.argv) == 3) and
+    sys.argv[2] == "no-hashcodes"):
+    ignoreHashcodes = True
+
+# If 'no-hashcodes' option is on, then ignore all variables whose
+# rep. type is hashcode
+hashcodeRE = re.compile('hashcode.*')
+
 
 f = open(sys.argv[1], 'r')
 allLines = [line.strip() for line in f.readlines()]
@@ -102,13 +118,16 @@ for pptName in sortedPptKeys:
     # int
     # 1
     while i < len(v):
+        curRepType = v[i+2]
         curComp = v[i+3]
-        
-        isArrayMatch = LWArrayRExp.search(curComp)
-        if isArrayMatch:
-            var2comp[v[i]] = curComp[:isArrayMatch.start()]
-        else:
-            var2comp[v[i]] = curComp
+
+        if ((not ignoreHashcodes) or
+            (not hashcodeRE.match(curRepType))):
+            isArrayMatch = LWArrayRExp.search(curComp)
+            if isArrayMatch:
+                var2comp[v[i]] = curComp[:isArrayMatch.start()]
+            else:
+                var2comp[v[i]] = curComp
             
         i += 4
 
