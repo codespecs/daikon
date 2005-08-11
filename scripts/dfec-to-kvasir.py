@@ -1,19 +1,35 @@
 #!/usr/bin/python
 
+# The point of this script is to convert Dfec-generated .decls data
+# with Lackwit comparability info. into a form that Kvasir can
+# understand so that we don't have to run Dfec at all.
 
-# Takes a .decls file that Dfec produced (with comparability info),
-# a .decls file that Kvasir produced, and outputs to stdout a .decls
-# file that contains the intersection of Dfec and Kvasir program
-# points and variables in a format that is compatible with Kvasir,
-# but with comparability numbers from the Dfec .decls file.
+# Takes a .decls file that Dfec produced (with Lackwit comparability),
+# a .decls file that Kvasir produced (with DynComp comparability), and
+# outputs 2 .decls file that contain the intersection of Dfec and
+# Kvasir program points and variables in a format that is compatible
+# with Kvasir, one with comparability numbers from Lackwit
+# (kvasir-with-lackwit.decls) and the other from DynComp
+# (kvasir-with-dyncomp.decls), and also outputs a variable list file
+# (intersection.vars) so that Kvasir can be run and trace data can be
+# collected only for those variables.
 
 # Created on 2005-08-09 by Philip Guo
 
-# Usage:
-# ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls output.decls output.vars
+# Usage: (Takes in 5 filenames as params.  The first 2 files are inputs
+#         and the latter 3 are outputs.)
+# ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls kvasir-with-lackwit.decls kvasir-with-dyncomp.decls intersection.vars
+
+# If everything goes correctly, kvasir-with-lackwit.decls and
+# kvasir-with-dyncomp.decls should only differ in their comparability
+# numbers.  Also, when running Kvasir with the
+# --var-list-file=intersection.vars option, both of these .decls files
+# should be compatible with the resulting .dtrace file so that Daikon
+# can run on both sets of output.
 
 import sys
 
+# Process command-line args:
 dfecF = open(sys.argv[1], 'r')
 DfecAllLines = [line.strip() for line in dfecF.readlines()]
 dfecF.close()
@@ -22,12 +38,14 @@ kvasirF = open(sys.argv[2], 'r')
 KvasirAllLines = [line.strip() for line in kvasirF.readlines()]
 kvasirF.close()
 
-outputDeclsF = open(sys.argv[3], 'w')
-outputVarsF = open(sys.argv[4], 'w')
+outputLackwitDeclsF = open(sys.argv[3], 'w')
+outputDynCompDeclsF = open(sys.argv[4], 'w')
+outputVarsF = open(sys.argv[5], 'w')
+
+
 
 import re
 DfecGlobalRE = re.compile('^::')
-
 
 # Dfec and Kvasir variable differences:
 
@@ -211,8 +229,8 @@ for line in DfecAllLines:
 
 
 # Key: program point name
-# Value: A list of 3-tuples:
-#          Each tuple is: (variable name, decType, repType)
+# Value: A list of 4-element sub-lists
+#          Each sub-list is: (variable name, decType, repType, kvasirCompNum)
 KvasirPptMap = {}
 
 # A list of the same strings which are keys to KvasirPptMap
@@ -230,7 +248,7 @@ for line in KvasirAllLines:
         # line called "DECLARE"
         if line == "DECLARE":
             myState = State.PptName
-            
+
     elif myState == State.PptName:
         curVarList = []
         # Remember to add an entry to both the list and the map        
@@ -257,6 +275,7 @@ for line in KvasirAllLines:
         myState = State.CompNum
         
     elif myState == State.CompNum:
+        curVarList[-1].append(line)
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
@@ -275,7 +294,8 @@ for line in KvasirAllLines:
 
 # Remember that our goal is to output a Kvasir-compatible .decls file
 # with the variables and comparability numbers gathered from the
-# Dfec-generated .decls file.
+# Dfec-generated .decls file to outputLackwitDeclsF and one with
+# the numbers gathered from DynComp to outputDynCompDeclsF.
 
 
 ResultMap = {}
@@ -302,6 +322,7 @@ for ppt in KvasirPptMap:
             var = entry[0]
             decType = entry[1]
             repType = entry[2]
+            kvasirCompNum = entry[3]
 
             # If repType == "java.lang.String", then look
             # up the entry for the variable + '[]' because
@@ -316,7 +337,13 @@ for ppt in KvasirPptMap:
             if varToLookup in DfecVarMap:
                 # Throw the comparability number on the end
                 # of the entry for that variable
-                curResultVarList.append([var, decType, repType, DfecVarMap[varToLookup]])
+
+                # Make this a tuple 'cause it should be immutable:
+                # Each entry should be the following:
+                #  (variable name, dec. type, rep. type,
+                #                 (Lackwit comp. num, Kvasir comp. num)
+                curResultVarList.append((var, decType, repType,
+                                         (DfecVarMap[varToLookup], kvasirCompNum)))
                 if DfecVarMap[varToLookup] == "":
                     print "EMPTY COMP. NUMBER!", var, varToLookup
 
@@ -353,21 +380,59 @@ for varEntry in exampleVarList:
 
 outputVarsF.write("\n")
 
-            
+
+# Filter KvasirPptNames to remove any program points that are NOT
+# in the Dfec-generated .decls file:
+KvasirPptNames = [name for
+                  name in KvasirPptNames
+                  if (StripKvasirPptName(name) in DfecPptMap)]
+
 # Read these names from KvasirPptNames to preserve ordering
 for ppt in KvasirPptNames:
-    outputDeclsF.write("DECLARE\n")
-    outputDeclsF.write(ppt)
-    outputDeclsF.write("\n")
+    outputLackwitDeclsF.write("DECLARE\n")
+    outputLackwitDeclsF.write(ppt)
+    outputLackwitDeclsF.write("\n")
+
+    outputDynCompDeclsF.write("DECLARE\n")
+    outputDynCompDeclsF.write(ppt)
+    outputDynCompDeclsF.write("\n")
 
     outputVarsF.write("----SECTION----\n")
     outputVarsF.write(ppt)
     outputVarsF.write("\n")
 
-    for varEntry in ResultMap[ppt]:
-        for line in varEntry:
-            outputDeclsF.write(line)
-            outputDeclsF.write("\n")
+    for varEntry in ResultMap[ppt]: 
+        # Variable name       
+        outputLackwitDeclsF.write(varEntry[0])
+        outputLackwitDeclsF.write("\n")
+
+        outputDynCompDeclsF.write(varEntry[0])
+        outputDynCompDeclsF.write("\n")
+
+        # Declared type
+        outputLackwitDeclsF.write(varEntry[1])
+        outputLackwitDeclsF.write("\n")
+
+        outputDynCompDeclsF.write(varEntry[1])
+        outputDynCompDeclsF.write("\n")
+
+        # Representation type
+        outputLackwitDeclsF.write(varEntry[2])
+        outputLackwitDeclsF.write("\n")
+
+        outputDynCompDeclsF.write(varEntry[2])
+        outputDynCompDeclsF.write("\n")
+
+        # Comparability number
+        # Here is where we differ:
+        # For Lackwit, we choose the car of the tuple,
+        # For DynComp, we choose the cadr
+        outputLackwitDeclsF.write(varEntry[3][0])
+        outputLackwitDeclsF.write("\n")
+
+        outputDynCompDeclsF.write(varEntry[3][1])
+        outputDynCompDeclsF.write("\n")
+
 
         # Don't print out globals or file-static vars in the
         # var-list-file for individual program points
@@ -375,8 +440,11 @@ for ppt in KvasirPptNames:
             outputVarsF.write(varEntry[0])
             outputVarsF.write("\n")
 
-    outputDeclsF.write("\n")
+    # Newline separating neighboring program points
+    outputLackwitDeclsF.write("\n")
+    outputDynCompDeclsF.write("\n")    
     outputVarsF.write("\n")
+    
     
 #print '# Dfec ppts:', len(DfecPptMap.keys())
 #print '# Kvasir ppts:', len(KvasirPptMap.keys())
@@ -384,5 +452,6 @@ for ppt in KvasirPptNames:
 
 
 
-outputDeclsF.close()
+outputLackwitDeclsF.close()
+outputDynCompDeclsF.close()
 outputVarsF.close()
