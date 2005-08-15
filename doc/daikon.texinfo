@@ -3221,6 +3221,15 @@ memory usage, but at the expense of a slight loss in precision of the
 generated comparability sets.  If you cannot get DynComp to successfully
 run on a large program, try turning on this option.
 
+@item --separate-entry-exit-comp
+
+The default behavior for DynComp is to generate the same comparability
+numbers for Daikon variables at each pair of function entrance and exit
+program points.  If this option is used, then DynComp keeps track of
+comparability separately for function entrances and exits, which can
+lead to more accurate results, but sometimes generates output .decls
+files that Daikon cannot accept.
+
 @item --dtrace-append
 
 Append new trace information to the end of an existing @file{.dtrace}
