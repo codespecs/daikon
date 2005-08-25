@@ -12,12 +12,14 @@ import org.apache.bcel.util.*;
 //for each handle...
 //  look at get targeters...
 //  use any targeter as the "parent" stack
-//  copy stack, modify it, 
+//  copy stack, modify it, add to map
 
 public final class TypeStack
 {
-    private Stack<Type> stack = new Stack<Type>();
     private ConstantPoolGen pool;
+    
+    private Map<Instruction, Stack<Type>> stackMap = new HashMap<Instruction, Stack<Type>>();
+    private Stack<Type> stack = new Stack<Type>();
 
     public TypeStack(ClassGen gen)
     {
@@ -29,9 +31,35 @@ public final class TypeStack
         pool = new ConstantPoolGen(p);
     }
 
-    public void nextInstruction(Instruction inst)
+    public void nextInstruction(InstructionHandle hand)
     {
+        Instruction inst = hand.getInstruction();
         assert inst != null;
+        
+        InstructionTargeter targeters[] = hand.getTargeters();
+        Stack<Type> parent = null;
+        if(targeters != null)
+        {
+            for(InstructionTargeter targeter: targeters)
+            {                
+                if(targeter instanceof BranchInstruction)
+                {
+                    parent = stackMap.get(targeter);
+                    assert parent != null : "Lookup failed for " + targeter;
+                    System.out.println("**************************************");
+                }
+            }
+        }
+        
+        //by default, parent stack is just the previous stack
+        if(parent == null)
+            parent = stack;
+        
+        //update the current stack
+        stack = copyOfStack(parent);
+        
+        //update the map!
+        stackMap.put(inst, stack);
 
         //System.out.println("Processing instruction: " + inst);
 
@@ -157,6 +185,15 @@ public final class TypeStack
         }
     }
     
+    private static <T> Stack<T> copyOfStack(Stack<T> parent)
+    {
+        Stack<T> copy = new Stack<T>();
+        for(T el: parent)
+            copy.push(el);
+        
+        return copy;
+    }
+
     private void handleMath(ArithmeticInstruction inst)
     {
         if(inst instanceof DADD)
@@ -827,7 +864,7 @@ public final class TypeStack
 
             System.out.println("\n$$$$$$$$$$$$$$$$$$$$$$$$\nTesting method " + mg + " ...");
             TypeStack stack = new TypeStack(clazz.getConstantPool());
-            for (Instruction inst : mg.getInstructionList().getInstructions())
+            for (InstructionHandle inst : mg.getInstructionList().getInstructionHandles())
             {
                 stack.nextInstruction(inst);
                 
