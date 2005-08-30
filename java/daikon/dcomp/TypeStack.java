@@ -13,17 +13,17 @@ import org.apache.bcel.util.*;
 //  copy stack, modify it, add to map
 public final class TypeStack
 {
-    private ConstantPoolGen pool;
+    private final ConstantPoolGen pool;
     private final Map<InstructionHandle, Stack<Type>> stackMap = new HashMap<InstructionHandle, Stack<Type>>();
     private final Map<InstructionHandle, InstructionHandle> parentMap = new HashMap<InstructionHandle, InstructionHandle>();
-    private Stack<Type> stack = null;
-    
     private final Type[] argTypes;
     private final Type retType;
+    
+    private Stack<Type> stack = null;
 
     public TypeStack(ClassGen gen, InstructionList l,
-            final CodeExceptionGen[] exceptionTable,
-            final Type[] argT, final Type retT)
+            final CodeExceptionGen[] exceptionTable, final Type[] argT,
+            final Type retT)
     {
         retType = retT;
         argTypes = argT;
@@ -32,36 +32,40 @@ public final class TypeStack
     }
 
     public TypeStack(ConstantPool p, InstructionList l,
-            final CodeExceptionGen[] exceptionTable,
-            final Type[] argT, final Type retT)
+            final CodeExceptionGen[] exceptionTable, final Type[] argT,
+            final Type retT)
     {
         retType = retT;
         argTypes = argT;
         pool = new ConstantPoolGen(p);
         createMap(l, exceptionTable);
     }
-    
+
     private Stack<Type> startMethStack()
     {
-        Stack<Type> type = new Stack<Type> ();
-        
-        for(Type t: argTypes)
+        Stack<Type> type = new Stack<Type>();
+
+        for (Type t : argTypes)
         {
             type.push(t);
         }
-        
+
         return type;
     }
 
     private void createMap(final InstructionList l,
             final CodeExceptionGen[] exceptionTable)
     {
+        if (l == null)
+            return;
+
         if (!initParents(l.getStart(), l.getInstructionHandles(),
                 exceptionTable))
-            throw new IllegalStateException("No valid parent map possible for this method");
-        
-        //dumpMap(parentMap);
-        
+            throw new IllegalStateException(
+                    "No valid parent map possible for this method");
+
+        // dumpMap(parentMap);
+
         for (InstructionHandle hand : l.getInstructionHandles())
         {
             initStack(hand);
@@ -74,14 +78,16 @@ public final class TypeStack
     {
         if (hand == null)
             return true;
-        
+
         InstructionHandle prev = hand.getPrev();
         Set<InstructionHandle> targeters = new HashSet<InstructionHandle>();
 
-        // if first instruction, or previous instruction was not a "goto" or a throw
-        if (prev == null || 
-                !(prev.getInstruction() instanceof GotoInstruction 
-                 ))// || prev.getInstruction() instanceof ATHROW))
+        // if first instruction, or previous instruction was not a "goto" or a
+        // throw
+        if (prev == null || !(prev.getInstruction() instanceof GotoInstruction))// ||
+                                                                                // prev.getInstruction()
+                                                                                // instanceof
+                                                                                // ATHROW))
         {
             // hand's parent is prev
             targeters.add(prev);
@@ -100,7 +106,7 @@ public final class TypeStack
                 }
             }
         }
-        
+
         // look for an exception target
         for (CodeExceptionGen ex : exceptionTable)
         {
@@ -112,7 +118,8 @@ public final class TypeStack
 
         for (InstructionHandle h : targeters)
         {
-            //System.out.printf("%s targets%s(***%d***)%n", h, hand, targeters.size());
+            // System.out.printf("%s targets%s(***%d***)%n", h, hand,
+            // targeters.size());
 
             parentMap.put(hand, h);
             if (!inChain(hand))
@@ -120,7 +127,7 @@ public final class TypeStack
                 // if everything else works out, we're good
                 if (initParents(hand.getNext(), allInst, exceptionTable))
                 {
-                    //System.out.println("TRUE FOR " + hand);
+                    // System.out.println("TRUE FOR " + hand);
                     return true;
                 }
                 // otherwise, remove this entry and try next targeter...
@@ -135,7 +142,7 @@ public final class TypeStack
                 parentMap.remove(hand);
             }
         }
-        //System.out.println("FALSE FOR " + hand);
+        // System.out.println("FALSE FOR " + hand);
 
         // we couldn't find anything that worked
         return false;
@@ -151,7 +158,7 @@ public final class TypeStack
     {
         if (h2 == null)
             return false;
-        
+
         if (h1 == null)
         {
             return false;
@@ -168,17 +175,17 @@ public final class TypeStack
     {
         Instruction inst = hand.getInstruction();
         assert inst != null;
-        
+
         InstructionHandle parent = parentMap.get(hand);
         Stack<Type> parentStack;
-        
+
         if (parent != null)
         {
             parentStack = stackMap.get(parent);
             if (parentStack == null)
             {
-                //System.out.printf("handle: %s, parent: %s%n", hand, parent);
-                
+                // System.out.printf("handle: %s, parent: %s%n", hand, parent);
+
                 initStack(parent);
                 parentStack = stackMap.get(parent);
                 assert parentStack != null : "Could not initialize parent stack!!!";
@@ -188,7 +195,7 @@ public final class TypeStack
         {
             if (hand.getPosition() == 0)
             {
-                //init stack with just the arguments
+                // init stack with just the arguments
                 parentStack = startMethStack();
             }
             else
@@ -198,16 +205,16 @@ public final class TypeStack
                 parentStack.push(Type.OBJECT);
             }
         }
-        
+
         // update the current stack
         stack = copyOfStack(parentStack);
         // update the map!
         stackMap.put(hand, stack);
-        
-        //System.out.printf("Processing: %s, parent: %s%n", hand, parent);
-        //System.out.println("parent stack is " + parentStack);
-        //System.out.println("Stack (before) is " + stack);
-        
+
+        // System.out.printf("Processing: %s, parent: %s%n", hand, parent);
+        // System.out.println("parent stack is " + parentStack);
+        // System.out.println("Stack (before) is " + stack);
+
         if (inst instanceof ACONST_NULL)
         {
             stack.push(Type.NULL);
@@ -227,8 +234,8 @@ public final class TypeStack
         else if (inst instanceof ATHROW)
         {
             stack.clear();
-            
-            if(retType != Type.VOID)
+
+            if (retType != Type.VOID)
                 stack.push(retType);
         }
         else if (inst instanceof BIPUSH)
@@ -331,8 +338,8 @@ public final class TypeStack
         {
             throw new RuntimeException("Unknown instruction type: " + inst);
         }
-        
-        //System.out.println("Stack (after) is " + stack);
+
+        // System.out.println("Stack (after) is " + stack);
     }
 
     private static <T> Stack<T> copyOfStack(Stack<T> parent)
@@ -342,10 +349,10 @@ public final class TypeStack
             copy.push(el);
         return copy;
     }
-    
+
     private <K, V> void dumpMap(Map<K, V> map)
     {
-        for(K k: map.keySet())
+        for (K k : map.keySet())
         {
             System.out.printf("key: %s, value: %s%n", k, map.get(k));
         }
@@ -705,8 +712,7 @@ public final class TypeStack
         }
         else if (inst instanceof JsrInstruction)
         {
-            // TODO Jsr
-            notSupported(inst);
+            //NO CHANGE
         }
         else if (inst instanceof Select)
         {
@@ -956,7 +962,7 @@ public final class TypeStack
     {
         if (inst instanceof DUP)
         {
-            stack.push(stack.peek()); // duplicate!
+            stack.push(stack.peek()); //duplicate
         }
         else if (inst instanceof DUP_X1)
         {
@@ -968,28 +974,121 @@ public final class TypeStack
         }
         else if (inst instanceof DUP_X2)
         {
-            // TODO DUP_X2
-            /*
-             * Type t1 = stack.pop(); Type t2 = stack.pop(); Type t3 =
-             * stack.pop(); stack.push(t1); stack.push(t3); stack.push(t2);
-             * stack.push(t1);
-             */
-            assert false;
+            Type t1 = stack.pop();
+            Type t2 = stack.pop();
+            
+            
+            if(isCat1(t1) && isCat2(t2))
+            {               
+                stack.push(t1);
+                stack.push(t2);
+                stack.push(t1);
+            }
+            else if(isCat1(t1) && isCat1(t2) && isCat1(stack.peek()))
+            {
+                Type t3 = stack.pop();
+                
+                assert isCat1(t3);
+                
+                stack.push(t1);
+                stack.push(t3);
+                stack.push(t2);
+                stack.push(t1);
+            }
+            else
+                throw new IllegalStateException("Malformed stack for DUP_X2");
         }
         else if (inst instanceof DUP2)
         {
-            // TODO DUP2
-            assert false;
+            if(isCat2(stack.peek()))
+                stack.push(stack.peek());
+            else
+            {
+                Type t1 = stack.pop();
+                Type t2 = stack.pop();
+                stack.push(t2);
+                stack.push(t1);
+                stack.push(t2);
+                stack.push(t1);
+            }
         }
         else if (inst instanceof DUP2_X1)
         {
-            // TODO DUP2_X11
-            assert false;
+            if(isCat2(stack.peek()))
+            {
+                Type t1 = stack.pop();
+                Type t2 = stack.pop();
+                
+                assert isCat1(t2);
+                
+                stack.push(t1);
+                stack.push(t2);
+                stack.push(t1);
+            }
+            else
+            {
+                Type t1 = stack.pop();
+                Type t2 = stack.pop();
+                Type t3 = stack.pop();
+                
+                assert isCat1(t1);
+                assert isCat1(t2);
+                assert isCat1(t3);
+                
+                stack.push(t2);
+                stack.push(t1);
+                stack.push(t3);
+                stack.push(t2);
+                stack.push(t1);
+            }
         }
         else if (inst instanceof DUP2_X2)
         {
-            // TODO DUP2_X2
-            assert false;
+            Type t1 = stack.pop();
+            Type t2 = stack.pop();
+            
+            if(isCat2(t1) && isCat2(t2))
+            {
+                stack.push(t1);
+                stack.push(t2);
+                stack.push(t1);
+            }
+            else if(isCat1(t1) && isCat1(t2) && isCat2(stack.peek()))
+            {
+                Type t3 = stack.pop();
+                
+                stack.push(t2);
+                stack.push(t1);
+                stack.push(t3);
+                stack.push(t2);
+                stack.push(t1);
+            }
+            else if(isCat2(t1) && isCat1(t2) && isCat1(stack.peek()))
+            {
+                Type t3 = stack.pop();
+                
+                stack.push(t1);
+                stack.push(t3);
+                stack.push(t2);
+                stack.push(t1);
+            }
+            else
+            {
+                Type t3 = stack.pop();
+                Type t4 = stack.pop();
+                
+                assert isCat1(t1);
+                assert isCat1(t2);
+                assert isCat1(t3);
+                assert isCat1(t4);
+                
+                stack.push(t2);
+                stack.push(t1);
+                stack.push(t4);
+                stack.push(t3);
+                stack.push(t2);
+                stack.push(t1);
+            }
         }
         else if (inst instanceof POP)
         {
@@ -997,8 +1096,10 @@ public final class TypeStack
         }
         else if (inst instanceof POP2)
         {
-            // TODO POP2
-            assert false;
+            if(isCat2(top(stack, 0)))
+                stack.pop();
+            else
+                popNum(2);
         }
         else if (inst instanceof SWAP)
         {
@@ -1013,7 +1114,22 @@ public final class TypeStack
                     + inst);
         }
     }
+    
+    private <T> T top(Stack<T> theStack, int i)
+    {
+        return theStack.get(theStack.size() - i - 1);
+    }
 
+    private boolean isCat2(Type t)
+    {
+        return (t == Type.LONG || t == Type.DOUBLE);
+    }
+    
+    private boolean isCat1(Type t)
+    {
+        return !isCat2(t);
+    }
+    
     private void popNumPut(int n, Type type)
     {
         popNum(n);
@@ -1035,7 +1151,12 @@ public final class TypeStack
 
     public static void main(String args[]) throws ClassNotFoundException
     {
+        //JDK classes
         testClass(Class.forName("java.lang.Integer"));
+        testClass(Class.forName("java.util.ArrayList"));
+        testClass(Class.forName("java.util.HashMap"));
+        
+        //other classes
         testClass(BranchInstruction.class);
         testClass(TypeStack.class);
         testClass(Type.class);
@@ -1043,50 +1164,62 @@ public final class TypeStack
 
     public static void testClass(Class testClass) throws ClassNotFoundException
     {
-        System.out.printf("testing %s%n...", testClass);
-        
+        System.out.printf("testing %s...", testClass);
+
         ClassLoaderRepository load;
-        if(testClass.getClassLoader() == null)
-            load = new ClassLoaderRepository(java.lang.ClassLoader.getSystemClassLoader());
+        if (testClass.getClassLoader() == null)
+            load = new ClassLoaderRepository(java.lang.ClassLoader
+                    .getSystemClassLoader());
         else
             load = new ClassLoaderRepository(testClass.getClassLoader());
-            
-        if(load == null)
-            throw new RuntimeException("Null class loader for class " + testClass);
-            
+
+        if (load == null)
+            throw new RuntimeException("Null class loader for class "
+                    + testClass);
+
         JavaClass clazz = load.loadClass(testClass);
-        
+
         for (Method meth : clazz.getMethods())
         {
             MethodGen mg = new MethodGen(meth, TypeStack.class.getName(),
                     new ConstantPoolGen(clazz.getConstantPool()));
-            System.out.println("\n$$$$$$$$$$$$$$$$$$$$$$$$\nTesting method "
-                    + mg + " ...");
-            TypeStack stack = new TypeStack(clazz.getConstantPool(), mg.getInstructionList(), mg.getExceptionHandlers(), mg.getArgumentTypes(), mg.getReturnType());
             
-            for (InstructionHandle inst : mg.getInstructionList().getInstructionHandles())
+            //System.out.println("\n$$$$$$$$$$$$$$$$$$$$$$$$\nTesting method " + mg + " ...");
+
+            TypeStack stack = new TypeStack(clazz.getConstantPool(), mg
+                    .getInstructionList(), mg.getExceptionHandlers(), mg
+                    .getArgumentTypes(), mg.getReturnType());
+
+            if (mg.getInstructionList() != null)
             {
-                try
+                for (InstructionHandle inst : mg.getInstructionList()
+                        .getInstructionHandles())
                 {
-                    Stack<Type> s = stack.getAfterInst(inst);
-                    System.out.printf("After inst %s, have type %s with size %d%n", inst.toString(), s.peek().toString(), s.size());
+                    try
+                    {
+                        Stack<Type> s = stack.getAfterInst(inst);
+                        //System.out.printf("After inst %s, have type %s with size %d%n",inst.toString(), s.peek().toString(), s.size());
+                    }
+                    catch (EmptyStackException e)
+                    {
+                        //System.out.printf("After inst %s, stack is empty%n",inst.toString());
+                    }
                 }
-                catch (EmptyStackException e)
-                {
-                    System.out.printf("After inst %s, stack is empty%n", inst.toString());
-                }
+
+                int numRet = meth.getReturnType() == Type.VOID ? 0 : 1;
+                assert stack.size() == numRet : "Stack must be emtpy or size 1 after method is complete!!!\n"
+                        + "It is actually size " + stack.size();
+
+                if (meth.getReturnType() != Type.VOID)
+                    assert sameType(meth.getReturnType(), stack.peek()) : "Invalid return type "
+                            + stack.peek()
+                            + "\n"
+                            + "Expected "
+                            + meth.getReturnType();
             }
-            
-            int numRet = meth.getReturnType() == Type.VOID ? 0 : 1;
-            assert stack.size() == numRet : 
-                "Stack must be emtpy or size 1 after method is complete!!!\n" +
-                "It is actually size " + stack.size();
-            
-            if(meth.getReturnType() != Type.VOID)
-                assert sameType(meth.getReturnType(), stack.peek()) :
-                    "Invalid return type " + stack.peek() + "\n" +
-                    "Expected " + meth.getReturnType();
         }
+        
+        System.out.printf("done%n");
     }
 
     private Stack<Type> getAfterInst(InstructionHandle inst)
@@ -1098,29 +1231,30 @@ public final class TypeStack
                     + " in the map");
         return copyOfStack(s);
     }
-    
+
     private void assertStack(Type... types)
     {
-        for(int i = 0; i < types.length; i++)
+        for (int i = 0; i < types.length; i++)
         {
-            if(!sameType(stack.get(stack.size() - i - 1), types[i]))
-                assert false : "Wanted " + types[i] + " but got " + stack.get(stack.size() - i - 1);
+            if (!sameType(stack.get(stack.size() - i - 1), types[i]))
+                assert false : "Wanted " + types[i] + " but got "
+                        + stack.get(stack.size() - i - 1);
         }
     }
 
     private static boolean sameType(Type t1, Type t2)
     {
-        return both(Type.BOOLEAN, t1, t2) || both(Type.BYTE, t1, t2) || both(Type.CHAR, t1, t2)
-            || both(Type.DOUBLE, t1, t2) || both(Type.FLOAT, t1, t2)
-            || both(Type.INT, t1, t2) || both(Type.LONG, t1, t2)
-            || both(Type.SHORT, t1, t2)
-            || (t1 instanceof ReferenceType && t2 instanceof ReferenceType);
+        return both(Type.BOOLEAN, t1, t2) || both(Type.BYTE, t1, t2)
+                || both(Type.CHAR, t1, t2) || both(Type.DOUBLE, t1, t2)
+                || both(Type.FLOAT, t1, t2) || both(Type.INT, t1, t2)
+                || both(Type.LONG, t1, t2) || both(Type.SHORT, t1, t2)
+                || (t1 instanceof ReferenceType && t2 instanceof ReferenceType);
     }
-    
+
     private static boolean both(Type t, Type t1, Type t2)
     {
-        //System.out.printf("%s --- %s --- %s%n", t, t1, t2);
-        
+        // System.out.printf("%s --- %s --- %s%n", t, t1, t2);
+
         Class c = t.getClass();
         return (c.isInstance(t1)) && (c.isInstance(t2));
     }
@@ -1151,11 +1285,11 @@ public final class TypeStack
     {
         throw new RuntimeException("Unsupported instruction: " + inst);
     }
-    
+
     private void doMath(int i, float f, long l)
     {
         i = i + 3 + 4;
-        f = f - 3f - 4f + 5f*7f;
-        l = l + 6l*9l - 3l;
+        f = f - 3f - 4f + 5f * 7f;
+        l = l + 6l * 9l - 3l;
     }
 }
