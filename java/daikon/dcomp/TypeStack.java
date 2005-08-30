@@ -6,6 +6,7 @@ import org.apache.bcel.generic.*;
 import org.apache.bcel.generic.FieldOrMethod;
 import org.apache.bcel.util.*;
 
+
 //map from handle -> Stack
 //for each handle...
 //  look at get targeters...
@@ -18,7 +19,6 @@ public final class TypeStack
     private final Map<InstructionHandle, InstructionHandle> parentMap = new HashMap<InstructionHandle, InstructionHandle>();
     private final Type[] argTypes;
     private final Type retType;
-    
     private Stack<Type> stack = null;
 
     public TypeStack(ClassGen gen, InstructionList l,
@@ -59,10 +59,15 @@ public final class TypeStack
         if (l == null)
             return;
 
-        if (!initParents(l.getStart(), l.getInstructionHandles(),
-                exceptionTable))
+        //System.out.println("**********************");
+        if (!initParents(l.getStart(), l.getInstructionHandles(),exceptionTable))
+        {
+            //for(InstructionHandle h : l.getInstructionHandles())
+              //  System.out.println(h);
+            
             throw new IllegalStateException(
                     "No valid parent map possible for this method");
+        }
 
         // dumpMap(parentMap);
 
@@ -97,10 +102,9 @@ public final class TypeStack
         for (InstructionHandle nextHand : allInst)
         {
             if (nextHand.getInstruction() instanceof BranchInstruction)
-            {
-                BranchInstruction i = (BranchInstruction) nextHand
-                        .getInstruction();
-                if (i.getTarget().equals(hand))
+            {                
+                BranchInstruction i = (BranchInstruction) nextHand.getInstruction();
+                if(i.containsTarget(hand))
                 {
                     targeters.add(nextHand);
                 }
@@ -118,8 +122,7 @@ public final class TypeStack
 
         for (InstructionHandle h : targeters)
         {
-            // System.out.printf("%s targets%s(***%d***)%n", h, hand,
-            // targeters.size());
+            //System.out.printf("%s targets%s(***%d***)%n", h, hand, targeters.size());
 
             parentMap.put(hand, h);
             if (!inChain(hand))
@@ -127,7 +130,7 @@ public final class TypeStack
                 // if everything else works out, we're good
                 if (initParents(hand.getNext(), allInst, exceptionTable))
                 {
-                    // System.out.println("TRUE FOR " + hand);
+                    //System.out.println("TRUE FOR " + hand);
                     return true;
                 }
                 // otherwise, remove this entry and try next targeter...
@@ -142,7 +145,7 @@ public final class TypeStack
                 parentMap.remove(hand);
             }
         }
-        // System.out.println("FALSE FOR " + hand);
+        //System.out.println("FALSE FOR " + hand);
 
         // we couldn't find anything that worked
         return false;
@@ -350,7 +353,7 @@ public final class TypeStack
         return copy;
     }
 
-    private <K, V> void dumpMap(Map<K, V> map)
+    private static <K, V> void dumpMap(Map<K, V> map)
     {
         for (K k : map.keySet())
         {
@@ -1155,6 +1158,14 @@ public final class TypeStack
         testClass(Class.forName("java.lang.Integer"));
         testClass(Class.forName("java.util.ArrayList"));
         testClass(Class.forName("java.util.HashMap"));
+        testClass(Class.forName("java.math.BigDecimal"));
+        testClass(Class.forName("java.io.BufferedWriter"));
+        testClass(Class.forName("java.nio.Buffer"));
+        testClass(Class.forName("java.beans.XMLDecoder"));
+        
+        //switch these two, switch error??????
+        testClass(Class.forName("javax.crypto.Cipher"));
+        testClass(Class.forName("java.util.regex.Pattern"));
         
         //other classes
         testClass(BranchInstruction.class);
@@ -1184,7 +1195,7 @@ public final class TypeStack
             MethodGen mg = new MethodGen(meth, TypeStack.class.getName(),
                     new ConstantPoolGen(clazz.getConstantPool()));
             
-            //System.out.println("\n$$$$$$$$$$$$$$$$$$$$$$$$\nTesting method " + mg + " ...");
+            //System.out.printf("\tTesting method %s...", mg);
 
             TypeStack stack = new TypeStack(clazz.getConstantPool(), mg
                     .getInstructionList(), mg.getExceptionHandlers(), mg
@@ -1217,6 +1228,8 @@ public final class TypeStack
                             + "Expected "
                             + meth.getReturnType();
             }
+            
+            //System.out.printf("done%n");
         }
         
         System.out.printf("done%n");
