@@ -20,6 +20,15 @@ Further documentation can be found in:
 
 ===========================================================================
 
+A new source-based C/C++ front end, Mangel-Wurzel, is now available.
+Use of this front end requires that you purchase and install Rational
+Purify.  The initial version is available only for Linux/x86, but in theory
+this front end will work on any platform supported by Rational Purify.  It
+is intended as an alternative to Kvasir for Windows and other platforms.
+
+
+----------------
+
 4.1.4 (August 1 2005)
 
 Kvasir and Chicory have been enhanced with new command line options,

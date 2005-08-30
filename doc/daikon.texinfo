@@ -216,6 +216,7 @@ Front ends
 
 * Chicory::                     
 * Kvasir::                      
+* Mangel-Wurzel::               
 * dfepl::                       
 * convertcsv.pl::               
 * dfej::                        
@@ -240,6 +241,21 @@ Pointer type disambiguation
 
 * Pointer type disambiguation example::  
 * Using pointer type disambiguation with partial program tracing::  
+
+Source-based C/C++ front end Mangel-Wurzel
+
+* Using Mangel-Wurzel::         
+* Mangel options::              
+* Mangel-Wurzel naming conventions::  
+* Wurzel usage notes::          
+* Interaction with Purify::     
+* Installing Mangel-Wurzel::    
+
+Mangel options
+
+* Standard compiler options for Mangel::  
+* Mangel configuration options::  
+* Mangel annotation options::   
 
 Perl front end dfepl
 
@@ -2720,6 +2736,7 @@ ends,,,./developer,Daikon Developer Manual}.
 @menu
 * Chicory::                     
 * Kvasir::                      
+* Mangel-Wurzel::               
 * dfepl::                       
 * convertcsv.pl::               
 * dfej::                        
@@ -3050,7 +3067,7 @@ the target program.  The size is specified in the same manner as the
 
 
 
-@node Kvasir, dfepl, Chicory, Front ends
+@node Kvasir, Mangel-Wurzel, Chicory, Front ends
 @section C front end Kvasir
 
 @cindex Kvasir (binary front end for C)
@@ -4151,7 +4168,585 @@ optimization.
 @end itemize
 
 
-@node dfepl, convertcsv.pl, Kvasir, Front ends
+
+@node Mangel-Wurzel, dfepl, Kvasir, Front ends
+@section Source-based C/C++ front end Mangel-Wurzel
+
+@cindex Mangel-Wurzel (source-based front end for C)
+@cindex front end for C
+@cindex C front end
+
+In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
+is also a source-based front end, Mangel-Wurzel, that uses the
+Purify program analysis tool from Rational Software.  You must purchase
+and install Purify before you can use Mangel-Wurzel.
+
+Mangel-Wurzel is based on the EDG C/C++ front end, which is also commercial
+software.  For this reason, Mangel-Wurzel is distributed in precompiled 
+binary form only.  See @ref{Installing Mangel-Wurzel} for more information
+about installation.  If you have an EDG source license and would like to build
+or modify Mangel-Wurzel, we can provide source diffs on request.
+
+Unlike Kvasir, which runs only on Linux/x86 platforms, (in theory, at least) 
+Mangel-Wurzel will run on any platform supported by Rational Purify.  
+
+Mangel-Wurzel is named after a root vegetable grown as cattle fodder.
+It ``mangles'' the source code into a form that is not fit for human
+consumption before compiling it.  
+
+
+@menu
+* Using Mangel-Wurzel::         
+* Mangel options::              
+* Mangel-Wurzel naming conventions::  
+* Wurzel usage notes::          
+* Interaction with Purify::     
+* Installing Mangel-Wurzel::    
+@end menu
+
+@node Using Mangel-Wurzel, Mangel options, Mangel-Wurzel, Mangel-Wurzel
+@subsection Using Mangel-Wurzel
+
+@cindex mangel driver
+@cindex wurzel preprocessor
+
+Mangel-Wurzel consists of three parts: a driver program called
+@command{mangel}, the front-end preprocessor @command{wurzel} which is
+based on the EDG front end, and a small runtime library.  Mangel can be
+invoked similarly to the @command{cc} command; it in turn invokes
+wurzel, the host compiler and linker, and Purify, to produce an
+instrumented executable.
+
+To use Mangel-Wurzel in conjunction with Daikon, follow these steps:
+
+@enumerate
+
+@item
+@cindex MANGEL_INCLUDE environment variable
+@cindex MANGEL_LIB environment variable
+@cindex PURIFY_DIR environment variable
+Make sure you have both Mangel-Wurzel and Purify installed on your system and
+on your path.  You should define the environment variables 
+@env{MANGEL_INCLUDE} and @env{MANGEL_LIB} to point to the directories
+containing Mangel-Wurzel's include files and runtime libraries, respectively.
+You should also define the environment variable @env{PURIFY_DIR} to point
+to the directory where the Purify API files 
+(in particular, @file{libpurify_stubs.a}) can be found.
+
+
+@item 
+Compile and link the program with mangel.  This produces a @file{.decls} file
+for each compilation unit.
+
+For example, suppose we have a program that consists of three input files,
+@file{foo.c}, @file{bar.c}, and @file{baz.c}.  You can compile
+and link in one step:
+
+@example
+mangel -o foo foo.c bar.c baz.c
+@end example
+
+@noindent
+Or, you can compile each file individually and then invoke mangel again to
+link:
+
+@example
+mangel -c foo.c
+mangel -c bar.c
+mangel -c baz.c
+mangel -o foo foo.o bar.o baz.o
+@end example
+
+As a side-effect, the wurzel front end invoked by mangel 
+produces a @file{.decls} file for each source file
+it processes, in this case @file{foo.decls}, @file{bar.decls}, and
+@file{baz.decls}.
+
+@item
+Run the instrumented program.  This produces a single @file{.dtrace} file 
+as output.  Assuming @file{foo.c} contains the @code{main} routine, the
+output for this example will be in @file{foo.dtrace}.
+
+
+@item
+Invoke Daikon, passing all of the @file{.decls} files and the @file{.dtrace} 
+file as inputs.
+
+@example
+java daikon foo.decls bar.decls baz.decls foo.dtrace
+@end example
+
+
+@item
+Examine the invariants.  As described in @ref{StackAr example}, there are
+several ways to do this.
+
+@end enumerate
+
+@node Mangel options, Mangel-Wurzel naming conventions, Using Mangel-Wurzel, Mangel-Wurzel
+@subsection Mangel options
+
+Mangel is intended to act as a replacement for the host @command{cc}
+command; it supports most of the common C compiler command-line options.
+It also has a number of options to control how the front end, compiler,
+and linker programs are invoked, and options that are specific to controlling
+the program annotations added by wurzel.
+
+Mangel is invoked as:
+
+@example
+mangel @var{[options] inputfile1 ...}
+@end example
+
+You can specify multiple @code{inputfile}s on the command line.  Mangel will
+compile source files individually and then link them together (unless you have
+specified one of the command-line options that suppresses linking).  You
+can also include object and archive files on the command line, which are
+passed directly to the linker.
+
+@menu
+* Standard compiler options for Mangel::  
+* Mangel configuration options::  
+* Mangel annotation options::   
+@end menu
+
+@node Standard compiler options for Mangel, Mangel configuration options, Mangel options, Mangel options
+@subsubsection Standard compiler options for Mangel
+
+Mangel supports most of the common C compiler command-line options.  
+
+@table @option
+
+@item -o @var{filename}
+Specify @var{filename} as the output file.  
+
+@item -c
+Stop after compilation, producing a @file{.o} file; do not link.
+
+@item -E
+Stop after preprocessing, producing a @file{.int.c} file; 
+do not compile or link.  You might want to use this option for debugging
+if you are having problems getting the instrumented code to compile with 
+the host C/C++ compiler.
+
+@item -S
+Produce an assembly language @file{.s} file; do not assemble or link.
+(This option is not particularly useful in conjunction with Mangel-Wurzel.)
+
+@item -D@var{symbol}
+@itemx -D@var{symbol}=@var{value}
+Define preprocessor symbols.
+
+@item -U@var{symbol}
+Undefine preprocessor symbols.
+
+@item -I@var{pathname}
+Add @var{pathname} to the list of places searched for include files.  
+
+@cindex MANGEL_INCLUDE environment variable
+If the environment variable @env{MANGEL_INCLUDE} is set, mangel implicitly
+adds this directory to the list of directories searched for system include
+files.  Otherwise you must explicitly use @option{-I} to specify where to
+find Mangel-Wurzel's system include files, or include this information in
+the options list passed directly to the front end.  See the 
+@option{--frontend_opts} option below.
+
+@item -O
+@itemx -O@var{value}
+Enable optimization in the compiler.  This might interact badly with Purify, so
+be careful.
+
+@item -g
+Enable debugging in the compiler.  Since Purify expects code it processes
+to be compiled with @option{-g}, this is typically configured as one of the
+default host compiler options and need not be supplied explicitly on the 
+command line.
+
+@item -L@var{pathname}
+Add @var{pathname} to the list of places searched for system libraries.
+
+@cindex MANGEL_LIB environment variable
+If the environment variable @env{MANGEL_LIB} is set, mangel implicitly adds
+this directory to the list of directories searched for system libraries.
+Otherwise you must explicitly use @option{-L} to specify where to
+find Mangel-Wurzel's system libraries, or include this information in
+the options list passed directly to the linker.  See @option{--linker-opts}
+below.
+
+@cindex PURIFY_DIR environment variable
+Also, if the environment variable @env{PURIFY_DIR} is set, mangel
+implicity adds this directory to the list of directories searched for
+system libraries.  Otherwise you must explicitly use @option{-L} to
+specify where to find the library for the Purify API, or include this
+information in the options list passed directly to the linker.  See
+@option{--linker-opts} below.
+
+
+@item -l@var{name}
+Link with library @var{name}.
+
+@item --c
+@itemx --c99
+@itemx --c++
+Interpret the input source file as old standard C (C89), C99, or C++, 
+respectively.  If none of these options are specified, mangel attempts
+to infer the source language from the filename extension.
+
+@item -h
+@itemx --help
+Print a usage message and exit.
+@end table
+
+@node Mangel configuration options, Mangel annotation options, Standard compiler options for Mangel, Mangel options
+@subsubsection Mangel configuration options
+
+Mangel is completely configurable in how it invokes wurzel, the host
+compiler, and the linker.  You can either use command-line options or
+environment variables to override the built-in defaults.
+
+When you use command-line options from the shell or a makefile to
+specify these configuration parameters, be careful to quote the entire
+option value string so that mangel interprets it as a single argument.
+
+@table @option
+@item --frontend @var{command}
+@cindex MANGEL_FRONTEND environment variable
+Use @var{command} to invoke the wurzel front end.  If this option is not
+specified on the command line, mangel looks for an environment variable
+named @env{MANGEL_FRONTEND}; otherwise, it defaults to @samp{wurzel}.
+
+@item --frontend_opts @var{option_string}
+@cindex MANGEL_FRONTEND_OPTS environment variable
+Use @var{option_string} as additional options to the wurzel front end.  If
+this option is not specified on the command line, mangel looks for an 
+environment variable named @env{MANGEL_FRONTEND_OPTS}; otherwise, it uses a
+system-specific default.  (You can use @option{-n} or @option{-v} to see the
+default.)
+
+@item --compiler @var{command}
+@cindex MANGEL_COMPILER environment variable
+Use @var{command} to invoke the host C/C++ compiler.  If this option is not
+specified on the command line, mangel looks for an environment variable
+named @env{MANGEL_COMPILER}; otherwise, it defaults to @samp{cc}.
+
+@item --compiler_opts @var{option_string}
+@cindex MANGEL_COMPILER_OPTS environment variable
+Use @var{option_string} as additional options to the host compiler.  If
+this option is not specified on the command line, mangel looks for an 
+environment variable named @env{MANGEL_COMPILER_OPTS}; otherwise, it uses a
+system-specific default.  (You can use @option{-n} or @option{-v} to see the
+default.)
+
+@item --linker @var{command}
+@cindex MANGEL_LINKER environment variable
+Use @var{command} to invoke the host linker.  If this option is not
+specified on the command line, mangel looks for an environment variable
+named @env{MANGEL_LINKER}; otherwise, it defaults to
+@samp{purify -log-file=/dev/null -append-logfile cc}.  
+@xref{Interaction with Purify}, for more information about Purify options.
+
+@item --linker_opts @var{option_string}
+@cindex MANGEL_LINKER_OPTS environment variable
+Use @var{option_string} as additional options to the host linker.  If
+this option is not specified on the command line, mangel looks for an 
+environment variable named @env{MANGEL_LINKER_OPTS}; otherwise, it uses a
+system-specific default.  (You can use @option{-n} or @option{-v} to see the
+default.)
+
+@item --tmpdir @var{pathname}
+@cindex MANGEL_TMPDIR environment variable
+Put temporary files (the annotated @file{.int.c} files and temporary 
+object files created prior to linking) in the indicated directory.  
+If this option is not specified on the command line, mangel looks
+for an environment variable named @env{MANGEL_TMPDIR}; otherwise it defaults
+to a system-specific default, @file{/tmp/} on Unix platforms.  The
+directory must exist and be writable.
+
+@item -v
+@itemx --verbose
+Print commands (to @code{stderr}) before executing them.
+
+@item -n
+Print commands (to @code{stderr}), but don't execute them.
+@end table
+
+
+@node Mangel annotation options,  , Mangel configuration options, Mangel options
+@subsubsection Mangel annotation options
+
+Mangel passes these options to the wurzel preprocessor, which adds
+instrumentation to the code and produces a @file{.decls} file for each
+source file.
+
+@table @option
+
+@item --decls-file @var{filename}
+Specify @var{filename} as the name of the @file{.decls} file for this
+compilation unit.  If this option is not specified, declarations are
+written to a file in the current directory with a name derived from
+the current compilation unit.
+
+@item --dtrace-file @var{filename}
+Specify @var{filename} as the name of the @file{.dtrace} file for this
+program.  This option is only used if the compilation unit contains a
+definition for @code{main}.  If this option is not specified, dtrace
+output is written to a file in the current directory when the executable
+is run, with a name derived from the file containing the definition of
+@code{main}.  
+
+@item --dtrace-append
+Specify that output should be appended to an existing @file{.dtrace} file, 
+rather than overwriting it.
+This option is only used if the compilation unit contains a
+definition for @code{main}.
+
+@item --dtrace-gzip
+Specify that dtrace output should be filtered through @command{gzip}.
+This option is only used if the compilation unit contains a
+definition for @code{main}.
+
+@item --ignore-globals
+Ignore global, file-scope static, and function-scope static 
+variables when dumping program point state.
+The default behavior is to examine static variables and global variables
+that are defined (not just declared as @code{extern}) in the compilation
+unit and are in scope at the given program point, 
+as well (for C++ class member functions) static member variables of 
+the containing class.
+
+@item --ignore-static-vars
+Ignore file-scope and function-scope static variables when dumping
+program point state, but include global variables defined in the compilation
+unit.
+
+@item --nesting-depth @var{depth}
+Specify the recursion depth for examining fields of nested @code{struct},
+@code{union}, and @code{class} types.  The default value is 2.
+
+@item --ppt-select-pattern @var{regex}
+Only emit program points that match @var{regex}.  
+Specifically, a program point is considered to match @var{regex} if any of
+the function name, program point name, or containing class name (for C++)
+match @var{regex}.
+
+This option can be specified multiple times, but cannot be used in
+conjunction with @option{--ppt-omit-pattern}.
+
+@item --ppt-omit-pattern @var{regex}
+Suppress program points that match @var{regex}.
+Specifically, a program point is considered to match @var{regex} if any of
+the function name, program point name, or containing class name (for C++)
+match @var{regex}.
+
+This option can be specified multiple times, but cannot be used in
+conjunction with @option{--ppt-select-pattern}.
+
+@end table
+
+
+@node Mangel-Wurzel naming conventions, Wurzel usage notes, Mangel options, Mangel-Wurzel
+@subsection Mangel-Wurzel naming conventions
+
+Mangel-Wurzel uses naming conventions for program points and variables
+similar to, but not identical to, that of Kvasir (@ref{Kvasir}).
+
+Names of program points follow these conventions:
+
+@itemize @bullet
+@item 
+Names of program points for file-static functions are prefixed with the name
+of the source file, with @samp{.} characters mapped to @samp{_}, 
+followed by a @samp{.}
+
+@item Names of  program points for
+file-scope functions with external linkage are prefixed with @samp{..}.
+
+@item
+Names of C++ functions that are class or namespace members are prefixed
+with the name(s) of their classes or namespaces, with the C++ @samp{::} 
+syntax mapped onto the Java @samp{.} syntax used by Daikon.
+@end itemize
+
+Names of variables printed at each program point follow these conventions:
+
+@itemize @bullet
+@item
+Names of variables with local scope (e.g., function parameters and 
+function-scope statics) are unqualified.
+
+@item
+File-static variables have names of the form
+@samp{@var{filename}/@var{varname}}, where @samp{.} characters in the
+@var{filename} are mapped to underscores (@samp{_}).
+
+@item
+Global variables with external linkage have names of the form
+@samp{/@var{varname}}.
+
+@item
+Static variables of a class have names of the form
+@samp{@var{classname}.@var{varname}}.
+
+@item
+Fields of the @samp{this} parameter print as @samp{this->@var{fieldname}}.
+@end itemize
+
+
+@node Wurzel usage notes, Interaction with Purify, Mangel-Wurzel naming conventions, Mangel-Wurzel
+@subsection Wurzel usage notes
+
+Wurzel currently does not support any form of pointer/array disambiguation.
+In other words, an object of type @samp{int *} is treated as a pointer to a
+single integer, not as the address of an array of @code{int}.  However, global
+and static variables with a fully-defined array type are printed as arrays.
+
+You do not need to preprocess all compilation units in a program with
+wurzel if you are only interested in analyzing certain parts of it with
+Daikon; you can simply compile the ``uninteresting'' files in the normal
+way with your usual C compiler.  However, you must either preprocess the
+compilation unit including the definition of @code{main} so that the
+necessary runtime initialization is performed when the program starts, or
+insert an explicit call to @code{mw_init} in your program before any of the
+instrumented code is executed.  You should also use mangel to link 
+your program.
+
+The wurzel preprocessor produces the same dialect of code that it receives as
+input, that is C, C99, or C++.  It does not translate C++ to C.  This ensures
+that preprocessed code is link-compatible with system C++ libraries and other
+code that is not processed with wurzel.
+
+If you are using the C++ libraries that came with your host C++ compiler,
+you will probably have to add the locations of the include files to the
+search path passed to wurzel, either by using @option{--frontend-opts} or
+@option{-I} to mangel.  
+
+While wurzel recognizes standard C++, its support of instrumentation for
+C++ programs is rather rudimentary at this point.  In particular, it
+ignores anything having to do with templates.  Wurzel is smart enough to
+only generate references to class fields that are accessible at a given
+program point, to avoid errors in the compilation phase, but at this
+time it will not also generate references to accessible base classes and
+their members.  (This should be optional in any case because it will
+greatly increase the number of variables at a given program point.)
+
+By default, wurzel recognizes standard C and C++.  You may want to specify one
+of the compatibility modes using the mangel @option{--frontend-opts} option.
+
+@table @option
+
+@item --gcc
+@itemx --g++
+Enable compatibility with the Gnu C Compiler.  @option{--gcc} is for C,
+@option{--g++} is for C++.
+
+@item --microsoft
+Enable compatibility with the Microsoft C compiler.  
+
+@end table
+
+Wurzel recognizes many other command-line options supported by the underlying
+EDG front end, as described in the EDG documentation.
+
+Note that since the output of Wurzel is compilable source code, it is possible
+to perform the preprocessing on one machine and then compile, link, and run
+on another platform supported by Rational Purify.
+
+
+@node Interaction with Purify, Installing Mangel-Wurzel, Wurzel usage notes, Mangel-Wurzel
+@subsection Interaction with Purify
+
+Mangel-Wurzel's runtime library relies on the Purify API to test the
+validity of pointers -- in particular, to check for pointers to
+unallocated memory and pointers to memory that has been allocated but
+not initialized.  It performs these checks so that it can avoid
+dereferencing bad pointers and unitialized variables when printing
+values at program points to the @file{.dtrace} file.  (Instead,
+it prints a value of ``nonsensical'' for those variables, which has a
+special meaning to Daikon.)
+
+Normally, Mangel is configured to tell Purify to discard all of its
+diagnostic messages.  This is because, due to limitations of the Purify
+API, it isn't possible for the Mangel-Wurzel runtime to run Purify
+completely silently, and the diagnostics will contain bogus messages
+generated by the Mangel-Wurzel runtime as well as genuine diagnostics
+about the program that has been instrumented.  
+
+Specifically, since Purify doesn't provide any API functions for
+checking pointers without generating messages, the Mangel-Wurzel runtime
+works around this by enabling message batching when entering each
+program point, and discarding batched messages and turning batching off
+when printing of the program point data is complete.  But the Purify API
+still generates status messages when batching is enabled or disabled, or
+when batched messages are discarded.  Another problem is that this will
+interact badly if you try to enable message batching when you run
+Purify.
+
+What this boils down to is: if you are interested in getting Purify
+diagnostics on your code, it is better that you run Purify on the
+uninstrumented program.
+
+
+@node Installing Mangel-Wurzel,  , Interaction with Purify, Mangel-Wurzel
+@subsection Installing Mangel-Wurzel
+
+Since Mangel-Wurzel is based on the proprietary EDG C/C++ front end,
+we distribute it in binary rather than source format.  The distribution
+does not include Purify, which you must purchase and install separately.
+
+To install, follow these steps.
+
+@enumerate
+@item  
+Download and unpack the archive, which is packaged as a gzipped tar file for
+Linux and as a ZIP file for Windows.
+
+
+@item 
+The archive contains these subdirectories:
+
+@table @file
+@item bin
+Contains the @code{mangel} and @code{wurzel} binaries.  You should add this
+directory to your default path.
+@item include
+@cindex MANGEL_INCLUDE environment variable
+Contains the @file{.h} header files for the wurzel front end.  You should
+set the environment variable @env{MANGEL_INCLUDE} to point to this directory.
+@item lib
+@cindex MANGEL_LIB environment variable
+Contains run-time libraries needed to run Mangel-Wurzel.  You should set
+the environment variable @env{MANGEL_LIB} to point to this directory.
+@item runtime
+Contains source files for @code{mangel} and the Mangel-Wurzel 
+run-time library, which are independent of the EDG distribution 
+and do not contain proprietary code.  
+@item tests
+Contains test cases and examples.
+@end table
+
+@item
+@cindex PURIFY_DIR environment variable
+You should set the environment variable @env{PURIFY_DIR} to the directory
+in your Purify distribution where @file{libpurify_stubs.a} can be found.
+
+@item
+You may need to change or add to the default commands and options mangel 
+uses to invoke the wurzel front end, the host compiler, and the Purify/link
+step.  For example, you may need to specify the paths for additional system
+include files.
+
+For a system-wide distribution, you may want to change the
+defaults in @file{runtime/mangel.c} and recompile (use @command{make install}).  
+Otherwise, you can set the environment variables as described in 
+@ref{Mangel configuration options}.  You can use the @option{-n} or 
+@option{-v} options to see the actual commands wurzel is generating to 
+invoke each phase.
+
+@end enumerate
+
+
+
+@node dfepl, convertcsv.pl, Mangel-Wurzel, Front ends
 @section Perl front end dfepl
 
 @cindex front end for Perl
