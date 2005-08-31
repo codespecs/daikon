@@ -24,6 +24,13 @@ public class ParameterInfo extends DaikonVariableInfo
      */
     private final int argNum;
 
+    /**
+     * Offset of this parameter in the local table.  This is similar to
+     * the argument number except that doubles and longs take up two slots
+     * each
+     */
+    private final int param_offset;
+
     /** Argument type **/
     private final Class argType;
 
@@ -31,11 +38,12 @@ public class ParameterInfo extends DaikonVariableInfo
      * Constructs an ParameterInfo object with the specified name
      * @param theName The variable name (used in the decl file)
      */
-    public ParameterInfo(String theName, int theArgNum)
+    public ParameterInfo(String theName, int theArgNum, int param_offset)
     {
         super(theName);
 
         argNum = theArgNum;
+        this.param_offset = param_offset;
         argType = null;
     }
 
@@ -43,10 +51,11 @@ public class ParameterInfo extends DaikonVariableInfo
      * Constructs a PamterInfo object with the name/type specified for this
      * the specified argument number in mi.
      */
-    public ParameterInfo (MethodInfo mi, int theArgNum)
+    public ParameterInfo (MethodInfo mi, int theArgNum, int param_offset)
     {
         super (mi.arg_names[theArgNum]);
         argNum = theArgNum;
+        this.param_offset = param_offset;
         argType = mi.arg_types[argNum];
     }
 
@@ -56,6 +65,14 @@ public class ParameterInfo extends DaikonVariableInfo
     public int getArgNum()
     {
         return argNum;
+    }
+
+    /**
+     * Returns the offset in the local table for this parameter
+     */
+    public int get_param_offset()
+    {
+        return param_offset;
     }
 
     public Object getMyValFromParentVal(Object value)
