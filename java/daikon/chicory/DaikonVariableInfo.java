@@ -47,6 +47,9 @@ public abstract class DaikonVariableInfo
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
+    /** Determines whether or not synthetic variables should be ignored **/
+    private static boolean skip_synthetic = true;
+
     /**
      * The three strings needed for the .decls info, in addition to
      * the variable name are typeName, repTypeName, and
@@ -358,13 +361,20 @@ public abstract class DaikonVariableInfo
             : ((Method) method).getParameterTypes();
 
         Iterator<String> argnamesiter = argnames.iterator();
+        int param_offset = 0;
         for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++)
         {
             Class type = arguments[i];
             String name = argnamesiter.next();
+            if (type.getName().equals ("daikon.dcomp.DCompMarker"))
+                continue;
             DaikonVariableInfo theChild = addDeclVar(cinfo, type,
-                                                       name, offset, depth, i);
-            theChild.addChildNodes(cinfo, type, name, offset, depth, staticTraversedClasses);
+                                         name, offset, depth, i, param_offset);
+            param_offset++;
+            if ((type == Double.TYPE) || (type == Long.TYPE))
+                param_offset++;
+            theChild.addChildNodes(cinfo, type, name, offset, depth,
+                                   staticTraversedClasses);
         }
     }
 
@@ -420,6 +430,10 @@ public abstract class DaikonVariableInfo
         {
 
             Field classField = fields[i];
+
+            // Skip created variables (they were probably created by us)
+            if (skip_synthetic && classField.isSynthetic())
+                continue;
 
             if (debug_vars)
                 System.out.printf ("considering field %s%n", classField);
@@ -521,10 +535,12 @@ public abstract class DaikonVariableInfo
      * @return The newly created DaikonVariableInfo object, whose
      * parent is this.
      */
-    protected DaikonVariableInfo addDeclVar(ClassInfo cinfo, Class type, String name, String offset, int depth, int argNum)
+    protected DaikonVariableInfo addDeclVar(ClassInfo cinfo, Class type,
+           String name, String offset, int depth, int argNum, int param_offset)
     {
         // add this variable to the tree as a child of curNode
-        DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum);
+        DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum,
+                                                        param_offset);
 
         newChild.typeName = stdClassName(type) + isParamString;
         newChild.repTypeName = getRepName(type, false);
@@ -1131,8 +1147,22 @@ public abstract class DaikonVariableInfo
         return name.compareTo (dv.name);
     }
 
+    /** Returns whether or not this variable is an array **/
     public boolean isArray()
     {
         return isArray;
+    }
+
+    /** Returns whether or not this variable has a rep type of hashcode **/
+    public boolean isHashcode()
+    {
+        return getRepTypeName().equals ("hashcode");
+    }
+
+    /** Returns whether or not the declared type of this variable is int **/
+    public boolean isInt()
+    {
+        String[] sarr = getTypeName().split("  *");
+        return sarr[0].equals("int");
     }
 }
