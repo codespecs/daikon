@@ -2,16 +2,21 @@ package daikon.dcomp;
 
 import java.util.*;
 import java.util.regex.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import org.apache.bcel.verifier.*;
+import org.apache.bcel.verifier.structurals.*;
 
 import utilMDE.BCELUtil;
 
 import daikon.chicory.MethodInfo;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
+import utilMDE.*;
 
 /**
  * Instruments a class file to perform Dynamic Comparability.
@@ -34,11 +39,28 @@ class DCInstrument {
   private Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
   private Type[] string_arg = new Type[] {Type.STRING};
   private Type[] integer_arg = new Type[] {Type.INT};
+  private Type[] object_arg = new Type[] {Type.OBJECT};
 
   // Type descriptors
   private Type object_arr = new ArrayType (Type.OBJECT, 1);
   private Type int_arr = new ArrayType (Type.INT, 1);
   private ObjectType throwable = new ObjectType ("java.lang.Throwable");
+  private ObjectType dcomp_marker = null;
+
+  // Debug loggers
+  private SimpleLog debug_instrument = new SimpleLog (true);
+  private SimpleLog debug_instrument_inst = new SimpleLog (false);
+  private SimpleLog debug_native = new SimpleLog (true);
+  private SimpleLog debug_dup = new SimpleLog (true);
+  private SimpleLog debug_add_dcomp = new SimpleLog (false);
+
+  /**
+   * Specifies if the jdk is instrumented.  Calls to the JDK must be
+   * modified to remove the arguments from the tag stack if it is not
+   * instrumented.
+   */
+  private boolean jdk_instrumented = true;
+  private boolean exclude_object = true;
 
   /**
    * Don't instrument toString functions.  Useful in debugging since
@@ -46,6 +68,9 @@ class DCInstrument {
    * (recursive) instrumentation)
    */
   private static boolean ignore_toString = true;
+
+  private static final String SET_TAG = "set_tag";
+  private static final String GET_TAG = "get_tag";
 
   /**
    * Initialize with the original class and whether or not the class
@@ -59,6 +84,10 @@ class DCInstrument {
     gen = new ClassGen (orig_class);
     pool = gen.getConstantPool();
     ifact = new InstructionFactory (gen);
+    if (jdk_instrumented)
+      dcomp_marker = new ObjectType ("java.lang.DCompMarker");
+    else
+      dcomp_marker = new ObjectType ("daikon.dcomp.DCompMarker");
     System.out.printf ("DCInstrument %s%n", orig_class.getClassName());
   }
 
@@ -68,54 +97,214 @@ class DCInstrument {
    */
   public JavaClass instrument() {
 
+    // Don't instrument classes in the JDK.  They are already instrumented.
+    // TODO: crosscheck the class for instrumentation rather than by name.
+    if (BCELUtil.in_jdk (gen)) {
+      debug_instrument.log ("Skipping jdk class %s%n", gen.getClassName());
+      return (null);
+    }
+
+    // Don't instrument our classes.
+    String classname = gen.getClassName();
+    if (classname.startsWith ("daikon") &&
+        !classname.startsWith ("daikon.dcomp.Test")) {
+      debug_instrument.log ("Skipping daikon class %s%n", gen.getClassName());
+      return (null);
+    }
+    debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
+    debug_instrument.indent();
+
+    // Add the tag fields
+    //if (tag_fields_ok (classname))
+    //  add_tag_fields();
+
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
 
     // Process each method
     for (Method m : gen.getMethods()) {
 
-      // Skip methods that should not be instrumented
-      if (!should_instrument (methodEntryName (gen.getClassName(), m))) {
-        System.out.printf ("Skipping method %s%n", m);
-        continue;
-      }
+      // Note whether we want to track the daikon variables in this method
+      boolean track = should_track (methodEntryName (gen.getClassName(), m));
 
       MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
-      System.out.printf ("  Processing method %s\n", m);
+      boolean has_code = (mg.getInstructionList() != null) ;
+      debug_instrument.log ("  Processing method %s, track=%b\n", m, track);
+      debug_instrument.indent();
+
+      // Add an argument of java.lang.DCompMarker to match up with the
+      // instrumented versions in the JDK.
+      add_dcomp_arg (mg);
 
       // Create a MethodInfo that describes this methods arguments
       // and exit line numbers (information not available via reflection)
       // and add it to the list for this class.
-      MethodInfo mi = create_method_info (class_info, mg);
-      class_info.method_infos.add (mi);
-      DCRuntime.methods.add (mi);
+      MethodInfo mi = null;
+      if (track && has_code) {
+        mi = create_method_info (class_info, mg);
+        class_info.method_infos.add (mi);
+        DCRuntime.methods.add (mi);
+      }
 
       // Create the local to store the tag frame for this method
       tag_frame_local = create_tag_frame_local (mg);
 
-      instrument_method (mg, mi, DCRuntime.methods.size()-1);
-      add_enter (mg, mi, DCRuntime.methods.size()-1);
-      handle_exceptions (mg);
-      mg.setMaxLocals();
-      mg.setMaxStack();
+      if (has_code) {
+        instrument_method (mg);
+        if (track) {
+          add_enter (mg, mi, DCRuntime.methods.size()-1);
+          add_exit (mg, mi, DCRuntime.methods.size()-1);
+        }
+        add_create_tag_frame (mg);
+        handle_exceptions (mg);
+      }
+
+
+      if (has_code) {
+        mg.setMaxLocals();
+        mg.setMaxStack();
+      } else {
+        mg.removeCodeAttributes();
+        mg.removeLocalVariables();
+      }
+
       gen.replaceMethod (m, mg.getMethod());
+      debug_instrument.exdent();
     }
 
-    // If one or more methods were instrumented, return the new class
-    // Otherwise, return null since nothing has changed.
-    if (class_info.method_infos.size() > 0) {
-      track_class_init();
-      return (gen.getJavaClass().copy());
+    // Add tag accessor methods for each primitive in the class
+    create_tag_accessors (gen);
+
+    // Keep track of when the class is initialized (so we don't look
+    // for fields in uninitialized classes)
+    track_class_init();
+    debug_instrument.exdent();
+
+    return (gen.getJavaClass().copy());
+  }
+
+  /**
+   * Instruments the original class to perform dynamic comparabilty and
+   * returns the new class definition.  A second version of each method
+   * in the class is created which is instrumented for comparability
+   */
+  public JavaClass instrument_jdk() {
+
+    // Add the tag fields
+    // if (tag_fields_ok (gen.getClassName()))
+    //  add_tag_fields();
+
+    // Create tag accessor methods for each primitive field in gen
+    create_tag_accessors (gen);
+
+    debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
+
+    // Process each method
+    for (Method m : gen.getMethods()) {
+
+      // Don't modify class initialization methods.  They can't affect
+      // user comparability and there isn't any way to get a second
+      // copy of them.
+      if (BCELUtil.is_clinit (m))
+        continue;
+
+      debug_instrument.log ("  Processing method %s%n", m);
+
+      MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
+      boolean has_code = (mg.getInstructionList() != null) ;
+
+      // If the method is native
+      if (mg.isNative()) {
+
+        // Create java code that cleans up the tag stack and calls the
+        // real native method
+        fix_native (gen, mg);
+        has_code = true;
+
+      } else { // normal method
+
+        // Create the local to store the tag frame for this method
+        tag_frame_local = create_tag_frame_local (mg);
+
+        // Instrument the method
+        if (has_code) {
+          instrument_method (mg);
+          add_create_tag_frame (mg);
+          handle_exceptions (mg);
+        }
+      }
+
+      // Add an argument of java.lang.DCompMarker to distinguish our version
+      add_dcomp_arg (mg);
+
+      if (has_code) {
+        mg.setMaxLocals();
+        mg.setMaxStack();
+      } else {
+        mg.removeCodeAttributes();
+        mg.removeLocalVariables();
+      }
+      gen.addMethod (mg.getMethod());
     }
-    else
-      return (null);
+
+    // Add tag accessor methods for each primitive in the class
+    create_tag_accessors (gen);
+
+    // We don't need to track class initialization in the JDK because
+    // that is only used when printing comparability which is only done
+    // for client classes
+    // track_class_init();
+
+    return (gen.getJavaClass().copy());
   }
 
   /**
    * Instrument the specified method for dynamic comparability
    */
-  public void instrument_method (MethodGen mg, MethodInfo mi,
+  public void instrument_method (MethodGen mg) {
+
+    // Get Stack information
+    StackVer stackver = new StackVer ();
+    VerificationResult vr = stackver.do_stack_ver (mg);
+    assert vr == VerificationResult.VR_OK : " vr failed " + vr;
+    StackTypes stack_types = stackver.get_stack_types();
+
+    // Loop through each instruction, making substitutions
+    InstructionList il = mg.getInstructionList();
+    for (InstructionHandle ih = il.getStart(); ih != null; ) {
+      if (debug_instrument_inst.enabled()) {
+        debug_instrument_inst.log ("instrumenting instruction %s%n", ih);
+                     // ih.getInstruction().toString(pool.getConstantPool()));
+      }
+      InstructionList new_il = null;
+
+      // Remember the next instruction to process
+      InstructionHandle next_ih = ih.getNext();
+
+      // Get the translation for this instruction (if any)
+      new_il = xform_inst (mg, ih, stack_types.get (ih.getPosition()));
+
+      // If this instruction was modified, replace it with the new
+      // instruction list. If this instruction was the target of any
+      // jumps or line numbers , replace them with the first
+      // instruction in the new list
+      replace_instructions (il, ih, new_il);
+
+      ih = next_ih;
+    }
+  }
+
+  /**
+   * Instrument the specified method for dynamic comparability
+   */
+  public void old_instrument_method (MethodGen mg, MethodInfo mi,
                                  int method_info_index) {
+
+    // Get Stack information
+    StackVer stackver = new StackVer ();
+    VerificationResult vr = stackver.do_stack_ver (mg);
+    assert vr == VerificationResult.VR_OK : " vr failed " + vr;
+    StackTypes stack_types = stackver.get_stack_types();
 
     // Ignore methods with no instructions
     InstructionList il = mg.getInstructionList();
@@ -127,12 +316,12 @@ class DCInstrument {
 
     // Loop through each instruction, making substitutions
     for (InstructionHandle ih = il.getStart(); ih != null; ) {
-      System.out.printf ("instrumenting instruction %s%n", ih);
+      debug_instrument_inst.log ("instrumenting instruction %s%n", ih);
       InstructionList new_il = null;
-      Instruction inst = ih.getInstruction();
 
       // Get the translation for this instruction (if any)
-      new_il = xform_inst (mg, method_info_index, inst, exit_iter);
+      new_il = old_xform_inst (mg, method_info_index, ih, exit_iter,
+                           stack_types.get (ih.getPosition()));
 
       // Remember the next instruction to process
       InstructionHandle next_ih = ih.getNext();
@@ -141,31 +330,8 @@ class DCInstrument {
       // instruction list. If this instruction was the target of any
       // jumps or line numbers , replace them with the first
       // instruction in the new list
-      if (new_il != null) {
-        if (new_il.getLength() == 1)
-          ih.setInstruction (new_il.getEnd().getInstruction());
-        else { // more than one instruction to replace
-          InstructionHandle new_end = new_il.getEnd();
-          InstructionHandle new_start = il.insert (ih, new_il);
-          il.redirectBranches (ih, new_start);
-          if (ih.hasTargeters()) {
-            for (InstructionTargeter it : ih.getTargeters()) {
-              if (it instanceof LineNumberGen) {
-                it.updateTarget (ih, new_start);
-              } else if (it instanceof LocalVariableGen) {
-                it.updateTarget (ih, new_end);
-              } else {
-                System.out.printf ("unexpected target %s%n", it);
-              }
-            }
-          }
-          try {
-            il.delete (ih);
-          } catch (Exception e) {
-            throw new Error ("Can't delete instruction", e);
-          }
-        }
-      }
+      replace_instructions (il, ih, new_il);
+
       ih = next_ih;
     }
   }
@@ -191,8 +357,28 @@ class DCInstrument {
   }
 
   /**
-   * Adds the calls to DCRuntime.create_tag_frame and DCRuntime.enter to the
-   * beginning of the method.
+   * Adds the code to create the tag frame to the beginning of the method.
+   * This needs to be before the call to DCRuntime.enter (since it passed
+   * to that method).
+   */
+  public void add_create_tag_frame (MethodGen mg) {
+
+    // Create the tag frame and place it at the beginning of the method
+    // Move line number and local variable targeters to the new
+    // instructions, but leave other targeters (branches, exceptions)
+    // unchanged.
+    InstructionList il = mg.getInstructionList();
+    InstructionList tf_il = create_tag_frame (mg, tag_frame_local);
+    InstructionHandle old_start = il.getStart();
+    InstructionHandle new_start = il.insert (tf_il);
+    for (InstructionTargeter it : old_start.getTargeters()) {
+      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+        it.updateTarget (old_start, new_start);
+    }
+  }
+
+  /**
+   * Adds the call to DCRuntime.enter to the beginning of the method.
    */
   public void add_enter (MethodGen mg, MethodInfo mi, int method_info_index) {
 
@@ -200,9 +386,6 @@ class DCInstrument {
     InstructionList il = mg.getInstructionList();
     if (il == null)
       return;
-
-    // Create the tag frame for this method
-    InstructionList tf_il = create_tag_frame (mg, tag_frame_local);
 
     // Create the call that processes daikon varaibles upon enter
     InstructionList enter_il = call_enter_exit (mg, method_info_index,
@@ -212,7 +395,6 @@ class DCInstrument {
     // line number or local variable targeters to point to the new
     // instructions.  Other targeters (branches, exceptions) are left
     // unchanged.
-    enter_il.insert (tf_il);
     InstructionHandle old_start = il.getStart();
     InstructionHandle new_start = il.insert (enter_il);
     for (InstructionTargeter it : old_start.getTargeters()) {
@@ -247,12 +429,18 @@ class DCInstrument {
       offset = 0;
 
     // Encode the primitive parameter information in a string
-    int frame_size = arg_types.length + locals.length;
+    mgen.setMaxLocals();
+    int frame_size = mgen.getMaxLocals();
     String params = "" + Character.forDigit (frame_size, Character.MAX_RADIX);
-    for (int ii = arg_types.length-1; ii >= 0; ii--) {
-      if (arg_types[ii] instanceof BasicType) {
-        params += Character.forDigit (offset + ii, Character.MAX_RADIX);
+    List<Integer> plist = new ArrayList<Integer>();
+    for (Type arg_type : arg_types) {
+      if (arg_type instanceof BasicType) {
+        plist.add (offset);
       }
+      offset += arg_type.getSize();
+    }
+    for (int ii = plist.size()-1; ii >= 0; ii--) {
+      params += Character.forDigit (plist.get(ii), Character.MAX_RADIX);
     }
 
     // Create code to create/init the tag frame and store in tag_frame_local
@@ -262,8 +450,8 @@ class DCInstrument {
                                    "create_tag_frame", object_arr, string_arg,
                                    Constants.INVOKESTATIC));
     il.append (ifact.createStore (object_arr, tag_frame_local.getIndex()));
-    System.out.printf ("Store Tag frame local at index %d%n",
-                       tag_frame_local.getIndex());
+    debug_instrument_inst.log ("Store Tag frame local at index %d%n",
+                               tag_frame_local.getIndex());
 
     return (il);
   }
@@ -357,20 +545,19 @@ class DCInstrument {
      return (il);
    }
 
-
   /**
-   * Returns a list of instructions that replaces the specified instruction.
-   * Returns null if the instruction should not be replaced.
+   * Transforms instructions to track comparability.  Returns a list
+   * of instructions that replaces the specified instruction.  Returns
+   * null if the instruction should not be replaced.
    *
    *    @param mg Method being instrumented
-   *    @param method_info_index Index into the list of MethodInfos of this
-   *           method
-   *    @param inst Instruction to translate
-   *    @param exit_iter Iterator over the exit locations of this method.
-   *           It should point to the next exit location
+   *    @param ih Handle of Instruction to translate
+   *    @param stack Current contents of the stack.
    */
-  InstructionList xform_inst (MethodGen mg, int method_info_index,
-                              Instruction inst, Iterator<Integer> exit_iter) {
+  InstructionList xform_inst (MethodGen mg, InstructionHandle ih,
+                             OperandStack stack) {
+
+    Instruction inst = ih.getInstruction();
 
     switch (inst.getOpcode()) {
 
@@ -384,12 +571,248 @@ class DCInstrument {
       return (object_comparison ((BranchInstruction) inst, "object_ne",
                                  Constants.IFNE));
 
+    // These instructions compare the integer on the top of the stack
+    // to zero.  Nothing is made comparable by this, so we need only
+    // discard the tag on the top of the stack.
+    case Constants.IFEQ:
+    case Constants.IFNE:
+    case Constants.IFLT:
+    case Constants.IFGE:
+    case Constants.IFGT:
+    case Constants.IFLE: {
+      return discard_tag_code (inst, 1);
+    }
+
+    // Instanceof pushes either 0 or 1 on the stack depending on whether
+    // the object on top of stack is of the specified type.  We push a
+    // tag for a constant, since nothing is made comparable by this.
+    case Constants.INSTANCEOF:
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+
+    // Duplicates the item on the top of stack.  If the value on the
+    // top of the stack is a primitive, we need to do the same on the
+    // tag stack.  Otherwise, we need do nothing.
+    case Constants.DUP: {
+      Type top = stack.peek();
+      if (is_primitive (top)) {
+        return build_il (dcr_call ("dup", Type.VOID, Type.NO_ARGS), inst);
+      }
+      return (null);
+    }
+
+    // Duplicates the item on the top of the stack and inserts it 2
+    // values down in the stack.  If the value at the top of the stack
+    // is not a primitive, there is nothing to do here.  If the second
+    // value is not a primitive, then we need only to insert the duped
+    // value down 1 on the tag stack (which contains only primitives)
+    case Constants.DUP_X1: {
+      Type top = stack.peek();
+      if (!is_primitive (top))
+        return (null);
+      String method = "dup_x1";
+      if (!is_primitive (stack.peek(1)))
+        method = "dup";
+      return build_il (dcr_call (method, Type.VOID, Type.NO_ARGS), inst);
+    }
+
+      // Duplicates either the top 2 category 1 values or a single
+      // category 2 value and inserts it 2 or 3 values down on the
+      // stack.
+    case Constants.DUP2_X1: {
+      String op = null;
+      Type top = stack.peek();
+      if (is_category2 (top)) {
+        if (is_primitive (stack.peek(1)))
+          op = "dup_x1";
+        else // not a primitive, so just dup
+          op = "dup";
+      } else if (is_primitive (top)) {
+        if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
+          op = "dup2_x1";
+        else if (is_primitive (stack.peek(1)))
+          op = "dup2";
+        else if (is_primitive (stack.peek(2)))
+          op = "dup_x1";
+        else // neither value 1 nor value 2 is primitive
+          op = "dup";
+      } else { // top is not primitive
+        if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
+          op = "dup_x1";
+        else if (is_primitive (stack.peek(1)))
+          op = "dup";
+        else // neither of the top two values are primitive
+          op = null;
+      }
+      if (debug_dup.enabled())
+        debug_dup.log ("DUP2_X1 -> %s [... %s]%n", op,
+                       stack_contents (stack, 3));
+
+      if (op != null)
+        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+      return (null);
+    }
+
+    // Duplicate either one category 2 value or two category 1 values.
+    case Constants.DUP2: {
+      Type top = stack.peek();
+      String op = null;
+      if (is_category2 (top))
+        op = "dup";
+      else if (is_primitive (top) && is_primitive(stack.peek(1)))
+        op = "dup2";
+      else if (is_primitive (top) || is_primitive(stack.peek(1)))
+        op = "dup";
+      else // both of the top two items are not primitive, nothing to dup
+        op = null;
+      if (debug_dup.enabled())
+        debug_dup.log ("DUP2 -> %s [... %s]%n", op,
+                       stack_contents (stack, 2));
+      if (op != null)
+        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+      return (null);
+    }
+
+    // Dup the category 1 value on the top of the stack and insert it either
+    // two or three values down on the stack.
+    case Constants.DUP_X2: {
+      Type top = stack.peek();
+      String op = null;
+      if (is_primitive (top)) {
+        if (is_category2 (stack.peek(1)))
+          op = "dup_x1";
+        else if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
+          op = "dup_x2";
+        else if (is_primitive (stack.peek(1)) || is_primitive(stack.peek(2)))
+          op = "dup_x1";
+        else
+          op = "dup";
+      }
+      if (debug_dup.enabled())
+        debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
+                       stack_contents (stack, 3));
+      if (op != null)
+        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+      return (null);
+    }
+
+    case Constants.DUP2_X2: {
+      Type top = stack.peek();
+      String op = null;
+      if (is_category2 (top)) {
+        if (is_category2 (stack.peek(1)))
+          op = "dup_x1";
+        else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2)))
+          op = "dup_x2";
+        else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2)))
+          op = "dup_x1";
+        else // both values are references
+          op = "dup";
+      } else if (is_primitive (top)) {
+        if (is_category2 (stack.peek(1)))
+          assert false : "not supposed to happen " + stack_contents(stack, 3);
+        else if (is_category2(stack.peek(2))) {
+          if (is_primitive (stack.peek(1)))
+            op = "dup2_x1";
+          else
+            op = "dup_x1";
+        } else if (is_primitive (stack.peek(1))) {
+          if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
+            op = "dup2_x2";
+          else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
+            op = "dup2_x1";
+          else // both 2 and 3 are references
+            op = "dup2";
+        } else { // 1 is a reference
+          if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
+            op = "dup_x2";
+          else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
+            op = "dup_x1";
+          else // both 2 and 3 are references
+            op = "dup";
+        }
+      } else { // top is a reference
+        if (is_category2 (stack.peek(1)))
+          assert false : "not supposed to happen " + stack_contents(stack, 3);
+        else if (is_category2(stack.peek(2))) {
+          if (is_primitive (stack.peek(1)))
+            op = "dup_x1";
+          else
+            op = null; // nothing to dup
+        } else if (is_primitive (stack.peek(1))) {
+          if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
+            op = "dup_x2";
+          else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
+            op = "dup_x1";
+          else // both 2 and 3 are references
+            op = "dup";
+        } else { // 1 is a reference
+          op = null; // nothing to dup
+        }
+      }
+      if (debug_dup.enabled())
+        debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
+                       stack_contents (stack, 3));
+      if (op != null)
+        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+      return (null);
+    }
+
+    // Pop instructions discard the top of the stack.  We want to discard
+    // the top of the tag stack iff the item on the top of the stack is a
+    // primitive.
+    case Constants.POP: {
+      Type top = stack.peek();
+      if (is_primitive (top))
+        return discard_tag_code (inst, 1);
+      return (null);
+    }
+
+    // Pops either the top 2 category 1 values or a single category 2 value
+    // from the top of the stack.  We must do the same to the tag stack
+    // if the values are primitives.
+    case Constants.POP2: {
+      Type top = stack.peek();
+      if (is_category2 (top))
+        return discard_tag_code (inst, 1);
+      else {
+        int cnt = 0;
+        if (is_primitive (top))
+          cnt++;
+        if (is_primitive (stack.peek(1)))
+          cnt++;
+        if (cnt > 0)
+          return discard_tag_code (inst, cnt);
+      }
+      return (null);
+    }
+
+    // Swaps the two category 1 types on the top of the stack.  We need
+    // to swap the top of the tag stack if the two top elements on the
+    // real stack are primitives.
+    case Constants.SWAP: {
+      Type type1 = stack.peek();
+      Type type2 = stack.peek(1);
+      if (is_primitive(type1) && is_primitive(type2)) {
+        return build_il (dcr_call ("swap", Type.VOID, Type.NO_ARGS), inst);
+      }
+      return (null);
+    }
+
+    case Constants.IF_ICMPEQ:
+    case Constants.IF_ICMPGE:
+    case Constants.IF_ICMPGT:
+    case Constants.IF_ICMPLE:
+    case Constants.IF_ICMPLT:
+    case Constants.IF_ICMPNE: {
+      return build_il (dcr_call ("cmp_op", Type.VOID, Type.NO_ARGS), inst);
+    }
+
     case Constants.GETFIELD: {
-      return load_store_field ((GETFIELD) inst, "push_field_tag");
+      return load_store_field ((GETFIELD) inst);
     }
 
     case Constants.PUTFIELD: {
-      return load_store_field ((PUTFIELD) inst, "pop_field_tag");
+      return load_store_field ((PUTFIELD) inst);
     }
 
     case Constants.GETSTATIC: {
@@ -400,39 +823,111 @@ class DCInstrument {
       return load_store_static ((PUTSTATIC) inst, "pop_static_tag");
     }
 
+    case Constants.DLOAD:
+    case Constants.DLOAD_0:
+    case Constants.DLOAD_1:
+    case Constants.DLOAD_2:
+    case Constants.DLOAD_3:
+    case Constants.FLOAD:
+    case Constants.FLOAD_0:
+    case Constants.FLOAD_1:
+    case Constants.FLOAD_2:
+    case Constants.FLOAD_3:
     case Constants.ILOAD:
     case Constants.ILOAD_0:
     case Constants.ILOAD_1:
     case Constants.ILOAD_2:
-    case Constants.ILOAD_3: {
-      return load_store_local ((ILOAD)inst, tag_frame_local, "push_local_tag");
+    case Constants.ILOAD_3:
+    case Constants.LLOAD:
+    case Constants.LLOAD_0:
+    case Constants.LLOAD_1:
+    case Constants.LLOAD_2:
+    case Constants.LLOAD_3: {
+      return load_store_local ((LoadInstruction)inst, tag_frame_local,
+                               "push_local_tag");
     }
 
+    case Constants.DSTORE:
+    case Constants.DSTORE_0:
+    case Constants.DSTORE_1:
+    case Constants.DSTORE_2:
+    case Constants.DSTORE_3:
+    case Constants.FSTORE:
+    case Constants.FSTORE_0:
+    case Constants.FSTORE_1:
+    case Constants.FSTORE_2:
+    case Constants.FSTORE_3:
     case Constants.ISTORE:
     case Constants.ISTORE_0:
     case Constants.ISTORE_1:
     case Constants.ISTORE_2:
-    case Constants.ISTORE_3: {
-      return load_store_local ((ISTORE)inst, tag_frame_local, "pop_local_tag");
+    case Constants.ISTORE_3:
+    case Constants.LSTORE:
+    case Constants.LSTORE_0:
+    case Constants.LSTORE_1:
+    case Constants.LSTORE_2:
+    case Constants.LSTORE_3: {
+      return load_store_local ((StoreInstruction) inst, tag_frame_local,
+                               "pop_local_tag");
+    }
+
+    case Constants.LDC:
+    case Constants.LDC_W:
+    case Constants.LDC2_W: {
+      Type type;
+      if (inst instanceof LDC) // LDC_W extends LDC
+        type = ((LDC)inst).getType (pool);
+      else
+        type = ((LDC2_W)inst).getType (pool);
+      if (!(type instanceof BasicType))
+        return null;
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+    }
+
+    // TODO: For now push a constant tag for arraylength.  I think what
+    // should happen is that the tag for the array should get pushed on
+    // the tag stack.  That would cause anything that became comparable
+    // to the length to become comparable to the array as an index.
+    case Constants.ARRAYLENGTH: {
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
     }
 
     case Constants.BIPUSH:
+    case Constants.SIPUSH:
+    case Constants.DCONST_0:
+    case Constants.DCONST_1:
+    case Constants.FCONST_0:
+    case Constants.FCONST_1:
+    case Constants.FCONST_2:
     case Constants.ICONST_0:
     case Constants.ICONST_1:
     case Constants.ICONST_2:
     case Constants.ICONST_3:
     case Constants.ICONST_4:
-    case Constants.ICONST_5: {
-      InstructionList il = new InstructionList();
-      il.append(ifact.createInvoke (DCRuntime.class.getName(), "push_const",
-                            Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
-      il.append (inst);
-      return (il);
+    case Constants.ICONST_5:
+    case Constants.ICONST_M1:
+    case Constants.LCONST_0:
+    case Constants.LCONST_1: {
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
     }
 
     // Primitive Binary operators.  Each is augmented with a call to
     // DCRuntime.binary_tag_op that merges the tags and updates the tag
     // Stack.
+    case Constants.DADD:
+    case Constants.DCMPG:
+    case Constants.DCMPL:
+    case Constants.DDIV:
+    case Constants.DMUL:
+    case Constants.DREM:
+    case Constants.DSUB:
+    case Constants.FADD:
+    case Constants.FCMPG:
+    case Constants.FCMPL:
+    case Constants.FDIV:
+    case Constants.FMUL:
+    case Constants.FREM:
+    case Constants.FSUB:
     case Constants.IADD:
     case Constants.IAND:
     case Constants.IDIV:
@@ -443,15 +938,35 @@ class DCInstrument {
     case Constants.ISHR:
     case Constants.ISUB:
     case Constants.IUSHR:
-    case Constants.IXOR: {
-      InstructionList il = new InstructionList();
-      il.append(ifact.createInvoke (DCRuntime.class.getName(), "binary_tag_op",
-                            Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
-      il.append (inst);
-      return (il);
-    }
+    case Constants.IXOR:
+    case Constants.LADD:
+    case Constants.LAND:
+    case Constants.LCMP:
+    case Constants.LDIV:
+    case Constants.LMUL:
+    case Constants.LOR:
+    case Constants.LREM:
+    case Constants.LSHL:
+    case Constants.LSHR:
+    case Constants.LSUB:
+    case Constants.LUSHR:
+    case Constants.LXOR:
+      return build_il (dcr_call ("binary_tag_op", Type.VOID, Type.NO_ARGS),
+                       inst);
+
+    // Computed jump based on the int on the top of stack.  Since that int
+    // is not made comparable to anything, we just discard its tag.  One
+    // might argue that the key should be made comparable to each value in
+    // the jump table.  But the tags for those values are not available.
+    // And since they are all constants, its not clear how interesting it
+    // would be anyway.
+    case Constants.LOOKUPSWITCH:
+    case Constants.TABLESWITCH:
+      return discard_tag_code (inst, 1);
 
     // Discard the tag for the integer argument ANEWARRAY
+    // TODO: Should the integer argument be made comparable to the arry
+    // as an index?
     case Constants.ANEWARRAY:
     case Constants.NEWARRAY: {
       return discard_tag_code (inst, 1);
@@ -462,33 +977,519 @@ class DCInstrument {
       return discard_tag_code (inst, ((MULTIANEWARRAY)inst).getDimensions());
     }
 
-    // Discard the tag for the index argument to aastore and aaload
+    // Mark the array and its index as comparable.  Also for primitives,
+    // push the tag of the array element on the tag stack
+    case Constants.AALOAD:
+    case Constants.BALOAD:
+    case Constants.CALOAD:
+    case Constants.DALOAD:
+    case Constants.FALOAD:
+    case Constants.IALOAD:
+    case Constants.LALOAD:
+    case Constants.SALOAD: {
+      return array_load (inst);
+    }
+
+    // Mark the array and its index as comparable.  For primitives, store
+    // the tag for the value on the top of the stack in the tag storage
+    // for the array.
     case Constants.AASTORE:
-    case Constants.AALOAD: {
+      return array_store (inst, "aastore", Type.OBJECT);
+    case Constants.BASTORE:
+      return array_store (inst, "bastore", Type.BYTE);
+    case Constants.CASTORE:
+      return array_store (inst, "castore", Type.CHAR);
+    case Constants.DASTORE:
+      return array_store (inst, "dastore", Type.DOUBLE);
+    case Constants.FASTORE:
+      return array_store (inst, "fastore", Type.FLOAT);
+    case Constants.IASTORE:
+      return array_store (inst, "iastore", Type.INT);
+    case Constants.LASTORE:
+      return array_store (inst, "lastore", Type.LONG);
+    case Constants.SASTORE:
+      return array_store (inst, "sastore", Type.SHORT);
+
+    // Prefix the return with a call to the correct normal_exit method
+    // to handle the tag stack
+    case Constants.ARETURN:
+    case Constants.DRETURN:
+    case Constants.FRETURN:
+    case Constants.IRETURN:
+    case Constants.LRETURN:
+    case Constants.RETURN: {
+      Type type = mg.getReturnType();
+      InstructionList il = new InstructionList();
+      if ((type instanceof BasicType) && (type != Type.VOID))
+        il.append (dcr_call ("normal_exit_primitive", Type.VOID,Type.NO_ARGS));
+      else
+        il.append (dcr_call ("normal_exit", Type.VOID, Type.NO_ARGS));
+      il.append (inst);
+      return (il);
+    }
+
+    // Handles calls outside of instrumented code by discarding the tags.
+    // This may not work correctly for interfaces (who do we tell if we
+    // are instrumenting the destination.  This code needs to be updated
+    // when we instrument the JDK.
+    case Constants.INVOKESTATIC:
+    case Constants.INVOKEVIRTUAL:
+    case Constants.INVOKESPECIAL:
+    case Constants.INVOKEINTERFACE:
+      return handle_invoke ((InvokeInstruction) inst);
+
+    // Throws an exception.  This clears the operand stack of the current
+    // frame.  We need to clear the tag stack as well.
+    case Constants.ATHROW:
+      return build_il (dcr_call ("throw_op", Type.VOID, Type.NO_ARGS), inst);
+
+    // Opcodes that don't need any modifications.  Here for reference
+    case Constants.ACONST_NULL:
+    case Constants.ALOAD:
+    case Constants.ALOAD_0:
+    case Constants.ALOAD_1:
+    case Constants.ALOAD_2:
+    case Constants.ALOAD_3:
+    case Constants.ASTORE:
+    case Constants.ASTORE_0:
+    case Constants.ASTORE_1:
+    case Constants.ASTORE_2:
+    case Constants.ASTORE_3:
+    case Constants.CHECKCAST:
+    case Constants.D2F:     // double to float
+    case Constants.D2I:     // double to integer
+    case Constants.D2L:     // double to long
+    case Constants.DNEG:    // Negate double on top of stack
+    case Constants.F2D:     // float to double
+    case Constants.F2I:     // float to integer
+    case Constants.F2L:     // float to long
+    case Constants.FNEG:    // Negate float on top of stack
+    case Constants.GOTO:
+    case Constants.GOTO_W:
+    case Constants.I2B:     // integer to byte
+    case Constants.I2C:     // integer to char
+    case Constants.I2D:     // integer to double
+    case Constants.I2F:     // integer to float
+    case Constants.I2L:     // integer to long
+    case Constants.I2S:     // integer to short
+    case Constants.IFNONNULL:
+    case Constants.IFNULL:
+    case Constants.IINC:    // increment local variable by a constant
+    case Constants.INEG:    // negate integer on top of stack
+    case Constants.JSR:     // pushes return address on the stack, but that
+                            // is thought of as an object, so we don't need
+                            // a tag for it.
+    case Constants.JSR_W:
+    case Constants.L2D:     // long to double
+    case Constants.L2F:     // long to float
+    case Constants.L2I:     // long to int
+    case Constants.LNEG:    // negate long on top of stack
+    case Constants.MONITORENTER:
+    case Constants.MONITOREXIT:
+    case Constants.NEW:
+    case Constants.NOP:
+    case Constants.RET:     // this is the internal JSR return
+      return (null);
+
+    // Make sure we didn't miss anything
+    default:
+      assert false: "instruction " + inst + " unsupported";
+      return (null);
+    }
+
+  }
+
+  /**
+   * Adds a call to DCruntime.exit() at each return from the
+   * method.  This call calculates comparability on the daikon
+   * variables.  It is only necessary if we are tracking comparability
+   * for the variables of this method
+   */
+  public void add_exit (MethodGen mg, MethodInfo mi, int method_info_index) {
+
+    // Iterator over all of the exit line numbers for this method
+    Iterator <Integer> exit_iter = mi.exit_locations.iterator();
+
+    // Loop through each instruction
+    InstructionList il = mg.getInstructionList();
+    for (InstructionHandle ih = il.getStart(); ih != null; ) {
+
+      // Remember the next instruction to process
+      InstructionHandle next_ih = ih.getNext();
+
+      // If this is a return instruction, Call DCRuntime.exit to calculate
+      // comparability on Daikon variables
+      Instruction inst = ih.getInstruction();
+      if (inst instanceof ReturnInstruction) {
+        Type type = mg.getReturnType();
+        InstructionList new_il = new InstructionList();
+        if (type != Type.VOID) {
+          LocalVariableGen return_loc = get_return_local (mg, type);
+          new_il.append (ifact.createDup (type.getSize()));
+          new_il.append (ifact.createStore (type, return_loc.getIndex()));
+        }
+        new_il.append (call_enter_exit (mg, method_info_index, "exit",
+                                    exit_iter.next()));
+        new_il.append (inst);
+        replace_instructions (il, ih, new_il);
+      }
+
+      ih = next_ih;
+    }
+  }
+
+  /**
+   * Returns a list of instructions that replaces the specified instruction.
+   * Returns null if the instruction should not be replaced.
+   *
+   *    @param mg Method being instrumented
+   *    @param method_info_index Index into the list of MethodInfos of this
+   *           method
+   *    @param inst Instruction to translate
+   *    @param exit_iter Iterator over the exit locations of this method.
+   *           It should point to the next exit location
+   *    @param stack Current contents of the stack.
+   */
+  InstructionList old_xform_inst (MethodGen mg, int method_info_index,
+                             InstructionHandle ih, Iterator<Integer> exit_iter,
+                             OperandStack stack) {
+
+    Instruction inst = ih.getInstruction();
+
+    switch (inst.getOpcode()) {
+
+    // Replace the object comparison instructions with a call to
+    // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
+    // return a boolean which is used in a ifeq/ifne instruction
+    case Constants.IF_ACMPEQ:
+      return (object_comparison ((BranchInstruction) inst, "object_eq",
+                                 Constants.IFNE));
+    case Constants.IF_ACMPNE:
+      return (object_comparison ((BranchInstruction) inst, "object_ne",
+                                 Constants.IFNE));
+
+    // These instructions compare the integer on the top of the stack
+    // to zero.  Nothing is made comparable by this, so we need only
+    // discard the tag on the top of the stack.
+    case Constants.IFEQ:
+    case Constants.IFNE:
+    case Constants.IFLT:
+    case Constants.IFGE:
+    case Constants.IFGT:
+    case Constants.IFLE: {
       return discard_tag_code (inst, 1);
     }
 
-    // Replace iastore opcode with a calld to DCRuntime.iastore.  The iastore
-    // method stores the tag at the top of stack into the tag storage for
-    // the index into the array.  It also discards the tag for the index from
-    // the tag stack and performs the iastore instruction
-    case Constants.IASTORE:
-      return new InstructionList (dcr_call ("iastore", Type.VOID,
-                               new Type[] {int_arr, Type.INT, Type.INT}));
+    // Instanceof pushes either 0 or 1 on the stack depending on whether
+    // the object on top of stack is of the specified type.  We push a
+    // tag for a constant, since nothing is made comparable by this.
+    case Constants.INSTANCEOF:
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+
+    // Duplicates the item on the top of stack.  If the value on the
+    // top of the stack is a primitive, we need to do the same on the
+    // tag stack.  Otherwise, we need do nothing.
+    case Constants.DUP: {
+      Type top = stack.peek();
+      if (is_primitive (top)) {
+        InstructionList il = new InstructionList();
+        il.append (dcr_call ("dup", Type.VOID, Type.NO_ARGS));
+        il.append (inst);
+        return (il);
+      }
+      return (null);
+    }
+
+    // Duplicates the item on the top of the stack and inserts it 2
+    // values down in the stack.  If the value at the top of the stack
+    // is not a primitive, there is nothing to do here.  If the second
+    // value is not a primitive, then we need only to insert the duped
+    // value down 1 on the tag stack (which contains only primitives)
+    case Constants.DUP_X1: {
+      Type top = stack.peek();
+      if (!is_primitive (top))
+        return (null);
+      String method = "dup_x1";
+      if (!is_primitive (stack.peek(1)))
+        method = "dup";
+      InstructionList il = new InstructionList();
+      il.append (dcr_call (method, Type.VOID, Type.NO_ARGS));
+      il.append (inst);
+      return (il);
+    }
+
+    // We can do these, but haven't seem them yet.
+    case Constants.DUP_X2:
+    case Constants.DUP2:
+    case Constants.DUP2_X1:
+    case Constants.DUP2_X2: {
+      assert false : "can't handle " + inst;
+    }
 
 
-    // Replace iasload opcode with a calld to DCRuntime.iaload.  The iaload
-    // method pushes the tag for the specified index in the array onto the
-    // tag stackthe tag at the top of stack into the tag storage for
-    // the index into the array.  It also discards the tag for the index from
-    // the tag stack and performs the iaload instruction.
+    // Pop instructions discard the top of the stack.  We want to discard
+    // the top of the tag stack iff the item on the top of the stack is a
+    // primitive.
+    case Constants.POP: {
+      Type top = stack.peek();
+      if (is_primitive (top))
+        return discard_tag_code (inst, 1);
+      return (null);
+    }
+
+    // Pops either the top 2 category 1 values or a single category 2 value
+    // from the top of the stack.  We must do the same to the tag stack
+    // if the values are primitives.
+    case Constants.POP2: {
+      Type top = stack.peek();
+      if (is_category2 (top))
+        return discard_tag_code (inst, 1);
+      else {
+        int cnt = 0;
+        if (is_primitive (top))
+          cnt++;
+        if (is_primitive (stack.peek(1)))
+          cnt++;
+        if (cnt > 0)
+          return discard_tag_code (inst, cnt);
+      }
+      return (null);
+    }
+
+    // Swaps the two category 1 types on the top of the stack.  We need
+    // to swap the top of the tag stack if the two top elements on the
+    // real stack are primitives.
+    case Constants.SWAP: {
+      Type type1 = stack.peek();
+      Type type2 = stack.peek(1);
+      if (is_primitive(type1) && is_primitive(type2)) {
+        InstructionList il = new InstructionList();
+        il.append (dcr_call ("swap", Type.VOID, Type.NO_ARGS));
+        il.append (inst);
+        return (il);
+      }
+      return (null);
+    }
+
+    case Constants.IF_ICMPEQ:
+    case Constants.IF_ICMPGE:
+    case Constants.IF_ICMPGT:
+    case Constants.IF_ICMPLE:
+    case Constants.IF_ICMPLT:
+    case Constants.IF_ICMPNE: {
+      InstructionList il = new InstructionList();
+      il.append (dcr_call ("cmp_op", Type.VOID, Type.NO_ARGS));
+      append_inst (il, inst);
+      return il;
+    }
+
+    case Constants.GETFIELD: {
+      return load_store_field ((GETFIELD) inst);
+    }
+
+    case Constants.PUTFIELD: {
+      return load_store_field ((PUTFIELD) inst);
+    }
+
+    case Constants.GETSTATIC: {
+      return load_store_static ((GETSTATIC) inst, "push_static_tag");
+    }
+
+    case Constants.PUTSTATIC: {
+      return load_store_static ((PUTSTATIC) inst, "pop_static_tag");
+    }
+
+    case Constants.DLOAD:
+    case Constants.DLOAD_0:
+    case Constants.DLOAD_1:
+    case Constants.DLOAD_2:
+    case Constants.DLOAD_3:
+    case Constants.FLOAD:
+    case Constants.FLOAD_0:
+    case Constants.FLOAD_1:
+    case Constants.FLOAD_2:
+    case Constants.FLOAD_3:
+    case Constants.ILOAD:
+    case Constants.ILOAD_0:
+    case Constants.ILOAD_1:
+    case Constants.ILOAD_2:
+    case Constants.ILOAD_3:
+    case Constants.LLOAD:
+    case Constants.LLOAD_0:
+    case Constants.LLOAD_1:
+    case Constants.LLOAD_2:
+    case Constants.LLOAD_3: {
+      return load_store_local ((LoadInstruction)inst, tag_frame_local,
+                               "push_local_tag");
+    }
+
+    case Constants.DSTORE:
+    case Constants.DSTORE_0:
+    case Constants.DSTORE_1:
+    case Constants.DSTORE_2:
+    case Constants.DSTORE_3:
+    case Constants.FSTORE:
+    case Constants.FSTORE_0:
+    case Constants.FSTORE_1:
+    case Constants.FSTORE_2:
+    case Constants.FSTORE_3:
+    case Constants.ISTORE:
+    case Constants.ISTORE_0:
+    case Constants.ISTORE_1:
+    case Constants.ISTORE_2:
+    case Constants.ISTORE_3:
+    case Constants.LSTORE:
+    case Constants.LSTORE_0:
+    case Constants.LSTORE_1:
+    case Constants.LSTORE_2:
+    case Constants.LSTORE_3: {
+      return load_store_local ((StoreInstruction) inst, tag_frame_local,
+                               "pop_local_tag");
+    }
+
+    case Constants.LDC:
+    case Constants.LDC_W:
+    case Constants.LDC2_W: {
+      Type type;
+      if (inst instanceof LDC) // LDC_W extends LDC
+        type = ((LDC)inst).getType (pool);
+      else
+        type = ((LDC2_W)inst).getType (pool);
+      if (!(type instanceof BasicType))
+        return null;
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+    }
+
+    // TODO: For now push a constant tag for arraylength.  I think what
+    // should happen is that the tag for the array should get pushed on
+    // the tag stack.  That would cause anything that became comparable
+    // to the length to become comparable to the array as an index.
+    case Constants.ARRAYLENGTH: {
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+    }
+
+    case Constants.BIPUSH:
+    case Constants.SIPUSH:
+    case Constants.DCONST_0:
+    case Constants.DCONST_1:
+    case Constants.FCONST_0:
+    case Constants.FCONST_1:
+    case Constants.FCONST_2:
+    case Constants.ICONST_0:
+    case Constants.ICONST_1:
+    case Constants.ICONST_2:
+    case Constants.ICONST_3:
+    case Constants.ICONST_4:
+    case Constants.ICONST_5:
+    case Constants.ICONST_M1:
+    case Constants.LCONST_0:
+    case Constants.LCONST_1: {
+      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+    }
+
+    // Primitive Binary operators.  Each is augmented with a call to
+    // DCRuntime.binary_tag_op that merges the tags and updates the tag
+    // Stack.
+    case Constants.DADD:
+    case Constants.DCMPG:
+    case Constants.DCMPL:
+    case Constants.DDIV:
+    case Constants.DMUL:
+    case Constants.DREM:
+    case Constants.DSUB:
+    case Constants.FADD:
+    case Constants.FCMPG:
+    case Constants.FCMPL:
+    case Constants.FDIV:
+    case Constants.FMUL:
+    case Constants.FREM:
+    case Constants.FSUB:
+    case Constants.IADD:
+    case Constants.IAND:
+    case Constants.IDIV:
+    case Constants.IMUL:
+    case Constants.IOR:
+    case Constants.IREM:
+    case Constants.ISHL:
+    case Constants.ISHR:
+    case Constants.ISUB:
+    case Constants.IUSHR:
+    case Constants.IXOR:
+    case Constants.LADD:
+    case Constants.LAND:
+    case Constants.LCMP:
+    case Constants.LDIV:
+    case Constants.LMUL:
+    case Constants.LOR:
+    case Constants.LREM:
+    case Constants.LSHL:
+    case Constants.LSHR:
+    case Constants.LSUB:
+    case Constants.LUSHR:
+    case Constants.LXOR:
+      return build_il (dcr_call ("binary_tag_op", Type.VOID, Type.NO_ARGS),
+                       inst);
+
+    // Computed jump based on the int on the top of stack.  Since that int
+    // is not made comparable to anything, we just discard its tag.  One
+    // might argue that the key should be made comparable to each value in
+    // the jump table.  But the tags for those values are not available.
+    // And since they are all constants, its not clear how interesting it
+    // would be anyway.
+    case Constants.LOOKUPSWITCH:
+    case Constants.TABLESWITCH:
+      return discard_tag_code (inst, 1);
+
+    // Discard the tag for the integer argument ANEWARRAY
+    // TODO: Should the integer argument be made comparable to the arry
+    // as an index?
+    case Constants.ANEWARRAY:
+    case Constants.NEWARRAY: {
+      return discard_tag_code (inst, 1);
+    }
+
+    // Discard the tags for each dimension to MULTIANEWARRAY
+    case Constants.MULTIANEWARRAY: {
+      return discard_tag_code (inst, ((MULTIANEWARRAY)inst).getDimensions());
+    }
+
+    // Mark the array and its index as comparable.  Also for primitives,
+    // push the tag of the array element on the tag stack
+    case Constants.AALOAD:
+    case Constants.BALOAD:
+    case Constants.CALOAD:
+    case Constants.DALOAD:
+    case Constants.FALOAD:
     case Constants.IALOAD:
-      return new InstructionList (dcr_call ("iaload", Type.VOID,
-                               new Type[] {int_arr, Type.INT}));
+    case Constants.LALOAD:
+    case Constants.SALOAD: {
+      return array_load (inst);
+    }
 
+    // Mark the array and its index as comparable.  For primitives, store
+    // the tag for the value on the top of the stack in the tag storage
+    // for the array.
+    case Constants.AASTORE:
+      return array_store (inst, "aastore", Type.OBJECT);
+    case Constants.BASTORE:
+      return array_store (inst, "bastore", Type.BYTE);
+    case Constants.CASTORE:
+      return array_store (inst, "castore", Type.CHAR);
+    case Constants.DASTORE:
+      return array_store (inst, "dastore", Type.DOUBLE);
+    case Constants.FASTORE:
+      return array_store (inst, "fastore", Type.FLOAT);
+    case Constants.IASTORE:
+      return array_store (inst, "iastore", Type.INT);
+    case Constants.LASTORE:
+      return array_store (inst, "lastore", Type.LONG);
+    case Constants.SASTORE:
+      return array_store (inst, "sastore", Type.SHORT);
 
     // Prefix the return with a call to exit that passes the object,
     // method info index, return value, and parameters.
+    // Also, call the correct normal_exit method to handle the
+    // tag stack
     case Constants.ARETURN:
     case Constants.DRETURN:
     case Constants.FRETURN:
@@ -504,17 +1505,136 @@ class DCInstrument {
       }
       il.append (call_enter_exit (mg, method_info_index, "exit",
                                   exit_iter.next()));
-      il.append (ifact.createInvoke (DCRuntime.class.getName(), "normal_exit",
-                            Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
+      if ((type instanceof BasicType) && (type != Type.VOID))
+        il.append (dcr_call ("normal_exit_primitive", Type.VOID,Type.NO_ARGS));
+      else
+        il.append (dcr_call ("normal_exit", Type.VOID, Type.NO_ARGS));
       il.append (inst);
       return (il);
     }
 
+      // Handles calls outside of instrumented code by discarding the tags.
+      // This may not work correctly for interfaces (who do we tell if we
+      // are instrumenting the destination.  This code needs to be updated
+      // when we instrument the JDK.
+    case Constants.INVOKESTATIC:
+    case Constants.INVOKEVIRTUAL:
+    case Constants.INVOKESPECIAL:
+    case Constants.INVOKEINTERFACE:
+      return handle_invoke ((InvokeInstruction) inst);
+
+    // Throws an exception.  This clears the operand stack of the current
+    // frame.  We need to clear the tag stack as well.
+    case Constants.ATHROW:
+      return build_il (dcr_call ("throw_op", Type.VOID, Type.NO_ARGS), inst);
+
+    // Opcodes that don't need any modifications.  Here for reference
+    case Constants.ACONST_NULL:
+    case Constants.ALOAD:
+    case Constants.ALOAD_0:
+    case Constants.ALOAD_1:
+    case Constants.ALOAD_2:
+    case Constants.ALOAD_3:
+    case Constants.ASTORE:
+    case Constants.ASTORE_0:
+    case Constants.ASTORE_1:
+    case Constants.ASTORE_2:
+    case Constants.ASTORE_3:
+    case Constants.CHECKCAST:
+    case Constants.D2F:     // double to float
+    case Constants.D2I:     // double to integer
+    case Constants.D2L:     // double to long
+    case Constants.DNEG:    // Negate double on top of stack
+    case Constants.F2D:     // float to double
+    case Constants.F2I:     // float to integer
+    case Constants.F2L:     // float to long
+    case Constants.FNEG:    // Negate float on top of stack
+    case Constants.GOTO:
+    case Constants.GOTO_W:
+    case Constants.I2B:     // integer to byte
+    case Constants.I2C:     // integer to char
+    case Constants.I2D:     // integer to double
+    case Constants.I2F:     // integer to float
+    case Constants.I2L:     // integer to long
+    case Constants.I2S:     // integer to short
+    case Constants.IFNONNULL:
+    case Constants.IFNULL:
+    case Constants.IINC:    // increment local variable by a constant
+    case Constants.INEG:    // negate integer on top of stack
+    case Constants.JSR:     // pushes return address on the stack, but that
+                            // is thought of as an object, so we don't need
+                            // a tag for it.
+    case Constants.JSR_W:
+    case Constants.L2D:     // long to double
+    case Constants.L2F:     // long to float
+    case Constants.L2I:     // long to int
+    case Constants.LNEG:    // negate long on top of stack
+    case Constants.MONITORENTER:
+    case Constants.MONITOREXIT:
+    case Constants.NEW:
+    case Constants.NOP:
+    case Constants.RET:     // this is the internal JSR return
+      return (null);
+
+    // Make sure we didn't miss anything
     default:
+      assert false: "instruction " + inst + " unsupported";
       return (null);
     }
 
   }
+
+  /**
+   * Discards primitive tags for each primitive argument to a non-instrumented
+   * method and adds a tag for a primitive return value.  Insures that the
+   * tag stack is correct for non-instrumented methods
+   */
+  InstructionList handle_invoke (InvokeInstruction invoke) {
+
+    String classname = invoke.getClassName (pool);
+
+    InstructionList il = new InstructionList();
+
+    boolean callee_instrumented = !BCELUtil.in_jdk (classname)
+      || (jdk_instrumented && classname.startsWith ("java")
+          && (exclude_object && !classname.equals ("java.lang.Object")));
+
+    // If the callee is instrumented then, add the dcomp argument
+    if (callee_instrumented) {
+
+      // Add the DCompMarker argument so that the instrumented version
+      // will be used
+      il.append (new ACONST_NULL());
+      Type[] arg_types = add_type (invoke.getArgumentTypes(pool),
+                                   dcomp_marker);
+      il.append (ifact.createInvoke (classname, invoke.getMethodName(pool),
+                   invoke.getReturnType(pool), arg_types, invoke.getOpcode()));
+
+    } else { // not instrumented, discard the tags before making the call
+
+      // Discard the tags for any primitive arguments passed to system
+      // methods
+      int primitive_cnt = 0;
+      Type[] arg_types = invoke.getArgumentTypes (pool);
+      for (Type arg_type : arg_types) {
+        if (arg_type instanceof BasicType)
+          primitive_cnt++;
+      }
+      if (primitive_cnt > 0)
+        il.append (discard_tag_code (new NOP(), primitive_cnt));
+
+      // Add a tag for the return type if it is primitive
+      Type ret_type = invoke.getReturnType (pool);
+      if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
+        System.out.printf ("push tag for return  type of %s%n",
+                           invoke.getReturnType(pool));
+        il.append (dcr_call ("push_const", Type.VOID, Type.NO_ARGS));
+      }
+      il.append (invoke);
+    }
+    return (il);
+  }
+
 
   /**
    * Create the instructions that replace the object eq or ne branch
@@ -529,6 +1649,7 @@ class DCInstrument {
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
                                    compare_method, Type.BOOLEAN,
                                    two_objects, Constants.INVOKESTATIC));
+    assert branch.getTarget() != null;
     il.append (ifact.createBranchInstruction (boolean_if,
                                               branch.getTarget()));
     return (il);
@@ -541,7 +1662,7 @@ class DCInstrument {
    * in DCRuntime and passing that method the object containing the
    * the field and the offset of that field within the object
    */
-  InstructionList load_store_field (FieldInstruction f, String method) {
+  InstructionList old_load_store_field (FieldInstruction f, String method) {
 
     Type field_type = f.getFieldType (pool);
     if (field_type instanceof ReferenceType)
@@ -566,6 +1687,108 @@ class DCInstrument {
     il.append (f);
     return (il);
   }
+
+  /**
+   * Handles load and store field instructions.  The instructions must
+   * be augmented to either push (load) or pop (store) the tag on the
+   * tag stack.  If tag storage is supported for the class that contains
+   * the field, this is accomplished by loading/storing from the tag
+   * field of the specified field.
+   *
+   * If tag storage is not supported, then (for now) we just discard stores
+   * and push constant tags for loads.  This may miss some comparability
+   */
+  InstructionList load_store_field_tag_fields (FieldInstruction f) {
+
+    Type field_type = f.getFieldType (pool);
+    if (field_type instanceof ReferenceType)
+      return (null);
+    ObjectType obj_type = (ObjectType) f.getReferenceType (pool);
+    InstructionList il = new InstructionList();
+    String classname = obj_type.getClassName();
+
+    // If this class doesn't support tag fields, don't load/store them
+    if (!tag_fields_ok (classname)) {
+      if (f instanceof GETFIELD) {
+        il.append (dcr_call ("push_const", Type.VOID, Type.NO_ARGS));
+      } else {
+        il.append (ifact.createConstant (1));
+        il.append (dcr_call ("discard_tag", Type.VOID, integer_arg));
+      }
+      il.append (f);
+      return (il);
+    }
+
+    if (f instanceof GETFIELD) {
+      // Dup the object ref on the top of stack
+      il.append (ifact.createDup (obj_type.getSize()));
+
+      // Get the tag value from the tag field
+      il.append (ifact.createGetField (classname,
+               DCRuntime.tag_field_name (f.getFieldName(pool)), Type.OBJECT));
+
+      // Push the tag on the tag stack
+      il.append (dcr_call ("push_tag", Type.VOID, object_arg));
+
+    } else { // Must be putfield
+
+      // Put the object ref on the stop of stack and dup it
+      il.append (new SWAP());
+      il.append (ifact.createDup (obj_type.getSize()));
+
+      // Get the tag from the top of the tag stack
+      il.append (dcr_call ("pop_tag", Type.OBJECT, Type.NO_ARGS));
+
+      // Store the tag in the tag field for this field
+      il.append (ifact.createPutField (classname,
+               DCRuntime.tag_field_name (f.getFieldName(pool)), Type.OBJECT));
+
+      // Restore the original order of the items on the stack
+      il.append (new SWAP());
+    }
+
+    // Perform the normal field command
+    il.append (f);
+
+    return (il);
+  }
+
+  /**
+   * Handles load and store field instructions.  The instructions must
+   * be augmented to either push (load) or pop (store) the tag on the
+   * tag stack.  This is accomplished by calling the tag get/set method
+   * for this field.
+   */
+  InstructionList load_store_field  (FieldInstruction f) {
+
+    Type field_type = f.getFieldType (pool);
+    if (field_type instanceof ReferenceType)
+      return (null);
+    ObjectType obj_type = (ObjectType) f.getReferenceType (pool);
+    InstructionList il = new InstructionList();
+    String classname = obj_type.getClassName();
+
+    // invoke the appropriate tag accessor method
+    if (f instanceof GETFIELD) {
+      il.append (ifact.createDup (obj_type.getSize()));
+      il.append (ifact.createInvoke (classname,
+                 tag_method_name (GET_TAG, classname, f.getFieldName(pool)),
+                 Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+    } else {
+      il.append (new SWAP());
+      il.append (ifact.createDup (obj_type.getSize()));
+      il.append (ifact.createInvoke (classname,
+                 tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                 Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+      il.append (new SWAP());
+    }
+
+    // Perform the normal field command
+    il.append (f);
+
+    return (il);
+  }
+
 
   /**
    * Handles load and store static instructions.  The instructions must
@@ -613,16 +1836,15 @@ class DCInstrument {
                                     String method) {
 
     // Don't need tags for objects
-    if (lvi instanceof ALOAD)
-      return (null);
+    assert !(lvi instanceof ALOAD) && !(lvi instanceof ASTORE) : "lvi " + lvi;
 
     InstructionList il = new InstructionList();
 
     // Push the tag frame and the index of this local
     il.append (ifact.createLoad (tag_frame_local.getType(),
                                  tag_frame_local.getIndex()));
-    System.out.printf ("CreateLoad %s %d%n", tag_frame_local.getType(),
-                       tag_frame_local.getIndex());
+    debug_instrument_inst.log ("CreateLoad %s %d%n", tag_frame_local.getType(),
+                               tag_frame_local.getIndex());
     il.append (ifact.createConstant (lvi.getIndex()));
 
     // Call the runtime method to handle loading/storing the local/parameter
@@ -755,6 +1977,9 @@ class DCInstrument {
     int last_line_number = 0;
     boolean foundLine;
 
+    if (il == null)
+      return (null);
+
     for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
       foundLine = false;
 
@@ -853,15 +2078,61 @@ class DCInstrument {
   }
 
   /**
+   * Creates code that makes the index comparable (for indexing
+   * purposes) with the array in array load instructions.  First the
+   * arrayref and its index are duplicated on the stack.  Then the
+   * appropriate array load method is called to mark them as
+   * comparable and update the tag stack.  Finally the original load
+   * instruction is performed.
+   */
+  public InstructionList array_load (Instruction inst) {
+
+    InstructionList il = new InstructionList();
+
+    // Duplicate the array ref and index and pass them to DCRuntime
+    // which will make the index comparable with the array.  In the case
+    // of primtives it will also get the tag for the primitive and push
+    // it on the tag stack.
+    il.append (new DUP2());
+    String method = "primitive_array_load";
+    if (inst instanceof AALOAD)
+      method = "ref_array_load";
+    il.append (dcr_call (method, Type.VOID,
+                         new Type[] {Type.OBJECT, Type.INT}));
+
+    // Perform the original instruction
+    il.append (inst);
+
+    return (il);
+  }
+
+  /**
+   * Creates code to make the index comparable (for indexing purposes)
+   * with the array in the array store instruction.  This is accomplished
+   * by calling the specified method and passing it the array reference,
+   * index, and value (of base_type).  The method will mark the array and
+   * index as comparable and perform the array store.
+   */
+  public InstructionList array_store (Instruction inst, String method,
+                                      Type base_type) {
+
+    InstructionList il = new InstructionList();
+    Type arr_type = new ArrayType(base_type, 1);
+    il.append (dcr_call (method, Type.VOID, new Type[] {arr_type, Type.INT,
+                                                        base_type}));
+    return (il);
+  }
+
+  /**
    * Returns whether or not this ppt should be included.  A ppt is included
    * if it matches ones of the select patterns and doesn't match any of the
    * omit patterns.
    */
-  public boolean should_instrument (String pptname) {
+  public boolean should_track (String pptname) {
 
     // System.out.printf ("Considering ppt %s%n", pptname);
 
-    // Don't instrument toString methods because we call them in
+    // Don't track toString methods because we call them in
     // our debug statements.
     if (ignore_toString && pptname.contains ("toString"))
       return (false);
@@ -919,7 +2190,679 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     il.append (ifact.createConstant (tag_count));
     il.append (dcr_call ("discard_tag", Type.VOID, integer_arg));
-    il.append (inst);
+    append_inst (il, inst);
     return (il);
+  }
+
+  /**
+   * Appends the specified instruction to the end of the specified list.
+   * Required because for some reason you can't directly append jump
+   * instructions to the list -- but you can create new ones and append
+   * them.
+   */
+  private void append_inst (InstructionList il, Instruction inst) {
+
+    if (inst instanceof LOOKUPSWITCH) {
+      LOOKUPSWITCH ls = (LOOKUPSWITCH)inst;
+      il.append (new LOOKUPSWITCH (ls.getMatchs(), ls.getTargets(),
+                                   ls.getTarget()));
+    } else if (inst instanceof TABLESWITCH) {
+      TABLESWITCH ts = (TABLESWITCH)inst;
+      il.append (new TABLESWITCH (ts.getMatchs(), ts.getTargets(),
+                                  ts.getTarget()));
+    } else if (inst instanceof IfInstruction) {
+      IfInstruction ifi = (IfInstruction) inst;
+      il.append (ifact.createBranchInstruction (inst.getOpcode(),
+                                                ifi.getTarget()));
+    } else {
+      il.append (inst);
+    }
+  }
+
+  /**
+   * Returns whether or not the specified type is a primitive (int, float,
+   * double, etc)
+   */
+  private boolean is_primitive (Type type) {
+    return ((type instanceof BasicType) && (type != Type.VOID));
+  }
+
+  /**
+   * Returns whether or not the specified type is a category 2 (8 byte)
+   * type
+   */
+  private boolean is_category2 (Type type) {
+    return ((type == Type.DOUBLE) || (type == Type.LONG));
+  }
+
+  /**
+   * Returns the type of the last instruction that modified the top of
+   * stack.  A gross attempt to figure out what is on the top of stack.
+   */
+  private Type find_last_push (InstructionHandle ih) {
+
+    for (ih = ih.getPrev(); ih != null; ih = ih.getPrev()) {
+      Instruction inst = ih.getInstruction();
+      if (inst instanceof InvokeInstruction) {
+        return ((InvokeInstruction) inst).getReturnType(pool);
+      }
+      if (inst instanceof TypedInstruction)
+        return ((TypedInstruction) inst).getType (pool);
+    }
+    assert false : "couldn't find any typed instructions";
+    return null;
+  }
+
+  /** Convenience function to build an instruction list **/
+  private InstructionList build_il (Instruction... instructions) {
+    InstructionList il = new InstructionList();
+    for (Instruction inst : instructions)
+      append_inst (il, inst);
+    return (il);
+  }
+
+  /**
+   * Replace instruction ih in list il with the instructions in new_il.  If
+   * new_il is null, do nothing
+   */
+  private static void replace_instructions (InstructionList il,
+                                InstructionHandle ih, InstructionList new_il) {
+
+    if (new_il == null)
+      return;
+
+    // If there is only one new instruction, just replace it in the handle
+    if (new_il.getLength() == 1) {
+      ih.setInstruction (new_il.getEnd().getInstruction());
+      return;
+    }
+
+    // Get the start and end instruction of the new instructions
+    InstructionHandle new_end = new_il.getEnd();
+    InstructionHandle new_start = il.insert (ih, new_il);
+
+    // Move all of the branches from the old instruction to the new start
+    il.redirectBranches (ih, new_start);
+
+    // Move other targets to the new instuctions.
+    if (ih.hasTargeters()) {
+      for (InstructionTargeter it : ih.getTargeters()) {
+        if (it instanceof LineNumberGen) {
+          it.updateTarget (ih, new_start);
+        } else if (it instanceof LocalVariableGen) {
+          it.updateTarget (ih, new_end);
+        } else if (it instanceof CodeExceptionGen) {
+          CodeExceptionGen exc = (CodeExceptionGen)it;
+          if (exc.getStartPC() == ih)
+            exc.updateTarget (ih, new_start);
+          else if (exc.getEndPC() == ih)
+            exc.updateTarget(ih, new_end);
+          else if (exc.getHandlerPC() == ih)
+            exc.setHandlerPC (new_start);
+          else
+            System.out.printf ("Malformed CodeException: %s%n", exc);
+        } else {
+          System.out.printf ("unexpected target %s%n", it);
+        }
+      }
+    }
+
+    // Remove the old handle.  There should be no targeters left to it.
+    try {
+      il.delete (ih);
+    } catch (Exception e) {
+      throw new Error ("Can't delete instruction", e);
+    }
+  }
+
+  /**
+   * Returns whether or not the invoke specified invokes a native method.
+   * This requires that the class that contains the method to be loaded.
+   */
+  public boolean is_native (InvokeInstruction invoke) {
+
+    // Get the class of the method
+    ClassLoader loader = getClass().getClassLoader();
+    Class clazz = null;
+    try {
+      clazz = Class.forName (invoke.getClassName(pool), false, loader);
+    } catch (Exception e) {
+      throw new Error ("can't get class " + invoke.getClassName(pool), e);
+    }
+
+    // Get the arguments to the method
+    Type[] arg_types = invoke.getArgumentTypes (pool);
+    Class[] arg_classes = new Class[arg_types.length];
+    for (int ii = 0; ii < arg_types.length; ii++) {
+      arg_classes[ii] = type_to_class (arg_types[ii], loader);
+    }
+
+    // Find the method and determine if its native
+    int modifiers = 0;
+    String method_name = invoke.getMethodName(pool);
+    String classes = clazz.getName();
+    try {
+      if (method_name.equals("<init>")) {
+        Constructor c = clazz.getDeclaredConstructor (arg_classes);
+        modifiers = c.getModifiers();
+      } else if (clazz.isInterface()) {
+        return (false);  // presume interfaces aren't native...
+      } else {
+
+        java.lang.reflect.Method m = null;
+        while (m == null) {
+          try {
+            m = clazz.getDeclaredMethod (method_name, arg_classes);
+            modifiers = m.getModifiers();
+          } catch (NoSuchMethodException e) {
+            clazz = clazz.getSuperclass();
+            classes += ", " + clazz.getName();
+          }
+        }
+      }
+    } catch (Exception e) {
+      throw new Error ("can't find method " + method_name + " " +
+                       Arrays.toString(arg_classes) + " " + classes + " " +
+                       invoke.toString (pool.getConstantPool()) , e);
+    }
+
+    return (Modifier.isNative (modifiers));
+
+  }
+
+
+  /**
+   * Converts a BCEL type to a Class.  The class referenced will be
+   * loaded but not initialized.  The specified loader must be able to
+   * find it.  If load is null, the default loader will be used.
+   */
+  public static Class type_to_class (Type t, ClassLoader loader) {
+
+    if (loader == null)
+      loader = DCInstrument.class.getClassLoader();
+
+    if (t == Type.BOOLEAN)
+      return (Boolean.TYPE);
+    else if (t == Type.BYTE)
+      return (Byte.TYPE);
+    else if (t == Type.CHAR)
+      return (Character.TYPE);
+    else if (t == Type.DOUBLE)
+      return (Double.TYPE);
+    else if (t == Type.FLOAT)
+      return (Float.TYPE);
+    else if (t == Type.INT)
+      return (Integer.TYPE);
+    else if (t == Type.LONG)
+      return (Long.TYPE);
+    else if (t == Type.SHORT)
+      return (Short.TYPE);
+    else if (t instanceof ObjectType) {
+      try {
+        return Class.forName (((ObjectType)t).getClassName(), false, loader);
+      } catch (Exception e) {
+        throw new Error ("can't get class "+((ObjectType)t).getClassName(), e);
+      }
+    } else if (t instanceof ArrayType) {
+      String sig = t.getSignature().replace ('/', '.');
+      try {
+        return Class.forName (sig, false, loader);
+      } catch (Exception e) {
+        //System.out.printf ("classname of object[] = '%s'%n", Object[].class);
+        throw new Error ("can't get class " + sig, e);
+      }
+    } else {
+      assert false : "unexpected type " + t;
+      return (null);
+    }
+
+  }
+
+  /**
+   * Returns a type array with new_type added to the end of types
+   */
+  public static Type[] add_type (Type[] types, Type new_type) {
+      Type[] new_types = new Type[types.length + 1];
+      for (int ii = 0; ii < types.length; ii++) {
+        new_types[ii] = types[ii];
+      }
+      new_types[types.length] = new_type;
+      return (new_types);
+  }
+
+  /**
+   * Returns a String array with new_string added to the end of arr
+   */
+  public static String[] add_string (String[] arr, String new_string) {
+      String[] new_arr = new String[arr.length + 1];
+      for (int ii = 0; ii < arr.length; ii++) {
+        new_arr[ii] = arr[ii];
+      }
+      new_arr[arr.length] = new_string;
+      return (new_arr);
+  }
+
+  /**
+   * Modify a doubled native method to call its original method.  It pops
+   * all of the paramter tags off of the tag stack.  If there is a
+   * primitive return value it puts a new tag value on the stack for
+   * it.
+   *
+   * TODO: add a way to provide a synopsis for native methods that
+   * affect comparability.
+   *
+   * @param gen ClassGen for current class
+   * @param mg MethodGen for the interface method. Must be native
+   */
+  public void fix_native(ClassGen gen, MethodGen mg) {
+
+    InstructionList il = new InstructionList();
+    Type[] arg_types = mg.getArgumentTypes();
+    String[] arg_names = mg.getArgumentNames();
+
+    debug_native.log ("Native call %s%n", mg);
+
+    // Build local variables for each argument to the method
+    if (!mg.isStatic())
+      mg.addLocalVariable ("this", new ObjectType(mg.getClassName()), null,
+                           null);
+    for (int ii = 0; ii < arg_types.length; ii++) {
+      mg.addLocalVariable (arg_names[ii], arg_types[ii], null, null);
+    }
+
+    // Discard the tags for any primitive arguments passed to system
+    // methods
+    int primitive_cnt = 0;
+    for (Type arg_type : arg_types) {
+      if (arg_type instanceof BasicType)
+        primitive_cnt++;
+    }
+    if (primitive_cnt > 0)
+      il.append (discard_tag_code (new NOP(), primitive_cnt));
+
+    // push a tag if there is a primitive return value
+    Type ret_type = mg.getReturnType();
+    if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
+      il.append (dcr_call ("push_const", Type.VOID, Type.NO_ARGS));
+    }
+
+    // If the method is not static, push the instance on the stack
+    if (!mg.isStatic())
+      il.append(ifact.createLoad(new ObjectType(gen.getClassName()), 0));
+
+    // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
+    if (mg.getName().equals("getCallerClass")
+        && gen.getClassName().equals("sun.reflect.Reflection")) {
+
+      // The call returns the class realFramesToSkip up on the stack. Since we
+      // have added this call in between, we need to increment that number
+      // by 1.
+      il.append(ifact.createLoad(Type.INT, 0));
+      il.append(ifact.createConstant(1));
+      il.append(new IADD());
+      // System.out.printf("adding 1 in %s.%s\n", gen.getClassName(),
+      //                   mg.getName());
+
+    } else { // normal call
+
+      // push each argument on the stack
+      int param_index = 1;
+      if (mg.isStatic())
+        param_index = 0;
+      for (Type arg_type : arg_types) {
+        il.append(InstructionFactory.createLoad(arg_type, param_index));
+        param_index += arg_type.getSize();
+      }
+    }
+
+    // Call the method
+    il.append(ifact.createInvoke(gen.getClassName(), mg.getName(),
+      mg.getReturnType(), arg_types, (mg.isStatic() ? Constants.INVOKESTATIC
+                                      : Constants.INVOKEVIRTUAL)));
+
+    // If there is a return value, return it
+    il.append(InstructionFactory.createReturn(mg.getReturnType()));
+
+    // Add the instructions to the method
+    mg.setInstructionList(il);
+    mg.setMaxStack();
+    mg.setMaxLocals();
+
+    // turn off the native flag
+    mg.setAccessFlags(mg.getAccessFlags() & ~Constants.ACC_NATIVE);
+  }
+
+  /**
+   * Returns whether or not tag fields are used within the specified class.
+   * We can safely use class fields except in Object, String, and Class
+   */
+  public boolean tag_fields_ok (String classname) {
+
+    if (true)
+      return (false);
+
+    if (classname.startsWith ("java.lang"))
+      return false;
+
+    if (classname.equals ("java.lang.String")
+        || classname.equals ("java.lang.Class")
+        || classname.equals ("java.lang.Object")
+        || classname.equals ("java.lang.ClassLoader"))
+      return (false);
+
+    return (true);
+  }
+
+  /**
+   * Adds a tag field that parallels each primitive field in the class.
+   * The tag field is of type object and holds the tag associated with that
+   * primitive
+   */
+  public void add_tag_fields () {
+
+    // Add fields for tag storage for each primitive field
+    for (Field field : gen.getFields()) {
+      if (is_primitive (field.getType()) && !field.isStatic()) {
+        FieldGen tag_field
+          = new FieldGen (field.getAccessFlags() | Constants.ACC_SYNTHETIC,
+                Type.OBJECT, DCRuntime.tag_field_name(field.getName()), pool);
+        gen.addField (tag_field.getField());
+      }
+    }
+  }
+
+  /**
+   * Returns a string describing the top max_items items on the stack.
+   */
+  public static String stack_contents (OperandStack stack, int max_items) {
+    String contents = "";
+    if (max_items >= stack.size())
+      max_items = stack.size()-1;
+    for (int ii = max_items; ii >= 0; ii--) {
+      if (contents.length() != 0)
+        contents += ", ";
+      System.out.printf ("ii = %d%n", ii);
+      contents += stack.peek(ii);
+    }
+    return contents;
+  }
+
+  /**
+   * Creates tag get and set accessor methods for each field in gen.
+   * An accessor is created for each field (including final, static,
+   * and private fields). The accessors share the modifiers of their
+   * field (except that all are final).  Accessors are named
+   * <field>_<class>__$get_tag and <field>_<class>__$set_tag.  The class
+   * name must be included because field names can shadow one another.
+   *
+   * If tag_fields_ok is true for the class, then tag fields are created
+   * and the accessor uses the tag fields.  If not, tag storage is created
+   * separately and accessed via the field number.
+   *
+   * Accessors are also created for each visible superclass field that is
+   * not hidden by a field in this class.  These accessors just call the
+   * superclasses accessor.
+   *
+   * Returns the list of new accessors and adds them to the class
+   */
+  public List<MethodGen> create_tag_accessors (ClassGen gen) {
+
+    String classname = gen.getClassName();
+    List<MethodGen> mlist = new ArrayList<MethodGen>();
+
+    Set<String> field_set = new HashSet<String>();
+    Map<Field,Integer> field_map = build_field_map (gen.getJavaClass());
+
+    // Build accessors for all fields declared in this class
+    for (Field f : gen.getFields()) {
+
+      assert !field_set.contains(f.getName()) : f.getName() + "-" + classname;
+      field_set.add(f.getName());
+
+      // skip primitive fields
+      if (!is_primitive (f.getType()))
+        continue;
+
+      // skip static fields
+      if (f.isStatic())
+        continue;
+
+      // Build the get accessor
+      MethodGen get_method = create_get_tag (gen, f, field_map.get(f));
+      gen.addMethod(get_method.getMethod());
+      mlist.add(get_method);
+
+      // Build the set accessor
+      MethodGen set_method = create_set_tag (gen, f, field_map.get(f));
+      gen.addMethod(set_method.getMethod());
+      mlist.add(set_method);
+    }
+
+    // Build accessors for each field declared in a superclass that is
+    // is not shadowed in a subclass
+    JavaClass[] super_classes = null;
+    try {
+      super_classes = gen.getJavaClass().getSuperClasses();
+    } catch (Exception e) {
+      throw new Error(e);
+    }
+    for (JavaClass super_class : super_classes) {
+      for (Field f : super_class.getFields()) {
+        if (f.isPrivate())
+          continue;
+        if (field_set.contains(f.getName()))
+          continue;
+        if (!is_primitive (f.getType()))
+          continue;
+        if (f.isStatic())
+          continue;
+
+        field_set.add(f.getName());
+        MethodGen get_method = create_get_tag (gen, f, field_map.get(f));
+        gen.addMethod(get_method.getMethod());
+        mlist.add(get_method);
+        MethodGen set_method = create_set_tag (gen, f, field_map.get(f));
+        gen.addMethod(set_method.getMethod());
+        mlist.add(set_method);
+      }
+    }
+
+    return (mlist);
+  }
+
+  /**
+   * Builds a Map that relates each field in jc and each of its
+   * superclasses to a unique offset.  The offset can be used to
+   * index into a tag array for this class
+   */
+  public Map<Field,Integer> build_field_map (JavaClass jc) {
+
+    // Object doesn't have any primitive fields
+    if (jc.getClassName().equals ("java.lang.Object"))
+      return new LinkedHashMap<Field,Integer>();
+
+    // Get the offsets for each field in the superclasses.
+    JavaClass super_jc = null;
+    try {
+      super_jc = jc.getSuperClass();
+    } catch (Exception e) {
+      throw new Error ("can't get superclass for " + jc, e);
+    }
+    Map<Field,Integer> field_map = build_field_map (super_jc);
+    int offset = field_map.size();
+
+    // Determine the offset for each field in the class
+    for (Field f : jc.getFields()) {
+      if (is_primitive (f.getType())) {
+        field_map.put (f, offset);
+        offset++;
+      }
+    }
+
+    return field_map;
+  }
+
+  /**
+   * Creates a get tag method for field f.   The tag corresponding to field
+   * f will be pushed on the tag stack.
+   *
+   *  void <field>_<class>__$get_tag() {
+   *    DCRuntime.push_field_tag (this, tag_offset);
+   *  }
+   *
+   * @param gen ClassGen of class whose accessors are being built. Not
+   *          necessarily the class declaring f (if f is inherited)
+   * @param f field to build an accessor for
+   * @param tag_offset Offset of f in the tag storage for this field
+   */
+  public MethodGen create_get_tag (ClassGen gen, Field f, int tag_offset) {
+
+    String classname = gen.getClassName();
+    String accessor_name = tag_method_name(GET_TAG, classname, f.getName());
+
+    InstructionList il = new InstructionList();
+
+    il.append (ifact.createThis());
+    il.append (ifact.createConstant (tag_offset));
+    il.append (dcr_call ("push_field_tag", Type.VOID, object_int));
+    il.append (ifact.createReturn (Type.VOID));
+
+    // Create the get accessor method
+    MethodGen get_method
+      = new MethodGen(f.getAccessFlags() | Constants.ACC_FINAL,
+        Type.VOID, Type.NO_ARGS, new String[] {}, accessor_name,
+        classname, il, pool);
+    get_method.setMaxLocals();
+    get_method.setMaxStack();
+    // add_line_numbers(get_method, il);
+
+    return (get_method);
+  }
+
+  /**
+   * Creates a set tag method for field f.   The tag on the top of the tag
+   * stack will be popped off and placed in the tag storeage corresponding
+   * to field
+   *
+   *  void <field>_<class>__$set_tag() {
+   *    DCRuntime.pop_field_tag (this, tag_offset);
+   *  }
+   *
+   * @param gen ClassGen of class whose accessors are being built. Not
+   *          necessarily the class declaring f (if f is inherited)
+   * @param f field to build an accessor for
+   * @param tag_offset Offset of f in the tag storage for this field
+   */
+  public MethodGen create_set_tag (ClassGen gen, Field f, int tag_offset) {
+
+    String classname = gen.getClassName();
+    String accessor_name = tag_method_name(SET_TAG, classname, f.getName());
+
+    InstructionList il = new InstructionList();
+
+    il.append (ifact.createThis());
+    il.append (ifact.createConstant (tag_offset));
+    il.append (dcr_call ("pop_field_tag", Type.VOID, object_int));
+    il.append (ifact.createReturn (Type.VOID));
+
+    // Create the get accessor method
+    MethodGen set_method
+      = new MethodGen(f.getAccessFlags() | Constants.ACC_FINAL,
+        Type.VOID, Type.NO_ARGS, new String[] {}, accessor_name,
+        classname, il, pool);
+    set_method.setMaxLocals();
+    set_method.setMaxStack();
+    // add_line_numbers(set_method, il);
+
+    return (set_method);
+  }
+
+  /** Returns the tag accessor method name **/
+  public String tag_method_name (String typ, String classname, String fname) {
+    return fname + "_" + classname.replace ('.', '_') + "__$" + typ;
+  }
+
+  public void add_dcomp_arg (MethodGen mg) {
+
+    // Don't modify main or the JVM won't be able to find it.
+    if (BCELUtil.is_main (mg))
+      return;
+
+    // Don't modify class init methods, they don't take arguments
+    if (BCELUtil.is_clinit (mg))
+      return;
+
+    //if (!mg.getName().equals("double_check"))
+    //  return;
+
+    boolean has_code = (mg.getInstructionList() != null) ;
+
+    // If the method has code, add the local representing the new parameter
+    // as a local, move all of the other locals down one slot, and modify
+    // all of the code that references those locals
+    if (has_code) {
+
+      // Get the current local variables (includes parameters)
+      LocalVariableGen[] locals = mg.getLocalVariables();
+
+      // Remove the existing locals
+      mg.removeLocalVariables();
+      mg.setMaxLocals (0);
+
+      // Determine the first actual local in the local variables.  The object
+      // and the parameters form the first n entries in the list.
+      int first_local = mg.getArgumentTypes().length;
+      if (!mg.isStatic())
+        first_local++;
+
+      // Add back the object and the parameters
+      for (int ii = 0; ii < first_local; ii++) {
+        LocalVariableGen l = locals[ii];
+        LocalVariableGen new_lvg
+          = mg.addLocalVariable (l.getName(), l.getType(), l.getStart(),
+                                 l.getEnd());
+        debug_add_dcomp.log ("Added parameter %s%n", new_lvg);
+      }
+
+      // Add the new parameter
+      LocalVariableGen dcomp_arg = mg.addLocalVariable ("marker", dcomp_marker,
+                                                        null, null);
+      debug_add_dcomp.log ("Added dcomp arg %s%n", dcomp_arg);
+
+      // Add back the other locals
+      for (int ii = first_local; ii < locals.length; ii++) {
+        LocalVariableGen l = locals[ii];
+        LocalVariableGen new_lvg
+          = mg.addLocalVariable (l.getName(), l.getType(), l.getStart(),
+                                 l.getEnd());
+        debug_add_dcomp.log ("Added local %s%n", new_lvg);
+      }
+
+      // Process the instruction list, adding one to the index of each
+      // LocalVariableInstruction that is not referencing a parameter
+      InstructionList il = mg.getInstructionList();
+      for (InstructionHandle ih = il.getStart(); ih != null;ih = ih.getNext()){
+        Instruction inst = ih.getInstruction();
+        if (inst instanceof LocalVariableInstruction) {
+          LocalVariableInstruction lvi = (LocalVariableInstruction) inst;
+          if (lvi.getIndex() > first_local)
+            lvi.setIndex (lvi.getIndex() + 1);
+        }
+      }
+    }
+
+    // Add an argument of type java.lang.DCompMarker to distinguish the
+    // method as instrumented
+    Type[] arg_types = add_type (mg.getArgumentTypes(), dcomp_marker);
+    String[] arg_names = add_string (mg.getArgumentNames(), "marker");
+    debug_add_dcomp.log ("%s:%n  args = %s, %n  names = %s%n", mg.getName(),
+                     Arrays.toString (arg_types), Arrays.toString (arg_names));
+    mg.setArgumentTypes (arg_types);
+    mg.setArgumentNames (arg_names);
+
+    if(has_code)
+      mg.setMaxLocals();
+
+    debug_add_dcomp.log ("new mg: %s%n", mg);
   }
 }
