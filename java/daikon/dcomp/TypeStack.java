@@ -91,12 +91,8 @@ public final class TypeStack
         InstructionHandle prev = hand.getPrev();
         Set<InstructionHandle> targeters = new HashSet<InstructionHandle>();
 
-        // if first instruction, or previous instruction was not a "goto" or a
-        // throw
-        if (prev == null || !(prev.getInstruction() instanceof GotoInstruction))// ||
-                                                                                // prev.getInstruction()
-                                                                                // instanceof
-                                                                                // ATHROW))
+        // if first instruction, or previous instruction was not a "goto" or a throw
+        if (prev == null || !(prev.getInstruction() instanceof GotoInstruction || prev.getInstruction() instanceof ATHROW))
         {
             // hand's parent is prev
             targeters.add(prev);
