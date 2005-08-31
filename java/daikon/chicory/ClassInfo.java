@@ -24,6 +24,12 @@ public class ClassInfo {
   /** this class's classloader**/
   private ClassLoader loader;
 
+  /** DaikonVariables for the object (instance and static) **/
+  public RootInfo traversalObject;
+
+  /** DaikonVariables for the class (static vars only) **/
+  public RootInfo traversalClass;
+
   /** Mapping from field name to string representation of its value**/
   //only for static final primitives
   //which are declared by a CONSTANT VALUE in the code
@@ -64,7 +70,7 @@ public class ClassInfo {
 
     for (MethodInfo mi : method_infos)
       mi.initViaReflection();
-    
+
     if(ChicoryPremain.shouldDoPurity())
     {
         for(String pureMeth: ChicoryPremain.getPureMethods())
@@ -81,7 +87,7 @@ public class ClassInfo {
                         break;
                     }
                 }
-                
+
                 if(!foundMatch)
                 {
                     // pureMeth must not actually be in this class
@@ -91,7 +97,7 @@ public class ClassInfo {
         }
     }
   }
-  
+
   /**
    * Determines if fully qualified method name is in this class
    * Example methodName: public static String doStuff(int, java.lang.Object)
@@ -121,5 +127,20 @@ public class ClassInfo {
         ps.printf ("%s ", exit_loc);
       ps.printf ("%n");
     }
+  }
+
+  /** Initializes the daikon variables for the object and class ppts **/
+  public void init_traversal (int depth) {
+    if (traversalObject == null)
+      traversalObject = RootInfo.getObjectPpt (this, depth);
+    if (traversalClass == null)
+      traversalClass = RootInfo.getClassPpt (this, depth);
+    assert traversalObject != null : class_name;
+    assert traversalClass != null : class_name;
+
+  }
+
+  public String toString() {
+    return ("ClassInfo [" + class_name + "]");
   }
 }
