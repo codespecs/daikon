@@ -35,6 +35,8 @@ public class BCELUtil {
   /** Controls whether the checks in checkMgen are actually performed * */
   public static boolean skip_checks = false;
 
+  private static final Type string_array = Type.getType("[Ljava.lang.String;");
+
   static void dump_method_declarations(ClassGen gen) {
     out.printf("method signatures for class %s\n", gen.getClassName());
     for (Method m : gen.getMethods()) {
@@ -421,5 +423,14 @@ public class BCELUtil {
     return (att_name);
   }
 
+  /**
+   * Returns whether or not this is a standard main method (static,
+   * name is 'main', and one argument of string array
+   */
+  public static boolean is_main (MethodGen mg) {
+    Type[] arg_types = mg.getArgumentTypes();
+    return (mg.isStatic() && mg.getName().equals("main")
+            && (arg_types.length == 1) && arg_types[0].equals(string_array));
+  }
 
 }
