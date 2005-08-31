@@ -20,6 +20,7 @@ public class Premain {
   public static boolean debug = true;
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
   public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static String compare_sets_file = null;
 
   public static void premain (String agentArgs, Instrumentation inst) {
 
@@ -35,6 +36,10 @@ public class Premain {
 
     debug_bin_dir.mkdirs();
     debug_orig_dir.mkdirs();
+
+    // Setup the shutdown hook
+    Thread shutdown_thread = new ShutdownThread();
+    java.lang.Runtime.getRuntime().addShutdownHook (shutdown_thread);
 
     Transform transformer = new Transform();
     inst.addTransformer (transformer);
@@ -132,6 +137,8 @@ public class Premain {
         } catch (Exception e) {
           return String.format ("Can't compile pattern %s: %s%n", omit, e);
         }
+      } else if (arg.startsWith ("--compare-sets-file=")) {
+        compare_sets_file = arg.substring ("--compare-sets-file=".length());
       } else {
         return ("Unexpected argument " + arg);
       }
@@ -146,5 +153,37 @@ public class Premain {
     System.out.println ("Options:");
     System.out.println ("  --ppt-select-pattern=<regex>");
     System.out.println ("  --ppt-omit-pattern=<regex>");
+  }
+
+  /**
+   * Shutdown thread that writes out the comparability results
+   */
+  public static class ShutdownThread extends Thread {
+
+    public void run() {
+
+      // If requested, write the comparability data to a file
+      if (compare_sets_file != null) {
+        PrintStream compare_out = open (compare_sets_file);
+        DCRuntime.print_all_comparable (compare_out);
+      }
+
+      // Write comparability sets to standard out
+      DCRuntime.print_all_comparable (System.out);
+
+      // Write the decl file out
+      String comp_out_fname = "/tmp/dcomp.decls";
+      System.out.println("Writing comparability results to " + comp_out_fname);
+      PrintStream comp_out = open (comp_out_fname);
+      DCRuntime.print_decl_file (comp_out);
+    }
+  }
+
+  public static PrintStream open (String filename) {
+    try {
+      return new PrintStream (filename);
+    } catch (Exception e) {
+      throw new Error ("Can't open " + filename, e);
+    }
   }
 }
