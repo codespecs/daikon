@@ -22,7 +22,7 @@ public final class TypeStack
     private final Type[] argTypes;
     private final Type retType;
     private OperandStack stack = null;
-    
+
     private static final int MAX = Integer.MAX_VALUE;
 
     public TypeStack(ClassGen gen, InstructionList l,
@@ -43,6 +43,14 @@ public final class TypeStack
         argTypes = convArr(argT);
         pool = new ConstantPoolGen(p);
         createMap(l, exceptionTable);
+    }
+
+    public TypeStack (MethodGen mg)
+    {
+        retType = conv(mg.getReturnType());
+        argTypes = convArr(mg.getArgumentTypes());
+        pool = mg.getConstantPool();
+        createMap (mg.getInstructionList(), mg.getExceptionHandlers());
     }
 
     private OperandStack startMethStack()
@@ -68,7 +76,7 @@ public final class TypeStack
         {
             //for(InstructionHandle h : l.getInstructionHandles())
               //  System.out.println(h);
-            
+
             throw new IllegalStateException(
                     "No valid parent map possible for this method");
         }
@@ -102,7 +110,7 @@ public final class TypeStack
         for (InstructionHandle nextHand : allInst)
         {
             if (nextHand.getInstruction() instanceof BranchInstruction)
-            {                
+            {
                 BranchInstruction i = (BranchInstruction) nextHand.getInstruction();
                 if(i.containsTarget(hand))
                 {
@@ -348,13 +356,13 @@ public final class TypeStack
     private static OperandStack copyOfStack(OperandStack parent)
     {
         /*OperandStack copy = new OperandStack(MAX);
-        
+
         for (Type el : parent)
             copy.push(el);
-        
-        
+
+
         return copy;*/
-        
+
         return parent.getClone();
     }
 
@@ -984,10 +992,10 @@ public final class TypeStack
         {
             Type t1 = stack.pop();
             Type t2 = stack.pop();
-            
-            
+
+
             if(isCat1(t1) && isCat2(t2))
-            {               
+            {
                 stack.push(t1);
                 stack.push(t2);
                 stack.push(t1);
@@ -995,9 +1003,9 @@ public final class TypeStack
             else if(isCat1(t1) && isCat1(t2) && isCat1(stack.peek()))
             {
                 Type t3 = stack.pop();
-                
+
                 assert isCat1(t3);
-                
+
                 stack.push(t1);
                 stack.push(t3);
                 stack.push(t2);
@@ -1026,9 +1034,9 @@ public final class TypeStack
             {
                 Type t1 = stack.pop();
                 Type t2 = stack.pop();
-                
+
                 assert isCat1(t2);
-                
+
                 stack.push(t1);
                 stack.push(t2);
                 stack.push(t1);
@@ -1038,11 +1046,11 @@ public final class TypeStack
                 Type t1 = stack.pop();
                 Type t2 = stack.pop();
                 Type t3 = stack.pop();
-                
+
                 assert isCat1(t1);
                 assert isCat1(t2);
                 assert isCat1(t3);
-                
+
                 stack.push(t2);
                 stack.push(t1);
                 stack.push(t3);
@@ -1054,7 +1062,7 @@ public final class TypeStack
         {
             Type t1 = stack.pop();
             Type t2 = stack.pop();
-            
+
             if(isCat2(t1) && isCat2(t2))
             {
                 stack.push(t1);
@@ -1064,7 +1072,7 @@ public final class TypeStack
             else if(isCat1(t1) && isCat1(t2) && isCat2(stack.peek()))
             {
                 Type t3 = stack.pop();
-                
+
                 stack.push(t2);
                 stack.push(t1);
                 stack.push(t3);
@@ -1074,7 +1082,7 @@ public final class TypeStack
             else if(isCat2(t1) && isCat1(t2) && isCat1(stack.peek()))
             {
                 Type t3 = stack.pop();
-                
+
                 stack.push(t1);
                 stack.push(t3);
                 stack.push(t2);
@@ -1084,12 +1092,12 @@ public final class TypeStack
             {
                 Type t3 = stack.pop();
                 Type t4 = stack.pop();
-                
+
                 assert isCat1(t1);
                 assert isCat1(t2);
                 assert isCat1(t3);
                 assert isCat1(t4);
-                
+
                 stack.push(t2);
                 stack.push(t1);
                 stack.push(t4);
@@ -1122,7 +1130,7 @@ public final class TypeStack
                     + inst);
         }
     }
-    
+
     private Type top(OperandStack theStack, int i)
     {
         //return theStack.get(theStack.size() - i - 1);
@@ -1133,12 +1141,12 @@ public final class TypeStack
     {
         return (t == Type.LONG || t == Type.DOUBLE);
     }
-    
+
     private boolean isCat1(Type t)
     {
         return !isCat2(t);
     }
-    
+
     private void popNumPut(int n, Type type)
     {
         popNum(n);
@@ -1168,11 +1176,11 @@ public final class TypeStack
         testClass(Class.forName("java.io.BufferedWriter"));
         testClass(Class.forName("java.nio.Buffer"));
         testClass(Class.forName("java.beans.XMLDecoder"));
-        
+
         //switch these two, switch error??????
         testClass(Class.forName("javax.crypto.Cipher"));
         testClass(Class.forName("java.util.regex.Pattern"));
-        
+
         //other classes
         testClass(BranchInstruction.class);
         testClass(TypeStack.class);
@@ -1195,12 +1203,16 @@ public final class TypeStack
                     + testClass);
 
         JavaClass clazz = load.loadClass(testClass);
+        testJavaClass (clazz);
+    }
 
+    public static void testJavaClass (JavaClass clazz)
+    {
         for (Method meth : clazz.getMethods())
         {
             MethodGen mg = new MethodGen(meth, TypeStack.class.getName(),
                     new ConstantPoolGen(clazz.getConstantPool()));
-            
+
             //System.out.printf("\tTesting method %s...", mg);
 
             TypeStack stack = new TypeStack(clazz.getConstantPool(), mg
@@ -1229,7 +1241,7 @@ public final class TypeStack
 
                 //if(meth.getReturnType() != Type.VOID)
                     //System.out.printf("\tmethod --- %s, return type %s --- expected --- %s%n", mg, stack.peek(), mg.getReturnType());
-                
+
                 if (meth.getReturnType() != Type.VOID)
                     assert sameType(meth.getReturnType(), stack.peek()) : "Invalid return type "
                             + stack.peek()
@@ -1237,10 +1249,10 @@ public final class TypeStack
                             + "Expected "
                             + meth.getReturnType();
             }
-            
+
             //System.out.printf("done%n");
         }
-        
+
         System.out.printf("done%n");
     }
 
@@ -1268,7 +1280,7 @@ public final class TypeStack
     {
         t1 = conv(t1);
         t2 = conv(t2);
-        
+
         return both(Type.BOOLEAN, t1, t2) || both(Type.BYTE, t1, t2)
                 || both(Type.CHAR, t1, t2) || both(Type.DOUBLE, t1, t2)
                 || both(Type.FLOAT, t1, t2) || both(Type.INT, t1, t2)
@@ -1317,11 +1329,11 @@ public final class TypeStack
         f = f - 3f - 4f + 5f * 7f;
         l = l + 6l * 9l - 3l;
     }
-    
-    private static Type conv(Type t) 
+
+    private static Type conv(Type t)
     {
         //System.out.println(t);
-        
+
         if(t == Type.BOOLEAN)
             return Type.INT;
         else if(t == Type.CHAR)
@@ -1333,16 +1345,16 @@ public final class TypeStack
         else
             return t;
     }
-    
+
     private static Type[] convArr(Type[] tArr)
     {
         Type[] convArr = new Type[tArr.length];
-        
+
         for(int i = 0; i < tArr.length; i++)
         {
             convArr[i] = conv(tArr[i]);
         }
-        
+
         return convArr;
     }
 }
