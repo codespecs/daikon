@@ -32,9 +32,12 @@ public class Chicory {
   /** Ppts to include (regular expression) **/
   public List<Pattern> daikon_include_regex = new ArrayList<Pattern>();
 
+  /** File containing comparabiity information **/
+  public File comparability_filename = null;
+
   /** Print progress information **/
   public static boolean verbose = true;
-  
+
   /**
    * See StdVisibility in the DeclWriter class
    */
@@ -87,21 +90,21 @@ public class Chicory {
 
   /** flag to use if we want to turn on the static initialization checks**/
   public static final boolean checkStaticInit = true;
-  
-  /** Percentage of dtrace program points to report.  Each is chosen randomly at runtime **/ 
+
+  /** Percentage of dtrace program points to report.  Each is chosen randomly at runtime **/
   private static int recordPct = -1;
 
   private static final boolean RemoteDebug = false;
 
   /** Flag to initiate a purity analysis and use results to create additional variables **/
   private boolean purityAnalysis = false;
-  
-  /** 
+
+  /**
    * Flag to "watch" how we recurse on static types.  If true, don't recurse on the same
    * static type.
    */
   private static boolean watchStatics = false;
-  
+
 
   /** The name of the file to read for a list of pure methods.  Should be 1 method per line.
    *  Each method should be in the same format as format ouput by the purity analysis.
@@ -135,7 +138,7 @@ public class Chicory {
       return;
     System.out.printf(format, args);
   }
-  
+
   /**
    * Return true iff we should watch how static variable recursion
    */
@@ -146,14 +149,14 @@ public class Chicory {
 
   /**
    * Percentage of dtrace program points to report.  Each is chosen randomly at runtime.
-   * @return -1 if not using this feature (equivalent to 100%), the percentage otherwise.  
+   * @return -1 if not using this feature (equivalent to 100%), the percentage otherwise.
    *
    */
   public static int recordPct()
   {
       return recordPct;
   }
-  
+
   /** Return true iff argument was given to run a purity analysis
    *  Only run after running parse_args
    */
@@ -161,7 +164,7 @@ public class Chicory {
   {
       return purityAnalysis;
   }
-  
+
   /**
    * Return true iff a file name was specified to supply pure method names
    */
@@ -169,7 +172,7 @@ public class Chicory {
   {
       return purityFileName;
   }
-  
+
   /**
    * Get config dir
    */
@@ -177,13 +180,13 @@ public class Chicory {
   {
       return configDir;
   }
-  
+
   /**
    * Parse the command line arguments, setting fields accordingly.  If
    * agent is true, only allows agent arguments
    */
   public void parse_args(String[] args, boolean agent) {
-      
+
 
     int inx;
     for (inx = 0; inx < args.length; ++inx) {
@@ -283,6 +286,10 @@ public class Chicory {
         }
         premain_args.add(arg);
 
+      } else if (arg.startsWith("--comp_file=")) {
+        comparability_filename
+          = new File (arg.substring ("--comp_file=".length()));
+        premain_args.add (arg);
       } else if (arg.startsWith("--premain=")) {
         String premain_name = arg.substring("--premain=".length());
         premain_path = new File(premain_name);
@@ -374,7 +381,7 @@ public class Chicory {
       {
           StdVisibility = true;
           DaikonVariableInfo.StdVisibility = true;
-          
+
           premain_args.add(arg);
       }
       else if (arg.startsWith("--target-program="))
@@ -390,7 +397,7 @@ public class Chicory {
 
           target_program = arg;
           premain_args.add("--target-program=" + target_program);
-        
+
         for (; inx < args.length; inx++)
           target_args.add(args[inx]);
       }
@@ -550,23 +557,23 @@ public class Chicory {
         cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
     if(terminate != null)
         cmdlist.add("-D" + traceLimTermString + "=" + terminate );
-    
+
     Properties props = System.getProperties();
     for(Object key: props.keySet())
     {
         Object value = props.get(key);
-        
+
         assert value instanceof String: "All properties should be strings";
-        
+
         if(((String)key).contains("harpoon"))
             cmdlist.add("-D" + key + "=" + value);
     }
-    
-    
+
+
     cmdlist.add (String.format("-javaagent:%s=%s", premain_path,
                                args_to_string(premain_args)));
-    
-    
+
+
     for (String target_arg : target_args)
       cmdlist.add (target_arg);
     if (verbose)
@@ -753,7 +760,7 @@ public class Chicory {
   {
       if (msg != null)
           System.err.println(msg);
-      
+
       System.err.println("Usage: java daikon.Chicory <options> <class> <args>");
       System.err.println("<options> are:");
       //System.err.println("  -all                             Include system classes in output");

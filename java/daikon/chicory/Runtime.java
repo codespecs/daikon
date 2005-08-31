@@ -46,6 +46,9 @@ public class Runtime
     /** Ppts to include (regular expression) **/
     static List<Pattern> daikon_include_regex = new ArrayList<Pattern>();
 
+    /** Comparability information (if any) **/
+    static DeclReader comp_info = null;
+
     //
     // Setups that control what information is written
     //
@@ -82,7 +85,7 @@ public class Runtime
     /** Dtrace writer setup for writing to the trace file **/
     static DTraceWriter dtrace_writer = null;
 
-    /** 
+    /**
      * Which static initializers have been run.
      * Each element of the Set is a fully qualified class name.
      **/
@@ -148,7 +151,7 @@ public class Runtime
         }
     }
 
-    
+
     private static boolean invokingPure = false;
     public static boolean dontProcessPpts()
     {
@@ -181,14 +184,14 @@ public class Runtime
         {
             if (new_classes.size() > 0)
                 process_new_classes();
-            
-            
+
+
             MethodInfo mi = methods.get(mi_index);
             dtrace_writer.methodEntry(mi, nonce, obj, args);
         }
 
     }
-    
+
     /**
      * Called when a method is exited.
      *
@@ -204,13 +207,13 @@ public class Runtime
     {
         if(dontProcessPpts())
             return;
-        
+
         synchronized (all_classes)
         {
             if (new_classes.size() > 0)
                 process_new_classes();
-            
-            
+
+
             MethodInfo mi = methods.get(mi_index);
             dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, exitLineNum);
         }
@@ -220,17 +223,17 @@ public class Runtime
     /**
      * Called by classes when they have finished initialization
      * (ie, their static initializer has completed).
-     * 
+     *
      * This functionality must be enabled by the flag Chicory.checkStaticInit.
      * When enabled, this method should only be called by the hooks created in the
      * RetTransform class.
-     * 
+     *
      * @param className Fully qualified class name
      */
     public static void initNotify(String className)
     {
         assert !initSet.contains(className) : className + " already exists in initSet";
-        
+
         //System.out.println("initialized ---> " + name);
         initSet.add(className);
     }
@@ -238,7 +241,7 @@ public class Runtime
     /**
      * Return true iff the class with fully qualified name className
      * has been initialized.
-     * 
+     *
      * @param className Fully qualified class name
      */
     public static boolean isInitialized(String className)
@@ -269,15 +272,15 @@ public class Runtime
           }
           class_info.initViaReflection();
           // class_info.dump (System.out);
-          
+
           // Create tree structure for all method entries/exits in the class
           for(MethodInfo mi: class_info.method_infos)
           {
               mi.traversalEnter = RootInfo.enter_process(mi, Runtime.nesting_depth);
               mi.traversalExit = RootInfo.exit_process(mi, Runtime.nesting_depth);
           }
-          
-          decl_writer.printDeclClass (class_info);
+
+          decl_writer.printDeclClass (class_info, comp_info);
 
         }
       }
@@ -385,7 +388,7 @@ public class Runtime
     public static void setDtrace(String filename, boolean append)
     {
         // Copied from daikon.Runtime
-        
+
         if (no_dtrace)
         {
             throw new Error("setDtrace called when no_dtrace was specified");
@@ -469,7 +472,7 @@ public class Runtime
     private static void addShutdownHook()
     {
         // Copied from daikon.Runtime
-        
+
         java.lang.Runtime.getRuntime().addShutdownHook(new Thread()
         {
 

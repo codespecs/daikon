@@ -60,7 +60,15 @@ public class ChicoryPremain {
     Runtime.linked_lists        = chicory.linked_lists;
     Runtime.daikon_omit_regex   = chicory.daikon_omit_regex;
     Runtime.daikon_include_regex= chicory.daikon_include_regex;
-
+    if (chicory.comparability_filename != null) {
+      Runtime.comp_info = new DeclReader();
+      Runtime.comp_info.read (chicory.comparability_filename);
+      if (debug) {
+        System.out.printf ("Read comparability from %s%n",
+                           chicory.comparability_filename);
+        Runtime.comp_info.dump();
+      }
+    }
 
     if(chicory.doPurity())
     {
