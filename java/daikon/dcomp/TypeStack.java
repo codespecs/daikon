@@ -76,9 +76,9 @@ public final class TypeStack
         {
             //for(InstructionHandle h : l.getInstructionHandles())
               //  System.out.println(h);
-
-            throw new IllegalStateException(
-                    "No valid parent map possible for this method");
+            //System.out.println(l);
+            
+            throw new IllegalStateException("No valid parent map possible for this method ");
         }
 
         // dumpMap(parentMap);
@@ -95,12 +95,14 @@ public final class TypeStack
     {
         if (hand == null)
             return true;
+        
+        //System.out.println("\t" + hand);
 
         InstructionHandle prev = hand.getPrev();
         Set<InstructionHandle> targeters = new HashSet<InstructionHandle>();
 
         // if first instruction, or previous instruction was not a "goto" or a throw
-        if (prev == null || !(prev.getInstruction() instanceof GotoInstruction || prev.getInstruction() instanceof ATHROW))
+        if (prev == null || !(prev.getInstruction() instanceof GotoInstruction))// || prev.getInstruction() instanceof ATHROW))
         {
             // hand's parent is prev
             targeters.add(prev);
@@ -154,6 +156,7 @@ public final class TypeStack
             }
         }
         //System.out.println("FALSE FOR " + hand);
+        //System.out.println(hand.getPrev());
 
         // we couldn't find anything that worked
         return false;
@@ -1167,7 +1170,13 @@ public final class TypeStack
     }
 
     public static void main(String args[]) throws ClassNotFoundException
-    {
+    {        
+        testClass(Class.forName("java.util.IdentityHashMap"));
+        testClass(Class.forName("java.util.concurrent.ConcurrentLinkedQueue"));
+        testClass(Class.forName("java.util.IdentityHashMap"));
+        testClass(Class.forName("java.util.concurrent.Semaphore$Sync"));
+        testClass(Class.forName("javax.security.auth.kerberos.ServicePermission"));
+        
         //JDK classes
         testClass(Class.forName("java.util.ArrayList"));
         testClass(Class.forName("java.lang.Integer"));
@@ -1234,9 +1243,16 @@ public final class TypeStack
                         //System.out.printf("After inst %s, stack is empty%n",inst.toString());
                     }
                 }
+                
+                if(mg.getInstructionList().getEnd().getInstruction() instanceof BranchInstruction)
+                {
+                    //System.out.printf("\n\tSkipping stack check at end of %s because last instruction is branching", mg);
+                    continue;
+                }
 
                 int numRet = meth.getReturnType() == Type.VOID ? 0 : 1;
-                assert stack.size() == numRet : "Stack must be emtpy or size 1 after method is complete!!!\n"
+                String size = numRet == 0 ? "empty" : "size 1";
+                assert stack.size() == numRet : "Stack must be " + size + " after method is complete!!!\n"
                         + "It is actually size " + stack.size();
 
                 //if(meth.getReturnType() != Type.VOID)
