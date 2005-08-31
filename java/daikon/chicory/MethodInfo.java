@@ -175,18 +175,22 @@ public class MethodInfo {
   public void init_traversal (int depth) {
 
     traversalEnter = RootInfo.enter_process (this, depth);
-    System.out.printf ("Method %s.%s: %n ", class_info.clazz.getName(), this);
-    System.out.printf ("Enter daikon variable tree%n%s%n",
-                       traversalEnter.treeString());
+    // System.out.printf ("Method %s.%s: %n ", class_info.clazz.getName(),
+    //                    this);
+    // System.out.printf ("Enter daikon variable tree%n%s%n",
+    //                    traversalEnter.treeString());
 
     traversalExit = RootInfo.exit_process (this, depth);
-    System.out.printf ("Exit daikon variable tree%n%s%n",
-                       traversalExit.treeString());
+    // System.out.printf ("Exit daikon variable tree%n%s%n",
+    //                    traversalExit.treeString());
   }
 
 
   public String toString() {
-    String out = method_name + "(";
+    String out = "";
+    if (class_info != null)
+      out = class_info.class_name + ".";
+    out += method_name + "(";
     for (int ii = 0; ii < arg_names.length; ii++) {
       if (ii > 0)
         out += ", ";
@@ -200,4 +204,13 @@ public class MethodInfo {
       return isPure;
   }
 
+  /** Returns the turn type of the method.  Constructors return Void.TYPE **/
+  public Class return_type() {
+    if (member instanceof Method) {
+      Method m = (Method) member;
+      return m.getReturnType();
+    } else {
+      return Void.TYPE;
+    }
+  }
 }
