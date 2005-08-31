@@ -23,8 +23,9 @@ public class FieldInfo extends DaikonVariableInfo
        field = theField;
 
        // Calculate the offset of this field in its class
-       field_num = 0;
-       for (Field f : field.getDeclaringClass().getDeclaredFields())
+       Class clazz = field.getDeclaringClass();
+       field_num = num_prim_fields (clazz.getSuperclass());
+       for (Field f : clazz.getDeclaredFields())
        {
            if (f.equals (field))
                return;
@@ -32,6 +33,26 @@ public class FieldInfo extends DaikonVariableInfo
                field_num++;
        }
        assert false : "Can't find " + field + " in "+field.getDeclaringClass();
+    }
+
+    /**
+     * Return the number of primitive fields in clazz and all of its
+     * superclasses
+     */
+    public static int num_prim_fields (Class clazz)
+    {
+        if (clazz == Object.class)
+            return 0;
+        else
+        {
+            int field_cnt = num_prim_fields (clazz.getSuperclass());
+            for (Field f : clazz.getDeclaredFields())
+            {
+                if (f.getType().isPrimitive())
+                    field_cnt++;
+            }
+            return (field_cnt);
+        }
     }
 
     /**
@@ -74,5 +95,20 @@ public class FieldInfo extends DaikonVariableInfo
     public int get_field_num()
     {
         return (field_num);
+    }
+
+    Field tag_field = null;
+    public Field get_tag_field (String tag_field_name, Class parent_class)
+    {
+        if (tag_field == null)
+        {
+            try {
+                tag_field = parent_class.getDeclaredField (tag_field_name);
+            } catch (Exception e) {
+                throw new Error ("can't get field " + tag_field_name + " in "
+                                 + parent_class, e);
+            }
+        }
+        return tag_field;
     }
 }
