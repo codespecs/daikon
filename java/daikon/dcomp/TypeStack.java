@@ -5,6 +5,8 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.generic.FieldOrMethod;
 import org.apache.bcel.util.*;
+import org.apache.bcel.verifier.structurals.*;
+
 
 
 //map from handle -> Stack
@@ -15,18 +17,20 @@ import org.apache.bcel.util.*;
 public final class TypeStack
 {
     private final ConstantPoolGen pool;
-    private final Map<InstructionHandle, Stack<Type>> stackMap = new HashMap<InstructionHandle, Stack<Type>>();
+    private final Map<InstructionHandle, OperandStack> stackMap = new HashMap<InstructionHandle, OperandStack>();
     private final Map<InstructionHandle, InstructionHandle> parentMap = new HashMap<InstructionHandle, InstructionHandle>();
     private final Type[] argTypes;
     private final Type retType;
-    private Stack<Type> stack = null;
+    private OperandStack stack = null;
+    
+    private static final int MAX = Integer.MAX_VALUE;
 
     public TypeStack(ClassGen gen, InstructionList l,
             final CodeExceptionGen[] exceptionTable, final Type[] argT,
             final Type retT)
     {
-        retType = retT;
-        argTypes = argT;
+        retType = conv(retT);
+        argTypes = convArr(argT);
         pool = gen.getConstantPool();
         createMap(l, exceptionTable);
     }
@@ -35,15 +39,15 @@ public final class TypeStack
             final CodeExceptionGen[] exceptionTable, final Type[] argT,
             final Type retT)
     {
-        retType = retT;
-        argTypes = argT;
+        retType = conv(retT);
+        argTypes = convArr(argT);
         pool = new ConstantPoolGen(p);
         createMap(l, exceptionTable);
     }
 
-    private Stack<Type> startMethStack()
+    private OperandStack startMethStack()
     {
-        Stack<Type> type = new Stack<Type>();
+        OperandStack type = new OperandStack(MAX);
 
         for (Type t : argTypes)
         {
@@ -180,7 +184,7 @@ public final class TypeStack
         assert inst != null;
 
         InstructionHandle parent = parentMap.get(hand);
-        Stack<Type> parentStack;
+        OperandStack parentStack;
 
         if (parent != null)
         {
@@ -204,7 +208,7 @@ public final class TypeStack
             else
             {
                 // must be exception
-                parentStack = new Stack<Type>();
+                parentStack = new OperandStack(MAX);
                 parentStack.push(Type.OBJECT);
             }
         }
@@ -345,12 +349,17 @@ public final class TypeStack
         // System.out.println("Stack (after) is " + stack);
     }
 
-    private static <T> Stack<T> copyOfStack(Stack<T> parent)
+    private static OperandStack copyOfStack(OperandStack parent)
     {
-        Stack<T> copy = new Stack<T>();
-        for (T el : parent)
+        /*OperandStack copy = new OperandStack(MAX);
+        
+        for (Type el : parent)
             copy.push(el);
-        return copy;
+        
+        
+        return copy;*/
+        
+        return parent.getClone();
     }
 
     private static <K, V> void dumpMap(Map<K, V> map)
@@ -824,12 +833,12 @@ public final class TypeStack
             if (inst instanceof GETFIELD)
             {
                 FieldInstruction f = (FieldInstruction) inst;
-                popNumPut(1, f.getFieldType(pool));
+                popNumPut(1, conv(f.getFieldType(pool)));
             }
             else if (inst instanceof GETSTATIC)
             {
                 FieldInstruction f = (FieldInstruction) inst;
-                stack.push(f.getFieldType(pool));
+                stack.push(conv(f.getFieldType(pool)));
             }
             else if (inst instanceof PUTFIELD)
             {
@@ -843,7 +852,7 @@ public final class TypeStack
             {
                 InvokeInstruction inv = (InvokeInstruction) inst;
                 popNum(inv.getArgumentTypes(pool).length + 1);
-                Type ret = inv.getReturnType(pool);
+                Type ret = conv(inv.getReturnType(pool));
                 if (ret != Type.VOID)
                     stack.push(ret);
             }
@@ -851,7 +860,7 @@ public final class TypeStack
             {
                 InvokeInstruction inv = (InvokeInstruction) inst;
                 popNum(inv.getArgumentTypes(pool).length + 1);
-                Type ret = inv.getReturnType(pool);
+                Type ret = conv(inv.getReturnType(pool));
                 if (ret != Type.VOID)
                     stack.push(ret);
             }
@@ -859,7 +868,7 @@ public final class TypeStack
             {
                 InvokeInstruction inv = (InvokeInstruction) inst;
                 popNum(inv.getArgumentTypes(pool).length);
-                Type ret = inv.getReturnType(pool);
+                Type ret = conv(inv.getReturnType(pool));
                 if (ret != Type.VOID)
                     stack.push(ret);
             }
@@ -867,7 +876,7 @@ public final class TypeStack
             {
                 InvokeInstruction inv = (InvokeInstruction) inst;
                 popNum(inv.getArgumentTypes(pool).length + 1);
-                Type ret = inv.getReturnType(pool);
+                Type ret = conv(inv.getReturnType(pool));
                 if (ret != Type.VOID)
                     stack.push(ret);
             }
@@ -884,12 +893,12 @@ public final class TypeStack
         else if (inst instanceof LDC)
         {
             LDC ldc = (LDC) inst;
-            stack.push(ldc.getType(pool));
+            stack.push(conv(ldc.getType(pool)));
         }
         else if (inst instanceof LDC2_W)
         {
             LDC2_W ldc = (LDC2_W) inst;
-            stack.push(ldc.getType(pool));
+            stack.push(conv(ldc.getType(pool)));
         }
         else if (inst instanceof MULTIANEWARRAY)
         {
@@ -957,7 +966,7 @@ public final class TypeStack
         stack.clear();
         if (inst.getType() != Type.VOID)
         {
-            stack.push(inst.getType());
+            stack.push(conv(inst.getType()));
         }
     }
 
@@ -1118,9 +1127,10 @@ public final class TypeStack
         }
     }
     
-    private <T> T top(Stack<T> theStack, int i)
+    private Type top(OperandStack theStack, int i)
     {
-        return theStack.get(theStack.size() - i - 1);
+        //return theStack.get(theStack.size() - i - 1);
+        return theStack.peek(i);
     }
 
     private boolean isCat2(Type t)
@@ -1155,8 +1165,8 @@ public final class TypeStack
     public static void main(String args[]) throws ClassNotFoundException
     {
         //JDK classes
-        testClass(Class.forName("java.lang.Integer"));
         testClass(Class.forName("java.util.ArrayList"));
+        testClass(Class.forName("java.lang.Integer"));
         testClass(Class.forName("java.util.HashMap"));
         testClass(Class.forName("java.math.BigDecimal"));
         testClass(Class.forName("java.io.BufferedWriter"));
@@ -1208,7 +1218,7 @@ public final class TypeStack
                 {
                     try
                     {
-                        Stack<Type> s = stack.getAfterInst(inst);
+                        OperandStack s = stack.getAfterInst(inst);
                         //System.out.printf("After inst %s, have type %s with size %d%n",inst.toString(), s.peek().toString(), s.size());
                     }
                     catch (EmptyStackException e)
@@ -1221,6 +1231,9 @@ public final class TypeStack
                 assert stack.size() == numRet : "Stack must be emtpy or size 1 after method is complete!!!\n"
                         + "It is actually size " + stack.size();
 
+                //if(meth.getReturnType() != Type.VOID)
+                    //System.out.printf("\tmethod --- %s, return type %s --- expected --- %s%n", mg, stack.peek(), mg.getReturnType());
+                
                 if (meth.getReturnType() != Type.VOID)
                     assert sameType(meth.getReturnType(), stack.peek()) : "Invalid return type "
                             + stack.peek()
@@ -1235,10 +1248,10 @@ public final class TypeStack
         System.out.printf("done%n");
     }
 
-    private Stack<Type> getAfterInst(InstructionHandle inst)
+    public OperandStack getAfterInst(InstructionHandle inst)
     {
         assert inst != null;
-        Stack<Type> s = stackMap.get(inst);
+        OperandStack s = stackMap.get(inst);
         if (s == null)
             throw new IllegalArgumentException("Could not find " + inst
                     + " in the map");
@@ -1249,14 +1262,17 @@ public final class TypeStack
     {
         for (int i = 0; i < types.length; i++)
         {
-            if (!sameType(stack.get(stack.size() - i - 1), types[i]))
+            if (!sameType(top(stack, i), types[i]))
                 assert false : "Wanted " + types[i] + " but got "
-                        + stack.get(stack.size() - i - 1);
+                        + top(stack, i);
         }
     }
 
     private static boolean sameType(Type t1, Type t2)
     {
+        t1 = conv(t1);
+        t2 = conv(t2);
+        
         return both(Type.BOOLEAN, t1, t2) || both(Type.BYTE, t1, t2)
                 || both(Type.CHAR, t1, t2) || both(Type.DOUBLE, t1, t2)
                 || both(Type.FLOAT, t1, t2) || both(Type.INT, t1, t2)
@@ -1304,5 +1320,33 @@ public final class TypeStack
         i = i + 3 + 4;
         f = f - 3f - 4f + 5f * 7f;
         l = l + 6l * 9l - 3l;
+    }
+    
+    private static Type conv(Type t) 
+    {
+        //System.out.println(t);
+        
+        if(t == Type.BOOLEAN)
+            return Type.INT;
+        else if(t == Type.CHAR)
+            return Type.INT;
+        else if(t == Type.SHORT)
+            return Type.INT;
+        else if(t == Type.BYTE)
+            return Type.INT;
+        else
+            return t;
+    }
+    
+    private static Type[] convArr(Type[] tArr)
+    {
+        Type[] convArr = new Type[tArr.length];
+        
+        for(int i = 0; i < tArr.length; i++)
+        {
+            convArr[i] = conv(tArr[i]);
+        }
+        
+        return convArr;
     }
 }
