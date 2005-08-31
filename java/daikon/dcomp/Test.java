@@ -56,6 +56,8 @@ class Test {
     A[] a1a;
     A[] a2a;
     A a1;
+    int ii = 2;
+    int jj = 1;
 
     B() {
       a1a = new A[] {new A("a1a-0"), new A("a1a-1"), new A("a1a-2")};
@@ -64,7 +66,8 @@ class Test {
     }
 
     void ecomp() {
-      if (a1a[2] == a2a[1])
+
+      if (a1a[ii] == a2a[jj])
         System.out.println ("a1a[2] == a2a[1]");
       else
         System.out.println ("a1a[2] != a2a[1]");
@@ -86,19 +89,6 @@ class Test {
   public static void main (String[] args) throws Exception {
 
     test();
-
-    System.out.println ("Value Sets:");
-    System.out.println (TagEntry.dump());
-
-    System.out.println ("Comparability Info:");
-    DCRuntime.print_all_comparable(System.out);
-
-    String comp_out_fname = "/tmp/dcomp_out.txt";
-    if (args.length > 0)
-      comp_out_fname = args[0];
-    System.out.println("Writing comparability results to " + comp_out_fname);
-    PrintStream comp_out = new PrintStream (comp_out_fname);
-    DCRuntime.print_all_comparable (comp_out);
 
   }
 
@@ -128,6 +118,20 @@ class Test {
     else
       out.println ("sa1 != sa2");
 
+    double_check (1.2, 56, 1);
+
+
+  }
+
+  public static double double_check (double d1, Integer wrapper, int i1) {
+
+    double loc1 = 22.4;
+    double loc2 = loc1 + 14.6;
+
+    d1 += loc2;
+    i1 += loc1;
+
+    return ((double) i1);
   }
 
   public static void t1 (A a1, A a2, A a3, A a4) {
