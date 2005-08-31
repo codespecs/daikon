@@ -17,6 +17,8 @@ class TagEntry extends WeakReference<Object> {
   public static final WeakIdentityHashMap<Object,TagEntry> object_map
     = new WeakIdentityHashMap<Object,TagEntry>();
 
+  private static SimpleLog debug = new SimpleLog(false);
+
   /**
    * Parent in the tree that represents the set for this element.  If null,
    * this entry is the representive one
@@ -60,7 +62,7 @@ class TagEntry extends WeakReference<Object> {
    */
   public static void union (Object obj1, Object obj2) {
     assert (obj1 != null) && (obj2 != null);
-    System.out.printf ("union of '%s' and '%s'%n", obj1, obj2);
+    debug.log ("union of '%s' and '%s'%n", obj1, obj2);
     union (get_entry (obj1).find(), get_entry (obj2).find());
   }
 
