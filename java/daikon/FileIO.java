@@ -119,7 +119,6 @@ public final class FileIO {
   // (This implementation as a public static variable is a bit unclean.)
   // Number of ignored declarations.
   public static int omitted_declarations = 0;
-  // Also see Daikon.ppts_with_no_vars
 
   // Logging Categories
 
@@ -230,14 +229,6 @@ public final class FileIO {
         continue;
       }
       var_infos.add(vi);
-    }
-
-    // An entry point may have no variables even if the exit point does.
-    // Before printing final statistics/warnings, we should remove entry
-    // points such that every corresponding exit has no variables.
-    if (var_infos.isEmpty() && !ppt_name.endsWith(enter_tag)) {
-      Daikon.ppts_with_no_vars.add(ppt_name);
-      return null;
     }
 
     VarInfo[] vi_array = (VarInfo[])
@@ -1594,9 +1585,8 @@ public final class FileIO {
 
     // System.out.println ("ppt_name = '" + ppt_name + "' max name = '"
     //                     + Daikon.ppt_max_name + "'");
-    if (Daikon.ppts_with_no_vars.contains(ppt_name)
-        || ((Daikon.ppt_omit_regexp != null)
-            && Daikon.ppt_omit_regexp.matcher(ppt_name).find())
+    if (((Daikon.ppt_omit_regexp != null)
+	 && Daikon.ppt_omit_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_regexp != null)
             && !Daikon.ppt_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_max_name != null)

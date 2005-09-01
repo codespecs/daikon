@@ -250,7 +250,6 @@ public final class Daikon {
   public static Pattern ppt_omit_regexp;
   public static Pattern var_regexp;
   public static Pattern var_omit_regexp;
-  public static Set<String> ppts_with_no_vars = new HashSet<String>();
 
   /**
    * When true, perform detailed internal checking.
@@ -1651,11 +1650,6 @@ public final class Daikon {
              ? "declaration was"
              : "declarations were")
           + " omitted by regexps (e.g., --ppt-select-pattern).";
-      }
-      if (! ppts_with_no_vars.isEmpty()) {
-        message += lineSep + "  "
-          + UtilMDE.nplural(ppts_with_no_vars.size(), "declaration")
-          + " had no varibles (e.g., --var-select-pattern).";
       }
       throw new Daikon.TerminationMessage(message);
     }
