@@ -57,6 +57,9 @@ for line in allLines:
 sumOfAvgs = 0
 numPpts = len(pptInfoDict.keys())
 
+totalSquareVars = 0;
+totalVars = 0
+
 for ppt in pptInfoDict:
     compSetSizesAtPpt = pptInfoDict[ppt]
     totalVarsAtPpt = sum(compSetSizesAtPpt)
@@ -66,10 +69,14 @@ for ppt in pptInfoDict:
 
     sumOfAvgs += avgForPpt
 
+    totalSquareVars += squareVarsAtPpt
+    totalVars += totalVarsAtPpt
+
 #    print ppt
 #    print "Total # vars:     ", totalVarsAtPpt
 #    print "Average set size: ", avgForPpt
 
 
 #print
-print ((sumOfAvgs) / float(numPpts))
+#print "Unweighted average:", ((sumOfAvgs) / float(numPpts))
+print "Weighted average:", (float(totalSquareVars) / float(totalVars))
