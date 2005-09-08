@@ -7,7 +7,7 @@
 
 import re
 
-pptNameRE = re.compile(':::(ENTER|EXIT).*')
+pptNameRE = re.compile(':::')
 
 import sys
 
@@ -60,17 +60,21 @@ numPpts = len(pptInfoDict.keys())
 totalSquareVars = 0;
 totalVars = 0
 
+totalSquareVarsNoComp = 0
+
 for ppt in pptInfoDict:
     compSetSizesAtPpt = pptInfoDict[ppt]
     totalVarsAtPpt = sum(compSetSizesAtPpt)
     squareVarsAtPpt = sum([(i*i) for i in compSetSizesAtPpt])
 
-    avgForPpt = float(squareVarsAtPpt) / float(totalVarsAtPpt)
+#    avgForPpt = float(squareVarsAtPpt) / float(totalVarsAtPpt)
 
-    sumOfAvgs += avgForPpt
+#    sumOfAvgs += avgForPpt
 
     totalSquareVars += squareVarsAtPpt
     totalVars += totalVarsAtPpt
+
+    totalSquareVarsNoComp += (totalVarsAtPpt * totalVarsAtPpt)
 
 #    print ppt
 #    print "Total # vars:     ", totalVarsAtPpt
@@ -80,3 +84,4 @@ for ppt in pptInfoDict:
 #print
 #print "Unweighted average:", ((sumOfAvgs) / float(numPpts))
 print "Weighted average:", (float(totalSquareVars) / float(totalVars))
+print "Avg. (No comparability):", (float(totalSquareVarsNoComp) / float(totalVars))

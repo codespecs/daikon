@@ -297,6 +297,14 @@ for line in KvasirAllLines:
         myState = State.VarName
 
 
+# Strips all comments after #
+# space-delimited token:
+# Input:  int # isParam=true
+# Output: int
+def StripComments(comp_num):
+    return comp_num.split('#')[0].strip()
+
+
 # Now we are going to initialize the declaredTypeCompNum of each entry
 # within KvasirPptMap.  All variables with identical declared type
 # strings will have the same comparability number at each program
@@ -310,7 +318,7 @@ for ppt in KvasirPptMap:
     curVarList = KvasirPptMap[ppt]
 
     for elt in curVarList:
-        curDecType = elt[1]
+        curDecType = StripComments(elt[1])
         if curDecType in decTypesMap:
             elt.append(decTypesMap[curDecType]) # Use the stored comp. num
         else:
