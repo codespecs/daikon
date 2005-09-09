@@ -53,6 +53,7 @@
 # c
 # -1: d
 
+# NOTE (2005-09-08): No longer does this anymore:
 # Prints out a '-1: ' prefix in front of the special comparability set
 # with a number of -1
 
@@ -141,10 +142,10 @@ for pptName in sortedPptKeys:
     while len(sortedVars) > 0:
         varName = sortedVars[0]
 
-        if var2comp[varName] == '-1': # Remember that everything is a string
-            print '-1:', varName,
-        else:
-            print varName,
+#        if var2comp[varName] == '-1': # Remember that everything is a string
+#            print '-1:', varName,
+#        else:
+        print varName,
 
         compNum = var2comp[varName]
 
