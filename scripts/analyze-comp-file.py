@@ -31,7 +31,6 @@ for line in allLines:
     # We hit a program point name, so calculate stuff
     # for the previous program point
     if pptNameRE.search(line):
-        curPptSetSizes = []
         
         # Special case for the first program point reached
         if not curPpt:
@@ -42,6 +41,8 @@ for line in allLines:
         else:
             pptInfoDict[curPpt] = curPptSetSizes
             curPpt = line
+
+        curPptSetSizes = []
 
 
     # (Ignore blank lines) ... we hit a space-delimited list of
@@ -67,9 +68,12 @@ for ppt in pptInfoDict:
     totalVarsAtPpt = sum(compSetSizesAtPpt)
     squareVarsAtPpt = sum([(i*i) for i in compSetSizesAtPpt])
 
-#    avgForPpt = float(squareVarsAtPpt) / float(totalVarsAtPpt)
+    if totalVarsAtPpt > 0:
+        avgForPpt = float(squareVarsAtPpt) / float(totalVarsAtPpt)
+    else:
+        avgForPpt = 0
 
-#    sumOfAvgs += avgForPpt
+    sumOfAvgs += avgForPpt
 
     totalSquareVars += squareVarsAtPpt
     totalVars += totalVarsAtPpt
