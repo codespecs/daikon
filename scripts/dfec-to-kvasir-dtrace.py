@@ -225,16 +225,28 @@ def processPpt(pptName, varInfo):
             # Dfec has separate variables for the pointer
             # and content of strings
             varToLookup = varName
-            if repType == "java.lang.String":
+            if "java.lang.String" in repType:
                 varToLookup += '[]'
 
             varToLookup = ConvertKvasirVarName(varToLookup)
 
             if varToLookup in varInfo:
                 stuff = varInfo[varToLookup]
-                print varToLookup
-                print stuff[0]
+                print varName
+                
+                if repType[-2:] == '[]' and stuff[0][0] != '[' and stuff[0] != "uninit" and stuff[0] != "nonsensical":
+                    print '[', stuff[0], ']'
+                else:
+                    print stuff[0]
+                    
                 print stuff[1]
+            # Total cop out ... print blank
+            else:
+                print varName
+
+                print "uninit"
+                    
+                print "2"
 
         # Blank line ends this ppt
         print
