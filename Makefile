@@ -165,11 +165,13 @@ build-kvasir: kvasir
 ### Rebuild everything; used for monthly releases, for example
 
 rebuild-everything:
-	${MAKE} -C $(inv)/java clean
-	${MAKE} -C $(inv)/java compile
+	${MAKE} -C $(inv)/java very-clean
+	${MAKE} -C $(inv)/java tags compile
+	${MAKE} -C $(inv)/doc clean
 	${MAKE} -C $(inv)/doc
+	${MAKE} -C $(inv)/dfej clean
 	${MAKE} -C $(inv)/dfej
-	${MAKE} -C $(inv)/kvasir
+	${MAKE} -C $(inv)/kvasir clean
 	${MAKE} -C $(inv)/kvasir all install
 
 ### Testing the code
