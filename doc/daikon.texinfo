@@ -1498,7 +1498,7 @@ true on the @code{:::ENTER}
 program point.  With no hierarchy, each program point is treated
 independently.  This is for using Daikon on applications that do not
 have a concept of hierarchy.  It can also be useful when you wish to
-process unmatched enter point samples from a trace file thatis missing
+process unmatched enter point samples from a trace file that is missing
 some exit point samples.
 
 @item --suppress_redundant
@@ -3032,7 +3032,7 @@ add a @code{radiusSquared()} variable just like it will add @code{x} and @code{y
 of Daikon invariants returned.  For instance, if a point is constantly changing but remains on some circle, then Daikon
 ought return an invariant that the point's radius remains constant if Chicory knows that @code{radiusSquared()} is a pure method.
 
-The purity file has a simple format: there is exactly one method on each line.  The format of each method is outline clearly in the
+The purity file has a simple format: there is exactly one method on each line.  The format of each method is outlined clearly in the
 Sun JDK API: 
     "The string is formatted as the method access modifiers, if any, followed by the method return type, 
     followed by a space, followed by the class declaring the method, followed by a period, followed by 
@@ -4375,7 +4375,7 @@ below.
 
 @cindex PURIFY_DIR environment variable
 Also, if the environment variable @env{PURIFY_DIR} is set, mangel
-implicity adds this directory to the list of directories searched for
+implicitly adds this directory to the list of directories searched for
 system libraries.  Otherwise you must explicitly use @option{-L} to
 specify where to find the library for the Purify API, or include this
 information in the options list passed directly to the linker.  See
@@ -4659,7 +4659,7 @@ Mangel-Wurzel's runtime library relies on the Purify API to test the
 validity of pointers -- in particular, to check for pointers to
 unallocated memory and pointers to memory that has been allocated but
 not initialized.  It performs these checks so that it can avoid
-dereferencing bad pointers and unitialized variables when printing
+dereferencing bad pointers and uninitialized variables when printing
 values at program points to the @file{.dtrace} file.  (Instead,
 it prints a value of ``nonsensical'' for those variables, which has a
 special meaning to Daikon.)
@@ -10437,11 +10437,17 @@ this.topOfStack
 @c  LocalWords:  Kataoka Loosemore Vikash Mansinghka Samir Meghani Jelani Toh
 @c  LocalWords:  Nimmer Shih Iuliu Vasilescu Xiao Kaplan Angros Tadashi Araragi
 @c  LocalWords:  Seung Cho Hardojo Engelbert Hubbers McMaster Orso Manos Wacha
-@c  LocalWords:  Renieris NTT varname VarInfoName hasDuplicates hasOrder len
+@c  LocalWords:  Renieris NTT varname VarInfoName hasDuplicates hasOrder len gc
 @c  LocalWords:  hasNull nullTerminated isParam hashCode VarComparability IDE
-@c  LocalWords:  makeEmpty topLevel bottomLevel pptInfo MyInteger printindex
+@c  LocalWords:  makeEmpty topLevel bottomLevel pptInfo MyInteger printindex mw
 @c  LocalWords:  cygwin basename globalVar staticVar funcStaticVar myName foo
 @c  LocalWords:  TerminationMessage HotSpot daikonPrintArrayMissing javacc invs
 @c  LocalWords:  sourcing toString struct uninstrumented Garbervetsky classfile
 @c  LocalWords:  UnsupportedClassVersionError DtraceDiff VerifyError procedurei
 @c  LocalWords:  replacementi junit declsfiles dtracefile PublicTest BCEL bcel
+@c  LocalWords:  Mangel Wurzel premain ChicoryPremain configs radiusSquared vol
+@c  LocalWords:  dyncomp DynComp metadata comp firstFileFunctioni ppts argc
+@c  LocalWords:  firstFileFunction secondFileFunctionv secondFileFunction argv
+@c  LocalWords:  FunctionNamesTest globalIntArray anotherGlobalIntArray diffs
+@c  LocalWords:  mangel wurzel Wurzel's libpurify inputfile frontend logfile
+@c  LocalWords:  tmpdir regex namespaces fieldname microsoft Christoph Csallner
