@@ -3057,6 +3057,30 @@ class A will not include private fields from class B.  Of course, it
 will include public fields from class B if it examines some variable of
 type B.
 
+@item --watch-static-recursion
+If this switch is on, Chicory will traverse the static fields of a given class
+at most once.
+
+If we had:
+@example
+class A
+@{
+   private static int x, y;
+   private static A a = new A();
+@}
+@end example
+
+Then if this switch is on, and a program point contains variable @code{myA} of type @code{A}, then 
+Chicory will produce variables @code{myA.x}, @code{myA.y}, @code{myA.A}, but not @code{myA.A.x}, @code{myA.A.y},
+@code{myA.A.A} and so on.
+
+@item -trace-percent=<integer>
+If this switch is on, then <integer> represents the percentage of program points
+to instrument.  The actual random chance only affects the method entry program point.
+The corresponding exit program point is included if and only if the entry program point
+is included.  This ensures that despite random program points being removed, there will
+not be unmatched nonce values.
+
 @item --heap_size=@var{max_heap}
 Specifies the maximum size, in bytes, of the memory allocation pool for
 the target program.  The size is specified in the same manner as the
