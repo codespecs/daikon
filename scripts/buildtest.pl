@@ -18,7 +18,7 @@ use Cwd;
 
 # Process the command-line args
 my $usage =
-    "Usage: buildtest.pl [--quiet] [--test_kvasir]\n"
+    "Usage: buildtest.pl [--quiet] [--test_kvasir] [--message=text]\n"
   . "                    [--rsync_location=machine:/path/invariants]\n"
   . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n"
   . "                    [--skip_dfec] [--skip_dfej]\n";
@@ -35,6 +35,8 @@ my $test_kvasir = 0;
 # When set, get the sources by rsync from the given location, rather
 # than by CVS
 my $rsync_location;
+# When set, print an additional message in the header of failing runs
+my $message;
 
 while (scalar(@ARGV) > 0) {
   my $arg = shift @ARGV;
@@ -56,6 +58,8 @@ while (scalar(@ARGV) > 0) {
     $test_kvasir = 0;
   } elsif ($arg =~ /^--rsync_location=(.*)$/) {
     $rsync_location = $1;
+  } elsif ($arg =~ /^--message=(.*)$/) {
+    $message = $1;
   } else {
     die "Unrecognized argument $arg\n$usage\n";
   }
@@ -181,9 +185,10 @@ if (@failed_steps != 0) {
   # not quiet is set.  However, if all steps succeed, there is no
   # output iff quiet is set.
   if ($quiet) {
+    print "$message\n" if defined $message;
     open LOG, $LOG or die "can't open $LOG: $!\n";
-    my $log = join('', <LOG>);
-    print $log;
+    print <LOG>;
+    close LOG;
   }
 }
 
