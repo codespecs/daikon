@@ -73,6 +73,7 @@ DIST_PAG_BIN_DIR := /afs/csail/group/pag/projects/invariants/binaries
 DIST_DIR_FILES := daikon.tar.gz daikon-logo.gif daikon.jar
 DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 
+# Perhaps replace with `cat CVS/Root`, for remote CVS users?
 CVS_REPOSITORY := /afs/csail.mit.edu/group/pag/projects/invariants/.CVS
 
 # It seems like these should come from their standard locations (jhp)
@@ -133,7 +134,7 @@ javadoc:
 ### Kvasir (C front end)
 
 valgrind-3/auto-everything.sh:
-	cvs -d $(CVS_REPOSITORY) co -P valgrind-3
+	cvs co -P valgrind-3
 	touch $@
 
 kvasir/kvasir/Makefile.in: valgrind-3/auto-everything.sh
