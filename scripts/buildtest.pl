@@ -17,8 +17,11 @@ $WARNING = 1;
 use Cwd;
 
 # Process the command-line args
-my $usage = "Usage: buildtest.pl [--quiet] [--test_kvasir]\n"
-  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej]\n";
+my $usage =
+    "Usage: buildtest.pl [--quiet] [--test_kvasir]\n"
+  . "                    [--rsync_location=machine:/path/invariants]\n"
+  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n"
+  . "                    [--skip_dfec] [--skip_dfej]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # These flags permit only part of the tests to be run; good for debugging.
@@ -29,6 +32,9 @@ my $skip_dfec = 0;
 my $skip_dfej = 0;
 # When on, test Kvasir
 my $test_kvasir = 0;
+# When set, get the sources by rsync from the given location, rather
+# than by CVS
+my $rsync_location;
 
 while (scalar(@ARGV) > 0) {
   my $arg = shift @ARGV;
@@ -48,6 +54,8 @@ while (scalar(@ARGV) > 0) {
     $test_kvasir = 1;
   } elsif ($arg eq "--skip_kvasir") {
     $test_kvasir = 0;
+  } elsif ($arg =~ /^--rsync_location=(.*)$/) {
+    $rsync_location = $1;
   } else {
     die "Unrecognized argument $arg\n$usage\n";
   }
@@ -205,7 +213,11 @@ exit();
 # Check the invariants module out from CVS
 sub daikon_checkout {
   print_log("Checking out Daikon...");
-  `cvs -d $CVS_REP co invariants &> daikon_checkout.out`;
+  if ($rsync_location) {
+    `rsync -e "ssh -x" -rav $rsync_location . &> daikon_checkout.out`;
+  } else {
+    `cvs -d $CVS_REP co invariants &> daikon_checkout.out`;
+  }
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
     return 0;
