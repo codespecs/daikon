@@ -88,6 +88,8 @@ chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
 
 my $LOG = "buildtest.out";
 
+print_log("$message\n") if defined $message;
+
 $success{"daikon_checkout"} = daikon_checkout();
 
 # Inherit the environment of the group-wide init file
@@ -185,7 +187,6 @@ if (@failed_steps != 0) {
   # not quiet is set.  However, if all steps succeed, there is no
   # output iff quiet is set.
   if ($quiet) {
-    print "$message\n" if defined $message;
     open LOG, $LOG or die "can't open $LOG: $!\n";
     print <LOG>;
     close LOG;
