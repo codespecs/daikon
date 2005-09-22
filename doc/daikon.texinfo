@@ -247,6 +247,7 @@ Source-based C/C++ front end Mangel-Wurzel
 * Using Mangel-Wurzel::         
 * Mangel options::              
 * Mangel-Wurzel naming conventions::  
+* Pointer/array disambiguation in Mangel-Wurzel::  
 * Wurzel usage notes::          
 * Interaction with Purify::     
 * Installing Mangel-Wurzel::    
@@ -4223,6 +4224,7 @@ consumption before compiling it.
 * Using Mangel-Wurzel::         
 * Mangel options::              
 * Mangel-Wurzel naming conventions::  
+* Pointer/array disambiguation in Mangel-Wurzel::  
 * Wurzel usage notes::          
 * Interaction with Purify::     
 * Installing Mangel-Wurzel::    
@@ -4568,7 +4570,7 @@ conjunction with @option{--ppt-select-pattern}.
 @end table
 
 
-@node Mangel-Wurzel naming conventions, Wurzel usage notes, Mangel options, Mangel-Wurzel
+@node Mangel-Wurzel naming conventions, Pointer/array disambiguation in Mangel-Wurzel, Mangel options, Mangel-Wurzel
 @subsection Mangel-Wurzel naming conventions
 
 Mangel-Wurzel uses naming conventions for program points and variables
@@ -4615,14 +4617,43 @@ Static variables of a class have names of the form
 Fields of the @samp{this} parameter print as @samp{this->@var{fieldname}}.
 @end itemize
 
+@node Pointer/array disambiguation in Mangel-Wurzel, Wurzel usage notes, Mangel-Wurzel naming conventions, Mangel-Wurzel
+@subsection Pointer/array disambiguation in Mangel-Wurzel
 
-@node Wurzel usage notes, Interaction with Purify, Mangel-Wurzel naming conventions, Mangel-Wurzel
+Wurzel currently does not support any form of pointer/array
+disambiguation.  In other words, an object of type @samp{int *} is
+treated as a pointer to a single integer, not as the address of an array
+of @code{int}.  This is in contrast to the default behavior of Kvasir
+(@ref{Kvasir}), which assumes the more general case that pointers point to
+arrays rather than single objects.  The difference in behavior is due
+to differences in the underlying runtime support; Purify does not track
+the length of arrays or provide an API for querying this information.
+
+Wurzel does, however, make use of static type information to dump
+function arguments and global and static variables with fully-defined
+array types as arrays.  Note that a ``fully-defined'' array type
+includes a complete set of (constant) dimensions.
+
+Wurzel also assumes that variables with type @code{char *}, or arrays of
+@code{char}, are likely to be null-terminated strings rather than pointers to
+a single @code{char} object.  The runtime code which prints strings
+first performs a ``sanity check'' to make sure the string is of
+reasonable length and contains only printable characters (as determined by
+the C library functions @code{isprint} and @code{isspace}) rather than
+arbitrary byte values.  If these conditions are not met, the string is
+printed as its first character (with appropriate escape codes) followed
+by @samp{...}.  For example, a @code{char *} variable which points to a
+byte value of 1 prints as the string @samp{"\001..."}.
+
+On the other hand, variables with type @code{signed char *} or
+@code{unsigned char *}, or arrays of explicitly @code{signed} or
+@code{unsigned char}, are treated as byte pointers or byte arrays,
+respectively, and the elements print as normal integer values rather than
+as strings.
+
+
+@node Wurzel usage notes, Interaction with Purify, Pointer/array disambiguation in Mangel-Wurzel, Mangel-Wurzel
 @subsection Wurzel usage notes
-
-Wurzel currently does not support any form of pointer/array disambiguation.
-In other words, an object of type @samp{int *} is treated as a pointer to a
-single integer, not as the address of an array of @code{int}.  However, global
-and static variables with a fully-defined array type are printed as arrays.
 
 You do not need to preprocess all compilation units in a program with
 wurzel if you are only interested in analyzing certain parts of it with
