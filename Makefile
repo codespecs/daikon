@@ -565,14 +565,14 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 
 ## C/C++ front end
 
-dist-dfec: dist-dfec-linux
-
-dist-dfec-linux:
-	cd $(DFEC_DIR) && $(MAKE) dfec dfec-static
-	cp -pf $(DFEC_DIR)/src/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
-	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
-	update-link-dates $(DIST_DIR)/index.html
-	# cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
+# dist-dfec: dist-dfec-linux
+# 
+# dist-dfec-linux:
+# 	cd $(DFEC_DIR) && $(MAKE) dfec dfec-static
+# 	cp -pf $(DFEC_DIR)/src/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
+# 	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
+# 	update-link-dates $(DIST_DIR)/index.html
+# 	# cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
 
 ## Java front end
 
