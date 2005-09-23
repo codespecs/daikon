@@ -295,6 +295,9 @@ all_stop_on_error:
 all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
+xlint:
+	$(MAKE) JAVAC_ARGS="-Xlint ${JAVAC_ARGS}"
+
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # all_directly: ${AUTO_GENERATED_FILES} ajax
 all_directly: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
