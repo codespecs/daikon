@@ -140,7 +140,6 @@ Example usage for Java, C, and Perl
 
 Detecting invariants in Java programs
 
-* Eclipse plug-in::             
 * StackAr example::             
 * Understanding the invariants::  
 
@@ -220,7 +219,6 @@ Front ends
 * dfepl::                       
 * convertcsv.pl::               
 * dfej::                        
-* dfec::                        
 * Other front ends::            
 
 Java front end Chicory
@@ -287,35 +285,6 @@ All-in-one script daikon.pl
 
 * daikon.pl arguments::         
 
-Source-based C front end dfec
-
-* Instrumenting C programs with dfec::  
-* dfec examples::               
-* dfec command-line arguments::  
-* dfec runtime customization::  
-* Instrumentation scope::       
-* dfec requirements::           
-* Installing dfec::             
-
-dfec examples
-
-* Dfec C examples summary::     
-
-Instrumentation scope
-
-* Memory tracking details::     
-* Memory tracking in libraries::  
-
-dfec requirements
-
-* C program requirements::      
-* Header file dependencies::    
-* gcc version::                 
-
-Installing dfec, the source-based Daikon front end for C
-
-* dfec EDG sources::            
-
 Tools for use with Daikon
 
 * Tools for manipulating invariants::  
@@ -348,8 +317,6 @@ Troubleshooting
 * Parsing Java 5.0 code::       
 * Chicory problems::            
 * dfej problems::               
-* Eclipse plug-in problems::    
-* dfec problems::               
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
@@ -386,21 +353,6 @@ Problems with dfej
 Problems running dfej
 
 * Ajax errors::                 
-
-Problems with dfec
-
-* dfec instrumentation problems::  
-* Compilation and linking of instrumented code problems::  
-* Running instrumented code problems::  
-
-Problems running dfec
-
-* Lackwit problems::            
-
-Problems compiling and linking instrumented programs
-
-* Compiler problems::           
-* Linker problems::             
 
 Details
 
@@ -575,15 +527,18 @@ for other operating systems are welcome.)
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
 (@uref{http://java.sun.com,, Java Virtual Machine}).
 
-Unless you are using Chicory, the classfile-based front end for Java, 
-you also need a compiler for whatever language your target programs are
-written in.  For instance, if you
-wish to analyze C or C++ programs, you need a C or C++ compiler such as
-GCC.
+If you plan to use one of Daikon's source-based front ends, such as
+Mangel-Wurzel (@pxref{Mangel-Wurzel}), then you need a compiler compiler
+for whatever language your target programs are written in.  For
+instance, if you wish to analyze C or C++ programs, you need a C or C++
+compiler such as GCC.  Source code and a compiler are not necessary if
+you plan to use one of Daikon's front ends that work on binaries, such
+as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
-If you wish to edit the Daikon sources, then re-compile Daikon, you
-will need a java compiler (javac) and the C preprocessor, cpp.  If you
-have a C compiler, you almost certainly have cpp.
+If you wish to edit the Daikon source code and re-compile Daikon, you
+will need a Java compiler (such as javac) and a C preprocessor (cpp).
+If you have a C compiler, you almost certainly have cpp.
+
 
 @node  Installation steps, Windows installation notes, Requirements, Complete installation
 @subsection Installation steps
@@ -660,8 +615,8 @@ other variables you can customize.
 Optionally, build various executables used by Daikon, such as
 the C front end Kvasir
 (@pxref{Installing Kvasir}), the source-based Java front end dfej
-(@pxref{Installing dfej}), and the source-based C front end dfec
-(@pxref{Installing dfec}).
+(@pxref{Installing dfej}), and the source-based C front end
+Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 
 @end enumerate
 
@@ -692,6 +647,8 @@ registry key to the program you want to run:
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\AutoRun
 @end example
 @noindent
+
+@c This feels quite irrelevant; omit?
 You may also wish to set two registry entries to enable automatic completion:
 @example
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\CompletionChar
@@ -793,34 +750,36 @@ java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 
 
 @menu
-* Eclipse plug-in::             
 * StackAr example::             
 * Understanding the invariants::  
 @end menu
 
-@node    Eclipse plug-in, StackAr example, Detecting invariants in Java programs, Detecting invariants in Java programs
-@subsection Eclipse plug-in
-@cindex Eclipse plug-in
-@cindex GUI, Eclipse
+@c Commented out as of summer 2005, because David Cok doesn't seem likely
+@c to pick this up again, and we don't want to lead users astray or
+@c discourage them with non-functional software.
+@c @node    Eclipse plug-in, StackAr example, Detecting invariants in Java programs, Detecting invariants in Java programs
+@c @subsection Eclipse plug-in
+@c @cindex Eclipse plug-in
+@c @cindex GUI, Eclipse
+@c 
+@c Daikon is integrated with the 
+@c @uref{http://eclipse.org/, ,
+@c Eclipse} IDE (Integrated Development Environment) for Java.
+@c The Daikon plug-in provides a convenient way to instrument files,
+@c obtain trace information, analyze those traces,
+@c and create appropriately annotated Java source code.
+@c For
+@c details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
+@c documentation}.
+@c 
+@c As of this writing (February 11, 2005), the plug-in only works with 
+@c Daikon 3 (for instance, version 3.1.7), not with Daikon 4.  Support for
+@c Daikon 4 is underway.
+@c 
+@c For brief troubleshooting information, see @ref{Eclipse plug-in problems}.
 
-Daikon is integrated with the 
-@uref{http://eclipse.org/, ,
-Eclipse} IDE (Integrated Development Environment) for Java.
-The Daikon plug-in provides a convenient way to instrument files,
-obtain trace information, analyze those traces,
-and create appropriately annotated Java source code.
-For
-details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
-documentation}.
 
-As of this writing (February 11, 2005), the plug-in only works with 
-Daikon 3 (for instance, version 3.1.7), not with Daikon 4.  Support for
-Daikon 4 is underway.
-
-For brief troubleshooting information, see @ref{Eclipse plug-in problems}.
-
-
-@node    StackAr example, Understanding the invariants, Eclipse plug-in, Detecting invariants in Java programs
+@node    StackAr example, Understanding the invariants, Detecting invariants in Java programs, Detecting invariants in Java programs
 @subsection StackAr example
 
 The Daikon distribution contains some sample programs that will help
@@ -875,7 +834,7 @@ to the end of the command that runs Daikon.)
 java daikon.PrintInvariants StackAr.inv.gz
 @end example
 
-For more options to the PrintInvariants program, @xref{Printing
+For more options to the PrintInvariants program, see @ref{Printing
 invariants}.
 
 @item Use the Annotate program to insert the invariants as comments
@@ -888,7 +847,7 @@ java daikon.tools.jtb.Annotate daikon-output/StackAr.inv.gz \
 @end example
 
 Now examine file @file{DataStructures/StackAr.java-escannotated}.
-For more information about the Annotate program, @xref{Annotate}.
+For more information about the Annotate program, see @ref{Annotate}.
 
 @c @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
 @c contains a tree that hierarchically organizes program points according
@@ -1092,32 +1051,18 @@ For help understanding the invariants, see @ref{Interpreting output}.
 @node    Dealing with large examples,  , C examples, Detecting invariants in C programs
 @subsection Dealing with large examples
 
-Beware that several of the C example programs require significant
-resources in terms of memory, CPU time, or disk space.  Therefore they
-can also serve as examples of techniques for limiting Daikon's
-resource usage.
-
 Since the default memory size used by Java virtual machines varies, we
-suggest that Daikon be run on the examples with at least 256 megabytes of
-memory, specified for many JVMs by the option @option{-Xmx256m}.
-The schedule example uses even more space: we suggest specifying
+suggest that Daikon be run with at least 256 megabytes of
+memory (and perhaps much more), specified for many JVMs by the option @option{-Xmx256m}.
+(The schedule example uses even more space: we suggest specifying
 @option{-Xmx768m}, and avoiding the example altogether unless your
-workstation has at least a gigabyte of physical memory.  For more
+workstation has at least a gigabyte of physical memory.)  For more
 information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
-Most of the C examples shouldn't require more than a minute of
-processing time for any single step, but the schedule2 example
-requires about 10 minutes, the Rijndael example about 20, and the
-schedule example more than an hour, on a relatively modern
-workstation.
-
-Most of the C examples require no more than 50 megabytes of disk
-space, but the schedule and schedule2 examples require around 200
-megabytes each, and the Rijndael example requires about 600
-megabytes.  This disk usage can be reduced by recompiling the Daikon
-runtime to compress its output dtrace files; see @ref{dfec runtime
-customization}.
+Disk usage can be reduced by specifying that the front end should
+compress its output dtrace files.
+@c ; see @ref{dfec runtime customization}.
 
 In some cases, the time and space requirements of the examples can be
 reduced by reducing the length of the program run.  For instance, when
@@ -1625,8 +1570,8 @@ Daikon also creates a @file{.inv} file that contains the invariants in
 serialized (binary) form.  You can use the @file{.inv} file to print the
 invariants (@pxref{Printing invariants}) in a variety of formats, to
 insert the invariants in your source code (@pxref{Annotate}), to perform
-run-time checking of the invariants (@pxref{Runtime-check instrumenter},
-and @pxref{InvariantChecker}), and to do various other operations.  See
+run-time checking of the invariants (see @ref{Runtime-check instrumenter},
+and @ref{InvariantChecker}), and to do various other operations.  See
 @ref{Tools}, for descriptions of such tools.
 
 
@@ -2741,7 +2686,6 @@ ends,,,./developer,Daikon Developer Manual}.
 * dfepl::                       
 * convertcsv.pl::               
 * dfej::                        
-* dfec::                        
 * Other front ends::            
 @end menu
 
@@ -3171,7 +3115,7 @@ A number of options to Kvasir may be supplied on the command line
 before the argument that is the name of your program (@pxref{Kvasir options}).
 
 Note that Kvasir uses a different scheme for naming variables than the
-Java front ends and the source-based C front end dfec do
+Java front ends and the source-based C front end Mangel-Wurzel do
 (@pxref{Variable names}).  Because C does not have classes, the
 ``class'' portion of a program point name (before the last period)
 instead holds the file in which a function was defined, for
@@ -4103,7 +4047,7 @@ program.  Also, rather than using your program's source code to find
 the names and types of functions and variables, Kvasir obtains them
 from debugging information included in the executable in a standard
 format.  These differences should make Kvasir both much easier to use and
-more robust than the source-rewriting-based dfec front end (@pxref{dfec}).
+more robust than the source-rewriting-based Mangel-Wurzel front end (@pxref{Mangel-Wurzel}).
 
 However, Kvasir has some limitations of its own.  Because Kvasir uses
 Valgrind, it shares Valgrind's limitation of working only under the
@@ -4179,9 +4123,8 @@ library, supply the path to its static version (@file{libfoo.a})
 directly to GCC instead.
 
 @item
-Not all of the options of the source-based C front end dfec are supported.
-Of the environment variables obeyed by dfec,
-only @env{DTRACEAPPEND} is recognized by Kvasir.
+@c Not all of the options of the source-based C front end dfec are supported.
+Kvasir respects only the only @env{DTRACEAPPEND} environment variable.
 
 @item
 Kvasir is incompatible with some compiler optimizations.  It is
@@ -4212,7 +4155,7 @@ binary form only.  See @ref{Installing Mangel-Wurzel} for more information
 about installation.  If you have an EDG source license and would like to build
 or modify Mangel-Wurzel, we can provide source diffs on request.
 
-Unlike Kvasir, which runs only on Linux/x86 platforms, (in theory, at least) 
+Unlike Kvasir, which runs only on Linux/x86 platforms,
 Mangel-Wurzel will run on any platform supported by Rational Purify.  
 
 Mangel-Wurzel is named after a root vegetable grown as cattle fodder.
@@ -4710,8 +4653,15 @@ on another platform supported by Rational Purify.
 @node Interaction with Purify, Installing Mangel-Wurzel, Wurzel usage notes, Mangel-Wurzel
 @subsection Interaction with Purify
 
+If you are interested in obtaining Purify diagnostics for your code, it
+is better that you run Purify on the uninstrumented program.  The
+remainder of this section explains why this is the case.  It is not
+necessary to fix all the problems that Purify diagnoses before running
+Mangel-Wurzel.  However, fixing them is likely to correct bugs and make
+your code more robust, so it is recommended.
+
 Mangel-Wurzel's runtime library relies on the Purify API to test the
-validity of pointers -- in particular, to check for pointers to
+validity of pointers --- in particular, to check for pointers to
 unallocated memory and pointers to memory that has been allocated but
 not initialized.  It performs these checks so that it can avoid
 dereferencing bad pointers and uninitialized variables when printing
@@ -4735,10 +4685,6 @@ still generates status messages when batching is enabled or disabled, or
 when batched messages are discarded.  Another problem is that this will
 interact badly if you try to enable message batching when you run
 Purify.
-
-What this boils down to is: if you are interested in getting Purify
-diagnostics on your code, it is better that you run Purify on the
-uninstrumented program.
 
 
 @node Installing Mangel-Wurzel,  , Interaction with Purify, Mangel-Wurzel
@@ -5206,7 +5152,7 @@ produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
 message.
 
 
-@node    dfej, dfec, convertcsv.pl, Front ends
+@node    dfej, Other front ends, convertcsv.pl, Front ends
 @section Source-based Java front end dfej
 
 @cindex front end for Java, source-based
@@ -5373,7 +5319,7 @@ representation of the invariants is written to
 @file{StackAr.inv.gz}.
 
 @item Examine the invariants; for a
-description of how to do this, @xref{StackAr example}.
+description of how to do this, see @ref{StackAr example}.
 
 @end enumerate
 
@@ -5423,7 +5369,7 @@ daikon.pl DataStructures.StackArTester
 
 This command instruments your program, generates a trace file, and
 displays the invariants in the (deprecated) Tree GUI@.  Currently, this
-script only works on Unix.  For more details, @xref{All-in-one script}.
+script only works on Unix.  For more details, see @ref{All-in-one script}.
 
 
 @node    Second Java example,  , Automating the process, Instrumenting Java programs
@@ -5995,1136 +5941,7 @@ Print extra debugging information.
 @end table
 
 
-@node    dfec, Other front ends, dfej, Front ends
-@section Source-based C front end dfec
-
-@cindex dfec (Daikon front end for C)
-@cindex front end for C
-@cindex C front end
-
-This section describes dfec, the Daikon source-based front end for C@.
-For information about installing dfec, see @ref{Installing dfec}.
-
-There are two ways to instrument C programs.  Compiled programs
-originally written in C can be instrumented on the fly using the
-Kvasir tool, or C programs in source code form can be instrumented
-with the dfec tool.  We recommend use of Kvasir instead of dfec.
-Kvasir can only be used on Linux/x86, but it is
-usually easier to use and more reliable.
-
-
-Dynamic invariant detection over a C program using dfec requires
-three steps:
-@enumerate
-@item
-Run dfec, creating an instrumented version of the program and a
-declaration file.
-@item
-Run the instrumented program, creating data trace files.
-@item
-Run Daikon on the declaration files and data trace files.
-@end enumerate
-
-This section discusses the steps in more detail, with an emphasis on the
-first step.  If you have trouble, see @ref{dfec requirements}.
-
-@c The three crucial files are @command{dfec}, 
-@c @file{daikon_runtime.h}, and 
-@c @file{daikon_runtime.o}.
-
-Instrumentation with dfec performs two actions:
-@itemize @bullet
-@item
-Instrumentation adds instructions to the target program so that, in
-addition to performing its original task, it also writes variable values
-to a data trace file.  The changes are made to a copy of the target
-program; your original version is not modified.
-@item
-Instrumentation creates declaration files that describe the format of
-the data trace files.  For instance, these declaration files describe
-the names of procedures and variables that appear in the data trace file.
-@end itemize
-
-To instrument a C file, run dfec on it.  dfec produces
-instrumented source as well as a @file{.decls} file.  dfec
-must be run on all source files, including any header files that
-contain code or definitions to be instrumented (header files typically
-end in @file{.h}).  All files to be included in a single executable
-must be instrumented simultaneously; for example,
-@example
-dfec file1.c file2.c file1.h file2.h
-@end example
-
-Even if you do not wish to detect invariants in one of the files, it
-must be run through dfec so it can correctly interact with the
-instrumented versions of the other files.  @xref{dfec command-line
-arguments}, for instructions on how to exclude files from
-instrumentation.
-
-Running @command{dfec @var{arguments} myprog.c} creates
-a file named @file{myprog.cc} in the @file{daikon-instrumented/}
-directory.  (The instrumented file has a @file{.cc} extension, regardless of 
-the extension of the original file.)  
-It also creates a file named @file{myprog.decls}, which
-is placed in the @file{daikon-output/} directory by default.  To change
-these defaults, see @ref{dfec command-line arguments}.
-
-
-@c Before compiling the instrumented program, either copy or link
-@c @file{daikon_runtime.h} and @file{daikon_runtime.o} from
-@c @file{daikon/front-end/c/} to the current directory.  (See
-@c @ref{Installing dfec}, for details on creating @file{daikon_runtime.o}.)
-@c @example
-@c   cp -p $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
-@c @end example
-
-Compile the instrumented program in the usual way, except that the link
-step should include @file{daikon_runtime.o}, and the compiler should be
-G++, since the instrumented files are C++ files.
-For instance,
-@example
-gcc -g -o @var{exefile} myprog.c
-@end example
-@noindent
-would become
-@example
-g++ -g -o @var{exefile} daikon-instrumented/myprog.cc\
-     $DFECDIR/daikon_runtime.o
-@end example
-
-@cindex DTRACEFILE environment variable
-@cindex environment variable DTRACEFILE
-@c dfec option -- do not rename (yet)
-Now you can run your executable in the usual way.  Running the
-executable creates a @file{myprog.dtrace} file.  By default, this file
-is placed in @file{daikon-output/}, and subsequent runs overwrite that
-file.  This default can be overridden via the @option{--tracefilename}
-argument to dfec or the @env{DTRACEFILE} environment variable at runtime.
-
-Given the @file{myprog.decls} file that dfec created and the
-@file{myprog.dtrace} file that running the instrumented program created,
-you can run Daikon:
-@example
-java daikon.Daikon daikon-output/myprog.decls \
-     daikon-output/myprog.dtrace
-@end example
-
-@menu
-* Instrumenting C programs with dfec::  
-* dfec examples::               
-* dfec command-line arguments::  
-* dfec runtime customization::  
-* Instrumentation scope::       
-* dfec requirements::           
-* Installing dfec::             
-@end menu
-
-
-@node    Instrumenting C programs with dfec, dfec examples, dfec, dfec
-@subsection Instrumenting C programs with dfec
-
-To instrument C source, invoke @command{dfec} on all the source and
-header files at once:
-@example
-dfec @var{...options...} @var{myprog}.c
-@end example
-@strong{Important:}  dfec may only be run on programs written in 
-ANSI/ISO C, not on K&R C
-or other dialects (@pxref{C program requirements})
-
-You may want to specify one or more command-line options;
-see @ref{dfec command-line arguments}.
-
-After dfec is run, you must compile the instrumented source, linking
-it with the object file for the Daikon runtime library and the stdc++
-library.  By default, dfec places instrumented source in the
-@file{daikon-instrumented/} directory.
-@example
-g++ -g -o @var{myprog} daikon-instrumented/@var{myprog}.cc \
-    $DFECDIR/daikon_runtime.o
-@end example
-@noindent
-In addition, you may want to specify the @option{-w} flag to G++, to
-suppress warnings.  dfec's output is valid C++ but may cause G++ to
-issue warnings.
-
-The Daikon front end for C has three effects:
-@itemize @bullet
-@item
-dfec writes instrumented versions of the files to a
-@file{daikon-instrumented/} directory 
-@item
-dfec creates declaration files named
-@file{@var{myprog}.decls}, etc.@: in a
-@file{daikon-output/} directory.
-@item
-optionally, dfec may create a pointer
-type disambiguation file named
-@file{@var{myprog}.disambig} in the
-same directory as the @file{@var{myprog}.decls}
-file.
-@end itemize
-
-For more information about dfec, including more detailed documentation
-on its command-line options, see @ref{dfec}.
-
-
-@node    dfec examples, dfec command-line arguments, Instrumenting C programs with dfec, dfec
-@subsection dfec examples
-
-To detect invariants for a program with dfec, you need to perform three basic
-tasks: instrument the target program (steps 1-3), run the instrumented
-program to create a data trace file (step 4), and run Daikon over the
-data trace file to produce invariants (steps 5-6).  The following
-instructions are for the print_tokens example.  The other examples can
-be run in exactly the same manner.
-
-@enumerate
-@item Change to the directory containing the print_tokens program.
-@example
-cd $DAIKONDIR/examples/dfec-examples/print_tokens
-@end example
-
-@item Instrument the program using dfec, the C front end.
-Run the front end over all the C source files and
-the user-created header files they depend on.
-@example
-dfec print_tokens.c stream.h tokens.h
-@end example
-@noindent
-This command creates two directories, @file{daikon-instrumented}
-and @file{daikon-output}.  It creates an instrumented and preprocessed
-version of @file{print_tokens.c} at
-@file{daikon-instrumented/print_tokens.cc}.  It 
-creates a declaration file at @file{daikon-output/print_tokens.decls}.
-
-@quotation
-Note for Windows users:
-Under Windows, you must insert in the source file a gcc-specific
-@samp{__attribute__} for the @samp{_ctype_} variable, which is used in
-our test suite.  Run the following commands:
-@example
-alias fix="sed -f $DFECDIR/fix.sed"
-(cd daikon-instrumented; \
-  fix print_tokens.cc > fixed.cc;
-  mv fixed.cc print_tokens.cc)
-@end example
-@end quotation
-
-@item Compile and link the instrumented program to create the
-executable @file{print_tokens} in the current directory.
-
-@example
-g++ -g -w -o print_tokens.exe \
-    daikon-instrumented/print_tokens.cc \
-    $DFECDIR/daikon_runtime.o
-@end example
-
-@item Run the print_tokens test suite.  First set the @env{DTRACEAPPEND}
-environment variable, so that a final @file{.dtrace} file contains
-information from all runs, rather than each run overwriting the file
-so that it contains only information from the last run.  (For more
-details about the @env{DTRACEAPPEND} environment variable, see @ref{dfej
-options} and @ref{dfec command-line arguments}.)
-
-If you use the bash shell, run the following commands:
-@example
-export DTRACEAPPEND=1
-sh tests.sh
-@end example
-
-If you use the csh or tcsh shell, run the following commands:
-@example
-setenv DTRACEAPPEND 1
-sh tests.sh
-@end example
-
-These commands create a data trace file at
-@file{daikon-output/print_tokens.dtrace}.
-
-@item Run Daikon on the trace file.
-@example
-java -Xmx256m daikon.Daikon \
-     daikon-output/print_tokens.decls \
-     daikon-output/print_tokens.dtrace
-@end example
-@noindent
-The invariants are printed to standard output, and a binary representation
-of the invariants is written to @file{print_tokens.inv.gz}.
-
-@item Examine the invariants.  You can do this in one of the following
-ways:
-@itemize 
-@item Examine the output from running Daikon.
-@item Use the PrintInvariants program (@pxref{Printing invariants}) 
-to display the invariants.
-@c @item Use the Daikon Tree GUI to browse the invariants.
-@item Use the Daikon Context GUI to browse the invariants.
-@end itemize
-@noindent
-For help understanding the invariants, see @ref{Daikon output}.
-
-@end enumerate
-
-@menu
-* Dfec C examples summary::     
-@end menu
-
-@node    Dfec C examples summary,  , dfec examples, dfec examples
-@subsubsection Dfec C examples summary
-
-The above steps can be divided into three stages:
-
-Instrumentation (Steps 1-3)
-@example
-cd $DAIKONDIR/examples/dfec-examples/print_tokens
-dfec print_tokens.c stream.h tokens.h
-g++ -g -w -o print_tokens daikon-instrumented/print_tokens.cc \
-    $DFECDIR/daikon_runtime.o
-@end example
-
-Trace File Generation (Step 4)
-@example
-export DTRACEAPPEND=1
-sh tests.sh
-@end example
-
-Invariant Detection (Step 5)
-@example
-java -Xmx256m daikon.Daikon \
-     daikon-output/print_tokens.decls \
-     daikon-output/print_tokens.dtrace
-@end example
-
-
-
-@node    dfec command-line arguments, dfec runtime customization, dfec examples, dfec
-@subsection dfec command-line arguments
-
-@c dfec option -- do not rename (yet)
-This section describes dfec's command-line options.
-When conflicting options are specified (for instance, both
-@option{--declsfiledir} and @option{--declsfiledirflat}), the last one
-takes precedence.
-
-@table @option
-
-@item -I@var{path}
-Adds @var{path} to the end of the system include path.  The system
-include path that @command{gcc} uses is automatically detected by dfec,
-so you should not have to use the @option{-I} option unless you wish to
-use additional include
-paths or @command{gcc} defaults to using header files
-that cannot be processed by @command{dfec}.
-For example,
-@example
-dfec -I/usr/local/.../2.95.3/include myprog.c
-@end example
-@c  @noindent
-@c  To determine your system include path, run
-@c  @example
-@c  touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
-@c  @end example
-@c  @noindent
-@c  and look for what follows "@samp{#include <...> search starts here:}".
-
-
-@c [this is deprecated - we want the c++ searchpath only.]
-@c For instance, on
-@c Unix run one of these commands, depending on whether you want the C or
-@c C++ search path:
-@c @example
-@c touch searchpath.c; gcc -v -E searchpath.c > /dev/null; rm searchpath.c
-@c touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
-@c @end example
-
-
-@item -D@var{macro}=@var{value}
-Defines the preprocessor macro @var{macro} to be @var{value}.
-@c    For example,
-@c  to get dfec to correctly traverse the include files on our system, we use
-@c  @example
-@c    dfec @var{...includepath...} -D__GNUG__=1 -D__null=0
-@c  @end example
-
-
-@cindex DTRACEFILE environment variable
-@cindex environment variable DTRACEFILE
-@cindex DTRACEAPPEND environment variable
-@cindex environment variable DTRACEAPPEND
-@cindex trace file name
-@cindex dtrace file name
-@cindex file name, for dtrace file
-@c dfec option -- do not rename (yet)
-@item --tracefilename=@var{filename}
-Specifies the default name for the trace output (@file{.dtrace}) file (default
-@file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
-the instrumented program file that contains the main() procedure).
-A relative filename is interpreted with respect
-to the current directory at runtime, not at compile time.
-If the @env{DTRACEFILE} environment
-variable is set (to a file name) when the instrumented program is run,
-it overrides the default specified by this flag.  Furthermore, if the
-@env{DTRACEAPPEND} environment
-variable is set to any value at runtime, the dtrace file is appended to
-instead of overwritten, which can be handy if you wish to run
-the instrumented program multiple times.
-
-@c dfec option -- do not rename (yet)
-@item --declsfiledir=@var{decldir}
-Specifies the directory in which to create
-@file{@var{PATH}/@var{myprog}.decls} (default
-@c dfec option -- do not rename (yet)
-@file{daikon-output/}, unless @option{--declsfiledirflat} is
-specified).  @var{PATH} is the relative path from the current
-directory to the source file; that is, the relative path from
-@var{decldir} to the @file{.decls} file is the same as the relative
-path from the current directory to the source file.  The directory
-structure of the @file{.decls} files mirrors the directory structure of
-the source files.
-
-@c dfec option -- do not rename (yet)
-@item --declsfiledirflat=@var{decldir}
-Specifies the directory in which to create @file{@var{myprog}.decls}
-(no default).  All @file{.decls} files appear in the same directory.
-
-@c dfec option -- do not rename (yet)
-@item --instrsourcedir=@var{instrdir}
-Specifies the directory in which to write instrumented source files
-(default @file{daikon-instrumented/}).  The instrumented files have the
-same names and directory structure as the original input @file{.c} files, with the
-slight exception that the file suffix is always set to @file{.cc}, so if you
-instrument @file{@var{myprog}.c}, you will end up with
-@file{daikon-instrumented/@var{myprog}.cc}.  
-Header files (files with a @file{.h} extension) are textually 
-substituted into the instrumented @file{.cc} files, so they do not appear 
-in the instrumented source directory.  If @var{instrdir} is @file{.},
-then instrumentation is performed in place, first copying the source
-file @file{myprog.c} to @file{myprog.c.uninst}, then overwriting
-@file{myprog.c} with instrumented source.  If @file{myprog.c.uninst}
-already exists, it is left in place:  the copy step is not performed.
-This is useful in situations with Makefiles that you don't want to
-change, or when compiling a system requires many files to be in place.
-
-
-@item --disambigfilename=@var{filename}
-Specifies the filename for the pointer type disambiguation file
-(@pxref{Pointer type disambiguation}), which must be given relative to
-the @file{daikon-output} directory.  If this file exists, dfec uses it
-to make decisions about how to output the referents of pointer
-variables.  If the file does not exist, dfec creates it,
-specifying default instrumentation behavior for all
-pointer types.  It may then be edited and used on subsequent runs. 
-Note: The dfec version of pointer type disambiguation differs slightly 
-in both syntax and functionality from the Kvasir version.
-
-@item --disambig
-Tells dfec to create or read pointer type disambiguation with the
-default filename, which is @file{@var{myprog}.disambig} in the same
-directory as the @file{.decls} file.  For more information, see
-@ref{Pointer type disambiguation}.
-
-@item --flatten-mdas
-Ensures that each multi-dimensional array in the instrumented program will be
-allocated as a single contiguous block of memory.  A multi-dimensional array
-is a variable declared with multiple sets of square brackets after it, e.g.:
-@example
-int foo[5][10];
-@end example
-@noindent
-This is necessary if the program under analysis performs operations that
-assume that its sub-arrays appear in contiguous blocks of memory (that
-is, that @code{foo[3][0]} appears immediately after  @code{foo[2][9]});
-examples of such operations are clearing the entire array with
-@code{memset()}, manually calculating addresses of elements
-in the array using memory offsets from the first element, etc.
-Use of the @option{--flatten-mdas} removes padding at the beginnings
-and ends of subarrays and diminishes the ability of the runtime
-library to report array overflow errors, so this option should only be
-specified if necessary.
-
-@item --help
-Displays a usage message.
-
-@item -l
-Indicates that the next file (only) should not produce @file{.dtrace}
-file output (@pxref{Instrumentation scope}).
-For instance, if you have two source files, @file{file1.c} and @file{file2.c},
-and each has its own header file, but you don't want to instrument the
-procedures defined in @file{file2.c}, you would instrument as follows:
-@example
-dfec file1.c -l file2.c file1.h file2.h
-@end example
-@noindent
-This is the only command-line switch that can be used in the midst of the
-list of filenames; it may be specified multiple times.
-
-@item --no-lackwit
-@cindex LACKWIT_HOME environment variable
-@cindex --no-lackwit flag to dfec
-@cindex Lackwit, runs slowly
-Turns off Lackwit postprocessing of the @file{.decls} file.  
-Lackwit is a variable comparability analysis package; it can make
-invariant detection in Daikon more accurate and efficient.  However,
-Lackwit processing itself can be very slow, especially on large programs.
-You can also turn off Lackwit postprocessing by unsetting the 
-@env{LACKWIT_HOME} environment variable.  
-
-@item --struct-depth=@var{N}
-For nested or recursive types (structs or classes that have members that
-are also structs or classes), this argument specifies how deep to instrument.
-For example, suppose you have a simple linked list structure as follows:
-@example
-struct node @{
-  struct node *next;
-  int val;
-@} list;
-@end example
-@noindent
-Setting the struct instrumentation depth to 1 would cause the runtime
-library to output @code{node.val} and @code{node.next}.  Setting the
-struct instrumentation depth to 2 would cause the runtime library to
-output @code{node.val}, @code{node.next}, @w{@code{node.next->val}}, and
-@w{@code{node.next->next}}.  The default instrumentation depth is 3, which
-allows Daikon to capture invariants about nonadjacent nodes, but results
-in larger dtrace files than smaller values do.
-
-@item --pcc-array-addresses
-In ANSI/ISO C, the address operator applied to an ``array of T''
-yields a ``pointer to array of T,'' whereas some compilers (such as
-pcc) treat @samp{&a} the same as @samp{a} --- that is, as a pointer to
-the first element of @samp{a}.  If you have code that uses the latter
-interpretation, your best bet is to rewrite @samp{&a} as the simpler,
-clearer, and correct @samp{a}.  Failing that, you can supply the
-@option{--pcc-array-addresses} option to dfec to make it treat all
-address-of-array operations in the older, pcc-style manner.
-
-@end table
-
-
-@node    dfec runtime customization, Instrumentation scope, dfec command-line arguments, dfec
-@subsection dfec runtime customization
-
-@cindex dfec customizations
-@cindex Daikon C runtime customizations
-@cindex daikon_runtime.h file
-Many customization options for the dfec front end appear in the
-file @file{$DAIKONDIR/front-end/c/daikon_runtime.h}.
-Each option in the file has a comment explaining its function and how
-to enable it.
-Some examples of the options are:
-
-@itemize @bullet
-@item
-The instrumented program can have the capability to produce gzipped
-(compressed) @file{.dtrace} files.  (This option requires zlib to be
-available on your system.)
-@item
-You can allocate extra space at the ends of arrays, so that your
-program can continue despite (some) memory errors.  You can customize
-what error code is returned if your program contains a memory error
-and is terminated by the dfec runtime.  You can (dangerously) tell
-the dfec runtime not to check for specific memory errors.
-@item
-You can turn specific dfec warnings on and off.
-@end itemize
-
-
-@node    Instrumentation scope, dfec requirements, dfec runtime customization, dfec
-@subsection Instrumentation scope
-
-@cindex instrumentation scope
-@cindex scope of instrumentation
-@cindex uninstrumented libraries
-@cindex libraries, uninstrumented
-
-When you run a C program that has been instrumented with dfec to 
-produce a @file{.dtrace}
-file, the executable may contain three varieties of code:  fully
-instrumented code that produces @file{.dtrace} file output (and also
-tracks memory), partially instrumented code that only tracks memory,
-and entirely uninstrumented code.  The default level of
-instrumentation is full instrumentation.  The @option{-l} command-line
-argument to dfec (@pxref{dfec command-line arguments})
-specifies partial instrumentation for a
-file.  Uninstrumented code is only included by being linked from a
-library that was not processed with dfec --- for instance, system
-libraries.  You should not intentionally leave part of your program
-entirely uninstrumented, because dfec's memory tracking is important
-both for improved output and for correctness.
-If you must link your program against uninstrumented libraries, you need
-to make some small changes to your program.
-
-@enumerate
-@item
-If there are calls from instrumented code to uninstrumented code, then
-memory tracking will not occur in the uninstrumented code.  To correct
-this problem, see @ref{Memory tracking in libraries}.
-
-@item
-If there are calls from uninstrumented code to instrumented code, your
-program will not link, because the instrumented code is C++ and the
-uninstrumented code is C@.  If certain procedures are called from
-uninstrumented code (an example is @code{usage} in @file{wc.c}), then
-you can place
-@example
-#ifdef DAIKON_RUNTIME_H
-extern "C"
-#endif
-@end example
-@noindent
-in front of the procedure definition (and declaration).
-This will not affect calls from within the file, nor will it affect
-compilation of the program, but it will enable dfec to process it.
-@end enumerate
-
-
-@menu
-* Memory tracking details::     
-* Memory tracking in libraries::  
-@end menu
-
-@node    Memory tracking details, Memory tracking in libraries, Instrumentation scope, Instrumentation scope
-@subsubsection Memory tracking details
-
-Here are some details about dfec's operation, to help you understand
-linker errors or other problems.
-
-Instrumented
-programs perform memory tracking, which checks and records the
-program's memory accesses.  This has many benefits.  It tracks whether
-pointers are valid, so dfec's runtime does not attempt to dereference
-uninitialized or deallocated pointers.  It tracks how many elements of
-memory have been initialized, so the runtime does not output garbage
-values.  It catches memory errors in user programs.  It protects
-dfec's runtime data structures from program memory errors that would
-otherwise corrupt them (and which would then appear to the user as
-dfec errors).
-
-Memory tracking is implemented by converting all pointers and arrays
-in the program to ``smart pointers'' and ``smart arrays'', implemented
-as the classes DaikonSmartPointer and DaikonSmartArray.
-Additionally, dfec outputs C++, whereas the original user program is
-written in C@.
-
-@node    Memory tracking in libraries,  , Memory tracking details, Instrumentation scope
-@subsubsection Memory tracking in libraries
-
-The C front end keeps track of the maximum read or written element
-of each array.  This enables it to avoid outputting (meaningless)
-uninitialized elements.  For example, consider the following code:
-@example
-char * mystring = malloc(100);
-strcpy(mystring, "hello");
-@end example
-@noindent
-Even though @code{mystring} has 100 elements, only the first six of them are
-valid.  dfec will only communicate those first six elements to
-Daikon.  After a subsequent operation:
-@example
-strcat(mystring, ", world");
-@end example
-@noindent
-dfec would communicate 13 elements to Daikon.
-
-dfec tracks all array accesses in the instrumented program, and dfec
-also contains special-case handling for certain library routines,
-including all the stdc library functions found in @file{string.h}.
-However, array accesses in files not supplied to dfec (for instance,
-in other library functions) might not be recorded, causing too little
-of the array to be output to Daikon.
-
-The rest of this section describes how to add 
-other functions to dfec's list of special-case functions.
-Suppose system header file @file{<bar.h>} contains a function with signature
-@example
-int foo(char *arg1, char *arg2)
-@end example
-@noindent
-Then you would need to do these things:
-
-@enumerate
-@item
-Add a @code{#include} directive for @file{<bar.h>} to @file{daikon_runtime.cc},
-in the section with the other overloaded functions.
-That section starts with this text:
-@example
-/* functions to overload with DAIKON_* implementations: */
-#include <string.h>
-@end example
-
-@item
-Add an instrumented implementation to @file{daikon_runtime.cc}.  This requires
-knowledge of how smartpointers and the basemap work.  Typically, the
-instrumented implementation calls the normal library function, then
-manually adjusts the max_seen pointers in the basemap to their correct values,
-based on semantic knowledge about the function itself.  For examples, see
-the implementations provided for @file{string.h}.
-The signature of the function must be changed in two ways:  the name should
-have @code{DAIKON_} 
-prepended to it, to avoid namespace pollution (the calls are
-resolved through a macro definition explained below), and the argument and
-return value types must be changed as well to reflect the use of
-smartpointers.  In this example, @code{foo()} as above would be declared as
-@example
-int DAIKON_foo(DaikonSmartPointer<char> arg1,
-               DaikonSmartPointer<char> arg2);
-@end example
-
-@item
-Add a macro definition and a function declaration to @file{daikon_runtime.h}.
-There is a large section of these near the end of the file.  In the case of
-@code{foo()} above, we would need to insert:
-@example
-extern int DAIKON_foo(DaikonSmartPointer<char> arg1,
-                      DaikonSmartPointer<char> arg2);
-#define foo DAIKON_foo
-@end example
-@noindent
-You can find the section to add this in by searching for
-@example
-/* add other user-overloaded functions here */
-@end example
-@noindent
-Be sure to place the declaration and macro definition before the @code{#endif}
-signifying the end of the @code{!COMPILING_DAIKON_RUNTIME} block.  If you put the
-macro definition outside this block, then the runtime library will fail to
-compile.
-
-@end enumerate
-
-
-@node    dfec requirements, Installing dfec, Instrumentation scope, dfec
-@subsection dfec requirements
-
-If you have trouble with dfec, you should first ensure that
-the input to dfec (the program being instrumented) is
-proper, according to the requirements set out in this section.
-dfec sometimes issues obscure error messages when provided
-invalid input.
-For additional help troubleshooting dfec, see @ref{dfec problems}.
-
-@menu
-* C program requirements::      
-* Header file dependencies::    
-* gcc version::                 
-@end menu
-
-@node    C program requirements, Header file dependencies, dfec requirements, dfec requirements
-@subsubsection C program requirements
-
-dfec only instruments ANSI/ISO C programs.  (More
-specifically, dfec only instruments programs that are both
-legal C and legal C++.  This is essentially the same as C, but
-avoiding C++ keywords.)  dfec does not support K&R C or
-other non-ANSI/ISO C dialects.  Before running dfec, you
-should ensure that your code is legal ANSI/ISO C (and legal ANSI/ISO
-C++) and that it compiles cleanly.
-
-@cindex ANSI C
-@cindex ISO C
-@cindex C89 standard
-@cindex C99 standard
-@cindex K&R C
-
-Running your code through a C compiler is necessary, but not
-sufficient, to verify that your program is valid C; GCC and
-other compilers accept a number of erroneous or nonstandard 
-C constructs for which dfec issues warnings.  You should remove all
-warnings produced by @command{gcc -g -Wall -ansi -pedantic}.  (Lack of
-errors from that command does not guarantee your code is ANSI/ISO C,
-or that your code is acceptable to dfec.  However, errors from that
-command do indicate that your code is not ANSI/ISO C@.)  Likewise,
-your code should compile
-@c and link??
-using @command{g++} (instead of @command{gcc}) as the compiler.
-
-Here are some steps you may find necessary in converting code from C
-to the intersection of ANSI/ISO C and ANSI/ISO C++.
-
-@table @asis
-
-@item prototypes
-@cindex C prototypes
-@cindex prototypes, C
-@cindex protoize tool
-@cindex function declarations, C
-@cindex procedure declarations, C
-@cindex declaration formats, of C functions
-You must convert any K&R function prototypes to ANSI/ISO form.  In K&R
-function declarations, parameters may be omitted entirely, and in K&R
-function definitions, variable types may appear as variable
-declarations between the ``)'' that ends the signature and the ``@{''
-that starts the body.  In ANSI/ISO C, variable types always appear in
-the function signature.  Furthermore, signatures must match
-@b{exactly} between declarations and definitions.
-(C library functions needn't be declared at all, since they should
-appear in header files; a fallback would be to make the declarations
-@samp{extern "C"}.)
-
-@c Stephen McCamant says:
-@c When debugging linking problems, I usually find it helpful to compile
-@c everything to .o files.  This will let the linker give you a sensible
-@c file name to tell where the unsatisfied usages are, and let you see
-@c for yourself which symbols are needed or provided, using nm.
-
-The best way to convert prototypes is to use the @command{protoize}
-program.  Even if you believe your code to be ANSI/ISO C, you should
-check that @command{protoize} has no effect.  Protoize is distributed
-with gcc, among other places; you can find documentation at
-@uref{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
-
-After running @command{protoize}, you may need to perform additional
-fixups by hand.  A common problem is function declarations of the form
-@code{f()} that specify no parameters.  In K&R C, the corresponding
-definition was allowed to have any number of arguments, but such
-declarations are obsolescent under the ANSI/ISO C standard, and in C++
-they always denote a function that takes no arguments.  To specify a
-prototype in ANSI/ISO C for a function that takes no arguments, write
-@code{f(void)}.
-
-@item type checking, casts, and const
-C++ is stricter about type checking than C is.  Some C compilers permit
-function prototypes to differ slightly from function definitions.
-Whereas C silently inserts conversions,
-C++ requires types to match or explicit casts to be inserted.
-Therefore, your program may need to have variable types refined or
-changed.
-
-Furthermore, certain functions have different types in the C and C++
-standard libraries.  In particular, more functions have parameters
-annotated as @code{const} in the C++ library, and in more modern C
-libraries, than in older C libraries. 
-In order to satisfy the type checker, you may need to change the types
-of variables, for instance by adding @code{const} the types of variables
-that are assigned string literals, or assigned the results of functions
-that return @code{const} pointers.
-Alternatively, you can add casts every time a value of type @code{char *}
-(for instance) must be converted to a value of type @code{const char *}.
-Adding such casts is only safe if your program never actually modifies
-the value pointed to.
-In some cases, changing the declaration of a variable may be easier,
-since only the declaration, and not each use, must be changed.
-In others, adding casts will require fewer changes, because when
-variable becomes const, other variables that receive its value may
-also need to be declared const, causing a cascade of required
-changes.
-
-@item reserved words
-@cindex string, use in C programs
-
-C++ reserves the following keywords that are not reserved words in C:
-@example
-asm catch class const_cast delete dynamic_cast explicit
-export friend inline mutable namespace new operator
-private protected public reinterpret_cast static_cast
-template this throw try typeid typename using virtual
-
-and and_eq bitand bitor bool compl false not not_eq
-or or_eq true wchar_t xor xor_eq
-@end example
-@noindent
-(Those in the second group are defined as macros in the 1999 ISO C
-standard).
-Additionally, the C++ standard libraries define certain other
-identifiers, such as @code{string}.
-Any use of these words as identifiers must be changed.
-
-@item daikon_runtime.h file
-The easiest solution is to rewrite the program so that it uses a
-different name for that typedef, say @samp{STRING} instead of
-@samp{string}.  Another workaround for @samp{string} is to change
-@file{daikon_runtime.h} so that it never mentions an identifier
-@samp{string}.  See the file for a commented-out (unportable,
-inelegant) way to do this.
-
-
-@item nested enums
-@cindex template-argument uses local type error
-In C, enums that appear inside structs have global scope and can be
-accessed anywhere in the program.  When converting to C++, you will
-have to raise the enum to top level or else use a qualified name,
-which may not work with your C compiler.
-The error message @samp{template-argument `...' 
-uses local type `...'} may indicate this problem.
-
-@end table
-
-
-dfec does not accept every legal program in the intersection
-of ANSI/ISO C and ANSI/ISO C++.  Here are the exceptions.
-@enumerate
-
-@item 
-dfec does not output the contents of C unions.
-
-@item
-If G++ gives an error message while compiling the instrumented code,
-then first try compiling the uninstrumented code with G++,
-and remove any errors that G++ issues.  For instance, C++ requires
-declaration of prototypes, whereas C can sometimes guess the types for
-missing prototypes.
-
-@item 
-Instrumented programs must not redeclare functions defined in system
-headers; for instance, do not do the following:
-@example
-#include <stdlib.h>
-...
-char *getenv(const char *name);
-@end example
-
-The reason is that dfec expects every C file to contain either only
-code and declarations that are instrumented (with respect to smart
-pointer tracking), or no code that is instrumented (with respect to
-smart pointer tracking).  User code is instrumented, but library
-functions are not, so you should use the declaration in
-@file{stdlib.h} rather than repeating it in your own code.
-
-@item
-dfec redefines certain functions defined in system headers.
-Your program must not define these as macros or otherwise use them
-in a non-standard way.
-
-@item
-Instrumented programs must not use nested structures or enums that are
-declared inside procedures.
-You should raise all nested structures to
-the top level (and after raising them, remove any
-@code{static} modifier, which is not relevant to top-level definitions).
-
-You should also separate all declarations from uses.  For example, change
-@example
-enum @{ make, user @} current_access;
-@end example
-to
-@example
-enum current_access_type @{ make, user @};
-current_access_type current_access;
-@end example
-
-@item
-dfec does not deal properly with bitfields (declared like
-@samp{unsigned int env:1} for a single bit).  Change any bitfield
-variables to full-width variables.
-
-@item
-@cindex realloc, use in C programs
-The @code{realloc} function of standard C, used to change the size of
-a memory block allocated with @code{malloc}, is not supported by the dfec
-runtime.  Calls to @code{realloc} will instrument and compile without
-errors, but if @code{realloc} is called, the runtime will not notice
-that the amount of accessible memory has increased after the call, and
-so spurious array overflow errors will occur.  If you know the old
-size of the allocated region, or if it is null terminated, a call to
-@code{realloc} can be replaced by a @code{malloc}, a @code{memcpy} or
-@code{strcpy} respectively, and a @code{free}.
-
-@end enumerate
-
-
-@node    Header file dependencies, gcc version, C program requirements, dfec requirements
-@subsubsection Header file dependencies
-
-Some programs contain dependences on header files that make code that
-is legal C but not legal C++.  dfec's input must be both legal C and
-legal C++ (@pxref{C program requirements}).  This section shows how to
-work around such problems by modifying the header files.
-
-For example, the GNU @command{wc} program
-(@uref{http://www.gnu.org/software/textutils/}; download from
-@uref{ftp://ftp.gnu.org/pub/gnu/textutils/textutils-2.0.tar.gz})
-contains the following test on line 179 (in textutils version 2.0):
-@example
-(current_pos = lseek (fd, (off_t) 0, SEEK_CUR)) != -1
-@end example
-@noindent
-However, Linux's header files define @code{off_t} as @code{__quad_t},
-and @file{bits/types.h} in turn defines @code{__quad_t} as
-follows:
-@example
-#ifdef __GNUC__
-__extension__ typedef long long int __quad_t;
-#else
-typedef struct
-  @{
-    long int __val[2];
-  @} __quad_t;
-#endif
-@end example
-
-dfec uses the non-@code{__GNUC__} branch.  (Many non-standard
-extensions are enabled when @code{__GNUC__} is defined, and dfec can
-understand many but not all of them.)  In C, it is legal to cast the
-number 0 to a struct.  Such a cast is not legal in C++.  Because
-dfec's input must be both legal C and legal C++, dfec issues an error
-message for line 179 of @file{wc.c}.
-
-To work around the problem, execute the following two lines to create
-a local copy of @file{bits/types.h}:
-@example
-mkdir -p $DFECDIR/bits
-cp -p /usr/include/bits/types.h $DFECDIR/bits/types.h
-@end example
-@noindent
-and then edit @file{$DFECDIR/bits/types.h} to remove all but the
-second line of the above snippet.  This will define @code{__quad_t} as
-@code{long long int} instead of as a struct.  dfec uses files found
-under @file{$DFECDIR} in preference to other system headers, so
-@file{wc.c} will compile.
-
-You may need to make similar changes to other header files in order to
-ensure that your code is both legal C and legal C++, or to work around
-other problems.
-
-
-@node    gcc version,  , Header file dependencies, dfec requirements
-@subsubsection gcc version
-
-
-@cindex gcc version for use with dfec
-@cindex gcc 3, does not work with dfec
-@cindex gcc 2.96
-
-dfec works with GCC 2.95.3 or 2.95.2, so long as you do not
-include both C's @file{math.h} and C++'s @file{complex.h}.
-dfec also works with GCC 2.96; this is not an official GCC
-release, but it does appear in some Linux distributions, such as Red Hat's.
-dfec does not currently work with other
-compilers or other versions of GCC.  In particular, GCC 3 does not
-work, nor does the pre-release version labeled ``GCC 2.95.4'' that
-appears in some Linux distributions (including some versions of
-Debian).
-
-
-@cindex gcc 2.95.3, installing
-@cindex installing gcc 2.95.3
-
-You can download GCC 2.95.3, which is the last official release in the
-GCC 2.x series, from @uref{http://gcc.gnu.org/releases.html}.
-
-GCC is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
-GCC installations instructions}.  If you do not wish to read them,
-then the following commands may work for you.  They do not require
-that you have superuser privileges on your machine.  They create
-directory @file{/tmp/build-gcc-2.95.3}, then build GCC and install
-GCC under directory @file{/tmp/build-gcc-2.95.3/gcc-installation}.
-You may wish to adjust those directory names.
-
-@example
-cd /tmp
-mkdir build-gcc-2.95.3
-cd build-gcc-2.95.3
-wget ftp://prep.ai.mit.edu/pub/gnu/gcc/gcc-2.95.3.tar.gz
-gunzip gcc-2.95.3.tar.gz
-tar xf gcc-2.95.3.tar
-mkdir gcc-2.95.3-build
-cd gcc-2.95.3-build
-../gcc-2.95.3/configure --prefix=/tmp/build-gcc-2.95.3/gcc-installation
-make bootstrap
-make install
-@end example
-
-To test the installation, do the following:
-@example
-which gcc
-gcc -v
-set path = (/tmp/build-gcc-2.95.3/gcc-installation $path)
-which gcc
-gcc -v
-@end example
-
-Now you can just use it; @command{gcc} refers to the new version.  You should
-also add the @command{set path} command to your @file{.cshrc} file.  
-If you use sh or
-bash rather than csh, then add the following to your @file{.bashrc} or
-equivalent file.
-@example
-export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
-@end example
-
-@node    Installing dfec,  , dfec requirements, dfec
-@subsection Installing dfec, the source-based Daikon front end for C
-
-@cindex installing dfec
-@cindex dfec installation
-
-dfec is distributed separately from Daikon itself.
-If you wish to use dfec, first perform the following installation
-steps.
-
-@enumerate
-@item
-Download the dfec distribution from
-@uref{http://pag.csail.mit.edu/daikon/download/}; choose the version for
-your architecture and operating system.  The distribution includes
-both the dfec executable and Lackwit.  Lackwit is a variable
-comparability analysis package; its use is optional, but it can make
-invariant detection more accurate and efficient.
-@item
-Unpack the tarfile.
-@example
-cd $DAIKONDIR/front-end
-tar zxvf dfec-linux-x86.tar.gz
-@end example
-@item
-Compile the dfec C runtime library.
-@example
-cd $DAIKONDIR/front-end/c
-make
-@end example
-@noindent
-This creates the file @file{daikon_runtime.o}; you will use it (and
-@file{daikon_runtime.h}, which also appears in @file{front-end/c})
-when compiling C and C++ programs in which you wish to detect invariants.
-@end enumerate
-
-For information about customizing the behavior of your instrumented
-programs, @pxref{dfec runtime customization}.
-
-@menu
-* dfec EDG sources::            
-@end menu
-
-@node    dfec EDG sources,  , Installing dfec, Installing dfec
-@subsubsection Installing dfec from EDG sources
-
-@cindex EDG C front end
-@cindex Edison Design Group C front end
-
-License restrictions prohibit us from distributing the source for dfec,
-except to other parties who hold a license to the EDG (Edison Design
-Group) C front end.  If you hold such a license, send mail to
-@email{daikon-developers@@lists.csail.mit.edu} to obtain a patch to the
-EDG front end.  To build dfec for yourself, perform the following steps:
-@enumerate
-@item Unpack your EDG source code (which you obtained from EDG).
-@example
-tar zxf edgcpfe_3.0.tar.gz
-@end example
-@item cd into the EDG source directory
-@example
-cd release_3.0
-@end example
-@item Apply the patch (which you received from the Daikon group) with
-@option{-p1}; this adds the dfec source modifications.
-@example
-patch -p1 < edg-3.0_to_dfec.patch
-@end example
-@item Compile the software, creating the dfec executable
-@file{release_3.0/bin/dfec}.
-@example
-make
-@end example
-@end enumerate
-
-(A different patch is available for EDG version 2.45; substitute
-@file{2.45} for @file{3.0} in the above instructions.  However, we
-recommend the use of EDG version 3.0, because the version of dfec built
-using EDG 2.45 contains some known bugs that are corrected in the
-version of dfec that is built using EDG 3.0.)
-
-@node    Other front ends,  , dfec, Front ends
+@node    Other front ends,  , dfej, Front ends
 @section Other front ends
 
 @cindex front end for IOA
@@ -7512,7 +6329,7 @@ interface, and accept objects of type Invariant.
 @c in a text editor or code browser; as the cursor moves, the invariant
 @c display is updated.
 @c (Before using the Context GUI, you must follow the installation
-@c instructions; @pxref{Installing the Context GUI}.)
+@c instructions; see @ref{Installing the Context GUI}.)
 @c 
 @c @c Force a paragraph break so the image is on its own line.
 @c @*
@@ -7913,7 +6730,7 @@ Specify a single configuration setting.  The available settings are the
 same as can be passed to Daikon's @option{--config_option} option,
 though because the invariants have already been generated, some will
 have no effect.  For a list of
-available options, @xref{Configuration options}.
+available options, see @ref{Configuration options}.
 
 @item --config-file=@var{file}
 Read configuration options from the file @var{file}.  This file should
@@ -8135,8 +6952,6 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * Parsing Java 5.0 code::       
 * Chicory problems::            
 * dfej problems::               
-* Eclipse plug-in problems::    
-* dfec problems::               
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
@@ -8540,25 +7355,25 @@ files in the first place (rather than cutting the @file{.dtrace} files
 down afterward).
 @itemize
 @item With Chicory or dfej, use the @option{--ppt-omit-pattern} or
-@option{--ppt-select-pattern} options (@pxref{Processing only part of
-the trace file}, @pxref{Chicory options}) to
+@option{--ppt-select-pattern} options (see @ref{Processing only part of
+the trace file}, @ref{Chicory options}) to
 restrict which program points are traced.  Running the
 instrumented program will result in a smaller @file{.dtrace} file that
 contains fewer records.
 @item With Kvasir, use the @option{--ppt-list-file} option to specify a list
 of program points that should be traced (@pxref{Tracing only part of a
 program} section for more details).
-@item With dfec, split your program into multiple files, then
-instrument only some of them (see below).
+@c @item With dfec, split your program into multiple files, then
+@c instrument only some of them (see below).
 @end itemize
 
 @item
 If you are using a source-based front end, you can instrument fewer files.
 @itemize
 @item With dfej, only supply it the files you wish to instrument.
-@item With dfec, use the @option{-l} command (@pxref{dfec command-line
-arguments}) on the command line immediately before any file you wish
-not to instrument.
+@c @item With dfec, use the @option{-l} command (@pxref{dfec command-line
+@c arguments}) on the command line immediately before any file you wish
+@c not to instrument.
 @end itemize
 
 @end enumerate
@@ -8581,8 +7396,8 @@ the @file{.dtrace} file directly.  Analogously with the
 @option{--ppt-select-pattern} and @option{--ppt-omit-pattern} flags, the
 @option{--var-select-pattern} and @option{--var-omit-pattern} flags
 restrict which variables Daikon processes
-(@pxref{Processing only part of
-the trace file}, @pxref{Chicory options}).
+(see @ref{Processing only part of
+the trace file}, and @ref{Chicory options}).
 
 @item
 You can reduce the number of variables that are output by instrumented
@@ -8594,7 +7409,8 @@ depth.
 @item With dfej, use the @option{--nesting-depth=@var{N}} option.
 @item With Kvasir, use the @option{--struct-depth=@var{N}} or the 
 @option{--nesting-depth=@var{N}} option.
-@item With dfec, use the @option{--struct-depth=@var{N}} option.
+@item With Mangel-Wurzel, use the @option{--struct-depth=@var{N}} or the 
+@option{--nesting-depth=@var{N}} option.
 @end itemize
 
 @item
@@ -8747,7 +7563,7 @@ ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
 BCEL on your classpath.)
 
 
-@node    dfej problems, Eclipse plug-in problems, Chicory problems, Troubleshooting
+@node    dfej problems, Reporting bugs, Chicory problems, Troubleshooting
 @section Problems with dfej
 
 @menu
@@ -8867,8 +7683,8 @@ not intended dfej to examine.
 @cindex --decls-dir= option (to dfej) invalid
 @cindex --instr-dir= option (to dfej) invalid
 @cindex --dtrace-file= option (to dfej) invalid
-@cindex Eclipse plug-in, with wrong version of dfej
-@cindex dfej, wrong version for Eclipse plug-in
+@c @cindex Eclipse plug-in, with wrong version of dfej
+@c @cindex dfej, wrong version for Eclipse plug-in
 
 If you get a warning like
 @example
@@ -9018,283 +7834,21 @@ internally by the JVM@.  Users can create a new class MyVector, replace
 uses of Vector by MyVector, and then instrument MyVector.
 
 
-@node    Eclipse plug-in problems, dfec problems, dfej problems, Troubleshooting
-@section Problems with dfec
-
-@cindex Eclipse plug-in, troubleshooting
-
-If you have trouble with the Eclipse plug-in, one good way to debug the
-difficulty is to run the command-line tools (because the plug-in does
-nothing more than run those tools for you).  If the command-line
-versions work properly, then you have isolated the bug to the plug-in.
-If the command-line versions do not work properly, then you can submit a
-more specific bug report that is easier for the developers to reproduce
-and correct.
-
-
-@node    dfec problems, Reporting bugs, Eclipse plug-in problems, Troubleshooting
-@section Problems with dfec
-
-If you have trouble while instrumenting a C program, or while
-compiling the instrumented program, first make sure that the program
-being instrumented satisfies dfec's requirements: @xref{C program requirements}.
-
-Problems with dfec can be divided into those encountered when running
-dfec; those encountered when compiling and linking the instrumented code; and
-those encountered when running the instrumented code.
-
-@menu
-* dfec instrumentation problems::  
-* Compilation and linking of instrumented code problems::  
-* Running instrumented code problems::  
-@end menu
+@c @node    Eclipse plug-in problems, Reporting bugs, dfej problems, Troubleshooting
+@c @section Problems with Eclipse plug-in
+@c 
+@c @cindex Eclipse plug-in, troubleshooting
+@c 
+@c If you have trouble with the Eclipse plug-in, one good way to debug the
+@c difficulty is to run the command-line tools (because the plug-in does
+@c nothing more than run those tools for you).  If the command-line
+@c versions work properly, then you have isolated the bug to the plug-in.
+@c If the command-line versions do not work properly, then you can submit a
+@c more specific bug report that is easier for the developers to reproduce
+@c and correct.
 
 
-@node    dfec instrumentation problems, Compilation and linking of instrumented code problems, dfec problems, dfec problems
-@subsection Problems running dfec
-
-dfec errors in system files, such as
-@file{.../gcc-3.2.1/include/c++/3.2.1/cstdlib}, or in the Daikon C
-runtime, @file{daikon_runtime.h}, are likely to indicate that you are
-using an unsupported version of GCC.  In particular, when you run
-dfec, the version of GCC on your path should be 2.95.2, 2.95.3, or
-2.96; @xref{gcc version}.
-
-@cindex ?: operator, types of operands
-
-dfec is sometimes confused by the conditional expression (@samp{?:})
-operator, saying that the two sides are of different types.  If either
-of the reported types involve ``DaikonSmartPointer'', then the problem
-may be that the compiler could interconvert the two different types in
-the original code, but after dfec instrumented those types, the
-resulting ones were no longer interconvertible.  You have
-two options.  The first option is to
-rewrite the expression using a conditional statement (@samp{if
-... else}).
-@c Take care, because in C it is illegal to insert statements in the middle
-@c of a list of declarations.
-The second option is to add an appropriate cast to give the two
-arms of the conditional expression the same type.  For example, change
-the second line of
-@example
-char * mystring = ...;
-foo ? "literal" : mystring;
-@end example
-@noindent
-to
-@example
-foo ? (char *)"literal" : mystring;
-@end example
-@noindent
-or perhaps to
-@example
-foo ? strdup("literal") : mystring;
-@end example
-@noindent
-(though the latter introduces a small memory leak).
-
-@menu
-* Lackwit problems::            
-@end menu
-
-@node    Lackwit problems,  , dfec instrumentation problems, dfec instrumentation problems
-@subsubsection Lackwit problems
-
-@cindex Lackwit error, identifier undefined
-@cindex identifier undefined, Lackwit error
-@cindex undefined identifier, Lackwit error
-
-By default, dfec runs the Lackwit variable comparability analysis
-package.  Use of Lackwit is optional, but it can make invariant
-detection more accurate and efficient.  Lackwit errors are non-fatal
-to dfec, which can continue even if Lackwit fails.  (Lackwit is
-pickier than dfec, so it may fail when dfec does not.)
-
-If Lackwit (but not dfec proper) gives errors of the form
-``identifier "strcat" is undefined'', then you have failed to include
-the proper header file.  In this case, you should add @samp{#include
-<string.h>} to the program to make the program valid ANSI C@.  dfec
-does not produce this particular error, because it includes
-@file{daikon_runtime.h}, which itself includes @file{string.h}.
-
-@cindex lwpp-init.pl error
-
-If Lackwit gives an error of the form
-@example
-sh: lwpp-init.pl: not found
-@end example
-@noindent
-then you have not correctly installed the dfec distribution
-(@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
-in the directory referred to by environment variable @env{DFECDIR}@.  (That
-directory is placed on your path by the standard Daikon dotfiles.)
-
-Note, Lackwit may have different preprocessor parameters set than
-GCC or G++ (and dfec) do.  As a result,
-you may get errors about undefined function definitions with
-Lackwit, but not with dfec proper.  Check if the
-preprocessor is following the wrong branch, and adjust your code to
-follow the right branch.  
-
-@node    Compilation and linking of instrumented code problems, Running instrumented code problems, dfec instrumentation problems, dfec problems
-@subsection Problems compiling and linking instrumented programs
-
-This section discusses errors encountered when compiling instrumented
-code (with G++) and linking the resulting compiled files.  (In some
-cases, compiling and linking may be performed by a single command line
-invocation, but the two steps are still logically distinct.)
-
-  In Emacs, run this command from the @file{.cc} file
-buffer to comment out the @samp{#line} directives:
-@example
-(replace-regexp "^\\(#line.*\\)$" "/* \\1 */" nil nil nil)
-@end example
-
-
-@menu
-* Compiler problems::           
-* Linker problems::             
-@end menu
-
-@node    Compiler problems, Linker problems, Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
-@subsubsection Compiler problems
-
-When compiling the instrumented code (e.g., @samp{g++ myfile.cc},
-where @file{myfile.cc} was created by dfec from @file{myfile.c}), G++
-produces error messages referring to lines of the original file
-@file{myfile.c}.  Often this indicates the problem, but in other
-cases, you may wish to know which line in the @file{.cc} file is the
-wrong one.  In that case, remove or comment out all the @samp{#line}
-directives from the @file{.cc} file and re-compile.  For example, run
-this command in the @file{daikon-instrumented} directory:
-@example
-perl -pi -e 's|^(#line.*)$|/* $1 */|' myfile.cc
-@end example
-
-
-@cindex DaikonSmartPointer errors in compilation of instrumented code
-@cindex function not defined errors in compilation of instrumented code
-
-@c Can this happen, if the original g++ compilation worked?
-A ``function not defined'' error may indicate a type mismatch in the
-original code.  Code should not declare a parameter but omit the
-corresponding argument at the function call.  The solution is to make
-the function declaration consistent with the use.
-
-@cindex template-argument uses local type errors
-@cindex local type in template-argument error
-
-An error of the form ``template-argument ... uses local type'' is
-probably due to use of a nested (local) structure declaration; raise
-the declaration to top level in your C program.
-
-An error of the form ``__T142459136' was not declared in this scope''
-likely means that you simultaneously declared and used an enum
-or other type.  Separate the declaration from the use.
-
-
-@node    Linker problems,  , Compiler problems, Compilation and linking of instrumented code problems
-@subsubsection Linker problems
-
-This section discusses problems that may occur when linking files that
-have been instrumented by dfec.  For more details,
-@xref{Instrumentation scope}.
-
-@cindex undefined symbol error
-@cindex error, undefined symbol
-@cindex ld error
-@cindex symbol referencing errors
-@cindex DaikonSmartPointer link errors
-
-A linker error involving DaikonSmartPointer, such as
-@example
-Undefined                       first referenced
- symbol                             in file
-foo(DaikonSmartPointer<Bar>)/var/tmp/ccPtoCZc.o
-ld: fatal: Symbol referencing errors. No output written to MyProgram
-@end example
-@noindent
-means that
-instrumented (or partially instrumented) code contains a declaration
-of @code{foo(bar *)}, but the definition appears in uninstrumented
-code.  The instrumented version uses smart pointers, but the
-uninstrumented version does not.  You should supply the @file{.c} file
-containing the definition to dfec (preceded by @option{-l}
-if you do not wish to fully instrument the file).
-
-If you cannot specify the @file{.c} containing the definition of
-@code{foo()} to dfec (for instance, if it appears in a pre-compiled
-library), then no code supplied to dfec should contain a declaration
-for @code{foo()}.   The declaration should occur in a @file{.h} file
-that your code @code{#include}s, but that is not specified on the dfec
-command line.
-
-Other linker problems may indicate a mismatch between part of
-your code that was compiled with GCC and part of it that was compiled
-with G++.  GCC creates files using ``C linkage'', and G++ creates
-files using ``C++ linkage''; the two are not compatible.  (It is
-possible to direct G++ to use C linkage in certain circumstances;
-@xref{Instrumentation scope}.)
-While G++ can compile and link in the same step,
-you should never provide the link step (the one that creates an
-executable) with uninstrumented C code.  You should only provide the
-link invocation of G++ with either
-@itemize @bullet
-@item
-@file{.cc} files (or their @file{.o} versions) that were output
-by dfec, or
-@item
-@file{.o} or @file{.a} files for (completely) uninstrumented code;
-these files should be created by compiling with GCC, never
-G++.
-@end itemize
-
-
-@node    Running instrumented code problems,  , Compilation and linking of instrumented code problems, dfec problems
-@subsection Problems running instrumented code
-
-@cindex daikon_runtime error
-@cindex error, daikon_runtime
-@cindex attempted to access index error
-@cindex error, attempted to access index
-
-A program instrumented by dfec may produce a message such as
-@example
-daikon_runtime: attempted to access index 5 of a 4-length array!
-@end example
-@noindent
-Such a message indicates that there is an error in your program.  Your
-program attempts to read or write memory beyond the end of an array.
-You should fix this error before proceeding to try to detect
-invariants.  If you do not do so, then the program's results cannot be
-relied on, because the erroneous array access might corrupt (or access
-meaningless values from) other variables, the dfec runtime data
-structures, or your program's stack.  When this occurs, the dfec
-runtime immediately halts your program to let you know where the error
-occurred and to prevent memory corruption.  The dfec runtime's
-discovery of these errors, while not directly related to invariant
-detection, is a pleasant side effect of using dfec.  You also might
-want to consider using the Valgrind tool for Linux on x86 processors
-(@uref{http://valgrind.kde.org/}), which can help you correct
-memory errors; this reduces the number of warnings/errors produced by
-the dfec runtime, and it also improves your code.
-
-@cindex daikon_runtime.h file
-@cindex customizing the Daikon C runtime
-
-The dfec runtime's behavior when a program
-contains a memory error is customizable.
-For instance, it can halt immediately; it
-can allocate extra buffer space around arrays (but cannot do so around
-dynamically allocated (malloced) blocks, because the type is not known
-at the time of the malloc call) and only halt if the program goes
-beyond those bounds; or the checking can be turned off entirely, which
-is extremely dangerous.  These and many other customizations for the
-dfec C runtime library are described in the @file{daikon_runtime.h}
-file.
-
-
-@node    Reporting bugs, Known bugs, dfec problems, Troubleshooting
+@node    Reporting bugs, Known bugs, dfej problems, Troubleshooting
 @section Reporting bugs
 
 @cindex reporting bugs
@@ -9450,7 +8004,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon 1
+@cindex Daikon version 1
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
@@ -9739,7 +8293,7 @@ file, it is permitted to place the declarations in one or more
 @file{.decls} ``declaration files'' while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
 perform a separate instrumentation step, such as dfepl (@pxref{dfepl}),
-dfej (@pxref{dfej}), and dfec (@pxref{dfec}).  Such a tool takes as
+dfej (@pxref{dfej}), and Mangel-Wurzel (@pxref{Mangel-Wurzel}).  Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
 instrumented program produces a @file{.dtrace} file containing data
