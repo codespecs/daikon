@@ -58,7 +58,7 @@ while (scalar(@ARGV) > 0) {
     $test_kvasir = 0;
   } elsif ($arg =~ /^--rsync_location=(.*)$/) {
     $rsync_location = $1;
-  } elsif ($arg =~ /^--message=(.*)$/) {
+  } elsif ($arg =~ /^--message=(.*)$/s) {
     $message = $1;
   } else {
     die "Unrecognized argument $arg\n$usage\n";
