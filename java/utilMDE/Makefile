@@ -5,11 +5,12 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
-JAVA ?= java -ea
-JAVAC ?= javac -g
+JAVAC ?= javac
+JAVAC_ARGS ?= -g -J-Xmx800m
+JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
-
+JAVA ?= java -ea
 
 JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print)
@@ -25,10 +26,13 @@ all: all_notest test
 all_javac: all_javac_notest test
 
 all_javac_notest:  ${AUTO_GENERATED_FILES}
-	javac -g ${JAVAC_EXTRA_ARGS} ${JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES}
 
 all_notest: ${AUTO_GENERATED_FILES}
-	${JAVAC} ${JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVA_FILES}
+
+xlint:
+	$(MAKE) JAVAC_ARGS="-Xlint ${JAVAC_ARGS}"
 
 clean:
 	rm -f *.class
