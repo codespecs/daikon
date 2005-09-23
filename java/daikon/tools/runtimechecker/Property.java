@@ -331,7 +331,7 @@ public class Property implements Serializable {
     }
 
     // Maps into all the Property objects created.
-    private static HashMap/*<Integer, Property>*/ propertiesMap = new HashMap/*<Integer, Property>*/();
+    private static HashMap<Integer, Property> propertiesMap = new HashMap<Integer, Property>();
 
     // Creates a new property with the given attributes.
     private Property(Kind kind, String daikonRep, String method) {

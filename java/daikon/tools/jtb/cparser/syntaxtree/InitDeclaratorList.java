@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> ( "," InitDeclarator() )*
  */
 public class InitDeclaratorList implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public InitDeclarator f0;
    public NodeListOptional f1;
 

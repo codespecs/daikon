@@ -14,7 +14,7 @@ import java.util.Iterator;
  * is equivalent to the condition.
  *
  * To use dummy invariants for splitting conditions, the configuration
- * option <samp>daikon.PptTopLevel.dummy_invariant_level</samp> must be set, 
+ * option <samp>daikon.PptTopLevel.dummy_invariant_level</samp> must be set,
  * and formatting information must be supplied in the splitter info file.
  **/
 public class DummyInvariant
@@ -79,7 +79,7 @@ public class DummyInvariant
 
     // Find between 1 and 3 unique variables, to pick a slice to put
     // this in.
-    HashSet uniqVarsSet = new HashSet();
+    HashSet<VarInfo> uniqVarsSet = new HashSet<VarInfo>();
     for (int i = 0; i < vars.length; i++)
       uniqVarsSet.add(vars[i].canonicalRep());
     int sliceSize = uniqVarsSet.size();

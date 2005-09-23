@@ -9,6 +9,8 @@ package jtb.syntaxtree;
  * f0 -> StatementExpressionList()
  */
 public class ForUpdate implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public StatementExpressionList f0;
 
@@ -32,4 +34,3 @@ public class ForUpdate implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

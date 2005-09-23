@@ -39,10 +39,10 @@ public final class DCRuntime {
     = new LinkedHashMap<String,Integer>();
 
   /** Storage for each static tag **/
-  public static List<Object> static_tags = new ArrayList();
+  public static List<Object> static_tags = new ArrayList<Object>();
 
   /** Tag stack **/
-  public static Stack tag_stack = new Stack();
+  public static Stack<Object> tag_stack = new Stack<Object>();
 
   /**
    * Object used to mark procedure entries in the tag stack.  It is pushed
@@ -916,6 +916,8 @@ public final class DCRuntime {
    */
   private static class DVSet extends ArrayList<DaikonVariableInfo>
     implements Comparable<DVSet> {
+    static final long serialVersionUID = 20050923L;
+
     public int compareTo (DVSet s1) {
       if (s1.size() == 0)
         return 1;

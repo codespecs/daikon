@@ -1510,12 +1510,10 @@ public final class TestUtilMDE extends TestCase {
       Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_3.iterator()))));
 
 
-      class OddFilter implements Filter {
+      class OddFilter implements Filter<Integer> {
         public OddFilter() { }
-        public boolean accept(Object o) {
-          if (!(o instanceof Integer))
-            return false;
-          return ((Integer) o).intValue() % 2 == 1;
+        public boolean accept(Integer i) {
+          return i.intValue() % 2 == 1;
         }
       }
 
@@ -1822,6 +1820,24 @@ public final class TestUtilMDE extends TestCase {
     // public static Vector tokens(String str)
 
     // public static List sortList (List l, Comparator c)
+    // public static <T> List<T> removeDuplicates(List<T> l) {
+
+    List<Integer> l123 = new ArrayList<Integer>();
+    l123.add(1); l123.add(2); l123.add(3);
+    List<Integer> l123123 = new ArrayList<Integer>();
+    l123123.add(1); l123123.add(2); l123123.add(3); l123123.add(1); l123123.add(2); l123123.add(3);
+    List<Integer> l12223 = new ArrayList<Integer>();
+    l12223.add(1); l12223.add(2); l12223.add(2); l12223.add(2); l12223.add(3);
+    List<Integer> l1123 = new ArrayList<Integer>();
+    l1123.add(1); l1123.add(1); l1123.add(2); l1123.add(3);
+    List<Integer> l1233 = new ArrayList<Integer>();
+    l1233.add(1); l1233.add(1); l1233.add(2); l1233.add(3);
+
+    assertTrue(UtilMDE.removeDuplicates(l123).equals(l123));
+    assertTrue(UtilMDE.removeDuplicates(l123123).equals(l123));
+    assertTrue(UtilMDE.removeDuplicates(l12223).equals(l123));
+    assertTrue(UtilMDE.removeDuplicates(l1123).equals(l123));
+    assertTrue(UtilMDE.removeDuplicates(l1233).equals(l123));
 
     // This is tested by the tokens methods.
     // public static Vector makeVector(Enumeration e)

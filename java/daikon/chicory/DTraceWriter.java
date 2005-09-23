@@ -42,16 +42,16 @@ public class DTraceWriter extends DaikonWriter
 
     /** debug information about daikon variables  **/
     private boolean debug_vars = false;
-    
+
     /** Percentage of program points to output **/
     private int recordPct;
-    
+
     /**
      * Pseudorandom number generator
      */
     private Random rand;
-    
-    /** 
+
+    /**
      * Nonces for method exits whose records should be excluded
      * but have not yet been reached in the program's execution.
      */
@@ -67,7 +67,7 @@ public class DTraceWriter extends DaikonWriter
     {
         super();
         outFile = writer;
-        
+
         recordPct = Chicory.recordPct();
         rand = new Random();
         pendingIgnoreNonces = new HashSet <Integer> ();
@@ -81,7 +81,7 @@ public class DTraceWriter extends DaikonWriter
         //don't print
         if(Runtime.dtrace_closed)
             return;
-        
+
         if(checkPct(nonceVal))
             return;
 
@@ -115,7 +115,7 @@ public class DTraceWriter extends DaikonWriter
     {
         if(Runtime.dtrace_closed)
             return;
-        
+
         if(checkIgnoreNonces(nonceVal))
             return;
 
@@ -195,7 +195,7 @@ public class DTraceWriter extends DaikonWriter
             else
             {
                 assert false: "Unknown DaikonVariableInfo subtype " + child.getClass() +
-                        " in traversePattern in DTraceWriter for info named " + child.getName() + 
+                        " in traversePattern in DTraceWriter for info named " + child.getName() +
                         " in class " + "for method " + mi;
                 val = null;
             }
@@ -211,7 +211,7 @@ public class DTraceWriter extends DaikonWriter
         {
             return;
         }
-        
+
         outFile.println(curInfo.getName());
         outFile.println(curInfo.getDTraceValueString(val));
 
@@ -222,13 +222,13 @@ public class DTraceWriter extends DaikonWriter
             System.out.printf ("  --variable %s [%d]= %s%n", curInfo.getName(),
                                curInfo.children.size(), out);
         }
-        
+
         //go through all of the current node's children
         //and recurse on their values
         for (DaikonVariableInfo child : curInfo)
         {
             Object childVal = child.getMyValFromParentVal(val);
-            
+
             traverseValue(mi, child, childVal);
         }
 
@@ -400,7 +400,7 @@ public class DTraceWriter extends DaikonWriter
      * @param arrayVal Must be an array type
      * @return a List (with correct primitive wrappers) corresponding to the array
      */
-    public static List getListFromArray(Object arrayVal)
+    public static List<Object> getListFromArray(Object arrayVal)
     {
         if (!arrayVal.getClass().isArray())
             throw new RuntimeException("The object --- " + arrayVal
@@ -586,7 +586,7 @@ public class DTraceWriter extends DaikonWriter
         else
             throw new RuntimeException("Could not find correct primitive wrapper class for class " + val.getClass());
     }
-    
+
     /**
      * Return true iff we should skip a record due to the
      * percentage set from the --trace-percent switch.
@@ -596,10 +596,10 @@ public class DTraceWriter extends DaikonWriter
     {
         if(recordPct == -1)
             return false;
-        
+
         // get random int from 0 to 100 (inclusive)
         int randInt = rand.nextInt(100 + 1);
-        
+
         if(randInt < recordPct)
         {
             return false;
@@ -610,7 +610,7 @@ public class DTraceWriter extends DaikonWriter
             return true;
         }
     }
-    
+
     /**
      * Checks if the corresponding method entry
      * was excluded from a percentage check.
@@ -621,7 +621,7 @@ public class DTraceWriter extends DaikonWriter
     {
         if(recordPct == -1)
             return false;
-        
+
         if(pendingIgnoreNonces.contains(nonce))
         {
             pendingIgnoreNonces.remove(nonce);

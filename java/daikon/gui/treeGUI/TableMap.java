@@ -22,6 +22,8 @@ import javax.swing.event.TableModelEvent;
 
 public class TableMap extends AbstractTableModel
                       implements TableModelListener {
+    static final long serialVersionUID = 20050923L;
+
     protected TableModel model;
 
     public TableModel getModel() {

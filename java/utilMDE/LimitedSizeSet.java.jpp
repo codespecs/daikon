@@ -148,7 +148,7 @@ public class LIMITEDSIZEINTSET
    * represents the values seen by the entire list.  Returns the new
    * object, whose max_values is the given integer.
    **/
-  public static LIMITEDSIZEINTSET merge (int max_values, List /* LIMITEDSIZEINTSET */ slist) {
+  public static LIMITEDSIZEINTSET merge (int max_values, List<LIMITEDSIZEINTSET> slist) {
     LIMITEDSIZEINTSET result = new LIMITEDSIZEINTSET(max_values);
     for (Iterator<LIMITEDSIZEINTSET> itor = slist.iterator(); itor.hasNext(); ) {
       LIMITEDSIZEINTSET s = itor.next();

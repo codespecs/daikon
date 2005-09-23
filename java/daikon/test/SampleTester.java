@@ -202,7 +202,7 @@ public class SampleTester extends TestCase {
     debug_progress.fine ("Processing " + decl_file);
 
     // Read in the specified file
-    Set decl_files = new HashSet(1);
+    Set<File> decl_files = new HashSet<File>(1);
     String absolute_decl_file = find_file (decl_file);
     if (absolute_decl_file == null)
       fail ("Decl file " + decl_file + " not found.");
@@ -357,7 +357,7 @@ public class SampleTester extends TestCase {
 
     // Get the arguments (enclosed in parens, separated by commas)
     stok.need ("(");
-    List args = new ArrayList(10);
+    List<String> args = new ArrayList<String>(10);
     do {
       String arg = stok.nextToken();
       if (!stok.isWord() && !stok.isQString())

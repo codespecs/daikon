@@ -11,23 +11,18 @@ import daikon.inv.*;
  * this.compare(A, B->A) == c.compare(A, A)
  * this.compare(C, D) == c.compare(C, D)
  **/
-public class ConsequentPairComparator implements Comparator {
+public class ConsequentPairComparator implements Comparator<Invariant> {
 
-  private Comparator c;
+  private Comparator<Invariant> c;
 
-  public ConsequentPairComparator(Comparator c) {
+  public ConsequentPairComparator(Comparator<Invariant> c) {
     this.c = c;
   }
 
-  public int compare(Object o1, Object o2) {
-    Invariant inv1, inv2;
-    inv1 = (Invariant) o1;
-
-    if (o2 instanceof Implication) {
-      Implication imp2 = (Implication) o2;
+  public int compare(Invariant inv1, Invariant inv2) {
+    if (inv2 instanceof Implication) {
+      Implication imp2 = (Implication) inv2;
       inv2 = imp2.consequent();
-    } else {
-      inv2 = (Invariant) o2;
     }
 
     return c.compare(inv1, inv2);

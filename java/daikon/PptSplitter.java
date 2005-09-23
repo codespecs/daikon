@@ -51,7 +51,7 @@ public class PptSplitter implements Serializable {
    **/
   public PptTopLevel[] ppts = new PptTopLevel[2];
 
-  private static final Comparator icfp
+  private static final Comparator<Invariant> icfp
                             = new Invariant.InvariantComparatorForPrinting();
 
   /**
@@ -154,7 +154,7 @@ public class PptSplitter implements Serializable {
     Assert.assertTrue (ppts.length == 2);
 
     // Create any NIS suppressed invariants in each conditional
-    List<Invariant> suppressed_invs[] = new ArrayList[ppts.length];
+    List<Invariant> suppressed_invs[] = (ArrayList<Invariant>[]) new ArrayList[ppts.length]; // cast because can't create a generic array -MDE
     for (int i = 0; i < ppts.length; i++)
       suppressed_invs[i] = NIS.create_suppressed_invs (ppts[i]);
 
@@ -197,13 +197,13 @@ public class PptSplitter implements Serializable {
     debug.fine ("Adding Implications for " + parent.name);
 
     // Maps permuted invariants to their original invariants
-    Map<Invariant,Invariant> orig_invs = new LinkedHashMap();
+    Map<Invariant,Invariant> orig_invs = new LinkedHashMap<Invariant,Invariant>();
 
-    Vector<Invariant> same_invs_vec = new Vector();
+    Vector<Invariant> same_invs_vec = new Vector<Invariant>();
 
-    Vector<Invariant[]> exclusive_invs_vec = new Vector();
+    Vector<Invariant[]> exclusive_invs_vec = new Vector<Invariant[]>();
 
-    Vector<Invariant[]> different_invs_vec = new Vector();
+    Vector<Invariant[]> different_invs_vec = new Vector<Invariant[]>();
 
 /// ??? MDE
     // Loop through each possible parent slice
@@ -464,7 +464,7 @@ public class PptSplitter implements Serializable {
    **/
   private List<VarInfo[]> possible_slices() {
 
-    List<VarInfo[]> result = new ArrayList();
+    List<VarInfo[]> result = new ArrayList<VarInfo[]>();
 
     // Get an array of leaders at the parent to build slices over
     VarInfo[] leaders = parent.equality_view.get_leaders_sorted();
@@ -503,7 +503,7 @@ public class PptSplitter implements Serializable {
   // Could be used in assertion that all invariants are at same point.
   private boolean at_same_ppt(Invariants invs1, Invariants invs2) {
     PptSlice ppt = null;
-    Iterator<Invariant> itor = new UtilMDE.MergedIterator2(invs1.iterator(), invs2.iterator());
+    Iterator<Invariant> itor = new UtilMDE.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
     for (; itor.hasNext(); ) {
       Invariant inv = itor.next();
       if (ppt == null) {
@@ -522,10 +522,10 @@ public class PptSplitter implements Serializable {
    * elements of invs2.  Result elements are pairs of Invariants.
    * All the arguments should be over the same program point.
    */
-  Vector /*Invariants[2]*/ exclusive_conditions (Invariants invs1,
+  Vector<Invariant[]> exclusive_conditions (Invariants invs1,
                                                  Invariants invs2) {
 
-    Vector result = new Vector();
+    Vector<Invariant[]> result = new Vector<Invariant[]>();
     for (int i1=0; i1 < invs1.size(); i1++) {
       for (int i2=0; i2 < invs2.size(); i2++) {
         Invariant inv1 = invs1.get(i1);
@@ -554,21 +554,21 @@ public class PptSplitter implements Serializable {
    * possibly null).
    * All the arguments should be over the same program point.
    */
-  Vector /*Invariant[2]*/ different_invariants (Invariants invs1,
-                                                Invariants invs2) {
-    SortedSet ss1 = new TreeSet(icfp);
+  Vector<Invariant[]> different_invariants (Invariants invs1,
+                                            Invariants invs2) {
+    SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
-    SortedSet ss2 = new TreeSet(icfp);
+    SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    Vector result = new Vector();
-    for (OrderedPairIterator<Pair> opi = new OrderedPairIterator(ss1.iterator(),
+    Vector<Invariant[]> result = new Vector<Invariant[]>();
+    for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {
-      Pair pair = opi.next();
+      Pair<Invariant,Invariant> pair = opi.next();
       if ((pair.a == null) || (pair.b == null)
           // || (icfp.compare(pair.a, pair.b) != 0)
           ) {
-        result.add(new Invariant[] { (Invariant) pair.a, (Invariant) pair.b });
+        result.add(new Invariant[] { pair.a, pair.b });
       }
     }
     return result;
@@ -582,11 +582,11 @@ public class PptSplitter implements Serializable {
    */
   Vector<Invariant> same_invariants(Invariants invs1, Invariants invs2) {
 
-    SortedSet ss1 = new TreeSet(icfp);
+    SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
-    SortedSet ss2 = new TreeSet(icfp);
+    SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    Vector result = new Vector();
+    Vector<Invariant> result = new Vector<Invariant>();
     for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {

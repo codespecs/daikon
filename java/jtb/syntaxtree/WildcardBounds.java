@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  *       | "super" ReferenceType()
  */
 public class WildcardBounds implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeChoice f0;
 
@@ -33,4 +35,3 @@ public class WildcardBounds implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

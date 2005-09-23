@@ -237,6 +237,7 @@ public final class Intern {
   // Map from an ArrayWrapper to the array (I don't need to map to a
   // WeakReference because the array isn't the key of the WeakHashMap).
 
+  /* Cannot uncomment the generic types until WeakHasherMap is made generic. */
   private static WeakHasherMap/*<Integer,WeakReference<Integer>>*/ internedIntegers;
   private static WeakHasherMap/*<Long,WeakReference<Long>>*/ internedLongs;
   private static WeakHasherMap/*<int[],WeakReference<int[]>>*/ internedIntArrays;

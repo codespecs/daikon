@@ -8,6 +8,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * Represents a grammar choice, e.g. ( A | B )
  */
 public class NodeChoice implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice(Node node) {
       this(node, -1);
    }

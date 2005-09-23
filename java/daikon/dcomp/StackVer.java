@@ -114,8 +114,8 @@ public final class StackVer {
 	 * we have about its symbolic execution predecessors.
 	 */
 	private static final class InstructionContextQueue{
-		private Vector<InstructionContext> ics = new Vector<InstructionContext>(); // Type: InstructionContext
-		private Vector<ArrayList<InstructionContext>> ecs = new Vector<ArrayList<InstructionContext>>(); // Type: ArrayList (of InstructionContext)
+		private Vector<InstructionContext> ics = new Vector<InstructionContext>();
+		private Vector<ArrayList<InstructionContext>> ecs = new Vector<ArrayList<InstructionContext>>();
 		/**
 		 * TODO
 		 * @param ic

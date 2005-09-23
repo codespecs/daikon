@@ -8,6 +8,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * Represents an grammar optional node, e.g. ( A )? or [ A ]
  */
 public class NodeOptional implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeOptional() {
       node = null;
    }

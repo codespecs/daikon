@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> ( "," ParameterDeclaration() )*
  */
 public class ParameterList implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public ParameterDeclaration f0;
    public NodeListOptional f1;
 

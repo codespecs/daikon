@@ -45,8 +45,8 @@ public class InvariantFilters {
   // n) to O(n), but that functionality isn't used a whole lot and
   // there are only ~10 filters anyway.
 
-  List propertyFilters = new Vector();
-  List variableFilters = new ArrayList();
+  List<InvariantFilter> propertyFilters = new Vector<InvariantFilter>();
+  List<VariableFilter> variableFilters = new ArrayList<VariableFilter>();
 
   public InvariantFilters() {
 
@@ -86,7 +86,7 @@ public class InvariantFilters {
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;
-        for (Iterator<InvariantFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
+        for (Iterator<VariableFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
           InvariantFilter filter = iter.next();
           if (! filter.shouldDiscard( invariant )) {
             hasAnyVariable = true;
@@ -95,10 +95,10 @@ public class InvariantFilters {
         if (! hasAnyVariable) {
           if (invariant.logOn())
             invariant.log ("Failed ANY_VARIABLE filter");
-          return (InvariantFilter) variableFilters.get(0);
+          return variableFilters.get(0);
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
-        for (Iterator<InvariantFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
+        for (Iterator<VariableFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
           InvariantFilter filter = iter.next();
           if (filter.shouldDiscard( invariant )) {
             if (invariant.logOn())
@@ -246,14 +246,14 @@ public class InvariantFilters {
    * The Equality invariants are inserted into the beginning.  Equality
    * invariants are useful when it comes to displaying invariants.
    **/
-  public static List<Invariant> addEqualityInvariants( List invariants ) {
+  public static List<Invariant> addEqualityInvariants( List<Invariant> invariants ) {
 
     return invariants;
 
   }
 
   // For debugging
-  static String reprVarInfoList(List vis) {
+  static String reprVarInfoList(List<VarInfo> vis) {
     String result = "";
     for (int i=0; i<vis.size(); i++) {
       if (i!=0) result += " ";

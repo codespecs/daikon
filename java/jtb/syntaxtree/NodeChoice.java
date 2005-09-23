@@ -8,6 +8,8 @@ package jtb.syntaxtree;
  * Represents a grammar choice, e.g. ( A | B )
  */
 public class NodeChoice implements Node {
+   static final long serialVersionUID = 20050923L;
+
    public NodeChoice(Node node) {
       this(node, -1);
    }
@@ -38,4 +40,3 @@ public class NodeChoice implements Node {
    public Node choice;
    public int which;
 }
-

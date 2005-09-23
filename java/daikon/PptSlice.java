@@ -169,7 +169,7 @@ public abstract class PptSlice
    * ValueTuple that encapsulates objects of any type whatever.)
    * @return a List of Invariants that weakened due to the processing.
    **/
-  abstract List add (ValueTuple full_vt, int count);
+  abstract List<Invariant> add (ValueTuple full_vt, int count);
 
   /**
    * Removes any falsified invariants from our list.
@@ -226,14 +226,12 @@ public abstract class PptSlice
    * It orders by arity, then by variable names.
    * It's somewhat less efficient than ArityPptnameComparator.
    **/
-  public static final class ArityVarnameComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class ArityVarnameComparator implements Comparator<PptSlice> {
+    public int compare(PptSlice slice1, PptSlice slice2) {
+      if (slice1 == slice2)
         return 0;
-      PptSlice slice1 = (PptSlice) o1;
-      PptSlice slice2 = (PptSlice) o2;
-      // Don't do this, to permit comparison across different Ppts.
-      // (The check may be useful in some situations, though.)
+      // Don't do this assert, which prevents comparison across different Ppts.
+      // (The assert check may be useful in some situations, though.)
       // Assert.assertTrue(slice1.parent == slice2.parent);
       if (slice1.arity() != slice2.arity()) {
         return slice2.arity() - slice1.arity();
@@ -249,12 +247,10 @@ public abstract class PptSlice
    * Because of the dependence on name, it should be used only for slices
    * on the same Ppt.
    **/
-  public static final class ArityPptnameComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class ArityPptnameComparator implements Comparator<PptSlice> {
+    public int compare(PptSlice slice1, PptSlice slice2) {
+      if (slice1 == slice2)
         return 0;
-      PptSlice slice1 = (PptSlice) o1;
-      PptSlice slice2 = (PptSlice) o2;
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // Assert.assertTrue(slice1.parent == slice2.parent);
@@ -276,7 +272,7 @@ public abstract class PptSlice
    * contains the PptSlice where the invariant was originally located.
    */
   public void guardInvariants() {
-    List invariantsToGuard = new ArrayList();
+    List<Invariant> invariantsToGuard = new ArrayList<Invariant>();
 
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("PptSlice.guardInvariants init: " + this.parent.name());
@@ -356,7 +352,7 @@ public abstract class PptSlice
    */
   public void processOmissions(boolean[] omitTypes) {
     if (invs.size() == 0) return;
-    List toRemove = new ArrayList();
+    List<Invariant> toRemove = new ArrayList<Invariant>();
     for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
       Invariant inv = (Invariant)overInvs.next();
       if (omitTypes['r'] && inv.isReflexive())

@@ -12,6 +12,8 @@ package daikon.tools.jtb.cparser;
  * mechanisms so long as you retain the public fields.
  */
 public class ParseException extends Exception {
+  static final long serialVersionUID = 20050923L;
+
 
   /**
    * This constructor is used by the method "generateParseException"

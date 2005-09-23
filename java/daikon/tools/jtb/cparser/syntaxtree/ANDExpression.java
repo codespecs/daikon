@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> [ "&" ANDExpression() ]
  */
 public class ANDExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public EqualityExpression f0;
    public NodeOptional f1;
 

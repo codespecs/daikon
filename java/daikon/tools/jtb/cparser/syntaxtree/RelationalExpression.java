@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> [ ( "<" | ">" | "<=" | ">=" ) RelationalExpression() ]
  */
 public class RelationalExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public ShiftExpression f0;
    public NodeOptional f1;
 

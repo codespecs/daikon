@@ -15,6 +15,8 @@ package jtb.syntaxtree;
  *       | Arguments()
  */
 public class PrimarySuffix implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeChoice f0;
 
@@ -38,4 +40,3 @@ public class PrimarySuffix implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

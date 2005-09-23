@@ -9,7 +9,7 @@ import java.io.*;
  * the condition is read from the .spinfo file, and later contains a
  * reference to the compiled "Splitter" object.
  **/
-public class SplitterObject implements Comparable {
+public class SplitterObject implements Comparable<SplitterObject> {
 
   private Splitter splitter;
   private String condition; // the condition
@@ -188,7 +188,7 @@ public class SplitterObject implements Comparable {
             + ", @ " + pptName);
   }
 
-  public int compareTo(Object o) {
-    return this.guid - ((SplitterObject) o).getGUID();
+  public int compareTo(SplitterObject o) {
+    return this.guid - o.getGUID();
   }
 }

@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> <IDENTIFIER>
  */
 public class TypedefName implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeToken f0;
 
    public TypedefName(NodeToken n0) {

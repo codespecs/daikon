@@ -64,17 +64,17 @@ public class NIS {
    * that contain a suppressor of that class.
    */
   static Map<Class,List<NISuppressionSet>>
-    suppressor_map = new LinkedHashMap(256);
+    suppressor_map = new LinkedHashMap<Class,List<NISuppressionSet>>(256);
 
   /** List of all suppressions */
-  static List<NISuppressionSet> all_suppressions = new ArrayList();
+  static List<NISuppressionSet> all_suppressions = new ArrayList<NISuppressionSet>();
 
   /**
    * List of invariants that are unsuppressed by the current sample.
    * The falsified() and process_falsified_invs() methods add created
    * invariants to this list.  This list is cleared by apply_samples()
    */
-  public static List new_invs = new ArrayList();
+  public static List<Invariant> new_invs = new ArrayList<Invariant>();
 
   // Statistics that are kept during processing.  Some of these are kept
   // and/or make sense for some approches and not for others
@@ -143,7 +143,7 @@ public class NIS {
         NISuppressionSet ss = j.next();
         NISuppressee suppressee = ss.get_suppressee();
         List<NISuppressionSet> suppressor_ss_list
-          = (List) suppressor_map.get (suppressee.sup_class);
+          = suppressor_map.get (suppressee.sup_class);
         if (suppressor_ss_list == null)
           continue;
         for (Iterator<NISuppressionSet> k = suppressor_ss_list.iterator(); k.hasNext(); ) {
@@ -164,13 +164,14 @@ public class NIS {
    *
    * @deprecated  Use NIS.process_falsified_invs() instead.
    */
+  @Deprecated
   public static void falsified (Invariant inv) {
 
     if (!dkconfig_enabled || dkconfig_antecedent_method)
       return;
 
     // Get the suppression sets (if any) associated with this invariant
-    List ss_list = (List) suppressor_map.get(inv.getClass());
+    List<NISuppressionSet> ss_list = suppressor_map.get(inv.getClass());
     if (ss_list == null) {
       return;
     }
@@ -364,7 +365,7 @@ public class NIS {
       ppt.debug_invs (debugAnt);
 
     // Find all antecedents and organize them by their variables comparability
-    Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap();
+    Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap<VarComparability,Antecedents>();
     store_antecedents_by_comparability (ppt.views_iterator(), comp_ants);
     if (ppt.constants != null)
       store_antecedents_by_comparability
@@ -436,7 +437,7 @@ public class NIS {
     // Loop through each suppression creating each invariant that
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately
-    Set<SupInv> unsuppressed_invs = new LinkedHashSet();
+    Set<SupInv> unsuppressed_invs = new LinkedHashSet<SupInv>();
     for (Iterator<NISuppressionSet> i = all_suppressions.iterator(); i.hasNext(); ) {
       NISuppressionSet ss = i.next();
       for (Iterator<NISuppression> j = ss.iterator(); j.hasNext(); ) {
@@ -531,7 +532,7 @@ public class NIS {
   public static List<Invariant> create_suppressed_invs (PptTopLevel ppt) {
 
     // Find all antecedents and organize them by their variables comparability
-    Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap();
+    Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap<VarComparability,Antecedents>();
     store_antecedents_by_comparability (ppt.views_iterator(), comp_ants);
 
     // Add always-comparable antecedents to each of the other maps.
@@ -540,7 +541,7 @@ public class NIS {
     // Loop through each suppression creating each invariant that
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately.
-    Set<SupInv> suppressed_invs = new LinkedHashSet();
+    Set<SupInv> suppressed_invs = new LinkedHashSet<SupInv>();
     for (Iterator<NISuppressionSet> i = all_suppressions.iterator(); i.hasNext(); ) {
       NISuppressionSet ss = i.next();
       for (Iterator<NISuppression> j = ss.iterator(); j.hasNext(); ) {
@@ -553,7 +554,7 @@ public class NIS {
     }
 
     // Create each invariant and add it to its slice.
-    List created_invs = new ArrayList (suppressed_invs.size());
+    List<Invariant> created_invs = new ArrayList<Invariant> (suppressed_invs.size());
     for (Iterator<SupInv> i = suppressed_invs.iterator(); i.hasNext(); ) {
       SupInv supinv = i.next();
       Invariant inv = supinv.instantiate (ppt);
@@ -573,7 +574,7 @@ public class NIS {
    * object in comp_ants with the corresponding VarComparability.
    */
   static void store_antecedents_by_comparability
-                           (Iterator slice_iterator,
+                           (Iterator<PptSlice> slice_iterator,
                             Map<VarComparability,Antecedents> comp_ants) {
 
     for (Iterator<PptSlice> i = slice_iterator; i.hasNext(); ) {
@@ -616,9 +617,9 @@ public class NIS {
           continue;
         if (inv.is_false())
           false_cnt++;
-        List antecedents = (List) antecedent_map.get (inv.getClass());
+        List<Invariant> antecedents = antecedent_map.get (inv.getClass());
         if (antecedents == null) {
-          antecedents = new ArrayList();
+          antecedents = new ArrayList<Invariant>();
           antecedent_map.put (inv.getClass(), antecedents);
         }
         antecedents.add (inv);
@@ -662,7 +663,7 @@ public class NIS {
       return;
 
     for (Class sclass : suppressor_map.keySet()) {
-      List suppression_set_list = (List) suppressor_map.get (sclass);
+      List<NISuppressionSet> suppression_set_list = suppressor_map.get (sclass);
       for (ListIterator<NISuppressionSet> j = suppression_set_list.listIterator(); j.hasNext();) {
         NISuppressionSet ss = j.next();
         if (j.previousIndex() > 0)
@@ -775,7 +776,7 @@ public class NIS {
     public String toString () {
       String out = "";
       for (int i = 0; i < vis.length; i++) {
-        if (out != "")
+        if (out != "")          // interned
           out += ", ";
         out += vis[i].name.name();
       }
@@ -809,7 +810,7 @@ public class NIS {
     /** Create with specified comparability */
     public Antecedents (VarComparability comparability) {
 
-      antecedent_map = new LinkedHashMap();
+      antecedent_map = new LinkedHashMap<Class,List<Invariant>>();
       this.comparability = comparability;
     }
 
@@ -850,7 +851,7 @@ public class NIS {
       // Add the invariant to the map for its class
       List<Invariant> antecedents = get (inv.getClass());
       if (antecedents == null) {
-        antecedents = new ArrayList();
+        antecedents = new ArrayList<Invariant>();
         antecedent_map.put (inv.getClass(), antecedents);
       }
       if (inv.is_false())
@@ -879,7 +880,7 @@ public class NIS {
      */
     public List<Invariant> get (Class cls) {
 
-      return (List) antecedent_map.get (cls);
+      return antecedent_map.get (cls);
     }
 
     /**
@@ -891,7 +892,7 @@ public class NIS {
 
       for (Class iclass : antecedent_map.keySet()) {
         out += UtilMDE.unqualified_name (iclass) + " : ";
-        List<Invariant> ilist = (List) antecedent_map.get (iclass);
+        List<Invariant> ilist = antecedent_map.get (iclass);
         for (Iterator<Invariant> j = ilist.iterator(); j.hasNext(); ) {
           Invariant inv = j.next();
           if (inv.is_false())

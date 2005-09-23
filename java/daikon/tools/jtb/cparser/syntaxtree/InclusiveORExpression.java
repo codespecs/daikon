@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> [ "|" InclusiveORExpression() ]
  */
 public class InclusiveORExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public ExclusiveORExpression f0;
    public NodeOptional f1;
 

@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> [ "?" Expression() ":" ConditionalExpression() ]
  */
 public class ConditionalExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public LogicalORExpression f0;
    public NodeOptional f1;
 

@@ -23,7 +23,7 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
     if (Daikon.output_format != OutputFormat.DAIKON)
       return null;
 
-    ArrayList result = new ArrayList(3);
+    ArrayList<UnaryDerivation> result = new ArrayList<UnaryDerivation>(3);
     if (SequenceMin.dkconfig_enabled) { result.add(new SequenceMin(vi)); }
     if (SequenceMax.dkconfig_enabled) { result.add(new SequenceMax(vi)); }
     if (SequenceSum.dkconfig_enabled) { result.add(new SequenceSum(vi)); }

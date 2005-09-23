@@ -675,7 +675,7 @@ public class LOWERBOUND
    *                    parent_ppt.
    * @param parent_ppt  Slice that will contain the new invariant
    */
-  public Invariant merge (List invs, PptSlice parent_ppt) {
+  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     LOWERBOUND first = (LOWERBOUND) invs.get(0);

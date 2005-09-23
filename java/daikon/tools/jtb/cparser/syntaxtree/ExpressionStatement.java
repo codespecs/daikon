@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> ";"
  */
 public class ExpressionStatement implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeOptional f0;
    public NodeToken f1;
 

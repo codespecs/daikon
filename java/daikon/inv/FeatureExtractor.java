@@ -82,8 +82,8 @@ public final class FeatureExtractor {
     }
 
     // First, parse the arguments
-    ArrayList usefuls = new ArrayList();
-    ArrayList nonusefuls = new ArrayList();
+    ArrayList<String> usefuls = new ArrayList<String>();
+    ArrayList<String> nonusefuls = new ArrayList<String>();
     String output_file = null;
     String output_words = null;
     String output_type = null;
@@ -144,8 +144,8 @@ public final class FeatureExtractor {
     // ########## Commented out in order to use reflect functions
     //    ArrayList usefulFeatures = getFeatures(useful);
     //    ArrayList nonusefulFeatures = getFeatures(nonuseful);
-    ArrayList usefulStrings = getStrings(useful);
-    ArrayList nonusefulStrings = getStrings(nonuseful);
+    ArrayList<String> usefulStrings = getStrings(useful);
+    ArrayList<String> nonusefulStrings = getStrings(nonuseful);
 
     HashMap lookup = getFullMapping();
     ArrayList usefulFeatures = getReflectFeatures(useful, lookup);
@@ -654,7 +654,7 @@ public final class FeatureExtractor {
   // to get all the features of that invariant
   // and store those featues in a new TreeSet.
   // return a ArrayList of TreeSets of features.
-  private static ArrayList getReflectFeatures(ArrayList invariants, HashMap lookup)
+  private static ArrayList getReflectFeatures(ArrayList<Invariant> invariants, HashMap lookup)
     throws IllegalAccessException, InvocationTargetException {
     ArrayList answer = new ArrayList();
     // for each invariant, extract all the features and build a new TreeSet
@@ -736,7 +736,7 @@ public final class FeatureExtractor {
    * the IntDoublePair.  Two IntDoublePairs that have the same integer are
    * considered equal.
    *********************************************/
-  private static final class IntDoublePair implements Comparable{
+  private static final class IntDoublePair implements Comparable<IntDoublePair> {
     // public fields
     public int number;
     public double value;
@@ -762,14 +762,7 @@ public final class FeatureExtractor {
 
     // Compares an Object to this
     // Throws ClassCastException if o is not an IntDoublePair
-    public int compareTo(Object o) throws ClassCastException {
-      IntDoublePair p;
-      try {
-        p = (IntDoublePair) o;
-      }
-      catch (ClassCastException e) {
-        throw e;
-      }
+    public int compareTo(IntDoublePair p) {
       if (this.number != p.number)
         return this.number - p.number;
       else
@@ -1099,8 +1092,8 @@ public final class FeatureExtractor {
 
   public static int oneMoreOrderThanLargestFeature = 100000;
 
-  public static HashSet TYPES = new HashSet();
-  public static HashSet BANNED_METHODS = new HashSet();
+  public static HashSet<Class> TYPES = new HashSet<Class>();
+  public static HashSet<String> BANNED_METHODS = new HashSet<String>();
   public static String CLASSES =
     "/PAG/g5/users/brun/research/invariants/daikon.ver3";
   public static int NUM_VARS = 8;

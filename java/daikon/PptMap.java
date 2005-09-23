@@ -13,13 +13,13 @@ public class PptMap
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
-  private final Map nameToPpt = new HashMap();
+  private final Map<String,PptTopLevel> nameToPpt = new HashMap<String,PptTopLevel>();
 
   public void add(PptTopLevel ppt) {
     nameToPpt.put(ppt.name(), ppt);
   }
 
-  public void addAll(List ppts) {
+  public void addAll(List<PptTopLevel> ppts) {
     for (Iterator<PptTopLevel> iPpt = ppts.iterator(); iPpt.hasNext(); ) {
       PptTopLevel ppt = iPpt.next();
       add (ppt);
@@ -27,7 +27,7 @@ public class PptMap
   }
 
   public PptTopLevel get(String name) {
-    return (PptTopLevel) nameToPpt.get(name);
+    return nameToPpt.get(name);
   }
 
   public PptTopLevel get(PptName name) {
@@ -46,7 +46,7 @@ public class PptMap
     return Collections.unmodifiableCollection(nameToPpt.values());
   }
 
-  public Collection nameStringSet() {
+  public Collection<String> nameStringSet() {
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 
@@ -55,19 +55,19 @@ public class PptMap
    * Ppt.NameComparator on their names.  This is good for consistency.
    **/
   public Iterator<PptTopLevel> pptIterator() {
-    TreeSet sorted = new TreeSet(new Ppt.NameComparator());
+    TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
     // Use a (live) view iterator to get concurrent modification
     // exceptions, and an iterator over sorted to get consistency.
-    final Iterator iter_view = nameToPpt.values().iterator();
-    final Iterator iter_sort = sorted.iterator();
-    return new Iterator() {
+    final Iterator<PptTopLevel> iter_view = nameToPpt.values().iterator();
+    final Iterator<PptTopLevel> iter_sort = sorted.iterator();
+    return new Iterator<PptTopLevel>() {
         public boolean hasNext() {
           boolean result = iter_view.hasNext();
           Assert.assertTrue(result == iter_sort.hasNext());
           return result;
         }
-        public Object next() {
+        public PptTopLevel next() {
           iter_view.next(); // to check for concurrent modifications
           return iter_sort.next();
         }
@@ -82,15 +82,15 @@ public class PptMap
    * Ppt.NameComparator on their names.  This differs from pptIterator()
    * in that it includes all ppts (including conditional ppts).
    **/
-  public Iterator ppt_all_iterator() {
-    TreeSet sorted = new TreeSet(new Ppt.NameComparator());
+  public Iterator<PptTopLevel> ppt_all_iterator() {
+    TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
     // Use a (live) view iterator to get concurrent modification
     // exceptions, and an iterator over sorted to get consistency.
-    final Iterator iter_view = nameToPpt.values().iterator();
+    final Iterator<PptTopLevel> iter_view = nameToPpt.values().iterator();
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
-    return new Iterator() {
-        Iterator cond_iterator = null;
+    return new Iterator<PptTopLevel>() {
+        Iterator<PptConditional> cond_iterator = null;
         public boolean hasNext() {
           if ((cond_iterator != null) && cond_iterator.hasNext())
             return (true);
@@ -98,7 +98,7 @@ public class PptMap
           Assert.assertTrue(result == iter_sort.hasNext());
           return result;
         }
-        public Object next() {
+        public PptTopLevel next() {
           if ((cond_iterator != null) && cond_iterator.hasNext())
             return (cond_iterator.next());
           iter_view.next(); // to check for concurrent modifications

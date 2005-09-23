@@ -64,15 +64,14 @@ public class PptSlice0
   // implications (they're also stored as a vector in invs) so we can
   // efficiently avoid adding implications more than once.
 
-  // Really a HashSet<ImplicationByFormatWrapper>.
   // This should not be transient:  more implications can be created during
   // printing, for instance due to guarding.
-  private transient HashSet invariantsSeen = new HashSet();
+  private transient HashSet<ImplicationByFormatWrapper> invariantsSeen = new HashSet<ImplicationByFormatWrapper>();
 
   // In lieu of a readResolve method.
   private void initInvariantsSeen() {
     if (invariantsSeen == null) {
-      invariantsSeen = new HashSet();
+      invariantsSeen = new HashSet<ImplicationByFormatWrapper>();
       for (Invariant inv : invs) {
         invariantsSeen.add(new ImplicationByFormatWrapper((Implication) inv));
       }
@@ -248,7 +247,7 @@ public class PptSlice0
     throw new Error("Shouldn't get called");
   }
 
-  public List add(ValueTuple vt, int count) {
+  public List<Invariant> add(ValueTuple vt, int count) {
     throw new Error("Shouldn't get called");
   }
 

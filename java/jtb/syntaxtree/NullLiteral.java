@@ -9,6 +9,8 @@ package jtb.syntaxtree;
  * f0 -> "null"
  */
 public class NullLiteral implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeToken f0;
 
@@ -37,4 +39,3 @@ public class NullLiteral implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

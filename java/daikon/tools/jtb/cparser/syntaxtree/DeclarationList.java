@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( Declaration() )+
  */
 public class DeclarationList implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeList f0;
 
    public DeclarationList(NodeList n0) {

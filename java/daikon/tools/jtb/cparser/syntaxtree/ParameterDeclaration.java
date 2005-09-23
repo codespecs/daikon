@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> ( Declarator() | [ AbstractDeclarator() ] )
  */
 public class ParameterDeclaration implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public DeclarationSpecifiers f0;
    public NodeChoice f1;
 

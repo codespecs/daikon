@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( Pointer() | [ Pointer() ] DirectAbstractDeclarator() )
  */
 public class AbstractDeclarator implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public AbstractDeclarator(NodeChoice n0) {

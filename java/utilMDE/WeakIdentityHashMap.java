@@ -196,7 +196,7 @@ public class WeakIdentityHashMap<K,V>
         int capacity = 1;
         while (capacity < initialCapacity)
             capacity <<= 1;
-        table = new Entry[capacity];
+        table = (Entry<K,V>[]) new Entry[capacity]; // can't create generic array -MDE
         this.loadFactor = loadFactor;
         threshold = (int)(capacity * loadFactor);
     }
@@ -222,7 +222,7 @@ public class WeakIdentityHashMap<K,V>
     public WeakIdentityHashMap() {
         this.loadFactor = DEFAULT_LOAD_FACTOR;
         threshold = (int)(DEFAULT_INITIAL_CAPACITY);
-        table = new Entry[DEFAULT_INITIAL_CAPACITY];
+        table = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // can't create gneeric array -MDE
     }
 
     /**
@@ -252,6 +252,7 @@ public class WeakIdentityHashMap<K,V>
     /**
      * Use NULL_KEY for key if it is null.
      */
+    // not: "private static <K> K maskNull(K key)" because NULL_KEY isn't of type K.
     private static Object maskNull(Object key) {
         return (key == null ? NULL_KEY : key);
     }
@@ -455,7 +456,7 @@ public class WeakIdentityHashMap<K,V>
             return;
         }
 
-        Entry<K,V>[] newTable = new Entry[newCapacity];
+        Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry[newCapacity]; // can't make generic arrays -MDE
         transfer(oldTable, newTable);
         table = newTable;
 

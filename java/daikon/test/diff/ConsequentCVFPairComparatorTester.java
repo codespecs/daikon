@@ -39,7 +39,7 @@ public class ConsequentCVFPairComparatorTester extends TestCase {
     Invariant A_C = Implication.makeImplication(P,A,C,false,null,null);
     Invariant B_C = Implication.makeImplication(P,B,C,false,null,null);
 
-    Comparator c = new ConsequentCVFPairComparator();
+    Comparator<Invariant> c = new ConsequentCVFPairComparator();
 
     assertTrue(c.compare(A,A) == 0);
     assertTrue(c.compare(A,B) < 0);

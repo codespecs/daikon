@@ -41,7 +41,7 @@ public class InvariantFormatTester extends TestCase
   /**
    * A list containing all of the test formats.
    **/
-  public static final List TEST_FORMAT_LIST = getTestFormatList();
+  public static final List<String> TEST_FORMAT_LIST = getTestFormatList();
 
   /**
    * Allows for the configuring of Daikon options.
@@ -101,8 +101,8 @@ public class InvariantFormatTester extends TestCase
    * This function produces the format list for intialization of the
    * static format list variable.
    **/
-  static List getTestFormatList() {
-    List result = new Vector();
+  static List<String> getTestFormatList() {
+    List<String> result = new Vector<String>();
 
     // Add test formats - hard coded in
     result.add("daikon");
@@ -315,7 +315,7 @@ public class InvariantFormatTester extends TestCase
    * @param output the place to where the test output is written
    **/
   private boolean performTest(LineNumberReader commands, PrintStream output) {
-    List invariantTestCases = new Vector();
+    List<FormatTestCase> invariantTestCases = new Vector<FormatTestCase>();
     boolean noTestFailed = true;
 
     // Need to be able to go to beginning of buffer for combining goals with the input

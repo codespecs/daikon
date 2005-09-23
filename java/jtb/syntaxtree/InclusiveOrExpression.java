@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  * f1 -> ( "|" ExclusiveOrExpression() )*
  */
 public class InclusiveOrExpression implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public ExclusiveOrExpression f0;
    public NodeListOptional f1;
@@ -36,4 +38,3 @@ public class InclusiveOrExpression implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

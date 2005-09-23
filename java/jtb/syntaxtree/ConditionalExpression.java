@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  * f1 -> [ "?" Expression() ":" Expression() ]
  */
 public class ConditionalExpression implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public ConditionalOrExpression f0;
    public NodeOptional f1;
@@ -36,4 +38,3 @@ public class ConditionalExpression implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

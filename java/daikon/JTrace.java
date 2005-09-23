@@ -237,7 +237,9 @@ public final class JTrace
     // We subclass Error because it is much less likely that the target
     // program catches this anywhere, compared to other unchecked
     // exceptions such as RuntimeException.
-    private static class SystemExitException extends SecurityException {}
+    private static class SystemExitException extends SecurityException {
+        static final long serialVersionUID = 20050923L;
+    }
 
     private static class Enforcer extends SecurityManager
     {

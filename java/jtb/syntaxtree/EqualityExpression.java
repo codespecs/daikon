@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  * f1 -> ( ( "==" | "!=" ) InstanceOfExpression() )*
  */
 public class EqualityExpression implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public InstanceOfExpression f0;
    public NodeListOptional f1;
@@ -36,4 +38,3 @@ public class EqualityExpression implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

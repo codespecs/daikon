@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  *       | ConditionalExpression()
  */
 public class AssignmentExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public AssignmentExpression(NodeChoice n0) {

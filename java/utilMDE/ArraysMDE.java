@@ -1799,8 +1799,8 @@ public final class ArraysMDE {
    * @return true iff a does not contain duplicate elements
    * using O(n) time and O(n) space.
    */
-  public static boolean noDuplicates (List a) {
-    HashSet hs = new HashSet ();
+  public static <T> boolean noDuplicates (List<T> a) {
+    HashSet<T> hs = new HashSet<T> ();
     for (int i = 0; i < a.size(); i++) {
       if (hs.contains(a.get(i))) { return false; }
       // Could be optimized not to add the last element,
@@ -1981,12 +1981,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
    **/
-  public static final class IntArrayComparatorLexical implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class IntArrayComparatorLexical implements Comparator<int[]> {
+    public int compare(int[] a1, int[] a2) {
+      if (a1 == a2)
         return 0;
-      int[] a1 = (int[])o1;
-      int[] a2 = (int[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
         if (a1[i] != a2[i])
@@ -2001,12 +1999,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
    **/
-  public static final class LongArrayComparatorLexical implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class LongArrayComparatorLexical implements Comparator<long[]> {
+    public int compare(long[] a1, long[] a2) {
+      if (a1 == a2)
         return 0;
-      long[] a1 = (long[])o1;
-      long[] a2 = (long[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
         if (a1[i] != a2[i])
@@ -2021,12 +2017,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
    **/
-  public static final class DoubleArrayComparatorLexical implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class DoubleArrayComparatorLexical implements Comparator<double[]> {
+    public int compare(double[] a1, double[] a2) {
+      if (a1 == a2)
         return 0;
-      double[] a1 = (double[])o1;
-      double[] a2 = (double[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
         int result = Double.compare(a1[i], a2[i]);
@@ -2042,12 +2036,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical Strings).
    **/
-  public static final class StringArrayComparatorLexical implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class StringArrayComparatorLexical implements Comparator<String[]> {
+    public int compare(String[] a1, String[] a2) {
+      if (a1 == a2)
         return 0;
-      String[] a1 = (String[])o1;
-      String[] a2 = (String[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
         int tmp = 0;
@@ -2071,16 +2063,14 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    **/
-  public static final class ComparableArrayComparatorLexical implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class ComparableArrayComparatorLexical<T extends Comparable> implements Comparator<T[]> {
+    public int compare(T[] a1, T[] a2) {
+      if (a1 == a2)
         return 0;
-      Comparable[] a1 = (Comparable[])o1;
-      Comparable[] a2 = (Comparable[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        Comparable elt1 = a1[i];
-        Comparable elt2 = a2[i];
+        T elt1 = a1[i];
+        T elt2 = a2[i];
         // Make null compare smaller than anything else
         if ((elt1 == null) && (elt2 == null))
           continue;
@@ -2103,12 +2093,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    **/
-  public static final class ObjectArrayComparatorLexical implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class ObjectArrayComparatorLexical implements Comparator<Object[]> {
+    public int compare(Object[] a1, Object[] a2) {
+      if (a1 == a2)
         return 0;
-      Object[] a1 = (Object[])o1;
-      Object[] a2 = (Object[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
         Object elt1 = a1[i];
@@ -2136,12 +2124,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
    **/
-  public static final class IntArrayComparatorLengthFirst implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class IntArrayComparatorLengthFirst implements Comparator<int[]> {
+    public int compare(int[] a1, int[] a2) {
+      if (a1 == a2)
         return 0;
-      int[] a1 = (int[])o1;
-      int[] a2 = (int[])o2;
       int tmp;
       tmp = a1.length - a2.length;
       if (tmp != 0)
@@ -2159,12 +2145,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
    **/
-  public static final class LongArrayComparatorLengthFirst implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class LongArrayComparatorLengthFirst implements Comparator<long[]> {
+    public int compare(long[] a1, long[] a2) {
+      if (a1 == a2)
         return 0;
-      long[] a1 = (long[])o1;
-      long[] a2 = (long[])o2;
       int lendiff = a1.length - a2.length;
       if (lendiff != 0)
         return lendiff;
@@ -2182,12 +2166,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    **/
-  public static final class ComparableArrayComparatorLengthFirst implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class ComparableArrayComparatorLengthFirst<T> implements Comparator<Comparable<T>[]> {
+    public int compare(Comparable<T>[] a1, Comparable<T>[] a2) {
+      if (a1 == a2)
         return 0;
-      Comparable[] a1 = (Comparable[])o1;
-      Comparable[] a2 = (Comparable[])o2;
       int tmp;
       tmp = a1.length - a2.length;
       if (tmp != 0)
@@ -2217,12 +2199,10 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    **/
-  public static final class ObjectArrayComparatorLengthFirst implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+  public static final class ObjectArrayComparatorLengthFirst implements Comparator<Object[]> {
+    public int compare(Object[] a1, Object[] a2) {
+      if (a1 == a2)
         return 0;
-      Object[] a1 = (Object[])o1;
-      Object[] a2 = (Object[])o2;
       int tmp;
       tmp = a1.length - a2.length;
       if (tmp != 0)

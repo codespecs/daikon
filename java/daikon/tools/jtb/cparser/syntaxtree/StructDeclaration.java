@@ -11,6 +11,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f2 -> ";"
  */
 public class StructDeclaration implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public SpecifierQualifierList f0;
    public StructDeclaratorList f1;
    public NodeToken f2;

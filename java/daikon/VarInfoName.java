@@ -400,15 +400,14 @@ public abstract class VarInfoName
 
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
-  private static final WeakHashMap internTable = new WeakHashMap();
+  private static final WeakHashMap<VarInfoName,WeakReference<VarInfoName>> internTable = new WeakHashMap<VarInfoName,WeakReference<VarInfoName>>();
   public VarInfoName intern() {
-    Object lookup = internTable.get(this);
-    if (lookup != null) {
-      WeakReference ref = (WeakReference)lookup;
-      VarInfoName result = (VarInfoName)ref.get();
+    WeakReference<VarInfoName> ref = internTable.get(this);
+    if (ref != null) {
+      VarInfoName result = ref.get();
       return result;
     } else {
-      internTable.put(this, new WeakReference(this));
+      internTable.put(this, new WeakReference<VarInfoName>(this));
       return this;
     }
   }
@@ -757,7 +756,7 @@ public abstract class VarInfoName
       return null;
     }
 
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitSimple(this);
     }
   }
@@ -903,7 +902,7 @@ public abstract class VarInfoName
       return null;
     }
 
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitSizeOf(this);
     }
   }
@@ -922,7 +921,7 @@ public abstract class VarInfoName
    * @param function the name of the function
    * @param vars The arguments to the function, of type VarInfoName
    **/
-  public static VarInfoName applyFunctionOfN(String function, List vars) {
+  public static VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
     return (new FunctionOfN(function, vars)).intern();
   }
 
@@ -1002,7 +1001,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return null;
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitFunctionOf(this);
     }
   }
@@ -1016,14 +1015,14 @@ public abstract class VarInfoName
     static final long serialVersionUID = 20020130L;
 
     public final String function;
-    public final List args;
+    public final List<VarInfoName> args;
 
     /**
      * Construct a new function of multiple arguments.
      * @param function the name of the function
      * @param args the arguments to the function, of type VarInfoName
      **/
-    public FunctionOfN(String function, List args) {
+    public FunctionOfN(String function, List<VarInfoName> args) {
       Assert.assertTrue(function != null);
       Assert.assertTrue(args != null);
       this.args = args;
@@ -1032,7 +1031,7 @@ public abstract class VarInfoName
 
     protected String repr_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
+      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).repr());
         if (i.hasNext()) sb.append (", ");
       }
@@ -1040,7 +1039,7 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
+      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).name());
         if (i.hasNext()) sb.append (", ");
       }
@@ -1049,7 +1048,7 @@ public abstract class VarInfoName
 
     protected String repair_name_impl(VarInfo vi) {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
+      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).name());
         if (i.hasNext()) sb.append (", ");
       }
@@ -1057,7 +1056,7 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
+      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).repr());
         if (i.hasNext()) sb.append (", ");
       }
@@ -1066,7 +1065,7 @@ public abstract class VarInfoName
     }
     protected String simplify_name_impl(boolean prestate) {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
+      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).repr());
         if (i.hasNext()) sb.append (", ");
       }
@@ -1075,7 +1074,7 @@ public abstract class VarInfoName
     }
     protected String ioa_name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
+      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).ioa_name());
         if (i.hasNext()) sb.append (", ");
       }
@@ -1117,7 +1116,7 @@ public abstract class VarInfoName
     protected String identifier_name_impl() {
       StringBuffer sb = new StringBuffer(function);
       sb.append("_of_");
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
+      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).identifier_name());
         if (i.hasNext()) sb.append ("_comma_");
       }
@@ -1137,7 +1136,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return null;
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitFunctionOfN(this);
     }
 
@@ -1426,7 +1425,7 @@ public abstract class VarInfoName
       }
       return null;
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitField(this);
     }
   }
@@ -1500,7 +1499,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return null;
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitTypeOf(this);
     }
   }
@@ -1584,7 +1583,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return term.resolveField(ppt);
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitPrestate(this);
     }
   }
@@ -1665,7 +1664,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return term.resolveField(ppt);
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitPoststate(this);
     }
   }
@@ -1740,7 +1739,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return term.resolveField(ppt);
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitAdd(this);
     }
     // override for cleanliness
@@ -1886,7 +1885,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return term.resolveField(ppt);
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitElements(this);
     }
     public VarInfoName getLowerBound() {
@@ -2032,7 +2031,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return sequence.resolveField(ppt);
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitSubscript(this);
     }
   }
@@ -2227,7 +2226,7 @@ public abstract class VarInfoName
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
       return sequence.resolveField(ppt);
     }
-    public Object accept(Visitor v) {
+    public <T> T accept(Visitor<T> v) {
       return v.visitSlice(this);
     }
     public VarInfoName getLowerBound() {
@@ -2243,22 +2242,22 @@ public abstract class VarInfoName
 
 
   /** Accept the actions of a visitor. **/
-  public abstract Object accept(Visitor v);
+  public abstract <T> T accept(Visitor<T> v);
 
   /** Visitor framework for processing of VarInfoNames. **/
-  public static interface Visitor {
-    public Object visitSimple(Simple o);
-    public Object visitSizeOf(SizeOf o);
-    public Object visitFunctionOf(FunctionOf o);
-    public Object visitFunctionOfN(FunctionOfN o);
-    public Object visitField(Field o);
-    public Object visitTypeOf(TypeOf o);
-    public Object visitPrestate(Prestate o);
-    public Object visitPoststate(Poststate o);
-    public Object visitAdd(Add o);
-    public Object visitElements(Elements o);
-    public Object visitSubscript(Subscript o);
-    public Object visitSlice(Slice o);
+  public static interface Visitor<T> {
+    public T visitSimple(Simple o);
+    public T visitSizeOf(SizeOf o);
+    public T visitFunctionOf(FunctionOf o);
+    public T visitFunctionOfN(FunctionOfN o);
+    public T visitField(Field o);
+    public T visitTypeOf(TypeOf o);
+    public T visitPrestate(Prestate o);
+    public T visitPoststate(Poststate o);
+    public T visitAdd(Add o);
+    public T visitElements(Elements o);
+    public T visitSubscript(Subscript o);
+    public T visitSlice(Slice o);
   }
 
   /**
@@ -2267,25 +2266,25 @@ public abstract class VarInfoName
    * methods for traversing elements (e.g. FunctionOfN) with more
    * than one branch.
    **/
-  public abstract static class AbstractVisitor
-    implements Visitor
+  public abstract static class AbstractVisitor<T>
+    implements Visitor<T>
   {
-    public Object visitSimple(Simple o) {
+    public T visitSimple(Simple o) {
       // nothing to do; leaf node
       return null;
     }
-    public Object visitSizeOf(SizeOf o) {
+    public T visitSizeOf(SizeOf o) {
       return o.sequence.accept(this);
     }
-    public Object visitFunctionOf(FunctionOf o) {
+    public T visitFunctionOf(FunctionOf o) {
       return o.argument.accept(this);
     }
 
     /**
      * By default, return effect on first argument, but traverse all, backwards.
      **/
-    public Object visitFunctionOfN(FunctionOfN o) {
-      Object retval = null;
+    public T visitFunctionOfN(FunctionOfN o) {
+      T retval = null;
       for (ListIterator i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
         VarInfoName vin = (VarInfoName)i.previous();
         retval = vin.accept(this);
@@ -2293,29 +2292,29 @@ public abstract class VarInfoName
       return retval;
     }
 
-    public Object visitField(Field o) {
+    public T visitField(Field o) {
       return o.term.accept(this);
     }
-    public Object visitTypeOf(TypeOf o) {
+    public T visitTypeOf(TypeOf o) {
       return o.term.accept(this);
     }
-    public Object visitPrestate(Prestate o) {
+    public T visitPrestate(Prestate o) {
       return o.term.accept(this);
     }
-    public Object visitPoststate(Poststate o) {
+    public T visitPoststate(Poststate o) {
       return o.term.accept(this);
     }
-    public Object visitAdd(Add o) {
+    public T visitAdd(Add o) {
       return o.term.accept(this);
     }
-    public Object visitElements(Elements o) {
+    public T visitElements(Elements o) {
       return o.term.accept(this);
     }
     // leave abstract; traversal order and return values matter
-    public abstract Object visitSubscript(Subscript o);
+    public abstract T visitSubscript(Subscript o);
 
     // leave abstract; traversal order and return values matter
-    public abstract Object visitSlice(Slice o);
+    public abstract T visitSlice(Slice o);
   }
 
   /**
@@ -2323,7 +2322,7 @@ public abstract class VarInfoName
    * Throws an assertion error if a given goal isn't present.
    **/
   public static class NodeFinder
-    extends AbstractVisitor
+    extends AbstractVisitor<VarInfoName>
   {
     /**
      * Creates a new NodeFinder.
@@ -2341,17 +2340,17 @@ public abstract class VarInfoName
       return pre;
     }
     // visitor methods that get the job done
-    public Object visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       return (o == goal) ? goal : null;
     }
-    public Object visitSizeOf(SizeOf o) {
+    public VarInfoName visitSizeOf(SizeOf o) {
       return (o == goal) ? goal : super.visitSizeOf(o);
     }
-    public Object visitFunctionOf(FunctionOf o) {
+    public VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == goal) ? goal : super.visitFunctionOf(o);
     }
-    public Object visitFunctionOfN(FunctionOfN o) {
-      Object retval = null;
+    public VarInfoName visitFunctionOfN(FunctionOfN o) {
+      VarInfoName retval = null;
       for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
         retval = vin.accept(this);
@@ -2359,33 +2358,33 @@ public abstract class VarInfoName
       }
       return retval;
     }
-    public Object visitField(Field o) {
+    public VarInfoName visitField(Field o) {
       return (o == goal) ? goal : super.visitField(o);
     }
-    public Object visitTypeOf(TypeOf o) {
+    public VarInfoName visitTypeOf(TypeOf o) {
       return (o == goal) ? goal : super.visitTypeOf(o);
     }
-    public Object visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       pre = true;
       return super.visitPrestate(o);
     }
-    public Object visitPoststate(Poststate o) {
+    public VarInfoName visitPoststate(Poststate o) {
       pre = false;
       return super.visitPoststate(o);
     }
-    public Object visitAdd(Add o) {
+    public VarInfoName visitAdd(Add o) {
       return (o == goal) ? goal : super.visitAdd(o);
     }
-    public Object visitElements(Elements o) {
+    public VarInfoName visitElements(Elements o) {
       return (o == goal) ? goal : super.visitElements(o);
     }
-    public Object visitSubscript(Subscript o) {
+    public VarInfoName visitSubscript(Subscript o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
       if (o.index.accept(this) != null) return goal;
       return null;
     }
-    public Object visitSlice(Slice o) {
+    public VarInfoName visitSlice(Slice o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
       if ((o.i != null) && (o.i.accept(this) != null)) return goal;
@@ -2400,7 +2399,7 @@ public abstract class VarInfoName
    * everything except fields, so in x.a, we don't look at a.
    **/
   public static class Finder
-    extends AbstractVisitor
+    extends AbstractVisitor<VarInfoName>
   {
     // state and accessors
     private final Set<VarInfoName> goals;
@@ -2410,10 +2409,10 @@ public abstract class VarInfoName
      * Creates a new Finder.  Uses equals() to find.
      * @param argGoals The goals to find
      **/
-    public Finder(Set argGoals) {
-      goals = new HashSet();
-      for (Iterator i = argGoals.iterator(); i.hasNext(); ) {
-        this.goals.add (((VarInfoName) i.next()).intern());
+    public Finder(Set<VarInfoName> argGoals) {
+      goals = new HashSet<VarInfoName>();
+      for (VarInfoName name : argGoals) {
+        this.goals.add (name.intern());
       }
     }
 
@@ -2422,7 +2421,7 @@ public abstract class VarInfoName
      * Returns true iff some part of root is contained in this.goals.
      **/
     public boolean contains (VarInfoName root) {
-      Object o = getPart(root);
+      VarInfoName o = getPart(root);
       return (o != null);
     }
 
@@ -2431,23 +2430,23 @@ public abstract class VarInfoName
      * Returns the part of root that is contained in this.goals, or
      * null if not found.
      **/
-    public Object getPart (VarInfoName root) {
-      Object o = root.intern().accept(this);
+    public VarInfoName getPart (VarInfoName root) {
+      VarInfoName o = root.intern().accept(this);
       return o;
     }
 
     // visitor methods that get the job done
-    public Object visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       return (goals.contains(o)) ? o : null;
     }
-    public Object visitSizeOf(SizeOf o) {
+    public VarInfoName visitSizeOf(SizeOf o) {
       return (goals.contains(o)) ? o : o.sequence.intern().accept(this);
     }
-    public Object visitFunctionOf(FunctionOf o) {
+    public VarInfoName visitFunctionOf(FunctionOf o) {
       return (goals.contains(o)) ? o : super.visitFunctionOf(o);
     }
-    public Object visitFunctionOfN(FunctionOfN o) {
-      Object result = null;
+    public VarInfoName visitFunctionOfN(FunctionOfN o) {
+      VarInfoName result = null;
       if (goals.contains(o)) return o;
       for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
@@ -2456,37 +2455,37 @@ public abstract class VarInfoName
       }
       return result;
     }
-    public Object visitField(Field o) {
+    public VarInfoName visitField(Field o) {
       return (goals.contains(o)) ? o : super.visitField(o);
     }
-    public Object visitTypeOf(TypeOf o) {
+    public VarInfoName visitTypeOf(TypeOf o) {
       return (goals.contains(o)) ? o : super.visitTypeOf(o);
     }
-    public Object visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       if (goals.contains(o)) return o;
       return super.visitPrestate(o);
     }
-    public Object visitPoststate(Poststate o) {
+    public VarInfoName visitPoststate(Poststate o) {
       if (goals.contains(o)) return o;
       return super.visitPoststate(o);
     }
-    public Object visitAdd(Add o) {
+    public VarInfoName visitAdd(Add o) {
       return (goals.contains(o)) ? o : super.visitAdd(o);
     }
-    public Object visitElements(Elements o) {
+    public VarInfoName visitElements(Elements o) {
       return (goals.contains(o)) ? o : super.visitElements(o);
     }
-    public Object visitSubscript(Subscript o) {
+    public VarInfoName visitSubscript(Subscript o) {
       if (goals.contains(o)) return o;
-      Object temp = o.sequence.accept(this);
+      VarInfoName temp = o.sequence.accept(this);
       if (temp != null) return temp;
       temp = o.index.accept(this);
       if (temp != null) return temp;
       return null;
     }
-    public Object visitSlice(Slice o) {
+    public VarInfoName visitSlice(Slice o) {
       if (goals.contains(o)) return o;
-      Object temp = o.sequence.accept(this);
+      VarInfoName temp = o.sequence.accept(this);
       if (temp != null) return temp;
       if (o.i != null) {
         temp = o.i.accept(this);
@@ -2502,10 +2501,9 @@ public abstract class VarInfoName
 
   // An abstract base class for visitors that compute some predicate
   // of a conjunctive nature (true only if true on all subparts),
-  // returning null for false and an arbitrary non-null Object for
-  // true.
+  // returning Boolean.FALSE or Boolean.TRUE.
   public abstract static class BooleanAndVisitor
-    extends AbstractVisitor
+    extends AbstractVisitor<Boolean>
   {
     private boolean result;
 
@@ -2517,8 +2515,8 @@ public abstract class VarInfoName
       return result;
     }
 
-    public Object visitFunctionOfN(FunctionOfN o) {
-      Object retval = null;
+    public Boolean visitFunctionOfN(FunctionOfN o) {
+      Boolean retval = null;
       for (ListIterator i = o.args.listIterator(o.args.size());
            i.hasPrevious(); ) {
         VarInfoName vin = (VarInfoName)i.previous();
@@ -2529,15 +2527,15 @@ public abstract class VarInfoName
       return retval;
     }
 
-    public Object visitSubscript(Subscript o) {
-      Object temp = o.sequence.accept(this);
+    public Boolean visitSubscript(Subscript o) {
+      Boolean temp = o.sequence.accept(this);
       if (temp == null) return temp;
       temp = o.index.accept(this);
       return temp;
     }
 
-    public Object visitSlice(Slice o) {
-      Object temp = o.sequence.accept(this);
+    public Boolean visitSlice(Slice o) {
+      Boolean temp = o.sequence.accept(this);
       if (temp == null) return temp;
       if (o.i != null) {
         temp = o.i.accept(this);
@@ -2557,11 +2555,11 @@ public abstract class VarInfoName
 
     public IsAllPrestateVisitor(VarInfoName vin) { super(vin); }
 
-    public Object visitSimple(Simple o) {
+    public Boolean visitSimple(Simple o) {
       // Any var not inside an orig() isn't prestate
       return null;
     }
-    public Object visitPrestate(Prestate o) {
+    public Boolean visitPrestate(Prestate o) {
       // orig(...) is all prestate unless it contains post(...)
       return (new IsAllNonPoststateVisitor(o).result())
         ? Boolean.valueOf(true) : null;
@@ -2573,11 +2571,11 @@ public abstract class VarInfoName
   {
     public IsAllNonPoststateVisitor(VarInfoName vin) { super(vin); }
 
-    public Object visitSimple(Simple o) {
+    public Boolean visitSimple(Simple o) {
       // Any var not inside a post() isn't poststate
       return Boolean.valueOf(true);
     }
-    public Object visitPoststate(Poststate o) {
+    public Boolean visitPoststate(Poststate o) {
       // If we see a post(...), we aren't all poststate.
       return null;
     }
@@ -2588,7 +2586,7 @@ public abstract class VarInfoName
    * report whether it's in pre or post-state.
    **/
   public static class ElementsFinder
-    extends AbstractVisitor
+    extends AbstractVisitor<Elements>
   {
     public ElementsFinder (VarInfoName name) {
       elems = (Elements) name.accept(this);
@@ -2606,8 +2604,8 @@ public abstract class VarInfoName
     }
 
     // visitor methods that get the job done
-    public Object visitFunctionOfN(FunctionOfN o) {
-      Object retval = null;
+    public Elements visitFunctionOfN(FunctionOfN o) {
+      Elements retval = null;
       for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
         retval = vin.accept(this);
@@ -2615,26 +2613,26 @@ public abstract class VarInfoName
       }
       return retval;
     }
-    public Object visitPrestate(Prestate o) {
+    public Elements visitPrestate(Prestate o) {
       pre = true;
       return super.visitPrestate(o);
     }
-    public Object visitPoststate(Poststate o) {
+    public Elements visitPoststate(Poststate o) {
       pre = false;
       return super.visitPoststate(o);
     }
-    public Object visitElements(Elements o) {
+    public Elements visitElements(Elements o) {
       return o;
     }
-    public Object visitSubscript(Subscript o) {
+    public Elements visitSubscript(Subscript o) {
       // skip the subscripted sequence
-      Object tmp = o.sequence.term.accept(this);
+      Elements tmp = o.sequence.term.accept(this);
       if (tmp == null) { tmp = o.index.accept(this); }
       return tmp;
     }
-    public Object visitSlice(Slice o) {
+    public Elements visitSlice(Slice o) {
       // skip the sliced sequence
-      Object tmp = o.sequence.term.accept(this);
+      Elements tmp = o.sequence.term.accept(this);
       if (tmp == null && o.i != null) { tmp = o.i.accept(this); }
       if (tmp == null && o.j != null) { tmp = o.j.accept(this); }
       return tmp;
@@ -2646,7 +2644,7 @@ public abstract class VarInfoName
    * replaces some node (and its children) with another.
    **/
   public static class Replacer
-    extends AbstractVisitor
+    extends AbstractVisitor<VarInfoName>
   {
     private final VarInfoName old;
     private final VarInfoName _new;
@@ -2659,59 +2657,59 @@ public abstract class VarInfoName
       return (VarInfoName) root.accept(this);
     }
 
-    public Object visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       return (o == old) ? _new : o;
     }
-    public Object visitSizeOf(SizeOf o) {
+    public VarInfoName visitSizeOf(SizeOf o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitSizeOf(o)).applySize();
     }
-    public Object visitFunctionOf(FunctionOf o) {
+    public VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
     }
-    public Object visitFunctionOfN(FunctionOfN o) {
+    public VarInfoName visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
       // otherwise, create a new function and check if arguments get replaced
       if (o == old) return _new;
-      ArrayList newArgs = new ArrayList();
+      ArrayList<VarInfoName> newArgs = new ArrayList<VarInfoName>();
       for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
-        Object retval = vin.accept(this);
+        VarInfoName retval = vin.accept(this);
         newArgs.add (retval);
       }
       return VarInfoName.applyFunctionOfN(o.function, newArgs);
     }
-    public Object visitField(Field o) {
+    public VarInfoName visitField(Field o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitField(o)).applyField(o.field);
     }
-    public Object visitTypeOf(TypeOf o) {
+    public VarInfoName visitTypeOf(TypeOf o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitTypeOf(o)).applyTypeOf();
     }
-    public Object visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitPrestate(o)).applyPrestate();
     }
-    public Object visitPoststate(Poststate o) {
+    public VarInfoName visitPoststate(Poststate o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitPoststate(o)).applyPoststate();
     }
-    public Object visitAdd(Add o) {
+    public VarInfoName visitAdd(Add o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitAdd(o)).applyAdd(o.amount);
     }
-    public Object visitElements(Elements o) {
+    public VarInfoName visitElements(Elements o) {
       return (o == old) ? _new :
         ((VarInfoName) super.visitElements(o)).applyElements();
     }
-    public Object visitSubscript(Subscript o) {
+    public VarInfoName visitSubscript(Subscript o) {
       return (o == old) ? _new :
         ((VarInfoName) o.sequence.accept(this)).
         applySubscript((VarInfoName) o.index.accept(this));
     }
-    public Object visitSlice(Slice o) {
+    public VarInfoName visitSlice(Slice o) {
       return (o == old) ? _new :
         ((VarInfoName) o.sequence.accept(this)).
         applySlice((o.i == null) ? null : ((VarInfoName) o.i.accept(this)),
@@ -2733,17 +2731,19 @@ public abstract class VarInfoName
       super(null, null);
     }
 
-    public Object visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       if (o.name.equals("return")) return o;
       return o.applyPoststate();
     }
 
-    public Object visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       return o.term;
     }
 
   }
 
+
+  public class NoReturnValue { }
 
   /**
    * Use to collect all elements in a tree into an inorder-traversal
@@ -2751,72 +2751,72 @@ public abstract class VarInfoName
    * All methods return null; to obtain the result, call nodes().
    **/
   public static class InorderFlattener
-    extends AbstractVisitor
+    extends AbstractVisitor<NoReturnValue>
   {
     public InorderFlattener(VarInfoName root) {
       root.accept(this);
     }
 
     // state and accessors
-    private final List result = new ArrayList();
+    private final List<VarInfoName> result = new ArrayList<VarInfoName>();
 
     /** Method returning the actual results (the nodes in order). **/
-    public List nodes() {
+    public List<VarInfoName> nodes() {
       return Collections.unmodifiableList(result);
     }
 
     // visitor methods that get the job done
-    public Object visitSimple(Simple o) {
+    public NoReturnValue visitSimple(Simple o) {
       result.add(o);
       return super.visitSimple(o);
     }
-    public Object visitSizeOf(SizeOf o) {
+    public NoReturnValue visitSizeOf(SizeOf o) {
       result.add(o);
       return super.visitSizeOf(o);
     }
-    public Object visitFunctionOf(FunctionOf o) {
+    public NoReturnValue visitFunctionOf(FunctionOf o) {
       result.add(o);
       return super.visitFunctionOf(o);
     }
-    public Object visitFunctionOfN(FunctionOfN o) {
+    public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       result.add (o);
       for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
-        Object retval = vin.accept(this);
+        NoReturnValue retval = vin.accept(this);
       }
       return null;
     }
-    public Object visitField(Field o) {
+    public NoReturnValue visitField(Field o) {
       result.add(o);
       return super.visitField(o);
     }
-    public Object visitTypeOf(TypeOf o) {
+    public NoReturnValue visitTypeOf(TypeOf o) {
       result.add(o);
       return super.visitTypeOf(o);
     }
-    public Object visitPrestate(Prestate o) {
+    public NoReturnValue visitPrestate(Prestate o) {
       result.add(o);
       return super.visitPrestate(o);
     }
-    public Object visitPoststate(Poststate o) {
+    public NoReturnValue visitPoststate(Poststate o) {
       result.add(o);
       return super.visitPoststate(o);
     }
-    public Object visitAdd(Add o) {
+    public NoReturnValue visitAdd(Add o) {
       result.add(o);
       return super.visitAdd(o);
     }
-    public Object visitElements(Elements o) {
+    public NoReturnValue visitElements(Elements o) {
       result.add(o);
       return super.visitElements(o);
     }
-    public Object visitSubscript(Subscript o) {
+    public NoReturnValue visitSubscript(Subscript o) {
       result.add(o);
       o.sequence.accept(this);
       o.index.accept(this);
       return null;
     }
-    public Object visitSlice(Slice o) {
+    public NoReturnValue visitSlice(Slice o) {
       result.add(o);
       o.sequence.accept(this);
       if (o.i != null) o.i.accept(this);
@@ -2829,11 +2829,11 @@ public abstract class VarInfoName
   // Quantification for formatting in ESC or Simplify
 
   public static class SimpleNamesVisitor
-    extends AbstractVisitor
+    extends AbstractVisitor<NoReturnValue>
   {
     public SimpleNamesVisitor(VarInfoName root) {
       Assert.assertTrue(root != null);
-      simples = new HashSet();
+      simples = new HashSet<String>();
       root.accept(this);
     }
 
@@ -2845,31 +2845,31 @@ public abstract class VarInfoName
      * expression, as Strings. (Used, for instance, to check for
      * conflict with a quantifier variable name).
      **/
-    public Set simples() {
+    public Set<String> simples() {
       return Collections.unmodifiableSet(simples);
     }
 
     // visitor methods that get the job done
-    public Object visitSimple(Simple o) {
+    public NoReturnValue visitSimple(Simple o) {
       simples.add(o.name);
       return super.visitSimple(o);
     }
-    public Object visitElements(Elements o) {
+    public NoReturnValue visitElements(Elements o) {
       return super.visitElements(o);
     }
-    public Object visitFunctionOf(FunctionOf o) {
+    public NoReturnValue visitFunctionOf(FunctionOf o) {
       simples.add(o.function);
       return super.visitFunctionOf(o);
     }
-    public Object visitFunctionOfN(FunctionOfN o) {
+    public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       simples.add(o.function);
       return super.visitFunctionOfN(o);
     }
-    public Object visitSubscript(Subscript o) {
+    public NoReturnValue visitSubscript(Subscript o) {
       o.sequence.accept(this);
       return o.index.accept(this);
     }
-    public Object visitSlice(Slice o) {
+    public NoReturnValue visitSlice(Slice o) {
       if (o.i != null) { o.i.accept(this); }
       if (o.j != null) { o.j.accept(this); }
       return o.sequence.accept(this);
@@ -2882,17 +2882,17 @@ public abstract class VarInfoName
    * unquantified sequences (e.g. a[] or a[i..j]).
    **/
   public static class QuantifierVisitor
-    extends AbstractVisitor
+    extends AbstractVisitor<NoReturnValue>
   {
     public QuantifierVisitor(VarInfoName root) {
       Assert.assertTrue(root != null);
-      unquant = new HashSet();
+      unquant = new HashSet<VarInfoName>();
       root.accept(this);
     }
 
     // state and accessors
     /** @see #unquants() **/
-    private Set/*<Elements || Slice>*/ unquant;
+    private Set<VarInfoName>/*actually <Elements || Slice>*/ unquant;
 
     /**
      * @return Collection of the nodes under the root that need
@@ -2906,7 +2906,7 @@ public abstract class VarInfoName
     //  ary[row][col]            ==> { }
     //  ary[row][]               ==> { ary[row][] }
     //  ary[][]                  ==> { ary[], ary[][] }
-    public Set unquants() {
+    public Set<VarInfoName> unquants() {
       if (QuantHelper.debug.isLoggable(Level.FINE)) {
         QuantHelper.debug.fine ("unquants: " + unquant);
       }
@@ -2914,15 +2914,15 @@ public abstract class VarInfoName
     }
 
     // visitor methods that get the job done
-    public Object visitSimple(Simple o) {
+    public NoReturnValue visitSimple(Simple o) {
       return super.visitSimple(o);
     }
-    public Object visitElements(Elements o) {
+    public NoReturnValue visitElements(Elements o) {
       unquant.add(o);
       return super.visitElements(o);
     }
 
-    public Object visitFunctionOf(FunctionOf o) {
+    public NoReturnValue visitFunctionOf(FunctionOf o) {
       return null;
       // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
@@ -2934,23 +2934,23 @@ public abstract class VarInfoName
      * arrays that are returned, making the quantification engine
      * think it's working with 2-d arrays.)
      **/
-    public Object visitFunctionOfN(FunctionOfN o) {
+    public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       return null;
       // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
-    public Object visitSizeOf(SizeOf o) {
+    public NoReturnValue visitSizeOf(SizeOf o) {
       // don't visit the sequence; we aren't using the elements of it,
       // just the length, so we don't want to include it in the results
       return o.sequence.term.accept(this);
     }
-    public Object visitSubscript(Subscript o) {
+    public NoReturnValue visitSubscript(Subscript o) {
       o.index.accept(this);
       // don't visit the sequence; it is fixed with an exact
       // subscript, so we don't want to include it in the results
       return o.sequence.term.accept(this);
     }
-    public Object visitSlice(Slice o) {
+    public NoReturnValue visitSlice(Slice o) {
       unquant.add(o);
       if (o.i != null) { o.i.accept(this); }
       if (o.j != null) { o.j.accept(this); }
@@ -3083,7 +3083,7 @@ public abstract class VarInfoName
                                         VarInfoName index_base,
                                         int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
-      List unquants = new ArrayList(qv.unquants());
+      List<VarInfoName> unquants = new ArrayList<VarInfoName>(qv.unquants());
       if (unquants.size() == 0) {
         // Nothing to do?
         return null;
@@ -3106,8 +3106,8 @@ public abstract class VarInfoName
       }
     }
 
-    // Return a string distinct from any of the strings in "taken"
-    private static String freshDistinctFrom(Set taken) {
+    // Return a string distinct from any of the strings in "taken".
+    private static String freshDistinctFrom(Set<String> taken) {
       char c = 'a';
       String name;
       do {
@@ -3121,7 +3121,7 @@ public abstract class VarInfoName
      * variable name.
      **/
     public static VarInfoName getFreeIndex(VarInfoName vin) {
-      Set simples = new SimpleNamesVisitor(vin).simples();
+      Set<String> simples = new SimpleNamesVisitor(vin).simples();
       return new FreeVar(freshDistinctFrom(simples));
     }
 
@@ -3131,7 +3131,7 @@ public abstract class VarInfoName
      **/
     public static VarInfoName getFreeIndex(VarInfoName vin1,
                                            VarInfoName vin2) {
-      Set simples = new HashSet(new SimpleNamesVisitor(vin1).simples());
+      Set<String> simples = new HashSet<String>(new SimpleNamesVisitor(vin1).simples());
       simples.addAll(new SimpleNamesVisitor(vin2).simples());
       return new FreeVar(freshDistinctFrom(simples));
     }
@@ -3143,7 +3143,7 @@ public abstract class VarInfoName
     public static VarInfoName getFreeIndex(VarInfoName vin1,
                                            VarInfoName vin2,
                                            VarInfoName vin3) {
-      Set simples = new HashSet(new SimpleNamesVisitor(vin1).simples());
+      Set<String> simples = new HashSet<String>(new SimpleNamesVisitor(vin1).simples());
       simples.addAll(new SimpleNamesVisitor(vin2).simples());
       simples.addAll(new SimpleNamesVisitor(vin3).simples());
       return new FreeVar(freshDistinctFrom(simples));
@@ -3154,7 +3154,7 @@ public abstract class VarInfoName
      **/
     public static class QuantifyReturn {
       public VarInfoName[] root_primes;
-      public Vector bound_vars; // of VarInfoName[3] = <variable, lower, upper>
+      public Vector<VarInfoName[]> bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
     }
 
     // <root*> -> <root'*, <index, lower, upper>*>
@@ -3174,7 +3174,7 @@ public abstract class VarInfoName
       // create empty result
       QuantifyReturn result = new QuantifyReturn();
       result.root_primes = new VarInfoName[roots.length];
-      result.bound_vars = new Vector();
+      result.bound_vars = new Vector<VarInfoName[]>();
 
       // all of the simple identifiers used by these roots
       Set<String> simples = new HashSet<String>();
@@ -3194,7 +3194,7 @@ public abstract class VarInfoName
       // replace the right stuff in the term
       char tmp = 'i';
       for (int i=0; i < roots.length; i++) {
-        List uq = new ArrayList(helper[i].unquants());
+        List<VarInfoName> uq = new ArrayList<VarInfoName>(helper[i].unquants());
         if (uq.size() == 0) {
           // nothing needs quantification
           result.root_primes[i] = roots[i];
@@ -3977,10 +3977,8 @@ public abstract class VarInfoName
   /**
    * Compare VarInfoNames alphabetically.
    **/
-  public static class LexicalComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      VarInfoName name1 = ((VarInfoName)o1);
-      VarInfoName name2 = ((VarInfoName)o2);
+  public static class LexicalComparator implements Comparator<VarInfoName> {
+    public int compare(VarInfoName name1, VarInfoName name2) {
       return name1.compareTo(name2);
     }
   }

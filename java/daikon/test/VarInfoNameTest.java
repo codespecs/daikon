@@ -53,7 +53,7 @@ public class VarInfoNameTest
     VarInfoNameDriver.run(input_stream, new PrintStream(out));
 
     // put output into actual
-    List _actual = new ArrayList();
+    List<String> _actual = new ArrayList<String>();
     StringTokenizer tok = new StringTokenizer(out.toString(), lineSep);
     while (tok.hasMoreTokens()) {
       _actual.add(tok.nextToken());
@@ -61,7 +61,7 @@ public class VarInfoNameTest
     String[] actual = (String[]) _actual.toArray(new String[_actual.size()]);
 
     // put desired into goal
-    List _goal = new ArrayList();
+    List<String> _goal = new ArrayList<String>();
     try {
       BufferedReader buf = new BufferedReader(new InputStreamReader(goal_stream));
       while (buf.ready()) {

@@ -139,13 +139,13 @@ public final class FileCompiler {
   private void recompile_without_errors (List fileNames, String errorString) {
     // search the error string and extract the files with errors.
     if (errorString != null) {
-      HashSet errors = new HashSet();
+      HashSet<String> errors = new HashSet<String>();
       Matcher m = java_filename_pattern.matcher(errorString);
       while (m.find()) {
         errors.add(m.group(1));
       }
       // Collect all the files that were not compiled into retry
-      List<String> retry = new ArrayList();
+      List<String> retry = new ArrayList<String>();
       String filenames = "";
       for (int i = 0; i < fileNames.size(); i++) {
         String sourceFileName = ((String) fileNames.get(i)).trim();

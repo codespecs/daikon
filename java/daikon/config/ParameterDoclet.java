@@ -79,7 +79,7 @@ public class ParameterDoclet
     public String fieldName;
     public String description;
     public String longBlurb;
-    public Map fields;  // field -> description
+    public Map<String,String> fields;  // field -> description
 
     public DocCategory (String prefix, String name, String desc, String blurb) {
       prefixPattern = prefix;
@@ -89,7 +89,7 @@ public class ParameterDoclet
 	fieldName = Configuration.PREFIX + name;
       description = desc;
       longBlurb = blurb;
-      fields = new HashMap ();
+      fields = new HashMap<String,String> ();
     }
   }
 

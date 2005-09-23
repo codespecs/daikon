@@ -82,7 +82,7 @@ public final class Equality
   /**
    * Returns the variables in their index order.  Unmodifiable.
    **/
-  public Set getVars() {
+  public Set<VarInfo> getVars() {
     return Collections.unmodifiableSet (vars);
   }
 
@@ -90,14 +90,14 @@ public final class Equality
    * @param variables Variables which are equivalent, with the canonical
    * one first.  Elements must be of type VarInfo.
    **/
-  public Equality(Collection variables, PptSlice ppt) {
+  public Equality(Collection<VarInfo> variables, PptSlice ppt) {
     super(ppt);
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Creating at " + ppt.parent.name() + " vars: ");
     }
 
     numSamples = 0;
-    vars = new TreeSet(VarInfo.IndexComparator.theInstance);
+    vars = new TreeSet<VarInfo>(VarInfo.IndexComparator.theInstance);
     vars.addAll (variables);
     VarInfo leader = leader();
 
@@ -242,7 +242,7 @@ public final class Equality
     List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
     List<VarInfo> invalid_equiv = new ArrayList<VarInfo>();
 
-    List equal_vars = new Vector();
+    List<VarInfo> equal_vars = new Vector<VarInfo>();
 
     for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
       VarInfo other = i.next();
@@ -416,7 +416,7 @@ public final class Equality
    * go farther and break out of the equality set any variable that is
    * missingOutOfBounds (JHP)
    **/
-  public List add(ValueTuple vt, int count) {
+  public List<VarInfo> add(ValueTuple vt, int count) {
     // Need to handle specially if leader is missing.
     VarInfo leader = leader();
     Object leaderValue = leader.getValue(vt);
@@ -428,7 +428,7 @@ public final class Equality
       numSamples += count;
     }
 
-    List result = new LinkedList();
+    List<VarInfo> result = new LinkedList<VarInfo>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Doing add at " + this.ppt.parent.name() + " for " + this);
     }

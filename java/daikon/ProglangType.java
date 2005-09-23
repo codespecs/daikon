@@ -41,13 +41,11 @@ public final class ProglangType
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // With Vector search, this func was a hotspot (38%), so use a Map:
-  // HashMap<String base, Vector<ProglangType>>
-  private static HashMap all_known_types = new HashMap();
+  // With Vector search, this func was a hotspot (38%), so use a Map.
+  private static HashMap<String,Vector<ProglangType>> all_known_types = new HashMap<String,Vector<ProglangType>>();
 
-  // The set of (interned) names of classes that implement
-  // java.util.List
-  public static HashSet list_implementors = new HashSet();
+  // The set of (interned) names of classes that implement java.util.List.
+  public static HashSet<String> list_implementors = new HashSet<String>();
 
   static {
     // XXX for now, hard-code these list-implementing types. We should
@@ -174,7 +172,7 @@ public final class ProglangType
 //    Assert.assertTrue(t_base == t_base.intern());
 
     // the string maps us to a vec of all plts with that base
-    Vector v = (Vector)all_known_types.get(t_base);
+    Vector<ProglangType> v = all_known_types.get(t_base);
     if (v == null)
       return null;
 
@@ -211,9 +209,9 @@ public final class ProglangType
     }
     result = new ProglangType(t_base, t_dims);
 
-    Vector v = (Vector)all_known_types.get(t_base);
+    Vector<ProglangType> v = all_known_types.get(t_base);
     if (v == null) {
-      v = new Vector();
+      v = new Vector<ProglangType>();
       all_known_types.put(t_base, v);
     }
 
@@ -432,7 +430,7 @@ public final class ProglangType
       if (value.length() == 0) {
         value_strings = new String[0];
       } else if (base == BASE_STRING) {
-        Vector v = new Vector();
+        Vector<String> v = new Vector<String>();
         StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
         parser.quoteChar('\"');
         try {
@@ -685,7 +683,7 @@ public final class ProglangType
   public static String toString (ProglangType[] types) {
     String out = "[";
     for (int i = 0; i < types.length; i++) {
-      if (out != "[")
+      if (out != "[")           // interned
         out += ", ";
       out += types[i];
     }

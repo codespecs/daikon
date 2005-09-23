@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( <GOTO> <IDENTIFIER> ";" | <CONTINUE> ";" | <BREAK> ";" | <RETURN> [ Expression() ] ";" )
  */
 public class JumpStatement implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public JumpStatement(NodeChoice n0) {

@@ -128,7 +128,7 @@ public class NISuppressee {
    */
   public List<Invariant> instantiate_all (VarInfo[] vis, PptTopLevel ppt) {
 
-    List<Invariant> created_list = new ArrayList();
+    List<Invariant> created_list = new ArrayList<Invariant>();
 
     // Check for empty slots in vis, fail if there is more than one
     int missing_index = -1;
@@ -175,7 +175,7 @@ public class NISuppressee {
    */
   public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt) {
 
-    List<NIS.SupInv> created_list = new ArrayList();
+    List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 
     // Check for empty slots in vis, fail if there is more than one
     int missing_index = -1;

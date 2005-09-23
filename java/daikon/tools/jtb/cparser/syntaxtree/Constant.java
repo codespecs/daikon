@@ -12,6 +12,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  *       | <STRING_LITERAL>
  */
 public class Constant implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public Constant(NodeChoice n0) {

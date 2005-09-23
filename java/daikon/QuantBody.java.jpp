@@ -621,7 +621,8 @@ The test is ensures that it only appears once in the output.
   /*@ pure */ public static boolean isReverse(Collection seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    return isReverse(seq1.toArray(new _TYPE[]{}), seq2);
+    _TYPE[] seq1_array = (_TYPE[]) seq1.toArray(new _TYPE[]{});
+    return isReverse(seq1_array, seq2);
   }
 #endif
 
@@ -743,13 +744,15 @@ The test is ensures that it only appears once in the output.
   /*@ pure */ public static boolean subsetOf(Collection seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    return subsetOf(seq1.toArray(new _TYPE[]{}), seq2);
+    _TYPE[] seq1_array = (_TYPE[]) seq1.toArray(new _TYPE[]{});
+    return subsetOf(seq1_array, seq2);
   }
 
   /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, Collection seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    return subsetOf(seq1, seq2.toArray(new _TYPE[]{}));
+    _TYPE[] seq2_array = (_TYPE[]) seq2.toArray(new _TYPE[]{});
+    return subsetOf(seq1, seq2_array);
   }
 #endif
 
@@ -1703,7 +1706,7 @@ The test is ensures that it only appears once in the output.
 
       if (daikon.ProglangType.list_implementors.contains(fieldObj.getClass().getName())) {
         // last field is the collection
-        return (_TYPE[])((java.util.AbstractCollection)fieldObj).toArray(new _TYPE[]{});
+        return (_TYPE[])((java.util.AbstractCollection<_TYPE>)fieldObj).toArray(new _TYPE[]{});
       } else
 #endif
       if (fieldObj.getClass().isArray()) {

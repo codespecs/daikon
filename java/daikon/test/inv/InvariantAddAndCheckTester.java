@@ -99,7 +99,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   /**
    * A list containing all of the test formats.
    **/
-  public static final List TEST_FORMAT_LIST = getTestFormatList();
+  public static final List<String> TEST_FORMAT_LIST = getTestFormatList();
 
   /**
    * Allows for the configuring of Daikon options.
@@ -151,8 +151,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * This function produces the format list for intialization of the
    * static format list variable.
    **/
-  static List getTestFormatList() {
-    List result = new Vector();
+  static List<String> getTestFormatList() {
+    List<String> result = new Vector<String>();
 
     // Add test formats - hard coded in
     result.add("daikon");

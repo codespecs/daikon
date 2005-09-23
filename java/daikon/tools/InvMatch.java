@@ -26,7 +26,7 @@ public class InvMatch {
   public static void main (String[] args) throws IOException {
 
     // Read in the sample decls file
-    Set decl_files = new HashSet(1);
+    Set<File> decl_files = new HashSet(1);
     decl_files.add (new File("daikon/test/SampleTester.decls"));
     PptMap all_ppts = FileIO.read_declaration_files (decl_files);
 
@@ -91,12 +91,12 @@ public class InvMatch {
     // Fmt.pf ("lt : " + xlate);
 
     // Try to matchup the program points
-    List valid_translations = match_ppt (ppt35, ppt40);
+    List<List<InvTranslate>> valid_translations = match_ppt (ppt35, ppt40);
 
     // Dump all of the valid translations
     Fmt.pf ("Valid Translations:");
-    for (Iterator<List> i = valid_translations.iterator(); i.hasNext(); ) {
-      List current_translation = i.next();
+    for (Iterator<List<InvTranslate>> i = valid_translations.iterator(); i.hasNext(); ) {
+      List<InvTranslate> current_translation = i.next();
       Fmt.pf ("  Translation: ");
       for (Iterator<InvTranslate> j = current_translation.iterator(); j.hasNext(); ) {
         InvTranslate xlate = j.next();
@@ -124,11 +124,11 @@ public class InvMatch {
   static List<List<InvTranslate>> match_ppt (PptTopLevel ppt1,
                                              PptTopLevel ppt2) {
 
-    List<List<InvTranslate>> xlate_list = new ArrayList();
+    List<List<InvTranslate>> xlate_list = new ArrayList<List<InvTranslate>>();
 
     for (Iterator<Invariant> i = ppt1.invariants_iterator(); i.hasNext(); ) {
       Invariant inv1 = i.next();
-      List<InvTranslate> inv_xlate_list = new ArrayList();
+      List<InvTranslate> inv_xlate_list = new ArrayList<InvTranslate>();
       xlate_list.add (inv_xlate_list);
       for (Iterator<Invariant> j = ppt2.invariants_iterator(); j.hasNext(); ) {
         Invariant inv2 = j.next();
@@ -154,7 +154,7 @@ public class InvMatch {
       }
     }
 
-    List valid_translations = new ArrayList();
+    List<List<InvTranslate>> valid_translations = new ArrayList();
     List current_translation = new ArrayList();
     consider_xlate (valid_translations, current_translation, xlate_list, 0);
 
@@ -171,11 +171,11 @@ public class InvMatch {
    * @param index               The current index in xlate_list.
    *
    */
-  public static void consider_xlate (List valid_translations,
+  public static void consider_xlate (List<List<InvTranslate>> valid_translations,
                                      List current_translation,
-                                     List xlate_list, int index) {
+                                     List<List<InvTranslate>> xlate_list, int index) {
 
-    List inv_xlate_list = (List) xlate_list.get (index);
+    List<InvTranslate> inv_xlate_list = xlate_list.get (index);
     for (Iterator<InvTranslate> i = inv_xlate_list.iterator(); i.hasNext(); ) {
       InvTranslate xlate = i.next();
 
@@ -195,7 +195,7 @@ public class InvMatch {
   }
   public static boolean is_good_translation (List translation_list) {
 
-    Map var_map = new LinkedHashMap();
+    Map<String,String> var_map = new LinkedHashMap<String,String>();
 
     for (Iterator<InvTranslate> i = translation_list.iterator(); i.hasNext(); ) {
       InvTranslate xlate = i.next();

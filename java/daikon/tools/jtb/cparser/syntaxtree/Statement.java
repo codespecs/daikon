@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( LabeledStatement() | ExpressionStatement() | CompoundStatement() | SelectionStatement() | IterationStatement() | JumpStatement() )
  */
 public class Statement implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public Statement(NodeChoice n0) {

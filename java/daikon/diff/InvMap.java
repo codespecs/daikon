@@ -20,18 +20,18 @@ public class InvMap implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020301L;
 
-  private Map pptToInvs = new HashMap();
+  private Map<PptTopLevel,List<Invariant>> pptToInvs = new HashMap<PptTopLevel,List<Invariant>>();
   // The purpose of this field is apparently to permit the ppts to be
   // extracted in the same order in which they were inserted.
-  private List ppts = new ArrayList();
+  private List<PptTopLevel> ppts = new ArrayList<PptTopLevel>();
 
   public InvMap() { }
 
   public void addPpt(PptTopLevel ppt) {
-    put(ppt, new ArrayList());
+    put(ppt, new ArrayList<Invariant>());
   }
 
-  public void put(PptTopLevel ppt, List invs) {
+  public void put(PptTopLevel ppt, List<Invariant> invs) {
     if (ppts.contains(ppt)) {
       throw new Error("Tried to add duplicate PptTopLevel " + ppt.name());
     }
@@ -46,8 +46,8 @@ public class InvMap implements Serializable {
     get(ppt).add(inv);
   }
 
-  public List get(PptTopLevel ppt) {
-    return (List) pptToInvs.get(ppt);
+  public List<Invariant> get(PptTopLevel ppt) {
+    return pptToInvs.get(ppt);
   }
 
   /**
@@ -57,13 +57,13 @@ public class InvMap implements Serializable {
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
    **/
-  public Iterator pptIterator() {
+  public Iterator<PptTopLevel> pptIterator() {
     return ppts.iterator();
   }
 
   // Returns a sorted iterator over the Ppts using c as the comparator
-  public Iterator pptSortedIterator(Comparator c) {
-    List ppts_copy = new ArrayList(ppts);
+  public Iterator<PptTopLevel> pptSortedIterator(Comparator<PptTopLevel> c) {
+    List<PptTopLevel> ppts_copy = new ArrayList<PptTopLevel>(ppts);
     Collections.sort(ppts_copy, c);
     return ppts_copy.iterator();
   }
@@ -76,7 +76,7 @@ public class InvMap implements Serializable {
   // necessarily that in which they were added, depending on calling
   // sequences.
   public Iterator invariantIterator() {
-    Vector answer = new Vector();
+    Vector<Invariant> answer = new Vector<Invariant>();
     for (Iterator i = ppts.iterator(); i.hasNext(); )
       answer.addAll(get((PptTopLevel) i.next()));
     return answer.iterator();
@@ -87,7 +87,7 @@ public class InvMap implements Serializable {
     for (Iterator<PptTopLevel> i = pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
       result += ppt.name() + Global.lineSep;
-      List invs = get(ppt);
+      List<Invariant> invs = get(ppt);
       for (Iterator<Invariant> i2 = invs.iterator(); i2.hasNext(); ) {
         Invariant inv = i2.next();
         result += "  " + inv.format() + Global.lineSep;

@@ -387,8 +387,8 @@ public class CLASSNAME
 
   // Returns a vector of CLASSNAME objects.
   // This ought to produce an iterator instead.
-  public static Vector findAll(VarInfo vi) {
-    Vector result = new Vector();
+  public static Vector<CLASSNAME> findAll(VarInfo vi) {
+    Vector<CLASSNAME> result = new Vector<CLASSNAME>();
     for (Iterator<PptSlice> itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = itor.next();
       if ((view.arity() == 3) && view.usesVar(vi)) {
@@ -413,10 +413,10 @@ public class CLASSNAME
    *                    permuted to match the variable order in parent_ppt.
    * @param parent_ppt  Slice that will contain the new invariant
    */
-  public Invariant merge (List invs, PptSlice parent_ppt) {
+  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
-    List cores = new ArrayList();
+    List<CORECLASS> cores = new ArrayList();
     for (int i = 0; i < invs.size(); i++) {
       cores.add (((CLASSNAME) invs.get(i)).core);
     }

@@ -11,7 +11,7 @@ import daikon.VarInfoName.TypeOf;
 import daikon.VarInfoName.Add;
 import daikon.VarInfoName.Subscript;
 import java.util.*;
-
+import utilMDE.Pair;
 
 /**
  * Enumeration type for output style.
@@ -88,13 +88,13 @@ public final class OutputFormat
         repair=new Repair();
       return repair;
     }
-    Hashtable<Tuple,String> settable=new Hashtable<Tuple,String>();
-    Hashtable<Tuple,String> relationtable=new Hashtable<Tuple,String>();
+    Hashtable<Pair<String,Ppt>,String> settable=new Hashtable<Pair<String,Ppt>,String>();
+    Hashtable<Pair<String,Ppt>,String> relationtable=new Hashtable<Pair<String,Ppt>,String>();
     Hashtable<Ppt,Definition> definitiontable=new Hashtable<Ppt,Definition>();
     int tagnumber=0;
     boolean forceset=false;
     HashMap<String,String> quantifiers=new LinkedHashMap<String,String>(); // LinkedHashMap for deterministic output
-    HashSet usednames=new HashSet();
+    HashSet<Pair<String,Ppt>> usednames=new HashSet<Pair<String,Ppt>>();
 
 
     /** Creates a copy of the current Repair object state.  This copy
@@ -142,7 +142,7 @@ public final class OutputFormat
 
     /** This method resets the quantifier table. */
     public void reset() {
-      quantifiers=new LinkedHashMap();
+      quantifiers=new LinkedHashMap<String,String>();
       forceset=false;
       varcount=0;
     }
@@ -176,7 +176,7 @@ public final class OutputFormat
 
       String intervalset=generateRangeSet(ppt,lower,upper);
 
-      Tuple t=new Tuple(vi.name.name()+".arrayrelation",ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(vi.name.name()+".arrayrelation",ppt);
 
       if (relationtable.containsKey(t)) {
         String relationname=(String)relationtable.get(t);
@@ -202,7 +202,7 @@ public final class OutputFormat
     /** This method generates a set contain the range [0..var] */
 
     public String generateRangeSet(Ppt ppt, VarInfoName lower, VarInfoName upper) {
-      Tuple t=new Tuple(lower.name()+"-"+upper.name()+".rangeset",ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(lower.name()+"-"+upper.name()+".rangeset",ppt);
 
       if (settable.containsKey(t)) {
         String setname=(String)settable.get(t);
@@ -215,7 +215,7 @@ public final class OutputFormat
       appendSetRelation(ppt,setdef);
 
       if (lower.name().indexOf(".")!=-1) {
-        Set roots=getRoot(lower);
+        Set<VarInfoName> roots=getRoot(lower);
         for(Iterator it=roots.iterator();it.hasNext();) {
           String lowerrootvar=((VarInfoName)it.next()).name();
           String vardef="";
@@ -228,7 +228,7 @@ public final class OutputFormat
       }
 
       if (upper.name().indexOf(".")!=-1) {
-        Set roots=getRoot(upper);
+        Set<VarInfoName> roots=getRoot(upper);
         for(Iterator it=roots.iterator();it.hasNext();) {
           String upperrootvar=((VarInfoName)it.next()).name();
           String vardef="";
@@ -280,7 +280,7 @@ public final class OutputFormat
      * corresponding relation. */
 
     public String getRelation(Ppt ppt, String set, String field, String fld) {
-      Tuple t=new Tuple(set,field,ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(set + "///" + field,ppt);
       if (relationtable.containsKey(t))
         return (String)relationtable.get(t);
       String relationname=generateRelationName(field,ppt);
@@ -302,12 +302,12 @@ public final class OutputFormat
      * point, and returns a relation. */
 
     public String getRelation(String programvar, Ppt ppt) {
-      Tuple t=new Tuple(programvar,ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
       if (relationtable.containsKey(t))
         return (String)relationtable.get(t);
       String relationname=generateRelationName(programvar,ppt);
 
-      Tuple t2=new Tuple(programvar,ppt);
+      Pair<String,Ppt> t2=new Pair<String,Ppt>(programvar,ppt);
       boolean generatesetdef=true;
       if (settable.containsKey(t2))
         generatesetdef=false;
@@ -377,7 +377,7 @@ public final class OutputFormat
      * and returns the corresponding setname. */
 
     public String getRealSet(String programvar, Ppt ppt) {
-      Tuple t=new Tuple(programvar,ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
 
       if (settable.containsKey(t)) {
         String setname=(String)settable.get(t);
@@ -401,14 +401,14 @@ public final class OutputFormat
 
     /** This method returns the roots of a VarInfoName. */
 
-    public static Set getRoot(VarInfoName vi) {
+    public static Set<VarInfoName> getRoot(VarInfoName vi) {
       while(true) {
         if (vi instanceof Simple) {
-          HashSet hs=new HashSet();
+          HashSet<VarInfoName> hs=new HashSet<VarInfoName>();
           hs.add(vi);
           return hs;
         } else if (vi instanceof FreeVar) {
-          HashSet hs=new HashSet();
+          HashSet<VarInfoName> hs=new HashSet<VarInfoName>();
           hs.add(vi);
           return hs;
         } else if (vi instanceof SizeOf) {
@@ -424,17 +424,17 @@ public final class OutputFormat
         } else if (vi instanceof Elements) {
           vi=((Elements)vi).term;
         } else if (vi instanceof Subscript) {
-          Set a=getRoot(((Subscript)vi).sequence);
+          Set<VarInfoName> a=getRoot(((Subscript)vi).sequence);
           a.addAll(getRoot(((Subscript)vi).index));
           return a;
         } else if (vi instanceof Slice) {
-          Set a=getRoot(((Slice)vi).sequence);
+          Set<VarInfoName> a=getRoot(((Slice)vi).sequence);
           a.addAll(getRoot(((Slice)vi).i));
           a.addAll(getRoot(((Slice)vi).j));
           return a;
         } else {
           System.out.println("Unrecognized var: "+vi.name());
-          Set a=new HashSet();
+          Set<VarInfoName> a=new HashSet<VarInfoName>();
           return a;
         }
       }
@@ -517,7 +517,7 @@ public final class OutputFormat
       String setname=setnameprefix;
       tagnumber=0;
       while(true) {
-        Tuple t=new Tuple(setname, p);
+        Pair<String,Ppt> t=new Pair<String,Ppt>(setname, p);
         if (usednames.contains(t)) {
           tagnumber++;
           setname=setnameprefix+tagnumber;
@@ -536,7 +536,7 @@ public final class OutputFormat
       String relname=relnameprefix;
       tagnumber=0;
       while(true) {
-        Tuple t=new Tuple(relname, p);
+        Pair<String,Ppt> t=new Pair<String,Ppt>(relname, p);
         if (usednames.contains(t)) {
           tagnumber++;
           relname=relnameprefix+tagnumber;
@@ -590,40 +590,40 @@ public final class OutputFormat
       return s;
     }
 
-    /** Generic tuple class.  Implements hashcode and equals.  */
-    public static class Tuple {
-      Object a;
-      Object b;
-      Object c;
-
-      Tuple(Object a, Object b) {
-        this.a=a;
-        this.b=b;
-        this.c=null;
-      }
-      Tuple(Object a, Object b,Object c) {
-        this.a=a;
-        this.b=b;
-        this.c=c;
-      }
-      public int hashCode() {
-        int h=a.hashCode()^b.hashCode();
-        if (c!=null)
-          h^=c.hashCode();
-        return h;
-      }
-      public boolean equals(Object o) {
-        if (!((o instanceof Tuple)&&
-              ((Tuple)o).a.equals(a)&&
-              ((Tuple)o).b.equals(b)))
-          return false;
-        if (c==null&&((Tuple)o).c==null)
-          return true;
-        if (c==null||((Tuple)o).c==null)
-          return false;
-        return ((Tuple)o).c.equals(c);
-      }
-    }
+    // /** Generic tuple class.  Implements hashcode and equals.  */
+    // public static class Tuple {
+    //   Object a;
+    //   Object b;
+    //   Object c;
+    //
+    //   Tuple(Object a, Object b) {
+    //     this.a=a;
+    //     this.b=b;
+    //     this.c=null;
+    //   }
+    //   Tuple(Object a, Object b,Object c) {
+    //     this.a=a;
+    //     this.b=b;
+    //     this.c=c;
+    //   }
+    //   public int hashCode() {
+    //     int h=a.hashCode()^b.hashCode();
+    //     if (c!=null)
+    //       h^=c.hashCode();
+    //     return h;
+    //   }
+    //   public boolean equals(Object o) {
+    //     if (!((o instanceof Tuple)&&
+    //           ((Tuple)o).a.equals(a)&&
+    //           ((Tuple)o).b.equals(b)))
+    //       return false;
+    //     if (c==null&&((Tuple)o).c==null)
+    //       return true;
+    //     if (c==null||((Tuple)o).c==null)
+    //       return false;
+    //     return ((Tuple)o).c.equals(c);
+    //   }
+    // }
 
     /** This class stores information on a given program point. */
 
@@ -633,8 +633,8 @@ public final class OutputFormat
       String globaldecls="";
       boolean generatespecial=false;
 
-      Hashtable rangetable=new Hashtable();
-      HashSet globaltable=new HashSet();
+      Hashtable<String,String> rangetable=new Hashtable<String,String>();
+      HashSet<String> globaltable=new HashSet<String>();
 
       void appendGlobal(String g) {
         /* Ensure that we haven't already defined the global. */
@@ -659,8 +659,8 @@ public final class OutputFormat
           // Can't happen because Definition directly extends Object
           throw new Error("This can't happen: " + e.toString());
         }
-        rangetable = (Hashtable) rangetable.clone();
-        globaltable = (HashSet) globaltable.clone();
+        rangetable = (Hashtable<String,String>) rangetable.clone(); // not sure how to eliminate lint warning -MDE
+        globaltable = (HashSet<String>) globaltable.clone(); // not sure how to eliminate lint warning -MDE
         return newd;
       }
 

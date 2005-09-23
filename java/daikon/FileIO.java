@@ -109,7 +109,7 @@ public final class FileIO {
   // old values of all variables in scope the last time the program point
   // was executed. This enables us to determine whether the values have been
   // modified since this program point was last executed.
-  static HashMap ppt_to_value_reps = new HashMap();
+  static HashMap<PptTopLevel,String[]> ppt_to_value_reps = new HashMap<PptTopLevel,String[]>();
 
   // For debugging purposes: printing out a modified trace file with
   // changed modbits.
@@ -212,7 +212,7 @@ public final class FileIO {
     }
 
     // The var_infos that will populate the new program point
-    List var_infos = new ArrayList();
+    List<VarInfo> var_infos = new ArrayList<VarInfo>();
 
     // Each iteration reads a variable name, type, and comparability.
     // Possibly abstract this out into a separate function??
@@ -446,7 +446,7 @@ public final class FileIO {
   /// invocation tracking for dtrace files entry/exit grouping
   ///
 
-  static final class Invocation implements Comparable {
+  static final class Invocation implements Comparable<Invocation> {
     PptTopLevel ppt; // used in printing and in suppressing duplicates
     // Rather than a valuetuple, place its elements here.
     Object[] vals;
@@ -525,8 +525,8 @@ public final class FileIO {
         return false;
     }
 
-    public int compareTo(Object other) {
-      return ppt.name().compareTo(((Invocation)other).ppt.name());
+    public int compareTo(Invocation other) {
+      return ppt.name().compareTo(other.ppt.name());
     }
 
     public int hashCode() {
@@ -540,8 +540,8 @@ public final class FileIO {
 
   // I could save some Object overhead by using two parallel stacks
   // instead of Invocation objects; but that's not worth it.
-  static Stack<Invocation> call_stack = new Stack();
-  static HashMap<Integer,Invocation> call_hashmap = new HashMap();
+  static Stack<Invocation> call_stack = new Stack<Invocation>();
+  static HashMap<Integer,Invocation> call_hashmap = new HashMap<Integer,Invocation>();
 
   /** Reads data trace files using the default sample processor. **/
   public static void read_data_trace_files(Collection<String> files,
@@ -1125,7 +1125,7 @@ public final class FileIO {
   }
 
   /** Print all the invocations in the collection, in order. **/
-  static void print_invocations_verbose(Collection invocations) {
+  static void print_invocations_verbose(Collection<Invocation> invocations) {
     for (Iterator<Invocation> i = invocations.iterator(); i.hasNext();) {
       Invocation invok = i.next();
       System.out.println(invok.format());
@@ -1136,7 +1136,7 @@ public final class FileIO {
    * Print the invocations in the collection, in order, and
    * suppressing duplicates.
    **/
-  static void print_invocations_grouped(Collection invocations) {
+  static void print_invocations_grouped(Collection<Invocation> invocations) {
     Map<Invocation,Integer> counter = new HashMap<Invocation,Integer>();
 
     for (Iterator<Invocation> i = invocations.iterator(); i.hasNext();) {
@@ -1152,7 +1152,7 @@ public final class FileIO {
     }
 
     // Print the invocations in sorted order.
-    TreeSet<Invocation> keys = new TreeSet(counter.keySet());
+    TreeSet<Invocation> keys = new TreeSet<Invocation>(counter.keySet());
     for (Invocation invok : keys) {
       Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "

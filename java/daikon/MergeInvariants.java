@@ -129,9 +129,9 @@ public final class MergeInvariants {
     daikon.LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE
                                : LogHelper.INFO);
 
-    List inv_files = new ArrayList();
+    List<File> inv_files = new ArrayList<File>();
     File decl_file = null;
-    Set splitter_files = new TreeSet();
+    Set<File> splitter_files = new TreeSet<File>();
 
     // Get each file specified
     for (int i = g.getOptind(); i < args.length; i++) {
@@ -157,7 +157,7 @@ public final class MergeInvariants {
       throw new Error ("Must specify at least two inv files");
 
     // Read in each of the specified maps
-    List pptmaps = new ArrayList();
+    List<PptMap> pptmaps = new ArrayList<PptMap>();
     for (int i = 0; i < inv_files.size(); i++) {
       File file = (File) inv_files.get(i);
       debugProgress.fine ("Processing " + file);
@@ -192,7 +192,7 @@ public final class MergeInvariants {
       // Build the result ppmap from the specific decls file
       debugProgress.fine ("Building result ppt map from decls file");
       Daikon.create_splitters(splitter_files);
-      List  decl_files = new ArrayList();
+      List<File> decl_files = new ArrayList();
       decl_files.add (decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
       merge_ppts.trimToSize();

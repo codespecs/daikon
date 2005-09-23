@@ -13,15 +13,17 @@ import daikon.inv.filter.InvariantFilters;
 //  settings, this class recomputes which invariants should be displayed.
 
 class InvariantTableModel extends AbstractTableModel {
+  static final long serialVersionUID = 20050923L;
+
   static final String[] columnNames = { "invariant", "# values", "# samples", "confidence", "justified" };
   static final Class[] columnClasses = { String.class, Integer.class, Integer.class, Double.class, Boolean.class };
   private static DecimalFormat CONFIDENCE_FORMAT =
     new DecimalFormat("0.####");
 
-  List allInvariants;
+  List<Invariant> allInvariants;
   List<Invariant> filteredInvariants;	// only filtered invariants are displayed
 
-  public InvariantTableModel( List invariants, InvariantFilters invariantFilters ) {
+  public InvariantTableModel( List<Invariant> invariants, InvariantFilters invariantFilters ) {
     allInvariants = invariants;
     updateInvariantList( invariantFilters );
   }
@@ -51,7 +53,7 @@ class InvariantTableModel extends AbstractTableModel {
   }
 
   public void updateInvariantList( InvariantFilters invariantFilters ) {
-    filteredInvariants = new ArrayList();
+    filteredInvariants = new ArrayList<Invariant>();
     for (Iterator<Invariant> iter = allInvariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = iter.next();
       if (invariantFilters.shouldKeep( invariant ) == null)

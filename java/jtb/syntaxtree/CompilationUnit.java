@@ -12,6 +12,8 @@ package jtb.syntaxtree;
  * f3 -> <EOF>
  */
 public class CompilationUnit implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeOptional f0;
    public NodeListOptional f1;
@@ -55,4 +57,3 @@ public class CompilationUnit implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

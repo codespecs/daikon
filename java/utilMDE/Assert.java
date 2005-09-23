@@ -32,6 +32,7 @@ public final class Assert {
   }
   /** Error class for failed assertions. **/
   public static final class AssertionException extends Error {
+    static final long serialVersionUID = 20050923L;
     public AssertionException(String s) {
       super(s);
     }

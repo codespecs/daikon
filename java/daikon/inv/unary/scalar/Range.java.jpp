@@ -213,9 +213,9 @@ public abstract class RANGE extends SUPERCLASS {
    * Returns a list of all of prototypes of all of the range
    * invariants
    */
-  public static List get_proto_all () {
+  public static List<Invariant> get_proto_all () {
 
-    List result = new ArrayList();
+    List<Invariant> result = new ArrayList<Invariant>();
     result.add (EqualZero.get_proto());
     result.add (EqualOne.get_proto());
     result.add (EqualMinusOne.get_proto());

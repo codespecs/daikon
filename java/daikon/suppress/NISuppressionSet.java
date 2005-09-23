@@ -26,7 +26,7 @@ public class NISuppressionSet {
   }
 
 
-  public Iterator iterator() {
+  public Iterator<NISuppression> iterator() {
     return (Arrays.asList(suppression_set).iterator());
   }
 
@@ -35,9 +35,9 @@ public class NISuppressionSet {
    * the suppressor to this. If the same suppressor class appears more
    * than once, the suppression is only added once.
    */
-  public void add_to_suppressor_map (Map suppressor_map) {
+  public void add_to_suppressor_map (Map<Class,List<NISuppressionSet>> suppressor_map) {
 
-    Set all_suppressors = new LinkedHashSet();
+    Set<Class> all_suppressors = new LinkedHashSet<Class>();
 
     // Loop through each suppression in the suppression set
     for (int i = 0; i < suppression_set.length; i++) {
@@ -57,10 +57,10 @@ public class NISuppressionSet {
 
         // Get the list of suppression sets for this suppressor.  Create it
         // if this is the first one.  Add this set to the list
-        List suppression_set_list
-                     = (List) suppressor_map.get (suppressor.get_inv_class());
+        List<NISuppressionSet> suppression_set_list
+                     = suppressor_map.get (suppressor.get_inv_class());
         if (suppression_set_list == null) {
-          suppression_set_list = new ArrayList();
+          suppression_set_list = new ArrayList<NISuppressionSet>();
           suppressor_map.put (suppressor.get_inv_class(),
                               suppression_set_list);
         }
@@ -77,7 +77,7 @@ public class NISuppressionSet {
    * Note, this is no longer the preferred approach, but is kept for
    * informational purposes.  Use NIS.process_falsified_invs() instead.
    */
-  public void falsified (Invariant inv, List new_invs) {
+  public void falsified (Invariant inv, List<Invariant> new_invs) {
 
     // Get the ppt we are working in
     PptTopLevel ppt = inv.ppt.parent;
@@ -170,7 +170,7 @@ public class NISuppressionSet {
    * instantiates the suppressee
    */
   private void check_falsified (PptTopLevel ppt, VarInfo[] vis, Invariant inv,
-                               List new_invs) {
+                               List<Invariant> new_invs) {
 
     // process each suppression in the set, marking each suppressor as
     // to whether it is true, false, or matches the falsified inv
@@ -291,7 +291,8 @@ public class NISuppressionSet {
    *
    * @deprecated
    */
-  private void instantiate (PptTopLevel ppt, VarInfo[] vis, List new_invs) {
+  @Deprecated
+  private void instantiate (PptTopLevel ppt, VarInfo[] vis, List<Invariant> new_invs) {
 
     NIS.new_invs_cnt++;
 
@@ -384,7 +385,7 @@ public class NISuppressionSet {
   public void recurse_definitions (NISuppressionSet ss) {
 
     // Get all of the new suppressions
-    List<NISuppression> new_suppressions = new ArrayList();
+    List<NISuppression> new_suppressions = new ArrayList<NISuppression>();
     for (int i = 0; i < suppression_set.length; i++) {
       new_suppressions.addAll (suppression_set[i].recurse_definition (ss));
     }

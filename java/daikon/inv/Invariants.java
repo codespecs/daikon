@@ -48,13 +48,13 @@ public final class Invariants
 
   // Remove all the invariants in toRemove. This is faster than
   // repeatedly calling remove(), if toRemove is long.
-  public int removeMany(List toRemove) {
+  public int removeMany(List<Invariant> toRemove) {
     // System.out.printf ("removeMany in %s\n", this.getClass());
-    HashSet removeSet = new HashSet(toRemove);
-    ArrayList copy = new ArrayList();
+    HashSet<Invariant> removeSet = new HashSet<Invariant>(toRemove);
+    ArrayList<Invariant> copy = new ArrayList<Invariant>();
     Iterator<Invariant> it = this.iterator();
     while (it.hasNext()) {
-      Object inv = it.next();
+      Invariant inv = it.next();
       if (!removeSet.contains(inv)) {
         copy.add(inv);
         //System.out.printf ("NOT remove set [%x-%x-%x] %s [%s]\n",

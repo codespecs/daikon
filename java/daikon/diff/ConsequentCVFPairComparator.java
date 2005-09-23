@@ -9,11 +9,11 @@ import daikon.inv.*;
  * ClassVarnameFormulaComparator.  See the documentation for those two
  * classes to figure out what this class does.
  **/
-public class ConsequentCVFPairComparator implements Comparator {
-  private Comparator c = new ConsequentPairComparator
+public class ConsequentCVFPairComparator implements Comparator<Invariant> {
+  private Comparator<Invariant> c = new ConsequentPairComparator
     (new Invariant.ClassVarnameFormulaComparator());
 
-  public int compare(Object o1, Object o2) {
-    return c.compare(o1, o2);
+  public int compare(Invariant inv1, Invariant inv2) {
+    return c.compare(inv1, inv2);
   }
 }

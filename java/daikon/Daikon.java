@@ -392,6 +392,7 @@ public final class Daikon {
    * If the string is null, then this is normal termination, not an error.
    **/
   public static class TerminationMessage extends RuntimeException {
+    static final long serialVersionUID = 20050923L;
     public TerminationMessage(String s) { super(s); }
     public TerminationMessage(Object... s) { super(UtilMDE.joinLines(s)); }
     public TerminationMessage() { super(); }
@@ -424,12 +425,11 @@ public final class Daikon {
    **/
   public static void mainHelper(final String[] args) {
     // Read command line options
-    Set[] files = read_options(args, usage);
-    Assert.assertTrue(files.length == 4);
-    Set<File> decls_files = files[0];
-    Set<String> dtrace_files = files[1];
-    Set<File> spinfo_files = files[2];
-    Set<File> map_files = files[3];
+    FileOptions files = read_options(args, usage);
+    Set<File> decls_files = files.decls;
+    Set<String> dtrace_files = files.dtrace;
+    Set<File> spinfo_files = files.spinfo;
+    Set<File> map_files = files.map;
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       System.out.println("No .decls or .dtrace files specified");
       throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
@@ -470,6 +470,8 @@ public final class Daikon {
     if (dkconfig_calc_possible_invs) {
       fileio_progress.shouldStop = true;
       int total_invs = 0;
+      // Can't use new for syntax because the default iterator for all_ppts
+      // is not the one I want here.
       for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
            itor.hasNext();
            ) {
@@ -603,11 +605,25 @@ public final class Daikon {
     }
   }
 
+  // Structure for return value of read_options.
+  // Return an array of {decls, dtrace, spinfo, map} files.
+  public static class FileOptions {
+    public Set<File> decls;
+    public Set<String> dtrace;
+    public Set<File> spinfo;
+    public Set<File> map;
+    public FileOptions(Set<File> decls, Set<String> dtrace, Set<File> spinfo, Set<File> map) {
+      this.decls = decls;
+      this.dtrace = dtrace;
+      this.spinfo = spinfo;
+      this.map = map;
+    }
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
-  // Return an array of {decls, dtrace, spinfo, map} files; each array
-  // element is a set.
-  protected static Set[] read_options(String[] args, String usage) {
+  // Return {decls, dtrace, spinfo, map} files.
+  protected static FileOptions read_options(String[] args, String usage) {
     if (args.length == 0) {
       System.out.println(
         "Daikon error: no files supplied on command line.");
@@ -950,7 +966,7 @@ public final class Daikon {
       System.out.println("Max ppt name = " + ppt_max_name);
     }
 
-    return new Set[] { decl_files, dtrace_files, spinfo_files, map_files, };
+    return new FileOptions(decl_files, dtrace_files, spinfo_files, map_files);
   }
 
   /**
@@ -1220,8 +1236,8 @@ public final class Daikon {
 
     // Recursively initialize ppts created by splitters
     if (ppt.has_splitters()) {
-      for (Iterator<PptTopLevel> ii = ppt.cond_iterator(); ii.hasNext(); ) {
-	PptTopLevel ppt_cond = ii.next();
+      for (Iterator<PptConditional> ii = ppt.cond_iterator(); ii.hasNext(); ) {
+	PptConditional ppt_cond = ii.next();
 	init_ppt (ppt_cond, all_ppts);
       }
     }
@@ -1365,7 +1381,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
-  private static PptMap load_decls_files(Set decl_files) {
+  private static PptMap load_decls_files(Set<File> decl_files) {
     stopwatch.reset();
     try {
       if (!Daikon.dkconfig_quiet) {
@@ -1588,7 +1604,7 @@ public final class Daikon {
    * been instantiated.  This routine processes data to falsify the
    * candidate invariants.
    **/
-  private static void process_data(PptMap all_ppts, Set dtrace_files) {
+  private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
     MemMonitor monitor = null;
     if (use_mem_monitor) {
       monitor = new MemMonitor("stat.out");

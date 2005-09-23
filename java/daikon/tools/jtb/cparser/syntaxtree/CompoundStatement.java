@@ -12,6 +12,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f3 -> "}"
  */
 public class CompoundStatement implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeToken f0;
    public NodeOptional f1;
    public NodeOptional f2;

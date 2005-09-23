@@ -215,7 +215,7 @@ public final class PPTSLICE1 extends PptSlice {
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
    **/
-  public List add(ValueTuple full_vt, int count) {
+  public List<Invariant> add(ValueTuple full_vt, int count) {
 
     Assert.assertTrue(invs.size() > 0);
     for (int i=0; i<invs.size(); i++) {
@@ -241,7 +241,7 @@ public final class PPTSLICE1 extends PptSlice {
     // relevant
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].missingOutOfBounds()) {
-        List result = new ArrayList();
+        List<Invariant> result = new ArrayList<Invariant>();
         for (int j = 0; j < invs.size(); j++) {
           Invariant inv = invs.get(j);
           if (PrintInvariants.print_discarded_invariants)
@@ -264,7 +264,7 @@ public final class PPTSLICE1 extends PptSlice {
     int mod1 = full_vt.getModified(vi1);
     if (mod1 == ValueTuple.MISSING_FLOW
         || mod1 == ValueTuple.MISSING_NONSENSICAL) {
-      return emptyList;
+      return emptyInvList;
     }
 
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
@@ -277,7 +277,7 @@ public final class PPTSLICE1 extends PptSlice {
       int mod2 = full_vt.getModified(vi2);
       if (mod2 == ValueTuple.MISSING_FLOW
           || mod2 == ValueTuple.MISSING_NONSENSICAL) {
-        return emptyList;
+        return emptyInvList;
       }
       if (mod2 == ValueTuple.STATIC_CONSTANT) {
         Assert.assertTrue(vi2.is_static_constant);
@@ -290,7 +290,7 @@ public final class PPTSLICE1 extends PptSlice {
       int mod3 = full_vt.getModified(vi3);
       if (mod3 == ValueTuple.MISSING_FLOW
           || mod3 == ValueTuple.MISSING_NONSENSICAL) {
-        return emptyList;
+        return emptyInvList;
       }
       if (mod3 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi3.is_static_constant);
@@ -320,11 +320,11 @@ public final class PPTSLICE1 extends PptSlice {
                           || (mod1 == ValueTuple.MODIFIED))));
 
     #if defined(ARITY1)
-      List weakened_invs = add_val_bu (val1, mod1, count);
+      List<Invariant> weakened_invs = add_val_bu (val1, mod1, count);
     #elif defined(ARITY2)
-      List weakened_invs = add_val_bu (val1, val2, mod1, mod2, count);
+      List<Invariant> weakened_invs = add_val_bu (val1, val2, mod1, mod2, count);
     #elif defined(ARITY3)
-      List weakened_invs = add_val_bu (val1, val2, val3, mod1, mod2,
+      List<Invariant> weakened_invs = add_val_bu (val1, val2, val3, mod1, mod2,
                                        mod3, count);
     #endif
     return (weakened_invs);
@@ -335,7 +335,7 @@ public final class PPTSLICE1 extends PptSlice {
 
     Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
                       && mod1 != ValueTuple.MISSING_NONSENSICAL);
-    List result = new ArrayList();
+    List<Invariant> result = new ArrayList<Invariant>();
     for (int i=0; i < invs.size(); i++) {
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
       if (inv.is_false()) continue;
@@ -364,7 +364,7 @@ public final class PPTSLICE1 extends PptSlice {
                        && (mod2 != ValueTuple.MISSING_FLOW
                        && mod2 != ValueTuple.MISSING_NONSENSICAL));
 
-    List result = new ArrayList();
+    List<Invariant> result = new ArrayList<Invariant>();
     boolean array1 = var_infos[0].rep_type.isArray();
     boolean array2 = var_infos[1].rep_type.isArray();
     if (array2 && ! array1) {
@@ -430,7 +430,7 @@ public final class PPTSLICE1 extends PptSlice {
                         && (mod3 != ValueTuple.MISSING_FLOW
                         && mod3 != ValueTuple.MISSING_NONSENSICAL));
 
-    List result = new ArrayList();
+    List<Invariant> result = new ArrayList<Invariant>();
     for (int i=0; i < invs.size(); i++) {
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
       if (inv.is_false()) continue;
@@ -506,7 +506,7 @@ public final class PPTSLICE1 extends PptSlice {
     PPTSLICE1 result = new PPTSLICE1 (this.parent, vis_sorted);
 
     // re-parent the invariants and copy them out.
-    List newInvs = new LinkedList();
+    List<Invariant> newInvs = new LinkedList<Invariant>();
     for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = i.next();
       Assert.assertTrue (inv.ppt == this);
@@ -681,17 +681,17 @@ public final class PPTSLICE1 extends PptSlice {
     // invariants class) and add the invariant to that list.
     // Invariant.Match.equals() defines if two invariants are of the
     // same 'type' for the purpose of merging invariants.
-    Map inv_map = new LinkedHashMap();
+    Map<Invariant.Match,List<Invariant>> inv_map = new LinkedHashMap<Invariant.Match,List<Invariant>>();
     for (int i = 0; i < all_invs.size(); i++) {
       Invariant inv = all_invs.get (i);
       Invariant.Match imatch = new Invariant.Match (inv);
-      ArrayList invs = (ArrayList) inv_map.get (imatch);
+      List<Invariant> invs = inv_map.get (imatch);
       if (inv.logOn()) {
         inv.log ("Adding " + inv.format() + " to " + name()
                  + " invs list " + invs);
       }
       if (invs == null) {
-        invs = new ArrayList();
+        invs = new ArrayList<Invariant>();
         inv_map.put (imatch, invs);
       }
       invs.add (inv);
@@ -703,8 +703,8 @@ public final class PPTSLICE1 extends PptSlice {
     // appeared at each valid child.  Note that some invariants will
     // not exist at the parent even if they exist at each child (eg,
     // LinearBinary)
-    for (Iterator<ArrayList> j = inv_map.values().iterator(); j.hasNext(); ) {
-      ArrayList<Invariant> child_invs = j.next();
+    for (Iterator<List<Invariant>> j = inv_map.values().iterator(); j.hasNext(); ) {
+      List<Invariant> child_invs = j.next();
       if (child_invs.size() > valid_child_count) {
         // this shouldn't happen
         System.out.println ("Found " + child_invs.size() + " invariants at "

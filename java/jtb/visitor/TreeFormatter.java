@@ -1379,6 +1379,7 @@ class FormatCommand {
 }
 
 class TreeFormatterException extends RuntimeException {
+    static final long serialVersionUID = 20050923L;
    TreeFormatterException()         { super(); }
    TreeFormatterException(String s) { super(s); }
 }

@@ -15,6 +15,8 @@ package jtb.syntaxtree;
  * f6 -> "}"
  */
 public class SwitchStatement implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeToken f0;
    public NodeToken f1;
@@ -73,4 +75,3 @@ public class SwitchStatement implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

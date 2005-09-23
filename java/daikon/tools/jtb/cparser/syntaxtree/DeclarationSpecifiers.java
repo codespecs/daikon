@@ -11,6 +11,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  *       | TypeQualifier() [ DeclarationSpecifiers() ]
  */
 public class DeclarationSpecifiers implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public DeclarationSpecifiers(NodeChoice n0) {

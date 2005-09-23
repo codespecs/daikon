@@ -56,7 +56,7 @@ The correct way to build the system is to run 'make'.
    * returned; otherwise, all returned values are between the minimum and
    * maximum of the original values.
    **/
-  static final class MissingNumbersIteratorINT implements Iterator {
+  static final class MissingNumbersIteratorINT implements Iterator<INTEGER> {
     INT[] nums;
     Iterator nums_itor;
     INT current_nonmissing;
@@ -139,7 +139,7 @@ The correct way to build the system is to run 'make'.
       }
     }
 
-    public Object next() {
+    public INTEGER next() {
       if (!hasNext())
         throw new NoSuchElementException();
       INTEGER result = new INTEGER(current_missing);

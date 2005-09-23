@@ -270,19 +270,16 @@ public class FuzzyFloat {
    * Lexically compares two double arrays.
    */
 
-  /*@ pure */ public class DoubleArrayComparatorLexical implements Comparator {
+  /*@ pure */ public class DoubleArrayComparatorLexical implements Comparator<double[]> {
 
     /**
      * Lexically compares o1 and o2 as double arrays.
      *
      * @return positive if o1 > 02, 0 if 01 == 02, negative if 01 < 02
      */
-
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
+    public int compare(double[] a1, double[] a2) {
+      if (a1 == a2)
         return 0;
-      double[] a1 = (double[])o1;
-      double[] a2 = (double[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
         if (ne (a1[i], a2[i])) {

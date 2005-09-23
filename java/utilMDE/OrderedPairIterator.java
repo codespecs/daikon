@@ -73,7 +73,7 @@ public class OrderedPairIterator<T> implements java.util.Iterator<Pair<T,T>> {
       } else {
         int comparison;
         if (comparator == null) {
-          comparison = ((Comparable)next1).compareTo(next2);
+          comparison = ((Comparable<T>)next1).compareTo(next2);
         } else {
           comparison = comparator.compare(next1, next2);
         }

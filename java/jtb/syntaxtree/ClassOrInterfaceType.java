@@ -11,6 +11,8 @@ package jtb.syntaxtree;
  * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
  */
 public class ClassOrInterfaceType implements Node {
+   static final long serialVersionUID = 20050923L;
+
 
    public ClassOrInterfaceType unGenerifiedVersionOfThis = null;
 

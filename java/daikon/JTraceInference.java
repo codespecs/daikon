@@ -80,7 +80,7 @@ class JTraceInference extends Thread
                 int key = getInteger();
                 String pptname = getPptNameX(key);
                 JTrace.println(JTrace.V_DEBUG, pptname);
-                Vector var_infos = new Vector();
+                Vector<VarInfo> var_infos = new Vector<VarInfo>();
 
                 while((control = getControl()) != CT_PptDeclEnd)
                 {

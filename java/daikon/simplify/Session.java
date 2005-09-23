@@ -52,8 +52,8 @@ public class Session
    * if the invariant was redundant,
    * <samp>F</samp> if it was not found to be,
    * and <samp>?</samp> if Simplify gave up because of a time limit.
-   * If the value 
-   * is 2 or higher, a <samp><</samp> or <samp>></samp> 
+   * If the value
+   * is 2 or higher, a <samp><</samp> or <samp>></samp>
    * will also be printed for each
    * invariant that is pushed onto or popped from from Simplify's
    * assumption stack. This option is mainly intended for debugging
@@ -89,7 +89,7 @@ public class Session
    **/
   public Session() {
     try {
-      Vector newEnv = new Vector();
+      Vector<String> newEnv = new Vector<String>();
       if (dkconfig_simplify_max_iterations != 0) {
         newEnv.add("PROVER_KILL_ITER=" + dkconfig_simplify_max_iterations);
       }

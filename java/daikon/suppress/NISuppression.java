@@ -71,7 +71,7 @@ public class NISuppression {
     this(new NISuppressor[] {sup1, sup2, sup3, sup4, sup5}, suppressee);
   }
 
-  public Iterator suppressor_iterator() {
+  public Iterator<NISuppressor> suppressor_iterator() {
     return Arrays.asList(suppressors).iterator();
   }
 
@@ -192,7 +192,7 @@ public class NISuppression {
     int total_false_cnt = 0;
     // Fmt.pf ("antecedents for suppression " + this);
     for (int i = 0; i < antecedents.length; i++) {
-      List a = antecedents[i];
+      List<Invariant> a = antecedents[i];
       int false_cnt = 0;
       for (Iterator<Invariant> j = a.iterator(); j.hasNext(); ) {
         Invariant inv = j.next();
@@ -438,7 +438,7 @@ public class NISuppression {
    */
   List<Invariant>[] antecedents_for_suppressors (NIS.Antecedents ants) {
 
-    List<Invariant> antecedents[] = new List [suppressors.length];
+    List<Invariant> antecedents[] = (List<Invariant>[]) new List [suppressors.length]; // generic array creation is not permitted
 
     // Find the list of antecedents that matches each suppressor.  If any
     // suppressor doesn't have any matching antecedents, there can't be
@@ -516,11 +516,11 @@ public class NISuppression {
   public List<NISuppression> recurse_definition (NISuppressionSet ss) {
 
     NISuppressee sse = ss.get_suppressee();
-    List<NISuppression> new_suppressions = new ArrayList();
+    List<NISuppression> new_suppressions = new ArrayList<NISuppression>();
 
     // Create a list of all of our suppressors that don't match the suppressee
     // of ss
-    List<NISuppressor> old_sors = new ArrayList();
+    List<NISuppressor> old_sors = new ArrayList<NISuppressor>();
     NISuppressor match = null;
     for (int i = 0; i < suppressors.length; i++) {
       if (suppressors[i].match (sse))
@@ -542,7 +542,7 @@ public class NISuppression {
     // suppressor.
     for (int i = 0; i < ss.suppression_set.length; i++) {
       NISuppression s = ss.suppression_set[i];
-      List<NISuppressor> sors = new ArrayList (old_sors);
+      List<NISuppressor> sors = new ArrayList<NISuppressor> (old_sors);
       for (int j = 0; j < s.suppressors.length; j++)
         sors.add (s.suppressors[j].translate (match));
       new_suppressions.add (new NISuppression (sors, suppressee));

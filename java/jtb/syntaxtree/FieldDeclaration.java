@@ -12,6 +12,8 @@ package jtb.syntaxtree;
  * f3 -> ";"
  */
 public class FieldDeclaration implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public Type f0;
    public VariableDeclarator f1;

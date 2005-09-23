@@ -5,6 +5,7 @@ package daikon;
 import java.util.*;
 import java.io.Serializable;
 import utilMDE.*;
+import daikon.inv.Invariant;    // for emptyInvList
 
 // Types of Ppt (program point) objects:
 //  Ppt:  abstract base class
@@ -50,7 +51,7 @@ public abstract class Ppt
     }
   }
 
-  protected static final List emptyList = new ArrayList();
+  protected static final List<Invariant> emptyInvList = new ArrayList<Invariant>();
 
   /** Returns a string rep of the specified variable names **/
   public static String varNames(VarInfo[] infos) {

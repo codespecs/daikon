@@ -45,7 +45,7 @@ public class Runtime {
      * Empty the violations list.
      */
     public static synchronized void resetViolations() {
-	violations = new ArrayList();
+	violations = new ArrayList<Violation>();
     }
 
     /**

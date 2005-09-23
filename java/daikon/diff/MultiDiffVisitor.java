@@ -17,9 +17,9 @@ import java.util.*;
 public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
     protected PptMap currMap;
-    private HashSet programPointsList;
+    private HashSet<String> programPointsList;
     private HashMap<String,Integer> freqList;
-    private HashSet justifiedList;
+    private HashSet<String> justifiedList;
     private int total = 0;
     private static boolean spinfoMode = false;
     private static PrintStream out = System.out;
@@ -28,9 +28,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // I'll always want System.out, and never verbose!
         super (System.out, false);
         currMap = firstMap;
-        programPointsList = new HashSet();
+        programPointsList = new HashSet<String>();
         freqList = new HashMap<String,Integer>();
-        justifiedList = new HashSet();
+        justifiedList = new HashSet<String>();
     }
 
     public static void setForSpinfoOut (OutputStream out_os) {
@@ -90,7 +90,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // every sample of the MultiDiff
         int kill = 0;
         int unjustifiedKill = 0;
-        ArrayList bigList = new ArrayList();
+        ArrayList<String> bigList = new ArrayList<String>();
 
         // New historgram stuff
         System.out.println ("Histogram**************");
@@ -116,11 +116,11 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // mapping:  program point names ->
         //                      ArrayList of inv.format_java() with frequency
 
-        HashMap<String,ArrayList> lastMap = new HashMap<String,ArrayList>();
+        HashMap<String,ArrayList<String>> lastMap = new HashMap<String,ArrayList<String>>();
         // One pass to fill each mapping with an empty ArrayList
         for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
             String key = i.next();
-            lastMap.put (key, new ArrayList());
+            lastMap.put (key, new ArrayList<String>());
         }
 
         // Now to populate those ArrayLists
@@ -130,12 +130,12 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = st.nextToken();
             String data = st.nextToken();
             try {
-            ((ArrayList) lastMap.get(key)).add (data);
+                lastMap.get(key).add (data);
             } catch (Exception e) {System.out.println (key + " error in MultiDiffVisitor");}
         }
 
         // print it all
-        for (Map.Entry<String,ArrayList> entry : lastMap.entrySet()) {
+        for (Map.Entry<String,ArrayList<String>> entry : lastMap.entrySet()) {
             String key = entry.getKey();
             ArrayList al = entry.getValue();
             // don't print anything if there are no selective invariants
@@ -157,7 +157,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // keeps track of supressed invariants due to appearing in
         // every sample of the MultiDiff
         int kill = 0;
-        ArrayList bigList = new ArrayList();
+        ArrayList<String> bigList = new ArrayList<String>();
 
 
         // This gets all of the output in the format:
@@ -176,11 +176,11 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // mapping:  program point names ->
         //                      ArrayList of inv.format_java() with frequency
 
-        HashMap<String,ArrayList> lastMap = new HashMap<String,ArrayList>();
+        HashMap<String,ArrayList<String>> lastMap = new HashMap<String,ArrayList<String>>();
         // One pass to fill each mapping with an empty ArrayList
         for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
             String key = i.next();
-            lastMap.put (key, new ArrayList());
+            lastMap.put (key, new ArrayList<String>());
         }
 
         // Now to populate those ArrayLists
@@ -190,7 +190,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = st.nextToken();
             String data = st.nextToken();
             try {
-            ((ArrayList) lastMap.get(key)).add (data);
+                lastMap.get(key).add (data);
             } catch (Exception e) { out.println (key + " error in MultiDiffVisitor");}
         }
 

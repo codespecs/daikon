@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | <SIZEOF> ( UnaryExpression() | "(" TypeName() ")" ) )
  */
 public class UnaryExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public UnaryExpression(NodeChoice n0) {

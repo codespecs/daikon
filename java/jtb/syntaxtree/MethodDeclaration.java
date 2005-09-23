@@ -13,6 +13,8 @@ package jtb.syntaxtree;
  * f4 -> ( Block() | ";" )
  */
 public class MethodDeclaration implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeOptional f0;
    public ResultType f1;

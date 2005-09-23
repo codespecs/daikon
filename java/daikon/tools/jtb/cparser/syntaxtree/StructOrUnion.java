@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( <STRUCT> | <UNION> )
  */
 public class StructOrUnion implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public StructOrUnion(NodeChoice n0) {

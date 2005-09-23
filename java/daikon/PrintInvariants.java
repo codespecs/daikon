@@ -961,7 +961,7 @@ public final class PrintInvariants {
    * Takes a list of Invariants and returns a list of Invariants that
    * is sorted according to PptTopLevel.icfp.
    */
-  public static List<Invariant> sort_invariant_list(List invs) {
+  public static List<Invariant> sort_invariant_list(List<Invariant> invs) {
     Invariant[] invs_array = (Invariant[]) invs.toArray(new Invariant[invs.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
@@ -1013,7 +1013,7 @@ public final class PrintInvariants {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List invs_vector = new LinkedList(ppt.getInvariants());
+    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
 
     if (PptSplitter.debug.isLoggable (Level.FINE)) {
       PptSplitter.debug.fine ("Joiner View for ppt " + ppt.name);
@@ -1103,7 +1103,7 @@ public final class PrintInvariants {
   /**
    * Does the actual printing of the invariants.
    **/
-  private static void finally_print_the_invariants(List invariants,
+  private static void finally_print_the_invariants(List<Invariant> invariants,
                                                    PrintWriter out,
                                                    PptTopLevel ppt) {
     int index = 0;
@@ -1301,7 +1301,7 @@ public final class PrintInvariants {
 
     boolean print_invs = false;
 
-    List invs_vector = new LinkedList(ppt.getInvariants());
+    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
     Invariant[] invs_array = (Invariant[]) invs_vector.toArray(
       new Invariant[invs_vector.size()]);
 

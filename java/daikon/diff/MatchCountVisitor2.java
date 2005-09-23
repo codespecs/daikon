@@ -20,18 +20,18 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
 
   // invariants found by the splitting
-  private HashSet cnt = new HashSet();
+  private HashSet<String> cnt = new HashSet<String>();
   // target set of invariants
-  private HashSet targSet = new HashSet();
+  private HashSet<String> targSet = new HashSet<String>();
   // invariants found matching
-  private HashSet correctSet = new HashSet();
+  private HashSet<String> correctSet = new HashSet<String>();
 
   // invariants reported but not correct
-  private HashSet incorrectSet = new HashSet();
+  private HashSet<String> incorrectSet = new HashSet<String>();
 
 
 
-  private HashMap<String,HashSet> goodMap = new HashMap<String,HashSet>();
+  private HashMap<String,HashSet<String>> goodMap = new HashMap<String,HashSet<String>>();
 
 
 
@@ -103,9 +103,9 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
       /** this is all for printing purposes */
 
       String predicate = extractPredicate (thisPptName1);
-      HashSet bucket = (HashSet) goodMap.get (bucketKey);
+      HashSet<String> bucket = goodMap.get (bucketKey);
       if (bucket == null) {
-        bucket = new HashSet();
+        bucket = new HashSet<String>();
         goodMap.put (bucketKey, bucket);
       }
       bucket.add (predicate + " ==> " + inv1.format());
@@ -257,8 +257,8 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
   private void finish() {
     correctSet.clear();
-    for (Iterator i = cnt.iterator(); i.hasNext(); ) {
-      Object elem = i.next();
+    for (Iterator<String> i = cnt.iterator(); i.hasNext(); ) {
+      String elem = i.next();
       if (targSet.contains (elem))
         correctSet.add (elem);
     }

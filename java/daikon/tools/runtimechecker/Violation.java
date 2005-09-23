@@ -145,7 +145,7 @@ public class Violation implements Serializable {
     }
 
     // Maps into all the Violation objects created.
-    private static HashMap/*Integer, Violation*/ violationsMap = new HashMap/*<Integer, Violation>*/();
+    private static HashMap<Integer, Violation> violationsMap = new HashMap<Integer, Violation>();
 
     // [[[ TODO: ensure args are not null (otherwise hashCode,
     // equals can break). Do the same thing for Property. ]]]

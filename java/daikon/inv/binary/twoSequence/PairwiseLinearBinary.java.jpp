@@ -262,10 +262,10 @@ public class CLASSNAME
    *                    permuted to match the variable order in parent_ppt.
    * @param parent_ppt  Slice that will contain the new invariant
    */
-  public Invariant merge (List invs, PptSlice parent_ppt) {
+  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
-    List cores = new ArrayList();
+    List<CORECLASS> cores = new ArrayList<CORECLASS>();
     for (int i = 0; i < invs.size(); i++) {
       cores.add (((CLASSNAME) invs.get(i)).core);
     }

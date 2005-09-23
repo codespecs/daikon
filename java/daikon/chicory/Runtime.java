@@ -139,6 +139,7 @@ public class Runtime
      **/
     public static class TerminationMessage extends RuntimeException
     {
+        static final long serialVersionUID = 20050923L;
 
         public TerminationMessage(String s)
         {

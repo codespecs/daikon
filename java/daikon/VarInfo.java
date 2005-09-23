@@ -388,8 +388,8 @@ public final class VarInfo implements Cloneable, Serializable {
   }
 
   /** Return all derived variables that build off this one. **/
-  public List derivees() {
-    ArrayList result = new ArrayList();
+  public List<Derivation> derivees() {
+    ArrayList<Derivation> result = new ArrayList<Derivation>();
     VarInfo[] vis = ppt.var_infos;
     for (int i = 0; i < vis.length; i++) {
       VarInfo vi = vis[i];
@@ -736,13 +736,13 @@ public final class VarInfo implements Cloneable, Serializable {
     return (String[]) raw;
   }
 
-  static final class UsesVarFilter implements Filter {
+  static final class UsesVarFilter implements Filter<Invariant> {
     VarInfo var;
     public UsesVarFilter(VarInfo var) {
       this.var = var;
     }
-    public boolean accept(Object o) {
-      return ((Invariant) o).usesVar(var);
+    public boolean accept(Invariant inv) {
+      return inv.usesVar(var);
     }
   }
 
@@ -1464,10 +1464,10 @@ public final class VarInfo implements Cloneable, Serializable {
    * alone, because it is possible for two different program points to have
    * unrelated variables of the same name.
    **/
-  public static class LexicalComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      VarInfoName name1 = ((VarInfo) o1).name;
-      VarInfoName name2 = ((VarInfo) o2).name;
+  public static class LexicalComparator implements Comparator<VarInfo> {
+    public int compare(VarInfo vi1, VarInfo vi2) {
+      VarInfoName name1 = vi1.name;
+      VarInfoName name2 = vi2.name;
       return name1.compareTo(name2);
     }
   }
@@ -1519,34 +1519,34 @@ public final class VarInfo implements Cloneable, Serializable {
 
   // Finds a list of variables that must be guarded for a VarInfo to
   // be guaranteed to not be missing. The variables are returned in
-  // the order in which their guarding preficies are supposed to print
-  public List getGuardingList() {
-    class GuardingVisitor implements Visitor {
-      public Object visitSimple(Simple o) {
+  // the order in which their guarding prefixes are supposed to print.
+  public List<VarInfo> getGuardingList() {
+    class GuardingVisitor implements Visitor<List<VarInfo>> {
+      public List<VarInfo> visitSimple(Simple o) {
         return takeActionOnDerived(ppt.findVar(o));
       }
-      public Object visitSizeOf(SizeOf o) {
-        List result = (List) o.sequence.accept(this);
+      public List<VarInfo> visitSizeOf(SizeOf o) {
+        List<VarInfo> result = (List<VarInfo>) o.sequence.accept(this);
         return result;
       }
-      public Object visitFunctionOf(FunctionOf o) {
-        List result = (List) o.argument.accept(this);
+      public List<VarInfo> visitFunctionOf(FunctionOf o) {
+        List<VarInfo> result = (List<VarInfo>) o.argument.accept(this);
         return result;
       }
-      public Object visitFunctionOfN(FunctionOfN o) {
-        List args = o.args;
+      public List<VarInfo> visitFunctionOfN(FunctionOfN o) {
+        List<VarInfoName> args = o.args;
 
-        List result = (List) ((VarInfoName) args.get(0)).accept(this);
+        List<VarInfo> result = (List<VarInfo>) args.get(0).accept(this);
 
         for (int i = 1; i < args.size(); i++) {
           result.addAll(
-            (List) ((VarInfoName) args.get(i)).accept(this));
+            (List<VarInfo>) ((VarInfoName) args.get(i)).accept(this));
         }
 
         return result;
       }
-      public Object visitField(Field o) {
-        List result = (List) o.term.accept(this);
+      public List<VarInfo> visitField(Field o) {
+        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1561,8 +1561,8 @@ public final class VarInfo implements Cloneable, Serializable {
 
         return result;
       }
-      public Object visitTypeOf(TypeOf o) {
-        List result = (List) o.term.accept(this);
+      public List<VarInfo> visitTypeOf(TypeOf o) {
+        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1577,21 +1577,21 @@ public final class VarInfo implements Cloneable, Serializable {
 
         return result;
       }
-      public Object visitPrestate(Prestate o) {
-        List result = (List) o.term.accept(this);
+      public List<VarInfo> visitPrestate(Prestate o) {
+        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
         return result;
       }
-      public Object visitPoststate(Poststate o) {
-        List result = (List) o.term.accept(this);
+      public List<VarInfo> visitPoststate(Poststate o) {
+        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
         return result;
       }
-      public Object visitAdd(Add o) {
-        List result = (List) o.term.accept(this);
+      public List<VarInfo> visitAdd(Add o) {
+        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
         return result;
       }
-      public Object visitElements(Elements o) {
+      public List<VarInfo> visitElements(Elements o) {
         VarInfo vi = ppt.findVar(o);
-        List result = (List) o.term.accept(this);
+        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
         result.addAll(takeActionOnDerived(vi));
 
         Invariant.debugGuarding.fine(
@@ -1606,9 +1606,9 @@ public final class VarInfo implements Cloneable, Serializable {
 
         return result;
       }
-      public Object visitSubscript(Subscript o) {
-        List result = (List) o.sequence.accept(this);
-        result.addAll((List) o.index.accept(this));
+      public List<VarInfo> visitSubscript(Subscript o) {
+        List<VarInfo> result = (List<VarInfo>) o.sequence.accept(this);
+        result.addAll((List<VarInfo>) o.index.accept(this));
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1625,12 +1625,12 @@ public final class VarInfo implements Cloneable, Serializable {
 
         return result;
       }
-      public Object visitSlice(Slice o) {
-        List result = (List) o.sequence.accept(this);
+      public List<VarInfo> visitSlice(Slice o) {
+        List<VarInfo> result = (List<VarInfo>) o.sequence.accept(this);
         if (o.i != null)
-          result.addAll((List) o.i.accept(this));
+          result.addAll((List<VarInfo>) o.i.accept(this));
         if (o.j != null)
-          result.addAll((List) o.j.accept(this));
+          result.addAll((List<VarInfo>) o.j.accept(this));
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1650,20 +1650,20 @@ public final class VarInfo implements Cloneable, Serializable {
 
         return result;
       }
-      public List takeActionOnDerived(VarInfo vi) {
-        List result = new GuardingVariableList();
+      public List<VarInfo> takeActionOnDerived(VarInfo vi) {
+        List<VarInfo> result = new ArrayList<VarInfo>();
 
         if (vi != null && vi.isDerived()) {
           VarInfo[] bases = vi.derived.getBases();
 
           for (int i = 0; i < bases.length; i++) {
-            result.addAll((List) (bases[i].name.accept(this)));
+            result.addAll((List<VarInfo>) (bases[i].name.accept(this)));
           }
         }
         return result;
       }
     }
-    List result = (List) name.accept(new GuardingVisitor());
+    List<VarInfo> result = (List<VarInfo>) name.accept(new GuardingVisitor());
     if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
       Invariant.debugGuarding.fine("VarInfo.getGuardingList: ");
       Invariant.debugGuarding.fine("  for variable " + this.name.name());
@@ -1683,21 +1683,19 @@ public final class VarInfo implements Cloneable, Serializable {
    * Compare names by index.
    **/
   public static final class IndexComparator
-    implements Comparator, Serializable {
+    implements Comparator<VarInfo>, Serializable {
     // This needs to be serializable because Equality invariants keep
     // a TreeSet of variables sorted by theInstance.
 
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
-    static final long serialVersionUID = 20031204L;
+    static final long serialVersionUID = 20050923L;
 
     private IndexComparator() {
     }
 
-    public int compare(Object o1, Object o2) {
-      VarInfo vi1 = (VarInfo) o1;
-      VarInfo vi2 = (VarInfo) o2;
+    public int compare(VarInfo vi1, VarInfo vi2) {
       if (vi1.varinfo_index < vi2.varinfo_index) {
         return -1;
       } else if (vi1.varinfo_index == vi2.varinfo_index) {
@@ -1781,7 +1779,7 @@ public final class VarInfo implements Cloneable, Serializable {
 
     if (vis == null)
       return ("null");
-    ArrayList<String> vars = new ArrayList(vis.length);
+    ArrayList<String> vars = new ArrayList<String>(vis.length);
     for (int i = 0; i < vis.length; i++) {
       if (vis[i] == null)
         vars.add("null");
@@ -1796,7 +1794,7 @@ public final class VarInfo implements Cloneable, Serializable {
 
     if (vlist == null)
       return ("null");
-    ArrayList<String> vars = new ArrayList(vlist.size());
+    ArrayList<String> vars = new ArrayList<String>(vlist.size());
     for (int i = 0; i < vlist.size(); i++) {
       VarInfo v = (VarInfo) vlist.get(i);
       if (v == null)
@@ -1838,9 +1836,9 @@ public final class VarInfo implements Cloneable, Serializable {
    * Returns the vars_info in the variable's equality set.
    * Returns a set with just itself if the equality optimization is turned off
    */
-  public Set get_equalitySet_vars() {
+  public Set<VarInfo> get_equalitySet_vars() {
     if (equalitySet == null) {
-      HashSet set = new HashSet();
+      HashSet<VarInfo> set = new HashSet<VarInfo>();
       set.add(this);
       return set;
     } else

@@ -116,16 +116,16 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
     if (sclvar2.derived != null)
       return null;
 
-    Vector results1 = instantiateWithOrder(seqvar, sclvar1, sclvar2);
-    Vector results2 = instantiateWithOrder(seqvar, sclvar2, sclvar1);
+    Vector<TernaryDerivation> results1 = instantiateWithOrder(seqvar, sclvar1, sclvar2);
+    Vector<TernaryDerivation> results2 = instantiateWithOrder(seqvar, sclvar2, sclvar1);
 
     results1.addAll(results2);
     return (TernaryDerivation[]) results1.toArray(new TernaryDerivation[0]);
   }
 
-  private Vector instantiateWithOrder(VarInfo seqvar, VarInfo startvar,
+  private Vector<TernaryDerivation> instantiateWithOrder(VarInfo seqvar, VarInfo startvar,
                                       VarInfo endvar) {
-    Vector results = new Vector();
+    Vector<TernaryDerivation> results = new Vector<TernaryDerivation>();
     VarInfo seqsize = seqvar.sequenceSize();
     if (seqsize != null) {
       seqsize = seqsize.canonicalRep();
@@ -166,7 +166,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
 //         return null;
 //       } else if (INTEQUAL.find(compar_slice) != null) {
 //         Global.nonsensical_suppressed_derived_variables += 3;
-//         ArrayList result = new ArrayList();
+//         ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
 //         if (enable_subscript) {
 //           result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true)); // a[i-1]
 //         }
@@ -230,9 +230,9 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
         // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b <-- old
         // Note that var2 comes before var1; this makes the most sense
         // if you think of them as "y" and "x". <-- old
-        
+
         // lb asserts that lb.core.a * lb.var1() + lb.core.b * lb.var2() + lb.core.c == 0
-        // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b 
+        // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b
 
       //  if (lb.core.a == 1) {
         if (-lb.core.a/lb.core.b == 1) {
@@ -262,9 +262,9 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
         // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b <-- old
         // Note that var2 comes before var1; this makes the most sense
         // if you think of them as "y" and "x". <-- old
-        
+
         // lb asserts that lb.core.a * lb.var1() + lb.core.b * lb.var2() + lb.core.c == 0
-        // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b 
+        // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b
 
 //        if (lb.core.a == 1) {
         if (-lb.core.a/lb.core.b == 1) {

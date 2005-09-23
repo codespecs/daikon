@@ -12,6 +12,8 @@ package jtb.syntaxtree;
  * f3 -> [ "finally" Block() ]
  */
 public class TryStatement implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeToken f0;
    public Block f1;
@@ -55,4 +57,3 @@ public class TryStatement implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

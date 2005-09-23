@@ -243,7 +243,7 @@ public class PptRelation implements Serializable {
     for (int i = 0; i < child.equality_view.invs.size(); i++) {
       Equality e = (Equality) child.equality_view.invs.get(i);
       debug.fine("-- processing equality set " + e);
-      Set eqset = e.getVars();
+      Set<VarInfo> eqset = e.getVars();
       VarInfo[] varr = new VarInfo[eqset.size()];
       varr = (VarInfo[]) eqset.toArray(varr);
 
@@ -780,8 +780,7 @@ public class PptRelation implements Serializable {
         PptSplitter ppt_split = ii.next();
 
         // list of children that match this splitter
-        List<SplitChild>
-        split_children = new ArrayList();
+        List<SplitChild> split_children = new ArrayList<SplitChild>();
 
         // Create a list of children for this splitter
         child_loop : for (int jj = 0; jj < ppt.children.size(); jj++) {

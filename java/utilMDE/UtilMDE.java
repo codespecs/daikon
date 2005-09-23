@@ -16,13 +16,13 @@ public final class UtilMDE {
 
   private static final String lineSep = System.getProperty("line.separator");
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Array
   ///
 
   // For arrays, see ArraysMDE.java.
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// BitSet
   ///
 
@@ -93,7 +93,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// BufferedFileReader
   ///
 
@@ -190,7 +190,7 @@ public final class UtilMDE {
 
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Class
   ///
 
@@ -354,7 +354,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// ClassLoader
   ///
 
@@ -387,7 +387,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Classpath
   ///
 
@@ -409,7 +409,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// File
   ///
 
@@ -602,7 +602,7 @@ public final class UtilMDE {
 
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// HashMap
   ///
 
@@ -760,7 +760,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Iterator
   ///
 
@@ -768,20 +768,20 @@ public final class UtilMDE {
   // their arguments into a scope that Java was happy with.
 
   /** Converts an Enumeration into an Iterator. */
-  public static final class EnumerationIterator implements Iterator {
-    Enumeration e;
-    public EnumerationIterator(Enumeration e) { this.e = e; }
+  public static final class EnumerationIterator<T> implements Iterator<T> {
+    Enumeration<T> e;
+    public EnumerationIterator(Enumeration<T> e) { this.e = e; }
     public boolean hasNext() { return e.hasMoreElements(); }
-    public Object next() { return e.nextElement(); }
+    public T next() { return e.nextElement(); }
     public void remove() { throw new UnsupportedOperationException(); }
   }
 
   /** Converts an Iterator into an Enumeration. */
-  public static final class IteratorEnumeration implements Enumeration {
-    Iterator itor;
-    public IteratorEnumeration(Iterator itor) { this.itor = itor; }
+  public static final class IteratorEnumeration<T> implements Enumeration<T> {
+    Iterator<T> itor;
+    public IteratorEnumeration(Iterator<T> itor) { this.itor = itor; }
     public boolean hasMoreElements() { return itor.hasNext(); }
-    public Object nextElement() { return itor.next(); }
+    public T nextElement() { return itor.next(); }
   }
 
   // This must already be implemented someplace else.  Right??
@@ -790,15 +790,15 @@ public final class UtilMDE {
    * argument, then the elements returned by its second argument.
    * Like MergedIterator, but specialized for the case of two arguments.
    **/
-  public static final class MergedIterator2 implements Iterator {
-    Iterator itor1, itor2;
-    public MergedIterator2(Iterator itor1_, Iterator itor2_) {
+  public static final class MergedIterator2<T> implements Iterator<T> {
+    Iterator<T> itor1, itor2;
+    public MergedIterator2(Iterator<T> itor1_, Iterator<T> itor2_) {
       this.itor1 = itor1_; this.itor2 = itor2_;
     }
     public boolean hasNext() {
       return (itor1.hasNext() || itor2.hasNext());
     }
-    public Object next() {
+    public T next() {
       if (itor1.hasNext())
         return itor1.next();
       else if (itor2.hasNext())
@@ -822,7 +822,7 @@ public final class UtilMDE {
     public MergedIterator(Iterator<Iterator<T>> itorOfItors) { this.itorOfItors = itorOfItors; }
 
     // an empty iterator to prime the pump
-    Iterator<T> current = Collections.EMPTY_SET.iterator();
+    Iterator<T> current = new ArrayList<T>().iterator();
 
     public boolean hasNext() {
       while ((!current.hasNext()) && (itorOfItors.hasNext())) {
@@ -841,15 +841,15 @@ public final class UtilMDE {
     }
   }
 
-  public static final class FilteredIterator implements Iterator {
-    Iterator itor;
-    Filter filter;
+  public static final class FilteredIterator<T> implements Iterator<T> {
+    Iterator<T> itor;
+    Filter<T> filter;
 
-    public FilteredIterator(Iterator itor, Filter filter) {
+    public FilteredIterator(Iterator<T> itor, Filter<T> filter) {
       this.itor = itor; this.filter = filter;
     }
 
-    Object current;
+    T current;
     boolean current_valid = false;
 
     public boolean hasNext() {
@@ -860,7 +860,7 @@ public final class UtilMDE {
       return current_valid;
     }
 
-    public Object next() {
+    public T next() {
       if (hasNext()) {
         current_valid = false;
         return current;
@@ -879,13 +879,13 @@ public final class UtilMDE {
    * last elements are removed.  They can be accessed via the getFirst and
    * getLast methods.
    **/
-  public static final class RemoveFirstAndLastIterator implements Iterator {
-    Iterator itor;
-    Object nothing = new Object();
-    Object first = nothing;
-    Object current = nothing;
+  public static final class RemoveFirstAndLastIterator<T> implements Iterator<T> {
+    Iterator<T> itor;
+    T nothing = null;           // was Object nothing = new Object();
+    T first = nothing;
+    T current = nothing;
 
-    public RemoveFirstAndLastIterator(Iterator itor) {
+    public RemoveFirstAndLastIterator(Iterator<T> itor) {
       this.itor = itor;
       if (itor.hasNext()) {
         first = itor.next();
@@ -899,23 +899,23 @@ public final class UtilMDE {
       return itor.hasNext();
     }
 
-    public Object next() {
+    public T next() {
       if (! itor.hasNext()) {
         throw new NoSuchElementException();
       }
-      Object tmp = current;
+      T tmp = current;
       current = itor.next();
       return tmp;
     }
 
-    public Object getFirst() {
+    public T getFirst() {
       if (first == nothing) {
         throw new NoSuchElementException();
       }
       return first;
     }
 
-    public Object getLast() {
+    public T getLast() {
       if (itor.hasNext()) {
         throw new Error();
       }
@@ -965,7 +965,7 @@ public final class UtilMDE {
       result.add(itor.next());
     }
     for (; itor.hasNext(); i++) {
-      Object o = itor.next();
+      T o = itor.next();
       // test random < num_elts/i
       if (random.nextDouble() * i < num_elts) {
         // This element will replace one of the existing elements.
@@ -977,7 +977,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Method
   ///
 
@@ -1044,7 +1044,7 @@ public final class UtilMDE {
 
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Properties
   ///
 
@@ -1084,7 +1084,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Regexp (regular expression)
   ///
 
@@ -1125,7 +1125,7 @@ public final class UtilMDE {
     }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Set
   ///
 
@@ -1147,7 +1147,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Stream
   ///
 
@@ -1177,7 +1177,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// String
   ///
 
@@ -1593,11 +1593,9 @@ public final class UtilMDE {
   // Same as built-in String comparison, but accept null arguments,
   // and place them at the beginning.
   public static class NullableStringComparator
-    implements Comparator
+    implements Comparator<String>
   {
-    public int compare(Object o1, Object o2) {
-      String s1 = (String) o1;
-      String s2 = (String) o2;
+    public int compare(String s1, String s2) {
       if (s1 == null && s2 == null) return 0;
       if (s1 == null && s2 != null) return 1;
       if (s1 != null && s2 == null) return -1;
@@ -1628,7 +1626,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// StringTokenizer
   ///
 
@@ -1658,7 +1656,7 @@ public final class UtilMDE {
 
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Throwable
   ///
 
@@ -1690,7 +1688,7 @@ public final class UtilMDE {
   }
 
 
-  ///
+  ///////////////////////////////////////////////////////////////////////////
   /// Collections
   ///
 
@@ -1704,7 +1702,25 @@ public final class UtilMDE {
     return result;
   }
 
-  ///
+
+  /**
+   * Returns a copy of the list with duplicates removed.
+   * Retains the original order.
+   **/
+  public static <T> List<T> removeDuplicates(List<T> l) {
+    // There are shorter solutions that do not maintain order.
+    HashSet<T> hs = new HashSet<T>(l.size());
+    List<T> result = new ArrayList<T>();
+    for (T t : l) {
+      if (hs.add(t)) {
+        result.add(t);
+      }
+    }
+    return result;
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
   /// Vector
   ///
 

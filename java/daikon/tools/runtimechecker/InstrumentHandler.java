@@ -265,7 +265,7 @@ public class InstrumentHandler extends CommandHandler {
             System.out.println("Error: No .java file arguments supplied.");
             return errorWhileReadingArguments;
         }
-        List<String> javaFileNames = new ArrayList();
+        List<String> javaFileNames = new ArrayList<String>();
         for (; argindex < args.length; argindex++) {
             String javafile = args[argindex];
             if (!javafile.endsWith(".java")) {

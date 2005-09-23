@@ -24,6 +24,7 @@ import javax.swing.tree.*;
 //  to view various tables of invariants by selecting points of the hierarchy.
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener, VariableListChangeListener {
+  static final long serialVersionUID = 20050923L;
 
   private static final String lineSep = System.getProperty("line.separator");
 

@@ -542,9 +542,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (new InvDef[][] {});
   }
 
-  public static List get_proto_all() {
+  public static List<Invariant> get_proto_all() {
 
-    List result = new ArrayList();
+    List<Invariant> result = new ArrayList<Invariant>();
     result.add (Divides.get_proto (false));
     result.add (Divides.get_proto (true));
     result.add (Square.get_proto (false));

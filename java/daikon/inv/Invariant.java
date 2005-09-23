@@ -1084,11 +1084,11 @@ public abstract class Invariant
 
       // The names "match" iff there is an intersection of the names
       // of equal variables.
-      Vector all_vars1 = new Vector();
-      Vector all_vars2 = new Vector();
+      Vector<VarInfo> all_vars1 = new Vector<VarInfo>();
+      Vector<VarInfo> all_vars2 = new Vector<VarInfo>();
       all_vars1.add(var1);
       all_vars1.add(var2);
-      Vector all_vars_names1 = new Vector(all_vars1.size());
+      Vector<VarInfoName> all_vars_names1 = new Vector<VarInfoName>(all_vars1.size());
       for (Iterator<VarInfo> iter = all_vars1.iterator(); iter.hasNext(); ) {
         VarInfo elt = iter.next();
         VarInfoName viname = name_extractor.getFromFirst(elt);
@@ -1477,10 +1477,8 @@ public abstract class Invariant
   // Orders invariants by class, then by variable names.  If the
   // invariants are both of class Implication, they are ordered by
   // comparing the predicate, then the consequent.
-  public static final class ClassVarnameComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      Invariant inv1 = (Invariant) o1;
-      Invariant inv2 = (Invariant) o2;
+  public static final class ClassVarnameComparator implements Comparator<Invariant> {
+    public int compare(Invariant inv1, Invariant inv2) {
 
       if (inv1 instanceof Implication && inv2 instanceof Implication)
         return compareImplications((Implication) inv1, (Implication) inv2);
@@ -1555,19 +1553,16 @@ public abstract class Invariant
    * obtained from the format() method.
    **/
   public static final class ClassVarnameFormulaComparator
-    implements Comparator {
+    implements Comparator<Invariant> {
 
-    Comparator classVarnameComparator = new ClassVarnameComparator();
+    Comparator<Invariant> classVarnameComparator = new ClassVarnameComparator();
 
-    public int compare(Object o1, Object o2) {
-      int compareClassVarname = classVarnameComparator.compare(o1, o2);
+    public int compare(Invariant inv1, Invariant inv2) {
+      int compareClassVarname = classVarnameComparator.compare(inv1, inv2);
 
       if (compareClassVarname != 0) {
         return compareClassVarname;
       }
-
-      Invariant inv1 = (Invariant) o1;
-      Invariant inv2 = (Invariant) o2;
 
       if (inv1.isSameInvariant(inv2)) {
         return 0;
@@ -1711,7 +1706,7 @@ public abstract class Invariant
   // Gets a list of all the variables that must be guarded for this
   // invariant
   public static List getGuardingList(VarInfo[] varInfos) {
-    List guardingList = new GuardingVariableList();
+    List<VarInfo> guardingList = new ArrayList<VarInfo>();
 
     for (int i=0; i<varInfos.length; i++) {
       // debugGuarding.fine (varInfos[i]);
@@ -1719,7 +1714,7 @@ public abstract class Invariant
       // debugGuarding.fine (guardingSet.toString());
     }
 
-    return guardingList;
+    return UtilMDE.removeDuplicates(guardingList);
   }
 
 
@@ -1917,7 +1912,7 @@ public abstract class Invariant
 
   public static String toString (Invariant[] invs) {
 
-    ArrayList strings = new ArrayList(invs.length);
+    ArrayList<String> strings = new ArrayList<String>(invs.length);
     for (int i = 0; i < invs.length; i++) {
       if (invs[i] == null)
         strings.add("null");

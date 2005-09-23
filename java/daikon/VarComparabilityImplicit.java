@@ -83,7 +83,7 @@ public final class VarComparabilityImplicit
   static VarComparabilityImplicit parse(String rep, ProglangType vartype) {
     // String rep_ = rep;          // for debugging
 
-    Vector dim_reps = new Vector();
+    Vector<String> dim_reps = new Vector<String>();
     while (rep.endsWith("]")) {
       int openpos = rep.lastIndexOf("[");
       dim_reps.add(0, rep.substring(openpos+1, rep.length()-1));

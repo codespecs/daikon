@@ -109,7 +109,7 @@ public class PptSliceEquality
       // Debug.debugTrack.fine ("Vars for " + parent.name());
       for (int i = 0; i < var_infos.length; i++) {
         VarInfo vi = var_infos[i];
-        List vi_list = new ArrayList(1);
+        List<VarInfo> vi_list = new ArrayList<VarInfo>(1);
         vi_list.add (vi);
         Equality eq = new Equality (vi_list, this);
         invs.add (eq);
@@ -164,21 +164,21 @@ public class PptSliceEquality
   public void instantiate_from_pairs (Set<VarInfo.Pair> eset) {
 
     // Build a map from each variable to all those that are equal to it
-    Map varmap = new LinkedHashMap();
-    Map sample_cnt_map = new LinkedHashMap();
+    Map<VarInfo,List<VarInfo>> varmap = new LinkedHashMap<VarInfo,List<VarInfo>>();
+    Map<VarInfo,Integer> sample_cnt_map = new LinkedHashMap<VarInfo,Integer>();
     for (Iterator<VarInfo.Pair> i = eset.iterator(); i.hasNext(); ) {
       VarInfo.Pair cp = i.next();
-      ArrayList vlist = (ArrayList) varmap.get (cp.v1);
+      List<VarInfo> vlist =  varmap.get (cp.v1);
       if (vlist == null) {
-        vlist = new ArrayList();
+        vlist = new ArrayList<VarInfo>();
         vlist.add (cp.v1);
         varmap.put (cp.v1, vlist);
         sample_cnt_map.put (cp.v1, new Integer(cp.samples));
       }
       vlist.add (cp.v2);
-      vlist = (ArrayList) varmap.get (cp.v2);
+      vlist = varmap.get (cp.v2);
       if (vlist == null) {
-        vlist = new ArrayList();
+        vlist = new ArrayList<VarInfo>();
         vlist.add (cp.v2);
         varmap.put (cp.v2, vlist);
         sample_cnt_map.put (cp.v2, new Integer(cp.samples));
@@ -189,18 +189,18 @@ public class PptSliceEquality
     // Loop through each variable, building the appropriate equality set
     // for each.  Note that variables that are distinct still have an
     // equality set (albeit with only the one variable)
-    ArrayList newInvs = new ArrayList();
+    ArrayList<Invariant> newInvs = new ArrayList<Invariant>();
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo v = var_infos[i];
       if (v.equalitySet != null)
         continue;
-      ArrayList vlist = (ArrayList) varmap.get (v);
+      List<VarInfo> vlist = varmap.get (v);
       if (vlist == null) {
-        vlist = new ArrayList(1);
+        vlist = new ArrayList<VarInfo>(1);
         vlist.add (v);
       }
       Equality eq = new Equality (vlist, this);
-      Integer sample_cnt = (Integer) sample_cnt_map.get (v);
+      Integer sample_cnt = sample_cnt_map.get (v);
       if (sample_cnt != null)
         eq.setSamples (sample_cnt.intValue());
       v.equalitySet = eq;
@@ -224,8 +224,8 @@ public class PptSliceEquality
   //
   public List<Invariant>  add(ValueTuple vt, int count) {
 
-    LinkedList<Equality> allNewInvs = new LinkedList();
-    LinkedList<Invariant> weakenedInvs = new LinkedList();
+    LinkedList<Equality> allNewInvs = new LinkedList<Equality>();
+    LinkedList<Invariant> weakenedInvs = new LinkedList<Invariant>();
 
     // Loop through each existing equality invariant
     for (Invariant invar : invs) {
@@ -243,7 +243,7 @@ public class PptSliceEquality
           createEqualityInvs (nonEqualVis, vt, inv, count);
 
         // Get a list of all of the new non-missing leaders
-        List newInvsLeaders = new ArrayList (newInvs.size());
+        List<VarInfo> newInvsLeaders = new ArrayList<VarInfo> (newInvs.size());
         for (Iterator<Equality> iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
           Equality eq = iNewInvs.next();
           if ((parent.constants == null) || !parent.constants.is_missing (eq.leader()))
@@ -298,12 +298,12 @@ public class PptSliceEquality
    * pre vis.size() > 0
    * post result.size() > 0
    **/
-  private List<Equality> createEqualityInvs (List vis, ValueTuple vt,
+  private List<Equality> createEqualityInvs (List<VarInfo> vis, ValueTuple vt,
                                                  Equality leader, int count
                                                  ) {
     Assert.assertTrue (vis.size() > 0);
     HashMap<Object,List<VarInfo>> multiMap = new HashMap<Object,List<VarInfo>>(); /* key is a value */
-    List out_of_bounds = new ArrayList();
+    List<VarInfo> out_of_bounds = new ArrayList<VarInfo>();
     for (Iterator<VarInfo> i = vis.iterator(); i.hasNext(); ) {
       VarInfo vi = i.next();
       if (vi.missingOutOfBounds())
@@ -343,7 +343,7 @@ public class PptSliceEquality
       resultCount++;
     }
     for (int i = 0; i < out_of_bounds.size(); i++) {
-      List list = new LinkedList();
+      List<VarInfo> list = new LinkedList<VarInfo>();
       list.add (out_of_bounds.get (i));
       resultArray[resultCount] = new Equality (list, this);
       resultCount++;
@@ -367,15 +367,15 @@ public class PptSliceEquality
       * pre vis.size() > 0
       * post result.size() > 0
       */
-     public List<Equality> createEqualityInvs(List vis, Equality leader) {
+     public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
        Assert.assertTrue(vis.size() > 0);
 
        // Why use an array?  Because we'll be sorting shortly
        Equality[] resultArray = new Equality[vis.size()];
        int resultCount = 0;
-       Iterator<PptSlice> i = vis.iterator();
+       Iterator<VarInfo> i = vis.iterator();
        while (i.hasNext()) {
-         List list = new ArrayList();
+         List<VarInfo> list = new ArrayList<VarInfo>();
          list.add(i.next());
          Equality eq = new Equality(list, this);
          eq.setSamples(leader.numSamples());
@@ -387,7 +387,7 @@ public class PptSliceEquality
        Arrays.sort(
          resultArray,
          PptSliceEquality.EqualityComparator.theInstance);
-       List result = Arrays.asList(resultArray);
+       List<Equality> result = Arrays.asList(resultArray);
        Assert.assertTrue(result.size() > 0);
        return result;
      }
@@ -409,9 +409,9 @@ public class PptSliceEquality
     List elements = (List) map.get(key);
     if (elements == null) {
       elements = new LinkedList();
-      map.put (key, elements);
+      map.put (key, elements);  // TODO: polymorphic container
     }
-    elements.add (value);
+    elements.add (value);       // TODO: polymorphic container
   }
 
 
@@ -428,11 +428,11 @@ public class PptSliceEquality
    * post: Adds the newly instantiated invariants and slices to
    * this.parent.
    **/
-  public List<Invariant> copyInvsFromLeader (VarInfo leader, List newVis) {
+  public List<Invariant> copyInvsFromLeader (VarInfo leader, List<VarInfo> newVis) {
 
 
-    List falsified_invs = new ArrayList();
-    List newSlices = new LinkedList();
+    List<Invariant> falsified_invs = new ArrayList<Invariant>();
+    List<PptSlice> newSlices = new LinkedList<PptSlice>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
                   + leader.name.name()
@@ -525,8 +525,8 @@ public class PptSliceEquality
    * @param soFar Buffer to which assignments temporarily go before
    * becoming instantiated.  Has to equal slice.var_infos in length.
    **/
-  private void copyInvsFromLeaderHelper (VarInfo leader, List newVis,
-                                         PptSlice slice, List newSlices,
+  private void copyInvsFromLeaderHelper (VarInfo leader, List<VarInfo> newVis,
+                                         PptSlice slice, List<PptSlice> newSlices,
                                          int position, int loop,
                                          VarInfo[] soFar) {
 
@@ -548,7 +548,7 @@ public class PptSliceEquality
                       + soFar[0].equalitySet);
             Debug.log (getClass(), newSlice, "Created this slice");
           }
-          List invs = newSlice.invs;
+          List<Invariant> invs = newSlice.invs;
           for (Iterator<Invariant> iInvs = invs.iterator(); iInvs.hasNext(); ) {
             Invariant inv = iInvs.next();
             if (!Daikon.dkconfig_undo_opts) {
@@ -613,15 +613,12 @@ public class PptSliceEquality
   /**
    * Order Equality invariants by the indices of leaders.
    **/
-  public static final class EqualityComparator implements Comparator {
+  public static final class EqualityComparator implements Comparator<Equality> {
     public static final EqualityComparator theInstance = new EqualityComparator();
     private EqualityComparator() {
 
     }
-    public int compare(Object o1,
-                       Object o2) {
-      Equality eq1 = (Equality) o1;
-      Equality eq2 = (Equality) o2;
+    public int compare(Equality eq1, Equality eq2) {
       return VarInfo.IndexComparator.theInstance.compare (eq1.leader(), eq2.leader());
     }
 

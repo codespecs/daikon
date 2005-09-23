@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( TypeQualifier() )+
  */
 public class TypeQualifierList implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeList f0;
 
    public TypeQualifierList(NodeList n0) {

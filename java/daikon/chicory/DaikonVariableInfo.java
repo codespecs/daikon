@@ -353,7 +353,7 @@ public abstract class DaikonVariableInfo
      * Add the parameters of the given method to this node.
      */
     protected void addParameters(ClassInfo cinfo,
-                       Member method, List argnames, String offset, int depth,
+                       Member method, List<String> argnames, String offset, int depth,
                        Set <Class> staticTraversedClasses)
     {
         Class[] arguments = (method instanceof Constructor)

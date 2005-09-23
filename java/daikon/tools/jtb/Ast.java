@@ -1014,7 +1014,7 @@ public class Ast {
   // Returns the parameters of the constructor, as a list of
   // FormalParameter objects. Does not include implicit parameters for
   // inner classes.
-  public static List getParametersNoImplicit(ConstructorDeclaration cd) {
+  public static List<FormalParameter> getParametersNoImplicit(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
       public void visit(FormalParameter p) {

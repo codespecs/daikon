@@ -11,6 +11,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f2 -> [ Pointer() ]
  */
 public class Pointer implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeToken f0;
    public NodeOptional f1;
    public NodeOptional f2;

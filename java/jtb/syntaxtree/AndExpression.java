@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  * f1 -> ( "&" EqualityExpression() )*
  */
 public class AndExpression implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public EqualityExpression f0;
    public NodeListOptional f1;
@@ -36,4 +38,3 @@ public class AndExpression implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( <WHILE> "(" Expression() ")" Statement() | <DO> Statement() <WHILE> "(" Expression() ")" ";" | <FOR> "(" [ Expression() ] ";" [ Expression() ] ";" [ Expression() ] ")" Statement() )
  */
 public class IterationStatement implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public IterationStatement(NodeChoice n0) {

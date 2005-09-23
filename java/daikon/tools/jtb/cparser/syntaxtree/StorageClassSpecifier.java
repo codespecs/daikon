@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( &lt; AUTO &gt; | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
  */
 public class StorageClassSpecifier implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public StorageClassSpecifier(NodeChoice n0) {

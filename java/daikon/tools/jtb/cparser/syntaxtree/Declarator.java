@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> DirectDeclarator()
  */
 public class Declarator implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeOptional f0;
    public DirectDeclarator f1;
 

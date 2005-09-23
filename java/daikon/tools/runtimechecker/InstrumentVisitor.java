@@ -137,7 +137,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             }
 
             newModifiers.add(new NodeToken("public"));
-            modifiers.f0.nodes = new Vector(newModifiers);
+            modifiers.f0.nodes = new Vector<Node>(newModifiers);
         }
     }
 
@@ -238,8 +238,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onEntry);");
 
         String name = Ast.getName(ctor);
-        List parameters = new ArrayList();
-        List typesAndParameters = new ArrayList();
+        List<String> parameters = new ArrayList<String>();
+        List<String> typesAndParameters = new ArrayList<String>();
         for (Iterator<FormalParameter> i = Ast.getParametersNoImplicit(ctor).iterator(); i.hasNext();) {
             FormalParameter param = i.next();
             parameters.add(Ast.getName(param));
@@ -293,7 +293,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
 
     // Methods that we have created
-    private final Set generated_methods = new HashSet();
+    private final Set<MethodDeclaration> generated_methods = new HashSet<MethodDeclaration>();
 
     /**
      *
@@ -751,7 +751,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
 
     private static List<String> getDeclaredThrowables(NodeOptional nodeOpt) {
-        List<String> declaredThrowables = new ArrayList();
+        List<String> declaredThrowables = new ArrayList<String>();
         if (nodeOpt.present()) {
             NodeSequence seq = (NodeSequence) nodeOpt.node;
             // There should only be two elements: "throws" and NameList
@@ -783,7 +783,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             List<PptTopLevel> matching_ppts, PptMap pptmap,
 	   List<String> declaredThrowables, boolean isStatic) {
 
-// 	List<String> declaredThrowablesLocal = new ArrayList(declaredThrowables);
+// 	List<String> declaredThrowablesLocal = new ArrayList<String>(declaredThrowables);
 // 	declaredThrowablesLocal.remove("java.lang.RuntimeException");
 // 	declaredThrowablesLocal.remove("RuntimeException");
 // 	declaredThrowablesLocal.remove("java.lang.Error");
@@ -1006,7 +1006,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             // this transformation on a character list than by pattern
             // matching against a String.
             char[] chars = daikonrep.toCharArray();
-            List<Character> charList = new ArrayList();
+            List<Character> charList = new ArrayList<Character>();
             for (int j = 0; j < chars.length; j++) {
                 char c = chars[j];
                 if ((c == '\"') || (c == '\\')) {

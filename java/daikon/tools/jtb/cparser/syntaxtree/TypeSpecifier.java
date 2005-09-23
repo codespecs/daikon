@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( <VOID> | <CHAR> | <SHORT> | <INT> | <LONG> | <FLOAT> | <DOUBLE> | <SIGNED> | <UNSIGNED> | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
  */
 public class TypeSpecifier implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public TypeSpecifier(NodeChoice n0) {

@@ -10,6 +10,8 @@ import java.util.*;
  * Represents a grammar list, e.g. ( A )+
  */
 public class NodeList implements NodeListInterface {
+  static final long serialVersionUID = 20050923L;
+
    public NodeList() {
       nodes = new Vector();
    }

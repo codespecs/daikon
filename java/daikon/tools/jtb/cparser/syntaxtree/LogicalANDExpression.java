@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> [ "&&" LogicalANDExpression() ]
  */
 public class LogicalANDExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public InclusiveORExpression f0;
    public NodeOptional f1;
 

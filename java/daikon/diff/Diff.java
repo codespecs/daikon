@@ -69,15 +69,15 @@ public final class Diff {
 
 
   /** Determine which ppts should be paired together in the tree. **/
-  private static final Comparator PPT_COMPARATOR = new Ppt.NameComparator();
+  private static final Comparator<PptTopLevel> PPT_COMPARATOR = new Ppt.NameComparator();
 
   /**
    * Comparators to sort the sets of invs, and to combine the two sets
    * into the pair tree.  Can be overriden by command-line options.
    **/
-  private Comparator invSortComparator1;
-  private Comparator invSortComparator2;
-  private Comparator invPairComparator;
+  private Comparator<Invariant> invSortComparator1;
+  private Comparator<Invariant> invSortComparator2;
+  private Comparator<Invariant> invPairComparator;
 
   private boolean examineAllPpts;
   private boolean ignoreNumberedExits;
@@ -307,7 +307,7 @@ public final class Diff {
 
     // Set the comparators based on the command-line options
 
-    Comparator defaultComparator;
+    Comparator<Invariant> defaultComparator;
     if (minus || xor || union) {
       defaultComparator = new Invariant.ClassVarnameFormulaComparator();
     } else {
@@ -582,7 +582,7 @@ public final class Diff {
 
     // Created sorted set of top level ppts, possibly including
     // conditional ppts
-    SortedSet ppts = new TreeSet(PPT_COMPARATOR);
+    SortedSet<PptTopLevel> ppts = new TreeSet<PptTopLevel>(PPT_COMPARATOR);
     ppts.addAll(pptMap.asCollection());
 
     for (Iterator<PptTopLevel> i = ppts.iterator(); i.hasNext(); ) {
@@ -590,16 +590,16 @@ public final class Diff {
       if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint())
         continue;
 
-      // List invs = ppt.getInvariants();
-      List invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);
+      // List<Invariant> invs = ppt.getInvariants();
+      List<Invariant> invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (Iterator<PptConditional> i2 = ppt.cond_iterator(); i2.hasNext(); ) {
           PptConditional pptCond = i2.next();
-          List invsCond = UtilMDE.sortList (pptCond.getInvariants(),
+          List<Invariant> invsCond = UtilMDE.sortList (pptCond.getInvariants(),
                                           PptTopLevel.icfp);
-          // List invsCond = pptCond.getInvariants();
+          // List<Invariant> invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
       }
@@ -628,11 +628,11 @@ public final class Diff {
                              boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator<Pair> opi = new OrderedPairIterator(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
+    Iterator<Pair<PptTopLevel,PptTopLevel>> opi = new OrderedPairIterator<PptTopLevel>(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
     while (opi.hasNext()) {
-      Pair ppts = opi.next();
-      PptTopLevel ppt1 = (PptTopLevel) ppts.a;
-      PptTopLevel ppt2 = (PptTopLevel) ppts.b;
+      Pair<PptTopLevel,PptTopLevel> ppts = opi.next();
+      PptTopLevel ppt1 = ppts.a;
+      PptTopLevel ppt2 = ppts.b;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
         PptNode node = diffPptTopLevel(ppt1, ppt2, map1, map2,
                                        includeUnjustified);
@@ -700,16 +700,16 @@ public final class Diff {
                       PPT_COMPARATOR.compare(ppt1, ppt2) == 0,
                       "Program points do not correspond");
 
-    List invs1;
+    List<Invariant> invs1;
     if (ppt1 != null && !treeManip) {
-      invs1 = (List) map1.get(ppt1);
+      invs1 = map1.get(ppt1);
       Collections.sort(invs1, invSortComparator1);
     }
 
     else if (ppt1 != null && treeManip && !isCond(ppt1)) {
-      HashSet repeatFilter = new HashSet();
-      ArrayList ret = new ArrayList ();
-      invs1 = (List) map1.get(ppt1);
+      HashSet<String> repeatFilter = new HashSet<String>();
+      ArrayList<Invariant> ret = new ArrayList<Invariant> ();
+      invs1 = map1.get(ppt1);
       for (Iterator<Invariant> j = invs1.iterator(); j.hasNext(); ) {
         Invariant inv = j.next();
         if (/*inv.justified() && */inv instanceof Implication) {
@@ -737,18 +737,18 @@ public final class Diff {
     }
 
     else {
-      invs1 = Collections.EMPTY_LIST;
+      invs1 = new ArrayList<Invariant>();
     }
 
-    List invs2;
+    List<Invariant> invs2;
     if (ppt2 != null && !treeManip) {
-      invs2 = (List) map2.get(ppt2);
+      invs2 = map2.get(ppt2);
       Collections.sort(invs2, invSortComparator2);
     } else {
       if ( false && treeManip && isCond (ppt1)) {
         // remember, only want to mess with the second list
         invs2 = findCondPpt (manip1, ppt1);
-        List tmpList = findCondPpt (manip2, ppt1);
+        List<Invariant> tmpList = findCondPpt (manip2, ppt1);
 
         invs2.addAll (tmpList);
 
@@ -765,11 +765,11 @@ public final class Diff {
         Collections.sort (invs2, invSortComparator2);
       }
       else {
-        invs2 = Collections.EMPTY_LIST;
+        invs2 = new ArrayList<Invariant>();
       }
     }
 
-    Iterator<Pair> opi = new OrderedPairIterator(invs1.iterator(), invs2.iterator(),
+    Iterator<Pair<Invariant,Invariant>> opi = new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(),
                                            invPairComparator);
     while (opi.hasNext()) {
       Pair invariants = opi.next();
@@ -797,7 +797,7 @@ public final class Diff {
     return (ppt instanceof PptConditional);
   }
 
-  private List findCondPpt (PptMap manip, PptTopLevel ppt) {
+  private List<Invariant> findCondPpt (PptMap manip, PptTopLevel ppt) {
     // targetName should look like this below
     // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
     String targetName = ppt.name();
@@ -814,11 +814,11 @@ public final class Diff {
     }
     //    System.out.println ("Could not find the left hand side of implication!!!");
     System.out.println ("LHS Missing: " + targ);
-    return Collections.EMPTY_LIST;
+    return new ArrayList<Invariant>();
   }
 
 
-  private List findNormalPpt (PptMap manip, PptTopLevel ppt) {
+  private List<Invariant> findNormalPpt (PptMap manip, PptTopLevel ppt) {
     // targetName should look like this below
     // Contest.smallestRoom(II)I:::EXIT9
     String targetName = ppt.name();
@@ -835,7 +835,7 @@ public final class Diff {
     }
     //    System.out.println ("Could not find the left hand side of implication!!!");
     System.out.println ("LHS Missing: " + targetName);
-    return Collections.EMPTY_LIST;
+    return new ArrayList<Invariant>();
   }
 
 
@@ -843,7 +843,7 @@ public final class Diff {
    * Use the comparator for sorting both sets and creating the pair
    * tree.
    **/
-  public void setAllInvComparators(Comparator c) {
+  public void setAllInvComparators(Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
     setInvPairComparator(c);
@@ -853,13 +853,13 @@ public final class Diff {
    * If the classname is non-null, returns the comparator named by the
    * classname.  Else, returns the default.
    **/
-  private static Comparator selectComparator
+  private static Comparator<Invariant> selectComparator
     (String classname, Comparator defaultComparator) throws
     ClassNotFoundException, InstantiationException, IllegalAccessException {
 
     if (classname != null) {
       Class cls = Class.forName(classname);
-      Comparator cmp = (Comparator) cls.newInstance();
+      Comparator<Invariant> cmp = (Comparator<Invariant>) cls.newInstance();
       return cmp;
     } else {
       return defaultComparator;
@@ -867,17 +867,17 @@ public final class Diff {
   }
 
   /** Use the comparator for sorting the first set. **/
-  public void setInvSortComparator1(Comparator c) {
+  public void setInvSortComparator1(Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
   /** Use the comparator for sorting the second set. **/
-  public void setInvSortComparator2(Comparator c) {
+  public void setInvSortComparator2(Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
   /** Use the comparator for creating the pair tree. **/
-  public void setInvPairComparator(Comparator c) {
+  public void setInvPairComparator(Comparator<Invariant> c) {
     invPairComparator = c;
   }
 

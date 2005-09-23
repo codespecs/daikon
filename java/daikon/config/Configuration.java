@@ -78,7 +78,7 @@ public final class Configuration
 
   public void replay() {
     // Make a copy of the statements, since apply mutates the list.
-    List<String> copy = new ArrayList(statements);
+    List<String> copy = new ArrayList<String>(statements);
     Iterator<String> iter = copy.iterator();
     while (iter.hasNext()) {
       String statement = iter.next();

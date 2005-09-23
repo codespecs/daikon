@@ -112,8 +112,8 @@ public final class DiscReasonMap {
    * into the method call. If the user wishes for any of the 3 params to be
    * a wildcard, they can pass that/those param(s) in as null.
    **/
-  public static List returnMatches_from_ppt(InvariantInfo invInfo) {
-    ArrayList result = new ArrayList();
+  public static List<DiscardInfo> returnMatches_from_ppt(InvariantInfo invInfo) {
+    ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
     HashMap vars_map_from_ppt = (HashMap) the_map.get(invInfo.ppt());
 
     if (vars_map_from_ppt == null) {
@@ -147,8 +147,9 @@ public final class DiscReasonMap {
     return result;
   }
 
-  // Helper function used to combine all the DiscardInfo lists associated with a set of vars
-  // at a ppt.  Only called when we know ppt has at least 1 DiscardInfo associated with it
+  // Helper function used to combine all the DiscardInfo lists associated
+  // with a set of vars at a ppt.  Only called when we know ppt has at
+  // least 1 DiscardInfo associated with it
   private static List all_vars_tied_from_ppt(String ppt) {
     HashMap vars_map = (HashMap) the_map.get(ppt);
     Assert.assertTrue(vars_map != null);

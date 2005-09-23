@@ -56,14 +56,14 @@ public class XorVisitorTester extends TestCase {
     Invariant unjO = new DiffDummyInvariant(sliceo, "O", false);
 
     InvMap map1 = new InvMap();
-    map1.put(A, Arrays.asList(new Object[] {W, X1, Y}));
-    map1.put(B, Arrays.asList(new Object[] {Y}));
-    map1.put(D, Arrays.asList(new Object[] {M, unjN, unjO}));
+    map1.put(A, Arrays.asList(new Invariant[] {W, X1, Y}));
+    map1.put(B, Arrays.asList(new Invariant[] {Y}));
+    map1.put(D, Arrays.asList(new Invariant[] {M, unjN, unjO}));
 
     InvMap map2 = new InvMap();
-    map2.put(A, Arrays.asList(new Object[] {W, X2, Z}));
-    map2.put(C, Arrays.asList(new Object[] {Z}));
-    map2.put(D, Arrays.asList(new Object[] {unjM, N}));
+    map2.put(A, Arrays.asList(new Invariant[] {W, X2, Z}));
+    map2.put(C, Arrays.asList(new Invariant[] {Z}));
+    map2.put(D, Arrays.asList(new Invariant[] {unjM, N}));
 
     diff.setAllInvComparators(new Invariant.ClassVarnameFormulaComparator());
     RootNode root = diff.diffInvMap(map1, map2, false);
@@ -72,10 +72,10 @@ public class XorVisitorTester extends TestCase {
     InvMap result = v.getResult();
 
     InvMap expected = new InvMap();
-    expected.put(A, Arrays.asList(new Object[] {X1, X2, Y, Z}));
-    expected.put(B, Arrays.asList(new Object[] {Y}));
-    expected.put(C, Arrays.asList(new Object[] {Z}));
-    expected.put(D, Arrays.asList(new Object[] {M, N}));
+    expected.put(A, Arrays.asList(new Invariant[] {X1, X2, Y, Z}));
+    expected.put(B, Arrays.asList(new Invariant[] {Y}));
+    expected.put(C, Arrays.asList(new Invariant[] {Z}));
+    expected.put(D, Arrays.asList(new Invariant[] {M, N}));
 
     assertEquals(expected.toString(), result.toString());
   }

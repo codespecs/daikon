@@ -391,16 +391,16 @@ public final class ONEOFSCALAR
   }
 
 #if defined(STRING) || defined(ELTSTRING)
-  static Comparator comparator = new UtilMDE.NullableStringComparator();
+  static Comparator<String> comparator = new UtilMDE.NullableStringComparator();
   #define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
-  static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
+  static Comparator<long[]> comparator = new ArraysMDE.LongArrayComparatorLexical();
 #define COMPARATOR_ARG , comparator
 #elif defined(FLOATSEQUENCE)
-  static Comparator comparator = new ArraysMDE.DoubleArrayComparatorLexical();
+  static Comparator<double[]> comparator = new ArraysMDE.DoubleArrayComparatorLexical();
 #define COMPARATOR_ARG , comparator
 #elif defined(STRINGSEQUENCE)
-  static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical();
+  static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical(); // need to figure out proper generic type -MDE
   #define COMPARATOR_ARG , comparator
 #else
   #define COMPARATOR_ARG
@@ -1983,7 +1983,7 @@ public final class ONEOFSCALAR
    *                   the variable order in parent_ppt.
    * @param parent_ppt Slice that will contain the new invariant
    */
-  public Invariant merge (List invs, PptSlice parent_ppt) {
+  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     ONEOFSCALAR  first = (ONEOFSCALAR ) invs.get(0);

@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  * f1 -> [ "instanceof" Type() ]
  */
 public class InstanceOfExpression implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public RelationalExpression f0;
    public NodeOptional f1;
@@ -36,4 +38,3 @@ public class InstanceOfExpression implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

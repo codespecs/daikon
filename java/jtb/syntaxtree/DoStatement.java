@@ -15,6 +15,8 @@ package jtb.syntaxtree;
  * f6 -> ";"
  */
 public class DoStatement implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeToken f0;
    public Statement f1;
@@ -73,4 +75,3 @@ public class DoStatement implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

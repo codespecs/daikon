@@ -20,7 +20,7 @@ public class VarInfoNameDriver {
     run(System.in, System.out);
   }
 
-  private static final Map handlers = new HashMap<String,Handler>();
+  private static final Map<String,Handler> handlers = new HashMap<String,Handler>();
 
   public static void run(InputStream commands, PrintStream output) {
     try {
@@ -34,7 +34,7 @@ public class VarInfoNameDriver {
     throws IOException
   {
     BufferedReader commands = new BufferedReader(new InputStreamReader(_commands));
-    Map<String,Object> variables = new HashMap<String,Object>();
+    Map<String,VarInfoName> variables = new HashMap<String,VarInfoName>();
 
     String command;
     while ((command = commands.readLine()) != null) {
@@ -45,7 +45,7 @@ public class VarInfoNameDriver {
 
       // tokenize arguments
       StringTokenizer tok = new StringTokenizer(command);
-      LinkedList list = new LinkedList();
+      LinkedList<String> list = new LinkedList<String>();
       while (tok.hasMoreTokens()) {
         list.add(tok.nextToken());
       }
@@ -69,12 +69,12 @@ public class VarInfoNameDriver {
   }
 
   public static interface Handler {
-    public void handle(Map vars, String[] args, PrintStream out);
+    public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out);
   }
 
   // VarInfoName parse(String);
   private static class Parse implements Handler {
-    public void handle(Map vars, String[] args, PrintStream out) {
+    public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
       Assert.assertTrue(args.length == 2);
       String var = args[0];
       String expr = args[1];
@@ -325,10 +325,10 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyFunctionOfN(String function, List vars)
   private static class FunctionOfN implements Handler {
-    public void handle(Map vars, String[] args, PrintStream out) {
+    public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
       Assert.assertTrue(args.length >= 4);
       String func = args[1];
-      List function_vars = new Vector();
+      List<VarInfoName> function_vars = new Vector<VarInfoName>();
       for (int x=2; x<args.length; x++)
         function_vars.add((VarInfoName)vars.get(args[x]));
       VarInfoName result = VarInfoName.applyFunctionOfN(func,function_vars);
@@ -340,7 +340,7 @@ public class VarInfoNameDriver {
 
   // public VarInfoName applyField(String field)
   private static class Field implements Handler {
-    public void handle(Map vars, String[] args, PrintStream out) {
+    public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
       Assert.assertTrue(args.length == 3);
       VarInfoName var = (VarInfoName)vars.get(args[1]);
       String fieldname = args[2];
@@ -353,7 +353,7 @@ public class VarInfoNameDriver {
 
   // public String[] QuantHelper.format_jml(VarInfoName[] roots)
 //   private static class QuantifyFormatJML implements Handler {
-//     public void handle(Map vars, String[] args, PrintStream out) {
+//     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
 //       Assert.assertTrue(args.length >= 1);
 //       VarInfoName roots[] = new VarInfoName [args.length];
 //       for (int x=0; x<args.length; x++)
@@ -367,7 +367,7 @@ public class VarInfoNameDriver {
 
 //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise)
 //   private static class QuantifyFormatJMLElementwise implements Handler {
-//     public void handle(Map vars, String[] args, PrintStream out) {
+//     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
 //       Assert.assertTrue(args.length >= 1);
 //       VarInfoName roots[] = new VarInfoName [args.length];
 //       for (int x=0; x<args.length; x++)
@@ -381,7 +381,7 @@ public class VarInfoNameDriver {
 
 //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise,boolean forall)
 //   private static class QuantifyFormatJMLExists implements Handler {
-//     public void handle(Map vars, String[] args, PrintStream out) {
+//     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
 //       Assert.assertTrue(args.length >= 1);
 //       VarInfoName roots[] = new VarInfoName [args.length];
 //       for (int x=0; x<args.length; x++)

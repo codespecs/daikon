@@ -11,6 +11,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> ( [ <IDENTIFIER> ] "{" StructDeclarationList() "}" | <IDENTIFIER> )
  */
 public class StructOrUnionSpecifier implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public StructOrUnion f0;
    public NodeChoice f1;
 

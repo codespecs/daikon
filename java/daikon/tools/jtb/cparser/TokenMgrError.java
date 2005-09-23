@@ -4,6 +4,8 @@ package daikon.tools.jtb.cparser;
 
 public class TokenMgrError extends Error
 {
+  static final long serialVersionUID = 20050923L;
+
    /*
     * Ordinals for various reasons why an Error of this type can be thrown.
     */

@@ -3,6 +3,7 @@ package daikon.test.diff;
 import junit.framework.*;
 import daikon.*;
 import daikon.diff.*;
+import daikon.inv.Invariant;
 
 import java.util.*;
 
@@ -12,9 +13,9 @@ public class InvMapTester extends TestCase {
   private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptB = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptC = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
-  private List invsA = new ArrayList();
-  private List invsB = new ArrayList();
-  private List invsC = new ArrayList();
+  private List<Invariant> invsA = new ArrayList<Invariant>();
+  private List<Invariant> invsB = new ArrayList<Invariant>();
+  private List<Invariant> invsC = new ArrayList<Invariant>();
 
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(LogHelper.INFO);

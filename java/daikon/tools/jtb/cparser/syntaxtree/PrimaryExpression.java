@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ( <IDENTIFIER> | Constant() | "(" Expression() ")" )
  */
 public class PrimaryExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public NodeChoice f0;
 
    public PrimaryExpression(NodeChoice n0) {

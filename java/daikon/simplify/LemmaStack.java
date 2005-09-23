@@ -53,7 +53,7 @@ public class LemmaStack {
    **/
   public static boolean dkconfig_synchronous_errors = false;
 
-  private Stack lemmas;
+  private Stack<Lemma> lemmas;
   private SessionManager session;
 
   /** Tell Simplify to assume a lemma, which should already be on our
@@ -107,7 +107,7 @@ public class LemmaStack {
 
   public LemmaStack() throws SimplifyError {
     startProver();
-    lemmas = new Stack();
+    lemmas = new Stack<Lemma>();
     if (daikon.inv.Invariant.dkconfig_simplify_define_predicates)
       pushLemmas(Lemma.lemmasVector());
   }
@@ -145,9 +145,9 @@ public class LemmaStack {
   }
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
-  public void pushLemmas(Vector newLemmas) throws SimplifyError {
+  public void pushLemmas(Vector<Lemma> newLemmas) throws SimplifyError {
     for (int i = 0; i < newLemmas.size(); i++) {
-      Lemma l = (Lemma)newLemmas.elementAt(i);
+      Lemma l = newLemmas.elementAt(i);
       pushLemma(l);
     }
   }
@@ -221,7 +221,7 @@ public class LemmaStack {
    * subset of that set does. Note that we may not return the smallest
    * such set. The set is currently returned in the same order as the
    * invariants appeared in invs[] */
-  private Vector minimizeAssumptions(Lemma[] invs, String consequence)
+  private Vector<Lemma> minimizeAssumptions(Lemma[] invs, String consequence)
     throws TimeoutException
   {
     boolean[] excluded = new boolean[invs.length];
@@ -257,8 +257,8 @@ public class LemmaStack {
     return new_invs;
   }
 
-  private static Vector filterByClass(Vector lems, Set blacklist) {
-    Vector new_lems = new Vector();
+  private static Vector<Lemma> filterByClass(Vector<Lemma> lems, Set blacklist) {
+    Vector<Lemma> new_lems = new Vector<Lemma>();
     for (int i = 0; i < lems.size(); i++) {
       if (!blacklist.contains(((Lemma)lems.elementAt(i)).invClass())) {
         new_lems.add(lems.elementAt(i));
@@ -267,27 +267,28 @@ public class LemmaStack {
     return new_lems;
   }
 
-  private void minimizeClasses_rec(String result, Vector lems,
-                                   Set exclude, Set black, Set gray,
-                                   Set found) throws TimeoutException {
-    Iterator found_it = found.iterator();
+  private void minimizeClasses_rec(String result, Vector<Lemma> lems,
+                                   Set<Class> exclude,
+                                   Set<Set<Class>> black, Set<Set<Class>> gray,
+                                   Set<Set<Class>> found) throws TimeoutException {
+    Iterator<Set<Class>> found_it = found.iterator();
     while (found_it.hasNext()) {
-      Set known = (Set)found_it.next();
+      Set<Class> known = found_it.next();
       // If known and exclude are disjoint, return
-      Set exclude2 = new HashSet(exclude);
+      Set<Class> exclude2 = new HashSet<Class>(exclude);
       exclude2.retainAll(known);
       if (exclude2.isEmpty())
         return;
     }
     int mark = markLevel();
-    Vector filtered = filterByClass(lems, exclude);
+    Vector<Lemma> filtered = filterByClass(lems, exclude);
     pushLemmas(filtered);
     boolean holds = checkString(result) == 'T';
     popToMark(mark);
     if (holds) {
-      Vector mini
+      Vector<Lemma> mini
         = minimizeAssumptions((Lemma[])filtered.toArray(new Lemma[0]), result);
-      Set used = new HashSet();
+      Set<Class> used = new HashSet<Class>();
       for (int i = 0; i < mini.size(); i++) {
         Class c = ((Lemma)mini.elementAt(i)).invClass();
         if (c != null)
@@ -302,9 +303,9 @@ public class LemmaStack {
       System.err.println();
 
       found.add(used);
-      Iterator steps_it = used.iterator();
+      Iterator<Class> steps_it = used.iterator();
       while (steps_it.hasNext()) {
-        Set step = new HashSet(exclude);
+        Set<Class> step = new HashSet<Class>(exclude);
         step.add(steps_it.next());
         if (!black.contains(step) && !gray.contains(step)) {
           gray.add(step);
@@ -315,16 +316,16 @@ public class LemmaStack {
     black.add(exclude);
   }
 
-  public Vector minimizeClasses(String result) {
-    Vector assumptions = new Vector(lemmas);
-    Vector found = new Vector();
+  public Vector<Set<Class>> minimizeClasses(String result) {
+    Vector<Lemma> assumptions = new Vector<Lemma>(lemmas);
+    Vector<Set<Class>> found = new Vector<Set<Class>>();
     try {
       unAssumeAll(lemmas);
       if (checkString(result) == 'F') {
-        Set exclude = new HashSet();
-        Set black = new HashSet();
-        Set gray = new HashSet();
-        Set found_set = new HashSet();
+        Set<Class> exclude = new HashSet<Class>();
+        Set<Set<Class>> black = new HashSet<Set<Class>>();
+        Set<Set<Class>> gray = new HashSet<Set<Class>>();
+        Set<Set<Class>> found_set = new HashSet<Set<Class>>();
         minimizeClasses_rec(result, assumptions, exclude, black, gray,
                             found_set);
         found.addAll(found_set);
@@ -347,10 +348,10 @@ public class LemmaStack {
 
   /** Return a minimal set of assumptions from the stack that imply a
    * given string. */
-  private Vector minimizeReasons(String str) throws SimplifyError {
+  private Vector<Lemma> minimizeReasons(String str) throws SimplifyError {
     Assert.assertTrue(checkString(str) == 'T');
     unAssumeAll(lemmas);
-    Vector result;
+    Vector<Lemma> result;
     try {
       Lemma[] lemmaAry = (Lemma[])lemmas.toArray(new Lemma[0]);
       // shuffle(lemmaAry, new Random());
@@ -367,7 +368,7 @@ public class LemmaStack {
   /** Return a set of contradictory assumptions from the stack (as a
    * vector of Lemmas) which are minimal in the sense that no proper
    * subset of them are contradictory as far as Simplify can tell. */
-  public Vector minimizeContradiction() throws SimplifyError {
+  public Vector<Lemma> minimizeContradiction() throws SimplifyError {
     return minimizeReasons("(OR)");
   }
 
@@ -375,18 +376,18 @@ public class LemmaStack {
    * Lemmas) that imply the given Lemma and which are minimal in the
    * sense that no proper subset of them imply it as far as Simplify
    * can tell. */
-  public Vector minimizeProof(Lemma lem) throws SimplifyError {
+  public Vector<Lemma> minimizeProof(Lemma lem) throws SimplifyError {
     return minimizeReasons(lem.formula);
   }
 
   /** Remove some lemmas from the stack, such that our set of
    * assumptions is no longer contradictory. This is not a very
    * principled thing to do, but it's better than just giving up. The
-   * approach is relatively slow, trying not too remove too many
+   * approach is relatively slow, trying not to remove too many
    * lemmas. */
   public void removeContradiction() throws SimplifyError {
     do {
-      Vector problems = minimizeContradiction();
+      Vector<Lemma> problems = minimizeContradiction();
       if (problems.size() == 0) {
         throw new SimplifyError("Minimization failed");
       }
@@ -441,9 +442,9 @@ public class LemmaStack {
 
   /** Convenience method to print a vector of lemmas, in both their
    * human-readable and Simplify forms. */
-  public static void printLemmas(java.io.PrintStream out, Vector v) {
+  public static void printLemmas(java.io.PrintStream out, Vector<Lemma> v) {
     for (int i = 0; i < v.size(); i++) {
-      Lemma l = (Lemma)v.elementAt(i);
+      Lemma l = v.elementAt(i);
       out.println(l.summarize());
       out.println("    " + l.formula);
     }
@@ -458,7 +459,7 @@ public class LemmaStack {
     }
   }
 
-  private static SortedSet ints_seen = new TreeSet();
+  private static SortedSet<Long> ints_seen = new TreeSet<Long>();
 
   /** Keep track that we've seen this number in formulas, for the sake
    * of assumeOrdering. */
@@ -467,16 +468,16 @@ public class LemmaStack {
   }
 
   public static void clearInts() {
-    ints_seen = new TreeSet();
+    ints_seen = new TreeSet<Long>();
   }
 
   /** For all the integers we've seen, tell Simplify about the
    * ordering between them. */
   public void pushOrdering() throws SimplifyError {
-    Iterator longs_it = ints_seen.iterator();
+    Iterator<Long> longs_it = ints_seen.iterator();
     long last_long = Long.MIN_VALUE;
     while (longs_it.hasNext()) {
-      long l = ((Long)longs_it.next()).longValue();
+      long l = longs_it.next().longValue();
       if (l == Long.MIN_VALUE)
         continue;
       Assert.assertTrue(l != last_long);

@@ -21,10 +21,10 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
     private int nonce;
 
     // Gets rid of repeated reports
-    private HashSet repeatFilter = new HashSet();
+    private HashSet<String> repeatFilter = new HashSet<String>();
 
     // Accumulation of extracted consequents
-    private Vector<Invariant> accum = new Vector();
+    private Vector<Invariant> accum = new Vector<Invariant>();
 
 
     public ConsequentExtractorVisitor () {

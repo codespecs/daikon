@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> [ ( "==" | "!=" ) EqualityExpression() ]
  */
 public class EqualityExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public RelationalExpression f0;
    public NodeOptional f1;
 

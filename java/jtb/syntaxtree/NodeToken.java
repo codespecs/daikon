@@ -10,9 +10,11 @@ import java.util.*;
  * is used, also contains a Vector of preceding special tokens.
  */
 public class NodeToken implements Node {
+   static final long serialVersionUID = 20050923L;
+
    public NodeToken(String s) {
       this(s, -1, -1, -1, -1, -1);
-}
+   }
 
    public NodeToken(String s, int kind, int beginLine, int beginColumn, int endLine, int endColumn) {
       tokenImage = s;

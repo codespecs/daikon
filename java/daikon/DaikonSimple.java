@@ -125,12 +125,11 @@ public static void mainHelper(final String[] args) throws IOException,
     Daikon.using_DaikonSimple = true;
 
     // Read command line options
-    Set[] files = Daikon.read_options(args, usage);
-
+    Daikon.FileOptions files = Daikon.read_options(args, usage);
     // DaikonSimple does not supply nor use the spinfo_files and map_files
-    Assert.assertTrue(files.length == 4);
-    Set<File> decls_files = files[0];
-    Set<String> dtrace_files = files[1];
+    Set<File> decls_files = files.decls;
+    Set<String> dtrace_files = files.dtrace;
+
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       throw new Daikon.TerminationMessage(
           "No .decls or .dtrace files specified");

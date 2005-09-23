@@ -104,6 +104,8 @@ public class Annotation {
    * represent a well-formed annotation.
    */
   public static class MalformedAnnotationException extends Exception {
+  static final long serialVersionUID = 20050923L;
+
     public MalformedAnnotationException(String s) {
       super(s);
     }

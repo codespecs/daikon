@@ -91,7 +91,7 @@ public final class VarInfoAux
     tok.quoteChar('\"');
     tok.ordinaryChars(',', ',');
     tok.ordinaryChars('=', '=');
-    Map map = theDefault.map;
+    Map<String,String> map = theDefault.map;
 
     String key = "";
     String value = "";
@@ -103,7 +103,7 @@ public final class VarInfoAux
         // here rather than above to save time when there are no
         // tokens.
 
-        map = new HashMap(theDefault.map);
+        map = new HashMap<String,String>(theDefault.map);
       }
 
       String token;
@@ -210,7 +210,7 @@ public final class VarInfoAux
   /**
    * Create a new VarInfoAux with default options.
    **/
-  private VarInfoAux (Map map) {
+  private VarInfoAux (Map<String,String> map) {
     this.map = map;
     this.isInterned = false;
   }
@@ -250,7 +250,7 @@ public final class VarInfoAux
     if (this.isInterned) return this;
 
     if (theMap == null) {
-      theMap = (new HashMap());
+      theMap = new HashMap<VarInfoAux,VarInfoAux>();
     }
 
     VarInfoAux result;
@@ -284,7 +284,7 @@ public final class VarInfoAux
    * Does not modify this.
    **/
   public VarInfoAux setValue (String key, String value) {
-    HashMap newMap = new HashMap (this.map);
+    HashMap<String,String> newMap = new HashMap<String,String> (this.map);
     newMap.put (key.intern(), value.intern());
     return new VarInfoAux(newMap).intern();
   }

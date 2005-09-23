@@ -10,7 +10,7 @@ import java.util.Vector;
  * we give to Simplify as background, with hand-written descriptions.
  **/
 
-public class Lemma implements Comparable {
+public class Lemma implements Comparable<Lemma> {
   public String summary;
   public String formula;
 
@@ -29,14 +29,13 @@ public class Lemma implements Comparable {
     return null;
   }
 
-  public int compareTo(Object o) {
-    Lemma other = (Lemma)o;
+  public int compareTo(Lemma other) {
     return summarize().compareTo(other.summarize());
   }
 
   /** Convenience function to give you lemmas[], but as a vector. */
-  public static Vector lemmasVector() {
-    Vector v = new Vector();
+  public static Vector<Lemma> lemmasVector() {
+    Vector<Lemma> v = new Vector<Lemma>();
     for (int i = 0; i < lemmas.length; i++) {
       v.add(lemmas[i]);
     }

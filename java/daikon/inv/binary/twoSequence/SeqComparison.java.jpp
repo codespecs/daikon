@@ -287,7 +287,7 @@ public class SEQSEQINTEQUAL
   static final Logger debug = Logger.getLogger ("daikon.inv.binary.twoSequence."
                                                 + SEQSEQINTEQUALstring);
 
-  static Comparator comparator = ARRAYCOMPARATOR;
+  static Comparator<PRIMITIVE[]> comparator = ARRAYCOMPARATOR;
 
   boolean orderMatters;
 

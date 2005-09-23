@@ -7,6 +7,7 @@ import java.io.*;
  * number at which the exception occurred.
  **/
 public class FileIOException extends IOException {
+  static final long serialVersionUID = 20050923L;
 
   public final String fileName;
   public final int lineNumber;

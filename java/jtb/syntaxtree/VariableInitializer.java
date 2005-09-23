@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  *       | Expression()
  */
 public class VariableInitializer implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeChoice f0;
 
@@ -33,4 +35,3 @@ public class VariableInitializer implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

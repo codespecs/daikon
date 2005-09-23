@@ -69,7 +69,7 @@ public class InvariantDoclet
     //go through all of the classes and intialize the map
     for (int i = 0; i < clazzes.length; i++) {
       ClassDoc cd = clazzes[i];
-      cmap.put (cd, new TreeSet());
+      cmap.put (cd, new TreeSet<ClassDoc>());
     }
 
     //go through the list again and put in the derived class information
@@ -77,7 +77,7 @@ public class InvariantDoclet
       ClassDoc cd = clazzes[i];
       ClassDoc super_c = cd.superclass();
       if (super_c != null) {
-        Set derived = cmap.get (super_c);
+        Set<ClassDoc> derived = cmap.get (super_c);
         if (derived == null) {
            // System.out.println ("NO SUPER: " + cd + " s: " + super_c);
         } else {
@@ -250,9 +250,9 @@ public class InvariantDoclet
       }
 
       //get a list of any other configuration variables
-      Vector config_vars = find_fields (dc, Configuration.PREFIX);
+      Vector<FieldDoc> config_vars = find_fields (dc, Configuration.PREFIX);
       for (int i = 0; i < config_vars.size(); i++) {
-        FieldDoc f =   (FieldDoc) config_vars.get (i);
+        FieldDoc f = config_vars.get (i);
         if (f.name().equals (Configuration.PREFIX + "enabled")) {
           config_vars.remove (i);
           break;
@@ -353,9 +353,9 @@ public class InvariantDoclet
    * null)
    */
 
-  public Vector find_fields (ClassDoc cd, String prefix) {
+  public Vector<FieldDoc> find_fields (ClassDoc cd, String prefix) {
 
-    Vector list = new Vector();
+    Vector<FieldDoc> list = new Vector<FieldDoc>();
 
     FieldDoc[] fields = cd.fields();
     for (int i = 0; i < fields.length; i++) {

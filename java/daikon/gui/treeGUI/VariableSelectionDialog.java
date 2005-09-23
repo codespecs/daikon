@@ -15,6 +15,7 @@ import daikon.inv.filter.InvariantFilters;
 //  the variables in a Ppt, and allows the user to select variables of interest.
 
 class VariableSelectionDialog extends JDialog {
+  static final long serialVersionUID = 20050923L;
 
   final Vector selectedVarNames = new Vector();
 

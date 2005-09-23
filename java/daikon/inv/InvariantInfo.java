@@ -58,7 +58,7 @@ public class InvariantInfo {
    * e.g., if vars is "var1,var2,var3", this method will return
    * ["var1,var2,var3", "var1,var3,var2", "var2,var1,var3"... etc.]
    */
-  public List var_permutations() {
+  public List<String> var_permutations() {
     if (vars == null)
       return null;
 
@@ -66,7 +66,7 @@ public class InvariantInfo {
     // a complicated routine that generates all permutations
     StringTokenizer st = new StringTokenizer(vars, ",");
     Assert.assertTrue(st.countTokens() <= 3);
-    ArrayList result = new ArrayList(3);
+    ArrayList<String> result = new ArrayList<String>(3);
     if (st.countTokens() == 1) {
       result.add(vars);
       return result;

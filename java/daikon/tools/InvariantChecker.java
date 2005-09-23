@@ -47,7 +47,7 @@ public class InvariantChecker {
       );
 
   public static File inv_file = null;
-  public static List dtrace_files = new ArrayList();
+  public static List<String> dtrace_files = new ArrayList<String>();
   static File output_file;
   static PrintStream output_stream = System.out;
   static int error_cnt = 0;

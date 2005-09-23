@@ -63,14 +63,14 @@ public class DynamicConstants implements Serializable {
                           = Logger.getLogger ("daikon.DynamicConstants");
 
   /** List of dynamic constants. **/
-  List<Constant> con_list = new ArrayList();
+  List<Constant> con_list = new ArrayList<Constant>();
 
   /** List of variables that have always been missing. **/
-  List<Constant> missing_list = new ArrayList();
+  List<Constant> missing_list = new ArrayList<Constant>();
 
   /** List of all variables. **/
   Constant[] all_vars;
-  List<Constant> all_list = new ArrayList();
+  List<Constant> all_list = new ArrayList<Constant>();
 
   /** Program point of these constants. **/
   PptTopLevel ppt = null;
@@ -164,14 +164,16 @@ public class DynamicConstants implements Serializable {
 
   /** Compares two constants based on the vi_index of their variable. **/
   public static final class ConIndexComparator
-    implements Comparator, Serializable {
+    implements Comparator<Constant>, Serializable {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20050923L;
 
     private ConIndexComparator() {
     }
 
-    public int compare(Object o1, Object o2) {
-      Constant con1 = (Constant) o1;
-      Constant con2 = (Constant) o2;
+    public int compare(Constant con1, Constant con2) {
       return (con1.vi.varinfo_index - con2.vi.varinfo_index);
     }
 
@@ -212,8 +214,8 @@ public class DynamicConstants implements Serializable {
    */
   public void add (ValueTuple vt, int count) {
 
-    List<Constant> non_missing = new ArrayList();
-    List<Constant> non_con = new ArrayList();
+    List<Constant> non_missing = new ArrayList<Constant>();
+    List<Constant> non_con = new ArrayList<Constant>();
 
     // Check each constant, destroy any that are missing or different
     for (Iterator<Constant> i = con_list.iterator(); i.hasNext(); ) {
@@ -377,7 +379,7 @@ public class DynamicConstants implements Serializable {
     // between the non-constants and other variables will have already
     // been created when those other variables became non-constants.
     if (noncons.size() > 0) {
-      List cons = new ArrayList();
+      List<Constant> cons = new ArrayList<Constant>();
       cons.addAll (con_list);
       cons.addAll (noncons);
       debug.fine ("Instantiating non constants in ppt: " + ppt.name());
@@ -607,7 +609,7 @@ public class DynamicConstants implements Serializable {
 
     // Find all of the variable (non-constant) non-missing
     // integral/float leaders
-    List vars = new ArrayList();
+    List<Constant> vars = new ArrayList<Constant>();
     for (Constant con : all) {
       if (con.always_missing || con.previous_missing)
         continue;
@@ -623,7 +625,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // Find all of the new non-constant integer/float leaders
-    List new_leaders = new ArrayList();
+    List<Constant> new_leaders = new ArrayList<Constant>();
     for (Constant con : new_noncons) {
       if (!con.vi.isCanonical())
         continue;
@@ -816,16 +818,16 @@ public class DynamicConstants implements Serializable {
     // Get a list of all remaining constants and clear the existing list
     // (if the existing list is not cleared, constant slices will not
     // be created)
-    List noncons = con_list;
+    List<Constant> noncons = con_list;
     for (Constant con : con_list) {
       con.constant = false;
       con.previous_constant = true;
     }
-    con_list = new ArrayList();
+    con_list = new ArrayList<Constant>();
 
     // Don't do anything with variables that have always been missing.  They
     // should have no invariants over them.
-    List non_missing = new ArrayList();
+    List<Constant> non_missing = new ArrayList<Constant>();
 
     instantiate_new_views (noncons, non_missing);
 
@@ -858,7 +860,7 @@ public class DynamicConstants implements Serializable {
       LogHelper.setLevel ("daikon.Debug", Level.OFF);
 
     // Get constant leaders
-    List<Constant> leaders = new ArrayList(100);
+    List<Constant> leaders = new ArrayList<Constant>(100);
     for (int i = 0; i < con_list.size(); i++) {
       Constant con = (Constant) con_list.get(i);
       if (!con.vi.isCanonical())
@@ -866,7 +868,7 @@ public class DynamicConstants implements Serializable {
       leaders.add (con);
     }
 
-    List<PptSlice>new_views = new ArrayList(100);
+    List<PptSlice> new_views = new ArrayList<PptSlice>(100);
     int mod = ValueTuple.MODIFIED;
 
     // Unary slices/invariants

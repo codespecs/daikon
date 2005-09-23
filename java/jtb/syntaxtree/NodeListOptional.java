@@ -10,6 +10,8 @@ import java.util.*;
  * Represents an optional grammar list, e.g. ( A )*
  */
 public class NodeListOptional implements NodeListInterface {
+   static final long serialVersionUID = 20050923L;
+
    public NodeListOptional() {
       nodes = new Vector<Node>();
    }
@@ -47,4 +49,3 @@ public class NodeListOptional implements NodeListInterface {
    private Node parent;
    public Vector<Node> nodes;
 }
-

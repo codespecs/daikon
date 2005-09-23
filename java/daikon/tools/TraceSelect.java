@@ -180,9 +180,9 @@ public class TraceSelect {
         while (dec.hasNext()) {
           mrs.accept (dec.next());
         }
-        List al = new ArrayList();
+        List<String> al = new ArrayList<String>();
 
-        for (Iterator i = mrs.valuesIter(); i.hasNext();) {
+        for (Iterator<String> i = mrs.valuesIter(); i.hasNext();) {
           al.add (i.next());
         }
 
@@ -310,12 +310,13 @@ public class TraceSelect {
 // Now all of the random selection comes from the
 // classes in utilMDE.
 
-class InvocationComparator implements Comparator {
-    /** Requires:  (o1 and o2 are String representations of invocations
+class InvocationComparator implements Comparator<String> {
+    /** Requires:  s1 and s2 are String representations of invocations
      *  from a tracefile. */
-    public int compare (Object o1, Object o2) {
-	String s1 = (String) o1;
-	String s2 = (String) o2;
+    public int compare (String s1, String s2) {
+        if (s1 == s2) {
+            return 0;
+        }
 
 	// sorts first by program point
 	int pptCompare = s1.substring (0, s1.indexOf(":::")).compareTo

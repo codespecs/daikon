@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  * f1 -> Block()
  */
 public class Initializer implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeOptional f0;
    public Block f1;
@@ -36,4 +38,3 @@ public class Initializer implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

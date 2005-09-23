@@ -427,7 +427,7 @@ class FormatTestCase {
     Object[] outputProducerArgs = null;
     String format = null;
 
-    Iterator formatStrings = null;
+    Iterator<String> formatStrings = null;
 
 
     // If not generating goals get the goal lines from the file
@@ -445,7 +445,7 @@ class FormatTestCase {
         if (!formatStrings.hasNext()) {
           goalOutput = null;
         } else {
-          format = (String)formatStrings.next();
+          format = formatStrings.next();
           goalOutput = "init"; // Need something non-whitespace
         }
       } else {

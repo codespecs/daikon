@@ -10,6 +10,8 @@ package jtb.syntaxtree;
  * f1 -> PrimaryExpression()
  */
 public class PreDecrementExpression implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeToken f0;
    public PrimaryExpression f1;
@@ -43,4 +45,3 @@ public class PreDecrementExpression implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

@@ -87,7 +87,7 @@ public class DtracePartitioner
   // TODO: this should be a Javadoc link
   /** Same as this.patchValues (enters, false)
    */
-  public List patchValues (List enters) {
+  public List<String> patchValues (List<String> enters) {
     return patchValues (enters, false);
   }
 
@@ -100,16 +100,16 @@ public class DtracePartitioner
    *  <p> The original order is NOT guaranteed.
    */
 
-  public List patchValues (List enters, boolean includeUnreturnedEnters) {
+  public List<String> patchValues (List<String> enters, boolean includeUnreturnedEnters) {
     try {
       System.out.println ("Entering patchValues");
       // Keep a list of enters that are so far unmatched
-      Set unreturned = new HashSet (enters);
+      Set<String> unreturned = new HashSet<String> (enters);
 
       // Build a hashmap of values to watch
-      HashMap nonceMap = new HashMap();
+      HashMap nonceMap = new HashMap(); // maps (String or Integer) -> String
       for (int i = 0; i < enters.size(); i++) {
-        String enterStr = (String) enters.get(i);
+        String enterStr = enters.get(i);
         // it could be an OBJECT or CLASS invocation ppt, ignore those
         // by putting them in the HashMap to themselves, they'll
         // be reaped up later

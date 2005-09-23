@@ -13,6 +13,8 @@ package jtb.syntaxtree;
  * f4 -> Statement()
  */
 public class WhileStatement implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeToken f0;
    public NodeToken f1;
@@ -61,4 +63,3 @@ public class WhileStatement implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

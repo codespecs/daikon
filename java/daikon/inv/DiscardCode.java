@@ -40,7 +40,7 @@ import daikon.inv.filter.*;
     filtered // filtered by some other means not in the above list
  */
 
-public class DiscardCode implements Comparable,Serializable {
+public class DiscardCode implements Comparable<DiscardCode>, Serializable {
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -111,14 +111,10 @@ public class DiscardCode implements Comparable,Serializable {
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
-  public int compareTo(Object o) throws ClassCastException {
-    if (!(o instanceof DiscardCode))
-      throw new ClassCastException("Tried to compare instance of DiscardCode with incompatible type");
-    else {
-      Integer thisValue = new Integer(this.enumValue);
-      Integer oValue = new Integer( ((DiscardCode) o).enumValue );
-      return thisValue.compareTo(oValue);
-    }
+  public int compareTo(DiscardCode o) {
+    Integer thisValue = new Integer(this.enumValue);
+    Integer oValue = new Integer( o.enumValue );
+    return thisValue.compareTo(oValue);
   }
 
   /** Returns the DiscardCode most associated with the given filter */

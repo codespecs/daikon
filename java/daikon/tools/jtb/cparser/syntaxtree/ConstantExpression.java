@@ -9,6 +9,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f0 -> ConditionalExpression()
  */
 public class ConstantExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public ConditionalExpression f0;
 
    public ConstantExpression(ConditionalExpression n0) {

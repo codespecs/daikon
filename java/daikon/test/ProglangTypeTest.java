@@ -16,7 +16,7 @@ public class ProglangTypeTest extends TestCase {
     super(name);
   }
 
-  static Comparator longarrcomparator = new ArraysMDE.LongArrayComparatorLexical();
+  static Comparator<long[]> longarrcomparator = new ArraysMDE.LongArrayComparatorLexical();
   static Comparator comparrcomparator = new ArraysMDE.ComparableArrayComparatorLexical();
 
   // Runtime type of first argument is long[]

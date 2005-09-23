@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
  */
 public class MultiplicativeExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public CastExpression f0;
    public NodeOptional f1;
 

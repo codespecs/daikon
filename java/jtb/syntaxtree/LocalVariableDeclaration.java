@@ -12,6 +12,8 @@ package jtb.syntaxtree;
  * f3 -> ( "," VariableDeclarator() )*
  */
 public class LocalVariableDeclaration implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeOptional f0;
    public Type f1;
@@ -44,4 +46,3 @@ public class LocalVariableDeclaration implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

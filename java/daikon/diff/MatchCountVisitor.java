@@ -19,13 +19,13 @@ import java.util.*;
 public class MatchCountVisitor extends PrintAllVisitor {
 
   // invariants found by the splitting
-  private HashSet cnt = new HashSet();
+  private HashSet<String> cnt = new HashSet<String>();
   // target set of invariants
-  private HashSet targSet = new HashSet();
+  private HashSet<String> targSet = new HashSet<String>();
   // invariants found matching
-  private HashSet recall = new HashSet();
+  private HashSet<String> recall = new HashSet<String>();
 
-  private HashMap<String,HashSet> goodMap = new HashMap<String,HashSet>();
+  private HashMap<String,HashSet<String>> goodMap = new HashMap<String,HashSet<String>>();
 
 
   private Invariant dummy = null;
@@ -86,9 +86,9 @@ public class MatchCountVisitor extends PrintAllVisitor {
       String thisPptName1 = tmpStr1.substring (0,
                                                tmpStr1.lastIndexOf (";condition"));
       String predicate = extractPredicate (tmpStr1);
-      HashSet bucket = goodMap.get (thisPptName1);
+      HashSet<String> bucket = goodMap.get (thisPptName1);
       if (bucket == null) {
-        bucket = new HashSet();
+        bucket = new HashSet<String>();
         goodMap.put (thisPptName1, bucket);
       }
       bucket.add (predicate + " ==> " + inv1.format());

@@ -14,6 +14,8 @@ package jtb.syntaxtree;
  * f5 -> [ "else" Statement() ]
  */
 public class IfStatement implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeToken f0;
    public NodeToken f1;
@@ -67,4 +69,3 @@ public class IfStatement implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

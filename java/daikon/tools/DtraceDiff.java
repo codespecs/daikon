@@ -79,9 +79,9 @@ public class DtraceDiff {
    * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(final String[] args) {
-    Set declsfile1 = new HashSet();
+    Set<File> declsfile1 = new HashSet<File>();
     String dtracefile1 = null;
-    Set declsfile2 = new HashSet();
+    Set<File> declsfile2 = new HashSet<File>();
     String dtracefile2 = null;
 
     LongOpt[] longopts = new LongOpt[] {
@@ -221,7 +221,7 @@ public class DtraceDiff {
 				 Set declsfile2,
 				 String dtracefile2) {
     try {
-      Map pptmap = new HashMap();  // map ppts1 -> ppts2
+      Map<PptTopLevel,PptTopLevel> pptmap = new HashMap<PptTopLevel,PptTopLevel>();  // map ppts1 -> ppts2
       PptMap ppts1 = FileIO.read_declaration_files(declsfile1);
       PptMap ppts2 = FileIO.read_declaration_files(declsfile2);
 

@@ -109,6 +109,8 @@ public final class CLASSNAME
 
   // Inner class to store points in for more convenient access.
   public static class Point implements Serializable, Cloneable {
+    static final long serialVersionUID = 20050923L;
+
     public PRIMITIVE x;
     public PRIMITIVE y;
     public PRIMITIVE z;

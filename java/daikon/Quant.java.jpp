@@ -323,7 +323,7 @@ public final class Quant {
   public static Object[] toObjArray(Object o) {
     if (o == null) { return null; }
     if (o instanceof java.util.AbstractCollection) {
-      return ((AbstractCollection)o).toArray(new java.lang.Object[]{});
+      return ((AbstractCollection<Object>)o).toArray(new java.lang.Object[]{});
     } else if (o.getClass().isArray()) {
       return (Object[])o;
     } else {

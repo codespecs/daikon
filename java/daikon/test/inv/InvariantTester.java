@@ -28,7 +28,7 @@ public class InvariantTester extends TestCase {
   }
 
   public void testClassVarnameComparator() {
-    Comparator c = new Invariant.ClassVarnameComparator();
+    Comparator<Invariant> c = new Invariant.ClassVarnameComparator();
 
     VarInfo[] vars = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("y") };
     PptTopLevel ppt = Common.makePptTopLevel("Foo:::OBJECT", vars);

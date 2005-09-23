@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> ( "," StructDeclarator() )*
  */
 public class StructDeclaratorList implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public StructDeclarator f0;
    public NodeListOptional f1;
 

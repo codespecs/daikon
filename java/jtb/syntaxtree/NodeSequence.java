@@ -11,6 +11,8 @@ import java.util.*;
  * optional list, or optional, e.g. ( A B )+ or [ C D E ]
  */
 public class NodeSequence implements NodeListInterface {
+   static final long serialVersionUID = 20050923L;
+
    public NodeSequence(int n) {
       nodes = new Vector<Node>(n);
    }
@@ -47,4 +49,3 @@ public class NodeSequence implements NodeListInterface {
    private Node parent;
    public Vector<Node> nodes;
 }
-

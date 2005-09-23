@@ -9,6 +9,8 @@ package jtb.syntaxtree;
  * f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
  */
 public class Modifiers implements Node {
+   static final long serialVersionUID = 20050923L;
+
    private Node parent;
    public NodeListOptional f0;
 
@@ -32,4 +34,3 @@ public class Modifiers implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-

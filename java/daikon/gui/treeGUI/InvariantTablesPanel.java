@@ -13,12 +13,15 @@ import javax.swing.tree.*;
 import daikon.PptName;
 import daikon.PptTopLevel;
 import daikon.inv.filter.InvariantFilters;
+import daikon.inv.Invariant;
 
-//  InvariantTablesPanel is the lower panel that displays tables of invariants for each
-//  Ppt.  This class keeps track of all the tables that should be displayed.  This class
-//  updates its list of tables when the user makes a new selection (ie, when the user
-//  clicks elsewhere on the tree browser).
-
+/**
+ * InvariantTablesPanel is the lower panel that displays tables of
+ * invariants for each Ppt.  This class keeps track of all the tables that
+ * should be displayed.  This class updates its list of tables when the
+ * user makes a new selection (i.e., when the user clicks elsewhere on the
+ * tree browser).
+ **/
 class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeListener, InvariantsUpdateListener {
   JScrollPane scrollPane = new JScrollPane(); // the main scrollPane, which contains the main panel
   JPanel panel = new JPanel();	              // the main panel
@@ -127,7 +130,7 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
     //  		System.out.print( topLevel.var_infos[i].name + " " );
     //  	System.out.println();
 
-    List invariants = new ArrayList( topLevel.getInvariants());
+    List<Invariant> invariants = new ArrayList<Invariant>( topLevel.getInvariants());
     InvariantTableModel tableModel = new InvariantTableModel( invariants, invariantFilters );
     TableSorter sorter = new TableSorter( tableModel );
     JTable table = new JTable( sorter );

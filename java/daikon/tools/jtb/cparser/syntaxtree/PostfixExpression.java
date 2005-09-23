@@ -10,6 +10,8 @@ package daikon.tools.jtb.cparser.syntaxtree;
  * f1 -> ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." <IDENTIFIER> | "->" <IDENTIFIER> | "++" | "--" )*
  */
 public class PostfixExpression implements Node {
+  static final long serialVersionUID = 20050923L;
+
    public PrimaryExpression f0;
    public NodeListOptional f1;
 
