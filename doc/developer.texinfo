@@ -1549,15 +1549,18 @@ commands
 @c Tell those who receive the repository:
 @c   You can find a copy of the Daikon CVS repository at
 @c     http://pag.csail.mit.edu/~mernst/tmp/inv-cvs.tar.gz
-@c   The compressed repository is about 800 Mbytes in size.  Please tell
-@c   me when you have downloaded it, so I can remove the  file. Please
-@c   carefully read the "Analyzing historical versions of Daikon"
-@c   section of the Daikon Developer Manual.  Let us know if you have
-@c   any problems, questions, or suggestions; we will do our best to
-@c   help.  Please let us know anything interesting you learn, and we
-@c   wish you the best of luck with your research!
+@c   The compressed repository is about 800 Mbytes in size.  Let me know me
+@c   when you have downloaded it, so I can remove the file, and please do
+@c   not distribute it to anyone else.  Before using it, carefully read the
+@c   "Analyzing historical versions of Daikon" section of the Daikon
+@c   Developer Manual.  Let us know if you have any problems, questions, or
+@c   suggestions; we will do our best to help.  Finally, please let us know
+@c   anything interesting you learn, and we wish you the best of luck with
+@c   your research!
 @c Distributions in 2005:
 @c   1/7/2005   Miryung Kim <miryung@cs.washington.edu>
+@c   9/19/2005  Barbara Ryder <ryder@cs.rutgers.edu>, Xiaoxia Ren <xren@cs.rutgers.edu>, Frank Tip <ftip@us.ibm.com>
+
 
 
 This section is intended primarily for researchers who are analyzing
