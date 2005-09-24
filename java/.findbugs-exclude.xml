@@ -5,7 +5,7 @@
   <Match classregex="ajax.*" />
   <Match classregex="org.apache.*" />
   <Match classregex="jtb.*" />
-  <Match classregex="daikon.tools.jtb.cparser.*" />
+  <Match classregex="jtb.cparser.*" />
   <Match classregex="junit.*" />
 
 
