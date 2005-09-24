@@ -200,7 +200,7 @@ public abstract class DaikonVariableInfo
         }
         else
         {
-            return getValueStrignOfObjectWithMod(val, true);
+            return getValueStringOfObjectWithMod(val, true);
         }
     }
 
@@ -209,7 +209,7 @@ public abstract class DaikonVariableInfo
      * Gets the value of an object and concatenates
      * the associated "modified" integer.
      */
-    protected String getValueStrignOfObjectWithMod(Object theValue, boolean hashArray)
+    protected String getValueStringOfObjectWithMod(Object theValue, boolean hashArray)
     {
         String retString =getValueStringOfObject(theValue, hashArray) + DaikonWriter.lineSep;
 
