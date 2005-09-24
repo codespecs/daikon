@@ -75,7 +75,7 @@ public class InvMap implements Serializable {
   // added within each ppt, but the order of all invariants is not
   // necessarily that in which they were added, depending on calling
   // sequences.
-  public Iterator invariantIterator() {
+  public Iterator<Invariant> invariantIterator() {
     Vector<Invariant> answer = new Vector<Invariant>();
     for (Iterator i = ppts.iterator(); i.hasNext(); )
       answer.addAll(get((PptTopLevel) i.next()));

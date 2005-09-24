@@ -26,7 +26,7 @@ public class InvMatch {
   public static void main (String[] args) throws IOException {
 
     // Read in the sample decls file
-    Set<File> decl_files = new HashSet(1);
+    Set<File> decl_files = new HashSet<File>(1);
     decl_files.add (new File("daikon/test/SampleTester.decls"));
     PptMap all_ppts = FileIO.read_declaration_files (decl_files);
 
@@ -154,8 +154,8 @@ public class InvMatch {
       }
     }
 
-    List<List<InvTranslate>> valid_translations = new ArrayList();
-    List current_translation = new ArrayList();
+    List<List<InvTranslate>> valid_translations = new ArrayList<List<InvTranslate>>();
+    List<InvTranslate> current_translation = new ArrayList<InvTranslate>();
     consider_xlate (valid_translations, current_translation, xlate_list, 0);
 
     return (valid_translations);
@@ -172,7 +172,7 @@ public class InvMatch {
    *
    */
   public static void consider_xlate (List<List<InvTranslate>> valid_translations,
-                                     List current_translation,
+                                     List<InvTranslate> current_translation,
                                      List<List<InvTranslate>> xlate_list, int index) {
 
     List<InvTranslate> inv_xlate_list = xlate_list.get (index);
@@ -193,7 +193,7 @@ public class InvMatch {
       }
     }
   }
-  public static boolean is_good_translation (List translation_list) {
+  public static boolean is_good_translation (List<InvTranslate> translation_list) {
 
     Map<String,String> var_map = new LinkedHashMap<String,String>();
 

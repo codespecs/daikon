@@ -12,7 +12,7 @@ public class Converter extends DepthFirstVisitor {
   private boolean reorder = false;
   private NestedArrayChecker nestChecker= new NestedArrayChecker();
   private boolean shouldConvert = true;
-  private Vector toBringToFront = new Vector();
+  private Vector<Node> toBringToFront = new Vector<Node>();
   private int nestedIndents = 0;
 
   public void visit(PostfixExpression n) {
@@ -88,7 +88,7 @@ public class Converter extends DepthFirstVisitor {
     nestedIndents--;
   }
 
-  public void  convertMatrixExpression(PostfixExpression n, Vector nodes1, Vector nodes2) {
+  public void  convertMatrixExpression(PostfixExpression n, Vector<Node> nodes1, Vector<Node> nodes2) {
     NodeToken nameToken = (NodeToken) n.f0.f0.choice;
     String nameString = nameToken.tokenImage;
     String lengthString = "length";
@@ -131,7 +131,7 @@ public class Converter extends DepthFirstVisitor {
   }
 
 
-  private void convertToStringAccess(Vector v) {
+  private void convertToStringAccess(Vector<Node> v) {
     // remove the [ and ]
     v.remove(0);
     v.remove(1);
@@ -186,7 +186,7 @@ public class Converter extends DepthFirstVisitor {
     nestedIndents--;
   }
 
-    public void convertArrayExpression(PostfixExpression n, Vector nodes, int i) {
+    public void convertArrayExpression(PostfixExpression n, Vector<Node> nodes, int i) {
     if ((n.f0.f0.choice instanceof NodeToken)) {
       String name = n.f0.f0.choice.toString();
       if (shouldConvert) {
@@ -252,7 +252,7 @@ public class Converter extends DepthFirstVisitor {
     NodeSequence seq = (NodeSequence) choice.choice;
     if (token.tokenImage.equals("strlen")) {
       NodeOptional opt = (NodeOptional) seq.nodes.get(1);
-      ArrayList l = extractArgumentNames((ArgumentExpressionList)opt.node);
+      ArrayList<Node> l = extractArgumentNames((ArgumentExpressionList)opt.node);
       token.tokenImage =  "";
       seq.nodes.remove(1);
       seq.nodes.add(0, new NodeToken(".length"));
@@ -270,7 +270,7 @@ public class Converter extends DepthFirstVisitor {
 
 
   private ArrayList extractArgumentNames(ArgumentExpressionList ael) {
-    ArrayList assigns = new ArrayList();
+    ArrayList<Node> assigns = new ArrayList<Node>();
     if (ael!=null) {
       assigns.add(ael.f0);
       if (ael.f1.nodes.size() > 0) {
@@ -289,7 +289,7 @@ public class Converter extends DepthFirstVisitor {
   }
 
 
-  private ArrayList extractNamesAssignmentExpressions(ArrayList assigns) {
+  private ArrayList<Node> extractNamesAssignmentExpressions(ArrayList<Node> assigns) {
     for (int i = 0; i < assigns.size(); i++) {
       AssignmentExpression curr = (AssignmentExpression)assigns.get(i);
       Node n = ((UnaryExpression)((ConditionalExpression)curr.f0.choice).f0.f0.f0.f0.f0.f0.f0.f0.f0.f0.f0.f0.choice).f0.choice;
@@ -369,7 +369,7 @@ public class Converter extends DepthFirstVisitor {
   public void visit(LogicalANDExpression n) {
     // put parentheses around each subexpression
     if (n!=null &&n.f1 != null && n.f1.node instanceof NodeSequence) {
-      Vector nodes = ((NodeSequence) n.f1.node).nodes;
+      Vector<Node> nodes = ((NodeSequence) n.f1.node).nodes;
       if (nodes.get(0).toString().equals("&&")) {
         nodes.add(0, new NodeToken("("));
         nodes.add(1, n.f0);
@@ -388,7 +388,7 @@ public class Converter extends DepthFirstVisitor {
   public void visit(LogicalORExpression n) {
     // put parentheses around each subexpression
     if (n != null && n.f1.node instanceof NodeSequence) {
-      Vector nodes = ((NodeSequence) n.f1.node).nodes;
+      Vector<Node> nodes = ((NodeSequence) n.f1.node).nodes;
       if (nodes.get(0).toString().equals("||")) {
         nodes.add(0, new NodeToken("("));
         nodes.add(1, n.f0);

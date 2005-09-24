@@ -30,7 +30,7 @@ public class NonModulus
   public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();
-  SortedSet elements = new TreeSet();
+  SortedSet<Long> elements = new TreeSet<Long>();
 
   private long modulus = 0;
   private long remainder = 0;
@@ -77,7 +77,7 @@ public class NonModulus
 
   public NonModulus clone() {
     NonModulus result = (NonModulus) super.clone();
-    result.elements = new TreeSet(this.elements);
+    result.elements = new TreeSet<Long>(this.elements);
     return result;
   }
 

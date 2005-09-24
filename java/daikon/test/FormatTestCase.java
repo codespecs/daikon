@@ -178,7 +178,7 @@ class FormatTestCase {
    * A list of all of the test cases (which are SingleOutputTestCase
    * objects) that are to be performed on the contained Invariant.
    **/
-  private List testCases;
+  private List<SingleOutputTestCase> testCases;
 
   /**
    * The Invariant object to be tested.
@@ -195,7 +195,7 @@ class FormatTestCase {
    * @param invariantToTest the Invariant on which the tests are to be
    *        performed
    **/
-  private FormatTestCase(List testCases, Invariant invariantToTest) {
+  private FormatTestCase(List<SingleOutputTestCase> testCases, Invariant invariantToTest) {
     this.testCases = testCases;
     this.invariantToTest = invariantToTest;
   }
@@ -353,7 +353,7 @@ class FormatTestCase {
    * @return a new FormatTestCase instance
    **/
   public static FormatTestCase instantiate(LineNumberReader commands, boolean generateGoals) {
-    List testCases = new Vector();
+    List<SingleOutputTestCase> testCases = new Vector<SingleOutputTestCase>();
 
     // The first line contains the class and its instantiate args
     // each token is separated by blanks.  Each argument to instantiate
@@ -517,7 +517,7 @@ class FormatTestCase {
       }
     }
 
-    List samples = new Vector();
+    List<Object[]> samples = new Vector<Object[]>();
 
     // Get samples if they are needed to determine invariant data
     // e.g. to determine the exact nature of a linear relationship
@@ -658,7 +658,7 @@ class FormatTestCase {
   }
 
 
-  private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
+  private static void getSamples(ProglangType[] types, BufferedReader commands, List<Object[]> samples, boolean generateGoals, String firstLine) {
     String currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
                                        firstLine);
 

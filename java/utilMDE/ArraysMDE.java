@@ -2063,14 +2063,17 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    **/
-  public static final class ComparableArrayComparatorLexical<T extends Comparable> implements Comparator<T[]> {
+  // I would like to say something like
+  // public static final class ComparableArrayComparatorLexical<T extends Comparable<T>> implements Comparator<T[]> {
+  // but writing a type for this is problematic.
+  public static final class ComparableArrayComparatorLexical<T> implements Comparator<T[]> {
     public int compare(T[] a1, T[] a2) {
       if (a1 == a2)
         return 0;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        T elt1 = a1[i];
-        T elt2 = a2[i];
+        Comparable elt1 = (Comparable) a1[i];
+        Comparable elt2 = (Comparable) a2[i];
         // Make null compare smaller than anything else
         if ((elt1 == null) && (elt2 == null))
           continue;

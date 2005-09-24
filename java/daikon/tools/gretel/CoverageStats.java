@@ -56,33 +56,33 @@ public class CoverageStats
     {
       Method m;
       m = clazzListHits.getMethod("getHits", (Class[])null);
-      hits = (Map) m.invoke(null, (Object[])null);
+      hits = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null);
       m = clazzListHits.getMethod("getMisses", (Class[])null);
-      misses = (Map) m.invoke(null, (Object[])null);
+      misses = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null);
     }
 
     // Compute coverage
-    Map all = new HashMap();
-    Map covered = new HashMap();
+    Map<String,HashSet<Integer>> all = new HashMap<String,HashSet<Integer>>();
+    Map<String,HashSet<Integer>> covered = new HashMap<String,HashSet<Integer>>();
     for (Map.Entry<String,Set<Integer>> entry : hits.entrySet()) {
       String file = entry.getKey();
       Set<Integer> lines = entry.getValue();
       if (! relevant.contains(file)) continue;
-      if (! all.containsKey(file)) all.put(file, new HashSet());
-      ((Set) all.get(file)).addAll(lines);
-      if (! covered.containsKey(file)) covered.put(file, new HashSet());
-      ((Set) covered.get(file)).addAll(lines);
+      if (! all.containsKey(file)) all.put(file, new HashSet<Integer>());
+      all.get(file).addAll(lines);
+      if (! covered.containsKey(file)) covered.put(file, new HashSet<Integer>());
+      covered.get(file).addAll(lines);
     }
     for (Map.Entry<String,Set<Integer>> entry : misses.entrySet()) {
       String file = entry.getKey();
       Set<Integer> lines = entry.getValue();
       if (! relevant.contains(file)) continue;
-      if (! all.containsKey(file)) all.put(file, new HashSet());
-      ((Set) all.get(file)).addAll(lines);
+      if (! all.containsKey(file)) all.put(file, new HashSet<Integer>());
+      all.get(file).addAll(lines);
       // We choose to count partially-covered lines as fully covered,
       // instead of uncovered.  Uncomment below code to not count them.
-      // if (! covered.containsKey(file)) covered.put(file, new HashSet(0));
-      // ((Set) covered.get(file)).removeAll(lines);
+      // if (! covered.containsKey(file)) covered.put(file, new HashSet<Integer>(0));
+      // covered.get(file).removeAll(lines);
     }
 
     // Display results

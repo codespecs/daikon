@@ -400,7 +400,7 @@ public final class ONEOFSCALAR
   static Comparator<double[]> comparator = new ArraysMDE.DoubleArrayComparatorLexical();
 #define COMPARATOR_ARG , comparator
 #elif defined(STRINGSEQUENCE)
-  static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical(); // need to figure out proper generic type -MDE
+  static Comparator<String[]> comparator = new ArraysMDE.ComparableArrayComparatorLexical<String>(); // need to figure out proper generic type -MDE
   #define COMPARATOR_ARG , comparator
 #else
   #define COMPARATOR_ARG

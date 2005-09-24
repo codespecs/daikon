@@ -32,5 +32,5 @@ public class NodeList implements NodeListInterface {
       v.visit(this);
    }
 
-   public Vector nodes;
+   public Vector<Node> nodes;
 }

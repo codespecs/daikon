@@ -732,11 +732,11 @@ public class LogicalCompare {
     } else if (num_args == 2) {
       startProver();
 
-      Collection app_ppt_names = app_ppts.nameStringSet();
-      Collection test_ppt_names = test_ppts.nameStringSet();
-      Set common_names = new TreeSet();
+      Collection<String> app_ppt_names = app_ppts.nameStringSet();
+      Collection<String> test_ppt_names = test_ppts.nameStringSet();
+      Set<String> common_names = new TreeSet<String>();
 
-      Iterator it = app_ppt_names.iterator();
+      Iterator<String> it = app_ppt_names.iterator();
       while (it.hasNext()) {
         String name = (String)it.next();
         PptTopLevel app_ppt = app_ppts.get(name);

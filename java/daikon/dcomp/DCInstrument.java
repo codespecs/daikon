@@ -1223,7 +1223,8 @@ class DCInstrument {
     case Constants.DUP2:
     case Constants.DUP2_X1:
     case Constants.DUP2_X2: {
-      assert false : "can't handle " + inst;
+      assert false : "can't yet handle " + inst;
+      throw new Error("can't yet handle " + inst);
     }
 
 

@@ -247,6 +247,7 @@ public class WeakIdentityHashMap<K,V>
     /**
      * Value representing null keys inside tables.
      */
+    // This is problematic because it isn't of the right type.
     private static final Object NULL_KEY = new Object();
 
     /**
@@ -289,6 +290,7 @@ public class WeakIdentityHashMap<K,V>
      */
     private void expungeStaleEntries() {
 	Entry<K,V> e;
+        // These types look wronge to me.
         while ( (e = (Entry<K,V>) queue.poll()) != null) {
             int h = e.hash;
             int i = indexFor(h, table.length);

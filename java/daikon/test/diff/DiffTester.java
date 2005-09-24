@@ -90,7 +90,7 @@ public class DiffTester extends TestCase {
         newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]);
       Splitter split = new ReturnTrueSplitter();
       PptSplitter ppt_split = new PptSplitter (ppt1, split);
-      ppt1.splitters = new ArrayList();
+      ppt1.splitters = new ArrayList<PptSplitter>();
       ppt1.splitters.add (ppt_split);
       pptsCond.add(ppt1);
       pptsCond.add(newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
@@ -116,7 +116,7 @@ public class DiffTester extends TestCase {
       PptSlice slicez = new PptSlice1(ppt, new VarInfo[] {vars[2]});
       Invariant invz = LowerBound.get_proto().instantiate(slicez);
       slicez.addInvariant(invz);
-      Vector v = new Vector();
+      Vector<PptSlice> v = new Vector<PptSlice>();
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
@@ -139,7 +139,7 @@ public class DiffTester extends TestCase {
       PptSlice slicez = new PptSlice1(ppt, new VarInfo[] {vars[2]});
       Invariant invz = LowerBound.get_proto().instantiate(slicez);
       slicez.addInvariant(invz);
-      Vector v = new Vector();
+      Vector<PptSlice> v = new Vector<PptSlice>();
       v.add(slicey);
       v.add(slicex);
       v.add(slicez);
@@ -161,7 +161,7 @@ public class DiffTester extends TestCase {
       PptSlice slicez = new PptSlice1(ppt, new VarInfo[] {vars[2]});
       Invariant invz = LowerBound.get_proto().instantiate(slicez);
       slicez.addInvariant(invz);
-      Vector v = new Vector();
+      Vector<PptSlice> v = new Vector<PptSlice>();
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
@@ -470,7 +470,7 @@ public class DiffTester extends TestCase {
     PptSlice slice = new PptSlice1(ppt, vars);
     Invariant inv = NonModulus.get_proto().instantiate(slice);
     slice.addInvariant(inv);
-    Vector v = new Vector();
+    Vector<PptSlice> v = new Vector<PptSlice>();
     v.add(slice);
     map.add(ppt);
 

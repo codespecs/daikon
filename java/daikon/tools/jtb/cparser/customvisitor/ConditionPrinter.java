@@ -10,11 +10,11 @@ public class ConditionPrinter extends DepthFirstVisitor {
 
     private Printer printer;
     private Converter converter = new Converter();
-    private ArrayList actualStrings;
+    private ArrayList<String> actualStrings;
     private ArrayList stringArrays;
-    private HashMap actualStringsByFunction;
-    private HashMap stringArraysByFunction;
-    private ArrayList localVariables;
+    private HashMap<String,ArrayList<String>> actualStringsByFunction;
+    private HashMap<String,ArrayList> stringArraysByFunction;
+    private ArrayList<String> localVariables;
 
 
     public ConditionPrinter(String fileName) throws IOException {
@@ -25,11 +25,11 @@ public class ConditionPrinter extends DepthFirstVisitor {
         printer.close();
     }
 
-    public void setActualStrings(HashMap l) {
+    public void setActualStrings(HashMap<String,ArrayList<String>> l) {
         this.actualStringsByFunction = l;
     }
 
-    public void setStringArrays(HashMap l) {
+    public void setStringArrays(HashMap<String,ArrayList> l) {
         this.stringArraysByFunction = l;
     }
 
@@ -52,7 +52,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
         printer.print("PPT_NAME std." + functionName);
         printer.println();
         DeclarationList l = (DeclarationList) n.f3.f1.node;
-        localVariables = new ArrayList();
+        localVariables = new ArrayList<String>();
         localVariables.addAll(actualStringsByFunction.keySet());
         if (l!=null) {
             identifyLocalVariables(l.f0.nodes);

@@ -197,7 +197,7 @@ The correct way to build the system is to run 'make'.
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
    **/
-  public static INT[] nonmodulus_strict_INT(Iterator nums) {
+  public static INT[] nonmodulus_strict_INT(Iterator<INTEGER> nums) {
     return nonmodulus_strict_INT_internal(new MissingNumbersIteratorINT(nums, true));
   }
 

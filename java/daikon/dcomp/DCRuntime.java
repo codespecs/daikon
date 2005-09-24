@@ -664,8 +664,8 @@ public final class DCRuntime {
    * @param obj    Value of dv
    * @param dv     DaikonVariable to process
    */
-  static void merge_comparability (IdentityHashMap<Object,DaikonVariableInfo>
-                                   varmap, Object parent, Object obj,
+  static void merge_comparability (IdentityHashMap<Object,DaikonVariableInfo> varmap,
+                                   Object parent, Object obj,
                                    DaikonVariableInfo dv) {
 
     merge_dv.log ("merge_comparability: checking var %s = '%s' %n",

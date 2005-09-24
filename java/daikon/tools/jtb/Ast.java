@@ -1030,7 +1030,7 @@ public class Ast {
   // Returns the parameters of the constructor, as a list of
   // FormalParameter objects.  Returns an empty list if there are no
   // parameters.
-  public static List getParameters(ConstructorDeclaration cd) {
+  public static List<FormalParameter> getParameters(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
       public void visit(FormalParameter p) {

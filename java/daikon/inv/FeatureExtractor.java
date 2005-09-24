@@ -131,9 +131,9 @@ public final class FeatureExtractor {
       throw new IOException("Invalid Argumnent List, output and description files " +
                             "cannot be the same");
     // Step 1
-    ArrayList[] allInvariants = getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
-    ArrayList useful = allInvariants[0];
-    ArrayList nonuseful = allInvariants[1];
+    ArrayList<Invariant>[] allInvariants = getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
+    ArrayList<Invariant> useful = allInvariants[0];
+    ArrayList<Invariant> nonuseful = allInvariants[1];
 
     // Step 2
     // Extract the features of each invariant in useful and nonuseful
@@ -147,9 +147,9 @@ public final class FeatureExtractor {
     ArrayList<String> usefulStrings = getStrings(useful);
     ArrayList<String> nonusefulStrings = getStrings(nonuseful);
 
-    HashMap lookup = getFullMapping();
-    ArrayList usefulFeatures = getReflectFeatures(useful, lookup);
-    ArrayList nonusefulFeatures = getReflectFeatures(nonuseful, lookup);
+    HashMap<Object,Integer> lookup = getFullMapping();
+    ArrayList<TreeSet<IntDoublePair>> usefulFeatures = getReflectFeatures(useful, lookup);
+    ArrayList<TreeSet<IntDoublePair>> nonusefulFeatures = getReflectFeatures(nonuseful, lookup);
 
     // Step 3
     // Output the labeling in desired format.
@@ -186,8 +186,8 @@ public final class FeatureExtractor {
 
   // Takes a vector of invariants and returns a vector of
   // the string representations of those invariants in the same order
-  private static ArrayList getStrings(ArrayList<Invariant> invs) {
-    ArrayList answer = new ArrayList();
+  private static ArrayList<String> getStrings(ArrayList<Invariant> invs) {
+    ArrayList<String> answer = new ArrayList<String>();
     for (int i = 0; i < invs.size(); i++) {
       Invariant current = invs.get(i);
       answer.add(current.ppt.parent.name + ":::" + current.format());
@@ -200,8 +200,8 @@ public final class FeatureExtractor {
   //   Returns the useful invariants in return[0],
   //   returns the nonuseful invariants in return[1];
 
-  private static ArrayList[] getSimpleUsefulAndNonuseful(ArrayList usefuls,
-                                                      ArrayList nonusefuls)
+  private static ArrayList<Invariant>[] getSimpleUsefulAndNonuseful(ArrayList<String> usefuls,
+                                                      ArrayList<String> nonusefuls)
     throws IOException, ClassNotFoundException {
 
     // returns two ArrayLists (in an array) of Useful invariants and
@@ -209,15 +209,15 @@ public final class FeatureExtractor {
     // return[0] are Useful
     // return[1] are Non-Useful
 
-    ArrayList[] answer = new ArrayList[2];
-    answer[0] = new ArrayList(); // useful
-    answer[1] = new ArrayList(); // nonuseful
+    ArrayList<Invariant>[] answer = (ArrayList<Invariant>[]) new ArrayList[2];
+    answer[0] = new ArrayList<Invariant>(); // useful
+    answer[1] = new ArrayList<Invariant>(); // nonuseful
     for (int i = 0; i < usefuls.size(); i++)
-      for (Iterator invs=readInvMap(new File((String) usefuls.get(i))).invariantIterator(); invs.hasNext(); )
+      for (Iterator<Invariant> invs=readInvMap(new File(usefuls.get(i))).invariantIterator(); invs.hasNext(); )
         answer[0].add(invs.next());
 
     for (int i = 0; i < nonusefuls.size(); i++)
-      for (Iterator invs=readInvMap(new File((String) nonusefuls.get(i))).invariantIterator(); invs.hasNext(); )
+      for (Iterator<Invariant> invs=readInvMap(new File(nonusefuls.get(i))).invariantIterator(); invs.hasNext(); )
         answer[1].add(invs.next());
 
     return answer;
@@ -237,13 +237,13 @@ public final class FeatureExtractor {
 
     // returns two ArrayLists (in an array) of Useful invariants and
     // non-useful invariants
-    ArrayList[] answer = new ArrayList[2];
-    answer[0] = new ArrayList();
-    answer[1] = new ArrayList();
+    ArrayList<Invariant>[] answer = (ArrayList<Invariant>[]) new ArrayList[2];
+    answer[0] = new ArrayList<Invariant>();
+    answer[1] = new ArrayList<Invariant>();
 
     for (int i = 1; i < args.length-1; i+=2) {
       // good contains string reps of invariants in Non-Buggy.inv
-      HashSet good = new HashSet();
+      HashSet<String> good = new HashSet<String>();
       for (Iterator goodppts =
              FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
            goodppts.hasNext(); ) {
@@ -274,8 +274,8 @@ public final class FeatureExtractor {
 
   // Prints the labeling using C5 format
 
-  private static void printC5Output(ArrayList usefulFeatures,
-                                    ArrayList nonusefulFeatures,
+  private static void printC5Output(ArrayList<TreeSet<IntDoublePair>> usefulFeatures,
+                                    ArrayList<TreeSet<IntDoublePair>> nonusefulFeatures,
                                     File outputFile, File namesFile,
                                     HashMap<Object,Integer> lookup)
     throws IOException {
@@ -283,8 +283,8 @@ public final class FeatureExtractor {
 
     // First create a TreeSet of all the Feature Numbers and 0 as value
     // and a Map of numbers to names
-    TreeSet allFeatures = new TreeSet();
-    HashMap numbersToNames = new HashMap();
+    TreeSet<IntDoublePair> allFeatures = new TreeSet<IntDoublePair>();
+    HashMap<IntDoublePair,String> numbersToNames = new HashMap<IntDoublePair,String>();
     for (Map.Entry<Object,Integer> entry : lookup.entrySet()) {
       Object key = entry.getKey();
       int num = entry.getValue().intValue();
@@ -343,15 +343,15 @@ public final class FeatureExtractor {
   // Prints the partial labeling using C5 format for all feature vectors
   //   in features.
 
-  private static void printC5DataOutput (ArrayList features,
-                                         TreeSet allFeatures,
+  private static void printC5DataOutput (ArrayList<TreeSet<IntDoublePair>> features,
+                                         TreeSet<IntDoublePair> allFeatures,
                                          String label,
                                          PrintStream output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     // Create a TreeSet allFets which has all the features of
     // the current (ith) vector and the other features filled in with 0s
     for (int i = 0; i < features.size(); i++) {
-      TreeSet allFets = ((TreeSet) features.get(i));
+      TreeSet<IntDoublePair> allFets = features.get(i);
 
       // Debugging code to detect duplicates within allFets
       //
@@ -408,10 +408,10 @@ public final class FeatureExtractor {
 
   // Prints the labeling using SVMlight format
 
-  private static void printSVMOutput(ArrayList usefulFeatures,
-                                     ArrayList nonusefulFeatures,
-                                     ArrayList usefulStrings,
-                                     ArrayList nonusefulStrings,
+  private static void printSVMOutput(ArrayList<TreeSet<IntDoublePair>> usefulFeatures,
+                                     ArrayList<TreeSet<IntDoublePair>> nonusefulFeatures,
+                                     ArrayList<String> usefulStrings,
+                                     ArrayList<String> nonusefulStrings,
                                      File outputFile) throws IOException {
     PrintStream output = new PrintStream(new FileOutputStream(outputFile));
     // Now add all the features in SVM-Light format to output
@@ -425,13 +425,14 @@ public final class FeatureExtractor {
   // Prints a partial labeling using SVMlight format for all the
   //   feature vectors in features.
 
-  private static void printSVMDataOutput(ArrayList features, ArrayList strings,
+  private static void printSVMDataOutput(ArrayList<TreeSet<IntDoublePair>> features,
+                                         ArrayList<String> strings,
                                          String label,
                                          PrintStream output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       output.print(label);
-      for (Iterator<IntDoublePair> fets = ((TreeSet) features.get(i)).iterator();
+      for (Iterator<IntDoublePair> fets = features.get(i).iterator();
            fets.hasNext();) {
         IntDoublePair fet = fets.next();
         if (fet.value > THRESHOLD)
@@ -444,8 +445,8 @@ public final class FeatureExtractor {
 
   // Prints the labeling using SVMfu format.
 
-  private static void printSVMfuOutput(ArrayList usefulFeatures,
-                                       ArrayList nonusefulFeatures,
+  private static void printSVMfuOutput(ArrayList<TreeSet<IntDoublePair>> usefulFeatures,
+                                       ArrayList<TreeSet<IntDoublePair>> nonusefulFeatures,
                                        File outputFile) throws IOException {
     PrintStream output = new PrintStream(new FileOutputStream(outputFile));
     // Now add all the features in SVMfu format to output
@@ -461,12 +462,12 @@ public final class FeatureExtractor {
   // Prints a partial labeling using SVMfu format for all the
   // feature vectors in features.
 
-  private static void printSVMfuDataOutput(ArrayList features, String label,
+  private static void printSVMfuDataOutput(ArrayList<TreeSet<IntDoublePair>> features, String label,
                                            PrintStream output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
-      output.print(((TreeSet) features.get(i)).size() * 2 + " ");
-      for (Iterator<IntDoublePair> fets = ((TreeSet) features.get(i)).iterator();
+      output.print(features.get(i).size() * 2 + " ");
+      for (Iterator<IntDoublePair> fets = features.get(i).iterator();
            fets.hasNext();) {
         IntDoublePair fet = fets.next();
         output.print(fet.number + " " + df.format(fet.value) + " ");
@@ -477,14 +478,14 @@ public final class FeatureExtractor {
 
   // Prints the invariant descriptions to a file.
 
-  private static void writeInvariantDescriptions(ArrayList usefulStrings,
-                                       ArrayList nonusefulStrings,
+  private static void writeInvariantDescriptions(ArrayList<String> usefulStrings,
+                                       ArrayList<String> nonusefulStrings,
                                        File outputFile) throws IOException {
     PrintStream output = new PrintStream(new FileOutputStream(outputFile));
     for (int i = 0; i < usefulStrings.size(); i++)
-      output.println((String) usefulStrings.get(i));
+      output.println(usefulStrings.get(i));
     for (int i = 0; i < nonusefulStrings.size(); i++)
-      output.println((String) nonusefulStrings.get(i));
+      output.println(nonusefulStrings.get(i));
     output.close();
   }
 
@@ -493,8 +494,8 @@ public final class FeatureExtractor {
   private static void compactSVMFeatureFile(File input, File output)
     throws IOException {
     BufferedReader br = new BufferedReader(new FileReader(input));
-    HashSet vectors = new HashSet();
-    ArrayList outputData = new ArrayList();
+    HashSet<String> vectors = new HashSet<String>();
+    ArrayList<String> outputData = new ArrayList<String>();
     while (br.ready()) {
       String line = br.readLine();
       if (vectors.contains(line))
@@ -517,7 +518,7 @@ public final class FeatureExtractor {
   private static void compactSVMfuFeatureFile(File input, File output)
     throws IOException {
     BufferedReader br = new BufferedReader(new FileReader(input));
-    HashSet vectors = new HashSet();
+    HashSet<String> vectors = new HashSet<String>();
     br.readLine();
     while (br.ready())
       vectors.add(br.readLine());
@@ -541,13 +542,13 @@ public final class FeatureExtractor {
   }
 
   // Calculate a HashMap of every feature to a unique integer.
-  private static HashMap getFullMapping() throws ClassNotFoundException {
-    HashMap answer = new HashMap();
+  private static HashMap<Object,Integer> getFullMapping() throws ClassNotFoundException {
+    HashMap<Object,Integer> answer = new HashMap<Object,Integer>();
     Integer counter = new Integer(0);
 
     //get a set of all Invariant classes
     File top = new File(CLASSES);
-    ArrayList classes = getInvariantClasses(top);
+    ArrayList<Class> classes = getInvariantClasses(top);
 
     for (int i = 0; i < classes.size(); i++) {
       Class currentClass = (Class) classes.get(i);
@@ -613,9 +614,9 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  private static ArrayList getInvariantClasses(File top)
+  private static ArrayList<Class> getInvariantClasses(File top)
     throws ClassNotFoundException {
-    ArrayList answer = new ArrayList();
+    ArrayList<Class> answer = new ArrayList<Class>();
     if (top.isDirectory()) {
       File[] all = top.listFiles();
       for (int i = 0; i < all.length; i++)
@@ -654,27 +655,26 @@ public final class FeatureExtractor {
   // to get all the features of that invariant
   // and store those featues in a new TreeSet.
   // return a ArrayList of TreeSets of features.
-  private static ArrayList getReflectFeatures(ArrayList<Invariant> invariants, HashMap lookup)
+  private static ArrayList<TreeSet<IntDoublePair>> getReflectFeatures(ArrayList<Invariant> invariants, HashMap<Object,Integer> lookup)
     throws IllegalAccessException, InvocationTargetException {
-    ArrayList answer = new ArrayList();
+    ArrayList<TreeSet<IntDoublePair>> answer = new ArrayList<TreeSet<IntDoublePair>>();
     // for each invariant, extract all the features and build a new TreeSet
     for (int i = 0; i < invariants.size(); i++) {
-      answer.add(new TreeSet(getReflectFeatures(invariants.get(i), lookup)));
+      answer.add(new TreeSet<IntDoublePair>(getReflectFeatures(invariants.get(i), lookup)));
     }
     return answer;
   }
 
   // Extract the features of inv using reflection,
   // return a Collection of these features in IntDoublePairs
-  private static TreeSet getReflectFeatures(Object inv, HashMap lookup)
+  private static TreeSet<IntDoublePair> getReflectFeatures(Object inv, HashMap<Object,Integer> lookup)
     throws IllegalAccessException, InvocationTargetException {
-    TreeSet answer = new TreeSet();
+    TreeSet<IntDoublePair> answer = new TreeSet<IntDoublePair>();
     if (inv instanceof Invariant) {
       if (lookup.get(inv.getClass()) == null)
         throw new NullPointerException("Missing " + inv.getClass().getName() +
                                        " class in the lookup Map");
-      answer.add(new IntDoublePair(((Integer)
-                                    lookup.get(inv.getClass())).intValue(),1));
+      answer.add(new IntDoublePair(lookup.get(inv.getClass()).intValue(), 1));
       answer.addAll(getReflectFeatures(((Invariant)inv).ppt, lookup));
       answer.addAll(getReflectFeatures(((Invariant)inv).ppt.var_infos,lookup));
       VarInfo[] varInfos = ((Invariant) inv).ppt.var_infos;
@@ -714,8 +714,8 @@ public final class FeatureExtractor {
     }
 
     //cleanup answer
-    TreeSet final_answer = new TreeSet();
-    HashSet index = new HashSet();
+    TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
+    HashSet<Integer> index = new HashSet<Integer>();
     for (Iterator<IntDoublePair> iter = answer.iterator(); iter.hasNext();) {
       IntDoublePair current = iter.next();
       if (!(index.contains(new Integer(current.number))))
@@ -813,7 +813,7 @@ public final class FeatureExtractor {
         System.out.println(USAGE);
         throw new Daikon.TerminationMessage("No arguments found");
       }
-      ArrayList inputs = new ArrayList();
+      ArrayList<String> inputs = new ArrayList<String>();
       boolean normalize = false;
       String output = null;
       String type = null;
@@ -842,10 +842,10 @@ public final class FeatureExtractor {
         throw new IOException("You must specify at least one input file");
 
       // Load the input files into 2 HashSets, pos and neg.
-      HashSet pos = new HashSet();
-      HashSet neg = new HashSet();
+      HashSet<String> pos = new HashSet<String>();
+      HashSet<String> neg = new HashSet<String>();
 
-      for (Iterator i = inputs.iterator(); i.hasNext(); ) {
+      for (Iterator<String> i = inputs.iterator(); i.hasNext(); ) {
         BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
         br.readLine();
         while (br.ready()) {
@@ -872,8 +872,8 @@ public final class FeatureExtractor {
 
       // Now create two vectors, posvectors and negvectors, of the
       // positive and negative vectors respectively.
-      ArrayList posvectors = new ArrayList();
-      ArrayList negvectors = new ArrayList();
+      ArrayList<String> posvectors = new ArrayList<String>();
+      ArrayList<String> negvectors = new ArrayList<String>();
 
       for (Iterator<String> i = neg.iterator(); i.hasNext(); ) {
         String vector = i.next();
@@ -948,8 +948,8 @@ public final class FeatureExtractor {
         System.out.println(USAGE);
         throw new Daikon.TerminationMessage("No arguments found");
       }
-      ArrayList trains = new ArrayList();
-      ArrayList tests = new ArrayList();
+      ArrayList<String> trains = new ArrayList<String>();
+      ArrayList<String> tests = new ArrayList<String>();
       String type = null;
       for (int i = 0; i < args.length; i++) {
         if (args[i].equals("-t"))
@@ -970,8 +970,8 @@ public final class FeatureExtractor {
         throw new IOException("You must specify at least one train data file");
 
       // Load the train files into 2 HashSets, pos and neg.
-      HashSet pos = new HashSet();
-      HashSet neg = new HashSet();
+      HashSet<String> pos = new HashSet<String>();
+      HashSet<String> neg = new HashSet<String>();
 
       for (Iterator i = trains.iterator(); i.hasNext(); ) {
         BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
@@ -999,8 +999,8 @@ public final class FeatureExtractor {
       }
 
       // Load the test files into two vectors: testBad and testGood
-      ArrayList testGood = new ArrayList();
-      ArrayList testBad = new ArrayList();
+      ArrayList<String> testGood = new ArrayList<String>();
+      ArrayList<String> testBad = new ArrayList<String>();
 
       for (Iterator i = trains.iterator(); i.hasNext(); ) {
         BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
@@ -1051,7 +1051,7 @@ public final class FeatureExtractor {
 
   }
 
-  private static void writeArrayLists(ArrayList one, ArrayList two,
+  private static void writeArrayLists(ArrayList<String> one, ArrayList<String> two,
                                      String label, PrintStream ps)
     throws IOException {
 

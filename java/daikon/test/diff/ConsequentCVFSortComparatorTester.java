@@ -39,7 +39,7 @@ public class ConsequentCVFSortComparatorTester extends TestCase {
     Invariant A_C = Implication.makeImplication(P,A,C,false,null,null);
     Invariant B_C = Implication.makeImplication(P,B,C,false,null,null);
 
-    Comparator c = new ConsequentCVFSortComparator();
+    Comparator<Invariant> c = new ConsequentCVFSortComparator();
 
     assertTrue(c.compare(A,A) == 0);
     assertTrue(c.compare(A,B) < 0);

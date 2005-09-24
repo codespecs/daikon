@@ -14,7 +14,7 @@ public class Printer extends DepthFirstVisitor {
   private File file;
 
   static {
-    ArrayList temp = new ArrayList();
+    ArrayList<String> temp = new ArrayList<String>();
     temp.add("(unsigned)");
     temp.add("(unsignedshortint)");
     temp.add("(__ctype)");
@@ -73,7 +73,7 @@ public class Printer extends DepthFirstVisitor {
     buffer = new StringBuffer();
   }
 
-  public void setFilter(ArrayList filter) {
+  public void setFilter(ArrayList<String> filter) {
     this.filter = filter;
     this.filter.addAll(badExpressions);
   }
