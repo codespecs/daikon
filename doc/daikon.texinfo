@@ -2519,7 +2519,7 @@ expand CPP commands into legal C, run either @command{cpp -P} or
 @example
 cpp -P foo.c foo.c-expanded
 cpp -P bar.c bar.c-expanded
-java daikon.tools.jtb.cparser.CreateSpinfoC \
+java daikon.tools.jtb.CreateSpinfoC \
      foo.c-expanded bar.c-expanded
 @end example
 @noindent
