@@ -30,9 +30,13 @@ CLASSPATH := $(CLASSPATH):/$(BCEL)
 # files get compiled as well.  DO NOT USE THESE in dependencies or the
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
+# " | perl -pi -e 's/^\.\///g'" to remove leading "./"
 JAVA_FILES = $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print) \
-					$(shell find utilMDE/ -name '*.java' -print)
+                    $(shell find utilMDE/ -name '*.java' -print)
+DAIKON_LINT_FILES = $(shell find daikon/ -name '*.java' -print) \
+                    $(shell find utilMDE/ \( -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
+
 TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
@@ -295,8 +299,8 @@ all_stop_on_error:
 all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
-xlint:
-	$(MAKE) JAVAC_ARGS="-Xlint -Xmaxwarns 1000 ${JAVAC_ARGS}"
+xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_LINT_FILES}
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # all_directly: ${AUTO_GENERATED_FILES} ajax
@@ -532,8 +536,6 @@ checkstyle-sun: .checkstyle-sunchecks-output
 	    -r daikon | tee .checkstyle-cschecks-output
 
 
-lint:	jlint
-
 jlint:
 	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
 
@@ -689,6 +691,7 @@ showvars:
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVA = ${JAVA}
 	@echo JAVA_FILES = $(JAVA_FILES)
+	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 

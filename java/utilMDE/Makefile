@@ -13,6 +13,7 @@ JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 JAVA ?= java -ea
 
 JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
+JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 AUTO_GENERATED_FILES = \
@@ -21,7 +22,11 @@ AUTO_GENERATED_FILES = \
 
 default: all
 
-all: all_notest test
+all: all_stop_on_error
+
+# Don't bother to run the unit tests if the compilation failed.
+all_stop_on_error:
+	$(MAKE) --stop all_notest test
 
 all_javac: all_javac_notest test
 
@@ -31,8 +36,11 @@ all_javac_notest:  ${AUTO_GENERATED_FILES}
 all_notest: ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} ${JAVA_FILES}
 
-xlint:
-	$(MAKE) JAVAC_ARGS="-Xlint ${JAVAC_ARGS}"
+xlint: ${AUTO_GENERATED_FILES}
+	${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${JAVA_LINT_FILES}
+
+all_xlint: ${AUTO_GENERATED_FILES}
+	${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${JAVA_FILES}
 
 clean:
 	rm -f *.class
@@ -78,6 +86,7 @@ utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 showvars:
 	@echo ALL_JAVA_FILES = $(ALL_JAVA_FILES)
 	@echo JAVA_FILES = $(JAVA_FILES)
+	@echo JAVA_LINT_FILES = $(JAVA_LINT_FILES)
 	@echo JAVA_CPP_FILES = $(JAVA_CPP_FILES)
 
 
