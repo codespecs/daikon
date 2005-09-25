@@ -1280,7 +1280,7 @@ public class PptTopLevel extends Ppt {
       return;
 
     // Don't modify the actual parameter
-    slices_vector = (Vector<PptSlice>) slices_vector.clone(); // not sure how to eliminate lint warning -MDE
+    slices_vector = (Vector<PptSlice>) slices_vector.clone(); // unchecked cast
 
     // This might be a brand-new Slice, and instantiate_invariants for this
     // pass might not have come up with any invariants.
@@ -2928,9 +2928,9 @@ public class PptTopLevel extends Ppt {
       // ick ick ick
       // Equality is not represented with a permanent invariant
       // object, so store the canonical variable instead.
-      redundant_invs.add(((Equality) inv).leader()); // polymorphic container -MDE
+      redundant_invs.add(((Equality) inv).leader()); // unchecked cast due to polymorphic container
     } else {
-      redundant_invs.add(inv);  // polymorphic container -MDE
+      redundant_invs.add(inv);  // unchecked cast due to polymorphic container -MDE
     }
   }
 

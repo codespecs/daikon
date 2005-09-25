@@ -12,14 +12,14 @@ public final class DiscReasonMap {
   // names separated by commas, e.g. "this.head, this.tail" (names appear in sorted order)
   // The values of those HashMaps are lists containing DiscardInfo's
   // for all Invariants using those variable names in that PptTopLevel.
-  private static HashMap the_map;
+  private static HashMap<String,HashMap<String,List<DiscardInfo>>> the_map;
 
   private DiscReasonMap() {
     // Use initialize();
   }
 
   public static void initialize() {
-    the_map = new HashMap();
+    the_map = new HashMap<String,HashMap<String,List<DiscardInfo>>>();
   }
 
   /**
@@ -72,9 +72,9 @@ public final class DiscReasonMap {
       vars_result += ((String) temp_vars.get(i)) + ",";
       }*/
 
-    HashMap ppt_hashmap = (HashMap) the_map.get(ppt);
+    HashMap<String,List<DiscardInfo>> ppt_hashmap = the_map.get(ppt);
     if (ppt_hashmap != null) {
-      List disc_infos = (List) ppt_hashmap.get(vars);
+      List<DiscardInfo> disc_infos = ppt_hashmap.get(vars);
       if (disc_infos != null) {
         // Check to see if this invariant already has a DiscInfo
         for (int i = 0; i < disc_infos.size(); i++) {
@@ -90,14 +90,14 @@ public final class DiscReasonMap {
         }
         disc_infos.add(disc_info);
       } else {
-        List temp = new ArrayList();
+        List<DiscardInfo> temp = new ArrayList<DiscardInfo>();
         temp.add(disc_info);
         ppt_hashmap.put(vars, temp);
       }
     } else {
       // In case where nothing from this inv's PptTopLevel has been discarded yet
-      HashMap new_map = new HashMap();
-      List temp = new ArrayList();
+      HashMap<String,List<DiscardInfo>> new_map = new HashMap<String,List<DiscardInfo>>();
+      List<DiscardInfo> temp = new ArrayList<DiscardInfo>();
       temp.add(disc_info);
       new_map.put(vars, temp);
       the_map.put(ppt, new_map);
@@ -114,19 +114,19 @@ public final class DiscReasonMap {
    **/
   public static List<DiscardInfo> returnMatches_from_ppt(InvariantInfo invInfo) {
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
-    HashMap vars_map_from_ppt = (HashMap) the_map.get(invInfo.ppt());
+    HashMap<String,List<DiscardInfo>> vars_map_from_ppt = the_map.get(invInfo.ppt());
 
     if (vars_map_from_ppt == null) {
       return result;
     }
 
-    List di_list = new ArrayList();
+    List<DiscardInfo> di_list = new ArrayList<DiscardInfo>();
     if (invInfo.vars() != null) {
       // The user entered the vars in a specific order, but let's give
       // them matching invariants that have those vars in any order
       List var_perms = invInfo.var_permutations();
       for (int i = 0; i < var_perms.size(); i++) {
-        List temp = (List) vars_map_from_ppt.get(var_perms.get(i));
+        List<DiscardInfo> temp = vars_map_from_ppt.get(var_perms.get(i));
         if (temp != null) {
           di_list.addAll(temp);
         }
@@ -150,12 +150,12 @@ public final class DiscReasonMap {
   // Helper function used to combine all the DiscardInfo lists associated
   // with a set of vars at a ppt.  Only called when we know ppt has at
   // least 1 DiscardInfo associated with it
-  private static List all_vars_tied_from_ppt(String ppt) {
-    HashMap vars_map = (HashMap) the_map.get(ppt);
+  private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
+    HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
     Assert.assertTrue(vars_map != null);
     Iterator listIter = vars_map.values().iterator();
 
-    ArrayList result = new ArrayList();
+    ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
     while (listIter.hasNext()) {
       result.addAll((List) listIter.next());
     }

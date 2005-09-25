@@ -56,9 +56,9 @@ public class CoverageStats
     {
       Method m;
       m = clazzListHits.getMethod("getHits", (Class[])null);
-      hits = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null);
+      hits = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null); // unchecked cast
       m = clazzListHits.getMethod("getMisses", (Class[])null);
-      misses = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null);
+      misses = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null); // unchecked cast
     }
 
     // Compute coverage

@@ -17,7 +17,7 @@ public class ProglangTypeTest extends TestCase {
   }
 
   static Comparator<long[]> longarrcomparator = new ArraysMDE.LongArrayComparatorLexical();
-  static Comparator<Object[]> comparrcomparator = new ArraysMDE.ComparableArrayComparatorLexical<Object>();
+  static Comparator<String[]> comparrcomparator = new ArraysMDE.ComparableArrayComparatorLexical<String>();
 
   // Runtime type of first argument is long[]
   boolean longarrcomp(Object a, long[] b) {
@@ -26,9 +26,9 @@ public class ProglangTypeTest extends TestCase {
 
   // Runtime type of first (and second) argument is Comparable[]
   boolean comparrcomp(Object a, Object[] b) {
-    Comparable[] a1 = (Comparable[]) a;
-    Comparable[] b1 = (Comparable[]) b;
-    boolean result = comparrcomparator.compare(a1, b) == 0;
+    String[] a1 = (String[]) a;
+    String[] b1 = (String[]) b;
+    boolean result = comparrcomparator.compare(a1, b1) == 0;
     if (!result)
       System.out.println("Arrays differ: " + ArraysMDE.toString(a1)
                           + ", " + ArraysMDE.toString(b));

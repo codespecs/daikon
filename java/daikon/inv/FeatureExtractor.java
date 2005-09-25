@@ -131,9 +131,9 @@ public final class FeatureExtractor {
       throw new IOException("Invalid Argumnent List, output and description files " +
                             "cannot be the same");
     // Step 1
-    ArrayList<Invariant>[] allInvariants = getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
-    ArrayList<Invariant> useful = allInvariants[0];
-    ArrayList<Invariant> nonuseful = allInvariants[1];
+    Pair<ArrayList<Invariant>,ArrayList<Invariant>> allInvariants = getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
+    ArrayList<Invariant> useful = allInvariants.a;
+    ArrayList<Invariant> nonuseful = allInvariants.b;
 
     // Step 2
     // Extract the features of each invariant in useful and nonuseful
@@ -195,82 +195,77 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  // Takes two vectors of file names and loads the invariants
-  //   in those files into two vectors.
-  //   Returns the useful invariants in return[0],
-  //   returns the nonuseful invariants in return[1];
-
-  private static ArrayList<Invariant>[] getSimpleUsefulAndNonuseful(ArrayList<String> usefuls,
-                                                      ArrayList<String> nonusefuls)
+  /**
+   * Takes two vectors of file names and loads the invariants in those
+   * files into two vectors, first the useful invariants and then the
+   * nonuseful invariants.
+   **/
+  private static Pair<ArrayList<Invariant>,ArrayList<Invariant>>
+    getSimpleUsefulAndNonuseful(ArrayList<String> usefuls,
+                                ArrayList<String> nonusefuls)
     throws IOException, ClassNotFoundException {
 
-    // returns two ArrayLists (in an array) of Useful invariants and
-    // Non-Useful invariants
-    // return[0] are Useful
-    // return[1] are Non-Useful
-
-    ArrayList<Invariant>[] answer = (ArrayList<Invariant>[]) new ArrayList[2];
-    answer[0] = new ArrayList<Invariant>(); // useful
-    answer[1] = new ArrayList<Invariant>(); // nonuseful
+    ArrayList<Invariant> useful = new ArrayList<Invariant>();
+    ArrayList<Invariant> nonuseful = new ArrayList<Invariant>();
     for (int i = 0; i < usefuls.size(); i++)
       for (Iterator<Invariant> invs=readInvMap(new File(usefuls.get(i))).invariantIterator(); invs.hasNext(); )
-        answer[0].add(invs.next());
+        useful.add(invs.next());
 
     for (int i = 0; i < nonusefuls.size(); i++)
       for (Iterator<Invariant> invs=readInvMap(new File(nonusefuls.get(i))).invariantIterator(); invs.hasNext(); )
-        answer[1].add(invs.next());
+        nonuseful.add(invs.next());
 
-    return answer;
+    return new Pair<ArrayList<Invariant>,ArrayList<Invariant>>(useful, nonuseful);
   }
 
-  // Old version of loading invariants from a list of filenames.
-  //   Compares invariants within the files to determine if they
-  //   are useful or non-useful.
-
-  private static ArrayList[] getUsefulAndNonuseful(String[] args)
-    throws IOException {
-    // ignore args[0] and args[length-1]
-    // the rest of the args are pairs of files such each pair
-    // consists of a Non-Buggy.inv and Buggy.inv
-    // Note, Non-Buggy.inv contains invariants present in non-buggy code
-    // and Buggy.inv contains invariants present in buggy code
-
-    // returns two ArrayLists (in an array) of Useful invariants and
-    // non-useful invariants
-    ArrayList<Invariant>[] answer = (ArrayList<Invariant>[]) new ArrayList[2];
-    answer[0] = new ArrayList<Invariant>();
-    answer[1] = new ArrayList<Invariant>();
-
-    for (int i = 1; i < args.length-1; i+=2) {
-      // good contains string reps of invariants in Non-Buggy.inv
-      HashSet<String> good = new HashSet<String>();
-      for (Iterator goodppts =
-             FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
-           goodppts.hasNext(); ) {
-        List<Invariant> temp = ((PptTopLevel) goodppts.next()).getInvariants();
-        for (int j = 0; j < temp.size(); j++)
-          good.add(temp.get(j).repr());
-      }
-
-      // bad contains actual invariants in Buggy.inv
-      ArrayList<Invariant> bad = new ArrayList<Invariant>();
-      for (Iterator<PptTopLevel> badppts =
-             FileIO.read_serialized_pptmap(new File(args[i+1]),false).pptIterator();
-           badppts.hasNext(); ) {
-        List<Invariant> temp = badppts.next().getInvariants();
-        for (int j = 0; j < temp.size(); j++)
-          bad.add(temp.get(j));
-      }
-
-      for (int j = 0; j < bad.size(); j++) {
-        if (good.contains(bad.get(j).repr()))
-          answer[1].add(bad.get(j));
-        else
-          answer[0].add(bad.get(j));
-      }
-    }
-    return answer;
-  }
+  //   // Old version of loading invariants from a list of filenames.
+  //   //   Compares invariants within the files to determine if they
+  //   //   are useful or non-useful.
+  //
+  //   private static ArrayList[] getUsefulAndNonuseful(String[] args)
+  //     throws IOException {
+  //     // ignore args[0] and args[length-1]
+  //     // the rest of the args are pairs of files such each pair
+  //     // consists of a Non-Buggy.inv and Buggy.inv
+  //     // Note, Non-Buggy.inv contains invariants present in non-buggy code
+  //     // and Buggy.inv contains invariants present in buggy code
+  //
+  //     // returns two ArrayLists (in an array) of Useful invariants and
+  //     // non-useful invariants
+  //     ArrayList<Invariant>[] answer = (ArrayList<Invariant>[]) new ArrayList[2];
+  //     answer[0] = new ArrayList<Invariant>();
+  //     answer[1] = new ArrayList<Invariant>();
+  //
+  //     for (int i = 1; i < args.length-1; i+=2) {
+  //       // good contains string reps of invariants in Non-Buggy.inv
+  //       HashSet<String> good = new HashSet<String>();
+  //       for (Iterator goodppts =
+  //              FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
+  //            goodppts.hasNext(); ) {
+  //         List<Invariant> temp = ((PptTopLevel) goodppts.next()).getInvariants();
+  //         for (int j = 0; j < temp.size(); j++)
+  //           good.add(temp.get(j).repr());
+  //       }
+  //
+  //       // bad contains actual invariants in Buggy.inv
+  //       ArrayList<Invariant> bad = new ArrayList<Invariant>();
+  //       for (Iterator<PptTopLevel> badppts =
+  //              FileIO.read_serialized_pptmap(new File(args[i+1]),false).pptIterator();
+  //            badppts.hasNext(); ) {
+  //         List<Invariant> temp = badppts.next().getInvariants();
+  //         for (int j = 0; j < temp.size(); j++)
+  //           bad.add(temp.get(j));
+  //       }
+  //
+  //       for (int j = 0; j < bad.size(); j++) {
+  //         if (good.contains(bad.get(j).repr()))
+  //           answer[1].add(bad.get(j));
+  //         else
+  //           answer[0].add(bad.get(j));
+  //       }
+  //     }
+  //     return answer;
+  //   }
 
   // Prints the labeling using C5 format
 

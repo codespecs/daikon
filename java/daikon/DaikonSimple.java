@@ -264,7 +264,7 @@ public static void mainHelper(final String[] args) throws IOException,
     // dynamic constants optimization is turned on (so we do not do the
     // check here).
 
-    Vector unary_views = new Vector(ppt.var_infos.length);
+    Vector<PptSlice> unary_views = new Vector<PptSlice>(ppt.var_infos.length);
     for (int i = 0; i < ppt.var_infos.length; i++) {
       VarInfo vi = ppt.var_infos[i];
 
@@ -282,7 +282,7 @@ public static void mainHelper(final String[] args) throws IOException,
     /// 2. all binary views
 
     // Binary slices/invariants.
-    Vector binary_views = new Vector();
+    Vector<PptSlice> binary_views = new Vector<PptSlice>();
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 
@@ -310,7 +310,7 @@ public static void mainHelper(final String[] args) throws IOException,
     binary_views = null;
 
     // 3. all ternary views
-    Vector ternary_views = new Vector();
+    Vector<PptSlice> ternary_views = new Vector<PptSlice>();
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 

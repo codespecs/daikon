@@ -313,8 +313,8 @@ public final class PrintInvariants {
     }
 
     // Uses the custom comparator to get the Ppt objects in sorted order
-    Comparator comparator = new Ppt.NameComparator();
-    TreeSet ppts_sorted = new TreeSet(comparator);
+    Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
+    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<PptTopLevel>(comparator);
     ppts_sorted.addAll(ppts.asCollection());
 
     // Iterate over the PptTopLevels in ppts
@@ -648,10 +648,10 @@ public final class PrintInvariants {
       debugPrintModified.fine ("Doing print_modified_vars for: " + ppt.name());
     }
 
-    Vector modified_vars = new Vector();
-    Vector modified_primitive_args = new Vector();
-    Vector unmodified_vars = new Vector();
-    Vector unmodified_orig_vars = new Vector();
+    Vector<VarInfo> modified_vars = new Vector<VarInfo>();
+    Vector<VarInfo> modified_primitive_args = new Vector<VarInfo>();
+    Vector<VarInfo> unmodified_vars = new Vector<VarInfo>();
+    Vector<VarInfo> unmodified_orig_vars = new Vector<VarInfo>();
 
     for (int i=0; i<ppt.var_infos.length; i++) {
       VarInfo vi = ppt.var_infos[i];
@@ -752,7 +752,7 @@ public final class PrintInvariants {
     if (Daikon.output_format == OutputFormat.ESCJAVA
         || Daikon.output_format == OutputFormat.JML
         ) {
-      Vector mods = new Vector();
+      Vector<VarInfo> mods = new Vector<VarInfo>();
       for (int i=0; i<modified_vars.size(); i++) {
         VarInfo vi = (VarInfo)modified_vars.elementAt(i);
         // System.out.println("modified var: " + vi.name.name());
@@ -965,7 +965,7 @@ public final class PrintInvariants {
     Invariant[] invs_array = (Invariant[]) invs.toArray(new Invariant[invs.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
-    Vector result = new Vector(invs_array.length);
+    Vector<Invariant> result = new Vector<Invariant>(invs_array.length);
 
     for (int i = 0; i < invs_array.length; i++) {
       result.add(invs_array[i]);
@@ -1032,7 +1032,7 @@ public final class PrintInvariants {
 
     Global.non_falsified_invariants += invs_array.length;
 
-    List accepted_invariants = new Vector();
+    List<Invariant> accepted_invariants = new Vector<Invariant>();
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
@@ -1320,7 +1320,7 @@ public final class PrintInvariants {
         filter_class = filter.getClass();
       Map<Class,Integer> inv_map = filter_map.get (filter_class);
       if (inv_map == null) {
-        inv_map = new LinkedHashMap();
+        inv_map = new LinkedHashMap<Class,Integer>();
         filter_map.put (filter_class, inv_map);
       }
       Integer cnt = (Integer) inv_map.get (inv.getClass());

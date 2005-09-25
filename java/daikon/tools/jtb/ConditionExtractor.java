@@ -33,12 +33,12 @@ class ConditionExtractor extends DepthFirstVisitor {
   // to decide whether the return statement should be included as a conditional.
   // Return statements are included as conditionals iff the return type is "boolean"
   // Must be a stack rather than a single variable for the case of helper classes.
-  private Stack resultTypes = new Stack();
+  private Stack<Object> resultTypes = new Stack<Object>(); // elements are ResultType or String
 
   // key = methodname (as String); value = conditional expressions (as Strings)
-  HashMap conditions = new HashMap();
+  HashMap<String,List<String>> conditions = new HashMap<String,List<String>>();
   // key = method declaration (String); value = method bodies (String)
-  HashMap replaceStatements = new HashMap();
+  HashMap<String,String> replaceStatements = new HashMap<String,String>();
 
 
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
@@ -160,11 +160,11 @@ class ConditionExtractor extends DepthFirstVisitor {
    */
   public void visit(SwitchStatement n) {
     String switchExpression = Ast.format(n.f2);
-    Collection caseValues = getCaseValues(n.f5);
+    Collection<String> caseValues = getCaseValues(n.f5);
      // a condition for the default case. A 'not' of all the different cases.
     StringBuffer defaultString = new StringBuffer();
-    for (Iterator e = caseValues.iterator(); e.hasNext(); ) {
-      String switchValue = ((String) e.next()).trim();
+    for (Iterator<String> e = caseValues.iterator(); e.hasNext(); ) {
+      String switchValue = e.next().trim();
       if (!switchValue.equals(":")) {
 	if (!(defaultString.length() == 0))
 	  defaultString.append(" && ");
@@ -180,8 +180,8 @@ class ConditionExtractor extends DepthFirstVisitor {
    * @return a String[] which contains the different Integer values
    * which the case expression is tested against
    */
-  public Collection getCaseValues (NodeListOptional n) {
-    ArrayList values = new ArrayList();
+  public Collection<String> getCaseValues (NodeListOptional n) {
+    ArrayList<String> values = new ArrayList<String>();
     Enumeration e = n.elements();
     while (e.hasMoreElements()) {
       // in the nodeSequence for the switch statement,
@@ -326,10 +326,10 @@ class ConditionExtractor extends DepthFirstVisitor {
       meth = className + ":::OBJECT";
     }
     if (! conditions.containsKey(meth)) {
-      conditions.put(meth, new Vector());
+      conditions.put(meth, new Vector<String>());
     }
-    Vector conds = (Vector) conditions.get(meth);
-    conds.addElement(cond);
+    List<String> conds = conditions.get(meth);
+    conds.add(cond);
   }
 
   // store the replace statement (expression) in the hashmap
@@ -339,11 +339,11 @@ class ConditionExtractor extends DepthFirstVisitor {
     }
   }
 
-   public Map getConditionMap() {
+   public Map<String,List<String>> getConditionMap() {
      return conditions;
    }
 
-  public Map getReplaceStatements() {
+  public Map<String,String> getReplaceStatements() {
     return replaceStatements;
   }
 

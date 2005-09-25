@@ -23,9 +23,9 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // For debugging purposes.
   private void printShadowingMap() {
     System.out.println("Shadowing map:");
-    for (Map.Entry e : shadowingMap.entrySet()) {
+    for (Map.Entry<String,Stack<ClassOrInterfaceType>> e : shadowingMap.entrySet()) {
       System.out.print("  " + e.getKey() + " stack: ");
-      for (ClassOrInterfaceType t : (Stack<ClassOrInterfaceType>)e.getValue()) {
+      for (ClassOrInterfaceType t : e.getValue()) {
         StringWriter w = new StringWriter();
         t.accept(new TreeFormatter());
         t.accept(new TreeDumper(w));
@@ -179,7 +179,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
       // No explicit bound means that bound is java.lang.Object.
 
-      Stack s = shadowingMap.get(n.f0.tokenImage);
+      Stack<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
       if (s == null) {
         s = new Stack<ClassOrInterfaceType>();
         shadowingMap.put(n.f0.tokenImage, s);
@@ -283,10 +283,10 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
     HashMap<String,Stack<ClassOrInterfaceType>> newMap = new HashMap<String,Stack<ClassOrInterfaceType>>();
 
-    for (Map.Entry e : m.entrySet()) {
+    for (Map.Entry<String,Stack<ClassOrInterfaceType>> e : m.entrySet()) {
       String key = (String)e.getKey();
-      Stack<ClassOrInterfaceType> oldStack = (Stack<ClassOrInterfaceType>)e.getValue();
-      Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>)oldStack.clone();
+      Stack<ClassOrInterfaceType> oldStack = e.getValue();
+      Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>)oldStack.clone(); // unchecked cast
       newMap.put(key, newStack);
     }
 

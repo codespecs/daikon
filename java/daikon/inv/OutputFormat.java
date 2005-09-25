@@ -659,8 +659,8 @@ public final class OutputFormat
           // Can't happen because Definition directly extends Object
           throw new Error("This can't happen: " + e.toString());
         }
-        rangetable = (Hashtable<String,String>) rangetable.clone(); // not sure how to eliminate lint warning -MDE
-        globaltable = (HashSet<String>) globaltable.clone(); // not sure how to eliminate lint warning -MDE
+        rangetable = (Hashtable<String,String>) rangetable.clone(); // unchecked cast
+        globaltable = (HashSet<String>) globaltable.clone(); // unchecked cast
         return newd;
       }
 

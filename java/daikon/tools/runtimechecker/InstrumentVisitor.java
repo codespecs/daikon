@@ -337,8 +337,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String name = Ast.getName(method);
         String returnType = Ast.getReturnType(method);
         String maybeReturn = (returnType.equals("void") ? "" : "return");
-        List typesAndParameters = new ArrayList();
-        List parameters = new ArrayList();
+        List<String> typesAndParameters = new ArrayList<String>();
+        List<String> parameters = new ArrayList<String>();
         for (Iterator<FormalParameter> i = Ast.getParameters(method).iterator(); i.hasNext();) {
             FormalParameter param = i.next();
             parameters.add(Ast.getName(param));

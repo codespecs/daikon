@@ -12,7 +12,6 @@ import java.io.*;
 // Assert.java
 // CountingPrintWriter.java
 // Digest.java
-// EqHashMap.java
 // FuzzyFloat.java
 // Hasher.java
 // Intern.java
@@ -72,15 +71,15 @@ public final class TestUtilMDE extends TestCase {
   /// Utility functions
   ///
 
-  public static Iterator int_array_iterator(int[] nums) {
-    Object[] o = new Object[nums.length];
+  public static Iterator<Integer> int_array_iterator(int[] nums) {
+    Integer[] o = new Integer[nums.length];
     for (int i=0; i<nums.length; i++)
       o[i] = new Integer(nums[i]);
     return Arrays.asList(o).iterator();
   }
 
-  public static int[] int_iterator_array(Iterator itor) {
-    Vector v = new Vector();
+  public static int[] int_iterator_array(Iterator<Integer> itor) {
+    Vector<Integer> v = new Vector<Integer>();
     while (itor.hasNext())
       v.add(itor.next());
     int[] a = new int[v.size()];
@@ -94,16 +93,16 @@ public final class TestUtilMDE extends TestCase {
     assert_arrays_equals(int_iterator_array(int_array_iterator(a)), a);
   }
 
-  public static Vector toVector(Iterator itor) {
-    Vector v = new Vector();
+  public static <T> Vector<T> toVector(Iterator<T> itor) {
+    Vector<T> v = new Vector<T>();
     for ( ; itor.hasNext() ; ) {
       v.add(itor.next());
     }
     return v;
   }
 
-  public static Vector toVector(Enumeration e) {
-    Vector v = new Vector();
+  public static <T> Vector<T> toVector(Enumeration<T> e) {
+    Vector<T> v = new Vector<T>();
     for ( ; e.hasMoreElements() ; ) {
       v.add(e.nextElement());
     }
@@ -505,8 +504,8 @@ public final class TestUtilMDE extends TestCase {
     // public static class IntArrayComparatorLexical implements Comparator
     // public static class IntArrayComparatorLengthFirst implements Comparator
     {
-      Comparator iacl = new ArraysMDE.IntArrayComparatorLexical();
-      Comparator iaclf = new ArraysMDE.IntArrayComparatorLengthFirst();
+      Comparator<int[]> iacl = new ArraysMDE.IntArrayComparatorLexical();
+      Comparator<int[]> iaclf = new ArraysMDE.IntArrayComparatorLengthFirst();
 
       int[] a0 = new int[] { };
       int[] a1 = new int[] { };
@@ -572,8 +571,8 @@ public final class TestUtilMDE extends TestCase {
     // public static class LongArrayComparatorLexical implements Comparator
     // public static class LongArrayComparatorLengthFirst implements Comparator
     {
-      Comparator lacl = new ArraysMDE.LongArrayComparatorLexical();
-      Comparator laclf = new ArraysMDE.LongArrayComparatorLengthFirst();
+      Comparator<long[]> lacl = new ArraysMDE.LongArrayComparatorLexical();
+      Comparator<long[]> laclf = new ArraysMDE.LongArrayComparatorLengthFirst();
       long[] a0 = new long[] { };
       long[] a1 = new long[] { };
       long[] a2 = new long[] { 0,1,2,3 };
@@ -637,7 +636,7 @@ public final class TestUtilMDE extends TestCase {
 
     // public static class DoubleArrayComparatorLexical implements Comparator
     {
-      Comparator dacl = new ArraysMDE.DoubleArrayComparatorLexical();
+      Comparator<double[]> dacl = new ArraysMDE.DoubleArrayComparatorLexical();
       double[] a0 = new double[] { };
       double[] a1 = new double[] { };
       double[] a2 = new double[] { 0,1,2,3 };
@@ -690,8 +689,8 @@ public final class TestUtilMDE extends TestCase {
     // public static final class ComparableArrayComparatorLexical implements Comparator
     // public static final class ComparableArrayComparatorLengthFirst implements Comparator
 {
-      Comparator cacl = new ArraysMDE.ComparableArrayComparatorLexical();
-      Comparator caclf = new ArraysMDE.ComparableArrayComparatorLengthFirst();
+      Comparator<String[]> cacl = new ArraysMDE.ComparableArrayComparatorLexical<String>();
+      Comparator<String[]> caclf = new ArraysMDE.ComparableArrayComparatorLengthFirst<String>();
       String[] a0 = new String[] { };
       String[] a1 = new String[] { };
       String[] a2 = new String[] { "0","1","2","3" };
@@ -864,7 +863,7 @@ public final class TestUtilMDE extends TestCase {
         for (int i=0; i<arrays.length; i++)
           Intern.intern(arrays[i]);
         if (Intern.numIntArrays() != size1)
-          throw new Error();
+          throw new Error("Expected " + size1 + ", got " + Intern.numIntArrays() + " int arrays");
         System.gc();
         if (Intern.numIntArrays() != size1)
           throw new Error();
@@ -880,8 +879,8 @@ public final class TestUtilMDE extends TestCase {
             for (int i=0; i<arrays.length; i++)
               System.out.println(ArraysMDE.toString(arrays[i]));
             System.out.println("================");
-            for (Iterator itor = Intern.intArrays(); itor.hasNext(); ) {
-              System.out.println(ArraysMDE.toString((int[])itor.next()));
+            for (Iterator<int[]> itor = Intern.intArrays(); itor.hasNext(); ) {
+              System.out.println(ArraysMDE.toString(itor.next()));
             }
             String message = ("Size should have been " + size2 + ", actually was "
                               + Intern.numIntArrays());
@@ -1156,8 +1155,8 @@ public final class TestUtilMDE extends TestCase {
     class TestMissingNumbersIteratorInt {
       // javadoc won't let this be static
       void test(int[] orig, boolean add_ends, int[] goal_missing) {
-        Iterator orig_iterator = int_array_iterator(orig);
-        Iterator missing_iterator = new MathMDE.MissingNumbersIteratorInt(orig_iterator, add_ends);
+        Iterator<Integer> orig_iterator = int_array_iterator(orig);
+        Iterator<Integer> missing_iterator = new MathMDE.MissingNumbersIteratorInt(orig_iterator, add_ends);
         int[] missing = TestUtilMDE.int_iterator_array(missing_iterator);
         assert_arrays_equals(missing, goal_missing);
       }
@@ -1239,7 +1238,7 @@ public final class TestUtilMDE extends TestCase {
       // javadoc won't let this be static
       void check_strict(int[] nums, int[] goal_rm) {
         check(nums, goal_rm, true);
-        Iterator itor = int_array_iterator(nums);
+        Iterator<Integer> itor = int_array_iterator(nums);
         assert_arrays_equals(MathMDE.nonmodulus_strict_int(itor), goal_rm);
       }
 
@@ -1292,43 +1291,43 @@ public final class TestUtilMDE extends TestCase {
   public static void testOrderedPairIterator() {
     final int NULL = -2222;
 
-    Vector ones = new Vector();
+    Vector<Integer> ones = new Vector<Integer>();
     for (int i=1; i<=30; i++)
       ones.add(new Integer(i));
-    Vector twos = new Vector();
+    Vector<Integer> twos = new Vector<Integer>();
     for (int i=2; i<=30; i+=2)
       twos.add(new Integer(i));
-    Vector threes = new Vector();
+    Vector<Integer> threes = new Vector<Integer>();
     for (int i=3; i<=30; i+=3)
       threes.add(new Integer(i));
 
     // I've replaced the nulls by 0 in order to permit the array elements
     // to be ints instead of Integers.
 
-    compareOrderedPairIterator(new OrderedPairIterator(ones.iterator(), ones.iterator()),
+    compareOrderedPairIterator(new OrderedPairIterator<Integer>(ones.iterator(), ones.iterator()),
                                new int[][] { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}, {23, 23}, {24, 24}, {25, 25}, {26, 26}, {27, 27}, {28, 28}, {29, 29}, {30, 30}, });
 
-    compareOrderedPairIterator(new OrderedPairIterator(ones.iterator(), twos.iterator()),
+    compareOrderedPairIterator(new OrderedPairIterator<Integer>(ones.iterator(), twos.iterator()),
                                new int[][] { {1, NULL}, {2, 2}, {3, NULL}, {4, 4}, {5, NULL}, {6, 6}, {7, NULL}, {8, 8}, {9, NULL}, {10, 10}, {11, NULL}, {12, 12}, {13, NULL}, {14, 14}, {15, NULL}, {16, 16}, {17, NULL}, {18, 18}, {19, NULL}, {20, 20}, {21, NULL}, {22, 22}, {23, NULL}, {24, 24}, {25, NULL}, {26, 26}, {27, NULL}, {28, 28}, {29, NULL}, {30, 30}, });
 
-    compareOrderedPairIterator(new OrderedPairIterator(twos.iterator(), ones.iterator()),
+    compareOrderedPairIterator(new OrderedPairIterator<Integer>(twos.iterator(), ones.iterator()),
                                new int[][] { {NULL, 1}, {2, 2}, {NULL, 3}, {4, 4}, {NULL, 5}, {6, 6}, {NULL, 7}, {8, 8}, {NULL, 9}, {10, 10}, {NULL, 11}, {12, 12}, {NULL, 13}, {14, 14}, {NULL, 15}, {16, 16}, {NULL, 17}, {18, 18}, {NULL, 19}, {20, 20}, {NULL, 21}, {22, 22}, {NULL, 23}, {24, 24}, {NULL, 25}, {26, 26}, {NULL, 27}, {28, 28}, {NULL, 29}, {30, 30}, });
 
-    compareOrderedPairIterator(new OrderedPairIterator(ones.iterator(), threes.iterator()),
+    compareOrderedPairIterator(new OrderedPairIterator<Integer>(ones.iterator(), threes.iterator()),
                                new int[][] { {1, NULL}, {2, NULL}, {3, 3}, {4, NULL}, {5, NULL}, {6, 6}, {7, NULL}, {8, NULL}, {9, 9}, {10, NULL}, {11, NULL}, {12, 12}, {13, NULL}, {14, NULL}, {15, 15}, {16, NULL}, {17, NULL}, {18, 18}, {19, NULL}, {20, NULL}, {21, 21}, {22, NULL}, {23, NULL}, {24, 24}, {25, NULL}, {26, NULL}, {27, 27}, {28, NULL}, {29, NULL}, {30, 30}, });
 
-    compareOrderedPairIterator(new OrderedPairIterator(twos.iterator(), threes.iterator()),
+    compareOrderedPairIterator(new OrderedPairIterator<Integer>(twos.iterator(), threes.iterator()),
                                new int[][] { {2, NULL}, {NULL, 3}, {4, NULL}, {6, 6}, {8, NULL}, {NULL, 9}, {10, NULL}, {12, 12}, {14, NULL}, {NULL, 15}, {16, NULL}, {18, 18}, {20, NULL}, {NULL, 21}, {22, NULL}, {24, 24}, {26, NULL}, {NULL, 27}, {28, NULL}, {30, 30}, });
 
   }
 
-  public static void compareOrderedPairIterator(OrderedPairIterator<Pair> opi, int[][] ints) {
+  public static void compareOrderedPairIterator(OrderedPairIterator<Integer> opi, int[][] ints) {
     int pairno = 0;
     while (opi.hasNext()) {
-      Pair pair = opi.next();
+      Pair<Integer,Integer> pair = opi.next();
       // System.out.println("Iterator: <" + pair.a + "," + pair.b + ">, array: <" + ints[pairno][0] + "," + ints[pairno][1] + ">");
-      assertTrue((pair.a == null) || (((Integer)(pair.a)).intValue() == ints[pairno][0]));
-      assertTrue((pair.b == null) || (((Integer)(pair.b)).intValue() == ints[pairno][1]));
+      assertTrue((pair.a == null) || (pair.a.intValue() == ints[pairno][0]));
+      assertTrue((pair.b == null) || (pair.b.intValue() == ints[pairno][1]));
       pairno++;
     }
     assertTrue(pairno == ints.length);
@@ -1458,14 +1457,14 @@ public final class TestUtilMDE extends TestCase {
     {
       // These names are taken from APL notation, where iota creates an
       // array of all the numbers up to its argument.
-      Vector iota0 = new Vector();
-      Vector iota10 = new Vector();
+      Vector<Integer> iota0 = new Vector<Integer>();
+      Vector<Integer> iota10 = new Vector<Integer>();
       for (int i=0; i<10; i++)
         iota10.add(new Integer(i));
-      Vector iota10_twice = new Vector();
+      Vector<Integer> iota10_twice = new Vector<Integer>();
       iota10_twice.addAll(iota10);
       iota10_twice.addAll(iota10);
-      Vector iota10_thrice = new Vector();
+      Vector<Integer> iota10_thrice = new Vector<Integer>();
       iota10_thrice.addAll(iota10);
       iota10_thrice.addAll(iota10);
       iota10_thrice.addAll(iota10);
@@ -1474,40 +1473,40 @@ public final class TestUtilMDE extends TestCase {
       // public static class IteratorEnumeration implements Enumeration
 
       Assert.assertTrue(iota0.equals(toVector(iota0.iterator())));
-      Assert.assertTrue(iota0.equals(toVector(new UtilMDE.IteratorEnumeration(iota0.iterator()))));
+      Assert.assertTrue(iota0.equals(toVector(new UtilMDE.IteratorEnumeration<Integer>(iota0.iterator()))));
       Assert.assertTrue(iota0.equals(toVector(iota0.elements())));
-      Assert.assertTrue(iota0.equals(toVector(new UtilMDE.EnumerationIterator(iota0.elements()))));
+      Assert.assertTrue(iota0.equals(toVector(new UtilMDE.EnumerationIterator<Integer>(iota0.elements()))));
       Assert.assertTrue(iota10.equals(toVector(iota10.iterator())));
-      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.IteratorEnumeration(iota10.iterator()))));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.IteratorEnumeration<Integer>(iota10.iterator()))));
       Assert.assertTrue(iota10.equals(toVector(iota10.elements())));
-      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.EnumerationIterator(iota10.elements()))));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.EnumerationIterator<Integer>(iota10.elements()))));
 
       // public static class MergedIterator2 implements Iterator {
-      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator2(iota10.iterator(), iota10.iterator()))));
-      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.MergedIterator2(iota0.iterator(), iota10.iterator()))));
-      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.MergedIterator2(iota10.iterator(), iota0.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator2<Integer>(iota10.iterator(), iota10.iterator()))));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.MergedIterator2<Integer>(iota0.iterator(), iota10.iterator()))));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.MergedIterator2<Integer>(iota10.iterator(), iota0.iterator()))));
 
       // public static class MergedIterator implements Iterator {
-      Vector iota10_iterator_thrice = new Vector();
+      Vector<Iterator<Integer>> iota10_iterator_thrice = new Vector<Iterator<Integer>>();
       iota10_iterator_thrice.add(iota10.iterator());
       iota10_iterator_thrice.add(iota10.iterator());
       iota10_iterator_thrice.add(iota10.iterator());
-      Assert.assertTrue(iota10_thrice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_thrice.iterator()))));
-      Vector iota10_iterator_twice_1 = new Vector();
+      Assert.assertTrue(iota10_thrice.equals(toVector(new UtilMDE.MergedIterator<Integer>(iota10_iterator_thrice.iterator()))));
+      Vector<Iterator<Integer>> iota10_iterator_twice_1 = new Vector<Iterator<Integer>>();
       iota10_iterator_twice_1.add(iota0.iterator());
       iota10_iterator_twice_1.add(iota10.iterator());
       iota10_iterator_twice_1.add(iota10.iterator());
-      Vector iota10_iterator_twice_2 = new Vector();
+      Vector<Iterator<Integer>> iota10_iterator_twice_2 = new Vector<Iterator<Integer>>();
       iota10_iterator_twice_2.add(iota10.iterator());
       iota10_iterator_twice_2.add(iota0.iterator());
       iota10_iterator_twice_2.add(iota10.iterator());
-      Vector iota10_iterator_twice_3 = new Vector();
+      Vector<Iterator<Integer>> iota10_iterator_twice_3 = new Vector<Iterator<Integer>>();
       iota10_iterator_twice_3.add(iota10.iterator());
       iota10_iterator_twice_3.add(iota10.iterator());
       iota10_iterator_twice_3.add(iota0.iterator());
-      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_1.iterator()))));
-      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_2.iterator()))));
-      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_3.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator<Integer>(iota10_iterator_twice_1.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator<Integer>(iota10_iterator_twice_2.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator<Integer>(iota10_iterator_twice_3.iterator()))));
 
 
       class OddFilter implements Filter<Integer> {
@@ -1519,24 +1518,24 @@ public final class TestUtilMDE extends TestCase {
 
       // public static final class FilteredIterator implements Iterator
 
-      Vector iota10_odd = new Vector();
+      Vector<Integer> iota10_odd = new Vector<Integer>();
       for (int i=0; i<iota10.size(); i++)
         if (i%2 == 1)
           iota10_odd.add(new Integer(i));
-      Assert.assertTrue(iota10_odd.equals(toVector(new UtilMDE.FilteredIterator(iota10.iterator(), new OddFilter()))));
+      Assert.assertTrue(iota10_odd.equals(toVector(new UtilMDE.FilteredIterator<Integer>(iota10.iterator(), new OddFilter()))));
 
     }
 
     // public static final class RemoveFirstAndLastIterator implements Iterator
     {
-      Vector iota5 = new Vector();
+      Vector<Integer> iota5 = new Vector<Integer>();
       for (int i=0; i<5; i++)
         iota5.add(new Integer(i));
-      Vector iota5middle = new Vector();
+      Vector<Integer> iota5middle = new Vector<Integer>();
       for (int i=1; i<4; i++)
         iota5middle.add(new Integer(i));
-      UtilMDE.RemoveFirstAndLastIterator rfali = new UtilMDE.RemoveFirstAndLastIterator(iota5.iterator());
-      Vector rfali_vector = toVector(rfali);
+      UtilMDE.RemoveFirstAndLastIterator<Integer> rfali = new UtilMDE.RemoveFirstAndLastIterator<Integer>(iota5.iterator());
+      Vector<Integer> rfali_vector = toVector(rfali);
       Assert.assertTrue(iota5middle.equals(rfali_vector));
       Assert.assertTrue(rfali.getFirst().equals(new Integer(0)));
       Assert.assertTrue(rfali.getLast().equals(new Integer(4)));
@@ -1546,12 +1545,12 @@ public final class TestUtilMDE extends TestCase {
     // public static ArrayList randomElements(Iterator itor, int num_elts, Random random)
 
     // Iterate through numbers from zero up to the argument (non-inclusive)
-    class IotaIterator implements Iterator {
+    class IotaIterator implements Iterator<Integer> {
       int i = 0;
       int limit;
       public IotaIterator(int limit) { this.limit = limit; }
       public boolean hasNext() { return i<limit; }
-      public Object next() {
+      public Integer next() {
         if (! hasNext()) throw new NoSuchElementException();
         return new Integer(i++);
       }
@@ -1567,7 +1566,7 @@ public final class TestUtilMDE extends TestCase {
       for (int i=1; i<num_elts_limit; i+=3) {
         int[] totals = new int[num_elts_limit];
         for (int j=0; j<tries; j++) {
-          List chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
+          List<Integer> chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
           for (int m=0; m<chosen.size(); m++) {
             for (int n=m+1; n<chosen.size(); n++) {
               if ( ((Integer)chosen.get(m)).intValue() == ((Integer)chosen.get(n)).intValue() ) {
@@ -1652,7 +1651,7 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.join(new String[] { "foo" }, ", ").equals("foo"));
     assertTrue(UtilMDE.join(new String[] { }, ", ").equals(""));
     assertTrue(UtilMDE.join(new Integer[] { new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4) }, "").equals("01234"));
-    Vector potpourri = new Vector();
+    Vector<Object> potpourri = new Vector<Object>();
     potpourri.add("day"); potpourri.add(new Integer(2)); potpourri.add("day");
     assertTrue(UtilMDE.join(potpourri, " ").equals("day 2 day"));
 
@@ -2156,7 +2155,7 @@ public final class TestUtilMDE extends TestCase {
     // public class DoubleArrayComparatorLexical implements Comparator
     // public int compare(Object o1, Object o2)
     {
-      Comparator comparator = ff.new DoubleArrayComparatorLexical();
+      Comparator<double[]> comparator = ff.new DoubleArrayComparatorLexical();
       double[] a0 = new double[] { };
       double[] a1 = new double[] { };
       double[] a2 = new double[] { 0,1,2,3 };
@@ -2268,14 +2267,14 @@ public final class TestUtilMDE extends TestCase {
     List ac = Arrays.asList (new Object[] {a, c});
     List bc = Arrays.asList (new Object[] {b, c});
 
-    List abc = new ArrayList (Arrays.asList (new Object[] {a,b,c}));
-    List combo1 = UtilMDE.create_combinations (1, 0, abc);
+    List<Object> abc = Arrays.asList (new Object[] {a,b,c});
+    List<List<Object>> combo1 = UtilMDE.create_combinations (1, 0, abc);
     assertTrue (combo1.size() == 3);
     assertTrue (combo1.contains (a_list));
     assertTrue (combo1.contains (b_list));
     assertTrue (combo1.contains (c_list));
 
-    List combo2 = UtilMDE.create_combinations (2, 0, abc);
+    List<List<Object>> combo2 = UtilMDE.create_combinations (2, 0, abc);
     assertTrue (combo2.size() == 6);
     assertTrue (combo2.contains (aa));
     assertTrue (combo2.contains (ab));

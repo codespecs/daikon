@@ -28,7 +28,7 @@ public class StringInfo extends DaikonVariableInfo
     {
         if(isArray)
         {
-            return getStringList((List)val);
+            return getStringList((List<String>)val); // unchecked cast
         }
         else
         {

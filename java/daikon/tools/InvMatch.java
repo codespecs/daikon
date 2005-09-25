@@ -179,7 +179,7 @@ public class InvMatch {
     for (Iterator<InvTranslate> i = inv_xlate_list.iterator(); i.hasNext(); ) {
       InvTranslate xlate = i.next();
 
-      List new_translation = new ArrayList();
+      List<InvTranslate> new_translation = new ArrayList<InvTranslate>();
       new_translation.addAll (current_translation);
       new_translation.add (xlate);
       if (!is_good_translation (new_translation))

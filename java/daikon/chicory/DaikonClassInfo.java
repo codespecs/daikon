@@ -35,7 +35,7 @@ public class DaikonClassInfo extends DaikonVariableInfo
         if(isArray)
         {
             //a list of the runtime type of each value in the array
-            return StringInfo.getStringList(DTraceWriter.getTypeNameList((List) val));
+            return StringInfo.getStringList(DTraceWriter.getTypeNameList((List<Object>) val));
         }
         else
         {

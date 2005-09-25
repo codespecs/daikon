@@ -1751,19 +1751,19 @@ public final class UtilMDE {
    *    {b, b}, {b, c},
    *    {c, c}
    */
-  public static <T> ArrayList<ArrayList<T>> create_combinations (int dims, int start, List<T> objs) {
+  public static <T> List<List<T>> create_combinations (int dims, int start, List<T> objs) {
 
-    ArrayList<ArrayList<T>> results = new ArrayList<ArrayList<T>>();
+    List<List<T>> results = new ArrayList<List<T>>();
 
     for (int i = start; i < objs.size(); i++) {
       if (dims == 1) {
-        ArrayList<T> simple = new ArrayList<T>();
+        List<T> simple = new ArrayList<T>();
         simple.add (objs.get(i));
         results.add (simple);
       } else {
-        ArrayList<ArrayList<T>> combos = create_combinations (dims-1, i, objs);
-        for (Iterator<ArrayList<T>> j = combos.iterator(); j.hasNext(); ) {
-          ArrayList<T> simple = new ArrayList<T>();
+        List<List<T>> combos = create_combinations (dims-1, i, objs);
+        for (Iterator<List<T>> j = combos.iterator(); j.hasNext(); ) {
+          List<T> simple = new ArrayList<T>();
           simple.add (objs.get(i));
           simple.addAll (j.next());
           results.add (simple);

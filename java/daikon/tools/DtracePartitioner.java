@@ -107,7 +107,7 @@ public class DtracePartitioner
       Set<String> unreturned = new HashSet<String> (enters);
 
       // Build a hashmap of values to watch
-      HashMap nonceMap = new HashMap(); // maps (String or Integer) -> String
+      HashMap<Object/*String or Integer*/,String> nonceMap = new HashMap<Object,String>();
       for (int i = 0; i < enters.size(); i++) {
         String enterStr = enters.get(i);
         // it could be an OBJECT or CLASS invocation ppt, ignore those
@@ -148,8 +148,8 @@ public class DtracePartitioner
       // Return a list of all the invocations where matching ENTER and
       // EXIT points were found as well as the OBJECT and CLASS
       // invocations.
-      ArrayList al = new ArrayList();
-      for (Iterator i = nonceMap.values().iterator(); i.hasNext(); ) {
+      ArrayList<String> al = new ArrayList<String>();
+      for (Iterator<String> i = nonceMap.values().iterator(); i.hasNext(); ) {
         al.add (i.next());
       }
       // add in the invocations that were never resolved because no

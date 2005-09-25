@@ -404,14 +404,14 @@ public class PptSliceEquality
    * pre: Each value in map is a list of size 1 or greater
    * post: Each value in map is a list of size 1 or greater
    **/
-  private void addToBindingList (Map map, Object key, VarInfo value) {
+  private <T> void addToBindingList (Map<T,List<VarInfo>> map, T key, VarInfo value) {
     Assert.assertTrue (key != null);
-    List elements = (List) map.get(key);
+    List<VarInfo> elements = map.get(key);
     if (elements == null) {
-      elements = new LinkedList();
-      map.put (key, elements);  // TODO: polymorphic container
+      elements = new LinkedList<VarInfo>();
+      map.put (key, elements);
     }
-    elements.add (value);       // TODO: polymorphic container
+    elements.add (value);
   }
 
 

@@ -21,12 +21,12 @@ public class InstrumentObserversVisitor
 {
 
   /** @param observers a collection of MethodDeclarations **/
-  public InstrumentObserversVisitor(Collection observers) {
-    observer_methods = new ArrayList(observers);
+  public InstrumentObserversVisitor(Collection<MethodDeclaration> observers) {
+    observer_methods = new ArrayList<MethodDeclaration>(observers);
   }
 
   // All methods that we want to observe
-  private final List observer_methods;
+  private final List<MethodDeclaration> observer_methods;
 
   /**
    * Add fields for each observed method.
@@ -83,7 +83,7 @@ public class InstrumentObserversVisitor
   }
 
   // Methods that we have created
-  private final Set generated_methods = new HashSet();
+  private final Set<MethodDeclaration> generated_methods = new HashSet<MethodDeclaration>();
   /**
    * Renames the original method, and add two new ones that wraps it.
    **/
@@ -98,7 +98,7 @@ public class InstrumentObserversVisitor
     String name = Ast.getName(method);
     String returnType = Ast.getReturnType(method);
     String maybeReturn = (returnType.equals("void") ? "" : "return");
-    Vector parameters = new Vector();
+    Vector<String> parameters = new Vector<String>();
     for (Iterator<FormalParameter> i = Ast.getParameters(method).iterator(); i.hasNext(); ) {
       FormalParameter param = i.next();
       parameters.add(Ast.getName(param));
@@ -176,7 +176,7 @@ public class InstrumentObserversVisitor
   public static final class GrepObserversVisitor
     extends DepthFirstVisitor
   {
-    public final List observer_methods = new ArrayList();
+    public final List<MethodDeclaration> observer_methods = new ArrayList<MethodDeclaration>();
 
     /**
      * Note all occurences of observer methods.

@@ -72,8 +72,9 @@ public class OrderedPairIterator<T> implements java.util.Iterator<Pair<T,T>> {
         return return1();
       } else {
         int comparison;
+        // Either T extends Comparable<T>, or else a comparator was passed in.
         if (comparator == null) {
-          comparison = ((Comparable<T>)next1).compareTo(next2);
+          comparison = ((Comparable<T>)next1).compareTo(next2); // unchecked cast
         } else {
           comparison = comparator.compare(next1, next2);
         }

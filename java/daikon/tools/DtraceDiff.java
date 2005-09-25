@@ -216,9 +216,9 @@ public class DtraceDiff {
     dtraceDiff (declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
 
-  public static void dtraceDiff (Set declsfile1,
+  public static void dtraceDiff (Set<File> declsfile1,
 				 String dtracefile1,
-				 Set declsfile2,
+				 Set<File> declsfile2,
 				 String dtracefile2) {
     try {
       Map<PptTopLevel,PptTopLevel> pptmap = new HashMap<PptTopLevel,PptTopLevel>();  // map ppts1 -> ppts2

@@ -451,7 +451,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
                     }
             continue;
         }
-        
+
         // If method is synthetic...
         if((Constants.ACC_SYNTHETIC & mg.getAccessFlags()) > 0)
         {
@@ -997,7 +997,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         int last_line_number = 0;
         boolean foundLine;
 
-        for (Iterator<InstructionHandle> ii = il.iterator(); ii.hasNext();)
+        for (Iterator<InstructionHandle> ii = (Iterator<InstructionHandle>) il.iterator(); ii.hasNext();) // unchecked cast: BCEL is non-generic
         {
 
             foundLine = false;

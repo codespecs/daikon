@@ -186,7 +186,7 @@ public class CreateSpinfo {
     // conditions: method name (String) to conditional expressions (String)
     Map<String,List<String>> conditions = extractor.getConditionMap();
     // replaceStatements: method declaration (String) to method body (String)
-    Map replaceStatements = extractor.getReplaceStatements();
+    Map<String,String> replaceStatements = extractor.getReplaceStatements();
     String packageName = extractor.getPackageName();
     addOrigConditions(conditions);
     printSpinfoFile(output, conditions, replaceStatements, packageName);
@@ -227,7 +227,7 @@ public class CreateSpinfo {
    *  spinfo file is being written.
    */
   private static void printSpinfoFile(PrintWriter output,
-                                      Map conditions,
+                                      Map<String,List<String>> conditions,
                                       Map<String,String> replaceStatements,
                                       String packageName)
     throws IOException {
@@ -241,13 +241,13 @@ public class CreateSpinfo {
       }
       output.println();
     }
-    List method_conds;
-    List methodsList = new ArrayList(conditions.keySet());
+    List<String> method_conds;
+    List<String> methodsList = new ArrayList<String>(conditions.keySet());
     Collections.sort(methodsList);
     Iterator<String> methods = methodsList.iterator();
     while (methods.hasNext()) {
       String method = methods.next();
-      method_conds = (List) conditions.get(method);
+      method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {
 	if (packageName != null) {

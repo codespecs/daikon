@@ -27,6 +27,10 @@ import java.lang.ref.ReferenceQueue;
 
 import utilMDE.Hasher;
 
+// The purpose of this class is to be used by Intern.java.  It is difficult
+// to upgrade this to use the Java 1.5 version of WeakHashMap (which is
+// generic, among other advantages) because that implementation uses
+// various package-visible implementation details of java.util.
 /**
  * This is a modified version of @see{WeakHashMap} from JDK 1.2.2.
  * The modification adds a constructor that takes a Hasher argument.
@@ -107,7 +111,7 @@ import utilMDE.Hasher;
  * @see		java.lang.ref.WeakReference
  */
 
-public final class WeakHasherMap extends AbstractMap implements Map {
+public final class WeakHasherMap<K,V> extends AbstractMap<K,V> implements Map<K,V> {
 
     /* A WeakHashMap is implemented as a HashMap that maps WeakKeys to values.
        Because we don't have access to the innards of the HashMap, the various
@@ -131,35 +135,36 @@ public final class WeakHasherMap extends AbstractMap implements Map {
     // were static in the original version of this code.
     // This finesses that.
 
-    private WeakKey WeakKeyCreate(Object k) {
+    private WeakKey WeakKeyCreate(K k) {
 	if (k == null) return null;
 	else return new WeakKey(k);
     }
-    private WeakKey WeakKeyCreate(Object k, ReferenceQueue q) {
+    private WeakKey WeakKeyCreate(K k, ReferenceQueue q) {
 	if (k == null) return null;
 	else return new WeakKey(k, q);
     }
 
-    private final class WeakKey extends WeakReference {
+    // Cannot be a static class: uses keyHashCode() and keyEquals()
+    private final class WeakKey extends WeakReference<K> {
 	private int hash;	/* Hashcode of key, stored here since the key
 				   may be tossed by the GC */
 
-	private WeakKey(Object k) {
+	private WeakKey(K k) {
 	    super(k);
 	    hash = keyHashCode(k);
 	}
 
-	private WeakKey create(Object k) {
+	private WeakKey create(K k) {
 	    if (k == null) return null;
 	    else return new WeakKey(k);
 	}
 
-	private WeakKey(Object k, ReferenceQueue q) {
+	private WeakKey(K k, ReferenceQueue q) {
 	    super(k, q);
 	    hash = keyHashCode(k);
 	}
 
-	private WeakKey create(Object k, ReferenceQueue q) {
+	private WeakKey create(K k, ReferenceQueue q) {
 	    if (k == null) return null;
 	    else return new WeakKey(k, q);
 	}
@@ -168,7 +173,10 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 	   that are, in turn, equal according to their own equals methods */
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (!(o instanceof WeakKey)) return false;
+            // This test is illegal because WeakKey is a generic type,
+            // so use the getClass hack below instead.
+	    // if (!(o instanceof WeakKey)) return false;
+            if (!(o.getClass().equals(WeakKey.class))) return false;
 	    Object t = this.get();
 	    Object u = ((WeakKey)o).get();
 	    if ((t == null) || (u == null)) return false;
@@ -184,7 +192,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 
 
     /* Hash table mapping WeakKeys to values */
-    private Map hash;
+    private Map<WeakKey,V> hash;
 
     /* Reference queue for cleared WeakKeys */
     private ReferenceQueue queue = new ReferenceQueue();
@@ -197,7 +205,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
        ConcurrentModificationExceptions. */
     private void processQueue() {
 	WeakKey wk;
-	while ((wk = (WeakKey)queue.poll()) != null) {
+	while ((wk = (WeakKey)queue.poll()) != null) { // unchecked cast
 	    hash.remove(wk);
 	}
     }
@@ -219,7 +227,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      *                                   nonpositive
      */
     public WeakHasherMap(int initialCapacity, float loadFactor) {
-	hash = new HashMap(initialCapacity, loadFactor);
+	hash = new HashMap<WeakKey,V>(initialCapacity, loadFactor);
     }
 
     /**
@@ -234,7 +242,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      *                                   zero
      */
     public WeakHasherMap(int initialCapacity) {
-	hash = new HashMap(initialCapacity);
+	hash = new HashMap<WeakKey,V>(initialCapacity);
     }
 
     /**
@@ -242,7 +250,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      * capacity and the default load factor, which is <code>0.75</code>.
      */
     public WeakHasherMap() {
-	hash = new HashMap();
+	hash = new HashMap<WeakKey,V>();
     }
 
     /**
@@ -252,7 +260,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      * keys and comparing them for equality.
      */
     public WeakHasherMap(Hasher h) {
-	hash = new HashMap();
+	hash = new HashMap<WeakKey,V>();
 	hasher = h;
     }
 
@@ -283,7 +291,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      * @param   key   The key whose presence in this map is to be tested
      */
     public boolean containsKey(Object key) {
-	return hash.containsKey(WeakKeyCreate(key));
+	return hash.containsKey(WeakKeyCreate((K)key));
     }
 
 
@@ -296,8 +304,8 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      *
      * @param  key  The key whose associated value, if any, is to be returned
      */
-    public Object get(Object key) {
-	return hash.get(WeakKeyCreate(key));
+    public V get(Object key) {  // type of argument is Object, not K
+	return hash.get(WeakKeyCreate((K)key)); // unchecked cast
     }
 
     /**
@@ -314,7 +322,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      * @return  The previous value to which this key was mapped, or
      *          <code>null</code> if if there was no mapping for the key
      */
-    public Object put(Object key, Object value) {
+    public V put(K key, V value) {
 	processQueue();
 	return hash.put(WeakKeyCreate(key, queue), value);
     }
@@ -328,9 +336,9 @@ public final class WeakHasherMap extends AbstractMap implements Map {
      * @return  The value to which this key was mapped, or <code>null</code> if
      *          there was no mapping for the key
      */
-    public Object remove(Object key) {
+    public V remove(Object key) { // type of argument is Object, not K
 	processQueue();
-	return hash.remove(WeakKeyCreate(key));
+	return hash.remove(WeakKeyCreate((K)key)); // unchecked cast
     }
 
     /**
@@ -347,46 +355,46 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 
     /* Internal class for entries */
     // This can't be static, again because of dependence on hasher.
-    private final class Entry implements Map.Entry {
-	private Map.Entry ent;
-	private Object key;	/* Strong reference to key, so that the GC
+    private final class Entry<K,V> implements Map.Entry<K,V> {
+	private Map.Entry<K,V> ent;
+	private K key;	/* Strong reference to key, so that the GC
 				   will leave it alone as long as this Entry
 				   exists */
 
-	Entry(Map.Entry ent, Object key) {
+	Entry(Map.Entry<K,V> ent, K key) {
 	    this.ent = ent;
 	    this.key = key;
 	}
 
-	public Object getKey() {
+	public K getKey() {
 	    return key;
 	}
 
-	public Object getValue() {
+	public V getValue() {
 	    return ent.getValue();
 	}
 
-	public Object setValue(Object value) {
+	public V setValue(V value) {
 	    return ent.setValue(value);
 	}
 
-	private boolean keyvalEquals(Object o1, Object o2) {
+	private boolean keyvalEquals(K o1, K o2) {
 	    return (o1 == null) ? (o2 == null) : keyEquals(o1, o2);
 	}
 
-	private boolean valEquals(Object o1, Object o2) {
+	private boolean valEquals(V o1, V o2) {
 	    return (o1 == null) ? (o2 == null) : o1.equals(o2);
 	}
 
-	public boolean equals(Object o) {
-	    if (! (o instanceof Map.Entry)) return false;
-	    Map.Entry e = (Map.Entry)o;
+	public boolean equals(Map.Entry<K,V> e /* Object o*/) {
+            // if (! (o instanceof Map.Entry)) return false;
+            // Map.Entry<K,V> e = (Map.Entry<K,V>)o;
 	    return (keyvalEquals(key, e.getKey())
 		    && valEquals(getValue(), e.getValue()));
 	}
 
 	public int hashCode() {
-	    Object v;
+	    V v;
 	    return (((key == null) ? 0 : keyHashCode(key))
 		    ^ (((v = getValue()) == null) ? 0 : v.hashCode()));
 	}
@@ -395,19 +403,19 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 
 
     /* Internal class for entry sets */
-    private final class EntrySet extends AbstractSet {
-	Set hashEntrySet = hash.entrySet();
+    private final class EntrySet extends AbstractSet<Map.Entry<K,V>> {
+	Set<Map.Entry<WeakKey,V>> hashEntrySet = hash.entrySet();
 
-	public Iterator iterator() {
+	public Iterator<Map.Entry<K,V>> iterator() {
 
-	    return new Iterator() {
-		Iterator hashIterator = hashEntrySet.iterator();
-		Entry next = null;
+	    return new Iterator<Map.Entry<K,V>>() {
+		Iterator<Map.Entry<WeakKey,V>> hashIterator = hashEntrySet.iterator();
+		Map.Entry<K,V> next = null;
 
 		public boolean hasNext() {
 		    while (hashIterator.hasNext()) {
-			Map.Entry ent = (Map.Entry)hashIterator.next();
-			WeakKey wk = (WeakKey)ent.getKey();
+			Map.Entry<WeakKey,V> ent = hashIterator.next();
+			WeakKey wk = ent.getKey();
 			Object k = null;
 			if ((wk != null) && ((k = wk.get()) == null)) {
 			    /* Weak key has been cleared by GC */
@@ -419,10 +427,10 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 		    return false;
 		}
 
-		public Object next() {
+		public Map.Entry<K,V> next() {
 		    if ((next == null) && !hasNext())
 			throw new NoSuchElementException();
-		    Entry e = next;
+		    Map.Entry<K,V> e = next;
 		    next = null;
 		    return e;
 		}
@@ -447,7 +455,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 	public boolean remove(Object o) {
 	    processQueue();
 	    if (!(o instanceof Map.Entry)) return false;
-	    Map.Entry e = (Map.Entry)o;
+	    Map.Entry<K,V> e = (Map.Entry<K,V>)o;
 	    Object ev = e.getValue();
 	    WeakKey wk = WeakKeyCreate(e.getKey());
 	    Object hv = hash.get(wk);
@@ -462,8 +470,8 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 	public int hashCode() {
 	    int h = 0;
 	    for (Iterator i = hashEntrySet.iterator(); i.hasNext(); ) {
-		Map.Entry ent = (Map.Entry)i.next();
-		WeakKey wk = (WeakKey)ent.getKey();
+		Map.Entry<WeakKey,V> ent = (Map.Entry<WeakKey,V>) i.next();
+		WeakKey wk = ent.getKey();
 		Object v;
 		if (wk == null) continue;
 		h += (wk.hashCode()
@@ -475,12 +483,12 @@ public final class WeakHasherMap extends AbstractMap implements Map {
     }
 
 
-    private Set entrySet = null;
+    private Set<Map.Entry<K,V>> entrySet = null;
 
     /**
      * Returns a <code>Set</code> view of the mappings in this map.
      */
-    public Set entrySet() {
+    public Set<Map.Entry<K,V>> entrySet() {
 	if (entrySet == null) entrySet = new EntrySet();
 	return entrySet;
     }

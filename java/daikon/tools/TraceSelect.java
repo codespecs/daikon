@@ -244,7 +244,7 @@ public class TraceSelect {
                                  "-o", dtraceName + ".inv"};
 
     // this part adds on the rest of the decls files
-    ArrayList al = new ArrayList ();
+    ArrayList<String> al = new ArrayList<String> ();
     al.add (dtraceName);
     al.add ("-o");
     al.add (dtraceName + ".inv");

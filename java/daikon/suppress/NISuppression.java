@@ -438,7 +438,7 @@ public class NISuppression {
    */
   List<Invariant>[] antecedents_for_suppressors (NIS.Antecedents ants) {
 
-    List<Invariant> antecedents[] = (List<Invariant>[]) new List [suppressors.length]; // generic array creation is not permitted
+    List<Invariant> antecedents[] = (List<Invariant>[]) new List [suppressors.length]; // unchecked cast
 
     // Find the list of antecedents that matches each suppressor.  If any
     // suppressor doesn't have any matching antecedents, there can't be

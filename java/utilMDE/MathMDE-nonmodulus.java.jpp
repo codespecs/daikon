@@ -169,12 +169,12 @@ The correct way to build the system is to run 'make'.
     return nonmodulus_strict_INT_internal(new MissingNumbersIteratorINT(nums, true));
   }
 
-  private static INT[] nonmodulus_strict_INT_internal(Iterator missing) {
+  private static INT[] nonmodulus_strict_INT_internal(Iterator<INTEGER> missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
     // modulus_strict.
-    UtilMDE.RemoveFirstAndLastIterator missing_nums
-      = new UtilMDE.RemoveFirstAndLastIterator(missing);
+    UtilMDE.RemoveFirstAndLastIterator<INTEGER> missing_nums
+      = new UtilMDE.RemoveFirstAndLastIterator<INTEGER>(missing);
     INT[] result = modulus_strict_INT(missing_nums, false);
     if (result == null)
       return result;
@@ -184,7 +184,7 @@ The correct way to build the system is to run 'make'.
     return result;
   }
 
-  private static boolean check_first_and_last_nonmodulus(INT[] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
+  private static boolean check_first_and_last_nonmodulus(INT[] rm, UtilMDE.RemoveFirstAndLastIterator<INTEGER> rfali) {
     INT r = rm[0];
     INT m = rm[1];
     INT first = ((INTEGER)rfali.getFirst()).INTValue();

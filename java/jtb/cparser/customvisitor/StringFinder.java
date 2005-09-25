@@ -27,9 +27,9 @@ public class StringFinder extends DepthFirstVisitor {
   //holds the string arrays
   private ArrayList actualStringMatrices;
   //map the function name with the string arrays
-  public HashMap stringMatrices = new HashMap();
+  public HashMap<String,ArrayList> stringMatrices = new HashMap<String,ArrayList>();
   //map the function name with the strings
-  public HashMap functionStringMapping = new HashMap();
+  public HashMap<String,ArrayList<String>> functionStringMapping = new HashMap<String,ArrayList<String>>();
   //holds the names of C functions that indicate a char pointer is a string
   private static HashMap stringFunctions = new HashMap();
 

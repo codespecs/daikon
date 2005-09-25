@@ -892,11 +892,11 @@ public final class ArraysMDE {
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static Object[] concat(Object[] a, Object[] b) {
+  public static <T> T[] concat(T[] a, T[] b) {
     if (a == null && b == null) return null;
     if (a == null) return b;
     if (b == null) return a;
-    Object[] result = new Object[a.length + b.length];
+    T[] result = (T[]) new Object[a.length + b.length]; // unchecked cast
 
     System.arraycopy(a, 0, result, 0, a.length);
     System.arraycopy(b, 0, result, a.length, b.length);
@@ -909,11 +909,11 @@ public final class ArraysMDE {
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static Object[] concat(Object[] a, List b) {
+  public static <T> T[] concat(T[] a, List<T> b) {
     if (a == null && b == null) return null;
-    if (a == null) return b.toArray(new Object[]{});
+    if (a == null) return (T[]) b.toArray(); // unchecked cast
     if (b == null) return a;
-    Object[] result = new Object[a.length + b.size()];
+    T[] result = (T[]) new Object[a.length + b.size()]; // unchecked cast
 
     System.arraycopy(a, 0, result, 0, a.length);
     // System.arraycopy(b, 0, result, a.length, b.size());
@@ -929,11 +929,11 @@ public final class ArraysMDE {
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static Object[] concat(List a, Object[] b) {
+  public static <T> T[] concat(List<T> a, T[] b) {
     if (a == null && b == null) return null;
     if (a == null) return b;
-    if (b == null) return a.toArray(new Object[]{});
-    Object[] result = new Object[a.size() + b.length];
+    if (b == null) return (T[]) a.toArray(); // unchecked cast
+    T[] result = (T[]) new Object[a.size() + b.length]; // unchecked cast
 
     // System.arraycopy(a, 0, result, 0, a.size());
     for (int i=0; i<a.size(); i++) {
@@ -949,11 +949,11 @@ public final class ArraysMDE {
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static Object[] concat(List a, List b) {
+  public static <T> T[] concat(List<T> a, List<T> b) {
     if (a == null && b == null) return null;
-    if (a == null) return b.toArray(new Object[]{});
-    if (b == null) return a.toArray(new Object[]{});
-    Object[] result = new Object[a.size() + b.size()];
+    if (a == null) return (T[]) b.toArray(); // unchecked cast
+    if (b == null) return (T[]) a.toArray(); // unchecked cast
+    T[] result = (T[]) new Object[a.size() + b.size()]; // unchecked cast
 
     // System.arraycopy(a, 0, result, 0, a.length);
     for (int i=0; i<a.size(); i++) {
@@ -2063,17 +2063,14 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    **/
-  // I would like to say something like
-  // public static final class ComparableArrayComparatorLexical<T extends Comparable<T>> implements Comparator<T[]> {
-  // but writing a type for this is problematic.
-  public static final class ComparableArrayComparatorLexical<T> implements Comparator<T[]> {
+  public static final class ComparableArrayComparatorLexical<T extends Comparable<T>> implements Comparator<T[]> {
     public int compare(T[] a1, T[] a2) {
       if (a1 == a2)
         return 0;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        Comparable elt1 = (Comparable) a1[i];
-        Comparable elt2 = (Comparable) a2[i];
+        T elt1 = a1[i];
+        T elt2 = a2[i];
         // Make null compare smaller than anything else
         if ((elt1 == null) && (elt2 == null))
           continue;
@@ -2169,8 +2166,8 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    **/
-  public static final class ComparableArrayComparatorLengthFirst<T> implements Comparator<Comparable<T>[]> {
-    public int compare(Comparable<T>[] a1, Comparable<T>[] a2) {
+  public static final class ComparableArrayComparatorLengthFirst<T extends Comparable<T>> implements Comparator<T[]> {
+    public int compare(T[] a1, T[] a2) {
       if (a1 == a2)
         return 0;
       int tmp;
@@ -2178,8 +2175,8 @@ public final class ArraysMDE {
       if (tmp != 0)
         return tmp;
       for (int i=0; i<a1.length; i++) {
-        Comparable elt1 = a1[i];
-        Comparable elt2 = a2[i];
+        T elt1 = a1[i];
+        T elt2 = a2[i];
         // Make null compare smaller than anything else
         if ((elt1 == null) && (elt2 == null))
           continue;

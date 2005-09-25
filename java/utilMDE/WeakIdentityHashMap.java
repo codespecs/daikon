@@ -291,7 +291,7 @@ public class WeakIdentityHashMap<K,V>
     private void expungeStaleEntries() {
 	Entry<K,V> e;
         // These types look wronge to me.
-        while ( (e = (Entry<K,V>) queue.poll()) != null) {
+        while ( (e = (Entry<K,V>) queue.poll()) != null) { // unchecked cast
             int h = e.hash;
             int i = indexFor(h, table.length);
 
@@ -414,7 +414,7 @@ public class WeakIdentityHashMap<K,V>
      *	       <tt>null</tt> with the specified key.
      */
     public V put(K key, V value) {
-        K k = (K) maskNull(key);
+        K k = (K) maskNull(key); // unchecked cast
         int h = System.identityHashCode (k);
         Entry<K,V>[] tab = getTable();
         int i = indexFor(h, tab.length);

@@ -608,7 +608,7 @@ public final class DCRuntime {
       if (fi.getType().isPrimitive()) {
         String tag_field_name = tag_field_name(fi.getField().getName());
         if (fi.isArray()) {
-          List<Object> parent_list = (List<Object>)parent;
+          List<Object> parent_list = (List<Object>)parent; // unchecked cast
           Field tag_field = null;
           List<Object> tag_list = new ArrayList<Object>(parent_list.size());
           for (Object parent_element : parent_list) {
@@ -684,7 +684,7 @@ public final class DCRuntime {
       tag = get_field_tag ((FieldInfo) dv, parent, obj);
 
     if (dv.isArray()) {
-      List<Object> elements = (List<Object>)tag;
+      List<Object> elements = (List<Object>)tag; // unchecked cast
       for (Object atag : elements) {
         // Ignore null and nonsensical tags.  There is no reason to process
         // their children, because they can't have any with reasonable values

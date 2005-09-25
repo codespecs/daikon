@@ -14,7 +14,7 @@ import utilMDE.Assert;
 
 class CollectFieldsVisitor extends DepthFirstVisitor {
 
-  private Vector fieldDecls = new Vector();
+  private Vector<FieldDeclaration> fieldDecls = new Vector<FieldDeclaration>();
   private int cachedSize = -1;
   private FieldDeclaration[] fieldDeclsArray;
   private String[] allNamesArray;
@@ -23,10 +23,10 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
 
   private void updateCache() {
     if (cachedSize != fieldDecls.size()) {
-      fieldDeclsArray = (FieldDeclaration[]) fieldDecls.toArray(new FieldDeclaration[0]);
-      Vector allNames = new Vector();
-      Vector ownedNames = new Vector();
-      Vector finalNames = new Vector();
+      fieldDeclsArray = fieldDecls.toArray(new FieldDeclaration[0]);
+      Vector<String> allNames = new Vector<String>();
+      Vector<String> ownedNames = new Vector<String>();
+      Vector<String> finalNames = new Vector<String>();
       for (int i=0; i<fieldDeclsArray.length; i++) {
         FieldDeclaration fd = fieldDeclsArray[i];
         boolean isFinal = hasModifier(fd, "final");
@@ -59,9 +59,9 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
           }
         }
       }
-      allNamesArray = (String[]) allNames.toArray(new String[0]);
-      ownedNamesArray = (String[]) ownedNames.toArray(new String[0]);
-      finalNamesArray = (String[]) finalNames.toArray(new String[0]);
+      allNamesArray = allNames.toArray(new String[0]);
+      ownedNamesArray = ownedNames.toArray(new String[0]);
+      finalNamesArray = finalNames.toArray(new String[0]);
       cachedSize = fieldDecls.size();
     }
   }

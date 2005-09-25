@@ -196,7 +196,7 @@ public abstract class DaikonVariableInfo
     {
         if(isArray)
         {
-            return getValueStringOfListWithMod((List<Object>) val);
+            return getValueStringOfListWithMod((List<Object>) val); // unchecked cast
         }
         else
         {

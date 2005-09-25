@@ -9,22 +9,22 @@ import org.apache.bcel.Constants;
 
 
 /**
- * The PureMethodInfo class is a subtype of DaikonVariableInfo used 
+ * The PureMethodInfo class is a subtype of DaikonVariableInfo used
  * for "variable types" which correspond to the values of pure method
  * invocations.
  */
 public class PureMethodInfo extends DaikonVariableInfo
 {
-    
+
     /** The MethodInfo object for this pure method **/
     private MethodInfo minfo;
 
     public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray)
     {
         super(name, inArray);
-        
+
         assert methInfo.isPure() : "Method " + methInfo + " is not pure";
-        
+
         minfo = methInfo;
     }
 
@@ -57,14 +57,14 @@ public class PureMethodInfo extends DaikonVariableInfo
             {
                 List<Object> retList = new ArrayList<Object>();
 
-                for (Object val : (List<Object>) parentVal)
+                for (Object val : (List<Object>) parentVal) // unchecked cast
                 {
                     if(val == null || val instanceof NonsensicalObject)
                         retList.add(NonsensicalObject.getInstance());
                     else
                         retList.add(executePureMethod(meth, val));
                 }
-                
+
                 retVal = retList;
             }
         }
@@ -89,7 +89,7 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         return retVal;
     }
-    
+
     private static Object executePureMethod(Method meth, Object objectVal)
     {
         Object retVal = null;
@@ -129,7 +129,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         return retVal;
     }
 
-    
+
     /**
      * Convert standard wrapped Objects (ie, Integers) to Chicory wrappers (ie,
      * Runtime.IntWrap)\ Should not be called if the Object was not auto-boxed
@@ -139,44 +139,44 @@ public class PureMethodInfo extends DaikonVariableInfo
     {
         if(obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList)
             return obj;
-        
+
         if(obj instanceof Integer)
         {
             return new Runtime.IntWrap((Integer) obj);
         }
         else if(obj instanceof Boolean)
         {
-            return new Runtime.BooleanWrap((Boolean) obj);   
+            return new Runtime.BooleanWrap((Boolean) obj);
         }
         else if(obj instanceof Byte)
         {
-            return new Runtime.ByteWrap((Byte) obj);   
+            return new Runtime.ByteWrap((Byte) obj);
         }
         else if(obj instanceof Character)
         {
-            return new Runtime.CharWrap((Character) obj);   
+            return new Runtime.CharWrap((Character) obj);
         }
         else if(obj instanceof Float)
         {
-            return new Runtime.FloatWrap((Float) obj);   
+            return new Runtime.FloatWrap((Float) obj);
         }
         else if(obj instanceof Double)
         {
-            return new Runtime.DoubleWrap((Double) obj);   
+            return new Runtime.DoubleWrap((Double) obj);
         }
         else if(obj instanceof Long)
         {
-            return new Runtime.LongWrap((Long) obj);   
+            return new Runtime.LongWrap((Long) obj);
         }
         else if(obj instanceof Short)
         {
-            return new Runtime.ShortWrap((Short) obj);   
+            return new Runtime.ShortWrap((Short) obj);
         }
         else
         {
             // Not a primitive object (wrapper), so just keep it the same
             return obj;
         }
-        
+
     }
 }
