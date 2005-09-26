@@ -36,7 +36,10 @@ for my $page (@pages) {
     next;
   }
   if ($page =~ /^([0-9]+) warnings\n$/) {
-    push(@output_pages, "" . ($1 - $removed_warnings) . " warnings\n");
+    my $remaining_warnings = ($1 - $removed_warnings);
+    if ($remaining_warnings > 0) {
+      push(@output_pages, "$remaining_warnings warnings\n");
+    }
     next;
   }
   if ($page =~ /$file_line_re/) {
