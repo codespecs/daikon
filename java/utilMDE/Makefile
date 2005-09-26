@@ -6,7 +6,7 @@
 -include Makefile.user
 
 JAVAC ?= javac
-JAVAC_ARGS ?= -g -J-Xmx800m
+JAVAC_ARGS ?= -g -J-Xmx800m -Xlint -Xmaxwarns 1000
 JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
@@ -30,17 +30,8 @@ all_stop_on_error:
 
 all_javac: all_javac_notest test
 
-all_javac_notest:  ${AUTO_GENERATED_FILES}
-	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES}
-
-all_notest: ${AUTO_GENERATED_FILES}
-	${JAVAC_COMMAND} ${JAVA_FILES}
-
-xlint: ${AUTO_GENERATED_FILES}
-	${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${JAVA_LINT_FILES}
-
-all_xlint: ${AUTO_GENERATED_FILES}
-	${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${JAVA_FILES}
+all_notest:  ${AUTO_GENERATED_FILES}
+	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1 | prune-xlint.pl
 
 clean:
 	rm -f *.class
@@ -77,7 +68,7 @@ utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 	mkdir /tmp/utilMDE
 	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE
-	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${DAIKONDIR}/java/lib/junit.jar:${DAIKONDIR}/java/lib/bcel.jar' all_javac_notest doc)
+	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${DAIKONDIR}/java/lib/junit.jar:${DAIKONDIR}/java/lib/bcel.jar' all_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
 	mv /tmp/utilMDE.tar.gz .
