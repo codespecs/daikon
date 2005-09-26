@@ -621,7 +621,7 @@ The test is ensures that it only appears once in the output.
   /*@ pure */ public static boolean isReverse(Collection seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    _TYPE[] seq1_array = (_TYPE[]) seq1.toArray(new _TYPE[]{});
+    _TYPE[] seq1_array = (_TYPE[]) seq1.toArray(new _TYPE[]{}); // unchecked (for now)
     return isReverse(seq1_array, seq2);
   }
 #endif
@@ -744,14 +744,14 @@ The test is ensures that it only appears once in the output.
   /*@ pure */ public static boolean subsetOf(Collection seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    _TYPE[] seq1_array = (_TYPE[]) seq1.toArray(new _TYPE[]{});
+    _TYPE[] seq1_array = (_TYPE[]) seq1.toArray(new _TYPE[]{}); // unchecked (for now)
     return subsetOf(seq1_array, seq2);
   }
 
   /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, Collection seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    _TYPE[] seq2_array = (_TYPE[]) seq2.toArray(new _TYPE[]{});
+    _TYPE[] seq2_array = (_TYPE[]) seq2.toArray(new _TYPE[]{}); // unchecked (for now)
     return subsetOf(seq1, seq2_array);
   }
 #endif

@@ -153,11 +153,11 @@ public final class DiscReasonMap {
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
     HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
     Assert.assertTrue(vars_map != null);
-    Iterator listIter = vars_map.values().iterator();
+    Iterator<List<DiscardInfo>> listIter = vars_map.values().iterator();
 
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
     while (listIter.hasNext()) {
-      result.addAll((List) listIter.next());
+      result.addAll(listIter.next());
     }
     return result;
   }
