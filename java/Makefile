@@ -34,8 +34,6 @@ CLASSPATH := $(CLASSPATH):/$(BCEL)
 JAVA_FILES = $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print) \
                     $(shell find utilMDE/ -name '*.java' -print)
-DAIKON_LINT_FILES = $(shell find daikon/ \( -name treeGUI \) -prune -o -name '*.java' -print) \
-                    $(shell find utilMDE/ -name '*.java' -print)
 
 TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
@@ -300,7 +298,7 @@ all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Dif
 	$(MAKE) all_pass2
 
 xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_LINT_FILES} 2>&1 | prune-xlint.pl
+	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | prune-xlint.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # all_directly: ${AUTO_GENERATED_FILES} ajax
