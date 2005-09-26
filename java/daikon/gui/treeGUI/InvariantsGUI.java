@@ -32,7 +32,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
   InvariantTablesPanel invariantsTablesPanel;
   InvariantFilters invariantFilters = new InvariantFilters();
-  List filterCheckBoxes = new ArrayList();
+  List<JCheckBox> filterCheckBoxes = new ArrayList<JCheckBox>();
   final JList variablesList = new JList( new DefaultListModel());
   JScrollPane variablesListScrollPane = null;
   static JTree myTree;
@@ -155,7 +155,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
 
     //  Create the first level of the tree:  classes
-    for (Iterator<String> iter = (new TreeSet(pptMap.nameStringSet())).iterator(); iter.hasNext(); ) {
+    for (Iterator<String> iter = (new TreeSet<String>(pptMap.nameStringSet())).iterator(); iter.hasNext(); ) {
       String name = iter.next();
       PptName pptName = new PptName( name );
       String className = pptName.getFullClassName();
@@ -173,7 +173,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     //  later contain entry and exit ppt's as children.  If the ppt is a class-level
     //  ppt (CLASS or CLASS-STATIC or OBJECT), then create the leaf node for this ppt
     //  right away.
-    for (Iterator<String> iter = (new TreeSet(pptMap.nameStringSet())).iterator(); iter.hasNext(); ) {
+    for (Iterator<String> iter = (new TreeSet<String>(pptMap.nameStringSet())).iterator(); iter.hasNext(); ) {
       String name = iter.next();
       Assert.assertTrue( name != null );
       PptName pptName = new PptName( name );

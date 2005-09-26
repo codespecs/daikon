@@ -40,7 +40,7 @@ public class TableSorter extends TableMap {
     static final long serialVersionUID = 20050923L;
 
     int[]           indexes;
-    Vector          sortingColumns = new Vector();
+    Vector<Integer> sortingColumns = new Vector<Integer>();
     boolean         ascending = true;
     int compares;
 

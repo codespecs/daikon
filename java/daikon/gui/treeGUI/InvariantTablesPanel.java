@@ -29,10 +29,10 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
   final InvariantFilters invariantFilters;
   final JList variablesList;
 
-  List tables = new ArrayList();
-  List tableNames = new ArrayList();
-  List tableHeights = new ArrayList();
-  List tableModels = new ArrayList();
+  List<JPanel> tables = new ArrayList<JPanel>();
+  List<String> tableNames = new ArrayList<String>();
+  List<Integer> tableHeights = new ArrayList<Integer>();
+  List<InvariantTableModel> tableModels = new ArrayList<InvariantTableModel>();
   int currentTableIndex;	// used by scrollToTable methods
 
   VariableListChangeListener variableListChangeSink;

@@ -17,7 +17,7 @@ import daikon.inv.filter.InvariantFilters;
 class VariableSelectionDialog extends JDialog {
   static final long serialVersionUID = 20050923L;
 
-  final Vector selectedVarNames = new Vector();
+  final Vector<String> selectedVarNames = new Vector<String>();
 
   public VariableSelectionDialog( VarInfo[] vInfos, InvariantFilters iFilters, InvariantsUpdateListener iTablesPanel, JList vList, VariableListChangeListener listChangeListenerIn ) {
     super();
@@ -26,7 +26,7 @@ class VariableSelectionDialog extends JDialog {
     final InvariantFilters invariantFilters = iFilters;
     final InvariantsUpdateListener invariantsTablesPanel = iTablesPanel;
     final JList variablesList = vList;
-    final List variableCheckBoxes = new ArrayList();
+    final List<JCheckBox> variableCheckBoxes = new ArrayList<JCheckBox>();
     this.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
     JPanel variablesPanel = new JPanel();
     variablesPanel.setLayout( new BoxLayout( variablesPanel, BoxLayout.Y_AXIS ));
