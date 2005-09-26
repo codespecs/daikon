@@ -1279,7 +1279,7 @@ public final class UtilMDE {
   /**
    * Concatenate the string representations of the objects, placing the
    * delimiter between them.
-   * @see java.util.List#toString
+   * @see java.util.AbstractCollection#toString()
    **/
   public static String join(List v, String delim) {
     if (v.size() == 0) return "";
@@ -1294,7 +1294,7 @@ public final class UtilMDE {
   /**
    * Concatenate the string representations of the objects, placing the
    * system-specific line separator between them.
-   * @see java.util.List#toString
+   * @see java.util.AbstractCollection#toString()
    **/
   public static String joinLines(List<String> v, String delim) {
     return join(v, lineSep);

@@ -932,7 +932,7 @@ public class WeakIdentityHashMap<K,V>
      * It does not support the <tt>add</tt> or <tt>addAll</tt> operations.
      *
      * @return a collection view of the mappings contained in this map.
-     * @see Map.Entry
+     * @see java.util.Map.Entry
      */
     public Set<Map.Entry<K,V>> entrySet() {
         Set<Map.Entry<K,V>> es = entrySet;

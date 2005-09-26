@@ -233,7 +233,7 @@ public class BCELUtil {
     mg.setMaxLocals();
   }
 
-  /** @see dump(JavaClass, File) **/
+  /** @see #dump(JavaClass, File) **/
   public static void dump (JavaClass jc, String dump_dir) {
 
     dump (jc, new File (dump_dir));
@@ -300,10 +300,6 @@ public class BCELUtil {
 
   /**
    * TODO
-   *
-   * @param il
-   * @param pool
-   * @return
    */
   public static String instruction_descr(InstructionList il,
       ConstantPoolGen pool) {
