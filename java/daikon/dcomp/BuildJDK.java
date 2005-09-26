@@ -50,7 +50,6 @@ public class BuildJDK {
      *          /usr/bin/jd2sdk, and spaceSeparatedJarLocations was
      *          "jre/lib/rt.jar", this could return
      *          /usr/bin/jd2sdk/jre/lib/rt.jar, if it existed.
-     * @return
      */
     public String findRtJar(String spaceSeparatedJarLocations) {
       String jarFilename = arg;

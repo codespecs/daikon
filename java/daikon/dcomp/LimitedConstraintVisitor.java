@@ -604,3 +604,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	public void visitSWAP(SWAP o){}
 	public void visitTABLESWITCH(TABLESWITCH o){}
 }
+
+// Local Variables:
+// tab-width: 2
+// End:

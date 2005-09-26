@@ -477,3 +477,7 @@ public final class StackVer {
 
 
 }
+
+// Local Variables:
+// tab-width: 2
+// End:

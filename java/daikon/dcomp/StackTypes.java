@@ -71,8 +71,6 @@ public final class StackTypes {
 
   /**
    * TODO
-   * @param os
-   * @return
    */
   public String toString (OperandStack os) {
 
@@ -93,8 +91,6 @@ public final class StackTypes {
 
   /**
    * TODO
-   * @param lv
-   * @return
    */
   public String toString (LocalVariables lv) {
 
