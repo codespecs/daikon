@@ -196,7 +196,7 @@ public class WeakIdentityHashMap<K,V>
         int capacity = 1;
         while (capacity < initialCapacity)
             capacity <<= 1;
-        table = (Entry<K,V>[]) new Entry[capacity]; // can't create generic array -MDE
+        table = (Entry<K,V>[]) new Entry[capacity]; // unchecked cast
         this.loadFactor = loadFactor;
         threshold = (int)(capacity * loadFactor);
     }
@@ -222,7 +222,7 @@ public class WeakIdentityHashMap<K,V>
     public WeakIdentityHashMap() {
         this.loadFactor = DEFAULT_LOAD_FACTOR;
         threshold = (int)(DEFAULT_INITIAL_CAPACITY);
-        table = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // can't create gneeric array -MDE
+        table = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // unchecked cast
     }
 
     /**
@@ -458,7 +458,7 @@ public class WeakIdentityHashMap<K,V>
             return;
         }
 
-        Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry[newCapacity]; // can't make generic arrays -MDE
+        Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry[newCapacity]; // unchecked cast
         transfer(oldTable, newTable);
         table = newTable;
 
