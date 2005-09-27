@@ -33,6 +33,12 @@ Eclipse plug-in
   The Eclipse plug-in is no longer being maintained, so it has been removed
   from the manual until it is updated.
 
+Mangel-Wurzel
+
+  Printing of string variable values has been fixed to do a better job of
+  distinguishing between null-terminated strings, and arrays of arbitrary
+  byte values or pointers to a single character object.
+
 ----------------
 
 4.1.5 (September 1 2005)
