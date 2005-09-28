@@ -39,6 +39,15 @@ Mangel-Wurzel
   distinguishing between null-terminated strings, and arrays of arbitrary
   byte values or pointers to a single character object.
 
+Kvasir
+
+  Bug fixes
+
+    A memory allocation problem that caused Kvasir to crash in some
+    Linux environments, including Red Hat version 9, has been worked
+    around. To catch such problems more quickly in the future, we now
+    regularly test Kvasir on four Linux distribution versions.
+
 ----------------
 
 4.1.5 (September 1 2005)
