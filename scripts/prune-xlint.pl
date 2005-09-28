@@ -14,46 +14,53 @@ use strict;
 use English;
 $WARNING = 1;
 
-my $file_line_re = '^[^\n]+:[0-9]+:';
-
-# Slurping in the whole file is slightly inefficient, and it delays output,
-# but it made this easy to program.  It should perhaps be changed.
-
-undef $/;
-my $contents = <>;
-
-my @pages = split(/($file_line_re.*?^ *\^ *\n|^[0-9]+ (?:warnings|errors)\n)/sm, $contents);
-
-# print "pages: ", scalar(@pages), "\n";
-# print join("FOO", @pages);
+my $file_line_re = "^[^\n]+:[0-9]+:";
 
 my $removed_warnings = 0;
 
 my $status = 0;                 # zero means normal completion
 
-my @output_pages = ();
-for my $page (@pages) {
-  if ($page eq "") { next; }
-  if ($page =~ /: warning: \[unchecked\] unchecked.*\/\/ unchecked/s) {
-    $removed_warnings++;
+# Queue up input until we have a whole record, then output it.
+my $data = "";
+
+while (defined(my $line = <>)) {
+  $data .= $line;
+  my @parts = split(/($file_line_re.*?^ *\^ *\n|^[0-9]+ (?:warnings|errors)\n)/sm, $data);
+  if (scalar(@parts) == 1) {
     next;
   }
-  if ($page =~ /^([0-9]+) warnings\n$/) {
+  # print "parts: " . join("*****", @parts);
+  if (scalar(@parts) > 3) {
+    die "bad parts (" . scalar(@parts) . "): " . join("*****", @parts);
+  }
+
+  print $parts[0];
+  $data = (defined($parts[2]) ? $parts[2] : "");
+  my $record = $parts[1];
+
+  # if ($record eq "") { next; }
+  if ($record =~ /^([0-9]+) errors\n$/) {
+    print $record;
+    next;
+  }
+  if ($record =~ /^([0-9]+) warnings\n$/) {
     my $remaining_warnings = ($1 - $removed_warnings);
     if ($remaining_warnings > 0) {
-      push(@output_pages, "$remaining_warnings warnings\n");
+      print "$remaining_warnings warnings\n";
     }
     next;
   }
-  if ($page =~ /$file_line_re/) {
-    $status = 1;
+  if ($record !~ /$file_line_re/) {
+    die "this can't happen";
   }
-  push(@output_pages, $page);
+  if ($record =~ /: warning: \[unchecked\] unchecked.*\/\/ unchecked/s) {
+    $removed_warnings++;
+    next;
+  }
+  $status = 1;
+  print $record;
 }
 
-print join('', @output_pages);
-
-# print "pages: ", scalar(@output_pages), "\n";
-# print join("BAR", @output_pages);
+print $data;
 
 exit $status;
