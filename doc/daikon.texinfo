@@ -4192,7 +4192,7 @@ object code instrumenter Purify.
 
 
 To use Mangel-Wurzel in conjunction with Daikon, follow these steps
-(after installing Mangel-Wurzel, @pxref{Installing Mangel-Wurzel}:
+(after installing Mangel-Wurzel, @pxref{Installing Mangel-Wurzel}):
 
 @enumerate
 
