@@ -4231,9 +4231,10 @@ it processes, in this case @file{foo.decls}, @file{bar.decls}, and
 @file{baz.decls}.
 
 @item
-Run the instrumented program.  This produces a single @file{.dtrace} file 
-as output.  Assuming @file{foo.c} contains the @code{main} routine, the
-output for this example will be in @file{foo.dtrace}.
+Run the instrumented program.  This creates a single @file{.dtrace} file 
+(in addition to anything else the program does).
+Assuming @file{foo.c} contains the @code{main} routine, the
+trace output for this example will be in @file{foo.dtrace}.
 
 
 @item
@@ -4737,7 +4738,7 @@ Set to the directory in your Purify distribution containing
 @end table
 
 @item
-Optionally change the default commands and options mangel 
+Optionally, change the default commands and options mangel 
 uses to invoke the wurzel front end, the host compiler, and the Purify/link
 step.  For example, you may need to specify the paths for additional system
 include files.
