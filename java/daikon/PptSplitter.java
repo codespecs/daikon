@@ -33,6 +33,12 @@ public class PptSplitter implements Serializable {
    **/
   public static int dkconfig_dummy_invariant_level = 0;
 
+  /**
+   * Split bi-implications into two seperate invariants.
+   **/
+
+  public static boolean dkconfig_split_bi_implications = false;
+
   /** General debug tracer. **/
   public static final Logger debug = Logger.getLogger ("daikon.PptSplitter");
 
@@ -636,6 +642,20 @@ public class PptSplitter implements Serializable {
     // System.out.println("  consequent= " + consequent.format());
     // System.out.println("  orig_pred = " + orig_pred.format());
     // System.out.println("  orig_cons = " + orig_cons.format());
+
+    if (dkconfig_split_bi_implications && iff) {
+      Implication imp = Implication.makeImplication (ppt, predicate, consequent,
+                                                     false, orig_pred, orig_cons);
+      if (imp != null)
+        ppt.joiner_view.addInvariant (imp);
+      imp = Implication.makeImplication (ppt, consequent, predicate,
+                                                     false, orig_cons, orig_pred);
+      if (imp != null)
+        ppt.joiner_view.addInvariant (imp);
+
+      return;
+    }
+
     Implication imp = Implication.makeImplication (ppt, predicate, consequent,
                                                    iff, orig_pred, orig_cons);
     if (imp == null)

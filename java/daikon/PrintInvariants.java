@@ -32,6 +32,9 @@ public final class PrintInvariants {
   /** If true, print all invariants without any filtering.  **/
   public static boolean dkconfig_print_all = false;
 
+  /** print commented daikon version of invariants with repair output **/
+  public static boolean dkconfig_repair_debug = false;
+
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
@@ -947,6 +950,9 @@ public final class PrintInvariants {
     } else if (Daikon.output_format == OutputFormat.REPAIR) {
 	String quantifiers=Repair.getRepair().getQuantifiers();
 	Repair.getRepair().reset();
+        if (dkconfig_repair_debug) {
+          out.println("/*"+inv.format_using(OutputFormat.DAIKON)+"*/");
+        }
 	out.println("["+quantifiers+"],"+inv_rep+";");
     } else {
       out.println(inv_rep);

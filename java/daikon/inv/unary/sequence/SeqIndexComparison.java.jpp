@@ -330,7 +330,7 @@ public class CLASSNAME extends SUPERCLASS {
         upper = slice.getUpperBound();
       } else {
         // unreachable; placate javac
-        throw new IllegalStateException();
+        return "$noprint(FIX REPAIR IN SEQINDECOMPARISON)";
       }
 
       String set=Repair.getRepair().generateRangeSet(var().ppt,lower,upper);

@@ -149,6 +149,28 @@ public abstract class VarInfoName
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
 
+  /** This method returns a set that contains the given VarInfoName.
+   */
+
+  static public String getRealSet(VarInfo v, VarInfoName term) {
+    if (term instanceof Simple) {
+      Simple simple=(Simple)term;
+      return Repair.getRepair().getRealSet(simple.name,v.ppt);
+    } else if (term instanceof Field) {
+      Field nfield=(Field)term;
+      String r=Repair.getRepair().getRelation(v.ppt,getRealSet(v,nfield.term),nfield.field,nfield.name());
+      return Repair.getRepair().getRange(v.ppt,r);
+    } else if (term instanceof Elements) {
+      Elements e=(Elements) term;
+      String set=Repair.getRepair().generateRangeSet(v.ppt,e.getLowerBound(),e.getUpperBound());
+      return Repair.getRepair().convertArraytoSet(v.ppt,set,e,v);
+    } else if (term instanceof Slice) {
+      Slice s=(Slice) term;
+      String set=Repair.getRepair().generateRangeSet(v.ppt,s.getLowerBound(),s.getUpperBound());
+      return Repair.getRepair().convertArraytoSet(v.ppt,set,s,v);
+    } else return "$error";
+  }
+
   /**
    * Return the String representation of this name in the default
    * output format.
@@ -280,6 +302,12 @@ public abstract class VarInfoName
   private String repair_name_cached = null; // interned
   protected abstract String repair_name_impl(VarInfo v);
 
+  public VarInfoName getBase() {
+    throw new Error();
+  }
+  public String gen_name(String name) {
+    return name();
+  }
    /**
    * Return the String representation of this name in the JML style output format
    */
@@ -688,6 +716,9 @@ public abstract class VarInfoName
 	} else
 	    return Repair.getRepair().getSet(name,v.ppt);
     }
+    public VarInfoName getBase() {
+      return null;
+    }
     protected String jml_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
     }
@@ -698,7 +729,6 @@ public abstract class VarInfoName
         return name;
       }
     }
-
     protected String identifier_name_impl() {
       if (name.equals("return"))
         return "Daikon_return";
@@ -848,6 +878,9 @@ public abstract class VarInfoName
       Repair.getRepair().addSpecial();
       return "s_quant."+Repair.getRepair().getRelation("size("+sequence.name()+")",v.ppt);
     }
+    public VarInfoName getBase() {
+      return null;
+    }
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";
     }
@@ -973,6 +1006,9 @@ public abstract class VarInfoName
     protected String repair_name_impl(VarInfo v) {
       return function + "(" + argument.repair_name(v) + ")";
     }
+    public VarInfoName getBase() {
+      return null;
+    }
     protected String jml_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JML, v);
     }
@@ -1053,6 +1089,9 @@ public abstract class VarInfoName
         if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
+    }
+    public VarInfoName getBase() {
+      return null;
     }
     protected String esc_name_impl() {
       StringBuffer sb = new StringBuffer();
@@ -1231,24 +1270,15 @@ public abstract class VarInfoName
     protected String name_impl() {
       return term.name() + "." + field;
     }
-
-    /** This method returns a set that contains the given VarInfoName.
-     */
-
-    protected String getRealSet(VarInfo v, VarInfoName term) {
-      if (term instanceof Simple) {
-	Simple simple=(Simple)term;
-	return Repair.getRepair().getRealSet(simple.name,v.ppt);
-      } else if (term instanceof Field) {
-	Field nfield=(Field)term;
-	String r=Repair.getRepair().getRelation(v.ppt,getRealSet(v,nfield.term),nfield.field,nfield.name());
-	return Repair.getRepair().getRange(v.ppt,r);
-      } else return "$error";
+    public VarInfoName getBase() {
+      return term;
     }
-
+    public String gen_name(String str) {
+      return str+"."+field;
+    }
     protected String repair_name_impl(VarInfo v) {
       Repair.getRepair().noForceSet();
-      String base=term.repair_name(v);
+      String base=term.repair_name_impl(v);
       String set=getRealSet(v,term);
       String relation=Repair.getRepair().getRelation(v.ppt,set,field,this.name());
       return base + "." + relation;
@@ -1457,7 +1487,10 @@ public abstract class VarInfoName
       return term.name() + ".class";
     }
     protected String repair_name_impl(VarInfo vi) {
-      return term.repair_name(vi);
+      return term.repair_name_impl(vi)+"$noprint.class";
+    }
+    public VarInfoName getBase() {
+      return null;
     }
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
@@ -1550,6 +1583,9 @@ public abstract class VarInfoName
     protected String repair_name_impl(VarInfo v) {
       return "$noprint(old(" + term.repair_name(v) + "))";
     }
+    public VarInfoName getBase() {
+      return null;
+    }
     protected String java_name_impl(VarInfo v) {
       return "\\old(" + term.java_name(v) + ")";
     }
@@ -1635,6 +1671,9 @@ public abstract class VarInfoName
     protected String repair_name_impl(VarInfo vi) {
       return "post(" + term.repair_name(vi) + ")";
     }
+    public VarInfoName getBase() {
+      return null;
+    }
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
     }
@@ -1706,6 +1745,12 @@ public abstract class VarInfoName
     }
     protected String repair_name_impl(VarInfo v) {
       return term.repair_name(v) + amount();
+    }
+    public VarInfoName getBase() {
+      return term;
+    }
+    public String gen_name(String str) {
+      return str+"+"+amount();
     }
     protected String esc_name_impl() {
       return term.esc_name() + amount();
@@ -1785,7 +1830,29 @@ public abstract class VarInfoName
     protected String name_impl() {
       return name_impl("");
     }
+    public VarInfoName getBase() {
+      return term.getBase();
+    }
+    public String gen_name(String str) {
+      if (term instanceof Elements)
+        return "$noprint";
+      else return term.gen_name(str);
+    }
     protected String repair_name_impl(VarInfo vi) {
+      /* Generate set here */
+      VarInfoName lower, upper;
+
+      lower = getLowerBound();
+      upper = getUpperBound();
+
+      String set=Repair.getRepair().generateRangeSet(vi.ppt,lower,upper);
+      String set2=Repair.getRepair().convertArraytoSet(vi.ppt,set,this,vi);
+      String index=Repair.getRepair().getQuantifierVar();
+      Repair.getRepair().appendQuantifier(index,set2);
+      return index;
+    }
+
+    public String repair_name(VarInfo vi) {
       // Figure out what to replace needy with, and the appropriate
       // bounds to use
       VarInfoName lower, upper;
@@ -1802,6 +1869,7 @@ public abstract class VarInfoName
     }
 
     protected String repair_name_impl(String index,VarInfo vi) {
+      /* Need to fix */
       return term.repair_name(vi)+"["+index+"]";
     }
     protected String name_impl(String index) {
@@ -1978,6 +2046,14 @@ public abstract class VarInfoName
     protected String repair_name_impl(VarInfo v) {
       return sequence.repair_name_impl(index.repair_name(v),v);
     }
+    public VarInfoName getBase() {
+      return sequence.getBase();
+    }
+    public String gen_name(String str) {
+      if (sequence instanceof Elements)
+        return "$noprint";
+      else return sequence.gen_name(str);
+    }
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
@@ -2089,8 +2165,26 @@ public abstract class VarInfoName
                                 ((j == null) ? ""  : j.name())
                                 );
     }
-
+    public VarInfoName getBase() {
+      return sequence.getBase();
+    }
+    public String gen_name(String str) {
+      return sequence.gen_name(str);
+    }
     protected String repair_name_impl(VarInfo v) {
+      /* Generate set here */
+      VarInfoName lower, upper;
+
+      lower = getLowerBound();
+      upper = getUpperBound();
+
+      String set=Repair.getRepair().generateRangeSet(v.ppt,lower,upper);
+      String set2=Repair.getRepair().convertArraytoSet(v.ppt,set,this,v);
+      String index=Repair.getRepair().getQuantifierVar();
+      Repair.getRepair().appendQuantifier(index,set2);
+      return index;
+    }
+    public String repair_name(VarInfo v) {
       // Figure out what to replace needy with, and the appropriate
       // bounds to use
       VarInfoName lower, upper;
