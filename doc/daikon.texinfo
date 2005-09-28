@@ -4145,18 +4145,19 @@ optimization.
 @cindex C front end
 
 In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
-is also a source-based front end, Mangel-Wurzel, that uses the
+is also a source-based front end, Mangel-Wurzel.
+Unlike Kvasir, which runs only on Linux/x86 platforms,
+Mangel-Wurzel will run on nearly any platform.
+Mangel-Wurzel requires the source code for your program, and 
+it also requires the
 Purify program analysis tool from Rational Software.  You must purchase
 and install Purify before you can use Mangel-Wurzel.
 
 Mangel-Wurzel is based on the EDG C/C++ front end, which is also commercial
 software.  For this reason, Mangel-Wurzel is distributed in precompiled 
-binary form only.  See @ref{Installing Mangel-Wurzel} for more information
+binary form only.  See @ref{Installing Mangel-Wurzel}, for more information
 about installation.  If you have an EDG source license and would like to build
-or modify Mangel-Wurzel, we can provide source diffs on request.
-
-Unlike Kvasir, which runs only on Linux/x86 platforms,
-Mangel-Wurzel will run on any platform supported by Rational Purify.  
+or modify Mangel-Wurzel, we can provide source code on request.
 
 Mangel-Wurzel is named after a root vegetable grown as cattle fodder.
 It ``mangles'' the source code into a form that is not fit for human
@@ -4180,34 +4181,32 @@ consumption before compiling it.
 @cindex wurzel preprocessor
 
 Mangel-Wurzel consists of three parts: a driver program called
-@command{mangel}, the front-end preprocessor @command{wurzel} which is
-based on the EDG front end, and a small runtime library.  Mangel can be
-invoked similarly to the @command{cc} command; it in turn invokes
-wurzel, the host compiler and linker, and Purify, to produce an
-instrumented executable.
+@command{mangel}, the source-code instrumenter @command{wurzel},
+and a small runtime library.  Mangel is a replacement for the
+@command{cc} command:  it produces an
+instrumented executable that behaves like the original program, but that
+also produces a @file{\.dtrace} data trace file for Daikon to analyze.
+Mangel operates by in turn invoking
+the source instrumenter wurzel, the host compiler and linker, and the
+object code instrumenter Purify.
 
-To use Mangel-Wurzel in conjunction with Daikon, follow these steps:
+
+To use Mangel-Wurzel in conjunction with Daikon, follow these steps
+(after installing Mangel-Wurzel, @pxref{Installing Mangel-Wurzel}:
 
 @enumerate
 
-@item
-@cindex MANGEL_INCLUDE environment variable
-@cindex MANGEL_LIB environment variable
-@cindex PURIFY_DIR environment variable
-Make sure you have both Mangel-Wurzel and Purify installed on your system and
-on your path.  You should define the environment variables 
-@env{MANGEL_INCLUDE} and @env{MANGEL_LIB} to point to the directories
-containing Mangel-Wurzel's include files and runtime libraries, respectively.
-You should also define the environment variable @env{PURIFY_DIR} to point
-to the directory where the Purify API files 
-(in particular, @file{libpurify_stubs.a}) can be found.
-
-
 @item 
-Compile and link the program with mangel.  This produces a @file{.decls} file
+Compile and link the program, using @command{mangel} in place of
+@command{cc}.  This produces both an
+instrumented executable and also a @file{.decls} file
 for each compilation unit.
 
-For example, suppose we have a program that consists of three input files,
+If you use a makefile to compile your program, simply substitute
+@command{mangel} for @command{cc}.
+
+Alternately, you may issue the compilation commands directly.
+For example, suppose you have a program that consists of three input files,
 @file{foo.c}, @file{bar.c}, and @file{baz.c}.  You can compile
 and link in one step:
 
@@ -4242,7 +4241,7 @@ Invoke Daikon, passing all of the @file{.decls} files and the @file{.dtrace}
 file as inputs.
 
 @example
-java daikon foo.decls bar.decls baz.decls foo.dtrace
+java daikon.Daikon foo.decls bar.decls baz.decls foo.dtrace
 @end example
 
 
@@ -4255,11 +4254,12 @@ several ways to do this.
 @node Mangel options, Mangel-Wurzel naming conventions, Using Mangel-Wurzel, Mangel-Wurzel
 @subsection Mangel options
 
-Mangel is intended to act as a replacement for the host @command{cc}
-command; it supports most of the common C compiler command-line options.
-It also has a number of options to control how the front end, compiler,
-and linker programs are invoked, and options that are specific to controlling
-the program annotations added by wurzel.
+Mangel acts as a replacement for the host @command{cc}
+command.
+It supports most of the common C compiler command-line options (@pxref{Standard compiler options for Mangel}).
+It also has options that control how the front end, compiler,
+and linker programs are invoked (@pxref{Mangel configuration options}), and options that are specific to controlling
+the program annotations added by wurzel (@pxref{Mangel annotation options}).
 
 Mangel is invoked as:
 
@@ -4318,7 +4318,7 @@ adds this directory to the list of directories searched for system include
 files.  Otherwise you must explicitly use @option{-I} to specify where to
 find Mangel-Wurzel's system include files, or include this information in
 the options list passed directly to the front end.  See the 
-@option{--frontend_opts} option below.
+@option{--frontend_opts} option (@pxref{Mangel configuration options}).
 
 @item -O
 @itemx -O@var{value}
@@ -4328,8 +4328,8 @@ be careful.
 @item -g
 Enable debugging in the compiler.  Since Purify expects code it processes
 to be compiled with @option{-g}, this is typically configured as one of the
-default host compiler options and need not be supplied explicitly on the 
-command line.
+default host compiler options (@pxref{Installing Mangel-Wurzel}) and
+need not be supplied explicitly on the command line.
 
 @item -L@var{pathname}
 Add @var{pathname} to the list of places searched for system libraries.
@@ -4339,8 +4339,8 @@ If the environment variable @env{MANGEL_LIB} is set, mangel implicitly adds
 this directory to the list of directories searched for system libraries.
 Otherwise you must explicitly use @option{-L} to specify where to
 find Mangel-Wurzel's system libraries, or include this information in
-the options list passed directly to the linker.  See @option{--linker-opts}
-below.
+the options list passed directly to the linker.  See @option{--linker_opts}
+(@pxref{Mangel configuration options}).
 
 @cindex PURIFY_DIR environment variable
 Also, if the environment variable @env{PURIFY_DIR} is set, mangel
@@ -4348,7 +4348,7 @@ implicitly adds this directory to the list of directories searched for
 system libraries.  Otherwise you must explicitly use @option{-L} to
 specify where to find the library for the Purify API, or include this
 information in the options list passed directly to the linker.  See
-@option{--linker-opts} below.
+@option{--linker_opts} (@pxref{Mangel configuration options}).
 
 
 @item -l@var{name}
@@ -4369,9 +4369,10 @@ Print a usage message and exit.
 @node Mangel configuration options, Mangel annotation options, Standard compiler options for Mangel, Mangel options
 @subsubsection Mangel configuration options
 
-Mangel is completely configurable in how it invokes wurzel, the host
-compiler, and the linker.  You can either use command-line options or
-environment variables to override the built-in defaults.
+You can use either command-line options or
+environment variables to override Mangel's default behavior
+regarding how Mangel invokes wurzel, the host
+compiler, and the linker.  
 
 When you use command-line options from the shell or a makefile to
 specify these configuration parameters, be careful to quote the entire
@@ -4470,7 +4471,8 @@ This option is only used if the compilation unit contains a
 definition for @code{main}.
 
 @item --dtrace-gzip
-Specify that dtrace output should be filtered through @command{gzip}.
+Produce gzipped (compressed) dtrace output.
+This is implemented by filtering the dtrace output through @command{gzip}.
 This option is only used if the compilation unit contains a
 definition for @code{main}.
 
@@ -4480,7 +4482,7 @@ variables when dumping program point state.
 The default behavior is to examine static variables and global variables
 that are defined (not just declared as @code{extern}) in the compilation
 unit and are in scope at the given program point, 
-as well (for C++ class member functions) static member variables of 
+as well as (for C++ class member functions) static member variables of 
 the containing class.
 
 @item --ignore-static-vars
@@ -4517,7 +4519,7 @@ conjunction with @option{--ppt-select-pattern}.
 @subsection Mangel-Wurzel naming conventions
 
 Mangel-Wurzel uses naming conventions for program points and variables
-similar to, but not identical to, that of Kvasir (@ref{Kvasir}).
+similar to, but not identical to, those of Kvasir (@ref{Kvasir}).
 
 Names of program points follow these conventions:
 
@@ -4690,58 +4692,69 @@ Purify.
 @node Installing Mangel-Wurzel,  , Interaction with Purify, Mangel-Wurzel
 @subsection Installing Mangel-Wurzel
 
-Since Mangel-Wurzel is based on the proprietary EDG C/C++ front end,
-we distribute it in binary rather than source format.  The distribution
-does not include Purify, which you must purchase and install separately.
+Since Mangel-Wurzel is based on the proprietary EDG C/C++ front end, we
+distribute it, at @uref{http://pag.csail.mit.edu/daikon/download/}, in
+binary rather than source format.  (If the web page does not currently
+contain a binary for your architecture, send mail to
+@email{daikon-developers@@lists.csail.mit.edu} and we may be able to
+produce it for you.)  The distribution does not include Purify, which
+you must purchase and install separately.
 
-To install, follow these steps.
+
+Installation requires unpacking the distribution, setting the 
+@env{MANGEL_INCLUDE}, @env{MANGEL_LIB}, and @env{PURIFY_DIR} environment
+variables, optionally customizing the defaults for how mangel operates,
+and optionally running its tests.
 
 @enumerate
 @item  
-Download and unpack the archive, which is packaged as a gzipped tar file for
-Linux and as a ZIP file for Windows.
+Download the archive from
+@uref{http://pag.csail.mit.edu/daikon/download} and unpack it in the
+parent of the directory where you wish to install Mangel-Wurzel.
+Unpacking creates a directory named @file{mangel-wurzel}.
+For example, on the Linux/x86 platform, execute these two commands:
+@smallexample
+wget http://pag.csail.mit.edu/daikon/download/binaries/mangel-wurzel-linux-x86.tar.gz
+tar xvzf mangel-wurzel-linux-x86.tar.gz
+@end smallexample
 
+@item
+Set several environment variables:
 
-@item 
-The archive contains these subdirectories:
-
-@table @file
-@item bin
-Contains the @code{mangel} and @code{wurzel} binaries.  You should add this
-directory to your default path.
-@item include
+@table @env
+@item PATH
+Add @file{mangel-wurzel/bin} to your path.
+@item MANGEL_INCLUDE
 @cindex MANGEL_INCLUDE environment variable
-Contains the @file{.h} header files for the wurzel front end.  You should
-set the environment variable @env{MANGEL_INCLUDE} to point to this directory.
-@item lib
+Set to @file{mangel-wurzel/include}.
+@item MANGEL_LIB
 @cindex MANGEL_LIB environment variable
-Contains run-time libraries needed to run Mangel-Wurzel.  You should set
-the environment variable @env{MANGEL_LIB} to point to this directory.
-@item runtime
-Contains source files for @code{mangel} and the Mangel-Wurzel 
-run-time library, which are independent of the EDG distribution 
-and do not contain proprietary code.  
-@item tests
-Contains test cases and examples.
+Set to @file{mangel-wurzel/lib}.
+@item PURIFY_DIR
+@cindex PURIFY_DIR environment variable
+Set to the directory in your Purify distribution containing
+@file{libpurify_stubs.a}.
 @end table
 
 @item
-@cindex PURIFY_DIR environment variable
-You should set the environment variable @env{PURIFY_DIR} to the directory
-in your Purify distribution where @file{libpurify_stubs.a} can be found.
-
-@item
-You may need to change or add to the default commands and options mangel 
+Optionally change the default commands and options mangel 
 uses to invoke the wurzel front end, the host compiler, and the Purify/link
 step.  For example, you may need to specify the paths for additional system
 include files.
+Make these changes in @file{mangel-wurzel/runtime/mangel.c} and recompile (use @command{make install}).  
 
-For a system-wide distribution, you may want to change the
-defaults in @file{runtime/mangel.c} and recompile (use @command{make install}).  
-Otherwise, you can set the environment variables as described in 
+If you want to override the defaults (whether or not you changed them),
+you can set the environment variables as described in 
 @ref{Mangel configuration options}.  You can use the @option{-n} or 
 @option{-v} options to see the actual commands wurzel is generating to 
 invoke each phase.
+
+@item
+Optionally (but recommended), run Mangel-Wurzel's tests.
+@example
+cd tests
+make
+@end example
 
 @end enumerate
 
