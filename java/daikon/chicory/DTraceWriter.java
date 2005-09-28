@@ -31,7 +31,7 @@ public class DTraceWriter extends DaikonWriter
     /**instance of a nonsensical value*/
     private static NonsensicalObject nonsenseValue = NonsensicalObject.getInstance();
     /**instance of a nonsensical list*/
-    private static List nonsenseList = NonsensicalList.getInstance();
+    private static List<Object> nonsenseList = NonsensicalList.getInstance();
 
     //certain class names
     protected static final String classClassName = "java.lang.Class";
@@ -502,8 +502,10 @@ public class DTraceWriter extends DaikonWriter
      */
     public static List <String> getTypeNameList(List <Object> theVals)
     {
+        // Return null rather than NonsensicalList as NonsensicalList is
+        // an array of Object and not String.
         if (theVals == null || theVals instanceof NonsensicalList)
-            return nonsenseList;
+            return null;
 
         List <String> typeNames = new ArrayList <String> (theVals.size());
 

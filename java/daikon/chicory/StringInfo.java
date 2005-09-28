@@ -37,8 +37,10 @@ public class StringInfo extends DaikonVariableInfo
     }
 
     /**
-     * Returns a space-separated String of the elements in theValues.  If theValues
-     * is null, returns "null." If theValues is nonsensical, returns "nonsensical".
+     * Returns a space-separated String of the elements in theValues.
+     * If theValues is null, returns "null." If theValues is
+     * nonsensical, returns "nonsensical".
+     *
      * @param theValues A list of values, each is a String
      * @return a space-separated String of the elements in theValues
      */
@@ -52,7 +54,9 @@ public class StringInfo extends DaikonVariableInfo
             return "null" + DaikonWriter.lineSep + "1";
         }
 
-        if (theValues instanceof NonsensicalList || theValues instanceof NonsensicalObject)
+        assert !NonsensicalList.isNonsensicalList (theValues);
+        if (NonsensicalList.isNonsensicalList (theValues)
+            || theValues instanceof NonsensicalObject)
         {
             //buf.append("nonsensical");
             return "nonsensical" + DaikonWriter.lineSep + "2";
@@ -77,7 +81,7 @@ public class StringInfo extends DaikonVariableInfo
         }
         buf.append("]");
 
-        if (theValues instanceof NonsensicalList)
+        if (NonsensicalList.isNonsensicalList (theValues))
             buf.append(DaikonWriter.lineSep + "2");
         else
             buf.append(DaikonWriter.lineSep + "1");

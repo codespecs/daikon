@@ -7,8 +7,8 @@ import java.util.*;
  * arrays whose value is nonsensical.
  */
 // It's problematic to make this generic:  what would "get" return?
-public class NonsensicalList extends AbstractList implements List
-{
+public class NonsensicalList extends AbstractList<Object>
+  implements List<Object> {
 
     /**
      *
@@ -36,6 +36,11 @@ public class NonsensicalList extends AbstractList implements List
     public String toString()
     {
         return "NonsensicalList";
+    }
+
+    public static boolean isNonsensicalList (Object obj)
+    {
+        return (obj instanceof NonsensicalList);
     }
 
     private final static NonsensicalList theList = new NonsensicalList();
