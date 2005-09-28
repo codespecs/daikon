@@ -22,17 +22,6 @@ Further documentation can be found in:
 
 4.1.6 (October 1 2005)
 
-dfec
-
-  Dfec has been removed from the Daikon distribution and the manual.  To
-  run Daikon on C/C++ programs, we recommend use of Kvasir (for Linux/x86)
-  or Mangel-Wurzel (for all other platforms).
-
-Eclipse plug-in
-
-  The Eclipse plug-in is no longer being maintained, so it has been removed
-  from the manual until it is updated.
-
 Mangel-Wurzel
 
   Printing of string variable values has been fixed to do a better job of
@@ -47,6 +36,17 @@ Kvasir
     Linux environments, including Red Hat version 9, has been worked
     around. To catch such problems more quickly in the future, we now
     regularly test Kvasir on four Linux distribution versions.
+
+dfec
+
+  Dfec has been removed from the Daikon distribution and the manual.  To
+  run Daikon on C/C++ programs, we recommend use of Kvasir (for Linux/x86)
+  or Mangel-Wurzel (for all other platforms).
+
+Eclipse plug-in
+
+  The Eclipse plug-in is no longer being maintained, so it has been removed
+  from the manual (at least until the plug-in gets updated again).
 
 ----------------
 
