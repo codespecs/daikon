@@ -97,9 +97,21 @@
     <BugPattern name="DLS_DEAD_LOCAL_STORE"/>
   </Match>
 
-  <Match class="daikon.tools.runtimechecker.Mail"/>
+  <Match class="daikon.tools.runtimechecker.Mail">
     <Method name="nonStaticMain"/>
     <BugPattern name="DM_EXIT"/>
+  </Match>
+
+  <!-- This should be fixed. -->
+  <Match class="daikon.inv.binary.twoScalar.LinearBinaryCore">
+    <Method name="format_using"/>
+    <BugPattern name="DLS_DEAD_LOCAL_STORE"/>
+  </Match>
+
+  <!-- This should be fixed. -->
+  <Match class="daikon.inv.binary.twoScalar.LinearBinaryCoreFloat">
+    <Method name="format_using"/>
+    <BugPattern name="DLS_DEAD_LOCAL_STORE"/>
   </Match>
 
 </FindBugsFilter>
