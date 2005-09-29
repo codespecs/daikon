@@ -10,6 +10,7 @@ import daikon.VarInfoName.Field;
 import daikon.VarInfoName.TypeOf;
 import daikon.VarInfoName.Add;
 import daikon.VarInfoName.Subscript;
+import utilMDE.Pair;
 import java.util.*;
 
 /**
@@ -87,14 +88,14 @@ public final class OutputFormat
         repair=new Repair();
       return repair;
     }
-    Hashtable settable=new Hashtable();
-    Hashtable relationtable=new Hashtable();
+    Hashtable<Pair<String,Ppt>,String> settable=new Hashtable<Pair<String,Ppt>,String>();
+    Hashtable<Pair<String,Ppt>,String> relationtable=new Hashtable<Pair<String,Ppt>,String>();
     Hashtable<Ppt,Definition> definitiontable=new Hashtable<Ppt,Definition>();
     int tagnumber=0;
     boolean forceset=false;
-    HashMap revquantifiers=new LinkedHashMap();
-    HashMap quantifiers=new LinkedHashMap(); // LinkedHashMap for deterministic output
-    HashSet usednames=new HashSet();
+    HashMap<String,String> revquantifiers=new LinkedHashMap<String,String>();
+    HashMap<String,String> quantifiers=new LinkedHashMap<String,String>(); // LinkedHashMap for deterministic output
+    HashSet<Pair<String,Ppt>> usednames=new HashSet<Pair<String,Ppt>>();
 
 
     /** Creates a copy of the current Repair object state.  This copy
@@ -143,8 +144,8 @@ public final class OutputFormat
 
     /** This method resets the quantifier table. */
     public void reset() {
-      revquantifiers=new LinkedHashMap();
-      quantifiers=new LinkedHashMap();
+      revquantifiers=new LinkedHashMap<String,String>();
+      quantifiers=new LinkedHashMap<String,String>();
       forceset=false;
       varcount=0;
     }
@@ -178,7 +179,7 @@ public final class OutputFormat
 
       //      String intervalset=generateRangeSet(ppt,lower,upper);
       // Unique set name based on range
-      Tuple t=new Tuple(vi.name.name()+".arrayset",ppt,lower.name()+".."+upper.name());
+      Pair<String,Ppt> t=new Pair<String,Ppt>(vi.name.name()+".arrayset"+"///"+lower.name()+".."+upper.name(),ppt);
 
       if (settable.containsKey(t)) {
         String setname=(String)settable.get(t);
@@ -232,7 +233,7 @@ public final class OutputFormat
 
       String intervalset=generateRangeSet(ppt,lower,upper);
 
-      Tuple t=new Tuple(vi.name.name()+".arrayrelation",ppt,lower.name()+".."+upper.name());
+      Pair<String,Ppt> t=new Pair<String,Ppt>(vi.name.name()+".arrayrelation"+"///"+lower.name()+".."+upper.name(),ppt);
 
       if (relationtable.containsKey(t)) {
         String relationname=(String)relationtable.get(t);
@@ -296,7 +297,7 @@ public final class OutputFormat
     /** This method generates a set contain the range [0..var] */
 
     public String generateRangeSet(Ppt ppt, VarInfoName lower, VarInfoName upper) {
-      Tuple t=new Tuple(lower.name()+"-"+upper.name()+".rangeset",ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(lower.name()+"-"+upper.name()+".rangeset",ppt);
 
       if (settable.containsKey(t)) {
         String setname=(String)settable.get(t);
@@ -385,7 +386,7 @@ public final class OutputFormat
      * corresponding relation. */
 
     public String getRelation(Ppt ppt, String set, String field, String fld) {
-      Tuple t=new Tuple(set + "///" + field,ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(set + "///" + field,ppt);
       if (relationtable.containsKey(t))
         return (String)relationtable.get(t);
       String relationname=generateRelationName(field,ppt);
@@ -413,12 +414,12 @@ public final class OutputFormat
      * point, and returns a relation. */
 
     public String getRelation(String programvar, Ppt ppt) {
-      Tuple t=new Tuple(programvar,ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
       if (relationtable.containsKey(t))
         return (String)relationtable.get(t);
       String relationname=generateRelationName(programvar,ppt);
 
-      Tuple t2=new Tuple(programvar,ppt);
+      Pair<String,Ppt> t2=new Pair<String,Ppt>(programvar,ppt);
       boolean generatesetdef=true;
       if (settable.containsKey(t2))
         generatesetdef=false;
@@ -498,7 +499,7 @@ public final class OutputFormat
      * and returns the corresponding setname. */
 
     public String getRealSet(String programvar, Ppt ppt) {
-      Tuple t=new Tuple(programvar,ppt);
+      Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
 
       if (settable.containsKey(t)) {
         String setname=(String)settable.get(t);
@@ -647,7 +648,7 @@ public final class OutputFormat
       String setname=setnameprefix;
       tagnumber=0;
       while(true) {
-        Tuple t=new Tuple(setname, p);
+        Pair<String,Ppt> t=new Pair<String,Ppt>(setname, p);
         if (usednames.contains(t)) {
           tagnumber++;
           setname=setnameprefix+tagnumber;
@@ -666,7 +667,7 @@ public final class OutputFormat
       String relname=relnameprefix;
       tagnumber=0;
       while(true) {
-        Tuple t=new Tuple(relname, p);
+        Pair<String,Ppt> t=new Pair<String,Ppt>(relname, p);
         if (usednames.contains(t)) {
           tagnumber++;
           relname=relnameprefix+tagnumber;
@@ -721,7 +722,7 @@ public final class OutputFormat
     }
 
     // /** Generic tuple class.  Implements hashcode and equals.  */
-     public static class Tuple {
+    /*     public static class Tuple {
        Object a;
        Object b;
        Object c;
@@ -754,7 +755,7 @@ public final class OutputFormat
          return ((Tuple)o).c.equals(c);
        }
      }
-
+    */
     public static class SetRelationPair {
       String set;
       String relation;
