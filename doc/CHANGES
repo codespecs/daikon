@@ -45,6 +45,12 @@ Kvasir
     Improved the garbage collector for DynComp comparability analysis
     to allow it to scale up to larger programs.
 
+Daikon
+
+  Implementation detail
+
+    The Daikon code no longer uses any raw generic types.  All uses of
+    generic types (such as List) are supplied a type parameter.
 
 dfec
 
