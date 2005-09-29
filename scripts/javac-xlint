@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# [Needs documentation.  Steal from prune-javac.pl.]
+
+# The "-p REGEXP" argument (mnemonic: "prune") means to completely ignore
+# any warning (not error) in a file whose name matches the given regular
+# expression.
+
+# Two possible ways this could work:
+#  1. Drop-in replacement for javac:  "javac-xlint args..."
+#     An advantage is that it looks more like javac, may be easier to
+#     remember/use.
+#  2. Prefix to javac line, like so:  "javac-xlint javac args..."
+#     An advantage of the latter is that we can continue to respect user
+#     settings of javac to "javac -g", rather than overriding them.
+#     But this doesn't permit using (say) jikes:  prune-xlint.pl is
+#     hard-coded for "javac" output.
+
+# Parse arguments.
+while getopts "p:" Option
+do
+  case $Option in
+    p ) 
+      # echo "found p!"
+      PRUNE_XLINT_ARGS=$OPTARG
+  esac
+done
+# Move argument pointer to next.
+shift $(($OPTIND - 1))
+
+# echo "all: $*"
+
+# Separate the first argument from all the others.
+SUPPLIED_JAVAC=$1
+shift
+
+${SUPPLIED_JAVAC} -Xlint $* 2>&1 | `dirname ${0}`/prune-xlint.pl "${PRUNE_XLINT_ARGS}"
