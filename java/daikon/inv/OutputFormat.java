@@ -188,6 +188,8 @@ public final class OutputFormat
       String setname=generateSetName(vin2.name(),ppt);
 
       VarInfoName base=vin2.getBase();
+      if (vin2.name().indexOf('*')!=-1)
+        return "$noprint("+vin2.name()+")";
 
       String baseset=VarInfoName.getRealSet(vi, base);
 
@@ -244,6 +246,9 @@ public final class OutputFormat
       String rangeset=generateSetName("R"+vin2.name(),ppt);
 
       VarInfoName base=vin2.getBase();
+
+      if (vin2.name().indexOf('*')!=-1)
+        return "$noprint("+vin2.name()+")";
 
       String baseset=VarInfoName.getRealSet(vi, base);
 

@@ -710,7 +710,11 @@ public abstract class VarInfoName
     public String repair_name(VarInfo v, boolean needrelation) {
 	if ("return".equals(name))
 	    return "$noprint(return)";
-	if (v.name==this&&needrelation) {
+        else if (name.indexOf("*")!=-1) {
+            /* Throw away all of these...we don't have a good way to
+               handle them currently. */
+            return "$noprint(name)";
+        } else if (v.name==this&&needrelation) {
 	    Repair.getRepair().addSpecial();
 	    return "s_quant."+Repair.getRepair().getRelation(name,v.ppt);
 	} else

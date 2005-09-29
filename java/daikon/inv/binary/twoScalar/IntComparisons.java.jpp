@@ -590,7 +590,7 @@ public final class INTEQUAL
       String var1name;
       String var2name;
 
-#if defined(EQUAL_OP)
+#if 1
       /* Daikon prints out equality sets with the left hand side being
          the leader...  This causes problems with the repair tool
          currently, so we flip them when possible */
@@ -610,6 +610,15 @@ public final class INTEQUAL
           var2name=((Simple)var2().name).repair_name(var2(),false);
         else
           var2name=var2().name.repair_name(var2());
+      } else {
+        /* Need to rewrite righthand side */
+        comparator = INVEQUALSstring;
+        var1name=var2().name.repair_name(var1());
+        if (var1().name instanceof Simple)
+          var2name=((Simple)var1().name).repair_name(var1(),false);
+        else
+          var2name=var1().name.repair_name(var1());
+      }
 #else
       if (lefthasfield) {
         /* No flip necessary */
@@ -626,7 +635,6 @@ public final class INTEQUAL
           var2name=((Simple)var1().name).repair_name(var1(),false);
         else
           var2name=var1().name.repair_name(var1());
-#endif
       } else {
         /* Need to rewrite lefthand side */
         var1name=var1().name.repair_name(var1());
@@ -635,6 +643,8 @@ public final class INTEQUAL
         else
           var2name=var2().name.repair_name(var2());
       }
+#endif
+
 #if defined(EQUAL_OP)
       comparator = "=";
 #elif defined(NONEQUAL_OP)
