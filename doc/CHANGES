@@ -37,6 +37,15 @@ Kvasir
     around. To catch such problems more quickly in the future, we now
     regularly test Kvasir on four Linux distribution versions.
 
+    Added support for giving names to unnamed struct/union/enum types
+    and fixed bugs that prevented Kvasir from traversing into
+    certain structs within large programs with many files which include 
+    the definitions of those structs.
+
+    Improved the garbage collector for DynComp comparability analysis
+    to allow it to scale up to larger programs.
+
+
 dfec
 
   Dfec has been removed from the Daikon distribution and the manual.  To
