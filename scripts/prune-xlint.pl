@@ -19,14 +19,18 @@ $WARNING = 1;
 
 my $file_line_re = "^[^\n]+:[0-9]+:";
 
-if (scalar(@ARGV) > 1) {
-  die "Provide zero or one argument to prune-xlint.pl";
-}
-
+my @ORIG_ARGV = (@ARGV);
 my $file_regexp;
-if (scalar(@ARGV) == 1) {
+# print "prune-xlint.pl args: " . scalar(@ARGV) . "; #1=$ARGV[0]\n";
+if ((scalar(@ARGV) > 1) && ($ARGV[0] eq "-p")) {
+  shift(@ARGV);                 # get rid of "-p"
   $file_regexp = shift (@ARGV);
   # print "found arg: $file_regexp\n";
+}
+
+if (scalar(@ARGV) > 1) {
+  # Could also
+  die "Too many arguments to prune-xlint.pl (or unrecognized option): prune-xlint.pl " . join(" ", @ORIG_ARGV) ;
 }
 
 
