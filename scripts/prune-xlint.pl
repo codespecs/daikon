@@ -10,11 +10,25 @@
 # source code comment.  Other (non-"unchecked") warnings and errors on the
 # line with "// unchecked" are retained.
 
+# Takes an optional argument, a regular expression.  Any warning (not
+# error) message matching the regular expression is suppressed.
+
 use strict;
 use English;
 $WARNING = 1;
 
 my $file_line_re = "^[^\n]+:[0-9]+:";
+
+if (scalar(@ARGV) > 1) {
+  die "Provide zero or one argument to prune-xlint.pl";
+}
+
+my $file_regexp;
+if (scalar(@ARGV) == 1) {
+  $file_regexp = shift (@ARGV);
+  # print "found arg: $file_regexp\n";
+}
+
 
 my $removed_warnings = 0;
 
@@ -53,10 +67,16 @@ while (defined(my $line = <>)) {
   if ($record !~ /$file_line_re/) {
     die "this can't happen";
   }
+
   if ($record =~ /: warning: \[unchecked\] unchecked.*\/\/ unchecked/s) {
     $removed_warnings++;
     next;
   }
+  if (defined($file_regexp) && ($record =~ /$file_regexp.*:[0-9]+: warning: /)) {
+    $removed_warnings++;
+    next;
+  }
+
   $status = 1;
   print $record;
 }
