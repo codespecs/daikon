@@ -17,6 +17,7 @@
 use strict;
 use English;
 $WARNING = 1;
+$OUTPUT_AUTOFLUSH = 1;
 
 my $file_line_re = "^[^\n]+:[0-9]+:";
 
@@ -43,6 +44,11 @@ my $status = 0;                 # zero means normal completion
 my $data = "";
 
 while (defined(my $line = <>)) {
+  if ($line =~ /^\[/) {
+    # Let "javac -verbose" messages through immediately
+    print $line;
+    next;
+  }
   $data .= $line;
   my @parts = split(/($file_line_re.*?^ *\^ *\n|^[0-9]+ (?:warnings|errors)\n)/sm, $data);
   if (scalar(@parts) == 1) {

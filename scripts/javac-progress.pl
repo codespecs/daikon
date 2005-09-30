@@ -3,7 +3,8 @@
 # Run javac, but process its STDERR to give progress indications.
 
 # To use with daikon, put
-# JAVAC ?= javac-progress.pl
+# JAVAC = javac-progress.pl --javac="javac-xlint -p '\./jtb/' javac"
+# JAVAC_XLINT =
 # in java/Makefile.user
 
 use 5.006;
@@ -12,14 +13,20 @@ use warnings;
 
 $| = 1;
 
+my $javac = "javac";
 my $chars = 0;
-if (grep($_ eq "--chars", @ARGV)) {
-    $chars = 1;
-    @ARGV = grep($_ ne "--chars", @ARGV);
-}
 
-my $javac = `which javac`;
-chomp $javac;
+my @remain;
+for my $arg (@ARGV) {
+    if ($arg eq "--chars") {
+        $chars = 1;
+    } elsif ($arg =~ /^--javac=(.*)$/s) {
+        $javac = $1;
+    } else {
+        push @remain, $arg;
+    }
+}
+@ARGV = @remain;
 
 my $width = ($ENV{COLUMNS} || 80);
 
@@ -41,6 +48,8 @@ sub abbrev {
         return "w";
     } elsif ($line =~ /checking/) {
         return "c";
+    } elsif ($line =~ /search path/) {
+        return "S";
     } else {
         return $line;
     }
@@ -53,6 +62,7 @@ my $javac_args = join(" ", map("'$_'", @ARGV));
 open(JAVAC, "$javac -verbose $javac_args 2>&1 |") or die "$!\n";
 while (<JAVAC>) {
     if (/^\[/) {
+        s/total (\d+)(\d\d\d)ms/total $1.$2sec/;
         if ($chars) {
             print abbrev($_);
         } else {
