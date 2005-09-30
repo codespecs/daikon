@@ -49,19 +49,7 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
                     download/index.html download/doc/index.html
 
 
-# build the windows version of dfej here
-MINGW_DFEJ_LOC := $(INV_DIR)
-
-MINGW_TOOLS := /afs/csail/group/pag/software/pkg/mingw32-linux-x86-glibc-2.1
-
-DFEJ_DIR := $(INV_DIR)/dfej
-DFEC_DIR := $(INV_DIR)/dfec
 C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
-# Old C front end
-# EDG_DIR := $(INV_DIR)/edg/dist
-# EDG_DIR := $(INV_DIR)/c-front-end
-# $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
-# EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
 BCEL_DIR := $(INV)/java/lib/bcel.jar
 DIST_DIR := $(WWW_DIR)/dist
@@ -84,7 +72,7 @@ JUNIT_VERSION := junit3.8.1
 # for "chgrp, we need to use the number on debian, 14127 is invariants"
 INV_GROUP := 14127
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name 'dfej-solaris*' -o -name 'dfej-dynamic' -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -169,8 +157,6 @@ rebuild-everything:
 	${MAKE} -C $(inv)/java tags compile
 	${MAKE} -C $(inv)/doc clean
 	${MAKE} -C $(inv)/doc
-	${MAKE} -C $(inv)/dfej clean
-	${MAKE} -C $(inv)/dfej
 	${MAKE} -C $(inv)/kvasir clean
 	${MAKE} -C $(inv)/kvasir all install
 
@@ -237,12 +223,8 @@ cvs-test:
 
 # The staging target builds all of the files that will be distributed
 # to the website in the directory $(STAGING_DIR).  This includes:
-# daikon.tar.gz, daikon.zip, daikon.jar, javadoc, dfej-linux-x86
-# (static version), dfej.exe (mingw windows) and the documentation.
+# daikon.tar.gz, daikon.zip, daikon.jar, javadoc, and the documentation.
 # See the dist target for moving these files to the website.
-# Note that this process does NOT include: dfej-cygwin.exe, dfej-solaris,
-# dfej-macosx, dfec-linux-x86.tar.gz and dfec-solaris.tar.gz.  These
-# must be built separately.
 staging: doc/CHANGES
 	/bin/rm -rf $(STAGING_DIR)
 	install -d $(STAGING_DIR)/download
@@ -268,17 +250,6 @@ staging: doc/CHANGES
 	cd doc/www && make pubs
 	install -d $(STAGING_DIR)/pubs
 	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
-	# Build static dfej and copy to staging dir
-	@echo "]2;Building static dfej"
-	$(MAKE) static-dfej-linux-x86
-	install -d $(STAGING_DIR)/download/binaries
-	cp $(DFEJ_DIR)/src/dfej-linux-x86 $(STAGING_DIR)/download/binaries
-	# Build the windows (mingw) version of dfej and copy to staging dir
-	@echo "]2;Building mingw dfej"
-	$(MAKE) mingw
-	cp $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe \
-	  $(STAGING_DIR)/download/binaries/dfej.exe
-	cd $(STAGING_DIR)/download/binaries && zip dfej dfej.exe
 	# all distributed files should be readonly
 	chmod -R -w $(STAGING_DIR)
 	# compare new list of files in tarfile to previous list
@@ -288,7 +259,7 @@ staging: doc/CHANGES
 	tar tzf $(STAGING_DIR)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
 	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt
 	# Delete the tmp files
-	cd /tmp && /bin/rm -rf /daikon dfej.tar daikon.dist daikon.tar daikon.zip \
+	cd /tmp && /bin/rm -rf daikon daikon.dist daikon.tar daikon.zip \
 							old_tar.txt new_tar.txt
 
 # Copy the files in the staging area to the website.  This will copy
@@ -430,13 +401,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir /tmp/daikon/examples/perl-examples
 	cp -p examples/perl-examples/{Birthday.{pm,accessors},{test_bday,standalone}.pl} /tmp/daikon/examples/perl-examples
 
-	# Removed since dfec is no longer our suggested C front end and Kvasir
-	# has its own examples (below).
-	# C example files for dfec
-	#cp examples/c-examples.tar.gz /tmp/daikon/examples
-	#cd /tmp/daikon/examples && tar zxf c-examples.tar.gz
-	#rm /tmp/daikon/examples/c-examples.tar.gz
-
 	# C example files for Kvasir
 	mkdir /tmp/daikon/examples/kvasir-examples
 	mkdir /tmp/daikon/examples/kvasir-examples/bzip2
@@ -500,18 +464,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# mkdir /tmp/daikon/front-end/c
 	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
 
-	# Java instrumenter (dfej)
-	# The -h option saves symbolic links as real files, to avoid problem
-	# with the fact that I've made dfej into a symbolic link.
-	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar --exclude '*.o' --exclude 'src/dfej' --exclude 'src.tar' dfej)
-	# (cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej front-end/java; rm /tmp/dfej.tar)
-	# For debugging
-	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej front-end/java)
-	# the subsequence rm -rf shouldn't be necessary one day,
-	# but for the time being (and just in case)...
-	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
-	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES) )
-
 	# Perl front end
 	# mkdir /tmp/daikon/front-end/perl
 	cp -pR front-end/perl /tmp/daikon/front-end
@@ -549,147 +501,13 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 
 ### Front end binaries
 
-## C/C++ front end
-
-# dist-dfec: dist-dfec-linux
-# 
-# dist-dfec-linux:
-# 	cd $(DFEC_DIR) && $(MAKE) dfec dfec-static
-# 	cp -pf $(DFEC_DIR)/src/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
-# 	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
-# 	update-link-dates $(DIST_DIR)/index.html
-# 	# cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
-
-## Java front end
-
-.PRECIOUS: $(DFEJ_DIR)/src/dfej
-$(DFEJ_DIR)/src/dfej:
-	cd $(DFEJ_DIR) && $(MAKE)
-
-## Don't distribute executables for now
-
-# Make the current dfej the one used by the PAG group
-# (Warning:  As of 7/3/2002 the DIST_PAG_BIN_DIR version is not used by
-# $inv/tests/Makefile.common!)
-dist-dfej-pag: $(DIST_PAG_BIN_DIR)/dfej
-
-$(DIST_PAG_BIN_DIR)/dfej: $(DFEJ_DIR)/src/dfej
-	# No "-p" flag:  we want to ensure that dfej is newer than any
-	# generated files in any group member's directory.
-	cp -f $< $@
-
-# Make the current dfej the one distributed to the world
-dist-dfej: dist-dfej-pag dist-dfej-linux-x86 dist-dfej-windows
-
-dist-dfej-solaris: $(DIST_BIN_DIR)/dfej-solaris
-
-$(DIST_BIN_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
-	cp -pf $< $@
-	# strip $@
-	chmod +r $@
-	update-link-dates $(DIST_DIR)/index.html
-	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
-
-dist-dfej-cygwin: $(DIST_BIN_DIR)/dfej-cygwin.exe
-
-$(DIST_BIN_DIR)/dfej-cygwin.exe: $(DFEJ_DIR)/src/dfej-cygwin.exe
-	cp -pf $< $@
-	# strip $@
-	chmod +r $@
-	update-link-dates $(DIST_DIR)/index.html
-	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
-
-static-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
-	# Move away the dynamic version and build the static one.
-	# The result is in $(DFEJ_DIR)/src/dfej-linux-x86
-	-mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-dynamic
-	-mv -f $(DFEJ_DIR)/src/dfej-linux-x86 $(DFEJ_DIR)/src/dfej
-	cd $(DFEJ_DIR)/src && $(MAKE) LDFLAGS=-static
-	mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-linux-x86
-	mv -f $(DFEJ_DIR)/src/dfej-dynamic $(DFEJ_DIR)/src/dfej
-
-dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej static-dfej-linux-x86
-	# Now copy it over
-	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86
-	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
-	strip $(DIST_BIN_DIR)/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
-	chmod +r $(DIST_BIN_DIR)/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
-	update-link-dates $(DIST_DIR)/index.html
-	# # Unstripped, to permit better debugging
-	# cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
-	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
-
-# use this target to test building mingw without distributing anything
-mingw : mingw_exe
-
-# Creates the build_mingw_dfej directory.  This probably needs to be redone
-# when dfej is changed to include new object files or other Makefile changes.
-# Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
-$(MINGW_DFEJ_LOC)/build_mingw_dfej:
-	cd dfej && $(MAKE) distclean
-	mkdir $(MINGW_DFEJ_LOC)/build_mingw_dfej
-	# Bad hacks to fix problems in mingw32.  Need to be resolved
-	#cp /g6/users/jhp/mingw32/crt2.o $(MINGW_DFEJ_LOC)/build_mingw_dfej
-	#mkdir $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
-	#cp /g6/users/jhp/mingw32/crt2.o $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
-	#cp /usr/i386-glibc21-linux/include/regex.h $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
-	# Configure mingw version
-	(PATH=$(MINGW_TOOLS)/cross-tools/bin:$$PATH; echo $$PATH; cd $(MINGW_DFEJ_LOC)/build_mingw_dfej &&  ~/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
-	cd dfej && ./configure
-
-# dfej-src/build_mingw_dfej/src/dfej.exe:
-# 	cd dfej-src/build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE)
-
-mingw_exe: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe
-
-$(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe: dfej/src/*.cpp dfej/src/*.h
-	(cd $(MINGW_DFEJ_LOC)/build_mingw_dfej && export PATH=$(MINGW_TOOLS)/cross-tools/bin:${PATH} && $(MAKE))
-
-dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej \
-				   $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe mingw_exe
-	cp -pf $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe \
-		   $(DIST_BIN_DIR)/dfej.exe
-	chmod +r $(DIST_BIN_DIR)/dfej.exe
-	update-link-dates $(DIST_DIR)/index.html
-
-## Cross-compiling DFEJ to create a Windows executable (instructions by
-## Michael Harder <mharder@MIT.EDU>):
-# 1.  Get the mingw32 cross-compiler for Linux.  Details are avaliable at:
-# http://www.mingw.org/mingwfaq.shtml#faq-cross.  A pre-built version for
-# Linux is available at:
-# http://www.devolution.com/~slouken/SDL/Xmingw32/mingw32-linux-x86-glibc-2.1.tar.gz
-# 
-# 2.  Extract mingw32-linux-x86-glibc-2.1.tar.gz.  The cross compiler tools
-# are in cross-tools/bin.  The tools start with "i386-mingw32msvc-".  These
-# tools need to be in your path when you build the Windows binary (including
-# when you configure the Windows binary).
-# 
-# 
-# The following instructions are adapted from daikon/java-front-end/INSTALL
-# 
-# 3.  Make a separate directory to build the Windows executable.
-# 
-# mkdir build_mingw; cd build_mingw
-# 
-# 4.  Run the dfej configure script, with a target platform of
-# "i386-mingw32msvc".  Assume the dfej source is at ~/daikon/java-front-end.
-# 
-# ~/daikon/java-front-end/configure --prefix=/tmp/dfej_Xmingw
-# --host=i386-mingw32msvc
-# 
-# Add additional arguments to configure as desired.  I don't know what the
-# "--prefix" flag is for, but they use it in the jikes INSTALL instructions.
-# 
-# 5.  Run "make".  This should make the Windows binary at
-# build_mingw/src/dfej.exe.  Copy this file to a Windows machine, and run
-# it.  You should at least get the Daikon usage message.
+## (empty for now)
 
 
 ###########################################################################
 ### Utilities
 ###
 
-#
 # Copies PAG specific files to the website and group area
 WWW_PAG_FILES := doc/www/mit/eclipse-pag.html \
 				 doc/www/mit/index.html \

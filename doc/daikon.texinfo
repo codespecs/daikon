@@ -143,6 +143,10 @@ Detecting invariants in Java programs
 * StackAr example::             
 * Understanding the invariants::  
 
+Understanding the invariants
+
+* Second Java example::         
+
 Detecting invariants in C programs
 
 * C examples::                  
@@ -218,7 +222,6 @@ Front ends
 * Mangel-Wurzel::               
 * dfepl::                       
 * convertcsv.pl::               
-* dfej::                        
 * Other front ends::            
 
 Java front end Chicory
@@ -260,31 +263,6 @@ Perl front end dfepl
 
 * dfepl options::               
 
-Source-based Java front end dfej
-
-* Instrumenting Java programs::  
-* dfej options::                
-* Run dfej Java::               
-* Scope of instrumentation::    
-* Refined runtime types::       
-* Installing dfej::             
-* All-in-one script::           
-
-Instrumenting Java programs
-
-* StackAr example with dfej::   
-* Summary of Daikon use with dfej::  
-* Automating the process::      
-* Second Java example::         
-
-Details on running dfej-instrumented Java programs
-
-* Java applets::                
-
-All-in-one script daikon.pl
-
-* daikon.pl arguments::         
-
 Tools for use with Daikon
 
 * Tools for manipulating invariants::  
@@ -316,7 +294,6 @@ Troubleshooting
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
 * Chicory problems::            
-* dfej problems::               
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
@@ -342,13 +319,6 @@ Large data trace (.dtrace) files
 Problems with Chicory
 
 * VerifyError constant pool index error::  
-
-Problems with dfej
-
-* dfej installation problems::  
-* dfej invocation problems::    
-* dfej javac problems::         
-* JVM initialization error::    
 
 Details
 
@@ -608,11 +578,10 @@ You can examine the appropriate Daikon environment file to learn of
 other variables you can customize.
 
 @item
-Optionally, build various executables used by Daikon, such as
-the C front end Kvasir
-(@pxref{Installing Kvasir}), the source-based Java front end dfej
-(@pxref{Installing dfej}), and the source-based C front end
-Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
+Optionally, build various executables used by Daikon, such as the
+C front end Kvasir (@pxref{Installing Kvasir}).
+Optionally, download other executables, such as the source-based C front
+end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 
 @end enumerate
 
@@ -670,8 +639,7 @@ Windows.  (The incompatibility does not exist if the program was
 compiled for Cygwin.)  The incompatibility is that Windows programs
 use the semicolon (@samp{;}) as their path separator (for instance,
 for @env{CLASSPATH}), but Unix and Cygwin programs use the colon (@samp{:})
-as their path separator.  The dfej executable compiled on Cygwin seems
-to accept both Windows-style and Cygwin/Unix-style paths.
+as their path separator.
 
 The @file{cygwin-runner.pl} script in the @file{bin/} directory may
 help you run windows-native Java tools from within the Cygwin
@@ -929,6 +897,35 @@ array, the elements of the array, and @code{topOfStack} are not
 modified by this method --- this method is an ``observer''.  The
 last invariant is not particularly interesting.
 
+
+@menu
+* Second Java example::         
+@end menu
+
+@node    Second Java example,  , Understanding the invariants, Understanding the invariants
+@subsubsection A second Java example
+
+A second example is located in the @file{examples/QueueAr} subdirectory.
+Run this sample using the following steps:
+
+@itemize @bullet
+@item Compile
+@example
+cd examples/QueueAr
+javac -g DataStructures/*.java
+@end example
+
+@item Trace file generation
+@example
+java daikon.Chicory DataStructures.QueueArTester
+@end example
+
+@item Invariant detection
+@example
+java daikon.Daikon QueueArTester.dtrace.gz
+@end example
+
+@end itemize
 
 
 
@@ -1776,7 +1773,7 @@ the class invariant holds.  ESC/Java and JML require an explicit
 ``helper'' annotation to indicate a private method for which the class
 invariant does not hold.)
 
-The Java instrumenters Chicory and dfej select names for program
+The Java instrumenter Chicory selects names for program
 points that include an indication of the argument and return types for
 each method.  These signatures are presented in the JVML format: one
 character for each primitive type (@samp{B} for byte, @samp{C} for
@@ -2681,7 +2678,6 @@ ends,,,./developer,Daikon Developer Manual}.
 * Mangel-Wurzel::               
 * dfepl::                       
 * convertcsv.pl::               
-* dfej::                        
 * Other front ends::            
 @end menu
 
@@ -2728,13 +2724,6 @@ the names of method arguments.
 
 Chicory must be run in a version 5.0 JVM, but it is backward-compatible
 with older versions of Java code.
-Chicory's functionality is very similar to that
-of the older dfej Java front end (@pxref{dfej}), and Chicory 
-supports most of the same
-command-line options.  However, Chicory has three substantial advantages
-over dfej: Chicory is much easier to use, dfej only supports Java
-1.4 and earlier, and Chicory is platform-independent (and requires no
-special action to build) since it is written in Java.
 
 @menu
 * Chicory options::             
@@ -2757,8 +2746,6 @@ is a valid invocation of Java.
 
 This section lists the optional command-line arguments to Chicory, which
 appear before the @var{classname} on the Chicory command line.
-Unless otherwise noted, all of these options are also accepted by
-dfej (@pxref{dfej options}).
 
 @table @option
 @item --help
@@ -2910,13 +2897,11 @@ give you more control over which subsets of runs to invoke Daikon on.
 @item --output-dir=@var{directory}
 Write the trace output (@file{.dtrace}) to this directory.  The default
 is the current directory.
-(Not supported by dfej, only Chicory.)
 
 @item --daikon
 @itemx --daikon=@var{args}
 After creating a data trace (@file{.dtrace}) file, run Daikon on it,
 passing the specified arguments, if any, to Daikon.
-(Not supported by dfej, only Chicory.)
 
 This option supplies Daikon with a single trace from a one execution of
 your program.  When Daikon is invoked from the command line, it can be
@@ -5136,7 +5121,7 @@ including external commands invoked.
 @end table
 
 
-@node convertcsv.pl, dfej, dfepl, Front ends
+@node convertcsv.pl, Other front ends, dfepl, Front ends
 @section Comma-separated-value front end convertcsv.pl
 
 @cindex csv files
@@ -5162,736 +5147,7 @@ produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
 message.
 
 
-@node    dfej, Other front ends, convertcsv.pl, Front ends
-@section Source-based Java front end dfej
-
-@cindex front end for Java, source-based
-@cindex Java front end, source-based
-@cindex dfej (Daikon front end for Java)
-
-This section contains details about dfej, the source-based Daikon front
-end for Java.
-
-For brief information about running dfej, see @ref{Instrumenting Java programs}.
-For information about installing dfej, see @ref{Installing dfej}.
-The @command{dfej} usage message also contains some usage information;
-run @command{dfej --help} to see it.
-
-dfej works on Java code that corresponds to versions 1.0--1.4
-of the Java language.  dfej does not work on Java 5.0.
-
-The Chicory front end for Java (@pxref{Chicory}) works on
-all versions of the Java language, including Java 5.0.
-Another advantage of Chicory is that Chicory is much easier to use.
-Finally, Chicory is platform-independent (and requires no special action to
-build), since it is written in Java.  
-Thus, we recommend the use of Chicory over dfej in most circumstances.
-For more details on Chicory, see @ref{Chicory}.
-
-@menu
-* Instrumenting Java programs::  
-* dfej options::                
-* Run dfej Java::               
-* Scope of instrumentation::    
-* Refined runtime types::       
-* Installing dfej::             
-* All-in-one script::           
-@end menu
-
-
-@node    Instrumenting Java programs, dfej options, dfej, dfej
-@subsection Instrumenting Java programs
-
-To instrument Java source programs, simply invoke @command{dfej}, the
-Daikon front end for Java, on them:
-@example
-dfej @var{filename1}.java @var{filename2}.java @var{...}
-@end example
-
-
-Instrumentation with dfej performs two actions:
-@itemize @bullet
-@item
-Instrumentation adds instructions to the target program so that, in
-addition to performing its original task, it also writes variable values
-to a data trace file.  The changes are made to a copy of the target
-program; your original version is not modified.
-dfej writes instrumented versions of the files to a
-@file{daikon-instrumented/} directory.
-
-@item
-Instrumentation creates declaration files that describe the format of
-the data trace files.  For instance, these declaration files describe
-the names of procedures and variables that appear in the data trace file.
-dfej creates declaration files named @file{@var{filename1}.decls}, etc.@
-in a @file{daikon-output/} directory.
-@end itemize
-
-After running dfej, compile the instrumented version of the code, which
-by default appears in the @file{daikon-instrumented/} directory.
-
-@menu
-* StackAr example with dfej::   
-* Summary of Daikon use with dfej::  
-* Automating the process::      
-* Second Java example::         
-@end menu
-
-@node    StackAr example with dfej, Summary of Daikon use with dfej, Instrumenting Java programs, Instrumenting Java programs
-@subsubsection StackAr example with dfej
-
-@c We recommend you run Daikon on Unix, but it can also be run on Windows.
-
-You need to perform three basic tasks:  instrument the target program
-(steps 1-4), run the instrumented program to create a data trace file
-(steps 5-7), and run Daikon over the data trace file to produce
-invariants (steps 8-9).
-
-You must first install Daikon if you haven't done so already; see
-@ref{Installing Daikon}.  If you have any trouble with these
-instructions, see @ref{Troubleshooting}, or try the @ref{Index}.
-
-
-@enumerate
-@item Change to the directory containing the StackAr program.  (The
-directory contains the @file{DataStructures} directory.)
-@example
-cd examples/StackAr
-@end example
-
-@item Compile the original version of the program.  You must use the
-@option{-g} flag to include debugging information in the compiled classfiles.
-You may compile with any Java compiler you like (such as javac), but
-your code must be compilable with the @command{jikes} Java compiler (see
-@uref{http://www.ibm.com/developerworks/oss/jikes/}).
-@example
-javac -g DataStructures/*.java
-@end example
-
-
-@item Instrument the @file{StackAr.java} file.
-@example
-dfej DataStructures/StackAr.java
-@end example
-@noindent
-
-We instrument only this one file because we are only interested in the
-invariants of the StackAr class, not the other classes in the program.
-
-This command creates two directories, @file{daikon-instrumented} and
-@file{daikon-output}.  It creates an instrumented version of
-@file{StackAr.java} at @file{daikon-instrumented/DataStructures/StackAr.java}.
-It creates a declaration file at
-@file{daikon-output/DataStructures/StackAr.decls}.
-
-@item Compile the instrumented version of StackAr.java.
-@c I think this comment about "." on the classpath is correct.  -MDE 8/26/01
-(This step requires @file{.} to be on your classpath.)
-
-@example
-javac daikon-instrumented/DataStructures/StackAr.java
-@end example
-
-@item Run the StackAr test suite, using the instrumented
-@file{StackAr.class} class file instead of the original (but the
-original version of all other files):
-
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.StackArTester
-@end example
-
-(On Windows, use @samp{;%CLASSPATH%} instead of @samp{:$CLASSPATH}.)
-
-This will generate a trace file at
-@file{daikon-output/StackAr.dtrace}.  This could take anywhere from
-a few seconds to a few minutes, depending on the speed of your
-computer.
-
-@item Change to the @file{daikon-output} directory to analyze
-the output.
-
-@example
-cd daikon-output
-@end example
-
-@item Run Daikon on the trace file.
-
-@example
-java daikon.Daikon DataStructures/StackAr.decls StackAr.dtrace
-@end example
-
-The invariants are printed to standard output, and a binary
-representation of the invariants is written to
-@file{StackAr.inv.gz}.
-
-@item Examine the invariants; for a
-description of how to do this, see @ref{StackAr example}.
-
-@end enumerate
-
-@node    Summary of Daikon use with dfej, Automating the process, StackAr example with dfej, Instrumenting Java programs
-@subsubsection Summary of Daikon use with dfej
-
-The steps above can be divided into three stages:
-
-@itemize @bullet
-@item Instrumentation (steps 1-4)
-@example
-cd examples/StackAr
-javac -g DataStructures/*.java
-dfej DataStructures/StackAr.java
-javac daikon-instrumented/DataStructures/StackAr.java
-@end example
-
-@c @item Trace file generation (steps 5-7)
-
-@item Trace file generation (step 5)
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.StackArTester
-@end example
-
-(On Windows, use ``;'' as the path separator.)
-
-@item Invariant detection (steps 6-8)
-@example
-cd daikon-output
-java daikon.Daikon DataStructures/StackAr.decls StackAr.dtrace
-@end example
-
-@end itemize
-
-
-@node    Automating the process, Second Java example, Summary of Daikon use with dfej, Instrumenting Java programs
-@subsubsection Automating the process
-
-The script @command{daikon.pl} automates all steps of the invariant
-detection process.
-
-@example
-cd examples/StackAr
-daikon.pl DataStructures.StackArTester
-@end example
-
-This command instruments your program, generates a trace file, and
-displays the invariants in the (deprecated) Tree GUI@.  Currently, this
-script only works on Unix.  For more details, see @ref{All-in-one script}.
-
-
-@node    Second Java example,  , Automating the process, Instrumenting Java programs
-@subsubsection A second Java example
-
-A second example is located in the @file{examples/QueueAr} subdirectory.
-Run this sample using the following steps:
-
-@itemize @bullet
-@item Instrumentation (steps 1-4)
-@example
-cd examples/QueueAr
-javac -g DataStructures/*.java
-dfej DataStructures/QueueAr.java
-javac daikon-instrumented/DataStructures/QueueAr.java
-@end example
-
-@c @item Trace file generation (steps 5-7)
-@item Trace file generation (step 5)
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.QueueArTester
-@end example
-
-(On Windows, use ``;'' as the path separator.)
-
-@item Invariant detection (steps 6-8)
-@example
-cd daikon-output
-java daikon.Daikon DataStructures/QueueAr.decls \
-     QueueAr.dtrace
-@end example
-
-@end itemize
-
-@node    dfej options, Run dfej Java, Instrumenting Java programs, dfej
-@subsection dfej options
-
-The simplest way to invoke dfej is simply to supply it with a list of
-Java files:
-@example
-dfej @var{filename1}.java @var{filename2}.java @var{...}
-@end example
-
-dfej options should be provided before the first Java file name.  dfej
-accepts most Chicory arguments (@pxref{Chicory options}), and also the
-following additional options.
-@c
-@c The options can be divided into the following
-@c categories:
-@c @table @b
-@c @item where (in what directory) to produce output
-@c 
-@c @end table
-@c
-@c Details of the options are as follows.  
-When conflicting options are specified, the last one
-takes precedence.
-
-
-@table @option
-@c @item +daikon_loops
-@c Produce data trace output for loop invariants.
-@c @emph{This option has no effect:  loop invariants are not currently supported.}
-@c 
-@c @item -daikon_loops
-@c Do not produce data trace output for loop invariants (default).
-
-@item --instrument
-Produce tracing output (default).
-
-@item --no-instrument
-Do not produce tracing output.
-
-@item --linked-lists
-Render linked lists as vectors (default).
-
-Suppose you have a class one of whose fields is of the class's own type,
-such as
-@example
-class Link @{
-  Object value;
-  Link next;
-@}
-@end example
-Then if the @option{--linked-list} option is set, the Daikon front end
-will output a list consisting of all the elements reachable via
-@code{next} pointers.
-
-@item --no-linked-lists
-Do not render linked lists as vectors.
-
-@item +daikon_context
-Produce context sensitive output.
-
-@item -daikon_context
-Do not produce context sensitive output (default).
-
-@item --exceptions
-Produce data trace output for exceptions.
-
-@item --no-exceptions
-Do not produce data trace output for exceptions (default).
-
-@item +daikon_classhier
-Produce class hierarchy data.
-
-@item -daikon_classhier
-Do not produce class hierarchy data (default).
-
-
-@item --decls-dir=@var{decldir}
-Specifies the directory in which to create
-@file{@var{PACKAGES}/@var{CLASSNAME}.decls} (default
-@file{daikon-output}, unless @option{--decls-flat} is
-specified).  @file{@var{PACKAGES}} is the relative path from the current
-directory to the source file; that is, the relative path from
-@var{decldir} to the @file{.decls} file is the same as the relative
-path from the current directory to the source file.  The directory
-structure of the @file{.decls} files mirrors the directory structure of
-the source files.
-
-@item --decls-flat
-Specifies to create @file{@var{CLASSNAME}.decls} in a single directory,
-not in a directory hierarchy.
-
-@item --instr-dir=@var{instrdir}
-Specifies the directory in which to write instrumented source files
-(default @file{daikon-instrumented/}).  The instrumented files have the
-same names and directory structure as the original input files.
-
-@c not yet implemented for dfej as of 6/13/2001
-@c If the value of this field is @samp{.} (i.e., a single period), then
-@c instrumented files replace the original versions in the original
-@c directories, but the original source files are backed up by appending
-@c @file{.uninst}.  More specifically,
-@c @enumerate
-@c @item each instrumented file is copied from @file{filename} to
-@c @file{filename.uninst}, unless filename @file{filename.uninst} already
-@c exists, in which case no copying occurs
-@c @item the system reads from @file{filename.uninst} and writes to
-@c @file{filename}.
-@c @end enumerate
-@c This behavior permits in-place instrumentation, which may be desirable
-@c to ease compiling the instrumented code.  (This feature is probably more
-@c important for C than for Java programs.)  Running the instrumenter a
-@c second time reads the original source code rather than inserting an
-@c additional set of instrumentation into the already-instrumented source
-@c code files.
-
-Note for Java:
-
-If you do not override the default value of this variable (and possibly
-even if you do, if you do not set it to @samp{.}), then you should run
-dfej from a directory in your classpath.  For example, if
-directory @file{parent/} is in your classpath and you want to instrument
-@file{parent/foo/Bar.java}, you should run @samp{dfej foo/Bar.java} from
-directory @file{parent/}.  This will create a file
-@file{parent/daikon-instrumented/foo/Bar.java}.  You must add directory
-@file{parent/daikon-instrumented} to your classpath.
-
-(The reason for running dfej from a directory in your
-classpath is that it allows the directory structure to remain consistent
-with the package structure.  If @file{Bar.java} specifies its package, it
-does so with a line like @samp{package foo;}.  If you run dfej
-from the @file{parent/foo} directory, the instrumented version of
-@file{Bar.java} will go in @file{parent/foo/daikon-instrumented/Bar.java}; this
-is not consistent with the package structure.)
-
-@end table
-
-
-@cindex trace file size, limiting
-@cindex limiting trace file size
-The following two environment variables can control the size of your
-trace file.  (There aren't currently dfej command-line arguments to
-set these, but there probably should be.)
-
-@cindex DTRACELIMIT environment variable
-@cindex environment variable DTRACELIMIT
-@cindex DTRACELIMITTERMINATE environment variable
-@cindex environment variable DTRACELIMITTERMINATE
-Environment variable @env{DTRACELIMIT} is a number of records (that is,
-program point executions), after which the instrumented program will
-continue to run but will close the @file{.dtrace} and produce no more
-output to it.  If environment variable @env{DTRACELIMITTERMINATE} is set to
-true, then when the specified number of records is output, the
-instrumentation throws a TerminationMessage (an unchecked Java error) in
-an attempt to halt the program.
-
-Note that recent versions of the JDK do not allow Java programs to
-inspect environment variables.  So if you're generating a
-@file{.dtrace} from a Java class, you may need to pass the environment
-variable directly as an argument to Java.  For example:
-
-@example
-java -classpath daikon-instrumented:$CLASSPATH \
-    -DDTRACELIMIT=10000 -DDTRACELIMITTERMINATE=true Foo
-@end example
-
-
-@node    Run dfej Java, Scope of instrumentation, dfej options, dfej
-@subsection Details on running dfej-instrumented Java programs
-
-After instrumentation, there are two versions of your Java program:
-the original version, which is unmodified, and the instrumented
-version, which appears in the @file{daikon-instrumented/} directory.
-Make sure that the @file{daikon-instrumented/} directory appears on
-your class path before the directory containing the original Java
-code.  You can do this by running the program from that directory, if
-@file{.} (the current directory) appears early on your class path, or
-you can add the @file{daikon-instrumented/} directory to your class
-path explicitly.  (To be able to run the instrumented program from a
-directory other than the parent of the @file{daikon-instrumented/}
-directory, an absolute path to the @file{daikon-instrumented/} should
-be used).
-
-
-@menu
-* Java applets::                
-@end menu
-
-@node    Java applets,  , Run dfej Java, Run dfej Java
-@subsubsection Java applets
-
-In order to run an applet, you must take two additional steps.
-
-@enumerate
-@item
-Copy or link all class files, jar files, input files, and html files
-that your applet needs to the @file{daikon-instrumented/} directory.  This
-includes the @file{daikon/java} directory itself.  For example, to
-create a link to the @file{daikon/java} directory, type (while in the
-@file{daikon-instrumented/} directory):
-@example
-ln -s $DAIKONDIR/java/daikon .
-@end example
-
-@item
-By default, the Java 2 applet security model does not allow applets to
-write files.  To get around this so that Daikon can write its @file{.dtrace}
-files, create a file named @file{javaPolicy} in the @file{daikon-instrumented/}
-directory that contains the text
-@example
-grant @{
-    permission java.io.FilePermission
-      "<<ALL FILES>>", "read, write, delete, execute";
-@};
-@end example
-@noindent
-Do not use this policy file with untrusted applets.
-
-@item
-Finally, run the applet:
-@example
-appletviewer -J-Djava.security.policy=javaPolicy @var{html-file}
-@end example
-@end enumerate
-
-
-@node    Scope of instrumentation, Refined runtime types, Run dfej Java, dfej
-@subsection Controlling what classes are instrumented
-
-Only the specified Java files are instrumented; other files are
-run uninstrumented.  This permits you to control the scope of invariant
-detection.
-
-In any of the specified files, all classes defined in any of those
-files are instrumented.  For instance, after
-@example
-dfej Foo.java Bar.java
-@end example
-@noindent
-the instrumented versions of @file{Foo.java} and @file{Bar.java} output
-information about all @code{Foo} objects (including @code{Foo} objects that are
-components of @code{Bar} objects, that are arguments to @code{Bar} 
-procedures, etc.), and likewise for @code{Bar} objects.
-
-After
-@example
-dfej Foo.java
-dfej Bar.java
-@end example
-@noindent
-the same procedures (all those in the @code{Foo} and @code{Bar} classes)
-are instrumented, but in @code{Foo} procedures, no detail is provided
-about the structure of any @code{Bar} objects that might appear.  In other
-words, the instrumenter assumes that the only classes instrumented (and
-about which information is desired) are those presented to it on the
-command line.  One way to determine all the @file{.java} files that are
-included in a specified program is to run the following commands:
-@example
-find . -name '*.class' -print | xargs rm -f
-javac MyProgram.java
-find . -name '*.class' -print
-@end example
-
-dfej tracks all modifications of instrumented classes; if you
-do not instrument all users of a class, then modifications in
-uninstrumented classes may not be detected.  This can affect Daikon's
-statistical tests, but in practice usually has little impact.  The program 
-makes approximations to the missing modification information.
-
-
-@node    Refined runtime types, Installing dfej, Scope of instrumentation, dfej
-@subsection Refined runtime types
-
-Daikon uses the declared types of variables to determine what fields
-those variables have and what methods may be legally applied to those
-variables.  However, sometimes the declared type is excessively general:
-the runtime value may be guaranteed to be of a more specific type.  This
-often results from use of polymorphic datatypes or methods.  For
-instance, a Java variable may be declared as @code{Object} even though
-it always holds an @code{Integer}.  In that case, methods such as
-@code{intValue} may be safely called on the object, even though it is
-not applicable to arbitrary @code{Object}s.
-
-You can indicate the runtime type of a variable to dfej by inserting a
-@example
-/*refined_type: Integer*/ 
-@end example
-@noindent
-comment immediately before the declared type (but after any modifiers like
-@code{public} or @code{static}).  For example, a list element that only 
-contains @code{Integer}s might be annotated as follows:
-@example
-class ListNode @{
-  /*refined_type: Integer*/ Object element;
-  ListNode next;
-
-  ListNode( /*refined_type: Integer*/ Object theElement ) @{ ... @}
-  ListNode( /*refined_type: Integer*/ Object theElement,
-            ListNode n ) @{ ... @}
-@}
-@end example
-
-
-@node    Installing dfej, All-in-one script, Refined runtime types, dfej
-@subsection Installing dfej, the Daikon front end for Java
-
-@cindex installing dfej
-@cindex dfej installation
-
-This manual section is optional; if you ran @command{make} from
-@file{$DAIKONDIR} (@pxref{Installing Daikon}), you can skip it.
-
-If you wish to use the dfej source-based front end for Java, you need to
-obtain or build an executable for dfej.
-
-@itemize @bullet
-@item
-You can download a precompiled version of
-dfej from @uref{http://pag.csail.mit.edu/daikon/download/}.
-Place that executable in directory
-@file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
-your path), then run @command{rehash}.  Now you are ready to run dfej.
-(If no executable is available for your architecture, send mail to
-@email{daikon-developers@@lists.csail.mit.edu} and we may be able to produce an
-executable for you.)
-
-@item
-You can build dfej from the sources, which are included in
-the Daikon source distribution.  
-(dfej is written in C++, so you need a C++ compiler such as
-@uref{http://gcc.gnu.org/,, gcc}.)
-After building, file @file{src/dfej} (on Windows, @file{src/dfej.exe}) is
-the dfej executable.  If you followed the installation instructions
-(@pxref{Installing Daikon}), it is already on your path.
-
-@itemize
-@item
-The easiest way to do this is to type @command{make dfej} from the top
-level of your Daikon distribution.
-
-@item
-Alternatively, see file @file{INSTALL} in the dfej sources.  In
-summary, you should be able to build dfej by running the following
-commands:
-@example
-cd daikon/front-end/java
-./configure
-make
-rehash
-@end example
-@noindent
-@end itemize
-@noindent
-
-If you modify the source code for dfej (which is not recommended
-unless you know what you are doing), just run @command{make} again to
-build a new binary.
-
-@c Because it uses some obsolescent C++ features, dfej cannot be compiled
-@c using gcc/g++ 3.2; dfej can be compiled with gcc 2.95.3 (and possibly
-@c other versions).
-@c 
-@c @b{Cygwin note:}  Cygwin uses gcc 3.2 by default; there is also an
-@c option to install gcc 2.95.3.  After installing gcc 2.95.3, you can
-@c make it the default in the following way:
-@c @example
-@c      cd /usr/bin
-@c      mv gcc.exe gcc-3.exe
-@c      mv g++.exe g++-3.exe
-@c      cp gcc-2.exe gcc.exe
-@c      cp g++-2.exe g++.exe
-@c @end example
-
-@b{Cygwin note:}If you wish to
-build dfej under Cygwin, you must use GCC 2.95.3.
-
-@b{Solaris note:}
-If you are running under Solaris, you may need to edit
-@file{Makefile} to indicate use of the @file{libw} library; change
-@example
-LDFLAGS=-L. -o $(EXECUTABLE)
-@end example
-@noindent
-to
-@example
-LDFLAGS=-L. -lw -o $(EXECUTABLE)
-@end example
-
-
-@end itemize
-
-
-@node    All-in-one script,  , Installing dfej, dfej
-@subsection All-in-one script daikon.pl
-
-The @command{daikon.pl} script automates all steps of the invariant
-detection process:  instrumentation, trace file generation, and
-invariant display.  However, it has several limitations: it only works
-with programs written in Java, it doesn't allow all of the optional
-features of Daikon to be controlled, and it depends on external
-programs that may not be present on non-Unix systems.  It is not
-the preferred way to run Daikon, but some users may find it helpful
-for quick testing, or for use from automated scripts.
-
-Running @command{daikon.pl} without without any arguments will display usage information:
-@example
-% daikon.pl
-Usage: daikon.pl [OPTIONS] MAIN_CLASS [MAIN_ARGUMENTS]
-Options:
-  -o, --output FILE   Save invariants in FILE.inv
-  ...
-@end example
-
-You must supply at least the name of a ``main'' class that provides
-the method @code{public static void main(String[] args)}.
-@command{daikon.pl} runs this class to exercise your program.
-
-@menu
-* daikon.pl arguments::         
-@end menu
-
-@node    daikon.pl arguments,  , All-in-one script, All-in-one script
-@subsubsection Command line options for daikon.pl
-
-@table @option
-@item -i @var{file}
-@itemx --instrument @var{file}
-Only instrument @var{file}@.  Can be specified multiple times.
-Otherwise, all files that are used by the main file are instrumented.
-
-@item -o @var{file}
-@itemx --output @var{file}
-Save invariants in @file{@var{file}.inv} and source in
-@file{@var{file}.src.tar.gz}.  If no name 
-is given, a name is automatically generated and used.
-
-@item -t
-@itemx --textfile
-Save a textual listing of invariants to a @file{.txt} file.
-
-@item -n
-@itemx --nogui
-Create the invariants file (and @file{.txt} file,
-if @option{-t} is given), but do not start the Tree GUI@.
-
-@item --daikonarg @var{arg}
-Supply additional argument to Daikon proper.
-Can be specified multiple times, in order to supply multiple arguments to
-Daikon.
-Warning:  be careful with quoting, as the argument is supplied directly
-to the shell and may be viewed as multiple arguments or reinterpreted
-(which may or may not be what you want).
-
-@item -v
-@itemx --verbose
-Display progress messages while running.
-
-@item -c
-@itemx --cleanup
-Remove files left over from an interrupted session before starting.
-Should be used only when @command{daikon.pl} detects left-over files and instructs
-you to use this option.
-
-@item --nocleanup
-Do not remove temporary files when exiting.
-This option is intended for debugging.
-
-@item -s
-@itemx --src
-Make an archive of the source code for later reference.  All the code
-that is instrumented will be recorded in the compressed tarfile
-@file{@var{file}.src.tar.gz}, where @var{file} is the name that was
-supplied via the @option{-o} or @option{--output} arguments.
-
-@item -d
-@itemx --debug
-Print extra debugging information.
-@end table
-
-
-@node    Other front ends,  , dfej, Front ends
+@node    Other front ends,  , convertcsv.pl, Front ends
 @section Other front ends
 
 @cindex front end for IOA
@@ -5901,8 +5157,16 @@ Print extra debugging information.
 
 A front end for the IOA programming language is distributed separately
 (see @uref{http://theory.csail.mit.edu/tds/ioa.html}).
+
 An earlier version of Daikon included a Lisp front end, but it is no
 longer supported.
+
+An earlier version of Daikon provided a source-based front end for Java
+named dfej.  It has been superseded by Chicory.
+
+An earlier version of Daikon provided a source-based front end for Java
+named dfec.  It has been superseded by Kvasir (binary-based, for Linux/x86) and
+Mangel-Wurzel (source-based, for all other platforms).
 
 
 @node    Tools, Troubleshooting, Front ends, Top
@@ -6901,7 +6165,6 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
 * Chicory problems::            
-* dfej problems::               
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
@@ -7304,7 +6567,7 @@ You can instrument fewer methods, creating smaller @file{.dtrace}
 files in the first place (rather than cutting the @file{.dtrace} files
 down afterward).
 @itemize
-@item With Chicory or dfej, use the @option{--ppt-omit-pattern} or
+@item With Chicory, use the @option{--ppt-omit-pattern} or
 @option{--ppt-select-pattern} options (see @ref{Processing only part of
 the trace file}, @ref{Chicory options}) to
 restrict which program points are traced.  Running the
@@ -7319,12 +6582,6 @@ program} section for more details).
 
 @item
 If you are using a source-based front end, you can instrument fewer files.
-@itemize
-@item With dfej, only supply it the files you wish to instrument.
-@c @item With dfec, use the @option{-l} command (@pxref{dfec command-line
-@c arguments}) on the command line immediately before any file you wish
-@c not to instrument.
-@end itemize
 
 @end enumerate
 
@@ -7356,7 +6613,6 @@ code --- for instance, output @samp{a} and @samp{a.b} but not
 depth.
 @itemize
 @item With Chicory, use the @option{--nesting-depth=@var{N}} option.
-@item With dfej, use the @option{--nesting-depth=@var{N}} option.
 @item With Kvasir, use the @option{--struct-depth=@var{N}} or the 
 @option{--nesting-depth=@var{N}} option.
 @item With Mangel-Wurzel, use the @option{--struct-depth=@var{N}} or the 
@@ -7459,7 +6715,7 @@ as comments, and runtimechecker silently ignores them.)
 @c your system administrator to do so.
 
 
-@node    Chicory problems, dfej problems, Parsing Java 5.0 code, Troubleshooting
+@node    Chicory problems, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
 @section Problems with Chicory
 
 Before reporting or investigating a problem with Chicory, always check
@@ -7513,185 +6769,6 @@ ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
 BCEL on your classpath.)
 
 
-@node    dfej problems, Reporting bugs, Chicory problems, Troubleshooting
-@section Problems with dfej
-
-@menu
-* dfej installation problems::  
-* dfej invocation problems::    
-* dfej javac problems::         
-* JVM initialization error::    
-@end menu
-
-@node    dfej installation problems, dfej invocation problems, dfej problems, dfej problems
-@subsection Problems installing dfej
-
-GCC 2.95.2 on Linux raises an internal error when compiling
-@file{stream.cpp} using the @option{-Wall} flag.  You can simply compile
-that file without the @option{-Wall} flag.
-
-@cindex cannot convert `const char **' to `char **'
-
-If you get an error like
-@example
-stream.cpp: In method `void LexStream::ProcessInputUnicode
-                                       (const char *, long int)':
-stream.cpp:901: cannot convert `const char **' to `char **' for
-argument `2' to `iconv (void *, char **, size_t *, char **, size_t *)'
-@end example
-@noindent
-then
-@c undefine preprocessor macro @code{HAVE_ICONV_H}
-define preprocessor macro @code{HAVE_ERROR_CALL_ICONV_CONST}
-and try compiling again --- that is, run the command that failed, but
-add the @option{-DHAVE_ERROR_CALL_ICONV_CONST} command-line argument.
-(This has been reported on Red Hat Linux 7.@i{x}.)
-
-@c reported 12/19/2001 by Tao Xie
-Also reported on Red Hat Linux 7.0 is the following error:
-@example
-daikon-context.cpp:466: no matching function for call to `pair<Ast *, 
-Ast *>::pair (Ast *&, void *)'
-@end example
-@noindent
-We do not yet have a fix, but if you find one, please let us know.
-
-
-@node    dfej invocation problems, dfej javac problems, dfej installation problems, dfej problems
-@subsection Problems running dfej
-
-@cindex could not find package named, dfej error
-@cindex dfej error, could not find package named
-
-If you get an error like
-@example
-% dfej MyProg.java
-MyProg.java:0:0:0:0: Error: Could not find package named: 
-                ./java/util
-MyProg.java:0:0:0:0: Error: Could not find package named: 
-                ./java/lang
-@end example
-@noindent
-then you need to add @file{rt.jar} to your
-@env{CLASSPATH}@.  This should be automatic, if you are using the
-@file{daikon.bashrc} or @file{daikon.cshrc} file and have set the
-@env{JDKDIR} environment variable correctly.  Also see @ref{Installing dfej}.
-
-@cindex zip file, invalid
-
-If you get an error like
-@example
-MyProg.java:0:0:0:0: Error: Could not find package named:
-                MyProg.MyPackage
-@end example
-@noindent
-then the root of your packages in not in your classpath.  For example,
-if you have a package @code{A} in directory @file{src/A} 
-and a class @code{A.B}, then you
-have to add the superdirectory of @code{A} (@file{src}) to your classpath so that
-dfej can find package @code{A}@.  For example,
-@example
-dfej -classpath src:$CLASSPATH src/A/B.java
-@end example
-@noindent
-Note that this behavior is identical to that of jikes, but differs
-from javac.
-
-If you get a warning like
-@example
-*** Warning: the file "/cygdrive/c/jswdk-1.0.1/jspengine.jar"
-    is not a valid zip file.
-@end example
-@noindent
-then you have set your @env{CLASSPATH} incorrectly:  it names a nonexistent
-file or a file that is not a @file{.jar} Java archive.  You should adjust
-your @env{CLASSPATH} to remove the offending file.  This warning has no effect
-on the operation of dfej, however.
-
-@cindex SOURCEPATH environment variable
-@cindex environment variable SOURCEPATH
-
-The behavior of dfej is controlled by many environment variables;
-unexpected behavior may result from your settings for these
-environment variables.  For example, if @env{SOURCEPATH} is set, then dfej
-searches the indicated path for source files (ignoring class files in
-those directories); this may cause processing of files that you had
-not intended dfej to examine.
-
-@cindex dfej option, invalid
-@cindex decls-dir= option (to dfej) invalid
-@cindex instr-dir= option (to dfej) invalid
-@cindex dtrace-file= option (to dfej) invalid
-@cindex --decls-dir= option (to dfej) invalid
-@cindex --instr-dir= option (to dfej) invalid
-@cindex --dtrace-file= option (to dfej) invalid
-@c @cindex Eclipse plug-in, with wrong version of dfej
-@c @cindex dfej, wrong version for Eclipse plug-in
-
-If you get a warning like
-@example
-Warning: "--decls-dir=../DaikonInstrumented/output" is an invalid option
-@end example
-@noindent
-then you are running dfej version 3, but you are trying to supply
-arguments that are recognized by dfej version 4.  (For instance, perhaps
-you are using the Eclipse plug-in with an out-of-date version of dfej.)
-To fix the problem, download or build a current version of dfej.
-
-
-@node    dfej javac problems, JVM initialization error, dfej invocation problems, dfej problems
-@subsection Problems compiling dfej output
-
-@cindex javac errors on dfej output
-
-@cindex duplicate definition, in instrumented Java file
-
-While compiling files instrumented by dfej, if you get an error like
-@example
-Duplicate declaration of local variable "this_invocation_nonce".
-Duplicate declaration of method "daikonPrintArrayMissing"
-    in type "StackAr".
-@end example
-@noindent
-then you have instrumented an already-instrumented file.  Remove the
-instrumented version and re-run dfej on the original version.  (If you
-are using the Daikon regression tests, run @command{make clean}.)
-
-@cindex package and variable with same name
-@cindex variable and package with same name
-
-You should avoid giving a package and a variable the same name,
-because of a problem with the standard javac compiler that is exposed
-when dfej instruments inner classes.  Suppose that a package and a
-variable are both named @code{link}.  When the compiler sees
-@code{link.foo}, it doesn't know whether to interpret that as field
-@code{foo} of the variable @code{link}, or as class @code{foo} of the
-package @code{link}.  The compiler should just try both, but it
-doesn't:  it only tries the variable.
-
-In the future, we plan to make dfej to work around this javac problem.  
-In the meanwhile, you can avoid the problem by not using the same name for a
-package and a variable.  Reusing such names is considered bad style anyway,
-because the name @code{link.foo} is ambiguous to people as well as to the
-compiler.
-
-
-@node    JVM initialization error,  , dfej javac problems, dfej problems
-@subsection JVM initialization error
-
-@cindex JVM initialization error
-@cindex initialization error, JVM
-@cindex Vector, dfej cannot instrument
-
-Instrumenting @code{java.util.Vector} with dfej prevents the Java
-Virtual Machine from initializing
-properly, because instrumented classes attempt to use the JVM's
-facilities when they are loaded, but the JVM loads Vector during its own
-initialization.  The same problem may be true for other classes used
-internally by the JVM@.  Users can create a new class MyVector, replace
-uses of Vector by MyVector, and then instrument MyVector.
-
-
 @c @node    Eclipse plug-in problems, Reporting bugs, dfej problems, Troubleshooting
 @c @section Problems with Eclipse plug-in
 @c 
@@ -7706,7 +6783,7 @@ uses of Vector by MyVector, and then instrument MyVector.
 @c and correct.
 
 
-@node    Reporting bugs, Known bugs, dfej problems, Troubleshooting
+@node    Reporting bugs, Known bugs, Chicory problems, Troubleshooting
 @section Reporting bugs
 
 @cindex reporting bugs
@@ -8150,8 +7227,8 @@ Instead of placing both declarations and data trace records in a single
 file, it is permitted to place the declarations in one or more
 @file{.decls} ``declaration files'' while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
-perform a separate instrumentation step, such as dfepl (@pxref{dfepl}),
-dfej (@pxref{dfej}), and Mangel-Wurzel (@pxref{Mangel-Wurzel}).  Such a tool takes as
+perform a separate instrumentation step, such as dfepl (@pxref{dfepl})
+and Mangel-Wurzel (@pxref{Mangel-Wurzel}).  Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
 instrumented program produces a @file{.dtrace} file containing data

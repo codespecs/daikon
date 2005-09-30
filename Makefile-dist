@@ -23,15 +23,4 @@ kvasir:
 	cd kvasir/valgrind && make
 	cd kvasir/valgrind && make install
 
-dfej: java-front-end
-
-java-front-end: front-end/java/config.status
-	@echo "If this command fails, see 'Installing dfej' section in manual"
-	$(MAKE) -C front-end/java
-
-front-end/java/config.status:
-	@echo "If this command fails, see 'Installing dfej' section in manual"
-	cd front-end/java && ./configure
-
-.PHONY: java-front-end kvasir
-.SECONDARY: front-end/java/config.status
+.PHONY: kvasir
