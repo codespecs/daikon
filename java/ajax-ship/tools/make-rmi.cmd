@@ -1,1 +1,0 @@
-d:\programs\jdk117\bin\rmic -d . -classpath .;d:\programs\jdk117\lib\classes.zip;d:\programs\vcafe3\swing-1.1\swingall.jar ajax.tools.server.RMIServer ajax.tools.server.DowncastCheckerServer ajax.tools.client.DowncastCheckerClient

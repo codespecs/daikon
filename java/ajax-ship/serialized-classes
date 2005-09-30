@@ -1,7 +1,0 @@
-# These are regular expressions that describe the classes that are
-# serialized. Regexps that match classes that do not implement the
-# Serializable interface are ignored.
-
-ajax.jbc.util.salamis.*
-ajax.jbc.util.*
-java.util.Hashtable
