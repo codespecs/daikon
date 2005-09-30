@@ -919,7 +919,12 @@ public final class PrintInvariants {
       // Store copy of current repair state.
       Repair oldstate = Repair.getRepair().createCopy(ppt);
       inv_rep = inv.format_using(Daikon.output_format);
-      if (inv_rep.indexOf ("$noprint") != -1) {
+      if (inv_rep.indexOf ("$noprint") != -1||
+          inv_rep.indexOf (">>") != -1||
+          inv_rep.indexOf (">>>") != -1||
+          inv_rep.indexOf ("&") != -1||
+          inv_rep.indexOf ("^") != -1||
+          inv_rep.indexOf ("<<") != -1) {
         Repair.changeRepairObject(oldstate); // revert state
         return;
       }

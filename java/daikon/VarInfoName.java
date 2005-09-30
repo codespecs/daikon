@@ -130,16 +130,17 @@ public abstract class VarInfoName
     }
 
     // A.B, where A is complex: foo(x).y, x[7].y, etc.
-    if (name.indexOf('.') != -1) {
-      int dot = name.lastIndexOf('.');
+    int dot = name.lastIndexOf('.');
+    int arrow = name.lastIndexOf("->");
+
+    if (dot>=0 && dot >arrow) {
       String first = name.substring(0, dot);
       String field = name.substring(dot+1);
       return parse(first).applyField(field);
     }
 
     // A->B, where A is complex: foo(x)->y, x[7]->y, etc.
-    if (name.indexOf("->") != -1) {
-      int arrow = name.lastIndexOf("->");
+    if (arrow>=0 & arrow > dot) {
       String first = name.substring(0, arrow);
       String field = name.substring(arrow+2);
       return parse(first).applyField(field);
@@ -164,11 +165,21 @@ public abstract class VarInfoName
       Elements e=(Elements) term;
       String set=Repair.getRepair().generateRangeSet(v.ppt,e.getLowerBound(),e.getUpperBound());
       return Repair.getRepair().convertArraytoSet(v.ppt,set,e,v);
+    } else if (term instanceof Subscript) {
+      Subscript s=(Subscript) term;
+      Elements e=(Elements) s.sequence;
+      if (e.term instanceof Simple) {
+        return Repair.getRepair().getRealSet(((Simple)e.term).name+"["+s.index.name()+"]",v.ppt);
+      } else if (e.term instanceof Field) {
+        Field nfield=(Field)e.term;
+        String r=Repair.getRepair().getRelation(v.ppt,getRealSet(v,nfield.term),nfield.field+"["+s.index.name()+"]",nfield.name());
+        return Repair.getRepair().getRange(v.ppt,r);
+      } else return "$error3("+term.name()+")";
     } else if (term instanceof Slice) {
       Slice s=(Slice) term;
       String set=Repair.getRepair().generateRangeSet(v.ppt,s.getLowerBound(),s.getUpperBound());
       return Repair.getRepair().convertArraytoSet(v.ppt,set,s,v);
-    } else return "$error";
+    } else return "$error1("+term.name()+")";
   }
 
   /**
@@ -1851,6 +1862,8 @@ public abstract class VarInfoName
 
       String set=Repair.getRepair().generateRangeSet(vi.ppt,lower,upper);
       String set2=Repair.getRepair().convertArraytoSet(vi.ppt,set,this,vi);
+      if (set2.indexOf ("$noprint") != -1)
+          return "$noprint";
       String index=Repair.getRepair().getQuantifierVar();
       Repair.getRepair().appendQuantifier(index,set2);
       return index;
@@ -1874,8 +1887,27 @@ public abstract class VarInfoName
 
     protected String repair_name_impl(String index,VarInfo vi) {
       /* Need to fix */
-      return term.repair_name(vi)+"["+index+"]";
+      return "$nop"+term.repair_name(vi)+"["+index+"]";
     }
+
+    protected String repair_name_impl(int index,VarInfo v) {
+      /* Need to fix */
+      if (term instanceof Field) {
+        Field f=(Field)term;
+
+        Repair.getRepair().noForceSet();
+        String base=f.term.repair_name_impl(v);
+        String set=f.getRealSet(v,f.term);
+        String relation=Repair.getRepair().getRelation(v.ppt,set,f.field+"["+index+"]",this.name());
+
+        return base + "." + relation;
+      } else if (term instanceof Simple) {
+        Simple s=(Simple)term;
+        Repair.getRepair().addSpecial();
+        return "s_quant."+Repair.getRepair().getRelation(s.name_impl()+"["+index+"]",v.ppt);
+      } else return "$error2"+term.repair_name(v)+"["+index+"]";
+    }
+
     protected String name_impl(String index) {
       return term.name() + "[" + index + "]";
     }
@@ -2048,7 +2080,23 @@ public abstract class VarInfoName
       return sequence.name_impl(index.name());
     }
     protected String repair_name_impl(VarInfo v) {
-      return sequence.repair_name_impl(index.repair_name(v),v);
+     if (index.isLiteralConstant()) {
+        if (sequence.term instanceof Field) {
+          Field f=(Field)sequence.term;
+
+          Repair.getRepair().noForceSet();
+          String base=f.term.repair_name_impl(v);
+          String set=f.getRealSet(v,f.term);
+          String relation=Repair.getRepair().getRelation(v.ppt,set,f.field+"["+index.name()+"]",this.name());
+
+          return base + "." + relation;
+        } else if (sequence.term instanceof Simple) {
+          Simple s=(Simple)sequence.term;
+          Repair.getRepair().addSpecial();
+          return "s_quant."+Repair.getRepair().getRelation(s.name_impl()+"["+index+"]",v.ppt);
+        } else return "$error2"+sequence.term.repair_name(v)+"["+index+"]";
+      } else
+        return sequence.repair_name_impl(index.repair_name(v),v);
     }
     public VarInfoName getBase() {
       return sequence.getBase();

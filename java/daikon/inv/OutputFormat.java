@@ -191,7 +191,9 @@ public final class OutputFormat
       if (vin2.name().indexOf('*')!=-1)
         return "$noprint("+vin2.name()+")";
 
-      String baseset=VarInfoName.getRealSet(vi, base);
+      String baseset=null;
+      if (base!=null)
+        baseset=VarInfoName.getRealSet(vi, base);
 
       //String set=VarInfoName.getRealSet(
 
@@ -250,7 +252,10 @@ public final class OutputFormat
       if (vin2.name().indexOf('*')!=-1)
         return "$noprint("+vin2.name()+")";
 
-      String baseset=VarInfoName.getRealSet(vi, base);
+      String baseset=null;
+
+      if (base!=null)
+        baseset=VarInfoName.getRealSet(vi, base);
 
       //      String set=VarInfoName.getRealSet(
 
@@ -314,7 +319,7 @@ public final class OutputFormat
       appendModelRule(ppt,newrule);
       appendSetRelation(ppt,setdef);
 
-      if (lower.name().indexOf(".")!=-1) {
+      if (lower.name().indexOf(".")!=-1||lower.name().indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(lower);
         for(Iterator it=roots.iterator();it.hasNext();) {
           String lowerrootvar=((VarInfoName)it.next()).name();
@@ -327,7 +332,7 @@ public final class OutputFormat
         }
       }
 
-      if (upper.name().indexOf(".")!=-1) {
+      if (upper.name().indexOf(".")!=-1||upper.name().indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(upper);
         for(Iterator it=roots.iterator();it.hasNext();) {
           String upperrootvar=((VarInfoName)it.next()).name();
@@ -723,6 +728,7 @@ public final class OutputFormat
       s=s.replace(')','_');
       s=s.replace('[','_');
       s=s.replace(']','_');
+      s=s.replace('-','_');
       return s;
     }
 

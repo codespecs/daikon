@@ -566,7 +566,7 @@ public final class ONEOFSCALAR
         if (elts[0] == 0) {
           String varname = REPAIR_NAME;
 	  Repair.getRepair().setForceSet();
-          String str="sizeof("+varname + ") = 0;";
+          String str="sizeof("+varname + ") = 0";
 	  Repair.getRepair().noForceSet();
           return str;
         } else {
