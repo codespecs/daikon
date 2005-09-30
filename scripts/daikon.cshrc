@@ -32,8 +32,7 @@ else
   setenv CLASSPATH ${CPADD}
 endif
 
-## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
-## Daikon front end for Java), rt.jar must be on your classpath.
+## tools.jar must be on your classpath.
 setenv darwinos 0
 if ($?OSTYPE) then
   if ("$OSTYPE" != "darwin") then

@@ -8,7 +8,7 @@
 # This script ordinarily runs overnight; to invoke it by hand, execute the
 # followng commands as user daikonbuildtest:
 #   cd $HOME/build
-#   /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --skip_dfec --skip_dfej --nocleanup
+#   /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --nocleanup
 # You can also run this script as any other user.
 
 use strict;
@@ -20,16 +20,13 @@ use Cwd;
 my $usage =
     "Usage: buildtest.pl [--quiet] [--test_kvasir] [--message=text]\n"
   . "                    [--rsync_location=machine:/path/invariants]\n"
-  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n"
-  . "                    [--skip_dfec] [--skip_dfej]\n";
+  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # These flags permit only part of the tests to be run; good for debugging.
 my $skip_daikon_build = 0;
 # When on, skip Daikon unit tests, Daikon system tests, and diff system tests
 my $skip_daikon = 0;
-my $skip_dfec = 0;
-my $skip_dfej = 0;
 # When on, test Kvasir
 my $test_kvasir = 0;
 # When set, get the sources by rsync from the given location, rather
@@ -48,10 +45,6 @@ while (scalar(@ARGV) > 0) {
     $skip_daikon = $skip_daikon_build = 1;
   } elsif ($arg eq "--skip_daikon") {
     $skip_daikon = 1;
-  } elsif ($arg eq "--skip_dfec") {
-    $skip_dfec = 1;
-  } elsif ($arg eq "--skip_dfej") {
-    $skip_dfej = 1;
   } elsif ($arg eq "--test_kvasir") {
     $test_kvasir = 1;
   } elsif ($arg eq "--skip_kvasir") {
@@ -114,24 +107,6 @@ if (! $skip_daikon) {
     $success{"daikon_unit_test"} = daikon_unit_test();
     $success{"daikon_system_test"} = daikon_system_test();
     $success{"diff_system_test"} = diff_system_test();
-  }
-}
-
-if (! $skip_dfec) {
-  if ($success{"daikon_checkout"}
-      && $success{"tests_update"}) {
-    $success{"dfec_system_test"} = dfec_system_test();
-  }
-}
-
-if (! $skip_dfej) {
-  $success{"dfej_checkout"} = dfej_checkout();
-  if ($success{"dfej_checkout"}) {
-    `chmod -R a+r dfej`;  # make sure we can read the results on AFS
-    $success{"dfej_configure"} = dfej_configure();
-  }
-  if ($success{"dfej_configure"}) {
-    $success{"dfej_compile"} = dfej_compile();
   }
 }
 
@@ -198,7 +173,7 @@ if (@failed_steps != 0) {
 # checkouts
 mkdir("diffs", 0777) or die "can't make directory diffs: $!\n";
 
-foreach my $subdir ("daikon", "diff", "dfec", "kvasir") {
+foreach my $subdir ("daikon", "diff", "kvasir") {
   mkdir("diffs/$subdir", 0777) or die "can't make directory diffs/$subdir: $!\n";
   my $diffs = `find invariants/tests/$subdir-tests -name "*.diff"`;
   foreach my $file (split '\n',$diffs) {
@@ -208,7 +183,7 @@ foreach my $subdir ("daikon", "diff", "dfec", "kvasir") {
 }
 
 if (! $nocleanup) {
-  `rm -rf dfej invariants`;
+  `rm -rf invariants`;
 }
 
 exit();
@@ -224,20 +199,6 @@ sub daikon_checkout {
   } else {
     `cvs -d $CVS_REP co invariants &> daikon_checkout.out`;
   }
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  } else {
-    print_log("OK\n");
-    return 1;
-  }
-}
-
-
-# Check the dfej module out from CVS
-sub dfej_checkout {
-  print_log("Checking out dfej...");
-  `cvs -d $CVS_REP co dfej &> dfej_checkout.out`;
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
     return 0;
@@ -282,40 +243,10 @@ sub tests_update {
 }
 
 
-# Run 'configure' on dfej
-sub dfej_configure {
-  print_log("Configuring dfej...");
-  chdir("dfej") or die "Can't chdir to dfej: $!\n";
-  `./configure &> ../dfej_configure.out`;
-  chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  } else {
-    print_log("OK\n");
-    return 1;
-  }
-}
-
-
 # Compile daikon using javac
 sub daikon_compile {
   print_log("Compiling Daikon...");
   `make -C $INV/java clean all_directly &> daikon_compile.out`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  } else {
-    print_log("OK\n");
-    return 1;
-  }
-}
-
-
-# Compile dfej using gcc
-sub dfej_compile {
-  print_log("Compiling dfej...");
-  `make $J2 -C dfej/src &> dfej_compile.out`;
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
     return 0;
@@ -440,45 +371,6 @@ sub diff_system_test {
   return 1;
 }
 
-
-# Run the dfec system tests.  Scans the output for any "FAILED" tests.
-# Uses the version of dfec in invariants/front-end/c.  Could build
-# dfec from source instead.
-sub dfec_system_test {
-  # Standard test suite
-  my $TEST_SUITE = "summary";
-  # Short test suites
-#  my $TEST_SUITE = "summary-no-space";
-#  my $TEST_SUITE = "test print_tokens";
-  print_log("Dfec system tests...");
-
-  my $command = "make $J2 -C $INV/tests/dfec-tests $TEST_SUITE " .
-    "&> dfec_system_test.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
-
-  $command = "make -C $INV/tests/dfec-tests summary-only " .
-    "2>&1 | tee dfec_system_test_summary.out";
-  my $result = `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
-
-  foreach my $line (split /\n/,$result) {
-    next if ($line =~ /^make/);
-    if (!($line =~ /^OK\s/)) {
-      print_log("FAILED\n");
-      return 0;
-    }
-  }
-
-  print_log("OK\n");
-  return 1;
-}
 
 sub kvasir_checkout {
   print_log("Checking out Kvasir...");

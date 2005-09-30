@@ -123,7 +123,7 @@ sub run {
 
     open(RUN, "-|", $perl, $buildtest_pl, "--message=$message", "--quiet",
 	 "--rsync_location=$host_machine.$domain:$rsync_loc",
-	 "--test_kvasir", "--skip_daikon_build", "--skip_dfec", "--skip_dfej")
+	 "--test_kvasir", "--skip_daikon_build")
       or die "Couldn't start test: $!";
     my @lines = <RUN>;
     close RUN;

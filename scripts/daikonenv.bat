@@ -33,8 +33,7 @@ if defined %CLASSPATH% (
   set CLASSPATH=%CPADD%
 )
 
-REM tools.jar must be on your classpath.  Also, if you wish to use dfej (the
-REM Daikon front end for Java), rt.jar must be on your classpath.
+REM tools.jar must be on your classpath.
 set CLASSPATH=%CLASSPATH%;%JDKDIR%\jre\lib\rt.jar;%JDKDIR%\lib\tools.jar
 
 REM Add the Daikon binaries to your path
