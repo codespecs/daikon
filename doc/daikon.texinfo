@@ -5553,63 +5553,6 @@ from the @file{parent/foo} directory, the instrumented version of
 @file{Bar.java} will go in @file{parent/foo/daikon-instrumented/Bar.java}; this
 is not consistent with the package structure.)
 
-@item --no-ajax
-@cindex AJAX_DIR environment variable
-@cindex environment variable AJAX_DIR
-Do not use Ajax.  Ordinarily, the Ajax module
-@code{ComparablePairsDescFileReader} updates the variable comparability
-information in the @file{.decls} file.  The comparability information
-can indicate which variables should not be compared to one another.
-(For instance, the number of people that a recipe serves should not be
-compared to the page number in a cookbook where the recipe is found,
-even if both are integers.)  Use of Ajax to update this information is
-entirely optional; its effect is to suppress invariants over incomparable
-variables.  These comparisons are usually nonsensical, so using Ajax makes
-Daikon report fewer irrelevant invariants.
-
-Use of Ajax requires environment variable @env{AJAX_DIR} to be set to a
-directory containing various Ajax helper files (such as
-@file{main-harness.csal}, @file{tweaked-classes.zip}, etc.).  The proper
-directory is @file{java/ajax-ship} in the Daikon distribution and is set
-by the provided @file{daikon.cshrc} and @file{daikon.bashrc}
-initialization files.
-
-@item -ajaxap=@var{apdir}
-This is the directory in which the Ajax comparability module looks
-for @file{.class} files for the current application.  (It is a classpath
-entry, so the @file{.class} files might appear in a subdirectory named
-for the appropriate package.  If this option is not supplied, the
-@option{-classpath} argument is used.  A sensible value is required for
-code that (for example) calls libraries that do not appear under the
-current directory.
-
-@item -ajaxcp=@var{cpdir}
-Classpath to give to Ajax in its @option{-cp} flag, similar to @option{-ajaxap}.
-
-@item -ajax_runnable=@var{class}
-This is a Java class, in dot-delimited form (e.g., @samp{foo.bar.Baz}), that
-contains a @samp{public static void main(String[])} method.  This class
-need not be one of the instrumented ones.  If it is not supplied, the
-first instrumented class with such a @samp{main} method is used instead.
-
-@c @item -ajax_runnables=@var{classes}
-@c This is a whitespace-separated list of Java classes, in dot-delimited
-@c form (e.g., "foo.bar.Baz"), that contain @samp{public static void
-@c main(String[])} methods.  Those Java classes need not be among the
-@c instrumented ones.  In addition, all such @samp{main} methods in the
-@c instrumented classes are also used as entry points.  In order to run,
-@c Ajax requires the name of at least one runnable class.
-@c (Actually, Ajax requires the name of exactly one runnable class.)
-@c 
-@c @item -ajax_all_runnables=@var{classes}
-@c Just like @option{-ajax_runnables}, except that no @samp{main} methods
-@c in the instrumented classes are used as entry points.
-
-@item -ajaxdumpdir=@var{dumpdir}
-This is the directory in which the Ajax comparability module writes its
-log file, named @file{ajax.log}.  By default, @file{ajax.log} is written
-to the current directory.
-
 @end table
 
 
@@ -7710,90 +7653,6 @@ arguments that are recognized by dfej version 4.  (For instance, perhaps
 you are using the Eclipse plug-in with an out-of-date version of dfej.)
 To fix the problem, download or build a current version of dfej.
 
-@menu
-* Ajax errors::                 
-@end menu
-
-@node    Ajax errors,  , dfej invocation problems, dfej invocation problems
-@subsubsection Ajax errors
-
-@cindex Ajax, problem with
-
-The warning 
-@example
-Problem with Ajax; using original .decls files instead
-@end example
-@noindent
-indicates that the Ajax variable comparator could not run.
-
-Ajax
-indicates which variables are comparable to which other variables.  This
-information can reduce the amount of spurious output from Daikon by
-preventing it from making spurious comparisons and reporting irrelevant
-output.  For example, two integer variables that never appear together
-in an expression (and that don't appear with variables that appear
-together, etc.)@ should not be compared to one another, because those
-variables are likely to be entirely unrelated and any properties over
-them are incidental and uninformative.
-
-Use of Ajax is optional and can be disabled via the
-@option{--no-ajax} argument to dfej (@pxref{dfej options}).
-If Ajax cannot be run, then a more primitive method of determining
-comparability is used instead.  Even if Ajax cannot be run, Daikon
-proceeds without error.
-
-@cindex No such method in call, Ajax error
-@cindex ajax.jbc.InvalidClassDataError
-@cindex InvalidClassDataError, Ajax
-
-Ajax cannot deal with binary @file{.class} files of version later that 1.1.
-Thus, before running ajax, compile all your code using 
-@command{javac -target 1.1} 
-to create correct format @file{.class} files.  Note that all the
-@file{.jar} files and other class files in your classpath used by the code
-also need to be compiled using @command{javac -target 1.1} in order
-for ajax to be able to execute.
-
-As of July 2002, Ajax cannot deal with JDK 1.2 (or later) libraries.
-For instance, Ajax issues the error 
-@example
-ajax.jbc.InvalidClassDataError: No such method in call
-@end example
-@noindent
-for methods such as
-@code{java.lang.Math.toDegrees(Double)} that do not appear in JDK 1.1.
-
-@cindex Invalid class loading, Ajax warning
-
-Ajax may produce the warning message ``Invalid class loading ...'';
-you will notice this if environment variable @env{DFEJ_VERBOSE} is set.
-You may safely ignore this message if Ajax does not produce any
-further warnings or errors.  The message results from Ajax's inability
-to handle JDK 1.2 libraries.
-
-@cindex classpath cycles
-@cindex Too many levels of symbolic links, Ajax exception
-
-Due to a bug in Java 1.3,
-Ajax may throw a RuntimeException with a message stating
-``Too many levels of symbolic links''.  This can be caused
-by cycles in the classpath (for example, a link from a directory to
-itself).  To locate the problem link, rerun the the the failing command
-as before, but prefixed by @samp{strace}.  If the original command had
-been @samp{wc ~/.emacs}, then you would instead run 
-@samp{strace wc ~/.emacs}.
-Search the resulting output for the exception stack trace, containing
-the message, ``Too many levels of symbolic links''.  On the line just
-before the stack trace begins should appear the name of the link being
-processed.  For example,
-@example
-lstat("a/sources/sources", st_mode=S_IFLNK|0777, st_size=53, ...) = 0
-@end example
-@noindent
-Removing the link identified, in this case @file{.../sources/sources},
-should solve the problem.
-
-
 
 @node    dfej javac problems, JVM initialization error, dfej invocation problems, dfej problems
 @subsection Problems compiling dfej output
@@ -9026,9 +8885,9 @@ this.topOfStack
 @c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo FIFOs AFS csv
 @c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst pragma prog
 @c  LocalWords:  workflow accessor instr instrsourcedir TYPESAPPEND basedir cp
-@c  LocalWords:  myfile dfej's classfiles jikes ajaxap QueueAr QueueArTester ln
-@c  LocalWords:  classhier decldir instrdir uninst ajax csal apdir ajaxcp cpdir
-@c  LocalWords:  ComparablePairsDescFileReader runnables ajaxdumpdir dumpdir rm
+@c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln
+@c  LocalWords:  classhier decldir instrdir uninst csal apdir cpdir
+@c  LocalWords:  ComparablePairsDescFileReader runnables dumpdir rm
 @c  LocalWords:  DTRACELIMIT DTRACELIMITTERMINATE DDTRACELIMIT applet xargs mv
 @c  LocalWords:  DDTRACELIMITTERMINATE javaPolicy appletviewer MyProgram exe lw
 @c  LocalWords:  datatypes intValue ListNode theElement precompiled Solaris cc

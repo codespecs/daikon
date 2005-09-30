@@ -1,6 +1,5 @@
 .classpath
 doc
-ajax-ship-200*
 Makefile.user
 .findbugs-output
 ChicoryPremain.jar

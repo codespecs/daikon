@@ -40,11 +40,6 @@ else
   export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
 fi
 
-## (ajax.jar is temporary, will be removed soon, we hope.)
-if [ -e ${DAIKONDIR}/java/ajax-ship/ajax.jar ]; then
-  export CLASSPATH=${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
-fi
-
 ## Add the Daikon binaries to your path
 export PATH=${DAIKONBIN}:${DAIKONDIR}/front-end/java/src:${DFECDIR}:${JDKDIR}/bin:${PATH}
 
@@ -54,11 +49,6 @@ if [ $PERLLIB ]; then
 else
   export PERLLIB=${DAIKONBIN}
 fi
-
-## Indicates where Ajax should find its helper files such as
-## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
-## determines which variables can be sensibly compared to one another.
-export AJAX_DIR=${DAIKONDIR}/java/ajax-ship
 
 ## Indicates where Lackwit can find its libraries (and binaries).
 export LACKWIT_HOME=$DFECDIR/lackwit

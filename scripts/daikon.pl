@@ -14,7 +14,6 @@ use constant TAR_MANIFEST_TAG => $ENV{'TAR_MANIFEST_TAG'} || '-T'; # change to -
 use constant DAIKON_WRAPPER_CLASSPATH => $ENV{'DAIKON_WRAPPER_CLASSPATH'} ||
     $ENV{'CLASSPATH'};
  # || '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
-# use constant AJAX_DIR => $ENV{'AJAX_DIR'} || "ajax";
 
 
 sub usage() {
@@ -31,7 +30,6 @@ sub usage() {
 	"  -c, --cleanup           Remove files left over from an interrupted session before starting\n",
         "      --nocleanup         Do not remove temporary files (for debugging)\n",
 	"  -s, --src               Make an archive of the source for later reference\n",
-#	"  -a, --ajax              Run Ajax analysis\n",
 	"  -d, --debug             Print extra debugging info\n",
 	"\n",
 	"Examples:\n",
@@ -60,7 +58,6 @@ my $cleanup = 0;
 my $nocleanup = 0;
 my $nogui = 0;
 my $src = 0;
-my $ajax = 0;
 my @daikonarg = ();
 my $debug = 0;
 
@@ -73,7 +70,6 @@ GetOptions("instrument=s" => \@instrument,
 	   "nogui" => \$nogui,
 	   "n" => \$nogui,
 	   "src" => \$src,
-	   "ajax" => \$ajax,
            "daikonarg=s" => \@daikonarg,
 	   "debug" => \$debug,
 	   ) or usagedie();
@@ -130,17 +126,10 @@ unless (which('jikes')) {
 }
 
 # check the program make sure it starts out with no errors
-# Also, ensure that .class files exist for Ajax's use
 
-# getting rid of Ajax...
-my $error = "";
-#  if ($ajax) {
-#    $error = system("jikes -classpath $cp_dot -depend -g $nowarn $mainsrc");
-#  } else {
 $debug && print "compiling initial source program...\n";
 $debug && print "jikes -classpath $cp_dot -depend -nowrite $nowarn $mainsrc\n";
 $error = system("jikes -classpath $cp_dot -depend -nowrite $nowarn $mainsrc");
-#  }
 die ("Fix compiler errors before running daikon") if $error;
 
 # come up with a list of files which we need to care about
@@ -230,40 +219,6 @@ if ($dfejerr) {
     cleanupWorking($working);
     die("dfej error");
 }
-
-    # run Ajax
-#      if ($ajax) {
-#        print "Running Ajax over your java program...\n" if $verbose;
-#        my($cwd) = `pwd`;
-#        chomp($cwd);
-#        chdir($working);
-#        my @decls = find('*.decls', '.');
-#        if (!@decls) {
-#  	print STDERR "No .decls files found\n";
-#  	chdir($cwd);
-#  	last;
-#        }
-#        my $runnable_dots = $runnable;
-#        $runnable_dots =~ s:/:.:g;
-#        $ajaxcommand = "java -cp @{[AJAX_DIR]} "
-#  	. "ajax.tools.benchmarks.ComparablePairsDescFileReader "
-#          . "-cp @{[AJAX_DIR]}/tweaked-classes.zip -ap $cwd "
-#  	. "$runnable_dots -rewrite " . join(" ", @decls);
-#        print "Running $ajaxcommand\n" if $verbose;
-#        $ajaxoutput = `$ajaxcommand 2>&1`;
-#        $ajaxerr = $?;
-#        if ($ajaxerr) {
-#  	chdir($cwd);
-#  	last;
-#        }
-#
-#        foreach my $d (@decls) {
-#  	rename($d, $d . ".bak") || die "Cannot create backup of $d!\n";
-#  	rename($d . ".ajax", $d) || die "Cannot update $d with $d.ajax!\n";
-#        }
-#
-#        chdir($cwd);
-#      }
 
 # compile the instrumented source files
 $debug && print "\n";
@@ -360,12 +315,6 @@ if ($gzerr) {
 
 # do cleanup
 cleanupWorking($working);
-
-#  if ($ajaxerr) {
-#      print "ajax command: $ajaxcommand\n";
-#      print "ajax output: $ajaxoutput\n";
-#      die("ajax error");
-#  }
 
 #  if ($mberr) {
 #    print $mboutput;

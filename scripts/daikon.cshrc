@@ -52,11 +52,6 @@ endif
 
 if ($?debuglogin) echo "daikon.cshrc about to set classpath"
 
-## (ajax.jar is temporary, will be removed soon, we hope.)
-if (-e ${DAIKONDIR}/java/ajax-ship/ajax.jar) then
-  setenv CLASSPATH ${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
-endif
-
 if ($?debuglogin) echo "daikon.cshrc about to set path"
 
 ## Add the Daikon binaries to your path
@@ -68,11 +63,6 @@ if ($?PERLLIB) then
 else
   setenv PERLLIB ${DAIKONBIN}
 endif
-
-## Indicates where Ajax should find its helper files such as
-## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
-## determines which variables can be sensibly compared to one another.
-setenv AJAX_DIR ${DAIKONDIR}/java/ajax-ship
 
 ## Indicates where Lackwit can find its libraries (and binaries).
 setenv LACKWIT_HOME $DFECDIR/lackwit

@@ -8,7 +8,8 @@
 
 JAVAC ?= javac
 JAVAC_ARGS ?= -g -J-Xmx800m
-JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
+# JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
+JAVAC_COMMAND = javac-xlint -p '\./jtb/' ${JAVAC} ${JAVAC_ARGS}
 JAR ?= jar
 JAVA ?= java -ea
 
@@ -26,16 +27,15 @@ CLASSPATH := $(CLASSPATH):/$(BCEL)
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
 # Therefore, this assignment uses "=" instead of ":=".
-# Creates a symlink to ajax if it does not exist, so the ajax .java
-# files get compiled as well.  DO NOT USE THESE in dependencies or the
+# DO NOT USE THESE in dependencies or the
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-JAVA_FILES = $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print) \
                     $(shell find utilMDE/ -name '*.java' -print)
 
-TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
+TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS\) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -301,7 +301,6 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${INV}/scripts/prune-xlint.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-# all_directly: ${AUTO_GENERATED_FILES} ajax
 all_directly: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
@@ -434,11 +433,6 @@ daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES}
 
 daikon/Runtime.class: daikon/Runtime.java
 	${JAVAC_COMMAND} daikon/Runtime.java
-
-# No longer needed because symlink is created when setting the
-# JAVA_FILES variable.
-#ajax:
-#	ln -s ajax-ship/ajax .
 
 
 ###########################################################################
@@ -590,8 +584,6 @@ clover: all_directly
 	mkdir $(CLOVER)/java
 	cd $(CLOVER)/java; ln -s $(INV)/java/jtb
 	cd $(CLOVER)/java; ln -s $(INV)/java/lib
-	cd $(CLOVER)/java; ln -s $(INV)/java/ajax-ship
-	cd $(CLOVER)/java; ln -s ajax-ship/ajax ajax
 	cp Makefile $(CLOVER)/java
 	mkdir $(CLOVER)/java/daikon
 	(cd daikon; tar cf - .) | (cd $(CLOVER)/java/daikon; tar xfBp -)
@@ -602,7 +594,7 @@ clover: all_directly
 	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s daikon -d $(CLOVER)/java/daikon
 	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s utilMDE -d $(CLOVER)/java/utilMDE
 	cd $(CLOVER)/java; \
-	  javac -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
+	  ${JAVAC} -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
 
 ###
 ### Documentation
@@ -615,9 +607,8 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
-# Note that this excludes Ajax
-JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v ajax | grep -v '\#'`
-#JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
+JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
+#JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
 javadoc: doc
 

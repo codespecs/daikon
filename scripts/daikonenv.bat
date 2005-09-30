@@ -37,11 +37,6 @@ REM tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 REM Daikon front end for Java), rt.jar must be on your classpath.
 set CLASSPATH=%CLASSPATH%;%JDKDIR%\jre\lib\rt.jar;%JDKDIR%\lib\tools.jar
 
-REM (ajax.jar is temporary, will be removed soon, we hope.)
-if exist %DAIKONDIR%\java\ajax-ship\ajax.jar (
-  set CLASSPATH=%CLASSPATH%;%DAIKONDIR%\java\ajax-ship\ajax.jar
-)
-
 REM Add the Daikon binaries to your path
 set PATH=%DAIKONBIN%;%DAIKONDIR%\front-end\java\src;%DFECDIR%;%JDKDIR%\bin;%PATH%
 
@@ -51,11 +46,6 @@ if defined %PERLLIB% (
 ) else (
   set PERLLIB=%DAIKONBIN%
 )
-
-REM Indicates where Ajax should find its helper files such as
-REM main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
-REM determines which variables can be sensibly compared to one another.
-set AJAX_DIR=%DAIKONDIR%\java\ajax-ship
 
 REM Indicates where Lackwit can find its libraries (and binaries).
 set LACKWIT_HOME=%DFECDIR%\lackwit

@@ -2,7 +2,6 @@
 
 <FindBugsFilter>
   <!-- Ignore libraries that are distributed with Daikon. -->
-  <Match classregex="ajax.*" />
   <Match classregex="org.apache.*" />
   <Match classregex="jtb.*" />
   <Match classregex="jtb.cparser.*" />

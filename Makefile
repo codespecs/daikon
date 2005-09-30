@@ -29,9 +29,8 @@ SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 # This is so toublesome that it isn't used except as a list of dependences for make commands
-DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
+DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS  \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt daikon/simplify/daikon-background.txt
-AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 # Find might be cleaner, but this works.
 # I don't know why, but a "-o name ." clause makes find err, so use grep instead
 # WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw -o name . -o name .. \) -prune -o -print)
@@ -208,7 +207,7 @@ test-staged-dist: $(STAGING_DIR)
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
-	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
 	# Test the main target of the makefile
 	cd $(DISTTESTDIR)/daikon && make
@@ -370,7 +369,7 @@ chicory:
 ## Problem: "make -C java veryclean; make daikon.jar" fails.
 ## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
-daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
+daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
 	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' all_directly
@@ -385,7 +384,6 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	# jar xf java/lib/junit.jar -C /tmp/${USER}/daikon-jar
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar)
 	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
@@ -393,14 +391,6 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
 	mv /tmp/${USER}/daikon-jar/$@ $@
 	rm -rf /tmp/${USER}/daikon-jar
-
-java/lib/ajax.jar: $(AJAX_JAVA_FILES)
-	-rm -rf $@ /tmp/${USER}/ajax-jar
-	mkdir -p /tmp/${USER}/ajax-jar
-	javac -g -d /tmp/${USER}/ajax-jar $(AJAX_JAVA_FILES)
-	cd /tmp/${USER}/ajax-jar && jar cf ajax.jar *
-	mv /tmp/${USER}/ajax-jar/ajax.jar $@
-	rm -rf /tmp/${USER}/ajax-jar
 
 # This rule creates the files that comprise the distribution, but does
 # not copy them anywhere.
@@ -488,11 +478,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir /tmp/daikon/java/org/apache
 	## JTB
 	cp -pR java/jtb /tmp/daikon/java/
-	## Ajax
-	cp -pR java/ajax-ship /tmp/daikon/java
-	rm -rf /tmp/daikon/java/ajax-ship/ajax
-	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
-    ## BCEL
+	## BCEL
 	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
 
 	## JUnit
@@ -719,7 +705,6 @@ pag-install:
 
 showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
-	@echo "AJAX_JAVA_FILES = " $(AJAX_JAVA_FILES)
 	@echo "WWW_FILES = " $(WWW_FILES)
 	@echo "DIST_DIR_PATHS = " $(DIST_DIR_PATHS)
 
