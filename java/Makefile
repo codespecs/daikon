@@ -9,7 +9,8 @@
 JAVAC ?= javac
 JAVAC_ARGS ?= -g -J-Xmx800m
 # JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
-JAVAC_COMMAND = javac-xlint -p '\./jtb/' ${JAVAC} ${JAVAC_ARGS}
+JAVAC_XLINT ?= javac-xlint -p '\./jtb/'
+JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 JAR ?= jar
 JAVA ?= java -ea
 
