@@ -1601,9 +1601,9 @@ should include both in any analysis of Daikon's tests.
 
 Daikon intentionally does not contain tests for third-party libraries
 that are included (sometimes in source form) in the Daikon distribution.
-For example, the @file{java/ajax/} and @file{java/jtb/} directories
-contain external libraries.  Therefore, any measurement of Daikon's code
-coverage should not include those libraries (or other libraries, some of
+For example, the @file{java/jtb/} directory
+contains an external library.  Therefore, any measurement of Daikon's code
+coverage should not include such libraries (or other libraries, some of
 which are distributed as @file{.jar} files).
 
 Be sure to see file @file{doc/www/mit/index.html} in the repository for

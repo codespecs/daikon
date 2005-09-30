@@ -350,10 +350,6 @@ Problems with dfej
 * dfej javac problems::         
 * JVM initialization error::    
 
-Problems running dfej
-
-* Ajax errors::                 
-
 Details
 
 * History::                     
@@ -5278,9 +5274,6 @@ javac -g DataStructures/*.java
 dfej DataStructures/StackAr.java
 @end example
 @noindent
-(These instructions assume you have the current working directory (@file{.})
-in your @env{CLASSPATH}@.  If that is not the case, then run @command{dfej
--ajaxap=.} instead of @command{dfej}.)
 
 We instrument only this one file because we are only interested in the
 invariants of the StackAr class, not the other classes in the program.
@@ -7566,14 +7559,6 @@ We do not yet have a fix, but if you find one, please let us know.
 
 @node    dfej invocation problems, dfej javac problems, dfej installation problems, dfej problems
 @subsection Problems running dfej
-
-@cindex dfej, runs slowly
-
-You may find that dfej runs very slowly, even on small programs.  dfej
-itself finishes quite quickly, but it calls the external Ajax program,
-which is extremely slow.  If you disable Ajax with the
-@option{--no-ajax} argument to dfej, then Daikon may output slightly
-more irrelevant invariants, but dfej will run much faster.
 
 @cindex could not find package named, dfej error
 @cindex dfej error, could not find package named
