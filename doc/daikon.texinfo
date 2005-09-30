@@ -3019,7 +3019,7 @@ Then if this switch is on, and a program point contains variable @code{myA} of t
 Chicory will produce variables @code{myA.x}, @code{myA.y}, @code{myA.A}, but not @code{myA.A.x}, @code{myA.A.y},
 @code{myA.A.A} and so on.
 
-@item -trace-percent=<integer>
+@item --trace-percent=<integer>
 If this switch is on, then <integer> represents the percentage of program points
 to instrument.  The actual random chance only affects the method entry program point.
 The corresponding exit program point is included if and only if the entry program point
