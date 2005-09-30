@@ -1,11 +1,25 @@
 #!/bin/sh
 
-# [Needs documentation.  Steal from prune-javac.pl.]
+# javac-xlint can be run as a prefix to a javac line, like so:
+#
+#   javac-xlint [-p regexp] javac [-option...] file...
+#
+# javac-xlint makes 3 changes to the invocation of javac:
+#  1. It adds the -Xlint option
+#  2. I suppresses cetain warning messages.
+#  3. It returns non-zero sttus if any other warnings (or errors) exist.
+#     Ordinarily, javac returns non-zero status only if errors exist.
+#
+# The suppressed warnings are of two sorts.
+#  1. Any warning in a file that matches the regexp provided with -p
+#     (mnemonic: "prune").
+#  2. Any "unchecked" warning for a line containing a comment of the form
+#     "// unchecked".  This permits suppression of warning messages via an
+#     inline source code comment.  javac 6 will provide a built-in method
+#     for doing this, but javac 5 (= javac 1.5) does not.
 
-# The "-p REGEXP" argument (mnemonic: "prune") means to completely ignore
-# any warning (not error) in a file whose name matches the given regular
-# expression.
 
+# Design note:
 # Two possible ways this could work:
 #  1. Drop-in replacement for javac:  "javac-xlint args..."
 #     An advantage is that it looks more like javac, may be somewhat

@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
 # prune-xlint.pl
+# Also see javac-xlint
 
-# Removes certain "unchecked" warning messages from "javac -Xlint" output.
+# Removes certain warning messages from "javac -Xlint" output.
 # Returns non-zero status if any other warnings (or any errors) exist.
 
 # Each warning that is removed is an "unchecked" warning message, such that
@@ -10,8 +11,8 @@
 # source code comment.  Other (non-"unchecked") warnings and errors on the
 # line with "// unchecked" are retained.
 
-# Takes an optional argument, a regular expression.  Any warning (not
-# error) message matching the regular expression is suppressed.
+# With the optional "-p regexp" argument, any warning (not error) message
+# matching the regular expression is suppressed.
 
 use strict;
 use English;
