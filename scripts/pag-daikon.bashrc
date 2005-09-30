@@ -52,8 +52,6 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 ## # Alternately, run CVS under emacs via "M-x cvs-update".
 ## alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
-export DFEJ_VERBOSE=1
-
 # Enable use of group bibliographies, and the "bibfind" command.
 # Private comments in bib files are not to be shared outside the group.
 export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
