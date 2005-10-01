@@ -54,7 +54,9 @@ Daikon
   Implementation detail
 
     The Daikon code no longer uses any raw generic types.  All uses of
-    generic types (such as List) are supplied a type parameter.
+    generic types (such as List) are supplied a type parameter.  When
+    compiled using the supplied makefile, there are no "javac -Xlint"
+    warnings.
 
 Chicory
 
@@ -62,21 +64,34 @@ Chicory
   percentage of program points) and and --watch-static-recursion (only
   output a particular static once).  
 
-dfec
+Removed components
 
-  Dfec has been removed from the Daikon distribution and the manual.  To
-  run Daikon on C/C++ programs, we recommend use of Kvasir (for Linux/x86)
-  or Mangel-Wurzel (for all other platforms).
+  We have reduced the size of the Daikon distribution by removing several
+  un-needed or out-of-date components.
 
-dfej
+  Eclipse plug-in
 
-  Dfej has been removed from the Daikon distribution and the manual.  to
-  run Daikon on Java programs, we recommend use of Chicory.
+    The Eclipse plug-in is no longer being maintained, so it has been
+    removed from the manual.  We hope to re-include this when the plug-in
+    gets updated again.
 
-Eclipse plug-in
+  dfec
 
-  The Eclipse plug-in is no longer being maintained, so it has been removed
-  from the manual (at least until the plug-in gets updated again).
+    Dfec has been removed from the Daikon distribution and the manual.  To
+    run Daikon on C/C++ programs, we use Kvasir (for Linux/x86) or
+    Mangel-Wurzel (for all other platforms).
+
+  dfej
+
+    Dfej has been removed from the Daikon distribution and the manual.  to
+    run Daikon on Java programs, use Chicory.
+
+  Ajax
+
+    The Ajax package for computing comparability of variables in Java
+    programs has been removed from the distribution and the manual.  It
+    only works with Java 1.1 and is the bottleneck in running dfej.  A
+    replacement is in testing and will be included in a future release.
 
 ----------------
 
