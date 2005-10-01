@@ -51,6 +51,12 @@ Kvasir
 
 Daikon
 
+  Manual
+
+    The description of program point names and variable names has been
+    improved, consolidating several different discussions and clarifying
+    the interpretation of arrays.
+
   Implementation detail
 
     The Daikon code no longer uses any raw generic types.  All uses of
