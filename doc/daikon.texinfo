@@ -247,7 +247,6 @@ Source-based C/C++ front end Mangel-Wurzel
 
 * Using Mangel-Wurzel::         
 * Mangel options::              
-* Mangel-Wurzel naming conventions::  
 * Pointer/array disambiguation in Mangel-Wurzel::  
 * Wurzel usage notes::          
 * Interaction with Purify::     
@@ -1785,60 +1784,168 @@ prefix for each level of array nesting.
 @node    Variable names, Interpreting output, Program points, Daikon output
 @section Variable names
 
-Here is an incomplete list of the conventions used by Daikon for
-variable names.  Some of these conventions are Java-specific; for
-information about conventions in C programs, see @ref{Using Kvasir}.
+A front end produces a trace file that associates trace variable names
+with values.  Trace variable names need not be exactly the same as the
+variables in the program.  The trace may contain values that are not
+held in any program variables; in this case, the front end must make up
+a name to express that value (see below for examples).
+
+Daikon ignores variable names when inferring invariants; it uses the
+names only when performing output.  (Thus, the only practical
+restriction on trace names is that the VarInfoName @code{parse} method
+must be able to parse the name.)
+
+By convention, trace variables are similar to program variables and
+field accesses.  For example, @code{w}, @code{x.y.z}, @samp{a[i]}, and
+@samp{a[0].next} are legal trace variables.  As in languages such as
+Java and C, a period character represents field access and square
+brackets represent selecting an element of a sequence.
+
+The remainder of this section describes conventions for naming
+expressions.  Those that cannot be named by simple C/Java expressions
+are primarily related to arrays and sequences.  (In part, these special
+expressions are necessary because Daikon's can only handle variables of
+scalar (integer, floating-point, boolean, String) and array-of-scalar
+types.  Daikon cannot handle structs, classes, or multi-dimensional
+arrays or structures, but such data structures can be represented as
+scalars and arrays by choosing variable names that indicate their
+relationship.)
+
 
 @itemize @bullet
+@item
+@code{a[i]} array access.
+@code{a} and @code{i} are themselves
+arbitrary variable names, of array and integral type, respectively.
+
+@item
+@cindex @code{-1} array index (counts from end of array)
+@cindex negative array index (counts from end of array)
+@code{a[-1]} from-end array access.
+@code{a[-1]} denotes the last element of array @code{a};
+it is syntactic sugar for @code{a[a.length-1]}.
+
+@item
+@cindex @code{[]} variable name (array contents)
+@code{a[]} array contents.
+For array-valued expression @code{a}, all of its elements, as a
+sequence.  Simply using the expression @code{a} means the identity
+(address or hashcode) of the array, not a list of its elements.  For two
+arrays @code{a} and @code{b}, @samp{a=b} implies @samp{a[]=b[]}, but
+@samp{a[]=b[]} does not imply @samp{a=b}.
+
+@item @code{x.y}, @code{x->y} field access.
+When field access is applied to a structure/class, it has the usual
+meaning of selecting one field from the structure/class.
+
+When field access is applied to an array, it means to map the field
+access across the elements of the array.  For example, if @code{a} is an
+array, then @code{a[].foo} is the sequence consisting of the @code{foo}
+fields of each of the elements of @code{a}.  Likewise,
+@code{a[].foo.bar} contains the @code{bar} fields of @code{a[].foo}.  By
+contrast, @code{a.foo} does not make sense, because one cannot ask for
+the @code{foo} field of an address, and @code{a[].foo[]} would be a
+two-dimensional array.
+
+@c This is valuable and true, but probably more than users need to know.
+@c In Mangel-Wurzel, fields of the @samp{this} parameter print as
+@c @samp{this->@var{fieldname}}.
+
+@item
+@cindex @code{.class} variable
+@code{x.class} is the runtime type of @code{x}, which may
+differ from its declared type.
+
+@item
+@cindex @code{.length} variable name
+@code{a.length} is the length (number of elements) of array @code{a};
+this is not necessarily the number of initialized or used elements.
+
+@item
+@cindex @code{.toString} variable
+@code{s.toString} is the string value of String @code{s}, namely a
+sequence of characters.
+
+@item
+@code{Classname.varname} static class variable.
+Static variables of a class have names of the form
+@samp{@var{classname}.@var{varname}}
+
 @item
 @cindex @code{orig()} variable (pre-state value)
 @cindex pre-state variables
 @code{orig(x)} refers to the value of formal parameter @code{x} upon
 entry to a procedure (because the procedure body might modify the value
 of @code{x}).  These variables appear only at @code{:::EXIT} program
-points.
+points.  Typically, @code{orig()} variables do not appear in the trace,
+but are automatically created by Daikon when it matches up
+@code{:::ENTER@var{[nn]}} and @code{:::EXIT} program points.
+@xref{orig variable example}.
+
+@c Old version.  Do any of the front ends still do this?
+@c @item
+@c @cindex @code{::} variable (C global)
+@c @code{::x} is the global variable @code{x}.
+
 @item
-@code{a} (for an array, class, or other non-primitive variable
-@code{a}) is the identity of @code{a}; think of it as a
-comparison over hash codes.
+@cindex @code{/} variable (C global or file-static)
+@code{/globalVar} C global variable.  In C output, global variables with
+external linkage are
+prefixed with a slash.  For instance, global @code{/x} is distinct from
+procedure parameter @code{/x}.  (In Java programs, variables can be
+distinguished by prefixing them with @code{this.} or, for class-static
+variables, a class name.)
+
 @item
-@cindex @code{.class} variable
-@code{a.class} is the runtime type of @code{a}, which may
-differ from its declared type.
-@c "a.class" is omitted for arrays of primitive type
+@code{myfile_c/staticVar} C static variable.  In C output, file-static
+variables have names of the form @samp{@var{filename}/@var{varname}},
+where periods (@samp{.}) in the filename are converted into underscores
+(@samp{_}).  For example, @samp{Global_c/x} is the name for a
+file-static variable @code{x} declared in the file @file{Global.c}).
+
 @item
-@cindex @code{a[]} variable (array contents)
-@code{a[]} is the contents of array @code{a}, namely a sequence of
-elements.  @samp{a=b} implies @samp{a[]=b[]}, but @samp{a[]=b[]} does not 
-imply @samp{a=b}.
-Also, @samp{a=orig(a)} does not imply @samp{a[]=orig(a[])}.
-@item
-@code{a[].class} is an array of types, representing the run-time classes
-of the contents of @code{a}; it is omitted for arrays of primitive type.
-@item
-@cindex @code{-1} array index (counts from end of array)
-@cindex negative array index (counts from end of array)
-@code{a[-1]} denotes the last element of array @code{a};
-it is syntactic sugar for @code{a[a.length-1]}.
-@item
-@cindex @code{.toString} variable
-@code{s.toString} is the string value of String @code{s}, namely a
-sequence of characters.
-@item
-@cindex @code{::} variable (C global)
-@code{::a} is the global variable @code{a}.  It contains the colons to
-differentiate it from @code{a} as a procedure parameter, so that
-different properties can be reported over the two different variables.
+@cindex @code{@@} variable (C function-scoped static)
+@code{myfile_c@@funcname/funcStaticVar} C function-scoped static variable.
+In C output, for static variables which are
+declared within functions, an at-sign @samp{@@} separates the filename
+and the function name and then a slash separates the function name and
+variable name (e.g., @samp{Global_c@@main/funcStaticVar} for a static
+variable @code{funcStaticVar} declared within the function @code{main}
+in the file @file{Global.c}).
+
 @end itemize
 
 @cindex local variables
 @cindex variables, local
-Daikon does not produce output for local variables, only for variables
-visible from outside a procedure.  Thus, its output forms a
-specification (mostly) from the view of a client of a procedure.  A
-future version of Daikon may permit output of local variables as a user
-option; send mail to @email{daikon-developers@@lists.csail.mit.edu} if
-this functionality is important to you.
+Daikon's current front ends do not produce output for local variables,
+only for variables visible from outside a procedure.  (Also see the
+@option{--std-vis} option to Chicory, @ref{Chicory options}.)  Thus,
+Daikon's output forms a specification from the view of a client of a
+procedure.  A future version of Daikon may permit output of local
+variables as a user option; send mail to
+@email{daikon-developers@@lists.csail.mit.edu} if this functionality is
+important to you.
+
+
+The array introduction operator @code{[]} can made Daikon variables look
+slightly odd, but it is intended to assist in interpreting the variables
+and to provide an indication that the variable name cannot be
+substituted directly in a program as an expression.
+
+Each array introduction operator @code{[]} increases the dimensionality
+of the variable, and each array indexing operation @code{[i]} decreases
+it.  Since all Daikon variables are scalars or one-dimensional arrays,
+these operators must be matched up, or have at most one more @code{[]}
+than @code{[i]}.  (There is one exception:  according to a strict
+interpretation of the rules, the C/Java expression @code{a[i]} would
+turn into the Daikon variable @code{a[][i]}, since it does not change
+the dimensionality of any expression it appears in.  However, that would
+be even more confusing, and the point is to avoid confusion, so by
+convention Daikon front ends use just @code{a[i]}, not @code{a[][i]}.
+Strictly speaking, none of the @code{[]} operators is necessary, since a
+user with a perfect knowledge of the type of each program variable and
+field could use that to infer the type of any Daikon expression.)
+
 
 @menu
 * orig variable example::       
@@ -1851,7 +1958,7 @@ this functionality is important to you.
 
 This section gives an example of use of @code{orig()} variables and arrays.
 
-Suppose you have initially that
+Suppose you have initially that (in Java syntax)
 @example
 int i = 0;
 int[] a = new int[] @{ 22, 23 @};
@@ -1899,6 +2006,14 @@ In the post-state, @code{a} indexed by the original value of
 
 @item a[i] = 49
 The value of @code{a[i]} in the post-state.
+
+@item b = orig(b) = @var{some hashcode}
+The identity of the array @code{b} has not changed.
+
+@item b[] = [48, 49]
+@itemx orig(b[]) = [46, 47]
+For an array @code{b}, @samp{b=orig(b)} does not imply @samp{b[]=orig(b[])}.
+
 @end table
 
 @node    Interpreting output, Invariant list, Variable names, Daikon output
@@ -3095,31 +3210,6 @@ directory containing a @file{program.dtrace} file suitable as input to Daikon.
 A number of options to Kvasir may be supplied on the command line
 before the argument that is the name of your program (@pxref{Kvasir options}).
 
-Note that Kvasir uses a different scheme for naming variables than the
-Java front ends and the source-based C front end Mangel-Wurzel do
-(@pxref{Variable names}).  Because C does not have classes, the
-``class'' portion of a program point name (before the last period)
-instead holds the file in which a function was defined, for
-file-static functions, or is simply a single period for global
-functions. (Thus, global function names start with two periods, like
-@samp{..main():::ENTER}., the first denoting that it is global in
-scope and the second denoting the separator between the ``class''
-portion of the program point name and its actual name) In variable
-names, by contrast, the period is used to represent the field
-selection operator, so a slash is used instead as a separator: global
-variables are prefixed with a slash (e.g., @samp{/globalVar}), and
-file-static variables are prefixed with their filename (with periods
-converted into underscores) and then a slash (e.g.,
-@samp{Global_c/staticVar} for a file-static variable @code{staticVar}
-declared in the file @file{Global.c}).  For static variables which are
-declared within functions, an at-sign @samp{@@} separates the filename
-and the function name and then a slash separates the function name and
-variable name (e.g., @samp{Global_c@@main/funcStaticVar} for a static
-variable @code{funcStaticVar} declared within the function @code{main}
-in the file @file{Global.c}).  This syntax ensures that each program
-point and variable within a C program has a unique name when presented
-to Daikon.
-
 
 @node Kvasir options, Tracing only part of a program, Using Kvasir, Kvasir
 @subsection Kvasir options
@@ -4148,7 +4238,6 @@ consumption before compiling it.
 @menu
 * Using Mangel-Wurzel::         
 * Mangel options::              
-* Mangel-Wurzel naming conventions::  
 * Pointer/array disambiguation in Mangel-Wurzel::  
 * Wurzel usage notes::          
 * Interaction with Purify::     
@@ -4233,7 +4322,7 @@ several ways to do this.
 
 @end enumerate
 
-@node Mangel options, Mangel-Wurzel naming conventions, Using Mangel-Wurzel, Mangel-Wurzel
+@node Mangel options, Pointer/array disambiguation in Mangel-Wurzel, Using Mangel-Wurzel, Mangel-Wurzel
 @subsection Mangel options
 
 Mangel acts as a replacement for the host @command{cc}
@@ -4497,54 +4586,7 @@ conjunction with @option{--ppt-select-pattern}.
 @end table
 
 
-@node Mangel-Wurzel naming conventions, Pointer/array disambiguation in Mangel-Wurzel, Mangel options, Mangel-Wurzel
-@subsection Mangel-Wurzel naming conventions
-
-Mangel-Wurzel uses naming conventions for program points and variables
-similar to, but not identical to, those of Kvasir (@ref{Kvasir}).
-
-Names of program points follow these conventions:
-
-@itemize @bullet
-@item 
-Names of program points for file-static functions are prefixed with the name
-of the source file, with @samp{.} characters mapped to @samp{_}, 
-followed by a @samp{.}
-
-@item Names of  program points for
-file-scope functions with external linkage are prefixed with @samp{..}.
-
-@item
-Names of C++ functions that are class or namespace members are prefixed
-with the name(s) of their classes or namespaces, with the C++ @samp{::} 
-syntax mapped onto the Java @samp{.} syntax used by Daikon.
-@end itemize
-
-Names of variables printed at each program point follow these conventions:
-
-@itemize @bullet
-@item
-Names of variables with local scope (e.g., function parameters and 
-function-scope statics) are unqualified.
-
-@item
-File-static variables have names of the form
-@samp{@var{filename}/@var{varname}}, where @samp{.} characters in the
-@var{filename} are mapped to underscores (@samp{_}).
-
-@item
-Global variables with external linkage have names of the form
-@samp{/@var{varname}}.
-
-@item
-Static variables of a class have names of the form
-@samp{@var{classname}.@var{varname}}.
-
-@item
-Fields of the @samp{this} parameter print as @samp{this->@var{fieldname}}.
-@end itemize
-
-@node Pointer/array disambiguation in Mangel-Wurzel, Wurzel usage notes, Mangel-Wurzel naming conventions, Mangel-Wurzel
+@node Pointer/array disambiguation in Mangel-Wurzel, Wurzel usage notes, Mangel options, Mangel-Wurzel
 @subsection Pointer/array disambiguation in Mangel-Wurzel
 
 Wurzel currently does not support any form of pointer/array
@@ -7306,47 +7348,12 @@ class name or method name; what information is contained depends on
 which instrumenter is being used.  @xref{pptname format}, for a full
 specification of the naming format.
 
-By convention, the entry and exit points for a function have names of
-a special form so that they can be associated with one another.
-(Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
-convention permits Daikon to generate pre-state variables 
-(@pxref{Variable names}) automatically at procedure exit points, so 
-front ends need not output them explicitly.  When there
-are multiple exit points, then each one should be suffixed by a number
-(such as a line number, for example, @code{foo::EXIT22}).  Daikon produces
-the main (non-numbered) @code{:::EXIT} point automatically.  All the
-numbered exits should contain the same set of variables; in general,
-this means that local variables are not included at exit points.
-Daikon currently requires that declarations for @code{:::ENTER} program
-points appear before any declarations for matching @code{:::EXIT} program
-points.
-
-Another convention is to have another program point whose name ends
-with @code{:::OBJECT} for the representation invariant of an object or
-class.  This program point is not created automatically, because
-there isn't a way to know whether a particular method is a private
-helper method or not --- that is, whether the representation
-invariants should hold on entry to and exit from it.
 
 @item
 for each variable:
 @itemize @bullet
 @item
-name: a string containing no tabs or newlines.  For the most part,
-the variable name can be any string, except that the period character,
-square brackets, and parentheses have special meanings.  (The exact
-requirement is that the VarInfoName @code{parse} method must be able
-to parse the name).   A pair of empty square brackets (@samp{[]}) represents
-an array-valued variable.  For instance, @samp{a} might stand for the array
-object itself (appearing in the trace file as a unique ID or
-hashcode), and @samp{a[]} would stand for the array contents (appearing in
-the trace file as a sequence of values).  Otherwise, square brackets
-represent selecting an element of a sequence (as in the C or Java
-array access operator); the index should not itself contain square
-brackets.  A period character represents field access, and any field
-name is allowed, except for the restrictions above and the special
-case that a field named @samp{class} represents the type of a value.
-Parentheses once had a special meaning to Daikon, but now should not be used.
+name: a string containing no tabs or newlines.  @xref{Variable names}.
 
 @item
 declared type: this is what the programmer used in the declaration of
@@ -7509,16 +7516,9 @@ format specification.
 A program point name is a string with no tabs or newlines in it.  The basic
 format is @samp{@var{topLevel}.@var{bottomLevel}:::@var{pptInfo}}.
 For the first example given above, the top level of the hierarchy would
-be @code{StackAr}, the bottom level would be @code{makeEmpty()V}, and the
-program point information would be @code{EXIT54}.
-
-@var{topLevel} and @var{bottomLevel} can represent anything.  Currently,
-for Java, @var{topLevel} consists of the class name while
-@var{bottomLevel} consists of the method name and method signature.  For
-C, @var{topLevel} could consist of a filename and @var{bottomLevel}
-could consist of a method name and signature.  For IOA, @var{topLevel}
-could consist of an Automaton name and @var{bottomLevel} could consist of
-information for a transition state.
+be @code{DataStructures.StackAr}, the bottom level would be
+@code{push(java.lang.Object)}, and the
+program point information would be @code{ENTER}.
 
 @var{topLevel} may contain any number of periods (@samp{.}). @var{bottomLevel}
 and @var{pptInfo} may not contain any periods.  The string @samp{:::} may only
@@ -7526,14 +7526,67 @@ appear once.
 
 @var{topLevel} and @var{pptInfo} are required (i.e., they must be non-empty),
 as are the period to the right of @var{topLevel} and the colons to the
-left of @var{pptInfo}.  However, @var{bottomLevel} is optional.  For
-example, the Java instrumenter creates an artificial object program point
-which contains invariants that are true for all of an object's methods,
-rather than for just one method:
+left of @var{pptInfo}.  However, @var{bottomLevel} is optional.
 
-@example
-StackAr:::OBJECT
-@end example
+By convention, for Java @var{topLevel} consists of the class name, and
+@var{bottomLevel} consists of the method name and method signature.
+
+For C, @var{topLevel} consists of a filename (or a single period for
+global functions), and @var{bottomLevel}
+could consist of a function name and signature.
+More precisely, names of C program points follow these conventions:
+
+@itemize @bullet
+@item 
+Names of program points for file-static functions are prefixed with the name
+of the source file, with @samp{.} characters mapped to @samp{_}, 
+followed by a @samp{.}.
+
+@item Names of program points for
+file-scope functions with external linkage are prefixed with @samp{..}.
+For example, a global function program point might be named 
+@samp{..main():::ENTER}., the first period denoting that it is global in
+scope and the second denoting the separator between the @var{toplevel}
+and @var{bottomlevel} parts of the name.
+
+@item
+Names of C++ functions that are class or namespace members are prefixed
+with the name(s) of their classes or namespaces, with the C++ @samp{::} 
+syntax mapped onto the Java @samp{.} syntax used by Daikon.
+@end itemize
+
+For IOA, @var{topLevel} consists of an Automaton name and
+@var{bottomLevel} consists of information for a transition state.
+
+
+
+By convention, the entry and exit points for a function have names of
+a special form so that they can be associated with one another.
+(Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
+convention permits Daikon to generate pre-state variables 
+(@pxref{Variable names}) automatically at procedure exit points, so 
+front ends need not output them explicitly.  When there
+are multiple exit points, then each one should be suffixed by a number
+(such as a line number, for example, @code{foo::EXIT22}).  Daikon produces
+the main (non-numbered) @code{:::EXIT} point automatically.  All the
+numbered exits should contain the same set of variables; in general,
+this means that local variables are not included at exit points.
+Daikon currently requires that declarations for @code{:::ENTER} program
+points appear before any declarations for matching @code{:::EXIT} program
+points.
+
+Another convention is to have another program point whose
+@var{bottomLevel} is empty and whose @var{pptInfo} is  @code{OBJECT}:
+for example, @code{StackAr:::OBJECT}.  This contains the
+representation invariant (sometimes called the object invariant) of a
+class.  This program point is created automatically by Daikon; it need
+not appear in a trace file.
+
+@c This program point is not created automatically by Daikon, because
+@c there isn't a way to know whether a particular method is a private
+@c helper method or not --- that is, whether the representation
+@c invariants should hold on entry to and exit from it.
+
 
 
 @node VarComparability declaration, ListImplementors declaration, pptname format, Declarations
@@ -7947,9 +8000,9 @@ this.topOfStack
 @c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo FIFOs AFS csv
 @c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst pragma prog
 @c  LocalWords:  workflow accessor instr instrsourcedir TYPESAPPEND basedir cp
-@c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln
-@c  LocalWords:  classhier decldir instrdir uninst csal apdir cpdir
-@c  LocalWords:  ComparablePairsDescFileReader runnables dumpdir rm
+@c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln nn
+@c  LocalWords:  classhier decldir instrdir uninst csal apdir cpdir Mangel's
+@c  LocalWords:  ComparablePairsDescFileReader runnables dumpdir rm isprint
 @c  LocalWords:  DTRACELIMIT DTRACELIMITTERMINATE DDTRACELIMIT applet xargs mv
 @c  LocalWords:  DDTRACELIMITTERMINATE javaPolicy appletviewer MyProgram exe lw
 @c  LocalWords:  datatypes intValue ListNode theElement precompiled Solaris cc
@@ -7995,3 +8048,4 @@ this.topOfStack
 @c  LocalWords:  FunctionNamesTest globalIntArray anotherGlobalIntArray diffs
 @c  LocalWords:  mangel wurzel Wurzel's libpurify inputfile frontend logfile
 @c  LocalWords:  tmpdir regex namespaces fieldname microsoft Christoph Csallner
+@c  LocalWords:  isspace xvzf toplevel bottomlevel
