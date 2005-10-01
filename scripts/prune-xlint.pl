@@ -17,6 +17,7 @@
 use strict;
 use English;
 $WARNING = 1;
+
 $OUTPUT_AUTOFLUSH = 1;
 
 my $file_line_re = "^[^\n]+:[0-9]+:";
