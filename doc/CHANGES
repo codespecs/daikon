@@ -22,6 +22,10 @@ Further documentation can be found in:
 
 4.1.6 (October 1 2005)
 
+A number of bug fixes and minor enhancements have been made to the
+Mangel-Wurzel, Kvasir, and Chicory front ends.  The older front
+ends dfec and dfej have been removed from the distribution.
+
 Mangel-Wurzel
 
   Printing of string variable values has been fixed to do a better job of
@@ -52,11 +56,22 @@ Daikon
     The Daikon code no longer uses any raw generic types.  All uses of
     generic types (such as List) are supplied a type parameter.
 
+Chicory
+
+  Added command line options --trace-percent (only output the specified
+  percentage of program points) and and --watch-static-recursion (only
+  output a particular static once).  
+
 dfec
 
   Dfec has been removed from the Daikon distribution and the manual.  To
   run Daikon on C/C++ programs, we recommend use of Kvasir (for Linux/x86)
   or Mangel-Wurzel (for all other platforms).
+
+dfej
+
+  Dfej has been removed from the Daikon distribution and the manual.  to
+  run Daikon on Java programs, we recommend use of Chicory.
 
 Eclipse plug-in
 
