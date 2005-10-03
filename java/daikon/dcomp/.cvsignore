@@ -1,1 +1,2 @@
-std_dcomp_out.diff
+*.diff
+*.txt
