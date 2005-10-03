@@ -38,6 +38,7 @@ There are ways around the launch location inconvenience, such as
 the -data switch, but the alias trick should be the simplest and least
 confusing workaround.</p>
 
+<p>
 It is strongly recommended that you make the following customizations to Eclipse:
 <pre>
 Window >> Preferences >> Workbench >> Refresh Workspace on Starup
@@ -50,28 +51,33 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 
 <h3><a name="importing-daikon">Importing Daikon</a></h3>
 
-First, do <tt>cp $inv/java/.classpath-pag $inv/java/.classpath</tt>
 <p>
+First, do <tt>cp $inv/java/.classpath-pag $inv/java/.classpath</tt>
+</p>
 
+<p>
 Second, import Daikon into Eclipse.  To import:  start Eclipse, then choose
 menu item File->Import->ExistingProjectIntoWorkspace, then enter (the full
 name of) directory <tt>$inv/java</tt> for Project Contents.
-<p>
+</p>
 
+<p>
 Those two steps are all there is to it!
-<p>
+</p>
 
+<p>
 (This simple procedure works because there are already
 <tt>.project</tt> and <tt>.classpath</tt> files in <tt>$inv/java</tt>.
 To import a project that doesn't have these files, you would need to create
 them (for instance, copy them from Daikon's), or else follow a different
 procedure to work on your project in Eclipse.)
-<p>
+</p>
 
 <h3><a name="existing-old">Importing a different existing project</a></h3>
 
 <p>(This is the most annoying and error prone part.  I will add screenshots
 soon.)
+</p>
 
 <p>Before working on code in Eclipse, you must import the code into
 the Eclipse workspace.  You also need to set up various compilation
@@ -84,6 +90,7 @@ environment Classpath.)</p>
 the perspective menu on the far-left tool panel.  You should see some
 of the windows move around to a structure similar to the screenshot
 below.  <br><br> 
+</p>
 
 <li> Select the menu item File->New->Project <br><br>
 
@@ -91,12 +98,14 @@ below.  <br><br>
 
 <li> Call the project 'Daikon' or some other appropriate name and
 click Next.  <br><br> 
+</p>
 
 <li> On the next window, create a new folder in
 the project called 'src', and answer Yes to the next dialog box asking
 you to confirm a change in the build directory. Select Ok and you
 should see the new Project as a small folder icon in the package
 explorer.  <br><br> 
+</p>
 
 <li> Select the menu item File->Import <br><br>
 
@@ -113,6 +122,7 @@ junit.jar, jakarta-oro.jar, and java-getopt.jar.  (See your CLASSPATH
 environment variable for full pathnames to these files.)
 </ol>
 
+<p>
 Note that if you follow these directions, then
 <b>the compiled classes do not appear in the directory from
 which you imported in the previous step</b>.
@@ -121,6 +131,7 @@ directory. If you followed the setup instructions above, then the
 compiled code will be in "$HOME/.eclipse/Daikon/bin", which you
 should add to your CLASSPATH in order to use the updates you make from
 Eclipse.
+</p>
 
 
 <h2><a name="external-tools">Interaction with external tools</a></h2>
@@ -129,10 +140,12 @@ Eclipse.
 However, it parses frequently during editing and issues most or all of the
 errors and warnings that the compiler would have.  In order to clear a
 warning/error (in the Task List), you must save the file, however.
+</p>
 
 <p>
 If you change files outside Eclipse, you should refresh Eclipse, via
 right-clicking on the project or via menu item File >> Refresh.
+</p>
 
 
 <h2><a name="debugger">Using the Eclipse debugger</a></h2>
@@ -150,15 +163,18 @@ step control panel.</p>
 <li>Breakpoints: You can add breakpoints during editing by
 double-clicking on the left margin area of the source code.  When
 debugging, the program halts when it reaches a breakpoint.
+</p>
 
 <li>Stack Trace: Once the program halts at a breakpoint, the window
 in the upper-left corner window show the stack trace.
+</p>
 
 <li>Step Controls: Once the program halts at a breakpoint, the panels
 just below the stack trace allow you to step through the code one line
 at a time (step over), resume execution as normal (resume), step down
 into a method call (step into), or execute until leaving the current
 method (Step return).
+</p>
 
 <li>Variables: On the top right window, there is a tab pane that displays
 the values of objects and fields during a breakpoint halt.  You can also
@@ -172,9 +188,10 @@ put a semi-colon at the end of your expression!).
 <p>TODO, although you can just do all the editing, compiling, and
 running from the Eclipse IDE while doing CVS commands from the shell
 or whatever current system you use.
+</p>
 
 <hr>
-<a href="./">Using Daikon at MIT</a><p>
+<a href="./">Using Daikon at MIT</a></p>
 
 </body>
 </html>
