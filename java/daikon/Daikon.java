@@ -2005,7 +2005,7 @@ public final class Daikon {
   * suppression and equality set optimizations (should yield the same
   * invariants as the simple incremental algorithm
   */
-  private static void undoOpts(PptMap all_ppts) {
+  static void undoOpts(PptMap all_ppts) {
 
     //undo suppressions
     Iterator<PptTopLevel> suppress_it = all_ppts.ppt_all_iterator();
