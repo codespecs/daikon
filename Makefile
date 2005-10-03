@@ -18,7 +18,7 @@ DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
-SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
+SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
 	dfepl dtrace-perl dtype-perl \
 	kvasir-dtrace \

@@ -9,7 +9,7 @@
 JAVAC ?= javac
 JAVAC_ARGS ?= -g -J-Xmx800m
 # JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
-JAVAC_XLINT ?= javac-xlint -p '\./jtb/'
+JAVAC_XLINT ?= javac-xlint -p '\./jtb/|\./junit/'
 JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 JAR ?= jar
 JAVA ?= java -ea
@@ -36,7 +36,7 @@ JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-i
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print) \
                     $(shell find utilMDE/ -name '*.java' -print)
 
-TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS\) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
+TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \

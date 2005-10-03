@@ -46,11 +46,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 4.1.5
+@center Daikon version 4.1.6
 
 @sp 1
-@c Daikon version 4.1.5 date
-@center September 1, 2005
+@c Daikon version 4.1.6 date
+@center October 1, 2005
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -72,7 +72,7 @@ Copyright @copyright{} 1998-2005
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 4.1.5, released September 1, 2005.
+@c It describes Daikon version 4.1.6, released October 1, 2005.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -91,7 +91,7 @@ Copyright @copyright{} 1998-2005
 @c 
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 4.1.5, released September 1, 2005.
+It describes Daikon version 4.1.6, released October 1, 2005.
 @end ifnottex
 
 @menu
@@ -493,7 +493,7 @@ In order to run Daikon, you must have a Java 5.0 (or later) JVM
 (@uref{http://java.sun.com,, Java Virtual Machine}).
 
 If you plan to use one of Daikon's source-based front ends, such as
-Mangel-Wurzel (@pxref{Mangel-Wurzel}), then you need a compiler compiler
+Mangel-Wurzel (@pxref{Mangel-Wurzel}), then you need a compiler
 for whatever language your target programs are written in.  For
 instance, if you wish to analyze C or C++ programs, you need a C or C++
 compiler such as GCC.  Source code and a compiler are not necessary if
@@ -6970,7 +6970,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 4.1.5, released September 1, 2005.
+This manual describes Daikon version 4.1.6, released October 1, 2005.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -6984,7 +6984,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 1
+@cindex Daikon version 4.1.6
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
