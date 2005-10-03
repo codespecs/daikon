@@ -1,8 +1,17 @@
 TODO:
 
-  - Try Eric's stack code
+  - Allow decl output file to be named directly
+  - Add a stub main like chicory so user doesn't have to directly deal
+    with premain and its odd argument style.
+  - Support reflection.  Because of the additional argument, reflection
+    finds the original code and not our code.  This means we don't 
+    accurately instrument.  This is the downside of adding the dcomp_marker
+    argument to user code (which is necessary only so that we don't have to
+    tell when calling between user code and the jdk)
+  - Change design so that everything doesn't have to be added into the
+    system classes.  We should be able to create a DCRuntime without a lot
+    of external dependencies.
   - Native synopsis (could probably ignore for now)
-  - find experimental program (hopefully that ajax can run on).
   - run experiments on javac
   - Interface static final variables.  It seems that at least some of these
     are placed into their users and not fetched.  That works fine, but
@@ -10,6 +19,8 @@ TODO:
     comparability.  Not if anything can be done about it.  It also not
     clear that this is always the case but it working for now.
   - Properly handle object methods.  Just ignoring them is not so good!
+  - Consider using Eric's stack code to replace BCEL (since BCEL breaks
+    on a few methods)
 
 Can be put off
   - Should the integer argument to ANEWARRAY be made comparable to
@@ -25,6 +36,11 @@ Can be put off
     the store case.  Left alone until we encounter an array of booleans.
 
 Done:
+  - find experimental program (hopefully that ajax can run on).
+    We used bzip2.  Not the best, but something
+  - Try Eric's stack code
+    This seems to work fine.  Perhaps a bit slower than the BCEL version,
+    but it doesn't crash on the ones that the BCEL crashes on.
   - How are we going to handle JDK static fields?  Perhaps a separate
     tag array (will be really big!)
     I used one big array with an offset for the JDK.  
