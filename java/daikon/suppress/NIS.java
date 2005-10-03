@@ -162,7 +162,7 @@ public class NIS {
    * Instantiates any invariants that are no longer suppressed because
    * inv has been falsified.
    *
-   * Note: this method should NOT be used with the antecedent approach.
+   * Note: this method is should NOT be used with the antecedent approach.
    * See NIS.process_falsified_invs()
    */
   public static void falsified (Invariant inv) {
