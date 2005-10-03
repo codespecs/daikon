@@ -77,7 +77,7 @@ public class BuildJDK {
   /** Whether or not to instrument java.lang.Object **/
   private static boolean skip_object = true;
 
-  private static boolean test_stack = true;
+  private static boolean test_stack = false;
 
   private int _numFilesProcessed = 0;
 
@@ -182,9 +182,9 @@ public class BuildJDK {
         // Get the binary for this class
         InputStream is = jfile.getInputStream(entry);
         ClassParser parser = new ClassParser(is, entryName);
-        if (entryName.equals ("java/lang/ClassLoader.class"))
-          parser
-            = new ClassParser ("/scratch/jhp/jdk/java/lang/ClassLoader.class");
+        // if (entryName.equals ("java/lang/ClassLoader.class"))
+        //  parser
+        //  = new ClassParser ("/scratch/jhp/jdk/java/lang/ClassLoader.class");
         JavaClass jc = parser.parse();
 
         classmap.put(jc.getClassName(), jc);
@@ -204,12 +204,10 @@ public class BuildJDK {
           try {
             TypeStack.testJavaClass (jc);
           } catch (Throwable t) {
-            System.out.printf ("Error: %s%n", t.getMessage());
             t.printStackTrace();
           }
           continue;
         }
-        DCInstrument dci = new DCInstrument (jc, true, null);
         try {
           processClassFile(classmap, dfile, classname);
         } catch (Throwable e) {
@@ -224,6 +222,9 @@ public class BuildJDK {
         | Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT, new String[0]);
       dcomp_marker.getJavaClass().dump (new File(dest, "java"
          + File.separator + "lang" + File.separator + "DCompMarker.class"));
+
+      // Write out how many statics we found
+      System.out.printf ("Found %d statics%n", DCInstrument.static_map.size());
 
     } catch (Exception e) {
       throw new Error(e);
