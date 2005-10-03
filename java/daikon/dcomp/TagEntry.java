@@ -89,8 +89,21 @@ class TagEntry extends WeakReference<Object> {
     if (parent == null)
       return this;
 
-    parent = parent.find();
-    return (parent);
+    // Find the tag at the top of the list
+    TagEntry tag = this;
+    while (tag.parent != null)
+      tag = tag.parent;
+    TagEntry top = tag;
+
+    // Set everyone to point to the top
+    tag = this;
+    while (tag.parent != null) {
+      TagEntry next = tag.parent;
+      tag.parent = top;
+      tag = next;
+    }
+
+    return top;
   }
 
   /**
