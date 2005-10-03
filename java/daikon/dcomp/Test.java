@@ -2,6 +2,7 @@ package daikon.dcomp;
 
 import static java.lang.System.out;
 import java.io.*;
+import java.util.*;
 
 class Test {
 
@@ -10,6 +11,7 @@ class Test {
   static int j;
   static A sa1 = new A ("sa1");
   static A sa2 = new A ("sa2");
+  static boolean verbose = false;
   // A[] at_arr;
   // double[] d_arr;
 
@@ -40,9 +42,14 @@ class Test {
   public static class C {
 
     String cid;
+    long long1;
 
     C (String id) {
       cid = id;
+    }
+
+    public void set_long (long l1) {
+      long1 = l1;
     }
 
     public String toString() {
@@ -67,10 +74,13 @@ class Test {
 
     void ecomp() {
 
-      if (a1a[ii] == a2a[jj])
-        System.out.println ("a1a[2] == a2a[1]");
-      else
-        System.out.println ("a1a[2] != a2a[1]");
+      if (a1a[ii] == a2a[jj]) {
+        if (verbose)
+          System.out.println ("a1a[2] == a2a[1]");
+      } else {
+        if (verbose)
+          System.out.println ("a1a[2] != a2a[1]");
+      }
     }
 
     void p (A aval) {
@@ -78,13 +88,31 @@ class Test {
     }
 
     void comp() {
-      if (a1a == a2a)
-        System.out.println ("a1a == a2a");
-      else
-        System.out.println ("a1a != a2a");
+      if (a1a == a2a) {
+        if (verbose)
+          System.out.println ("a1a == a2a");
+      } else {
+        if (verbose)
+          System.out.println ("a1a != a2a");
+      }
 
     }
   }
+
+  public static class Arr {
+
+    int[] big_arr = new int[90000];
+    int val = 3;
+
+    public Arr() {
+      big_arr[70] = val;
+    }
+
+    public void tryit (int val1) {
+      big_arr[71] = val1;
+    }
+  }
+
 
   public static void main (String[] args) throws Exception {
 
@@ -93,6 +121,26 @@ class Test {
   }
 
   public static void test() {
+
+    if (true) {
+      Arr arr = new Arr();
+      arr.tryit (17);
+    }
+
+    if (true) {
+      C c1 = new C("C1");
+      c1.set_long (0L);
+    }
+
+    if (true) {
+      java_check (1, 5);
+    }
+
+    if (true) {
+      A a10 = new A("a10");
+      A a11 = new A("a11");
+      list_check (a10, a11);
+    }
 
     B b1 = new B();
     b1.ecomp();
@@ -112,15 +160,23 @@ class Test {
 
       t1 (a1, a2, a3, a4);
     }
-
-    if (sa1 == sa2)
-      out.println ("sa1 == sa2");
-    else
-      out.println ("sa1 != sa2");
-
+    if (sa1 == sa2) {
+      if (verbose)
+        out.println ("sa1 == sa2");
+    } else {
+      if (verbose)
+        out.println ("sa1 != sa2");
+    }
     double_check (1.2, 56, 1);
 
+  }
 
+  public static void list_check (A a10, A a11) {
+
+      List list = new ArrayList();
+      list.add (a10);  // unchecked
+      list.add (a11);  // unchecked
+      list.contains (a11);
   }
 
   public static double double_check (double d1, Integer wrapper, int i1) {
@@ -136,30 +192,49 @@ class Test {
 
   public static void t1 (A a1, A a2, A a3, A a4) {
 
-    if (a1 == a2)
-      out.println ("a1 == a2");
-    else
-      out.println ("a1 != a2");
+    if (a1 == a2) {
+      if (verbose)
+        out.println ("a1 == a2");
+    } else {
+      if (verbose)
+        out.println ("a1 != a2");
+    }
 
-    if (a1 != a2)
-      out.println ("a1 != a2");
-    else
-      out.println ("a1 == a2");
+    if (a1 != a2) {
+      if (verbose)
+        out.println ("a1 != a2");
+    } else {
+      if (verbose)
+        out.println ("a1 == a2");
+    }
 
-    if (a1 == a1)
-      out.println ("a1 == a1");
-    else
-      out.println ("a1 != a1");
+    if (a1 == a1) {
+      if (verbose)
+        out.println ("a1 == a1");
+    } else {
+      if (verbose)
+        out.println ("a1 != a1");
+    }
 
-    if (a2 != a2)
-      out.println ("a2 != a2");
-    else
-      out.println ("a2 == a2");
+    if (a2 != a2) {
+      if (verbose)
+        out.println ("a2 != a2");
+    } else {
+      if (verbose)
+        out.println ("a2 == a2");
+    }
 
-    if (a3 == a3)
-      out.println ("a3 == a3");
-    if (a4 == a4)
-      out.println ("a4 == a4");
+    if (a3 == a3) {
+      if (verbose)
+        out.println ("a3 == a3");
+    }
+    if (a4 == a4) {
+      if (verbose)
+        out.println ("a4 == a4");
+    }
+  }
 
+  public static int java_check (int i1, int i2) {
+    return (Math.max (i1, i2));
   }
 }
