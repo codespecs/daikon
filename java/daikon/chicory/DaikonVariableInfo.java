@@ -125,6 +125,7 @@ public abstract class DaikonVariableInfo
         assert info.repTypeName != null : "Child's representation type name should not be null";
         assert info.compareInfoString != null : "Child's comparability information should not be null";
 
+        // System.out.printf ("Adding %s to %s\n", info, this);
         children.add(info);
     }
 
@@ -174,6 +175,18 @@ public abstract class DaikonVariableInfo
     public Iterator<DaikonVariableInfo> iterator()
     {
         return Collections.unmodifiableList(children).iterator();
+    }
+
+    /** Returns the complete tree of variables as a list **/
+    public List<DaikonVariableInfo> tree_as_list()
+    {
+        List<DaikonVariableInfo> list = new ArrayList<DaikonVariableInfo>();
+        list.add (this);
+        for (DaikonVariableInfo dv : children)
+        {
+            list.addAll (dv.tree_as_list());
+        }
+        return (list);
     }
 
     /**
@@ -367,6 +380,8 @@ public abstract class DaikonVariableInfo
             Class type = arguments[i];
             String name = argnamesiter.next();
             if (type.getName().equals ("daikon.dcomp.DCompMarker"))
+                continue;
+            if (type.getName().equals ("java.lang.DCompMarker"))
                 continue;
             DaikonVariableInfo theChild = addDeclVar(cinfo, type,
                                          name, offset, depth, i, param_offset);
@@ -1020,7 +1035,21 @@ public abstract class DaikonVariableInfo
            Class arrayType = type.getComponentType();
            if (arrayType.isPrimitive())
            {
-               DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
+               if ((Chicory.omit_var != null) &&
+                   (theName.endsWith ("selector") ||
+                   theName.endsWith ("selectorMtf") ||
+                   theName.endsWith ("block") ||
+                   theName.endsWith ("quadrant") ||
+                   theName.endsWith ("zptr") ||
+                   theName.endsWith ("ftab") ||
+                   theName.endsWith ("szptr"))) {
+                   System.out.printf ("Skipping variable %s%n",
+                                      offset + theName);
+                   return;
+               }
+
+               DaikonVariableInfo newChild
+                   = new ArrayInfo(offset + theName + "[]", arrayType);
 
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
@@ -1030,7 +1059,8 @@ public abstract class DaikonVariableInfo
            // multi-dimensional arrays (not currently used)
            else if (arrayType.isArray())
            {
-               DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
+               DaikonVariableInfo newChild
+                   = new ArrayInfo(offset + theName + "[]", arrayType);
 
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
@@ -1042,7 +1072,8 @@ public abstract class DaikonVariableInfo
            // array is 1-dimensional and element type is a regular class
            else
            {
-               DaikonVariableInfo newChild = new ArrayInfo(offset + theName + "[]");
+               DaikonVariableInfo newChild
+                   = new ArrayInfo(offset + theName + "[]", arrayType);
 
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
@@ -1157,6 +1188,11 @@ public abstract class DaikonVariableInfo
     public boolean isHashcode()
     {
         return getRepTypeName().equals ("hashcode");
+    }
+
+    public boolean isHashcodeArray()
+    {
+        return getRepTypeName().equals ("hashcode[]");
     }
 
     /** Returns whether or not the declared type of this variable is int **/
