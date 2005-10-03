@@ -23,12 +23,21 @@ public class FieldInfo extends DaikonVariableInfo
        field = theField;
 
        // Calculate the offset of this field in its class
+       if (!field.getType().isPrimitive()) {
+           field_num = -1;
+           return;
+       }
        Class clazz = field.getDeclaringClass();
        field_num = num_prim_fields (clazz.getSuperclass());
        for (Field f : clazz.getDeclaredFields())
        {
-           if (f.equals (field))
+           if (f.equals (field)) {
+               // System.out.printf ("field %s has field num %d\n", field,
+               //                   field_num);
                return;
+           }
+           if (Modifier.isStatic(f.getModifiers()))
+               continue;
            if (f.getType().isPrimitive())
                field_num++;
        }
