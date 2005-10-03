@@ -77,7 +77,7 @@ public final class TypeStack
             //for(InstructionHandle h : l.getInstructionHandles())
               //  System.out.println(h);
             //System.out.println(l);
-            
+
             throw new IllegalStateException("No valid parent map possible for this method ");
         }
 
@@ -95,11 +95,11 @@ public final class TypeStack
     {
         if (hand == null)
             return true;
-        
+
         //System.out.println("\t" + hand);
 
         InstructionHandle prev = hand.getPrev();
-        Set<InstructionHandle> targeters = new HashSet<InstructionHandle>();
+        Set<InstructionHandle> targeters = new LinkedHashSet<InstructionHandle>();
 
         // if first instruction, or previous instruction was not a "goto" or a throw
         if (prev == null || !(prev.getInstruction() instanceof GotoInstruction))// || prev.getInstruction() instanceof ATHROW))
@@ -1170,13 +1170,13 @@ public final class TypeStack
     }
 
     public static void main(String args[]) throws ClassNotFoundException
-    {        
+    {
         testClass(Class.forName("java.util.IdentityHashMap"));
         testClass(Class.forName("java.util.concurrent.ConcurrentLinkedQueue"));
         testClass(Class.forName("java.util.IdentityHashMap"));
         testClass(Class.forName("java.util.concurrent.Semaphore$Sync"));
         testClass(Class.forName("javax.security.auth.kerberos.ServicePermission"));
-        
+
         //JDK classes
         testClass(Class.forName("java.util.ArrayList"));
         testClass(Class.forName("java.lang.Integer"));
@@ -1243,7 +1243,7 @@ public final class TypeStack
                         //System.out.printf("After inst %s, stack is empty%n",inst.toString());
                     }
                 }
-                
+
                 if(mg.getInstructionList().getEnd().getInstruction() instanceof BranchInstruction)
                 {
                     //System.out.printf("\n\tSkipping stack check at end of %s because last instruction is branching", mg);
