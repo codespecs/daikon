@@ -36,6 +36,13 @@ public final class PrintInvariants {
   public static boolean dkconfig_repair_debug = false;
 
   /**
+   * If true, print the number of true invariants.  This includes
+   * invariants that are redundant and would normally not be printed
+   * or even created due to optimizations
+   */
+  public static boolean dkconfig_true_inv_cnt = false;
+
+  /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
   public static final Logger debug = Logger.getLogger("daikon.PrintInvariants");
@@ -253,6 +260,12 @@ public final class PrintInvariants {
 
     // Make sure ppts' rep invariants hold
     ppts.repCheck();
+
+    // If requested, just print the number of true invariants
+    if (dkconfig_true_inv_cnt) {
+      print_true_inv_cnt (ppts);
+      return;
+    }
 
     if ((Daikon.output_format == OutputFormat.ESCJAVA ||
          Daikon.output_format == OutputFormat.JML) &&
@@ -1364,5 +1377,48 @@ public final class PrintInvariants {
         log.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());
       }
     }
+  }
+
+  public static void print_true_inv_cnt (PptMap ppts) {
+
+    int inv_cnt = 0;
+    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
+      inv_cnt += ppt.invariant_cnt();
+    }
+    System.out.printf ("%d invariants%n", inv_cnt);
+
+    //undo suppressions
+    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
+      NIS.create_suppressed_invs(ppt);
+    }
+
+    // Recount with suppressions removed
+    inv_cnt = 0;
+    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
+      inv_cnt += ppt.invariant_cnt();
+    }
+    System.out.printf ("%d invariants with suppressions removed\n",
+                       inv_cnt);
+
+    // Count invariants again, adjusting the count for equality sets
+    inv_cnt = 0;
+    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
+      List<Invariant> invs = ppt.getInvariants();
+      for (Invariant inv : invs) {
+        int cnt = 1;
+        VarInfo[] vis = inv.ppt.var_infos;
+        for (VarInfo vi : vis) {
+          cnt = cnt * vi.get_equalitySet_size();
+        }
+        inv_cnt += cnt;
+      }
+    }
+    System.out.printf ("%d invariants with equality removed\n",
+                       inv_cnt);
+
   }
 }
