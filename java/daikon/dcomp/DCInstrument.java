@@ -48,19 +48,21 @@ class DCInstrument {
   private ObjectType dcomp_marker = null;
 
   // Debug loggers
-  private SimpleLog debug_instrument = new SimpleLog (true);
+  private SimpleLog debug_instrument = new SimpleLog (false);
   private SimpleLog debug_instrument_inst = new SimpleLog (false);
-  private SimpleLog debug_native = new SimpleLog (true);
-  private SimpleLog debug_dup = new SimpleLog (true);
+  private SimpleLog debug_native = new SimpleLog (false);
+  private SimpleLog debug_dup = new SimpleLog (false);
   private SimpleLog debug_add_dcomp = new SimpleLog (false);
+  private SimpleLog debug_track = new SimpleLog (false);
 
   /**
    * Specifies if the jdk is instrumented.  Calls to the JDK must be
    * modified to remove the arguments from the tag stack if it is not
    * instrumented.
    */
-  private boolean jdk_instrumented = true;
-  private boolean exclude_object = true;
+  public static boolean jdk_instrumented = true;
+  private static boolean exclude_object = true;
+  private static boolean use_StackVer = true;
 
   /**
    * Don't instrument toString functions.  Useful in debugging since
@@ -69,8 +71,69 @@ class DCInstrument {
    */
   private static boolean ignore_toString = true;
 
-  private static final String SET_TAG = "set_tag";
-  private static final String GET_TAG = "get_tag";
+  /**
+   * Double client methods like we do in the JDK.  This allows our
+   * non-instrumentation of object methods to work better in client
+   * code when they call other methods (because original versions of
+   * those other methods will exist
+   */
+  private static boolean double_client = true;
+
+  public static final String SET_TAG = "set_tag";
+  public static final String GET_TAG = "get_tag";
+
+  /** Map from each static field to its unique integer id **/
+  static Map<Field,Integer> static_map = new LinkedHashMap<Field,Integer>();
+
+  /**
+   * Array of classes whose fields are not initialized from java.  Since
+   * the fields are not initialized from java, their tag storage is not
+   * allocated as part of a store, but rather must be allocated as part
+   * of a load.  We call a special runtime method for this so that we
+   * can check for this in other cases
+   */
+  private static String[] uninit_classes = new String[] {
+    "java.lang.String",
+    "java.lang.Class",
+    "java.lang.StringBuilder",
+    "java.lang.AbstractStringBuilder",
+  };
+
+  private static MethodDef[] obj_methods = new MethodDef[] {
+    new MethodDef ("clone", new Type[0]),
+    new MethodDef ("equals", new Type[] {Type.OBJECT}),
+    new MethodDef ("finalize", new Type[0]),
+    new MethodDef ("hashcode", new Type[0]),
+    new MethodDef ("toString", new Type[0]),
+    new MethodDef ("wait", new Type[0]),
+    new MethodDef ("wait", new Type[] {Type.LONG}),
+    new MethodDef ("wait", new Type[] {Type.LONG, Type.INT}),
+    new MethodDef ("getClass", new Type[0]),
+    new MethodDef ("notify", new Type[0]),
+    new MethodDef ("notifyall", new Type[0]),
+  };
+
+  /** Class that defines a method (by its name and argument types) **/
+  static class MethodDef {
+    String name;
+    Type[] arg_types;
+
+    MethodDef (String name, Type[] arg_types) {
+      this.name = name;
+      this.arg_types = arg_types;
+    }
+
+    boolean equals (String name, Type[] arg_types) {
+      if (!name.equals (this.name))
+        return false;
+      if (this.arg_types.length != arg_types.length)
+        return false;
+      for (int ii = 0;  ii < arg_types.length; ii++)
+        if (!arg_types[ii].equals (this.arg_types[ii]))
+          return (false);
+      return (true);
+    }
+  }
 
   /**
    * Initialize with the original class and whether or not the class
@@ -88,7 +151,7 @@ class DCInstrument {
       dcomp_marker = new ObjectType ("java.lang.DCompMarker");
     else
       dcomp_marker = new ObjectType ("daikon.dcomp.DCompMarker");
-    System.out.printf ("DCInstrument %s%n", orig_class.getClassName());
+    // System.out.printf ("DCInstrument %s%n", orig_class.getClassName());
   }
 
   /**
@@ -114,62 +177,78 @@ class DCInstrument {
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
     debug_instrument.indent();
 
-    // Add the tag fields
-    //if (tag_fields_ok (classname))
-    //  add_tag_fields();
-
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
 
     // Process each method
     for (Method m : gen.getMethods()) {
 
-      // Note whether we want to track the daikon variables in this method
-      boolean track = should_track (methodEntryName (gen.getClassName(), m));
+      try {
+        // Note whether we want to track the daikon variables in this method
+        boolean track = should_track (gen.getClassName(),
+                                      methodEntryName (gen.getClassName(), m));
 
-      MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
-      boolean has_code = (mg.getInstructionList() != null) ;
-      debug_instrument.log ("  Processing method %s, track=%b\n", m, track);
-      debug_instrument.indent();
+        MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
+        boolean has_code = (mg.getInstructionList() != null) ;
+        debug_instrument.log ("  Processing method %s, track=%b\n", m, track);
+        debug_instrument.indent();
 
-      // Add an argument of java.lang.DCompMarker to match up with the
-      // instrumented versions in the JDK.
-      add_dcomp_arg (mg);
-
-      // Create a MethodInfo that describes this methods arguments
-      // and exit line numbers (information not available via reflection)
-      // and add it to the list for this class.
-      MethodInfo mi = null;
-      if (track && has_code) {
-        mi = create_method_info (class_info, mg);
-        class_info.method_infos.add (mi);
-        DCRuntime.methods.add (mi);
-      }
-
-      // Create the local to store the tag frame for this method
-      tag_frame_local = create_tag_frame_local (mg);
-
-      if (has_code) {
-        instrument_method (mg);
-        if (track) {
-          add_enter (mg, mi, DCRuntime.methods.size()-1);
-          add_exit (mg, mi, DCRuntime.methods.size()-1);
+        // Skip methods defined in Object
+        if (!double_client) {
+          if (is_object_method (mg.getName(), mg.getArgumentTypes())) {
+            debug_instrument.log ("Skipped object method %s%n", mg.getName());
+            continue;
+          }
         }
-        add_create_tag_frame (mg);
-        handle_exceptions (mg);
+
+        // Add an argument of java.lang.DCompMarker to match up with the
+        // instrumented versions in the JDK.
+        add_dcomp_arg (mg);
+
+        // Create a MethodInfo that describes this methods arguments
+        // and exit line numbers (information not available via reflection)
+        // and add it to the list for this class.
+        MethodInfo mi = null;
+        if (track && has_code) {
+          mi = create_method_info (class_info, mg);
+          class_info.method_infos.add (mi);
+          DCRuntime.methods.add (mi);
+        }
+
+        // Create the local to store the tag frame for this method
+        tag_frame_local = create_tag_frame_local (mg);
+
+        if (has_code) {
+          instrument_method (mg);
+          if (track) {
+            add_enter (mg, mi, DCRuntime.methods.size()-1);
+            add_exit (mg, mi, DCRuntime.methods.size()-1);
+          }
+          add_create_tag_frame (mg);
+          handle_exceptions (mg);
+        }
+
+
+        if (has_code) {
+          mg.setMaxLocals();
+          mg.setMaxStack();
+        } else {
+          mg.removeCodeAttributes();
+          mg.removeLocalVariables();
+        }
+
+        if (double_client && !BCELUtil.is_main (mg) && !BCELUtil.is_clinit(mg))
+          gen.addMethod (mg.getMethod());
+        else {
+          gen.replaceMethod (m, mg.getMethod());
+          if (BCELUtil.is_main (mg))
+            gen.addMethod (create_dcomp_stub (mg).getMethod());
+        }
+        debug_instrument.exdent();
+      } catch (Throwable t) {
+        throw new Error ("Unexpected error processing " + classname
+                         + "." + m.getName(), t);
       }
-
-
-      if (has_code) {
-        mg.setMaxLocals();
-        mg.setMaxStack();
-      } else {
-        mg.removeCodeAttributes();
-        mg.removeLocalVariables();
-      }
-
-      gen.replaceMethod (m, mg.getMethod());
-      debug_instrument.exdent();
     }
 
     // Add tag accessor methods for each primitive in the class
@@ -193,9 +272,6 @@ class DCInstrument {
     // Add the tag fields
     // if (tag_fields_ok (gen.getClassName()))
     //  add_tag_fields();
-
-    // Create tag accessor methods for each primitive field in gen
-    create_tag_accessors (gen);
 
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
 
@@ -221,7 +297,13 @@ class DCInstrument {
         fix_native (gen, mg);
         has_code = true;
 
+        // Add an argument of java.lang.DCompMarker to distinguish our version
+        add_dcomp_arg (mg);
+
       } else { // normal method
+
+        // Add an argument of java.lang.DCompMarker to distinguish our version
+        add_dcomp_arg (mg);
 
         // Create the local to store the tag frame for this method
         tag_frame_local = create_tag_frame_local (mg);
@@ -233,9 +315,6 @@ class DCInstrument {
           handle_exceptions (mg);
         }
       }
-
-      // Add an argument of java.lang.DCompMarker to distinguish our version
-      add_dcomp_arg (mg);
 
       if (has_code) {
         mg.setMaxLocals();
@@ -264,13 +343,25 @@ class DCInstrument {
   public void instrument_method (MethodGen mg) {
 
     // Get Stack information
-    StackVer stackver = new StackVer ();
-    VerificationResult vr = stackver.do_stack_ver (mg);
-    assert vr == VerificationResult.VR_OK : " vr failed " + vr;
-    StackTypes stack_types = stackver.get_stack_types();
+    StackTypes stack_types = null;
+    TypeStack type_stack = null;
+    if (use_StackVer) {
+      StackVer stackver = new StackVer ();
+      VerificationResult vr = stackver.do_stack_ver (mg);
+      if (vr != VerificationResult.VR_OK) {
+        System.out.printf ("Warning: StackVer failed for %s: %s%n", mg, vr);
+        System.out.printf ("Method is NOT instrumented%n");
+        return;
+      }
+      assert vr == VerificationResult.VR_OK : " vr failed " + vr;
+      stack_types = stackver.get_stack_types();
+    } else { // Use Eric's version
+      type_stack = new TypeStack (mg);
+    }
 
     // Loop through each instruction, making substitutions
     InstructionList il = mg.getInstructionList();
+    OperandStack stack = null;
     for (InstructionHandle ih = il.getStart(); ih != null; ) {
       if (debug_instrument_inst.enabled()) {
         debug_instrument_inst.log ("instrumenting instruction %s%n", ih);
@@ -281,8 +372,17 @@ class DCInstrument {
       // Remember the next instruction to process
       InstructionHandle next_ih = ih.getNext();
 
+      // Get the stack information
+      if (use_StackVer)
+        stack = stack_types.get (ih.getPosition());
+
       // Get the translation for this instruction (if any)
-      new_il = xform_inst (mg, ih, stack_types.get (ih.getPosition()));
+      new_il = xform_inst (mg, ih, stack);
+      if (debug_instrument_inst.enabled())
+        debug_instrument_inst.log ("  new inst: %s%n", new_il);
+
+      if (!use_StackVer)
+        stack = type_stack.getAfterInst (ih);
 
       // If this instruction was modified, replace it with the new
       // instruction list. If this instruction was the target of any
@@ -431,7 +531,10 @@ class DCInstrument {
     // Encode the primitive parameter information in a string
     mgen.setMaxLocals();
     int frame_size = mgen.getMaxLocals();
-    String params = "" + Character.forDigit (frame_size, Character.MAX_RADIX);
+    assert frame_size < 100
+      : frame_size + " " + mgen.getClassName() + "." + mgen.getName();
+    String params = "" + (char)(frame_size + '0');
+      // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<Integer>();
     for (Type arg_type : arg_types) {
       if (arg_type instanceof BasicType) {
@@ -440,7 +543,8 @@ class DCInstrument {
       offset += arg_type.getSize();
     }
     for (int ii = plist.size()-1; ii >= 0; ii--) {
-      params += Character.forDigit (plist.get(ii), Character.MAX_RADIX);
+      params += (char)(plist.get(ii) + '0');
+        //Character.forDigit (plist.get(ii), Character.MAX_RADIX);
     }
 
     // Create code to create/init the tag frame and store in tag_frame_local
@@ -808,19 +912,21 @@ class DCInstrument {
     }
 
     case Constants.GETFIELD: {
-      return load_store_field ((GETFIELD) inst);
+      return load_store_field (mg, (GETFIELD) inst);
     }
 
     case Constants.PUTFIELD: {
-      return load_store_field ((PUTFIELD) inst);
+      return load_store_field (mg, (PUTFIELD) inst);
     }
 
     case Constants.GETSTATIC: {
-      return load_store_static ((GETSTATIC) inst, "push_static_tag");
+      return load_store_field (mg, ((GETSTATIC) inst));
+      // return load_store_static ((GETSTATIC) inst, "push_static_tag");
     }
 
     case Constants.PUTSTATIC: {
-      return load_store_static ((PUTSTATIC) inst, "pop_static_tag");
+      return load_store_field (mg, ((PUTSTATIC) inst));
+      // return load_store_static ((PUTSTATIC) inst, "pop_static_tag");
     }
 
     case Constants.DLOAD:
@@ -1285,11 +1391,11 @@ class DCInstrument {
     }
 
     case Constants.GETFIELD: {
-      return load_store_field ((GETFIELD) inst);
+      return load_store_field (mg, (GETFIELD) inst);
     }
 
     case Constants.PUTFIELD: {
-      return load_store_field ((PUTFIELD) inst);
+      return load_store_field (mg, (PUTFIELD) inst);
     }
 
     case Constants.GETSTATIC: {
@@ -1597,8 +1703,13 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     boolean callee_instrumented = !BCELUtil.in_jdk (classname)
-      || (jdk_instrumented && classname.startsWith ("java")
+      || (jdk_instrumented // && classname.startsWith ("java")
           && (exclude_object && !classname.equals ("java.lang.Object")));
+
+    // We don't instrument any of the Object methods
+    String method_name = invoke.getMethodName(pool);
+    if (is_object_method (method_name, invoke.getArgumentTypes(pool)))
+      callee_instrumented = false;
 
     // If the callee is instrumented then, add the dcomp argument
     if (callee_instrumented) {
@@ -1627,8 +1738,8 @@ class DCInstrument {
       // Add a tag for the return type if it is primitive
       Type ret_type = invoke.getReturnType (pool);
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
-        System.out.printf ("push tag for return  type of %s%n",
-                           invoke.getReturnType(pool));
+        // System.out.printf ("push tag for return  type of %s%n",
+        //                   invoke.getReturnType(pool));
         il.append (dcr_call ("push_const", Type.VOID, Type.NO_ARGS));
       }
       il.append (invoke);
@@ -1760,7 +1871,7 @@ class DCInstrument {
    * tag stack.  This is accomplished by calling the tag get/set method
    * for this field.
    */
-  InstructionList load_store_field  (FieldInstruction f) {
+  InstructionList load_store_field  (MethodGen mg, FieldInstruction f) {
 
     Type field_type = f.getFieldType (pool);
     if (field_type instanceof ReferenceType)
@@ -1769,19 +1880,36 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     String classname = obj_type.getClassName();
 
-    // invoke the appropriate tag accessor method
-    if (f instanceof GETFIELD) {
+    if (f instanceof GETSTATIC) {
+      il.append (ifact.createInvoke (classname,
+                 tag_method_name (GET_TAG, classname, f.getFieldName(pool)),
+                 Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
+    } else if (f instanceof PUTSTATIC) {
+        il.append (ifact.createInvoke (classname,
+                   tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                   Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
+    } else if (f instanceof GETFIELD) {
       il.append (ifact.createDup (obj_type.getSize()));
       il.append (ifact.createInvoke (classname,
                  tag_method_name (GET_TAG, classname, f.getFieldName(pool)),
                  Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-    } else {
-      il.append (new SWAP());
-      il.append (ifact.createDup (obj_type.getSize()));
-      il.append (ifact.createInvoke (classname,
-                 tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
-                 Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-      il.append (new SWAP());
+    } else { // must be put field
+      if (field_type.getSize() == 2) {
+        LocalVariableGen lv = get_tmp2_local (mg, field_type);
+        il.append (ifact.createStore (field_type, lv.getIndex()));
+        il.append (ifact.createDup (obj_type.getSize()));
+        il.append (ifact.createInvoke (classname,
+                   tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                   Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+        il.append (ifact.createLoad (field_type, lv.getIndex()));
+      } else {
+        il.append (new SWAP());
+        il.append (ifact.createDup (obj_type.getSize()));
+        il.append (ifact.createInvoke (classname,
+                   tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                   Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+        il.append (new SWAP());
+      }
     }
 
     // Perform the normal field command
@@ -1797,7 +1925,10 @@ class DCInstrument {
    * tag stack.  This is accomplished by calling the specified method
    * in DCRuntime and passing that method the object containing the
    * the field and the offset of that field within the object
+   *
+   * @deprecated use load_store_field
    */
+  @java.lang.Deprecated
   InstructionList load_store_static (FieldInstruction f, String method) {
 
     Type field_type = f.getFieldType (pool);
@@ -1808,10 +1939,10 @@ class DCInstrument {
 
     // Get the index of this static in the list of all statics and allocate
     // a tag for it.
-    Integer index = DCRuntime.static_map.get (name);
+    Integer index = null; // DCRuntime.static_map.get (name);
     if (index == null) {
-      index = DCRuntime.static_map.size();
-      DCRuntime.static_map.put (name, index);
+      // index = DCRuntime.static_map.size();
+      // DCRuntime.static_map.put (name, index);
       DCRuntime.static_tags.add (new Object());
     }
 
@@ -1894,6 +2025,29 @@ class DCInstrument {
     }
     assert false : "Can't find " + name + " in " + obj_class;
     return (-1);
+  }
+
+  /**
+   * Gets the local variable used to store a category2 temporary.
+   * This is used in the PUTFIELD code to temporarily store the value
+   * being placed in the field
+   */
+  LocalVariableGen get_tmp2_local (MethodGen mgen, Type typ) {
+
+    String name = "dcomp_$tmp_" + typ;
+    // System.out.printf ("local var name = %s%n", name);
+
+    // See if the local has already been created
+    LocalVariableGen tmp_local = null;
+    for (LocalVariableGen lv : mgen.getLocalVariables()) {
+      if (lv.getName().equals (name)) {
+        assert lv.getType().equals (typ) : lv + " " + typ;
+        return (lv);
+      }
+    }
+
+    // Create the variable
+    return mgen.addLocalVariable (name, typ, null, null);
   }
 
   /**
@@ -2098,6 +2252,9 @@ class DCInstrument {
     String method = "primitive_array_load";
     if (inst instanceof AALOAD)
       method = "ref_array_load";
+    else if (is_uninit_class (gen.getClassName()))
+      method = "primitive_array_load_null_ok";
+
     il.append (dcr_call (method, Type.VOID,
                          new Type[] {Type.OBJECT, Type.INT}));
 
@@ -2129,9 +2286,9 @@ class DCInstrument {
    * if it matches ones of the select patterns and doesn't match any of the
    * omit patterns.
    */
-  public boolean should_track (String pptname) {
+  public boolean should_track (String classname, String pptname) {
 
-    // System.out.printf ("Considering ppt %s%n", pptname);
+    debug_track.log ("Considering tracking ppt %s %s%n", classname, pptname);
 
     // Don't track toString methods because we call them in
     // our debug statements.
@@ -2140,19 +2297,30 @@ class DCInstrument {
 
     // If any of the omit patterns match, exclude the ppt
     for (Pattern p : Premain.ppt_omit_pattern) {
-      if (p.matcher (pptname).find())
+      // System.out.printf ("should_trakc: pattern '%s' on ppt '%s'\n",
+      //                    p, pptname);
+      if (p.matcher (pptname).find()) {
+        debug_track.log ("  Omitting program point %s%n", pptname);
         return (false);
+      }
     }
 
     // If there are no select patterns, everything matches
     if (Premain.ppt_select_pattern.size() == 0)
       return (true);
 
-    // One of the select patterns must match to include
+    // One of the select patterns must match the ppt or the class to include
     for (Pattern p : Premain.ppt_select_pattern) {
-      if (p.matcher (pptname).find())
+      if (p.matcher (pptname).find()) {
+        debug_track.log ("  matched pptname%n");
         return (true);
+      }
+      if (p.matcher (classname).find()) {
+        debug_track.log (" matched classname%n");
+        return (true);
+      }
     }
+    debug_track.log (" No Match%n");
     return (false);
   }
 
@@ -2170,9 +2338,13 @@ class DCInstrument {
     for (int ii = 0; ii < arg_types.length; ii++)
         type_names[ii] = arg_types[ii].toString();
 
+    // Remove exceptions from the name
+    String full_name = m.toString();
+    full_name = full_name.replaceFirst ("\\s*throws.*", "");
+
     return fullClassName + "." +
       DaikonWriter.methodEntryName (fullClassName, type_names,
-                                    m.toString(), m.getName());
+                                    full_name, m.getName());
   }
 
   /** Convenience function to call a static method in DCRuntime **/
@@ -2608,6 +2780,9 @@ class DCInstrument {
    */
   public List<MethodGen> create_tag_accessors (ClassGen gen) {
 
+    if (gen.isInterface())
+      return (null);
+
     String classname = gen.getClassName();
     List<MethodGen> mlist = new ArrayList<MethodGen>();
 
@@ -2624,17 +2799,17 @@ class DCInstrument {
       if (!is_primitive (f.getType()))
         continue;
 
-      // skip static fields
-      if (f.isStatic())
-        continue;
-
-      // Build the get accessor
-      MethodGen get_method = create_get_tag (gen, f, field_map.get(f));
+      MethodGen get_method = null;
+      MethodGen set_method = null;
+      if (f.isStatic()) {
+        get_method = create_get_tag (gen, f, static_map.get(f));
+        set_method = create_set_tag (gen, f, static_map.get(f));
+      } else {
+        get_method = create_get_tag (gen, f, field_map.get(f));
+        set_method = create_set_tag (gen, f, field_map.get(f));
+      }
       gen.addMethod(get_method.getMethod());
       mlist.add(get_method);
-
-      // Build the set accessor
-      MethodGen set_method = create_set_tag (gen, f, field_map.get(f));
       gen.addMethod(set_method.getMethod());
       mlist.add(set_method);
     }
@@ -2655,14 +2830,19 @@ class DCInstrument {
           continue;
         if (!is_primitive (f.getType()))
           continue;
-        if (f.isStatic())
-          continue;
 
         field_set.add(f.getName());
-        MethodGen get_method = create_get_tag (gen, f, field_map.get(f));
+        MethodGen get_method = null;
+        MethodGen set_method = null;
+        if (f.isStatic()) {
+          get_method = create_get_tag (gen, f, static_map.get(f));
+          set_method = create_set_tag (gen, f, static_map.get(f));
+        } else {
+          get_method = create_get_tag (gen, f, field_map.get(f));
+          set_method = create_set_tag (gen, f, field_map.get(f));
+        }
         gen.addMethod(get_method.getMethod());
         mlist.add(get_method);
-        MethodGen set_method = create_set_tag (gen, f, field_map.get(f));
         gen.addMethod(set_method.getMethod());
         mlist.add(set_method);
       }
@@ -2674,7 +2854,9 @@ class DCInstrument {
   /**
    * Builds a Map that relates each field in jc and each of its
    * superclasses to a unique offset.  The offset can be used to
-   * index into a tag array for this class
+   * index into a tag array for this class.  Instance fields are
+   * placed in the returned map and static fields are placed in static
+   * map (shared between all classes)
    */
   public Map<Field,Integer> build_field_map (JavaClass jc) {
 
@@ -2692,9 +2874,22 @@ class DCInstrument {
     Map<Field,Integer> field_map = build_field_map (super_jc);
     int offset = field_map.size();
 
-    // Determine the offset for each field in the class
+    // Determine the offset for each primitive field in the class
+    // Also make sure the the static_tags list is large enough for
+    // of the tags.
     for (Field f : jc.getFields()) {
-      if (is_primitive (f.getType())) {
+      if (!is_primitive (f.getType()))
+        continue;
+      if (f.isStatic()) {
+        if (!in_jdk) {
+          int min_size = static_map.size() + DCRuntime.max_jdk_static;
+          while (DCRuntime.static_tags.size() <= min_size)
+            DCRuntime.static_tags.add (null);
+          static_map.put (f, min_size);
+        } else { // building jdk
+          static_map.put (f, static_map.size() + 1);
+        }
+      } else {
         field_map.put (f, offset);
         offset++;
       }
@@ -2708,7 +2903,10 @@ class DCInstrument {
    * f will be pushed on the tag stack.
    *
    *  void <field>_<class>__$get_tag() {
-   *    DCRuntime.push_field_tag (this, tag_offset);
+   *    #if f.isStatic()
+   *      DCRuntime.push_static_tag (tag_offset)
+   *    #else
+   *      DCRuntime.push_field_tag (this, tag_offset);
    *  }
    *
    * @param gen ClassGen of class whose accessors are being built. Not
@@ -2718,14 +2916,28 @@ class DCInstrument {
    */
   public MethodGen create_get_tag (ClassGen gen, Field f, int tag_offset) {
 
+    // Determine the method to call in DCRuntime.  Instance fields and static
+    // fields are handled separately.  Also instance fields in special
+    // classes that are created by the JVM are handled separately since only
+    // in those classes can fields be read without being written (in java)
+    String methodname = "push_field_tag";
+    Type[] args = object_int;
+    if (f.isStatic()) {
+      methodname = "push_static_tag";
+      args = integer_arg;
+    } else if (is_uninit_class (gen.getClassName())) {
+      methodname = "push_field_tag_null_ok";
+    }
+
     String classname = gen.getClassName();
     String accessor_name = tag_method_name(GET_TAG, classname, f.getName());
 
     InstructionList il = new InstructionList();
 
-    il.append (ifact.createThis());
+    if (!f.isStatic())
+      il.append (ifact.createThis());
     il.append (ifact.createConstant (tag_offset));
-    il.append (dcr_call ("push_field_tag", Type.VOID, object_int));
+    il.append (dcr_call (methodname, Type.VOID, args));
     il.append (ifact.createReturn (Type.VOID));
 
     // Create the get accessor method
@@ -2733,6 +2945,9 @@ class DCInstrument {
       = new MethodGen(f.getAccessFlags() | Constants.ACC_FINAL,
         Type.VOID, Type.NO_ARGS, new String[] {}, accessor_name,
         classname, il, pool);
+    get_method.isPrivate(false);
+    get_method.isProtected(false);
+    get_method.isPublic(true);
     get_method.setMaxLocals();
     get_method.setMaxStack();
     // add_line_numbers(get_method, il);
@@ -2746,7 +2961,10 @@ class DCInstrument {
    * to field
    *
    *  void <field>_<class>__$set_tag() {
-   *    DCRuntime.pop_field_tag (this, tag_offset);
+   *    #if f.isStatic()
+   *      DCRuntime.pop_static_tag (tag_offset)
+   *    #else
+   *      DCRuntime.pop_field_tag (this, tag_offset);
    *  }
    *
    * @param gen ClassGen of class whose accessors are being built. Not
@@ -2756,14 +2974,22 @@ class DCInstrument {
    */
   public MethodGen create_set_tag (ClassGen gen, Field f, int tag_offset) {
 
+    String methodname = "pop_field_tag";
+    Type[] args = object_int;
+    if (f.isStatic()) {
+      methodname = "pop_static_tag";
+      args = integer_arg;
+    }
+
     String classname = gen.getClassName();
     String accessor_name = tag_method_name(SET_TAG, classname, f.getName());
 
     InstructionList il = new InstructionList();
 
-    il.append (ifact.createThis());
+    if (!f.isStatic())
+      il.append (ifact.createThis());
     il.append (ifact.createConstant (tag_offset));
-    il.append (dcr_call ("pop_field_tag", Type.VOID, object_int));
+    il.append (dcr_call (methodname, Type.VOID, args));
     il.append (ifact.createReturn (Type.VOID));
 
     // Create the get accessor method
@@ -2779,7 +3005,8 @@ class DCInstrument {
   }
 
   /** Returns the tag accessor method name **/
-  public String tag_method_name (String typ, String classname, String fname) {
+  public static String tag_method_name (String typ, String classname,
+                                        String fname) {
     return fname + "_" + classname.replace ('.', '_') + "__$" + typ;
   }
 
@@ -2804,7 +3031,7 @@ class DCInstrument {
     if (has_code) {
 
       // Get the current local variables (includes parameters)
-      LocalVariableGen[] locals = mg.getLocalVariables();
+      LocalVariableGen[] locals = get_fix_locals (mg);
 
       // Remove the existing locals
       mg.removeLocalVariables();
@@ -2816,12 +3043,23 @@ class DCInstrument {
       if (!mg.isStatic())
         first_local++;
 
+      if (first_local > locals.length) {
+        Type[] arg_types = mg.getArgumentTypes();
+        String[] arg_names = mg.getArgumentNames();
+        for (int ii = 0; ii < arg_types.length; ii++)
+          System.out.printf ("param %s %s%n", arg_types[ii], arg_names[ii]);
+        for (LocalVariableGen lvg : locals)
+          System.out.printf ("local[%d] = %s%n", lvg.getIndex(), lvg);
+        assert false : mg.getClassName() + "." + mg + " "
+          + first_local + " " + locals.length;
+      }
+
       // Add back the object and the parameters
       for (int ii = 0; ii < first_local; ii++) {
         LocalVariableGen l = locals[ii];
         LocalVariableGen new_lvg
-          = mg.addLocalVariable (l.getName(), l.getType(), l.getStart(),
-                                 l.getEnd());
+          = mg.addLocalVariable (l.getName(), l.getType(), l.getIndex(),
+                                 l.getStart(), l.getEnd());
         debug_add_dcomp.log ("Added parameter %s%n", new_lvg);
       }
 
@@ -2834,20 +3072,28 @@ class DCInstrument {
       for (int ii = first_local; ii < locals.length; ii++) {
         LocalVariableGen l = locals[ii];
         LocalVariableGen new_lvg
-          = mg.addLocalVariable (l.getName(), l.getType(), l.getStart(),
-                                 l.getEnd());
-        debug_add_dcomp.log ("Added local %s%n", new_lvg);
+          = mg.addLocalVariable (l.getName(), l.getType(), l.getIndex()+1,
+                                 l.getStart(), l.getEnd());
+        debug_add_dcomp.log ("Added local %d-%s%n", new_lvg.getIndex(),
+                             new_lvg);
       }
+
+      // Get the index of the first local.  This may not be equal to first
+      // local because of category 2 (long, double) parameters.  Note that
+      // this is the OLD value of the index, not the new value
+      int first_local_index = dcomp_arg.getIndex();
+      debug_add_dcomp.log ("First local index = %d%n", first_local_index);
 
       // Process the instruction list, adding one to the index of each
       // LocalVariableInstruction that is not referencing a parameter
       InstructionList il = mg.getInstructionList();
       for (InstructionHandle ih = il.getStart(); ih != null;ih = ih.getNext()){
         Instruction inst = ih.getInstruction();
-        if (inst instanceof LocalVariableInstruction) {
-          LocalVariableInstruction lvi = (LocalVariableInstruction) inst;
-          if (lvi.getIndex() > first_local)
-            lvi.setIndex (lvi.getIndex() + 1);
+        if ((inst instanceof LocalVariableInstruction)
+            || (inst instanceof RET) || (inst instanceof IINC)) {
+          IndexedInstruction index_inst = (IndexedInstruction) inst;
+          if (index_inst.getIndex() >= first_local_index)
+            index_inst.setIndex (index_inst.getIndex() + 1);
         }
       }
     }
@@ -2864,6 +3110,127 @@ class DCInstrument {
     if(has_code)
       mg.setMaxLocals();
 
-    debug_add_dcomp.log ("new mg: %s%n", mg);
+    debug_add_dcomp.log ("new mg: %s [%d locals]%n", mg, mg.getMaxLocals());
+  }
+
+  /** Returns whether or not the method is defined in Object **/
+  public boolean is_object_method (String method_name, Type[] arg_types) {
+    for (MethodDef md : obj_methods) {
+      if (md.equals (method_name, arg_types)) {
+        return (true);
+      }
+    }
+    return (false);
+  }
+
+  /**
+   * Returns whether or not the class is one of those that has values
+   * initialized by the JVM or native methods
+   */
+  public boolean is_uninit_class (String classname) {
+
+    for (String u_name : uninit_classes)
+      if (u_name.equals (classname))
+        return (true);
+
+    return (false);
+  }
+
+  /**
+   * Fixes the local variable table so that all parameters are in the
+   * local table.  In some special cases where parameters are added by
+   * the compiler (eg, constructors for inner classes) the local variable
+   * table is missing the entry for the additional parameter.  This
+   * method creates a correct array of locals and returns it.
+   */
+  private LocalVariableGen[] get_fix_locals (MethodGen mg) {
+
+    LocalVariableGen[] locals = mg.getLocalVariables();
+    Type[] arg_types = mg.getArgumentTypes();
+
+    // Initial offset into the stack frame of the first parameter
+    int offset = 0;
+    if (!mg.isStatic())
+      offset = 1;
+
+    // Index into locals of the first parameter
+    int loc_index = 0;
+    if (!mg.isStatic())
+      loc_index = 1;
+
+    // Loop through each argument
+    for (int ii = 0; ii < arg_types.length; ii++) {
+
+      // If this parameter doesn't have a matching local
+      if ((loc_index >= locals.length)
+          || (offset != locals[loc_index].getIndex())) {
+
+        // Create a local variable to describe the missing argument
+        LocalVariableGen missing_arg
+          = mg.addLocalVariable (mg.getArgumentName(ii), arg_types[ii], offset,
+                                   null, null);
+
+        // Add the new local variable to a new locals array
+        LocalVariableGen[] new_locals = new LocalVariableGen[locals.length+1];
+        System.arraycopy (locals, 0, new_locals, 0, loc_index);
+        new_locals[loc_index] = missing_arg;
+        System.arraycopy (locals, loc_index, new_locals, loc_index+1,
+                          locals.length-loc_index);
+        System.out.printf ("Added missing parameter %s%n", missing_arg);
+        locals = new_locals;
+        System.out.printf ("New Local Array:%n");
+        for (LocalVariableGen lvg : locals)
+          System.out.printf ("  local[%d] = %s%n", lvg.getIndex(), lvg);
+      }
+
+      loc_index++;
+      offset += arg_types[ii].getSize();
+    }
+
+    return (locals);
+  }
+
+  /**
+   * Creates a method with a DcompMarker argument that does nothing but
+   * call the corresponding method without the DCompMarker argument
+   */
+  private MethodGen create_dcomp_stub (MethodGen mg) {
+
+    InstructionList il = new InstructionList();
+    Type ret_type = mg.getReturnType();
+
+
+    // if mg is dynamic, Push 'this' on the stack
+    int offset = 0;
+    if (!mg.isStatic()) {
+      il.append (ifact.createThis());
+      offset = 1;
+    }
+
+    // push each argument on the stack
+    for (Type arg_type : mg.getArgumentTypes()) {
+      il.append (ifact.createLoad (arg_type, offset));
+      offset += arg_type.getSize();
+    }
+
+    // Call the method
+    short kind = Constants.INVOKEVIRTUAL;
+    if (mg.isStatic())
+      kind = Constants.INVOKESTATIC;
+    il.append (ifact.createInvoke (mg.getClassName(), mg.getName(),
+                                   ret_type, mg.getArgumentTypes(), kind));
+
+    il.append (ifact.createReturn (ret_type));
+
+    // Create the method
+    Type[] arg_types = add_type (mg.getArgumentTypes(), dcomp_marker);
+    String[] arg_names = add_string (mg.getArgumentNames(), "marker");
+    MethodGen dcomp_mg
+      = new MethodGen (mg.getAccessFlags(), ret_type, arg_types,
+                       arg_names, mg.getName(), mg.getClassName(), il, pool);
+    dcomp_mg.setMaxLocals();
+    dcomp_mg.setMaxStack();
+
+    return (dcomp_mg);
   }
 }
