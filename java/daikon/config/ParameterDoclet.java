@@ -104,19 +104,24 @@ public class ParameterDoclet
       // first (for node linking).
       new DocCategory("daikon.inv.filter.", "enabled",
 		      "Options to enable/disable filters",
-		      "These configuration options enable or disable filters which suppress printing of invariants which are found to be true but which are considered uninteresting or redundant.  See @ref{Invariant filters}, for more information."),
+		      "@cindex filters, enabling/disabling\n"
+                      + "These configuration options enable or disable filters that suppress printing of certain invariants.  Invariants are filtered if they are found to be true but are considered uninteresting or redundant.  See @ref{Invariant filters}, for more information."),
       new DocCategory("daikon.inv.", "enabled",
 		      "Options to enable/disable specific invariants",
-		      "These options control whether Daikon looks for specific kinds of invariants.  See @ref{Invariant list}, for more information about the corresponding invariants."),
+		      "@cindex invariants, enabling/disabling\n"
+		      + "These options control whether Daikon looks for specific kinds of invariants.  See @ref{Invariant list}, for more information about the corresponding invariants."),
       new DocCategory("daikon.inv.", null,
 		      "Other invariant configuration parameters",
-		      "The configuration options listed in this section parameterize the behavior of certain invariants.  See @ref{Invariant list}, for more information about the invariants."),
+		      "@cindex invariants, configuring\n"
+		      + "The configuration options listed in this section parameterize the behavior of certain invariants.  See @ref{Invariant list}, for more information about the invariants."),
       new DocCategory("daikon.derive.", null,
 		      "Options to enable/disable derived variables",
-		      "These options control whether Daikon looks for invariants involving certain forms of derived variables.  See @ref{Variable names}, for more about derived variables."),
+		      "@cindex derived variables, enabling/disabling\n"
+                      + "These options control whether Daikon looks for invariants involving certain forms of derived variables.  Also see @ref{Variable names}."),
       new DocCategory("daikon.simplify.", null,
 		      "Simplify interface configuration options",
-		      "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."),
+                      "@cindex Simplify theorem prover, configuring\n"
+		      + "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."),
       new DocCategory(null, null,
 		      "General configuration options",
 		      "This section lists miscellaneous configuration options for Daikon.") };
