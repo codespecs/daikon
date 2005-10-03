@@ -4258,7 +4258,7 @@ Mangel-Wurzel consists of three parts: a driver program called
 and a small runtime library.  Mangel is a replacement for the
 @command{cc} command:  it produces an
 instrumented executable that behaves like the original program, but that
-also produces a @file{\.dtrace} data trace file for Daikon to analyze.
+also produces a @file{.dtrace} data trace file for Daikon to analyze.
 Mangel operates by in turn invoking
 the source instrumenter wurzel, the host compiler and linker, and the
 object code instrumenter Purify.
