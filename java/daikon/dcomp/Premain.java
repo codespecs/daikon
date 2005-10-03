@@ -14,18 +14,16 @@ import utilMDE.BCELUtil;
 
 public class Premain {
 
+  public static boolean verbose = false;
+  public static boolean debug = false;
   public static File debug_dir = new File ("/tmp", System.getenv ("USER"));
   public static File debug_bin_dir = new File (debug_dir, "bin");
   public static File debug_orig_dir = new File (debug_dir, "orig");
-  public static boolean debug = true;
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
   public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
   public static String compare_sets_file = null;
 
   public static void premain (String agentArgs, Instrumentation inst) {
-
-    System.out.format ("In dcomp premain, agentargs ='%s', " +
-                       "Instrumentation = '%s'\n", agentArgs, inst);
 
     String[] args = agentArgs.split ("  *");
     String error_msg = parse_args (args);
@@ -33,6 +31,10 @@ public class Premain {
       usage (error_msg);
       System.exit (1);
     }
+
+    if (verbose)
+      System.out.format ("In dcomp premain, agentargs ='%s', " +
+                       "Instrumentation = '%s'\n", agentArgs, inst);
 
     debug_bin_dir.mkdirs();
     debug_orig_dir.mkdirs();
@@ -43,6 +45,9 @@ public class Premain {
 
     Transform transformer = new Transform();
     inst.addTransformer (transformer);
+
+    // Initialize the static tag array
+    DCRuntime.init();
   }
 
   static public class Transform implements ClassFileTransformer {
@@ -70,47 +75,40 @@ public class Premain {
           || className.startsWith ("daikon/chicory/"))
         return (null);
 
-      System.out.format ("In Transform: class = %s\n", className);
+      if (verbose)
+        System.out.format ("In Transform: class = %s\n", className);
 
-      // Parse the bytes of the classfile, die on any errors
-      JavaClass c = null;
-      ClassParser parser = new ClassParser
-        (new ByteArrayInputStream (classfileBuffer), className);
       try {
-        c = parser.parse();
-      } catch (Exception e) {
+        // Parse the bytes of the classfile, die on any errors
+        ClassParser parser = new ClassParser
+          (new ByteArrayInputStream (classfileBuffer), className);
+        JavaClass c = parser.parse();
+
+
+        if (debug) {
+          c.dump (new File (debug_orig_dir, c.getClassName() + ".class"));
+        }
+
+        // Transform the file
+        DCInstrument dci = new DCInstrument (c, false, loader);
+        JavaClass njc = dci.instrument();
+        if (njc == null) {
+          if (verbose)
+            System.out.printf ("Didn't instrument %s%n", c.getClassName());
+          return (null);
+        } else {
+          if (debug) {
+            System.out.printf ("Dumping to %s%n", debug_bin_dir);
+            njc.dump (new File (debug_bin_dir, njc.getClassName() + ".class"));
+            BCELUtil.dump (njc, debug_bin_dir);
+          }
+          return (njc.getBytes());
+        }
+      } catch (Throwable e) {
+        System.out.printf ("Unexpected Error: %n");
+        e.printStackTrace();
         throw new RuntimeException ("Unexpected error: " + e);
       }
-
-      if (debug) {
-        try {
-          c.dump (new File (debug_orig_dir, c.getClassName() + ".class"));
-        } catch (Exception e) {
-          throw new Error ("can't dump " + c.getClassName(), e);
-        }
-      }
-
-      // Transform the file
-      DCInstrument dci = new DCInstrument (c, false, loader);
-      JavaClass njc = null;
-      try {
-        njc = dci.instrument();
-      } catch (Throwable t) {
-        System.out.printf ("Unexected error: %s%n", t);
-        t.printStackTrace();
-        System.exit (1);
-        return (null);
-      }
-      if (debug) {
-        try {
-          System.out.printf ("Dumping to %s%n", debug_bin_dir);
-          njc.dump (new File (debug_bin_dir, njc.getClassName() + ".class"));
-          BCELUtil.dump (njc, debug_bin_dir);
-        } catch (Exception e) {
-          throw new Error ("can't dump " + njc.getClassName(), e);
-        }
-      }
-      return (njc.getBytes());
     }
   }
 
@@ -139,6 +137,12 @@ public class Premain {
         }
       } else if (arg.startsWith ("--compare-sets-file=")) {
         compare_sets_file = arg.substring ("--compare-sets-file=".length());
+      } else if (arg.equals ("--no-jdk")) {
+        DCInstrument.jdk_instrumented = false;
+      } else if (arg.equals ("--verbose")) {
+        verbose = true;
+      } else if (arg.equals ("--debug")) {
+        debug = true;
       } else {
         return ("Unexpected argument " + arg);
       }
@@ -153,6 +157,10 @@ public class Premain {
     System.out.println ("Options:");
     System.out.println ("  --ppt-select-pattern=<regex>");
     System.out.println ("  --ppt-omit-pattern=<regex>");
+    System.out.println ("  --compare-sets-file=<pathname>");
+    System.out.println ("  --no-jdk");
+    System.out.println ("  --debug");
+    System.out.println ("  --verbose");
   }
 
   /**
@@ -169,11 +177,14 @@ public class Premain {
       }
 
       // Write comparability sets to standard out
+      if (verbose && (compare_sets_file == null))
       DCRuntime.print_all_comparable (System.out);
 
       // Write the decl file out
       String comp_out_fname = "/tmp/dcomp.decls";
-      System.out.println("Writing comparability results to " + comp_out_fname);
+      if (verbose)
+        System.out.println("Writing comparability results to "
+                           + comp_out_fname);
       PrintStream comp_out = open (comp_out_fname);
       DCRuntime.print_decl_file (comp_out);
     }
