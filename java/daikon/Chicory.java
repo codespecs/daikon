@@ -20,6 +20,9 @@ public class Chicory {
   /** File in which to put dtrace output **/
   public String trace_file_name = null;
 
+  /** TODO: make this a pattern and not a flag **/
+  public static String omit_var = null;
+
   /** Directory in which to create output files **/
   public File output_dir = new File(".");
 
@@ -278,6 +281,9 @@ public class Chicory {
 
         premain_args.add(arg);
 
+      } else if (arg.startsWith ("--omit-var=")) {
+        omit_var = arg.substring ("--omit-var=".length());
+        premain_args.add (arg);
       } else if (arg.startsWith("--dtrace-file=")) {
         trace_file_name = arg.substring("--dtrace-file=".length());
         if (trace_file_name.length() == 0) {
