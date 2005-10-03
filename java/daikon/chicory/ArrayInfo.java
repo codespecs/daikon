@@ -12,16 +12,13 @@ public class ArrayInfo extends DaikonVariableInfo
 
     /**
      * Constructs an ArrayInfo object with the specified name
+     * and type.
      * @param theName The variable name. Should end with "[]"
+     * @param array_type component type of the array
      */
-    public ArrayInfo(String theName)
-    {
-        super(theName, true);
-    }
+    public ArrayInfo (String theName, Class array_type) {
 
-    public ArrayInfo (String parent_name, Class array_type) {
-
-        super (parent_name + "[]", true);
+        super (theName, true);
         this.array_type = array_type;
     }
 
@@ -41,4 +38,8 @@ public class ArrayInfo extends DaikonVariableInfo
             return DTraceWriter.getListFromArray(value);
     }
 
+    public Class getType()
+    {
+        return array_type;
+    }
 }
