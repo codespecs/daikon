@@ -1,5 +1,7 @@
 TODO:
 
+  - remove all standard use of /tmp so that multiple users on the same
+    machine can run.  
   - Allow decl output file to be named directly
   - Add a stub main like chicory so user doesn't have to directly deal
     with premain and its odd argument style.
