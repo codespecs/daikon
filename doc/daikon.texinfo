@@ -1817,6 +1817,9 @@ relationship.)
 @code{a[i]} array access.
 @code{a} and @code{i} are themselves
 arbitrary variable names, of array and integral type, respectively.
+Since @code{a[i]} is not a variable in the program source code, it is
+called a ``derived variable''; see @ref{Options to enable/disable
+derived variables}.
 
 @item
 @cindex @code{-1} array index (counts from end of array)
@@ -2063,8 +2066,8 @@ The following is a list of all of the invariants that Daikon detects.
 Each invariant has a configuration enable switch.  By default most invariants
 are enabled.  Any that are not enabled by default are indicated below.
 Some invariants also have additional configuration switches that control 
-their behavior.  These are indicated below as well. @xref{Configuration 
-options}.
+their behavior.  These are indicated below as well.
+@xref{Options to enable/disable specific invariants}.
 
 @table @asis
 @include invariants-doc.texinfo
@@ -2083,7 +2086,7 @@ context.
 
 The following is a list of the invariant filters that Daikon supports.
 Each of these filters has a corresponding configuration enable switch;
-by default, all filters are enabled.  @xref{Configuration options},
+by default, all filters are enabled.  @xref{Options to enable/disable filters},
 for details.
 
 @itemize @bullet
@@ -4195,7 +4198,7 @@ directly to GCC instead.
 
 @item
 @c Not all of the options of the source-based C front end dfec are supported.
-Kvasir respects only the only @env{DTRACEAPPEND} environment variable.
+Kvasir respects only the @env{DTRACEAPPEND} environment variable.
 
 @item
 Kvasir is incompatible with some compiler optimizations.  It is
