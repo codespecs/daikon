@@ -3237,7 +3237,9 @@ mainly for Kvasir's developers.
 Write the @file{.decls} file listing the names of functions and
 variables to the specified file name.  This forces Kvasir to generate separate 
 @file{.decls} and @file{.dtrace} files instead of outputting everything to the 
-@file{.dtrace} file, which is the default behavior.
+@file{.dtrace} file, which is the default behavior.  To generate 
+a @file{.dtrace} file with no @file{.decls} information, you can use
+@option{--decls-file=/dev/null}.
 
 @item --decls-only
 
@@ -3262,16 +3264,22 @@ without .dtrace.
 
 By default, DynComp runs with a garbage collector for the tag metadata
 that it uses, but this can cause your program to slow down if it runs
-too often.  This option turns off the garbage collector.
+too often.  This option turns off the garbage collector.  This is not
+recommended for long program runs, because without the garbage
+collector, it will likely run out of memory.
 
 @item --gc-num-tags=@var{N}
 
-The DynComp garbage collector runs once after every 5,000,000 tags have
+The DynComp garbage collector runs once after every 10,000,000 tags have
 been assigned.  This option tells the garbage collector to run once
 after every @var{N} tags have been assigned.  Making the value of
 @var{N} larger allows your program to run faster (because the garbage
 collector runs less frequently), but may cause your program to run out
-of memory faster as well.
+of memory as well.  Making the value of @var{N} too small may cause your
+program to never terminate if @var{N} is smaller than the total number
+of tags that your program uses in steady state.  You will probably need
+to experiment with tweaking this value in order to get DynComp to work
+properly.
 
 @item --dyncomp-fast-mode
 
@@ -3279,7 +3287,8 @@ This option applies an approximation for handling literal values which
 greatly speeds up the performance of DynComp and drastically lowers its
 memory usage, but at the expense of a slight loss in precision of the
 generated comparability sets.  If you cannot get DynComp to successfully
-run on a large program, try turning on this option.
+run on a large program, even after tweaking @option{--gc-num-vars}, try
+turning on this option.
 
 @item --separate-entry-exit-comp
 
@@ -3449,6 +3458,28 @@ pointer variable.  This potentially provides more accuracy than using
 either the @option{--disambig} or @option{--disambig-file} options alone,
 but at the expense of a longer run time.  (If the .disambig file already
 exists, then this option provides no extra functionality.)
+
+@item --disambig-ptrs
+By default, Kvasir treats all pointers as arrays when outputting their
+contents.  This option forces to treat all pointers as pointing to
+single values.
+
+@item --flatten-arrays
+This option forces the flattening of statically-sized arrays into
+separate variables, one for each element.  For example, an array
+@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
+@var{foo[1]}, @var{foo[2]}.  By default, Kvasir flattens
+statically-sized arrays only after is has already exhausted the one
+level of sequences that Daikon allows in the .dtrace output format
+(e.g. an array of structs where each struct contains a statically-sized
+array).
+
+@item --output-struct-vars
+This option forces Kvasir to output .decls and .dtrace entries for
+struct variables.  By default, Kvasir ignores struct variables because
+there is really no value that can be meaningfully associated with these
+variables.  However, some tools require struct variables to be
+outputted, so we have included this option.
 
 @end table
 
