@@ -107,7 +107,7 @@ public final class Daikon {
   /**
    * Boolean.  If true, Daikon will not create any derived variables.
    * Derived variables, which are combinations of variables that appeared in
-   * the program, like <code>ary[index]</code> if <code>ary</code> and
+   * the program, like <code>array[index]</code> if <code>array</code> and
    * <code>index</code> appeared, can
    * increase the number of properties Daikon finds, especially over
    * sequences. However, derived variables increase Daikon's time and
@@ -161,7 +161,7 @@ public final class Daikon {
   /**
    * Whether to use the dynamic constants optimization.  This
    * optimization doesn't instantiate invariants over constant
-   * variables (ie, that that have only seen one value).  When the
+   * variables (i.e., that that have only seen one value).  When the
    * variable receives a second value, invariants are instantiated and
    * are given the sample representing the previous constant value.
    **/

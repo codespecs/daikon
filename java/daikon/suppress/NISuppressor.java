@@ -333,7 +333,7 @@ public class NISuppressor {
 
   /**
    * Returns true if inv matches this suppressor.  It is assummed that
-   * inv's variables already match (ie, that it was looked up in
+   * inv's variables already match (i.e., that it was looked up in
    * compatible slice
    */
   public boolean match (Invariant inv) {

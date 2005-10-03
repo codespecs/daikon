@@ -223,7 +223,7 @@ public class Runtime
 
     /**
      * Called by classes when they have finished initialization
-     * (ie, their static initializer has completed).
+     * (i.e., their static initializer has completed).
      *
      * This functionality must be enabled by the flag Chicory.checkStaticInit.
      * When enabled, this method should only be called by the hooks created in the

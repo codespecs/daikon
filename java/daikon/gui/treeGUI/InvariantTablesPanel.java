@@ -99,7 +99,7 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
     DefaultMutableTreeNode leadNode = (DefaultMutableTreeNode) leadPath.getLastPathComponent();
     if (leadNode.getUserObject().getClass() == daikon.PptTopLevel.class)
       lastTableName = ((PptTopLevel) leadNode.getUserObject()).name;
-    else {			//  The last selected node was not a leaf node -- ie, it was a method or a class node.
+    else {			//  The last selected node was not a leaf node -- i.e., it was a method or a class node.
 	                        //  If any of this node's children are selected, display their table.
       DefaultMutableTreeNode child;
       for (Enumeration e = leadNode.children(); e.hasMoreElements(); ) {

@@ -34,9 +34,8 @@ public class PptSplitter implements Serializable {
   public static int dkconfig_dummy_invariant_level = 0;
 
   /**
-   * Split bi-implications into two seperate invariants.
+   * Split bi-implications into two separate invariants.
    **/
-
   public static boolean dkconfig_split_bi_implications = false;
 
   /** General debug tracer. **/
@@ -62,7 +61,7 @@ public class PptSplitter implements Serializable {
 
   /**
    * Create a binary PptSplitter with the specied splitter for the specified
-   * PptTopLevel parent.  The parent should be a leaf (ie, a numbered
+   * PptTopLevel parent.  The parent should be a leaf (i.e., a numbered
    * exit point)
    */
   public PptSplitter (PptTopLevel parent, Splitter splitter) {

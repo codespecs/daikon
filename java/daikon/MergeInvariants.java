@@ -201,7 +201,7 @@ public final class MergeInvariants {
 
     // Create a hierarchy between the merge exitNN points and the
     // corresponding points in each of the specified maps.  This
-    // should only be created at the exitNN points (ie, the leaves)
+    // should only be created at the exitNN points (i.e., the leaves)
     // so that the normal processing will create the invariants at
     // upper points.
     debugProgress.fine ("Building hierarchy between leaves of the maps");

@@ -1897,7 +1897,7 @@ public class PptTopLevel extends Ppt {
   // Note that some slightly inefficient code has been added to aid
   // in debugging.  When creating binary and ternary views and debugging
   // is on, the outer loops will not terminate prematurely on innapropriate
-  // (ie, non-canonical) variables.  This allows explicit debug statements
+  // (i.e., non-canonical) variables.  This allows explicit debug statements
   // for each possible combination, simplifying determining why certain
   // slices were not created.
 
@@ -2223,7 +2223,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Determines whether the order of the variables in vis is a valid
-   * permutation (ie, their varinfo_index's are ordered).  Null
+   * permutation (i.e., their varinfo_index's are ordered).  Null
    * elements are ignored (and an all-null list is ok)
    */
   public boolean vis_order_ok(VarInfo[] vis) {
@@ -3753,7 +3753,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Removes any invariant in this ppt which has a matching invariant in the
    * parent (as specified in the relation).  Done to save space.  Only safe
-   * when all processing of this child is complete (ie, all of the parents
+   * when all processing of this child is complete (i.e., all of the parents
    * of this child must have been merged)
    *
    * Another interesting problem arises with this code.  As currently

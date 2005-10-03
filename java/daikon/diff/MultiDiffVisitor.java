@@ -86,7 +86,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             return;
         }
 
-        // keeps track of supressed invariants due to appearing in
+        // keeps track of suppressed invariants due to appearing in
         // every sample of the MultiDiff
         int kill = 0;
         int unjustifiedKill = 0;
@@ -154,7 +154,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
      /** Prints everything in the goodList, outputs as spinfo. */
     public void printAllSpinfo() {
 
-        // keeps track of supressed invariants due to appearing in
+        // keeps track of suppressed invariants due to appearing in
         // every sample of the MultiDiff
         int kill = 0;
         ArrayList<String> bigList = new ArrayList<String>();

@@ -65,7 +65,7 @@ public class DeclWriter extends DaikonWriter
 
     /**
      * Returns the correctly formulated ":::OBJECT" name of the class
-     * (ie, the program point name)
+     * (i.e., the program point name)
      *
      * @param type the ClassType type
      * @return the correctly formulated String

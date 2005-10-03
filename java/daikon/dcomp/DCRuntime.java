@@ -970,7 +970,7 @@ public final class DCRuntime {
    * Merges comparability so that the same variable have the same
    * comparability at all points in the program point hierarchy.
    * The comparability at the class/object points is calculated by
-   * merging the comparability at each exit point (ie, if two variables
+   * merging the comparability at each exit point (i.e., if two variables
    * are in the same set it any exit point, they are in the same set at
    * the class point).  That comparability is then applied back to the
    * exit points so that if two class variables are comparable at any

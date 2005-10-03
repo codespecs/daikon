@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * Represents long scalars that are never equal to <code>r (mod m)</code>
- * where all other numbers in the same range (ie, all the values that
+ * where all other numbers in the same range (i.e., all the values that
  * <code>x</code> doesn't take from <code>min(x)</code> to
  * <code>max(x)</code>) are equal to <code>r (mod m)</code>.
  * Prints as <samp>x != r (mod m)</samp>, where <samp>r</samp>

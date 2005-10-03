@@ -31,7 +31,7 @@ public class FuzzyFloat {
   /**
    * Specify the specific relative difference allowed between two
    * floats in order for them to be equal.  The default is 0.0001
-   * a relative diff of zero, disables it (ie, only exact matches work).
+   * a relative diff of zero, disables it (i.e., only exact matches work).
    */
   public FuzzyFloat (double rel_diff) {
     set_rel_diff (rel_diff);

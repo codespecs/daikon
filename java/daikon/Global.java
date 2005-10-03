@@ -44,7 +44,7 @@ public final class Global {
   /// Variables
   ///
 
-  // Perhaps I shouldn't have anything in this category (ie, no global
+  // Perhaps I shouldn't have anything in this category (i.e., no global
   // variables)?
 
 

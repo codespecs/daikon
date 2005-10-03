@@ -266,7 +266,7 @@ public class SampleTester extends TestCase {
    * Processes a line of sample data.  There should be one item of
    * data for each previously specified variable.  Each data item is
    * separated by spaces.  Spaces cannot be included within a single
-   * item (ie, strings and arrays can't include spaces). Missing items
+   * item (i.e., strings and arrays can't include spaces). Missing items
    * are indicated with a dash (-).  Any variables not specifically
    * mentioned in the variable string are set to missing as well.
    *

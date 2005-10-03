@@ -460,7 +460,7 @@ public class NISuppression {
 
   /**
    * Determines whether the order of the variables in vis a valid
-   * permutations (ie, their varinfo_index's are ordered).  Null
+   * permutations (i.e., their varinfo_index's are ordered).  Null
    * elements are ignored (and an all-null list is ok)
    */
   private boolean vis_order_ok (VarInfo[] vis) {

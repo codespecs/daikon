@@ -119,7 +119,7 @@ public class InvMatch {
    * and returns a list of possible translations.  A possible translation
    * is a consistent set of translations (one for each invariant in ppt1)
    * A set of translations is consistent if all of the variable mappings
-   * are consistent (ie, no variable maps to more than one variable).
+   * are consistent (i.e., no variable maps to more than one variable).
    */
   static List<List<InvTranslate>> match_ppt (PptTopLevel ppt1,
                                              PptTopLevel ppt2) {

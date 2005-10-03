@@ -379,7 +379,7 @@ public abstract class DaikonVariableInfo
     }
 
     /**
-     * Adds class variables (ie, the fields) for the given type and
+     * Adds class variables (i.e., the fields) for the given type and
      * attach new nodes as children of this node.
      */
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
@@ -703,7 +703,7 @@ public abstract class DaikonVariableInfo
 
     /**
      * Returns the class name of the specified class in 'java' format
-     * (ie, as the class would have been declared in java source code)
+     * (i.e., as the class would have been declared in java source code)
      */
     public static String stdClassName (Class type)
     {

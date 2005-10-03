@@ -24,7 +24,7 @@ import utilMDE.*;
 /**
  * Class that implements dynamic constants optimization.  This
  * optimization doesn't instantiate invariants over constant
- * variables (ie, that that have only seen one value).  When the
+ * variables (i.e., that that have only seen one value).  When the
  * variable receives a second value, invariants are instantiated and
  * are given the sample representing the previous constant value.
  **/

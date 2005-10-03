@@ -3,7 +3,7 @@ package daikon.chicory;
 
 /**
  *  The ArrayInfo class is a subtype of DaikonVariableInfo used for
- * variable types which are arrays (ie, their name ends with "[]").
+ * variable types which are arrays (i.e., their name ends with "[]").
  */
 public class ArrayInfo extends DaikonVariableInfo
 {
@@ -26,7 +26,7 @@ public class ArrayInfo extends DaikonVariableInfo
     }
 
     public Object getMyValFromParentVal(Object value)
-    {        
+    {
         if(value == null)
         {
             return null;

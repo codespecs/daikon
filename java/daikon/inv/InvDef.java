@@ -97,7 +97,7 @@ public class InvDef {
   /**
    * Defines a ternary invariant independent of specific variables by
    * using the var_info instead.  The class must be correctly permutted
-   * to match the variable order (ie, the indices must be 0, 1, 2).
+   * to match the variable order (i.e., the indices must be 0, 1, 2).
    * This is ok for now, since we are only using these to define
    * suppressees and we always know the correct permuation in that
    * instance

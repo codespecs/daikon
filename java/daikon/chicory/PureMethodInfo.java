@@ -131,7 +131,7 @@ public class PureMethodInfo extends DaikonVariableInfo
 
 
     /**
-     * Convert standard wrapped Objects (ie, Integers) to Chicory wrappers (ie,
+     * Convert standard wrapped Objects (i.e., Integers) to Chicory wrappers (ie,
      * Runtime.IntWrap)\ Should not be called if the Object was not auto-boxed
      * from from a primitive!
      */

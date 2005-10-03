@@ -240,7 +240,7 @@ public static void mainHelper(final String[] args) throws IOException,
   // Note that some slightly inefficient code has been added to aid
   // in debugging.  When creating binary and ternary views and debugging
   // is on, the outer loops will not terminate prematurely on innapropriate
-  // (ie, non-canonical) variables.  This allows explicit debug statements
+  // (i.e., non-canonical) variables.  This allows explicit debug statements
   // for each possible combination, simplifying determining why certain
   // slices were not created.
   //

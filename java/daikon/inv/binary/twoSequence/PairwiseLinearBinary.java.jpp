@@ -36,7 +36,7 @@ import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 
 /**
- * Represents a linear invariant (ie, <samp>y = ax + b</samp>) between
+ * Represents a linear invariant (i.e., <samp>y = ax + b</samp>) between
  * the corresponding elements of two sequences of PRIMITIVE values.
  * Each <samp>(x[i], y[i])</samp> pair is examined.
  * Thus, <samp>x[0]</samp> is compared to <samp>y[0]</samp>,

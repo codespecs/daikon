@@ -1593,10 +1593,10 @@ public abstract class Invariant
   /**
    * Class used as a key to store invariants in a MAP where their
    * equality depends on the invariant representing the same invariant
-   * (ie, their class is the same) and the same internal state (when
+   * (i.e., their class is the same) and the same internal state (when
    * multiple invariants with the same class are possible)
    *
-   * Note that this is based on the Invariant type (ie, class) and the
+   * Note that this is based on the Invariant type (i.e., class) and the
    * internal state and not on what ppt the invariant is in or what
    * variables it is over.  Thus, invariants from different ppts are
    * the same if they represent the same type of invariant.
