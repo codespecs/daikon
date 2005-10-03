@@ -334,7 +334,7 @@ chicory-test : ChicoryPremain.jar
 	  daikon.chicory.Test
 
 #
-# Dynamic Comparability
+# Dynamic Comparability (DynComp/Java)
 #
 DCOMP_JAVA_FILES := $(shell find daikon/dcomp -name '*.java') \
 					$(shell find daikon/chicory -name '*.java')
@@ -342,55 +342,61 @@ DCOMP_CLASS_FILES := $(patsubst %.java,%.class,$(DCOMP_JAVA_FILES))
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test \
 			  --compare-sets-file=/tmp/dcomp_out.txt
 ORIG_RT ?= /afs/csail.mit.edu/group/pag/software/pkg/j2sdk-1.5/jre/lib/rt.jar
+DCOMP_DIR := daikon/dcomp
+JAVA_DCOMP := /scratch/${USER}/j2sdk-1.5/bin/java \
+			  -Xbootclasspath/a:$(CLASSPATH) -ea \
 
-dcomp : dcomp_premain.jar
+# Build DynComp/Java and run a sanity test
+dcomp : dcomp_premain.jar dcomp-test
 dcomp_premain.jar : $(DCOMP_JAVA_FILES) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
 
-dcomp-test : dcomp_premain.jar
+# Runs a simple sanity test on DynComp/Java without an instrumented JDK
+dcomp-test : daikon/dcomp/std_dcomp_out.diff
+daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS)" daikon/dcomp/Test
-	-diff -u daikon/dcomp/std_dcomp_out.goal /tmp/dcomp_out.txt \
+	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) --no-jdk" \
+	  daikon/dcomp/Test
+	@cp /tmp/dcomp_out.txt daikon/dcomp/std_dcomp_out.txt
+	-diff -u daikon/dcomp/std_dcomp_out.goal daikon/dcomp/std_dcomp_out.txt \
 	  > daikon/dcomp/std_dcomp_out.diff
-	@cat daikon/dcomp/std_dcomp_out.diff
+	@if test ! -s daikon/dcomp/std_dcomp_out.diff ; then echo No Errors; \
+	else echo Errors: more daikon/dcomp/std_dcomp_out.diff for details; fi
+
+dcomp-test-jdk : dcomp_premain.jar
+	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
+	/scratch/${USER}/j2sdk-1.5/bin/java -Xbootclasspath/a:$(CLASSPATH) \
+	  "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS)" daikon/dcomp/Test
+	@cp /tmp/dcomp_out.txt daikon/dcomp/jdk_dcomp_out.txt
+	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
+	  > daikon/dcomp/jdk_dcomp_out.diff
+	@cat daikon/dcomp/jdk_dcomp_out.diff
 	@find daikon/dcomp -name '*.diff' -printf "%8s    %p\n"
 
-DCOMP_SA_ARGS := --ppt-select-pattern=DataStructures
-dcomp-stackar : dcomp_premain.jar
-	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_SA_ARGS)" \
-	  -cp $(CLASSPATH):$(HOME) \
-	  DataStructures/StackArTester
+#
+# Rules to build the instrumented JDK for DynComp/Java
+#
+DCOMP_RT	:= /scratch/$(USER)/dcomp-rt
+DCOMP_JDK	:= /scratch/$(USER)/dcomp-j2sdk-1.5
+J2SDK15		:= /usr/lib/j2sdk1.5-sun
+dcomp-jdk   : $(DCOMP_JDK)/jre/lib/rt.jar
+$(DCOMP_JDK)/jre/lib/rt.jar : dcomp_premain.jar $(DCOMP_JDK)
+	/bin/rm -rf $(DCOMP_RT)
+	$(JAVA) -Xmx768m daikon.dcomp.BuildJDK $(ORIG_RT) $(DCOMP_RT)
+	cd $(DCOMP_RT) && jar cmf META-INF/MANIFEST.MF \
+	  /scratch/${USER}/dcomp_rt.jar *
+	cp /scratch/$(USER)/dcomp_rt.jar $(DCOMP_JDK)/jre/lib/rt.jar
 
-dcomp-chicory : dcomp_premain.jar
-	$(JAVA) -cp $(CLASSPATH):$(HOME) daikon.Chicory \
-	  --comp_file=/tmp/dcomp.decls --ppt-select-pattern=StackAr --debug \
-	  --daikon DataStructures/StackArTester
-
-dcomp-test-stack : dcomp_premain.jar
-	$(JAVA) -Xmx768m daikon.dcomp.BuildJDK $(ORIG_RT) /scratch/$(USER)/rt \
-	  "java"
-
-dcomp-jdk : dcomp_premain.jar
-	/bin/rm -rf /scratch/$(USER)/rt
-	$(JAVA) -Xmx768m daikon.dcomp.BuildJDK $(ORIG_RT) /scratch/$(USER)/rt \
-	  "java"
-	cd /scratch/${USER}/rt && jar cmf META-INF/MANIFEST.MF \
-	  /scratch/${USER}/rt.jar *
-	cd /scratch/${USER}/ && cp rt.jar /scratch/${USER}/j2sdk-1.5/jre/lib/rt.jar
+$(DCOMP_JDK) : $(J2SDK15)
+	install -d $(DCOMP_JDK)
+	(cd $(J2SDK15) && tar cf - .) | (cd $(DCOMP_JDK) && tar xfBp -)
 
 dcomp-jdk-only :
 	cd /scratch/${USER}/rt && jar cmf META-INF/MANIFEST.MF \
 	  /scratch/${USER}/rt.jar *
 	cd /scratch/${USER}/ && cp rt.jar /scratch/${USER}/j2sdk-1.5/jre/lib/rt.jar
-
-dcomp-jdk-test : dcomp_premain.jar
-	/scratch/${USER}/j2sdk-1.5/bin/java -cp $(HOME) -ea -Xshare:off \
-	  DataStructures/StackArTester
-
-dcomp-update-goals :
-	cp /tmp/dcomp_out.txt daikon/dcomp/std_dcomp_out.goal
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
