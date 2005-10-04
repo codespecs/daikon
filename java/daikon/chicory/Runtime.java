@@ -544,7 +544,8 @@ public class Runtime
     }
 
     /**
-     * Gets the ClassInfo structure corresponding to type
+     * Gets the ClassInfo structure corresponding to type.  Returns null
+     * if the class was not instrumented.
      * @param type declaring class
      * @return ClassInfo structure corresponding to type
      */
@@ -571,7 +572,8 @@ public class Runtime
             return getClassInfoFromClass(type);
         }
 
-        throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
+        // throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
+        return null;
     }
 
 
