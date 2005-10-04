@@ -101,17 +101,21 @@ public class ChicoryPremain {
    *
    * From the Sun JDK API:
    *
-   * "The string is formatted as the method access modifiers, if any, followed by the method return type,
-   * followed by a space, followed by the class declaring the method, followed by a period, followed by
-   * the method name, followed by a parenthesized, comma-separated list of the method's formal parameter
-   * types. If the method throws checked exceptions, the parameter list is followed by a space, followed
-   * by the word throws followed by a comma-separated list of the thrown exception types. For example:
+   * "The string is formatted as the method access modifiers, if any,
+   * followed by the method return type, followed by a space, followed
+   * by the class declaring the method, followed by a period, followed
+   * by the method name, followed by a parenthesized, comma-separated
+   * list of the method's formal parameter types. If the method throws
+   * checked exceptions, the parameter list is followed by a space,
+   * followed by the word throws followed by a comma-separated list of
+   * the thrown exception types. For example:
    *
    * public boolean java.lang.Object.equals(java.lang.Object)
    *
-   * The access modifiers are placed in canonical order as specified by "The Java Language Specification".
-   * This is public, protected or private first, and then other modifiers in the following order: abstract,
-   * static, final, synchronized native."
+   * The access modifiers are placed in canonical order as specified
+   * by "The Java Language Specification".  This is public, protected
+   * or private first, and then other modifiers in the following
+   * order: abstract, static, final, synchronized native."
    */
    private static void readPurityFile(String purityFileName, String pathLoc)
    {
