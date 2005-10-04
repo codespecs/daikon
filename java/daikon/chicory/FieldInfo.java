@@ -23,11 +23,11 @@ public class FieldInfo extends DaikonVariableInfo
        field = theField;
 
        // Calculate the offset of this field in its class
-       if (!field.getType().isPrimitive()) {
+       Class clazz = field.getDeclaringClass();
+       if (!field.getType().isPrimitive() || clazz.isInterface()) {
            field_num = -1;
            return;
        }
-       Class clazz = field.getDeclaringClass();
        field_num = num_prim_fields (clazz.getSuperclass());
        for (Field f : clazz.getDeclaredFields())
        {
@@ -57,6 +57,8 @@ public class FieldInfo extends DaikonVariableInfo
             int field_cnt = num_prim_fields (clazz.getSuperclass());
             for (Field f : clazz.getDeclaredFields())
             {
+                if (Modifier.isStatic(f.getModifiers()))
+                    continue;
                 if (f.getType().isPrimitive())
                     field_cnt++;
             }
