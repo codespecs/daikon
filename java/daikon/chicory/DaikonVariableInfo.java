@@ -679,7 +679,9 @@ public abstract class DaikonVariableInfo
         if (DaikonWriter.isStaticConstField(field) && !isArray)
         {
             ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
-            String value = cinfo.staticMap.get(theName);
+            String value = null;
+            if (cinfo != null)
+              value = cinfo.staticMap.get(theName);
 
             // System.out.printf ("static final value = %s%n", value);
 
