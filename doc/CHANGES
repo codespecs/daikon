@@ -20,6 +20,24 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.1.7 (November 1 2005)
+
+Chicory
+
+  Bug fixes
+
+    Fixed a bug (reported by Christoph Csallner) where Chicory crashed
+    when the --std-vis switch was used and a field was accessed in
+    a non-instrumented class (in this case an interface)
+
+  Enhancements
+
+    Added daikon.inv.unary.sequence.SingleSequence.SeqIndexDisableAll
+    configuration option to disable all of the SeqIndex invariants 
+    (SeqIndexIntEqual, SeqIndexFloatLessThan, etc).
+
+--------------------------------------------
+
 4.1.6 (October 1 2005)
 
 A number of bug fixes and minor enhancements have been made to the
