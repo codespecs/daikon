@@ -489,7 +489,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp && chmod -R a+rX daikon)
 	(cd /tmp; tar cf daikon.tar daikon)
-	# cp -pf /tmp/daikon.tar
+	cp -pf /tmp/daikon.tar .
 	rm -f /tmp/daikon.zip
 	(cd /tmp; zip -r daikon daikon)
 
