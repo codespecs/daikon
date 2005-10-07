@@ -2,7 +2,7 @@
 # checkargs -- check number of args in function calls
 # Michael D. Ernst <mernst@csail.mit.edu>
 # http://pag.csail.mit.edu/~mernst/software/checkargs.pm
-# Time-stamp: <2004-05-08 11:18:42 mernst>
+# Time-stamp: <2005-10-07 11:54:36 mernst>
 
 package checkargs;
 require 5.004;			# uses "for my $var"
@@ -72,49 +72,43 @@ Michael D. Ernst <F<mernst@cs.washington.edu>>
 sub check_args ( $@ )
 {
   my ($num_formals, @args) = @_;
-  my ($pack, $file_arg, $line_arg, $subname, $hasargs, $wantarr) = caller(1);
-  # Fake uses to satisfy shadowed-variables-perl: $pack $hasargs $wantarr.
   if (@_ < 1) { croak "check_args needs at least 1 arg, got ", scalar(@_), ": @_\n "; }
   if ((!wantarray) && ($num_formals != 0))
     { croak "check_args called in scalar context"; }
   # Can't use croak below here: it would only go out to caller, not its caller
   my $num_actuals = @args;
   if ($num_actuals != $num_formals)
-    { die "$file_arg:$line_arg: function $subname expected $num_formals argument",
+    { die error_loc() . " expected $num_formals argument",
       (($num_formals == 1) ? "" : "s"),
       ", got $num_actuals",
       (($num_actuals == 0) ? "" : ": @args"),
       "\n"; }
   for my $index (0..$#args)
     { if (!defined($args[$index]))
-	{ die "$file_arg:$line_arg: function $subname undefined argument ", $index+1, ": @args[0..$index-1]\n"; } }
+	{ die error_loc() . " undefined argument ", $index+1, ": @args[0..$index-1]\n"; } }
   return @args;
 }
 
 sub check_args_range ( $$@ )
 {
   my ($min_formals, $max_formals, @args) = @_;
-  my ($pack, $file_arg, $line_arg, $subname, $hasargs, $wantarr) = caller(1);
-  # Fake uses to satisfy shadowed-variables-perl: $pack $hasargs $wantarr.
   if (@_ < 2) { croak "check_args_range needs at least 2 args, got ", scalar(@_), ": @_"; }
   if ((!wantarray) && ($max_formals != 0) && ($min_formals !=0) )
     { croak "check_args_range called in scalar context"; }
   # Can't use croak below here: it would only go out to caller, not its caller
   my $num_actuals = @args;
   if (($num_actuals < $min_formals) || ($num_actuals > $max_formals))
-    { die "$file_arg:$line_arg: function $subname expected $min_formals-$max_formals arguments, got $num_actuals",
+    { die error_loc() . " expected $min_formals-$max_formals arguments, got $num_actuals",
       ($num_actuals == 0) ? "" : ": @args", "\n"; }
   for my $index (0..$#args)
     { if (!defined($args[$index]))
-	{ die "$file_arg:$line_arg: function $subname undefined argument ", $index+1, ": @args[0..$index-1]\n"; } }
+	{ die error_loc() . " undefined argument ", $index+1, ": @args[0..$index-1]\n"; } }
   return @args;
 }
 
 sub check_args_at_least ( $@ )
 {
   my ($min_formals, @args) = @_;
-  my ($pack, $file_arg, $line_arg, $subname, $hasargs, $wantarr) = caller(1);
-  # Fake uses to satisfy shadowed-variables-perl: $pack $hasargs $wantarr.
   # Don't do this, because we want every sub to start with a call to check_args*
   # if ($min_formals == 0)
   #   { die "Isn't it pointless to check for at least zero args to $subname?\n"; }
@@ -125,14 +119,26 @@ sub check_args_at_least ( $@ )
   # Can't use croak below here: it would only go out to caller, not its caller
   my $num_actuals = @args;
   if ($num_actuals < $min_formals)
-    { die "$file_arg:$line_arg: function $subname expected at least $min_formals argument",
+    { die error_loc() . " expected at least $min_formals argument",
       ($min_formals == 1) ? "" : "s",
       ", got $num_actuals",
       ($num_actuals == 0) ? "" : ": @args", "\n"; }
   for my $index (0..$#args)
     { if (!defined($args[$index]))
-	{ warn "$file_arg:$line_arg: function $subname undefined argument ", $index+1, ": @args[0..$index-1]\n"; last; } }
+	{ warn error_loc() . " undefined argument ", $index+1, ": @args[0..$index-1]\n"; last; } }
   return @args;
+}
+
+sub error_loc ( ) {
+  my ($pack, $file_arg, $line_arg, $subname, $hasargs, $wantarr) = caller(2);
+  # Fake uses to satisfy shadowed-variables-perl: $pack $hasargs $wantarr.
+  if (defined($subname))
+    { return "$file_arg:$line_arg: function $subname"; }
+  else
+    { # One of the checkargs routines was called at top level.  That's not
+      # its intended us, but make it give a good error message nonetheless.
+      ($pack, $file_arg, $line_arg, $subname, $hasargs, $wantarr) = caller(1);
+      return "$file_arg:$line_arg:"; }
 }
 
 1;				# successful import
