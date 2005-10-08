@@ -793,36 +793,34 @@ on specific invariant objects rather than a particular class or portion of Daiko
 This is referred to as @emph{Track} logging because it tracks particular
 values across Daikon.
 
-Track logging is specified by three pieces of information: 
+The @option{--track @var{class|class|...<var,var,var>@@ppt}} option to Daikon 
+(@pxref{Daikon debugging options,,,./daikon,Daikon User Manual})
+enables track logging.
+The argument to the @option{--track} option supplies three pieces of information: 
 
-   @enumerate
-   
-   @item The class name of the invariant (e.g., @code{IntEqual})
+@enumerate
 
-   @item The program point of interest (e.g., 
-   @code{DataStructures.StackAr.makeEmpty()V:::ENTER})
+@item The class name of the invariant (e.g., @code{IntEqual}).
+Multiple class arguments can be specified separated by pipe symbols
+(@samp{|}).
 
-   @item The variables that are used in the invariant (e.g., @code{return},
-   @code{size(this.s[])})
+@item The variables that are used in the invariant (e.g., @code{return},
+@code{size(this.s[])}).  The variables are specified in angle brackets
+(@samp{<>}).
 
-   @end enumerate
+@item The program point of interest (e.g., 
+@code{DataStructures.StackAr.makeEmpty()V:::ENTER}).  The program point
+is preceded by an at sign (@samp{@@}).
 
-These items are specified using the --track argument to Daikon.  Each of
-the the inputs to track logging can be specified in a single argument.
-The basic syntax is:
-@example
- class|class|...<var,var,var>@@ppt
-@end example
-As shown, multiple class arguments can be specified separated by pipe
-symbols (@samp{|}).  The variables are specified in angle brackets (@samp{<>}) 
-and the program point is preceded by an at sign (@samp{@@}).  
+@end enumerate
+
 Each item is optional.
 For example:
 @example
 IntEqual<x,y>@@makeEmpty()
 LessThan|GreaterThan<return,orig(y)>@@EXIT99
 @end example
-Multiple --track switches can be specified. The class, program point,
+Multiple @option{--track} switches can be specified. The class, program point,
 and each of the variables must match one of the specifications in order
 for information concerning the invariant to be printed.
 
@@ -867,6 +865,10 @@ and
 
 @node Adding track logging, Track log output, Track logging, Track logging
 @subsection Adding track logging
+
+When you add a new invariant, derived variable, or other component to
+Daikon, you should ensure that it supports track logging in the same way
+that existing components do.  This section describes how to do so.
 
 @emph{Track} logging is based
 around the class name, program point name, and variables of interest.
@@ -1196,7 +1198,8 @@ don't check in your changes until you understand which is the desired
 behavior and possibly update the goals.
 
 The Daikon distribution contains unit tests, but not regression tests
-(which would make the distribution much larger).
+(which would make the distribution much larger).  The regression tests
+appear in Daikon's CVS repository.
 
 Note on Kvasir tests: The Kvasir (Daikon C front-end) tests appear in the 
 @file{$inv/tests/kvasir-tests} directory. These tests run Daikon to ensure 

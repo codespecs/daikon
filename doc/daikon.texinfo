@@ -132,10 +132,10 @@ Complete installation instructions
 * Windows installation notes::  
 * Cygwin installation notes::   
 
-Example usage for Java, C, and Perl
+Example usage for Java, C/C++, and Perl
 
 * Detecting invariants in Java programs::  
-* Detecting invariants in C programs::  
+* Detecting invariants in C/C++ programs::  
 * Detecting invariants in Perl programs::  
 
 Detecting invariants in Java programs
@@ -147,7 +147,7 @@ Understanding the invariants
 
 * Second Java example::         
 
-Detecting invariants in C programs
+Detecting invariants in C/C++ programs
 
 * C examples::                  
 * Dealing with large examples::  
@@ -662,7 +662,7 @@ always translate anything listed in @env{CYGWIN_RUNNER_ENV} (e.g.,
 
 
 @node    Example usage, Running Daikon, Installing Daikon, Top
-@chapter Example usage for Java, C, and Perl
+@chapter Example usage for Java, C/C++, and Perl
 
 Detecting invariants involves two steps:
 @enumerate
@@ -671,6 +671,9 @@ Obtain a data trace file by running your program under the control of a
 front end (also known as an instrumenter) that records information about
 variable values.  You can run your program over an input of your own
 choosing, such as regression tests or a typical user input session.
+Often, you will choose to obtain trace data for only a certain part of
+your program; this can improve performance and avoid inundating you with
+output.
 
 @item
 Run the Daikon invariant detector over the data trace files
@@ -687,11 +690,11 @@ these and other front ends that are available for Daikon, @ref{Front ends}.
 
 @menu
 * Detecting invariants in Java programs::  
-* Detecting invariants in C programs::  
+* Detecting invariants in C/C++ programs::  
 * Detecting invariants in Perl programs::  
 @end menu
 
-@node    Detecting invariants in Java programs, Detecting invariants in C programs, Example usage, Example usage
+@node    Detecting invariants in Java programs, Detecting invariants in C/C++ programs, Example usage, Example usage
 @section Detecting invariants in Java programs
 
 In order to detect invariants in a Java program, run the
@@ -928,11 +931,13 @@ java daikon.Daikon QueueArTester.dtrace.gz
 
 
 
-@node    Detecting invariants in C programs, Detecting invariants in Perl programs, Detecting invariants in Java programs, Example usage
-@section Detecting invariants in C programs
+@node    Detecting invariants in C/C++ programs, Detecting invariants in Perl programs, Detecting invariants in Java programs, Example usage
+@section Detecting invariants in C/C++ programs
 
-In order to detect invariants over C programs, you must first install
-the C front end Kvasir; see @ref{Installing Kvasir}.
+In order to detect invariants over C or C++ programs, you must first install
+a C/C++ front end.  You can choose Kvasir (@pxref{Installing Kvasir}) or
+Mangel-Wurzel (@pxref{Mangel-Wurzel}).  This section gives examples
+using Kvasir.
 
 To use the C front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
@@ -949,7 +954,7 @@ documentation on its command-line options, see @ref{Kvasir}.
 * Dealing with large examples::  
 @end menu
 
-@node    C examples, Dealing with large examples, Detecting invariants in C programs, Detecting invariants in C programs
+@node    C examples, Dealing with large examples, Detecting invariants in C/C++ programs, Detecting invariants in C/C++ programs
 @subsection C examples
 
 The Daikon distribution comes with several example C programs in the
@@ -1040,7 +1045,7 @@ For help understanding the invariants, see @ref{Interpreting output}.
 @end enumerate
 
 
-@node    Dealing with large examples,  , C examples, Detecting invariants in C programs
+@node    Dealing with large examples,  , C examples, Detecting invariants in C/C++ programs
 @subsection Dealing with large examples
 
 Since the default memory size used by Java virtual machines varies, we
@@ -1070,7 +1075,7 @@ and long program runs, see @ref{Large dtrace files}.
 
 
 
-@node    Detecting invariants in Perl programs,  , Detecting invariants in C programs, Example usage
+@node    Detecting invariants in Perl programs,  , Detecting invariants in C/C++ programs, Example usage
 @section Detecting invariants in Perl programs
 
 The Daikon front end for Perl is called dfepl.
@@ -1529,8 +1534,8 @@ a particular invariant through Daikon.  Multiple @option{--track} options
 can be specified.  Each item (class, variables, and program point) is optional.
 Multiple classes can be specified separated by vertical bars (|).  Matching
 is a simple substring (not a regular expression) comparison.  Each item
-must match in order for a printout to occur.  See the Daikon Developer
-Manual for more information.
+must match in order for a printout to occur.  For more information, see
+@ref{Track logging,,,./developer,Daikon Developer Manual}.
 
 @item --disc_reason @var{inv_class}<@var{var1},@var{var2},...>@@@var{ppt}
 Prints all discarded invariants of class @var{inv_class} at the program point
@@ -2062,6 +2067,8 @@ and @samp{a=c}.
 @node   Invariant list, Invariant filters, Interpreting output, Daikon output
 @section Invariant list
 
+@cindex invariant list
+@cindex invariants, list of all
 The following is a list of all of the invariants that Daikon detects.
 Each invariant has a configuration enable switch.  By default most invariants
 are enabled.  Any that are not enabled by default are indicated below.
@@ -7466,15 +7473,16 @@ trace file.
 @item
 @cindex comparability, for variables
 @cindex variable comparability
-comparable variables.  These indicate
-which other variables are comparable to this one, which is typically
-obtained via type-inference based analysis.
+comparable variables.  Theis information indicates
+which other variables are comparable to this one.
+This may be obtained dynamically, via type-inference based analysis, or
+in some other manner.
 
 A comparability for a non-array type is a signed integer.  Two variables
 at the same program point
 are considered comparable if both integers are the same, or if either
-integer is negative.are 
-A comparability for an array type may contain an
+integer is negative.
+A comparability for an array type must contain an
 integer for each index and for the contents; for instance, @samp{5[22][17]}
 for a two-dimensional array.  Comparisons succeed if comparisons over
 each component succeed.
