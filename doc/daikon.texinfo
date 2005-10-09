@@ -984,7 +984,8 @@ program for finding anagrams.
 cd $DAIKONDIR/examples/kvasir-examples/wordplay
 @end example
 
-@item Compile the program with DWARF-2 debugging information enabled.
+@item Compile the program with DWARF-2 debugging information enabled
+(and all optimizations disabled).
 @example
 gcc -gdwarf-2 wordplay.c -o wordplay
 @end example
@@ -1004,17 +1005,17 @@ Any options to the program can be specified as usual; here, for
 instance, we give commands to look for anagrams of the phrase ``Daikon
 Dynamic Invariant Detector'' using words from the file @file{words.txt}.
 
-Executing under Kvasir, the program runs normally, but Kvasir will
+Executing under Kvasir, the program runs normally, but Kvasir
 executes additional checks and collects trace information (for this
 reason, the program will run more slowly than usual).  Kvasir creates a
 directory named @file{daikon-output} under the current directory, and
-creates files @file{wordplay.decls} and @file{wordplay.dtrace} describing
-its observations.
+creates the @file{wordplay.dtrace} file, which lists both variable
+declarations and values.
 
 Kvasir will also print messages if it observes your program doing
 something with undefined effects; these may indicate bugs in your
 program, or they may be spurious.  (If they are bugs, they can also be
-tracked down by using Valgrind (@uref{http://valgrind.kde.org/})
+tracked down by using Valgrind (@uref{http://www.valgrind.org/})
 with its regular memory checking
 tool; if they do not appear with that tool, they are probably
 spurious).
@@ -1023,7 +1024,7 @@ spurious).
 @example
 java daikon.Daikon \
      --config_option daikon.Daikon.disable_derived_variables=true \
-     daikon-output/wordplay.decls daikon-output/wordplay.dtrace
+     daikon-output/wordplay.dtrace
 @end example
 
 The invariants are printed to standard output, and a binary representation
@@ -3151,11 +3152,13 @@ the target program.  The size is specified in the same manner as the
 
 Daikon's front end for C, named Kvasir, executes C (and a reasonable subset 
 of C++) programs and creates  
-data trace (@file{.dtrace}) files by examining the operation of the binary at
+data trace (@file{.dtrace}) files of variables and their values by
+examining the operation of the binary at 
 runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
 
 To use Kvasir, first compile your program using the DWARF-2 debugging
-format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}).
+format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
+without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
 Then, prefix your command line by @command{kvasir-dtrace}.  For example, 
 if you normally run your program with the command 
 @example
@@ -3167,7 +3170,9 @@ then instead use the command
 kvasir-dtrace ./program -option input.file
 @end example
 @noindent
-which creates a data trace file @file{daikon-output/program.dtrace}.
+to run your program and create a data trace file
+@file{daikon-output/program.dtrace}, which can be fed as input into
+Daikon.
 You can also run Daikon without creating an intermediate data trace
 file; see @ref{Online execution}.
 
@@ -3175,7 +3180,7 @@ For information about installing Kvasir, see @ref{Installing Kvasir}.
 Kvasir only works under Linux running on an x86 processor; for full
 details, see @ref{Kvasir limitations}.
 For information about how to create an instrumenter for C that works on
-non-Linux or non-386 platforms, see @ref{Instrumenting C
+non-Linux or non-x86 platforms, see @ref{Instrumenting C
 programs,,,./developer,Daikon Developer Manual}.
 
 @menu
@@ -3224,29 +3229,23 @@ before the argument that is the name of your program (@pxref{Kvasir options}).
 @node Kvasir options, Tracing only part of a program, Using Kvasir, Kvasir
 @subsection Kvasir options
 
+To see a complete list of options, run this command: @command{kvasir-dtrace --help}
+
+Output file format:
+
 @table @option
 
-@item --asserts-aborts
-@itemx --no-asserts-aborts
-
-Enable (disable) Kvasir's internal consistency checks.  By default, they
-are disabled. 
-
-@item --debug
-@itemx --no-debug
-
-Enable (disable) progress messages meant for debugging problems with
-Kvasir itself.  By default, they are disabled.  This option is intended
-mainly for Kvasir's developers.
-
-@item --decls-file=@var{filename.decls}
+@item --decls-file=@var{filename}
 
 Write the @file{.decls} file listing the names of functions and
-variables to the specified file name.  This forces Kvasir to generate separate 
+variables (called declarations) to the specified file name.  This forces
+Kvasir to generate separate
 @file{.decls} and @file{.dtrace} files instead of outputting everything to the 
-@file{.dtrace} file, which is the default behavior.  To generate 
-a @file{.dtrace} file with no @file{.decls} information, you can use
-@option{--decls-file=/dev/null}.
+@file{.dtrace} file, which is the default behavior.    If only a @file{.dtrace} file is
+created (default behavior), then it contains both variable declarations and a trace of
+values.  If separate @file{.decls} and @file{.dtrace} files are created,
+then the @file{.decls} file contains declarations and the @file{.dtrace}
+file contains the trace of values.
 
 @item --decls-only
 
@@ -3255,6 +3254,178 @@ generate trace information.  Since the @file{.decls} file is the same for
 any run of a program, it can be generated once and then reused on later
 runs, as long as no new program points are added and each program point
 has the same set of variables.
+
+@item --dtrace-file=@var{filename}
+
+Write the @file{.dtrace} trace file to the specified file name.  The default is
+@file{daikon-output/@var{programname}.dtrace}, where @var{programname}
+is the name of the program.  A filename of @file{-} may be used to
+specify the standard output; in this case, the regular standard output
+of the program will be redirected back to the terminal (@file{/dev/tty}), to avoid
+intermixing it with the trace output.  If the given filename ends in
+@file{.gz}, then @option{--dtrace-gzip} is enabled and the
+@file{.dtrace} file will be compressed.
+
+@item --dtrace-no-decs
+
+By default, the @file{.dtrace} file contains both a list of variable
+declarations followed by a trace of variable values (@pxref{File
+formats}).  If this option is used, then variable declarations are not
+outputted in the .dtrace file.  This option is equivalent to
+@option{--decls-file=/dev/null}, except that it runs faster.  This is
+useful when you want to generate one copy of the declarations in the
+.decls file using @option{--decls-only}, generate many
+@file{.dtrace} files from different program runs, and then feed 1
+@file{.decls} and several @file{.dtrace} files into Daikon.
+
+@item --dtrace-append
+
+Append new trace information to the end of an existing @file{.dtrace}
+file.  The default is to overwrite a pre-existing @file{.dtrace} file.
+When this option is used, no declaration information is written because
+it is assumed that the existing .dtrace file already contains all
+declarations (Daikon does not accept duplicate declarations).
+
+@item --dtrace-gzip
+
+Compress trace information with the gzip program before writing
+it to the @file{.dtrace} file.  You must have the gzip program
+available.
+
+@item --output-fifo
+
+Create the output @file{.decls} and @file{.dtrace} files as FIFOs (also
+known as ``named pipes'').  Kvasir will then open first the @file{.decls}
+FIFO and then the @file{.dtrace} FIFO, blocking until another program
+(such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
+avoids the need for large trace files, but FIFOs are not supported by
+some file systems, including AFS@.
+
+@item --program-stdout=@var{filename}
+@itemx --program-stderr=@var{filename}
+
+Redirect the standard output (respectively, standard error) stream of the
+program being traced to the specified path.  By default, the standard
+output and standard error streams will be left pointing to the same
+locations specified by the shell, except that if @option{--dtrace-file=-}
+is specified, then the default behavior is as if
+@option{--program-stdout=/dev/tty} were specified, since mixing the
+program's output and Kvasir's trace output is not advisable.
+If the same filename is given for both options, the streams will be
+interleaved in the same way as if by the Bourne shell construction
+@code{2>&1}.
+
+Also, as in the shell, @var{filename} can be an ampersand followed by an
+integer, to redirect to a numbered file descriptor.  For instance, to
+redirect the program's standard output and error, and Kvasir's standard
+error, to a single file, you can say @option{--program-stdout='&2'
+--program-stderr='&2' 2>@var{filename}}.
+
+@end table
+
+Selective program tracing:
+
+@table @option
+
+
+@item --ppt-list-file=@var{filename}
+@itemx --var-list-file=@var{filename}
+
+Trace only the program points (respectively, variables) listed in the
+given file.  Other program points (respectively variables) will be
+omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
+way to produce such files is by editing the output produced by the
+@option{--dump-ppt-file} (respectively, @option{--dump-var-file}) option
+described above.  (@pxref{Tracing only part of a program} section
+for detailed instructions on using these options.)
+
+@item --dump-ppt-file=@var{filename}
+@itemx --dump-var-file=@var{filename}
+
+Print a list of all the program points (respectively all the variables)
+in the program to the specified file.  An edited version of this file can
+then be used with the @option{--ppt-list-file} (respectively
+@option{--var-list-file}) option.
+(@pxref{Tracing only part of a program} section
+for detailed instructions on using these options.)
+Note: Do not use these options with the
+@option{--with-dyncomp} option because the behavior is undefined.
+Running Kvasir with these 
+options will initialize but not actually execute the target program, so
+the dynamic comparability analysis cannot be performed in the first
+place.
+
+@item --ignore-globals
+
+Omit any global or static variables from the @file{.decls} and
+@file{.dtrace} files.  Leaving these out can significantly improve Kvasir
+and Daikon's performance, at the expense of missing properties involving
+them.  The default is to generate trace information for 
+global and static variables.
+
+@item --ignore-static-vars
+
+Omit any static variables but generate trace information for 
+global variables in the  @file{.decls} and @file{.dtrace} files.
+
+@item --limit-static-vars
+
+Limits the output of static variables in the @file{.decls} and
+@file{.dtrace} files.  File-static variables are only observed at
+program points for functions which belong to the same file as the
+variable.  Static variables declared within a particular function are
+only observed at program points for that function.  This is a
+heuristic to reduce the amount of Kvasir output without greatly
+reducing the amount of useful output.
+
+@end table
+
+Pointer type disambiguation:
+
+@table @option
+
+@item --disambig-file=@var{filename}
+Specifies the name of the pointer type disambiguation file 
+(@pxref{Pointer type disambiguation}).
+If this file exists, Kvasir uses it to make decisions about how 
+to output the referents of pointer variables.  If the file does not exist, 
+then Kvasir creates it.  This file may then be edited and used on
+subsequent runs. This option initializes but does not fully execute the
+target program (unless it is run with the @option{--smart-disambig}
+option).
+
+@item --disambig
+Tells Kvasir to create or read pointer type disambiguation 
+(@pxref{Pointer type disambiguation}) with the default filename, 
+which is @file{@var{myprog}.disambig} in the same
+directory as the target program, where @var{myprog} is the name of the 
+target program. This is equivalent to 
+@samp{--disambig-file=@file{@var{myprog}.disambig}}.
+
+@item --smart-disambig
+This option should be used in addition to either the @option{--disambig}
+or @option{--disambig-file} options (it does nothing by itself).  If the
+.disambig file specified by the option does not exist, then Kvasir
+executes the target program, observes whether each pointer refers to
+either one element or an array of elements, and creates a disambiguation
+file that contains suggestions for the disambiguation types of each
+pointer variable.  This potentially provides more accuracy than using
+either the @option{--disambig} or @option{--disambig-file} options alone,
+but at the expense of a longer run time.  (If the .disambig file already
+exists, then this option provides no extra functionality.)
+
+@item --disambig-ptrs
+By default, Kvasir treats all pointers as arrays when outputting their
+contents.  This option forces Kvasir to treat all pointers as pointing to
+single values.  This is useful when tracing nested structures with lots
+of pointer fields which all refer to one element.
+
+@end table
+
+
+DynComp Dynamic Comparability Analysis:
+
+@table @option
 
 @item --with-dyncomp
 
@@ -3306,51 +3477,29 @@ comparability separately for function entrances and exits, which can
 lead to more accurate results, but sometimes generates output .decls
 files that Daikon cannot accept.
 
-@item --dtrace-append
+@end table
 
-Append new trace information to the end of an existing @file{.dtrace}
-file.  The default is to overwrite a pre-existing @file{.dtrace} file.
+Misc. options:
 
-@item --dtrace-file=@var{filename.dtrace}
+@table @option
 
-Write the @file{.dtrace} trace file giving the values of variables to
-the specified file name.  The default is
-@file{daikon-output/@var{programname}.dtrace}, where @var{programname}
-is the name of the program.  A filename of @file{-} may be used to
-specify the standard output; in this case, the regular standard output
-of the program will be redirected back to the terminal, to avoid
-intermixing it with the trace output.  If the given filename ends in
-@file{.gz}, then @option{--dtrace-gzip} is enabled and the
-@file{.dtrace} file will be compressed.
+@item --flatten-arrays
+This option forces the flattening of statically-sized arrays into
+separate variables, one for each element.  For example, an array
+@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
+@var{foo[1]}, @var{foo[2]}.  By default, Kvasir flattens
+statically-sized arrays only after is has already exhausted the one
+level of sequences that Daikon allows in the .dtrace output format
+(e.g. an array of structs where each struct contains a statically-sized
+array).
 
-@item --dtrace-gzip
-
-Compress trace information with the gzip program before writing
-it to the @file{.dtrace} file.  You must have the gzip program
-available.
-
-@item --ignore-globals
-
-Omit any global or static variables from the @file{.decls} and
-@file{.dtrace} files.  Leaving these out can significantly improve Kvasir
-and Daikon's performance, at the expense of missing properties involving
-them.  The default is to generate trace information for 
-global and static variables.
-
-@item --ignore-static-vars
-
-Omit any static variables but generate trace information for 
-global variables in the  @file{.decls} and @file{.dtrace} files.
-
-@item --limit-static-vars
-
-Limits the output of static variables in the @file{.decls} and
-@file{.dtrace} files.  File-static variables are only observed at
-program points for functions which belong to the same file as the
-variable.  Static variables declared within a particular function are
-only observed at program points for that function.  This is a
-heuristic to reduce the amount of Kvasir output without greatly
-reducing the amount of useful output.
+@item --output-struct-vars
+This option forces Kvasir to output .decls and .dtrace entries for
+struct variables.  By default, Kvasir ignores struct variables because
+there is really no value that can be meaningfully associated with these
+variables.  However, some tools require struct variables to be
+outputted, so we have included this option.  Struct variables are
+denoted by a @code{# isStruct=true} annotation in their declarations.
 
 @item --bit-level-precision
 
@@ -3378,115 +3527,28 @@ are pointers to the @emph{same} type of struct or class),
 @var{N} (an integer between 
 0 and 100) specifies approximately how many levels of pointers to dereference. 
 This is useful for controlling the output of linked lists and trees. 
-The default is 2.
+The default is 2.  If you are trying to traverse deep into data
+structures, try adjusting the @option{--struct-depth} and
+@option{--total-depth} options until Kvasir traverses deep enough to
+reach the desired variables.
 
-@item --output-fifo
+@end table
 
-Create the output @file{.decls} and @file{.dtrace} files as FIFOs (also
-known as ``named pipes'').  Kvasir will then open first the @file{.decls}
-FIFO and then the @file{.dtrace} FIFO, blocking until another program
-(such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
-avoids the need for large trace files, but FIFOs are not supported by
-some file systems, including AFS@.
+Debugging:
 
-@item --ppt-list-file=@var{filename}
-@itemx --var-list-file=@var{filename}
+@table @option
 
-Trace only the program points (respectively, variables) listed in the
-given file.  Other program points (respectively variables) will be
-omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
-way to produce such files is by editing the output produced by the
-@option{--dump-ppt-file} (respectively, @option{--dump-var-file}) option
-described above.  (@pxref{Tracing only part of a program} section
-for detailed instructions on using these options.)
+@item --asserts-aborts
 
-@item --dump-ppt-file=@var{filename}
-@itemx --dump-var-file=@var{filename}
+Enable Kvasir's internal consistency checks.  By default, they are
+disabled.
 
-Print a list of all the program points (respectively all the variables)
-in the program to the specified file.  An edited version of this file can
-then be used with the @option{--ppt-list-file} (respectively
-@option{--var-list-file}) option.
-(@pxref{Tracing only part of a program} section
-for detailed instructions on using these options.)
-Note: Do not use these options with the
-@option{--with-dyncomp} option because the behavior is undefined.
-Running Kvasir with these 
-options will initialize but not actually execute the target program, so
-the dynamic comparability analysis cannot be performed in the first
-place.
+@item --debug
+@itemx --dyncomp-debug
 
-@item --program-stdout=@var{filename}
-@itemx --program-stderr=@var{filename}
-
-Redirect the standard output (respectively, standard error) stream of the
-program being traced to the specified path.  By default, the standard
-output and standard error streams will be left pointing to the same
-locations specified by the shell, except that if @option{--dtrace-file=-}
-is specified, then the default behavior is as if
-@option{--program-stdout=/dev/tty} were specified, since mixing the
-program's output and Kvasir's trace output is not advisable.
-If the same filename is given for both options, the streams will be
-interleaved in the same way as if by the Bourne shell construction
-@code{2>&1}.
-
-Also, as in the shell, @var{filename} can be an ampersand followed by an
-integer, to redirect to a numbered file descriptor.  For instance, to
-redirect the program's standard output and error, and Kvasir's standard
-error, to a single file, you can say @option{--program-stdout='&2'
---program-stderr='&2' 2>@var{filename}}.
-
-@item --disambig-file=@var{filename}
-Specifies the name of the pointer type disambiguation file 
-(@pxref{Pointer type disambiguation}).
-If this file exists, Kvasir uses it to make decisions about how 
-to output the referents of pointer variables.  If the file does not exist, 
-then Kvasir creates it.  This file may then be edited and used on
-subsequent runs. This option initializes but does not fully execute the
-target program (unless it is run with the @option{--smart-disambig}
-option).
-
-@item --disambig
-Tells Kvasir to create or read pointer type disambiguation 
-(@pxref{Pointer type disambiguation}) with the default filename, 
-which is @file{@var{myprog}.disambig} in the same
-directory as the target program, where @var{myprog} is the name of the 
-target program. This is equivalent to 
-@samp{--disambig-file=@file{@var{myprog}.disambig}}.
-
-@item --smart-disambig
-This option should be used in addition to either the @option{--disambig}
-or @option{--disambig-file} options (it does nothing by itself).  If the
-.disambig file specified by the option does not exist, then Kvasir
-executes the target program, observes whether each pointer refers to
-either one element or an array of elements, and creates a disambiguation
-file that contains suggestions for the disambiguation types of each
-pointer variable.  This potentially provides more accuracy than using
-either the @option{--disambig} or @option{--disambig-file} options alone,
-but at the expense of a longer run time.  (If the .disambig file already
-exists, then this option provides no extra functionality.)
-
-@item --disambig-ptrs
-By default, Kvasir treats all pointers as arrays when outputting their
-contents.  This option forces to treat all pointers as pointing to
-single values.
-
-@item --flatten-arrays
-This option forces the flattening of statically-sized arrays into
-separate variables, one for each element.  For example, an array
-@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
-@var{foo[1]}, @var{foo[2]}.  By default, Kvasir flattens
-statically-sized arrays only after is has already exhausted the one
-level of sequences that Daikon allows in the .dtrace output format
-(e.g. an array of structs where each struct contains a statically-sized
-array).
-
-@item --output-struct-vars
-This option forces Kvasir to output .decls and .dtrace entries for
-struct variables.  By default, Kvasir ignores struct variables because
-there is really no value that can be meaningfully associated with these
-variables.  However, some tools require struct variables to be
-outputted, so we have included this option.
+Enable progress messages meant for debugging problems with Kvasir or
+DynComp.  By default, they are disabled.  This option is intended mainly
+for Kvasir's developers.
 
 @end table
 
@@ -3507,11 +3569,11 @@ any other program points or variables in the trace file.  The
 used to achieve such selective tracing.
 
 The program point list file (abbreviated as @file{ppt-list-file})
-consists of a newline-separated list of names of program points that the
+consists of a newline-separated list of names of functions that the
 user wants Kvasir to trace.  Every name corresponds to both the entrance
-(@code{:::ENTER}) and exit (@code{:::EXIT}) program points corresponding
-to that name and is printed out in the exact same format that Kvasir
-uses for that program point in the trace file (@pxref{Using Kvasir}
+(@code{:::ENTER}) and exit (@code{:::EXIT}) program points for that function
+and is printed out in the exact same format that Kvasir
+uses for that function in the trace file (@pxref{Using Kvasir}
 section for the program point naming scheme).  In the special case of
 certain C++ functions, Kvasir needs to have the mangled versions of the
 names in order to optimize the performance of selective tracing.  Those
@@ -3522,10 +3584,10 @@ example of a @file{ppt-list-file} which contains both regular and C++
 names:
 
 @example
-FunctionNamesTest.c.staticFoo()
+FunctionNamesTest.cpp.staticFoo()
 (mangled) _Z17firstFileFunctioni ..firstFileFunction(int)
 ..main()
-second_file.c.staticFoo()
+second_file.cpp.staticFoo()
 (mangled) _Z18secondFileFunctionv ..secondFileFunction()
 @end example
 
@@ -3540,7 +3602,7 @@ not to be traced or create a new @file{ppt-list-file} using the names in
 the Kvasir-generated file.  This prevents typos and the tedium of
 manually typing up program point names (which is nearly impossible in
 the case of mangled C++ names).  In fact, the @file{ppt-list-file}
-presented in the above example was generated from a test program named
+presented in the above example was generated from a C++ test program named
 @code{FunctionNamesTest} by using the following command:
 
 @example
@@ -3554,10 +3616,10 @@ function, he could comment out all other lines by placing a single
 as demonstrated here:
 
 @example
-#FunctionNamesTest.c.staticFoo()
+#FunctionNamesTest.cpp.staticFoo()
 #(mangled) _Z17firstFileFunctioni ..firstFileFunction(int)
 ..main()
-#second_file.c.staticFoo()
+#second_file.cpp.staticFoo()
 #(mangled) _Z18secondFileFunctionv ..secondFileFunction()
 @end example
 @noindent
@@ -3573,7 +3635,7 @@ no other declarations are necessary.
 The variable list file (abbreviated as @file{var-list-file}) contains
 all of the variables that the user wants Kvasir to output.  There is one
 section for global variables and a section for variables associated with
-each program point (function formal parameters).  Again, the best way to
+each function (formal parameters and return values).  Again, the best way to
 create a @file{var-list-file} is to have Kvasir generate a file with all
 variables using the @option{--dump-var-file} option and then modifying
 that file for one's particular needs by either deleting or
@@ -3598,7 +3660,7 @@ globals
 
 
 ----SECTION----
-FunctionNamesTest.c.staticFoo()
+FunctionNamesTest.cpp.staticFoo()
 x
 y
 
@@ -3617,7 +3679,7 @@ return
 
 
 ----SECTION----
-second_file.c.staticFoo()
+second_file.cpp.staticFoo()
 x
 y
 
@@ -3658,6 +3720,25 @@ general rule about variable entries in the @file{var-list-file} is that
 if a parent variable is not present, then neither it nor its children
 are traced.
 
+@example
+
+record
+record->entries[1]
+record->entries[1]->list
+record->entries[1]->list->head
+record->entries[1]->list->head->magic
+
+@end example
+
+For example, if you wanted to trace the value of the @code{magic} field
+nested deep within several layers of structs and arrays, it would not be
+enough to merely list this variable in the @file{var-list-file}.  You
+would need to list all variables that are the parents of this one, as
+indicated by their names.  This can be easily accomplished by creating a
+file with @option{--dump-var-file} and cutting out variable entries,
+taking care to not cut out entries that are the parents of entries that
+you want to trace.
+
 In order to limit both the number of program points traced as well as
 the variables traced at those program points, the user can run Kvasir
 with both the @option{--ppt-list-file} and @option{--var-list-file}
@@ -3685,7 +3766,7 @@ already-existent @file{ppt-list-file}.
 Kvasir permits users (or external analyses) to specify whether pointers
 refer to arrays or to single values.  For example, in
 @example
-void sum(int * array, int * result) @{ ... @}  // definition of "sum"
+void sum(int* array, int* result) @{ ... @}  // definition of "sum"
 ...
 int a[40];
 int total;
@@ -3700,7 +3781,7 @@ an array of integers, and @code{result[]} isn't a sensible array
 at all, even though in C @code{result[0]} is semantically identical to 
 @code{*result}.
 By default, Kvasir treats all pointers as referencing arrays.  For
-instance, it would print @code{result[]} rather than @code{*result}
+instance, it would print @code{result[]} rather than @code{result[0]}
 and would indicate that the length of array @code{result[]} is always 1.
 In order to improve the formatting of Daikon's output (and to speed it
 up), you can indicate to Daikon that certain pointers refer to single
@@ -3716,7 +3797,7 @@ Kvasir produces the file automatically and, if invoked along with the
 pointer variable refers to single or multiple elements. Thus, users can
 edit this file for use on subsequent runs rather than having to create it 
 from scratch.)  The disambig file lists all the program points and user-defined 
-types, and under each, a list of certain types of variables along with their 
+types, and under each, lists certain types of variables along with their 
 custom disambiguation types as shown below.  
 The list of disambiguation options is:
 
@@ -3748,20 +3829,26 @@ along with @option{--smart-disambig}, Kvasir automatically infers a default 'A' 
 @item
 'A': an array.  (Default) (For an array of structs, an array will be output for each scalar field of the struct.  Aggregate children (arrays, other structs) will not be output.)
 @item
-'P': a pointer to a single element.  (For a pointer to a struct, each field will be output as a single instance, and child aggregate types will be output recursively. This extra information obtained from struct pointers is a powerful consequence of pointer type disambiguation.)
+'P': a pointer to a single element.  (For a pointer to a struct, each
+field will be output as a single instance, and child aggregate types
+will be output recursively. This extra information obtained from struct
+pointers is a powerful consequence of pointer type disambiguation.  This
+will be the default if the @option{--disambig-ptrs} option is used.)
 @end enumerate
 @end enumerate
 
-The disambig file that Kvasir creates contains an entry for each program
-point, which can be used to disambiguate parameter variables visible at
-that program point.  It also contains an entry for every user-defined
-struct, which can be used to disambiguate member variables of
-that struct.  Disambiguation information entered here will apply to all
-instances of a struct or class of that type, at all program points.
-There is also an entry called ``globals'', which disambiguates global
+The disambig file that Kvasir creates contains a section for each
+function, which can be used to disambiguate parameter variables visible
+at that function's entrance program point and parameter and return
+value variables visible at that function's exit program point.  It also contains
+a section for every user-defined 
+struct/class, which can be used to disambiguate member variables of
+that struct/class.  Disambiguation information entered here will apply to all
+instances of a struct/class of that type, at all program points.
+There is also a section called ``globals'', which disambiguates global
 variables which are output at every program point.  The entries in the
 disambig file may appear in any order, and whole entries or individual
-variables within an entry may be omitted.  In this case, Kvasir will
+variables within a section may be omitted.  In this case, Kvasir will
 retain their default values.
 
 
@@ -3797,7 +3884,7 @@ int main() @{
 @}
 @end example
 
-In @code{foo()}, @code{bar} is a @code{struct record *}.  By inspection, it is 
+In @code{foo()}, @code{bar} is a pointer to a  @code{record} struct.  By inspection, it is 
 evident that in this program, @code{bar} only refers to one element: @code{&baz} 
 within @code{main}.  However, by default, Kvasir assumes that @code{bar} is an 
 array of @code{record} structs since a C pointer contains no information about 
@@ -3807,7 +3894,7 @@ array and @w{@code{bar->numbers}} is an array of integers, it ``flattens''
 through @w{@code{bar->numbers[4]}} 
 and creates fairly verbose output.  This is a direct 
 consequence of the fact that Daikon can only handle one layer of sequences 
-(it cannot handle arrays within arrays, i.e., multi-dimensional arrays).  
+(it cannot handle arrays within arrays, i.e., multi-dimensional arrays).
 
 Here is part of the Daikon output for this program:
 
@@ -3815,47 +3902,51 @@ Here is part of the Daikon output for this program:
 ===========================================================================
 ..foo():::ENTER
 bar has only one value
-bar[] contains no nulls and has only one value, of length 1
-bar[] elements has only one value
 bar[].name == [Daikon User]
 bar[].name elements == "Daikon User"
-size(bar[]) == 1
 ===========================================================================
 ..foo():::EXIT
-bar[] == orig(bar[])
-size(bar[].numbers[0][]) == orig(size(bar[]))
-size(bar[].numbers[1][]) == orig(size(bar[]))
-size(bar[].numbers[2][]) == orig(size(bar[]))
-size(bar[].numbers[3][]) == orig(size(bar[]))
-size(bar[].numbers[4][]) == orig(size(bar[]))
-bar[] contains no nulls and has only one value, of length 1
-bar[] elements has only one value
+size(bar[]).numbers[0] == size(bar[]).numbers[0][0]
+size(bar[]).numbers[0] == size(bar[]).numbers[1]
+size(bar[]).numbers[0] == size(bar[]).numbers[1][0]
+size(bar[]).numbers[0] == size(bar[]).numbers[2]
+size(bar[]).numbers[0] == size(bar[]).numbers[2][0]
+size(bar[]).numbers[0] == size(bar[]).numbers[3]
+size(bar[]).numbers[0] == size(bar[]).numbers[3][0]
+size(bar[]).numbers[0] == size(bar[]).numbers[4]
+size(bar[]).numbers[0] == size(bar[]).numbers[4][0]
 bar[].name == [Daikon User]
 bar[].name elements == "Daikon User"
-bar[].numbers[0] has only one value
-bar[].numbers[0][] == [5]
-bar[].numbers[0][] elements == 5
-bar[].numbers[1] has only one value
-bar[].numbers[1][] == [4]
-bar[].numbers[1][] elements == 4
-bar[].numbers[2] has only one value
-bar[].numbers[2][] == [3]
-bar[].numbers[2][] elements == 3
-bar[].numbers[3] has only one value
-bar[].numbers[3][] == [2]
-bar[].numbers[3][] elements == 2
-bar[].numbers[4] has only one value
-bar[].numbers[4][] == [1]
-bar[].numbers[4][] elements == 1
-bar[].numbers[4][] elements == orig(size(bar[]))
-orig(size(bar[])) in bar[].numbers[4][]
+bar[].numbers[0] contains no nulls and has only one value, of length 1
+bar[].numbers[0] elements has only one value
+bar[].numbers[0][0] == [5]
+bar[].numbers[0][0] elements == 5
+bar[].numbers[1] contains no nulls and has only one value, of length 1
+bar[].numbers[1] elements has only one value
+bar[].numbers[1][0] == [4]
+bar[].numbers[1][0] elements == 4
+bar[].numbers[2] contains no nulls and has only one value, of length 1
+bar[].numbers[2] elements has only one value
+bar[].numbers[2][0] == [3]
+bar[].numbers[2][0] elements == 3
+bar[].numbers[3] contains no nulls and has only one value, of length 1
+bar[].numbers[3] elements has only one value
+bar[].numbers[3][0] == [2]
+bar[].numbers[3][0] elements == 2
+bar[].numbers[4] contains no nulls and has only one value, of length 1
+bar[].numbers[4] elements has only one value
+bar[].numbers[4][0] == [1]
+bar[].numbers[4][0] elements == 1
+size(bar[]).numbers[0] == 1
+bar[].numbers[4][0] elements == size(bar[]).numbers[0]
+size(bar[]).numbers[0] in bar[].numbers[4][0]
 @end example
 
-This is a bit wordy due to the fact that Kvasir treats @code{bar} like an array 
+This is a bit verbose due to the fact that Kvasir treats @code{bar} like an array 
 by default when it actually only points to one element.  However, by running 
 Kvasir with the @option{--disambig} option, we create the 
 @file{@var{myprog}.disambig} file, which we can then edit and feed back to 
-Kvasir to change how the pointer is output.  (We run Kvasir twice on the same
+Kvasir to change how the pointer is treated.  (We run Kvasir twice on the same
 program, but we edit the @file{.disambig} file in between the runs.)
 @example
 kvasir-dtrace @var{...options...} --disambig --smart-disambig @var{myprog}.c
@@ -3865,17 +3956,12 @@ This creates the @file{@var{myprog}.disambig} file.  It contains, at the top:
 
 @example
 ----SECTION----
-..foo():::ENTER
-bar
-P
-
-----SECTION----
-..foo():::EXIT0
+function: ..foo()
 bar
 P
 @end example
 
-This means that at the two program points corresponding to the entry and
+This means that at the program points corresponding to the entry and
 exit of @code{foo()}, the variable @code{bar} is treated as a
 @samp{P}ointer type. 
 Since we have used the @option{--smart-disambig} option,
@@ -3899,22 +3985,20 @@ kvasir-dtrace @var{...options...} --disambig @var{myprog}.c
 @end example
 
 This tells Kvasir to output @code{bar} as a @samp{P}ointer to a single
-element, which in turn causes Daikon to generate much cleaner
-invariants. Notice that @w{@code{bar->numbers}} no longer has to be
+element, which in turn causes Daikon to generate a much more concise
+set of invariants. Notice that @w{@code{bar->numbers}} no longer has to be
 ``flattened'' because @code{bar} is now a pointer to one struct, so
 Daikon can recognize @w{@code{bar->numbers}} as a single-dimensional
-array.
+array (Daikon uses a Java-like syntax, replacing the arrow '->' symbol
+with a dot, so it actually outputs @code{bar.numbers}).
 
 @example
 ===========================================================================
 ..foo():::ENTER
 bar has only one value
-*bar has only one value
 bar.name == "Daikon User"
 ===========================================================================
 ..foo():::EXIT
-*bar == orig(*bar)
-*bar has only one value
 bar.name == "Daikon User"
 bar.numbers has only one value
 bar.numbers[] == [5, 4, 3, 2, 1]
@@ -3958,18 +4042,20 @@ default.  Hence, the .decls, .dtrace, and @file{var-list-file} will list
 the following variables derived from this parameter:
 
 @example
+----SECTION----
+..foo()
 bar
 bar[].name
 bar[].numbers[0]
-bar[].numbers[0][]
+bar[].numbers[0][0]
 bar[].numbers[1]
-bar[].numbers[1][]
+bar[].numbers[1][0]
 bar[].numbers[2]
-bar[].numbers[2][]
+bar[].numbers[2][0]
 bar[].numbers[3]
-bar[].numbers[3][]
+bar[].numbers[3][0]
 bar[].numbers[4]
-bar[].numbers[4][]
+bar[].numbers[4][0]
 @end example
 
 However, if we use a disambiguation file to denote @code{bar} as a
@@ -3977,6 +4063,8 @@ pointer to a single element, then the .decls and .dtrace files will
 instead list the following variables:
 
 @example
+----SECTION----
+..foo()
 bar
 bar->name
 bar->numbers
@@ -4034,7 +4122,7 @@ tracing, variable tracing, and disambiguation together all at once.
 
 The term ``online execution'' refers to running Daikon at the same time
 as the target program, without writing any information to a file.  This
-can avoid some I/O overhead, it prevents filling up your disk with
+can avoid some I/O overhead, prevent filling up your disk with
 files, and in the future Daikon may be able to produce partial results
 as the target program is executing.
 
@@ -4043,6 +4131,10 @@ as the target program is executing.
 To use regular pipes in lieu of a disk file, simply use @file{-} as the
 name of the @file{.dtrace} file, and run the target program and Daikon
 in a Unix pipeline.
+When the @option{--dtrace-file=-} option is used to redirect
+the .dtrace output to stdout, the target program's stdout is redirected
+to the terminal (@file{/dev/tty}) so that it does not intermix with the
+.dtrace output.
 
 @example
 kvasir-dtrace --dtrace-file=- ./bzip2 --help | $DAIKON -
@@ -4103,20 +4195,18 @@ This should generate a .decls file with comparability information
 named @file{daikon-output/foo.decls}.
 
 @example
-kvasir-dtrace --decls-file=/dev/null --dtrace-file=- ./foo | java daikon.Daikon daikon-output/foo.decls -
+kvasir-dtrace --dtrace-no-decs --dtrace-file=- ./foo | java daikon.Daikon daikon-output/foo.decls -
 @end example
 
 When you run Kvasir the second time, you don't need to run DynComp
 again since you are only interested in the .dtrace file.  Notice that
-the .decls output is directed to @file{/dev/null} and the .dtrace output
-is directed to standard out (@file{--dtrace-file=-}).  You can simply
+the .dtrace output
+is directed to standard out (@file{--dtrace-file=-}) and does not
+contain any declarations (@option{--dtrace-no-decs}) because the .decls
+file already contains the declarations.  You can simply
 pipe that .dtrace output out to Daikon, which is invoked using the
 .decls file (with comparability information) generated during your
 previous run.
-
-A general warning about online execution: If your program outputs text
-to standard output and the .dtrace data is also redirected to standard
-output, then the two may conflict and confuse Daikon.
 
 @node    Installing Kvasir, Kvasir limitations, Online execution, Kvasir
 @subsection Installing Kvasir
@@ -4158,8 +4248,7 @@ variables, and examine its memory usage, all transparently to the
 program.  Also, rather than using your program's source code to find
 the names and types of functions and variables, Kvasir obtains them
 from debugging information included in the executable in a standard
-format.  These differences should make Kvasir both much easier to use and
-more robust than the source-rewriting-based Mangel-Wurzel front end (@pxref{Mangel-Wurzel}).
+format (DWARF-2).
 
 However, Kvasir has some limitations of its own.  Because Kvasir uses
 Valgrind, it shares Valgrind's limitation of working only under the
@@ -4233,10 +4322,6 @@ this problem, do not use the @option{-static} flag when linking programs
 for use Kvasir.  If you want to link statically with a particular
 library, supply the path to its static version (@file{libfoo.a})
 directly to GCC instead.
-
-@item
-@c Not all of the options of the source-based C front end dfec are supported.
-Kvasir respects only the @env{DTRACEAPPEND} environment variable.
 
 @item
 Kvasir is incompatible with some compiler optimizations.  It is
@@ -5247,7 +5332,7 @@ longer supported.
 An earlier version of Daikon provided a source-based front end for Java
 named dfej.  It has been superseded by Chicory.
 
-An earlier version of Daikon provided a source-based front end for Java
+An earlier version of Daikon provided a source-based front end for C
 named dfec.  It has been superseded by Kvasir (binary-based, for Linux/x86) and
 Mangel-Wurzel (source-based, for all other platforms).
 
