@@ -551,13 +551,12 @@ class Example @{
 @cindex instrumenting C programs
 
 Daikon comes with two front ends for the C language:  Kvasir
-(@pxref{Kvasir,,,./daikon,Daikon User Manual}) and dfec
-(@pxref{dfec,,,./daikon,Daikon User Manual}).  Each has its limitations.
+(@pxref{Kvasir,,,./daikon,Daikon User Manual}) and Mangel-Wurzel
+(@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}).  Each has its limitations.
 Kvasir only works under the Linux operating system, and it works only on
-``x86'' (Intel 386-compatible) processors.  dfec is based on a
-relatively fragile smart pointer library and does not scale to large
-programs (it has been successfully applied only to programs of about
-10,000 lines).
+``x86'' (Intel 386-compatible) processors.  Mangel-Wurzel is still in the 
+early stages of development, thus lacking many tracing features related to arrays
+and nested structs, and requires the user to purchase Purify.
 
 You may wish to infer invariants over C programs running on other
 platforms; for instance, you want a robust C front end that works under
@@ -611,7 +610,7 @@ fault when @samp{*p} is accessed.  (If you choose never to dereference a
 pointer while performing instrumentation, then you do not need to worry
 about invalid references.  However, you will be unable to output any
 fields of a pointer to a struct or class, making your front end less
-useful.  You will still be abel to output fields of a regular variable
+useful.  You will still be able to output fields of a regular variable
 to a struct or class, but most interesting uses of structs and classes
 in C and C++ are through pointers.)
 
@@ -1726,5 +1725,5 @@ trunk (respectively, the branch).
 @c  LocalWords:  diff InvariantFormatTest classpath ioa jml aString valueOf val
 @c  LocalWords:  deffn SampleTester decl subsubsection arg iff testsubject ajax
 @c  LocalWords:  jtb cvs checkin smallexample checkins printindex Dataflow gcc
-@c  LocalWords:  convertcsv dfec malloc TerminationMessage un Mozilla FSE cd
+@c  LocalWords:  convertcsv Mangel-Wurzel malloc TerminationMessage un Mozilla FSE cd
 @c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo
