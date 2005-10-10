@@ -50,6 +50,9 @@ Mangel-Wurzel
 
      There are new command-line options for mangel to directly specify
      strict ANSI, gcc, and Microsoft compatibility modes.
+
+     Instrumented programs now run much faster due to improvements in the
+     Mangel-Wurzel runtime.
     
 
 --------------------------------------------
