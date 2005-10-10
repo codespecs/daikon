@@ -249,7 +249,7 @@ Source-based C/C++ front end Mangel-Wurzel
 * Using Mangel-Wurzel::         
 * Mangel options::              
 * Pointer/array disambiguation in Mangel-Wurzel::  
-* Wurzel usage notes::          
+* Mangel-Wurzel usage notes::   
 * Interaction with Purify::     
 * Installing Mangel-Wurzel::    
 
@@ -4484,7 +4484,7 @@ consumption before compiling it.
 * Using Mangel-Wurzel::         
 * Mangel options::              
 * Pointer/array disambiguation in Mangel-Wurzel::  
-* Wurzel usage notes::          
+* Mangel-Wurzel usage notes::   
 * Interaction with Purify::     
 * Installing Mangel-Wurzel::    
 @end menu
@@ -4496,7 +4496,8 @@ consumption before compiling it.
 @cindex wurzel preprocessor
 
 Mangel-Wurzel consists of three parts: a driver program called
-@command{mangel}, the source-code preprocessor @command{wurzel},
+@command{mangel}, the preprocessor @command{wurzel} which
+adds annotations to the source code,
 and a small runtime library.  Mangel is a replacement for the
 @command{cc} command:  it produces an
 instrumented executable that behaves like the original program, but that
@@ -4540,7 +4541,7 @@ mangel -c baz.c
 mangel -o foo foo.o bar.o baz.o
 @end example
 
-As a side-effect, the wurzel front end invoked by mangel 
+As a side-effect, the wurzel preprocessor invoked by mangel 
 produces a @file{.decls} file for each source file
 it processes, in this case @file{foo.decls}, @file{bar.decls}, and
 @file{baz.decls}.
@@ -4610,7 +4611,7 @@ Specify @var{filename} as the output file.
 Stop after compilation, producing a @file{.o} file; do not link.
 
 @item -E
-Stop after preprocessing, producing a @file{.int.c} file; 
+Stop after preprocessing with wurzel, producing a @file{.int.c} file; 
 do not compile or link.  You might want to use this option for debugging
 if you are having problems getting the instrumented code to compile with 
 the host C/C++ compiler.
@@ -4629,9 +4630,10 @@ Undefine preprocessor symbols.
 @item -I@var{pathname}
 Add @var{pathname} to the list of places searched for include files.  
 
-@cindex MANGEL_INCLUDE environment variable
-If the environment variable @env{MANGEL_INCLUDE} is set, mangel implicitly
-adds this directory to the list of directories searched for system include
+@cindex MANGEL_DIR environment variable
+If the environment variable @env{MANGEL_DIR} is set, mangel implicitly
+adds its @file{include} subdirectory to the list of directories searched 
+for system include
 files.  Otherwise you must explicitly use @option{-I} to specify where to
 find Mangel-Wurzel's system include files, or include this information in
 the options list passed directly to the wurzel preprocessor.  See the 
@@ -4651,9 +4653,9 @@ need not be supplied explicitly on the command line.
 @item -L@var{pathname}
 Add @var{pathname} to the list of places searched for system libraries.
 
-@cindex MANGEL_LIB environment variable
-If the environment variable @env{MANGEL_LIB} is set, mangel implicitly adds
-this directory to the list of directories searched for system libraries.
+If the environment variable @env{MANGEL_DIR} is set, mangel implicitly adds
+its @file{lib} directory to the list of directories searched for system 
+libraries.
 Otherwise you must explicitly use @option{-L} to specify where to
 find Mangel-Wurzel's system libraries, or include this information in
 the options list passed directly to the linker.  See @option{--linker_opts}
@@ -4798,7 +4800,7 @@ the current compilation unit.
 @item --dtrace-file @var{filename}
 Specify @var{filename} as the name of the @file{.dtrace} file for this
 program.  This option is only used if the compilation unit contains a
-definition for @code{main}.  If this option is not specified, dtrace
+definition for @code{main}.  If this option is not specified, trace
 output is written to a file in the current directory when the executable
 is run, with a name derived from the file containing the definition of
 @code{main}.  
@@ -4810,22 +4812,23 @@ This option is only used if the compilation unit contains a
 definition for @code{main}.
 
 @item --dtrace-gzip
-Produce gzipped (compressed) dtrace output.
-This is implemented by filtering the dtrace output through @command{gzip}.
+Produce gzipped (compressed) trace output.
+This is implemented by filtering the trace output through @command{gzip}.
 This option is only used if the compilation unit contains a
 definition for @code{main}.
 
 @item --ignore-globals
 Ignore global, file-scope static, and function-scope static 
-variables when dumping program point state.
-The default behavior is to examine static variables and global variables
+variables when emitting program point state.
+The default behavior is to emit declarations and trace information for
+static variables and global variables
 that are defined (not just declared as @code{extern}) in the compilation
 unit and are in scope at the given program point, 
 as well as (for C++ class member functions) static member variables of 
 the containing class.
 
 @item --ignore-static-vars
-Ignore file-scope and function-scope static variables when dumping
+Ignore file-scope and function-scope static variables when emitting
 program point state, but include global variables defined in the compilation
 unit.
 
@@ -4854,7 +4857,7 @@ conjunction with @option{--ppt-select-pattern}.
 @end table
 
 
-@node Pointer/array disambiguation in Mangel-Wurzel, Wurzel usage notes, Mangel options, Mangel-Wurzel
+@node Pointer/array disambiguation in Mangel-Wurzel, Mangel-Wurzel usage notes, Mangel options, Mangel-Wurzel
 @subsection Pointer/array disambiguation in Mangel-Wurzel
 
 Wurzel currently does not support any form of pointer/array
@@ -4866,9 +4869,9 @@ arrays rather than single objects.  The difference in behavior is due
 to differences in the underlying runtime support; Purify does not track
 the length of arrays or provide an API for querying this information.
 
-Wurzel does, however, make use of static type information to dump
-function arguments and global and static variables with fully-defined
-array types as arrays.  Note that a ``fully-defined'' array type
+Wurzel does, however, make use of static type information to emit trace
+information for function arguments and global and static variables with 
+fully-defined array types as arrays.  Note that a ``fully-defined'' array type
 includes a complete set of (constant) dimensions.
 
 Wurzel also assumes that variables with type @code{char *}, or arrays of
@@ -4889,14 +4892,14 @@ respectively, and the elements print as normal integer values rather than
 as strings.
 
 
-@node Wurzel usage notes, Interaction with Purify, Pointer/array disambiguation in Mangel-Wurzel, Mangel-Wurzel
-@subsection Wurzel usage notes
+@node Mangel-Wurzel usage notes, Interaction with Purify, Pointer/array disambiguation in Mangel-Wurzel, Mangel-Wurzel
+@subsection Mangel-Wurzel usage notes
 
-You do not need to preprocess all compilation units in a program with
-wurzel if you are only interested in analyzing certain parts of it with
+You do not need to instrument all compilation units in a program with
+Mangel-Wurzel if you are only interested in analyzing certain parts of it with
 Daikon; you can simply compile the ``uninteresting'' files in the normal
-way with your usual C compiler.  However, you must either preprocess the
-compilation unit including the definition of @code{main} so that the
+way with your usual C compiler.  However, you must either instrument the
+compilation unit including the definition of @code{main} with so that the
 necessary runtime initialization is performed when the program starts, or
 insert an explicit call to @code{mw_init} in your program before any of the
 instrumented code is executed.  You should also use mangel to link 
@@ -4931,7 +4934,7 @@ as described in the EDG documentation.  You can set these options using
 the @samp{--preprocessor-opts} flag to mangel.  
 
 If you are having compatibility problems getting your code to compile with
-wurzel, you can try these approaches:
+Mangel-Wurzel, you can try these approaches:
 
 @enumerate
 
@@ -4952,7 +4955,7 @@ to perform the preprocessing on one machine and then compile, link, and run
 on another platform supported by Rational Purify.
 
 
-@node Interaction with Purify, Installing Mangel-Wurzel, Wurzel usage notes, Mangel-Wurzel
+@node Interaction with Purify, Installing Mangel-Wurzel, Mangel-Wurzel usage notes, Mangel-Wurzel
 @subsection Interaction with Purify
 
 If you are interested in obtaining Purify diagnostics for your code, you
@@ -4992,12 +4995,11 @@ distribute it, at @uref{http://pag.csail.mit.edu/daikon/download/}, in
 binary rather than source format.  (If the web page does not currently
 contain a binary for your architecture, send mail to
 @email{daikon-developers@@lists.csail.mit.edu} and we may be able to
-produce it for you.)  The distribution does not include Purify, which
+produce one for you.)  The distribution does not include Purify, which
 you must purchase and install separately.
 
-
 Installation requires unpacking the distribution, setting the 
-@env{MANGEL_INCLUDE}, @env{MANGEL_LIB}, and @env{PURIFY_DIR} environment
+@env{MANGEL_DIR} and @env{PURIFY_DIR} environment
 variables, optionally customizing the defaults for how mangel operates,
 and optionally running its tests.
 
@@ -5014,17 +5016,14 @@ tar xvzf mangel-wurzel-linux-x86.tar.gz
 @end smallexample
 
 @item
-Set several environment variables:
+Set these environment variables:
 
 @table @env
 @item PATH
 Add @file{mangel-wurzel/bin} to your path.
-@item MANGEL_INCLUDE
-@cindex MANGEL_INCLUDE environment variable
-Set to @file{mangel-wurzel/include}.
-@item MANGEL_LIB
-@cindex MANGEL_LIB environment variable
-Set to @file{mangel-wurzel/lib}.
+@item MANGEL_DIR
+@cindex MANGEL_DIR environment variable
+Set to the full pathname of the @file{mangel-wurzel} directory.
 @item PURIFY_DIR
 @cindex PURIFY_DIR environment variable
 Set to the directory in your Purify distribution containing
