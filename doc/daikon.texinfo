@@ -4496,13 +4496,13 @@ consumption before compiling it.
 @cindex wurzel preprocessor
 
 Mangel-Wurzel consists of three parts: a driver program called
-@command{mangel}, the source-code instrumenter @command{wurzel},
+@command{mangel}, the source-code preprocessor @command{wurzel},
 and a small runtime library.  Mangel is a replacement for the
 @command{cc} command:  it produces an
 instrumented executable that behaves like the original program, but that
 also produces a @file{.dtrace} data trace file for Daikon to analyze.
 Mangel operates by in turn invoking
-the source instrumenter wurzel, the host compiler and linker, and the
+the source preprocessor wurzel, the host compiler and linker, and the
 object code instrumenter Purify.
 
 
@@ -4570,12 +4570,13 @@ several ways to do this.
 @node Mangel options, Pointer/array disambiguation in Mangel-Wurzel, Using Mangel-Wurzel, Mangel-Wurzel
 @subsection Mangel options
 
-Mangel acts as a replacement for the host @command{cc}
-command.
-It supports most of the common C compiler command-line options (@pxref{Standard compiler options for Mangel}).
-It also has options that control how the front end, compiler,
-and linker programs are invoked (@pxref{Mangel configuration options}), and options that are specific to controlling
-the program annotations added by wurzel (@pxref{Mangel annotation options}).
+Mangel acts as a replacement for the host @command{cc} command.  It
+supports most of the common C compiler command-line options
+(@pxref{Standard compiler options for Mangel}).  It also has options
+that control how the wurzel preprocessor, compiler, and linker programs
+are invoked (@pxref{Mangel configuration options}), and options that are
+specific to controlling the program annotations added by wurzel
+(@pxref{Mangel annotation options}).
 
 Mangel is invoked as:
 
@@ -4583,7 +4584,7 @@ Mangel is invoked as:
 mangel @var{[options] inputfile1 ...}
 @end example
 
-You can specify multiple @code{inputfile}s on the command line.  Mangel will
+You can specify multiple @var{inputfile}s on the command line.  Mangel will
 compile source files individually and then link them together (unless you have
 specified one of the command-line options that suppresses linking).  You
 can also include object and archive files on the command line, which are
@@ -4633,8 +4634,8 @@ If the environment variable @env{MANGEL_INCLUDE} is set, mangel implicitly
 adds this directory to the list of directories searched for system include
 files.  Otherwise you must explicitly use @option{-I} to specify where to
 find Mangel-Wurzel's system include files, or include this information in
-the options list passed directly to the front end.  See the 
-@option{--frontend_opts} option (@pxref{Mangel configuration options}).
+the options list passed directly to the wurzel preprocessor.  See the 
+@option{--preprocessor_opts} option (@pxref{Mangel configuration options}).
 
 @item -O
 @itemx -O@var{value}
@@ -4677,6 +4678,13 @@ Interpret the input source file as old standard C (C89), C99, or C++,
 respectively.  If none of these options are specified, mangel attempts
 to infer the source language from the filename extension.
 
+@item --ansi
+@itemx --gcc
+@itemx --microsoft
+Enable strict ANSI, gcc, and Microsoft compatibility modes (respectively)
+in the wurzel preprocessor.  If none of these options are specified, wurzel 
+accepts ANSI C/C++ with a few common extensions and anachronisms.
+
 @item -h
 @itemx --help
 Print a usage message and exit.
@@ -4695,17 +4703,17 @@ specify these configuration parameters, be careful to quote the entire
 option value string so that mangel interprets it as a single argument.
 
 @table @option
-@item --frontend @var{command}
-@cindex MANGEL_FRONTEND environment variable
-Use @var{command} to invoke the wurzel front end.  If this option is not
+@item --preprocessor @var{command}
+@cindex MANGEL_PREPROCESSOR environment variable
+Use @var{command} to invoke the wurzel preprocessor.  If this option is not
 specified on the command line, mangel looks for an environment variable
-named @env{MANGEL_FRONTEND}; otherwise, it defaults to @samp{wurzel}.
+named @env{MANGEL_PREPROCESSOR}; otherwise, it defaults to @samp{wurzel}.
 
-@item --frontend_opts @var{option_string}
-@cindex MANGEL_FRONTEND_OPTS environment variable
-Use @var{option_string} as additional options to the wurzel front end.  If
+@item --preprocessor_opts @var{option_string}
+@cindex MANGEL_PREPROCESSOR_OPTS environment variable
+Use @var{option_string} as additional options to the wurzel preprocessor.  If
 this option is not specified on the command line, mangel looks for an 
-environment variable named @env{MANGEL_FRONTEND_OPTS}; otherwise, it uses a
+environment variable named @env{MANGEL_PREPROCESSOR_OPTS}; otherwise, it uses a
 system-specific default.  (You can use @option{-n} or @option{-v} to see the
 default.)
 
@@ -4728,8 +4736,7 @@ default.)
 Use @var{command} to invoke the host linker.  If this option is not
 specified on the command line, mangel looks for an environment variable
 named @env{MANGEL_LINKER}; otherwise, it defaults to
-@samp{purify -log-file=/dev/null -append-logfile cc}.  
-@xref{Interaction with Purify}, for more information about Purify options.
+@samp{cc}.  
 
 @item --linker_opts @var{option_string}
 @cindex MANGEL_LINKER_OPTS environment variable
@@ -4738,6 +4745,22 @@ this option is not specified on the command line, mangel looks for an
 environment variable named @env{MANGEL_LINKER_OPTS}; otherwise, it uses a
 system-specific default.  (You can use @option{-n} or @option{-v} to see the
 default.)
+
+@item --purify @var{command}
+@cindex MANGEL_PURIFY environment variable
+Use @var{command} to invoke Rational Purify.  If this option is not
+specified on the command line, mangel looks for an environment variable
+named @env{MANGEL_PURIFY}; otherwise, it defaults to @samp{purify}.
+@xref{Interaction with Purify}, for more information about Purify options.
+
+@item --purify-opts @var{option-string}
+@cindex MANGEL_PURIFY_OPTS environment variable
+Use @var{option-string} as additional options to Rational Purify.  
+If this option is not specified on the command line, mangel looks 
+for an environment variable named @env{MANGEL_PURIFY_OPTS}; otherwise, it uses
+a system-specific default.  (You can use @option{-n} or @option{-v} to see the
+default.)  
+@xref{Interaction with Purify}, for more information about Purify options.
 
 @item --tmpdir @var{pathname}
 @cindex MANGEL_TMPDIR environment variable
@@ -4886,8 +4909,9 @@ code that is not processed with wurzel.
 
 If you are using the C++ libraries that came with your host C++ compiler,
 you will probably have to add the locations of the include files to the
-search path passed to wurzel, either by using @option{--frontend-opts} or
-@option{-I} to mangel.  
+search path passed to wurzel, either by using @option{--preprocessor-opts} or
+@option{-I} to mangel, or by configuring the location into mangel's 
+defaults at installation time (@ref{Installing Mangel-Wurzel}).
 
 While wurzel recognizes standard C++, its support of instrumentation for
 C++ programs is rather rudimentary at this point.  In particular, it
@@ -4898,25 +4922,32 @@ time it will not also generate references to accessible base classes and
 their members.  (This should be optional in any case because it will
 greatly increase the number of variables at a given program point.)
 
-By default, wurzel recognizes standard C and C++.  You may want to specify one
-of the compatibility modes using the mangel @option{--frontend-opts} option.
+If your source code uses extensions specific to a particular host compiler,
+you may need to use the @samp{--gcc} or @samp{--microsoft} flags to enable
+the appropriate compatibility mode.  
+Wurzel recognizes many other command-line options supported by the
+underlying EDG front end to customize the language dialects it accepts,
+as described in the EDG documentation.  You can set these options using
+the @samp{--preprocessor-opts} flag to mangel.  
 
-@table @option
+If you are having compatibility problems getting your code to compile with
+wurzel, you can try these approaches:
 
-@item --gcc
-@itemx --g++
-Enable compatibility with the Gnu C Compiler.  @option{--gcc} is for C,
-@option{--g++} is for C++.
+@enumerate
 
-@item --microsoft
-Enable compatibility with the Microsoft C compiler.  
+@item If you are getting compilation errors from wurzel that can't be resolved
+with one of the above compatibility flags or with appropriate defines, a
+possible workaround is to preprocess the code with the host compiler's
+preprocessor before running it through Mangel-Wurzel.  
 
-@end table
+@item If you are getting compilation errors from the host C compiler, you can
+use the @samp{-E} option to mangel to produce a @file{.int.c} file
+containing the code as preprocessed by wurzel, which you can examine to track
+down the cause of the errors.
 
-Wurzel recognizes many other command-line options supported by the underlying
-EDG front end, as described in the EDG documentation.
+@end enumerate
 
-Note that since the output of Wurzel is compilable source code, it is possible
+Note that since the output of wurzel is compilable source code, it is possible
 to perform the preprocessing on one machine and then compile, link, and run
 on another platform supported by Rational Purify.
 
@@ -4924,12 +4955,12 @@ on another platform supported by Rational Purify.
 @node Interaction with Purify, Installing Mangel-Wurzel, Wurzel usage notes, Mangel-Wurzel
 @subsection Interaction with Purify
 
-If you are interested in obtaining Purify diagnostics for your code, it
-is better that you run Purify on the uninstrumented program.  The
-remainder of this section explains why this is the case.  It is not
-necessary to fix all the problems that Purify diagnoses before running
-Mangel-Wurzel.  However, fixing them is likely to correct bugs and make
-your code more robust, so it is recommended.
+If you are interested in obtaining Purify diagnostics for your code, you
+should run Purify on the uninstrumented program.  The remainder of this
+section explains why this is the case.  It is not necessary to fix all
+the problems that Purify diagnoses before running Mangel-Wurzel.
+However, fixing them is likely to correct bugs and make your code more
+robust, so it is recommended.
 
 Mangel-Wurzel's runtime library relies on the Purify API to test the
 validity of pointers --- in particular, to check for pointers to
@@ -4940,7 +4971,7 @@ values at program points to the @file{.dtrace} file.  (Instead,
 it prints a value of ``nonsensical'' for those variables, which has a
 special meaning to Daikon.)
 
-Normally, Mangel is configured to tell Purify to discard all of its
+Normally, mangel is configured to tell Purify to discard all of its
 diagnostic messages.  This is because, due to limitations of the Purify
 API, it isn't possible for the Mangel-Wurzel runtime to run Purify
 completely silently, and the diagnostics will contain bogus messages
@@ -4949,13 +4980,8 @@ about the program that has been instrumented.
 
 Specifically, since Purify doesn't provide any API functions for
 checking pointers without generating messages, the Mangel-Wurzel runtime
-works around this by enabling message batching when entering each
-program point, and discarding batched messages and turning batching off
-when printing of the program point data is complete.  But the Purify API
-still generates status messages when batching is enabled or disabled, or
-when batched messages are discarded.  Another problem is that this will
-interact badly if you try to enable message batching when you run
-Purify.
+works around this by enabling message batching and by discarding the
+batched messages as processing of each program point is completed.
 
 
 @node Installing Mangel-Wurzel,  , Interaction with Purify, Mangel-Wurzel
@@ -5007,10 +5033,11 @@ Set to the directory in your Purify distribution containing
 
 @item
 Optionally, change the default commands and options mangel 
-uses to invoke the wurzel front end, the host compiler, and the Purify/link
-step.  For example, you may need to specify the paths for additional system
+uses to invoke the wurzel preprocessor, the host compiler and linker, and
+Purify.  For example, you may need to specify the paths for additional system
 include files.
-Make these changes in @file{mangel-wurzel/runtime/mangel.c} and recompile (use @command{make install}).  
+Make these changes in @file{mangel-wurzel/runtime/Makefile} 
+and recompile (use @command{make install}).  
 
 If you want to override the defaults (whether or not you changed them),
 you can set the environment variables as described in 
