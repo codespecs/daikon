@@ -36,6 +36,22 @@ Chicory
     configuration option to disable all of the SeqIndex invariants 
     (SeqIndexIntEqual, SeqIndexFloatLessThan, etc).
 
+Mangel-Wurzel
+
+   Bug fixes
+
+     Fixed a bug that was causing wurzel to crash when processing switch 
+     statements followed by an implicit return.
+
+   Enhancements
+
+     Some of the mangel configuration options have changed to make it
+     easier to set up at installation time.  See the Daikon manual for details.
+
+     There are new command-line options for mangel to directly specify
+     strict ANSI, gcc, and Microsoft compatibility modes.
+    
+
 --------------------------------------------
 
 4.1.6 (October 1 2005)
