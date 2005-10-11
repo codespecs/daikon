@@ -258,6 +258,7 @@ Mangel options
 * Standard compiler options for Mangel::  
 * Mangel configuration options::  
 * Mangel annotation options::   
+* Options files for Mangel::    
 
 Perl front end dfepl
 
@@ -4595,6 +4596,7 @@ passed directly to the linker.
 * Standard compiler options for Mangel::  
 * Mangel configuration options::  
 * Mangel annotation options::   
+* Options files for Mangel::    
 @end menu
 
 @node Standard compiler options for Mangel, Mangel configuration options, Mangel options, Mangel options
@@ -4695,82 +4697,64 @@ Print a usage message and exit.
 @node Mangel configuration options, Mangel annotation options, Standard compiler options for Mangel, Mangel options
 @subsubsection Mangel configuration options
 
-You can use either command-line options or
-environment variables to override Mangel's default behavior
+You can use either command-line options or an options file
+to override Mangel's default behavior
 regarding how Mangel invokes wurzel, the host
 compiler, and the linker.  
+Options files are discussed in @ref{Options files for Mangel}.
 
-When you use command-line options from the shell or a makefile to
+When you use command-line options from the shell or makefile to
 specify these configuration parameters, be careful to quote the entire
 option value string so that mangel interprets it as a single argument.
 
 @table @option
 @item --preprocessor @var{command}
-@cindex MANGEL_PREPROCESSOR environment variable
 Use @var{command} to invoke the wurzel preprocessor.  If this option is not
-specified on the command line, mangel looks for an environment variable
-named @env{MANGEL_PREPROCESSOR}; otherwise, it defaults to @samp{wurzel}.
+specified on the command line or in an options file,
+it defaults to @samp{wurzel}.
 
 @item --preprocessor_opts @var{option_string}
-@cindex MANGEL_PREPROCESSOR_OPTS environment variable
 Use @var{option_string} as additional options to the wurzel preprocessor.  If
-this option is not specified on the command line, mangel looks for an 
-environment variable named @env{MANGEL_PREPROCESSOR_OPTS}; otherwise, it uses a
-system-specific default.  (You can use @option{-n} or @option{-v} to see the
-default.)
+this option is not specified on the command line or in an options file, it
+defaults to a system-specific value.
 
 @item --compiler @var{command}
-@cindex MANGEL_COMPILER environment variable
 Use @var{command} to invoke the host C/C++ compiler.  If this option is not
-specified on the command line, mangel looks for an environment variable
-named @env{MANGEL_COMPILER}; otherwise, it defaults to @samp{cc}.
+specified on the command line or in an options file,
+it defaults to @samp{cc}.
 
 @item --compiler_opts @var{option_string}
-@cindex MANGEL_COMPILER_OPTS environment variable
 Use @var{option_string} as additional options to the host compiler.  If
-this option is not specified on the command line, mangel looks for an 
-environment variable named @env{MANGEL_COMPILER_OPTS}; otherwise, it uses a
-system-specific default.  (You can use @option{-n} or @option{-v} to see the
-default.)
+this option is not specified on the command line or in an options file,
+it defaults to a system-specific value.
 
 @item --linker @var{command}
-@cindex MANGEL_LINKER environment variable
 Use @var{command} to invoke the host linker.  If this option is not
-specified on the command line, mangel looks for an environment variable
-named @env{MANGEL_LINKER}; otherwise, it defaults to
-@samp{cc}.  
+specified on the command line or in an options file,
+it defaults to @samp{cc}.  
 
 @item --linker_opts @var{option_string}
-@cindex MANGEL_LINKER_OPTS environment variable
 Use @var{option_string} as additional options to the host linker.  If
-this option is not specified on the command line, mangel looks for an 
-environment variable named @env{MANGEL_LINKER_OPTS}; otherwise, it uses a
-system-specific default.  (You can use @option{-n} or @option{-v} to see the
-default.)
+this option is not specified on the command line or in an options file,
+it defaults to a system-specific value.
 
 @item --purify @var{command}
-@cindex MANGEL_PURIFY environment variable
 Use @var{command} to invoke Rational Purify.  If this option is not
-specified on the command line, mangel looks for an environment variable
-named @env{MANGEL_PURIFY}; otherwise, it defaults to @samp{purify}.
+specified on the command line or in an options file,
+it defaults to @samp{purify}.
 @xref{Interaction with Purify}, for more information about Purify options.
 
 @item --purify-opts @var{option-string}
-@cindex MANGEL_PURIFY_OPTS environment variable
 Use @var{option-string} as additional options to Rational Purify.  
-If this option is not specified on the command line, mangel looks 
-for an environment variable named @env{MANGEL_PURIFY_OPTS}; otherwise, it uses
-a system-specific default.  (You can use @option{-n} or @option{-v} to see the
-default.)  
+If this option is not specified on the command line, it defaults to
+a system-specific value.
 @xref{Interaction with Purify}, for more information about Purify options.
 
 @item --tmpdir @var{pathname}
-@cindex MANGEL_TMPDIR environment variable
 Put temporary files (the annotated @file{.int.c} files and temporary 
 object files created prior to linking) in the indicated directory.  
-If this option is not specified on the command line, mangel looks
-for an environment variable named @env{MANGEL_TMPDIR}; otherwise it defaults
-to a system-specific default, @file{/tmp/} on Unix platforms.  The
+If this option is not specified on the command line or in an options file, 
+it defaults to a system-specific default, @file{/tmp/} on Unix platforms.  The
 directory must exist and be writable.
 
 @item -v
@@ -4782,7 +4766,7 @@ Print commands (to @code{stderr}), but don't execute them.
 @end table
 
 
-@node Mangel annotation options,  , Mangel configuration options, Mangel options
+@node Mangel annotation options, Options files for Mangel, Mangel configuration options, Mangel options
 @subsubsection Mangel annotation options
 
 Mangel passes these options to the wurzel preprocessor, which adds
@@ -4856,6 +4840,45 @@ conjunction with @option{--ppt-select-pattern}.
 
 @end table
 
+@node Options files for Mangel,  , Mangel annotation options, Mangel options
+@subsubsection Options files for Mangel
+
+In addition to specifying mangel options on the command line, you can
+also put them in an options file.  This is most useful for customizing the
+defaults for the configuration options (@ref{Mangel configuration
+options}) which control how wurzel and the host compiler and linker
+should be invoked, but you can put any command-line options in the file.
+
+Mangel looks for an options file in the following places, and will use
+the first one it finds.
+
+@enumerate
+@item @file{.mangelrc}
+@item @file{$HOME/.mangelrc}
+@item @file{$MANGEL_DIR/.mangelrc}
+@end enumerate
+
+Option files are formatted with one option, or option/value pair, per
+line.  Everything following the option keyword on the same line is
+considered to be a value.  Value strings should not be quoted (even if they
+contain embedded spaces).  Blank lines are ignored.
+
+Here is an example of an options file:
+
+@example
+--preprocessor wurzel
+--preprocessor_opts --sys_include=/usr/include
+
+--compiler cc
+--compiler_opts -g -Dsetjmp=_setjmp -Dva_copy=__va_copy
+
+--linker cc
+--linker_opts -lmangelwurzel -lstdc++ -lpurify_stubs
+
+--purify purify
+--purify_opts -log-file=/dev/null -append-logfile
+@end example
+
 
 @node Pointer/array disambiguation in Mangel-Wurzel, Mangel-Wurzel usage notes, Mangel options, Mangel-Wurzel
 @subsection Pointer/array disambiguation in Mangel-Wurzel
@@ -4910,11 +4933,11 @@ input, that is C, C99, or C++.  It does not translate C++ to C.  This ensures
 that preprocessed code is link-compatible with system C++ libraries and other
 code that is not processed with wurzel.
 
-If you are using the C++ libraries that came with your host C++ compiler,
-you will probably have to add the locations of the include files to the
-search path passed to wurzel, either by using @option{--preprocessor-opts} or
-@option{-I} to mangel, or by configuring the location into mangel's 
-defaults at installation time (@ref{Installing Mangel-Wurzel}).
+If you are using the C++ libraries that came with your host C++
+compiler, you will probably have to add the locations of the include
+files to the search path passed to wurzel, either by explicitly passing
+@option{--preprocessor-opts} or @option{-I} to mangel, or by using an
+options file (@ref{Options files for Mangel}).
 
 While wurzel recognizes standard C++, its support of instrumentation for
 C++ programs is rather rudimentary at this point.  In particular, it
@@ -5034,13 +5057,11 @@ Set to the directory in your Purify distribution containing
 Optionally, change the default commands and options mangel 
 uses to invoke the wurzel preprocessor, the host compiler and linker, and
 Purify.  For example, you may need to specify the paths for additional system
-include files.
-Make these changes in @file{mangel-wurzel/runtime/Makefile} 
-and recompile (use @command{make install}).  
+include or library files.
+Make these changes in the system options file @file{mangel-wurzel/.mangelrc};
+see @ref{Options files for Mangel} for details about the format of this file.
 
-If you want to override the defaults (whether or not you changed them),
-you can set the environment variables as described in 
-@ref{Mangel configuration options}.  You can use the @option{-n} or 
+You can use the @option{-n} or 
 @option{-v} options to see the actual commands wurzel is generating to 
 invoke each phase.
 

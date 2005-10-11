@@ -46,7 +46,9 @@ Mangel-Wurzel
    Enhancements
 
      Some of the mangel configuration options have changed to make it
-     easier to set up at installation time.  See the Daikon manual for details.
+     easier to set up at installation time.  Most options now get their
+     defaults from reading an options file instead of through environment
+     variables.  See the Daikon manual for details.
 
      There are new command-line options for mangel to directly specify
      strict ANSI, gcc, and Microsoft compatibility modes.
