@@ -18,6 +18,11 @@
 #     inline source code comment.  javac 6 will provide a built-in method
 #     for doing this, but javac 5 (= javac 1.5) does not.
 
+# As of Java 5 update 6 (JDK 5.0u6), javac will have a way to suppress
+# warnings:  @SuppressWarnings("unchecked).  It does not permit suprression
+# per-line (and isn't yet released; as of October 2005, the current version
+# was JDK 5.0u4), but otherwise seems preferable to this script, as it is
+# more portable.
 
 # Design note:
 # Two possible ways this could work:
