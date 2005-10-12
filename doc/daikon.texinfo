@@ -228,6 +228,12 @@ Java front end Chicory
 
 * Chicory options::             
 
+Chicory options
+
+* Program points in Chicory output::  
+* Variables in Chicory output::  
+* Chicory miscellaneous options::  
+
 C front end Kvasir
 
 * Using Kvasir::                
@@ -2875,53 +2881,24 @@ is a valid invocation of Java.
 This section lists the optional command-line arguments to Chicory, which
 appear before the @var{classname} on the Chicory command line.
 
+@menu
+* Program points in Chicory output::  
+* Variables in Chicory output::  
+* Chicory miscellaneous options::  
+@end menu
+
+@node    Program points in Chicory output, Variables in Chicory output, Chicory options, Chicory options
+@subsubsection Program points in Chicory output
+
+@c Perhaps explain why --trace-percent doesn't appear here:  it doesn't
+@c affect the .decls structure.
+
+This section lists options that control which program points appear in
+Chicory's output.
+
+
+
 @table @option
-@item --help
-Print a help message.
-
-@item --debug
-Produce debugging information.
-
-@item --nesting-depth=@var{n}
-Depth to which to examine structure components (default 2).
-This parameter determines which variables the front end causes to be output at
-runtime.  For instance, suppose that a program contained the following
-data structures and variables:
-@example
-class A @{
-  int x;
-  B b;
-@}
-class B @{
-  int y;
-  int z;
-@}
-A myA;
-
-class Link @{
-  int val;
-  Link next;
-@}
-Link myList;
-@end example
-@itemize @bullet
-@item
-If depth=0, only the identities (hashcodes) of @code{myA} and
-@code{myList} would be examined; those variables could be determined to
-be equal or not equal to other variables.
-@item
-If depth=1, then also @code{MyA.b}, @code{myList.next}, and the integers
-@code{myA.x} and @code{myList.val} would be examined.
-@item
-If depth=2, then also @code{MyA.b.y}, @code{MyA.b.y},
-@code{myList.next.next}, and @code{myList.next.val} would be examined.
-@end itemize
-
-Values that do not exist are not examined.  For instance, if @code{myA}
-is @code{null} on a particular execution of a program point, then
-@code{myA.b} is not accessed on that execution regardless of the depth
-parameter.
-
 @item --ppt-select-pattern=@var{regexp}
 Only produce trace output for classes/procedures/program points whose
 names match the
@@ -3001,124 +2978,135 @@ java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
 @end example
 
 @end itemize
+@end table
 
-@cindex DTRACEFILE environment variable
-@cindex environment variable DTRACEFILE
-@cindex DTRACEAPPEND environment variable
-@cindex environment variable DTRACEAPPEND
-@cindex trace file name
-@cindex dtrace file name
-@cindex file name, for dtrace file
-@item --dtrace-file=@var{filename}
-Specifies the default name for the trace output (@file{.dtrace}) file.
-If no explicit trace file name or directory is specified on the command line,
-the default is @file{./@var{CLASSNAME}.dtrace}; however,
-if the @env{DTRACEFILE}
-environment variable is set when the instrumented program is run, it
-overrides this default.  Furthermore, if the @env{DTRACEAPPEND} environment
-variable is set to any value, the dtrace file will be appended to
-instead of overwritten.  Compressed data trace files may not be appended
-to.  In some cases you may find a single large data trace file more
-convenient; in other cases, a collection of smaller data trace files may
-give you more control over which subsets of runs to invoke Daikon on.
 
-@item --output-dir=@var{directory}
-Write the trace output (@file{.dtrace}) to this directory.  The default
-is the current directory.
+@node    Variables in Chicory output, Chicory miscellaneous options, Program points in Chicory output, Chicory options
+@subsubsection Variables in Chicory output
 
-@item --daikon
-@itemx --daikon=@var{args}
-After creating a data trace (@file{.dtrace}) file, run Daikon on it,
-passing the specified arguments, if any, to Daikon.
+@c Perhaps explain why --trace-percent doesn't appear here:  it doesn't
+@c affect the .decls structure.
 
-This option supplies Daikon with a single trace from a one execution of
-your program.  When Daikon is invoked from the command line, it can be
-supplied as many trace files as desired.
+This section lists options that control which variables appear in
+Chicory's output.
 
-@item --premain=@var{path}
-Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
-Chicory requires this jar file in order to execute.  By default Chicory
-looks for the jar file in the classpath and in @file{$(DAIKONDIR)/java}
-(where @file{DAIKONDIR} is an environment variable that points to the
-complete installation of Daikon).  
 
-Chicory can also use the @file{daikon.jar} file for this purpose.  If it
-doesn't find @file{ChicoryPremain.jar} above, it will use daikon.jar
-itself (if a file named 'daikon.jar' appears in the classpath).  If
-the daikon jar file is not named @file{daikon.jar}, you can use this
-switch to specify its name.  For example:
+
+@table @option
+
+
+@item --nesting-depth=@var{n}
+Depth to which to examine structure components (default 2).
+This parameter determines which variables the front end causes to be output at
+runtime.  For instance, suppose that a program contained the following
+data structures and variables:
 @example
---premain=C:\lib\daikon-4.1.3.jar
+class A @{
+  int x;
+  B b;
+@}
+class B @{
+  int y;
+  int z;
+@}
+A myA;
+
+class Link @{
+  int val;
+  Link next;
+@}
+Link myList;
 @end example
+@itemize @bullet
+@item
+If depth=0, only the identities (hashcodes) of @code{myA} and
+@code{myList} would be examined; those variables could be determined to
+be equal or not equal to other variables.
+@item
+If depth=1, then also @code{MyA.b}, @code{myList.next}, and the integers
+@code{myA.x} and @code{myList.val} would be examined.
+@item
+If depth=2, then also @code{MyA.b.y}, @code{MyA.b.y},
+@code{myList.next.next}, and @code{myList.next.val} would be examined.
+@end itemize
 
-@item --daikon-online
-@itemx --daikon-online=@var{args}
-This option produces behavior very similar to @option{--daikon}.  The difference is that with @option{--daikon-online}, Daikon processes the data trace information as Chicory produces it.  Daikon and Chicory use socket communication in this mode.  Thus, there is no intermediate .dtrace file created when using @option{--daikon-online}.
+Values whose value is undefind are not examined.  For instance, if @code{myA}
+is @code{null} on a particular execution of a program point, then
+@code{myA.b} is not accessed on that execution regardless of the depth
+parameter.  That variable appears in the @file{.dtrace} file, but its
+value is marked as nonsensical.
 
-Just like with the @option{--daikon} option, Daikon is only given a single trace from one execution of your program.
+@item --std-vis
+When this switch is on, Chicory will only traverse fields that are
+visible from a given program point.  For instance, private fields of
+class B will not be included at a program point for class A@.
+By default, Chicory outputs all fields, even those that would not be
+accessible in Java code at the given program point.
+
 
 @item --purity-file=@var{file}
-Specifies a @file{*.pure} file to read.  It may be specified as a full path or just a file name.  If a configuration directory is
-specified via @option{--configs=@var{directory}}, then Chicory looks for @var{file} in @var{directory}.  Otherwise, it searches for @var{file}
-in the current directory.
+Specifies a @file{*.pure} file to read.  It may be specified as a full
+path or just a file name.  If a configuration directory is specified via
+@option{--configs=@var{directory}}, then Chicory looks for @var{file} in
+@var{directory}.  Otherwise, it searches for @var{file} in the current
+directory.
 
-Pure methods are defined as methods which do not induce side-effects.  Thus, invoking a pure method at any time in an application should
-not change the execution of the rest of the application.  For example, almost all implementations of @code{toString()} methods are pure.
-Thus, if we took an existing application and added calls to @code{toString()} on various objects, its input-output relationship should not
-change.
+Pure methods have no side effects (such as setting variables or
+producing output).  Invoking a pure method at any time in an application
+should not change the execution of the rest of the application.  For
+example, most implementations of @code{hashCode()} and @code{toString()}
+methods are pure.  Thus, if we took an existing application and added
+calls to @code{toString()} on various objects, its input-output
+relationship should not change.
 
-Chicory will use this behavior to its advantage, although currently it only supports pure methods which take no parameters (and return
-some value).  When appropriate, Chicory will add variables corresponding to the values of pure method invocations.  Here is an example:
+Chicory adds to the trace a new ``variable'' that represents invoking
+each pure method in a given class.  (Currently, Chicory does so only for
+pure methods that take no parameters, and obviously this mechanism is
+only useful for methods that return a value:  a pure method that returns
+no value does nothing!)  Here is an example:
 
 @example
-class Point
-@{
-   private int x, y;
-   public int radiusSquared() 
-   @{ 
-       return x*x + y*y;
-   @}
+class Point @{
+  private int x, y;
+  public int radiusSquared() @{ 
+    return x*x + y*y;
+  @}
 @}
 @end example
 
-If a user tells Chicory that @code{radiusSquared()} is pure via the @option{--purity-file=@var{file}} switch, then Chicory will
-add a @code{radiusSquared()} variable just like it will add @code{x} and @code{y} variables.  Doing so may improve the richness
-of Daikon invariants returned.  For instance, if a point is constantly changing but remains on some circle, then Daikon
-ought return an invariant that the point's radius remains constant if Chicory knows that @code{radiusSquared()} is a pure method.
+If a user tells Chicory that @code{radiusSquared()} is pure via the
+@option{--purity-file=@var{file}} switch, then for each point @var{p},
+Chicory will output the variables @code{@var{p}.x}, @code{@var{p}.y},
+and @code{@var{p}.radiusSquared()}.  Use of pure methods can improve the
+Daikon output, since they represent information that the programmer
+considered important but that is not necessarily stored in a variable.
 
-The purity file has a simple format: there is exactly one method on each line.  The format of each method is outlined clearly in the
-Sun JDK API: 
-    "The string is formatted as the method access modifiers, if any, followed by the method return type, 
-    followed by a space, followed by the class declaring the method, followed by a period, followed by 
-    the method name, followed by a parenthesized, comma-separated list of the method's formal parameter 
-    types. If the method throws checked exceptions, the parameter list is followed by a space, followed 
-    by the word throws followed by a comma-separated list of the thrown exception types. For example:
-    @example 
-    public boolean java.lang.Object.equals(java.lang.Object)
-    @end example
-    The access modifiers are placed in canonical order as specified by "The Java Language Specification". 
-    This is public, protected or private first, and then other modifiers in the following order: abstract, 
-    static, final, synchronized native."
-
-@item --configs=@var{directory}
-Chicory will use this location to search for configuration files.
-Currently, this only includes @file{*.pure} files.
-
-@item --std-vis
-When this switch is on, Chicory will only traverse fields which are
-visible from a given program point.  For instance, a program point from
-class A will not include private fields from class B.  Of course, it
-will include public fields from class B if it examines some variable of
-type B.
+The purity file lists a set of methods, one per line.  The format of
+each method is given by the Sun JDK API:
+@quotation
+The string is formatted as the method access modifiers, if any, followed
+by the method return type, followed by a space, followed by the class
+declaring the method, followed by a period, followed by the method name,
+followed by a parenthesized, comma-separated list of the method's formal
+parameter types. If the method throws checked exceptions, the parameter
+list is followed by a space, followed by the word throws followed by a
+comma-separated list of the thrown exception types. For example:
+@example 
+public boolean java.lang.Object.equals(java.lang.Object)
+@end example
+The access modifiers are placed in canonical order as specified by "The
+Java Language Specification".  This is public, protected or private
+first, and then other modifiers in the following order: abstract,
+static, final, synchronized native.
+@end quotation
 
 @item --watch-static-recursion
 If this switch is on, Chicory will traverse the static fields of a given class
 at most once.
 
-If we had:
+Given this code:
 @example
-class A
-@{
+class A @{
    private static int x, y;
    private static A a = new A();
 @}
@@ -3128,12 +3116,95 @@ Then if this switch is on, and a program point contains variable @code{myA} of t
 Chicory will produce variables @code{myA.x}, @code{myA.y}, @code{myA.A}, but not @code{myA.A.x}, @code{myA.A.y},
 @code{myA.A.A} and so on.
 
-@item --trace-percent=<integer>
-If this switch is on, then <integer> represents the percentage of program points
-to instrument.  The actual random chance only affects the method entry program point.
-The corresponding exit program point is included if and only if the entry program point
-is included.  This ensures that despite random program points being removed, there will
-not be unmatched nonce values.
+@end table
+
+@node    Chicory miscellaneous options,  , Variables in Chicory output, Chicory options
+@subsubsection Chicory miscellaneous options
+
+This section lists all other Chicory options --- that is, all options
+that do not control which program points and variables appear in
+Chicory's output.
+
+@table @option
+@item --help
+Print a help message.
+
+@item --debug
+Produce debugging information.
+
+@item --trace-percent=@var{integer}
+If this switch is on, then Chicory only produces output for a fraction
+of all program point executions.  For each method, output is produced
+for the given fraction of its executions.  the randomization is applied
+only to entry program points; an exit program point is included if and
+only if its corresponding entry program point is included.
+
+
+@item --dtrace-file=@var{filename}
+@cindex DTRACEFILE environment variable
+@cindex environment variable DTRACEFILE
+@cindex DTRACEAPPEND environment variable
+@cindex environment variable DTRACEAPPEND
+@cindex trace file name
+@cindex dtrace file name
+@cindex file name, for dtrace file
+Specifies the default name for the trace output (@file{.dtrace}) file.
+If this is not specified, then the value of the @env{DTRACEFILE}
+environment variable (at the time the instrumented program runs) is
+used.  If that environment variable is not used, then the default is
+@file{./@var{CLASSNAME}.dtrace}.
+
+If the @env{DTRACEAPPEND} environment
+variable is set to any value, the dtrace file will be appended to
+instead of overwritten.  Compressed data trace files may not be appended
+to.  In some cases you may find a single large data trace file more
+convenient; in other cases, a collection of smaller data trace files may
+give you more control over which subsets of runs to invoke Daikon on.
+
+@item --output-dir=@var{directory}
+Write the @file{.dtrace} trace output file to the specified directory.
+The default is the current directory.
+
+@item --configs=@var{directory}
+Chicory will use this location to search for configuration files.
+Currently, this only includes @file{*.pure} files.
+
+@item --daikon
+@itemx --daikon=@var{args}
+After creating a data trace (@file{.dtrace}) file, run Daikon on it,
+passing the specified arguments, if any, to Daikon.  Also see the
+@option{--daikon-online} option.
+
+This option supplies Daikon with a single trace from one execution of
+your program.  By contrast to this option (and
+@option{--daikon-online}), if you invoke Daikon from the command line,
+you can supply Daikon with as many trace files as you wish.
+
+@item --daikon-online
+@itemx --daikon-online=@var{args}
+This option is like @option{--daikon}, except that no @file{.dtrace}
+data trace file is produced.  Instead, Chicory sends trace information
+over a socket to Daikon, which processes the information incrementally
+(``online''), as Chicory produces it.
+
+Just like with the @option{--daikon} option, Daikon is only given a
+single trace from one execution of your program.
+
+@item --premain=@var{path}
+Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
+Chicory requires this jar file in order to execute.  By default Chicory
+looks for the jar file in the classpath and in @file{$(DAIKONDIR)/java}
+(where @file{DAIKONDIR} is an environment variable that points to the
+complete installation of Daikon).  
+
+Chicory can also use the @file{daikon.jar} file for this purpose.  If it
+doesn't find @file{ChicoryPremain.jar} above, it will use @file{daikon.jar}
+itself (if a file named @file{daikon.jar} appears in the classpath).  If
+the Daikon jar file is not named @file{daikon.jar}, you can use this
+switch to specify its name.  For example:
+@example
+--premain=C:\lib\daikon-4.1.3.jar
+@end example
 
 @item --heap_size=@var{max_heap}
 Specifies the maximum size, in bytes, of the memory allocation pool for
