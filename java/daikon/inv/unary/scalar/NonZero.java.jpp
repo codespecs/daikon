@@ -107,6 +107,18 @@ public class NONZERO
     return dkconfig_enabled;
   }
 
+  /** Make sure the NonZero make sense on these vars **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types(vis))
+      return (false);
+
+    if (vis[0].aux.getFlag (VarInfoAux.IS_STRUCT))
+      return (false);
+
+    return (true);
+  }
+
   /** instantiate an invariant on the specified slice **/
   public Invariant instantiate_dyn (PptSlice slice) {
     return new NONZERO (slice);
