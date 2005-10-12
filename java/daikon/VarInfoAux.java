@@ -75,6 +75,17 @@ public final class VarInfoAux
   public static final String FALSE = "false";
 
   /**
+   * Whether this variable is an inline structure or a reference to
+   * a structure (class).  By default it is a reference.  If it is
+   * an inlined structure (or array), it doesn't make sense to look
+   * for invariants over its hashcode.  Front ends include references
+   * to inlined structures as variables because some tools that follow
+   * daikon (eg, data structure repair) need other information about
+   * the variable
+   */
+  public static final String IS_STRUCT = "isStruct";
+
+  /**
    * Return an interned VarInfoAux that represents a given string.
    * Elements are separated by commas, in the form:
    *
@@ -203,6 +214,7 @@ public final class VarInfoAux
     defaultMap.put (NULL_TERMINATING, TRUE);
     defaultMap.put (IS_PARAM, FALSE);
     defaultMap.put (PACKAGE_NAME, NO_PACKAGE_NAME);
+    defaultMap.put (IS_STRUCT, FALSE);
     this.map = defaultMap;
     this.isInterned = false;
   }
