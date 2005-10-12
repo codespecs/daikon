@@ -147,7 +147,9 @@ Remake it first if it is more than a week old."
   (let* ((dir (substitute-in-file-name "$inv/doc/"))
 	 (infofile (concat dir basename ".info"))
 	 (texinfofile (concat dir basename ".texinfo"))
-	 (remake (or (not (file-exists-p infofile))
+	 (remake (or (and (get-file-buffer texinfofile)
+			  (buffer-modified-p (get-file-buffer texinfofile)))
+		     (not (file-exists-p infofile))
 		     (and (file-newer-than-file-p texinfofile infofile)
 			  (y-or-n-p (concat basename ".info is out of date; re-make it? "))))))
     (if remake
