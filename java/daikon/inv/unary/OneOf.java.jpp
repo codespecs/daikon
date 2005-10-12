@@ -1946,6 +1946,10 @@ public final class ONEOFSCALAR
   }
 
 
+  public boolean isExact() {
+    return (num_elts == 1);
+  }
+
   // Look up a previously instantiated invariant.
   public static ONEOFSCALAR find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
