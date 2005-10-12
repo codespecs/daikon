@@ -153,7 +153,7 @@ public class DeclWriter extends DaikonWriter
     private void traverseDecl(DaikonVariableInfo curInfo,
                               DeclReader.DeclPpt decl_ppt)
     {
-        if(!curInfo.declShouldPrint())
+        if (!curInfo.declShouldPrint())
             return;
 
         outFile.println(curInfo.getName());
@@ -211,7 +211,7 @@ public class DeclWriter extends DaikonWriter
         for(DaikonVariableInfo childOfRoot: root)
         {
             // If we are here, there is at least 1 child
-            if(!printedHeader)
+            if (!printedHeader)
             {
                 outFile.println (declareHeader);
                 outFile.println (name);
@@ -223,7 +223,7 @@ public class DeclWriter extends DaikonWriter
                                        : comp_info.find_ppt (name)));
         }
 
-        if(printedHeader)
+        if (printedHeader)
             outFile.println();
     }
 }

@@ -178,7 +178,7 @@ public class Runtime
      */
     public static void enter(Object obj, int nonce, int mi_index, Object[] args)
     {
-        if(dontProcessPpts())
+        if (dontProcessPpts())
             return;
 
         synchronized (all_classes)
@@ -206,7 +206,7 @@ public class Runtime
      */
     public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum)
     {
-        if(dontProcessPpts())
+        if (dontProcessPpts())
             return;
 
         synchronized (all_classes)
@@ -294,7 +294,7 @@ public class Runtime
 
         // This should only print a percentage if dtraceLimit is not its
         // default value.
-        // if(printedRecords%1000 == 0)
+        // if (printedRecords%1000 == 0)
         //     System.out.printf("printed=%d, percent printed=%f%n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
 
         if (printedRecords >= dtraceLimit)
@@ -726,7 +726,7 @@ public class Runtime
       result = result.replace('/', '.');
     }
     else {
-        if(dims > 0) //array of primitives
+        if (dims > 0) //array of primitives
             result = (String) primitiveClassesFromJvm.get(classname);
         else //just a primitive
             result = classname;

@@ -79,17 +79,17 @@ public class DTraceWriter extends DaikonWriter
     public void methodEntry(MethodInfo mi, int nonceVal, Object obj, Object[] args)
     {
         //don't print
-        if(Runtime.dtrace_closed)
+        if (Runtime.dtrace_closed)
             return;
 
-        if(checkPct(nonceVal))
+        if (checkPct(nonceVal))
             return;
 
         Member member = mi.member;
 
         //get the root of the method's traversal pattern
         RootInfo root = mi.traversalEnter;
-        if(root == null)
+        if (root == null)
             throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
 
         if (debug_vars) {
@@ -113,17 +113,17 @@ public class DTraceWriter extends DaikonWriter
      */
     public void methodExit(MethodInfo mi, int nonceVal, Object obj, Object[] args, Object ret_val, int lineNum)
     {
-        if(Runtime.dtrace_closed)
+        if (Runtime.dtrace_closed)
             return;
 
-        if(checkIgnoreNonces(nonceVal))
+        if (checkIgnoreNonces(nonceVal))
             return;
 
         Member member = mi.member;
 
         //gets the traversal pattern root for this method exit
         RootInfo root = mi.traversalExit;
-        if(root == null)
+        if (root == null)
             throw new RuntimeException("Traversal pattern not initialized for method " + mi.method_name + " at line " + lineNum);
 
         //make sure the line number is valid
@@ -173,15 +173,15 @@ public class DTraceWriter extends DaikonWriter
 
             Object val;
 
-            if(child instanceof ReturnInfo)
+            if (child instanceof ReturnInfo)
             {
                 val = ret_val;
             }
-            else if(child instanceof ThisObjInfo)
+            else if (child instanceof ThisObjInfo)
             {
                 val = thisObj;
             }
-            else if(child instanceof ParameterInfo)
+            else if (child instanceof ParameterInfo)
             {
                 val = args[((ParameterInfo)child).getArgNum()];
             }
@@ -207,7 +207,7 @@ public class DTraceWriter extends DaikonWriter
     //traverse from the traversal pattern data structure and recurse
     private void traverseValue(MethodInfo mi, DaikonVariableInfo curInfo, Object val)
     {
-        if(!curInfo.dTraceShouldPrint())
+        if (!curInfo.dTraceShouldPrint())
         {
             return;
         }
@@ -542,11 +542,11 @@ public class DTraceWriter extends DaikonWriter
     {
         if (!(val instanceof Runtime.PrimitiveWrapper))
         {
-            if(!runtime)
+            if (!runtime)
                 return declared;
             else
             {
-                if(val != null)
+                if (val != null)
                     return val.getClass();
                 else
                     return null;
@@ -596,13 +596,13 @@ public class DTraceWriter extends DaikonWriter
      */
     private boolean checkPct(int nonce)
     {
-        if(recordPct == -1)
+        if (recordPct == -1)
             return false;
 
         // get random int from 0 to 100 (inclusive)
         int randInt = rand.nextInt(100 + 1);
 
-        if(randInt < recordPct)
+        if (randInt < recordPct)
         {
             return false;
         }
@@ -621,10 +621,10 @@ public class DTraceWriter extends DaikonWriter
      */
     private boolean checkIgnoreNonces(int nonce)
     {
-        if(recordPct == -1)
+        if (recordPct == -1)
             return false;
 
-        if(pendingIgnoreNonces.contains(nonce))
+        if (pendingIgnoreNonces.contains(nonce))
         {
             pendingIgnoreNonces.remove(nonce);
             return true;

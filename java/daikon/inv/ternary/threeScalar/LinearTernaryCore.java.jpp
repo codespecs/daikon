@@ -446,7 +446,7 @@ public final class CLASSNAME
       } else {
 
         // try to fit to the current line
-        if(!try_points_linear(x, y, z)) {
+        if (!try_points_linear(x, y, z)) {
           //put the crucial point in, so that it can be tested against the new line
           def_points[MINTRIPLES-1] = new Point (x, y, z);
 
@@ -457,7 +457,7 @@ public final class CLASSNAME
         }
 
         // new point has broken the line, try to fit to a plane
-        if(line_flag == Flag.NO_LINE) {
+        if (line_flag == Flag.NO_LINE) {
           InvariantStatus stat = planarIntervention(def_points);
           return stat;
         } else {
@@ -1077,7 +1077,7 @@ public final class CLASSNAME
     // divide all terms by -1.  Also reduce all terms by dividing by
     // the gcd.  If the gcd is 1, no harm done -- divide by 1.
     // ensures postive x coefficient
-    if(wrapper != null) {
+    if (wrapper != null) {
       wrapper.log("Preliminary: " + i_var + " " + j_var + " GCD: " + MathMDE.gcd(i_var, j_var));
       wrapper.log("Preliminary: " + k_var + " " + Stand_const + " GCD: " + MathMDE.gcd(k_var, Stand_const));
       wrapper.log("GCD: " + myGCD);

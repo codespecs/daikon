@@ -865,7 +865,7 @@ public class NIS {
      */
     public void add (Antecedents ants) {
 
-      for (Iterator<List<Invariant>> i = ants.antecedent_map.values().iterator(); i.hasNext();){
+      for (Iterator<List<Invariant>> i = ants.antecedent_map.values().iterator(); i.hasNext();) {
         List<Invariant> invs = i.next();
         for (Iterator<Invariant> j = invs.iterator(); j.hasNext(); ) {
           Invariant inv = j.next();

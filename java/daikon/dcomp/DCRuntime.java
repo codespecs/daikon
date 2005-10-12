@@ -817,7 +817,7 @@ public final class DCRuntime {
     } else {
       // Ignore null and nonsensical tags.  There is no reason to process
       // their children, because they can't have any with reasonable values
-      if ((tag == null) || (tag == nonsensical) || (tag == nonsensical_list)){
+      if ((tag == null) || (tag == nonsensical) || (tag == nonsensical_list)) {
         if (debug_timing.enabled())
           debug_timing.log ("  Variable %s : %d msecs%n", dv,
                             System.currentTimeMillis() - start_millis);
@@ -1183,7 +1183,7 @@ public final class DCRuntime {
    * the source tree.  The source tree's comparability is unchanged.
    * Variables are identified by name
    */
-  static void merge_dv_comparability (RootInfo src, RootInfo dest){
+  static void merge_dv_comparability (RootInfo src, RootInfo dest) {
 
     debug_merge_comp.indent();
 

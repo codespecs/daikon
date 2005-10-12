@@ -134,19 +134,19 @@ public class MethodInfo {
     }
 
 
-    if(ChicoryPremain.shouldDoPurity())
+    if (ChicoryPremain.shouldDoPurity())
     {
         int mod = member.getModifiers();
 
 
         // Only consider purity on non-abstract, non-static, non-constructor
         // methods which return a value and take no parameters!
-        if(!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&
+        if (!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&
                 !(member instanceof Constructor) &&
                 !((Method) member).getReturnType().equals(Void.TYPE) &&
                 ((Method) member).getParameterTypes().length == 0)
         {
-            if(ChicoryPremain.isMethodPure(member))
+            if (ChicoryPremain.isMethodPure(member))
             {
                 isPure = true;
             }

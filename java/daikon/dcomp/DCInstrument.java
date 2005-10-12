@@ -2088,7 +2088,7 @@ class DCInstrument {
    * exit locations are filled in, but the reflection information is
    * not generated
    */
-  private MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen){
+  private MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
 
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();
@@ -3087,7 +3087,7 @@ class DCInstrument {
       // Process the instruction list, adding one to the index of each
       // LocalVariableInstruction that is not referencing a parameter
       InstructionList il = mg.getInstructionList();
-      for (InstructionHandle ih = il.getStart(); ih != null;ih = ih.getNext()){
+      for (InstructionHandle ih = il.getStart(); ih != null;ih = ih.getNext()) {
         Instruction inst = ih.getInstruction();
         if ((inst instanceof LocalVariableInstruction)
             || (inst instanceof RET) || (inst instanceof IINC)) {
@@ -3107,7 +3107,7 @@ class DCInstrument {
     mg.setArgumentTypes (arg_types);
     mg.setArgumentNames (arg_names);
 
-    if(has_code)
+    if (has_code)
       mg.setMaxLocals();
 
     debug_add_dcomp.log ("new mg: %s [%d locals]%n", mg, mg.getMaxLocals());

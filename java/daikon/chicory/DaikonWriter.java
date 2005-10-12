@@ -127,7 +127,7 @@ public abstract class DaikonWriter
         {
             paramTypes.append(types[i]);
 
-            if(i != types.length - 1)
+            if (i != types.length - 1)
                 paramTypes.append(",");
         }
         paramTypes.append(")");

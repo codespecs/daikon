@@ -24,9 +24,10 @@ public class StringInfo extends DaikonVariableInfo
      * Returns a String which contains a string representation of val, used for
      * dtrace information.
      */
+    @SuppressWarnings("unhecked")
     public String getDTraceValueString(Object val)
     {
-        if(isArray)
+        if (isArray)
         {
             return getStringList((List<String>)val); // unchecked cast
         }
@@ -70,7 +71,7 @@ public class StringInfo extends DaikonVariableInfo
 
             if (str == null)
                 buf.append(str);
-            else if(str instanceof NonsensicalObject || str instanceof NonsensicalList)
+            else if (str instanceof NonsensicalObject || str instanceof NonsensicalList)
                 buf.append("nonsensical");
             else
                 buf.append("\"" + encodeString((String) str) + "\"");

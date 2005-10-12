@@ -38,7 +38,7 @@ public class RootInfo extends DaikonVariableInfo
             return (root);
 
         Set<Class> staticTraversedClasses = null;
-        if(Chicory.shouldWatchStatics())
+        if (Chicory.shouldWatchStatics())
         {
             staticTraversedClasses = new HashSet <Class> ();
         }
@@ -68,7 +68,7 @@ public class RootInfo extends DaikonVariableInfo
             return (root);
 
         Set<Class> staticTraversedClasses = null;
-        if(Chicory.shouldWatchStatics())
+        if (Chicory.shouldWatchStatics())
         {
             staticTraversedClasses = new HashSet <Class> ();
         }
@@ -114,7 +114,7 @@ public class RootInfo extends DaikonVariableInfo
         RootInfo root = new RootInfo();
 
         Set<Class> staticTraversedClasses = null;
-        if(Chicory.shouldWatchStatics())
+        if (Chicory.shouldWatchStatics())
         {
             staticTraversedClasses = new HashSet <Class> ();
         }
@@ -134,7 +134,7 @@ public class RootInfo extends DaikonVariableInfo
         RootInfo root = new RootInfo();
 
         Set<Class> staticTraversedClasses = null;
-        if(Chicory.shouldWatchStatics())
+        if (Chicory.shouldWatchStatics())
         {
             staticTraversedClasses = new HashSet <Class> ();
         }

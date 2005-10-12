@@ -176,12 +176,12 @@ public class RetTransform implements ClassFileTransformer {
       Field[] fields = cg.getFields();
       for(Field field: fields)
       {
-          if(field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType))
+          if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType))
           {
               ConstantValue value = field.getConstantValue();
               String valString;
 
-              if(value == null)
+              if (value == null)
                   {
                   //System.out.println("WARNING FROM " + field.getName());
                   //valString = "WARNING!!!";
@@ -193,7 +193,7 @@ public class RetTransform implements ClassFileTransformer {
                   //System.out.println("GOOD FROM " + field.getName() + " --- " + valString);
                   }
 
-              if(valString != null)
+              if (valString != null)
                   c_info.staticMap.put(field.getName(), valString);
           }
       }
@@ -326,29 +326,29 @@ public class RetTransform implements ClassFileTransformer {
   //called by addInvokeToClinit to add in a hook at return opcodes
   private InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp,
             String fullClassName, Instruction inst, MethodContext context) {
-        switch (inst.getOpcode()) {
+    switch (inst.getOpcode()) {
 
-        case Constants.ARETURN:
-        case Constants.DRETURN:
-        case Constants.FRETURN:
-        case Constants.IRETURN:
-        case Constants.LRETURN:
-        case Constants.RETURN:
-            break;
+    case Constants.ARETURN:
+    case Constants.DRETURN:
+    case Constants.FRETURN:
+    case Constants.IRETURN:
+    case Constants.LRETURN:
+    case Constants.RETURN:
+        break;
 
-        default:
-            return (null);
-        }
-
-        InstructionList il = new InstructionList();
-        il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
-        il.append(inst);
-        return (il);
+    default:
+        return (null);
     }
 
+    InstructionList il = new InstructionList();
+    il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
+    il.append(inst);
+    return (il);
+  }
 
-    //created a <clinit> method if none exists, to guarantee we always have this hook
-      private Method createClinit(ClassGen cg, String fullClassName) {
+
+  //created a <clinit> method if none exists, to guarantee we always have this hook
+  private Method createClinit(ClassGen cg, String fullClassName) {
         /*
          * System.out.println(mg.getAccessFlags());
          * System.out.println(mg.getReturnType());
@@ -392,9 +392,9 @@ public class RetTransform implements ClassFileTransformer {
     }
 
 
-    //created the InstructionList to insert for adding the <clinit> hookd
-private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName, InstructionFactory factory)
-{
+  //created the InstructionList to insert for adding the <clinit> hookd
+  private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName, InstructionFactory factory)
+  {
     InstructionList invokeList = new InstructionList();
 
     invokeList.append(new PUSH(cp, fullClassName));
@@ -403,9 +403,9 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
 
     //System.out.println(fullClassName + " --- " + invokeList.size());
     return invokeList;
-}
+  }
 
-/**
+  /**
    * Changes each return statement to first place the value being returned into
    * a local and then return. This allows us to work around the JDI deficiency
    * of not being able to query return values.
@@ -429,34 +429,34 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         MethodContext context = new MethodContext (cg, mg);
 
         if (debug)
-                {
-                    out.format("  Method = %s%n", mg);
-                    Attribute[] attributes = mg.getCodeAttributes();
-                    for (Attribute a : attributes)
-                    {
-                        int con_index = a.getNameIndex();
-                        Constant c = pgen.getConstant(con_index);
-                        String att_name = ((ConstantUtf8) c).getBytes();
-                        out.format("attribute: %s [%s]%n", a, att_name);
-                    }
-                }
+          {
+            out.format("  Method = %s%n", mg);
+            Attribute[] attributes = mg.getCodeAttributes();
+            for (Attribute a : attributes)
+              {
+                int con_index = a.getNameIndex();
+                Constant c = pgen.getConstant(con_index);
+                String att_name = ((ConstantUtf8) c).getBytes();
+                out.format("attribute: %s [%s]%n", a, att_name);
+              }
+          }
 
         // check for the class init method
         if (mg.getName().equals("<clinit>"))
-        {
-                    if (Chicory.checkStaticInit)
-                    {
-                        cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
-                        cg.update();
-                    }
+          {
+            if (Chicory.checkStaticInit)
+              {
+                cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
+                cg.update();
+              }
             continue;
-        }
+          }
 
         // If method is synthetic...
-        if((Constants.ACC_SYNTHETIC & mg.getAccessFlags()) > 0)
-        {
+        if ((Constants.ACC_SYNTHETIC & mg.getAccessFlags()) > 0)
+          {
             continue;
-        }
+          }
 
         // Get the instruction list and skip methods with no instructions
         InstructionList il = mg.getInstructionList();
@@ -471,8 +471,8 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         // and add it to the list for this class.
         MethodInfo mi = (create_method_info (class_info, mg));
 
-        if(mi == null)  //method filtered out!
-            continue;
+        if (mi == null)  //method filtered out!
+          continue;
 
         if (!shouldInclude && ChicoryPremain.debug)
           out.format ("Class %s included [%s]%n", cg.getClassName(),
@@ -592,7 +592,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     // as enter/exit ppts are processed.
     class_info.set_method_infos (method_infos);
 
-    if(shouldInclude)
+    if (shouldInclude)
     {
     synchronized (Runtime.new_classes)
     {
@@ -630,12 +630,12 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
       return (null);
     }
 
-    if(!shouldIncIter.hasNext())
-        throw new RuntimeException("Not enough entries in shouldIncIter");
+    if (!shouldIncIter.hasNext())
+      throw new RuntimeException("Not enough entries in shouldIncIter");
 
     boolean shouldInclude = shouldIncIter.next();
 
-    if(!shouldInclude)
+    if (!shouldInclude)
         return null;
 
     Type type = c.mgen.getReturnType();
@@ -646,7 +646,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
       il.append (c.ifact.createStore (type, return_loc.getIndex()));
     }
 
-    if(!exitIter.hasNext())
+    if (!exitIter.hasNext())
         throw new RuntimeException("Not enough exit locations in the exitIter");
 
     il.append (call_enter_exit (c, "exit", exitIter.next()));
@@ -741,7 +741,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
     nl.append (c.ifact.createStore (Type.INT, nonce_lv.getIndex()));
 
 
-    if(shouldCallEnter)
+    if (shouldCallEnter)
     {
     // call Runtime.enter()
     nl.append (call_enter_exit (c, "enter", -1));
@@ -948,7 +948,8 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
   }
 
   //creates a MethodInfo struct corresponding to mgen
-  private MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen)
+    @SuppressWarnings("unchecked")
+    private MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen)
     {
         // Get the argument names for this method
         String[] arg_names = mgen.getArgumentNames();
@@ -968,7 +969,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
         boolean shouldInclude = false;
 
         //see if we should filter the entry point
-        if(!shouldFilter(class_info.class_name, mgen.getName(),
+        if (!shouldFilter(class_info.class_name, mgen.getName(),
                 DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName())))
             shouldInclude = true;
 
@@ -1037,7 +1038,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
 
                     last_line_number = line_number;
 
-                    if(!shouldFilter(class_info.class_name, mgen.getName(),
+                    if (!shouldFilter(class_info.class_name, mgen.getName(),
                             DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), line_number)))
                     {
                         shouldInclude = true;
@@ -1055,7 +1056,7 @@ private InstructionList call_initNotify(ClassGen cg, ConstantPoolGen cp, String 
             }
         }
 
-        if(shouldInclude)
+        if (shouldInclude)
             return new MethodInfo(class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
         else
             return null;

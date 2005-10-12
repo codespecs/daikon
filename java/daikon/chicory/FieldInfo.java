@@ -74,15 +74,16 @@ public class FieldInfo extends DaikonVariableInfo
         return Modifier.isStatic(field.getModifiers());
     }
 
+    @SuppressWarnings("unchecked")
     public Object getMyValFromParentVal(Object val)
     {
-        if(isArray)
+        if (isArray)
         {
             return DTraceWriter.getFieldValues(field, (List <Object>) val); // unchecked cast
         }
         else
         {
-            if(Modifier.isStatic(field.getModifiers()))
+            if (Modifier.isStatic(field.getModifiers()))
             {
                 return DTraceWriter.getStaticValue(field);
             }

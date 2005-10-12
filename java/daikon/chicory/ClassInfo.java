@@ -71,24 +71,24 @@ public class ClassInfo {
     for (MethodInfo mi : method_infos)
       mi.initViaReflection();
 
-    if(ChicoryPremain.shouldDoPurity())
+    if (ChicoryPremain.shouldDoPurity())
     {
         for(String pureMeth: ChicoryPremain.getPureMethods())
         {
-            if(isInThisClass(pureMeth))
+            if (isInThisClass(pureMeth))
             {
                 boolean foundMatch = false;
                 for(MethodInfo mi: method_infos)
                 {
                     //System.out.println(mi.member.toString() + "\n" + pureMeth + "\n\n");
-                    if(mi.member.toString().trim().equals(pureMeth))
+                    if (mi.member.toString().trim().equals(pureMeth))
                     {
                         foundMatch = true;
                         break;
                     }
                 }
 
-                if(!foundMatch)
+                if (!foundMatch)
                 {
                     // pureMeth must not actually be in this class
                     throw new Error(String.format("Could not find pure method \"%s\" in class %s", pureMeth, getClass().toString()));

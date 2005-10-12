@@ -33,6 +33,7 @@ public class PureMethodInfo extends DaikonVariableInfo
      * This is safe because the method is pure!
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Object getMyValFromParentVal(Object parentVal)
     {
         Method meth = (Method) minfo.member;
@@ -59,7 +60,7 @@ public class PureMethodInfo extends DaikonVariableInfo
 
                 for (Object val : (List<Object>) parentVal) // unchecked cast
                 {
-                    if(val == null || val instanceof NonsensicalObject)
+                    if (val == null || val instanceof NonsensicalObject)
                         retList.add(NonsensicalObject.getInstance());
                     else
                         retList.add(executePureMethod(meth, val));
@@ -137,38 +138,38 @@ public class PureMethodInfo extends DaikonVariableInfo
      */
     public static Object convertWrapper(Object obj)
     {
-        if(obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList)
+        if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList)
             return obj;
 
-        if(obj instanceof Integer)
+        if (obj instanceof Integer)
         {
             return new Runtime.IntWrap((Integer) obj);
         }
-        else if(obj instanceof Boolean)
+        else if (obj instanceof Boolean)
         {
             return new Runtime.BooleanWrap((Boolean) obj);
         }
-        else if(obj instanceof Byte)
+        else if (obj instanceof Byte)
         {
             return new Runtime.ByteWrap((Byte) obj);
         }
-        else if(obj instanceof Character)
+        else if (obj instanceof Character)
         {
             return new Runtime.CharWrap((Character) obj);
         }
-        else if(obj instanceof Float)
+        else if (obj instanceof Float)
         {
             return new Runtime.FloatWrap((Float) obj);
         }
-        else if(obj instanceof Double)
+        else if (obj instanceof Double)
         {
             return new Runtime.DoubleWrap((Double) obj);
         }
-        else if(obj instanceof Long)
+        else if (obj instanceof Long)
         {
             return new Runtime.LongWrap((Long) obj);
         }
-        else if(obj instanceof Short)
+        else if (obj instanceof Short)
         {
             return new Runtime.ShortWrap((Short) obj);
         }

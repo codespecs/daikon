@@ -24,11 +24,11 @@ public class ArrayInfo extends DaikonVariableInfo
 
     public Object getMyValFromParentVal(Object value)
     {
-        if(value == null)
+        if (value == null)
         {
             return null;
         }
-        else if(value instanceof NonsensicalObject)
+        else if (value instanceof NonsensicalObject)
         {
             return NonsensicalList.getInstance();
         }

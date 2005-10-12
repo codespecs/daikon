@@ -344,7 +344,7 @@ public class Chicory {
           premain_args.add(arg);
           purityAnalysis = true;
       }
-      else if(arg.equals("--watch-static-recursion"))
+      else if (arg.equals("--watch-static-recursion"))
       {
           premain_args.add(arg);
           watchStatics = true;
@@ -547,7 +547,7 @@ public class Chicory {
     List<String> cmdlist = new ArrayList<String>();
     cmdlist.add ("java");
 
-    if(RemoteDebug)
+    if (RemoteDebug)
     {
         //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
         cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
@@ -559,9 +559,9 @@ public class Chicory {
     cmdlist.add ("-ea");
     cmdlist.add ("-Xmx" + heap_size);
 
-    if(dtraceLim != null)
+    if (dtraceLim != null)
         cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
-    if(terminate != null)
+    if (terminate != null)
         cmdlist.add("-D" + traceLimTermString + "=" + terminate );
 
     Properties props = System.getProperties();
@@ -571,7 +571,7 @@ public class Chicory {
 
         assert value instanceof String: "All properties should be strings";
 
-        if(((String)key).contains("harpoon"))
+        if (((String)key).contains("harpoon"))
             cmdlist.add("-D" + key + "=" + value);
     }
 
@@ -601,7 +601,7 @@ public class Chicory {
     }
     int result = redirect_wait (chicory_proc);
 
-    if(daikon_cmd != null)
+    if (daikon_cmd != null)
     {
     // Terminate if target didn't end properly
     if (result != 0) {

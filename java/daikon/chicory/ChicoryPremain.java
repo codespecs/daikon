@@ -42,7 +42,7 @@ public class ChicoryPremain {
     debug = chicory.debug;
 
     // Open the dtrace file
-    if(chicory.getDaikonPort() != -1)
+    if (chicory.getDaikonPort() != -1)
     {
         Runtime.setDtraceOnlineMode(chicory.getDaikonPort());
     }
@@ -70,7 +70,7 @@ public class ChicoryPremain {
       }
     }
 
-    if(chicory.doPurity())
+    if (chicory.doPurity())
     {
         throw new RuntimeException("Executing a purity analysis is currently disabled");
 
@@ -78,7 +78,7 @@ public class ChicoryPremain {
         //writePurityFile(chicory.target_program + ".pure", chicory.getConfigDir());
         //doPurity = true;
     }
-    else if(chicory.getPurityFileName() != null)
+    else if (chicory.getPurityFileName() != null)
     {
         readPurityFile(chicory.getPurityFileName(), chicory.getConfigDir());
         doPurity = true;
@@ -132,7 +132,7 @@ public class ChicoryPremain {
             throw new Error("Could not find file " + purityFileName + ". Got exception " + e);
         }
 
-        if(Chicory.verbose)
+        if (Chicory.verbose)
             System.out.printf("Reading %s for pure methods %n", purityFileName);
 
         String line;
@@ -147,7 +147,7 @@ public class ChicoryPremain {
                 throw new Error("Error reading file " + purityFileName + ". Got exception e");
             }
 
-            if(line != null)
+            if (line != null)
                 pureMethods.add(line.trim());
         }
         while(line != null);
@@ -228,7 +228,7 @@ public class ChicoryPremain {
       //TODO just use Set.contains(member.toString()) ?
       for(String methName: pureMethods)
       {
-          if(methName.equals(member.toString()))
+          if (methName.equals(member.toString()))
               return true;
       }
 

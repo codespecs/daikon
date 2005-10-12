@@ -31,7 +31,7 @@ public final class TestAnnotate extends TestCase {
       "\tpublic void push(int k) {",
       "\t       int index;",
       "\t       for(index=0; index<numberOfElements; index++) {",
-      "                        if(k==elems[index]) {"
+      "                        if (k==elems[index]) {"
 
     };
 
@@ -46,7 +46,7 @@ public final class TestAnnotate extends TestCase {
       "        public void push(int k) {",
       "               int index;",
       "               for(index=0; index<numberOfElements; index++) {",
-      "                        if(k==elems[index]) {"
+      "                        if (k==elems[index]) {"
     };
 
     for (int i = 0 ; i < tabbed.length ; i++) {

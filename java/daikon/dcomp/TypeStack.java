@@ -114,7 +114,7 @@ public final class TypeStack
             if (nextHand.getInstruction() instanceof BranchInstruction)
             {
                 BranchInstruction i = (BranchInstruction) nextHand.getInstruction();
-                if(i.containsTarget(hand))
+                if (i.containsTarget(hand))
                 {
                     targeters.add(nextHand);
                 }
@@ -997,13 +997,13 @@ public final class TypeStack
             Type t2 = stack.pop();
 
 
-            if(isCat1(t1) && isCat2(t2))
+            if (isCat1(t1) && isCat2(t2))
             {
                 stack.push(t1);
                 stack.push(t2);
                 stack.push(t1);
             }
-            else if(isCat1(t1) && isCat1(t2) && isCat1(stack.peek()))
+            else if (isCat1(t1) && isCat1(t2) && isCat1(stack.peek()))
             {
                 Type t3 = stack.pop();
 
@@ -1019,7 +1019,7 @@ public final class TypeStack
         }
         else if (inst instanceof DUP2)
         {
-            if(isCat2(stack.peek()))
+            if (isCat2(stack.peek()))
                 stack.push(stack.peek());
             else
             {
@@ -1033,7 +1033,7 @@ public final class TypeStack
         }
         else if (inst instanceof DUP2_X1)
         {
-            if(isCat2(stack.peek()))
+            if (isCat2(stack.peek()))
             {
                 Type t1 = stack.pop();
                 Type t2 = stack.pop();
@@ -1066,13 +1066,13 @@ public final class TypeStack
             Type t1 = stack.pop();
             Type t2 = stack.pop();
 
-            if(isCat2(t1) && isCat2(t2))
+            if (isCat2(t1) && isCat2(t2))
             {
                 stack.push(t1);
                 stack.push(t2);
                 stack.push(t1);
             }
-            else if(isCat1(t1) && isCat1(t2) && isCat2(stack.peek()))
+            else if (isCat1(t1) && isCat1(t2) && isCat2(stack.peek()))
             {
                 Type t3 = stack.pop();
 
@@ -1082,7 +1082,7 @@ public final class TypeStack
                 stack.push(t2);
                 stack.push(t1);
             }
-            else if(isCat2(t1) && isCat1(t2) && isCat1(stack.peek()))
+            else if (isCat2(t1) && isCat1(t2) && isCat1(stack.peek()))
             {
                 Type t3 = stack.pop();
 
@@ -1115,7 +1115,7 @@ public final class TypeStack
         }
         else if (inst instanceof POP2)
         {
-            if(isCat2(top(stack, 0)))
+            if (isCat2(top(stack, 0)))
                 stack.pop();
             else
                 popNum(2);
@@ -1244,7 +1244,7 @@ public final class TypeStack
                     }
                 }
 
-                if(mg.getInstructionList().getEnd().getInstruction() instanceof BranchInstruction)
+                if (mg.getInstructionList().getEnd().getInstruction() instanceof BranchInstruction)
                 {
                     //System.out.printf("\n\tSkipping stack check at end of %s because last instruction is branching", mg);
                     continue;
@@ -1255,7 +1255,7 @@ public final class TypeStack
                 assert stack.size() == numRet : "Stack must be " + size + " after method is complete!!!\n"
                         + "It is actually size " + stack.size();
 
-                //if(meth.getReturnType() != Type.VOID)
+                //if (meth.getReturnType() != Type.VOID)
                     //System.out.printf("\tmethod --- %s, return type %s --- expected --- %s%n", mg, stack.peek(), mg.getReturnType());
 
                 if (meth.getReturnType() != Type.VOID)
@@ -1350,13 +1350,13 @@ public final class TypeStack
     {
         //System.out.println(t);
 
-        if(t == Type.BOOLEAN)
+        if (t == Type.BOOLEAN)
             return Type.INT;
-        else if(t == Type.CHAR)
+        else if (t == Type.CHAR)
             return Type.INT;
-        else if(t == Type.SHORT)
+        else if (t == Type.SHORT)
             return Type.INT;
-        else if(t == Type.BYTE)
+        else if (t == Type.BYTE)
             return Type.INT;
         else
             return t;

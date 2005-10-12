@@ -1214,12 +1214,12 @@ public final class Daikon {
    */
   public static void init_ppt (PptTopLevel ppt, PptMap all_ppts) {
 
-    if(!Daikon.using_DaikonSimple) {
-    // Setup splitters.  This must be done before adding derived variables.
-    // Do not add splitters to ppts that were already created by splitters!
-    if (! (ppt instanceof PptConditional)) {
-      setup_splitters(ppt);
-    }
+    if (!Daikon.using_DaikonSimple) {
+      // Setup splitters.  This must be done before adding derived variables.
+      // Do not add splitters to ppts that were already created by splitters!
+      if (! (ppt instanceof PptConditional)) {
+        setup_splitters(ppt);
+      }
     }
 
     // Create orig and derived variables

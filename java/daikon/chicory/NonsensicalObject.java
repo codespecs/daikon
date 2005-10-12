@@ -15,8 +15,8 @@ public class NonsensicalObject
 {
     private static NonsensicalObject instance = new NonsensicalObject();
 
-    private NonsensicalObject(){}
+    private NonsensicalObject() {}
 
-    public static NonsensicalObject getInstance(){return instance;}
+    public static NonsensicalObject getInstance() {return instance;}
 
 }

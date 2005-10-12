@@ -65,7 +65,7 @@ public class StreamRedirectThread extends Thread
         this.in = new InputStreamReader(in);
         this.out = new OutputStreamWriter(out);
         //this.outWriter = new PrintStream(out);
-        
+
         setPriority(Thread.MAX_PRIORITY - 1);
     }
 
@@ -77,22 +77,22 @@ public class StreamRedirectThread extends Thread
         try
         {
             //BufferedReader br = new BufferedReader(in, BUFFER_SIZE);
-            
+
             //char[] cbuf = new char[BUFFER_SIZE];
             //int count;
-            
+
             /*String line = null;
             while ((line = br.readLine()) != null) {
                 outWriter.println(line);
             }*/
-            
+
             int nextChar;
             while(true)
             {
                 nextChar = in.read();
-                if(nextChar == -1)
+                if (nextChar == -1)
                     break;
-                
+
                 out.write(nextChar);
                 out.flush();
             }

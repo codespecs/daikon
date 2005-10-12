@@ -575,16 +575,16 @@ public final class CLASSNAME
     // the gcd.  If the gcd is 1, no harm done -- divide by 1.
     // ensures postive x coefficient
 
-    if(i_var == 0) {
+    if (i_var == 0) {
       standard_i_var = 0;
       standard_j_var = (j_var)/(myGCD);
       standard_Stand_const = Stand_const/myGCD;
     }
-    else if(i_var < 0) {
+    else if (i_var < 0) {
       standard_i_var = -(i_var)/myGCD;
       standard_j_var = -(j_var)/myGCD;
       standard_Stand_const = -(Stand_const)/myGCD;
-    } else if(i_var > 0) {
+    } else if (i_var > 0) {
       standard_i_var = i_var/myGCD;
       standard_j_var = j_var/myGCD;
       standard_Stand_const = Stand_const/myGCD;

@@ -166,7 +166,7 @@ public final class FileIO {
   /** Read one decls file; add it to all_ppts. **/
   public static void read_declaration_file(File filename, PptMap all_ppts)
     throws IOException {
-    if(Daikon.using_DaikonSimple) {
+    if (Daikon.using_DaikonSimple) {
       Processor processor = new DaikonSimple.SimpleProcessor();
       read_data_trace_file(filename.toString(), all_ppts, processor, true);
     } else {
@@ -217,7 +217,7 @@ public final class FileIO {
     // Each iteration reads a variable name, type, and comparability.
     // Possibly abstract this out into a separate function??
     VarInfo vi;
-    while ((vi = read_VarInfo(file, varcomp_format,filename,ppt_name))!= null){
+    while ((vi = read_VarInfo(file, varcomp_format,filename,ppt_name))!= null) {
       for (int i=0; i<var_infos.size(); i++) {
         if (vi.name == ((VarInfo)var_infos.get(i)).name) {
           throw new FileIOException("Duplicate variable name", file, filename);
@@ -240,21 +240,21 @@ public final class FileIO {
     // the ppt name is truncated before putting it in the pptMap because the visibility
     // information is only present in the decls file and not the dtrace file
 
-    //    if(ppt_name.startsWith("public")) {
+    //    if (ppt_name.startsWith("public")) {
     //      int position = ppt_name.indexOf("public");
     //      ppt_name = ppt_name.substring(7);
     //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
     //      newppt.ppt_name.setVisibility("public");
     //      return newppt;
     //    }
-    //    if(ppt_name.startsWith("private")) {
+    //    if (ppt_name.startsWith("private")) {
     //      int position = ppt_name.indexOf("private");
     //      ppt_name = ppt_name.substring(8);
     //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
     //      newppt.ppt_name.setVisibility("private");
     //      return newppt;
     //    }
-    //    if(ppt_name.startsWith("protected")) {
+    //    if (ppt_name.startsWith("protected")) {
     //      int position = ppt_name.indexOf("protected");
     //      ppt_name = ppt_name.substring(10);
     //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
@@ -637,7 +637,7 @@ public final class FileIO {
       if (raw_filename.equals("-")) {
 	filename = "standard input";
       }
-      else if (raw_filename.equals("+")){
+      else if (raw_filename.equals("+")) {
           filename = "chicory socket";
       }
       else {

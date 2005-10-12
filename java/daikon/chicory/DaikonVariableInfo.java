@@ -91,7 +91,7 @@ public abstract class DaikonVariableInfo
         // Intern the names because there will be many of the
         // same variable names at different program points within
         // the same class
-        if(theName == null)
+        if (theName == null)
             name = null;
         else
             name = theName.intern();
@@ -205,9 +205,10 @@ public abstract class DaikonVariableInfo
      * Returns a String representation of this object suitable for a .dtrace file
      * @param val The object whose value to print
      */
+    @SuppressWarnings("unchecked")
     public String getDTraceValueString(Object val)
     {
-        if(isArray)
+        if (isArray)
         {
             return getValueStringOfListWithMod((List<Object>) val); // unchecked cast
         }
@@ -435,7 +436,7 @@ public abstract class DaikonVariableInfo
 
 
         boolean addStatics = !Chicory.shouldWatchStatics();
-        if(Chicory.shouldWatchStatics() && !isArray && !staticTraversedClasses.contains(type))
+        if (Chicory.shouldWatchStatics() && !isArray && !staticTraversedClasses.contains(type))
         {
             staticTraversedClasses.add(type);
             addStatics = true;
@@ -463,7 +464,7 @@ public abstract class DaikonVariableInfo
             }
 
             // Don't print arrays of the same static field
-            if(Modifier.isStatic(classField.getModifiers()) && isArray)
+            if (Modifier.isStatic(classField.getModifiers()) && isArray)
             {
                 if (debug_vars)
                     System.out.printf ("--field static and inArray%n");
@@ -471,7 +472,7 @@ public abstract class DaikonVariableInfo
             }
 
             // Don't print statics for class if already did so
-            if(Modifier.isStatic(classField.getModifiers()) && !addStatics)
+            if (Modifier.isStatic(classField.getModifiers()) && !addStatics)
             {
                 if (debug_vars)
                     System.out.printf ("--already printed statics for %s%n", type);
@@ -586,7 +587,7 @@ public abstract class DaikonVariableInfo
         boolean changedAccess = false;
 
         //we want to access all fields...
-        if(!meth.isAccessible())
+        if (!meth.isAccessible())
         {
             changedAccess = true;
             meth.setAccessible(true);
@@ -617,7 +618,7 @@ public abstract class DaikonVariableInfo
 
         buf.append(offset);
 
-        if(changedAccess)
+        if (changedAccess)
         {
             meth.setAccessible(false);
         }
@@ -643,7 +644,7 @@ public abstract class DaikonVariableInfo
         boolean changedAccess = false;
 
         //we want to access all fields...
-        if(!field.isAccessible())
+        if (!field.isAccessible())
         {
             changedAccess = true;
             field.setAccessible(true);
@@ -687,7 +688,7 @@ public abstract class DaikonVariableInfo
 
             // in this case, we don't want to print this variable to
             // the dtrace file
-            if(value != null)
+            if (value != null)
             {
                 newField.repTypeName += " = " + value;
                 newField.dtraceShouldPrint = false;
@@ -710,7 +711,7 @@ public abstract class DaikonVariableInfo
 
         buf.append(offset);
 
-        if(changedAccess)
+        if (changedAccess)
         {
             field.setAccessible(false);
         }

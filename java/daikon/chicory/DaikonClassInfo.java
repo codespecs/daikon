@@ -30,9 +30,10 @@ public class DaikonClassInfo extends DaikonVariableInfo
         return value;
     }
 
+    @SuppressWarnings("unchecked")
     public String getDTraceValueString(Object val)
     {
-        if(isArray)
+        if (isArray)
         {
             //a list of the runtime type of each value in the array
             List<String> name_list
@@ -51,7 +52,8 @@ public class DaikonClassInfo extends DaikonVariableInfo
      * Get a String representation of the given Object's runtime type and the
      * corresponding "modified" value
      * @param val The Object whose runtime class we wish to get a String representation of
-     * @return String representation of the given Object's runtime type, and the "modified" value (modbit)
+     * @return String representation (suitable for a .dtrace file) of the
+     * given Object's runtime type, and the "modified" value (modbit)
      */
     public String getValueStringNonArr(Object val)
     {
