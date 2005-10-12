@@ -192,6 +192,34 @@ improving test suites.
 </p>
 
 
+<h2><a name="How_can_I_change_my_program...?">How can I change my program to make Daikon work better?</a></h2>
+
+<p>
+Another way of stating this question is, "On what sort of programs does
+Daikon tend to perofrm poorly?"
+</p>
+
+<p>
+Typically, will run Daikon not on a whole program, but on the particular
+component(s) of interest.  Trying to run Daikon on too much data will
+overwhelm either Daikon, or else you when you try to examine the output.
+(If you plan to feed the output into another tool, verbosity is less of a
+concern.)
+</p>
+
+<p>
+Daikon can produce invariants if you provide it with the appropriate
+values.  If your data structures are organized in a fashion that makes
+Daikon unable to access those values, then Daikon obviously cannot produce
+any desired output.
+If values are packed (for instance, using a bit array instead of an array
+of boolean values), then Daikon will not be able to access the values.
+If values have very complex names (for example, <tt>a.b[i].c.d()</tt>, then
+Daikon may not even try that variable name.  See the configuration options
+that control what derived variables Daikon uses.
+</p>
+
+
 <h2><a name="What_does_the_name_Daikon_mean?">What does the name Daikon mean?</a></h2>
 
 <p>
