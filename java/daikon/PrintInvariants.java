@@ -561,6 +561,15 @@ public final class PrintInvariants {
         }
       }
 
+      if (false) {
+        VarInfo v = ppt.find_var_by_name ("size(/map.start_positions[])");
+        System.out.printf ("Found variable %s\n", v);
+        if (v != null) {
+          List<Invariant> invs = ppt.find_assignment_inv (v);
+          System.out.printf ("assignment invs = %s\n", invs);
+        }
+      }
+
       print_invariants_maybe(ppt, pw, all_ppts);
     }
 
