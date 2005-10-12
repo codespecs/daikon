@@ -229,6 +229,9 @@ public final class Configuration
       }
     } else if (type.getName().equals("java.lang.String")) {
       value = unparsed;
+      if (unparsed.matches ("^['\"].*['\"]$"))
+        value = unparsed.substring (1, unparsed.length()-1);
+      // System.out.printf ("setting %s to '%s'\n", field, value);
     } else {
       throw new ConfigException("Internal error: Unsupported type " + type.getName() + " for configuration option " + field.toString());
     }
