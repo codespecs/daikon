@@ -1486,6 +1486,53 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Searches for all of the invariants that that provide an exact
+   * value for v.  Intuitively those are invariants of the form
+   * 'v = equation'.  For example: 'v = 63' or 'v = x * y'  The
+   * implementation is a little iffy -- each invariant over v is
+   * examined and it matches iff it is exact and its daikon format
+   * starts with 'v ='.
+   *
+   * @return list of matching invariants or null if no matching
+   *         invariants are found
+   */
+  public List<Invariant> find_assignment_inv (VarInfo v) {
+
+    List<Invariant> assignment_invs = null;
+
+    String start = v.name() + " =";
+    for (PptSlice slice : views.values()) {
+
+      // Skip slices that don't use v
+      if (!slice.usesVar (v))
+        continue;
+
+      // Skip slices that use v in more than one slot (eg, v = v/1)
+      int cnt = 0;
+      for (VarInfo vi : slice.var_infos) {
+        if (vi == v)
+          cnt++;
+      }
+      if (cnt > 1)
+        continue;
+
+      // Look for exact assignments
+      for (Invariant inv : slice.invs) {
+        // System.out.printf ("considering invariant %s, exact = %b\n",
+        //                   inv.format(), inv.isExact());
+        if (inv.isExact()
+            && inv.format_using (OutputFormat.DAIKON).startsWith(start)) {
+          if (assignment_invs == null)
+            assignment_invs = new ArrayList<Invariant>();
+          assignment_invs.add (inv);
+        }
+      }
+    }
+
+    return (assignment_invs);
+  }
+
+  /**
    * Looks up the slice for v1.  If the slice does not exist, one is
    * created (but not added into the list of slices for this ppt).
    */
