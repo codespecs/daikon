@@ -64,6 +64,10 @@ public class InvariantFilters {
     if (Daikon.output_format == OutputFormat.ESCJAVA) {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
     }
+
+    // Filter out invariants that contain certain types of derived variables
+    // By default, all derived variales are accepted.
+    addPropertyFilter (new DerivedVariableFilter());
   }
 
 
