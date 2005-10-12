@@ -644,10 +644,12 @@ doc-jdk-lookup: doc
 
 doc-invariant: ../doc/invariants-doc.texinfo
 
-# This fails on pag-me, but successed on pag machines.  The pag-me failure
+# This fails on pag-me, but succeeds on pag machines.  The pag-me failure
 # (which occurs only when run from $inv/java) appears to be a result of
 # having both . and pwd on CLASSPATH:  classes are found twice resulting in
 # a duplicate class warning.
+# This could depend on java/daikon/config/ParameterDoclet.class (but that
+# will typically exist).
 ../doc/config-options.texinfo: $(AUTO_GENERATED_FILES)
 	javadoc -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
