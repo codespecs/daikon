@@ -127,6 +127,9 @@ public final class OutputFormat
       Repair.repair=r;
     }
 
+    public boolean isForceSet() {
+      return forceset;
+    }
     public void noForceSet() {
       forceset=false;
     }
@@ -200,9 +203,11 @@ public final class OutputFormat
       String newrule2;
       if (base!=null) {
         String genname=vin2.gen_name("s2");
+        //XXXXXXXXXXXX
         newrule2="[forall s2 in "+baseset+",for s="+lower.name()+" to "+upper.name()+
           "], true => "+genname+"[s] in "+setname+";";
       } else {
+        //XXXXXXXXXXX
         newrule2="[for s="+lower.name()+" to "+upper.name()+
           "], true => "+vin2.name()+"[s] in "+setname+";";
       }
@@ -314,6 +319,7 @@ public final class OutputFormat
         return setname;
       }
       String setname=generateSetName("Range",ppt);
+      //XXXXXXXXXX
       String newrule="[for i="+lower.name()+" to "+upper.name()+"], true => i in "+setname+";";
       String setdef="set "+setname+"(int);";
       appendModelRule(ppt,newrule);

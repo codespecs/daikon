@@ -725,6 +725,10 @@ public abstract class VarInfoName
             /* Throw away all of these...we don't have a good way to
                handle them currently. */
             return "$noprint(name)";
+        } else if (Repair.getRepair().isForceSet()) { /* can just return a set */
+          String set=getRealSet(v,this);
+          Repair.getRepair().noForceSet();
+          return set;
         } else if (v.name==this&&needrelation) {
 	    Repair.getRepair().addSpecial();
 	    return "s_quant."+Repair.getRepair().getRelation(name,v.ppt);
@@ -1292,11 +1296,19 @@ public abstract class VarInfoName
       return str+"."+field;
     }
     protected String repair_name_impl(VarInfo v) {
-      Repair.getRepair().noForceSet();
-      String base=term.repair_name_impl(v);
-      String set=getRealSet(v,term);
-      String relation=Repair.getRepair().getRelation(v.ppt,set,field,this.name());
-      return base + "." + relation;
+
+      if (field.indexOf("*")!=-1)
+        return "$noprint("+name_impl()+")";
+      if (Repair.getRepair().isForceSet()) {
+        String set=getRealSet(v,this);
+        Repair.getRepair().noForceSet();
+        return set;
+      } else {
+        String base=term.repair_name_impl(v);
+        String set=getRealSet(v,term);
+        String relation=Repair.getRepair().getRelation(v.ppt,set,field,this.name());
+        return base + "." + relation;
+      }
     }
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
@@ -1894,7 +1906,6 @@ public abstract class VarInfoName
       /* Need to fix */
       if (term instanceof Field) {
         Field f=(Field)term;
-
         Repair.getRepair().noForceSet();
         String base=f.term.repair_name_impl(v);
         String set=f.getRealSet(v,f.term);
@@ -2080,7 +2091,11 @@ public abstract class VarInfoName
       return sequence.name_impl(index.name());
     }
     protected String repair_name_impl(VarInfo v) {
-     if (index.isLiteralConstant()) {
+      if (Repair.getRepair().isForceSet()) {
+        String set=getRealSet(v,this);
+        Repair.getRepair().noForceSet();
+        return set;
+      } else if (index.isLiteralConstant()) {
         if (sequence.term instanceof Field) {
           Field f=(Field)sequence.term;
 
