@@ -598,6 +598,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #assert FTYPE (Multiply)
 #define FUNC(arg1,arg2) arg1 * arg2
 #define METHOD_NAME {"", " * ", ""}
+#define EXACT
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Minimum
@@ -618,12 +619,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #assert FTYPE (Division)
 #define FUNC(arg1, arg2) (arg1 / arg2)
 #define METHOD_NAME {"", " / ", ""}
+#define EXACT
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
 #define FUNCTION Power
 #assert FTYPE (Power)
 #define FUNC(arg1, arg2) POW (arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.pow(", ", ", ")"}
+#define EXACT
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
 #if defined(TYPELONG)

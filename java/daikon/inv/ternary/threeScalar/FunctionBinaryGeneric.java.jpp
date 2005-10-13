@@ -173,6 +173,10 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return (true);
   }
 
+  #ifdef EXACT
+    public boolean isExact() { return true; }
+  #endif
+
   /**
    * Returns a list of non-instantiating suppressions for this invariant.
    */
