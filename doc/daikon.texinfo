@@ -2762,7 +2762,6 @@ Creates an spinfo file for generating conditional invariants and
 implications by reporting the invariants that appear in at least one
 of the samples but not over the entire data set.
 
-
 @end table
 
 
@@ -5643,7 +5642,9 @@ PrintInvariants is invoked as follows:
 java daikon.PrintInvariants @i{[@var{flags}]} @var{inv-file}
 @end example
 
-PrintInvariants shares many flags with Daikon:
+PrintInvariants shares many flags with Daikon.
+These flags are only briefly summarized here.
+For more information about these flags, see @ref{Daikon configuration options}.
 
 @table @option
 @item --help
@@ -5670,8 +5671,11 @@ Enable debug loggers.
 
 @item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
 Track information on specified invariant class, variables and program point.
+For more information, also see @ref{Track logging,,,./developer,Daikon
+Developer Manual}.
 
 @end table
+
 
 @node    Invariant Diff, Annotate, Printing invariants, Tools for manipulating invariants
 @subsection Invariant Diff
