@@ -30,5 +30,8 @@
 --exclude-broken 500:https://web.mit.edu/21.guide/www/l-rec-wr.htm
 --exclude-broken 500:https://web.mit.edu/21.guide/www/toc.htm
 --exclude-broken 500:https://www.cvshome.org/docs/manual/cvs-1.11.18/cvs_5.html
+--exclude-broken 500:https://eecsfacweb.mit.edu/
+--exclude-broken 500:http://www.orbitz.com/
 --exclude-broken 501:https://web.mit.edu/21.guide/www/l-rec-wr.htm
 --exclude-broken 501:https://web.mit.edu/21.guide/www/toc.htm
+--exclude-broken 501:http://www.bizrate.com/
