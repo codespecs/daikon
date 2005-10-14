@@ -201,14 +201,49 @@ public final class OutputFormat
       //String set=VarInfoName.getRealSet(
 
       String newrule2;
+      String lowername=lower.name();
+      String uppername=upper.name();
+
+      if (lower.name().indexOf("size")!=-1) {
+        VarInfo v = ((PptTopLevel)ppt).find_var_by_name (lower.name());
+        if (v != null) {
+          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
+          if (invs!=null&&invs.size()>0) {
+            Invariant inv=invs.get(0);
+            String invstring=inv.format_using(OutputFormat.DAIKON);
+            int indexof=invstring.indexOf('=');
+            lowername=invstring.substring(indexof+2);
+          }
+        }
+      }
+
+      if (upper.name().indexOf("size")!=-1) {
+        String initial=upper.name();
+        String prefix=initial;
+        String postfix="";
+        if (initial.indexOf('-')!=-1) {
+          prefix=initial.substring(0,initial.indexOf('-'));
+          postfix=initial.substring(initial.indexOf('-'));
+        }
+
+        VarInfo v =  ((PptTopLevel)ppt).find_var_by_name (prefix);
+        if (v != null) {
+          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
+          if (invs!=null&&invs.size()>0) {
+            Invariant inv=invs.get(0);
+            String invstring=inv.format_using(OutputFormat.DAIKON);
+            int indexof=invstring.indexOf('=');
+            uppername=invstring.substring(indexof+2)+postfix;
+          }
+        }
+      }
+
       if (base!=null) {
         String genname=vin2.gen_name("s2");
-        //XXXXXXXXXXXX
-        newrule2="[forall s2 in "+baseset+",for s="+lower.name()+" to "+upper.name()+
+        newrule2="[forall s2 in "+baseset+",for s="+lowername+" to "+uppername+
           "], true => "+genname+"[s] in "+setname+";";
       } else {
-        //XXXXXXXXXXX
-        newrule2="[for s="+lower.name()+" to "+upper.name()+
+        newrule2="[for s="+lowername+" to "+uppername+
           "], true => "+vin2.name()+"[s] in "+setname+";";
       }
 
@@ -319,13 +354,52 @@ public final class OutputFormat
         return setname;
       }
       String setname=generateSetName("Range",ppt);
-      //XXXXXXXXXX
-      String newrule="[for i="+lower.name()+" to "+upper.name()+"], true => i in "+setname+";";
+
+
+      String uppername=upper.name();
+      String lowername=lower.name();
+      if (lower.name().indexOf("size")!=-1) {
+        VarInfo v = ((PptTopLevel)ppt).find_var_by_name (lower.name());
+        if (v != null) {
+          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
+          if (invs!=null&&invs.size()>0) {
+            Invariant inv=invs.get(0);
+            String invstring=inv.format_using(OutputFormat.DAIKON);
+            int indexof=invstring.indexOf('=');
+            lowername=invstring.substring(indexof+2);
+          }
+        }
+      }
+
+      if (upper.name().indexOf("size")!=-1) {
+        String initial=upper.name();
+        String prefix=initial;
+        String postfix="";
+        if (initial.indexOf('-')!=-1) {
+          prefix=initial.substring(0,initial.indexOf('-'));
+          postfix=initial.substring(initial.indexOf('-'));
+        }
+
+        VarInfo v = ((PptTopLevel)ppt).find_var_by_name (prefix);
+
+
+        if (v != null) {
+          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
+          if (invs!=null&&invs.size()>0) {
+            Invariant inv=invs.get(0);
+            String invstring=inv.format_using(OutputFormat.DAIKON);
+            int indexof=invstring.indexOf('=');
+            uppername=invstring.substring(indexof+2)+postfix;
+          }
+        }
+      }
+
+      String newrule="[for i="+lowername+" to "+uppername+"], true => i in "+setname+";";
       String setdef="set "+setname+"(int);";
       appendModelRule(ppt,newrule);
       appendSetRelation(ppt,setdef);
 
-      if (lower.name().indexOf(".")!=-1||lower.name().indexOf("->")!=-1) {
+      if (lowername.indexOf(".")!=-1||lowername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(lower);
         for(Iterator it=roots.iterator();it.hasNext();) {
           String lowerrootvar=((VarInfoName)it.next()).name();
@@ -338,7 +412,7 @@ public final class OutputFormat
         }
       }
 
-      if (upper.name().indexOf(".")!=-1||upper.name().indexOf("->")!=-1) {
+      if (uppername.indexOf(".")!=-1||uppername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(upper);
         for(Iterator it=roots.iterator();it.hasNext();) {
           String upperrootvar=((VarInfoName)it.next()).name();
