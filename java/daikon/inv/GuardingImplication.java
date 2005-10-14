@@ -21,8 +21,8 @@ public class GuardingImplication
   }
 
   // Trying to figure out a better way to enforce this, but for now, do not
-  // create these... only location these should be created is in the PptSlice
-  // function guardInvariants
+  // create these... only location these should be created is in
+  // PptSlice.guardInvariants().
   public static GuardingImplication makeGuardingImplication(PptTopLevel ppt,
                                                             Invariant predicate,
                                                             Invariant consequent,
