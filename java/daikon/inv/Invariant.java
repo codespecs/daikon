@@ -1659,7 +1659,7 @@ public abstract class Invariant
     }
 
     // Find which VarInfos must be guarded
-    List mustBeGuarded = getGuardingList(varInfos);
+    List<VarInfo> mustBeGuarded = getGuardingList(varInfos);
 
     if (mustBeGuarded.isEmpty()) {
       if (debugGuarding.isLoggable(Level.FINE)) {
@@ -1672,12 +1672,12 @@ public abstract class Invariant
     // VarInfo temp = (VarInfo)i.next();
     // debugGuarding.fine ("First VarInfo: " + temp);
     Invariant guardingPredicate
-       = ((VarInfo)mustBeGuarded.get(0)).createGuardingPredicate();
+       = mustBeGuarded.get(0).createGuardingPredicate();
     // debugGuarding.fine (guardingPredicate.format_using(OutputFormat.DAIKON));
     Assert.assertTrue(guardingPredicate != null);
 
     for (int i=1; i<mustBeGuarded.size(); i++) {
-      VarInfo current = (VarInfo)mustBeGuarded.get(i);
+      VarInfo current = mustBeGuarded.get(i);
       // debugGuarding.fine ("Another VarInfo: " + current);
       Invariant currentGuard = current.createGuardingPredicate();
       // debugGuarding.fine (currentGuard.toString());
@@ -1687,10 +1687,9 @@ public abstract class Invariant
       guardingPredicate = new AndJoiner(ppt.parent, guardingPredicate, currentGuard);
     }
 
-    // Must eliminate the dupliaction of guarding prefixes, this is
-    // liable to be slow We only care if there is more than one var
-    // info, otherwise we are guarenteed that there is no duplicate by
-    // VarInfo.createGuardingPredicate()
+    // If the guarding predicate has been previously constructed, return it.
+    // Otherwise, we will return the newly constructed one.
+    // This algorithm is inefficient.
     if (mustBeGuarded.size() > 1) {
       Invariants joinerViewInvs = ppt.parent.joiner_view.invs;
       for (int i=0; i<joinerViewInvs.size(); i++) {
@@ -1705,7 +1704,7 @@ public abstract class Invariant
 
   // Gets a list of all the variables that must be guarded for this
   // invariant
-  public static List getGuardingList(VarInfo[] varInfos) {
+  public static List<VarInfo> getGuardingList(VarInfo[] varInfos) {
     List<VarInfo> guardingList = new ArrayList<VarInfo>();
 
     for (int i=0; i<varInfos.length; i++) {
