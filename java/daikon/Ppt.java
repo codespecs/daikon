@@ -75,7 +75,7 @@ public abstract class Ppt
     return (varNames (var_infos));
   }
 
-  /** Find the variable with the specified name and returns its VarInfo **/
+  /** Return the VarInfo that has the specified name. **/
   public VarInfo findVar(VarInfoName viname) {
     for (int i=0; i<var_infos.length; i++) {
       if (viname.equals(var_infos[i].name))

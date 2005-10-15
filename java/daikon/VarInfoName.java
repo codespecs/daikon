@@ -656,7 +656,7 @@ public abstract class VarInfoName
   // ============================================================
   // Static inner classes that form the expression langugage
 
-  /** A simple identifier like "a", "this.foo", etc. **/
+  /** A simple identifier like "a", etc. **/
   public static class Simple extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
