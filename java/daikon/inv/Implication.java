@@ -23,6 +23,8 @@ public class Implication
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
+  // These can be null (for instance, for GuardingImplication).  What
+  // exactly is the representation invariant:  should they never be null?
   /** The original predicate invariant from its original conditional ppt. */
   private Invariant orig_left;
   /** The original consequent invariant from its original conditional ppt. */
@@ -35,6 +37,8 @@ public class Implication
   protected Implication(PptSlice ppt, Invariant predicate, Invariant consequent,
                         boolean iff, Invariant orig_predicate, Invariant orig_consequent) {
     super(ppt, predicate, consequent);
+    assert(predicate != null);
+    assert(consequent != null);
     this.iff = iff;
     this.orig_left = orig_predicate;
     this.orig_right = orig_consequent;
@@ -250,7 +254,7 @@ public class Implication
   public void log (Logger log, String msg) {
 
     right.log (log, msg + "[for implication " + format() + " ("
-               + orig_right.format() + ")]");
+               + (orig_right == null ? "null" : orig_right.format()) + ")]");
   }
 
 
