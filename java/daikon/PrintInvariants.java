@@ -200,6 +200,8 @@ public final class PrintInvariants {
            OptionalDataException, IOException, ClassNotFoundException {
     try {
       mainHelper(args);
+    } catch (Configuration.ConfigException e) {
+      System.err.println(e.getMessage());
     } catch (Daikon.TerminationMessage e) {
       System.err.println(e.getMessage());
       System.exit(1);
