@@ -411,6 +411,8 @@ public final class Daikon {
   public static void main(final String[] args) {
     try {
       mainHelper(args);
+    } catch (Configuration.ConfigException e) {
+      System.err.println(e.getMessage());
     } catch (TerminationMessage e) {
       if (e.getMessage() != null) {
         System.err.println(e.getMessage());
