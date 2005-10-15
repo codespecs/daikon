@@ -10,10 +10,10 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.OutputFormat;
+import daikon.inv.OutputFormat.Repair;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;
-import daikon.inv.OutputFormat.Repair;
 
 public final class PrintInvariants {
 
@@ -242,24 +242,7 @@ public final class PrintInvariants {
       }
     }
 
-    // Validate guardNulls option
-    Daikon.dkconfig_guardNulls = Daikon.dkconfig_guardNulls.intern();
-    // Complicated default!
-    if (Daikon.dkconfig_guardNulls == "default") { // interned
-      if (Daikon.output_format == OutputFormat.JML
-          || Daikon.output_format == OutputFormat.ESCJAVA) {
-        Daikon.dkconfig_guardNulls = "missing";
-      } else {
-        Daikon.dkconfig_guardNulls = "never";
-      }
-    }
-    if (! ((Daikon.dkconfig_guardNulls == "always") // interned
-           || (Daikon.dkconfig_guardNulls == "never") // interned
-           || (Daikon.dkconfig_guardNulls == "missing")) // interned
-        ) {
-      throw new Error("Bad guardNulls config option \"" + Daikon.dkconfig_guardNulls + "\", should be one of \"always\", \"never\", or \"missing\"");
-    }
-
+    validateGuardNulls();
 
     // The index of the first non-option argument -- the name of the file
     int fileIndex = g.getOptind();
@@ -366,6 +349,27 @@ public final class PrintInvariants {
       }
     }
   }
+
+  /** Validate guardNulls config option. **/
+  public static void validateGuardNulls() {
+    Daikon.dkconfig_guardNulls = Daikon.dkconfig_guardNulls.intern();
+    // Complicated default!
+    if (Daikon.dkconfig_guardNulls == "default") { // interned
+      if (Daikon.output_format == OutputFormat.JML
+          || Daikon.output_format == OutputFormat.ESCJAVA) {
+        Daikon.dkconfig_guardNulls = "missing";
+      } else {
+        Daikon.dkconfig_guardNulls = "never";
+      }
+    }
+    if (! ((Daikon.dkconfig_guardNulls == "always") // interned
+           || (Daikon.dkconfig_guardNulls == "never") // interned
+           || (Daikon.dkconfig_guardNulls == "missing")) // interned
+        ) {
+      throw new Error("Bad guardNulls config option \"" + Daikon.dkconfig_guardNulls + "\", should be one of \"always\", \"never\", or \"missing\"");
+    }
+  }
+
 
   /**
    * Add discard reasons for invariants that are filtered out

@@ -5,6 +5,7 @@ import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.VarInfoName.*;
+import daikon.PrintInvariants;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;

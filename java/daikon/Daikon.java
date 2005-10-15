@@ -182,6 +182,7 @@ public final class Daikon {
    * methods.  Default value is 'false'.
    **/
   public static boolean using_DaikonSimple = false;
+
   /**
    * If "always", then invariants are always guarded.
    * If "never", then invariants are never guarded.
@@ -534,8 +535,8 @@ public final class Daikon {
       }
     }
 
-    if ((dkconfig_guardNulls == "always") // interned
-        || (dkconfig_guardNulls == "missing")) { // interned
+    if ((Daikon.dkconfig_guardNulls == "always") // interned
+        || (Daikon.dkconfig_guardNulls == "missing")) { // interned
       guardInvariants(all_ppts);
     }
 
@@ -690,7 +691,7 @@ public final class Daikon {
           } else if (format_SWITCH.equals(option_name)) {
             String format_name = g.getOptarg();
             Daikon.output_format = OutputFormat.get(format_name);
-            if (output_format == null) {
+            if (Daikon.output_format == null) {
               throw new Daikon.TerminationMessage(
                 "Unknown output format:  --format " + format_name);
             }
@@ -971,22 +972,7 @@ public final class Daikon {
     }
 
     // Validate guardNulls option
-    dkconfig_guardNulls = dkconfig_guardNulls.intern();
-    // Complicated default!
-    if (dkconfig_guardNulls == "default") { // interned
-      if (Daikon.output_format == OutputFormat.JML
-          || Daikon.output_format == OutputFormat.ESCJAVA) {
-        dkconfig_guardNulls = "missing";
-      } else {
-        dkconfig_guardNulls = "never";
-      }
-    }
-    if (! ((dkconfig_guardNulls == "always") // interned
-           || (dkconfig_guardNulls == "never") // interned
-           || (dkconfig_guardNulls == "missing")) // interned
-        ) {
-      throw new Error("Bad guardNulls config option \"" + dkconfig_guardNulls + "\", should be one of \"always\", \"never\", or \"missing\"");
-    }
+    PrintInvariants.validateGuardNulls();
 
     return new FileOptions(decl_files, dtrace_files, spinfo_files, map_files);
   }
