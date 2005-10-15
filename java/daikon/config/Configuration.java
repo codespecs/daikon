@@ -32,6 +32,16 @@ public final class Configuration
 
   protected static final String PREFIX = "dkconfig_";
 
+  private static final Class STRING_CLASS;
+  static {
+    try {
+      STRING_CLASS = Class.forName("java.lang.String");
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
   /**
    * @return singleton instance of this class
    **/
@@ -193,7 +203,7 @@ public final class Configuration
     Object value; // typed version of value
     Class type = field.getType();
 
-    if (type.equals(Boolean.TYPE) || type.equals(Boolean.class)) {
+    if (type.equals(Boolean.TYPE)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
         value = Boolean.TRUE;
       } else if (unparsed.equals("0") || unparsed.equalsIgnoreCase("false")) {
@@ -201,37 +211,55 @@ public final class Configuration
       } else {
         throw new ConfigException("Badly formatted boolean argument " + unparsed + " for configuration option " + field.getName());
       }
-    } else if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
+    } else if (type.equals(Integer.TYPE)) {
       try {
         // decode instead of valueOf to handle "0x" and other styles
         value = Integer.decode(unparsed);
       } catch (NumberFormatException e) {
         throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
-    } else if (type.equals(Long.TYPE) || type.equals(Long.class)) {
+    } else if (type.equals(Long.TYPE)) {
       try {
         // decode instead of valueOf to handle "0x" and other styles
         value = Long.decode(unparsed);
       } catch (NumberFormatException e) {
         throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
-    } else if (type.equals(Float.TYPE) || type.equals(Float.class)) {
+    } else if (type.equals(Float.TYPE)) {
       try {
         value = Float.valueOf(unparsed);
       } catch (NumberFormatException e) {
         throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
-    } else if (type.equals(Double.TYPE) || type.equals(Double.class)) {
+    } else if (type.equals(Double.TYPE)) {
+      assert Double.class == Double.TYPE;
       try {
         value = Double.valueOf(unparsed);
       } catch (NumberFormatException e) {
         throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
-    } else if (type.getName().equals("java.lang.String")) {
+    } else if (type.equals(STRING_CLASS)) {
       value = unparsed;
-      if (unparsed.matches ("^['\"].*['\"]$"))
+      if ((unparsed.startsWith("\"") && unparsed.endsWith("\""))
+          || (unparsed.startsWith("'") && unparsed.endsWith("'"))) {
         value = unparsed.substring (1, unparsed.length()-1);
+      }
       // System.out.printf ("setting %s to '%s'\n", field, value);
+    } else if (type.getSuperclass().getName().equals("java.lang.Enum")) {
+      try {
+        java.lang.reflect.Method valueOf
+          = type.getDeclaredMethod("valueOf", new Class[] { STRING_CLASS });
+        if (valueOf == null) {
+          throw new Error("Didn't find valueOf in " + type);
+        }
+        value = valueOf.invoke(null, unparsed);
+      } catch (NoSuchMethodException e) {
+        throw new RuntimeException(e);
+      } catch (IllegalAccessException e) {
+        throw new RuntimeException(e);
+      } catch (java.lang.reflect.InvocationTargetException e) {
+        throw new RuntimeException(e);
+      }
     } else {
       throw new ConfigException("Internal error: Unsupported type " + type.getName() + " for configuration option " + field.toString());
     }
