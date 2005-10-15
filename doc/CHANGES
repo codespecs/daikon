@@ -22,6 +22,12 @@ Further documentation can be found in:
 
 4.1.7 (November 1 2005)
 
+Daikon
+
+    Config option "noInvariantGuarding" has been renamed to
+    "guardNulls", and instead of being a boolean, is a string with
+    three possible values:  "always", "never", or "missing".
+
 Chicory
 
   Bug fixes

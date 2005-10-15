@@ -242,6 +242,25 @@ public final class PrintInvariants {
       }
     }
 
+    // Validate guardNulls option
+    Daikon.dkconfig_guardNulls = Daikon.dkconfig_guardNulls.intern();
+    // Complicated default!
+    if (Daikon.dkconfig_guardNulls == "default") { // interned
+      if (Daikon.output_format == OutputFormat.JML
+          || Daikon.output_format == OutputFormat.ESCJAVA) {
+        Daikon.dkconfig_guardNulls = "missing";
+      } else {
+        Daikon.dkconfig_guardNulls = "never";
+      }
+    }
+    if (! ((Daikon.dkconfig_guardNulls == "always") // interned
+           || (Daikon.dkconfig_guardNulls == "never") // interned
+           || (Daikon.dkconfig_guardNulls == "missing")) // interned
+        ) {
+      throw new Error("Bad guardNulls config option \"" + Daikon.dkconfig_guardNulls + "\", should be one of \"always\", \"never\", or \"missing\"");
+    }
+
+
     // The index of the first non-option argument -- the name of the file
     int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
@@ -267,10 +286,10 @@ public final class PrintInvariants {
       return;
     }
 
-    if ((Daikon.output_format == OutputFormat.ESCJAVA ||
-         Daikon.output_format == OutputFormat.JML) &&
-        !Daikon.dkconfig_noInvariantGuarding)
+    if ((Daikon.dkconfig_guardNulls == "always") // interned
+        || (Daikon.dkconfig_guardNulls == "missing")) { // interned
       Daikon.guardInvariants(ppts);
+    }
 
     // Debug print the hierarchy is a more readable manner
     if (debug.isLoggable(Level.FINE)) {

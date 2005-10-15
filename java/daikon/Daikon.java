@@ -183,15 +183,20 @@ public final class Daikon {
    **/
   public static boolean using_DaikonSimple = false;
   /**
-   * If true, no invariants will be guarded.  Guarding means that
-   * if a variable ``can be missing'' in a dtrace file, predicates
-   * are attached to invariants ensuring their values can be dereferenced.
-   * For instance, if <code>a.b</code> can be missing, and
-   * <samp>a.b == 5</samp> is an
-   * invariant, then it is more properly declared as
+   * If "always", then invariants are always guarded.
+   * If "never", then invariants are never guarded.
+   * If "missing", then invariants are guarded only for variables that
+   * were missing (``can be missing'') in the dtrace (the observed executions).
+   * <p>
+   * Guarding means that predicates are attached to invariants ensuring
+   * their values can be dereferenced.  For instance, if <code>a.b</code>
+   * can be missing, and
+   * <samp>a.b == 5</samp>
+   * is an invariant, then it is more properly written as
    * <samp>(a != null) ==> (a.b == 5)</samp>.
    **/
-  public static boolean dkconfig_noInvariantGuarding = false;
+  // Perhaps a better default would be "missing".
+  public static String dkconfig_guardNulls = "default";
 
   /**
    * When true compilation errors during splitter file generation
@@ -529,11 +534,10 @@ public final class Daikon {
       }
     }
 
-    // Guard invariants
-    if ((Daikon.output_format == OutputFormat.JML
-      || Daikon.output_format == OutputFormat.ESCJAVA)
-      && !dkconfig_noInvariantGuarding)
+    if ((dkconfig_guardNulls == "always") // interned
+        || (dkconfig_guardNulls == "missing")) { // interned
       guardInvariants(all_ppts);
+    }
 
     // print out the invariants for each program point
     if (Daikon.dkconfig_undo_opts) {
@@ -964,6 +968,24 @@ public final class Daikon {
     if (dkconfig_ppt_perc != 100) {
       ppt_max_name = setup_ppt_perc(decl_files, dkconfig_ppt_perc);
       System.out.println("Max ppt name = " + ppt_max_name);
+    }
+
+    // Validate guardNulls option
+    dkconfig_guardNulls = dkconfig_guardNulls.intern();
+    // Complicated default!
+    if (dkconfig_guardNulls == "default") { // interned
+      if (Daikon.output_format == OutputFormat.JML
+          || Daikon.output_format == OutputFormat.ESCJAVA) {
+        dkconfig_guardNulls = "missing";
+      } else {
+        dkconfig_guardNulls = "never";
+      }
+    }
+    if (! ((dkconfig_guardNulls == "always") // interned
+           || (dkconfig_guardNulls == "never") // interned
+           || (dkconfig_guardNulls == "missing")) // interned
+        ) {
+      throw new Error("Bad guardNulls config option \"" + dkconfig_guardNulls + "\", should be one of \"always\", \"never\", or \"missing\"");
     }
 
     return new FileOptions(decl_files, dtrace_files, spinfo_files, map_files);

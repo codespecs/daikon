@@ -1521,32 +1521,45 @@ public final class VarInfo implements Cloneable, Serializable {
   // be guaranteed to not be missing. The variables are returned in
   // the order in which their guarding prefixes are supposed to print.
   public List<VarInfo> getGuardingList() {
+    // Inner class because it uses the "ppt" variable.
     class GuardingVisitor implements Visitor<List<VarInfo>> {
+      private boolean shouldBeGuarded(VarInfo vi) {
+        Invariant.debugGuarding.fine("shouldBeGuarded("
+                                     + (vi == null ? "null" : vi.name)
+                                     + ") => " +
+               (vi != null
+                && (Daikon.dkconfig_guardNulls == "always" // interned
+                    || (Daikon.dkconfig_guardNulls == "missing" // interned
+                        && vi.canBeMissing))));
+        return (vi != null
+                && (Daikon.dkconfig_guardNulls == "always" // interned
+                    || (Daikon.dkconfig_guardNulls == "missing" // interned
+                        && vi.canBeMissing)));
+      }
       public List<VarInfo> visitSimple(Simple o) {
         return takeActionOnDerived(ppt.findVar(o));
       }
       public List<VarInfo> visitSizeOf(SizeOf o) {
-        List<VarInfo> result = (List<VarInfo>) o.sequence.accept(this);
+        List<VarInfo> result = o.sequence.accept(this);
         return result;
       }
       public List<VarInfo> visitFunctionOf(FunctionOf o) {
-        List<VarInfo> result = (List<VarInfo>) o.argument.accept(this);
+        List<VarInfo> result = o.argument.accept(this);
         return result;
       }
       public List<VarInfo> visitFunctionOfN(FunctionOfN o) {
         List<VarInfoName> args = o.args;
 
-        List<VarInfo> result = (List<VarInfo>) args.get(0).accept(this);
+        List<VarInfo> result = args.get(0).accept(this);
 
         for (int i = 1; i < args.size(); i++) {
-          result.addAll(
-            (List<VarInfo>) ((VarInfoName) args.get(i)).accept(this));
+          result.addAll(args.get(i).accept(this));
         }
 
         return result;
       }
       public List<VarInfo> visitField(Field o) {
-        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
+        List<VarInfo> result = o.term.accept(this);
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1556,13 +1569,14 @@ public final class VarInfo implements Cloneable, Serializable {
               + (vi.canBeMissing ? "" : "not ")
               + "be missing"
             : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
+        if (shouldBeGuarded(vi)) {
           result.add(ppt.findVar(o.term));
+        }
 
         return result;
       }
       public List<VarInfo> visitTypeOf(TypeOf o) {
-        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
+        List<VarInfo> result = o.term.accept(this);
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1572,26 +1586,26 @@ public final class VarInfo implements Cloneable, Serializable {
               + (vi.canBeMissing ? "" : "not ")
               + "be missing"
             : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
+        if (shouldBeGuarded(vi))
           result.add(ppt.findVar(o.term));
 
         return result;
       }
       public List<VarInfo> visitPrestate(Prestate o) {
-        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
+        List<VarInfo> result = o.term.accept(this);
         return result;
       }
       public List<VarInfo> visitPoststate(Poststate o) {
-        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
+        List<VarInfo> result = o.term.accept(this);
         return result;
       }
       public List<VarInfo> visitAdd(Add o) {
-        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
+        List<VarInfo> result = o.term.accept(this);
         return result;
       }
       public List<VarInfo> visitElements(Elements o) {
         VarInfo vi = ppt.findVar(o);
-        List<VarInfo> result = (List<VarInfo>) o.term.accept(this);
+        List<VarInfo> result = o.term.accept(this);
         result.addAll(takeActionOnDerived(vi));
 
         Invariant.debugGuarding.fine(
@@ -1601,14 +1615,15 @@ public final class VarInfo implements Cloneable, Serializable {
               + (vi.canBeMissing ? "" : "not ")
               + "be missing"
             : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
+        if (shouldBeGuarded(vi)) {
           result.add(ppt.findVar(o.term));
+        }
 
         return result;
       }
       public List<VarInfo> visitSubscript(Subscript o) {
-        List<VarInfo> result = (List<VarInfo>) o.sequence.accept(this);
-        result.addAll((List<VarInfo>) o.index.accept(this));
+        List<VarInfo> result = o.sequence.accept(this);
+        result.addAll(o.index.accept(this));
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1618,7 +1633,7 @@ public final class VarInfo implements Cloneable, Serializable {
               + (vi.canBeMissing ? "" : "not ")
               + "be missing"
             : o + " does not exist");
-        if (vi != null && ppt.findVar(o).canBeMissing) {
+        if (shouldBeGuarded(vi)) {
           result.add(ppt.findVar(o.sequence));
           result.add(ppt.findVar(o.index));
         }
@@ -1626,11 +1641,11 @@ public final class VarInfo implements Cloneable, Serializable {
         return result;
       }
       public List<VarInfo> visitSlice(Slice o) {
-        List<VarInfo> result = (List<VarInfo>) o.sequence.accept(this);
+        List<VarInfo> result = o.sequence.accept(this);
         if (o.i != null)
-          result.addAll((List<VarInfo>) o.i.accept(this));
+          result.addAll(o.i.accept(this));
         if (o.j != null)
-          result.addAll((List<VarInfo>) o.j.accept(this));
+          result.addAll(o.j.accept(this));
 
         VarInfo vi = ppt.findVar(o);
         Invariant.debugGuarding.fine(
@@ -1640,7 +1655,7 @@ public final class VarInfo implements Cloneable, Serializable {
               + (vi.canBeMissing ? "" : "not ")
               + "be missing"
             : o + " does not exist");
-        if (vi != null && vi.canBeMissing) {
+        if (shouldBeGuarded(vi)) {
           result.add(ppt.findVar(o.sequence));
           if (o.i != null)
             result.add(ppt.findVar(o.i));
@@ -1657,23 +1672,31 @@ public final class VarInfo implements Cloneable, Serializable {
           VarInfo[] bases = vi.derived.getBases();
 
           for (int i = 0; i < bases.length; i++) {
-            result.addAll((List<VarInfo>) (bases[i].name.accept(this)));
+            result.addAll(bases[i].name.accept(this));
           }
         }
         return result;
       }
     }
-    List<VarInfo> result = (List<VarInfo>) name.accept(new GuardingVisitor());
+    List<VarInfo> result = name.accept(new GuardingVisitor());
     if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
       Invariant.debugGuarding.fine("VarInfo.getGuardingList: ");
       Invariant.debugGuarding.fine("  for variable " + this.name.name());
       // Invariant.debugGuarding.fine ("        " + this.repr());
       String str = "[ ";
       for (int i = 0; i < result.size(); i++) {
-        str += ((VarInfo) result.get(i)).name.name() + " ";
+        str += result.get(i).name.name() + " ";
       }
       str += "]";
       Invariant.debugGuarding.fine("  list is " + str);
+    }
+
+    // remove variable "this" from the list, if it exists.
+    for (VarInfo vi : result) {
+      if (vi.name.name().equals("this")) {
+        result.remove(vi);
+        break;
+      }
     }
 
     return result;
