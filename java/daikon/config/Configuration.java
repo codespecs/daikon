@@ -250,14 +250,22 @@ public final class Configuration
         java.lang.reflect.Method valueOf
           = type.getDeclaredMethod("valueOf", new Class[] { STRING_CLASS });
         if (valueOf == null) {
-          throw new Error("Didn't find valueOf in " + type);
+          // Can't happen, so RuntimeException instead of ConfigException
+          throw new RuntimeException("Didn't find valueOf in " + type);
         }
-        value = valueOf.invoke(null, unparsed);
+        try {
+          value = valueOf.invoke(null, unparsed);
+        } catch (IllegalArgumentException e) {
+          throw new ConfigException(e.getMessage());
+        }
       } catch (NoSuchMethodException e) {
+        // Can't happen, so RuntimeException instead of ConfigException
         throw new RuntimeException(e);
       } catch (IllegalAccessException e) {
+        // Can't happen, so RuntimeException instead of ConfigException
         throw new RuntimeException(e);
       } catch (java.lang.reflect.InvocationTargetException e) {
+        // Can't happen, so RuntimeException instead of ConfigException
         throw new RuntimeException(e);
       }
     } else {
@@ -286,5 +294,6 @@ public final class Configuration
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
   }
+
 
 }
