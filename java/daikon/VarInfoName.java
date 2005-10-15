@@ -1614,6 +1614,9 @@ public abstract class VarInfoName
       return null;
     }
     protected String java_name_impl(VarInfo v) {
+      if (PrintInvariants.dkconfig_replace_prestate) {
+        return PrintInvariants.addPrestateExpression(term.java_name(v));
+      }
       return "\\old(" + term.java_name(v) + ")";
     }
     protected String jml_name_impl(VarInfo v) {

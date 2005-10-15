@@ -19,8 +19,66 @@ public final class PrintInvariants {
 
   private PrintInvariants() { throw new Error("do not instantiate"); }
 
+  /**
+   * See dkconfig_replace_prestate.
+   *
+   * Resets the prestate expression mapping.
+   * This is done between printing of each different
+   * program point.
+   */
+  public static void resetPrestateExpressions() {
+    varNameCounter = 0;
+    exprToVar = new HashMap<String,String>();
+  }
+
+  // Used to create distinct variable names (see See dkconfig_replace_prestate).
+  private static int varNameCounter = 0;
+
+  // Maps prestate expressions to variable names (see See dkconfig_replace_prestate)>
+  private static Map<String,String> exprToVar = new HashMap<String,String>();
+
+  /**
+   * See dkconfig_replace_prestate.
+   *
+   * Return the variable name corresponding to expr.  Create a new
+   * varname and an expr -> varname mapping if there is not already
+   * one.
+   */
+  public static String addPrestateExpression(String expr) {
+    if (expr == null) {
+      throw new IllegalArgumentException(expr);
+    }
+    if (exprToVar.containsKey(expr)) {
+      return exprToVar.get(expr);
+    }
+    String v = "v" + Integer.toString(varNameCounter++);
+    exprToVar.put(expr, v);
+    return v;
+  }
+
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+
+  /**
+   * This option must be given with "--format Java" option.
+   *
+   * Instead of outputting prestate expressions as "\old(E)" within an
+   * invariant, output a variable names (e.g. `v1'). At the end of
+   * each program point, output the list of variable-to-expression
+   * mappings. For example: with this option set to false, a program
+   * point might print like this:
+   *
+   * foo.bar.Bar(int):::EXIT
+   * \old(capacity) == sizeof(this.theArray)
+   *
+   * With the option set to true, it would print like this:
+   *
+   * foo.bar.Bar(int):::EXIT
+   * v0 == sizeof(this.theArray)
+   * prestate assignment: v0=capacity
+   *
+   */
+  public static boolean dkconfig_replace_prestate = true;
 
   /**
    * Print invariant classname with invariants in output of
@@ -1171,6 +1229,14 @@ public final class PrintInvariants {
       print_invariant(inv, out, index, ppt);
 
     }
+
+    if (dkconfig_replace_prestate) {
+      for (Map.Entry<String,String> e : exprToVar.entrySet()) {
+        out.println("prestate assignment: " + e.getValue() + "=" + e.getKey());
+      }
+      resetPrestateExpressions();
+    }
+
     if (Daikon.output_format == OutputFormat.REPAIR) {
 	if (Repair.getRepair().getRules(ppt)!=null) {
 	    out.println("-----------------------------------------------------------------------------");
