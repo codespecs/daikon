@@ -277,11 +277,13 @@ public abstract class PptSlice
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("PptSlice.guardInvariants init: " + this.parent.name());
       debugGuarding.fine ("  I have " + invs.size() + " invariants");
-      for (int i=0; i<var_infos.length; i++) {
+      for (Invariant inv : invs) {
+        debugGuarding.fine ("    " + inv);
+      }
+      debugGuarding.fine ("  var_infos in this slice:");
+      for (VarInfo vi : var_infos) {
         try {
-          debugGuarding.fine ("  var_info[" + i +
-                              "] name = " +
-                              var_infos[i].name.name());
+          debugGuarding.fine ("    " + vi.name.name());
         } catch (UnsupportedOperationException e) {
           debugGuarding.fine ("  Part of PptSlice cannot be formatted.");
         }
@@ -296,7 +298,7 @@ public abstract class PptSlice
     for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
       Invariant inv = (Invariant)overInvs.next();
       if (debugGuarding.isLoggable(Level.FINE)) {
-        debugGuarding.fine ("  Trying to add implication for: " + inv.repr());
+        debugGuarding.fine ("  Trying to add guard for: " + inv + "     " + inv.repr());
       }
       if (inv.isGuardingPredicate) {
         debugGuarding.fine ("  Continuing: this is a guarding predicate");
