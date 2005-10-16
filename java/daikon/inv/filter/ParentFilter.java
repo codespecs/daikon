@@ -58,6 +58,8 @@ public class ParentFilter extends InvariantFilter {
       // Look for a matching invariant in the parent slice
       for (int j = 0; j < pslice.invs.size(); j++) {
         Invariant pinv = pslice.invs.get (j);
+        if (pinv.isGuardingPredicate)
+          continue;
         if (pinv.getClass() != inv.getClass())
           continue;
         if (pinv.isSameFormula (inv)) {
