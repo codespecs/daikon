@@ -269,7 +269,7 @@ public class Implication
   public boolean log (String msg) {
 
     return (right.log (msg + "[for implication " + format() + " ("
-               + orig_right.format() + ")]"));
+               + (orig_right == null ? "null" : orig_right.format()) + ")]"));
   }
 
 
