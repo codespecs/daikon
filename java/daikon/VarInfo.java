@@ -1162,6 +1162,9 @@ public final class VarInfo implements Cloneable, Serializable {
    * post-state, or vice versa) that equals this one, or null if no equal
    * variable exists.
    **/
+  // This does *not* try the obvious thing of converting "foo" to
+  // "orig(foo)"; it creates something new.  I need to clarify the
+  // documentation.
   public VarInfoName otherStateEquivalent(boolean post) {
 
     // Below is equivalent to:
@@ -1478,6 +1481,9 @@ public final class VarInfo implements Cloneable, Serializable {
    * invariant that ensures that this object is available for access
    * to variables that reference it, such as fields.
    **/
+  // Adding a test against null is not quite right for C, where *p could
+  // be nonsensical (uninitialized or freed) even when p is non-null.  But
+  // this is a decent approximation to start with.
   public Invariant createGuardingPredicate() {
     // Later for the array, make sure index in bounds
     if (type.isArray() || type.isObject()) {
@@ -1505,6 +1511,8 @@ public final class VarInfo implements Cloneable, Serializable {
         // filtering might remove it from associateWith.
         retval = NonZero.get_proto().instantiate(associateWith);
         retval.isGuardingPredicate = true;
+        // System.out.printf("Created a guarding predicate: %s at %s%n", retval, associateWith);
+        // new Error().printStackTrace(System.out);
         associateWith.addInvariant(retval);
       } else {
         retval = prevInstantiation;
@@ -1518,186 +1526,255 @@ public final class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  // Finds a list of variables that must be guarded for a VarInfo to
-  // be guaranteed to not be missing. The variables are returned in
-  // the order in which their guarding prefixes are supposed to print.
+  // Finds a list of variables that must be guarded for a VarInfo to be
+  // guaranteed to not be missing.  This list never includes this.  The
+  // variables are returned in the order in which their guarding prefixes
+  // are supposed to print.
   public List<VarInfo> getGuardingList() {
+
+    /**
+     * The list returned by this visitor always includes the argument
+     * itself (if it is testable against null; for example, derived
+     * variables are not).
+     * If the caller does not want that, it must remove it.
+     **/
     // Inner class because it uses the "ppt" variable.
+    // Basic structure of each visitor:
+    //   If the argument should be guarded, recurse.
+    //   If the argument is testable against null, add it to the result.
+    //     (This arranges that the argument goes at the end, after its
+    //     subparts that need to be guarded.
+
     class GuardingVisitor implements Visitor<List<VarInfo>> {
+      boolean inPre = false;
+
       private boolean shouldBeGuarded(VarInfo vi) {
-        Invariant.debugGuarding.fine("shouldBeGuarded("
-                                     + (vi == null ? "null" : vi.name)
-                                     + ") => " +
-               (vi != null
-                && (Daikon.dkconfig_guardNulls == "always" // interned
-                    || (Daikon.dkconfig_guardNulls == "missing" // interned
-                        && vi.canBeMissing))));
-        return (vi != null
-                && (Daikon.dkconfig_guardNulls == "always" // interned
-                    || (Daikon.dkconfig_guardNulls == "missing" // interned
-                        && vi.canBeMissing)));
+        assert vi != null;
+        boolean result
+          = (vi != null
+             && (Daikon.dkconfig_guardNulls == "always" // interned
+                 || (Daikon.dkconfig_guardNulls == "missing" // interned
+                     && vi.canBeMissing)));
+        return result;
+      }
+      private boolean shouldBeGuarded(VarInfoName viname) {
+        // Not "shouldBeGuarded(ppt.findVar(viname))" because that
+        // unnecessarily computes ppt.findVar(viname), if
+        // dkconfig_guardNulls is "always"
+        return (Daikon.dkconfig_guardNulls == "always" // interned
+                || (Daikon.dkconfig_guardNulls == "missing" // interned
+                    && ppt.findVar(applyPreMaybe(viname)).canBeMissing));
       }
       public List<VarInfo> visitSimple(Simple o) {
-        return takeActionOnDerived(ppt.findVar(o));
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        // No recursion:  no children
+        if (! o.name.equals("this")) {
+          result = addVar(result, o);
+        }
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
+        return result;
       }
       public List<VarInfo> visitSizeOf(SizeOf o) {
-        List<VarInfo> result = o.sequence.accept(this);
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.sequence.accept(this));
+        }
+        // No call to addVar:  derived variable
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitFunctionOf(FunctionOf o) {
-        List<VarInfo> result = o.argument.accept(this);
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.argument.accept(this));
+        }
+        result = addVar(result, o);
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitFunctionOfN(FunctionOfN o) {
-        List<VarInfoName> args = o.args;
-
-        List<VarInfo> result = args.get(0).accept(this);
-
-        for (int i = 1; i < args.size(); i++) {
-          result.addAll(args.get(i).accept(this));
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          for (VarInfoName arg : o.args) {
+            result.addAll(arg.accept(this));
+          }
         }
-
+        result = addVar(result, o);
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitField(Field o) {
-        List<VarInfo> result = o.term.accept(this);
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(
-          vi != null
-            ? vi.name
-              + " exists and can "
-              + (vi.canBeMissing ? "" : "not ")
-              + "be missing"
-            : o + " does not exist");
-        if (shouldBeGuarded(vi)) {
-          result.add(ppt.findVar(o.term));
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.term.accept(this));
         }
-
+        result = addVar(result, o);
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitTypeOf(TypeOf o) {
-        List<VarInfo> result = o.term.accept(this);
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(
-          vi != null
-            ? vi.name
-              + " exists and can "
-              + (vi.canBeMissing ? "" : "not ")
-              + "be missing"
-            : o + " does not exist");
-        if (shouldBeGuarded(vi))
-          result.add(ppt.findVar(o.term));
-
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.term.accept(this));
+        }
+        // No call to addVar:  derived variable
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitPrestate(Prestate o) {
+        assert inPre == false;
+        inPre = true;
         List<VarInfo> result = o.term.accept(this);
+        assert inPre == true;
+        inPre = false;
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitPoststate(Poststate o) {
+        assert inPre == true;
+        inPre = false;
         List<VarInfo> result = o.term.accept(this);
+        assert inPre == false;
+        inPre = true;
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitAdd(Add o) {
-        List<VarInfo> result = o.term.accept(this);
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.term.accept(this));
+        }
+        // No call to addVar:  derived variable
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitElements(Elements o) {
-        VarInfo vi = ppt.findVar(o);
-        List<VarInfo> result = o.term.accept(this);
-        result.addAll(takeActionOnDerived(vi));
-
-        Invariant.debugGuarding.fine(
-          vi != null
-            ? vi.name
-              + " exists and can "
-              + (vi.canBeMissing ? "" : "not ")
-              + "be missing"
-            : o + " does not exist");
-        if (shouldBeGuarded(vi)) {
-          result.add(ppt.findVar(o.term));
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.term.accept(this));
         }
-
+        // No call to addVar:  derived variable
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitSubscript(Subscript o) {
-        List<VarInfo> result = o.sequence.accept(this);
-        result.addAll(o.index.accept(this));
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(
-          vi != null
-            ? vi.name
-              + " exists and can "
-              + (vi.canBeMissing ? "" : "not ")
-              + "be missing"
-            : o + " does not exist");
-        if (shouldBeGuarded(vi)) {
-          result.add(ppt.findVar(o.sequence));
-          result.add(ppt.findVar(o.index));
+        List<VarInfo> result = new ArrayList<VarInfo>();
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.sequence.accept(this));
+          result.addAll(o.index.accept(this));
         }
-
+        result = addVar(result, o);
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+        }
         return result;
       }
       public List<VarInfo> visitSlice(Slice o) {
-        List<VarInfo> result = o.sequence.accept(this);
-        if (o.i != null)
-          result.addAll(o.i.accept(this));
-        if (o.j != null)
-          result.addAll(o.j.accept(this));
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(
-          vi != null
-            ? vi.name
-              + " exists and can "
-              + (vi.canBeMissing ? "" : "not ")
-              + "be missing"
-            : o + " does not exist");
-        if (shouldBeGuarded(vi)) {
-          result.add(ppt.findVar(o.sequence));
-          if (o.i != null)
-            result.add(ppt.findVar(o.i));
-          if (o.j != null)
-            result.add(ppt.findVar(o.j));
-        }
-
-        return result;
-      }
-      public List<VarInfo> takeActionOnDerived(VarInfo vi) {
         List<VarInfo> result = new ArrayList<VarInfo>();
-
-        if (vi != null && vi.isDerived()) {
-          VarInfo[] bases = vi.derived.getBases();
-
-          for (int i = 0; i < bases.length; i++) {
-            result.addAll(bases[i].name.accept(this));
-          }
+        if (shouldBeGuarded(o)) {
+          result.addAll(o.sequence.accept(this));
+          if (o.i != null)
+            result.addAll(o.i.accept(this));
+          if (o.j != null)
+            result.addAll(o.j.accept(this));
+        }
+        // No call to addVar:  derived variable
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
         }
         return result;
       }
-    }
-    List<VarInfo> result = name.accept(new GuardingVisitor());
-    if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-      Invariant.debugGuarding.fine("VarInfo.getGuardingList: ");
-      Invariant.debugGuarding.fine("  for variable " + this.name.name());
-      // Invariant.debugGuarding.fine ("        " + this.repr());
-      String str = "[ ";
-      for (int i = 0; i < result.size(); i++) {
-        str += result.get(i).name.name() + " ";
+
+      // Convert to prestate variable name if appropriate
+      VarInfoName applyPreMaybe(VarInfoName vin) {
+        if (inPre)
+          return vin.applyPrestate();
+        else
+          return vin;
       }
-      str += "]";
-      Invariant.debugGuarding.fine("  list is " + str);
+
+      private VarInfo convertToPre(VarInfo vi) {
+        //   1. "ppt.findVar("orig(" + vi.name.name() + ")")" does not work:
+        //       "Error: orig() variables shouldn't appear in .decls files"
+
+        VarInfoName viPreName = vi.name.applyPrestate();
+        VarInfo viPre = ppt.findVar(viPreName);
+        if (viPre == null) {
+          System.out.printf("Can't find pre var %s (%s) at %s%n", viPreName.name(), viPreName, ppt);
+          for (VarInfo v : ppt.var_infos) {
+            System.out.printf("  %s%n", v);
+          }
+          throw new Error();
+        }
+        return viPre;
+      }
+
+      private List<VarInfo> addVar(List<VarInfo> result, VarInfoName vin) {
+        VarInfo vi = ppt.findVar(applyPreMaybe(vin));
+        if (vi == null) {
+          String message
+            = String.format("Did not find variable %s [inpre=%s] (%s) in %s", vin.name(), inPre, ppt);
+          System.out.println(message);
+          System.out.println("vars: " + ppt.varNames());
+          System.out.flush();
+          throw new Error(String.format(message));
+        }
+        return addVarInfo(result, vi);
+      }
+
+      /**
+       * Add the given variable to the result list.
+       * Does nothing if the variable is of primitive type.
+       **/
+      // Should this operate by side effect on a global variable?
+      // (Then what is the type of the visitor; what does everything return?)
+      private List<VarInfo> addVarInfo(List<VarInfo> result, VarInfo vi) {
+        assert vi != null;
+        assert ((! vi.isDerived()) || vi.isDerived())
+          : "addVar on derived variable: " + vi;
+        // Don't guard primitives
+        if (vi.type.isArray() || vi.type.isObject()) {
+          result.add(vi);
+        }
+        // System.out.printf("addVarInfo(%s) => %s%n", vi, result);
+        return result;
+      }
+
+    } // end of class GuardingVisitor
+
+    if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+      Invariant.debugGuarding.fine(String.format("VarInfo.getGuardingList(%s)", this.name.name()));
     }
 
-    // remove variable "this" from the list, if it exists.
-    for (VarInfo vi : result) {
-      if (vi.name.name().equals("this")) {
-        result.remove(vi);
-        break;
-      }
+    // System.out.printf("getGuardingList(%s)%n", name.name());
+
+    List<VarInfo> result = name.accept(new GuardingVisitor());
+    result.remove(ppt.findVar(name));
+
+    assert ! ArraysMDE.any_null(result);
+
+    if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+      Invariant.debugGuarding.fine(String.format("VarInfo.getGuardingList(%s) => : %s", this.name.name(), result));
     }
 
     return result;
