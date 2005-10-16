@@ -486,14 +486,15 @@ public class Debug {
     // Get a string with all of the variable names.  Each is separated by ': '
     // 3 variable slots are always setup for consistency
     String vars = "";
-    for (int i = 0; i < vis.length; i++) {
+    int numvars = (vis == null) ? 0 : vis.length;
+    for (int i = 0; i < numvars; i++) {
       VarInfo v = vis[i];
       vars += v.name.name();
       if (ourvars[i] != null)
         vars += " {" + ourvars[i] + "}";
       vars += ": ";
     }
-    for (int i = vis.length; i < 3; i++)
+    for (int i = numvars; i < 3; i++)
       vars += ": ";
 
     // Figure out the sample count if possible
@@ -510,7 +511,7 @@ public class Debug {
     String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
     line = " line=" + line;
 
-    debugTrack.fine (class_str + ": " + ppt.name()
+    debugTrack.fine (class_str + ": " + ((ppt == null) ? "null" : ppt.name())
                      + samp_str + line + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
