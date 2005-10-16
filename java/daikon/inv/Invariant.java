@@ -124,8 +124,9 @@ public abstract class Invariant
   protected boolean falsified = false;
 
   // Whether an invariant is a guarding predicate, that is, creately solely
-  // for the purpose of ensuring invariants with variables that can be missing
-  // do not cause exceptions when tested
+  // for the purpose of ensuring invariants with variables that can be
+  // missing do not cause exceptions when tested.  If this is true, then
+  // the invariant itself does not hold over the observed data.
   public boolean isGuardingPredicate = false;
 
   /**
@@ -390,6 +391,7 @@ public abstract class Invariant
   // Implementations of this need to examine all the data values already
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
+  // The "ppt" argument can be null if this is a prototype invariant.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
   }
@@ -1655,7 +1657,7 @@ public abstract class Invariant
 
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("Guarding predicate being created for: ");
-      debugGuarding.fine (this.format());
+      debugGuarding.fine ("  " + this.format());
     }
 
     // Find which VarInfos must be guarded
@@ -1668,23 +1670,18 @@ public abstract class Invariant
       return null;
     }
 
-    // Hard to decide what PptSlice to associate with
-    // VarInfo temp = (VarInfo)i.next();
-    // debugGuarding.fine ("First VarInfo: " + temp);
-    Invariant guardingPredicate
-       = mustBeGuarded.get(0).createGuardingPredicate();
-    // debugGuarding.fine (guardingPredicate.format_using(OutputFormat.DAIKON));
-    Assert.assertTrue(guardingPredicate != null);
-
-    for (int i=1; i<mustBeGuarded.size(); i++) {
-      VarInfo current = mustBeGuarded.get(i);
-      // debugGuarding.fine ("Another VarInfo: " + current);
-      Invariant currentGuard = current.createGuardingPredicate();
-      // debugGuarding.fine (currentGuard.toString());
-
-      Assert.assertTrue(currentGuard != null);
-
-      guardingPredicate = new AndJoiner(ppt.parent, guardingPredicate, currentGuard);
+    // This conjunction would look better if it was built up right-to-left.
+    Invariant guardingPredicate = null;
+    for (VarInfo vi : mustBeGuarded) {
+      Invariant currentGuard = vi.createGuardingPredicate();
+      debugGuarding.fine (String.format("VarInfo %s guard is %s", vi, currentGuard));
+      assert currentGuard != null;
+      if (guardingPredicate == null) {
+        guardingPredicate = currentGuard;
+      } else {
+        guardingPredicate = new AndJoiner(ppt.parent, guardingPredicate, currentGuard);
+      }
+      debugGuarding.fine (String.format("  predicate so far: %s", guardingPredicate));
     }
 
     // If the guarding predicate has been previously constructed, return it.
@@ -1885,8 +1882,9 @@ public abstract class Invariant
 
   public void log (Logger log, String msg) {
 
-    if (Debug.logOn())
+    if (Debug.logOn()) {
       Debug.log (log, getClass(), ppt, msg);
+    }
   }
 
 
