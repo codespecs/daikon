@@ -1,6 +1,8 @@
 package daikon.inv;
 
 import daikon.*;
+import java.util.*;
+import utilMDE.UtilMDE;
 
 /**
  * This is a special invariant used internally by Daikon to represent
@@ -35,20 +37,39 @@ public class AndJoiner
   }
 
   public String format_using(OutputFormat format) {
-    String leftFormat = left.format_using(format);
-    String rightFormat = right.format_using(format);
+    List<Invariant> invs = conjuncts();
+    List<String> invStrings = new ArrayList<String>(invs.size());
+    for (Invariant inv : invs) {
+      invStrings.add(inv.format_using(format));
+    }
     if (format == OutputFormat.DAIKON) {
-      return leftFormat + " and " + rightFormat;
+      return UtilMDE.join(invStrings, " and ");
     } else if (format == OutputFormat.REPAIR) {
-	return leftFormat + " and " + rightFormat;
+      return UtilMDE.join(invStrings, " and ");
     } else if (format == OutputFormat.ESCJAVA || format.isJavaFamily()) {
-      return "(" + leftFormat + ") && (" + rightFormat + ")";
+      return "(" + UtilMDE.join(invStrings, ") && (") + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
-      return "(AND " + leftFormat + " " + rightFormat + ")";
+      return "(AND" + UtilMDE.join(invStrings, " ") + ")";
     } else {
       return format_unimplemented(format);
     }
   }
+
+  public List<Invariant> conjuncts() {
+    List<Invariant> result = new ArrayList<Invariant>(2);
+    if (left instanceof AndJoiner) {
+      result.addAll(((AndJoiner)left).conjuncts());
+    } else {
+      result.add(left);
+    }
+    if (right instanceof AndJoiner) {
+      result.addAll(((AndJoiner)right).conjuncts());
+    } else {
+      result.add(right);
+    }
+    return result;
+  }
+
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     // Don't call super.isObviousDynamically(vis);
@@ -57,8 +78,8 @@ public class AndJoiner
     DiscardInfo rightObvious = right.isObviousDynamically(vis);
     if (leftObvious != null && rightObvious != null) {
       return new DiscardInfo(this, DiscardCode.obvious,
-                                           "Left obvious: " + leftObvious.discardString() + Global.lineSep
-                                           + "Right obvious: " + rightObvious.discardString());
+                             "Left obvious: " + leftObvious.discardString() + Global.lineSep
+                             + "Right obvious: " + rightObvious.discardString());
     }
     return null;
   }
