@@ -24,9 +24,10 @@ Further documentation can be found in:
 
 Daikon
 
-    Config option "noInvariantGuarding" has been renamed to
-    "guardNulls", and instead of being a boolean, is a string with
-    three possible values:  "always", "never", or "missing".
+    Config option "Daikon.noInvariantGuarding" has been renamed to
+    "Daikon.guardNulls", and instead of being a boolean, is a
+    string with three possible values:  "always", "never", or "missing".
+    See the documentation for details.
 
 Chicory
 
