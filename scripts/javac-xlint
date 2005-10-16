@@ -2,7 +2,7 @@
 
 # javac-xlint can be run as a prefix to a javac line, like so:
 #
-#   javac-xlint [-p regexp] javac [-option...] file...
+#   javac-xlint [-p regexp] javac [javac-options] file...
 #
 # javac-xlint makes 3 changes to the invocation of javac:
 #  1. It adds the -Xlint option
@@ -43,7 +43,6 @@ do
   case $Option in
     p ) 
 #      echo "found p!"
-      PRUNE_XLINT_PFLAG=-p
       PRUNE_XLINT_ARGS=$OPTARG
   esac
 done
@@ -55,5 +54,9 @@ shift $(($OPTIND - 1))
 SUPPLIED_JAVAC=$1
 shift
 
-# echo ${SUPPLIED_JAVAC} -Xlint $* PIPED-INTO `dirname ${0}`/prune-xlint.pl "${PRUNE_XLINT_ARGS}"
-${SUPPLIED_JAVAC} -Xlint $* 2>&1 | `dirname ${0}`/prune-xlint.pl ${PRUNE_XLINT_PFLAG} "${PRUNE_XLINT_ARGS}"
+# echo ${SUPPLIED_JAVAC} -Xlint $* PIPED-INTO `dirname ${0}`/prune-xlint.pl -p "${PRUNE_XLINT_ARGS}"
+if [ ! -z "${PRUNE_XLINT_ARGS}" ]; then
+  ${SUPPLIED_JAVAC} -Xlint $* 2>&1 | `dirname ${0}`/prune-xlint.pl -p "${PRUNE_XLINT_ARGS}"
+else
+  ${SUPPLIED_JAVAC} -Xlint $* 2>&1 | `dirname ${0}`/prune-xlint.pl
+fi
