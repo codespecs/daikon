@@ -45,7 +45,10 @@ public class NISuppressor {
    **/
   String state = NIS.NONE;
 
-  /** sample invariant - used to check the suppressor over constants */
+  /**
+   * Sample invariant - used to check the suppressor over constants.
+   * this is a prototype invariant; that is, simple_inv.ppt == null.
+   **/
   Invariant sample_inv;
 
   /**
