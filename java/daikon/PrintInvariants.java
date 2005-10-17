@@ -314,8 +314,8 @@ public final class PrintInvariants {
     // Read in the invariants
     String filename = args[fileIndex];
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
-                                               true // use saved config
-                                               );
+                                                true // use saved config
+                                                );
     // Setup the list of proto invariants and initialize NIS suppressions
     Daikon.setup_proto_invs();
     Daikon.setup_NISuppression();
@@ -329,6 +329,7 @@ public final class PrintInvariants {
       return;
     }
 
+    validateGuardNulls();
     if ((Daikon.dkconfig_guardNulls == "always") // interned
         || (Daikon.dkconfig_guardNulls == "missing")) { // interned
       Daikon.guardInvariants(ppts);

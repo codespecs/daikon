@@ -539,6 +539,8 @@ public final class Daikon {
 
     if ((Daikon.dkconfig_guardNulls == "always") // interned
         || (Daikon.dkconfig_guardNulls == "missing")) { // interned
+      // This side-effects the PptMap, but it has already been saved
+      // to disk and is now being used only for printing.
       guardInvariants(all_ppts);
     }
 

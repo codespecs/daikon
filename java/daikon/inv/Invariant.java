@@ -1781,8 +1781,17 @@ public abstract class Invariant
    */
   public Invariant instantiate (PptSlice slice) {
 
-    Assert.assertTrue (slice != null);
-    Assert.assertTrue (valid_types(slice.var_infos));
+    assert slice != null;
+    if (! valid_types(slice.var_infos)) {
+      System.out.printf("this.getClass(): %s%n", this.getClass());
+      System.out.printf("slice: %s%n", slice);
+      System.out.printf("slice.var_infos: %s%n", (Object)slice.var_infos);
+      System.out.printf("ppt: %s%n", ppt);
+      // Can't do this, as this might be a "prototype" invariant.
+      // System.out.printf("this: %s%n", this.repr());
+    }
+    assert valid_types(slice.var_infos)
+      : String.format("valid_types(%s) = false for %s", slice.var_infos, this);
     if (!enabled() || !instantiate_ok (slice.var_infos))
       return (null);
     Invariant inv = instantiate_dyn (slice);

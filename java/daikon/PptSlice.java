@@ -265,11 +265,15 @@ public abstract class PptSlice
   //// Invariant guarding
 
   /**
-   * This function guards all of the invariants in a given PptSlice by
+   * This procedure guards all of the invariants in a given PptSlice by
    * iterating over the contained invariants and replace the invariants
    * that require guarding with their guarded counterparts. The guarded
    * invariants are put into the joiner view of the PptTopLevel that
    * contains the PptSlice where the invariant was originally located.
+   * <p>
+   * This procedure changes what invariants exist, so the PptMap should
+   * not be saved, or used for anything except printing, after this is
+   * called.
    */
   public void guardInvariants() {
     List<Invariant> invariantsToGuard = new ArrayList<Invariant>();
