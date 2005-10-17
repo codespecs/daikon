@@ -1753,7 +1753,9 @@ public final class VarInfo implements Cloneable, Serializable {
         assert ((! vi.isDerived()) || vi.isDerived())
           : "addVar on derived variable: " + vi;
         // Don't guard primitives
-        if (vi.type.isArray() || vi.type.isObject()) {
+        if (vi.file_rep_type.isScalar() && ! vi.type.isScalar()
+            // (vi.type.isArray() || vi.type.isObject())
+            ) {
           result.add(vi);
         }
         // System.out.printf("addVarInfo(%s) => %s%n", vi, result);
