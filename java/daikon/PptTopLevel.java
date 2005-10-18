@@ -303,7 +303,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Iterate through each variable at this ppt **/
-  public Iterator var_info_iterator() {
+  public Iterator<VarInfo> var_info_iterator() {
     return Arrays.asList(var_infos).iterator();
   }
 
