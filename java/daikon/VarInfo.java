@@ -1520,11 +1520,13 @@ public final class VarInfo implements Cloneable, Serializable {
 
       return retval;
     } else {
-      System.err.println("Unexpected guarding based on " + name.name());
+      System.err.printf("Unexpected guarding based on %s with type %s%n", name.name(), type);
       Assert.assertTrue(false);
       return null;
     }
   }
+
+  static Set<String> addVarMessages = new HashSet<String>();
 
   // Finds a list of variables that must be guarded for a VarInfo to be
   // guaranteed to not be missing.  This list never includes this.  The
@@ -1561,9 +1563,11 @@ public final class VarInfo implements Cloneable, Serializable {
         // Not "shouldBeGuarded(ppt.findVar(viname))" because that
         // unnecessarily computes ppt.findVar(viname), if
         // dkconfig_guardNulls is "always"
-        return (Daikon.dkconfig_guardNulls == "always" // interned
-                || (Daikon.dkconfig_guardNulls == "missing" // interned
-                    && ppt.findVar(applyPreMaybe(viname)).canBeMissing));
+        boolean result
+          = (Daikon.dkconfig_guardNulls == "always" // interned
+             || (Daikon.dkconfig_guardNulls == "missing" // interned
+                 && ppt.findVar(applyPreMaybe(viname)).canBeMissing));
+        return result;
       }
       public List<VarInfo> visitSimple(Simple o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
@@ -1731,15 +1735,24 @@ public final class VarInfo implements Cloneable, Serializable {
 
       private List<VarInfo> addVar(List<VarInfo> result, VarInfoName vin) {
         VarInfo vi = ppt.findVar(applyPreMaybe(vin));
+        // vi could be null because some variable's prefix is not a
+        // variable.  Example: for static variable "Class.staticvar",
+        // "Class" is not a varible, even though for variable "a.b.c",
+        // typically "a" and "a.b" are also variables.
         if (vi == null) {
           String message
-            = String.format("Did not find variable %s [inpre=%s] (%s) in %s", vin.name(), inPre, ppt);
-          System.out.println(message);
-          System.out.println("vars: " + ppt.varNames());
-          System.out.flush();
-          throw new Error(String.format(message));
+            = String.format("getGuardingList(%s, %s): did not find variable %s [inpre=%s]", name.name(), ppt.name(), vin.name(), inPre);
+          // Only print the error message at most once per variable.
+          if (addVarMessages.add(name.name())) {
+            System.err.println(message);
+          }
+          // System.out.println("vars: " + ppt.varNames());
+          // System.out.flush();
+          // throw new Error(String.format(message));
+          return result;
+        } else {
+          return addVarInfo(result, vi);
         }
-        return addVarInfo(result, vi);
       }
 
       /**
