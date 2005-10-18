@@ -117,7 +117,7 @@ public static void mainHelper(final String[] args) throws IOException,
     Daikon.suppress_implied_controlled_invariants = false;
     NIS.dkconfig_enabled = false;
 
-    // The flag tells FileIO to use DaikonSimple
+    // The flag tells FileIO and Daikon to use DaikonSimple
     // specific methods (e.g. FileIO.read_declaration_file).
     // When FileIO reads and processes
     // samples, it must use the SimpleProcessor rather than the
@@ -142,8 +142,14 @@ public static void mainHelper(final String[] args) throws IOException,
     // initializes the points (adding orig and derived variables)
     all_ppts = FileIO.read_declaration_files(decls_files);
 
+//    for (Iterator<PptTopLevel> t = all_ppts.pptIterator(); t.hasNext();) {
+//      PptTopLevel ppt = t.next();
+//      System.out.println("After decls: " + ppt.name);
+//    }
+//    System.out.println("here");
+//    System.exit(0);
     // Create the combined exits (and add orig and derived vars)
-    Daikon.create_combined_exits(all_ppts);
+//    Daikon.create_combined_exits(all_ppts);
 
     // Read and process the data trace files
     SimpleProcessor processor = new SimpleProcessor();
@@ -234,7 +240,7 @@ public static void mainHelper(final String[] args) throws IOException,
    * equality set 2. debugging information turned off because DaikonSimple's
    * code is more contained 3. less constraints on the slices
    *
-   * @see daikon.PptTopLevel#instantiate_views_and_invariants()
+   * @see Daikon.PptTopLevel#instantiate_views_and_invariants()
    */
 
   // Note that some slightly inefficient code has been added to aid
@@ -463,12 +469,80 @@ public static void mainHelper(final String[] args) throws IOException,
       // Intern the sample
       vt = new ValueTuple(vt.vals, vt.mods);
 
+      // DaikonSimple must make the object program point manually because
+      // the new Chicory produced dtrace files do not contain object ppts
+      // in the dtrace part of the file (the program point is declared).
+
+      // Make the object ppt
+       PptName ppt_name = ppt.ppt_name;
+
+       PptName object_ppt_name = null;
+       PptTopLevel object_ppt = null;
+       ValueTuple object_vt = null;
+
+       if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
+         object_ppt_name = ppt_name.makeObject();
+       }
+       if (ppt.ppt_name.isObjectInstanceSynthetic()) {
+         object_ppt = all_ppts.get(object_ppt_name);
+       }
+
+       if (object_ppt_name == null) {
+         object_ppt = null;
+       } else {
+         object_ppt = all_ppts.get(object_ppt_name);
+       }
+
+       // C programs do not have object ppts
+       if (object_ppt != null) {
+       //       Assert.assertTrue(object_ppt.ppt_name.isObjectInstanceSynthetic());
+
+
+       // Make the vt for the object ppt
+       Object values[] = new Object[object_ppt.var_infos.length];
+       int mods[] = new int[object_ppt.var_infos.length];
+
+
+       // Build the vt for the object ppt by looking through the current
+       // vt and filling in the gaps.
+       int k = 0;
+       for(Iterator<VarInfo> i = object_ppt.var_info_iterator(); i.hasNext();) {
+
+         VarInfo var = i.next();
+         boolean found = false;
+         for(Iterator<VarInfo> j = ppt.var_info_iterator(); j.hasNext();) {
+           VarInfo var2 = j.next();
+
+           if (var.name.equals(var2.name)) {
+             values[k] = vt.getValue(var2);
+             mods[k] = vt.getModified(var2);
+             found = true;
+             break;
+           }
+         }
+         if (!found) {
+           values[k] = null;
+           mods[k] = 2;
+         }
+         k++;
+
+       }
+
+       object_vt = new ValueTuple (values, mods);
+       }
+
       // If this is an enter point, just remember it for later
       if (ppt.ppt_name.isEnterPoint()) {
         Assert.assertTrue(nonce != null);
         Assert.assertTrue(call_map.get(nonce) == null);
         List<Call> value = new ArrayList<Call>();
         value.add(new Call(ppt, vt));
+
+        // only include the object ppt if the current ppt is not
+        // the enter point of a constructor
+          if(!ppt.ppt_name.isConstructor() && object_ppt != null)
+            value.add(new Call(object_ppt, object_vt));
+
         call_map.put(nonce, value);
         last_nonce = nonce;
         wait = true;
@@ -477,16 +551,19 @@ public static void mainHelper(final String[] args) throws IOException,
 
       // If we find an object call, then we need to associated it with
       // its enter call.
-      if (ppt.ppt_name.isObjectInstanceSynthetic()) {
-        if (wait) {
-          List<Call> value = call_map.get(last_nonce);
-          // there should only be an enter call in the list
-          Assert.assertTrue(value.size() == 1);
-          value.add(new Call(ppt, vt));
-          call_map.put(last_nonce, value);
-          return;
-        }
-      }
+      // In the new version, we do not need this call.  Will remove.
+//      if (ppt.ppt_name.isObjectInstanceSynthetic()) {
+//        if (wait) {
+//          List<Call> value = call_map.get(last_nonce);
+//          // there should only be an enter call in the list
+//          Assert.assertTrue(value.size() == 1);
+//          value.add(new Call(ppt, vt));
+//          call_map.put(last_nonce, value);
+//          return;
+//        }
+//
+//        // return;
+//      }
 
       // If this is an exit point, process the saved enter (and sometimes
       // object) point
@@ -500,6 +577,9 @@ public static void mainHelper(final String[] args) throws IOException,
         wait = false;
       }
       add(ppt, vt);
+
+      if (object_ppt != null)
+          add(object_ppt, object_vt);   //apply object vt
     }
 
     // The method iterates through all of the invariants in the ppt
@@ -510,9 +590,31 @@ public static void mainHelper(final String[] args) throws IOException,
 
       // if this is a numbered exit, apply to the combined exit as well
       if (ppt.ppt_name.isNumberedExitPoint()) {
+//        System.out.println(ppt.ppt_name.makeExit());
+        //Daikon.create_combined_exits(all_ppts);
         PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
         if (parent != null) {
           parent.get_missingOutOfBounds(ppt, vt);
+          add(parent, vt);
+        //  System.out.println("Parent not null");
+        } else {
+          // make parent and apply
+
+
+          // this is a hack. it should probably filter out orig and derived
+          // vars instead of taking the first n.
+          int len = ppt.num_tracevars + ppt.num_static_constant_vars;
+          VarInfo[] exit_vars = new VarInfo[len];
+          for (int j = 0; j < len; j++) {
+            exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+            exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
+            exit_vars[j].value_index = ppt.var_infos[j].value_index;
+            exit_vars[j].equalitySet = null;
+          }
+
+          parent = new PptTopLevel(ppt.ppt_name.makeExit().getName(), exit_vars);
+          Daikon.init_ppt(parent, all_ppts);
+          all_ppts.add(parent);
           add(parent, vt);
         }
       }
@@ -579,11 +681,39 @@ public static void mainHelper(final String[] args) throws IOException,
         // add methods
         for (int j = 0; j < vt.vals.length; j++) {
           if (!vt.isMissing(j)) {
+            try {
             ValueSet vs = ppt.value_sets[j];
-            vs.add(vt.vals[j]);
-          } else {
-            ValueSet vs = ppt.value_sets[j];
+//            Assert.assertTrue(ppt.value_sets.length == vt.vals.length, ppt.value_sets.length + " " + vt.vals.length);
+            //System.out.println(ppt.value_sets.length + " " + vt.vals.length);
+//            if (vt.vals[j] instanceof Object[]) {
+//              Object[] s = (Object[]) vt.vals[j];
+//              for (Object l : s)
+//                vs.add(l);
+//            } else {
+
+              if (vs instanceof ValueSet.ValueSetScalar && (vt.vals[j] instanceof long[])) {
+//                System.out.println(vs.getClass());
+//                System.out.println(vt.vals[j]);
+//                System.out.println(counter++);
+//                System.out.println(ppt.value_sets.length);
+//                System.out.println(vt.vals.length);
+                vs.add(vt.vals[j]);
+              } else
+//              else
+//                System.out.println(":::::::::::::::::::::::: " + counter2++);
+                vs.add(vt.vals[j]);
+
+           // }
+
+            } catch (ArrayIndexOutOfBoundsException e) {
+              System.out.println("A: " + vt.vals.length);
+              System.out.println("B: " + ppt.value_sets.length);
+              System.exit(0);
+            }
           }
+//          } else {
+//            //ValueSet vs = ppt.value_sets[j];
+//          }
         }
         ppt.mbtracker.add(vt, 1);
 
