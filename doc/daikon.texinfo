@@ -1891,13 +1891,30 @@ Static variables of a class have names of the form
 @item
 @cindex @code{orig()} variable (pre-state value)
 @cindex pre-state variables
-@code{orig(x)} refers to the value of formal parameter @code{x} upon
+@code{orig(x)} refers to the value of variable @code{x} upon
 entry to a procedure (because the procedure body might modify the value
 of @code{x}).  These variables appear only at @code{:::EXIT} program
 points.  Typically, @code{orig()} variables do not appear in the trace,
 but are automatically created by Daikon when it matches up
 @code{:::ENTER@var{[nn]}} and @code{:::EXIT} program points.
 @xref{orig variable example}.
+
+This variable prints as @code{orig} when using Daikon output format
+(@pxref{Invariant syntax}), but may print differently in other formats
+(such as @code{\old}).
+
+@item
+@cindex @code{post()} variable (post-state value)
+@cindex post-state variables
+@code{post(x)} refers to the value of variable @code{x} upon exit from a
+procedure.  Such a value is usually written simply @code{x}; the
+@code{post} prefix is needed only within an @code{orig} expression, when
+the post-state value needs to be referenced.  Just as @code{orig} may
+be used only in a post-state context and specifies an expression to be
+evaluated in the pre-state, @code{post} may be may be used only in a
+pre-state context and specifies an expression to be evaluated in the
+post-state.  @xref{orig variable example}.
+
 
 @c Old version.  Do any of the front ends still do this?
 @c @item
@@ -1973,7 +1990,8 @@ field could use that to infer the type of any Daikon expression.)
 
 @cindex @code{orig()} variable (pre-state value)
 
-This section gives an example of use of @code{orig()} variables and arrays.
+This section gives an example of use of @code{orig()} and @code{post()}
+variables and arrays.
 
 Suppose you have initially that (in Java syntax)
 @example
@@ -2005,9 +2023,8 @@ The value of @code{a[i]} in the pre-state: @{22, 23@}[0]
 This is the same as orig(a[i]):   @{22, 23@}[0].
 
 @item orig(a[])[i] = 23
-The value of @code{a[]} (that is, the array object, not the reference
-@code{a}) in the pre-state, indexed by the post-state value of i:
-@{22, 23@}[1]
+The value of @code{a[]} in the pre-state (which is an array object, not
+areference), indexed by the post-state value of i:  @{22, 23@}[1]
 
 @item orig(a)[orig(i)] = 24
 @code{orig(a)} is the original value of the reference @code{a}, not
@@ -2030,6 +2047,10 @@ The identity of the array @code{b} has not changed.
 @item b[] = [48, 49]
 @itemx orig(b[]) = [46, 47]
 For an array @code{b}, @samp{b=orig(b)} does not imply @samp{b[]=orig(b[])}.
+
+@item orig(a[post(i)]) = 23
+The pre-state value of @code{a[1]} (because the post-state value of
+@code{i} is 1):  @{22, 23@}[1]
 
 @end table
 
@@ -4535,6 +4556,8 @@ In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
 is also a source-based front end, Mangel-Wurzel.
 Unlike Kvasir, which runs only on Linux/x86 platforms,
 Mangel-Wurzel will run on nearly any platform.
+Mangel-Wurzel is missing a few features of Kvasir; for instance,
+Mangel-Wurzel outputs fewer variables.
 Mangel-Wurzel requires the source code for your program, and 
 it also requires the
 Purify program analysis tool from Rational Software.  You must purchase
