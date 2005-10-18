@@ -113,7 +113,8 @@ public class NONZERO
     if (!valid_types(vis))
       return (false);
 
-    if (vis[0].aux.getFlag (VarInfoAux.IS_STRUCT))
+    if (vis[0].aux.getFlag (VarInfoAux.IS_STRUCT) ||
+        !vis[0].aux.getFlag (VarInfoAux.HAS_NULL))
       return (false);
 
     return (true);
