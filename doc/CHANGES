@@ -62,6 +62,9 @@ Mangel-Wurzel
 
      Instrumented programs now run much faster due to improvements in the
      Mangel-Wurzel runtime.
+
+     Arrays of structs are now treated as arrays of each scalar struct field
+     (instead of being ignored), as in the other Daikon front ends.
     
 
 --------------------------------------------
