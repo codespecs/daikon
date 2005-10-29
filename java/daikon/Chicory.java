@@ -41,10 +41,7 @@ public class Chicory {
   /** Print progress information **/
   public static boolean verbose = true;
 
-  /**
-   * See StdVisibility in the DeclWriter class
-   */
-  public static boolean StdVisibility = false;
+  public static boolean stdVisibility = false;
 
   /** Main debug switch **/
   public boolean debug = false;
@@ -385,8 +382,8 @@ public class Chicory {
       }
       else if (arg.startsWith("--std-vis"))
       {
-          StdVisibility = true;
-          DaikonVariableInfo.StdVisibility = true;
+          stdVisibility = true;
+          DaikonVariableInfo.stdVisibility = true;
 
           premain_args.add(arg);
       }

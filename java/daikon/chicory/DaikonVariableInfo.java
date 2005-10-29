@@ -71,7 +71,7 @@ public abstract class DaikonVariableInfo
      * behavior (if the field is in a class in a different package, it
      * is only visible if public, etc.)
      */
-    public static boolean StdVisibility = false;
+    public static boolean stdVisibility = false;
 
     /** Constructs a non-array type DaikonVariableInfo object
      * @param theName The name of the variable
@@ -831,7 +831,7 @@ public abstract class DaikonVariableInfo
         if (current.equals (fclass))
             return (true);
 
-        if (!StdVisibility)
+        if (!stdVisibility)
         {
             // If the field is in any instrumented class it is always visible
             synchronized (Runtime.all_classes)
@@ -850,7 +850,7 @@ public abstract class DaikonVariableInfo
 
         // Otherwise we consider the variable not to be visible, even
         // though it is.  This mimics dfej behavior
-        if (!StdVisibility)
+        if (!stdVisibility)
             return (false);
 
         // If the field is in the same package, it's visible if it is
