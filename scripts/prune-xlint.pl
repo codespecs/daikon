@@ -12,7 +12,7 @@
 # line with "// unchecked" are retained.
 
 # With the optional "-p regexp" argument, any warning (not error) message
-# matching the regular expression is suppressed.
+# matching the regular expression is suppressed (even non-"unchecked" warnings).
 
 use strict;
 use English;
@@ -90,12 +90,16 @@ while (defined(my $line = <>)) {
     die "this can't happen";
   }
 
+  ## Remove annotated "unchecked" warnings.
   if ($record =~ /: warning: \[unchecked\] unchecked.*\/\/ unchecked/s) {
     if ($debug) { print "suppressed an unchecked warning"; }
     $removed_warnings++;
     next;
   }
-  if (defined($file_regexp) && ($record =~ /($file_regexp).*:[0-9]+: warning: \[unchecked\] unchecked/)) {
+  ## Remove all warnings in the pruned directories.  Parens around
+  ## $file_regexp are crucial, as it might contain a top-level alternation
+  ## ("|").
+  if (defined($file_regexp) && ($record =~ /($file_regexp).*:[0-9]+: warning: /)) {
     if ($debug) { print "suppressed an unchecked warning in pruned directory\n"; }
     $removed_warnings++;
     next;
