@@ -24,7 +24,7 @@ public class ParentFilter extends InvariantFilter {
 
   boolean shouldDiscardInvariant( Invariant inv ) {
 
-    System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());
+    // System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());
 
     // If there are no parents, can't discard
     if (inv.ppt.parent.parents == null)
@@ -36,7 +36,7 @@ public class ParentFilter extends InvariantFilter {
       // Get the parent/child relation information
       PptRelation rel = inv.ppt.parent.parents.get (i);
 
-      System.out.printf("  considering slice %s%n", rel.parent);
+      // System.out.printf("  considering slice %s%n", rel.parent);
 
       // Look up each variable in the parent, skip this parent if any
       // variables don't exist in the parent.
@@ -47,7 +47,7 @@ public class ParentFilter extends InvariantFilter {
           continue outer;
       }
 
-      System.out.printf("  got variables%n");
+      // System.out.printf("  got variables%n");
 
       // Sort the parent variables in index order
       Arrays.sort (pvis, VarInfo.IndexComparator.getInstance());
@@ -61,12 +61,12 @@ public class ParentFilter extends InvariantFilter {
       if (Debug.logDetail())
         inv.log ("Found parent slice: " + pslice.name());
 
-      System.out.printf ("  found parent slice (%d invs): %s%n", pslice.invs.size(), pslice.name());
+      // System.out.printf ("  found parent slice (%d invs): %s%n", pslice.invs.size(), pslice.name());
 
       // Look for a matching invariant in the parent slice
       for (int j = 0; j < pslice.invs.size(); j++) {
         Invariant pinv = pslice.invs.get (j);
-        System.out.printf ("  inv in parent slice: %s%n", pinv.format());
+        // System.out.printf ("  inv in parent slice: %s%n", pinv.format());
         if (pinv.isGuardingPredicate)
           continue;
         if (pinv.getClass() != inv.getClass())
