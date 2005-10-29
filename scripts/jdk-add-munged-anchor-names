@@ -19,6 +19,14 @@
 #   find /usr/local/pkg/java/j2sdk1.4.1_01/docs/api -name '*.html' -print | xargs jdk-add-munged-anchor-names
 #   find /g2/jdoc/jdk1.3/docs/api -name '*.html' -print | xargs jdk-add-munged-anchor-names
 
+## Replaced by the use of FindBin.
+# BEGIN {
+#   unshift @INC, "$ENV{'INV'}/scripts";
+# }
+# use checkargs;
+
+use FindBin ();
+use lib "$FindBin::Bin";
 use checkargs;
 
 if ((/<A NAME=\"([^\"]*)\">(.*?)<\/A>/i) && ($1 =~ /[,\(\)]/))
