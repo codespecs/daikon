@@ -6,8 +6,8 @@
 #
 # javac-xlint makes 3 changes to the invocation of javac:
 #  1. It adds the -Xlint option
-#  2. I suppresses cetain warning messages.
-#  3. It returns non-zero sttus if any other warnings (or errors) exist.
+#  2. It suppresses certain warning messages.
+#  3. It returns non-zero status if any other warnings (or errors) exist.
 #     Ordinarily, javac returns non-zero status only if errors exist.
 #
 # The suppressed warnings are of two sorts.
@@ -19,7 +19,7 @@
 #     for doing this, but javac 5 (= javac 1.5) does not.
 
 # As of Java 5 update 6 (JDK 5.0u6), javac will have a way to suppress
-# warnings:  @SuppressWarnings("unchecked).  It does not permit suprression
+# warnings:  @SuppressWarnings("unchecked).  It does not permit suppression
 # per-line (and isn't yet released; as of October 2005, the current version
 # was JDK 5.0u4), but otherwise seems preferable to this script, as it is
 # more portable.
