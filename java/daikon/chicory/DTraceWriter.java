@@ -55,7 +55,7 @@ public class DTraceWriter extends DaikonWriter
      * Nonces for method exits whose records should be excluded
      * but have not yet been reached in the program's execution.
      */
-    private Set <Integer> pendingIgnoreNonces;
+    private Set<Integer> pendingIgnoreNonces;
 
     /**
      * Initializes the DTraceWriter
@@ -70,7 +70,7 @@ public class DTraceWriter extends DaikonWriter
 
         recordPct = Chicory.recordPct();
         rand = new Random();
-        pendingIgnoreNonces = new HashSet <Integer> ();
+        pendingIgnoreNonces = new HashSet<Integer> ();
     }
 
     /**
@@ -239,12 +239,12 @@ public class DTraceWriter extends DaikonWriter
      * @param theObjects List of Objects, each must have the Field field
      * @param field Which field of theObjects we are probing
      */
-    public static List <Object> getFieldValues(Field field, List <Object> theObjects)
+    public static List<Object> getFieldValues(Field field, List<Object> theObjects)
     {
         if (theObjects == null || theObjects instanceof NonsensicalList)
             return nonsenseList;
 
-        List <Object> fieldVals = new ArrayList <Object> ();
+        List<Object> fieldVals = new ArrayList<Object> ();
 
         for(Object theObj : theObjects)
         {
@@ -500,14 +500,14 @@ public class DTraceWriter extends DaikonWriter
      * @return a list of Strings which are the names of the runtime types in the
      * theVals param
      */
-    public static List <String> getTypeNameList(List <Object> theVals)
+    public static List<String> getTypeNameList(List<Object> theVals)
     {
         // Return null rather than NonsensicalList as NonsensicalList is
         // an array of Object and not String.
         if (theVals == null || theVals instanceof NonsensicalList)
             return null;
 
-        List <String> typeNames = new ArrayList <String> (theVals.size());
+        List<String> typeNames = new ArrayList<String> (theVals.size());
 
         for(Object ref: theVals)
         {

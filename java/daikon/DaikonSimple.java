@@ -540,8 +540,8 @@ public static void mainHelper(final String[] args) throws IOException,
 
         // only include the object ppt if the current ppt is not
         // the enter point of a constructor
-          if(!ppt.ppt_name.isConstructor() && object_ppt != null)
-            value.add(new Call(object_ppt, object_vt));
+        if (!ppt.ppt_name.isConstructor() && object_ppt != null)
+          value.add(new Call(object_ppt, object_vt));
 
         call_map.put(nonce, value);
         last_nonce = nonce;

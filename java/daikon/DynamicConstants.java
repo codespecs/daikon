@@ -343,7 +343,7 @@ public class DynamicConstants implements Serializable {
 
     int con_cnt = 0;
     for (int i = 0; i < con_list.size(); i++) {
-      Constant con = (Constant) con_list.get(i);
+      Constant con = con_list.get(i);
       if (con.vi.isCanonical())
         con_cnt++;
     }
@@ -360,13 +360,13 @@ public class DynamicConstants implements Serializable {
 
     if (Debug.logOn()) {
       for (int i = 0; i < noncons.size(); i++) {
-        Constant con = (Constant) noncons.get (i);
+        Constant con = noncons.get (i);
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "is non constant"
                     + " with val = " + Debug.toString(con.val)
                     + " with count = " + con.count);
       }
       for (int i = 0; i < non_missing.size(); i++) {
-        Constant con = (Constant) non_missing.get (i);
+        Constant con = non_missing.get (i);
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "is non missing");
       }
     }
@@ -417,7 +417,7 @@ public class DynamicConstants implements Serializable {
     // Get list1 leaders
     Set<Constant> leaders1 = new LinkedHashSet<Constant>();
     for (int i = 0; i < list1.size(); i++) {
-      Constant con = (Constant) list1.get(i);
+      Constant con = list1.get(i);
       if (con.vi.isCanonical())
         leaders1.add (con);
     }
@@ -425,7 +425,7 @@ public class DynamicConstants implements Serializable {
     // Get list2 leaders
     Set<Constant> leaders2 = new LinkedHashSet<Constant>();
     for (int i = 0; i < list2.size(); i++) {
-      Constant con = (Constant) list2.get(i);
+      Constant con = list2.get(i);
       if (con.vi.isCanonical())
         leaders2.add (con);
     }
@@ -529,7 +529,7 @@ public class DynamicConstants implements Serializable {
       int[] inv_cnt = {0, 0, 0, 0};
       int[] true_inv_cnt = {0, 0, 0, 0};
       for (int i = 0; i < new_views.size(); i++) {
-        PptSlice slice = (PptSlice) new_views.get (i);
+        PptSlice slice = new_views.get (i);
         for (int j = 0; j < slice.invs.size(); j++) {
           Invariant inv = slice.invs.get (j);
           inv.log ("created, falsified = " + inv.is_false());
@@ -643,12 +643,12 @@ public class DynamicConstants implements Serializable {
 
     // Consider all of the ternary slices with one new non-constant
     for (int i = 0; i < new_leaders.size(); i++) {
-      Constant con1 = (Constant) new_leaders.get(i);
+      Constant con1 = new_leaders.get(i);
       for (int j = 0; j < vars.size(); j++ ) {
-        Constant con2 = (Constant) vars.get(j);
+        Constant con2 = vars.get(j);
         Assert.assertTrue (con1 != con2);
         for (int k = j; k < vars.size(); k++ ) {
-          Constant con3 = (Constant) vars.get(k);
+          Constant con3 = vars.get(k);
           Assert.assertTrue (con1 != con3);
           if (!ppt.is_slice_ok (con1.vi, con2.vi, con3.vi))
             continue;
@@ -696,11 +696,11 @@ public class DynamicConstants implements Serializable {
 
     // Consider all of the ternary slices with two new non-constants
     for (int i = 0; i < new_leaders.size(); i++) {
-      Constant con1 = (Constant) new_leaders.get(i);
+      Constant con1 = new_leaders.get(i);
       for (int j = i; j < new_leaders.size(); j++ ) {
-        Constant con2 = (Constant) new_leaders.get(j);
+        Constant con2 = new_leaders.get(j);
         for (int k = 0; k < vars.size(); k++ ) {
-          Constant con3 = (Constant) vars.get(k);
+          Constant con3 = vars.get(k);
           Assert.assertTrue (con2 != con3);
           Assert.assertTrue (con1 != con3);
           if (!ppt.is_slice_ok (con1.vi, con2.vi, con3.vi))
@@ -791,7 +791,7 @@ public class DynamicConstants implements Serializable {
     if (no_post_process) {
       int con_count = 0;
       for (int i = 0; i < con_list.size(); i++) {
-        Constant con = (Constant) con_list.get(i);
+        Constant con = con_list.get(i);
         if (!con.vi.isCanonical())
           continue;
         System.out.println ("  Not creating invariants over leader "
@@ -806,7 +806,7 @@ public class DynamicConstants implements Serializable {
     // equality invariant, since that is assumed to exist in many places
     if (dkconfig_OneOf_only) {
       for (int i = 0; i < con_list.size(); i++) {
-        Constant con = (Constant) con_list.get(i);
+        Constant con = con_list.get(i);
         if (!con.vi.isCanonical())
           continue;
         instantiate_oneof (con);
@@ -833,7 +833,7 @@ public class DynamicConstants implements Serializable {
 
   /* Code to just create just unary slices for constants
     for (int i = 0; i < con_list.size(); i++) {
-      Constant con = (Constant) con_list.get(i);
+      Constant con = con_list.get(i);
       if (!con.vi.isCanonical())
         continue;
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
@@ -862,7 +862,7 @@ public class DynamicConstants implements Serializable {
     // Get constant leaders
     List<Constant> leaders = new ArrayList<Constant>(100);
     for (int i = 0; i < con_list.size(); i++) {
-      Constant con = (Constant) con_list.get(i);
+      Constant con = con_list.get(i);
       if (!con.vi.isCanonical())
         continue;
       leaders.add (con);
@@ -886,9 +886,9 @@ public class DynamicConstants implements Serializable {
 
     // Binary slices/invariants
     for (int i = 0; i < leaders.size(); i++) {
-      Constant con1 = (Constant) leaders.get(i);
+      Constant con1 = leaders.get(i);
       for (int j = i; j < leaders.size(); j++) {
-        Constant con2 = (Constant) leaders.get(j);
+        Constant con2 = leaders.get(j);
         if (!con1.vi.compatible (con2.vi))
           continue;
         PptSlice2 slice2 = new PptSlice2 (ppt, con1.vi, con2.vi);
@@ -922,7 +922,7 @@ public class DynamicConstants implements Serializable {
   public void print_missing (PrintWriter out) {
 
     for (int i = 0; i < missing_list.size(); i++) {
-      Constant con = (Constant) missing_list.get(i);
+      Constant con = missing_list.get(i);
       out.println (con.vi.name.name() + " is always missing");
     }
   }
@@ -945,7 +945,7 @@ public class DynamicConstants implements Serializable {
       VarInfo pvar = ppt.var_infos[i];
       boolean missing = true;
       for (int j = 0; j < ppt.children.size(); j++) {
-        PptRelation rel = (PptRelation) ppt.children.get(j);
+        PptRelation rel = ppt.children.get(j);
         VarInfo cvar = rel.childVar (pvar);
         if ((cvar != null) && (rel.child.constants != null)
             && !rel.child.constants.is_missing (cvar)) {

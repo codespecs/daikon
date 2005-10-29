@@ -178,7 +178,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       function = function.replaceFirst ("_.*", "");
       if (function.equals ("SubClass"))
         continue;
-      CLASSNAME[] fb_arr = (CLASSNAME[]) functions.get (function);
+      CLASSNAME[] fb_arr = functions.get (function);
       if (fb_arr == null) {
         fb_arr = new CLASSNAME[7];
         functions.put (function, fb_arr);
@@ -219,7 +219,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // Instantiate all of the subclasses and return them
     List<Invariant> result = new ArrayList<Invariant>();
     for (int ii = 0; ii < func_list.size(); ii++) {
-      CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (ii);
+      CLASSNAME[] fb_arr = func_list.get (ii);
       for (int jj = 1; jj < fb_arr.length; jj++) {
         CLASSNAME fb = fb_arr[jj];
         if (fb != null) {
@@ -257,7 +257,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Get the proto invariant for all of the subclasses and return them
     for (int ii = 0; ii < func_list.size(); ii++) {
-      CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (ii);
+      CLASSNAME[] fb_arr = func_list.get (ii);
       for (int jj = 1; jj < fb_arr.length; jj++) {
         CLASSNAME fb = fb_arr[jj];
         if (fb != null) {
@@ -368,7 +368,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     if (functions == null)
       build_func_list();
     int func_id = get_function_id();
-    CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (func_id);
+    CLASSNAME[] fb_arr = func_list.get (func_id);
     Assert.assertTrue (fb_arr != null);
     for (int ii = 0; ii < fb_arr.length; ii++)
       if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order))

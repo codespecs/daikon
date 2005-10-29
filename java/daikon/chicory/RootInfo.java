@@ -40,7 +40,7 @@ public class RootInfo extends DaikonVariableInfo
         Set<Class> staticTraversedClasses = null;
         if (Chicory.shouldWatchStatics())
         {
-            staticTraversedClasses = new HashSet <Class> ();
+            staticTraversedClasses = new HashSet<Class> ();
         }
 
         root.addParameters(mi.class_info, mi.member,
@@ -70,7 +70,7 @@ public class RootInfo extends DaikonVariableInfo
         Set<Class> staticTraversedClasses = null;
         if (Chicory.shouldWatchStatics())
         {
-            staticTraversedClasses = new HashSet <Class> ();
+            staticTraversedClasses = new HashSet<Class> ();
         }
 
         // Print arguments
@@ -116,7 +116,7 @@ public class RootInfo extends DaikonVariableInfo
         Set<Class> staticTraversedClasses = null;
         if (Chicory.shouldWatchStatics())
         {
-            staticTraversedClasses = new HashSet <Class> ();
+            staticTraversedClasses = new HashSet<Class> ();
         }
 
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ false,
@@ -136,7 +136,7 @@ public class RootInfo extends DaikonVariableInfo
         Set<Class> staticTraversedClasses = null;
         if (Chicory.shouldWatchStatics())
         {
-            staticTraversedClasses = new HashSet <Class> ();
+            staticTraversedClasses = new HashSet<Class> ();
         }
 
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ true,

@@ -33,7 +33,7 @@ public class InvariantInfo {
       Collections.sort(temp);
       String vars_result = "";
       for (int i = 0; i < temp.size(); i++) {
-        vars_result += ((String) temp.get(i)) + ",";
+        vars_result += temp.get(i) + ",";
       }
       this.vars = vars_result;
       }*/

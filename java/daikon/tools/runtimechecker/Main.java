@@ -11,7 +11,7 @@ public class Main extends CommandHandler {
 
     protected void usageMessage(List<CommandHandler> handlers) {
         for (int i = 0 ; i < handlers.size() ; i++) {
-            CommandHandler h = (CommandHandler)handlers.get(i);
+            CommandHandler h = handlers.get(i);
             h.usageMessage();
         }
     }
@@ -40,7 +40,7 @@ public class Main extends CommandHandler {
         try {
 
             for (int i = 0 ; i < handlers.size() ; i++) {
-                h = (CommandHandler)handlers.get(i);
+                h = handlers.get(i);
                 if (h.handles(command)) {
                     success = h.handle(args);
                     if (!success) {

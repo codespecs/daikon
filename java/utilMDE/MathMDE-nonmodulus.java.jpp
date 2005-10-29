@@ -58,7 +58,7 @@ The correct way to build the system is to run 'make'.
    **/
   static final class MissingNumbersIteratorINT implements Iterator<INTEGER> {
     INT[] nums;
-    Iterator nums_itor;
+    Iterator<INTEGER> nums_itor;
     INT current_nonmissing;
     INT current_missing;
     int current_index;
@@ -83,11 +83,11 @@ The correct way to build the system is to run 'make'.
     }
 
     // The argument iterator must return the Integers in sorted order
-    MissingNumbersIteratorINT(Iterator nums_itor, boolean add_ends) {
+    MissingNumbersIteratorINT(Iterator<INTEGER> nums_itor, boolean add_ends) {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext())
         throw new Error("No elements in nums_itor");
-      current_nonmissing = ((INTEGER)nums_itor.next()).INTValue();
+      current_nonmissing = nums_itor.next().INTValue();
       if (add_ends) {
         current_missing = current_nonmissing - 1;
       } else {
@@ -123,7 +123,7 @@ The correct way to build the system is to run 'make'.
           }
           // prev_nonmissing is for testing only
           INT prev_nonmissing = current_nonmissing;
-          current_nonmissing = ((INTEGER)nums_itor.next()).INTValue();
+          current_nonmissing = nums_itor.next().INTValue();
           if (! (prev_nonmissing < current_nonmissing))
             throw new Error("Non-sorted Iterator supplied to " + stringify(MissingNumbersIteratorINT) + ": prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
         } else {

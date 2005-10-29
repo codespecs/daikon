@@ -82,8 +82,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         this.pptmap = pptmap;
         this.pptMatcher = new PptNameMatcher(root);
 
-        for (Iterator i = pptmap.pptIterator() ; i.hasNext() ; ) {
-            PptTopLevel ppt = (PptTopLevel)i.next();
+        for (Iterator<PptTopLevel> i = pptmap.pptIterator() ; i.hasNext() ; ) {
+            PptTopLevel ppt = i.next();
 
             if (ppt.ppt_name.isExitPoint()
 		&& !ppt.ppt_name.isCombinedExitPoint()) {
@@ -91,8 +91,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 	    }
 
             List<Invariant> invList = filterInvariants(daikon.tools.jtb.Ast.getInvariants(ppt, pptmap));
-            for (Iterator invI = invList.iterator() ; invI.hasNext() ; ) {
-                Invariant inv = (Invariant)invI.next();
+            for (Iterator<Invariant> invI = invList.iterator() ; invI.hasNext() ; ) {
+                Invariant inv = invI.next();
 
 		xmlStringToIndex.put(toProperty(inv).xmlString(), Integer.toString(varNumCounter));
 		varNumCounter++;
@@ -1016,8 +1016,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             }
             char[] backslashedChars = new char[charList.size()];
             for (int j = 0; j < charList.size(); j++) {
-                backslashedChars[j] = ((Character) charList.get(j))
-                    .charValue();
+                backslashedChars[j] = charList.get(j).charValue();
             }
             daikonrep = new String(backslashedChars);
         }

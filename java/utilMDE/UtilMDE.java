@@ -1002,7 +1002,7 @@ public final class UtilMDE {
     String classname = method.substring(0,dotpos);
     String methodname = method.substring(dotpos+1, oparenpos);
     String all_argnames = method.substring(oparenpos+1, cparenpos).trim();
-    Class[] argclasses = (Class[]) args_seen.get(all_argnames);
+    Class[] argclasses = args_seen.get(all_argnames);
     if (argclasses == null) {
       String[] argnames;
       if (all_argnames.equals("")) {

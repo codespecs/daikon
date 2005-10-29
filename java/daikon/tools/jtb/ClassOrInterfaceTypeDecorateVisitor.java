@@ -231,7 +231,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     n.f1 = new NodeOptional(); // This removes optional node, if present.
     Vector<Node> nodeSequenceList = ((NodeListOptional)n.f2).nodes;
     for (int i = 0 ; i < nodeSequenceList.size() ; i++) {
-      NodeSequence oldSequence = (NodeSequence)nodeSequenceList.get(i);
+      NodeSequence oldSequence = nodeSequenceList.get(i);
       NodeSequence newSequence = new NodeSequence(3);
       newSequence.addNode(oldSequence.elementAt(0)); // "."
       newSequence.addNode(oldSequence.elementAt(1)); // <IDENTIFIER>

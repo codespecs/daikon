@@ -160,7 +160,7 @@ public class Violation implements Serializable {
     public static Violation get(Property anno, Time t) {
         Violation vio = new Violation(anno, t);
         if (violationsMap.containsKey(new Integer(vio.hashCode()))) {
-            return (Violation) violationsMap.get(new Integer(vio.hashCode()));
+            return violationsMap.get(new Integer(vio.hashCode()));
         } else {
             violationsMap.put(new Integer(vio.hashCode()), vio);
             return vio;

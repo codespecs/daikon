@@ -87,10 +87,10 @@ public class DummyInvariant
       sliceSize = 3;
     VarInfo[] newVars = new VarInfo[sliceSize];
     {
-      Iterator it = uniqVarsSet.iterator();
+      Iterator<VarInfo> it = uniqVarsSet.iterator();
       int i = 0;
       while (it.hasNext()) {
-        newVars[i++] = (VarInfo)it.next();
+        newVars[i++] = it.next();
         if (i == sliceSize)
           break;
       }

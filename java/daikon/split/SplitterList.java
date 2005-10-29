@@ -51,7 +51,7 @@ public abstract class SplitterList
     }
 
     if (ppt_splitters.containsKey(pptname)) {
-      Splitter[] old = (Splitter[]) ppt_splitters.get(pptname);
+      Splitter[] old = ppt_splitters.get(pptname);
       Splitter[] new_splits = new Splitter[old.length + splits.length];
       System.arraycopy(old, 0, new_splits, 0, old.length);
       System.arraycopy(splits, 0, new_splits, old.length, splits.length);
@@ -84,7 +84,7 @@ public abstract class SplitterList
   }
 
   public static Splitter[] get_raw(String pptname) {
-    return (Splitter[]) ppt_splitters.get(pptname);
+    return ppt_splitters.get(pptname);
   }
 
   //   // This returns a list of all the splitters that are applicable to the
@@ -187,9 +187,9 @@ public abstract class SplitterList
         // For the OBJECT program point, we want to use all the splitters.
       } else if ((pptName.indexOf("OBJECT") != -1)
                  && (name.indexOf("OBJECT") != -1)) {
-        Iterator all = ppt_splitters.values().iterator();
+        Iterator<Splitter[]> all = ppt_splitters.values().iterator();
         while (all.hasNext()) {
-          splitterArrays.addElement((Splitter[])all.next());
+          splitterArrays.addElement(all.next());
         }
       }
     }
@@ -221,9 +221,9 @@ public abstract class SplitterList
    */
   public static Splitter[] get_all( ) {
     Vector<Splitter> splitters = new Vector<Splitter>();
-    Iterator all_splitters = ppt_splitters.values().iterator();
+    Iterator<Splitter[]> all_splitters = ppt_splitters.values().iterator();
     while (all_splitters.hasNext()) {
-      Splitter[] splitter_array = (Splitter[])all_splitters.next();
+      Splitter[] splitter_array = all_splitters.next();
       for (int i = 0; i < splitter_array.length; i++) {
         Splitter tempsplitter = splitter_array[i];
         int j = 0; boolean duplicate = false;

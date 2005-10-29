@@ -114,7 +114,7 @@ public final class OutputFormat
       repair.revquantifiers.putAll(revquantifiers);
       repair.varcount=varcount;
       if (repair.definitiontable.containsKey(ppt)) {
-        Definition d=(Definition)repair.definitiontable.get(ppt);
+        Definition d=repair.definitiontable.get(ppt);
         Definition newd=(Definition)d.clone();
         repair.definitiontable.put(ppt,newd);
       }
@@ -139,10 +139,10 @@ public final class OutputFormat
     /** This method returns a the range set for the relation given by
      * the second parameter.*/
     public String getRange(Ppt ppt, String relation) {
-      Definition d=(Definition)definitiontable.get(ppt);
+      Definition d=definitiontable.get(ppt);
       if (d==null)
         return null;
-      return (String)d.rangetable.get(relation);
+      return d.rangetable.get(relation);
     }
 
     /** This method resets the quantifier table. */
@@ -185,7 +185,7 @@ public final class OutputFormat
       Pair<String,Ppt> t=new Pair<String,Ppt>(vi.name.name()+".arrayset"+"///"+lower.name()+".."+upper.name(),ppt);
 
       if (settable.containsKey(t)) {
-        String setname=(String)settable.get(t);
+        String setname=settable.get(t);
         return setname;
       }
       String setname=generateSetName(vin2.name(),ppt);
@@ -280,7 +280,7 @@ public final class OutputFormat
       Pair<String,Ppt> t=new Pair<String,Ppt>(vi.name.name()+".arrayrelation"+"///"+lower.name()+".."+upper.name(),ppt);
 
       if (relationtable.containsKey(t)) {
-        String relationname=(String)relationtable.get(t);
+        String relationname=relationtable.get(t);
         return relationname;
       }
       String relationname=generateRelationName(vin2.name(),ppt);
@@ -334,7 +334,7 @@ public final class OutputFormat
       } else
         rangeset=getTypedef(ppt,vin2.name());
 
-      Definition d=(Definition)definitiontable.get(ppt);
+      Definition d=definitiontable.get(ppt);
       d.rangetable.put(relationname,rangeset);
       String setdef=relationname+": int ->"+rangeset+";";
       appendModelRule(ppt,newrule);
@@ -350,7 +350,7 @@ public final class OutputFormat
       Pair<String,Ppt> t=new Pair<String,Ppt>(lower.name()+"-"+upper.name()+".rangeset",ppt);
 
       if (settable.containsKey(t)) {
-        String setname=(String)settable.get(t);
+        String setname=settable.get(t);
         return setname;
       }
       String setname=generateSetName("Range",ppt);
@@ -401,8 +401,8 @@ public final class OutputFormat
 
       if (lowername.indexOf(".")!=-1||lowername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(lower);
-        for(Iterator it=roots.iterator();it.hasNext();) {
-          String lowerrootvar=((VarInfoName)it.next()).name();
+        for(Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
+          String lowerrootvar=it.next().name();
           String vardef="";
           if (!getType(ppt,lowerrootvar).equals("int"))
             vardef=getType(ppt,lowerrootvar)+" "+lowerrootvar+";";
@@ -414,8 +414,8 @@ public final class OutputFormat
 
       if (uppername.indexOf(".")!=-1||uppername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(upper);
-        for(Iterator it=roots.iterator();it.hasNext();) {
-          String upperrootvar=((VarInfoName)it.next()).name();
+        for(Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
+          String upperrootvar=it.next().name();
           String vardef="";
           if (!getType(ppt,upperrootvar).equals("int"))
             vardef=getType(ppt,upperrootvar)+" "+upperrootvar+";";
@@ -444,14 +444,14 @@ public final class OutputFormat
     /** This method generates the current quantifier string. */
     public String getQuantifiers() {
       String str="";
-      for(Iterator it=quantifiers.entrySet().iterator();it.hasNext();) {
-        Map.Entry entry = (Map.Entry) it.next();
-        String key = (String) entry.getKey();
-        String value = (String) entry.getValue();
+      for(Iterator<Map.Entry<String,String>> it=quantifiers.entrySet().iterator();it.hasNext();) {
+        Map.Entry<String,String> entry = it.next();
+        String key = entry.getKey();
+        String value = entry.getValue();
 
         if (!str.equals(""))
           str+=",";
-        str+="forall "+key+" in "+((String)quantifiers.get(key));
+        str+="forall "+key+" in "+quantifiers.get(key);
       }
       return str;
     }
@@ -466,7 +466,7 @@ public final class OutputFormat
 
     public String checkQuantifierVar(String set) {
       if (revquantifiers.containsKey(set))
-        return (String)revquantifiers.get(set);
+        return revquantifiers.get(set);
       else
         return null;
     }
@@ -478,7 +478,7 @@ public final class OutputFormat
     public String getRelation(Ppt ppt, String set, String field, String fld) {
       Pair<String,Ppt> t=new Pair<String,Ppt>(set + "///" + field,ppt);
       if (relationtable.containsKey(t))
-        return (String)relationtable.get(t);
+        return relationtable.get(t);
       String relationname=generateRelationName(field,ppt);
       String rangeset=generateSetName("R"+field,ppt);
       String newrule="[forall s in "+set+"], true => <s,s."+field+"> in "+relationname+";";
@@ -491,7 +491,7 @@ public final class OutputFormat
       } else
         rangeset=getTypedef(ppt,fld);
 
-      Definition d=(Definition)definitiontable.get(ppt);
+      Definition d=definitiontable.get(ppt);
       d.rangetable.put(relationname,rangeset);
       String setdef=relationname+": "+set+"->"+rangeset+";";
       appendModelRule(ppt,newrule);
@@ -506,7 +506,7 @@ public final class OutputFormat
     public String getRelation(String programvar, Ppt ppt) {
       Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
       if (relationtable.containsKey(t))
-        return (String)relationtable.get(t);
+        return relationtable.get(t);
       String relationname=generateRelationName(programvar,ppt);
 
       Pair<String,Ppt> t2=new Pair<String,Ppt>(programvar,ppt);
@@ -552,7 +552,7 @@ public final class OutputFormat
       if (!definitiontable.containsKey(ppt)) {
         definitiontable.put(ppt,new Definition());
       }
-      Definition d=(Definition)definitiontable.get(ppt);
+      Definition d=definitiontable.get(ppt);
       if (!d.generatespecial) {
         //Generate special set
         d.generatespecial=true;
@@ -592,7 +592,7 @@ public final class OutputFormat
       Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
 
       if (settable.containsKey(t)) {
-        String setname=(String)settable.get(t);
+        String setname=settable.get(t);
         return setname;
       }
       String setname=generateSetName(programvar,ppt);
@@ -614,7 +614,7 @@ public final class OutputFormat
     /** This method returns the roots of a VarInfoName. */
 
     public static Set<VarInfoName> getRoot(VarInfoName vi) {
-      while(true) {
+      while (true) {
         if (vi instanceof Simple) {
           HashSet<VarInfoName> hs=new HashSet<VarInfoName>();
           hs.add(vi);
@@ -656,7 +656,7 @@ public final class OutputFormat
      * program point. */
 
     public String getRules(Ppt ppt) {
-      Definition d=(Definition)definitiontable.get(ppt);
+      Definition d=definitiontable.get(ppt);
       if (d==null)
         return null;
       return d.modelrule;
@@ -666,7 +666,7 @@ public final class OutputFormat
      * point. */
 
     public String getGlobals(Ppt ppt) {
-      Definition d=(Definition)definitiontable.get(ppt);
+      Definition d=definitiontable.get(ppt);
       if (d==null)
         return null;
       return d.globaldecls;
@@ -676,7 +676,7 @@ public final class OutputFormat
      * given program point. */
 
     public String getSetRelation(Ppt ppt) {
-      Definition d=(Definition)definitiontable.get(ppt);
+      Definition d=definitiontable.get(ppt);
       if (d==null)
         return null;
       return d.setrelation;
@@ -710,7 +710,7 @@ public final class OutputFormat
       else
         str=vi.type.toString();
 
-      while(str.indexOf("[]")!=-1) {
+      while (str.indexOf("[]")!=-1) {
         int location=str.indexOf("[]");
         str=str.substring(0,location)+"*"+str.substring(location+2,str.length());
       }
@@ -737,7 +737,7 @@ public final class OutputFormat
       String setnameprefix="S"+programvar;
       String setname=setnameprefix;
       tagnumber=0;
-      while(true) {
+      while (true) {
         Pair<String,Ppt> t=new Pair<String,Ppt>(setname, p);
         if (usednames.contains(t)) {
           tagnumber++;
@@ -756,7 +756,7 @@ public final class OutputFormat
       String relnameprefix="R"+fieldvar;
       String relname=relnameprefix;
       tagnumber=0;
-      while(true) {
+      while (true) {
         Pair<String,Ppt> t=new Pair<String,Ppt>(relname, p);
         if (usednames.contains(t)) {
           tagnumber++;
@@ -776,7 +776,7 @@ public final class OutputFormat
       if (!definitiontable.containsKey(p)) {
         definitiontable.put(p,new Definition());
       }
-      Definition d=(Definition)definitiontable.get(p);
+      Definition d=definitiontable.get(p);
       d.appendSetRelation(s);
     }
 
@@ -787,7 +787,7 @@ public final class OutputFormat
       if (!definitiontable.containsKey(p)) {
         definitiontable.put(p,new Definition());
       }
-      Definition d=(Definition)definitiontable.get(p);
+      Definition d=definitiontable.get(p);
       d.appendModelRule(s);
     }
 
@@ -798,7 +798,7 @@ public final class OutputFormat
       if (!definitiontable.containsKey(p)) {
         definitiontable.put(p,new Definition());
       }
-      Definition d=(Definition)definitiontable.get(p);
+      Definition d=definitiontable.get(p);
       d.appendGlobal(s);
     }
 

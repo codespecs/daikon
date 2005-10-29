@@ -488,8 +488,8 @@ public class RetTransform implements ClassFileTransformer {
         add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName())));
 
 
-        Iterator <Boolean> shouldIncIter = mi.is_included.iterator();
-        Iterator <Integer> exitIter = mi.exit_locations.iterator();
+        Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
+        Iterator<Integer> exitIter = mi.exit_locations.iterator();
 
         // Loop through each instruction
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
@@ -613,7 +613,7 @@ public class RetTransform implements ClassFileTransformer {
    * Runtime.exit() immediately before the return.
    */
   private InstructionList xform_inst (String fullClassName, Instruction inst, MethodContext c,
-          Iterator <Boolean> shouldIncIter, Iterator <Integer> exitIter)
+          Iterator<Boolean> shouldIncIter, Iterator<Integer> exitIter)
   {
 
     switch (inst.getOpcode()) {

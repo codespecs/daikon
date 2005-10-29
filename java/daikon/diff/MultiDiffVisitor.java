@@ -125,7 +125,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         // Now to populate those ArrayLists
         for (int i = 0; i < bigList.size(); i++) {
-            String str = (String) bigList.get(i);
+            String str = bigList.get(i);
             StringTokenizer st = new StringTokenizer (str, "$");
             String key = st.nextToken();
             String data = st.nextToken();
@@ -185,7 +185,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         // Now to populate those ArrayLists
         for (int i = 0; i < bigList.size(); i++) {
-            String str = (String) bigList.get(i);
+            String str = bigList.get(i);
             StringTokenizer st = new StringTokenizer (str, "$");
             String key = st.nextToken();
             String data = st.nextToken();

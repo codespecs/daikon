@@ -260,7 +260,7 @@ public class PptSplitter implements Serializable {
               // Impossible: multiple invariants found
               System.out.println ("Found " + nc_slice.invs.size() +
                                   " invs at " + nc_slice);
-              for (Iterator kk = nc_slice.invs.iterator(); kk.hasNext(); )
+              for (Iterator<Invariant> kk = nc_slice.invs.iterator(); kk.hasNext(); )
                 System.out.println (" -- inv = " + kk.next());
               for (int kk = 0; kk < cvis_non_canonical.length; kk++)
                 System.out.println (" -- equality set = " +
@@ -425,7 +425,7 @@ public class PptSplitter implements Serializable {
         }
       }
     }
-    Invariant[] first = (Invariant[]) exclusive_invs_vec.get(0);
+    Invariant[] first = exclusive_invs_vec.get(0);
     for (int jj = 0; jj < con_invs.length; jj++) {
       if (con_invs[jj] == null) {
         System.out.println ("Warning: No non-obvious non-suppressed exclusive"
@@ -437,7 +437,7 @@ public class PptSplitter implements Serializable {
 
     // Create double-implications for each exclusive invariant
     for (int ii = 0; ii < exclusive_invs_vec.size(); ii++) {
-      Invariant[] invs = (Invariant[]) exclusive_invs_vec.get(ii);
+      Invariant[] invs = exclusive_invs_vec.get(ii);
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] != invs[jj])
           add_implication (parent, con_invs[jj], invs[jj], true, orig_invs);
@@ -446,7 +446,7 @@ public class PptSplitter implements Serializable {
 
     // Create single implication for each different invariant
     for (int ii = 0; ii < different_invs_vec.size(); ii++) {
-      Invariant[] invs = (Invariant[]) different_invs_vec.get(ii);
+      Invariant[] invs = different_invs_vec.get(ii);
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (invs[jj] != null)
           add_implication (parent, con_invs[jj], invs[jj], false, orig_invs);

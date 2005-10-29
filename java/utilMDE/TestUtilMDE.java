@@ -1204,7 +1204,7 @@ public final class TestUtilMDE extends TestCase {
       }
 
       // javadoc won't let this be static
-      void check(Iterator itor, int[] goal_rm) {
+      void check(Iterator<Integer> itor, int[] goal_rm) {
         // There would be no point to this:  it's testing
         // int_iterator_array, not the iterator version!
         // return check(int_iterator_array(itor), goal_rm);
@@ -1569,13 +1569,13 @@ public final class TestUtilMDE extends TestCase {
           List<Integer> chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
           for (int m=0; m<chosen.size(); m++) {
             for (int n=m+1; n<chosen.size(); n++) {
-              if ( ((Integer)chosen.get(m)).intValue() == ((Integer)chosen.get(n)).intValue() ) {
+              if ( chosen.get(m).intValue() == chosen.get(n).intValue() ) {
                 throw new Error("Duplicate at " + m + "," + n);
               }
             }
           }
           for (int k=0; k<chosen.size(); k++) {
-            totals[((Integer)chosen.get(k)).intValue()]++;
+            totals[chosen.get(k).intValue()]++;
           }
         }
         int i_truncated = Math.min(itor_size, i);

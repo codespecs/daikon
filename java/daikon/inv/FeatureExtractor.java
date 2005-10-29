@@ -242,7 +242,7 @@ public final class FeatureExtractor {
   //       for (Iterator goodppts =
   //              FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
   //            goodppts.hasNext(); ) {
-  //         List<Invariant> temp = ((PptTopLevel) goodppts.next()).getInvariants();
+  //         List<Invariant> temp = goodppts.next().getInvariants();
   //         for (int j = 0; j < temp.size(); j++)
   //           good.add(temp.get(j).repr());
   //       }
@@ -306,7 +306,7 @@ public final class FeatureExtractor {
     for (Iterator<IntDoublePair> all = allFeatures.iterator(); all.hasNext(); ) {
       IntDoublePair current = all.next();
       if (numbersToNames.containsKey(current)) {
-        String currentName = (String) numbersToNames.get(current);
+        String currentName = numbersToNames.get(current);
         if (currentName.endsWith("Bool"))
           names.println(currentName + ":0.0, 1.0.");
         else if (currentName.endsWith("Float"))
@@ -434,7 +434,7 @@ public final class FeatureExtractor {
           output.print(fet.number + ":" + df.format(fet.value) + " ");
       }
       output.println();
-      output.println("#  " + ((String) strings.get(i)));
+      output.println("#  " + strings.get(i));
     }
   }
 
@@ -504,8 +504,8 @@ public final class FeatureExtractor {
     br.close();
 
     PrintStream ps = new PrintStream(new FileOutputStream(output));
-    for (Iterator i = outputData.iterator(); i.hasNext(); )
-      ps.println((String) i.next());
+    for (Iterator<String> i = outputData.iterator(); i.hasNext(); )
+      ps.println(i.next());
     ps.close();
   }
 
@@ -521,8 +521,8 @@ public final class FeatureExtractor {
 
     PrintStream ps = new PrintStream(new FileOutputStream(output));
     ps.println(vectors.size());
-    for (Iterator i = vectors.iterator(); i.hasNext(); )
-      ps.println((String) i.next());
+    for (Iterator<String> i = vectors.iterator(); i.hasNext(); )
+      ps.println(i.next());
     ps.close();
   }
 
@@ -546,7 +546,7 @@ public final class FeatureExtractor {
     ArrayList<Class> classes = getInvariantClasses(top);
 
     for (int i = 0; i < classes.size(); i++) {
-      Class currentClass = (Class) classes.get(i);
+      Class currentClass = classes.get(i);
       Field[] fields = currentClass.getFields();
       Method[] methods = currentClass.getMethods();
       //handle the class
@@ -689,9 +689,9 @@ public final class FeatureExtractor {
     for (int i = 0; i < fields.length; i++) {
       if (!BANNED_METHODS.contains(fields[i].getName()))
         if (fields[i].getType().equals(Boolean.TYPE))
-          answer.add(new IntDoublePair(((Integer) lookup.get(fields[i].getName() + "Bool")).intValue(), 1));
+          answer.add(new IntDoublePair(lookup.get(fields[i].getName() + "Bool").intValue(), 1));
         else if (TYPES.contains(fields[i].getType()))
-          answer.add(new IntDoublePair(((Integer) lookup.get(fields[i].getName() + "Float")).intValue(), fields[i].getDouble(inv)));
+          answer.add(new IntDoublePair(lookup.get(fields[i].getName() + "Float").intValue(), fields[i].getDouble(inv)));
     }
 
     Method[] methods = inv.getClass().getMethods();
@@ -699,9 +699,9 @@ public final class FeatureExtractor {
       if (methods[i].getParameterTypes().length == 0) {
         if (!BANNED_METHODS.contains(methods[i].getName()))
           if (methods[i].getReturnType().equals(Boolean.TYPE))
-            answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Bool")).intValue(), 1));
+            answer.add(new IntDoublePair(lookup.get(methods[i].getName() + "Bool").intValue(), 1));
           else if (TYPES.contains(methods[i].getReturnType()))
-            answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Float")).intValue(),
+            answer.add(new IntDoublePair(lookup.get(methods[i].getName() + "Float").intValue(),
                                          ((Number)
                                           methods[i].invoke(inv, new Object[0])
                                           ).doubleValue()));
@@ -841,7 +841,7 @@ public final class FeatureExtractor {
       HashSet<String> neg = new HashSet<String>();
 
       for (Iterator<String> i = inputs.iterator(); i.hasNext(); ) {
-        BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
+        BufferedReader br=new BufferedReader(new FileReader(i.next()));
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
@@ -880,11 +880,11 @@ public final class FeatureExtractor {
         }
       }
 
-      for (Iterator i = pos.iterator(); i.hasNext(); )
+      for (Iterator<String> i = pos.iterator(); i.hasNext(); )
         if (type.equals("C5"))
-          posvectors.add(((String) i.next()) + "good");
+          posvectors.add(i.next() + "good");
         else if (type.equals("SVMfu"))
-          posvectors.add(((String) i.next()) + "1");
+          posvectors.add(i.next() + "1");
 
       // Set the appropriate repeat values.
       int posrepeat = 1 , negrepeat = 1;
@@ -909,11 +909,11 @@ public final class FeatureExtractor {
         ps.println(size);
       // now write the data
       for (int repeat = 0; repeat < negrepeat; repeat++)
-        for (Iterator i = negvectors.iterator(); i.hasNext(); )
-          ps.println((String) i.next() + " ");
+        for (Iterator<String> i = negvectors.iterator(); i.hasNext(); )
+          ps.println(i.next() + " ");
       for (int repeat = 0; repeat < posrepeat; repeat++)
-        for (Iterator i = posvectors.iterator(); i.hasNext(); )
-          ps.println((String) i.next() + " ");
+        for (Iterator<String> i = posvectors.iterator(); i.hasNext(); )
+          ps.println(i.next() + " ");
       ps.close();
 
       // Print a summary of positives and negatives to stdout.
@@ -968,8 +968,8 @@ public final class FeatureExtractor {
       HashSet<String> pos = new HashSet<String>();
       HashSet<String> neg = new HashSet<String>();
 
-      for (Iterator i = trains.iterator(); i.hasNext(); ) {
-        BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
+      for (Iterator<String> i = trains.iterator(); i.hasNext(); ) {
+        BufferedReader br = new BufferedReader(new FileReader(i.next()));
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
@@ -997,8 +997,8 @@ public final class FeatureExtractor {
       ArrayList<String> testGood = new ArrayList<String>();
       ArrayList<String> testBad = new ArrayList<String>();
 
-      for (Iterator i = trains.iterator(); i.hasNext(); ) {
-        BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
+      for (Iterator<String> i = trains.iterator(); i.hasNext(); ) {
+        BufferedReader br=new BufferedReader(new FileReader(i.next()));
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
@@ -1024,20 +1024,20 @@ public final class FeatureExtractor {
     }
 
 
-  //   for (Iterator i = pos.iterator(); i.hasNext(); )
+//     for (Iterator<String> i = pos.iterator(); i.hasNext(); )
 //       if (type.equals("C5"))
-//         posvectors.add(((String) i.next()) + "good");
+//         posvectors.add(i.next() + "good");
 //     else if (type.equals("SVMfu"))
-//       posvectors.add(((String) i.next()) + "1");
+//       posvectors.add(i.next() + "1");
 
 //     // Print the output to the output file.
 //     PrintStream ps = new PrintStream(new FileOutputStream(output));
 //     for (int repeat = 0; repeat < negrepeat; repeat++)
-//       for (Iterator i = negvectors.iterator(); i.hasNext(); )
-//         ps.println((String) i.next() + " ");
+//       for (Iterator<String> i = negvectors.iterator(); i.hasNext(); )
+//         ps.println(i.next() + " ");
 //     for (int repeat = 0; repeat < posrepeat; repeat++)
-//       for (Iterator i = posvectors.iterator(); i.hasNext(); )
-//         ps.println((String) i.next() + " ");
+//       for (Iterator<String> i = posvectors.iterator(); i.hasNext(); )
+//         ps.println(i.next() + " ");
 //     ps.close();
 
 //     // Print a summary of positives and negatives to stdout.
@@ -1052,8 +1052,8 @@ public final class FeatureExtractor {
 
     for (int i = 0; i < one.size(); i++)
       for (int j = 0; j < two.size(); j++) {
-        String first = (String) one.get(i);
-        String second = (String) two.get(j);
+        String first = one.get(i);
+        String second = two.get(j);
         String answer = first.substring(first.indexOf(" ") + 1) +
           shift(second);
         answer = (new StringTokenizer(answer)).countTokens() + " " + answer;

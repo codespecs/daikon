@@ -159,7 +159,7 @@ public final class MergeInvariants {
     // Read in each of the specified maps
     List<PptMap> pptmaps = new ArrayList<PptMap>();
     for (int i = 0; i < inv_files.size(); i++) {
-      File file = (File) inv_files.get(i);
+      File file = inv_files.get(i);
       debugProgress.fine ("Processing " + file);
       PptMap ppts = FileIO.read_serialized_pptmap (file, false);
       ppts.repCheck();
@@ -176,7 +176,7 @@ public final class MergeInvariants {
                         + "with a .decls file");
 
       // Read in the first map again to serve as a template
-      File file = (File) inv_files.get(0);
+      File file = inv_files.get(0);
       debugProgress.fine ("Reading " + file + " as merge template");
       merge_ppts = FileIO.read_serialized_pptmap (file, true);
 
@@ -219,7 +219,7 @@ public final class MergeInvariants {
           j.remove();
       }
       for (int j = 0; j < pptmaps.size(); j++ ) {
-        PptMap pmap = (PptMap) pptmaps.get (j);
+        PptMap pmap = pptmaps.get (j);
         PptTopLevel child = pmap.get (ppt.ppt_name);
         if ((decl_file == null) && (child == null))
           throw new Error ("Can't find " + ppt.ppt_name + " in "
@@ -332,8 +332,8 @@ public final class MergeInvariants {
       Assert.assertTrue(false);
     }
     for (int ii = 0; ii < ppt.splitters.size(); ii++) {
-      PptSplitter ppt_split = (PptSplitter) ppt.splitters.get(ii);
-      PptSplitter child_split = (PptSplitter) child.splitters.get(ii);
+      PptSplitter ppt_split = ppt.splitters.get(ii);
+      PptSplitter child_split = child.splitters.get(ii);
       ppt_split.add_relation (rel, child_split);
     }
   }

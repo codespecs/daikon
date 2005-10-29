@@ -1197,9 +1197,9 @@ public final class PrintInvariants {
       = InvariantFilters.addEqualityInvariants(accepted_invariants);
 
     if (debugFiltering.isLoggable(Level.FINE)) {
-      Iterator inv_iter = accepted_invariants.iterator();
+      Iterator<Invariant> inv_iter = accepted_invariants.iterator();
       while (inv_iter.hasNext()) {
-        Invariant current_inv = (Invariant)inv_iter.next();
+        Invariant current_inv = inv_iter.next();
         if (current_inv instanceof Equality) {
           debugFiltering.fine ("Found Equality that says "
                                 + current_inv.format());
@@ -1224,10 +1224,10 @@ public final class PrintInvariants {
                                                    PrintWriter out,
                                                    PptTopLevel ppt) {
     int index = 0;
-    Iterator inv_iter = invariants.iterator();
+    Iterator<Invariant> inv_iter = invariants.iterator();
     while (inv_iter.hasNext()) {
       index++;
-      Invariant inv = (Invariant)inv_iter.next();
+      Invariant inv = inv_iter.next();
 
       print_invariant(inv, out, index, ppt);
 
@@ -1448,7 +1448,7 @@ public final class PrintInvariants {
         inv_map = new LinkedHashMap<Class,Integer>();
         filter_map.put (filter_class, inv_map);
       }
-      Integer cnt = (Integer) inv_map.get (inv.getClass());
+      Integer cnt = inv_map.get (inv.getClass());
       if (cnt == null)
         cnt = new Integer(1);
       else

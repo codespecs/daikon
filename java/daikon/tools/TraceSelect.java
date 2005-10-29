@@ -262,7 +262,7 @@ public class TraceSelect {
     // create an array to store the Strings in al
     daikonArgs = new String [al.size()];
     for (int i = 0; i < daikonArgs.length; i++) {
-      daikonArgs[i] = (String) al.get(i);
+      daikonArgs[i] = al.get(i);
     }
 
 

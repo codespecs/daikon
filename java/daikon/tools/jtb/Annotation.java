@@ -328,7 +328,7 @@ public class Annotation {
 
     Annotation anno = new Annotation(kind, daikonRep, method);
     if (annotationsMap.containsKey(new Integer(anno.hashCode()))) {
-      return (Annotation)annotationsMap.get(new Integer(anno.hashCode()));
+      return annotationsMap.get(new Integer(anno.hashCode()));
     } else {
       annotationsMap.put(new Integer(anno.hashCode()), anno);
       return anno;

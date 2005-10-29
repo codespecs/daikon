@@ -224,7 +224,7 @@ class FormatTestCase {
     // System.out.println("Generating goal output");
     for (int i=0; i<testCases.size(); i++) {
       // System.out.println("Goal output gen: " + i);
-      SingleOutputTestCase current = (SingleOutputTestCase)testCases.get(i);
+      SingleOutputTestCase current = testCases.get(i);
       int currentGoalLineNumber = current.getGoalLineNumber();
       for (int j=currentLine; j<currentGoalLineNumber; j++) {
         currentLineOfText = theInputFile.readLine();
@@ -251,7 +251,7 @@ class FormatTestCase {
     boolean currentResult;
 
     for (int i=0; i<testCases.size(); i++) {
-      currentResult = ((SingleOutputTestCase)testCases.get(i)).performTest(invariantToTest);
+      currentResult = testCases.get(i).performTest(invariantToTest);
       passTest = passTest &&  currentResult;
 
     }
@@ -270,7 +270,7 @@ class FormatTestCase {
     String currentDiffString;
 
     for (int i=0; i<testCases.size(); i++) {
-      currentDiffString = ((SingleOutputTestCase)testCases.get(i)).getDiffString();
+      currentDiffString = testCases.get(i).getDiffString();
       result.append(currentDiffString);
       if (i != testCases.size() && currentDiffString != "") // "interned"
         result.append(lineSep + lineSep);
@@ -868,7 +868,7 @@ class FormatTestCase {
    * @param samples a list of samples (each entry of type Object []) that
    *        can be added to the variables involved
    **/
-  private static void populateWithSamples(Invariant inv, List samples) {
+  private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
     if (samples == null || samples.size() == 0) return;
 
     Assert.assertTrue (inv != null);
@@ -877,7 +877,7 @@ class FormatTestCase {
     // System.out.println(samples.size());
 
     Method addModified = getAddModified(inv.getClass());
-    int sampleSize = ((Object [])samples.get(0)).length;
+    int sampleSize = samples.get(0).length;
     Class currentClass;
 
     // System.out.println(sampleSize);
@@ -886,7 +886,7 @@ class FormatTestCase {
 
       // Last slot is for "count" parameter
       Object[] params = new Object [sampleSize+1];
-      Object[] currentSample = (Object [])samples.get(i);
+      Object[] currentSample = samples.get(i);
 
       for (int j=0; j<sampleSize; j++) {
         currentClass = currentSample[j].getClass();

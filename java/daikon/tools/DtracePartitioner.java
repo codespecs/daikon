@@ -138,7 +138,7 @@ public class DtracePartitioner
         if (nextInvo.indexOf ("EXIT") == -1) continue;
         int invoNonce = calcNonce (nextInvo);
         Integer key = new Integer (invoNonce);
-        String enterInvo = (String) nonceMap.get (key);
+        String enterInvo = nonceMap.get (key);
         if (enterInvo != null) {
           nonceMap.put (key, enterInvo + lineSep + nextInvo);
           unreturned.remove (enterInvo);

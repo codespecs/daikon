@@ -412,7 +412,7 @@ class DCInstrument {
       return;
 
     // Iterator over all of the exit line numbers for this method
-    Iterator <Integer> exit_iter = mi.exit_locations.iterator();
+    Iterator<Integer> exit_iter = mi.exit_locations.iterator();
 
     // Loop through each instruction, making substitutions
     for (InstructionHandle ih = il.getStart(); ih != null; ) {
@@ -1214,7 +1214,7 @@ class DCInstrument {
   public void add_exit (MethodGen mg, MethodInfo mi, int method_info_index) {
 
     // Iterator over all of the exit line numbers for this method
-    Iterator <Integer> exit_iter = mi.exit_locations.iterator();
+    Iterator<Integer> exit_iter = mi.exit_locations.iterator();
 
     // Loop through each instruction
     InstructionList il = mg.getInstructionList();
@@ -3087,7 +3087,7 @@ class DCInstrument {
       // Process the instruction list, adding one to the index of each
       // LocalVariableInstruction that is not referencing a parameter
       InstructionList il = mg.getInstructionList();
-      for (InstructionHandle ih = il.getStart(); ih != null;ih = ih.getNext()) {
+      for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
         Instruction inst = ih.getInstruction();
         if ((inst instanceof LocalVariableInstruction)
             || (inst instanceof RET) || (inst instanceof IINC)) {

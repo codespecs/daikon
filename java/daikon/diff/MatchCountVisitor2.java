@@ -312,7 +312,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     for (String ppt : goodMap.keySet()) {
       System.out.println ();
       System.out.println ("*****************" + ppt);
-      for (Iterator j = ((HashSet) goodMap.get(ppt)).iterator();
+      for (Iterator<String> j = goodMap.get(ppt).iterator();
            j.hasNext();) {
         System.out.println (j.next());
       }

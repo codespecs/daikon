@@ -219,7 +219,7 @@ public final class FileIO {
     VarInfo vi;
     while ((vi = read_VarInfo(file, varcomp_format,filename,ppt_name))!= null) {
       for (int i=0; i<var_infos.size(); i++) {
-        if (vi.name == ((VarInfo)var_infos.get(i)).name) {
+        if (vi.name == var_infos.get(i).name) {
           throw new FileIOException("Duplicate variable name", file, filename);
         }
       }
@@ -903,7 +903,7 @@ public final class FileIO {
                         + " line " + reader.getLineNumber());
       }
 
-      PptTopLevel ppt = (PptTopLevel) state.all_ppts.get(ppt_name);
+      PptTopLevel ppt = state.all_ppts.get(ppt_name);
       if (ppt == null) {
         throw new Error("Program point " + ppt_name
                         + " appears in dtrace file " + state.filename
@@ -1097,7 +1097,7 @@ public final class FileIO {
           // (Does this work?  The keys are integers. -MDE 7/1/2005.)
           TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-          for (Iterator itor = keys.iterator(); itor.hasNext();) {
+          for (Iterator<Integer> itor = keys.iterator(); itor.hasNext();) {
             invocations.add(call_hashmap.get(itor.next()));
           }
           print_invocations_verbose(invocations);
@@ -1171,7 +1171,7 @@ public final class FileIO {
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
-    String[] oldvalue_reps = (String[]) ppt_to_value_reps.get(ppt);
+    String[] oldvalue_reps = ppt_to_value_reps.get(ppt);
     if (oldvalue_reps == null) {
       // We've not encountered this program point before.  The nulls in
       // this array will compare non-equal to whatever is in the trace
@@ -1433,7 +1433,7 @@ public final class FileIO {
           }
         } else {
           // nonce != null
-          invoc = (Invocation) call_hashmap.get(nonce);
+          invoc = call_hashmap.get(nonce);
           if (invoc == null) {
             throw new Error(
               "Didn't find call with nonce "
@@ -1445,7 +1445,7 @@ public final class FileIO {
                 + " line "
                 + data_trace_state.reader.getLineNumber());
           }
-          invoc = (Invocation) call_hashmap.get(nonce);
+          invoc = call_hashmap.get(nonce);
           call_hashmap.remove(nonce);
         }
       }

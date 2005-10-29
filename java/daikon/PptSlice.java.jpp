@@ -564,13 +564,10 @@ public final class PPTSLICE1 extends PptSlice {
     // variable for each parent variable
     int valid_child_count = 0;
 
-    // List of value caches from each child slice.
-    List vtlist = new ArrayList();
-
     // Loop through all of the children of our top level parent
     child_loop:
     for (int i = 0; i < parent.children.size(); i++) {
-      PptRelation rel = (PptRelation) parent.children.get(i);
+      PptRelation rel = parent.children.get(i);
       PptTopLevel ppt = rel.child;
 
       // Skip any children that have not seen any samples
@@ -696,8 +693,6 @@ public final class PPTSLICE1 extends PptSlice {
       }
       invs.add (inv);
     }
-
-    Assert.assertTrue(vtlist.size() == 0);
 
     // Attempt to create a parent invariant for each invariant that
     // appeared at each valid child.  Note that some invariants will

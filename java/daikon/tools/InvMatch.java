@@ -202,8 +202,8 @@ public class InvMatch {
       if (xlate == null)
         continue;
       for (String key : xlate.var_map.keySet()) {
-        String val = (String) xlate.var_map.get (key);
-        String cur_val = (String) var_map.get (key);
+        String val = xlate.var_map.get (key);
+        String cur_val = var_map.get (key);
         if (cur_val == null)
           var_map.put (key, val);
         else if (!cur_val.equals (val))

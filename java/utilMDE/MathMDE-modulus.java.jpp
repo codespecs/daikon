@@ -41,18 +41,18 @@ The correct way to build the system is to run 'make'.
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
    **/
-  public static INT[] modulus_INT(Iterator itor) {
+  public static INT[] modulus_INT(Iterator<INTEGER> itor) {
     if (!itor.hasNext())
       return null;
-    INT avalue = ((INTEGER)itor.next()).INTValue();
+    INT avalue = itor.next().INTValue();
     if (!itor.hasNext())
       return null;
-    INT modulus = Math.abs(avalue - ((INTEGER)itor.next()).INTValue());
+    INT modulus = Math.abs(avalue - itor.next().INTValue());
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
-      INT i = ((INTEGER)itor.next()).INTValue();
+      INT i = itor.next().INTValue();
       if (i == avalue)
         continue;
       modulus = MathMDE.gcd(modulus, Math.abs(avalue - i));
@@ -125,27 +125,27 @@ The correct way to build the system is to run 'make'.
    * For documentation, see modulus_strict(INT[], boolean).
    * @see #modulus_strict(int[], boolean)
    **/
-  public static INT[] modulus_strict_INT(Iterator itor, boolean nonstrict_ends) {
+  public static INT[] modulus_strict_INT(Iterator<INTEGER> itor, boolean nonstrict_ends) {
     if (!itor.hasNext())
       return null;
 
     INT first_nonstrict = 0;    // arbitrary initial value
     INT last_nonstrict = 0;     // arbitrary initial value
     if (nonstrict_ends) {
-      first_nonstrict = ((INTEGER)itor.next()).INTValue();
+      first_nonstrict = itor.next().INTValue();
     }
 
-    INT prev = ((INTEGER)itor.next()).INTValue();
+    INT prev = itor.next().INTValue();
     if (!itor.hasNext())
       return null;
-    INT next = ((INTEGER)itor.next()).INTValue();
+    INT next = itor.next().INTValue();
     INT modulus = next-prev;
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
       prev = next;
-      next = ((INTEGER)itor.next()).INTValue();
+      next = itor.next().INTValue();
       if (nonstrict_ends && (! itor.hasNext())) {
         last_nonstrict = next;
         break;

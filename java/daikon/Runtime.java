@@ -80,7 +80,7 @@ public final class Runtime {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
     } else {
-      result = (String) primitiveClassesFromJvm.get(classname);
+      result = primitiveClassesFromJvm.get(classname);
       if (result == null) {
         // As a failsafe, use the input; perhaps it is in Java, not JVML,
         // format.

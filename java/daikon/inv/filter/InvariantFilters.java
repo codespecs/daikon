@@ -159,7 +159,7 @@ public class InvariantFilters {
 
   }
 
-  public Iterator getPropertyFiltersIterator() {
+  public Iterator<InvariantFilter> getPropertyFiltersIterator() {
     return propertyFilters.iterator();
   }
 
@@ -262,7 +262,7 @@ public class InvariantFilters {
     String result = "";
     for (int i=0; i<vis.size(); i++) {
       if (i!=0) result += " ";
-      VarInfo vi = (VarInfo)vis.get(i);
+      VarInfo vi = vis.get(i);
       result += vi.name.name();
     }
     return "[ " + result + " ]";

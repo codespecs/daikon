@@ -74,8 +74,8 @@ class TokenReplacer extends DepthFirstVisitor {
     if (Visitors.isIdentifier(lastToken) &&
         (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo)))) {
       for (int i = 0; i < oldVars.size(); i++) {
-        if (lastToken.tokenImage.equals((String) oldVars.get(i))) {
-          lastToken.tokenImage = (String) newVars.get(i);
+        if (lastToken.tokenImage.equals(oldVars.get(i))) {
+          lastToken.tokenImage = newVars.get(i);
           break;
         }
       }
@@ -97,8 +97,8 @@ class TokenReplacer extends DepthFirstVisitor {
         Visitors.isIdentifier(lastToken) &&
         (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo)))) {
       for (int i = 0; i < oldVars.size(); i++) {
-        if (lastToken.tokenImage.equals((String) oldVars.get(i))) {
-          lastToken.tokenImage = (String) newVars.get(i);
+        if (lastToken.tokenImage.equals(oldVars.get(i))) {
+          lastToken.tokenImage = newVars.get(i);
           break;
         }
       }

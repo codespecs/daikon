@@ -261,7 +261,7 @@ public class DtraceDiff {
 	    VarInfo[] vis2 = ppt2.var_infos;
 
 	    // Check to see that Ppts match the first time we encounter them
-	    PptTopLevel foundppt = (PptTopLevel) pptmap.get(ppt1);
+	    PptTopLevel foundppt = pptmap.get(ppt1);
 	    if (foundppt == null) {
 	      if (!ppt1.name.equals(ppt2.name))
 		ppt_mismatch_error (state1, dtracefile1, state2, dtracefile2);

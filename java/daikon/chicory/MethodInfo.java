@@ -36,12 +36,12 @@ public class MethodInfo {
   public Class[] arg_types;
 
   /** exit locations for this method **/
-  public List <Integer> exit_locations;
+  public List<Integer> exit_locations;
 
   /**
    * Tells whether each exit point in method is instrumented, based on
    * filters **/
-  public List <Boolean> is_included;
+  public List<Boolean> is_included;
 
   /**
    * The root of the variable tree for the method entry program point.
@@ -71,8 +71,8 @@ public class MethodInfo {
    */
   public MethodInfo (ClassInfo class_info, String method_name,
                      String[] arg_names, String[] arg_type_strings,
-                     List <Integer> exit_locations,
-                     List <Boolean> is_included) {
+                     List<Integer> exit_locations,
+                     List<Boolean> is_included) {
 
     this.class_info = class_info;
     this.method_name = method_name;
@@ -103,7 +103,7 @@ public class MethodInfo {
     for (int ii = 0; ii < arg_type_strings.length; ii++) {
       try {
         String aname = arg_type_strings[ii];
-        Class c = (Class) primitive_classes.get (aname);
+        Class c = primitive_classes.get (aname);
 
         if (c == null)
         {

@@ -89,7 +89,7 @@ public class Runtime
      * Which static initializers have been run.
      * Each element of the Set is a fully qualified class name.
      **/
-    private static Set <String> initSet = new HashSet<String>();
+    private static Set<String> initSet = new HashSet<String>();
 
     // Constructor
     private Runtime()
@@ -727,7 +727,7 @@ public class Runtime
     }
     else {
         if (dims > 0) //array of primitives
-            result = (String) primitiveClassesFromJvm.get(classname);
+            result = primitiveClassesFromJvm.get(classname);
         else //just a primitive
             result = classname;
 

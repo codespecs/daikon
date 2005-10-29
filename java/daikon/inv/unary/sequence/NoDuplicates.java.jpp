@@ -304,9 +304,9 @@ public class CLASSNAME
 
     PptSlice slice = this.ppt.parent.findSlice_unordered (vis);
     if (slice != null) {
-      Iterator invs = slice.invs.iterator();
+      Iterator<Invariant> invs = slice.invs.iterator();
       while (invs.hasNext()) {
-        Invariant inv = (Invariant)invs.next();
+        Invariant inv = invs.next();
         if ((inv instanceof EltwiseIntLessThan)
             || (inv instanceof EltwiseFloatLessThan)
             || (inv instanceof EltwiseIntGreaterThan)

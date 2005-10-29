@@ -1826,7 +1826,7 @@ public final class Daikon {
         if (!v.isCanonical())
           continue;
         leader_cnt++;
-        Count cnt = (Count) type_map.get (v.file_rep_type);
+        Count cnt = type_map.get (v.file_rep_type);
         if (cnt == null)
           type_map.put (v.file_rep_type, cnt = new Count(0));
         cnt.val++;

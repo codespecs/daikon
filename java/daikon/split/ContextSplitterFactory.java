@@ -42,8 +42,8 @@ public class ContextSplitterFactory
   public static void load_mapfiles_into_splitterlist(Collection<File> files,
                                                      int grain
                                                      ) {
-    for (Iterator i = files.iterator(); i.hasNext(); ) {
-      File file = (File)i.next();
+    for (Iterator<File> i = files.iterator(); i.hasNext(); ) {
+      File file = i.next();
       String filename = file.getName();
 
       System.out.print(".");  // show progress
@@ -262,7 +262,7 @@ public class ContextSplitterFactory
         // Make a splitter
         long[] ids_array = new long[ids.size()];
         for (int k=0; k < ids_array.length; k++) {
-          ids_array[k] = ((Long) ids.get(k)).longValue();
+          ids_array[k] = ids.get(k).longValue();
         }
 
         debug.fine ("Creating splitter for " + callee_ppt_name

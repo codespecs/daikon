@@ -248,18 +248,18 @@ public class LogicalCompare {
 
       if (opt_minimize_classes) {
         if (result == 'T' && !identical) {
-          Vector sets = lemmas.minimizeClasses(inv.formula);
+          Vector<Set<Class>> sets = lemmas.minimizeClasses(inv.formula);
           for (int j = 0; j < sets.size(); j++) {
-            Set classes = (Set)sets.elementAt(j);
+            Set<Class> classes = sets.elementAt(j);
             Class inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ": ");
             if (classes.contains(inv_class)) {
               System.out.print(shortName(inv_class) + " ");
               classes.remove(inv_class);
             }
-            Iterator class_it = classes.iterator();
+            Iterator<Class> class_it = classes.iterator();
             while (class_it.hasNext()) {
-              Class c = (Class)class_it.next();
+              Class c = class_it.next();
               System.out.print(shortName(c));
               if (class_it.hasNext())
                 System.out.print(" ");
@@ -738,7 +738,7 @@ public class LogicalCompare {
 
       Iterator<String> it = app_ppt_names.iterator();
       while (it.hasNext()) {
-        String name = (String)it.next();
+        String name = it.next();
         PptTopLevel app_ppt = app_ppts.get(name);
 
         if (!app_ppt.ppt_name.isEnterPoint()) {
@@ -757,7 +757,7 @@ public class LogicalCompare {
 
       it = common_names.iterator();
       while (it.hasNext()) {
-        String name = (String)it.next();
+        String name = it.next();
         System.out.println("Looking at " + name);
         PptTopLevel app_enter_ppt = app_ppts.get(name);
         PptTopLevel test_enter_ppt = test_ppts.get(name);

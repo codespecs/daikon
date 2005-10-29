@@ -349,7 +349,7 @@ public class Property implements Serializable {
 
         Property anno = new Property(kind, daikonRep, method);
         if (propertiesMap.containsKey(new Integer(anno.hashCode()))) {
-            return (Property) propertiesMap.get(new Integer(anno.hashCode()));
+            return propertiesMap.get(new Integer(anno.hashCode()));
         } else {
             propertiesMap.put(new Integer(anno.hashCode()), anno);
             return anno;

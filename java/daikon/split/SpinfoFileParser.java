@@ -200,7 +200,7 @@ public class SpinfoFileParser {
         String pptName = pptSection.get(0).trim();
         SplitterObject splitObj = null;
         for (int j = 1; j < pptSection.size(); j++) {
-          String pptStatement = (String) pptSection.get(j);
+          String pptStatement = pptSection.get(j);
           if (isComment(pptStatement)) {
             // nothing to do
           } else if (isFormatting(pptStatement)) {

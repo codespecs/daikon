@@ -38,7 +38,7 @@ class JTraceInference extends Thread
     private final VarComparability default_comparability =
         VarComparabilityNone.it;
 
-    private final List prims = Arrays.asList(new String[] {
+    private final List<String> prims = Arrays.asList(new String[] {
         "int",
         "byte",
         "char",
@@ -67,7 +67,7 @@ class JTraceInference extends Thread
                 String ppt_name = getPptNameX(key);
                 int nonce = getInteger();
                 JTrace.println(JTrace.V_DEBUG, ppt_name);
-                PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
+                PptTopLevel ppt = all_ppts.get(ppt_name);
                 ValueTuple vt = read_single_sample(ppt_name);
                 Integer nonce_ = nonce == 0 ? null : new Integer(nonce);
                 FileIO.process_sample(all_ppts, ppt, vt, nonce_);
@@ -158,7 +158,7 @@ class JTraceInference extends Thread
     {
         // from FileIO:
 
-        PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
+        PptTopLevel ppt = all_ppts.get(ppt_name);
         Assert.assertTrue(ppt != null);
 
         // not vis.length, as that includes constants, derived variables, etc.

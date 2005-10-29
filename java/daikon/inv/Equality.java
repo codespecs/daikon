@@ -258,10 +258,10 @@ public final class Equality
     // Choose a leader, preferring the valid variables.
     VarInfo leader;
     if (valid_equiv.size() > 0) {
-      leader = (VarInfo) valid_equiv.get(0);
+      leader = valid_equiv.get(0);
     } else {
       Assert.assertTrue(invalid_equiv.size() > 0);
-      leader = (VarInfo) invalid_equiv.get(0);
+      leader = invalid_equiv.get(0);
     }
     // Print the equality statements, stating expressible ones first.
     equal_vars.clear();
@@ -269,7 +269,7 @@ public final class Equality
     equal_vars.addAll(invalid_equiv);
     int numprinted = 0;
     for (int j=0; j<equal_vars.size(); j++) {
-      VarInfo other = (VarInfo) equal_vars.get(j);
+      VarInfo other = equal_vars.get(j);
       if (other == leader) continue;
       if (leader.name.applyPrestate().equals(other.name)) continue;
       if (other.name.applyPrestate().equals(leader.name)) continue;

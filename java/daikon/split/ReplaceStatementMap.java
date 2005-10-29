@@ -39,13 +39,13 @@ class ReplaceStatementMap {
    * @param name the name of the ReplaceStatement desired.
    */
   public ReplaceStatement get(String name) {
-    ReplaceStatement rs = (ReplaceStatement) map.get(name);
+    ReplaceStatement rs = map.get(name);
     if (rs != null) {
       return rs;
     }
     int index = name.indexOf('.');
     while (index != -1) {
-      rs = (ReplaceStatement) map.get(name.substring(index + 1));
+      rs = map.get(name.substring(index + 1));
       if (rs != null) {
         return rs;
       }

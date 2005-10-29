@@ -338,8 +338,8 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     JPanel filtersPanel = new JPanel();
     filtersPanel.setBorder( createBorder( "Property filters" ));
     filtersPanel.setLayout( new BoxLayout( filtersPanel, BoxLayout.Y_AXIS ));
-    for (Iterator iter = invariantFilters.getPropertyFiltersIterator(); iter.hasNext(); )
-      filtersPanel.add( createFilterCheckBox( (InvariantFilter) iter.next()));
+    for (Iterator<InvariantFilter> iter = invariantFilters.getPropertyFiltersIterator(); iter.hasNext(); )
+      filtersPanel.add( createFilterCheckBox( iter.next() ));
     filtersPanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
     filtersPanel.add( filterButtonsPanel );
     filtersPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
@@ -467,13 +467,13 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   }
 
   void turnFilterCheckBoxesOn() {
-    for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
-      ((JCheckBox) iter.next()).setSelected( true );
+    for (Iterator<JCheckBox> iter = filterCheckBoxes.iterator(); iter.hasNext(); )
+      iter.next().setSelected( true );
   }
 
   void turnFilterCheckBoxesOff() {
-    for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
-      ((JCheckBox) iter.next()).setSelected( false );
+    for (Iterator<JCheckBox> iter = filterCheckBoxes.iterator(); iter.hasNext(); )
+      iter.next().setSelected( false );
   }
 
   public void actionPerformed( ActionEvent e ) {

@@ -268,7 +268,7 @@ public class InvariantDoclet
         out.println("    @itemize @bullet");
         for (int i = 0; i < config_vars.size(); i++) {
           out.print("    @item ");
-          FieldDoc f = (FieldDoc) config_vars.get (i);
+          FieldDoc f = config_vars.get (i);
           out.println("@samp{" +
 		      UtilMDE.replaceString(f.qualifiedName(),
                                             Configuration.PREFIX, "")

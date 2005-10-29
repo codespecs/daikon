@@ -218,7 +218,7 @@ public class ExtractConsequent {
       if (allConds.size() > 0) {
         pw.println();
         pw.println("PPT_NAME " + pptname);
-        Iterator condsIter = allConds.iterator();
+        Iterator<String> condsIter = allConds.iterator();
         while (condsIter.hasNext())
           pw.println(condsIter.next());
       }
@@ -255,7 +255,7 @@ public class ExtractConsequent {
     Invariants invs = new Invariants();
     if (invs.size() > 0) {
       String pptname = cleanup_pptname(ppt.name());
-      Iterator itor = invs.iterator();
+      Iterator<Invariant> itor = invs.iterator();
       while (itor.hasNext()) {
         Implication maybe = (Implication)itor.next();
 
@@ -376,7 +376,7 @@ public class ExtractConsequent {
 
     Map<String,HashedConsequent> conditions = cluster_to_conditions.get(predicate);
     if (conditions.containsKey(index)) {
-      HashedConsequent old = (HashedConsequent)conditions.get(index);
+      HashedConsequent old = conditions.get(index);
       if (old.fakeFor != null && consequent.fakeFor == null) {
         // We already saw (say) "x != y", but we're "x == y", so replace it.
         conditions.remove(index);

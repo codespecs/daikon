@@ -923,8 +923,8 @@ public final class VarInfo implements Cloneable, Serializable {
     }
 
     // "myVector[]" is invalid, as is myVector[foo]
-    for (Iterator i = name.inOrderTraversal().iterator(); i.hasNext();) {
-      Object next = i.next();
+    for (Iterator<VarInfoName> i = name.inOrderTraversal().iterator(); i.hasNext();) {
+      VarInfoName next = i.next();
       if (next instanceof VarInfoName.Elements) {
         VarInfoName.Elements elems = (VarInfoName.Elements) next;
         VarInfo seq = ppt.findVar(elems.term);
@@ -1254,10 +1254,10 @@ public final class VarInfo implements Cloneable, Serializable {
 
     // find a ...post(...)... expression to simplify
     VarInfoName.Poststate postexpr = null;
-    Iterator nodes =
+    Iterator<VarInfoName> nodes =
       (new VarInfoName.InorderFlattener(name)).nodes().iterator();
     while (nodes.hasNext()) {
-      Object node = nodes.next();
+      VarInfoName node = nodes.next();
       if (node instanceof VarInfoName.Poststate) {
         postexpr = (VarInfoName.Poststate) node;
         break;
@@ -1562,7 +1562,7 @@ public final class VarInfo implements Cloneable, Serializable {
       private boolean shouldBeGuarded(VarInfoName viname) {
         // Not "shouldBeGuarded(ppt.findVar(viname))" because that
         // unnecessarily computes ppt.findVar(viname), if
-        // dkconfig_guardNulls is "always"
+        // dkconfig_guardNulls is "always".
         boolean result
           = (Daikon.dkconfig_guardNulls == "always" // interned
              || (Daikon.dkconfig_guardNulls == "missing" // interned
@@ -1912,7 +1912,7 @@ public final class VarInfo implements Cloneable, Serializable {
       return ("null");
     ArrayList<String> vars = new ArrayList<String>(vlist.size());
     for (int i = 0; i < vlist.size(); i++) {
-      VarInfo v = (VarInfo) vlist.get(i);
+      VarInfo v = vlist.get(i);
       if (v == null)
         vars.add("null");
       else

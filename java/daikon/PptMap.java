@@ -155,9 +155,9 @@ public class PptMap
    * Blow away any PptTopLevels that never saw any samples (to reclaim space).
    **/
   public void removeUnsampled() {
-    Iterator iter = nameToPpt.values().iterator();
+    Iterator<PptTopLevel> iter = nameToPpt.values().iterator();
     while (iter.hasNext()) {
-      PptTopLevel ppt = (PptTopLevel)iter.next();
+      PptTopLevel ppt = iter.next();
       if ((ppt.num_samples() == 0)
           && ! FileIO.has_unmatched_procedure_entry(ppt))
         iter.remove();

@@ -213,14 +213,14 @@ public class CLASSNAME
     {
       VarInfoName[] boundv;
 
-      boundv = (VarInfoName[]) qret.bound_vars.get(0);
+      boundv = qret.bound_vars.get(0);
       aE = qret.root_primes[0].simplify_name();
       aI = boundv[0].simplify_name();
       aL = boundv[1].simplify_name();
       aH = boundv[2].simplify_name();
       aS = "(+ (- " + aH + " " + aL + ") 1)";
 
-      boundv = (VarInfoName[]) qret.bound_vars.get(1);
+      boundv = qret.bound_vars.get(1);
       bE = qret.root_primes[1].simplify_name();
       bI = boundv[0].simplify_name();
       bL = boundv[1].simplify_name();
@@ -278,11 +278,11 @@ public class CLASSNAME
 
 //     // Bound the following quantification
 //     QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
-//     VarInfoName superIndexName = ((VarInfoName [])superQuantifyReturn.bound_vars.get(0))[0];
+//     VarInfoName superIndexName = superQuantifyReturn.bound_vars.get(0)[0];
 //     String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
 
 //     QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
-//     VarInfoName subIndexGroup[] = (VarInfoName [])subQuantifyReturn.bound_vars.get(0);
+//     VarInfoName subIndexGroup[] = subQuantifyReturn.bound_vars.get(0);
 
 //     VarInfoName subIndexName = subIndexGroup[0];
 
@@ -650,9 +650,9 @@ public class CLASSNAME
         System.out.println("No slice: parent =" + ppt_parent);
       } else {
         System.out.println("Slice var =" + slice.var_infos[0]);
-        Iterator superinvs = slice.invs.iterator();
+        Iterator<Invariant> superinvs = slice.invs.iterator();
         while (superinvs.hasNext()) {
-          Object superinv = superinvs.next();
+          Invariant superinv = superinvs.next();
           System.out.println("Inv = " + superinv);
           if (superinv instanceof ELTONEOF) {
             ELTONEOF eltinv = (ELTONEOF) superinv;
@@ -669,9 +669,9 @@ public class CLASSNAME
     if (true) {
       PptSlice1 slice = ppt_parent.findSlice(subvar);
       if (slice != null) {
-        Iterator subinvs = slice.invs.iterator();
+        Iterator<Invariant> subinvs = slice.invs.iterator();
         while (subinvs.hasNext()) {
-          Object subinv = subinvs.next();
+          Invariant subinv = subinvs.next();
           if (subinv instanceof ONEOFSEQUENCE) {
             ONEOFSEQUENCE seqinv = (ONEOFSEQUENCE) subinv;
             if (seqinv.num_elts() == 1) {
@@ -799,10 +799,10 @@ public class CLASSNAME
 
     // A subseq B[0..n] => A subseq B
 
-    List derivees = supervar.derivees();
+    List<Derivation> derivees = supervar.derivees();
     // For each variable derived from supervar ("B")
     for (int i=0; i<derivees.size(); i++) {
-      Derivation der = (Derivation) derivees.get(i);
+      Derivation der = derivees.get(i);
       // System.out.println("  ... der = " + der.getVarInfo().name.name() + " " + der);
       if (der instanceof SEQUENCESCALARSUBSEQUENCE) {
         // If that variable is "B[0..n]"

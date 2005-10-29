@@ -4,40 +4,40 @@ import java.io.*;
 import daikon.inv.filter.*;
 
 /** DiscardCode is an enumeration type where the instances
-    represent reasons why an invariant is falsified or disregarded.
-    Methods that decide whether an Invariant should be printed later
-    (such as isObviousImplied()), side effect Invariants to contain
-    DiscardCode instances in their discardCode field slot.
-
-    The different elements of the enumeration are:
-
-    obvious // is implied by other already known invariants
-
-    bad_sample // is falsified by a seen example
-
-    bad_confidence // has an unjustified confidence
-
-    <unused> // was few_modified_samples
-
-    not_enough_samples // not enough samples seen for the Invariant
-
-    non_canonical_var // expression involves a non-canonical variable
-
-    implied_post_condition // implied by some prestate conditions
-
-    only_constant_vars // expression for invariant only contains constant variables
-
-    derived_param // has a VarInfo that has derived and uninteresting param
-
-    unmodified_var // invariant discarded because it says some var hasn't been modified
-
-    control_check // if discarded due to the ControlledInvariantFilter
-
-    exact // isExact() fails
-
-    var_filtered // Doesn't contain a desirable variable
-
-    filtered // filtered by some other means not in the above list
+ *  represent reasons why an invariant is falsified or disregarded.
+ *  Methods that decide whether an Invariant should be printed later
+ *  (such as isObviousImplied()), side effect Invariants to contain
+ *  DiscardCode instances in their discardCode field slot.
+ *
+ *  The different elements of the enumeration are:
+ *
+ *  obvious // is implied by other already known invariants
+ *
+ *  bad_sample // is falsified by a seen example
+ *
+ *  bad_confidence // has an unjustified confidence
+ *
+ *  <unused> // was few_modified_samples
+ *
+ *  not_enough_samples // not enough samples seen for the Invariant
+ *
+ *  non_canonical_var // expression involves a non-canonical variable
+ *
+ *  implied_post_condition // implied by some prestate conditions
+ *
+ *  only_constant_vars // expression for invariant only contains constant variables
+ *
+ *  derived_param // has a VarInfo that has derived and uninteresting param
+ *
+ *  unmodified_var // invariant discarded because it says some var hasn't been modified
+ *
+ *  control_check // if discarded due to the ControlledInvariantFilter
+ *
+ *  exact // isExact() fails
+ *
+ *  var_filtered // Doesn't contain a desirable variable
+ *
+ *  filtered // filtered by some other means not in the above list
  */
 
 public class DiscardCode implements Comparable<DiscardCode>, Serializable {

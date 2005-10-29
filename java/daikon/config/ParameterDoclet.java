@@ -222,7 +222,7 @@ public class ParameterDoclet
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
       for (String field : keys) {
-	String desc = (String) categories[c].fields.get(field);
+	String desc = categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
 
 	// @item [field]
@@ -259,7 +259,7 @@ public class ParameterDoclet
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
       for (String field : keys) {
-	String desc = (String) categories[c].fields.get(field);
+	String desc = categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
 
 	// [field]

@@ -182,12 +182,12 @@ class ConditionExtractor extends DepthFirstVisitor {
    */
   public Collection<String> getCaseValues (NodeListOptional n) {
     ArrayList<String> values = new ArrayList<String>();
-    Enumeration e = n.elements();
+    Enumeration<NodeSequence> e = n.elements();
     while (e.hasMoreElements()) {
       // in the nodeSequence for the switch statement,
       // the first element is always the case statement.
       // ie: case <value>: expr(); break;  | default ...
-      NodeSequence ns = (NodeSequence) e.nextElement();
+      NodeSequence ns = e.nextElement();
       SwitchLabel sl = (SwitchLabel) ns.elementAt(0);
       ns = (NodeSequence) sl.f0.choice;
       values.add(Ast.format(ns.elementAt(1)));

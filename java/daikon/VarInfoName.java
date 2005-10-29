@@ -476,7 +476,7 @@ public abstract class VarInfoName
   /**
    * @return the nodes of this, as given by an inorder traversal.
    **/
-  public Collection inOrderTraversal() {
+  public Collection<VarInfoName> inOrderTraversal() {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
 
@@ -492,7 +492,7 @@ public abstract class VarInfoName
    * @return true iff a node of the given type exists in this
    **/
   public boolean hasNodeOfType(Class type) {
-    Iterator nodes = inOrderTraversal().iterator();
+    Iterator<VarInfoName> nodes = inOrderTraversal().iterator();
     while (nodes.hasNext()) {
       if (type.equals(nodes.next().getClass())) {
         return true;
@@ -1087,7 +1087,7 @@ public abstract class VarInfoName
     protected String repr_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).repr());
+        sb.append (i.next().repr());
         if (i.hasNext()) sb.append (", ");
       }
       return "FunctionOfN{" + function + "}[" + sb.toString() + "]";
@@ -1095,7 +1095,7 @@ public abstract class VarInfoName
     protected String name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).name());
+        sb.append (i.next().name());
         if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
@@ -1104,7 +1104,7 @@ public abstract class VarInfoName
     protected String repair_name_impl(VarInfo vi) {
       StringBuffer sb = new StringBuffer();
       for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).name());
+        sb.append (i.next().name());
         if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
@@ -1115,7 +1115,7 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).repr());
+        sb.append (i.next().repr());
         if (i.hasNext()) sb.append (", ");
       }
       return "(warning: format_esc() needs to be implemented: " +
@@ -1124,7 +1124,7 @@ public abstract class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       StringBuffer sb = new StringBuffer();
       for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).repr());
+        sb.append (i.next().repr());
         if (i.hasNext()) sb.append (", ");
       }
       return "(warning: format_simplify() needs to be implemented: " +
@@ -1133,7 +1133,7 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).ioa_name());
+        sb.append (i.next().ioa_name());
         if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
@@ -1167,15 +1167,15 @@ public abstract class VarInfoName
       VarInfo arg1VarInfo = ((BinaryDerivation)derived).base1;
       VarInfo arg2VarInfo = ((BinaryDerivation)derived).base2;
       return "daikon.Quant." + function + "("
-        + ((VarInfoName)args.get(0)).name_using(format, arg1VarInfo)  + ", "
-        + ((VarInfoName)args.get(1)).name_using(format, arg2VarInfo)  + ")";
+        + args.get(0).name_using(format, arg1VarInfo)  + ", "
+        + args.get(1).name_using(format, arg2VarInfo)  + ")";
     }
 
     protected String identifier_name_impl() {
       StringBuffer sb = new StringBuffer(function);
       sb.append("_of_");
       for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).identifier_name());
+        sb.append (i.next().identifier_name());
         if (i.hasNext()) sb.append ("_comma_");
       }
       sb.append("___");
@@ -1186,7 +1186,7 @@ public abstract class VarInfoName
      * Shortcut getter to avoid repeated type casting.
      **/
     public VarInfoName getArg (int n) {
-      return (VarInfoName) args.get(n);
+      return args.get(n);
     }
     protected Class resolveType(PptTopLevel ppt) {
       return null;
@@ -2515,8 +2515,8 @@ public abstract class VarInfoName
     }
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName retval = null;
-      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = (VarInfoName)i.next();
+      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
+        VarInfoName vin = i.next();
         retval = vin.accept(this);
         if (retval != null) return retval;
       }
@@ -2612,8 +2612,8 @@ public abstract class VarInfoName
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName result = null;
       if (goals.contains(o)) return o;
-      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = (VarInfoName)i.next();
+      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
+        VarInfoName vin = i.next();
         result = vin.accept(this);
         if (result != null) return result;
       }
@@ -2770,8 +2770,8 @@ public abstract class VarInfoName
     // visitor methods that get the job done
     public Elements visitFunctionOfN(FunctionOfN o) {
       Elements retval = null;
-      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = (VarInfoName)i.next();
+      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
+        VarInfoName vin = i.next();
         retval = vin.accept(this);
         if (retval != null) return retval;
       }
@@ -2837,8 +2837,8 @@ public abstract class VarInfoName
       // otherwise, create a new function and check if arguments get replaced
       if (o == old) return _new;
       ArrayList<VarInfoName> newArgs = new ArrayList<VarInfoName>();
-      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = (VarInfoName)i.next();
+      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
+        VarInfoName vin = i.next();
         VarInfoName retval = vin.accept(this);
         newArgs.add (retval);
       }
@@ -2944,8 +2944,8 @@ public abstract class VarInfoName
     }
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       result.add (o);
-      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = (VarInfoName)i.next();
+      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
+        VarInfoName vin = i.next();
         NoReturnValue retval = vin.accept(this);
       }
       return null;
@@ -3088,7 +3088,7 @@ public abstract class VarInfoName
 
     public NoReturnValue visitFunctionOf(FunctionOf o) {
       return null;
-      // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
+      // return o.args.get(0).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
     /**
@@ -3100,7 +3100,7 @@ public abstract class VarInfoName
      **/
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       return null;
-      // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
+      // return o.args.get(0).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
     public NoReturnValue visitSizeOf(SizeOf o) {
@@ -3260,7 +3260,7 @@ public abstract class VarInfoName
         } else {
           index_vin = new Simple(index_off + "");
         }
-        VarInfoName to_replace = (VarInfoName)unquants.get(0);
+        VarInfoName to_replace = unquants.get(0);
         VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         return replace_result[0];
       } else {
@@ -3373,7 +3373,7 @@ public abstract class VarInfoName
           // sequence had more than one dimension.
           Assert.assertTrue(uq.size() == 1, "We can only handle 1D arrays for now");
 
-          VarInfoName uq_elt = (VarInfoName) uq.get(0);
+          VarInfoName uq_elt = uq.get(0);
 
           String idx_name;
           do {
@@ -3442,7 +3442,7 @@ public abstract class VarInfoName
         StringBuffer quantifier = new StringBuffer();
         for (int i=0; i < qret.bound_vars.size(); i++) {
           // Assert.assertTrue(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
-          VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+          VarInfoName var = qret.bound_vars.get(i)[0];
           quantifier.append (quantifierUniversal);
           quantifier.append (var.ioa_name());
           quantifier.append (" : ");
@@ -3478,7 +3478,7 @@ public abstract class VarInfoName
       }
 
       public VarInfoName getVarName (int num) {
-        return ((VarInfoName[]) (qret.bound_vars.get(num))) [0];
+        return qret.bound_vars.get(num) [0];
       }
 
       public VarInfoName getVarIndexed (int num) {
@@ -3632,7 +3632,7 @@ public abstract class VarInfoName
     //           conditions.setLength(0);
     //           closing.setLength(0);
 
-    //           VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+    //           VarInfoName[] boundv = qret.bound_vars.get(i);
     //           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
     //           if (i != 0) {
     //             //int_list.append(", ");
@@ -3653,7 +3653,7 @@ public abstract class VarInfoName
     //           conditions.append(high.dbc_name(null));
 
     //           if (elementwise && (i >= 1)) {
-    //             VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i - 1);
+    //             VarInfoName[] _boundv = qret.bound_vars.get(i - 1);
     //             VarInfoName _idx = _boundv[0], _low = _boundv[1];
     //             conditions.append(" && ");
     //             if (ZERO.equals(_low)) {
@@ -3785,7 +3785,7 @@ public abstract class VarInfoName
         // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
         conditions = new StringBuffer();
         for (int i=0; i < qret.bound_vars.size(); i++) {
-          VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+          VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
           if (i != 0) {
             int_list.append(" ");
@@ -3795,7 +3795,7 @@ public abstract class VarInfoName
           conditions.append( "(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
           conditions.append(" (<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
           if (elementwise && (i >= 1)) {
-            VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+            VarInfoName[] _boundv = qret.bound_vars.get(i-1);
             VarInfoName _idx = _boundv[0], _low = _boundv[1];
             if (_low.simplify_name().equals(low.simplify_name())) {
               conditions.append(" (EQ " + _idx.simplify_name() + " "
@@ -3806,7 +3806,7 @@ public abstract class VarInfoName
             }
           }
           if (i == 1 && (adjacent || distinct)) {
-            VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+            VarInfoName[] _boundv = qret.bound_vars.get(i-1);
             VarInfoName prev_idx = _boundv[0];
             if (adjacent)
               conditions.append(" (EQ (+ " + prev_idx.simplify_name() + " 1) "
@@ -3828,7 +3828,7 @@ public abstract class VarInfoName
       // stringify the indices, if requested
       if (includeIndex) {
         for (int i=0; i < qret.root_primes.length; i++) {
-          VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+          VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx_var = boundv[0];
           result[i + qret.root_primes.length + 1] = idx_var.simplify_name();
         }
@@ -3914,7 +3914,7 @@ public abstract class VarInfoName
         conditions = new StringBuffer();
         closing = new StringBuffer();
         for (int i=0; i < qret.bound_vars.size(); i++) {
-          VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+          VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
           if (i != 0) {
             int_list.append(", ");
@@ -3926,7 +3926,7 @@ public abstract class VarInfoName
           conditions.append(quant_execution_condition(low, idx, high, format));
 
           if (elementwise && (i >= 1)) {
-            VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+            VarInfoName[] _boundv = qret.bound_vars.get(i-1);
             VarInfoName _idx = _boundv[0], _low = _boundv[1];
             if (format == OutputFormat.JAVA)
                conditions.append(" || ");

@@ -96,7 +96,7 @@ public abstract class DaikonVariableInfo
         else
             name = theName.intern();
 
-        children = new ArrayList <DaikonVariableInfo> ();
+        children = new ArrayList<DaikonVariableInfo> ();
         isArray = arr;
 
      }
@@ -288,7 +288,7 @@ public abstract class DaikonVariableInfo
      */
     private String getValueStringOfArray(Object array)
     {
-        List <Object> theList = DTraceWriter.getListFromArray(array);
+        List<Object> theList = DTraceWriter.getListFromArray(array);
         return getValueStringOfList(theList);
     }
 
@@ -312,7 +312,7 @@ public abstract class DaikonVariableInfo
      *  Gets the list of values (as a string) from getValueStringOfList
      *  and concatenates the "modified" value
      */
-    private String getValueStringOfListWithMod(List <Object> theValues)
+    private String getValueStringOfListWithMod(List<Object> theValues)
     {
         String retString = getValueStringOfList(theValues) + DaikonWriter.lineSep;
 
@@ -326,11 +326,11 @@ public abstract class DaikonVariableInfo
 
     /**
      * Returns a string representation of the values
-     * of a list of values as if it were an array
+     * of a list of values as if it were an array.
      *
      * @param theValues The values to print out
      */
-    protected String getValueStringOfList(List <Object> theValues)
+    protected String getValueStringOfList(List<Object> theValues)
     {
         if (theValues == null)
         {
@@ -345,7 +345,7 @@ public abstract class DaikonVariableInfo
         StringBuffer buf = new StringBuffer();
 
         buf.append("[");
-        for (Iterator <Object> iter = theValues.iterator(); iter.hasNext();)
+        for (Iterator<Object> iter = theValues.iterator(); iter.hasNext();)
         {
             Object elementVal = iter.next();
 
@@ -368,7 +368,7 @@ public abstract class DaikonVariableInfo
      */
     protected void addParameters(ClassInfo cinfo,
                        Member method, List<String> argnames, String offset, int depth,
-                       Set <Class> staticTraversedClasses)
+                       Set<Class> staticTraversedClasses)
     {
         Class[] arguments = (method instanceof Constructor)
             ? ((Constructor) method).getParameterTypes()
@@ -400,7 +400,7 @@ public abstract class DaikonVariableInfo
      */
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
             Class type, String offset, int depth,
-            Set <Class> staticTraversedClasses)
+            Set<Class> staticTraversedClasses)
     {
         //DaikonVariableInfo corresponding to the "this" object
         DaikonVariableInfo thisInfo;
@@ -1025,7 +1025,7 @@ public abstract class DaikonVariableInfo
     */
    protected void addChildNodes(ClassInfo cinfo, Class type, String theName,
            String offset, int depthRemaining,
-           Set <Class> staticTraversedClasses)
+           Set<Class> staticTraversedClasses)
    {
        if (type.isPrimitive())
            return;

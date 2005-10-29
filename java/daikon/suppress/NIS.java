@@ -396,13 +396,13 @@ public class NIS {
               Fmt.pf ("inv %s has two constant variables", inv.format());
             if (!v1.compatible (v2))
               Fmt.pf ("inv %s has incompatible variables", inv.format());
-            Count cnt = (Count) var_map.get (v1);
+            Count cnt = var_map.get (v1);
             if (cnt == null) {
               cnt = new Count (0);
               var_map.put (v1, cnt);
             }
             cnt.val++;
-            cnt = (Count) var_map.get (v2);
+            cnt = var_map.get (v2);
             if (cnt == null) {
               cnt = new Count (0);
               var_map.put (v2, cnt);
@@ -411,7 +411,7 @@ public class NIS {
           }
           Fmt.pf ("%s distinct variables", "" + var_map.size());
           for (VarInfo key : var_map.keySet()) {
-            Count cnt = (Count) var_map.get (key);
+            Count cnt = var_map.get (key);
             Fmt.pf (" %s %s %s ", key.comparability, key.name.name(),
                     "" + cnt.val);
           }
@@ -507,7 +507,7 @@ public class NIS {
     Antecedents compare_all = null;
     for (VarComparability vc : comp_ants.keySet()) {
       if (vc.alwaysComparable()) {
-        compare_all = (Antecedents) comp_ants.get (vc);
+        compare_all = comp_ants.get (vc);
         break;
       }
     }
@@ -586,7 +586,7 @@ public class NIS {
         if (inv.is_false())
           false_invs++;
         VarComparability vc = inv.get_comparability();
-        Antecedents ants = (Antecedents) comp_ants.get (vc);
+        Antecedents ants = comp_ants.get (vc);
         if (ants == null) {
           ants = new Antecedents (vc);
           comp_ants.put (vc, ants);

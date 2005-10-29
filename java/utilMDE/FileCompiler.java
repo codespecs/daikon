@@ -53,7 +53,7 @@ public final class FileCompiler {
    * Compiles the files given by fileNames.
    * @param fileNames pathes to the files to be compiled as Strings.
    */
-  public void compileFiles(List fileNames) {
+  public void compileFiles(List<String> fileNames) {
 
     // Start a process to compile all of the files (in one command)
     TimeLimitProcess p = compile_source (fileNames);
@@ -108,13 +108,13 @@ public final class FileCompiler {
    * @param filenames the paths of the java source to be compiled as Strings.
    * @return The process that executed the external compile command
    **/
-  private TimeLimitProcess compile_source(List filenames) {
+  private TimeLimitProcess compile_source(List<String> filenames) {
     int num_files = filenames.size();
 
     if (num_files > 0) {
-      String to_compile = (String) filenames.get(0);
+      String to_compile = filenames.get(0);
       for (int i = 1; i < num_files; i++) {
-        to_compile += (" " + (String) filenames.get(i));
+        to_compile += (" " + filenames.get(i));
       }
 
       String command = compiler + " " + to_compile;
@@ -136,7 +136,7 @@ public final class FileCompiler {
    * compile all the files supplied to it if some of them contain
    * errors. So some "good" files end up not being compiled.
    */
-  private void recompile_without_errors (List fileNames, String errorString) {
+  private void recompile_without_errors (List<String> fileNames, String errorString) {
     // search the error string and extract the files with errors.
     if (errorString != null) {
       HashSet<String> errors = new HashSet<String>();
@@ -148,7 +148,7 @@ public final class FileCompiler {
       List<String> retry = new ArrayList<String>();
       String filenames = "";
       for (int i = 0; i < fileNames.size(); i++) {
-        String sourceFileName = ((String) fileNames.get(i)).trim();
+        String sourceFileName = fileNames.get(i).trim();
         String classFilePath = getClassFilePath(sourceFileName);
         if (! fileExists(classFilePath)) {
           if (! errors.contains(getClassName(sourceFileName))) {

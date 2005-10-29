@@ -267,7 +267,7 @@ public final class VarInfoAux
 
     VarInfoAux result;
     if (theMap.containsKey(this)) {
-      result = (VarInfoAux) theMap.get(this);
+      result = theMap.get(this);
     } else {
       // Intern values in map
       theMap.put (this, this);

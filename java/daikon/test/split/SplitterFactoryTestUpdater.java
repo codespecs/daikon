@@ -85,13 +85,13 @@ public class SplitterFactoryTestUpdater {
     HashSet<File> declsFileSet = new HashSet<File>();
     HashSet<File> spinfoFiles = new HashSet<File>();
     for (int i = 0; i < spinfos.size(); i++) {
-      String spinfoFile = (String) spinfos.get(i);
+      String spinfoFile = spinfos.get(i);
       spinfoFile = targetDir + spinfoFile;
       spinfoFiles.add(new File(spinfoFile));
     }
     spinfoFileLists.add(new ArrayList<File>(spinfoFiles));
     for (int i = 0; i < decls.size(); i++) {
-      String declsFile = (String) decls.get(i);
+      String declsFile = decls.get(i);
       declsFile = targetDir + declsFile;
       declsFileSet.add(new File(declsFile));
     }
@@ -259,11 +259,11 @@ public class SplitterFactoryTestUpdater {
     ps.println("  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
     ps.println("    List<File> declsFiles = new ArrayList<File>();");
     ps.println("    for (int i = 0; i < decls.size(); i++) {");
-    ps.println("      declsFiles.add(new File((String) decls.get(i)));");
+    ps.println("      declsFiles.add(new File(decls.get(i)));");
     ps.println("    }");
     ps.println("    Set<File> spFiles = new HashSet<File>();");
     ps.println("    for (int i = 0; i < spinfos.size(); i++) {");
-    ps.println("      spFiles.add(new File((String) spinfos.get(i)));");
+    ps.println("      spFiles.add(new File(spinfos.get(i)));");
     ps.println("    }");
     ps.println("    try {");
     ps.println("      if (saveFiles) {");
@@ -332,7 +332,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     for (int i = 0; i < classNames.size(); i++) {
-      String className = (String) classNames.get(i);
+      String className = classNames.get(i);
       ps.println("  public static void test" + className + "() {");
       ps.println("    assertEqualFiles(\"" + className + ".java\");");
       ps.println("  }");
@@ -346,7 +346,7 @@ public class SplitterFactoryTestUpdater {
    */
   private static void appendSuite(PrintStream ps) {
     for (int i = 0; i < classNames.size(); i++) {
-      String className = (String) classNames.get(i);
+      String className = classNames.get(i);
       ps.println("    suite.addTest(new SplitterFactoryTest(\"test" + className + "\"));");
     }
   }

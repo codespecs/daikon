@@ -62,14 +62,14 @@ public final class DiscReasonMap {
     // I should move this var_sorting stuff to a central
     // place soon since it's being used kind of frequently
     /*StringTokenizer st = new StringTokenizer(vars, ",");
-    ArrayList temp_vars = new ArrayList();
+    ArrayList<String> temp_vars = new ArrayList();
     while (st.hasMoreTokens()) {
       temp_vars.add(st.nextToken());
     }
     Collections.sort(temp_vars);
     String vars_result = "";
     for (int i = 0; i < temp_vars.size(); i++) {
-      vars_result += ((String) temp_vars.get(i)) + ",";
+      vars_result += temp_vars.get(i) + ",";
       }*/
 
     HashMap<String,List<DiscardInfo>> ppt_hashmap = the_map.get(ppt);
@@ -78,7 +78,7 @@ public final class DiscReasonMap {
       if (disc_infos != null) {
         // Check to see if this invariant already has a DiscInfo
         for (int i = 0; i < disc_infos.size(); i++) {
-          DiscardInfo di = (DiscardInfo) disc_infos.get(i);
+          DiscardInfo di = disc_infos.get(i);
           if (disc_info.className().equals(di.className())) {
             // We already have a reason for why the Invariant was discarded
             // Perhaps we could replace it with the new reason, but maybe we
@@ -124,7 +124,7 @@ public final class DiscReasonMap {
     if (invInfo.vars() != null) {
       // The user entered the vars in a specific order, but let's give
       // them matching invariants that have those vars in any order
-      List var_perms = invInfo.var_permutations();
+      List<String> var_perms = invInfo.var_permutations();
       for (int i = 0; i < var_perms.size(); i++) {
         List<DiscardInfo> temp = vars_map_from_ppt.get(var_perms.get(i));
         if (temp != null) {
@@ -136,7 +136,7 @@ public final class DiscReasonMap {
     }
 
     for (int i = 0; i < di_list.size(); i++) {
-      DiscardInfo di = (DiscardInfo) di_list.get(i);
+      DiscardInfo di = di_list.get(i);
       // Assert.assertTrue(di.discardCode() != DiscardCode.not_discarded);
       String shortName = di.className().substring(di.className().lastIndexOf('.')+1); // chop off hierarchical info
       if ((invInfo.className() == null) || invInfo.className().equals(di.className())
@@ -170,7 +170,7 @@ public final class DiscReasonMap {
     System.out.println();
     System.out.println();
     System.out.println("DEBUGGING PPT: " + ppt);
-    HashMap vars_map = (HashMap) the_map.get(ppt);
+    HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
     if (vars_map == null) {
       System.out.println("No reasons for this ppt");
       return;

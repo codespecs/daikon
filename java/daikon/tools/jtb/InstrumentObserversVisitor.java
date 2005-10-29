@@ -185,8 +185,8 @@ public class InstrumentObserversVisitor
       super.visit(n);
 
       if (n.numSpecials() == 0) { return; }
-      for (Enumeration e = n.specialTokens.elements(); e.hasMoreElements(); ) {
-        String comment = ((NodeToken) e.nextElement()).tokenImage;
+      for (Enumeration<NodeToken> e = n.specialTokens.elements(); e.hasMoreElements(); ) { // JTB is non-generic
+        String comment = e.nextElement().tokenImage;
         if (comment.indexOf("@ observer") >= 0) {
           MethodDeclaration method =
             (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);

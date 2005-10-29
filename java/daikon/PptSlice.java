@@ -266,8 +266,8 @@ public abstract class PptSlice
 
   /**
    * This procedure guards all of the invariants in a given PptSlice by
-   * iterating over the contained invariants and replace the invariants
-   * that require guarding with their guarded counterparts. The guarded
+   * iterating over the contained invariants and replacing the invariants
+   * that require guarding with their guarded counterparts.  The guarded
    * invariants are put into the joiner view of the PptTopLevel that
    * contains the PptSlice where the invariant was originally located.
    * <p>
@@ -299,8 +299,8 @@ public abstract class PptSlice
     // If this slice is to be deleted, then don't guard it
     if (invs.size() == 0) return;
 
-    for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
-      Invariant inv = (Invariant)overInvs.next();
+    for (Iterator<Invariant> overInvs = invs.iterator(); overInvs.hasNext(); ) {
+      Invariant inv = overInvs.next();
       if (debugGuarding.isLoggable(Level.FINE)) {
         debugGuarding.fine ("  Trying to add guard for: " + inv + "     " + inv.repr());
       }
@@ -359,8 +359,8 @@ public abstract class PptSlice
   public void processOmissions(boolean[] omitTypes) {
     if (invs.size() == 0) return;
     List<Invariant> toRemove = new ArrayList<Invariant>();
-    for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
-      Invariant inv = (Invariant)overInvs.next();
+    for (Iterator<Invariant> overInvs = invs.iterator(); overInvs.hasNext(); ) {
+      Invariant inv = overInvs.next();
       if (omitTypes['r'] && inv.isReflexive())
         toRemove.add(inv);
     }

@@ -255,7 +255,7 @@ public class CreateSpinfo {
         }
 	output.println("PPT_NAME " + method);
 	for (int i = 0; i < method_conds.size(); i++) {
-	  output.println(removeNewlines((String) method_conds.get(i)));
+	  output.println(removeNewlines(method_conds.get(i)));
 	}
 	output.println();
       }

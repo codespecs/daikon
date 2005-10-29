@@ -222,7 +222,7 @@ public class PptSliceEquality
   //        - Get the new leaders
   //        - Create new slices and invariants (call CopyInvsFromLeader)
   //
-  public List<Invariant>  add(ValueTuple vt, int count) {
+  public List<Invariant> add(ValueTuple vt, int count) {
 
     LinkedList<Equality> allNewInvs = new LinkedList<Equality>();
     LinkedList<Invariant> weakenedInvs = new LinkedList<Invariant>();
@@ -254,9 +254,9 @@ public class PptSliceEquality
         if (Debug.logOn()) {
           for (int j = 0; j < newInvsLeaders.size(); j++) {
             Debug.log (getClass(), parent,
-                       Debug.vis ((VarInfo) newInvsLeaders.get(j)),
+                       Debug.vis (newInvsLeaders.get(j)),
               "Split off from previous leader " + inv.leader().name.name()
-              + ": new set = " + ((VarInfo) newInvsLeaders.get(j)).equalitySet
+              + ": new set = " + (newInvsLeaders.get(j)).equalitySet
               + ": old set = " + inv);
           }
         }
@@ -576,7 +576,7 @@ public class PptSliceEquality
         // If leader does need replacing
         // newLoop starts at loop so that we don't have repeats
         for (int newLoop = loop; newLoop < newVis.size(); newLoop++) {
-          VarInfo vi = newLoop == -1 ? leader : (VarInfo) newVis.get(newLoop);
+          VarInfo vi = newLoop == -1 ? leader : newVis.get(newLoop);
           soFar[position] = vi;
           // Advance position to next step, let next loop variable be
           // this loop's counter.

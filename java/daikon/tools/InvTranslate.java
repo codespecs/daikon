@@ -114,8 +114,8 @@ public class InvTranslate {
 
     String out = "";
     for (String key : var_map.keySet()) {
-      String value = (String) var_map.get (key);
-      if (out != "")
+      String value = var_map.get (key);
+      if (out != "")            // interned
         out += ", ";
       out += key + "->" + value;
     }

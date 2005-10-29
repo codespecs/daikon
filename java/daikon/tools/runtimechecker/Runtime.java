@@ -36,7 +36,7 @@ public class Runtime {
     public static synchronized List<Violation> getViolations() {
 	List<Violation> retval = new ArrayList<Violation>();
 	for (int i = 0 ; i < violations.size() ; i++) {
-	    retval.add((Violation)violations.get(i));
+	    retval.add(violations.get(i));
 	}
 	return retval;
     }

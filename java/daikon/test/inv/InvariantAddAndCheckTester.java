@@ -465,7 +465,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     public static String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) return null;
-      while(true) {
+      while (true) {
         String commandLine = getNextLine(commands).trim();
         int lineNumber = commands.getLineNumber();
         if (InvariantAddAndCheckTester.isComment(commandLine)) {

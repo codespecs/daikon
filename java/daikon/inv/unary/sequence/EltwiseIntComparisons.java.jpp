@@ -419,9 +419,9 @@ public class CLASSNAME
       // other invariants to exist for now because they are not wrong, just
       // obvious.
 
-      Iterator invs = ppt.invs.iterator();
+      Iterator<Invariant> invs = ppt.invs.iterator();
       while (invs.hasNext()) {
-        Invariant inv = (Invariant)invs.next();
+        Invariant inv = invs.next();
 #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
         if ((inv instanceof LESSTHANCLASS) || (inv instanceof LESSTHANFLOATCLASS)) {
           String discardString = "The invariant holds for < which implies <=.";
@@ -461,10 +461,10 @@ public class CLASSNAME
         sliceToCheck = ppt.parent.findSlice(((SequenceFloatSubsequence)deriv).seqvar());
 
       if (sliceToCheck != null) {
-        Iterator invs = sliceToCheck.invs.iterator();
+        Iterator<Invariant> invs = sliceToCheck.invs.iterator();
 
         while (invs.hasNext()) {
-          Invariant inv = (Invariant)invs.next();
+          Invariant inv = invs.next();
 #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
           if ((inv instanceof LESSTHANCLASS) || (inv instanceof LESSTHANFLOATCLASS)) {
             String discardString = "This is a subsequence of a sequence for which the < invariant holds.";

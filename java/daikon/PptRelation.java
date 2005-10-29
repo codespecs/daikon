@@ -743,7 +743,7 @@ public class PptRelation implements Serializable {
       // under all cases and then remove it from non-leaves children
       // list.  This doesn't seem like the best solution.
       if (ppt.has_splitters()) {
-        PptSplitter ppt_split = (PptSplitter) ppt.splitters.get(0);
+        PptSplitter ppt_split = ppt.splitters.get(0);
         for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
           rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
           debug.fine(
@@ -784,7 +784,7 @@ public class PptRelation implements Serializable {
 
         // Create a list of children for this splitter
         child_loop : for (int jj = 0; jj < ppt.children.size(); jj++) {
-          PptRelation rel = (PptRelation) ppt.children.get(jj);
+          PptRelation rel = ppt.children.get(jj);
           if (!rel.child.has_splitters())
             break;
           for (Iterator<PptSplitter> kk = rel.child.splitters.iterator(); kk.hasNext();) {

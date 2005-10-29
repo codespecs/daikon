@@ -406,7 +406,7 @@ public class SampleTester extends TestCase {
     String format = null;
 
     // If the first argument is a quoted string
-    String arg0 = (String) args.get(0);
+    String arg0 = args.get(0);
     if (arg0.startsWith ("\"")) {
       format = arg0.substring(1, arg0.length()-1);
       debug.fine (Fmt.spf ("Looking for format: '%s' in ppt %s", format, ppt));
@@ -422,7 +422,7 @@ public class SampleTester extends TestCase {
     // Build a vis to match the specified variables
     VarInfo[] vis = new VarInfo[args.size()-1];
     for (int i = 0; i < vis.length; i++) {
-      vis[i] = ppt.find_var_by_name ((String) args.get(i+1));
+      vis[i] = ppt.find_var_by_name (args.get(i+1));
       if (vis[i] == null)
         parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
                               args.get(i+1), ppt.name()));
@@ -460,7 +460,7 @@ public class SampleTester extends TestCase {
     // Build a vis to match the specified variables
     VarInfo[] vis = new VarInfo[args.size()];
     for (int i = 0; i < vis.length; i++) {
-      vis[i] = ppt.find_var_by_name ((String) args.get(i));
+      vis[i] = ppt.find_var_by_name (args.get(i));
       if (vis[i] == null)
         parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
                               args.get(i), ppt.name()));

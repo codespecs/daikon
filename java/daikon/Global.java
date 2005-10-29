@@ -198,6 +198,6 @@ public final class Global {
   public static FuzzyFloat fuzzy = new FuzzyFloat ();
 
   /* Map of statistics for each ppt. */
-  public static Map stats_map = new LinkedHashMap();
+  public static Map<PptTopLevel,List<PptTopLevel.Stats>> stats_map = new LinkedHashMap<PptTopLevel,List<PptTopLevel.Stats>>();
 
 }

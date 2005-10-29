@@ -740,7 +740,7 @@ public class Ast {
 
   public static Method getMethod(Class c, MethodDeclaration methoddecl) {
     String ast_methodname = getName(methoddecl);
-    List ast_params = getParameters(methoddecl);
+    List<FormalParameter> ast_params = getParameters(methoddecl);
 
     List<Method> publicMethods = Arrays.asList(c.getMethods());
     List<Method> declaredMethods = Arrays.asList(c.getDeclaredMethods());
@@ -775,7 +775,7 @@ public class Ast {
   public static Constructor getConstructor(Class c, ConstructorDeclaration constructordecl) {
     String ast_constructorname = getName(constructordecl);
 
-    List ast_params = getParameters(constructordecl);
+    List<FormalParameter> ast_params = getParameters(constructordecl);
 
 
     List<Constructor> publicConstructors = Arrays.asList(c.getConstructors());
@@ -800,7 +800,7 @@ public class Ast {
     return null;
   }
 
-  public static boolean paramsMatch(Class[] params, List ast_params) {
+  public static boolean paramsMatch(Class[] params, List<FormalParameter> ast_params) {
 
     if (params.length != ast_params.size()) {
       return false;
@@ -808,8 +808,8 @@ public class Ast {
     // Now check whether args match.
     boolean unmatched = false;
     int j=0;
-    for (Iterator itor = ast_params.iterator(); itor.hasNext(); j++) {
-      String ast_param = getType((FormalParameter) itor.next());
+    for (Iterator<FormalParameter> itor = ast_params.iterator(); itor.hasNext(); j++) {
+      String ast_param = getType(itor.next());
       Class param = params[j];
       //System.out.println("Comparing " + param + " to " + ast_param + ":");
       if (! typeMatch(classnameForSourceOutput(param), ast_param)) {
@@ -928,7 +928,7 @@ public class Ast {
     NodeSequence sequence = (NodeSequence)nc.choice;
     Modifiers modifiers = (Modifiers)sequence.elementAt(0);
     NodeListOptional options = modifiers.f0;
-    for (Enumeration e = options.elements(); e.hasMoreElements(); ) {
+    for (Enumeration e = options.elements(); e.hasMoreElements(); ) { // non-generic due to JTB
       NodeChoice c = (NodeChoice) e.nextElement();
       NodeToken t = (NodeToken) c.choice;
       String token = t.tokenImage;
@@ -1094,9 +1094,9 @@ public class Ast {
         Node gp = n.getParent().getParent();
         if (gp instanceof PrimaryPrefix) {
           PrimaryExpression ggp = (PrimaryExpression) gp.getParent();
-          for (Enumeration e = getPrimarySuffixes(ggp);
+          for (Enumeration<PrimarySuffix> e = getPrimarySuffixes(ggp);
                e.hasMoreElements(); ) {
-            PrimarySuffix s = (PrimarySuffix) e.nextElement();
+            PrimarySuffix s = e.nextElement();
             if (s.f0.choice instanceof Arguments) {
               return;
             }
@@ -1112,7 +1112,7 @@ public class Ast {
   }
 
   // Returns an Enumeration of PrimarySuffix objects
-  public static Enumeration getPrimarySuffixes(PrimaryExpression p) {
+  public static Enumeration<PrimarySuffix> getPrimarySuffixes(PrimaryExpression p) {
     return p.f1.elements();
   }
 
@@ -1135,9 +1135,9 @@ public class Ast {
   /** Return true if this is the main method for this class. **/
   public static boolean isMain(MethodDeclaration md) {
     if (Ast.getName(md).equals("main")) {
-      List params = Ast.getParameters(md);
+      List<FormalParameter> params = Ast.getParameters(md);
       if (params.size() == 1) {
-        FormalParameter fp = (FormalParameter)params.get(0);
+        FormalParameter fp = params.get(0);
         String paramtype = Ast.getType(fp);
         if (Ast.typeMatch("java.lang.String[]", paramtype)) {
           return true;

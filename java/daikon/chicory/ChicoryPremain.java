@@ -150,7 +150,7 @@ public class ChicoryPremain {
             if (line != null)
                 pureMethods.add(line.trim());
         }
-        while(line != null);
+        while (line != null);
 
         try
         {

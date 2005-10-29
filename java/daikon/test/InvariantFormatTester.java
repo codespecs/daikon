@@ -356,7 +356,7 @@ public class InvariantFormatTester extends TestCase
 
       try {
         for (int i=0; i<invariantTestCases.size(); i++) {
-          FormatTestCase currentCase = (FormatTestCase)invariantTestCases.get(i);
+          FormatTestCase currentCase = invariantTestCases.get(i);
           // System.out.println("Goal output #" + i);
           debugTemp = currentCase.generateGoalOutput(commands);
           // System.out.println(debugTemp);

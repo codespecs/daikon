@@ -173,9 +173,9 @@ class Test {
 
   public static void list_check (A a10, A a11) {
 
-      List list = new ArrayList();
-      list.add (a10);  // unchecked
-      list.add (a11);  // unchecked
+      List<A> list = new ArrayList<A>();
+      list.add (a10);
+      list.add (a11);
       list.contains (a11);
   }
 

@@ -39,7 +39,7 @@ public class CoverageStats
     throws Exception
   {
     String gretelFile = args[0];
-    List relevant = Arrays.asList(args).subList(1, args.length);
+    List<String> relevant = Arrays.asList(args).subList(1, args.length);
 
     // We use reflection for Gretel calls so that people don't have to
     // download Gretel to build Daikon.
@@ -89,13 +89,13 @@ public class CoverageStats
     int nall_sum = 0;
     int ncov_sum = 0;
     for (int i = 0; i < relevant.size(); i++) {
-      String file = (String) relevant.get(i);
+      String file = relevant.get(i);
       if (all.get(file) == null) {
 	System.out.println(file + " not instrumented (?)");
 	continue;
       }
-      int nall = ((Set) all.get(file)).size();
-      int ncov = (covered.get(file) == null) ? 0 : ((Set) covered.get(file)).size();
+      int nall = all.get(file).size();
+      int ncov = (covered.get(file) == null) ? 0 : covered.get(file).size();
       System.out.println(file + " covered on " + ncov + " of " + nall + " lines");
       nall_sum += nall;
       ncov_sum += ncov;

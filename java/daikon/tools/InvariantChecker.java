@@ -218,7 +218,7 @@ public class InvariantChecker {
       // If this is an exit point, process the saved enter point
       if (ppt.ppt_name.isExitPoint()) {
         Assert.assertTrue (nonce != null);
-        EnterCall ec = (EnterCall) call_map.get (nonce);
+        EnterCall ec = call_map.get (nonce);
         call_map.remove (nonce);
         debug.fine ("Processing enter sample from " + ec.ppt.name);
         add (ec.ppt, ec.vt);

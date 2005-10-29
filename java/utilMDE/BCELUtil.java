@@ -305,6 +305,7 @@ public class BCELUtil {
       ConstantPoolGen pool) {
 
     String out = "";
+    // not generic because BCEL is not generic
     for (Iterator i = il.iterator(); i.hasNext();) {
       InstructionHandle handle = (InstructionHandle) i.next();
       out += handle.getInstruction().toString(pool.getConstantPool()) + "\n";
