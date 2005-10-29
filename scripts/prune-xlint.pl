@@ -20,6 +20,9 @@ $WARNING = 1;
 
 $OUTPUT_AUTOFLUSH = 1;
 
+my $debug = 0;
+# $debug = 1;
+
 my $file_line_re = "^[^\n]+:[0-9]+:";
 
 my @ORIG_ARGV = (@ARGV);
@@ -28,7 +31,7 @@ my $file_regexp;
 if ((scalar(@ARGV) > 1) && ($ARGV[0] eq "-p")) {
   shift(@ARGV);                 # get rid of "-p"
   $file_regexp = shift (@ARGV);
-  # print "found arg: $file_regexp\n";
+  if ($debug) { print "found arg: $file_regexp\n"; }
 }
 
 if (scalar(@ARGV) > 1) {
@@ -64,7 +67,13 @@ while (defined(my $line = <>)) {
   $data = (defined($parts[2]) ? $parts[2] : "");
   my $record = $parts[1];
 
+  if ($debug) {
+    print "record = <<<$record>>>\n";
+  }
+
   # if ($record eq "") { next; }
+
+  ## Summary of number of errors/warnings
   if ($record =~ /^([0-9]+) errors\n$/) {
     print $record;
     next;
@@ -76,15 +85,18 @@ while (defined(my $line = <>)) {
     }
     next;
   }
+
   if ($record !~ /$file_line_re/) {
     die "this can't happen";
   }
 
   if ($record =~ /: warning: \[unchecked\] unchecked.*\/\/ unchecked/s) {
+    if ($debug) { print "suppressed an unchecked warning"; }
     $removed_warnings++;
     next;
   }
-  if (defined($file_regexp) && ($record =~ /$file_regexp.*:[0-9]+: warning: /)) {
+  if (defined($file_regexp) && ($record =~ /($file_regexp).*:[0-9]+: warning: \[unchecked\] unchecked/)) {
+    if ($debug) { print "suppressed an unchecked warning in pruned directory\n"; }
     $removed_warnings++;
     next;
   }
