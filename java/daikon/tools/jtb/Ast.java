@@ -1094,9 +1094,9 @@ public class Ast {
         Node gp = n.getParent().getParent();
         if (gp instanceof PrimaryPrefix) {
           PrimaryExpression ggp = (PrimaryExpression) gp.getParent();
-          for (Enumeration<PrimarySuffix> e = getPrimarySuffixes(ggp);
+          for (Enumeration e = getPrimarySuffixes(ggp);
                e.hasMoreElements(); ) {
-            PrimarySuffix s = e.nextElement();
+            PrimarySuffix s = (PrimarySuffix) e.nextElement();
             if (s.f0.choice instanceof Arguments) {
               return;
             }
@@ -1111,8 +1111,11 @@ public class Ast {
     return v.symbolNames;
   }
 
-  // Returns an Enumeration of PrimarySuffix objects
-  public static Enumeration<PrimarySuffix> getPrimarySuffixes(PrimaryExpression p) {
+  /**
+   * Returns an Enumeration of PrimarySuffix objects (but the static type
+   * of the elements is only known to be Node).
+   **/
+  public static Enumeration getPrimarySuffixes(PrimaryExpression p) {
     return p.f1.elements();
   }
 
