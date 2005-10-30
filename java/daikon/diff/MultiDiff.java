@@ -1,4 +1,3 @@
-
 // MultiDiff.java
 
 package daikon.diff;
