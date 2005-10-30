@@ -354,18 +354,18 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    *  may appear in the splitting condition.
    */
   private static boolean isNormalVar(VarInfo varInfo) {
-    return ((! isClassVar(varInfo)) &&
+    return ((! isTypeOfVar(varInfo)) &&
             (! isSizeVar(varInfo)) &&
             (! isThisVar(varInfo)));
   }
 
   /**
    * Determines if the variable represented by varInfo is
-   * a ".class" variable.
+   * a ".getClass()" variable.
    * @param varInfo the VarInfo of the variable being tested.
-   * @return true iff varInfo is a ".class" variable.
+   * @return true iff varInfo is a ".getClass()" variable.
    */
-  private static boolean isClassVar(VarInfo varInfo) {
+  private static boolean isTypeOfVar(VarInfo varInfo) {
     return ((varInfo.name instanceof VarInfoName.TypeOf) ||
             ((varInfo.name instanceof VarInfoName.Prestate) &&
              (((VarInfoName.Prestate) varInfo.name).term

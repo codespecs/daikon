@@ -966,7 +966,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         varname = ppt.ppt_name.getFullClassName() + "." + field;
       else
         throw new Error("Bad ppt: " + ppt);
-      varname += "[].class";
+      varname += "[]" + VarInfoName.getClassSuffix;
       VarInfo vi = ppt.findVar(varname);
       if (vi == null) {
         // This means that we found a variable in the source code that is

@@ -869,7 +869,7 @@ public final class PrintInvariants {
           Derivation derived = vi.derived;
           VarInfoName vin = vi.name;
           if (vin instanceof VarInfoName.TypeOf) {
-            // "VAR.class"
+            // "VAR.getClass()"
             vi = null;
           } else if (vin instanceof VarInfoName.SizeOf) {
             // "size(VAR)"

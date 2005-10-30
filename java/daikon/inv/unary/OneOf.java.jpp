@@ -544,8 +544,26 @@ public final class ONEOFSCALAR
       } else {
         return varname + " == " + TOSTRING(elts[0]);
       }
+#elif defined(STRING) || defined(ELTSTRING)
+      boolean is_type = is_type();
+      if (! is_type) {
+        return varname + " == " + TOSTRING(elts[0]);
+      } else {
+        // It's a type
+        String str = elts[0];
+        if ((str == null) || "null".equals(str)) {
+          return varname + " == " + "null";
+        } else {
+          if (str.startsWith("[")) {
+            str = UtilMDE.classnameFromJvm(str);
+          }
+          // ".class" (which is a suffix for a type name) and not
+          // getClassSuffix (which is a suffix for an expression).
+          return varname + " == " + str + ".class";
+        }
+      }
 #else
-      return varname + " == " + TOSTRING(elts[0]);
+        return varname + " == " + TOSTRING(elts[0]);
 #endif
     } else {
       return varname + " one of " + subarray_rep();
@@ -619,7 +637,7 @@ public final class ONEOFSCALAR
 
 #if defined(STRING) || defined(ELTSTRING)
   private boolean is_type() {
-    return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
+    return var().name.hasTypeOf();
   }
 #endif
 
@@ -1171,18 +1189,20 @@ public final class ONEOFSCALAR
     boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
-      result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += JAVA_EQUALS_STRING(TOSTRING(str));
+        result += varname + JAVA_EQUALS_STRING(TOSTRING(str));
       } else {
-        result += " == ";
+        // It's a type
         if ((str == null) || "null".equals(str)) {
-          result += "null";
-        } else if (str.startsWith("[")) {
-          result += "\"" + UtilMDE.classnameFromJvm(str) + "\"";
+          result += varname + " == " + "null";
         } else {
-          result += "\"" + str + "\"";
+          if (str.startsWith("[")) {
+            str = UtilMDE.classnameFromJvm(str);
+          }
+          // ".class" (which is a suffix for a type name) and not
+          // getClassSuffix (which is a suffix for an expression).
+          result += varname + " == " + str + ".class";
         }
       }
     }
@@ -1418,7 +1438,7 @@ public final class ONEOFSCALAR
     if (result.trim().equals(""))
       result = "format_simplify() failed on a weird OneOf";
 #else
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    String classname = this.getClass().toString().substring(6); // remove leading "class "
     result =  "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
 #endif
 #if defined(IS_ELT)

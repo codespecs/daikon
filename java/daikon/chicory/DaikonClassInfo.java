@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * The DaikonClassInfo class is a subtype of DaikonVariableInfo used
  * for variables which represent the runtime type of a variable (ie,
- * ".class" variables).
+ * ".getClass()" variables).
  */
 public class DaikonClassInfo extends DaikonVariableInfo
 {
@@ -35,7 +35,7 @@ public class DaikonClassInfo extends DaikonVariableInfo
     {
         if (isArray)
         {
-            //a list of the runtime type of each value in the array
+            // A list of the runtime type of each value in the array.
             List<String> name_list
               = DTraceWriter.getTypeNameList((List<Object>) val); // unchecked
             if (name_list == null)

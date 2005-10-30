@@ -401,6 +401,19 @@ public final class INTEQUAL
         return (vis[0].file_rep_type.isIntegral()
                 && vis[1].file_rep_type.isIntegral());
       #endif
+    #elif defined (IS_STRING)
+      #if defined (EQUALSTRING) || defined (NONEQUALSTRING)
+        boolean result = (! (vis[0].name.hasTypeOf() ^ vis[0].name.hasTypeOf()));
+        return result;
+      #else
+        boolean result = (! (vis[0].name.hasTypeOf() || vis[0].name.hasTypeOf()));
+        // System.out.printf(INTEQUALstring + ".instantiate_ok(");
+        // for (VarInfo vi : vis) {
+        //   System.out.printf("%s ", vi.name.name());
+        // }
+        // System.out.printf(") => %s%n", result);
+        return result;
+      #endif
     #else
       return (true);
     #endif
@@ -581,116 +594,16 @@ public final class INTEQUAL
   }
 
   public String format_using(OutputFormat format) {
-    if (format == OutputFormat.REPAIR)
-    {
-      boolean lefthasfield=var1().name.name().indexOf(".")!=-1;
-      boolean righthasfield=var2().name.name().indexOf(".")!=-1;
-      String comparator = EQUALSstring;
-
-      String var1name;
-      String var2name;
-
-#if defined(GREATERTHAN) || defined(GREATEREQUAL)
-      /* Want all inequalities to be expressed in the same form if
-         possible.  That way changes are easily propagated upward. */
-
-      if (lefthasfield) {
-        /* No flip necessary */
-        var1name=var1().name.repair_name(var1());
-        if (var2().name instanceof Simple)
-          var2name=((Simple)var2().name).repair_name(var2(),false);
-        else
-          var2name=var2().name.repair_name(var2());
-      } else if (righthasfield) {
-        /* Need to flip */
-        comparator = INVEQUALSstring;
-        var1name=var2().name.repair_name(var2());
-        if (var1().name instanceof Simple)
-          var2name=((Simple)var1().name).repair_name(var1(),false);
-        else
-          var2name=var1().name.repair_name(var1());
-      } else {
-        /* Need to rewrite lefthand side */
-        var1name=var1().name.repair_name(var1());
-        if (var2().name instanceof Simple)
-          var2name=((Simple)var2().name).repair_name(var2(),false);
-        else
-          var2name=var2().name.repair_name(var2());
-      }
-#else
-      /* Daikon prints out equality sets with the left hand side being
-         the leader...  This causes problems with the repair tool
-         currently, so we flip them when possible */
-
-      if (righthasfield) {
-        /* Need to flip */
-        comparator = INVEQUALSstring;
-        var1name=var2().name.repair_name(var2());
-        if (var1().name instanceof Simple)
-          var2name=((Simple)var1().name).repair_name(var1(),false);
-        else
-          var2name=var1().name.repair_name(var1());
-      } else if (lefthasfield) {
-        /* No flip necessary */
-        var1name=var1().name.repair_name(var1());
-        if (var2().name instanceof Simple)
-          var2name=((Simple)var2().name).repair_name(var2(),false);
-        else
-          var2name=var2().name.repair_name(var2());
-      } else {
-        /* Need to rewrite righthand side */
-        comparator = INVEQUALSstring;
-        var1name=var2().name.repair_name(var1());
-        if (var1().name instanceof Simple)
-          var2name=((Simple)var1().name).repair_name(var1(),false);
-        else
-          var2name=var1().name.repair_name(var1());
-      }
-#endif
-      /*
-        if (lefthasfield) {
-        // No flip necessary
-      var1name=var1().name.repair_name(var1());
-        if (var2().name instanceof Simple)
-          var2name=((Simple)var2().name).repair_name(var2(),false);
-        else
-          var2name=var2().name.repair_name(var2());
-    } else if (righthasfield) {
-        // Need to flip
-        comparator = INVEQUALSstring;
-        var1name=var2().name.repair_name(var2());
-        if (var1().name instanceof Simple)
-          var2name=((Simple)var1().name).repair_name(var1(),false);
-        else
-          var2name=var1().name.repair_name(var1());
-      } else {
-        // Need to rewrite lefthand side
-        var1name=var1().name.repair_name(var1());
-        if (var2().name instanceof Simple)
-          var2name=((Simple)var2().name).repair_name(var2(),false);
-        else
-          var2name=var2().name.repair_name(var2());
-      }
-    */
-
-#if defined(EQUAL_OP)
-      comparator = "=";
-#elif defined(NONEQUAL_OP)
-      comparator = "!=";
-#endif
-
-      return var1name + " " + comparator + " " + var2name;
+    if (format == OutputFormat.REPAIR) {
+      return format_repair();
     }
 
     String var1name = var1().name.name_using(format, var1());
     String var2name = var2().name.name_using(format, var2());
 
-
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.IOA))
-
-    {
+        || (format == OutputFormat.IOA)) {
       String comparator = EQUALSstring;
       #if defined(EQUAL_OP)
         if (format == OutputFormat.IOA) comparator = "=";
@@ -714,9 +627,19 @@ public final class INTEQUAL
       #elif defined(GREATEREQUALFLOAT)
         return Invariant.formatFuzzy("gte", var1(), var2(), format);
       #elif defined(EQUALSTRING)
-        return var1name + ".equals(" + var2name + ")";
+        assert var1().name.hasTypeOf() == var2().name.hasTypeOf();
+        if (var1().name.hasTypeOf()) {
+          return var1name + " == " + var2name;
+        } else {
+          return var1name + ".equals(" + var2name + ")";
+        }
       #elif defined(NONEQUALSTRING)
-        return "!" + var1name + ".equals(" + var2name + ")";
+        assert var1().name.hasTypeOf() == var2().name.hasTypeOf();
+        if (var1().name.hasTypeOf()) {
+          return var1name + " != " + var2name;
+        } else {
+          return "!" + var1name + ".equals(" + var2name + ")";
+        }
       #elif defined (LESSTHANSTRING)
         return var1name + ".compareTo(" + var2name +") < 0";
       #elif defined (LESSEQUALSTRING)
@@ -752,6 +675,106 @@ public final class INTEQUAL
     }
 
     return format_unimplemented(format);
+  }
+
+  public String format_repair() {
+    boolean lefthasfield=var1().name.name().indexOf(".")!=-1;
+    boolean righthasfield=var2().name.name().indexOf(".")!=-1;
+    String comparator = EQUALSstring;
+
+    String var1name;
+    String var2name;
+
+#if defined(GREATERTHAN) || defined(GREATEREQUAL)
+    /* Want all inequalities to be expressed in the same form if
+       possible.  That way changes are easily propagated upward. */
+
+    if (lefthasfield) {
+      /* No flip necessary */
+      var1name=var1().name.repair_name(var1());
+      if (var2().name instanceof Simple)
+        var2name=((Simple)var2().name).repair_name(var2(),false);
+      else
+        var2name=var2().name.repair_name(var2());
+    } else if (righthasfield) {
+      /* Need to flip */
+      comparator = INVEQUALSstring;
+      var1name=var2().name.repair_name(var2());
+      if (var1().name instanceof Simple)
+        var2name=((Simple)var1().name).repair_name(var1(),false);
+      else
+        var2name=var1().name.repair_name(var1());
+    } else {
+      /* Need to rewrite lefthand side */
+      var1name=var1().name.repair_name(var1());
+      if (var2().name instanceof Simple)
+        var2name=((Simple)var2().name).repair_name(var2(),false);
+      else
+        var2name=var2().name.repair_name(var2());
+    }
+#else
+    /* Daikon prints out equality sets with the left hand side being
+       the leader...  This causes problems with the repair tool
+       currently, so we flip them when possible */
+
+    if (righthasfield) {
+      /* Need to flip */
+      comparator = INVEQUALSstring;
+      var1name=var2().name.repair_name(var2());
+      if (var1().name instanceof Simple)
+        var2name=((Simple)var1().name).repair_name(var1(),false);
+      else
+        var2name=var1().name.repair_name(var1());
+    } else if (lefthasfield) {
+      /* No flip necessary */
+      var1name=var1().name.repair_name(var1());
+      if (var2().name instanceof Simple)
+        var2name=((Simple)var2().name).repair_name(var2(),false);
+      else
+        var2name=var2().name.repair_name(var2());
+    } else {
+      /* Need to rewrite righthand side */
+      comparator = INVEQUALSstring;
+      var1name=var2().name.repair_name(var1());
+      if (var1().name instanceof Simple)
+        var2name=((Simple)var1().name).repair_name(var1(),false);
+      else
+        var2name=var1().name.repair_name(var1());
+    }
+#endif
+    /*
+      if (lefthasfield) {
+      // No flip necessary
+      var1name=var1().name.repair_name(var1());
+      if (var2().name instanceof Simple)
+      var2name=((Simple)var2().name).repair_name(var2(),false);
+      else
+      var2name=var2().name.repair_name(var2());
+      } else if (righthasfield) {
+      // Need to flip
+      comparator = INVEQUALSstring;
+      var1name=var2().name.repair_name(var2());
+      if (var1().name instanceof Simple)
+      var2name=((Simple)var1().name).repair_name(var1(),false);
+      else
+      var2name=var1().name.repair_name(var1());
+      } else {
+      // Need to rewrite lefthand side
+      var1name=var1().name.repair_name(var1());
+      if (var2().name instanceof Simple)
+      var2name=((Simple)var2().name).repair_name(var2(),false);
+      else
+      var2name=var2().name.repair_name(var2());
+      }
+    */
+
+#if defined(EQUAL_OP)
+    comparator = "=";
+#elif defined(NONEQUAL_OP)
+    comparator = "!=";
+#endif
+
+    return var1name + " " + comparator + " " + var2name;
   }
 
   public InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {

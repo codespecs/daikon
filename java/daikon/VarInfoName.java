@@ -43,6 +43,9 @@ public abstract class VarInfoName
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020614L;
 
+  /** Suffix for variables that represent a class, e.g., "foo.getClass()". **/
+  public static final String getClassSuffix = ".getClass()";
+
   /**
    * Given the standard String representation of a variable name (like
    * what appears in the normal output format), return the
@@ -56,8 +59,9 @@ public abstract class VarInfoName
    **/
   public static VarInfoName parse(String name) {
     // x.class
-    if (name.endsWith(".class")) {
-      return parse(name.substring(0, name.length()-6)).applyTypeOf();
+    if (name.endsWith(getClassSuffix)) {
+      return parse(name.substring(0, name.length()-getClassSuffix.length()))
+        .applyTypeOf();
     }
 
     // a quoted string
@@ -499,6 +503,10 @@ public abstract class VarInfoName
       }
     }
     return false;
+  }
+
+  public boolean hasTypeOf() {
+    return hasNodeOfType(VarInfoName.TypeOf.class);
   }
 
   /**
@@ -1429,7 +1437,7 @@ public abstract class VarInfoName
 
       object = splits[0];
       if (isStatic) {
-        object += ".class";
+        object += getClassSuffix;
       }
       if (object.equals("return")) {
         if (format == OutputFormat.DBCJAVA) {
@@ -1489,13 +1497,13 @@ public abstract class VarInfoName
 
   /**
    * Returns a name for the type of this object; form is like
-   * "this.class" or "\typeof(this)".
+   * "this.getClass()" or "\typeof(this)".
    **/
   public VarInfoName applyTypeOf() {
     return (new TypeOf(this)).intern();
   }
 
-  /** The type of the term, like "term.class" or "\typeof(term)". **/
+  /** The type of the term, like "term.getClass()" or "\typeof(term)". **/
   public static class TypeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1511,10 +1519,10 @@ public abstract class VarInfoName
       return "TypeOf[" + term.repr() + "]";
     }
     protected String name_impl() {
-      return term.name() + ".class";
+      return term.name() + getClassSuffix;
     }
     protected String repair_name_impl(VarInfo vi) {
-      return term.repair_name_impl(vi)+"$noprint.class";
+      return term.repair_name_impl(vi)+"$noprint"+getClassSuffix;
     }
     public VarInfoName getBase() {
       return null;
@@ -1533,7 +1541,7 @@ public abstract class VarInfoName
       if (isArray) {
         return "daikon.Quant.typeArray(" + varname + ")";
       } else {
-        return varname + ".getClass().getName()";
+        return varname + getClassSuffix;
       }
     }
 

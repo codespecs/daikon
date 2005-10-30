@@ -1,10 +1,10 @@
-
 package daikon.chicory;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import daikon.Chicory;
+import daikon.VarInfoName;
 
 
 /**
@@ -417,7 +417,7 @@ public abstract class DaikonVariableInfo
             //.class variable
             if (shouldAddRuntimeClass(type))
             {
-                DaikonVariableInfo thisClass = new DaikonClassInfo("this.class", false);
+                DaikonVariableInfo thisClass = new DaikonClassInfo("this.getClass()", false);
 
                 thisClass.typeName = classClassName;
                 thisClass.repTypeName = stringClassName;
@@ -926,8 +926,8 @@ public abstract class DaikonVariableInfo
 
            addChild(child);
 
-           //.class var
-           DaikonVariableInfo childClass = new DaikonClassInfo(offset + theName + "[].class", true);
+           // .getClass() var
+           DaikonVariableInfo childClass = new DaikonClassInfo(offset + theName + "[]" + VarInfoName.getClassSuffix, true);
 
            childClass.typeName = classClassName + "[]";
            childClass.repTypeName = stringClassName + "[]" ;
@@ -951,9 +951,10 @@ public abstract class DaikonVariableInfo
        if (theName.contains("[]") || offset.contains ("[]"))
            postString = "[]";
 
-       //add daikoninfo type
-       DaikonVariableInfo classInfo = new DaikonClassInfo(offset + theName + ".class",
-               (offset+theName).contains("[]"));
+       // add daikoninfo type
+       DaikonVariableInfo classInfo
+           = new DaikonClassInfo(offset + theName + VarInfoName.getClassSuffix,
+                                 (offset+theName).contains("[]"));
 
        classInfo.typeName = classClassName + postString;
        classInfo.repTypeName = stringClassName + postString;

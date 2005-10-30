@@ -9,10 +9,11 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if defined(SCALAR)
+  #define IS_SCALAR
+  #undef SCALAR
   #define CLASSNAME Member
   #define SEQUENCESCALAR SequenceScalar
   #define SEQUENCESCALARPKG sequenceScalar
-  #undef SCALAR
   #define SCALAR long
   #define PROGLANG_INT ProglangType.INT
   #define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
@@ -23,13 +24,13 @@ The correct way to build the system is to run 'make'.
   #define SEQUENCEINITIAL SequenceInitial
   #define INDEXOF ArraysMDE.indexOf
 #elif defined(STRING)
+  #undef STRING
+  #define IS_STRING
   #define CLASSNAME MemberString
   #define SEQUENCESCALAR SequenceString
   #define SEQUENCESCALARPKG sequenceString
-  #undef SCALAR
   #define SCALAR String
   #define THIS_UNDEF_OF_STRING is because string is defined to "1" in cpp.
-  #undef STRING
   #define PROGLANG_INT ProglangType.STRING
   #define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
   #define SEQ_SUBSCRIPT SequenceStringSubscript
@@ -266,19 +267,21 @@ public final class CLASSNAME
       return format_daikon();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
-#ifdef SCALAR
+#ifdef IS_SCALAR
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
+#endif
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
-#endif
     } else {
       return format_unimplemented(format);
     }
   }
 
   public String format_daikon() {
-    return sclvar().name.name() + " in " + seqvar().name.name();
+    String sclname = sclvar().name.name();
+    String seqname = seqvar().name.name();
+    return sclname + " in " + seqname;
   }
 
   public String format_java() {
@@ -292,13 +295,12 @@ public final class CLASSNAME
   }
 
   public String format_java_family(OutputFormat format) {
-    return "daikon.Quant.memberOf(" + sclvar().name.name_using(format, sclvar())
-      + " , " + seqvar().name.name_using(format, seqvar()) + " )";
+    String sclname = sclvar().name.name_using(format, sclvar());
+    String seqname = seqvar().name.name_using(format, seqvar());
+    return "daikon.Quant.memberOf(" + sclname
+      + " , " + seqname + " )";
   }
 
-  // XXX this "#ifdef SCALAR" test seems unlikely to have its original
-  // meaning, since it's currently always true. -smcc
-#ifdef SCALAR
   public String format_esc() {
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
@@ -307,6 +309,7 @@ public final class CLASSNAME
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
+#ifdef IS_SCALAR
   public String format_simplify() {
     if (Invariant.dkconfig_simplify_define_predicates) {
       String[] seq_name =
