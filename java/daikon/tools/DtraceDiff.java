@@ -351,8 +351,9 @@ public class DtraceDiff {
 	if (v1.length != v2.length)
 	  return false;
 	for (int i = 0; i<v1.length; i++)
-	  if (!(Global.fuzzy.eq(v1[i], v2[i])))
-	    return false;
+          if (!((Double.isNaN(v1[i]) && Double.isNaN(v2[i]))
+                || Global.fuzzy.eq(v1[i], v2[i])))
+            return false;
 	return true;
       }
       else if (type.baseIsString()) {
@@ -380,10 +381,12 @@ public class DtraceDiff {
       }
       else if (type.isScalar())
 	return (((Long)val1).longValue() == ((Long)val2).longValue());
-      else if (type.isFloat())
-	return Global.fuzzy.eq (((Double)val1).doubleValue(),
-				((Double)val2).doubleValue());
-      else if (type.isString())
+      else if (type.isFloat()) {
+        double d1 = ((Double)val1).doubleValue();
+        double d2 = ((Double)val2).doubleValue();
+	return ((Double.isNaN(d1) && Double.isNaN(d2))
+                || Global.fuzzy.eq (d1, d2));
+      } else if (type.isString())
 	return (((String)val1).equals((String)val2));
     }
     throw new Error ("Unexpected value type found");  // should never happen
