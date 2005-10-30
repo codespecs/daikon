@@ -549,7 +549,7 @@ Goal (esc): !(\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != b))
 Goal (ioa): b \in a
 Goal (jml): daikon.Quant.memberOf(b , a )
 Goal (dbc): daikon.Quant.memberOf(b , a )
-Goal (simplify): (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) |b|))))
+Goal (simplify): warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: b in a[]
 ["A" "b" "C" "longerString" "under_score" "findMe" "various" "other strings" "involved" "in" "the array"]
 "findMe"
 
