@@ -64,7 +64,7 @@ public class FuzzyFloat {
 
   /*@ pure */ public boolean eq (double d1, double d2) {
 
-    //NaNs are not considered equal
+    // NaNs are not considered equal.
     if (Double.isNaN(d1) && Double.isNaN(d2))
       return (false);
 
