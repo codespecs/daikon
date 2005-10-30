@@ -864,7 +864,7 @@ implementation.  Now, look at the first section of Daikon output.
 ======================================================================
 StackAr:::OBJECT
 this.theArray != null
-this.theArray.class == "java.lang.Object[]"
+this.theArray.getClass() == java.lang.Object[].class
 this.topOfStack >= -1
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
@@ -1869,8 +1869,8 @@ two-dimensional array.
 @c @samp{this->@var{fieldname}}.
 
 @item
-@cindex @code{.class} variable
-@code{x.class} is the runtime type of @code{x}, which may
+@cindex @code{.getClass()} variable
+As in Java, @code{x.getClass()} is the runtime type of @code{x}, which may
 differ from its declared type.
 
 @item
@@ -3061,29 +3061,27 @@ When this switch is on, Chicory will only traverse fields that are
 visible from a given program point.  For instance, private fields of
 class B will not be included at a program point for class A@.
 By default, Chicory outputs all fields, even those that would not be
-accessible in Java code at the given program point.
+accessible in Java code at the given program point.  When you supply
+@option{--std-vis}, consider also supplying @option{--purity-file} to
+enrich the set of expressions in Daikon's output.
 
 
-@item --purity-file=@var{file}
-Specifies a @file{*.pure} file to read.  It may be specified as a full
-path or just a file name.  If a configuration directory is specified via
-@option{--configs=@var{directory}}, then Chicory looks for @var{file} in
-@var{directory}.  Otherwise, it searches for @var{file} in the current
-directory.
+@item --purity-file=@var{pure-methods-file}
+@cindex pure methods
+@cindex observer methods, as synonym for pure methods
+File @var{pure-methods-file} lists the pure methods (sometimes called
+observer methods) in a Java program.  Pure methods have no externally
+side effects, such as setting variables or producing output.  For
+example, most implementations of the @code{hashCode()},
+@code{toString()}, and @code{equals()} methods are pure.
 
-Pure methods have no side effects (such as setting variables or
-producing output).  Invoking a pure method at any time in an application
-should not change the execution of the rest of the application.  For
-example, most implementations of @code{hashCode()} and @code{toString()}
-methods are pure.  Thus, if we took an existing application and added
-calls to @code{toString()} on various objects, its input-output
-relationship should not change.
+For each variable, Chicory adds to the trace new ``fields'' that
+represent invoking each pure method on the variable.  (Currently,
+Chicory does so only for pure methods that take no parameters, and
+obviously this mechanism is only useful for methods that return a value:
+a pure method that returns no value does nothing!)  
 
-Chicory adds to the trace a new ``variable'' that represents invoking
-each pure method in a given class.  (Currently, Chicory does so only for
-pure methods that take no parameters, and obviously this mechanism is
-only useful for methods that return a value:  a pure method that returns
-no value does nothing!)  Here is an example:
+Here is an example:
 
 @example
 class Point @{
@@ -3094,12 +3092,17 @@ class Point @{
 @}
 @end example
 
-If a user tells Chicory that @code{radiusSquared()} is pure via the
-@option{--purity-file=@var{file}} switch, then for each point @var{p},
-Chicory will output the variables @code{@var{p}.x}, @code{@var{p}.y},
-and @code{@var{p}.radiusSquared()}.  Use of pure methods can improve the
-Daikon output, since they represent information that the programmer
-considered important but that is not necessarily stored in a variable.
+I @code{radiusSquared()} has been specified as pure, then for each point
+@var{p}, Chicory will output the variables @code{@var{p}.x},
+@code{@var{p}.y}, and @code{@var{p}.radiusSquared()}.  Use of pure
+methods can improve the Daikon output, since they represent information
+that the programmer considered important but that is not necessarily
+stored in a variable.
+
+Invoking a pure method at any time in an application should not change
+the application's behavior.  If a non-pure method is listed in a purity
+file, then application behavior can change.  Chicory does not verify the
+purity of methods listed in the purity file.
 
 The purity file lists a set of methods, one per line.  The format of
 each method is given by the Sun JDK API:
@@ -3119,6 +3122,12 @@ Java Language Specification".  This is public, protected or private
 first, and then other modifiers in the following order: abstract,
 static, final, synchronized native.
 @end quotation
+
+By convention, @var{pure-methods-file} has the suffix @file{.pure}.  If
+@var{pure-methods-file} is specified as a relative (not absolute) file
+name, it is searched for in the configuration directory specified via
+@option{--configs=@var{directory}}, or in the current directory if no
+configuration dirctory is specified.
 
 @item --watch-static-recursion
 If this switch is on, Chicory will traverse the static fields of a given class
@@ -8147,7 +8156,7 @@ x
 Object
 int
 1
-x.class
+x.getClass()
 Class
 String
 -1
@@ -8155,7 +8164,7 @@ this.theArray
 Object[]
 int
 -2
-this.theArray.class
+this.theArray.getClass()
 Class
 String
 -1
@@ -8163,7 +8172,7 @@ this.theArray[]
 Object[]
 int[]
 1
-this.theArray[].class
+this.theArray[].getClass()
 Class[]
 String[]
 -1
@@ -8178,7 +8187,7 @@ x
 Object
 int
 1
-x.class
+x.getClass()
 Class
 String
 -1
@@ -8186,7 +8195,7 @@ this.theArray
 Object[]
 int
 -2
-this.theArray.class
+this.theArray.getClass()
 Class
 String
 -1
@@ -8194,7 +8203,7 @@ this.theArray[]
 Object[]
 int[]
 1
-this.theArray[].class
+this.theArray[].getClass()
 Class[]
 String[]
 -1
@@ -8209,7 +8218,7 @@ this.theArray
 Object[]
 int
 -2
-this.theArray.class
+this.theArray.getClass()
 Class
 String
 -1
@@ -8217,7 +8226,7 @@ this.theArray[]
 Object[]
 int[]
 1
-this.theArray[].class
+this.theArray[].getClass()
 Class[]
 String[]
 -1
@@ -8248,19 +8257,19 @@ this_invocation_nonce
 x
 1217030
 1
-x.class
+x.getClass()
 "DataStructures.MyInteger"
 1
 this.theArray
 3852104
 1
-this.theArray.class
+this.theArray.getClass()
 "java.lang.Object[]"
 1
 this.theArray[]
 [null]
 1
-this.theArray[].class
+this.theArray[].getClass()
 [null]
 1
 this.topOfStack
@@ -8271,13 +8280,13 @@ StackAr:::OBJECT
 this.theArray
 3852104
 1
-this.theArray.class
+this.theArray.getClass()
 "java.lang.Object[]"
 1
 this.theArray[]
 [null]
 1
-this.theArray[].class
+this.theArray[].getClass()
 [null]
 1
 this.topOfStack
@@ -8292,19 +8301,19 @@ this_invocation_nonce
 x
 1217030
 1
-x.class
+x.getClass()
 "DataStructures.MyInteger"
 1
 this.theArray
 3852104
 1
-this.theArray.class
+this.theArray.getClass()
 "java.lang.Object[]"
 1
 this.theArray[]
 [1217030]
 1
-this.theArray[].class
+this.theArray[].getClass()
 ["DataStructures.MyInteger"]
 1
 this.topOfStack
@@ -8315,13 +8324,13 @@ StackAr:::OBJECT
 this.theArray
 3852104
 1
-this.theArray.class
+this.theArray.getClass()
 "java.lang.Object[]"
 1
 this.theArray[]
 [1217030]
 1
-this.theArray[].class
+this.theArray[].getClass()
 ["DataStructures.MyInteger"]
 1
 this.topOfStack
@@ -8336,19 +8345,19 @@ this_invocation_nonce
 x
 1482257
 1
-x.class
+x.getClass()
 "DataStructures.StackAr"
 1
 this.theArray
 350965
 1
-this.theArray.class
+this.theArray.getClass()
 "java.lang.Object[]"
 1
 this.theArray[]
 [null]
 1
-this.theArray[].class
+this.theArray[].getClass()
 [null]
 1
 this.topOfStack
@@ -8359,13 +8368,13 @@ StackAr:::OBJECT
 this.theArray
 350965
 1
-this.theArray.class
+this.theArray.getClass()
 "java.lang.Object[]"
 1
 this.theArray[]
 [null]
 1
-this.theArray[].class
+this.theArray[].getClass()
 [null]
 1
 this.topOfStack
