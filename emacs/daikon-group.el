@@ -36,7 +36,9 @@
 
 ;; Use guess-offset in favor of c-set-basic-offset
 (require 'guess-offset)
+(setq guess-offset-minimum-superiority 1.5) ; default 2
 ;; (load "c-set-basic-offset")
+
 (load "remove-trailing-whitespace")
 (defun unset-indent-tabs-mode ()
   (setq indent-tabs-mode nil))
@@ -154,7 +156,7 @@ Remake it first if it is more than a week old."
 			  (y-or-n-p (concat basename ".info is out of date; re-make it? "))))))
     (if remake
         (let ((default-directory dir))
-          (call-process "make" nil nil nil "info")
+          (call-process "makeinfo" nil nil nil (concat basename ".info"))
           (sit-for 0 500)               ; let the filesystem find the new file
           ;; The above was synchronous and minimal;
           ;; the below is asynchronous and maximal.
