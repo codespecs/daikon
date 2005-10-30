@@ -35,7 +35,7 @@ public class Annotate {
   //  * "modifies" clauses are inserted for changed variables.
   //    Use "a[*]", not "a[]" or "a[i]" or "a[i..]" or "a[...].field", for arrays;
   //    consider adding a \forall to specify which indices are *not* changed.
-  //    Modifies clauses should not contain "size()", ".class", or "~".
+  //    Modifies clauses should not contain "size()", ".getClass()", or "~".
   //    Modifies clauses should not contain final fields.
   //  * use "also_requires", "also_ensures", "also_modifies" if this method
   //    overrides another method/interface.
@@ -381,159 +381,159 @@ public class Annotate {
 // Jtest with their tool, version 1.x)
 
 //                     Design by Contract for Java
-
-
+//
+//
 //    This document describes the syntax and semantics for the "Design by
 // Contract" (DbC) specification supported by Jcontract 1.X.
-
+//
 //    The "Design by Contract" contracts are expressed with Java code
 // embedded in Javadoc comments in the .java source file.
-
-
+//
+//
 // 1. Javadoc Tags for Design by Contract.
 // --------------------------------------
-
+//
 //    The reserved javadoc tags for DbC are:
-
+//
 // - @invariant: specifies class invariant condition.
 // - @pre: specifies method pre-condition.
 // - @post: specifies method post-condition.
 // - @concurrency: specifies the method concurrency.
-
+//
 // Jcontract and Jtest also support the following tags:
-
+//
 // - @throws/@exception: to document exceptions.
 // - @assert: to put assertions in the method bodies.
 // - @verbose: to add verbose statements to the method bodies.
-
+//
 //    Please see "appendix10.txt" for information about those tags.
-
-
+//
+//
 // 2. Contract Syntax.
 // ------------------
-
+//
 //    The general syntax for a contract is:
-
+//
 //         DbcContract:
 //               DbcTag DbcCode
 //             | @concurrency { concurrent | guarded | sequential }
-
+//
 // where
-
+//
 //         DbcTag:
 //               @invariant
 //             | @pre
 //             | @post
-
+//
 //         DbcCode:
 //               BooleanExpression
 //             | '(' BooleanExpression ')'
 //             | '(' BooleanExpression ',' MessageExpression ')'
 //             | CodeBlock
 //             | $none
-
+//
 //         MessageExpression:
 //               Expression
-
+//
 //    Any Java code can be used in the DbcCode with the following restrictions:
-
+//
 // - The code should not have side effects, i.e. it should not have assignments
 //   or invocation of methods with side-effects.
-
+//
 //    Also the following extensions to Java (DbC keywords) are allowed in the
 // contract code:
-
+//
 // - $result: used in a @post contract, evaluates to the return value of the
 //   method.
-
+//
 // - $pre: used in a @post contract to refer to the value of an expression at
 //   @pre-time. The syntax to use it is: $pre (ExpressionType, Expression).
 //   Note: the full "$pre (...)" expression should not extend over multiple lines.
-
+//
 // - $assert: can be used in DbcCode CodeBlocks to specify the contract conditions.
 //   The syntax to use it is:
 //     $assert (BooleanExpression) or
 //     $assert (BooleanExpression , MessageExpression)
-
+//
 // - $none: to specify there is no contract.
-
-
+//
+//
 //    Notes:
-
+//
 // - The @pre, @post and @concurrent tags apply to the method that follows in
 //   the source file.
-
+//
 // - The MessageExpression is optional and will be used to identify the contract
 //   in the error messages or contract violation exceptions thrown.
 //   The MessageExpression can be of any type. If it is a reference type it will
 //   be converted to a String using the "toString ()" method. If it is of
 //   primitive type it will first be wrapped into an object.
-
+//
 // - There can be multiple conditions of the same kind for a given method.
 //   If there are multiple conditions, all conditions are checked. The
 //   conditions are ANDed together into one virtual condition.
 //   For example it is equivalent (and encouraged for clarity) to have multiple
 //   @pre conditions instead of a single big @pre condition.
-
-
+//
+//
 // Examples:
-
-
+//
+//
 //     /**
 //       * @pre {
 //       *     for (int i = 0; i < array.length; i++)
 //       *         $assert (array [i] != null, "array elements are non-null");
 //       * }
 //       */
-
+//
 //     public void set (int[] array) {...}
-
-
+//
+//
 //     /** @post $result == ($pre (int, arg) + 1) */
-
+//
 //     public int inc (arg) {...}
-
-
+//
+//
 //     /** @invariant size () >= 0 */
-
+//
 //     class Stack {...}
-
-
+//
+//
 //     /**
 //      * @concurrency sequential
 //      * @pre (value > 0, "value positive:" + value)
 //      */
-
+//
 //     void update (int value) {...}
-
-
+//
+//
 // 3. Contract Semantics.
 // ---------------------
-
+//
 //    The contracts are specified in comments and will not have any effect if
 // compiling or executing in a non DbC enhanced environment.
-
+//
 //    In a DbC enhanced environment the contracts are executed/checked when
 // methods of a class with DbC contracts are invoked.  Contracts placed inside
 // a method are treated like normal statements and can thus alter the flow of
 // poorly structured conditional statements.  See section 6: Coding Conventions
 // for details.
-
+//
 //    A contract fails if any of these conditions occur:
-
+//
 // a) The "BooleanExpression" evaluates to "false"
-
+//
 // b) An "$assert (BooleanExpression)" is called in a "CodeBlock" with an argument
 //    that evaluates to "false".
-
+//
 // c) The method is called in a way that violates its @concurrency contract.
-
+//
 //    If a contract fails the Runtime Handler for the class is notified of
 // the contract violation. Jcontract provides several Runtime Handlers, the
 // default one uses a GUI Monitor that shows the program progress and what
 // contracts are violated. The user can also write its own RuntimeHandlers,
 // for more information see {isntalldir}\docs\runtime.txt.
-
+//
 //    With the Moninor Runtime Handlers provided by Jcontract program execution
 // continues as if nothing had happened when a contract is violated, i.e. even
 // if a @pre contract is violated, the method will still be executed.
@@ -541,50 +541,50 @@ public class Annotate {
 // program to work in exactly the same way. The only difference is that in the
 // DbC enabled version the contract violations are reported to the current
 // Jcontract Monitor.
-
-
+//
+//
 //    Note that contract evaluation is not nested, when a contract calls
 // another methods, the contracts in the other method are not executed.
-
-
+//
+//
 // 4. DbC Contracts.
 // ----------------
-
+//
 //    This section gives details about each specific DbC tag.
-
-
+//
+//
 // 4.1 @pre.
 // - - - - -
-
+//
 //    Pre-conditions check that the client calls the method correctly.
-
+//
 // - Point of execution: right before calling the method.
-
+//
 // - Scope: can access anything accessible from the method scope except local
 //   variables. I.e. can access method arguments, and methods/fields of the
 //   class.
-
-
+//
+//
 // 4.2 @post.
 // - - - - -
-
+//
 //    Post-conditions check that the method doesn't work incorrectly.
 //    Sometimes when a post-condition fails it means that the method was not
 // actually supposed to accept the arguments that were passed to it. The fix in
 // this case is to strengthen the @pre-condition.
-
+//
 // - Point of execution: right after the method returns successfully. Note that
 //   if the method throws an exception the @post contract is not executed.
-
+//
 // - Scope: same as @pre plus can access "$result" and "$pre (type, expression)".
-
-
+//
+//
 // 4.3 @invariant.
 // - - - - - - - -
-
+//
 //    Class invariants are contracts that the objects of the class should
 // always satisfy.
-
+//
 // - Point of execution: same as @pre/@post: invariant checked before checking
 //   the pre-condition and after checking the post-condition.
 //   Done for every non-static, non-private method entry and exit and for
@@ -594,171 +594,171 @@ public class Annotate {
 //   - Not done for "finalize ()".
 //   - When inner class methods are executed, the invariants of the outer classes
 //     are not checked.
-
+//
 // - Scope: class scope, can access anything a method in the class can access,
 //   except local variables.
-
-
+//
+//
 // 4.4 @concurrency.
 // - - - - - - - - -
-
+//
 //    The @concurrency tag specifies how the method can be called by multiple
 // threads. Its possible values are:
-
+//
 // a) concurrent: the method can be called simultaneously by different threads.
 //    I.e. the method is multi-thread safe. Note that this is the default
 //    mode for Java methods.
-
+//
 // b) guarded: the method can be called simultaneously by different threads,
 //    but only one will execute it in turn, while the other threads will
 //    wait for the executing one to finish.
 //    I.e. it specifies that the method is synchronized.
 //    Jcontract will just give a compile-time error if a method is declared
 //    as "guarded" but is not declared as "synchronized".
-
+//
 // c) sequential: the method can only by executed by one thread at once and it
 //    is not declared synchronized. It is thus the responsibility of the callers
 //    to ensure that no simultaneous calls to that method occur. For methods with
 //    this concurrency contract Jcontract will generate code to check if they are
 //    being executed by more than one thread at once. An error will be reported
 //    at runtime if the contract is violated.
-
+//
 // - Point of execution: right before calling the method.
-
-
+//
+//
 // 5. Inheritance.
 // --------------
-
+//
 //    Contracts are inherited. If the derived class or overriding method doesn't
 // define a contract, it inherits that of the super class or interface.
 //    Note that a contract of $none implies that the super contract is applied.
-
+//
 //    If an overriding method does define a contract then it can only:
-
+//
 // - Weaken the precondition: because it should at least accept the same input as
 //   the parent, but it can also accept more.
-
+//
 // - Strengthen the postcondition: because it should at least do as much as the
 //   parent one, but it can also do more.
-
+//
 //    To enforce this:
-
+//
 // - When checking the @pre condition, the pre-condition contract is assumed to
 //   succeed if any of the @pre conditions of the chain of overridded methods
 //   succeeds. I.e. the preconditions are ORed.
-
+//
 // - When checking the @post condition, the post-condition contract is assumed
 //   to succeed if all the @post conditions of the chain of overridded methods
 //   succeed. I.e. the postconditions are ANDed.
-
+//
 //    Note that if there are multiple @pre conditions for a given method, the
 // preconditions are ANDed together into one virtual @pre condition and then
 // ORed with the virtual @pre conditions for the other methods in the chain
 // of overridden methods.
-
+//
 //    For @invariant conditions the same logic as for @post applies.
-
+//
 //    @concurrency contracts are also inherited. If the overriding method doesn't
 // have a @concurrency contract it inherits that of the parent. If it has an
 // inheritance contract it can only weaken it, like for @pre conditions. For
 // example if the parent has a "sequential" @concurrency, the overriding method
 // can have a "guarded" or "concurrent" @concurrency.
-
+//
 // 6. Special Keyword and Functions
-
+//
 // 6.1 Keywords
-
+//
 // $implies
-
+//
 //     You can use the '$implies' keyword to compare two boolean expressions,
 //     ensuring that when the first expression is true, the second one also
 //     is true.
-
+//
 //     Example: a $implies b
 //     This is equivalent to '!a || b'.
-
+//
 // 6.2 Collection functions
-
+//
 // Class and method contracts can contain a few special functions that are
 // internally mapped to equivalent Java code.
-
+//
 // These are:
-
+//
 // public boolean Collection.$forall(Type t; <boolean expression>)
-
+//
 //     <boolean expression> is an expression that will be evaluated for all
 //     elements in the collection, with each element of type "Type", using
 //     an element named "t". The value of $forall is true when for all elements
 //     the expression evaluates to true.
-
+//
 //     Think of this as a modified 'for' statement.
-
+//
 //     Example:
 //     /** @pre names.$forall (String s; s.length() != 0) */
 //     void method (List names) { }
-
+//
 //     Since $forall generates a boolean value, you can use it with assert
 //     in a block precondition:
-
+//
 //     /** @pre {
 //             $assert (names != null);
 //             $assert (names.$forall (String e; e.length() > 1));
 //         }
 //      */
-
+//
 // public boolean Collection.$exists(Type t; <boolean expression>)
-
+//
 //     This is almost identical in structure to $forall, but it succeeds if any
 //     of the elements in the collection cause the expression to evaluate to true.
-
+//
 //     Example:
 //     /** @pre names.$exists (String s; s != null && "seth".equals (s)) */
 //     void method (List names) { }
-
+//
 // 7. Coding Conventions.
 // ---------------------
-
+//
 //    When using Design by Contract in Java, the following coding conventions
 // are recommended:
-
+//
 // 1) Place all the @invariant conditions in the class javadoc comment, the
 //    javadoc comment appearing immediately before the class definition.
-
+//
 // 2) It is recommended that the Javadoc comments with the @invariant tag appear
 //    before the class definition.
-
+//
 // 3) All public and protected methods should have a contract. It is recommended
 //    that all package-private and private methods also have a contract.
-
+//
 // 4) If a method has a DbC tag it should have a complete contract. This means
 //    that is should have both a precondition and a postcondition.
 //    One should use "DbcTag $none" to specify that a method doesn't have any
 //    condition for that tag.
-
+//
 // 5) No public class field should participate in an @invariant clause. Since any
 //    client can modify such a field arbitrarily, there is no way for the class to
 //    ensure any invariant on it.
-
+//
 // 6) The code contracts should only access members visible from the interface.
 //    For example the code in the @pre condition of a method should only access
 //    members that are accessible from any client that could use the method. I.e.
 //    the contract of a public method should only use public members from the
 //    method's class.
-
+//
 // 7) Contracts that appear in the body of a method should be thought of as
 //    normal statements.  Thus the following example would have undesireable
 //    behavior:
-
+//
 //        if (a) /** @assert (a) */
 //            System.out.println("poor use of contract code");
-
+//
 //    Because the assert is a normal statement when your code is compiled by
 //    dbc_javac, this example is equivalent to the following pseudocode:
-
+//
 //        if (a)
 //            assert (a);
 //        System.out.println("poor use of contract code");
-
+//
 //    which makes it clear that the assertion is the body of the "if".
-
+//
 //    The current version of Jcontract doesn't enforce these coding conventions.
