@@ -192,8 +192,8 @@ information."
 		      (while (and (/= bracket-level 0)
 				  (re-search-forward "[()]" nil t))
 			(if (eq ?\( (char-before))
-			    (setq bracket-level (+ 1 bracket-level))
-			  (setq bracket-level (- 1 bracket-level))))))
+			    (setq bracket-level (+ bracket-level 1))
+			  (setq bracket-level (- bracket-level 1))))))
 	       (and go-in-comment
 		    (funcall guess-offset-skip-comment-end eol)
 		    (not (setq go-in-comment nil))))))
