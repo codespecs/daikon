@@ -367,7 +367,7 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 
 dcomp-test-jdk : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	/scratch/${USER}/j2sdk-1.5/bin/java -Xbootclasspath/a:$(CLASSPATH) \
+	$(DCOMP_JDK)/bin/java -Xbootclasspath/a:$(CLASSPATH) \
 	  "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS)" daikon/dcomp/Test
 	@cp /tmp/dcomp_out.txt daikon/dcomp/jdk_dcomp_out.txt
 	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
