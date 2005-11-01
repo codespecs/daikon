@@ -1953,7 +1953,7 @@ in the file @file{Global.c}).
 @cindex variables, local
 Daikon's current front ends do not produce output for local variables,
 only for variables visible from outside a procedure.  (Also see the
-@option{--std-vis} option to Chicory, @ref{Chicory options}.)  Thus,
+@option{--std-visibility} option to Chicory, @ref{Chicory options}.)  Thus,
 Daikon's output forms a specification from the view of a client of a
 procedure.  A future version of Daikon may permit output of local
 variables as a user option; send mail to
@@ -3056,15 +3056,17 @@ is @code{null} on a particular execution of a program point, then
 parameter.  That variable appears in the @file{.dtrace} file, but its
 value is marked as nonsensical.
 
-@item --std-vis
-When this switch is on, Chicory will only traverse fields that are
-visible from a given program point.  For instance, private fields of
-class B will not be included at a program point for class A@.
-By default, Chicory outputs all fields, even those that would not be
-accessible in Java code at the given program point.  When you supply
-@option{--std-vis}, consider also supplying @option{--purity-file} to
+@item --std-visibility
+When this switch is on, Chicory will traverse exactly those fields that are
+visible from a given program point.  For instance, only the public
+fields of class @code{pack1.B} will be included at a program point for 
+class @code{pack2.A} whether or not @code{pack1.B} is instrumented.
+By default, Chicory outputs all fields in instrumented classes (even 
+those that would not be accessible in Java code at the given program point)
+and outputs no fields from uninstrumented classes (even those that are
+accessible). When you supply
+@option{--std-visibility}, consider also supplying @option{--purity-file} to
 enrich the set of expressions in Daikon's output.
-
 
 @item --purity-file=@var{pure-methods-file}
 @cindex pure methods
@@ -3129,7 +3131,7 @@ name, it is searched for in the configuration directory specified via
 @option{--configs=@var{directory}}, or in the current directory if no
 configuration dirctory is specified.
 
-@item --watch-static-recursion
+@item --avoid-static-recursion
 If this switch is on, Chicory will traverse the static fields of a given class
 at most once.
 
@@ -3141,9 +3143,10 @@ class A @{
 @}
 @end example
 
-Then if this switch is on, and a program point contains variable @code{myA} of type @code{A}, then 
-Chicory will produce variables @code{myA.x}, @code{myA.y}, @code{myA.A}, but not @code{myA.A.x}, @code{myA.A.y},
-@code{myA.A.A} and so on.
+Then if this switch is on, and a program point contains variable
+@code{myA} of type @code{A}, then Chicory will produce variables
+@code{myA.x}, @code{myA.y}, @code{myA.A}, but not @code{myA.A.x},
+@code{myA.A.y}, @code{myA.A.A} and so on.
 
 @end table
 
@@ -3161,13 +3164,13 @@ Print a help message.
 @item --debug
 Produce debugging information.
 
-@item --trace-percent=@var{integer}
-If this switch is on, then Chicory only produces output for a fraction
-of all program point executions.  For each method, output is produced
-for the given fraction of its executions.  the randomization is applied
-only to entry program points; an exit program point is included if and
-only if its corresponding entry program point is included.
-
+@item --trace-percent=@var{percent}
+If this switch is on, then Chicory only produces output for the
+specified percentage of all program point executions.  For each method,
+output is produced for the given fraction of its executions.  the
+randomization is applied only to entry program points; an exit program
+point is included if and only if its corresponding entry program point
+is included.  
 
 @item --dtrace-file=@var{filename}
 @cindex DTRACEFILE environment variable
@@ -3194,7 +3197,7 @@ give you more control over which subsets of runs to invoke Daikon on.
 Write the @file{.dtrace} trace output file to the specified directory.
 The default is the current directory.
 
-@item --configs=@var{directory}
+@item --config-dir=@var{directory}
 Chicory will use this location to search for configuration files.
 Currently, this only includes @file{*.pure} files.
 
@@ -3235,7 +3238,7 @@ switch to specify its name.  For example:
 --premain=C:\lib\daikon-4.1.3.jar
 @end example
 
-@item --heap_size=@var{max_heap}
+@item --heap-size=@var{max_heap}
 Specifies the maximum size, in bytes, of the memory allocation pool for
 the target program.  The size is specified in the same manner as the
 -Xmx switch to java.
