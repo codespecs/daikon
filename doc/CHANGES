@@ -24,10 +24,16 @@ Further documentation can be found in:
 
 Daikon
 
+  User-visible changes
+
     Config option "Daikon.noInvariantGuarding" has been renamed to
     "Daikon.guardNulls", and instead of being a boolean, is a
     string with three possible values:  "always", "never", or "missing".
     See the documentation for details.
+
+    Added daikon.inv.unary.sequence.SingleSequence.SeqIndexDisableAll
+    configuration option to disable all of the SeqIndex invariants 
+    (SeqIndexIntEqual, SeqIndexFloatLessThan, etc).
 
 Chicory
 
@@ -35,13 +41,7 @@ Chicory
 
     Fixed a bug (reported by Christoph Csallner) where Chicory crashed
     when the --std-vis switch was used and a field was accessed in
-    a non-instrumented class (in this case an interface)
-
-  Enhancements
-
-    Added daikon.inv.unary.sequence.SingleSequence.SeqIndexDisableAll
-    configuration option to disable all of the SeqIndex invariants 
-    (SeqIndexIntEqual, SeqIndexFloatLessThan, etc).
+    a non-instrumented class (in this case an interface).
 
 Mangel-Wurzel
 
