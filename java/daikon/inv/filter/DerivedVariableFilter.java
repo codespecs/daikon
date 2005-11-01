@@ -16,6 +16,11 @@ public class DerivedVariableFilter extends InvariantFilter {
     return "Derived Variable filter on '" + dkconfig_class_re + "'";
   }
 
+  /**
+   * Regular expression to match against the class name of derived
+   * variables.  Invariants that contain derived variables that match will
+   * be filtered out.  If null, nothing will be filtered out.
+   **/
   public static String dkconfig_class_re = null;
   public static Pattern class_re = null;
 
