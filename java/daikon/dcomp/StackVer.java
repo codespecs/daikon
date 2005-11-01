@@ -85,6 +85,14 @@ import org.apache.bcel.verifier.structurals.UninitializedObjectType;
 
 
 /**
+ * This is a slightly modified version of Pass3bVerifier from BCEL.
+ * It uses LimitedConstaintVisitor rather than InstConstraintVisitor
+ * to implement the constraints.  The LimitedConstraintVisitor doesn't
+ * do any checking outside of the current class and removes some checks
+ * so that this will pass on the JDK.  This version also provides the
+ * ability to get the contents of the stack for each instruction in
+ * the method.
+ *
  * This PassVerifier verifies a method of class file according to pass 3,
  * so-called structural verification as described in The Java Virtual Machine
  * Specification, 2nd edition.
@@ -93,7 +101,7 @@ import org.apache.bcel.verifier.structurals.UninitializedObjectType;
  *
  * @version $Id$
  * @author <A HREF="http://www.inf.fu-berlin.de/~ehaase"/>Enver Haase</A>
- * @see #do_verify()
+ * @see #get_stack_types()
  */
 public final class StackVer {
 	/* TODO:	Throughout pass 3b, upper halves of LONG and DOUBLE
@@ -381,9 +389,8 @@ public final class StackVer {
 	/**
 	 * Implements the pass 3b data flow analysis as described in the
 	 * Java Virtual Machine Specification, Second Edition.  As it is doing
-     * so it keeps track of the stack and local variables at each instruction.
+   * so it keeps track of the stack and local variables at each instruction.
  	 *
- 	 * @see org.apache.bcel.verifier.statics.LocalVariablesInfo
  	 * @see org.apache.bcel.verifier.statics.Pass2Verifier#getLocalVariablesInfo(int)
  	 */
 	public VerificationResult do_stack_ver (MethodGen mg){
@@ -468,8 +475,6 @@ public final class StackVer {
 	 * PassVerifier. This method is normally only internally used by
 	 * BCEL's class file verifier "JustIce" and should not be used from
 	 * the outside.
-	 *
-	 * @see #getMessages()
 	 */
 	public void addMessage(String message){
 		messages.add(message);
