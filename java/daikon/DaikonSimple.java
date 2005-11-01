@@ -23,6 +23,7 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.ValueSet;
 import daikon.suppress.NIS;
+import daikon.PptTopLevel;
 
 import static daikon.Global.*;
 
@@ -240,7 +241,7 @@ public static void mainHelper(final String[] args) throws IOException,
    * equality set 2. debugging information turned off because DaikonSimple's
    * code is more contained 3. less constraints on the slices
    *
-   * @see Daikon.PptTopLevel#instantiate_views_and_invariants()
+   * @see daikon.PptTopLevel#instantiate_views_and_invariants()
    */
 
   // Note that some slightly inefficient code has been added to aid
