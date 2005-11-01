@@ -42,6 +42,20 @@ Chicory
     Fixed a bug (reported by Christoph Csallner) where Chicory crashed
     when the --std-vis switch was used and a field was accessed in
     a non-instrumented class (in this case an interface).
+    a non-instrumented class (in this case an interface)
+
+  Enhancements
+
+    Chicory's switches were renamed for consistency as follows:
+
+        --configs                   is now --config-dir
+        --heap_size                 is now --heap-size
+        --std-vis                   is now --std-visibility
+        --watch-static-recursion    is now --avoid-static-recursion
+
+    The --trace-percent switch now takes a floating point argument
+    The documentation was also updated to provide a better explanation
+    of the switches.
 
 Kvasir
 
