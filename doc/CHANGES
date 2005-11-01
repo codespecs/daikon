@@ -43,6 +43,21 @@ Chicory
     when the --std-vis switch was used and a field was accessed in
     a non-instrumented class (in this case an interface).
 
+Kvasir
+
+  Enhancements
+
+     Implemented a more robust data structure traversal mechanism
+     that can better handle dereferencing pointer fields inside of 
+     arrays and arrays of structures.
+
+  Documentation changes
+
+     Re-organized and updated the Kvasir section in the Daikon User
+     Manual.  Updated examples, added categories for command-line
+     options, and added a section describing the DynComp dynamic 
+     comparability analysis tool that comes with Kvasir.
+
 Mangel-Wurzel
 
    Bug fixes
