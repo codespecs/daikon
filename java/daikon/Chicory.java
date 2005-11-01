@@ -91,23 +91,27 @@ public class Chicory {
   /** flag to use if we want to turn on the static initialization checks**/
   public static final boolean checkStaticInit = true;
 
-  /** Percentage of dtrace program points to report.  Each is chosen randomly at runtime **/
-  private static int recordPct = -1;
+  /**
+   * Percentage of dtrace program points to report.  Each is chosen
+   * randomly at runtime
+   **/
+  private static float recordPct = -1;
 
   private static final boolean RemoteDebug = false;
 
-  /** Flag to initiate a purity analysis and use results to create additional variables **/
+  /** Flag to initiate a purity analysis and use results to create add vars **/
   private boolean purityAnalysis = false;
 
   /**
-   * Flag to "watch" how we recurse on static types.  If true, don't recurse on the same
-   * static type.
+   * Flag to "watch" how we recurse on static types.  If true, don't
+   * recurse on the same static type.
    */
   private static boolean watchStatics = false;
 
-
-  /** The name of the file to read for a list of pure methods.  Should be 1 method per line.
-   *  Each method should be in the same format as format ouput by the purity analysis.
+  /**
+   * The name of the file to read for a list of pure methods.  Should
+   * be 1 method per line.  Each method should be in the same format
+   * as format ouput by the purity analysis.
    */
   private String purityFileName;
 
@@ -148,11 +152,13 @@ public class Chicory {
   }
 
   /**
-   * Percentage of dtrace program points to report.  Each is chosen randomly at runtime.
-   * @return -1 if not using this feature (equivalent to 100%), the percentage otherwise.
+   * Percentage of dtrace program points to report.  Each is chosen
+   * randomly at runtime.
+   * @return -1 if not using this feature (equivalent to 100%), the
+   * percentage otherwise.
    *
    */
-  public static int recordPct()
+  public static float recordPct()
   {
       return recordPct;
   }
@@ -211,22 +217,16 @@ public class Chicory {
         }
         premain_args.add(arg);
 
-      }
-      else if (arg.startsWith("--daikon-port="))
-            {
-                String portStr = arg.substring("--daikon-port=".length());
-                try
-                {
-                    daikonPort  = Integer.parseInt(portStr);
-                }
-                catch (NumberFormatException e)
-                {
-                    usage("Invalid port: " + portStr);
-                    System.exit(1);
-                }
+      } else if (arg.startsWith("--daikon-port=")) {
+        String portStr = arg.substring("--daikon-port=".length());
+        try {
+          daikonPort  = Integer.parseInt(portStr);
+        } catch (NumberFormatException e) {
+          usage("Invalid port: " + portStr);
+          System.exit(1);
+        }
 
-            }
-       else if (arg.equals("--linked-lists")) {
+      } else if (arg.equals("--linked-lists")) {
         linked_lists = true;
         premain_args.add(arg);
 
@@ -251,7 +251,8 @@ public class Chicory {
         }
         catch (PatternSyntaxException e)
         {
-            System.out.println("WARNING: Error during regular expression compilation: " + e.getMessage());
+            System.out.println("WARNING: Error during regular expression "
+                               + "compilation: " + e.getMessage());
         }
 
         premain_args.add(arg);
@@ -273,7 +274,8 @@ public class Chicory {
         }
         catch (PatternSyntaxException e)
         {
-            System.out.println("WARNING: Error during regular expression compilation: " + e.getMessage());
+            System.out.println("WARNING: Error during regular expression "
+                               + "compilation: " + e.getMessage());
         }
 
         premain_args.add(arg);
@@ -308,40 +310,35 @@ public class Chicory {
           usage("output directory not writable: " + output_dir);
         premain_args.add(arg);
 
-      } else if (arg.startsWith ("--heap_size=")) {
-        heap_size = arg.substring ("--heap_size=".length());
+      } else if (arg.startsWith ("--heap-size=")) {
+        heap_size = arg.substring ("--heap-size=".length());
       } else if (arg.equals("--help")) {
         usage();
         System.exit(0);
 
-      }
-      else if (arg.equals("--daikon")) {
-          daikon_cmd = "daikon.Daikon";
+      } else if (arg.equals("--daikon")) {
+        daikon_cmd = "daikon.Daikon";
 
-        }
-      else if (arg.startsWith ("--daikon=")) {
+      } else if (arg.startsWith ("--daikon=")) {
           daikon_cmd = "daikon.Daikon " + arg.substring ("--daikon=".length());
-      }
 
-         else if (arg.equals("--daikon-online")) {
+      } else if (arg.equals("--daikon-online")) {
         daikon_cmd_online = "daikon.Daikon +";
 
-      }
-      else if (arg.startsWith ("--daikon-online=")) {
-        daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon-online=".length()) + " +";
+      } else if (arg.startsWith ("--daikon-online=")) {
+        daikon_cmd_online = "daikon.Daikon "
+          + arg.substring ("--daikon-online=".length()) + " +";
 
-      }
-      else if (arg.startsWith("--configs="))
-      {
-          premain_args.add(arg);
-          configDir = arg.substring("--configs=".length());
+      } else if (arg.startsWith("--config-dir=")) {
+        premain_args.add(arg);
+        configDir = arg.substring("--configs=".length());
       }
       else if (arg.equals("--purity-analysis"))
       {
           premain_args.add(arg);
           purityAnalysis = true;
       }
-      else if (arg.equals("--watch-static-recursion"))
+      else if (arg.equals("--avoid-static-recursion"))
       {
           premain_args.add(arg);
           watchStatics = true;
@@ -351,16 +348,17 @@ public class Chicory {
           String pctStr = arg.substring("--trace-percent=".length());
           try
           {
-              recordPct = Integer.parseInt(pctStr);
+              recordPct = Float.parseFloat(pctStr);
           }
           catch (NumberFormatException e)
           {
               usage("Invalid percent: " + pctStr);
               System.exit(1);
           }
-          if (recordPct < 0 || recordPct > 100)
+          if (recordPct <= 0 || recordPct >= 100)
           {
-              usage("Percent string " + pctStr + " should be an integer between 0 and 100 (inclusive)");
+              usage("Percent string " + pctStr
+                    + " should be between 0 and 100 (exclusive)");
               System.exit(1);
           }
           premain_args.add(arg);
@@ -380,7 +378,7 @@ public class Chicory {
         premain_args.add(arg);
 
       }
-      else if (arg.startsWith("--std-vis"))
+      else if (arg.startsWith("--std-visibility"))
       {
           stdVisibility = true;
           DaikonVariableInfo.stdVisibility = true;
