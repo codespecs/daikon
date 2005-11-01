@@ -44,7 +44,7 @@ public class DTraceWriter extends DaikonWriter
     private boolean debug_vars = false;
 
     /** Percentage of program points to output **/
-    private int recordPct;
+    private float recordPct;
 
     /**
      * Pseudorandom number generator
@@ -599,10 +599,10 @@ public class DTraceWriter extends DaikonWriter
         if (recordPct == -1)
             return false;
 
-        // get random int from 0 to 100 (inclusive)
-        int randInt = rand.nextInt(100 + 1);
+        // get random float from 0 to 100
+        float randFloat = rand.nextFloat() * 100;
 
-        if (randInt < recordPct)
+        if (randFloat < recordPct)
         {
             return false;
         }
