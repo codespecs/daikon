@@ -371,25 +371,26 @@ detector reports likely program invariants.  An invariant is a property
 that holds at a certain point or points in a program; these are often
 seen in assert statements, documentation, and formal specifications.
 Invariants can be useful in program understanding and a host of other
-applications.  Examples include ``.field > abs(y)''; ``y = 2*x+3''; ``array
-a is sorted''; ``for all list objects lst, lst.next.prev = lst''; ``for all
-treenode objects n, n.left.value < n.right.value''; ``p != null =>
-p.content in myArray''; and many more.  You can extend Daikon to add new
-properties.
+applications.  Examples include ``.field > abs(y)''; ``y = 2*x+3'';
+``array a is sorted''; ``for all list objects lst, lst.next.prev =
+lst''; ``for all treenode objects n, n.left.value < n.right.value''; ``p
+!= null => p.content in myArray''; and many more.  You can extend Daikon
+to add newproperties (@pxref{Enhancing Daikon output}).
 
 Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
 observed executions.  
 @c Daikon's output, which is sometimes called an ``operational abstraction'',
 @c looks like a formal specification, or the contents of assert statements.
-Daikon can detect properties in Java,
-Perl, C, and @uref{http://theory.csail.mit.edu/tds/ioa/, ,IOA} programs;
+Daikon can detect properties in C, C++, Java,
+Perl, and IOA programs;
+@c not very helpful: @uref{http://theory.csail.mit.edu/tds/ioa/, ,IOA}
 in spreadsheet files; and in other data sources.  (Dynamic invariant
 detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications; as
-one example, an interface exists to the
-@uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
-checker}.
+one example, an interface exists to the Java PathFinder model checker.
+@c Removed this because it was the biggest link on the page, which is
+@c not the desired effect:  @uref{http://ase.arc.nasa.gov/visser/jpf/, , }
 
 Daikon is freely available for download from
 @uref{http://pag.csail.mit.edu/daikon/download/}.  The distribution
