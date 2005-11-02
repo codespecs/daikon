@@ -247,6 +247,7 @@ C front end Kvasir
 
 Pointer type disambiguation
 
+* Pointer type coercion::       
 * Pointer type disambiguation example::  
 * Using pointer type disambiguation with partial program tracing::  
 
@@ -3988,7 +3989,8 @@ already-existent @file{ppt-list-file}.
 @cindex disambiguation of pointer types
 
 Kvasir permits users (or external analyses) to specify whether pointers
-refer to arrays or to single values.  For example, in
+refer to arrays or to single values, and optionally, to specify the type
+of a pointer (@pxref{Pointer type coercion}).  For example, in
 @example
 void sum(int* array, int* result) @{ ... @}  // definition of "sum"
 ...
@@ -4077,11 +4079,77 @@ retain their default values.
 
 
 @menu
+* Pointer type coercion::       
 * Pointer type disambiguation example::  
 * Using pointer type disambiguation with partial program tracing::  
 @end menu
 
-@node    Pointer type disambiguation example, Using pointer type disambiguation with partial program tracing, Pointer type disambiguation, Pointer type disambiguation
+@node    Pointer type coercion, Pointer type disambiguation example, Pointer type disambiguation, Pointer type disambiguation
+@subsubsection Pointer type coercion
+
+In addition to specifying whether a particular pointer refers to one
+element or to an array of elements, the user can also specify what type
+of data a pointer refers to.  This type coercion acts like an explicit
+type cast in C, except that it only works on struct/class types and not
+on primitive types.  This feature is useful for traversing inside of
+data structures with generic @code{void*} pointer fields.  Another use
+is to cast a pointer from one that refers to a 'super class' to one that
+refers to a 'sub class'.  This structural equivalence pattern is often
+found in C programs that emulate object orientation.  To coerce a
+pointer to a particular type, simply write the name of the struct type
+after the disambiguation letter (e.g., A, P, S, C, I) in the
+@file{.disambig} file:
+
+@example
+----SECTION----
+function: ..view_foo_and_bar()
+f
+P foo
+b
+P bar
+@end example
+
+Without the type coercion, Kvasir cannot print out anything except for a
+hashcode for the two @code{void*} parameters of this function:
+
+@example
+void view_foo_and_bar(void* f, void* b);
+@end example
+
+With type coercion, though, Kvasir treats @code{f} as a @code{foo*} and
+@code{b} as @code{bar*} and can traverse inside of them.  Of course, if
+those are not the true runtime types of the variables, then Kvasir's
+output will be meaningless.
+
+Due to the use of typedefs, there may be more than one name for a
+particular struct type.  The exact name that you need to write in the
+@file{.disambig} file is the one that appears in that file after the
+@code{usertype} prefix.  Note that if a struct does not have any pointer
+fields, then there will be no @code{usertype} section for it in the
+@file{.disambig} file.  In that case, try different names for the struct
+if necessary until Kvasir accepts the name (names are all one word long;
+you will never have to write @code{struct foo}).  There should only be
+at most a few choices to make.  If the coercion if successful, Kvasir
+prints out a message in the following form while it is processing the
+@file{.disambig} file:
+
+@example
+  .disambig: Coerced variable f into type 'foo'
+  .disambig: Coerced variable b into type 'bar'
+@end example
+
+One more caveat about type coercion is that you can currently only
+coerce pointers into types that at least one variable in the program
+(e.g., globals, function parameters, struct fields) belongs to.  It is
+not enough to merely declare a struct type in your source code; you must
+have a variable of that type somewhere in your program.  This is a
+limitation of the current implementation, but it should not matter most
+of the time because programs rarely have struct declarations with no
+variables that belong to that type.  If you encounter this problem, you
+can simply create a global variable of a certain type to make type
+coercion work.
+
+@node    Pointer type disambiguation example, Using pointer type disambiguation with partial program tracing, Pointer type coercion, Pointer type disambiguation
 @subsubsection Pointer type disambiguation example
 
 This example demonstrates the power of pointer type disambiguation in creating 
@@ -4519,12 +4587,6 @@ please send email to @email{daikon-developers@@lists.csail.mit.edu},
 so that we can increase its priority on our to-do list.
 
 @item
-Kvasir always prints the contents of structures according to their
-compile-time type.  Programs that use generic pointers and structural
-equivalence to simulate object-orientation will have derived-class
-fields missing when a structure is passed via a base-class pointer.
-
-@item
 Kvasir's support for outputting arrays is not yet complete. 
 It still does not have the functionality to print out multidimensional 
 arrays with all of their elements or the option to flatten 
@@ -4553,6 +4615,14 @@ definitely incompatible with the @option{-fomit-frame-pointer}
 optimization, and it may have trouble with other optimizations as
 well.  We recommend that you compile programs for Kvasir without
 optimization.
+
+@item
+Kvasir always prints the contents of structures according to their
+compile-time type.  Programs that use generic pointers and structural
+equivalence to simulate object-orientation will have derived-class
+fields missing when a structure is passed via a base-class pointer.
+This limitation can now be overcome by manually coercing a pointer to a
+particular type (@pxref{Pointer type coercion}).
 
 @end itemize
 
