@@ -22,6 +22,12 @@ Further documentation can be found in:
 
 4.1.7 (November 1 2005)
 
+Enhancements were made to the Kvasir, Mangel/Wurzel and Chicory front
+ends.  Kvasir and Mangel/Wurzel both handle arrays of structures and
+pointers better than previously.  The command line options for Chicory
+were standardized.  The documentation of each was reorganized and updated.
+Daikon has some new and enhanced configuration options.
+
 Daikon
 
   User-visible changes
@@ -35,14 +41,19 @@ Daikon
     configuration option to disable all of the SeqIndex invariants 
     (SeqIndexIntEqual, SeqIndexFloatLessThan, etc).
 
+    Added DerivedVariableFilter that will filter out invariants that
+    use a specific class of derived variable.  See the configuration 
+    option daikon.inv.filter.DerivedVariableFilter.class_re for more
+    information.
+
 Chicory
 
   Bug fixes
 
     Fixed a bug (reported by Christoph Csallner) where Chicory crashed
-    when the --std-vis switch was used and a field was accessed in
-    a non-instrumented class (in this case an interface).
-    a non-instrumented class (in this case an interface)
+    when the --std-vis (now std-visiblity) switch was used and a field
+    was accessed in a non-instrumented class (in this case an
+    interface).
 
   Enhancements
 
