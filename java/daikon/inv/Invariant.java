@@ -1674,8 +1674,9 @@ public abstract class Invariant
     Invariant guardingPredicate = null;
     for (VarInfo vi : mustBeGuarded) {
       Invariant currentGuard = vi.createGuardingPredicate();
+      if (currentGuard == null)
+        continue;
       debugGuarding.fine (String.format("VarInfo %s guard is %s", vi, currentGuard));
-      assert currentGuard != null;
       if (guardingPredicate == null) {
         guardingPredicate = currentGuard;
       } else {

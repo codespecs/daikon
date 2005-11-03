@@ -1510,6 +1510,8 @@ public final class VarInfo implements Cloneable, Serializable {
         // retval's children were missing.  However, some forms of
         // filtering might remove it from associateWith.
         retval = NonZero.get_proto().instantiate(associateWith);
+        if (retval == null)
+          return null;
         retval.isGuardingPredicate = true;
         // System.out.printf("Created a guarding predicate: %s at %s%n", retval, associateWith);
         // new Error().printStackTrace(System.out);
