@@ -54,7 +54,7 @@ if ($?debuglogin) echo "daikon.cshrc about to set classpath"
 if ($?debuglogin) echo "daikon.cshrc about to set path"
 
 ## Add the Daikon binaries to your path
-set path = (${DAIKONBIN} ${DAIKONDIR}/front-end/java/src $DFECDIR $JDKDIR/bin $path)
+set path = (${DAIKONBIN} $DFECDIR $JDKDIR/bin $path)
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if ($?PERLLIB) then

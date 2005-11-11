@@ -1,3 +1,5 @@
+echo off
+
 REM daikonenv.bat
 REM Set up environment variables to run Daikon in a Windows NT command window.
 REM (This file should be kept in synch with daikon.bashrc and daikon.cshrc.)
@@ -11,9 +13,10 @@ REM        files, instead of the default, which is to use daikon.jar.
 REM You should not need to edit this file directly.
 
 
-echo off
-REM set JDKDIR=d:\j2sdk1.4.0
-REM set DAIKONPARENT=d:\Daikon
+REM These are examples of the customization you might put where you source this file.
+REM set DAIKONPARENT=c:\Daikon
+REM set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
+
 set DAIKONDIR=%DAIKONPARENT%\Daikon
 set DFECDIR=%DAIKONDIR%\front-end\c
 set DAIKONBIN=%DAIKONDIR%\bin
@@ -37,7 +40,7 @@ REM tools.jar must be on your classpath.
 set CLASSPATH=%CLASSPATH%;%JDKDIR%\jre\lib\rt.jar;%JDKDIR%\lib\tools.jar
 
 REM Add the Daikon binaries to your path
-set PATH=%DAIKONBIN%;%DAIKONDIR%\front-end\java\src;%DFECDIR%;%JDKDIR%\bin;%PATH%
+set PATH=%DAIKONBIN%;%DFECDIR%;%JDKDIR%\bin;%PATH%
 
 REM Indicate where to find Perl modules such as util_daikon.pm.
 if defined %PERLLIB% (

@@ -40,7 +40,7 @@ else
 fi
 
 ## Add the Daikon binaries to your path
-export PATH=${DAIKONBIN}:${DAIKONDIR}/front-end/java/src:${DFECDIR}:${JDKDIR}/bin:${PATH}
+export PATH=${DAIKONBIN}:${DFECDIR}:${JDKDIR}/bin:${PATH}
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERLLIB ]; then
