@@ -8,7 +8,7 @@ IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.png
 # old image files
 # gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html daikonEclipseHelp.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html daikonEclipseHelp.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # The texinfo files are included so we can diff to see what has changed from
@@ -18,7 +18,7 @@ DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 				  daikon.texinfo developer.texinfo config-options.texinfo \
 				  invariants-doc.texinfo
 # EMACS_PATHS := emacs/daikon-context-gui.el
-README_FILES := README-daikon-java README-dist README-dist-doc
+README_FILES := README-daikon-java.txt README-dist.txt README-dist-doc.txt
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
@@ -310,7 +310,7 @@ update-doc-dist-date-and-version:
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo doc/developer.texinfo
-	perl -wpi -e 's/(Daikon version .*, released ).*(\.|<\/CENTER>)$$/$$1${TODAY}$$2/' doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/daikon.texinfo doc/developer.texinfo
+	perl -wpi -e 's/(Daikon version .*, released ).*(\.|<\/CENTER>)$$/$$1${TODAY}$$2/' doc/README-dist.txt doc/README-dist.html doc/README-dist-doc.txt doc/www/download/index.html doc/daikon.texinfo doc/developer.texinfo
 	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
@@ -320,7 +320,7 @@ update-doc-dist-date:
 # I removed the dependence on "update-dist-version-file" because this rule
 # is invoked at the beginning of a make.
 update-doc-dist-version:
-	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/developer.texinfo doc/README-dist doc/README-dist-doc doc/www/download/index.html
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/developer.texinfo doc/README-dist.txt doc/README-dist.html doc/README-dist-doc.txt doc/www/download/index.html
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
 	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/kvasir/mc_main.c
 	cvs ci -m "Update version number for new Daikon distribution" kvasir/kvasir/mc_main.c
@@ -378,8 +378,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir /tmp/daikon
 
 	mkdir /tmp/daikon/doc
-	cp -p doc/README-dist /tmp/daikon/README
-	cp -p doc/README-dist-doc /tmp/daikon/doc/README
+	cp -p doc/README-dist.txt /tmp/daikon/README.txt
+	cp -p doc/README-dist.html /tmp/daikon/README.html
+	cp -p doc/README-dist-doc.txt /tmp/daikon/doc/README.txt
 	cd doc && cp -p $(DOC_FILES_NO_IMAGES) /tmp/daikon/doc
 	mkdir /tmp/daikon/doc/images
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) /tmp/daikon/doc/images
@@ -427,7 +428,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Daikon itself
 	(cd java; tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
 	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
-	cp -p doc/README-daikon-java /tmp/daikon/java/README
+	cp -p doc/README-daikon-java.txt /tmp/daikon/java/README.txt
 	cp -p java/Makefile /tmp/daikon/java/Makefile
 	# Maybe I should do  $(MAKE) doc
 	# Don't do  $(MAKE) clean  which deletes .class files
