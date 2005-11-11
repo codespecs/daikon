@@ -4,9 +4,11 @@
 
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though all other versions are built)
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps dfepl-flow.png
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.png
+# old image files
+# gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html daikonHelp.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html daikonEclipseHelp.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # The texinfo files are included so we can diff to see what has changed from
@@ -15,7 +17,7 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 				  daikon.texinfo developer.texinfo config-options.texinfo \
 				  invariants-doc.texinfo
-EMACS_PATHS := emacs/daikon-context-gui.el
+# EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl lines-from \
@@ -383,9 +385,10 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) /tmp/daikon/doc/images
 	cp -pR doc/daikon_manual_html /tmp/daikon/doc
 
-	# Emacs
-	mkdir /tmp/daikon/emacs
-	cp -p $(EMACS_PATHS) /tmp/daikon/emacs
+	## EMACS_PATHS is currently empty.
+	# # Emacs
+	# mkdir /tmp/daikon/emacs
+	# cp -p $(EMACS_PATHS) /tmp/daikon/emacs
 
 	# Auxiliary programs
 	mkdir /tmp/daikon/bin
