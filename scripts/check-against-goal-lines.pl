@@ -24,6 +24,7 @@ for my $goal (@goals) {
   chomp($actuallines);
   if ($goallines ne $actuallines) {
     print "$goallines lines in $goal\n$actuallines lines in $actual\n";
+    print "  (ediff-files \"$goal\" \"$actual\")\n";
     $status = 1;
   }
 }
