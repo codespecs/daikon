@@ -27,7 +27,7 @@
 		      load-path))
 (if (not (featurep 'tex-site))
     (progn
-      (require 'tex-site)))
+      (require 'tex-site nil (equal system-name "pink-panther.csail.mit.edu"))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -36,7 +36,7 @@
 
 ;; Use guess-offset in favor of c-set-basic-offset
 (require 'guess-offset)
-(setq guess-offset-minimum-superiority 1.5) ; default 2
+(setq guess-offset-minimum-superiority 1.33) ; default 2
 ;; (load "c-set-basic-offset")
 
 (load "remove-trailing-whitespace")
