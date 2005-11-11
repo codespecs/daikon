@@ -442,6 +442,8 @@ you may send mail to the list asking to be added.
 @chapter Installing Daikon
 @cindex installing Daikon
 
+Shortcut for the impatient:  skip directly to @ref{Installation steps}.
+
 This section describes two ways to install Daikon.  The first gives a
 minimal installation that is adequate for the needs of most users.
 The second gives a complete installation that some users may prefer.
@@ -485,7 +487,8 @@ classpath.
 This section gives step-by-step instructions for installing Daikon.
 The instructions in @ref{Installation steps} are targeted for
 Unix users.  If you use another operating system such as Windows, you
-may need to adjust the instructions.  (Contributions to this manual
+may need to adjust the instructions, for example to change the shell
+quoting conventions.  (Contributions to this manual
 for other operating systems are welcome.)
 
 @menu
@@ -501,6 +504,9 @@ for other operating systems are welcome.)
 
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
 (@uref{http://java.sun.com,, Java Virtual Machine}).
+
+All the remaining requirements listed here are optional (they enable you
+to perform certain additional tasks with Daikon).
 
 If you plan to use one of Daikon's source-based front ends, such as
 Mangel-Wurzel (@pxref{Mangel-Wurzel}), then you need a compiler
@@ -522,12 +528,20 @@ If you have a C compiler, you almost certainly have cpp.
 @item
 In the directory where you want to install Daikon (we'll call this
 the @var{daikonparent} directory), 
-download and unpack Daikon.  Daikon is available as a tar file from
-@uref{http://pag.csail.mit.edu/daikon/download/daikon.tar.gz},
-or as a zip file from
-@uref{http://pag.csail.mit.edu/daikon/download/daikon.zip}.
+download and unpack Daikon.  Daikon is available as a zip file from
+@uref{http://pag.csail.mit.edu/daikon/download/daikon.zip} or
+as a tar file from
+@uref{http://pag.csail.mit.edu/daikon/download/daikon.tar.gz}.
 The two files contain the same information; you only need one of them.
-For example, you could use one of the following sets of commands:
+Windows users typically opt for the zip file.
+
+@itemize
+@item Windows:  Download the
+@uref{http://pag.csail.mit.edu/daikon/download/daikon.zip, zip file}
+extract it into, say, @file{C:\}.  This creates a directory
+@file{C:\daikon} containing the Daikon distribution.
+
+@item Unix:  use one of the following sets of commands:
 @example
 cd @var{daikonparent}
 wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
@@ -542,6 +556,7 @@ unzip daikon.zip
 @end example
 @noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+@end itemize
 
 @item
 Set up your environment.  You need to arrange for @file{daikon.jar} to
@@ -571,11 +586,13 @@ export DAIKONPARENT=@var{daikonparent}
 source $DAIKONPARENT/daikon/bin/daikon.bashrc
 @end example
 @item
-If you use Windows, add the following to your startup file:
+If you use Windows, add commands similar to the following to your
+startup file (typically @file{C:\AUTOEXEC.BAT}):
 @example
-set DAIKONPARENT=@var{daikonparent}
+set DAIKONPARENT=C:\
+set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
+%DAIKONPARENT%\daikon\bin\daikonenv.bat
 @end example
-before sourcing file @file{$DAIKONPARENT\daikon\bin\daikonenv.bat}.
 @end itemize
 @noindent
 
@@ -2934,16 +2951,22 @@ the program point name against each @var{regexp} that
 was supplied.  If any of these match, then the program point is included
 in the instrumentation.
 
-Here are two commands, each of which traces only method @code{bar}
-(assuming that @code{bar} is defined only in class @code{C}):
+Suppose that method @code{bar} is defined only in class @code{C}.  Then to 
+traces only @code{bar}, you could match the method name (in any class)
+with regular expression
+@samp{bar$}, or you could match the program point name with @samp{C\.bar\(}.
 
+Using Unix shell syntax, you would execute
 @example
 java daikon.Chicory --ppt-select-pattern='bar$' ...
 java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
 @end example
 
-The first example matches the method name (in any class), whereas the
-second matches the program point name.
+From the Windows command line, you would execute
+@example
+java daikon.Chicory --ppt-select-pattern='bar$' ...
+java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
+@end example
 
 
 @item --ppt-omit-pattern=@var{regexp}
