@@ -3545,6 +3545,15 @@ either the @option{--disambig} or @option{--disambig-file} options alone,
 but at the expense of a longer run time.  (If the .disambig file already
 exists, then this option provides no extra functionality.)
 
+@item --func-disambig-ptrs
+By default, Kvasir treats all pointers as arrays when outputting their
+contents.  This option forces Kvasir to treat function parameters and
+return values that are pointers as pointing to single values.  However,
+all pointers nested inside of data structures pointed-to by parameters
+and return values are still treated as arrays.  This is useful for
+outputting richer data information for functions that pass parameters or
+return values via pointers, which happens often in practice.
+
 @item --disambig-ptrs
 By default, Kvasir treats all pointers as arrays when outputting their
 contents.  This option forces Kvasir to treat all pointers as pointing to
