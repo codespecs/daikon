@@ -389,6 +389,17 @@ public final class FileIO {
         file,
         filename);
     }
+    // COMPARABILITY TEST
+    // if (!(comparability.alwaysComparable()
+    //       || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions())) {
+    //   throw new FileIOException(
+    //     "Rep type " + file_rep_type.format() + " has " + file_rep_type.dimensions() + " dimensions"
+    //       + " but comparability " + comparability + " has " + ((VarComparabilityImplicit)comparability).dimensions + " dimensions"
+    //       + " for variable "
+    //       + varname,
+    //     file,
+    //     filename);
+    // }
 
     return new VarInfo(
       VarInfoName.parse(varname),
