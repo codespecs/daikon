@@ -71,11 +71,18 @@ public class ParentFilter extends InvariantFilter {
           continue;
         if (pinv.getClass() != inv.getClass())
           continue;
-        if (pinv.isSameFormula (inv)) {
-          inv.log ("Filtered by parent inv '" + pinv.format() + "' at ppt "
-                   + pslice.name());
-          return (true);
-        }
+        if (! pinv.isSameFormula (inv))
+          continue;
+        List<VarInfo> guardedVars = inv.getGuardingList();
+        List<VarInfo> pGuardedVars = pinv.getGuardingList();
+        if (guardedVars.size() != pGuardedVars.size())
+          continue;
+        // TODO: Need to check that all the variables correspond, not just
+        // that there are the same number of them.
+
+        inv.log ("Filtered by parent inv '" + pinv.format() + "' at ppt "
+                 + pslice.name());
+        return (true);
       }
     }
 
