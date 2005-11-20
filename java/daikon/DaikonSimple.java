@@ -219,7 +219,7 @@ public static void mainHelper(final String[] args) throws IOException,
             || vars[1] == vars[2] || vars[0] == vars[2]))) {
           if (inv.ppt.num_values() != 0) {
 
-            // filters out "warning- too few samples for
+            // filters out "warning: too few samples for
             // daikon.inv.ternary.threeScalar.LinearTernary invariant"
             if (inv.isActive()) {
               new_list.add(inv);
