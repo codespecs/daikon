@@ -79,10 +79,10 @@ public class DynamicConstants implements Serializable {
   int sample_cnt = 0;
 
   /**
-   * Class used to store the value and count for each constant
+   * Class used to store the value and count for each constant.
    * Note that two objects of this class are equal if they refer
    * to the same variable.  This allows these to be stored in
-   * sets
+   * sets.
    **/
   public static class Constant implements Serializable {
 
@@ -458,9 +458,7 @@ public class DynamicConstants implements Serializable {
       new_views.add (slice1);
     }
 
-    // Binary slices/invariants.  Note that if a variable is in both
-    // leader lists, it is only added when it is in order (to prevent
-    // creating the slice twice)
+    // Binary slices/invariants.
     for (Constant con1 : leaders1) {
       for (Constant con2 : leaders2) {
         Constant c1 = con1;
@@ -468,8 +466,12 @@ public class DynamicConstants implements Serializable {
         Debug.log (getClass(), ppt, Debug.vis(c1.vi, c2.vi),
                    "Considering slice");
         if (con2.vi.varinfo_index < con1.vi.varinfo_index) {
-          if (leaders1.contains (con2))
+          if (leaders1.contains (con2)) {
+            // The variable is in both leader lists.
+            // Don't add it on this iteration; add it when the variables
+            // are given in order (to prevent creating the slice twice).
             continue;
+          }
           c1 = con2;
           c2 = con1;
         }
@@ -490,7 +492,7 @@ public class DynamicConstants implements Serializable {
 
     // Ternary slices/invariants.  Note that if a variable is in both
     // leader lists, it is only added when it is in order (to prevent
-    // creating the slice twice)
+    // creating the slice twice).
     for (Constant con1 : leaders1) {
       for (Constant con2 : leaders2) {
         if ((con2.vi.varinfo_index < con1.vi.varinfo_index)
