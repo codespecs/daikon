@@ -43,8 +43,8 @@ public class ConditionPrinter extends DepthFirstVisitor {
 
     public void visit(FunctionDefinition n) {
         String functionName = n.f1.f1.f0.choice.toString();
-        this.actualStrings = (ArrayList)actualStringsByFunction.get(functionName);
-        this.stringArrays = (ArrayList)stringArraysByFunction.get(functionName);
+        this.actualStrings = actualStringsByFunction.get(functionName);
+        this.stringArrays = stringArraysByFunction.get(functionName);
         converter.actualStrings = this.actualStrings;
         converter.stringArrays = this.stringArrays;
         printer.println();
