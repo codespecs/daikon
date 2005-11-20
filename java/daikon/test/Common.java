@@ -14,7 +14,7 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
                        ProglangType.INT,
                        ProglangType.INT,
-                       null, // null Comparability
+                       VarComparabilityNone.it,
                        VarInfoAux.getDefault());
   }
 
@@ -22,7 +22,7 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
                        ProglangType.HASHCODE,
                        ProglangType.HASHCODE,
-                       null, // null Comparability
+                       VarComparabilityNone.it,
                        VarInfoAux.getDefault());
   }
 
@@ -31,7 +31,7 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
                        ProglangType.INT_ARRAY,
                        ProglangType.INT_ARRAY,
-                       null, // null Comparability
+                       VarComparabilityNone.it,
                        VarInfoAux.getDefault());
   }
 
@@ -39,7 +39,7 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
                        ProglangType.HASHCODE_ARRAY,
                        ProglangType.HASHCODE_ARRAY,
-                       null, // null Comparability
+                       VarComparabilityNone.it,
                        VarInfoAux.getDefault());
   }
 

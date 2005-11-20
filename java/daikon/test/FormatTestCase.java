@@ -605,7 +605,7 @@ class FormatTestCase {
       arrayModifier = "[]";
     }
 
-    // Create the new VarInfoName dependant on a couple factors:
+    // Create the new VarInfoName dependent on a couple factors:
     // - If it is an array, attach [] to the name to make parse return
     // the correct thing
     // - The base part of the name will be "a" for the first var in an
@@ -613,8 +613,9 @@ class FormatTestCase {
     // - The ProglangType will be specified in the parameters
     // - The comparability will be none
     VarInfo result = new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
-                                          arrayModifier), type, type,
-                        /* comparability = */ null, VarInfoAux.getDefault());
+                                                    arrayModifier),
+                                  type, type,
+                                  VarComparabilityNone.it, VarInfoAux.getDefault());
     return result;
   }
 

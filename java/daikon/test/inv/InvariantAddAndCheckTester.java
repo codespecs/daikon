@@ -831,7 +831,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       // - The comparability will be none
       VarInfo result = new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
                                                       arrayModifier), type, type,
-                                    /* comparability = */ null, VarInfoAux.getDefault());
+                                    VarComparabilityNone.it, VarInfoAux.getDefault());
       return result;
     }
 

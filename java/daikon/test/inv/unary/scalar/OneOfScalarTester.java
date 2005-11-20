@@ -23,7 +23,7 @@ public class OneOfScalarTester extends TestCase {
     VarInfo result = new VarInfo(VarInfoName.parse(name),
                                  ProglangType.INT,
                                  ProglangType.INT,
-                                 null, // null Comparability
+                                 VarComparabilityNone.it,
                                  VarInfoAux.getDefault());
     return result;
   }
@@ -32,7 +32,7 @@ public class OneOfScalarTester extends TestCase {
     VarInfo result = new VarInfo(VarInfoName.parse(name),
                                  ProglangType.HASHCODE,
                                  ProglangType.HASHCODE,
-                                 null, // null Comparability
+                                 VarComparabilityNone.it,
                                  VarInfoAux.getDefault());
     return result;
   }

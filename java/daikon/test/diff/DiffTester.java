@@ -45,7 +45,7 @@ public class DiffTester extends TestCase {
     VarInfo result = new VarInfo(VarInfoName.parse(name),
                                  ProglangType.INT,
                                  ProglangType.INT,
-                                 (VarComparability)null, // null Comparability
+                                 VarComparabilityNone.it,
                                  VarInfoAux.getDefault());
     return result;
   }

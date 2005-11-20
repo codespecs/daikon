@@ -25,7 +25,7 @@ public class OneOfSequenceTester extends TestCase {
     VarInfo result = new VarInfo(VarInfoName.parse(name),
                                  ProglangType.INT_ARRAY,
                                  ProglangType.INT_ARRAY,
-                                 null, // null Comparability
+                                 VarComparabilityNone.it,
                                  VarInfoAux.getDefault());
     return result;
   }
@@ -34,7 +34,7 @@ public class OneOfSequenceTester extends TestCase {
     VarInfo result = new VarInfo(VarInfoName.parse(name),
                                  ProglangType.HASHCODE_ARRAY,
                                  ProglangType.HASHCODE_ARRAY,
-                                 null, // null Comparability
+                                 VarComparabilityNone.it,
                                  VarInfoAux.getDefault());
     return result;
   }
