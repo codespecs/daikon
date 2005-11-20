@@ -76,8 +76,12 @@ public final class VarComparabilityImplicit
     return equality_set_ok (o);
   }
 
-  public boolean alwaysComparable() {
+  public boolean baseAlwayscomparable() {
     return (base < 0);
+  }
+
+  public boolean alwaysComparable() {
+    return (dimensions == 0) && (base < 0);
   }
 
   static VarComparabilityImplicit parse(String rep, ProglangType vartype) {
@@ -113,6 +117,8 @@ public final class VarComparabilityImplicit
       if (dimensions > 0) {
         cached_element_type = new VarComparabilityImplicit(base, indexTypes, dimensions-1);
       } else {
+        // COMPARABILITY TEST
+        // System.out.println("Warning: taking element type of non-array comparability.");
         cached_element_type = unknown;
       }
     }
@@ -130,27 +136,24 @@ public final class VarComparabilityImplicit
 
   static boolean comparable(VarInfoName viname1, VarComparabilityImplicit type1,
                             VarInfoName viname2, VarComparabilityImplicit type2) {
-    if ((type1.dimensions == 0) && (type1.base < 0))
+    if (type1.alwaysComparable())
       return true;
-    if ((type2.dimensions == 0) && (type2.base < 0))
+    if (type2.alwaysComparable())
       return true;
     if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
+      // Both are arrays
       return (comparable(type1.indexType(type1.dimensions-1),
                          type2.indexType(type2.dimensions-1))
               && comparable(type1.elementType(),
                             type2.elementType()));
+    } else if ((type1.dimensions == 0) && (type2.dimensions == 0)) {
+      // Neither is an array.
+      return type1.base == type2.base;
+    } else {
+      // One array, one non-array, and the non-array isn't universally comparable.
+      Assert.assertTrue(type1.dimensions == 0 || type2.dimensions == 0);
+      return false;
     }
-
-    // the check ensures that a scalar or string and elements of an array of the same type are
-    // labelled as comparable
-    if (((type1.dimensions > 0) && (type2.dimensions == 0)) || ((type1.dimensions == 0) && (type2.dimensions > 0)))
-      return type1.base == type2.base;
-
-    if ((type1.dimensions == 0) && (type2.dimensions == 0))
-      return type1.base == type2.base;
-    // One array, one non-array, and the non-array isn't universally comparable.
-    Assert.assertTrue(type1.dimensions == 0 || type2.dimensions == 0);
-    return false;
   }
 
   /**
