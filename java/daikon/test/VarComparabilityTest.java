@@ -24,7 +24,18 @@ public class VarComparabilityTest extends TestCase {
   }
 
   VarComparability parsei(String rep) {
-    return VarComparability.parse(IMPLICIT, rep, null);
+    // count number of dimensions
+    int dims = rep.split("\\[").length;
+    return parsei(rep, dims);
+  }
+
+  VarComparability parsei(String rep, int dims) {
+    String typerep = "int";
+    for (int i=0; i<dims; i++) {
+      typerep += "[]";
+    }
+    ProglangType type = ProglangType.parse(typerep);
+    return VarComparability.parse(IMPLICIT, rep, type);
   }
 
   public void test_VarComparabilityImplicit_scalar() {
