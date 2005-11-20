@@ -330,10 +330,10 @@ public final class PrintInvariants {
     }
 
     validateGuardNulls();
-    if ((Daikon.dkconfig_guardNulls == "always") // interned
-        || (Daikon.dkconfig_guardNulls == "missing")) { // interned
-      Daikon.guardInvariants(ppts);
-    }
+//     if ((Daikon.dkconfig_guardNulls == "always") // interned
+//         || (Daikon.dkconfig_guardNulls == "missing")) { // interned
+//       Daikon.guardInvariants(ppts);
+//     }
 
     // Debug print the hierarchy is a more readable manner
     if (debug.isLoggable(Level.FINE)) {
@@ -989,7 +989,7 @@ public final class PrintInvariants {
 
       inv_rep = "invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ";
 
-      inv_rep += get_ioa_precondition (invCounter, ppt);
+      inv_rep += get_ioa_precondition (ppt);
       // We look for indexed variables and add fake quantifiers to
       // the left.  Should we be doing this with visitors and the
       // quantification engine?  Maybe, but then again, Daikon
@@ -1059,12 +1059,12 @@ public final class PrintInvariants {
       out.print(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
       out.println("</INVINFO>");
     } else if (Daikon.output_format == OutputFormat.REPAIR) {
-	String quantifiers=Repair.getRepair().getQuantifiers();
-	Repair.getRepair().reset();
-        if (dkconfig_repair_debug) {
-          out.println("/*"+inv.format_using(OutputFormat.DAIKON)+"*/");
-        }
-	out.println("["+quantifiers+"],"+inv_rep+";");
+      String quantifiers=Repair.getRepair().getQuantifiers();
+      Repair.getRepair().reset();
+      if (dkconfig_repair_debug) {
+        out.println("/*"+inv.format_using(OutputFormat.DAIKON)+"*/");
+      }
+      out.println("["+quantifiers+"],"+inv_rep+";");
     } else {
       out.println(inv_rep);
     }
@@ -1125,8 +1125,6 @@ public final class PrintInvariants {
     // Count statistics (via Global) on variables (canonical, missing, etc.)
     count_global_stats(ppt);
 
-    int invCounter = 0; // Count printed invariants for this program point
-
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
@@ -1181,7 +1179,6 @@ public final class PrintInvariants {
       // Never print the guarding predicates themselves, they should only
       // print as part of GuardingImplications
       if (fi_accepted && !inv.isGuardingPredicate) {
-        invCounter++;
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       } else {
@@ -1224,13 +1221,13 @@ public final class PrintInvariants {
                                                    PrintWriter out,
                                                    PptTopLevel ppt) {
     int index = 0;
-    Iterator<Invariant> inv_iter = invariants.iterator();
-    while (inv_iter.hasNext()) {
+    for (Invariant inv : invariants) {
       index++;
-      Invariant inv = inv_iter.next();
-
+      Invariant guarded = inv.createGuardedInvariant(false);
+      if (guarded != null) {
+        inv = guarded;
+      }
       print_invariant(inv, out, index, ppt);
-
     }
 
     if (dkconfig_replace_prestate) {
@@ -1278,7 +1275,7 @@ public final class PrintInvariants {
     }
   }
 
-  public static String get_ioa_precondition (int numbering, PptTopLevel ppt) {
+  public static String get_ioa_precondition (PptTopLevel ppt) {
     if (ppt.ppt_name.isClassStaticSynthetic()) return "";
     if (ppt.ppt_name.isObjectInstanceSynthetic()) return "";
     return "enabled(" + ppt.ppt_name.getSignature() + ") => ";

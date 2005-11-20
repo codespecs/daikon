@@ -537,12 +537,12 @@ public final class Daikon {
       }
     }
 
-    if ((Daikon.dkconfig_guardNulls == "always") // interned
-        || (Daikon.dkconfig_guardNulls == "missing")) { // interned
-      // This side-effects the PptMap, but it has already been saved
-      // to disk and is now being used only for printing.
-      guardInvariants(all_ppts);
-    }
+//     if ((Daikon.dkconfig_guardNulls == "always") // interned
+//         || (Daikon.dkconfig_guardNulls == "missing")) { // interned
+//       // This side-effects the PptMap, but it has already been saved
+//       // to disk and is now being used only for printing.
+//       guardInvariants(all_ppts);
+//     }
 
     // print out the invariants for each program point
     if (Daikon.dkconfig_undo_opts) {
@@ -1331,7 +1331,7 @@ public final class Daikon {
             || vars[1] == vars[2] || vars[0] == vars[2]))) {
           if (inv.ppt.num_values() != 0) {
 
-            // filters out "warning- too few samples for
+            // filters out "warning: too few samples for
             // daikon.inv.ternary.threeScalar.LinearTernary invariant"
             if (inv.isActive()) {
               new_list.add(inv);
@@ -1782,17 +1782,19 @@ public final class Daikon {
     // Add implications
     stopwatch.reset();
     fileio_progress.clear();
-    if (!Daikon.dkconfig_quiet) {
-      System.out.println("Creating implications");
+    if (! Daikon.dkconfig_disable_splitting) {
+      if (!Daikon.dkconfig_quiet) {
+        System.out.println("Creating implications");
+      }
+      debugProgress.fine("Adding Implications ... ");
+      for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext();) {
+        PptTopLevel ppt = itor.next();
+        // debugProgress.fine ("  Adding Implications for " + ppt.name);
+        ppt.addImplications();
+      }
+      debugProgress.fine(
+                         "Time spent adding implications: " + stopwatch.format());
     }
-    debugProgress.fine("Adding Implications ... ");
-    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext();) {
-      PptTopLevel ppt = itor.next();
-      // debugProgress.fine ("  Adding Implications for " + ppt.name);
-      ppt.addImplications();
-    }
-    debugProgress.fine(
-      "Time spent adding implications: " + stopwatch.format());
   }
 
   private static class Count {
@@ -1907,28 +1909,28 @@ public final class Daikon {
   }
 
 
-  /**
-   * Guard the invariants at all PptTopLevels. Note that this changes
-   * the contents of the PptTopLevels, and the changes made should
-   * probably not be written out to an inv file (save the file before
-   * this is called).
-   */
-  public static void guardInvariants(PptMap allPpts) {
-    for (PptTopLevel ppt : allPpts.asCollection()) {
-      if (ppt.num_samples() == 0)
-        continue;
-      // Make sure isDerivedParam is set before guarding.  Otherwise
-      // we'll never get it correct.
-      for (int iVarInfo = 0;
-        iVarInfo < ppt.var_infos.length;
-        iVarInfo++) {
-        boolean temp =
-          ppt.var_infos[iVarInfo].isDerivedParamAndUninteresting();
-      }
-
-      ppt.guardInvariants();
-    }
-  }
+//   /**
+//    * Guard the invariants at all PptTopLevels. Note that this changes
+//    * the contents of the PptTopLevels, and the changes made should
+//    * probably not be written out to an inv file (save the file before
+//    * this is called).
+//    */
+//   public static void guardInvariants(PptMap allPpts) {
+//     for (PptTopLevel ppt : allPpts.asCollection()) {
+//       if (ppt.num_samples() == 0)
+//         continue;
+//       // Make sure isDerivedParam is set before guarding.  Otherwise
+//       // we'll never get it correct.
+//       for (int iVarInfo = 0;
+//         iVarInfo < ppt.var_infos.length;
+//         iVarInfo++) {
+//         boolean temp =
+//           ppt.var_infos[iVarInfo].isDerivedParamAndUninteresting();
+//       }
+//
+//       ppt.guardInvariants();
+//     }
+//   }
 
   /**
    * Removed invariants as specified in omit_types

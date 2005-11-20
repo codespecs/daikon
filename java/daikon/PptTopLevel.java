@@ -2198,8 +2198,13 @@ public class PptTopLevel extends Ppt {
     if (is_constant(var1) && is_constant(var2))
       return (false);
 
-    if (!var1.compatible(var2))
+    if (! (var1.compatible(var2)
+           || (var1.type.isArray() && var1.eltsCompatible(var2))
+           || (var2.type.isArray() && var2.eltsCompatible(var1)))) {
+      // System.out.printf("is_slice_ok(%s, %s): variables not compatible%n",
+      //                    var1, var2);
       return (false);
+    }
 
     // Don't create a slice with the same variables if the equality
     // set only contains 1 variable
@@ -3106,32 +3111,32 @@ public class PptTopLevel extends Ppt {
   /////////////////////////////////////////////////////////////////////////////
   ///// Invariant guarding
 
-  /** This function guards all of the invariants in a PptTopLevel **/
-  public void guardInvariants() {
-    // To avoid concurrent modification exceptions using arrays
-    Object[] viewArray = viewsAsCollection().toArray();
-    for (int i = 0; i < viewArray.length; i++) {
-      PptSlice currentView = (PptSlice) viewArray[i];
-      currentView.guardInvariants();
-    }
-
-    // Commented this code out because conditional views are not slices.
-    // It is not clear what this is trying to accomplish
-    //     Object viewCondArray[] = views_cond.toArray();
-    //     for (int i=0; i < viewCondArray.length; i++) {
-    //       PptSlice currentCondView = (PptSlice)viewCondArray[i];
-    //       currentCondView.guardInvariants();
-    //     }
-    // This is a version changed to use the new conditional ppt iterator.
-    // But the elements are still not slices!
-    //     for (Iterator<PptSlice> i = cond_iterator(); i.hasNext(); ) {
-    //       PptSlice currentCondView = i.next();
-    //       currentCondView.guardInvariants();
-    //     }
-
-    // System.out.println("Ppt name: " + name());
-    // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
-  }
+//   /** This function guards all of the invariants in a PptTopLevel **/
+//   public void guardInvariants() {
+//     // To avoid concurrent modification exceptions using arrays
+//     Object[] viewArray = viewsAsCollection().toArray();
+//     for (int i = 0; i < viewArray.length; i++) {
+//       PptSlice currentView = (PptSlice) viewArray[i];
+//       currentView.guardInvariants(true);
+//     }
+//
+//     // Commented this code out because conditional views are not slices.
+//     // It is not clear what this is trying to accomplish
+//     //     Object viewCondArray[] = views_cond.toArray();
+//     //     for (int i=0; i < viewCondArray.length; i++) {
+//     //       PptSlice currentCondView = (PptSlice)viewCondArray[i];
+//     //       currentCondView.guardInvariants();
+//     //     }
+//     // This is a version changed to use the new conditional ppt iterator.
+//     // But the elements are still not slices!
+//     //     for (Iterator<PptSlice> i = cond_iterator(); i.hasNext(); ) {
+//     //       PptSlice currentCondView = i.next();
+//     //       currentCondView.guardInvariants();
+//     //     }
+//
+//     // System.out.println("Ppt name: " + name());
+//     // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
+//   }
 
   /**
    * remove invariants that are marked for ommission in omitTypes

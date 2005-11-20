@@ -44,6 +44,8 @@ public abstract class PptSlice
 
   public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
 
+  // A better name would perhaps be "container", as this has nothing to do
+  // with the program point hierarchy.
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
   public abstract int arity();
@@ -264,83 +266,85 @@ public abstract class PptSlice
   //////////////////////////////////////////////////////////////////////////////
   //// Invariant guarding
 
-  /**
-   * This procedure guards all of the invariants in a given PptSlice by
-   * iterating over the contained invariants and replacing the invariants
-   * that require guarding with their guarded counterparts.  The guarded
-   * invariants are put into the joiner view of the PptTopLevel that
-   * contains the PptSlice where the invariant was originally located.
-   * <p>
-   * This procedure changes what invariants exist, so the PptMap should
-   * not be saved, or used for anything except printing, after this is
-   * called.
-   */
-  public void guardInvariants() {
-    List<Invariant> invariantsToGuard = new ArrayList<Invariant>();
+//   /**
+//    * This procedure guards all of the invariants in a given PptSlice by
+//    * iterating over the contained invariants and replacing the invariants
+//    * that require guarding with their guarded counterparts.  The guarded
+//    * invariants are put into the joiner view of the PptTopLevel that
+//    * contains the PptSlice where the invariant was originally located.
+//    * The original (unguarded) invariants are removed.
+//    * <p>
+//    * This procedure changes what invariants exist, so the PptMap should
+//    * not be saved, or used for anything except printing, after this is
+//    * called.
+//    */
+//   public void guardInvariants() {
+//     List<Invariant> guardedInvariants = new ArrayList<Invariant>();
+//
+//     if (debugGuarding.isLoggable(Level.FINE)) {
+//       debugGuarding.fine ("PptSlice.guardInvariants init: " + this.parent.name());
+//       debugGuarding.fine ("  I have " + invs.size() + " invariants");
+//       for (Invariant inv : invs) {
+//         debugGuarding.fine ("    " + inv);
+//       }
+//       debugGuarding.fine ("  var_infos in this slice:");
+//       for (VarInfo vi : var_infos) {
+//         try {
+//           debugGuarding.fine ("    " + vi.name.name());
+//         } catch (UnsupportedOperationException e) {
+//           debugGuarding.fine ("  Part of PptSlice cannot be formatted.");
+//         }
+//       }
+//       // debugGuarding.fine ("In guardInvariants, the VarInfos for the PptSlice: ");
+//       // debugGuarding.fine (Arrays.asList(var_infos).toString());
+//     }
+//
+//     // If this slice is to be deleted, then don't guard it
+//     if (invs.size() == 0) return;
+//
+//     for (Iterator<Invariant> overInvs = invs.iterator(); overInvs.hasNext(); ) {
+//       Invariant inv = overInvs.next();
+/// The below can be replaced by a call to invariant.createGuardedInvariant().
+// //       if (debugGuarding.isLoggable(Level.FINE)) {
+// //         debugGuarding.fine ("  Trying to add guard for: " + inv + "     " + inv.repr());
+// //       }
+// //       if (inv.isGuardingPredicate) {
+// //         debugGuarding.fine ("  Continuing: this is a guarding predicate");
+// //         continue;
+// //       }
+// //       Invariant guardingPredicate = inv.createGuardingPredicate();
+// //       if (debugGuarding.isLoggable(Level.FINE)) {
+// //         if (guardingPredicate != null) {
+// //           debugGuarding.fine ("  Predicate: " +
+// //                               guardingPredicate.format());
+// //           debugGuarding.fine ("  Consequent: " +
+// //                               inv.format());
+// //         } else {
+// //           debugGuarding.fine ("  No implication needed");
+// //         }
+// //       }
+//
+//       if (guardingPredicate != null) {
+//         Implication guardingImplication =
+//           GuardingImplication.makeGuardingImplication(parent, guardingPredicate, inv, false);
+//
+//         if (! parent.joiner_view.hasImplication(guardingImplication)) {
+//           parent.joiner_view.addInvariant(guardingImplication);
+//           guardedInvariants.add(inv);
+//
+//           if (debugGuarding.isLoggable(Level.FINE)) {
+//             debugGuarding.fine ("Adding " +
+//                                 guardingImplication.format());
+//             debugGuarding.fine ("Removing " +
+//                                 inv.format());
+//           }
+//         }
+//       }
+//     }
+//
+//     removeInvariants(guardedInvariants);
+//   }
 
-    if (debugGuarding.isLoggable(Level.FINE)) {
-      debugGuarding.fine ("PptSlice.guardInvariants init: " + this.parent.name());
-      debugGuarding.fine ("  I have " + invs.size() + " invariants");
-      for (Invariant inv : invs) {
-        debugGuarding.fine ("    " + inv);
-      }
-      debugGuarding.fine ("  var_infos in this slice:");
-      for (VarInfo vi : var_infos) {
-        try {
-          debugGuarding.fine ("    " + vi.name.name());
-        } catch (UnsupportedOperationException e) {
-          debugGuarding.fine ("  Part of PptSlice cannot be formatted.");
-        }
-      }
-      // debugGuarding.fine ("In guardInvariants, the VarInfos for the PptSlice: ");
-      // debugGuarding.fine (Arrays.asList(var_infos).toString());
-    }
-
-    // If this slice is to be deleted, then don't guard it
-    if (invs.size() == 0) return;
-
-    for (Iterator<Invariant> overInvs = invs.iterator(); overInvs.hasNext(); ) {
-      Invariant inv = overInvs.next();
-      if (debugGuarding.isLoggable(Level.FINE)) {
-        debugGuarding.fine ("  Trying to add guard for: " + inv + "     " + inv.repr());
-      }
-      if (inv.isGuardingPredicate) {
-        debugGuarding.fine ("  Continuing: this is a guarding predicate");
-        continue;
-      }
-      Invariant guardingPredicate = inv.createGuardingPredicate();
-      Implication guardingImplication;
-      if (debugGuarding.isLoggable(Level.FINE)) {
-        if (guardingPredicate != null) {
-          debugGuarding.fine ("  Predicate: " +
-                              guardingPredicate.format());
-          debugGuarding.fine ("  Consequent: " +
-                              inv.format());
-        } else {
-          debugGuarding.fine ("  No implication needed");
-        }
-      }
-
-      if (guardingPredicate != null) {
-        guardingImplication =
-          GuardingImplication.makeGuardingImplication(parent, guardingPredicate, inv, false);
-
-        if (! parent.joiner_view.hasImplication(guardingImplication)) {
-          parent.joiner_view.addInvariant(guardingImplication);
-          invariantsToGuard.add(inv);
-
-          if (debugGuarding.isLoggable(Level.FINE)) {
-            debugGuarding.fine ("Adding " +
-                                guardingImplication.format());
-            debugGuarding.fine ("Removing " +
-                                inv.format());
-          }
-        }
-      }
-    }
-
-    removeInvariants(invariantsToGuard);
-  }
 
   public boolean containsOnlyGuardingPredicates() {
     for (int i=0; i<invs.size(); i++) {
