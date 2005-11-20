@@ -781,8 +781,8 @@ public abstract class Invariant
     if (attempt == null) {
       attempt = varNames();
     }
-    return "warning- too few samples for " + classname
-      + " invariant- " + attempt;
+    return "warning: too few samples for " + classname
+      + " invariant: " + attempt;
   }
 
   /**
@@ -1651,21 +1651,22 @@ public abstract class Invariant
     return (state == null);
   }
 
-  // This function creates a guarding predicate for a given invariant
-  public Invariant createGuardingPredicate() {
-    VarInfo[] varInfos = ppt.var_infos;
-
+  /**
+   * Create a guarding predicate for a given invariant.
+   * Returns null if no guarding is needed.
+   **/
+  public Invariant createGuardingPredicate(boolean install) {
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("Guarding predicate being created for: ");
       debugGuarding.fine ("  " + this.format());
     }
 
     // Find which VarInfos must be guarded
-    List<VarInfo> mustBeGuarded = getGuardingList(varInfos);
+    List<VarInfo> mustBeGuarded = getGuardingList();
 
     if (mustBeGuarded.isEmpty()) {
       if (debugGuarding.isLoggable(Level.FINE)) {
-        debugGuarding.fine ("Left predicate is empty, returning");
+        debugGuarding.fine ("No guarding is needed, returning");
       }
       return null;
     }
@@ -1673,7 +1674,7 @@ public abstract class Invariant
     // This conjunction would look better if it was built up right-to-left.
     Invariant guardingPredicate = null;
     for (VarInfo vi : mustBeGuarded) {
-      Invariant currentGuard = vi.createGuardingPredicate();
+      Invariant currentGuard = vi.createGuardingPredicate(install);
       if (currentGuard == null)
         continue;
       debugGuarding.fine (String.format("VarInfo %s guard is %s", vi, currentGuard));
@@ -1701,7 +1702,11 @@ public abstract class Invariant
   }
 
   // Gets a list of all the variables that must be guarded for this
-  // invariant
+  // invariant.
+  public List<VarInfo> getGuardingList() {
+    return getGuardingList(ppt.var_infos);
+  }
+
   public static List<VarInfo> getGuardingList(VarInfo[] varInfos) {
     List<VarInfo> guardingList = new ArrayList<VarInfo>();
 
@@ -1712,6 +1717,52 @@ public abstract class Invariant
     }
 
     return UtilMDE.removeDuplicates(guardingList);
+  }
+
+
+  /**
+   * This procedure guards one invariant and returns the resulting guarded
+   * invariant (implication), without placing it in any slice and without
+   * modifying the original invariant.
+   * Returns null if the invariant does not need to be guarded.
+   **/
+  public Invariant createGuardedInvariant(boolean install) {
+    if (Daikon.dkconfig_guardNulls == "never") { // interned
+      return null;
+    }
+
+    if (debugGuarding.isLoggable(Level.FINE)) {
+      debugGuarding.fine ("  Trying to add guard for: " + this + "; repr = " + repr());
+    }
+    if (isGuardingPredicate) {
+      debugGuarding.fine ("  Do not guard: this is a guarding predicate");
+      return null;
+    }
+    Invariant guardingPredicate = createGuardingPredicate(install);
+    if (debugGuarding.isLoggable(Level.FINE)) {
+      if (guardingPredicate != null) {
+        debugGuarding.fine ("  Predicate: " +
+                            guardingPredicate.format());
+        debugGuarding.fine ("  Consequent: " +
+                            format());
+      } else {
+        debugGuarding.fine ("  No implication needed");
+      }
+    }
+
+    if (guardingPredicate == null) {
+      return null;
+    }
+
+    Implication guardingImplication =
+      GuardingImplication.makeGuardingImplication(ppt.parent, guardingPredicate, this, false);
+
+    if (install) {
+      if (! ppt.parent.joiner_view.hasImplication(guardingImplication)) {
+        ppt.parent.joiner_view.addInvariant(guardingImplication);
+      }
+    }
+    return guardingImplication;
   }
 
 
