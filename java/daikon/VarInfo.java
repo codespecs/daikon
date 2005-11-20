@@ -138,8 +138,10 @@ public final class VarInfo implements Cloneable, Serializable {
   /** Cached value for sequenceSize() **/
   private VarInfo sequenceSize;
 
-  // DO NOT TEST EQUALITY!  ONLY USE ITS .name SLOT!!   -MDE 3/9/2001
-  public VarInfo postState; // non-null if this is an orig() variable
+  /** non-null if this is an orig() variable.
+   *  <b>Do not test equality!  Only use its .name slot.</b>
+   **/
+  public VarInfo postState; //
 
   /**
    * @exception RuntimeException if representation invariant on this is broken
