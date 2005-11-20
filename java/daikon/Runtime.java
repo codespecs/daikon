@@ -460,7 +460,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_Object(java.io.PrintStream ps, List v) {
+  public static final void println_array_Object(java.io.PrintStream ps, List<?> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -519,7 +519,7 @@ public final class Runtime {
 
   // Deprecated.
   // Print an array of the classes of the elements.
-  public static final void println_array_Object_eltclass(java.io.PrintStream ps, List v) {
+  public static final void println_array_Object_eltclass(java.io.PrintStream ps, List<?> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -537,7 +537,7 @@ public final class Runtime {
   }
 
   // Print an array of the classes of the elements.
-  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, List v) {
+  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, List<?> v) {
     if (v == null) {
       ps.println("nonsensical");
       println_modbit_missing(ps);
@@ -622,7 +622,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_List_size(java.io.PrintStream ps, List v) {
+  public static final void println_array_List_size(java.io.PrintStream ps, List<List<?>> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -630,10 +630,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(v.get(0) == null ? 0 : ((List)v.get(0)).size());
+      ps.print(v.get(0) == null ? 0 : v.get(0).size());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(v.get(i) == null ? 0 : ((List)v.get(i)).size());
+        ps.print(v.get(i) == null ? 0 : v.get(i).size());
       }
     }
     ps.println(']');
@@ -675,7 +675,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_String(java.io.PrintStream ps, List v) {
+  public static final void println_array_String(java.io.PrintStream ps, List<String> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -683,10 +683,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      print_quoted_String(ps, (String)v.get(0));
+      print_quoted_String(ps, v.get(0));
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        print_quoted_String(ps, (String)v.get(i));
+        print_quoted_String(ps, v.get(i));
       }
     }
     ps.println(']');
@@ -735,7 +735,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_boolean(java.io.PrintStream ps, List v) {
+  public static final void println_array_boolean(java.io.PrintStream ps, List<Boolean> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -743,10 +743,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((Boolean)v.get(0)).booleanValue());
+      ps.print(v.get(0).booleanValue());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((Boolean)v.get(i)).booleanValue());
+        ps.print(v.get(i).booleanValue());
       }
     }
     ps.println(']');
@@ -803,7 +803,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_byte(java.io.PrintStream ps, List v) {
+  public static final void println_array_byte(java.io.PrintStream ps, List<Byte> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -811,10 +811,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((Byte)v.get(0)).byteValue());
+      ps.print(v.get(0).byteValue());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((Byte)v.get(i)).byteValue());
+        ps.print(v.get(i).byteValue());
       }
     }
     ps.println(']');
@@ -847,7 +847,7 @@ public final class Runtime {
     println_array_char_as_chars(ps, a);
   }
 
-  public static final void println_array_char(java.io.PrintStream ps, List v) {
+  public static final void println_array_char(java.io.PrintStream ps, List<Character> v) {
     println_array_char_as_chars(ps, v);
   }
 
@@ -883,7 +883,7 @@ public final class Runtime {
 
   // Outputs a sequence of space-separated characters, with (only) return
   // and newline quoted.  (Should backslash also be quoted?)
-  public static final void println_array_char_as_chars(java.io.PrintStream ps, List v) {
+  public static final void println_array_char_as_chars(java.io.PrintStream ps, List<Character> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -893,7 +893,7 @@ public final class Runtime {
     for (int i=0; i<size; i++) {
       if (i != 0)
         ps.print(' ');
-      char c = ((Character)v.get(i)).charValue();
+      char c = v.get(i).charValue();
       if (c == '\r')
         ps.print("\\r");
       else if (c == '\n')       // not lineSep
@@ -936,7 +936,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_char_as_ints(java.io.PrintStream ps, List v) {
+  public static final void println_array_char_as_ints(java.io.PrintStream ps, List<Character> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -944,10 +944,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(Character.getNumericValue(((Character)v.get(0)).charValue()));
+      ps.print(Character.getNumericValue(v.get(0).charValue()));
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(Character.getNumericValue(((Character)v.get(i)).charValue()));
+        ps.print(Character.getNumericValue(v.get(i).charValue()));
       }
     }
     ps.println(']');
@@ -1005,7 +1005,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_double(java.io.PrintStream ps, List v) {
+  public static final void println_array_double(java.io.PrintStream ps, List<Double> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1013,10 +1013,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((Double)v.get(0)).doubleValue());
+      ps.print(v.get(0).doubleValue());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((Double)v.get(i)).doubleValue());
+        ps.print(v.get(i).doubleValue());
       }
     }
     ps.println(']');
@@ -1073,7 +1073,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_float(java.io.PrintStream ps, List v) {
+  public static final void println_array_float(java.io.PrintStream ps, List<Float> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1081,10 +1081,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((Float)v.get(0)).floatValue());
+      ps.print(v.get(0).floatValue());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((Float)v.get(i)).floatValue());
+        ps.print(v.get(i).floatValue());
       }
     }
     ps.println(']');
@@ -1141,7 +1141,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_int(java.io.PrintStream ps, List v) {
+  public static final void println_array_int(java.io.PrintStream ps, List<Integer> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1149,10 +1149,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((Integer)v.get(0)).intValue());
+      ps.print(v.get(0).intValue());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((Integer)v.get(i)).intValue());
+        ps.print(v.get(i).intValue());
       }
     }
     ps.println(']');
@@ -1209,7 +1209,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_long(java.io.PrintStream ps, List v) {
+  public static final void println_array_long(java.io.PrintStream ps, List<Long> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1217,10 +1217,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((Long)v.get(0)).longValue());
+      ps.print(v.get(0).longValue());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((Long)v.get(i)).longValue());
+        ps.print(v.get(i).longValue());
       }
     }
     ps.println(']');
@@ -1277,7 +1277,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_short(java.io.PrintStream ps, List v) {
+  public static final void println_array_short(java.io.PrintStream ps, List<Short> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1285,10 +1285,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((Short)v.get(0)).shortValue());
+      ps.print(v.get(0).shortValue());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((Short)v.get(i)).shortValue());
+        ps.print(v.get(i).shortValue());
       }
     }
     ps.println(']');
