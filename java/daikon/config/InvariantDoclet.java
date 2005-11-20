@@ -198,7 +198,7 @@ public class InvariantDoclet
       // setup the comment for info
       String comment = dc.commentText();
       // Remove leading spaces, which throw off Info.
-      UtilMDE.replaceString (comment, lineSep + " ", lineSep);
+      comment = UtilMDE.replaceString (comment, lineSep + " ", lineSep);
       comment = UtilMDE.replaceString (comment, "{", "@{");
       comment = UtilMDE.replaceString (comment, "}", "@}");
       comment = UtilMDE.replaceString (comment, "<br>", "@*");
