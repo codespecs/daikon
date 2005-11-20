@@ -65,7 +65,7 @@ public abstract class VarComparability {
     if (old instanceof VarComparabilityNone) {
       return VarComparabilityNone.it;
     } else {
-      throw new Error ("Not implemented for implicity comparables");
+      throw new Error ("makeComparabilitySameIndices not implemented for implicit comparables");
     }
   }
 
