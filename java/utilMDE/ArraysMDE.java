@@ -756,7 +756,7 @@ public final class ArraysMDE {
    *        to avoid confusion over whether it would be the last included
    *        index or the first non-included index)
    **/
-  public static List subarray(List a, int startindex, int length) {
+  public static <T> List<T> subarray(List<T> a, int startindex, int length) {
     return a.subList(startindex, startindex+length);
   }
 
@@ -2257,7 +2257,7 @@ public final class ArraysMDE {
   /**
    * @return true iff some element of a is null (false if a is zero-sized)
    **/
-  public static boolean any_null(List a) {
+  public static boolean any_null(List<?> a) {
     if (a.size() == 0)
       return false;
     // The cast ensures that the right version of IndexOfEq gets called.
@@ -2267,7 +2267,7 @@ public final class ArraysMDE {
   /**
    * @return true iff all elements of a are null (unspecified result if a is zero-sized)
    **/
-  public static boolean all_null(List a) {
+  public static boolean all_null(List<?> a) {
     for (int i=0; i<a.size(); i++) {
       if (! (a.get(i) == null))
         return false;

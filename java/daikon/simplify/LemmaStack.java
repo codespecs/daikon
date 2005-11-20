@@ -257,10 +257,10 @@ public class LemmaStack {
     return new_invs;
   }
 
-  private static Vector<Lemma> filterByClass(Vector<Lemma> lems, Set blacklist) {
+  private static Vector<Lemma> filterByClass(Vector<Lemma> lems, Set<Class> blacklist) {
     Vector<Lemma> new_lems = new Vector<Lemma>();
     for (int i = 0; i < lems.size(); i++) {
-      if (!blacklist.contains(((Lemma)lems.elementAt(i)).invClass())) {
+      if (!blacklist.contains(lems.elementAt(i).invClass())) {
         new_lems.add(lems.elementAt(i));
       }
     }
