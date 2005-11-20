@@ -16,7 +16,7 @@ public final class VarComparabilityNone
   static final long serialVersionUID = 20020122L;
 
   // There is only one VarComparabilityNone object.
-  static VarComparabilityNone it = new VarComparabilityNone();
+  public static final VarComparabilityNone it = new VarComparabilityNone();
 
   private VarComparabilityNone() { }
 
