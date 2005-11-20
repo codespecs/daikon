@@ -152,6 +152,8 @@ public final class VarInfo implements Cloneable, Serializable {
     Assert.assertTrue(file_rep_type != null);
     Assert.assertTrue(rep_type != null);
     Assert.assertTrue(comparability != null); // anything else ??
+    Assert.assertTrue(comparability.alwaysComparable()
+                      || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()));
     Assert.assertTrue(
       0 <= varinfo_index && varinfo_index < ppt.var_infos.length);
     Assert.assertTrue(-1 <= value_index && value_index < varinfo_index);
@@ -200,12 +202,21 @@ public final class VarInfo implements Cloneable, Serializable {
         + " for variable "
         + name);
     // Ensure that the type and rep type are somewhat consistent
+    Assert.assertTrue(type != null);
     Assert.assertTrue(
       type.pseudoDimensions() >= file_rep_type.dimensions(),
       "Types dimensions incompatibility: "
         + type
         + " vs. "
         + file_rep_type);
+    Assert.assertTrue(comparability != null);
+    // COMPARABILITY TEST
+    // Assert.assertTrue(
+    //   comparability.alwaysComparable() || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions(),
+    //   "Types dimensions incompatibility: "
+    //     + type
+    //     + " vs. "
+    //     + file_rep_type);
     Assert.assertTrue(aux != null);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
@@ -1332,7 +1343,7 @@ public final class VarInfo implements Cloneable, Serializable {
     // comparability info may not make sense.
     Assert.assertTrue(var1.ppt == var2.ppt);
 
-    if (!comparable2Way(var2)) {
+    if (!comparableByType(var2)) {
       return false;
     }
 
@@ -1351,18 +1362,18 @@ public final class VarInfo implements Cloneable, Serializable {
   public boolean eltsCompatible(VarInfo sclvar) {
     VarInfo seqvar = this;
     if (Daikon.check_program_types) {
-      if (!seqvar
-        .type
-        .elementType()
-        .comparableOrSuperclassEitherWay(sclvar.type)) {
+      ProglangType elttype = seqvar.type.elementType();
+      if (!elttype.comparableOrSuperclassEitherWay(sclvar.type)) {
+        // System.out.printf("eltsCompatible: bad program types; elttype(%s)=%s, scltype(%s)=%s%n",
+        //                   seqvar, elttype, sclvar, sclvar.type);
         return false;
       }
     }
     if (!Daikon.ignore_comparability) {
-      if (!VarComparability
-        .comparable(
-          seqvar.comparability.elementType(),
-          sclvar.comparability)) {
+      if (!VarComparability.comparable(seqvar.comparability.elementType(),
+                                       sclvar.comparability)) {
+        // System.out.printf("eltsCompatible: eltcomp(%s;%s)=%s, sclcomp(%s)=%s%n",
+        //                   seqvar, seqvar.comparability.elementType(), seqvar.comparability.elementType(), sclvar, sclvar.comparability);
         return false;
       }
     }
@@ -1377,13 +1388,16 @@ public final class VarInfo implements Cloneable, Serializable {
    * superclass, even though it would for each child and the
    * superclass.  Does not check comparabilities.
    **/
-  public boolean comparable2Way(VarInfo var2) {
+  public boolean comparableByType(VarInfo var2) {
     VarInfo var1 = this;
+
+    // System.out.printf("comparableByType(%s, %s)%n", var1, var2);
 
     // the check ensures that a scalar or string and elements of an array of the same type are
     // labelled as comparable
     if (Daikon.check_program_types && (var1.file_rep_type.isArray() && !var2.file_rep_type.isArray())) {
 
+      // System.out.printf("comparableByType: case 1 %s%n", var1.eltsCompatible(var2));
       if (var1.eltsCompatible(var2))
         return true;
     }
@@ -1392,6 +1406,7 @@ public final class VarInfo implements Cloneable, Serializable {
     // labelled as comparable
     if (Daikon.check_program_types && (!var1.file_rep_type.isArray() && var2.file_rep_type.isArray())) {
 
+      // System.out.printf("comparableByType: case 2 %s%n", var2.eltsCompatible(var1));
       if (var2.eltsCompatible(var1))
         return true;
 
@@ -1400,14 +1415,17 @@ public final class VarInfo implements Cloneable, Serializable {
 
     if (Daikon.check_program_types
       && (!var1.type.comparableOrSuperclassEitherWay(var2.type))) {
+      // System.out.printf("comparableByType: case 3 return false%n");
       return false;
     }
 
     if (Daikon.check_program_types
       && (var1.file_rep_type != var2.file_rep_type)) {
+      // System.out.printf("comparableByType: case 4 return false%n");
       return false;
     }
 
+    // System.out.printf("comparableByType: fallthough return true%n");
     return true;
   }
 
@@ -1480,74 +1498,78 @@ public final class VarInfo implements Cloneable, Serializable {
    * Create a guarding predicate for this VarInfo, that is, an
    * invariant that ensures that this object is available for access
    * to variables that reference it, such as fields.
+   * (The invariant is placed in the appropriate slice.)
+   * Returns null if no guarding is needed.
    **/
-  // Adding a test against null is not quite right for C, where *p could
-  // be nonsensical (uninitialized or freed) even when p is non-null.  But
-  // this is a decent approximation to start with.
-  public Invariant createGuardingPredicate() {
+  // Adding a test against null is not quite right for C programs, where *p
+  // could be nonsensical (uninitialized or freed) even when p is non-null.
+  // But this is a decent approximation to start with.
+  public Invariant createGuardingPredicate(boolean install) {
     // Later for the array, make sure index in bounds
-    if (type.isArray() || type.isObject()) {
-      // For now associating with the variable's PptSlice
-      PptSlice associateWith = ppt.get_or_instantiate_slice(this);
-
-      Invariant prevInstantiation;
-      try {
-        prevInstantiation =
-          Invariant.find(
-            Class.forName("daikon.inv.unary.scalar.NonZero"),
-            associateWith);
-      } catch (ClassNotFoundException e) {
-        throw new Error("Could not locate class object for daikon.inv.unary.scalar.NonZero");
-      }
-
-      Invariant retval;
-
-      // Check whether the predicate already exists
-      if (prevInstantiation == null) {
-        // If it doesn't, create a "fake" invariant, which should
-        // never be printed.  Is it a good idea even to set
-        // retval.falsified to true?  We know it's true because
-        // retval's children were missing.  However, some forms of
-        // filtering might remove it from associateWith.
-        retval = NonZero.get_proto().instantiate(associateWith);
-        if (retval == null)
-          return null;
-        retval.isGuardingPredicate = true;
-        // System.out.printf("Created a guarding predicate: %s at %s%n", retval, associateWith);
-        // new Error().printStackTrace(System.out);
-        associateWith.addInvariant(retval);
-      } else {
-        retval = prevInstantiation;
-      }
-
-      return retval;
-    } else {
-      System.err.printf("Unexpected guarding based on %s with type %s%n", name.name(), type);
-      Assert.assertTrue(false);
-      return null;
+    if (! (type.isArray() || type.isObject())) {
+      String message = String.format("Unexpected guarding based on %s with type %s%n", name.name(), type);
+      System.err.printf(message);
+      throw new Error(message);
     }
+
+    // For now associating with the variable's PptSlice
+    PptSlice slice = ppt.get_or_instantiate_slice(this);
+
+    Invariant result;
+    try {
+      result =
+        Invariant.find(Class.forName("daikon.inv.unary.scalar.NonZero"),
+                       slice);
+    } catch (ClassNotFoundException e) {
+      throw new Error("Could not locate class object for daikon.inv.unary.scalar.NonZero");
+    }
+
+    // Check whether the predicate already exists
+    if (result == null) {
+      // If it doesn't, create a "fake" invariant, which should
+      // never be printed.  Is it a good idea even to set
+      // result.falsified to true?  We know it's true because
+      // result's children were missing.  However, some forms of
+      // filtering might remove it from slice.
+      result = NonZero.get_proto().instantiate(slice);
+      if (result == null)
+        // Return null if NonZero invariant is not applicable to this variable.
+        return null;
+      result.isGuardingPredicate = true;
+      // System.out.printf("Created a guarding predicate: %s at %s%n", result, slice);
+      // new Error().printStackTrace(System.out);
+      if (install) {
+        slice.addInvariant(result);
+      }
+    }
+
+    return result;
   }
+
 
   static Set<String> addVarMessages = new HashSet<String>();
 
-  // Finds a list of variables that must be guarded for a VarInfo to be
-  // guaranteed to not be missing.  This list never includes this.  The
-  // variables are returned in the order in which their guarding prefixes
-  // are supposed to print.
+  /**
+   * Finds a list of variables that must be guarded for a VarInfo to be
+   * guaranteed to not be missing.  This list never includes "this", as it
+   * can never be null.  The variables are returned in the order in which
+   * their guarding prefixes are supposed to print.
+   **/
   public List<VarInfo> getGuardingList() {
 
     /**
      * The list returned by this visitor always includes the argument
      * itself (if it is testable against null; for example, derived
      * variables are not).
-     * If the caller does not want that, it must remove it.
+     * If the caller does not want the argument to be in the list, the
+     * caller must must remove the argument.
      **/
     // Inner class because it uses the "ppt" variable.
     // Basic structure of each visitor:
     //   If the argument should be guarded, recurse.
     //   If the argument is testable against null, add it to the result.
-    //     (This arranges that the argument goes at the end, after its
-    //     subparts that need to be guarded.
+    // Recursing first arranges that the argument goes at the end,
+    // after its subparts that need to be guarded.
 
     class GuardingVisitor implements Visitor<List<VarInfo>> {
       boolean inPre = false;
@@ -1578,7 +1600,7 @@ public final class VarInfo implements Cloneable, Serializable {
           result = addVar(result, o);
         }
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitSimple(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1589,7 +1611,7 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         // No call to addVar:  derived variable
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitSizeOf(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1600,7 +1622,7 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         result = addVar(result, o);
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitFunctionOf(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1613,18 +1635,21 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         result = addVar(result, o);
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitFunctionOfN(%s) => %s", o.name(), result));
         }
         return result;
       }
       public List<VarInfo> visitField(Field o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("visitField: shouldBeGuarded(%s) => %s", o.name(), shouldBeGuarded(o)));
+        }
         if (shouldBeGuarded(o)) {
           result.addAll(o.term.accept(this));
         }
         result = addVar(result, o);
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitField(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1635,7 +1660,7 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         // No call to addVar:  derived variable
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitTypeOf(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1646,7 +1671,7 @@ public final class VarInfo implements Cloneable, Serializable {
         assert inPre == true;
         inPre = false;
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitPrestate(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1657,7 +1682,7 @@ public final class VarInfo implements Cloneable, Serializable {
         assert inPre == false;
         inPre = true;
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitPostState(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1668,7 +1693,7 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         // No call to addVar:  derived variable
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitAdd(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1679,7 +1704,7 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         // No call to addVar:  derived variable
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitElements(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1691,7 +1716,7 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         result = addVar(result, o);
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitSubscript(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1706,7 +1731,7 @@ public final class VarInfo implements Cloneable, Serializable {
         }
         // No call to addVar:  derived variable
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("visit(%s) => %s", o, result));
+          Invariant.debugGuarding.fine(String.format("visitSlice(%s) => %s", o.name(), result));
         }
         return result;
       }
@@ -1745,8 +1770,10 @@ public final class VarInfo implements Cloneable, Serializable {
           String message
             = String.format("getGuardingList(%s, %s): did not find variable %s [inpre=%s]", name.name(), ppt.name(), vin.name(), inPre);
           // Only print the error message at most once per variable.
-          if (addVarMessages.add(name.name())) {
-            System.err.println(message);
+          if (addVarMessages.add(vin.name())) {
+            // For now, don't print at all:  it's generally innocuous
+            // (class prefix of a static variable).
+            // System.err.println(message);
           }
           // System.out.println("vars: " + ppt.varNames());
           // System.out.flush();
@@ -1773,7 +1800,9 @@ public final class VarInfo implements Cloneable, Serializable {
             ) {
           result.add(vi);
         }
-        // System.out.printf("addVarInfo(%s) => %s%n", vi, result);
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+          Invariant.debugGuarding.fine(String.format("addVarInfo(%s) => %s%n", vi, result));
+        }
         return result;
       }
 
@@ -1783,9 +1812,14 @@ public final class VarInfo implements Cloneable, Serializable {
       Invariant.debugGuarding.fine(String.format("VarInfo.getGuardingList(%s)", this.name.name()));
     }
 
-    // System.out.printf("getGuardingList(%s)%n", name.name());
+    if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+      Invariant.debugGuarding.fine(String.format("getGuardingList(%s)", name.name()));
+    }
 
     List<VarInfo> result = name.accept(new GuardingVisitor());
+    if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+      Invariant.debugGuarding.fine(String.format("  resultlist: %s", result));
+    }
     result.remove(ppt.findVar(name));
 
     assert ! ArraysMDE.any_null(result);
