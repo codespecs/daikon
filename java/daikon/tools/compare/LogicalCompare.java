@@ -411,10 +411,10 @@ public class LogicalCompare {
                                   PptTopLevel test_exit_ppt) {
     LemmaStack.clearInts();
 
-    app_enter_ppt.guardInvariants();
-    test_enter_ppt.guardInvariants();
-    app_exit_ppt.guardInvariants();
-    test_exit_ppt.guardInvariants();
+//     app_enter_ppt.guardInvariants();
+//     test_enter_ppt.guardInvariants();
+//     app_exit_ppt.guardInvariants();
+//     test_exit_ppt.guardInvariants();
 
     Vector<Invariant> a_pre = app_enter_ppt.invariants_vector();
     Vector<Invariant> t_pre = test_enter_ppt.invariants_vector();
