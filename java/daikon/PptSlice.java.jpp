@@ -120,6 +120,7 @@ public final class PPTSLICE1 extends PptSlice {
 
     // Do nothing if the variables aren't compatible
     #if defined (ARITY1)
+    // (TODO: need to compare element and index comparabilities.)
     #elif defined (ARITY2)
       boolean compatible = true;
       VarInfo v1 = var_infos[0];
@@ -131,8 +132,10 @@ public final class PPTSLICE1 extends PptSlice {
       } else {
         compatible = v2.eltsCompatible (v1);
       }
-      if (!compatible)
+      if (!compatible) {
+        Debug.log (this.getClass(), this, "not created - incompatible");
         return;
+      }
     #elif defined (ARITY3)
       VarInfo v1 = var_infos[0];
       VarInfo v2 = var_infos[1];
