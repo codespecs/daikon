@@ -83,6 +83,14 @@ public class NONZERO
    **/
   public static boolean dkconfig_enabled = true;
 
+  /**
+   * Determines whether non-null is obvious on 'this' variables.  While
+   * 'this' can never be null (making the invariant vacuous), object-client
+   * relations can exist between this and references to the class.  The client
+   * references can be null, which make this interesting
+   */
+  private static boolean this_non_null_obvious = true;
+
   /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.inv.unary.scalar." + NONZEROSTRING);
 
@@ -265,18 +273,21 @@ public class NONZERO
 
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var = vis[0];
-    // In Java, "this" can never be non-null, so "this != null" is vacuous.
-    if (var.name.name() == "this") { // interned
-      return new DiscardInfo(this, DiscardCode.obvious, "'this' can never be null in Java");
-    }
-    if (var.name instanceof VarInfoName.Prestate &&
-        ((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
-      return new DiscardInfo(this, DiscardCode.obvious, "'this' can never be null in Java");
+
+    // If we consider 'this' to be non-null obvious, then don't look for
+    // these invariants.  While 'this' can clearly not be null, if 'this'
+    // is a parent for all of the references to the class, those references
+    // can be null and the non-null invariant becomes interesting.
+    if (this_non_null_obvious) {
+      if (var.name.isThis())
+        return new DiscardInfo(this, DiscardCode.obvious,
+                               "'this' can never be null in Java");
     }
 
     if (!var.aux.getFlag(VarInfoAux.HAS_NULL)) {
       // If it's not a number and null doesn't have special meaning...
-      return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + var.name.name());
+      return new DiscardInfo(this, DiscardCode.obvious,
+                     "'null' has no special meaning for " + var.name.name());
     }
 
     return super.isObviousStatically(vis);
