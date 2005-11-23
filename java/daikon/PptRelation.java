@@ -349,16 +349,21 @@ public class PptRelation implements Serializable {
    * to a user (child) of that objects (eg, from the object B to the method
    * A.foo (B arg))
    *
-   * Note that only the fields of the object (eg, this.x, this.y)
-   * and not the object itself (eg, this) are substituted in this
-   * fashion.  That is because the object and references to it are
-   * really not the same.
+   * Note that on Nov 22 2005, jhp removed the exception noted below.
+   * We now think it would be more regular to include this in the relation.
+   * If the output is confusing, we can change the ParentFilter to not
+   * filter out this particular child invariant.
    *
-   * For example, assume that every reference to T at all ppts was not
-   * null.  This invariant would print as 'this != null.'  The
-   * invariant is both confusing (since in a normal context 'this' can
-   * never be null) and it is not obvious that it implies that all
-   * references to the object are not NULL.
+   *   Note that only the fields of the object (eg, this.x, this.y)
+   *   and not the object itself (eg, this) are substituted in this
+   *   fashion.  That is because the object and references to it are
+   *   really not the same.
+   *
+   *   For example, assume that every reference to T at all ppts was not
+   *   null.  This invariant would print as 'this != null.'  The
+   *   invariant is both confusing (since in a normal context 'this' can
+   *   never be null) and it is not obvious that it implies that all
+   *   references to the object are not NULL.
    *
    * @param parent Ppt of the object definition
    * @param child Ppt of a user of parent's object
@@ -378,8 +383,8 @@ public class PptRelation implements Serializable {
     // for a name match in the child
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
-      if (vp.name.equals(VarInfoName.THIS))
-        continue;
+      // if (vp.name.equals(VarInfoName.THIS))
+      //  continue;
       VarInfoName parent_name = vp.name.replaceAll(VarInfoName.THIS, arg.name);
       rel.relate(vp, parent_name);
     }

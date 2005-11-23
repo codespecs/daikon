@@ -510,6 +510,23 @@ public abstract class VarInfoName
   }
 
   /**
+   * Returns whether or not this name refers to the 'this' variable
+   * of a class.  True for both normal and prestate versions of the
+   * variable
+   */
+  public boolean isThis() {
+    if (name() == "this") { // interned
+      return (true);
+    }
+    if (this instanceof VarInfoName.Prestate &&
+        ((VarInfoName.Prestate) this).term.name() == "this") { //interned
+      return (true);
+    }
+
+    return (false);
+  }
+
+  /**
    * @return true if the given node is in a prestate context within
    * this tree; the node must be a member of this tree.
    **/
@@ -3967,9 +3984,10 @@ public abstract class VarInfoName
     // This set of functions are helper functions to the quantification function.
 
     /**
-     * This function creates a string that represents how to increment the variables involved
-     * in quantification. Since the increment is not stated explicitly in the JML and ESC
-     * formats this function merely returns an empty string for those formats.
+     * This function creates a string that represents how to increment
+     * the variables involved in quantification. Since the increment
+     * is not stated explicitly in the JML and ESC formats this
+     * function merely returns an empty string for those formats.
      */
     protected static String quant_increment(VarInfoName idx, int i, OutputFormat format) {
       if (format != OutputFormat.JAVA) {
@@ -3984,8 +4002,8 @@ public abstract class VarInfoName
     }
 
     /**
-     * This function returns a string that represents the initial condition for the index
-     * variable.
+     * This function returns a string that represents the initial
+     * condition for the index variable.
      */
     protected static String quant_var_initial_state(VarInfoName idx,
                                                     VarInfoName low,
@@ -3998,8 +4016,8 @@ public abstract class VarInfoName
     }
 
     /**
-     * This function returns a string that represents the execution condition for the
-     * quantification.
+     * This function returns a string that represents the execution
+     * condition for the quantification.
      */
     protected static String quant_execution_condition(VarInfoName low,
                                                       VarInfoName idx,
@@ -4014,8 +4032,8 @@ public abstract class VarInfoName
     }
 
     /**
-     * This function returns a string representing the extra conditions necessary if the
-     * quantification is element-wise.
+     * This function returns a string representing the extra
+     * conditions necessary if the quantification is element-wise.
      */
     protected static String quant_element_conditions(VarInfoName _idx,
                                                      VarInfoName _low,
@@ -4048,8 +4066,8 @@ public abstract class VarInfoName
     }
 
     /**
-     * This function returns a string representing how to format a forall statement in a
-     * given output mode.
+     * This function returns a string representing how to format a
+     * forall statement in a given output mode.
      */
     protected static String quant_format_forall(OutputFormat format) {
       if (format == OutputFormat.JAVA) {
@@ -4060,17 +4078,17 @@ public abstract class VarInfoName
     }
 
     /**
-     * This function returns a string representing how to format an exists statement in a
-     * given output mode.
+     * This function returns a string representing how to format an
+     * exists statement in a given output mode.
      */
     protected static String quant_format_exists(OutputFormat format) {
       return "(\\exists int ";
     }
 
     /**
-     * This function returns a string representing how to format the first seperation in
-     * the quantification, that is, the one between the intial condition and the execution
-     * condition.
+     * This function returns a string representing how to format the
+     * first seperation in the quantification, that is, the one
+     * between the intial condition and the execution condition.
      */
     protected static String quant_separator1(OutputFormat format) {
       if (format == OutputFormat.JML) {
@@ -4081,9 +4099,9 @@ public abstract class VarInfoName
     }
 
     /**
-     * This function returns a string representing how to format the second seperation in
-     * the quantification, that is, the one between the execution condition and the
-     * assertion.
+     * This function returns a string representing how to format the
+     * second seperation in the quantification, that is, the one
+     * between the execution condition and the assertion.
      */
     protected static String quant_separator2(OutputFormat format) {
       if (format == OutputFormat.ESCJAVA) {
