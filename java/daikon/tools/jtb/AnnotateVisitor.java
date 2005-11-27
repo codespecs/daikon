@@ -67,10 +67,16 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public Vector<NodeToken> addedComments = new Vector<NodeToken>();
 
-  private String[] ownedFieldNames;  // list of fields in this and related classes
-  private String[] finalFieldNames;  // list of fields in this and related classes
-  private String[] notContainsNullFieldNames;  // list of fields in this and related classes
-  private HashMap<String,String> elementTypeFieldNames; // list of fields in this and related classes
+  /** List of "owned" fields in this and related classes. **/
+  private String[] ownedFieldNames;
+  /** List of "final" fields in this and related classes. **/
+  private String[] finalFieldNames;
+  /** List of fields in this and related classes such that the field
+   * has a  ".containsNull == false" invariant. **/
+  private String[] notContainsNullFieldNames;
+  /** List of fields in this and related classes such that the field
+   * has a  ".elementType == \type(...)" invariant. **/
+  private HashMap<String,String> elementTypeFieldNames;
 
   private PptNameMatcher pptMatcher;
 
@@ -911,6 +917,36 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
 
+  /**
+   * Find a variable for the given field.  The variable is either
+   * "this.field" (for instance variables) or "ClassName.field" (for static
+   * variables).
+   **/
+  private VarInfo findVar(String field, PptTopLevel ppt) {
+    String varname = "this." + field;
+    VarInfo vi = ppt.findVar(varname);
+    if (vi == null) {
+      // No "this.field" variable, so try (static) "ClassName.field".
+      varname = ppt.ppt_name.getFullClassName() + "." + field;
+      vi = ppt.findVar(varname);
+    }
+    if (vi == null) {
+      // We found a variable in the source code that is not computed by
+      // Daikon.  (This can happen if Daikon was run omitting the
+      // variable, for instance due to --std-visibility.  But I want to
+      // throw an error instead, since I expect bugs to be more common
+      // than such problems.)
+      System.out.println("Warning: Annotate: Daikon knows nothing about field " + field + " at " + ppt);
+      System.out.println("  ppt.var_infos:");
+      for (VarInfo pptvi : ppt.var_infos) {
+        System.out.println("    " + pptvi.name.name());
+      }
+      throw new Error("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
+    }
+    return vi;
+  }
+
+
   // Returns a list of fields with ".containsNull == false" invariants.
   // ppt is an :::OBJECT or :::CLASS program point.
   String[] not_contains_null_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
@@ -920,29 +956,17 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     for (int i=0; i<fields.length; i++) {
       String field = fields[i];
       // System.out.println("field: " + field);
-      String varname;
-      if (ppt.ppt_name.isObjectInstanceSynthetic()) // ":::OBJECT"
-        varname = "this." + field;
-      else if (ppt.ppt_name.isClassStaticSynthetic()) // ":::CLASS"
-        varname = ppt.ppt_name.getFullClassName() + "." + field;
-      else
-        throw new Error("Bad ppt: " + ppt);
-      VarInfo vi = ppt.findVar(varname);
-      if (vi == null) {
-        // This happens, for example, for static final vars (see
-        // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
-        System.out.println("Warning: Annotate: skipping Variable " + varname + " at " + ppt);
-      } else {
-        // vi != null
-        PptSlice1 slice = ppt.findSlice(vi);
-        if (slice != null) {
-          EltNonZero enz = EltNonZero.find(slice);
-          if (enz != null) {
-            String enz_format = format((Invariant)enz);
-            if (enz_format.endsWith(".containsNull == false")) {
-              result.add(field);
-            }
-          }
+      VarInfo vi = findVar(field, ppt);
+      PptSlice1 slice = ppt.findSlice(vi);
+      if (slice == null) {
+        // There might be no slice if there are no invariants over this var.
+        continue;
+      }
+      EltNonZero enz = EltNonZero.find(slice);
+      if (enz != null) {
+        String enz_format = format((Invariant)enz);
+        if (enz_format.endsWith(".containsNull == false")) {
+          result.add(field);
         }
       }
     }
@@ -953,53 +977,60 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // mapping the field to the type.
   // ppt is an :::OBJECT or :::CLASS program point.
   HashMap<String,String> element_type_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
-    // System.out.println("not_contains_null_fields(" + ppt + ")");
+    // System.out.println("element_type_fields(" + ppt + ")");
     HashMap<String,String> result = new HashMap<String,String>();
+    // FieldDeclaration[] fdecls = cfv.fieldDeclarations();
     String[] fields = cfv.allFieldNames();
+    // System.out.println("fields: " + ArraysMDE.toString(fields));
     for (int i=0; i<fields.length; i++) {
+      // FieldDeclaration fdecl = fields[i];
       String field = fields[i];
       // System.out.println("field: " + field);
-      String varname;
-      if (ppt.ppt_name.isObjectInstanceSynthetic()) // ":::OBJECT"
-        varname = "this." + field;
-      else if (ppt.ppt_name.isClassStaticSynthetic()) // ":::CLASS"
-        varname = ppt.ppt_name.getFullClassName() + "." + field;
-      else
-        throw new Error("Bad ppt: " + ppt);
-      varname += "[]" + VarInfoName.getClassSuffix;
-      VarInfo vi = ppt.findVar(varname);
-      if (vi == null) {
-        // This means that we found a variable in the source code that is
-        // not computed by Daikon.
-        System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
-      } else {
-        // vi != null
-        PptSlice1 slice = ppt.findSlice(vi);
-        if (slice != null) {
-          // System.out.println("Slice for " + vi.name.name());
-          {
-            EltOneOfString eoos = EltOneOfString.find(slice);
-            // System.out.println("eoos: " + (eoos == null ? "null" : format((Invariant)eoos)));
-            if ((eoos != null) && (eoos.num_elts() == 1)) {
-              String eoos_format = format((Invariant)eoos);
-              int et_pos = eoos_format.indexOf(".elementType == \\type(");
-              if (et_pos != -1) {
-                String type = eoos_format.substring(et_pos + ".elementType == ".length());
-                result.put(field, type);
-              }
-            }
+      VarInfo vi = findVar(field, ppt);
+      if (! (vi.type.isArray() || vi.type.isPseudoArray())) {
+        continue;
+      }
+      if (vi.type.elementType().isPrimitive()) {
+        continue;
+      }
+      String varname = vi.name.name();
+      String elt_varname = varname + "[]";
+      assert ppt.findVar(elt_varname) != null
+        : "Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt;
+      // This variable represents the types of the elements.
+      String et_varname = elt_varname + VarInfoName.getClassSuffix;
+      VarInfo et_vi = ppt.findVar(et_varname);
+      assert et_vi != null
+        : "Annotate: Daikon knows nothing about variable " + et_varname + " at " + ppt;
+
+      // et_vi != null
+      PptSlice1 slice = ppt.findSlice(et_vi);
+      if (slice == null) {
+        // There might be no slice if there are no invariants over this var.
+        continue;
+      }
+      // System.out.println("Found slice for " + et_vi.name.name());
+      {
+        EltOneOfString eoos = EltOneOfString.find(slice);
+        // System.out.println("eoos: " + (eoos == null ? "null" : format((Invariant)eoos)));
+        if ((eoos != null) && (eoos.num_elts() == 1)) {
+          String eoos_format = format((Invariant)eoos);
+          int et_pos = eoos_format.indexOf(".elementType == \\type(");
+          if (et_pos != -1) {
+            String type = eoos_format.substring(et_pos + ".elementType == ".length());
+            result.put(field, type);
           }
-          {
-            OneOfStringSequence eooss = OneOfStringSequence.find(slice);
-            // System.out.println("eooss: " + (eooss == null ? "null" : format((Invariant)eooss)));
-            if (eooss != null) {
-              String eooss_format = format((Invariant)eooss);
-              int et_pos = eooss_format.indexOf(".elementType == \\type(");
-              if (et_pos != -1) {
-                String type = eooss_format.substring(et_pos + ".elementType == ".length());
-                result.put(field, type);
-              }
-            }
+        }
+      }
+      {
+        OneOfStringSequence eooss = OneOfStringSequence.find(slice);
+        // System.out.println("eooss: " + (eooss == null ? "null" : format((Invariant)eooss)));
+        if (eooss != null) {
+          String eooss_format = format((Invariant)eooss);
+          int et_pos = eooss_format.indexOf(".elementType == \\type(");
+          if (et_pos != -1) {
+            String type = eooss_format.substring(et_pos + ".elementType == ".length());
+            result.put(field, type);
           }
         }
       }
