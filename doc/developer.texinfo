@@ -187,13 +187,38 @@ This chapter describes how to customize or modify Daikon.
 @section Compiling Daikon
 @cindex compiling daikon
 
-To compile Daikon, type @samp{make} in any directory under
-@file{daikon/java/}.  The distribution includes compiled
-@file{.class} files, so you do not need to compile them yourself unless
-you make changes.
+To compile Daikon, type @samp{make} in @file{daikon/java/} or any of its
+subdirectories.  The distribution includes compiled @file{.class} files,
+so you do not need to compile them yourself unless you make changes.
+
+When you compile Daikon, your classpath should contain
+@file{@var{JDKDIR}/lib/tools.jar} and @file{@var{JDKDIR}/lib/rt.jar},
+where @var{JDKDIR} is the directory where the JDK was installed, such as
+@file{/usr/lib/j2sdk1.5-sun}.
+Furthermore, environment variable @samp{DAIKONCLASS_SOURCES} should be
+set (to any value) before your startup file sources file
+@file{daikon.bashrc} or @file{daikon.cshrc}.
+
+When you compile Daikon, one of the environment variables @samp{DAIKONDIR} or 
+@samp{INV} should be set (their effect is the same).
+This is already done for you if you followed the installation
+instructions and source the @file{daikon.bashrc} or @file{daikon.cshrc}
+file; see @ref{Installation steps,,,./daikon,Daikon User Manual}.
 
 @cindex .jpp files
 @cindex jpp files
+
+Daikon is written in Java 1.5 (also known as Jvaa 5).  In order to
+compile Daikon, you need a Java 1.5 compiler such as javac on your path.
+@cindex Jikes compiler
+@cindex javac compiler, overriding
+@cindex Java compiler, specifying
+To override the default Java compiler (javac), create a
+@file{Makefile.user} file in the @file{daikon/} directory and add a line
+like the following.
+@example
+JAVAC ?= jikes -g +E +F
+@end example
 
 In order to compile Daikon, you need the C preprocessor
 @command{cpp}, which is used to convert each @file{.jpp} file in the
@@ -205,15 +230,6 @@ which case changes to @code{.jpp} files will not be reflected in the
 of the @file{.jpp} files is to avoid code duplication by placing
 common code in a single file, then generating other files that need to
 include that common code.)
-
-@cindex Jikes compiler
-@cindex javac compiler, overriding
-@cindex Java compiler, specifying
-You may wish to create a @file{Makefile.user} file in the @file{daikon/}
-directory to set your Java compiler.  For instance, it might contain
-@example
-JAVAC ?= jikes -g +E +F
-@end example
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
