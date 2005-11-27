@@ -317,7 +317,7 @@ public class PptRelation implements Serializable {
     debug.fine("parent vars = " + VarInfo.toString(parent.var_infos));
     debug.fine("child vars = " + VarInfo.toString(child.var_infos));
 
-    // Connect each 'this' variable between parent and child
+    // Connect each 'this' variable between parent and child.
     // Note that these should be the only variables whose names match and
     // that each parent variable should match one in the child.
     boolean relate_all = rel.relate_same_name();

@@ -49,7 +49,11 @@ public class Chicory {
   /** Size of the heap for the target program **/
   public String heap_size = "128M";
 
-  /** Path to java agent jar file that performs the transformation **/
+  /**
+   * Path to java agent jar file that performs the transformation.
+   * The "main" procedure is ChicoryPremain.premain().
+   * @see ChicoryPremain#premain
+   **/
   File premain_path = null;
 
   /** Arguments to be passed to the java agent **/
