@@ -42,7 +42,6 @@ public class PptRelation implements Serializable {
 
   /**
    * Description of type of parent-child relationship (debug output only).
-   * isRelationship() returns true of this value.
    **/
   String relationship;
 
@@ -182,12 +181,37 @@ public class PptRelation implements Serializable {
 
   /**
    * Returns the parent variable that corresponds to childVar.  Returns
-   * null if there is no corresponding variable
+   * null if there is no corresponding variable.
    */
 
   public VarInfo parentVar(VarInfo childVar) {
     return child_to_parent_map.get(childVar);
   }
+
+
+  /**
+   * Like parentVar(VarInfo), but if no parent is found, tries every
+   * variable in the equality set and returns null only if none of them has
+   * a parent.
+   **/
+  public VarInfo parentVarAnyInEquality(VarInfo childVar) {
+    VarInfo result = parentVar(childVar);
+    if (result != null) {
+      return result;
+    }
+    if (childVar.equalitySet == null) {
+      return null;
+    }
+    for (VarInfo v : childVar.equalitySet.getVars()) {
+      result = parentVar(v);
+      if (result != null) {
+        return result;
+      }
+    }
+    return null;
+  }
+
+
 
   /**
    * Returns the child variable that corresponds to parentVar.  Returns
@@ -383,6 +407,7 @@ public class PptRelation implements Serializable {
     // for a name match in the child
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
+      // // Don't make any relationship for variable "this".
       // if (vp.name.equals(VarInfoName.THIS))
       //  continue;
       VarInfoName parent_name = vp.name.replaceAll(VarInfoName.THIS, arg.name);
@@ -700,8 +725,8 @@ public class PptRelation implements Serializable {
       // We skip variables named exactly 'this' so that we don't setup a
       // recursive relationship from the object to itself.
 
-      //DaikonSimple can not see these relations, so don't create them
-      //if we'll be comparing to DaikonSimple
+      // DaikonSimple can not see these relations, so don't create them
+      // if we'll be comparing to DaikonSimple.
       if (dkconfig_enable_object_user) {
 
         debug.fine("-- Looking for variables with an OBJECT ppt");
