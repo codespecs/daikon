@@ -132,6 +132,10 @@ Complete installation instructions
 * Windows installation notes::  
 * Cygwin installation notes::   
 
+Requirements for running Daikon
+
+* Optional requirements::       
+
 Example usage for Java, C/C++, and Perl
 
 * Detecting invariants in Java programs::  
@@ -505,6 +509,13 @@ for other operating systems are welcome.)
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
 (@uref{http://java.sun.com,, Java Virtual Machine}).
 
+@menu
+* Optional requirements::       
+@end menu
+
+@node    Optional requirements,  , Requirements, Requirements
+@subsubsection Optional requirements for running Daikon
+
 All the remaining requirements listed here are optional (they enable you
 to perform certain additional tasks with Daikon).
 
@@ -516,9 +527,10 @@ compiler such as GCC.  Source code and a compiler are not necessary if
 you plan to use one of Daikon's front ends that work on binaries, such
 as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
-If you wish to edit the Daikon source code and re-compile Daikon, you
-will need a Java compiler (such as javac) and a C preprocessor (cpp).
-If you have a C compiler, you almost certainly have cpp.
+If you wish to edit the Daikon source code and re-compile Daikon, will
+need a Java compiler (such as javac) and a C preprocessor (cpp).  If you
+have a C compiler, you almost certainly have cpp.  For more details, see
+@ref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
 
 
 @node  Installation steps, Windows installation notes, Requirements, Complete installation
@@ -3082,6 +3094,8 @@ parameter.  That variable appears in the @file{.dtrace} file, but its
 value is marked as nonsensical.
 
 @item --std-visibility
+@cindex private variables
+@cindex variables, private
 When this switch is on, Chicory will traverse exactly those fields that are
 visible from a given program point.  For instance, only the public
 fields of class @code{pack1.B} will be included at a program point for 
