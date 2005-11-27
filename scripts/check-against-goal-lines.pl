@@ -3,9 +3,16 @@ use strict;
 use English;
 $WARNING = 1;
 
+# Verify that the txt-daikon files have the same number of lines as the
+# txt-daikon.goal files.  This is used for testing guarding.
+
 my $status = 0;
 
-my $glob = $ENV{"inv"} . "/tests/daikon-tests/*/*-{daikon,esc,jml}.goal";
+# Check only txt-daikon, not txt-esc or txt-jml, as the latter default to
+# some guarding and existence of any previous guarding can throw off the
+# check.
+
+my $glob = $ENV{"inv"} . "/tests/daikon-tests/*/*-daikon.goal";
 # print "glob: $glob\n";
 my @goals = glob($glob);
 # print "numgoals = " . scalar(@goals) . "\n";
