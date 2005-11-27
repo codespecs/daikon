@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # prune-xlint.pl
-# Also see javac-xlint
+# Also see javac-xlint, which is a wrapper around this script.
 
 # Removes certain warning messages from "javac -Xlint" output.
 # Returns non-zero status if any other warnings (or any errors) exist.
