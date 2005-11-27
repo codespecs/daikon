@@ -12,15 +12,15 @@ import jtb.*;
 import jtb.syntaxtree.*;
 
 /**
- * Merge Daikon-generated invariants into Java source code as
- * ESC/JML/DBC annotations.
+ * Merge Daikon-generated invariants into Java source code as ESC/JML/DBC
+ * annotations.  All original .java files are left unmodified; copies are
+ * created.
  * <p>
  *
  * The first argument is a Daikon .inv file -- a serialized file of
- * Invariant objects.  All subsequent arguments are .java files that are
- * rewritten into -escannotated versions; alternately, use the -r flag to
- * process every .java file under the current directory.  (All original
- * .java files are left unmodified.)
+ * Invariant objects.  All subsequent arguments are Foo.java files that are
+ * rewritten into Foo.java-jmlannotated versions; alternately, use the -r
+ * flag to process every .java file under the current directory.
  * <p>
  **/
 public class Annotate {
@@ -213,26 +213,6 @@ public class Annotate {
     // The index of the first non-option argument -- the name of the .inv file
     int argindex = g.getOptind();
 
-    // This undocumented command is for testing purposes. It takes as input
-    // a bunch of java files, and creates new versions of the files
-    // (sufixed with "random-tabs") that have some randomly-inserted tabs
-    // in whitespace areas. These modified java files are used when testing
-    // Annotate (see regressiont tests) because Annotate should leave the
-    // tabs alone, or in the case of annotations that span their own line,
-    // the annotation should contain the same initial whitespace as the
-    // first non-comment line below (e.g a method invariant for a method
-    // whose declaration has been typed with a tab preceding it should have
-    // a tab preceding the annotation).
-    if ("insert-tabs-for-testing".equals(args[argindex])) {
-      for (int i = argindex+1 ; i < args.length ; i++) {
-        if (!args[i].endsWith(".java")) {
-          throw new Daikon.TerminationMessage("Error in insert-tabs-for-testing command: all arguments should be .java files.", usage);
-        }
-        createNewFileWithRandomTabsInserted(args[i], 0.5, 0.5, 1); // arbitrary hardcoded numbers.
-      }
-      System.exit(0);
-    }
-
     if (argindex >= args.length) {
       throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied.", usage);
     }
@@ -299,80 +279,6 @@ public class Annotate {
         throw e;
       }
     }
-  }
-
-  // Creates a new version of filename, called "filename-random-tabs", where
-  // random tabs have been inserted in whitespace areas.
-  //
-  // This method isn't terribly elegant, but it works well enough.
-  private static void createNewFileWithRandomTabsInserted(String filename,
-                                                          double tabinsertionratio_beginning_of_line,
-                                                          double tabinsertionratio_within_line,
-                                                          long seed) {
-    Random rand = new Random(seed);
-    BufferedReader r = null;
-    PrintWriter w = null;
-    try {
-      File f = new File(filename);
-      r = new BufferedReader(new FileReader(filename));
-      w = new PrintWriter(new FileWriter(new File(f.getParent(), f.getName() + "-random-tabs")), /*autoflush=*/true);
-    } catch (FileNotFoundException e) {
-      throw new Error(e);
-    } catch (IOException e) {
-      throw new Error(e);
-    }
-    String line = null;
-    try {
-      line = r.readLine();
-    } catch (IOException e) {
-      throw new Error(e);
-    }
-    while (line != null) {
-
-      StringBuffer sb = new StringBuffer();
-
-      if (rand.nextDouble() <= tabinsertionratio_beginning_of_line) {
-        // Half the time insert one tab, half the time two.
-        if (rand.nextDouble() <= 0.5) {
-          sb.append("\t");
-        } else {
-          sb.append("\t \t ");
-        }
-      }
-
-
-      if (line.length() > 0 && rand.nextDouble() <= tabinsertionratio_within_line) {
-        // 1. Pick a place in the line.
-        int index = rand.nextInt(line.length());
-        // 2. Find the next area that has a space.
-        int spaceIndex = line.indexOf(" ", index);
-        // 3. Add a tab at that index.
-        if (spaceIndex == -1) {
-          sb.append(line);
-        } else {
-          sb.append(line.substring(0, spaceIndex));
-          sb.append("\t");
-          sb.append(line.substring(spaceIndex));
-        }
-      } else {
-        sb.append(line);
-      }
-
-      w.println(sb.toString());
-
-      try {
-        line = r.readLine();
-      } catch (IOException e) {
-        throw new Error(e);
-      }
-
-    }
-    try {
-      r.close();
-    } catch (IOException e) {
-      throw new Error(e);
-    }
-    w.close();
   }
 
 }
