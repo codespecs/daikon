@@ -5,9 +5,10 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import utilMDE.Assert;
 
-// // Method "fieldDeclarations" returns a list of all FieldDeclarations
-// // declared in this class or in nested/inner classes.
-//
+/**
+ * Method "fieldDeclarations" returns a list of all FieldDeclarations
+ * declared in this class or in nested/inner classes.
+ **/
 // This visitor previously included nested classes, but that didn't
 // seem like the right thing to do; we should treat each class
 // individually.
