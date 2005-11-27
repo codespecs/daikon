@@ -8,22 +8,27 @@
 
 JAVAC ?= javac
 JAVAC_ARGS ?= -g -J-Xmx800m
-# JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
+## If you do not wish to use the "javac-xlint" program, add to Makefile.user:
+##   JAVAC_XLINT =
 JAVAC_XLINT ?= javac-xlint -p '(/jtb/)|(/junit/)'
-JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 JAR ?= jar
-JAVA ?= java -ea
+JAVA ?= java -ea -g
 
 ### end of user customizations
+
+JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 
 
 ###########################################################################
 ### Variables
 ###
 
-# Add BCEL to the classpath.  A better solution to this should be found
-BCEL := $(INV)/java/lib/bcel.jar
-CLASSPATH := $(CLASSPATH):/$(BCEL)
+INV ?= ${DAIKONDIR}
+
+# CLASSPATH must also contain ${JDKDIR}/lib/tools.jar and
+# ${JDKDIR}/lib/rt.jar, where ${JDKDIR} is the directory where the JDK was
+# installed.
+CLASSPATH := .:$(CLASSPATH):$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/junit.jar
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
