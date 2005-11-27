@@ -22,6 +22,9 @@ public class ParentFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
+  private static boolean debug = false;
+  // private static boolean debug = true;
+
   boolean shouldDiscardInvariant( Invariant inv ) {
 
     // System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());
@@ -30,13 +33,20 @@ public class ParentFilter extends InvariantFilter {
     if (inv.ppt.parent.parents == null)
       return (false);
 
+    if (debug) {
+      System.out.printf("inv %s has PptTopLevel %s which has %d parents%n", inv.format(), inv.ppt.parent.name, inv.ppt.parent.parents.size());
+      for (PptRelation rel : inv.ppt.parent.parents) {
+        System.out.printf("    %s%n", rel);
+      }
+    }
+
     // Loop through each parent ppt
     outer: for (int i = 0; i < inv.ppt.parent.parents.size(); i++) {
 
       // Get the parent/child relation information
       PptRelation rel = inv.ppt.parent.parents.get (i);
 
-      // System.out.printf("  considering slice %s%n", rel.parent);
+      if (debug) System.out.printf("  considering slice %s%n", rel);
 
       // Look up each variable in the parent, skip this parent if any
       // variables don't exist in the parent.
@@ -81,12 +91,41 @@ public class ParentFilter extends InvariantFilter {
         }
         if (! pinv.isSameFormula (inv))
           continue;
+
+        // Check that all the guard variables correspond.
         List<VarInfo> guardedVars = inv.getGuardingList();
         List<VarInfo> pGuardedVars = pinv.getGuardingList();
-        if (guardedVars.size() != pGuardedVars.size())
+        // Optimization: bail our early if size of list is different.
+        if ((guardedVars.size() != pGuardedVars.size())
+            && (guardedVars.size() != pGuardedVars.size()+1))
           continue;
-        // TODO: Need to check that all the variables correspond, not just
-        // that there are the same number of them.
+        boolean var_mismatch = false;
+        for (VarInfo v : guardedVars) {
+          VarInfo pv = rel.parentVarAnyInEquality(v);
+          // VarInfo pv = rel.parentVar(v);
+          if (pv == null) {
+            if (debug) {
+              System.out.printf("    ParentFilter %s, parent %s%n", inv.format(), pslice.name());
+              System.out.printf("    No parent var for %s via %s%n", v.name.name(), rel);
+              System.out.printf("      Equality set: %s%n", v.equalitySet.shortString());
+            }
+            var_mismatch = true;
+            break;
+          }
+          if (! (pv.name.name().equals("this")
+                 || pGuardedVars.contains(pv))) {
+            if (debug) System.out.printf("Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
+                              guardedVars, pinv, pv, rel.parent, v.name.name(), rel.child);
+            VarInfo pgv = pGuardedVars.get(0);
+            assert (pgv != pv);
+            if (debug) System.out.printf("%s is index %d at %s, %s is index %d at %s%n",
+                              pgv, pgv.varinfo_index, pgv.ppt.name, pv, pv.varinfo_index, pv.ppt.name);
+            var_mismatch = true;
+            break;
+          }
+        }
+        if (var_mismatch)
+          continue;
 
         inv.log ("Filtered by parent inv '" + pinv.format() + "' at ppt "
                  + pslice.name());
