@@ -571,7 +571,7 @@ check-serialize:
 # Include . in CLASSPATH because you can have two versions of Daikon,
 # and you want to do junit tests on *this* version.
 junit:
-	@echo Running unit (not system) tests...
+	@echo "Running unit (not system) tests..."
 	@echo java daikon.test.MasterUnitTester
 	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
 
