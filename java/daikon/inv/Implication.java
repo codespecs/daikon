@@ -58,8 +58,8 @@ public class Implication
                                              Invariant orig_predicate,
                                              Invariant orig_consequent) {
     if (predicate.isSameInvariant(consequent)) {
-      PptSplitter.debug.fine ("Not creating implication " + predicate +
-                              " ==> " + consequent + " pred == conseq ");
+      PptSplitter.debug.fine ("Not creating implication (pred==conseq): " + predicate +
+                              " ==> " + consequent);
       return null;
     }
 
@@ -67,9 +67,7 @@ public class Implication
                                          orig_predicate, orig_consequent);
 
     // Don't add this Implication to the program point if the program
-    // point already has this implication.  This is slow and dumb; we
-    // should use hashing for O(1) check instead.
-
+    // point already has this implication.
     if (ppt.joiner_view.hasImplication(result)) {
       return null;
     }
