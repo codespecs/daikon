@@ -12,3 +12,6 @@ My understanding of the Java 2 SDK License is:
     [3.1 (d) (i)]
   * I can re-use the JDK's names if I choose, but only for modified
     versions of the original code of those names.  [3.1 (d) (iii)]
+
+I have tried a few times to update WeakHasherMap to a more recent version
+of the JDK, but failed.  It should probably be left as is.
