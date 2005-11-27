@@ -66,14 +66,14 @@ public class PptSlice0
 
   // This should not be transient:  more implications can be created during
   // printing, for instance due to guarding.
-  private transient HashSet<ImplicationByFormatWrapper> invariantsSeen = new HashSet<ImplicationByFormatWrapper>();
+  private transient HashSet<ImplicationWrapper> invariantsSeen = new HashSet<ImplicationWrapper>();
 
   // In lieu of a readResolve method.
   private void initInvariantsSeen() {
     if (invariantsSeen == null) {
-      invariantsSeen = new HashSet<ImplicationByFormatWrapper>();
+      invariantsSeen = new HashSet<ImplicationWrapper>();
       for (Invariant inv : invs) {
-        invariantsSeen.add(new ImplicationByFormatWrapper((Implication) inv));
+        invariantsSeen.add(new ImplicationWrapper((Implication) inv));
       }
     }
   }
@@ -98,7 +98,7 @@ public class PptSlice0
     // Assert.assertTrue(! hasImplication((Implication) inv));
     initInvariantsSeen();
     invs.add(inv);
-    invariantsSeen.add(new ImplicationByFormatWrapper((Implication)inv));
+    invariantsSeen.add(new ImplicationWrapper((Implication)inv));
     // checkRep();
   }
 
@@ -109,7 +109,7 @@ public class PptSlice0
     // Assert.assertTrue(hasImplication((Implication) inv));
     initInvariantsSeen();
     invs.remove(inv);
-    invariantsSeen.remove(new ImplicationByFormatWrapper((Implication)inv));
+    invariantsSeen.remove(new ImplicationWrapper((Implication)inv));
     // checkRep();
   }
 
@@ -131,7 +131,7 @@ public class PptSlice0
         // Faster to update
         for (int i=0; i<to_remove.size(); i++) {
           invariantsSeen.remove(new
-              ImplicationByFormatWrapper((Implication)to_remove.get(i)));
+              ImplicationWrapper((Implication)to_remove.get(i)));
         }
       }
     }
@@ -139,15 +139,15 @@ public class PptSlice0
 
   public boolean hasImplication(Implication imp) {
     initInvariantsSeen();
-    return invariantsSeen.contains(new ImplicationByFormatWrapper(imp));
+    return invariantsSeen.contains(new ImplicationWrapper(imp));
   }
 
   // // For debugging only
   // public Implication getImplication(Implication imp) {
   //   initInvariantsSeen();
-  //   ImplicationByFormatWrapper resultWrapper
-  //     = (ImplicationByFormatWrapper) UtilMDE.getFromSet(
-  //              invariantsSeen, new ImplicationByFormatWrapper(imp));
+  //   ImplicationWrapper resultWrapper
+  //     = (ImplicationWrapper) UtilMDE.getFromSet(
+  //              invariantsSeen, new ImplicationWrapper(imp));
   //   if (resultWrapper == null) {
   //     return null;
   //   }
@@ -165,25 +165,13 @@ public class PptSlice0
   // reads them in, but their format methods croak when they couldn't
   // get their varInfos.
 
-  // It seems like a bit of a hack to use format() this way, but the
-  // check this is replacing (used to be in makeImplication())
-  // compared two invariants by their format() values, so I'm
-  // assuming there's some good reason. -SMcC
-  // Yes, it is a hack and should be fixed.  Note that there are certain
-  // invariants that print identically but are internally different:
-  // "this.theArray[this.topOfStack..] == this.theArray[this.topOfStack..]"
-  // can be either SeqSeqIntEqual or PairwiseLinearBinary.  Thus, I changed
-  // it from using format() to using repr(); but that doesn't fix the
-  // underlying issue.
-
-  private static final class ImplicationByFormatWrapper {
+  private static final class ImplicationWrapper {
 
     public Implication theImp;
-    // private String format;
     // hashCode is cached to make equality checks faster.
     private int hashCode;
 
-    public ImplicationByFormatWrapper(Implication theImp) {
+    public ImplicationWrapper(Implication theImp) {
       this.theImp = theImp;
       // this.format = theImp.format();
       this.hashCode = 0;
@@ -206,21 +194,28 @@ public class PptSlice0
       return hashCode;
     }
 
+    // Returns the value of "isSameInvariant()".
     public boolean equals(Object o) {
       if (o == null)
         return false;
-      Assert.assertTrue(o instanceof ImplicationByFormatWrapper);
-      ImplicationByFormatWrapper other = (ImplicationByFormatWrapper)o;
+      Assert.assertTrue(o instanceof ImplicationWrapper);
+      ImplicationWrapper other = (ImplicationWrapper)o;
       if (hashCode() != other.hashCode()) {
         return false;
       }
       boolean same_eq = theImp.isSameInvariant(other.theImp);
 
-      // Look for  differences between the format based check and the
-      // isSameInvariant check.
+      // For debugging, look for differences between the format based check
+      // and the isSameInvariant check.  Note that there are certain
+      // invariants that print identically but are internally different:
+      // "this.theArray[this.topOfStack..] ==
+      // this.theArray[this.topOfStack..]" can be either SeqSeqIntEqual or
+      // PairwiseLinearBinary, and "(return != null) ==> (return.getClass()
+      // != this.theArray.getClass())" can be either an Implication or a
+      // guarded invariant.
       if (false) {
         boolean fmt_eq = format().equals(other.format());
-        if (fmt_eq != same_eq) {
+        if (! ((!same_eq) || fmt_eq)) {
           System.out.println ("imp1 = " + theImp.format());
           System.out.println ("imp2 = " + other.theImp.format());
           System.out.println ("fmt_eq = " + fmt_eq + " same_eq = " + same_eq);
@@ -233,6 +228,7 @@ public class PptSlice0
                               + other.theImp.right.getClass());
           // Assert.assertTrue (false);
         }
+        assert (!same_eq) || fmt_eq;
       }
       return same_eq;
     }
