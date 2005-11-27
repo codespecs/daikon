@@ -191,19 +191,15 @@ To compile Daikon, type @samp{make} in @file{daikon/java/} or any of its
 subdirectories.  The distribution includes compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
 
-When you compile Daikon, your classpath should contain
-@file{@var{JDKDIR}/lib/tools.jar} and @file{@var{JDKDIR}/lib/rt.jar},
-where @var{JDKDIR} is the directory where the JDK was installed, such as
-@file{/usr/lib/j2sdk1.5-sun}.
-Furthermore, environment variable @samp{DAIKONCLASS_SOURCES} should be
-set (to any value) before your startup file sources file
-@file{daikon.bashrc} or @file{daikon.cshrc}.
-
-When you compile Daikon, one of the environment variables @samp{DAIKONDIR} or 
-@samp{INV} should be set (their effect is the same).
-This is already done for you if you followed the installation
+When you compile Daikon, environment variables @samp{DAIKONDIR} (or 
+@samp{INV}, whose effect is the same) and @samp{JDKDIR} should be set.
+This is already done if you followed the installation
 instructions and source the @file{daikon.bashrc} or @file{daikon.cshrc}
 file; see @ref{Installation steps,,,./daikon,Daikon User Manual}.
+
+When you compile Daikon, environment variable @samp{DAIKONCLASS_SOURCES}
+should be set (to any value) before your startup file sources file
+@file{daikon.bashrc} or @file{daikon.cshrc}.
 
 @cindex .jpp files
 @cindex jpp files
@@ -1474,6 +1470,10 @@ most common target is @samp{make diffs}; if any resulting file has
 non-zero size, the tests fail.  You do not generally need to do
 @samp{make clean}, which forces re-instrumentation (a possibly slow
 process) the next time you run the tests.
+
+As when you install or compile Daikon, when you run the tests
+environment variables @samp{DAIKONDIR} (or @samp{INV}, whose effect is
+the same) and @samp{JDKDIR} should be set.
 
 You should generally run the regression tests before checking it a
 change (especially any non-trivial change).  If any of the regression
