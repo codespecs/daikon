@@ -20,6 +20,49 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.1.8 (December 1, 2005)
+
+Many small improvements to Daikon's output have been made (but most users
+will only notice small changes to the output).
+
+
+Daikon:
+
+  User-visible changes
+
+    The default ("Daikon") output format has been made more Java-like. for
+    instance,
+      this.theArray.class == "java.lang.Object[]"
+    now prints as
+      this.theArray.getClass() == java.lang.Object[].class
+
+    Daikon's comparability tests, which determine what variables may be
+    compared to one another (and so may co-occur in an invariant) have been
+    improved.
+
+    Daikon outputs fewer logically redundant invariants.  (For instance,
+    the tests that suppress, from the output, method invariants when a
+    stronger invariant occurs as an object invariant, have been improved.)
+
+  Implementation detail
+    
+    Guarding (controlled by the Daikon.guardNulls config option) has been
+    completely re-implemented.
+
+    The Daikon regression tests (not included in the distribution due to
+    size, but available on request) have been made easier to use.  In
+    particular, they now require only two environment variables to be set,
+    and set all other environment variables appropriately.
+
+Annotate:
+
+  Bug fixes
+
+    Annotate no longer prints warning messages about being unable to locate
+    a Daikon variable that corresponds to a class field.
+
+--------------------------------------------
+
 4.1.7 (November 1 2005)
 
 Enhancements were made to the Kvasir, Mangel/Wurzel and Chicory front
