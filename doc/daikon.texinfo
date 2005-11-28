@@ -4616,19 +4616,15 @@ output data much faster than Daikon can process it.  Thus, it is not the
 performance bottleneck in the entire invariant detection system.
 
 @item
-Kvasir currently has rudimentary support for C++.  It outputs C++ classes
-like C structs, generates @code{:::OBJECT} and @code{:::CLASS} invariants 
-(@pxref{Program points}), treats member functions like regular
+Kvasir currently has moderate support for C++.  It outputs C++ classes
+like C structs, generates @code{:::OBJECT} invariants (@pxref{Program points}), treats member functions like regular 
 functions with an extra @code{this} pointer parameter, and
 correctly outputs static class member variables.  However, 
 it cannot print out the contents of classes which are defined in external 
 libraries rather than in the 
 user's program (e.g., it can properly output a C-string represented as 
 @code{char*} but not the contents of the C++ @code{string} class).
-Kvasir can only recognize classes which have member function
-definitions located outside of the class body like in typical C++ style
-instead of inside the class body like in Java style.  
-If further support for more C++ features is important to you,
+If further support for specific C++ features is important to you,
 please send email to @email{daikon-developers@@lists.csail.mit.edu},
 so that we can increase its priority on our to-do list.
 
