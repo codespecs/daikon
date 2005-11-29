@@ -15,7 +15,16 @@ export JDKDIR=${JDKDIR:-/directory/containing/jdk}
 export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 export DFECDIR=${DFECDIR:-${DAIKONDIR}/front-end/c}
-export DAIKONBIN=${DAIKONBIN:-${DAIKONDIR}/bin}
+# export DAIKONBIN=${DAIKONBIN:-${DAIKONDIR}/bin}
+if [ -z "$DAIKONBIN" ]; then
+  if [ -d ${DAIKONDIR}/bin ]; then
+    export DAIKONBIN=${DAIKONDIR}/bin
+  elif [ -d ${DAIKONDIR}/scripts ]; then
+    export DAIKONBIN=${DAIKONDIR}/scripts
+  else
+    echo "Cannot set DAIKONBIN"
+  fi
+fi
 
 # export DAIKONCLASS_SOURCES=1
 

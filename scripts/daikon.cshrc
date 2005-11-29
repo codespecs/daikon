@@ -15,6 +15,19 @@ if (! $?JDKDIR) setenv JDKDIR /directory/containing/jdk
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
 if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
 if (! $?DFECDIR) setenv DFECDIR ${DAIKONDIR}/front-end/c
+# if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/bin
+if (! $?DAIKONBIN) then
+  if ( -d ${DAIKONDIR}/bin ) then
+    setenv DAIKONBIN ${DAIKONDIR}/bin
+  else if ( -d ${DAIKONDIR}/scripts ) then
+    setenv DAIKONBIN ${DAIKONDIR}/scripts
+  else
+    echo "Cannot set DAIKONBIN"
+  endif
+endif
+
+setenv DAIKONBIN ${DAIKONDIR}/bin
+
 if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/bin
 
 # setenv DAIKONCLASS_SOURCES 1
