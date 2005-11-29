@@ -61,6 +61,18 @@ Annotate:
     Annotate no longer prints warning messages about being unable to locate
     a Daikon variable that corresponds to a class field.
 
+Mangel-Wurzel:
+
+  Enhancements
+    
+    Some minor changes have been made to the way Mangel-Wurzel looks for
+    include files and libraries.
+
+    Mangel-Wurzel now runs on Microsoft Windows as a command-line utility
+    with the Microsoft Visual C/C++ compiler.  (GCC is not supported on 
+    this platform).  
+
+
 --------------------------------------------
 
 4.1.7 (November 1 2005)
