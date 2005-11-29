@@ -7731,6 +7731,8 @@ Engelbert Hubbers,
 Scott McMaster,
 Alex Orso,
 Manos Renieris,
+@c maybe move Alex to the ``contributors'' section.
+Alexandru Salcianu,
 Rosie Wacha.
 Many others have also been generous with their feedback, for which we
 are also grateful.
