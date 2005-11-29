@@ -191,13 +191,13 @@ To compile Daikon, type @samp{make} in @file{daikon/java/} or any of its
 subdirectories.  The distribution includes compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
 
-When you compile Daikon, environment variables @samp{DAIKONDIR} (or 
-@samp{INV}, whose effect is the same) and @samp{JDKDIR} should be set.
+When you compile Daikon, environment variables @env{DAIKONDIR} (or 
+@env{INV}, whose effect is the same) and @env{JDKDIR} should be set.
 This is already done if you followed the installation
 instructions and source the @file{daikon.bashrc} or @file{daikon.cshrc}
 file; see @ref{Installation steps,,,./daikon,Daikon User Manual}.
 
-When you compile Daikon, environment variable @samp{DAIKONCLASS_SOURCES}
+When you compile Daikon, environment variable @env{DAIKONCLASS_SOURCES}
 should be set (to any value) before your startup file sources file
 @file{daikon.bashrc} or @file{daikon.cshrc}.
 
@@ -1478,8 +1478,10 @@ non-zero size, the tests fail.  You do not generally need to do
 process) the next time you run the tests.
 
 As when you install or compile Daikon, when you run the tests
-environment variables @samp{DAIKONDIR} (or @samp{INV}, whose effect is
-the same) and @samp{JDKDIR} should be set.
+environment variables @env{DAIKONDIR} (or @env{INV}, whose effect is
+the same) and @env{JDKDIR} should be set.  Additionally, you should set
+environment variable @env{JDKDIR} (or, equivalently, @env{JDK5DIR}) to the directory containing the Java
+5 JDK@.
 
 You should generally run the regression tests before checking it a
 change (especially any non-trivial change).  If any of the regression

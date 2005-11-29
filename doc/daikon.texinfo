@@ -3265,7 +3265,7 @@ single trace from one execution of your program.
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
 Chicory requires this jar file in order to execute.  By default Chicory
 looks for the jar file in the classpath and in @file{$(DAIKONDIR)/java}
-(where @file{DAIKONDIR} is an environment variable that points to the
+(where @env{DAIKONDIR} is an environment variable that points to the
 complete installation of Daikon).  
 
 Chicory can also use the @file{daikon.jar} file for this purpose.  If it
