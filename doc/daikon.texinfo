@@ -271,6 +271,11 @@ Mangel options
 * Mangel annotation options::   
 * Options files for Mangel::    
 
+Mangel-Wurzel usage notes
+
+* Using Mangel-Wurzel on Unix::  
+* Using Mangel-Wurzel on Windows::  
+
 Perl front end dfepl
 
 * dfepl options::               
@@ -4678,15 +4683,14 @@ particular type (@pxref{Pointer type coercion}).
 @cindex C front end
 
 In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
-is also a source-based front end, Mangel-Wurzel.
-Unlike Kvasir, which runs only on Linux/x86 platforms,
-Mangel-Wurzel will run on nearly any platform.
-Mangel-Wurzel is missing a few features of Kvasir; for instance,
-Mangel-Wurzel outputs fewer variables.
-Mangel-Wurzel requires the source code for your program, and 
-it also requires the
-Purify program analysis tool from Rational Software.  You must purchase
-and install Purify before you can use Mangel-Wurzel.
+is also a source-based front end, Mangel-Wurzel.  Unlike Kvasir, which
+runs only on Linux/x86 platforms, Mangel-Wurzel will run on nearly any
+Unix platform, as well as on Windows (with the Microsoft Visual C/C++
+compiler).  Mangel-Wurzel is missing a few features of Kvasir; for
+instance, Mangel-Wurzel outputs fewer variables.  Mangel-Wurzel requires
+the source code for your program, and it also requires the Purify
+program analysis tool from Rational Software.  You must purchase and
+install Purify before you can use Mangel-Wurzel.
 
 Mangel-Wurzel is based on the EDG C/C++ front end, which is also commercial
 software.  For this reason, Mangel-Wurzel is distributed in precompiled 
@@ -4766,10 +4770,15 @@ it processes, in this case @file{foo.decls}, @file{bar.decls}, and
 @file{baz.decls}.
 
 @item
-Run the instrumented program.  This creates a single @file{.dtrace} file 
+On Unix, run the instrumented program created by mangel.  
+This creates a single @file{.dtrace} file 
 (in addition to anything else the program does).
 Assuming @file{foo.c} contains the @code{main} routine, the
 trace output for this example will be in @file{foo.dtrace}.
+
+On Windows, Purify needs to be invoked when you run your program, not
+at link time.  Mangel creates a @file{.cmd} file that does this for you;
+in this example, run @file{foo.cmd} instead of @file{foo.exe}.
 
 
 @item
@@ -4836,10 +4845,6 @@ do not compile or link.  You might want to use this option for debugging
 if you are having problems getting the instrumented code to compile with 
 the host C/C++ compiler.
 
-@item -S
-Produce an assembly language @file{.s} file; do not assemble or link.
-(This option is not particularly useful in conjunction with Mangel-Wurzel.)
-
 @item -D@var{symbol}
 @itemx -D@var{symbol}=@var{value}
 Define preprocessor symbols.
@@ -4859,6 +4864,15 @@ find Mangel-Wurzel's system include files, or include this information in
 the options list passed directly to the wurzel preprocessor.  See the 
 @option{--preprocessor_opts} option (@pxref{Mangel configuration options}).
 
+@cindex INCLUDE environment variable
+@cindex CPATH envirionment variable
+On Windows, mangel implicitly adds @samp{-I} options for all of the
+pathnames specified in the environment variable @env{INCLUDE}, which is
+also used by the Microsoft C compiler to specify the location of its
+default system libraries.  On Unix, it uses the path specified in the
+environment variable @env{CPATH} in addition to the default system libraries
+specified in the configuration file, for compatibility with gcc.
+
 @item -O
 @itemx -O@var{value}
 Enable optimization in the compiler.  This might interact badly with Purify, so
@@ -4872,26 +4886,30 @@ need not be supplied explicitly on the command line.
 
 @item -L@var{pathname}
 Add @var{pathname} to the list of places searched for system libraries.
-
-If the environment variable @env{MANGEL_DIR} is set, mangel implicitly adds
-its @file{lib} directory to the list of directories searched for system 
-libraries.
-Otherwise you must explicitly use @option{-L} to specify where to
-find Mangel-Wurzel's system libraries, or include this information in
-the options list passed directly to the linker.  See @option{--linker_opts}
-(@pxref{Mangel configuration options}).
-
-@cindex PURIFY_DIR environment variable
-Also, if the environment variable @env{PURIFY_DIR} is set, mangel
-implicitly adds this directory to the list of directories searched for
-system libraries.  Otherwise you must explicitly use @option{-L} to
-specify where to find the library for the Purify API, or include this
-information in the options list passed directly to the linker.  See
-@option{--linker_opts} (@pxref{Mangel configuration options}).
+This option is not supported on Windows, since the Microsoft linker uses
+a different model for finding libraries.
 
 
 @item -l@var{name}
-Link with library @var{name}.
+Link with system library @var{name}.  This option is not supported on 
+Windows, since the Microsoft linker expects libraries to be specified like
+ordinary input files to the linker.
+
+If the environment variable @env{MANGEL_DIR} is set, mangel implicitly
+adds @file{$MANGEL_DIR/lib/libmangelwurzel.a} to the list of libraries to
+be linked with.  Otherwise you must explicitly link with this library,
+include this information in the options list passed directly to the
+linker.  See @option{--linker_opts} (@pxref{Mangel configuration
+options}).
+
+@cindex PURIFY_DIR environment variable
+Also, on Unix, if the environment variable @env{PURIFY_DIR} is set, mangel
+implicitly adds @file{$PURIFY_DIR/purify_stubs.a} to the list of libraries to
+be linked with.  Similarly, if the environment variable is not set, you have
+to specify this library explicitly.  This is not needed on Windows because
+Purify uses a different model for resolving link references to its API on
+that platform.
+
 
 @item --c
 @itemx --c99
@@ -4972,8 +4990,9 @@ a system-specific value.
 Put temporary files (the annotated @file{.int.c} files and temporary 
 object files created prior to linking) in the indicated directory.  
 If this option is not specified on the command line or in an options file, 
-it defaults to a system-specific default, @file{/tmp/} on Unix platforms.  The
-directory must exist and be writable.
+it defaults to a system-specific default, @file{/tmp/} on Unix platforms or the
+directory specified by the @env{TMP} or @env{TEMP} environment variables on
+Windows.  The directory must exist and be writable.
 
 @item -v
 @itemx --verbose
@@ -5019,6 +5038,8 @@ This is implemented by filtering the trace output through @command{gzip}.
 This option is only used if the compilation unit contains a
 definition for @code{main}.
 
+This option is not currently supported on Windows.
+
 @item --ignore-globals
 Ignore global, file-scope static, and function-scope static 
 variables when emitting program point state.
@@ -5047,6 +5068,12 @@ match @var{regex}.
 This option can be specified multiple times, but cannot be used in
 conjunction with @option{--ppt-omit-pattern}.
 
+On Windows, regular expressions are not supported.  Instead, the
+argument is interpreted as a literal string which is used to perform a
+substring match against the function name, program point name, or
+containing class name.
+
+
 @item --ppt-omit-pattern @var{regex}
 Suppress program points that match @var{regex}.
 Specifically, a program point is considered to match @var{regex} if any of
@@ -5055,6 +5082,11 @@ match @var{regex}.
 
 This option can be specified multiple times, but cannot be used in
 conjunction with @option{--ppt-select-pattern}.
+
+On Windows, regular expressions are not supported.  Instead, the
+argument is interpreted as a literal string which is used to perform a
+substring match against the function name, program point name, or
+containing class name.
 
 @end table
 
@@ -5091,7 +5123,7 @@ Here is an example of an options file:
 --compiler_opts -g -Dsetjmp=_setjmp -Dva_copy=__va_copy
 
 --linker cc
---linker_opts -lmangelwurzel -lstdc++ -lpurify_stubs
+--linker_opts -lstdc++
 
 --purify purify
 --purify_opts -log-file=/dev/null -append-logfile
@@ -5151,12 +5183,6 @@ input, that is C, C99, or C++.  It does not translate C++ to C.  This ensures
 that preprocessed code is link-compatible with system C++ libraries and other
 code that is not processed with wurzel.
 
-If you are using the C++ libraries that came with your host C++
-compiler, you will probably have to add the locations of the include
-files to the search path passed to wurzel, either by explicitly passing
-@option{--preprocessor-opts} or @option{-I} to mangel, or by using an
-options file (@ref{Options files for Mangel}).
-
 While wurzel recognizes standard C++, its support of instrumentation for
 C++ programs is rather rudimentary at this point.  In particular, it
 ignores anything having to do with templates.  Wurzel is smart enough to
@@ -5165,6 +5191,11 @@ program point, to avoid errors in the compilation phase, but at this
 time it will not also generate references to accessible base classes and
 their members.  (This should be optional in any case because it will
 greatly increase the number of variables at a given program point.)
+
+If you are using the C++ libraries that came with your host C++
+compiler, you will probably have to add the locations of the include
+files to the search path passed to wurzel, as well adding the libraries
+themselves to your link options.
 
 If your source code uses extensions specific to a particular host compiler,
 you may need to use the @samp{--gcc} or @samp{--microsoft} flags to enable
@@ -5194,6 +5225,94 @@ down the cause of the errors.
 Note that since the output of wurzel is compilable source code, it is possible
 to perform the preprocessing on one machine and then compile, link, and run
 on another platform supported by Rational Purify.
+
+@menu
+* Using Mangel-Wurzel on Unix::  
+* Using Mangel-Wurzel on Windows::  
+@end menu
+
+@node Using Mangel-Wurzel on Unix, Using Mangel-Wurzel on Windows, Mangel-Wurzel usage notes, Mangel-Wurzel usage notes
+@subsubsection Using Mangel-Wurzel on Unix
+
+GCC is the standard compiler on most Unix-based systems.  You may find
+it necessary to specify the @samp{--gcc} option to wurzel to make it
+correctly process system
+include files, even if your code doesn't use GCC extensions itself.
+
+You'll need to specify the full set of search paths for include files in
+your @file{.mangelrc} file, since these are normally hard-wired into GCC
+instead of configured with an environment variable.  You probably need
+to specify both @file{/usr/local/include} and @file{/usr/include}.  You
+should also specify the include directory for the particular version of
+gcc you are using ahead of @file{/usr/include}; you can find the full
+pathname by doing @samp{gcc -print-libgcc-file-name} and substituting
+@samp{include} for @samp{libgcc.a}.
+
+Not all of the preprocessor symbols predefined by GCC's cpp are correctly
+predefined by the EDG front end's GCC compatibility mode.  If you run into
+preprocessing errors, try this approach:
+
+@enumerate
+@item Doing @samp{cpp -dM </dev/null} will produce a list of all of cpp's
+built-in defines.
+
+@item Instead of trying to define everything on the command line for wurzel,
+create a new @file{.h} file.  In this file, wrap each of the @samp{#define}s 
+from the cpp output above in an @samp{#ifndef...#endif} to prevent possible
+multiple definition.  
+
+@item In the @samp{--preprocessor-opts} value in your @file{.mangelrc}, add
+@samp{--preinclude=@var{filename}}, where @var{filename} is the name of your
+new @file{.h} file.
+@end enumerate
+
+
+@node Using Mangel-Wurzel on Windows,  , Using Mangel-Wurzel on Unix, Mangel-Wurzel usage notes
+@subsubsection Using Mangel-Wurzel on Windows
+
+Rational Purify on Windows only supports the Microsoft Visual C/C++ compiler,
+not GCC.  Therefore Mangel-Wurzel will only work with the Microsoft compiler
+on this platform as well.  Currently, Mangel-Wurzel is not integrated with
+the Visual Studio IDE, and runs as a command-line utility only.
+
+You can run Mangel-Wurzel and programs instrumented with Mangel-Wurzel
+from within a Cygwin shell, Makefile, and the like, as well as from the
+default Windows @samp{cmd} shell in a console window.  However, another
+limitation of Rational Purify on Windows is that instrumented
+executables will only run from a console window, not an XTerm or other
+pty.  (This is because Purify, like some other Windows console programs,
+does not like having its standard input or output redirected to pipes.)
+
+Since Mangel-Wurzel runs as a regular Windows console application, it
+expects all pathname arguments and environment variables to be in
+regular Windows pathname syntax even when you run it from inside a
+Cygwin shell.
+
+Mangel-Wurzel uses the same @env{INCLUDE} environment variable as the 
+Microsoft compiler to set up the system include paths, so in theory you
+should not have to specify any additional paths in your configuration file.
+Do be sure that you specify @samp{cl} (the Microsoft C compiler) for
+both the @samp{--compiler} and @samp{--linker} options and that you have
+your @env{PATH} environment variable set up to include both the path to the
+cl compiler and related Visual C utilities, and the path for Rational Purify.
+
+You will probably need to specify the @samp{--microsoft} compatibility mode
+option as the default.
+
+Some other limitations of the Windows version of Mangel-Wurzel may be removed
+in future releases:
+
+@itemize
+
+@item 
+@samp{--ppt-select-pattern} and @samp{--ppt-omit-pattern} do not support
+regular expression matching, and instead perform only a literal substring
+match.
+
+@item
+@samp{--dtrace-gzip} is not supported.
+
+@end itemize
 
 
 @node Interaction with Purify, Installing Mangel-Wurzel, Mangel-Wurzel usage notes, Mangel-Wurzel
@@ -5278,23 +5397,20 @@ Purify.  Make these changes in the system options file
 @file{mangel-wurzel/.mangelrc}; see @ref{Options files for Mangel} for
 details about the format of this file.
 
-A default version of @file{.mangelrc} is included with the distribution.
-The most likely things you may need to change are:
+A default version of @file{.mangelrc} is
+included with the distribution.  The most likely things you may need to
+change are:
 
 @itemize
 @item Make sure that the @samp{--compiler} and @samp{--linker} commands are
 correct.  For example, if you want to use gcc, on some systems you may
 need to specify @samp{gcc} explicitly instead of @samp{cc}, or use a
-full pathname.
+full pathname.  On Windows, you should use @samp{cl} only.
 
 @item You may need to alter the default system include paths, specified with
-@samp{--sys_include} in the @samp{--preprocessor_opts} option.  On Unix
-systems, you probably need to specify both @file{/usr/local/include} and
-@file{/usr/include}.  If you are using gcc, you should also specify the
-include directory for the particular version of gcc you are using ahead
-of @file{/usr/include}; you can find the full pathname by doing
-@samp{gcc -print-libgcc-file-name} and substituting @samp{include} for
-@samp{libgcc.a}.
+@samp{--sys_include} in the @samp{--preprocessor_opts} option.  See 
+@ref{Using Mangel-Wurzel on Unix}, and @ref{Using Mangel-Wurzel on Windows},
+for details.
 
 @item You might also want to add some additional options, such as specifying
 @samp{--gcc} or @samp{--microsoft} to enable the appropriate compatibility
