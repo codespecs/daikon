@@ -1,2 +1,2 @@
 #!/bin/sh
-$DAIKONDIR/kvasir/inst/bin/valgrind --tool=kvasir "$@"
+$DAIKONDIR/kvasir/inst/bin/valgrind --tool=fjalar "$@"
