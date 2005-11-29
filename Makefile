@@ -121,35 +121,35 @@ clean-java:
 javadoc:
 	cd java && $(MAKE) javadoc
 
-### Kvasir (C front end)
+### Kvasir (C/C++ front end)
 
 valgrind-3/auto-everything.sh:
 	cvs co -P valgrind-3
 	touch $@
 
-kvasir/kvasir/Makefile.in: valgrind-3/auto-everything.sh
+kvasir/fjalar/Makefile.in: valgrind-3/auto-everything.sh
 	ln -nsf valgrind-3/valgrind kvasir
 	touch $@
 
 valgrind-3/vex/libvex.a: valgrind-3/auto-everything.sh $(wildcard valgrind-3/vex/priv/guest-x86/*.[ch] valgrind-3/vex/priv/guest-generic/*.[ch] valgrind-3/vex/priv/host-x86/*.[ch] valgrind-3/vex/priv/host-generic/*.[ch] valgrind-3/vex/priv/ir/*.[ch] valgrind-3/vex/priv/main/*.[ch] valgrind-3/vex/pub/*.[ch])
 	cd valgrind-3/vex && make
 
-kvasir/config.status: kvasir/kvasir/Makefile.in valgrind-3/vex/pub/libvex.h
+kvasir/config.status: kvasir/fjalar/Makefile.in valgrind-3/vex/pub/libvex.h
 	cd kvasir && ./configure --prefix=`pwd`/inst --with-vex=`pwd`/../vex
 
 kvasir/coregrind/stage2: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch]) valgrind-3/vex/libvex.a
 	cd kvasir && $(MAKE)
 
-kvasir/kvasir/vgtool_kvasir.so: kvasir/coregrind/stage2 $(wildcard kvasir/kvasir/*.[ch]) valgrind-3/vex/libvex.a
-	cd kvasir/kvasir && $(MAKE)
+kvasir/fjalar/vgtool_fjalar.so: kvasir/coregrind/stage2 $(wildcard kvasir/fjalar/*.[ch]) valgrind-3/vex/libvex.a
+	cd kvasir/fjalar && $(MAKE)
 
 kvasir/inst/bin/valgrind: kvasir/coregrind/stage2
 	cd kvasir && $(MAKE) install
 
-kvasir/inst/lib/valgrind/vgtool_kvasir.so: kvasir/kvasir/vgtool_kvasir.so
-	cd kvasir/kvasir && $(MAKE) install
+kvasir/inst/lib/valgrind/vgtool_fjalar.so: kvasir/fjalar/vgtool_fjalar.so
+	cd kvasir/fjalar && $(MAKE) install
 
-kvasir: kvasir/inst/bin/valgrind kvasir/inst/lib/valgrind/vgtool_kvasir.so
+kvasir: kvasir/inst/bin/valgrind kvasir/inst/lib/valgrind/vgtool_fjalar.so
 
 build-kvasir: kvasir
 
@@ -480,7 +480,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	@# CVS-only build script
 	rm -f /tmp/daikon/kvasir/auto-everything.sh
 	@# Internal developer documentation
-	rm -rf /tmp/daikon/kvasir/valgrind/kvasir/doc
+	rm -rf /tmp/daikon/kvasir/valgrind/fjalar/notes
+	rm -rf /tmp/daikon/kvasir/valgrind/fjalar/trivial-tool
 	(cd /tmp/daikon/kvasir; $(RM_TEMP_FILES) )
 
 	# Jar file needed for Chicory front end
