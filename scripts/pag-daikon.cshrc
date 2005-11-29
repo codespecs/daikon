@@ -28,6 +28,8 @@ setenv pag ${PAG}
 
 ## Set this directory to the directory containing the JDK.
 if (! $?JDKDIR) setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
+if (! $?JDK4DIR) setenv JDK4DIR /afs/csail/group/pag/software/pkg/j2sdk-1.4.2
+if (! $?JDK5DIR) setenv JDK5DIR /afs/csail/group/pag/software/pkg/j2sdk-1.5
 
 # Remove duplicates so path and classpath don't get too long
 if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`

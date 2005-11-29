@@ -28,6 +28,8 @@ export pag=${PAG}
 
 ## Set this directory to the directory containing the JDK.
 export JDKDIR=${JDKDIR:-/afs/csail/group/pag/software/pkg/jdk}
+export JDK4DIR=${JDK4DIR:-/afs/csail/group/pag/software/pkg/j2sdk-1.4.2}
+export JDK5DIR=${JDK5DIR:-/afs/csail/group/pag/software/pkg/j2sdk-1.5}
 
 export PATH=/usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
