@@ -227,6 +227,12 @@ of the @file{.jpp} files is to avoid code duplication by placing
 common code in a single file, then generating other files that need to
 include that common code.)
 
+To make the documentation (via @samp{make -C $inv/doc}), you will need a
+recent verssion of makeinfo.
+@c Info as of November 2005
+Makeinfo version 4.7 is known to work, but makeinfo version 4.1 is known
+to fail.
+
 For more information about compiling Daikon, see the comments in the Makefiles.
 
 
