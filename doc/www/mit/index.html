@@ -204,10 +204,14 @@ is, not a PAG client machine).  You can do so using CVS.
 You will need to set up your environment
 properly on the remote machine.
 (You don't have to worry about this step when using a local CVS checkout on
-the CSAIL machines.)
-For example, you will want to copy over your dotfiles or at least copy the
-contents of the dotfiles in <tt>$inv/doc/www/mit/</tt> (at a minimum,
-<tt>.bashrc</tt> or <tt>.cshrc</tt>) to your remote machine, and you may
+the CSAIL machines, because the
+<tt>pag-daikon.</tt>{<tt>bashrc</tt>,</tt>cshrc</tt>} files do that for you.)
+One difference from the instructions in the Daikon manual is that the
+<tt>bin/</tt> subdirectory in the distribution is named <tt>scripts/</tt>
+in the repository.
+You can start by copy over your dotfiles or working from
+the dotfiles in <tt>$inv/doc/www/mit/</tt> (such as
+<tt>.bashrc</tt> or <tt>.cshrc</tt>).  You may
 need to adjust some of their settings (such as the ones that refer to the
 PAG filesystem).  Also ensure that you set the CVS_RSH environment variable
 to "ssh" (without the quotes).
