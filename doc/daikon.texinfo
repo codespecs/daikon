@@ -245,6 +245,7 @@ C/C++ front end Kvasir
 * DynComp dynamic comparability analysis::  
 * Tracing only part of a program::  
 * Pointer type disambiguation::  
+* C++ support::                 
 * Online execution::            
 * Installing Kvasir::           
 * Kvasir limitations::          
@@ -3338,6 +3339,7 @@ programs,,,./developer,Daikon Developer Manual}.
 * DynComp dynamic comparability analysis::  
 * Tracing only part of a program::  
 * Pointer type disambiguation::  
+* C++ support::                 
 * Online execution::            
 * Installing Kvasir::           
 * Kvasir limitations::          
@@ -4028,7 +4030,7 @@ program points explicitly mentioned in the @file{ppt-list-file}.  This
 is helpful for generating a smaller @file{var-list-file} for use with an
 already-existent @file{ppt-list-file}.
 
-@node    Pointer type disambiguation, Online execution, Tracing only part of a program, Kvasir
+@node    Pointer type disambiguation, C++ support, Tracing only part of a program, Kvasir
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -4452,7 +4454,80 @@ variables.
 For maximum control of the output, you can use selective program point
 tracing, variable tracing, and disambiguation together all at once.
 
-@node Online execution, Installing Kvasir, Pointer type disambiguation, Kvasir
+@node    C++ support, Online execution, Pointer type disambiguation, Kvasir
+@subsection C++ support
+
+Kvasir supports C++, but we have done far more tests on C programs than
+on C++ programs, so our C++ support is not as mature as our C support.
+Here is a partial list of C++ features that Kvasir currently supports:
+
+@itemize @bullet
+
+@item
+Class member functions are traced just like regular functions, except
+that their first parameter is a pointer (called @code{this}) to a single
+instance of the class.  They are printed with the class name as the
+prefix, followed by a period and then the full function signature.  For
+example, a @code{push()} function of a @code{Stack} class might be named
+@code{Stack.push(char*)}.
+
+@item
+OBJECT program points (@pxref{Program points}) are printed out in the
+.decls file for each class with at least 1 member variable and 1 member
+function.  No extra information besides member function traces are
+required in the .dtrace file; Daikon can link together class and
+function names to determine when a particular function is a member
+function and generate object invariants for that class by observing the
+values of the @code{this} parameter.
+
+@item
+Static member variables are currently treated just like global
+variables, because they actually have static global locations.  Another
+(not yet implemented) possibility is to only print them at program
+points of member functions belonging to the respective variable's own
+class.
+
+@item
+Inheritance is handled correctly because whenever Kvasir traverses
+inside of a class to print out its member variables, it also recursively
+traverses inside all superclasses (and inside their superclasses,
+etc...) to print out inherited member variables.  The superclass class
+names are appended onto the variable names to make them unique.  For
+example, if @code{this} is an instance of a class that inherits from
+another class called @code{fooClass} which has a member variable
+@code{fooVar}, then Kvasir prints out @code{fooVar} as
+@code{this->fooClass.fooVar}. This correctly handles the case of
+multiple inheritance as well as several layers of inheritance.  Thus,
+object invariants capture properties of a class's own member variables
+as well as those of its superclasses' member variables.
+
+@item
+Inheritance-based polymorphism is handled correctly without any extra
+effort because when a function entrance or exit is encountered at run
+time, the version that is called has already been resolved.
+
+@item
+Overloaded functions are handled correctly because Kvasir prints out the
+full function signature as its name in order to prevent conflicts.  For
+example, two overloaded versions of a function @code{foo()} will be
+disambiguated by their signatures, such as @code{foo(int, int)} and
+@code{foo(double, double)}.
+
+@item
+Kvasir handles functions that pass parameters by reference as well as
+those that pass parameters by value.
+
+@end itemize
+
+One current C++ limitation is that Kvasir cannot print out the contents
+of classes which are defined in external libraries rather than in the
+user's program (e.g., it can properly output a C-string represented as
+@code{char*} but not the contents of the C++ @code{string} class).  If
+further support for specific C++ features are important to you, please
+send email to @email{daikon-developers@@lists.csail.mit.edu}, so that we
+can increase its priority on our to-do list.
+
+@node Online execution, Installing Kvasir, C++ support, Kvasir
 @subsection Online execution
 
 @cindex online execution, for C programs
@@ -4614,18 +4689,6 @@ However, please keep in mind that, when running simultaneously with
 Daikon using the @option{--output-fifo} option (see @ref{Online execution}), Kvasir can generate
 output data much faster than Daikon can process it.  Thus, it is not the
 performance bottleneck in the entire invariant detection system.
-
-@item
-Kvasir currently has support for C++, but it has not yet been tested
-extensively on large programs.  One current limitation is that it cannot
-print out the contents of classes which are defined in external  
-libraries rather than in the 
-user's program (e.g., it can properly output a C-string represented as 
-@code{char*} but not the contents of the C++ @code{string} class).
-If further support for specific C++ features or the ability to run on
-large C++ examples in general are important to you,
-please send email to @email{daikon-developers@@lists.csail.mit.edu},
-so that we can increase its priority on our to-do list.
 
 @item
 Kvasir's support for outputting arrays is not yet complete. 

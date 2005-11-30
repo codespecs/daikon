@@ -87,6 +87,11 @@ Kvasir
      separation between the Fjalar framework and the Kvasir and
      Dyncomp tools that are built upon the framework.
 
+  Documentation changes
+
+     Updated the Daikon User Manual to describe C++ support in more
+     detail and to document new features.
+
 
 Mangel-Wurzel:
 
