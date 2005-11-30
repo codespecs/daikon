@@ -48,7 +48,7 @@ images/dfepl-flow.png: images/dfepl-flow.eps
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 
-html: daikon.html developer.html daikonHelp.html
+html: daikon.html developer.html daikonEclipseHelp.html
 
 # The perl moves </ul> from after the table of contents to before it,
 # preventing it from being too deeply indented.  It's needed with makeinfo 4.2.
@@ -103,7 +103,7 @@ developer.pdf: developer.dvi
 # If the source file below doesn't exist, you may need to check out
 # the eclipse-plugins CVS module by saying "cvs checkout
 # eclipse-plugins" in $INV.
-daikonHelp.html: ../eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html
+daikonEclipseHelp.html: ../eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html
 	cp -p $< $@
 
 clean: texi-clean
