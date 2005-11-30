@@ -61,6 +61,33 @@ Annotate:
     Annotate no longer prints warning messages about being unable to locate
     a Daikon variable that corresponds to a class field.
 
+Kvasir
+
+  User-visible changes
+
+     Made many enhancements to greatly improve C++ support.  New
+     features include support for inheritance (printing out
+     superclass member variables), reference parameter variables,
+     member function declarations both within and outside of class
+     bodies, and more consistent naming of C++ function and variable
+     names so that OBJECT program points now work properly.
+
+     Simplified the format of the program point list (ppt-list) files.
+
+     Added a pointer type coercion feature where a user can manually
+     specify in a .disambig file whether to explicitly cast a pointer
+     to a particular type (useful for dereferencing void* pointers).
+     
+     
+  Implementation changes
+
+     Re-factored all of the Kvasir and DynComp code to use the Fjalar
+     C/C++ dynamic analysis framework that we have recently finished
+     constructing.  The new directory structure reflects the
+     separation between the Fjalar framework and the Kvasir and
+     Dyncomp tools that are built upon the framework.
+
+
 Mangel-Wurzel:
 
   Enhancements

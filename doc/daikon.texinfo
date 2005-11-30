@@ -238,7 +238,7 @@ Chicory options
 * Variables in Chicory output::  
 * Chicory miscellaneous options::  
 
-C front end Kvasir
+C/C++ front end Kvasir
 
 * Using Kvasir::                
 * Kvasir options::              
@@ -622,7 +622,7 @@ other variables you can customize.
 
 @item
 Optionally, build various executables used by Daikon, such as the
-C front end Kvasir (@pxref{Installing Kvasir}).
+C/C++ front end Kvasir (@pxref{Installing Kvasir}).
 Optionally, download other executables, such as the source-based C front
 end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 
@@ -983,7 +983,7 @@ a C/C++ front end.  You can choose Kvasir (@pxref{Installing Kvasir}) or
 Mangel-Wurzel (@pxref{Mangel-Wurzel}).  This section gives examples
 using Kvasir.
 
-To use the C front end Kvasir with your program, first make sure that
+To use the C/C++ front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
 information, such as by giving the @option{-gdwarf-2} flag to GCC when
 compiling.  Then, run your program as usual, but prepend
@@ -3293,14 +3293,14 @@ the target program.  The size is specified in the same manner as the
 
 
 @node Kvasir, Mangel-Wurzel, Chicory, Front ends
-@section C front end Kvasir
+@section C/C++ front end Kvasir
 
 @cindex Kvasir (binary front end for C)
 @cindex front end for C
-@cindex C front end
+@cindex C/C++ front end
 
-Daikon's front end for C, named Kvasir, executes C (and a reasonable subset 
-of C++) programs and creates  
+Daikon's front end for C and C++, named Kvasir, executes C and C++
+programs and creates  
 data trace (@file{.dtrace}) files of variables and their values by
 examining the operation of the binary at 
 runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
@@ -3347,7 +3347,8 @@ programs,,,./developer,Daikon Developer Manual}.
 @subsection Using Kvasir
 
 Before using Kvasir, you must compile your program without optimization,
-and with the DWARF-2 format of debugging information.
+and with the DWARF-2 format of debugging information (e.g, by using @code{gcc} for C
+programs and @code{g++} for C++ programs).
 DWARF-2 is the default format for debugging information in GCC 3, and
 otherwise is produced by supplying the
 @option{-gdwarf-2} command line option.
@@ -3659,16 +3660,6 @@ variables.  However, some tools require struct variables to be
 outputted, so we have included this option.  Struct variables are
 denoted by a @code{# isStruct=true} annotation in their declarations.
 
-@item --bit-level-precision
-
-When activated, forces more stringent checking of value validity on the
-bit-level, which in some cases could result in more accurate output at
-the expense of speed.  This is useful when your program performs
-lots of bit-level operations, but is unnecessary for most programs.
-(Note: If you have trouble getting floating point values to print out
-properly, try this option.  It seems to work well in practice.)
-This option is fairly untested at the moment.
-
 @item --nesting-depth=@var{N}
 
 For recursively-defined structures (structs or classes with members that
@@ -3685,7 +3676,7 @@ are pointers to the @emph{same} type of struct or class),
 @var{N} (an integer between 
 0 and 100) specifies approximately how many levels of pointers to dereference. 
 This is useful for controlling the output of linked lists and trees. 
-The default is 2.  If you are trying to traverse deep into data
+The default is 4.  If you are trying to traverse deep into data
 structures, try adjusting the @option{--struct-depth} and
 @option{--total-depth} options until Kvasir traverses deep enough to
 reach the desired variables.
@@ -3696,10 +3687,21 @@ Debugging:
 
 @table @option
 
-@item --asserts-aborts
+@item --xml-output-file=@var{filename}
 
-Enable Kvasir's internal consistency checks.  By default, they are
-disabled.
+Outputs a representation of data structures, functions, and variables in
+the target program to an XML file in order to aid in debugging.  These
+are all the entities that Kvasir tracks for a particular run of a target
+program, so if you do not see an entity in this XML file, then you
+should either adjust command-line options or contact us with a bug
+report.
+
+@item --with-gdb
+
+This pauses the program's execution in an infinite loop during
+initialization.  You can attach a debugger such as @code{gdb} to the
+running process by running gdb on @file{inst/lib/valgrind/stage2} under
+the Kvasir directory and using the @code{attach} command.
 
 @item --debug
 @itemx --dyncomp-debug
@@ -3850,21 +3852,15 @@ user wants Kvasir to trace.  Every name corresponds to both the entrance
 (@code{:::ENTER}) and exit (@code{:::EXIT}) program points for that function
 and is printed out in the exact same format that Kvasir
 uses for that function in the trace file (@pxref{Using Kvasir}
-section for the program point naming scheme).  In the special case of
-certain C++ functions, Kvasir needs to have the mangled versions of the
-names in order to optimize the performance of selective tracing.  Those
-entries are listed in the @file{ppt-list-file} as three space-delimited
-tokens: The string literal ``@code{(mangled)}'', the C++ mangled name,
-and the actual name that Kvasir outputs to the trace file.  Here is an
-example of a @file{ppt-list-file} which contains both regular and C++
-names:
+section for the program point naming scheme).  Here is an
+example of a @file{ppt-list-file}:
 
 @example
-FunctionNamesTest.cpp.staticFoo()
-(mangled) _Z17firstFileFunctioni ..firstFileFunction(int)
+FunctionNamesTest.cpp.staticFoo(int, int)
+..firstFileFunction(int)
 ..main()
-second_file.cpp.staticFoo()
-(mangled) _Z18secondFileFunctionv ..secondFileFunction()
+second_file.cpp.staticFoo(int, int)
+..secondFileFunction()
 @end example
 
 It is very important to follow this format in the @file{ppt-list-file}
@@ -3876,8 +3872,7 @@ either comment out (by using the @code{'#'} comment character at the
 beginning of the line) or delete lines in that file for program points
 not to be traced or create a new @file{ppt-list-file} using the names in
 the Kvasir-generated file.  This prevents typos and the tedium of
-manually typing up program point names (which is nearly impossible in
-the case of mangled C++ names).  In fact, the @file{ppt-list-file}
+manually typing up program point names.  In fact, the @file{ppt-list-file}
 presented in the above example was generated from a C++ test program named
 @code{FunctionNamesTest} by using the following command:
 
@@ -3892,11 +3887,11 @@ function, he could comment out all other lines by placing a single
 as demonstrated here:
 
 @example
-#FunctionNamesTest.cpp.staticFoo()
-#(mangled) _Z17firstFileFunctioni ..firstFileFunction(int)
+#FunctionNamesTest.cpp.staticFoo(int, int)
+#..firstFileFunction(int)
 ..main()
-#second_file.cpp.staticFoo()
-#(mangled) _Z18secondFileFunctionv ..secondFileFunction()
+#second_file.cpp.staticFoo(int, int)
+..secondFileFunction()
 @end example
 @noindent
 When running Kvasir with the @option{--ppt-list-file} option using this
@@ -4557,7 +4552,7 @@ previous run.
 @cindex installing Kvasir
 @cindex Kvasir installation
 
-@c Kvasir is the recommended C front end for use on Linux/x86.
+@c Kvasir is the recommended C/C++ front end for use on Linux/x86.
 The source
 code for Kvasir is included in the main Daikon distribution, and is
 compiled by default on Linux/x86 based systems.
@@ -4621,15 +4616,14 @@ output data much faster than Daikon can process it.  Thus, it is not the
 performance bottleneck in the entire invariant detection system.
 
 @item
-Kvasir currently has moderate support for C++.  It outputs C++ classes
-like C structs, generates @code{:::OBJECT} invariants (@pxref{Program points}), treats member functions like regular 
-functions with an extra @code{this} pointer parameter, and
-correctly outputs static class member variables.  However, 
-it cannot print out the contents of classes which are defined in external 
+Kvasir currently has support for C++, but it has not yet been tested
+extensively on large programs.  One current limitation is that it cannot
+print out the contents of classes which are defined in external  
 libraries rather than in the 
 user's program (e.g., it can properly output a C-string represented as 
 @code{char*} but not the contents of the C++ @code{string} class).
-If further support for specific C++ features is important to you,
+If further support for specific C++ features or the ability to run on
+large C++ examples in general are important to you,
 please send email to @email{daikon-developers@@lists.csail.mit.edu},
 so that we can increase its priority on our to-do list.
 
@@ -4680,7 +4674,7 @@ particular type (@pxref{Pointer type coercion}).
 
 @cindex Mangel-Wurzel (source-based front end for C)
 @cindex front end for C
-@cindex C front end
+@cindex C/C++ front end
 
 In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
 is also a source-based front end, Mangel-Wurzel.  Unlike Kvasir, which
@@ -7757,7 +7751,7 @@ regular Daikon license or, at your option, either the GNU General
 Public License or the Perl Artistic License (that is, under the same
 terms as Perl itself).
 
-The Daikon dynamic C front end Kvasir is based in part on the Valgrind
+The Daikon dynamic C/C++ front end Kvasir is based in part on the Valgrind
 dynamic program supervision framework, copyright 2000-2004 Julian
 Seward, the Sparrow Valgrind tool, copyright 2002 Nicholas Nethercote,
 the MemCheck Valgrind tool, copyright 2000-2004 Julian Seward, and the
