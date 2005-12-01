@@ -18,8 +18,12 @@ DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 				  daikon.texinfo developer.texinfo config-options.texinfo \
 				  invariants-doc.texinfo
 # EMACS_PATHS := emacs/daikon-context-gui.el
-README_FILES := README-daikon-java.txt README-dist.txt README-dist-doc.txt
+README_FILES := README-dist.txt README-dist-doc.txt README-daikon-java.txt
 README_PATHS := $(addprefix doc/,$(README_FILES))
+# Files that contain the (automatically updated) version number and date.
+DIST_VERSION_FILES := ${README_PATHS} \
+	doc/daikon.texinfo doc/developer.texinfo \
+	doc/index.html doc/www/download/index.html
 SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
 	dfepl dtrace-perl dtype-perl \
@@ -43,7 +47,6 @@ WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsi
 WWW_PARENT := /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu
 WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
-JDKDIR ?= /afs/csail/group/pag/software/pkg/jdk
 # Staging area for the distribution
 STAGING_DIR := $(WWW_DIR)/staging-daikon
 
@@ -310,8 +313,8 @@ update-doc-dist-date-and-version:
 # Update the documentation with a new distribution date (today).
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
+	perl -wpi -e 's/(Daikon version .*, released ).*(\.|<\/CENTER>)$$/$$1${TODAY}$$2/' ${DIST_VERSION_FILES}
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo doc/developer.texinfo
-	perl -wpi -e 's/(Daikon version .*, released ).*(\.|<\/CENTER>)$$/$$1${TODAY}$$2/' doc/README-dist.txt doc/README-dist.html doc/README-dist-doc.txt doc/www/download/index.html doc/daikon.texinfo doc/developer.texinfo
 	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
@@ -321,7 +324,7 @@ update-doc-dist-date:
 # I removed the dependence on "update-dist-version-file" because this rule
 # is invoked at the beginning of a make.
 update-doc-dist-version:
-	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/developer.texinfo doc/README-dist.txt doc/README-dist.html doc/README-dist-doc.txt doc/www/download/index.html
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' ${DIST_VERSION_FILES}
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
 	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/kvasir/mc_main.c
 	cvs ci -m "Update version number for new Daikon distribution" kvasir/kvasir/mc_main.c
