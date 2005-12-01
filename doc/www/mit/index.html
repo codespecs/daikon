@@ -690,6 +690,145 @@ target.
 
 
 
+<h3><a name="Mangel/Wurzel">Building and testing Mangel/Wurzel</a></h3>
+
+<ol>
+    <Li> Checkout mangel-wurzel from CVS
+    <pre>
+    cd $inv
+    cvs -d $pag/projects/invariants/.CVS co mangel-wurzel
+    </pre>
+
+    <li> Setup yourself to use purify and switch over the license (if
+    necessary) to you as described below. <p>
+
+    <li> Build and test mangel-wurzel
+    <pre>
+    cd $inv/mangel-wurzel;
+    make install
+    make test
+    </pre>
+
+</ol>
+
+<h3><a name="purify-linux">Setting up Purify on Linux</a></h3>
+
+Purify is installed in the group directories:
+
+    <pre>
+    /afs/csail.mit.edu/group/pag/software/pkg/Rational
+    /afs/csail.mit.edu/group/pag/software/pkg/PurifyPlus.2003a.06.15</pre>
+
+To use purify <ol> 
+
+    <li> Set the environment variable <code>RATIONAL</code> to
+    <code> /afs/csail.mit.edu/group/pag/software/pkg/Rational </code>
+
+    <li> Add the Purify bin directory 
+    (<code>$RATIONAL/releases/PurifyPlus.2003a.06.15/i386_linux2/bin</code>) 
+    to your path
+
+    <li> Set the environment variable <code>PURIFY_DIR</code> to
+    <code>$RATIONAL/releases/purify.i386_linux2.2003a.06.15/</code>
+
+</ol>
+
+To change the authorized user: <ol>
+
+    <li> Go to <code>$RATIONAL/config</code> and edit
+    <code>rational.opt</code> to have your login name as the authorized user.
+
+    <li> Restart the license manager:
+    <pre> 
+    cd $RATIONAL/config
+    sudo start_lmgrd_on_horseradish stop
+    sudo start_lmgrd_on_horseradish </pre>
+</ol>
+
+To move the license to a different machine: <p>
+
+The current license file is <code>license_for_horseradish.upd</code>
+and is located in in <code>$RATIONAL/config</code>.  The script that
+sets up a machine is 
+<code>$RATIONAL/releases/PurifyPlus.2003a.06.15/rs_install</code>
+
+<h3><a name="purify-windows">Setting up Purify on Windows</a></h3>
+
+To install Purify from scratch: <ol>
+
+    <li> Go to http://www.rational.com/licensing and create an account with
+    your e-mail address.  Our account number is N218469-0-245 and our IBM
+    customer number is 5549887. <p>
+
+    <li> Once you have logged in, get a license key using the link to
+    "Request and Manage License Keys".  We have a named user floating
+    license.  The key is specific to the machine you want to install
+    Purify on, so if you want to move Purify to a different machine,
+    you need to return the old key (for horseradish) and request a new
+    one. <p>
+
+    <li> Download PurifyPlus for Windows.  It'll ask you to run one program to
+    download the files, then ask you to run the installer.  That'll start up
+    the "Rational Setup Wizard". <p>
+
+    <li> Tell the wizard to install the Rational License Server first.
+    That will start up another wizard to set up the license server.
+    Just got through the menus and accept all the defaults. <p>
+
+    <Li> When that finishes, it'll start up the License Key
+    Administrator Wizard.  Choose the option to Import a Rational
+    License File, and point it at the license key you downloaded in
+    step (2). <p>
+
+    <li> Next it'll ask you to edit the options file.  You only need one
+    line in the file, like 
+
+    <pre>
+    INCLUDE PurifyNT USER sjl </pre>
+
+    where "sjl" is the login name of the user authorized to run
+    Purify.  If the login name includes spaces, wrap it in double quotes. <p>
+
+    <li> Use the dialog box to restart the license server, then exit from
+    the Rational License Key Administrator. <p>
+
+    <li> Now you have to go back and install PurifyPlus.  To do this, use the
+    desktop file browser to go to
+    C:\Program Files\PurifyPlus for Windows\SETUP\
+    and then open "purifyplusNT Setup Launcher".  Choose Rational Purify as
+    the product to install (our license doesn't include PureCoverage or 
+    Quantify).  This will throw you back into the License Key Administrator
+    again, but you don't have to do anything here. <p>
+
+    <li> At this point, you should be able to start up Purify from the "All
+    Programs" button on the "Start" menu on your toolbar.  Ta-da!
+</ol> <p>
+
+To change the authorized user: <ol>
+
+    <li> Go into C:\Program Files\Rational\Common and edit Rational.opt (make
+    sure it is the one listed as an OPT file and not a text file).  If 
+    your username includes spaces, be sure to enclose it in "double quotes". 
+    <p>
+
+    <li> From the Windows Control Panel, go to Performance and Maintenance,
+    then Administrative Tools, and then pick "Services".  From this
+    menu, restart the "FLEXlm License Manager".  (In a pinch, you can
+    also reboot the machine to force the license server to restart and
+    read the new options file.)  <p>
+</ol>
+
+To move the license to another machine: <ol>
+
+    <li> Fire up the "Rational Licence Key Administrator" from the Start
+    menu and use the wizard for "Get, Return, or Move Keys".  It'll
+    send you to the Rational web site to return the existing license
+    key and get a new one.  <p>
+
+    <li> Then follow the instructions above for a scratch installation on the
+    new machine. <p>
+</ol>
+
 <hr>
 <a href="../">Daikon invariant detector</a></p>
 
