@@ -917,6 +917,21 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return "size(" + sequence.name() + ")";
+
+      // I'm not sure how to get this right; seems to require info about
+      // the variable type.
+      // // The result could be either "sequence.length" or "sequence.size()",
+      // // depending on the type of "sequence".
+      // String seqname = sequence.name();
+      // if (seqname.endsWith("[]")
+      //     // This clause is too confusing for C output, where some
+      //     // variables get "size(seq)" and some get seq.length.
+      //     // && ! seqname.startsWith("::")
+      //     ) {
+      //   return sequence.term.name() + ".length";
+      // } else {
+      //   return seqname + ".size()";
+      // }
     }
     protected String repair_name_impl(VarInfo v) {
       Repair.getRepair().addSpecial();
@@ -1985,10 +2000,6 @@ public abstract class VarInfoName
       return java_family_impl(OutputFormat.DBCJAVA, v, index);
     }
 
-    // XXX temporary fix: sometimes long is passed as index (utilMDE.StopWatch).
-    // I can't find where the VarInfo for "index" is found. Wherever that is,
-    // we should check if its type is long, and do the casting only for that
-    // case.
     protected String java_family_impl(OutputFormat format, VarInfo v, String index) {
 
       // If the collection goes through daikon.Quant.collect___, then
@@ -1996,6 +2007,10 @@ public abstract class VarInfoName
       String formatted = term.name_using(format, v);
       String collectType =  (v.type.baseIsPrimitive() ? v.type.base() : "Object");
       return "daikon.Quant.getElement_" + collectType + "(" + formatted + ", " + index + ")";
+//       // XXX temporary fix: sometimes long is passed as index (utilMDE.StopWatch).
+//       // I can't find where the VarInfo for "index" is found. Wherever that is,
+//       // we should check if its type is long, and do the casting only for that
+//       // case.
 //       if (formatted.startsWith("daikon.Quant.collect")) {
 //         return formatted + "[(int)" + index + "]";
 //       } else {
