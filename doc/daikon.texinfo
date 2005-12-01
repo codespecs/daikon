@@ -386,7 +386,7 @@ applications.  Examples include ``.field > abs(y)''; ``y = 2*x+3'';
 ``array a is sorted''; ``for all list objects lst, lst.next.prev =
 lst''; ``for all treenode objects n, n.left.value < n.right.value''; ``p
 != null => p.content in myArray''; and many more.  You can extend Daikon
-to add newproperties (@pxref{Enhancing Daikon output}).
+to add new properties (@pxref{Enhancing Daikon output}).
 
 Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
@@ -2062,7 +2062,7 @@ This is the same as orig(a[i]):   @{22, 23@}[0].
 
 @item orig(a[])[i] = 23
 The value of @code{a[]} in the pre-state (which is an array object, not
-areference), indexed by the post-state value of i:  @{22, 23@}[1]
+a reference), indexed by the post-state value of i:  @{22, 23@}[1]
 
 @item orig(a)[orig(i)] = 24
 @code{orig(a)} is the original value of the reference @code{a}, not
@@ -3094,7 +3094,7 @@ If depth=2, then also @code{MyA.b.y}, @code{MyA.b.y},
 @code{myList.next.next}, and @code{myList.next.val} would be examined.
 @end itemize
 
-Values whose value is undefind are not examined.  For instance, if @code{myA}
+Values whose value is undefined are not examined.  For instance, if @code{myA}
 is @code{null} on a particular execution of a program point, then
 @code{myA.b} is not accessed on that execution regardless of the depth
 parameter.  That variable appears in the @file{.dtrace} file, but its
@@ -3175,7 +3175,7 @@ By convention, @var{pure-methods-file} has the suffix @file{.pure}.  If
 @var{pure-methods-file} is specified as a relative (not absolute) file
 name, it is searched for in the configuration directory specified via
 @option{--configs=@var{directory}}, or in the current directory if no
-configuration dirctory is specified.
+configuration directory is specified.
 
 @item --avoid-static-recursion
 If this switch is on, Chicory will traverse the static fields of a given class
@@ -4923,7 +4923,7 @@ the options list passed directly to the wurzel preprocessor.  See the
 @option{--preprocessor_opts} option (@pxref{Mangel configuration options}).
 
 @cindex INCLUDE environment variable
-@cindex CPATH envirionment variable
+@cindex CPATH environment variable
 On Windows, mangel implicitly adds @samp{-I} options for all of the
 pathnames specified in the environment variable @env{INCLUDE}, which is
 also used by the Microsoft C compiler to specify the location of its
@@ -5346,8 +5346,8 @@ Make sure you set up your .mangelrc to compile with debugging
 information enabled; otherwise Rational Purify does not detect
 uninitialized memory references, which is a critical feature for
 Mangel-Wurzel's data structure traversal.  On Windows, Purify also has
-problems reliably detecting unintialized stack locations which manifest
-themselves in Mangel-Wurzel as unintialized block-scope automatic
+problems reliably detecting uninitialized stack locations which manifest
+themselves in Mangel-Wurzel as uninitialized block-scope automatic
 variables sometimes being reported as having garbage values instead of as
 being ``nonsensical'', which is treated specially by Daikon.
 
@@ -8738,9 +8738,9 @@ this.topOfStack
 @c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo FIFOs AFS csv
 @c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst pragma prog
 @c  LocalWords:  workflow accessor instr instrsourcedir TYPESAPPEND basedir cp
-@c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln nn
-@c  LocalWords:  classhier decldir instrdir uninst csal apdir cpdir Mangel's
-@c  LocalWords:  ComparablePairsDescFileReader runnables dumpdir rm isprint
+@c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln nn gdb
+@c  LocalWords:  classhier decldir instrdir uninst csal apdir cpdir Mangel's va
+@c  LocalWords:  ComparablePairsDescFileReader runnables dumpdir rm isprint cmd
 @c  LocalWords:  DTRACELIMIT DTRACELIMITTERMINATE DDTRACELIMIT applet xargs mv
 @c  LocalWords:  DDTRACELIMITTERMINATE javaPolicy appletviewer MyProgram exe lw
 @c  LocalWords:  datatypes intValue ListNode theElement precompiled Solaris cc
@@ -8781,9 +8781,12 @@ this.topOfStack
 @c  LocalWords:  UnsupportedClassVersionError DtraceDiff VerifyError procedurei
 @c  LocalWords:  replacementi junit declsfiles dtracefile PublicTest BCEL bcel
 @c  LocalWords:  Mangel Wurzel premain ChicoryPremain configs radiusSquared vol
-@c  LocalWords:  dyncomp DynComp metadata comp firstFileFunctioni ppts argc
+@c  LocalWords:  dyncomp DynComp metadata comp firstFileFunctioni ppts argc Dva
 @c  LocalWords:  firstFileFunction secondFileFunctionv secondFileFunction argv
 @c  LocalWords:  FunctionNamesTest globalIntArray anotherGlobalIntArray diffs
-@c  LocalWords:  mangel wurzel Wurzel's libpurify inputfile frontend logfile
+@c  LocalWords:  mangel wurzel Wurzel's libpurify inputfile frontend logfile dM
 @c  LocalWords:  tmpdir regex namespaces fieldname microsoft Christoph Csallner
-@c  LocalWords:  isspace xvzf toplevel bottomlevel
+@c  LocalWords:  isspace xvzf toplevel bottomlevel AUTOEXEC getClass decs func
+@c  LocalWords:  ptrs Misc isStruct winterDays summerDays usertype fooClass pty
+@c  LocalWords:  fooVar CPATH mangelrc Dsetjmp setjmp lstdc libgcc GCC's cpp's
+@c  LocalWords:  ifndef preinclude XTerm cl
