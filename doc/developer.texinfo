@@ -1580,19 +1580,18 @@ instrument-files-revise:
 
 The goal files are the expected results of running daikon and its
 associated tools.  The easiest way to create them is to simply create
-empty versions of each.  The execute @samp{make diffs} to run the test and
+empty versions of each.  They execute @samp{make diffs} to run the test and
 produce results.  When the results are as expected execute 
 @samp{make update-goals} to copy the results in to the goal files.  
 Release the test by committing the goal files, Makefile, and source files
 to the CVS repository.
 
 The common makefile contains a number of other useful targets.  A brief
-explanation of each can be found by executing @samp{make} without a target.
+explanation of each can be found by executing @samp{make} (without a target).
 
 The test can be added into the standard tests (either @samp{everything} or
 @samp{quick} by adding the test the appropriate list in 
 @file{$inv/tests/daikon-tests/Makefile}.
-commands 
 
 
 @node    Historical, Index, Testing, Top
