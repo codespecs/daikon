@@ -500,6 +500,9 @@ Unix users.  If you use another operating system such as Windows, you
 may need to adjust the instructions, for example to change the shell
 quoting conventions.  (Contributions to this manual
 for other operating systems are welcome.)
+If you wish to compile, not just run, Daikon, see @ref{Compiling
+Daikon,,,./developer,Daikon Developer Manual}.
+
 
 @menu
 * Requirements::                
@@ -533,9 +536,7 @@ compiler such as GCC.  Source code and a compiler are not necessary if
 you plan to use one of Daikon's front ends that work on binaries, such
 as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
-If you wish to edit the Daikon source code and re-compile Daikon, will
-need a Java compiler (such as javac) and a C preprocessor (cpp).  If you
-have a C compiler, you almost certainly have cpp.  For more details, see
+If you wish to edit the Daikon source code and re-compile Daikon, see
 @ref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
 
 
@@ -579,7 +580,7 @@ This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 @item
 Set up your environment.  You need to arrange for @file{daikon.jar} to
 be on your Java classpath.  One easy way to do this is to make your
-shell initialization file set the @env{DAIKONPARENT} environment variable (to
+shell initialization file set the @env{DAIKONDIR} environment variable (to
 an absolute pathname) and source the appropriate Daikon environment
 file.  (Alternately, you could set your classpath yourself.)
 @itemize 
@@ -590,8 +591,8 @@ file.  (Alternately, you could set your classpath yourself.)
 If you use the csh or tcsh shell, add the
 following to your @file{.cshrc} file:
 @example
-setenv DAIKONPARENT @var{daikonparent}
-source $DAIKONPARENT/daikon/bin/daikon.cshrc
+setenv DAIKONDIR @var{daikonparent}/daikon
+source $DAIKONDIR/bin/daikon.cshrc
 @end example
 @noindent
 @item
@@ -600,16 +601,16 @@ source $DAIKONPARENT/daikon/bin/daikon.cshrc
 If you use the bash shell, add the following to your
 @file{.bash_profile} file:
 @example
-export DAIKONPARENT=@var{daikonparent}
-source $DAIKONPARENT/daikon/bin/daikon.bashrc
+export DAIKONDIR=@var{daikonparent}/daikon
+source $DAIKONDIR/bin/daikon.bashrc
 @end example
 @item
 If you use Windows, add commands similar to the following to your
 startup file (typically @file{C:\AUTOEXEC.BAT}):
 @example
-set DAIKONPARENT=C:\
+set DAIKONDIR=C:\daikon
 set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
-%DAIKONPARENT%\daikon\bin\daikonenv.bat
+%DAIKONDIR%\bin\daikonenv.bat
 @end example
 @end itemize
 @noindent
