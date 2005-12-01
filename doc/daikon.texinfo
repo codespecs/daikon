@@ -5116,6 +5116,15 @@ unit.
 Specify the recursion depth for examining fields of nested @code{struct},
 @code{union}, and @code{class} types.  The default value is 2.
 
+@item --ignore-system-structs
+If you specify this option, Mangel-Wurzel ignores fields of 
+@code{struct}s defined in system include files (e.g., those included via the 
+@samp{#include <@var{file}.h>} syntax rather than
+@samp{#include "@var{file.h}"}.)  
+These are typically interfaces like @code{FILE}
+whose internal representations are not interesting to ``regular'' 
+programmers or portable across operating systems.
+
 @item --ppt-select-pattern @var{regex}
 Only emit program points that match @var{regex}.  
 Specifically, a program point is considered to match @var{regex} if any of
@@ -5332,12 +5341,27 @@ not GCC.  Therefore Mangel-Wurzel will only work with the Microsoft compiler
 on this platform as well.  Currently, Mangel-Wurzel is not integrated with
 the Visual Studio IDE, and runs as a command-line utility only.
 
+Make sure you set up your .mangelrc to compile with debugging
+information enabled; otherwise Rational Purify does not detect
+uninitialized memory references, which is a critical feature for
+Mangel-Wurzel's data structure traversal.  On Windows, Purify also has
+problems reliably detecting unintialized stack locations which manifest
+themselves in Mangel-Wurzel as unintialized block-scope automatic
+variables sometimes being reported as having garbage values instead of as
+being ``nonsensical'', which is treated specially by Daikon.
+
+On Windows, Purify needs to be invoked when you run your program, not at
+link time, as on Linux.  Mangel creates a @file{.cmd} file that does
+this for you; in this example, run @file{foo.cmd} instead of
+@file{foo.exe}.  You can also run your program from within the Purify GUI
+instead of from the command line, if you prefer to work that way.
+
 You can run Mangel-Wurzel and programs instrumented with Mangel-Wurzel
 from within a Cygwin shell, Makefile, and the like, as well as from the
 default Windows @samp{cmd} shell in a console window.  However, another
 limitation of Rational Purify on Windows is that instrumented
 executables will only run from a console window, not an XTerm or other
-pty.  (This is because Purify, like some other Windows console programs,
+Cygwin pty.  (This is because Purify, like some other Windows console programs,
 does not like having its standard input or output redirected to pipes.)
 
 Since Mangel-Wurzel runs as a regular Windows console application, it
