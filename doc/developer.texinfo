@@ -191,20 +191,29 @@ To compile Daikon, type @samp{make} in @file{daikon/java/} or any of its
 subdirectories.  The distribution includes compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
 
-When you compile Daikon, environment variables @env{DAIKONDIR} (or 
+When you compile Daikon, environment variables @env{DAIKONDIR} (or
 @env{INV}, whose effect is the same) and @env{JDKDIR} should be set.
-This is already done if you followed the installation
-instructions and source the @file{daikon.bashrc} or @file{daikon.cshrc}
-file; see @ref{Installation steps,,,./daikon,Daikon User Manual}.
-
+This is already done if you source the @file{daikon.bashrc} or
+@file{daikon.cshrc} file, as recommended in the installation
+instructions (@pxref{Installation steps,,,./daikon,Daikon User Manual}).
 When you compile Daikon, environment variable @env{DAIKONCLASS_SOURCES}
 should be set (to any value) before your startup file sources file
 @file{daikon.bashrc} or @file{daikon.cshrc}.
+Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
+that would enable you to compile Daikon might look like the following.
+
+@example
+  export INV=$HOME/invariants
+  export JDKDIR=$HOME/jdk1.5.0_04
+  export DAIKONCLASS_SOURCES=1
+  source $INV/scripts/daikon.bashrc
+  export CLASSPATH=.:$CLASSPATH
+@end example
 
 @cindex .jpp files
 @cindex jpp files
 
-Daikon is written in Java 1.5 (also known as Jvaa 5).  In order to
+Daikon is written in Java 1.5 (also known as Java 5).  In order to
 compile Daikon, you need a Java 1.5 compiler such as javac on your path.
 @cindex Jikes compiler
 @cindex javac compiler, overriding
@@ -219,6 +228,7 @@ JAVAC ?= jikes -g +E +F
 In order to compile Daikon, you need the C preprocessor
 @command{cpp}, which is used to convert each @file{.jpp} file in the
 distribution into multiple @file{.java} files, which are then compiled.
+If you have a C compiler, you almost certainly have @command{cpp}.
 If you do not have @command{cpp} (or @command{gcc}, which can emulate
 @command{cpp} via @samp{gcc -E}), you may run @samp{make avoid-jpp}, in
 which case changes to @code{.jpp} files will not be reflected in the
@@ -228,7 +238,7 @@ common code in a single file, then generating other files that need to
 include that common code.)
 
 To make the documentation (via @samp{make -C $inv/doc}), you will need a
-recent verssion of makeinfo.
+recent version of makeinfo.
 @c Info as of November 2005
 Makeinfo version 4.7 is known to work, but makeinfo version 4.1 is known
 to fail.
@@ -373,7 +383,7 @@ the @samp{repr} formatting routine produces low-level, detailed output for
 debugging.  When first writing
 an invariant, you can make @code{repr} and @code{format_using}
 simply call @code{format}, then fix up the
-implementations for the different ouput formats later as needed.
+implementations for the different output formats later as needed.
 See also @ref{New formatting for invariants}.
 @end table
 
@@ -1126,7 +1136,7 @@ Michael D. Ernst, published in FSE 2004; the paper is available from
 
 Suppression optimization allows for elimination of redundancy based on
 how a set of invariants might imply an invariant.  For example, ``a ==
-b'' and ``b >= c'' implies ``a = max (b, c)'' We say that a set of
+b'' and ``b >= c'' implies ``a = max (b, c)''.  We say that a set of
 @emph{suppressors} suppress a @emph{suppressee} invariant.  A
 suppressed invariant is neither instantiated or checked.  It is
 instantiated only when one of its suppressors becomes falsified, in
@@ -1772,4 +1782,7 @@ trunk (respectively, the branch).
 @c  LocalWords:  deffn SampleTester decl subsubsection arg iff testsubject ajax
 @c  LocalWords:  jtb cvs checkin smallexample checkins printindex Dataflow gcc
 @c  LocalWords:  convertcsv Mangel-Wurzel malloc TerminationMessage un Mozilla FSE cd
-@c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo
+@c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo env
+@c  LocalWords:  JDKDIR bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx
+@c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
+@c  LocalWords:  INST Xiaoxia regex
