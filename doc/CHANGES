@@ -104,6 +104,11 @@ Mangel-Wurzel:
     with the Microsoft Visual C/C++ compiler.  (GCC is not supported on 
     this platform).  
 
+    There is a new command-line option, --ignore-system-structs, to ignore
+    fields of structs defined in system include files.  (Typically, ordinary
+    users have no need to examine the internals of structures like FILE that
+    are defined as interfaces to the underlying operating system.)
+
 
 --------------------------------------------
 
