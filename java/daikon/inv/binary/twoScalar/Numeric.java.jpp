@@ -536,7 +536,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Returns an array of arrays of antecedents.  If all of the
-   * antecedents in any array are true, then the invariant is obvious
+   * antecedents in any array are true, then the invariant is obvious.
    */
   public InvDef[][] obvious_checks (VarInfo[] vis) {
     return (new InvDef[][] {});
