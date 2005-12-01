@@ -1,13 +1,7 @@
 This is the distribution of the Daikon invariant detector,
 Daikon version 4.1.7, released November 1, 2005.
 
-For documentation, including installation instructions, see the Daikon
-Invariant Detector User Manual.  It is available in the "doc" subdirectory.
-There, you can find it in a variety of formats:
-  doc/daikon.html
-  doc/daikon_manual_html/daikon.html
-  doc/daikon.pdf
-  doc/daikon.ps
-  doc/daikon.info
+For documentation, including installation instructions, see the "doc"
+subdirectory.  You can start with file
+  doc/index.html
 
-Javadoc for the Daikon implementation appears in directory java/doc/.
