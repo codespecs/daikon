@@ -33,7 +33,7 @@ sub parse_results {
 	if (/^\t\[([\w-]+)\]$/) {
 	    $test = $1;
 	    push @tests, $test if not exists $results{$test};
-	} elsif (/^(OK|FAILED)\s+(\w+\.(\w+)\.diff)$/) {
+	} elsif (/^(OK|FAILED)\s+([\w-]+\.(\w+)\.diff)$/) {
 	    my($result, $fname, $type) = ($1, $2, $3);
 	    if ($result eq "OK") {
 		$results{$test}{$type}{$ident} = "OK";
