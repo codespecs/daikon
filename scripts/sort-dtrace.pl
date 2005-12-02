@@ -44,7 +44,7 @@ while (<>) {
 	my @lines = split(/\n/, $_);
 	my @header;
 	push @header, shift @lines;
-	if ($lines[0] eq "this_invocation_nonce") {
+	if (@lines and $lines[0] eq "this_invocation_nonce") {
 	    push @header, shift @lines;
 	    push @header, shift @lines;
 	}
@@ -56,7 +56,8 @@ while (<>) {
 	@vars = sort @vars;
 	print join("\n", @header, @vars), "\n\n";
     }
+    flush_decls() if eof;
 }
 
-flush_decls();
+
 
