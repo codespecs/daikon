@@ -3,32 +3,40 @@
 ## (This file should be kept in synch with daikon.bashrc and daikonenv.bat.)
 
 ## Wherever you source this file, you should set two environment variables:
-##   DAIKONPARENT   absolute pathname of the directory containing "daikon/"
+##   DAIKONDIR      absolute pathname of the "daikon" directory
 ##   JDKDIR         absolute pathname of the directory containing the JDK
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 ##        files, instead of the default, which is to use daikon.jar.
 ## You should not need to edit this file directly.
 
+if (! $?JDKDIR) then
+  echo "daikon.cshrc: JDKDIR environment variable is not set"
+  return 2
+else if (! -d $JDKDIR); then
+  echo "daikon.cshrc: JDKDIR is set to non-existent directory $JDKDIR"
+  return 2
+fi
 
-if (! $?JDKDIR) setenv JDKDIR /directory/containing/jdk
-if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
 if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
-if (! $?DFECDIR) setenv DFECDIR ${DAIKONDIR}/front-end/c
-# if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/bin
+if (! $?DAIKONDIR) then
+  echo "daikon.cshrc: DAIKONDIR environment variable is not set"
+  return 2
+else if (! -d $DAIKONDIR); then
+  echo "daikon.cshrc: DAIKONDIR is set to non-existent directory $JDKDIR"
+  return 2
+fi
+
 if (! $?DAIKONBIN) then
   if ( -d ${DAIKONDIR}/bin ) then
     setenv DAIKONBIN ${DAIKONDIR}/bin
   else if ( -d ${DAIKONDIR}/scripts ) then
     setenv DAIKONBIN ${DAIKONDIR}/scripts
   else
-    echo "Cannot set DAIKONBIN"
+    echo "daikon.cshrc: Cannot set DAIKONBIN"
+    return 2
   endif
 endif
-
-setenv DAIKONBIN ${DAIKONDIR}/bin
-
-if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/bin
 
 # setenv DAIKONCLASS_SOURCES 1
 
@@ -67,7 +75,7 @@ if ($?debuglogin) echo "daikon.cshrc about to set classpath"
 if ($?debuglogin) echo "daikon.cshrc about to set path"
 
 ## Add the Daikon binaries to your path
-set path = (${DAIKONBIN} $DFECDIR $JDKDIR/bin $path)
+set path = (${DAIKONBIN} $JDKDIR/bin $path)
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if ($?PERLLIB) then
@@ -75,6 +83,3 @@ if ($?PERLLIB) then
 else
   setenv PERLLIB ${DAIKONBIN}
 endif
-
-## Indicates where Lackwit can find its libraries (and binaries).
-setenv LACKWIT_HOME $DFECDIR/lackwit

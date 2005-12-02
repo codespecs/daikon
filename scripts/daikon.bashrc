@@ -3,26 +3,38 @@
 ## (This file should be kept in synch with daikon.cshrc and daikonenv.bat.)
 
 ## Wherever you source this file, you should set two environment variables:
-##   DAIKONPARENT   absolute pathname of the directory containing "daikon/"
+##   DAIKONDIR      absolute pathname of the "daikon" directory
 ##   JDKDIR         absolute pathname of the directory containing the JDK
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 ##        files, instead of the default, which is to use daikon.jar.
 ## You should not need to edit this file directly.
 
+if [ -z "$JDKDIR" ]; then
+  echo "daikon.bashrc: JDKDIR environment variable is not set"
+  return 2
+elif [ ! -d "$JDKDIR" ]; then
+  echo "daikon.bashrc: JDKDIR is set to non-existent directory $JDKDIR"
+  return 2
+fi
 
-export JDKDIR=${JDKDIR:-/directory/containing/jdk}
-export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
-export DFECDIR=${DFECDIR:-${DAIKONDIR}/front-end/c}
-# export DAIKONBIN=${DAIKONBIN:-${DAIKONDIR}/bin}
+if [ -z "$DAIKONDIR" ]; then
+  echo "daikon.bashrc: DAIKONDIR environment variable is not set"
+  return 2
+elif [ ! -d "$DAIKONDIR" ]; then
+  echo "daikon.bashrc: DAIKONDIR is set to non-existent directory $JDKDIR"
+  return 2
+fi
+
 if [ -z "$DAIKONBIN" ]; then
   if [ -d ${DAIKONDIR}/bin ]; then
     export DAIKONBIN=${DAIKONDIR}/bin
   elif [ -d ${DAIKONDIR}/scripts ]; then
     export DAIKONBIN=${DAIKONDIR}/scripts
   else
-    echo "Cannot set DAIKONBIN"
+    echo "daikon.bashrc: Cannot set DAIKONBIN"
+    return 2
   fi
 fi
 
@@ -49,7 +61,7 @@ else
 fi
 
 ## Add the Daikon binaries to your path
-export PATH=${DAIKONBIN}:${DFECDIR}:${JDKDIR}/bin:${PATH}
+export PATH=${DAIKONBIN}:${JDKDIR}/bin:${PATH}
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERLLIB ]; then
@@ -57,6 +69,3 @@ if [ $PERLLIB ]; then
 else
   export PERLLIB=${DAIKONBIN}
 fi
-
-## Indicates where Lackwit can find its libraries (and binaries).
-export LACKWIT_HOME=$DFECDIR/lackwit
