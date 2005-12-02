@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<h1>Using Daikon at MIT CSAIL</h1>
+<h1>Using Daikon at MIT CSAIL</h1> <!-- omit from toc -->
 
 <p>
 This document tells you how to get started using Daikon on the PAG machines
@@ -62,6 +62,10 @@ Contents:
         <ul>
           <li><a href="#regression-tests">Testing Daikon</a>
           <li><a href="#distribution">Making a distribution</a>
+          <li><a href="#Mangel-Wurzel">Building and testing Mangel-Wurzel</a>
+          <li><a href="#purify-linux">Setting up Purify on Linux</a>
+          <li><a href="#purify-windows">Setting up Purify on Windows</a>
+          <li><a href="#EDG-front-end">EDG C++ front end</a>
         </ul>
     </ul>
 <!-- end toc -->
@@ -689,15 +693,17 @@ target.
 </ol> </p>
 
 
-
-<h3><a name="Mangel/Wurzel">Building and testing Mangel/Wurzel</a></h3>
+<h3><a name="Mangel-Wurzel">Building and testing Mangel-Wurzel</a></h3>
 
 <ol>
-    <Li> Checkout mangel-wurzel from CVS
+    <li> Checkout mangel-wurzel from CVS.
     <pre>
     cd $inv
     cvs -d $pag/projects/invariants/.CVS co mangel-wurzel
     </pre>
+
+    (Before doing this step, you should have signed an <a
+    href="#EDG-front-end">EDG non-disclosure agreement</a>.)<p>
 
     <li> Setup yourself to use purify and switch over the license (if
     necessary) to you as described below. <p>
@@ -828,6 +834,33 @@ To move the license to another machine: <ol>
     <li> Then follow the instructions above for a scratch installation on the
     new machine. <p>
 </ol>
+
+<h3><a name="EDG-front-end">EDG C++ front end</a></h3>
+
+<p>
+The <a href="http://www.edg.com/cpp.html">EDG C++ Front End</a> is a parser
+for C and C++.  It is the basis of the Mangel-Wurzel front end for Daikon.
+</p>
+
+<p>
+Reading the code of the EDG C++ Front End (and therefore any work on
+Mangel-Wurzel) requires signing a <a
+href="edg-nda-noncomm.pdf">non-disclosure agreement</a>.
+You just have to fill out pages 4 and 5; 
+"Developer" is MIT, and "Programmer" is you.
+<!-- This detail is no longer relevant with the form as of October 2005. -->
+<!-- The "date of the original agreement" is August 16, 2000. -->
+You should <a href="http://www.edg.com/contact.html">fax</a> the signed
+document back to EDG, give a copy to Michael Ernst, and retain a copy for
+your own records.
+</p>
+
+<p>
+We distribute Mangel-Wurzel in binary form, so users don't have to worry
+about this issue at all (though they also don't get the source code to
+Mangel-Wurzel unless they, too, have an EDG license.
+</p>
+
 
 <hr>
 <a href="../">Daikon invariant detector</a></p>
