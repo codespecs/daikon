@@ -30,6 +30,17 @@ Daikon:
 
   User-visible changes
 
+    The installation instructions have been modified to reflect the fact
+    that the environment variable DAIKONDIR, rather than its parent
+    DAIKONPARENT, is the preferred setting for the user to configure.
+
+    The shell configuration files (daikon.bashrc, daikon.cshrc,
+    daikonenv.bat) do better checking of whether the user has set the
+    required configuration variables.
+
+    Errors in the Windows configuration file (daikonenv.bat) have been
+    corrected.
+
     The default ("Daikon") output format has been made more Java-like. for
     instance,
       this.theArray.class == "java.lang.Object[]"
