@@ -129,12 +129,16 @@ Complete installation instructions
 
 * Requirements::                
 * Installation steps::          
-* Windows installation notes::  
-* Cygwin installation notes::   
+* Windows command shells::      
 
 Requirements for running Daikon
 
 * Optional requirements::       
+
+Windows command shells
+
+* Windows command line::        
+* Cygwin shell::                
 
 Example usage for Java, C/C++, and Perl
 
@@ -507,8 +511,7 @@ Daikon,,,./developer,Daikon Developer Manual}.
 @menu
 * Requirements::                
 * Installation steps::          
-* Windows installation notes::  
-* Cygwin installation notes::   
+* Windows command shells::      
 @end menu
 
 
@@ -540,7 +543,7 @@ If you wish to edit the Daikon source code and re-compile Daikon, see
 @ref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
 
 
-@node  Installation steps, Windows installation notes, Requirements, Complete installation
+@node  Installation steps, Windows command shells, Requirements, Complete installation
 @subsection Installation steps
 
 @enumerate
@@ -631,11 +634,14 @@ end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 @end enumerate
 
 
-@node    Windows installation notes, Cygwin installation notes, Installation steps, Complete installation
-@subsection Windows installation notes
-
+@node    Windows command shells,  , Installation steps, Complete installation
+@subsection Windows command shells
 @cindex Windows
 @cindex Microsoft Windows
+
+To install Daikon under Windows, see the main installation instructions
+(@pxref{Installing Daikon}).  This section discusses options for running
+Daikon under Windows.
 
 If you are running Daikon under Microsoft Windows, you have two
 options:  using native Windows utilities, or using the Cygwin
@@ -646,6 +652,14 @@ Windows as command-line applications.  You should invoke them from a
 command shell --- either an Windows command shell or a Cygwin command
 shell --- rather than by double-clicking their icons.  In any event,
 double-clicking would not supply the proper arguments to the program.
+
+@menu
+* Windows command line::        
+* Cygwin shell::                
+@end menu
+
+@node    Windows command line, Cygwin shell, Windows command shells, Windows command shells
+@subsubsection Windows command line
 
 The first option is to run Daikon using native Windows utilities.
 Before running Daikon, you must invoke the @file{daikonenv.bat} batch
@@ -668,8 +682,8 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\PathCompletionChar
 The values for these registry entries are ASCII key codes.  Tab is 9.
 
 
-@node    Cygwin installation notes,  , Windows installation notes, Complete installation
-@subsection Cygwin installation notes
+@node    Cygwin shell,  , Windows command line, Windows command shells
+@subsubsection Cygwin shell
 
 @cindex Cygwin toolset
 
