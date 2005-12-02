@@ -487,6 +487,11 @@ tags:
 	@echo etags '*.java ...'
 	@etags -l java ${TAG_FILES}
 
+utilMDE.jar: $(AUTO_GENERATED_FILES)
+	javac -g utilMDE/*.java
+	jar cf utilMDE.jar utilMDE/*.class
+.PHONY: utilMDE.jar
+
 ###
 ### Static checks of the code
 ###
