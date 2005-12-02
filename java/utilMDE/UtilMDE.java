@@ -1447,10 +1447,22 @@ public final class UtilMDE {
         sb.append(orig.substring(post_esc, this_esc+1));
         post_esc = this_esc+2;
         break;
+
       case '0': case '1': case '2': case '3': case '4':
       case '5': case '6': case '7': case '8': case '9':
-        // Here we should convert octal escapes into characters.
-        // For now, fall through.
+        sb.append(orig.substring(post_esc, this_esc));
+        char octal_char = 0;
+        int ii = this_esc+1;
+        while (ii < orig.length()) {
+          char ch = orig.charAt(ii++);
+          if ((ch < '0') || (ch > '8'))
+            break;
+          octal_char = (char) ((octal_char * 8)+ Character.digit (ch, 8));
+        }
+        sb.append (octal_char);
+        post_esc = ii-1;
+        break;
+
       default:
         // In the default case, retain the character following the backslash,
         // but discard the backslash itself.  "\*" is just a one-character string.
