@@ -120,7 +120,8 @@ public class PptRelation implements Serializable {
 
   /**
    * Relates all of the variables with the same name in parent and child.
-   * Returns true if each parent variable was related to a child variable
+   * Returns true if each non-static parent variable was related to a
+   * child variable
    */
   public boolean relate_same_name() {
 
@@ -128,8 +129,10 @@ public class PptRelation implements Serializable {
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
       boolean relate_var = relate(vp, vp.name);
-      if (!relate_var)
+      if (!relate_var && !vp.isStaticConstant()) {
+        // System.out.printf ("no relation for %s%n", vp);
         relate_all = false;
+      }
     }
 
     return (relate_all);
@@ -428,7 +431,7 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation(parent, child, ENTER_EXIT);
 
-    // Look for orgig versions of each non-derived parent variable in the child
+    // Look for orig versions of each non-derived parent variable in the child
     // Note that static constants don't have orig versions (since they are
     // known to be the same), so we connect to the post version instead.
     for (int i = 0; i < parent.var_infos.length; i++) {
@@ -437,7 +440,8 @@ public class PptRelation implements Serializable {
         continue;
       if (vp.isStaticConstant()) {
         boolean found = rel.relate(vp, vp.name);
-        Assert.assertTrue(found);
+        // Static constants are not always placed at each level in hierarchy
+        // Assert.assertTrue(found);
       } else {
         VarInfoName orig_name = vp.name.applyPrestate().intern();
         boolean found = rel.relate(vp, orig_name);
