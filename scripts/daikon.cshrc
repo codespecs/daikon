@@ -13,19 +13,19 @@
 if (! $?JDKDIR) then
   echo "daikon.cshrc: JDKDIR environment variable is not set"
   return 2
-else if (! -d $JDKDIR); then
+else if (! -d $JDKDIR) then
   echo "daikon.cshrc: JDKDIR is set to non-existent directory $JDKDIR"
   return 2
-fi
+endif
 
 if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
 if (! $?DAIKONDIR) then
   echo "daikon.cshrc: DAIKONDIR environment variable is not set"
   return 2
-else if (! -d $DAIKONDIR); then
+else if (! -d $DAIKONDIR) then
   echo "daikon.cshrc: DAIKONDIR is set to non-existent directory $JDKDIR"
   return 2
-fi
+endif
 
 if (! $?DAIKONBIN) then
   if ( -d ${DAIKONDIR}/bin ) then
