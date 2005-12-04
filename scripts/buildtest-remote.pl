@@ -121,6 +121,7 @@ sub run {
 
     chdir($builds_dir);
 
+    $ENV{"JDKDIR"} = "none";
     open(RUN, "-|", $perl, $buildtest_pl, "--message=$message", "--quiet",
 	 "--rsync_location=$host_machine.$domain:$rsync_loc",
 	 "--test_kvasir", "--skip_daikon_build")
