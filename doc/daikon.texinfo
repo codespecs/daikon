@@ -7871,7 +7871,7 @@ regular Daikon license or, at your option, either the GNU General
 Public License or the Perl Artistic License (that is, under the same
 terms as Perl itself).
 
-The Daikon dynamic C/C++ front end Kvasir is based in part on the Valgrind
+The Daikon C/C++ front end Kvasir is based in part on the Valgrind
 dynamic program supervision framework, copyright 2000-2004 Julian
 Seward, the Sparrow Valgrind tool, copyright 2002 Nicholas Nethercote,
 the MemCheck Valgrind tool, copyright 2000-2004 Julian Seward, and the
