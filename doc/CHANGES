@@ -20,19 +20,24 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.1.8 (December 1, 2005)
+4.2.0 (December 5, 2005)
 
-Many small improvements to Daikon's output have been made (but most users
-will only notice small changes to the output).
+Daikon's support for C and C++ has been substantially improved.  The
+Mangel-Wurzel C/C++ front end now runs on Windows, and it supports new
+option --ignore-system-structs.  The Kvasir C/C++ front end has
+greatly improved support for C++, it supports a new pointer type
+coercion feature, and it makes use of the new Fjalar dynamic
+instrumentation framework.
+
+The Purity Analysis Kit can determine which methods of your program
+are pure observer methods, and so can be treated as derived variables.
+Many small improvements to Daikon's output have been made (but most
+users will only notice small changes to the output).
 
 
-Daikon:
+Daikon
 
   User-visible changes
-
-    The installation instructions have been modified to reflect the fact
-    that the environment variable DAIKONDIR, rather than its parent
-    DAIKONPARENT, is the preferred setting for the user to configure.
 
     The shell configuration files (daikon.bashrc, daikon.cshrc,
     daikonenv.bat) do better checking of whether the user has set the
@@ -41,85 +46,100 @@ Daikon:
     Errors in the Windows configuration file (daikonenv.bat) have been
     corrected.
 
-    The default ("Daikon") output format has been made more Java-like. for
-    instance,
+    The default ("Daikon") output format has been made more Java-like.
+    As one example,
       this.theArray.class == "java.lang.Object[]"
     now prints as
       this.theArray.getClass() == java.lang.Object[].class
 
-    Daikon's comparability tests, which determine what variables may be
-    compared to one another (and so may co-occur in an invariant) have been
-    improved.
+    Daikon's comparability tests, which determine what variables may
+    be compared to one another (and so may co-occur in an invariant)
+    have been improved.
 
-    Daikon outputs fewer logically redundant invariants.  (For instance,
-    the tests that suppress, from the output, method invariants when a
-    stronger invariant occurs as an object invariant, have been improved.)
+    Daikon outputs fewer logically redundant invariants.  (For
+    instance, the tests that suppress, from the output, method
+    invariants when a stronger invariant occurs as an object
+    invariant, have been improved.)
 
   Implementation detail
-    
-    Guarding (controlled by the Daikon.guardNulls config option) has been
-    completely re-implemented.
 
-    The Daikon regression tests (not included in the distribution due to
-    size, but available on request) have been made easier to use.  In
-    particular, they now require only two environment variables to be set,
-    and set all other environment variables appropriately.
+    Guarding (controlled by the Daikon.guardNulls config option) has
+    been completely re-implemented.
 
-Annotate:
+    The Daikon regression tests (not included in the distribution due
+    to size, but available on request) have been made easier to use.
+    In particular, they now require only two environment variables to
+    be set, and set all other environment variables appropriately.
+
+  Documentation changes
+
+    The installation instructions have been modified to reflect the
+    fact that the environment variable DAIKONDIR, rather than its
+    parent DAIKONPARENT, is the preferred setting for the user to
+    configure.
+
+Annotate
 
   Bug fixes
 
-    Annotate no longer prints warning messages about being unable to locate
-    a Daikon variable that corresponds to a class field.
+    Annotate can now locate all Daikon variables that correspond to
+    class fields.  This improves the output and eliminates a warning
+    message.
 
 Kvasir
 
   User-visible changes
 
-     Made many enhancements to greatly improve C++ support.  New
-     features include support for inheritance (printing out
-     superclass member variables), reference parameter variables,
-     member function declarations both within and outside of class
-     bodies, and more consistent naming of C++ function and variable
-     names so that OBJECT program points now work properly.
+     C++ support is greatly improved.  New features include support
+     for inheritance (printing out superclass member variables),
+     reference parameter variables, member function declarations both
+     within and outside of class bodies, and more consistent naming of
+     C++ function and variable names (enabling proper handling of
+     OBJECT program points by Daikon).
 
      Simplified the format of the program point list (ppt-list) files.
 
-     Added a pointer type coercion feature where a user can manually
-     specify in a .disambig file whether to explicitly cast a pointer
-     to a particular type (useful for dereferencing void* pointers).
-     
-     
+     Added a pointer type coercion feature.  A user can specify in a
+     .disambig file the actual type of a pointer with some other
+     declared type.  This is useful for obtaining fields of pointers
+     that are declared as void*.
+
   Implementation changes
 
      Re-factored all of the Kvasir and DynComp code to use the Fjalar
-     C/C++ dynamic analysis framework that we have recently finished
-     constructing.  The new directory structure reflects the
-     separation between the Fjalar framework and the Kvasir and
-     Dyncomp tools that are built upon the framework.
+     framework.  Fjalar is a C/C++ dynamic analysis framework.  The
+     new directory structure reflects the separation between the
+     Fjalar framework and the Kvasir and Dyncomp tools that are built
+     upon the framework.
 
   Documentation changes
 
-     Updated the Daikon User Manual to describe C++ support in more
-     detail and to document new features.
+     The Daikon User Manual describes C++ support in more detail.
 
-
-Mangel-Wurzel:
+Mangel-Wurzel
 
   Enhancements
-    
-    Some minor changes have been made to the way Mangel-Wurzel looks for
-    include files and libraries.
 
     Mangel-Wurzel now runs on Microsoft Windows as a command-line utility
-    with the Microsoft Visual C/C++ compiler.  (GCC is not supported on 
-    this platform).  
+    with the Microsoft Visual C/C++ compiler.  (Mangel-Wurzel does not
+    support GCC on this platform.)
+
+    Some minor changes have been made to the way Mangel-Wurzel looks for
+    include files and libraries.
 
     There is a new command-line option, --ignore-system-structs, to ignore
     fields of structs defined in system include files.  (Typically, ordinary
     users have no need to examine the internals of structures like FILE that
     are defined as interfaces to the underlying operating system.)
 
+Purity Analysis Kit
+
+  The Purity Analysis Kit computes which methods of a Java program are pure
+  (have no externally visible side effects).  The Purity Analysis Kit now
+  includes a command-line option, --daikon-purity-file, that causes it to
+  write a file that is appropriate for passing to Chicory via its
+  --purity-file option.  The Purity Analysis Kit was written by Alexandru
+  Salcianu and is availble from http://www.mit.edu/~salcianu/purity/.
 
 --------------------------------------------
 
@@ -141,11 +161,11 @@ Daikon
     See the documentation for details.
 
     Added daikon.inv.unary.sequence.SingleSequence.SeqIndexDisableAll
-    configuration option to disable all of the SeqIndex invariants 
+    configuration option to disable all of the SeqIndex invariants
     (SeqIndexIntEqual, SeqIndexFloatLessThan, etc).
 
     Added DerivedVariableFilter that will filter out invariants that
-    use a specific class of derived variable.  See the configuration 
+    use a specific class of derived variable.  See the configuration
     option daikon.inv.filter.DerivedVariableFilter.class_re for more
     information.
 
@@ -176,21 +196,21 @@ Kvasir
   Enhancements
 
      Implemented a more robust data structure traversal mechanism
-     that can better handle dereferencing pointer fields inside of 
+     that can better handle dereferencing pointer fields inside of
      arrays and arrays of structures.
 
   Documentation changes
 
      Re-organized and updated the Kvasir section in the Daikon User
      Manual.  Updated examples, added categories for command-line
-     options, and added a section describing the DynComp dynamic 
+     options, and added a section describing the DynComp dynamic
      comparability analysis tool that comes with Kvasir.
 
 Mangel-Wurzel
 
    Bug fixes
 
-     Fixed a bug that was causing wurzel to crash when processing switch 
+     Fixed a bug that was causing wurzel to crash when processing switch
      statements followed by an implicit return.
 
    Enhancements
@@ -208,7 +228,7 @@ Mangel-Wurzel
 
      Arrays of structs are now treated as arrays of each scalar struct field
      (instead of being ignored), as in the other Daikon front ends.
-    
+
 
 --------------------------------------------
 
@@ -235,7 +255,7 @@ Kvasir
 
     Added support for giving names to unnamed struct/union/enum types
     and fixed bugs that prevented Kvasir from traversing into
-    certain structs within large programs with many files which include 
+    certain structs within large programs with many files which include
     the definitions of those structs.
 
     Improved the garbage collector for DynComp comparability analysis
@@ -260,7 +280,7 @@ Chicory
 
   Added command line options --trace-percent (only output the specified
   percentage of program points) and and --watch-static-recursion (only
-  output a particular static once).  
+  output a particular static once).
 
 Removed components
 
@@ -346,7 +366,7 @@ Daikon
     output into source code as comments.  This eliminates errors reported
     by the JML syntax checker (available at http://www.jmlspecs.org/).
 
-Chicory 
+Chicory
 
   User changes:
 
@@ -364,7 +384,7 @@ Chicory
     Added --std-vis switch.  When on, Chicory will only traverse fields which
     are visible from a given program point.  For instance, a program point from
     class A will not include private fields from class B.
-    
+
     Added --heap_size switch to specify the maximum heap size of the target
     program.
 
@@ -400,7 +420,7 @@ Kvasir
 
   Documentation Changes
 
-    Added "Tracing only part of a program" and "Using pointer type 
+    Added "Tracing only part of a program" and "Using pointer type
     disambiguation with partial program tracing" entries to the Kvasir
     section of the Daikon User Manual.
 
@@ -476,7 +496,7 @@ Kvasir
 Chicory
 
   User changes:
-   
+
     Added --daikon-online option.  Behavior is similar to that of the
     --daikon option, but instead of writing and reading back a dtrace
     file, Chicory and Daikon communicate directly via a socket.  This
@@ -541,9 +561,9 @@ Chicory
 
 Dfec
 
-  User changes:  
+  User changes:
 
-    Because of their size, the C examples for dfec are no longer included 
+    Because of their size, the C examples for dfec are no longer included
     in the distribution.  Examples for Kvasir (the recommended C front end)
     are still available.
 
@@ -578,9 +598,9 @@ Kvasir
 
   User changes
 
-    In order to reduce the amount of extraneous output, added heuristics 
-    to avoid dereferencing pointers to certain types of variables 
-    (such as FILE*) associated with the C library and operating 
+    In order to reduce the amount of extraneous output, added heuristics
+    to avoid dereferencing pointers to certain types of variables
+    (such as FILE*) associated with the C library and operating
     system which are unlikely to be interesting for the user.
 
     Added C++ support:
@@ -608,7 +628,7 @@ Kvasir
         not yet been tested.
 
   Bug fixes
-    
+
     Fixed a variety of segmentation faults in Kvasir.  Kvasir now runs on
     programs of significant size (for example, gcc 3.4.3, which is over
     300,000 lines of code).
