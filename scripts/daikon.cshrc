@@ -5,6 +5,7 @@
 ## Wherever you source this file, you should set two environment variables:
 ##   DAIKONDIR      absolute pathname of the "daikon" directory
 ##   JDKDIR         absolute pathname of the directory containing the JDK
+##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 ##        files, instead of the default, which is to use daikon.jar.
@@ -12,19 +13,19 @@
 
 if (! $?JDKDIR) then
   echo "daikon.cshrc: JDKDIR environment variable is not set"
-  return 2
-else if (! -d $JDKDIR) then
+  exit 2
+else if (! -d $JDKDIR && $JDKDIR != "none") then
   echo "daikon.cshrc: JDKDIR is set to non-existent directory $JDKDIR"
-  return 2
+  exit 2
 endif
 
 if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
 if (! $?DAIKONDIR) then
   echo "daikon.cshrc: DAIKONDIR environment variable is not set"
-  return 2
+  exit 2
 else if (! -d $DAIKONDIR) then
   echo "daikon.cshrc: DAIKONDIR is set to non-existent directory $JDKDIR"
-  return 2
+  exit 2
 endif
 
 if (! $?DAIKONBIN) then
@@ -34,7 +35,7 @@ if (! $?DAIKONBIN) then
     setenv DAIKONBIN ${DAIKONDIR}/scripts
   else
     echo "daikon.cshrc: Cannot set DAIKONBIN"
-    return 2
+    exit 2
   endif
 endif
 
@@ -60,22 +61,27 @@ if ($?OSTYPE) then
     setenv darwinos 1
   endif
 endif
-if (! $darwinos) then
-  if ($?debuglogin) echo "daikon.cshrc about to set classpath (#1)"
-  if ($?debuglogin) echo "CLASSPATH: $CLASSPATH"
-  setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
-else
-  ## For Macintosh MacOSX users.  (This list
-  ## is the system property "sun.boot.class.path".)
-  setenv CLASSPATH ${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+
+if ($JDKDIR != "none") then
+  if (! $darwinos) then
+    if ($?debuglogin) echo "daikon.cshrc about to set classpath (non-Darwin)"
+    if ($?debuglogin) echo "CLASSPATH: $CLASSPATH"
+    setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
+  else
+    if ($?debuglogin) echo "daikon.cshrc about to set classpath (Darwin)"
+    ## For Macintosh MacOSX users.  (This list
+    ## is the system property "sun.boot.class.path".)
+    setenv CLASSPATH ${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+  endif
+
+  ## Add the requested JDK's binaries to the front of the path
+  set path = ($JDKDIR/bin $path)
 endif
 
-if ($?debuglogin) echo "daikon.cshrc about to set classpath"
-
-if ($?debuglogin) echo "daikon.cshrc about to set path"
+if ($?debuglogin) echo "daikon.cshrc about to add scripts to path"
 
 ## Add the Daikon binaries to your path
-set path = (${DAIKONBIN} $JDKDIR/bin $path)
+set path = (${DAIKONBIN} $path)
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if ($?PERLLIB) then

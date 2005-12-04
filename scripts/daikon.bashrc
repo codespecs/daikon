@@ -5,6 +5,7 @@
 ## Wherever you source this file, you should set two environment variables:
 ##   DAIKONDIR      absolute pathname of the "daikon" directory
 ##   JDKDIR         absolute pathname of the directory containing the JDK
+##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 ##        files, instead of the default, which is to use daikon.jar.
@@ -13,7 +14,7 @@
 if [ -z "$JDKDIR" ]; then
   echo "daikon.bashrc: JDKDIR environment variable is not set"
   return 2
-elif [ ! -d "$JDKDIR" ]; then
+elif [ ! -d "$JDKDIR" -a "$JDKDIR" != "none" ]; then
   echo "daikon.bashrc: JDKDIR is set to non-existent directory $JDKDIR"
   return 2
 fi
@@ -51,17 +52,22 @@ else
   export CLASSPATH=${CPADD}
 fi
 
-## tools.jar must be on your classpath.
-if [ "$OSTYPE" != "darwin" ]; then
-  export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
-else
-  ## For Macintosh MacOSX users.  (This list
-  ## is the system property "sun.boot.class.path".)
-  export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+if [ "$JDKPATH" != "none" ]; then
+  ## tools.jar must be on your classpath.
+  if [ "$OSTYPE" != "darwin" ]; then
+    export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
+  else
+    ## For Macintosh MacOSX users.  (This list
+    ## is the system property "sun.boot.class.path".)
+    export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+  fi
+
+  ## Make sure the specified JDK is first on your path
+  export PATH=$JDKDIR/bin:$PATH
 fi
 
 ## Add the Daikon binaries to your path
-export PATH=${DAIKONBIN}:${JDKDIR}/bin:${PATH}
+export PATH=${DAIKONBIN}:${PATH}
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERLLIB ]; then
