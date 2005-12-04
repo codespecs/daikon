@@ -608,8 +608,11 @@ export DAIKONDIR=@var{daikonparent}/daikon
 source $DAIKONDIR/bin/daikon.bashrc
 @end example
 @item
-If you use Windows, add commands similar to the following to your
-startup file (typically @file{C:\AUTOEXEC.BAT}):
+If you use Windows, you need to execute the following commands (in each
+shell that you start) before running Daikon.
+@c This does not work for me.
+@c add commands similar to the following to your
+@c startup file (typically @file{C:\WINDOWS\system32\AUTOEXEC.NT}):
 @example
 set DAIKONDIR=C:\daikon
 set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
@@ -617,6 +620,16 @@ set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
 @end example
 @end itemize
 @noindent
+
+One way is to put these commands in a batch file and manually execute
+that batch file from the command line.  (Another way is to set the
+environment variables in the registry (right-click My Computer, and then
+click Properties; click the Advanced tab; click Environment variables),
+meaning you only have to run the @file{daikonenv.bat} file, but this
+gives relatively few benefits.  (Query to users:  is there a good way to
+make the batch file get run automatically?  If so, we'll put the answer
+here.))
+
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
@@ -3190,6 +3203,11 @@ By convention, @var{pure-methods-file} has the suffix @file{.pure}.  If
 name, it is searched for in the configuration directory specified via
 @option{--configs=@var{directory}}, or in the current directory if no
 configuration directory is specified.
+
+One way to create a @file{.pure} file is to run the Purity Analysis Kit,
+available at @uref{http://www.mit.edu/~salcianu/purity/}.  If you supply
+the @option{--daikon-purity-file} when running the Purity Analysis Kit,
+it writes a file that can be supplied to Daikon.
 
 @item --avoid-static-recursion
 If this switch is on, Chicory will traverse the static fields of a given class
