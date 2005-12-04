@@ -24,7 +24,7 @@ if [ -z "$DAIKONDIR" ]; then
   echo "daikon.bashrc: DAIKONDIR environment variable is not set"
   return 2
 elif [ ! -d "$DAIKONDIR" ]; then
-  echo "daikon.bashrc: DAIKONDIR is set to non-existent directory $JDKDIR"
+  echo "daikon.bashrc: DAIKONDIR is set to non-existent directory $DAIKONDIR"
   return 2
 fi
 

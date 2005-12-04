@@ -24,7 +24,7 @@ if (! $?DAIKONDIR) then
   echo "daikon.cshrc: DAIKONDIR environment variable is not set"
   exit 2
 else if (! -d $DAIKONDIR) then
-  echo "daikon.cshrc: DAIKONDIR is set to non-existent directory $JDKDIR"
+  echo "daikon.cshrc: DAIKONDIR is set to non-existent directory $DAIKONDIR"
   exit 2
 endif
 
