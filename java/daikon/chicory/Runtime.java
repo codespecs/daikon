@@ -225,9 +225,9 @@ public class Runtime
      * Called by classes when they have finished initialization
      * (i.e., their static initializer has completed).
      *
-     * This functionality must be enabled by the flag Chicory.checkStaticInit.
-     * When enabled, this method should only be called by the hooks created in the
-     * RetTransform class.
+     * This functionality must be enabled by the flag
+     * Chicory.checkStaticInit.  When enabled, this method should only
+     * be called by the hooks created in the Instrument class.
      *
      * @param className Fully qualified class name
      */
@@ -490,12 +490,24 @@ public class Runtime
                     {
                         dtrace.println();
                         // This lets us know we didn't lose any data.
+                        for (Pattern p : daikon_omit_regex)
+                            dtrace.println ("# ppt-omit-pattern: " + p);
+                        for (Pattern p : daikon_include_regex)
+                            dtrace.println ("# ppt-select-pattern: " + p);
                         dtrace.println("# EOF (added by Runtime.addShutdownHook)");
                         dtrace.close();
                     }
 
 
                 }
+                if (all_classes.size() == 0)
+                    System.out.println ("Chicory warning: No methods were "
+                       + "instrumented, check the -ppt-select-pattern and "
+                       + "-ppt-omit-pattern options");
+                if (printedRecords == 0)
+                    System.out.println ("Chicory Warning: "
+                                        + "no records were printed");
+
 
             }
         });
