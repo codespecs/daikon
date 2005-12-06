@@ -117,10 +117,6 @@ Daikon internals
 * Dataflow hierarchy::          
 * Equality optimization::       
 
-Avoiding work for redundant invariants
-
-* Suppression optimization::    
-
 Testing
 
 * Unit testing::                
@@ -1075,7 +1071,7 @@ be enabled or disabled at the Daikon command line, as described in
 Daikon reduces runtime and memory by avoiding performing work for
 redundant invariants that provide no useful information to the user.
 There are three basic types of optimization that can be performed for
-uninteresting invariants:  non-instantiation, non-checking, and
+uninteresting invariants:  non-instantiation, suppression, and
 non-printing.
 
 @emph{Non-instantiation} prevents the creation of an invariant because
@@ -1086,65 +1082,39 @@ time.  Two examples are ``A[i] is an element of A[]'' and ``size(A[])
 @code{isObviousStatically} method.
 With the equality sets optimization (@pxref{Equality optimization}),
 non-instantiation can only happen if all equality permutations are
-statically obvious.
+statically obvious.  Note that @code{isObviousStatically} should 
+be used only for invariants that are known to be true.  Other code
+presumes that any statically obvious invariants are true and can
+be safely presumed when determining if other invariants are redundant.
 
-@emph{Non-checking}, also known as ``suppression'', creates invariants
-but does not check them; an invariant can be suppressed (not checked)
-if some other set of true invariants implies it.  For example, ``a[]
-contains no duplicates'' implies ``a[i..j] contains no duplicates''.
+An invariant can be @emph{suppressed} if it is logically implied by some
+set of other invariants (referred to as ``suppressors'').  A suppressed
+invariant is not instantiated or checked as long as its suppressors
+hold.  For example ``x > y'' implies ``x >= y''.  Suppression has some
+limitations.  It cannot be used on sample dependent invariants
+(invariants that adapt themselves to the samples they see and whose
+equation thus involves a constant such as ``x > 42'').  Suppression also
+cannot use relationships between variables.  For example, it cannot
+suppress ``x[i] = y[j]'' by ``(x[] = y[]) ^ (i = j)''.  The set of
+suppressor invariants can only use the variables in the suppressed
+invariants.  In this example, only invariants using the variables
+``x[i]'' and ``y[i]'' can be used as a supressors.  See @ref{New suppressors}
+for more information.
 
 @emph{Non-printing} is a post-pass that throws out any invariants that
-are implied by other true invariants.  It is similar to suppression,
-but it differs in that it can implement checks that are not sound to
-perform until all data samples have been seen.  Non-printing is implemented by
-@code{ObviousFilter}, which calls the @code{isObviousDynamically} method on
-invariants.  
-The @code{isObviousStatically} method is
-also used by the non-printing checks; it can be called at the end
-without reference to equality sets.
-
-Non-printing can do anything that non-checking can, and more.
-However, implication checks that do not require all data samples to be
-seen should be implemented as suppressions, not as non-printing.
-There are two cases in which non-printing must be used.  First,
-invariants that must see every data sample, because they cache
-information about all samples, cannot be suppressed, because
-suppressed invariants do not see all samples.  Second, there are
-invariants that are obvious by themselves, without relying on other
-invariants.  Third (and this is a questionable usage, but does appear
-in the code as of October 2003), non-printing can suppress
-uninteresting invariants, whereas non-checking is only valid for
-mathematically true implications.  For example, if ``a[] == b[]'' we
-may choose not to print invariants such as ``a[i..] < b[j..]'' even
-though ``a[] == b[]'' does not imply anything about the truth of
-``a[i..] < b[j..]''.
+are implied by other true invariants.  It is similar to suppression, but
+has none of the limitations of suppression.  But since it is only run as
+a post pass, it can optimize runtime and memory use as suppression can.
+Non-printing should be used only in cases where suppression cannot.
+Non-printing is implemented by @code{ObviousFilter}, which calls the
+@code{isObviousDynamically} method on invariants.  The
+@code{isObviousStatically} method is also used by the non-printing
+checks; it can be called at the end without reference to equality sets.
 
 More detail can be found in the paper ``Efficient incremental algorithms
 for dynamic detection of likely invariants'' by Jeff H. Perkins and
 Michael D. Ernst, published in FSE 2004; the paper is available from
 @uref{http://pag.csail.mit.edu/pubs/invariants-incremental-fse2004-abstract.html}.
-
-
-@menu
-* Suppression optimization::    
-@end menu
-
-@node    Suppression optimization,  , Avoiding work for redundant invariants, Avoiding work for redundant invariants
-@subsection Suppression optimization
-
-@cindex suppression optimization
-
-Suppression optimization allows for elimination of redundancy based on
-how a set of invariants might imply an invariant.  For example, ``a ==
-b'' and ``b >= c'' implies ``a = max (b, c)''.  We say that a set of
-@emph{suppressors} suppress a @emph{suppressee} invariant.  A
-suppressed invariant is neither instantiated or checked.  It is
-instantiated only when one of its suppressors becomes falsified, in
-which case the implication for suppression no longer holds.
-
-Thus when certain invariants are not found in Daikon, they may be
-hidden due to suppression.  Suppression is enabled by default, but it can
-be disabled by the @option{daikon.suppress.NIS.enabled} configuration option.
 
 @node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
 @section Dataflow hierarchy
