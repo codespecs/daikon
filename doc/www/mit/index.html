@@ -712,8 +712,11 @@ target.
     <pre>
     cd $inv/mangel-wurzel;
     make install
-    make test
-    </pre>
+    make test </pre>
+
+    <li> Create a tar file (in the m/w directory)
+    <pre>
+    make tar </pre>
 
 </ol>
 
@@ -737,6 +740,10 @@ To use purify <ol>
     <li> Set the environment variable <code>PURIFY_DIR</code> to
     <code>$RATIONAL/releases/purify.i386_linux2.2003a.06.15/</code>
 
+    <li> Test to see you have a license:
+    <pre>
+    $RATIONAL/releases/PurifyPlus.2003a.06.15/i386_linux2/bin/purify -testlicense </pre>
+
 </ol>
 
 To change the authorized user: <ol>
@@ -747,8 +754,8 @@ To change the authorized user: <ol>
     <li> Restart the license manager:
     <pre> 
     cd $RATIONAL/config
-    start_lmgrd_on_horseradish stop
-    start_lmgrd_on_horseradish </pre>
+    sudo ./start_lmgrd_on_horseradish stop
+    sudo ./start_lmgrd_on_horseradish </pre>
 </ol>
 
 To move the license to a different machine: <p>
