@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.2.0 (December 5, 2005)
+4.2.0 (December 6, 2005)
 
 Daikon's support for C and C++ has been substantially improved.  The
 Mangel-Wurzel C/C++ front end now runs on Windows, and it supports new
