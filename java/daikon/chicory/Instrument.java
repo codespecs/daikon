@@ -27,12 +27,12 @@ import sun.nio.cs.ext.ISCII91;
 import daikon.Chicory;
 
 /**
- * The RetTransform class is responsible for modifying another class'
+ * The Instrument class is responsible for modifying another class'
  * bytecode.  Specifically, its main task is to add "hooks" into the
  * other class at method entries and exits for instrumentation
  * purposes.
  */
-public class RetTransform implements ClassFileTransformer {
+public class Instrument implements ClassFileTransformer {
 
   boolean debug = false;
   boolean log_on = false;
@@ -46,7 +46,7 @@ public class RetTransform implements ClassFileTransformer {
   /** the location of the runtime support class **/
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  public RetTransform () {
+  public Instrument () {
   }
 
   private void log (String format, Object... args) {

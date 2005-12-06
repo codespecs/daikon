@@ -91,7 +91,7 @@ public class ChicoryPremain {
     Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace);
 
     // Setup the transformer
-    RetTransform transformer = new RetTransform ();
+    Instrument transformer = new Instrument();
     inst.addTransformer (transformer);
   }
 
