@@ -3209,23 +3209,6 @@ available at @uref{http://www.mit.edu/~salcianu/purity/}.  If you supply
 the @option{--daikon-purity-file} when running the Purity Analysis Kit,
 it writes a file that can be supplied to Daikon.
 
-@item --avoid-static-recursion
-If this switch is on, Chicory will traverse the static fields of a given class
-at most once.
-
-Given this code:
-@example
-class A @{
-   private static int x, y;
-   private static A a = new A();
-@}
-@end example
-
-Then if this switch is on, and a program point contains variable
-@code{myA} of type @code{A}, then Chicory will produce variables
-@code{myA.x}, @code{myA.y}, @code{myA.A}, but not @code{myA.A.x},
-@code{myA.A.y}, @code{myA.A.A} and so on.
-
 @end table
 
 @node    Chicory miscellaneous options,  , Variables in Chicory output, Chicory options
