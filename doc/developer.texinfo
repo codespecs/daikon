@@ -1091,20 +1091,20 @@ An invariant can be @emph{suppressed} if it is logically implied by some
 set of other invariants (referred to as ``suppressors'').  A suppressed
 invariant is not instantiated or checked as long as its suppressors
 hold.  For example ``x > y'' implies ``x >= y''.  Suppression has some
-limitations.  It cannot be used on sample dependent invariants
-(invariants that adapt themselves to the samples they see and whose
-equation thus involves a constant such as ``x > 42'').  Suppression also
-cannot use relationships between variables.  For example, it cannot
-suppress ``x[i] = y[j]'' by ``(x[] = y[]) ^ (i = j)''.  The set of
-suppressor invariants can only use the variables in the suppressed
-invariants.  In this example, only invariants using the variables
-``x[i]'' and ``y[i]'' can be used as a supressors.  See @ref{New suppressors}
-for more information.
+limitations.  It cannot use as suppressors or suppress sample dependent
+invariants (invariants that adapt themselves to the samples they see and
+whose equation thus involves a constant such as ``x > 42'').
+Suppression also cannot use relationships between variables.  For
+example, it cannot suppress ``x[i] = y[j]'' by ``(x[] = y[]) ^ (i =
+j)''.  Suppressor invariants can only use variables that are also in the
+invariant that is being suppressed.  In this example, only invariants
+using the variables ``x[i]'' and ``y[i]'' can be used as a supressors.
+See @ref{New suppressors} for more information.
 
 @emph{Non-printing} is a post-pass that throws out any invariants that
 are implied by other true invariants.  It is similar to suppression, but
 has none of the limitations of suppression.  But since it is only run as
-a post pass, it can optimize runtime and memory use as suppression can.
+a post pass, it cannot optimize runtime and memory use as suppression can.
 Non-printing should be used only in cases where suppression cannot.
 Non-printing is implemented by @code{ObviousFilter}, which calls the
 @code{isObviousDynamically} method on invariants.  The
