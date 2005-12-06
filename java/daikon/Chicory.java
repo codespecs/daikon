@@ -110,7 +110,7 @@ public class Chicory {
    * Flag to "watch" how we recurse on static types.  If true, don't
    * recurse on the same static type.
    */
-  private static boolean watchStatics = false;
+  private static boolean watchStatics = true;
 
   /**
    * The name of the file to read for a list of pure methods.  Should
@@ -341,11 +341,6 @@ public class Chicory {
       {
           premain_args.add(arg);
           purityAnalysis = true;
-      }
-      else if (arg.equals("--avoid-static-recursion"))
-      {
-          premain_args.add(arg);
-          watchStatics = true;
       }
       else if (arg.startsWith("--trace-percent="))
       {
