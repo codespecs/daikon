@@ -132,6 +132,23 @@ Mangel-Wurzel
     users have no need to examine the internals of structures like FILE that
     are defined as interfaces to the underlying operating system.)
 
+Chicory
+
+  User-visible changes
+
+    The command line option --avoid-static-recursion was removed.  Chicory
+    will now traverse the static fields of a give class at most once by
+    default.
+
+    The trace file now contains the contents of the --ppt-select-pattern
+    and --ppt-omit-pattern switches as comments near the end of the file.
+
+    Chicory issues a warning if the result of the settings for the
+    --ppt-omit-pattern and --ppt-select-pattern switches don't match any
+    program points.  It also complains if no records are printed to the
+    trace file (which can happen even if some methods match if those methods
+    are never executed)
+    
 Purity Analysis Kit
 
   The Purity Analysis Kit computes which methods of a Java program are pure
