@@ -16,7 +16,7 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # visible to the user
 DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 				  daikon.texinfo developer.texinfo config-options.texinfo \
-				  invariants-doc.texinfo
+				  invariants-doc.texinfo developer.pdf developer.ps
 # EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-dist.txt README-dist-doc.txt README-daikon-java.txt
 README_PATHS := $(addprefix doc/,$(README_FILES))
@@ -250,6 +250,7 @@ staging: doc/CHANGES
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
 	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc
+	cp -pR doc/developer_manual_html $(STAGING_DIR)/download/doc
 	cd doc/www && cp --parents -pf $(WWW_DAIKON_FILES) $(STAGING_DIR)
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
@@ -520,6 +521,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 # Copies PAG specific files to the website and group area
 WWW_PAG_FILES := doc/www/mit/eclipse-pag.html \
 				 doc/www/mit/index.html \
+				 doc/www/mit/edg-nda-noncomm.pdf \
 				 scripts/log2html.php \
 				 scripts/emacs_launch.php
 GROUP_FILES   := scripts/pag-daikon.bashrc scripts/pag-daikon.cshrc
