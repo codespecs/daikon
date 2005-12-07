@@ -1472,7 +1472,7 @@ goal output files, so that the diffs are again zero).
 
 There are several subdirectories under @file{$inv/tests/}, testing
 different components of the Daikon distribution (such as Kvasir,
-@pxref{C/C++ front end Kvasir,,,./daikon,Daikon User Manual}).  Tests of the
+@pxref{Kvasir,,,./daikon,Daikon User Manual}).  Tests of the
 invariant detection engine itself appear in
 @file{$inv/tests/daikon-tests/}.
 
