@@ -175,6 +175,12 @@ public final class VarInfo implements Cloneable, Serializable {
         || (rep_type == ProglangType.STRING_ARRAY));
   }
 
+  /** Returns whether or not constant_value is a legal constant **/
+  static boolean legalConstant (Object constant_value) {
+    return ((constant_value == null) || (constant_value instanceof Long)
+            || (constant_value instanceof Double));
+  }
+
   /**
    * Returns whether or not file_rep_type is a legal file_rep_type.
    * The file_rep_type matches rep_type except that it also allows
@@ -195,23 +201,16 @@ public final class VarInfo implements Cloneable, Serializable {
                   boolean is_static_constant, Object static_constant_value,
                   VarInfoAux aux) {
 
-    Assert.assertTrue(file_rep_type != null);
-    Assert.assertTrue(
-      legalFileRepType(file_rep_type),
-      "Unsupported representation type "
+    assert name != null;
+    assert file_rep_type != null;
+    assert legalFileRepType(file_rep_type) : "Unsupported representation type "
       + file_rep_type.format() + "/" + file_rep_type.getClass() + " "
-      + ProglangType.HASHCODE.getClass()
-        + " for variable "
-        + name);
+      + ProglangType.HASHCODE.getClass() + " for variable " + name;
     // Ensure that the type and rep type are somewhat consistent
-    Assert.assertTrue(type != null);
-    Assert.assertTrue(
-      type.pseudoDimensions() >= file_rep_type.dimensions(),
-      "Types dimensions incompatibility: "
-        + type
-        + " vs. "
-        + file_rep_type);
-    Assert.assertTrue(comparability != null);
+    assert type != null;
+    assert type.pseudoDimensions() >= file_rep_type.dimensions() :
+      "Types dimensions incompatibility: "+ type + " vs. " + file_rep_type;
+    assert comparability != null;
     // COMPARABILITY TEST
     // Assert.assertTrue(
     //   comparability.alwaysComparable() || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions(),
@@ -219,7 +218,9 @@ public final class VarInfo implements Cloneable, Serializable {
     //     + type
     //     + " vs. "
     //     + file_rep_type);
-    Assert.assertTrue(aux != null);
+    assert aux != null;
+    assert legalConstant (static_constant_value)
+      : "unexpected constant class " + static_constant_value.getClass();
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
