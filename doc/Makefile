@@ -60,7 +60,7 @@ developer.html: developer.texinfo .fix-menu
 	makeinfo --html --no-split $<
 	perl -pi -e '$$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$$1|; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|,\nPrevious:<a rel=previous href="#dir">\(dir\)</a>,\nUp:<a rel=up href="#dir">\(dir\)</a>||; s|,\nPrevious:&nbsp;<a rel="previous" accesskey="p" href="#dir">\(dir\)</a>,\nUp:&nbsp;<a rel="up" accesskey="u" href="#dir">\(dir\)</a>||;' developer.html
 
-html-chap: daikon_manual_html/daikon.html
+html-chap: daikon_manual_html/daikon.html developer_manual_html/developer.html
 
 # The "subdir" flag does not copy over images aren't copied, so the
 # pathnames become incorrect.  I need to copy them over myself.
@@ -71,6 +71,10 @@ daikon_manual_html/daikon.html: daikon.texinfo
 	texi2html -split chapter -subdir daikon_manual_html $<
 	mkdir daikon_manual_html/images
 	cp -p images/gui-InvariantsDisplay-small.jpg images/gui-ControlPanel.jpg images/context-gui.jpg daikon_manual_html/images
+
+developer_manual_html/developer.html: developer.texinfo
+	rm -rf developer_manual_html/*
+	texi2html -split chapter -subdir developer_manual_html $<
 
 daikon.dvi: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 	texi2dvi $<
