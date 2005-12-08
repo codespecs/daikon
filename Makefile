@@ -163,8 +163,8 @@ rebuild-everything:
 	${MAKE} -C $(inv)/java tags compile
 	${MAKE} -C $(inv)/doc clean
 	${MAKE} -C $(inv)/doc
-	${MAKE} -C $(inv)/kvasir clean
-	${MAKE} -C $(inv)/kvasir all install
+	-${MAKE} -C $(inv)/kvasir distclean
+	${MAKE} kvasir
 
 ### Testing the code
 
