@@ -20,6 +20,19 @@ Further documentation can be found in:
 
 ===========================================================================
 
+
+
+Mangel-Wurzel
+
+  Enhancements
+
+    The Windows version now includes full support for regular expression
+    matching in --ppt-omit-pattern and --ppt-select-pattern command-line
+    options.  The --dtrace-gzip option is also now fully supported.
+
+
+===========================================================================
+
 4.2.0 (December 6, 2005)
 
 Daikon's support for C and C++ has been substantially improved.  The
