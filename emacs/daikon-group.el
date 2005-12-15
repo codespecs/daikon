@@ -150,13 +150,22 @@ Remake it first if it is more than a week old."
 	 (infofile (concat dir basename ".info"))
 	 (texinfofile (concat dir basename ".texinfo"))
 	 (remake (or (and (get-file-buffer texinfofile)
-			  (buffer-modified-p (get-file-buffer texinfofile)))
+			  (buffer-modified-p (get-file-buffer texinfofile))
+			  ;; This isn't working; why?
+			  (progn (save-buffer (get-file-buffer texinfofile))
+				 t)
+			  )
 		     (not (file-exists-p infofile))
 		     (and (file-newer-than-file-p texinfofile infofile)
 			  (y-or-n-p (concat basename ".info is out of date; re-make it? "))))))
     (if remake
         (let ((default-directory dir))
-          (call-process "makeinfo" nil nil nil (concat basename ".info"))
+	  (if (get-buffer "*make-daikon-info*")
+	      (kill-buffer "*make-daikon-info*"))
+	  (if (not (equal 0 (call-process "makeinfo" nil "*make-daikon-info*" nil texinfofile)))
+	      (progn
+		(pop-to-buffer "*make-daikon-info*")
+		(error "Makeinfo process failed.")))
           (sit-for 0 500)               ; let the filesystem find the new file
           ;; The above was synchronous and minimal;
           ;; the below is asynchronous and maximal.
