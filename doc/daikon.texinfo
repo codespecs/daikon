@@ -4255,12 +4255,12 @@ consequence of the fact that Daikon can only handle one layer of sequences
 Here is part of the Daikon output for this program:
 
 @example
-===========================================================================
+======================================================================
 ..foo():::ENTER
 bar has only one value
 bar[].name == [Daikon User]
 bar[].name elements == "Daikon User"
-===========================================================================
+======================================================================
 ..foo():::EXIT
 size(bar[]).numbers[0] == size(bar[]).numbers[0][0]
 size(bar[]).numbers[0] == size(bar[]).numbers[1]
@@ -4349,11 +4349,11 @@ array (Daikon uses a Java-like syntax, replacing the arrow '->' symbol
 with a dot, so it actually outputs @code{bar.numbers}).
 
 @example
-===========================================================================
+======================================================================
 ..foo():::ENTER
 bar has only one value
 bar.name == "Daikon User"
-===========================================================================
+======================================================================
 ..foo():::EXIT
 bar.name == "Daikon User"
 bar.numbers has only one value
@@ -4756,14 +4756,14 @@ particular type (@pxref{Pointer type coercion}).
 @cindex C/C++ front end
 
 In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
-is also a source-based front end, Mangel-Wurzel.  Unlike Kvasir, which
+is also a source-based C/C++ front end, Mangel-Wurzel.  Unlike Kvasir, which
 runs only on Linux/x86 platforms, Mangel-Wurzel will run on nearly any
 Unix platform, as well as on Windows (with the Microsoft Visual C/C++
 compiler).  Mangel-Wurzel is missing a few features of Kvasir; for
 instance, Mangel-Wurzel outputs fewer variables.  Mangel-Wurzel requires
 the source code for your program, and it also requires the Purify
-program analysis tool from Rational Software.  You must purchase and
-install Purify before you can use Mangel-Wurzel.
+program analysis tool from Rational Software.  You must install Purify
+(either a paid or evaluation version) before you can use Mangel-Wurzel.
 
 Mangel-Wurzel is based on the EDG C/C++ front end, which is also commercial
 software.  For this reason, Mangel-Wurzel is distributed in precompiled 
@@ -4843,16 +4843,26 @@ it processes, in this case @file{foo.decls}, @file{bar.decls}, and
 @file{baz.decls}.
 
 @item
-On Unix, run the instrumented program created by mangel.  
+Run the instrumented program.
+
+@itemize
+@item
+On Unix, simply run the instrumented program (in this example, @file{foo})
+created by mangel.
+
+@item
+On Windows, Purify needs to be invoked when you run your program, not
+at link time.  Mangel creates a @file{.cmd} file that does this for you;
+in this example, run @file{foo.cmd} instead of @file{foo.exe}.
+You can also run your program from within the Purify GUI
+instead of from the command line, if you prefer.
+@end itemize
+
 This creates a single @file{.dtrace} file 
 (in addition to anything else the program does).
 Assuming @file{foo.c} contains the @code{main} routine, the
 trace output for this example will be in @file{foo.dtrace}.
-
-On Windows, Purify needs to be invoked when you run your program, not
-at link time.  Mangel creates a @file{.cmd} file that does this for you;
-in this example, run @file{foo.cmd} instead of @file{foo.exe}.
-
+How to run the instrumented program depends on your operating system.
 
 @item
 Invoke Daikon, passing all of the @file{.decls} files and the @file{.dtrace} 
@@ -4864,8 +4874,8 @@ java daikon.Daikon foo.decls bar.decls baz.decls foo.dtrace
 
 
 @item
-Examine the invariants.  As described in @ref{StackAr example}, there are
-several ways to do this.
+Examine the invariants.  There are
+several ways to do this; see @ref{StackAr example}.
 
 @end enumerate
 
@@ -5246,7 +5256,7 @@ You do not need to instrument all compilation units in a program with
 Mangel-Wurzel if you are only interested in analyzing certain parts of it with
 Daikon; you can simply compile the ``uninteresting'' files in the normal
 way with your usual C compiler.  However, you must either instrument the
-compilation unit including the definition of @code{main} with so that the
+compilation unit including the definition of @code{main} so that the
 necessary runtime initialization is performed when the program starts, or
 insert an explicit call to @code{mw_init} in your program before any of the
 instrumented code is executed.  You should also use mangel to link 
@@ -5266,6 +5276,8 @@ time it will not also generate references to accessible base classes and
 their members.  (This should be optional in any case because it will
 greatly increase the number of variables at a given program point.)
 
+@c TODO: How does one do this?
+@c TODO: Does this belong in the ``installation'' section instead?
 If you are using the C++ libraries that came with your host C++
 compiler, you will probably have to add the locations of the include
 files to the search path passed to wurzel, as well adding the libraries
@@ -5279,7 +5291,7 @@ underlying EDG front end to customize the language dialects it accepts,
 as described in the EDG documentation.  You can set these options using
 the @samp{--preprocessor-opts} flag to mangel.  
 
-If you are having compatibility problems getting your code to compile with
+If your code compiles with your host compiler, but not with
 Mangel-Wurzel, you can try these approaches:
 
 @enumerate
@@ -5313,31 +5325,24 @@ it necessary to specify the @samp{--gcc} option to wurzel to make it
 correctly process system
 include files, even if your code doesn't use GCC extensions itself.
 
-You'll need to specify the full set of search paths for include files in
-your @file{.mangelrc} file, since these are normally hard-wired into GCC
-instead of configured with an environment variable.  You probably need
-to specify both @file{/usr/local/include} and @file{/usr/include}.  You
-should also specify the include directory for the particular version of
-GCC you are using ahead of @file{/usr/include}; you can find the full
-pathname by doing @samp{gcc -print-libgcc-file-name} and substituting
-@samp{include} for @samp{libgcc.a}.
-
 Not all of the preprocessor symbols predefined by GCC's cpp are correctly
-predefined by the EDG front end's GCC compatibility mode.  If you run into
-preprocessing errors, try this approach:
+predefined by the EDG front end's GCC compatibility mode, so you may
+need to specify some of these preprocessor symbols yourself.  If you run
+into such preprocessing errors, consider creating a @file{mwdefines.h} file
+instead of trying to define every necessary macro on the command line
+for wurzel:
 
 @enumerate
-@item Doing @samp{cpp -dM </dev/null} will produce a list of all of cpp's
-built-in defines.
+@item Create a file with a list of all of cpp's
+built-in defines: @samp{cpp -dM > mwdefines.h}
 
-@item Instead of trying to define everything on the command line for wurzel,
-create a new @file{.h} file.  In this file, wrap each of the @samp{#define}s 
-from the cpp output above in an @samp{#ifndef...#endif} to prevent possible
-multiple definition.  
+@item 
+Edit the file, wrapping each of the @samp{#define}s in an
+@samp{#ifndef...#endif} to prevent multiple definition.
 
 @item In the @samp{--preprocessor-opts} value in your @file{.mangelrc}, add
 @samp{--preinclude=@var{filename}}, where @var{filename} is the name of your
-new @file{.h} file.
+new @file{mwdefines.h} file.
 @end enumerate
 
 
@@ -5348,21 +5353,6 @@ Rational Purify on Windows only supports the Microsoft Visual C/C++ compiler,
 not GCC.  Therefore Mangel-Wurzel will only work with the Microsoft compiler
 on this platform as well.  Currently, Mangel-Wurzel is not integrated with
 the Visual Studio IDE, and runs as a command-line utility only.
-
-Make sure you set up your .mangelrc to compile with debugging
-information enabled; otherwise Rational Purify does not detect
-uninitialized memory references, which is a critical feature for
-Mangel-Wurzel's data structure traversal.  On Windows, Purify also has
-problems reliably detecting uninitialized stack locations which manifest
-themselves in Mangel-Wurzel as uninitialized block-scope automatic
-variables sometimes being reported as having garbage values instead of as
-being ``nonsensical'', which is treated specially by Daikon.
-
-On Windows, Purify needs to be invoked when you run your program, not at
-link time, as on Linux.  Mangel creates a @file{.cmd} file that does
-this for you; in this example, run @file{foo.cmd} instead of
-@file{foo.exe}.  You can also run your program from within the Purify GUI
-instead of from the command line, if you prefer to work that way.
 
 You can run Mangel-Wurzel and programs instrumented with Mangel-Wurzel
 from within a Cygwin shell, Makefile, and the like, as well as from the
@@ -5377,17 +5367,6 @@ expects all pathname arguments and environment variables to be in
 regular Windows pathname syntax even when you run it from inside a
 Cygwin shell.
 
-Mangel-Wurzel uses the same @env{INCLUDE} environment variable as the 
-Microsoft compiler to set up the system include paths, so in theory you
-should not have to specify any additional paths in your @file{.mangelrc} 
-configuration file.
-Do be sure that you specify @samp{cl} (the Microsoft C compiler) for
-both the @samp{--compiler} and @samp{--linker} options and that you have
-your @env{PATH} environment variable set up to include both the path to the
-cl compiler and related Visual C utilities, and the path for Rational Purify.
-
-You will probably need to specify the @samp{--microsoft} compatibility mode
-option as the default.
 
 
 @node Interaction with Purify, Installing Mangel-Wurzel, Mangel-Wurzel usage notes, Mangel-Wurzel
@@ -5433,7 +5412,8 @@ binary rather than source format.  (If the web page does not currently
 contain a binary for your architecture, send mail to
 @email{daikon-developers@@lists.csail.mit.edu} and we may be able to
 produce one for you.)  The distribution does not include Purify, which
-you must purchase and install separately.
+you must install separately (either purchase it or download an
+evaluation copy).
 
 Installation requires unpacking the distribution, setting the 
 @env{MANGEL_DIR} and @env{PURIFY_DIR} environment
@@ -5444,24 +5424,34 @@ and optionally running its tests.
 @enumerate
 @item  
 Download the archive from
-@uref{http://pag.csail.mit.edu/daikon/download} and unpack it in the
+@uref{http://pag.csail.mit.edu/daikon/download/} and unpack it in the
 parent of the directory where you wish to install Mangel-Wurzel.
 Unpacking creates a directory named @file{mangel-wurzel}.
-For example, on the Linux/x86 platform, execute these two commands:
+@itemize
+@item
+On the Linux/x86 platform, execute these two commands (other Unix
+platforms are similar):
+
 @smallexample
 wget http://pag.csail.mit.edu/daikon/download/binaries/mangel-wurzel-linux-x86.tar.gz
 tar xvzf mangel-wurzel-linux-x86.tar.gz
 @end smallexample
 
 @item
+On Windows, download, then unzip, 
+@url{http://pag.csail.mit.edu/daikon/download/binaries/mangel-wurzel-linux-x86.tar.gz} .
+
+@end itemize
+
+@item
 Set these environment variables:
 
 @table @env
-@item PATH
-Add @file{mangel-wurzel/bin} to your path.
 @item MANGEL_DIR
 @cindex MANGEL_DIR environment variable
 Set to the full pathname of the @file{mangel-wurzel} directory.
+@item PATH
+Add @file{@var{MANGEL_DIR}/bin} to your path.
 @item PURIFY_DIR
 @cindex PURIFY_DIR environment variable
 Set to the directory in your Purify distribution containing
@@ -5490,6 +5480,40 @@ full pathname.  On Windows, you should use @samp{cl} only.
 @ref{Using Mangel-Wurzel on Unix}, and @ref{Using Mangel-Wurzel on Windows},
 for details.
 
+@itemize
+@item
+On Unix, you must specify the full set of search paths for include files in
+your @file{.mangelrc} file, since these are normally hard-wired into GCC
+instead of configured with an environment variable.
+These include your gcc include directory (run @samp{gcc
+-print-libgcc-file-name | sed s/libgcc.a/include/}), 
+@file{/usr/local/include}, and @file{/usr/include} (after the gcc
+include directory).
+
+@item
+On Windows, Mangel-Wurzel uses the same @env{INCLUDE} environment variable as the 
+Microsoft compiler to set up the system include paths, so in theory you
+should not have to specify any additional paths in your @file{.mangelrc}
+configuration file.
+Do be sure that you specify @samp{cl} (the Microsoft C compiler) for
+both the @samp{--compiler} and @samp{--linker} options and that you have
+your @env{PATH} environment variable set up to include both the path to the
+cl compiler and related Visual C utilities, and the path for Rational Purify.
+
+Make sure you set up your .mangelrc to compile with debugging
+information enabled; otherwise Rational Purify does not detect
+uninitialized memory references, which is a critical feature for
+Mangel-Wurzel's data structure traversal.  On Windows, Purify also has
+problems reliably detecting uninitialized stack locations which manifest
+themselves in Mangel-Wurzel as uninitialized block-scope automatic
+variables sometimes being reported as having garbage values instead of as
+being ``nonsensical'', which is treated specially by Daikon.
+
+You will probably need to specify the @samp{--microsoft} compatibility mode
+option as the default in your @file{.mangelrc} file.
+
+@end itemize
+
 @item You might also want to add some additional options, such as specifying
 @samp{--gcc} or @samp{--microsoft} to enable the appropriate compatibility
 mode for your normal C compiler by default.
@@ -5500,6 +5524,7 @@ For debugging the options file, you can use the @option{-n} or
 invoke each phase.
 
 @item
+@c TODO Does this require Daikon to be installed?
 Optionally (but recommended), run Mangel-Wurzel's tests.
 @example
 cd tests
