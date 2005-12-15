@@ -102,38 +102,43 @@ not industrial or academic secrets.
 <dt>
 Sun Microsystems
 <dd>
-IODINE is an invariant detector for hardware designs, built by Sudheendra
-Hangal (who is also responsible for the DIDUCE invariant detector) and
+IODINE is an invariant detector for hardware designs, built by <a
+href="http://xenon.stanford.edu/~hangal/">Sudheendra Hangal</a> (who is
+also responsible for the DIDUCE invariant detector, described below) and
 colleagues.  The goal is to execute test vectors or real loads on a
 simulator in order to learn emergent properties of the design.  See the
-paper "IODINE: A tool to automatically infer dynamic invariants for
-hardware designs" in the Design Automation Conference, DAC 2005.
+paper <a
+href="http://portal.acm.org/citation.cfm?id=1065579.1065786">"IODINE: A
+tool to automatically infer dynamic invariants for hardware designs"</a> in
+the Design Automation Conference, DAC 2005.
 
 <dt>
 Microsoft
 <dd>
-Trishul Chilimbi is building a high-performance dynamic invariant detector
-that operates at garbage collection (GC) time.  Since all of memory must be
-scanned then anyway, the invariant detector imposes relatively little
-additional cost for its memory accesses.  The invariant detector's grammar
-includes run-time types (for checking what types a collection contains),
+<a href="http://research.microsoft.com/~trishulc/">Trishul Chilimbi</a> is
+building a high-performance dynamic invariant detector that operates at
+garbage collection (GC) time.  Since all of memory must be scanned then
+anyway, the invariant detector imposes relatively little additional cost
+for its memory accesses.  The invariant detector's grammar includes
+run-time types (for checking what types a collection contains),
 immutability, and cycles in the object reference graph (the heap).
 
 <dt>
 Agitar
 <dd>
 <a href="http://www.agitar.com/">Agitar</a>'s product, Agitator, was
-inspired by Daikon.  Agitar performs
-dynamic invariant detection in order to inform users about tests, and to
-improve those tests.  The results are called "observations", they include
-equality (x = y), range (-10 <= x <= 10), non-null (x != null),
-equality (.equals), and properties gleaned from the user's source code.
-Agitar won the Wall Street Journal's 2005 Software Technology Innovation Award.
+inspired by Daikon.  Agitar performs dynamic invariant detection in order
+to inform users about tests, and to improve those tests.  The results are
+called "observations", they include equality (x = y), range (-10 <= x <=
+10), non-null (x != null), equality (.equals), and properties gleaned from
+the user's source code.  Agitar won the Wall Street Journal's 2005 <a
+href="http://www.dowjones.com/innovation/ei_winners_2005.html#software">Software
+Technology Innovation Award</a>.
 
 <dt>
 Microsoft
 <dd>
-The Axion Meister tool (built by Wolfram Schulte and colleagues) infers
+The Axion Meister tool (built by <a href="http://research.microsoft.com/~schulte/">Wolfram Schulte</a> and colleagues) infers
 specifications from code by performing exhaustive symbolic execution
 (similar to model checking).  The tool generalizes over the results of
 user-specified observer methods.  The output can be used for test
@@ -149,69 +154,96 @@ generation and program verification.
 Stanford
 <dd>
 The <a href="http://diduce.sourceforge.net/">DIDUCE</a> tool (DIDUCE stands
-for "Dynamic Invariant Detection Union Checking Engine")
-checks one invariant:  the bitwise or of the values of a variable.  DIDUCE
-performs dynamic invariant detection online -- at run time, rather than
-after-the-fact.  DIDUCE is described in the paper "Tracking down software
-bugs using automatic anomaly detection", by Sudheendra Hangal and Monica
-S. Lam (appears in ICSE 2002).
+for "Dynamic Invariant Detection Union Checking Engine") checks one
+invariant:  the bitwise or of the values of a variable.  DIDUCE performs
+dynamic invariant detection online -- at run time, rather than
+after-the-fact.  DIDUCE is described in the paper <a
+href="http://portal.acm.org/citation.cfm?id=581377">"Tracking down software
+bugs using automatic anomaly detection"</a>, by <a
+href="http://xenon.stanford.edu/~hangal/">Sudheendra Hangal</a> and <a
+href="http://suif.stanford.edu/~lam/">Monica S. Lam</a> (appears in ICSE
+2002).
 
 <dt>
 Wisconsin and Microsoft
 <dd>
-The paper "Mining specifications" by Glenn Ammons, Rastislav Bod&iacute;k,
-and James R. Larus (appears in POPL 2002) describes a system for inferring
-temporal specifications, such as "method <tt>open</tt> must be called
-before method <tt>close</tt>.  The sequence of observed method calls is fed
-to a machine learner in order to obtain a grammar of permitted call
-sequences.
+The paper <a
+href="http://portal.acm.org/citation.cfm?id=565816.503275">"Mining
+specifications"</a> Glenn Ammons, <a
+href="http://www.cs.berkeley.edu/~bodik/">Rastislav Bod&iacute;k</a>, and
+<a href="http://research.microsoft.com/~larus/">James R. Larus</a> (appears
+in POPL 2002) describes a system for inferring temporal specifications,
+such as "method <tt>open</tt> must be called before method <tt>close</tt>.
+The sequence of observed method calls is fed to a machine learner in order
+to obtain a grammar of permitted call sequences.
 
 <dt>
 Stanford
 <dd>
-The paper "Automatic extraction of object-oriented component interfaces" by
-John Whaley, Michael Martin, and Monica Lam (appears in ISSTA 2002) has the
-same goal as that of the "Mining specifications" paper:  determining the
-legal sequences of procedure calls (in the paper, called "interfaces").
-The paper proposes a combination of static and dynamic methods.
+The paper <a href="http://portal.acm.org/citation.cfm?id=566171.566212">"Automatic extraction of object-oriented component interfaces"</a> by
+<a href="http://www.stanford.edu/~jwhaley/">John Whaley</a>, <a href="http://www.stanford.edu/~mcmartin/">Michael G. Martin</a>, and <a
+href="http://suif.stanford.edu/~lam/">Monica S Lam</a> (appears in ISSTA
+2002) has the same goal as that of the "Mining specifications" paper:
+determining the legal sequences of procedure calls (in the paper, called
+"interfaces").  The paper proposes a combination of static and dynamic
+methods.
 
 <dt>
 Berkeley
 <dd>
-Ben Liblit's statistical debugging project, described in a variety of <a
-href="http://www.cs.wisc.edu/~liblit/">publications</a>, aims to
-permit collecting a small amount of information from a large number of
-executions in the field (some faulty, some not) in order to determine which
-properties of an execution are most relevant to errors.  Its mechanism for
-collecting the information is a type of invariant detection.
+<a href="http://www.cs.wisc.edu/~liblit/">Ben Liblit</a>'s statistical debugging project, described in a variety of <a
+href="http://www.cs.wisc.edu/~liblit/">publications</a>, aims to permit
+collecting a small amount of information from a large number of executions
+in the field (some faulty, some not) in order to determine which properties
+of an execution are most relevant to errors.  Its mechanism for collecting
+the information is a type of invariant detection.
 
 <dt>
 Brown
 <dd>
 The Carrot dynamic invariant detection system is described in the paper
 "Automated fault localization using potential invariants", by Brock Pytlik,
-Manos Renieris, Shriram Krishnamurthi, and Steven P. Reiss.  It is built
-partly upon the Daikon infrastructure, but investigates other
-implementation strategies.
+<a href="http://www.cs.brown.edu/people/er/">Manos Renieris</a>, <a
+href="http://www.cs.brown.edu/~sk/">Shriram Krishnamurthi</a>, and <a
+href="http://www.cs.brown.edu/~spr/">Steven P. Reiss</a> (appears in
+AADEBUG 2003).  It is built partly upon the Daikon infrastructure, but
+investigates other implementation strategies.
 
 <dt>
 Colorado
 <dd>
-Two papers by Johannes Henkel and Amer Diwan -- "Discovering algebraic
-specifications from Java classes" (appears in ECOOP 2003) and "A tool for
-writing and debugging algebraic specifications" (appears in ICSE 2004) --
-describe an application of dynamic invariant detection to algebraic
+Two papers by <a href="http://www.jhenkel.de/">Johannes Henkel</a> and <a
+href="http://www.cs.brown.edu/~sk/">Amer Diwan</a> -- "Discovering
+algebraic specifications from Java classes" (appears in ECOOP 2003) and <a
+href="http://portal.acm.org/citation.cfm?id=998675.999449">"A tool for
+writing and debugging algebraic specifications"</a> (appears in ICSE 2004)
+-- describe an application of dynamic invariant detection to algebraic
 specifications.  Algebraic specifications are equations between terms, such
 as "pop(push(s,i).state).retval = i" and "pop(push(s,i).state).state = s".
 
 <dt>
-Virginia
+Virginia and Microsoft
 <dd>
-David Evans and Jinlin Yang are building 
+<a href="http://www.cs.virginia.edu/~evans/">David Evans</a> and <a href="http://www.cs.virginia.edu/~jy6q/">Jinlin Yang</a> are building 
 <a href="http://www.cs.virginia.edu/terracotta/">Terracotta</a>,
 a dynamic analysis tool for automatically inferring temporal properties.
 It takes the program's execution traces as input and outputs a set of
-likely temporal properties.
+likely temporal properties.  It is reported in <a
+href="http://doi.ieeecomputersociety.org/10.1109/ISSRE.2004.11">"Automatically
+Inferring Temporal Properties"</a> (appears in ISSRE 2005).  Jinlin Yang
+applied the techniques to the Windows Kernel while at Microsoft.
+
+<dt>
+SUNY at Stony Brook
+<dd>
+"Type discovery" can be thought of as dynamic invariant detection for
+ownership (locks held when a field is accessed).  It is a dynamic analysis
+that observes run-time types and forms hypotheses based on those
+observations.  Two papers describe the technique and the analyses that can
+be built upon it:  "Type discovery for Parameterized Race-Free Java"
+(appears at VMCAI 2005) and
+<a href="http://portal.acm.org/citation.cfm?id=1065944.1065956">"Automated type-based analysis of data races and atomicity"</a>
+(appears at PPOPP 2005).
 
 </dl>
 
