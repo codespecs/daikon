@@ -3539,15 +3539,18 @@ global and static variables.
 Omit any static variables but generate trace information for 
 global variables in the  @file{.decls} and @file{.dtrace} files.
 
-@item --limit-static-vars
+@item --all-static-vars
 
-Limits the output of static variables in the @file{.decls} and
-@file{.dtrace} files.  File-static variables are only observed at
-program points for functions which belong to the same file as the
-variable.  Static variables declared within a particular function are
-only observed at program points for that function.  This is a
-heuristic to reduce the amount of Kvasir output without greatly
-reducing the amount of useful output.
+Output all static variables at all program points in the @file{.decls} and
+@file{.dtrace} files.  By default, file-static variables are only outputted at
+program points for functions that are defined in the same file (compilation unit)
+as the
+variable, and static variables declared within a particular function are
+only outputted at program points for that function.  These heuristics decrease
+clutter in the output without greatly reducing precision because functions
+have no easy way of modifying variables that are not in-scope, so it is often
+not useful to output those variables.  This option turns off these heuristics
+and always outputs static variables at all program points.
 
 @end table
 
@@ -4701,8 +4704,8 @@ limitations are listed roughly in decreasing order of severity.
 Kvasir-traced programs take a while to start (often a good fraction of a
 second).  When tracing short-lived programs, this overhead can
 dominate Kvasir's per-instruction runtime overhead.  In order to make Kvasir 
-run faster, try the @option{--ignore-globals} or @option{--limit-static-vars} 
-options in order to limit the amount of generated output.
+run faster, try the @option{--ignore-globals}
+option in order to limit the amount of generated output.
 However, please keep in mind that, when running simultaneously with
 Daikon using the @option{--output-fifo} option (see @ref{Online execution}), Kvasir can generate
 output data much faster than Daikon can process it.  Thus, it is not the
