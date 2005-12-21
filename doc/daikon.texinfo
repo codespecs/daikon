@@ -5114,6 +5114,12 @@ output is written to a file in the current directory when the executable
 is run, with a name derived from the file containing the definition of
 @code{main}.  
 
+If you specify a @var{filename} of @samp{-}, trace output is written to
+stdout.  In this case, regular program output to stdout is redirected to
+the terminal (on Unix) or console (on Windows).  This allows you to
+redirect trace output to a file or pipe on the command line, without
+mingling the two output streams.
+
 @item --dtrace-append
 Specify that output should be appended to an existing @file{.dtrace} file, 
 rather than overwriting it.
@@ -5149,11 +5155,32 @@ unit.
 Specify the recursion depth for examining fields of nested @code{struct},
 @code{union}, and @code{class} types.  The default value is 2.
 
+@item --flatten-arrays
+This option forces the flattening of statically-sized arrays into
+separate variables, one for each element.  For example, an array
+@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
+@var{foo[1]}, @var{foo[2]}.  By default, Mangel-Wurzel flattens
+arrays only after is has already exhausted the one level of sequences
+that Daikon allows in the .dtrace output format.
+
+@item --max-flatten-array-size @var{size}
+Specify the maximum @var{size} of any dimension for arrays to be flattened.
+The default value is 10, so that (for instance) a 10x10x20 array would be
+broken down into 100 variables each containing a 20-element sequence.  If
+any one dimension to be flattened is larger than @var{size}, then Mangel-Wurzel
+doesn't output the contents of the array.
+
+@item --max-array-size @var{size}
+Specify the maximum @var{size} of one-dimensional arrays, which are
+output as sequences in the .dtrace file.  If the static array dimension is
+larger than @var{size}, then Mangel-Wurzel doesn't output the contents of
+the array. The default is 100.
+
 @item --ignore-system-structs
 If you specify this option, Mangel-Wurzel ignores fields of 
 @code{struct}, @code{union}, and @code{class} types declared in system 
 include files (e.g., those included via the 
-@samp{#include <@var{file}.h>} syntax rather than
+@samp{#include <@var{file.h}>} syntax rather than
 @samp{#include "@var{file.h}"}.)  
 These are typically interfaces like @code{FILE}
 whose internal representations are not interesting to ``regular'' 
@@ -5251,7 +5278,8 @@ On the other hand, variables with type @code{signed char *} or
 @code{unsigned char *}, or arrays of explicitly @code{signed} or
 @code{unsigned char}, are treated as byte pointers or byte arrays,
 respectively, and the elements print as normal integer values rather than
-as strings.
+as strings.  Multidimensional @code{char} arrays also print as byte arrays
+rather than as arrays of strings.
 
 
 @node Mangel-Wurzel usage notes, Interaction with Purify, Pointer/array disambiguation in Mangel-Wurzel, Mangel-Wurzel
@@ -5393,6 +5421,12 @@ values at program points to the @file{.dtrace} file.  (Instead,
 it prints a value of ``nonsensical'' for those variables, which has a
 special meaning to Daikon.)
 
+Both the Unix and Windows versions of Purify have problems identifying
+uninitialized variables on the stack.  In Mangel-Wurzel, this manifests
+itself by uninitialized block-scope automatic variables sometimes
+printing as garbage values rather than as ``nonsensical'', which in turn
+might cause Daikon to find inaccurate invariants.
+
 Normally, mangel is configured to tell Purify to discard all of its
 diagnostic messages.  This is because, due to limitations of the Purify
 API, it isn't possible for the Mangel-Wurzel runtime to run Purify
@@ -5505,7 +5539,7 @@ both the @samp{--compiler} and @samp{--linker} options and that you have
 your @env{PATH} environment variable set up to include both the path to the
 cl compiler and related Visual C utilities, and the path for Rational Purify.
 
-Make sure you set up your .mangelrc to compile with debugging
+Make sure you set up your @file{.mangelrc} to compile with debugging
 information enabled; otherwise Rational Purify does not detect
 uninitialized memory references, which is a critical feature for
 Mangel-Wurzel's data structure traversal.  On Windows, Purify also has

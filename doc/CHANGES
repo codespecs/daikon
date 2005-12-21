@@ -30,6 +30,15 @@ Mangel-Wurzel
     matching in --ppt-omit-pattern and --ppt-select-pattern command-line
     options.  The --dtrace-gzip option is also now fully supported.
 
+    Sending dtrace output to stdout now works.
+
+    Output for statically-sized, multidimensional arrays is now supported.
+    There are new command-line options --flatten-arrays,
+    --max-flatten-array-size, and --max-array-size to control how arrays
+    are output.  Some minor bugs in array output have also been fixed.
+
+
+
 
 ===========================================================================
 
