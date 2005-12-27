@@ -1132,8 +1132,7 @@ public final class PrintInvariants {
 
     if (PptSplitter.debug.isLoggable (Level.FINE)) {
       PptSplitter.debug.fine ("Joiner View for ppt " + ppt.name);
-      for (Iterator<Invariant> ii = ppt.joiner_view.invs.iterator(); ii.hasNext(); ) {
-        Invariant inv = ii.next();
+      for (Invariant inv : ppt.joiner_view.invs) {
         PptSplitter.debug.fine ("-- " + inv.format());
       }
     }
@@ -1310,8 +1309,7 @@ public final class PrintInvariants {
           continue;
         slice_cnt++;
         inv_cnt += slice.invs.size();
-        for (Iterator<Invariant> ii = slice.invs.iterator(); ii.hasNext(); ) {
-          Invariant inv = ii.next();
+        for (Invariant inv : slice.invs) {
           if (inv.getClass().getName().indexOf ("Ternary") > 0) {
             lt_cnt++;
           }
@@ -1342,8 +1340,7 @@ public final class PrintInvariants {
         Fmt.pf ("  Slice %s - %s invariants", var_str, "" + slice.invs.size());
 
         // Loop through each invariant (skipping ternary ones)
-        for (Iterator<Invariant> ii = slice.invs.iterator(); ii.hasNext(); ) {
-          Invariant inv = ii.next();
+        for (Invariant inv : slice.invs) {
           if (inv.getClass().getName().indexOf ("Ternary") > 0) {
             continue;
           }
@@ -1407,8 +1404,7 @@ public final class PrintInvariants {
     if (slice == null)
       return;
 
-    for (Iterator<Invariant> ii = slice.invs.iterator(); ii.hasNext(); ) {
-      Invariant inv = ii.next();
+    for (Invariant inv : slice.invs) {
       Fmt.pf ("%s%s [%s]", indent, inv.format(),
               UtilMDE.unqualified_name(inv.getClass()));
     }

@@ -1091,14 +1091,12 @@ public abstract class Invariant
       all_vars1.add(var1);
       all_vars1.add(var2);
       Vector<VarInfoName> all_vars_names1 = new Vector<VarInfoName>(all_vars1.size());
-      for (Iterator<VarInfo> iter = all_vars1.iterator(); iter.hasNext(); ) {
-        VarInfo elt = iter.next();
+      for (VarInfo elt : all_vars1) {
         VarInfoName viname = name_extractor.getFromFirst(elt);
         all_vars_names1.add(viname);
       }
       boolean intersection = false;
-      for (Iterator<VarInfo> iter = all_vars2.iterator(); iter.hasNext(); ) {
-        VarInfo elt = iter.next();
+      for (VarInfo elt : all_vars2) {
         VarInfoName viname = name_extractor.getFromSecond(elt);
 
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
@@ -1144,8 +1142,7 @@ public abstract class Invariant
   // This implementation should be made more efficient, because it's used in
   // suppression.  We should somehow index invariants by their type.
   public static Invariant find(Class invclass, PptSlice ppt) {
-    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = itor.next();
+    for (Invariant inv : ppt.invs) {
       if (inv.getClass() == invclass)
         return inv;
     }

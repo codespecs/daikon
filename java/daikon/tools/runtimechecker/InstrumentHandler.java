@@ -110,8 +110,7 @@ public class InstrumentHandler extends CommandHandler {
         List<ParseResults> parseResults = ParseResults.parse(arguments.javaFileNames,
                                                              true /* discard comments */);
 
-        for (Iterator<ParseResults> i = parseResults.iterator(); i.hasNext();) {
-            ParseResults oneFile = i.next();
+        for (ParseResults oneFile : parseResults) {
 
             System.out.println("Instrumenting " + oneFile.fileName);
 

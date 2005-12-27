@@ -13,7 +13,7 @@ import java.util.*;
  * Class that defines a set of non-instantiating suppressions for a single
  * invariant (suppressee).
  */
-public class NISuppressionSet {
+public class NISuppressionSet implements Iterable<NISuppression> {
 
   public static final Logger debug
         = Logger.getLogger ("daikon.suppress.NISuppressionSet");
@@ -330,8 +330,7 @@ public class NISuppressionSet {
 
     // Make sure the invariant isn't already in the new_invs list
     if (Daikon.dkconfig_internal_check) {
-      for (Iterator<Invariant> i = new_invs.iterator(); i.hasNext(); ) {
-        Invariant new_inv = i.next();
+      for (Invariant new_inv : new_invs) {
         if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
           Assert.assertTrue (false, Fmt.spf ("inv %s:%s already in new_invs "
                         + "(slice %s)", inv.getClass(), inv.format(), slice));

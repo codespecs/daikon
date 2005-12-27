@@ -155,8 +155,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
 
     //  Create the first level of the tree:  classes
-    for (Iterator<String> iter = (new TreeSet<String>(pptMap.nameStringSet())).iterator(); iter.hasNext(); ) {
-      String name = iter.next();
+    for (String name : (new TreeSet<String>(pptMap.nameStringSet()))) {
       PptName pptName = new PptName( name );
       String className = pptName.getFullClassName();
       	   // System.out.println( "name is " + name + ", className is " + className );
@@ -173,8 +172,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     //  later contain entry and exit ppt's as children.  If the ppt is a class-level
     //  ppt (CLASS or CLASS-STATIC or OBJECT), then create the leaf node for this ppt
     //  right away.
-    for (Iterator<String> iter = (new TreeSet<String>(pptMap.nameStringSet())).iterator(); iter.hasNext(); ) {
-      String name = iter.next();
+    for (String name : (new TreeSet<String>(pptMap.nameStringSet()))) {
       Assert.assertTrue( name != null );
       PptName pptName = new PptName( name );
       String className = pptName.getFullClassName();
@@ -200,8 +198,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     }
 
     //  Create the third level of the tree:  method entry and exit points
-    for (Iterator<String> iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
-      String name = iter.next();
+    for (String name : pptMap.nameStringSet()) {
       PptName pptName = new PptName( name );
       String methodName = pptName.getSignature();
       if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it

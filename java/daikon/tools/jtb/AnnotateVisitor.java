@@ -325,8 +325,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       throw new Error("Node must be MethodDeclaration or ConstructorDeclaration");
     }
 
-    for (Iterator<PptTopLevel> itor = matching_ppts.iterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = itor.next();
+    for (PptTopLevel ppt : matching_ppts) {
       String prefix;
       if (ppt.ppt_name.isEnterPoint()) {
         requires_invs = invariants_for(ppt, ppts);

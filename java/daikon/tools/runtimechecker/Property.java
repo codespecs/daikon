@@ -306,8 +306,7 @@ public class Property implements Serializable {
         }
         //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
         Set<Property> annos = new HashSet<Property>();
-        for (Iterator<String> i = annoStrings.iterator(); i.hasNext();) {
-            String location = i.next();
+        for (String location : annoStrings) {
             if (location == null || location.equals("")) {
                 continue;
             }

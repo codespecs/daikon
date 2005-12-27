@@ -118,8 +118,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         HashMap<String,ArrayList<String>> lastMap = new HashMap<String,ArrayList<String>>();
         // One pass to fill each mapping with an empty ArrayList
-        for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
-            String key = i.next();
+        for (String key : programPointsList) {
             lastMap.put (key, new ArrayList<String>());
         }
 
@@ -178,8 +177,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         HashMap<String,ArrayList<String>> lastMap = new HashMap<String,ArrayList<String>>();
         // One pass to fill each mapping with an empty ArrayList
-        for (Iterator<String> i = programPointsList.iterator(); i.hasNext(); ) {
-            String key = i.next();
+        for (String key : programPointsList) {
             lastMap.put (key, new ArrayList<String>());
         }
 

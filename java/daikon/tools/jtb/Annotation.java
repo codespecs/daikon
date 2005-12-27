@@ -159,8 +159,7 @@ public class Annotation {
     }
     //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
     Set<Annotation> annos = new HashSet<Annotation>();
-    for (Iterator<String> i = annoStrings.iterator(); i.hasNext();) {
-      String location = i.next();
+    for (String location : annoStrings) {
       if (location == null || location.equals("")) {
         continue;
       }

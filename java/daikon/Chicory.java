@@ -486,54 +486,55 @@ public class Chicory {
     dtraceLim = System.getProperty(traceLimString);
     terminate = System.getProperty(traceLimTermString);
 
-        //run Daikon if we're in online mode
-        StreamRedirectThread daikon_err = null, daikon_out = null;
-        if (daikon_cmd_online != null)
+    //run Daikon if we're in online mode
+    StreamRedirectThread daikon_err = null, daikon_out = null;
+    if (daikon_cmd_online != null)
+    {
+        runDaikon(true);
+
+        daikon_err = new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
+        daikon_err.start();
+
+        InputStream daikonStdOut = daikon_proc.getInputStream();
+        // daikonReader escapes, so it is not closed in this method.
+        BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut));
+
+        //online mode code
+        for (int i = 0; i < 100; i++)
         {
-            runDaikon(true);
-
-            daikon_err = new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
-            daikon_err.start();
-
-            InputStream daikonStdOut = daikon_proc.getInputStream();
-            BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut));
-
-            //online mode code
-            for (int i = 0; i < 100; i++)
+            String line;
+            try
             {
-                String line;
-                try
-                {
-                    line = daikonReader.readLine();
-                }
-                catch (IOException e1)
-                {
-                    line = null;
-                }
-
-                if (line == null)
-                {
-                    throw new RuntimeException("Did not receive socket port from Daikon!");
-                }
-                else
-                {
-                    //if (!line.startsWith("DaikonChicoryOnlinePort="))
-                        System.out.println(line);
-
-                    if (line.startsWith("DaikonChicoryOnlinePort="))
-                    {
-                        String portStr = line.substring("DaikonChicoryOnlinePort=".length());
-                        //System.out.println("GOT PORT STRING " + portStr);
-                        premain_args.add("--daikon-port=" + portStr);
-                        break;
-                    }
-                }
+                line = daikonReader.readLine();
+            }
+            catch (IOException e1)
+            {
+                line = null;
             }
 
-            //continue reading daikon output in separate thread
-            daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
-            daikon_out.start();
+            if (line == null)
+            {
+                throw new RuntimeException("Did not receive socket port from Daikon!");
+            }
+            else
+            {
+                //if (!line.startsWith("DaikonChicoryOnlinePort="))
+                    System.out.println(line);
+
+                if (line.startsWith("DaikonChicoryOnlinePort="))
+                {
+                    String portStr = line.substring("DaikonChicoryOnlinePort=".length());
+                    //System.out.println("GOT PORT STRING " + portStr);
+                    premain_args.add("--daikon-port=" + portStr);
+                    break;
+                }
+            }
         }
+
+        //continue reading daikon output in separate thread
+        daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
+        daikon_out.start();
+    }
 
 
 

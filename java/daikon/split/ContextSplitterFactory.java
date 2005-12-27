@@ -42,8 +42,7 @@ public class ContextSplitterFactory
   public static void load_mapfiles_into_splitterlist(Collection<File> files,
                                                      int grain
                                                      ) {
-    for (Iterator<File> i = files.iterator(); i.hasNext(); ) {
-      File file = i.next();
+    for (File file : files) {
       String filename = file.getName();
 
       System.out.print(".");  // show progress

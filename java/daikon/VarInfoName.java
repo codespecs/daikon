@@ -2555,8 +2555,7 @@ public abstract class VarInfoName
     }
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName retval = null;
-      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = i.next();
+      for (VarInfoName vin : o.args) {
         retval = vin.accept(this);
         if (retval != null) return retval;
       }
@@ -2652,8 +2651,7 @@ public abstract class VarInfoName
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName result = null;
       if (goals.contains(o)) return o;
-      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = i.next();
+      for (VarInfoName vin : o.args) {
         result = vin.accept(this);
         if (result != null) return result;
       }
@@ -2810,8 +2808,7 @@ public abstract class VarInfoName
     // visitor methods that get the job done
     public Elements visitFunctionOfN(FunctionOfN o) {
       Elements retval = null;
-      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = i.next();
+      for (VarInfoName vin : o.args) {
         retval = vin.accept(this);
         if (retval != null) return retval;
       }
@@ -2877,8 +2874,7 @@ public abstract class VarInfoName
       // otherwise, create a new function and check if arguments get replaced
       if (o == old) return _new;
       ArrayList<VarInfoName> newArgs = new ArrayList<VarInfoName>();
-      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = i.next();
+      for (VarInfoName vin : o.args) {
         VarInfoName retval = vin.accept(this);
         newArgs.add (retval);
       }
@@ -2984,8 +2980,7 @@ public abstract class VarInfoName
     }
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       result.add (o);
-      for (Iterator<VarInfoName> i = o.args.iterator(); i.hasNext(); ) {
-        VarInfoName vin = i.next();
+      for (VarInfoName vin : o.args) {
         NoReturnValue retval = vin.accept(this);
       }
       return null;

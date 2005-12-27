@@ -20,8 +20,7 @@ public class PptMap
   }
 
   public void addAll(List<PptTopLevel> ppts) {
-    for (Iterator<PptTopLevel> iPpt = ppts.iterator(); iPpt.hasNext(); ) {
-      PptTopLevel ppt = iPpt.next();
+    for (PptTopLevel ppt : ppts) {
       add (ppt);
     }
   }
@@ -115,8 +114,7 @@ public class PptMap
 
   /** Iterate over the PptTopLevels and trim them. */
   public void trimToSize() {
-    for (Iterator<PptTopLevel> i = nameToPpt.values().iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : nameToPpt.values()) {
       ppt.trimToSize();
     }
   }

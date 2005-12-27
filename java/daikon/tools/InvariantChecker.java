@@ -231,8 +231,7 @@ public class InvariantChecker {
 
       // Add the sample to any splitters
       if (ppt.has_splitters()) {
-        for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
-          PptSplitter ppt_split = ii.next();
+        for (PptSplitter ppt_split : ppt.splitters) {
           PptConditional ppt_cond = ppt_split.choose_conditional (vt);
           if (ppt_cond != null)
             add (ppt_cond, vt);
@@ -289,8 +288,7 @@ public class InvariantChecker {
         }
 
         // Loop through each invariant
-        for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
-          Invariant inv = j.next();
+        for (Invariant inv : slice.invs) {
           if (debug_detail.isLoggable (Level.FINE))
             debug_detail.fine (": : Processing invariant: " + inv);
           if (!inv.isActive()) {

@@ -137,8 +137,7 @@ public class PptSliceEquality
     Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
     int invCount = 0;
-    for (Iterator<List<VarInfo>> i = multiMap.values().iterator(); i.hasNext(); ) {
-      List<VarInfo> list = i.next();
+    for (List<VarInfo> list : multiMap.values()) {
       varCount += list.size();
 
       Equality eq = new Equality (list, this);
@@ -166,8 +165,7 @@ public class PptSliceEquality
     // Build a map from each variable to all those that are equal to it
     Map<VarInfo,List<VarInfo>> varmap = new LinkedHashMap<VarInfo,List<VarInfo>>();
     Map<VarInfo,Integer> sample_cnt_map = new LinkedHashMap<VarInfo,Integer>();
-    for (Iterator<VarInfo.Pair> i = eset.iterator(); i.hasNext(); ) {
-      VarInfo.Pair cp = i.next();
+    for (VarInfo.Pair cp : eset) {
       List<VarInfo> vlist =  varmap.get (cp.v1);
       if (vlist == null) {
         vlist = new ArrayList<VarInfo>();
@@ -244,8 +242,7 @@ public class PptSliceEquality
 
         // Get a list of all of the new non-missing leaders
         List<VarInfo> newInvsLeaders = new ArrayList<VarInfo> (newInvs.size());
-        for (Iterator<Equality> iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
-          Equality eq = iNewInvs.next();
+        for (Equality eq : newInvs) {
           if ((parent.constants == null) || !parent.constants.is_missing (eq.leader()))
             newInvsLeaders.add (eq.leader());
         }
@@ -304,8 +301,7 @@ public class PptSliceEquality
     Assert.assertTrue (vis.size() > 0);
     HashMap<Object,List<VarInfo>> multiMap = new HashMap<Object,List<VarInfo>>(); /* key is a value */
     List<VarInfo> out_of_bounds = new ArrayList<VarInfo>();
-    for (Iterator<VarInfo> i = vis.iterator(); i.hasNext(); ) {
-      VarInfo vi = i.next();
+    for (VarInfo vi : vis) {
       if (vi.missingOutOfBounds())
         out_of_bounds.add (vi);
       else if (vt.isMissing (vi)) {
@@ -464,8 +460,7 @@ public class PptSliceEquality
         // This is called here because breaking up the equality set may
         // cause some invariants to become statically obvious (because
         // they will now be the only item in their set)
-        for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
-          Invariant inv = j.next();
+        for (Invariant inv : slice.invs) {
           if (!Daikon.dkconfig_undo_opts) {
             if (inv.isObviousStatically_AllInEquality()) {
               inv.falsify();
@@ -478,8 +473,7 @@ public class PptSliceEquality
     }
 
     // Add each new slice with invariants
-    for (Iterator<PptSlice> itor = newSlices.iterator(); itor.hasNext(); ) {
-      PptSlice slice = itor.next();
+    for (PptSlice slice : newSlices) {
       if (slice.invs.size() == 0) {
         continue;
       }
@@ -593,8 +587,7 @@ public class PptSliceEquality
   }
 
   public void repCheck() {
-    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = i.next();
+    for (Invariant inv : invs) {
       inv.repCheck();
       Assert.assertTrue (inv.ppt == this);
     }

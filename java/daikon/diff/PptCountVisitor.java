@@ -304,8 +304,7 @@ public class PptCountVisitor extends PrintAllVisitor {
   public void printFinal () {
 
     System.out.println ("CORRECT_FOUND: ");
-    for (Iterator<String> i = targSet.iterator(); i.hasNext(); ) {
-      String str = i.next();
+    for (String str : targSet) {
       if (correctSet.contains (str)) {
         System.out.println (str);
       }
@@ -315,8 +314,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     System.out.println ();
     System.out.println ();
     System.out.println ("NOT_FOUND: ");
-    for (Iterator<String> i = targSet.iterator(); i.hasNext(); ) {
-      String str = i.next();
+    for (String str : targSet) {
       if (!correctSet.contains (str)) {
         System.out.println (str);
       }
@@ -326,8 +324,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     System.out.println ();
     System.out.println ();
     System.out.println ("WRONG_REPORTS: ");
-    for (Iterator<String> i = incorrectSet.iterator(); i.hasNext(); ) {
-      String str = i.next();
+    for (String str : incorrectSet) {
       System.out.println (str);
     }
 

@@ -241,7 +241,7 @@ public class DynamicConstants implements Serializable {
     // Move any non-missing variables to the constant list and init their val
     // If a variable is missing out of bounds, leave it on this list
     // forever (guranteeing that invariants will never be instantiated over
-    // it)
+    // it).
     for (Iterator<Constant> i = missing_list.iterator(); i.hasNext(); ) {
       Constant con = i.next();
       if (con.vi.missingOutOfBounds())

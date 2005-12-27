@@ -38,8 +38,7 @@ public class InstrumentObserversVisitor
       return;
     }
 
-    for (Iterator<MethodDeclaration> i = observer_methods.iterator(); i.hasNext(); ) {
-      MethodDeclaration method = i.next();
+    for (MethodDeclaration method : observer_methods) {
       String fldtype = getFieldTypeFor(method);
       String fldname = getFieldNameFor(method);
       String code = "private " + fldtype + " " + fldname + ";" + Global.lineSep;
@@ -52,8 +51,7 @@ public class InstrumentObserversVisitor
     code.append("private void daikon_update() {");
     code.append("  if (daikon.Runtime.ps_count == 0) {");
     code.append("    daikon.Runtime.ps_count++;");
-    for (Iterator<MethodDeclaration> i = observer_methods.iterator(); i.hasNext(); ) {
-      MethodDeclaration obs_method = i.next();
+    for (MethodDeclaration obs_method : observer_methods) {
       String fldname = getFieldNameFor(obs_method);
       code.append("    " + fldname + " = " + getCallExprFor(obs_method) + ";");
     }
@@ -99,8 +97,7 @@ public class InstrumentObserversVisitor
     String returnType = Ast.getReturnType(method);
     String maybeReturn = (returnType.equals("void") ? "" : "return");
     Vector<String> parameters = new Vector<String>();
-    for (Iterator<FormalParameter> i = Ast.getParameters(method).iterator(); i.hasNext(); ) {
-      FormalParameter param = i.next();
+    for (FormalParameter param : Ast.getParameters(method)) {
       parameters.add(Ast.getName(param));
     }
 

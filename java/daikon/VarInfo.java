@@ -937,8 +937,7 @@ public final class VarInfo implements Cloneable, Serializable {
     }
 
     // "myVector[]" is invalid, as is myVector[foo]
-    for (Iterator<VarInfoName> i = name.inOrderTraversal().iterator(); i.hasNext();) {
-      VarInfoName next = i.next();
+    for (VarInfoName next : name.inOrderTraversal()) {
       if (next instanceof VarInfoName.Elements) {
         VarInfoName.Elements elems = (VarInfoName.Elements) next;
         VarInfo seq = ppt.findVar(elems.term);

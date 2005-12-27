@@ -585,8 +585,7 @@ public final class Diff {
     SortedSet<PptTopLevel> ppts = new TreeSet<PptTopLevel>(PPT_COMPARATOR);
     ppts.addAll(pptMap.asCollection());
 
-    for (Iterator<PptTopLevel> i = ppts.iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : ppts) {
       if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint())
         continue;
 
@@ -710,8 +709,7 @@ public final class Diff {
       HashSet<String> repeatFilter = new HashSet<String>();
       ArrayList<Invariant> ret = new ArrayList<Invariant> ();
       invs1 = map1.get(ppt1);
-      for (Iterator<Invariant> j = invs1.iterator(); j.hasNext(); ) {
-        Invariant inv = j.next();
+      for (Invariant inv : invs1) {
         if (/*inv.justified() && */inv instanceof Implication) {
           Implication imp = (Implication) inv;
           if (!repeatFilter.contains (imp.consequent().format_using(OutputFormat.JAVA))) {

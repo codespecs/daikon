@@ -126,7 +126,7 @@ public class InvDef {
 
     debug.fine ("checking " + this);
 
-    // If its a binary invariant that is swapped, make sure it matches
+    // If it's a binary invariant that is swapped, make sure it matches
     if ((v2 != null) && !swap_class) {
       BinaryInvariant binv = (BinaryInvariant) inv;
       if (!binv.is_symmetric() && swap != binv.get_swap()) {

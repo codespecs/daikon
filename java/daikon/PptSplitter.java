@@ -214,8 +214,7 @@ public class PptSplitter implements Serializable {
     // Loop through each possible parent slice
     List<VarInfo[]> slices = possible_slices();
 
-    for (Iterator<VarInfo[]> itor = slices.iterator(); itor.hasNext(); ) {
-      VarInfo[] vis = itor.next();
+    for (VarInfo[] vis : slices) {
 
       int num_children = ppts.length;
       // Each element is an invariant from the indexth child, permuted to
@@ -328,8 +327,7 @@ public class PptSplitter implements Serializable {
     if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
       debug.fine ("Found " + exclusive_invs_vec.size()
                   + " exclusive conditions ");
-      for (Iterator<Invariant[]> i = exclusive_invs_vec.iterator(); i.hasNext(); ) {
-        Invariant[] invs = i.next();
+      for (Invariant[] invs : exclusive_invs_vec) {
         invs[0].log ("exclusive condition with " + invs[1].format());
         invs[1].log ("exclusive condition with " + invs[0].format());
         debug.fine ("-- " + invs[0] + " -- " + invs[1]);
@@ -388,8 +386,7 @@ public class PptSplitter implements Serializable {
       if (diff_invs[0] != null) {
         Assert.assertTrue (diff_invs[1] == null);
         // debug.fine ("Considering inv0 " + diff_invs[0]);
-        for (Iterator<Invariant[]> jj = exclusive_invs_vec.iterator(); jj.hasNext(); ) {
-          Invariant[] ex_invs = jj.next();
+        for (Invariant[] ex_invs : exclusive_invs_vec) {
           if (ex_invs[0] == diff_invs[0]) {
             debug.fine ("removed exclusive invariant " + ex_invs[0]);
             ii.remove();
@@ -399,8 +396,7 @@ public class PptSplitter implements Serializable {
       } else {
         Assert.assertTrue (diff_invs[1] != null);
         // debug.fine ("Considering inv1 " + diff_invs[1]);
-        for (Iterator<Invariant[]> jj = exclusive_invs_vec.iterator(); jj.hasNext(); ) {
-          Invariant[] ex_invs = jj.next();
+        for (Invariant[] ex_invs : exclusive_invs_vec) {
           if (ex_invs[1] == diff_invs[1]) {
             debug.fine ("removed exclusive invariant " + ex_invs[1]);
             ii.remove();
@@ -415,8 +411,7 @@ public class PptSplitter implements Serializable {
     // If all are either obvious or suppressed, we just pick the first
     // one in the list
     Invariant[] con_invs = new Invariant[2];
-    for (Iterator<Invariant[]> ii = exclusive_invs_vec.iterator(); ii.hasNext(); ) {
-      Invariant[] invs = ii.next();
+    for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
           Invariant orig = orig_invs.get (invs[jj]);

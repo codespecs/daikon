@@ -191,7 +191,7 @@ public class TraceSelect {
         filePrefix = calcOut (fileName);
 
         // gotta do num_reps - 1 because of "off by one"
-        // but now add a '-p' in the front so its all good
+        // but now add a '-p' in the front so it's all good
         sampleNames[num_reps] = filePrefix + ".inv";
 
         PrintWriter pwOut = new PrintWriter

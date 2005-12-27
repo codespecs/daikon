@@ -240,8 +240,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String name = Ast.getName(ctor);
         List<String> parameters = new ArrayList<String>();
         List<String> typesAndParameters = new ArrayList<String>();
-        for (Iterator<FormalParameter> i = Ast.getParametersNoImplicit(ctor).iterator(); i.hasNext();) {
-            FormalParameter param = i.next();
+        for (FormalParameter param : Ast.getParametersNoImplicit(ctor)) {
             parameters.add(Ast.getName(param));
             typesAndParameters.add(Ast.format(param));
         }
@@ -339,8 +338,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String maybeReturn = (returnType.equals("void") ? "" : "return");
         List<String> typesAndParameters = new ArrayList<String>();
         List<String> parameters = new ArrayList<String>();
-        for (Iterator<FormalParameter> i = Ast.getParameters(method).iterator(); i.hasNext();) {
-            FormalParameter param = i.next();
+        for (FormalParameter param : Ast.getParameters(method)) {
             parameters.add(Ast.getName(param));
             typesAndParameters.add(Ast.format(param));
         }
@@ -463,8 +461,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // something like: \"<ENTER>\"
     private void appendInvariantChecks(List<Invariant> invs,
             StringBuffer code, String vioTime) {
-        for (Iterator<Invariant> i = invs.iterator(); i.hasNext();) {
-            Invariant inv = i.next();
+        for (Invariant inv : invs) {
 
             String javarep = inv.format_using(OutputFormat.JAVA);
 
@@ -722,8 +719,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     private static List<Invariant> filterInvariants(
             List<Invariant> invariants) {
         List<Invariant> survivors = new ArrayList<Invariant>();
-        for (Iterator<Invariant> i = invariants.iterator(); i.hasNext();) {
-            Invariant inv = i.next();
+        for (Invariant inv : invariants) {
 
             if (! inv.isValidExpression(OutputFormat.JAVA)) {
                 continue;
@@ -825,8 +821,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 //         code.append(" if (!methodThrewSomething_instrument) {");
 
         // Check postconditions.
-        for (Iterator<PptTopLevel> i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isExitPoint()
 		&& ppt.ppt_name.isCombinedExitPoint()) {
                 List<Invariant> postconditions = filterInvariants(Ast
@@ -848,8 +843,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     private void checkPreconditions(StringBuffer code,
             List<PptTopLevel> matching_ppts, PptMap pptmap) {
-        for (Iterator<PptTopLevel> i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isEnterPoint()) {
                 List<Invariant> preconditions = filterInvariants(Ast
                         .getInvariants(ppt, pptmap));
@@ -872,8 +866,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                     UtilMDE.join(parameters, ", ") +
                     ") {");
 
-        for (Iterator<PptTopLevel> i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isEnterPoint()) {
                 List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
                 List<InvProp> finalList = null;
@@ -907,8 +900,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                     UtilMDE.join(parameters, ", ") +
                     ") {");
 
-        for (Iterator<PptTopLevel> i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isExitPoint()
 		&& ppt.ppt_name.isCombinedExitPoint()) {
                 List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
@@ -941,8 +933,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                     UtilMDE.join(parameters, ", ") +
                     ") {");
 
-        for (Iterator<PptTopLevel> i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isEnterPoint()) {
                 List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
                 List<InvProp> finalList = null;
@@ -975,8 +966,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                     UtilMDE.join(parameters, ", ") +
                     ") {");
 
-        for (Iterator<PptTopLevel> i = matching_ppts.iterator(); i.hasNext();) {
-            PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isExitPoint()
 		&& ppt.ppt_name.isCombinedExitPoint()) {
                 List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));

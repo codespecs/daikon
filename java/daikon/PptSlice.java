@@ -363,8 +363,7 @@ public abstract class PptSlice
   public void processOmissions(boolean[] omitTypes) {
     if (invs.size() == 0) return;
     List<Invariant> toRemove = new ArrayList<Invariant>();
-    for (Iterator<Invariant> overInvs = invs.iterator(); overInvs.hasNext(); ) {
-      Invariant inv = overInvs.next();
+    for (Invariant inv : invs) {
       if (omitTypes['r'] && inv.isReflexive())
         toRemove.add(inv);
     }
@@ -377,8 +376,7 @@ public abstract class PptSlice
    */
   public void repCheck() {
 
-    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = i.next();
+    for (Invariant inv : invs) {
       inv.repCheck();
       Assert.assertTrue (inv.ppt == this);
     }
@@ -421,8 +419,7 @@ public abstract class PptSlice
    */
   public boolean contains_inv (Invariant inv) {
 
-    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
-      Invariant mine = i.next();
+    for (Invariant mine : invs) {
       if (mine.match (inv))
         return (true);
     }
@@ -446,8 +443,7 @@ public abstract class PptSlice
    */
   public Invariant find_inv_exact (Invariant inv) {
 
-    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
-      Invariant mine = i.next();
+    for (Invariant mine : invs) {
       if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv))
         return (mine);
     }
@@ -460,8 +456,7 @@ public abstract class PptSlice
    */
   public Invariant find_inv_by_class (Class cls) {
 
-    for (Iterator<Invariant> i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = i.next();
+    for (Invariant inv : invs) {
       if ((inv.getClass() == cls))
         return (inv);
     }

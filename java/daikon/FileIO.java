@@ -1133,8 +1133,7 @@ public final class FileIO {
 
   /** Print all the invocations in the collection, in order. **/
   static void print_invocations_verbose(Collection<Invocation> invocations) {
-    for (Iterator<Invocation> i = invocations.iterator(); i.hasNext();) {
-      Invocation invok = i.next();
+    for (Invocation invok : invocations) {
       System.out.println(invok.format());
     }
   }
@@ -1146,8 +1145,7 @@ public final class FileIO {
   static void print_invocations_grouped(Collection<Invocation> invocations) {
     Map<Invocation,Integer> counter = new HashMap<Invocation,Integer>();
 
-    for (Iterator<Invocation> i = invocations.iterator(); i.hasNext();) {
-      Invocation invok = i.next();
+    for (Invocation invok : invocations) {
       invok = invok.canonicalize();
       if (counter.containsKey(invok)) {
         Integer oldCount = counter.get(invok);
@@ -1560,8 +1558,7 @@ public final class FileIO {
           nppt.set_sample_number(ppt.num_samples());
           ppts.add(nppt);
           List<Invariant> inv_list = invs.get(ppt);
-          for (Iterator<Invariant> j = inv_list.iterator(); j.hasNext();) {
-            Invariant inv = j.next();
+          for (Invariant inv : inv_list) {
             PptSlice slice = nppt.get_or_instantiate_slice(inv.ppt.var_infos);
             inv.ppt = slice;
             slice.addInvariant(inv);

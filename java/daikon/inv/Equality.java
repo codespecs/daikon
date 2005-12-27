@@ -104,8 +104,7 @@ public final class Equality
     // ensure well-formedness and set equality slots
     Assert.assertTrue (variables.size() > 0);
     Assert.assertTrue (vars.size() == variables.size());
-    for (Iterator<VarInfo> i = variables.iterator(); i.hasNext(); ) {
-      VarInfo vi = i.next();
+    for (VarInfo vi : variables) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("  " + vi.name.name() + " [" + vi.comparability + "]");
       }
@@ -185,8 +184,7 @@ public final class Equality
   public String format_daikon() {
     StringBuffer result = new StringBuffer();
     boolean start = true;
-    for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-      VarInfo var = i.next();
+    for (VarInfo var : vars) {
       if (!start) {
         result.append(" == ");
       } else {
@@ -244,8 +242,7 @@ public final class Equality
 
     List<VarInfo> equal_vars = new Vector<VarInfo>();
 
-    for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-      VarInfo other = i.next();
+    for (VarInfo other : vars) {
       if (other.isDerivedSequenceMinMaxSum()) {
         break;
       }
@@ -335,8 +332,7 @@ public final class Equality
     VarInfo leader = leader();
     String leaderName = leader.name.simplify_name();
     if (leader.rep_type.isArray()) {
-      for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-        VarInfo var = i.next();
+      for (VarInfo var : vars) {
         if (var == leader) continue;
         String[] form =
           VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
@@ -346,8 +342,7 @@ public final class Equality
         result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
       }
     } else {
-      for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-        VarInfo var = i.next();
+      for (VarInfo var : vars) {
         if (var == leader) continue;
         String a = format_elt(leaderName);
         String b = format_elt(var.name.simplify_name());
@@ -518,8 +513,7 @@ public final class Equality
    **/
   public void pivot() {
     VarInfo newLeader = null;
-    for (Iterator<VarInfo> iVars = vars.iterator(); iVars.hasNext(); ) {
-      VarInfo var = iVars.next();
+    for (VarInfo var : vars) {
       if (newLeader == null) {
         newLeader = var;
       }
@@ -549,8 +543,7 @@ public final class Equality
   public void repCheck() {
     super.repCheck();
     VarInfo leader = leader();
-    for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-      VarInfo var = i.next();
+    for (VarInfo var : vars) {
       Assert.assertTrue (VarComparability.comparable (leader, var),
                  "not comparable: " + leader.name.name() + " "
                 + var.name.name() + " at ppt " + ppt.parent.name());

@@ -646,8 +646,7 @@ public class LOWERBOUND
   // Look up a previously instantiated invariant.
   public static LOWERBOUND find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
-    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = itor.next();
+    for (Invariant inv : ppt.invs) {
       if (inv instanceof LOWERBOUND)
         return (LOWERBOUND) inv;
     }

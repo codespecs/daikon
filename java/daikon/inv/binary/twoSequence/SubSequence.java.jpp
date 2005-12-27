@@ -527,8 +527,7 @@ public class CLASSNAME
   // Look up a previously instantiated SubSequence relationship.
   public static CLASSNAME find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
-    for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = itor.next();
+    for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME)
         return (CLASSNAME) inv;
     }

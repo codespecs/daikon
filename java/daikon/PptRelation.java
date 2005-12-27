@@ -821,8 +821,7 @@ public class PptRelation implements Serializable {
           PptRelation rel = ppt.children.get(jj);
           if (!rel.child.has_splitters())
             break;
-          for (Iterator<PptSplitter> kk = rel.child.splitters.iterator(); kk.hasNext();) {
-            PptSplitter csplit = kk.next();
+          for (PptSplitter csplit : rel.child.splitters) {
             if (ppt_split.splitter == csplit.splitter) {
               split_children.add(new SplitChild(rel, csplit));
               continue child_loop;
@@ -841,8 +840,7 @@ public class PptRelation implements Serializable {
         // Build the PptRelations for each child.  The PptRelation from
         // the conditional point is of the same type as the original
         // relation from parent to child
-        for (Iterator<SplitChild> jj = split_children.iterator(); jj.hasNext();) {
-          SplitChild sc = jj.next();
+        for (SplitChild sc : split_children) {
           ppt_split.add_relation(sc.rel, sc.ppt_split);
         }
       }

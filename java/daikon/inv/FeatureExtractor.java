@@ -361,11 +361,9 @@ public final class FeatureExtractor {
 
       // check which features are missing and add IntDoublePairs
       // with those features set to 0
-      for (Iterator<IntDoublePair> h = allFeatures.iterator(); h.hasNext();) {
-        IntDoublePair current = h.next();
+      for (IntDoublePair current : allFeatures) {
         boolean contains = false;
-        for (Iterator<IntDoublePair> j = allFets.iterator(); j.hasNext();) {
-          IntDoublePair jguy = j.next();
+        for (IntDoublePair jguy : allFets) {
           if (jguy.number == current.number)
             contains = true;
         }
@@ -393,8 +391,7 @@ public final class FeatureExtractor {
                         lineSep + "Expected number of features: "+allFeatures.size() +
                         lineSep + "Actual number of features: "+allFets.size());
 
-      for (Iterator<IntDoublePair> fets = allFets.iterator(); fets.hasNext(); ) {
-        IntDoublePair fet = fets.next();
+      for (IntDoublePair fet : allFets) {
         output.print(df.format(fet.value) + ",");
       }
       output.println(label);
@@ -711,8 +708,7 @@ public final class FeatureExtractor {
     //cleanup answer
     TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
     HashSet<Integer> index = new HashSet<Integer>();
-    for (Iterator<IntDoublePair> iter = answer.iterator(); iter.hasNext();) {
-      IntDoublePair current = iter.next();
+    for (IntDoublePair current : answer) {
       if (!(index.contains(new Integer(current.number))))
         final_answer.add(current);
       index.add(new Integer(current.number));
@@ -870,8 +866,7 @@ public final class FeatureExtractor {
       ArrayList<String> posvectors = new ArrayList<String>();
       ArrayList<String> negvectors = new ArrayList<String>();
 
-      for (Iterator<String> i = neg.iterator(); i.hasNext(); ) {
-        String vector = i.next();
+      for (String vector : neg) {
         if (!(pos.contains(vector))) {
           if (type.equals("C5"))
             negvectors.add(vector + "bad");

@@ -88,8 +88,7 @@ public class InvMap implements Serializable {
       PptTopLevel ppt = i.next();
       result += ppt.name() + Global.lineSep;
       List<Invariant> invs = get(ppt);
-      for (Iterator<Invariant> i2 = invs.iterator(); i2.hasNext(); ) {
-        Invariant inv = i2.next();
+      for (Invariant inv : invs) {
         result += "  " + inv.format() + Global.lineSep;
       }
     }

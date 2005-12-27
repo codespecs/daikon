@@ -811,8 +811,7 @@ public class PptTopLevel extends Ppt {
 
     // If there are conditional program points, add the sample there instead
     if (has_splitters()) {
-      for (Iterator<PptSplitter> ii = splitters.iterator(); ii.hasNext();) {
-        PptSplitter ppt_split = ii.next();
+      for (PptSplitter ppt_split : splitters) {
         ppt_split.add_bottom_up(vt, count);
       }
       if (Daikon.use_dataflow_hierarchy)
@@ -1142,8 +1141,7 @@ public class PptTopLevel extends Ppt {
     for (Iterator<PptSlice> i = views_iterator(); i.hasNext();) {
       PptSlice slice = i.next();
       log.fine("Slice: " + slice);
-      for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext();) {
-        Invariant inv = j.next();
+      for (Invariant inv : slice.invs) {
         log.fine(
           "-- "
             + inv.format()
@@ -1345,8 +1343,7 @@ public class PptTopLevel extends Ppt {
    * Remove a list of invariants
    */
   public void remove_invs(List<Invariant> rm_list) {
-    for (Iterator<Invariant> i = rm_list.iterator(); i.hasNext();) {
-      Invariant inv = i.next();
+    for (Invariant inv : rm_list) {
       inv.ppt.removeInvariant(inv);
     }
   }
@@ -2475,8 +2472,7 @@ public class PptTopLevel extends Ppt {
     // implications from the two exit points
     if (ppt_name.isCombinedExitPoint()) {
       List<PptTopLevel> exit_points = new ArrayList<PptTopLevel>();
-      for (Iterator<PptRelation> ii = children.iterator(); ii.hasNext();) {
-        PptRelation rel = ii.next();
+      for (PptRelation rel : children) {
         if (rel.getRelationType() == PptRelation.EXIT_EXITNN)
           exit_points.add(rel.child);
       }
@@ -2546,8 +2542,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Add in the removed slices
-    for (Iterator<PptSlice> iPivoted = pivoted.iterator(); iPivoted.hasNext();) {
-      PptSlice oPivoted = iPivoted.next();
+    for (PptSlice oPivoted : pivoted) {
       addSlice(oPivoted); // Make the key right again
       if (debugEqualTo.isLoggable(Level.FINE)) {
         debugEqualTo.fine("  Readded: " + oPivoted);
@@ -2693,8 +2688,7 @@ public class PptTopLevel extends Ppt {
     // since in the current scheme, implications came from controlled
     // program points, and we don't necessarily want to lose the
     // unconditional version of the invariant at the conditional ppt.
-    for (Iterator<PptTopLevel> ppts = closure.iterator(); ppts.hasNext();) {
-      PptTopLevel ppt = ppts.next();
+    for (PptTopLevel ppt : closure) {
       Vector<Invariant> invs_vec = ppt.invariants_vector();
       Collections.sort(invs_vec, icfp);
       Iterator<Invariant> _invs =
@@ -3178,8 +3172,7 @@ public class PptTopLevel extends Ppt {
     }
     // We could check a lot more than just that slices are okay.  For
     // example, we could ensure that flow graph is correct.
-    for (Iterator<PptSlice> i = viewsAsCollection().iterator(); i.hasNext();) {
-      PptSlice slice = i.next();
+    for (PptSlice slice : viewsAsCollection()) {
       slice.repCheck();
     }
     if (equality_view != null) equality_view.repCheck();
@@ -3191,8 +3184,7 @@ public class PptTopLevel extends Ppt {
   public String debugSlices() {
     StringBuffer result = new StringBuffer();
     result.append("Slices for: " + this.ppt_name);
-    for (Iterator<PptSlice> i = viewsAsCollection().iterator(); i.hasNext();) {
-      PptSlice slice = i.next();
+    for (PptSlice slice : viewsAsCollection()) {
       result.append(Global.lineSep + slice.toString());
     }
     return result.toString();
@@ -3247,8 +3239,7 @@ public class PptTopLevel extends Ppt {
       Equality e = (Equality) equality_view.invs.get(i);
       Set<VarInfo> vars = e.getVars();
       String set_str = "";
-      for (Iterator<VarInfo> j = vars.iterator(); j.hasNext();) {
-        VarInfo v = j.next();
+      for (VarInfo v : vars) {
         if (set_str != "") // interned
           set_str += ",";
         set_str += v.name.name();
@@ -3269,8 +3260,7 @@ public class PptTopLevel extends Ppt {
    */
   public boolean has_parent(VarInfo v) {
 
-    for (Iterator<PptRelation> i = parents.iterator(); i.hasNext();) {
-      PptRelation rel = i.next();
+    for (PptRelation rel : parents) {
       if (rel.parentVar(v) != null)
         return (true);
     }
@@ -3301,8 +3291,7 @@ public class PptTopLevel extends Ppt {
     in_merge = true;
 
     // First do this for any children.
-    for (Iterator<PptRelation> i = children.iterator(); i.hasNext();) {
-      PptRelation rel = i.next();
+    for (PptRelation rel : children) {
       if (!rel.child.in_merge)
         rel.child.mergeInvs();
     }
@@ -3451,8 +3440,7 @@ public class PptTopLevel extends Ppt {
         continue;
       Map<VarInfo.Pair,VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
       // Cannot use foreach loop, due to desire to remove from emap.
-      for (Iterator<VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
-        VarInfo.Pair curpair = j.next();
+      for (VarInfo.Pair curpair : emap.keySet()) {
         VarInfo.Pair newpair = eq_new.get(curpair);
         if (newpair == null)
           // Equivalent to emap.remove(...), but that could throw a
@@ -3502,8 +3490,7 @@ public class PptTopLevel extends Ppt {
 
     // Remove any child invariants that now exist here
     if (dkconfig_remove_merged_invs) {
-      for (Iterator<PptRelation> i = children.iterator(); i.hasNext();) {
-        PptRelation rel = i.next();
+      for (PptRelation rel : children) {
         rel.child.remove_child_invs(rel);
       }
     }
@@ -3512,8 +3499,7 @@ public class PptTopLevel extends Ppt {
 
     // Remove the relations since we don't need it anymore
     if (dkconfig_remove_merged_invs) {
-      for (Iterator<PptRelation> i = children.iterator(); i.hasNext();) {
-        PptRelation rel = i.next();
+      for (PptRelation rel : children) {
         rel.child.parents.remove(rel);
       }
       children = new ArrayList<PptRelation>(0);
@@ -3718,8 +3704,7 @@ public class PptTopLevel extends Ppt {
       // Make sure that the parent equality set is a subset of the child
       // equality set
       if (Assert.enabled) {
-        for (Iterator<VarInfo> k = pv.equalitySet.getVars().iterator(); k.hasNext();) {
-          VarInfo test_pv = k.next();
+        for (VarInfo test_pv : pv.equalitySet.getVars()) {
           VarInfo test_cv = rel.childVar (test_pv);
           if (test_cv.canonicalRep() != cv.canonicalRep()) {
             Fmt.pf("pv.equalitySet = " + pv.equalitySet);
@@ -3823,8 +3808,7 @@ public class PptTopLevel extends Ppt {
     //  return;
 
     // Only do this for ppts whose children have also been removed
-    for (Iterator<PptRelation> i = children.iterator(); i.hasNext();) {
-      PptRelation crel = i.next();
+    for (PptRelation crel : children) {
       if (!crel.child.invariants_removed) {
         // System.out.println ("Rel " + rel + "has not had its child invs rm");
         return;
@@ -3879,8 +3863,7 @@ public class PptTopLevel extends Ppt {
     // Remove all of the slices with 0 invariants
     System.out.println ("  Removed " + slices_to_remove.size() + " slices of "
                         + numViews());
-    for (Iterator<PptSlice> i = slices_to_remove.iterator(); i.hasNext(); ) {
-      PptSlice slice = i.next();
+    for (PptSlice slice : slices_to_remove) {
       // System.out.println ("Removing Slice " + slice);
       removeSlice(slice);
     }
