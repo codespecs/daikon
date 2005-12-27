@@ -649,6 +649,15 @@ public final class Intern {
       this.end = end;
     }
 
+    @SuppressWarnings("unchecked")
+    public boolean equals (Object other) {
+      if (other instanceof SequenceAndIndices) {
+        return equals((SequenceAndIndices<T>) other); // unchecked
+      } else {
+        return false;
+      }
+    }
+
     public boolean equals (SequenceAndIndices<T> other) {
       return (this.seq == other.seq) &&
         this.start == other.start &&

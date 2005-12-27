@@ -293,14 +293,14 @@ public class BCELUtil {
         p.printf("  %d %s\n", ii, constants[ii]);
       }
 
+      p.close();
+
     } catch (Exception e) {
       throw new Error("Unexpected error dumping javaclass", e);
     }
   }
 
-  /**
-   * TODO
-   */
+  // TODO: write Javadoc
   public static String instruction_descr(InstructionList il,
       ConstantPoolGen pool) {
 
