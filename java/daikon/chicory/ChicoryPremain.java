@@ -201,7 +201,7 @@ public class ChicoryPremain {
 //      Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);
 //
 //      pureMethods = new HashSet<String> ();
-//      for(HMethod meth: pureHMethods)
+//      for (HMethod meth: pureHMethods)
 //      {
 //          pureMethods.add(meth.toString());
 //      }
@@ -226,7 +226,7 @@ public class ChicoryPremain {
       assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
 
       //TODO just use Set.contains(member.toString()) ?
-      for(String methName: pureMethods)
+      for (String methName: pureMethods)
       {
           if (methName.equals(member.toString()))
               return true;

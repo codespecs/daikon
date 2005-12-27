@@ -507,7 +507,7 @@ findbugs: .findbugs-output
 # So make sure it's up to date before using this
 findbugs-nocompile:
 	rm -f .findbugs-output
-	~mernst/bin/share/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
+	~mernst/bin/share/findbugs -emacs -textui -property "findbugs.maskedfields.locals=true" -property "findbugs.de.comment=true" -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
 # This target is aimed at M-x compile in Emacs.  The output is misleading
 # if the .findbugs-output file might be old, or the daikon.jar file is old.

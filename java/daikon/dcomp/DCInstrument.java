@@ -35,7 +35,7 @@ class DCInstrument {
 
   // Argument descriptors
   private Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
-  private Type[] two_ints = new Type[] {Type.INT, Type.INT};
+  // private Type[] two_ints = new Type[] {Type.INT, Type.INT};
   private Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
   private Type[] string_arg = new Type[] {Type.STRING};
   private Type[] integer_arg = new Type[] {Type.INT};
@@ -43,7 +43,7 @@ class DCInstrument {
 
   // Type descriptors
   private Type object_arr = new ArrayType (Type.OBJECT, 1);
-  private Type int_arr = new ArrayType (Type.INT, 1);
+  // private Type int_arr = new ArrayType (Type.INT, 1);
   private ObjectType throwable = new ObjectType ("java.lang.Throwable");
   private ObjectType dcomp_marker = null;
 
@@ -521,7 +521,7 @@ class DCInstrument {
                                     LocalVariableGen tag_frame_local) {
 
     Type arg_types[] = mgen.getArgumentTypes();
-    LocalVariableGen[] locals = mgen.getLocalVariables();
+    // LocalVariableGen[] locals = mgen.getLocalVariables();
 
     // Determine the offset of the first argument in the frame
     int offset = 1;

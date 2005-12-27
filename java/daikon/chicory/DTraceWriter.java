@@ -168,7 +168,7 @@ public class DTraceWriter extends DaikonWriter
             Object ret_val)
     {
         //go through all of the node's children
-        for(DaikonVariableInfo child: root)
+        for (DaikonVariableInfo child: root)
         {
 
             Object val;
@@ -246,7 +246,7 @@ public class DTraceWriter extends DaikonWriter
 
         List<Object> fieldVals = new ArrayList<Object> ();
 
-        for(Object theObj : theObjects)
+        for (Object theObj : theObjects)
         {
             if (theObj == null)
                 fieldVals.add(nonsenseValue);
@@ -509,7 +509,7 @@ public class DTraceWriter extends DaikonWriter
 
         List<String> typeNames = new ArrayList<String> (theVals.size());
 
-        for(Object ref: theVals)
+        for (Object ref: theVals)
         {
             Class type = null;
 

@@ -401,7 +401,7 @@ public final class OutputFormat
 
       if (lowername.indexOf(".")!=-1||lowername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(lower);
-        for(Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
+        for (Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
           String lowerrootvar=it.next().name();
           String vardef="";
           if (!getType(ppt,lowerrootvar).equals("int"))
@@ -414,7 +414,7 @@ public final class OutputFormat
 
       if (uppername.indexOf(".")!=-1||uppername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(upper);
-        for(Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
+        for (Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
           String upperrootvar=it.next().name();
           String vardef="";
           if (!getType(ppt,upperrootvar).equals("int"))
@@ -444,7 +444,7 @@ public final class OutputFormat
     /** This method generates the current quantifier string. */
     public String getQuantifiers() {
       String str="";
-      for(Iterator<Map.Entry<String,String>> it=quantifiers.entrySet().iterator();it.hasNext();) {
+      for (Iterator<Map.Entry<String,String>> it=quantifiers.entrySet().iterator();it.hasNext();) {
         Map.Entry<String,String> entry = it.next();
         String key = entry.getKey();
         String value = entry.getValue();
@@ -847,14 +847,6 @@ public final class OutputFormat
        }
      }
     */
-    public static class SetRelationPair {
-      String set;
-      String relation;
-      public SetRelationPair(String s, String r) {
-        set=s;
-        relation=r;
-      }
-    }
 
     /** This class stores information on a given program point. */
 

@@ -62,7 +62,7 @@ public class CreateSpinfoC {
           }
           System.out.println("CreateSpinfoC:  C program parsed successfully.");
         } catch (FileNotFoundException fe) {
-          System.out.println(fileName.toString() + " was not found.");
+          System.out.println(fileName + " was not found.");
         }
       }
     catch (ParseException e)

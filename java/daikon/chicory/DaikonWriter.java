@@ -123,7 +123,7 @@ public abstract class DaikonWriter
         // build up the string to go inside the parens
         StringBuilder paramTypes = new StringBuilder();
         paramTypes.append("(");
-        for(int i = 0; i < types.length; i++)
+        for (int i = 0; i < types.length; i++)
         {
             paramTypes.append(types[i]);
 

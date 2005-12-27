@@ -2,8 +2,8 @@ package daikon.chicory;
 
 
 /**
- * The ReturnInfo class is a subtype of DaikonVariableInfo used for variables which are
- * returned from procedures
+ * A subtype of DaikonVariableInfo used for variables that are
+ * returned from procedures.
  */
 public class ReturnInfo extends DaikonVariableInfo
 {

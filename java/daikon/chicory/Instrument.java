@@ -174,7 +174,7 @@ public class Instrument implements ClassFileTransformer {
 
       //get constant static fields!
       Field[] fields = cg.getFields();
-      for(Field field: fields)
+      for (Field field: fields)
       {
           if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType))
           {

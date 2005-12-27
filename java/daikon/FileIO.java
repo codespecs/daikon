@@ -1007,10 +1007,6 @@ public final class FileIO {
   }
 
 
-  static java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
-  static PptTopLevel.Stats stats = new PptTopLevel.Stats();
-  static boolean store_stats = false;
-
   /**
    * Add orig() and derived variables to vt (by side effect), then
    * supply it to the program point for flowing.

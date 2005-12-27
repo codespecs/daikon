@@ -24,6 +24,7 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.ValueSet;
 import daikon.suppress.NIS;
 import daikon.PptTopLevel;
+import daikon.Daikon.TerminationMessage;
 
 import static daikon.Global.*;
 
@@ -507,11 +508,11 @@ public static void mainHelper(final String[] args) throws IOException,
        // Build the vt for the object ppt by looking through the current
        // vt and filling in the gaps.
        int k = 0;
-       for(Iterator<VarInfo> i = object_ppt.var_info_iterator(); i.hasNext();) {
+       for (Iterator<VarInfo> i = object_ppt.var_info_iterator(); i.hasNext();) {
 
          VarInfo var = i.next();
          boolean found = false;
-         for(Iterator<VarInfo> j = ppt.var_info_iterator(); j.hasNext();) {
+         for (Iterator<VarInfo> j = ppt.var_info_iterator(); j.hasNext();) {
            VarInfo var2 = j.next();
 
            if (var.name.equals(var2.name)) {
@@ -707,9 +708,8 @@ public static void mainHelper(final String[] args) throws IOException,
            // }
 
             } catch (ArrayIndexOutOfBoundsException e) {
-              System.out.println("A: " + vt.vals.length);
-              System.out.println("B: " + ppt.value_sets.length);
-              System.exit(0);
+              throw new TerminationMessage("A: " + vt.vals.length + lineSep
+                                           + "B: " + ppt.value_sets.length);
             }
           }
 //          } else {

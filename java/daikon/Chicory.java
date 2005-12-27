@@ -559,7 +559,7 @@ public class Chicory {
         cmdlist.add("-D" + traceLimTermString + "=" + terminate );
 
     Properties props = System.getProperties();
-    for(Object key: props.keySet())
+    for (Object key: props.keySet())
     {
         Object value = props.get(key);
 

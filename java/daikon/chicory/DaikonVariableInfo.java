@@ -159,7 +159,7 @@ public abstract class DaikonVariableInfo
 
         StringBuffer childOffset = new StringBuffer(offset);
         childOffset.append("--");
-        for(DaikonVariableInfo info: children)
+        for (DaikonVariableInfo info: children)
         {
             theBuf.append(info.getStringBuffer(childOffset));
         }

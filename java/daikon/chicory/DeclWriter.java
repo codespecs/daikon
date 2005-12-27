@@ -134,7 +134,7 @@ public class DeclWriter extends DaikonWriter
         outFile.println(declareHeader);
         outFile.println(name);
 
-        for(DaikonVariableInfo childOfRoot: root)
+        for (DaikonVariableInfo childOfRoot: root)
         {
             traverseDecl(childOfRoot, ((comp_info == null) ? null
                                        : comp_info.find_ppt (name)));
@@ -188,7 +188,7 @@ public class DeclWriter extends DaikonWriter
         outFile.println(name);
 
         RootInfo root = RootInfo.getObjectPpt(cinfo, Runtime.nesting_depth);
-        for(DaikonVariableInfo childOfRoot: root)
+        for (DaikonVariableInfo childOfRoot: root)
         {
             traverseDecl(childOfRoot, ((comp_info == null) ? null
                                        : comp_info.find_ppt(name)));
@@ -208,7 +208,7 @@ public class DeclWriter extends DaikonWriter
         boolean printedHeader = false;
         RootInfo root = RootInfo.getClassPpt(cinfo, Runtime.nesting_depth);
 
-        for(DaikonVariableInfo childOfRoot: root)
+        for (DaikonVariableInfo childOfRoot: root)
         {
             // If we are here, there is at least 1 child
             if (!printedHeader)

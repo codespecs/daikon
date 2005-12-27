@@ -73,12 +73,12 @@ public class ClassInfo {
 
     if (ChicoryPremain.shouldDoPurity())
     {
-        for(String pureMeth: ChicoryPremain.getPureMethods())
+        for (String pureMeth: ChicoryPremain.getPureMethods())
         {
             if (isInThisClass(pureMeth))
             {
                 boolean foundMatch = false;
-                for(MethodInfo mi: method_infos)
+                for (MethodInfo mi: method_infos)
                 {
                     //System.out.println(mi.member.toString() + "\n" + pureMeth + "\n\n");
                     if (mi.member.toString().trim().equals(pureMeth))

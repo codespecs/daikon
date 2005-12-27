@@ -30,7 +30,7 @@ public final class TestAnnotate extends TestCase {
       "\telems\t=\tnew int[max]\t;",
       "\tpublic void push(int k) {",
       "\t       int index;",
-      "\t       for(index=0; index<numberOfElements; index++) {",
+      "\t       for (index=0; index<numberOfElements; index++) {",
       "                        if (k==elems[index]) {"
 
     };
@@ -45,7 +45,7 @@ public final class TestAnnotate extends TestCase {
       "        elems   =       new int[max]    ;",
       "        public void push(int k) {",
       "               int index;",
-      "               for(index=0; index<numberOfElements; index++) {",
+      "               for (index=0; index<numberOfElements; index++) {",
       "                        if (k==elems[index]) {"
     };
 

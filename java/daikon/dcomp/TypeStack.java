@@ -74,7 +74,7 @@ public final class TypeStack
         //System.out.println("**********************");
         if (!initParents(l.getStart(), l.getInstructionHandles(),exceptionTable))
         {
-            //for(InstructionHandle h : l.getInstructionHandles())
+            //for (InstructionHandle h : l.getInstructionHandles())
               //  System.out.println(h);
             //System.out.println(l);
 
@@ -1366,7 +1366,7 @@ public final class TypeStack
     {
         Type[] convArr = new Type[tArr.length];
 
-        for(int i = 0; i < tArr.length; i++)
+        for (int i = 0; i < tArr.length; i++)
         {
             convArr[i] = conv(tArr[i]);
         }

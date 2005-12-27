@@ -275,7 +275,7 @@ public class Runtime
           // class_info.dump (System.out);
 
           // Create tree structure for all method entries/exits in the class
-          for(MethodInfo mi: class_info.method_infos)
+          for (MethodInfo mi: class_info.method_infos)
           {
               mi.traversalEnter = RootInfo.enter_process(mi, Runtime.nesting_depth);
               mi.traversalExit = RootInfo.exit_process(mi, Runtime.nesting_depth);

@@ -144,7 +144,7 @@ public abstract class VarInfoName
     }
 
     // A->B, where A is complex: foo(x)->y, x[7]->y, etc.
-    if (arrow>=0 & arrow > dot) {
+    if (arrow>=0 && arrow > dot) {
       String first = name.substring(0, arrow);
       String field = name.substring(arrow+2);
       return parse(first).applyField(field);
@@ -2947,7 +2947,7 @@ public abstract class VarInfoName
   }
 
 
-  public class NoReturnValue { }
+  public static class NoReturnValue { }
 
   /**
    * Use to collect all elements in a tree into an inorder-traversal

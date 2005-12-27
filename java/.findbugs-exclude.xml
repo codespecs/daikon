@@ -1,12 +1,14 @@
 <!-- This file specifies what findbugs should exclude when checking. -->
 
+<!-- For documentation, see ~mernst/bin/src/findbugs/doc/manual/filter.html -->
+
 <FindBugsFilter>
   <!-- Ignore libraries that are distributed with Daikon. -->
   <Match classregex="org.apache.*" />
   <Match classregex="jtb.*" />
   <Match classregex="jtb.cparser.*" />
   <Match classregex="junit.*" />
-
+  <Match class="daikon.gui.treeGUI.InvariantsGUI" />
 
   <!-- Ignore certain violations:
 	EI[2] (expose internal representation)
@@ -78,7 +80,6 @@
   </Match>
 
   <Match classregex=".*" >
-    <Method name="set_function_id"/>
     <BugPattern name="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
   </Match>
 
