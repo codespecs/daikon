@@ -3440,7 +3440,8 @@ public class PptTopLevel extends Ppt {
         continue;
       Map<VarInfo.Pair,VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
       // Cannot use foreach loop, due to desire to remove from emap.
-      for (VarInfo.Pair curpair : emap.keySet()) {
+      for (Iterator<VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
+        VarInfo.Pair curpair = j.next();
         VarInfo.Pair newpair = eq_new.get(curpair);
         if (newpair == null)
           // Equivalent to emap.remove(...), but that could throw a
