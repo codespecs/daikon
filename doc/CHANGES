@@ -35,9 +35,15 @@ Mangel-Wurzel
     Output for statically-sized, multidimensional arrays is now supported.
     There are new command-line options --flatten-arrays,
     --max-flatten-array-size, and --max-array-size to control how arrays
-    are output.  Some minor bugs in array output have also been fixed.
+    are output.  
 
+  Bug fixes
 
+    Some minor bugs in array output have been fixed.
+
+    C++ support has been better tested, with bug fixes added for reference
+    parameters and return values, and proper scoping of exit PPT processing
+    with respect to binding and destruction of block-scope variables.
 
 
 ===========================================================================
