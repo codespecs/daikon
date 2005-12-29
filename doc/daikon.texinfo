@@ -5498,15 +5498,17 @@ Set to the directory in your Purify distribution containing
 @end table
 
 @item
-Optionally, change the default commands and options mangel uses to
+Customize the default commands and options mangel uses to
 invoke the wurzel preprocessor, the host compiler and linker, and
 Purify.  Make these changes in the system options file
 @file{mangel-wurzel/.mangelrc}; see @ref{Options files for Mangel} for
 details about the format of this file.
 
-A default version of @file{.mangelrc} for each supported platform is
-included with the distribution.  The most likely things you may need to
-change are:
+A suggested version of @file{.mangelrc} for each supported platform is
+included with the distribution.  For example, @file{.mangelrc.linux} is
+provided for Linux.  You should copy the appropriate file to @file{.mangelrc}
+and make any necessary changes there.  The most likely things you may need to 
+customize are:
 
 @itemize
 @item Make sure that the @samp{--compiler} and @samp{--linker} commands are
