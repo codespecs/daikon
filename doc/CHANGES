@@ -45,6 +45,9 @@ Mangel-Wurzel
     parameters and return values, and proper scoping of exit PPT processing
     with respect to binding and destruction of block-scope variables.
 
+    Code with multiple return statements on the same line no longer results
+    in duplicate exit PPT names.
+
 
 ===========================================================================
 
