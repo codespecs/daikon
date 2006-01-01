@@ -1,6 +1,10 @@
 ;; This file removes trailing whitespace from source code; the trailing
 ;; whitespace serves no purpose.
 
+;; TODO: See Emacs function delete-trailing-whitespace instead.
+;; Also see library whitespace.el, which is part of the Emacs distribution.
+
+
 (defun add-whitespace-hooks ()
   (add-hook 'write-contents-hooks 'maybe-remove-trailing-whitespace))
 
