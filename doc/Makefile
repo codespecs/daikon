@@ -69,6 +69,7 @@ html-chap: daikon_manual_html/daikon.html developer_manual_html/developer.html
 daikon_manual_html/daikon.html: daikon.texinfo
 	rm -rf daikon_manual_html/*
 	texi2html -split chapter -subdir daikon_manual_html $<
+	perl -pi -e '$$/ = "\n\n"; if (m|http://texi2html\.cvshome\.org|) { $$_ = ""; }' daikon_manual_html/daikon.html
 	mkdir daikon_manual_html/images
 	cp -p images/gui-InvariantsDisplay-small.jpg images/gui-ControlPanel.jpg images/context-gui.jpg daikon_manual_html/images
 
