@@ -26,8 +26,8 @@
 (setq load-path (cons (expand-file-name "~mernst/emacs/auctex-11.13")
 		      load-path))
 (if (not (featurep 'tex-site))
-    (progn
-      (require 'tex-site nil (equal system-name "pink-panther.csail.mit.edu"))))
+    (if (not (require 'tex-site nil t))
+	(message "Unable to load tex-site (AUC TeX).")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
