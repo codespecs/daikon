@@ -20,7 +20,12 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.1 (January 1, 2006)
 
+Enhancements were made to the Mangel-Wurzel and Kvasir front ends.
+Mangel-Wurzel better supports arrays, C++, and regular expressions for
+specifying program point names.  Some Kvasir command line 
+options were updated. 
 
 Mangel-Wurzel
 
@@ -48,8 +53,16 @@ Mangel-Wurzel
     Code with multiple return statements on the same line no longer results
     in duplicate exit PPT names.
 
+Kvasir
 
-===========================================================================
+  User-visible changes
+
+    The --limit-static-vars command line option was removed.  The default
+    behavior now only outputs static variables at program points for
+    the file that contains the static variable.  The new option 
+    --all-static-vars outputs static variables at all program points.
+
+--------------------------------------------
 
 4.2.0 (December 6, 2005)
 
