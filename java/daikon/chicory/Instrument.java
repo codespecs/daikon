@@ -167,7 +167,6 @@ public class Instrument implements ClassFileTransformer {
       // Get the class information
       ClassGen cg = new ClassGen (c);
 
-      InstructionFactory ifact = new InstructionFactory (cg);
       // Convert reach non-void method to save its result in a local
       // before returning
       ClassInfo c_info = save_ret_value (cg, fullClassName, loader);
@@ -419,7 +418,6 @@ public class Instrument implements ClassFileTransformer {
     boolean shouldInclude = false;
 
     try {
-      InstructionFactory ifact = new InstructionFactory (cg);
       pgen = cg.getConstantPool();
 
       // Loop through each method in the class
