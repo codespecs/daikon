@@ -70,7 +70,7 @@ public class StringInfo extends DaikonVariableInfo
             Object str = iter.next();
 
             if (str == null)
-                buf.append(str);
+                buf.append("null");
             else if (str instanceof NonsensicalObject || str instanceof NonsensicalList)
                 buf.append("nonsensical");
             else
