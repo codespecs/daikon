@@ -26,10 +26,10 @@ index.html:
 	../pubs-sources/fix-homedir-tilde.pl $@
 
 writable-abstracts:
-	chmod +w *-abstract.html
+	chmod -f +w *-abstract.html
 
 # Creates *-abstract.html files.
-abstracts: writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection
+abstracts: abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
 
 abstracts-invariantdetection:
 	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${MDEWWW}/pubs/link-names -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}

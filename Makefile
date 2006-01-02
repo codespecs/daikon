@@ -327,8 +327,8 @@ update-doc-dist-date:
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' ${DIST_VERSION_FILES}
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
-	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/kvasir/mc_main.c
-	cvs ci -m "Update version number for new Daikon distribution" kvasir/kvasir/mc_main.c
+	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/fjalar/mc_main.c
+	cvs ci -m "Update version number for new Daikon distribution" kvasir/fjalar/mc_main.c
 	touch doc/CHANGES
 
 # Update the version number.
