@@ -482,6 +482,19 @@ public final class UtilMDE {
 
 
   /**
+   * Fixes a file name to do tilde expansion (to the users home directory)
+   * There maybe other logical things to do as well
+   */
+  public static File fix_filename (File name) {
+    String name_str = name.getPath();
+    if (name_str.contains ("~"))
+      return new File (name_str.replace ("~",
+                                         System.getProperty ("user.home")));
+    else
+      return name;
+  }
+
+  /**
    * Returns true
    *  if the file exists and is writable, or
    *  if the file can be created.
