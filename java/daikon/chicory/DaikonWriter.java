@@ -115,10 +115,12 @@ public abstract class DaikonWriter
 
         boolean isConstructor = name.equals("<init>") || name.equals("");
 
-        // replace <init>'s with the actual class name
-        // so "public void <init>" becomes "public void StackAr" for example
-        name = name.replace("<init>", className);
-        short_name = className;
+        if (isConstructor) {
+          // replace <init>'s with the actual class name
+          // so "public void <init>" becomes "public void StackAr" for example
+          name = name.replace("<init>", className);
+          short_name = className;
+        }
 
         // build up the string to go inside the parens
         StringBuilder paramTypes = new StringBuilder();
