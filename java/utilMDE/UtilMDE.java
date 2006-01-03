@@ -1150,8 +1150,7 @@ public final class UtilMDE {
     if (key == null) {
       return null;
     }
-    for (Iterator itor = set.iterator(); itor.hasNext(); ) {
-      Object elt = itor.next();
+    for (Object elt : set) {
       if (key.equals(elt)) {
         return elt;
       }
