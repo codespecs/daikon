@@ -76,9 +76,9 @@ public class InvMap implements Serializable {
   // necessarily that in which they were added, depending on calling
   // sequences.
   public Iterator<Invariant> invariantIterator() {
-    Vector<Invariant> answer = new Vector<Invariant>();
-    for (Iterator<PptTopLevel> i = ppts.iterator(); i.hasNext(); )
-      answer.addAll(get(i.next()));
+    ArrayList<Invariant> answer = new ArrayList<Invariant>();
+    for (PptTopLevel ppt : ppts)
+      answer.addAll(get(ppt));
     return answer.iterator();
   }
 

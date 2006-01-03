@@ -90,8 +90,7 @@ public class InvariantFilters {
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;
-        for (Iterator<VariableFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
-          InvariantFilter filter = iter.next();
+        for (VariableFilter filter : variableFilters) {
           if (! filter.shouldDiscard( invariant )) {
             hasAnyVariable = true;
           }
@@ -102,8 +101,7 @@ public class InvariantFilters {
           return variableFilters.get(0);
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
-        for (Iterator<VariableFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
-          InvariantFilter filter = iter.next();
+        for (VariableFilter filter : variableFilters) {
           if (filter.shouldDiscard( invariant )) {
             if (invariant.logOn())
               invariant.log ("Failed ALL_VARIABLES filter"

@@ -998,10 +998,10 @@ public class Instrument implements ClassFileTransformer {
 
         for (Iterator<InstructionHandle> ii = (Iterator<InstructionHandle>) il.iterator(); ii.hasNext();) // unchecked cast: BCEL is non-generic
         {
+            InstructionHandle ih = ii.next();
 
             foundLine = false;
 
-            InstructionHandle ih = ii.next();
             if (ih.hasTargeters())
             {
                 for (InstructionTargeter it : ih.getTargeters())

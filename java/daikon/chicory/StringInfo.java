@@ -29,7 +29,7 @@ public class StringInfo extends DaikonVariableInfo
     {
         if (isArray)
         {
-            return getStringList((List<String>)val); // unchecked cast
+            return getStringList((List)val); // unchecked cast
         }
         else
         {
@@ -42,13 +42,11 @@ public class StringInfo extends DaikonVariableInfo
      * If theValues is null, returns "null." If theValues is
      * nonsensical, returns "nonsensical".
      *
-     * @param theValues A list of values, each is a String
+     * @param theValues A list of values, each is a String or NonsensicalObject or NonsensicalList.
      * @return a space-separated String of the elements in theValues
      */
-    public static String getStringList(List<String> theValues)
+    public static String getStringList(List theValues)
     {
-        StringBuffer buf = new StringBuffer();
-
         if (theValues == null)
         {
             //buf.append("null");
@@ -63,18 +61,23 @@ public class StringInfo extends DaikonVariableInfo
             return "nonsensical" + DaikonWriter.lineSep + "2";
         }
 
+        StringBuffer buf = new StringBuffer();
 
         buf.append("[");
-        for (Iterator<String> iter = theValues.iterator(); iter.hasNext();)
+        for (Iterator iter = theValues.iterator(); iter.hasNext();)
         {
             Object str = iter.next();
 
-            if (str == null)
-                buf.append("null");
-            else if (str instanceof NonsensicalObject || str instanceof NonsensicalList)
-                buf.append("nonsensical");
-            else
+            if (str == null) {
+                buf.append(str);
+            } else if (str instanceof String) {
                 buf.append("\"" + encodeString((String) str) + "\"");
+            } else if (str instanceof NonsensicalObject
+                       || str instanceof NonsensicalList) {
+                buf.append("nonsensical");
+            } else {
+                throw new Error("Impossible");
+            }
 
             // Put space between elements in array
             if (iter.hasNext())

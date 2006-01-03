@@ -302,8 +302,7 @@ public abstract class PptSlice
 //     // If this slice is to be deleted, then don't guard it
 //     if (invs.size() == 0) return;
 //
-//     for (Iterator<Invariant> overInvs = invs.iterator(); overInvs.hasNext(); ) {
-//       Invariant inv = overInvs.next();
+//     for (Invariant inv : invs) {
 /// The below can be replaced by a call to invariant.createGuardedInvariant().
 // //       if (debugGuarding.isLoggable(Level.FINE)) {
 // //         debugGuarding.fine ("  Trying to add guard for: " + inv + "     " + inv.repr());

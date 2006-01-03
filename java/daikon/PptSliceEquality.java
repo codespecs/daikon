@@ -369,10 +369,9 @@ public class PptSliceEquality
        // Why use an array?  Because we'll be sorting shortly
        Equality[] resultArray = new Equality[vis.size()];
        int resultCount = 0;
-       Iterator<VarInfo> i = vis.iterator();
-       while (i.hasNext()) {
+       for (VarInfo vi : vis) {
          List<VarInfo> list = new ArrayList<VarInfo>();
-         list.add(i.next());
+         list.add(vi);
          Equality eq = new Equality(list, this);
          eq.setSamples(leader.numSamples());
          resultArray[resultCount] = eq;

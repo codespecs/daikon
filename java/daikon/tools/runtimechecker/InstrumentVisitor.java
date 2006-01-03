@@ -91,9 +91,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 	    }
 
             List<Invariant> invList = filterInvariants(daikon.tools.jtb.Ast.getInvariants(ppt, pptmap));
-            for (Iterator<Invariant> invI = invList.iterator() ; invI.hasNext() ; ) {
-                Invariant inv = invI.next();
-
+            for (Invariant inv : invList) {
 		xmlStringToIndex.put(toProperty(inv).xmlString(), Integer.toString(varNumCounter));
 		varNumCounter++;
 	    }
@@ -791,8 +789,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 //         // [[ TODO: Figure out what could go wrong here (e.g. what if
 //         // method declaration says "throws Throwable") and prepare for
 //         // it. ]]
-//         for (Iterator<String> i = declaredThrowablesLocal.iterator(); i.hasNext();) {
-//             String declaredThrowable = i.next();
+//         for (String declaredThrowable : declaredThrowablesLocal) {
 //             code.append("} catch (" + declaredThrowable + " t_instrument) {");
 //             // Count this program point exit.
 //             code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");

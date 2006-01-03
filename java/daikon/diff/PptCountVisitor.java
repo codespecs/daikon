@@ -333,9 +333,8 @@ public class PptCountVisitor extends PrintAllVisitor {
     for (String ppt : goodMap.keySet()) {
       System.out.println ();
       System.out.println ("*****************" + ppt);
-      for (Iterator<String> j = goodMap.get(ppt).iterator();
-           j.hasNext();) {
-        System.out.println (j.next());
+      for (String s : goodMap.get(ppt)) {
+        System.out.println (s);
       }
     }
 

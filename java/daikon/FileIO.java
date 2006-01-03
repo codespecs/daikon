@@ -1104,8 +1104,8 @@ public final class FileIO {
           // (Does this work?  The keys are integers. -MDE 7/1/2005.)
           TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-          for (Iterator<Integer> itor = keys.iterator(); itor.hasNext();) {
-            invocations.add(call_hashmap.get(itor.next()));
+          for (Integer i : keys) {
+            invocations.add(call_hashmap.get(i));
           }
           print_invocations_verbose(invocations);
         } else {

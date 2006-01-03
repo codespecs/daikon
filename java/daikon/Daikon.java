@@ -2043,18 +2043,15 @@ public final class Daikon {
        }
 
 
-      Iterator<Invariant> sets = sliceEquality.invs.iterator();
+      // get the new leaders
       List<Equality> allNewInvs = new ArrayList<Equality>();
 
-      // get the new leaders
-      while (sets.hasNext()) {
-        Equality eq = (Equality) sets.next();
+      for (Invariant eq_as_inv : sliceEquality.invs) {
+        Equality eq = (Equality) eq_as_inv;
         VarInfo leader = eq.leader();
-        Iterator<VarInfo> varsIt = eq.getVars().iterator();
         List<VarInfo> vars = new ArrayList<VarInfo>();
 
-        while (varsIt.hasNext()) {
-          VarInfo var = varsIt.next();
+        for (VarInfo var : eq.getVars()) {
           if (!var.equals(leader)) {
             vars.add(var);
           }
@@ -2066,8 +2063,8 @@ public final class Daikon {
           List<Equality> newInvs = sliceEquality.createEqualityInvs(vars, eq);
 
           // Create new slices and invariants for each new leader
-         // copyInvsFromLeader(sliceEquality, leader, vars);
-         sliceEquality.copyInvsFromLeader(leader, vars);
+          // copyInvsFromLeader(sliceEquality, leader, vars);
+          sliceEquality.copyInvsFromLeader(leader, vars);
 
           // Keep track of all of the new invariants created.
           // Add all of the new equality sets to our list

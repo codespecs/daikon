@@ -464,13 +464,13 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   }
 
   void turnFilterCheckBoxesOn() {
-    for (Iterator<JCheckBox> iter = filterCheckBoxes.iterator(); iter.hasNext(); )
-      iter.next().setSelected( true );
+    for (JCheckBox jcb : filterCheckBoxes)
+      jcb.setSelected( true );
   }
 
   void turnFilterCheckBoxesOff() {
-    for (Iterator<JCheckBox> iter = filterCheckBoxes.iterator(); iter.hasNext(); )
-      iter.next().setSelected( false );
+    for (JCheckBox jcb : filterCheckBoxes)
+      jcb.setSelected( false );
   }
 
   public void actionPerformed( ActionEvent e ) {

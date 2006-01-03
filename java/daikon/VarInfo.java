@@ -1267,10 +1267,7 @@ public final class VarInfo implements Cloneable, Serializable {
 
     // find a ...post(...)... expression to simplify
     VarInfoName.Poststate postexpr = null;
-    Iterator<VarInfoName> nodes =
-      (new VarInfoName.InorderFlattener(name)).nodes().iterator();
-    while (nodes.hasNext()) {
-      VarInfoName node = nodes.next();
+    for (VarInfoName node : (new VarInfoName.InorderFlattener(name)).nodes()) {
       if (node instanceof VarInfoName.Poststate) {
         postexpr = (VarInfoName.Poststate) node;
         break;

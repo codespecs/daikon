@@ -347,8 +347,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   //
   //   List<PptTopLevel> matching_ppts = pptMatcher.getMatches(ppts, n);
   //
-  //   for (Iterator<PptTopLevel> itor = matching_ppts.iterator(); itor.hasNext(); ) {
-  //     PptTopLevel ppt = itor.next();
+  //   for (PptTopLevel ppt : matching_ppts) {
   //     String prefix;
   //     if (ppt.ppt_name.isThrowsPoint()) {
   //       String exceptionName = "Not getting called"; // ppt.ppt_name.dontKnowHowToDoThis();

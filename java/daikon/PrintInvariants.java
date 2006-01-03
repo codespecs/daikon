@@ -397,8 +397,7 @@ public final class PrintInvariants {
     ppts_sorted.addAll(ppts.asCollection());
 
     // Iterate over the PptTopLevels in ppts
-    for (Iterator<PptTopLevel> itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = itor.next();
+    for (PptTopLevel ppt : ppts_sorted) {
       StringBuffer toPrint = new StringBuffer();
       toPrint.append(print_reasons_from_ppt(ppt,ppts));
 
@@ -436,9 +435,9 @@ public final class PrintInvariants {
    * Add discard reasons for invariants that are filtered out
    */
   private static void add_filter_reasons(PptTopLevel ppt, PptMap ppts) {
-    Iterator<Invariant> fullInvItor = ppt.invariants_iterator();
     InvariantFilters fi = InvariantFilters.defaultFilters();
-    while (fullInvItor.hasNext()) {
+    for (Iterator<Invariant> fullInvItor = ppt.invariants_iterator();
+         fullInvItor.hasNext(); ) {
       Invariant nextInv = fullInvItor.next();
       InvariantFilter varFilter = fi.shouldKeepVarFilters(nextInv);
       if (varFilter != null) {
@@ -481,12 +480,9 @@ public final class PrintInvariants {
       toPrint += (ppt.name() + lineSep);
     }
 
-    Iterator<DiscardInfo> matchesIter = DiscReasonMap.returnMatches_from_ppt
-                (new InvariantInfo(ppt.name(), discVars, discClass)).iterator();
-
     StringBuffer sb = new StringBuffer();
-    while (matchesIter.hasNext()) {
-      DiscardInfo nextInfo = matchesIter.next();
+    for (DiscardInfo nextInfo : DiscReasonMap.returnMatches_from_ppt
+           (new InvariantInfo(ppt.name(), discVars, discClass))) {
       sb.append(dashes + nextInfo.format() + lineSep);
     }
 
@@ -1193,9 +1189,7 @@ public final class PrintInvariants {
       = InvariantFilters.addEqualityInvariants(accepted_invariants);
 
     if (debugFiltering.isLoggable(Level.FINE)) {
-      Iterator<Invariant> inv_iter = accepted_invariants.iterator();
-      while (inv_iter.hasNext()) {
-        Invariant current_inv = inv_iter.next();
+      for (Invariant current_inv : accepted_invariants) {
         if (current_inv instanceof Equality) {
           debugFiltering.fine ("Found Equality that says "
                                 + current_inv.format());

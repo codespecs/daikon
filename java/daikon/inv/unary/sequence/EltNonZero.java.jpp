@@ -273,8 +273,7 @@ public final class CLASSNAME
 
       // I need to come back and make this work.
       // {
-      //   for (Iterator<Invariant> itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      //     Invariant inv = itor.next();
+      //   for (Invariant inv : ppt.invs) {
       //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
       //       modulus = ((Modulus) inv).modulus;
       //       break;

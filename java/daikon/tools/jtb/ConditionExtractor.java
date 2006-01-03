@@ -163,8 +163,8 @@ class ConditionExtractor extends DepthFirstVisitor {
     Collection<String> caseValues = getCaseValues(n.f5);
      // a condition for the default case. A 'not' of all the different cases.
     StringBuffer defaultString = new StringBuffer();
-    for (Iterator<String> e = caseValues.iterator(); e.hasNext(); ) {
-      String switchValue = e.next().trim();
+    for (String switchValue : caseValues) {
+      switchValue = switchValue.trim();
       if (!switchValue.equals(":")) {
 	if (!(defaultString.length() == 0))
 	  defaultString.append(" && ");

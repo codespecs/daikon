@@ -149,8 +149,8 @@ public class DtracePartitioner
       // EXIT points were found as well as the OBJECT and CLASS
       // invocations.
       ArrayList<String> al = new ArrayList<String>();
-      for (Iterator<String> i = nonceMap.values().iterator(); i.hasNext(); ) {
-        al.add (i.next());
+      for (String s : nonceMap.values()) {
+        al.add (s);
       }
       // add in the invocations that were never resolved because no
       // matching EXIT invocation exists.

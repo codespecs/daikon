@@ -649,9 +649,7 @@ public class CLASSNAME
         System.out.println("No slice: parent =" + ppt_parent);
       } else {
         System.out.println("Slice var =" + slice.var_infos[0]);
-        Iterator<Invariant> superinvs = slice.invs.iterator();
-        while (superinvs.hasNext()) {
-          Invariant superinv = superinvs.next();
+        for (Invariant superinv : slice.invs) {
           System.out.println("Inv = " + superinv);
           if (superinv instanceof ELTONEOF) {
             ELTONEOF eltinv = (ELTONEOF) superinv;
@@ -668,9 +666,7 @@ public class CLASSNAME
     if (true) {
       PptSlice1 slice = ppt_parent.findSlice(subvar);
       if (slice != null) {
-        Iterator<Invariant> subinvs = slice.invs.iterator();
-        while (subinvs.hasNext()) {
-          Invariant subinv = subinvs.next();
+        for (Invariant subinv : slice.invs) {
           if (subinv instanceof ONEOFSEQUENCE) {
             ONEOFSEQUENCE seqinv = (ONEOFSEQUENCE) subinv;
             if (seqinv.num_elts() == 1) {

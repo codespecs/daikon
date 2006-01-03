@@ -401,8 +401,8 @@ public final class OutputFormat
 
       if (lowername.indexOf(".")!=-1||lowername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(lower);
-        for (Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
-          String lowerrootvar=it.next().name();
+        for (VarInfoName vin : roots) {
+          String lowerrootvar=vin.name();
           String vardef="";
           if (!getType(ppt,lowerrootvar).equals("int"))
             vardef=getType(ppt,lowerrootvar)+" "+lowerrootvar+";";
@@ -414,8 +414,8 @@ public final class OutputFormat
 
       if (uppername.indexOf(".")!=-1||uppername.indexOf("->")!=-1) {
         Set<VarInfoName> roots=getRoot(upper);
-        for (Iterator<VarInfoName> it=roots.iterator();it.hasNext();) {
-          String upperrootvar=it.next().name();
+        for (VarInfoName vin : roots) {
+          String upperrootvar=vin.name();
           String vardef="";
           if (!getType(ppt,upperrootvar).equals("int"))
             vardef=getType(ppt,upperrootvar)+" "+upperrootvar+";";
@@ -444,8 +444,7 @@ public final class OutputFormat
     /** This method generates the current quantifier string. */
     public String getQuantifiers() {
       String str="";
-      for (Iterator<Map.Entry<String,String>> it=quantifiers.entrySet().iterator();it.hasNext();) {
-        Map.Entry<String,String> entry = it.next();
+      for (Map.Entry<String,String> entry  : quantifiers.entrySet()) {
         String key = entry.getKey();
         String value = entry.getValue();
 

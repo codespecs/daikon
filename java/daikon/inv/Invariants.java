@@ -52,9 +52,7 @@ public final class Invariants
     // System.out.printf ("removeMany in %s\n", this.getClass());
     HashSet<Invariant> removeSet = new HashSet<Invariant>(toRemove);
     ArrayList<Invariant> copy = new ArrayList<Invariant>();
-    Iterator<Invariant> it = this.iterator();
-    while (it.hasNext()) {
-      Invariant inv = it.next();
+    for (Invariant inv : this) {
       if (!removeSet.contains(inv)) {
         copy.add(inv);
         //System.out.printf ("NOT remove set [%x-%x-%x] %s [%s]\n",

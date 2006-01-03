@@ -496,9 +496,8 @@ public abstract class VarInfoName
    * @return true iff a node of the given type exists in this
    **/
   public boolean hasNodeOfType(Class type) {
-    Iterator<VarInfoName> nodes = inOrderTraversal().iterator();
-    while (nodes.hasNext()) {
-      if (type.equals(nodes.next().getClass())) {
+    for (VarInfoName vin : inOrderTraversal()) {
+      if (type.equals(vin.getClass())) {
         return true;
       }
     }
@@ -1124,59 +1123,48 @@ public abstract class VarInfoName
       this.function = function;
     }
 
-    protected String repr_impl() {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (i.next().repr());
-        if (i.hasNext()) sb.append (", ");
+    private List<String> elts_repr() {
+      List<String> elts = new ArrayList<String>(args.size());
+      for (VarInfoName vin : args) {
+        elts.add(vin.repr());
       }
-      return "FunctionOfN{" + function + "}[" + sb.toString() + "]";
+      return elts;
+    }
+    private String elts_repr_commas() {
+      return UtilMDE.join(elts_repr(), ", ");
+    }
+
+    protected String repr_impl() {
+      return "FunctionOfN{" + function + "}[" + elts_repr_commas() + "]";
     }
     protected String name_impl() {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (i.next().name());
-        if (i.hasNext()) sb.append (", ");
-      }
-      return function + "(" + sb.toString() + ")";
+      return function + "(" + elts_repr_commas() + ")";
     }
 
     protected String repair_name_impl(VarInfo vi) {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (i.next().name());
-        if (i.hasNext()) sb.append (", ");
+      List<String> elts = new ArrayList<String>(args.size());
+      for (VarInfoName vin : args) {
+        elts.add(vin.name());
       }
-      return function + "(" + sb.toString() + ")";
+      return function + "(" + UtilMDE.join(elts, ", ") + ")";
     }
     public VarInfoName getBase() {
       return null;
     }
     protected String esc_name_impl() {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (i.next().repr());
-        if (i.hasNext()) sb.append (", ");
-      }
       return "(warning: format_esc() needs to be implemented: " +
-        function + " on " + sb.toString() + ")";
+        function + " on " + elts_repr_commas() + ")";
     }
     protected String simplify_name_impl(boolean prestate) {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (i.next().repr());
-        if (i.hasNext()) sb.append (", ");
-      }
       return "(warning: format_simplify() needs to be implemented: " +
-        function + " on " + sb.toString() + ")";
+        function + " on " + elts_repr_commas() + ")";
     }
     protected String ioa_name_impl() {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (i.next().ioa_name());
-        if (i.hasNext()) sb.append (", ");
+      List<String> elts = new ArrayList<String>(args.size());
+      for (VarInfoName vin : args) {
+        elts.add(vin.ioa_name());
       }
-      return function + "(" + sb.toString() + ")";
+      return function + "(" + UtilMDE.join(elts, ", ") + ")";
     }
 
     protected String java_name_impl(VarInfo v) {
@@ -1212,14 +1200,11 @@ public abstract class VarInfoName
     }
 
     protected String identifier_name_impl() {
-      StringBuffer sb = new StringBuffer(function);
-      sb.append("_of_");
-      for (Iterator<VarInfoName> i = args.iterator(); i.hasNext(); ) {
-        sb.append (i.next().identifier_name());
-        if (i.hasNext()) sb.append ("_comma_");
+      List<String> elts = new ArrayList<String>(args.size());
+      for (VarInfoName vin : args) {
+        elts.add (vin.identifier_name());
       }
-      sb.append("___");
-      return sb.toString();
+      return function + "_of_" + UtilMDE.join(elts, "_comma_") + "___";
     }
 
     /**

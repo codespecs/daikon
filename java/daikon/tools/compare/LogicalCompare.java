@@ -252,17 +252,13 @@ public class LogicalCompare {
           for (int j = 0; j < sets.size(); j++) {
             Set<Class> classes = sets.elementAt(j);
             Class inv_class = inv.invClass();
-            System.out.print(shortName(inv_class) + ": ");
+            System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
-              System.out.print(shortName(inv_class) + " ");
+              System.out.print(" " + shortName(inv_class));
               classes.remove(inv_class);
             }
-            Iterator<Class> class_it = classes.iterator();
-            while (class_it.hasNext()) {
-              Class c = class_it.next();
-              System.out.print(shortName(c));
-              if (class_it.hasNext())
-                System.out.print(" ");
+            for (Class c : classes) {
+              System.out.print(" " + shortName(c));
             }
             System.out.println();
           }
@@ -736,9 +732,7 @@ public class LogicalCompare {
       Collection<String> test_ppt_names = test_ppts.nameStringSet();
       Set<String> common_names = new TreeSet<String>();
 
-      Iterator<String> it = app_ppt_names.iterator();
-      while (it.hasNext()) {
-        String name = it.next();
+      for (String name : app_ppt_names) {
         PptTopLevel app_ppt = app_ppts.get(name);
 
         if (!app_ppt.ppt_name.isEnterPoint()) {
@@ -755,9 +749,7 @@ public class LogicalCompare {
         }
       }
 
-      it = common_names.iterator();
-      while (it.hasNext()) {
-        String name = it.next();
+      for (String name : common_names) {
         System.out.println("Looking at " + name);
         PptTopLevel app_enter_ppt = app_ppts.get(name);
         PptTopLevel test_enter_ppt = test_ppts.get(name);

@@ -56,13 +56,13 @@ class VariableSelectionDialog extends JDialog {
 	  selectedVarNames.removeAllElements();
 	  DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
 	  for (int i=0; i < variableCheckBoxes.size(); i++ ) {
-	    if (((JCheckBox) variableCheckBoxes.get( i )).isSelected()) {
-	      invariantFilters.addVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+	    if (variableCheckBoxes.get( i ).isSelected()) {
+	      invariantFilters.addVariableFilter( variableCheckBoxes.get( i ).getText());
 	      invariantsTablesPanel.updateInvariantsDisplay();
-	      listModel.addElement( ((JCheckBox) variableCheckBoxes.get( i )).getText());
-	      selectedVarNames.add( ((JCheckBox) variableCheckBoxes.get( i )).getText());
-	    } else if (invariantFilters.containsVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText() )) {
-	      invariantFilters.removeVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText() );
+	      listModel.addElement( variableCheckBoxes.get( i ).getText());
+	      selectedVarNames.add( variableCheckBoxes.get( i ).getText());
+	    } else if (invariantFilters.containsVariableFilter( variableCheckBoxes.get( i ).getText() )) {
+	      invariantFilters.removeVariableFilter( variableCheckBoxes.get( i ).getText() );
 	    }
 	  }
 	  // System.out.println("VSD : " + selectedVarNames);

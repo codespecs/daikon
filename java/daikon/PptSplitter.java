@@ -259,11 +259,11 @@ public class PptSplitter implements Serializable {
               // Impossible: multiple invariants found
               System.out.println ("Found " + nc_slice.invs.size() +
                                   " invs at " + nc_slice);
-              for (Iterator<Invariant> kk = nc_slice.invs.iterator(); kk.hasNext(); )
-                System.out.println (" -- inv = " + kk.next());
-              for (int kk = 0; kk < cvis_non_canonical.length; kk++)
+              for (Invariant inv2 : nc_slice.invs)
+                System.out.println (" -- inv = " + inv2);
+              for (VarInfo cvi : cvis_non_canonical)
                 System.out.println (" -- equality set = " +
-                      cvis_non_canonical[kk].equalitySet.shortString());
+                      cvi.equalitySet.shortString());
               throw new Error("nc_slice.invs.size() == " + nc_slice.invs.size());
             }
             eq_inv = nc_slice.invs.get (0);
@@ -333,8 +333,7 @@ public class PptSplitter implements Serializable {
         debug.fine ("-- " + invs[0] + " -- " + invs[1]);
       }
       debug.fine ("Found " + different_invs_vec.size() + " different invariants ");
-      for (Iterator<Invariant[]>  i = different_invs_vec.iterator(); i.hasNext(); ) {
-        Invariant[] invs = i.next();
+      for (Invariant[] invs : different_invs_vec) {
         if (invs[0] != null)
           invs[0].log (invs[0] + " differs from "  + invs[1]);
         if (invs[1] != null)

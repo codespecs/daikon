@@ -1085,7 +1085,7 @@ public class Ast {
   // Returns a list of Strings, the names of all the variables in the node.
   // The node is an expression, conditional expression, or primary
   // expression.
-  public static Set getVariableNames(Node expr) {
+  public static Set<String> getVariableNames(Node expr) {
 
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
       public Set<String> symbolNames = new HashSet<String>();

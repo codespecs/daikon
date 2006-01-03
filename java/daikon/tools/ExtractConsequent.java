@@ -147,8 +147,7 @@ public class ExtractConsequent {
     TreeSet<PptTopLevel> ppts_sorted = new TreeSet<PptTopLevel>(comparator);
     ppts_sorted.addAll(ppts.asCollection());
 
-    for (Iterator<PptTopLevel> itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = itor.next();
+    for (PptTopLevel ppt : ppts_sorted) {
       extract_consequent_maybe(ppt, ppts);
     }
 
@@ -218,9 +217,9 @@ public class ExtractConsequent {
       if (allConds.size() > 0) {
         pw.println();
         pw.println("PPT_NAME " + pptname);
-        Iterator<String> condsIter = allConds.iterator();
-        while (condsIter.hasNext())
-          pw.println(condsIter.next());
+        for (String s : allConds) {
+          pw.println(s);
+        }
       }
       allConds.clear();
     }
@@ -255,9 +254,8 @@ public class ExtractConsequent {
     Invariants invs = new Invariants();
     if (invs.size() > 0) {
       String pptname = cleanup_pptname(ppt.name());
-      Iterator<Invariant> itor = invs.iterator();
-      while (itor.hasNext()) {
-        Implication maybe = (Implication)itor.next();
+      for (Invariant maybe_as_inv : invs) {
+        Implication maybe = (Implication)maybe_as_inv;
 
         // don't print redundant invariants.
         if (Daikon.suppress_redundant_invariants_with_simplify &&

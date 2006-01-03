@@ -2691,10 +2691,7 @@ public class PptTopLevel extends Ppt {
     for (PptTopLevel ppt : closure) {
       Vector<Invariant> invs_vec = ppt.invariants_vector();
       Collections.sort(invs_vec, icfp);
-      Iterator<Invariant> _invs =
-        InvariantFilters.addEqualityInvariants(invs_vec).iterator();
-      while (_invs.hasNext()) {
-        Invariant inv = _invs.next();
+      for (Invariant inv : InvariantFilters.addEqualityInvariants(invs_vec)) {
         if (inv instanceof Implication) {
           continue;
         }
@@ -2768,10 +2765,7 @@ public class PptTopLevel extends Ppt {
       // State the object invariant on the incoming argument
       Vector invs2 = obj_ppt.invariants_vector();
       Collections.sort(invs2, icfp);
-      Iterator<Invariant> _invs
-        = InvariantFilters.addEqualityInvariants(invs2).iterator();
-      while (_invs.hasNext()) {
-        Invariant inv = _invs.next();
+      for (Invariant inv : InvariantFilters.addEqualityInvariants(invs2)) {
         if (!test.include(inv)) { // think: !inv.isWorthPrinting()
           continue;
         }
@@ -3089,9 +3083,7 @@ public class PptTopLevel extends Ppt {
    * doesn't have anything like post().
    **/
   public void simplify_variable_names() {
-    Iterator<VarInfo> iter = Arrays.asList(var_infos).iterator();
-    while (iter.hasNext()) {
-      VarInfo vi = iter.next();
+    for (VarInfo vi : Arrays.asList(var_infos)) {
       vi.simplify_expression();
     }
   }
@@ -3165,9 +3157,7 @@ public class PptTopLevel extends Ppt {
     // they should. When the VarInfo was fully unserialized, the key's
     // hashCode then changed to the correct one, messing up the
     // indexing in a hard-to-debug way. -SMcC
-    Iterator<List<Integer>> view_keys_it = views.keySet().iterator();
-    while (view_keys_it.hasNext()) {
-      List<Integer> this_key = view_keys_it.next();
+    for (List<Integer> this_key : views.keySet()) {
       Assert.assertTrue(views.containsKey(this_key));
     }
     // We could check a lot more than just that slices are okay.  For

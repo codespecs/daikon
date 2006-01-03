@@ -204,33 +204,25 @@ public final class Equality
   // convert to normal two-way IntEqual type invariants.  However,
   // they can be called if desired.
   public String format_java() {
-    StringBuffer result = new StringBuffer ();
     VarInfo leader = leader();
     String leaderName = leader.name.name();
-    for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-      VarInfo var = i.next();
+    List<String> clauses = new ArrayList<String>();
+    for (VarInfo var : vars) {
       if (leader == var) continue;
-      result.append("(").append(leaderName).append(" == "); // "interned"
-      result.append(var.name.name()).append(")");
-      if (i.hasNext()) result.append(" && ");
+      clauses.add(String.format("(%s == %s)", leaderName, var.name.name()));
     }
-    return result.toString();
+    return UtilMDE.join(clauses, " && ");
   }
 
   public String format_ioa() {
-    StringBuffer result = new StringBuffer();
     VarInfo leader = leader();
     String leaderName = leader.name.ioa_name();
-    for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-      VarInfo var = i.next();
+    List<String> clauses = new ArrayList<String>();
+    for (VarInfo var : vars) {
       if (leader == var) continue;
-      result.append (var.name.ioa_name());
-      result.append (" = ");
-      result.append (leaderName);
-      if (i.hasNext()) result.append (" /\\ ");
+      clauses.add(var.name.ioa_name() + " = " + leaderName);
     }
-
-    return result.toString();
+    return UtilMDE.join(clauses, " /\\ ");
   }
 
 
@@ -362,37 +354,33 @@ public final class Equality
   }
 
   public String format_java_family(OutputFormat format) {
-    StringBuffer result = new StringBuffer ();
     VarInfo leader = leader();
     String leaderName = leader.name.name_using(format, leader);
-    for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
-      VarInfo var = i.next();
+    List<String> clauses = new ArrayList<String>();
+    for (VarInfo var : vars) {
       if (leader == var) continue;
       if (leader.rep_type.isArray()) {
-        result.append("(").append("daikon.Quant.pairwiseEqual(");
-        result.append(leaderName).append(", ").append(var.name.name_using(format, var));
-        result.append(")");
+        clauses.add(String.format("(daikon.Quant.pairwiseEqual(%s, %s)",
+                                  leaderName,
+                                  var.name.name_using(format, var)));
       } else {
         if (leader.type.isFloat()) {
-          result
-            .append("(")
-            .append(Invariant.formatFuzzy("eq", leader, var, format))
-            .append(")");
+          clauses.add("(" + Invariant.formatFuzzy("eq", leader, var, format) + ")");
         } else {
           if ((leaderName.indexOf("daikon.Quant.collectObject") != -1)
               ||
               (var.name.name_using(format, var).indexOf("daikon.Quant.collectObject") != -1)) {
-            result.append("(warning: it is meaningless to compare hashcodes for values "
+            clauses.add("(warning: it is meaningless to compare hashcodes for values "
                           + "obtained through daikon.Quant.collect... methods.");
           } else {
-            result.append("(").append(leaderName).append(" == "); // "interned"
-            result.append(var.name.name_using(format, var)).append(")");
+            clauses.add(String.format("(%s == %s)",
+                                      leaderName,
+                                      var.name.name_using(format, var)));
           }
         }
       }
-      if (i.hasNext()) result.append(" && ");
     }
-    return result.toString();
+    return UtilMDE.join(clauses, " && ");
   }
 
   public String toString() {

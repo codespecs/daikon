@@ -201,8 +201,7 @@ public class LOWERBOUNDCORE
   private PRIMITIVE calc_modulus() {
     // Need to reinstate this at some point.
     // {
-    //   for (Iterator<Invariant> itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
-    //     Invariant inv = itor.next();
+    //   for (Invariant inv : wrapper.ppt.invs) {
     //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
     //       modulus = ((Modulus) inv).modulus;
     //       break;

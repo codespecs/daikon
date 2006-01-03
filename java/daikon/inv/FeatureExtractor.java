@@ -303,8 +303,7 @@ public final class FeatureExtractor {
     names.println("|Beginning of .names file");
     // names.println("GoodBad."); names.println(); names.println("GoodBad: 1, -1.");
     names.println("good, bad.");
-    for (Iterator<IntDoublePair> all = allFeatures.iterator(); all.hasNext(); ) {
-      IntDoublePair current = all.next();
+    for (IntDoublePair current  : allFeatures) {
       if (numbersToNames.containsKey(current)) {
         String currentName = numbersToNames.get(current);
         if (currentName.endsWith("Bool"))
@@ -314,7 +313,7 @@ public final class FeatureExtractor {
         else if (currentName.endsWith("Int"))
           //          names.println(currentName + ": discrete.");
           names.println(currentName + ": continuous.");
-        else throw new IOException("All feature names must end with one of " +
+        else throw new IOException("Feature names must end with one of " +
                                    "Float, Bool, or Int." + lineSep + "Error: " +
                                    currentName + lineSep);
       }
@@ -351,11 +350,10 @@ public final class FeatureExtractor {
       // Debugging code to detect duplicates within allFets
       //
       //  HashSet temp = new HashSet();
-      //  for (Iterator<IntDoublePair> iter = allFets.iterator(); iter.hasNext();) {
-      //  IntDoublePair meh = iter.next();
-      //  if (temp.contains(new Integer(meh.number)))
-      //  throw new RuntimeException(lineSep + "Found duplicate feature: "+meh.number);
-      //  temp.add(new Integer(meh.number));
+      //  for (IntDoublePair meh : allFets) {
+      //    if (temp.contains(new Integer(meh.number)))
+      //    throw new RuntimeException(lineSep + "Found duplicate feature: "+meh.number);
+      //    temp.add(new Integer(meh.number));
       //  }
       // End Debugging Code
 
@@ -374,12 +372,10 @@ public final class FeatureExtractor {
       // Debug Code that prints out features that
       // have been forgotten in AllFeatures
 
-//       for (Iterator<IntDoublePair> h = allFets.iterator(); h.hasNext();) {
-//         IntDoublePair current = h.next();
+//       for (IntDoublePair current : allFets) {
 //         boolean contains = false;
 
-//         for (Iterator<IntDoublePair> j = allFeatures.iterator(); j.hasNext();) {
-//           IntDoublePair jguy = j.next();
+//         for (IntDoublePair jguy : allFeatures) {
 //           if (jguy.number == current.number)
 //             contains = true;
 //         }
@@ -424,9 +420,7 @@ public final class FeatureExtractor {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       output.print(label);
-      for (Iterator<IntDoublePair> fets = features.get(i).iterator();
-           fets.hasNext();) {
-        IntDoublePair fet = fets.next();
+      for (IntDoublePair fet : features.get(i)) {
         if (fet.value > THRESHOLD)
           output.print(fet.number + ":" + df.format(fet.value) + " ");
       }
@@ -459,9 +453,7 @@ public final class FeatureExtractor {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       output.print(features.get(i).size() * 2 + " ");
-      for (Iterator<IntDoublePair> fets = features.get(i).iterator();
-           fets.hasNext();) {
-        IntDoublePair fet = fets.next();
+      for (IntDoublePair fet : features.get(i)) {
         output.print(fet.number + " " + df.format(fet.value) + " ");
       }
       output.println(label);
@@ -501,8 +493,8 @@ public final class FeatureExtractor {
     br.close();
 
     PrintStream ps = new PrintStream(new FileOutputStream(output));
-    for (Iterator<String> i = outputData.iterator(); i.hasNext(); )
-      ps.println(i.next());
+    for (String s : outputData)
+      ps.println(s);
     ps.close();
   }
 
@@ -518,8 +510,8 @@ public final class FeatureExtractor {
 
     PrintStream ps = new PrintStream(new FileOutputStream(output));
     ps.println(vectors.size());
-    for (Iterator<String> i = vectors.iterator(); i.hasNext(); )
-      ps.println(i.next());
+    for (String s : vectors)
+      ps.println(s);
     ps.close();
   }
 
@@ -672,9 +664,7 @@ public final class FeatureExtractor {
       VarInfo[] varInfos = ((Invariant) inv).ppt.var_infos;
       for (int i = 0; i < varInfos.length; i++) {
 
-        for (Iterator<IntDoublePair> it = getReflectFeatures(varInfos[i],lookup).iterator();
-             it.hasNext();) {
-          IntDoublePair current = it.next();
+        for (IntDoublePair current : getReflectFeatures(varInfos[i],lookup)) {
           answer.add(new IntDoublePair(current.number + i + 1, current.value));
           answer.add(current);
         }
@@ -836,8 +826,8 @@ public final class FeatureExtractor {
       HashSet<String> pos = new HashSet<String>();
       HashSet<String> neg = new HashSet<String>();
 
-      for (Iterator<String> i = inputs.iterator(); i.hasNext(); ) {
-        BufferedReader br=new BufferedReader(new FileReader(i.next()));
+      for (String s : inputs) {
+        BufferedReader br=new BufferedReader(new FileReader(s));
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
@@ -875,11 +865,12 @@ public final class FeatureExtractor {
         }
       }
 
-      for (Iterator<String> i = pos.iterator(); i.hasNext(); )
+      for (String s : pos) {
         if (type.equals("C5"))
-          posvectors.add(i.next() + "good");
+          posvectors.add(s + "good");
         else if (type.equals("SVMfu"))
-          posvectors.add(i.next() + "1");
+          posvectors.add(s + "1");
+      }
 
       // Set the appropriate repeat values.
       int posrepeat = 1 , negrepeat = 1;
@@ -904,11 +895,11 @@ public final class FeatureExtractor {
         ps.println(size);
       // now write the data
       for (int repeat = 0; repeat < negrepeat; repeat++)
-        for (Iterator<String> i = negvectors.iterator(); i.hasNext(); )
-          ps.println(i.next() + " ");
+        for (String s : negvectors)
+          ps.println(s + " ");
       for (int repeat = 0; repeat < posrepeat; repeat++)
-        for (Iterator<String> i = posvectors.iterator(); i.hasNext(); )
-          ps.println(i.next() + " ");
+        for (String s : posvectors)
+          ps.println(s + " ");
       ps.close();
 
       // Print a summary of positives and negatives to stdout.
@@ -963,8 +954,8 @@ public final class FeatureExtractor {
       HashSet<String> pos = new HashSet<String>();
       HashSet<String> neg = new HashSet<String>();
 
-      for (Iterator<String> i = trains.iterator(); i.hasNext(); ) {
-        BufferedReader br = new BufferedReader(new FileReader(i.next()));
+      for (String s : trains) {
+        BufferedReader br = new BufferedReader(new FileReader(s));
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
@@ -992,8 +983,8 @@ public final class FeatureExtractor {
       ArrayList<String> testGood = new ArrayList<String>();
       ArrayList<String> testBad = new ArrayList<String>();
 
-      for (Iterator<String> i = trains.iterator(); i.hasNext(); ) {
-        BufferedReader br=new BufferedReader(new FileReader(i.next()));
+      for (String s : trains) {
+        BufferedReader br=new BufferedReader(new FileReader(s));
         br.readLine();
         while (br.ready()) {
           String vector = br.readLine();
@@ -1019,20 +1010,21 @@ public final class FeatureExtractor {
     }
 
 
-//     for (Iterator<String> i = pos.iterator(); i.hasNext(); )
+//     for (String s : pos) {
 //       if (type.equals("C5"))
-//         posvectors.add(i.next() + "good");
-//     else if (type.equals("SVMfu"))
-//       posvectors.add(i.next() + "1");
+//         posvectors.add(s + "good");
+//       else if (type.equals("SVMfu"))
+//         posvectors.add(s + "1");
+//     }
 
 //     // Print the output to the output file.
 //     PrintStream ps = new PrintStream(new FileOutputStream(output));
 //     for (int repeat = 0; repeat < negrepeat; repeat++)
-//       for (Iterator<String> i = negvectors.iterator(); i.hasNext(); )
-//         ps.println(i.next() + " ");
+//       for (String s : negvectors)
+//         ps.println(s + " ");
 //     for (int repeat = 0; repeat < posrepeat; repeat++)
-//       for (Iterator<String> i = posvectors.iterator(); i.hasNext(); )
-//         ps.println(i.next() + " ");
+//       for (String s : posvectors)
+//         ps.println(s + " ");
 //     ps.close();
 
 //     // Print a summary of positives and negatives to stdout.

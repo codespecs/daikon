@@ -629,8 +629,8 @@ public class SEQSEQINTEQUAL
         PptSlice slice = this.ppt.parent.findSlice_unordered (avis);
         debug.log ("Found ppt " + slice);
         if (slice != null) {
-          for (Iterator<Invariant> i = slice.invs.iterator(); i.hasNext(); )
-            debug.log ("-- invariant " + i.next().format());
+          for (Invariant inv : slice.invs)
+            debug.log ("-- invariant " + inv.format());
           List<Invariant> found = new ArrayList<Invariant>();
           found.add (SEQSEQ_EQ.find(slice));
           found.add (SEQSEQ_LT.find(slice));

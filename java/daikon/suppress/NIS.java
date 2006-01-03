@@ -379,14 +379,14 @@ public class NIS {
           Map<VarInfo,Count> var_map = new LinkedHashMap<VarInfo,Count>();
           Fmt.pf ("ppt %s, comparability %s has %s equality invariants",
                   ppt.name, ants.comparability, "" + eq_invs.size());
-          for (Iterator<Invariant> j = eq_invs.iterator(); j.hasNext(); ) {
-            IntEqual inv = (IntEqual) j.next();
-            VarInfo v1 = inv.ppt.var_infos[0];
-            VarInfo v2 = inv.ppt.var_infos[1];
+          for (Invariant inv  : eq_invs) {
+            IntEqual ie = (IntEqual) inv;
+            VarInfo v1 = ie.ppt.var_infos[0];
+            VarInfo v2 = ie.ppt.var_infos[1];
             if (ppt.is_constant(v1) && ppt.is_constant(v2))
-              Fmt.pf ("inv %s has two constant variables", inv.format());
+              Fmt.pf ("inv %s has two constant variables", ie.format());
             if (!v1.compatible (v2))
-              Fmt.pf ("inv %s has incompatible variables", inv.format());
+              Fmt.pf ("inv %s has incompatible variables", ie.format());
             Count cnt = var_map.get (v1);
             if (cnt == null) {
               cnt = new Count (0);

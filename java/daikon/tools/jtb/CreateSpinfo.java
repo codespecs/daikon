@@ -244,9 +244,7 @@ public class CreateSpinfo {
     List<String> method_conds;
     List<String> methodsList = new ArrayList<String>(conditions.keySet());
     Collections.sort(methodsList);
-    Iterator<String> methods = methodsList.iterator();
-    while (methods.hasNext()) {
-      String method = methods.next();
+    for (String method : methodsList) {
       method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {

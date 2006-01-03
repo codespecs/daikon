@@ -271,9 +271,7 @@ public class LemmaStack {
                                    Set<Class> exclude,
                                    Set<Set<Class>> black, Set<Set<Class>> gray,
                                    Set<Set<Class>> found) throws TimeoutException {
-    Iterator<Set<Class>> found_it = found.iterator();
-    while (found_it.hasNext()) {
-      Set<Class> known = found_it.next();
+    for (Set<Class> known : found) {
       // If known and exclude are disjoint, return
       Set<Class> exclude2 = new HashSet<Class>(exclude);
       exclude2.retainAll(known);
@@ -303,10 +301,9 @@ public class LemmaStack {
       System.err.println();
 
       found.add(used);
-      Iterator<Class> steps_it = used.iterator();
-      while (steps_it.hasNext()) {
+      for (Class c : used) {
         Set<Class> step = new HashSet<Class>(exclude);
-        step.add(steps_it.next());
+        step.add(c);
         if (!black.contains(step) && !gray.contains(step)) {
           gray.add(step);
           minimizeClasses_rec(result, lems, step, black, gray, found);
@@ -474,10 +471,9 @@ public class LemmaStack {
   /** For all the integers we've seen, tell Simplify about the
    * ordering between them. */
   public void pushOrdering() throws SimplifyError {
-    Iterator<Long> longs_it = ints_seen.iterator();
     long last_long = Long.MIN_VALUE;
-    while (longs_it.hasNext()) {
-      long l = longs_it.next().longValue();
+    for (Long ll : ints_seen) {
+      long l = ll.longValue();
       if (l == Long.MIN_VALUE)
         continue;
       Assert.assertTrue(l != last_long);

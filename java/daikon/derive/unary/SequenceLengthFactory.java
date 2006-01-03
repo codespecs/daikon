@@ -45,9 +45,7 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
     // have a corresponding equal-length sequence (sans-field).
     {
       // If $Field appears before $Elements, omit.
-      Iterator<VarInfoName> nodes = (new VarInfoName.InorderFlattener(vi.name)).nodes().iterator();
-      while (nodes.hasNext()) {
-        VarInfoName node = nodes.next();
+      for (VarInfoName node : (new VarInfoName.InorderFlattener(vi.name)).nodes()) {
         if (node instanceof VarInfoName.Field) {
           return null;
         }
