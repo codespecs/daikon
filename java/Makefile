@@ -400,6 +400,17 @@ dcomp-jdk-only :
 	  /scratch/${USER}/rt.jar *
 	cd /scratch/${USER}/ && cp rt.jar /scratch/${USER}/j2sdk-1.5/jre/lib/rt.jar
 
+#
+# Wisdom targets
+#
+WISDOM_JAVA_FILES := $(shell find utilMDE -name '*.java')
+wisdom.jar : $(WISDOM_JAVA_FILES) utilMDE/wisdom.manifest
+	${JAVAC_COMMAND} $(WISDOM_JAVA_FILES)
+	$(JAR) cfm wisdom.jar utilMDE/wisdom.manifest utilMDE/*.class
+
+install-wisdom: wisdom.jar
+	cp wisdom.jar $(pag)/software/pkg/wisdom
+
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ${AUTO_GENERATED_FILES}
