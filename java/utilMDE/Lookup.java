@@ -96,6 +96,9 @@ public class Lookup {
   @Option ("-h Show detailed help information")
   public static boolean help = false;
 
+  @Option ("-v Print progress information")
+  public static boolean verbose = false;
+
   /** Comments start with percent signs in the first column **/
   private static String comment_re = "^%.*";
 
@@ -162,8 +165,13 @@ public class Lookup {
 
     try {
       // Process each entry looking for matches
+      int entry_cnt = 0;
       Entry entry = reader.get_entry ();
       while (entry != null) {
+        entry_cnt++;
+        if (verbose && ((entry_cnt % 1000) == 0))
+          System.out.printf ("%d matches in %d entries\r",
+                             matching_entries.size(), entry_cnt);
         int matchcount = 0;
         for (String keyword : keywords) {
           String search = entry.first_line;
@@ -182,7 +190,7 @@ public class Lookup {
             if (!case_sensitive)
               keyword = keyword.toLowerCase();
             if (word_match) {
-              keyword = "[^a-zA-z]" + keyword + "[^a-zA-z]";
+              keyword = "\\b" + keyword + "\\b";
               if (Pattern.compile (keyword).matcher(search).find())
                 matchcount++;
             } else if (search.contains(keyword))
