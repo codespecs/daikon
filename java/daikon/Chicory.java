@@ -110,7 +110,7 @@ public class Chicory {
    * Flag to "watch" how we recurse on static types.  If true, don't
    * recurse on the same static type.
    */
-  private static boolean watchStatics = true;
+  private static boolean watchStatics = false;
 
   /**
    * The name of the file to read for a list of pure methods.  Should
