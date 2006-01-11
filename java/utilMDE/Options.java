@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.regex.*;
 import java.lang.reflect.*;
 import java.lang.annotation.*;
+import com.sun.javadoc.*;
 
 /**
  * Class that reads and sets command line options.  The Option
@@ -70,6 +71,9 @@ public class Options {
     /** Argument description **/
     String description;
 
+    /** JavaDoc description **/
+    String jdoc;
+
     /**
      * Name of the argument type.  Defaults to the type of the field, but
      * user can override this in the option string
@@ -90,23 +94,16 @@ public class Options {
       this.option = option;
       this.obj = obj;
 
-      // Get the short name, long name, and description
-      String val = option.value();
-      if (val.startsWith("-")) {
-        short_name = val.substring (1, 2);
-        description = val.substring (3);
-      } else {
-        short_name = null;
-        description = val;
-      }
+      // The long name is the name of the field
       long_name = field.getName();
 
-      // Get the type (if any) out of the description
-      type_name = type_short_name (field.getType());
-      if (description.startsWith ("<")) {
-        type_name = description.substring (1).replaceFirst (">.*", "");
-        description = description.replaceFirst ("<.*> ", "");
-      }
+      // Get the short name, type name, and description from the annotation
+      String[] opt_results = parse_option (option.value());
+      short_name = opt_results[0];
+      type_name = opt_results[1];
+      if (type_name == null)
+        type_name = type_short_name (field.getType());
+      description = opt_results[2];
 
       // Get the default value (if any)
       try {
@@ -150,7 +147,14 @@ public class Options {
                             field);
     }
 
+    /** Returns the class that declares this option **/
+    public Class get_declaring_class() {
+      return field.getDeclaringClass();
+    }
   }
+
+  /** First specified class **/
+  private Class main_class = null;
 
   /** List of all of the defined options **/
   private List<OptionInfo> options = new ArrayList<OptionInfo>();
@@ -174,6 +178,9 @@ public class Options {
 
       if (obj instanceof Class) {
 
+        if (main_class == null)
+          main_class = (Class) obj;
+
         Field[] fields = ((Class) obj).getDeclaredFields();
         for (Field f : fields) {
           Option option = f.getAnnotation (Option.class);
@@ -185,6 +192,10 @@ public class Options {
         }
 
       } else { // must be an object that contains option fields
+
+        if (main_class == null)
+          main_class = obj.getClass();
+
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field f : fields) {
           Option option = f.getAnnotation (Option.class);
@@ -483,6 +494,86 @@ public class Options {
     }
   }
 
+  /**
+   * Entry point for creating html documentation
+   */
+  public void jdoc (RootDoc doc) {
+
+    // Find the overall documentation (on the main class)
+    ClassDoc main = find_class_doc (doc, main_class);
+    if (main == null) {
+      throw new Error ("can't find main class " + main_class);
+    }
+
+    // Process each option and add in the javadoc info
+    for (OptionInfo oi : options) {
+      ClassDoc opt_doc = find_class_doc (doc, oi.get_declaring_class());
+      for (FieldDoc fd : opt_doc.fields()) {
+        if (fd.name().equals (oi.long_name)) {
+          oi.jdoc = fd.commentText();
+          break;
+        }
+      }
+    }
+
+    // Write out the info as HTML
+    System.out.println (main.commentText());
+    System.out.println ("<p>Command line options: <p>");
+    System.out.println ("<ul>");
+    for (OptionInfo oi : options) {
+      String default_str = "[no default]";
+      if (oi.default_str != null)
+        default_str = String.format ("[default %s]", oi.default_str);
+      String synopsis = oi.synopsis();
+      synopsis = synopsis.replaceAll ("<", "&lt;");
+      System.out.printf ("  <li> <b>%s</b>. %s %s<p>%n", synopsis,
+                         oi.jdoc, default_str);
+    }
+    System.out.println ("</ul>");
+
+  }
+
+  ClassDoc find_class_doc (RootDoc doc, Class c) {
+
+    for (ClassDoc cd : doc.classes()) {
+      if (cd.qualifiedName().equals (c.getName())) {
+        return cd;
+      }
+    }
+    return (null);
+  }
+
+  /**
+   * Parse an option value and return its three components (short_name,
+   * type_name, and description).  The short_name and type_name are null
+   * if they are not specified in the string.  There are always three
+   * elements in the array
+   */
+  private static String[] parse_option (String val) {
+
+    // Get the short name, long name, and description
+    String short_name = null;
+    String type_name = null;
+    String description = null;
+
+    // Get the short name (if any)
+    if (val.startsWith("-")) {
+      short_name = val.substring (1, 2);
+      description = val.substring (3);
+    } else {
+      short_name = null;
+      description = val;
+    }
+
+    // Get the type name (if any)
+    if (description.startsWith ("<")) {
+      type_name = description.substring (1).replaceFirst (">.*", "");
+      description = description.replaceFirst ("<.*> ", "");
+    }
+
+    // Return the result
+    return new String[] {short_name, type_name, description};
+  }
 
   /**
    * Test  class with some defined arguments

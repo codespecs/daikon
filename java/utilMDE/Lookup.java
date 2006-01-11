@@ -4,18 +4,19 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 import static utilMDE.MultiReader.Entry;
+import com.sun.javadoc.*;
 
 /**
- * Wisdom searches a set of files for information.  By default, it
- * searches the file ~/wisdom/root.  A wisdom file can contain one or more
+ * Lookup searches a set of files for information.  By default, it
+ * searches the file ~/lookup/root.  A file can contain one or more
  * entries.  A short entry is a single paragraph (delimited from the
  * next entry by a blank line).  A long entry is introduced by a line
  * that begins with '>entry'.  The remainder of that line is a one
  * line description of the entry.  A long entry is terminated by
- * '@lt;entry', the start of a new long entry, or the start of a new
+ * '&lt;entry', the start of a new long entry, or the start of a new
  * file. <p>
  *
- * Wisdom files can contain comments and can include other files.
+ * Files can contain comments and can include other files.
  * Comments start with a % sign in the first column.  Any line that
  * starts with a comment is ignored (it is not treated as a blank line
  * for the purpose of separating entries). <p>
@@ -24,15 +25,13 @@ import static utilMDE.MultiReader.Entry;
  * '\include{filename}'. <p>
  *
  * The user specifies a set of keywords in which they are interested.
- * Wisdom will look for those keywords in the body of short entries
+ * Lookup will look for those keywords in the body of short entries
  * and in the description of long entries.  Entries that contain all
  * of the keywords match.  If multiple entries match, the first line
  * of each is printed.  If only one entry matches, then that entry is
  * printed in its entirety. <p>
- *
- * Options to wisdom are noted below
  **/
-public class Wisdom {
+public class Lookup {
 
   /**
    * Search the body of long entries in addition to the entry's
@@ -57,11 +56,12 @@ public class Wisdom {
   public static boolean regular_expressions = false;
 
   /**
-   * Specify the search list for the file that contains wisdom information.
-   * The first file found is used.  Files are separated by colons (:)
+   * Specify the search list for the file that contains information to
+   * be searched.  The first file found is used.  Files are separated
+   * by colons (:)
    */
-  @Option ("-f Specify the search list of files of wisdom information")
-  public static String entry_file = "~/wisdom/root";
+  @Option ("-f Specify the search list of files of information")
+  public static String entry_file = "~/lookup/root";
 
   /**
    * Specifies which item to print when there are multiple matches
@@ -92,6 +92,10 @@ public class Wisdom {
   @Option ("-l Show the location of each matching entry")
   public static boolean show_location = false;
 
+  /** Show detailed help information and exit **/
+  @Option ("-h Show detailed help information")
+  public static boolean help = false;
+
   /** Comments start with percent signs in the first column **/
   private static String comment_re = "^%.*";
 
@@ -103,19 +107,32 @@ public class Wisdom {
 
 
   /**
-   * Look for the specified keywords in the wisdom file(s) and prints
+   * Look for the specified keywords in the file(s) and prints
    * the corresponding entries
    */
   public static void main (String args[]) throws IOException {
 
-    Options options = new Options (Wisdom.class);
+    Options options = new Options (Lookup.class);
     String[] keywords = options.parse_and_usage (args,
-                               "wisdom [options] <keyword> <keyword> ...");
+                               "lookup [options] <keyword> <keyword> ...");
 
+    // If help was requested, print it and exit
+    if (help) {
+      BufferedReader help_stream = new BufferedReader (new InputStreamReader
+                   (Lookup.class.getResourceAsStream ("lookup.txt")));
+      String line = help_stream.readLine();
+      while (line != null) {
+        System.out.println (line);
+        line = help_stream.readLine();
+      }
+      System.exit (0);
+    }
 
-    // Find our own entry if there are no arguments
-    if (keywords.length == 0)
-      keywords = new String[] {"help program"};
+    // Make sure at least one keyword was specified
+    if (keywords.length == 0) {
+      options.print_usage ("No keywords specified");
+      System.exit (254);
+    }
 
     // Open the first readable root file
     MultiReader reader = null;
@@ -227,6 +244,16 @@ public class Wisdom {
         }
       }
     }
+  }
+
+  /**
+   * Entry point for creating html documentation
+   */
+  public static boolean start (RootDoc doc) {
+
+    Options options = new Options (Lookup.class);
+    options.jdoc (doc);
+    return (true);
   }
 
   /**
