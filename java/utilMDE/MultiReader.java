@@ -204,7 +204,7 @@ public class MultiReader {
     if (line == null)
       return (null);
 
-    String body = "";
+    StringBuilder body = new StringBuilder(10000);
     Entry entry = null;
     String filename = get_filename();
     long line_number = get_line_number();
@@ -221,7 +221,8 @@ public class MultiReader {
       Matcher end_entry_match = entry_stop_re.matcher(line);
       while ((line != null) && !entry_match.find() &&
              !end_entry_match.find() && filename.equals (get_filename())) {
-        body += line + lineSep;
+        body.append (line);
+        body.append (lineSep);
         line = readLine();
         entry_match = entry_start_re.matcher(line);
         end_entry_match = entry_stop_re.matcher(line);
@@ -233,7 +234,7 @@ public class MultiReader {
                              || !filename.equals (get_filename())))
         putback (line);
 
-      entry = new Entry (description, body, filename,
+      entry = new Entry (description, body.toString(), filename,
                                      line_number, false);
 
     } else { // blank separated entry
@@ -242,11 +243,13 @@ public class MultiReader {
 
       // Read until we find another blank line
       while ((line != null) && (line.trim().length() != 0)) {
-        body += String.format ("%s%n", line);
+        body.append (line);
+        body.append (lineSep);
         line = readLine();
       }
 
-      entry = new Entry (description, body, filename, line_number, true);
+      entry = new Entry (description, body.toString(), filename, line_number,
+                         true);
     }
 
     return (entry);
