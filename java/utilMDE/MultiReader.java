@@ -25,7 +25,6 @@ public class MultiReader {
     }
 
     public ReaderInfo (String filename) throws IOException {
-      filename = UtilMDE.fix_filename (filename);
       this.reader = new BufferedReader (new FileReader (filename));
       this.filename = filename;
     }
@@ -170,11 +169,20 @@ public class MultiReader {
     if (line == null)
       return null;
 
+    // Handle include files.  Non-absolute pathnames are relative
+    // to the including file (the current file)
     Matcher m = include_re.matcher (line);
     if (m.matches()) {
-      String filename = m.group (1);
+      File filename = new File (UtilMDE.fix_filename(m.group (1)));
       // System.out.printf ("Trying to include filename %s%n", filename);
-      readers.push (new ReaderInfo (filename));
+      if (!filename.isAbsolute()) {
+        File current_filename = new File (readers.peek().filename);
+        File current_parent = current_filename.getParentFile();
+        filename = new File (current_parent, filename.toString());
+        // System.out.printf ("absolute filename = %s %s %s%n",
+        //                     current_filename, current_parent, filename);
+      }
+      readers.push (new ReaderInfo (filename.getAbsolutePath()));
       return readLine();
     }
 
