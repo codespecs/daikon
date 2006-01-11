@@ -73,6 +73,13 @@ public abstract class DaikonVariableInfo
      */
     public static boolean stdVisibility = false;
 
+    /**
+     * Set of fully qualified static variable names for this ppt.  Used
+     * to ensure that each static is only included once (regardless of
+     * how many other variables may include its declaring class).
+     */
+    protected static Set<String> ppt_statics = new LinkedHashSet<String>();
+
     /** Constructs a non-array type DaikonVariableInfo object
      * @param theName The name of the variable
      */
@@ -367,9 +374,7 @@ public abstract class DaikonVariableInfo
      * Add the parameters of the given method to this node.
      */
     protected void addParameters(ClassInfo cinfo,
-                       Member method, List<String> argnames, String offset, int depth,
-                       Set<Class> staticTraversedClasses)
-    {
+             Member method, List<String> argnames, String offset, int depth) {
         Class[] arguments = (method instanceof Constructor)
             ? ((Constructor) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
@@ -389,8 +394,7 @@ public abstract class DaikonVariableInfo
             param_offset++;
             if ((type == Double.TYPE) || (type == Long.TYPE))
                 param_offset++;
-            theChild.addChildNodes(cinfo, type, name, offset, depth,
-                                   staticTraversedClasses);
+            theChild.addChildNodes(cinfo, type, name, offset, depth);
         }
     }
 
@@ -399,9 +403,8 @@ public abstract class DaikonVariableInfo
      * attach new nodes as children of this node.
      */
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
-            Class type, String offset, int depth,
-            Set<Class> staticTraversedClasses)
-    {
+                                Class type, String offset, int depth) {
+
         //DaikonVariableInfo corresponding to the "this" object
         DaikonVariableInfo thisInfo;
 
@@ -435,17 +438,11 @@ public abstract class DaikonVariableInfo
                                dontPrintInstanceVars, isArray);
 
 
-        boolean addStatics = !Chicory.shouldWatchStatics();
-        if (Chicory.shouldWatchStatics() && !isArray && !staticTraversedClasses.contains(type))
-        {
-            staticTraversedClasses.add(type);
-            addStatics = true;
-        }
-
         for (int i = 0; i < fields.length; i++)
         {
 
             Field classField = fields[i];
+            boolean is_static = Modifier.isStatic (classField.getModifiers());
 
             // Skip created variables (they were probably created by us)
             if (skip_synthetic && classField.isSynthetic())
@@ -454,8 +451,7 @@ public abstract class DaikonVariableInfo
             if (debug_vars)
                 System.out.printf ("considering field %s%n", classField);
 
-            if (!Modifier.isStatic(classField.getModifiers()) &&
-                dontPrintInstanceVars)
+            if (!is_static && dontPrintInstanceVars)
             {
                 if (debug_vars)
                     System.out.printf ("--field !static and instance var %b%n",
@@ -464,22 +460,24 @@ public abstract class DaikonVariableInfo
             }
 
             // Don't print arrays of the same static field
-            if (Modifier.isStatic(classField.getModifiers()) && isArray)
+            if (is_static && isArray)
             {
                 if (debug_vars)
                     System.out.printf ("--field static and inArray%n");
                 continue;
             }
 
-            // Don't print statics for class if already did so
-            if (Modifier.isStatic(classField.getModifiers()) && !addStatics)
-            {
-                if (debug_vars)
-                    System.out.printf ("--already printed statics for %s%n", type);
-
-                continue;
+            // Skip any statics that have been already included
+            if (is_static) {
+                String full_name = classField.getDeclaringClass().getName()
+                    + "." + classField.getName();
+                if (ppt_statics.contains (full_name)) {
+                    if (debug_vars)
+                        System.out.println ("already printed static "
+                                            + full_name);
+                    continue;
+                }
             }
-
 
             if (!isFieldVisible (cinfo.clazz, classField))
             {
@@ -498,7 +496,7 @@ public abstract class DaikonVariableInfo
 
             String newOffset = buf.toString();
             newChild.addChildNodes(cinfo, fieldType, classField.getName(),
-                          newOffset, depth, staticTraversedClasses);
+                          newOffset, depth);
         }
 
 
@@ -535,7 +533,7 @@ public abstract class DaikonVariableInfo
                         String newOffset = buf.toString();
                         newChild.addChildNodes(cinfo, ((Method) meth.member)
                                 .getReturnType(), meth.member
-                                .getName(), newOffset, depth, staticTraversedClasses);
+                                .getName(), newOffset, depth);
 
                     }
                 }
@@ -654,15 +652,13 @@ public abstract class DaikonVariableInfo
         String theName = field.getName();
         int modifiers = field.getModifiers();
 
-        if (offset.length() > 0) // offset already starts with "this"
+        if (Modifier.isStatic(modifiers))
         {
-        }
-        else if (Modifier.isStatic(modifiers))
-        {
-            offset = offset + field.getDeclaringClass().getName() + ".";
+            offset = field.getDeclaringClass().getName() + ".";
+            ppt_statics.add (offset + theName);
         }
         // instance field, first recursion step
-        else
+        else if (offset.length() == 0)
         {
             offset = "this.";
         }
@@ -672,10 +668,12 @@ public abstract class DaikonVariableInfo
         // Print auxiliary information.
         type_name += appendAuxInfo(field);
 
-        DaikonVariableInfo newField = new FieldInfo(offset + theName, field, isArray);
+        DaikonVariableInfo newField = new FieldInfo(offset + theName, field,
+                                                    isArray);
 
         newField.typeName = type_name;
         newField.repTypeName = getRepName(type, isArray) + arr_str;
+
 
         if (DaikonWriter.isStaticConstField(field) && !isArray)
         {
@@ -1025,9 +1023,8 @@ public abstract class DaikonVariableInfo
     *                "this.ballCount."
     */
    protected void addChildNodes(ClassInfo cinfo, Class type, String theName,
-           String offset, int depthRemaining,
-           Set<Class> staticTraversedClasses)
-   {
+                                String offset, int depthRemaining) {
+
        if (type.isPrimitive())
            return;
        else if (type.isArray())
@@ -1071,7 +1068,7 @@ public abstract class DaikonVariableInfo
 
                addChild(newChild);
 
-               newChild.addChildNodes(cinfo, arrayType, "", offset + theName + "[]", depthRemaining, staticTraversedClasses);
+               newChild.addChildNodes(cinfo, arrayType, "", offset + theName + "[]", depthRemaining);
            }
            // array is 1-dimensional and element type is a regular class
            else
@@ -1094,7 +1091,7 @@ public abstract class DaikonVariableInfo
 
 
                newChild.checkForString(arrayType, theName + "[]", offset);
-               newChild.addClassVars(cinfo, false, arrayType, offset + theName + "[].", depthRemaining - 1, staticTraversedClasses);
+               newChild.addClassVars(cinfo, false, arrayType, offset + theName + "[].", depthRemaining - 1);
 
            }
        }
@@ -1107,7 +1104,7 @@ public abstract class DaikonVariableInfo
                return;
            }
            if (!systemClass (type))
-               addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1, staticTraversedClasses);
+               addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1);
        }
    }
 

@@ -37,22 +37,19 @@ public class RootInfo extends DaikonVariableInfo
         if (mi.is_class_init())
             return (root);
 
-        Set<Class> staticTraversedClasses = null;
-        if (Chicory.shouldWatchStatics())
-        {
-            staticTraversedClasses = new HashSet<Class> ();
-        }
+        // Clear the set of static variables
+        ppt_statics.clear();
 
         root.addParameters(mi.class_info, mi.member,
                            Arrays.asList(mi.arg_names), /*offset = */ "",
-                           depth, staticTraversedClasses);
+                           depth);
 
-        if (!(mi.member instanceof Constructor))
+        if (!(mi.member instanceof Constructor)) {
             root.addClassVars(mi.class_info,
                               Modifier.isStatic(mi.member.getModifiers()),
                               mi.member.getDeclaringClass(), /*offset = */ "",
-                              depth, staticTraversedClasses);
-
+                              depth);
+        }
         return root;
     }
 
@@ -67,15 +64,12 @@ public class RootInfo extends DaikonVariableInfo
         if (mi.is_class_init())
             return (root);
 
-        Set<Class> staticTraversedClasses = null;
-        if (Chicory.shouldWatchStatics())
-        {
-            staticTraversedClasses = new HashSet<Class> ();
-        }
+        // Clear the set of static variables
+        ppt_statics.clear();
 
         // Print arguments
         root.addParameters(mi.class_info, mi.member, Arrays.asList(mi.arg_names), /*offset = */ "",
-                depth, staticTraversedClasses);
+                depth);
 
         // Print return type information for methods only and not constructors
         if (mi.member instanceof Method)
@@ -93,14 +87,14 @@ public class RootInfo extends DaikonVariableInfo
                 retInfo.checkForDerivedVariables(returnType, "return", "");
 
                 retInfo.addChildNodes(mi.class_info, returnType, "return", "",
-                        depth, staticTraversedClasses);
+                        depth);
             }
         }
 
         // Print class variables
         root.addClassVars(mi.class_info,
                 Modifier.isStatic(mi.member.getModifiers()), mi.member
-                        .getDeclaringClass(), "", depth, staticTraversedClasses);
+                        .getDeclaringClass(), "", depth);
 
         return root;
     }
@@ -113,14 +107,11 @@ public class RootInfo extends DaikonVariableInfo
     {
         RootInfo root = new RootInfo();
 
-        Set<Class> staticTraversedClasses = null;
-        if (Chicory.shouldWatchStatics())
-        {
-            staticTraversedClasses = new HashSet<Class> ();
-        }
+        // Clear the set of static variables
+        ppt_statics.clear();
 
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ false,
-                cinfo.clazz, /*offset = */ "", depth, staticTraversedClasses);
+                cinfo.clazz, /*offset = */ "", depth);
 
         return root;
     }
@@ -133,14 +124,11 @@ public class RootInfo extends DaikonVariableInfo
     {
         RootInfo root = new RootInfo();
 
-        Set<Class> staticTraversedClasses = null;
-        if (Chicory.shouldWatchStatics())
-        {
-            staticTraversedClasses = new HashSet<Class> ();
-        }
+        // Clear the set of static variables
+        ppt_statics.clear();
 
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ true,
-                cinfo.clazz, /*offset = */ "", depth, staticTraversedClasses);
+                cinfo.clazz, /*offset = */ "", depth);
 
         return root;
     }
