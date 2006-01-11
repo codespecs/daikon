@@ -401,15 +401,20 @@ dcomp-jdk-only :
 	cd /scratch/${USER}/ && cp rt.jar /scratch/${USER}/j2sdk-1.5/jre/lib/rt.jar
 
 #
-# Wisdom targets
+# Lookup targets
 #
-WISDOM_JAVA_FILES := $(shell find utilMDE -name '*.java')
-wisdom.jar : $(WISDOM_JAVA_FILES) utilMDE/wisdom.manifest
-	${JAVAC_COMMAND} $(WISDOM_JAVA_FILES)
-	$(JAR) cfm wisdom.jar utilMDE/wisdom.manifest utilMDE/*.class
+LOOKUP_JAVA_FILES := $(shell find utilMDE -name '*.java')
+lookup.jar : $(LOOKUP_JAVA_FILES) utilMDE/lookup.manifest utilMDE/html2textrc
+	${JAVAC_COMMAND} $(LOOKUP_JAVA_FILES)
+	javadoc -quiet -doclet utilMDE.Lookup utilMDE/Lookup.java \
+	  > utilMDE/lookup.html
+	html2text -rcfile utilMDE/html2textrc \
+	  < utilMDE/lookup.html > utilMDE/lookup.txt
+	$(JAR) cfm lookup.jar utilMDE/lookup.manifest utilMDE/*.class \
+	  utilMDE/lookup.html utilMDE/lookup.txt
 
-install-wisdom: wisdom.jar
-	cp wisdom.jar $(pag)/software/pkg/wisdom
+install-lookup: lookup.jar
+	cp lookup.jar $(pag)/software/pkg/
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
