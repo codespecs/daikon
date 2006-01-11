@@ -4,4 +4,4 @@ Makefile.user
 .findbugs-output
 ChicoryPremain.jar
 dcomp_premain.jar
-wisdom.jar
+lookup.jar
