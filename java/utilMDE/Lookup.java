@@ -7,31 +7,46 @@ import static utilMDE.MultiReader.Entry;
 import com.sun.javadoc.*;
 
 /**
- * Lookup searches a set of files for information.  By default, it
- * searches the file ~/lookup/root.  A file can contain one or more
- * entries.  A short entry is a single paragraph (delimited from the
- * next entry by a blank line).  A long entry is introduced by a line
- * that begins with '>entry'.  The remainder of that line is a one
- * line description of the entry.  A long entry is terminated by
- * '&lt;entry', the start of a new long entry, or the start of a new
- * file. <p>
+ * Lookup searches a set of files for information.  The user specifies
+ * a set of keywords (or regular expressions), and Lookup outputs each
+ * entry that matches the keywords.  In the simplest case, Lookup
+ * prints each paragraph (in any of the files) that contains all the
+ * keywords. <p>
  *
- * Files can contain comments and can include other files.
- * Comments start with a % sign in the first column.  Any line that
- * starts with a comment is ignored (it is not treated as a blank line
- * for the purpose of separating entries). <p>
+ * A file can contain one or more entries.  A short entry is a single
+ * paragraph (delimited from the next entry by a blank line).  A long
+ * entry is introduced by a line that begins with '&gt;entry'.  The
+ * remainder of that line is a one line description of the entry.  A
+ * long entry is terminated by '&lt;entry', by the start of a new long
+ * entry, or by the start of a new file. <p>
  *
- * A file can include another file by including a line of the form
+ * Lookup searches for the keywords in the body of short entries and
+ * in the description of long entries.  Entries that contain all of
+ * the keywords match.  If multiple entries match, the first line of
+ * each is printed.  If only one entry matches, then that entry is
+ * printed in its entirety. <p>
+ *
+ * By default, Lookup searches the file ~/lookup/root.  Files can
+ * contain comments and can include other files.  Comments start with
+ * a % sign in the first column.  Any comment line is ignored (it is
+ * not treated as a blank line for the purpose of separating entries).
+ * A file can include another file via a line of the form
  * '\include{filename}'. <p>
  *
- * The user specifies a set of keywords in which they are interested.
- * Lookup will look for those keywords in the body of short entries
- * and in the description of long entries.  Entries that contain all
- * of the keywords match.  If multiple entries match, the first line
- * of each is printed.  If only one entry matches, then that entry is
- * printed in its entirety. <p>
  **/
 public class Lookup {
+
+  /** Show detailed help information and exit. **/
+  @Option ("-h Show detailed help information")
+  public static boolean help = false;
+
+  /**
+   * Specify the search list for the file that contains information to
+   * be searched.  Only the first file found is used.  Files are separated
+   * by colons (:).
+   */
+  @Option ("-f Specify the search list of files of information")
+  public static String entry_file = "~/lookup/root";
 
   /**
    * Search the body of long entries in addition to the entry's
@@ -39,6 +54,28 @@ public class Lookup {
    */
   @Option ("-b Search body of long entries for matches")
   public static boolean search_body = false;
+
+  /**
+   * Specifies that keywords are regular expressions.  If false, keywords
+   * are text matches.
+   */
+  @Option ("-e Keywords are regular expressions")
+  public static boolean regular_expressions = false;
+
+  /**
+   * If true, keywords matching is case sensistive.  By default both
+   * regular expressions and text keywords are case insensitive.
+   */
+  @Option ("-c Keywords are case sensistive")
+  public static boolean case_sensitive = false;
+
+  /**
+   * If true, match a text keyword only as a separate word, not as a
+   * substring of a word.  This option is ignored if
+   * regular_expressions is true.
+   */
+  @Option ("-w Only match text keywords against complete words")
+  public static boolean word_match = false;
 
   /**
    * By default, if multiple entries are matched, only a synopsis
@@ -49,52 +86,17 @@ public class Lookup {
   public static boolean print_all = false;
 
   /**
-   * Specifies that keywords are regular expressions.  If false, keywords
-   * are text matches
-   */
-  @Option ("-e Keywords are regular expressions")
-  public static boolean regular_expressions = false;
-
-  /**
-   * Specify the search list for the file that contains information to
-   * be searched.  The first file found is used.  Files are separated
-   * by colons (:)
-   */
-  @Option ("-f Specify the search list of files of information")
-  public static String entry_file = "~/lookup/root";
-
-  /**
-   * Specifies which item to print when there are multiple matches
+   * Specifies which item to print when there are multiple matches.
    */
   @Option ("-i Choose a specific item when there are multiple matches")
   public static Integer item_num;
 
   /**
-   * If true, keywords matching is case sensistive.  By default both
-   * regular expressions and text keywords are case insensitive.
-   */
-  @Option ("-c Keywords are case sensistive")
-  public static boolean case_sensitive = false;
-
-  /**
-   * If true, match a text keyword anywhere that it is found.  By default
-   * keywords are searched for only as words.  Words are delimited by
-   * any non-alphabetic character.  This option is ignored if
-   * regular_expressions is true
-   */
-  @Option ("-w Only match text keywords against words")
-  public static boolean word_match = false;
-
-  /**
-   * If true show the filename/line number of each matching entry
-   * in the output
+   * If true, show the filename/line number of each matching entry
+   * in the output.
    */
   @Option ("-l Show the location of each matching entry")
   public static boolean show_location = false;
-
-  /** Show detailed help information and exit **/
-  @Option ("-h Show detailed help information")
-  public static boolean help = false;
 
   @Option ("-v Print progress information")
   public static boolean verbose = false;
@@ -113,8 +115,8 @@ public class Lookup {
     = "lookup [options] <keyword> <keyword> ...";
 
   /**
-   * Look for the specified keywords in the file(s) and prints
-   * the corresponding entries
+   * Look for the specified keywords in the file(s) and print
+   * the corresponding entries.
    */
   public static void main (String args[]) throws IOException {
 
