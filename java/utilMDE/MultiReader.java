@@ -43,14 +43,14 @@ public class MultiReader {
    * Regular expression that starts a long entry (paragraph).
    * By default, paragraphs are separated by blank lines
    */
-  private Pattern entry_start_re = null;
+  public Pattern entry_start_re = null;
 
   /**
    * Regular expression that terminates a long entry.  Long entries
    * can also be terminated by the start of a new long entry or the
    * end of the current file
    */
-  private Pattern entry_stop_re = null;
+  public Pattern entry_stop_re = null;
 
   /** Line that is pushed back to be reread **/
   String pushback_line = null;
@@ -79,6 +79,23 @@ public class MultiReader {
       this.filename = filename;
       this.line_number = line_number;
       this.short_entry = short_entry;
+    }
+
+    /**
+     * Return a description of the entry body that matches the specified
+     * regular expression.  If no match is found, reeturns the first_line
+     */
+    String get_description (Pattern re) {
+
+      if (re == null)
+        return first_line;
+
+      Matcher descr = re.matcher (body);
+      if (descr.find()) {
+        return descr.group();
+      } else {
+        return first_line;
+      }
     }
   }
 
@@ -214,7 +231,11 @@ public class MultiReader {
     if (entry_match.find()) {
 
       // Remove entry match from the line
-      line = entry_match.replaceFirst ("");
+      if (entry_match.groupCount() > 0) {
+        line = entry_match.replaceFirst (entry_match.group(1));
+      }
+
+      // Description is the first line
       String description = line;
 
       // Read until we find the termination of the entry
@@ -299,6 +320,16 @@ public class MultiReader {
                                     String entry_stop_re) {
     this.entry_start_re = Pattern.compile (entry_start_re);
     this.entry_stop_re = Pattern.compile (entry_stop_re);
+  }
+
+  /**
+   * Set the regular expressions for the start and stop of long
+   * entries (multiple lins that are read as a group by get_entry())
+   */
+  public void set_entry_start_stop (Pattern entry_start_re,
+                                    Pattern entry_stop_re) {
+    this.entry_start_re = entry_start_re;
+    this.entry_stop_re = entry_stop_re;
   }
 
   /**
