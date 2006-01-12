@@ -108,6 +108,9 @@ public class Lookup {
   /** Platform specific line separator **/
   private static final String lineSep = System.getProperty("line.separator");
 
+  /** One line synopsis of usage **/
+  private static String usage_string
+    = "lookup [options] <keyword> <keyword> ...";
 
   /**
    * Look for the specified keywords in the file(s) and prints
@@ -115,9 +118,8 @@ public class Lookup {
    */
   public static void main (String args[]) throws IOException {
 
-    Options options = new Options (Lookup.class);
-    String[] keywords = options.parse_and_usage (args,
-                               "lookup [options] <keyword> <keyword> ...");
+    Options options = new Options (usage_string, Lookup.class);
+    String[] keywords = options.parse_and_usage (args);
 
     // If help was requested, print it and exit
     if (help) {
@@ -133,7 +135,7 @@ public class Lookup {
 
     // Make sure at least one keyword was specified
     if (keywords.length == 0) {
-      options.print_usage ("No keywords specified");
+      options.print_usage ("Error: No keywords specified");
       System.exit (254);
     }
 
@@ -228,7 +230,7 @@ public class Lookup {
           System.out.printf ("%d matches found (separated by dashes "
                               +"below)%n", matching_entries.size());
         else
-          System.out.printf ("%d matches found. Use the -i switch to print a "
+          System.out.printf ("%d matches found. Use -i to print a "
                              + "specific match or -a to see them all%n",
                              matching_entries.size());
 

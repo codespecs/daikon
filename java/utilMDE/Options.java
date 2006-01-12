@@ -163,6 +163,9 @@ public class Options {
   private Map<String,OptionInfo> name_map
     = new LinkedHashMap<String,OptionInfo>();
 
+  /** Synopsis of usage (e.g., prog [options] arg1, arg2, ...) **/
+  String usage_synopsis = "";
+
   /**
    * Setup option processing on the specified array of objects or
    * classes.  If an element is a class, each of the options must be
@@ -172,6 +175,20 @@ public class Options {
    * the elements
    */
   public Options (Object... classes) {
+    this ("", classes);
+  }
+
+  /**
+   * Setup option processing on the specified array of objects or
+   * classes.  If an element is a class, each of the options must be
+   * static.  Otherwise the element is assumed to be an object that
+   * contains some option fields.  In that case, the fields can be either
+   * static or instance fields.  The names must be unique over all of
+   * the elements
+   */
+  public Options (String usage_synopsis, Object... classes) {
+
+    this.usage_synopsis = usage_synopsis;
 
     // Loop through each specified object or class
     for (Object obj : classes) {
@@ -281,14 +298,14 @@ public class Options {
    * the usage and terminates the program.  The program is terminated
    * rather than throwing an error to create cleaner output.  See parse().
    */
-  public String[] parse_and_usage (String[] args, String usage) {
+  public String[] parse_and_usage (String[] args) {
 
     String non_options[] = null;
 
     try {
       non_options = parse (args);
     } catch (ArgException ae) {
-      System.out.printf ("%s, Usage: %s%n", ae.getMessage(), usage);
+      System.out.printf ("%s, Usage: %s%n", ae.getMessage(), usage_synopsis);
       for (String use : usage()) {
         System.out.printf ("  %s%n", use);
       }
@@ -414,7 +431,7 @@ public class Options {
   public void print_usage (String format, Object... args) {
 
     System.out.printf (format, args);
-    System.out.println ("Usage: ");
+    System.out.printf (". Usage: %s%n", usage_synopsis);
     for (String use : usage()) {
       System.out.printf ("  %s%n", use);
     }
@@ -594,7 +611,7 @@ public class Options {
     Test t = new Test();
     Options options = new Options (new Test());
     // System.out.printf ("Options:%n%s", options);
-    options.parse_and_usage (args, "test");
+    // options.parse_and_usage (args, "test");
     System.out.printf ("Results:%n%s", options.settings());
   }
 }
