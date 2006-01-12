@@ -237,6 +237,9 @@ class DCInstrument {
           mg.removeLocalVariables();
         }
 
+        // Remove any LVTT tables
+        BCELUtil.remove_local_variable_type_tables (mg);
+
         if (double_client && !BCELUtil.is_main (mg) && !BCELUtil.is_clinit(mg))
           gen.addMethod (mg.getMethod());
         else {
