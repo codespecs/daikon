@@ -101,6 +101,15 @@ public class Lookup {
   @Option ("-v Print progress information")
   public static boolean verbose = false;
 
+  @Option ("Regex that denotes the start of a long entry")
+  public static Pattern entry_start_re = Pattern.compile ("^>entry *()");
+
+  @Option ("Regex that denotes the end of a long entry")
+  public static Pattern entry_stop_re = Pattern.compile ("^<entry");
+
+  @Option ("Regex that finds an entries description")
+  public static Pattern description_re = null;
+
   /** Comments start with percent signs in the first column **/
   private static String comment_re = "^%.*";
 
@@ -135,6 +144,10 @@ public class Lookup {
       System.exit (0);
     }
 
+    if (verbose) {
+      System.out.printf ("Options settings: %s%n", options.settings());
+    }
+
     // Make sure at least one keyword was specified
     if (keywords.length == 0) {
       options.print_usage ("Error: No keywords specified");
@@ -163,7 +176,7 @@ public class Lookup {
     }
 
     // Setup the regular expressions for long entries
-    reader.set_entry_start_stop ("^>entry", "^<entry");
+    reader.set_entry_start_stop (entry_start_re, entry_stop_re);
 
     List<Entry> matching_entries = new ArrayList<Entry>();
 
@@ -178,7 +191,7 @@ public class Lookup {
                              matching_entries.size(), entry_cnt);
         int matchcount = 0;
         for (String keyword : keywords) {
-          String search = entry.first_line;
+          String search = entry.get_description (description_re);
           if (search_body || entry.short_entry)
             search = entry.body;
           if (!case_sensitive) {
@@ -250,7 +263,8 @@ public class Lookup {
               System.out.printf ("  -i=%d %s:%d %s%n", i, e.filename,
                                  e.line_number, e.first_line);
             else
-              System.out.printf ("  -i=%d %s%n", i, e.first_line);
+              System.out.printf ("  -i=%d %s%n", i,
+                                 e.get_description (description_re));
 
           }
         }
