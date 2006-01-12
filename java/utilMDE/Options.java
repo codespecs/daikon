@@ -5,27 +5,37 @@ import java.util.*;
 import java.util.regex.*;
 import java.lang.reflect.*;
 import java.lang.annotation.*;
-import com.sun.javadoc.*;
+import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.FieldDoc;
 
 /**
  * Class that reads and sets command line options.  The Option
  * annotation is used to identify fields that are associated with a
  * command line option.  Both the short (-) and long option formats
  * (--) are supported.  The name of the option is the name of the
- * field (with some exceptions noted below).  The types boolean, int,
- * double, String, and File are supported.  The primitive types can be
- * either primitives or their wrappers (Boolean, Integer or Double).
- * Use of the wrappers allows a primitive argument not to have a
- * default value. <p>
+ * field (with some exceptions noted below).  The primitive types
+ * boolean, int, and double are supported.  All reference types that
+ * have a constructor with a single string parameter are supported as
+ * well.  Pattern (created with a factory) is supported as a special
+ * case.  Primitives can also be represented as wrappers (Boolean,
+ * Integer, Double).  Use of the wrappers allows a primitive argument
+ * not to have a default value. <p>
+ *
+ * Lists of any valid reference type are also supported.  If an option
+ * as a list, it can be specified multiple times and each entry will
+ * be added to the list.  Non list options overwrite the previous value
+ * if specified multiple times.  Lists must be initialized to a valid
+ * list before using Options on that list. <p>
  *
  * The option annotation (@see Option) specifies the optional short
  * name, optional type name, and long description.  The long name is taken
  * from the name of the variable. <p>
  *
- * On the command line, the values for options are specified in the form
- * '--long=value' or '-short=value'.  The value is mandatory for all
- * options except booleans.  Booleans are set to true if no value is
- * specified. <p>
+ * On the command line, the values for options are specified in the
+ * form '--long=value', '-short=value', '--long value' or '-short
+ * value'.  The value is mandatory for all options except booleans.
+ * Booleans are set to true if no value is specified. <p>
  *
  * Any non-options (entries that don't begin with --) in the
  * argument list are returned. <p>
@@ -35,13 +45,8 @@ import com.sun.javadoc.*;
  *  <li> Short options are only supported as separate entries (eg, -a -b)
  *  and not as a single group (eg -ab).
  *
- *  <li> It would be nice if option value could be specified as the next
- *  argument as well as with '=value'
- *
- *  <li> Other types (such as the remaining primitives and user defined
- *  types) are not supported.
- *
- *  <li> Arrays are not supported
+ *  <li> Types without a string constructor and the other primitive types
+ *  are not supported.
  *
  *  <li>  Non option information could be supported in the same manner
  *  as options which would be cleaner than simply returning all of the
@@ -80,8 +85,23 @@ public class Options {
      */
     String type_name;
 
+    /**
+     * Class type of this field.  If the field is a list, the basetype
+     * of the list.
+     */
+    Class base_type;
+
     /** Default value of the option as a string **/
     String default_str = null;
+
+    /** If the option is a list, this references that list **/
+    List list = null;
+
+    /** Constructor that takes one String for the type **/
+    Constructor constructor = null;
+
+    /** Factory that takes a string (some classes don't have a string const) */
+    Method factory = null;
 
     /**
      * Create the specified option.  If obj is null, the field must be
@@ -93,27 +113,64 @@ public class Options {
       this.field = field;
       this.option = option;
       this.obj = obj;
+      this.base_type = field.getType();
 
       // The long name is the name of the field
       long_name = field.getName();
 
-      // Get the short name, type name, and description from the annotation
-      String[] opt_results = parse_option (option.value());
-      short_name = opt_results[0];
-      type_name = opt_results[1];
-      if (type_name == null)
-        type_name = type_short_name (field.getType());
-      description = opt_results[2];
-
       // Get the default value (if any)
+      Object default_obj = null;
       try {
-        Object default_obj = field.get (obj);
+        default_obj = field.get (obj);
         if (default_obj != null)
           default_str = default_obj.toString();
       } catch (Exception e) {
         throw new Error ("Unexpected error getting default for " + field, e);
       }
 
+      // Handle lists.  When a list argument is specified multiple times,
+      // each argument value is appended to the list.
+      Type gen_type = field.getGenericType();
+      if (gen_type instanceof ParameterizedType) {
+        ParameterizedType pt = (ParameterizedType) gen_type;
+        Type raw_type = pt.getRawType();
+        if (!raw_type.equals (List.class))
+          throw new Error ("Unsupported option type " + pt);
+        this.list = (List) default_obj;
+        if (this.list == null)
+          throw new Error ("List option " + field + " must be initialized");
+        // System.out.printf ("list default = %s%n", list);
+        this.base_type = (Class) pt.getActualTypeArguments()[0];
+
+        // System.out.printf ("Param type for %s = %s%n", field, pt);
+        // System.out.printf ("raw type = %s, type = %s%n", pt.getRawType(),
+        //                   pt.getActualTypeArguments()[0]);
+      }
+
+      // Get the short name, type name, and description from the annotation
+      String[] opt_results = parse_option (option.value());
+      short_name = opt_results[0];
+      type_name = opt_results[1];
+      if (type_name == null) {
+        type_name = type_short_name (base_type);
+        if (list != null)
+          type_name += "[]";
+      }
+      description = opt_results[2];
+
+      // Get a constructor for non-primitive base types
+      if (!base_type.isPrimitive()) {
+        try {
+          if (base_type == Pattern.class) {
+            factory = base_type.getMethod ("compile", String.class);
+          } else { // look for a string constructor
+            constructor = base_type.getConstructor (String.class);
+          }
+        } catch (Exception e) {
+          throw new Error ("Option " + field
+                           + " does not have a string constructor", e);
+        }
+      }
     }
 
     /**
@@ -324,32 +381,32 @@ public class Options {
     throws ArgException {
 
     Field f = oi.field;
-    Class type = f.getType();
+    Class type = oi.base_type;
+
+    // Argument values are required for everything but booleans
+    if ((arg_value == null) && (type != Boolean.TYPE)
+        && (type != Boolean.class))
+      throw new ArgException ("Value required for option " + arg_name);
+
 
     try {
-      if ((type == Boolean.TYPE) || (type == Boolean.class)) {
-        boolean val = false;
-        if (arg_value == null) {
-          val = true;
-        } else {
-          arg_value = arg_value.toLowerCase();
-          if (arg_value.equals ("true") || (arg_value.equals ("t")))
-            val = true;
-          else if (arg_value.equals ("false") || arg_value.equals ("f"))
-            val = false;
-          else
-            throw new ArgException ("Bad boolean value for %s: %s", arg_name,
-                                    arg_value);
-        }
-        if (type == Boolean.class)
-          f.set (oi.obj, new Boolean (val));
-        else
-          f.setBoolean (oi.obj, val);
-      } else if ((type == Integer.TYPE) || (type == Integer.class)) {
-        if (arg_value == null) {
-          throw new ArgException ("Integer value required for argument "
-                                  + arg_name);
-        } else {
+      if (type.isPrimitive()) {
+        if (type == Boolean.TYPE) {
+            boolean val = false;
+            if (arg_value == null) {
+              val = true;
+            } else {
+              arg_value = arg_value.toLowerCase();
+              if (arg_value.equals ("true") || (arg_value.equals ("t")))
+                val = true;
+              else if (arg_value.equals ("false") || arg_value.equals ("f"))
+                val = false;
+              else
+                throw new ArgException ("Bad boolean value for %s: %s", arg_name,
+                                        arg_value);
+            }
+            f.setBoolean (oi.obj, val);
+        } else if (type == Integer.TYPE) {
           int val = 0;
           try {
             val = Integer.decode (arg_value);
@@ -357,35 +414,40 @@ public class Options {
             throw new ArgException ("Invalid integer (%s) for argument %s",
                                     arg_value, arg_name);
           }
-          if (type == Integer.class)
-            f.set (oi.obj, new Integer(val));
-          else
-            f.setInt (oi.obj, val);
+          f.setInt (oi.obj, val);
+        } else if (type == Double.TYPE) {
+          Double val = 0.0;
+          try {
+            val = Double.valueOf (arg_value);
+          } catch (Exception e) {
+            throw new ArgException ("Invalid double (%s) for argument %s",
+                                    arg_value, arg_name);
+          }
+          f.setDouble (oi.obj, val);
+        } else { // unexpected type
+          throw new Error ("Unexpected type " + type);
         }
-      } else if (type == Double.TYPE) {
-        if (arg_value == null)
-          throw new ArgException ("Double value required for argument "
-                                  + arg_name);
-        Double val = 0.0;
+      } else { // reference type
+
+        // Create an instance of the correct type by passing the argument value
+        // string to the constructor.  The only expected error is some sort
+        // of parse error from the constructor
+        Object val = null;
         try {
-          val = Double.valueOf (arg_value);
+          if (oi.constructor != null)
+            val = oi.constructor.newInstance (arg_value);
+          else
+            val = oi.factory.invoke (null, arg_value);
         } catch (Exception e) {
-          throw new ArgException ("Invalid double (%s) for argument %s",
+          throw new ArgException ("Invalid argument (%s) for argument %s",
                                   arg_value, arg_name);
         }
-        f.setDouble (oi.obj, val);
-      } else if (type == String.class) {
-        if (arg_value == null)
-          throw new ArgException ("String value required for argument "
-                                  + arg_name);
-        f.set (oi.obj, arg_value);
-      } else if (type == File.class) {
-        if (arg_value == null)
-          throw new ArgException ("Filename value required for argument "
-                                  + arg_name);
-        f.set (oi.obj, new File (arg_value));
-      } else { // not a supported type
-        throw new ArgException ("%s is not a valid option field", f);
+
+        // Set the value
+        if (oi.list != null)
+          oi.list.add (val); // unchecked cast
+        else
+          f.set (oi.obj, val);
       }
     } catch (ArgException ae) {
       throw ae;
@@ -442,19 +504,14 @@ public class Options {
    */
   private static String type_short_name (Class type) {
 
-    if ((type == Boolean.TYPE) || (type == Boolean.class)) {
-      return "boolean";
-    } else if ((type == Integer.TYPE) || (type == Integer.class)) {
-      return "int";
-    } else if ((type == Double.TYPE) || (type == Double.class))  {
-      return "double";
-    } else if (type == String.class) {
-      return "string";
-    } else if (type == File.class) {
-      return "filename";
-    } else {
+    if (type.isPrimitive())
       return type.getName();
-    }
+    else if (type == File.class)
+      return "filename";
+    else if (type == Pattern.class)
+      return "regex";
+    else
+      return UtilMDE.unqualified_name (type.getName()).toLowerCase();
   }
 
   /**
@@ -597,6 +654,7 @@ public class Options {
    */
   public static class Test {
 
+    @Option ("generic") List<Pattern> lp = new ArrayList<Pattern>();
     @Option ("-a <filename> argument 1") String arg1 = "/tmp/foobar";
     @Option ("argument 2") String arg2;
     @Option ("-d double value") double temperature;
@@ -609,9 +667,9 @@ public class Options {
   public static void main (String[] args) throws ArgException {
 
     Test t = new Test();
-    Options options = new Options (new Test());
-    // System.out.printf ("Options:%n%s", options);
-    // options.parse_and_usage (args, "test");
+    Options options = new Options ("test", new Test());
+    System.out.printf ("Options:%n%s", options);
+    options.parse_and_usage (args);
     System.out.printf ("Results:%n%s", options.settings());
   }
 }
