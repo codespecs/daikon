@@ -377,6 +377,9 @@ dcomp-test-jdk : dcomp_premain.jar
 	@cat daikon/dcomp/jdk_dcomp_out.diff
 	@find daikon/dcomp -name '*.diff' -printf "%8s    %p\n"
 
+dcomp-update-goals:
+	cp daikon/dcomp/std_dcomp_out.txt daikon/dcomp/std_dcomp_out.goal
+	cp daikon/dcomp/jdk_dcomp_out.txt daikon/dcomp/jdk_dcomp_out.goal
 #
 # Rules to build the instrumented JDK for DynComp/Java
 #
