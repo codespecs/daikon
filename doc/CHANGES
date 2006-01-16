@@ -200,7 +200,7 @@ Purity Analysis Kit
   includes a command-line option, --daikon-purity-file, that causes it to
   write a file that is appropriate for passing to Chicory via its
   --purity-file option.  The Purity Analysis Kit was written by Alexandru
-  Salcianu and is availble from http://www.mit.edu/~salcianu/purity/.
+  Salcianu and is available from http://www.mit.edu/~salcianu/purity/.
 
 --------------------------------------------
 
