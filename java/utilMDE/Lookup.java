@@ -227,7 +227,7 @@ public class Lookup {
 
     // Print the results
     if (matching_entries.size() == 0) {
-      System.out.println ("No help found");
+      System.out.println ("Nothing found.");
     } else if (matching_entries.size() == 1) {
       Entry e = matching_entries.get(0);
       if (show_location)
