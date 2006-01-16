@@ -63,9 +63,7 @@ alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existe
 # Enable use of group bibliographies, and the "bibfind" command.
 # Private comments in bib files are not to be shared outside the group.
 setenv BIBINPUTS .:/afs/csail.mit.edu/u/m/mernst/bib:..:
-setenv HELPPROG /afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help
-alias help    $HELPPROG .w .f ~mernst/wisdom/HELP.non-mde
-alias bibfind $HELPPROG .n .F ~mernst/bib/bibroot.non-mde
+alias bibfind 'java -jar $pag/software/pkg/lookup.jar -l -f ~mernst/bib/bibroot
 
 if (! $?EDITOR) setenv EDITOR emacsclient
 if (! $?ALTERNATE_EDITOR) setenv ALTERNATE_EDITOR emacs

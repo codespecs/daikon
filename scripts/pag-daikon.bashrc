@@ -57,9 +57,7 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 # Enable use of group bibliographies, and the "bibfind" command.
 # Private comments in bib files are not to be shared outside the group.
 export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
-export HELPPROG=/afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help
-alias help="$HELPPROG .w .f ~mernst/wisdom/HELP.non-mde"
-alias bibfind="$HELPPROG .n .F ~mernst/bib/bibroot.non-mde"
+alias bibfind='java -jar $pag/software/pkg/lookup.jar -l -f ~mernst/bib/bibroot'
 
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
