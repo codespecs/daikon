@@ -21,10 +21,10 @@ import com.sun.javadoc.*;
  * entry, or by the start of a new file. <p>
  *
  * Lookup searches for the keywords in the body of short entries and
- * in the description of long entries.  Entries that contain all of
- * the keywords match.  If multiple entries match, the first line of
- * each is printed.  If only one entry matches, then that entry is
- * printed in its entirety. <p>
+ * in the one-line description of long entries.  An entry matches if
+ * it contains all of the keywords.  If multiple entries match, the
+ * first line of each is printed.  If only one entry matches, then
+ * that entry is printed in its entirety. <p>
  *
  * By default, Lookup searches the file ~/lookup/root.  Files can
  * contain comments and can include other files.  Comments start with
