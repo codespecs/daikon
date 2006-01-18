@@ -339,8 +339,7 @@ chicory-test : ChicoryPremain.jar
 # Dynamic Comparability (DynComp/Java)
 #
 DCOMP_JAVA_FILES := daikon/dcomp/*java daikon/chicory/*.java utilMDE/*.java
-DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test \
-			  --compare-sets-file=/tmp/dcomp_out.txt
+DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= /afs/csail.mit.edu/group/pag/software/pkg/j2sdk-1.5/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
@@ -356,7 +355,8 @@ dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) --no-jdk" \
+	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) \
+		     --compare-sets-file=daikon/dcomp/std_dcomp_out.txt --no-jdk" \
 	  daikon/dcomp/Test
 	@cp /tmp/dcomp_out.txt daikon/dcomp/std_dcomp_out.txt
 	-diff -u daikon/dcomp/std_dcomp_out.goal daikon/dcomp/std_dcomp_out.txt \
@@ -367,8 +367,8 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
 	$(JAVA_DCOMP) \
-	  "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS)" daikon/dcomp/Test
-	@cp /tmp/dcomp_out.txt daikon/dcomp/jdk_dcomp_out.txt
+	  "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) \
+	   --compare-sets-file=daikon/dcomp/jdk_dcomp_out.txt" daikon/dcomp/Test
 	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
 	  > daikon/dcomp/jdk_dcomp_out.diff
 	@cat daikon/dcomp/jdk_dcomp_out.diff
