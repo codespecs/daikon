@@ -57,6 +57,9 @@
 # Prints out a '-1: ' prefix in front of the special comparability set
 # with a number of -1
 
+# 2006-01-18: Added support for "INTERMEDIATE DECLARE" keyword
+#             for the --dyncomp-print-inc option
+
 import sys
 
 # Note: Lackwit produces comparability numbers for arrays in the
@@ -77,11 +80,6 @@ hashcodeRE = re.compile('hashcode.*')
 
 
 f = open(sys.argv[1], 'r')
-allLines = [line.strip() for line in f.readlines()]
-
-# Skip comparability declaration, if any
-if allLines[0] == "VarComparability":
-    allLines = allLines[3:]
 
 # Break each program point declaration up into separate lists.
 # Program points are separated by "DECLARE" statements
@@ -91,15 +89,40 @@ allPpts = {}
 
 tempAllPpts = [] # Temporary before placing in allPpts
 
-for line in allLines:
+isIntermediate = 0
+
+for line in f.readlines():
+    line = line.strip()
+
     if line == "DECLARE":
         tempAllPpts.append([]) # Start a new list
-    elif line != "" and line[0] != "#":   # Don't add blank lines or comments
-        tempAllPpts[-1].append(line) # Append line to the last entry
+        isIntermediate = 0
+    elif line == "INTERMEDIATE DECLARE":
+        tempAllPpts.append([]) # Start a new list
+        isIntermediate = 1
+    elif line != "" and line[0] != "#": # Don't add blank lines & comments
+        tempAllPpts[-1].append(line) # Append line to the latest entry
+
 
 # Init allPpts from tempAllPpts
 for pptList in tempAllPpts:
-    allPpts[pptList[0]] = pptList[1:]
+    # Allow duplicates by appending numeric indices onto program point
+    # name
+    index = 1
+
+    pptName = pptList[0]
+
+    # There is already an entry
+    if pptList[0] in allPpts:
+        # Try appending numbers until there isn't an entry
+        found = 1
+        while found:
+            pptName = pptList[0] + ' (' + str(index) + ')'
+            if not (pptName in allPpts):
+                break
+            index += 1
+
+    allPpts[pptName] = pptList[1:]
 
 # Alphabetically sort the program points
 sortedPptKeys = allPpts.keys()
@@ -110,7 +133,7 @@ for pptName in sortedPptKeys:
     v = allPpts[pptName]
     i = 0
     var2comp = {} # Key: variable name, Value: comparability number
-    
+
     # All info. about variables at a program point come in sets of 4
     # lines. e.g.
     #
@@ -129,7 +152,7 @@ for pptName in sortedPptKeys:
                 var2comp[v[i]] = curComp[:isArrayMatch.start()]
             else:
                 var2comp[v[i]] = curComp
-            
+
         i += 4
 
     # Now we can do the real work of grouping variables together
@@ -154,7 +177,7 @@ for pptName in sortedPptKeys:
 
             sortedVars = var2comp.keys()
             sortedVars.sort()
-            
+
             for otherVar in sortedVars:
                 if var2comp[otherVar] == compNum:
                     print otherVar,
@@ -165,5 +188,5 @@ for pptName in sortedPptKeys:
         # from var2comp
         sortedVars = var2comp.keys()
         sortedVars.sort()
-        
+
     print
