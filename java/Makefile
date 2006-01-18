@@ -294,7 +294,7 @@ all: all_stop_on_error
 
 # Don't bother to run the unit tests if the compilation failed.
 all_stop_on_error:
-	$(MAKE) --stop all_directly junit chicory
+	$(MAKE) --stop all_directly junit chicory dyncomp
 
 ## In general, don't use this; it misses some files
 all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
@@ -338,19 +338,16 @@ chicory-test : ChicoryPremain.jar
 #
 # Dynamic Comparability (DynComp/Java)
 #
-DCOMP_JAVA_FILES := $(shell find daikon/dcomp -name '*.java') \
-					$(shell find daikon/chicory -name '*.java')
-DCOMP_CLASS_FILES := $(patsubst %.java,%.class,$(DCOMP_JAVA_FILES))
+DCOMP_JAVA_FILES := daikon/dcomp/*java daikon/chicory/*.java utilMDE/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test \
 			  --compare-sets-file=/tmp/dcomp_out.txt
 ORIG_RT ?= /afs/csail.mit.edu/group/pag/software/pkg/j2sdk-1.5/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
-JAVA_DCOMP := /scratch/${USER}/j2sdk-1.5/bin/java \
-			  -Xbootclasspath/a:$(CLASSPATH) -ea \
+JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 
 # Build DynComp/Java and run a sanity test
-dcomp : dcomp_premain.jar dcomp-test
-dcomp_premain.jar : $(DCOMP_JAVA_FILES) daikon/dcomp/manifest.txt
+dyncomp dcomp : dcomp_premain.jar dcomp-test
+dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
@@ -367,9 +364,9 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	@if test ! -s daikon/dcomp/std_dcomp_out.diff ; then echo No Errors; \
 	else echo Errors: more daikon/dcomp/std_dcomp_out.diff for details; fi
 
-dcomp-test-jdk : dcomp_premain.jar
+dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(DCOMP_JDK)/bin/java -Xbootclasspath/a:$(CLASSPATH) \
+	$(JAVA_DCOMP) \
 	  "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS)" daikon/dcomp/Test
 	@cp /tmp/dcomp_out.txt daikon/dcomp/jdk_dcomp_out.txt
 	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
@@ -377,7 +374,7 @@ dcomp-test-jdk : dcomp_premain.jar
 	@cat daikon/dcomp/jdk_dcomp_out.diff
 	@find daikon/dcomp -name '*.diff' -printf "%8s    %p\n"
 
-dcomp-update-goals:
+dyncomp-update-goals dcomp-update-goals:
 	cp daikon/dcomp/std_dcomp_out.txt daikon/dcomp/std_dcomp_out.goal
 	cp daikon/dcomp/jdk_dcomp_out.txt daikon/dcomp/jdk_dcomp_out.goal
 #
@@ -386,22 +383,21 @@ dcomp-update-goals:
 DCOMP_RT	:= /scratch/$(USER)/dcomp-rt
 DCOMP_JDK	:= /scratch/$(USER)/dcomp-j2sdk-1.5
 J2SDK15		:= /usr/lib/j2sdk1.5-sun
-dcomp-jdk   : $(DCOMP_JDK)/jre/lib/rt.jar
-$(DCOMP_JDK)/jre/lib/rt.jar : dcomp_premain.jar $(DCOMP_JDK)
+dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
+dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
+	install -d $(DCOMP_RT)
 	$(JAVA) -Xmx768m daikon.dcomp.BuildJDK $(ORIG_RT) $(DCOMP_RT)
-	cd $(DCOMP_RT) && jar cmf META-INF/MANIFEST.MF \
-	  /scratch/${USER}/dcomp_rt.jar *
-	cp /scratch/$(USER)/dcomp_rt.jar $(DCOMP_JDK)/jre/lib/rt.jar
+	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
-$(DCOMP_JDK) : $(J2SDK15)
-	install -d $(DCOMP_JDK)
-	(cd $(J2SDK15) && tar cf - .) | (cd $(DCOMP_JDK) && tar xfBp -)
+# Install the local version of the dyncomp specific rt.jar
+install-dyncomp-jdjk install-dcomp-jdk : dcomp_rt.jar
+	cp dcomp_rt.jar $(pag)/software/pkg/DynComp/
 
-dcomp-jdk-only :
-	cd /scratch/${USER}/rt && jar cmf META-INF/MANIFEST.MF \
-	  /scratch/${USER}/rt.jar *
-	cd /scratch/${USER}/ && cp rt.jar /scratch/${USER}/j2sdk-1.5/jre/lib/rt.jar
+# Only rebuild the jar file, don't recreate the contents of $(DCOMP_RT)
+# useful if editing only one file in the jar
+dyncomp-jdk-only dcomp-jdk-only :
+	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 #
 # Lookup targets
