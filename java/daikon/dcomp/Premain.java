@@ -10,31 +10,55 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 
-import utilMDE.BCELUtil;
+import utilMDE.*;
 
 public class Premain {
 
-  public static boolean verbose = false;
-  public static boolean debug = false;
   public static File debug_dir = new File ("/tmp", System.getenv ("USER"));
   public static File debug_bin_dir = new File (debug_dir, "bin");
   public static File debug_orig_dir = new File (debug_dir, "orig");
+
+  @Option("-v Print information about the classes being transformed")
+  public static boolean verbose = false;
+
+  @Option("-d Dump the instrumented classes to /tmp/$USER/bin")
+  public static boolean debug = false;
+
+  @Option("-f Output filename for Daikon decl file")
+  public static File decl_file = new File ("comparability.decls");
+
+  @Option("Only process program points matching the regex")
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+
+  @Option("Ignore program points matching the regex")
   public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
-  public static String compare_sets_file = null;
+
+  @Option("Output file for comarability sets")
+  public static File compare_sets_file = null;
+
+  @Option("Don't use an instrumented JDK")
+  public static boolean no_jdk = false;
+
+  public static String usage_synopsis
+    = "java -javaagent:dcomp_premain.jar=[options]";
 
   public static void premain (String agentArgs, Instrumentation inst) {
 
-    String[] args = agentArgs.split ("  *");
-    String error_msg = parse_args (args);
-    if (error_msg != null) {
-      usage (error_msg);
-      System.exit (1);
+    Options options = new Options (usage_synopsis, Premain.class);
+    String[] args = options.parse_and_usage (agentArgs.split ("  *"));
+    if (args.length > 0) {
+      options.print_usage ("Unexpected argument %s", args[0]);
+      System.exit (-1);
     }
 
-    if (verbose)
+    if (no_jdk)
+      DCInstrument.jdk_instrumented = false;
+
+    if (verbose) {
       System.out.format ("In dcomp premain, agentargs ='%s', " +
                        "Instrumentation = '%s'\n", agentArgs, inst);
+      System.out.printf ("Options settings: %n%s%n", options.settings());
+    }
 
     debug_bin_dir.mkdirs();
     debug_orig_dir.mkdirs();
@@ -112,57 +136,6 @@ public class Premain {
     }
   }
 
-  static String parse_args (String[] args) {
-
-    for (int ii = 0; ii < args.length; ii++) {
-
-      String arg = args[ii];
-      if (arg.startsWith ("--ppt-select-pattern=")) {
-        String include = arg.substring ("--ppt-select-pattern=".length());
-        if (include.length() == 0)
-          return ("Empty ppt-select-pattern string");
-        try {
-          ppt_select_pattern.add (Pattern.compile (include));
-        } catch (Exception e) {
-          return String.format ("Can't compile pattern %s: %s%n", include, e);
-        }
-      } else if (arg.startsWith ("--ppt-omit-pattern=")) {
-        String omit = arg.substring ("--ppt-omit-pattern=".length());
-        if (omit.length() == 0)
-          return ("Empty ppt-omit-pattern string");
-        try {
-          ppt_omit_pattern.add (Pattern.compile (omit));
-        } catch (Exception e) {
-          return String.format ("Can't compile pattern %s: %s%n", omit, e);
-        }
-      } else if (arg.startsWith ("--compare-sets-file=")) {
-        compare_sets_file = arg.substring ("--compare-sets-file=".length());
-      } else if (arg.equals ("--no-jdk")) {
-        DCInstrument.jdk_instrumented = false;
-      } else if (arg.equals ("--verbose")) {
-        verbose = true;
-      } else if (arg.equals ("--debug")) {
-        debug = true;
-      } else {
-        return ("Unexpected argument " + arg);
-      }
-    }
-    return (null);
-  }
-
-  public static void usage (String msg) {
-
-    System.out.println (msg);
-    System.out.println ("dcomp <options>");
-    System.out.println ("Options:");
-    System.out.println ("  --ppt-select-pattern=<regex>");
-    System.out.println ("  --ppt-omit-pattern=<regex>");
-    System.out.println ("  --compare-sets-file=<pathname>");
-    System.out.println ("  --no-jdk");
-    System.out.println ("  --debug");
-    System.out.println ("  --verbose");
-  }
-
   /**
    * Shutdown thread that writes out the comparability results
    */
@@ -172,6 +145,9 @@ public class Premain {
 
       // If requested, write the comparability data to a file
       if (compare_sets_file != null) {
+        if (verbose)
+          System.out.println ("Writing comparability sets to "
+                              + compare_sets_file);
         PrintStream compare_out = open (compare_sets_file);
         DCRuntime.print_all_comparable (compare_out);
       }
@@ -181,16 +157,14 @@ public class Premain {
       DCRuntime.print_all_comparable (System.out);
 
       // Write the decl file out
-      String comp_out_fname = "/tmp/dcomp.decls";
       if (verbose)
-        System.out.println("Writing comparability results to "
-                           + comp_out_fname);
-      PrintStream comp_out = open (comp_out_fname);
-      DCRuntime.print_decl_file (comp_out);
+        System.out.println("Writing comparability results to " + decl_file);
+      PrintStream decl_fp = open (decl_file);
+      DCRuntime.print_decl_file (decl_fp);
     }
   }
 
-  public static PrintStream open (String filename) {
+  public static PrintStream open (File filename) {
     try {
       return new PrintStream (filename);
     } catch (Exception e) {
