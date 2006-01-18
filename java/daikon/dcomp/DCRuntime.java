@@ -58,7 +58,7 @@ public final class DCRuntime {
   public static final boolean debug = false;
   public static final boolean debug_tag_frame = false;
   public static final boolean debug_objects = false;
-  public static final SimpleLog merge_dv = new SimpleLog(false);
+  public static final SimpleLog merge_dv = new SimpleLog (false);
   public static final SimpleLog debug_arr_index = new SimpleLog(false);
   public static final SimpleLog debug_primitive = new SimpleLog (false);
   public static final SimpleLog debug_merge_comp = new SimpleLog (false);
@@ -832,6 +832,7 @@ public final class DCRuntime {
         merge_dv.log ("Leader for tag '%s' is '%s'%n", obj_str(tag),
                       obj_str (leader));
       DaikonVariableInfo current = varmap.get (leader);
+      assert leader != null : "null leader for " + obj_str(tag);
       merge_dv.log ("Daikon variable for leader = %s%n", current);
       if (current != null) {
         merge_dv.log ("**Merging variable '%s' and '%s'%n", current, dv);
