@@ -145,7 +145,7 @@ public class Lookup {
     }
 
     if (verbose) {
-      System.out.printf ("Options settings: %s%n", options.settings());
+      System.out.printf ("Options settings: %n%s%n", options.settings());
     }
 
     // Make sure at least one keyword was specified
