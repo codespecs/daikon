@@ -117,7 +117,18 @@ class TagEntry extends WeakReference<Object> {
     if (entry == null)
       return obj;
     TagEntry root = entry.find();
-    return root.get();
+
+    // It shouldn't matter that this isn't a member of the set, only that
+    // it is unique.
+    // return (root);
+
+    // If the root object has been garbage collected, just return
+    // a reference to the tag instead.  Since the caller has no references
+    // to the root, it can't matter what we returned.
+    Object root_ref = root.get();
+    if (root_ref == null)
+      root_ref = root;
+    return (root_ref);
   }
 
   /**
