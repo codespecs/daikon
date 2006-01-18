@@ -192,7 +192,7 @@ public class BuildJDK {
 
       if (false) {
         processClassFile (classmap, dfile,
-                          "java.awt.TexturePaintContext$Byte");
+                          "sun.rmi.registry.RegistryImpl_Skel");
         System.exit(0);
       }
 
