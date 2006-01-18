@@ -56,7 +56,7 @@ import com.sun.javadoc.FieldDoc;
 public class Options {
 
   /** Information about an option **/
-  private static class OptionInfo {
+  private class OptionInfo {
 
     /** Field containing the value of the option **/
     Field field;
@@ -117,6 +117,8 @@ public class Options {
 
       // The long name is the name of the field
       long_name = field.getName();
+      if (use_dashes)
+        long_name = long_name.replace ('_', '-');
 
       // Get the default value (if any)
       Object default_obj = null;
@@ -220,8 +222,17 @@ public class Options {
   private Map<String,OptionInfo> name_map
     = new LinkedHashMap<String,OptionInfo>();
 
+  /**
+   * Convert underscores to dashes in long options.  The underscore name
+   * will work as well, but the dashed name will be used in the usage
+   */
+  private boolean use_dashes = true;
+
   /** Synopsis of usage (e.g., prog [options] arg1, arg2, ...) **/
   String usage_synopsis = "";
+
+  // Debug loggers
+  private SimpleLog debug_options = new SimpleLog (false);
 
   /**
    * Setup option processing on the specified array of objects or
@@ -257,6 +268,8 @@ public class Options {
 
         Field[] fields = ((Class) obj).getDeclaredFields();
         for (Field f : fields) {
+          debug_options.log ("Considering field %s with annotations %s%n", f,
+                             Arrays.toString(f.getDeclaredAnnotations()));
           Option option = f.getAnnotation (Option.class);
           if (option == null)
             continue;
@@ -290,6 +303,8 @@ public class Options {
       if (name_map.containsKey ("--" + oi.long_name))
         throw new Error ("long name " + oi + " appears twice");
       name_map.put ("--" + oi.long_name, oi);
+      if (use_dashes && oi.long_name.contains ("-"))
+        name_map.put ("--" + oi.long_name.replace ('-', '_'), oi);
     }
   }
 
