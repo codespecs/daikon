@@ -358,7 +358,6 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) \
 		     --compare-sets-file=daikon/dcomp/std_dcomp_out.txt --no-jdk" \
 	  daikon/dcomp/Test
-	@cp /tmp/dcomp_out.txt daikon/dcomp/std_dcomp_out.txt
 	-diff -u daikon/dcomp/std_dcomp_out.goal daikon/dcomp/std_dcomp_out.txt \
 	  > daikon/dcomp/std_dcomp_out.diff
 	@if test ! -s daikon/dcomp/std_dcomp_out.diff ; then echo No Errors; \
