@@ -160,20 +160,31 @@ class DCInstrument {
    */
   public JavaClass instrument() {
 
+    String classname = gen.getClassName();
+
     // Don't instrument classes in the JDK.  They are already instrumented.
+    // Do instrument javac (its not in the JDK)
     // TODO: crosscheck the class for instrumentation rather than by name.
-    if (BCELUtil.in_jdk (gen)) {
-      debug_instrument.log ("Skipping jdk class %s%n", gen.getClassName());
+    if (BCELUtil.in_jdk (gen)
+        && !classname.startsWith ("com.sun.tools.javac")) {
+      debug_track.log ("Skipping jdk class %s%n", gen.getClassName());
       return (null);
     }
 
     // Don't instrument our classes.
-    String classname = gen.getClassName();
     if (classname.startsWith ("daikon") &&
         !classname.startsWith ("daikon.dcomp.Test")) {
-      debug_instrument.log ("Skipping daikon class %s%n", gen.getClassName());
+      debug_track.log ("Skipping daikon class %s%n", gen.getClassName());
       return (null);
     }
+
+    // Don't instrument annotations.  They aren't executed and adding
+    // the marker argument causes subtle errors
+    if ((gen.getModifiers() & Constants.ACC_ANNOTATION) != 0) {
+      debug_track.log ("Not instrumenting annotation %s%n",gen.getClassName());
+      return gen.getJavaClass().copy();
+    }
+
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
     debug_instrument.indent();
 
@@ -275,6 +286,13 @@ class DCInstrument {
     // Add the tag fields
     // if (tag_fields_ok (gen.getClassName()))
     //  add_tag_fields();
+
+    // Don't instrument annotations.  They aren't executed and adding
+    // the marker argument causes subtle errors
+    if ((gen.getModifiers() & Constants.ACC_ANNOTATION) != 0) {
+      debug_track.log ("Not instrumenting annotation %s%n",gen.getClassName());
+      return gen.getJavaClass().copy();
+    }
 
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
 
@@ -474,9 +492,11 @@ class DCInstrument {
     InstructionList tf_il = create_tag_frame (mg, tag_frame_local);
     InstructionHandle old_start = il.getStart();
     InstructionHandle new_start = il.insert (tf_il);
-    for (InstructionTargeter it : old_start.getTargeters()) {
-      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
-        it.updateTarget (old_start, new_start);
+    if (old_start.hasTargeters()) {
+      for (InstructionTargeter it : old_start.getTargeters()) {
+        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+          it.updateTarget (old_start, new_start);
+      }
     }
   }
 
