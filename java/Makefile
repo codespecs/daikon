@@ -294,7 +294,7 @@ all: all_stop_on_error
 
 # Don't bother to run the unit tests if the compilation failed.
 all_stop_on_error:
-	$(MAKE) --stop all_directly junit chicory dyncomp
+	$(MAKE) --stop all_directly junit
 
 ## In general, don't use this; it misses some files
 all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
@@ -304,7 +304,7 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${INV}/scripts/prune-xlint.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} chicory
+all_directly: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} chicory dyncomp
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
