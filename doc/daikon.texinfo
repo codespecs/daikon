@@ -3228,7 +3228,7 @@ Produce debugging information.
 @item --trace-percent=@var{percent}
 If this switch is on, then Chicory only produces output for the
 specified percentage of all program point executions.  For each method,
-output is produced for the given fraction of its executions.  the
+output is produced for the given fraction of its executions.  The
 randomization is applied only to entry program points; an exit program
 point is included if and only if its corresponding entry program point
 is included.  
