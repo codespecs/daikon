@@ -2348,11 +2348,11 @@ public final class TestUtilMDE extends TestCase {
                                  });
     assertEquals (t.lp.get(0).toString(), "foo");
     assertEquals (t.lp.get(1).toString(), "bar");
-    assertEquals (t.integer_reference, 24);
+    assertEquals (t.integer_reference.intValue(), 24);
     assertEquals (t.temperature, 37.8);
     assertEquals (t.bool, false);
-    assertEquals (t.ld.get(0), 34.6);
-    assertEquals (t.ld.get(1), 17.8);
+    assertEquals (t.ld.get(0).doubleValue(), 34.6);
+    assertEquals (t.ld.get(1).doubleValue(), 17.8);
   }
 
 }
