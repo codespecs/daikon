@@ -263,11 +263,17 @@ public class MultiReader {
       String description = line;
 
       // Read until we find another blank line
-      while ((line != null) && (line.trim().length() != 0)) {
+      while ((line != null) && (line.trim().length() != 0)
+             && filename.equals (get_filename())) {
         body.append (line);
         body.append (lineSep);
         line = readLine();
       }
+
+      // If this entry was terminated by the start of a new input file
+      // put that line back
+      if ((line != null) && !filename.equals (get_filename()))
+        putback (line);
 
       entry = new Entry (description, body.toString(), filename, line_number,
                          true);
