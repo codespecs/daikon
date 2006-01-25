@@ -340,7 +340,7 @@ chicory-test : ChicoryPremain.jar
 #
 DCOMP_JAVA_FILES := daikon/dcomp/*java daikon/chicory/*.java utilMDE/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
-ORIG_RT ?= /afs/csail.mit.edu/group/pag/software/pkg/j2sdk-1.5/jre/lib/rt.jar
+ORIG_RT ?= $(JDKDIR)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 
@@ -379,8 +379,8 @@ dyncomp-update-goals dcomp-update-goals:
 #
 # Rules to build the instrumented JDK for DynComp/Java
 #
-DCOMP_RT	:= /scratch/$(USER)/dcomp-rt
-DCOMP_JDK	:= /scratch/$(USER)/dcomp-j2sdk-1.5
+DCOMP_RT	:= /tmp/$(USER)/dcomp-rt
+DCOMP_JDK	:= /tmp/$(USER)/dcomp-j2sdk-1.5
 J2SDK15		:= /usr/lib/j2sdk1.5-sun
 dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar
