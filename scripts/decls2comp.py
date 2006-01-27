@@ -101,7 +101,8 @@ for line in f.readlines():
         tempAllPpts.append([]) # Start a new list
         isIntermediate = 1
     elif line != "" and line[0] != "#": # Don't add blank lines & comments
-        tempAllPpts[-1].append(line) # Append line to the latest entry
+        if len(tempAllPpts) > 0:
+            tempAllPpts[-1].append(line) # Append line to the latest entry
 
 
 # Init allPpts from tempAllPpts
