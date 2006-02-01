@@ -22,6 +22,32 @@ Further documentation can be found in:
 
 4.2.2 (February 1, 2006)
 
+Enhancements were made to the Chicory and Kvasir front ends.
+Chicory allows a regular expression to choose variables to be 
+omitted by name and has some new and modified command line options.
+Kvasir has some new command line options to better control its
+comparability analysis.
+
+Chicory
+
+  User-visible changes
+
+    The --omit-var <regex> command line option was added.  Variables whose
+    name matches the regular expression will be omitted from the trace file.
+
+    The option --daikon-args must be used to specify any arguments to
+    daikon when it is automatically run with the --daikon or --daikon-online
+    options.  The --daikon and --daikon-online options no longer accept
+    an argument
+
+    The option --trace-percent has been removed and replaced with  the
+    --sample_start option.  The --sample_start option starts sampling after
+    the specified number of samples have been recorded.  The sampling
+    percentage decreases as more samples are recorded.
+
+    The option --comparability was added to specify a decl formatted file
+    with comparability information.
+
 Kvasir
 
   User-visible changes
