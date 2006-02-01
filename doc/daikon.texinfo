@@ -3659,6 +3659,24 @@ comparability separately for function entrances and exits, which can
 lead to more accurate results, but sometimes generates output .decls
 files that Daikon cannot accept.
 
+@item --dyncomp-dataflow-only
+
+When DynComp is operating in this mode, no binary operations qualify as
+interactions between values.  Thus, DynComp only tracks dataflow.
+
+@item --dyncomp-dataflow-comp
+
+When DynComp is operating in this mode, the only binary operations that
+qualify as interactions are comparisons between values (e.g., @code{x <=
+y} or @code{x != y}).
+
+@item --dyncomp-units
+
+When DynComp is operating in this mode, the only binary operations that
+qualify as interactions are comparisons, addition, subtraction.
+This ensures that the variables that DynComp groups together into one
+set all have the same units (e.g., physics units).
+
 @end table
 
 Misc. options:

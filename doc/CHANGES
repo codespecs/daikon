@@ -20,6 +20,20 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.2 (February 1, 2006)
+
+Kvasir
+
+  User-visible changes
+
+    Added several command-line options (--dyncomp-units,
+    --dyncomp-dataflow-only, --dyncomp-dataflow-comp) to provide
+    finer user control over the DynComp comparability analysis tool,
+    which is distributed along with Kvasir.
+    
+
+--------------------------------------------
+
 4.2.1 (January 1, 2006)
 
 Enhancements were made to the Mangel-Wurzel and Kvasir front ends.
