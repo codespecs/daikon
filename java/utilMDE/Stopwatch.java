@@ -48,6 +48,10 @@ public final class Stopwatch {
     startTime = 0;
   }
 
+  public long snapshot() {
+    return (System.currentTimeMillis() - startTime);
+  }
+
   public long elapsedMillis() {
     return elapsedMillis;
   }
