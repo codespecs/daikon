@@ -194,21 +194,19 @@ public class DtraceDiff {
 
     for (int i = g.getOptind(); i < args.length; i++) {
       if (args[i].indexOf(".decls") != -1) {
-	if (dtracefile1 == null)
-	  declsfile1.add(new File(args[i]));
-	else if (dtracefile2 == null)
-	  declsfile2.add(new File(args[i]));
-	else
-	  throw new daikon.Daikon.TerminationMessage(usage);
-      } else if (args[i].indexOf(".dtrace") != -1) {
-	if (dtracefile1  == null)
-	  dtracefile1 = args[i];
-	else if (dtracefile2 == null)
-	  dtracefile2 = args[i];
-	else
-	  throw new daikon.Daikon.TerminationMessage(usage);
-      } else {
-	throw new daikon.Daikon.TerminationMessage(usage);
+        if (dtracefile1 == null)
+          declsfile1.add(new File(args[i]));
+        else if (dtracefile2 == null)
+          declsfile2.add(new File(args[i]));
+        else
+          throw new daikon.Daikon.TerminationMessage(usage);
+      } else { // presume any other file is a dtrace file
+        if (dtracefile1  == null)
+          dtracefile1 = args[i];
+        else if (dtracefile2 == null)
+          dtracefile2 = args[i];
+        else
+          throw new daikon.Daikon.TerminationMessage(usage);
       }
     }
     if ((dtracefile1 == null) || (dtracefile2 == null))
