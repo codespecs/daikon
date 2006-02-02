@@ -212,6 +212,15 @@ public class Options {
     }
   }
 
+  /**
+   * Ignore options after the first non-option
+   * @see #ignore_options_after_arg(boolean)
+   **/
+  private boolean ignore_options_after_arg = false;
+
+  /** All of the non-argument options as a single string **/
+  private String options_str = "";
+
   /** First specified class **/
   private Class main_class = null;
 
@@ -309,6 +318,55 @@ public class Options {
   }
 
   /**
+   * Set whether or not options after the first non option (first argument)
+   * should be treated as arguments and not as options.  Useful if the
+   * arguments are actually arguments/options for another program or for
+   * some other reason include items that start with '-' or '--'
+   */
+  public void ignore_options_after_arg (boolean val) {
+    ignore_options_after_arg = val;
+  }
+
+  /**
+   * Parses a command line that is encoded in a single string.  Quoted
+   * string with both single and double quotes are supported.
+   * @see parse(String[])
+   */
+  public String[] parse (String args) throws ArgException {
+
+    // Split the args string on whitespace boundaries accounting for quoted
+    // strings.
+    args = args.trim();
+    List<String> arg_list = new ArrayList<String>();
+    String arg = "";
+    char active_quote = 0;
+    for (int ii = 0; ii < args.length(); ii++) {
+      char ch = args.charAt (ii);
+      if ((ch == '\'') || (ch == '"')) {
+        arg+= ch;
+        ii++;
+        while ((ii < args.length()) && (args.charAt(ii) != ch))
+          arg += args.charAt(ii++);
+        arg += ch;
+      } else if (Character.isWhitespace (ch)) {
+        // System.out.printf ("adding argument '%s'%n", arg);
+        arg_list.add (arg);
+        arg = "";
+        while ((ii < args.length()) && Character.isWhitespace(args.charAt(ii)))
+          ii++;
+        if (ii < args.length())
+          ii--;
+      } else { // must be part of current argument
+        arg += ch;
+      }
+    }
+    if (!arg.equals (""))
+      arg_list.add (arg);
+
+    return parse (arg_list.toArray (new String[arg_list.size()]));
+  }
+
+  /**
    * Parses a command line and sets the options accordingly.  Any
    * non-option arguments are returned.  Any unknown option or other
    * errors throws an ArgException
@@ -316,11 +374,12 @@ public class Options {
   public String[] parse (String[] args) throws ArgException {
 
     List<String> non_options = new ArrayList<String>();
+    boolean ignore_options = false;
 
     // Loop through each argument
     for (int ii = 0; ii < args.length; ii++) {
       String arg = args[ii];
-      if (arg.startsWith ("--")) {
+      if (arg.startsWith ("--") && !ignore_options) {
         int eq_pos = arg.indexOf ('=');
         String arg_name = arg;
         String arg_value = null;
@@ -338,7 +397,7 @@ public class Options {
           arg_value = args[ii];
         }
         set_arg (oi, arg_name, arg_value);
-      } else if (arg.startsWith ("-")) {
+      } else if (arg.startsWith ("-") && !ignore_options) {
         int eq_pos = arg.indexOf ('=');
         String arg_name = arg;
         String arg_value = null;
@@ -357,6 +416,8 @@ public class Options {
         }
         set_arg (oi, arg_name, arg_value);
       } else { // not an option
+        if (ignore_options_after_arg)
+          ignore_options = true;
         non_options.add (arg);
       }
 
@@ -387,6 +448,29 @@ public class Options {
     return (non_options);
   }
 
+  /**
+   * Parses a command line and sets the options accordingly.  Any
+   * non-option arguments are returned.  If an error occurs prints
+   * the usage and terminates the program.  The program is terminated
+   * rather than throwing an error to create cleaner output.  See parse().
+   */
+  public String[] parse_and_usage (String args) {
+
+    String non_options[] = null;
+
+    try {
+      non_options = parse (args);
+    } catch (ArgException ae) {
+      System.out.printf ("%s, Usage: %s%n", ae.getMessage(), usage_synopsis);
+      for (String use : usage()) {
+        System.out.printf ("  %s%n", use);
+      }
+      System.exit (-1);
+      // throw new Error ("usage error: ", ae);
+    }
+    return (non_options);
+  }
+
 
   /**
    * Set the specified option to the value specified in arg_value.  Throws
@@ -398,11 +482,20 @@ public class Options {
     Field f = oi.field;
     Class type = oi.base_type;
 
+    // Keep track of all of the options specified
+    if (options_str.length() > 0)
+      options_str += " ";
+    options_str += arg_name;
+    if (arg_value != null) {
+      if (arg_value.contains (" "))
+        options_str += " '" + arg_value + "'";
+      else
+        options_str += " " + arg_value;
+    }
     // Argument values are required for everything but booleans
     if ((arg_value == null) && (type != Boolean.TYPE)
         && (type != Boolean.class))
       throw new ArgException ("Value required for option " + arg_name);
-
 
     try {
       if (type.isPrimitive()) {
@@ -420,6 +513,7 @@ public class Options {
                 throw new ArgException ("Bad boolean value for %s: %s", arg_name,
                                         arg_value);
             }
+            arg_value = (val) ? "true" : "false";
             f.setBoolean (oi.obj, val);
         } else if (type == Integer.TYPE) {
           int val = 0;
@@ -500,6 +594,15 @@ public class Options {
 
     return uses.toArray (new String[uses.size()]);
 
+  }
+
+  /**
+   * Returns a string containing all of the options that were set and
+   * their arguments (essentially the contents of args[] without all
+   * non-options removed)
+   */
+  public String get_options_str() {
+    return (options_str);
   }
 
   /**
