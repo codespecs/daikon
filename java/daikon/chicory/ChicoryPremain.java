@@ -9,8 +9,13 @@ import java.io.File;
 import java.util.*;
 
 import daikon.Chicory;
+import utilMDE.*;
 
 public class ChicoryPremain {
+
+  // Premain specific options.  Most options are the same as Chicory.
+  @Option ("socket port to communicate with Daikon")
+  public static int daikon_port = -1;
 
   public static boolean debug = false;
 
@@ -31,56 +36,62 @@ public class ChicoryPremain {
    */
   public static void premain (String agentArgs, Instrumentation inst) {
 
-    //System.out.format ("In premain, agentargs ='%s', " +
+    // System.out.format ("In premain, agentargs ='%s', " +
     //                   "Instrumentation = '%s'%n", agentArgs, inst);
 
 
     // Parse our arguments using Chicory's argument parser
-    String[] args = agentArgs.split ("  *");
-    Chicory chicory = new Chicory();
-    chicory.parse_args (args, true);
-    debug = chicory.debug;
+    Options options = new Options (Chicory.synopsis, Chicory.class,
+                                   ChicoryPremain.class);
+    String[] target_args = options.parse_and_usage (agentArgs);
+    if (target_args.length > 0) {
+      System.out.printf ("Unexpected arguments %s%n",
+                         Arrays.toString (target_args));
+      System.exit (1);
+    }
+    debug = Chicory.debug;
 
     // Open the dtrace file
-    if (chicory.getDaikonPort() != -1)
-    {
-        Runtime.setDtraceOnlineMode(chicory.getDaikonPort());
-    }
-    else if (chicory.trace_file_name == null) {
-      File trace_file_path = new File (chicory.output_dir, "dtrace.gz");
+    if (Chicory.daikon_online) {
+        Runtime.setDtraceOnlineMode(daikon_port);
+    } else if (Chicory.dtrace_file == null) {
+      File trace_file_path = new File (Chicory.output_dir, "dtrace.gz");
       Runtime.setDtraceMaybe (trace_file_path.toString());
     } else {
-      File trace_file_path = new File (chicory.output_dir,
-                                       chicory.trace_file_name);
+      File trace_file_path = new File (Chicory.output_dir,
+                                       Chicory.dtrace_file.getPath());
       Runtime.setDtrace (trace_file_path.toString(), false);
     }
 
     // Setup argument fields in Runtime
-    Runtime.nesting_depth       = chicory.nesting_depth;
-    Runtime.linked_lists        = chicory.linked_lists;
-    Runtime.daikon_omit_regex   = chicory.daikon_omit_regex;
-    Runtime.daikon_include_regex= chicory.daikon_include_regex;
-    if (chicory.comparability_filename != null) {
+    Runtime.nesting_depth       = Chicory.nesting_depth;
+    Runtime.linked_lists        = Chicory.linked_lists;
+    Runtime.ppt_omit_pattern    = Chicory.ppt_omit_pattern;
+    Runtime.ppt_select_pattern  = Chicory.ppt_select_pattern;
+    Runtime.sample_start        = Chicory.sample_start;
+    DaikonVariableInfo.std_visibility = Chicory.std_visibility;
+    if (Chicory.comparability != null) {
       Runtime.comp_info = new DeclReader();
-      Runtime.comp_info.read (chicory.comparability_filename);
+      Runtime.comp_info.read (Chicory.comparability);
       if (debug) {
         System.out.printf ("Read comparability from %s%n",
-                           chicory.comparability_filename);
-        Runtime.comp_info.dump();
+                           Chicory.comparability);
+        // Runtime.comp_info.dump();
       }
     }
 
-    if (chicory.doPurity())
+    if (Chicory.doPurity())
     {
         throw new RuntimeException("Executing a purity analysis is currently disabled");
 
-        //runPurityAnalysis(chicory.target_program);
-        //writePurityFile(chicory.target_program + ".pure", chicory.getConfigDir());
+        //runPurityAnalysis(Chicory.target_program);
+        //writePurityFile(Chicory.target_program + ".pure",
+        //                Chicory.config_dir);
         //doPurity = true;
     }
-    else if (chicory.getPurityFileName() != null)
+    else if (Chicory.get_purity_file() != null)
     {
-        readPurityFile(chicory.getPurityFileName(), chicory.getConfigDir());
+        readPurityFile(Chicory.get_purity_file(), Chicory.config_dir);
         doPurity = true;
     }
 
@@ -96,7 +107,7 @@ public class ChicoryPremain {
   }
 
   /**
-   * Reads purityFileName.  Each line should contain exactly one method.
+   * Reads purity file.  Each line should contain exactly one method.
    * Care must be taken to supply the correct format.
    *
    * From the Sun JDK API:
@@ -117,7 +128,7 @@ public class ChicoryPremain {
    * or private first, and then other modifiers in the following
    * order: abstract, static, final, synchronized native."
    */
-   private static void readPurityFile(String purityFileName, String pathLoc)
+   private static void readPurityFile(File purityFileName, File pathLoc)
    {
         pureMethods = new HashSet<String>();
 
@@ -125,7 +136,7 @@ public class ChicoryPremain {
         try
         {
             reader = new BufferedReader(new FileReader(
-                    new File(pathLoc, purityFileName)));
+                    new File(pathLoc, purityFileName.getPath())));
         }
         catch (FileNotFoundException e)
         {
