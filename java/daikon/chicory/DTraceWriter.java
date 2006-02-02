@@ -43,20 +43,6 @@ public class DTraceWriter extends DaikonWriter
     /** debug information about daikon variables  **/
     private boolean debug_vars = false;
 
-    /** Percentage of program points to output **/
-    private float recordPct;
-
-    /**
-     * Pseudorandom number generator
-     */
-    private Random rand;
-
-    /**
-     * Nonces for method exits whose records should be excluded
-     * but have not yet been reached in the program's execution.
-     */
-    private Set<Integer> pendingIgnoreNonces;
-
     /**
      * Initializes the DTraceWriter
      *
@@ -67,10 +53,6 @@ public class DTraceWriter extends DaikonWriter
     {
         super();
         outFile = writer;
-
-        recordPct = Chicory.recordPct();
-        rand = new Random();
-        pendingIgnoreNonces = new HashSet<Integer> ();
     }
 
     /**
@@ -80,9 +62,6 @@ public class DTraceWriter extends DaikonWriter
     {
         //don't print
         if (Runtime.dtrace_closed)
-            return;
-
-        if (checkPct(nonceVal))
             return;
 
         Member member = mi.member;
@@ -114,9 +93,6 @@ public class DTraceWriter extends DaikonWriter
     public void methodExit(MethodInfo mi, int nonceVal, Object obj, Object[] args, Object ret_val, int lineNum)
     {
         if (Runtime.dtrace_closed)
-            return;
-
-        if (checkIgnoreNonces(nonceVal))
             return;
 
         Member member = mi.member;
@@ -592,50 +568,5 @@ public class DTraceWriter extends DaikonWriter
             throw new RuntimeException("Could not find correct primitive wrapper class for class " + val.getClass());
     }
 
-    /**
-     * Return true iff we should skip a record due to the
-     * percentage set from the --trace-percent switch.
-     * Should only be called from methodEntry.
-     */
-    private boolean checkPct(int nonce)
-    {
-        if (recordPct == -1)
-            return false;
-
-        // get random float from 0 to 100
-        float randFloat = rand.nextFloat() * 100;
-
-        if (randFloat < recordPct)
-        {
-            return false;
-        }
-        else
-        {
-            pendingIgnoreNonces.add(nonce);
-            return true;
-        }
-    }
-
-    /**
-     * Checks if the corresponding method entry
-     * was excluded from a percentage check.
-     * If so, exclude this method exit so Daikon
-     * does not see unmatched nonces.
-     */
-    private boolean checkIgnoreNonces(int nonce)
-    {
-        if (recordPct == -1)
-            return false;
-
-        if (pendingIgnoreNonces.contains(nonce))
-        {
-            pendingIgnoreNonces.remove(nonce);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 
 }
