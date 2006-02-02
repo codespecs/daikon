@@ -41,10 +41,10 @@ public class Runtime
     // Control over what classes (ppts) are instrumented
     //
     /** Ppts to omit (regular expression) **/
-    static List<Pattern> daikon_omit_regex = new ArrayList<Pattern>();
+    static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
     /** Ppts to include (regular expression) **/
-    static List<Pattern> daikon_include_regex = new ArrayList<Pattern>();
+    static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
     /** Comparability information (if any) **/
     static DeclReader comp_info = null;
@@ -90,6 +90,28 @@ public class Runtime
      * Each element of the Set is a fully qualified class name.
      **/
     private static Set<String> initSet = new HashSet<String>();
+
+    /** Class of information about each active call **/
+    private static class CallInfo {
+        /** nonce of call **/
+        int nonce;
+        /** whether or not the call was captured on enter **/
+        boolean captured;
+        public CallInfo (int nonce, boolean captured) {
+            this.nonce = nonce; this.captured = captured;
+        }
+    }
+
+    /** Stack of active methods. **/
+    private static Stack<CallInfo> callstack = new Stack<CallInfo>();
+
+  /**
+   * Sample count at a call site to begin sampling.  All previous calls
+   * will be recorded.  Sampling starts at 10% and decreases by a factor
+   * of 10 each time another sample_start samples have been recorded.  If
+   * sample_start is 0, then all calls will be recorded.
+   */
+  public static int sample_start = 0;
 
     // Constructor
     private Runtime()
@@ -176,21 +198,47 @@ public class Runtime
      * @param mi_index - Index in methods of the MethodInfo for this method
      * @param args - Array of arguments to method
      */
-    public static void enter(Object obj, int nonce, int mi_index, Object[] args)
-    {
-        if (dontProcessPpts())
-            return;
+    public static void enter(Object obj, int nonce, int mi_index,
+                             Object[] args) {
 
-        synchronized (all_classes)
-        {
-            if (new_classes.size() > 0)
-                process_new_classes();
+      if (dontProcessPpts())
+        return;
 
+      synchronized (all_classes) {
+        if (new_classes.size() > 0)
+          process_new_classes();
 
-            MethodInfo mi = methods.get(mi_index);
-            dtrace_writer.methodEntry(mi, nonce, obj, args);
+        MethodInfo mi = methods.get(mi_index);
+        mi.call_cnt++;
+
+        // If sampling, check to see if we are capturing this sample
+        boolean capture = true;
+        if (sample_start > 0) {
+          if (mi.call_cnt <= sample_start)
+            ;
+          else if (mi.call_cnt <= (sample_start*10))
+            capture = (mi.call_cnt % 10) == 0;
+          else if (mi.call_cnt <= (sample_start*100))
+            capture = (mi.call_cnt % 100) == 0;
+          else if (mi.call_cnt <= (sample_start*1000))
+            capture = (mi.call_cnt % 1000) == 0;
+          else
+            capture = (mi.call_cnt % 10000) == 0;
+          callstack.push (new CallInfo (nonce, capture));
         }
 
+        if (capture) {
+          mi.capture_cnt++;
+          // long start = System.currentTimeMillis();
+          dtrace_writer.methodEntry(mi, nonce, obj, args);
+          // long duration = System.currentTimeMillis() - start;
+          //System.out.println ("Enter " + mi + " " + duration + "ms"
+          //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
+        } else {
+          //System.out.println ("skipped " + mi
+          //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
+        }
+      }
     }
 
     /**
@@ -204,21 +252,32 @@ public class Runtime
      * @param ret_val     - Return value of method.  null if method is void
      * @param exitLineNum - The line number at which this method exited
      */
-    public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum)
-    {
-        if (dontProcessPpts())
+    public static void exit(Object obj, int nonce, int mi_index,
+                            Object[] args, Object ret_val, int exitLineNum) {
+      if (dontProcessPpts())
+        return;
+
+      synchronized (all_classes) {
+        if (new_classes.size() > 0)
+          process_new_classes();
+
+        // Skip this call if it was not sampled at entry to the method
+        if (sample_start > 0) {
+          CallInfo ci = callstack.pop();
+          while (ci.nonce != nonce)
+            ci = callstack.pop();
+          if (!ci.captured)
             return;
-
-        synchronized (all_classes)
-        {
-            if (new_classes.size() > 0)
-                process_new_classes();
-
-
-            MethodInfo mi = methods.get(mi_index);
-            dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, exitLineNum);
         }
 
+        // Write out the infromation for this method
+        MethodInfo mi = methods.get(mi_index);
+        // long start = System.currentTimeMillis();
+        dtrace_writer.methodExit(mi, nonce, obj, args, ret_val,
+                                 exitLineNum);
+        // long duration = System.currentTimeMillis() - start;
+        // System.out.println ("Exit " + mi + " " + duration + "ms");
+      }
     }
 
     /**
@@ -490,9 +549,9 @@ public class Runtime
                     {
                         dtrace.println();
                         // This lets us know we didn't lose any data.
-                        for (Pattern p : daikon_omit_regex)
+                        for (Pattern p : ppt_omit_pattern)
                             dtrace.println ("# ppt-omit-pattern: " + p);
-                        for (Pattern p : daikon_include_regex)
+                        for (Pattern p : ppt_select_pattern)
                             dtrace.println ("# ppt-select-pattern: " + p);
                         dtrace.println("# EOF (added by Runtime.addShutdownHook)");
                         dtrace.close();
