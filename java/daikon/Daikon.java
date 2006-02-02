@@ -1377,7 +1377,15 @@ public final class Daikon {
         VarInfo origvar = VarInfo.origVarInfo(vi);
         // Fix comparability
         VarInfo postvar = exit_ppt.findVar(vi.name);
-        Assert.assertTrue(postvar != null, "Exit not superset of entry: "  + vi.name);
+        if (postvar == null) {
+          System.out.printf ("Cant find var %s in exit of ppt %s%n", vi,
+                             exit_ppt.name());
+          for (VarInfo cvi : entry_ppt.var_infos)
+            System.out.printf ("  entry var = %s%n", cvi);
+          for (VarInfo cvi : exit_ppt.var_infos)
+            System.out.printf ("  exit var = %s%n", cvi);
+          assert false;
+        }
         origvar.comparability = postvar.comparability.makeAlias(origvar.name);
 
         // Add to new_vis
