@@ -624,6 +624,43 @@ public final class UtilMDE {
     dir.delete();
   }
 
+  /**
+   * Reads the entire contents of the specified file and returns it
+   * as a string.  Any IOException encountered will be turned into Errors
+   */
+  public static String readFile (File filename) {
+
+    try {
+      BufferedReader reader = new BufferedReader (new FileReader (filename));
+      StringBuilder contents = new StringBuilder();
+      String line = reader.readLine();
+      while (line != null) {
+        contents.append (line);
+        contents.append (lineSep);
+        line = reader.readLine();
+      }
+      reader.close();
+      return contents.toString();
+    } catch (Exception e) {
+      throw new Error ("Unexpected error in writeFile", e);
+    }
+  }
+
+  /**
+   * Creates a file with the given name and writes the specified string
+   * to it.  If the file currently exists (and is writable) it is overwritten
+   * Any IOException encountered will be turned into Errors
+   */
+  public static void writeFile (File filename, String contents) {
+
+    try {
+      FileWriter writer = new FileWriter (filename);
+      writer.write (contents, 0, contents.length());
+      writer.close();
+    } catch (Exception e) {
+      throw new Error ("Unexpected error in writeFile", e);
+    }
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
