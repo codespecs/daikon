@@ -46,25 +46,23 @@ public abstract class DaikonWriter
      * @param method non-null method
      * @return the decorated method entry name for Daikon
      */
-    public static String methodEntryName(Member method)
-    {
-        //System.out.printf("(NORM)  %s ----  %s%n", method.toString(), method.getName());
-        return methodName(method, "ENTER");
+    public static String methodEntryName(Member method) {
+        return methodName (method, "ENTER");
     }
 
     /**
      * Given a method, returns the method entry program point name for Daikon
-     * method entry name for Daikon
+     * method entry name for Daikon.  Used when reflection information is
+     * not available
      *
      * @param types Argument types
      * @return the decorated method entry name for Daikon
      */
-    public static String methodEntryName(String fullClassName, String[] types, String name, String short_name)
+    public static String methodEntryName(String fullClassName, String[] types,
+                                         String name, String short_name)
     {
-        // System.out.printf("(bytecodes)  %s ----  %s%n", name, short_name);
         return methodName(fullClassName, types, name, short_name, "ENTER");
     }
-
     /**
      * Given a method, returns the method exit program point name for Daikon
      * @param method require method != null
@@ -75,7 +73,6 @@ public abstract class DaikonWriter
     {
         return methodName(method, "EXIT" + lineNum);
     }
-
     /**
      * Given a method, returns the method exit program point name for Daikon
      *
@@ -83,7 +80,8 @@ public abstract class DaikonWriter
      * @param lineNum The line number of the exit point of the method
      * @return the decorated method entry name for Daikon
      */
-    public static String methodExitName(String fullClassName, String[] types, String name, String short_name, int lineNum)
+    public static String methodExitName(String fullClassName, String[] types,
+                              String name, String short_name, int lineNum)
     {
         return methodName(fullClassName, types, name, short_name, "EXIT" + lineNum);
     }
@@ -106,20 +104,21 @@ public abstract class DaikonWriter
      * @param point Usually "EXIT" or "ENTER"
      * @return Same thing as methodName(Member, point)
      */
-    private static String methodName(String fullClassName, String[] types, String name,
-            String short_name, String point)
-    {
-        //System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n", fullClassName, name, short_name);
+    private static String methodName(String fullClassName, String[] types,
+                              String name, String short_name, String point) {
 
-        String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+        //System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
+        //                  fullClassName, name, short_name);
+
 
         boolean isConstructor = name.equals("<init>") || name.equals("");
 
         if (isConstructor) {
           // replace <init>'s with the actual class name
           // so "public void <init>" becomes "public void StackAr" for example
-          name = name.replace("<init>", className);
-          short_name = className;
+          short_name = fullClassName.substring(fullClassName.lastIndexOf('.')
+                                               + 1);
+          name = name.replace("<init>", short_name);
         }
 
         // build up the string to go inside the parens
@@ -133,6 +132,12 @@ public abstract class DaikonWriter
                 paramTypes.append(",");
         }
         paramTypes.append(")");
+        String pptname = fullClassName + "." + short_name + paramTypes
+            + ":::" + point;
+        // System.out.printf ("ppt name = %s%n", pptname);
+        return (pptname);
+
+        /*
         // Quote dollar signs, which replaceFirst would interpreted as a
         // group reference.
         String paramTypesString = paramTypes.toString().replace("$", "\\$");
@@ -141,59 +146,43 @@ public abstract class DaikonWriter
         //                   paramTypesString, name, short_name);
 
         return methodName(name, short_name, isConstructor, point);
+        */
     }
 
     /**
      * Constructs the program point name (which includes the point
      * string at the end)
      *
-     * @param method non-null method
-     * @param point The point in the method, usually "EXIT" or "ENTRY"
-     * @return the program point name which includes the point string
+     * @param method Reflection object for the method/constructor
+     * @param point Usually "ENTER" or "EXIT"
      */
     private static String methodName(Member method, String point)
     {
         String name = method.toString();
-        String short_name = method.getName();
-        boolean isConstructor = method instanceof Constructor;
 
-
-        return methodName(name, short_name, isConstructor, point);
-    }
-
-    /**
-     * Constructs the program point name (which includes the point
-     * string at the end)
-     *
-     * @param name Looks like: "public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception"
-     * @param short_name Looks like: "push"
-     * @param isConstructor
-     * @param point Usually "ENTER" or "EXIT"
-     */
-    private static String methodName(String name, String short_name, boolean isConstructor, String point)
-    {
-        // System.out.printf("%s ---- %s %n", name, short_name);
-
-        if (isConstructor)
-        {
-            name = fixDuplicateConstructorName(name, short_name);
-        }
+        if (method instanceof Constructor)
+            name = fixDuplicateConstructorName(name, method.getName());
 
         // Remove the modifiers and the type
-        if (no_modifiers_ppt)
-        {
+        if (no_modifiers_ppt) {
             // At this point, name might look something like:
-            // public boolean DataStructures.StackAr.push(java.lang.Object) throws Exception
+            // public boolean DataStructures.StackAr.push(java.lang.Object) \
+            //          throws Exception
+            // Get ride of throws and everything after it
+            // (and the space right before it)
+            int index = name.indexOf (" throws");
+            if (index > 0)
+                name = name.substring (0, index);
 
-            // Get ride of throws and everything after it (and space right before it)
-            name = name.replaceFirst (" throws.*", "");
-
-            // Get rid of modifiers before the method name (public boolean in above example)
-            String[] parts = name.split ("  *");
-            name = parts[parts.length-1];
+            // Get rid of modifiers before the method name
+            // (public boolean in above example)
+            index = name.lastIndexOf (' ');
+            if (index > 0)
+                name = name.substring(index+1);
         }
-        name = name.replaceAll (",", ", ");
+        name = name.replace (",", ", ");
 
+        // System.out.printf ("'%s' to '%s'%n", method.toString(), name);
         return (name + ":::" + point);
     }
 
