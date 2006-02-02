@@ -45,8 +45,12 @@ Chicory
     the specified number of samples have been recorded.  The sampling
     percentage decreases as more samples are recorded.
 
-    The option --comparability was added to specify a decl formatted file
-    with comparability information.
+    The option --comparability-file was added to specify a decl
+    formatted file with comparability information.
+
+    Static variables are only included once at each program point.  Static
+    variables are named with their full static pathname (for example:
+    package.class.varname) rather than their relative name (this.varname)
 
 Kvasir
 
