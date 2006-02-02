@@ -94,7 +94,7 @@ public final class PrintInvariants {
   public static boolean dkconfig_repair_debug = false;
 
   /**
-   * If true, print the number of true invariants.  This includes
+   * If true, print the total number of true invariants.  This includes
    * invariants that are redundant and would normally not be printed
    * or even created due to optimizations
    */
@@ -1469,12 +1469,25 @@ public final class PrintInvariants {
 
   public static void print_true_inv_cnt (PptMap ppts) {
 
+    // Count printable invariants
     int inv_cnt = 0;
+    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = i.next();
+      for (Invariant inv : ppt.getInvariants()) {
+        InvariantFilters fi = InvariantFilters.defaultFilters();
+        if (fi.shouldKeep (inv) == null)
+          inv_cnt++;
+      }
+    }
+    System.out.printf ("%d printable invariants%n", inv_cnt);
+
+    // Count all of the stored invariants
+    inv_cnt = 0;
     for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
       inv_cnt += ppt.invariant_cnt();
     }
-    System.out.printf ("%d invariants%n", inv_cnt);
+    System.out.printf ("%d physical invariants%n", inv_cnt);
 
     //undo suppressions
     for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
