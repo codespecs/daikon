@@ -57,6 +57,12 @@ public class MethodInfo {
    **/
   public RootInfo traversalExit = null;
 
+  /** The number of times this method has been called **/
+  public int call_cnt = 0;
+
+  /** The number of times we have captured the output for this method **/
+  public int capture_cnt = 0;
+
   /**
    * Whether or not the method is pure (has no side-effects).
    * Will only be set to true if the --purity-analysis switch is given
