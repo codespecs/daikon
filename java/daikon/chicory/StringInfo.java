@@ -53,7 +53,7 @@ public class StringInfo extends DaikonVariableInfo
             return "null" + DaikonWriter.lineSep + "1";
         }
 
-        assert !NonsensicalList.isNonsensicalList (theValues);
+        // assert !NonsensicalList.isNonsensicalList (theValues);
         if (NonsensicalList.isNonsensicalList (theValues)
             || theValues instanceof NonsensicalObject)
         {
