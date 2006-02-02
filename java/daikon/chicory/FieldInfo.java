@@ -1,5 +1,7 @@
 package daikon.chicory;
 
+import daikon.dcomp.DCRuntime;
+
 import java.lang.reflect.*;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -17,10 +19,22 @@ public class FieldInfo extends DaikonVariableInfo
     /** The offset of this field in its containing class **/
     private int field_num;
 
+    /** whether or not this is a static field **/
+    private boolean is_static;
+
+    /** whether or not this field is of a primitive type **/
+    private boolean is_primitive;
+
+    /** Class that gets the tags for fields.  Used by DynComp **/
+    public DCRuntime.FieldTag field_tag = null;
+
     public FieldInfo(String theName, Field theField, boolean isArr)
     {
        super(theName, isArr);
        field = theField;
+
+       is_static = Modifier.isStatic(field.getModifiers());
+       is_primitive = field.getType().isPrimitive();
 
        // Calculate the offset of this field in its class
        Class clazz = field.getDeclaringClass();
@@ -71,7 +85,7 @@ public class FieldInfo extends DaikonVariableInfo
      */
     public boolean isStatic()
     {
-        return Modifier.isStatic(field.getModifiers());
+        return is_static;
     }
 
     @SuppressWarnings("unchecked")
@@ -108,6 +122,11 @@ public class FieldInfo extends DaikonVariableInfo
     {
         return (field_num);
     }
+
+    public boolean isPrimitive() {
+        return is_primitive;
+    }
+
 
     Field tag_field = null;
     public Field get_tag_field (String tag_field_name, Class parent_class)

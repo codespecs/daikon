@@ -34,17 +34,22 @@ public class ParameterInfo extends DaikonVariableInfo
     /** Argument type **/
     private final Class argType;
 
+    /** True if this parameter is of a primitive type **/
+    boolean isPrimitive;
+
     /**
      * Constructs an ParameterInfo object with the specified name
      * @param theName The variable name (used in the decl file)
      */
-    public ParameterInfo(String theName, int theArgNum, int param_offset)
+    public ParameterInfo(String theName, int theArgNum, Class argType,
+                         int param_offset)
     {
         super(theName);
 
         argNum = theArgNum;
         this.param_offset = param_offset;
-        argType = null;
+        this.argType = argType;
+        this.isPrimitive = argType.isPrimitive();
     }
 
     /**
@@ -85,5 +90,10 @@ public class ParameterInfo extends DaikonVariableInfo
     public Class getType()
     {
         return (argType);
+    }
+
+    /** Returns whether or not this parameter is a primitive type **/
+    public boolean isPrimitive() {
+        return isPrimitive;
     }
 }
