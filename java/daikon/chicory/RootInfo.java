@@ -33,6 +33,10 @@ public class RootInfo extends DaikonVariableInfo
     {
         RootInfo root = new RootInfo();
 
+        // debug_vars = mi.toString().contains ("Infer.instance");
+        if (debug_vars)
+            System.out.printf ("building enter tree for %s%n", mi);
+
         // Don't build a tree for class initializers.
         if (mi.is_class_init())
             return (root);
@@ -40,16 +44,22 @@ public class RootInfo extends DaikonVariableInfo
         // Clear the set of static variables
         ppt_statics.clear();
 
-        root.addParameters(mi.class_info, mi.member,
-                           Arrays.asList(mi.arg_names), /*offset = */ "",
-                           depth);
-
+        // Print class variables.   Print class variables first because
+        // the depth goes deeper there ('this' is not counted).  This
+        // guarantees that any static variables in the class are found here
+        // and not below.
         if (!(mi.member instanceof Constructor)) {
             root.addClassVars(mi.class_info,
                               Modifier.isStatic(mi.member.getModifiers()),
                               mi.member.getDeclaringClass(), /*offset = */ "",
                               depth);
         }
+
+        // Print each parameter
+        root.addParameters(mi.class_info, mi.member,
+                           Arrays.asList(mi.arg_names), /*offset = */ "",
+                           depth);
+
         return root;
     }
 
@@ -60,6 +70,10 @@ public class RootInfo extends DaikonVariableInfo
     {
         RootInfo root = new RootInfo();
 
+        // debug_vars = mi.toString().contains ("Infer.instance");
+        if (debug_vars)
+            System.out.printf ("building exit tree for %s%n", mi);
+
         // Don't build a tree for class initializers.
         if (mi.is_class_init())
             return (root);
@@ -67,9 +81,18 @@ public class RootInfo extends DaikonVariableInfo
         // Clear the set of static variables
         ppt_statics.clear();
 
+        // Print class variables.   Print class variables first because
+        // the depth goes deeper there ('this' is not counted).  This
+        // guarantees that any static variables in the class are found here
+        // and not below.
+        root.addClassVars(mi.class_info,
+                Modifier.isStatic(mi.member.getModifiers()), mi.member
+                        .getDeclaringClass(), "", depth);
+
         // Print arguments
-        root.addParameters(mi.class_info, mi.member, Arrays.asList(mi.arg_names), /*offset = */ "",
-                depth);
+        root.addParameters(mi.class_info, mi.member,
+                           Arrays.asList(mi.arg_names), /*offset = */ "",
+                           depth);
 
         // Print return type information for methods only and not constructors
         if (mi.member instanceof Method)
@@ -90,11 +113,6 @@ public class RootInfo extends DaikonVariableInfo
                         depth);
             }
         }
-
-        // Print class variables
-        root.addClassVars(mi.class_info,
-                Modifier.isStatic(mi.member.getModifiers()), mi.member
-                        .getDeclaringClass(), "", depth);
 
         return root;
     }
