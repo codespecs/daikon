@@ -2,6 +2,7 @@ package daikon.chicory;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.regex.*;
 
 import daikon.Chicory;
 import daikon.VarInfoName;
@@ -35,7 +36,7 @@ public abstract class DaikonVariableInfo
     protected final boolean isArray;
 
     /** Print debug information about the variables **/
-    protected final boolean debug_vars = false;
+    static boolean debug_vars = false;
 
     /**default string for comparability info**/
     private static final String compareInfoDefaultString = "22";
@@ -71,7 +72,7 @@ public abstract class DaikonVariableInfo
      * behavior (if the field is in a class in a different package, it
      * is only visible if public, etc.)
      */
-    public static boolean stdVisibility = false;
+    public static boolean std_visibility = false;
 
     /**
      * Set of fully qualified static variable names for this ppt.  Used
@@ -132,7 +133,8 @@ public abstract class DaikonVariableInfo
         assert info.repTypeName != null : "Child's representation type name should not be null";
         assert info.compareInfoString != null : "Child's comparability information should not be null";
 
-        // System.out.printf ("Adding %s to %s\n", info, this);
+        if (debug_vars)
+            System.out.printf ("Adding %s to %s\n", info, this);
         children.add(info);
     }
 
@@ -431,6 +433,8 @@ public abstract class DaikonVariableInfo
             thisInfo = this;
 
         Field[] fields = type.getDeclaredFields();
+        // if (fields.length > 50)
+        //    System.out.printf ("%d fields in %s%n", fields.length, type);
 
         if (debug_vars)
             System.out.printf ("%s: [%s] %d dontPrintInstanceVars = %b, "
@@ -554,7 +558,7 @@ public abstract class DaikonVariableInfo
     {
         // add this variable to the tree as a child of curNode
         DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum,
-                                                        param_offset);
+                                                        type, param_offset);
 
         newChild.typeName = stdClassName(type) + isParamString;
         newChild.repTypeName = getRepName(type, false);
@@ -656,6 +660,9 @@ public abstract class DaikonVariableInfo
         {
             offset = field.getDeclaringClass().getName() + ".";
             ppt_statics.add (offset + theName);
+            if (debug_vars)
+                System.out.printf (" added static var %s to list%n",
+                                   offset + theName);
         }
         // instance field, first recursion step
         else if (offset.length() == 0)
@@ -700,10 +707,6 @@ public abstract class DaikonVariableInfo
         }
 
         addChild(newField);
-        if (debug_vars)
-            System.out.printf ("Added field %s to node %s%n", newField,
-                               this);
-
 
         newField.checkForDerivedVariables(type, theName, offset);
 
@@ -829,7 +832,7 @@ public abstract class DaikonVariableInfo
         if (current.equals (fclass))
             return (true);
 
-        if (!stdVisibility)
+        if (!std_visibility)
         {
             // If the field is in any instrumented class it is always visible
             synchronized (Runtime.all_classes)
@@ -848,14 +851,19 @@ public abstract class DaikonVariableInfo
 
         // Otherwise we consider the variable not to be visible, even
         // though it is.  This mimics dfej behavior
-        if (!stdVisibility)
+        if (!std_visibility)
             return (false);
+
+        // Everythign in the same class is visible
+        if (current == fclass)
+            return true;
 
         // If the field is in the same package, it's visible if it is
         // not private or protected
-        if (current.getPackage() != null && current.getPackage().equals (fclass.getPackage())) {
+        if (current.getPackage() != null
+            && current.getPackage().equals (fclass.getPackage())) {
             if (Modifier.isPrivate (modifiers)
-                 || Modifier.isProtected (modifiers))
+                || Modifier.isProtected (modifiers))
                 return (false);
             else
                 return (true);
@@ -1025,6 +1033,16 @@ public abstract class DaikonVariableInfo
    protected void addChildNodes(ClassInfo cinfo, Class type, String theName,
                                 String offset, int depthRemaining) {
 
+       // Ignore variables that match the ignore pattern
+       if (Chicory.omit_var != null) {
+           Matcher m = Chicory.omit_var.matcher (offset + theName);
+           if (m.find()) {
+               System.out.printf ("variable %s matches omit pattern %s%n",
+                                  offset + theName, Chicory.omit_var);
+               return;
+           }
+       }
+
        if (type.isPrimitive())
            return;
        else if (type.isArray())
@@ -1034,20 +1052,7 @@ public abstract class DaikonVariableInfo
                return;
 
            Class arrayType = type.getComponentType();
-           if (arrayType.isPrimitive())
-           {
-               if ((Chicory.omit_var != null) &&
-                   (theName.endsWith ("selector") ||
-                   theName.endsWith ("selectorMtf") ||
-                   theName.endsWith ("block") ||
-                   theName.endsWith ("quadrant") ||
-                   theName.endsWith ("zptr") ||
-                   theName.endsWith ("ftab") ||
-                   theName.endsWith ("szptr"))) {
-                   System.out.printf ("Skipping variable %s%n",
-                                      offset + theName);
-                   return;
-               }
+           if (arrayType.isPrimitive()) {
 
                DaikonVariableInfo newChild
                    = new ArrayInfo(offset + theName + "[]", arrayType);
@@ -1098,6 +1103,9 @@ public abstract class DaikonVariableInfo
        // regular old class type
        else
        {
+           if (debug_vars)
+               System.out.printf ("**Depth Remaining = %d%n", depthRemaining);
+
            if (depthRemaining <= 0)
            {
                // don't recurse any more!
@@ -1202,4 +1210,5 @@ public abstract class DaikonVariableInfo
         String[] sarr = getTypeName().split("  *");
         return sarr[0].equals("int");
     }
+
 }
