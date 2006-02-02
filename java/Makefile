@@ -390,7 +390,7 @@ dcomp_rt.jar : dcomp_premain.jar
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # Install the local version of the dyncomp specific rt.jar
-install-dyncomp-jdjk install-dcomp-jdk : dcomp_rt.jar
+install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 	cp dcomp_rt.jar $(pag)/software/pkg/DynComp/
 
 # Only rebuild the jar file, don't recreate the contents of $(DCOMP_RT)
