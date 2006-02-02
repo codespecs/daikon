@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import daikon.chicory.*;
+import utilMDE.*;
 
 /**
  * This is the main class for Chicory which transforms the class files
@@ -17,112 +18,112 @@ import daikon.chicory.*;
  */
 public class Chicory {
 
-  /** File in which to put dtrace output **/
-  public String trace_file_name = null;
+  @Option ("File in which to put dtrace output")
+  public static File dtrace_file = null;
 
-  /** TODO: make this a pattern and not a flag **/
-  public static String omit_var = null;
+  @Option ("Omit variables that match this regular expression")
+  public static Pattern omit_var = null;
 
-  /** Directory in which to create output files **/
-  public File output_dir = new File(".");
+  @Option ("Directory in which to create output files")
+  public static File output_dir = new File(".");
 
-  /** Depth to wich to examine structure components **/
-  public int nesting_depth = 2;
+  @Option ("Depth to examine structure components")
+  public static int nesting_depth = 2;
 
-  /** Ppts to omit (regular expression) **/
-  public List<Pattern> daikon_omit_regex = new ArrayList<Pattern>();
+  @Option ("Omit all program points that match")
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
-  /** Ppts to include (regular expression) **/
-  public List<Pattern> daikon_include_regex = new ArrayList<Pattern>();
+  @Option ("Include only program points that match")
+  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
-  /** File containing comparabiity information **/
-  public File comparability_filename = null;
+  @Option ("Decl formatted file containing comparabiity information")
+  public static File comparability = null;
 
-  /** Print progress information **/
+  @Option ("Print progress information")
   public static boolean verbose = true;
 
-  public static boolean stdVisibility = false;
+  @Option ("Include variables that are visible under normal java access rules")
+  public static boolean std_visibility = false;
 
-  /** Main debug switch **/
-  public boolean debug = false;
+  @Option ("Print debug information and save instrumented classes")
+  public static boolean debug = false;
 
-  /** Size of the heap for the target program **/
-  public String heap_size = "128M";
+  @Option ("Size of the heap for the target program")
+  public static String heap_size = "128M";
 
   /**
    * Path to java agent jar file that performs the transformation.
    * The "main" procedure is ChicoryPremain.premain().
    * @see ChicoryPremain#premain
    **/
-  File premain_path = null;
-
-  /** Arguments to be passed to the java agent **/
-  public List<String> premain_args = new ArrayList<String>();
-
-  /** Render linked lists as vectors **/
-  public boolean linked_lists = true;
-
-  /** Daikon command line.  If null, Daikon is not run **/
-  public String daikon_cmd = null;
-
-  /**Daikon command line for online mode.  Daikon not run in online mode if null **/
-  public String daikon_cmd_online = null;
-
-  /** Target program name **/
-  public String target_program = null;
-
-  /** Target program and target program args **/
-  public List<String> target_args = new ArrayList<String>();
-
-  /** Thread that copies output from target to our output **/
-  public StreamRedirectThread out_thread;
-
-  /** Thread that copies stderr from target to our stderr **/
-  public StreamRedirectThread err_thread;
-
-  /** starting time (msecs) **/
-  public static long start = System.currentTimeMillis();
-
-  /** daikon process for --daikon switch **/
-  public Process daikon_proc;
-
-  private static final String traceLimTermString = "DTRACELIMITTERMINATE";
-  private static final String traceLimString = "DTRACELIMIT";
-
-  /**socket port to communicate with Daikon**/
-  private int daikonPort = -1;
-
-  /** flag to use if we want to turn on the static initialization checks**/
-  public static final boolean checkStaticInit = true;
-
-  /**
-   * Percentage of dtrace program points to report.  Each is chosen
-   * randomly at runtime
-   **/
-  private static float recordPct = -1;
-
-  private static final boolean RemoteDebug = false;
-
-  /** Flag to initiate a purity analysis and use results to create add vars **/
-  private boolean purityAnalysis = false;
-
-  /**
-   * Flag to "watch" how we recurse on static types.  If true, don't
-   * recurse on the same static type.
-   */
-  private static boolean watchStatics = false;
+  @Option ("Path to the Chicory agent jar file")
+  public static File premain = null;
 
   /**
    * The name of the file to read for a list of pure methods.  Should
    * be 1 method per line.  Each method should be in the same format
    * as format ouput by the purity analysis.
    */
-  private String purityFileName;
+  @Option ("File of pure methods to use as additional Daikon variables")
+  public static File purity_file;
+
+  @Option ("Directory in which to find configuration files")
+  public static File config_dir = null;
+
+  @Option ("Run Daikon on the generated data trace file")
+  public static boolean daikon = false;
+
+  @Option ("Send trace information to Daikon over a socket")
+  public static boolean daikon_online = false;
 
   /**
-   * The path to the configurations files
+   * Specifies Daikon arguments to be used if Daikon is run on a generated
+   * trace file or online via a socket.  If neither --daikon or --daikon-online
+   * is chosen, this option will select --daikon
    */
-  private String configDir = null;
+  @Option ("Specify Daikon arguments for either --daikon or --daikon-online")
+  public static String daikon_args = "";
+
+  @Option ("Render linked lists as vectors")
+  public static boolean linked_lists = true;
+
+  @Option ("Number of calls after which sampling will begin")
+  public static int sample_start = 0;
+
+  /**
+   * Daikon port number.  Daikon writes this to stdout when it is started
+   * in online mode
+   */
+  private static int daikon_port = -1;
+
+  /** Thread that copies output from target to our output **/
+  public static StreamRedirectThread out_thread;
+
+  /** Thread that copies stderr from target to our stderr **/
+  public static StreamRedirectThread err_thread;
+
+  /** starting time (msecs) **/
+  public static long start = System.currentTimeMillis();
+
+  /** daikon process for --daikon switch **/
+  public static Process daikon_proc;
+
+  private static final String traceLimTermString = "DTRACELIMITTERMINATE";
+  private static final String traceLimString = "DTRACELIMIT";
+
+  /** flag to use if we want to turn on the static initialization checks**/
+  public static final boolean checkStaticInit = true;
+
+  private static final boolean RemoteDebug = false;
+
+  /** Flag to initiate a purity analysis and use results to create add vars **/
+  private static boolean purityAnalysis = false;
+
+  private static final SimpleLog basic = new SimpleLog (false);
+
+  /** Synopsis for the chicory command line **/
+  public static final String synopsis
+    = "daikon.Chicory [options] target [target-args]";
 
   /**
    * Entry point of Chicory <p>
@@ -130,47 +131,50 @@ public class Chicory {
    */
   public static void main(String[] args) {
 
-      parseAndLoadTarget(args);
-  }
+    // Parse our arguments
+    Options options = new Options (synopsis, Chicory.class);
+    options.ignore_options_after_arg (true);
+    String[] target_args = options.parse_and_usage (args);
+    boolean ok = check_args (options, target_args);
+    if (!ok)
+      System.exit (1);
 
-  public static void parseAndLoadTarget(String[] args)
-  {
-      Chicory chicory = new Chicory();
-      chicory.parse_args(args, false);
-      chicory.start_target();
-  }
+    // Turn on basic logging if the debug was selected
+    basic.enabled = debug;
+    basic.log ("target_args = %s%n", Arrays.toString (target_args));
 
-  /** debug print **/
-  public void log(String format, Object... args) {
-    if (!debug)
-      return;
-    System.out.printf(format, args);
-  }
+    // Start the target.  Pass the same options to the premain as
+    // were passed here.
 
-  /**
-   * Return true iff we should watch how static variable recursion
-   */
-  public static boolean shouldWatchStatics()
-  {
-      return watchStatics;
+    Chicory chicory = new Chicory();
+    chicory.start_target (options.get_options_str(), target_args);
   }
 
   /**
-   * Percentage of dtrace program points to report.  Each is chosen
-   * randomly at runtime.
-   * @return -1 if not using this feature (equivalent to 100%), the
-   * percentage otherwise.
-   *
+   * Check the resulting arguments for legality.  Prints a messagen and
+   * Returns false if there was an error
    */
-  public static float recordPct()
-  {
-      return recordPct;
+  public static boolean check_args (Options options, String[] target_args) {
+
+    // Make sure arguments have legal values
+    if (nesting_depth < 0) {
+      options.print_usage ("nesting depth (%d) must not be negative",
+                           nesting_depth);
+      return (false);
+    }
+    if (target_args.length == 0) {
+      options.print_usage ("target program must be specified");
+      return (false);
+    }
+
+    return (true);
+
   }
 
   /** Return true iff argument was given to run a purity analysis
    *  Only run after running parse_args
    */
-  public boolean doPurity()
+  public static boolean doPurity()
   {
       return purityAnalysis;
   }
@@ -178,301 +182,73 @@ public class Chicory {
   /**
    * Return true iff a file name was specified to supply pure method names
    */
-  public String getPurityFileName()
+  public static File get_purity_file()
   {
-      return purityFileName;
+      return purity_file;
   }
 
   /**
-   * Get config dir
-   */
-  public String getConfigDir()
-  {
-      return configDir;
-  }
-
-  /**
-   * Parse the command line arguments, setting fields accordingly.  If
-   * agent is true, only allows agent arguments
-   */
-  public void parse_args(String[] args, boolean agent) {
-
-
-    int inx;
-    for (inx = 0; inx < args.length; ++inx) {
-
-      String arg = args[inx];
-
-      if (arg.equals("--debug")) {
-        debug = true;
-        premain_args.add (arg);
-
-      } else if (arg.startsWith("--nesting-depth=")) {
-        String depthStr = arg.substring("--nesting-depth=".length());
-        try {
-          nesting_depth = Integer.parseInt(depthStr);
-        } catch (NumberFormatException e) {
-          usage("Invalid depth: " + depthStr);
-          System.exit(1);
-        }
-        if (nesting_depth <= 0) {
-          usage("Daikon depth " + depthStr + " must be positive");
-          System.exit(1);
-        }
-        premain_args.add(arg);
-
-      } else if (arg.startsWith("--daikon-port=")) {
-        String portStr = arg.substring("--daikon-port=".length());
-        try {
-          daikonPort  = Integer.parseInt(portStr);
-        } catch (NumberFormatException e) {
-          usage("Invalid port: " + portStr);
-          System.exit(1);
-        }
-
-      } else if (arg.equals("--linked-lists")) {
-        linked_lists = true;
-        premain_args.add(arg);
-
-      } else if (arg.equals("--no-linked-lists")) {
-        linked_lists = false;
-        premain_args.add(arg);
-
-      } else if (arg.startsWith("--ppt-omit-pattern=")) {
-        String omit = arg.substring("--ppt-omit-pattern=".length());
-        if (daikon_include_regex.size() > 0) {
-          usage("Cannot use both --ppt-select-pattern and --ppt-omit-pattern");
-          System.exit(1);
-        }
-        if (omit.length() == 0) {
-          usage("Empty omit string");
-          System.exit(1);
-        }
-
-        try
-        {
-            daikon_omit_regex.add(Pattern.compile(omit));
-        }
-        catch (PatternSyntaxException e)
-        {
-            System.out.println("WARNING: Error during regular expression "
-                               + "compilation: " + e.getMessage());
-        }
-
-        premain_args.add(arg);
-
-      } else if (arg.startsWith("--ppt-select-pattern=")) {
-        String include = arg.substring("--ppt-select-pattern=".length());
-        if (daikon_omit_regex.size() > 0) {
-          usage("Cannot use both --ppt-select-pattern and --ppt-omit-pattern");
-          System.exit(1);
-        }
-        if (include.length() == 0) {
-          usage("Empty select string");
-          System.exit(1);
-        }
-
-        try
-        {
-            daikon_include_regex.add(Pattern.compile(include));
-        }
-        catch (PatternSyntaxException e)
-        {
-            System.out.println("WARNING: Error during regular expression "
-                               + "compilation: " + e.getMessage());
-        }
-
-        premain_args.add(arg);
-
-      } else if (arg.startsWith ("--omit-var=")) {
-        omit_var = arg.substring ("--omit-var=".length());
-        premain_args.add (arg);
-      } else if (arg.startsWith("--dtrace-file=")) {
-        trace_file_name = arg.substring("--dtrace-file=".length());
-        if (trace_file_name.length() == 0) {
-          usage("invalid trace file name: " + trace_file_name);
-          System.exit(1);
-        }
-        premain_args.add(arg);
-
-      } else if (arg.startsWith("--comp_file=")) {
-        comparability_filename
-          = new File (arg.substring ("--comp_file=".length()));
-        premain_args.add (arg);
-      } else if (arg.startsWith("--premain=")) {
-        String premain_name = arg.substring("--premain=".length());
-        premain_path = new File(premain_name);
-        if (!premain_path.canRead()) {
-          usage("premain is not readable: " + premain_path);
-          System.exit(1);
-        }
-
-      } else if (arg.startsWith("--output-dir=")) {
-        String dir_name = arg.substring("--output-dir=".length());
-        output_dir = new File(dir_name);
-        if (!output_dir.canWrite())
-          usage("output directory not writable: " + output_dir);
-        premain_args.add(arg);
-
-      } else if (arg.startsWith ("--heap-size=")) {
-        heap_size = arg.substring ("--heap-size=".length());
-      } else if (arg.equals("--help")) {
-        usage();
-        System.exit(0);
-
-      } else if (arg.equals("--daikon")) {
-        daikon_cmd = "daikon.Daikon";
-
-      } else if (arg.startsWith ("--daikon=")) {
-          daikon_cmd = "daikon.Daikon " + arg.substring ("--daikon=".length());
-
-      } else if (arg.equals("--daikon-online")) {
-        daikon_cmd_online = "daikon.Daikon +";
-
-      } else if (arg.startsWith ("--daikon-online=")) {
-        daikon_cmd_online = "daikon.Daikon "
-          + arg.substring ("--daikon-online=".length()) + " +";
-
-      } else if (arg.startsWith("--config-dir=")) {
-        premain_args.add(arg);
-        configDir = arg.substring("--configs=".length());
-      }
-      else if (arg.equals("--purity-analysis"))
-      {
-          premain_args.add(arg);
-          purityAnalysis = true;
-      }
-      else if (arg.startsWith("--trace-percent="))
-      {
-          String pctStr = arg.substring("--trace-percent=".length());
-          try
-          {
-              recordPct = Float.parseFloat(pctStr);
-          }
-          catch (NumberFormatException e)
-          {
-              usage("Invalid percent: " + pctStr);
-              System.exit(1);
-          }
-          if (recordPct <= 0 || recordPct >= 100)
-          {
-              usage("Percent string " + pctStr
-                    + " should be between 0 and 100 (exclusive)");
-              System.exit(1);
-          }
-          premain_args.add(arg);
-
-      }
-      else if (arg.startsWith("--purity-file="))
-      {
-          premain_args.add(arg);
-          purityFileName = arg.substring("--purity-file=".length());
-      }
-      else if (arg.equals("--verbose")) {
-        verbose = true;
-        premain_args.add(arg);
-
-      } else if (arg.equals("--no-verbose")) {
-        verbose = false;
-        premain_args.add(arg);
-
-      }
-      else if (arg.startsWith("--std-visibility"))
-      {
-          stdVisibility = true;
-          DaikonVariableInfo.stdVisibility = true;
-
-          premain_args.add(arg);
-      }
-      else if (arg.startsWith("--target-program="))
-      {
-          target_program = arg.substring ("--target-program=".length());
-      }
-      else if (arg.startsWith("-")) {
-        usage("Unexpected argument: " + arg);
-        System.exit(1);
-
-      }
-      else { // must be the start of the target program arguments
-
-          target_program = arg;
-          premain_args.add("--target-program=" + target_program);
-
-        for (; inx < args.length; inx++)
-          target_args.add(args[inx]);
-      }
-    }
-
-    // Make sure a target program was specified
-    if (!agent && target_args.size() == 0) {
-      usage("Error: No target program specified");
-      System.exit(1);
-    }
-
-    // Default the trace file name to the <target-program-name>.dtrace.gz
-    if (trace_file_name == null) {
-      String target_class = target_program.replaceFirst (".*[/.]", "");
-      trace_file_name = String.format ("%s.dtrace.gz", target_class);
-      premain_args.add ("--dtrace-file=" + trace_file_name);
-    }
-
-  }
-
-  /*
    * Starts the target program with the java agent setup to do the
    * transforms.  All java agent arguments are passed to it.  Our
    * classpath is passed to the new jvm
    */
-  void start_target() {
+  void start_target (String premain_args, String[] target_args) {
+
+    // Default the trace file name to the <target-program-name>.dtrace.gz
+    if (dtrace_file == null) {
+      String target_class = target_args[0].replaceFirst (".*[/.]", "");
+      dtrace_file = new File (String.format ("%s.dtrace.gz", target_class));
+      premain_args += " --dtrace-file=" + dtrace_file;
+    }
 
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
-    log("classpath = '%s'\n", cp);
+    basic.log("classpath = '%s'\n", cp);
     if (cp == null)
       cp = ".";
 
     // The the separator for items in the class path
     String separator = System.getProperty("path.separator");
-    log("separator = %s\n", separator);
+    basic.log("separator = %s\n", separator);
     if (separator == null)
       separator = ";"; //should work for windows at least...
 
     // Look for ChicoryPremain.jar along the classpath
-    if (premain_path == null)
+    if (premain == null)
       {
         String[] cpath = cp.split(separator);
         for (String path : cpath)
           {
             File poss_premain = new File(path, "ChicoryPremain.jar");
             if (poss_premain.canRead())
-              premain_path = poss_premain;
+              premain = poss_premain;
           }
       }
 
     // If not on the classpath look in $(DAIKONDIR)/java
-    if (premain_path == null) {
+    if (premain == null) {
       String daikon_dir = System.getenv ("DAIKONDIR");
       if (daikon_dir != null) {
         String file_separator = System.getProperty ("file.separator");
         File poss_premain = new File (daikon_dir + file_separator + "java",
                                       "ChicoryPremain.jar");
         if (poss_premain.canRead())
-          premain_path = poss_premain;
+          premain = poss_premain;
       }
     }
 
     // If not found, try the daikon.jar file itself
-    if (premain_path == null) {
+    if (premain == null) {
       for (String path : cp.split(separator)) {
         File poss_premain = new File(path);
         if (poss_premain.getName().equals ("daikon.jar"))
           if (poss_premain.canRead())
-            premain_path = poss_premain;
+            premain = poss_premain;
         }
     }
 
     // If we didn't find a premain, give up
-    if (premain_path == null) {
+    if (premain == null) {
       System.err.printf ("Can't find ChicoryPremain.jar on the classpath\n");
       System.err.printf ("or in $DAIKONDIR/java\n");
       System.err.printf ("It should be find in directory where Daikon was "
@@ -488,16 +264,18 @@ public class Chicory {
 
     //run Daikon if we're in online mode
     StreamRedirectThread daikon_err = null, daikon_out = null;
-    if (daikon_cmd_online != null)
+    if (daikon_online)
     {
-        runDaikon(true);
+        runDaikon();
 
-        daikon_err = new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
+        daikon_err = new StreamRedirectThread("stderr",
+                                  daikon_proc.getErrorStream(), System.err);
         daikon_err.start();
 
         InputStream daikonStdOut = daikon_proc.getInputStream();
         // daikonReader escapes, so it is not closed in this method.
-        BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut));
+        BufferedReader daikonReader
+          = new BufferedReader(new InputStreamReader(daikonStdOut));
 
         //online mode code
         for (int i = 0; i < 100; i++)
@@ -523,9 +301,10 @@ public class Chicory {
 
                 if (line.startsWith("DaikonChicoryOnlinePort="))
                 {
-                    String portStr = line.substring("DaikonChicoryOnlinePort=".length());
-                    //System.out.println("GOT PORT STRING " + portStr);
-                    premain_args.add("--daikon-port=" + portStr);
+                    String portStr
+                      = line.substring("DaikonChicoryOnlinePort=".length());
+                    daikon_port = Integer.decode (portStr);
+                    System.out.println("GOT PORT STRING " + daikon_port);
                     break;
                 }
             }
@@ -559,21 +338,13 @@ public class Chicory {
     if (terminate != null)
         cmdlist.add("-D" + traceLimTermString + "=" + terminate );
 
-    Properties props = System.getProperties();
-    for (Object key: props.keySet())
-    {
-        Object value = props.get(key);
-
-        assert value instanceof String: "All properties should be strings";
-
-        if (((String)key).contains("harpoon"))
-            cmdlist.add("-D" + key + "=" + value);
+    // Specify the port to use to talk to Daikon if in online mode
+    if (daikon_online) {
+      assert daikon_port != -1 : daikon_port;
+      premain_args += " --daikon-port " + daikon_port;
     }
 
-
-    cmdlist.add (String.format("-javaagent:%s=%s", premain_path,
-                               args_to_string(premain_args)));
-
+    cmdlist.add (String.format("-javaagent:%s=%s", premain, premain_args));
 
     for (String target_arg : target_args)
       cmdlist.add (target_arg);
@@ -596,21 +367,18 @@ public class Chicory {
     }
     int result = redirect_wait (chicory_proc);
 
-    if (daikon_cmd != null)
-    {
-    // Terminate if target didn't end properly
-    if (result != 0) {
-      System.out.printf ("Warning: Target exited with %d status\n", result);
-      System.out.printf ("Daikon not run\n");
-      System.exit (result);
-    }
+    if (daikon) {
+      // Terminate if target didn't end properly
+      if (result != 0) {
+        System.out.printf ("Warning: Target exited with %d status\n", result);
+        System.out.printf ("Daikon not run\n");
+        System.exit (result);
+      }
 
-    runDaikon(false);
-    result = waitForDaikon();
-    System.exit(result);
-    }
-    else if (daikon_cmd_online != null)
-    {
+      runDaikon();
+      result = waitForDaikon();
+      System.exit(result);
+    } else if (daikon_online) {
         // Wait for the process to terminate and return the results
         result = -1;
         while (true) {
@@ -644,27 +412,26 @@ public class Chicory {
   }
 
 
-  public void runDaikon(boolean isOnline)
-  {
-      java.lang.Runtime rt = java.lang.Runtime.getRuntime();
+  /**
+   * Runs daikon either online or on the generated trace file.
+   */
+  public void runDaikon() {
 
-      // Get the current classpath
-      String cp = System.getProperty("java.class.path");
-      if (cp == null)
-        cp = ".";
+    java.lang.Runtime rt = java.lang.Runtime.getRuntime();
 
-      String cmdstr;
-        if (isOnline)
-        {
-            cmdstr = String.format("java -Xmx500m -cp %s -ea %s", cp, daikon_cmd_online);
-        }
-        else
-        {
-            cmdstr = String.format("java -Xmx500m -cp %s -ea %s %s/%s", cp, daikon_cmd, output_dir, trace_file_name);
-        }
+    // Get the current classpath
+    String cp = System.getProperty("java.class.path");
+    if (cp == null)
+      cp = ".";
 
-    //cmdstr = "java -Xmx500m -cp " + cp + " -ea " + daikon_cmd + " " + output_dir+"/"+trace_file_name;
-
+    String cmdstr;
+    if (daikon_online) {
+      cmdstr = String.format("java -Xmx500m -cp %s -ea daikon.Daikon %s +",
+                               cp, daikon_args);
+    } else {
+      cmdstr = String.format("java -Xmx500m -cp %s -ea daikon.Daikon "
+                       + "%s %s/%s", cp, daikon_args, output_dir, dtrace_file);
+    }
 
     //System.out.println("daikon command is " + daikon_cmd);
     //System.out.println("daikon command cmdstr " + cmdstr);
@@ -681,12 +448,11 @@ public class Chicory {
     }
   }
 
-  private int waitForDaikon()
-  {
+  /** Wait for daikon to complete and return its exit status **/
+  private int waitForDaikon() {
     int result = redirect_wait (daikon_proc);
     return result;
   }
-
 
   /** Wait for stream redirect threads to complete **/
   public int redirect_wait (Process p) {
@@ -749,42 +515,6 @@ public class Chicory {
       return outFile;
   }
 
-  void usage()
-  {
-      usage(null);
-  }
-
-  /**
-   * Print command line usage help
-   */
-  void usage(String msg)
-  {
-      if (msg != null)
-          System.err.println(msg);
-
-      System.err.println("Usage: java daikon.Chicory <options> <class> <args>");
-      System.err.println("<options> are:");
-      //System.err.println("  -all                             Include system classes in output");
-      System.err.println("  --nesting-depth=<integer>          Specify Daikon depth (default 2)");
-      System.err.println("  --debug");
-      System.err.println("  --linked-lists                     Instrument implicit linked lists as vectors (default)");
-      System.err.println("  --no-linked-lists                  Don't instrument implicit linked lists as vectors");
-      System.err.println("  --ppt-omit-pattern=<regex>         Specifies an include-only class for instrumentation.  Cannot be used with ppt-select-pattern");
-      System.err.println("  --ppt-select-pattern=<regex>       Specifies an include-only class for instrumentation.  Cannot be used with ppt-omit-pattern");
-      System.err.println("  --dtrace-file=<file>               Write the dtrace file to this filename.  Usually ends with .dtrace");
-      System.err.println("  --output-dir=<directory>           Write the dtrace files to this directory (default is current directory)");
-      System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args");
-      System.err.println("  --daikon-online[=<daikon-args>]    Run daikon with no additional args in online mode via socket communication");
-      System.err.println("  --configs=<directory>              Look for configuration files (such as *.pure files) in this location");
-      System.err.println("  --purity-file=<file>               Read pure methods from this file.  Will look in current directory if --configs=<directory> not given");
-      System.err.println("  --std-vis                          Only look at visible fields (example: ignore private field in another class)");
-      System.err.println("  --trace-percent=<integer>          Print this percentage of records (default 100)");
-      System.err.println("  --heap_size=<heapsize>             Use the specified heap size for the target program");
-      System.err.println("  --help                             Print this help message");
-      System.err.println("<class> is the program to trace.  Must exist in the classpath given");
-      System.err.println("<args> are the arguments to <class>");
-  }
-
   /** Returns elapsed time as a String since the start of the program **/
   public static String elapsed()
   {
@@ -810,14 +540,6 @@ public class Chicory {
   {
       //TODO deal with quotation marks...
       return arg.split(" ");
-  }
-
-  /**
-  * @return The local socket port on which Daikon is listening
-  */
-  public int getDaikonPort()
-  {
-    return daikonPort;
   }
 
 }
