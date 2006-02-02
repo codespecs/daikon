@@ -11,3 +11,5 @@ papers
 daikon.speccov
 daikon.ver3.tar.gz
 tests.speccov
+rt
+dcomp-rt
