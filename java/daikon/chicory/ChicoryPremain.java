@@ -70,12 +70,12 @@ public class ChicoryPremain {
     Runtime.ppt_select_pattern  = Chicory.ppt_select_pattern;
     Runtime.sample_start        = Chicory.sample_start;
     DaikonVariableInfo.std_visibility = Chicory.std_visibility;
-    if (Chicory.comparability != null) {
+    if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
-      Runtime.comp_info.read (Chicory.comparability);
+      Runtime.comp_info.read (Chicory.comparability_file);
       if (debug) {
         System.out.printf ("Read comparability from %s%n",
-                           Chicory.comparability);
+                           Chicory.comparability_file);
         // Runtime.comp_info.dump();
       }
     }

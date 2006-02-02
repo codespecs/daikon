@@ -37,7 +37,7 @@ public class Chicory {
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
   @Option ("Decl formatted file containing comparabiity information")
-  public static File comparability = null;
+  public static File comparability_file = null;
 
   @Option ("Print progress information")
   public static boolean verbose = true;

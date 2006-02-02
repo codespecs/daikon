@@ -26,10 +26,12 @@ public class Runtime
      * each enter/exit and the decl information for any new classes are
      * printed out and the class is then removed from the list.
      */
-    public static final List<ClassInfo> new_classes = new LinkedList<ClassInfo>();
+    public static final List<ClassInfo> new_classes
+      = new LinkedList<ClassInfo>();
 
     /** List of all instrumented classes **/
-    public static final List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+    public static final List<ClassInfo> all_classes
+      = new ArrayList<ClassInfo>();
 
     /** flag that indicates when the first class has been processed**/
     static boolean first_class = true;
