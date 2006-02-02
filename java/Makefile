@@ -321,12 +321,11 @@ compile_daikon : $(AUTO_GENERATED_FILES)
 #
 # Chicory java front end for Daikon
 #
-CHICORY_JAVA_FILES := daikon/Chicory.java \
-					  $(shell find daikon/chicory -name '*.java')
-CHICORY_CLASS_FILES := $(patsubst %.java,%.class,$(CHICORY_JAVA_FILES))
+CHICORY_JAVA_FILES := daikon/Chicory.java daikon/chicory/*.java utilMDE/*.java
 
 chicory : ChicoryPremain.jar
-ChicoryPremain.jar : $(CHICORY_JAVA_FILES)
+ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
+					 daikon/chicory/manifest.txt
 	$(JAVAC_COMMAND) $(CHICORY_JAVA_FILES)
 	$(JAR) cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
 	  daikon/chicory/ChicoryPremain.class
@@ -343,6 +342,7 @@ DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JDKDIR)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
+JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 
 # Build DynComp/Java and run a sanity test
 dyncomp dcomp : dcomp_premain.jar dcomp-test
