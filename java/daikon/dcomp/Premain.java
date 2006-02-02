@@ -81,16 +81,19 @@ public class Premain {
     debug_orig_dir.mkdirs();
 
     // Read in the list of pre-instrumented classes
-    InputStream strm
-      = Premain.class.getResourceAsStream ("jdk_classes.txt");
-    assert strm != null : "cant find jdk_classes.txt";
-    BufferedReader reader = new BufferedReader (new InputStreamReader (strm));
-    while (true) {
-      String line = reader.readLine();
-      if (line == null)
-        break;
-      // System.out.printf ("adding '%s'%n", line);
-      pre_instrumented.add (line);
+    if (!no_jdk) {
+      InputStream strm
+        = Premain.class.getResourceAsStream ("jdk_classes.txt");
+      assert strm != null : "cant find jdk_classes.txt";
+      BufferedReader reader
+        = new BufferedReader (new InputStreamReader (strm));
+      while (true) {
+        String line = reader.readLine();
+        if (line == null)
+          break;
+        // System.out.printf ("adding '%s'%n", line);
+        pre_instrumented.add (line);
+      }
     }
 
     // Find out what classes are already loaded
@@ -128,7 +131,7 @@ public class Premain {
       if ((className.startsWith ("java/") || className.startsWith ("com/")
            || className.startsWith ("sun/"))
           && !className.startsWith ("com/sun/tools/javac")) {
-        if (pre_instrumented.contains (className))
+        if (no_jdk || pre_instrumented.contains (className))
           return (null);
         if (verbose)
           System.out.printf ("Instrumenting JDK class %s%n", className);
