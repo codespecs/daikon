@@ -3127,6 +3127,11 @@ is @code{null} on a particular execution of a program point, then
 parameter.  That variable appears in the @file{.dtrace} file, but its
 value is marked as nonsensical.
 
+@item --omit-var=@var{regex}
+@cindex variables, omit
+Do not include variables whose name matches the regular expression.  Variables
+will be omitted from each program point in which they appear.
+
 @item --std-visibility
 @cindex private variables
 @cindex variables, private
@@ -3225,13 +3230,12 @@ Print a help message.
 @item --debug
 Produce debugging information.
 
-@item --trace-percent=@var{percent}
-If this switch is on, then Chicory only produces output for the
-specified percentage of all program point executions.  For each method,
-output is produced for the given fraction of its executions.  The
-randomization is applied only to entry program points; an exit program
-point is included if and only if its corresponding entry program point
-is included.  
+@item --sample-start=@var{sample-cnt}
+When this option is chosen, Chicory will record each program point until
+that program point has been executed @var{sample-cnt} times.  Chicory will
+then begin sampling.  Sampling starts at 10% and decreases by a factor
+of 10 each time another sample-cnt samples have been recorded.  If 
+sample_start is 0, then all calls will be recorded.
 
 @item --dtrace-file=@var{filename}
 @cindex DTRACEFILE environment variable
@@ -3254,6 +3258,13 @@ to.  In some cases you may find a single large data trace file more
 convenient; in other cases, a collection of smaller data trace files may
 give you more control over which subsets of runs to invoke Daikon on.
 
+@item --comparability-file=@var{filename}
+This option specifies a declaration file (see @ref{Declarations}) 
+that contains comparability information.  This information will be 
+incorporated in the output of Chicory.  Any variables not included in
+the comparability file will have their comparability set so that they
+are comparable to all other variables of the same type.
+
 @item --output-dir=@var{directory}
 Write the @file{.dtrace} trace output file to the specified directory.
 The default is the current directory.
@@ -3263,9 +3274,9 @@ Chicory will use this location to search for configuration files.
 Currently, this only includes @file{*.pure} files.
 
 @item --daikon
-@itemx --daikon=@var{args}
-After creating a data trace (@file{.dtrace}) file, run Daikon on it,
-passing the specified arguments, if any, to Daikon.  Also see the
+After creating a data trace (@file{.dtrace}) file, run Daikon on it.
+To specify arguments to Daikon use the @option{--daikon-args} option.
+Also see the
 @option{--daikon-online} option.
 
 This option supplies Daikon with a single trace from one execution of
@@ -3274,7 +3285,6 @@ your program.  By contrast to this option (and
 you can supply Daikon with as many trace files as you wish.
 
 @item --daikon-online
-@itemx --daikon-online=@var{args}
 This option is like @option{--daikon}, except that no @file{.dtrace}
 data trace file is produced.  Instead, Chicory sends trace information
 over a socket to Daikon, which processes the information incrementally
@@ -3282,6 +3292,10 @@ over a socket to Daikon, which processes the information incrementally
 
 Just like with the @option{--daikon} option, Daikon is only given a
 single trace from one execution of your program.
+
+@item --daikon-args=@var{arguments}
+Specifies arguments to be passed to Daikon if the --daikon or --daikon-online
+options are used.
 
 @item --premain=@var{path}
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
