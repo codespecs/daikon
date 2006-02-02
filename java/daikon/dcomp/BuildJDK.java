@@ -81,6 +81,8 @@ public class BuildJDK {
 
   private int _numFilesProcessed = 0;
 
+  private static String static_map_fname = "dcomp_jdk_static_map";
+
   /**
    * BuildJDK <jarfile> <dest> <prefix>
    *
@@ -92,25 +94,70 @@ public class BuildJDK {
    * Instruments each class file in jarfile that begins with prefix
    * and puts the results in dest.
    */
-  public static void main(String[] args) throws java.io.IOException {
+  public static void main(String[] args) throws IOException {
 
-
-    assert (args.length == 2 || args.length == 3)
-      : "2 args req: jarfile dest-dir [class-prefix]";
-
-    final String potential_jar_file_name = args[0];
-    String dest_dir = args[1];
-    String prefix = args.length == 3 ? args[2] : "";
-
-    BuildJDK build = new BuildJDK();
     System.out.println("Starting at " + new Date());
-    JarFile jfile = getJarFile(potential_jar_file_name);
 
-    build.translate_classes(jfile, dest_dir, prefix, "");
+    if (args[0].equals ("-classfiles")) {
 
-    // Create the various helper classes
-    // build.dump_helper_classes(dest_dir);
+      // Arguments are -classfiles <srcdir> <destdir> <classfiles>...
+      File src_dir = new File(args[1]);
+      File dest_dir = new File(args[2]);
+      File[] class_files = new File[args.length-3];
+      for (int ii = 3; ii < args.length; ii++) {
+        class_files[ii-3] = new File(args[ii]);
+      }
 
+      BuildJDK build = new BuildJDK();
+
+      // Restore the static map from field names to ids
+      DCInstrument.restore_static_map (new File (dest_dir, static_map_fname));
+      System.out.printf ("Restored %d entries in static map%n",
+                         DCInstrument.static_map.size());
+
+      // Read in each specified classfile
+      Map<String, JavaClass> classmap = new LinkedHashMap<String, JavaClass>();
+      for (File class_file : class_files) {
+        if (class_file.toString().endsWith ("java/lang/Object.class")) {
+          System.out.printf ("Skipping %s%n", class_file);
+          continue;
+        }
+        ClassParser parser = new ClassParser (class_file.toString());
+        JavaClass jc = parser.parse();
+        classmap.put (jc.getClassName(), jc);
+      }
+
+      // Process each classfile
+      for (String classname : classmap.keySet()) {
+        JavaClass jc = classmap.get (classname);
+        try {
+          build.processClassFile(classmap, dest_dir, classname);
+        } catch (Throwable e) {
+          throw new Error ("Couldn't instrument " + classname, e);
+        }
+      }
+
+    } else { // translate from jar file
+
+      assert (args.length == 2 || args.length == 3)
+        : "2 args req: jarfile dest-dir [class-prefix]";
+
+      final String potential_jar_file_name = args[0];
+      String dest_dir = args[1];
+      String prefix = args.length == 3 ? args[2] : "";
+
+      BuildJDK build = new BuildJDK();
+      JarFile jfile = getJarFile(potential_jar_file_name);
+
+      build.translate_classes(jfile, dest_dir, prefix, "");
+
+      // Create the various helper classes
+      // build.dump_helper_classes(dest_dir);
+
+      // Write out the static map
+      System.out.printf ("Found %d statics%n", DCInstrument.static_map.size());
+      DCInstrument.save_static_map (new File (dest_dir, static_map_fname));
+    }
     System.out.println("done at " + new Date());
   }
 
@@ -159,16 +206,23 @@ public class BuildJDK {
       Enumeration<JarEntry> entries = jfile.entries();
       while (entries.hasMoreElements()) {
         JarEntry entry = entries.nextElement();
+        System.out.printf ("processing entry %s%n", entry);
         final String entryName = entry.getName();
         if (!entryName.startsWith(prefixOfFilesToInclude)
             && !entryName.startsWith("META-INF"))
           continue;
         if (entryName.endsWith("/"))
           continue;
+        if (entryName.endsWith("~"))
+          continue;
         if (!entryName.endsWith(".class")
             || (skip_object && entryName.equals("java/lang/Object.class"))
             || (!prefix.equals ("") && !entryName.startsWith (prefix))) {
           File destfile = new File(entryName);
+          if (destfile.getParent() == null) {
+            System.out.printf ("Skipping file %s%n", destfile);
+            continue;
+          }
           File dir = new File(dfile, destfile.getParent());
           dir.mkdirs();
           File destpath = new File(dir, destfile.getName());
@@ -222,9 +276,6 @@ public class BuildJDK {
         | Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT, new String[0]);
       dcomp_marker.getJavaClass().dump (new File(dest, "java"
          + File.separator + "lang" + File.separator + "DCompMarker.class"));
-
-      // Write out how many statics we found
-      System.out.printf ("Found %d statics%n", DCInstrument.static_map.size());
 
     } catch (Exception e) {
       throw new Error(e);
