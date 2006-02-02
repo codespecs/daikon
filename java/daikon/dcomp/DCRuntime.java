@@ -1,10 +1,12 @@
 package daikon.dcomp;
 
 import java.util.*;
+import java.util.regex.*;
 import java.lang.reflect.*;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 
 import daikon.chicory.*;
+import daikon.VarInfoName;
 import utilMDE.WeakIdentityHashMap;
 import utilMDE.SimpleLog;
 import utilMDE.ArraysMDE;
@@ -63,6 +65,8 @@ public final class DCRuntime {
   public static final SimpleLog debug_primitive = new SimpleLog (false);
   public static final SimpleLog debug_merge_comp = new SimpleLog (false);
   public static final SimpleLog debug_timing = new SimpleLog (false);
+  public static final SimpleLog debug_decl_print = new SimpleLog (false);
+  public static final SimpleLog time_decl = new SimpleLog (false);
 
   /** Simplifies printouts for debugging if we ignore toString **/
   private static boolean ignore_toString = true;
@@ -127,7 +131,8 @@ public final class DCRuntime {
                          obj_str(obj2));
 
     // Note that obj1 and obj2 are comparable
-    TagEntry.union (obj1, obj2);
+    if ((obj1 != null) && (obj2 != null))
+      TagEntry.union (obj1, obj2);
 
     return (obj1 == obj2);
   }
@@ -143,7 +148,8 @@ public final class DCRuntime {
       System.out.printf ("comparing (ne) '%s' and '%s'%n", obj_str(obj1),
                          obj_str(obj2));
     // Note that obj1 and obj2 are comparable
-    TagEntry.union (obj1, obj2);
+    if ((obj1 != null) && (obj2 != null))
+      TagEntry.union (obj1, obj2);
 
     return (obj1 != obj2);
   }
@@ -244,7 +250,8 @@ public final class DCRuntime {
   /** Pushes the tag at tag_frame[index] on the tag stack */
   public static void push_local_tag (Object[] tag_frame, int index) {
 
-    debug_primitive.log ("push_local_tag[%d] %s%n", index, tag_frame[index]);
+    if (debug_primitive.enabled())
+      debug_primitive.log ("push_local_tag[%d] %s%n", index, tag_frame[index]);
     assert tag_frame[index] != null : "index " + index;
     tag_stack.push (tag_frame[index]);
   }
@@ -255,7 +262,8 @@ public final class DCRuntime {
     check_method_marker();
     tag_frame[index] = tag_stack.pop();
     assert tag_frame[index] != null : "index " + index;
-    debug_primitive.log ("pop_local_tag[%d] %s%n", index, tag_frame[index]);
+    if (debug_primitive.enabled())
+      debug_primitive.log ("pop_local_tag[%d] %s%n", index, tag_frame[index]);
 
   }
 
@@ -489,21 +497,21 @@ public final class DCRuntime {
     }
 
     MethodInfo mi = methods.get (mi_index);
+    mi.call_cnt++;
     ClassInfo ci = mi.class_info;
     if (ci.clazz == null) {
       ci.initViaReflection();
       all_classes.add (ci);
       daikon.chicory.Runtime.all_classes.add (ci);
       merge_dv.log ("initializing traversal for %s%n", ci);
-      ci.init_traversal(2);
+      ci.init_traversal(depth);
     }
     if (mi.traversalEnter == null) {
-      mi.init_traversal (2);
+      mi.init_traversal (depth);
     }
 
     // Merge comparability information for the Daikon variables
-    merge_dv.log ("processing method %s:::ENTER%n", mi);
-    merge_dv.indent();
+    merge_dv.indent ("processing method %s:::ENTER%n", mi);
     process_all_vars (mi, mi.traversalEnter, tag_frame, obj, args, null);
     merge_dv.exdent();
 
@@ -577,22 +585,25 @@ public final class DCRuntime {
 
     debug_timing.log ("process_all_vars for %s%n", mi);
 
-    merge_dv.log ("this: %s%n", obj);
-    merge_dv.log ("arguments: %s%n", ArraysMDE.toString(args));
+    if (merge_dv.enabled()) {
+      merge_dv.log ("this: %s%n", obj);
+      merge_dv.log ("arguments: %s%n", ArraysMDE.toString(args));
+    }
 
     // Map from an Object to the Daikon variable that currently holds
     // that object.
     IdentityHashMap<Object,DaikonVariableInfo> varmap
       = new IdentityHashMap<Object,DaikonVariableInfo>();
 
-    for (DaikonVariableInfo dv : root) {
+    for (DaikonVariableInfo dv : root.children) {
       if (dv instanceof ThisObjInfo) {
         merge_comparability (varmap, null, obj, dv);
       } else if (dv instanceof ParameterInfo) {
         ParameterInfo pi = (ParameterInfo) dv;
         Object p = args[pi.getArgNum()];
-        Class arg_type = mi.arg_types[pi.getArgNum()];
-        if (arg_type.isPrimitive())
+        // Class arg_type = mi.arg_types[pi.getArgNum()];
+        // if (arg_type.isPrimitive())
+        if (pi.isPrimitive())
           p = tag_frame[pi.get_param_offset() + ((obj == null) ? 0 : 1)];
         merge_comparability (varmap, null, p, pi);
       } else if (dv instanceof ReturnInfo) {
@@ -611,6 +622,35 @@ public final class DCRuntime {
   }
 
   /**
+   * Returns the tag for the specified field.  If that field is an array,
+   * a list of tags will be returned.
+   */
+  static Object get_field_tag (FieldInfo fi, Object parent, Object obj) {
+
+    // Initialize the code that gets the tag for various field types
+    if (fi.field_tag == null) {
+      if (fi.isStatic()) {
+        if (fi.isPrimitive()) {
+          fi.field_tag = new StaticPrimitiveTag (fi);
+        } else {
+          fi.field_tag = new StaticReferenceTag (fi);
+        }
+      } else { // not static
+        if (fi.isPrimitive() && fi.isArray()) {
+          fi.field_tag = new PrimitiveArrayTag (fi);
+        } else if (fi.isPrimitive()) {
+          fi.field_tag = new PrimitiveTag (fi);
+        } else {
+          fi.field_tag = new ReferenceTag (fi);
+        }
+      }
+    }
+
+    // get the tag
+    return fi.field_tag.get_tag (parent, obj);
+  }
+
+  /**
    * Gets the tag for the specified field.  The tags for primitive instance
    * fields are stored in the tag storage for the parent.  Tags for
    * primitive static fields are stored a single global list (statics_tags)
@@ -623,12 +663,12 @@ public final class DCRuntime {
    * @param parent Value of dv's parent
    * @param obj    Value of dv
    */
-  static Object get_field_tag (FieldInfo fi, Object parent, Object obj) {
+  static Object old_get_field_tag (FieldInfo fi, Object parent, Object obj) {
 
     Object tag = null;
 
     if (fi.isStatic()) {
-      if (fi.getType().isPrimitive()) {
+      if (fi.isPrimitive()) {
         Field field = fi.getField();
         Class clazz = field.getDeclaringClass();
         String name = DCInstrument.tag_method_name (DCInstrument.GET_TAG,
@@ -642,7 +682,6 @@ public final class DCRuntime {
         } catch (Exception e) {
           throw new Error ("can't execute tag method " + name , e);
         }
-        // tag = static_tags.get (static_map.get (fi.getName()));
       } else { // the tag is the object itself.  Get it via reflection
         Field field = fi.getField();
         if (is_class_init (field.getDeclaringClass())) {
@@ -670,8 +709,11 @@ public final class DCRuntime {
               //tag_field = fi.get_tag_field (tag_field_name,
               //                              parent_element.getClass());
             Object[] tags = field_map.get (parent_element);
-            assert tags != null : "array " + fi + " " + parent_element;
-            tag_list.add (tags[fi.get_field_num()]);
+            // assert tags != null : "array " + fi + " " + parent_element;
+            if (tags == null)
+              tag_list.add (nonsensical);
+            else
+              tag_list.add (tags[fi.get_field_num()]);
                           // get_object_field (tag_field, parent_element));
 
           }
@@ -867,7 +909,7 @@ public final class DCRuntime {
    * Dumps out comparability information for all classes that were
    * processed.
    */
-  public static void print_all_comparable(PrintStream ps) {
+  public static void print_all_comparable(PrintWriter ps) {
 
     for (ClassInfo ci : all_classes) {
       for (MethodInfo mi : ci.method_infos) {
@@ -879,7 +921,7 @@ public final class DCRuntime {
     }
   }
 
-  public static void print_decl_file (PrintStream ps) {
+  public static void print_decl_file (PrintWriter ps) {
 
     // Write the file header
     ps.printf ("// Declaration file written by daikon.dcomp%n%n");
@@ -889,12 +931,127 @@ public final class DCRuntime {
     for (ClassInfo ci : all_classes) {
       print_class_decl (ps, ci);
     }
+    debug_decl_print.log ("finished %d classes%n", all_classes.size());
+  }
+
+  static int class_cnt = 0;
+  static int method_cnt = 0;
+  static int instance_var_cnt = 0;
+  static int static_final_cnt = 0;
+  static int hashcode_var_cnt = 0;
+  static int hashcode_arr_cnt = 0;
+  static int primitive_var_cnt = 0;
+  static int tostring_cnt = 0;
+  static int class_var_cnt = 0;
+  static int this_instance_cnt = 0;
+  static int other_instance_cnt = 0;
+  static int other_cnt = 0;
+  static int parameter_cnt = 0;
+  static int static_cnt = 0;
+  static int synthetic_cnt = 0;
+  static int enum_cnt = 0;
+
+  /**
+   * prints statistics about the number of decls to stdout
+   */
+  public static void decl_stats () {
+
+
+    for (ClassInfo ci : all_classes) {
+      class_cnt++;
+      System.out.printf ("processing class %s%n", ci);
+      add_dv_stats (ci.traversalClass);
+      add_dv_stats (ci.traversalObject);
+      for (MethodInfo mi : ci.method_infos) {
+        if (mi.is_class_init())
+          continue;
+        method_cnt++;
+        System.out.printf ("  Processing method %s [%d calls]%n", mi,
+                           mi.call_cnt);
+        if (mi.traversalEnter == null) {
+          System.out.printf ("  Skipping method %s%n", mi);
+          continue;
+        }
+        System.out.printf ("    Enter%n");
+        add_dv_stats (mi.traversalEnter);
+        for (Integer ii : mi.exit_locations) {
+          System.out.printf ("    Exit%d%n", ii);
+          add_dv_stats (mi.traversalExit);
+        }
+      }
+    }
+
+    System.out.printf ("Classes             = %,d%n", class_cnt);
+    System.out.printf ("Methods             = %,d%n", method_cnt);
+    System.out.printf ("------------------------------%n");
+    System.out.printf ("Hashcodes           = %,d%n", hashcode_var_cnt);
+    System.out.printf ("Hashcode arrays     = %,d%n", hashcode_arr_cnt);
+    System.out.printf ("primitives          = %,d%n", primitive_var_cnt);
+    System.out.printf ("------------------------------%n");
+    System.out.printf ("tostring vars       = %,d%n", tostring_cnt);
+    System.out.printf ("class vars          = %,d%n", class_var_cnt);
+    System.out.printf ("Enums               = %,d%n", enum_cnt);
+    System.out.printf ("Synthetic           = %,d%n", synthetic_cnt);
+    System.out.printf ("static final vars   = %,d%n", static_final_cnt);
+    System.out.printf ("static vars         = %,d%n", static_cnt);
+    System.out.printf ("this instance vars  = %,d%n", this_instance_cnt);
+    System.out.printf ("other instance vars = %,d%n", other_instance_cnt);
+    System.out.printf ("Parameters          = %,d%n", parameter_cnt);
+    System.out.printf ("Others              = %,d%n", other_cnt);
+  }
+
+  private static void add_dv_stats (RootInfo root) {
+
+    if (root == null)
+      return;
+    List<DaikonVariableInfo> dv_list = root.tree_as_list();
+    for (DaikonVariableInfo dv : dv_list) {
+      if (dv instanceof RootInfo)
+        continue;
+      // System.out.printf ("      processing dv %s [%s]%n", dv,
+      //                    dv.getTypeName());
+      if (dv.isHashcode())
+        hashcode_var_cnt++;
+      else if (dv.isHashcodeArray())
+        hashcode_arr_cnt++;
+      else
+        primitive_var_cnt++;
+      if (dv.getName().contains (".toString"))
+        tostring_cnt++;
+      else if (dv.getName().contains (VarInfoName.getClassSuffix))
+        class_var_cnt++;
+      else if (dv instanceof FieldInfo) {
+        Field field = ((FieldInfo)dv).getField();
+        int modifiers = field.getModifiers();
+        if (field.isEnumConstant())
+          enum_cnt++;
+        else if (field.isSynthetic())
+          synthetic_cnt++;
+        else if (Modifier.isStatic (modifiers)
+                 && Modifier.isFinal(modifiers))
+          static_final_cnt++;
+        else if (Modifier.isStatic (modifiers))
+          static_cnt++;
+        else if (dv.getName().startsWith ("this"))
+          this_instance_cnt++;
+        else
+          other_instance_cnt++;
+      } else if (dv instanceof ParameterInfo)
+        parameter_cnt++;
+      else
+        other_cnt++;
+    }
   }
 
   /**
    * Calculates and prints the declarations for the specified class
    */
-  public static void print_class_decl (PrintStream ps, ClassInfo ci) {
+  public static void print_class_decl (PrintWriter ps, ClassInfo ci) {
+
+    Stopwatch watch = null;
+
+    time_decl.start_time();
+    time_decl.indent ("Printing decl file for class %s%n", ci.class_name);
 
     // Make sure that two variables have the same comparability at all
     // program points
@@ -906,6 +1063,7 @@ public final class DCRuntime {
     print_decl_vars (ps, get_comparable (ci.traversalClass),
                      ci.traversalClass);
     ps.printf ("%n");
+    time_decl.log_time ("printed class ppt");
 
     // Write the object ppt
     ps.printf ("DECLARE%n");
@@ -913,43 +1071,72 @@ public final class DCRuntime {
     print_decl_vars (ps, get_comparable (ci.traversalObject),
                      ci.traversalObject);
     ps.printf ("%n");
+    time_decl.log_time ("printed object ppt");
 
     // Print the information for each enter/exit point
     for (MethodInfo mi : ci.method_infos) {
       if (mi.is_class_init())
         continue;
+      debug_decl_print.log ("  method %s%n", mi.method_name);
       ps.printf ("%n");
       print_decl (ps, mi);
     }
+
+    time_decl.exdent_time ("finished class %s%n", ci.class_name);
   }
+
+  static long comp_list_ms = 0;
+  static long ppt_name_ms = 0;
+  static long decl_vars_ms = 0;
+  static long total_ms = 0;
+  // static Stopwatch watch = new Stopwatch();
 
   /**
    * Prints a decl ENTER/EXIT records with comparability.  Returns the
    * list of comparabile DVSets for the exit.
    */
-  public static List<DVSet> print_decl (PrintStream ps, MethodInfo mi) {
+  public static List<DVSet> print_decl (PrintWriter ps, MethodInfo mi) {
 
+    // long start = System.currentTimeMillis();
+    // watch.reset();
+
+    time_decl.start_time();
+    time_decl.indent ("Print decls for method '%s'", mi.method_name);
     List<DVSet> l = get_comparable (mi.traversalEnter);
+    // comp_list_ms += watch.snapshot(); watch.reset();
     if (l == null)
       return (null);
+    time_decl.log_time ("got %d comparable sets", l.size());
 
     // Print the enter point
-    ps.printf ("DECLARE%n");
-    ps.printf ("%s%n", clean_decl_name (DaikonWriter.methodEntryName
-                                        (mi.member)));
+    ps.println ("DECLARE");
+    ps.println (clean_decl_name (DaikonWriter.methodEntryName (mi.member)));
+    // ppt_name_ms += watch.snapshot();  watch.reset();
     print_decl_vars (ps, l, mi.traversalEnter);
-    ps.printf ("%n");
+    // decl_vars_ms += watch.snapshot();  watch.reset();
+    ps.println();
+    time_decl.log_time ("after enter");
 
     // Print the exit points
     l = get_comparable (mi.traversalExit);
+    // comp_list_ms += watch.snapshot();  watch.reset();
+
+    time_decl.log_time ("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
-      ps.printf ("DECLARE%n");
-      ps.printf ("%s%n", clean_decl_name (DaikonWriter.methodExitName
-                                          (mi.member, ii)));
+      ps.println ("DECLARE");
+      ps.println (clean_decl_name (DaikonWriter.methodExitName
+                                   (mi.member, ii)));
+      // ppt_name_ms += watch.snapshot();  watch.reset();
+
+      time_decl.log_time ("after exit clean_decl_name");
       print_decl_vars (ps, l, mi.traversalExit);
-      ps.printf ("%n");
+      ps.println();
+      // decl_vars_ms += watch.snapshot();  watch.reset();
+
     }
 
+    // total_ms += System.currentTimeMillis() - start;
+    time_decl.exdent_time ("Finished processing method '%s'", mi.method_name);
     return (l);
   }
 
@@ -959,8 +1146,11 @@ public final class DCRuntime {
    * classname variables are made comparable to opther classname variables
    * only.
    */
-  private static void print_decl_vars (PrintStream ps, List<DVSet> sets,
+  private static void print_decl_vars (PrintWriter ps, List<DVSet> sets,
                                        RootInfo dv_tree) {
+
+    time_decl.indent();
+    time_decl.log ("print_decl_vars start");
 
     // Map from array name to comparability for its indices (if any)
     Map<String, Integer> arr_index_map = new LinkedHashMap<String,Integer>();
@@ -986,11 +1176,14 @@ public final class DCRuntime {
         else
           non_hashcode_vars = true;
       }
+      debug_decl_print.log ("        %d vars in set, hashcode/non = %b/%b%n",
+                            set.size(), hashcode_vars, non_hashcode_vars);
 
       // Loop through each variable and assign its comparability
       // Since hashcodes and their indices are in the same set, assign
       // hashcodes one higher comparability number
       for (DaikonVariableInfo dv : set) {
+        debug_decl_print.log ("          dv %s%n", dv);
         if (dv instanceof DaikonClassInfo) {
           dv_comp_map.put (dv, class_comp);
           assert set.size() == 1 : "odd set " + set;
@@ -1009,32 +1202,40 @@ public final class DCRuntime {
         comp++;
     }
 
+    time_decl.log_time ("finished filling maps%n");
+
     // Loop through each variable and print out its comparability
     // Use the dv_tree rather than sets so that we print out in the
     // same order each time
-    for (DaikonVariableInfo dv : dv_tree.tree_as_list()) {
+
+    List<DaikonVariableInfo> dv_list = dv_tree.tree_as_list();
+    time_decl.log_time ("built tree as list with %d elements", dv_list.size());
+    for (DaikonVariableInfo dv : dv_list) {
       if (dv instanceof RootInfo)
         continue;
-      ps.printf ("%s%n", dv.getName());
-      ps.printf ("%s%n", dv.getTypeName());
-      ps.printf ("%s%n", dv.getRepTypeName());
+      ps.println(dv.getName());
+      ps.println (dv.getTypeName());
+      ps.println (dv.getRepTypeName());
       comp = dv_comp_map.get (dv);
       if (dv.isArray()) {
         Integer index_comp = arr_index_map.get (dv.getName());
         if (index_comp != null)
-          ps.printf ("%d[%d]%n", comp, index_comp);
+          ps.println (comp + "[" + index_comp + "]");
         else
-          ps.printf ("%d%n", comp);
+          ps.println (comp);
       } else
-        ps.printf ("%d%n", comp);
+        ps.println (comp);
     }
+
+    time_decl.log_time ("print_decl_vars end%n");
+    time_decl.exdent();
   }
 
   /**
    * Prints comparabilty information for the enter and exit points of
    * the specified method
    */
-  public static void print_comparable (PrintStream ps, MethodInfo mi) {
+  public static void print_comparable (PrintWriter ps, MethodInfo mi) {
 
     List<DVSet> l = get_comparable (mi.traversalEnter);
     ps.printf ("Daikon Variable sets for %s enter%n",
@@ -1656,16 +1857,207 @@ public final class DCRuntime {
     return (field_name + "__$tag");
   }
 
-  private static String clean_decl_name (String decl_name) {
+  private static Matcher jdk_decl_matcher
+    = Pattern.compile ("(, )?java.lang.DCompMarker( marker)?").matcher("");
+  private static Matcher non_jdk_decl_matcher
+    = Pattern.compile ("(, )?daikon.dcomp.DCompMarker( marker)?").matcher("");
 
-    decl_name = decl_name.replace (", daikon.dcomp.DCompMarker marker", "");
-    decl_name = decl_name.replace ("daikon.dcomp.DCompMarker marker", "");
-    decl_name = decl_name.replace (", java.lang.DCompMarker marker", "");
-    decl_name = decl_name.replace ("java.lang.DCompMarker marker", "");
-    decl_name = decl_name.replace (", daikon.dcomp.DCompMarker", "");
-    decl_name = decl_name.replace ("daikon.dcomp.DCompMarker", "");
-    decl_name = decl_name.replace (", java.lang.DCompMarker", "");
-    decl_name = decl_name.replace ("java.lang.DCompMarker", "");
-    return decl_name;
+  /**
+   * Removes DCompMarker from the signature
+   */
+  public static String clean_decl_name (String decl_name) {
+
+    if (DCInstrument.jdk_instrumented) {
+      jdk_decl_matcher.reset (decl_name);
+      return jdk_decl_matcher.replaceFirst("");
+    } else {
+      non_jdk_decl_matcher.reset (decl_name);
+      return non_jdk_decl_matcher.replaceFirst("");
+    }
+  }
+
+  /**
+   * Abstract base class for code that gets the tag associated with
+   * a particular field.  There are specific implementors for the various
+   * types of fields.  FieldTag instances are stored in FieldInfo so that
+   * tags can be efficiently obtained.
+   */
+  public static abstract class FieldTag {
+
+    /**
+     * Gets the tag for the field
+     * @param parent Object that contains the field (if any)
+     * @param obj Value of the field itself (if available and if its an
+     *            object
+     */
+    abstract Object get_tag (Object parent, Object obj);
+  }
+
+  /**
+   * Class that gets the tag for static primitive fields.  We retrieve
+   * the static tag by using the same method as we use during runtime
+   * to push the tag on the tag stack.
+   */
+  public static class StaticPrimitiveTag extends FieldTag {
+
+    Method get_tag;
+
+    /** Initialize with information from the field **/
+    StaticPrimitiveTag (FieldInfo fi) {
+      assert fi.isStatic();
+      assert fi.isPrimitive();
+      Field field = fi.getField();
+      Class clazz = field.getDeclaringClass();
+      String name = DCInstrument.tag_method_name (DCInstrument.GET_TAG,
+                                     clazz.getName(), field.getName());
+      try {
+        get_tag = clazz.getMethod (name);
+      } catch (Exception e) {
+        throw new Error ("can't find tag method " + name , e);
+      }
+    }
+
+    /** Return the tag associated with this field **/
+    Object get_tag (Object parent, Object obj) {
+      Object tag = null;
+      // jhp - not sure why these are not null...
+      //assert parent == null && obj == null
+      //  : " parent/obj = " + obj_str(parent) + "/" + obj_str(obj);
+      try {
+        Object ret_val = get_tag.invoke (parent);
+        assert ret_val == null;
+        tag = pop_check();
+        assert tag != null;
+      } catch (Exception e) {
+        throw new Error ("can't execute tag method " + get_tag , e);
+      }
+      return (tag);
+    }
+  }
+
+
+  /**
+   * Class that gets the tag for a static reference variable.  The
+   * tag for a reference variable is the object itself, so that is
+   * obtained via reflection
+   */
+  public static class StaticReferenceTag extends FieldTag {
+
+    /** Corresponding java field **/
+    Field field;
+
+    /** Set to true when the class containing the field is initialized **/
+    boolean is_class_initialized = false;
+
+    /** Class that contains the field **/
+    Class declaring_class;
+
+    /** Initialize for this field **/
+    public StaticReferenceTag (FieldInfo fi) {
+
+      assert fi.isStatic();
+      assert !fi.isPrimitive();
+      field = fi.getField();
+      declaring_class = field.getDeclaringClass();
+    }
+
+    /** Gets the tag for this static reference **/
+    public Object get_tag (Object parent, Object obj) {
+
+      // assert parent == null && obj == null;
+      if (!is_class_initialized) {
+        if (is_class_init (declaring_class)) {
+          if (!field.isAccessible())
+            field.setAccessible (true);
+          is_class_initialized = true;
+        } else {
+          return nonsensical;
+        }
+      }
+
+      try {
+        return (field.get (null));
+      } catch (Exception e) {
+        throw new RuntimeException("Can't get val for static field "
+                                   + field, e);
+      }
+    }
+  }
+
+  /**
+   * Class that gets the list of tags for primitive arrays.  Note that
+   * primitive arrays can both be actual arrays of primitives and also
+   * arrays of classes containing primitives.  In the second case, there
+   * is a separate object that contains each of the 'array' values
+   */
+  public static class PrimitiveArrayTag extends FieldTag {
+
+    /** The field number for this field inside its object **/
+    int field_num;
+
+    public PrimitiveArrayTag (FieldInfo fi) {
+      assert !fi.isStatic() && fi.isPrimitive() && fi.isArray();
+      field_num = fi.get_field_num();
+    }
+
+    /** Returns a list of object tags **/
+    public Object get_tag (Object parent, Object obj) {
+
+      // Object is an array of objects containing each item
+      // assert obj == null: "primitive array object = " + obj_str (obj);
+      List<Object> parent_list = (List<Object>)parent; // unchecked
+      Field tag_field = null;
+      List<Object> tag_list = new ArrayList<Object>(parent_list.size());
+      for (Object parent_element : parent_list) {
+        Object[] tags = field_map.get (parent_element);
+        if (tags == null)
+          tag_list.add (nonsensical);
+        else
+          tag_list.add (tags[field_num]);
+      }
+      return (tag_list);
+    }
+  }
+
+  /**
+   * Class that gets the tag for a primitive instance field.
+   * Each object with primitive fields has a corresponding tag array
+   * in field map.  The tag for a particular field is stored at that
+   * fields offset in the tag array.
+   */
+  public static class PrimitiveTag extends FieldTag {
+
+    int field_num;
+
+    public PrimitiveTag (FieldInfo fi) {
+      assert !fi.isStatic() && fi.isPrimitive() && !fi.isArray();
+      field_num = fi.get_field_num();
+    }
+
+    public Object get_tag (Object parent, Object obj) {
+
+      // obj is the wrapper for the primitive
+      // assert obj == null: "primitive object = " + obj_str (obj);
+      Object[] tags = field_map.get (parent);
+      if (tags == null)
+        return (nonsensical); // happens if field has never been assigned to
+      else
+        return (tags[field_num]);
+    }
+  }
+
+  /**
+   * Class that returns the tag for a reference instance field.  In
+   * this case, the tag is just the object itself
+   */
+  public static class ReferenceTag extends FieldTag {
+
+    public ReferenceTag (FieldInfo fi) {
+      assert !fi.isStatic() && !fi.isPrimitive();
+    }
+
+    public Object get_tag (Object parent, Object obj) {
+      return (obj);
+    }
   }
 }
