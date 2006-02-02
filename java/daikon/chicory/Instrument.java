@@ -55,14 +55,14 @@ public class Instrument implements ClassFileTransformer {
     System.out.printf (format, args);
   }
 
-  //uses Runtime.Daikon_omit_regex and Runtime.daikon_include_regex
+  //uses Runtime.ppt_omit_pattern and Runtime.ppt_select_pattern
   //to see if the given ppt should be "filtered out"
   private boolean shouldFilter(String className, String methodName, String pptName)
   {
       boolean shouldExclude = false;
 
         // Don't instrument class if it matches an excluded regular expression
-        for (Pattern pattern : Runtime.daikon_omit_regex)
+        for (Pattern pattern : Runtime.ppt_omit_pattern)
         {
 
             Matcher mPpt = pattern.matcher(pptName);
@@ -83,9 +83,9 @@ public class Instrument implements ClassFileTransformer {
 
         // If any include regular expressions are specified, only instrument
         // classes that match them
-        if (Runtime.daikon_include_regex.size() > 0)
+        if (Runtime.ppt_select_pattern.size() > 0)
         {
-            for (Pattern pattern: Runtime.daikon_include_regex)
+            for (Pattern pattern: Runtime.ppt_select_pattern)
             {
 
                 Matcher mPpt = pattern.matcher(pptName);
@@ -107,7 +107,7 @@ public class Instrument implements ClassFileTransformer {
 
         //if we're here, this ppt not explicitly included or excluded
         //so keep unless there were items in the "include only" list
-        boolean ret = (Runtime.daikon_include_regex.size() > 0);
+        boolean ret = (Runtime.ppt_select_pattern.size() > 0);
 
         //System.out.println("filtering 3: " + ret + " on --- " + pptName);
         return ret;
@@ -483,8 +483,10 @@ public class Instrument implements ClassFileTransformer {
         Runtime.methods.add (mi);
 
         // Add nonce local to matchup enter/exits
-        add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName())));
-
+        String entry_ppt_name = DaikonWriter.methodEntryName(fullClassName,
+                                getArgTypes(mg), mg.toString(), mg.getName());
+        add_method_startup (il, context, !shouldFilter(fullClassName,
+                                             mg.getName(), entry_ppt_name));
 
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
         Iterator<Integer> exitIter = mi.exit_locations.iterator();
