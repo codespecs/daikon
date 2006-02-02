@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.regex.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.io.*;
 
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
@@ -34,18 +35,18 @@ class DCInstrument {
   private LocalVariableGen tag_frame_local;
 
   // Argument descriptors
-  private Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
+  private static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
   // private Type[] two_ints = new Type[] {Type.INT, Type.INT};
-  private Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
-  private Type[] string_arg = new Type[] {Type.STRING};
-  private Type[] integer_arg = new Type[] {Type.INT};
-  private Type[] object_arg = new Type[] {Type.OBJECT};
+  private static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
+  private static Type[] string_arg = new Type[] {Type.STRING};
+  private static Type[] integer_arg = new Type[] {Type.INT};
+  private static Type[] object_arg = new Type[] {Type.OBJECT};
 
   // Type descriptors
-  private Type object_arr = new ArrayType (Type.OBJECT, 1);
+  private static Type object_arr = new ArrayType (Type.OBJECT, 1);
   // private Type int_arr = new ArrayType (Type.INT, 1);
-  private ObjectType throwable = new ObjectType ("java.lang.Throwable");
-  private ObjectType dcomp_marker = null;
+  private static ObjectType throwable = new ObjectType ("java.lang.Throwable");
+  private static ObjectType dcomp_marker = null;
 
   // Debug loggers
   private SimpleLog debug_instrument = new SimpleLog (false);
@@ -82,8 +83,16 @@ class DCInstrument {
   public static final String SET_TAG = "set_tag";
   public static final String GET_TAG = "get_tag";
 
-  /** Map from each static field to its unique integer id **/
-  static Map<Field,Integer> static_map = new LinkedHashMap<Field,Integer>();
+  /**
+   * Map from each static field name to its unique integer id
+   * Note that while its intuitive to think that each static should
+   * show up exactly once, that is not the case.  A static defined in a
+   * superclass can be accessed through each of its subclasses.  Tag
+   * accessor methods must be added in each subclass and each should
+   * return the same id.  We thus will lookup the same name multiple
+   * times.
+   **/
+  static Map<String,Integer> static_map = new LinkedHashMap<String,Integer>();
 
   /**
    * Array of classes whose fields are not initialized from java.  Since
@@ -99,6 +108,12 @@ class DCInstrument {
     "java.lang.AbstractStringBuilder",
   };
 
+  /**
+   * List of all of the object methods.  Since we can't instrument
+   * object, none of these can be instrumented.  I've also added
+   * newInstance because of a problem with code that the JDK generates
+   * for newInstance.
+   */
   private static MethodDef[] obj_methods = new MethodDef[] {
     new MethodDef ("clone", new Type[0]),
     new MethodDef ("equals", new Type[] {Type.OBJECT}),
@@ -111,6 +126,7 @@ class DCInstrument {
     new MethodDef ("getClass", new Type[0]),
     new MethodDef ("notify", new Type[0]),
     new MethodDef ("notifyall", new Type[0]),
+    new MethodDef ("newInstance", new Type[] {object_arr}),
   };
 
   /** Class that defines a method (by its name and argument types) **/
@@ -162,14 +178,16 @@ class DCInstrument {
 
     String classname = gen.getClassName();
 
+    // Removed this check (1/20/06) as we are already doing this in premain.
+    // Probably a better solution is needed.
     // Don't instrument classes in the JDK.  They are already instrumented.
     // Do instrument javac (its not in the JDK)
     // TODO: crosscheck the class for instrumentation rather than by name.
-    if (BCELUtil.in_jdk (gen)
-        && !classname.startsWith ("com.sun.tools.javac")) {
-      debug_track.log ("Skipping jdk class %s%n", gen.getClassName());
-      return (null);
-    }
+    //if (BCELUtil.in_jdk (gen)
+    //    && !classname.startsWith ("com.sun.tools.javac")) {
+    //  debug_track.log ("Skipping jdk class %s%n", gen.getClassName());
+    //  return (null);
+    // }
 
     // Don't instrument our classes.
     if (classname.startsWith ("daikon") &&
@@ -198,6 +216,13 @@ class DCInstrument {
         // Note whether we want to track the daikon variables in this method
         boolean track = should_track (gen.getClassName(),
                                       methodEntryName (gen.getClassName(), m));
+
+        // If we are tracking variables, make sure the class is public
+        if (track && !gen.isPublic()) {
+          gen.isPrivate(false);
+          gen.isProtected(false);
+          gen.isPublic(true);
+        }
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         boolean has_code = (mg.getInstructionList() != null) ;
@@ -2825,8 +2850,9 @@ class DCInstrument {
       MethodGen get_method = null;
       MethodGen set_method = null;
       if (f.isStatic()) {
-        get_method = create_get_tag (gen, f, static_map.get(f));
-        set_method = create_set_tag (gen, f, static_map.get(f));
+        String full_name = full_name (orig_class, f);
+        get_method = create_get_tag (gen, f, static_map.get(full_name));
+        set_method = create_set_tag (gen, f, static_map.get(full_name));
       } else {
         get_method = create_get_tag (gen, f, field_map.get(f));
         set_method = create_set_tag (gen, f, field_map.get(f));
@@ -2858,8 +2884,9 @@ class DCInstrument {
         MethodGen get_method = null;
         MethodGen set_method = null;
         if (f.isStatic()) {
-          get_method = create_get_tag (gen, f, static_map.get(f));
-          set_method = create_set_tag (gen, f, static_map.get(f));
+          String full_name = full_name (super_class, f);
+          get_method = create_get_tag (gen, f, static_map.get(full_name));
+          set_method = create_set_tag (gen, f, static_map.get(full_name));
         } else {
           get_method = create_get_tag (gen, f, field_map.get(f));
           set_method = create_set_tag (gen, f, field_map.get(f));
@@ -2908,9 +2935,17 @@ class DCInstrument {
           int min_size = static_map.size() + DCRuntime.max_jdk_static;
           while (DCRuntime.static_tags.size() <= min_size)
             DCRuntime.static_tags.add (null);
-          static_map.put (f, min_size);
+          static_map.put (full_name(jc,f), min_size);
         } else { // building jdk
-          static_map.put (f, static_map.size() + 1);
+          String full_name = full_name(jc,f);
+          if (static_map.containsKey (full_name)) {
+            // System.out.printf ("Reusing static field %s value %d%n",
+            //                    full_name, static_map.get(full_name));
+          } else {
+            // System.out.printf ("Allocating new static field %s%n",
+            //                    full_name);
+            static_map.put (full_name, static_map.size() + 1);
+          }
         }
       } else {
         field_map.put (f, offset);
@@ -3199,11 +3234,11 @@ class DCInstrument {
         new_locals[loc_index] = missing_arg;
         System.arraycopy (locals, loc_index, new_locals, loc_index+1,
                           locals.length-loc_index);
-        System.out.printf ("Added missing parameter %s%n", missing_arg);
+        // System.out.printf ("Added missing parameter %s%n", missing_arg);
         locals = new_locals;
-        System.out.printf ("New Local Array:%n");
-        for (LocalVariableGen lvg : locals)
-          System.out.printf ("  local[%d] = %s%n", lvg.getIndex(), lvg);
+        // System.out.printf ("New Local Array:%n");
+        // for (LocalVariableGen lvg : locals)
+        //  System.out.printf ("  local[%d] = %s%n", lvg.getIndex(), lvg);
       }
 
       loc_index++;
@@ -3256,4 +3291,46 @@ class DCInstrument {
 
     return (dcomp_mg);
   }
+
+  /**
+   * Writes the static map from field names to their integer ids to
+   * the specified file.  Can be read with restore_static_map.
+   * Each line contains a key/value combination with a blank separating them.
+   */
+  public static void save_static_map (File filename) throws IOException {
+
+    PrintStream ps = new PrintStream (filename);
+    for (Map.Entry<String,Integer> entry : static_map.entrySet()) {
+      ps.printf ("%s  %d%n", entry.getKey(), entry.getValue());
+    }
+    ps.close();
+  }
+
+  /**
+   * Restores the static map from the specified file.
+   * @see #save_static_map(File)
+   */
+  public static void restore_static_map (File filename) throws IOException {
+
+    BufferedReader reader = new BufferedReader (new FileReader (filename));
+    while (true) {
+      String line = reader.readLine();
+      if (line == null)
+        break;
+      String[] key_val = line.split ("  *");
+      assert !static_map.containsKey (key_val[0])
+        : key_val[0] + " " + key_val[1];
+      static_map.put (key_val[0], new Integer (key_val[1]));
+      // System.out.printf ("Adding %s %s to static map%n", key_val[0],
+      //                   key_val[1]);
+    }
+  }
+
+  /**
+   * Return the fully qualified fieldname of the specified field
+   */
+  private String full_name (JavaClass jc, Field f) {
+    return jc.getClassName() + "." + f.getName();
+  }
+
 }
