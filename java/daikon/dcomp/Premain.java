@@ -11,6 +11,7 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 
 import utilMDE.*;
+import daikon.chicory.DaikonVariableInfo;
 
 public class Premain {
 
@@ -39,10 +40,23 @@ public class Premain {
   @Option("Don't use an instrumented JDK")
   public static boolean no_jdk = false;
 
+  @Option("use standard visibility")
+  public static boolean std_visibility = false;
+
+  @Option("variable nesting depth")
+  public static int nesting_depth = 2;
+
   public static String usage_synopsis
     = "java -javaagent:dcomp_premain.jar=[options]";
 
-  public static void premain (String agentArgs, Instrumentation inst) {
+  /**
+   * Set of pre_instrumented jdk classes.  Needed so that we will instrument
+   * classes generated on the fly in the jdk.
+   **/
+  static Set<String> pre_instrumented = new LinkedHashSet<String>();
+
+  public static void premain (String agentArgs, Instrumentation inst)
+    throws IOException {
 
     Options options = new Options (usage_synopsis, Premain.class);
     String[] args = options.parse_and_usage (agentArgs.split ("  *"));
@@ -50,6 +64,9 @@ public class Premain {
       options.print_usage ("Unexpected argument %s", args[0]);
       System.exit (-1);
     }
+
+    DaikonVariableInfo.std_visibility = std_visibility;
+    DCRuntime.depth = nesting_depth;
 
     if (no_jdk)
       DCInstrument.jdk_instrumented = false;
@@ -63,6 +80,25 @@ public class Premain {
     debug_bin_dir.mkdirs();
     debug_orig_dir.mkdirs();
 
+    // Read in the list of pre-instrumented classes
+    InputStream strm
+      = Premain.class.getResourceAsStream ("jdk_classes.txt");
+    assert strm != null : "cant find jdk_classes.txt";
+    BufferedReader reader = new BufferedReader (new InputStreamReader (strm));
+    while (true) {
+      String line = reader.readLine();
+      if (line == null)
+        break;
+      // System.out.printf ("adding '%s'%n", line);
+      pre_instrumented.add (line);
+    }
+
+    // Find out what classes are already loaded
+    Class[] loaded_classes = inst.getAllLoadedClasses();
+    for (Class loaded_class : loaded_classes) {
+      // System.out.printf ("loaded class = %s\n", loaded_class.getName());
+    }
+
     // Setup the shutdown hook
     Thread shutdown_thread = new ShutdownThread();
     java.lang.Runtime.getRuntime().addShutdownHook (shutdown_thread);
@@ -72,6 +108,8 @@ public class Premain {
 
     // Initialize the static tag array
     DCRuntime.init();
+
+
   }
 
   static public class Transform implements ClassFileTransformer {
@@ -89,8 +127,12 @@ public class Premain {
       // compiler)
       if ((className.startsWith ("java/") || className.startsWith ("com/")
            || className.startsWith ("sun/"))
-          && !className.startsWith ("com/sun/tools/javac"))
-        return (null);
+          && !className.startsWith ("com/sun/tools/javac")) {
+        if (pre_instrumented.contains (className))
+          return (null);
+        if (verbose)
+          System.out.printf ("Instrumenting JDK class %s%n", className);
+      }
 
       // Don't instrument our own classes
       if ((className.startsWith ("daikon/dcomp/")
@@ -148,25 +190,47 @@ public class Premain {
         if (verbose)
           System.out.println ("Writing comparability sets to "
                               + compare_sets_file);
-        PrintStream compare_out = open (compare_sets_file);
+        PrintWriter compare_out = open (compare_sets_file);
+        Stopwatch watch = new Stopwatch();
         DCRuntime.print_all_comparable (compare_out);
+        compare_out.close();
+        if (verbose)
+          System.out.printf ("Comparability sets written in %s%n",
+                             watch.format());
       }
 
       // Write comparability sets to standard out
-      if (verbose && (compare_sets_file == null))
-      DCRuntime.print_all_comparable (System.out);
+      //if (verbose && (compare_sets_file == null))
+      //  DCRuntime.print_all_comparable (System.out);
+
+      if (verbose)
+        DCRuntime.decl_stats();
 
       // Write the decl file out
       if (verbose)
-        System.out.println("Writing comparability results to " + decl_file);
-      PrintStream decl_fp = open (decl_file);
+        System.out.println("Writing decl file to " + decl_file);
+      PrintWriter decl_fp = open (decl_file);
+      Stopwatch watch = new Stopwatch();
       DCRuntime.print_decl_file (decl_fp);
+      decl_fp.close();
+      if (verbose) {
+        System.out.printf ("Decl file written in %s%n", watch.format());
+        System.out.printf ("comp_list = %,d%n", DCRuntime.comp_list_ms);
+        System.out.printf ("ppt name  = %,d%n", DCRuntime.ppt_name_ms);
+        System.out.printf ("decl vars = %,d%n", DCRuntime.decl_vars_ms);
+        System.out.printf ("total     = %,d%n", DCRuntime.total_ms);
+      }
+      if (verbose)
+        System.out.println ("DynComp complete");
     }
   }
 
-  public static PrintStream open (File filename) {
+  public static PrintWriter open (File filename) {
     try {
-      return new PrintStream (filename);
+      return new PrintWriter (new BufferedWriter (new FileWriter (filename)));
+      //return new PrintWriter (filename);
+      //return new PrintStream (new BufferedWriter
+      //            (new OutputStreamWriter (new FileOutputStream(filename))));
     } catch (Exception e) {
       throw new Error ("Can't open " + filename, e);
     }
