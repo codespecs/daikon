@@ -19,6 +19,12 @@
 --exclude-redirect http://www.ibm.com/developerworks/oss/jikes/->http://www-124.ibm.com/developerworks/oss/jikes/
 --exclude-redirect http://www.jmlspecs.org/->http://www.cs.iastate.edu/~leavens/JML/
 --exclude-redirect http://www.pricegrabber.com/->http://www.pricegrabber.com/spiders.php
+--exclude-redirect http://student.mit.edu/catalog/index.cgi->http://student.mit.edu/@8178100.17571/catalog/index.cgi	
+--exclude-redirect http://www.aro.ncren.net/->http://www.arl.army.mil/main/main/default.cfm?Action=29&Page=29	
+--exclude-redirect http://www.nsf.gov/home/cise/->http://www.nsf.gov/dir/index.jsp?org=CISE
+--exclude-redirect http://libraries.mit.edu/get/ieee->http://aeryn.mit.edu/emetrics/count.php?http://libproxy.mit.edu/login?url=http://ieeexplore.ieee.org/	
+--exclude-redirect http://libraries.mit.edu/get/lncs->http://aeryn.mit.edu/emetrics/count.php?http://libproxy.mit.edu/login?url=http://www.springerlink.com/openurl.asp?genre=journal&issn=0302-9743	
+--exclude-redirect http://www.usps.gov/ncsc/lookups/lookup_zip%2B4.html->http://www.usps.com/ncsc/lookups/lookup_zip%2b4.html	
 --exclude-broken -1:http://whereis.mit.edu/map-jpg?selection=32&Buildings=go 
 --exclude-broken 403:http://www.cs.washington.edu/orgs/student-affairs/gsc/jobs/
 --exclude-broken 403:https://www.csail.mit.edu/mrbs/
