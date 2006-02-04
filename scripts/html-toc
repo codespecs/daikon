@@ -1,8 +1,9 @@
 #!/usr/bin/env perl
 # html-toc
 # Generate (to standard out) table of contents for an HTML document.
-# Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2005-07-04 15:09:16 mernst>
+# Michael Ernst <mernst@csail.mit.edu>
+# Thanks to C. Scott Ananian <cscott@cscott.net>
+# Time-stamp: <2006-02-03 17:32:17 mernst>
 
 # See html-update-toc for documentation.
 # (Typically, you will not run this program, but will use html-update-toc
@@ -22,13 +23,18 @@ my $debug = 0;
 
 
 sub enter_level {
+  # called with cursor at start of line.
   $output .= ((" " x ($level * 4)) . "<ul>\n");
   $level++;
+  # returns with cursor at start of line.
 }
 
 sub exit_level {
+  # always called with an open <li>
   $level--;
-  $output .= ((" " x ($level * 4)) . "</ul>\n");
+  $output .= "</li>\n";
+  $output .= ((" " x ($level * 4)) . "</ul>");
+  # returns with an open <li>
 }
 
 
@@ -64,13 +70,18 @@ while (<>) {
       next;
     }
 
-    while ($level < $thishlevel) {
-      enter_level();
-    }
+    # if $level >= $thishlevel, we hve an open <li>
     while ($level > $thishlevel) {
       exit_level();
     }
-    $output .= ((" " x ($level * 4 - 2)) . "<li><a href=\"#$anchorname\">$sectitle</a>\n");
+    # close this <li>, unless we're going deeper
+    $output .= "</li>" if ($level == $thishlevel);
+    $output .= "\n" unless $level == 0;
+    while ($level < $thishlevel) {
+      enter_level();
+      $output .= (" " x ($level * 4 - 2)) . "<li>\n" if $level < $thishlevel;
+    }
+    $output .= ((" " x ($level * 4 - 2)) . "<li><a href=\"#$anchorname\">$sectitle</a>");
     if ($level == 1) { $num_named_1++; }
   } elsif (/<h([1-9])>(.*)<\/h([1-9])>/) {
     if ($1 == 1) {
@@ -88,13 +99,19 @@ while (<>) {
 while ($level > 0) {
   exit_level();
 }
+$output .= "\n";
 if ($num_named_1 + $num_unnamed_1 < 2) {
+  # There is only one top-level (<h1>) item.
+  # Assume <h1> is the page title, and the h2, h3, h4 etc are the ones
+  # we should be making a toc for.
   $output =~ s/^<ul>\n//;
   $output =~ s/<\/ul>\n$//;
-  if ($num_named_1 == 1) {
-    $output =~ s/^  <li><a href=[^\n]*\n//;
-  } elsif ($num_unnamed_1 == 1) {
-    $errors =~ s/^Warning: No <a name=\.\.\.> tag in header: <h1>[^\n]*\n//;
+  # remove top-level item.
+  $output =~ s/^  <li>.*\n//;
+  $output =~ s/<\/li>\n$/\n/;
+  if ($num_unnamed_1 == 1) {
+    # Remove error from output
+    $errors =~ s/^.*: No <a name=\.\.\.> tag: <h1>[^\n]*\n//;
   }
 }
 print STDERR $errors;
