@@ -1677,15 +1677,14 @@ HTTP Message: %s%s%s</dd>
       }
     } else {
       my $redirmsg = $redirect_loop ? ' redirect loop detected' : '';
-      printf("\n%s\t%s\n  Code: %d%s %s\n%s\n",
+      printf("\n%s\n  Code: %d%s %s\n%s\n",
              # List of redirects
              $redirected ? join("\n-> ", @redirects_urls) . $redirmsg : $u,
              # List of lines
              ## The list of line numbers is confusing, as it includes all
              ## external URLs containing "#", not just the erroneous ones.
-             ## So omit it. -MDE
+             ## So omit it (and I removed the "%s" in the format string). -MDE
              ## $lines_list ? "Line$s: $lines_list" : '',
-             '',
              # Original HTTP reply
              $results->{$u}{location}{orig},
              # Final HTTP reply
