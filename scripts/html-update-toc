@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
-# Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2005-01-31 19:31:27 mernst>
+# Michael Ernst <mernst@csail.mit.edu>
+# Time-stamp: <2006-02-03 17:31:48 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -17,15 +17,15 @@
 
 # The table of contents contains links to header lines of the form
 #   <h3><a name="key">Subheading</a></h3>
-# Header without "<a name=...>" anchor tags are ignored (and a warning is
-# generated).
+# Header lines without "<a name=...>" anchor tags are ignored (and a warning
+# is generated).
 # Header lines are omitted if they contain
 #   <!-- omit from toc -->
 # For instance, this would not appear:
 #   <h1>The title of the document</h1>			<!-- omit from toc -->
 
 # This script does not fully parse the HTML document; instead, it
-# pattern-matches against specific lines in the document.  That menas that
+# pattern-matches against specific lines in the document.  That means that
 # it will generate table-of-contents lines for commented-out sections of a
 # document.  To ensure that a header line doesn't appear in the table of
 # contents, start a comment startss on that line, such as:
@@ -34,27 +34,25 @@
 
 # As noted above, header lines should contain anchor tags.
 # Here is Emacs code to add anchor names:
-my $ignore = <<EOF;
-  (defun html-add-heading-anchors ()
-    "Add anchors to section headings in an HTML document."
-    (interactive)
-    (save-excursion
-      (goto-char (point-min))
-      (query-replace-regexp "^\\(<h[1-6]>\\)\\([^<>\n]*\\)\\(</h[1-6]>\\)\\s-*$"
-                            "\\1<a name=\"\\2\">\\2</a>\\3")
-      ;; now convert spaces to underscores in anchors
-      (require 'dired)
-      (goto-char (point-min))
-      (while (re-search-forward "^\\(<h[1-6]><a name=\"\\)\\([^<> \"\n]* [^<>\"\n]*\\)\\(\">\\)" nil t)
-        (let ((s1 (match-string 1))
-              (s2 (match-string 2))
-              (s3 (match-string 3)))
-          (replace-match
-           (concat s1
-                   (save-match-data (dired-replace-in-string " " "_" s2))
-                   s3)
-           nil nil)))))
-EOF
+#   (defun html-add-heading-anchors ()
+#     "Add anchors to section headings in an HTML document."
+#     (interactive)
+#     (save-excursion
+#       (goto-char (point-min))
+#       (query-replace-regexp "^\\(<h[1-6]>\\)\\([^<>\n]*\\)\\(</h[1-6]>\\)\\s-*$"
+#                             "\\1<a name=\"\\2\">\\2</a>\\3")
+#       ;; now convert spaces to underscores in anchors
+#       (require 'dired)
+#       (goto-char (point-min))
+#       (while (re-search-forward "^\\(<h[1-6]><a name=\"\\)\\([^<> \"\n]* [^<>\"\n]*\\)\\(\">\\)" nil t)
+#         (let ((s1 (match-string 1))
+#               (s2 (match-string 2))
+#               (s3 (match-string 3)))
+#           (replace-match
+#            (concat s1
+#                    (save-match-data (dired-replace-in-string " " "_" s2))
+#                    s3)
+#            nil nil)))))
 
 
 use strict;
@@ -63,6 +61,8 @@ $WARNING = 1;
 
 my $debug = 0;
 # $debug = 1;
+
+my $quiet = 0;
 
 # read by paragraphs (remember that this is a string, not a regexp)
 # (Warning: this doesn't work for DOS files, but I hack around that via
@@ -84,6 +84,9 @@ $contents_end_quoted =~ s/\r/\\r/g;
 
 FILELOOP: for my $file (@ARGV) {
   # print STDERR "Examining $file\n";
+  if (($file eq "-q") || ($file eq "--quiet") || ($file eq "-quiet")) {
+    $quiet = 1;
+  }
   if ($file !~ /\.html?$/) {
     next;
   }
@@ -104,7 +107,9 @@ FILELOOP: for my $file (@ARGV) {
       my $oldcontent = $2;
       my $newcontent = `html-toc $file`;
       if ($oldcontent eq $newcontent) {
-	print STDERR "$file has up-to-date table of contents\n";
+	if (! $quiet) {
+          print STDERR "$file has up-to-date table of contents\n";
+        }
 	close(FILE);
 	next FILELOOP;
       }
