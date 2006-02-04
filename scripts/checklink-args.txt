@@ -25,6 +25,7 @@
 --exclude-redirect http://libraries.mit.edu/get/ieee->http://aeryn.mit.edu/emetrics/count.php?http://libproxy.mit.edu/login?url=http://ieeexplore.ieee.org/	
 --exclude-redirect http://libraries.mit.edu/get/lncs->http://aeryn.mit.edu/emetrics/count.php?http://libproxy.mit.edu/login?url=http://www.springerlink.com/openurl.asp?genre=journal&issn=0302-9743	
 --exclude-redirect http://www.usps.gov/ncsc/lookups/lookup_zip%2B4.html->http://www.usps.com/ncsc/lookups/lookup_zip%2b4.html	
+--exclude-redirect http://www.rational.com/licensing/->http://www-306.ibm.com/software/rational/support/licensing/
 --exclude-broken -1:http://whereis.mit.edu/map-jpg?selection=32&Buildings=go 
 --exclude-broken 403:http://www.cs.washington.edu/orgs/student-affairs/gsc/jobs/
 --exclude-broken 403:https://www.csail.mit.edu/mrbs/
