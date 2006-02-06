@@ -1,17 +1,8 @@
 // Created on Nov 9, 2004 by saff for edu.mit.csail.pag.testfactoring
 package daikon.dcomp;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
@@ -82,6 +73,8 @@ public class BuildJDK {
   private int _numFilesProcessed = 0;
 
   private static String static_map_fname = "dcomp_jdk_static_map";
+
+  private static List<String> all_classes = new ArrayList<String>();
 
   /**
    * BuildJDK <jarfile> <dest> <prefix>
@@ -157,6 +150,16 @@ public class BuildJDK {
       // Write out the static map
       System.out.printf ("Found %d statics%n", DCInstrument.static_map.size());
       DCInstrument.save_static_map (new File (dest_dir, static_map_fname));
+
+      // Write out the list of all classes in the jar file
+      File jdk_classes_dir = new File (dest_dir, "java/lang");
+      File jdk_classes_file = new File (jdk_classes_dir, "jdk_classes.txt");
+      PrintWriter pw = new PrintWriter (jdk_classes_file);
+      System.out.printf ("Writing all classes to %s%n", jdk_classes_file);
+      for (String classname : all_classes) {
+        pw.println (classname);
+      }
+
     }
     System.out.println("done at " + new Date());
   }
@@ -206,7 +209,7 @@ public class BuildJDK {
       Enumeration<JarEntry> entries = jfile.entries();
       while (entries.hasMoreElements()) {
         JarEntry entry = entries.nextElement();
-        System.out.printf ("processing entry %s%n", entry);
+        // System.out.printf ("processing entry %s%n", entry);
         final String entryName = entry.getName();
         if (!entryName.startsWith(prefixOfFilesToInclude)
             && !entryName.startsWith("META-INF"))
@@ -215,6 +218,8 @@ public class BuildJDK {
           continue;
         if (entryName.endsWith("~"))
           continue;
+        if (entryName.endsWith (".class"))
+          all_classes.add (entryName.replace (".class", ""));
         if (!entryName.endsWith(".class")
             || (skip_object && entryName.equals("java/lang/Object.class"))
             || (!prefix.equals ("") && !entryName.startsWith (prefix))) {

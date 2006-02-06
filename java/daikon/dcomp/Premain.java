@@ -83,7 +83,7 @@ public class Premain {
     // Read in the list of pre-instrumented classes
     if (!no_jdk) {
       InputStream strm
-        = Premain.class.getResourceAsStream ("jdk_classes.txt");
+        = Object.class.getResourceAsStream ("jdk_classes.txt");
       assert strm != null : "cant find jdk_classes.txt";
       BufferedReader reader
         = new BufferedReader (new InputStreamReader (strm));
