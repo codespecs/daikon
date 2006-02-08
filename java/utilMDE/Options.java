@@ -28,7 +28,7 @@ import com.sun.javadoc.FieldDoc;
  * if specified multiple times.  Lists must be initialized to a valid
  * list before using Options on that list. <p>
  *
- * The option annotation (@see Option) specifies the optional short
+ * The option annotation {@link Option} specifies the optional short
  * name, optional type name, and long description.  The long name is taken
  * from the name of the variable. <p>
  *
@@ -37,8 +37,29 @@ import com.sun.javadoc.FieldDoc;
  * value'.  The value is mandatory for all options except booleans.
  * Booleans are set to true if no value is specified. <p>
  *
- * Any non-options (entries that don't begin with --) in the
+ * Any non-options (entries that don't begin with -- or -) in the
  * argument list are returned. <p>
+ *
+ * Simple example: <pre>
+ *
+ *  public static class Test {
+ *
+ *    &#064;Option ("-o specifies the output file ")
+ *    public static File outfile = "/tmp/foobar";
+ *
+ *    &#064;Option ("-i ignore case")
+ *    public static boolean ignore_case;
+ *
+ *    &#064;Option ("-t set the initial temperature")
+ *    public static double temperature = 75.0;
+ *
+ *    public static void main (String[] args) throws ArgException {
+ *
+ *     Options options = new Options ("Test [options] files", new Test());
+ *     String[] file_args = options.parse_and_usage (args);
+ *    }
+ *  }
+ *</pre>
  *
  * Limitations: <ul>
  *
@@ -330,7 +351,7 @@ public class Options {
   /**
    * Parses a command line that is encoded in a single string.  Quoted
    * string with both single and double quotes are supported.
-   * @see parse(String[])
+   * @see #parse(String[])
    */
   public String[] parse (String args) throws ArgException {
 
