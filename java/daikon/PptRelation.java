@@ -61,7 +61,7 @@ public class PptRelation implements Serializable {
    * Boolean.  Controls whether the object-user relation is created in the
    * variable hierarchy.
    **/
-  public static boolean dkconfig_enable_object_user = true;
+  public static boolean dkconfig_enable_object_user = false;
 
   /**
    * Create a relation between the specified parent and child.  The actual
