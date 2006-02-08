@@ -1214,6 +1214,8 @@ public final class Daikon {
     // Process each ppt that doesn't have a parent
     for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
+      // System.out.printf ("considering ppt %s parents: %s, children: %s\n",
+      //                     ppt.name, ppt.parents, ppt.children);
       if (ppt.parents.size() == 0) {
         ppt.mergeInvs();
       }
