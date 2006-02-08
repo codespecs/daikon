@@ -3269,6 +3269,10 @@ public class PptTopLevel extends Ppt {
    */
   public void mergeInvs() {
 
+    Daikon.debugProgress.fine ("Merging ppt " + name + " with " +
+                               children.size() + " children, "
+                               + var_infos.length + " variables");
+
     // If we don't have any children, there is nothing to do.
     if (children.size() == 0)
       return;
@@ -3287,9 +3291,6 @@ public class PptTopLevel extends Ppt {
     }
 
     //Fmt.pf ("Merging ppt " + name + " with " + children.size() + " children");
-    Daikon.debugProgress.fine ("Merging ppt " + name + " with " +
-                               children.size() + " children, "
-                               + var_infos.length + " variables");
     if (debugMerge.isLoggable(Level.FINE))
       debugMerge.fine("Processing ppt " + name());
 
