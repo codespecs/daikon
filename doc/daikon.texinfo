@@ -6502,9 +6502,11 @@ interface, and accept objects of type Invariant.
 @cindex MergeESC tool, see Annotate tool
 
 The Annotate program inserts Daikon-generated invariants into Java
-source code as  annotations in  DBC, ESC, Java or JML format.
+source code as annotations in  DBC, ESC, Java or JML format.
 These annotations are comments that can be automatically verified or
 otherwise manipulated by other tools.
+The Daikon website has an example of code after invariant
+insertion:  @url{http://pag.csail.mit.edu/daikon/StackAr.html}.
 
 Invoke Annotate like this:
 @example
