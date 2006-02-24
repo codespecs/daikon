@@ -36,23 +36,28 @@ public class DeclReader {
   @Option("Output a decl file with representation type comparability")
   public static boolean rep_type_comparability = false;
 
-  HashMap<String,DeclPpt> ppts = new LinkedHashMap<String,DeclPpt>();
+  public HashMap<String,DeclPpt> ppts = new LinkedHashMap<String,DeclPpt>();
+
+  @Option("Read and dump a dtrace file")
+  public static boolean dump_dtrace = false;
 
   /**
    * Information about variables within a program point
    */
   public static class VarInfo {
-    String name;
-    String type;
-    String rep_type;
-    String comparability;
+    public String name;
+    public String type;
+    public String rep_type;
+    public String comparability;
+    public int index;
 
     public VarInfo (String name, String type, String rep_type,
-                    String comparability) {
+                    String comparability, int index) {
       this.name = name;
       this.type = type;
       this.rep_type = rep_type;
       this.comparability = comparability;
+      this.index = index;
     }
 
     /** Returns the variables name */
@@ -81,6 +86,22 @@ public class DeclReader {
       return rep_type;
     }
 
+    public boolean is_double() {
+      return (rep_type.equals ("double") || (rep_type.equals ("float")));
+    }
+
+    public boolean is_string() {
+      return (rep_type.equals ("string"));
+    }
+
+    public boolean is_string_array() {
+      return (rep_type.equals ("string[]"));
+    }
+
+    public boolean is_int() {
+      return (rep_type.equals ("int"));
+    }
+
     /** Returns the comparability string from the decl file **/
     public String get_comparability() {
       return comparability;
@@ -95,9 +116,53 @@ public class DeclReader {
     }
 
     public String toString() {
-      return name;
+      return String.format ("%s [%s] %s", type, rep_type, name);
     }
-  }
+
+    /**
+     * Reads a single value for this variable and returns it.
+     */
+    public Object read_data (MultiReader reader) throws IOException {
+      String var_name = reader.readLine();
+      if (!var_name.equals (this.name))
+        throw new Error (var_name + " found where " + this.name
+                         + " expected ");
+      String value = reader.readLine();
+      String mod_bit = reader.readLine();
+      if (value.equals ("nonsensical")) {
+        return null;
+      } else if (is_int()) {
+        Integer val = null;
+        try {
+          val = new Integer (value);
+        } catch (Throwable t) {
+          System.out.printf ("Unexpected integer value '%s', for variable %s "
+                             + "treated as nonsensical%n", value, this.name);
+        }
+        return (val);
+      } else if (is_double()){
+        Double val = null;
+        try {
+          val = new Double (value);
+        } catch (Throwable t) {
+          System.out.printf ("Unexpected double value '%s', for variable %s "
+                             + "treated as nonsensical%n", value, this.name);
+        }
+        return (val);
+      } else if (is_string()) {
+        if (value.startsWith("\"") && value.endsWith("\""))
+          value = value.substring (1, value.length()-1);
+        return value.intern();
+      } else if (is_string_array()) {
+        return (null);  // treating arrays as nonsensical for now
+      } else {
+        assert false : "unexpected rep type " + rep_type;
+        return (null);
+      }
+
+    }
+
+}
 
   /**
    * Information about the program point that is contained in the decl
@@ -105,8 +170,16 @@ public class DeclReader {
    * variables
    */
   public static class DeclPpt {
-    String name;
-    HashMap<String,VarInfo> vars = new LinkedHashMap<String,VarInfo>();
+    public String name;
+    public HashMap<String,VarInfo> vars = new LinkedHashMap<String,VarInfo>();
+
+    /**
+     * List of values for the program point.  There is one entry in
+     * the list for each time the program point is executed.  That
+     * entry is a list of the values for each variable in the same
+     * order as the variables were defined
+     **/
+    List<List<Object>> data_values = new ArrayList<List<Object>>();
 
     public DeclPpt (String name) {
       this.name = name;
@@ -116,7 +189,7 @@ public class DeclReader {
      * Read a single variable declaration from decl_file.  The file
      * must be positioned immediately before the variable name
      */
-    public VarInfo read_var (BufferedReader decl_file)
+    public VarInfo read_var (MultiReader decl_file)
       throws java.io.IOException{
 
       String name = decl_file.readLine().intern();
@@ -124,9 +197,23 @@ public class DeclReader {
       String rep_type = decl_file.readLine().intern();
       String comparability = decl_file.readLine().intern();
 
-      VarInfo var = new VarInfo (name, type, rep_type, comparability);
+      VarInfo var = new VarInfo (name, type, rep_type, comparability,
+                                 vars.size());
       vars.put (name, var);
       return (var);
+    }
+
+    /**
+     * Adds a record of data for this ppt.  The data must have one element
+     * for each variable in the ppt and be ordered in the same way
+     */
+    public void add_var_data (List<Object> var_data_list) {
+      assert var_data_list.size() == vars.size();
+      data_values.add (var_data_list);
+    }
+
+    public List<List<Object>> get_var_data() {
+      return data_values;
     }
 
     /**
@@ -140,6 +227,16 @@ public class DeclReader {
     public String get_name() {
       return name;
     }
+
+    public String toString() {
+      return name;
+    }
+
+    /** Returns the list of variables in their standard order **/
+    public List<VarInfo> get_all_vars() {
+      return new ArrayList<VarInfo> (vars.values());
+    }
+
   }
 
   public DeclReader() {
@@ -151,36 +248,46 @@ public class DeclReader {
   public void read (File pathname) {
     try {
 
-      BufferedReader decl_file = new BufferedReader(new FileReader(pathname));
+      MultiReader decl_file = new MultiReader(pathname, "^(//|#).*", null);
 
       for (String line = decl_file.readLine(); line != null;
            line = decl_file.readLine()) {
         if (!line.equals ("DECLARE"))
           continue;
 
-        // Read the name of the program point
-        String pptname = decl_file.readLine();
-        assert pptname.contains (":::");
-        DeclPpt ppt = new DeclPpt (pptname);
-        ppts.put (pptname, ppt);
-
-        // Read each of the variables in this program point.  The variables
-        // are terminated by a blank line.
-        decl_file.mark (4000);
-        line = decl_file.readLine();
-        while ((line != null) && (line.length() != 0)) {
-          decl_file.reset();
-          ppt.read_var (decl_file);
-          decl_file.mark (4000);
-          line = decl_file.readLine();
-        }
+        // Read the declaration
+        read_decl (decl_file);
       }
     } catch (Exception e) {
       throw new Error ("Error reading comparability decl file", e);
     }
   }
 
-  public void dump() {
+  /**
+   * Reads a single declaration from decl_file.  The opening "DECLARE"
+   * line should have already been read.  Returns the ppt.
+   */
+  protected DeclPpt read_decl (MultiReader decl_file) throws IOException {
+
+    // Read the name of the program point
+    String pptname = decl_file.readLine();
+    assert pptname.contains (":::");
+    DeclPpt ppt = new DeclPpt (pptname);
+    ppts.put (pptname, ppt);
+
+    // Read each of the variables in this program point.  The variables
+    // are terminated by a blank line.
+    String line = decl_file.readLine();
+    while ((line != null) && (line.length() != 0)) {
+      decl_file.putback (line);
+      ppt.read_var (decl_file);
+      line = decl_file.readLine();
+    }
+
+    return (ppt);
+  }
+
+  public void dump_decl() {
 
     for (String ppt_name : ppts.keySet()) {
       System.out.printf ("Comp Ppt: %s%n", ppt_name);
@@ -204,6 +311,14 @@ public class DeclReader {
                                    DeclReader.class);
     String[] files = options.parse_and_usage (args);
     boolean print_each_set = !avg_size;
+
+    // If reading/dumping dtrace file, just read one file and dump it
+    if (dump_dtrace) {
+      DTraceReader trace = new DTraceReader();
+      trace.read (new File (files[0]));
+      trace.dump_data();
+      return;
+    }
 
     // If determining declaration type comparability, setup the comparability
     // base on the declared type of primitives and write out the result
@@ -371,6 +486,9 @@ public class DeclReader {
     decl_file.close();
   }
 
-
+  /** Returns a list of all of the program points **/
+  public List<DeclPpt> get_all_ppts() {
+    return new ArrayList<DeclPpt> (ppts.values());
+  }
 
 }
