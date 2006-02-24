@@ -399,6 +399,15 @@ dyncomp-jdk-only dcomp-jdk-only :
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 #
+# Web Services Matching targets
+#
+WSMATCH_JAVA_FILES = daikon/tools/WSMatch.java daikon/chicory/*.java \
+					 utilMDE/*.java
+wsmatch : daikon/tools/WSMatch.class
+daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES))
+	$(JAVAC_COMMAND) $(WSMATCH_JAVA_FILES)
+
+#
 # Lookup targets
 #
 LOOKUP_JAVA_FILES := $(shell find utilMDE -name '*.java')
