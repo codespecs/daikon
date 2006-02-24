@@ -144,7 +144,7 @@ public class ChicoryPremain {
         }
 
         if (Chicory.verbose)
-            System.out.printf("Reading %s for pure methods %n", purityFileName);
+            System.out.printf("Reading '%s' for pure methods %n", purityFileName);
 
         String line;
         do
@@ -158,8 +158,11 @@ public class ChicoryPremain {
                 throw new Error("Error reading file " + purityFileName + ". Got exception e");
             }
 
-            if (line != null)
+            if (line != null) {
                 pureMethods.add(line.trim());
+                // System.out.printf ("Adding '%s' to list of pure methods\n",
+                //                   line);
+            }
         }
         while (line != null);
 
@@ -170,6 +173,8 @@ public class ChicoryPremain {
         catch (IOException e)
         {
         }
+
+        // System.out.printf ("leaving purify file\n");
 
     }
 
