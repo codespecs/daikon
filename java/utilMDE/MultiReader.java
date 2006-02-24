@@ -116,7 +116,8 @@ public class MultiReader {
 
     readers.push (new ReaderInfo (reader, null));
     this.comment_re = Pattern.compile (comment_re);
-    this.include_re = Pattern.compile (include_re);
+    if (include_re != null)
+      this.include_re = Pattern.compile (include_re);
   }
 
   /** Creates a MultiReader with no comments or include directives **/
@@ -170,7 +171,7 @@ public class MultiReader {
     }
 
     String line = get_next_line();
-    while (line != null) { // && line.trim().startsWith (line_comment))
+    while (line != null) {
       Matcher cmatch = comment_re.matcher (line);
       if (cmatch.find()) {
         line = cmatch.replaceFirst ("");
@@ -188,19 +189,21 @@ public class MultiReader {
 
     // Handle include files.  Non-absolute pathnames are relative
     // to the including file (the current file)
-    Matcher m = include_re.matcher (line);
-    if (m.matches()) {
-      File filename = new File (UtilMDE.fix_filename(m.group (1)));
-      // System.out.printf ("Trying to include filename %s%n", filename);
-      if (!filename.isAbsolute()) {
-        File current_filename = new File (readers.peek().filename);
-        File current_parent = current_filename.getParentFile();
-        filename = new File (current_parent, filename.toString());
-        // System.out.printf ("absolute filename = %s %s %s%n",
-        //                     current_filename, current_parent, filename);
+    if (include_re != null) {
+      Matcher m = include_re.matcher (line);
+      if (m.matches()) {
+        File filename = new File (UtilMDE.fix_filename(m.group (1)));
+        // System.out.printf ("Trying to include filename %s%n", filename);
+        if (!filename.isAbsolute()) {
+          File current_filename = new File (readers.peek().filename);
+          File current_parent = current_filename.getParentFile();
+          filename = new File (current_parent, filename.toString());
+          // System.out.printf ("absolute filename = %s %s %s%n",
+          //                     current_filename, current_parent, filename);
+        }
+        readers.push (new ReaderInfo (filename.getAbsolutePath()));
+        return readLine();
       }
-      readers.push (new ReaderInfo (filename.getAbsolutePath()));
-      return readLine();
     }
 
     // System.out.printf ("Returning [%d] '%s'%n", readers.size(), line);
