@@ -80,7 +80,7 @@ public class ClassInfo {
                 boolean foundMatch = false;
                 for (MethodInfo mi: method_infos)
                 {
-                    //System.out.println(mi.member.toString() + "\n" + pureMeth + "\n\n");
+                  // System.out.println(mi.member.toString() + "\n" + pureMeth + "\n\n");
                     if (mi.member.toString().trim().equals(pureMeth))
                     {
                         foundMatch = true;
@@ -91,7 +91,7 @@ public class ClassInfo {
                 if (!foundMatch)
                 {
                     // pureMeth must not actually be in this class
-                    throw new Error(String.format("Could not find pure method \"%s\" in class %s", pureMeth, getClass().toString()));
+                    throw new Error(String.format("Could not find pure method \"%s\" in class %s", pureMeth, clazz));
                 }
             }
         }
