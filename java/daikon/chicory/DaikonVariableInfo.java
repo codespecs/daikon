@@ -463,6 +463,20 @@ public abstract class DaikonVariableInfo
                 continue;
             }
 
+            // Skip variables that match the ignore pattern
+            if (Chicory.omit_var != null) {
+                String fullname = offset + "." + classField.getName();
+                if (is_static)
+                    fullname = classField.getDeclaringClass().getName()
+                        + "." + classField.getName();
+                Matcher m = Chicory.omit_var.matcher (fullname);
+                if (m.find()) {
+                    System.out.printf ("VAR %s matches omit pattern %s%n",
+                                       fullname, Chicory.omit_var);
+                    continue;
+                }
+            }
+
             // Don't print arrays of the same static field
             if (is_static && isArray)
             {
@@ -1032,16 +1046,6 @@ public abstract class DaikonVariableInfo
     */
    protected void addChildNodes(ClassInfo cinfo, Class type, String theName,
                                 String offset, int depthRemaining) {
-
-       // Ignore variables that match the ignore pattern
-       if (Chicory.omit_var != null) {
-           Matcher m = Chicory.omit_var.matcher (offset + theName);
-           if (m.find()) {
-               System.out.printf ("variable %s matches omit pattern %s%n",
-                                  offset + theName, Chicory.omit_var);
-               return;
-           }
-       }
 
        if (type.isPrimitive())
            return;
