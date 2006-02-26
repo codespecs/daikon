@@ -2,18 +2,16 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
-# Time-stamp: <2006-02-03 17:31:48 mernst>
+# Time-stamp: <2006-02-25 19:26:59 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
 # toc -->" and "<!-- end toc -->".  There may be extra text in the
 # comments; for example,
-#   <p>
-#   Contents:
+#   <p>Contents:</p>
 #   <!-- start toc.  do not edit; run html-update-toc instead -->
 #   <!-- end toc -->
-#   </p>
-# To get started, just add those five lines near the top of the file.
+# To get started, just add those three lines near the top of the file.
 
 # The table of contents contains links to header lines of the form
 #   <h3><a name="key">Subheading</a></h3>
