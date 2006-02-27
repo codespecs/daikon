@@ -466,7 +466,9 @@ declaration (@pxref{Declarations,,,./daikon,Daikon User Manual}) that
 lists the variables in scope at that program point, and the front end
 must arrange that execution creates a data trace record (@pxref{Data
 trace records,,,./daikon,Daikon User Manual}) for each execution of that
-program point.
+program point.  Conventionally, the way to create a data trace record is
+to insert a printf (or similar) statement that outputs the current
+values of the variables of interest.
 
 
 @menu
