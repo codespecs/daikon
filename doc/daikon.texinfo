@@ -3664,6 +3664,17 @@ generated comparability sets.  If you cannot get DynComp to successfully
 run on a large program, even after tweaking @option{--gc-num-vars}, try
 turning on this option.
 
+@item --dyncomp-detailed-mode
+
+This option runs a more detailed (but more time- and space-intensive)
+algorithm for tracking variable comparability.  It takes O(n^2) time and
+space, whereas the default algorithm takes roughly O(n) time and space.
+However, it can produce more precise results.  Despite its name, this
+mode can be used together with @option{--dyncomp-fast-mode} to run the
+more precise algorithm but still use an approximation for handling
+literal values.  (This mode is still experimental and not well-tested
+yet.)
+
 @item --separate-entry-exit-comp
 
 The default behavior for DynComp is to generate the same comparability

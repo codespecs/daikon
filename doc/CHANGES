@@ -20,6 +20,23 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.3 (March 1, 2006)
+
+Kvasir
+
+  User-visible changes
+
+    Added a --dyncomp-detailed-mode command-line option to provide
+    more detailed DynComp variable comparability analysis.
+
+  Implementation changes
+
+    Ported Kvasir to use a recent development version of Valgrind
+    3.2.0 from the Feb. 10, 2006 snapshot of the Subversion
+    repository.
+
+--------------------------------------------
+
 4.2.2 (February 1, 2006)
 
 Enhancements were made to the Chicory and Kvasir front ends.
