@@ -22,12 +22,33 @@ Further documentation can be found in:
 
 4.2.3 (March 1, 2006)
 
+This is a bug-fix release.  It also adds a new, more detailed mode to
+the x86 DynComp tool.
+
+Daikon
+
+  User-visible changes
+
+    Changed the default value of configuration parameter
+    daikon.PptRelation.enable_object_user from "true" to "false".
+
+    Fixed bugs in LinearTernary invariant, which is expressed as
+    ax+by+cz+d=0 or as x=jy+kz+c.
+
+Chicory
+
+  User-visible changes
+
+    Fixed bugs in operation of --purity-file and in --omit-var
+    switches.
+
 Kvasir
 
   User-visible changes
 
     Added a --dyncomp-detailed-mode command-line option to provide
-    more detailed DynComp variable comparability analysis.
+    more detailed (accurate) but slower DynComp variable comparability
+    analysis.
 
   Implementation changes
 
