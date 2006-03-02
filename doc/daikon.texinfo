@@ -6027,6 +6027,13 @@ message.
 @node    Other front ends,  , convertcsv.pl, Front ends
 @section Other front ends
 
+It is relatively easy to create a Daikon front end for another language
+or run-time system.  For example, people have done this without any help
+at all from the Daikon developers.  For more information about building
+a new front end, see @ref{New front ends,,,./developer,Daikon Developer
+Manual}.
+
+
 @cindex front end for IOA
 @cindex IOA front end
 @cindex front end for Lisp
@@ -6039,11 +6046,11 @@ An earlier version of Daikon included a Lisp front end, but it is no
 longer supported.
 
 An earlier version of Daikon provided a source-based front end for Java
-named dfej.  It has been superseded by Chicory.
+named dfej.  It has been superseded by @ref{Chicory}.
 
 An earlier version of Daikon provided a source-based front end for C
-named dfec.  It has been superseded by Kvasir (binary-based, for Linux/x86) and
-Mangel-Wurzel (source-based, for all other platforms).
+named dfec.  It has been superseded by @ref{Kvasir} (binary-based, for Linux/x86) and
+@ref{Mangel-Wurzel} (source-based, for all other platforms).
 
 
 @node    Tools, Troubleshooting, Front ends, Top
