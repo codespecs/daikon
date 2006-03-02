@@ -484,7 +484,7 @@ clean:
 	-rm -f `find daikon -follow -name "*.class" -print`
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
 	-rm -f ChicoryPremain.jar
-	-rm -f dcomp_premain.jar
+	-rm -f dcomp_premain.jar dcomp_rt.jar
 
 dist_clean: clean
 	-rm -f TAGS
