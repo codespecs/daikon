@@ -198,10 +198,10 @@ public final class CLASSNAME
 
         // we still need to guarantee a positive x coefficient
         if (a < 0) {
-          a = a/-1.0;
-          b = b/-1.0;
-          c = c/-1.0;
-          d = d/-1.0;
+          a = -a;
+          b = -b;
+          c = -c;
+          d = -d;
         }
       }
     }
@@ -1030,42 +1030,42 @@ public final class CLASSNAME
     // http://jblanco_60.tripod.com/plane.html (the math behind the
     // implementation is detailed above)
 
-    double px = p0.x;
-    double py = p0.y;
-    double pz = p0.z;
-    double qx = p1.x;
-    double qy = p1.y;
-    double qz = p1.z;
-    double rx = p2.x;
-    double ry = p2.y;
-    double rz = p2.z;
+    PRIMITIVE px = p0.x;
+    PRIMITIVE py = p0.y;
+    PRIMITIVE pz = p0.z;
+    PRIMITIVE qx = p1.x;
+    PRIMITIVE qy = p1.y;
+    PRIMITIVE qz = p1.z;
+    PRIMITIVE rx = p2.x;
+    PRIMITIVE ry = p2.y;
+    PRIMITIVE rz = p2.z;
 
     // define the i, j, k components of the two line segments on the plane
-    double a1 = (qx - px);
-    double a2 = (qy - py);
-    double a3 = (qz - pz);
+    PRIMITIVE a1 = (qx - px);
+    PRIMITIVE a2 = (qy - py);
+    PRIMITIVE a3 = (qz - pz);
 
-    double b1 = (rx - px);
-    double b2 = (ry - py);
-    double b3 = (rz - pz);
+    PRIMITIVE b1 = (rx - px);
+    PRIMITIVE b2 = (ry - py);
+    PRIMITIVE b3 = (rz - pz);
 
 
     // calculate the i, j, k components of the cross product
-    double i_var = (a2 * b3) - (b2 * a3);
-    double j_var = -((a1 * b3) - (b1 * a3));
-    double k_var = (a1 * b2) - (b1 * a2);
+    PRIMITIVE i_var = (a2 * b3) - (b2 * a3);
+    PRIMITIVE j_var = -((a1 * b3) - (b1 * a3));
+    PRIMITIVE k_var = (a1 * b2) - (b1 * a2);
 
 
 
     // Calculate the value of the constant.  Note that given the format
     // of the point-normal form, we multiply by the negative of P(x,y,z)
 
-    double Stand_const = ((i_var*(-px)) + (j_var*(-py)) + (k_var*(-pz)));
+    PRIMITIVE Stand_const = ((i_var*(-px)) + (j_var*(-py)) + (k_var*(-pz)));
 
 
     // call gcd function to get the greatest common divisor of the output
     // and put the coefficients in lowest terms
-    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
+    PRIMITIVE myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
 
     double standard_i_var = 0;
     double standard_j_var = 0;
