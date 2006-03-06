@@ -1317,7 +1317,7 @@ public final class Daikon {
   // reflexive and partially reflexive invs in ternary slices
   // and also filters out the invariants that have not seen enough
   // samples in ternary slices.
-  private static List<Invariant> filter_invs(List<Invariant> invs) {
+  static List<Invariant> filter_invs(List<Invariant> invs) {
     List<Invariant> new_list = new ArrayList<Invariant>();
 
     for (Invariant inv : invs) {
