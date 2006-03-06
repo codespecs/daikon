@@ -809,6 +809,12 @@ public class PptTopLevel extends Ppt {
       vt.size() == var_infos.length - num_static_constant_vars,
       name);
 
+    // stop early if there are no vars
+    if (var_infos.length == 0) {
+      Assert.assertTrue(vt.size() == 0);
+      return null;
+    }
+    
     // If there are conditional program points, add the sample there instead
     if (has_splitters()) {
       for (PptSplitter ppt_split : splitters) {
@@ -2194,7 +2200,7 @@ public class PptTopLevel extends Ppt {
     // Check to see if the new slice would be over all constants
     if (is_constant(var1) && is_constant(var2))
       return (false);
-
+    
     if (! (var1.compatible(var2)
            || (var1.type.isArray() && var1.eltsCompatible(var2))
            || (var2.type.isArray() && var2.eltsCompatible(var1)))) {
@@ -3554,6 +3560,7 @@ public class PptTopLevel extends Ppt {
         if (!is_slice_ok(leaders[i], leaders[j]))
           continue;
         PptSlice2 slice2 = new PptSlice2(this, leaders[i], leaders[j]);
+        
         slice2.merge_invariants();
         if (slice2.invs.size() > 0)
           binary_slices.add(slice2);
