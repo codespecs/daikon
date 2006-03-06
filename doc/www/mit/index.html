@@ -63,10 +63,12 @@ Contents:
           <li><a href="#regression-tests">Testing Daikon</a></li>
           <li><a href="#distribution">Making a distribution</a></li>
           <li><a href="#Mangel-Wurzel-linux">Building and testing Mangel-Wurzel on Linux</a></li>
-          <li><a href="#Mangel-Wurzel-windows">Building and testing Mangel-Wurzel on Windows</a></li>
+          <li><a href="#Mangel-Wurzel-Windows">Building/testing Mangel-Wurzel on Windows</a></li>
           <li><a href="#purify-linux">Setting up Purify on Linux</a></li>
           <li><a href="#purify-windows">Setting up Purify on Windows</a></li>
           <li><a href="#EDG-front-end">EDG C++ front end</a></li>
+          <li><a href="#vmware">Setting up VMWare</a></li>
+          <li><a href="#windows-setup">Setting up Windows for Mangel-Wurzel</a></li>
         </ul></li>
     </ul>
 <!-- end toc -->
@@ -568,8 +570,7 @@ target.
     <li> <p> Rebuild everything. </p>
 
     <pre>
-        make rebuild-everything
-    </pre> </p>
+        make rebuild-everything    </pre> 
 
     <li> Run the kvasir regression tests <p>
     <pre>
@@ -622,14 +623,12 @@ target.
     installing.</b></p>
 
     <pre>
-        make test-staged-dist
-    </pre>
+        make test-staged-dist    </pre>
 
-    <li> Update the website. </p>
+    <li> Update the website. 
 
     <pre>
-        make staging-to-www
-    </pre> </p>
+        make staging-to-www </pre> 
 
     Note that <code>make staging-to-www</code> will automatically
     update the version numbers in the source code and documentation
@@ -649,15 +648,13 @@ target.
     <li> Check the website to see if it has any broken links </p>
 
     <pre>
-      checklink.pl -q -r `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon
-    </pre>
+      checklink.pl -q -r `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
 
     <li> Commit any changes back to CVS </p>
 
     <pre>
         cd $inv
-        cvs -q commit -m "Change version to &lt;X.Y.Z>"
-    </pre> </p>
+        cvs -q commit -m "Change version to &lt;X.Y.Z>" </pre>
 
     <li> Send mail to the daikon-announce mailing list.  There are sample
     messages in the <a href="https://lists.csail.mit.edu/pipermail/daikon-announce/">archive</a> of <a href="https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/">daikon-announce</a>.
@@ -668,7 +665,7 @@ target.
     to approve the message before it is sent to the list.
     </p>
 
-    <li> Use the freshmeat-submit script to submit an update to
+    <li> Submit an update to
     freshmeat.net, which will inform others that a new release is available.
 
     <p>
@@ -694,18 +691,23 @@ target.
 <h3><a name="Mangel-Wurzel-linux">Building and testing Mangel-Wurzel on Linux</a></h3>
 
 <ol>
-    <li> Checkout Mangel-Wurzel from CVS.
+    <li> Checkout Mangel-Wurzel from CVS (if necessary)
     <pre>
     cd $inv
-    cvs -d $pag/projects/invariants/.CVS co mangel-wurzel
-    </pre>
+    cvs -d $pag/projects/invariants/.CVS co mangel-wurzel </pre>
 
     (Before doing this step, you should have signed an <a
     href="#EDG-front-end">EDG non-disclosure agreement</a>.)<p>
 
-    <li> Setup yourself to use Purify and switch over the license (if
-    necessary) to you as described below. <p>
+    <li> Update Mangel-Wurzel
+    <pre>
+    cd $inv/mangel-wurzel
+    cvs -q update </pre> 
 
+    <li> Setup yourself to use Purify and switch over the license (if
+    necessary) to you as described <a href=#purify-linux> below</a>. <p>
+
+    <!-- These should not be necessary they are in the makefile
     <li> Set the environment variable <code>PURIFY_DIR</code> to
     <code>$RATIONAL/releases/purify.i386_linux2.2003a.06.15/</code>.<p>
 
@@ -713,6 +715,7 @@ target.
     <code>$inv/mangel-wurzel</code>.<p>
 
     <li> Add <code>$inv/mangel-wurzel/bin</code> to your path.<p>
+    -->
 
     <li> Build and test Mangel-Wurzel.<p>
     <pre>
@@ -720,136 +723,75 @@ target.
     make install
     make test </pre><p>
 
-    <li> To make a new binary distribution for release:
+    <li> To make and copy new binary distribution for release:
     <pre>
-    make tar </pre><p>
-    The resulting tar file can then be copied over to the release area.
+    make tar 
+    make release</pre><p>
 </ol>
 
 
-<h3><a name="Mangel-Wurzel-windows">Building and testing Mangel-Wurzel on Windows</a></h3>
 
-Setting up your Windows environment:<p>
-
+<h3><a name="Mangel-Wurzel-Windows">Building/testing Mangel-Wurzel on Windows</a></h3>
 <ol>
+    <li> Startup VMWare on horseradish <p>
 
-<li> You need to come up with a good way to transfer files back and
-forth between Linux and Windows.  If you're using VMWare, the easiest
-way to do this is to import your home directory on Linux into Windows
-as a shared folder/network drive.  To do this, you need to add the
-directory on the Linux side to VMWare's list of shared folders (use
-the "Virtual Machine Settings" menu), then on the Windows side, go
-into the "Tools" menu tab in the file browser and select "Map network
-drive".  You do not need to install CVS on Windows as long as you can
-easily copy tarballs back and forth.<p>
+    <li> Checkout mangel-wurzel from CVS (if necessary)
+    <pre>
+    cd $inv
+    cvs -d :ext:username@pag.csail.mit.edu:/afs/csail.mit.edu/group/pag/projects/invariants/.CVS co mangel-wurzel </pre> <p>
 
-<li> You need to have all of these installed on your Windows box:
-Cygwin, Daikon, the JDK (because Daikon uses some stuff that isn't
-included in the JRE), Rational Purify, and Visual C/C++.<p>
+    <li> Update mangel-wurzel
+    <pre>
+    cd $inv/mangel-wurzel
+    cvs -q update </pre> <p>
 
-<li> It's helpful for copying files back and forth if you create
-shortcuts to both your Cygwin and Linux home directories from your
-desktop, and/or a symbolic link in your Cygwin home directory to your
-shared Linux directory.<p>
+    <li> Make sure that the mangel is setup for windows
+    <pre>
+    cd $inv/mangel-wurzel
+    cp .mangelrc.windows .mangelrc </pre><p>
 
-<li> Although MW runs as a native Windows application, building it
-requires Cygwin and particularly Gnu Make.  However, be aware that you
-can't run MW from inside an XTerm window -- you need to be in a
-Windows console window, like the shell window you get when you
-double-click on the Cygwin icon.  (This is a restriction of Rational
-Purify, which doesn't work correctly if console input/output is
-redirected to/from a pipe, which is how ptys are implemented in
-Cygwin.)  Also note that Purify only works on native Windows
-executables produced by the Visual C/C++ compiler, not by gcc.<p>
+    <li> Setup yourself to use purify and switch over the license (if
+    necessary) to you as described <a
+    href=#purify-windows-change-user> below</a>. <p>
 
-<li> You need to set up some environment variables in your 
-<code>.cshrc</code> or <code>.bashrc</code>,  like so:<p>
+    <li> Build and test mangel-wurzel
+    <pre>
+    cd $inv/mangel-wurzel
+    make install
+    make test </pre> <p>
 
-For Daikon:
-<pre>
-setenv CLASSPATH '.;C:\Program Files\daikon\daikon.jar;C:\Program Files\Java\jdk1.5.0_05\lib\tools.jar'
-</pre><p>
+    There will be differences in the md5, rijndael, and unit directories,
+    because of differences between the unix and windows versions.
 
-For Visual C/C++:
-<pre>
-setenv MVSDIR "C:\Program Files\Microsoft Visual Studio .NET 2003"
-setenv INCLUDE "$MVSDIR\Vc7\include;$MVSDIR\Vc7\PlatformSDK\Include"
-setenv LIB  "$MVSDIR\Vc7\lib;$MVSDIR\Vc7\PlatformSDK\Lib"
-</pre><p>
+    <li> Create a zip file and release it
+    <pre>
+    make zip
+    cp mangel-wurzel-windows.zip /afs/csail/group/pag/www/daikon/download/binaries </pre> <p>
 
-For Mangel-Wurzel:
-<pre>
-setenv PURIFY_DIR "C:\Program Files\Rational\PurifyPlus"
-setenv MANGEL_DIR "C:\cygwin\home\sjl\mangel-wurzel"
-</pre><p>
+    Note that the vmware box probably doesn't have direct access to
+    afs, so the above cp command will have to me modified accordingly.
+</ol> <p>
 
-<li> You also need to set your path to include the bin directories for
-Java, Visual C/C++, Purify, and Mangel-Wurzel, in addition to all the standard
-places, something like this:
-<pre>
-setenv PATH .:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/lib/lapack:\
-  /home/sjl/mangel-wurzel/bin:\
-  /cygdrive/c/Program_Files/Java/jdk1.5.0_05/bin:\
-  /cygdrive/c/WINDOWS/system32:/cygdrive/c/WINDOWS:\
-  /cygdrive/c/WINDOWS/System32/Wbem:\
-  /cygdrive/c/Program_Files/Microsoft_Visual_Studio/Vc7/bin:\
-  /cygdrive/c/Program_Files/Microsoft_Visual_Studio/Common7/IDE:\
-  /cygdrive/c/Program_Files/Rational/Common:\
-  /cygdrive/c/Program_Files/Rational/PurifyPlus:\
-  /cygdrive/c/Program_Files/Rational/PurifyPlus/cache
-</pre><p>
+Problems:
+<ul>
+    <li> When running the tests, the error '<code>Expected
+    HOST_ALIGNMENT_REQUIRED is 8</code>' is seen. <p>
 
-Note that PATH uses Unix-like file syntax instead of Windows-like.
-(You can use the cygpath utility to convert back and forth.)  Also, it's
-useful to creat a shortcut named "Program_Files" to point to the "Program
-Files" directory since it's a pain dealing with pathnames with spaces
-in Cygwin.<p>
+    Probably, the  file <code>misc/dettargs.out</code> has been
+    created incorrectly.  Try going to the <code>misc</code> subdirectory,
+    deleting the files <code>lldef</code> and<code>dettargs.out</code>
+    and then rebuilding dettargs.out (<code>makedettargs.out</code>). <p>
 
-<li> Make sure you have your Purify license set up correctly.<p>
+    <li> When running the tests, the first test hangs or encounters
+    illegal instructions. <p>
 
-<li> You might want to do a sanity check on your configuration stuff by
-compiling "hello, world" with the Visual C/C++ compiler and running
-Purify on it.<p>
-
-Visual C/C++ compiler documentation is available
-<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vccore/html/_core_building_on_the_command_line.3a_.overview.asp">here</a>, while
-Purify documentation is only available through its online "help" menu.<p>
-
-</ol>
-
-
-Building Mangel-Wurzel:<p>
-
-<ol>
-<li>Check out the Mangel-Wurzel source distribution on Linux, tar it
-up (note: *don't* use <code>make tar</code> -- that makes a binary 
-distribution), copy to Windows, and untar it there 
-(<code>/home/sjl/mangel-wurzel</code> 
-in the examples above).  If you're using an existing copy of MW that you
-already built on Linux, do <code>make superclobber</code> 
-before you tar it up to get rid of all the Linux binaries.  <p>
-
-<li>Copy <code>.mangelrc.windows</code> to <code>.mangelrc</code> and 
-make any changes you need there (hopefully none).<p>
-
-<li>In a Cygwin shell, do <code>make install</code>.<p>
-
-<li><code>make -i test</code> will run the Mangel-Wurzel tests that are not
-specific to GCC/Linux.  Expect there to be differences reported,
-compared to the Linux output.  This is usually because Purify on
-Windows doesn't reliably detect uninitialized memory references to
-stack variables, causing random values for these variables to be
-reported instead of "nonsensical".  It is probably OK to ignore these
-differences as long as you are using a version of Mangel-Wurzel that
-is known to pass the tests on Linux.<p>
-
-<li> <code>make zip</code> makes a zip file for the binary distribution.  
-You can copy this back to your Linux home directory and from there to the
-release area.  If you made any changes to the MW sources, do 
-<code>make superclobber</code> and then make another source tarball to copy 
-back as well so that you can check your changes back into CVS.<p>
-
-</ol>
+    Look to see what command is being used to compile the intermediate
+    file.  The command on windows should be 'cl'.  If it is 'cc', the
+    <code>.mangelrc</code> file (that controls defaults) is not set
+    correctly.  Make sure that <code>.mangelrc</code> in $MANGEL_DIR
+    has the same contents as does <code>.mangelrc.windows</code> (in
+    the same directory) <p>
+</ul>
 
 <h3><a name="purify-linux">Setting up Purify on Linux</a></h3>
 
@@ -886,8 +828,8 @@ To change the authorized user: <p>
 
     <li> Restart the license manager:<pre> 
     cd $RATIONAL/config
-    sudo ./start_lmgrd_on_horseradish stop
-    sudo ./start_lmgrd_on_horseradish </pre><p>
+    ./start_lmgrd_on_horseradish stop
+    ./start_lmgrd_on_horseradish </pre><p>
 </ol>
 
 To move the license to a different machine: <p>
@@ -975,7 +917,7 @@ To install Purify from scratch: <ol>
     Programs" button on the "Start" menu on your toolbar.  Ta-da!
 </ol> <p>
 
-To change the authorized user: <ol>
+<a name=purify-windows-change-user> To change the authorized user: </a> <ol>
 
     <li> Go into <code>C:\Program&nbsp;Files\Rational\Common</code> 
     and edit <code>Rational.opt</code> (make
@@ -1031,6 +973,123 @@ Mangel-Wurzel unless they, too, have an EDG license).
 If you are new to this code, start by reading its manual and by looking
 at <code>src/il_def.h</code>.
 </p>
+
+<h3><a name="vmware"> Setting up VMWare </a></h3>
+
+<ul> 
+    <li> The vmware executable is /usr/vmware/bin/vmware.  Normally its
+    best to add /usr/vmware/bin to your path <p>
+
+    <li> MIT has licenses for VMWare.  Send an email to software@csail.mit.edu
+    to get a license number.  From the vmware screen, choose 
+    'help->Enter Serial Number' to enter the license. <p>
+
+    <li> Start up VMWare by choosing 'Open existing virtual machine or team'
+    from the main window.  The setup (at least on horseradish) is found
+    in /scratch/vmware (should we move this to a place that is backed up?) <p>
+
+    <li> Using VMWare remotely may create some problems with mapping X
+    keys correctly.  This is explained at: <a
+    href=http://www.vmware.com/support/ws5/doc/ws_devices_keymap_linux_longer.html>
+    the vmware support site</a>.  To use VNC I found I had to set the
+    keyboard by hand.  To do this add 'xkeymap.language = us101' to
+    your vmware config file (~/.vmware/config).  At that point
+    everything worked except the vertical bar (|).  I fixed that be
+    adding 'xkeymap.keysym.bar = 0x02b' to the config file. <p>
+
+
+</ul>
+
+<h3><a name="windows-setup"> Setting up Windows for Mangel-Wurzel</a></h3>
+
+Setting up your Windows environment:<p>
+
+<ol>
+
+<li> You need to come up with a good way to transfer files back and
+forth between Linux and Windows.  If you're using VMWare, the easiest
+way to do this is to import your home directory on Linux into Windows
+as a shared folder/network drive.  To do this, you need to add the
+directory on the Linux side to VMWare's list of shared folders (use
+the "Virtual Machine Settings" menu), then on the Windows side, go
+into the "Tools" menu tab in the file browser and select "Map network
+drive".  You do not need to install CVS on Windows as long as you can
+easily copy tarballs back and forth.<p>
+
+<li> You need to have all of these installed on your Windows box:
+Cygwin, Daikon, the JDK (because Daikon uses some stuff that isn't
+included in the JRE), Rational Purify, and Visual C/C++.<p>
+
+<li> It's helpful for copying files back and forth if you create
+shortcuts to both your Cygwin and Linux home directories from your
+desktop, and/or a symbolic link in your Cygwin home directory to your
+shared Linux directory.<p>
+
+<li> Although MW runs as a native Windows application, building it
+requires Cygwin and particularly Gnu Make.  However, be aware that you
+can't run MW from inside an XTerm window -- you need to be in a
+Windows console window, like the shell window you get when you
+double-click on the Cygwin icon.  (This is a restriction of Rational
+Purify, which doesn't work correctly if console input/output is
+redirected to/from a pipe, which is how ptys are implemented in
+Cygwin.)  Also note that Purify only works on native Windows
+executables produced by the Visual C/C++ compiler, not by gcc.<p>
+
+<li> You need to set up some environment variables in your 
+<code>.cshrc</code> or <code>.bashrc</code>,  like so:<p>
+
+For Daikon:
+<pre>
+setenv CLASSPATH '.;C:\Program Files\daikon\daikon.jar;C:\Program Files\Java\jdk1.5.0_05\lib\tools.jar'
+</pre><p>
+
+For Visual C/C++:
+<pre>
+setenv MVSDIR "C:\Program Files\Microsoft Visual Studio .NET 2003"
+setenv INCLUDE "$MVSDIR\Vc7\include;$MVSDIR\Vc7\PlatformSDK\Include"
+setenv LIB  "$MVSDIR\Vc7\lib;$MVSDIR\Vc7\PlatformSDK\Lib"
+</pre><p>
+
+For Mangel-Wurzel:
+<pre>
+setenv PURIFY_DIR "C:\Program Files\Rational\PurifyPlus"
+setenv MANGEL_DIR "C:\cygwin\home\sjl\mangel-wurzel"
+</pre><p>
+
+<li> You also need to set your path to include the bin directories for
+Java, Visual C/C++, Purify, and Mangel-Wurzel, in addition to all the standard
+places, something like this:
+<pre>
+setenv PATH .:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/lib/lapack:\
+  /home/sjl/mangel-wurzel/bin:\
+  /cygdrive/c/Program_Files/Java/jdk1.5.0_05/bin:\
+  /cygdrive/c/WINDOWS/system32:/cygdrive/c/WINDOWS:\
+  /cygdrive/c/WINDOWS/System32/Wbem:\
+  /cygdrive/c/Program_Files/Microsoft_Visual_Studio/Vc7/bin:\
+  /cygdrive/c/Program_Files/Microsoft_Visual_Studio/Common7/IDE:\
+  /cygdrive/c/Program_Files/Rational/Common:\
+  /cygdrive/c/Program_Files/Rational/PurifyPlus:\
+  /cygdrive/c/Program_Files/Rational/PurifyPlus/cache
+</pre><p>
+
+Note that PATH uses Unix-like file syntax instead of Windows-like.
+(You can use the cygpath utility to convert back and forth.)  Also, it's
+useful to creat a shortcut named "Program_Files" to point to the "Program
+Files" directory since it's a pain dealing with pathnames with spaces
+in Cygwin.<p>
+
+<li> Make sure you have your <a href=#purify-windows>Purify license</a> 
+set up correctly.<p>
+
+<li> You might want to do a sanity check on your configuration stuff by
+compiling "hello, world" with the Visual C/C++ compiler and running
+Purify on it.<p>
+
+Visual C/C++ compiler documentation is available
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vccore/html/_core_building_on_the_command_line.3a_.overview.asp">here</a>, while
+Purify documentation is only available through its online "help" menu.<p>
+
+</ol>
 
 
 <hr>
