@@ -1,13 +1,11 @@
 package daikon;
 
-import gnu.getopt.Getopt;
-import gnu.getopt.LongOpt;
+import static daikon.Global.lineSep;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,14 +17,11 @@ import java.util.logging.Logger;
 
 import utilMDE.Assert;
 import utilMDE.UtilMDE;
+import daikon.Daikon.TerminationMessage;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.ValueSet;
 import daikon.suppress.NIS;
-import daikon.PptTopLevel;
-import daikon.Daikon.TerminationMessage;
-
-import static daikon.Global.*;
 
 /**
  * DaikonSimple reads a declaration file and trace file and outputs a list of
@@ -106,7 +101,7 @@ public class DaikonSimple {
    * @see daikon.Daikon.TerminationMessage
    * @see daikon.Daikon#mainHelper(String[])
    */
-public static void mainHelper(final String[] args) throws IOException,
+  public static void mainHelper(final String[] args) throws IOException,
       FileNotFoundException {
 
     // set up logging information
@@ -144,18 +139,14 @@ public static void mainHelper(final String[] args) throws IOException,
     // initializes the points (adding orig and derived variables)
     all_ppts = FileIO.read_declaration_files(decls_files);
 
-//    for (Iterator<PptTopLevel> t = all_ppts.pptIterator(); t.hasNext();) {
-//      PptTopLevel ppt = t.next();
-//      System.out.println("After decls: " + ppt.name);
-//    }
-//    System.out.println("here");
-//    System.exit(0);
     // Create the combined exits (and add orig and derived vars)
-//    Daikon.create_combined_exits(all_ppts);
+    // Daikon.create_combined_exits(all_ppts);
 
     // Read and process the data trace files
     SimpleProcessor processor = new SimpleProcessor();
     FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
+
+    //System.exit(0);
 
     // Print out the invariants for each program point (sort first)
     for (Iterator<PptTopLevel> t = all_ppts.pptIterator(); t.hasNext();) {
@@ -166,16 +157,21 @@ public static void mainHelper(final String[] args) throws IOException,
       if (ppt.num_samples() == 0) {
         continue;
       }
-      List<Invariant> invs = PrintInvariants.sort_invariant_list(ppt.invariants_vector());
-      List<Invariant> filtered_invs = filter_invs(invs);
-      // The dkconfig_quiet printing is used for creating diffs between DaikonSimple
-      // and Daikon's output.  The second kind of printing is used for
-      // debugging.  Since the names of the program points are the same for both
+      List<Invariant> invs = PrintInvariants.sort_invariant_list(ppt
+          .invariants_vector());
+      List<Invariant> filtered_invs = Daikon.filter_invs(invs);
+      // The dkconfig_quiet printing is used for creating diffs between
+      // DaikonSimple
+      // and Daikon's output. The second kind of printing is used for
+      // debugging. Since the names of the program points are the same for both
       // Daikon and DaikonSimple, diffing the two output will result in
       // only differences in the invariants, but we can not see at which program
-      // points these differing invariants appear.  Using the second kind of printing,
-      // Daikon's output does not have the '+' in the program point name, so in addition
-      // to the invariants showing up in the diff, we will also see the program point
+      // points these differing invariants appear. Using the second kind of
+      // printing,
+      // Daikon's output does not have the '+' in the program point name, so in
+      // addition
+      // to the invariants showing up in the diff, we will also see the program
+      // point
       // names.
 
       if (Daikon.dkconfig_quiet) {
@@ -194,43 +190,10 @@ public static void mainHelper(final String[] args) throws IOException,
       System.out.println(ppt.num_samples());
 
       for (Invariant inv : filtered_invs) {
-          System.out.println(inv.getClass());
-          System.out.println(inv);
+        System.out.println(inv.getClass());
+        System.out.println(inv);
       }
     }
-  }
-
-  // The function filters out the reflexive invs in binary slices,
-  // reflexive and partially reflexive invs in ternary slices
-  // and also filters out the invariants that have not seen enough
-  // samples in ternary slices.
-  private static List<Invariant> filter_invs(List<Invariant> invs) {
-    List<Invariant> new_list = new ArrayList<Invariant>();
-
-    for (Invariant inv : invs) {
-      VarInfo[] vars = inv.ppt.var_infos;
-
-      // This check is the most non-intrusive way to filter out the invs
-      // Filter out reflexive invariants in the binary invs
-      if (!((inv.ppt instanceof PptSlice2) && vars[0] == vars[1])) {
-
-        // Filter out the reflexive and partially reflexive invs in the
-        // ternary slices
-        if (!((inv.ppt instanceof PptSlice3) && (vars[0] == vars[1]
-            || vars[1] == vars[2] || vars[0] == vars[2]))) {
-          if (inv.ppt.num_values() != 0) {
-
-            // filters out "warning: too few samples for
-            // daikon.inv.ternary.threeScalar.LinearTernary invariant"
-            if (inv.isActive()) {
-              new_list.add(inv);
-            }
-          }
-        }
-      }
-    }
-
-    return new_list;
   }
 
   /**
@@ -246,9 +209,9 @@ public static void mainHelper(final String[] args) throws IOException,
    */
 
   // Note that some slightly inefficient code has been added to aid
-  // in debugging.  When creating binary and ternary views and debugging
+  // in debugging. When creating binary and ternary views and debugging
   // is on, the outer loops will not terminate prematurely on innapropriate
-  // (i.e., non-canonical) variables.  This allows explicit debug statements
+  // (i.e., non-canonical) variables. This allows explicit debug statements
   // for each possible combination, simplifying determining why certain
   // slices were not created.
   //
@@ -262,7 +225,7 @@ public static void mainHelper(final String[] args) throws IOException,
     int old_num_views = ppt.numViews();
     boolean debug_on = debug.isLoggable(Level.FINE);
 
-    /// 1. all unary views
+    // / 1. all unary views
 
     // Unary slices/invariants.
     // Currently, there are no constraints on the unary
@@ -276,8 +239,8 @@ public static void mainHelper(final String[] args) throws IOException,
     for (int i = 0; i < ppt.var_infos.length; i++) {
       VarInfo vi = ppt.var_infos[i];
 
-      ///* if (!is_slice_ok(vi))
-      ///*  continue;
+      // /* if (!is_slice_ok(vi))
+      // /* continue;
 
       PptSlice1 slice1 = new PptSlice1(ppt, vi);
       slice1.instantiate_invariants();
@@ -287,7 +250,7 @@ public static void mainHelper(final String[] args) throws IOException,
     ppt.addViews(unary_views);
     unary_views = null;
 
-    /// 2. all binary views
+    // / 2. all binary views
 
     // Binary slices/invariants.
     Vector<PptSlice> binary_views = new Vector<PptSlice>();
@@ -295,22 +258,25 @@ public static void mainHelper(final String[] args) throws IOException,
       VarInfo var1 = ppt.var_infos[i1];
 
       // Variables can be constant and missing in DaikonSimple invariants
-      ///* if (!is_var_ok_binary(var1))
-      ///*   continue;
+      // /* if (!is_var_ok_binary(var1))
+      // /* continue;
 
       for (int i2 = i1; i2 < ppt.var_infos.length; i2++) {
         VarInfo var2 = ppt.var_infos[i2];
 
         // Variables can be constant and missing in DaikonSimple invariants
-        ///* if (!is_var_ok_binary(var2))
-        ///*   continue;
+        // /* if (!is_var_ok_binary(var2))
+        // /* continue;
 
-        if (!var1.compatible(var2)) {
+        if (! (var1.compatible(var2)
+            || (var1.type.isArray() && var1.eltsCompatible(var2))
+            || (var2.type.isArray() && var2.eltsCompatible(var1)))) {
           continue;
         }
 
         PptSlice2 slice2 = new PptSlice2(ppt, var1, var2);
         slice2.instantiate_invariants();
+
         binary_views.add(slice2);
       }
     }
@@ -356,7 +322,7 @@ public static void mainHelper(final String[] args) throws IOException,
   }
 
   // This method is exclusively for checking variables participating
-  // in ternary invariants.  The variable must be integer or float, and
+  // in ternary invariants. The variable must be integer or float, and
   // can not be an array.
   public static boolean is_var_ok(VarInfo var) {
 
@@ -384,10 +350,9 @@ public static void mainHelper(final String[] args) throws IOException,
 
   /**
    * Returns whether or not the specified ternary slice should be created. The
-   * slice should not be created if any of the following are true
-   * - Any var is an array
-   * - Any of the vars are not compatible with the others
-   * - Any var is not (integral or float)
+   * slice should not be created if any of the following are true - Any var is
+   * an array - Any of the vars are not compatible with the others - Any var is
+   * not (integral or float)
    *
    * Since we are trying to create all of the invariants, the variables does not
    * have to be a leader and can be a constant. Note that the always missing
@@ -406,7 +371,7 @@ public static void mainHelper(final String[] args) throws IOException,
 
   /**
    * The Call class helps the SimpleProcessor keep track of matching enter and
-   * exit program points and also object program points.  Each Call object
+   * exit program points and also object program points. Each Call object
    * represents one entry in the dtrace file, i.e. enter, exit, object entry.
    *
    */
@@ -439,7 +404,7 @@ public static void mainHelper(final String[] args) throws IOException,
     // not exit entry in the dtrace file), because DaikonSimple had
     // processed each entry separately (not bottom up like Daikon),
     // DaikonSimple applied the enter and object call before seeing the
-    // exit call, which is not consistent with Daikon.  Daikon does not
+    // exit call, which is not consistent with Daikon. Daikon does not
     // process unterminated method calls.
 
     // The method of holding the enter and object calls until finding
@@ -454,6 +419,62 @@ public static void mainHelper(final String[] args) throws IOException,
     // pointer to last nonce so we can associate the object entry
     // with the right enter entry
     Integer last_nonce = new Integer(-1);
+
+
+    /**
+     * Creates a valuetuple for the receiver using the vt of the original.  The
+     * method copies over the values of variables shared by both program points
+     * and sets the rest of the variables in the receiver's valuetuple as missing.
+     * Also, adds the orig and derived variables to the receiver and returns the
+     * newly created valuetuple.
+     */
+    private static ValueTuple copySample(PptTopLevel receiver,
+        PptTopLevel original, ValueTuple vt, int nonce) {
+
+      // Make the vt for the receiver ppt
+//      Object values[] = new Object[receiver.num_tracevars];
+//      int mods[] = new int[receiver.num_tracevars];
+      Object values[] = new Object[receiver.var_infos.length - receiver.num_static_constant_vars];
+      int mods[] = new int[receiver.var_infos.length - receiver.num_static_constant_vars];
+
+      // Build the vt for the receiver ppt by looking through the current
+      // vt and filling in the gaps.
+      int k = 0;
+      for (Iterator<VarInfo> i = receiver.var_info_iterator(); i.hasNext();) {
+
+        VarInfo var = i.next();
+        if (var.is_static_constant)
+          continue;
+        boolean found = false;
+        for (Iterator<VarInfo> j = original.var_info_iterator(); j.hasNext();) {
+          VarInfo var2 = j.next();
+
+          if (var.name.equals(var2.name)) {
+            values[k] = vt.getValue(var2);
+            mods[k] = vt.getModified(var2);
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          values[k] = null;
+          mods[k] = 2;
+        }
+        k++;
+
+      }
+
+      ValueTuple receiver_vt = new ValueTuple(values, mods);
+
+      FileIO.add_orig_variables(receiver, receiver_vt.vals, receiver_vt.mods,
+          nonce);
+      FileIO
+          .add_derived_variables(receiver, receiver_vt.vals, receiver_vt.mods);
+
+      return receiver_vt;
+
+    }
 
     /**
      * process the sample by checking it against each existing invariant at the
@@ -476,74 +497,60 @@ public static void mainHelper(final String[] args) throws IOException,
       // in the dtrace part of the file (the program point is declared).
 
       // Make the object ppt
-       PptName ppt_name = ppt.ppt_name;
+      PptName ppt_name = ppt.ppt_name;
 
-       PptName object_ppt_name = null;
-       PptTopLevel object_ppt = null;
-       ValueTuple object_vt = null;
+      PptTopLevel object_ppt = null;
+      PptTopLevel class_ppt = null;
+      ValueTuple object_vt = null;
+      ValueTuple class_vt = null;
 
-       if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
-         object_ppt_name = ppt_name.makeObject();
-       }
-       if (ppt.ppt_name.isObjectInstanceSynthetic()) {
-         object_ppt = all_ppts.get(object_ppt_name);
-       }
+      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor()) || ppt_name
+          .isExitPoint()) {
+        object_ppt = all_ppts.get(ppt_name.makeObject());
+        class_ppt = all_ppts.get(ppt_name.makeClassStatic());
+      }
 
-       if (object_ppt_name == null) {
-         object_ppt = null;
-       } else {
-         object_ppt = all_ppts.get(object_ppt_name);
-       }
+      // C programs do not have object ppts
+      // check whether the ppt is a static or instance method
+      // that decides whether the sample is copied over to the object and/or
+      // class ppt
+      if (object_ppt != null) {
 
-       // C programs do not have object ppts
-       if (object_ppt != null) {
-       //       Assert.assertTrue(object_ppt.ppt_name.isObjectInstanceSynthetic());
+          // the check assumes that static fields are not stored first in the
+          // object ppt
+          if (PptRelation.find_var(ppt, object_ppt.var_infos[0].name) != null) {
+            // object and class ppt should be created
+            object_vt = copySample(object_ppt, ppt, vt, nonce);
 
+            if (class_ppt != null) {
+                class_vt = copySample(class_ppt, ppt, vt, nonce);
+            }
 
-       // Make the vt for the object ppt
-       Object values[] = new Object[object_ppt.var_infos.length];
-       int mods[] = new int[object_ppt.var_infos.length];
+          } else {
+            // only class ppt should be created
+            if (class_ppt != null) {
+              class_vt = copySample(class_ppt, ppt, vt, nonce);
+            }
 
-
-       // Build the vt for the object ppt by looking through the current
-       // vt and filling in the gaps.
-       int k = 0;
-       for (Iterator<VarInfo> i = object_ppt.var_info_iterator(); i.hasNext();) {
-
-         VarInfo var = i.next();
-         boolean found = false;
-         for (Iterator<VarInfo> j = ppt.var_info_iterator(); j.hasNext();) {
-           VarInfo var2 = j.next();
-
-           if (var.name.equals(var2.name)) {
-             values[k] = vt.getValue(var2);
-             mods[k] = vt.getModified(var2);
-             found = true;
-             break;
-           }
-         }
-         if (!found) {
-           values[k] = null;
-           mods[k] = 2;
-         }
-         k++;
-
-       }
-
-       object_vt = new ValueTuple (values, mods);
-       }
+            object_vt = null;
+            object_ppt = null;
+          }
+        }
 
       // If this is an enter point, just remember it for later
-      if (ppt.ppt_name.isEnterPoint()) {
+      if (ppt_name.isEnterPoint()) {
         Assert.assertTrue(nonce != null);
         Assert.assertTrue(call_map.get(nonce) == null);
         List<Call> value = new ArrayList<Call>();
         value.add(new Call(ppt, vt));
 
-        // only include the object ppt if the current ppt is not
-        // the enter point of a constructor
-        if (!ppt.ppt_name.isConstructor() && object_ppt != null)
+        if (object_ppt != null) {
           value.add(new Call(object_ppt, object_vt));
+        }
+
+        if (class_ppt != null) {
+          value.add(new Call(class_ppt, class_vt));
+        }
 
         call_map.put(nonce, value);
         last_nonce = nonce;
@@ -551,57 +558,44 @@ public static void mainHelper(final String[] args) throws IOException,
         return;
       }
 
-      // If we find an object call, then we need to associated it with
-      // its enter call.
-      // In the new version, we do not need this call.  Will remove.
-//      if (ppt.ppt_name.isObjectInstanceSynthetic()) {
-//        if (wait) {
-//          List<Call> value = call_map.get(last_nonce);
-//          // there should only be an enter call in the list
-//          Assert.assertTrue(value.size() == 1);
-//          value.add(new Call(ppt, vt));
-//          call_map.put(last_nonce, value);
-//          return;
-//        }
-//
-//        // return;
-//      }
-
       // If this is an exit point, process the saved enter (and sometimes
       // object) point
-      if (ppt.ppt_name.isExitPoint()) {
+      if (ppt_name.isExitPoint()) {
         Assert.assertTrue(nonce != null);
-        List<Call> value = call_map.get(nonce);
-        call_map.remove(nonce);
+        List<Call> value = call_map.remove(nonce);
+
+        add(ppt, vt, nonce);
+
         for (Call ec : value) {
-          add(ec.ppt, ec.vt);
+          add(ec.ppt, ec.vt, nonce);
         }
         wait = false;
       }
-      add(ppt, vt);
 
       if (object_ppt != null)
-          add(object_ppt, object_vt);   //apply object vt
+        add(object_ppt, object_vt, nonce); // apply object vt
+
+      if (class_ppt != null)
+        add(class_ppt, class_vt, nonce);
     }
 
     // The method iterates through all of the invariants in the ppt
     // and manually adds the sample to the invariant and removing the
     // invariant if it is falsified
 
-    private void add(PptTopLevel ppt, ValueTuple vt) {
+    private void add(PptTopLevel ppt, ValueTuple vt, int nonce) {
 
       // if this is a numbered exit, apply to the combined exit as well
       if (ppt.ppt_name.isNumberedExitPoint()) {
-//        System.out.println(ppt.ppt_name.makeExit());
-        //Daikon.create_combined_exits(all_ppts);
+
+        // Daikon.create_combined_exits(all_ppts);
         PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
         if (parent != null) {
           parent.get_missingOutOfBounds(ppt, vt);
-          add(parent, vt);
-        //  System.out.println("Parent not null");
+          add(parent, vt, nonce);
+
         } else {
           // make parent and apply
-
 
           // this is a hack. it should probably filter out orig and derived
           // vars instead of taking the first n.
@@ -617,15 +611,23 @@ public static void mainHelper(final String[] args) throws IOException,
           parent = new PptTopLevel(ppt.ppt_name.makeExit().getName(), exit_vars);
           Daikon.init_ppt(parent, all_ppts);
           all_ppts.add(parent);
-          add(parent, vt);
+          parent.get_missingOutOfBounds(ppt, vt);
+          add(parent, vt, nonce);
         }
       }
 
-      // If the point has no variables, skip it
-      if (ppt.var_infos.length == 0)
-        return;
 
-      //Instantiate slices and invariants if this is the first sample
+      // If the point has no variables, skip it
+      if (ppt.var_infos.length == 0) {
+        // The sample should be skipped but Daikon does not do this so
+        // DaikonSimple will not do this to be consistent.
+        // The better idea is for Daikon to assert that these valuetuples are
+        // empty and then skip the sample.
+        assert vt.size() == 0;
+        return;
+      }
+
+      // Instantiate slices and invariants if this is the first sample
       if (ppt.num_samples() == 0) {
         instantiate_views_and_invariants(ppt);
       }
@@ -649,7 +651,7 @@ public static void mainHelper(final String[] args) throws IOException,
           // doesn't really make any sense (essentially that i is not a valid
           // index for a). Invariants on the derived variable are thus not
           // relevant.
-          //  If any variables are out of bounds, remove the invariants
+          // If any variables are out of bounds, remove the invariants
           if (v.missingOutOfBounds()) {
             while (k.hasNext()) {
               Invariant inv = k.next();
@@ -659,16 +661,17 @@ public static void mainHelper(final String[] args) throws IOException,
             break;
           }
 
-          //  If any variables are missing, skip this slice
+          // If any variables are missing, skip this slice
           if (v.isMissing(vt)) {
             missing = true;
             break;
           }
         }
 
-        //keep a list of the falsified invariants
+        // keep a list of the falsified invariants
         if (!missing) {
           while (k.hasNext()) {
+
             Invariant inv = k.next();
             Invariant pre_inv = (Invariant) inv.clone();
             InvariantStatus status = inv.add_sample(vt, 1);
@@ -683,38 +686,9 @@ public static void mainHelper(final String[] args) throws IOException,
         // add methods
         for (int j = 0; j < vt.vals.length; j++) {
           if (!vt.isMissing(j)) {
-            try {
-            ValueSet vs = ppt.value_sets[j];
-//            Assert.assertTrue(ppt.value_sets.length == vt.vals.length, ppt.value_sets.length + " " + vt.vals.length);
-            //System.out.println(ppt.value_sets.length + " " + vt.vals.length);
-//            if (vt.vals[j] instanceof Object[]) {
-//              Object[] s = (Object[]) vt.vals[j];
-//              for (Object l : s)
-//                vs.add(l);
-//            } else {
-
-              if (vs instanceof ValueSet.ValueSetScalar && (vt.vals[j] instanceof long[])) {
-//                System.out.println(vs.getClass());
-//                System.out.println(vt.vals[j]);
-//                System.out.println(counter++);
-//                System.out.println(ppt.value_sets.length);
-//                System.out.println(vt.vals.length);
-                vs.add(vt.vals[j]);
-              } else
-//              else
-//                System.out.println(":::::::::::::::::::::::: " + counter2++);
-                vs.add(vt.vals[j]);
-
-           // }
-
-            } catch (ArrayIndexOutOfBoundsException e) {
-              throw new TerminationMessage("A: " + vt.vals.length + lineSep
-                                           + "B: " + ppt.value_sets.length);
-            }
+              ValueSet vs = ppt.value_sets[j];
+              vs.add(vt.vals[j]);     
           }
-//          } else {
-//            //ValueSet vs = ppt.value_sets[j];
-//          }
         }
         ppt.mbtracker.add(vt, 1);
 
