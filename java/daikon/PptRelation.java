@@ -143,7 +143,7 @@ public class PptRelation implements Serializable {
    * Returns the variable in ppt that matches viname.  Returns null
    * if viname does not exist in ppt
    */
-  private static VarInfo find_var(PptTopLevel ppt, VarInfoName viname) {
+  static VarInfo find_var(PptTopLevel ppt, VarInfoName viname) {
 
     for (int j = 0; j < ppt.var_infos.length; j++) {
       VarInfo v = ppt.var_infos[j];
