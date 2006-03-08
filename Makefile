@@ -27,7 +27,7 @@ DIST_VERSION_FILES := ${README_PATHS} \
 SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
 	dfepl dtrace-perl dtype-perl \
-	javac-xlint prune-xlint.pl \
+	javac-xlint javac-xlint-prune.pl \
 	kvasir-dtrace \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
