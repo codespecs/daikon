@@ -22,23 +22,27 @@
 # Regarding the warning message suppression feature of this script:  As of
 # Java 5 update 6 (JDK 5.0u6), javac will have a way to suppress warnings:
 # @SuppressWarnings("unchecked").  This is more portable and standard than
-# this script.  However, it does not permit suppression per-line (and isn't
-# yet released; as of October 2005, the current version was JDK 5.0u4), nor
-# does it give a non-zero return status if non-suppressed warnings exist.
+# this script.  However, it does not permit suppression per-line, only per
+# declaration, nor does it give a non-zero return status if non-suppressed
+# warnings exist.
 
-# This script uses the separate) prune-xlint.pl script.
+# This script uses the separate) javac-xlint-prune.pl script.
+# As an alternative to this script, pipe javac output into javac-xlint-prune.pl:
+#   JAVA-COMMAND-LINE 2>&1 | javac-xlint-prune.pl
+# (That's all that this script does.)
 
 # Design note:
-# Two possible ways this could work:
+# Here are two possible ways a wrapper script around javac could work
+# (this script does the latter).
 #  1. Drop-in replacement for javac:  "javac-xlint args..."
-#     An advantage is that it looks more like javac, may be somewhat
+#     An advantage is that it looks more like javac, and may be somewhat
 #     easier to remember/use.
 #  2. Prefix to javac line, like so:  "javac-xlint javac args..."
-#     An advantage is that we can continue to respect user
-#     settings of javac to "javac -g", rather than overriding them.
-#     (But maybe users should be discouraged from such settings?)
-#     Note that even so, this script doesn't currently permit using
-#     (say) jikes: prune-xlint.pl is hard-coded for "javac" output.
+#     An advantage is that we can continue to respect user settings of
+#     javac (to "javac -g", "javac-1.5.0", etc.), rather than
+#     overriding them.  Note that even so, this script doesn't
+#     currently permit using (say) jikes: prune-xlint.pl is hard-coded
+#     for "javac" output.
 
 # echo "all javac-xlint args: $*"
 
@@ -52,6 +56,7 @@ fi
 ## Older option processing code.
 ## A problem with this is that it does not halt the script, nor is its error
 ## message (e.g., "illegal option -- d") comprehensible.
+## I could do my own such processing, however, using the getopts return value.
 # # Parse arguments.
 # while getopts "p:" Option
 # do
