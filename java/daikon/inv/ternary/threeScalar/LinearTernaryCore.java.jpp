@@ -90,21 +90,24 @@ public final class CLASSNAME
   public double[] coefficients = new double[4];
 
 
-  // The values of the flags determine indicate whether a line exists with the current
-  // samples (NO_LINE) and which variables are constant (constant variables indicate that
-  // the 'plane' is parallel to that axis).  For example, XY_CONSTANT means that the
-  // so far, the x and y values have all been constant and only z has been varying so
-  // so the plane is actually a line.  NO_CONSTANT_VARIABLES indicates that the values
-  // have not been constant but do for a plane between variables.
+  // The values of the flags determine indicate whether a line exists
+  // with the current samples (NO_LINE) and which variables are
+  // constant (constant variables indicate that the 'plane' is
+  // parallel to that axis).  For example, XY_CONSTANT means that the
+  // so far, the x and y values have all been constant and only z has
+  // been varying so so the plane is actually a line.
+  // NO_CONSTANT_VARIABLES indicates that the values have not been
+  // constant but do for a plane between variables.
+  public enum Flag {NO_LINE, XY_CONSTANT, XZ_CONSTANT, YZ_CONSTANT,
+                    X_CONSTANT, Y_CONSTANT, Z_CONSTANT, NO_CONSTANT_VARIABLES};
 
-  public enum Flag {NO_LINE, XY_CONSTANT, XZ_CONSTANT, YZ_CONSTANT, X_CONSTANT, Y_CONSTANT, Z_CONSTANT, NO_CONSTANT_VARIABLES};
-
-  // The flag ndicates whether a line exists in the 3D space instead of a plane
-  // If the flag value is not NO_LINE, then a line does currently exist among the values seen
-  // and the flag specifies which variables are constant to make the invariant a line rather than
-  // a plane.
-  // The value NO_LINE indicates either that not enough values have been seen to make any
-  // decision or that a plane exists.
+  // The flag indicates whether a line exists in the 3D space instead
+  // of a plane If the flag value is not NO_LINE, then a line does
+  // currently exist among the values seen and the flag specifies
+  // which variables are constant to make the invariant a line rather
+  // than a plane.  The value NO_LINE indicates either that not enough
+  // values have been seen to make any decision or that a plane
+  // exists.
   public Flag line_flag = Flag.NO_LINE;
 
   // Inner class to store points in for more convenient access.
@@ -181,6 +184,7 @@ public final class CLASSNAME
     if (isActive()) {
       // Seen enough values, so permuting a, b, c is useful
       if ( a == 0 || b == 0 || c == 0) {
+        assert false : "Active LTs never have 0 coefficients";
         // Can't handle this form once rotated.  But if we've seen
         // enough values, yet a, b or c is zero, then this is covered by
         // a LinearBinary or a constant, so let me just destroy myself.
@@ -1397,17 +1401,24 @@ public final class CLASSNAME
       first.wrapper = wrapper;
 
     // Merge in any points from non-active cores
+    // Note that while null points can't show up in a core that is not active
+    // because it hasn't seen enough values, they can show up if the core
+    // is not active because it is a line.
     for (int i = 0; i < cores.size(); i++) {
       CLASSNAME c = cores.get (i);
       if (c.isActive())
         continue;
       for (int j = 0; j < c.values_seen; j++) {
         Point cp = c.def_points[j];
+        if (cp == null)
+          continue;
         if (Debug.logDetail())
           wrapper.log ("Adding point " + cp + " from " + c.wrapper.ppt);
-        first.add_modified (cp.x, cp.y, cp.z, 1);
-        if (wrapper.is_false())
+        InvariantStatus stat = first.add_modified (cp.x, cp.y, cp.z, 1);
+        if (stat == InvariantStatus.FALSIFIED)
           return (null);
+        //if (wrapper.is_false())
+        //  return (null);
       }
     }
 
