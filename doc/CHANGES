@@ -20,6 +20,17 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.4 (April 1, 2006)
+
+Daikon
+
+  User-visible changes
+
+    Fixed bugs in LinearTernary invariant, which is expressed as
+    ax+by+cz+d=0 or as x=jy+kz+c.
+
+--------------------------------------------
+
 4.2.3 (March 1, 2006)
 
 This is a bug-fix release.  It also adds a new, more detailed mode to
@@ -31,9 +42,6 @@ Daikon
 
     Changed the default value of configuration parameter
     daikon.PptRelation.enable_object_user from "true" to "false".
-
-    Fixed bugs in LinearTernary invariant, which is expressed as
-    ax+by+cz+d=0 or as x=jy+kz+c.
 
 Chicory
 
