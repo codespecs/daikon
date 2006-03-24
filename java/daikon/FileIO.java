@@ -168,45 +168,44 @@ public final class FileIO {
     throws IOException {
     if (Daikon.using_DaikonSimple) {
       Processor processor = new DaikonSimple.SimpleProcessor();
-      read_data_trace_file(filename.toString(), all_ppts, processor, true);
+      read_data_trace_file(filename.toString(), all_ppts, processor, true,
+                           false);
     } else {
       Processor processor = new Processor();
-      read_data_trace_file(filename.toString(), all_ppts, processor, true);
+      read_data_trace_file(filename.toString(), all_ppts, processor, true,
+                           true);
     }
 
   }
 
 
   // The "DECLARE" line has already been read.
-  private static PptTopLevel read_declaration(LineNumberReader file,
-                                             PptMap all_ppts,
-                                             int varcomp_format,
-                                             File filename) throws IOException {
+  private static PptTopLevel read_declaration(ParseState state)
+    throws IOException {
+
     // We have just read the "DECLARE" line.
-    String ppt_name = file.readLine();
+    String ppt_name = state.reader.readLine();
     if (ppt_name == null) {
       throw new FileIOException(
         "File ends with \"DECLARE\" with no following program point name",
-        file,
-        filename);
+        state.reader, state.filename);
     }
     ppt_name = ppt_name.intern();
 
     // This program point name has already been encountered.
-    if (all_ppts.containsName(ppt_name)) {
-      throw new FileIOException(
-        "Duplicate declaration of program point \"" + ppt_name + "\"",
-        file,
-        filename);
+    if (state.all_ppts.containsName(ppt_name)) {
+      if (state.ppts_are_new)
+        throw new FileIOException("Duplicate declaration of program point \""
+                            + ppt_name + "\"", state.reader, state.filename);
+      else { // ppts are already in the map
+        skip_decl (state.reader);
+        return state.all_ppts.get (ppt_name);
+      }
     }
 
+    // If we are excluding this ppt, just read the data and throw it away
     if (!ppt_included (ppt_name)) {
-      String line = file.readLine();
-      // This fails if some lines of a declaration (e.g., the comparability
-      // field) are empty.
-      while ((line != null) && !line.equals("")) {
-        line = file.readLine();
-      }
+      skip_decl (state.reader);
       omitted_declarations++;
       return null;
     }
@@ -217,10 +216,12 @@ public final class FileIO {
     // Each iteration reads a variable name, type, and comparability.
     // Possibly abstract this out into a separate function??
     VarInfo vi;
-    while ((vi = read_VarInfo(file, varcomp_format,filename,ppt_name))!= null) {
+    while ((vi = read_VarInfo(state.reader, state.varcomp_format,
+                              state.file, ppt_name)) != null) {
       for (int i=0; i<var_infos.size(); i++) {
         if (vi.name == var_infos.get(i).name) {
-          throw new FileIOException("Duplicate variable name", file, filename);
+          throw new FileIOException("Duplicate variable name", state.reader,
+                                    state.filename);
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
@@ -559,19 +560,26 @@ public final class FileIO {
                                            PptMap all_ppts) throws IOException {
 
     Processor processor = new Processor();
-    read_data_trace_files(files, all_ppts, processor);
+    read_data_trace_files(files, all_ppts, processor, true);
   }
 
   /**
    * Read data from .dtrace files.
    * Calls @link{read_data_trace_file(File,PptMap,Pattern,false)} for each
    * element of filenames.
+   *
+   * @param ppts_are_new - true if declarations of ppts read from the data
+   *                       trace file are new (and thus are not in all_ppts)
+   *                       false if the ppts may already be there.
    **/
   public static void read_data_trace_files(Collection<String> files,
-                                           PptMap all_ppts, Processor processor) throws IOException {
+                PptMap all_ppts, Processor processor, boolean ppts_are_new)
+                throws IOException {
+
     for (String filename : files) {
       try {
-        read_data_trace_file(filename, all_ppts, processor, false);
+        read_data_trace_file(filename, all_ppts, processor, false,
+                             ppts_are_new);
       } catch (IOException e) {
         if (e.getMessage().equals("Corrupt GZIP trailer")) {
           System.out.println(
@@ -606,7 +614,7 @@ public final class FileIO {
   static void read_data_trace_file(String filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
-    read_data_trace_file(filename, all_ppts, processor, false);
+    read_data_trace_file(filename, all_ppts, processor, false, true);
   }
 
   /**
@@ -628,6 +636,7 @@ public final class FileIO {
   public static class ParseState {
     public String filename;
     public boolean is_decl_file;
+    public boolean ppts_are_new;
     public PptMap all_ppts;
     public LineNumberReader reader;
     public File file;
@@ -639,61 +648,59 @@ public final class FileIO {
     public ValueTuple vt;	// returned when state=SAMPLE
     public long lineNum;
 
-    public ParseState (String raw_filename,
-		       boolean decl_file_p,
-		       PptMap ppts)
-      throws IOException {
+    public ParseState (String raw_filename, boolean decl_file_p,
+                       boolean ppts_are_new, PptMap ppts) throws IOException {
       // Pretty up raw_filename for use in messages
       file = new File(raw_filename);
       if (raw_filename.equals("-")) {
-	filename = "standard input";
+        filename = "standard input";
       }
       else if (raw_filename.equals("+")) {
-          filename = "chicory socket";
+        filename = "chicory socket";
       }
       else {
-	// Remove directory parts, to make it shorter
-	filename = file.getName();
+        // Remove directory parts, to make it shorter
+        filename = file.getName();
       }
 
       is_decl_file = decl_file_p;
+      this.ppts_are_new = ppts_are_new;
       all_ppts = ppts;
 
       // Do we need to count the lines in the file?
       total_lines = 0;
       boolean count_lines = dkconfig_count_lines;
       if (is_decl_file) {
-	count_lines = false;
+        count_lines = false;
       } else if (dkconfig_dtrace_line_count != 0) {
-	total_lines = dkconfig_dtrace_line_count;
-	count_lines = false;
+        total_lines = dkconfig_dtrace_line_count;
+        count_lines = false;
       } else if (filename.equals("-")) {
-	count_lines = false;
+        count_lines = false;
       } else if (Daikon.dkconfig_progress_delay == -1) {
-	count_lines = false;
+        count_lines = false;
       } else if ((new File(filename)).length() == 0) {
 	// Either it's actually empty, or it's something like a pipe.
-	count_lines = false;
+        count_lines = false;
       }
+
       if (count_lines) {
-	Daikon.progress = "Checking size of " + filename;
-	total_lines = UtilMDE.count_lines(raw_filename);
+        Daikon.progress = "Checking size of " + filename;
+        total_lines = UtilMDE.count_lines(raw_filename);
       }
 
       // Open the reader stream
       if (raw_filename.equals("-")) {
 	// "-" means read from the standard input stream
-	Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
-	reader = new LineNumberReader(file_reader);
+        Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
+        reader = new LineNumberReader(file_reader);
       }
-      else if (raw_filename.equals("+")) //socket comm with Chicory
-	{
-	  InputStream chicoryInput = connectToChicory();
-	  InputStreamReader chicReader = new InputStreamReader(chicoryInput);
-	  reader = new LineNumberReader(chicReader);
-	}
-      else {
-	reader = UtilMDE.lineNumberFileReader(raw_filename);
+      else if (raw_filename.equals("+")) { //socket comm with Chicory
+        InputStream chicoryInput = connectToChicory();
+        InputStreamReader chicReader = new InputStreamReader(chicoryInput);
+        reader = new LineNumberReader(chicReader);
+      } else {
+        reader = UtilMDE.lineNumberFileReader(raw_filename);
       }
 
       varcomp_format = VarComparability.IMPLICIT;
@@ -761,7 +768,8 @@ public final class FileIO {
 
   /** Read data from .dtrace file. **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
-                                   Processor processor, boolean is_decl_file)
+                                   Processor processor,
+                                   boolean is_decl_file, boolean ppts_are_new)
     throws IOException {
 
     if (debugRead.isLoggable(Level.FINE)) {
@@ -772,7 +780,8 @@ public final class FileIO {
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-    data_trace_state = new ParseState(filename, is_decl_file, all_ppts);
+    data_trace_state = new ParseState(filename, is_decl_file, ppts_are_new,
+                                      all_ppts);
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
@@ -847,14 +856,14 @@ public final class FileIO {
 
       // First look for declarations in the dtrace stream
       if (line == declaration_header) {
-        state.ppt =
-          read_declaration(reader, state.all_ppts, state.varcomp_format,
-			   state.file);
+        state.ppt = read_declaration(state);
         // ppt can be null if this declaration was skipped because of
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
-          state.all_ppts.add(state.ppt);
-          Daikon.init_ppt(state.ppt, state.all_ppts);
+          if (!state.all_ppts.containsName (state.ppt.name())) {
+            state.all_ppts.add(state.ppt);
+            Daikon.init_ppt(state.ppt, state.all_ppts);
+          }
 	}
 	state.status = ParseStatus.DECL;
 	return;
@@ -1614,5 +1623,17 @@ public final class FileIO {
     }
   }
 
+  /**
+   * Skips over a decl.  Essentially reads in everything up to and including
+   * the next blank line.
+   */
+  private static void skip_decl (LineNumberReader reader) throws IOException {
+    String line = reader.readLine();
+    // This fails if some lines of a declaration (e.g., the comparability
+    // field) are empty.
+    while ((line != null) && !line.equals("")) {
+      line = reader.readLine();
+    }
+  }
 
 }
