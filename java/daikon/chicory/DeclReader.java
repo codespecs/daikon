@@ -228,6 +228,11 @@ public class DeclReader {
       return name;
     }
 
+    /** Returns the name without the :::EXIT, :::ENTER, etc **/
+    public String get_short_name() {
+      return name.replaceFirst (":::.*", "");
+    }
+
     public String toString() {
       return name;
     }
