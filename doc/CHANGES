@@ -23,11 +23,23 @@ Further documentation can be found in:
 4.2.4 (April 1, 2006)
 
 Daikon
-
+   
   User-visible changes
 
     Fixed bugs in LinearTernary invariant, which is expressed as
     ax+by+cz+d=0 or as x=jy+kz+c.
+
+  Bug Fixes
+
+    An error in LinearTernary invariant that showed up when merging
+    LinearTernary invariant that formed lines rather than planes was
+    fixed.
+
+  Internal Changes
+
+    Several bugs in the overnight regression test script (buildtest.pl)
+    that obscured problems were fixed.  
+
 
 --------------------------------------------
 
