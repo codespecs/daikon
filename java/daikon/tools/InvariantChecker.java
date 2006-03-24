@@ -163,7 +163,7 @@ public class InvariantChecker {
     FileIO.Processor processor = new InvariantCheckProcessor();
     progress.start();
     progress.clear();
-    FileIO.read_data_trace_files (dtrace_files, ppts, processor);
+    FileIO.read_data_trace_files (dtrace_files, ppts, processor, false);
     progress.shouldStop = true;
     System.out.println ();
     System.out.println ("" + error_cnt + " Errors Found");
