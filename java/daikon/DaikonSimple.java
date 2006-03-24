@@ -144,7 +144,7 @@ public class DaikonSimple {
 
     // Read and process the data trace files
     SimpleProcessor processor = new SimpleProcessor();
-    FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
+    FileIO.read_data_trace_files(dtrace_files, all_ppts, processor, true);
 
     //System.exit(0);
 
@@ -687,7 +687,7 @@ public class DaikonSimple {
         for (int j = 0; j < vt.vals.length; j++) {
           if (!vt.isMissing(j)) {
               ValueSet vs = ppt.value_sets[j];
-              vs.add(vt.vals[j]);     
+              vs.add(vt.vals[j]);
           }
         }
         ppt.mbtracker.add(vt, 1);

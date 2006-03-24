@@ -224,9 +224,9 @@ public class DtraceDiff {
       PptMap ppts2 = FileIO.read_declaration_files(declsfile2);
 
       FileIO.ParseState state1 =
-	new FileIO.ParseState (dtracefile1, false, ppts1);
+        new FileIO.ParseState (dtracefile1, false, true, ppts1);
       FileIO.ParseState state2 =
-	new FileIO.ParseState (dtracefile2, false, ppts2);
+        new FileIO.ParseState (dtracefile2, false, true, ppts2);
 
       while (true) {
 	// *** should do some kind of progress bar here?
