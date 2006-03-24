@@ -23,11 +23,12 @@ Further documentation can be found in:
 4.2.4 (April 1, 2006)
 
 Daikon
-   
-  User-visible changes
 
-    Fixed bugs in LinearTernary invariant, which is expressed as
-    ax+by+cz+d=0 or as x=jy+kz+c.
+  User-visible changes
+    
+    Fixed bugs in the LinearTernaryFloat and LinearBinaryFloat
+    invariants such that the coefficients and constants of these
+    invariants print out as decimals rather than integers.
 
   Bug Fixes
 
