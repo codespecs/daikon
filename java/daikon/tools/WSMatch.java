@@ -38,6 +38,21 @@ public class WSMatch {
   @Option ("minimum rate for a composable match")
   public static double min_composable_match = 0.60;
 
+  /** Set of variables that are constant **/
+  public static Set<VarInfo> constants = new LinkedHashSet<VarInfo>();
+
+  /** Set of variables that are duplicates of an input variable **/
+  public static Set<VarInfo> dups = new LinkedHashSet<VarInfo>();
+
+  static SimpleLog debug_substitution = new SimpleLog (false);
+  static SimpleLog debug_constants = new SimpleLog (false);
+  static SimpleLog debug_dups = new SimpleLog (true);
+
+  /**
+   * Information about a match between two operations.  Includes the
+   * matching variables, the percentage of matches, and the rows that
+   * match
+   */
   public static class MatchInfo implements Comparable<MatchInfo> {
     DeclPpt ppt1;
     VarInfo var1;
@@ -67,8 +82,265 @@ public class WSMatch {
     }
 
     public String toString() {
-      return String.format ("%5.2f  %s.%s  %s.%s", perc_match, ppt1.name,
-                            var1.name, ppt2.name, var2.name);
+      return String.format ("%5.2f  %s.%s  %s.%s", perc_match,
+                            ppt1.get_short_name(), var1.name,
+                            ppt2.get_short_name(), var2.name);
+    }
+  }
+
+  /**
+   * Pair of VarInfos suitable for a key in a hashmap.  The names of the
+   * variables are used as their identifiers
+   */
+  public static class VarPair {
+    VarInfo v1;
+    VarInfo v2;
+    VarPair (VarInfo v1, VarInfo v2) {
+      this.v1 = v1;
+      this.v2 = v2;
+    }
+    public int hashCode() {
+      return v1.name.hashCode() * v2.name.hashCode();
+    }
+    public boolean equals(Object other) {
+      if (other instanceof VarPair) {
+        VarPair vp = (VarPair) other;
+        return (v1.name.equals (vp.v1.name) && v2.name.equals (vp.v2.name));
+      }
+      return (false);
+    }
+  }
+
+  /**
+   * Information about a operations that are possible substitutions
+   * for each other
+   */
+  public static class Substitution {
+
+    /**
+     * List of matching inputs.  All of the inputs much match for an
+     * operation to substitute for another
+     */
+    List<MatchInfo> inputs = new ArrayList<MatchInfo>();
+
+    /** List of matching outputs.  One or more outputs must match **/
+    List<MatchInfo> outputs = new ArrayList<MatchInfo>();
+
+    /**
+     * Map from each pair of variables of the same type (input or
+     * output) to their match info.  Note that this is based on a
+     * particular primary match which determines which rows to compare
+     * between the two operations.
+     */
+    Map<VarPair,MatchInfo> vars_match = new LinkedHashMap<VarPair,MatchInfo>();
+
+    /** Input variables for program point 1 from the primary match **/
+    List<VarInfo> ppt1_inputs  = new ArrayList<VarInfo>();
+    /** Input variables for program point 2 from the primary match **/
+    List<VarInfo> ppt2_inputs  = new ArrayList<VarInfo>();
+    /** Output variables for program point 1 from the primary match **/
+    List<VarInfo> ppt1_outputs = new ArrayList<VarInfo>();
+    /** Output variables for program point 2 from the primary match **/
+    List<VarInfo> ppt2_outputs = new ArrayList<VarInfo>();
+
+    /** Best matches for input variables **/
+    List<MatchInfo> input_matches = new ArrayList<MatchInfo>();
+
+    /** Best matches for output variables **/
+    List<MatchInfo> output_matches = new ArrayList<MatchInfo>();
+
+    protected Substitution (MatchInfo primary) {
+
+      // Find the inputs and outputs for ppt 1 from the primary match
+      for (VarInfo v : primary.ppt1.get_all_vars()) {
+        if (!include_var (v))
+          continue;
+        if (constants.contains (v))
+          continue;
+        if (is_input (v))
+          ppt1_inputs.add (v);
+        else
+          ppt1_outputs.add (v);
+      }
+
+      // Find the inputs and outputs for ppt 2 from the primary match
+      for (VarInfo v : primary.ppt2.get_all_vars()) {
+        if (!include_var (v))
+          continue;
+        if (constants.contains (v))
+          continue;
+        if (is_input (v))
+          ppt2_inputs.add (v);
+        else
+          ppt2_outputs.add (v);
+      }
+
+      // Build the var match information for each combination of variables
+      // input-input and output-output
+      for (VarInfo var1 : ppt1_inputs) {
+        for (VarInfo var2 : ppt2_inputs) {
+          MatchInfo mi = compare_var (primary, primary.ppt1, var1,
+                                      primary.ppt2, var2);
+          vars_match.put (new VarPair (var1, var2), mi);
+        }
+      }
+      for (VarInfo var1 : ppt1_outputs) {
+        for (VarInfo var2 : ppt2_outputs) {
+          MatchInfo mi = compare_var (primary, primary.ppt1, var1,
+                                      primary.ppt2, var2);
+          vars_match.put (new VarPair (var1, var2), mi);
+        }
+      }
+      debug_substitution.log ("%s inputs: %s\n", primary.ppt1.get_short_name(),
+                              ppt1_inputs);
+      debug_substitution.log ("%s outputs: %s\n",
+                              primary.ppt1.get_short_name(), ppt1_outputs);
+      debug_substitution.log ("%s inputs: %s\n", primary.ppt2.get_short_name(),
+                              ppt2_inputs);
+      debug_substitution.log ("%s outputs: %s\n",
+                              primary.ppt2.get_short_name(), ppt2_outputs);
+
+
+      // Find the best input matches
+      if (ppt1_inputs.size() == ppt2_inputs.size())
+        input_matches = find_best_matches (ppt1_inputs, ppt2_inputs,
+                                           min_substitution_cross_check);
+
+      // Find the best output matches
+      output_matches = find_best_matches (ppt1_outputs, ppt2_outputs,
+                                          min_substitution_cross_check);
+    }
+
+    /**
+     * Returns whether or not this is a valid substitute.  To be valid
+     * each of the inputs from the first operation must match a distinct
+     * input in the second operation and at least one output must match
+     */
+    public boolean is_valid() {
+      if (input_matches.size() != ppt1_inputs.size())
+        return false;
+
+      if (output_matches.size() == 0)
+        return false;
+
+      return true;
+    }
+    /**
+     * Finds the best set of matches between the variables in vars1 and
+     * those in vars2.  The best set of matches is the set that has the
+     * the most elements whose match percentage is greater than min_percent.
+     * If multiple sets have the same number of elements, the set with the
+     * higher average match percent is chosen.
+     */
+    public List<MatchInfo> find_best_matches (List<VarInfo> vars1,
+                                              List<VarInfo> vars2,
+                                              double min_percent) {
+
+      debug_substitution.log ("Looking for matches between %s and %s at %f%n",
+                              vars1, vars2, min_percent);
+      List<MatchInfo> best_match = new ArrayList<MatchInfo>();
+      matches (vars1, vars2, 0, min_percent, new ArrayList<MatchInfo>(),
+               best_match);
+      debug_substitution.log ("Found matches: %s%n", best_match);
+      return best_match;
+    }
+
+    /**
+     * Recursively explore all of the possible combinations of matches
+     * between the variables in vars1 and vars2.
+     *
+     * @param vars1 List of variables from the first operation
+     * @param vars2 List of variables from the second operation
+     * @param index Index of current variable in vars1
+     * @param min_perc The minimum percentage of matches required to call
+     *    a variable pair a match
+     * @param matches List good matches for the variables in vars1 that
+     *    have already been processed.
+     * @param best_match The best match found so far.  Updated in place
+     *    when a better match is found.
+     */
+    private void matches (List<VarInfo> vars1, List<VarInfo> vars2,
+                         int index, double min_perc,
+                         List<MatchInfo> matches,
+                         List<MatchInfo> best_match) {
+
+      // If there are no more variables to consider, replace best_match
+      // with matches iff it is a better match.
+      if ((index >= vars1.size()) || (vars2.size() == 0)) {
+        if (better_match (best_match, matches)) {
+          best_match.clear();
+          best_match.addAll (matches);
+        }
+        return;
+      }
+
+      // Loop through each variable in vars2 and determine its match with
+      // the current v1.   If it is better than the minimum percentage,
+      // add it to the list of matches and remove it from the vars2 to
+      // consider for other matches.  In either case explore the
+      // remaining variables in vars1.  Note that we only need to
+      // explore the other variables once if we don't have a match (since
+      // the result will be the same)
+      VarInfo v1 = vars1.get (index);
+      // System.out.printf ("Processing variable %s [%d/%d]%n", v1, index,
+      //                   vars1.size());
+      boolean no_match = false;
+      for (int ii = 0; ii < vars2.size(); ii++) {
+        VarInfo v2 = vars2.get(ii);
+        MatchInfo m = vars_match.get (new VarPair(v1, v2));
+        if (m.perc_match > min_perc) {
+          // System.out.printf ("Adding match %s%n", m);
+          matches.add (m);
+          List<VarInfo> vars2_remaining = new ArrayList<VarInfo>(vars2);
+          vars2_remaining.remove (ii);
+          matches (vars1, vars2_remaining, index+1, min_perc, matches,
+                   best_match);
+          matches.remove (matches.size() - 1);
+        } else if (!no_match) {
+          no_match = true;
+          matches (vars1, vars2, index+1, min_perc, matches, best_match);
+        }
+      }
+    }
+
+    /**
+     * Returns true if m2 is a better match than m1, false otherwise.
+     * A match is better if it contains more matches.  If each has the
+     * the same number of matches, the one with the highest average match
+     * percentage is better.
+     */
+    private boolean better_match (List<MatchInfo> m1, List<MatchInfo> m2) {
+
+      if (m2.size() > m1.size())
+        return (true);
+
+      if (m2.size() == m1.size()) {
+        double m1_total = 0.0;
+        double m2_total = 0.0;
+        for (MatchInfo m : m1)
+          m1_total += m.perc_match;
+        for (MatchInfo m : m2)
+          m2_total += m.perc_match;
+        if (m2_total > m1_total)
+          return (true);
+      }
+
+      return (false);
+    }
+
+    /**
+     * Look for a substitution given a primary match.  A valid
+     * substitution requires that all input parameters match and that
+     * one or more output parameters match.  Returns the substitution if
+     * it is valid, otherwise returns null
+     */
+    public static Substitution check_substitution (MatchInfo primary) {
+
+      Substitution s = new Substitution (primary);
+      if (s.is_valid())
+        return (s);
+      else
+        return (null);
     }
   }
 
@@ -90,15 +362,34 @@ public class WSMatch {
                                    WSMatch.class);
     String[] files = options.parse_and_usage (args);
 
-    // Read in all of the files
+    // Read in all of the files.  Change all ppt names to include the
+    // filenames since some operation names are the same
     List<DTraceReader> traces = new ArrayList<DTraceReader>();
     for (String file : files) {
       if (verbose)
         System.out.printf ("Processing file %s%n", file);
       DTraceReader trace = new DTraceReader();
-      trace.read (new File (file));
+      File tracefile = new File (file);
+      trace.read (tracefile);
+      for (DeclPpt ppt : trace.get_all_ppts())
+        ppt.name = tracefile.getName().replaceFirst ("[.].*", "") + "."
+          + ppt.name;
       traces.add (trace);
     }
+
+    // Find all of the constants
+    for (DTraceReader trace : traces) {
+      for (DeclPpt ppt : trace.get_all_ppts())
+        constants.addAll (find_constants (ppt));
+    }
+
+    // Find all of the duplicate
+    for (DTraceReader trace : traces) {
+      for (DeclPpt ppt : trace.get_all_ppts())
+        dups.addAll (find_dups (ppt));
+    }
+
+    print_input_stats (traces);
 
     List<MatchInfo> substitute_matches = new ArrayList<MatchInfo>();
     List<MatchInfo> compose_matches = new ArrayList<MatchInfo>();
@@ -114,8 +405,10 @@ public class WSMatch {
           split_results (results, substitute_results, compose_results);
           if (substitute_results.size() > 0)
             substitute_matches.add (Collections.max (substitute_results));
-          if (compose_results.size() > 0)
-            compose_matches.add (Collections.max (compose_results));
+          for (MatchInfo m : compose_results) {
+            if (m.perc_match >= min_composable_match)
+              compose_matches.add (m);
+          }
         }
       }
     }
@@ -135,6 +428,23 @@ public class WSMatch {
         if (sub.perc_match < min_substitution_cross_check)
           continue;
         System.out.printf ("  %s%n", sub);
+      }
+    }
+
+    // More precise substitution matching
+    for (MatchInfo primary_match : substitute_matches) {
+      if (primary_match.perc_match < min_substitution_match)
+        continue;
+      System.out.printf ("%nChecking Substitution matches for primary %s%n",
+                         primary_match);
+      Substitution sub = Substitution.check_substitution (primary_match);
+      if (sub != null) {
+        System.out.printf ("  Input matches:%n");
+        for (MatchInfo m : sub.input_matches)
+          System.out.printf ("    %s%n", m);
+        System.out.printf ("  Output matches:%n");
+        for (MatchInfo m : sub.output_matches)
+          System.out.printf ("    %s%n", m);
       }
     }
 
@@ -242,7 +552,27 @@ public class WSMatch {
       double d2 = (Double) data2;
       return fuzzy.eq (d1, d2);
     } else if (var1.is_string() && var2.is_string()) {
-      return data1.equals (data2);
+      String s1 = (String) data1;
+      String s2 = (String) data2;
+      return s1.equalsIgnoreCase (s2);
+    } else if (var1.is_string() && var2.is_double()) {
+      double d1;
+      try {
+        d1 = Double.parseDouble ((String) data1);
+      } catch (Throwable t) {
+        return (false);
+      }
+      double d2 = (Double) data2;
+      return fuzzy.eq (d1, d2);
+    } else if (var2.is_string() && var1.is_double()) {
+      double d2;
+      try {
+        d2 = Double.parseDouble ((String) data2);
+      } catch (Throwable t) {
+        return (false);
+      }
+      double d1 = (Double) data1;
+      return fuzzy.eq (d1, d2);
     } else { // non-matching types
       return (false);
     }
@@ -300,6 +630,95 @@ public class WSMatch {
   }
 
   /**
+   * Finds all of the constants variables in the ppt.  A constant variable
+   * is one that has the same value for each data sample.  Null values are
+   * ignored (as they are nonsensical)
+   */
+  public static List<VarInfo> find_constants (DeclPpt ppt) {
+
+    List<VarInfo> constants = new ArrayList<VarInfo>();
+    List<List<Object>> data = ppt.get_var_data();
+
+    // Loop through each variable
+    for (VarInfo v : ppt.get_all_vars()) {
+
+      boolean constant = true;
+      boolean always_missing = true;
+      Object first_val = null;
+
+      // Loop through each remaining sample, exit if a sample is not equal
+      for (List<Object> sample : data) {
+        Object val = sample.get(v.index);
+        if (val == null)
+          continue;
+        always_missing = false;
+        if (first_val == null)
+          first_val = val;
+        else if (!first_val.equals(val)) {
+          constant = false;
+          break;
+        }
+      }
+
+      if (constant && !always_missing) {
+        constants.add (v);
+        debug_constants.log ("Variable %s in ppt %s is constant%n", v.name,
+                             ppt);
+      }
+    }
+
+    return (constants);
+  }
+
+  /**
+   * Looks for output variables that are duplicates of an input variable.
+   * Null (nonsensical) values are ignored.
+   */
+  public static List<VarInfo> find_dups (DeclPpt ppt) {
+
+    List<VarInfo> dups = new ArrayList<VarInfo>();
+    List<List<Object>> data = ppt.get_var_data();
+
+    // Find the input and output variables
+    List<VarInfo> inputs = new ArrayList<VarInfo>();
+    List<VarInfo> outputs = new ArrayList<VarInfo>();
+    for (VarInfo v : ppt.get_all_vars()) {
+      if (is_input (v))
+        inputs.add (v);
+      else
+        outputs.add (v);
+      }
+
+    // Compare each input against each output.  If every available value
+    // matches, note the output as a duplicate
+    for (VarInfo input : inputs) {
+      for (VarInfo output : outputs) {
+        boolean duplicate = true;
+        boolean always_missing = true;
+        for (List<Object> samples : data) {
+          Object input_val = samples.get (input.index);
+          Object output_val = samples.get (output.index);
+          if (output_val != null)
+            always_missing = false;
+          if ((input_val == null) || (output_val == null))
+            continue;
+          if (!compare_val (input, input_val, output, output_val)) {
+            duplicate = false;
+            break;
+          }
+        }
+        if (duplicate && !always_missing) {
+          dups.add (output);
+          debug_dups.log ("Added duplicate variable %s%n", output);
+        }
+      }
+    }
+
+    return (dups);
+  }
+
+
+  /**
    * Prints the results of comparing two services
    */
   public static void print_results (List<MatchInfo> results) {
@@ -334,8 +753,15 @@ public class WSMatch {
     return v.name.startsWith ("input");
   }
 
-  /** Returns whether or not to consider this variable **/
+  /**
+   * Returns whether or not to consider this variable.  Variables that
+   * are duplicates or that are specified by the user to be ignored are
+   * not included
+   **/
   public static boolean include_var (VarInfo var) {
+
+    if (dups.contains (var))
+      return (false);
 
     if (var_match == null)
       return true;
@@ -343,4 +769,62 @@ public class WSMatch {
     Matcher m = var_match.matcher (var.name);
     return (m.find());
   }
+
+  public static void print_input_stats (List<DTraceReader> traces) {
+
+    int op_cnt = 0;
+    int total_outputs = 0;
+    int input_constants = 0;
+    int output_constants = 0;
+    int total_dups = 0;
+
+    for (DTraceReader trace : traces) {
+      for (DeclPpt ppt : trace.get_all_ppts()) {
+        op_cnt++;
+        List<VarInfo> inputs = new ArrayList<VarInfo>();
+        List<VarInfo> outputs = new ArrayList<VarInfo>();
+        for (VarInfo v : ppt.get_all_vars()) {
+          if (constants.contains (v)) {
+            if (is_input(v)) input_constants++;
+            else output_constants++;
+          }
+          else if (dups.contains (v))
+            total_dups++;
+          if (is_input (v))
+            inputs.add (v);
+          else
+            outputs.add(v);
+        }
+        System.out.printf ("%noperation %s (%d inputs, %d outputs)%n", ppt,
+                           inputs.size(), outputs.size());
+        System.out.printf (" inputs:%n");
+        print_vars ("    ", inputs);
+        System.out.printf (" outputs:%n");
+        print_vars ("    ", outputs);
+        total_outputs += outputs.size();
+      }
+    }
+
+    System.out.printf ("%nTotal operations       = %d%n", op_cnt);
+    System.out.printf   ("Total outputs          = %d%n", total_outputs);
+    System.out.printf   ("Total input constants  = %d%n", input_constants);
+    System.out.printf   ("Total output constants = %d%n", output_constants);
+    System.out.printf   ("Total dups             = %d%n", total_dups);
+  }
+
+  /** Prints each variable on a separate line **/
+  public static void print_vars (String prefix, List<VarInfo> vars) {
+
+    for (VarInfo v : vars) {
+      String constant_str = "";
+      if (constants.contains (v))
+        constant_str = " [constant]";
+      String dup_str = "";
+      if (dups.contains (v))
+        dup_str = " [duplicate]";
+      System.out.printf ("%s%-8s %s%s%s%n", prefix, v.type, v.get_name(),
+                         constant_str, dup_str);
+    }
+  }
+
 }
