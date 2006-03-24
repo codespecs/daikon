@@ -1586,6 +1586,9 @@ public final class VarInfo implements Cloneable, Serializable {
         // Not "shouldBeGuarded(ppt.findVar(viname))" because that
         // unnecessarily computes ppt.findVar(viname), if
         // dkconfig_guardNulls is "always".
+        //System.out.printf ("viname = %s, applyPreMaybe=%s, findvar=%s%n",
+        //                   viname, applyPreMaybe(viname),
+        //                   ppt.findVar(applyPreMaybe(viname)));
         boolean result
           = (Daikon.dkconfig_guardNulls == "always" // interned
              || (Daikon.dkconfig_guardNulls == "missing" // interned
