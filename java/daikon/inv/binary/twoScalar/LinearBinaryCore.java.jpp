@@ -381,44 +381,31 @@ public final class CLASSNAME
       // invariant would not have been instantiated).
       return false;
     }
- 
+
     PRIMITIVE i_var = y1-y0;
     PRIMITIVE j_var = x0-x1;
     PRIMITIVE Stand_const = y0*x1-x0*y1;
 
-    // call gcd function to get the greatest common divisor of the output
-    // and put the coefficients in lowest terms
+    // Call gcd function to get the greatest common divisor of the output
+    // and put the coefficients in lowest terms.
     PRIMITIVE myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , Stand_const);
 
-    double standard_i_var = 0;
-    double standard_j_var = 0;
-    double standard_Stand_const = 0;
+    // Reduce all terms by dividing by the gcd.
+    // If the gcd is 1, no harm done -- divide by 1.
+    double standard_i_var = i_var/myGCD;
+    double standard_j_var = j_var/myGCD;
+    double standard_Stand_const = Stand_const/myGCD;
 
-
-    // check to see if the "x" term is negative.  If it is,
-    // divide all terms by -1.  Also reduce all terms by dividing by
-    // the gcd.  If the gcd is 1, no harm done -- divide by 1.
-    // ensures postive x coefficient
-
-    if (i_var == 0) {
-      standard_i_var = 0;
-      standard_j_var = (j_var)/(myGCD);
-      standard_Stand_const = Stand_const/myGCD;
-    }
-    else if (i_var < 0) {
-      standard_i_var = -(i_var)/myGCD;
-      standard_j_var = -(j_var)/myGCD;
-      standard_Stand_const = -(Stand_const)/myGCD;
-    } else if (i_var > 0) {
-      standard_i_var = i_var/myGCD;
-      standard_j_var = j_var/myGCD;
-      standard_Stand_const = Stand_const/myGCD;
+    // Ensure postive x coefficient by negating if "x" term is negative.
+    if (i_var < 0) {
+      standard_i_var = - standard_i_var;
+      standard_j_var = - standard_j_var;
+      standard_Stand_const = - standard_Stand_const;
     }
 
     result[0] = standard_i_var;
     result[1] = standard_j_var;
     result[2] = standard_Stand_const;
-
 
     return true;
   }
