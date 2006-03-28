@@ -36,12 +36,6 @@ Daikon
     LinearTernary invariant that formed lines rather than planes was
     fixed.
 
-  Internal Changes
-
-    Several bugs in the overnight regression test script (buildtest.pl)
-    that obscured problems were fixed.  
-
-
 --------------------------------------------
 
 4.2.3 (March 1, 2006)
