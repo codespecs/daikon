@@ -1387,6 +1387,7 @@ public final class Daikon {
           for (VarInfo cvi : exit_ppt.var_infos)
             System.out.printf ("  exit var = %s%n", cvi);
           assert false;
+          throw new Error("this can't happen: postvar is null");
         }
         origvar.comparability = postvar.comparability.makeAlias(origvar.name);
 
