@@ -426,7 +426,14 @@ public final class Equality
       // test also takes into account missing values, since they are
       // null.
       if ((leaderValue == viValue) && (leaderMod == viMod)
-        && !leaderOutOfBounds && !vi.missingOutOfBounds()) continue;
+        && !leaderOutOfBounds && !vi.missingOutOfBounds()) {
+        if (leaderValue instanceof Double) {
+          if (!((Double)leaderValue).isNaN() && !((Double)viValue).isNaN())
+            continue;
+        } else {
+          continue;
+        }
+      }
       //       if (debug.isLoggable(Level.FINE)) {
       //         debug.fine ("  vi name: " + vi.name.name());
       //         debug.fine ("  vi value: " + viValue);
