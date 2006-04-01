@@ -97,6 +97,8 @@ public final class UtilMDE {
   /// BufferedFileReader
   ///
 
+  // Convenience methods for creating BufferedReaders, LineNumberReaders, etc.
+
   /**
    * Returns a BufferedReader for the file, accounting for the possibility
    * that the file is compressed.
@@ -163,7 +165,6 @@ public final class UtilMDE {
    * gzipped files) after the first gzipped file.
    **/
   public static BufferedWriter bufferedFileWriter(String filename) throws IOException {
-
     return bufferedFileWriter (filename, false);
   }
 
@@ -187,7 +188,6 @@ public final class UtilMDE {
     }
     return new BufferedWriter(file_writer);
   }
-
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -413,6 +413,7 @@ public final class UtilMDE {
   /// File
   ///
 
+
   /** Count the number of lines in the specified file **/
   public static long count_lines(String filename) throws IOException {
     LineNumberReader reader = UtilMDE.lineNumberFileReader(filename);
@@ -460,51 +461,6 @@ public final class UtilMDE {
   }
 
 
-  // Someone must have already written this.  Right?
-
-  // Deals with exactly one "*" in name.
-  public static final class WildcardFilter implements FilenameFilter {
-    String prefix;
-    String suffix;
-    public WildcardFilter(String filename) {
-      int astloc = filename.indexOf("*");
-      if (astloc == -1)
-        throw new Error("No asterisk in wildcard argument: " + filename);
-      prefix = filename.substring(0, astloc);
-      suffix = filename.substring(astloc+1);
-      if (filename.indexOf("*") != -1)
-        throw new Error("Multiple asterisks in wildcard argument: " + filename);
-    }
-    public boolean accept(File dir, String name) {
-      return name.startsWith(prefix) && name.endsWith(suffix);
-    }
-  }
-
-
-  /**
-   * Fixes a file name to do tilde expansion (to the users home directory)
-   * There maybe other logical things to do as well
-   */
-  public static File fix_filename (File name) {
-    String path = name.getPath();
-    String newname = fix_filename (path);
-    if (newname == path)
-      return (name);
-    else
-      return new File (newname);
-  }
-
-  /**
-   * Fixes a file name to do tilde expansion (to the users home directory)
-   * There maybe other logical things to do as well
-   */
-  public static String fix_filename (String name) {
-    if (name.contains ("~"))
-      return (name.replace ("~", System.getProperty ("user.home")));
-    else
-      return name;
-  }
-
   /**
    * Returns true
    *  if the file exists and is writable, or
@@ -537,36 +493,9 @@ public final class UtilMDE {
   }
 
 
-  /**
-   * Writes an Object to a File.
-   **/
-  public static void writeObject(Object o, File file) throws IOException {
-    // 8192 is the buffer size in BufferedReader
-    OutputStream bytes =
-      new BufferedOutputStream(new FileOutputStream(file), 8192);
-    if (file.getName().endsWith(".gz")) {
-      bytes = new GZIPOutputStream(bytes);
-    }
-    ObjectOutputStream objs = new ObjectOutputStream(bytes);
-    objs.writeObject(o);
-    objs.close();
-  }
-
-
-  /**
-   * Reads an Object from a File.
-   **/
-  public static Object readObject(File file) throws
-  IOException, ClassNotFoundException {
-    // 8192 is the buffer size in BufferedReader
-    InputStream istream =
-      new BufferedInputStream(new FileInputStream(file), 8192);
-    if (file.getName().endsWith(".gz")) {
-      istream = new GZIPInputStream(istream);
-    }
-    ObjectInputStream objs = new ObjectInputStream(istream);
-    return objs.readObject();
-  }
+  ///
+  /// Directories
+  ///
 
   /**
    * Creates an empty directory in the default temporary-file directory,
@@ -624,9 +553,96 @@ public final class UtilMDE {
     dir.delete();
   }
 
+
+  ///
+  /// File names (aka filenames)
+  ///
+
+  // Someone must have already written this.  Right?
+
+  // Deals with exactly one "*" in name.
+  public static final class WildcardFilter implements FilenameFilter {
+    String prefix;
+    String suffix;
+    public WildcardFilter(String filename) {
+      int astloc = filename.indexOf("*");
+      if (astloc == -1)
+        throw new Error("No asterisk in wildcard argument: " + filename);
+      prefix = filename.substring(0, astloc);
+      suffix = filename.substring(astloc+1);
+      if (filename.indexOf("*") != -1)
+        throw new Error("Multiple asterisks in wildcard argument: " + filename);
+    }
+    public boolean accept(File dir, String name) {
+      return name.startsWith(prefix) && name.endsWith(suffix);
+    }
+  }
+
+  // A better name would be "expandFilename"; "fix"is too vague. -MDE
+  /**
+   * Fixes a file name to do tilde expansion (to the user's home directory).
+   * There maybe other logical things to do as well.
+   */
+  public static File fix_filename (File name) {
+    String path = name.getPath();
+    String newname = fix_filename (path);
+    if (newname == path)
+      return (name);
+    else
+      return new File (newname);
+  }
+
+  // A better name would be "expandFilename"; "fix"is too vague. -MDE
+  /**
+   * Fixes a file name to do tilde expansion (to the users home directory)
+   * There maybe other logical things to do as well
+   */
+  public static String fix_filename (String name) {
+    if (name.contains ("~"))
+      return (name.replace ("~", System.getProperty ("user.home")));
+    else
+      return name;
+  }
+
+
+  ///
+  /// Reading and writing
+  ///
+
+  /**
+   * Writes an Object to a File.
+   **/
+  public static void writeObject(Object o, File file) throws IOException {
+    // 8192 is the buffer size in BufferedReader
+    OutputStream bytes =
+      new BufferedOutputStream(new FileOutputStream(file), 8192);
+    if (file.getName().endsWith(".gz")) {
+      bytes = new GZIPOutputStream(bytes);
+    }
+    ObjectOutputStream objs = new ObjectOutputStream(bytes);
+    objs.writeObject(o);
+    objs.close();
+  }
+
+
+  /**
+   * Reads an Object from a File.
+   **/
+  public static Object readObject(File file) throws
+  IOException, ClassNotFoundException {
+    // 8192 is the buffer size in BufferedReader
+    InputStream istream =
+      new BufferedInputStream(new FileInputStream(file), 8192);
+    if (file.getName().endsWith(".gz")) {
+      istream = new GZIPInputStream(istream);
+    }
+    ObjectInputStream objs = new ObjectInputStream(istream);
+    return objs.readObject();
+  }
+
   /**
    * Reads the entire contents of the specified file and returns it
-   * as a string.  Any IOException encountered will be turned into Errors
+   * as a string.  Any IOException encountered will be turned into an Error.
    */
   public static String readFile (File filename) {
 
@@ -649,7 +665,7 @@ public final class UtilMDE {
   /**
    * Creates a file with the given name and writes the specified string
    * to it.  If the file currently exists (and is writable) it is overwritten
-   * Any IOException encountered will be turned into Errors
+   * Any IOException encountered will be turned into an Error.
    */
   public static void writeFile (File filename, String contents) {
 
@@ -661,6 +677,8 @@ public final class UtilMDE {
       throw new Error ("Unexpected error in writeFile", e);
     }
   }
+
+
 
 
   ///////////////////////////////////////////////////////////////////////////
