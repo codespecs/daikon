@@ -69,7 +69,7 @@ public class StringInfo extends DaikonVariableInfo
             Object str = iter.next();
 
             if (str == null) {
-                buf.append(str);
+                buf.append(str); // appends "null"
             } else if (str instanceof String) {
                 buf.append("\"" + encodeString((String) str) + "\"");
             } else if (str instanceof NonsensicalObject
