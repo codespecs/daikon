@@ -1066,47 +1066,32 @@ public final class CLASSNAME
 
     PRIMITIVE Stand_const = ((i_var*(-px)) + (j_var*(-py)) + (k_var*(-pz)));
 
+    // Put the coefficients in lowest terms by dividing by the gcd.
+    // If the gcd is 1, no harm done -- divide by 1.
+    // Type is double to ensure floating-point division.
+    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
+    double standard_i_var = i_var/myGCD;
+    double standard_j_var = j_var/myGCD;
+    double standard_k_var = k_var/myGCD;
+    double standard_Stand_const = Stand_const/myGCD;
 
-    // call gcd function to get the greatest common divisor of the output
-    // and put the coefficients in lowest terms
-    PRIMITIVE myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
-
-    double standard_i_var = 0;
-    double standard_j_var = 0;
-    double standard_k_var = 0;
-    double standard_Stand_const = 0;
-
-
-    // check to see if the "x" term is negative.  If it is,
-    // divide all terms by -1.  Also reduce all terms by dividing by
-    // the gcd.  If the gcd is 1, no harm done -- divide by 1.
-    // ensures postive x coefficient
     if (wrapper != null) {
       wrapper.log("Preliminary: " + i_var + " " + j_var + " GCD: " + MathMDE.gcd(i_var, j_var));
       wrapper.log("Preliminary: " + k_var + " " + Stand_const + " GCD: " + MathMDE.gcd(k_var, Stand_const));
       wrapper.log("GCD: " + myGCD);
     }
-    if (i_var == 0) {
-      standard_i_var = 0;
-      standard_j_var = (j_var)/(myGCD);
-      standard_k_var = (k_var)/(myGCD);
-      standard_Stand_const = Stand_const/myGCD;
-    } else if (i_var < 0) {
-      standard_i_var = -(i_var)/myGCD;
-      standard_j_var = -(j_var)/myGCD;
-      standard_k_var = -(k_var)/myGCD;
-      standard_Stand_const = -(Stand_const)/myGCD;
-    } else if (i_var > 0) {
-      standard_i_var = i_var/myGCD;
-      standard_j_var = j_var/myGCD;
-      standard_k_var = k_var/myGCD;
-      standard_Stand_const = Stand_const/myGCD;
+
+    // Ensure postive x coefficient by negating if "x" term is negative.
+    if (i_var < 0) {
+      standard_i_var = - standard_i_var;
+      standard_j_var = - standard_j_var;
+      standard_k_var = - standard_k_var;
+      standard_Stand_const = - standard_Stand_const;
     }
 
     double[] coef = new double[] {standard_i_var,
                                   standard_j_var,
                                   standard_k_var, standard_Stand_const };
-
 
     return coef;
 
