@@ -9,7 +9,7 @@ import java.util.regex.*;
  * comments with arbitrary syntax (specified by regular expression).
  *
  * It can also read multi-line entries (paragraphs).
- * .  @see #get_entry() and @see #set_entry_start_stop(String,String)
+ * @see #get_entry() and @see #set_entry_start_stop(String,String)
  */
 public class MultiReader {
 
