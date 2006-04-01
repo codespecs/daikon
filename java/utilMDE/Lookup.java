@@ -231,13 +231,13 @@ public class Lookup {
     } else if (matching_entries.size() == 1) {
       Entry e = matching_entries.get(0);
       if (show_location)
-        System.out.printf ("%s:%d%n", e.filename, e.line_number);
+        System.out.printf ("%s:%d:%n", e.filename, e.line_number);
       System.out.print (e.body);
     } else { // there must be multiple matches
       if (item_num != null) {
         Entry e = matching_entries.get (item_num-1);
         if (show_location)
-          System.out.printf ("%s:%d%n", e.filename, e.line_number);
+          System.out.printf ("%s:%d:%n", e.filename, e.line_number);
         System.out.print (e.body);
       } else {
         int i = 0;
@@ -253,14 +253,14 @@ public class Lookup {
           i++;
           if (print_all) {
             if (show_location)
-              System.out.printf ("%n-------------------------%n%s:%d%n",
+              System.out.printf ("%n-------------------------%n%s:%d:%n",
                                  e.filename, e.line_number);
             else
               System.out.printf ("%n-------------------------%n");
             System.out.print (e.body);
           } else {
             if (show_location)
-              System.out.printf ("  -i=%d %s:%d %s%n", i, e.filename,
+              System.out.printf ("  -i=%d %s:%d: %s%n", i, e.filename,
                                  e.line_number, e.first_line);
             else
               System.out.printf ("  -i=%d %s%n", i,
