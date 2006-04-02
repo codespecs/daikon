@@ -34,14 +34,14 @@ Daikon
 
   Bug Fixes
 
-    An error in LinearTernary invariant that showed up when merging
-    LinearTernary invariant that formed lines rather than planes was
-    fixed.
+    Fixed an error in LinearTernary invariant that showed up when
+    merging LinearTernary invariant that formed lines rather than
+    planes.
 
     Fixed a problem in the equality set optimization that caused
-    variables with NaN values to show up as equal (NaN values are
-    considered not to be equal to anything, including another NaN
-    value).
+    variables with NaN values to show up as equal (Java considers a
+    NaN value to be unequal to everything, including itself or another
+    NaN value).
 
     Fixed InvariantChecker so that it works correctly with trace files
     that contain declaration records.
