@@ -55,7 +55,7 @@ javadoc: $(JAVA_FILES)
 	javadoc -d doc utilMDE
 	# makes "doc" (the target of this rule) look up to date
 	touch doc
-	jdk-add-munged-anchor-names-no-bak doc/utilMDE/*.html
+	jdk-add-munged-anchor-names doc/utilMDE/*.html
 	@echo "Run jdk-index-to-alist (see ~/bin/share/jdk-index-to-alist)"
 
 audit:
