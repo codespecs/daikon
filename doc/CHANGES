@@ -22,6 +22,8 @@ Further documentation can be found in:
 
 4.2.4 (April 1, 2006)
 
+This is a bug-fix release.  Several bugs in Daikon were fixed.
+
 Daikon
 
   User-visible changes
@@ -38,7 +40,7 @@ Daikon
 
     Fixed a problem in the equality set optimization that caused
     variables with NaN values to show up as equal (NaN values are
-    considered not to be equal to anything including another NaN
+    considered not to be equal to anything, including another NaN
     value).
 
     Fixed InvariantChecker so that it works correctly with trace files
