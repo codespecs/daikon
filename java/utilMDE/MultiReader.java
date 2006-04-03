@@ -25,7 +25,7 @@ public class MultiReader {
     }
 
     public ReaderInfo (String filename) throws IOException {
-      this.reader = new BufferedReader (new FileReader (filename));
+      this.reader = UtilMDE.bufferedFileReader (filename);
       this.filename = filename;
     }
   }
@@ -128,7 +128,7 @@ public class MultiReader {
   /**
    * Create a MultiReader
    *
-   *    @param filename   Initial file to read
+   *    @param file       Initial file to read
    *    @param comment_re Regular expression that matches comments.
    *                      Any text that matches comment_re is removed.
    *                      A line that is entirely a comment is ignored
@@ -136,12 +136,11 @@ public class MultiReader {
    *                      The expression should define one group that contains
    *                      the include file name
    */
-  public MultiReader (File filename, String comment_re,
+  public MultiReader (File file, String comment_re,
                       String include_re) throws IOException {
 
-    this ((new BufferedReader (new FileReader (filename))), comment_re,
-          include_re);
-    readers.peek().filename = filename.toString();
+    this ((UtilMDE.bufferedFileReader (file)), comment_re, include_re);
+    readers.peek().filename = file.toString();
   }
 
   /**
