@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import utilMDE.Assert;
 import utilMDE.Fmt;
+import utilMDE.TextFile;
 
 /**
  * This class applies settings from a configuration file that lists
@@ -116,15 +117,11 @@ public final class Configuration
 
   public void apply(InputStream input) {
     Assert.assertTrue(input != null);
-    try {
-      for (String line : new TextFile(input)) {
-        line = line.trim();
-        if (line.length() == 0) continue;    // skip blank lines
-        if (line.charAt(0) == '#') continue; // skip # comment lines
-        apply(line);
-      }
-    } catch (IOException e) {
-      throw new ConfigException("Cannot read from stream", e);
+    for (String line : new TextFile(input)) {
+      line = line.trim();
+      if (line.length() == 0) continue;    // skip blank lines
+      if (line.charAt(0) == '#') continue; // skip # comment lines
+      apply(line);
     }
   }
 
