@@ -97,7 +97,7 @@ public final class UtilMDE {
   /// BufferedFileReader
   ///
 
-  // Convenience methods for creating BufferedReaders, LineNumberReaders, etc.
+  // Convenience methods for creating BufferedReaders and LineNumberReaders.
 
   /**
    * Returns a BufferedReader for the file, accounting for the possibility
@@ -109,12 +109,25 @@ public final class UtilMDE {
    * gzipped files) after the first gzipped file.
    **/
   public static BufferedReader bufferedFileReader(String filename) throws FileNotFoundException, IOException {
+    return bufferedFileReader(new File(filename));
+  }
+
+  /**
+   * Returns a BufferedReader for the file, accounting for the possibility
+   * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static BufferedReader bufferedFileReader(File file) throws FileNotFoundException, IOException {
     Reader file_reader;
-    if (filename.endsWith(".gz")) {
-      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)),
+    if (file.getName().endsWith(".gz")) {
+      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(file)),
                                           "ISO-8859-1");
     } else {
-      file_reader = new InputStreamReader(new FileInputStream(filename),
+      file_reader = new InputStreamReader(new FileInputStream(file),
                                           "ISO-8859-1");
     }
     return new BufferedReader(file_reader);
@@ -644,10 +657,10 @@ public final class UtilMDE {
    * Reads the entire contents of the specified file and returns it
    * as a string.  Any IOException encountered will be turned into an Error.
    */
-  public static String readFile (File filename) {
+  public static String readFile (File file) {
 
     try {
-      BufferedReader reader = new BufferedReader (new FileReader (filename));
+      BufferedReader reader = UtilMDE.bufferedFileReader (file);
       StringBuilder contents = new StringBuilder();
       String line = reader.readLine();
       while (line != null) {
@@ -667,18 +680,16 @@ public final class UtilMDE {
    * to it.  If the file currently exists (and is writable) it is overwritten
    * Any IOException encountered will be turned into an Error.
    */
-  public static void writeFile (File filename, String contents) {
+  public static void writeFile (File file, String contents) {
 
     try {
-      FileWriter writer = new FileWriter (filename);
+      FileWriter writer = new FileWriter (file);
       writer.write (contents, 0, contents.length());
       writer.close();
     } catch (Exception e) {
       throw new Error ("Unexpected error in writeFile", e);
     }
   }
-
-
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1243,7 +1254,7 @@ public final class UtilMDE {
       }
     } catch (java.io.IOException e) {
       e.printStackTrace();
-      throw new Error("" + e);
+      throw new Error(e);
     }
   }
 
