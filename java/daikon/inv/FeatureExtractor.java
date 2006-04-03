@@ -477,7 +477,7 @@ public final class FeatureExtractor {
 
   private static void compactSVMFeatureFile(File input, File output)
     throws IOException {
-    BufferedReader br = new BufferedReader(new FileReader(input));
+    BufferedReader br = UtilMDE.bufferedFileReader(input);
     HashSet<String> vectors = new HashSet<String>();
     ArrayList<String> outputData = new ArrayList<String>();
     while (br.ready()) {
@@ -501,7 +501,7 @@ public final class FeatureExtractor {
   // compacts an SVMfu file to remove repeats.
   private static void compactSVMfuFeatureFile(File input, File output)
     throws IOException {
-    BufferedReader br = new BufferedReader(new FileReader(input));
+    BufferedReader br = UtilMDE.bufferedFileReader(input);
     HashSet<String> vectors = new HashSet<String>();
     br.readLine();
     while (br.ready())
@@ -827,12 +827,7 @@ public final class FeatureExtractor {
       HashSet<String> neg = new HashSet<String>();
 
       for (String s : inputs) {
-        BufferedReader br=new BufferedReader(new FileReader(s));
-        br.readLine();
-        while (br.ready()) {
-          String vector = br.readLine();
-          assert vector != null;
-
+        for (String vector : new TextFile(s)) {
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
               neg.add(vector.substring(0, vector.lastIndexOf("bad")));
@@ -848,7 +843,6 @@ public final class FeatureExtractor {
               pos.add(vector.substring(0, vector.lastIndexOf("1")));
           }
         }
-        br.close();
       }
 
       // Now create two vectors, posvectors and negvectors, of the
@@ -955,12 +949,7 @@ public final class FeatureExtractor {
       HashSet<String> neg = new HashSet<String>();
 
       for (String s : trains) {
-        BufferedReader br = new BufferedReader(new FileReader(s));
-        br.readLine();
-        while (br.ready()) {
-          String vector = br.readLine();
-          assert vector != null;
-
+        for (String vector : new TextFile(s)) {
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
               neg.add(vector.substring(0, vector.lastIndexOf("bad")));
@@ -976,7 +965,6 @@ public final class FeatureExtractor {
               pos.add(vector.substring(0, vector.lastIndexOf("1")));
           }
         }
-        br.close();
       }
 
       // Load the test files into two vectors: testBad and testGood
@@ -984,12 +972,7 @@ public final class FeatureExtractor {
       ArrayList<String> testBad = new ArrayList<String>();
 
       for (String s : trains) {
-        BufferedReader br=new BufferedReader(new FileReader(s));
-        br.readLine();
-        while (br.ready()) {
-          String vector = br.readLine();
-          assert vector != null;
-
+        for (String vector : new TextFile(s)) {
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
               testBad.add(vector.substring(0, vector.lastIndexOf("bad")));
@@ -1005,7 +988,6 @@ public final class FeatureExtractor {
               testGood.add(vector.substring(0, vector.lastIndexOf("1")));
           }
         }
-        br.close();
       }
     }
 

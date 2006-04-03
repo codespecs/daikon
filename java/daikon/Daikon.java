@@ -709,12 +709,9 @@ public final class Daikon {
           } else if (output_num_samples_SWITCH.equals(option_name)) {
             output_num_samples = true;
           } else if (files_from_SWITCH.equals(option_name)) {
+            String files_from_filename = g.getOptarg();
             try {
-              BufferedReader files_from =
-                UtilMDE.bufferedFileReader(g.getOptarg());
-              String filename;
-              while ((filename = files_from.readLine())
-                != null) {
+              for (String filename : new TextFile(files_from_filename)) {
                 // Ignore blank lines in file.
                 if (filename.equals("")) {
                   continue;
@@ -742,7 +739,7 @@ public final class Daikon {
                 }
               }
             } catch (IOException e) {
-              throw new RuntimeException("Error reading --files_from file");
+              throw new RuntimeException(String.format("Error reading --files_from file: %s", files_from_filename));
             }
             break;
           } else if (omit_from_output_SWITCH.equals(option_name)) {
@@ -1980,8 +1977,8 @@ public final class Daikon {
 
         // Read each ppt name from the file
         for (String line = fp.readLine();
-          line != null;
-          line = fp.readLine()) {
+             line != null;
+             line = fp.readLine()) {
           if (line.equals("") || FileIO.isComment(line))
             continue;
           if (!line.equals("DECLARE"))

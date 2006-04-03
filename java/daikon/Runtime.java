@@ -197,7 +197,7 @@ public final class Runtime {
       dtrace = new PrintStream(bos);
     } catch (Exception e) {
       e.printStackTrace();
-      throw new Error("" + e);
+      throw new Error(e);
     }
     if (supportsAddShutdownHook()) {
       addShutdownHook();

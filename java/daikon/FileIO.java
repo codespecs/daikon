@@ -953,21 +953,21 @@ public final class FileIO {
       reader.reset();
       if ("this_invocation_nonce".equals(nonce_name_maybe)) {
 
-          String nonce_name = reader.readLine();
-          Assert.assertTrue(nonce_name != null && nonce_name.equals("this_invocation_nonce"));
-          String nonce_number = reader.readLine();
-          if (nonce_number == null) {
-            throw new FileIOException("File ended while trying to read nonce",
-                                      reader,
-                                      state.file);
-          }
-          nonce = new Integer(nonce_number);
+        String nonce_name = reader.readLine();
+        Assert.assertTrue(nonce_name != null && nonce_name.equals("this_invocation_nonce"));
+        String nonce_number = reader.readLine();
+        if (nonce_number == null) {
+          throw new FileIOException("File ended while trying to read nonce",
+                                    reader,
+                                    state.file);
+        }
+        nonce = new Integer(nonce_number);
 
-          if (Global.debugPrintDtrace) {
-            to_write_nonce = true;
-            nonce_value = nonce.toString();
-            nonce_string = nonce_name_maybe;
-          }
+        if (Global.debugPrintDtrace) {
+          to_write_nonce = true;
+          nonce_value = nonce.toString();
+          nonce_string = nonce_name_maybe;
+        }
       }
 
       Object[] vals = new Object[vals_array_size];
@@ -1579,7 +1579,7 @@ public final class FileIO {
           "Unexpected serialized file type: " + obj.getClass());
       }
     } catch (ClassNotFoundException e) {
-      throw new IOException("Error while loading inv file: " + e);
+      throw (IOException)(new IOException("Error while loading inv file").initCause(e));
     } catch (InvalidClassException e) {
       throw new IOException(
         "It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file." + lineSep

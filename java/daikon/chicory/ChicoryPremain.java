@@ -15,7 +15,7 @@ public class ChicoryPremain {
 
   // Premain specific options.  Most options are the same as Chicory.
   @Option ("socket port to communicate with Daikon")
-  public static int daikon_port = -1;
+    public static int daikon_port = -1;
 
   public static boolean debug = false;
 
@@ -53,7 +53,7 @@ public class ChicoryPremain {
 
     // Open the dtrace file
     if (Chicory.daikon_online) {
-        Runtime.setDtraceOnlineMode(daikon_port);
+      Runtime.setDtraceOnlineMode(daikon_port);
     } else if (Chicory.dtrace_file == null) {
       File trace_file_path = new File (Chicory.output_dir, "dtrace.gz");
       Runtime.setDtraceMaybe (trace_file_path.toString());
@@ -81,19 +81,19 @@ public class ChicoryPremain {
     }
 
     if (Chicory.doPurity())
-    {
+      {
         throw new RuntimeException("Executing a purity analysis is currently disabled");
 
         //runPurityAnalysis(Chicory.target_program);
         //writePurityFile(Chicory.target_program + ".pure",
         //                Chicory.config_dir);
         //doPurity = true;
-    }
+      }
     else if (Chicory.get_purity_file() != null)
-    {
+      {
         readPurityFile(Chicory.get_purity_file(), Chicory.config_dir);
         doPurity = true;
-    }
+      }
 
     // Setup the declaration and dtrace writer.  The include/exclude filter are
     // implemented in the transform, so they don't need to be handled
@@ -128,107 +128,111 @@ public class ChicoryPremain {
    * or private first, and then other modifiers in the following
    * order: abstract, static, final, synchronized native."
    */
-   private static void readPurityFile(File purityFileName, File pathLoc)
-   {
-        pureMethods = new HashSet<String>();
+  private static void readPurityFile(File purityFileName, File pathLoc)
+  {
+    pureMethods = new HashSet<String>();
 
-        BufferedReader reader = null;
+    BufferedReader reader = null;
+    try
+      {
+        reader = UtilMDE.bufferedFileReader(
+                                            new File(pathLoc, purityFileName.getPath()));
+      }
+    catch (FileNotFoundException e)
+      {
+        throw new Error("Could not find file " + purityFileName, e);
+      }
+    catch (IOException e)
+      {
+        throw new Error("Problem reading file " + purityFileName, e);
+      }
+
+    if (Chicory.verbose)
+      System.out.printf("Reading '%s' for pure methods %n", purityFileName);
+
+    String line;
+    do
+      {
         try
-        {
-            reader = new BufferedReader(new FileReader(
-                    new File(pathLoc, purityFileName.getPath())));
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new Error("Could not find file " + purityFileName + ". Got exception " + e);
-        }
-
-        if (Chicory.verbose)
-            System.out.printf("Reading '%s' for pure methods %n", purityFileName);
-
-        String line;
-        do
-        {
-            try
-            {
-                line = reader.readLine();
-            }
-            catch (IOException e)
-            {
-                throw new Error("Error reading file " + purityFileName + ". Got exception e");
-            }
-
-            if (line != null) {
-                pureMethods.add(line.trim());
-                // System.out.printf ("Adding '%s' to list of pure methods\n",
-                //                   line);
-            }
-        }
-        while (line != null);
-
-        try
-        {
-            reader.close();
-        }
+          {
+            line = reader.readLine();
+          }
         catch (IOException e)
-        {
+          {
+            throw new Error("Error reading file " + purityFileName + ". Got exception e");
+          }
+
+        if (line != null) {
+          pureMethods.add(line.trim());
+          // System.out.printf ("Adding '%s' to list of pure methods\n",
+          //                   line);
         }
+      }
+    while (line != null);
 
-        // System.out.printf ("leaving purify file\n");
+    try
+      {
+        reader.close();
+      }
+    catch (IOException e)
+      {
+      }
 
-    }
+    // System.out.printf ("leaving purify file\n");
 
-   /**
-    * Write a *.pure file to the given location
-    * @param fileName Where to write the file to (full path)
-    */
-   private static void writePurityFile(String fileName, String parentDir)
-    {
-        PrintWriter pureFileWriter = null;
-        try
-        {
-            pureFileWriter = new PrintWriter(new File(parentDir, fileName));
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new Error("Could not open " + fileName + " for writing. Got exception " + e);
-        }
+  }
 
-        System.out.printf("Writing pure methods to %s%n", fileName);
+  /**
+   * Write a *.pure file to the given location
+   * @param fileName Where to write the file to (full path)
+   */
+  private static void writePurityFile(String fileName, String parentDir)
+  {
+    PrintWriter pureFileWriter = null;
+    try
+      {
+        pureFileWriter = new PrintWriter(new File(parentDir, fileName));
+      }
+    catch (FileNotFoundException e)
+      {
+        throw new Error("Could not open " + fileName + " for writing. Got exception", e);
+      }
 
-        for (String methodName : pureMethods)
-        {
-            pureFileWriter.println(methodName);
-        }
+    System.out.printf("Writing pure methods to %s%n", fileName);
 
-        pureFileWriter.close();
-    }
+    for (String methodName : pureMethods)
+      {
+        pureFileWriter.println(methodName);
+      }
+
+    pureFileWriter.close();
+  }
 
   /**
    * Invokes Alexandru Salcianu's purity analysis on given application.
    * Populates the pureMethods Set with pure (non side-effecting) methods.
    * @param targetApp Name of the class whose main method is the entry point of the application
    */
-//  private static void runPurityAnalysis(String targetApp)
-//  {
-//      //Example args: --pa:assignable -q  -c DataStructures.StackAr
-//      String[] args = new String[] {"--pa:assignable", "-c", targetApp};
-//
-//      Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);
-//
-//      pureMethods = new HashSet<String> ();
-//      for (HMethod meth: pureHMethods)
-//      {
-//          pureMethods.add(meth.toString());
-//      }
-//  }
+  //  private static void runPurityAnalysis(String targetApp)
+  //  {
+  //      //Example args: --pa:assignable -q  -c DataStructures.StackAr
+  //      String[] args = new String[] {"--pa:assignable", "-c", targetApp};
+  //
+  //      Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);
+  //
+  //      pureMethods = new HashSet<String> ();
+  //      for (HMethod meth: pureHMethods)
+  //      {
+  //          pureMethods.add(meth.toString());
+  //      }
+  //  }
 
   /**
    * Return true iff Chicory has run a purity analysis or read a *.pure file
    */
   public static boolean shouldDoPurity()
   {
-      return doPurity;
+    return doPurity;
   }
 
   /**
@@ -239,16 +243,16 @@ public class ChicoryPremain {
    */
   public static boolean isMethodPure(Member member)
   {
-      assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
+    assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
 
-      //TODO just use Set.contains(member.toString()) ?
-      for (String methName: pureMethods)
+    //TODO just use Set.contains(member.toString()) ?
+    for (String methName: pureMethods)
       {
-          if (methName.equals(member.toString()))
-              return true;
+        if (methName.equals(member.toString()))
+          return true;
       }
 
-      return false;
+    return false;
   }
 
   /**
@@ -256,7 +260,7 @@ public class ChicoryPremain {
    */
   public static Set<String> getPureMethods()
   {
-      return Collections.unmodifiableSet(pureMethods);
+    return Collections.unmodifiableSet(pureMethods);
   }
 
 

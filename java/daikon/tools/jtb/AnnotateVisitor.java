@@ -10,6 +10,7 @@ import jtb.visitor.*;
 import daikon.*;
 import utilMDE.Assert;
 import utilMDE.ArraysMDE;
+import utilMDE.UtilMDE;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.sequence.EltNonZero;
@@ -115,8 +116,10 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     this.javaFileLines = new ArrayList<String>();
     BufferedReader reader = null;
     try {
-      reader = new BufferedReader(new FileReader(javafilename));
+      reader = UtilMDE.bufferedFileReader(javafilename);
     } catch (FileNotFoundException e) {
+      throw new Error(e);
+    } catch (IOException e) {
       throw new Error(e);
     }
     String line = null;

@@ -385,7 +385,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     try {
       pairwise_class = Class.forName (cstr);
     } catch (Exception e) {
-      throw new Error ("can't create class for " + cstr + " - " + e);
+      throw new Error ("can't create class for " + cstr, e);
     }
     Invariant inv = find (pairwise_class, der1.seqvar(), der2.seqvar());
     if (inv == null)

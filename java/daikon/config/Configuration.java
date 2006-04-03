@@ -117,19 +117,14 @@ public final class Configuration
   public void apply(InputStream input) {
     Assert.assertTrue(input != null);
     try {
-
-      BufferedReader lines = new BufferedReader(new InputStreamReader(input));
-      String line;
-      while ((line = lines.readLine()) != null) {
+      for (String line : new TextFile(input)) {
         line = line.trim();
         if (line.length() == 0) continue;    // skip blank lines
         if (line.charAt(0) == '#') continue; // skip # comment lines
         apply(line);
       }
-      lines.close();
-
     } catch (IOException e) {
-      throw new ConfigException("Cannot read from stream." + daikon.Global.lineSep + e);
+      throw new ConfigException("Cannot read from stream", e);
     }
   }
 
@@ -171,7 +166,7 @@ public final class Configuration
     } catch (ClassNotFoundException e) {
       throw new ConfigException("Configuration option attempts to use nonexistent class " + classname, e);
     } catch (LinkageError e) {
-      throw new ConfigException("Configuration option attempts to use class with lnkage error " + classname + daikon.Global.lineSep + e);
+      throw new ConfigException("Configuration option attempts to use class with lnkage error " + classname, e);
     }
 
     apply(clazz, fieldname, value);

@@ -62,11 +62,11 @@ class WriteViolationFile {
     }
     catch (IllegalAccessException e) {
       // This can't happen
-      throw new Error("Problem while invoking main: " + e);
+      throw new Error("Problem while invoking main", e);
     }
     catch (InvocationTargetException e) {
       // This can't happen
-      throw new Error("Problem while invoking main: " + e);
+      throw new Error("Problem while invoking main", e);
     }
     finally {
 
@@ -108,7 +108,7 @@ class WriteViolationFile {
         }
         writer.close();
       } catch (IOException e) {
-        throw new Error("Problem while writing file violations.txt: " + e);
+        throw new Error("Problem while writing file violations.txt", e);
       }
     }
   }

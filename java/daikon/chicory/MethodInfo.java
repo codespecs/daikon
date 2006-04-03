@@ -136,7 +136,7 @@ public class MethodInfo {
       else
         member = class_info.clazz.getDeclaredMethod (method_name, arg_types);
     } catch (Exception e) {
-      throw new Error ("can't find method " + method_name + " : " + e);
+      throw new Error ("can't find method " + method_name, e);
     }
 
 

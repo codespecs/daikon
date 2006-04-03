@@ -176,7 +176,7 @@ public class Premain {
       } catch (Throwable e) {
         System.out.printf ("Unexpected Error: %n");
         e.printStackTrace();
-        throw new RuntimeException ("Unexpected error: " + e);
+        throw new RuntimeException ("Unexpected error", e);
       }
     }
   }

@@ -13,16 +13,14 @@ import utilMDE.*;
  * dtrace file besides the first will have the invocation nonces increased
  * by the "correct" amount, determined in the following way:
  *
- * <br><br>Keep track of all the nonces you see and maintain a record
+ * <p>
+ * Keep track of all the nonces you see and maintain a record
  * of the highest nonce observed.  The next time you see a '0' valued
  * nonce that is not part of an EXIT program point, then you know you have
  * reached the beginning of the next dtrace file.  Use that as the number
  * to add to the remaining nonces and repeat.  This should only require
  * one pass through the file.
- *
  */
-
-
 
 public class DtraceNonceFixer {
 
@@ -65,7 +63,7 @@ public class DtraceNonceFixer {
       (args[0] + "_fixed");
 
     try {
-      BufferedReader br = UtilMDE.bufferedFileReader (args[0]);
+      BufferedReader br1 = UtilMDE.bufferedFileReader (args[0]);
       PrintWriter out =
         new PrintWriter (UtilMDE.bufferedFileWriter (outputFilename));
 
@@ -75,8 +73,8 @@ public class DtraceNonceFixer {
       int maxNonce = 0;
       int correctionFactor = 0;
       boolean first = true;
-      while (br.ready()) {
-        String nextInvo = grabNextInvocation (br);
+      while (br1.ready()) {
+        String nextInvo = grabNextInvocation (br1);
         int non = peekNonce (nextInvo);
         // The first legit 0 nonce will have an ENTER and EXIT
         // seeing a 0 means we have reached the next file
@@ -104,12 +102,12 @@ public class DtraceNonceFixer {
         (args[0] + "_all_fixed.gz") :
         (args[0] + "_all_fixed");
 
-      br = UtilMDE.bufferedFileReader (outputFilename);
+      BufferedReader br2 = UtilMDE.bufferedFileReader (outputFilename);
       out =
         new PrintWriter (UtilMDE.bufferedFileWriter (allFixedFilename));
 
-      while (br.ready()) {
-        String nextInvo = grabNextInvocation (br);
+      while (br2.ready()) {
+        String nextInvo = grabNextInvocation (br2);
         int non = peekNonce (nextInvo);
         // if there is no nonce at this point it must be an OBJECT
         // or a CLASS invocation

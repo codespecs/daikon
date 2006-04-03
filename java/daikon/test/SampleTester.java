@@ -414,7 +414,7 @@ public class SampleTester extends TestCase {
       try {
         cls = Class.forName (arg0);
       } catch (Exception e) {
-        throw new RuntimeException ("Can't find class " + arg0 + " - " + e);
+        throw new RuntimeException ("Can't find class " + arg0, e);
       }
       debug.fine ("Looking for " + cls);
     }

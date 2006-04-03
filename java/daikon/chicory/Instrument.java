@@ -59,58 +59,58 @@ public class Instrument implements ClassFileTransformer {
   //to see if the given ppt should be "filtered out"
   private boolean shouldFilter(String className, String methodName, String pptName)
   {
-      boolean shouldExclude = false;
+    boolean shouldExclude = false;
 
-        // Don't instrument class if it matches an excluded regular expression
-        for (Pattern pattern : Runtime.ppt_omit_pattern)
-        {
+    // Don't instrument class if it matches an excluded regular expression
+    for (Pattern pattern : Runtime.ppt_omit_pattern)
+      {
+
+        Matcher mPpt = pattern.matcher(pptName);
+        Matcher mClass = pattern.matcher(className);
+        Matcher mMethod = pattern.matcher(methodName);
+
+        if (mPpt.find() || mClass.find() || mMethod.find())
+          {
+            log("not instrumenting %s, it matches regex %s%n", pptName, pattern);
+            shouldExclude = true;
+
+            //System.out.println("filtering 1 true on --- " + pptName);
+
+            //omit takes priority over include
+            return true;
+          }
+      }
+
+    // If any include regular expressions are specified, only instrument
+    // classes that match them
+    if (Runtime.ppt_select_pattern.size() > 0)
+      {
+        for (Pattern pattern: Runtime.ppt_select_pattern)
+          {
 
             Matcher mPpt = pattern.matcher(pptName);
             Matcher mClass = pattern.matcher(className);
             Matcher mMethod = pattern.matcher(methodName);
 
+            //System.out.println("--->" + regex);
+
             if (mPpt.find() || mClass.find() || mMethod.find())
-            {
-                log("not instrumenting %s, it matches regex %s%n", pptName, pattern);
-                shouldExclude = true;
+              {
+                //System.out.printf ("instrumenting %s, it matches regex %s%n", pptName, regex);
+                log("instrumenting %s, it matches regex %s%n", pptName, pattern);
 
-                //System.out.println("filtering 1 true on --- " + pptName);
+                //System.out.println("filtering 2 false on --- " + pptName);
+                return false; //don't filter out
+              }
+          }
+      }
 
-                //omit takes priority over include
-                return true;
-            }
-        }
+    //if we're here, this ppt not explicitly included or excluded
+    //so keep unless there were items in the "include only" list
+    boolean ret = (Runtime.ppt_select_pattern.size() > 0);
 
-        // If any include regular expressions are specified, only instrument
-        // classes that match them
-        if (Runtime.ppt_select_pattern.size() > 0)
-        {
-            for (Pattern pattern: Runtime.ppt_select_pattern)
-            {
-
-                Matcher mPpt = pattern.matcher(pptName);
-                Matcher mClass = pattern.matcher(className);
-                Matcher mMethod = pattern.matcher(methodName);
-
-                //System.out.println("--->" + regex);
-
-                if (mPpt.find() || mClass.find() || mMethod.find())
-                {
-                    //System.out.printf ("instrumenting %s, it matches regex %s%n", pptName, regex);
-                    log("instrumenting %s, it matches regex %s%n", pptName, pattern);
-
-                    //System.out.println("filtering 2 false on --- " + pptName);
-                    return false; //don't filter out
-                }
-            }
-        }
-
-        //if we're here, this ppt not explicitly included or excluded
-        //so keep unless there were items in the "include only" list
-        boolean ret = (Runtime.ppt_select_pattern.size() > 0);
-
-        //System.out.println("filtering 3: " + ret + " on --- " + pptName);
-        return ret;
+    //System.out.println("filtering 3: " + ret + " on --- " + pptName);
+    return ret;
 
   }
 
@@ -122,14 +122,14 @@ public class Instrument implements ClassFileTransformer {
                            Class<?> classBeingRedefined,
                            ProtectionDomain protectionDomain,
                            byte[] classfileBuffer)
-                                  throws IllegalClassFormatException {
+    throws IllegalClassFormatException {
 
     // debug = className.equals ("DataStructures/StackAr");
     // debug = className.equals ("chicory/Test");
     // debug = className.equals ("DataStructures/BinarySearchTree");
 
-      String fullClassName = className.replace("/", ".");
-      //String fullClassName = className;
+    String fullClassName = className.replace("/", ".");
+    //String fullClassName = className;
 
     if (debug)
       out.format ("In Transform: class = %s%n", className);
@@ -149,19 +149,19 @@ public class Instrument implements ClassFileTransformer {
 
 
     if (debug)
-            out.format("transforming class %s%n", className);
+      out.format("transforming class %s%n", className);
 
-        // Parse the bytes of the classfile, die on any errors
-        JavaClass c = null;
-        ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-        try
-        {
-            c = parser.parse();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Unexpected error: " + e);
-        }
+    // Parse the bytes of the classfile, die on any errors
+    JavaClass c = null;
+    ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
+    try
+      {
+        c = parser.parse();
+      }
+    catch (Exception e)
+      {
+        throw new RuntimeException("Unexpected error", e);
+      }
 
     try {
       // Get the class information
@@ -174,43 +174,43 @@ public class Instrument implements ClassFileTransformer {
       //get constant static fields!
       Field[] fields = cg.getFields();
       for (Field field: fields)
-      {
+        {
           if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType))
-          {
+            {
               ConstantValue value = field.getConstantValue();
               String valString;
 
               if (value == null)
-                  {
+                {
                   //System.out.println("WARNING FROM " + field.getName());
                   //valString = "WARNING!!!";
                   valString = null;
-                  }
+                }
               else
-                  {
+                {
                   valString = value.toString();
                   //System.out.println("GOOD FROM " + field.getName() + " --- " + valString);
-                  }
-
-              if (valString != null)
-                  c_info.staticMap.put(field.getName(), valString);
-          }
-      }
-
-      if (Chicory.checkStaticInit)
-            {
-                //check for static initializer
-                boolean hasInit = false;
-                for (Method meth : cg.getMethods())
-                {
-                    if (meth.getName().equals("<clinit>"))
-                        hasInit = true;
                 }
 
-                //if not found, add our own!
-                if (!hasInit)
-                    cg.addMethod(createClinit(cg, fullClassName));
+              if (valString != null)
+                c_info.staticMap.put(field.getName(), valString);
             }
+        }
+
+      if (Chicory.checkStaticInit)
+        {
+          //check for static initializer
+          boolean hasInit = false;
+          for (Method meth : cg.getMethods())
+            {
+              if (meth.getName().equals("<clinit>"))
+                hasInit = true;
+            }
+
+          //if not found, add our own!
+          if (!hasInit)
+            cg.addMethod(createClinit(cg, fullClassName));
+        }
 
 
       JavaClass njc = cg.getJavaClass();
@@ -230,101 +230,101 @@ public class Instrument implements ClassFileTransformer {
   //used to add a "hook" into the <clinit> static initializer
   private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName)
   {
-      call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
+    call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
 
-      InstructionList newList = mg.getInstructionList();
-      mg.update();
+    InstructionList newList = mg.getInstructionList();
+    mg.update();
 
 
-      InstructionList il = mg.getInstructionList();
-      MethodContext context = new MethodContext(cg,mg);
+    InstructionList il = mg.getInstructionList();
+    MethodContext context = new MethodContext(cg,mg);
 
-      for (InstructionHandle ih = il.getStart(); ih != null; ) {
-          InstructionList new_il = null;
-          Instruction inst = ih.getInstruction();
+    for (InstructionHandle ih = il.getStart(); ih != null; ) {
+      InstructionList new_il = null;
+      Instruction inst = ih.getInstruction();
 
-          // Get the translation for this instruction (if any)
-          new_il = xform_clinit (cg, cg.getConstantPool(), fullClassName, inst, context);
+      // Get the translation for this instruction (if any)
+      new_il = xform_clinit (cg, cg.getConstantPool(), fullClassName, inst, context);
 
-          // Remember the next instruction to process
-          InstructionHandle next_ih = ih.getNext();
+      // Remember the next instruction to process
+      InstructionHandle next_ih = ih.getNext();
 
-          // If this instruction was modified, replace it with the new
-          // instruction list. If this instruction was the target of any
-          // jumps, replace it with the first instruction in the new list
-          if (new_il != null) {
-            if (true) {
-              try
+      // If this instruction was modified, replace it with the new
+      // instruction list. If this instruction was the target of any
+      // jumps, replace it with the first instruction in the new list
+      if (new_il != null) {
+        if (true) {
+          try
             {
-                new_il.delete (new_il.getEnd());
+              new_il.delete (new_il.getEnd());
             }
-            catch (TargetLostException e)
+          catch (TargetLostException e)
             {
-                throw new Error ("unexpected lost target exception " + e);
+              throw new Error ("unexpected lost target exception", e);
             }
-              InstructionHandle new_start = il.insert (ih, new_il);
-              //out.format ("old start = %s, new_start = %s%n", ih, new_start);
-              il.redirectBranches (ih, new_start);
+          InstructionHandle new_start = il.insert (ih, new_il);
+          //out.format ("old start = %s, new_start = %s%n", ih, new_start);
+          il.redirectBranches (ih, new_start);
 
-              // Fix up line numbers to point at the new code
-              if (ih.hasTargeters()) {
-                for (InstructionTargeter it : ih.getTargeters()) {
-                  if (it instanceof LineNumberGen) {
-                    it.updateTarget (ih, new_start);
-                  }
-                }
+          // Fix up line numbers to point at the new code
+          if (ih.hasTargeters()) {
+            for (InstructionTargeter it : ih.getTargeters()) {
+              if (it instanceof LineNumberGen) {
+                it.updateTarget (ih, new_start);
               }
-
-              ih = next_ih;
-              continue;
-            }
-
-            if (debug)
-              out.format ("Replacing %s by %s%n", ih, new_il);
-
-            il.append (ih, new_il);
-            InstructionTargeter[] targeters = ih.getTargeters();
-            if (targeters != null) {
-              // out.format ("targeters length = %d%n", targeters.length);
-              for (int j = 0; j < targeters.length; j++)
-                targeters[j].updateTarget (ih, ih.getNext());
-            }
-            try {
-              il.delete (ih);
-            } catch (TargetLostException e) {
-              throw new Error ("unexpected lost target exception " + e);
             }
           }
-          // Go on to the next instruction in the list
+
           ih = next_ih;
+          continue;
         }
 
+        if (debug)
+          out.format ("Replacing %s by %s%n", ih, new_il);
 
-
-
-      mg.setInstructionList (newList);
-
-
-
-      for (Attribute a : mg.getCodeAttributes()) {
-          if (is_local_variable_type_table (a)) {
-              mg.removeCodeAttribute (a);
-          }
+        il.append (ih, new_il);
+        InstructionTargeter[] targeters = ih.getTargeters();
+        if (targeters != null) {
+          // out.format ("targeters length = %d%n", targeters.length);
+          for (int j = 0; j < targeters.length; j++)
+            targeters[j].updateTarget (ih, ih.getNext());
         }
+        try {
+          il.delete (ih);
+        } catch (TargetLostException e) {
+          throw new Error ("unexpected lost target exception", e);
+        }
+      }
+      // Go on to the next instruction in the list
+      ih = next_ih;
+    }
 
-      // Update the max stack and Max Locals
-      mg.setMaxLocals();
-      mg.setMaxStack();
-      mg.update();
 
-      return mg.getMethod();
+
+
+    mg.setInstructionList (newList);
+
+
+
+    for (Attribute a : mg.getCodeAttributes()) {
+      if (is_local_variable_type_table (a)) {
+        mg.removeCodeAttribute (a);
+      }
+    }
+
+    // Update the max stack and Max Locals
+    mg.setMaxLocals();
+    mg.setMaxStack();
+    mg.update();
+
+    return mg.getMethod();
   }
 
 
 
   //called by addInvokeToClinit to add in a hook at return opcodes
   private InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp,
-            String fullClassName, Instruction inst, MethodContext context) {
+                                       String fullClassName, Instruction inst, MethodContext context) {
     switch (inst.getOpcode()) {
 
     case Constants.ARETURN:
@@ -333,10 +333,10 @@ public class Instrument implements ClassFileTransformer {
     case Constants.IRETURN:
     case Constants.LRETURN:
     case Constants.RETURN:
-        break;
+      break;
 
     default:
-        return (null);
+      return (null);
     }
 
     InstructionList il = new InstructionList();
@@ -348,47 +348,47 @@ public class Instrument implements ClassFileTransformer {
 
   //created a <clinit> method if none exists, to guarantee we always have this hook
   private Method createClinit(ClassGen cg, String fullClassName) {
-        /*
-         * System.out.println(mg.getAccessFlags());
-         * System.out.println(mg.getReturnType());
-         * System.out.println(mg.getArgumentTypes());
-         * System.out.println(mg.getName());
-         * System.out.println(mg.getClassName());
-         */
+    /*
+     * System.out.println(mg.getAccessFlags());
+     * System.out.println(mg.getReturnType());
+     * System.out.println(mg.getArgumentTypes());
+     * System.out.println(mg.getName());
+     * System.out.println(mg.getClassName());
+     */
 
-        InstructionFactory factory = new InstructionFactory(cg);
+    InstructionFactory factory = new InstructionFactory(cg);
 
-        InstructionList il = new InstructionList();
-        il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName,
-                factory));
-        il.append(InstructionFactory.createReturn(Type.VOID)); // need to
-                                                                // return!
+    InstructionList il = new InstructionList();
+    il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName,
+                              factory));
+    il.append(InstructionFactory.createReturn(Type.VOID)); // need to
+    // return!
 
-        MethodGen newMethGen = new MethodGen(8, Type.VOID, new Type[0],
-                new String[0], "<clinit>", fullClassName, il, cg
-                        .getConstantPool());
-        newMethGen.update();
+    MethodGen newMethGen = new MethodGen(8, Type.VOID, new Type[0],
+                                         new String[0], "<clinit>", fullClassName, il, cg
+                                         .getConstantPool());
+    newMethGen.update();
 
-        for (Attribute a : newMethGen.getCodeAttributes()) {
-            if (is_local_variable_type_table(a)) {
-                newMethGen.removeCodeAttribute(a);
-            }
-        }
-
-        // MethodContext context = new MethodContext (cg, newMethGen);
-        // InstructionFactory ifact = context.ifact;
-
-        // il.append (ifact.createConstant (0));
-        // newMethGen.setInstructionList(il);
-        // newMethGen.update();
-
-        // Update the max stack and Max Locals
-        newMethGen.setMaxLocals();
-        newMethGen.setMaxStack();
-        newMethGen.update();
-
-        return newMethGen.getMethod();
+    for (Attribute a : newMethGen.getCodeAttributes()) {
+      if (is_local_variable_type_table(a)) {
+        newMethGen.removeCodeAttribute(a);
+      }
     }
+
+    // MethodContext context = new MethodContext (cg, newMethGen);
+    // InstructionFactory ifact = context.ifact;
+
+    // il.append (ifact.createConstant (0));
+    // newMethGen.setInstructionList(il);
+    // newMethGen.update();
+
+    // Update the max stack and Max Locals
+    newMethGen.setMaxLocals();
+    newMethGen.setMaxStack();
+    newMethGen.update();
+
+    return newMethGen.getMethod();
+  }
 
 
   //created the InstructionList to insert for adding the <clinit> hookd
@@ -398,7 +398,7 @@ public class Instrument implements ClassFileTransformer {
 
     invokeList.append(new PUSH(cp, fullClassName));
     invokeList.append(factory.createInvoke(runtime_classname, "initNotify",
-            Type.VOID, new Type[] {Type.STRING}, Constants.INVOKESTATIC));
+                                           Type.VOID, new Type[] {Type.STRING}, Constants.INVOKESTATIC));
 
     //System.out.println(fullClassName + " --- " + invokeList.size());
     return invokeList;
@@ -484,9 +484,9 @@ public class Instrument implements ClassFileTransformer {
 
         // Add nonce local to matchup enter/exits
         String entry_ppt_name = DaikonWriter.methodEntryName(fullClassName,
-                                getArgTypes(mg), mg.toString(), mg.getName());
+                                                             getArgTypes(mg), mg.toString(), mg.getName());
         add_method_startup (il, context, !shouldFilter(fullClassName,
-                                             mg.getName(), entry_ppt_name));
+                                                       mg.getName(), entry_ppt_name));
 
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
         Iterator<Integer> exitIter = mi.exit_locations.iterator();
@@ -538,7 +538,7 @@ public class Instrument implements ClassFileTransformer {
             try {
               il.delete (ih);
             } catch (TargetLostException e) {
-              throw new Error ("unexpected lost target exception " + e);
+              throw new Error ("unexpected lost target exception", e);
             }
           }
           // Go on to the next instruction in the list
@@ -593,27 +593,27 @@ public class Instrument implements ClassFileTransformer {
     class_info.set_method_infos (method_infos);
 
     if (shouldInclude)
-    {
-    synchronized (Runtime.new_classes)
-    {
-    synchronized (Runtime.all_classes)
-    {
-      Runtime.new_classes.add (class_info);
-      Runtime.all_classes.add (class_info);
-    }
-    }
-    }
+      {
+        synchronized (Runtime.new_classes)
+          {
+            synchronized (Runtime.all_classes)
+              {
+                Runtime.new_classes.add (class_info);
+                Runtime.all_classes.add (class_info);
+              }
+          }
+      }
 
     return class_info;
   }
 
-/**
+  /**
    * Transforms return instructions to first assign the result to a local
    * variable (return__$trace2_val) and then do the return.  Also, calls
    * Runtime.exit() immediately before the return.
    */
   private InstructionList xform_inst (String fullClassName, Instruction inst, MethodContext c,
-          Iterator<Boolean> shouldIncIter, Iterator<Integer> exitIter)
+                                      Iterator<Boolean> shouldIncIter, Iterator<Integer> exitIter)
   {
 
     switch (inst.getOpcode()) {
@@ -636,7 +636,7 @@ public class Instrument implements ClassFileTransformer {
     boolean shouldInclude = shouldIncIter.next();
 
     if (!shouldInclude)
-        return null;
+      return null;
 
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
@@ -647,7 +647,7 @@ public class Instrument implements ClassFileTransformer {
     }
 
     if (!exitIter.hasNext())
-        throw new RuntimeException("Not enough exit locations in the exitIter");
+      throw new RuntimeException("Not enough exit locations in the exitIter");
 
     il.append (call_enter_exit (c, "exit", exitIter.next()));
     il.append (inst);
@@ -675,7 +675,7 @@ public class Instrument implements ClassFileTransformer {
       assert (return_type != null) : " return__$trace2_val doesn't exist";
     else
       assert (return_type.equals (return_local.getType())) :
-        " return_type = " + return_type + "current type = "
+      " return_type = " + return_type + "current type = "
         + return_local.getType();
 
     if (return_local == null) {
@@ -714,7 +714,7 @@ public class Instrument implements ClassFileTransformer {
 
     // create the local variable
     LocalVariableGen nonce_lv= c.mgen.addLocalVariable("this_invocation_nonce",
-                                                        Type.INT, null, null);
+                                                       Type.INT, null, null);
 
     //
     // The following implements this_invocation_nonce = Runtime.nonce++
@@ -742,10 +742,10 @@ public class Instrument implements ClassFileTransformer {
 
 
     if (shouldCallEnter)
-    {
-    // call Runtime.enter()
-    nl.append (call_enter_exit (c, "enter", -1));
-    }
+      {
+        // call Runtime.enter()
+        nl.append (call_enter_exit (c, "enter", -1));
+      }
 
     // Add the new instruction at the start and move any LineNumbers
     // and Local variables to point to them.  Other targeters
@@ -763,22 +763,22 @@ public class Instrument implements ClassFileTransformer {
     nl.append (start.getInstruction());
     start.setInstruction (nl.getStart().getInstruction());
     try {
-      nl.delete (nl.getStart());
+    nl.delete (nl.getStart());
     } catch (TargetLostException e) {
-      throw new Error ("unexpected lost target exception " + e);
+    throw new Error ("unexpected lost target exception", e);
     }
     il.append (start, nl);
 
     // there shouldn't be jumps to the first opcode of the method
     InstructionTargeter[] targeters = start.getTargeters();
     if (targeters.length > 0) {
-      // out.format ("%d targets point to %s%n", targeters.length, start);
-      for (InstructionTargeter it : targeters) {
-        // out.format ("    targeter: %s%n", it);
-        assert !(it instanceof BranchInstruction) : "target " + it;
-        if (it instanceof CodeExceptionGen) {
+    // out.format ("%d targets point to %s%n", targeters.length, start);
+    for (InstructionTargeter it : targeters) {
+    // out.format ("    targeter: %s%n", it);
+    assert !(it instanceof BranchInstruction) : "target " + it;
+    if (it instanceof CodeExceptionGen) {
 
-      }
+    }
     }
     */
   }
@@ -790,90 +790,90 @@ public class Instrument implements ClassFileTransformer {
    * as an array of objects.  Any primitive values are wrapped
    * in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc)
    */
-   InstructionList call_enter_exit (MethodContext c, String method_name, int line) {
+  InstructionList call_enter_exit (MethodContext c, String method_name, int line) {
 
-     InstructionList il = new InstructionList();
-     InstructionFactory ifact = c.ifact;
-     MethodGen mgen = c.mgen;
-     Type[] arg_types = mgen.getArgumentTypes();
+    InstructionList il = new InstructionList();
+    InstructionFactory ifact = c.ifact;
+    MethodGen mgen = c.mgen;
+    Type[] arg_types = mgen.getArgumentTypes();
 
-     // Push the object.  Null if this is a static method or a constructor
-     if (mgen.isStatic() ||
-         (method_name.equals ("enter") && is_constructor (mgen))) {
-       il.append (new ACONST_NULL());
-     } else { // must be an instance method
-       il.append (ifact.createLoad (Type.OBJECT, 0));
-     }
+    // Push the object.  Null if this is a static method or a constructor
+    if (mgen.isStatic() ||
+        (method_name.equals ("enter") && is_constructor (mgen))) {
+      il.append (new ACONST_NULL());
+    } else { // must be an instance method
+      il.append (ifact.createLoad (Type.OBJECT, 0));
+    }
 
-     // Determine the offset of the first parameter
-     int param_offset = 1;
-     if (c.mgen.isStatic())
-       param_offset = 0;
+    // Determine the offset of the first parameter
+    int param_offset = 1;
+    if (c.mgen.isStatic())
+      param_offset = 0;
 
-     // Push the nonce
-     LocalVariableGen nonce_lv = get_nonce_local (mgen);
-     il.append (ifact.createLoad (Type.INT, nonce_lv.getIndex()));
+    // Push the nonce
+    LocalVariableGen nonce_lv = get_nonce_local (mgen);
+    il.append (ifact.createLoad (Type.INT, nonce_lv.getIndex()));
 
-     // Push the MethodInfo index
-     il.append (ifact.createConstant (cur_method_info_index));
+    // Push the MethodInfo index
+    il.append (ifact.createConstant (cur_method_info_index));
 
-     // Create an array of objects with elements for each parameter
-     il.append (ifact.createConstant (arg_types.length));
-     Type object_arr_typ = new ArrayType ("java.lang.Object", 1);
-     il.append (ifact.createNewArray (Type.OBJECT, (short) 1));
+    // Create an array of objects with elements for each parameter
+    il.append (ifact.createConstant (arg_types.length));
+    Type object_arr_typ = new ArrayType ("java.lang.Object", 1);
+    il.append (ifact.createNewArray (Type.OBJECT, (short) 1));
 
-     // Put each argument into the array
-     int param_index = param_offset;
-     for (int ii = 0; ii < arg_types.length; ii++) {
-       il.append (ifact.createDup (object_arr_typ.getSize()));
-       il.append (ifact.createConstant (ii));
-       Type at = arg_types[ii];
-       if (at instanceof BasicType) {
-         il.append (create_wrapper (c, at, param_index));
-       } else { // must be reference of some sort
-         il.append (ifact.createLoad (Type.OBJECT, param_index));
-       }
-       il.append (ifact.createArrayStore (Type.OBJECT));
-       param_index += at.getSize();
-     }
+    // Put each argument into the array
+    int param_index = param_offset;
+    for (int ii = 0; ii < arg_types.length; ii++) {
+      il.append (ifact.createDup (object_arr_typ.getSize()));
+      il.append (ifact.createConstant (ii));
+      Type at = arg_types[ii];
+      if (at instanceof BasicType) {
+        il.append (create_wrapper (c, at, param_index));
+      } else { // must be reference of some sort
+        il.append (ifact.createLoad (Type.OBJECT, param_index));
+      }
+      il.append (ifact.createArrayStore (Type.OBJECT));
+      param_index += at.getSize();
+    }
 
-     // If this is an exit, push the return value and line number.
-     // The return value
-     // is stored in the local "return__$trace2_val"  If the return
-     // value is a primitive, wrap it in the appropriate runtime wrapper
-     if (method_name.equals ("exit")) {
-       Type ret_type = mgen.getReturnType();
-       if (ret_type == Type.VOID) {
-         il.append (new ACONST_NULL());
-       } else {
-         LocalVariableGen return_local = get_return_local (mgen, ret_type);
-         if (ret_type instanceof BasicType) {
-           il.append (create_wrapper (c, ret_type, return_local.getIndex()));
-         } else {
-           il.append (ifact.createLoad (Type.OBJECT, return_local.getIndex()));
-         }
-       }
-
-
-       //push line number
-       //System.out.println(c.mgen.getName() + " --> " + line);
-       il.append (ifact.createConstant (line));
-     }
-
-     // Call the specified method
-     Type[] method_args = null;
-     if (method_name.equals ("exit"))
-       method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
-                                 object_arr_typ, Type.OBJECT, Type.INT};
-     else
-       method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
-                                 object_arr_typ};
-     il.append (c.ifact.createInvoke (runtime_classname, method_name,
-                             Type.VOID, method_args, Constants.INVOKESTATIC));
+    // If this is an exit, push the return value and line number.
+    // The return value
+    // is stored in the local "return__$trace2_val"  If the return
+    // value is a primitive, wrap it in the appropriate runtime wrapper
+    if (method_name.equals ("exit")) {
+      Type ret_type = mgen.getReturnType();
+      if (ret_type == Type.VOID) {
+        il.append (new ACONST_NULL());
+      } else {
+        LocalVariableGen return_local = get_return_local (mgen, ret_type);
+        if (ret_type instanceof BasicType) {
+          il.append (create_wrapper (c, ret_type, return_local.getIndex()));
+        } else {
+          il.append (ifact.createLoad (Type.OBJECT, return_local.getIndex()));
+        }
+      }
 
 
-     return (il);
-   }
+      //push line number
+      //System.out.println(c.mgen.getName() + " --> " + line);
+      il.append (ifact.createConstant (line));
+    }
+
+    // Call the specified method
+    Type[] method_args = null;
+    if (method_name.equals ("exit"))
+      method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
+                                object_arr_typ, Type.OBJECT, Type.INT};
+    else
+      method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
+                                object_arr_typ};
+    il.append (c.ifact.createInvoke (runtime_classname, method_name,
+                                     Type.VOID, method_args, Constants.INVOKESTATIC));
+
+
+    return (il);
+  }
 
   /**
    * Creates code to put the local var/param at the specified var_index
@@ -898,7 +898,7 @@ public class Instrument implements ClassFileTransformer {
     case Constants.T_LONG:    wrapper = "LongWrap"; break;
     case Constants.T_SHORT:   wrapper = "ShortWrap"; break;
     default:
-      assert false : "unexpected type " + prim_type;
+    assert false : "unexpected type " + prim_type;
     }
 
     InstructionList il = new InstructionList();
@@ -907,7 +907,7 @@ public class Instrument implements ClassFileTransformer {
     il.append (c.ifact.createDup (Type.OBJECT.getSize()));
     il.append (c.ifact.createLoad (prim_type, var_index));
     il.append (c.ifact.createInvoke (classname, "<init>", Type.VOID,
-                              new Type[] {prim_type}, Constants.INVOKESPECIAL));
+                                     new Type[] {prim_type}, Constants.INVOKESPECIAL));
 
     return (il);
   }
@@ -931,136 +931,136 @@ public class Instrument implements ClassFileTransformer {
    */
   String[] getArgTypes(MethodGen mgen)
   {
-      Type[] arg_types = mgen.getArgumentTypes();
-      String[] arg_type_strings = new String[arg_types.length];
-      for (int ii = 0; ii < arg_types.length; ii++)
+    Type[] arg_types = mgen.getArgumentTypes();
+    String[] arg_type_strings = new String[arg_types.length];
+    for (int ii = 0; ii < arg_types.length; ii++)
       {
-          Type t = arg_types[ii];
-          /*if (t instanceof ObjectType)
-              arg_type_strings[ii] = ((ObjectType) t).getClassName();
+        Type t = arg_types[ii];
+        /*if (t instanceof ObjectType)
+          arg_type_strings[ii] = ((ObjectType) t).getClassName();
           else
-              arg_type_strings[ii] = t.getSignature().replace('/', '.');
-              */
-          arg_type_strings[ii] = t.toString();
+          arg_type_strings[ii] = t.getSignature().replace('/', '.');
+        */
+        arg_type_strings[ii] = t.toString();
       }
 
-      return arg_type_strings;
+    return arg_type_strings;
   }
 
   //creates a MethodInfo struct corresponding to mgen
-    @SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
     private MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen)
-    {
-        // Get the argument names for this method
-        String[] arg_names = mgen.getArgumentNames();
-        LocalVariableGen[] lvs = mgen.getLocalVariables();
-        int param_offset = 1;
-        if (mgen.isStatic())
-            param_offset = 0;
-        if (lvs != null)
-        {
-            for (int ii = 0; ii < arg_names.length; ii++)
-            {
-                if ((ii + param_offset) < lvs.length)
-                    arg_names[ii] = lvs[ii + param_offset].getName();
-            }
-        }
+  {
+    // Get the argument names for this method
+    String[] arg_names = mgen.getArgumentNames();
+    LocalVariableGen[] lvs = mgen.getLocalVariables();
+    int param_offset = 1;
+    if (mgen.isStatic())
+      param_offset = 0;
+    if (lvs != null)
+      {
+        for (int ii = 0; ii < arg_names.length; ii++)
+          {
+            if ((ii + param_offset) < lvs.length)
+              arg_names[ii] = lvs[ii + param_offset].getName();
+          }
+      }
 
-        boolean shouldInclude = false;
+    boolean shouldInclude = false;
 
-        //see if we should filter the entry point
-        if (!shouldFilter(class_info.class_name, mgen.getName(),
-                DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName())))
-            shouldInclude = true;
+    //see if we should filter the entry point
+    if (!shouldFilter(class_info.class_name, mgen.getName(),
+                      DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName())))
+      shouldInclude = true;
 
-        // Get the argument types for this method
-        Type[] arg_types = mgen.getArgumentTypes();
-        String[] arg_type_strings = new String[arg_types.length];
-        for (int ii = 0; ii < arg_types.length; ii++)
-        {
-            Type t = arg_types[ii];
-            if (t instanceof ObjectType)
-                arg_type_strings[ii] = ((ObjectType) t).getClassName();
-            else
-                arg_type_strings[ii] = t.getSignature().replace('/', '.');
-        }
-
-        // Loop through each instruction and find the line number for each
-        // return opcode
-        List<Integer> exit_locs = new ArrayList<Integer>();
-
-        //tells whether each exit loc in the method is included or not (based on filters)
-        List<Boolean> isIncluded = new ArrayList<Boolean>();
-
-        // log ("Looking for exit points in %s%n", mgen.getName());
-        InstructionList il = mgen.getInstructionList();
-        int line_number = 0;
-        int last_line_number = 0;
-        boolean foundLine;
-
-        for (Iterator<InstructionHandle> ii = (Iterator<InstructionHandle>) il.iterator(); ii.hasNext();) // unchecked cast: BCEL is non-generic
-        {
-            InstructionHandle ih = ii.next();
-
-            foundLine = false;
-
-            if (ih.hasTargeters())
-            {
-                for (InstructionTargeter it : ih.getTargeters())
-                {
-                    if (it instanceof LineNumberGen)
-                    {
-                        LineNumberGen lng = (LineNumberGen) it;
-                        // log ("  line number at %s: %d%n", ih, lng.getSourceLine());
-                        //System.out.printf("  line number at %s: %d%n", ih, lng.getSourceLine());
-                        line_number = lng.getSourceLine();
-                        foundLine = true;
-                    }
-                }
-            }
-
-            switch (ih.getInstruction().getOpcode())
-            {
-                case Constants.ARETURN :
-                case Constants.DRETURN :
-                case Constants.FRETURN :
-                case Constants.IRETURN :
-                case Constants.LRETURN :
-                case Constants.RETURN :
-                    // log ("Exit at line %d%n", line_number);
-
-                    //only do incremental lines if we don't have the line generator
-                    if (line_number == last_line_number && foundLine == false)
-                    {
-                        //System.out.printf("Could not find line... at %d%n", line_number);
-                        line_number++;
-                    }
-
-                    last_line_number = line_number;
-
-                    if (!shouldFilter(class_info.class_name, mgen.getName(),
-                            DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), line_number)))
-                    {
-                        shouldInclude = true;
-                        exit_locs.add(new Integer(line_number));
-
-                        isIncluded.add(true);
-                    }
-                    else
-                        isIncluded.add(false);
-
-                    break;
-
-                default :
-                    break;
-            }
-        }
-
-        if (shouldInclude)
-            return new MethodInfo(class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
+    // Get the argument types for this method
+    Type[] arg_types = mgen.getArgumentTypes();
+    String[] arg_type_strings = new String[arg_types.length];
+    for (int ii = 0; ii < arg_types.length; ii++)
+      {
+        Type t = arg_types[ii];
+        if (t instanceof ObjectType)
+          arg_type_strings[ii] = ((ObjectType) t).getClassName();
         else
-            return null;
-    }
+          arg_type_strings[ii] = t.getSignature().replace('/', '.');
+      }
+
+    // Loop through each instruction and find the line number for each
+    // return opcode
+    List<Integer> exit_locs = new ArrayList<Integer>();
+
+    //tells whether each exit loc in the method is included or not (based on filters)
+    List<Boolean> isIncluded = new ArrayList<Boolean>();
+
+    // log ("Looking for exit points in %s%n", mgen.getName());
+    InstructionList il = mgen.getInstructionList();
+    int line_number = 0;
+    int last_line_number = 0;
+    boolean foundLine;
+
+    for (Iterator<InstructionHandle> ii = (Iterator<InstructionHandle>) il.iterator(); ii.hasNext();) // unchecked cast: BCEL is non-generic
+      {
+        InstructionHandle ih = ii.next();
+
+        foundLine = false;
+
+        if (ih.hasTargeters())
+          {
+            for (InstructionTargeter it : ih.getTargeters())
+              {
+                if (it instanceof LineNumberGen)
+                  {
+                    LineNumberGen lng = (LineNumberGen) it;
+                    // log ("  line number at %s: %d%n", ih, lng.getSourceLine());
+                    //System.out.printf("  line number at %s: %d%n", ih, lng.getSourceLine());
+                    line_number = lng.getSourceLine();
+                    foundLine = true;
+                  }
+              }
+          }
+
+        switch (ih.getInstruction().getOpcode())
+          {
+          case Constants.ARETURN :
+          case Constants.DRETURN :
+          case Constants.FRETURN :
+          case Constants.IRETURN :
+          case Constants.LRETURN :
+          case Constants.RETURN :
+            // log ("Exit at line %d%n", line_number);
+
+            //only do incremental lines if we don't have the line generator
+            if (line_number == last_line_number && foundLine == false)
+              {
+                //System.out.printf("Could not find line... at %d%n", line_number);
+                line_number++;
+              }
+
+            last_line_number = line_number;
+
+            if (!shouldFilter(class_info.class_name, mgen.getName(),
+                              DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), line_number)))
+              {
+                shouldInclude = true;
+                exit_locs.add(new Integer(line_number));
+
+                isIncluded.add(true);
+              }
+            else
+              isIncluded.add(false);
+
+            break;
+
+          default :
+            break;
+          }
+      }
+
+    if (shouldInclude)
+      return new MethodInfo(class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
+    else
+      return null;
+  }
 
   public boolean is_local_variable_type_table (Attribute a) {
     return (get_attribute_name (a).equals ("LocalVariableTypeTable"));

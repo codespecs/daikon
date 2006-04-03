@@ -156,7 +156,7 @@ public class SessionManager
     try {
       prover.request(new CmdRaw(proverBackground()));
     } catch (TimeoutException e) {
-      throw new RuntimeException("Timeout on universal background " + e);
+      throw new RuntimeException("Timeout on universal background", e);
     }
     return prover;
   }

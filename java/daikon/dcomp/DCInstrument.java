@@ -11,13 +11,14 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
-
 import utilMDE.BCELUtil;
+
+import utilMDE.*;
+import org.apache.commons.io.*;
 
 import daikon.chicory.MethodInfo;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
-import utilMDE.*;
 
 /**
  * Instruments a class file to perform Dynamic Comparability.
@@ -3311,12 +3312,7 @@ class DCInstrument {
    * @see #save_static_map(File)
    */
   public static void restore_static_map (File filename) throws IOException {
-
-    BufferedReader reader = new BufferedReader (new FileReader (filename));
-    while (true) {
-      String line = reader.readLine();
-      if (line == null)
-        break;
+    for (String line : new TextFile(filename, "UTF-8")) {
       String[] key_val = line.split ("  *");
       assert !static_map.containsKey (key_val[0])
         : key_val[0] + " " + key_val[1];

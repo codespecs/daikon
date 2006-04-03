@@ -112,9 +112,7 @@ public class ContextSplitterFactory
     ArrayList<MapfileEntry> result = new ArrayList<MapfileEntry>();
 
     try {
-      LineNumberReader reader = UtilMDE.lineNumberFileReader(mapfile.toString());
-      String reader_line;
-      while ((reader_line = reader.readLine()) != null) {
+      for (String reader_line : new TextFile(mapfile.toString())) {
         String line = reader_line;
         // Remove comments, skip blank lines
         {
@@ -172,11 +170,6 @@ public class ContextSplitterFactory
           Assert.assertTrue(! tok.hasMoreTokens());
         }
 
-        // As we add better error messages, use this:
-        // "Malformed line " + reader.getLineNumber()
-        // + " (\"" + reader_line + "\")"
-        // + " in " + mapfile;
-
         MapfileEntry entry = new MapfileEntry
           (id, fromclass, frommeth, fromfile, fromline, fromcol,
            toexpr, toargs, toclass, tometh);
@@ -184,7 +177,7 @@ public class ContextSplitterFactory
         result.add(entry);
       }
     } catch (NumberFormatException e) {
-      throw new IOException("Malformed number: " + e);
+      throw (IOException)(new IOException("Malformed number").initCause(e));
     }
 
     return (MapfileEntry[]) result.toArray(new MapfileEntry[result.size()]);

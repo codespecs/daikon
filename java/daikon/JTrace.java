@@ -116,7 +116,7 @@ public final class JTrace
         try {
             FileIO.write_serialized_pptmap(inference.all_ppts, inv_file);
         } catch (IOException e) {
-            throw new Daikon.TerminationMessage("Error while writing '" + inv_file + "': " + e);
+            throw new Daikon.TerminationMessage("Error while writing " + inv_file, e);
         }
 
         // Display the invariants
