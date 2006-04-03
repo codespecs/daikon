@@ -61,7 +61,10 @@ public class TextFile implements Iterable<String> {
 	if (!f.canRead())
 	    throw new IOException("Can't read: " +
 				  f.getPath());
-        this(new FileInputStream(f), charsetName)
+        // Not "this(new FileInputStream(f), charsetName);"
+        // because a call to "this" must be the first thing in a constructor.
+        this.is = new FileInputStream(f);
+        this.charsetName = charsetName;
     }
 
     public TextFile(InputStream is)
@@ -98,14 +101,14 @@ public class TextFile implements Iterable<String> {
 	    this(new FileInputStream(f), charsetName);
         }
 
-	public TextFileIterator(InputStream f, String charsetName)
+	public TextFileIterator(InputStream is, String charsetName)
 	    throws IOException
 	{
 	    Reader isr;
             if (charsetName == null) {
-                isr = new InputStreamReader(fis);
+                isr = new InputStreamReader(is);
             } else {
-                isr = new InputStreamReader(fis, charsetName);
+                isr = new InputStreamReader(is, charsetName);
             }
 	    in = new LineNumberReader(isr);
 	    getNextLine();
