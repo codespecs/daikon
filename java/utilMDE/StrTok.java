@@ -69,7 +69,7 @@ public class StrTok {
     try {
       ttype = stok.nextToken();
     } catch (Exception e) {
-      throw new RuntimeException ("StreamTokenizer exception: " + e);
+      throw new RuntimeException ("StreamTokenizer exception: ", e);
     }
 
     return (token());
