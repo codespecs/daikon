@@ -176,7 +176,7 @@ public class Chicory {
    */
   public static boolean doPurity()
   {
-      return purityAnalysis;
+    return purityAnalysis;
   }
 
   /**
@@ -184,7 +184,7 @@ public class Chicory {
    */
   public static File get_purity_file()
   {
-      return purity_file;
+    return purity_file;
   }
 
   /**
@@ -244,7 +244,7 @@ public class Chicory {
         if (poss_premain.getName().equals ("daikon.jar"))
           if (poss_premain.canRead())
             premain = poss_premain;
-        }
+      }
     }
 
     // If we didn't find a premain, give up
@@ -265,11 +265,11 @@ public class Chicory {
     //run Daikon if we're in online mode
     StreamRedirectThread daikon_err = null, daikon_out = null;
     if (daikon_online)
-    {
+      {
         runDaikon();
 
         daikon_err = new StreamRedirectThread("stderr",
-                                  daikon_proc.getErrorStream(), System.err);
+                                              daikon_proc.getErrorStream(), System.err);
         daikon_err.start();
 
         InputStream daikonStdOut = daikon_proc.getInputStream();
@@ -277,43 +277,44 @@ public class Chicory {
         BufferedReader daikonReader
           = new BufferedReader(new InputStreamReader(daikonStdOut));
 
-        //online mode code
+        // Examine up to 100 lines of Daikon output, looking for
+        // the "DaikonChicoryOnlinePort=" line.
         for (int i = 0; i < 100; i++)
-        {
+          {
             String line;
             try
-            {
+              {
                 line = daikonReader.readLine();
-            }
+              }
             catch (IOException e1)
-            {
+              {
                 line = null;
-            }
+              }
 
             if (line == null)
-            {
+              {
                 throw new RuntimeException("Did not receive socket port from Daikon!");
-            }
+              }
             else
-            {
+              {
                 //if (!line.startsWith("DaikonChicoryOnlinePort="))
-                    System.out.println(line);
+                System.out.println(line);
 
                 if (line.startsWith("DaikonChicoryOnlinePort="))
-                {
+                  {
                     String portStr
                       = line.substring("DaikonChicoryOnlinePort=".length());
                     daikon_port = Integer.decode (portStr);
                     System.out.println("GOT PORT STRING " + daikon_port);
                     break;
-                }
-            }
-        }
+                  }
+              }
+          }
 
         //continue reading daikon output in separate thread
         daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
         daikon_out.start();
-    }
+      }
 
 
 
@@ -322,11 +323,11 @@ public class Chicory {
     cmdlist.add ("java");
 
     if (RemoteDebug)
-    {
+      {
         //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
         cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
         //cmdlist.add("-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
-    }
+      }
 
     cmdlist.add ("-cp");
     cmdlist.add (cp);
@@ -334,9 +335,9 @@ public class Chicory {
     cmdlist.add ("-Xmx" + heap_size);
 
     if (dtraceLim != null)
-        cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
+      cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
     if (terminate != null)
-        cmdlist.add("-D" + traceLimTermString + "=" + terminate );
+      cmdlist.add("-D" + traceLimTermString + "=" + terminate );
 
     // Specify the port to use to talk to Daikon if in online mode
     if (daikon_online) {
@@ -379,36 +380,36 @@ public class Chicory {
       result = waitForDaikon();
       System.exit(result);
     } else if (daikon_online) {
-        // Wait for the process to terminate and return the results
-        result = -1;
-        while (true) {
-          try {
-            result = daikon_proc.waitFor();
-            break;
-          } catch (InterruptedException e) {
-            System.out.printf ("unexpected interrupt %s while waiting for "
-                               + "target to finish", e);
-          }
-        }
-
-        // Make sure all output is forwarded before we finish
+      // Wait for the process to terminate and return the results
+      result = -1;
+      while (true) {
         try {
-            daikon_err.join();
-            daikon_out.join();
+          result = daikon_proc.waitFor();
+          break;
         } catch (InterruptedException e) {
           System.out.printf ("unexpected interrupt %s while waiting for "
-                               + "threads to join", e);
+                             + "target to finish", e);
         }
+      }
 
-        System.exit(result);
+      // Make sure all output is forwarded before we finish
+      try {
+        daikon_err.join();
+        daikon_out.join();
+      } catch (InterruptedException e) {
+        System.out.printf ("unexpected interrupt %s while waiting for "
+                           + "threads to join", e);
+      }
+
+      System.exit(result);
     }
     else
-    {
+      {
         // If no daikon command specified, show results and exit
         if (result != 0)
-            System.out.printf ("Warning: Target exited with %d status\n", result);
-          System.exit (result);
-    }
+          System.out.printf ("Warning: Target exited with %d status\n", result);
+        System.exit (result);
+      }
   }
 
 
@@ -427,10 +428,10 @@ public class Chicory {
     String cmdstr;
     if (daikon_online) {
       cmdstr = String.format("java -Xmx500m -cp %s -ea daikon.Daikon %s +",
-                               cp, daikon_args);
+                             cp, daikon_args);
     } else {
       cmdstr = String.format("java -Xmx500m -cp %s -ea daikon.Daikon "
-                       + "%s %s/%s", cp, daikon_args, output_dir, dtrace_file);
+                             + "%s %s/%s", cp, daikon_args, output_dir, dtrace_file);
     }
 
     //System.out.println("daikon command is " + daikon_cmd);
@@ -483,7 +484,7 @@ public class Chicory {
       out_thread.join();
     } catch (InterruptedException e) {
       System.out.printf ("unexpected interrupt %s while waiting for "
-                           + "threads to join", e);
+                         + "threads to join", e);
     }
 
     return (result);
@@ -491,55 +492,55 @@ public class Chicory {
 
   public PrintWriter openFileInDirectory(String fileName, String dirName)
   {
-      PrintWriter outFile = null;
-      try
+    PrintWriter outFile = null;
+    try
       {
-          if (dirName != null)
+        if (dirName != null)
           {
-              File directory = new File(dirName);
+            File directory = new File(dirName);
 
-              //make the output directory if non-existent
-              if (!directory.exists())
-                  directory.mkdir();
+            //make the output directory if non-existent
+            if (!directory.exists())
+              directory.mkdir();
           }
 
-          outFile = new PrintWriter(new File(dirName, fileName));
+        outFile = new PrintWriter(new File(dirName, fileName));
       }
-      catch (IOException e)
+    catch (IOException e)
       {
-          if (outFile == null) { throw new RuntimeException("This can't happen."); }
-          outFile.close();
+        if (outFile == null) { throw new RuntimeException("This can't happen."); }
+        outFile.close();
 
-          throw new Error("File creation of file " + fileName + " failed", e);
+        throw new Error("File creation of file " + fileName + " failed", e);
       }
-      return outFile;
+    return outFile;
   }
 
   /** Returns elapsed time as a String since the start of the program **/
   public static String elapsed()
   {
-      return ("[" + (System.currentTimeMillis() - start) + " msec]");
+    return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }
 
   public static long elapsed_msecs()
   {
-      return (System.currentTimeMillis() - start);
+    return (System.currentTimeMillis() - start);
   }
 
   /** convert a list of arguments into a command line string **/
   public String args_to_string(List<String> args)
   {
-      String str = "";
-      for (String arg : args)
-          str += arg + " ";
-      return (str.trim());
+    String str = "";
+    for (String arg : args)
+      str += arg + " ";
+    return (str.trim());
   }
 
   //parses the single string into arguments
   public String[] parseDaikonArgs(String arg)
   {
-      //TODO deal with quotation marks...
-      return arg.split(" ");
+    //TODO deal with quotation marks...
+    return arg.split(" ");
   }
 
 }
