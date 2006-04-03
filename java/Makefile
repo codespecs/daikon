@@ -25,7 +25,7 @@ JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 
 INV ?= ${DAIKONDIR}
 
-CLASSPATH := .:$(CLASSPATH):$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/junit.jar:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+CLASSPATH := .:$(CLASSPATH):$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
