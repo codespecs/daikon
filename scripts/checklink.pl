@@ -1818,6 +1818,11 @@ sub links_summary (\%\%\%\%)
       next unless (defined($results->{$l})
                    && defined($links->{$l})
                    && !defined($broken->{$l}));
+      my $code = &code_shown($l, $results);
+      # Temporary redirection.  No need to tell the user, as the HTTP/1.1
+      # spec says clients should continue using the original URL.
+      next if ($code == 302 || $code == 307);
+      # print "redirect ($code): $l\n";
       # Check whether we have a "directory redirect"
       # e.g. http://www.w3.org/TR -> http://www.w3.org/TR/
       my ($redirect_loop, @redirects) = get_redirects($l, %$redirects);
