@@ -166,7 +166,7 @@ information."
 	(line-count 0)
 	go-in-comment)
     (save-excursion
-      (beginning-of-buffer)
+      (goto-char (point-min))
       (while (re-search-forward "[^\t\r\n ]" nil t)
 	(let ((column (- (current-column) 1)))
 	  (when (and (> column 0)
