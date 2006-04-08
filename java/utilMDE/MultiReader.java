@@ -4,11 +4,32 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+// TODO:
+// MultiReader has a public concept of "short entry", but I don't think that
+// concept is logically part of MultiReader.  I think it would be better for
+// Lookup to make this decision itself, for instance by checking whether there
+// are any line separators in the entry that it gets back.
+//
+// Here are some useful features that MultiReader should have.  It should
+// extend LineNumberReader (but also provide a mechanism for indicating the
+// current file name in addition to the current line number) and implement
+// both Iterable<String> and Iterator<String>, so that it can be used in
+// foreach loops.  It should have constructors that take a String, File,
+// InputStream, or Reader.  It should have a close method.  It should
+// automatically close the underlying file/etc. when the iterator gets to
+// the end (or the end is otherwise reached).  Once it implements
+// Iterable<String>, we can eliminate TextFile in favor of MultiReader.
+//
+// Lower priority:  consider changing the name of this class to EntryReader
+// (or maybe LineReader?), or something else that is more descriptive.
+
+
 /**
- * Class that reads lines from file.  It supports include files and
- * comments with arbitrary syntax (specified by regular expression).
- *
- * It can also read multi-line entries (paragraphs).
+ * Class that reads "lines" from a file.  It supports:
+ *   include files,
+ *   comments, and
+ *   multi-line entries (paragraphs).
+ * The syntax of each of these is customizable.
  * @see #get_entry() and @see #set_entry_start_stop(String,String)
  */
 public class MultiReader {
@@ -41,24 +62,24 @@ public class MultiReader {
 
   /**
    * Regular expression that starts a long entry (paragraph).
-   * By default, paragraphs are separated by blank lines
+   * By default, paragraphs are separated by blank lines.
    */
   public Pattern entry_start_re = null;
 
   /**
    * Regular expression that terminates a long entry.  Long entries
    * can also be terminated by the start of a new long entry or the
-   * end of the current file
+   * end of the current file.
    */
   public Pattern entry_stop_re = null;
 
   /** Line that is pushed back to be reread **/
   String pushback_line = null;
 
-  /** Platform specific line separator **/
+  /** Platform-specific line separator **/
   private static final String lineSep = System.getProperty("line.separator");
 
-  /** Descriptor for a an entry (paragraph) **/
+  /** Descriptor for an entry (paragraph) **/
   public static class Entry {
     /** First line  of the entry */
     public String first_line;
