@@ -6,6 +6,16 @@ import java.util.Iterator;
 // This code was originally taken from
 // http://www.onjava.com/pub/a/onjava/2005/04/20/javaIAN5.html, then
 // modified.
+// It's been modified enough that I should just re-write from scratch.
+
+// A problem with this class is that it is difficult to give good error
+// messages; for instance, it doesn't provide a good method for computing
+// the current line number, or the file name.  Perhaps have a pointer from
+// the TextFile to its corresponding iterator (and only permit one iterator
+// at a time to exist).  Then one could add a close method, and perhaps
+// other methods as well.
+// Idea: why doesn'this implement both Iterable and Iterator?  Then the
+// iterator() method could just returh "this".
 
 /**
  * TextFile implements Iterable&lt;String&gt; allowing text files to be
@@ -21,14 +31,6 @@ import java.util.Iterator;
  * The iterator makes no attempt to detect
  * concurrent modifications to the underlying file. If you want to do that
  * yourself, take a look at java.nio.channels.FileLock.
- *
- * <p>
- * Another problem with this class is that it is difficult to give good
- * error messages; for instance, it doesn't provide a good method for
- * computing the current line number, or the file name.  Perhaps have a
- * pointer from the TextFile to its corresponding iterator (and only permit
- * one iterator at a time to exist).  Then one could add a close method,
- * and perhaps other methods as well.
  **/
 
 public class TextFile implements Iterable<String> {
