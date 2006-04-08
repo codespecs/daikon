@@ -3,7 +3,7 @@
 # Generate (to standard out) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
 # Thanks to C. Scott Ananian <cscott@cscott.net>
-# Time-stamp: <2006-02-03 17:32:17 mernst>
+# Time-stamp: <2006-04-07 17:24:11 mernst>
 
 # See html-update-toc for documentation.
 # (Typically, you will not run this program, but will use html-update-toc
@@ -46,7 +46,17 @@ while (<>) {
   } elsif (/<!-- omit from toc -->|<omit from toc>/) {
     # Check <omit from toc> because sometimes, a HTML comment is not appropriate.
     next;
-  } elsif (/<h([1-9])><a\s+name\s*=\s*\"(.*)\">(.*)<\/a>(.*)<\/h([1-9])>/i) {
+  } elsif (/<h([1-9])>
+	   <a   # open the a start tag
+	   (?:\s+\w+\s*=\s*\"[^\"]*\")*? # allow random attributes
+	   \s+(?:name|id)\s*=\s*\"([^\"]*)\" # look for name or id attribute
+	   (?:\s+\w+\s*=\s*\"[^\"]*\")*? # allow random attributes
+	   \s*> # close the a start tag
+	   (.*?)  # the text of the anchor
+	   <\/a> # the a end tag
+	   (.*)   # sometimes the anchor text is found here instead
+	   <\/h([1-9])>
+	   /ix) {
     if ($debug) { print STDERR "match 3: <$1><$2><$3><$4><$5>\n"; }
     if ($1 ne $5) {
       $errors .= "Non-matching heading tags $1 and $5: $_";
@@ -70,7 +80,7 @@ while (<>) {
       next;
     }
 
-    # if $level >= $thishlevel, we hve an open <li>
+    # if $level >= $thishlevel, we have an open <li>
     while ($level > $thishlevel) {
       exit_level();
     }
