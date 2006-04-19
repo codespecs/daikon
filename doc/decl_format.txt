@@ -8,7 +8,7 @@ Introduction
   problems with the current format.  Daikon derives information from the
   variable and program point names in a poorly defined ad-hoc manner.
   This proposal suggests an augmented format that more completely 
-  defines the information and allows for future expandability
+  defines the information and allows for future expandability.
 
 Current problems
 
@@ -55,6 +55,9 @@ Goals
       a relatively small part of the total file.  Optimizing them for
       size or parsing time should be unnecessary.
 
+    - The format should have reasonable defaults so that it is relatively
+      easy to produce by hand or with a program.
+
     - The format should be expandable in a straight-forward way.
 
 Proposal
@@ -97,7 +100,7 @@ Internal Variable Names
     <static-location> ::= an arbitrary string name for the static location
                           of the variable.  For example 'java.lang.System'.
 
-    <name>            ::= [<name>[<array-op>]<field-op>]<field>
+    <name>            ::= [<name>[<field-op><array-op>]<field-op>]<field>
     <field>           ::= <identifier>[()]
     <array-op>        ::= '[]'
     <field-op>        ::= '.' | '->'
@@ -107,21 +110,29 @@ Internal Variable Names
     java.lang.System::out
     a.b.c
     a->b->c
-    a->b[].c
+    a->d
+    a->d->[].c
+    a->g.[]
     a->foo()
 
   The field-op specifies that the field is enclosed within the name.
   As in C, the '.' operator specifies that the field is physically
   stored as part of its enclosing name and the '->' operator specifies
   that the name is a reference to a separate memory area that contains
-  the field.  It may be that this distinction is not important to Daikon,
-  but it seems reasonable to include the information that is available to
-  the front end.
+  the field.  Note that in Java, '->' would always be used.  It may be
+  that this distinction is not important to Daikon, but it seems
+  reasonable to include the information that is available to the front
+  end.
 
   If the field name is followed by parens it is a function (presumably
   pure) and not a field.
 
-  The array-op specifies that there is an array of name.
+  The array-op specifies that there the preceeding name is an array
+  and that this variable represents its contents.  Just as with fields,
+  if the '.' operator is used before the array op, the array is stored
+  as part of its enclosing name and if the '->' operator is used,
+  the name is a reference to a separate memory area that contains
+  the array.  
 
   Identifiers can include the following characters:  a-zA-Z0-9_$@%
   Other characters are reserved for future features.
@@ -132,14 +143,20 @@ Internal Variable Names
 
         Internal name                 Parent name
         --------------                -----------
+        a                             <none>
         a->b                          a
         package.class::a->b           package.class::a
-        this->j[]->i                  this->j[]
+        this                          <none>
+        this->j                       this
+        this->j->[]                   this->j
+        this->j->[]->i                this->j->[]
 
-      Note that while an enclosing variable normally exists, it does
-      not necessarily exist.  Front ends can be configured to ignore variables
-      by name.  As an alternative, we could require that front ends 
-      always remove any enclosed variables of any omitted variable.
+      Note that even if an enclosing name can be determined (as in all
+      the cases except 'a' and 'this' above), it will not necessarily
+      be declared in the decl file.  Front ends can be configured to
+      ignore variables by name.  As an alternative, we could require
+      that front ends always remove any enclosed variables of any
+      omitted variable.
 
     - The name of the field itself.  This allows the internal name to
       be used to construct names in other languages (such as simplify)
@@ -152,10 +169,29 @@ External variable names
 
   External variable names should match as much as possible the legal
   variable name in the input language.  All characters are legal
-  except for '*'.  If the variable is an array '*' marks the location
-  of array indices within the variable name.  This (adding array
-  indices) is the only manipulation that daikon output needs to make
-  to an external variable name
+  except for '..'.  If the variable is an array '..' marks the location
+  of array indices within the variable name.  Adding array
+  indices is the only manipulation that daikon output needs to make
+  to an external variable name.  For example, consider the following
+  Java definitions:
+
+    Class A {               Class B {   
+      B b;                    int c;      
+      B barr[];             }
+      List<B> blist;
+    }
+
+    A a;
+
+  The following names would be specified:
+
+    internal name       external name
+    -------------       --------------
+    a->b->c             a.b.c
+    a->barr->[]->c      a.barr[..].c
+    a->blist->[]->c     a.blist.get(..).c   
+
+  In the last case, a.blist is list that we are treating as an array.
   
 Declared Type
 
@@ -167,35 +203,33 @@ Representation Type
 
 Program point names
 
-  Program point names are very similar to today.  The only difference is
-  that the static location of the program point is set off with '::'
-  rather than '.' to make it more explicit.  For example, rather than
+  Like external variable names, program point names are not parsed by
+  Daikon and are simply passed through to the output.  The only
+  restrictions on them is that they are distinct and that they
+  cannot contain spaces.
 
-    DataStructures.StackAr.isEmpty():::ENTER
-
-  we would use
-
-    DataStructures.StackAr::isEmpty():::ENTER
-
-  A rough BNF is
-
-    <static-location>::<name>:::<ppt-type>
-
-  The name can include the characters a-zA-Z0-9_$@%(),
+  Information on the type of the program point is contained in a separate
+  ppt-type record that specifies the type of the record.  The possible
+  types of program points are class, object, enter, exit, subexit.  The
+  'subexit' type is used for multiple exits from the same method.  When
+  'subexit' is used, the program point name must still be made 
+  distinct.  This can be accomplished by adding the line number of the various
+  exits as is done today or by some other front-end specific manner.
 
 Parent Ppt/variable
 
-  Each variable can have one or more parent variables in the Ppt/variable
-  hierarchy.  Each program point defines one or more program points as
-  parents and a local abbreviation for that parent.  Each variable within
-  a program point can reference one or more parent program points and
-  variable names.  For example, consider the following method in
-  class 'A':
+  Each variable can have one or more parent variables in the
+  Ppt/variable hierarchy.  Each program point defines one or more
+  program points as parents.  Each variable within a program point can
+  reference one or more parent program points and variable names.  For
+  example, consider the following method in class 'A':
 
     void m (B b, C c)
 
   Method 'm' has 3 different parents in the ppt hierarchy.  It is a member
-  of class A and it has arguments of classes B and C.
+  of class A and it has arguments of classes B and C.  It could also
+  be related to an interface or a superclass, but we don't support those
+  relations and doing so is not part of this proposal.
 
   Each variable can specify one or more of the program point parents and
   optionally the parent variable name within the parent program point.
@@ -217,11 +251,13 @@ Parent Ppt/variable
   program points.  For example, each variable in a numbered exit point
   has a child of the same variable in the common exit point.  In that
   case the program points parent is noted as being of type 'one-to-one'
-  and each variable does not have to be explicitly annotated. 
+  and each variable does not have to be explicitly annotated.  The
+  relation type 'exit-exitNN' is by default one-to-one.
 
-  Its not clear this (one-to-one) is a necessary feature.  Its added
-  simply to make the declaration somewhat more readable especially because
-  the program point names of methods tend to be long.
+  Note that it is not clear this (one-to-one) is a necessary feature.
+  Its added simply to make the declaration somewhat more readable
+  especially because the program point names of methods tend to be
+  long.
   
 Program point flags
 
@@ -245,12 +281,14 @@ Variable Flags
                           be has_order
     no_size     false     True if a collection's size is not relevant.
                           Used to be has_size.  Only valid on collections
-    nomod       false     True if a variable cannot be modified (eg, is
+    no_mod      false     True if a variable cannot be modified (eg, is
                           final in java).  New.
-    synthetic   false     variable created by the front end.  Such as the
-                          class name variables
+    synthetic   false     Any variable created by the front end that is not
+                          a program variable.  For example, the class name 
+                          variables.  Pure method calls are marked with
+                          'method' only (below) and not 'synthetic'.
     classname   false     variable is the classname synthetic variable
-    method      false     variable is a pure method call and not a field
+    method_call false     variable is a pure method call and not a field
     
 
   Most of these are the same as previously except that they are changed
@@ -276,7 +314,7 @@ File format
   The declaration format is line oriented.  Each line is a record that
   consists of an item name followed by the value for that item.  A
   value consists of one or more blank separated items.  A record
-  is referred to be its item name.  For example
+  is referred to by its item name.  For example
 
     ppt C:::OBJECT
 
@@ -294,6 +332,7 @@ File format
   A rough description of the format is:
 
     ppt <pptname>
+      ppt-type <ppt-type>
       [parent* <relation-type> <parent-ppt-name>]
       [flags <ppt-flags>]
       variable <internal-name>
@@ -312,6 +351,7 @@ File format
     <ppt-flags>         ::= static
     <variable-flags>    ::= is_param|no_dups|not_ordered|no_size|nomod|
                             synthetic|classname|method
+    <ppt-type>          ::= class|object|enter|exit|subexit
     * means that the record can occur one or more times
 
   There is also global records that can be specified at the beginning
@@ -461,6 +501,11 @@ Issues
     - Should we include both '.' and '->' as field operators in internal
       variable names?  Its not clear that the distinction is interesting.
 
+    - Similarly should we add '.' and '->' to array references (eg,
+      a->[] or a.[]) to make it clear whether or not the array is directly
+      within its enclosing name or stored separately?  Currently the proposal
+      calls for the field operators to be included with arrays as well.
+
     - Should we require that enclosing variables always exists?  This would
       make processing in Daikon easier and could possibly make nested
       dtrace output more straightforward.  The downside is that the front
@@ -475,7 +520,8 @@ Issues
       like.  That would remove the need to parse the name completely and
       it could just be language specific.
 
-      My current feeling is that we should go with this approach.
+      My current feeling is that we should go with this approach of not
+      parsing the ppt name.
 
     - Should we continue to have both class and object ppts?  The distinction
       is that static variables are in the class ppt and both class
@@ -497,6 +543,52 @@ Issues
       whether to include them or not (via a switch) and could possibly
       enable some interesting additional information (eg, whether or
       not the private method did violate some object invariants).
+
+    - Should front ends be required to include the enclosing variable
+      for each variable?  This would imply that if a variable was
+      omitted that any enclosed variables would be omitted as well.
+      While placing more burden on the front end, it might make a more
+      consistent decl file especially if we go to a nested approach
+      for sample data at some point.
+
+      I tend to think that requiring all enclosing variables to be variables
+      is a good idea.
+
+    - Do we need a program point abbreviation when specifying parent 
+      program points?  The point of this was to ease readability for
+      long ppt names.  
+
+      I don't think this is necessary.  I think, instead, that certain
+      ppt relations (exit->exitNN, enter->exit) should automatically create
+      the correct variable relations.  The only reason this wouldn't work
+      would be if the internal names were different from enter to exit
+      or exit to numbered exit.  That doesn't seem very likely (or useful).
+      Daikon already needs to understand enter/exit ppts since it creates
+      orig versions of the variables (which would also be confused if
+      the variables had different names).
+
+    - How should the object-user relation handle the multiple possible
+      relations that can occur with nested classes.  For example, if
+      the depth is 5 and we have a variable 'a' of type A from the'
+      example, the following variables exists:
+
+        a.f1
+        a.b.f2
+        a.b.a.f1
+        a.b.a.b.f2
+
+      Should each instance a field in B (a.b.f2 and a.b.a.b.f2) be tied 
+      back to B directly (ie, its parent is B::this.f2) or should it only
+      be tied to the corresponding level in B (the parent for a.b.f2 is
+      B::this.f2 and the parent for a.b.a.b.f2 is B::this.a.b.f2), or
+      both?
+
+    - Should we include information on superclasses in the declaration
+      information?  This could be used to determine what variables are
+      possibly comparable (at least in java).  Or perhaps we should include
+      two forms of comparability information -- calculated comparability
+      (ala DynComp) and type comparability (that can be determined statically
+      by the front end).
 
     - It doesn't look like the internal variable grammar supports
       arrays that nest directly inside another array ("foo[][]",
@@ -555,10 +647,11 @@ Issues
       character, including $*. Perhaps a multi-character marker would
       be more robust?  (smcc)
 
-      I'd forgotten about '*' in C.  I'd suggest either '..', '...', or the
-      somewhat less elegant alternative of specifying the offset (in
-      characters).  The latter always works and it leaves the variable
-      name completely unchanged.  But its quite unreadable.
+      I'd forgotten about '*' in C.  I've changed the proposal to use
+      '..' instead.  We could also use '...', or the somewhat less
+      elegant alternative of specifying the offset (in characters).
+      The latter always works and it leaves the variable name
+      completely unchanged.  But its quite unreadable.
 
     - What does Daikon use this the declared type for again?  If
       nothing, it would be nice to make it completely uninterpreted
@@ -615,6 +708,19 @@ Issues
       format that can easily be read by java.  As long as they the parsed
       parts of the file are 'normal', the unparsed parts should be able
       to be anything that can be read by java.
+
+    - Should language specific flags be defined in a data file so that they
+      can be updated without recompiling daikon? (mernst)
+
+      I don't think this is necessary.  We already plan to have a switch
+      that will ignore flags that are not understood.  Since Daikon can't
+      do anything with a flag it doesn't know anything about, this would
+      seem to be sufficient.
+
+    - Are the language specific flags only intended for internal daikon
+      use? (mernst)
+
+      Yes.  I couldn't think of another use.
 
 Appendix A -- Alternative Object-User hierarchy relation solutions
 
