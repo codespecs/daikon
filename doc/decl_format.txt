@@ -483,12 +483,16 @@ Issues
 
     - Rather than supplying information about variables with a name that
       must be parsed, why not make the nesting of variables explicit by
-      using xml or some other format that is explicitly nested?
+      using xml or some other format that is explicitly nested?  Also
+      xml can be easily validated give a DTD or schema (pgbovine)
 
       Our thought is that naming each variable in the flat style of the
       current decl file is more readable than a nested definition.  The
       name carries a lot of intuitive information since it is very
       similar to Java and C.
+
+      The format is so simple to parse and understand that the advantage
+      of a scheme is not clear to me, though perhaps I am missing something.
 
     - Should program points have an internal/external name as well so
       that the external name can be more tailored to the input language?
@@ -498,18 +502,22 @@ Issues
       Its possible, however, that the front end should create the
       merged exit point rather than relying on Daikon to do it.
 
-    - Should we include both '.' and '->' as field operators in internal
-      variable names?  Its not clear that the distinction is interesting.
+    - Is the internal variable operator '->' necessary?  Couldn't '.' only
+      be used. (pgbovine)
+
+      The only usuage of I know of this information is that '.' tells
+      Daikon that the enclosing variable doesn't have an interesting
+      value (because it isn't really a hashcode).  We infer this now from
+      the non-null attribute, but this would be a bit more specific.  It
+      simply feels like information that might be useful at some point that
+      is relatively easy to provide.
 
     - Similarly should we add '.' and '->' to array references (eg,
       a->[] or a.[]) to make it clear whether or not the array is directly
       within its enclosing name or stored separately?  Currently the proposal
       calls for the field operators to be included with arrays as well.
 
-    - Should we require that enclosing variables always exists?  This would
-      make processing in Daikon easier and could possibly make nested
-      dtrace output more straightforward.  The downside is that the front
-      ends are more constrained.
+      (pgbovine) This is weird looking?  Is this complexity worthwhile?
 
     - Do we need to specify list implementors?  Why?
 
@@ -552,7 +560,8 @@ Issues
       for sample data at some point.
 
       I tend to think that requiring all enclosing variables to be variables
-      is a good idea.
+      is a good idea.  Philip points out that this is how Kvasir works
+      already.
 
     - Do we need a program point abbreviation when specifying parent 
       program points?  The point of this was to ease readability for
@@ -588,7 +597,15 @@ Issues
       possibly comparable (at least in java).  Or perhaps we should include
       two forms of comparability information -- calculated comparability
       (ala DynComp) and type comparability (that can be determined statically
-      by the front end).
+      by the front end, eg, declared types, typedefs, etc).
+
+    - How should we handle java lists in external names?  Should we include
+      '.get(..)' in the external name?  That implies that the external
+      name is always indexed and that is not always the case.  Perhaps
+      the external name needs an unindexed value and an indexed value.
+      That way the variable 'list' could refer to the entire array referred
+      to by a list and 'list.get(1..5)' would refer to a sequence from
+      within the list.  
 
     - It doesn't look like the internal variable grammar supports
       arrays that nest directly inside another array ("foo[][]",
@@ -623,6 +640,20 @@ Issues
       if desired, but if we think this is interesting, perhaps this is
       something Daikon could do itself (for all front ends).
 
+      (pgbovine) We do this because it allows us to get 1 extra level
+      of arrays.  For example:
+
+         rgb[0].foo[]
+         rgb[1].foo[]
+         rgb[2].foo[]
+
+      otherwise, rgb[].foo[] is a 2-D array which Daikon cannot curently
+      support.
+
+      (jhp) I think we should allow front ends to do this if they want.
+      Other than the definition of [] for internal variables, is there
+      any reason that a front end cannot do this?
+
     - Kvasir creates pointer dereferences (if x is an "int ***", you might
       want variables for x, *x, **x, and ***x).  At the moment, I think
       we output both using an array syntax, since "x[0]" happens to
@@ -636,7 +667,9 @@ Issues
       example what does *x->b mean?)  Perhaps we could use an empty
       '->' instead of '*' for this function.  Though its certainly
       possible that being consistent with C syntax is more valuable.
-      
+      Its also possible that a unary right hand operator is no more
+      clear than a unary left hand operator.
+
     - I'd worry that a single "*" as a placeholder for array indices
       in the external name is likely to conflict with the syntaxes of
       other languages. For instance, as mentioned above it would be
@@ -721,6 +754,51 @@ Issues
       use? (mernst)
 
       Yes.  I couldn't think of another use.
+
+    - Is the internal variable operator '->' necessary?  Couldn't '.' only
+      be used. (pgbovine)
+
+      The only usuage of I know of this information is that '.' tells
+      Daikon that the enclosing variable doesn't have an interesting
+      value (because it isn't really a hashcode).  We infer this now from
+      the non-null attribute, but this would be a bit more specific.  It
+      simply feels like information that might be useful at some point that
+      is relatively easy to provide.
+
+    - Is the set of characters for internal names the set of legal chars
+      in all languages we want to support or will there need to be some
+      sort of translation?  (pgbovine)
+
+      I purposefully limited this to a pretty conservative set so that we
+      could use other special characters in the future.  Thus, if a 
+      front end needs other special characters, we either need to modify
+      Daikon to support those, or translate them in the front end.
+
+    - In the ppt hierarchy, what is the parent for a C function?  
+      The file it is contained in? (pgbovine)
+
+      A file doesn't provide a variable hierarchy since methods from the
+      same file don't necessarily share any variables in common (except
+      for file statics).  Methods that are passed a structure could have
+      a object-user relation.  I think this is closes to the object-method
+      relation from an object oriented language.  If we think that file
+      statics are interesting, then they could be included as well.  I'm
+      pretty sure that the front end can make that decision.  We only
+      need to provide a name for the type of relation in Daikon.  Or we
+      could allow new relation types to be used, but this allows typo
+      mistakes.
+
+    - Should we rename 'comparability' to 'abstract-type' as in the ISSTA
+      paper and move it earlier in the list of variable records? (pgbovine)
+
+      I think that comparability is what Daikon is interested in and this
+      is a Daikon file.  But I certainly don't feel strongly about it.
+      The order of the records is arbitrary.  Any order is ok.
+
+    - Should we change the name for 'implicit' comparability to something
+      more meaningful? (pgbovine)
+
+      Sure.  Any suggestions?
 
 Appendix A -- Alternative Object-User hierarchy relation solutions
 
