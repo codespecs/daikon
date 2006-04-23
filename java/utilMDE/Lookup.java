@@ -107,14 +107,14 @@ public class Lookup {
   @Option ("Regex that denotes the end of a long entry")
   public static Pattern entry_stop_re = Pattern.compile ("^<entry");
 
-  @Option ("Regex that finds an entries description")
+  @Option ("Regex that finds an entry's description")
   public static Pattern description_re = null;
 
-  /** Comments start with percent signs in the first column **/
-  private static String comment_re = "^%.*";
+  @Option ("Regex that matches an entire comment (not just a comment start)")
+  public static String comment_re = "^%.*";
 
-  /** Include directive is of the form \include{filename} **/
-  private static String include_re = "\\\\include\\{(.*)\\}";
+  @Option ("Regex that matches an include directive; group 1 is the file name")
+  public static String include_re = "\\\\include\\{(.*)\\}";
 
   /** Platform specific line separator **/
   private static final String lineSep = System.getProperty("line.separator");
