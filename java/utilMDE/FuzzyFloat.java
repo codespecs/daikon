@@ -22,6 +22,7 @@ public class FuzzyFloat {
   double min_ratio = 0.9999;
   /** Maximum ratio between two floats that will act as equal. */
   double max_ratio = 1.0001;
+
   /** True if ratio test turned off. */
   boolean off = false;
 
@@ -78,12 +79,25 @@ public class FuzzyFloat {
     if (d1 == d2)
       return (true);
 
+    double zero_tolerance = Math.pow((max_ratio - 1), 2);
+
     // Only zero matches no matter what the ratio.  Saves on overflow checks
     // below as well.
-    if (d1 == 0.0)
-      return (d2 == 0.0);
-    else if (d2 == 0.0)
-      return (d1 == 0.0);
+    if (d1 == 0.0) {
+
+
+      if (((d1 + zero_tolerance) > d2) && (d1 - zero_tolerance) < d2)
+        return true;
+      else
+        return false;
+
+    } else if (d2 == 0.0) {
+
+      if (((d2 + zero_tolerance) > d1) && (d2 - zero_tolerance) < d1)
+        return true;
+      else
+        return false;
+    }
 
     double ratio = d1/d2;
     return ((ratio >= min_ratio) && (ratio <= max_ratio));
