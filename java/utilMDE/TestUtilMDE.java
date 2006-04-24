@@ -1976,10 +1976,10 @@ public final class TestUtilMDE extends TestCase {
     }
 
     //make sure nothing is equal to zero
-    assertTrue (!ff.eq (0, Double.MIN_VALUE));
-    assertTrue (!ff.eq (0, -Double.MIN_VALUE));
-    assertTrue (ff.ne (0, Double.MIN_VALUE));
-    assertTrue (ff.ne (0, -Double.MIN_VALUE));
+    assertTrue (ff.eq (0, Double.MIN_VALUE));
+    assertTrue (ff.eq (0, -Double.MIN_VALUE));
+    assertTrue (!ff.ne (0, Double.MIN_VALUE));
+    assertTrue (!ff.ne (0, -Double.MIN_VALUE));
 
     //make sure that 0 equals 0
     assertTrue (ff.eq (0, 0));
@@ -2018,7 +2018,7 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(ff.indexOf(a, 9) == 9);
       assertTrue(ff.indexOf(a, 10) == -1);
       assertTrue(ff.indexOf(a, 20) == -1);
-      assertTrue(ff.indexOf(a, Double.MIN_VALUE) == -1);
+      assertTrue(ff.indexOf(a, Double.MIN_VALUE) == 0);
       assertTrue(ff.indexOf(a, 7 * offhigh) == 7);
       assertTrue(ff.indexOf(a, 9 * offlow) == 9);
       assertTrue(ff.indexOf(a, 7 * offhigh2) == -1);
