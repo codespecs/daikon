@@ -3846,11 +3846,16 @@ public abstract class VarInfoName
       }
 
       // stringify the indices, if requested
+      // note that the index should be relative to the slice, not relative
+      // to the original array (we used to get this wrong)
       if (includeIndex) {
         for (int i=0; i < qret.root_primes.length; i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx_var = boundv[0];
-          result[i + qret.root_primes.length + 1] = idx_var.simplify_name();
+          String idx_var_name = idx_var.simplify_name();
+          String lower_bound = qret.bound_vars.get(i)[1].simplify_name();
+          String idx_expr = "(- " + idx_var_name + " " + lower_bound + ")";
+          result[i + qret.root_primes.length + 1] = idx_expr;
         }
       }
 

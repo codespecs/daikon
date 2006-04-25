@@ -204,7 +204,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > i))
 Goal (ioa): \A i : Int (i \in a => i > a[i])
 Goal (jml): daikon.Quant.eltsGtIndex(a)
 Goal (dbc): daikon.Quant.eltsGtIndex(a)
-Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) |i|)))
+Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) (- |i| 0))))
 [5 10 15 20 25 30 35 40]
 
 ; array[index] != index
@@ -216,7 +216,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != i))
 Goal (ioa): \A i : Int (i \in a => i ~= a[i])
 Goal (jml): daikon.Quant.eltsNotEqualIndex(a)
 Goal (dbc): daikon.Quant.eltsNotEqualIndex(a)
-Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) |i|)))
+Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) (- |i| 0))))
 [5 10 15 20 25 30 35 40]
 
 ; Testing unary string invariants
