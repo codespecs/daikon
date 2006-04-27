@@ -749,178 +749,103 @@ public final class PrintInvariants {
    * DBCJAVA
    */
   public static void print_modified_vars(PptTopLevel ppt, PrintWriter out) {
-    if (debugPrintModified.isLoggable(Level.FINE)) {
-      debugPrintModified.fine ("Doing print_modified_vars for: " + ppt.name());
-    }
 
-    Vector<VarInfo> modified_vars = new Vector<VarInfo>();
-    Vector<VarInfo> modified_primitive_args = new Vector<VarInfo>();
-    Vector<VarInfo> unmodified_vars = new Vector<VarInfo>();
-    Vector<VarInfo> unmodified_orig_vars = new Vector<VarInfo>();
+    debugPrintModified.fine ("Doing print_modified_vars for: " + ppt.name());
 
-    for (int i=0; i<ppt.var_infos.length; i++) {
-      VarInfo vi = ppt.var_infos[i];
-      if (debugPrintModified.isLoggable(Level.FINE)) {
-        debugPrintModified.fine ("  Testing var: " + vi.name.name());
+    List<VarInfo> modified_vars = new ArrayList<VarInfo>();
+    List<VarInfo> reassigned_parameters = new ArrayList<VarInfo>();
+    List<VarInfo> unmodified_vars = new ArrayList<VarInfo>();
+    List<VarInfo> unmodified_orig_vars = new ArrayList<VarInfo>();
+
+    // Loop through each variable at this ppt
+    for (VarInfo vi : ppt.var_infos) {
+
+      // Skip any orig variables
+      if (vi.isPrestate()) {
+        debugPrintModified.fine ("  skipping " + vi.name.name()
+                                 + ": is prestate");
+        continue;
       }
-      // This test is purely an optimization.
-      if (! vi.isPrestate()) {
-        debugPrintModified.fine ("  not prestate");
-        VarInfo vi_orig = ppt.findVar(vi.name.applyPrestate());
-        if (vi_orig != null) {
-          debugPrintModified.fine ("  has orig var");
-          // Assert.assertTrue(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
-          // Assert.assertTrue(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
-          boolean is_unmodified = false;
-          if (! is_unmodified) {
-            java.lang.reflect.Field f = vi.name.resolveField(ppt);
-            // System.out.println("Field for " + vi.name.name() + ": " + f);
-            if ((f != null)
-                && java.lang.reflect.Modifier.isFinal(f.getModifiers())) {
-              // System.out.println("Final: " + vi.name.name());
-              is_unmodified = true;
-              debugPrintModified.fine ("  modified from reflection");
-            }
-          }
-          // System.out.println(vi.name.name() + (is_unmodified ? " unmodified" : " modified"));
-          if (is_unmodified) {
-            debugPrintModified.fine ("  concluded unmodified");
-            unmodified_vars.add(vi);
-            unmodified_orig_vars.add(vi_orig);
-          } else {
-            // out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
-            PptSlice1 view = ppt.findSlice(vi);
-            // out.println("View " + view + " num_values=" + ((view!=null)?view.num_values():0));
-            // The test "((view != null) && (view.num_values() > 0))" is
-            // fallacious becuase the view might have been removed (is now
-            // null) because all invariants at it were false.
-            if ((view == null) ||
-                view.containsOnlyGuardingPredicates()) {
-              // Further modified because a view might have otherwise been
-              // destroyed if it were not for the guarding invariants put
-              // into the PptSlice. This if view != null, and it only contains
-              // guarding predicates, it would have been null had invariant
-              // guarding been off, thus the variable belongs in modified_vars.
+      debugPrintModified.fine ("  Considering var: " + vi.name.name());
 
-              // Using only the isPrimitive test is wrong.  We should suppress
-              // for only parameters, not all primitive values.  That's why we
-              // look for the period in the name.
-              // (Shouldn't this use the VarInfoName, and/or the isParam
-              // information in VarInfoAux, rather than examining the text
-              // of the name?  -MDE 12/2/2002)
-              is_unmodified = false;
-            } else {
-              // If a slice is present, though, we can try to make some judgements
-              // is_unmodified = (view.num_mod_samples() == 0);
-            }
-            if (!is_unmodified) {
-              if (vi.type.isPrimitive() && (vi.name.name().indexOf(".") == -1)) {
-                modified_primitive_args.add(vi);
-                debugPrintModified.fine ("  concluded modified prim");
-              } else {
-                modified_vars.add(vi);
-                debugPrintModified.fine ("  concluded modified ");
-              }
-            }
-          }
-        }
+      // Get the orig version of this variable.  If none is found then this
+      // isn't a variable about which it makes sense to consider modifiability
+      VarInfo vi_orig = ppt.findVar (vi.name.applyPrestate());
+      if (vi_orig == null) {
+        debugPrintModified.fine ("  skipping " + vi.name.name()
+                                 + ": no orig variable");
+        continue;
+      }
+
+      // TODO: When we can get information from the decl file that
+      // indicates if a variable is 'final', we should add such a test
+      // here.  For now we use the equality invariant between the
+      // variable and its orig variable to determine if it has been
+      // modified
+
+      if (ppt.is_equal (vi, vi_orig)) {
+        debugPrintModified.fine ("  " + vi.name.name() + " = "
+                                 + vi_orig.name.name());
+        unmodified_vars.add (vi);
+      } else { // variables are not equal
+        if (vi.aux.isParam())
+          reassigned_parameters.add (vi);
+        else
+          modified_vars.add (vi);
       }
     }
+
     if (Daikon.output_num_samples
         || (Daikon.output_format == OutputFormat.ESCJAVA)
         || (Daikon.output_format == OutputFormat.DBCJAVA)) {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
-        for (int i=0; i<modified_vars.size(); i++) {
-          VarInfo vi = (VarInfo)modified_vars.elementAt(i);
+        for (VarInfo vi : modified_vars)
           out.print(" " + vi.name.name());
-        }
         out.println();
       }
-      if (modified_primitive_args.size() > 0) {
+      if (reassigned_parameters.size() > 0) {
+        // out.print("      Reassigned parameters:");
         out.print("      Modified primitive arguments:");
-        for (int i=0; i<modified_primitive_args.size(); i++) {
-          VarInfo vi = (VarInfo)modified_primitive_args.elementAt(i);
+        for (VarInfo vi : reassigned_parameters)
           out.print(" " + vi.name.name());
-        }
         out.println();
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");
-        for (int i=0; i<unmodified_vars.size(); i++)
-          out.print(" " + ((VarInfo)unmodified_vars.elementAt(i)).name.name());
+        for (VarInfo vi : unmodified_vars)
+          out.print(" " + vi.name.name());
         out.println();
       }
     }
-    // It would be nice to collect the list of indices that are modified,
-    // and create a \forall to specify that the rest aren't.
+
+    // Remove non-variables from the assignable output
     if (Daikon.output_format == OutputFormat.ESCJAVA
-        || Daikon.output_format == OutputFormat.JML
-        ) {
-      Vector<VarInfo> mods = new Vector<VarInfo>();
-      for (int i=0; i<modified_vars.size(); i++) {
-        VarInfo vi = (VarInfo)modified_vars.elementAt(i);
-        // System.out.println("modified var: " + vi.name.name());
-        while (vi != null) {
-          Derivation derived = vi.derived;
-          VarInfoName vin = vi.name;
-          if (vin instanceof VarInfoName.TypeOf) {
-            // "VAR.getClass()"
-            vi = null;
-          } else if (vin instanceof VarInfoName.SizeOf) {
-            // "size(VAR)"
-            vi = null;
-          } else if ((vin instanceof VarInfoName.Field)
-                     && ((VarInfoName.Field)vin).term.name().endsWith("]")) {
-            // "VAR[..].field" => VAR[..];
-            // vi = ppt.findVar(((VarInfoName.Field)vin).term.name());
-            vi = ppt.findVar(((VarInfoName.Field)vin).term);
-            if (vi == null) {
-              System.out.println("Failed findVar(" + ((VarInfoName.Field)vin).term.name() + ") from " + vin.name() + " at " + ppt.name());
-            }
-            Assert.assertTrue(vi != null);
-          } else if (derived instanceof SequenceScalarSubscript) {
-            vi = ((SequenceScalarSubscript)vi.derived).seqvar();
-          } else if (derived instanceof SequenceFloatSubscript) {
-            vi = ((SequenceFloatSubscript)vi.derived).seqvar();
-          } else if (derived instanceof SequenceStringSubscript) {
-            vi = ((SequenceStringSubscript)vi.derived).seqvar();
-          } else if (derived instanceof SequenceScalarSubsequence) {
-            vi = ((SequenceScalarSubsequence)vi.derived).seqvar();
-          } else if (derived instanceof SequenceFloatSubsequence) {
-            vi = ((SequenceFloatSubsequence)vi.derived).seqvar();
-          } else if (derived instanceof SequenceStringSubsequence) {
-            vi = ((SequenceStringSubsequence)vi.derived).seqvar();
-            Assert.assertTrue(vi != null);
-          } else {
-            break;
-          }
-        }
-        // Change this.myvector[*] to this.myvector (or would it be
-        // best to just remove it?)
-        if ((vi != null) && (vi.name instanceof VarInfoName.Elements)) {
-          VarInfoName.Elements elems = (VarInfoName.Elements) vi.name;
-          VarInfo base = ppt.findVar(elems.term);
-          // Assert.assertTrue(base != null);
-          if (base != null) {
-            if (! base.type.isArray()) {
-              vi = base;
-            }
-          }
-        }
-        // System.out.println("really modified var: " + ((vi == null) ? "null" : vi.name.name()));
-        if ((vi != null) && (! mods.contains(vi))) {
-          mods.add(vi);
-        }
+        || Daikon.output_format == OutputFormat.JML) {
+      List<VarInfo> mods = new ArrayList<VarInfo>();
+      for (VarInfo vi : modified_vars) {
+        Derivation derived = vi.derived;
+        VarInfoName vin = vi.name;
+
+        // Skip var.getClass() variables
+        if (vin instanceof VarInfoName.TypeOf)
+          continue;
+
+        // Skip sizeof variables
+        if (vin instanceof VarInfoName.SizeOf)
+          continue;
+
+        mods.add (vi);
       }
+
+      // Print out the modifies/assignable list
       if (mods.size() > 0) {
         if (Daikon.output_format == OutputFormat.ESCJAVA)
           out.print("modifies ");
         else
           out.print("assignable ");
         int inserted = 0;
-        for (int i=0; i<mods.size(); i++) {
-          VarInfo vi = (VarInfo)mods.elementAt(i);
+        for (VarInfo vi : mods) {
           String name = vi.name.name();
           if (!name.equals("this")) {
             if (inserted>0) {
