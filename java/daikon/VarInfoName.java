@@ -154,9 +154,11 @@ public abstract class VarInfoName
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
 
-  /** This method returns a set that contains the given VarInfoName.
+  /**
+   * This method returns a set that contains the given VarInfoName.
+   * JHP: This has something to do with repair.  It is unclear what a
+   * 'set' is in this context.
    */
-
   static public String getRealSet(VarInfo v, VarInfoName term) {
     if (term instanceof Simple) {
       Simple simple=(Simple)term;
@@ -204,6 +206,11 @@ public abstract class VarInfoName
     return name_cached;
   }
   private String name_cached = null; // interned
+
+  /**
+   * Returns the String representation of this name in the default output
+   * format.  Results are cached by name().
+   */
   protected abstract String name_impl();
 
   /**
@@ -225,11 +232,17 @@ public abstract class VarInfoName
     return esc_name_cached;
   }
   private String esc_name_cached = null; // interned
+
+
+  /**
+   * Returns the String representation of this name in the ESC style
+   * output format.  Cached by esc_name()
+   */
   protected abstract String esc_name_impl();
 
   /**
    * @return the string representation (interned) of this name, in the
-   * Simplify tool output format
+   * Simplify tool output format in the pre-state context.
    **/
   public String simplify_name() {
     return simplify_name(false);
@@ -252,8 +265,12 @@ public abstract class VarInfoName
     return simplify_name_cached[which];
   }
   private String[] simplify_name_cached = new String[2]; // each interned
-  protected abstract String simplify_name_impl(boolean prestate);
 
+  /**
+   * Returns the String representation of this name in the simplify
+   * output format in either prestate or poststate context
+   */
+  protected abstract String simplify_name_impl(boolean prestate);
 
   /**
    * Return the string representation of this name in IOA format.
@@ -278,8 +295,8 @@ public abstract class VarInfoName
   private String ioa_name_cached = null; // interned
 
   /**
-   * Called in subclasses to return the internal implementation of
-   * ioa_name.
+   * Reeturns the string representation of this name in IOA format.
+   * Results are cached by ioa_name().
    **/
   protected abstract String ioa_name_impl();
 
@@ -302,6 +319,11 @@ public abstract class VarInfoName
     return java_name_cached;
   }
   private String java_name_cached = null; // interned
+
+  /**
+   * Return the String representation of this name in java format.
+   * Cached and interned by java_name()
+   */
   protected abstract String java_name_impl(VarInfo v);
 
   /**
@@ -315,16 +337,32 @@ public abstract class VarInfoName
       return repair_name_impl(v).intern();
   }
   private String repair_name_cached = null; // interned
+
+  /**
+   * Return the String representation of this name in the repair style
+   * output format.  Interned (but not cached) by repair_name()
+   */
   protected abstract String repair_name_impl(VarInfo v);
 
-  public VarInfoName getBase() {
-    throw new Error();
-  }
+  /**
+   * Returns the name of the base of this variable which appears to be
+   * the variable in which this variable is nested (eg, the base of x.y
+   * is x) (jhp 3/30/2006, this comment is a guess)
+   */
+  public abstract VarInfoName getBase();
+
+  /**
+   * Returns the name with 'name' substituted for the base of the variable.
+   * Its not entirely clear what this is used for.  I'm guessing this
+   * default implementation is never right.
+   */
   public String gen_name(String name) {
     return name();
   }
-   /**
-   * Return the String representation of this name in the JML style output format
+
+  /**
+   * Return the String representation of this name in the JML style output
+   * format
    */
   public String jml_name(VarInfo v) {
     if (jml_name_cached == null) {
@@ -339,6 +377,10 @@ public abstract class VarInfoName
     return jml_name_cached;
   }
   private String jml_name_cached = null; // interned
+  /**
+   * Returns the name in JML style output format.  Cached and interned by
+   * jml_name()
+   */
   protected abstract String jml_name_impl(VarInfo v);
 
 
@@ -385,8 +427,11 @@ public abstract class VarInfoName
   }
 
   private String dbc_name_cached = null; // interned
+  /**
+   * Return the name in the DBC style output format.  If v is null, uses
+   * JML style instead.  Cached and interned by dbc_name()
+   */
   protected abstract String dbc_name_impl(VarInfo v);
-
 
   /**
    * Return the String representation of this name using only letters,
@@ -405,6 +450,11 @@ public abstract class VarInfoName
     return identifier_name_cached;
   }
   private String identifier_name_cached = null; // interned
+
+  /**
+   * Returns the name using only letters, numbers, and underscores.  Cached
+   * and interned by identifier_name()
+   */
   protected abstract String identifier_name_impl();
 
   /**
@@ -425,10 +475,7 @@ public abstract class VarInfoName
       ("Unknown format requested: " + format);
   }
 
-  /**
-   * @return the string reprenentation (interned) of this name, in a
-   * debugging format
-   **/
+  /** @return the name, in a debugging format **/
   public String repr() {
     // AAD: Used to be interned for space reasons, but removed during
     // profiling when it was determined that the interns are unique
@@ -439,6 +486,8 @@ public abstract class VarInfoName
     return repr_cached;
   }
   private String repr_cached = null;
+
+  /** return the name in a verbose debugging format.  Cached by repr **/
   protected abstract String repr_impl();
 
   // It would be nice if a generalized form of the mechanics of
@@ -454,10 +503,6 @@ public abstract class VarInfoName
       return this;
     }
   }
-
-  // Not sure exactly where these belong in this file.
-  protected abstract Class resolveType(PptTopLevel ppt);
-  protected abstract java.lang.reflect.Field resolveField(PptTopLevel ppt);
 
 
   // ============================================================
@@ -798,37 +843,6 @@ public abstract class VarInfoName
         return buf.toString();
       }
     }
-
-    protected Class resolveType(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveType(" + ppt.name() + ")");
-      // Also see Ast.getClass(String s)
-      if (name.equals("this")) {
-        try {
-          String classname = ppt.ppt_name.getFullClassName();
-          // System.out.println("classname = " + classname);
-          Class result = Class.forName(classname);
-          // System.out.println("resolveType => " + result);
-          return result;
-        } catch (Throwable e) {
-        }
-      }
-      return null;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveField(" + ppt.name() + ")");
-      try {
-        if (name.startsWith("this.")) {
-          Class c = Class.forName(ppt.ppt_name.getFullClassName());
-          if (c != null) {
-            java.lang.reflect.Field f = c.getDeclaredField(name.substring(5));
-            return f;
-          }
-        }
-      } catch (Exception e) {
-      }
-      return null;
-    }
-
     public <T> T accept(Visitor<T> v) {
       return v.visitSimple(this);
     }
@@ -986,13 +1000,6 @@ public abstract class VarInfoName
       return "size_of" + sequence.identifier_name() + "___";
     }
 
-    protected Class resolveType(PptTopLevel ppt) {
-      return Integer.TYPE;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return null;
-    }
-
     public <T> T accept(Visitor<T> v) {
       return v.visitSizeOf(this);
     }
@@ -1088,12 +1095,6 @@ public abstract class VarInfoName
 
     protected String identifier_name_impl() {
       return function + "_of_" + argument.identifier_name() + "___";
-    }
-    protected Class resolveType(PptTopLevel ppt) {
-      return null;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return null;
     }
     public <T> T accept(Visitor<T> v) {
       return v.visitFunctionOf(this);
@@ -1212,12 +1213,6 @@ public abstract class VarInfoName
      **/
     public VarInfoName getArg (int n) {
       return args.get(n);
-    }
-    protected Class resolveType(PptTopLevel ppt) {
-      return null;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return null;
     }
     public <T> T accept(Visitor<T> v) {
       return v.visitFunctionOfN(this);
@@ -1486,27 +1481,6 @@ public abstract class VarInfoName
     protected String identifier_name_impl() {
       return term.identifier_name() + "_dot_" + field;
     }
-    protected Class resolveType(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveType(" + ppt.name() + ")");
-      java.lang.reflect.Field f = resolveField(ppt);
-      if (f != null) {
-        // System.out.println("resolveType => " + f.getType());
-        return f.getType();
-      }
-      return null;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveField(" + ppt.name() + ")");
-      Class c = term.resolveType(ppt);
-      if (c != null) {
-        try {
-          // System.out.println("resolveField found type " + c.getName());
-          return c.getDeclaredField(field);
-        } catch (Exception e) {
-        }
-      }
-      return null;
-    }
     public <T> T accept(Visitor<T> v) {
       return v.visitField(this);
     }
@@ -1577,12 +1551,6 @@ public abstract class VarInfoName
     }
     protected String identifier_name_impl() {
       return "type_of_" + term.identifier_name() + "___";
-    }
-    protected Class resolveType(PptTopLevel ppt) {
-      return Class.class;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return null;
     }
     public <T> T accept(Visitor<T> v) {
       return v.visitTypeOf(this);
@@ -1668,12 +1636,6 @@ public abstract class VarInfoName
     protected String identifier_name_impl() {
       return "orig_of_" + term.identifier_name() + "___";
     }
-    protected Class resolveType(PptTopLevel ppt) {
-      return term.resolveType(ppt);
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return term.resolveField(ppt);
-    }
     public <T> T accept(Visitor<T> v) {
       return v.visitPrestate(this);
     }
@@ -1752,12 +1714,6 @@ public abstract class VarInfoName
     protected String identifier_name_impl() {
       return "post_of_" + term.identifier_name() + "___";
     }
-    protected Class resolveType(PptTopLevel ppt) {
-      return term.resolveType(ppt);
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return term.resolveField(ppt);
-    }
     public <T> T accept(Visitor<T> v) {
       return v.visitPoststate(this);
     }
@@ -1832,12 +1788,6 @@ public abstract class VarInfoName
         return term.identifier_name() + "_plus" + amount;
       else
         return term.identifier_name() + "_minus" + (-amount);
-    }
-    protected Class resolveType(PptTopLevel ppt) {
-      return term.resolveType(ppt);
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return term.resolveField(ppt);
     }
     public <T> T accept(Visitor<T> v) {
       return v.visitAdd(this);
@@ -2018,16 +1968,6 @@ public abstract class VarInfoName
     protected String identifier_name_impl() {
       return identifier_name_impl("");
     }
-    protected Class resolveType(PptTopLevel ppt) {
-      Class c = term.resolveType(ppt);
-      if (c != null) {
-        return c.getComponentType();
-      }
-      return null;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return term.resolveField(ppt);
-    }
     public <T> T accept(Visitor<T> v) {
       return v.visitElements(this);
     }
@@ -2191,16 +2131,6 @@ public abstract class VarInfoName
     }
     protected String identifier_name_impl() {
       return sequence.identifier_name_impl(index.identifier_name());
-    }
-    protected Class resolveType(PptTopLevel ppt) {
-      Class c = sequence.resolveType(ppt);
-      if (c != null) {
-        return c.getComponentType();
-      }
-      return null;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return sequence.resolveField(ppt);
     }
     public <T> T accept(Visitor<T> v) {
       return v.visitSubscript(this);
@@ -2404,16 +2334,6 @@ public abstract class VarInfoName
       String start = (i == null) ? "0" : i.identifier_name();
       String end   = (j == null) ? ""  : j.identifier_name();
       return sequence.identifier_name_impl(start + "_to_" + end);
-    }
-    protected Class resolveType(PptTopLevel ppt) {
-      Class c = sequence.resolveType(ppt);
-      if (c != null) {
-        return c.getComponentType();
-      }
-      return null;
-    }
-    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      return sequence.resolveField(ppt);
     }
     public <T> T accept(Visitor<T> v) {
       return v.visitSlice(this);
