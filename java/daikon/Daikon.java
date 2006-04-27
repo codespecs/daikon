@@ -544,6 +544,19 @@ public final class Daikon {
 //       guardInvariants(all_ppts);
 //     }
 
+    // Debug print information about the variables
+    if (false) {
+      for (PptTopLevel ppt : all_ppts.all_ppts()) {
+        System.out.printf ("Dumping variables for ppt %s%n", ppt.name());
+        for (VarInfo vi : ppt.var_infos) {
+          System.out.printf ("  vi %s%n", vi);
+          System.out.printf ("    file_rep_type = %s%n", vi.file_rep_type);
+          System.out.printf ("    type = %s%n", vi.type);
+        }
+      }
+    }
+
+
     // print out the invariants for each program point
     if (Daikon.dkconfig_undo_opts) {
       // Print out the invariants for each program point (sort first)
