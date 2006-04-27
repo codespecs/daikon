@@ -290,6 +290,10 @@ public final class VarInfoAux
     return value.equals(TRUE);
   }
 
+  /** Returns whether or not this is a parameter **/
+  public boolean isParam() {
+    return getFlag (IS_PARAM);
+  }
 
   /**
    * Return a new VarInfoAux with the desired value set.
