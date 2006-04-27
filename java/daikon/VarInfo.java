@@ -31,6 +31,17 @@ public final class VarInfo implements Cloneable, Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020629L;
 
+  /**
+   * If true, then variables are only considered comparable if they
+   * are declared with the same type.  For example, java.util.List
+   * is not comparable to java.util.ArrayList and float is not
+   * comparable to double.  This may miss valid invariants, but
+   * significant time can be saved and many variables with
+   * different declared types are not comparable (e.g., java.util.Date
+   * and java.util.ArrayList)
+   */
+  public static boolean dkconfig_declared_type_comparability = true;
+
   /** Debug missing vals. **/
   public static final Logger debugMissing =
     Logger.getLogger("daikon.VarInfo.missing");
@@ -1411,18 +1422,32 @@ public final class VarInfo implements Cloneable, Serializable {
 
     }
 
-
-    if (Daikon.check_program_types
-      && (!var1.type.comparableOrSuperclassEitherWay(var2.type))) {
-      // System.out.printf("comparableByType: case 3 return false%n");
-      return false;
-    }
-
     if (Daikon.check_program_types
       && (var1.file_rep_type != var2.file_rep_type)) {
       // System.out.printf("comparableByType: case 4 return false%n");
       return false;
     }
+
+    // If the file rep types match then the variables are comparable unless
+    // their dimensions are different.
+    if (!dkconfig_declared_type_comparability) {
+      if (var1.type.dimensions() != var2.type.dimensions()) {
+        // debug_print_once ("types %s and %s are not comparable",
+        //                    var1.type, var2.type);
+        return (false);
+      }
+      return (true);
+    }
+
+
+    if (Daikon.check_program_types
+      && (!var1.type.comparableOrSuperclassEitherWay(var2.type))) {
+      // debug_print_once ("types %s and %s are not comparable",
+      //                     var1.type, var2.type);
+      return false;
+    }
+    // debug_print_once ("types %s and %s are comparable",
+    //                  var1.type, var2.type);
 
     // System.out.printf("comparableByType: fallthough return true%n");
     return true;
@@ -2009,6 +2034,18 @@ public final class VarInfo implements Cloneable, Serializable {
       return this;
     } else
       return equalitySet.leader();
+  }
+
+
+  private static Set<String> out_strings = new LinkedHashSet<String>();
+
+  /** If the message is new print it, otherwise discard it **/
+  static void debug_print_once (String format, Object... args) {
+    String msg = String.format (format, args);
+    if (!out_strings.contains (msg)) {
+      System.out.println (msg);
+      out_strings.add (msg);
+    }
   }
 
 }
