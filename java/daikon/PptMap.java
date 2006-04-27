@@ -13,7 +13,8 @@ public class PptMap
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
-  private final Map<String,PptTopLevel> nameToPpt = new HashMap<String,PptTopLevel>();
+  private final Map<String,PptTopLevel> nameToPpt
+    = new LinkedHashMap<String,PptTopLevel>();
 
   public void add(PptTopLevel ppt) {
     nameToPpt.put(ppt.name(), ppt);
@@ -35,6 +36,11 @@ public class PptMap
 
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
+  }
+
+  /** Returns all of the program points in the map **/
+  public Collection<PptTopLevel> all_ppts() {
+    return (nameToPpt.values());
   }
 
   /**
