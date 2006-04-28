@@ -162,6 +162,15 @@ if (!$saw_comparability) {
   seek(DECLS, 0, 0);
 }
 
+my $lwpp_mode = "robust";
+if (exists $ENV{"LWPP_MODE"}) {
+  $lwpp_mode = $ENV{"LWPP_MODE"};
+}
+
+if ($lwpp_mode eq "fast") {
+  start_lackwit();
+}
+
 open OUT, ">$outfn" or die_and_restore "Can't open $outfn for write: $!\n";
 print OUT "VarComparability\n";
 print OUT "implicit\n";
@@ -219,6 +228,10 @@ foreach my $implicit_type (sort {$a <=> $b;} values %explicit_to_implicit) {
   my %explicit_types = reverse %explicit_to_implicit;
   my $explicit_type = $explicit_types{$implicit_type};
   printf OUT "# %3s : $explicit_type\n", $implicit_type;
+}
+
+if ($lwpp_mode eq "fast") {
+  stop_lackwit();
 }
 
 # finished processing
@@ -458,16 +471,56 @@ sub lackwit {
 
   my $key = "$variable $function";
   if (exists $cache{$key}) {
-    return $cache{$key};
+    return ${$cache{$key}};
   }
 
-  my $retval = _lackwit(@_);
-  $cache{$key} = $retval;
+  my $retval;
+  if ($lwpp_mode eq "fast") {
+    $retval = _lackwit_fast(@_);
+  } else {
+    $retval = _lackwit_robust(@_);
+  }
+  $cache{$key} = \$retval;
+  for my $line (split /\n/, $retval) {
+    if ($line =~ /^\(.*\) ([^:]+):([^:]+)$/) {
+      my($other_func, $other_var) = ($1, $2);
+      my $key = "$other_var $other_func";
+      if (not exists $cache{$key}) {
+        $cache{$key} = \$retval;
+      }
+    }
+  }
   return $retval;
 }
 
+use IPC::Open2 'open2';
+my($lackwit_pid, $lackwit_in_fh, $lackwit_out_fh);
 
-sub _lackwit {
+sub start_lackwit {
+  $lackwit_pid = open2($lackwit_out_fh, $lackwit_in_fh,
+                       "BackEnd -batch");
+}
+
+sub stop_lackwit {
+  print $lackwit_in_fh "quit\n";
+  waitpid $lackwit_pid, 0;
+}
+
+sub _lackwit_fast {
+  my ($function, $variable) = @_;
+  while (my $line = <$lackwit_out_fh>) {
+    last if $line eq "<<READY FOR COMMAND>>\n";
+  }
+  print $lackwit_in_fh "searchlocal $function:$variable -all\n";
+  my @lines;
+  while (my $line = <$lackwit_out_fh>) {
+    last if $line eq "<<END OF RESPONSE>>\n";
+    push @lines, $line unless $line =~ /[#\@\{]/;
+  }
+  return join("", @lines);
+}
+
+sub _lackwit_robust {
   my ($function, $variable) = @_;
   # On Solaris, "sh -c" is required to prevent the 'Segmentation Fault'
   # error message from going to standard error.  For some reason, in
