@@ -26,6 +26,7 @@
 --exclude-redirect http://pag.csail.mit.edu/~smcc/->http://people.csail.mit.edu/people/smcc/
 --exclude-redirect http://pag/daikon/mit/log2html.php->http://www.pag.csail.mit.edu/daikon/mit/log2html.php
 --exclude-redirect http://student.mit.edu/catalog/index.cgi->http://student.mit.edu/@8178100.17571/catalog/index.cgi	
+--exclude-redirect http://texi2html.cvshome.org/->http://ximbiot.com/cvs/
 --exclude-redirect http://www.a1trails.com/xc_ski/xc_ma.html->http://www.a1trails.com/home/nospiders.html
 --exclude-redirect http://www.a1trails.com/xc_ski/xc_nh.html->http://www.a1trails.com/home/nospiders.html
 --exclude-redirect http://www.amtrak.com/->http://www.amtrak.com/servlet/ContentServer?pagename=Amtrak/HomePage
@@ -40,6 +41,7 @@
 --exclude-redirect http://www.jmlspecs.org/->http://www.cs.iastate.edu/~leavens/JML/
 --exclude-redirect http://www.nsf.gov/home/cise/->http://www.nsf.gov/dir/index.jsp?org=CISE
 --exclude-redirect http://www.pricegrabber.com/->http://www.pricegrabber.com/spiders.php
+--exclude-redirect http://www.rational.com/licensing->http://www-306.ibm.com/software/rational/support/licensing/
 --exclude-redirect http://www.rational.com/licensing/->http://www-306.ibm.com/software/rational/support/licensing/
 --exclude-redirect http://www.usps.gov/ncsc/lookups/lookup_zip%2B4.html->http://www.usps.com/ncsc/lookups/lookup_zip%2b4.html	
 --exclude-redirect https://tree-api.dev.java.net/->https://www.dev.java.net/servlets/Login?cookieCheck=failed
