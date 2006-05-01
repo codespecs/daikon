@@ -49,6 +49,11 @@ Daikon
     ratio squared will also be considered equal to 0.0.  The fuzzy
     ratio is set via the configuration option daikon.Invariant.fuzzy_ratio
 
+  Bug Fixes
+
+    Fixed a bug in the Simplify formatting of index comparison invariants
+    that occurred on slices starting from non-zero indices.
+
 --------------------------------------------
 
 4.2.4 (April 1, 2006)
