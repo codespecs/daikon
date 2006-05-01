@@ -20,6 +20,37 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.5 (May 1, 2006)
+
+Some enhancements were made to Daikon.  The list of modified and
+unmodified variables in DBC and JML output is more accurate.  A 
+configuration option was added to control the method by which Daikon
+determines variable comparability.  And the treatment of values near
+zero with fuzzy comparisons has been changed.
+
+Daikon
+
+  User-visible changes
+
+    Changed the way that modified/unmodified variables are determined
+    in DBC and JML output.  The new version uses equality invariants
+    between pre and post variables to provide more complete information.
+
+    Added daikon.VarInfo.declared_type_comparability configuration option.
+    By default, Daikon only considers variables declared with the same
+    type name to be comparable.  If this option is set to false, Daikon
+    does not consider the type name in determining comparability.
+
+    Floating point values are subject to roundoff errors so Daikon
+    compares them with a "fuzzy" rather than exact test.  Previously
+    the test always used a relative comparison.  Under this approach a
+    floating point value of 0.0 was only equal to exactly 0.0.  This
+    test has been changed so that values closer to zero than the fuzzy
+    ratio squared will also be considered equal to 0.0.  The fuzzy
+    ratio is set via the configuration option daikon.Invariant.fuzzy_ratio
+
+--------------------------------------------
+
 4.2.4 (April 1, 2006)
 
 This is a bug-fix release.  Several bugs in Daikon were fixed.
