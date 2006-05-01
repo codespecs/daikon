@@ -56,9 +56,9 @@ public class FuzzyFloat {
    * Test d1 and d2 for equality using the current ratio.  Two NaN floats
    * are not considered equal (consistent with the == operator). <p>
    *
-   * Note that since a ratio is used, that no number is close enough to zero
-   * to be considered equal to zero (since the difference between the two is
-   * equal to the non-zero one, so the difference is 100%).
+   * Note that if one of the numbers if 0.0, then the other number must
+   * be less than the square of the fuzzy ratio.  This policy accomodates
+   * round off errors in floating point values.
    *
    * @return true if d1 and d2 are considered equal, false otherwise
    */
@@ -79,24 +79,22 @@ public class FuzzyFloat {
     if (d1 == d2)
       return (true);
 
-    double zero_tolerance = Math.pow((max_ratio - 1), 2);
+    // when one number is 0, check that the other is less than the square
+    // of the fuzzy ration (accomodates round off errors in floating point
+    // values)
 
-    // Only zero matches no matter what the ratio.  Saves on overflow checks
-    // below as well.
-    if (d1 == 0.0) {
+    if (d1 == 0.0 || d2 == 0.0) {
 
+      double zero_tolerance = Math.pow((max_ratio - 1), 2);
 
-      if (((d1 + zero_tolerance) > d2) && (d1 - zero_tolerance) < d2)
-        return true;
-      else
-        return false;
+      if (d1 == 0.0) {
 
-    } else if (d2 == 0.0) {
+        return (Math.abs(d2) < zero_tolerance);
 
-      if (((d2 + zero_tolerance) > d1) && (d2 - zero_tolerance) < d1)
-        return true;
-      else
-        return false;
+      } else {
+
+        return (Math.abs(d1) < zero_tolerance);
+      }
     }
 
     double ratio = d1/d2;
