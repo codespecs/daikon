@@ -347,8 +347,8 @@ chicory:
 daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
-	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' all_directly
-	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar:${INV_DIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' all_notest
+	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' all_directly
+	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' all_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
 	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/${USER}/daikon-jar
@@ -361,11 +361,12 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar)
+	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar)
 	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/${USER}/daikon-jar && \
 	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
 	mv /tmp/${USER}/daikon-jar/$@ $@
-	rm -rf /tmp/${USER}/daikon-jar
+	#rm -rf /tmp/${USER}/daikon-jar
 
 # This rule creates the files that comprise the distribution, but does
 # not copy them anywhere.
@@ -450,6 +451,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -pR java/jtb /tmp/daikon/java/
 	## BCEL
 	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
+	## Apache commons
+	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/commons-io.jar)
 
 	## JUnit
 	# This is wrong:
