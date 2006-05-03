@@ -3718,6 +3718,12 @@ level of sequences that Daikon allows in the .dtrace output format
 (e.g. an array of structs where each struct contains a statically-sized
 array).
 
+@item --array-length-limit=@var{N}
+Only visit at most the first @var{N} elements of all arrays.  This can
+improve performance at the expense of losing coverage; it is often
+useful for tracing selected parts of programs that use extremely large
+arrays or memory buffers.
+
 @item --output-struct-vars
 This option forces Kvasir to output .decls and .dtrace entries for
 struct variables.  By default, Kvasir ignores struct variables because
@@ -3766,7 +3772,7 @@ report.
 
 This pauses the program's execution in an infinite loop during
 initialization.  You can attach a debugger such as @code{gdb} to the
-running process by running gdb on @file{inst/lib/valgrind/stage2} under
+running process by running gdb on @file{inst/lib/valgrind/x86-linux/fjalar} under
 the Kvasir directory and using the @code{attach} command.
 
 @item --debug
@@ -3957,7 +3963,7 @@ as demonstrated here:
 #..firstFileFunction(int)
 ..main()
 #second_file.cpp.staticFoo(int, int)
-..secondFileFunction()
+#..secondFileFunction()
 @end example
 @noindent
 When running Kvasir with the @option{--ppt-list-file} option using this
@@ -4037,7 +4043,7 @@ For clarity, one or more blank lines should separate neighboring sections,
 although the ``@code{----SECTION----}'' string literal on a line by itself is the only
 required delimiter.  If an entire section is missing, then no variables
 for that program point (or no global variables, if it is the special
-global section) are traced.
+globals section) are traced.
 
 The variables listed in this file are written exactly as they appear in
 the .decls and .dtrace file (@pxref{Using Kvasir} section
@@ -4122,7 +4128,7 @@ By default, Kvasir treats all pointers as referencing arrays.  For
 instance, it would print @code{result[]} rather than @code{result[0]}
 and would indicate that the length of array @code{result[]} is always 1.
 In order to improve the formatting of Daikon's output (and to speed it
-up), you can indicate to Daikon that certain pointers refer to single
+up), you can indicate to Kvasir that certain pointers refer to single
 elements rather than to arrays.
 For an example, see @ref{Pointer type disambiguation example}).
 
