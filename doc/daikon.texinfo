@@ -33,7 +33,7 @@
 
 @c @ifinfo
 @c @c This text appears only in the Info Version.
-@c 
+@c
 @c Copyright 1998-2005
 @c @end ifinfo
 
@@ -76,7 +76,7 @@ Copyright @copyright{} 1998-2005
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
-@c but it's acceptable. 
+@c but it's acceptable.
 @ifnothtml
 @contents
 @end ifnothtml
@@ -88,7 +88,7 @@ Copyright @copyright{} 1998-2005
 @c Unfortunately, the Daikon logo doesn't look good in ASCII.
 @c @ifinfo
 @c @image{images/daikon-logo,4in,}
-@c 
+@c
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
 It describes Daikon version 4.2.5, released May 1, 2006.
@@ -301,10 +301,10 @@ Tools for manipulating invariants
 
 Invariant Diff
 
-* Annotate::                    
-* Runtime-check instrumenter::  
-* InvariantChecker::            
-* LogicalCompare::              
+* Annotate::
+* Runtime-check instrumenter::
+* InvariantChecker::
+* LogicalCompare::
 
 Runtime-check instrumenter (runtimechecker)
 
@@ -394,7 +394,7 @@ to add new properties (@pxref{Enhancing Daikon output}).
 
 Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
-observed executions.  
+observed executions.
 @c Daikon's output, which is sometimes called an ``operational abstraction'',
 @c looks like a formal specification, or the contents of assert statements.
 Daikon can detect properties in C, C++, Java,
@@ -468,7 +468,7 @@ invariants in Java programs.  Use the complete installation instructions
 programs, or if you wish to edit the source code of Daikon itself.
 
 Differences between various versions of Daikon appear
-in the file @file{doc/CHANGES} in the distribution.  
+in the file @file{doc/CHANGES} in the distribution.
 You may wish to subscribe to one of the mailing lists
 (@pxref{Mailing lists}), in order to be notified of new releases or join
 discussions with other Daikon users and developers.
@@ -549,7 +549,7 @@ If you wish to edit the Daikon source code and re-compile Daikon, see
 @enumerate
 @item
 In the directory where you want to install Daikon (we'll call this
-the @var{daikonparent} directory), 
+the @var{daikonparent} directory),
 download and unpack Daikon.  Daikon is available as a zip file from
 @uref{http://pag.csail.mit.edu/daikon/download/daikon.zip} or
 as a tar file from
@@ -586,7 +586,7 @@ be on your Java classpath.  One easy way to do this is to make your
 shell initialization file set the @env{DAIKONDIR} environment variable (to
 an absolute pathname) and source the appropriate Daikon environment
 file.  (Alternately, you could set your classpath yourself.)
-@itemize 
+@itemize
 @item
 @cindex C shell
 @cindex csh shell
@@ -704,7 +704,7 @@ The second option for Windows is to run Daikon using the Cygwin
 toolset (available at @uref{http://sources.redhat.com/cygwin/}), which
 contains everything you need to compile and run Unix programs under
 Windows.  You can install Cygwin by simply running the program found
-at @uref{http://sources.redhat.com/cygwin/setup.exe}.  
+at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
 There is an incompatibility between Cygwin and programs compiled for
 Windows.  (The incompatibility does not exist if the program was
@@ -800,8 +800,8 @@ java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @c @subsection Eclipse plug-in
 @c @cindex Eclipse plug-in
 @c @cindex GUI, Eclipse
-@c 
-@c Daikon is integrated with the 
+@c
+@c Daikon is integrated with the
 @c @uref{http://eclipse.org/, ,
 @c Eclipse} IDE (Integrated Development Environment) for Java.
 @c The Daikon plug-in provides a convenient way to instrument files,
@@ -810,11 +810,11 @@ java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @c For
 @c details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
 @c documentation}.
-@c 
-@c As of this writing (February 11, 2005), the plug-in only works with 
+@c
+@c As of this writing (February 11, 2005), the plug-in only works with
 @c Daikon 3 (for instance, version 3.1.7), not with Daikon 4.  Support for
 @c Daikon 4 is underway.
-@c 
+@c
 @c For brief troubleshooting information, see @ref{Eclipse plug-in problems}.
 
 
@@ -892,7 +892,7 @@ For more information about the Annotate program, see @ref{Annotate}.
 @c contains a tree that hierarchically organizes program points according
 @c to their class and method.  Using the GUI, you can look at invariants
 @c for only the methods and program points you care about.
-@c 
+@c
 @c @example
 @c java daikon.gui.treeGUI.InvariantsGUI StackAr.inv.gz
 @c @end example
@@ -900,7 +900,7 @@ For more information about the Annotate program, see @ref{Annotate}.
 @c @item Use the Daikon Context GUI to browse the invariants.  As you move
 @c the cursor in an editor window, the Context GUI displays the invariants
 @c applicable to the current location (class or method).  For details on
-@c running the Context GUI, see @ref{Context GUI}.  
+@c running the Context GUI, see @ref{Context GUI}.
 
 @end itemize
 @end enumerate
@@ -919,7 +919,7 @@ implementation.  Now, look at the first section of Daikon output.
 @c   In
 @c the Tree GUI, expand the node labeled @command{StackAr}, then select the
 @c node labeled @command{StackAr:Object}.
-@c 
+@c
 @c @emph{(Note: The invariants displayed in the Tree GUI may be different than the
 @c invariants written to standard out by Daikon.  This is because the
 @c invariants are being filtered differently.  We are currently working
@@ -1108,7 +1108,7 @@ longer.
 
 @item Examine the invariants.  As described in @xref{StackAr example},
 there are several ways to do this:
-@itemize 
+@itemize
 @item Examine the output from running Daikon.
 @item Use the PrintInvariants program to display the invariants.
 @c @item Use the Daikon Tree GUI to browse the invariants.  (Deprecated.)
@@ -1159,7 +1159,7 @@ process: first you must run the annotated program so that the runtime
 system can dynamically infer the kind of data stored in each variable,
 and then you must re-annotate and re-run the program with the added
 type information.
-This is necessary because Perl programs do not contain type declarations. 
+This is necessary because Perl programs do not contain type declarations.
 
 dfepl requires version 5.8 or later of Perl.
 
@@ -1299,7 +1299,7 @@ java daikon.PrintInvariants Birthday.inv.gz
 @c java daikon.gui.treeGUI.InvariantsGUI Birthday.inv.gz
 
 Invariants produced from Perl programs can be examined using the same
-tools as other Daikon invariants. 
+tools as other Daikon invariants.
 @end enumerate
 
 In the example above, the script @file{test_bday.pl} was not itself
@@ -1350,7 +1350,7 @@ is to include every declaration file created when instrumenting the
 program.
 
 Not all Daikon front ends produce @file{.decl} files, since program point
-declarations may also appear in @file{.dtrace} files.  For instance, the 
+declarations may also appear in @file{.dtrace} files.  For instance, the
 Chicory front end for Java (@pxref{Chicory}) produces only @file{.dtrace}
 files.  If there are no @file{.decl} files, then it is not necessary to
 include them on the command line to Daikon.
@@ -1494,14 +1494,14 @@ unused program points, or program points with many variables.
 @cindex confidence limit
 @item --conf_limit @var{val}
 Set the confidence limit for justifying invariants, which is used to filter
-invariants which are satisfied purely by chance from Daikon's output.  
-@var{val} must be between 0 and 1; the default is .99 (1%).  Larger values 
+invariants which are satisfied purely by chance from Daikon's output.
+@var{val} must be between 0 and 1; the default is .99 (1%).  Larger values
 yield stronger filtering.
 
 @item --list_type @var{classname}
 Indicate that the given class implements the @code{java.util.List}
 interface.  The preferred mechanism for indicating such information is
-the @code{ListImplementors} section of the @file{.decls} file.  
+the @code{ListImplementors} section of the @file{.decls} file.
 See @ref{ListImplementors declaration}.
 
 @item --nohierarchy
@@ -1509,8 +1509,8 @@ See @ref{ListImplementors declaration}.
 @cindex unmatched entries, not ignoring
 Avoid connecting program points in a dataflow hierarchy.  For example,
 Daikon normally connects the @code{:::ENTER} program points of class methods
-with the class's @code{:::CLASS} program point, so that any invariant 
-that holds on the @code{:::CLASS} program point is considered to hold 
+with the class's @code{:::CLASS} program point, so that any invariant
+that holds on the @code{:::CLASS} program point is considered to hold
 true on the @code{:::ENTER}
 program point.  With no hierarchy, each program point is treated
 independently.  This is for using Daikon on applications that do not
@@ -1614,7 +1614,7 @@ must match in order for a printout to occur.  For more information, see
 @item --disc_reason @var{inv_class}<@var{var1},@var{var2},...>@@@var{ppt}
 Prints all discarded invariants of class @var{inv_class} at the program point
 specified that involve exactly the variables given, as well as a short reason
-and discard code explaining why they were not worthy of print.  Any of 
+and discard code explaining why they were not worthy of print.  Any of
 the three parts of the argument may be made a wildcard by excluding it.
 For example, @samp{@var{inv_class}} and
 @samp{<@var{var1},@var{var2},...>@@@var{ppt}} are valid arguments.
@@ -1686,7 +1686,7 @@ that value is not interesting to report.  Typically this means that
 variable was never rebound to a different object, but it would not be
 helpful to print out what the hashcode or address of that object
 happened to be at runtime.  @samp{@var{var} has only one value} differs from
-saying that @var{var} is unmodified.  
+saying that @var{var} is unmodified.
 
 A variable can have only one value but not be reported as unmodified
 because the variable is not a parameter to a procedure --- for instance,
@@ -1734,7 +1734,7 @@ modeled using I/O automata; for details, see
 @item Java format
 Write output as Java expressions.  This means that each invariant
 would be a valid Java expression, if inserted at the correct program
-point: right after method entry, for method entry invariants; 
+point: right after method entry, for method entry invariants;
 right before method exit, for method exit invariants;, or anywhere in
 the code, for object invariants.
 
@@ -1820,8 +1820,8 @@ suffixing them with their line numbers; for instance,
 this example, @code{StackAr.top():::EXIT}) collects the postconditions
 that are true at every numbered exit point.  This is an example of a
 program point that represents a collection of locations in the program
-source rather than a single location.  This concept is referred to as 
-@emph{hierarchy}.  
+source rather than a single location.  This concept is referred to as
+@emph{hierarchy}.
 
 @cindex :::OBJECT program point
 @cindex OBJECT program point
@@ -2126,7 +2126,7 @@ The pre-state value of @code{a[1]} (because the post-state value of
 
 If nothing gets printed before the @samp{Exiting} line, then Daikon
 found no invariants.  You can get a little bit more information by using
-the @option{--output_num_samples} flag to Daikon 
+the @option{--output_num_samples} flag to Daikon
 (@pxref{Options to control Daikon output}).
 
 
@@ -2134,7 +2134,7 @@ By default, Daikon does not display redundant invariants --- those
 that are implied by other invariants in the output --- because such
 results would merely clutter the output without adding any valuable
 information.  For instance, if Daikon reports @samp{x==y}, then it never
-also reports @samp{x-1==y-1}.  You can control this behavior to some extent by 
+also reports @samp{x-1==y-1}.  You can control this behavior to some extent by
 disabling invariant filters; @xref{Invariant filters}.
 (You can also print all invariants, even
 redundant ones, by saving the invariants to a @file{.inv} file and
@@ -2151,7 +2151,7 @@ then using the PrintInvariants (@pxref{Printing invariants}) or Diff
 When two or more variables are always equal, any invariant that
 is true over one variable is true over all of the variables.  Daikon
 prints invariants only over one variable (the leader) from the equal
-set. 
+set.
 
 An equality invariant is printed for each non-leader in the equal set.
 For example, if the variables @code{a}, @code{b}, and @code{c} are all
@@ -2167,7 +2167,7 @@ and @samp{a=c}.
 The following is a list of all of the invariants that Daikon detects.
 Each invariant has a configuration enable switch.  By default most invariants
 are enabled.  Any that are not enabled by default are indicated below.
-Some invariants also have additional configuration switches that control 
+Some invariants also have additional configuration switches that control
 their behavior.  These are indicated below as well.
 @xref{Options to enable/disable specific invariants}.
 
@@ -2241,7 +2241,7 @@ invariants will be suppressed by this filter.
 @item ParentFilter:  filter invariants that match a parent program point invariant
 
 A controlled invariant is an invariant that is ``controlled'' --- or
-implied --- by a parent program point in the dataflow hierarchy.  
+implied --- by a parent program point in the dataflow hierarchy.
 For example, for Java instrumented
 code each class is associated with an object program point, which
 contain invariants that are found at the entry and exit of all public
@@ -2266,7 +2266,7 @@ Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this filter.
 
-If you don't also specify the @option{--suppress_redundant} command-line 
+If you don't also specify the @option{--suppress_redundant} command-line
 option to enable Simplify processing, this filter doesn't do anything.
 
 @cindex UnjustifiedFilter
@@ -2323,8 +2323,8 @@ You may also specify a configuration setting directly on the command line,
 using the @option{--config_option @var{name}=@var{value}} option.
 
 The configuration options are different from the debugging flags
-@option{--debug} and @option{--dbg @var{category}} 
-(@pxref{Daikon debugging options}).  
+@option{--debug} and @option{--dbg @var{category}}
+(@pxref{Daikon debugging options}).
 The debugging flags permit Daikon to produce debugging
 output, but they do not affect the invariants that Daikon computes.
 
@@ -2345,7 +2345,7 @@ its source code.
 
 @c The config options are categorized into sections by pattern-matching
 @c their names.  If you are adding new options, you might want to choose
-@c names similar to those of similar options.  
+@c names similar to those of similar options.
 @c Currently the categories are:
 @c   daikon.inv.filter.*.enabled  -> turn filters on/off
 @c   daikon.inv.*.enabled -> turn invariant detection on/off
@@ -2398,7 +2398,7 @@ To detect conditional invariants and implications:
 @item
 Create the splitter info file, either automatically or by hand.
 @item
-Run Daikon with the @file{.spinfo} file as one of its arguments.  
+Run Daikon with the @file{.spinfo} file as one of its arguments.
 (The order of arguments does not matter.)
 For example,
 @example
@@ -2560,7 +2560,7 @@ same variables are in scope or other variables of the same name are in
 scope.  The disadvantage of indiscriminate splitting is that often the
 condition is not applicable everywhere, and when it is, it may not be
 useful at all such locations, so checking for many conditional
-invariants may slow down Daikon without a corresponding benefit. 
+invariants may slow down Daikon without a corresponding benefit.
 Indiscriminate splitting can result in Daikon attempting
 to use many conditions that are inappropriate at certain program
 points, for instance because the program point does not have (in
@@ -2572,7 +2572,7 @@ proceeds, using conditions wherever they are valid.
 
 By default, Daikon uses indiscriminate splitting.  To use
 non-indiscriminate splitting, place the following line in a file that is
-passed to Daikon via the @option{--config} flag 
+passed to Daikon via the @option{--config} flag
 (@pxref{Daikon configuration options}):
 @example
 daikon.split.SplitterList.all_splitters = false
@@ -2597,15 +2597,15 @@ also demonstrates some other features.
 
 @smallexample
 class simpleStack @{
- 
+
   private int[] myArray;
   private int currentSize;
- 
+
   public simpleStack(int capacity) @{
     myArray = new int[capacity];
     currentSize = 0;
   @}
- 
+
   /** Adds an element to the back of the stack, if the stack is
     * not full.
     * Returns true if this succeeds, false otherwise.  **/
@@ -2618,7 +2618,7 @@ class simpleStack @{
       return false;
     @}
   @}
- 
+
   /** Returns the most recently inserted stack element.
     * Returns -1 if the stack is empty. **/
   public int pop() @{
@@ -2693,7 +2693,7 @@ automatically create splitter info files for use by Daikon.
 In static analysis, all explicitly stated boolean statements in the program
 source are extracted and used as splitting conditions.  The assumption is that
 conditions that are explicitly tested in the program are likely to affect the
-program's behavior and could lead to useful conditional invariants.  
+program's behavior and could lead to useful conditional invariants.
 
 The CreateSpinfo program takes Java source code as input and creates a
 splitter info file for each input file; for instance,
@@ -2710,7 +2710,7 @@ boolean expression that appears in the source code.  The conditional
 statements that the programmer used in the source code are likely to
 have important semantic properties.  This simple heuristic of using
 these conditional statements as predicates for conditional invariant
-detection is often quite effective.  
+detection is often quite effective.
 
 If you get an error such as
 @example
@@ -2788,7 +2788,7 @@ and @samp{xm} (for xmeans).  The default is @samp{xm}.
 The number of clusters to use (for algorithms which require
 this input, which is everything except xmeans).  The default is 4.
 
-@item --keep    
+@item --keep
 Don't delete the temporary files created by the clustering
 process.  This is a debugging flag.
 @end table
@@ -2841,7 +2841,7 @@ the samples.
 @item -INCLUDE_UNRETURNED
 Allows random selection to choose method invocations that entered the
 method successfully but did not exit normally; either from a thrown
-Exception or abnormal termination. 
+Exception or abnormal termination.
 
 @item -DO_DIFFS
 Creates an spinfo file for generating conditional invariants and
@@ -2912,7 +2912,7 @@ creates data trace (@file{.dtrace}) files, and optionally runs Daikon on
 them.  Chicory is named after the chicory plant, whose root is sometimes
 used as a coffee substitute or flavor enhancer.
 
-To use Chicory, run your program as you normally would, but 
+To use Chicory, run your program as you normally would, but
 replace the @command{java} command with @command{java daikon.Chicory}.  For
 instance, if you usually run
 @example
@@ -2924,7 +2924,7 @@ then instead you would run
 java daikon.Chicory mypackage.MyClass arg1 arg2 arg3
 @end example
 @noindent
-This runs your program and creates file @file{MyClass.dtrace} 
+This runs your program and creates file @file{MyClass.dtrace}
 in the current directory.
 Furthermore, a single command can both create a trace file and run Daikon:
 @example
@@ -2933,7 +2933,7 @@ java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @noindent
 See below for more options.
 
-That's all there is to it!  Since Chicory instruments class files 
+That's all there is to it!  Since Chicory instruments class files
 directly as they are loaded into Java,
 you do not need to perform separate instrumentation and recompilation steps.
 However, you should compile your program with debugging information
@@ -2988,7 +2988,7 @@ Chicory's output.
 Only produce trace output for classes/procedures/program points whose
 names match the
 given regular expression.  This option may be supplied multiple times,
-but it cannot be used in conjunction with @option{--ppt-omit-pattern}.  
+but it cannot be used in conjunction with @option{--ppt-omit-pattern}.
 
 When this switch is supplied, filtering occurs in the following way:
 for each program point, Chicory checks the fully
@@ -2997,7 +2997,7 @@ the program point name against each @var{regexp} that
 was supplied.  If any of these match, then the program point is included
 in the instrumentation.
 
-Suppose that method @code{bar} is defined only in class @code{C}.  Then to 
+Suppose that method @code{bar} is defined only in class @code{C}.  Then to
 traces only @code{bar}, you could match the method name (in any class)
 with regular expression
 @samp{bar$}, or you could match the program point name with @samp{C\.bar\(}.
@@ -3023,7 +3023,7 @@ instrumented program run faster, since it need not output those variables.
 
 This option works just like @option{--ppt-select-pattern} does, except
 that matching program points are excluded, not included.
- 
+
 The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
 if its fully qualified class, procedure name, or
@@ -3036,7 +3036,7 @@ if its fully qualified class, fully qualified procedure name, or
 complete program point name exactly matches one of the omitting criteria.
 A regular expression matches if it matches any portion of the program
 point name.  Note that currently only classes are matched, not each full
-program point name.  Thus, either all of a class's methods are traced, 
+program point name.  Thus, either all of a class's methods are traced,
 or none of
 them are.
 
@@ -3137,9 +3137,9 @@ will be omitted from each program point in which they appear.
 @cindex variables, private
 When this switch is on, Chicory will traverse exactly those fields that are
 visible from a given program point.  For instance, only the public
-fields of class @code{pack1.B} will be included at a program point for 
+fields of class @code{pack1.B} will be included at a program point for
 class @code{pack2.A} whether or not @code{pack1.B} is instrumented.
-By default, Chicory outputs all fields in instrumented classes (even 
+By default, Chicory outputs all fields in instrumented classes (even
 those that would not be accessible in Java code at the given program point)
 and outputs no fields from uninstrumented classes (even those that are
 accessible). When you supply
@@ -3159,14 +3159,14 @@ For each variable, Chicory adds to the trace new ``fields'' that
 represent invoking each pure method on the variable.  (Currently,
 Chicory does so only for pure methods that take no parameters, and
 obviously this mechanism is only useful for methods that return a value:
-a pure method that returns no value does nothing!)  
+a pure method that returns no value does nothing!)
 
 Here is an example:
 
 @example
 class Point @{
   private int x, y;
-  public int radiusSquared() @{ 
+  public int radiusSquared() @{
     return x*x + y*y;
   @}
 @}
@@ -3194,7 +3194,7 @@ followed by a parenthesized, comma-separated list of the method's formal
 parameter types. If the method throws checked exceptions, the parameter
 list is followed by a space, followed by the word throws followed by a
 comma-separated list of the thrown exception types. For example:
-@example 
+@example
 public boolean java.lang.Object.equals(java.lang.Object)
 @end example
 The access modifiers are placed in canonical order as specified by "The
@@ -3234,7 +3234,7 @@ Produce debugging information.
 When this option is chosen, Chicory will record each program point until
 that program point has been executed @var{sample-cnt} times.  Chicory will
 then begin sampling.  Sampling starts at 10% and decreases by a factor
-of 10 each time another sample-cnt samples have been recorded.  If 
+of 10 each time another sample-cnt samples have been recorded.  If
 sample_start is 0, then all calls will be recorded.
 
 @item --dtrace-file=@var{filename}
@@ -3259,8 +3259,8 @@ convenient; in other cases, a collection of smaller data trace files may
 give you more control over which subsets of runs to invoke Daikon on.
 
 @item --comparability-file=@var{filename}
-This option specifies a declaration file (see @ref{Declarations}) 
-that contains comparability information.  This information will be 
+This option specifies a declaration file (see @ref{Declarations})
+that contains comparability information.  This information will be
 incorporated in the output of Chicory.  Any variables not included in
 the comparability file will have their comparability set so that they
 are comparable to all other variables of the same type.
@@ -3302,7 +3302,7 @@ Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
 Chicory requires this jar file in order to execute.  By default Chicory
 looks for the jar file in the classpath and in @file{$(DAIKONDIR)/java}
 (where @env{DAIKONDIR} is an environment variable that points to the
-complete installation of Daikon).  
+complete installation of Daikon).
 
 Chicory can also use the @file{daikon.jar} file for this purpose.  If it
 doesn't find @file{ChicoryPremain.jar} above, it will use @file{daikon.jar}
@@ -3331,9 +3331,9 @@ the target program.  The size is specified in the same manner as the
 @cindex C/C++ front end
 
 Daikon's front end for C and C++, named Kvasir, executes C and C++
-programs and creates  
+programs and creates
 data trace (@file{.dtrace}) files of variables and their values by
-examining the operation of the binary at 
+examining the operation of the binary at
 runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
 It is built upon the Fjalar dynamic analysis framework for C and C++ programs
 (available at @uref{http://pag.csail.mit.edu/fjalar/}).
@@ -3341,8 +3341,8 @@ It is built upon the Fjalar dynamic analysis framework for C and C++ programs
 To use Kvasir, first compile your program using the DWARF-2 debugging
 format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
 without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
-Then, prefix your command line by @command{kvasir-dtrace}.  For example, 
-if you normally run your program with the command 
+Then, prefix your command line by @command{kvasir-dtrace}.  For example,
+if you normally run your program with the command
 @example
 ./program -option input.file
 @end example
@@ -3393,7 +3393,7 @@ able to compile and link your program normally.
 
 In the second step of using Kvasir, run your program as you normally
 would, but prepend the command @command{kvasir-dtrace} to the beginning.
-For instance, if you normally run your program with the command 
+For instance, if you normally run your program with the command
 @example
 ./program -option input.file
 @end example
@@ -3425,7 +3425,7 @@ Output file format:
 Write the @file{.decls} file listing the names of functions and
 variables (called declarations) to the specified file name.  This forces
 Kvasir to generate separate
-@file{.decls} and @file{.dtrace} files instead of outputting everything to the 
+@file{.decls} and @file{.dtrace} files instead of outputting everything to the
 @file{.dtrace} file, which is the default behavior.    If only a @file{.dtrace} file is
 created (default behavior), then it contains both variable declarations and a trace of
 values.  If separate @file{.decls} and @file{.dtrace} files are created,
@@ -3521,7 +3521,7 @@ given file.  Other program points (respectively variables) will be
 omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
 way to produce such files is by editing the output produced by the
 @option{--dump-ppt-file} (respectively, @option{--dump-var-file}) option
-described above.  (@pxref{Tracing only part of a program} section
+described below.  (@pxref{Tracing only part of a program} section
 for detailed instructions on using these options.)
 
 @item --dump-ppt-file=@var{filename}
@@ -3535,7 +3535,7 @@ then be used with the @option{--ppt-list-file} (respectively
 for detailed instructions on using these options.)
 Note: Do not use these options with the
 @option{--with-dyncomp} option because the behavior is undefined.
-Running Kvasir with these 
+Running Kvasir with these
 options will initialize but not actually execute the target program, so
 the dynamic comparability analysis cannot be performed in the first
 place.
@@ -3545,12 +3545,12 @@ place.
 Omit any global or static variables from the @file{.decls} and
 @file{.dtrace} files.  Leaving these out can significantly improve Kvasir
 and Daikon's performance, at the expense of missing properties involving
-them.  The default is to generate trace information for 
+them.  The default is to generate trace information for
 global and static variables.
 
 @item --ignore-static-vars
 
-Omit any static variables but generate trace information for 
+Omit any static variables but generate trace information for
 global variables in the  @file{.decls} and @file{.dtrace} files.
 
 @item --all-static-vars
@@ -3573,21 +3573,21 @@ and always outputs static variables at all program points.
 @table @option
 
 @item --disambig-file=@var{filename}
-Specifies the name of the pointer type disambiguation file 
+Specifies the name of the pointer type disambiguation file
 (@pxref{Pointer type disambiguation}).
-If this file exists, Kvasir uses it to make decisions about how 
-to output the referents of pointer variables.  If the file does not exist, 
+If this file exists, Kvasir uses it to make decisions about how
+to output the referents of pointer variables.  If the file does not exist,
 then Kvasir creates it.  This file may then be edited and used on
 subsequent runs. This option initializes but does not fully execute the
 target program (unless it is run with the @option{--smart-disambig}
 option).
 
 @item --disambig
-Tells Kvasir to create or read pointer type disambiguation 
-(@pxref{Pointer type disambiguation}) with the default filename, 
+Tells Kvasir to create or read pointer type disambiguation
+(@pxref{Pointer type disambiguation}) with the default filename,
 which is @file{@var{myprog}.disambig} in the same
-directory as the target program, where @var{myprog} is the name of the 
-target program. This is equivalent to 
+directory as the target program, where @var{myprog} is the name of the
+target program. This is equivalent to
 @samp{--disambig-file=@file{@var{myprog}.disambig}}.
 
 @item --smart-disambig
@@ -3713,7 +3713,7 @@ This option forces the flattening of statically-sized arrays into
 separate variables, one for each element.  For example, an array
 @var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
 @var{foo[1]}, @var{foo[2]}.  By default, Kvasir flattens
-statically-sized arrays only after is has already exhausted the one
+statically-sized arrays only after it has already exhausted the one
 level of sequences that Daikon allows in the .dtrace output format
 (e.g. an array of structs where each struct contains a statically-sized
 array).
@@ -3729,7 +3729,7 @@ denoted by a @code{# isStruct=true} annotation in their declarations.
 @item --nesting-depth=@var{N}
 
 For recursively-defined structures (structs or classes with members that
-are structs or classes or pointers to structs or classes of @emph{any} type), 
+are structs or classes or pointers to structs or classes of @emph{any} type),
 @var{N} (an integer between 0 and 100) specifies approximately how many levels
 of pointers to dereference.  This is useful for controlling the output
 of complex data structures with many references to other structures.
@@ -3739,9 +3739,9 @@ The default is 2.
 
 For recursively-defined structures (structs or classes with members that
 are pointers to the @emph{same} type of struct or class),
-@var{N} (an integer between 
-0 and 100) specifies approximately how many levels of pointers to dereference. 
-This is useful for controlling the output of linked lists and trees. 
+@var{N} (an integer between
+0 and 100) specifies approximately how many levels of pointers to dereference.
+This is useful for controlling the output of linked lists and trees.
 The default is 4.  If you are trying to traverse deep into data
 structures, try adjusting the @option{--struct-depth} and
 @option{--total-depth} options until Kvasir traverses deep enough to
@@ -4114,9 +4114,9 @@ sum(a, &total);        // use of "sum"
 @noindent
 the first pointer parameter refers to an array while the second refers to
 a single value.  Kvasir (and Daikon) should treat these values
-differently.  For instance, @code{*array} is better printed as @code{array[]}, 
-an array of integers, and @code{result[]} isn't a sensible array 
-at all, even though in C @code{result[0]} is semantically identical to 
+differently.  For instance, @code{*array} is better printed as @code{array[]},
+an array of integers, and @code{result[]} isn't a sensible array
+at all, even though in C @code{result[0]} is semantically identical to
 @code{*result}.
 By default, Kvasir treats all pointers as referencing arrays.  For
 instance, it would print @code{result[]} rather than @code{result[0]}
@@ -4128,15 +4128,15 @@ For an example, see @ref{Pointer type disambiguation example}).
 
 Information about whether each pointer refers to an array or a single
 element can be specified in a ``disambig file'' that resides in the
-same directory as the target program (by default).  The @option{--disambig} 
-option instructs Kvasir to read this file if it exists.  (If it does not exist, 
+same directory as the target program (by default).  The @option{--disambig}
+option instructs Kvasir to read this file if it exists.  (If it does not exist,
 Kvasir produces the file automatically and, if invoked along with the
-@option{--smart-disambig} option, heuristically infers whether each 
+@option{--smart-disambig} option, heuristically infers whether each
 pointer variable refers to single or multiple elements. Thus, users can
-edit this file for use on subsequent runs rather than having to create it 
-from scratch.)  The disambig file lists all the program points and user-defined 
-types, and under each, lists certain types of variables along with their 
-custom disambiguation types as shown below.  
+edit this file for use on subsequent runs rather than having to create it
+from scratch.)  The disambig file lists all the program points and user-defined
+types, and under each, lists certain types of variables along with their
+custom disambiguation types as shown below.
 The list of disambiguation options is:
 
 @enumerate
@@ -4160,7 +4160,7 @@ For pointers to (or arrays of) @code{char} and @code{unsigned char}:
 @item
 'P': a single integer.
 @end enumerate
-@item 
+@item
 For pointers to (or arrays of) all other variable types (if invoked
 along with @option{--smart-disambig}, Kvasir automatically infers a default 'A' or 'P' for each variable during the generation of a @file{.disambig} file):
 @enumerate
@@ -4179,7 +4179,7 @@ The disambig file that Kvasir creates contains a section for each
 function, which can be used to disambiguate parameter variables visible
 at that function's entrance program point and parameter and return
 value variables visible at that function's exit program point.  It also contains
-a section for every user-defined 
+a section for every user-defined
 struct/class, which can be used to disambiguate member variables of
 that struct/class.  Disambiguation information entered here will apply to all
 instances of a struct/class of that type, at all program points.
@@ -4264,7 +4264,7 @@ coercion work.
 @node    Pointer type disambiguation example, Using pointer type disambiguation with partial program tracing, Pointer type coercion, Pointer type disambiguation
 @subsubsection Pointer type disambiguation example
 
-This example demonstrates the power of pointer type disambiguation in creating 
+This example demonstrates the power of pointer type disambiguation in creating
 more accurate Daikon output.  Consider this file:
 
 @example
@@ -4279,7 +4279,7 @@ void foo(struct record* bar) @{
     bar->numbers[i] = (5 - i);
   @}
 @}
-     
+
 int main() @{
   char* myName = "Daikon User";
   struct record baz;
@@ -4288,16 +4288,16 @@ int main() @{
 @}
 @end example
 
-In @code{foo()}, @code{bar} is a pointer to a  @code{record} struct.  By inspection, it is 
-evident that in this program, @code{bar} only refers to one element: @code{&baz} 
-within @code{main}.  However, by default, Kvasir assumes that @code{bar} is an 
-array of @code{record} structs since a C pointer contains no information about 
-how many elements it refers to.  Because Kvasir must output @code{bar} as an 
-array and @w{@code{bar->numbers}} is an array of integers, it ``flattens'' 
+In @code{foo()}, @code{bar} is a pointer to a  @code{record} struct.  By inspection, it is
+evident that in this program, @code{bar} only refers to one element: @code{&baz}
+within @code{main}.  However, by default, Kvasir assumes that @code{bar} is an
+array of @code{record} structs since a C pointer contains no information about
+how many elements it refers to.  Because Kvasir must output @code{bar} as an
+array and @w{@code{bar->numbers}} is an array of integers, it ``flattens''
 @w{@code{bar->numbers}} into 5 separate arrays named @w{@code{bar->numbers[0]}}
-through @w{@code{bar->numbers[4]}} 
-and creates fairly verbose output.  This is a direct 
-consequence of the fact that Daikon can only handle one layer of sequences 
+through @w{@code{bar->numbers[4]}}
+and creates fairly verbose output.  This is a direct
+consequence of the fact that Daikon can only handle one layer of sequences
 (it cannot handle arrays within arrays, i.e., multi-dimensional arrays).
 
 Here is part of the Daikon output for this program:
@@ -4346,10 +4346,10 @@ bar[].numbers[4][0] elements == size(bar[]).numbers[0]
 size(bar[]).numbers[0] in bar[].numbers[4][0]
 @end example
 
-This is a bit verbose due to the fact that Kvasir treats @code{bar} like an array 
-by default when it actually only points to one element.  However, by running 
-Kvasir with the @option{--disambig} option, we create the 
-@file{@var{myprog}.disambig} file, which we can then edit and feed back to 
+This is a bit verbose due to the fact that Kvasir treats @code{bar} like an array
+by default when it actually only points to one element.  However, by running
+Kvasir with the @option{--disambig} option, we create the
+@file{@var{myprog}.disambig} file, which we can then edit and feed back to
 Kvasir to change how the pointer is treated.  (We run Kvasir twice on the same
 program, but we edit the @file{.disambig} file in between the runs.)
 @example
@@ -4367,12 +4367,12 @@ P
 
 This means that at the program points corresponding to the entry and
 exit of @code{foo()}, the variable @code{bar} is treated as a
-@samp{P}ointer type. 
+@samp{P}ointer type.
 Since we have used the @option{--smart-disambig} option,
-Kvasir automatically inferred Pointer instead of Array for @code{bar} 
-because it observed that @code{bar} only pointed to one element during the 
-execution of the target program which generated the @file{.disambig} file. 
-This heuristic allows users to use 
+Kvasir automatically inferred Pointer instead of Array for @code{bar}
+because it observed that @code{bar} only pointed to one element during the
+execution of the target program which generated the @file{.disambig} file.
+This heuristic allows users to use
 @file{.disambig} files more effectively with less manual editing.
 Without @option{--smart-disambig}, Kvasir does not execute the program
 to make such inferences, which allows .disambig files to be generated
@@ -4382,7 +4382,7 @@ this case, @code{bar} would have the default array type of
 
 Then, running Kvasir again with the @option{--disambig}
 option causes Kvasir to open the existing
-@file{@var{myprog}.disambig} file, read the definitions, and alter 
+@file{@var{myprog}.disambig} file, read the definitions, and alter
 the output accordingly:
 @example
 kvasir-dtrace @var{...options...} --disambig @var{myprog}.c
@@ -4512,7 +4512,7 @@ the @file{var-list-file} that you have just created and either the
 @option{--disambig} or @option{--disambig-file} option with the proper
 .disambig file.  This will perform the desired function: selective
 variable tracing along with disambiguation for all of the traced
-variables. 
+variables.
 @end enumerate
 
 For maximum control of the output, you can use selective program point
@@ -4746,7 +4746,7 @@ limitations are listed roughly in decreasing order of severity.
 @item
 Kvasir-traced programs take a while to start (often a good fraction of a
 second).  When tracing short-lived programs, this overhead can
-dominate Kvasir's per-instruction runtime overhead.  In order to make Kvasir 
+dominate Kvasir's per-instruction runtime overhead.  In order to make Kvasir
 run faster, try the @option{--ignore-globals}
 option in order to limit the amount of generated output.
 However, please keep in mind that, when running simultaneously with
@@ -4755,9 +4755,9 @@ output data much faster than Daikon can process it.  Thus, it is not the
 performance bottleneck in the entire invariant detection system.
 
 @item
-Kvasir's support for outputting arrays is not yet complete. 
-It still does not have the functionality to print out multidimensional 
-arrays with all of their elements or the option to flatten 
+Kvasir's support for outputting arrays is not yet complete.
+It still does not have the functionality to print out multidimensional
+arrays with all of their elements or the option to flatten
 multidimensional arrays into multiple single-dimensional arrays.
 
 @item
@@ -4814,14 +4814,14 @@ program analysis tool from Rational Software.  You must install Purify
 (either a paid or evaluation version) before you can use Mangel-Wurzel.
 
 Mangel-Wurzel is based on the EDG C/C++ front end, which is also commercial
-software.  For this reason, Mangel-Wurzel is distributed in precompiled 
+software.  For this reason, Mangel-Wurzel is distributed in precompiled
 binary form only.  See @ref{Installing Mangel-Wurzel}, for more information
 about installation.  If you have an EDG source license and would like to build
 or modify Mangel-Wurzel, we can provide source code on request.
 
 Mangel-Wurzel is named after a root vegetable grown as cattle fodder.
 It ``mangles'' the source code into a form that is not fit for human
-consumption before compiling it.  
+consumption before compiling it.
 
 
 @menu
@@ -4856,7 +4856,7 @@ To use Mangel-Wurzel in conjunction with Daikon, follow these steps
 
 @enumerate
 
-@item 
+@item
 Compile and link the program, using @command{mangel} in place of
 @command{cc}.  This produces both an
 instrumented executable and also a @file{.decls} file
@@ -4885,7 +4885,7 @@ mangel -c baz.c
 mangel -o foo foo.o bar.o baz.o
 @end example
 
-As a side-effect, the wurzel preprocessor invoked by mangel 
+As a side-effect, the wurzel preprocessor invoked by mangel
 produces a @file{.decls} file for each source file
 it processes, in this case @file{foo.decls}, @file{bar.decls}, and
 @file{baz.decls}.
@@ -4906,14 +4906,14 @@ You can also run your program from within the Purify GUI
 instead of from the command line, if you prefer.
 @end itemize
 
-This creates a single @file{.dtrace} file 
+This creates a single @file{.dtrace} file
 (in addition to anything else the program does).
 Assuming @file{foo.c} contains the @code{main} routine, the
 trace output for this example will be in @file{foo.dtrace}.
 How to run the instrumented program depends on your operating system.
 
 @item
-Invoke Daikon, passing all of the @file{.decls} files and the @file{.dtrace} 
+Invoke Daikon, passing all of the @file{.decls} files and the @file{.dtrace}
 file as inputs.
 
 @example
@@ -4960,20 +4960,20 @@ passed directly to the linker.
 @node Standard compiler options for Mangel, Mangel configuration options, Mangel options, Mangel options
 @subsubsection Standard compiler options for Mangel
 
-Mangel supports most of the common C compiler command-line options.  
+Mangel supports most of the common C compiler command-line options.
 
 @table @option
 
 @item -o @var{filename}
-Specify @var{filename} as the output file.  
+Specify @var{filename} as the output file.
 
 @item -c
 Stop after compilation, producing a @file{.o} file; do not link.
 
 @item -E
-Stop after preprocessing with wurzel, producing a @file{.int.c} file; 
+Stop after preprocessing with wurzel, producing a @file{.int.c} file;
 do not compile or link.  You might want to use this option for debugging
-if you are having problems getting the instrumented code to compile with 
+if you are having problems getting the instrumented code to compile with
 the host C/C++ compiler.
 
 @item -D@var{symbol}
@@ -4984,15 +4984,15 @@ Define preprocessor symbols.
 Undefine preprocessor symbols.
 
 @item -I@var{pathname}
-Add @var{pathname} to the list of places searched for include files.  
+Add @var{pathname} to the list of places searched for include files.
 
 @cindex MANGEL_DIR environment variable
 If the environment variable @env{MANGEL_DIR} is set, mangel implicitly
-adds its @file{include} subdirectory to the list of directories searched 
+adds its @file{include} subdirectory to the list of directories searched
 for system include
 files.  Otherwise you must explicitly use @option{-I} to specify where to
 find Mangel-Wurzel's system include files, or include this information in
-the options list passed directly to the wurzel preprocessor.  See the 
+the options list passed directly to the wurzel preprocessor.  See the
 @option{--preprocessor_opts} option (@pxref{Mangel configuration options}).
 
 @cindex INCLUDE environment variable
@@ -5022,7 +5022,7 @@ a different model for finding libraries.
 
 
 @item -l@var{name}
-Link with system library @var{name}.  This option is not supported on 
+Link with system library @var{name}.  This option is not supported on
 Windows, since the Microsoft linker expects libraries to be specified like
 ordinary input files to the linker.
 
@@ -5045,7 +5045,7 @@ that platform.
 @item --c
 @itemx --c99
 @itemx --c++
-Interpret the input source file as old standard C (C89), C99, or C++, 
+Interpret the input source file as old standard C (C89), C99, or C++,
 respectively.  If none of these options are specified, mangel attempts
 to infer the source language from the filename extension.
 
@@ -5053,7 +5053,7 @@ to infer the source language from the filename extension.
 @itemx --gcc
 @itemx --microsoft
 Enable strict ANSI, gcc, and Microsoft compatibility modes (respectively)
-in the wurzel preprocessor.  If none of these options are specified, wurzel 
+in the wurzel preprocessor.  If none of these options are specified, wurzel
 accepts ANSI C/C++ with a few common extensions and anachronisms.
 
 @item -h
@@ -5067,7 +5067,7 @@ Print a usage message and exit.
 You can use either command-line options or an options file
 to override Mangel's default behavior
 regarding how Mangel invokes wurzel, the host
-compiler, and the linker.  
+compiler, and the linker.
 Options files are discussed in @ref{Options files for Mangel}.
 
 When you use command-line options from the shell or makefile to
@@ -5098,7 +5098,7 @@ it defaults to a system-specific value.
 @item --linker @var{command}
 Use @var{command} to invoke the host linker.  If this option is not
 specified on the command line or in an options file,
-it defaults to @samp{cc}.  
+it defaults to @samp{cc}.
 
 @item --linker_opts @var{option_string}
 Use @var{option_string} as additional options to the host linker.  If
@@ -5112,15 +5112,15 @@ it defaults to @samp{purify}.
 @xref{Interaction with Purify}, for more information about Purify options.
 
 @item --purify-opts @var{option-string}
-Use @var{option-string} as additional options to Rational Purify.  
+Use @var{option-string} as additional options to Rational Purify.
 If this option is not specified on the command line, it defaults to
 a system-specific value.
 @xref{Interaction with Purify}, for more information about Purify options.
 
 @item --tmpdir @var{pathname}
-Put temporary files (the annotated @file{.int.c} files and temporary 
-object files created prior to linking) in the indicated directory.  
-If this option is not specified on the command line or in an options file, 
+Put temporary files (the annotated @file{.int.c} files and temporary
+object files created prior to linking) in the indicated directory.
+If this option is not specified on the command line or in an options file,
 it defaults to a system-specific default, @file{/tmp/} on Unix platforms or the
 directory specified by the @env{TMP} or @env{TEMP} environment variables on
 Windows.  The directory must exist and be writable.
@@ -5155,7 +5155,7 @@ program.  This option is only used if the compilation unit contains a
 definition for @code{main}.  If this option is not specified, trace
 output is written to a file in the current directory when the executable
 is run, with a name derived from the file containing the definition of
-@code{main}.  
+@code{main}.
 
 If you specify a @var{filename} of @samp{-}, trace output is written to
 stdout.  In this case, regular program output to stdout is redirected to
@@ -5164,7 +5164,7 @@ redirect trace output to a file or pipe on the command line, without
 mingling the two output streams.
 
 @item --dtrace-append
-Specify that output should be appended to an existing @file{.dtrace} file, 
+Specify that output should be appended to an existing @file{.dtrace} file,
 rather than overwriting it.
 This option is only used if the compilation unit contains a
 definition for @code{main}.
@@ -5180,13 +5180,13 @@ have gzip installed in a nonstandard location on your system, you can
 specify its pathname using the @env{GZIP} environment variable.
 
 @item --ignore-globals
-Ignore global, file-scope static, and function-scope static 
+Ignore global, file-scope static, and function-scope static
 variables when emitting program point state.
 The default behavior is to emit declarations and trace information for
 static variables and global variables
 that are defined (not just declared as @code{extern}) in the compilation
-unit and are in scope at the given program point, 
-as well as (for C++ class member functions) static member variables of 
+unit and are in scope at the given program point,
+as well as (for C++ class member functions) static member variables of
 the containing class.
 
 @item --ignore-static-vars
@@ -5220,17 +5220,17 @@ larger than @var{size}, then Mangel-Wurzel doesn't output the contents of
 the array. The default is 100.
 
 @item --ignore-system-structs
-If you specify this option, Mangel-Wurzel ignores fields of 
-@code{struct}, @code{union}, and @code{class} types declared in system 
-include files (e.g., those included via the 
+If you specify this option, Mangel-Wurzel ignores fields of
+@code{struct}, @code{union}, and @code{class} types declared in system
+include files (e.g., those included via the
 @samp{#include <@var{file.h}>} syntax rather than
-@samp{#include "@var{file.h}"}.)  
+@samp{#include "@var{file.h}"}.)
 These are typically interfaces like @code{FILE}
-whose internal representations are not interesting to ``regular'' 
+whose internal representations are not interesting to ``regular''
 programmers or portable across operating systems.
 
 @item --ppt-select-pattern @var{regex}
-Only emit program points that match @var{regex}.  
+Only emit program points that match @var{regex}.
 Specifically, a program point is considered to match @var{regex} if any of
 the function name, program point name, or containing class name (for C++)
 match @var{regex}.
@@ -5303,7 +5303,7 @@ to differences in the underlying runtime support; Purify does not track
 the length of arrays or provide an API for querying this information.
 
 Wurzel does, however, make use of static type information to emit trace
-information for function arguments and global and static variables with 
+information for function arguments and global and static variables with
 fully-defined array types as arrays.  Note that a ``fully-defined'' array type
 includes a complete set of (constant) dimensions.
 
@@ -5335,7 +5335,7 @@ way with your usual C compiler.  However, you must either instrument the
 compilation unit including the definition of @code{main} so that the
 necessary runtime initialization is performed when the program starts, or
 insert an explicit call to @code{mw_init} in your program before any of the
-instrumented code is executed.  You should also use mangel to link 
+instrumented code is executed.  You should also use mangel to link
 your program.
 
 The wurzel preprocessor produces the same dialect of code that it receives as
@@ -5361,11 +5361,11 @@ themselves to your link options.
 
 If your source code uses extensions specific to a particular host compiler,
 you may need to use the @samp{--gcc} or @samp{--microsoft} flags to enable
-the appropriate compatibility mode.  
+the appropriate compatibility mode.
 Wurzel recognizes many other command-line options supported by the
 underlying EDG front end to customize the language dialects it accepts,
 as described in the EDG documentation.  You can set these options using
-the @samp{--preprocessor-opts} flag to mangel.  
+the @samp{--preprocessor-opts} flag to mangel.
 
 If your code compiles with your host compiler, but not with
 Mangel-Wurzel, you can try these approaches:
@@ -5375,7 +5375,7 @@ Mangel-Wurzel, you can try these approaches:
 @item If you are getting compilation errors from wurzel that can't be resolved
 with one of the above compatibility flags or with appropriate defines, a
 possible workaround is to preprocess the code with the host compiler's
-preprocessor before running it through Mangel-Wurzel.  
+preprocessor before running it through Mangel-Wurzel.
 
 @item If you are getting compilation errors from the host C compiler, you can
 use the @samp{-E} option to mangel to produce a @file{.int.c} file
@@ -5412,7 +5412,7 @@ for wurzel:
 @item Create a file with a list of all of cpp's
 built-in defines: @samp{cpp -dM > mwdefines.h}
 
-@item 
+@item
 Edit the file, wrapping each of the @samp{#define}s in an
 @samp{#ifndef...#endif} to prevent multiple definition.
 
@@ -5475,10 +5475,10 @@ diagnostic messages.  This is because, due to limitations of the Purify
 API, it isn't possible for the Mangel-Wurzel runtime to run Purify
 completely silently, and the diagnostics will contain bogus messages
 generated by the Mangel-Wurzel runtime as well as genuine diagnostics
-about the program that has been instrumented.  
+about the program that has been instrumented.
 
-Specifically, since the Unix versions of Purify don't provide any API 
-functions 
+Specifically, since the Unix versions of Purify don't provide any API
+functions
 for checking the validity of pointers without generating messages, the
 Mangel-Wurzel runtime works around this by enabling message batching and
 by discarding the batched messages as processing of each program point
@@ -5497,14 +5497,14 @@ produce one for you.)  The distribution does not include Purify, which
 you must install separately (either purchase it or download an
 evaluation copy).
 
-Installation requires unpacking the distribution, setting the 
+Installation requires unpacking the distribution, setting the
 @env{MANGEL_DIR} and @env{PURIFY_DIR} environment
 variables, optionally customizing the defaults for how mangel operates,
 and optionally running its tests.
 
 
 @enumerate
-@item  
+@item
 Download the archive from
 @uref{http://pag.csail.mit.edu/daikon/download/} and unpack it in the
 parent of the directory where you wish to install Mangel-Wurzel.
@@ -5520,7 +5520,7 @@ tar xvzf mangel-wurzel-linux-x86.tar.gz
 @end smallexample
 
 @item
-On Windows, download, then unzip, 
+On Windows, download, then unzip,
 @url{http://pag.csail.mit.edu/daikon/download/binaries/mangel-wurzel-linux-x86.tar.gz} .
 
 @end itemize
@@ -5550,7 +5550,7 @@ details about the format of this file.
 A suggested version of @file{.mangelrc} for each supported platform is
 included with the distribution.  For example, @file{.mangelrc.linux} is
 provided for Linux.  You should copy the appropriate file to @file{.mangelrc}
-and make any necessary changes there.  The most likely things you may need to 
+and make any necessary changes there.  The most likely things you may need to
 customize are:
 
 @itemize
@@ -5560,7 +5560,7 @@ need to specify @samp{gcc} explicitly instead of @samp{cc}, or use a
 full pathname.  On Windows, you should use @samp{cl} only.
 
 @item You may need to alter the default system include paths, specified with
-@samp{--sys_include} in the @samp{--preprocessor_opts} option.  See 
+@samp{--sys_include} in the @samp{--preprocessor_opts} option.  See
 @ref{Using Mangel-Wurzel on Unix}, and @ref{Using Mangel-Wurzel on Windows},
 for details.
 
@@ -5570,12 +5570,12 @@ On Unix, you must specify the full set of search paths for include files in
 your @file{.mangelrc} file, since these are normally hard-wired into GCC
 instead of configured with an environment variable.
 These include your gcc include directory (run @samp{gcc
--print-libgcc-file-name | sed s/libgcc.a/include/}), 
+-print-libgcc-file-name | sed s/libgcc.a/include/}),
 @file{/usr/local/include}, and @file{/usr/include} (after the gcc
 include directory).
 
 @item
-On Windows, Mangel-Wurzel uses the same @env{INCLUDE} environment variable as the 
+On Windows, Mangel-Wurzel uses the same @env{INCLUDE} environment variable as the
 Microsoft compiler to set up the system include paths, so in theory you
 should not have to specify any additional paths in your @file{.mangelrc}
 configuration file.
@@ -5603,8 +5603,8 @@ option as the default in your @file{.mangelrc} file.
 mode for your normal C compiler by default.
 @end itemize
 
-For debugging the options file, you can use the @option{-n} or 
-@option{-v} options to see the actual commands mangel is generating to 
+For debugging the options file, you can use the @option{-n} or
+@option{-v} options to see the actual commands mangel is generating to
 invoke each phase.
 
 @item
@@ -5814,7 +5814,7 @@ When @option{--dtrace-append} is specified, the instrumented program
 will append trace information to the appropriate
 @file{.dtrace} file each time it runs.  When
 @option{--no-dtrace-append} is specified, it will overwrite the file
-instead. 
+instead.
 
 The default behavior is to overwrite.  This choice can also be
 overridden, when the program is run, to always append by setting the
@@ -5927,7 +5927,7 @@ When @option{--types-append} is specified, the instrumented program
 will append type information to the appropriate
 @file{.types} file each time it runs.  When
 @option{--no-types-append} is specified, it will overwrite the file
-instead. 
+instead.
 
 The default behavior is to append.  If @option{--no-types-append} is
 specified, however, this choice can also be overridden, when the
@@ -6148,10 +6148,10 @@ compare the invariants generated by two versions of the same program.
 
 Invariant diff is invoked as follows:
 @example
-java daikon.diff.Diff @i{[@var{flags}]...} @var{file1} [@var{file2}] 
+java daikon.diff.Diff @i{[@var{flags}]...} @var{file1} [@var{file2}]
 @end example
 
-@var{file1} and @var{file2} are files containing serialized invariants 
+@var{file1} and @var{file2} are files containing serialized invariants
 produced by running Daikon or Diff
 with the @option{-o} flag.  If @var{file2} is not specified,
 @var{file1} is compared with the empty set of invariants.
@@ -6173,7 +6173,7 @@ Include ``uninteresting'' invariants in the tree of differing invariants.
 
 @item -y
 @itemx --ignore_unjustified
-Include (statistically) unjustified invariants. 
+Include (statistically) unjustified invariants.
 
 @item -a
 Display the tree of all invariants.  Includes invariants that are the
@@ -6196,7 +6196,7 @@ specified with the @option{-o} option.  To view the contents of the serialized
 InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -x
-Compute (@var{file1} XOR @var{file2}).  
+Compute (@var{file1} XOR @var{file2}).
 This is all the invariants that appear in
 one file but not the other.  Unjustified invariants are treated as if
 they don't exist.  Output is written as a serialized InvMap to the file
@@ -6204,7 +6204,7 @@ specified with the @option{-o} option.  To view the contents of the serialized
 InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -n
-Compute (@var{file1} UNION @var{file2}).  
+Compute (@var{file1} UNION @var{file2}).
 This is all the invariants that appear in
 either file.  If the same invariant appears in both files, the one with
 the better justification is chosen.  Output is written as a serialized
@@ -6255,7 +6255,7 @@ interface, and accept objects of type Invariant.
 
 @c @node    GUIs, Front ends, Daikon output, Top
 @c @chapter GUIs for displaying invariants
-@c 
+@c
 @c By default, Daikon outputs a textual list of invariants; this list may
 @c be very long.  Daikon's graphical user interfaces (GUIs) are designed to
 @c make the task of browsing invariants easier.  However, we recommend
@@ -6266,15 +6266,15 @@ interface, and accept objects of type Invariant.
 @c The Context GUI lets users browse
 @c the code in a text editor; the Context GUI concurrently displays the
 @c invariants for the browsed code.
-@c 
+@c
 @c The Eclipse plug-in is not a GUI per se; rather, it helps to automate
 @c various Daikon-related tasks such as instrumenting programs, running
 @c them, and inserting invariants into source code as comments.
-@c 
-@c 
+@c
+@c
 @c @menu
-@c * Eclipse plug-in::             
-@c * Context GUI::                 
+@c * Eclipse plug-in::
+@c * Context GUI::
 @c @end menu
 
 
@@ -6282,59 +6282,59 @@ interface, and accept objects of type Invariant.
 @c @section Tree-structured invariant browser
 @c @cindex Tree GUI
 @c @cindex GUI, tree
-@c 
+@c
 @c The Tree GUI contains a tree that
 @c hierarchically organizes program points according to their class and
 @c method.  Using the Tree GUI, you can look at invariants for only the methods
 @c and program points you care about.  You can also sort invariants by a
 @c property (e.g., probability) or filter invariants (e.g., only look at
 @c invariants containing a certain variable).
-@c 
+@c
 @c This invariant browser consists of two windows.  The main window is the
 @c Invariants Display, which gives a tree-structured view of program
 @c points; you can navigate through the program points and view invariants.
 @c The other window is the Filter Control Panel, where you can control
 @c which invariants from each program point are displayed in the Invariants
 @c Display.
-@c 
+@c
 @c @menu
-@c * Invoking Tree GUI::           
-@c * Invariants Display::          
-@c * Control panel::               
+@c * Invoking Tree GUI::
+@c * Invariants Display::
+@c * Control panel::
 @c @end menu
-@c 
+@c
 @c @node    Invoking Tree GUI, Invariants Display, Tree GUI, Tree GUI
 @c @subsection Starting the invariant browser
-@c 
+@c
 @c To use the Tree GUI, first make a @file{.inv} file by invoking Daikon with
 @c the @option{-o} option; for instance, to create @file{foo.inv}, run
 @c @example
 @c java daikon.Daikon -o foo.inv @var{decl-files...} @var{trace-files...}
 @c @end example
-@c 
+@c
 @c Then, run the Tree GUI with the @file{.inv} file as an argument:
 @c @example
 @c java daikon.gui.treeGUI.InvariantsGUI foo.inv
 @c @end example
-@c 
+@c
 @c If you run the Tree GUI with no arguments, it presents a file browser that
 @c asks you to choose a @file{.inv} file for viewing.
-@c 
-@c 
+@c
+@c
 @c @node    Invariants Display, Control panel, Invoking Tree GUI, Tree GUI
 @c @subsection Invariants Display
-@c 
+@c
 @c @ifnotinfo
 @c @image{images/gui-InvariantsDisplay-small,3in,}
 @c @end ifnotinfo
-@c 
+@c
 @c @table @strong
 @c @item File menu
-@c 
+@c
 @c The @command{Load file} menu option brings up a file browser that you
 @c can use to select another @file{.inv} file.  The @command{Quit} menu
 @c options lets you quit the Tree GUI@.
-@c 
+@c
 @c @item Program point tree
 @c The top part of the Invariants Display consists of the Program point
 @c tree --- a hierarchy of program points broken down by class and method.
@@ -6343,11 +6343,11 @@ interface, and accept objects of type Invariant.
 @c keys to make an arbitrary selection of program points.  Selecting a
 @c class or method automatically selects all the program points
 @c associated with that method or class.
-@c 
+@c
 @c @item Invariant tables
 @c Invariant tables that display the actual invariants appear at the bottom
 @c of the Invariants Display.
-@c 
+@c
 @c @itemize @bullet
 @c @item
 @c Use @key{Alt} along with the @key{up} or @key{down} arrow keys to scroll
@@ -6356,51 +6356,51 @@ interface, and accept objects of type Invariant.
 @c Sort a column in a table by clicking on the column header.  Shift-click
 @c to sort the column in reverse order.
 @c @end itemize
-@c 
+@c
 @c @end table
-@c 
+@c
 @c @node    Control panel,  , Invariants Display, Tree GUI
 @c @subsection Control panel
-@c 
+@c
 @c The Control Panel determines which invariants are displayed.
 @c @c As of 2/2002
 @c (This picture of the Control Panel is slightly out of date; it needs to
 @c be updated.)
-@c 
+@c
 @c @c Force a paragraph break so the image is on its own line.
 @c @*
-@c 
+@c
 @c @ifnotinfo
 @c @image{images/gui-ControlPanel,3in,}
 @c @end ifnotinfo
-@c 
-@c 
+@c
+@c
 @c @menu
-@c * Property filters::            
-@c * Variable filters::            
+@c * Property filters::
+@c * Variable filters::
 @c @end menu
-@c 
+@c
 @c @node    Property filters, Variable filters, Control panel, Control panel
 @c @subsubsection Property filters
 @c @cindex property filters
-@c 
+@c
 @c Property filters narrow down the list of invariants that are displayed.
 @c You can adjust which Property filters are being applied.  By default,
 @c all Property filters are enabled.
-@c 
+@c
 @c For information about property filters, see @ref{Invariant filters}.
-@c 
+@c
 @c @node    Variable filters,  , Property filters, Control panel
 @c @subsubsection Variable filters
 @c @cindex variable filters
-@c 
+@c
 @c Variable filters let you display only the invariants that contain
 @c certain variables.  The left-hand box displays the variables that you
 @c are interested in.  By default, the box is empty and invariants containing
 @c any variables are displayed.  There are two ways to add variables to the
 @c variables list:
 @c @enumerate
-@c @item 
+@c @item
 @c Type the name of the variable into the @command{Add variable}
 @c text field, and click the @command{Add variable} button (or just press
 @c @key{enter}).
@@ -6410,11 +6410,11 @@ interface, and accept objects of type Invariant.
 @c that program point.  Select any set of variables and click the
 @c @command{Filter on selected variables} button.
 @c @end enumerate
-@c 
+@c
 @c To remove variables from the variables list, select the variables in
 @c question and click on the @command{Remove selected
 @c variables} button.
-@c 
+@c
 @c If you click on the @command{any variable} checkbox,
 @c invariants are displayed if they contain any of the variables in the
 @c variables list.  If you click on the @command{all
@@ -6427,35 +6427,35 @@ interface, and accept objects of type Invariant.
 @c @section Context GUI
 @c @cindex Context GUI
 @c @cindex GUI, context
-@c 
+@c
 @c The Daikon Context GUI displays invariants for the Java or C code displayed
 @c in a text editor or code browser; as the cursor moves, the invariant
 @c display is updated.
 @c (Before using the Context GUI, you must follow the installation
 @c instructions; see @ref{Installing the Context GUI}.)
-@c 
+@c
 @c @c Force a paragraph break so the image is on its own line.
 @c @*
-@c 
+@c
 @c @ifnotinfo
 @c @image{images/context-gui,5in,}
 @c @end ifnotinfo
-@c 
+@c
 @c Currently, the Context GUI is integrated with the Emacs text editor.
 @c However, users can extend it to other Java or C editors.  The Context GUI can
 @c also be run stand-alone.  This provides the user the ability to browse
 @c the invariants without having to load up the text editor in case the
 @c user wants to do a quick lookup on invariants.
-@c 
+@c
 @c @menu
-@c * Context GUI with Emacs::      
-@c * Installing the Context GUI::  
+@c * Context GUI with Emacs::
+@c * Installing the Context GUI::
 @c @end menu
-@c 
+@c
 @c @node    Context GUI with Emacs, Installing the Context GUI, Context GUI, Context GUI
 @c @subsection Running the Context GUI with Emacs
 @c @cindex Emacs, with Context GUI
-@c 
+@c
 @c In order to use the Context GUI, perform the following steps:
 @c @enumerate
 @c @item
@@ -6464,28 +6464,28 @@ interface, and accept objects of type Invariant.
 @c @example
 @c   java daikon.Daikon -o foo.inv decl-files... trace-files...
 @c @end example
-@c 
-@c 
-@c 
+@c
+@c
+@c
 @c @item
-@c 
+@c
 @c Start the Context GUI by typing @kbd{M-x daikon-context-gui}
 @c while visiting a Java or C file in Emacs.  When prompted, select the
 @c appropriate @file{.inv} file, containing the invariants.
-@c 
+@c
 @c @item
 @c Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
-@c 
+@c
 @c @end enumerate
-@c 
-@c 
-@c 
+@c
+@c
+@c
 @c @node    Installing the Context GUI,  , Context GUI with Emacs, Context GUI
 @c @subsection Installing the Context GUI
-@c 
+@c
 @c If you wish to run the Daikon Context GUI (@pxref{Context GUI}), perform
 @c the following two steps:
-@c 
+@c
 @c @enumerate
 @c @item
 @c If you wish to use the Context GUI with Java code, then
@@ -6507,10 +6507,10 @@ interface, and accept objects of type Invariant.
 
 
 @menu
-* Annotate::                    
-* Runtime-check instrumenter::  
-* InvariantChecker::            
-* LogicalCompare::              
+* Annotate::
+* Runtime-check instrumenter::
+* InvariantChecker::
+* LogicalCompare::
 @end menu
 
 @node    Annotate, Runtime-check instrumenter, Invariant Diff, Tools for manipulating invariants
@@ -6531,12 +6531,12 @@ Invoke Annotate like this:
 java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
 @end example
 
-The first argument is a Daikon @file{.inv} or @file{.inv.gz} file 
+The first argument is a Daikon @file{.inv} or @file{.inv.gz} file
 produced by running
 Daikon with the @option{-o} command-line argument.  All subsequent
 arguments are @file{.java} files.  The original @file{.java} files are left
 unmodified, but Annotate produces new versions of the @file{.java} files
-(with names suffixed as @file{-escannotated}, @file{-jmlannotated}, or 
+(with names suffixed as @file{-escannotated}, @file{-jmlannotated}, or
 @file{-dbcannotated}) that include the Daikon invariants as comments.
 
 The options are:
@@ -6573,7 +6573,7 @@ in one line; we break it up here for clarity):
 @example
 /*@ requires <INVINFO>
 <INV> x != 0 </INV>
-<SAMPLES> 100 </SAMPLES> 
+<SAMPLES> 100 </SAMPLES>
 <DAIKON> x != 0 </DAIKON>
 <DAIKONCLASS> daikon.inv.unary.scalar.NonZero </DAIKONCLASS>
 <METHOD> foo() </METHOD>
@@ -6625,7 +6625,7 @@ code to process that list; see @ref{Accessing violations}.
 
 Here is an example of use of the runtime-check instrumenter.
 To create a version of file
-@file{ubs/BoundedStack.java} that checks the invariants in 
+@file{ubs/BoundedStack.java} that checks the invariants in
 invariant file @file{BoundedStack.inv.gz}, do:
 @example
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz \
@@ -6673,7 +6673,7 @@ The throwable is not rethrown.
 
 The instrumented class handles violations silently:
 it simply adds them to a list in the class
-@code{daikon.tools.runtimechecker.Runtime.}  
+@code{daikon.tools.runtimechecker.Runtime.}
 No ``invariant violation'' exceptions are thrown, and the violated
 invariants can only be obtained dynamically from class
 @code{daikon.tools.runtimechecker.Runtime}.
@@ -6696,7 +6696,7 @@ current directory.  If the program under test calls
 
 The following code snippet contains a method @code{callMethod()} which
 presumably calls one of the methods in the instrumented class.
-The code detects if any violations occurred, and if so, prints 
+The code detects if any violations occurred, and if so, prints
 a message.
 
 @example
@@ -6742,7 +6742,7 @@ output file.
 
 InvariantChecker is invoked as follows:
 @example
-java daikon.tools.InvariantChecker [@var{options}] @var{invariant-file} @var{dtrace-files} 
+java daikon.tools.InvariantChecker [@var{options}] @var{invariant-file} @var{dtrace-files}
 @end example
 
 The @var{invariant-files} are invariant files (@file{.inv}) created by
@@ -6796,7 +6796,7 @@ implication are printed.  If no other regular arguments are supplied,
 all the method or function program points that exist in both files
 will be compared, with a exception message reported for each method
 that exists in the ``weaker'' set but not the ``stronger''.
-Alternatively, one or two additional arguments may be supplied, which name an 
+Alternatively, one or two additional arguments may be supplied, which name an
 @code{:::ENTER} program point and an @code{:::EXIT} program point to examine
 (if only an @code{:::ENTER} program point is supplied,
 the corresponding combined @code{:::EXIT} point
@@ -6827,7 +6827,7 @@ starting with @samp{PPT_NAME}, followed by the complete name of an
 formula, optionally followed by a @code{#} and a human-readable
 annotation.  Blank lines and lines beginning with a @code{#} are
 ignored.  The assumption properties will be used as if they were
-invariants true at the strong @code{:::EXIT} point when checking 
+invariants true at the strong @code{:::EXIT} point when checking
 weak @code{:::EXIT} point invariants.
 
 @item --cfg @var{option}=@var{value}
@@ -7118,14 +7118,14 @@ section tells you how to debug your problem if the
 answer is 0, but you believe that there are samples in the file you are
 feeding to Daikon.
 
-Daikon processes only @code{:::ENTER} program points that have a 
+Daikon processes only @code{:::ENTER} program points that have a
 matching @code{:::EXIT}
 program point.  (You can disable this behavior with the
-@option{--nohierarchy} switch to Daikon; 
-see @xref{Options to control invariant detection}.)  
+@option{--nohierarchy} switch to Daikon;
+see @xref{Options to control invariant detection}.)
 If no @code{:::EXIT} program points are present (perhaps every
-execution threw an exception, or you filtered out all the 
-@code{:::EXIT} program points), 
+execution threw an exception, or you filtered out all the
+@code{:::EXIT} program points),
 then Daikon will not process any of the @code{:::ENTER} program points.
 You can make Daikon print information about unmatched procedure entries
 via the @samp{daikon.FileIO.unmatched_procedure_entries_quiet}
@@ -7179,7 +7179,7 @@ user.
 @cindex major.minor version error
 
 Daikon requires a Java 5 JVM (@pxref{Requirements}).
-An error such as 
+An error such as
 @example
 Exception in thread "main" java.lang.UnsupportedClassVersionError:
 daikon/Daikon (Unsupported major.minor version 49.0)
@@ -7208,13 +7208,13 @@ Exception in thread "main" java.lang.OutOfMemoryError
 then it is likely that it has created more invariants than will fit
 in memory.  The number of invariants created depends on the number of
 program points and the number of variables at each program point.
-In addition to the solutions discussed in @ref{Reducing program points}, 
+In addition to the solutions discussed in @ref{Reducing program points},
 you can try increasing the amount of memory available to Java
 with the @option{-mx} argument to @command{java}.  (This flag is
 JVM-specific; see your JVM documentation for details.  For instance,
 its correct name in JDK versions 1.3 and later is @option{-Xmx}.)
 However, the value you use should be less your system's total amount
-of physical memory.  
+of physical memory.
 The default may be 64 megabytes or less; to permit use of up to 256
 megabytes, you would run Java like so:
 @example
@@ -7238,7 +7238,7 @@ If you supply the @option{--output_num_samples} option to Daikon
 (@pxref{Options to control Daikon output}), then it will list all
 variables at each program point.  If some of these are of no interest,
 you may wish to suppress their creation.  For information on how to do that,
-see @ref{Options to enable/disable derived variables}.  Also see 
+see @ref{Options to enable/disable derived variables}.  Also see
 @ref{Reducing variables} for other techniques.
 
 Any output generated before the out-of-memory error is perfectly valid.
@@ -7336,16 +7336,16 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 @cindex runtime, of Daikon
 
 Daikon's runtime and space depend on the particular data that it analyzes.
-Informally, invariant detection time can be characterized as 
+Informally, invariant detection time can be characterized as
 @example
 O((@var{vars}^3 * @var{falsetime} + @var{trueinvs} * @var{testsuite}) * @var{procedures})
 @end example
 @noindent
-where @var{vars} is the number of variables @emph{at a program point}, 
-@var{falsetime} is the (small constant) 
-time to falsify a potential invariant, 
+where @var{vars} is the number of variables @emph{at a program point},
+@var{falsetime} is the (small constant)
+time to falsify a potential invariant,
 @var{trueinvs} is the (small) number of
-true invariants at a program point, 
+true invariants at a program point,
 @var{testsuite} is the size of the test
 suite, and
 @var{procedures} is the number of instrumented program points.  The first
@@ -7365,7 +7365,7 @@ single program point.  Derived variables (such as @code{a[i]},
 introduced whenever there is both an array @code{a} and an integer
 @code{i}) can increase the number of variables substantially.
 The @option{daikon.Daikon.disable_derived_variables} and individual
-@option{daikon.derive.*.*.enabled} configuration variables 
+@option{daikon.derive.*.*.enabled} configuration variables
 (@pxref{Options to enable/disable derived variables}) may be used
 to disable derived variables altogether or selectively, at the cost of
 detecting fewer invariants, especially over sequences.
@@ -7383,7 +7383,7 @@ memory}, and @ref{Large dtrace files}.
 Running instrumented code can create very large @file{.dtrace} files.
 This can be a problem because writing the large files can slow the
 target programs substantially, or because the large files may fill up
-your disk.  The solution is to create smaller data trace files, by 
+your disk.  The solution is to create smaller data trace files, by
 computing invariants over fewer program
 points (procedures), computing invariants over fewer variables, or
 computing invariants over fewer samples (executions).
@@ -7398,7 +7398,7 @@ Diff} to combine the resulting @file{.inv} files into one.
 @c A more correct way to merge the resulting .inv files would be with
 @c the MergeInvariants tool, but it is not yet documented,
 
-Independently from the above techniques, you can run Daikon online.  
+Independently from the above techniques, you can run Daikon online.
 The term ``online execution'' refers to running Daikon at the same time
 as the target program, without writing any information to a file.  This
 can avoid some I/O overhead, it prevents filling up your disk with
@@ -7422,20 +7422,20 @@ named) Unix pipes (@pxref{Online execution}).
 Here are ways to compute invariants over a subset of the program
 points (functions) in your program.
 @enumerate
-@item 
+@item
 You can make Daikon ignore some program points.  With the
 @option{--ppt-select-pattern=@var{ppt_regexp}}
-flag (@pxref{Processing only part of the trace file}), 
+flag (@pxref{Processing only part of the trace file}),
 only program points matching
 the regular expression are processed.  Likewise, the
 @option{--ppt-omit-pattern=@var{ppt_omit_regexp}} option causes program points
 matching the regular expression to be ignored.
 
 Also, the configuration variable @option{daikon.Daikon.ppt_perc}
-allows a percentage of the program points to be processed. 
+allows a percentage of the program points to be processed.
 @xref{General configuration options}, for details.
 
-@item 
+@item
 @cindex trace-purge-fns.pl script
 You can remove some program points (functions) from your
 @file{.dtrace} file.  The @command{trace-purge-fns.pl} script takes as
@@ -7453,7 +7453,7 @@ cp myprog.dtrace myprog-non-setters.dtrace
 trace-purge-fns.pl 'set|get' myprog-non-setters.dtrace
 @end example
 
-@item 
+@item
 You can instrument fewer methods, creating smaller @file{.dtrace}
 files in the first place (rather than cutting the @file{.dtrace} files
 down afterward).
@@ -7504,9 +7504,9 @@ code --- for instance, output @samp{a} and @samp{a.b} but not
 depth.
 @itemize
 @item With Chicory, use the @option{--nesting-depth=@var{N}} option.
-@item With Kvasir, use the @option{--struct-depth=@var{N}} or the 
+@item With Kvasir, use the @option{--struct-depth=@var{N}} or the
 @option{--nesting-depth=@var{N}} option.
-@item With Mangel-Wurzel, use the @option{--struct-depth=@var{N}} or the 
+@item With Mangel-Wurzel, use the @option{--struct-depth=@var{N}} or the
 @option{--nesting-depth=@var{N}} option.
 @end itemize
 
@@ -7517,9 +7517,9 @@ specify a subset of variables to trace using the
 @option{--var-list-file} option (@pxref{Tracing only part of a program}
 section for details)
 
-@item 
+@item
 You can pare down an existing @file{.dtrace} file using the
-@command{trace-purge-vars.pl} script.  Analogously to the 
+@command{trace-purge-vars.pl} script.  Analogously to the
 @command{trace-purge-fns.pl} script, it removes certain variables from
 all program points in a function (or retains them, with the
 @option{-v} flag).  After running this command, you will need
@@ -7537,10 +7537,10 @@ obtain the same result as running Daikon over all the executions.)
 
 @enumerate
 @item
-If you have multiple @file{.dtrace} files (perhaps resulting from 
+If you have multiple @file{.dtrace} files (perhaps resulting from
 multiple program runs), you can run Daikon on just some of them.
 
-@item 
+@item
 @cindex trace-untruncate program
 You can terminate the instrumented program when it has created a
 sufficiently large @file{.dtrace} file.  If you interrupt the program
@@ -7578,20 +7578,20 @@ as comments, and runtimechecker silently ignores them.)
 
 @c @node    Tree GUI font errors, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
 @c @section Tree GUI font errors
-@c 
+@c
 @c @cindex font not found
-@c 
+@c
 @c When running the Tree GUI on Linux, you may get font errors such as the following:
-@c 
+@c
 @c @example
 @c Font specified in font.properties not found
 @c   [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
 @c @end example
-@c 
+@c
 @c These errors are harmless; the Tree GUI will still run correctly.  To
 @c prevent these errors from appearing in the future, take the following
 @c steps:
-@c 
+@c
 @c @itemize @bullet
 @c @item
 @c Find out where your JDK root directory is.  In general, the JDK root directory
@@ -7601,7 +7601,7 @@ as comments, and runtimechecker silently ignores them.)
 @c with the offending fonts.  For example, to eliminate the error messages
 @c shown above, one would comment out all lines containing "fontspecific".
 @c @end itemize
-@c 
+@c
 @c If you don't have permission to edit @file{font.properties}, ask
 @c your system administrator to do so.
 
@@ -7613,7 +7613,7 @@ Before reporting or investigating a problem with Chicory, always check
 that the program executes properly when not being run under Chicory's
 control.
 
-For example, if a command such as 
+For example, if a command such as
 @example
 java daikon.Chicory DataStructures.StackArTester
 @end example
@@ -7646,7 +7646,7 @@ Chicory; please report it if it is not already explained in this manual.
 
 If Chicory throws an error such as the following:
 @example
-Exception in thread "main" java.lang.VerifyError: 
+Exception in thread "main" java.lang.VerifyError:
   (class: ps1/PublicTest, method: <init> signature: (Ljava/lang/String;)V)
   Illegal constant pool index
 @end example
@@ -7662,9 +7662,9 @@ BCEL on your classpath.)
 
 @c @node    Eclipse plug-in problems, Reporting bugs, dfej problems, Troubleshooting
 @c @section Problems with Eclipse plug-in
-@c 
+@c
 @c @cindex Eclipse plug-in, troubleshooting
-@c 
+@c
 @c If you have trouble with the Eclipse plug-in, one good way to debug the
 @c difficulty is to run the command-line tools (because the plug-in does
 @c nothing more than run those tools for you).  If the command-line
@@ -7731,7 +7731,7 @@ It is also helpful to include instrumented source files,
 any other information that you consider relevant.
 @end itemize
 
-When users provide an inadequate bug report, 
+When users provide an inadequate bug report,
 it is frequently more difficult for us to reproduce an error than to correct
 it.  If you make it easy for us to reproduce and verify the problem, then it is
 much more likely to be corrected.
@@ -7754,7 +7754,7 @@ You may also wish to take advantage of the Daikon mailing lists
 This problem affects @ref{Annotate} and the @ref{Runtime-check
 instrumenter}, which output Java source code. If
 the java file to be annotated/instrumented uses logical
-shift operators (@code{>>}, @code{<<}, and @code{>>>}), the 
+shift operators (@code{>>}, @code{<<}, and @code{>>>}), the
 annotated/instrumented java may contain extra brackets in these
 operators. For example, the expression @code{x << y} in the input source
 file may erroneously be translated as @code{x <<<<<< y} in the
@@ -7785,7 +7785,7 @@ helpful.  The mailing list archives may contain helpful information, but
 we strive to incorporate that information in this manual so that you
 don't have to search the archives as well.
 
-For further reading, see the list of publications at the 
+For further reading, see the list of publications at the
 Daikon homepage, @uref{http://pag.csail.mit.edu/daikon/pubs/}.
 
 
@@ -7905,7 +7905,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE@.
 @c As a condition of use, you agree to promptly communicate any changes,
 @c improvements, or enhancements to the authors for inclusion in a
 @c future release, and to promptly report any errors, problems, or
-@c bugs. 
+@c bugs.
 @c Other licensing terms are available;
 @c send mail to @email{mernst@@csail.mit.edu}.
 
@@ -7942,7 +7942,7 @@ programs, and some are made available under different licenses.
 @c All
 @c of the software in the main Daikon distribution is made available
 @c under the same license as the Daikon tool proper, or a less
-@c restrictive license.  However, 
+@c restrictive license.  However,
 Because the front ends are separate
 programs not derived from the Daikon invariant detection tool, you are
 neither required nor entitled to use the Daikon invariant detector
@@ -8255,7 +8255,7 @@ collections, which are presented to Daikon as arrays.  Valid keys are:
 
 @table @code
 
-@item hasDuplicates 
+@item hasDuplicates
 Whether a collection can contain duplicates.  If it
 cannot, Daikon does not check for some invariants that only have
 meaning for collections that can contain duplicate elements.
@@ -8263,9 +8263,9 @@ meaning for collections that can contain duplicate elements.
 @item hasOrder
 Whether order has meaning for a collection.  If order does
 not have meaning in a collection, then Daikon does not check for
-element-wise comparisons between it and other collections.  
+element-wise comparisons between it and other collections.
 
-@item hasNull 
+@item hasNull
 Whether zero has the special meaning null for the variable or
 collection.  If it does, then Daikon checks for whether a value or the
 elements in a collection are null.
@@ -8282,10 +8282,10 @@ Whether a given variable is a parameter to a method.  If a
 variable is a parameter, Daikon avoids printing some information that
 would be considered uninteresting for parameters.  First, invariants
 that use the parameter variable @code{p} in its post-state form are not
-printed.  Second, invariants that use fields of @code{p} (such as @code{p.x}) 
+printed.  Second, invariants that use fields of @code{p} (such as @code{p.x})
 are printed only if @code{p} has not changed.  Lastly, some immutable
 characteristics, such as the size of arrays and data types are not
-printed (both can be changed if @code{p} is changed, but then, @code{p} 
+printed (both can be changed if @code{p} is changed, but then, @code{p}
 would no longer be interesting).
 
 @end table
@@ -8420,21 +8420,21 @@ could consist of a function name and signature.
 More precisely, names of C program points follow these conventions:
 
 @itemize @bullet
-@item 
+@item
 Names of program points for file-static functions are prefixed with the name
-of the source file, with @samp{.} characters mapped to @samp{_}, 
+of the source file, with @samp{.} characters mapped to @samp{_},
 followed by a @samp{.}.
 
 @item Names of program points for
 file-scope functions with external linkage are prefixed with @samp{..}.
-For example, a global function program point might be named 
+For example, a global function program point might be named
 @samp{..main():::ENTER}., the first period denoting that it is global in
 scope and the second denoting the separator between the @var{toplevel}
 and @var{bottomlevel} parts of the name.
 
 @item
 Names of C++ functions that are class or namespace members are prefixed
-with the name(s) of their classes or namespaces, with the C++ @samp{::} 
+with the name(s) of their classes or namespaces, with the C++ @samp{::}
 syntax mapped onto the Java @samp{.} syntax used by Daikon.
 @end itemize
 
@@ -8446,8 +8446,8 @@ For IOA, @var{topLevel} consists of an Automaton name and
 By convention, the entry and exit points for a function have names of
 a special form so that they can be associated with one another.
 (Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
-convention permits Daikon to generate pre-state variables 
-(@pxref{Variable names}) automatically at procedure exit points, so 
+convention permits Daikon to generate pre-state variables
+(@pxref{Variable names}) automatically at procedure exit points, so
 front ends need not output them explicitly.  When there
 are multiple exit points, then each one should be suffixed by a number
 (such as a line number, for example, @code{foo::EXIT22}).  Daikon produces
@@ -8545,7 +8545,7 @@ double-quotes and backslashes are escaped by a backslash; newlines and
 carriage returns are represented as @samp{\n} and @samp{\r}, respectively
 @item    array: elements are listed on one line, separated by spaces.
 The entire array contents are in square brackets.  (Also, the array name
-should end in @samp{[]}; use @samp{a[]} for array contents, 
+should end in @samp{[]}; use @samp{a[]} for array contents,
 but @samp{a} for the identity of the array itself.)
 @end itemize
 
