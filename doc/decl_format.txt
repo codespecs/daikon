@@ -1,3 +1,15 @@
+Todo:
+
+  - Add an example of deep depths and how object user relations
+    work with them.
+
+  - Change the names to always use '-' or always use '_'
+
+  - Add * (or deref) to the internal variable definition
+
+  - Add an issue suggesting that we use records to describe a variable
+    rather than the name (ie, I am a function and my arguments are x, y, z
+
                        Daikon declaration record format
 
 Introduction
@@ -67,7 +79,8 @@ Proposal
     - An internal variable name with a defined syntax that can be parsed
       to determine information about the variable.  The internal name
       will specify the enclosing parent variable (if any), any arrays,
-      and the static location (package) of the variable (as appropriate).
+      any function calls, and the static location (package) of the 
+      variable (as appropriate).
 
     - An external variable name whose syntax is appropriate for the
       front end language.  These variables will be used unparsed and
@@ -101,9 +114,10 @@ Internal Variable Names
                           of the variable.  For example 'java.lang.System'.
 
     <name>            ::= [<name>[<field-op><array-op>]<field-op>]<field>
-    <field>           ::= <identifier>[()]
+    <field>           ::= <identifier>[([<args>])]
     <array-op>        ::= '[]'
     <field-op>        ::= '.' | '->'
+    <args>            ::= <name>|<name>,<args>
 
   For example:
 
@@ -114,6 +128,7 @@ Internal Variable Names
     a->d->[].c
     a->g.[]
     a->foo()
+    a->m1(b.c,a->d)
 
   The field-op specifies that the field is enclosed within the name.
   As in C, the '.' operator specifies that the field is physically
@@ -124,15 +139,43 @@ Internal Variable Names
   reasonable to include the information that is available to the front
   end.
 
-  If the field name is followed by parens it is a function (presumably
-  pure) and not a field.
-
   The array-op specifies that there the preceeding name is an array
   and that this variable represents its contents.  Just as with fields,
   if the '.' operator is used before the array op, the array is stored
   as part of its enclosing name and if the '->' operator is used,
   the name is a reference to a separate memory area that contains
   the array.  
+
+  If the field name is followed by parens it is a function (presumably
+  pure) and not a field.  Arguments can optionally be specified.  Initial
+  versions may not fully support arguments.  If the function is an instance
+  method, then it should appear enclosed within its receiver variable.
+  Static methods appear at the top level (eg, m1(b.c))  If the reciever
+  or any the arguments to a function is an array element, other arguments must
+  be elements of the same array or occur before the array.  It is not
+  possible to use elements from two unrelated arrays as arguments.  For
+  example:
+
+    class A {
+      int f1;
+      int f2;
+      String m1 (int i, int j) {}
+    }  
+
+    A[] a;
+    int[] karr;
+    int ii;
+    int jj;
+
+  Legal variables are:
+
+    a->[]->m1(a->[]->f1,a->[]->f2)
+    a->[]->m1(a->[]->f1, jj)
+    a->[]->m1(ii,jj)
+
+  An illegal variable name would be
+  
+    a->[]->m1(karr[],jj)
 
   Identifiers can include the following characters:  a-zA-Z0-9_$@%
   Other characters are reserved for future features.
@@ -191,7 +234,7 @@ External variable names
     a->barr->[]->c      a.barr[..].c
     a->blist->[]->c     a.blist.get(..).c   
 
-  In the last case, a.blist is list that we are treating as an array.
+  In the last case, a.blist is a list that we are treating as an array.
   
 Declared Type
 
@@ -492,27 +535,19 @@ Issues
       similar to Java and C.
 
       The format is so simple to parse and understand that the advantage
-      of a scheme is not clear to me, though perhaps I am missing something.
-
-    - Should program points have an internal/external name as well so
-      that the external name can be more tailored to the input language?
-
-      Since the hierarchy is explicitly stated, the program point name
-      does not have to be parsed except to create merged exit points.
-      Its possible, however, that the front end should create the
-      merged exit point rather than relying on Daikon to do it.
+      of a schema is not clear to me, though perhaps I am missing something.
 
     - Is the internal variable operator '->' necessary?  Couldn't '.' only
       be used. (pgbovine)
 
-      The only usuage of I know of this information is that '.' tells
+      The only usage of I know of this information is that '.' tells
       Daikon that the enclosing variable doesn't have an interesting
       value (because it isn't really a hashcode).  We infer this now from
       the non-null attribute, but this would be a bit more specific.  It
       simply feels like information that might be useful at some point that
       is relatively easy to provide.
 
-    - Similarly should we add '.' and '->' to array references (eg,
+    - Similarly, should we add '.' and '->' to array references (eg,
       a->[] or a.[]) to make it clear whether or not the array is directly
       within its enclosing name or stored separately?  Currently the proposal
       calls for the field operators to be included with arrays as well.
@@ -521,15 +556,19 @@ Issues
 
     - Do we need to specify list implementors?  Why?
 
+      I still don't know of a reason for these.  I'm going to suggest
+      that we remove this.  We can always add it if/when we find a need
+      for it.
+
     - Should a ppt name be parsable or could we simply make this an 
-      unparsed string.  Its not clear that the static location is at
+      unparsed string?  Its not clear that the static location is at
       all interesting or consistently applicable.  Instead, perhaps we
       should add a ppt-type record that specifies enter/exit and the
       like.  That would remove the need to parse the name completely and
       it could just be language specific.
 
-      My current feeling is that we should go with this approach of not
-      parsing the ppt name.
+      I've changed the proposal to take this approach (ppt names are
+      unparsed).
 
     - Should we continue to have both class and object ppts?  The distinction
       is that static variables are in the class ppt and both class
@@ -561,7 +600,8 @@ Issues
 
       I tend to think that requiring all enclosing variables to be variables
       is a good idea.  Philip points out that this is how Kvasir works
-      already.
+      already.  This, of course, may not work as expected if Daikon 
+      removes a variable.
 
     - Do we need a program point abbreviation when specifying parent 
       program points?  The point of this was to ease readability for
@@ -668,7 +708,19 @@ Issues
       '->' instead of '*' for this function.  Though its certainly
       possible that being consistent with C syntax is more valuable.
       Its also possible that a unary right hand operator is no more
-      clear than a unary left hand operator.
+      clear than a unary left hand operator.  In any event, it would
+      seem that we would then need to add parens as well.
+
+    - Should we allow functions in the middle of variable names?
+      For example 'foo(a)->x' or 'a->foo()->x'  This would allow pure
+      functions that return non-primitives and seems reasonable.  Note
+      that if we gave a function name to the '*' operator (such as
+      deref), that could use this same syntax (eg, deref(deref(x)) for
+      **x)
+
+      However, as the internal name becomes more complex, it is less
+      obvious that parsing all of this information is really worth it.
+      What is really being provided to Daikon?
 
     - I'd worry that a single "*" as a placeholder for array indices
       in the external name is likely to conflict with the syntaxes of
@@ -686,7 +738,7 @@ Issues
       The latter always works and it leaves the variable name
       completely unchanged.  But its quite unreadable.
 
-    - What does Daikon use this the declared type for again?  If
+    - What does Daikon use the declared type for again?  If
       nothing, it would be nice to make it completely uninterpreted
       (along the lines of the external variable names). The current
       documentation includes a strange restriction about appending the
@@ -754,16 +806,6 @@ Issues
       use? (mernst)
 
       Yes.  I couldn't think of another use.
-
-    - Is the internal variable operator '->' necessary?  Couldn't '.' only
-      be used. (pgbovine)
-
-      The only usuage of I know of this information is that '.' tells
-      Daikon that the enclosing variable doesn't have an interesting
-      value (because it isn't really a hashcode).  We infer this now from
-      the non-null attribute, but this would be a bit more specific.  It
-      simply feels like information that might be useful at some point that
-      is relatively easy to provide.
 
     - Is the set of characters for internal names the set of legal chars
       in all languages we want to support or will there need to be some
