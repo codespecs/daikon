@@ -1,14 +1,3 @@
-Todo:
-
-  - Add an example of deep depths and how object user relations
-    work with them.
-
-  - Change the names to always use '-' or always use '_'
-
-  - Add * (or deref) to the internal variable definition
-
-  - Add an issue suggesting that we use records to describe a variable
-    rather than the name (ie, I am a function and my arguments are x, y, z
 
                        Daikon declaration record format
 
@@ -167,15 +156,18 @@ Internal Variable Names
     int ii;
     int jj;
 
-  Legal variables are:
+  Legal variables with functions are:
 
     a->[]->m1(a->[]->f1,a->[]->f2)
     a->[]->m1(a->[]->f1, jj)
     a->[]->m1(ii,jj)
 
-  An illegal variable name would be
+  An illegal function name would be
   
     a->[]->m1(karr[],jj)
+
+  There is a special function named '*' which dereferences its one
+  argument.  For example '*(a.b)' dereferences the pointer a.b.
 
   Identifiers can include the following characters:  a-zA-Z0-9_$@%
   Other characters are reserved for future features.
@@ -283,21 +275,21 @@ Parent Ppt/variable
 
     variable    parent ppt  parent variable     relation type
     --------    ----------  ---------------     -------------
-    this        A:::OBJECT  this                object-method
-    this.f1     A:::OBJECT  this.f1             object-method
-    b           B:::OBJECT  this                object-user
-    b.f2        B:::OBJECT  this.f2             object-user
-    c           C:::OBJECT  this                object-user
-    c.f3        C:::OBJECT  this.f3             object-user
+    this        A:::OBJECT  this                object_method
+    this.f1     A:::OBJECT  this.f1             object_method
+    b           B:::OBJECT  this                object_user
+    b.f2        B:::OBJECT  this.f2             object_user
+    c           C:::OBJECT  this                object_user
+    c.f3        C:::OBJECT  this.f3             object_user
 
   Some program points have a one-to-one relationship with the parent
   program points.  For example, each variable in a numbered exit point
   has a child of the same variable in the common exit point.  In that
-  case the program points parent is noted as being of type 'one-to-one'
+  case the program points parent is noted as being of type 'one_to_one'
   and each variable does not have to be explicitly annotated.  The
-  relation type 'exit-exitNN' is by default one-to-one.
+  relation type 'exit_exitNN' is by default one-to-one.
 
-  Note that it is not clear this (one-to-one) is a necessary feature.
+  Note that it is not clear this (one_to_one) is a necessary feature.
   Its added simply to make the declaration somewhat more readable
   especially because the program point names of methods tend to be
   long.
@@ -389,8 +381,8 @@ File format
 
   where    
   
-    <relation-type>     ::= object-method|class-object|object-user|enter-exit|
-                            exit-exitnn
+    <relation-type>     ::= object_method|class_object|object_user|enter_exit|
+                            exit_exitnn
     <ppt-flags>         ::= static
     <variable-flags>    ::= is_param|no_dups|not_ordered|no_size|nomod|
                             synthetic|classname|method
@@ -413,7 +405,7 @@ File format
     - List implementors?  Its not clear what (if anything) this is used for
       in Daikon.  If necessary, the format is:
 
-        list-implementors <impl> <impl> ...
+        list_implementors <impl> <impl> ...
 
 File compatibility
 
@@ -490,12 +482,12 @@ Object-user hierarchy relation
   hierarchy relations.  The first level are direct relations that
   would not include object-user relations between two classes (it
   would include object user relations where the child is a parameter
-  to a method).  These relations would be merged in a first pass.
-  Then in a second pass we would merge the object-user relations we
-  missed on the first pass.  Note that on the second pass, some
-  variables may be missing (due to depth differences) The merge would
-  be restricted (as merges are now) to variables that exist at the
-  child.
+  to a method).  These relations (and all other relations) would be
+  merged in a first pass.  Then in a second pass we would merge the
+  object-user relations we missed on the first pass.  Note that on the
+  second pass, some variables may be missing (due to depth
+  differences) The merge would be restricted (as merges are now) to
+  variables that exist at the child.
 
   There are several alternative approaches that are discussed in
   appendix A.
@@ -537,6 +529,18 @@ Issues
       The format is so simple to parse and understand that the advantage
       of a schema is not clear to me, though perhaps I am missing something.
 
+    - Rather than using the internal name, why not specify information about
+      each variable in separate records?  for example, a.b.c could be
+        field-name c
+        enclosing-variable a.b
+      Functions and arrays would require additional information but could
+      be handled quite similarly.
+
+      This is possibly a more straightforward approach.  It is more verbose,
+      but is also more explicit.  Since the enclosing variable is required,
+      it becomes more important that all enclosing variables be present, but
+      that probably makes sense in any approach.
+
     - Is the internal variable operator '->' necessary?  Couldn't '.' only
       be used. (pgbovine)
 
@@ -560,6 +564,9 @@ Issues
       that we remove this.  We can always add it if/when we find a need
       for it.
 
+      Mike thinks that thiswas used as hint when producing java output.
+      But I'm not sure how it could bd used.
+
     - Should a ppt name be parsable or could we simply make this an 
       unparsed string?  Its not clear that the static location is at
       all interesting or consistently applicable.  Instead, perhaps we
@@ -578,6 +585,13 @@ Issues
       be used for both sets of variables (static variables receive more
       samples than do instance variables).
 
+      Mike suggests eliminating the distinction and notes that front ends
+      should be able to make this choice themselves. 
+
+      It might be a good idea in general to support relations where the
+      child only contains a subset of the variables at the parent.  This
+      is also true of object-user relations because of the depth.
+
     - How are private methods handled?
 
       The front end decides whether or not private methods are included
@@ -591,6 +605,11 @@ Issues
       enable some interesting additional information (eg, whether or
       not the private method did violate some object invariants).
 
+      The front end could implement this switch (whether or not to include
+      privates) as well, but implementing it in Daikon is seemingly the only
+      way to determine that the private method actually breaks object
+      invariants.
+
     - Should front ends be required to include the enclosing variable
       for each variable?  This would imply that if a variable was
       omitted that any enclosed variables would be omitted as well.
@@ -601,7 +620,7 @@ Issues
       I tend to think that requiring all enclosing variables to be variables
       is a good idea.  Philip points out that this is how Kvasir works
       already.  This, of course, may not work as expected if Daikon 
-      removes a variable.
+      removes a variable.  Or Daikon will have to follow the same rule.
 
     - Do we need a program point abbreviation when specifying parent 
       program points?  The point of this was to ease readability for
@@ -617,7 +636,7 @@ Issues
       the variables had different names).
 
     - How should the object-user relation handle the multiple possible
-      relations that can occur with nested classes.  For example, if
+      relations that can occur with nested classes?  For example, if
       the depth is 5 and we have a variable 'a' of type A from the'
       example, the following variables exists:
 
@@ -626,7 +645,7 @@ Issues
         a.b.a.f1
         a.b.a.b.f2
 
-      Should each instance a field in B (a.b.f2 and a.b.a.b.f2) be tied 
+      Should each instance of a field in B (a.b.f2 and a.b.a.b.f2) be tied 
       back to B directly (ie, its parent is B::this.f2) or should it only
       be tied to the corresponding level in B (the parent for a.b.f2 is
       B::this.f2 and the parent for a.b.a.b.f2 is B::this.a.b.f2), or
@@ -638,6 +657,8 @@ Issues
       two forms of comparability information -- calculated comparability
       (ala DynComp) and type comparability (that can be determined statically
       by the front end, eg, declared types, typedefs, etc).
+
+      I tend to think this latter approach is superior.
 
     - How should we handle java lists in external names?  Should we include
       '.get(..)' in the external name?  That implies that the external
@@ -841,6 +862,26 @@ Issues
       more meaningful? (pgbovine)
 
       Sure.  Any suggestions?
+
+    - Should all of the record names in the file format and the flags
+      be with underscores or dashes?  Currently all of the record names
+      use dashes and all other values use underscores.  This is at least
+      somewhat inconsistent.
+
+      I didn't want to make '-' an identifier character, but I don't
+      think that switching the flags and other built-in names to dashes
+      will do that.
+
+    - Should the relation types (object-user, exit-exitnn, etc) be built-in
+      to Daikon, or just a name given by the front end?
+
+      I think having the types built-in makes sense.  Some types such as
+      enter-exit have some very specific semantics.  This also makes it
+      possible to default the variable relations in well understood cases.
+
+      Built-in names can be checked for correctness and ensure consistency
+      between different front ends.  It should be easy to add additional 
+      relation types if necessary.
 
 Appendix A -- Alternative Object-User hierarchy relation solutions
 
