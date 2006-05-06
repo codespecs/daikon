@@ -85,7 +85,7 @@ public class MultiReader {
     public String first_line;
     /** Complete body of the entry including the first line **/
     public String body;
-    /** True if this is a short entry (blank line separated **/
+    /** True if this is a short entry (blank line separated) **/
     boolean short_entry;
     /** Filename in which the entry was found **/
     String filename;
