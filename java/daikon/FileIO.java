@@ -1041,7 +1041,10 @@ public final class FileIO {
     if (Daikon.use_dataflow_hierarchy) {
       if (!ppt.ppt_name.isExitPoint())
         return;
-      Assert.assertTrue (!ppt.ppt_name.isCombinedExitPoint());
+      if (ppt.ppt_name.isCombinedExitPoint()) {
+        throw new RuntimeException("Bad program point name " + ppt.name
+                                   + " is a combined exit point name");
+      }
     }
 
     // Add derived variables
