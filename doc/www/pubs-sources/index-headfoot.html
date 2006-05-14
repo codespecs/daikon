@@ -1,4 +1,6 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Invariant detection publications</title>
 <link rev="made" href="mailto:mernst@csail.mit.edu">
@@ -133,7 +135,10 @@ called "observations", they include equality (x = y), range (-10 <= x <=
 10), non-null (x != null), equality (.equals), and properties gleaned from
 the user's source code.  Agitar won the Wall Street Journal's 2005 <a
 href="http://www.dowjones.com/innovation/ei_winners_2005.html#software">Software
-Technology Innovation Award</a>.
+Technology Innovation Award</a>.  Regarding Agitar's work and its
+connection to Daikon, see the ISSTA 2006 paper ``From Daikon to Agitator:
+Lessons and Challenges in Building a Commercial Tool for Developer
+Testing'', by Marat Boshernitsan, Roongko Doong, and Alberto Savoia.
 
 <dt>
 Microsoft
@@ -156,8 +161,8 @@ Stanford
 The <a href="http://diduce.sourceforge.net/">DIDUCE</a> tool (DIDUCE stands
 for "Dynamic Invariant Detection Union Checking Engine") checks one
 invariant:  the bitwise or of the values of a variable.  DIDUCE performs
-dynamic invariant detection online -- at run time, rather than
-after-the-fact.  DIDUCE is described in the paper <a
+dynamic invariant detection online -- while the target program is running.
+DIDUCE is described in the paper <a
 href="http://portal.acm.org/citation.cfm?id=581377">"Tracking down software
 bugs using automatic anomaly detection"</a>, by <a
 href="http://xenon.stanford.edu/~hangal/">Sudheendra Hangal</a> and <a
@@ -244,6 +249,15 @@ be built upon it:  "Type discovery for Parameterized Race-Free Java"
 (appears at VMCAI 2005) and
 <a href="http://portal.acm.org/citation.cfm?id=1065944.1065956">"Automated type-based analysis of data races and atomicity"</a>
 (appears at PPOPP 2005).
+
+<dt>
+Purdue
+<dd>
+
+C-DIDUCE is a re-implementation, for C of Stanford's DIDUCE tool (which
+works on Java).  DIDUCE is described in the paper "Artemis:  Practical
+runtime monitoring  of applications for execution anomalies", by Long Fei
+and Samuel P. Midkiff (appears in PLDI 2006).
 
 </dl>
 
