@@ -1804,17 +1804,18 @@ public final class Daikon {
     stopwatch.reset();
     fileio_progress.clear();
     if (! Daikon.dkconfig_disable_splitting) {
-      if (!Daikon.dkconfig_quiet) {
-        System.out.println("Creating implications");
-      }
+      // This isn't helpful to users.  Perhaps add an option that prints it.
+      // if (!Daikon.dkconfig_quiet) {
+      //   System.out.println("Creating implications");
+      // }
       debugProgress.fine("Adding Implications ... ");
       for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext();) {
         PptTopLevel ppt = itor.next();
         // debugProgress.fine ("  Adding Implications for " + ppt.name);
         ppt.addImplications();
       }
-      debugProgress.fine(
-                         "Time spent adding implications: " + stopwatch.format());
+      debugProgress.fine("Time spent adding implications: "
+                         + stopwatch.format());
     }
   }
 
