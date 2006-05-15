@@ -1,18 +1,20 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<TITLE>Sample output from Daikon dynamic invariant detector</TITLE>
-<link rev="made" href="mailto:mernst@csail.mit.edu">
+  <title>Sample output from Daikon dynamic invariant detector</title>
+  <link rev="made" href="mailto:mernst@csail.mit.edu" />
 </head>
 <body>
 
 <h1>Sample output from Daikon dynamic invariant detector</h1>
 
 This is a simple example of Daikon's ouput.  The colored annotations
-starting with <FONT COLOR="red"><tt>@</tt></FONT> (in <a
+starting with <font color="red"><tt>@</tt></font> (in <a
 href="http://www.jmlspecs.org/">JML</a> format) were automatically detected
 by Daikon and automatically inserted in the source code.
 
-<hr>
+<hr />
 
 <pre>
 package DataStructures;
@@ -38,18 +40,18 @@ package DataStructures;
  */
 public class StackAr
 {
-    <font color="red">//@ invariant this.theArray != null;</font>
-    <font color="red">//@ invariant \typeof(this.theArray) == \type(java.lang.Object[]);</font>
-    <font color="red">//@ invariant this.topOfStack &gt;= -1;</font>
-    <font color="red">//@ invariant this.topOfStack &lt;= this.theArray.length-1;</font>
-    <font color="red">//@ invariant (\forall int i; (this.topOfStack+1 &lt;= i && i &lt;= this.theArray.length-1) ==&gt; (this.theArray[i] == null));</font>
-    <font color="red">//@ invariant (\forall int i; (0 &lt;= i && i &lt;= this.topOfStack) ==&gt; (this.theArray[i] != null));</font>
-    <font color="red">//@ invariant theArray.owner == this;</font>
+    <span><font color="red">//@ invariant this.theArray != null;</font></span>
+    <span><font color="red">//@ invariant \typeof(this.theArray) == \type(java.lang.Object[]);</font></span>
+    <span><font color="red">//@ invariant this.topOfStack &gt;= -1;</font></span>
+    <span><font color="red">//@ invariant this.topOfStack &lt;= this.theArray.length-1;</font></span>
+    <span><font color="red">//@ invariant (\forall int i; (this.topOfStack+1 &lt;= i &amp;&amp; i &lt;= this.theArray.length-1) ==&gt; (this.theArray[i] == null));</font></span>
+    <span><font color="red">//@ invariant (\forall int i; (0 &lt;= i &amp;&amp; i &lt;= this.topOfStack) ==&gt; (this.theArray[i] != null));</font></span>
+    <span><font color="red">//@ invariant theArray.owner == this;</font></span>
 
 
-    <font color="red">//@ requires capacity &gt;= 0;</font>
-    <font color="red">//@ ensures \old(capacity) == this.theArray.length;</font>
-    <font color="red">//@ ensures this.topOfStack == -1;</font>
+    <span><font color="red">//@ requires capacity &gt;= 0;</font></span>
+    <span><font color="red">//@ ensures \old(capacity) == this.theArray.length;</font></span>
+    <span><font color="red">//@ ensures this.topOfStack == -1;</font></span>
     /**
      * Construct the stack.
      * @param capacity the capacity.
@@ -57,12 +59,12 @@ public class StackAr
     public StackAr( int capacity )
     {
         theArray = new Object[ capacity ];
-        <font color="red">//@ set theArray.owner = this;</font>
+        <span><font color="red">//@ set theArray.owner = this;</font></span>
         topOfStack = -1;
     }
 
-    <font color="red">//@ ensures (\result == false)  ==  (this.topOfStack &gt;= 0);</font>
-    <font color="red">//@ ensures (\result == true)  ==  (this.topOfStack == -1);</font>
+    <span><font color="red">//@ ensures (\result == false)  ==  (this.topOfStack &gt;= 0);</font></span>
+    <span><font color="red">//@ ensures (\result == true)  ==  (this.topOfStack == -1);</font></span>
     /**
      * Test if the stack is logically empty.
      * @return true if empty, false otherwise.
@@ -73,7 +75,7 @@ public class StackAr
         return topOfStack == -1;
     }
 
-    <font color="red">//@ ensures (this.topOfStack &lt; this.theArray.length-1)  ==  (\result == false);</font>
+    <span><font color="red">//@ ensures (this.topOfStack &lt; this.theArray.length-1)  ==  (\result == false);</font></span>
     /**
      * Test if the stack is logically full.
      * @return true if full, false otherwise.
@@ -85,9 +87,9 @@ public class StackAr
     }
 
 
-    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
-    <font color="red">//@ ensures (\forall int i, j; (\old(this.topOfStack)+1 &lt;= i && i &lt;= this.theArray.length-1 && \old(this.topOfStack+1) &lt;= j && j &lt;= \old(this.theArray.length-1) && (i-(\old(this.topOfStack)+1)) == (j-(\old(this.topOfStack+1)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
-    <font color="red">//@ ensures this.topOfStack == -1;</font>
+    <span><font color="red">//@ modifies this.theArray[*], this.topOfStack;</font></span>
+    <span><font color="red">//@ ensures (\forall int i, j; (\old(this.topOfStack)+1 &lt;= i &amp;&amp; i &lt;= this.theArray.length-1 &amp;&amp; \old(this.topOfStack+1) &lt;= j &amp;&amp; j &lt;= \old(this.theArray.length-1) &amp;&amp; (i-(\old(this.topOfStack)+1)) == (j-(\old(this.topOfStack+1)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font></span>
+    <span><font color="red">//@ ensures this.topOfStack == -1;</font></span>
     /**
      * Make the stack logically empty.
      */
@@ -97,8 +99,8 @@ public class StackAr
         topOfStack = -1;
     }
 
-    <font color="red">//@ ensures (\result != null)  ==  (this.topOfStack &gt;= 0);</font>
-    <font color="red">//@ ensures (this.topOfStack &gt;= 0)  ==&gt;  (\result == this.theArray[this.topOfStack]);</font>
+    <span><font color="red">//@ ensures (\result != null)  ==  (this.topOfStack &gt;= 0);</font></span>
+    <span><font color="red">//@ ensures (this.topOfStack &gt;= 0)  ==&gt;  (\result == this.theArray[this.topOfStack]);</font></span>
     /**
      * Get the most recently inserted item in the stack.
      * Does not alter the stack.
@@ -112,10 +114,10 @@ public class StackAr
         return theArray[ topOfStack ];
     }
 
-    <font color="red">//@ requires this.topOfStack &gt;= 0;</font>
-    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
-    <font color="red">//@ ensures (\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= \old(this.topOfStack)-1 && i == j) ==&gt; ( this.theArray[i] == this.theArray[j] ))(\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= \old(this.topOfStack-1) && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ))(\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= \old(this.topOfStack-1) && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
-    <font color="red">//@ ensures \old(this.topOfStack) == this.topOfStack + 1;</font>
+    <span><font color="red">//@ requires this.topOfStack &gt;= 0;</font></span>
+    <span><font color="red">//@ modifies this.theArray[*], this.topOfStack;</font></span>
+    <span><font color="red">//@ ensures (\forall int i, j; (0 &lt;= i &amp;&amp; i &lt;= this.topOfStack &amp;&amp; 0 &lt;= j &amp;&amp; j &lt;= \old(this.topOfStack)-1 &amp;&amp; i == j) ==&gt; ( this.theArray[i] == this.theArray[j] ))(\forall int i, j; (0 &lt;= i &amp;&amp; i &lt;= this.topOfStack &amp;&amp; 0 &lt;= j &amp;&amp; j &lt;= \old(this.topOfStack-1) &amp;&amp; i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ))(\forall int i, j; (0 &lt;= i &amp;&amp; i &lt;= this.topOfStack &amp;&amp; 0 &lt;= j &amp;&amp; j &lt;= \old(this.topOfStack-1) &amp;&amp; i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font></span>
+    <span><font color="red">//@ ensures \old(this.topOfStack) == this.topOfStack + 1;</font></span>
     /**
      * Remove the most recently inserted item from the stack.
      * @exception Underflow if stack is already empty.
@@ -127,12 +129,12 @@ public class StackAr
         theArray[ topOfStack-- ] = null;
     }
 
-    <font color="red">//@ requires x != null;</font>
-    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
-    <font color="red">//@ ensures \old(x) == this.theArray[this.topOfStack];</font>
-    <font color="red">//@ ensures (\forall int i, j; (this.topOfStack+1 &lt;= i && i &lt;= this.theArray.length-1 && \old(this.topOfStack+2) &lt;= j && j &lt;= \old(this.theArray.length-1) && (i-(this.topOfStack+1)) == (j-(\old(this.topOfStack+2)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
-    <font color="red">//@ ensures (\forall int i, j; (0 &lt;= i && i &lt;= \old(this.topOfStack) && 0 &lt;= j && j &lt;= \old(this.topOfStack) && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
-    <font color="red">//@ ensures \old(this.topOfStack) == this.topOfStack - 1;</font>
+    <span><font color="red">//@ requires x != null;</font></span>
+    <span><font color="red">//@ modifies this.theArray[*], this.topOfStack;</font></span>
+    <span><font color="red">//@ ensures \old(x) == this.theArray[this.topOfStack];</font></span>
+    <span><font color="red">//@ ensures (\forall int i, j; (this.topOfStack+1 &lt;= i &amp;&amp; i &lt;= this.theArray.length-1 &amp;&amp; \old(this.topOfStack+2) &lt;= j &amp;&amp; j &lt;= \old(this.theArray.length-1) &amp;&amp; (i-(this.topOfStack+1)) == (j-(\old(this.topOfStack+2)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font></span>
+    <span><font color="red">//@ ensures (\forall int i, j; (0 &lt;= i &amp;&amp; i &lt;= \old(this.topOfStack) &amp;&amp; 0 &lt;= j &amp;&amp; j &lt;= \old(this.topOfStack) &amp;&amp; i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font></span>
+    <span><font color="red">//@ ensures \old(this.topOfStack) == this.topOfStack - 1;</font></span>
     /**
      * Insert a new item into the stack, if not already full.
      * @param x the item to insert.
@@ -145,13 +147,13 @@ public class StackAr
         theArray[ ++topOfStack ] = x;
     }
 
-    <font color="red">//@ modifies this.theArray[*], this.topOfStack;</font>
-    <font color="red">//@ ensures (\forall int i, j; (0 &lt;= i && i &lt;= this.topOfStack && 0 &lt;= j && j &lt;= this.topOfStack && i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
-    <font color="red">//@ ensures (\forall int i, j; (\old(this.topOfStack)+1 &lt;= i && i &lt;= this.theArray.length-1 && \old(this.topOfStack+1) &lt;= j && j &lt;= \old(this.theArray.length-1) && (i-(\old(this.topOfStack)+1)) == (j-(\old(this.topOfStack+1)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font>
-    <font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==  (\result != null);</font>
-    <font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==&gt;  (\old(this.topOfStack) == this.topOfStack + 1);</font>
-    <font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==&gt;  (\result == \old(this.theArray[this.topOfStack]));</font>
-    <font color="red">//@ ensures this.topOfStack &lt;= \old(this.topOfStack);</font>
+    <span><font color="red">//@ modifies this.theArray[*], this.topOfStack;</font></span>
+    <span><font color="red">//@ ensures (\forall int i, j; (0 &lt;= i &amp;&amp; i &lt;= this.topOfStack &amp;&amp; 0 &lt;= j &amp;&amp; j &lt;= this.topOfStack &amp;&amp; i == j) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font></span>
+    <span><font color="red">//@ ensures (\forall int i, j; (\old(this.topOfStack)+1 &lt;= i &amp;&amp; i &lt;= this.theArray.length-1 &amp;&amp; \old(this.topOfStack+1) &lt;= j &amp;&amp; j &lt;= \old(this.theArray.length-1) &amp;&amp; (i-(\old(this.topOfStack)+1)) == (j-(\old(this.topOfStack+1)))) ==&gt; ( this.theArray[i] == \old(this.theArray[j]) ));</font></span>
+    <span><font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==  (\result != null);</font></span>
+    <span><font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==&gt;  (\old(this.topOfStack) == this.topOfStack + 1);</font></span>
+    <span><font color="red">//@ ensures (\old(this.topOfStack) &gt;= 0)  ==&gt;  (\result == \old(this.theArray[this.topOfStack]));</font></span>
+    <span><font color="red">//@ ensures this.topOfStack &lt;= \old(this.topOfStack);</font></span>
     /**
      * Return and remove most recently inserted item from the stack.
      * @return most recently inserted item, or null, if stack is empty.
@@ -165,15 +167,17 @@ public class StackAr
         return topItem;
     }
 
-    <font color="red">/*@ spec_public */</font> private Object [ ] theArray;
-    <font color="red">/*@ spec_public */</font> private int        topOfStack;
+    <span><font color="red">/*@ spec_public */</font></span> private Object [ ] theArray;
+    <span><font color="red">/*@ spec_public */</font></span> private int        topOfStack;
 
 } 
 </pre>
 
-<hr>
+<hr />
 
-<a href="./">Daikon homepage</a><p>
+<p>
+<a href="./">Daikon homepage</a>
+</p>
 
 <address>
 <a href="http://pag.csail.mit.edu/~mernst/">Michael Ernst</a>

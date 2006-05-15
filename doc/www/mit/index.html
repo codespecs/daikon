@@ -1,7 +1,9 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<TITLE>Using Daikon at MIT CSAIL</TITLE>
-<link rev="made" href="mailto:mernst@csail.mit.edu">
+  <title>Using Daikon at MIT CSAIL</title>
+  <link rev="made" href="mailto:mernst@csail.mit.edu" />
 </head>
 <body>
 
@@ -35,8 +37,7 @@ with the <a href="http://pag.csail.mit.edu/pag/logistics.html">logistics
 for work at PAG</a>.
 </p>
 
-<p>
-Contents:
+<p>Contents:</p>
 <!-- start toc.  do not edit; run html-update-toc instead -->
     <ul>
       <li><a href="#getting-started">Getting started</a>
@@ -72,9 +73,8 @@ Contents:
         </ul></li>
     </ul>
 <!-- end toc -->
-</p>
 
-<hr>
+<hr />
 <h2><a name="getting-started"></a>Getting started</h2>
 
 <h3><a name="learning-about-daikon"></a>Learning about Daikon</h3>
@@ -83,18 +83,27 @@ Contents:
 In order to become familiar with the theory of dynamic invariant detection
 and some details of the Daikon implementation, see the following <a
 href="http://pag.csail.mit.edu/~mernst/research/#Invariant%20detection">papers</a>:
+</p>
 <ul>
   <li><a href="http://pag.csail.mit.edu/~mernst/pubs/invariants-tse2001-abstract.html">Dynamically
       Discovering Likely Program Invariants to Support Program
-      Evolution</a> (IEEE TSE, v27#2, Feb 2001, pp 1-25)<br>
+      Evolution</a> (IEEE TSE, v27#2, Feb 2001, pp 1-25)<br />
       I call this "the invariants paper" as it was the first exposition of
       the idea of dynamic invariant detection.  The first four and last
       three sections are more important than the middle four; you should
       skim or skip sections 5-8 on first reading.
-  <li><a href="http://pag.csail.mit.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html">Quickly Detecting Relevant Program Invariants</a> (ICSE 2000)<br>
+  </li>
+  <li><a href="http://pag.csail.mit.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html">Quickly Detecting Relevant Program Invariants</a> (ICSE 2000)<br />
       I call this "the relevance paper"; it discusses essential
       improvements to the basic technique.
+  </li>
+  <li><a href="http://pag.csail.mit.edu/~mernst/pubs/invariants-incremental-fse2004-abstract.html">Efficient incremental algorithms for dynamic detection of likely invariants</a> (FSE 2004)<br />
+      I call this "the incremental paper"; it discusses how to make the
+      system run fast in one pass, instead of making multiple passes over
+      the data in batch mode.  It may be the best overall introduction.
+  </li>
 </ul>
+<p>
 There are additional papers that further discuss the technique and
 its applications; which ones to read depends on your particular interest.
 </p>
@@ -138,14 +147,15 @@ Daikon from its .tar.gz distribution.
 
 <p>
 Checking out Daikon from the CVS repository has several advantages:
+</p>
 <ul>
   <li>You will have access to a number of files intended for developer use
-      which are not present in the distribution.
+      which are not present in the distribution.</li>
   <li>It is very easy to update to the latest version of the software,
-      retaining any personal customizations you have made.
+      retaining any personal customizations you have made.</li>
   <li>You can make changes and incorporate them in the master version of
-      Daikon.
-</ul></p>
+      Daikon.</li>
+</ul>
 
 <p>
 There are several modules (directories) available via anonymous CVS from
@@ -164,6 +174,7 @@ manual</a>.
 <p>
 The following commands create and populate the
 <tt>~/research/invariants</tt> directory:
+</p>
 <pre>
     mkdir ~/research
     cd ~/research
@@ -175,7 +186,6 @@ The following commands create and populate the
     cd ~/research/invariants
     make compile
 </pre>
-</p>
 
 <p>
 Before trying to compile (via <tt>make</tt> in any directory under
@@ -184,6 +194,7 @@ Before trying to compile (via <tt>make</tt> in any directory under
 
 <p>
 You may also want the <tt>papers</tt> directory:
+</p>
 <pre>
     cd ~/research/invariants
     cvs -d $pag/projects/invariants/.CVS co papers
@@ -191,11 +202,11 @@ You may also want the <tt>papers</tt> directory:
 
 <p>
 If you want to instrument C programs, get Kvasir:
+</p>
 <pre>
     cd ~/research/invariants
     make build-kvasir
 </pre>
-</p>
 
 
 <h4><a name="remote-cvs"></a>Remote CVS</h4>
@@ -210,7 +221,7 @@ You will need to set up your environment
 properly on the remote machine.
 (You don't have to worry about this step when using a local CVS checkout on
 the CSAIL machines, because the
-<tt>pag-daikon.</tt>{<tt>bashrc</tt>,</tt>cshrc</tt>} files do that for you.)
+<tt>pag-daikon.</tt>{<tt>bashrc</tt>,<tt>cshrc</tt>} files do that for you.)
 One difference from the instructions in the Daikon manual is that the
 <tt>bin/</tt> subdirectory in the distribution is named <tt>scripts/</tt>
 in the repository.
@@ -224,9 +235,11 @@ to "ssh" (without the quotes).
 
 <p>
 The command to check out the repository using regular remote CVS is:
+</p>
 <pre>
 cvs -d :ext:<i>username</i>@pag.csail.mit.edu:/afs/csail.mit.edu/group/pag/projects/invariants/.CVS co invariants
 </pre>
+<p>
 Other modules can be obtained by replacing the final
 <tt>invariants</tt> (in the command line above) with another module name.
 </p>
@@ -248,18 +261,20 @@ have to type your password every time that you perform a CVS operation.
 CVS permits multiple people to simultaneously edit (their own copy of) a
 set of files, then merge the changes.  See the CVS manual to learn more.
 The key commands are:
+</p>
 <dl>
-  <dt><tt>cvs update -d</tt>
-  <dd>update your version of the files from the repository
-  <dt><tt>cvs diff</tt>
+  <dt><tt>cvs update -d</tt></dt>
+  <dd>update your version of the files from the repository</dd>
+  <dt><tt>cvs diff</tt></dt>
   <dd>show difference between your version and the repository (at the time
-      you last updated)
-  <dt><tt>cvs add <i>FILENAME ...</i></tt>
-  <dd>add a file to the repository (you must also commit it)
-  <dt><tt>cvs commit <i>[FILENAME ...]</i></tt>
+      you last updated)</dd>
+  <dt><tt>cvs add <i>FILENAME ...</i></tt></dt>
+  <dd>add a file to the repository (you must also commit it)</dd>
+  <dt><tt>cvs commit <i>[FILENAME ...]</i></tt></dt>
   <dd>put your version of the file in the repository; don't forget to
-      include a descriptive message regarding what changed
+      include a descriptive message regarding what changed</dd>
 </dl>
+<p>
 I find it much easier to perform CVS manipulations in Emacs.  First, put
 <tt>(autoload 'cvs-update "pcl-cvs" nil t)</tt> in your <tt>.emacs</tt> file.
 Then, you can do <tt>M-x cvs-update</tt> to get a Dired-like listing of
@@ -318,6 +333,7 @@ chgrp -R invariants <em>DIR</em>
 
 <p>
 A few other environment details:
+</p>
 <ul>
   <li>Make sure that all the files in <tt>invariants/scripts</tt> are
       executable:
@@ -326,6 +342,7 @@ A few other environment details:
 </pre>
       (If everything is set up properly, they should be executable already
       when you check them out from the CVS repository.)
+  </li>
   <li>You can receive an email notification whenever files (in particular
       directories of your choosing) are checked in.  To receive such
       notifications, edit
@@ -334,8 +351,8 @@ A few other environment details:
       and again after editing it.  Note that some of the lists of email
       addresses are space-separated and others are comma-separated; be
       careful to use the proper separator.
+  </li>
 </ul>
-</p>
 
 <p>
 Feel free to look at other people's dotfiles, such as
@@ -344,14 +361,14 @@ potential customizations (but don't go overboard by copying everything you
 find without understanding it).</p>
 
 
-<hr>
+<hr />
 <h2><a name="running-daikon"></a>Running Daikon</h2>
 
 <p>
 See the <a href="../download/doc/">Daikon manual</a> for instructions.
 </p>
 
-<hr>
+<hr />
 <h2><a name="scratch-directories"></a>Large files and scratch directories</h2>
 
 <p>
@@ -362,10 +379,12 @@ machine has two such directories:  /scratch and /scratch2.  These
 directories are quite large (dozens of gigabytes) and are not backed up.
 The pag machines allow cross-mounting of /scratch and /scratch2 from other
 machines:
+</p>
 <pre>
   cd /var/autofs/net/<em>pag-client</em>/scratch
   cd /var/autofs/net/<em>pag-client</em>/scratch2
 </pre>
+<p>
 Typically each group member creates a subdirectory called
 <tt>/scratch/$USER/</tt> on some machine.
 </p>
@@ -387,7 +406,7 @@ environment variable.  (This is the default if you don't specify a filename.)
 </p>
 
 
-<hr>
+<hr />
 <h2><a name="editing-daikon">Editing Daikon source code</a></h2>
 
 <p>
@@ -436,12 +455,14 @@ already appear in the manual, but it's also a good idea to read the
 <p>
 If you wish to create a new section of the manual, insert two lines like
 the following:
+</p>
 <blockquote>
 <pre>
 @node    <em>Short title</em>, Foo, Bar, Baz
 @<em>chapter</em> <em>Long title</em>
 </pre>
 </blockquote>
+<p>
 where you should insert "Foo, Bar, Baz" literally (they will be fixed up
 for you automatically), you select the short and the long titles (which may
 even be the same), and you may replace "@chapter" by "@section",
@@ -451,42 +472,38 @@ even be the same), and you may replace "@chapter" by "@section",
 <p>
 Follow the Texinfo conventions for marking up text.  In particular:
 </p>
-
 <ul>
+  <li> Don't use regular double quotes (&quot;) in running text.  Instead, use 
+  two single backquotes and two regular quotes, ``like this''.  Emacs will
+  do this substitution for you if you are using its Texinfo mode.</li>
 
-<p><li> Don't use regular double quotes (&quot;) in running text.  Instead, use 
-two single backquotes and two regular quotes, ``like this''.  Emacs will
-do this substitution for you if you are using its Texinfo mode.
-</p>
-
-<p><li> Often, some other kind of markup is better than quotes:
-<ul>
-<li>@code is for names of classes, functions, variables, keywords, and
-other fragments of source code.
-<li>@var is for meta-syntactic variables, not for referring to variables 
-that appear literally in the source code.
-<li>@file is for the names of files.
-<li>@option is for command-line options.
-<li>@samp is for sample input or output.  (Alternatively, you can use
-@example to set off longer input/output strings.)
-<li>@command should be avoided.  If you are referring to the program 
-itself, just use the name of the program without special markup, e.g. GCC.
-If you are referring to how to invoke the program from the shell, 
-@samp is better, e.g. @samp{gcc -E}.
-</ul>
-</p>
-
-<p><li>Examples shouldn't include extra spaces on the left for 
-indentation since Texinfo already adds some indentation.  Remember 
-that in code examples you need to replace all curly braces with @{ and @} 
-to quote them for Texinfo.
-</p>
-
-<p><li>Don't mix @example and @smallexample in the same section since it
-looks funny to have examples in two different sized fonts.  If your example
-is too wide to fit on the page with @example, it's better to insert some
-line breaks to make it more readable than to shrink the font.
-</ul>
+  <li> Often, some other kind of markup is better than quotes:
+    <ul>
+      <li>@code is for names of classes, functions, variables, keywords, and
+      other fragments of source code.</li>
+      <li>@var is for meta-syntactic variables, not for referring to variables 
+      that appear literally in the source code.</li>
+      <li>@file is for the names of files.</li>
+      <li>@option is for command-line options.</li>
+      <li>@samp is for sample input or output.  (Alternatively, you can use
+      @example to set off longer input/output strings.)</li>
+      <li>@command should be avoided.  If you are referring to the program 
+      itself, just use the name of the program without special markup, e.g. GCC.
+      If you are referring to how to invoke the program from the shell, 
+      @samp is better, e.g. @samp{gcc -E}.</li>
+    </ul>
+  </li>
+  <li>Examples shouldn't include extra spaces on the left for 
+    indentation since Texinfo already adds some indentation.  Remember 
+    that in code examples you need to replace all curly braces with @{ and @} 
+    to quote them for Texinfo.
+  </li>
+  <li>Don't mix @example and @smallexample in the same section since it
+    looks funny to have examples in two different sized fonts.  If your example
+    is too wide to fit on the page with @example, it's better to insert some
+    line breaks to make it more readable than to shrink the font.
+  </li>
+  </ul>
 
 <p>
 Once you have edited the manual, run <tt>make</tt> twice (yes, you must run
@@ -495,7 +512,7 @@ it twice) in order to generate formatted versions of the manual
 </p>
 
 
-<hr>
+<hr />
 <h2><a name="other-tasks">Other tasks</a></h2>
 
 
@@ -517,10 +534,10 @@ they do fail, then it is the responsibility of everyone who checked in code
 in the previous day to collectively determine responsibility (this is often
 obvious).  You can find out who has checked in since a given date with the
 <tt>cvs history</tt> command:
+</p>
 <pre>
   cvs history -a -c -D "2005/03/08"
 </pre>
-</p>
 
 <p>
 It is the responsibility of the person who caused the failure to
@@ -553,12 +570,13 @@ target.
     committed to CVS and that nothing extraneous in your account gets
     included in the distribution.  Ask a senior group member for the
     password.  Note that all of the following instructions should work
-    from other accounts as well. </p>
+    from other accounts as well.
 
     <pre>
         su - daikonuser </pre>
+    </li>
 
-    <li> Update daikon in daikonuser to the most recent version. </p>
+    <li> Update daikon in daikonuser to the most recent version.
 
     <pre>
         cd $inv
@@ -566,26 +584,30 @@ target.
         cvs -q diff    </pre>
 
     <p>The <tt>cvs -q diff</tt> command should produce no output. </p>
+    </li>
 
     <li> <p> Rebuild everything. </p>
 
     <pre>
         make rebuild-everything    </pre> 
+    </li>
 
-    <li> Run the kvasir regression tests <p>
+    <li> Run the kvasir regression tests
     <pre>
         make -C $inv/tests/kvasir-tests    </pre>
+    </li>
 
     <li> Run the regression tests.
-         The last line printed should be "All tests succeeded."</p>
+         The last line printed should be "All tests succeeded."
 
     <pre>
         make -C $inv/tests clean diffs </pre>
+    </li>
 
     <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
     in this version.  A good way to determine what has changed is to diff
     the texinfo source files in the doc directory against the previous
-    versions: </p>
+    versions:
 
     <pre>
         cd $inv/doc
@@ -597,6 +619,7 @@ target.
     <pre>
 	cd $inv/java
 	cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl    </pre>
+    </li>
 
     <li> <p> Set the distribution date and version number.  The date will
     be set to today, but can be overridden by redefining environment
@@ -606,6 +629,7 @@ target.
     <pre>
 	cd $inv
 	make update-doc-dist-date-and-version    </pre>
+    </li>
 
     <li> <p>Build everything to be distributed and copy it to the staging
     area (www.pag.csai.mit.edu/daikon/staging-daikon).  The final
@@ -614,22 +638,25 @@ target.
 
     <pre>
         make staging    </pre>
+    </li>
 
     <li> Test the distribution in the staging area.  The last part of
     the test runs Chicory/Daikon on the StackAr example in the
     release.  Success is indicated by invariant output being written
     to the screen. <b>Consider moving the staging area to the website
     so that we can check things out via the webserver before
-    installing.</b></p>
+    installing.</b>
 
     <pre>
         make test-staged-dist    </pre>
+    </li>
 
     <li> Update the website. 
 
     <pre>
         make staging-to-www </pre> 
 
+    <p>
     Note that <code>make staging-to-www</code> will automatically
     update the version numbers in the source code and documentation
     from the file <tt>doc/VERSION</tt>.  After doing so, it will
@@ -641,20 +668,24 @@ target.
     case, simply edit <tt>doc/VERSION</tt> by hand back to the correct
     version number before rebuilding. </p>
 
+    <p>
     <b>We should consider just updating the version number by hand at the
     beginning of the process.  That way we can run this multiple times without
     confusion.</b> </p>
+    </li>
 
-    <li> Check the website to see if it has any broken links </p>
+    <li> Check the website to see if it has any broken links
 
     <pre>
       checklink.pl -q -r `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
+    </li>
 
-    <li> Commit any changes back to CVS </p>
+    <li> Commit any changes back to CVS 
 
     <pre>
         cd $inv
         cvs -q commit -m "Change version to &lt;X.Y.Z>" </pre>
+    </li>
 
     <li> Send mail to the daikon-announce mailing list.  There are sample
     messages in the <a href="https://lists.csail.mit.edu/pipermail/daikon-announce/">archive</a> of <a href="https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/">daikon-announce</a>.
@@ -664,6 +695,7 @@ target.
     href="https://lists.csail.mit.edu/mailman/admindb/daikon-announce/">https://lists.csail.mit.edu/mailman/admindb/daikon-announce/</a>
     to approve the message before it is sent to the list.
     </p>
+    </li>
 
     <li> Submit an update to
     freshmeat.net, which will inform others that a new release is available.
@@ -684,213 +716,261 @@ target.
     This could be automated.  See "man freshmeat-submit" or
     <a href="file:///afs/csail/group/pag/software/pkg/freshmeat-submit-1.6/freshmeat-submit.html">file:///afs/csail/group/pag/software/pkg/freshmeat-submit-1.6/freshmeat-submit.html</a>. 
     </p>
-
-</ol> </p>
+    </li>
+</ol>
 
 
 <h3><a name="Mangel-Wurzel-linux">Building and testing Mangel-Wurzel on Linux</a></h3>
 
 <ol>
+
     <li> Checkout Mangel-Wurzel from CVS (if necessary)
     <pre>
     cd $inv
     cvs -d $pag/projects/invariants/.CVS co mangel-wurzel </pre>
 
     (Before doing this step, you should have signed an <a
-    href="#EDG-front-end">EDG non-disclosure agreement</a>.)<p>
+    href="#EDG-front-end">EDG non-disclosure agreement</a>.)
+    </li>
 
     <li> Update Mangel-Wurzel
     <pre>
     cd $inv/mangel-wurzel
     cvs -q update </pre> 
+    </li>
 
     <li> Setup yourself to use Purify and switch over the license (if
-    necessary) to you as described <a href=#purify-linux> below</a>. <p>
+    necessary) to you as described <a href="#purify-linux"> below</a>.
+    </li>
 
-    <!-- These should not be necessary they are in the makefile
+    <!-- These should not be necessary they are in the makefile    </li>
+
     <li> Set the environment variable <code>PURIFY_DIR</code> to
     <code>$RATIONAL/releases/purify.i386_linux2.2003a.06.15/</code>.<p>
+    </li>
 
     <li> Set the environment variable <code>MANGEL_DIR</code> to
     <code>$inv/mangel-wurzel</code>.<p>
+    </li>
 
     <li> Add <code>$inv/mangel-wurzel/bin</code> to your path.<p>
     -->
 
-    <li> Build and test Mangel-Wurzel.<p>
+    <li> Build and test Mangel-Wurzel.
     <pre>
     cd $inv/mangel-wurzel;
     make install
-    make test </pre><p>
+    make test </pre>
+    </li>
 
     <li> To make and copy new binary distribution for release:
     <pre>
     make tar 
-    make release</pre><p>
+    make release</pre>
+    </li>
 </ol>
 
 
 
 <h3><a name="Mangel-Wurzel-Windows">Building/testing Mangel-Wurzel on Windows</a></h3>
 <ol>
-    <li> Startup VMWare on horseradish <p>
+
+    <li> Startup VMWare on horseradish
+    </li>
 
     <li> Checkout mangel-wurzel from CVS (if necessary)
     <pre>
     cd $inv
-    cvs -d :ext:username@pag.csail.mit.edu:/afs/csail.mit.edu/group/pag/projects/invariants/.CVS co mangel-wurzel </pre> <p>
+    cvs -d :ext:username@pag.csail.mit.edu:/afs/csail.mit.edu/group/pag/projects/invariants/.CVS co mangel-wurzel </pre>
+    </li>
 
     <li> Update mangel-wurzel
     <pre>
     cd $inv/mangel-wurzel
-    cvs -q update </pre> <p>
+    cvs -q update </pre>
+    </li>
 
     <li> Make sure that the mangel is setup for windows
     <pre>
     cd $inv/mangel-wurzel
-    cp .mangelrc.windows .mangelrc </pre><p>
+    cp .mangelrc.windows .mangelrc </pre>
+    </li>
 
     <li> Setup yourself to use purify and switch over the license (if
     necessary) to you as described <a
-    href=#purify-windows-change-user> below</a>. <p>
+    href="#purify-windows-change-user"> below</a>.
+    </li>
 
     <li> Build and test mangel-wurzel
     <pre>
     cd $inv/mangel-wurzel
     make install
-    make test </pre> <p>
+    make test </pre>
 
     There will be differences in the md5, rijndael, and unit directories,
     because of differences between the unix and windows versions.
+    </li>
 
     <li> Create a zip file and release it
     <pre>
     make zip
-    cp mangel-wurzel-windows.zip /afs/csail/group/pag/www/daikon/download/binaries </pre> <p>
+    cp mangel-wurzel-windows.zip /afs/csail/group/pag/www/daikon/download/binaries </pre>
 
     Note that the vmware box probably doesn't have direct access to
     afs, so the above cp command will have to me modified accordingly.
-</ol> <p>
+    </li>
+</ol>
 
+<p>
 Problems:
+</p>
 <ul>
-    <li> When running the tests, the error '<code>Expected
-    HOST_ALIGNMENT_REQUIRED is 8</code>' is seen. <p>
 
+    <li> 
+    When running the tests, the error '<code>Expected
+    HOST_ALIGNMENT_REQUIRED is 8</code>' is seen.
+    <br />
     Probably, the  file <code>misc/dettargs.out</code> has been
     created incorrectly.  Try going to the <code>misc</code> subdirectory,
     deleting the files <code>lldef</code> and<code>dettargs.out</code>
-    and then rebuilding dettargs.out (<code>makedettargs.out</code>). <p>
+    and then rebuilding dettargs.out (<code>makedettargs.out</code>).
+    </li>
 
-    <li> When running the tests, the first test hangs or encounters
-    illegal instructions. <p>
-
+    <li>
+    When running the tests, the first test hangs or encounters
+    illegal instructions.
+    <br />
     Look to see what command is being used to compile the intermediate
     file.  The command on windows should be 'cl'.  If it is 'cc', the
     <code>.mangelrc</code> file (that controls defaults) is not set
     correctly.  Make sure that <code>.mangelrc</code> in $MANGEL_DIR
     has the same contents as does <code>.mangelrc.windows</code> (in
-    the same directory) <p>
+    the same directory)
+    </li>
 </ul>
 
 <h3><a name="purify-linux">Setting up Purify on Linux</a></h3>
 
+<p>
 Currently, we only have a single-user, single-machine license for Purify, and
 you can only run it on horseradish (unless you transfer the license to 
-another machine).  Purify itself is installed in the group directories:<p>
+another machine).  Purify itself is installed in the group directories:
+</p>
 
     <pre>
     /afs/csail.mit.edu/group/pag/software/pkg/Rational
     /afs/csail.mit.edu/group/pag/software/pkg/PurifyPlus.2003a.06.15</pre>
 
-To run it:<p>
+<p>
+To run it:
+</p>
 
-<ol> 
+<ol>
+
     <li> Set the environment variable <code>RATIONAL</code> to
-    <code> /afs/csail.mit.edu/group/pag/software/pkg/Rational </code>.<p>
+    <code> /afs/csail.mit.edu/group/pag/software/pkg/Rational </code>.
+    </li>
 
     <li> Add the Purify bin directory 
     (<code>$RATIONAL/releases/PurifyPlus.2003a.06.15/i386_linux2/bin</code>) 
-    to your path.<p>
+    to your path.
+    </li>
 
     <li> Test to see you have a license:
     <pre>
-    $RATIONAL/releases/PurifyPlus.2003a.06.15/i386_linux2/bin/purify -testlicense </pre><p>
-
+    $RATIONAL/releases/PurifyPlus.2003a.06.15/i386_linux2/bin/purify -testlicense </pre>
+    </li>
 </ol>
 
-To change the authorized user: <p>
+<p>
+To change the authorized user:
+</p>
 <ol>
-
     <li> Go to <code>$RATIONAL/config</code> and edit
     <code>rational.opt</code> to have your login name as the authorized
-    user.<p>
+    user.
+    </li>
 
     <li> Restart the license manager:<pre> 
     cd $RATIONAL/config
     ./start_lmgrd_on_horseradish stop
-    ./start_lmgrd_on_horseradish </pre><p>
+    ./start_lmgrd_on_horseradish </pre>
+    </li>
 </ol>
 
-To move the license to a different machine: <p>
+<p>
+To move the license to a different machine:
+</p>
 
 <ol>
 
     <li> Go to <a href="http://www.ibm.com/software/rational/support/licensing/">http://www.ibm.com/software/rational/support/licensing/</a> 
     and create an account with
     your e-mail address.  Our account number is M211806-0-303 and our IBM
-    customer number is 5549887. <p>
+    customer number is 5549887.
+    </li>
 
     <li> Once you have logged in, get a license key using the link to
     "Request and Manage License Keys".  We have a named user floating
     license.  The key is specific to the machine you want to install
     Purify on, so if you want to move Purify to a different machine,
     you need to return the old key (for horseradish) and request a new
-    one. <p>
-
+    one.
+    <br />
     The current license file is 
-    <code>$RATIONAL/config/license_for_horseradish.upd</code>.<p>
+    <code>$RATIONAL/config/license_for_horseradish.upd</code>.
+    </li>
 
     <li> Install the new license key into Purify by running the script
     <code>$RATIONAL/releases/PurifyPlus.2003a.06.15/rs_install</code>.
     This script will walk you through a series of menus; if you aren't
     sure what step to do next, just choose the default.  Look for the option
     to install a new permanent license, and then the option to import a license
-    from an <code>.upd</code> file.<p>
+    from an <code>.upd</code> file.
+    </li>
 </ol>
 
 <h3><a name="purify-windows">Setting up Purify on Windows</a></h3>
 
+<p>
 As on Linux, we currently have only a single-user, single-machine license
 for Purify on Windows, currently set up to run on a VMWare virtual machine
 installed on horseradish in <code>/scratch/vmware/</code>.
+</p>
 
-To install Purify from scratch: <ol>
-
+<p>
+To install Purify from scratch:
+</p>
+<ol>
     <li> Go to <a href="http://www.rational.com/licensing">http://www.rational.com/licensing</a>
      and create an account with
     your e-mail address.  Our account number is N218469-0-245 and our IBM
-    customer number is 5549887. <p>
+    customer number is 5549887.
+    </li>
 
     <li> Once you have logged in, get a license key using the link to
     "Request and Manage License Keys".  We have a named user floating
     license.  The key is specific to the machine you want to install
     Purify on, so if you want to move Purify to a different machine,
     you need to return the old key (for horseradish) and request a new
-    one. <p>
+    one.
+    </li>
 
     <li> Download PurifyPlus for Windows.  It'll ask you to run one program to
     download the files, then ask you to run the installer.  That'll start up
-    the "Rational Setup Wizard". <p>
+    the "Rational Setup Wizard".
+    </li>
 
     <li> Tell the wizard to install the Rational License Server first.
     That will start up another wizard to set up the license server.
-    Just go through the menus and accept all the defaults. <p>
+    Just go through the menus and accept all the defaults.
+    </li>
 
     <li> When that finishes, it'll start up the License Key
     Administrator Wizard.  Choose the option to Import a Rational
     License File, and point it at the license key you downloaded in
-    step (2). <p>
+    step (2).
+    </li>
 
     <li> Next it'll ask you to edit the options file.  You only need one
     line in the file, like 
@@ -899,10 +979,12 @@ To install Purify from scratch: <ol>
     INCLUDE PurifyNT USER sjl </pre>
 
     where "sjl" is the login name of the user authorized to run
-    Purify.  If the login name includes spaces, wrap it in double quotes. <p>
+    Purify.  If the login name includes spaces, wrap it in double quotes.
+    </li>
 
     <li> Use the dialog box to restart the license server, then exit from
-    the Rational License Key Administrator. <p>
+    the Rational License Key Administrator.
+    </li>
 
     <li> Now you have to go back and install PurifyPlus.  To do this, use the
     desktop file browser to go to
@@ -911,37 +993,46 @@ To install Purify from scratch: <ol>
     and then open "purifyplusNT Setup Launcher".  Choose Rational Purify as
     the product to install (our license doesn't include PureCoverage or 
     Quantify).  This will throw you back into the License Key Administrator
-    again, but you don't have to do anything here. <p>
+    again, but you don't have to do anything here.
+    </li>
 
     <li> At this point, you should be able to start up Purify from the "All
     Programs" button on the "Start" menu on your toolbar.  Ta-da!
-</ol> <p>
+    </li>
+</ol>
 
-<a name=purify-windows-change-user> To change the authorized user: </a> <ol>
+
+<a name="purify-windows-change-user"> To change the authorized user: </a>
+<ol>
 
     <li> Go into <code>C:\Program&nbsp;Files\Rational\Common</code> 
     and edit <code>Rational.opt</code> (make
     sure it is the one listed as an OPT file and not a text file).  If 
     your username includes spaces, be sure to enclose it in "double quotes". 
-    <p>
+    </li>
 
     <li> From the Windows Control Panel, go to Performance and Maintenance,
     then Administrative Tools, and then pick "Services".  From this
     menu, restart the "FLEXlm License Manager".  (In a pinch, you can
     also reboot the machine to force the license server to restart and
-    read the new options file.)  <p>
+    read the new options file.)
+    </li>
 </ol>
 
-To move the license to another machine: <ol>
-
+<p>
+To move the license to another machine:</p>
+<ol>
     <li> Fire up the "Rational Licence Key Administrator" from the Start
     menu and use the wizard for "Get, Return, or Move Keys".  It'll
     send you to the Rational web site to return the existing license
-    key and get a new one.  <p>
+    key and get a new one.
+    </li>
 
     <li> Then follow the instructions above for a scratch installation on the
-    new machine. <p>
+    new machine.
+    </li>
 </ol>
+
 
 <h3><a name="EDG-front-end">EDG C++ front end</a></h3>
 
@@ -976,34 +1067,32 @@ at <code>src/il_def.h</code>.
 
 <h3><a name="vmware"> Setting up VMWare </a></h3>
 
-<ul> 
+<ul>
+
     <li> The vmware executable is /usr/vmware/bin/vmware.  Normally its
-    best to add /usr/vmware/bin to your path <p>
+    best to add /usr/vmware/bin to your path </li>
 
     <li> MIT has licenses for VMWare.  Send an email to software@csail.mit.edu
     to get a license number.  From the vmware screen, choose 
-    'help->Enter Serial Number' to enter the license. <p>
+    'help->Enter Serial Number' to enter the license. </li>
 
     <li> Start up VMWare by choosing 'Open existing virtual machine or team'
     from the main window.  The setup (at least on horseradish) is found
-    in /scratch/vmware (should we move this to a place that is backed up?) <p>
+    in /scratch/vmware (should we move this to a place that is backed up?) </li>
 
     <li> Using VMWare remotely may create some problems with mapping X
     keys correctly.  This is explained at: <a
-    href=http://www.vmware.com/support/ws5/doc/ws_devices_keymap_linux_longer.html>
+    href="http://www.vmware.com/support/ws5/doc/ws_devices_keymap_linux_longer.html">
     the vmware support site</a>.  To use VNC I found I had to set the
     keyboard by hand.  To do this add 'xkeymap.language = us101' to
     your vmware config file (~/.vmware/config).  At that point
     everything worked except the vertical bar (|).  I fixed that be
-    adding 'xkeymap.keysym.bar = 0x02b' to the config file. <p>
-
-
+    adding 'xkeymap.keysym.bar = 0x02b' to the config file. </li>
 </ul>
 
 <h3><a name="windows-setup"> Setting up Windows for Mangel-Wurzel</a></h3>
 
-Setting up your Windows environment:<p>
-
+<p>Setting up your Windows environment:</p>
 <ol>
 
 <li> You need to come up with a good way to transfer files back and
@@ -1014,16 +1103,16 @@ directory on the Linux side to VMWare's list of shared folders (use
 the "Virtual Machine Settings" menu), then on the Windows side, go
 into the "Tools" menu tab in the file browser and select "Map network
 drive".  You do not need to install CVS on Windows as long as you can
-easily copy tarballs back and forth.<p>
+easily copy tarballs back and forth.</li>
 
 <li> You need to have all of these installed on your Windows box:
 Cygwin, Daikon, the JDK (because Daikon uses some stuff that isn't
-included in the JRE), Rational Purify, and Visual C/C++.<p>
+included in the JRE), Rational Purify, and Visual C/C++.</li>
 
 <li> It's helpful for copying files back and forth if you create
 shortcuts to both your Cygwin and Linux home directories from your
 desktop, and/or a symbolic link in your Cygwin home directory to your
-shared Linux directory.<p>
+shared Linux directory.</li>
 
 <li> Although MW runs as a native Windows application, building it
 requires Cygwin and particularly Gnu Make.  However, be aware that you
@@ -1033,29 +1122,29 @@ double-click on the Cygwin icon.  (This is a restriction of Rational
 Purify, which doesn't work correctly if console input/output is
 redirected to/from a pipe, which is how ptys are implemented in
 Cygwin.)  Also note that Purify only works on native Windows
-executables produced by the Visual C/C++ compiler, not by gcc.<p>
+executables produced by the Visual C/C++ compiler, not by gcc.</li>
 
 <li> You need to set up some environment variables in your 
-<code>.cshrc</code> or <code>.bashrc</code>,  like so:<p>
+<code>.cshrc</code> or <code>.bashrc</code>,  like so:
 
-For Daikon:
+<p>For Daikon:</p>
 <pre>
 setenv CLASSPATH '.;C:\Program Files\daikon\daikon.jar;C:\Program Files\Java\jdk1.5.0_05\lib\tools.jar'
-</pre><p>
+</pre>
 
-For Visual C/C++:
+<p>For Visual C/C++:</p>
 <pre>
 setenv MVSDIR "C:\Program Files\Microsoft Visual Studio .NET 2003"
 setenv INCLUDE "$MVSDIR\Vc7\include;$MVSDIR\Vc7\PlatformSDK\Include"
 setenv LIB  "$MVSDIR\Vc7\lib;$MVSDIR\Vc7\PlatformSDK\Lib"
-</pre><p>
+</pre>
 
-For Mangel-Wurzel:
+<p>For Mangel-Wurzel:</p>
 <pre>
 setenv PURIFY_DIR "C:\Program Files\Rational\PurifyPlus"
 setenv MANGEL_DIR "C:\cygwin\home\sjl\mangel-wurzel"
-</pre><p>
-
+</pre>
+</li>
 <li> You also need to set your path to include the bin directories for
 Java, Visual C/C++, Purify, and Mangel-Wurzel, in addition to all the standard
 places, something like this:
@@ -1070,30 +1159,31 @@ setenv PATH .:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/lib/lapack:\
   /cygdrive/c/Program_Files/Rational/Common:\
   /cygdrive/c/Program_Files/Rational/PurifyPlus:\
   /cygdrive/c/Program_Files/Rational/PurifyPlus/cache
-</pre><p>
+</pre>
 
 Note that PATH uses Unix-like file syntax instead of Windows-like.
 (You can use the cygpath utility to convert back and forth.)  Also, it's
 useful to creat a shortcut named "Program_Files" to point to the "Program
 Files" directory since it's a pain dealing with pathnames with spaces
-in Cygwin.<p>
+in Cygwin.</li>
 
-<li> Make sure you have your <a href=#purify-windows>Purify license</a> 
-set up correctly.<p>
+<li> Make sure you have your <a href="#purify-windows">Purify license</a> 
+set up correctly.</li>
 
 <li> You might want to do a sanity check on your configuration stuff by
 compiling "hello, world" with the Visual C/C++ compiler and running
-Purify on it.<p>
-
+Purify on it.
+<br />
 Visual C/C++ compiler documentation is available
 <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vccore/html/_core_building_on_the_command_line.3a_.overview.asp">here</a>, while
-Purify documentation is only available through its online "help" menu.<p>
+Purify documentation is only available through its online "help" menu.</li>
 
 </ol>
 
 
-<hr>
-<a href="../">Daikon invariant detector</a></p>
+<hr />
+
+<p><a href="../">Daikon invariant detector</a></p>
 
 <address>
   <a href="http://pag.csail.mit.edu/~mernst/">Michael Ernst</a>

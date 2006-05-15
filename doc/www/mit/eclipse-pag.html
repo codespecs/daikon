@@ -1,27 +1,27 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Eclipse Setup for PAG Members</title>
+  <title>Eclipse Setup for PAG Members</title>
 </head>
 
 <body>
 <h1>Eclipse Setup for PAG Members</h1>
 
-<p>
-Contents:
+<p>Contents:</p>
 <!-- start toc.  do not edit; run html-update-toc instead -->
     <ul>
-      <li><a href="#startup">Start up Eclipse</a>
+      <li><a href="#startup">Start up Eclipse</a></li>
       <li><a href="#existing-projects">Work on existing coding projects</a>
         <ul>
-          <li><a href="#importing-daikon">Importing Daikon</a>
-          <li><a href="#existing-old">Importing a different existing project</a>
-        </ul>
-      <li><a href="#external-tools">Interaction with external tools</a>
-      <li><a href="#debugger">Using the Eclipse debugger</a>
-      <li><a href="#cvs">Using CVS with Eclipse</a>
+          <li><a href="#importing-daikon">Importing Daikon</a></li>
+          <li><a href="#existing-old">Importing a different existing project</a></li>
+        </ul></li>
+      <li><a href="#external-tools">Interaction with external tools</a></li>
+      <li><a href="#debugger">Using the Eclipse debugger</a></li>
+      <li><a href="#cvs">Using CVS with Eclipse</a></li>
     </ul>
 <!-- end toc -->
-</p>
 
 
 <h2><a name="startup">Start up Eclipse</a></h2>
@@ -40,6 +40,7 @@ confusing workaround.</p>
 
 <p>
 It is strongly recommended that you make the following customizations to Eclipse:
+</p>
 <pre>
 Window >> Preferences >> Workbench >> Refresh Workspace on Starup
 Window >> Preferences >> Java >> Compiler >> Problems >> Unused imports >> Ignore
@@ -89,37 +90,34 @@ environment Classpath.)</p>
 <li>Change to the Java perspective by selecting "Java Perspective" in
 the perspective menu on the far-left tool panel.  You should see some
 of the windows move around to a structure similar to the screenshot
-below.  <br><br> 
-</p>
+below.</li>
 
-<li> Select the menu item File->New->Project <br><br>
+<li> Select the menu item File->New->Project</li>
 
-<li> On the popup window, select Java Project and click Next <br><br>
+<li> On the popup window, select Java Project and click Next</li>
 
 <li> Call the project 'Daikon' or some other appropriate name and
-click Next.  <br><br> 
-</p>
+click Next.</li>
 
 <li> On the next window, create a new folder in
 the project called 'src', and answer Yes to the next dialog box asking
 you to confirm a change in the build directory. Select Ok and you
 should see the new Project as a small folder icon in the package
-explorer.  <br><br> 
-</p>
+explorer.</li>
 
-<li> Select the menu item File->Import <br><br>
+<li> Select the menu item File->Import</li>
 
 <li> On the next popup window, select "File System" and click
 Next. Browse to the folder containing your source code.  Using the
 standard PAG setup, the folder should be $INV/java. The import
 destination should be Daikon/src.  Check the boxes for including
-daikon, jtb, and utilMDE.  <br><br>
+daikon, jtb, and utilMDE.</li>
 
 <li> Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add tools.jar,
 junit.jar, jakarta-oro.jar, and java-getopt.jar.  (See your CLASSPATH
-environment variable for full pathnames to these files.)
+environment variable for full pathnames to these files.)</li>
 </ol>
 
 <p>
@@ -157,30 +155,31 @@ will switch to the Debugging Perspective, which reveals many windows
 such as the stack trace window, the variable values window, and the
 step control panel.</p>
 
-<P>Debugging features (window locations given for default setup):</P>
+<p>Debugging features (window locations given for default setup):</p>
 
 <ul>
 <li>Breakpoints: You can add breakpoints during editing by
 double-clicking on the left margin area of the source code.  When
 debugging, the program halts when it reaches a breakpoint.
-</p>
+</li>
 
 <li>Stack Trace: Once the program halts at a breakpoint, the window
 in the upper-left corner window show the stack trace.
-</p>
+</li>
 
 <li>Step Controls: Once the program halts at a breakpoint, the panels
 just below the stack trace allow you to step through the code one line
 at a time (step over), resume execution as normal (resume), step down
 into a method call (step into), or execute until leaving the current
 method (Step return).
-</p>
+</li>
 
 <li>Variables: On the top right window, there is a tab pane that displays
 the values of objects and fields during a breakpoint halt.  You can also
 type in any legal java expression that could appear at the breakpoint
 and the window will display the value of the expression (don't forget to
 put a semi-colon at the end of your expression!).
+</li>
 </ul>
 
 <h2><a name="cvs">Using CVS with Eclipse</a></h2>
@@ -190,8 +189,9 @@ running from the Eclipse IDE while doing CVS commands from the shell
 or whatever current system you use.
 </p>
 
-<hr>
-<a href="./">Using Daikon at MIT</a></p>
+<hr />
+
+<p><a href="./">Using Daikon at MIT</a></p>
 
 </body>
 </html>

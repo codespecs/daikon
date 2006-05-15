@@ -1,11 +1,17 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<TITLE>The Daikon dynamic invariant detector</TITLE>
-<link rev="made" href="mailto:mernst@csail.mit.edu">
+  <title>The Daikon dynamic invariant detector</title>
+  <link rev="made" href="mailto:mernst@csail.mit.edu" />
 </head>
 <body>
 
-<img src="daikon.gif" alt="Daikon logo"><p>
+<p>
+<img src="daikon.gif" alt="Daikon logo" />
+</p>
+
+<p>
 [ <b>Home</b>
 | <a href="faq.html">FAQ</a>
 | <a href="download/">Download</a>
@@ -13,24 +19,26 @@
 | <a href="pubs/">Publications</a>
 | <a href="mailing-lists.html">Mailing lists</a>
 ]
+</p>
 
-<hr>
+<hr />
 
 <h1>The Daikon invariant detector</h1>
 
-<!-- -----------------------------------------------------------------
+<!-- =================================================================
  DO NOT EDIT this text directly.  It is lifted (by hand) from
  $inv/doc/daikon.html, which is in turn generated from
  $inv/doc/daikon.texinfo.
 
  When re-inserting this text, prefix ``href="#'' by
  "http://pag.csail.mit.edu/daikon/download/doc/daikon.html#"
- ----------------------------------------------------------------- -->
+ ================================================================= -->
 
 
 <!-- If you edit the introduction, then re-generate daikon.html and insert -->
 <!-- its ``Introduction'' section into $inv/doc/www/index.html . -->
-<p><a href="http://pag.csail.mit.edu/daikon/">Daikon</a> is an implementation of
+<p>
+<a href="http://pag.csail.mit.edu/daikon/">Daikon</a> is an implementation of
 dynamic detection of likely invariants; that is, the Daikon invariant
 detector reports likely program invariants.  An invariant is a property
 that holds at a certain point or points in a program; these are often
@@ -41,6 +49,7 @@ applications.  Examples include &ldquo;.field &gt; abs(y)&rdquo;; &ldquo;y = 2*x
 lst&rdquo;; &ldquo;for all treenode objects n, n.left.value &lt; n.right.value&rdquo;; &ldquo;p
 != null =&gt; p.content in myArray&rdquo;; and many more.  You can extend Daikon
 to add newproperties (see <a href="http://pag.csail.mit.edu/daikon/download/doc/daikon.html#Enhancing-Daikon-output">Enhancing Daikon output</a>).
+</p>
 
    <p>Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
@@ -56,6 +65,7 @@ arbitrary data.)  It is easy to extend Daikon to other applications; as
 one example, an interface exists to the Java PathFinder model checker. 
 <!-- Removed this because it was the biggest link on the page, which is -->
 <!-- not the desired effect:  @uref{http://ase.arc.nasa.gov/visser/jpf/, , } -->
+</p>
 
    <p>Daikon is freely available for download from
 <a href="http://pag.csail.mit.edu/daikon/download/">http://pag.csail.mit.edu/daikon/download/</a>.  The distribution
@@ -65,10 +75,11 @@ and Daikon's license permits unrestricted use (see <a href="http://pag.csail.mit
 researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
 <a href="http://pag.csail.mit.edu/daikon/pubs/">publications</a>.
+</p>
 
+<hr />
 
-<hr>
-
+<p>
 [ <b>Home</b>
 | <a href="faq.html">FAQ</a>
 | <a href="download/">Download</a>
@@ -76,9 +87,9 @@ itself, are described in various
 | <a href="pubs/">Publications</a>
 | <a href="mailing-lists.html">Mailing lists</a>
 ]
-<p>
+</p>
 
-<hr>
+<hr />
 
 <a href="http://pag.csail.mit.edu/">MIT Program Analysis Group</a>
 
