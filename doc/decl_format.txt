@@ -65,21 +65,20 @@ Proposal
 
   The new format will contain the following information:
 
-    - An internal variable name with a defined syntax that can be parsed
-      to determine information about the variable.  The internal name
-      will specify the enclosing parent variable (if any), any arrays,
-      any function calls, and the static location (package) of the 
-      variable (as appropriate).
-
     - An external variable name whose syntax is appropriate for the
       front end language.  These variables will be used unparsed and
       unmodified by daikon as much as possible.  The only exception is
       that the front end will specify where array indices (if any) are
       placed within the name.
 
+    - Information about a variable (such as the enclosing variable, 
+      whether it is a function or a field, etc) will be specified in 
+      specific records.  The name will not be parsed to obtain this
+      information.
+
     - The parent ppt and variable within the ppt/variable hierarchy.
       Also, the type (object-user, enter-exit, object-method, etc) of
-      the hiearchy relationship between the two variables
+      the hierarchy relationship between the two variables
 
     - Flags about the variable.  These include most of the 
       current VarInfoAux flags.
@@ -90,144 +89,197 @@ Proposal
       information).  Examples, include final, static, public, private,
       etc.
 
-Internal Variable Names
-
-  The internal variable name is a C-like canonical name for the variable.
-  A rough BNF is:
-
-    [<static-location>]::<name>
-
-  where
-
-    <static-location> ::= an arbitrary string name for the static location
-                          of the variable.  For example 'java.lang.System'.
-
-    <name>            ::= [<name>[<field-op><array-op>]<field-op>]<field>
-    <field>           ::= <identifier>[([<args>])]
-    <array-op>        ::= '[]'
-    <field-op>        ::= '.' | '->'
-    <args>            ::= <name>|<name>,<args>
-
-  For example:
-
-    java.lang.System::out
-    a.b.c
-    a->b->c
-    a->d
-    a->d->[].c
-    a->g.[]
-    a->foo()
-    a->m1(b.c,a->d)
-
-  The field-op specifies that the field is enclosed within the name.
-  As in C, the '.' operator specifies that the field is physically
-  stored as part of its enclosing name and the '->' operator specifies
-  that the name is a reference to a separate memory area that contains
-  the field.  Note that in Java, '->' would always be used.  It may be
-  that this distinction is not important to Daikon, but it seems
-  reasonable to include the information that is available to the front
-  end.
-
-  The array-op specifies that there the preceeding name is an array
-  and that this variable represents its contents.  Just as with fields,
-  if the '.' operator is used before the array op, the array is stored
-  as part of its enclosing name and if the '->' operator is used,
-  the name is a reference to a separate memory area that contains
-  the array.  
-
-  If the field name is followed by parens it is a function (presumably
-  pure) and not a field.  Arguments can optionally be specified.  Initial
-  versions may not fully support arguments.  If the function is an instance
-  method, then it should appear enclosed within its receiver variable.
-  Static methods appear at the top level (eg, m1(b.c))  If the reciever
-  or any the arguments to a function is an array element, other arguments must
-  be elements of the same array or occur before the array.  It is not
-  possible to use elements from two unrelated arrays as arguments.  For
-  example:
-
-    class A {
-      int f1;
-      int f2;
-      String m1 (int i, int j) {}
-    }  
-
-    A[] a;
-    int[] karr;
-    int ii;
-    int jj;
-
-  Legal variables with functions are:
-
-    a->[]->m1(a->[]->f1,a->[]->f2)
-    a->[]->m1(a->[]->f1, jj)
-    a->[]->m1(ii,jj)
-
-  An illegal function name would be
-  
-    a->[]->m1(karr[],jj)
-
-  There is a special function named '*' which dereferences its one
-  argument.  For example '*(a.b)' dereferences the pointer a.b.
-
-  Identifiers can include the following characters:  a-zA-Z0-9_$@%
-  Other characters are reserved for future features.
-
-  The internal name conveys the following information to Daikon:
-
-    - The name of the enclosing class or structure.  For example:
-
-        Internal name                 Parent name
-        --------------                -----------
-        a                             <none>
-        a->b                          a
-        package.class::a->b           package.class::a
-        this                          <none>
-        this->j                       this
-        this->j->[]                   this->j
-        this->j->[]->i                this->j->[]
-
-      Note that even if an enclosing name can be determined (as in all
-      the cases except 'a' and 'this' above), it will not necessarily
-      be declared in the decl file.  Front ends can be configured to
-      ignore variables by name.  As an alternative, we could require
-      that front ends always remove any enclosed variables of any
-      omitted variable.
-
-    - The name of the field itself.  This allows the internal name to
-      be used to construct names in other languages (such as simplify)
-      that have a different naming scheme for fields.
-
-    - The location of any arrays.  Note that the syntax supports nested
-      arrays even though Daikon currently limits arrays to one level.
-
 External variable names
 
   External variable names should match as much as possible the legal
   variable name in the input language.  All characters are legal
-  except for '..'.  If the variable is an array '..' marks the location
-  of array indices within the variable name.  Adding array
-  indices is the only manipulation that daikon output needs to make
-  to an external variable name.  For example, consider the following
-  Java definitions:
+  except for '..' and blank (' ').  If the variable is an array '..'
+  marks the location of array indices within the variable name.
+  Adding array indices is the only manipulation that daikon output
+  needs to make to an external variable name.  Note that array indices
+  can occur multiple times in a variable name, but the index will
+  always be the same for each instance.  For example, consider the
+  following Java definitions:
 
     Class A {               Class B {   
       B b;                    int c;      
-      B barr[];             }
-      List<B> blist;
+      B barr[];               int m1(int arg) {}
+      List<B> blist;        }
+      int d;
+      int[] e
     }
 
     A a;
 
-  The following names would be specified:
+  The following names could be specified:
 
-    internal name       external name
-    -------------       --------------
-    a->b->c             a.b.c
-    a->barr->[]->c      a.barr[..].c
-    a->blist->[]->c     a.blist.get(..).c   
+     a.b.c
+     a.barr[..].c
+     a.barr[..].m1(a.barr[..].c)
+     a.barr[..].m1(a.d)
+     a.blist.get(..).c   
 
   In the last case, a.blist is a list that we are treating as an array.
+
+  Note that the variable name 'a.barr[..].m1(a.e[..])' should not be
+  used because there is no guarantee that the same index can be used for
+  'a.barr[]' and 'a.e[]'.
   
+Variable name information
+
+  The following information is specified for each variable:
+
+    var-kind
+
+      Specifies the kind of the variable.  The choices are 'field',
+      'function', 'array', or 'variable'.   Pointers to arrays are of type
+      'field'.  The arrays themselves (a sequence of values) are of 
+      type 'array'.  If the variable is a field or function, the name
+      of the field or function is specified after the kind.  For
+      example:  'var-kind  field f1'.  Field/Function names can include
+      any characters except space.
+
+    enclosing-var      
+
+      The variable that contains this variable.  Required for fields
+      and arrays and optional for functions.  If specified for
+      functions, the function is an instance method.  If not specified
+      the function is static.  A variable is specified by its external
+      name.  Note that the enclosing-var must be defined.  If a
+      variable is omitted (eg, by the omit-var switch), any variable
+      for which it is the enclosing variable must be omitted as well.
+
+    reference-type
+
+      Specifies the kind of reference for variables which are structures
+      or classes.  The choices are pointer or offset.  In C, pointer is
+      used if the variable is a pointer, offset is used when the structure
+      is placed inline.  Pointer would be used for all references to
+      java objects.  Defaults to pointer.
+
+    array
+
+      The number of array dimensions inherited or declared by this variable.
+      The valid values are 0 or 1.  This should be specified for any variable
+      that has multiple values.  If not specified it defaults to 0.  Future
+      versions of Daikon may support more levels of arrays.
+
+    function-args
+
+      Specifies the arguments to a function (if any).  Specified by the
+      external name of the argument variables.  Multiple arguments are
+      blank separated.  For example
+
+        function-args a.b this.f1
+
+      specifies that the function takes two arguments which are 'a.b' and
+      'this.f1'.  As with enclosing variables, each of the arguments must
+      be defined as variables.
+
+  Some Java examples are:
+
+    PrintStream java.lang.System.out
+
+      var-kind          variable
+      type              PrintStream
+      rep-type          hashcode
+      
+    Type1 arg1
+
+      var-kind          variable
+      reference-type    reference
+      type              Type1
+      rep-type          hashcode
+
+     Type2 arg1.a
+
+      var-kind          field a
+      reference-type    reference
+      enclosing-var     arg1
+      type              Type2
+      rep-type          hashcode
+
+    string arg1.a.m1(java.lang.System.out)
+
+      var-kind          function m1
+      enclosing-var     arg1.a
+      function-args     java.lang.System.out
+      type              string
+      rep-type          string
+
+    int[] arg1.barr
+
+      var-kind          field barr
+      reference-type    reference
+      enclosing-var     arg1
+      rep-type          hashcode
+      type              int[]
+
+    int[] arg1.barr[]
+
+      var-kind          array
+      enclosing-var     arg1.barr
+      rep-type          int
+      type              int
+      array             1
+      
+    Type3[] arg1.carr
+
+      var-kind          field carr
+      reference-type    reference
+      enclosing-var     arg1
+      rep-type          hashcode
+      type              Type3[]
+
+    Type3[] arg1.carr[]
+
+      var-kind          array
+      reference-type    reference
+      enclosing-var     arg1.carr
+      rep-type          hashcode
+      type              type3[]
+      array             1
+
+    int arg1.carr[].f1
+
+      var-kind          field f1
+      enclosing-var     arg1.carr[]
+      rep-type          int
+      type              int
+      array             1
+
+  Some C examples are:
+
+    (int *) a
+
+      var-kind          variable
+      rep-type          hashcode
+      type              int*
+
+    int *a
+
+      var-kind          function *
+      enclosing-var     a
+      rep-type          int
+      type              int
+
+    Type1 a
+
+      var-kind          variable
+      rep-type          hashcode
+      type              Type1
+
+    int a->rgb[1]
+
+      var-kind          field rgb[1]
+      enclosing-var     a
+      rep-type          int
+      type              int
+
+  Note that the dereference operator is treated as an instance function
+  on the variable being dereferenced.  We could support this with a special
+  var-kind if desired.
+
 Declared Type
 
   The declared type of the variable.  Unchanged.
@@ -245,16 +297,18 @@ Program point names
 
   Information on the type of the program point is contained in a separate
   ppt-type record that specifies the type of the record.  The possible
-  types of program points are class, object, enter, exit, subexit.  The
-  'subexit' type is used for multiple exits from the same method.  When
-  'subexit' is used, the program point name must still be made 
-  distinct.  This can be accomplished by adding the line number of the various
-  exits as is done today or by some other front-end specific manner.
+  types of program points are class, object, enter, exit, subexit and point.  
+  The 'subexit' type is used for multiple exits from the same method.
+  When 'subexit' is used, the program point name must still be made
+  distinct.  This can be accomplished by adding the line number of the
+  various exits as is done today or by some other front-end specific
+  manner.  The 'point' type is used for program points that are not
+  of the typical method enter/exit, object, class style.
 
 Parent Ppt/variable
 
   Each variable can have one or more parent variables in the
-  Ppt/variable hierarchy.  Each program point defines one or more
+  Ppt/variable hierarchy.  Each program point optionally defines one or more
   program points as parents.  Each variable within a program point can
   reference one or more parent program points and variable names.  For
   example, consider the following method in class 'A':
@@ -263,8 +317,7 @@ Parent Ppt/variable
 
   Method 'm' has 3 different parents in the ppt hierarchy.  It is a member
   of class A and it has arguments of classes B and C.  It could also
-  be related to an interface or a superclass, but we don't support those
-  relations and doing so is not part of this proposal.
+  be related to an interface or a superclass.
 
   Each variable can specify one or more of the program point parents and
   optionally the parent variable name within the parent program point.
@@ -275,24 +328,43 @@ Parent Ppt/variable
 
     variable    parent ppt  parent variable     relation type
     --------    ----------  ---------------     -------------
-    this        A:::OBJECT  this                object_method
-    this.f1     A:::OBJECT  this.f1             object_method
-    b           B:::OBJECT  this                object_user
-    b.f2        B:::OBJECT  this.f2             object_user
-    c           C:::OBJECT  this                object_user
-    c.f3        C:::OBJECT  this.f3             object_user
+    this        A:::OBJECT  this                parent
+    this.f1     A:::OBJECT  this.f1             parent
+    b           B:::OBJECT  this                parent
+    b.f2        B:::OBJECT  this.f2             parent
+    c           C:::OBJECT  this                parent
+    c.f3        C:::OBJECT  this.f3             parent
 
-  Some program points have a one-to-one relationship with the parent
+  Some program points have a 'complete' relationship with the parent
   program points.  For example, each variable in a numbered exit point
-  has a child of the same variable in the common exit point.  In that
-  case the program points parent is noted as being of type 'one_to_one'
-  and each variable does not have to be explicitly annotated.  The
-  relation type 'exit_exitNN' is by default one-to-one.
+  has a parent of the same variable in the common exit point.  In that
+  case the relation type is 'complete' and each variable does not have
+  to be explicitly annotated.
 
-  Note that it is not clear this (one_to_one) is a necessary feature.
-  Its added simply to make the declaration somewhat more readable
-  especially because the program point names of methods tend to be
-  long.
+  The following types of relations are supported:
+
+    enter_exit  - enter method to exit method relation.  In this case, the
+                  individual variables are not annotated.  Daikon automatically
+                  connects the orig versions of variables at the exit ppt
+                  to the same variable at the enter ppt.  The corresponding
+                  program points must have the flags 'enter' and 'exit'.
+                  See the ppt flags below.
+
+    complete    - All vars in the child have a matching variable with the
+                  same name in the parent.  Individual variables are not
+                  annotated, Daikon automatically matches each variable.
+                  It is an error for the parent and child not to have exactly
+                  the same set of variables.  Other relation types cannot
+                  be combined with complete.
+
+    parent      - Used for non-recursive parent-child relationship.  For 
+                  example, an object to its methods.  Each variable must
+                  be annotated.
+
+    user        - Similar to 'parent', but used if the relationship might be
+                  recursive.  For example, objects used within an
+                  object ppt would be a user relation (since they
+                  could be recursive).
   
 Program point flags
 
@@ -302,6 +374,15 @@ Program point flags
     ----------  ------    -------------------
     static      false     True if a program point that is a method entry
                           or exit is static (does not have a receiver)
+
+    enter       false     True if the program point is the entry to a method.
+
+    exit        false     True if the program point is the exit from a method
+
+    private     false     True if the program point is private to its class.
+                          Only applicable to object oriented languages that
+                          have this distinction.  By default, all ppts are
+                          not private (ie, public)
 
 Variable Flags
 
@@ -322,8 +403,8 @@ Variable Flags
                           a program variable.  For example, the class name 
                           variables.  Pure method calls are marked with
                           'method' only (below) and not 'synthetic'.
-    classname   false     variable is the classname synthetic variable
-    method_call false     variable is a pure method call and not a field
+    classname   false     Variable is the classname synthetic variable
+    non_null    flase     True if a variable can never be null.
     
 
   Most of these are the same as previously except that they are changed
@@ -356,22 +437,26 @@ File format
   is a ppt record that specifies the name of the program point as
   'C:::OBJECT'.
 
-  The definition for each program point consists of a
-  ppt record followed by parent records for the program point
-  and then variable definitions.  Each variable definition consists
-  of a variable record which defines the internal name followed
-  by records that describe the details of the variable (external name,
-  flags, comparability, parents, etc).  Program point definitions are
+  The definition for each program point consists of a ppt record
+  followed by parent records for the program point and then variable
+  definitions.  Each variable definition consists of a variable record
+  which defines the external name followed by records that describe
+  the details of the variable (kind, enclosing variable, flags,
+  comparability, parents, etc).  Program point definitions are
   terminated by a blank line.  Variable definitions are terminated by
-  the next variable definition or the end of the program point definition.
-  A rough description of the format is:
+  the next variable definition or the end of the program point
+  definition.  A rough description of the format is:
 
     ppt <pptname>
       ppt-type <ppt-type>
       [parent* <relation-type> <parent-ppt-name>]
       [flags <ppt-flags>]
-      variable <internal-name>
-        external-name <external-name>
+      variable <external-name>
+        var-kind <variable-kinds>
+        [enclosing-var <external-name>]
+        [reference-type pointer|offset]
+        [array <dim-cnt>]
+        [function-args <arg-list>]
         rep-type <representation-type>
         dec-type <declared-type>
         [flags <variable-flags>]
@@ -381,15 +466,15 @@ File format
 
   where    
   
-    <relation-type>     ::= object_method|class_object|object_user|enter_exit|
-                            exit_exitnn
+    <relation-type>     ::= enter_exit|complete|parent|user
     <ppt-flags>         ::= static
+    <variable-kinds     ::= field <name>|function <name>|array|variable
     <variable-flags>    ::= is_param|no_dups|not_ordered|no_size|nomod|
                             synthetic|classname|method
     <ppt-type>          ::= class|object|enter|exit|subexit
     * means that the record can occur one or more times
 
-  There is also global records that can be specified at the beginning
+  There are also global records that can be specified at the beginning
   of the file (before the first program point definition).  These
   are:
 
@@ -401,11 +486,6 @@ File format
     - The type of comparability used in the file
 
         var-comparability none|implicit
-
-    - List implementors?  Its not clear what (if anything) this is used for
-      in Daikon.  If necessary, the format is:
-
-        list_implementors <impl> <impl> ...
 
 File compatibility
 
@@ -1021,6 +1101,122 @@ Appendix B -- nested arrays
   versions).  A number of other invariants that we have not currently
   implemented for sequences (such as square) would be found as well
   with no extra implementation work.
+
+
+Appendix C -- Internal Variable Names
+
+  This appendix contains the original internal variable name proposal.
+  This has been replaced by individual records specifying variable
+  information.
+
+  The internal variable name is a C-like canonical name for the variable.
+  A rough BNF is:
+
+    [<static-location>]::<name>
+
+  where
+
+    <static-location> ::= an arbitrary string name for the static location
+                          of the variable.  For example 'java.lang.System'.
+
+    <name>            ::= [<name>[<field-op><array-op>]<field-op>]<field>
+    <field>           ::= <identifier>[([<args>])]
+    <array-op>        ::= '[]'
+    <field-op>        ::= '.' | '->'
+    <args>            ::= <name>|<name>,<args>
+
+  For example:
+
+    java.lang.System::out
+    a.b.c
+    a->b->c
+    a->d
+    a->d->[].c
+    a->g.[]
+    a->foo()
+    a->m1(b.c,a->d)
+
+  The field-op specifies that the field is enclosed within the name.
+  As in C, the '.' operator specifies that the field is physically
+  stored as part of its enclosing name and the '->' operator specifies
+  that the name is a reference to a separate memory area that contains
+  the field.  Note that in Java, '->' would always be used.  It may be
+  that this distinction is not important to Daikon, but it seems
+  reasonable to include the information that is available to the front
+  end.
+
+  The array-op specifies that there the preceeding name is an array
+  and that this variable represents its contents.  Just as with fields,
+  if the '.' operator is used before the array op, the array is stored
+  as part of its enclosing name and if the '->' operator is used,
+  the name is a reference to a separate memory area that contains
+  the array.  
+
+  If the field name is followed by parens it is a function (presumably
+  pure) and not a field.  Arguments can optionally be specified.  Initial
+  versions may not fully support arguments.  If the function is an instance
+  method, then it should appear enclosed within its receiver variable.
+  Static methods appear at the top level (eg, m1(b.c))  If the reciever
+  or any the arguments to a function is an array element, other arguments must
+  be elements of the same array or occur before the array.  It is not
+  possible to use elements from two unrelated arrays as arguments.  For
+  example:
+
+    class A {
+      int f1;
+      int f2;
+      String m1 (int i, int j) {}
+    }  
+
+    A[] a;
+    int[] karr;
+    int ii;
+    int jj;
+
+  Legal variables with functions are:
+
+    a->[]->m1(a->[]->f1,a->[]->f2)
+    a->[]->m1(a->[]->f1, jj)
+    a->[]->m1(ii,jj)
+
+  An illegal function name would be
+  
+    a->[]->m1(karr[],jj)
+
+  There is a special function named '*' which dereferences its one
+  argument.  For example '*(a.b)' dereferences the pointer a.b.
+
+  Identifiers can include the following characters:  a-zA-Z0-9_$@%
+  Other characters are reserved for future features.
+
+  The internal name conveys the following information to Daikon:
+
+    - The name of the enclosing class or structure.  For example:
+
+        Internal name                 Parent name
+        --------------                -----------
+        a                             <none>
+        a->b                          a
+        package.class::a->b           package.class::a
+        this                          <none>
+        this->j                       this
+        this->j->[]                   this->j
+        this->j->[]->i                this->j->[]
+
+      Note that even if an enclosing name can be determined (as in all
+      the cases except 'a' and 'this' above), it will not necessarily
+      be declared in the decl file.  Front ends can be configured to
+      ignore variables by name.  As an alternative, we could require
+      that front ends always remove any enclosed variables of any
+      omitted variable.
+
+    - The name of the field itself.  This allows the internal name to
+      be used to construct names in other languages (such as simplify)
+      that have a different naming scheme for fields.
+
+    - The location of any arrays.  Note that the syntax supports nested
+      arrays even though Daikon currently limits arrays to one level.
+
 
 
 ---------------------------------------
