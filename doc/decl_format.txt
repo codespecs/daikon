@@ -93,13 +93,13 @@ External variable names
 
   External variable names should match as much as possible the legal
   variable name in the input language.  All characters are legal
-  except for '..' and blank (' ').  If the variable is an array '..'
-  marks the location of array indices within the variable name.
-  Adding array indices is the only manipulation that daikon output
-  needs to make to an external variable name.  Note that array indices
-  can occur multiple times in a variable name, but the index will
-  always be the same for each instance.  For example, consider the
-  following Java definitions:
+  except for '..'.  Blanks must be escaped with \_ and backslashes
+  with \\.  If the variable is an array '..'  marks the location of
+  array indices within the variable name.  Adding array indices is the
+  only manipulation that daikon output needs to make to an external
+  variable name.  Note that array indices can occur multiple times in
+  a variable name, but the index will always be the same for each
+  instance.  For example, consider the following Java definitions:
 
     Class A {               Class B {   
       B b;                    int c;      
@@ -282,18 +282,20 @@ Variable name information
 
 Declared Type
 
-  The declared type of the variable.  Unchanged.
+  The declared type of the variable.  Unchanged except that blanks must
+  be quoted as they are in variable names.
 
 Representation Type
 
-  The type used to represent the variable in the dtrace file.  Unchanged.
+  The type used to represent the variable in the dtrace file.  Unchanged
+  except that strings are named 'string' rather than 'java.lang.String'.
 
 Program point names
 
   Like external variable names, program point names are not parsed by
   Daikon and are simply passed through to the output.  The only
-  restrictions on them is that they are distinct and that they
-  cannot contain spaces.
+  restrictions on them is that they are distinct and that blanks must
+  be quotes as they are in variable names.
 
   Information on the type of the program point is contained in a separate
   ppt-type record that specifies the type of the record.  The possible
@@ -357,14 +359,14 @@ Parent Ppt/variable
                   the same set of variables.  Other relation types cannot
                   be combined with complete.
 
-    parent      - Used for non-recursive parent-child relationship.  For 
+    parent      - Used for acyclic parent-child relationships.  For 
                   example, an object to its methods.  Each variable must
                   be annotated.
 
-    user        - Similar to 'parent', but used if the relationship might be
-                  recursive.  For example, objects used within an
+    user        - Similar to 'parent', but used if the relationship might have
+                  a cycle.  For example, objects used within an
                   object ppt would be a user relation (since they
-                  could be recursive).
+                  could form a cycle).
   
 Program point flags
 
@@ -589,22 +591,73 @@ Nested arrays
   proposal, there doesn't seem to be a downside to separating out these
   two issues.  A discussion of nested arrays can be found in Appendix B.
 
-Issues
+Open Issues
 
   The following is a list of issues concerning the proposal.  Some
   are open questions and others are concerns that I expect others to
   have.  If there are multiple paragraphs in an issue the first is
   the issue and remaining paragraphs are the proposed answer.
 
+    - How should we handle java lists in external names?  Should we include
+      '.get(..)' in the external name?  That implies that the external
+      name is always indexed and that is not always the case.  Perhaps
+      the external name needs an unindexed value and an indexed value.
+      That way the variable 'list' could refer to the entire array referred
+      to by a list and 'list.get(1..5)' would refer to a sequence from
+      within the list.  
+
+      For now, I'm proposing we just include .get() in the external name
+
+    - What does Daikon use the declared type for again?  If
+      nothing, it would be nice to make it completely uninterpreted
+      (along the lines of the external variable names). The current
+      documentation includes a strange restriction about appending the
+      right number of "[]"s which it would be nice to get rid of. (smcc)
+
+      The only thing that I know it is used for is determining 
+      the comparability of hashcodes.  Currently only hashcodes with
+      identical declared types are considered comparable.  
+
+      I think some output formats need to know the declared type in
+      order to create legal code.  It might be useful to declare 
+      a temporary variable or the like and the declared type would
+      be helpful.  But this would not require the declared type to
+      be parsed.  I'd suggest that the declared type should be the
+      correct name of the type in the input language.  That would require
+      it to include the correct number of parens.
+
+    - It might be good to specify whether the decl file is required to be 7-bit
+      ASCII, a particular 8-bit character set, or UTF8, though it's actually
+      more of an issue for .dtrace files. (smcc)
+
+      I'm not at all familiar with these issues.  It should be in whatever
+      format that can easily be read by java.  As long as the parsed
+      parts of the file are 'normal', the unparsed parts should be able
+      to be anything that can be read by java.
+
+    - Should we change the name for 'implicit' comparability to something
+      more meaningful? (pgbovine)
+
+      Sure.  Any suggestions?
+
+    - Should all of the record names in the file format and the flags
+      be with underscores or dashes?  Currently all of the record names
+      use dashes and all other values use underscores.  This is at least
+      somewhat inconsistent.
+
+      I'm happy to change to use dashes everywhere if that is preferred.
+
+
+Resolved Issues:
+
     - Rather than supplying information about variables with a name that
       must be parsed, why not make the nesting of variables explicit by
       using xml or some other format that is explicitly nested?  Also
       xml can be easily validated give a DTD or schema (pgbovine)
 
-      Our thought is that naming each variable in the flat style of the
-      current decl file is more readable than a nested definition.  The
-      name carries a lot of intuitive information since it is very
-      similar to Java and C.
+      It feels like fully nesting all variables within their enclosing
+      variables would create a file that both more complex to create
+      and read.
 
       The format is so simple to parse and understand that the advantage
       of a schema is not clear to me, though perhaps I am missing something.
@@ -616,20 +669,17 @@ Issues
       Functions and arrays would require additional information but could
       be handled quite similarly.
 
-      This is possibly a more straightforward approach.  It is more verbose,
-      but is also more explicit.  Since the enclosing variable is required,
-      it becomes more important that all enclosing variables be present, but
-      that probably makes sense in any approach.
+      We have changed to this approach.  It is somewhat more verbose, but
+      is also both more clear and easier to create.  The old approach is
+      documented in Appendix C.
 
     - Is the internal variable operator '->' necessary?  Couldn't '.' only
       be used. (pgbovine)
 
-      The only usage of I know of this information is that '.' tells
-      Daikon that the enclosing variable doesn't have an interesting
-      value (because it isn't really a hashcode).  We infer this now from
-      the non-null attribute, but this would be a bit more specific.  It
-      simply feels like information that might be useful at some point that
-      is relatively easy to provide.
+      This was part of the internal name, but the same information is
+      specified in the reference-type record.  We needed to pass this
+      information to Daikon in the past, so it seems reasonable to 
+      continue to provide it.
 
     - Similarly, should we add '.' and '->' to array references (eg,
       a->[] or a.[]) to make it clear whether or not the array is directly
@@ -637,6 +687,10 @@ Issues
       calls for the field operators to be included with arrays as well.
 
       (pgbovine) This is weird looking?  Is this complexity worthwhile?
+
+      The reference-type record applies to arrays as well as fields.
+      I think it is useful to distinguish between a pointer to an array
+      and an inline structure.
 
     - Do we need to specify list implementors?  Why?
 
@@ -672,23 +726,22 @@ Issues
       child only contains a subset of the variables at the parent.  This
       is also true of object-user relations because of the depth.
 
+      Daikon should allow either.  Front ends can decide what makes more
+      sense for their language.  This does imply that the sample count
+      will not be correct for cases where the child does not have all of
+      the variables of the parent.
+
     - How are private methods handled?
 
-      The front end decides whether or not private methods are included
-      in the object ppt hierarchy.  If they are not included, then no
-      hierarchy information is included with the ppt.  The ppt is still
-      interesting for its enter/exit invariants.
+      The front end can decide whether or not to include private
+      methods in the hierarchy.
 
-      Perhaps though it would be better to mark the ppt as private and
-      still include the relations.  This would allow daikon to determine
-      whether to include them or not (via a switch) and could possibly
-      enable some interesting additional information (eg, whether or
-      not the private method did violate some object invariants).
-
-      The front end could implement this switch (whether or not to include
-      privates) as well, but implementing it in Daikon is seemingly the only
-      way to determine that the private method actually breaks object
-      invariants.
+      The front end can also mark program points as private.  Daikon
+      will have a switch or configuration option that will ignore
+      any hierarchy relationships on private program points.  Daikon
+      could also optionally check to see if the private program points
+      broke any object invariants and/or create a public/private version
+      of the object program points.
 
     - Should front ends be required to include the enclosing variable
       for each variable?  This would imply that if a variable was
@@ -697,10 +750,10 @@ Issues
       consistent decl file especially if we go to a nested approach
       for sample data at some point.
 
-      I tend to think that requiring all enclosing variables to be variables
-      is a good idea.  Philip points out that this is how Kvasir works
-      already.  This, of course, may not work as expected if Daikon 
-      removes a variable.  Or Daikon will have to follow the same rule.
+      With the record oriented approach to defining variables, the enclosing
+      variable is required for all fields and instance methods.  Thus all
+      enclosing variables must exist.  Daikon's implementation of omit-var
+      must also remove any variables whose enclosing variable is removed.
 
     - Do we need a program point abbreviation when specifying parent 
       program points?  The point of this was to ease readability for
@@ -731,6 +784,9 @@ Issues
       B::this.f2 and the parent for a.b.a.b.f2 is B::this.a.b.f2), or
       both?
 
+      The later relation is correct.  Note that the B nested within B
+      should also be connected by to B which covers this.
+
     - Should we include information on superclasses in the declaration
       information?  This could be used to determine what variables are
       possibly comparable (at least in java).  Or perhaps we should include
@@ -738,15 +794,15 @@ Issues
       (ala DynComp) and type comparability (that can be determined statically
       by the front end, eg, declared types, typedefs, etc).
 
-      I tend to think this latter approach is superior.
+      We should not include superclass information.  The front end could
+      take this into account when creating comparability data or we can
+      use other comparability data.  There is no need for two types of
+      comparability data in the same file.
 
-    - How should we handle java lists in external names?  Should we include
-      '.get(..)' in the external name?  That implies that the external
-      name is always indexed and that is not always the case.  Perhaps
-      the external name needs an unindexed value and an indexed value.
-      That way the variable 'list' could refer to the entire array referred
-      to by a list and 'list.get(1..5)' would refer to a sequence from
-      within the list.  
+    - Can blanks be included in names (program point, variable, type, etc)?
+
+      Blanks can be included, but they must be escaped with as \_.  This
+      provides for easier parsing while still being somewhat reasonable.
 
     - It doesn't look like the internal variable grammar supports
       arrays that nest directly inside another array ("foo[][]",
@@ -770,17 +826,6 @@ Issues
       rgb[2] instead of a sequence).  How would this be supported?
       (smcc)
 
-      I don't understand why Kvasir creates single variables for
-      arrays of a statically declared size.  Why treat these
-      differently from other arrays?  Do you believe that statically
-      sized arrays are normally used as a shorthand for structures?
-      Is there a size limit on this (ie, does Kvasir only do this for
-      arrays below a certain size?)
-
-      We can certainly extend the internal name format to support this
-      if desired, but if we think this is interesting, perhaps this is
-      something Daikon could do itself (for all front ends).
-
       (pgbovine) We do this because it allows us to get 1 extra level
       of arrays.  For example:
 
@@ -791,9 +836,9 @@ Issues
       otherwise, rgb[].foo[] is a 2-D array which Daikon cannot curently
       support.
 
-      (jhp) I think we should allow front ends to do this if they want.
-      Other than the definition of [] for internal variables, is there
-      any reason that a front end cannot do this?
+      As shown in the examples, this is legal.  A number inside of
+      brackets is treated as a special field name.  Front ends can
+      decide if they wish to do this or not.
 
     - Kvasir creates pointer dereferences (if x is an "int ***", you might
       want variables for x, *x, **x, and ***x).  At the moment, I think
@@ -801,27 +846,19 @@ Issues
       usually be equivalent to "*x" in C. How should we name these
       variables in the new syntax? (smcc)
 
-      I agree that we should support pointer dereferences as
-      variables.  Do you think we should support the '*' syntax?  I've
-      always disliked this syntax because of its different
-      associativity rules (I never know where to put parens -- for
-      example what does *x->b mean?)  Perhaps we could use an empty
-      '->' instead of '*' for this function.  Though its certainly
-      possible that being consistent with C syntax is more valuable.
-      Its also possible that a unary right hand operator is no more
-      clear than a unary left hand operator.  In any event, it would
-      seem that we would then need to add parens as well.
+      The external name can be exactly as indicated above.  There are
+      a variety of ways that the variable could be described to
+      daikon, but I suggest treating the defererence operator as
+      an instance method.  Thus *a is defined as:
+
+        var-kind           function *
+        enclosing-var      a
 
     - Should we allow functions in the middle of variable names?
-      For example 'foo(a)->x' or 'a->foo()->x'  This would allow pure
-      functions that return non-primitives and seems reasonable.  Note
-      that if we gave a function name to the '*' operator (such as
-      deref), that could use this same syntax (eg, deref(deref(x)) for
-      **x)
+      For example 'foo(a).x' or 'a.foo().x'  This would allow pure
+      functions that return non-primitives and seems reasonable.  
 
-      However, as the internal name becomes more complex, it is less
-      obvious that parsing all of this information is really worth it.
-      What is really being provided to Daikon?
+      Both of the above examples should be legal.
 
     - I'd worry that a single "*" as a placeholder for array indices
       in the external name is likely to conflict with the syntaxes of
@@ -839,26 +876,10 @@ Issues
       The latter always works and it leaves the variable name
       completely unchanged.  But its quite unreadable.
 
-    - What does Daikon use the declared type for again?  If
-      nothing, it would be nice to make it completely uninterpreted
-      (along the lines of the external variable names). The current
-      documentation includes a strange restriction about appending the
-      right number of "[]"s which it would be nice to get rid of. (smcc)
-
-      The only thing that I know it is used for is determining 
-      the comparability of hashcodes.  Currently only hashcodes with
-      identical declared types are considered comparable.  
-
-      I think some output formats need to know the declared type in
-      order to create legal code.  It might be useful to declare 
-      a temporary variable or the like and the declared type would
-      be helpful.  But this would not require the declared type to
-      be parsed.
-
     - Can we change the rep type name for strings from "java.lang.String" 
       to "string"? (smcc)
 
-      Yes, I think that makes sense.
+      Yes, the proposal now indicates this.
 
     - In program point names, can <static-location> can be anything, as 
       long as it doesn't contain "::" or ":::"?  The character set 
@@ -886,15 +907,6 @@ Issues
       It is not required to parse the file, but I think the file is more
       readable that way.
 
-    - It might be good to specify whether the decl file is required to be 7-bit
-      ASCII, a particular 8-bit character set, or UTF8, though it's actually
-      more of an issue for .dtrace files. (smcc)
-
-      I'm not at all familiar with these issues.  It should be in whatever
-      format that can easily be read by java.  As long as they the parsed
-      parts of the file are 'normal', the unparsed parts should be able
-      to be anything that can be read by java.
-
     - Should language specific flags be defined in a data file so that they
       can be updated without recompiling daikon? (mernst)
 
@@ -912,10 +924,7 @@ Issues
       in all languages we want to support or will there need to be some
       sort of translation?  (pgbovine)
 
-      I purposefully limited this to a pretty conservative set so that we
-      could use other special characters in the future.  Thus, if a 
-      front end needs other special characters, we either need to modify
-      Daikon to support those, or translate them in the front end.
+      This is no longer relevant as we do not use internal names
 
     - In the ppt hierarchy, what is the parent for a C function?  
       The file it is contained in? (pgbovine)
@@ -925,11 +934,8 @@ Issues
       for file statics).  Methods that are passed a structure could have
       a object-user relation.  I think this is closes to the object-method
       relation from an object oriented language.  If we think that file
-      statics are interesting, then they could be included as well.  I'm
-      pretty sure that the front end can make that decision.  We only
-      need to provide a name for the type of relation in Daikon.  Or we
-      could allow new relation types to be used, but this allows typo
-      mistakes.
+      statics are interesting, then they could be included as well.  The
+      front end can define the hierarchy that make sense to it.
 
     - Should we rename 'comparability' to 'abstract-type' as in the ISSTA
       paper and move it earlier in the list of variable records? (pgbovine)
@@ -938,30 +944,13 @@ Issues
       is a Daikon file.  But I certainly don't feel strongly about it.
       The order of the records is arbitrary.  Any order is ok.
 
-    - Should we change the name for 'implicit' comparability to something
-      more meaningful? (pgbovine)
-
-      Sure.  Any suggestions?
-
-    - Should all of the record names in the file format and the flags
-      be with underscores or dashes?  Currently all of the record names
-      use dashes and all other values use underscores.  This is at least
-      somewhat inconsistent.
-
-      I didn't want to make '-' an identifier character, but I don't
-      think that switching the flags and other built-in names to dashes
-      will do that.
-
     - Should the relation types (object-user, exit-exitnn, etc) be built-in
       to Daikon, or just a name given by the front end?
 
-      I think having the types built-in makes sense.  Some types such as
-      enter-exit have some very specific semantics.  This also makes it
-      possible to default the variable relations in well understood cases.
+      These have been changed to be more generic.  Only enter_exit has
+      a specific meaning.  That is required because relations have to
+      be made to orig variables which are created by Daikon.
 
-      Built-in names can be checked for correctness and ensure consistency
-      between different front ends.  It should be easy to add additional 
-      relation types if necessary.
 
 Appendix A -- Alternative Object-User hierarchy relation solutions
 
@@ -1218,10 +1207,7 @@ Appendix C -- Internal Variable Names
       arrays even though Daikon currently limits arrays to one level.
 
 
-
----------------------------------------
-
-Notes:
+Appendix D -- Various Notes
 
 Things we need to include:
 
