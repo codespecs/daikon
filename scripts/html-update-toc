@@ -2,7 +2,7 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
-# Time-stamp: <2006-02-25 19:26:59 mernst>
+# Time-stamp: <2006-05-14 14:35:53 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -104,6 +104,9 @@ FILELOOP: for my $file (@ARGV) {
     if ($line =~ /($contents_start)(.*?)($contents_end)/is) {
       my $oldcontent = $2;
       my $newcontent = `html-toc $file`;
+      if ($newcontent eq "\n") {
+        $newcontent = "";
+      }
       if ($oldcontent eq $newcontent) {
 	if (! $quiet) {
           print STDERR "$file has up-to-date table of contents\n";
