@@ -12,10 +12,9 @@ import java.util.regex.*;
 //
 // Here are some useful features that MultiReader should have.  It should
 // extend LineNumberReader (but also provide a mechanism for indicating the
-// current file name in addition to the current line number) and implement
-// both Iterable<String> and Iterator<String>, so that it can be used in
-// foreach loops.  It should have constructors that take a String, File,
-// InputStream, or Reader.  It should have a close method.  It should
+// current file name in addition to the current line number)
+// It should have constructors that take a String, InputStream, or Reader.
+// It should have a close method.  It should
 // automatically close the underlying file/etc. when the iterator gets to
 // the end (or the end is otherwise reached).  Once it implements
 // Iterable<String>, we can eliminate TextFile in favor of MultiReader.
