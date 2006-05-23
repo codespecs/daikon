@@ -502,7 +502,8 @@ public final class DCRuntime {
     if (ci.clazz == null) {
       ci.initViaReflection();
       all_classes.add (ci);
-      daikon.chicory.Runtime.all_classes.add (ci);
+      // Moved to DCInstrument.instrument()
+      // daikon.chicory.Runtime.all_classes.add (ci);
       merge_dv.log ("initializing traversal for %s%n", ci);
       ci.init_traversal(depth);
     }
