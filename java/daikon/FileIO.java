@@ -4,6 +4,13 @@ import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
 import daikon.diff.InvMap;
 import daikon.inv.Invariant;
+import static daikon.PptRelation.PptRelationType;
+import static daikon.PptTopLevel.PptFlags;
+import static daikon.PptTopLevel.PptType;
+import static daikon.VarInfo.RefType;
+import static daikon.VarInfo.VarKind;
+import static daikon.VarInfo.VarFlags;
+import static daikon.VarInfo.LangFlags;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -103,6 +110,9 @@ public final class FileIO {
    */
   public static long dkconfig_dtrace_line_count = 0;
 
+  /** True if declaration records are in the new format **/
+  public static boolean new_decl_format = Daikon.dkconfig_new_decl_format;
+
   /// Variables
 
   // This hashmap maps every program point to an array, which contains the
@@ -131,6 +141,35 @@ public final class FileIO {
 
   /** Debug tracer for printing variable values. **/
   public static final Logger debugVars = Logger.getLogger("daikon.FileIO.vars");
+
+  public static final SimpleLog debug_decl = new SimpleLog(true);
+
+  /** Errors while processing ppt declarations */
+  public static class DeclError extends IOException {
+
+    static final long serialVersionUID = 20060518L;
+
+    public DeclError (String msg) {
+      super (msg);
+    }
+
+    public static DeclError detail (ParseState state, String format,
+                                    Object... args) {
+      String msg = String.format (format, args)
+        + String.format (" at line %d in file %s",
+                 state.reader.getLineNumber(), state.filename);
+      return new DeclError (msg);
+    }
+  }
+
+  /**
+   * Parents in the ppt/variable hierarchy for a particular program point
+   */
+  public static class ParentRelation {
+    PptRelationType rel_type;
+    String parent_ppt_name;
+    public String toString() { return parent_ppt_name + " " + rel_type; };
+  }
 
   // Utilities
   // The Daikon manual states that "#" is the comment starter, but
@@ -176,6 +215,148 @@ public final class FileIO {
                            true);
     }
 
+  }
+
+  /**
+   * Reads one ppt declaration.  The next line should be the ppt record.
+   * After completion, the file pointer will be pointing at the next
+   * record (ie, the blank line at the end of the ppt declaration will
+   * have been read in)
+   */
+  private static PptTopLevel read_ppt_decl (ParseState state, String top_line)
+    throws IOException {
+
+    // process the ppt record
+    // String line = state.reader.readLine();
+    String line = top_line;
+    Scanner scanner = new Scanner (line);
+    String record_name = need (state, scanner, "'ppt'");
+    if (record_name != "ppt")
+      decl_error (state, "found '%s' where 'ppt' expected", record_name);
+    String ppt_name = need (state, scanner, "ppt name");
+
+    // Check to see if the program point is new
+    if (state.all_ppts.containsName(ppt_name)) {
+      if (state.ppts_are_new)
+        decl_error (state, "Duplicate declaration of ppt '%s'", ppt_name);
+      else { // ppts are already in the map
+        skip_decl (state.reader);
+        return state.all_ppts.get (ppt_name);
+      }
+    }
+
+    // Information that will populate the new program point
+    Map<String,VarDefinition> varmap
+      = new LinkedHashMap<String,VarDefinition>();
+    VarDefinition vardef = null;
+    List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
+    EnumSet<PptFlags> ppt_flags = EnumSet.noneOf (PptFlags.class);
+    PptType ppt_type = PptType.POINT;
+
+    // Read the records the define this program point
+    while ((line = state.reader.readLine()) != null) {
+      debug_decl.log ("read line %s%n", line);
+      line = line.trim();
+      if (line.length() == 0)
+        break;
+
+      scanner = new Scanner (line);
+      String record = scanner.next().intern();
+      if (vardef == null) {
+        if (record == "parent") {
+          ppt_parents.add (parse_ppt_parent (state, scanner));
+        } else if (record == "flags") {
+          parse_ppt_flags (state, scanner, ppt_flags);
+        } else if (record == "variable") {
+          vardef = new VarDefinition (state, scanner);
+          if (var_included (vardef.name))
+            varmap.put (vardef.name, vardef);
+        } else if (record == "ppt-type") {
+          ppt_type = parse_ppt_type (state, scanner);
+        } else {
+          decl_error (state, "record '%s' found where %s expected", record,
+                      "'parent' or 'flags'");
+        }
+      } else { // there must be a current variable
+        if (record == "var-kind") {
+          vardef.parse_var_kind (scanner);
+        } else if (record == "enclosing-var") {
+          vardef.parse_enclosing_var (scanner);
+        } else if (record == "reference-type") {
+          vardef.parse_reference_type (scanner);
+        } else if (record == "array") {
+          vardef.parse_array (scanner);
+        } else if (record == "rep-type") {
+          vardef.parse_rep_type (scanner);
+        } else if (record == "dec-type") {
+          vardef.parse_dec_type (scanner);
+        } else if (record == "flags") {
+          vardef.parse_flags (scanner);
+        } else if (record == "lang-flags") {
+          vardef.parse_lang_flags (scanner);
+        } else if (record == "parent") {
+          vardef.parse_parent (scanner, ppt_parents);
+        } else if (record == "comparability") {
+          vardef.parse_comparability (scanner);
+        } else if (record == "variable") {
+          vardef = new VarDefinition (state, scanner);
+          if (varmap.containsKey (vardef.name))
+            decl_error (state, "var %s declared twice", vardef.name);
+          if (var_included (vardef.name))
+            varmap.put (vardef.name, vardef);
+        }
+      }
+    }
+
+    // If we are excluding this ppt, just read the data and throw it away
+    if (!ppt_included (ppt_name)) {
+      omitted_declarations++;
+      return null;
+    }
+
+    VarInfo[] vi_array = new VarInfo[varmap.size()];
+    int ii = 0;
+    for (VarDefinition vd : varmap.values()) {
+      vi_array[ii++] = new VarInfo (vd);
+    }
+
+    PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents,
+                                         ppt_flags, vi_array);
+    return newppt;
+  }
+
+  /** Parses a ppt parent hierarchy record and returns it. **/
+  private static ParentRelation parse_ppt_parent (ParseState state,
+       Scanner scanner) throws DeclError {
+
+    ParentRelation pr = new ParentRelation();
+    pr.rel_type = parse_enum_val (state, scanner, PptRelationType.class,
+                                  "relation type");
+    pr.parent_ppt_name = need (state, scanner, "ppt name");
+    need_eol (state, scanner);
+    return (pr);
+  }
+
+  /**
+   * Parses a program point flag record.  Adds any specified flags to
+   * to flags.
+   */
+  private static void parse_ppt_flags (ParseState state, Scanner scanner,
+                                  EnumSet<PptFlags> flags) throws DeclError {
+
+    flags.add (parse_enum_val (state, scanner, PptFlags.class, "ppt flags"));
+    while (scanner.hasNext())
+      flags.add (parse_enum_val (state, scanner, PptFlags.class, "ppt flags"));
+  }
+
+  /** Parses a ppt-type record and returns the type **/
+  private static PptType parse_ppt_type (ParseState state, Scanner scanner)
+    throws DeclError {
+
+    PptType ppt_type
+      = parse_enum_val (state, scanner, PptType.class, "ppt type");
+    need_eol (state, scanner);
+    return (ppt_type);
   }
 
 
@@ -412,39 +593,54 @@ public final class FileIO {
       aux);
   }
 
-  private static int read_var_comparability (LineNumberReader reader,
-					     File filename)
+  private static int read_var_comparability (ParseState state, String line)
     throws IOException {
-    int varcomp_format;
-    String line = reader.readLine();
-    if (line == null) {
-      throw new FileIOException("Found end of file, expected comparability",
-                                reader,
-                                filename);
+
+    String comp_str = null;
+    if (new_decl_format) {
+      Scanner scanner = new Scanner (line);
+      scanner.next();
+      comp_str = need (state, scanner, "comparability");
+      need_eol (state, scanner);
+    } else { // old format
+      comp_str = state.reader.readLine();
+      if (comp_str == null) {
+        throw new FileIOException("Found end of file, expected comparability",
+                                  state.reader, state.filename);
+      }
     }
-    if (line.equals("none")) {
-      varcomp_format = VarComparability.NONE;
-    } else if (line.equals("implicit")) {
-      varcomp_format = VarComparability.IMPLICIT;
+
+    if (comp_str.equals("none")) {
+      return (VarComparability.NONE);
+    } else if (comp_str.equals("implicit")) {
+      return (VarComparability.IMPLICIT);
     } else {
-      throw new FileIOException("Unrecognized VarComparability",
-				reader,
-				filename);
+      throw new FileIOException("Unrecognized VarComparability " + comp_str,
+                                state.reader, state.filename);
     }
-    return varcomp_format;
+  }
+
+  private static String read_input_language (ParseState state, String line)
+    throws IOException {
+
+    Scanner scanner = new Scanner (line);
+    scanner.next();
+    String input_lang = need (state, scanner, "input language");
+    need_eol (state, scanner);
+    return input_lang;
   }
 
   private static void read_list_implementors (LineNumberReader reader,
-					      File filename)
+                                              File filename)
     throws IOException {
     // Each line following is the name (in JVM form) of a class
     // that implements java.util.List.
     for (;;) {
       String line = reader.readLine();
       if (line == null || line.equals(""))
-	break;
+        break;
       if (isComment(line))
-	continue;
+        continue;
       ProglangType.list_implementors.add(line.intern());
     }
   }
@@ -623,14 +819,14 @@ public final class FileIO {
    */
 
   public enum ParseStatus {
-    NULL,		// haven't read anything yet
-    DECL,		// got a decl
-    SAMPLE,		// got a sample
-    COMPARABILITY,	// got a VarComparability declaration
-    LIST,		// got a ListImplementors declaration
-    EOF,		// found EOF
-    ERROR,		// continuable error; fatal errors thrown as exceptions
-    TRUNCATED		// dkconfig_max_line_number reached
+    NULL,               // haven't read anything yet
+    DECL,               // got a decl
+    SAMPLE,             // got a sample
+    COMPARABILITY,      // got a VarComparability declaration
+    LIST,               // got a ListImplementors declaration
+    EOF,                // found EOF
+    ERROR,              // continuable error; fatal errors thrown as exceptions
+    TRUNCATED           // dkconfig_max_line_number reached
   };
 
   public static class ParseState {
@@ -643,9 +839,9 @@ public final class FileIO {
     public long total_lines;
     public int varcomp_format;
     public ParseStatus status;
-    public PptTopLevel ppt;	// returned when state=DECL or SAMPLE
-    public Integer nonce;	// returned when state=SAMPLE
-    public ValueTuple vt;	// returned when state=SAMPLE
+    public PptTopLevel ppt;     // returned when state=DECL or SAMPLE
+    public Integer nonce;       // returned when state=SAMPLE
+    public ValueTuple vt;       // returned when state=SAMPLE
     public long lineNum;
 
     public ParseState (String raw_filename, boolean decl_file_p,
@@ -680,7 +876,7 @@ public final class FileIO {
       } else if (Daikon.dkconfig_progress_delay == -1) {
         count_lines = false;
       } else if ((new File(filename)).length() == 0) {
-	// Either it's actually empty, or it's something like a pipe.
+        // Either it's actually empty, or it's something like a pipe.
         count_lines = false;
       }
 
@@ -691,7 +887,7 @@ public final class FileIO {
 
       // Open the reader stream
       if (raw_filename.equals("-")) {
-	// "-" means read from the standard input stream
+        // "-" means read from the standard input stream
         Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
         reader = new LineNumberReader(file_reader);
       }
@@ -792,33 +988,33 @@ public final class FileIO {
     while (true) {
       read_data_trace_record (data_trace_state);
       if (data_trace_state.status == ParseStatus.SAMPLE) {
-	// Keep track of the total number of samples we have seen.
-	samples_processed++;
-	// Add orig and derived variables; pass to inference (add_and_flow)
-	try {
-	  processor.process_sample (data_trace_state.all_ppts,
-				    data_trace_state.ppt,
-				    data_trace_state.vt,
-				    data_trace_state.nonce);
-	} catch (Error e) {
-	  if (! dkconfig_continue_after_file_exception) {
-	    throw e;
-	  } else {
-	    System.out.println ();
-	    System.out.println ("WARNING: Error while processing "
-				+ "trace file - record ignored");
-	    System.out.print ("Ignored backtrace:");
-	    e.printStackTrace(System.out);
-	    System.out.println ();
-	  }
-	}
+        // Keep track of the total number of samples we have seen.
+        samples_processed++;
+        // Add orig and derived variables; pass to inference (add_and_flow)
+        try {
+          processor.process_sample (data_trace_state.all_ppts,
+                                    data_trace_state.ppt,
+                                    data_trace_state.vt,
+                                    data_trace_state.nonce);
+        } catch (Error e) {
+          if (! dkconfig_continue_after_file_exception) {
+            throw e;
+          } else {
+            System.out.println ();
+            System.out.println ("WARNING: Error while processing "
+                                + "trace file - record ignored");
+            System.out.print ("Ignored backtrace:");
+            e.printStackTrace(System.out);
+            System.out.println ();
+          }
+        }
       }
       else if ((data_trace_state.status == ParseStatus.EOF)
-	       || (data_trace_state.status == ParseStatus.TRUNCATED)) {
-	break;
+               || (data_trace_state.status == ParseStatus.TRUNCATED)) {
+        break;
       }
       else
-	;  // don't need to do anything explicit for other records found
+        ;  // don't need to do anything explicit for other records found
     }
 
     if (Global.debugPrintDtrace) {
@@ -838,7 +1034,7 @@ public final class FileIO {
 
     // "line_" is uninterned, "line" is interned
     for (String line_ = reader.readLine(); line_ != null;
-	 line_ = reader.readLine()) {
+         line_ = reader.readLine()) {
       if (line_.equals("") || isComment(line_)) {
         continue;
       }
@@ -847,16 +1043,19 @@ public final class FileIO {
       // stop at a specified point in the file
       if ((dkconfig_max_line_number > 0)
           && (state.lineNum > dkconfig_max_line_number))
-	{
-	  state.status = ParseStatus.TRUNCATED;
-	  return;
-	}
+        {
+          state.status = ParseStatus.TRUNCATED;
+          return;
+        }
 
       String line = line_.intern();
 
       // First look for declarations in the dtrace stream
-      if (line == declaration_header) {
-        state.ppt = read_declaration(state);
+      if (is_declaration_header (line)) {
+        if (new_decl_format)
+          state.ppt = read_ppt_decl (state, line);
+        else
+          state.ppt = read_declaration(state);
         // ppt can be null if this declaration was skipped because of
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
@@ -864,19 +1063,24 @@ public final class FileIO {
             state.all_ppts.add(state.ppt);
             Daikon.init_ppt(state.ppt, state.all_ppts);
           }
-	}
-	state.status = ParseStatus.DECL;
-	return;
+        }
+        state.status = ParseStatus.DECL;
+        return;
       }
-      if (line.equals("VarComparability")) {
-	state.varcomp_format = read_var_comparability (reader, state.file);
+      if (line.equals ("VarComparability")
+          || line.startsWith ("var-comparability")) {
+        state.varcomp_format = read_var_comparability (state, line);
         state.status = ParseStatus.COMPARABILITY;
-	return;
+        return;
+      }
+      if (line.startsWith ("input-language")) {
+        String input_language = read_input_language (state, line);
+        return;
       }
       if (line.equals("ListImplementors")) {
-	read_list_implementors (reader, state.file);
-	state.status = ParseStatus.LIST;
-	return;
+        read_list_implementors (reader, state.file);
+        state.status = ParseStatus.LIST;
+        return;
       }
       if (!ppt_included (line)) {
         // System.out.printf ("skipping ppt %s\n", line);
@@ -890,26 +1094,26 @@ public final class FileIO {
       // For compatibility with previous implementation, if this is a
       // declaration file, skip over samples.
       if (state.is_decl_file) {
-	if (debugRead.isLoggable(Level.FINE))
-	  debugRead.fine("Skipping paragraph starting at line "
-			 + reader.getLineNumber()
-			 + " of file "
-			 + state.filename
-			 + ": "
-			 + line);
-	while ((line != null) && (!line.equals("")) && (!isComment(line))) {
-	  System.out.println("Unrecognized paragraph contains line = `"
-			     + line
-			     + "'");
-	  System.out.println(" line: null="
-			     + false // (line != null)
-			     + " empty="
-			     + (line.equals(""))
-			     + " comment="
-			     + (isComment(line)));
-	  line = reader.readLine();
-	}
-	continue;
+        if (debugRead.isLoggable(Level.FINE))
+          debugRead.fine("Skipping paragraph starting at line "
+                         + reader.getLineNumber()
+                         + " of file "
+                         + state.filename
+                         + ": "
+                         + line);
+        while ((line != null) && (!line.equals("")) && (!isComment(line))) {
+          System.out.println("Unrecognized paragraph contains line = `"
+                             + line
+                             + "'");
+          System.out.println(" line: null="
+                             + false // (line != null)
+                             + " empty="
+                             + (line.equals(""))
+                             + " comment="
+                             + (isComment(line)));
+          line = reader.readLine();
+        }
+        continue;
       }
 
 
@@ -984,12 +1188,12 @@ public final class FileIO {
           System.out.println ();
           System.out.println ("WARNING: Unexpected EOF while processing "
                         + "trace file - last record of trace file ignored");
-	  state.status = ParseStatus.EOF;
-	  return;
+          state.status = ParseStatus.EOF;
+          return;
         } else if (dkconfig_continue_after_file_exception) {
           System.out.println ();
           System.out.println ("WARNING: IOException while processing "
-			      + "trace file - record ignored");
+                              + "trace file - record ignored");
           System.out.print ("Ignored backtrace:");
           e.printStackTrace(System.out);
           System.out.println ();
@@ -1250,7 +1454,7 @@ public final class FileIO {
         if (line == null
             || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
           throw new FileIOException("Bad modbit", reader,
-				    data_trace_state.filename);
+                                    data_trace_state.filename);
         }
         line = reader.readLine(); // next variable name
       }
@@ -1602,7 +1806,7 @@ public final class FileIO {
     // System.out.println ("ppt_name = '" + ppt_name + "' max name = '"
     //                     + Daikon.ppt_max_name + "'");
     if (((Daikon.ppt_omit_regexp != null)
-	 && Daikon.ppt_omit_regexp.matcher(ppt_name).find())
+         && Daikon.ppt_omit_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_regexp != null)
             && !Daikon.ppt_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_max_name != null)
@@ -1638,5 +1842,290 @@ public final class FileIO {
       line = reader.readLine();
     }
   }
+
+  /**
+   * Converts the declaration record versoin of a name into its correct
+   * version.  In the declaration record, blanks are encoded as \_ and
+   * backslashes as \\.
+   */
+  private static String unescape_decl (String orig) {
+    StringBuilder sb = new StringBuilder(orig.length());
+    // The previous escape character was seen just before this position.
+    int post_esc = 0;
+    int this_esc = orig.indexOf('\\');
+    while (this_esc != -1) {
+      if (this_esc == orig.length()-1) {
+        sb.append(orig.substring(post_esc, this_esc+1));
+        post_esc = this_esc+1;
+        break;
+      }
+      switch (orig.charAt(this_esc+1)) {
+      case 'n':
+        sb.append(orig.substring(post_esc, this_esc));
+        sb.append('\n');        // not lineSep
+        post_esc = this_esc+2;
+        break;
+      case 'r':
+        sb.append(orig.substring(post_esc, this_esc));
+        sb.append('\r');
+        post_esc = this_esc+2;
+        break;
+      case '_':
+        sb.append (orig.substring(post_esc, this_esc));
+        sb.append (' ');
+        post_esc = this_esc+2;
+        break;
+      case '\\':
+        // This is not in the default case because the search would find
+        // the quoted backslash.  Here we incluce the first backslash in
+        // the output, but not the first.
+        sb.append(orig.substring(post_esc, this_esc+1));
+        post_esc = this_esc+2;
+        break;
+
+      default:
+        // In the default case, retain the character following the
+        // backslash, but discard the backslash itself.  "\*" is just
+        // a one-character string.
+        sb.append(orig.substring(post_esc, this_esc));
+        post_esc = this_esc+1;
+        break;
+      }
+      this_esc = orig.indexOf('\\', post_esc);
+    }
+    if (post_esc == 0)
+      return orig;
+    sb.append(orig.substring(post_esc));
+    return sb.toString();
+  }
+
+  /**
+   * Class that holds all of the information from the declaration record
+   * concerning a particular variable
+   */
+  public static class VarDefinition {
+    ParseState state;
+    String name;
+    VarKind kind = null;
+    String enclosing_var;
+    String relative_name = null;
+    RefType ref_type = RefType.POINTER;
+    int arr_dims = 0;
+    List<String> function_args = null;
+    ProglangType rep_type = null;
+    ProglangType declared_type = null;
+    EnumSet<VarFlags> flags = EnumSet.noneOf (VarFlags.class);
+    EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
+    VarComparability comparability = null;
+    String parent_ppt = null;
+    String parent_variable = null;
+    Object static_constant_value = null;
+
+    /**
+     * Initialize from the 'variable <name>' record.  Scanner should be
+     * pointing at name.
+     */
+    public VarDefinition (ParseState state, Scanner scanner) throws DeclError {
+      this.state = state;
+      name = need (scanner, "name");
+      need_eol (scanner);
+      if (state.varcomp_format == VarComparability.IMPLICIT)
+        comparability = VarComparabilityImplicit.unknown;
+    }
+
+    /**
+     * Parse a var-kind record.  Scanner should be pointing at the variable
+     * kind.
+     */
+    public void parse_var_kind (Scanner scanner) throws DeclError {
+      kind = parse_enum_val (scanner, VarKind.class, "variable kind");
+
+      if ((kind == VarKind.FIELD) || (kind == VarKind.FUNCTION)) {
+        relative_name = need (scanner, "relative name");
+      }
+      need_eol (scanner);
+    }
+
+    /** Parses the enclosing-var record **/
+    public void parse_enclosing_var (Scanner scanner) throws DeclError {
+      enclosing_var = need (scanner, "enclosing variable name");
+      need_eol(scanner);
+    }
+
+    /** Parses the reference-type record **/
+    public void parse_reference_type (Scanner scanner) throws DeclError {
+      ref_type = parse_enum_val (scanner, RefType.class, "reference type");
+      need_eol (scanner);
+    }
+
+    /** Parses the array record **/
+    public void parse_array (Scanner scanner) throws DeclError {
+      String arr_str = need (scanner, "array dimensions");
+      if (arr_str == "0")
+        arr_dims = 0;
+      else if (arr_str == "1")
+        arr_dims = 1;
+      else
+        decl_error (state, "%s found where 0 or 1 expected", arr_str);
+    }
+
+    /** Parses the function-args record **/
+    public void parse_function_args (Scanner scanner) throws DeclError {
+
+      function_args = new ArrayList<String>();
+      while (scanner.hasNext()) {
+        function_args.add (unescape_decl (scanner.next()).intern());
+      }
+    }
+
+    public void parse_rep_type (Scanner scanner) throws DeclError {
+      String rep_type_str = need (scanner, "rep type");
+      need_eol (scanner);
+      rep_type = ProglangType.rep_parse (rep_type_str);
+    }
+
+    public void parse_dec_type (Scanner scanner) throws DeclError {
+      String declared_type_str = need (scanner, "declaration type");
+      need_eol (scanner);
+      declared_type = ProglangType.parse (declared_type_str);
+    }
+
+    /** Parse the flags record.  Multiple flags can be specified **/
+    public void parse_flags (Scanner scanner) throws DeclError {
+
+      flags.add (parse_enum_val (scanner, VarFlags.class, "Flag"));
+      while (scanner.hasNext())
+        flags.add (parse_enum_val (scanner, VarFlags.class, "Flag"));
+    }
+
+    /**
+     * Parse the langauge specific flags record.  Multiple flags can
+     * be specified **/
+    public void parse_lang_flags (Scanner scanner) throws DeclError {
+
+      lang_flags.add (parse_enum_val (scanner, LangFlags.class,
+                                      "Language Specific Flag"));
+      while (scanner.hasNext())
+        lang_flags.add (parse_enum_val (scanner, LangFlags.class,
+                                        "Language Specific Flag"));
+    }
+
+    /** Parses a comparability record **/
+    public void parse_comparability (Scanner scanner) throws DeclError {
+      String comparability_str = need (scanner, "comparability");
+      need_eol (scanner);
+      comparability = VarComparability.parse (state.varcomp_format,
+                                            comparability_str, declared_type);
+    }
+
+    /** Parse a parent ppt record **/
+    public void parse_parent (Scanner scanner,
+                       List<ParentRelation> ppt_parents) throws DeclError {
+
+     parent_ppt = need (scanner, "parent ppt");
+     boolean found = false;
+     for (ParentRelation pr : ppt_parents) {
+       if (pr.parent_ppt_name == parent_ppt) {
+         found = true;
+         break;
+       }
+     }
+     if (!found) {
+       decl_error (state, "specified parent ppt '%s' for variable '%s' "
+                   + "is not a parent to this ppt", parent_ppt, name);
+     }
+     if (scanner.hasNext())
+       parent_variable = need (scanner, "parent variable");
+     need_eol (scanner);
+    }
+
+    /** Parse a constant record **/
+    public void parse_constant (Scanner scanner) throws DeclError {
+      String constant_str = need (scanner, "constant value");
+      need_eol (scanner);
+      static_constant_value = rep_type.parse_value (constant_str);
+    }
+
+    /**
+     * Helper function, returns the next string token unescaped and
+     * interned.  Throw a DeclError if there is no next token
+     */
+    public String need (Scanner scanner, String description) throws DeclError {
+      return (FileIO.need (state, scanner, description));
+    }
+
+    /** Throws a DeclError if the scanner is not at end of line */
+    public void need_eol (Scanner scanner) throws DeclError {
+      FileIO.need_eol (state, scanner);
+    }
+
+    /**
+     * Looks up the next token as a member of enum_class.  A DeclError
+     * is thrown if there is no token or if it is not valid member of
+     * the class.  Enums are presumed to be in in upper case
+     */
+    public <E extends Enum<E>> E parse_enum_val (Scanner scanner,
+           Class<E> enum_class, String descr) throws DeclError {
+      return FileIO.parse_enum_val (state, scanner, enum_class, descr);
+    }
+  }
+
+  /**
+   * Helper function, returns the next string token unescaped and
+   * interned.  Throw a DeclError if there is no next token
+   */
+  public static String need (ParseState state, Scanner scanner,
+                             String description) throws DeclError {
+    if (!scanner.hasNext())
+      decl_error (state, "end-of-line found where %s expected", description);
+    return unescape_decl (scanner.next()).intern();
+  }
+
+  /** Throws a DeclError if the scanner is not at end of line */
+  public static void need_eol (ParseState state, Scanner scanner)
+    throws DeclError {
+    if (scanner.hasNext())
+      decl_error (state, "'%s' found where end-of-line expected",
+                  scanner.next());
+  }
+
+  /**
+   * Looks up the next token as a member of enum_class.  A DeclError
+   * is thrown if there is no token or if it is not valid member of
+   * the class.  Enums are presumed to be in in upper case
+   */
+  public static <E extends Enum<E>> E parse_enum_val (ParseState state,
+         Scanner scanner, Class<E> enum_class, String descr) throws DeclError {
+
+    String str = need (state, scanner, descr);
+    try {
+      E e = Enum.valueOf (enum_class, str.toUpperCase());
+      return (e);
+    } catch (Exception exception) {
+      E[] all = enum_class.getEnumConstants();
+      String msg = "";
+      for (E e : all) {
+        if (msg != "")
+          msg += ", ";
+        msg += String.format ("'%s'", e.name().toLowerCase());
+      }
+      decl_error (state, "'%s' found where %s expected", str, msg);
+      return (null);
+    }
+  }
+
+  private static void decl_error (ParseState state, String format,
+                                  Object... args) throws DeclError {
+    throw DeclError.detail (state, format, args);
+  }
+
+  /** Returns whether the line is the start of a ppt declaration **/
+  private static boolean is_declaration_header (String line) {
+    if (new_decl_format)
+      return (line.startsWith ("ppt "));
+    else
+      return (line == declaration_header);
+  }
+
 
 }
