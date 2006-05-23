@@ -1395,7 +1395,7 @@ public final class PrintInvariants {
   public static void print_true_inv_cnt (PptMap ppts) {
 
     // Count printable invariants
-    int inv_cnt = 0;
+    long inv_cnt = 0;
     for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
       for (Invariant inv : ppt.getInvariants()) {
