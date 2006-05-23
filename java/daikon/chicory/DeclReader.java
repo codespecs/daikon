@@ -24,6 +24,16 @@ public class DeclReader {
    * types.  All hashcodes are left in a single set.  Each named primitive
    * type has a distinct set.
    */
+  @Option("Output a decl file with primitive declaration comparability")
+  public static boolean primitive_declaration_type_comparability = false;
+
+  /**
+   * Reads in a decl file with arbitrary comparability and writes
+   * out a file with comparability based on declaration
+   * types.  Each variable with a different typename will be in a different
+   * set.  For example, java.util.List, java.util.ArrayList, float, short,
+   * double, and int are each in a distinct set.
+   */
   @Option("Output a decl file with declaration comparability")
   public static boolean declaration_type_comparability = false;
 
@@ -36,10 +46,13 @@ public class DeclReader {
   @Option("Output a decl file with representation type comparability")
   public static boolean rep_type_comparability = false;
 
-  public HashMap<String,DeclPpt> ppts = new LinkedHashMap<String,DeclPpt>();
-
   @Option("Read and dump a dtrace file")
   public static boolean dump_dtrace = false;
+
+  @Option("Specify the comparability type (implicit or none)")
+  public static String comparability = "implicit";
+
+  public HashMap<String,DeclPpt> ppts = new LinkedHashMap<String,DeclPpt>();
 
   /**
    * Information about variables within a program point
@@ -80,10 +93,10 @@ public class DeclReader {
 
     /**
      * Returns the representation type of the variable as specified in
-     * the decl file
+     * the decl file.  The static value (if any) is discarded
      */
     public String get_rep_type() {
-      return rep_type;
+      return rep_type.replaceFirst (" .*", "");
     }
 
     public boolean is_double() {
@@ -325,13 +338,24 @@ public class DeclReader {
       return;
     }
 
-    // If determining declaration type comparability, setup the comparability
-    // base on the declared type of primitives and write out the result
-    if (declaration_type_comparability) {
+    // If determining primitive declaration type comparability, setup
+    // the comparability base on the declared type of primitives and
+    // write out the result
+    if (primitive_declaration_type_comparability) {
       DeclReader dr = new DeclReader();
       dr.read (new File (files[0]));
       dr.primitive_declaration_types();
-      dr.write_decl (files[1], "implicit");
+      dr.write_decl (files[1], comparability);
+      return;
+    }
+
+    // If determining declaration type comparability, setup the comparability
+    // base on the declared types and write out the result
+    if (declaration_type_comparability) {
+      DeclReader dr = new DeclReader();
+      dr.read (new File (files[0]));
+      dr.declaration_types();
+      dr.write_decl (files[1], comparability);
       return;
     }
 
@@ -341,7 +365,7 @@ public class DeclReader {
       DeclReader dr = new DeclReader();
       dr.read (new File (files[0]));
       dr.rep_types();
-      dr.write_decl (files[1], "implicit");
+      dr.write_decl (files[1], comparability);
       return;
     }
 
@@ -351,16 +375,46 @@ public class DeclReader {
 
       int num_sets = 0;
       int total_set_size = 0;
+      int num_type_integer_vars = 0;
+      int num_rep_type_integer_vars = 0;
+      int num_vars = 0;
+
+      // Map from rep type to the count of each declared type for that rep
+      Map<String,Map<String,Integer>> rep_map
+        = new LinkedHashMap<String,Map<String,Integer>>();
 
       // Loop through each ppt
       for (DeclPpt ppt : dr.ppts.values()) {
         if (print_each_set)
           System.out.printf ("ppt %s%n", ppt.name);
 
+        int ppt_num_sets = 0;
+        int ppt_total_set_size = 0;
+
         // Build a map from comparabilty to all of the variables with that comp
         Map<String,List<VarInfo>> comp_map
           = new LinkedHashMap<String,List<VarInfo>>();
         for (VarInfo vi : ppt.vars.values()) {
+
+          // Update the map that tracks the declared types for each rep type
+          Map<String,Integer> dec_map = rep_map.get (vi.get_rep_type());
+          if (dec_map == null) {
+            dec_map = new LinkedHashMap<String,Integer>();
+            rep_map.put (vi.get_rep_type(), dec_map);
+          }
+          Integer cnt = dec_map.get (vi.get_type_name());
+          if (cnt == null)
+            cnt = new Integer(0);
+          dec_map.put (vi.get_type_name(), ++cnt);
+
+          num_vars++;
+          if (vi.get_type_name().equals ("int"))
+            num_type_integer_vars++;
+          if (vi.get_rep_type().equals ("int"))
+            num_rep_type_integer_vars++;
+          if (!vi.get_type_name().equals ("int") && vi.get_rep_type().equals ("int"))
+            System.out.printf ("huh '%s' - '%s'%n", vi.get_type_name(),
+                               vi.rep_type);
           String comp = vi.get_basic_comparability();
           if (!comp_map.containsKey (comp)) {
             comp_map.put (comp, new ArrayList<VarInfo>());
@@ -374,11 +428,16 @@ public class DeclReader {
           num_sets++;
           total_set_size += vi_list.size();
           if (print_each_set) {
-            System.out.printf ("%-5s : [%d] %s%n",
+            ppt_num_sets++;
+            ppt_total_set_size += vi_list.size();
+            System.out.printf ("  %-5s : [%d] %s%n",
                                vi_list.get(0).get_basic_comparability(),
                                vi_list.size(), vi_list);
           }
         }
+        if (print_each_set && (ppt_num_sets > 0))
+          System.out.printf ("  %d sets of average size %f%n", ppt_num_sets,
+                             ((double) ppt_total_set_size) / ppt_num_sets);
       }
 
       if (avg_size) {
@@ -386,9 +445,56 @@ public class DeclReader {
                            filename, num_sets,
                            ((double)total_set_size) / num_sets);
       }
+      for (String rep_type : rep_map.keySet()) {
+        Map<String,Integer> dec_map = rep_map.get (rep_type);
+        System.out.printf ("Rep Type %s (%d declared types):%n", rep_type,
+                           dec_map.size());
+        for (String dec_type : dec_map.keySet()) {
+          System.out.printf ("  %5d - %s%n", dec_map.get (dec_type), dec_type);
+        }
+      }
+      System.out.printf ("Total variables of declared type int = %d%n",
+                         num_type_integer_vars);
+      System.out.printf ("Total variables of rep type int = %d%n",
+                         num_rep_type_integer_vars);
+      System.out.printf ("Total number of variables = %d%n", num_vars);
     }
   }
 
+  /**
+   * Sets the comparability to match declaration types.
+   * The comparability for each variable is set so that each
+   * declaration type is in a separate set.  Each hashcode with a
+   * different type name will be in a different set.  Primitives
+   * with different type names will be in different sets.
+   */
+  public void declaration_types () {
+
+    Map<String,Integer> type_comp = new LinkedHashMap<String,Integer>();
+    int next_comparability = 1;
+
+    // Loop through each program point
+    for (DeclPpt ppt : ppts.values()) {
+
+      // Loop through each variable
+      for (VarInfo vi : ppt.vars.values()) {
+
+        // Determine the comparabilty for this declared type.  Hashcodes
+        // are not included because hashcodes of different declared types
+        // can still be sensibly compared (eg, subclasses/superclasses)
+        String declared_type = vi.get_type_name();
+        Integer comparability = type_comp.get (declared_type);
+        if (comparability == null) {
+          comparability = new Integer (next_comparability);
+          next_comparability++;
+          type_comp.put (declared_type, comparability);
+          System.out.printf ("declared type %s has comparability %d%n",
+                             declared_type, comparability);
+        }
+        vi.set_comparability (comparability.toString());
+      }
+    }
+  }
   /**
    * Sets the comparability to match primitive declaration types.
    * The comparability for each non-hashcode is set so that each
@@ -441,17 +547,15 @@ public class DeclReader {
       // Loop through each variable
       for (VarInfo vi : ppt.vars.values()) {
 
-        // Determine the comparabilty for this declared type.  Hashcodes
-        // are not included because hashcodes of different declared types
-        // can still be sensibly compared (eg, subclasses/superclasses)
-        String declared_type = vi.get_rep_type();
-        Integer comparability = type_comp.get (declared_type);
+        // Determine the comparabilty for this rep type.
+        String rep_type = vi.get_rep_type();
+        Integer comparability = type_comp.get (rep_type);
         if (comparability == null) {
           comparability = new Integer (next_comparability);
           next_comparability++;
-          type_comp.put (declared_type, comparability);
-          System.out.printf ("declared type %s has comparability %d%n",
-                             declared_type, comparability);
+          type_comp.put (rep_type, comparability);
+          System.out.printf ("representation type %s has comparability %d%n",
+                             rep_type, comparability);
         }
         vi.set_comparability (comparability.toString());
       }
