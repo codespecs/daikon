@@ -20,6 +20,7 @@ import daikon.split.misc.*;
 import daikon.suppress.*;
 import utilMDE.Assert;
 import daikon.inv.filter.InvariantFilters;
+import static daikon.FileIO.ParentRelation;
 
 import java.util.*;
 import java.text.*;
@@ -73,7 +74,23 @@ public class PptTopLevel extends Ppt {
    */
   public static boolean dkconfig_remove_merged_invs = false;
 
-  /** Number of invariants after equality set processing for the last sample. */
+  /** Ppt attributes (specified in decl records) **/
+  public enum PptFlags {STATIC, ENTER, EXIT, PRIVATE};
+
+  /** Attributes of this ppt **/
+  public EnumSet flags = EnumSet.noneOf (PptFlags.class);
+
+  /**
+   * Possible types of program points.  POINT is a generic, non-program
+   * language point.  It is the default and can be used when the others
+   * are not appropriate
+   */
+  public enum PptType {POINT, CLASS, OBJECT, ENTER, EXIT, SUBEXIT}
+
+  /** Type of this program point **/
+  public PptType type;
+
+  /** Number of invariants after equality set processing for the last sample.*/
   public int instantiated_inv_cnt = 0;
 
   /** Number of slices after equality set processing for the last sample. */
@@ -244,9 +261,28 @@ public class PptTopLevel extends Ppt {
   // VarInfo for the equality.  (This is gross.)
   public Set/*<Invariant or VarInfo>*/ redundant_invs = new LinkedHashSet(0);
 
+  public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
+                      EnumSet<PptFlags> flags, VarInfo[] var_infos) {
+
+    this.name = name;
+    if (!name.contains (":::")) {
+      name += ":::" + type;
+    }
+    this.ppt_name = new PptName (name);
+    init_vars (var_infos);
+    this.flags = flags;
+    this.type = type;
+    // handle parents
+  }
+
   public PptTopLevel(String name, VarInfo[] var_infos) {
     this.name = name;
     ppt_name = new PptName(name);
+    init_vars (var_infos);
+  }
+
+  private void init_vars (VarInfo[] var_infos) {
+
     this.var_infos = var_infos;
     int val_idx = 0;
     num_static_constant_vars = 0;
@@ -272,7 +308,7 @@ public class PptTopLevel extends Ppt {
     num_declvars = var_infos.length;
     num_tracevars = val_idx;
     num_orig_vars = 0;
-    Assert.assertTrue(num_static_constant_vars == num_declvars - num_tracevars);
+    Assert.assertTrue(num_static_constant_vars == num_declvars -num_tracevars);
     Assert.assertTrue(num_tracevars ==
                       var_infos.length - num_static_constant_vars);
     mbtracker = new ModBitTracker(num_tracevars);
@@ -290,7 +326,6 @@ public class PptTopLevel extends Ppt {
       Assert.assertTrue(value_sets[i] != null);
     }
   }
-
 
 
   // Appears to be used only in the memory monitor.
@@ -814,7 +849,7 @@ public class PptTopLevel extends Ppt {
       Assert.assertTrue(vt.size() == 0);
       return null;
     }
-    
+
     // If there are conditional program points, add the sample there instead
     if (has_splitters()) {
       for (PptSplitter ppt_split : splitters) {
@@ -2200,7 +2235,7 @@ public class PptTopLevel extends Ppt {
     // Check to see if the new slice would be over all constants
     if (is_constant(var1) && is_constant(var2))
       return (false);
-    
+
     if (! (var1.compatible(var2)
            || (var1.type.isArray() && var1.eltsCompatible(var2))
            || (var2.type.isArray() && var2.eltsCompatible(var1)))) {
@@ -3560,7 +3595,7 @@ public class PptTopLevel extends Ppt {
         if (!is_slice_ok(leaders[i], leaders[j]))
           continue;
         PptSlice2 slice2 = new PptSlice2(this, leaders[i], leaders[j]);
-        
+
         slice2.merge_invariants();
         if (slice2.invs.size() > 0)
           binary_slices.add(slice2);
@@ -4225,6 +4260,14 @@ public class PptTopLevel extends Ppt {
   */
   public void incSampleNumber() {
     values_num_samples++;
+  }
+
+  /** Returns whether or not this program point is an exit point **/
+  public boolean is_exit_point() {
+    if (type != null)
+      return (type == PptType.EXIT);
+    else
+      return ppt_name.isExitPoint();
   }
 
 }
