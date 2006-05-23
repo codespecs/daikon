@@ -32,7 +32,7 @@ import java.util.regex.*;
  * The syntax of each of these is customizable.
  * @see #get_entry() and @see #set_entry_start_stop(String,String)
  */
-public class MultiReader {
+public class MultiReader implements Iterable<String>, Iterator<String> {
 
   /** Information about the current reader **/
   private static class ReaderInfo {
@@ -136,7 +136,8 @@ public class MultiReader {
                       String include_re) {
 
     readers.push (new ReaderInfo (reader, null));
-    this.comment_re = Pattern.compile (comment_re);
+    if (comment_re != null)
+      this.comment_re = Pattern.compile (comment_re);
     if (include_re != null)
       this.include_re = Pattern.compile (include_re);
   }
@@ -162,6 +163,16 @@ public class MultiReader {
 
     this ((UtilMDE.bufferedFileReader (file)), comment_re, include_re);
     readers.peek().filename = file.toString();
+  }
+
+  /**
+   * Create a MultiReader that does not support includes or comments
+   *
+   *    @param file       Initial file to read
+   */
+  public MultiReader (File file) throws IOException {
+
+    this (file, null, null);
   }
 
   /**
@@ -191,17 +202,19 @@ public class MultiReader {
     }
 
     String line = get_next_line();
-    while (line != null) {
-      Matcher cmatch = comment_re.matcher (line);
-      if (cmatch.find()) {
-        line = cmatch.replaceFirst ("");
-        if (line.length() > 0)
+    if (comment_re != null) {
+      while (line != null) {
+        Matcher cmatch = comment_re.matcher (line);
+        if (cmatch.find()) {
+          line = cmatch.replaceFirst ("");
+          if (line.length() > 0)
+            break;
+        } else {
           break;
-      } else {
-        break;
+        }
+        line = get_next_line();
+      // System.out.printf ("get_next_line = %s%n", line);
       }
-      line = get_next_line();
-    // System.out.printf ("get_next_line = %s%n", line);
     }
 
     if (line == null)
@@ -228,6 +241,48 @@ public class MultiReader {
 
     // System.out.printf ("Returning [%d] '%s'%n", readers.size(), line);
     return (line);
+  }
+
+  /** Returns an line-by-line interator for this file. **/
+  public Iterator<String> iterator() {
+    return this;
+  }
+
+  /**
+   * Returns whether or not there is another line to read.  Any IOExceptions
+   * are turned into errors (because the definition of hasNext() in Iterator
+   * doesn't throw any exceptions
+   **/
+  public boolean hasNext() {
+    if (pushback_line != null)
+      return true;
+
+    String line = null;
+    try {
+      line = readLine();
+    } catch (IOException e) {
+      throw new Error ("unexpected IOException: ", e);
+    }
+
+    if (line == null)
+      return false;
+
+    putback (line);
+    return true;
+  }
+
+  /** Returns the next line in the multi-file **/
+  public String next() {
+    try {
+    return readLine();
+    } catch (IOException e) {
+      throw new Error ("unexpected IOException", e);
+    }
+  }
+
+  /** remove() is not supported **/
+  public void remove() {
+    throw new UnsupportedOperationException ("can't remove lines from file");
   }
 
   /**
