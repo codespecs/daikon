@@ -75,11 +75,10 @@ public class PptName
     }
     int dot = fn_name.lastIndexOf('.', lparen);
     if (dot == -1) {
-      throw new Error("No dot in function name " + fn_name);
-      // // probably a lisp program, which was instrumented differently
-      // method = fn_name;
-      // cls = null;
-      // return;
+      // throw new Error("No dot in function name " + fn_name);
+      method = fn_name;
+      cls = null;
+      return;
     }
     // now 0 <= dot < lparen
     cls = fn_name.substring(0, dot).intern();
