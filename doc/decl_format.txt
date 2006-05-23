@@ -377,10 +377,6 @@ Program point flags
     static      false     True if a program point that is a method entry
                           or exit is static (does not have a receiver)
 
-    enter       false     True if the program point is the entry to a method.
-
-    exit        false     True if the program point is the exit from a method
-
     private     false     True if the program point is private to its class.
                           Only applicable to object oriented languages that
                           have this distinction.  By default, all ppts are
@@ -461,6 +457,7 @@ File format
         [function-args <arg-list>]
         rep-type <representation-type>
         dec-type <declared-type>
+        constant <constant-value>
         [flags <variable-flags>]
         [lang-flags <language-specific-flags>]
         [parent <parent-ppt-name> [<parent-var-name>]]
@@ -472,7 +469,7 @@ File format
     <ppt-flags>         ::= static
     <variable-kinds     ::= field <name>|function <name>|array|variable
     <variable-flags>    ::= is_param|no_dups|not_ordered|no_size|nomod|
-                            synthetic|classname|method
+                            synthetic|classname
     <ppt-type>          ::= class|object|enter|exit|subexit
     * means that the record can occur one or more times
 
