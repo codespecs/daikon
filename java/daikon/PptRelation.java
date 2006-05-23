@@ -40,6 +40,9 @@ public class PptRelation implements Serializable {
 
   private static final Logger debug = Logger.getLogger("daikon.PptRelation");
 
+  /** Enum of possible relation types **/
+  public enum PptRelationType {ENTER_EXIT, COMPLETE, PARENT, USER};
+
   /**
    * Description of type of parent-child relationship (debug output only).
    **/
@@ -341,8 +344,10 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation(parent, child, OBJECT_METHOD);
 
-    debug.fine("parent vars = " + VarInfo.toString(parent.var_infos));
-    debug.fine("child vars = " + VarInfo.toString(child.var_infos));
+    debug.fine(parent.name() + " parent vars = "
+               + VarInfo.toString(parent.var_infos));
+    debug.fine(child.name() + " child vars = "
+               + VarInfo.toString(child.var_infos));
 
     // Connect each 'this' variable between parent and child.
     // Note that these should be the only variables whose names match and
