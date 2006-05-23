@@ -46,7 +46,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
     } else if (rep_type == ProglangType.STRING_ARRAY) {
       return new ValueSet.ValueSetStringArray(44);
     } else {
-      throw new Error("Can't create ValueSet for " + var_info.name.name());
+      throw new Error("Can't create ValueSet for " + var_info.name.name()
+                      + " with rep type " + rep_type);
     }
   }
 
