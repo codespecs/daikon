@@ -209,6 +209,7 @@ class DCInstrument {
 
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
+    boolean track_class = false;
 
     // Process each method
     for (Method m : gen.getMethods()) {
@@ -217,6 +218,8 @@ class DCInstrument {
         // Note whether we want to track the daikon variables in this method
         boolean track = should_track (gen.getClassName(),
                                       methodEntryName (gen.getClassName(), m));
+        if (track)
+          track_class = true;
 
         // If we are tracking variables, make sure the class is public
         if (track && !gen.isPublic()) {
@@ -298,6 +301,14 @@ class DCInstrument {
     // for fields in uninitialized classes)
     track_class_init();
     debug_instrument.exdent();
+
+    // The code that builds the list of daikon variables for each ppt
+    // needs to know what classes are instrumented.  Its looks in the
+    // Chicory runtime for this information.
+    if (track_class) {
+      // System.out.printf ("adding class %s to all class list%n", class_info);
+      daikon.chicory.Runtime.all_classes.add (class_info);
+    }
 
     return (gen.getJavaClass().copy());
   }
@@ -546,9 +557,11 @@ class DCInstrument {
     // unchanged.
     InstructionHandle old_start = il.getStart();
     InstructionHandle new_start = il.insert (enter_il);
-    for (InstructionTargeter it : old_start.getTargeters()) {
-      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
-        it.updateTarget (old_start, new_start);
+    if (old_start.hasTargeters()) {
+      for (InstructionTargeter it : old_start.getTargeters()) {
+        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+          it.updateTarget (old_start, new_start);
+      }
     }
 
   }
@@ -2339,6 +2352,13 @@ class DCInstrument {
 
     debug_track.log ("Considering tracking ppt %s %s%n", classname, pptname);
 
+    // Don't track any JDK classes
+    if (classname.startsWith ("java.") || classname.startsWith ("com.")
+        || classname.startsWith ("sun.")) {
+      debug_track.log ("  jdk class, return false%n");
+      return (false);
+    }
+
     // Don't track toString methods because we call them in
     // our debug statements.
     if (ignore_toString && pptname.contains ("toString"))
@@ -2346,7 +2366,7 @@ class DCInstrument {
 
     // If any of the omit patterns match, exclude the ppt
     for (Pattern p : Premain.ppt_omit_pattern) {
-      // System.out.printf ("should_trakc: pattern '%s' on ppt '%s'\n",
+      // System.out.printf ("should_track: pattern '%s' on ppt '%s'\n",
       //                    p, pptname);
       if (p.matcher (pptname).find()) {
         debug_track.log ("  Omitting program point %s%n", pptname);
