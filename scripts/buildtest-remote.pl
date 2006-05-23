@@ -41,7 +41,7 @@ my $inv_dir = "$home/research/invariants";
 my $buildtest_pl = "$inv_dir/scripts/buildtest.pl";
 
 # Paths to programs
-my @rsync_opts = ("-e", "ssh -x", "-ra");
+my @rsync_opts = ("-e", "ssh -x", "-ra", "--delete");
 my $perl = "/usr/bin/perl";
 my $rsync = "/usr/bin/rsync";
 my $sendmail = "/usr/sbin/sendmail";
@@ -122,8 +122,13 @@ sub run {
     chdir($builds_dir);
 
     $ENV{"JDKDIR"} = "none";
+    # We used to use "--rsync_location=$host_machine.$domain:$rsync_loc"
+    # to make a fresh copy from the host machine, but after we switched
+    # to VMware 5.5, big rsyncs started mysteriously hanging. So instead
+    # use rsync to do a local copy from the version rsync'd above (which
+    # is fast because it's incremental)
     open(RUN, "-|", $perl, $buildtest_pl, "--message=$message", "--quiet",
-	 "--rsync_location=$host_machine.$domain:$rsync_loc",
+	 "--rsync_location=$inv_dir",
 	 "--test_kvasir", "--skip_daikon_build")
       or die "Couldn't start test: $!";
     my @lines = <RUN>;
