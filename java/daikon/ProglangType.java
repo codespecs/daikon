@@ -132,6 +132,8 @@ public final class ProglangType
       return intern("hashcode", candidate.dimensions);
     } else if (candidate.base == "float") { // interned
       return intern("double", candidate.dimensions);
+    } else if (candidate.base == "string") {
+      return intern ("java.lang.String", candidate.dimensions);
     } else {
       return candidate;
     }
