@@ -10,6 +10,7 @@ import daikon.inv.*;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.*;
+import static daikon.FileIO.VarDefinition;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -55,6 +56,7 @@ public final class VarInfo implements Cloneable, Serializable {
    * variables named "x".
    **/
   public VarInfoName name; // interned
+
 
     /** returns the name of the variable **/
   public String name() {
@@ -119,6 +121,31 @@ public final class VarInfo implements Cloneable, Serializable {
 
   /** Whether and how derived.  Null if this is not derived. **/
   public Derivation derived;
+
+  // Various enums used for information about variables
+  public enum RefType {POINTER, OFFSET};
+  public enum VarKind {FIELD, FUNCTION, ARRAY, VARIABLE};
+  public enum VarFlags {IS_PARAM, NO_DUPS, NOT_ORDERED, NO_SIZE, NOMOD,
+                        SYNTHETIC, CLASSNAME, NON_NULL};
+  public enum LangFlags {PUBLIC, PRIVATE, PROTECTED, STATIC, FINAL,
+                         SYNCHRONIZED, VOLATILE, TRANSIENT, ANNOTATION, ENUM};
+
+
+  public RefType ref_type;
+  public VarKind var_kind;
+  public EnumSet<VarFlags> var_flags = EnumSet.noneOf (VarFlags.class);
+  public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
+
+  public VarDefinition vardef;
+  public VarInfo enclosing_var;
+  public int arr_dims = 0;
+  public List<VarInfo> function_args = null;
+
+  /**
+   * The relative name of this variable with respect to its enclosing
+   * variable.  Field name for fields, method name for instance methods
+   */
+  public String relative_name = null;
 
   /**
    * Returns whether or not we have encountered to date any missing values
@@ -204,6 +231,88 @@ public final class VarInfo implements Cloneable, Serializable {
     || (file_rep_type == ProglangType.HASHCODE)
     || (file_rep_type == ProglangType.HASHCODE_ARRAY)
     || ((file_rep_type.dimensions() <= 1) && file_rep_type.baseIsPrimitive()));
+  }
+
+  /** Create VarInfo from VarDefinition **/
+  public VarInfo (VarDefinition vardef) {
+
+    // Basic checking for sensible input
+    assert vardef.name != null;
+    assert vardef.kind != null;
+    assert vardef.rep_type != null;
+    assert (vardef.arr_dims == 0) || (vardef.arr_dims == 1);
+    assert vardef.rep_type != null;
+    assert vardef.declared_type != null;
+    assert vardef.comparability != null;
+    if (vardef.kind != VarKind.FUNCTION)
+      assert vardef.function_args == null;
+
+    this.vardef = vardef;
+
+    // Create a VarInfoName from the external name.  This probably gets
+    // removed in the long run;
+    name = VarInfoName.parse (vardef.name);
+
+    // Copy info from vardef
+    var_kind = vardef.kind;
+    relative_name = vardef.relative_name;
+    ref_type = vardef.ref_type;
+    arr_dims = vardef.arr_dims;
+    comparability = vardef.comparability;
+    file_rep_type = vardef.rep_type;
+    type = vardef.declared_type;
+    var_flags = vardef.flags;
+    lang_flags = vardef.lang_flags;
+
+    // If a static constant value was specified, set it
+    if (vardef.static_constant_value != null) {
+      is_static_constant = true;
+      static_constant_value = vardef.static_constant_value;
+    } else {
+      is_static_constant = false;
+    }
+
+    // Create the rep_type from the file rep type
+    rep_type = file_rep_type.fileTypeToRepType();
+  }
+
+  /**
+   * Finishes defining the variable by relating it to other variables.
+   * This cannot be done when creating the variable because the other variables
+   * it is related to, may not yet exist.  Variables are related to their
+   * enclosing variables (for fields, arrays, and functions) and to their
+   * parent variables in the PptHierarchy.  RuntimeErrors are thrown if
+   * any related variables do not exist.
+   */
+  public void relate_var() {
+
+    // Find and set the enclosing variable (if any)
+    if (vardef.enclosing_var != null) {
+      enclosing_var = ppt.find_var_by_name (vardef.enclosing_var);
+      if (enclosing_var == null)
+        throw new RuntimeException
+          (String.format("enclosing variable '%s' for variable '%s' "
+                         + "in ppt '%s' cannot be found",
+                         vardef.enclosing_var, vardef.name, ppt.name));
+    }
+
+    // Find all function arguments (if any)
+    if (vardef.function_args != null) {
+      function_args = new ArrayList<VarInfo>(vardef.function_args.size());
+      for (String varname : vardef.function_args) {
+        VarInfo vi = ppt.find_var_by_name (varname);
+        if (vi == null) {
+          throw new RuntimeException
+            (String.format ("function argument '%s' for variable '%s' "
+                            +" in ppt '%s' cannot be found",
+                            varname, vardef.name, ppt.name));
+        }
+        function_args.add (vi);
+      }
+    }
+
+    // do something appropriate with the ppt/var hierarchy.  It may be
+    // that  this is better done within PptRelation
   }
 
   /** Create the specified VarInfo **/
