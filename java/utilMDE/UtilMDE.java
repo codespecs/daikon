@@ -1936,4 +1936,32 @@ public final class UtilMDE {
     return (unqualified_name (cls.getName()));
   }
 
+  public static String human_readable (long val) {
+
+    double dval = (double) val;
+    String mag = "";
+
+    if (val < 1000)
+      ;
+    else if (val < 1000000) {
+      dval = val / 1000.0;
+      mag = "K";
+    } else if (val < 1000000000) {
+      dval = val / 1000000.0;
+      mag = "M";
+    } else {
+      dval = val / 1000000000.0;
+      mag = "G";
+    }
+
+    String precision = "0";
+    if (dval < 10)
+      precision = "2";
+    else if (dval < 100)
+      precision = "1";
+
+    return String.format ("%,1." + precision + "f" + mag, dval);
+
+  }
+
 }
