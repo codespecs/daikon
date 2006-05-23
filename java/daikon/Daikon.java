@@ -159,6 +159,12 @@ public final class Daikon {
   public static boolean use_equality_optimization = true;
 
   /**
+   * If true, declaration records are presumed to be in the new
+   * declaration format
+   */
+  public static boolean dkconfig_new_decl_format = false;
+
+  /**
    * Whether to use the dynamic constants optimization.  This
    * optimization doesn't instantiate invariants over constant
    * variables (i.e., that that have only seen one value).  When the
@@ -1247,10 +1253,10 @@ public final class Daikon {
     }
 
     // Create orig and derived variables
-    progress = "Creating orig variables for: " +ppt.ppt_name.toString();
+    progress = "Creating orig variables for: " + ppt.name;
     create_orig_vars (ppt, all_ppts);
     if (!dkconfig_disable_derived_variables) {
-      progress = "Creating derived variables for: " +ppt.ppt_name.toString();
+      progress = "Creating derived variables for: " + ppt.name;
       ppt.create_derived_variables();
     }
 
@@ -1432,9 +1438,9 @@ public final class Daikon {
       }
       return all_ppts;
     } catch (IOException e) {
-      System.out.println();
-      e.printStackTrace();
-      throw new Error(e.toString());
+      // System.out.println();
+      // e.printStackTrace();
+      throw new Error("Error parsing decl file", e);
     } finally {
       debugProgress.fine(
         "Time spent on read_declaration_files: " + stopwatch.format());
