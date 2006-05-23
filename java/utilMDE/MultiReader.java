@@ -10,17 +10,19 @@ import java.util.regex.*;
 // Lookup to make this decision itself, for instance by checking whether there
 // are any line separators in the entry that it gets back.
 //
-// Here are some useful features that MultiReader should have.  It should
-// extend LineNumberReader (but also provide a mechanism for indicating the
-// current file name in addition to the current line number)
-// It should have constructors that take a String, InputStream, or Reader.
-// It should have a close method.  It should
-// automatically close the underlying file/etc. when the iterator gets to
-// the end (or the end is otherwise reached).  Once it implements
-// Iterable<String>, we can eliminate TextFile in favor of MultiReader.
+// Here are some useful features that MultiReader should have.
+//  * It should extend LineNumberReader (but also provide a mechanism for
+//    indicating the current file name in addition to the current line number).
+//  * It should have constructors that take an InputStream or Reader
+//    (in addition to the current BufferedReader, File, and String versions).
+//  * It should have a close method.
+//  * It should automatically close the underlying file/etc. when the
+//    iterator gets to the end (or the end is otherwise reached).
+// Some of these features are inspired by TextFile, which we should
+// eliminate in favor of MultiReader.
 //
-// Lower priority:  consider changing the name of this class to EntryReader
-// (or maybe LineReader?), or something else that is more descriptive.
+// Lower priority:  consider changing the name of this class to EntryReader,
+// or something else that is more descriptive.
 
 
 /**
@@ -141,7 +143,8 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
       this.include_re = Pattern.compile (include_re);
   }
 
-  /** Creates a MultiReader with no comments or include directives **/
+  /** Create a MultiReader that does not support comments or include directives.
+   * @see #MultiReader(BufferedReader,String,String) **/
   public MultiReader (BufferedReader reader) {
     this (reader, null, null);
   }
@@ -159,18 +162,13 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    */
   public MultiReader (File file, String comment_re,
                       String include_re) throws IOException {
-
     this ((UtilMDE.bufferedFileReader (file)), comment_re, include_re);
     readers.peek().filename = file.toString();
   }
 
-  /**
-   * Create a MultiReader that does not support includes or comments
-   *
-   *    @param file       Initial file to read
-   */
+  /** Create a MultiReader that does not support comments or include directives.
+   * @see #MultiReader(File,String,String) **/
   public MultiReader (File file) throws IOException {
-
     this (file, null, null);
   }
 
@@ -180,8 +178,13 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    */
   public MultiReader (String filename, String comment_re,
                       String include_re) throws IOException {
-
     this (new File(filename), comment_re, include_re);
+  }
+
+  /** Create a MultiReader that does not support comments or include directives.
+   * @see #MultiReader(String,String,String) **/
+  public MultiReader (String filename) throws IOException {
+    this (filename, null, null);
   }
 
   /**
@@ -242,7 +245,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     return (line);
   }
 
-  /** Returns an line-by-line interator for this file. **/
+  /** Returns a line-by-line interator for this file. **/
   public Iterator<String> iterator() {
     return this;
   }
