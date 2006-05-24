@@ -1903,8 +1903,9 @@ public final class FileIO {
    * Class that holds all of the information from the declaration record
    * concerning a particular variable
    */
-  public static class VarDefinition {
-    ParseState state;
+  public static class VarDefinition implements java.io.Serializable {
+    static final long serialVersionUID = 20060524L;
+    transient ParseState state;
     String name;
     VarKind kind = null;
     String enclosing_var;
