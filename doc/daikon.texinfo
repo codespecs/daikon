@@ -1520,7 +1520,14 @@ some exit point samples.
 
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using the Simplify
-automatic theorem prover.  Simplify must be separately obtained (from
+automatic theorem prover.  Daikon already suppresses most logically
+redundant output.  For example, if ``x >= 0'' and ``x > 0'' are both
+true, then Daikon outputs only ``x > 0''.  Use of the
+@option{--suppress_redundant} option tells Daikon to use Simplify to 
+eliminate even more redundant output, and should be used if it is
+important that absolutely no redundancies appear in the output.
+
+Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.  Beware that the process of
 detecting redundant invariants can sometimes be time-consuming; the
@@ -2258,7 +2265,10 @@ displayed (for example, because it's unjustified), then the controlled
 invariant @emph{will} be displayed.
 
 @cindex SimplifyFilter
-@item SimplifyFilter:  eliminate invariants using Simplify
+@item SimplifyFilter:  eliminate redundant invariants using Simplify
+
+Daikon contains built-in test that remove most redundant (logically
+implied) invariants from its output; see 
 
 Daikon can use the Simplify theorem-prover to eliminate even more
 implied invariants than Daikon's built-in tests are able to eliminate.
@@ -2267,7 +2277,8 @@ Simplify must be separately obtained (from
 order to take advantage of this filter.
 
 If you don't also specify the @option{--suppress_redundant} command-line
-option to enable Simplify processing, this filter doesn't do anything.
+option (@pxref{Options to control invariant detection}) to enable
+Simplify processing, this filter doesn't do anything.
 
 @cindex UnjustifiedFilter
 @item UnjustifiedFilter:  suppress unjustified invariants
