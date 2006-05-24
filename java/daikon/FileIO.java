@@ -1932,6 +1932,8 @@ public final class FileIO {
       need_eol (scanner);
       if (state.varcomp_format == VarComparability.IMPLICIT)
         comparability = VarComparabilityImplicit.unknown;
+      else
+        comparability = VarComparabilityNone.it;
     }
 
     /**
