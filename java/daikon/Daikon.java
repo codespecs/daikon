@@ -1375,9 +1375,6 @@ public final class Daikon {
                        + exit_ppt.name());
     }
 
-    if (dkconfig_new_decl_format)
-      return;
-
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
     Assert.assertTrue(entry_ppt != null, exit_ppt.name());
 
