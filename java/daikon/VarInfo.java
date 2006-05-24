@@ -274,6 +274,24 @@ public final class VarInfo implements Cloneable, Serializable {
 
     // Create the rep_type from the file rep type
     rep_type = file_rep_type.fileTypeToRepType();
+
+    // Create the VarInfoAux information
+    String auxstr = "";
+    if (var_flags.contains (VarFlags.IS_PARAM)) {
+      if (auxstr.length() > 0)
+        auxstr += ", ";
+      auxstr += "isParam=true";
+    }
+    if (var_flags.contains (VarFlags.NON_NULL)) {
+      if (auxstr.length() > 0)
+        auxstr += ", ";
+      auxstr += "isStruct=true";
+    }
+    try {
+      aux = VarInfoAux.parse (auxstr);
+    } catch (Exception e) {
+      throw new RuntimeException ("unexpected aux error", e);
+    }
   }
 
   /**
