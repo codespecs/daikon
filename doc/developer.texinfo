@@ -1575,6 +1575,7 @@ The test can be added into the standard tests (either @samp{everything} or
 @c   cd /afs/csail.mit.edu/group/pag/projects/invariants/.CVS/
 @c   tar czf ~mernst/www/tmp/inv-cvs.tar.gz invariants
 @c This took 40 minutes on 1/7/2005.
+@c This took 20 minutes on 5/17/2006.
 @c Tell those who receive the repository:
 @c   You can find a copy of the Daikon CVS repository at
 @c     http://pag.csail.mit.edu/~mernst/tmp/inv-cvs.tar.gz
@@ -1586,10 +1587,10 @@ The test can be added into the standard tests (either @samp{everything} or
 @c   suggestions; we will do our best to help.  Finally, please let us know
 @c   anything interesting you learn, and we wish you the best of luck with
 @c   your research!
-@c Distributions in 2005:
+@c Some recent distributions:
 @c   1/7/2005   Miryung Kim <miryung@cs.washington.edu>
 @c   9/19/2005  Barbara Ryder <ryder@cs.rutgers.edu>, Xiaoxia Ren <xren@cs.rutgers.edu>, Frank Tip <ftip@us.ibm.com>
-
+@c   5/17/2006	Harry Xu <xug@cse.ohio-state.edu>
 
 
 This section is intended primarily for researchers who are analyzing
@@ -1630,15 +1631,15 @@ should include both in any analysis of Daikon's tests.
 
 Daikon intentionally does not contain tests for third-party libraries
 that are included (sometimes in source form) in the Daikon distribution.
-For example, the @file{java/jtb/} directory
+As one example, the @file{java/jtb/} directory
 contains an external library.  Therefore, any measurement of Daikon's code
 coverage should not include such libraries (or other libraries, some of
 which are distributed as @file{.jar} files).
 
 Be sure to see file @file{doc/www/mit/index.html} in the repository for
 information about how group members use Daikon.  (This file changes from
-time to time --- for instance, when the CVS branch was created and later
-when development on it ceased.
+time to time --- for instance, it changed when a CVS branch was created
+and later when development on it ceased.)
 
 
 @menu
