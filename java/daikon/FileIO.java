@@ -1082,7 +1082,10 @@ public final class FileIO {
         state.status = ParseStatus.LIST;
         return;
       }
-      if (!ppt_included (line)) {
+      String ppt_name = line;
+      if (new_decl_format)
+        ppt_name = unescape_decl(line).intern();
+      if (!ppt_included (ppt_name)) {
         // System.out.printf ("skipping ppt %s\n", line);
         while ((line != null) && !line.equals(""))
           line = reader.readLine();
@@ -1118,7 +1121,6 @@ public final class FileIO {
 
 
       // Parse the ppt name
-      String ppt_name = line; // already interned
       try {
         new PptName(ppt_name);
       } catch (Error e) {
