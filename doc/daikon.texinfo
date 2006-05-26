@@ -838,7 +838,8 @@ javac -g DataStructures/*.java
 @end example
 
 @item Run the program under the control of the Chicory front end,
-pass the information to Daikon, and print the inferred invariants.
+pass the information to Daikon, print the inferred invariants, and write
+a binary representation of the invariants to @file{StackArTester.inv.gz}.
 
 @example
 java daikon.Chicory --daikon DataStructures.StackArTester
@@ -873,17 +874,8 @@ java daikon.Chicory DataStructures.StackArTester
 java daikon.Daikon StackArTester.dtrace.gz
 @end example
 
-Alternately, you can combine this step and the previous one into a
-single command:
-@example
-java daikon.Chicory --daikon DataStructures.StackArTester
-@end example
-
-In either case, the invariants are printed to standard output, and a binary
-representation of the invariants is written to @file{StackArTester.inv.gz}.
-
-
-@item Examine the invariants.
+@item Examine the invariants.  (They were also printed to standard out
+by the previous step.)
 
 There are various ways to do this.
 @itemize @bullet
