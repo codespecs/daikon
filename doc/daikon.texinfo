@@ -150,9 +150,6 @@ Detecting invariants in Java programs
 
 * StackAr example::             
 * Understanding the invariants::  
-
-Understanding the invariants
-
 * Second Java example::         
 
 Detecting invariants in C/C++ programs
@@ -594,6 +591,7 @@ file.  (Alternately, you could set your classpath yourself.)
 If you use the csh or tcsh shell, add the
 following to your @file{.cshrc} file:
 @example
+setenv JDKDIR @var{/usr/lib/j2sdk1.5-sun}
 setenv DAIKONDIR @var{daikonparent}/daikon
 source $DAIKONDIR/bin/daikon.cshrc
 @end example
@@ -604,6 +602,7 @@ source $DAIKONDIR/bin/daikon.cshrc
 If you use the bash shell, add the following to your
 @file{.bash_profile} file:
 @example
+export JDKDIR=@var{/usr/lib/j2sdk1.5-sun}
 export DAIKONDIR=@var{daikonparent}/daikon
 source $DAIKONDIR/bin/daikon.bashrc
 @end example
@@ -781,16 +780,18 @@ For example, if you usually run
 java mypackage.MyClass arg1 arg2 arg3
 @end example
 @noindent
-@noindent
 then instead you would run
 @example
 java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
+@noindent
+and the Daikon output is written to the terminal.
 
 
 @menu
 * StackAr example::             
 * Understanding the invariants::  
+* Second Java example::         
 @end menu
 
 @c Commented out as of summer 2005, because David Cok doesn't seem likely
@@ -832,7 +833,30 @@ Compile the program with the @option{-g} switch to enable debugging
 symbols.  (The program and test suite appear in the
 @file{DataStructures} subdirectory directory.)
 @example
-cd examples/StackAr
+cd examples/java-examples/StackAr
+javac -g DataStructures/*.java
+@end example
+
+@item Run the program under the control of the Chicory front end,
+pass the information to Daikon, and print the inferred invariants.
+
+@example
+java daikon.Chicory --daikon DataStructures.StackArTester
+@end example
+
+@end enumerate
+
+If you wish to have more control over the invariant detection process,
+you can split the second step above into multiple steps.  Then, the
+whole process would be as follows:
+
+@enumerate
+@item
+Compile the program with the @option{-g} switch to enable debugging
+symbols.  (The program and test suite appear in the
+@file{DataStructures} subdirectory directory.)
+@example
+cd examples/java-examples/StackAr
 javac -g DataStructures/*.java
 @end example
 
@@ -856,7 +880,7 @@ java daikon.Chicory --daikon DataStructures.StackArTester
 @end example
 
 In either case, the invariants are printed to standard output, and a binary
-representation of the invariants is written to @file{StackAr.inv.gz}.
+representation of the invariants is written to @file{StackArTester.inv.gz}.
 
 
 @item Examine the invariants.
@@ -870,7 +894,7 @@ to the end of the command that runs Daikon.)
 @item Use the PrintInvariants program to display the invariants.
 
 @example
-java daikon.PrintInvariants StackAr.inv.gz
+java daikon.PrintInvariants StackArTester.inv.gz
 @end example
 
 For more options to the PrintInvariants program, see @ref{Printing
@@ -881,7 +905,7 @@ into the Java source program.
 
 @example
 cd ..
-java daikon.tools.jtb.Annotate daikon-output/StackAr.inv.gz \
+java daikon.tools.jtb.Annotate StackArTester.inv.gz \
      DataStructures/StackAr.java
 @end example
 
@@ -894,7 +918,7 @@ For more information about the Annotate program, see @ref{Annotate}.
 @c for only the methods and program points you care about.
 @c
 @c @example
-@c java daikon.gui.treeGUI.InvariantsGUI StackAr.inv.gz
+@c java daikon.gui.treeGUI.InvariantsGUI StackArTester.inv.gz
 @c @end example
 
 @c @item Use the Daikon Context GUI to browse the invariants.  As you move
@@ -906,7 +930,7 @@ For more information about the Annotate program, see @ref{Annotate}.
 @end enumerate
 
 
-@node    Understanding the invariants,  , StackAr example, Detecting invariants in Java programs
+@node    Understanding the invariants, Second Java example, StackAr example, Detecting invariants in Java programs
 @subsection Understanding the invariants
 
 This section examines some of the invariants for the StackAr example.
@@ -973,22 +997,29 @@ modified by this method --- this method is an ``observer''.  The
 last invariant is not particularly interesting.
 
 
-@menu
-* Second Java example::         
-@end menu
+@node    Second Java example,  , Understanding the invariants, Detecting invariants in Java programs
+@subsection A second Java example
 
-@node    Second Java example,  , Understanding the invariants, Understanding the invariants
-@subsubsection A second Java example
-
-A second example is located in the @file{examples/QueueAr} subdirectory.
+A second example is located in the @file{examples/java-examples/QueueAr} subdirectory.
 Run this sample using the following steps:
 
 @itemize @bullet
 @item Compile
 @example
-cd examples/QueueAr
+cd examples/java-examples/QueueAr
 javac -g DataStructures/*.java
 @end example
+
+@item Trace file generation and invariant detection
+@example
+java daikon.Chicory --daikon DataStructures.QueueArTester
+@end example
+
+@end itemize
+
+Alternately, you can split the second command into two parts:
+
+@itemize
 
 @item Trace file generation
 @example
@@ -1031,12 +1062,12 @@ documentation on its command-line options, see @ref{Kvasir}.
 @subsection C examples
 
 The Daikon distribution comes with several example C programs in the
-@file{examples/kvasir-examples} directory to enable users to become
+@file{examples/c-examples} directory to enable users to become
 familiar with running Daikon on C programs.
 
 @c There are two sets of examples, corresponding to the two supplied C
 @c front ends.  Examples intended for use with the binary-based front end
-@c Kvasir are in a subdirectory @file{kvasir-examples}; examples for the
+@c Kvasir are in a subdirectory @file{c-examples}; examples for the
 @c older source-based front end dfec are in a subdirectory
 @c @file{dfec-examples}.  It should be possible to instrument the dfec
 @c examples with Kvasir, though we will not give directions here.
@@ -1054,7 +1085,7 @@ program for finding anagrams.
 @enumerate
 @item Change to the directory containing the program.
 @example
-cd $DAIKONDIR/examples/kvasir-examples/wordplay
+cd $DAIKONDIR/examples/c-examples/wordplay
 @end example
 
 @item Compile the program with DWARF-2 debugging information enabled
@@ -1106,7 +1137,7 @@ example uses a configuration option to disable the use of derived
 variables; it can also run without that option, but takes significantly
 longer.
 
-@item Examine the invariants.  As described in @xref{StackAr example},
+@item Examine the invariants.  As described in @ref{StackAr example},
 there are several ways to do this:
 @itemize
 @item Examine the output from running Daikon.
@@ -4639,7 +4670,7 @@ file.txt} to compress a text file (but start with a small one first).
 
 @noindent
 (This example assumes that you have compiled the bzip2 example (in
-@file{$DAIKONDIR/examples/kvasir-examples/bzip2} of the distribution) by
+@file{$DAIKONDIR/examples/c-examples/bzip2} of the distribution) by
 saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
 @command{$DAIKON} stands for the command that invokes Daikon, for
 instance @command{java -Xmx512m daikon.Daikon --config_option
@@ -4940,7 +4971,7 @@ java daikon.Daikon foo.decls bar.decls baz.decls foo.dtrace
 
 @item
 Examine the invariants.  There are
-several ways to do this; see @ref{StackAr example}.
+several ways to do this; @xref{StackAr example}.
 
 @end enumerate
 
@@ -6063,11 +6094,12 @@ An earlier version of Daikon included a Lisp front end, but it is no
 longer supported.
 
 An earlier version of Daikon provided a source-based front end for Java
-named dfej.  It has been superseded by @ref{Chicory}.
+named dfej.  It has been superseded by Chicory (@pxref{Chicory}).
 
 An earlier version of Daikon provided a source-based front end for C
-named dfec.  It has been superseded by @ref{Kvasir} (binary-based, for Linux/x86) and
-@ref{Mangel-Wurzel} (source-based, for all other platforms).
+named dfec.  It has been superseded by Kvasir  (binary-based, for
+Linux/x86; @pxref{Kvasir}) and
+Mangel-Wurzel (source-based, for all other platforms; @pxref{Mangel-Wurzel}).
 
 
 @node    Tools, Troubleshooting, Front ends, Top
@@ -8609,8 +8641,8 @@ omitted.
 @node    Example files,  , Data trace records, File formats
 @section Example files
 
-Here are portions of two files @file{StackAr.decls} and
-@file{StackAr.dtrace}, for a Java class that implements a stack of
+Here are portions of two files @file{StackArTester.decls} and
+@file{StackArTester.dtrace}, for a Java class that implements a stack of
 integers using an array as the underlying data structure.  You can see
 many more examples by simply running an existing front end on some Java,
 C, or Perl programs and viewing the resulting files.
@@ -8624,7 +8656,7 @@ C, or Perl programs and viewing the resulting files.
 @node    Example declaration file, Example data trace file, Example files, Example files
 @subsection Example declaration file
 
-This is part of the file @file{StackAr.decls}, a declaration file for
+This is part of the file @file{StackArTester.decls}, a declaration file for
 the @file{StackAr.java} program (@pxref{StackAr example}).
 
 @example
@@ -8718,7 +8750,7 @@ int
 @node    Example data trace file,  , Example declaration file, Example files
 @subsection Example data trace file
 
-This is part of file @file{StackAr.dtrace}, which you can create by
+This is part of file @file{StackArTester.dtrace}, which you can create by
 running the instrumented @file{StackAr.java} program (@pxref{StackAr
 example}).  This excerpt contains only the first two calls to
 @code{push} and the first return from @code{push}, along with the

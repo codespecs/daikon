@@ -20,6 +20,18 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.6 (May 1, 2006)
+
+Daikon
+
+  User-visible changes
+
+    The examples subdirectory of the distribution has been re-organized:
+    the Java examples have been put in a "java-examples" directory, and the
+    "kvasir-examples" directory has been renamed to "c-examples".
+
+--------------------------------------------
+
 4.2.5 (May 1, 2006)
 
 Some enhancements were made to Daikon.  The list of modified and
@@ -159,7 +171,6 @@ Kvasir
     --dyncomp-dataflow-only, --dyncomp-dataflow-comp) to provide
     finer user control over the DynComp comparability analysis tool,
     which is distributed along with Kvasir.
-    
 
 --------------------------------------------
 
