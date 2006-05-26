@@ -30,7 +30,7 @@ my $host_machine = "yam";
 my $domain = "csail.mit.edu";
 my $rsync_loc = "/scratch2/smcc/daikon-auto-checkout/invariants";
 my $results_loc = "/scratch3/smcc/kvasir-portability-results/$dirname";
-my $mailto = 'smcc@csail.mit.edu,pgbovine@mit.edu';
+my $mailto = 'smcc@csail.mit.edu';
 my $mailfrom = 'smcc@yam.csail.mit.edu';
 
 # Locations on the guest side
