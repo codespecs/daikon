@@ -504,8 +504,8 @@ public class DaikonSimple {
       ValueTuple object_vt = null;
       ValueTuple class_vt = null;
 
-      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor()) || ppt_name
-          .isExitPoint()) {
+      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor())
+          || ppt_name.isExitPoint()) {
         object_ppt = all_ppts.get(ppt_name.makeObject());
         class_ppt = all_ppts.get(ppt_name.makeClassStatic());
       }
