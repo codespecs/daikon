@@ -21,8 +21,8 @@ import java.util.regex.*;
 // Some of these features are inspired by TextFile, which we should
 // eliminate in favor of MultiReader.
 //
-// Lower priority:  consider changing the name of this class to EntryReader,
-// or something else that is more descriptive.
+// Lower priority:  consider changing the name of this class to LineReader,
+// or EntryReader, or something else that is more descriptive.
 
 
 /**
