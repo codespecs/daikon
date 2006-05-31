@@ -26,6 +26,9 @@ Daikon
 
   User-visible changes
 
+    Daikon no longer uses the JDKDIR and DAIKONPARENT environment
+    variables.
+
     The examples subdirectory of the distribution has been re-organized:
     the Java examples have been put in a "java-examples" directory, and the
     "kvasir-examples" directory has been renamed to "c-examples".
