@@ -23,11 +23,6 @@ if "%JDKDIR%"=="" (
 )
 
 if "%DAIKONDIR%"=="" (
-  if not "%DAIKONPARENT%"=="" (
-    set DAIKONDIR=%DAIKONPARENT\daikon
-  )
-)
-if "%DAIKONDIR%"=="" (
   echo daikonenv.bat: DAIKONDIR environment variable is not set
   exit /b 2
 ) else (

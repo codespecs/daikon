@@ -19,7 +19,6 @@ else if (! -d $JDKDIR && $JDKDIR != "none") then
   exit 2
 endif
 
-if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
 if (! $?DAIKONDIR) then
   echo "daikon.cshrc: DAIKONDIR environment variable is not set"
   exit 2

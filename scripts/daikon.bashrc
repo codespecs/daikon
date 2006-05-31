@@ -19,7 +19,6 @@ elif [ ! -d "$JDKDIR" -a "$JDKDIR" != "none" ]; then
   return 2
 fi
 
-export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 if [ -z "$DAIKONDIR" ]; then
   echo "daikon.bashrc: DAIKONDIR environment variable is not set"
   return 2
