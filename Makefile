@@ -201,7 +201,7 @@ test-staged-dist: $(STAGING_DIR)
 	# Test the main target of the makefile
 	cd $(DISTTESTDIR)/daikon && make
 	# test basic operation (Chicory/Daikon)
-	cd $(DISTTESTDIR)/daikon/examples/StackAr && \
+	cd $(DISTTESTDIR)/daikon/examples/java-examples/StackAr && \
 	  javac -g `find . -name '*.java'` && \
 	  java -cp .:$(DISTTESTDIR)/daikon/daikon.jar -ea daikon.Chicory \
 		--daikon DataStructures/StackArTester
@@ -400,21 +400,21 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 
 	# Java example files
 	mkdir /tmp/daikon/examples
-	cp -pR examples/{StackAr,QueueAr} /tmp/daikon/examples
+	cp -pR examples/java-examples /tmp/daikon/examples
 	# Keep .java files, delete everything else
-	cd /tmp/daikon && find examples -name '*.java' -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+	cd /tmp/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
 
 	# Perl example files
 	mkdir /tmp/daikon/examples/perl-examples
 	cp -p examples/perl-examples/{Birthday.{pm,accessors},{test_bday,standalone}.pl} /tmp/daikon/examples/perl-examples
 
 	# C example files for Kvasir
-	mkdir /tmp/daikon/examples/kvasir-examples
-	mkdir /tmp/daikon/examples/kvasir-examples/bzip2
-	cp -p examples/kvasir-examples/bzip2/bzip2.c /tmp/daikon/examples/kvasir-examples/bzip2
-	mkdir /tmp/daikon/examples/kvasir-examples/wordplay
-	cp -p examples/kvasir-examples/wordplay/wordplay.c /tmp/daikon/examples/kvasir-examples/wordplay
-	cp -p examples/kvasir-examples/wordplay/words.txt /tmp/daikon/examples/kvasir-examples/wordplay
+	mkdir /tmp/daikon/examples/c-examples
+	mkdir /tmp/daikon/examples/c-examples/bzip2
+	cp -p examples/c-examples/bzip2/bzip2.c /tmp/daikon/examples/c-examples/bzip2
+	mkdir /tmp/daikon/examples/c-examples/wordplay
+	cp -p examples/c-examples/wordplay/wordplay.c /tmp/daikon/examples/c-examples/wordplay
+	cp -p examples/c-examples/wordplay/words.txt /tmp/daikon/examples/c-examples/wordplay
 
 	# chgrp -R $(INV_GROUP) /tmp/daikon
 
