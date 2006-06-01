@@ -29,9 +29,21 @@ Daikon
     Daikon no longer uses the JDKDIR and DAIKONPARENT environment
     variables.
 
+    The examples section of the Daikon manual has been slightly
+    streamlined, and several small typos have been fixed.
+
     The examples subdirectory of the distribution has been re-organized:
     the Java examples have been put in a "java-examples" directory, and the
     "kvasir-examples" directory has been renamed to "c-examples".
+
+    Daikon no longer prints "Creating implications", which is
+    irrelevant to most users.
+
+Kvasir
+
+  User-visible changes
+
+    New command-line option --array-length-limit has been added.
 
 --------------------------------------------
 

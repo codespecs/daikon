@@ -22,11 +22,11 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 4.2.5
+@center Daikon version 4.2.6
 
 @sp 1
-@c Daikon version 4.2.5 date
-@center May 1, 2006
+@c Daikon version 4.2.6 date
+@center June 1, 2006
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -48,7 +48,7 @@ Copyright @copyright{} 1998-2005
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 4.2.5, released May 1, 2006.
+@c It describes Daikon version 4.2.6, released June 1, 2006.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2005
 @c 
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 4.2.5, released May 1, 2006.
+It describes Daikon version 4.2.6, released June 1, 2006.
 @end ifnottex
 
 @menu
