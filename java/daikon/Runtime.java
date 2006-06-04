@@ -1,7 +1,3 @@
-// Run-time support for dfej: Daikon Front End for Java.
-// This is not really part of the Daikon invariant detection engine proper,
-// but dfej and Daikon will be linked via it.
-
 package daikon;
 
 import java.util.HashMap;
@@ -10,6 +6,20 @@ import java.util.zip.GZIPOutputStream;
 import java.io.*;
 
 
+/**
+ * The Runtime class provides methods for printing values to a Daikon data
+ * trace file.  Daikon can process the data trace information, either while
+ * the target program is running or after-the-fact, to produce likely
+ * invariants.
+ * <p>
+ *
+ * The Daikon front end for Java, named Chicory, modifies the target
+ * program by inserting calls to the printing routines of the Runtime
+ * class.  Neither Chicory nor Daikon calls the methods of the Runtime
+ * class; only the target program (as instrumented by Chicory) does, in
+ * order to create input to Daikon.
+ * <p>
+ **/
 public final class Runtime {
 
   private static final String lineSep = System.getProperty("line.separator");
