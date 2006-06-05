@@ -27,13 +27,13 @@ Daikon
   User-visible changes
 
     Daikon prints a warning message if it encounters non-standard
-    program point names in a trace file and the --no-hierarchy 
+    program point names in a trace file and the --nohierarchy 
     switch is not used.  This change is irrelevant for most users,
     since, for trace files corresponding to an execution of a program,
-    such as those obtained from Chicory and Kvasir, the --no-hierarchy
+    such as those obtained from Chicory and Kvasir, the --nohierarchy
     switch should not be used.  For trace files obtained from 
     spreadsheet data, such as from a csv file using convertcsv.pl, 
-    the --no-hierarchy switch should be used.
+    the --nohierarchy switch should be used.
 
 --------------------------------------------
 
