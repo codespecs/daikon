@@ -6061,7 +6061,16 @@ convertcsv.pl myfile.csv
 @noindent
 produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
 @command{convertcsv.pl} without any arguments in order to see a usage
-message.
+message.  
+
+In order to ensure all data is processed, use Daikon with the 
+@option{--nohierarchy} option, as follows: 
+@example
+java daikon.Daikon --nohierarchy myfile.decls myfile.dtrace
+@end example
+@noindent
+In a future release, the @option{--nohierarchy} option may not be necessary,
+but it should always be safe to use this option.
 
 
 @node    Other front ends,  , convertcsv.pl, Front ends
@@ -7159,16 +7168,20 @@ section tells you how to debug your problem if the
 answer is 0, but you believe that there are samples in the file you are
 feeding to Daikon.
 
-Daikon processes only @code{:::ENTER} program points that have a
-matching @code{:::EXIT}
-program point.  (You can disable this behavior with the
+Using the normal dataflow hierarchy, Daikon only explicitly processes 
+@code{:::EXIT} program points.  Other program points, such as
+@code{:::ENTER} program points, are processed indirectly when their
+corresponding @code{:::EXIT} points are encountered.  
+(You can disable this behavior with the
 @option{--nohierarchy} switch to Daikon;
 see @xref{Options to control invariant detection}.)
 If no @code{:::EXIT} program points are present (perhaps every
-execution threw an exception, or you filtered out all the
-@code{:::EXIT} program points),
-then Daikon will not process any of the @code{:::ENTER} program points.
-You can make Daikon print information about unmatched procedure entries
+execution threw an exception, you filtered out all the
+@code{:::EXIT} program points, or the data trace is obtained from
+spreadsheet data instead of from a program execution),
+then Daikon will not process any of the other program points, such as 
+the @code{:::ENTER} program points.  You can make Daikon print information 
+about unmatched procedure entries
 via the @samp{daikon.FileIO.unmatched_procedure_entries_quiet}
 configuration option (@pxref{General configuration options}).
 
