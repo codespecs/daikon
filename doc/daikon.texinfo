@@ -6906,8 +6906,8 @@ option, LogicalCompare does not perform any of the filters that
 normally control whether invariants are printed by Daikon.  Also,
 invariants that cannot be formatted for the Simplify automatic theorem
 prover will be discarded in any case, as there would be no other way
-to process them.  Each letter controls a filter: an invariant is reject
-if it is reject by any filter (or, equivalently, kept only if it
+to process them.  Each letter controls a filter: an invariant is rejected
+if it is rejected by any filter (or, equivalently, kept only if it
 passes through every filter).
 
 @table @option
