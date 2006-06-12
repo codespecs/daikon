@@ -738,7 +738,8 @@ set of invariants (@code{NISuppression}) that imply and suppress a
 the suppressions that suppress a particular suppressee is stored in the
 class @code{NISuppressionSet}.
 
-Adding a new suppression is straightforward.  Define the suppressee and
+Adding a new suppression is straightforward when the invariants involved 
+do not have any state.  Define the suppressee and
 each of the suppressions that suppress it using the corresponding
 constructors.  Add the method @code{get_ni_suppressions} to the class
 of the invariant being suppressed and return the appropriate
@@ -770,6 +771,38 @@ public NISuppressionSet get_ni_suppressions() @{
   return (suppressions);
 @}
 @end example
+
+For suppressions depending on the state of a particular invariant, each @code{Invariant} has an @code{isObviousDynamically(VarInfo[] vis)} method that is called once the state of other invariants has already been determined.  This method returns a non-null value if this invariant is implied by a fact that can be derived from the given @code{VarInfo}s.  
+
+For example, suppose division was not defined for divisors smaller than 1.  The following example defines an obvious check for ``x <= c'' (where c < 1 is a constant) implies ``y % x == 0'', written in the Divides class.
+
+@example
+public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
+  DiscardInfo di = super.isObviousDynamically(vis);
+  if(di != null) @{
+    return di;
+  @}
+
+  VarInfo var1 = vis[0];
+
+  PptSlice1 ppt_over1 = ppt.parent.findSlice(var1);
+
+  if(ppt_over1 == null) @{
+    return null;
+  @}
+
+  for(Invariant inv : ppt_over1.invs) @{            
+    if(inv instanceof UpperBound) @{
+      if(((UpperBound) inv).max() < 1) @{
+        return new DiscardInfo(this, DiscardCode.obvious,
+                               ``Divides is obvious when divisor less than one'');
+      @}
+    @}
+  @}
+
+  return null;
+@}
+@end example  
 
 @node    System.exit,  , New suppressors, Extending Daikon
 @section System.exit

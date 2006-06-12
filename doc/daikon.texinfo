@@ -7185,6 +7185,9 @@ about unmatched procedure entries
 via the @samp{daikon.FileIO.unmatched_procedure_entries_quiet}
 configuration option (@pxref{General configuration options}).
 
+Another option that increases the number of Daikon invariants printed out is to lower the confidence level Daikon must have in an invariant before it prints it out.  Use the @option{--conf_limit} option (@pxref{Options to control invariant detection}).  In order to maximize the number of invariants printed, use @option{--conf_limit 0} to see all invariants Daikon is considering printing.
+
+To try to determine why an invariant is not printed, use the @option{--track} to determine why Daikon does not print an invariant (@pxref{Daikon debugging options}).
 
 @node    No return from procedure, Unsupported class version, No samples, Daikon problems
 @subsection No return from procedure
