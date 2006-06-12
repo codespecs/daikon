@@ -797,41 +797,48 @@ public final class FileIO {
   // warning if this does not match Daikon.use_dataflow_hierarchy.
   // Dataflow hierarchy should be used only when all program points
   // correspond to points normally found in traces from a
-  // programming languages
+  // programming languages.
   private static void warn_if_hierarchy_mismatch(PptMap all_ppts) {
+    
+    boolean some_program_points = false;
     boolean all_program_points = true;
 
     // go through each top level ppt, and make all_program_points
     // false if at least one of them is not a program point normally
     // found in traces from programming languages
     for(Iterator<PptTopLevel> all_ppts_iter = all_ppts.ppt_all_iterator();
-        all_ppts_iter.hasNext(); ) {
+        all_ppts_iter.hasNext(); ) {      
       PptTopLevel ppt_top_level = all_ppts_iter.next();
-      all_program_points =
-        all_program_points &&
+     
+      boolean is_program_point = 
         (ppt_top_level.ppt_name.isExitPoint() ||
-         ppt_top_level.ppt_name.isEnterPoint() ||
-         ppt_top_level.ppt_name.isThrowsPoint() ||
-         ppt_top_level.ppt_name.isObjectInstanceSynthetic() ||
-         ppt_top_level.ppt_name.isClassStaticSynthetic() ||
-         ppt_top_level.ppt_name.isGlobalPoint());
+        ppt_top_level.ppt_name.isEnterPoint() ||
+        ppt_top_level.ppt_name.isThrowsPoint() ||
+        ppt_top_level.ppt_name.isObjectInstanceSynthetic() ||
+        ppt_top_level.ppt_name.isClassStaticSynthetic() ||
+        ppt_top_level.ppt_name.isGlobalPoint());
+      
+      all_program_points = all_program_points && is_program_point;
+      some_program_points = some_program_points || is_program_point;
     }
 
     // if all program points correspond to a programming language,
     // but the dataflow hierarchy has been turned off, then
     // suggest not using the --nohierarchy flag
-    if(all_program_points && (!Daikon.use_dataflow_hierarchy)) {
-      System.out.println("Warning: data trace appears to be over" +
-                         " a program execution, but dataflow" +
-                         " hierarchy has been turned off," +
-                         " consider running Daikon without the" +
-                         " --nohierarchy flag");
-    }
+    //    if(all_program_points && (!Daikon.use_dataflow_hierarchy)) {
+    //      System.out.println("Warning: data trace appears to be over" +
+    //                         " a program execution, but dataflow" +
+    //                         " hierarchy has been turned off," +
+    //                         " consider running Daikon without the" +
+    //                         " --nohierarchy flag");
+    //    }
 
     // if some of the program points do not correspond to a
     // points from a programming language, and the dataflow
     // hierarchy is being used, suggest using the --nohierarchy flag.
-    if(Daikon.use_dataflow_hierarchy && (!all_program_points)) {
+    if(Daikon.use_dataflow_hierarchy && 
+        (!all_program_points) &&
+        some_program_points) {
       System.out.println("Warning: Daikon is using a dataflow" +
                          " hierarchy analysis on a data trace" +
                          " that does not appear to be over a" +
@@ -1295,9 +1302,27 @@ public final class FileIO {
     // of the form foo:::EXIT are not processed -- they are assumed to be
     // non-leaves.
     if (Daikon.use_dataflow_hierarchy) {
-      if (!ppt.ppt_name.isExitPoint())
+      
+      // Rather than defining leaves as :::EXIT54 (numbered exit)
+      // program points define them as everything except 
+      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, ::GLOBAL
+      //  and :::CLASS program points.  This scheme ensures that arbitrarly
+      //  named program points such as :::POINT (used by convertcsv.pl) 
+      //  will be treated as leaves.
+      
+      //OLD:
+      //if (!ppt.ppt_name.isExitPoint()) 
+      //  return;
+      if (ppt.ppt_name.isEnterPoint() ||
+          ppt.ppt_name.isThrowsPoint() ||
+          ppt.ppt_name.isObjectInstanceSynthetic() ||
+          ppt.ppt_name.isClassStaticSynthetic() ||
+          ppt.ppt_name.isGlobalPoint()) {
         return;
-      if (ppt.ppt_name.isCombinedExitPoint()) {
+      }
+      
+      //OLD:if (ppt.ppt_name.isCombinedExitPoint()) {
+      if(ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
         throw new RuntimeException("Bad program point name " + ppt.name
                                    + " is a combined exit point name");
       }
