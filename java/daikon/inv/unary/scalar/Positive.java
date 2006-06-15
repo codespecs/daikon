@@ -9,7 +9,7 @@ import daikon.inv.InvariantStatus;
 // This invariant is provided for pedagogical reasons only.
 
 /**
- * Represents the invariant <samp>x > 0</samp> where <samp>x</samp>
+ * Represents the invariant <samp>x &gt; 0</samp> where <samp>x</samp>
  * is a long scalar.  This exists
  * only as an example for the purposes of the manual.  It isn't actually
  * used (it is replaced by the more general invariant LowerBound).
