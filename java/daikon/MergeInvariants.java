@@ -263,7 +263,7 @@ public final class MergeInvariants {
 
     // Implications
     stopwatch.reset();
-    System.out.println("Creating implications ");
+    // System.out.println("Creating implications ");
     debugProgress.fine ("Adding Implications ... ");
     for (Iterator<PptTopLevel> itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = itor.next();
