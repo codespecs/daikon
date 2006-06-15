@@ -4,9 +4,10 @@ default:
 	@echo "  pubs"
 
 # Not the default to avoid accidentally installing new webpages.
-# It's best to run www-dist from pag, not a client machine.
 www-dist:
 	cd .. && $(MAKE) www-dist
+pag-install:
+	cd .. && $(MAKE) pag-install
 
 pubs:
 	mkdir -p pubs

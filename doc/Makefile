@@ -137,4 +137,6 @@ dist:
 # 	cd .. && $(MAKE) www
 
 www-dist:
-	cd .. && $(MAKE) www-dist
+	cd .. && $(MAKE) pag-install
+pag-install:
+	cd .. && $(MAKE) pag-install

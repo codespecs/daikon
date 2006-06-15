@@ -62,7 +62,7 @@ for work at PAG</a>.
       <li><a href="#other-tasks">Other tasks</a>
         <ul>
           <li><a href="#regression-tests">Testing Daikon</a></li>
-          <li><a href="#distribution">Making a distribution</a></li>
+          <li><a href="#distribution">Making a distribution (a release)</a></li>
           <li><a href="#Mangel-Wurzel-linux">Building and testing Mangel-Wurzel on Linux</a></li>
           <li><a href="#Mangel-Wurzel-Windows">Building/testing Mangel-Wurzel on Windows</a></li>
           <li><a href="#purify-linux">Setting up Purify on Linux</a></li>
@@ -554,7 +554,7 @@ The cron job for the overnight tests appears in
 </p>
 
 
-<h3><a name="distribution">Making a distribution</a></h3>
+<h3><a name="distribution">Making a distribution (a release)</a></h3>
 
 <p>
 To publish a Daikon distribution, do the following.  If you only want to
@@ -586,7 +586,7 @@ target.
     <p>The <tt>cvs -q diff</tt> command should produce no output. </p>
     </li>
 
-    <li> <p> Rebuild everything. </p>
+    <li> Rebuild everything.
 
     <pre>
         make rebuild-everything    </pre> 
@@ -654,7 +654,8 @@ target.
     <li> Update the website. 
 
     <pre>
-        make staging-to-www </pre> 
+        make staging-to-www
+        make pag-install </pre> 
 
     <p>
     Note that <code>make staging-to-www</code> will automatically
