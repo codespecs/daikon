@@ -35,6 +35,16 @@ Daikon
     spreadsheet data, such as from a csv file using convertcsv.pl, 
     the --nohierarchy switch should be used.
 
+Kvasir
+
+  User-visible changes
+
+    DynComp's treatment of indexed memory accesses, local variables,
+    and position-independent library code has been modified to be more
+    consistent. The most noticeable change is that base pointers and
+    indexes used in array dereferences are now always counted as
+    interacting.
+ 
 --------------------------------------------
 
 4.2.6 (June 1, 2006)
