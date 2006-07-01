@@ -22,16 +22,27 @@ Further documentation can be found in:
 
 4.2.7 (July 1, 2006)
 
+Minor enhancements were made to Chicory, Daikon, and Kvasir.  Chicory
+more accurately determines whether or not a class is a boot (system)
+class.  Daikon better handles spreadsheet data.  Kvasir's
+DynComp option more consistently handles array references.
+
 Chicory
 
   User-visible changes
 
-    Changed the mechanism by which boot classes are determined.  Previously
-    the name of the class was used.  Now if the class loader is null
-    (which indicates the boot class loader), the class is presumed to
-    be a boot class.  Also added a command line option (boot_classes) that
+    Changed the mechanism by which boot (system/jdk) classes are
+    determined (boot classes are not instrumented and errors will
+    occur if they are instrumented mistakenly).  Previously the name
+    of the class was used.  Now if the class loader is null (which
+    indicates the boot class loader), the class is presumed to be a
+    boot class.  Also added a command line option (boot_classes) that
     can specify a regular expression that determines what classes are
-    considered to be boot classes
+    considered to be boot classes.
+
+Daikon
+
+  User-visible changes
 
     Daikon prints a warning message if it encounters non-standard
     program point names in a trace file and the --nohierarchy 
@@ -41,6 +52,10 @@ Chicory
     switch should not be used.  For trace files obtained from 
     spreadsheet data, such as from a csv file using convertcsv.pl, 
     the --nohierarchy switch should be used.
+
+    The divides invariant (b % a == 0) is redundant and thus not printed
+    when a linear binary invariant of the form 'C*a = b' exists and C
+    is an integer constant.
 
 Kvasir
 
