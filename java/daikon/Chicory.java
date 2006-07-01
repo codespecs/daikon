@@ -36,7 +36,7 @@ public class Chicory {
   @Option ("Include only program points that match")
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
-  @Option ("Decl formatted file containing comparabiity information")
+  @Option ("Decl formatted file containing comparability information")
   public static File comparability_file = null;
 
   @Option ("Print progress information")
@@ -48,8 +48,17 @@ public class Chicory {
   @Option ("Print debug information and save instrumented classes")
   public static boolean debug = false;
 
+  @Option ("Print detailed information on which classes are transformed")
+  public static boolean debug_transform = false;
+
+  @Option ("Treat classes that match the regex as boot classes")
+  public static Pattern boot_classes = null;
+
   @Option ("Size of the heap for the target program")
   public static String heap_size = "128M";
+
+  @Option ("Create the new declaration record format")
+  public static boolean new_decl_format = false;
 
   /**
    * Path to java agent jar file that performs the transformation.
