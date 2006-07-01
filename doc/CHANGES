@@ -22,9 +22,16 @@ Further documentation can be found in:
 
 4.2.7 (July 1, 2006)
 
-Daikon
+Chicory
 
   User-visible changes
+
+    Changed the mechanism by which boot classes are determined.  Previously
+    the name of the class was used.  Now if the class loader is null
+    (which indicates the boot class loader), the class is presumed to
+    be a boot class.  Also added a command line option (boot_classes) that
+    can specify a regular expression that determines what classes are
+    considered to be boot classes
 
     Daikon prints a warning message if it encounters non-standard
     program point names in a trace file and the --nohierarchy 
