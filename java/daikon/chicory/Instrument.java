@@ -24,6 +24,8 @@ import sun.nio.cs.ext.ISCII91;
 // uncomment this and uses of it below, to get bcel verify info
 // import edu.mit.csail.pag.testfactoring.verify.StackVer;
 
+import utilMDE.SimpleLog;
+
 import daikon.Chicory;
 
 /**
@@ -45,6 +47,10 @@ public class Instrument implements ClassFileTransformer {
 
   /** the location of the runtime support class **/
   private static final String runtime_classname = "daikon.chicory.Runtime";
+
+  /** Debug information about which classes are transformed and why **/
+  public static SimpleLog debug_transform
+    = new SimpleLog (Chicory.debug_transform);
 
   public Instrument () {
   }
@@ -131,25 +137,39 @@ public class Instrument implements ClassFileTransformer {
     String fullClassName = className.replace("/", ".");
     //String fullClassName = className;
 
-    if (debug)
-      out.format ("In Transform: class = %s%n", className);
+      debug_transform.log ("In Transform: class = %s%n", className);
 
-    // Don't instrument standard classes (but allow instrumentation of
-    // the javac compiler)
-    if ((className.startsWith ("java/") || className.startsWith ("com/")
-         || className.startsWith("javax/")
-         || className.startsWith ("sun/"))
-        && !className.startsWith ("com/sun/tools/javac"))
+    // Don't instrument boot classes.  They are uninteresting and will
+    // not be able to access daikon.chicory.Runtime (because it is not
+    // on the boot classpath.  Previously this code skipped classes
+    // that started with java, com, javax, or sun, but this is not
+    // correct in many cases.
+    if (Chicory.boot_classes != null) {
+      Matcher matcher = Chicory.boot_classes.matcher (fullClassName);
+      if (matcher.find()) {
+        debug_transform.log ("ignoring sys class %s, "
+                             + "matches boot_classes regex", fullClassName);
+        return (null);
+      }
+    } else if (loader == null) {
+        debug_transform.log ("ignoring system class %s, class loader == null",
+                             fullClassName);
       return (null);
+    } else if (fullClassName.startsWith ("sun.reflect")) {
+      System.out.printf ("class = %s, loader = %s, domain = %s, mod = %08x, "
+                         + "synthetic=%b%n", fullClassName, loader,
+                         protectionDomain, classBeingRedefined.getModifiers(),
+                         classBeingRedefined.isSynthetic());
+    }
 
     // Don't intrument our code
     if (className.startsWith ("daikon/chicory")
-        && !className.equals ("daikon/chicory/Test"))
+        && !className.equals ("daikon/chicory/Test")) {
+      debug_transform.log ("Not considering chicory class %s%n",fullClassName);
       return (null);
+    }
 
-
-    if (debug)
-      out.format("transforming class %s%n", className);
+      debug_transform.log ("transforming class %s%n", className);
 
     // Parse the bytes of the classfile, die on any errors
     JavaClass c = null;
@@ -410,7 +430,8 @@ public class Instrument implements ClassFileTransformer {
    * of not being able to query return values.
    * @param fullClassName must be packageName.className
    */
-  private ClassInfo save_ret_value (ClassGen cg, String fullClassName, ClassLoader loader) {
+  private ClassInfo save_ret_value (ClassGen cg, String fullClassName,
+                                    ClassLoader loader) {
 
     ClassInfo class_info = new ClassInfo (cg.getClassName(), loader);
     List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
@@ -592,17 +613,17 @@ public class Instrument implements ClassFileTransformer {
     // as enter/exit ppts are processed.
     class_info.set_method_infos (method_infos);
 
-    if (shouldInclude)
-      {
-        synchronized (Runtime.new_classes)
-          {
-            synchronized (Runtime.all_classes)
-              {
-                Runtime.new_classes.add (class_info);
-                Runtime.all_classes.add (class_info);
-              }
-          }
+    if (shouldInclude) {
+      debug_transform.log ("Added trace info to class %s%n", class_info);
+      synchronized (Runtime.new_classes) {
+        synchronized (Runtime.all_classes) {
+          Runtime.new_classes.add (class_info);
+          Runtime.all_classes.add (class_info);
+        }
       }
+    } else { // not included
+      debug_transform.log ("Trace info not added to class %s%n", class_info);
+    }
 
     return class_info;
   }
