@@ -1,7 +1,7 @@
 #!/usr/bin/perl -wpi.bak
 # update-link-dates
 # Michael Ernst <mernst@alum.mit.edu>
-# Time-stamp: <2006-06-22 20:05:53 mernst>
+# Time-stamp: <2006-07-06 09:56:34 mernst>
 
 # usage:
 #   update-link-dates file [...]
@@ -14,6 +14,9 @@
 # modification date.
 # For examples, see http://pag.csail.mit.edu/~mernst/software/ and
 # http://pag.csail.mit.edu/daikon/download/.
+
+# Warning: if the filename is the HTML file being edited, the date/size may
+# be incorrect.
 
 # To do:
 #   Need to operate by paragraphs, not by lines.
@@ -44,7 +47,7 @@ BEGIN
   $datesizere = '(' . $datere . '(?:, ' . $sizere . ')?)';
 }
 
-s/(<a href\s*=\s*\")([^:\"> ]+)(\">.*?<\/a>(?:,? (?:by|from) [A-Za-z]+(?: [A-Za-z]+)?)?(?: \((?:PDF, )|, ))$datesizere([\)]?)/file_date_replacement($1,$2,$3,$4,$5)/eg;
+s/(<a href\s*=\s*\")([^:\"> ]+)(\">.*?<\/a>(?:,? (?:by|from) [A-Za-z]+(?: [A-Za-z]+)?)?(?: \((?:PDF, )?|, ))$datesizere([\)]?)/file_date_replacement($1,$2,$3,$4,$5)/eg;
 
 END
 { for my $file (keys %file_atime)
@@ -86,10 +89,10 @@ sub file_date_replacement ( $$$$$ )
     return "$pre$file${mid}$date$post"; }
   my $date = file_date($full_file, $longmonth);
   my $size = file_size($full_file);
-  # If this file changed, then don't reset its write date.  This means that
-  # browsers which check the modification time before downloading a
-  # new version will get the lastest version.  And indeed the text has
-  # changed, though not substantially...
+  # If this script changed the HTML file, then don't reset its write date.
+  # This means that browsers which check the modification time before
+  # downloading a new version will get the lastest version.  And indeed the
+  # text has changed, though not substantially...
   if (($date ne $old_date) || (defined($old_size) && ($size ne $old_size)))
     { delete $file_atime{$ARGV};
       delete $file_mtime{$ARGV};
@@ -108,12 +111,12 @@ sub file_date ( $;$ )
   my $mtime;
   (undef,undef,undef,undef,undef,undef,undef,undef,
    undef,$mtime,undef,undef,undef) = stat($file);
-  # print "file_date: $file\n";
   my ($mday,$mon,$year);
   (undef,undef,undef,$mday,$mon,$year,undef,undef,undef) = localtime($mtime);
   my $dateformat = ($longmonth ? "%d %B %Y" : "%d %b %Y");
   my $date = POSIX::strftime($dateformat, 0, 0, 0, $mday, $mon, $year);
   $date =~ s/^0//;
+  # print STDERR "file_date($file) => $date\n";
   return $date;
 }
 
