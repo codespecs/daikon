@@ -1275,6 +1275,8 @@ public final class UtilMDE {
    * oldStr replaced by newStr.
    **/
   public static String replaceString(String target, String oldStr, String newStr) {
+    if (oldStr.equals("")) throw new IllegalArgumentException();
+
     StringBuffer result = new StringBuffer();
     int lastend = 0;
     int pos;
