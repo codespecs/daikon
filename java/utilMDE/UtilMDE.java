@@ -1841,7 +1841,7 @@ public final class UtilMDE {
   /**
    * Returns a list of lists of each combination (with repetition, but
    * not permutations) of the specified objects starting at index
-   * start over dims dimensions.
+   * start over dims dimensions, for dims &gt; 0.
    *
    * For example, create_combinations (1, 0, {a, b, c}) returns:
    *    {a}, {b}, {c}
@@ -1853,6 +1853,8 @@ public final class UtilMDE {
    *    {c, c}
    */
   public static <T> List<List<T>> create_combinations (int dims, int start, List<T> objs) {
+
+    if (dims < 1) throw new IllegalArgumentException();
 
     List<List<T>> results = new ArrayList<List<T>>();
 
@@ -1883,7 +1885,7 @@ public final class UtilMDE {
    * For example, create_combinations (1, 0, 2) returns:
    *    {0}, {1}, {2}
    *
-   * And create_combinations (2, 0, 2} returns:
+   * And create_combinations (2, 0, 2) returns:
    *
    *    {0, 0}, {0, 1}, {0, 2}
    *    {1, 1}  {1, 2},
