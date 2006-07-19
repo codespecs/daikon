@@ -154,6 +154,10 @@ public class Lookup {
       System.exit (254);
     }
 
+    // If the comment regular expression is empty, turn off comment processing
+    if (comment_re.equals (""))
+      comment_re = null;
+
     // Open the first readable root file
     MultiReader reader = null;
     String entry_files[] = entry_file.split (":");
