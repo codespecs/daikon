@@ -58,6 +58,10 @@ public abstract class VarInfoName
    * it completes normally, the result should be true.
    **/
   public static VarInfoName parse(String name) {
+
+    // Remove the array indication from the new decl format
+    name = name.replace ("[..]", "[]");
+
     // x.class
     if (name.endsWith(getClassSuffix)) {
       return parse(name.substring(0, name.length()-getClassSuffix.length()))
