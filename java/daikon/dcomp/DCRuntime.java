@@ -615,6 +615,12 @@ public final class DCRuntime {
       } else if (dv instanceof FieldInfo) {
         assert ((FieldInfo)dv).isStatic() : "non static field at root " + dv;
         merge_comparability (varmap, null, null, dv);
+      } else if (dv instanceof StaticObjInfo) {
+        for (DaikonVariableInfo static_dv : dv.children) {
+          assert ((FieldInfo)static_dv).isStatic()
+            : "non static field at root " + dv;
+          merge_comparability (varmap, null, null, static_dv);
+        }
       } else {
         assert false : "unexpected node " + dv;
       }
@@ -1167,6 +1173,9 @@ public final class DCRuntime {
     // Loop through each set of comparable variables
     for (DVSet set : sets) {
 
+      if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
+        continue;
+
       // Determine if the set has both hashcode variables and integer
       // variables.  If it does, it is indicating index comparability
       boolean hashcode_vars = false;
@@ -1212,7 +1221,7 @@ public final class DCRuntime {
     List<DaikonVariableInfo> dv_list = dv_tree.tree_as_list();
     time_decl.log_time ("built tree as list with %d elements", dv_list.size());
     for (DaikonVariableInfo dv : dv_list) {
-      if (dv instanceof RootInfo)
+      if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo))
         continue;
       ps.println(dv.getName());
       ps.println (dv.getTypeName());
@@ -1245,6 +1254,8 @@ public final class DCRuntime {
       ps.printf ("  not called%n");
     else {
       for (DVSet set : l) {
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
+          continue;
         ps.printf ("  [%d] %s%n", set.size(), set);
       }
     }
@@ -1256,6 +1267,8 @@ public final class DCRuntime {
       ps.printf ("  not called%n");
     else {
       for (DVSet set : l) {
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
+          continue;
         ps.printf ("  [%d] %s%n", set.size(), set);
       }
     }
