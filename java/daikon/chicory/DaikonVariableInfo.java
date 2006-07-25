@@ -4,8 +4,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
 
-import daikon.Chicory;
-import daikon.VarInfoName;
+import daikon.*;
+import daikon.VarInfo.VarFlags;
 
 
 /**
@@ -59,6 +59,9 @@ public abstract class DaikonVariableInfo
     protected String typeName;
     protected String repTypeName;
     protected String compareInfoString = compareInfoDefaultString;
+
+    /** Value of static constants **/
+    String const_val = null;
 
     /** True iff the DeclWriter should print this variable **/
     protected boolean declShouldPrint = true;
@@ -114,7 +117,10 @@ public abstract class DaikonVariableInfo
      */
     public String getName()
     {
-        return name;
+        if (Chicory.new_decl_format)
+            return name.replaceFirst ("\\[]", "[..]");
+        else
+            return name;
     }
 
     /**
@@ -429,10 +435,17 @@ public abstract class DaikonVariableInfo
                 thisInfo.addChild(thisClass);
             }
         }
-        else
+        else if (offset.equals ("")) {
+            // Create a non-printing root for static variables.
+            thisInfo = new StaticObjInfo(type);
+            addChild (thisInfo);
+        } else
             thisInfo = this;
 
+        // Get the fields
+        // System.out.printf ("getting fields for %s%n", type);
         Field[] fields = type.getDeclaredFields();
+
         // if (fields.length > 50)
         //    System.out.printf ("%d fields in %s%n", fields.length, type);
 
@@ -710,6 +723,7 @@ public abstract class DaikonVariableInfo
             if (value != null)
             {
                 newField.repTypeName += " = " + value;
+                newField.const_val = value;
                 newField.dtraceShouldPrint = false;
             }
             //else
@@ -1147,6 +1161,11 @@ public abstract class DaikonVariableInfo
        return typeName;
    }
 
+    /** Return the type name without aux information **/
+    public String getTypeNameOnly() {
+        return typeName.replaceFirst (" # .*", "");
+    }
+
    /**
     * Returns the representation type name of this variable.
     */
@@ -1156,6 +1175,20 @@ public abstract class DaikonVariableInfo
 
        return repTypeName;
    }
+
+    /** Return the rep type name without the constant value **/
+    public String getRepTypeNameOnly() {
+        return repTypeName.replaceFirst (" = .*", "");
+    }
+
+    /**
+     * Returns the constant value of the variable.  If the variable is not
+     * static and final, or if the constant value is not available in the
+     * class file, returns null
+     */
+    public String get_const_val() {
+        return const_val;
+    }
 
    /**
     * Returns the comparability information for this variable.
@@ -1215,4 +1248,34 @@ public abstract class DaikonVariableInfo
         return sarr[0].equals("int");
     }
 
+    /** Returns the kind of the variable (array, field, function, etc) **/
+    public abstract VarInfo.VarKind get_var_kind();
+
+    /**
+     * Returns the name of this variable relative to its enclosing variable.
+     * For example the relative name for 'this.a' is 'a'.
+     */
+    public String get_relative_name() {
+        return null;
+    }
+
+    /** Returns whether or not this is a static variable.  **/
+    public boolean isStatic() {
+        if (this instanceof FieldInfo)
+            return ((FieldInfo)this).isStatic();
+        else
+            return (false);
+    }
+
+    /** Empty set of variable flags **/
+    private static EnumSet<VarFlags> empty_var_flags
+        = EnumSet.noneOf (VarFlags.class);
+
+    /**
+     * Returns the variable flags for this variable.  Subclasses should call
+     * super() and or in any flags that they add
+     */
+    public EnumSet<VarFlags> get_var_flags() {
+        return empty_var_flags;
+    }
 }
