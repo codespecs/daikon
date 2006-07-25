@@ -616,10 +616,10 @@ public class Instrument implements ClassFileTransformer {
     if (shouldInclude) {
       debug_transform.log ("Added trace info to class %s%n", class_info);
       synchronized (Runtime.new_classes) {
-        synchronized (Runtime.all_classes) {
-          Runtime.new_classes.add (class_info);
-          Runtime.all_classes.add (class_info);
-        }
+        Runtime.new_classes.add (class_info);
+      }
+      synchronized (Runtime.all_classes) {
+        Runtime.all_classes.add (class_info);
       }
     } else { // not included
       debug_transform.log ("Trace info not added to class %s%n", class_info);
