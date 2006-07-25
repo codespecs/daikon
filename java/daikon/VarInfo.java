@@ -58,9 +58,13 @@ public final class VarInfo implements Cloneable, Serializable {
   public VarInfoName name; // interned
 
 
-    /** returns the name of the variable **/
+  /** returns the name of the variable **/
   public String name() {
     return (name.name());
+    // if (FileIO.new_decl_format)
+    //  return vardef.name;
+    // else
+    //  return (name.name());
   }
 
   /**
@@ -124,7 +128,7 @@ public final class VarInfo implements Cloneable, Serializable {
 
   // Various enums used for information about variables
   public enum RefType {POINTER, OFFSET};
-  public enum VarKind {FIELD, FUNCTION, ARRAY, VARIABLE};
+  public enum VarKind {FIELD, FUNCTION, ARRAY, VARIABLE, RETURN};
   public enum VarFlags {IS_PARAM, NO_DUPS, NOT_ORDERED, NO_SIZE, NOMOD,
                         SYNTHETIC, CLASSNAME, NON_NULL};
   public enum LangFlags {PUBLIC, PRIVATE, PROTECTED, STATIC, FINAL,
@@ -140,6 +144,15 @@ public final class VarInfo implements Cloneable, Serializable {
   public VarInfo enclosing_var;
   public int arr_dims = 0;
   public List<VarInfo> function_args = null;
+
+  /** Parent ppt for this variable (if any) **/
+  public String parent_ppt = null;
+
+  /** Parent variable (within parent_ppt) (if any) **/
+  public String parent_variable = null;
+
+  /** Parent ppt relation id **/
+  public int parent_relation_id = 0;
 
   /**
    * The relative name of this variable with respect to its enclosing
@@ -250,7 +263,7 @@ public final class VarInfo implements Cloneable, Serializable {
     this.vardef = vardef;
 
     // Create a VarInfoName from the external name.  This probably gets
-    // removed in the long run;
+    // removed in the long run.
     name = VarInfoName.parse (vardef.name);
 
     // Copy info from vardef
@@ -263,6 +276,9 @@ public final class VarInfo implements Cloneable, Serializable {
     type = vardef.declared_type;
     var_flags = vardef.flags;
     lang_flags = vardef.lang_flags;
+    parent_ppt = vardef.parent_ppt;
+    parent_variable = vardef.parent_variable;
+    parent_relation_id = vardef.parent_relation_id;
 
     // If a static constant value was specified, set it
     if (vardef.static_constant_value != null) {
@@ -333,6 +349,110 @@ public final class VarInfo implements Cloneable, Serializable {
     // that  this is better done within PptRelation
   }
 
+  /**
+   * Setup information normally specified in the declaration record
+   * for derived variables where the new variable is the result of
+   * applying a function to the other variables.  Much of the
+   * information is inferred from (arbitrarily) the first argument to
+   * the function.
+   *
+   * The parent_ppt field is set if each VarInfo in the derivation has
+   * the same parent.  The parent_variable field is set if there is a
+   * parent_ppt and one or more of the bases has a non-default parent
+   * variable.  The parent variable name is formed as
+   * function_name(arg1,arg2,...) where arg1, arg2, etc are the
+   * parent variable names of each of the arguments.
+   */
+  public void setup_derived_function (String name, VarInfo... bases) {
+
+    // Copy variable info from the first base
+    VarInfo base = bases[0];
+    ref_type = null;
+    var_flags = base.var_flags.clone();
+    lang_flags = base.lang_flags.clone();
+    for (int ii = 1; ii < bases.length; ii++) {
+      var_flags.retainAll (bases[ii].var_flags);
+      lang_flags.retainAll (bases[ii].lang_flags);
+    }
+    enclosing_var = null;
+    arr_dims = base.arr_dims;
+    var_kind = VarKind.FUNCTION;
+    function_args = Arrays.asList (bases);
+
+    // The parent ppt is the same as the base if each varinfo in the
+    // derivation has the same parent
+    parent_relation_id = base.parent_relation_id;
+    parent_ppt = base.parent_ppt;
+    if (parent_relation_id != 0) {
+      for (int ii = 1; ii < bases.length; ii++) {
+        if (parent_relation_id != bases[ii].parent_relation_id) {
+          parent_relation_id = 0;
+          parent_ppt = null;
+          break;
+        }
+      }
+    }
+
+    // If there is a parent_ppt, determine the parent_variable name.
+    // If all of the argument names are the default, then the parent_variable
+    // is the default as well.  Otherwise, build up the name from the
+    // function name and the name of each arguments parent variable name.
+    if (parent_ppt != null) {
+      boolean parent_vars_specified = false;
+      for (VarInfo vi : bases) {
+        if (vi.parent_variable != null)
+          parent_vars_specified = true;
+      }
+      if (!parent_vars_specified)
+        parent_variable = null;
+      else {  // one of the arguments has a different parent variable name
+        String args = "";
+        for (VarInfo vi : bases) {
+          if (args != "")
+            args += ",";
+          args += vi.parent_variable;
+        }
+        parent_variable = String.format ("%s(%s)", name, args);
+      }
+    }
+  }
+
+  /**
+   * Setup information normally specified in the declaration record
+   * for derived variables where one of the variables is the base of
+   * the derivation.  In general this information is inferred
+   * from the base variable of the derived variables.  Note that
+   * parent_ppt is set if each VarInfo in the derivation has the same
+   * parent, but parent_variable is not set.  This has to be set based
+   * on the particular derivation.
+   */
+  public void setup_derived_base (VarInfo base, VarInfo... others) {
+
+    // Copy variable info from the base
+    ref_type = base.ref_type;
+    var_kind = base.var_kind;
+    var_flags = base.var_flags.clone();
+    lang_flags = base.lang_flags.clone();
+    enclosing_var = base.enclosing_var;
+    arr_dims = base.arr_dims;
+    function_args = base.function_args;
+
+    // The parent ppt is the same as the base if each varinfo in the
+    // derivation has the same parent
+    parent_relation_id = base.parent_relation_id;
+    parent_ppt = base.parent_ppt;
+    if (parent_relation_id != 0) {
+      for (VarInfo other : others) {
+        if (parent_relation_id != other.parent_relation_id) {
+          parent_relation_id = 0;
+          parent_ppt = null;
+          break;
+        }
+      }
+    }
+
+  }
+
   /** Create the specified VarInfo **/
   public VarInfo (VarInfoName name, ProglangType type,
                   ProglangType file_rep_type, VarComparability comparability,
@@ -397,6 +517,17 @@ public final class VarInfo implements Cloneable, Serializable {
     canBeMissing = vi.canBeMissing;
     postState = vi.postState;
     equalitySet = vi.equalitySet;
+    ref_type = vi.ref_type;
+    var_kind = vi.var_kind;
+    var_flags = vi.var_flags.clone();
+    lang_flags = vi.lang_flags.clone();
+    vardef = vi.vardef;
+    enclosing_var = vi.enclosing_var;
+    arr_dims = vi.arr_dims;
+    function_args = vi.function_args;
+    parent_ppt = vi.parent_ppt;
+    parent_variable = vi.parent_variable;
+    parent_relation_id = vi.parent_relation_id;
   }
 
   /** Creates and returns a copy of this. **/
@@ -409,8 +540,9 @@ public final class VarInfo implements Cloneable, Serializable {
   public static VarInfo origVarInfo(VarInfo vi) {
     // At an exit point, parameters are uninteresting, but orig(param) is not.
     // So don't call orig(param) a parameter.
-    VarInfoAux aux_nonparam =
-      vi.aux.setValue(VarInfoAux.IS_PARAM, VarInfoAux.FALSE);
+    // VIN (below should be removed)
+    // VarInfoAux aux_nonparam =
+    //   vi.aux.setValue(VarInfoAux.IS_PARAM, VarInfoAux.FALSE);
 
     VarInfoName newname = vi.name.applyPrestate();
     VarInfo result =
@@ -419,10 +551,14 @@ public final class VarInfo implements Cloneable, Serializable {
         vi.type,
         vi.file_rep_type,
         vi.comparability.makeAlias(vi.name),
-        aux_nonparam);
+        vi.aux);
     result.canBeMissing = vi.canBeMissing;
     result.postState = vi;
     result.equalitySet = vi.equalitySet;
+
+    // At an exit point, parameters are uninteresting, but orig(param) is not.
+    // So don't call orig(param) a parameter.
+    result.set_is_param (false);
     return result;
   }
 
@@ -587,7 +723,7 @@ public final class VarInfo implements Cloneable, Serializable {
       return isDerivedParamCached.booleanValue();
 
     boolean result = false;
-    if (aux.getFlag(VarInfoAux.IS_PARAM) && !isPrestate())
+    if (isParam() && !isPrestate())
       result = true;
 
     Set<VarInfoName> paramVars = ppt.getParamVars();
@@ -675,7 +811,7 @@ public final class VarInfo implements Cloneable, Serializable {
       return false;
     }
 
-    if (aux.getFlag(VarInfoAux.IS_PARAM)) {
+    if (isParam()) {
       PrintInvariants.debugFiltering.fine(
         "  not interesting, IS_PARAM == true for "
           + name.name());
@@ -695,8 +831,7 @@ public final class VarInfo implements Cloneable, Serializable {
       if (name instanceof VarInfoName.TypeOf) {
         VarInfoName base = ((VarInfoName.TypeOf) name).term;
         VarInfo baseVar = ppt.findVar(base);
-        if (baseVar != null
-          && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
+        if ((baseVar != null) && baseVar.isParam()) {
           Global.debugSuppressParam.fine("TypeOf returning true");
           PrintInvariants.debugFiltering.fine(
             "  not interesting, first dpf case");
@@ -706,8 +841,7 @@ public final class VarInfo implements Cloneable, Serializable {
       if (name instanceof VarInfoName.SizeOf) {
         VarInfoName base = ((VarInfoName.SizeOf) name).sequence.term;
         VarInfo baseVar = ppt.findVar(base);
-        if (baseVar != null
-          && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
+        if (baseVar != null && baseVar.isParam()) {
           Global.debugSuppressParam.fine("SizeOf returning true");
           PrintInvariants.debugFiltering.fine(
             "  not interesting, second dpf case");
@@ -2175,4 +2309,74 @@ public final class VarInfo implements Cloneable, Serializable {
     }
   }
 
+  /** Returns whether or not this variable is a parameter **/
+  public boolean isParam() {
+    if (FileIO.new_decl_format) {
+      // System.out.printf ("%s %s param = %b (%s) [%08X]%n", ppt.name(),
+      //                    name.name(),
+      //                    var_flags.contains (VarFlags.IS_PARAM), var_flags,
+      //                    System.identityHashCode (var_flags));
+      return var_flags.contains (VarFlags.IS_PARAM);
+    } else {
+      return aux.isParam(); // VIN
+    }
+  }
+
+  /** Set this variable as a parameter **/
+  public void set_is_param() {
+    // System.out.printf ("setting is_param for %s %n", name());
+    if (FileIO.new_decl_format)
+      var_flags.add (VarFlags.IS_PARAM);
+    else
+      aux = aux.setValue (VarInfoAux.IS_PARAM, VarInfoAux.TRUE);  // VIN
+  }
+
+  /** Set whether or not this variable is a parameter **/
+  public void set_is_param (boolean set) {
+    if (set)
+      set_is_param();
+    else {
+      if (FileIO.new_decl_format)
+        var_flags.remove (VarFlags.IS_PARAM);
+      else
+        aux = aux.setValue (VarInfoAux.IS_PARAM, VarInfoAux.FALSE); // VIN
+    }
+  }
+
+  /**
+   * Returns the name of the parent variable in the ppt/var hierarchy.
+   * If no parent name is specified, it is presume to be the same name
+   * as the variable.
+   */
+  public String parent_var_name() {
+    if (parent_variable == null)
+      return name();
+    else
+      return parent_variable;
+  }
+
+  /**
+   * Adds a subscript (or sequence) to an array variable.  This should
+   * really just just substitute for '..', but the dots are currently
+   * removed for back compatability
+   */
+  public String apply_subscript (String subscript) {
+    assert arr_dims == 1;
+    String name = name().substring (0, name().length()-2);
+    return (String.format ("%s[%s]", name, subscript));
+  }
+
+  /**
+   * Updates any references to other variables that should be within this
+   * ppt by looking them up within the ppt.  Necessary if a variable is
+   * moved to a different program point or if cloned variable is placed
+   * in a new program point (such as is done when combined exits are
+   * created)
+   **/
+  public void new_ppt() {
+    if (enclosing_var != null) {
+      enclosing_var = ppt.find_var_by_name (enclosing_var.name());
+      assert enclosing_var != null;
+    }
+  }
 }
