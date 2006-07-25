@@ -1,5 +1,6 @@
 package daikon.chicory;
 
+import daikon.*;
 
 /**
  * A subtype of DaikonVariableInfo used for variables that are
@@ -25,4 +26,7 @@ public class ReturnInfo extends DaikonVariableInfo
         throw new RuntimeException("Don't call getMyValFromParentVal on ReturnInfo objects");
     }
 
+    public VarInfo.VarKind get_var_kind() {
+        return VarInfo.VarKind.RETURN;
+    }
 }

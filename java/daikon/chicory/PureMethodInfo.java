@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.bcel.Constants;
 
+import daikon.*;
 
 /**
  * The PureMethodInfo class is a subtype of DaikonVariableInfo used
@@ -179,5 +180,9 @@ public class PureMethodInfo extends DaikonVariableInfo
             return obj;
         }
 
+    }
+
+    public VarInfo.VarKind get_var_kind() {
+        return VarInfo.VarKind.FUNCTION;
     }
 }
