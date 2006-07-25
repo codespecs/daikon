@@ -137,7 +137,7 @@ Variable name information
       type 'array'.  If the variable is a field or function, the name
       of the field or function is specified after the kind.  For
       example:  'var-kind  field f1'.  Field/Function names can include
-      any characters except space.
+      any characters except spaces.
 
     enclosing-var      
 
@@ -268,6 +268,11 @@ Variable name information
       var-kind          variable
       rep-type          hashcode
       type              Type1
+
+    int a->rgb
+      var-kind          field rgb
+      enclosing-var     a
+      rep-type          
 
     int a->rgb[1]
 
@@ -447,7 +452,7 @@ File format
 
     ppt <pptname>
       ppt-type <ppt-type>
-      [parent* <relation-type> <parent-ppt-name>]
+      [parent* <relation-type> <parent-ppt-name> <parent-id>] 
       [flags <ppt-flags>]
       variable <external-name>
         var-kind <variable-kinds>
@@ -460,17 +465,18 @@ File format
         constant <constant-value>
         [flags <variable-flags>]
         [lang-flags <language-specific-flags>]
-        [parent <parent-ppt-name> [<parent-var-name>]]
+        [parent <parent-ppt-name> <parent-id> [<parent-var-name>]]
         [comparability <comparability-value>]
 
   where    
   
     <relation-type>     ::= enter_exit|complete|parent|user
     <ppt-flags>         ::= static
-    <variable-kinds     ::= field <name>|function <name>|array|variable
+    <variable-kinds>    ::= field <name>|function <name>|array|variable
     <variable-flags>    ::= is_param|no_dups|not_ordered|no_size|nomod|
                             synthetic|classname
     <ppt-type>          ::= class|object|enter|exit|subexit
+    <parent_id>         ::= Number that uniquely identifies a relation
     * means that the record can occur one or more times
 
   There are also global records that can be specified at the beginning
