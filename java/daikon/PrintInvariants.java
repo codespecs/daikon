@@ -788,7 +788,7 @@ public final class PrintInvariants {
                                  + vi_orig.name.name());
         unmodified_vars.add (vi);
       } else { // variables are not equal
-        if (vi.aux.isParam())
+        if (vi.isParam())
           reassigned_parameters.add (vi);
         else
           modified_vars.add (vi);
