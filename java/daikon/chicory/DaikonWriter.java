@@ -134,6 +134,9 @@ public abstract class DaikonWriter
         paramTypes.append(")");
         String pptname = fullClassName + "." + short_name + paramTypes
             + ":::" + point;
+        //Throwable t = new Throwable("debug");
+        //t.fillInStackTrace();
+        // t.printStackTrace();
         // System.out.printf ("ppt name = %s%n", pptname);
         return (pptname);
 
@@ -160,8 +163,9 @@ public abstract class DaikonWriter
     {
         String name = method.toString();
 
-        if (method instanceof Constructor)
+        if (method instanceof Constructor) {
             name = fixDuplicateConstructorName(name, method.getName());
+        }
 
         // Remove the modifiers and the type
         if (no_modifiers_ppt) {
@@ -238,4 +242,17 @@ public abstract class DaikonWriter
         return Runtime.classnameFromJvm (type.getName());
     }
 
+  /**
+   * Escapes blanks and backslashes in names written to the decl/dtrace files
+   */
+  public String escape (String str) {
+
+    // If there is nothing to escape, return the original string
+    if ((str.indexOf ('\\') == -1) && (str.indexOf (' ') == -1))
+      return (str);
+
+    str = str.replace ("\\", "\\\\");
+    str = str.replace (" ", "\\_");
+    return (str);
+  }
 }
