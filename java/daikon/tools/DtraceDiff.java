@@ -305,10 +305,15 @@ public class DtraceDiff {
 	else if ((state1.status == FileIO.ParseStatus.TRUNCATED)
 		 || (state1.status == FileIO.ParseStatus.TRUNCATED))
 	  return;  // either file reached truncation limit, return quietly
-	else if (state1.status == FileIO.ParseStatus.EOF)
-	  throw new Error(dtracefile1 + " is shorter than " + dtracefile2);
-	else
-	  throw new Error(dtracefile2 + " is shorter than " + dtracefile1);
+	else if (state1.status == FileIO.ParseStatus.EOF) {
+	  throw new Error(String.format ("ppt %s (%s at line %d) is missing "
+                                    + "at end of %s", state2.ppt.name(),
+                                    dtracefile2, state2.lineNum, dtracefile1));
+	} else {
+	  throw new Error(String.format ("ppt %s (%s at line %d) is missing "
+                                    + "at end of %s", state1.ppt.name(),
+                                    dtracefile1, state1.lineNum, dtracefile2));
+    }
       }
     } catch (IOException e) {
       System.out.println();
