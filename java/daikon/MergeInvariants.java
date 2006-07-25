@@ -215,7 +215,7 @@ public final class MergeInvariants {
       // build the ppt from the matching points in the specified maps
       for (Iterator<PptRelation> j = ppt.children.iterator(); j.hasNext(); ) {
         PptRelation rel = j.next();
-        if (rel.getRelationType() == PptRelation.PPT_PPTCOND)
+        if (rel.getRelationType() == PptRelation.PptRelationType.PPT_PPTCOND)
           j.remove();
       }
       for (int j = 0; j < pptmaps.size(); j++ ) {
