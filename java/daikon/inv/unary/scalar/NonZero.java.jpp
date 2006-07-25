@@ -201,8 +201,8 @@ public class NONZERO
     if (status == InvariantStatus.FALSIFIED) {
       if (logOn())
         log (debug, "falsified (value = " + v + ")");
-    } else if (logDetail())
-      log ("add_modified (" + v + ")");
+    } // else if (logDetail())
+      // log ("add_modified (" + v + ")");
     return status;
   }
 
