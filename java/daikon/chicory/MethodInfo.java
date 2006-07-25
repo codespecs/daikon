@@ -173,6 +173,11 @@ public class MethodInfo {
     return (method_name.equals ("<clinit>"));
   }
 
+  /** Returns whether or not this method is static **/
+  public boolean is_static() {
+    return Modifier.isStatic(member.getModifiers());
+  }
+
   /**
    * Initialize the enter and exit daikon variable trees (traversalEnter and
    * traversalExit).  The reflection information must have already been
