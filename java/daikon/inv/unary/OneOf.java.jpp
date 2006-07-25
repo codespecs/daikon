@@ -57,8 +57,7 @@ The correct way to build the system is to run 'make'.
   #endif
   #define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
-  #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name(var())
+  #define NAME var().name()
   #define REPAIR_NAME var().name.repair_name(var())
   #define NONZERO NonZero
   #define ELTONEOF EltOneOf
@@ -78,7 +77,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name(var())
   #define REPAIR_NAME var().name.repair_name(var())
   #define NONZERO NonZeroFloat
   #define ELTONEOF EltOneOfFloat
@@ -96,7 +94,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name(var())
   #define REPAIR_NAME var().name.repair_name(var())
 #elif defined(SEQUENCE)
   #define SCALARPKG sequence
@@ -109,7 +106,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name(var())
   #define REPAIR_NAME var().name.repair_name(var())
 #elif defined(FLOATSEQUENCE)
   #define SCALARPKG sequence
@@ -122,7 +118,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name(var())
   #define REPAIR_NAME var().name.repair_name(var())
 #elif defined(STRINGSEQUENCE)
   #define SCALARPKG stringsequence
@@ -135,7 +130,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name(var())
   #define REPAIR_NAME var().name.repair_name(var())
 #elif defined(ELT)
   #define SCALARPKG sequence
@@ -147,7 +141,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
   #define TOSTRING_SIMPLIFY(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : simplify_format_long(x))
   #define NAME var().name.name() + " elements"
-  #define JAVA_NAME var().name.java_name(var())
   #define REPAIR_NAME var().name.repair_name(var())
   #define NONZERO EltNonZero
   #define LOWERBOUND LowerBound
@@ -165,7 +158,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define NAME var().name.name() + " elements"
   #define REPAIR_NAME var().name.repair_name(var())
-  #define JAVA_NAME var().name.java_name(var())
   #define NONZERO EltNonZeroFloat
   #define LOWERBOUND LowerBoundFloat
   #define UPPERBOUND UpperBoundFloat
@@ -179,7 +171,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name() + " elements"
   #define REPAIR_NAME var().name.repair_name(var())
-  #define JAVA_NAME var().name.java_name(var())
 #else
   #error "One of SCALAR, STRING, FLOAT, SEQUENCE, STRINGSEQUENCE, FLOATSEQUENCE, ELT, ELTSTRING, or ELTFLOAT must be defined"
 #endif
@@ -507,64 +498,64 @@ public final class ONEOFSCALAR
   public String format_daikon() {
     String varname = NAME;
     if (num_elts == 1) {
-#if defined(SCALAR) || defined(ELT)
-      if (is_boolean()) {
-        if ((elts[0] != 0) && (elts[0] != 1))
-            System.out.println ("WARNING:: Variable "
-            + varname + " is of type boolean, but has non boolean value: "
-            + elts[0]);
-        return varname + " == " + ((elts[0] == 0) ? "false" : "true");
-      } else if (is_hashcode()) {
-        if (elts[0] == 0) {
-          return varname + " == " + "null";
-        } else {
-          return varname + " has only one value"
-            // + " (hashcode=" + elts[0] + ")"
-            ;
-        }
-      } else {
-        return varname + " == " + TOSTRING(elts[0]);
-      }
-#elif defined(SEQUENCE)
-      if (is_hashcode()) {
-        // we only have one value, because add_modified dies if more
-        Assert.assertTrue(num_elts == 1);
-        INT value = elts[0];
-        if (value.length == 0) {
-          return varname + " == []";
-        } else if ((value.length == 1) && (value[0] == 0)) {
-          return varname + " == [null]";
-        } else if (no_nulls(0)) {
-          return varname + " contains no nulls and has only one value, of length " + value.length;
-        } else if (all_nulls(0)) {
-          return varname + " contains only nulls and has only one value, of length " + value.length;
-        } else {
-          return varname + " has only one value, of length " + value.length;
-        }
-      } else {
-        return varname + " == " + TOSTRING(elts[0]);
-      }
-#elif defined(STRING) || defined(ELTSTRING)
-      boolean is_type = is_type();
-      if (! is_type) {
-        return varname + " == " + TOSTRING(elts[0]);
-      } else {
-        // It's a type
-        String str = elts[0];
-        if ((str == null) || "null".equals(str)) {
-          return varname + " == " + "null";
-        } else {
-          if (str.startsWith("[")) {
-            str = UtilMDE.classnameFromJvm(str);
+      #if defined(SCALAR) || defined(ELT)
+        if (is_boolean()) {
+          if ((elts[0] != 0) && (elts[0] != 1))
+              System.out.println ("WARNING:: Variable "
+              + varname + " is of type boolean, but has non boolean value: "
+              + elts[0]);
+          return varname + " == " + ((elts[0] == 0) ? "false" : "true");
+        } else if (is_hashcode()) {
+          if (elts[0] == 0) {
+            return varname + " == " + "null";
+          } else {
+            return varname + " has only one value"
+              // + " (hashcode=" + elts[0] + ")"
+              ;
           }
-          // ".class" (which is a suffix for a type name) and not
-          // getClassSuffix (which is a suffix for an expression).
-          return varname + " == " + str + ".class";
+        } else {
+          return varname + " == " + TOSTRING(elts[0]);
         }
-      }
-#else
-        return varname + " == " + TOSTRING(elts[0]);
-#endif
+      #elif defined(SEQUENCE)
+        if (is_hashcode()) {
+          // we only have one value, because add_modified dies if more
+          Assert.assertTrue(num_elts == 1);
+          INT value = elts[0];
+          if (value.length == 0) {
+            return varname + " == []";
+          } else if ((value.length == 1) && (value[0] == 0)) {
+            return varname + " == [null]";
+          } else if (no_nulls(0)) {
+            return varname + " contains no nulls and has only one value, of length " + value.length;
+          } else if (all_nulls(0)) {
+            return varname + " contains only nulls and has only one value, of length " + value.length;
+          } else {
+            return varname + " has only one value, of length " + value.length;
+          }
+        } else {
+          return varname + " == " + TOSTRING(elts[0]);
+        }
+      #elif defined(STRING) || defined(ELTSTRING)
+        boolean is_type = is_type();
+        if (! is_type) {
+          return varname + " == " + TOSTRING(elts[0]);
+        } else {
+          // It's a type
+          String str = elts[0];
+          if ((str == null) || "null".equals(str)) {
+            return varname + " == " + "null";
+          } else {
+            if (str.startsWith("[")) {
+              str = UtilMDE.classnameFromJvm(str);
+            }
+            // ".class" (which is a suffix for a type name) and not
+            // getClassSuffix (which is a suffix for an expression).
+            return varname + " == " + str + ".class";
+          }
+        }
+        #else
+          return varname + " == " + TOSTRING(elts[0]);
+        #endif
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -641,135 +632,6 @@ public final class ONEOFSCALAR
   }
 #endif
 
-  /*
-    public String format_java() {
-    StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + JAVA_NAME + JAVA_EQUALS_STRING(TOSTRING(elts[i])));
-    sb.append (")");
-    }
-    // trim off the && at the beginning for the first case
-    return sb.toString().substring (4);
-    }
-  */
-
-//   public String format_java() {
-//     // have to take a closer look at this!
-//     sort_rep();
-// #if defined(IS_ELT)
-//     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-//     String varname = form[1];
-// #if defined(ELTSTRING)
-//     if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)
-//         && varname.endsWith("[]")) {
-//       varname = varname.substring(0, varname.length()-2);
-//     }
-// #endif
-// #elif defined(IS_SCALAR)
-//     String varname = var().name.java_name(var());
-// #if defined(STRING)
-//     if ((var().rep_type == ProglangType.CHAR_ARRAY)
-//         && varname.endsWith("[]")) {
-//       varname = varname.substring(0, varname.length()-2);
-//     }
-// #endif
-// #endif
-//     String result;
-
-// #if defined(STRING) || defined(ELTSTRING)
-//     result = "";
-//     boolean is_type = is_type();
-//     for (int i=0; i<num_elts; i++) {
-//       if (i != 0) { result += " || "; }
-//       result += varname;
-//       String str = elts[i];
-//       if (!is_type) {
-//         result += JAVA_EQUALS_STRING(TOSTRING(str));
-//       } else {
-//         result += " == ";
-//         if ((str == null) || "null".equals(str)) {
-//           result += "== null)";
-//         } else if (str.startsWith("[")) {
-//           result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-//         } else {
-//           if (str.startsWith("\"") && str.endsWith("\"")) {
-//             str = str.substring(1, str.length()-1);
-//           }
-//           result += "(" + str + ")";
-//         }
-//       }
-//     }
-// #elif defined(IS_NUMERIC) || defined(IS_ELT_NUMERIC)
-//   #if defined(BASE_INT)
-//     if (is_boolean) {
-//       Assert.assertTrue(num_elts == 1);
-//       Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
-//       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
-//     } else if (is_hashcode()) {
-//       if (num_elts == 2) {
-//         return "true";          // one elt is null, the other is non-null
-//       } else if (elts[0] == 0) {
-//         result = varname + " == " + "null";
-//       } else {
-//         result = varname + " != null";
-//           // varname + " has only one value"
-//           // + " (hashcode=" + elts[0] + ")"
-//           ;
-//       }
-//     } else
-//   #endif
-//     {
-//       result = "";
-//       for (int i=0; i<num_elts; i++) {
-//         if (i != 0) { result += " || "; }
-//         // Not quite right for the case of NaN, I think.
-//         result += varname + " == " + TOSTRING(elts[i]);
-//       }
-//     }
-// #elif defined(IS_SEQUENCE_NUMERIC)
-//     String length = "";
-//     String forall = "";
-//   #if defined(SEQUENCE)
-//     if (is_hashcode()) {
-//       if (num_elts == 0)  {
-//         String classname = this.getClass().toString().substring(6); // remove leading "class"
-//         result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
-//       } else {
-//         Assert.assertTrue(num_elts == 1);
-//         // we only have one value, because add_modified dies if more
-//         INT value = elts[0];
-//         if (var().name.isApplySizeSafe()) {
-//           length = var().name.applySize().java_name(var()) + " == " + value.length;
-//         }
-//         if (no_nulls(0)) {
-//           String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-//           forall = form[0] + "(" + form[1] + " != null)" + form[2];
-//         } else if (all_nulls(0)) {
-//           String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-//           forall = form[0] + "(" + form[1] + " == null)" + form[2];
-//         }
-//       }
-//     }
-//   #endif
-//     if (length == "" && forall == "") { // interned
-//       String classname = this.getClass().toString().substring(6); // remove leading "class"
-//       result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
-//     } else if (length == "") { // interned
-//       result = forall;
-//     } else if (forall == "") { // interned
-//       result = length;
-//     } else {
-//       result = "(" + length + ") && (" + forall + ")";
-//     }
-// #else
-//     String classname = this.getClass().toString().substring(6); // remove leading "class"
-//     result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
-// #endif
-// #if defined(IS_ELT)
-//     result = form[0] + "(" + result + ")" + form[2];
-// #endif
-//     return result;
-//   }
 
   /* IOA */
   public String format_ioa() {
@@ -791,31 +653,6 @@ public final class ONEOFSCALAR
     }
     result += ")";
 
-
-    /*
-    result = "(";
-    for (int i=0; i<num_elts; i++) {
-      if (i != 0) { result += " \\/ ("; }
-      result += varname + " = ";
-      String str = elts[i];
-      if (!is_type()) {
-        result += TOSTRING(str);
-      } else {
-        if ((str == null) || "null".equals(str)) {
-          result += "\\typeof(null)";
-        } else if (str.startsWith("[")) {
-          result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
-        } else {
-          if (str.startsWith("\"") && str.endsWith("\"")) {
-            str = str.substring(1, str.length()-1);
-          }
-          result += "\\type(" + str + ")";
-        }
-        result += "***";   // to denote that it's not correct IOA syntax
-      }
-      result += ")";
-    } // end for
-    */
 
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
   #if defined(SCALAR) || defined(ELT)
