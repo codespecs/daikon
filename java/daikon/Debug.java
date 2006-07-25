@@ -412,9 +412,12 @@ public class Debug {
     }
 
     // Figure out the line number if possible
-    LineNumberReader lnr = FileIO.data_trace_state.reader;
-    String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
-    line = " line=" + line;
+    String line = " line=?";
+    if ((FileIO.data_trace_state != null)
+        && (FileIO.data_trace_state.reader != null)) {
+      LineNumberReader lnr = FileIO.data_trace_state.reader;
+      line = " line=" + String.valueOf(lnr.getLineNumber());
+    }
 
     debug.fine (class_str + ": " + ppt.name()
                  + samp_str + line + ": " + vars + msg);
