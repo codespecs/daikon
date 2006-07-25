@@ -225,9 +225,11 @@ public class BCELUtil {
     // the first instruction to include the new instructions. Other
     // targeters (branches, exceptions) should not include the new
     // code
-    for (InstructionTargeter it : old_start.getTargeters()) {
-      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
-        it.updateTarget(old_start, new_start);
+    if (old_start.hasTargeters()) {
+      for (InstructionTargeter it : old_start.getTargeters()) {
+        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+          it.updateTarget(old_start, new_start);
+      }
     }
     mg.setMaxStack();
     mg.setMaxLocals();
