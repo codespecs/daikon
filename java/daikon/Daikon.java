@@ -159,12 +159,6 @@ public final class Daikon {
   public static boolean use_equality_optimization = true;
 
   /**
-   * If true, declaration records are presumed to be in the new
-   * declaration format
-   */
-  public static boolean dkconfig_new_decl_format = false;
-
-  /**
    * Whether to use the dynamic constants optimization.  This
    * optimization doesn't instantiate invariants over constant
    * variables (i.e., that that have only seen one value).  When the
@@ -1261,16 +1255,18 @@ public final class Daikon {
     }
 
     if (!Daikon.using_DaikonSimple) {
-    // Initialize equality sets on leaf nodes
-    setupEquality(ppt);
+      // Initialize equality sets on leaf nodes
+      setupEquality(ppt);
+      // System.out.printf ("initialized equality %s for ppt %s%n",
+      //                    ppt.equality_view, ppt.name());
 
-    // Recursively initialize ppts created by splitters
-    if (ppt.has_splitters()) {
-      for (Iterator<PptConditional> ii = ppt.cond_iterator(); ii.hasNext(); ) {
-	PptConditional ppt_cond = ii.next();
-	init_ppt (ppt_cond, all_ppts);
+      // Recursively initialize ppts created by splitters
+      if (ppt.has_splitters()) {
+        for (Iterator<PptConditional> ii = ppt.cond_iterator(); ii.hasNext();){
+          PptConditional ppt_cond = ii.next();
+          init_ppt (ppt_cond, all_ppts);
+        }
       }
-    }
     }
   }
 
@@ -1279,6 +1275,7 @@ public final class Daikon {
    * Create EXIT program points as needed for EXITnn program points.
    */
   public static void create_combined_exits(PptMap ppts) {
+
     // We can't add the newly created exit Ppts directly to ppts while we
     // are iterating over it, so store them temporarily in this map.
     PptMap exit_ppts = new PptMap();
@@ -1286,9 +1283,8 @@ public final class Daikon {
     for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
       // skip unless its an EXITnn
-      if (! (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint())) {
+      if (!ppt.is_subexit())
         continue;
-      }
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exitnn_name = exitnn_ppt.ppt_name;
@@ -1301,19 +1297,22 @@ public final class Daikon {
 
       // Create the exit, if necessary
       if (exit_ppt == null) {
-	// this is a hack.  it should probably filter out orig and derived
-	// vars instead of taking the first n.
-	int len = ppt.num_tracevars + ppt.num_static_constant_vars;
+        // this is a hack.  it should probably filter out orig and derived
+        // vars instead of taking the first n.
+        int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
-	for (int j = 0; j < len; j++) {
-	  exit_vars[j] = new VarInfo(ppt.var_infos[j]);
-	  exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
-	  exit_vars[j].value_index = ppt.var_infos[j].value_index;
-	  exit_vars[j].equalitySet = null;
-	}
+        for (int j = 0; j < len; j++) {
+          exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+          exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
+          exit_vars[j].value_index = ppt.var_infos[j].value_index;
+          exit_vars[j].equalitySet = null;
+        }
 
-        exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
-     //   exit_ppt.ppt_name.setVisibility(exitnn_name.getVisibility());
+        exit_ppt
+          = new PptTopLevel(exit_name.getName(), PptTopLevel.PptType.EXIT,
+                            ppt.parent_relations, ppt.flags, exit_vars);
+
+        // exit_ppt.ppt_name.setVisibility(exitnn_name.getVisibility());
         exit_ppts.add(exit_ppt);
         if (debugInit.isLoggable(Level.FINE))
           debugInit.fine ("create_combined_exits: created exit "
@@ -1763,7 +1762,10 @@ public final class Daikon {
 
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
-    PptRelation.init_hierarchy(all_ppts);
+    if (FileIO.new_decl_format)
+      PptRelation.init_hierarchy_new (all_ppts);
+    else
+      PptRelation.init_hierarchy(all_ppts);
     debugProgress.fine("Init Hierarchy ... done");
 
     // Calculate invariants at all non-leaf ppts
@@ -1901,42 +1903,38 @@ public final class Daikon {
    */
 
   public static void setupEquality (PptTopLevel ppt) {
-    if (Daikon.use_equality_optimization) {
 
-      // Skip points that are not leaves.
-      if (use_dataflow_hierarchy) {
-        PptTopLevel p = ppt;
-        if (ppt instanceof PptConditional)
-          p = ((PptConditional)ppt).parent;
-        
-        // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered exit)
-        // program points define them as everything except 
-        // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT 
-        //  and :::CLASS program points.  This scheme ensures that arbitrarly
-        //  named program points such as :::POINT (used by convertcsv.pl) 
-        //  will be treated as leaves.
-        
-        //OLD: if (!p.ppt_name.isGlobalPoint() 
-        //           && !p.ppt_name.isNumberedExitPoint())
-        //       return;
-        if (p.ppt_name.isCombinedExitPoint() ||
-            p.ppt_name.isEnterPoint() ||
-            p.ppt_name.isThrowsPoint() ||
-            p.ppt_name.isObjectInstanceSynthetic() ||
-            p.ppt_name.isClassStaticSynthetic()) {
-          return;
-        }
-                  
-        if (ppt.has_splitters())
-          return;
+    if (!Daikon.use_equality_optimization)
+      return;
+
+    // Skip points that are not leaves.
+    if (use_dataflow_hierarchy) {
+      PptTopLevel p = ppt;
+      if (ppt instanceof PptConditional)
+        p = ((PptConditional)ppt).parent;
+
+      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
+      // exit), we define them as everything except
+      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
+      //  and :::CLASS program points.  This scheme ensures that arbitrarly
+      //  named program points such as :::POINT (used by convertcsv.pl)
+      //  will be treated as leaves.
+      if (p.ppt_name.isCombinedExitPoint() ||
+          p.ppt_name.isEnterPoint() ||
+          p.ppt_name.isThrowsPoint() ||
+          p.ppt_name.isObjectInstanceSynthetic() ||
+          p.ppt_name.isClassStaticSynthetic()) {
+        return;
       }
 
-      // Create the initial equality sets
-      ppt.equality_view = new PptSliceEquality(ppt);
-      ppt.equality_view.instantiate_invariants();
+      if (ppt.has_splitters())
+        return;
     }
-  }
 
+    // Create the initial equality sets
+    ppt.equality_view = new PptSliceEquality(ppt);
+    ppt.equality_view.instantiate_invariants();
+  }
 
   /**
    * Create user defined splitters
