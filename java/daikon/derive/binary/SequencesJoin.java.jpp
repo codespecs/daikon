@@ -198,13 +198,11 @@ public final class CLASSNAME
       VarComparability.makeComparabilitySameIndices (newTypeName,
                                                      var1.comparability);
 
-    return new VarInfo(VarInfoName.applyFunctionOfN("join",
-                                                      new VarInfoName[] {var1.name, var2.name}).applyElements(),
-                       decltype,
-                       ProglangType.HASHCODE_ARRAY,
-                       comparability,
-                       var1.aux
-                       );
+    VarInfo vi = new VarInfo(VarInfoName.applyFunctionOfN("join",
+             new VarInfoName[] {var1.name, var2.name}).applyElements(),
+             decltype, ProglangType.HASHCODE_ARRAY, comparability, var1.aux);
+    vi.setup_derived_function ("join", var1, var2);
+    return (vi);
   }
 
   public String toString() {

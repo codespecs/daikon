@@ -219,11 +219,10 @@ public final class CLASSNAME
                                                          var2.name,
                                                          new VarInfoName.Simple(name)
                                      }).applyElements();
-    return new VarInfo(new_name,
-                       var1.type,
-                       var1.file_rep_type,
-                       var1.comparability,
-                       var1.aux);
+    VarInfo vi = new VarInfo(new_name, var1.type, var1.file_rep_type,
+                             var1.comparability, var1.aux);
+    vi.setup_derived_function ("predicateSlice", var1, var2);
+    return (vi);
   }
 
   public String toString() {

@@ -52,7 +52,18 @@ public final class SequenceMax
     ProglangType ptype = base.type.elementType();
     ProglangType frtype = base.file_rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(viname, ptype, frtype, comp, base.aux);
+    VarInfo vi = new VarInfo(viname, ptype, frtype, comp, base.aux);
+
+    vi.setup_derived_base (base);
+    vi.var_kind = VarInfo.VarKind.FUNCTION;
+    vi.enclosing_var = base;
+    vi.arr_dims = 0;
+    vi.function_args = null;
+    vi.relative_name = "max";
+    if ((vi.parent_ppt != null) && (vi.parent_variable != null)) {
+      vi.parent_variable = String.format ("max(%s)", base.parent_variable);
+    }
+    return (vi);
   }
 
   public  boolean isSameFormula(Derivation other) {

@@ -126,7 +126,27 @@ public final class SEQUENCESCALARSUBSCRIPT
     ProglangType type = seqvar.type.elementType();
     ProglangType file_rep_type = seqvar.file_rep_type.elementType();
     VarComparability compar = base1.comparability.elementType();
-    return new VarInfo(viname, type, file_rep_type, compar, VarInfoAux.getDefault());
+    VarInfo vi = new VarInfo(viname, type, file_rep_type, compar,
+                             VarInfoAux.getDefault());
+
+    vi.setup_derived_base (seqvar(), sclvar());
+    vi.var_kind = VarInfo.VarKind.FIELD;
+    if (vi.parent_ppt != null) {
+      if ((base1.parent_variable == null) && (base2.parent_variable == null))
+        vi.parent_variable = null;
+      else {  // one of the two bases has a different parent variable name
+        String scl_name = sclvar().parent_var_name();
+        if (index_shift == 0)
+          vi.parent_variable
+            = seqvar().apply_subscript (sclvar().parent_var_name());
+        else // index_shift == -1
+          vi.parent_variable
+            = seqvar().apply_subscript (sclvar().parent_var_name() + "-1");
+        System.out.printf ("parent var for %s is %s%n", vi.name(),
+                           vi.parent_variable);
+      }
+    }
+    return (vi);
   }
 
   public  boolean isSameFormula(Derivation other) {

@@ -171,8 +171,26 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
       right_name = right_name.applyDecrement();
     VarInfoName viname = seqvar.name.applySlice(left_name, right_name);
 
-    return new VarInfo(viname, seqvar.type, seqvar.file_rep_type,
-                       seqvar.comparability, seqvar.aux);
+    VarInfo vi = new VarInfo(viname, seqvar.type, seqvar.file_rep_type,
+                             seqvar.comparability, seqvar.aux);
+    vi.setup_derived_base (seqvar, startvar, endvar);
+
+    // Determine the name of the variable in its parent ppt in the ppt/var
+    // hierarchy.  The name is calculated from the parent name of each of
+    // the bases.
+    if (vi.parent_ppt != null) {
+      if ((seqvar.parent_variable == null) && (endvar.parent_variable == null)
+          && (startvar.parent_variable == null))
+        vi.parent_variable = null;
+      else {  // one of the bases has a different parent variable name
+        vi.parent_variable
+          = String.format ("%s[%s%s..%s%s]", seqvar.parent_var_name(),
+                           startvar.parent_var_name(), (left_closed? "" :"+1"),
+                           endvar.parent_var_name(), (right_closed? "" :"+1"));
+      }
+    }
+    return (vi);
+
   }
 
   public  boolean isSameFormula(Derivation other) {

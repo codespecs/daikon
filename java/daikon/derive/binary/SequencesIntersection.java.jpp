@@ -111,7 +111,10 @@ public final class SCALARSEQUENCESINTERSECTION
     ProglangType file_rep_type = base1.file_rep_type;
     VarComparability compar = base1.comparability.elementType();
     VarInfoAux aux = base1.aux;
-    return new VarInfo(viname, type, file_rep_type, compar, aux);
+    VarInfo vi = new VarInfo(viname, type, file_rep_type, compar, aux);
+    vi.setup_derived_function ("intersection", base1, base2);
+    return (vi);
+
   }
 
   public  boolean isSameFormula(Derivation other) {
