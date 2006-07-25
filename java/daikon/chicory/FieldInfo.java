@@ -6,6 +6,8 @@ import java.lang.reflect.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import daikon.*;
+import daikon.VarInfo.VarFlags;
 
 /**
  * The OjbectInfo class is a subtype of DaikonVariableInfo used for
@@ -142,4 +144,24 @@ public class FieldInfo extends DaikonVariableInfo
         }
         return tag_field;
     }
+
+    public VarInfo.VarKind get_var_kind() {
+        return VarInfo.VarKind.FIELD;
+    }
+
+    /** Returns the name of this field **/
+    public String get_relative_name() {
+        return field.getName();
+    }
+
+  /**
+   * static final fields are NOMOD
+   */
+  public EnumSet<VarFlags> get_var_flags() {
+    EnumSet<VarFlags> flags = super.get_var_flags();
+    int modbits = field.getModifiers();
+    if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits))
+      flags.add (VarFlags.NOMOD);
+    return (flags);
+  }
 }
