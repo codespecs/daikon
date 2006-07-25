@@ -168,7 +168,9 @@ public class DTraceWriter extends DaikonWriter
 
                val = child.getMyValFromParentVal(null);
             }
-            else
+            else if (child instanceof StaticObjInfo) {
+                val = null;
+            } else
             {
                 assert false: "Unknown DaikonVariableInfo subtype " + child.getClass() +
                         " in traversePattern in DTraceWriter for info named " + child.getName() +
@@ -188,8 +190,10 @@ public class DTraceWriter extends DaikonWriter
             return;
         }
 
-        outFile.println(curInfo.getName());
-        outFile.println(curInfo.getDTraceValueString(val));
+        if (!(curInfo instanceof StaticObjInfo)) {
+            outFile.println(curInfo.getName());
+            outFile.println(curInfo.getDTraceValueString(val));
+        }
 
         if (debug_vars) {
             String out = curInfo.getDTraceValueString(val);
