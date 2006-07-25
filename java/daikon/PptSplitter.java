@@ -199,6 +199,11 @@ public class PptSplitter implements Serializable {
    */
   private void add_implications_pair () {
 
+    for (PptTopLevel pchild : ppts) {
+      // System.out.printf ("splitter child = %s%n", pchild.name());
+      assert pchild.equality_view != null;
+    }
+
     debug.fine ("Adding Implications for " + parent.name);
 
     // Maps permuted invariants to their original invariants
@@ -230,8 +235,8 @@ public class PptSplitter implements Serializable {
       for (int childno = 0; childno < num_children; childno++) {
         PptTopLevel child_ppt = ppts[childno];
 
-        Assert.assertTrue (child_ppt.equality_view != null);
-        Assert.assertTrue (parent.equality_view != null);
+        assert child_ppt.equality_view != null : child_ppt.name();
+        assert parent.equality_view != null : parent.name();
 
         invs[childno] = new Invariants(); // permuted to parent
 
