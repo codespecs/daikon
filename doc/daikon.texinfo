@@ -2987,7 +2987,7 @@ with older versions of Java code.
 
 Chicory is invoked as follows:
 @example
-java daikon.Chicory @var{classname} @var{args}
+java daikon.Chicory @var{chicory-args} @var{classname} @var{args}
 @end example
 @noindent
 where
