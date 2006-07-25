@@ -1950,10 +1950,13 @@ public abstract class Invariant
   * @return whether or not it logged anything
   */
 
-  public boolean log (String msg) {
-    if (ppt != null)
+  public boolean log (String format, Object...args) {
+    if (ppt != null) {
+      String msg = format;
+      if (args.length > 0)
+        msg = String.format (format, args);
       return (Debug.log (getClass(), ppt, msg));
-    else
+    } else
       return (false);
   }
 
