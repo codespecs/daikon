@@ -21,6 +21,7 @@ import daikon.suppress.*;
 import utilMDE.Assert;
 import daikon.inv.filter.InvariantFilters;
 import static daikon.FileIO.ParentRelation;
+import static daikon.PptRelation.PptRelationType;
 
 import java.util.*;
 import java.text.*;
@@ -78,7 +79,7 @@ public class PptTopLevel extends Ppt {
   public enum PptFlags {STATIC, ENTER, EXIT, PRIVATE};
 
   /** Attributes of this ppt **/
-  public EnumSet flags = EnumSet.noneOf (PptFlags.class);
+  public EnumSet<PptFlags> flags = EnumSet.noneOf (PptFlags.class);
 
   /**
    * Possible types of program points.  POINT is a generic, non-program
@@ -225,6 +226,13 @@ public class PptTopLevel extends Ppt {
   public List<PptRelation> parents = new ArrayList<PptRelation>();
 
   /**
+   * List of parent relations in the variable/ppt hierarchy as specified
+   * in the declaration record.  These are used to build the detailed
+   * parents/children lists of PptRelation above
+   */
+  public List<ParentRelation> parent_relations = null;
+
+  /**
    *  Flag that indicates whether or not invariants have been merged
    *  from all of this ppts children to form the invariants here.  Necessary
    *  because a ppt can have multiple parents and otherwise we'd needlessly
@@ -269,10 +277,10 @@ public class PptTopLevel extends Ppt {
       name += ":::" + type;
     }
     this.ppt_name = new PptName (name);
-    init_vars (var_infos);
     this.flags = flags;
     this.type = type;
-    // handle parents
+    this.parent_relations = parents;
+    init_vars (var_infos);
   }
 
   public PptTopLevel(String name, VarInfo[] var_infos) {
@@ -325,6 +333,13 @@ public class PptTopLevel extends Ppt {
     for (int i = 0; i < num_tracevars; i++) {
       Assert.assertTrue(value_sets[i] != null);
     }
+
+    // Fix variable pointers so that they refer to the variables
+    // in this program point (they may have been cloned from a diff
+    // program point)
+    for (VarInfo vi : var_infos)
+      vi.new_ppt();
+
   }
 
 
@@ -1292,6 +1307,7 @@ public class PptTopLevel extends Ppt {
           Global.debugDerive.fine("Derived " + vis[i].name.name());
         }
       }
+
 
       // Using addDerivedVariables(derivations) would add data too
       addVarInfos(vis);
@@ -2512,11 +2528,14 @@ public class PptTopLevel extends Ppt {
     // If this is a combined exit point with two individual exits, create
     // implications from the two exit points
     if (ppt_name.isCombinedExitPoint()) {
+      // System.out.printf ("Considering ppt %s [%d children]%n", name(),
+      //                   children.size());
       List<PptTopLevel> exit_points = new ArrayList<PptTopLevel>();
       for (PptRelation rel : children) {
-        if (rel.getRelationType() == PptRelation.EXIT_EXITNN)
+        if (rel.getRelationType() == PptRelationType.EXIT_EXITNN)
           exit_points.add(rel.child);
       }
+      // System.out.printf ("exit point count = %d%n", exit_points.size());
       if (exit_points.size() == 2) {
         PptTopLevel ppt1 = exit_points.get(0);
         PptTopLevel ppt2 = exit_points.get(1);
@@ -3032,7 +3051,7 @@ public class PptTopLevel extends Ppt {
     paramVars = new LinkedHashSet<VarInfoName>();
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo var = var_infos[i];
-      if (var.aux.getFlag(VarInfoAux.IS_PARAM) && !var.isPrestate()) {
+      if (var.isParam() && !var.isPrestate()) {
         paramVars.add(var.name);
       }
     } // We should cache paramedVars in PptToplevel
@@ -3234,7 +3253,7 @@ public class PptTopLevel extends Ppt {
     // Get the type of the parent relation
     String rel_type = "";
     if (parent_rel != null)
-      rel_type = parent_rel.getRelationType();
+      rel_type = parent_rel.getRelationType().toString();
 
     // Calculate the variable relationships
     String var_rel = "[]";
@@ -3425,7 +3444,7 @@ public class PptTopLevel extends Ppt {
       // since "this" is always present for object invariants.
       // For the moment, just punt on this case, to match the previous
       // behavior.
-      if (rel.getRelationType() == PptRelation.OBJECT_USER)
+      if (rel.getRelationType() == PptRelationType.USER)
         continue;
       for (int j = 0; j < var_infos.length; j++) {
         VarInfo parent_vi = var_infos[j];
@@ -4262,12 +4281,31 @@ public class PptTopLevel extends Ppt {
     values_num_samples++;
   }
 
-  /** Returns whether or not this program point is an exit point **/
-  public boolean is_exit_point() {
+  /** Is this is an exit ppt (combined or specific)? **/
+  public boolean is_exit() {
     if (type != null)
-      return (type == PptType.EXIT);
+      return ((type == PptType.EXIT) || (type == PptType.SUBEXIT));
     else
       return ppt_name.isExitPoint();
   }
 
+  /** Is this a combined exit point? **/
+  public boolean is_combined_exit() {
+    if (type != null)
+      return (type == PptType.EXIT);
+    else
+      return ppt_name.isCombinedExitPoint();
+  }
+
+  /** Is this a numbered (specific) exit point? **/
+  public boolean is_subexit() {
+    if (type != null)
+      return (type == PptType.SUBEXIT);
+    else
+      return (ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint());
+  }
+
+  public String var_names() {
+    return Arrays.toString (var_infos);
+  }
 }
