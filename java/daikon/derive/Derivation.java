@@ -81,8 +81,10 @@ public abstract class Derivation
     vi.derived = this;
     vi.canBeMissing = canBeMissing();
     if (isParam()) {
-      this_var_info.aux = vi.aux.setValue(VarInfoAux.IS_PARAM,
-                                          VarInfoAux.TRUE);
+      this_var_info.set_is_param();
+      // VIN
+      // this_var_info.aux = vi.aux.setValue(VarInfoAux.IS_PARAM,
+      //                                    VarInfoAux.TRUE);
     }
   }
 

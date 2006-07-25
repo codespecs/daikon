@@ -62,9 +62,11 @@ public abstract class TernaryDerivation
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
   protected boolean isParam() {
-    return (base1.aux.getFlag(VarInfoAux.IS_PARAM)
-            || base2.aux.getFlag(VarInfoAux.IS_PARAM)
-            || base3.aux.getFlag(VarInfoAux.IS_PARAM));
+    return (base1.isParam() || base2.isParam() || base3.isParam());
+    // VIN
+    // return (base1.aux.getFlag(VarInfoAux.IS_PARAM)
+    //         || base2.aux.getFlag(VarInfoAux.IS_PARAM)
+    //         || base3.aux.getFlag(VarInfoAux.IS_PARAM));
   }
 
 

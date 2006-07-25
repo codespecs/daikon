@@ -52,7 +52,9 @@ public abstract class UnaryDerivation
   }
 
   protected boolean isParam() {
-    return base.aux.getFlag(VarInfoAux.IS_PARAM);
+    return base.isParam();
+    // VIN
+    // return base.aux.getFlag(VarInfoAux.IS_PARAM);
   }
 
   public boolean isDerivedFromNonCanonical() {
