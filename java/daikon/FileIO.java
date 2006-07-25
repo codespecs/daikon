@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import java.io.*;
+import java.io.Serializable;
 import java.net.*;
 import java.util.*;
 
@@ -111,7 +112,7 @@ public final class FileIO {
   public static long dkconfig_dtrace_line_count = 0;
 
   /** True if declaration records are in the new format **/
-  public static boolean new_decl_format = Daikon.dkconfig_new_decl_format;
+  public static boolean new_decl_format = false;
 
   /// Variables
 
@@ -165,10 +166,13 @@ public final class FileIO {
   /**
    * Parents in the ppt/variable hierarchy for a particular program point
    */
-  public static class ParentRelation {
+  static final class ParentRelation implements java.io.Serializable {
+    static final long serialVersionUID = 20060622L;
     PptRelationType rel_type;
     String parent_ppt_name;
-    public String toString() { return parent_ppt_name + " " + rel_type; };
+    int id;
+    public String toString() { return parent_ppt_name + "[" + id + "] "
+                                 + rel_type; };
   }
 
   // Utilities
@@ -227,7 +231,6 @@ public final class FileIO {
     throws IOException {
 
     // process the ppt record
-    // String line = state.reader.readLine();
     String line = top_line;
     Scanner scanner = new Scanner (line);
     String record_name = need (state, scanner, "'ppt'");
@@ -298,12 +301,16 @@ public final class FileIO {
           vardef.parse_parent (scanner, ppt_parents);
         } else if (record == "comparability") {
           vardef.parse_comparability (scanner);
+        } else if (record == "constant") {
+          vardef.parse_constant (scanner);
         } else if (record == "variable") {
           vardef = new VarDefinition (state, scanner);
           if (varmap.containsKey (vardef.name))
             decl_error (state, "var %s declared twice", vardef.name);
           if (var_included (vardef.name))
             varmap.put (vardef.name, vardef);
+        } else {
+          decl_error (state, "Unexpected variable item '%s' found", record);
         }
       }
     }
@@ -333,6 +340,7 @@ public final class FileIO {
     pr.rel_type = parse_enum_val (state, scanner, PptRelationType.class,
                                   "relation type");
     pr.parent_ppt_name = need (state, scanner, "ppt name");
+    pr.id = Integer.parseInt (need (state, scanner, "relation id"));
     need_eol (state, scanner);
     return (pr);
   }
@@ -596,6 +604,8 @@ public final class FileIO {
   private static int read_var_comparability (ParseState state, String line)
     throws IOException {
 
+    // System.out.printf("read_var_comparability, line = '%s' %b%n", line,
+    //                   new_decl_format);
     String comp_str = null;
     if (new_decl_format) {
       Scanner scanner = new Scanner (line);
@@ -615,8 +625,8 @@ public final class FileIO {
     } else if (comp_str.equals("implicit")) {
       return (VarComparability.IMPLICIT);
     } else {
-      throw new FileIOException("Unrecognized VarComparability " + comp_str,
-                                state.reader, state.filename);
+      throw new FileIOException("Unrecognized VarComparability '" + comp_str
+                                + "'", state.reader, state.filename);
     }
   }
 
@@ -628,6 +638,21 @@ public final class FileIO {
     String input_lang = need (state, scanner, "input language");
     need_eol (state, scanner);
     return input_lang;
+  }
+
+  private static void read_decl_version (ParseState state, String line)
+    throws IOException {
+    Scanner scanner = new Scanner (line);
+    scanner.next();
+    String version = need (state, scanner, "declaration version number");
+    need_eol (state, scanner);
+    if (version == "2.0")
+      new_decl_format = true;
+    else if (version == "1.0")
+      new_decl_format = false;
+    else
+      decl_error (state, "'%s' found where 1.0 or 2.0 expected",
+                  version);
   }
 
   private static void read_list_implementors (LineNumberReader reader,
@@ -1132,6 +1157,10 @@ public final class FileIO {
       }
       if (line.startsWith ("input-language")) {
         String input_language = read_input_language (state, line);
+        return;
+      }
+      if (line.startsWith ("decl-version")) {
+        read_decl_version (state, line);
         return;
       }
       if (line.equals("ListImplementors")) {
@@ -1996,6 +2025,7 @@ public final class FileIO {
     EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
     VarComparability comparability = null;
     String parent_ppt = null;
+    int parent_relation_id = 0;
     String parent_variable = null;
     Object static_constant_value = null;
 
@@ -2103,16 +2133,18 @@ public final class FileIO {
                        List<ParentRelation> ppt_parents) throws DeclError {
 
      parent_ppt = need (scanner, "parent ppt");
+     parent_relation_id = Integer.parseInt (need (scanner, "parent id"));
      boolean found = false;
      for (ParentRelation pr : ppt_parents) {
-       if (pr.parent_ppt_name == parent_ppt) {
+       if ((pr.parent_ppt_name == parent_ppt) && (pr.id ==parent_relation_id)){
          found = true;
          break;
        }
      }
      if (!found) {
-       decl_error (state, "specified parent ppt '%s' for variable '%s' "
-                   + "is not a parent to this ppt", parent_ppt, name);
+       decl_error (state, "specified parent ppt '%s[%d]' for variable '%s' "
+                   + "is not a parent to this ppt", parent_ppt,
+                   parent_relation_id, name);
      }
      if (scanner.hasNext())
        parent_variable = need (scanner, "parent variable");
