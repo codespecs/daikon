@@ -3,6 +3,9 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.*;
 
+import daikon.*;
+import static daikon.VarInfo.VarFlags;
+
 /**
  * The ParameterInfo class is a subtype of DaikonVariableInfo used for
  * variable types which are arguments to procedures.
@@ -95,5 +98,21 @@ public class ParameterInfo extends DaikonVariableInfo
     /** Returns whether or not this parameter is a primitive type **/
     public boolean isPrimitive() {
         return isPrimitive;
+    }
+
+    /**
+     * Parameters are not enclosed in other variable, so they are of
+     * kind VARIABLE
+     **/
+    public VarInfo.VarKind get_var_kind() {
+      return VarInfo.VarKind.VARIABLE;
+    }
+
+    /** Add IS_PARM to list of variable flags **/
+    public EnumSet<VarFlags> get_var_flags() {
+      System.out.printf ("%s is a parameter%n", this);
+      EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
+      var_flags.add (VarFlags.IS_PARAM);
+      return (var_flags);
     }
 }
