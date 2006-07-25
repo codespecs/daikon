@@ -29,16 +29,24 @@ public class ParentFilter extends InvariantFilter {
 
     // System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());
 
+    if (Debug.logDetail()) {
+      if (inv.ppt.parent.parents != null) {
+        inv.log ("%s has PptTopLevel %s which has %d parents",
+            inv.format(), inv.ppt.parent.name, inv.ppt.parent.parents.size());
+        for (PptRelation rel : inv.ppt.parent.parents) {
+          inv.log ("--%s%n", rel);
+          inv.log ("--variables: %s", VarInfo.toString (rel.parent.var_infos));
+          inv.log ("--map: %s", rel.child_to_parent_map);
+        }
+      } else {
+        inv.log ("%s has PptTopLevel %s which has 0 parents", inv.format(),
+                 inv.ppt.parent.name);
+      }
+    }
+
     // If there are no parents, can't discard
     if (inv.ppt.parent.parents == null)
       return (false);
-
-    if (debug) {
-      System.out.printf("inv %s has PptTopLevel %s which has %d parents%n", inv.format(), inv.ppt.parent.name, inv.ppt.parent.parents.size());
-      for (PptRelation rel : inv.ppt.parent.parents) {
-        System.out.printf("    %s%n", rel);
-      }
-    }
 
     // Loop through each parent ppt
     outer: for (int i = 0; i < inv.ppt.parent.parents.size(); i++) {
@@ -46,18 +54,24 @@ public class ParentFilter extends InvariantFilter {
       // Get the parent/child relation information
       PptRelation rel = inv.ppt.parent.parents.get (i);
 
-      if (debug) System.out.printf("  considering slice %s%n", rel);
+      if (Debug.logDetail())
+        inv.log ("  considering parent %s [%s]", rel, rel.parent.name());
 
       // Look up each variable in the parent, skip this parent if any
       // variables don't exist in the parent.
       VarInfo[] pvis = new VarInfo[inv.ppt.var_infos.length];
       for (int j = 0; j < pvis.length; j++) {
         pvis[j] = rel.parentVar (inv.ppt.var_infos[j]);
-        if (pvis[j] == null)
+        if (pvis[j] == null) {
+          if (Debug.logDetail())
+            inv.log ("variable %s cannot be found in %s",
+                     inv.ppt.var_infos[j], rel);
           continue outer;
+        }
       }
 
-      // System.out.printf("  got variables%n");
+      if (Debug.logDetail())
+        inv.log ("  got variables");
 
       // Sort the parent variables in index order
       Arrays.sort (pvis, VarInfo.IndexComparator.getInstance());
