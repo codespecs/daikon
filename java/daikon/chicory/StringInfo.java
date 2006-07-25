@@ -2,10 +2,11 @@ package daikon.chicory;
 
 import java.util.*;
 
+import daikon.*;
 
 /**
- * The StringInfo class is a subtype of DaikonVariableInfo used for variable types which are
- * strings.
+ * The StringInfo class is a subtype of DaikonVariableInfo used for
+ * variable types that can be converted into strings (.toString())
  */
 public class StringInfo extends DaikonVariableInfo
 {
@@ -130,4 +131,16 @@ public class StringInfo extends DaikonVariableInfo
     {
         return Runtime.quote(input);
     }
+
+    /** toString is a function **/
+    public VarInfo.VarKind get_var_kind() {
+        return VarInfo.VarKind.FUNCTION;
+    }
+
+    /** Returns the name of this function **/
+    public String get_relative_name() {
+        return "toString()";
+    }
+
+
 }
