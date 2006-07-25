@@ -200,46 +200,48 @@ public class Runtime
      * @param mi_index - Index in methods of the MethodInfo for this method
      * @param args - Array of arguments to method
      */
-    public static void enter(Object obj, int nonce, int mi_index,
-                             Object[] args) {
+    public static synchronized void enter(Object obj, int nonce, int mi_index,
+                                          Object[] args) {
 
       if (dontProcessPpts())
         return;
 
-      synchronized (all_classes) {
-        if (new_classes.size() > 0)
-          process_new_classes();
+      int num_new_classes = 0;
+      synchronized (new_classes) {
+        num_new_classes = new_classes.size();
+      }
+      if (num_new_classes > 0)
+        process_new_classes();
 
-        MethodInfo mi = methods.get(mi_index);
-        mi.call_cnt++;
+      MethodInfo mi = methods.get(mi_index);
+      mi.call_cnt++;
 
-        // If sampling, check to see if we are capturing this sample
-        boolean capture = true;
-        if (sample_start > 0) {
-          if (mi.call_cnt <= sample_start)
-            ;
-          else if (mi.call_cnt <= (sample_start*10))
-            capture = (mi.call_cnt % 10) == 0;
-          else if (mi.call_cnt <= (sample_start*100))
-            capture = (mi.call_cnt % 100) == 0;
-          else if (mi.call_cnt <= (sample_start*1000))
-            capture = (mi.call_cnt % 1000) == 0;
-          else
-            capture = (mi.call_cnt % 10000) == 0;
-          callstack.push (new CallInfo (nonce, capture));
-        }
+      // If sampling, check to see if we are capturing this sample
+      boolean capture = true;
+      if (sample_start > 0) {
+        if (mi.call_cnt <= sample_start)
+          ;
+        else if (mi.call_cnt <= (sample_start*10))
+          capture = (mi.call_cnt % 10) == 0;
+        else if (mi.call_cnt <= (sample_start*100))
+          capture = (mi.call_cnt % 100) == 0;
+        else if (mi.call_cnt <= (sample_start*1000))
+          capture = (mi.call_cnt % 1000) == 0;
+        else
+          capture = (mi.call_cnt % 10000) == 0;
+        callstack.push (new CallInfo (nonce, capture));
+      }
 
-        if (capture) {
-          mi.capture_cnt++;
-          // long start = System.currentTimeMillis();
-          dtrace_writer.methodEntry(mi, nonce, obj, args);
-          // long duration = System.currentTimeMillis() - start;
-          //System.out.println ("Enter " + mi + " " + duration + "ms"
-          //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
-        } else {
-          //System.out.println ("skipped " + mi
-          //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
-        }
+      if (capture) {
+        mi.capture_cnt++;
+        // long start = System.currentTimeMillis();
+        dtrace_writer.methodEntry(mi, nonce, obj, args);
+        // long duration = System.currentTimeMillis() - start;
+        //System.out.println ("Enter " + mi + " " + duration + "ms"
+        //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
+      } else {
+        //System.out.println ("skipped " + mi
+        //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
       }
     }
 
@@ -254,32 +256,34 @@ public class Runtime
      * @param ret_val     - Return value of method.  null if method is void
      * @param exitLineNum - The line number at which this method exited
      */
-    public static void exit(Object obj, int nonce, int mi_index,
+    public static synchronized void exit(Object obj, int nonce, int mi_index,
                             Object[] args, Object ret_val, int exitLineNum) {
       if (dontProcessPpts())
         return;
 
-      synchronized (all_classes) {
-        if (new_classes.size() > 0)
-          process_new_classes();
-
-        // Skip this call if it was not sampled at entry to the method
-        if (sample_start > 0) {
-          CallInfo ci = callstack.pop();
-          while (ci.nonce != nonce)
-            ci = callstack.pop();
-          if (!ci.captured)
-            return;
-        }
-
-        // Write out the infromation for this method
-        MethodInfo mi = methods.get(mi_index);
-        // long start = System.currentTimeMillis();
-        dtrace_writer.methodExit(mi, nonce, obj, args, ret_val,
-                                 exitLineNum);
-        // long duration = System.currentTimeMillis() - start;
-        // System.out.println ("Exit " + mi + " " + duration + "ms");
+      int num_new_classes = 0;
+      synchronized (new_classes) {
+        num_new_classes = new_classes.size();
       }
+      if (num_new_classes > 0)
+        process_new_classes();
+
+      // Skip this call if it was not sampled at entry to the method
+      if (sample_start > 0) {
+        CallInfo ci = callstack.pop();
+        while (ci.nonce != nonce)
+          ci = callstack.pop();
+        if (!ci.captured)
+          return;
+      }
+
+      // Write out the infromation for this method
+      MethodInfo mi = methods.get(mi_index);
+      // long start = System.currentTimeMillis();
+      dtrace_writer.methodExit(mi, nonce, obj, args, ret_val,
+                               exitLineNum);
+      // long duration = System.currentTimeMillis() - start;
+      // System.out.println ("Exit " + mi + " " + duration + "ms");
     }
 
     /**
@@ -320,31 +324,37 @@ public class Runtime
       // Processing of the new_classes list must be
       // very careful, as the call to get_reflection or printDeclClass
       // may load other classes (which then get added to the list).
-      synchronized (new_classes) {
-        // System.out.printf ("Processing %d new classes%n",
-        //                 new_classes.size());
-        while (new_classes.size() > 0) {
-          ClassInfo class_info = new_classes.get (0);
-          new_classes.remove (0);
-          if (debug)
-            System.out.printf ("processing class %s%n", class_info.class_name);
-          if (first_class) {
-            decl_writer.printHeaderInfo (class_info.class_name);
-            first_class = false;
+      while (true) {
+
+        // Get the first class in the list (if any)
+        ClassInfo class_info = null;
+        synchronized (new_classes) {
+          if (new_classes.size() > 0) {
+            class_info = new_classes.get (0);
+            new_classes.remove (0);
           }
-          class_info.initViaReflection();
-          // class_info.dump (System.out);
-
-          // Create tree structure for all method entries/exits in the class
-          for (MethodInfo mi: class_info.method_infos)
-          {
-              mi.traversalEnter = RootInfo.enter_process(mi, Runtime.nesting_depth);
-              mi.traversalExit = RootInfo.exit_process(mi, Runtime.nesting_depth);
-          }
-
-          decl_writer.printDeclClass (class_info, comp_info);
-
         }
+        if (class_info == null)
+          break;
+
+        if (debug)
+          System.out.printf ("processing class %s%n", class_info.class_name);
+        if (first_class) {
+          decl_writer.printHeaderInfo (class_info.class_name);
+          first_class = false;
+        }
+        class_info.initViaReflection();
+        // class_info.dump (System.out);
+
+        // Create tree structure for all method entries/exits in the class
+        for (MethodInfo mi: class_info.method_infos)
+        {
+            mi.traversalEnter = RootInfo.enter_process(mi, Runtime.nesting_depth);
+            mi.traversalExit = RootInfo.exit_process(mi, Runtime.nesting_depth);
+        }
+
+        decl_writer.printDeclClass (class_info, comp_info);
+
       }
     }
 
@@ -624,25 +634,21 @@ public class Runtime
      */
     public static ClassInfo getClassInfoFromClass(Class type)
     {
-        try
-        {
-        synchronized (Runtime.all_classes)
-        {
-            for (ClassInfo cinfo : Runtime.all_classes)
-            {
-                if (cinfo.clazz == null)
-                    cinfo.initViaReflection();
+        try {
+          synchronized (Runtime.all_classes) {
+            for (ClassInfo cinfo : Runtime.all_classes) {
+              if (cinfo.clazz == null)
+                cinfo.initViaReflection();
 
-                if (cinfo.clazz.equals(type))
-                    return cinfo;
+              if (cinfo.clazz.equals(type))
+                return cinfo;
             }
+          }
         }
-        }
-        catch(ConcurrentModificationException e)
-        {
-            // occurs if cinfo.get_reflection() causes a new class to be loaded
-            // which causes all_classes to change
-            return getClassInfoFromClass(type);
+        catch(ConcurrentModificationException e) {
+          // occurs if cinfo.get_reflection() causes a new class to be loaded
+          // which causes all_classes to change
+          return getClassInfoFromClass(type);
         }
 
         // throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
