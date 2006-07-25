@@ -141,6 +141,7 @@ public class ClassInfo {
   }
 
   public String toString() {
-    return ("ClassInfo [" + class_name + "]");
+    return (String.format ("ClassInfo %08X [%s] %s",
+                           System.identityHashCode (this), class_name, clazz));
   }
 }
