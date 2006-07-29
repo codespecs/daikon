@@ -458,12 +458,7 @@ public class DynamicConstants implements Serializable {
       if (!ppt.is_slice_ok (con.vi))
          continue;
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
-      
-      if (NIS.dkconfig_suppressor_list)
-        slice1.instantiate_invariants(NIS.suppressor_proto_invs);
-      else
-        slice1.instantiate_invariants();
-      
+      slice1.instantiate_invariants();
       if (Debug.logOn())
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
       if (con.count > 0) {
@@ -496,12 +491,7 @@ public class DynamicConstants implements Serializable {
           continue;
         }
         PptSlice2 slice2 = new PptSlice2 (ppt, c1.vi, c2.vi);
-        
-        if (NIS.dkconfig_suppressor_list)
-          slice2.instantiate_invariants(NIS.suppressor_proto_invs);
-        else
-          slice2.instantiate_invariants();
-        
+        slice2.instantiate_invariants();
         if (c1.count > 0 && c2.count > 0) {
           slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
         }
@@ -895,7 +885,12 @@ public class DynamicConstants implements Serializable {
     // Unary slices/invariants
     for (Constant con : leaders) {
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
-      slice1.instantiate_invariants();
+
+      if (NIS.dkconfig_suppressor_list)
+        slice1.instantiate_invariants(NIS.suppressor_proto_invs);
+      else
+        slice1.instantiate_invariants();
+
       // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name.name(), con.val,
       //        con.vi.comparability, "" +con.count);
       if (con.count > 0) {
@@ -913,7 +908,12 @@ public class DynamicConstants implements Serializable {
         if (!con1.vi.compatible (con2.vi))
           continue;
         PptSlice2 slice2 = new PptSlice2 (ppt, con1.vi, con2.vi);
-        slice2.instantiate_invariants();
+
+        if (NIS.dkconfig_suppressor_list)
+          slice2.instantiate_invariants(NIS.suppressor_proto_invs);
+        else
+          slice2.instantiate_invariants();
+
         if (con1.count > 0 && con2.count > 0) {
           slice2.add_val_bu (con1.val, con2.val, mod, mod, con1.count);
         }
