@@ -106,14 +106,24 @@ public final class PPTSLICE1 extends PptSlice {
   public final int arity() {
     return ARITY;
   }
-
-  /**
+	/**
    * Creates all of the the invariants that are appropriate for this
    * slice.  No invariants are created unless the variables in the
    * slice are compatible.  If the variables are compatible, invariants
    * that match the type of the slices variables are created.
    **/
   public void instantiate_invariants() {
+  	instantiate_invariants(Daikon.proto_invs);
+  }
+
+  /**
+   * Creates all of the the invariants that are appropriate for this
+   * slice based on the list of invariants passed in.  
+   * No invariants are created unless the variables in the
+   * slice are compatible.  If the variables are compatible, invariants
+   * that match the type of the slices variables are created.
+   **/
+  public void instantiate_invariants(List<Invariant> proto_invs) {
 
     if (Debug.logOn())
       log ("instantiate invariants");
@@ -150,7 +160,7 @@ public final class PPTSLICE1 extends PptSlice {
     #endif
 
     // Instantiate each invariant that is valid over those types
-    for (Invariant proto : Daikon.proto_invs) {
+    for (Invariant proto : proto_invs) {
 
       // Skip invariant if the types are not appropriate
       if (!proto.valid_types (var_infos) || !proto.instantiate_ok(var_infos)) {
