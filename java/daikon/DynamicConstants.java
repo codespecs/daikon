@@ -1,24 +1,33 @@
 package daikon;
 
-import daikon.inv.*;
-import daikon.inv.unary.*;
-import daikon.inv.binary.*;
-import daikon.inv.ternary.*;
-import daikon.suppress.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.binary.twoScalar.*;
-
-import java.io.*;
-import java.util.*;
-
-import java.util.logging.Logger;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import utilMDE.*;
+import utilMDE.Assert;
+import utilMDE.Fmt;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.binary.twoScalar.LinearBinary;
+import daikon.inv.binary.twoScalar.LinearBinaryFloat;
+import daikon.inv.ternary.threeScalar.LinearTernary;
+import daikon.inv.ternary.threeScalar.LinearTernaryFloat;
+import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.inv.unary.sequence.OneOfFloatSequence;
+import daikon.inv.unary.sequence.OneOfSequence;
+import daikon.inv.unary.string.OneOfString;
+import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.suppress.NIS;
 
 
 /**
@@ -449,7 +458,12 @@ public class DynamicConstants implements Serializable {
       if (!ppt.is_slice_ok (con.vi))
          continue;
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
-      slice1.instantiate_invariants();
+      
+      if (NIS.dkconfig_suppressor_list)
+        slice1.instantiate_invariants(NIS.suppressor_proto_invs);
+      else
+        slice1.instantiate_invariants();
+      
       if (Debug.logOn())
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
       if (con.count > 0) {
@@ -482,7 +496,12 @@ public class DynamicConstants implements Serializable {
           continue;
         }
         PptSlice2 slice2 = new PptSlice2 (ppt, c1.vi, c2.vi);
-        slice2.instantiate_invariants();
+        
+        if (NIS.dkconfig_suppressor_list)
+          slice2.instantiate_invariants(NIS.suppressor_proto_invs);
+        else
+          slice2.instantiate_invariants();
+        
         if (c1.count > 0 && c2.count > 0) {
           slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
         }
