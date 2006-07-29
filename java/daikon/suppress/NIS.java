@@ -45,7 +45,13 @@ public class NIS {
    *  invariants.
    */
   public static boolean dkconfig_antecedent_method = true;
-
+  
+  /** Boolean.  If true, use the specific list of suppressor related 
+   * invariant prototypes when creating constant invariants in the 
+   * antecedent method.  Default is 'true'.
+   */
+  public static boolean dkconfig_suppressor_list = true;
+  
   // Possible states for suppressors and suppressions.  When a suppression
   // is checked, it sets one of these states on each suppressor
   /** initial state -- suppressor has not been checked yet **/
@@ -68,6 +74,9 @@ public class NIS {
 
   /** List of all suppressions */
   static List<NISuppressionSet> all_suppressions = new ArrayList<NISuppressionSet>();
+  
+  /** List of suppressor invariant prototypes */
+  public static List<Invariant> suppressor_proto_invs = new ArrayList<Invariant>();
 
   /**
    * List of invariants that are unsuppressed by the current sample.
@@ -145,6 +154,15 @@ public class NIS {
         for (NISuppressionSet suppressor_ss : suppressor_ss_list) {
           suppressor_ss.recurse_definitions (ss);
           // Fmt.pf ("New recursed suppressions: " + suppressor_ss);
+        }
+      }
+    }
+    
+    if (dkconfig_suppressor_list) {
+      // Set up the list of suppressor invariant prototypes
+      for (Invariant i : Daikon.proto_invs) {
+        if (suppressor_map.containsKey(i.getClass())) {
+          suppressor_proto_invs.add(i);
         }
       }
     }
