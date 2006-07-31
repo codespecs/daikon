@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.8 (August 1, 2006)
+
+Daikon
+  
+  Performance changes
+    
+    Changed the list of invariant prototypes from which invariants over
+    constants are created during NIS suppression processing.  The new
+    list contains only the suppressor relevant invariant prototypes.
+
 4.2.7 (July 1, 2006)
 
 Minor enhancements were made to Chicory, Daikon, and Kvasir.  Chicory
