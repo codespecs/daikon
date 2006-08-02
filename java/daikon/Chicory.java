@@ -57,6 +57,9 @@ public class Chicory {
   @Option ("Size of the heap for the target program")
   public static String heap_size = "128M";
 
+  @Option ("Print information about each ppt name as it is created")
+  public static boolean debug_ppt_names = false;
+
   @Option ("Create the new declaration record format")
   public static boolean new_decl_format = false;
 

@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import java.lang.reflect.*;
+import daikon.Chicory;
 
 /**
  * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
@@ -134,10 +135,15 @@ public abstract class DaikonWriter
         paramTypes.append(")");
         String pptname = fullClassName + "." + short_name + paramTypes
             + ":::" + point;
+
+        if (Chicory.debug_ppt_names)
+          System.out.printf ("methodName1 final ppt name = '%s'%n", pptname);
+
         //Throwable t = new Throwable("debug");
         //t.fillInStackTrace();
         // t.printStackTrace();
         // System.out.printf ("ppt name = %s%n", pptname);
+
         return (pptname);
 
         /*
@@ -162,10 +168,16 @@ public abstract class DaikonWriter
     private static String methodName(Member method, String point)
     {
         String name = method.toString();
+        if (Chicory.debug_ppt_names)
+          System.out.printf ("methodName2: '%s' '%s'%n", name, point);
 
         if (method instanceof Constructor) {
             name = fixDuplicateConstructorName(name, method.getName());
+
+            if (Chicory.debug_ppt_names)
+              System.out.printf ("  constructor '%s'%n", name);
         }
+
 
         // Remove the modifiers and the type
         if (no_modifiers_ppt) {
@@ -177,14 +189,20 @@ public abstract class DaikonWriter
             int index = name.indexOf (" throws");
             if (index > 0)
                 name = name.substring (0, index);
+            if (Chicory.debug_ppt_names)
+              System.out.printf ("  throws '%s'%n", name);
 
             // Get rid of modifiers before the method name
             // (public boolean in above example)
             index = name.lastIndexOf (' ');
             if (index > 0)
                 name = name.substring(index+1);
+            if (Chicory.debug_ppt_names)
+              System.out.printf ("  modifiers '%s'%n", name);
         }
         name = name.replace (",", ", ");
+        if (Chicory.debug_ppt_names)
+          System.out.printf ("  spaces '%s'%n", name);
 
         // System.out.printf ("'%s' to '%s'%n", method.toString(), name);
         return (name + ":::" + point);
@@ -206,9 +224,16 @@ public abstract class DaikonWriter
         //       + " should not contain a period ('.') character. ";
 
         int lastPeriod = short_name.lastIndexOf(".");
+      if (Chicory.debug_ppt_names)
+        System.out.printf ("  fixdup; '%s' '%s' [%d]%n", name, short_name,
+                           lastPeriod);
 
         if (lastPeriod == -1)
         {
+          if (Chicory.debug_ppt_names)
+            System.out.printf ("  -1: replace '%s' with '%s'%n",
+                               short_name + "(",
+                               short_name + "." + short_name + "(");
             return name.replace(short_name + "(", short_name + "." + short_name
                     + "(");
         }
@@ -216,9 +241,23 @@ public abstract class DaikonWriter
         {
             // This case could occur for constructor names given as PackageName.ClassName
 
+
             short_name = short_name.substring(lastPeriod + 1);
-            return name.replace("." + short_name + "(", "." + short_name + "."
-                    + short_name + "(");
+
+          if (Chicory.debug_ppt_names)
+            System.out.printf ("  >0: replace '%s' with '%s'%n",
+                               "." + short_name + "(",
+                               "." + short_name + "." + short_name + "(");
+            String result = name.replace("." + short_name + "(", "."
+                                        + short_name + "." + short_name + "(");
+            if (Chicory.debug_ppt_names) {
+              System.out.printf ("  result '%s'%n", result);
+              String search = "." + short_name + "(";
+              String replace = "." + short_name + "." + short_name + "(";
+              System.out.printf ("  alt '%s' '%s' '%s' '%s'%n", search,
+                                 name, replace, name.replace (search, replace));
+            }
+            return result;
         }
     }
 
