@@ -296,13 +296,6 @@ Tools for manipulating invariants
 * InvariantChecker::            
 * LogicalCompare::              
 
-Invariant Diff
-
-* Annotate::
-* Runtime-check instrumenter::
-* InvariantChecker::
-* LogicalCompare::
-
 Runtime-check instrumenter (runtimechecker)
 
 * Accessing violations::        
@@ -2046,14 +2039,20 @@ in the file @file{Global.c}).
 
 @cindex local variables
 @cindex variables, local
+@cindex temporary (local) variables
+@cindex variables, temporary (local)
 Daikon's current front ends do not produce output for local variables,
 only for variables visible from outside a procedure.  (Also see the
-@option{--std-visibility} option to Chicory, @ref{Chicory options}.)  Thus,
+@option{--std-visibility} option to Chicory, @ref{Chicory options}.)
+More generally, Daikon's front ends produce output at procedure exit and
+entry, not within the procedure.  Thus,
 Daikon's output forms a specification from the view of a client of a
-procedure.  A future version of Daikon may permit output of local
-variables as a user option; send mail to
-@email{daikon-developers@@lists.csail.mit.edu} if this functionality is
-important to you.
+procedure.  If you wish to compute invariants over local variables, you
+can extend one of Daikon's front ends (or request us to do so).
+An alternative that permits computing invariants at arbitrary locations
+is to call a dummy procedure, passing all the variables of interest.
+The dummy procedure's pre- and post-conditions will be identical and will
+represent the invariants at the point of call.
 
 
 The array introduction operator @code{[]} can made Daikon variables look
@@ -6555,13 +6554,6 @@ interface, and accept objects of type Invariant.
 @c @end example
 @c @end enumerate
 
-
-@menu
-* Annotate::
-* Runtime-check instrumenter::
-* InvariantChecker::
-* LogicalCompare::
-@end menu
 
 @node    Annotate, Runtime-check instrumenter, Invariant Diff, Tools for manipulating invariants
 @subsection Annotate
