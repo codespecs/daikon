@@ -1875,11 +1875,18 @@ public final class VarInfo implements Cloneable, Serializable {
         //System.out.printf ("viname = %s, applyPreMaybe=%s, findvar=%s%n",
         //                   viname, applyPreMaybe(viname),
         //                   ppt.findVar(applyPreMaybe(viname)));
-        boolean result
-          = (Daikon.dkconfig_guardNulls == "always" // interned
-             || (Daikon.dkconfig_guardNulls == "missing" // interned
-                 && ppt.findVar(applyPreMaybe(viname)).canBeMissing));
-        return result;
+        if (Daikon.dkconfig_guardNulls == "always") // interned
+          return (true);
+        if (Daikon.dkconfig_guardNulls == "missing") { // interned
+          VarInfo vi = ppt.find_var_by_name(applyPreMaybe(viname).name());
+          // Don't guard variables that don't exist.  This happends when
+          // we incorrectly parse static variable package names as field names
+          if (vi == null)
+            return false;
+          return (vi.canBeMissing);
+        }
+        return false;
+
       }
       public List<VarInfo> visitSimple(Simple o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
