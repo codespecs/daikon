@@ -2,7 +2,7 @@ package daikon.chicory;
 
 import java.lang.reflect.*;
 import daikon.Chicory;
-
+import utilMDE.UtilMDE;
 /**
  * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
  *
@@ -165,7 +165,44 @@ public abstract class DaikonWriter
      * @param method Reflection object for the method/constructor
      * @param point Usually "ENTER" or "EXIT"
      */
-    private static String methodName(Member method, String point)
+    private static String methodName(Member member, String point) {
+
+      String ppt_name = null;
+
+      String fullname;
+      Class args[];
+      Class declaring_class = member.getDeclaringClass();
+      if (member instanceof Method) {
+        Method method = (Method) member;
+        fullname = declaring_class.getName() + "." + method.getName();
+        args = method.getParameterTypes();
+      } else {
+        Constructor constructor = (Constructor) member;
+        fullname = declaring_class.getName() + "."
+          + declaring_class.getSimpleName();
+        args = constructor.getParameterTypes();
+      }
+      String arg_str = "";
+      for (Class arg : args) {
+        if (arg_str.length() > 0)
+          arg_str += ", ";
+        if (arg.isArray())
+          arg_str += UtilMDE.classnameFromJvm (arg.getName());
+        else
+          arg_str += arg.getName();
+      }
+      ppt_name = String.format ("%s(%s):::%s", fullname, arg_str, point);
+      return ppt_name;
+    }
+
+    /**
+     * Constructs the program point name (which includes the point
+     * string at the end)
+     *
+     * @param method Reflection object for the method/constructor
+     * @param point Usually "ENTER" or "EXIT"
+     */
+    private static String old_methodName(Member method, String point)
     {
         String name = method.toString();
         if (Chicory.debug_ppt_names)
