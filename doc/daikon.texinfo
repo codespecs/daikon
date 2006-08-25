@@ -3601,6 +3601,57 @@ and always outputs static variables at all program points.
 
 @end table
 
+Other options affecting the amount of output Kvasir produces:
+
+@table @option
+
+@item --flatten-arrays
+This option forces the flattening of statically-sized arrays into
+separate variables, one for each element.  For example, an array
+@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
+@var{foo[1]}, @var{foo[2]}.  By default, Kvasir flattens
+statically-sized arrays only after it has already exhausted the one
+level of sequences that Daikon allows in the .dtrace output format
+(e.g. an array of structs where each struct contains a statically-sized
+array).
+
+@item --array-length-limit=@var{N}
+Only visit at most the first @var{N} elements of all arrays.  This can
+improve performance at the expense of losing coverage; it is often
+useful for tracing selected parts of programs that use extremely large
+arrays or memory buffers.
+
+@item --output-struct-vars
+This option forces Kvasir to output .decls and .dtrace entries for
+struct variables.  By default, Kvasir ignores struct variables because
+there is really no value that can be meaningfully associated with these
+variables.  However, some tools require struct variables to be
+outputted, so we have included this option.  Struct variables are
+denoted by a @code{# isStruct=true} annotation in their declarations.
+
+@item --nesting-depth=@var{N}
+
+For recursively-defined structures (structs or classes with members that
+are structs or classes or pointers to structs or classes of @emph{any} type),
+@var{N} (an integer between 0 and 100) specifies approximately how many levels
+of pointers to dereference.  This is useful for controlling the output
+of complex data structures with many references to other structures.
+The default is 2.
+
+@item --struct-depth=@var{N}
+
+For recursively-defined structures (structs or classes with members that
+are pointers to the @emph{same} type of struct or class),
+@var{N} (an integer between
+0 and 100) specifies approximately how many levels of pointers to dereference.
+This is useful for controlling the output of linked lists and trees.
+The default is 4.  If you are trying to traverse deep into data
+structures, try adjusting the @option{--struct-depth} and
+@option{--total-depth} options until Kvasir traverses deep enough to
+reach the desired variables.
+
+@end table
+
 @ref{Pointer type disambiguation}:
 
 @table @option
@@ -3734,57 +3785,6 @@ When DynComp is operating in this mode, the only binary operations that
 qualify as interactions are comparisons, addition, subtraction.
 This ensures that the variables that DynComp groups together into one
 set all have the same units (e.g., physics units).
-
-@end table
-
-Misc. options:
-
-@table @option
-
-@item --flatten-arrays
-This option forces the flattening of statically-sized arrays into
-separate variables, one for each element.  For example, an array
-@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
-@var{foo[1]}, @var{foo[2]}.  By default, Kvasir flattens
-statically-sized arrays only after it has already exhausted the one
-level of sequences that Daikon allows in the .dtrace output format
-(e.g. an array of structs where each struct contains a statically-sized
-array).
-
-@item --array-length-limit=@var{N}
-Only visit at most the first @var{N} elements of all arrays.  This can
-improve performance at the expense of losing coverage; it is often
-useful for tracing selected parts of programs that use extremely large
-arrays or memory buffers.
-
-@item --output-struct-vars
-This option forces Kvasir to output .decls and .dtrace entries for
-struct variables.  By default, Kvasir ignores struct variables because
-there is really no value that can be meaningfully associated with these
-variables.  However, some tools require struct variables to be
-outputted, so we have included this option.  Struct variables are
-denoted by a @code{# isStruct=true} annotation in their declarations.
-
-@item --nesting-depth=@var{N}
-
-For recursively-defined structures (structs or classes with members that
-are structs or classes or pointers to structs or classes of @emph{any} type),
-@var{N} (an integer between 0 and 100) specifies approximately how many levels
-of pointers to dereference.  This is useful for controlling the output
-of complex data structures with many references to other structures.
-The default is 2.
-
-@item --struct-depth=@var{N}
-
-For recursively-defined structures (structs or classes with members that
-are pointers to the @emph{same} type of struct or class),
-@var{N} (an integer between
-0 and 100) specifies approximately how many levels of pointers to dereference.
-This is useful for controlling the output of linked lists and trees.
-The default is 4.  If you are trying to traverse deep into data
-structures, try adjusting the @option{--struct-depth} and
-@option{--total-depth} options until Kvasir traverses deep enough to
-reach the desired variables.
 
 @end table
 
@@ -4766,11 +4766,20 @@ the names and types of functions and variables, Kvasir obtains them
 from debugging information included in the executable in a standard
 format (DWARF-2).
 
+@cindex AMD64 architecture, and Kvasir
+@cindex 64-bit AMD64 architecture, and Kvasir
+@cindex Kvasir, doesn't work on 64-bit architecture
+
 However, Kvasir has some limitations of its own.  Because Kvasir uses
 Valgrind, it shares Valgrind's limitation of working only under the
 Linux operating system, and only on Intel 386-compatible processors
 (the so-called IA-32 architecture) such as the Intel Pentium and the
-AMD Athlon.  Furthermore, Kvasir requires that your program have debugging
+AMD Athlon.  (Kvasir only works on 32-bit binaries.
+Furthermore, it must be compiled in 32-bit mode; if you want to compile
+Kvasir on a 64-bit machine, try adding the flag "--enable-only32bit" to
+the Valgrind configure line (as of August 2006, this is line 21 of the
+top-level Makefile).)
+Furthermore, Kvasir requires that your program have debugging
 information available in the DWARF-2 format, as produced by recent
 versions of GCC@.  Furthermore, the programs used by Kvasir should be
 compiled without optimization.
