@@ -8014,9 +8014,11 @@ terms as Perl itself).
 The Daikon C/C++ front end Kvasir is based in part on the Valgrind
 dynamic program supervision framework, copyright 2000-2004 Julian
 Seward, the Sparrow Valgrind tool, copyright 2002 Nicholas Nethercote,
-the MemCheck Valgrind tool, copyright 2000-2004 Julian Seward, and the
+the MemCheck Valgrind tool, copyright 2000-2004 Julian Seward, the
 readelf program of the GNU Binutils, copyright 1998-2003 the Free
-Software Foundation, Inc.  Kvasir is free software; you can
+Software Foundation, Inc., the GNU C Library, copyright 1995, 1996,
+1997, 2000  the Free Software Foundation, Inc., and the Diet libc,
+copyright Felix von Leitner et al. Kvasir is free software; you can
 redistribute it and/or modify it under the terms of the GNU General
 Public License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later version.
@@ -8026,8 +8028,8 @@ FITNESS FOR A PARTICULAR PURPOSE@.  See the GNU General Public License
 for more details.  You should have received a copy of the GNU General
 Public License along with Kvasir, in a file kvasir/COPYING;
 if not, write to the Free
-Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-02111-1307, USA@.
+Software Foundation, Inc., 51 Franklin St., Fifth Floor, Boston, MA
+02110-1301, USA@.
 
 The Windows version of the Mangel-Wurzel C/C++ front end incorporates
 the regular expression library written by Henry Spencer, which bears
