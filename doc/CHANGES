@@ -20,6 +20,25 @@ Further documentation can be found in:
 
 ===========================================================================
 
+September 1, 2006
+
+Kvasir
+
+  Kvasir has changed to use internal versions of some C standard
+  library routines, and versions provided by Valgrind, rather than
+  linking with the system's C library. This avoids an initialization
+  problem that caused Kvasir to crash on systems whose system library
+  used thread-local storage (such as some recent Fedora Core systems),
+  improves portability, and conforms to the best-practice suggested by
+  the Valgrind maintainers.
+
+  The only known user-visible effect is that some floating-point
+  values are now printed differently in the last digit because of
+  rounding differences. The value printed generally still corresponds
+  to the same internal representation, but the difference can be visible
+  in Daikon's output for values of type "float", because Daikon
+  represents them internally with type "double".
+
 4.2.8 (August 1, 2006)
 
 This is a maintenance release with few substantive changes.
