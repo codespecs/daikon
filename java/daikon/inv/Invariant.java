@@ -963,8 +963,8 @@ public abstract class Invariant
         // System.out.println("ICFP: different parents for " + inv1.format() + ", " + inv2.format());
 
         for (int i=0; i<vis1.length; i++) {
-          String name1 = vis1[i].name.name();
-          String name2 = vis2[i].name.name();
+          String name1 = vis1[i].name();
+          String name2 = vis2[i].name();
           if (name1.equals(name2)) {
             continue;
           }
@@ -1020,37 +1020,14 @@ public abstract class Invariant
     return (false);
   }
 
-  public static interface IsSameInvariantNameExtractor
-  {
-    public VarInfoName getFromFirst(VarInfo var1);
-    public VarInfoName getFromSecond(VarInfo var2);
-  }
-
-  public static class DefaultIsSameInvariantNameExtractor
-    implements IsSameInvariantNameExtractor
-  {
-    public VarInfoName getFromFirst(VarInfo var1)  { return var1.name; }
-    public VarInfoName getFromSecond(VarInfo var2) { return var2.name; }
-  }
-  private static final IsSameInvariantNameExtractor defaultIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor();
-
   /**
    * @return true iff the argument is the "same" invariant as this.
    * Same, in this case, means a matching type, formula, and variable
    * names.
    **/
   public boolean isSameInvariant(Invariant inv2) {
-    return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
-  }
+    // return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
 
-  /**
-   * @param name_extractor lambda to extract the variable name from the VarInfos
-   * @return true iff the argument is the "same" invariant as this.
-   * Same, in this case, means a matching type, formula, and variable
-   * names.
-   **/
-  public boolean isSameInvariant(Invariant inv2,
-                                 IsSameInvariantNameExtractor name_extractor) {
     Invariant inv1 = this;
 
     // Can't be the same if they aren't the same type
@@ -1063,63 +1040,20 @@ public abstract class Invariant
       return false;
     }
 
-    // System.out.println("isSameInvariant(" + inv1.format() + ", " + inv2.format() + ")");
-
     // The variable names much match up, in order
-
     VarInfo[] vars1 = inv1.ppt.var_infos;
     VarInfo[] vars2 = inv2.ppt.var_infos;
 
-//      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//        PrintInvariants.debugFiltering.fine ("\t\t----------------");
-//      }
+    // due to inv type match already
+    Assert.assertTrue(vars1.length == vars2.length);
 
-    Assert.assertTrue(vars1.length == vars2.length); // due to inv type match already
     for (int i=0; i < vars1.length; i++) {
       VarInfo var1 = vars1[i];
       VarInfo var2 = vars2[i];
-
-      // Do the easy check first
-      if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
-        continue;
-      }
-
-      // The names "match" iff there is an intersection of the names
-      // of equal variables.
-      Vector<VarInfo> all_vars1 = new Vector<VarInfo>();
-      Vector<VarInfo> all_vars2 = new Vector<VarInfo>();
-      all_vars1.add(var1);
-      all_vars1.add(var2);
-      Vector<VarInfoName> all_vars_names1 = new Vector<VarInfoName>(all_vars1.size());
-      for (VarInfo elt : all_vars1) {
-        VarInfoName viname = name_extractor.getFromFirst(elt);
-        all_vars_names1.add(viname);
-      }
-      boolean intersection = false;
-      for (VarInfo elt : all_vars2) {
-        VarInfoName viname = name_extractor.getFromSecond(elt);
-
-//      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//       PrintInvariants.debugFiltering.fine ("\t\t" + viname.toString() + " <--> " + all_vars_names1.toString());
-//      }
-
-        intersection = all_vars_names1.contains(viname);
-        if (intersection) {
-          break;
-        }
-      }
-      if (!intersection) {
+      if (!var1.name().equals (var2.name()))
         return false;
-      }
     }
 
-    // System.out.println("TRUE: isSameInvariant(" + inv1.format() + ", " + inv2.format() + ")");
-
-    // the type, formula, and vars all matched
-//      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//        PrintInvariants.debugFiltering.fine ("\tdecided " + this.format());
-//        PrintInvariants.debugFiltering.fine ("\t is the same as " + inv2.format());
-//      }
     return true;
   }
 
@@ -1278,7 +1212,7 @@ public abstract class Invariant
         StringBuffer sb = new StringBuffer();
         sb.append ("  isObviousStatically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
-          sb.append (assigned[i].name.name() + " ");
+          sb.append (assigned[i].name() + " ");
         }
         debugIsObvious.fine (sb.toString());
       }
@@ -1419,7 +1353,7 @@ public abstract class Invariant
         StringBuffer sb = new StringBuffer();
         sb.append ("  isObviousDynamically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
-          sb.append (assigned[i].name.name() + " ");
+          sb.append (assigned[i].name() + " ");
         }
         debugIsObvious.fine (sb.toString());
       }
@@ -1516,15 +1450,13 @@ public abstract class Invariant
       VarInfo[] vars2 = inv2.ppt.var_infos;
 
       // due to inv type match already
-      if (vars1.length != vars2.length)
-        Assert.assertTrue(vars1.length == vars2.length,
-                          "Bad type match: " + inv1.format() + " vs. " +
-                          inv2.format());
+      assert vars1.length == vars2.length :
+        "Bad type match: " + inv1.format() + " vs. " + inv2.format();
 
       for (int i=0; i < vars1.length; i++) {
         VarInfo var1 = vars1[i];
         VarInfo var2 = vars2[i];
-        int compare = var1.name.compareTo(var2.name);
+        int compare = var1.name().compareTo(var2.name());
         if (compare != 0)
           return compare;
       }
@@ -2001,9 +1933,9 @@ public abstract class Invariant
       .append("daikon.Quant.fuzzy.")
       .append(method)
       .append("(")
-      .append(v1.name.name_using(format, v1))
+      .append(v1.name_using(format))
       .append(", ")
-      .append(v2.name.name_using(format, v2))
+      .append(v2.name_using(format))
       .append(")")
       .toString();
   }
