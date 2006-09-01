@@ -56,7 +56,7 @@ public class PptTopLevel extends Ppt {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20040921L;
+  static final long serialVersionUID = 20060815L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -623,12 +623,12 @@ public class PptTopLevel extends Ppt {
       VarInfo vi = var_infos[i];
       if (Global.debugDerive.isLoggable(Level.FINE)) {
         Global.debugDerive.fine(
-          "Unary: trying to derive from " + vi.name.name());
+          "Unary: trying to derive from " + vi.name());
       }
       if (!worthDerivingFrom(vi)) {
         if (Global.debugDerive.isLoggable(Level.FINE)) {
           Global.debugDerive.fine(
-            "Unary: not worth deriving from " + vi.name.name());
+            "Unary: not worth deriving from " + vi.name());
         }
         continue;
       }
@@ -638,7 +638,7 @@ public class PptTopLevel extends Ppt {
         if (uderivs != null) {
           for (int udi = 0; udi < uderivs.length; udi++) {
             UnaryDerivation uderiv = uderivs[udi];
-            if (!FileIO.var_included(uderiv.getVarInfo().name.name())) {
+            if (!FileIO.var_included(uderiv.getVarInfo().name())) {
               continue;
             }
             result.add(uderiv);
@@ -657,7 +657,7 @@ public class PptTopLevel extends Ppt {
       if (!worthDerivingFrom(vi1)) {
         if (Global.debugDerive.isLoggable(Level.FINE)) {
           Global.debugDerive.fine(
-            "Binary first VarInfo: not worth deriving from " + vi1.name.name());
+            "Binary first VarInfo: not worth deriving from " + vi1.name());
         }
         continue;
       }
@@ -678,16 +678,16 @@ public class PptTopLevel extends Ppt {
       //                      + ", i2_min=" + i2_min
       //                      + ", i2_limit=" + i2_limit);
       Daikon.progress = "Creating derived variables for: "
-        + ppt_name.toString() + " (binary, " + vi1.name.name() + ")";
+        + ppt_name.toString() + " (binary, " + vi1.name() + ")";
       for (int i2 = i2_min; i2 < i2_limit; i2++) {
         VarInfo vi2 = var_infos[i2];
         if (!worthDerivingFrom(vi2)) {
           if (Global.debugDerive.isLoggable(Level.FINE)) {
             Global.debugDerive.fine(
               "Binary: not worth deriving from ("
-                + vi1.name.name()
+                + vi1.name()
                 + ","
-                + vi2.name.name()
+                + vi2.name()
                 + ")");
           }
           continue;
@@ -704,7 +704,7 @@ public class PptTopLevel extends Ppt {
           if (bderivs != null) {
             for (int bdi = 0; bdi < bderivs.length; bdi++) {
               BinaryDerivation bderiv = bderivs[bdi];
-              if (!FileIO.var_included(bderiv.getVarInfo().name.name())) {
+              if (!FileIO.var_included(bderiv.getVarInfo().name())) {
                 continue;
               }
               result.add(bderiv);
@@ -714,7 +714,7 @@ public class PptTopLevel extends Ppt {
                   vi1.ppt,
                   Debug.vis(vi1, vi2),
                   "Created Binary Derivation "
-                    + bderiv.getVarInfo().name.name());
+                    + bderiv.getVarInfo().name());
             }
           }
         }
@@ -729,7 +729,7 @@ public class PptTopLevel extends Ppt {
           Global.debugDerive.fine(
             "Ternary first VarInfo: not worth "
               + "deriving from "
-              + vi1.name.name());
+              + vi1.name());
         }
         continue;
       }
@@ -750,7 +750,7 @@ public class PptTopLevel extends Ppt {
       //                      + ", i2_min=" + i2_min
       //                      + ", i2_limit=" + i2_limit);
       Daikon.progress = "Creating derived variables for: "
-        + ppt_name.toString() + " (ternary, " + vi1.name.name() + ")";
+        + ppt_name.toString() + " (ternary, " + vi1.name() + ")";
       for (int i2 = i2_min; i2 < i2_limit; i2++) {
         VarInfo vi2 = var_infos[i2];
         if (vi2.isDerived()
@@ -759,9 +759,9 @@ public class PptTopLevel extends Ppt {
           if (Global.debugDerive.isLoggable(Level.FINE)) {
             Global.debugDerive.fine(
               "Ternary 2nd: not worth deriving from ("
-                + vi1.name.name()
+                + vi1.name()
                 + ","
-                + vi2.name.name()
+                + vi2.name()
                 + ")");
           }
           continue;
@@ -781,11 +781,11 @@ public class PptTopLevel extends Ppt {
             if (Global.debugDerive.isLoggable(Level.FINE)) {
               Global.debugDerive.fine(
                 "Ternary 3rd: not worth deriving from ("
-                  + vi1.name.name()
+                  + vi1.name()
                   + ","
-                  + vi2.name.name()
+                  + vi2.name()
                   + ")"
-                  + vi3.name.name()
+                  + vi3.name()
                   + ")");
             }
             continue;
@@ -796,7 +796,7 @@ public class PptTopLevel extends Ppt {
             if (tderivs != null) {
               for (int tdi = 0; tdi < tderivs.length; tdi++) {
                 TernaryDerivation tderiv = tderivs[tdi];
-                if (!FileIO.var_included(tderiv.getVarInfo().name.name())) {
+                if (!FileIO.var_included(tderiv.getVarInfo().name())) {
                   continue;
                 }
                 result.add(tderiv);
@@ -805,11 +805,11 @@ public class PptTopLevel extends Ppt {
               if (Global.debugDerive.isLoggable(Level.FINE)) {
                 Global.debugDerive.fine(
                   "Ternary instantiated but not used: "
-                    + vi1.name.name()
+                    + vi1.name()
                     + " "
-                    + vi2.name.name()
+                    + vi2.name()
                     + " "
-                    + vi3.name.name()
+                    + vi3.name()
                     + " ");
               }
             }
@@ -827,7 +827,7 @@ public class PptTopLevel extends Ppt {
       String derived_vars = "Derived:";
       for (Iterator<Derivation> itor = result.iterator(); itor.hasNext();) {
         derived_vars += " "
-          + itor.next().getVarInfo().name.name();
+          + itor.next().getVarInfo().name();
       }
       Global.debugDerive.fine(derived_vars);
     }
@@ -937,7 +937,7 @@ public class PptTopLevel extends Ppt {
         if (slice instanceof PptSlice1)
           debugInstantiate.fine(
             " : "
-              + slice.var_infos[0].name.name()
+              + slice.var_infos[0].name()
               + ": "
               + slice.var_infos[0].file_rep_type
               + ": "
@@ -957,9 +957,9 @@ public class PptTopLevel extends Ppt {
         if (slice instanceof PptSlice2)
           debugInstantiate.fine(
             " : "
-              + slice.var_infos[0].name.name()
+              + slice.var_infos[0].name()
               + " : "
-              + slice.var_infos[1].name.name());
+              + slice.var_infos[1].name());
       }
       debugInstantiate.fine("slice3 (" + slice3_cnt + ") slices");
       for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
@@ -967,11 +967,11 @@ public class PptTopLevel extends Ppt {
         if (slice instanceof PptSlice3)
           debugInstantiate.fine(
             " : "
-              + slice.var_infos[0].name.name()
+              + slice.var_infos[0].name()
               + " : "
-              + slice.var_infos[1].name.name()
+              + slice.var_infos[1].name()
               + " : "
-              + slice.var_infos[2].name.name());
+              + slice.var_infos[2].name());
       }
     }
 
@@ -1237,14 +1237,14 @@ public class PptTopLevel extends Ppt {
         log.fine(
           lb.min()
             + " <= "
-            + slice.var_infos[0].name.name()
+            + slice.var_infos[0].name()
             + " <= "
             + ub.max());
       else if (lbf != null)
         log.fine(
           lbf.min()
             + " <= "
-            + slice.var_infos[0].name.name()
+            + slice.var_infos[0].name()
             + " <= "
             + ubf.max());
     }
@@ -1304,7 +1304,7 @@ public class PptTopLevel extends Ppt {
       }
       if (Global.debugDerive.isLoggable(Level.FINE)) {
         for (int i = 0; i < ders.length; i++) {
-          Global.debugDerive.fine("Derived " + vis[i].name.name());
+          Global.debugDerive.fine("Derived " + vis[i].name());
         }
       }
 
@@ -1500,19 +1500,6 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns the varinfo_index of the variable whose name is varname.
-   * Returns -1 if there is no such variable
-   */
-  public int indexOf(String varname) {
-    for (int i = 0; i < var_infos.length; i++) {
-      if (var_infos[i].name.name().equals(varname)) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  /**
    * Returns the invariant in the slice specified by vis that matches the
    * specified class.  If the slice or the invariant does not exist, returns
    * null.
@@ -1523,18 +1510,6 @@ public class PptTopLevel extends Ppt {
     if (slice == null)
       return (null);
     return slice.find_inv_by_class(cls);
-  }
-
-  /**
-   * Returns the VarInfo with the specified name.  Null if the name is
-   * not found
-   */
-  public VarInfo find_var_by_name(String varname) {
-    int i = indexOf(varname);
-    if (i == -1)
-      return (null);
-    else
-      return (var_infos[i]);
   }
 
   /**
@@ -1884,9 +1859,9 @@ public class PptTopLevel extends Ppt {
     if (false) {
       Fmt.pf(
         "Looking for %s [%s] <= %s [%s] in ppt %s",
-        v1.name.name(),
+        v1.name(),
         "" + v1_shift,
-        v2.name.name(),
+        v2.name(),
         "" + v2_shift,
         this.name());
       Fmt.pf(
@@ -2776,68 +2751,6 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    // FIXME XXXXX:  Commented out by MDE, 6/26/2002, due to merging problems.
-    // Should this be deleted?  Need to check CVS logs and/or think about this.
-    /*
-    if (ppt_name.isEnterPoint() && controlling_ppts.size() == 1) {
-      // Guess the OBJECT ppt; usually right
-      PptTopLevel OBJ = controlling_ppts.iterator().next();
-      if (OBJ.ppt_name.isObjectInstanceSynthetic()) {
-        // Find variables here of the same type as us
-        String clsname = ppt_name.getFullClassName();
-      }
-    }
-
-    // Use type information to restate any OBJECT invariants over
-    // variable expressions such as arguments or fields whose types
-    // are instrumeted.
-    for (int i=0; i < var_infos.length; i++) {
-      VarInfo vi = var_infos[i];
-      ProglangType progtype = vi.type;
-
-      // Always skip "this" and "orig(this)" as necessary special cases.
-      if (VarInfoName.THIS.equals(vi.name) ||
-          VarInfoName.ORIG_THIS.equals(vi.name)) {
-        continue;
-      }
-
-      // For now, we don't handle sequences.  We could use a GLB type
-      // and state a forall, but it doesn't seem worth the work yet.
-      if (progtype.isPseudoArray()) {
-        continue;
-      }
-
-      // Locate the OBJECT ppt
-      PptName obj_name = new PptName(vi.type.base(), null,
-                                     FileIO.object_suffix);
-      PptTopLevel obj_ppt = all_ppts.get(obj_name);
-      if (obj_ppt == null) {
-        Global.debugSimplify.fine
-          (ppt_name + ": no type-based invariants found for "
-           + vi.name + " (" + obj_name + ")");
-        continue;
-      }
-
-      Global.debugSimplify.fine
-          (ppt_name + ": using type-based invariants for "
-           + vi.name + " (" + obj_name + ")");
-
-      // State the object invariant on the incoming argument
-      Vector invs2 = obj_ppt.invariants_vector();
-      Collections.sort(invs2, icfp);
-      for (Invariant inv : InvariantFilters.addEqualityInvariants(invs2)) {
-        if (!test.include(inv)) { // think: !inv.isWorthPrinting()
-          continue;
-        }
-        String fmt = inv.format_using(OutputFormat.SIMPLIFY);
-        if (format_simplify_problem(fmt)) {
-          continue;
-        }
-        Lemma replaced = InvariantLemma.makeLemmaReplaceThis(inv, vi.name);
-        proverStack.pushLemma(replaced);
-      }
-    }
-    */
 
     if (proverStack.checkForContradiction() == 'T') {
       if (LemmaStack.dkconfig_remove_contradictions) {
@@ -3037,24 +2950,23 @@ public class PptTopLevel extends Ppt {
   ///
 
   /**
-   * Cached VarInfoNames that are parameter variables.
+   * Cached VarInfos that are parameter variables.
    **/
-  private Set<VarInfoName> paramVars = null;
+  private Set<VarInfo> paramVars = null;
 
   /**
    * Returns variables in this Ppt that are parameters.
    **/
-  public Set<VarInfoName> getParamVars() {
-    if (paramVars != null)
+  public Set<VarInfo> getParamVars() {
+    if (paramVars != null) {
       return paramVars;
+    }
 
-    paramVars = new LinkedHashSet<VarInfoName>();
-    for (int i = 0; i < var_infos.length; i++) {
-      VarInfo var = var_infos[i];
-      if (var.isParam() && !var.isPrestate()) {
-        paramVars.add(var.name);
-      }
-    } // We should cache paramedVars in PptToplevel
+    paramVars = new LinkedHashSet<VarInfo>();
+    for (VarInfo var : var_infos) {
+      if (var.isParam() && !var.isPrestate())
+        paramVars.add (var);
+    }
     return paramVars;
   }
 
@@ -3292,7 +3204,7 @@ public class PptTopLevel extends Ppt {
       for (VarInfo v : vars) {
         if (set_str != "") // interned
           set_str += ",";
-        set_str += v.name.name();
+        set_str += v.name();
         if (v.missingOutOfBounds())
           set_str += "{MOB}";
       }
@@ -4146,7 +4058,7 @@ public class PptTopLevel extends Ppt {
           for (int k = 0; k < slice.arity(); k++) {
             VarInfo v = slice.var_infos[k];
             sb.append(
-              v.name.name()
+              v.name()
                 + "/"
                 + v.equalitySet.getVars().size()
                 + "/"
