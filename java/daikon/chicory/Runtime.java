@@ -43,10 +43,10 @@ public class Runtime
     // Control over what classes (ppts) are instrumented
     //
     /** Ppts to omit (regular expression) **/
-    static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+    public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
     /** Ppts to include (regular expression) **/
-    static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+    public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
     /** Comparability information (if any) **/
     static DeclReader comp_info = null;
