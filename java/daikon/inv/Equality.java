@@ -106,12 +106,12 @@ public final class Equality
     Assert.assertTrue (vars.size() == variables.size());
     for (VarInfo vi : variables) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("  " + vi.name.name() + " [" + vi.comparability + "]");
+        debug.fine ("  " + vi.name() + " [" + vi.comparability + "]");
       }
       Assert.assertTrue(vi.ppt == leader.ppt);
       Assert.assertTrue(vi.comparableNWay (leader));
       Assert.assertTrue (VarComparability.comparable (leader, vi),
-             "not comparable " + leader.name.name() + " " + vi.name.name()
+             "not comparable " + leader.name() + " " + vi.name()
             +" at ppt " + ppt.parent.name());
       Assert.assertTrue(vi.rep_type.isArray() == leader.rep_type.isArray());
       vi.equalitySet = this;
@@ -161,7 +161,7 @@ public final class Equality
 
   public String repr() {
     return "Equality: size=" + size()
-      + " leader: " + leader().name.name() + " with "
+      + " leader: " + leader().name() + " with "
       + format_daikon() + " samples: " + numSamples();
   }
 
@@ -190,7 +190,7 @@ public final class Equality
       } else {
         start = false;
       }
-      result.append(var.name.name());
+      result.append(var.name());
       result.append ("[" + var.varinfo_index + "]");
       // result.append("[" + var.comparability + "]");
       if (var == leader())
@@ -205,22 +205,22 @@ public final class Equality
   // they can be called if desired.
   public String format_java() {
     VarInfo leader = leader();
-    String leaderName = leader.name.name();
+    String leaderName = leader.name();
     List<String> clauses = new ArrayList<String>();
     for (VarInfo var : vars) {
       if (leader == var) continue;
-      clauses.add(String.format("(%s == %s)", leaderName, var.name.name()));
+      clauses.add(String.format("(%s == %s)", leaderName, var.name()));
     }
     return UtilMDE.join(clauses, " && ");
   }
 
   public String format_ioa() {
     VarInfo leader = leader();
-    String leaderName = leader.name.ioa_name();
+    String leaderName = leader.ioa_name();
     List<String> clauses = new ArrayList<String>();
     for (VarInfo var : vars) {
       if (leader == var) continue;
-      clauses.add(var.name.ioa_name() + " = " + leaderName);
+      clauses.add(var.ioa_name() + " = " + leaderName);
     }
     return UtilMDE.join(clauses, " /\\ ");
   }
@@ -260,8 +260,8 @@ public final class Equality
     for (int j=0; j<equal_vars.size(); j++) {
       VarInfo other = equal_vars.get(j);
       if (other == leader) continue;
-      if (leader.name.applyPrestate().equals(other.name)) continue;
-      if (other.name.applyPrestate().equals(leader.name)) continue;
+      if (leader.prestate_name().equals(other.name())) continue;
+      if (other.prestate_name().equals(leader.name())) continue;
       if (numprinted > 0) {
         result += Global.lineSep;
       }
@@ -270,41 +270,15 @@ public final class Equality
         result = result + "warning: method Equality.format_esc() needs to be implemented: " + format();
       }
       if (leader.rep_type.isArray()) {
-        String[] form =
-          VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-            { leader.name, other.name }, true); // elementwise
+        String[] form = VarInfo.esc_quantify (leader, other);
         result = result + form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3];
       } else {
-        result = result + leader.name.esc_name() + " == " + other.name.esc_name();
+        result = result + leader.esc_name() + " == " + other.esc_name();
       }
 
     }
     return result;
 
-//      StringBuffer result = new StringBuffer();
-//      if (leader().rep_type.isArray()) {
-//        for (int i=1; i < vars.length; i++) {
-//      if (i > 1) {
-//        result.append(Global.lineSep);
-//      }
-//      String[] form =
-//        VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-//          { leader().name, vars[i].name }, true); // elementwise
-//      result.append(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
-//        }
-//      } else {
-//        for (int i=1; i < vars.length; i++) {
-//      if (i > 1) {
-//        result.append(" && ");
-//      }
-//      result.append("");   // formerly "("
-//      result.append(leader().name.esc_name());
-//      result.append(" == ");
-//      result.append(vars[i].name.esc_name());
-//      result.append("");  // formerly ")"
-//        }
-//      }
-//      return result.toString();
   }
 
   // When A and B are pointers, don't say (EQ A B); instead say (EQ
@@ -322,13 +296,11 @@ public final class Equality
   public String format_simplify() {
     StringBuffer result = new StringBuffer("(AND");
     VarInfo leader = leader();
-    String leaderName = leader.name.simplify_name();
+    String leaderName = leader.simplify_name();
     if (leader.rep_type.isArray()) {
       for (VarInfo var : vars) {
         if (var == leader) continue;
-        String[] form =
-          VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-            { leader.name, var.name }, true); // elementwise
+        String[] form = VarInfo.simplify_quantify (leader, var, true);
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
         result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
@@ -337,7 +309,7 @@ public final class Equality
       for (VarInfo var : vars) {
         if (var == leader) continue;
         String a = format_elt(leaderName);
-        String b = format_elt(var.name.simplify_name());
+        String b = format_elt(var.simplify_name());
         result.append(" (EQ ");
         result.append(a);
         result.append(" ");
@@ -355,27 +327,27 @@ public final class Equality
 
   public String format_java_family(OutputFormat format) {
     VarInfo leader = leader();
-    String leaderName = leader.name.name_using(format, leader);
+    String leaderName = leader.name_using(format);
     List<String> clauses = new ArrayList<String>();
     for (VarInfo var : vars) {
       if (leader == var) continue;
       if (leader.rep_type.isArray()) {
         clauses.add(String.format("(daikon.Quant.pairwiseEqual(%s, %s)",
                                   leaderName,
-                                  var.name.name_using(format, var)));
+                                  var.name_using(format)));
       } else {
         if (leader.type.isFloat()) {
           clauses.add("(" + Invariant.formatFuzzy("eq", leader, var, format) + ")");
         } else {
           if ((leaderName.indexOf("daikon.Quant.collectObject") != -1)
               ||
-              (var.name.name_using(format, var).indexOf("daikon.Quant.collectObject") != -1)) {
+              (var.name_using(format).indexOf("daikon.Quant.collectObject") != -1)) {
             clauses.add("(warning: it is meaningless to compare hashcodes for values "
                           + "obtained through daikon.Quant.collect... methods.");
           } else {
             clauses.add(String.format("(%s == %s)",
                                       leaderName,
-                                      var.name.name_using(format, var)));
+                                      var.name_using(format)));
           }
         }
       }
@@ -441,9 +413,9 @@ public final class Equality
       //       }
       if (Debug.logOn())
         Debug.log (getClass(), ppt.parent, Debug.vis (vi),
-                   "Var " + vi.name.name()
+                   "Var " + vi.name()
                    + " [" + viValue + "," + viMod + "] split from leader "
-                   + leader.name.name() + " [" + leaderValue + ","
+                   + leader.name() + " [" + leaderValue + ","
                    + leaderMod + "]");
 
       result.add (vi);
@@ -482,12 +454,12 @@ public final class Equality
     VarInfo leader = leader();
 
     if (debugPostProcess.isLoggable(Level.FINE)) {
-      debugPostProcess.fine ("  var1: " + leader.name.name());
+      debugPostProcess.fine ("  var1: " + leader.name());
     }
     for (int i = 0; i < varArray.length; i++) {
       if (varArray[i] == leader) continue;
       if (debugPostProcess.isLoggable(Level.FINE)) {
-        debugPostProcess.fine ("  var2: " + varArray[i].name.name());
+        debugPostProcess.fine ("  var2: " + varArray[i].name());
       }
 
       parent.create_equality_inv (leader, varArray[i], numSamples());
@@ -527,8 +499,7 @@ public final class Equality
 	// do nothing
       }
       // if we got here, this is the "all other things being equal" case
-      else if (var.name.inOrderTraversal().size() <
-	       newLeader.name.inOrderTraversal().size()) {
+      else if (var.complexity() < newLeader.complexity()) {
 	newLeader = var;
       }
     }
@@ -540,8 +511,8 @@ public final class Equality
     VarInfo leader = leader();
     for (VarInfo var : vars) {
       Assert.assertTrue (VarComparability.comparable (leader, var),
-                 "not comparable: " + leader.name.name() + " "
-                + var.name.name() + " at ppt " + ppt.parent.name());
+                 "not comparable: " + leader.name() + " "
+                + var.name() + " at ppt " + ppt.parent.name());
     }
   }
 
