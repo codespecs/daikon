@@ -10,7 +10,6 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.OutputFormat;
-import daikon.inv.OutputFormat.Repair;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;
@@ -738,7 +737,7 @@ public final class PrintInvariants {
         || (Daikon.output_format == OutputFormat.DBCJAVA )) {
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++) {
-        out.print(" " + ppt.var_infos[i].name.name());
+        out.print(" " + ppt.var_infos[i].name());
       }
       out.println();
     }
@@ -762,17 +761,17 @@ public final class PrintInvariants {
 
       // Skip any orig variables
       if (vi.isPrestate()) {
-        debugPrintModified.fine ("  skipping " + vi.name.name()
+        debugPrintModified.fine ("  skipping " + vi.name()
                                  + ": is prestate");
         continue;
       }
-      debugPrintModified.fine ("  Considering var: " + vi.name.name());
+      debugPrintModified.fine ("  Considering var: " + vi.name());
 
       // Get the orig version of this variable.  If none is found then this
       // isn't a variable about which it makes sense to consider modifiability
-      VarInfo vi_orig = ppt.findVar (vi.name.applyPrestate());
+      VarInfo vi_orig = ppt.find_var_by_name (vi.prestate_name());
       if (vi_orig == null) {
-        debugPrintModified.fine ("  skipping " + vi.name.name()
+        debugPrintModified.fine ("  skipping " + vi.name()
                                  + ": no orig variable");
         continue;
       }
@@ -784,8 +783,8 @@ public final class PrintInvariants {
       // modified
 
       if (ppt.is_equal (vi, vi_orig)) {
-        debugPrintModified.fine ("  " + vi.name.name() + " = "
-                                 + vi_orig.name.name());
+        debugPrintModified.fine ("  " + vi.name() + " = "
+                                 + vi_orig.name());
         unmodified_vars.add (vi);
       } else { // variables are not equal
         if (vi.isParam())
@@ -801,20 +800,20 @@ public final class PrintInvariants {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
         for (VarInfo vi : modified_vars)
-          out.print(" " + vi.name.name());
+          out.print(" " + vi.name());
         out.println();
       }
       if (reassigned_parameters.size() > 0) {
         // out.print("      Reassigned parameters:");
         out.print("      Modified primitive arguments:");
         for (VarInfo vi : reassigned_parameters)
-          out.print(" " + vi.name.name());
+          out.print(" " + vi.name());
         out.println();
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");
         for (VarInfo vi : unmodified_vars)
-          out.print(" " + vi.name.name());
+          out.print(" " + vi.name());
         out.println();
       }
     }
@@ -824,17 +823,8 @@ public final class PrintInvariants {
         || Daikon.output_format == OutputFormat.JML) {
       List<VarInfo> mods = new ArrayList<VarInfo>();
       for (VarInfo vi : modified_vars) {
-        Derivation derived = vi.derived;
-        VarInfoName vin = vi.name;
-
-        // Skip var.getClass() variables
-        if (vin instanceof VarInfoName.TypeOf)
+        if (!vi.is_assignable_var())
           continue;
-
-        // Skip sizeof variables
-        if (vin instanceof VarInfoName.SizeOf)
-          continue;
-
         mods.add (vi);
       }
 
@@ -846,7 +836,7 @@ public final class PrintInvariants {
           out.print("assignable ");
         int inserted = 0;
         for (VarInfo vi : mods) {
-          String name = vi.name.name();
+          String name = vi.name();
           if (!name.equals("this")) {
             if (inserted>0) {
               out.print(", ");
@@ -1031,7 +1021,7 @@ public final class PrintInvariants {
         VarInfo vi = ppt.var_infos[i];
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
         PptSlice slice1 = ppt_tl.findSlice(vi);
-        debugPrint.fine ("      " + vi.name.name());
+        debugPrint.fine ("      " + vi.name());
       }
       debugPrint.fine ("Equality set: ");
       debugPrint.fine ((ppt.equality_view == null) ? "null"
@@ -1077,7 +1067,7 @@ public final class PrintInvariants {
       Assert.assertTrue (!(inv instanceof Equality));
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
         Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
-                           "var '" + inv.ppt.var_infos[j].name.name()
+                           "var '" + inv.ppt.var_infos[j].name()
                             + "' out of bounds in " + inv.format());
       InvariantFilters fi = InvariantFilters.defaultFilters();
 
@@ -1251,7 +1241,7 @@ public final class PrintInvariants {
 
         String var_str = "";
         for (int i = 0; i < vis.length; i++) {
-          var_str += vis[i].name.name() + " ";
+          var_str += vis[i].name() + " ";
           if (ppt.is_constant (vis[i]))
             var_str += "["
                  + Debug.toString(ppt.constants.constant_value(vis[i]))+ "] ";
@@ -1276,7 +1266,7 @@ public final class PrintInvariants {
 
           // Print all unary and binary invariants over the same variables
           for (int i = 0; i < vis.length; i++) {
-            Fmt.pf ("      %s is %s", vis[i].name.name(),vis[i].file_rep_type);
+            Fmt.pf ("      %s is %s", vis[i].name(),vis[i].file_rep_type);
             print_all_invs (ppt, vis[i], "      ");
           }
           print_all_invs (ppt, vis[0], vis[1], "      ");
@@ -1292,7 +1282,7 @@ public final class PrintInvariants {
    */
   public static void print_all_invs (PptTopLevel ppt, VarInfo vi,
                                      String indent) {
-    String name = Fmt.spf ("%s [%s]", vi.name.name(), vi.file_rep_type);
+    String name = Fmt.spf ("%s [%s]", vi.name(), vi.file_rep_type);
     if (ppt.is_missing (vi))
       Fmt.pf ("%s%s missing", indent, name);
     else if (ppt.is_constant (vi))
