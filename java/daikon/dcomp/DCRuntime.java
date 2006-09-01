@@ -6,7 +6,6 @@ import java.lang.reflect.*;
 import java.io.PrintWriter;
 
 import daikon.chicory.*;
-import daikon.VarInfoName;
 import utilMDE.WeakIdentityHashMap;
 import utilMDE.SimpleLog;
 import utilMDE.ArraysMDE;
@@ -1025,7 +1024,7 @@ public final class DCRuntime {
         primitive_var_cnt++;
       if (dv.getName().contains (".toString"))
         tostring_cnt++;
-      else if (dv.getName().contains (VarInfoName.getClassSuffix))
+      else if (dv.getName().contains (DaikonVariableInfo.class_suffix))
         class_var_cnt++;
       else if (dv instanceof FieldInfo) {
         Field field = ((FieldInfo)dv).getField();
