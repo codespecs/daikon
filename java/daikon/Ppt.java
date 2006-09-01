@@ -60,10 +60,10 @@ public abstract class Ppt
     if (infos.length == 0) {
       sb.append("<implication slice>");
     } else {
-      sb.append(infos[0].name.name());
+      sb.append(infos[0].name());
       for (int i=1; i<infos.length; i++) {
         sb.append(", ");
-        sb.append(infos[i].name.name());
+        sb.append(infos[i].name());
       }
     }
     sb.append(")");
@@ -75,31 +75,29 @@ public abstract class Ppt
     return (varNames (var_infos));
   }
 
-  /** Return the VarInfo that has the specified name. **/
-  public VarInfo findVar(VarInfoName viname) {
-    for (int i=0; i<var_infos.length; i++) {
-      if (viname.equals(var_infos[i].name))
-        return var_infos[i];
-    }
-    return null;
-  }
-
-  /** find the variable with specified rep output **/
-  public VarInfo findVarByRepr(String repr) {
-    for (int i=0; i<var_infos.length; i++) {
-      if (repr.equals(var_infos[i].name.repr())) {
-        return var_infos[i];
+  /**
+   * Returns the varinfo_index of the variable whose name is varname.
+   * Returns -1 if there is no such variable
+   */
+  public int indexOf(String varname) {
+    for (int i = 0; i < var_infos.length; i++) {
+      if (var_infos[i].name().equals(varname)) {
+        return i;
       }
     }
-    return null;
+    return -1;
   }
 
   /**
-   * This should never be used if the VarInfoName is available; it is a
-   * convenience method used when parsing from programs or user input.
-   **/
-  public VarInfo findVar(String name) {
-    return findVar(VarInfoName.parse(name));
+   * Returns the VarInfo with the specified name.  Null if the name is
+   * not found
+   */
+  public VarInfo find_var_by_name(String varname) {
+    int i = indexOf(varname);
+    if (i == -1)
+      return (null);
+    else
+      return (var_infos[i]);
   }
 
   public boolean containsVar (VarInfo vi) {
