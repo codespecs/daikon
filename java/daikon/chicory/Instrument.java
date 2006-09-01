@@ -237,7 +237,10 @@ public class Instrument implements ClassFileTransformer {
       if (debug)
         njc.dump ("/tmp/ret/" + njc.getClassName() + ".class");
 
-      return (cg.getJavaClass().getBytes());
+      if (c_info.shouldInclude)
+        return (cg.getJavaClass().getBytes());
+      else
+        return null;
 
     } catch (Throwable e) {
       out.format ("Unexpected error %s in transform", e);
@@ -625,6 +628,7 @@ public class Instrument implements ClassFileTransformer {
       debug_transform.log ("Trace info not added to class %s%n", class_info);
     }
 
+    class_info.shouldInclude = shouldInclude;
     return class_info;
   }
 
@@ -1097,5 +1101,31 @@ public class Instrument implements ClassFileTransformer {
     String att_name = ((ConstantUtf8) c).getBytes();
     return (att_name);
   }
+
+  /**
+   * Any information needed by InstTransform routines about the method
+   * and class
+   */
+  private static class MethodContext {
+
+    public ClassGen cg;
+    public ConstantPoolGen cpg;
+    public InstructionFactory ifact;
+    public MethodGen mgen;
+
+    public MethodContext (ClassGen cg) {
+      this.cg = cg;
+      ifact = new InstructionFactory (cg);
+      cpg = cg.getConstantPool();
+    }
+
+    public MethodContext (ClassGen cg, MethodGen mgen) {
+      this.cg = cg;
+      ifact = new InstructionFactory (cg);
+      cpg = cg.getConstantPool();
+      this.mgen = mgen;
+    }
+  }
+
 
 }
