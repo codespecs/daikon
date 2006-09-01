@@ -66,21 +66,4 @@ public class InvariantLemma extends Lemma {
     return result;
   }
 
-  /**
-   * Make a lemma corresponding to the given object invariant, except
-   * with `this' replaced by another VarInfoName, which for logic's
-   * sake should refer to some instance of that class.
-   **/
-  public static InvariantLemma makeLemmaReplaceThis(Invariant inv,
-                                                    VarInfoName newName) {
-    // XXX This isn't such a hot thing to do, but it isn't that
-    // hard, and seems to work.
-    PptSlice saved = inv.ppt;
-    PptSlice rewritten = PptSlice0.makeFakeReplaceThis(saved, newName);
-    inv.ppt = rewritten;
-    InvariantLemma result = new InvariantLemma(inv);
-    inv.ppt = saved;
-    result.from += " (`this' replaced with " + newName.name() + ")";
-    return result;
-  }
 }
