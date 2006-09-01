@@ -9,6 +9,7 @@ import daikon.PrintInvariants;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
+import daikon.Quantify;
 import utilMDE.*;
 import static daikon.FileIO.VarDefinition;
 
@@ -30,7 +31,7 @@ public final class VarInfo implements Cloneable, Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020629L;
+  static final long serialVersionUID = 20060815L;
 
   /**
    * If true, then variables are only considered comparable if they
@@ -55,16 +56,27 @@ public final class VarInfo implements Cloneable, Serializable {
    * points, because two different program points could contain unrelated
    * variables named "x".
    **/
-  public VarInfoName name; // interned
+  private VarInfoName name; // interned
 
+  /**
+   * Name as specified in the decl file.  VarInfoName sometimes changes this
+   * name as part of parsing so that VarInfoName.name() doesn't return the
+   * original name
+   */
+  private String str_name;
 
-  /** returns the name of the variable **/
+  /** returns the interned name of the variable **/
   public String name() {
-    return (name.name());
+    return (name.name().intern());
     // if (FileIO.new_decl_format)
     //  return vardef.name;
     // else
     //  return (name.name());
+  }
+
+  /** Returns the original name of the variable from the decl file **/
+  public String str_name() {
+    return str_name;
   }
 
   /**
@@ -443,6 +455,8 @@ public final class VarInfo implements Cloneable, Serializable {
     parent_ppt = base.parent_ppt;
     if (parent_relation_id != 0) {
       for (VarInfo other : others) {
+        if (other == null)
+          continue;
         if (parent_relation_id != other.parent_relation_id) {
           parent_relation_id = 0;
           parent_ppt = null;
@@ -454,7 +468,7 @@ public final class VarInfo implements Cloneable, Serializable {
   }
 
   /** Create the specified VarInfo **/
-  public VarInfo (VarInfoName name, ProglangType type,
+  private VarInfo (VarInfoName name, ProglangType type,
                   ProglangType file_rep_type, VarComparability comparability,
                   boolean is_static_constant, Object static_constant_value,
                   VarInfoAux aux) {
@@ -503,16 +517,34 @@ public final class VarInfo implements Cloneable, Serializable {
     canBeMissing = false;
   }
 
+  /** Create the specified VarInfo **/
+  public VarInfo (String name, ProglangType type,
+                  ProglangType file_rep_type, VarComparability comparability,
+                  boolean is_static_constant, Object static_constant_value,
+                  VarInfoAux aux) {
+    this (VarInfoName.parse(name), type, file_rep_type, comparability,
+          is_static_constant, static_constant_value, aux);
+    this.str_name = name;
+  }
+
   /** Create the specified non-static VarInfo **/
-  public VarInfo (VarInfoName name, ProglangType type,
+  private VarInfo (VarInfoName name, ProglangType type,
                   ProglangType file_rep_type, VarComparability comparability,
                   VarInfoAux aux) {
     this(name, type, file_rep_type, comparability, false, null, aux);
   }
 
+  /** Create the specified non-static VarInfo **/
+  public VarInfo (String name, ProglangType type,
+                  ProglangType file_rep_type, VarComparability comparability,
+                  VarInfoAux aux) {
+    this(name, type, file_rep_type, comparability, false, null, aux);
+    this.str_name = name;
+  }
+
   /** Create a VarInfo with the same values as vi **/
   public VarInfo (VarInfo vi) {
-    this (vi.name, vi.type, vi.file_rep_type, vi.comparability,
+    this (vi.name(), vi.type, vi.file_rep_type, vi.comparability,
          vi.is_static_constant, vi.static_constant_value, vi.aux);
     canBeMissing = vi.canBeMissing;
     postState = vi.postState;
@@ -546,15 +578,15 @@ public final class VarInfo implements Cloneable, Serializable {
 
     VarInfoName newname = vi.name.applyPrestate();
     VarInfo result =
-      new VarInfo(
-        newname,
+      new VarInfo(newname,
         vi.type,
         vi.file_rep_type,
-        vi.comparability.makeAlias(vi.name),
+        vi.comparability.makeAlias(),
         vi.aux);
     result.canBeMissing = vi.canBeMissing;
     result.postState = vi;
     result.equalitySet = vi.equalitySet;
+    result.arr_dims = vi.arr_dims;
 
     // At an exit point, parameters are uninteresting, but orig(param) is not.
     // So don't call orig(param) a parameter.
@@ -692,6 +724,25 @@ public final class VarInfo implements Cloneable, Serializable {
     return result;
   }
 
+  /**
+   * Returns a list of all of the basic (non-derived) variables that
+   * are used to make up this variable.  If this variable is not
+   * derived, it is just this variable.  Otherwise it is all of the
+   * the bases of this derivation
+   */
+  public List<VarInfo> get_all_constituent_vars() {
+    List<VarInfo> vars = new ArrayList<VarInfo>();
+    if (isDerived()) {
+      for (VarInfo vi : derived.getBases()) {
+        vars.addAll (vi.get_all_constituent_vars());
+      }
+    } else {
+      vars.add (this);
+    }
+    return (vars);
+  }
+
+
   public boolean isClosure() {
     // This should eventually turn into
     //   return name.indexOf("closure(") != -1;
@@ -726,13 +777,16 @@ public final class VarInfo implements Cloneable, Serializable {
     if (isParam() && !isPrestate())
       result = true;
 
-    Set<VarInfoName> paramVars = ppt.getParamVars();
+    Set<VarInfo> paramVars = ppt.getParamVars();
+    Set<VarInfoName> param_names = new LinkedHashSet<VarInfoName>();
+    for (VarInfo vi : paramVars)
+      param_names.add (vi.name);
 
-    VarInfoName.Finder finder = new VarInfoName.Finder(paramVars);
+    VarInfoName.Finder finder = new VarInfoName.Finder(param_names);
     Object baseMaybe = finder.getPart(name);
     if (baseMaybe != null) {
       VarInfoName base = (VarInfoName) baseMaybe;
-      derivedParamCached = this.ppt.findVar(base);
+      derivedParamCached = this.ppt.find_var_by_name (base.name());
       if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
         Global.debugSuppressParam.fine(
           name.name() + " is a derived param");
@@ -830,7 +884,7 @@ public final class VarInfo implements Cloneable, Serializable {
       // boring if X stays the same (because it's obviously true).
       if (name instanceof VarInfoName.TypeOf) {
         VarInfoName base = ((VarInfoName.TypeOf) name).term;
-        VarInfo baseVar = ppt.findVar(base);
+        VarInfo baseVar = ppt.find_var_by_name (base.name());
         if ((baseVar != null) && baseVar.isParam()) {
           Global.debugSuppressParam.fine("TypeOf returning true");
           PrintInvariants.debugFiltering.fine(
@@ -840,7 +894,7 @@ public final class VarInfo implements Cloneable, Serializable {
       }
       if (name instanceof VarInfoName.SizeOf) {
         VarInfoName base = ((VarInfoName.SizeOf) name).sequence.term;
-        VarInfo baseVar = ppt.findVar(base);
+        VarInfo baseVar = ppt.find_var_by_name (base.name());
         if (baseVar != null && baseVar.isParam()) {
           Global.debugSuppressParam.fine("SizeOf returning true");
           PrintInvariants.debugFiltering.fine(
@@ -864,10 +918,10 @@ public final class VarInfo implements Cloneable, Serializable {
       // will be ignoring the fact that y has changed.
 
       // Henceforth only interesting if it's true that base = orig(base)
-      if (base.name.name().equals("this"))
+      if (base.name().equals("this"))
         return false;
-      Global.debugSuppressParam.fine("Base is " + base.name.name());
-      VarInfo origBase = ppt.findVar(base.name.applyPrestate());
+      Global.debugSuppressParam.fine("Base is " + base.name());
+      VarInfo origBase = ppt.find_var_by_name (base.prestate_name());
       if (origBase == null) {
         Global.debugSuppressParam.fine(
           "No orig variable for base, returning true ");
@@ -934,7 +988,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (raw == null) {
       throw new Error(
         "getIndexValue: getValue returned null "
-          + this.name.name()
+          + this.name()
           + " index="
           + this.varinfo_index
           + " vt="
@@ -949,7 +1003,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (raw == null) {
       throw new Error(
         "getIntValue: getValue returned null "
-          + this.name.name()
+          + this.name()
           + " index="
           + this.varinfo_index
           + " vt="
@@ -964,7 +1018,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (raw == null) {
       throw new Error(
         "getIntArrayValue: getValue returned null "
-          + this.name.name()
+          + this.name()
           + " index="
           + this.varinfo_index
           + " vt="
@@ -979,7 +1033,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (raw == null) {
       throw new Error(
         "getDoubleValue: getValue returned null "
-          + this.name.name()
+          + this.name()
           + " index="
           + this.varinfo_index
           + " vt="
@@ -994,7 +1048,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (raw == null) {
       throw new Error(
         "getDoubleArrayValue: getValue returned null "
-          + this.name.name()
+          + this.name()
           + " index="
           + this.varinfo_index
           + " vt="
@@ -1014,7 +1068,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (raw == null) {
       throw new Error(
         "getDoubleArrayValue: getValue returned null "
-          + this.name.name()
+          + this.name()
           + " index="
           + this.varinfo_index
           + " vt="
@@ -1168,7 +1222,7 @@ public final class VarInfo implements Cloneable, Serializable {
         search = search.applyPrestate();
       }
       search = search.applySize();
-      VarInfo result = ppt.findVar(search);
+      VarInfo result = ppt.find_var_by_name (search.name());
       if (result != null) {
         return result;
         //        } else {
@@ -1212,7 +1266,7 @@ public final class VarInfo implements Cloneable, Serializable {
     for (VarInfoName next : name.inOrderTraversal()) {
       if (next instanceof VarInfoName.Elements) {
         VarInfoName.Elements elems = (VarInfoName.Elements) next;
-        VarInfo seq = ppt.findVar(elems.term);
+        VarInfo seq = ppt.find_var_by_name (elems.term.name());
         if (!seq.type.isArray()) {
           return false;
         }
@@ -1329,8 +1383,8 @@ public final class VarInfo implements Cloneable, Serializable {
     int varj_shift,
     boolean test_lessequal) {
 
-        // Fmt.pf ("comparing variables %s and %s in ppt %s", vari.name.name(),
-        //        varj.name.name(), vari.ppt.name());
+        // Fmt.pf ("comparing variables %s and %s in ppt %s", vari.name(),
+        //        varj.name(), vari.ppt.name());
         // Throwable stack = new Throwable("debug traceback");
         // stack.fillInStackTrace();
         // stack.printStackTrace();
@@ -1570,7 +1624,7 @@ public final class VarInfo implements Cloneable, Serializable {
 
     // see if the contents of the post(...) have an equivalent orig()
     // expression.
-    VarInfo postvar = post_context.findVar(postexpr.term);
+    VarInfo postvar = post_context.find_var_by_name (postexpr.term.name());
     if (postvar == null) {
       if (debugSimplifyExpression.isLoggable(Level.FINE))
         debugSimplifyExpression.fine(
@@ -2040,11 +2094,11 @@ public final class VarInfo implements Cloneable, Serializable {
       }
 
       private VarInfo convertToPre(VarInfo vi) {
-        //   1. "ppt.findVar("orig(" + vi.name.name() + ")")" does not work:
+        //   1. "ppt.findVar("orig(" + vi.name() + ")")" does not work:
         //       "Error: orig() variables shouldn't appear in .decls files"
 
         VarInfoName viPreName = vi.name.applyPrestate();
-        VarInfo viPre = ppt.findVar(viPreName);
+        VarInfo viPre = ppt.find_var_by_name (vi.prestate_name());
         if (viPre == null) {
           System.out.printf("Can't find pre var %s (%s) at %s%n", viPreName.name(), viPreName, ppt);
           for (VarInfo v : ppt.var_infos) {
@@ -2056,7 +2110,7 @@ public final class VarInfo implements Cloneable, Serializable {
       }
 
       private List<VarInfo> addVar(List<VarInfo> result, VarInfoName vin) {
-        VarInfo vi = ppt.findVar(applyPreMaybe(vin));
+        VarInfo vi = ppt.find_var_by_name(applyPreMaybe(vin).name());
         // vi could be null because some variable's prefix is not a
         // variable.  Example: for static variable "Class.staticvar",
         // "Class" is not a varible, even though for variable "a.b.c",
@@ -2104,7 +2158,7 @@ public final class VarInfo implements Cloneable, Serializable {
     } // end of class GuardingVisitor
 
     if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-      Invariant.debugGuarding.fine(String.format("VarInfo.getGuardingList(%s)", this.name.name()));
+      Invariant.debugGuarding.fine(String.format("VarInfo.getGuardingList(%s)", this.name()));
     }
 
     if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
@@ -2115,12 +2169,12 @@ public final class VarInfo implements Cloneable, Serializable {
     if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
       Invariant.debugGuarding.fine(String.format("  resultlist: %s", result));
     }
-    result.remove(ppt.findVar(name));
+    result.remove(ppt.find_var_by_name (name.name()));
 
     assert ! ArraysMDE.any_null(result);
 
     if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-      Invariant.debugGuarding.fine(String.format("VarInfo.getGuardingList(%s) => : %s", this.name.name(), result));
+      Invariant.debugGuarding.fine(String.format("VarInfo.getGuardingList(%s) => : %s", this.name(), result));
     }
 
     return result;
@@ -2217,7 +2271,7 @@ public final class VarInfo implements Cloneable, Serializable {
     }
 
     public String toString() {
-      return (v1.name.name() + " = " + v2.name.name());
+      return (v1.name() + " = " + v2.name());
     }
   }
 
@@ -2231,7 +2285,7 @@ public final class VarInfo implements Cloneable, Serializable {
       if (vis[i] == null)
         vars.add("null");
       else
-        vars.add(vis[i].name.name());
+        vars.add(vis[i].name());
     }
     return UtilMDE.join(vars, ", ");
   }
@@ -2247,7 +2301,7 @@ public final class VarInfo implements Cloneable, Serializable {
       if (v == null)
         vars.add("null");
       else
-        vars.add(v.name.name());
+        vars.add(v.name());
     }
     return UtilMDE.join(vars, ", ");
   }
@@ -2368,10 +2422,38 @@ public final class VarInfo implements Cloneable, Serializable {
    * removed for back compatability
    */
   public String apply_subscript (String subscript) {
-    assert arr_dims == 1;
-    String name = name().substring (0, name().length()-2);
-    return (String.format ("%s[%s]", name, subscript));
+    if (FileIO.new_decl_format)
+      assert arr_dims == 1 : "Can't apply subscript to " + name();
+    else
+      assert name().contains ("[]") : "Can't apply subscript to " + name();
+    return apply_subscript (name(), subscript);
   }
+
+  /**
+   * Adds a subscript (or subsequence) to an array name.  This should
+   * really just substitute for '..', but the dots are currently removed
+   * for back compatibility
+   */
+  public static String apply_subscript (String sequence, String subscript) {
+    return sequence.replace ("[]", "[" + subscript + "]");
+  }
+
+  /**
+   * Returns the lower bound of the array or slice.
+   */
+  /*
+  public static Quantify.Term get_lower_bound() {
+    assert file_rep_type.isArray();
+    if (isDerived()) {
+      if (derived instanceof SequenceScalarSubsequence) {
+        SequenceScalarSubsequence sss = (SequenceScalarSubsequence) derived;
+        return sss.get_lower_bound();
+      } else if (derived instanceof Sequence) {
+      }
+
+    }
+  }
+  */
 
   /**
    * Updates any references to other variables that should be within this
@@ -2386,4 +2468,666 @@ public final class VarInfo implements Cloneable, Serializable {
       assert enclosing_var != null;
     }
   }
+
+  /**
+   * Temporary to let things compile now that name is private.  Eventually
+   * this should be removed.
+   */
+  public VarInfoName get_VarInfoName() {
+    return (name);
+  }
+
+  /**
+   * Returns the name of this variable in the specified format
+   */
+  public String name_using (OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return name();
+    if (format == OutputFormat.REPAIR) return name.repair_name(this);
+    if (format == OutputFormat.SIMPLIFY) return name.simplify_name();
+    if (format == OutputFormat.ESCJAVA) return name.esc_name();
+    if (format == OutputFormat.JAVA) return name.java_name(this);
+    if (format == OutputFormat.JML) return name.jml_name(this);
+    if (format == OutputFormat.DBCJAVA) return name.dbc_name(this);
+    if (format == OutputFormat.IOA) return name.ioa_name();
+    if (format == OutputFormat.IDENTIFIER) return name.identifier_name();
+    throw new UnsupportedOperationException
+      ("Unknown format requested: " + format);
+  }
+
+  /** Returns the name of this variable in repair format **/
+  public String repair_name() {
+    return name.repair_name (this);
+  }
+
+  /**
+   * Returns the name of this variable in repair format.  If
+   * the name is simple (eg, 'a') then needrelation is false,
+   * otherwise hte normal code is called to get the name.  I (jhp)
+   * don't really claim to understand what this is for
+   **/
+  public String simple_repair_name () {
+    if (name instanceof VarInfoName.Simple)
+      return ((Simple) name).repair_name (this, false);
+    else
+      return repair_name();
+  }
+
+  /** Returns the name of this variable in IOA format **/
+  public String ioa_name() {
+    return name.ioa_name();
+  }
+
+  /** Returns the name of this variable in ESC format **/
+  public String esc_name() {
+    return name.esc_name();
+  }
+
+  /** Returns the name of this variable in simplify format **/
+  public String simplify_name() {
+    return name.simplify_name();
+  }
+
+  /**
+   * Return the name of this variable in its prestate (orig)
+   */
+  public String prestate_name() {
+    return get_VarInfoName().applyPrestate().name();
+  }
+
+  /**
+   * Returns the name of the size variable that correponds to this
+   * array variable is ESC format.  Returns null if this variable
+   * is not an array or the size name can't be constructed for other
+   * reasons.
+   */
+  public String get_esc_size_name() {
+    if (!type.isArray())
+      return null;
+    if (!name.isApplySizeSafe())
+      return null;
+    return name.applySize().esc_name();
+  }
+
+  /**
+   * Returns the name of the size variable that correponds to this
+   * array variable is ESC format.  Returns null if this variable
+   * is not an array or the size name can't be constructed for other
+   * reasons.
+   */
+  public String get_ioa_size_name() {
+    if (!type.isArray())
+      return null;
+    if (!name.isApplySizeSafe())
+      return null;
+    return name.applySize().ioa_name();
+  }
+
+  /**
+   * Returns the name of the size variable that correponds to this
+   * array variable in simplify format.  Returns null if this variable
+   * is not an array or the size name can't be constructed for other
+   * reasons.  Note that isArray seems to distinguish between actual
+   * arrays and other sequences (such as java.util.list).  Simplify uses
+   * (it seems) the same length approach for both, so we don't check isArray()
+   */
+  public String get_simplify_size_name() {
+    // if (!type.isArray())
+    //  return null;
+    if (!name.isApplySizeSafe())
+      return null;
+    return name.applySize().simplify_name();
+  }
+
+  /**
+   * Returns whether or not this variable is the 'this' variable
+   */
+  public boolean is_this() {
+    return (get_VarInfoName().equals (VarInfoName.THIS));
+  }
+
+  /**
+   * Returns true of this variable contains a simple variable whose
+   * name is varname
+   */
+  public boolean includes_simple_name (String varname) {
+    return name.includesSimpleName (varname);
+  }
+
+  /**
+   * Quantifies over the specified array variables in ESC format.
+   * Returns a 4 element string array.  Element 0 is the
+   * quantification, Element 1 is the indexed form of variable 1,
+   * Element 2 is the indexed form of variable 3.  and Element 4 is
+   * unknown.
+   */
+  public static String[] esc_quantify(VarInfo... vars) {
+    return esc_quantify (true, vars);
+  }
+
+  /**
+   * Quantifies over the specified array variables in ESC format.
+   * Returns a 4 element string array.  Element 0 is the
+   * quantification, Element 1 is the indexed form of variable 1,
+   * Element 2 is the indexed form of variable 3.  and Element 4 is
+   * unknown.
+   */
+  public static String[] esc_quantify(boolean elementwise, VarInfo... vars) {
+    if (FileIO.new_decl_format) {
+      System.out.printf ("In esc_quantify %s%n", Arrays.toString (vars));
+      String lower_bound = "0";
+      VarInfo arr_vi = vars[0];
+      assert arr_vi.arr_dims == 1;
+      while ((arr_vi.enclosing_var != null)
+             && (arr_vi.enclosing_var.arr_dims == 1))
+        arr_vi = arr_vi.enclosing_var;
+      String upper_bound = arr_vi.name() + ".length";
+      String[] out = new String[4];
+      out[0] = String.format ("\forall int i (%s <= i && i <= %s)",
+                              lower_bound, upper_bound);
+      out[1] = vars[0].name().replace ("[]", "[i]");
+      out[2] = vars[1].name().replace ("[]", "[i]");
+      out[3] = "";
+      return (out);
+    } else {
+      VarInfoName vin[] = new VarInfoName[vars.length];
+      for (int ii = 0; ii < vars.length; ii++)
+        vin[ii] = vars[ii].name;
+      return VarInfoName.QuantHelper.format_esc (vin, elementwise);
+    }
+  }
+
+  /**
+   * Returns the IOA quantifier for the specified variable
+   */
+  public static Quantify.IOAQuantification get_ioa_quantify (VarInfo var) {
+
+    return new Quantify.IOAQuantification (var);
+  }
+
+  /**
+   * Returns the IOA quantifier for the specified variables
+   */
+  public static Quantify.IOAQuantification get_ioa_quantify (VarInfo var1,
+                                                             VarInfo var2) {
+
+    return new Quantify.IOAQuantification (var1, var2);
+  }
+
+  /**
+   * Returns a string array with 3 elements.  The first element is
+   * the sequence, the second element is the lower bound, and the third
+   * element is the upper bound.
+   */
+  public String[] simplifyNameAndBounds() {
+    return VarInfoName.QuantHelper.simplifyNameAndBounds (name);
+  }
+
+  /**
+   * Returns the upper and lower bounds of the slice in simplify format.
+   * The implementation is somewhat different that simplifyNameAndBounds
+   * (I don't know why).
+   */
+  public String[] get_simplify_slice_bounds() {
+    VarInfoName[] bounds = name.getSliceBounds();
+    if (bounds == null)
+      return null;
+    String[] str_bounds = new String[2];
+    str_bounds[0] = bounds[0].simplify_name();
+    str_bounds[1] = bounds[1].simplify_name();
+    return str_bounds;
+  }
+
+  /**
+   * Return a string in simplify format that will seclect the
+   * (index_base + index_off)-th element of the sequence specified by
+   * this variable.
+   */
+  public String get_simplify_selectNth (String simplify_index_name,
+                                        boolean free, int index_off) {
+
+    // Remove the simplify bars if present from the index name
+    if ((simplify_index_name != null) && simplify_index_name.startsWith ("|")
+        && simplify_index_name.endsWith ("|"))
+      simplify_index_name
+        = simplify_index_name.substring (1, simplify_index_name.length()-1);
+
+    VarInfoName select
+      = VarInfoName.QuantHelper.selectNth (this.name, simplify_index_name,
+                                           free, index_off);
+    return select.simplify_name();
+  }
+
+  /**
+   * Get a fresh variable name that doesn't appear in the given
+   * variable in simplify format
+   */
+  public static String get_simplify_free_index (VarInfo... vars) {
+    if (vars.length == 1)
+      return VarInfoName.QuantHelper.getFreeIndex (vars[0].name)
+        .simplify_name();
+    else if (vars.length == 2)
+      return VarInfoName.QuantHelper.getFreeIndex (vars[0].name, vars[1].name)
+        .simplify_name();
+    else if (vars.length == 3)
+      return VarInfoName.QuantHelper.getFreeIndex (vars[0].name, vars[1].name,
+                                                vars[2].name).simplify_name();
+    else
+      throw new Error ("unexpected length " + vars.length);
+  }
+
+  /**
+   * Get a 2 fresh variable names that doesn't appear in the given
+   * variable in simplify format
+   */
+  public static String[] get_simplify_free_indices (VarInfo... vars) {
+    if (vars.length == 1) {
+      VarInfoName index1_vin
+        = VarInfoName.QuantHelper.getFreeIndex (vars[0].name);
+      String index2 = VarInfoName.QuantHelper.getFreeIndex (vars[0].name,
+                                                   index1_vin).simplify_name();
+      return new String[] {index1_vin.name(), index2};
+    } else if (vars.length == 2) {
+      VarInfoName index1_vin
+        = VarInfoName.QuantHelper.getFreeIndex (vars[0].name, vars[1].name);
+      String index2 = VarInfoName.QuantHelper.getFreeIndex (vars[0].name,
+                                    vars[2].name, index1_vin).simplify_name();
+      return new String[] {index1_vin.name(), index2};
+    } else
+      throw new Error ("unexpected length " + vars.length);
+  }
+
+  public static String[] simplify_quantify (VarInfo v1) {
+    VarInfoName vin[] = new VarInfoName[] { v1.name};
+    return VarInfoName.QuantHelper.format_simplify (vin, false, false,
+                                                    false, false);
+  }
+
+  public static String[] simplify_quantify (VarInfo v1, boolean elementwise) {
+    VarInfoName vin[] = new VarInfoName[] { v1.name};
+    return VarInfoName.QuantHelper.format_simplify (vin, elementwise, false,
+                                                    false, false);
+  }
+
+  public static String[] simplify_quantify (VarInfo v1,
+                                            boolean elementwise,
+                                            boolean adjacent,
+                                            boolean distinct,
+                                            boolean includeIndex) {
+    VarInfoName vin[] = new VarInfoName[] { v1.name};
+    return VarInfoName.QuantHelper.format_simplify (vin, elementwise, adjacent,
+                                                    distinct, includeIndex);
+  }
+
+  public static String[] simplify_quantify(VarInfo v1, VarInfo v2) {
+
+    return simplify_quantify (v1, v2, false, false, false, false);
+  }
+
+  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
+                                             boolean eltwise) {
+    return simplify_quantify (v1, v2, eltwise, false, false, false);
+  }
+
+  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
+                                           boolean eltwise,
+                                           boolean adjacent) {
+    return simplify_quantify (v1, v2, eltwise, adjacent, false, false);
+  }
+
+  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
+                                            boolean eltwise,
+                                            boolean adjacent,
+                                            boolean distinct) {
+    return simplify_quantify (v1, v2, eltwise, adjacent, distinct, false);
+  }
+
+  /**
+   * Quantifies over the specified array variables in Simplify format.
+   * Returns a 4 element string array.  Element 0 is the
+   * quantification, Element 1 is the indexed form of variable 1,
+   * Element 2 is the indexed form of variable 3.  and Element 4 is
+   * the closer (whatever that is).
+   *
+   * If elementwise is true, include the additional contraint that
+   * the indices (there must be exactly two in this case) refer to
+   * corresponding positions. If adjacent is true, include the
+   * additional constraint that the second index be one more than
+   * the first. If distinct is true, include the constraint that the
+   * two indices are different. If includeIndex is true, return
+   * additional strings, after the roots but before the closer, with
+   * the names of the index variables.
+   */
+  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
+                                            boolean elementwise,
+                                            boolean adjacent,
+                                            boolean distinct,
+                                            boolean includeIndex) {
+    VarInfoName vin[] = new VarInfoName[] { v1.name, v2.name};
+    return VarInfoName.QuantHelper.format_simplify (vin, elementwise,
+                                                    adjacent, distinct,
+                                                    includeIndex);
+  }
+
+  /**
+   * Returns a rough indication of the complexity of the variable.  Higher
+   * numbers indicate more complexity.
+   */
+  public int complexity() {
+    return name.inOrderTraversal().size();
+  }
+
+  /**
+   * Returns true if this variable can be assigned to.  Currently this is
+   * presumed true of all variable except the special variable for the type
+   * of a variable and the size of a sequence.  It should include pure
+   * functions as well
+   */
+  public boolean is_assignable_var() {
+    return !((name instanceof VarInfoName.TypeOf)
+             || (name instanceof VarInfoName.SizeOf));
+  }
+
+  /**
+   * Returns whether or not this variable represents the type of a variable
+   * (eg, a.getClass()).  Note that this will miss prestate variables such
+   * as 'orig(a.getClass())'.
+   */
+  public boolean is_typeof() {
+    return (name instanceof VarInfoName.TypeOf);
+    // return name.hasTypeOf();
+  }
+
+  /**
+   * Returns whether or not this variable represents the type of a variable
+   * (eg, a.getClass()).  This version finds prestate variable such as
+   * 'org(a.getClass())'.
+   */
+  public boolean has_typeof() {
+    return name.hasTypeOf();
+  }
+
+  /**
+   * Returns whether or not this name refers to the 'this' variable
+   * of a class.  True for both normal and prestate versions of the
+   * variable
+   */
+  public boolean isThis() {
+    return name.isThis();
+  }
+
+  /** Returns whether this is a size of an array or a prestate thereof **/
+  public boolean is_size() {
+    return (derived instanceof SequenceLength);
+  }
+
+  /** Returns wehther or not this variable is a field **/
+  public boolean is_field() {
+    return (name instanceof VarInfoName.Field);
+  }
+
+  /** Returns whether or not this variable has an integer offset (eg, a+2) **/
+  public boolean is_add() {
+    return (name instanceof VarInfoName.Add);
+  }
+
+  /**
+   * Returns the integer offset if this variable is an addition such
+   * as a+2.  Throws an exception of this variable is not an addition.
+   * see #is_add()
+   */
+  public int get_add_amount() {
+    return ((VarInfoName.Add)name).amount;
+  }
+
+  /**
+   * Returns whether or not this variable is an actual array as opposed
+   * to an array that is created over fields/methods of an array.  For
+   * example, 'a[]' is a direct array, but 'a[].b' is not.
+   */
+  public boolean is_direct_array() {
+    // Must be an array to be a direct array
+    if (!rep_type.isArray())
+      return false;
+
+    // If $Field or $Type appears before $Elements, false.
+    for (VarInfoName node : (new VarInfoName.InorderFlattener(name)).nodes()) {
+      if (node instanceof VarInfoName.Field) {
+        return false;
+      }
+      if (node instanceof VarInfoName.TypeOf) {
+        return false;
+      }
+      if (node instanceof VarInfoName.Elements) {
+        break;
+      }
+    }
+
+    return (true);
+  }
+
+  /**
+   * Returns whether or not this variable is an actual array as opposed
+   * to an array that is created over fields/methods of an array or a
+   * slice.  For example, 'a[]' is a direct array, but 'a[].b' and 'a[i..]'
+   * are not.
+   */
+  public boolean is_direct_non_slice_array() {
+    return (name instanceof VarInfoName.Elements);
+  }
+
+  /**
+   * Returns whether or not two variables have the same enclosing variable.
+   * If either variable is not a field, returns false
+   */
+  public boolean has_same_parent (VarInfo other) {
+    if (!is_field() || !other.is_field())
+      return (false);
+
+    VarInfoName.Field name1 = (VarInfoName.Field) name;
+    VarInfoName.Field name2 = (VarInfoName.Field) other.name;
+
+    return (name1.term.equals(name2.term));
+  }
+
+  /**
+   * Returns the variable that encloses this one.  For example if
+   * this variable is 'x.a.b', the enclosing variable is 'x.a'.
+   */
+  public VarInfo get_enclosing_var() {
+    List<VarInfoName> traversal
+      = new VarInfoName.InorderFlattener(name).nodes();
+    if (traversal.size() <= 1) {
+      // System.out.printf ("size <= 1, traversal = %s%n", traversal);
+      return (null);
+    } else {
+      VarInfo enclosing_var = ppt.find_var_by_name(traversal.get(1).name());
+      // if (enclosing_var == null)
+      //  System.out.printf ("Can't find '%s' in %s%n",
+      //                      traversal.get(1).name(), ppt.varNames());
+      return (enclosing_var);
+    }
+  }
+    // VarInfoName base = name.getBase();
+    // if (base == null)
+    // return (null);
+    // return ppt.find_var_by_name (base.name());
+
+  /**
+   * Replaces all instances of 'this' in the variable with the
+   * name of arg.  Used to match up enter/exit variables with object variables
+   **/
+  public String replace_this (VarInfo arg) {
+    VarInfoName parent_name = name.replaceAll (VarInfoName.THIS, arg.name);
+    return parent_name.name();
+  }
+
+  /**
+   * Creates a VarInfo that is a subsequence that begins at begin and
+   * ends at end with the specified shifts.  The begin or the end can be
+   * null.  Shifts are only allowed with non-null variables
+   */
+  public static VarInfo make_subsequence (VarInfo seq, VarInfo begin,
+                                int begin_shift, VarInfo end, int end_shift) {
+
+    VarInfoName begin_name = (begin != null) ? begin.name : null;
+    String parent_format = "%s..";
+    if (begin_shift == -1) {
+      begin_name = begin_name.applyDecrement();
+      parent_format = "%s-1..";
+    } else if (begin_shift == 1) {
+      begin_name = begin_name.applyIncrement();
+      parent_format = "%s+1..";
+    } else {
+      assert begin_shift == 0;
+    }
+
+    VarInfoName end_name = (end != null) ? end.name : null;
+    if (end_shift == -1) {
+      end_name = end_name.applyDecrement();
+      parent_format += "%s-1";
+    } else if (end_shift == 1) {
+      end_name = end_name.applyIncrement();
+      parent_format += "%s+1";
+    } else {
+      assert end_shift == 0;
+      parent_format += "%s";
+    }
+
+    VarInfoName new_name = seq.name.applySlice (begin_name, end_name);
+
+    VarInfo vi = new VarInfo (new_name, seq.type, seq.file_rep_type,
+                              seq.comparability, seq.aux);
+    vi.setup_derived_base (seq, begin, end);
+    if (vi.parent_ppt != null) {
+      if ((seq.parent_ppt == null)
+          && ((begin == null) || (begin.parent_ppt == null))
+          && ((end == null) || (end.parent_ppt == null)))
+        vi.parent_variable = null;
+      else
+        vi.parent_variable = apply_subscript (seq.parent_var_name(),
+            String.format (parent_format,
+                           ((begin == null) ? "0" : begin.parent_var_name()),
+                           ((end == null) ? "" : end.parent_var_name())));
+    }
+    return (vi);
+  }
+
+  /**
+   * Creates a VarInfo that is an index into a sequence.  The type,
+   * file_rep_type, etc are taken from the element type of the sequence.
+   */
+  public static VarInfo make_subscript (VarInfo seq, VarInfo index,
+                                        int index_shift) {
+
+    VarInfoName index_name = null;
+    if (index == null)
+      index_name = VarInfoName.parse (String.valueOf (index_shift));
+    else {
+      index_name = index.name;
+      if (index_shift == -1)
+        index_name = index_name.applyDecrement();
+      else
+        assert index_shift == 0 : "bad shift " + index_shift + " for " + index;
+    }
+
+    VarInfoName new_name = seq.name.applySubscript (index_name);
+    VarInfo vi = new VarInfo (new_name, seq.type.elementType(),
+                              seq.file_rep_type.elementType(),
+                              seq.comparability.elementType(),
+                              VarInfoAux.getDefault());
+    vi.setup_derived_base (seq, index);
+    vi.var_kind = VarInfo.VarKind.FIELD;
+    if (vi.parent_ppt != null) {
+      if ((seq.parent_variable == null) &&
+          ((index == null) || (index.parent_variable == null)))
+        vi.parent_variable = null;
+      else {  // one of the two bases has a different parent variable name
+        String subscript_parent = String.valueOf (index_shift);
+        if (index != null) {
+          subscript_parent = index.parent_var_name();
+          if (index_shift == -1)
+            subscript_parent = subscript_parent + "-1";
+        }
+        vi.parent_variable = apply_subscript (seq.parent_var_name(),
+                                              subscript_parent);
+      }
+    }
+    return (vi);
+  }
+
+
+  /**
+   * Create a VarInfo that is a function over one or more other variables.
+   * the type, rep_type, etc of the new function are taken from the first
+   * variable.
+   */
+  public static VarInfo make_function (String function_name, VarInfo... vars) {
+
+    VarInfoName[] vin = new VarInfoName[vars.length];
+    for (int ii = 0; ii < vars.length; ii++)
+      vin[ii] = vars[ii].name;
+
+    VarInfo vi = new VarInfo(VarInfoName.applyFunctionOfN(function_name, vin),
+                             vars[0].type, vars[0].file_rep_type,
+                             vars[0].comparability, vars[0].aux);
+    vi.setup_derived_function (function_name, vars);
+    return (vi);
+  }
+
+  /**
+   * Creates the derived variable func(seq) from seq.
+   *
+   * @param func_name Name of the function
+   * @param type Return type of the function.  If null, the return type is
+   *             the element type of the sequence
+   * @param seq Sequence variable
+   * @param shift value to add or subtract from the function.  Legal values
+   *              are -1, 0, and 1.
+   */
+  public static VarInfo make_scalar_seq_func (String func_name,
+                              ProglangType type, VarInfo seq, int shift) {
+
+    VarInfoName viname = seq.name.applyFunction (func_name);
+    if (func_name.equals ("size"))
+      viname = seq.name.applySize();
+    String shift_name = "";
+    if (shift == -1) {
+      viname = viname.applyDecrement();
+      shift_name = "_minus1";
+    } else if (shift == 1) {
+      viname = viname.applyIncrement();
+      shift_name = "_plus1";
+    } else
+      assert shift == 0;
+
+    ProglangType ptype = type;
+    ProglangType frtype = type;
+    VarComparability comp = seq.comparability.indexType(0);
+    VarInfoAux aux = VarInfoAux.getDefault();
+    if (type == null) {
+      ptype = seq.type.elementType();
+      frtype = seq.file_rep_type.elementType();
+      comp = seq.comparability.elementType();
+      aux = seq.aux;
+    }
+    VarInfo vi = new VarInfo(viname, ptype, frtype, comp, aux);
+    vi.setup_derived_base (seq);
+    vi.var_kind = VarInfo.VarKind.FUNCTION;
+    vi.enclosing_var = seq;
+    vi.arr_dims = 0;
+    vi.function_args = null;
+    vi.relative_name = "size" + shift_name;
+    if (vi.parent_ppt != null) {
+      if (seq.parent_variable == null)
+        vi.parent_variable = null;
+      else {
+        vi.parent_variable = String.format ("%s(%s)%s", func_name,
+                            seq.parent_variable, ((shift == -1) ? "-1" : ""));
+      }
+    }
+    return (vi);
+  }
+
+
+
 }
