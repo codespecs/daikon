@@ -77,8 +77,8 @@ public final class SEQUENCESCALARSUBSCRIPT
       shift = "" + index_shift;
     else if (index_shift > 0)
       shift = "+" + index_shift;
-    return (UtilMDE.replaceString (seqvar().name.name(), "[]", "")
-             + "[" + sclvar().name.name() + shift + "]");
+    return (UtilMDE.replaceString (seqvar().name(), "[]", "")
+             + "[" + sclvar().name() + shift + "]");
   }
 
   public ValueAndModified computeValueAndModifiedImpl (ValueTuple full_vt) {
@@ -95,8 +95,8 @@ public final class SEQUENCESCALARSUBSCRIPT
     int val2 = base2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length)) {
       //if (!missing_array_bounds)
-        // System.out.println ("out of bounds" + base1.name.name() + " "
-        //                    + base2.name.name() + " @" + base1.ppt.name());
+        // System.out.println ("out of bounds" + base1.name() + " "
+        //                    + base2.name() + " @" + base1.ppt.name());
       missing_array_bounds = true;
       return ValueAndModified.MISSING_NONSENSICAL;
     }
@@ -109,44 +109,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   }
 
   protected VarInfo makeVarInfo() {
-    VarInfo seqvar = seqvar();
-
-    VarInfoName index = sclvar().name;
-    switch (index_shift) {
-    case 0:
-      break;
-    case -1:
-      index = index.applyDecrement();
-      break;
-    default:
-      throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
-    }
-
-    VarInfoName viname = seqvar.name.applySubscript(index);
-    ProglangType type = seqvar.type.elementType();
-    ProglangType file_rep_type = seqvar.file_rep_type.elementType();
-    VarComparability compar = base1.comparability.elementType();
-    VarInfo vi = new VarInfo(viname, type, file_rep_type, compar,
-                             VarInfoAux.getDefault());
-
-    vi.setup_derived_base (seqvar(), sclvar());
-    vi.var_kind = VarInfo.VarKind.FIELD;
-    if (vi.parent_ppt != null) {
-      if ((base1.parent_variable == null) && (base2.parent_variable == null))
-        vi.parent_variable = null;
-      else {  // one of the two bases has a different parent variable name
-        String scl_name = sclvar().parent_var_name();
-        if (index_shift == 0)
-          vi.parent_variable
-            = seqvar().apply_subscript (sclvar().parent_var_name());
-        else // index_shift == -1
-          vi.parent_variable
-            = seqvar().apply_subscript (sclvar().parent_var_name() + "-1");
-        System.out.printf ("parent var for %s is %s%n", vi.name(),
-                           vi.parent_variable);
-      }
-    }
-    return (vi);
+    return VarInfo.make_subscript (seqvar(), sclvar(), index_shift);
   }
 
   public  boolean isSameFormula(Derivation other) {
