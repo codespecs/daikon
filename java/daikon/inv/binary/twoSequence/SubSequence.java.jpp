@@ -84,8 +84,6 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.suppress.*;
-import daikon.VarInfoName.QuantHelper;
-import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -153,16 +151,16 @@ public class CLASSNAME
   }
 
   public String format_daikon() {
-    String v1 = SUB_VAR().name.name();
-    String v2 = SUPER_VAR().name.name();
+    String v1 = SUB_VAR().name();
+    String v2 = SUPER_VAR().name();
     return v1 + " is a subsequence of " + v2;
   }
 
   /* IOA */
   public String format_ioa() {
     String result;
-    result = SUB_VAR().name.ioa_name() + " \\subseteq "
-           + SUPER_VAR().name.ioa_name();
+    result = SUB_VAR().ioa_name() + " \\subseteq "
+           + SUPER_VAR().ioa_name();
 
     if (var1().isIOAArray() || var2().isIOAArray()) {
       result += " *** (Invalid syntax for arrays)";
@@ -179,10 +177,8 @@ public class CLASSNAME
   }
 
   private String format_simplify_defined() {
-    String[] sub_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(SUB_VAR().name);
-    String[] super_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(SUPER_VAR().name);
+    String[] sub_name = SUB_VAR().simplifyNameAndBounds();
+    String[] super_name = SUPER_VAR().simplifyNameAndBounds();
 
     if (sub_name == null || super_name == null) {
       return "format_simplify can't handle one of these sequences: "
@@ -197,7 +193,11 @@ public class CLASSNAME
   // This is apparently broken somehow, though from the logs it's not
   // clear how. -- smcc
   private String format_simplify_explicit() {
-    if (1==1) return "format_simplify disabled";
+    return "format_simplify disabled";
+
+    /* Since this doesn't work (since at least april 2003)
+       and it uses quant in complex ways,
+       its just commented out (jhp 8/3/2006)
 
     // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))
 
@@ -263,60 +263,9 @@ public class CLASSNAME
 
     String result = "(IMPLIES " + sensible + " (AND " + length_stmt + " " + subseq_stmt + "))";
     return result;
+    */
   }
 
-//   public String format_jml() {
-//     // This appears to be right, but returns the wrong results... swapping these vars
-//     // VarInfo subvar = (var1_in_var2 ? var1() : var2());
-//     // VarInfo supervar = (var2_in_var1 ? var1() : var2());
-
-//     VarInfo supervar = (var1_in_var2 ? var1() : var2());
-//     VarInfo subvar = (var2_in_var1 ? var1() : var2());
-
-//     // System.out.println("subvar: "+subvar.name.name());
-//     // System.out.println("supervar: "+supervar.name.name());
-
-//     // Bound the following quantification
-//     QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
-//     VarInfoName superIndexName = superQuantifyReturn.bound_vars.get(0)[0];
-//     String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
-
-//     QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
-//     VarInfoName subIndexGroup[] = subQuantifyReturn.bound_vars.get(0);
-
-//     VarInfoName subIndexName = subIndexGroup[0];
-
-//     // If indicies have same name modify the quantify return before forming string
-//     if (superIndexName.equals(subIndexName)) {
-//       subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
-//     }
-
-//     String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
-
-//     VarInfoName superName = supervar.name;
-//     String superTermName = "";
-//     String postTag = "";
-
-//     if (superName instanceof VarInfoName.Prestate) {
-//       superName = ((VarInfoName.Prestate)superName).term;
-//       superTermName += "\\old(";
-//       postTag += ")";
-//     } else if (superName instanceof VarInfoName.Poststate) {
-//       return "inexpressible, daikon rep = " + format_daikon();
-//     }
-
-//     if (superName instanceof VarInfoName.Elements) {
-//       VarInfoName.Elements el = (VarInfoName.Elements)superName;
-//       superTermName += el.term.jml_name();
-//     } else if (superName instanceof VarInfoName.Slice) {
-//       VarInfoName.Slice sl = (VarInfoName.Slice)superName;
-//       superTermName += sl.sequence.term.jml_name();
-//     }
-
-//     return superQuantifyResults[0] + subQuantifyResults[0] + superTermName + "[" +
-//       superIndexName.jml_name() + "+" + subIndexName.jml_name() + "]" + postTag +
-//       " == " + subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
-//   }
 
   public InvariantStatus check_modified (PRIMITIVE[] a1, PRIMITIVE[] a2,
                                         int count) {
@@ -368,12 +317,12 @@ public class CLASSNAME
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("isObviousSubSequence " +
-                  subvar.name.name() + "in " + supervar.name.name());
+                  subvar.name() + "in " + supervar.name());
     }
 
     // Standard discard reason/string
     DiscardCode discardCode = DiscardCode.obvious;
-    String discardString = subvar.name.name()+" obvious subset/subsequence of "+supervar.name.name();
+    String discardString = subvar.name()+" obvious subset/subsequence of "+supervar.name();
 
     // For unions and intersections, it probably doesn't make sense to
     // do subsequence or subset detection.  This is mainly to prevent
@@ -398,7 +347,7 @@ public class CLASSNAME
       SEQUENCESPREDICATE derived = (SEQUENCESPREDICATE) subvar.derived;
       if (derived.var1().equals(supervar)) {
         discardCode = DiscardCode.obvious;
-        discardString = subvar.name.name()+" is derived from "+supervar.name.name();
+        discardString = subvar.name()+" is derived from "+supervar.name();
         debug.fine ("  returning true because of predicate slicing");
         return new Object[] {discardCode, discardString + " [pred slicing]"};
       }
@@ -412,10 +361,10 @@ public class CLASSNAME
     }
 
     if (subvar_super == supervar) {
-      // System.out.println("SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") = true");
+      // System.out.println("SubSequence.isObviousDerived(" + subvar.name() + ", " + supervar.name + ") = true");
       // System.out.println("  details: subvar_super=" + subvar_super.name + "; supervar_super=" + supervar.isDerivedSubSequenceOf() == null ? "null" : supervar.isDerivedSubSequenceOf().name);
       discardCode = DiscardCode.obvious;
-      discardString = subvar.name.name()+"=="+supervar.name.name();
+      discardString = subvar.name()+"=="+supervar.name();
       debug.fine ("  returning true because subvar_super == supervar");
       return new Object[] {discardCode, discardString
                             + " [subvar_super == supervar]"};
@@ -489,7 +438,7 @@ public class CLASSNAME
         }
         if (left_included && right_included) {
           discardCode = DiscardCode.obvious;
-          discardString = subvar.name.name()+" obvious subset/subsequence of "+supervar.name.name();
+          discardString = subvar.name()+" obvious subset/subsequence of "+supervar.name();
           return new Object[] {discardCode, discardString + " [obvious]"};
         }
       } else if ((subvar.derived instanceof SEQUENCESTRINGSUBSEQUENCE)
@@ -515,9 +464,9 @@ public class CLASSNAME
           }
         }
       } else {
-        Assert.assertTrue(false, "how can this happen? " + subvar.name +
+        Assert.assertTrue(false, "how can this happen? " + subvar.name() +
                           " " + subvar.derived.getClass() + " " +
-                          supervar.name + " " + supervar.derived.getClass());
+                          supervar.name() + " " + supervar.derived.getClass());
       }
     }
 
@@ -575,7 +524,7 @@ public class CLASSNAME
 
     // System.out.println("checking isObviousImplied for: " + format());
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("isObviousDynamically: checking " + vis[0].name.name() + " in " + vis[1].name.name());
+      debug.fine ("isObviousDynamically: checking " + vis[0].name() + " in " + vis[1].name());
     }
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -600,9 +549,9 @@ public class CLASSNAME
     }
 
     if (isObviousSubSequenceDynamically (this, subvar, supervar)) {
-      return new DiscardInfo(this, DiscardCode.obvious, subvar.name.name()
+      return new DiscardInfo(this, DiscardCode.obvious, subvar.name()
                              + " is an obvious subsequence of "
-                             + supervar.name.name());
+                             + supervar.name());
     }
     return null;
   }
@@ -628,7 +577,7 @@ public class CLASSNAME
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Checking isObviousSubSequenceDynamically " +
-                   subvar.name.name() + " in " + supervar.name.name());
+                   subvar.name() + " in " + supervar.name());
     }
 
     Object[] di = isObviousSubSequence (subvar, supervar);
@@ -759,8 +708,8 @@ public class CLASSNAME
             = VarInfo.compare_vars(super_right_var, super_right_shift,
                                    sub_right_var, sub_right_shift,
                                    false /* >= */);
-//         System.out.println("Is " + subvar.name.name() + " contained in "
-//                            + supervar.name.name()
+//         System.out.println("Is " + subvar.name() + " contained in "
+//                            + supervar.name()
 //                            + "? left: " + left_included + ", right: "
 //                            + right_included);
         if (left_included && right_included) {
@@ -784,7 +733,9 @@ public class CLASSNAME
             return true;
           }
       } else {
-        Assert.assertTrue(false, "how can this happen? " + subvar.name + " " + subvar.derived.getClass() + " " + supervar.name + " " + supervar.derived.getClass());
+        Assert.assertTrue(false, "how can this happen? " + subvar.name()
+                        + " " + subvar.derived.getClass() + " "
+                        + supervar.name() + " " + supervar.derived.getClass());
       }
 
     }
@@ -798,7 +749,7 @@ public class CLASSNAME
     // For each variable derived from supervar ("B")
     for (int i=0; i<derivees.size(); i++) {
       Derivation der = derivees.get(i);
-      // System.out.println("  ... der = " + der.getVarInfo().name.name() + " " + der);
+      // System.out.println("  ... der = " + der.getVarInfo().name() + " " + der);
       if (der instanceof SEQUENCESCALARSUBSEQUENCE) {
         // If that variable is "B[0..n]"
         VarInfo supervar_part = der.getVarInfo();
@@ -812,9 +763,9 @@ public class CLASSNAME
         if (supervar_part.isCanonical()) {
           if (subvar == supervar_part) {
             System.err.println ("Error: variables " +
-                                subvar.name.name() +
+                                subvar.name() +
                                 " and " +
-                                supervar_part.name.name() +
+                                supervar_part.name() +
                                 " are identical.  Canonical");
             System.err.println (subvar.isCanonical());
             System.err.println (supervar_part.isCanonical());
@@ -825,7 +776,7 @@ public class CLASSNAME
           if (ppt_parent.is_subsequence (subvar, supervar_part)) {
             if (Debug.logOn())
               inv.log ("ObvSubSeq- true from A subseq B[0..n] "
-                       + subvar.name.name() + "/"+ supervar_part.name.name());
+                       + subvar.name() + "/"+ supervar_part.name());
             return (true);
           }
         }
