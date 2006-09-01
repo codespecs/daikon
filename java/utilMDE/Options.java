@@ -417,6 +417,8 @@ public class Options {
             throw new ArgException ("option %s requires an argument", arg);
           arg_value = args[ii];
         }
+        // System.out.printf ("arg_name = '%s', arg_value='%s'%n", arg_name,
+        //                    arg_value);
         set_arg (oi, arg_name, arg_value);
       } else if (arg.startsWith ("-") && !ignore_options) {
         int eq_pos = arg.indexOf ('=');
@@ -509,9 +511,9 @@ public class Options {
     options_str += arg_name;
     if (arg_value != null) {
       if (arg_value.contains (" "))
-        options_str += " '" + arg_value + "'";
+        options_str += "='" + arg_value + "'";
       else
-        options_str += " " + arg_value;
+        options_str += "=" + arg_value;
     }
     // Argument values are required for everything but booleans
     if ((arg_value == null) && (type != Boolean.TYPE)
@@ -535,6 +537,7 @@ public class Options {
                                         arg_value);
             }
             arg_value = (val) ? "true" : "false";
+            // System.out.printf ("Setting %s to %s%n", arg_name, val);
             f.setBoolean (oi.obj, val);
         } else if (type == Integer.TYPE) {
           int val = 0;
