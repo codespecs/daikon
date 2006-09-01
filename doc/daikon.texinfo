@@ -3263,6 +3263,16 @@ Print a help message.
 @item --debug
 Produce debugging information.
 
+@item --default_bcel
+Chicory uses the Byte Code Engineering Library (BCEL) to instrument
+classfiles.  Errors can occur if the application uses an incompatible
+version of BCEL.  By defeault, Chicory identifies and loads its 
+copy of BCEL when multiple copies of BCEL are in the classpath.  It will
+also issue a warning if multiple copies of BCEL are in the classpath and
+the application version is not the first one.  When this option is
+chosen, Chicory will simply use whatever version of BCEL is found on
+the classpath.
+
 @item --sample-start=@var{sample-cnt}
 When this option is chosen, Chicory will record each program point until
 that program point has been executed @var{sample-cnt} times.  Chicory will
