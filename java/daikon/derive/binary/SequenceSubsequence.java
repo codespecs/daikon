@@ -51,46 +51,12 @@ public abstract class SequenceSubsequence
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
 
-    VarInfoName viname;
-    String parent_format = null;
-    if (from_start) {
-      if (index_shift == 0) {
-        // q[0..c]
-        viname = seqvar.name.applySlice(null, sclvar.name);
-        parent_format = "0..%s";
-      } else if (index_shift == -1) {
-        // q[0..c-1]
-        viname = seqvar.name.applySlice(null, sclvar.name.applyDecrement());
-        parent_format = "0..%s-1";
-      } else {
-        throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
-      }
-    } else {
-      if (index_shift == 0) {
-        // q[c..]
-        viname = seqvar.name.applySlice(sclvar.name, null);
-        parent_format = "%s..";
-      } else if (index_shift == 1) {
-        // q[c+1..]
-        viname = seqvar.name.applySlice(sclvar.name.applyIncrement(), null);
-        parent_format = "%s+1..";
-      } else {
-        throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
-      }
-    }
+    VarInfo vi = null;
+    if (from_start)
+      vi = VarInfo.make_subsequence (seqvar, null, 0, sclvar, index_shift);
+    else
+      vi = VarInfo.make_subsequence (seqvar, sclvar, index_shift, null, 0);
 
-    VarInfo vi = new VarInfo(viname, seqvar.type, seqvar.file_rep_type,
-                             seqvar.comparability, seqvar.aux);
-
-    vi.setup_derived_base (seqvar, sclvar);
-    if (vi.parent_ppt != null) {
-      if ((base1.parent_variable == null) && (base2.parent_variable == null))
-        vi.parent_variable = null;
-      else {  // one of the two bases has a different parent variable name
-        vi.parent_variable = seqvar.apply_subscript
-          (String.format (parent_format, sclvar.parent_var_name()));
-      }
-    }
     return (vi);
 
   }
