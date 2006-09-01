@@ -106,7 +106,7 @@ public final class VarComparabilityImplicit
     }
   }
 
-  public VarComparability makeAlias(VarInfoName viname) {
+  public VarComparability makeAlias() {
     return this;
   }
 
@@ -134,8 +134,8 @@ public final class VarComparabilityImplicit
       return unknown;
   }
 
-  static boolean comparable(VarInfoName viname1, VarComparabilityImplicit type1,
-                            VarInfoName viname2, VarComparabilityImplicit type2) {
+  static boolean comparable (VarComparabilityImplicit type1,
+                            VarComparabilityImplicit type2) {
     if (type1.alwaysComparable())
       return true;
     if (type2.alwaysComparable())

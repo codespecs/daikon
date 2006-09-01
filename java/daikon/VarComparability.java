@@ -70,9 +70,9 @@ public abstract class VarComparability {
   }
 
   public static VarComparability makeAlias(VarInfo vi) {
-    return vi.comparability.makeAlias(vi.name);
+    return vi.comparability.makeAlias();
   }
-  public abstract VarComparability makeAlias(VarInfoName viname);
+  public abstract VarComparability makeAlias();
 
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);
@@ -84,32 +84,25 @@ public abstract class VarComparability {
 
   /** Returns whether two variables are comparable. **/
   public static boolean comparable(VarInfo v1, VarInfo v2) {
-    return comparable(v1.name, v1.comparability, v2.name, v2.comparability);
+    return comparable(v1.comparability, v2.comparability);
   }
 
   /** Returns whether two comparabilities are comparable. **/
-  public static boolean comparable(VarComparability type1, VarComparability type2) {
-    return comparable(null, type1, null, type2);
-  }
-
-  /** Returns whether two variables are comparable. **/
-  public static boolean comparable(VarInfoName viname1, VarComparability type1,
-                                   VarInfoName viname2, VarComparability type2) {
+  public static boolean comparable (VarComparability type1,
+                                    VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
-      throw new Error("Trying to compare VarComparabilities " +
-                      "of different types: " + Global.lineSep
-                      + "    " + viname1 + " " + type1 + Global.lineSep
-                      + "    " + viname2 + " " + type2);
+      throw new Error(String.format ("Trying to compare VarComparabilities " +
+                      "of different types: %s (%s) and %s (%s)", type1,
+                      type1.getClass(), type2, type2.getClass()));
 
     if (type1 instanceof VarComparabilityNone || type1 == null || type2 == null) {
-      return VarComparabilityNone.comparable
-        (viname1, (VarComparabilityNone)type1,
-         viname2, (VarComparabilityNone)type2);
+      return VarComparabilityNone.comparable ((VarComparabilityNone)type1,
+                                              (VarComparabilityNone)type2);
     } else if (type1 instanceof VarComparabilityImplicit) {
         return VarComparabilityImplicit.comparable
-          (viname1, (VarComparabilityImplicit)type1,
-           viname2, (VarComparabilityImplicit)type2);
+          ((VarComparabilityImplicit)type1,
+           (VarComparabilityImplicit)type2);
     } else {
       throw new Error("Unrecognized subtype of VarComparability: " + type1);
     }

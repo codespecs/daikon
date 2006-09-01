@@ -1140,15 +1140,12 @@ public final class CLASSNAME
   }
 
   // In this class for convenience (avoid prefixing "LinearBinaryCore").
-  static String formatTerm(OutputFormat format, double coeff, VarInfoName var, VarInfo vi, boolean first) {
-    return LinearBinaryCore.formatTerm(format, coeff, var, vi, first);
-
+  static String formatTerm(double coeff, String varname, boolean first) {
+    return LinearBinaryCore.formatTerm (coeff, varname, first);
   }
 
   public String format_using(OutputFormat format,
-                             VarInfoName x, VarInfo xvi,
-                             VarInfoName y, VarInfo yvi,
-                             VarInfoName z, VarInfo zvi,
+                             String vix, String viy, String viz,
                              double a, double b, double c, double d) {
 
     if ((a == 0) && (b == 0) && (c == 0) && (d == 0)) {
@@ -1156,11 +1153,11 @@ public final class CLASSNAME
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return format_simplify(x, y, z, a, b, c, d);
+      return format_simplify(vix, viy, viz, a, b, c, d);
     }
 
     if (format == OutputFormat.REPAIR) {
-      return format_repair(x, xvi, y, yvi, z, zvi, a, b, c, d);
+      return format_repair(vix, viy, viz, a, b, c, d);
     }
 
     if ((format.isJavaFamily()))
@@ -1171,16 +1168,16 @@ public final class CLASSNAME
           // doesn't treat 0 as 'fuzzy' when compared against another
           // number.
           "daikon.Quant.fuzzy.eq("
-          + formatTerm(format, a, x, xvi, true)
-          + formatTerm(format, b, y, yvi, (a == 0))
-          + formatTerm(format, c, z, zvi, (a == 0) && (b == 0))
-          + formatTerm(format, d, null, null, (a == 0) && (b == 0) && (c == 0))
+          + formatTerm(a, vix, true)
+          + formatTerm(b, viy, (a == 0))
+          + formatTerm(c, viz, (a == 0) && (b == 0))
+          + formatTerm(d, null, (a == 0) && (b == 0) && (c == 0))
           + " + 1, 1)";
       #else
-        return formatTerm(format, a, x, xvi, true)
-          + formatTerm(format, b, y, yvi, (a == 0))
-          + formatTerm(format, c, z, zvi, (a == 0) && (b == 0))
-          + formatTerm(format, d, null, null, (a == 0) && (b == 0) && (c == 0))
+        return formatTerm(a, vix, true)
+          + formatTerm(b, viy, (a == 0))
+          + formatTerm(c, viz, (a == 0) && (b == 0))
+          + formatTerm(d, null, (a == 0) && (b == 0) && (c == 0))
           + " == 0";
       #endif
       }
@@ -1192,17 +1189,17 @@ public final class CLASSNAME
       {
         String eq = " == ";
         if (format == OutputFormat.IOA) eq = " = ";
-        return formatTerm(format, a, x, xvi, true)
-          + formatTerm(format, b, y, yvi, (a == 0))
-          + formatTerm(format, c, z, zvi, (a == 0) && (b == 0))
-          + formatTerm(format, d, null, null, (a == 0) && (b == 0) && (c == 0))
+        return formatTerm(a, vix, true)
+          + formatTerm(b, viy, (a == 0))
+          + formatTerm(c, viz, (a == 0) && (b == 0))
+          + formatTerm(d, null, (a == 0) && (b == 0) && (c == 0))
           + eq + "0";
       }
 
     return null;
   }
 
-  public static String format_simplify(VarInfoName x, VarInfoName y, VarInfoName z,
+  public static String format_simplify (String vix, String viy, String viz,
                                        double da, double db, double dc, double dd) {
     int ia = (int) da;
     int ib = (int) db;
@@ -1233,9 +1230,9 @@ public final class CLASSNAME
     }
 
 
-    String str_z = z.simplify_name();
-    String str_x = x.simplify_name();
-    String str_y = y.simplify_name();
+    String str_z = viz;
+    String str_x = vix;
+    String str_y = viy;
     String str_ax = (da == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
     String str_by = (db == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
     String str_cz = (dc == 1.0) ? str_z : "(* " + str_c + " " + str_z + ")";
@@ -1245,17 +1242,16 @@ public final class CLASSNAME
     return "(EQ 0 " + str_axPbyPczPd + ")";
   }
 
-  public static String format_repair(VarInfoName x, VarInfo xvi, VarInfoName y,
-                                     VarInfo yvi, VarInfoName z, VarInfo zvi,
-                                     double da, double db, double dc, double dd) {
+  public static String format_repair (String vix, String viy, String viz,
+                                  double da, double db, double dc, double dd) {
     int ia = (int) da;
     int ib = (int) db;
     int ic = (int) dc;
     int id = (int) dd;
 
-    String str_x = x.repair_name(xvi);
-    String str_y = y.repair_name(yvi);
-    String str_z = z.repair_name(zvi);
+    String str_x = vix;
+    String str_y = viy;
+    String str_z = viz;
 
     String str_a, str_b, str_c, str_d;
     if (ia != da || ib != db || ic != dc || id != dd) {
@@ -1283,10 +1279,9 @@ public final class CLASSNAME
   }
 
   public String format_using(OutputFormat format,
-                             VarInfoName x, VarInfo xvi,
-                             VarInfoName y, VarInfo yvi,
-                             VarInfoName z, VarInfo zvi) {
-    String result = format_using(format, x, xvi, y, yvi, z, zvi, a, b, c, d);
+                             String vix, String viy, String viz
+                             ) {
+    String result = format_using(format, vix, viy, viz, a, b, c, d);
     if (result != null) {
       return result;
     }
