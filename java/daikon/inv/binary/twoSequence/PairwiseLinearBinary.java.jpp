@@ -116,73 +116,27 @@ public class CLASSNAME
   }
 
   public String format_daikon() {
-    return core.format_using(OutputFormat.DAIKON, var1().name, null, var2().name, null);
+    return core.format_using(OutputFormat.DAIKON, var1().name(),
+                             var2().name());
   }
 
   /* IOA */
   public String format_ioa() {
     if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for sets: " + format();
-    VarInfoName.QuantHelper.IOAQuantification quant1 = new VarInfoName.QuantHelper.IOAQuantification(var1());
-    VarInfoName.QuantHelper.IOAQuantification quant2 = new VarInfoName.QuantHelper.IOAQuantification(var2());
+    Quantify.IOAQuantification quant1 = VarInfo.get_ioa_quantify (var1());
+    Quantify.IOAQuantification quant2 = VarInfo.get_ioa_quantify (var2());
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-                          quant1.getVarIndexed(0), null,
-                          quant2.getVarIndexed(0), null)
+                          quant1.getVarIndexed(0).ioa_name(),
+                          quant2.getVarIndexed(0).ioa_name())
       + quant1.getClosingExp();
   }
 
-//   public String format_jml() {
-//     VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var1().name,var2().name});
-//     VarInfoName var1index = (qret.bound_vars.get(0))[0];
-//     VarInfoName var2index = (qret.bound_vars.get(1))[0];
-
-//     String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,true);
-
-//     VarInfoName seq1 = var1().name.JMLElementCorrector();
-//     VarInfoName seq2 = var2().name.JMLElementCorrector();
-
-//     //      int seq1state = 0, seq2state = 0;
-
-//     //      if (seq1 instanceof VarInfoName.Prestate) {
-//     //        seq1 = ((VarInfoName.Prestate)seq1).term;
-//     //        seq1state = 1;
-//     //      } else if (seq1 instanceof VarInfoName.Poststate) {
-//     //        seq1 = ((VarInfoName.Poststate)seq1).term;
-//     //        seq1state = 2;
-//     //      }
-//     //      if (sueq2 instanceof VarInfoName.Prestate) {
-//     //        seq2 = ((VarInfoName.Prestate)seq2).term;
-//     //        seq2state = 1;
-//     //      } else if (seq2 instanceof VarInfoName.Poststate) {
-//     //        seq2 = ((VarInfoName.Poststate)seq2).term;
-//     //        seq2state = 2;
-//     //      }
-
-//     //      if (seq1 instanceof VarInfoName.Slice) {
-//     //        seq1 = ((VarInfoName.Slice)seq1).sequence;
-//     //      }
-//     //      if (seq2 instanceof VarInfoName.Slice) {
-//     //        seq2 = ((VarInfoName.Slice)seq2).sequence;
-//     //      }
-
-//     //      seq1 = seq1.applySubscript(var1index);
-//     //      seq2 =u seq2.applySubscript(var2index);
-
-//     //      seq1 = (seq1state == 1 ? seq1.applyPrestate() : seq1);
-//     //      seq1 = (seq1state == 2 ? seq1.applyPoststate() : seq1);
-//     //      seq2 = (seq2state == 1 ? seq2.applyPrestate() : seq2);
-//     //      seq2 = (seq2state == 2 ? seq2.applyPoststate() : seq2);
-
-//     return quantResult[0] + core.format_using(OutputFormat.JML,
-//                                               seq1, null,
-//                                               seq2, null) + quantResult[3];
-//   }
-
   public String format_simplify() {
-    VarInfoName[] vars = new VarInfoName[] { var1().name, var2().name };
-    String[] form = VarInfoName.QuantHelper.format_simplify(vars, true);
+    String[] form = VarInfo.simplify_quantify (var1(), var2(),
+                                               /* elementwise */ true);
     return form[0] + CORECLASS.format_simplify(form[1], form[2],
                                                core.a, core.b, core.c)
       + form[3];
@@ -232,10 +186,10 @@ public class CLASSNAME
     }
 
     if (core.a == 0) {
-      return new DiscardInfo(this, DiscardCode.obvious, var2().name.name() + " is constant");
+      return new DiscardInfo(this, DiscardCode.obvious, var2().name() + " is constant");
     }
     if (core.b == 0) {
-      return new DiscardInfo(this, DiscardCode.obvious, var1().name.name() + " is constant");
+      return new DiscardInfo(this, DiscardCode.obvious, var1().name() + " is constant");
     }
 //    if (core.a == 1 && core.b == 0) {
 //      return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");
