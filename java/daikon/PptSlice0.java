@@ -44,21 +44,6 @@ public class PptSlice0
     return fake;
   }
 
-  // Make a fake slice whose variables are the same as the ones in
-  // sliceTemplate, but with "this" replaced by newName.
-  public static PptSlice makeFakeReplaceThis(PptSlice template,
-                                             VarInfoName newName) {
-    PptSlice0 fake = new PptSlice0(template.parent);
-    fake.var_infos = new VarInfo[template.var_infos.length];
-    for (int i=0; i < fake.var_infos.length; i++) {
-      VarInfo svi = template.var_infos[i];
-      fake.var_infos[i] =
-        new VarInfo(svi.name.replace(VarInfoName.THIS, newName),
-                    svi.type, svi.file_rep_type,
-                    svi.comparability.makeAlias(svi.name), svi.aux);
-    }
-    return fake;
-  }
 
   // We trade space for time by keeping a hash table of all the
   // implications (they're also stored as a vector in invs) so we can
