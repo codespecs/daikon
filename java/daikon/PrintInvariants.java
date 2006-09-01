@@ -10,6 +10,7 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.OutputFormat;
+import daikon.VarInfoName.Repair;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;
