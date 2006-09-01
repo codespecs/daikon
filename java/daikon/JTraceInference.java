@@ -101,8 +101,7 @@ class JTraceInference extends Thread
                     if (!prims.contains(proglang_type_string))
                         file_rep_type = ProglangType.parse("hashcode");
 
-                    VarInfo vi = new VarInfo(VarInfoName.parse(varname),
-                                             prog_type, file_rep_type,
+                    VarInfo vi = new VarInfo(varname, prog_type, file_rep_type,
                                              default_comparability, false,
                                              null, VarInfoAux.getDefault());
                     var_infos.add(vi);
