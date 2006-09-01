@@ -94,36 +94,8 @@ public final class SequenceLength
   }
 
   protected VarInfo makeVarInfo() {
-    VarInfoName viname = base.name.applySize();
-    switch (shift) {
-    case 0:
-      break;
-    case -1:
-      viname = viname.applyDecrement();
-      break;
-    default:
-      throw new UnsupportedOperationException("Unsupported shift: " + shift);
-    }
-    ProglangType ptype = ProglangType.INT;
-    ProglangType frtype = ProglangType.INT;
-    VarComparability comp = base.comparability.indexType(0);
-    VarInfo vi = new VarInfo(viname, ptype, frtype, comp,
-                             VarInfoAux.getDefault());
-    vi.setup_derived_base (base);
-    vi.var_kind = VarInfo.VarKind.FUNCTION;
-    vi.enclosing_var = base;
-    vi.arr_dims = 0;
-    vi.function_args = null;
-    vi.relative_name = "size" + ((shift == -1) ? "_minus1" : "");
-    if (vi.parent_ppt != null) {
-      if (base.parent_variable == null)
-        vi.parent_variable = null;
-      else {
-        vi.parent_variable = String.format ("size(%s)%s", base.parent_variable,
-                                            ((shift == -1) ? "-1" : ""));
-      }
-    }
-    return (vi);
+    return VarInfo.make_scalar_seq_func ("size", ProglangType.INT, base,
+                                         shift);
   }
 
   public  boolean isSameFormula(Derivation other) {
