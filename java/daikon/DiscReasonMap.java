@@ -40,9 +40,9 @@ public final class DiscReasonMap {
         return;
     }
 
-    String vars_result = inv.ppt.var_infos[0].name.name();
+    String vars_result = inv.ppt.var_infos[0].name();
     for (int i = 1; i < inv.ppt.var_infos.length; i++) {
-      vars_result += "," + ((VarInfo) inv.ppt.var_infos[i]).name.name();
+      vars_result += "," + ((VarInfo) inv.ppt.var_infos[i]).name();
     }
     put(vars_result, inv.ppt.parent.name, disc_info);
   }

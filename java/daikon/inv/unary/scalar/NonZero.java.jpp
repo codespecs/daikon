@@ -45,7 +45,7 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.scalar;
 
 import daikon.*;
-import daikon.inv.OutputFormat.Repair;
+import daikon.VarInfoName.Repair;
 import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
@@ -151,17 +151,17 @@ public class NONZERO
     if (format == OutputFormat.REPAIR) {
       if (zero(format).equals("null")) {
         Repair.getRepair().setForceSet();
-        String repname=var().name.repair_name(var());
+        String repname=var().repair_name();
         String ret="sizeof("+repname+")=1";
         Repair.getRepair().noForceSet();
         return ret;
       } else {
-        String name = var().name.repair_name(var());
+        String name = var().repair_name();
 	return name+"!="+zero(format);
       }
     }
 
-    String name = var().name.name_using(format, var());
+    String name = var().name_using(format);
 
     if (format.isJavaFamily()) {
       #if defined(FLOAT)
@@ -279,7 +279,7 @@ public class NONZERO
     // is a parent for all of the references to the class, those references
     // can be null and the non-null invariant becomes interesting.
     if (this_non_null_obvious) {
-      if (var.name.isThis())
+      if (var.isThis())
         return new DiscardInfo(this, DiscardCode.obvious,
                                "'this' can never be null in Java");
     }
@@ -287,7 +287,7 @@ public class NONZERO
     if (!var.aux.getFlag(VarInfoAux.HAS_NULL)) {
       // If it's not a number and null doesn't have special meaning...
       return new DiscardInfo(this, DiscardCode.obvious,
-                     "'null' has no special meaning for " + var.name.name());
+                     "'null' has no special meaning for " + var.name());
     }
 
     return super.isObviousStatically(vis);
@@ -322,7 +322,7 @@ public class NONZERO
           // System.out.println(NONZEROSTRING + ".isObviousImplied: " + MEMBERSTRING + ".isObviousMember(" + var.name + ", " + v2.name + ") = true");
           if (logOn())
             dlog.log ("isObvDyn- true, arg is member of nonzero sequence");
-          String discardString = var.name.name() + " is a member of the non-zero sequence " + v2.name.name();
+          String discardString = var.name() + " is a member of the non-zero sequence " + v2.name();
           if (logOn())
             log (format() + " obviously implied from " + inv.format());
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
@@ -348,7 +348,7 @@ public class NONZERO
                 // System.out.println(NONZEROSTRING + ".isObviousImplied true due to: " + sine.format());
                 if (logOn())
                   dlog.log ("isObvDyn- true due to " + sine.format());
-                String discardString = var.name.name() + " is a member of the non-zero sequence " + vi.name.name();
+                String discardString = var.name() + " is a member of the non-zero sequence " + vi.name();
                 return new DiscardInfo(this, DiscardCode.obvious, discardString);
               }
             }

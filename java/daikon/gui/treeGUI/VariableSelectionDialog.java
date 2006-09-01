@@ -36,7 +36,7 @@ class VariableSelectionDialog extends JDialog {
     for (int i=0; i < varInfos.length; i++)
       if (! varInfos[i].isDerived()) {
 	final VarInfo varInfo = varInfos[i];
-	JCheckBox checkBox = new JCheckBox( varInfo.name.name(), invariantFilters.containsVariableFilter( varInfo.name.name() ));
+	JCheckBox checkBox = new JCheckBox( varInfo.name(), invariantFilters.containsVariableFilter( varInfo.name() ));
 	variablesPanel.add( checkBox );
 	variableCheckBoxes.add( checkBox );
       }

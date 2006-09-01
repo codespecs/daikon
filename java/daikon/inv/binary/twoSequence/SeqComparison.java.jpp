@@ -380,8 +380,8 @@ public class SEQSEQINTEQUAL
     if (format == OutputFormat.DAIKON)
 
     {
-      String name1 = var1().name.name_using(format, var1());
-      String name2 = var2().name.name_using(format, var2());
+      String name1 = var1().name_using(format);
+      String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
       String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
                           ? " (lexically)"
@@ -394,8 +394,8 @@ public class SEQSEQINTEQUAL
 
 
     if (format.isJavaFamily()) {
-      String name1 = var1().name.name_using(format, var1());
-      String name2 = var2().name.name_using(format, var2());
+      String name1 = var1().name_using(format);
+      String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
       return "daikon.Quant." + (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
                                 ? EQUALSstringDBC
@@ -410,15 +410,11 @@ public class SEQSEQINTEQUAL
       if (var1().isIOASet() || var2().isIOASet()) {
         return "Not valid for Sets: " + format();
       }
-      String name1 = var1().name.name_using(format, var1());
-      String name2 = var2().name.name_using(format, var2());
+      String name1 = var1().name_using(format);
+      String name2 = var2().name_using(format);
       return name1 + " " + EQUALSIOAstring + " " + name2 + " ***";
     }
 
-//     if (format == OutputFormat.JML) { // Must complete
-//       String quantResult[] = VarInfoName.QuantHelper.format_jml(new VarInfoName[] {var1().name,var2().name},true);
-//       return quantResult[0] + quantResult[1] + EQUALSstring + quantResult[2] + quantResult[3];
-//     }
     return format_unimplemented(format);
   }
 
@@ -430,10 +426,8 @@ public class SEQSEQINTEQUAL
   }
 
   private String format_simplify_defined() {
-    String[] var1_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(var1().name);
-    String[] var2_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(var2().name);
+    String[] var1_name = var1().simplifyNameAndBounds();
+    String[] var2_name = var2().simplifyNameAndBounds();
     if (var1_name == null || var2_name == null) {
       return "format_simplify can't handle one of these sequences: "
         + format();
@@ -447,9 +441,8 @@ public class SEQSEQINTEQUAL
     #if (defined(EQUAL) || defined(EQUALSTRING) || defined(EQUALFLOAT))
       // A simple case: if two sequences are lexically equal iff they
       // are elementwise equal.
-      String[] form =
-        VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-          { var1().name, var2().name }, true); // elementwise
+      String[] form = VarInfo.simplify_quantify (var1(), var2(),
+                                                 /* elementwise */ true);
       return form[0] +
         "(EQ " + form[1] + " " + form[2] + ")" + form[3];
     #else
@@ -624,8 +617,8 @@ public class SEQSEQINTEQUAL
           return new DiscardInfo(this, DiscardCode.obvious, "Supersequences are related lexically");
         }
         VarInfo[] avis = {arr1, arr2};
-        debug.log ("looking for " + avis[0].name.name()
-             + " " + avis[1].name.name());
+        debug.log ("looking for " + avis[0].name()
+             + " " + avis[1].name());
         PptSlice slice = this.ppt.parent.findSlice_unordered (avis);
         debug.log ("Found ppt " + slice);
         if (slice != null) {

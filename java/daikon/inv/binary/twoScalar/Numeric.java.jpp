@@ -197,8 +197,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     #if defined(SEQ)
       if (format.isJavaFamily()) {
-        v1 = var1().name.name_using(format, var1());
-        v2 = var2().name.name_using(format, var2());
+        v1 = var1().name_using(format);
+        v2 = var2().name_using(format);
         if (this instanceof Divides) {
           return "daikon.Quant.pairwiseDivides(" + v1 + ", " + v2 + ")";
         } else if (this instanceof Square) {
@@ -215,21 +215,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
 
       if (format == OutputFormat.ESCJAVA) {
-        String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-                              { var1().name, var2().name }, true);
+        String[] form = VarInfo.esc_quantify (var1(), var2());
         fmt_str = form[0] + "(" + fmt_str + ")" + form[3];
         v1 = form[1];
         v2 = form[2];
-//       } else if (format == OutputFormat.JML) {
-//         String form[] = VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-//                               { var1().name, var2().name }, true);
-//         fmt_str = form[0] + " " + fmt_str + " " + form[3];
-//         v1 = form[1];
-//         v2 = form[2];
       } else if (format == OutputFormat.SIMPLIFY) {
-        String[] form =
-          VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-            { var1().name, var2().name }, true); // elementwise
+        String[] form = VarInfo.simplify_quantify (var1(), var2(),
+                                                   /* elementwise */ true);
         fmt_str = form[0] + " " + fmt_str + " " + form[3];
         v1 = form[1];
         v2 = form[2];
@@ -239,12 +231,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
         fmt_str += " (elementwise)";
       }
       if (v1 == null)
-        v1 = var1().name.name_using(format, var1());
+        v1 = var1().name_using(format);
       if (v2 == null)
-        v2 = var2().name.name_using(format, var2());
+        v2 = var2().name_using(format);
     #else
-      v1 = var1().name.name_using(format, var1());
-      v2 = var2().name.name_using(format, var2());
+      v1 = var1().name_using(format);
+      v2 = var2().name_using(format);
     #endif
 
 
@@ -691,7 +683,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
          // (var1 == var2) ^ (var2 != 0) ==> var1 % var2 == 0
          new NISuppression (var1_eq_var2, var2_ne_0, suppressee),
-         
+
          // (var2 == var1) ^ (var1 != 0) ==> var2 % var1 == 0
          new NISuppression (var2_eq_var1, var1_ne_0, suppressee),
 
@@ -700,10 +692,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /**
      * Returns non-null if this invariant is obvious from an existing,
-     * non-falsified linear binary invariant in the same slice as this 
+     * non-falsified linear binary invariant in the same slice as this
      * invariant.  This invariant of the form "x % y == 0" is falsified
      * if a linear binary invariant is found of the form "a*y - 1*x + 0 == 0"
-     * 
+     *
      * @return non-null value iff this invariant is obvious from
      *          other invariants in the same slice
      **/
@@ -715,28 +707,28 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if(di != null) {
         return di;
       }
-      
+
       VarInfo var1 = vis[0];
       VarInfo var2 = vis[1];
-      
+
       // ensure that var1.varinfo_index <= var2.varinfo_index
       if(var1.varinfo_index > var2.varinfo_index) {
       	var1 = vis[1];
       	var2 = vis[0];
       }
-      
-      // Find slice corresponding to these two variables.  
-      // Ideally, this should always just be ppt if all 
+
+      // Find slice corresponding to these two variables.
+      // Ideally, this should always just be ppt if all
       // falsified invariants have been removed.
       PptSlice2 ppt2 = ppt.parent.findSlice(var1,var2);
-     
+
       // If no slice is found , no invariants exist to make this one obvious.
       if(ppt2 == null) {
         return null;
       }
-      
-      // For each invariant, check to see if it's a linear binary 
-      // invariant of the form "a*y - 1*x + 0 == 0" and if so, 
+
+      // For each invariant, check to see if it's a linear binary
+      // invariant of the form "a*y - 1*x + 0 == 0" and if so,
       // you know this invariant of the form "x % y == 0" is obvious.
       for(Invariant inv : ppt2.invs) {
         #if defined(TYPEDOUBLE)

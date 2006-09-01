@@ -123,8 +123,8 @@ public final class CLASSNAME
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (isObviousMember(sclvar(vis), seqvar(vis))) {
       log ("scalar is obvious member of");
-      return new DiscardInfo(this, DiscardCode.obvious, sclvar().name.name()
-                        + " is an obvious member of " + seqvar().name.name());
+      return new DiscardInfo(this, DiscardCode.obvious, sclvar().name()
+                        + " is an obvious member of " + seqvar().name());
     }
     return super.isObviousStatically (vis);
   }
@@ -279,42 +279,39 @@ public final class CLASSNAME
   }
 
   public String format_daikon() {
-    String sclname = sclvar().name.name();
-    String seqname = seqvar().name.name();
+    String sclname = sclvar().name();
+    String seqname = seqvar().name();
     return sclname + " in " + seqname;
   }
 
   public String format_java() {
     return "( (daikon.inv.FormatJavaHelper.memberOf("
-      + sclvar().name.name()
-      + " , " + seqvar().name.name() + " ) == true ) ";
+      + sclvar().name()
+      + " , " + seqvar().name() + " ) == true ) ";
   }
 
   public String format_ioa() {
-    return sclvar().name.ioa_name() + " \\in " + seqvar().name.ioa_name();
+    return sclvar().ioa_name() + " \\in " + seqvar().ioa_name();
   }
 
   public String format_java_family(OutputFormat format) {
-    String sclname = sclvar().name.name_using(format, sclvar());
-    String seqname = seqvar().name.name_using(format, seqvar());
+    String sclname = sclvar().name_using(format);
+    String seqname = seqvar().name_using(format);
     return "daikon.Quant.memberOf(" + sclname
       + " , " + seqname + " )";
   }
 
   public String format_esc() {
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
-    String[] form =
-      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-        { seqvar().name, sclvar().name });
+    String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
 #ifdef IS_SCALAR
   public String format_simplify() {
     if (Invariant.dkconfig_simplify_define_predicates) {
-      String[] seq_name =
-        VarInfoName.QuantHelper.simplifyNameAndBounds(seqvar().name);
-      String scalar_name = sclvar().name.simplify_name();
+      String[] seq_name = seqvar().simplifyNameAndBounds();
+      String scalar_name = sclvar().simplify_name();
       if (seq_name == null) {
         return "format_simplify can't handle this sequence: "
           + format();
@@ -324,9 +321,7 @@ public final class CLASSNAME
     } else {
       // "exists x in a..b : P(x)" gets written as
       // "!(forall x in a..b : !P(x))"
-      String[] form =
-        VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-          { seqvar().name, sclvar().name });
+      String[] form = VarInfo.simplify_quantify (seqvar(), sclvar());
       return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")"
         + form[3] + ")";
     }
@@ -416,17 +411,17 @@ public final class CLASSNAME
     SEQ_SUBSCRIPT sssc = (SEQ_SUBSCRIPT) scl_var.derived;
     if (Debug.logOn())
       Debug.log (getClass(), ppt.parent, vis, "Looking for "
-                 + sssc.seqvar().name.name() + " subset of "
-                 + seq_var.name.name());
+                 + sssc.seqvar().name() + " subset of "
+                 + seq_var.name());
 
     // check to see if subscripts sequence is a subset of the sequence var
     if (ppt.parent.is_subset (sssc.seqvar(), seq_var)) {
       return new DiscardInfo(this, DiscardCode.obvious,
-                             "(" + sssc.seqvar().name.name() + " subset "
-                             + seq_var.name.name() + ") ==> "
-                             + sssc.seqvar().name.name() + "["
-                             + sssc.sclvar().name.name()
-                             + "] member " + seq_var.name.name());
+                             "(" + sssc.seqvar().name() + " subset "
+                             + seq_var.name() + ") ==> "
+                             + sssc.seqvar().name() + "["
+                             + sssc.sclvar().name()
+                             + "] member " + seq_var.name());
     }
 
     return (null);
@@ -467,23 +462,23 @@ public final class CLASSNAME
     if (ssss.from_start) {
       if (Debug.logOn())
         Debug.log (getClass(), ppt.parent, vis,
-          "Looking for " + sssc.sclvar().name.name() + sssc.index_shift
-           + " <= " + ssss.sclvar().name.name() + ssss.index_shift);
+          "Looking for " + sssc.sclvar().name() + sssc.index_shift
+           + " <= " + ssss.sclvar().name() + ssss.index_shift);
       if (ppt.parent.is_less_equal (sssc.sclvar(), sssc.index_shift,
                              ssss.sclvar(), ssss.index_shift))
         return new DiscardInfo(this, DiscardCode.obvious,
                      "i <= n ==> a[i] in a[..n] for "
-                     + scl_var.name.name() + " and " + seq_var.name.name());
+                     + scl_var.name() + " and " + seq_var.name());
     } else { // a[i] in a[n..], look for i >= n
       if (Debug.logOn())
         Debug.log (getClass(), ppt.parent, vis,
-          "Looking for " + ssss.sclvar().name.name() + ssss.index_shift
-           + " <= " + sssc.sclvar().name.name() + sssc.index_shift);
+          "Looking for " + ssss.sclvar().name() + ssss.index_shift
+           + " <= " + sssc.sclvar().name() + sssc.index_shift);
       if (ppt.parent.is_less_equal (ssss.sclvar(), ssss.index_shift,
                              sssc.sclvar(), sssc.index_shift))
         return new DiscardInfo(this, DiscardCode.obvious,
                      "i >= n ==> a[i] in a[n..] for "
-                     + scl_var.name.name() + " and " + seq_var.name.name());
+                     + scl_var.name() + " and " + seq_var.name());
     }
     return (null);
 

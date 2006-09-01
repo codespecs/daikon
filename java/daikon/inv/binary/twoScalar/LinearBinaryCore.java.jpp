@@ -446,11 +446,10 @@ public final class CLASSNAME
 
   // Format one term of an equation.
   // Variable "first" indicates whether this is the leading term
-  // Variable "var" is the name of the variable; may be null for the constant term.
-  public static String formatTerm(OutputFormat format,
-                                  double coeff,
-                                  VarInfoName var,
-                                  VarInfo vi,
+  // Variable "varname" is the name of the variable; may be null
+  // for the constant term.
+  public static String formatTerm (double coeff,
+                                  String varname,
                                   boolean first) {
     double ncoeff = coeff;
 
@@ -471,46 +470,47 @@ public final class CLASSNAME
 
     //we want to ensure that the positive value is used because the sign has already been determined
     String coeff_string = (ncoeff == (int)ncoeff) ? "" + Math.abs((int)ncoeff) : "" + Math.abs(ncoeff);
-    if (var == null)
+    if (varname == null)
       return sign + coeff_string;
     if (ncoeff == 1 || ncoeff == -1)
-      return sign + var.name_using(format, vi);
+      return sign + varname;
     else
-      return sign + coeff_string + " * " + var.name_using(format, vi);
+      return sign + coeff_string + " * " + varname;
   }
 
   public String format_using(OutputFormat format,
-                             VarInfoName x, VarInfo vix, VarInfoName y, VarInfo viy,
+                             String vix, String viy,
                              double u, double v, double w) {
 
     //recall that a, b, c in the linear binary equation means ax + by + c = 0;
     if (u == 0 && v == 0 && w == 0) {
-      return wrapper.format_too_few_samples(format, "0 * " + x + "+ 0 * " + y + " + 0 == 0");
+      return wrapper.format_too_few_samples(format, "0 * " + vix
+                                    + "+ 0 * " + viy + " + 0 == 0");
     }
 
     // The repair format output changes if these lines are removed, even
     // though this code is dead, because formatting via repair has side
     // effects.  This should be fixed, so that these dead lines of code can
     // be removed.
-    String xname = x.name_using(format, vix);
-    String yname = y.name_using(format, viy);
+    // String xname = vix.name_using(format);
+    // String yname = viy.name_using(format);
 
     if (format.isJavaFamily()) {
 
       #if defined(TYPEDOUBLE)
         return
           "daikon.Quant.fuzzy.eq(0, "
-          + formatTerm(format, u, x, vix, true)
-          + formatTerm(format, v, y, viy, false)
-          + formatTerm(format, w, null, null, false)
+          + formatTerm(u, vix, true)
+          + formatTerm(v, viy, false)
+          + formatTerm(w, null, false)
           + ")";
       #else
         int a = (int) u;
    			int b = (int) v;
    			int c = (int) w;
-        return formatTerm(format, a, x, vix, true)
-          + formatTerm(format, b, y, viy, false)
-          + formatTerm(format, c, null, null, false)
+        return formatTerm(a, vix, true)
+          + formatTerm(b, viy, false)
+          + formatTerm(c, null, false)
            + " == 0";
       #endif
     }
@@ -533,10 +533,10 @@ public final class CLASSNAME
         postfix=")";
       }
 
-      if (y.repair_name(viy).indexOf(".")!=-1)
-        return prefix+y.repair_name(viy)+"="+str_a+"*"+x.repair_name(vix)+"+"+str_b+postfix;
+      if (viy.indexOf(".")!=-1)
+        return prefix+viy+"="+str_a+"*"+vix+"+"+str_b+postfix;
       else
-        return prefix+x.repair_name(vix)+"=("+y.repair_name(viy)+"-"+str_b+")"+"/"+str_a+postfix;
+        return prefix+vix+"=("+viy+"-"+str_b+")"+"/"+str_a+postfix;
     }
 
     if ((format == OutputFormat.DAIKON)
@@ -545,14 +545,15 @@ public final class CLASSNAME
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-      return formatTerm(format, u, x, vix, true)
-        + formatTerm(format, v, y, viy, false)
-        + formatTerm(format, w, null, null, false)
+      return formatTerm(u, vix, true)
+        + formatTerm(v, viy, false)
+        + formatTerm(w, null, false)
         + eq + "0";
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return format_simplify(x.simplify_name(), y.simplify_name(), u, v, w);
+      return format_simplify(vix, viy, u, v,
+                             w);
     }
     throw new Error("Unknown OutputFormat: " + format);
   }
@@ -589,9 +590,8 @@ public final class CLASSNAME
       return "(EQ 0 " + str_axpc + ")";
   }
 
-  public String format_using(OutputFormat format,
-                             VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {
-    String result = format_using(format, x, xvi, y, yvi, a, b, c);
+  public String format_using(OutputFormat format, String xname, String yname) {
+    String result = format_using(format, xname, yname, a, b, c);
     if (result != null) {
       return result;
     } else {
@@ -601,10 +601,10 @@ public final class CLASSNAME
 
   // Format as "x = cy+d" instead of as "y = ax+b". [now that we print in standard format, is
   // there a point to this method?
-  public String format_reversed_using(OutputFormat format,
-                                      VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {
+  public String format_reversed_using(OutputFormat format, String xname,
+                                      String yname) {
     Assert.assertTrue(a == 1 || a == -1);
-    return format_using(format, y, yvi, x, xvi, b, a, c);
+    return format_using(format, yname, xname, b, a, c);
   }
 
   /**

@@ -256,7 +256,7 @@ public class InvariantFilters {
     for (int i=0; i<vis.size(); i++) {
       if (i!=0) result += " ";
       VarInfo vi = vis.get(i);
-      result += vi.name.name();
+      result += vi.name();
     }
     return "[ " + result + " ]";
   }

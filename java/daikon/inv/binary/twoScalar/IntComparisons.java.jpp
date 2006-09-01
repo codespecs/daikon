@@ -320,7 +320,6 @@ package daikon.inv.binary.twoScalar;
 #endif
 
 import daikon.*;
-import daikon.VarInfoName.Simple;
 import daikon.inv.*;
 import daikon.inv.unary.string.*;
 import daikon.inv.unary.scalar.*;
@@ -403,13 +402,13 @@ public final class INTEQUAL
       #endif
     #elif defined (IS_STRING)
       #if defined (EQUALSTRING) || defined (NONEQUALSTRING)
-        boolean result = (! (vis[0].name.hasTypeOf() ^ vis[0].name.hasTypeOf()));
+        boolean result = (! (vis[0].has_typeof() ^ vis[0].has_typeof()));
         return result;
       #else
-        boolean result = (! (vis[0].name.hasTypeOf() || vis[0].name.hasTypeOf()));
+        boolean result = (! (vis[0].has_typeof() || vis[0].has_typeof()));
         // System.out.printf(INTEQUALstring + ".instantiate_ok(");
         // for (VarInfo vi : vis) {
-        //   System.out.printf("%s ", vi.name.name());
+        //   System.out.printf("%s ", vi.name());
         // }
         // System.out.printf(") => %s%n", result);
         return result;
@@ -450,7 +449,7 @@ public final class INTEQUAL
         // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
         Debug.log (debug, INTEQUAL.class, ppt,
                "Not instantiating, compare of form size(a)-1 op size(b)-1"
-               + " var1= " + var1.name.name() + " var2= " + var2.name.name());
+               + " var1= " + var1.name() + " var2= " + var2.name());
         return null;
       }
     }
@@ -601,8 +600,8 @@ public final class INTEQUAL
       return format_repair();
     }
 
-    String var1name = var1().name.name_using(format, var1());
-    String var2name = var2().name.name_using(format, var2());
+    String var1name = var1().name_using(format);
+    String var2name = var2().name_using(format);
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
@@ -630,15 +629,15 @@ public final class INTEQUAL
       #elif defined(GREATEREQUALFLOAT)
         return Invariant.formatFuzzy("gte", var1(), var2(), format);
       #elif defined(EQUALSTRING)
-        assert var1().name.hasTypeOf() == var2().name.hasTypeOf();
-        if (var1().name.hasTypeOf()) {
+        assert var1().has_typeof() == var2().has_typeof();
+        if (var1().has_typeof()) {
           return var1name + " == " + var2name;
         } else {
           return var1name + ".equals(" + var2name + ")";
         }
       #elif defined(NONEQUALSTRING)
-        assert var1().name.hasTypeOf() == var2().name.hasTypeOf();
-        if (var1().name.hasTypeOf()) {
+        assert var1().has_typeof() == var2().has_typeof();
+        if (var1().has_typeof()) {
           return var1name + " != " + var2name;
         } else {
           return "!" + var1name + ".equals(" + var2name + ")";
@@ -681,8 +680,8 @@ public final class INTEQUAL
   }
 
   public String format_repair() {
-    boolean lefthasfield=var1().name.name().indexOf(".")!=-1;
-    boolean righthasfield=var2().name.name().indexOf(".")!=-1;
+    boolean lefthasfield=var1().name().indexOf(".")!=-1;
+    boolean righthasfield=var2().name().indexOf(".")!=-1;
     String comparator = EQUALSstring;
 
     String var1name;
@@ -694,26 +693,17 @@ public final class INTEQUAL
 
     if (lefthasfield) {
       /* No flip necessary */
-      var1name=var1().name.repair_name(var1());
-      if (var2().name instanceof Simple)
-        var2name=((Simple)var2().name).repair_name(var2(),false);
-      else
-        var2name=var2().name.repair_name(var2());
+      var1name = var1().repair_name();
+      var2name = var2().simple_repair_name();
     } else if (righthasfield) {
       /* Need to flip */
       comparator = INVEQUALSstring;
-      var1name=var2().name.repair_name(var2());
-      if (var1().name instanceof Simple)
-        var2name=((Simple)var1().name).repair_name(var1(),false);
-      else
-        var2name=var1().name.repair_name(var1());
+      var1name=var2().repair_name();
+      var2name = var1().simple_repair_name();
     } else {
       /* Need to rewrite lefthand side */
-      var1name=var1().name.repair_name(var1());
-      if (var2().name instanceof Simple)
-        var2name=((Simple)var2().name).repair_name(var2(),false);
-      else
-        var2name=var2().name.repair_name(var2());
+      var1name=var1().repair_name();
+      var2name = var2().simple_repair_name();
     }
 #else
     /* Daikon prints out equality sets with the left hand side being
@@ -723,53 +713,24 @@ public final class INTEQUAL
     if (righthasfield) {
       /* Need to flip */
       comparator = INVEQUALSstring;
-      var1name=var2().name.repair_name(var2());
-      if (var1().name instanceof Simple)
-        var2name=((Simple)var1().name).repair_name(var1(),false);
-      else
-        var2name=var1().name.repair_name(var1());
+      var1name=var2().repair_name();
+      var2name = var1().simple_repair_name();
     } else if (lefthasfield) {
       /* No flip necessary */
-      var1name=var1().name.repair_name(var1());
-      if (var2().name instanceof Simple)
-        var2name=((Simple)var2().name).repair_name(var2(),false);
-      else
-        var2name=var2().name.repair_name(var2());
+      var1name=var1().repair_name();
+      var2name = var2().simple_repair_name();
     } else {
       /* Need to rewrite righthand side */
       comparator = INVEQUALSstring;
-      var1name=var2().name.repair_name(var1());
-      if (var1().name instanceof Simple)
-        var2name=((Simple)var1().name).repair_name(var1(),false);
-      else
-        var2name=var1().name.repair_name(var1());
+      // This got odd diffs with respect to the old implementation.
+      // The old implementation does:
+      //    var1name=var2().name.repair_name(var1());
+      // Its unclear why it would make anysense to use var2's name with
+      // var1.  So I changed it and updated the goal files.
+      var1name = var2().repair_name();
+      var2name = var1().simple_repair_name();
     }
 #endif
-    /*
-      if (lefthasfield) {
-      // No flip necessary
-      var1name=var1().name.repair_name(var1());
-      if (var2().name instanceof Simple)
-      var2name=((Simple)var2().name).repair_name(var2(),false);
-      else
-      var2name=var2().name.repair_name(var2());
-      } else if (righthasfield) {
-      // Need to flip
-      comparator = INVEQUALSstring;
-      var1name=var2().name.repair_name(var2());
-      if (var1().name instanceof Simple)
-      var2name=((Simple)var1().name).repair_name(var1(),false);
-      else
-      var2name=var1().name.repair_name(var1());
-      } else {
-      // Need to rewrite lefthand side
-      var1name=var1().name.repair_name(var1());
-      if (var2().name instanceof Simple)
-      var2name=((Simple)var2().name).repair_name(var2(),false);
-      else
-      var2name=var2().name.repair_name(var2());
-      }
-    */
 
 #if defined(EQUAL_OP)
     comparator = "=";
@@ -971,14 +932,11 @@ public final class INTEQUAL
     #endif
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       // a+c=b+c is implied, because a=b must have also been reported.
-      if ((var1.name instanceof VarInfoName.Add)
-          && (var2.name instanceof VarInfoName.Add) &&
-          ((((VarInfoName.Add) var1.name).amount)
-          == (((VarInfoName.Add) var2.name).amount))) {
+      if (var1.is_add() && var2.is_add()
+          && (var1.get_add_amount() == var2.get_add_amount()))
         return new DiscardInfo(this, DiscardCode.obvious,
           "Invariants of the form a+c==b+c are implied " +
           "since a==b is reported.");
-        }
     #endif
 
     DiscardInfo di = null;
@@ -1030,8 +988,8 @@ public final class INTEQUAL
       if ((s1 != null) && (s2 != null)
           && (s1.equalitySet == s2.equalitySet)) {
         // lengths of equal arrays being compared
-        String n1 = var1.name.name();
-        String n2 = var2.name.name();
+        String n1 = var1.name();
+        String n2 = var2.name();
         return new DiscardInfo(this, DiscardCode.obvious, n1 + " and  " + n2
                             + " are equal arrays, so equal size is implied");
       }

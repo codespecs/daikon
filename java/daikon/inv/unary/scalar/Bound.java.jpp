@@ -296,7 +296,7 @@ public class LOWERBOUND
 
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
   public String format_using(OutputFormat format) {
-    String name = var().name.name_using(format, var());
+    String name = var().name_using(format);
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
@@ -346,47 +346,37 @@ public class LOWERBOUND
   }
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
-    return var().name.name() + " elements " + GTESTR + " " + MIN1;
+    return var().name() + " elements " + GTESTR + " " + MIN1;
   }
 
   // ELTLOWEr || ELTUPPEr
   public String format_repair() {
-    return var().name.repair_name(var()) + GTESTR + " " + MIN1;
+    return var().repair_name() + GTESTR + " " + MIN1;
   }
 
   public String format_esc() {
 #ifdef IS_ELT
-    String[] form =
-      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-        { var().name });
+    String[] form = VarInfo.esc_quantify (var());
     return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
 #else
-    String varname = var().name.esc_name();
+    String varname = var().esc_name();
     return varname + " " + GTESTR + " " + MIN1;
 #endif
   }
 
-//   public String format_jml() {
-//     String[] form =
-//       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-//         { var().name });
-//     return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
-//   }
-
   public String format_java_family(OutputFormat format) {
 #ifdef IS_ELT
     return
-      "daikon.Quant.elts" + GTESTRDBC + "(" + var().name.name_using(format, var()) + ", " + MIN1 + ")";
+      "daikon.Quant.elts" + GTESTRDBC + "(" + var().name_using(format) + ", " + MIN1 + ")";
 #else
-    String varname = var().name.name_using(format, var());
+    String varname = var().name_using(format);
     return varname + " " + GTESTR + " " + MIN1;
 #endif
   }
 
   public String format_ioa() {
 #ifdef IS_ELT
-    VarInfoName.QuantHelper.IOAQuantification quant =
-      new VarInfoName.QuantHelper.IOAQuantification (var());
+    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
     String result = quant.getQuantifierExp()
       + quant.getMembershipRestriction(0)
       + " => " + quant.getVarIndexedString(0) + " " + GTESTR + " " + MIN1
@@ -405,9 +395,7 @@ public class LOWERBOUND
     String value = simplify_format_long(MIN1);
 #endif
 #ifdef IS_ELT
-    String[] form =
-      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { var().name });
+    String[] form = VarInfo.simplify_quantify (var());
     return form[0] + "(" + GTESTR + " " + form[1] + " " + value + ")"
       + form[2];
 #else
@@ -416,17 +404,6 @@ public class LOWERBOUND
 #endif
   }
 
-//   public String format_java() {
-#ifdef IS_ELT
-
-//     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[]
-//       { var().name });
-//     return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
-#else
-//     String varname = var().name.java_name();
-//     return varname + " " + GTESTR + " " + MIN1;
-#endif
-//   }
 #endif
 
   public InvariantStatus add_modified(LONG value, int count) {
@@ -547,7 +524,7 @@ public class LOWERBOUND
       // We could also use MIN1 == oo.MINELT(), since the LowerBound
       // will never have a MIN1 that does not appear in the OneOf.
       if (MIN1 LTE oo.MINELT()) {
-        String varName = vis[0].name.name();
+        String varName = vis[0].name();
         String discardString = varName+LTESTR+MIN1+" is implied by "+varName+LTESTR+oo.MINELT();
         log (discardString);
         return new DiscardInfo(this, DiscardCode.obvious, discardString);
@@ -571,8 +548,8 @@ public class LOWERBOUND
         LOWERBOUND other = (LOWERBOUND) inv;
         if (isSameFormula(other)
             && SUBSEQUENCE.isObviousSubSequenceDynamically(this, v, other.var())) {
-          String varName = v.name.name();
-          String otherName = other.var().name.name();
+          String varName = v.name();
+          String otherName = other.var().name();
           String discardString = varName + " is a subsequence of " + otherName + " for which the invariant holds.";
           log (discardString);
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
@@ -591,7 +568,7 @@ public class LOWERBOUND
       // Assert.assertTrue(vshift == 0);
       if (vshift == 0 && MIN1 == 0) {
         // "size(a[]) >= 0" is obvious.
-        return new DiscardInfo(this, DiscardCode.obvious, v.name.name()+" >=0 is obvious");
+        return new DiscardInfo(this, DiscardCode.obvious, v.name()+" >=0 is obvious");
       }
     }
 #endif
@@ -612,8 +589,8 @@ public class LOWERBOUND
           if ((eb != null)
               && eb.enoughSamples()
               && eb.MIN() == MIN()) {
-            String otherName = other_slice.var_infos[0].name.name();
-            String varName = v.name.name();
+            String otherName = other_slice.var_infos[0].name();
+            String varName = v.name();
             String discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
             log (discardString);
             return new DiscardInfo(this, DiscardCode.obvious, discardString);

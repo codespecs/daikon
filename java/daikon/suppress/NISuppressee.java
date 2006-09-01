@@ -97,8 +97,8 @@ public class NISuppressee {
         Assert.assertTrue (false, "not binary: " + sample_inv.getClass());
       BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
       // Fmt.pf ("checking %s over %s=%s and %s=%s", sample_inv.getClass(),
-      //        vis[0].name.name(), vt.getValue(vis[0]),
-      //        vis[1].name.name(), vt.getValue(vis[1]));
+      //        vis[0].name(), vt.getValue(vis[0]),
+      //        vis[1].name(), vt.getValue(vis[1]));
       return binary_inv.check_unordered (vt.getValue(vis[0]),
                                          vt.getValue(vis[1]), 1, 1);
     } else /* must be unary */ {
@@ -213,7 +213,7 @@ public class NISuppressee {
       if (!sample_inv.valid_types (vis))
         continue;
       NIS.SupInv sinv = new NIS.SupInv (this, (VarInfo[]) vis.clone(), ppt);
-      sinv.log ("Unspecified variable = " + v.name.name());
+      sinv.log ("Unspecified variable = " + v.name());
       created_list.add (sinv);
     }
     return (created_list);

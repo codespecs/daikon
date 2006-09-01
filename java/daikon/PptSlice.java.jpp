@@ -258,16 +258,16 @@ public final class PPTSLICE1 extends PptSlice {
           Invariant inv = invs.get(j);
           if (PrintInvariants.print_discarded_invariants)
             DiscReasonMap.put(inv, DiscardCode.bad_sample,
-                  var_infos[i].name.name() + " array index was out of bounds");
+                  var_infos[i].name() + " array index was out of bounds");
           inv.falsify();
           result.add (inv);
           if (inv.logOn())
-            inv.log ("destroyed because " + var_infos[i].name.name()
+            inv.log ("destroyed because " + var_infos[i].name()
                      + " array index out of bounds");
         }
         if (VarInfo.debugMissing.isLoggable (Level.FINE))
           VarInfo.debugMissing.fine ("Removing slice " + this +
-                          " because var " + var_infos[i].name.name() +
+                          " because var " + var_infos[i].name() +
                           " array index out of bounds");
         return (result);
       }
@@ -360,7 +360,7 @@ public final class PPTSLICE1 extends PptSlice {
       }
       if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
         DiscReasonMap.put(inv, DiscardCode.bad_sample,
-          "Falsified from sample: " + var_infos[0].name.name() + " = "
+          "Falsified from sample: " + var_infos[0].name() + " = "
           + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
       }
     }
@@ -393,8 +393,8 @@ public final class PPTSLICE1 extends PptSlice {
         if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
           DiscReasonMap.put(inv, DiscardCode.bad_sample,
                             "Falsified from sample: " +
-                            var_infos[0].name.name() +
-                            " = " + val1 + "," + var_infos[1].name.name() +
+                            var_infos[0].name() +
+                            " = " + val1 + "," + var_infos[1].name() +
                             " = " + ArraysMDE.toString(val2));
         }
       }
@@ -421,9 +421,9 @@ public final class PPTSLICE1 extends PptSlice {
                                 "Samples seen with different array lengths");
           } else {
             DiscReasonMap.put(inv, DiscardCode.bad_sample,
-                    "Falsified from sample: " + var_infos[0].name.name()
+                    "Falsified from sample: " + var_infos[0].name()
                     + " = " + (array1 ? ArraysMDE.toString(val1) : val1)
-                    + "," + var_infos[1].name.name()
+                    + "," + var_infos[1].name()
                     + " = " + (array2 ? ArraysMDE.toString(val2) : val2));
           }
         }
@@ -458,11 +458,11 @@ public final class PPTSLICE1 extends PptSlice {
         // Currently there are no ternary invariants with arrays, but if
         // there are in the future, I don't want this to break.
         DiscReasonMap.put(inv, DiscardCode.bad_sample,
-          "Falsified from sample: " + var_infos[0].name.name() + " = "
+          "Falsified from sample: " + var_infos[0].name() + " = "
           + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1)
-          + "," + var_infos[1].name.name() + " = "
+          + "," + var_infos[1].name() + " = "
           + (var_infos[1].rep_type.isArray() ? ArraysMDE.toString(val2) : val2)
-          + "," + var_infos[2].name.name() + " = "
+          + "," + var_infos[2].name() + " = "
           + (var_infos[2].rep_type.isArray() ? ArraysMDE.toString(val3) : val3));
       }
     }

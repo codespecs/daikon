@@ -349,7 +349,7 @@ public class NIS {
       for (int i = 0; i < ppt.var_infos.length; i++) {
         VarInfo v = ppt.var_infos[i];
         ValueSet vs = v.get_value_set();
-        Fmt.pf ("  %s %s %s %s %s", v.comparability, v.name.name(),
+        Fmt.pf ("  %s %s %s %s %s", v.comparability, v.name(),
                 v.file_rep_type, "" + ppt.is_constant(v), vs.repr_short());
       }
     }
@@ -421,7 +421,7 @@ public class NIS {
           Fmt.pf ("%s distinct variables", "" + var_map.size());
           for (VarInfo key : var_map.keySet()) {
             Count cnt = var_map.get (key);
-            Fmt.pf (" %s %s %s ", key.comparability, key.name.name(),
+            Fmt.pf (" %s %s %s ", key.comparability, key.name(),
                     "" + cnt.val);
           }
         }
@@ -775,7 +775,7 @@ public class NIS {
       for (int i = 0; i < vis.length; i++) {
         if (out != "")          // interned
           out += ", ";
-        out += vis[i].name.name();
+        out += vis[i].name();
       }
       out = suppressee + "[" + out + "]";
       return (out);

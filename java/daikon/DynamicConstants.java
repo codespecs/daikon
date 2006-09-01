@@ -157,7 +157,7 @@ public class DynamicConstants implements Serializable {
     public String toString() {
 
       StringBuffer out = new StringBuffer();
-      out.append (vi.name.name());
+      out.append (vi.name());
       if (val == null)
         out.append (" (val missing)");
       else
@@ -549,7 +549,7 @@ public class DynamicConstants implements Serializable {
           else {
             String vals = "";
             for (int k = 0; k < slice.var_infos.length; k++)
-              vals += slice.var_infos[k].name.name() + "="
+              vals += slice.var_infos[k].name() + "="
                 + Debug.toString (constant_value(slice.var_infos[k])) + " ";
             inv.log ("Invariant " + inv.format()
                      + " destroyed by constant values" + vals);
@@ -562,7 +562,7 @@ public class DynamicConstants implements Serializable {
           StringBuffer sb = new StringBuffer();
           for (int j = 0; j < slice.arity(); j++) {
             VarInfo v = slice.var_infos[j];
-            sb.append (v.name.name() + " [" + v.file_rep_type +"] ["
+            sb.append (v.name() + " [" + v.file_rep_type +"] ["
                         + v.comparability + "] ");
           }
           Debug.log (debug, getClass(), ppt, slice.var_infos,
@@ -579,7 +579,7 @@ public class DynamicConstants implements Serializable {
       int leader1_cnt = 0;
       for (Constant con1 : leaders1) {
         if (con1.vi.file_rep_type == ProglangType.INT) {
-          leader1_str += con1.vi.name.name() + " ";
+          leader1_str += con1.vi.name() + " ";
           leader1_cnt++;
         }
       }
@@ -588,7 +588,7 @@ public class DynamicConstants implements Serializable {
       int leader2_cnt = 0;
       for (Constant con1 : leaders2) {
         if (con1.vi.file_rep_type == ProglangType.INT) {
-          leader2_str += con1.vi.name.name() + " ";
+          leader2_str += con1.vi.name() + " ";
           leader2_cnt++;
         }
       }
@@ -806,7 +806,7 @@ public class DynamicConstants implements Serializable {
         if (!con.vi.isCanonical())
           continue;
         System.out.println ("  Not creating invariants over leader "
-                            + con.vi.name.name() + " = " + con.val);
+                            + con.vi.name() + " = " + con.val);
         con_count++;
       }
       System.out.println (con_count + " constants at ppt " + ppt);
@@ -891,8 +891,7 @@ public class DynamicConstants implements Serializable {
       else
         slice1.instantiate_invariants();
 
-      // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name.name(), con.val,
-      //        con.vi.comparability, "" +con.count);
+      // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name(), con.val,
       if (con.count > 0) {
         slice1.add_val_bu (con.val, mod, con.count);
       }
@@ -944,7 +943,7 @@ public class DynamicConstants implements Serializable {
 
     for (int i = 0; i < missing_list.size(); i++) {
       Constant con = missing_list.get(i);
-      out.println (con.vi.name.name() + " is always missing");
+      out.println (con.vi.name() + " is always missing");
     }
   }
 

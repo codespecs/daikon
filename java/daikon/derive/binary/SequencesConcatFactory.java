@@ -42,12 +42,14 @@ public final class SequencesConcatFactory extends BinaryDerivationFactory {
     }
 
     // We don't want concats of arrays with themselves
-    if (var1.name.equals (var2.name)) return null;
+    if (var1.name().equals (var2.name())) return null;
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine (var1.ppt + ": " + var1.name + " and " + var2.name + " are worth deriving from");
+      debug.fine (var1.ppt + ": " + var1.name() + " and " + var2.name()
+                  + " are worth deriving from");
       debug.fine ("Types are: " + var1.type + " " + var2.type);
-      debug.fine ("Comparabilities are: " + var1.comparability + " " + var2.comparability);
+      debug.fine ("Comparabilities are: " + var1.comparability + " "
+                  + var2.comparability);
     }
 
     return new BinaryDerivation[] {

@@ -80,12 +80,12 @@ public class CommonStringSequence
   }
 
   public String format_daikon() {
-    return (printIntersect() + " subset of " + var().name);
+    return (printIntersect() + " subset of " + var().name());
   }
 
   /* IOA */
   public String format_ioa() {
-    String vname = var().name.ioa_name();
+    String vname = var().ioa_name();
     return (printIntersect() + " \\in " + vname);
   }
 

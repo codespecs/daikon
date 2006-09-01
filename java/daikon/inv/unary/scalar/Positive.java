@@ -59,7 +59,7 @@ public class Positive
 
   // A printed representation for user output
   public String format_using(OutputFormat format) {
-    return var().name.name() + " > 0";
+    return var().name() + " > 0";
   }
 
   public InvariantStatus check_modified(long v, int count) {

@@ -74,9 +74,9 @@ public class PptSplitter implements Serializable {
     if (Debug.logDetail()) {
       debug.fine ("VarInfos for " + parent.name());
       for (int ii = 0; ii < parent.var_infos.length; ii++)
-        debug.fine (parent.var_infos[ii].name.name() + " "
-                            + ppts[0].var_infos[ii].name.name() + " "
-                            + ppts[1].var_infos[ii].name.name());
+        debug.fine (parent.var_infos[ii].name() + " "
+                            + ppts[0].var_infos[ii].name() + " "
+                            + ppts[1].var_infos[ii].name());
     }
   }
 
@@ -688,7 +688,7 @@ public class PptSplitter implements Serializable {
                                 VarInfo ppt2_var) {
 
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];
-    Assert.assertTrue (v.name.equals (ppt2_var.name));
+    Assert.assertTrue (v.name().equals (ppt2_var.name()));
     return (v);
   }
 

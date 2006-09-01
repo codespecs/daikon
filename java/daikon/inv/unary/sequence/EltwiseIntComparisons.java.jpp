@@ -214,16 +214,16 @@ public class CLASSNAME
       System.out.println(repr());
     }
 #if defined(EQUAL) || defined(FLOATEQUAL)
-    return var().name.name() + " elements are equal";
+    return var().name() + " elements are equal";
 #else
-    return (var().name.name() + " sorted by " + COMPARATORSTRING);
+    return (var().name() + " sorted by " + COMPARATORSTRING);
 #endif
   }
 
 
   /* IOA */
   public String format_ioa() {
-    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification(var(), var());
+    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var(), var());
 
     String result = quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) + " /\\ " + quant.getMembershipRestriction(1);
     #if defined(EQUAL) || defined(EQUALFLOAT)
@@ -238,9 +238,7 @@ public class CLASSNAME
   }
 
   public String format_esc() {
-    String[] form =
-      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-        { var().name, var().name });
+    String[] form = VarInfo.esc_quantify (false, var(), var());
     #if defined(EQUAL) || defined(EQUALFLOAT)
       return form[0] + "(" + form[1] + " " + COMPARATORSTRING + " " + form[2] + ")" + form[3];
     #else
@@ -248,25 +246,12 @@ public class CLASSNAME
     #endif
   }
 
-//   public String format_jml() {
-//     String[] form =
-//       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-//         { var().name, var().name });
-//     #if defined(EQUAL) || defined(EQUALFLOAT)
-//       return form[0] + "(" + form[1] + " " + COMPARATORSTRING + " " + form[2] + ")" + form[3];
-//     #else
-//       return form[0] + "((i+1 == j) ==> (" + form[1] + " " + COMPARATORSTRING + " " + form[2] + ")" + form[3];
-//     #endif
-//   }
-
   public String format_java_family(OutputFormat format) {
-    return "daikon.Quant." + COMPARATORSTRINGQUANT + "(" + var().name.name_using(format, var()) + ")";
+    return "daikon.Quant." + COMPARATORSTRINGQUANT + "(" + var().name_using(format) + ")";
   }
 
   public String format_simplify() {
-    String[] form =
-      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { var().name, var().name }, false, true);
+    String[] form = VarInfo.simplify_quantify (var(), var(), false, true);
 #if defined(EQUAL) || defined(EQUALFLOAT)
     String comparator = "EQ";
 #else

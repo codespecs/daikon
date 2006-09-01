@@ -99,7 +99,7 @@ public class ParentFilter extends InvariantFilter {
         if (pinv.getClass() != inv.getClass())
           continue;
         if ((pinv.getClass() == daikon.inv.unary.scalar.NonZero.class)
-            && pinv.ppt.var_infos[0].name.isThis()) {
+            && pinv.ppt.var_infos[0].isThis()) {
           inv.log ("Not filtered by " + pinv.format() + " 'this != null'");
           continue;
         }
@@ -120,16 +120,16 @@ public class ParentFilter extends InvariantFilter {
           if (pv == null) {
             if (debug) {
               System.out.printf("    ParentFilter %s, parent %s%n", inv.format(), pslice.name());
-              System.out.printf("    No parent var for %s via %s%n", v.name.name(), rel);
+              System.out.printf("    No parent var for %s via %s%n", v.name(), rel);
               System.out.printf("      Equality set: %s%n", v.equalitySet.shortString());
             }
             var_mismatch = true;
             break;
           }
-          if (! (pv.name.name().equals("this")
+          if (! (pv.name().equals("this")
                  || pGuardedVars.contains(pv))) {
             if (debug) System.out.printf("Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
-                              guardedVars, pinv, pv, rel.parent, v.name.name(), rel.child);
+                              guardedVars, pinv, pv, rel.parent, v.name(), rel.child);
             VarInfo pgv = pGuardedVars.get(0);
             assert (pgv != pv);
             if (debug) System.out.printf("%s is index %d at %s, %s is index %d at %s%n",

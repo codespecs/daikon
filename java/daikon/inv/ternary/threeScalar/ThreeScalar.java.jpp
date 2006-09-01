@@ -74,7 +74,7 @@ public abstract class CLASSNAME
     Assert.assertTrue(! falsified);
     if ((mod_index < 0) || (mod_index > 8))
       Assert.assertTrue((mod_index >= 0) && (mod_index < 8),
-        "var 1 " + ppt.var_infos[0].name.name() + " value = "
+        "var 1 " + ppt.var_infos[0].name() + " value = "
          + val1 + "mod_index = " +  mod_index);
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
     PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
@@ -94,7 +94,7 @@ public abstract class CLASSNAME
     Assert.assertTrue(! falsified);
     if ((mod_index < 0) || (mod_index > 8))
       Assert.assertTrue((mod_index >= 0) && (mod_index < 8),
-        "var 1 " + ppt.var_infos[0].name.name() + " value = "
+        "var 1 " + ppt.var_infos[0].name() + " value = "
          + val1 + "mod_index = " +  mod_index + " line "
          + FileIO.data_trace_state.reader.getLineNumber());
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();

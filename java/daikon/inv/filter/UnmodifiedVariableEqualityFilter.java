@@ -15,7 +15,7 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
   }
 
   /**
-   * Boolean. If true, UnmodifiedVariableEqualityFilter is initially turned on. 
+   * Boolean. If true, UnmodifiedVariableEqualityFilter is initially turned on.
    */
   public static boolean dkconfig_enabled = true;
 
@@ -40,10 +40,11 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
     VarInfo var2 = comp.var2();
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine ("compared " + var1.name.applyPrestate() + " to " + var2.name.toString());
+      PrintInvariants.debugFiltering.fine ("compared " + var1.prestate_name()
+                                           + " to " + var2.name());
     }
 
-    if (var1.name.applyPrestate().equals(var2.name)) {
+    if (var1.prestate_name().equals(var2.name())) {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("\t(yes...)");
       }
@@ -51,10 +52,11 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
     }
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine ("compared " + var2.name.applyPrestate() + " to " + var1.name.toString());
+      PrintInvariants.debugFiltering.fine ("compared " + var2.prestate_name()
+                                           + " to " + var1.name());
     }
 
-    if (var2.name.applyPrestate().equals(var1.name)) {
+    if (var2.prestate_name().equals(var1.name())) {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("\t(yes...)");
       }

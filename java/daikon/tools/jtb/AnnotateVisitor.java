@@ -16,6 +16,7 @@ import daikon.inv.OutputFormat;
 import daikon.inv.unary.sequence.EltNonZero;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.chicory.DaikonVariableInfo;
 
 
 // For each class:  (UnmodifiedClassDeclaration)
@@ -925,11 +926,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    **/
   private VarInfo findVar(String field, PptTopLevel ppt) {
     String varname = "this." + field;
-    VarInfo vi = ppt.findVar(varname);
+    VarInfo vi = ppt.find_var_by_name (varname);
     if (vi == null) {
       // No "this.field" variable, so try (static) "ClassName.field".
       varname = ppt.ppt_name.getFullClassName() + "." + field;
-      vi = ppt.findVar(varname);
+      vi = ppt.find_var_by_name (varname);
     }
     if (vi == null) {
       // We found a variable in the source code that is not computed by
@@ -940,7 +941,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       System.out.println("Warning: Annotate: Daikon knows nothing about field " + field + " at " + ppt);
       System.out.println("  ppt.var_infos:");
       for (VarInfo pptvi : ppt.var_infos) {
-        System.out.println("    " + pptvi.name.name());
+        System.out.println("    " + pptvi.name());
       }
       throw new Error("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
     }
@@ -994,13 +995,13 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (vi.type.elementType().isPrimitive()) {
         continue;
       }
-      String varname = vi.name.name();
+      String varname = vi.name();
       String elt_varname = varname + "[]";
-      assert ppt.findVar(elt_varname) != null
+      assert ppt.find_var_by_name (elt_varname) != null
         : "Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt;
       // This variable represents the types of the elements.
-      String et_varname = elt_varname + VarInfoName.getClassSuffix;
-      VarInfo et_vi = ppt.findVar(et_varname);
+      String et_varname = elt_varname + DaikonVariableInfo.class_suffix;
+      VarInfo et_vi = ppt.find_var_by_name (et_varname);
       assert et_vi != null
         : "Annotate: Daikon knows nothing about variable " + et_varname + " at " + ppt;
 

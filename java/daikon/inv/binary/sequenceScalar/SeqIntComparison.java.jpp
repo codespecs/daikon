@@ -247,7 +247,7 @@ public final class SEQINTEQUAL
     }
     if (seqvar(vis) == sclseq) {
       return new DiscardInfo (this, DiscardCode.obvious,
-                              sclvar(vis).name.name() + " is min/max ");
+                              sclvar(vis).name() + " is min/max ");
     }
     return (null);
   }
@@ -276,45 +276,36 @@ public final class SEQINTEQUAL
   }
 
   public String format_daikon() {
-    return seqvar().name.name() + " elements " + EQUALSstring + " " + sclvar().name.name();
+    return seqvar().name() + " elements " + EQUALSstring + " " + sclvar().name();
   }
 
   public String format_repair() {
-    return seqvar().name.repair_name(seqvar()) + EQUALSstring + " " + sclvar().name.repair_name(sclvar());
+    return seqvar().repair_name() + EQUALSstring + " " + sclvar().repair_name();
   }
 
 
   /* IOA */
   public String format_ioa() {
-    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification(seqvar());
+    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (seqvar());
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexedString(0) + EQUALSIOAstring + sclvar().name.ioa_name() + quant.getClosingExp();
+      " => " + quant.getVarIndexedString(0) + EQUALSIOAstring + sclvar().ioa_name() + quant.getClosingExp();
   }
 
   public String format_esc() {
-    String[] form =
-      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-        { seqvar().name, sclvar().name });
-    return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
+    String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
+    return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")"
+      + form[3];
   }
 
   public String format_simplify() {
-    String[] form =
-      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { seqvar().name, sclvar().name });
-    return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
+    String[] form = VarInfo.simplify_quantify (seqvar(), sclvar());
+    return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " "
+      + form[2] + ")" + form[3];
   }
 
-//   public String format_jml() {
-//     String[] form =
-//       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-//         { seqvar().name, sclvar().name });
-//     return form[0] + form[1] + " " + EQUALSstring + " " + form[2] + form[3];
-//   }
-
   public String format_java_family(OutputFormat format) {
-    return "daikon.Quant." + EQUALSstringDBC + "(" + seqvar().name.name_using(format, seqvar())
-      + ", " + sclvar().name.name_using(format, sclvar()) + ")";
+    return "daikon.Quant." + EQUALSstringDBC + "("
+      + seqvar().name_using(format) + ", " + sclvar().name_using(format) + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a, PRIMITIVE x, int count) {
@@ -401,8 +392,8 @@ public final class SEQINTEQUAL
 
     VarInfo seqvar = seqvar(vis);
     VarInfo sclvar = sclvar(vis);
-    //Debug.log (getClass(), ppt, vis, "Considering  over" + seqvar.name.name()
-    //           + " and " + sclvar.name.name());
+    //Debug.log (getClass(), ppt, vis, "Considering  over" + seqvar.name()
+    //           + " and " + sclvar.name());
 
     // Look for the same property over a supersequence of this one.  This
     // doesn't need to explicitly ignore oher members of the equality set
@@ -416,13 +407,13 @@ public final class SEQINTEQUAL
       if (inv instanceof SEQINTEQUAL) {
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
         // Fmt.pf ("considering %s seqvar=%s, other=%s", other.format(),
-        // seqvar().name.name(), other.seqvar().name.name());
+        // seqvar().name(), other.seqvar().name());
         if (pptt.is_subsequence (seqvar(), other.seqvar())
             && (sclvar(vis) == other.sclvar())) {
           // Fmt.pf ("is subsequence");
-          return new DiscardInfo(this, DiscardCode.obvious, seqvar().name.name()
+          return new DiscardInfo(this, DiscardCode.obvious, seqvar().name()
                                  + " is a subsequence of "
-                                 + other.seqvar().name.name() + " and "
+                                 + other.seqvar().name() + " and "
                                  + other.format() + " holds");
         }
       }
@@ -433,7 +424,7 @@ public final class SEQINTEQUAL
     if (false) {
       if (pptt.is_empty (seqvar))
         return new DiscardInfo (this, DiscardCode.obvious, "The sequence "
-                                + seqvar.name.name() + " is always empty");
+                                + seqvar.name() + " is always empty");
     }
 
     if (isExact()) {

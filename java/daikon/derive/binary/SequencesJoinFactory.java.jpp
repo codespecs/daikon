@@ -63,21 +63,19 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       return null;
     }
 
-    if (var1.name.equals(var2.name)) return null;
+    if (var1.name().equals(var2.name())) return null;
 
-    if (!(var1.name instanceof VarInfoName.Field) ||
-        !(var2.name instanceof VarInfoName.Field))   return null;
+    if (!var1.is_field() || !var2.is_field())
+      return null;
 
-    VarInfoName.Field name1 = (VarInfoName.Field) var1.name;
-    VarInfoName.Field name2 = (VarInfoName.Field) var2.name;
-
-    if (!name1.term.equals(name2.term)) return null;
+    if (!var1.has_same_parent (var2))
+      return null;
 
     // Now we finally can derive
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine (var1.ppt + ": " + var1.name + " and " +
-                   var2.name + " are worth deriving from");
+      debug.fine (var1.ppt + ": " + var1.name() + " and " +
+                   var2.name() + " are worth deriving from");
     }
 
     return new BinaryDerivation[] {

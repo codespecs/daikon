@@ -93,7 +93,7 @@ public abstract class PptSlice
     for (int i=0; i<var_infos.length; i++) {
       // mistere: I'm not sure is this is the right thing for
       // the gui, but it's probably close
-      if (var_infos[i].name.name().equals(name)) {
+      if (var_infos[i].name().equals(name)) {
         return true;
       }
     }
@@ -107,7 +107,7 @@ public abstract class PptSlice
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
     for (int i=0; i<var_infos.length; i++) {
-      if (var_infos[i].name.includesSimpleName(name))
+      if (var_infos[i].includes_simple_name(name))
         return true;
     }
     return false;
@@ -290,7 +290,7 @@ public abstract class PptSlice
 //       debugGuarding.fine ("  var_infos in this slice:");
 //       for (VarInfo vi : var_infos) {
 //         try {
-//           debugGuarding.fine ("    " + vi.name.name());
+//           debugGuarding.fine ("    " + vi.name());
 //         } catch (UnsupportedOperationException e) {
 //           debugGuarding.fine ("  Part of PptSlice cannot be formatted.");
 //         }
@@ -405,7 +405,7 @@ public abstract class PptSlice
   public String toString() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < var_infos.length; i++) {
-      sb.append (" " + var_infos[i].name.name());
+      sb.append (" " + var_infos[i].name());
     }
     return this.getClass().getName() + ": " + parent.ppt_name + " "
            + sb + " samples: " + num_samples();

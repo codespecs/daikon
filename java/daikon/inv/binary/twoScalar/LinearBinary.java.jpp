@@ -117,7 +117,8 @@ public class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
-    return core.format_using(format, var1().name, var1(), var2().name, var2());
+    return core.format_using(format, var1().name_using(format),
+                             var2().name_using(format));
   }
 
   public boolean isActive() {
@@ -183,8 +184,8 @@ public class CLASSNAME
       SequenceLength sl1 = (SequenceLength) var1.derived;
       SequenceLength sl2 = (SequenceLength) var2.derived;
       if (sl1.base == sl2.base) {
-        String discardString = var1.name.name()+" and "+var2.name.name()+" derived from "+
-          "same sequence: "+sl1.base.name.name();
+        String discardString = var1.name()+" and "+var2.name()+" derived from "+
+          "same sequence: "+sl1.base.name();
         return new DiscardInfo(this, DiscardCode.obvious, discardString);
       }
     }
@@ -212,10 +213,10 @@ public class CLASSNAME
     }
 
     if (core.a == 0) {
-      return new DiscardInfo(this, DiscardCode.obvious, var2().name.name() + " is constant");
+      return new DiscardInfo(this, DiscardCode.obvious, var2().name() + " is constant");
     }
     if (core.b == 0) {
-      return new DiscardInfo(this, DiscardCode.obvious, var1().name.name() + " is constant");
+      return new DiscardInfo(this, DiscardCode.obvious, var1().name() + " is constant");
     }
 //    if (core.a == 1 && core.b == 0) {
 //      return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");

@@ -24,35 +24,13 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       return null;
     }
 
-    // if (vi.rep_type != ProglangType.INT_ARRAY)
-    //   return null;
-    if (! vi.rep_type.isArray())
+    if (!vi.is_direct_array())
       return null;
-
-    // Omit length of .class sequences, since they always have a
-    // corresponding equal-length sequence (sans-class).
-    if (vi.name.hasNodeOfType(VarInfoName.TypeOf.class)) {
-      return null;
-    }
 
     if (!vi.aux.getFlag(VarInfoAux.HAS_SIZE)) {
       // Don't derive if auxiliary info says size of this collection
       // has no meaning
       return null;
-    }
-
-    // Omit length of fields applied over sequences, since they always
-    // have a corresponding equal-length sequence (sans-field).
-    {
-      // If $Field appears before $Elements, omit.
-      for (VarInfoName node : (new VarInfoName.InorderFlattener(vi.name)).nodes()) {
-        if (node instanceof VarInfoName.Field) {
-          return null;
-        }
-        if (node instanceof VarInfoName.Elements) {
-          break;
-        }
-      }
     }
 
     if (! SequenceLength.applicable(vi)) {
@@ -61,7 +39,7 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
     }
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Instantiating for " + vi.name + " in " + vi.ppt);
+      debug.fine ("Instantiating for " + vi.name() + " in " + vi.ppt);
     }
 
     if (vi.aux.getFlag(VarInfoAux.NULL_TERMINATING)) {

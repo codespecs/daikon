@@ -398,7 +398,7 @@ public class Debug {
     String vars = "";
     for (int i = 0; i < vis.length; i++) {
       VarInfo v = vis[i];
-      vars += v.name.name() + ": ";
+      vars += v.name() + ": ";
     }
     for (int i = vis.length; i < 3; i++) {
       vars += ": ";
@@ -492,7 +492,7 @@ public class Debug {
     int numvars = (vis == null) ? 0 : vis.length;
     for (int i = 0; i < numvars; i++) {
       VarInfo v = vis[i];
-      vars += v.name.name();
+      vars += v.name();
       if (ourvars[i] != null)
         vars += " {" + ourvars[i] + "}";
       vars += ": ";
@@ -592,11 +592,11 @@ public class Debug {
             // Loop through each variable in the equality set
             for (VarInfo v : evars) {
               if (!used[k] &&
-                  (cv[j].equals ("*") || cv[j].equals (v.name.name()))) {
+                  (cv[j].equals ("*") || cv[j].equals (v.name()))) {
                 used[k] = true;
                 this_match = true;
-                if (!cv[j].equals (vis[j].name.name())) {
-                  ourvars[j] = v.name.name();
+                if (!cv[j].equals (vis[j].name())) {
+                  ourvars[j] = v.name();
                   if (j != k)
                     ourvars[j] += " (" + j +"/" + k + ")";
                   if (v.isCanonical())
@@ -606,7 +606,7 @@ public class Debug {
               }
             }
           } else { // sometimes, no equality set
-            if (cv[j].equals ("*") || cv[j].equals (vis[k].name.name()))
+            if (cv[j].equals ("*") || cv[j].equals (vis[k].name()))
               this_match = true;
           }
         }
@@ -671,7 +671,7 @@ public class Debug {
         continue;
       if (v.file_rep_type != ProglangType.INT)
         continue;
-      out += v.name.name() + "=" + toString (v.getValue(vt))
+      out += v.name() + "=" + toString (v.getValue(vt))
         + " [" + vt.getModified(v) + "]: ";
     }
     return out;
@@ -691,10 +691,10 @@ public class Debug {
       for (int j = 0; j < debugTrackVars.length; j++) {
         String[] cv = debugTrackVars[j];
         for (int k = 0; k < cv.length; k++) {
-          if (cv[k].equals (v.name.name())) {
+          if (cv[k].equals (v.name())) {
             Object val = v.getValue (vt);
             int mod = vt.getModified (v);
-            out += v.name.name() + "=";
+            out += v.name() + "=";
             out += toString (val);
             if ((mod == ValueTuple.MISSING_FLOW)
               || (mod == ValueTuple.MISSING_NONSENSICAL))
@@ -703,7 +703,7 @@ public class Debug {
               out += " (out of bounds)";
             if (v.equalitySet != null) {
               if (!v.isCanonical())
-                out += " (leader=" + v.canonicalRep().name.name() + ")";
+                out += " (leader=" + v.canonicalRep().name() + ")";
             }
             // out += " mod=" + mod;
             out += ": ";
@@ -736,7 +736,7 @@ public class Debug {
 
     String vars = "";
     for (int j = 0; j < vis.length; j++)
-      vars += vis[j].name.name() + " ";
+      vars += vis[j].name() + " ";
     return (vars);
   }
 
@@ -752,7 +752,7 @@ public class Debug {
       VarInfo v = vis[i];
       Object val = v.getValue (vt);
       int mod = vt.getModified (v);
-      out += v.name.name() + "=";
+      out += v.name() + "=";
       out += toString (val);
       if (v.isMissing (vt))
         out += " (missing)";
@@ -760,7 +760,7 @@ public class Debug {
         out += " (out of bounds)";
       if (v.equalitySet != null) {
        if (!v.isCanonical())
-         out += " (leader=" + v.canonicalRep().name.name() + ")";
+         out += " (leader=" + v.canonicalRep().name() + ")";
       }
       out += ": ";
     }

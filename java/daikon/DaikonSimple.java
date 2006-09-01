@@ -449,7 +449,7 @@ public class DaikonSimple {
         for (Iterator<VarInfo> j = original.var_info_iterator(); j.hasNext();) {
           VarInfo var2 = j.next();
 
-          if (var.name.equals(var2.name)) {
+          if (var.name().equals(var2.name())) {
             values[k] = vt.getValue(var2);
             mods[k] = vt.getModified(var2);
             found = true;
@@ -518,7 +518,7 @@ public class DaikonSimple {
 
           // the check assumes that static fields are not stored first in the
           // object ppt
-          if (PptRelation.find_var(ppt, object_ppt.var_infos[0].name) != null) {
+          if (ppt.find_var_by_name (object_ppt.var_infos[0].name()) != null) {
             // object and class ppt should be created
             object_vt = copySample(object_ppt, ppt, vt, nonce);
 

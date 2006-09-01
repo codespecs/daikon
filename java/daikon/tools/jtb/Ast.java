@@ -1189,7 +1189,7 @@ public class Ast {
       Assert.assertTrue (!(inv instanceof Equality));
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
         Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
-                           "var '" + inv.ppt.var_infos[j].name.name()
+                           "var '" + inv.ppt.var_infos[j].name()
                            + "' out of bounds in " + inv.format());
       InvariantFilters fi = InvariantFilters.defaultFilters();
 

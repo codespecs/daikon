@@ -254,7 +254,7 @@ public class SampleTester extends TestCase {
     for (int i = 0; i < var_arr.length; i++) {
       String vname = var_arr[i];
       for (int j = 0; j < ppt.var_infos.length; j++) {
-        if (vname.equals (ppt.var_infos[j].name.name()))
+        if (vname.equals (ppt.var_infos[j].name()))
           vars[i] = ppt.var_infos[j];
       }
       if (vars[i] == null)

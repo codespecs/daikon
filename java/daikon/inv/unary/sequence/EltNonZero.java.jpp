@@ -49,14 +49,11 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.sequence;
 
 import daikon.*;
-import daikon.VarInfoName.Elements;
-import daikon.VarInfoName.Slice;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.ValueSet;
 import daikon.suppress.*;
-import daikon.inv.OutputFormat.Repair;
 
 import utilMDE.*;
 
@@ -142,18 +139,18 @@ public final class CLASSNAME
   }
 
   public String format_daikon() {
-    return var().name.name() + " elements " + "!=" + " "
+    return var().name() + " elements " + "!=" + " "
            + (is_pointer() ? "null" : "0");
   }
 
   public String format_repair() {
     if (var().type.isArray()) {
-      return "sizeof("+var().name.repair_name(var())+")>0";
+      return "sizeof("+var().repair_name()+")>0";
     } else {
       if (is_pointer())
-        return "sizeof("+ var().name.repair_name(var()) + ")>=0";
+        return "sizeof("+ var().repair_name() + ")>=0";
       else
-        return  var().name.repair_name(var()) + "!=0";
+        return  var().repair_name() + "!=0";
     }
   }
 
@@ -164,29 +161,35 @@ public final class CLASSNAME
   }
 
   public String format_esc() {
-    // If this is an entire array or Collection (not VarInfoName.Slice), then
+    // If this is an entire array or Collection (not a slice), then
     //  * for arrays: use \nonnullelements(A)
     //  * for Collections: use collection.containsNull == false
     //    (the latter also requires that ghost field to get set)
 
-    VarInfoName viname = var().name;
-    if (viname instanceof VarInfoName.Elements) {
-      VarInfoName term = ((VarInfoName.Elements) viname).term;
+    // if (var().isDerivedSubSequenceOf() == null) {
+    if (var().is_direct_non_slice_array()) {
+      VarInfo term = var().get_enclosing_var();
+      String esc_name = null;
+      if (term == null)
+        // Only happenes in internal format tests
+        esc_name = var().name().replace ("[]", "");
+      else {
+        // System.out.printf ("term = %s, var = %s%n", term.name, var().name);
+        esc_name = term.esc_name();
+      }
       if (var().type.isArray()) {
-        return "\\nonnullelements(" + term.esc_name() + ")";
+        return "\\nonnullelements(" + esc_name + ")";
       } else {
-        return term.esc_name() + ".containsNull == false";
+        return esc_name + ".containsNull == false";
       }
     }
 
-    // If this is just part of an array or Collection (viname instanceof
-    // VarInfoName.Slice), then calling viname.esc_name() will always throw
-    // an exception, since var() is certainly a sequence.  So use the
+    // If this is just part of an array or Collection (var is a
+    // slice), then calling viname.esc_name() will always throw an
+    // exception, since var() is certainly a sequence.  So use the
     // standard quantification.
 
-    String[] form =
-      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-        { var().name });
+    String[] form = VarInfo.esc_quantify (var());
     return form[0] + "(" + form[1] + " != "
            + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
@@ -194,7 +197,7 @@ public final class CLASSNAME
   /* modeled after format_jml, kind of */
   public String format_java_family(OutputFormat format) {
     String retval =
-      "daikon.Quant.eltsNotEqual(" + var().name.name_using(format, var())
+      "daikon.Quant.eltsNotEqual(" + var().name_using(format)
       + (is_pointer() ? ", null" : ", 0") + ")";
 
     return retval;
@@ -202,9 +205,10 @@ public final class CLASSNAME
 
   /* IOA */
   public String format_ioa() {
-    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
-    String result = quant.getQuantifierExp() + quant.getVarName(0).ioa_name() + " \\in " +
-      var().name.ioa_name() + " => " + quant.getVarIndexedString(0) + "~=";
+    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
+    String result = quant.getQuantifierExp() + quant.getVarString(0)
+      + " \\in " + var().ioa_name() + " => " + quant.getVarIndexedString(0)
+      + "~=";
     if (is_pointer()) {
       return result + "null" + quant.getClosingExp();
     } else {
@@ -213,10 +217,9 @@ public final class CLASSNAME
   }
 
   public String format_simplify() {
-    String[] form =
-      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { var().name });
-    return form[0] + "(NEQ " + form[1] + " " + (is_pointer() ? "null" : "0") + ")" + form[2];
+    String[] form = VarInfo.simplify_quantify (var());
+    return form[0] + "(NEQ " + form[1] + " "
+      + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
@@ -309,7 +312,7 @@ public final class CLASSNAME
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (!vis[0].aux.getFlag(VarInfoAux.HAS_NULL)) {
       // If it's not a number and null doesn't have special meaning...
-      return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + vis[0].name.name());
+      return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + vis[0].name());
     }
     return super.isObviousStatically (vis);
   }
@@ -342,7 +345,7 @@ public final class CLASSNAME
     // subsequence relationship between that array and this one.
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Testing isObviousDynamically for " + vis[0].name.name());
+      debug.fine ("Testing isObviousDynamically for " + vis[0].name());
     }
 
     PptTopLevel parent = ppt.parent;
@@ -357,8 +360,8 @@ public final class CLASSNAME
         if (Debug.logOn())
           Daikon.current_inv = this;
         if (parent.is_subsequence (v1, v2))
-          return new DiscardInfo (this, DiscardCode.obvious, v1.name.name() +
-                                  " is a subsequence of " + v2.name.name());
+          return new DiscardInfo (this, DiscardCode.obvious, v1.name() +
+                                  " is a subsequence of " + v2.name());
       }
     }
 

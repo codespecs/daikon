@@ -261,8 +261,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * variables, and swap state.
    **/
   public String repr() {
-    return getClass().getName() + " (" + var1().name.name() + ", "
-      + var2().name.name() + ") [swap=" + swap + "]";
+    return getClass().getName() + " (" + var1().name() + ", "
+      + var2().name() + ") [swap=" + swap + "]";
   }
 
   /**

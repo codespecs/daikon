@@ -114,7 +114,7 @@ public class CLASSNAME
   }
 
   public String format_daikon() {
-    return var1().name.name() + " is the reverse of " + var2().name.name();
+    return var1().name() + " is the reverse of " + var2().name();
   }
 
   /* IOA */
@@ -123,8 +123,8 @@ public class CLASSNAME
   }
 
   public String format_java_family(OutputFormat format) {
-          return "daikon.Quant.isReverse(" + var1().name.name_using(format, var1())
-            + ", " + var2().name.name_using(format, var2()) + ")";
+          return "daikon.Quant.isReverse(" + var1().name_using(format)
+            + ", " + var2().name_using(format) + ")";
   }
 
   public String format_simplify() {
@@ -137,10 +137,8 @@ public class CLASSNAME
   private String format_simplify_defined() {
     VarInfo onevar = var1();
     VarInfo othervar = var2();
-    String[] one_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(onevar.name);
-    String[] other_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(othervar.name);
+    String[] one_name = onevar.simplifyNameAndBounds();
+    String[] other_name = othervar.simplifyNameAndBounds();
 
     if (one_name == null || other_name == null) {
       return "format_simplify() can't handle one of these sequences: "
@@ -155,19 +153,15 @@ public class CLASSNAME
   private String format_simplify_explicit() {
     VarInfo onevar = var1();
     VarInfo othervar = var2();
-    String[] one_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(onevar.name);
-    String[] other_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(othervar.name);
+    String[] one_name = onevar.simplifyNameAndBounds();
+    String[] other_name = othervar.simplifyNameAndBounds();
 
     if (one_name == null || other_name == null) {
       return "format_simplify() can't handle one of these sequences: "
         + format();
     }
 
-    String index =
-      VarInfoName.QuantHelper.getFreeIndex(onevar.name, othervar.name)
-      .simplify_name();
+    String index = VarInfo.get_simplify_free_index (onevar, othervar);
 
     // (FORALL (a i j b ip jp)
     //  (IFF (|is-reverse-of| a i j b ip jp)

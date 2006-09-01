@@ -159,8 +159,8 @@ public class SUBSET
   }
 
   public String format() {
-    String v1 = var1().name.name();
-    String v2 = var2().name.name();
+    String v1 = var1().name();
+    String v2 = var2().name();
     #if (defined(SUB) || defined(SUBFLOAT))
     return v1 + " is a subset of " + v2;
     #else
@@ -171,8 +171,8 @@ public class SUBSET
   /* IOA */
   public String format_ioa() {
     String result;
-    String v1 = var1().name.ioa_name();
-    String v2 = var2().name.ioa_name();
+    String v1 = var1().ioa_name();
+    String v2 = var2().ioa_name();
     #if (defined(SUB) || defined(SUBFLOAT))
     result = v1 + " \\subseteq " + v2;
     #else
@@ -209,10 +209,8 @@ public class SUBSET
     VarInfo subvar = var2();
     VarInfo supervar = var1();
 #endif
-    String[] sub_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(subvar.name);
-    String[] super_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(supervar.name);
+    String[] sub_name = subvar.simplifyNameAndBounds();
+    String[] super_name = supervar.simplifyNameAndBounds();
 
     if (sub_name == null || super_name == null) {
       return "format_simplify can't handle one of these sequences: "
@@ -232,23 +230,15 @@ public class SUBSET
     VarInfo subvar = var2();
     VarInfo supervar = var1();
 #endif
-    String[] sub_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(subvar.name);
-    String[] super_name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(supervar.name);
+    String[] sub_name = subvar.simplifyNameAndBounds();
+    String[] super_name = supervar.simplifyNameAndBounds();
 
     if (sub_name == null || super_name == null) {
       return "format_simplify can't handle one of these sequences: "
         + format();
     }
 
-    VarInfoName index1_vin =
-      VarInfoName.QuantHelper.getFreeIndex(subvar.name, supervar.name);
-    String index1 = index1_vin.simplify_name();
-    String index2 =
-      VarInfoName.QuantHelper.getFreeIndex(subvar.name, supervar.name,
-                                           index1_vin)
-      .simplify_name();
+    String indices[] = VarInfo.get_simplify_free_indices (subvar, supervar);
 
     // (FORALL (a i j b ip jp)
     //    (IFF (subset a i j b ip jp)
@@ -260,19 +250,19 @@ public class SUBSET
     //                        (EQ (select (select elems a) x)
     //                            (select (select elems b) y))))))))
 
-    return "(FORALL (" + index1 + ") (IMPLIES " + "(AND (<= " + sub_name[1]
-      + " " + index1 + ") (<= " + index1 + " " + sub_name[2] + "))"
-      + "(EXISTS (" + index2 + ")" + "(AND (<= " + super_name[1] + " "
-      + index2 + ") (<= " + index2 + " " + super_name[2]+ ")"
-      + "(EQ (select (select elems " + sub_name[0] + ") " + index1 + ") "
-      + "(select (select elems " + super_name[0] +") " + index2 + "))))))";
+    return "(FORALL (" + indices[0] + ") (IMPLIES " + "(AND (<= " + sub_name[1]
+      + " " + indices[0] + ") (<= " + indices[0] + " " + sub_name[2] + "))"
+      + "(EXISTS (" + indices[1] + ")" + "(AND (<= " + super_name[1] + " "
+      + indices[1] + ") (<= " + indices[1] + " " + super_name[2]+ ")"
+      + "(EQ (select (select elems " + sub_name[0] + ") " + indices[0] + ") "
+      + "(select (select elems " + super_name[0] +") " + indices[1] + "))))))";
 
   }
 
   public String format_java_family(OutputFormat format) {
 
-    String v1 = var1().name.name_using(format, var1());
-    String v2 = var2().name.name_using(format, var2());
+    String v1 = var1().name_using(format);
+    String v2 = var2().name_using(format);
     #if (defined(SUB) || defined(SUBFLOAT))
     return "daikon.Quant.subsetOf(" + v1 + ", " + v2 + ")";
     #else

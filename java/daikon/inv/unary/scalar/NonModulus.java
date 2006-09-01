@@ -88,7 +88,7 @@ public class NonModulus
 
   public String format_using(OutputFormat format) {
     updateResults();
-    String name = var().name.name_using(format, var());
+    String name = var().name_using(format);
 
     if (format == OutputFormat.DAIKON) {
       if (no_result_yet) {
@@ -115,7 +115,7 @@ public class NonModulus
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(NEQ (MOD " + var().name.simplify_name() + " "
+      return "(NEQ (MOD " + var().simplify_name() + " "
         + simplify_format_long(modulus) + ") "
         + simplify_format_long(remainder) + ")";
     }

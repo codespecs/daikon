@@ -81,7 +81,7 @@ public class InvTranslate {
     for (int i = 0; i < i1.ppt.var_infos.length; i++) {
       VarInfo v1 = i1.ppt.var_infos[i];
       VarInfo v2 = i2.ppt.var_infos[i];
-      add_variable_map (v1.name.name(), v2.name.name());
+      add_variable_map (v1.name(), v2.name());
       if ((v1.derived == null) && (v2.derived == null))
         quality += 5;
       else if ((v1.derived != null) && (v2.derived != null)

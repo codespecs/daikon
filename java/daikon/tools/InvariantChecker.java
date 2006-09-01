@@ -275,13 +275,13 @@ public class InvariantChecker {
           int mod = vt.getModified (v);
           if (v.isMissing (vt)) {
             if (debug_detail.isLoggable (Level.FINE))
-              debug_detail.fine (": : Skipping slice, " + v.name.name()
+              debug_detail.fine (": : Skipping slice, " + v.name()
                                + " missing");
             continue slice_loop;
           }
           if (v.missingOutOfBounds()) {
             if (debug_detail.isLoggable (Level.FINE))
-              debug.fine (": : Skipping slice, " + v.name.name()
+              debug.fine (": : Skipping slice, " + v.name()
                           + " out of bounds");
             continue slice_loop;
           }

@@ -1388,12 +1388,13 @@ public final class Daikon {
       int new_vis_index = 0;
       for (int k = 0; k < entry_ppt.num_declvars; k++) {
         VarInfo vi = entry_ppt_vis[k];
-        Assert.assertTrue(!vi.isDerived(), "Derived when making orig(): " + vi.name);
+        Assert.assertTrue(!vi.isDerived(), "Derived when making orig(): "
+                          + vi.name());
         if (vi.isStaticConstant())
           continue;
         VarInfo origvar = VarInfo.origVarInfo(vi);
         // Fix comparability
-        VarInfo postvar = exit_ppt.findVar(vi.name);
+        VarInfo postvar = exit_ppt.find_var_by_name (vi.name());
         if (postvar == null) {
           System.out.printf ("Cant find var %s in exit of ppt %s%n", vi,
                              exit_ppt.name());
@@ -1404,7 +1405,7 @@ public final class Daikon {
           assert false;
           throw new Error("this can't happen: postvar is null");
         }
-        origvar.comparability = postvar.comparability.makeAlias(origvar.name);
+        origvar.comparability = postvar.comparability.makeAlias();
 
         // Add to new_vis
         new_vis[new_vis_index] = origvar;

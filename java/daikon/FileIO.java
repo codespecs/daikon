@@ -408,14 +408,14 @@ public final class FileIO {
     while ((vi = read_VarInfo(state.reader, state.varcomp_format,
                               state.file, ppt_name)) != null) {
       for (int i=0; i<var_infos.size(); i++) {
-        if (vi.name == var_infos.get(i).name) {
+        if (vi.name() == var_infos.get(i).name()) {
           throw new FileIOException("Duplicate variable name", state.reader,
                                     state.filename);
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
       // against null above.
-      if (!var_included (vi.name.name())) {
+      if (!var_included (vi.name())) {
         continue;
       }
       var_infos.add(vi);
@@ -591,8 +591,7 @@ public final class FileIO {
     //     filename);
     // }
 
-    return new VarInfo(
-      VarInfoName.parse(varname),
+    return new VarInfo(varname,
       prog_type,
       file_rep_type,
       comparability,
@@ -717,7 +716,7 @@ public final class FileIO {
         if (j != 0)
           pw.print(", ");
 
-        pw.print(ppt.var_infos[j].name + "=");
+        pw.print(ppt.var_infos[j].name() + "=");
 
         Object val = vals[j];
         if (val == canonical_hashcode)
@@ -824,7 +823,7 @@ public final class FileIO {
   // correspond to points normally found in traces from a
   // programming languages.
   private static void warn_if_hierarchy_mismatch(PptMap all_ppts) {
-    
+
     boolean some_program_points = false;
     boolean all_program_points = true;
 
@@ -832,17 +831,17 @@ public final class FileIO {
     // false if at least one of them is not a program point normally
     // found in traces from programming languages
     for(Iterator<PptTopLevel> all_ppts_iter = all_ppts.ppt_all_iterator();
-        all_ppts_iter.hasNext(); ) {      
+        all_ppts_iter.hasNext(); ) {
       PptTopLevel ppt_top_level = all_ppts_iter.next();
-     
-      boolean is_program_point = 
+
+      boolean is_program_point =
         (ppt_top_level.ppt_name.isExitPoint() ||
         ppt_top_level.ppt_name.isEnterPoint() ||
         ppt_top_level.ppt_name.isThrowsPoint() ||
         ppt_top_level.ppt_name.isObjectInstanceSynthetic() ||
         ppt_top_level.ppt_name.isClassStaticSynthetic() ||
         ppt_top_level.ppt_name.isGlobalPoint());
-      
+
       all_program_points = all_program_points && is_program_point;
       some_program_points = some_program_points || is_program_point;
     }
@@ -861,7 +860,7 @@ public final class FileIO {
     // if some of the program points do not correspond to a
     // points from a programming language, and the dataflow
     // hierarchy is being used, suggest using the --nohierarchy flag.
-    if(Daikon.use_dataflow_hierarchy && 
+    if(Daikon.use_dataflow_hierarchy &&
         (!all_program_points) &&
         some_program_points) {
       System.out.println("Warning: Daikon is using a dataflow" +
@@ -1331,16 +1330,16 @@ public final class FileIO {
     // of the form foo:::EXIT are not processed -- they are assumed to be
     // non-leaves.
     if (Daikon.use_dataflow_hierarchy) {
-      
+
       // Rather than defining leaves as :::EXIT54 (numbered exit)
-      // program points define them as everything except 
+      // program points define them as everything except
       // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, ::GLOBAL
       //  and :::CLASS program points.  This scheme ensures that arbitrarly
-      //  named program points such as :::POINT (used by convertcsv.pl) 
+      //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
-      
+
       //OLD:
-      //if (!ppt.ppt_name.isExitPoint()) 
+      //if (!ppt.ppt_name.isExitPoint())
       //  return;
       if (ppt.ppt_name.isEnterPoint() ||
           ppt.ppt_name.isThrowsPoint() ||
@@ -1349,7 +1348,7 @@ public final class FileIO {
           ppt.ppt_name.isGlobalPoint()) {
         return;
       }
-      
+
       //OLD:if (ppt.ppt_name.isCombinedExitPoint()) {
       if(ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
         throw new RuntimeException("Bad program point name " + ppt.name
@@ -1545,7 +1544,7 @@ public final class FileIO {
             + " line "
             + reader.getLineNumber() + lineSep
             + "  Expected variable "
-            + vi.name.name()
+            + vi.name()
             + ", got "
             + "null" // line
             + " for program point "
@@ -1565,10 +1564,10 @@ public final class FileIO {
         line = reader.readLine(); // next variable name
       }
 
-      if (!VarInfoName.parse(line).equals(vi.name)) {
+      if (!line.trim().equals (vi.str_name())) {
         throw new FileIOException(
           "Mismatch between .dtrace file and .decls file.  Expected variable "
-            + vi.name.name()
+            + vi.name()
             + ", got "
             + line
             + " for program point "
@@ -1584,7 +1583,7 @@ public final class FileIO {
             + " line "
             + reader.getLineNumber() + lineSep
             + "  Expected value for variable "
-            + vi.name.name()
+            + vi.name()
             + ", got "
             + "null" // line
             + " for program point "
@@ -1599,7 +1598,7 @@ public final class FileIO {
             + " line "
             + reader.getLineNumber() + lineSep
             + "  Expected modbit for variable "
-            + vi.name.name()
+            + vi.name()
             + ", got "
             + "null" // line
             + " for program point "
@@ -1612,7 +1611,7 @@ public final class FileIO {
       int mod = ValueTuple.parseModified(line);
 
       // System.out.println("Mod is " + mod + " at " + data_trace_state.filename + " line " + reader.getLineNumber());
-      // System.out.pringln("  for variable " + vi.name.name()
+      // System.out.pringln("  for variable " + vi.name()
       //                   + " for program point " + ppt.name());
 
       // MISSING_FLOW is only found during flow algorithm
@@ -1635,14 +1634,14 @@ public final class FileIO {
       oldvalue_reps[val_index] = value_rep;
 
       if (Global.debugPrintDtrace) {
-        Global.dtraceWriter.println(vi.name.name());
+        Global.dtraceWriter.println(vi.name());
         Global.dtraceWriter.println(value_rep);
         Global.dtraceWriter.println(mod);
       }
       Debug dbg = Debug.newDebug(FileIO.class, ppt, Debug.vis(vi));
       if (dbg != null)
         dbg.log(
-          "Var " + vi.name.name() + " has value " + value_rep + " mod " + mod);
+          "Var " + vi.name() + " has value " + value_rep + " mod " + mod);
 
       // Both uninit and nonsensical mean missing modbit 2, because
       // it doesn't make sense to look at x.y when x is uninitialized.
@@ -1652,7 +1651,7 @@ public final class FileIO {
           || value_rep.equals("missing"))) {
           throw new Daikon.TerminationMessage(
             "Modbit indicates missing value for variable "
-              + vi.name.name() + " with value \"" + value_rep + "\";" + lineSep
+              + vi.name() + " with value \"" + value_rep + "\";" + lineSep
             + "  text of value should be \"nonsensical\" or \"uninit\" at "
               + data_trace_state.filename + " line " + reader.getLineNumber());
         } else {
@@ -1673,7 +1672,7 @@ public final class FileIO {
             if (false)
               Fmt.pf(
                 "Var %s in ppt %s at line %s is null and not missing",
-                vi.name.name(),
+                vi.name(),
                 ppt.name(),
                 "" + FileIO.data_trace_state.reader.getLineNumber());
           }
@@ -1682,7 +1681,7 @@ public final class FileIO {
             "Error while parsing value "
               + value_rep
               + " for variable "
-              + vi.name.name()
+              + vi.name()
               + " of type "
               + vi.rep_type
               + ": "

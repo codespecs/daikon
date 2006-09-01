@@ -113,12 +113,12 @@ public class CLASSNAME
   }
 
   public String format_daikon() {
-    return (printIntersect() + " subset of " + var().name.name());
+    return (printIntersect() + " subset of " + var().name());
   }
 
   /* IOA */
   public String format_ioa() {
-    String vname = var().name.ioa_name();
+    String vname = var().ioa_name();
     if (var().isIOASet())
       return printIntersect() + " \\in " + vname;
     else
@@ -129,8 +129,7 @@ public class CLASSNAME
     if (intersect == null || intersect.length == 0) {
       return "(AND)";
     }
-    String[] name =
-      VarInfoName.QuantHelper.simplifyNameAndBounds(var().name);
+    String[] name = var().simplifyNameAndBounds();
     if (name == null) {
       return format_unimplemented(OutputFormat.SIMPLIFY);
     }

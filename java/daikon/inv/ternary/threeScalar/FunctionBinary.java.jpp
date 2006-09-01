@@ -394,15 +394,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     String[] methodname = get_method_name();
 
     VarInfo argresultvi = ppt.var_infos[var_indices[var_order][0]];
-    VarInfoName argresult = argresultvi.name;
     VarInfo arg1vi = ppt.var_infos[var_indices[var_order][1]];
-    VarInfoName arg1 = arg1vi.name;
     VarInfo arg2vi = ppt.var_infos[var_indices[var_order][2]];
-    VarInfoName arg2 = arg2vi.name;
 
-    String argresult_name = argresult.name_using(format, argresultvi);
-    String arg1_name = arg1.name_using(format, arg1vi);
-    String arg2_name = arg2.name_using(format, arg2vi);
+    String argresult_name = argresultvi.name_using(format);
+    String arg1_name = arg1vi.name_using(format);
+    String arg2_name = arg2vi.name_using(format);
 
     if (format == OutputFormat.DAIKON) {
       return argresult_name + " == (" + methodname[0] + arg1_name
@@ -433,15 +430,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     String[] methodname = get_method_name();
 
     VarInfo argresultvi = ppt.var_infos[var_indices[var_order][0]];
-    VarInfoName argresult = argresultvi.name;
     VarInfo arg1vi = ppt.var_infos[var_indices[var_order][1]];
-    VarInfoName arg1 = arg1vi.name;
     VarInfo arg2vi = ppt.var_infos[var_indices[var_order][2]];
-    VarInfoName arg2 = arg2vi.name;
 
-    String argresult_name = argresult.name_using(OutputFormat.REPAIR, argresultvi);
-    String arg1_name = arg1.name_using(OutputFormat.REPAIR, arg1vi);
-    String arg2_name = arg2.name_using(OutputFormat.REPAIR, arg2vi);
+    String argresult_name = argresultvi.repair_name();
+    String arg1_name = arg1vi.repair_name();
+    String arg2_name = arg2vi.repair_name();
     String prefix="";
     String postfix="";
     String op=methodname[1];
@@ -516,9 +510,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
       VarInfo v3 = ppt.var_infos[2];
       log("computeConfidence(" + format()
          + ": num_values = " + ppt.num_values()
-         + ", num_values(" + v1.name.name() + ")=" + ppt.parent.num_values(v1)
-         + ", num_values(" + v2.name.name() + ")=" + ppt.parent.num_values(v2)
-         + ", num_values(" + v3.name.name() + ")=" + ppt.parent.num_values(v3));
+         + ", num_values(" + v1.name() + ")=" + ppt.parent.num_values(v1)
+         + ", num_values(" + v2.name() + ")=" + ppt.parent.num_values(v2)
+         + ", num_values(" + v3.name() + ")=" + ppt.parent.num_values(v3));
     }
     return Invariant.conf_is_ge(ppt.num_values(), 5);
   }
@@ -550,9 +544,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
         || ((arr2 != null) && (arr2 == arr3))) {
       return new DiscardInfo(this, DiscardCode.obvious,
                     "two are sizes of same array:  "
-                    + vis[0].name.name() + " "
-                    + vis[1].name.name() + " "
-                    + vis[2].name.name());
+                    + vis[0].name() + " "
+                    + vis[1].name() + " "
+                    + vis[2].name());
     }
 
     return null;

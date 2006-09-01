@@ -321,7 +321,7 @@ public final class ValueTuple implements Cloneable {
     for (int i=0; i<vals.length; i++) {
       if (i>0)
         sb.append("; ");
-      sb.append (vis[i].name.name() + ": ");
+      sb.append (vis[i].name() + ": ");
       if (vals[i] instanceof String)
         sb.append("\"" + vals[i] + "\"");
       else if (vals[i] instanceof long[])

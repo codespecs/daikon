@@ -75,18 +75,18 @@ public class Modulus
   }
 
   public String format_using(OutputFormat format) {
-    String name = var().name.name_using(format, var());
+    String name = var().name_using(format);
 
     if (format == OutputFormat.DAIKON) {
-      return var().name.name() + " == " + remainder + "  (mod " + modulus + ")";
+      return var().name() + " == " + remainder + "  (mod " + modulus + ")";
     }
 
     if (format == OutputFormat.IOA) {
-      return "mod(" + var().name.ioa_name() + ", " + modulus + ") = " + remainder;
+      return "mod(" + var().ioa_name() + ", " + modulus + ") = " + remainder;
     }
 
     if (format.isJavaFamily()) {
-      name = var().name.name_using(format, var());
+      name = var().name_using(format);
       if (var().type.isFloat()) {
         return "daikon.Quant.fuzzy.eq(" + name + " % " + modulus + ", " + remainder + ")";
       } else {
@@ -101,7 +101,7 @@ public class Modulus
 
     if (format == OutputFormat.SIMPLIFY) {
       if (modulus > 0) {
-        return "(EQ (MOD " + var().name.simplify_name() + " "
+        return "(EQ (MOD " + var().simplify_name() + " "
           + simplify_format_long(modulus) + ") "
           + simplify_format_long(remainder) + ")";
       } else {
@@ -272,7 +272,7 @@ public class Modulus
          && (((SequenceLength) x.derived).shift != 0)) {
       return (new DiscardInfo (this, DiscardCode.obvious, "The invariant "
                           + format()  + " is implied by a mod invariant "
-                          + "over " + x.name.name() + " without the offset"));
+                          + "over " + x.name() + " without the offset"));
 
     }
     return (null);

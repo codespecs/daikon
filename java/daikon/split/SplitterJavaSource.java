@@ -145,8 +145,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    */
   private void writeConstructorBody() {
     for (int i = 0; i < vars.length; i++) {
-      add("    " + vars[i].getFieldName() + " = ppt.findVarByRepr(\"" +
-          vars[i].getRepr() + "\");");
+      add("    " + vars[i].getFieldName() + " = ppt.find_var_by_name(\"" +
+          vars[i].getNormalName() + "\");");
     }
   }
   /**
@@ -232,19 +232,19 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private void writeInstantiateDummyBody() {
     if (vars.length >=1 && vars.length <= 3) {
       for (int i = 0; i < vars.length; i++) {
-        add("    VarInfo " + vars[i].getVarInfoName() + " = ppt.findVarByRepr(\""
-            + vars[i].getRepr() + "\");");
+        add("    VarInfo " + vars[i].getVarName()
+            + " = ppt.find_var_by_name(\"" + vars[i].getNormalName() + "\");");
       }
       fileText.append("    if (");
-      fileText.append(vars[0].getVarInfoName() + " != null");
+      fileText.append(vars[0].getVarName() + " != null");
       for (int i = 1; i < vars.length; i++) {
-        fileText.append(" && " + vars[i].getVarInfoName() + " != null");
+        fileText.append(" && " + vars[i].getVarName() + " != null");
       }
       add(") {");
       fileText.append("      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {");
-      fileText.append(vars[0].getVarInfoName());
+      fileText.append(vars[0].getVarName());
       for (int i = 1; i < vars.length; i++) {
-        fileText.append(", " +  vars[i].getVarInfoName());
+        fileText.append(", " +  vars[i].getVarName());
       }
       add("});");
       add("    }");
@@ -366,10 +366,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return true iff varInfo is a ".getClass()" variable.
    */
   private static boolean isTypeOfVar(VarInfo varInfo) {
-    return ((varInfo.name instanceof VarInfoName.TypeOf) ||
-            ((varInfo.name instanceof VarInfoName.Prestate) &&
-             (((VarInfoName.Prestate) varInfo.name).term
-              instanceof VarInfoName.TypeOf)));
+    return varInfo.has_typeof();
   }
 
   /**
@@ -379,12 +376,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return true iff varInfo is a "size" variable.
    */
   private static boolean isSizeVar(VarInfo varInfo) {
-    VarInfoName viname = varInfo.name;
-    return ((viname instanceof VarInfoName.Field &&
-             ((VarInfoName.Field) viname).field.equals("size")) ||
-            (viname instanceof VarInfoName.Prestate &&
-             ((VarInfoName.Prestate) viname).term instanceof VarInfoName.Field &&
-             ((VarInfoName.Field) ((VarInfoName.Prestate) viname).term).field.equals("size")));
+    return varInfo.is_size();
   }
 
   /**
@@ -392,12 +384,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * "this" variable.
    */
   private static boolean isThisVar(VarInfo varInfo) {
-    VarInfoName viname = varInfo.name;
-    return ((viname instanceof VarInfoName.Simple &&
-             ((VarInfoName.Simple) viname).name.equals("this")) ||
-            ((viname instanceof VarInfoName.Prestate) &&
-             ((VarInfoName.Prestate) viname).term instanceof VarInfoName.Simple &&
-             ((VarInfoName.Simple) ((VarInfoName.Prestate) viname).term).name.equals("this")));
+    return varInfo.isThis();
   }
 
   /**
@@ -459,13 +446,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     return str.substring(0, index) + chr + str.substring(index);
   }
 
-  /**
-   * Calculates the variable name of the variable represented by varInfo.
-   * @return the name of the variable represented by varInfo
-   */
-  private static String getVarName(VarInfo varInfo) {
-    return varInfo.name.name();
-  }
 
   /**
    * Calculates the name of the variable represented by varInfo in
@@ -503,7 +483,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return the base name of the variable represented by varInfo.
    */
   private static String getBaseName(VarInfo varInfo, String className) {
-    String name = varInfo.name.name();
+    String name = varInfo.name();
     name = replaceReservedWords(name);
     if (name.length() > 5 && name.substring(0, 5).equals("orig(") &&
         name.endsWith(")")) {
@@ -588,7 +568,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return the name of the variable used to hold this varInfo in a java
    *  splitter file.
    */
-  private static String varInfoName(VarInfo varInfo, String className)
+  private static String varName(VarInfo varInfo, String className)
     throws ParseException {
     return compilableName(varInfo, className) + "_vi";
   }
@@ -612,16 +592,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Returns the repr of the variable represented by varInfo.
-   * @param varInfo the varInfo for the variable whose repr is desired.
-   * @return the repr of the variable represented by varInfo.
-   */
-  private static String getVarRepr(VarInfo varInfo) {
-    return varInfo.name.repr();
-  }
-
-
-  /**
    * VariableManager is a data structure for containing information about
    * a variable.
    */
@@ -640,26 +610,22 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     private String fieldName;
 
     /** Name of the variable that holds the varInfo in the splitter file. */
-    private String varInfoName;
+    private String varName;
 
     /** The type of the variable. */
     private String type;
 
-    /** The Repr of the variable. */
-    private String repr;
-
     private VariableManager(VarInfo varInfo, String condition, String className)
       throws ParseException {
       this.varInfo = varInfo;
-      name = getVarName(varInfo);
+      name = varInfo.name();
       compilableName = compilableName(varInfo, className);
       fieldName = fieldName(varInfo, className);
-      varInfoName = varInfoName(varInfo, className);
+      varName = varName(varInfo, className);
       type = makeIndexIfNeeded(getVarType(varInfo),
                                compilableName,
                                varInfo,
                                condition);
-      repr = getVarRepr(varInfo);
     }
 
     /**
@@ -707,8 +673,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
      * used to hold this varInfo in a java splitter file.
      * @return the VarInfo name of the variable.
      */
-    private String getVarInfoName () {
-      return varInfoName;
+    private String getVarName () {
+      return varName;
     }
 
     /**
@@ -716,13 +682,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
      */
     private String getType() {
       return type;
-    }
-
-    /**
-     * Returns the repr of the variable.
-     */
-    private String getRepr() {
-      return repr;
     }
 
   }

@@ -105,7 +105,7 @@ public class CLASSNAME
     }
 
     if (format == OutputFormat.DAIKON) {
-      return var().name.name() + " contains no duplicates";
+      return var().name() + " contains no duplicates";
     }
 
     if (format == OutputFormat.IOA) {
@@ -129,98 +129,27 @@ public class CLASSNAME
       debugPrint.fine ("Format_ioa: " + this.toString());
     }
 
-    // We first see if we can special case for certain types of variables
-    if (var().isDerived() && var().derived instanceof SEQUENCESPREDICATE) {
-      VarInfoName.FunctionOfN myName =
-        (VarInfoName.FunctionOfN) ((VarInfoName.Elements) var().name).term;
-      String predicateValue = myName.getArg(2).ioa_name();
+    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var(), var());
 
-      SEQUENCESPREDICATE derivation = (SEQUENCESPREDICATE) var().derived;
-      VarInfo varField = derivation.var1();
-      VarInfoName.Field varFieldName = (VarInfoName.Field) varField.name;
-      String fieldName = varFieldName.field;
-
-      VarInfo varPredicateField = derivation.var2();
-      VarInfoName.Field varPredicateFieldName = (VarInfoName.Field) varPredicateField.name;
-      String predicateName = varPredicateFieldName.field;
-
-      VarInfoName varOrigName = varFieldName.term;
-      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField.type,
-                                         varField.file_rep_type,
-                                         varField.comparability,
-                                         VarInfoAux.getDefault());
-
-      VarInfoName.QuantHelper.IOAQuantification quant
-        = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
-
-      //     \A i : type, j : type(   i \in X
-      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
-        //         /\ j \ in X
-        " /\\ " + quant.getMembershipRestriction(1) +
-        //           i.field = j.field
-        " /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName + " = " + quant.getVarName(1).ioa_name() + "." + fieldName +
-        //           i.pred = value
-        " /\\ " + quant.getVarName(0).ioa_name() + "." + predicateName + " = " + predicateValue +
-        //           j.pred = value
-        " /\\ " + quant.getVarName(1).ioa_name() + "." + predicateName + " = " + predicateValue +
-        //  =>      i           =       j           )
-        ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
-
-    } else if (var().isDerived() && var().derived instanceof SEQUENCESJOIN) {
-      SEQUENCESJOIN derivation = (SEQUENCESJOIN) var().derived;
-      VarInfo varField1 = derivation.var1();
-      VarInfoName.Field varFieldName1 = (VarInfoName.Field) varField1.name;
-      String fieldName1 = varFieldName1.field;
-      VarInfo varField2 = derivation.var2();
-      VarInfoName.Field varFieldName2 = (VarInfoName.Field) varField2.name;
-      String fieldName2 = varFieldName2.field;
-
-      VarInfoName varOrigName = varFieldName1.term;
-      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField1.type,
-                                         varField1.file_rep_type,
-                                         varField1.comparability,
-                                         VarInfoAux.getDefault());
-
-      VarInfoName.QuantHelper.IOAQuantification quant
-        = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
-
-      //     \A i : type, j : type(   i \in X
-      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
-        //         /\ j \ in X
-        " /\\ " + quant.getMembershipRestriction(1) +
-        //           i.field = j.field
-        " /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName1 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName1 +
-        //           i.field = j.field
-        " /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName2 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName2 +
-        //  =>      i           =       j           )
-        ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
-
-    } else {
-      VarInfoName.QuantHelper.IOAQuantification quant
-        = new VarInfoName.QuantHelper.IOAQuantification (var(), var());
-
-      //     \A i, j(                 i \in X /\ j \ in X
-      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
-        " /\\ " + quant.getMembershipRestriction(1) +
-        //           X[i] = X[j]
-        " /\\ " + quant.getVarIndexedString(0) + " = " + quant.getVarIndexedString(1) +
-        //  =>      i           =       j           )
-        ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
-
-    }
-
+    //     \A i, j(                 i \in X /\ j \ in X
+    return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
+      " /\\ " + quant.getMembershipRestriction(1) +
+      //           X[i] = X[j]
+      " /\\ " + quant.getVarIndexedString(0) + " = " + quant.getVarIndexedString(1) +
+      //  =>      i           =       j           )
+      ") => " + quant.getVarString(0) + " = " + quant.getVarString(1)
+      + quant.getClosingExp();
   }
 
   public String format_simplify() {
-    String[] form =
-      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { var().name, var().name }, false, false, true);
+    String[] form = VarInfo.simplify_quantify (var(), var(), false, false,
+                                               true);
     return form[0] + "(NEQ " + form[1] + " " + form[2] + ")"
       + form[3];
   }
 
   public String format_java_family(OutputFormat format) {
-    return "daikon.Quant.noDups(" + var().name.name_using(format, var()) + ")";
+    return "daikon.Quant.noDups(" + var().name_using(format) + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
@@ -239,7 +168,7 @@ public class CLASSNAME
   public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     InvariantStatus status = check_modified(a, count);
     if (debug.isLoggable(Level.FINE) && (status == InvariantStatus.FALSIFIED)) {
-      debug.fine ("Destroying myself with: " + var().name.repr());
+      debug.fine ("Destroying myself with: " + var().name());
       debug.fine (ArraysMDE.toString(a));
     }
     return status;

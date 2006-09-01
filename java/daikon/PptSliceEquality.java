@@ -128,7 +128,7 @@ public class PptSliceEquality
       VarInfoAndComparability viac = new VarInfoAndComparability(vi);
       addToBindingList (multiMap, viac, vi);
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("  " + vi.name.name() + ": " + vi.comparability);
+        debug.fine ("  " + vi.name() + ": " + vi.comparability);
       }
     }
     if (debug.isLoggable(Level.FINE)) {
@@ -252,7 +252,7 @@ public class PptSliceEquality
           for (int j = 0; j < newInvsLeaders.size(); j++) {
             Debug.log (getClass(), parent,
                        Debug.vis (newInvsLeaders.get(j)),
-              "Split off from previous leader " + inv.leader().name.name()
+              "Split off from previous leader " + inv.leader().name()
               + ": new set = " + (newInvsLeaders.get(j)).equalitySet
               + ": old set = " + inv);
           }
@@ -309,7 +309,7 @@ public class PptSliceEquality
       } else {
         if (vi.getValue(vt) == null) {
           Fmt.pf ("null value for variable %s, mod=%s at ppt %s",
-                vi.name.name(), "" + vt.getModified(vi), parent.name());
+                vi.name(), "" + vt.getModified(vi), parent.name());
           VarInfo rv = parent.find_var_by_name ("return");
           Fmt.pf ("return value = " + Debug.toString (rv.getValue(vt)));
           Fmt.pf("At line number "
@@ -430,7 +430,7 @@ public class PptSliceEquality
     List<PptSlice> newSlices = new LinkedList<PptSlice>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
-                  + leader.name.name()
+                  + leader.name()
                   + ": new leaders = " + VarInfo.toString (newVis));
       debug.fine ("  orig slices count:" + parent.numViews());
     }

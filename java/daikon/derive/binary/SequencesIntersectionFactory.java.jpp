@@ -85,7 +85,7 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
     }
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Instantiatiating " + seq1.name + " and " + seq2.name);
+      debug.fine ("Instantiatiating " + seq1.name() + " and " + seq2.name());
       debug.fine ("  in " + seq1.ppt.name());
     }
 

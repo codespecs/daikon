@@ -65,8 +65,8 @@ public class InvDef {
 
   public InvDef (VarInfo v1, VarInfo v2, Class cls) {
 
-    debug.fine ("creating " + cls.getName() + " " + v1.name.name() + ", " +
-                v2.name.name());
+    debug.fine ("creating " + cls.getName() + " " + v1.name() + ", " +
+                v2.name());
     // put the variables in their standard order
     if (v1.varinfo_index > v2.varinfo_index) {
       this.v1 = v2;
@@ -114,9 +114,9 @@ public class InvDef {
 
 
   public String toString() {
-    String out = "v1=" + v1.name.name();
+    String out = "v1=" + v1.name();
     if (v2 != null)
-      out += ", v2=" + v2.name.name();
+      out += ", v2=" + v2.name();
     return (out + ", class=" + inv_class.getName() + ", swap=" + swap
             + ", swap_class=" + swap_class);
   }

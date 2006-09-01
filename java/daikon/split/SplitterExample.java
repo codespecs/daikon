@@ -21,7 +21,7 @@ public final class SplitterExample
   }
 
   public SplitterExample(Ppt ppt) {
-    x_varinfo = ppt.findVar("X");
+    x_varinfo = ppt.find_var_by_name ("X");
     instantiated = true;
   }
 
@@ -50,7 +50,7 @@ public final class SplitterExample
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo x_vi = ppt.findVar("X");
+    VarInfo x_vi = ppt.find_var_by_name ("X");
     if (x_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] { x_vi });
     }

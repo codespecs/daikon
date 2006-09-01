@@ -14,7 +14,7 @@ public class DerivedParameterFilter extends InvariantFilter {
   }
 
   /**
-   * Boolean. If true, DerivedParameterFilter is initially turned on. 
+   * Boolean. If true, DerivedParameterFilter is initially turned on.
    */
   public static boolean dkconfig_enabled = true;
 
@@ -44,7 +44,7 @@ public class DerivedParameterFilter extends InvariantFilter {
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo vi = inv.ppt.var_infos[i];
         // ppt has to be a PptSlice, not a PptTopLevel
-        PrintInvariants.debugFiltering.fine ("\tconsidering DPF for " + vi.name.name());
+        PrintInvariants.debugFiltering.fine ("\tconsidering DPF for " + vi.name());
         if (vi.isDerivedParamAndUninteresting()) {
           return true;
         }
