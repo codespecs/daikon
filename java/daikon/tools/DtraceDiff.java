@@ -66,6 +66,8 @@ public class DtraceDiff {
     } catch (daikon.Daikon.TerminationMessage e) {
       return true;
     } catch (Error e) {
+      // System.out.printf ("Diff encountered error " + e.getMessage());
+      // e.printStackTrace();
       return false;
     }
   }
