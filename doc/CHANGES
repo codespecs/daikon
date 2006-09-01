@@ -20,7 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
-September 1, 2006
+4.2.9 (September 1, 2006)
+
+Bugs were fixed in Chicory, Kvasir, and Daikon.  Chicory was enhanced
+to correctly instrument programs that use an incompatible version of
+BCEL and to not instrument unselected classes.  Kvasir was modified to
+avoid making calls to the system C library.  Using the system C library
+can cause problems on some versions of Linux.
 
 Chicory
 
@@ -40,6 +46,8 @@ Daikon
   The configuration option 'omit_hashcode_values_Simplify' now uses 
   artificial values for hashcodes that should remain consistent from run
   to run rather than omitting the invariant altogether.
+
+  A problem where Daikon crashed when producing JML output was fixed.
 
 Kvasir
 
