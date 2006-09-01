@@ -22,7 +22,7 @@ public class OneOfSequenceTester extends TestCase {
   }
 
   public static VarInfo newIntArrayVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
+    VarInfo result = new VarInfo(name,
                                  ProglangType.INT_ARRAY,
                                  ProglangType.INT_ARRAY,
                                  VarComparabilityNone.it,
@@ -31,7 +31,7 @@ public class OneOfSequenceTester extends TestCase {
   }
 
   public static VarInfo newHashcodeArrayVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
+    VarInfo result = new VarInfo(name,
                                  ProglangType.HASHCODE_ARRAY,
                                  ProglangType.HASHCODE_ARRAY,
                                  VarComparabilityNone.it,

@@ -20,7 +20,7 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public static VarInfo newIntVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
+    VarInfo result = new VarInfo(name,
                                  ProglangType.INT,
                                  ProglangType.INT,
                                  VarComparabilityNone.it,
@@ -29,7 +29,7 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public static VarInfo newHashcodeVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
+    VarInfo result = new VarInfo(name,
                                  ProglangType.HASHCODE,
                                  ProglangType.HASHCODE,
                                  VarComparabilityNone.it,

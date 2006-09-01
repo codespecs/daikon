@@ -42,7 +42,7 @@ public class DiffTester extends TestCase {
   }
 
   public static VarInfo newIntVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
+    VarInfo result = new VarInfo(name,
                                  ProglangType.INT,
                                  ProglangType.INT,
                                  VarComparabilityNone.it,

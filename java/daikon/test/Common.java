@@ -11,7 +11,7 @@ public class Common
   private Common() { throw new Error("do not instantiate"); }
 
   public static VarInfo makeIntVarInfo(String name) {
-    return new VarInfo(VarInfoName.parse(name),
+    return new VarInfo(name,
                        ProglangType.INT,
                        ProglangType.INT,
                        VarComparabilityNone.it,
@@ -19,7 +19,7 @@ public class Common
   }
 
   public static VarInfo makeHashcodeVarInfo(String name) {
-    return new VarInfo(VarInfoName.parse(name),
+    return new VarInfo(name,
                        ProglangType.HASHCODE,
                        ProglangType.HASHCODE,
                        VarComparabilityNone.it,
@@ -28,7 +28,7 @@ public class Common
 
 
   public static VarInfo makeIntArrayVarInfo(String name) {
-    return new VarInfo(VarInfoName.parse(name),
+    return new VarInfo(name,
                        ProglangType.INT_ARRAY,
                        ProglangType.INT_ARRAY,
                        VarComparabilityNone.it,
@@ -36,7 +36,7 @@ public class Common
   }
 
   public static VarInfo makeHashcodeArrayVarInfo(String name) {
-    return new VarInfo(VarInfoName.parse(name),
+    return new VarInfo(name,
                        ProglangType.HASHCODE_ARRAY,
                        ProglangType.HASHCODE_ARRAY,
                        VarComparabilityNone.it,

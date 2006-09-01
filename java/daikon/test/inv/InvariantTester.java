@@ -20,7 +20,7 @@ public class InvariantTester extends TestCase {
   }
 
   public VarInfo newIntVarInfo(String name) {
-    return new VarInfo(VarInfoName.parse(name),
+    return new VarInfo(name,
                        ProglangType.INT,
                        ProglangType.INT,
                        VarComparabilityNone.it,
