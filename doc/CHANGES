@@ -22,6 +22,25 @@ Further documentation can be found in:
 
 September 1, 2006
 
+Chicory
+
+  Chicory uses the Byte Code Engineering Library (BCEL) to instrument
+  classfiles.  Errors can occur if the application uses an incompatible
+  version of BCEL.  Chicory has been modified to identify and load its 
+  copy of BCEL when multiple copies of BCEL are in the classpath.  It will
+  also issue a warning if multiple copies of BCEL are in the classpath and
+  the application version is not the first one.  This behavior can be
+  overriden with the default_bcel command line option 
+
+  Chicory only modifies classes that are instrumented.  Previous versions
+  made unnecessary changes to uninstrumented classes.
+
+Daikon
+
+  The configuration option 'omit_hashcode_values_Simplify' now uses 
+  artificial values for hashcodes that should remain consistent from run
+  to run rather than omitting the invariant altogether.
+
 Kvasir
 
   Kvasir has changed to use internal versions of some C standard
