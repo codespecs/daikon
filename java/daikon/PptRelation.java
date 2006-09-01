@@ -142,7 +142,7 @@ public class PptRelation implements Serializable {
       VarInfo cv = parent_to_child_map.get(pv);
       if (var_str.length() > 0)
         var_str.append(", ");
-      var_str.append(pv.name.name() + "->" + cv.name.name());
+      var_str.append(pv.name() + "->" + cv.name());
     }
 
     return var_str.toString();
@@ -158,30 +158,17 @@ public class PptRelation implements Serializable {
     boolean relate_all = true;
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
-      boolean relate_var = relate(vp, vp.name);
+      boolean relate_var = relate(vp, vp.name());
       if (!relate_var && !vp.isStaticConstant()) {
-        // System.out.printf ("no relation for %s%n", vp);
+        // System.out.printf ("no relation for '%s' from %s-%s with vars %s%n",
+        //                   vp.name(), parent.name(), child.name(),
+        //                   child.varNames());
         relate_all = false;
       }
     }
 
     return (relate_all);
 
-  }
-
-  /**
-   * Returns the variable in ppt that matches viname.  Returns null
-   * if viname does not exist in ppt
-   */
-  static VarInfo find_var(PptTopLevel ppt, VarInfoName viname) {
-
-    for (int j = 0; j < ppt.var_infos.length; j++) {
-      VarInfo v = ppt.var_infos[j];
-      if (viname == v.name) {
-        return (v);
-      }
-    }
-    return (null);
   }
 
   /**
@@ -311,14 +298,14 @@ public class PptRelation implements Serializable {
       for (int j = 0; j < varr.length; j++) {
         VarInfo v1 = parentVar(varr[j]);
         if (v1 == null) {
-          debug.fine("-- -- " + varr[j].name.name() + " not in parent (skip)");
+          debug.fine("-- -- " + varr[j].name() + " not in parent (skip)");
           continue;
         }
         for (int k = j + 1; k < varr.length; k++) {
           VarInfo v2 = parentVar(varr[k]);
           if (v2 == null) {
             debug.fine(
-              "-- -- " + varr[k].name.name() + " not in parent (skip)");
+              "-- -- " + varr[k].name() + " not in parent (skip)");
             continue;
           }
           VarInfo.Pair parent_pair = new VarInfo.Pair(v1, v2, e.numSamples());
@@ -326,9 +313,9 @@ public class PptRelation implements Serializable {
           if (debug.isLoggable(Level.FINE))
             debug.fine(
               "-- -- "
-              + varr[j].name.name()
+              + varr[j].name()
               + ", "
-              + varr[k].name.name()
+              + varr[k].name()
               + " in child yield "
               + parent_pair
               + " in parent");
@@ -347,11 +334,11 @@ public class PptRelation implements Serializable {
    * @return true if there was a matching variable, false otherwise.
    */
 
-  private boolean relate(VarInfo parent_var, VarInfoName viname) {
+  private boolean relate(VarInfo parent_var, String viname) {
 
     for (int j = 0; j < child.var_infos.length; j++) {
       VarInfo vc = child.var_infos[j];
-      if (viname == vc.name) {
+      if (viname.equals(vc.name())) {
         child_to_parent_map.put(vc, parent_var);
         parent_to_child_map.put(parent_var, vc);
         return (true);
@@ -486,10 +473,9 @@ public class PptRelation implements Serializable {
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
       // // Don't make any relationship for variable "this".
-      // if (vp.name.equals(VarInfoName.THIS))
+      // if (vp.isThis())
       //  continue;
-      VarInfoName parent_name = vp.name.replaceAll(VarInfoName.THIS, arg.name);
-      rel.relate(vp, parent_name);
+      rel.relate(vp, vp.replace_this (arg));
     }
     return (rel);
   }
@@ -515,14 +501,14 @@ public class PptRelation implements Serializable {
       if (vp.derived != null)
         continue;
       if (vp.isStaticConstant()) {
-        boolean found = rel.relate(vp, vp.name);
+        boolean found = rel.relate(vp, vp.name());
         // Static constants are not always placed at each level in hierarchy
         // Assert.assertTrue(found);
       } else {
-        VarInfoName orig_name = vp.name.applyPrestate().intern();
-        boolean found = rel.relate(vp, orig_name);
+        // VarInfoName orig_name = vp.name.applyPrestate().intern();
+        boolean found = rel.relate(vp, vp.prestate_name());
         assert found : String.format ("vp %s orig_name %s parent %s child %s",
-                                      vp, orig_name, parent, child);
+                                      vp, vp.prestate_name(), parent, child);
       }
     }
 
@@ -570,7 +556,7 @@ public class PptRelation implements Serializable {
       if (!rel.parent_to_child_map.containsKey(vp)) {
         System.out.println(
           "No match for "
-            + vp.name.name()
+            + vp.name()
             + " from parent "
             + parent.name()
             + " in child "
@@ -580,7 +566,7 @@ public class PptRelation implements Serializable {
     }
     if (!all_found) {
       for (int j = 0; j < child.var_infos.length; j++)
-        System.out.println("    " + child.var_infos[j].name.name());
+        System.out.println("    " + child.var_infos[j].name());
       //Assert.assertTrue (false, "Missing orig variable in EXIT");
     }
     return (rel);
@@ -607,7 +593,7 @@ public class PptRelation implements Serializable {
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
-      Assert.assertTrue(vc.name.name().equals(vp.name.name()));
+      Assert.assertTrue(vc.name().equals(vp.name()));
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
@@ -633,7 +619,7 @@ public class PptRelation implements Serializable {
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
-      Assert.assertTrue(vc.name.name().equals(vp.name.name()));
+      Assert.assertTrue(vc.name().equals(vp.name()));
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
@@ -668,16 +654,16 @@ public class PptRelation implements Serializable {
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
-      if (!vc.name.name().equals(vp.name.name())) {
+      if (!vc.name().equals(vp.name())) {
         System.out.println(
           "newMergeChildRel: in ppt "
             + parent.name()
             + " var "
-            + vc.name.name()
+            + vc.name()
             + " doesn't match");
         System.out.println("par vars  = " + VarInfo.toString(parent.var_infos));
         System.out.println("child vars= " + VarInfo.toString(child.var_infos));
-        Assert.assertTrue(vc.name.name().equals(vp.name.name()));
+        Assert.assertTrue(vc.name().equals(vp.name()));
       }
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
@@ -697,8 +683,8 @@ public class PptRelation implements Serializable {
       VarInfo vp = child_to_parent_map.get(vc);
       VarInfo new_vc = new_child.var_infos[vc.varinfo_index];
       VarInfo new_vp = new_parent.var_infos[vp.varinfo_index];
-      Assert.assertTrue(new_vc.name.equals(vc.name));
-      Assert.assertTrue(new_vp.name.equals(vp.name));
+      Assert.assertTrue(new_vc.name().equals(vc.name()));
+      Assert.assertTrue(new_vp.name().equals(vp.name()));
       rel.child_to_parent_map.put(new_vc, new_vp);
       rel.parent_to_child_map.put(new_vp, new_vc);
     }
@@ -750,7 +736,7 @@ public class PptRelation implements Serializable {
         PptTopLevel parent = all_ppts.get(pname.makeObject());
 
         if (parent != null) {
-          if (find_var(ppt, parent.var_infos[0].name) != null)
+          if (ppt.find_var_by_name (parent.var_infos[0].name()) != null)
             rel = newObjectMethodRel(parent, ppt);
           else {
             parent = all_ppts.get(parent.ppt_name.makeClassStatic());
@@ -819,12 +805,12 @@ public class PptRelation implements Serializable {
         debug.fine("-- Looking for variables with an OBJECT ppt");
         for (int j = 0; j < ppt.var_infos.length; j++) {
           VarInfo vc = ppt.var_infos[j];
-          String dstr = "-- -- var '" + vc.name.name() + "' - ";
+          String dstr = "-- -- var '" + vc.name() + "' - ";
           if (ppt.has_parent(vc)) {
             debug.fine(dstr + " Skipping, already has a parent");
             continue;
           }
-          if (vc.name.equals(VarInfoName.THIS)) {
+          if (vc.is_this()) {
             debug.fine(dstr + " skipping, name is 'this'");
             continue;
           }
