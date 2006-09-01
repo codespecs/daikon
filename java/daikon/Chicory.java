@@ -63,6 +63,9 @@ public class Chicory {
   @Option ("Create the new declaration record format")
   public static boolean new_decl_format = false;
 
+  @Option ("Use first BCEL on classpath rather than PAG's version")
+  public static boolean default_bcel = false;
+
   /**
    * Path to java agent jar file that performs the transformation.
    * The "main" procedure is ChicoryPremain.premain().
@@ -345,6 +348,7 @@ public class Chicory {
     cmdlist.add (cp);
     cmdlist.add ("-ea");
     cmdlist.add ("-Xmx" + heap_size);
+    // cmdlist.add ("-verbose");
 
     if (dtraceLim != null)
       cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
