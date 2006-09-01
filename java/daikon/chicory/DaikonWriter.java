@@ -179,7 +179,7 @@ public abstract class DaikonWriter
       } else {
         Constructor constructor = (Constructor) member;
         fullname = declaring_class.getName() + "."
-          + declaring_class.getSimpleName();
+          + UtilMDE.unqualified_name (declaring_class);
         args = constructor.getParameterTypes();
       }
       String arg_str = "";
