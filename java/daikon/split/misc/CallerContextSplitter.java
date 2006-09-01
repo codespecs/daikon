@@ -28,14 +28,13 @@ public final class CallerContextSplitter
    * (callsite) information.
    **/
   public final String CALLER_INDICATOR_NAME_STRING = "daikon_callsite_id";
-  public final VarInfoName CALLER_INDICATOR_NAME = VarInfoName.parse(CALLER_INDICATOR_NAME_STRING);
   private final VarInfo caller_varinfo;
   private final long[] ids;
   private final String condition;
 
   protected CallerContextSplitter(Ppt ppt, long[] ids,
                                   String condition) {
-    caller_varinfo = ppt.findVar(CALLER_INDICATOR_NAME);
+    caller_varinfo = ppt.find_var_by_name (CALLER_INDICATOR_NAME_STRING);
     this.ids = ids;
     this.condition = condition;
     instantiated = true;
