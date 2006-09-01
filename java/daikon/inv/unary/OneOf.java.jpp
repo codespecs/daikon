@@ -58,7 +58,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define NAME var().name()
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define REPAIR_NAME var().repair_name()
   #define NONZERO NonZero
   #define ELTONEOF EltOneOf
   #define LOWERBOUND LowerBound
@@ -76,8 +76,8 @@ The correct way to build the system is to run 'make'.
   #define NUMWRAPPER Double
   #define TOSTRING(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
-  #define NAME var().name.name()
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name()
+  #define REPAIR_NAME var().repair_name()
   #define NONZERO NonZeroFloat
   #define ELTONEOF EltOneOfFloat
   #define LOWERBOUND LowerBoundFloat
@@ -93,8 +93,8 @@ The correct way to build the system is to run 'make'.
   #define SINGLESCALAR SingleString
   #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
-  #define NAME var().name.name()
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name()
+  #define REPAIR_NAME var().repair_name()
 #elif defined(SEQUENCE)
   #define SCALARPKG sequence
   #define INT long[]
@@ -105,8 +105,8 @@ The correct way to build the system is to run 'make'.
   #define TOSTRINGELEMENT(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
-  #define NAME var().name.name()
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name()
+  #define REPAIR_NAME var().repair_name()
 #elif defined(FLOATSEQUENCE)
   #define SCALARPKG sequence
   #define INT double[]
@@ -117,8 +117,8 @@ The correct way to build the system is to run 'make'.
   #define TOSTRINGELEMENT(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
-  #define NAME var().name.name()
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name()
+  #define REPAIR_NAME var().repair_name()
 #elif defined(STRINGSEQUENCE)
   #define SCALARPKG stringsequence
   #define INT String[]
@@ -129,8 +129,8 @@ The correct way to build the system is to run 'make'.
   #define TOSTRINGELEMENT(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
-  #define NAME var().name.name()
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name()
+  #define REPAIR_NAME var().repair_name()
 #elif defined(ELT)
   #define SCALARPKG sequence
   #define INT long
@@ -140,8 +140,8 @@ The correct way to build the system is to run 'make'.
   #define SINGLESCALAR SingleScalarSequence
   #define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
   #define TOSTRING_SIMPLIFY(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : simplify_format_long(x))
-  #define NAME var().name.name() + " elements"
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name() + " elements"
+  #define REPAIR_NAME var().repair_name()
   #define NONZERO EltNonZero
   #define LOWERBOUND LowerBound
   #define UPPERBOUND UpperBound
@@ -156,8 +156,8 @@ The correct way to build the system is to run 'make'.
   #define SINGLESCALAR SingleFloatSequence
   #define TOSTRING(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
-  #define NAME var().name.name() + " elements"
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name() + " elements"
+  #define REPAIR_NAME var().repair_name()
   #define NONZERO EltNonZeroFloat
   #define LOWERBOUND LowerBoundFloat
   #define UPPERBOUND UpperBoundFloat
@@ -169,8 +169,8 @@ The correct way to build the system is to run 'make'.
   #define SINGLESCALAR SingleStringSequence
   #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
-  #define NAME var().name.name() + " elements"
-  #define REPAIR_NAME var().name.repair_name(var())
+  #define NAME var().name() + " elements"
+  #define REPAIR_NAME var().repair_name()
 #else
   #error "One of SCALAR, STRING, FLOAT, SEQUENCE, STRINGSEQUENCE, FLOATSEQUENCE, ELT, ELTSTRING, or ELTFLOAT must be defined"
 #endif
@@ -180,7 +180,7 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.SCALARPKG;
 
 import daikon.*;
-import daikon.inv.OutputFormat.Repair;
+import daikon.VarInfoName.Repair;
 import daikon.inv.*;
 #ifdef IS_NUMERIC
   import daikon.derive.unary.*;
@@ -266,14 +266,17 @@ public final class ONEOFSCALAR
 #ifdef BASE_INT
   /**
    * Boolean.  If true, invariants describing hashcode-typed variables
-   * as having any particular value will be completely omitted from
-   * Simplify-format output.  If false, hashcodes will be formatted as
-   * the application of a hashcode uninterpreted function to an
-   * integer representing the bit pattern of the hashcode.  One might
-   * wish to omit such invariants because the exact values of the
-   * hashcodes are usually uninteresting; this is the same reason they
-   * print in the native Daikon format, for instance, as <samp>var has only
-   * one value</samp> rather than <samp>var == 150924732</samp>.
+   * as having any particular value will have an artificial value
+   * substituted for the exact hashhode values.  The artificial values
+   * will stay the same from run to run even if the actual hashcode
+   * values change (as long as the OneOf invariants remain the same).
+   * If false, hashcodes will be formatted as the application of a
+   * hashcode uninterpreted function to an integer representing the
+   * bit pattern of the hashcode.  One might wish to omit the exact
+   * values of the hashcodes because they are usually uninteresting;
+   * this is the same reason they print in the native Daikon format,
+   * for instance, as <samp>var has only one value</samp> rather than
+   * <samp>var == 150924732</samp>.
    **/
   public static boolean dkconfig_omit_hashcode_values_Simplify = false;
 #endif
@@ -284,6 +287,7 @@ public final class ONEOFSCALAR
 
   private INT[] elts;
   private int num_elts;
+
 
   public ONEOFSCALAR (PptSlice slice) {
     super (slice);
@@ -628,7 +632,7 @@ public final class ONEOFSCALAR
 
 #if defined(STRING) || defined(ELTSTRING)
   private boolean is_type() {
-    return var().name.hasTypeOf();
+    return var().has_typeof();
   }
 #endif
 
@@ -637,11 +641,10 @@ public final class ONEOFSCALAR
   public String format_ioa() {
     sort_rep();
 #if defined(IS_ELT)
-    VarInfoName.QuantHelper.IOAQuantification quant =
-      new VarInfoName.QuantHelper.IOAQuantification (new VarInfo[] {var()});
-    String varname = quant.getVarName(0).ioa_name();
+    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
+    String varname = quant.getVarString(0);
 #elif defined(IS_SCALAR)
-    String varname = var().name.ioa_name();
+    String varname = var().ioa_name();
 #endif
     String result;
 
@@ -677,41 +680,50 @@ public final class ONEOFSCALAR
       }
     }
 #elif defined(IS_SEQUENCE_NUMERIC)
-    String length = "";
-    String forall = "";
+    String length = null;
+    String forall = null;
   #if defined(SEQUENCE)
     if (is_hashcode()) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
       INT value = elts[0];
-      if (var().name.isApplySizeSafe()) {
-        length = "size(" + var().name.ioa_name() + ") = " + value.length;
-      }
-      VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
+      length = var().get_ioa_size_name();
+      if (length != null)
+        length += " = " + value.length;
+      Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
       if (no_nulls(0)) {
-        forall = quant.getQuantifierExp() + quant.getVarIndexedString(0) + " ~= null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexedString(0)
+          + " ~= null " + quant.getClosingExp();
       } else if (all_nulls(0)) {
-        forall = quant.getQuantifierExp() + quant.getVarIndexedString(0) + " = null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexedString(0)
+          + " = null " + quant.getClosingExp();
       }
+
     }
   #endif
-    if (length == "" && forall == "") { // interned; can't say anything about size or elements
+    if (length == null && forall == null) {
+      // can't say anything about size or elements
       String thisclassname = this.getClass().getName();
-      result = "warning: " + thisclassname + ".format_ioa() " + " needs to be implemented: " + format();
-    } else if (length == "") { // interned; can't say anything about size
+      result = "warning: " + thisclassname + ".format_ioa() "
+        + " needs to be implemented: " + format();
+    } else if (length == null) {
+      // can't say anything about size
       result = forall;
-    } else if ((forall == "") || (elts[0].length == 0)) { // interned; can't say anything about elements
+    } else if ((forall == null) || (elts[0].length == 0)) {
+      // can't say anything about elements
       result = length;
     } else { // Default, can say about both length and elements
       result = "(" + length + ") /\\ (" + forall + ")";
     }
 #elif defined(STRINGSEQUENCE)
     INT value = elts[0];
-    if (var().name.isApplySizeSafe())
-      result = "size(" + var().name.ioa_name() + ") = " + value.length;
+    String size = var().get_ioa_size_name();
+    if (size != null)
+      result = size+ " = " + value.length;
     else {
       String thisclassname = this.getClass().getName();
-      result = "warning: " + thisclassname + ".format_ioa() needs to be implemented: " + format();
+      result = "warning: " + thisclassname
+        + ".format_ioa() needs to be implemented: " + format();
     }
 #endif
 #if defined(IS_ELT)
@@ -758,10 +770,10 @@ public final class ONEOFSCALAR
   public String format_esc() {
     sort_rep();
 #if defined(IS_ELT)
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String[] form = VarInfo.esc_quantify (var());
     String varname = form[1];
 #elif defined(IS_SCALAR)
-    String varname = var().name.esc_name();
+    String varname = var().esc_name();
 #endif
     String result;
 #if defined(ELTSTRING)
@@ -769,32 +781,19 @@ public final class ONEOFSCALAR
     // Daikon stores as Strings).
     boolean valid = false;
     result = null;
-    if (is_type() && num_elts == 1) {
-      VarInfoName hunt = var().name;
-      if (hunt instanceof VarInfoName.Prestate) {
-        hunt = ((VarInfoName.Prestate) hunt).term;
-      }
-      if (hunt instanceof VarInfoName.TypeOf) {
-        hunt = ((VarInfoName.TypeOf) hunt).term;
-        if (hunt instanceof VarInfoName.Elements) {
-          VarInfoName contents = ((VarInfoName.Elements) hunt).term;
-          VarInfo elems_var = ppt.parent.findVar(hunt);
-          if (elems_var != null) {
-            if (! elems_var.type.isArray()) {
-              varname = contents.esc_name();
-              String type = format_esc_string2type(elts[0]);
-              result = varname + ".elementType == " + type;
-              // Do not use the \forall, return this directly
-              return result;
-            } else {
-              valid = true;
-              result = "";
-              for (int i=0; i<num_elts; i++) {
-                if (i != 0) { result += " || "; }
-                result += varname + " == " + format_esc_string2type(elts[i]);
-              }
-            }
-          }
+    if (is_type() && (num_elts == 1)) {
+      VarInfo base = var().get_enclosing_var();
+      if ((base == null) || base.type.isArray()) {
+        valid = true;
+        result = varname + " == " + format_esc_string2type(elts[0]);
+      } else { // base is not an array, presume it is a collection
+        VarInfo collection = base.get_enclosing_var();
+        assert collection != null : "no enclosing var for " + base.name();
+        if (collection != null) {
+          result = collection.esc_name() + ".elementType == "
+            + format_esc_string2type(elts[0]);
+          // Do not use the \forall, return this directly
+          return (result);
         }
       }
     }
@@ -857,32 +856,31 @@ public final class ONEOFSCALAR
       }
     }
 #elif defined(IS_SEQUENCE_NUMERIC)
-    String length = "";
-    String forall = "";
+    String length = null;
+    String forall = null;
   #if defined(SEQUENCE)
     if (is_hashcode()) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
       INT value = elts[0];
       if (var().type.isArray()) {
-        if (var().name.isApplySizeSafe()) {
-          length = var().name.applySize().esc_name() + " == " + value.length;
-        }
+        length = var().get_esc_size_name();
+        if (length != null)
+          length += " == " + value.length;
+        String[] form = VarInfo.esc_quantify (var());
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
     }
   #endif
-    if (length == "" && forall == "") { // interned
+    if (length == null && forall == null) {
       return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
-    } else if (length == "") { // interned
+    } else if (length == null) { // interned
       result = forall;
-    } else if (forall == "") { // interned
+    } else if (forall == null) { // interned
       result = length;
     } else {
       result = "(" + length + ") && (" + forall + ")";
@@ -890,35 +888,32 @@ public final class ONEOFSCALAR
 #elif defined(STRINGSEQUENCE)
     // If the variable expression is a raw sequence, examine its
     // element type(s).
-    if (var().name instanceof VarInfoName.TypeOf) {
-      VarInfoName term = ((VarInfoName.TypeOf) var().name).term;
-      if (term instanceof VarInfoName.Elements) {
-        String varname = ((VarInfoName.Elements) term).term.esc_name();
-        String type = null;
-        boolean consistent = true;
-        for (int i=0; consistent && i<num_elts; i++) {
-          String[] elt = elts[i];
-          for (int j=0; consistent && j<elt.length; j++) {
-            String maybe = format_esc_string2type(elt[j]);
-            if (type == null) {
-              type = maybe;
-            } else {
-              consistent &= type.equals(maybe);
-            }
-          }
-        }
-        if (consistent && (type != null)) {
-          VarInfo term_var = ppt.parent.findVar(term);
-          if (term_var != null) {
-            if (term_var.type.isArray()) {
-              return "\\elemtype(" + varname + ") == " + type;
-            } else {
-              return varname + ".elementType == " + type;
-            }
+    if (var().is_typeof()) {
+
+      VarInfo sequence = var().get_enclosing_var();
+      String varname = sequence.get_enclosing_var().esc_name();
+      String type = null;
+      boolean consistent = true;
+      for (int i=0; consistent && i<num_elts; i++) {
+        String[] elt = elts[i];
+        for (int j=0; consistent && j<elt.length; j++) {
+          String maybe = format_esc_string2type(elt[j]);
+          if (type == null) {
+            type = maybe;
+          } else {
+            consistent &= type.equals(maybe);
           }
         }
       }
+      if (consistent && (type != null)) {
+        if (sequence.type.isArray()) {
+          return "\\elemtype(" + varname + ") == " + type;
+        } else {
+          return varname + ".elementType == " + type;
+        }
+      }
     }
+
     result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
 #endif
 #if defined(IS_ELT)
@@ -933,7 +928,7 @@ public final class ONEOFSCALAR
 
 #if !defined(SEQUENCE)
     // Setting up the name of the unary variable
-    String varname = var().name.name_using(format, var());
+    String varname = var().name_using(format);
 #endif
 
 #if defined(ELTSTRING)
@@ -1080,16 +1075,16 @@ public final class ONEOFSCALAR
 
   public String format_simplify() {
 #ifdef BASE_INT
-    if (is_hashcode() && dkconfig_omit_hashcode_values_Simplify)
-      return "(AND)";
+    // if (is_hashcode() && dkconfig_omit_hashcode_values_Simplify)
+    //   return "(AND)";
 #endif
     sort_rep();
 #if defined(IS_ELT)
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String[] form = VarInfo.simplify_quantify (var());
     String varname = form[1];
 #elif defined(IS_SCALAR)
     String varname =
-      var().simplifyFixup(var().name.name_using(OutputFormat.SIMPLIFY, null));
+      var().simplifyFixup(var().name_using(OutputFormat.SIMPLIFY));
 #endif
     String result;
 #if defined(STRING) || defined(ELTSTRING)
@@ -1127,15 +1122,17 @@ public final class ONEOFSCALAR
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode()) {
       if (num_elts == 1) {
+        long hashcode_val = get_hashcode_val (elts[0]);
         result = "(EQ " + varname + " " +
           ((elts[0] == 0) ? "null" :
-           ("(hashcode " + simplify_format_long(elts[0]) + ")")) + ")";
+           ("(hashcode " + simplify_format_long(hashcode_val) + ")")) + ")";
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
         Assert.assertTrue(elts[0] == 0);
         Assert.assertTrue(elts[1] != 0);
+        long hashcode_val = get_hashcode_val (elts[1]);
         result = "(OR (EQ " + varname + " null) (EQ " + varname
-          + "(hashcode " + simplify_format_long(elts[1]) + ")))";
+          + "(hashcode " + simplify_format_long(hashcode_val) + ")))";
       } else if (num_elts == 0) {
         return format_too_few_samples(OutputFormat.SIMPLIFY, null);
       } else {
@@ -1161,31 +1158,28 @@ public final class ONEOFSCALAR
 #elif defined(IS_SEQUENCE)
     StringBuffer resultBuf = new StringBuffer();
     for (int i=0; i<num_elts; i++) {
-      String length = null;
-      String contents = null;
       INT seq = elts[i];
-      VarInfoName[] bounds;
-      VarInfoName offset = null;
-      if (var().name.isApplySizeSafe()) {
-        length = "(EQ " + var().name.applySize().simplify_name() + " "
-          + simplify_format_long(seq.length) + ")";
-      } else if ((bounds = var().name.getSliceBounds()) != null) {
-        String size = "(+ 1 (- " + bounds[1].simplify_name() + " " +
-          bounds[0].simplify_name() + "))";
+      String offset = null;
+      String contents = null;
+      String[] bounds_name;
+      String length = var().get_simplify_size_name();
+      // if ((length == null) && var().name.isApplySizeSafe())
+      //  System.out.printf ("var %s, type %s, is_array %b%n", var().name(),
+      //                     var().type, var().type.isArray());
+      if (length != null) {
+        length = "(EQ " + length + " "+ simplify_format_long(seq.length) + ")";
+      } else if ((bounds_name = var().get_simplify_slice_bounds()) != null) {
+        String size = "(+ 1 (- " + bounds_name[1] +" " + bounds_name[0] + "))";
         length = "(EQ " + size + " " + simplify_format_long(seq.length) + ")";
-        offset = bounds[0];
+        offset = bounds_name[0];
       }
+
 #ifdef SEQUENCE
       if (is_hashcode()) {
+        String[] form = VarInfo.simplify_quantify (var());
         if (no_nulls(i)) {
-          String[] form =
-            VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-              { var().name } );
           contents = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
         } else if (all_nulls(i)) {
-          String[] form =
-            VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-              { var().name } );
           contents = form[0] + "(EQ " + form[1] + "  null)" + form[2];
         }
       } else
@@ -1203,32 +1197,27 @@ public final class ONEOFSCALAR
               if (!ELT_EQUALS(seq[j], seq[k]))
                 break;
             k--;
-            VarInfoName index_var =
-              VarInfoName.QuantHelper.getFreeIndex(var().name);
-            String index_name = index_var.simplify_name();
+            String index_name = VarInfo.get_simplify_free_index (var());
             String cond_left, cond_right;
             if (offset == null) {
               cond_left  = "(<= " + j + " " + index_name + ")";
               cond_right = "(<= " + index_name + " " + k + ")";
             } else {
-              cond_left = "(<= (+ " + offset.simplify_name() + " " + j + ") "
+              cond_left = "(<= (+ " + offset + " " + j + ") "
                 + index_name + ")";
-              cond_right = "(>= (+ " + offset.simplify_name() + " " + k + ") "
+              cond_right = "(>= (+ " + offset + " " + k + ") "
                 + index_name + ")";
             }
             String cond = "(AND " + cond_left + " " + cond_right + ")";
-            VarInfoName nth =
-              VarInfoName.QuantHelper.selectNth(var().name, index_var, 0);
-            String eq = "(EQ " + nth.simplify_name() + " " +
-              TOSTRING_SIMPLIFY(seq[j]) + ")";
+            String nth = var().get_simplify_selectNth (index_name, true, 0);
+            String eq = "(EQ " + nth + " " + TOSTRING_SIMPLIFY(seq[j]) + ")";
             String implies = "(IMPLIES " + cond + " " + eq + ")";
             String forall = "(FORALL (" + index_name + ") " + implies + ")";
             contentsBuf.append(" " + forall);
             j = k;
           } else {
             // Output a single value
-            VarInfoName nth =
-              VarInfoName.QuantHelper.selectNth(var().name, offset, j);
+            String nth = var().get_simplify_selectNth (offset, false, j);
             if (nth == null) {
               String classname = this.getClass().toString().substring(6);
               result = "warning: method " + classname
@@ -1236,8 +1225,10 @@ public final class ONEOFSCALAR
               return result;
             }
             String value = TOSTRING_SIMPLIFY(seq[j]);
-            contentsBuf.append(" (EQ " + nth.simplify_name() + " "
-                               + value + ")");
+            contentsBuf.append(" (EQ " + nth + " " + value + ")");
+            // if (nth.contains ("--orig__a"))
+            //   System.out.printf ("regular orig__a%n");
+
           }
         }
         if (seq.length > 1) {
@@ -1259,7 +1250,7 @@ public final class ONEOFSCALAR
         resultBuf.append(" (AND " + length + " " + contents + ")");
       }
 
-    }
+      }
     if (num_elts > 1) {
       result = "(OR" + resultBuf.toString() + ")";
     } else if (num_elts == 1) {
@@ -1523,7 +1514,7 @@ public final class ONEOFSCALAR
     // desirable if the user doesn't know their actual value.
     if (vis[0].isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
-      return new DiscardInfo(this, DiscardCode.obvious, vis[0].name.name() + " is a static constant.");
+      return new DiscardInfo(this, DiscardCode.obvious, vis[0].name() + " is a static constant.");
     }
     return super.isObviousStatically(vis);
   }
@@ -1552,8 +1543,8 @@ public final class ONEOFSCALAR
       VarInfo[] bv = v.derived.getBases();
       if (!bv[0].isDerived()) {
         if (logOn())
-          dlog.log ("isObviousDynamically '" + v.name.name()
-                    + " == 0' ==> '" + bv[0].name.name() + " == []'");
+          dlog.log ("isObviousDynamically '" + v.name()
+                    + " == 0' ==> '" + bv[0].name() + " == []'");
         return new DiscardInfo(this, DiscardCode.obvious, "size(array) == 0 is implied by array == []");
       }
     }
@@ -1561,7 +1552,7 @@ public final class ONEOFSCALAR
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
       SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
-        String discardString = v.name.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";
+        String discardString = v.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";
         return new DiscardInfo(this, DiscardCode.obvious, discardString);
       }
     }
@@ -1583,7 +1574,7 @@ public final class ONEOFSCALAR
             sort_rep();
             if (other.compare_rep(num_elts, elts)) {
               // System.out.println("isObviousImplied true");
-              String discardString = v1.name.name()+" is a member of "+v2.name.name()+" for which this Invariant also holds";
+              String discardString = v1.name()+" is a member of "+v2.name()+" for which this Invariant also holds";
               return new DiscardInfo(this, DiscardCode.obvious, discardString);
             }
           }
@@ -1735,10 +1726,12 @@ public final class ONEOFSCALAR
       // Be even more aggressive about rejecting these for use in
       // implications in this case, since, we'd be printing them as
       // "true"
+      /*
       if (dkconfig_omit_hashcode_values_Simplify &&
           (is_hashcode() || other.is_hashcode())) {
         return false;
       }
+      */
 #endif
 
       return true;
@@ -1920,4 +1913,27 @@ public final class ONEOFSCALAR
     return (true);
   }
 
+#ifdef BASE_INT
+  /**
+   * Map that holds dummy hashcode values for hashcodes.  Each hashcode
+   * seen is assigned a small integer in the order they are seen.  These
+   * values will be consistent as long as new hashcodes do not appear
+   * in the output.  Not a perfect fix for regressions consistency, but
+   * workable
+   */
+  private static Map<Long,Long> dummy_hashcode_vals
+    = new LinkedHashMap<Long,Long>();
+  private static long next_dummy_hashcode = 1001;
+
+  private long get_hashcode_val (long hashcode) {
+    if (!dkconfig_omit_hashcode_values_Simplify)
+      return hashcode;
+
+    Long val = dummy_hashcode_vals.get (hashcode);
+    if (val != null)
+      return val;
+    dummy_hashcode_vals.put (hashcode, next_dummy_hashcode);
+    return (next_dummy_hashcode++);
+  }
+#endif
 }
