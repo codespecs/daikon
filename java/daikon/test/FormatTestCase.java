@@ -117,8 +117,9 @@ class FormatTestCase {
         System.out.println("^^^" + e.toString());
         System.out.println("^^^" + e.getMessage());
         System.out.println("^^^" + e.getCause());
-        throw new RuntimeException(e.toString() + e.getMessage()
-                                   + e.getCause());
+        throw new RuntimeException ("unexpected exception", e);
+        // throw new RuntimeException(e.toString() + e.getMessage()
+        //                           + e.getCause());
       }
     }
 
@@ -612,9 +613,8 @@ class FormatTestCase {
     // invariant, "b" for the second, and so on
     // - The ProglangType will be specified in the parameters
     // - The comparability will be none
-    VarInfo result = new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
-                                                    arrayModifier),
-                                  type, type,
+    VarInfo result = new VarInfo (new String(new char [] {(char)('a' + i)}) +
+                                  arrayModifier, type, type,
                                   VarComparabilityNone.it, VarInfoAux.getDefault());
     return result;
   }
