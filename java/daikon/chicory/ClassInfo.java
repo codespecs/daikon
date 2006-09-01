@@ -30,6 +30,9 @@ public class ClassInfo {
   /** DaikonVariables for the class (static vars only) **/
   public RootInfo traversalClass;
 
+  /** Whether or not any methods in this class were instrumented **/
+  public boolean shouldInclude = false;
+
   /** Mapping from field name to string representation of its value**/
   //only for static final primitives
   //which are declared by a CONSTANT VALUE in the code
