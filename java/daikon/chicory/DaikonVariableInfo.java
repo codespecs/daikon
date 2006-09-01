@@ -48,6 +48,9 @@ public abstract class DaikonVariableInfo
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
+    /** Suffix for variables that represent a class, eg, "foo.getClass()". **/
+    public static final String class_suffix = ".getClass()";
+
     /** Determines whether or not synthetic variables should be ignored **/
     private static boolean skip_synthetic = true;
 
@@ -961,7 +964,8 @@ public abstract class DaikonVariableInfo
            addChild(child);
 
            // .getClass() var
-           DaikonVariableInfo childClass = new DaikonClassInfo(offset + theName + "[]" + VarInfoName.getClassSuffix, true);
+           DaikonVariableInfo childClass = new DaikonClassInfo(offset
+               + theName + "[]" + class_suffix, true);
 
            childClass.typeName = classClassName + "[]";
            childClass.repTypeName = stringClassName + "[]" ;
@@ -987,7 +991,7 @@ public abstract class DaikonVariableInfo
 
        // add daikoninfo type
        DaikonVariableInfo classInfo
-           = new DaikonClassInfo(offset + theName + VarInfoName.getClassSuffix,
+           = new DaikonClassInfo(offset + theName + class_suffix,
                                  (offset+theName).contains("[]"));
 
        classInfo.typeName = classClassName + postString;
