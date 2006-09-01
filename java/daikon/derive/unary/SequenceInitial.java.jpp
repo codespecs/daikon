@@ -114,23 +114,7 @@ public final class CLASSNAME
   }
 
   protected VarInfo makeVarInfo() {
-
-    VarInfoName viname = base.name.applySubscript(VarInfoName.parse(String.valueOf(index)));
-    ProglangType ptype = base.type.elementType();
-    ProglangType frtype = base.file_rep_type.elementType();
-    VarComparability comp = base.comparability.elementType();
-    VarInfo vi = new VarInfo(viname, ptype, frtype, comp, base.aux);
-
-    vi.setup_derived_base (base);
-    vi.var_kind = VarInfo.VarKind.FIELD;
-    if (vi.parent_ppt != null) {
-      if (base.parent_variable == null)
-        vi.parent_variable = null;
-      else
-        vi.parent_variable = String.format ("%s[%d]", base.parent_variable,
-                                            index);
-    }
-    return (vi);
+    return VarInfo.make_subscript (base, null, index);
   }
 
   public  boolean isSameFormula(Derivation other) {
