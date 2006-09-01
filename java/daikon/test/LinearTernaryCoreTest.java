@@ -87,10 +87,6 @@ public class LinearTernaryCoreTest
     // //      z = 6
   }
 
-  private static VarInfoName x_vin = VarInfoName.parse("x");
-  private static VarInfoName y_vin = VarInfoName.parse("y");
-  private static VarInfoName z_vin = VarInfoName.parse("z");
-
   public void one_test_format(double a, double b, double c, double d, String goal_result) {
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     ltc.a = a;
@@ -98,7 +94,7 @@ public class LinearTernaryCoreTest
     ltc.c = c;
     ltc.d = d;
     String actual_result = ltc.format_using(OutputFormat.DAIKON,
-                                            x_vin, null, y_vin, null, z_vin, null);
+                                            "x", "y", "z");
  //    System.out.println("Expecting: " + goal_result);
  //    System.out.println("Actual:    " + actual_result);
      assertTrue(actual_result.equals(goal_result));
