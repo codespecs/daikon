@@ -211,23 +211,12 @@ public final class CLASSNAME
 
 
   protected VarInfo makeVarInfo() {
-    VarInfo var1 = var1();
-    VarInfo var2 = var2();
-    VarInfoName new_name
-      = VarInfoName.applyFunctionOfN("predicateSlice",
-                                     new VarInfoName[] { var1.name,
-                                                         var2.name,
-                                                         new VarInfoName.Simple(name)
-                                     }).applyElements();
-    VarInfo vi = new VarInfo(new_name, var1.type, var1.file_rep_type,
-                             var1.comparability, var1.aux);
-    vi.setup_derived_function ("predicateSlice", var1, var2);
-    return (vi);
+    return VarInfo.make_function ("predicateSlice", var1(), var2());
   }
 
   public String toString() {
-    return "[" + CLASSSTRING + " of " + var1().name + " " +
-      var2().name + " for " + name + "]";
+    return "[" + CLASSSTRING + " of " + var1().name() + " " +
+      var2().name() + " for " + name + "]";
   }
 
   public boolean isSameFormula(Derivation other) {

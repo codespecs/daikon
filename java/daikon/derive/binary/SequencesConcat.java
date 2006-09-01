@@ -84,16 +84,11 @@ public final class SequencesConcat
   }
 
   protected VarInfo makeVarInfo() {
-    VarInfo var1 = var1();
-    VarInfo vi = new VarInfo(VarInfoName.applyFunctionOfN("concat",
-                       new VarInfoName[] {var1.name, var2().name}), var1.type,
-                       var1.file_rep_type, var1.comparability, var1.aux);
-    vi.setup_derived_function ("concat", var1(), var2());
-    return (vi);
+    return VarInfo.make_function ("concat", var1(), var2());
   }
 
   public String toString() {
-    return "[SequencesConcat of " + var1().name + " " + var2().name + "]";
+    return "[SequencesConcat of " + var1().name() + " " + var2().name() + "]";
 
   }
 
