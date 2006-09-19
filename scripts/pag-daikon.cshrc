@@ -32,8 +32,10 @@ if (! $?JDK4DIR) setenv JDK4DIR /afs/csail/group/pag/software/pkg/j2sdk-1.4.2
 if (! $?JDK5DIR) setenv JDK5DIR /afs/csail/group/pag/software/pkg/j2sdk-1.5
 
 # Remove duplicates so path and classpath don't get too long
-if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
-setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
+if (-x ${INV}/scripts/path-remove.pl) then
+  if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
+  setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
+endif
 
 setenv PATH /usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
