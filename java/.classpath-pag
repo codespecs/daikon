@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="lib/junit.jar"/>
-    <classpathentry kind="lib" path="lib/jakarta-oro.jar"/>
-    <classpathentry kind="lib" path="lib/java-getopt.jar"/>
-    <classpathentry kind="lib" path="/g2/users/mernst/java/jdk/lib/tools.jar"/>
-    <classpathentry kind="output" path=""/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/java-getopt.jar"/>
+	<classpathentry kind="lib" path="/afs/csail.mit.edu/u/m/mernst/java/jdk/lib/tools.jar"/>
+	<classpathentry kind="lib" path="lib/bcel.jar"/>
+	<classpathentry kind="output" path=""/>
 </classpath>
