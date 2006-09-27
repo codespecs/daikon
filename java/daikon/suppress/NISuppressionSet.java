@@ -82,85 +82,192 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // Get the ppt we are working in
     PptTopLevel ppt = inv.ppt.parent;
 
-    // For now all suppressors are unary/binary and all suppressees are ternary
+    // For now all suppressors are unary/binary and 
+    // all suppressees are unary, binary or ternary
     Assert.assertTrue (inv.ppt.var_infos.length < 3);
-    Assert.assertTrue (suppression_set[0].suppressee.var_count == 3);
+    
+    // check unary, binary and ternary suppressees separately
+    
+    // unary suppressee
+    if (suppression_set[0].suppressee.var_count == 1) {
+      // Create all of the valid unary slices that use the vars from inv
+      // and check to see if the invariant should be created for each slice
+      if (inv.ppt.var_infos.length == 1) {
+        VarInfo[] vis = new VarInfo[1];
+        VarInfo v1 = inv.ppt.var_infos[0];
+        vis[0] = v1;
 
-    // Create all of the valid ternary slices that use the vars from inv
-    // and check to see if the invariant should be created for each slice
-    if (inv.ppt.var_infos.length == 2) {
-      VarInfo[] vis = new VarInfo[3];
-      VarInfo v1 = inv.ppt.var_infos[0];
-      VarInfo v2 = inv.ppt.var_infos[1];
-      VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
-      for (int i = 0; i < leaders.length; i++) {
-        VarInfo l = leaders[i];
-        if (!ppt.is_slice_ok (l, v1, v2))
-          continue;
-        if (l.missingOutOfBounds() || v1.missingOutOfBounds()
-            || v2.missingOutOfBounds())
-          continue;
-
-        // Order the variables,
-        if (l.varinfo_index <= v1.varinfo_index) {
-          vis[0] = l;
-          vis[1] = v1;
-          vis[2] = v2;
-        } else if (l.varinfo_index <= v2.varinfo_index) {
-          vis[0] = v1;
-          vis[1] = l;
-          vis[2] = v2;
-        } else {
-          vis[0] = v1;
-          vis[1] = v2;
-          vis[2] = l;
-        }
-
-        if (NIS.debug.isLoggable (Level.FINE))
-          NIS.debug.fine ("processing slice " + Debug.toString(vis)
-                       + " in ppt " + ppt.name() + " with " + ppt.numViews());
-
-        check_falsified (ppt, vis, inv, new_invs);
+        // Make sure the slice is interesting and has valid types over the 
+        // suppressee invariant
+        if (!v1.missingOutOfBounds() && (ppt.is_slice_ok(v1))) {
+          if (suppression_set[0].suppressee.sample_inv.valid_types(vis))
+            check_falsified(ppt, vis, inv, new_invs);
+        }      
       }
-    } else /* must be unary */ {
-      VarInfo[] vis = new VarInfo[3];
-      VarInfo v1 = inv.ppt.var_infos[0];
-      VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
-      for (int i = 0; i < leaders.length; i++) {
-        VarInfo l1 = leaders[i];
-        for (int j = i; j < leaders.length; j++) {
-          VarInfo l2 = leaders[j];
+      return;
+    }
+    
+    // binary suppressee
+    if (suppression_set[0].suppressee.var_count == 2) {
+      // Create all of the valid binary slices that use the vars from inv
+      // and check to see if the invariant should be created for each slice
+      if (inv.ppt.var_infos.length == 2) {
+        VarInfo[] vis = new VarInfo[2];
+        VarInfo v1 = inv.ppt.var_infos[0];
+        VarInfo v2 = inv.ppt.var_infos[1];
+        vis[0] = v1;
+        vis[1] = v2;
+        
+        // Make sure the slice is interesting and has valid types over the 
+        // suppressee invariant
+        if (!v1.missingOutOfBounds() && !v2.missingOutOfBounds() && ppt.is_slice_ok(v1, v2)) {
+          if (suppression_set[0].suppressee.sample_inv.valid_types(vis)) 
+            check_falsified(ppt, vis, inv, new_invs);
+        }
+        
+      } else /* must be unary */{
+        VarInfo[] vis = new VarInfo[2];
+        VarInfo v1 = inv.ppt.var_infos[0];
+        VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
+        for (int i = 0; i < leaders.length; i++) {
+          VarInfo l1 = leaders[i];
 
+          // hashcode types are not involved in suppressions
+          if (NIS.dkconfig_skip_hashcode_type) {
+            if (l1.file_rep_type.isHashcode()) 
+              continue;
+          }
+          
           // Make sure the slice is interesting
-          if (v1.missingOutOfBounds() || l1.missingOutOfBounds()
-              || l2.missingOutOfBounds())
+          if (v1.missingOutOfBounds() || l1.missingOutOfBounds())
             continue;
-          if (!ppt.is_slice_ok (v1, l1, l2))
+          if (!ppt.is_slice_ok(v1, l1))
             continue;
 
           // Sort the variables
           if (v1.varinfo_index <= l1.varinfo_index) {
             vis[0] = v1;
             vis[1] = l1;
-            vis[2] = l2;
-          } else if (v1.varinfo_index <= l2.varinfo_index) {
-            vis[0] = l1;
-            vis[1] = v1;
-            vis[2] = l2;
           } else {
             vis[0] = l1;
-            vis[1] = l2;
-            vis[2] = v1;
+            vis[1] = v1;
           }
+          
+          if (!suppression_set[0].suppressee.sample_inv.valid_types(vis))
+            continue;
 
+          if (NIS.debug.isLoggable(Level.FINE))
+            NIS.debug.fine("processing slice " + Debug.toString(vis) + " in ppt "
+                + ppt.name() + " with " + ppt.numViews());
+
+          check_falsified(ppt, vis, inv, new_invs);
+        }
+      }
+      return;
+    }
+    
+
+    // ternary suppressee
+    if (suppression_set[0].suppressee.var_count == 3) {
+      // Create all of the valid ternary slices that use the vars from inv
+      // and check to see if the invariant should be created for each slice
+      if (inv.ppt.var_infos.length == 2) {
+        VarInfo[] vis = new VarInfo[3];
+        VarInfo v1 = inv.ppt.var_infos[0];
+        VarInfo v2 = inv.ppt.var_infos[1];
+        VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
+        for (int i = 0; i < leaders.length; i++) {
+          VarInfo l = leaders[i];
+          
+          if (NIS.dkconfig_skip_hashcode_type) {
+            if (l.file_rep_type.isHashcode())
+              continue;
+          }
+          
+          if (!ppt.is_slice_ok (l, v1, v2))
+            continue;
+          if (l.missingOutOfBounds() || v1.missingOutOfBounds()
+              || v2.missingOutOfBounds())
+            continue;
+
+          // Order the variables,
+          if (l.varinfo_index <= v1.varinfo_index) {
+            vis[0] = l;
+            vis[1] = v1;
+            vis[2] = v2;
+          } else if (l.varinfo_index <= v2.varinfo_index) {
+            vis[0] = v1;
+            vis[1] = l;
+            vis[2] = v2;
+          } else {
+            vis[0] = v1;
+            vis[1] = v2;
+            vis[2] = l;
+          }
+          
+          if (!suppression_set[0].suppressee.sample_inv.valid_types(vis))
+            continue;
 
           if (NIS.debug.isLoggable (Level.FINE))
             NIS.debug.fine ("processing slice " + Debug.toString(vis)
-                + " in ppt " + ppt.name() + " with " + ppt.numViews());
+                         + " in ppt " + ppt.name() + " with " + ppt.numViews());
 
           check_falsified (ppt, vis, inv, new_invs);
         }
+      } else /* must be unary */ {
+        VarInfo[] vis = new VarInfo[3];
+        VarInfo v1 = inv.ppt.var_infos[0];
+        VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
+        for (int i = 0; i < leaders.length; i++) {
+          VarInfo l1 = leaders[i];
+          
+          if (NIS.dkconfig_skip_hashcode_type) {
+            if (l1.file_rep_type.isHashcode())
+              continue;
+          }
+          
+          for (int j = i; j < leaders.length; j++) {
+            VarInfo l2 = leaders[j];
+
+            if (NIS.dkconfig_skip_hashcode_type) {
+              if (l2.file_rep_type.isHashcode())
+                continue;
+            }
+            
+            // Make sure the slice is interesting
+            if (v1.missingOutOfBounds() || l1.missingOutOfBounds()
+                || l2.missingOutOfBounds())
+              continue;
+            if (!ppt.is_slice_ok (v1, l1, l2))
+              continue;
+            
+            // Sort the variables
+            if (v1.varinfo_index <= l1.varinfo_index) {
+              vis[0] = v1;
+              vis[1] = l1;
+              vis[2] = l2;
+            } else if (v1.varinfo_index <= l2.varinfo_index) {
+              vis[0] = l1;
+              vis[1] = v1;
+              vis[2] = l2;
+            } else {
+              vis[0] = l1;
+              vis[1] = l2;
+              vis[2] = v1;
+            }
+
+            if (!suppression_set[0].suppressee.sample_inv.valid_types(vis))
+              continue;
+
+            if (NIS.debug.isLoggable (Level.FINE))
+              NIS.debug.fine ("processing slice " + Debug.toString(vis)
+                  + " in ppt " + ppt.name() + " with " + ppt.numViews());
+
+            check_falsified (ppt, vis, inv, new_invs);
+          }
+        }
       }
+      return;
     }
   }
 
@@ -176,7 +283,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // to whether it is true, false, or matches the falsified inv
     // If any particular suppression is still valid, just return as there
     // is nothing to be done (the suppressee is still suppressed)
+    
     for (int i = 0; i < suppression_set.length; i++ ) {
+      
       String status = suppression_set[i].check (ppt, vis, inv);
       if (status == NIS.VALID) {
         if (NIS.debug.isLoggable (Level.FINE))
@@ -195,7 +304,10 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // need to instantiate the suppressee.
     for (int i = 0; i < suppression_set.length; i++) {
       if (suppression_set[i].invalidated()) {
-        instantiate (inv.ppt.parent, vis, new_invs);
+        
+        Invariant v = suppression_set[i].suppressee.instantiate(vis, ppt);
+        if (v != null)
+          new_invs.add(v);
         return;
       }
     }
@@ -323,7 +435,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     // Create the new invariant
     Invariant inv = suppressee.instantiate (slice);
-
+    
     if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
       inv.log (NIS.debug, "Adding " + inv.format()
                + " from nis suppression set " + this);
@@ -336,9 +448,10 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                         + "(slice %s)", inv.getClass(), inv.format(), slice));
       }
     }
-
+    
     // Add the invariant to the new invariant list
-    new_invs.add (inv);
+    if (inv != null)
+      new_invs.add (inv);
 
     if (Daikon.dkconfig_internal_check) {
       if (slice.contains_inv_exact (inv)) {
@@ -401,6 +514,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       new_array[suppression_set.length + i]
         = new_suppressions.get(i);
     suppression_set = new_array;
+    
   }
 
   /**
