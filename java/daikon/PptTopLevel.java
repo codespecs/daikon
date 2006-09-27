@@ -74,6 +74,14 @@ public class PptTopLevel extends Ppt {
    * created at a higher program point. For experimental purposes only.
    */
   public static boolean dkconfig_remove_merged_invs = false;
+  
+  /**
+   * Boolean.  Needed by the NIS.falsified method when keeping stats
+   * to figure out how many falsified invariants are antecedents.  Only 
+   * the first pass of processing with the sample is counted toward the
+   * stats. 
+   */
+  public  static boolean first_pass_with_sample = true; 
 
   /** Ppt attributes (specified in decl records) **/
   public enum PptFlags {STATIC, ENTER, EXIT, PRIVATE};
@@ -999,20 +1007,37 @@ public class PptTopLevel extends Ppt {
     // Create any newly unsuppressed invariants
     NIS.process_falsified_invs(this, vt);
 
-    // Remove any falsified invariants.  Make a copy of the original slices
-    // since NISuppressions will add new slices/invariants as others are
-    // falsified.
-    PptSlice[] slices =
-      (PptSlice[]) views.values().toArray(new PptSlice[views.size()]);
-    for (int i = 0; i < slices.length; i++) {
-      slices[i].remove_falsified();
-    }
+    // NIS.newly_falsified is a list of invariants that are falsified by 
+    // the current sample when using the falsified method of processing
+    // suppressions.  The newly falsified invariants are added back to 
+    // the slices so that they can be processed.  Thus, the falsified method
+    // is used iteratively, since these newly falsified invariants may 
+    // unsuppress new invariants.  In the antecedents method, the problem
+    // does not exist, because of the way that recursive suppressions are
+    // ordered.  This loop should be executed at least once, regardless of
+    // the algorithm for processing suppressions, hence the do loop.  For, 
+    // the antecedents method, the loop is executed only once because
+    // the NIS.newly_falsified list will be empty.
+    
+    do {
+      // Remove any falsified invariants.  Make a copy of the original slices
+      // since NISuppressions will add new slices/invariants as others are
+      // falsified.
+      PptSlice[] slices = (PptSlice[]) views.values().toArray(
+          new PptSlice[views.size()]);
+      for (int i = 0; i < slices.length; i++) {
+        slices[i].remove_falsified();
+      }
 
-    // Apply the sample to any invariants created by non-instantiating
-    // suppressions.  This must happen before we remove slices without
-    // invariants below.
-    NIS.apply_samples(vt, count);
-
+      // Apply the sample to any invariants created by non-instantiating
+      // suppressions. This must happen before we remove slices without
+      // invariants below.
+      NIS.apply_samples(vt, count);
+      first_pass_with_sample = false;
+    } while (NIS.newly_falsified.size() != 0);
+    
+    first_pass_with_sample = true;
+    
     // Remove slices from the list if all of their invariants have died
     for (Iterator<PptSlice> itor = views_iterator(); itor.hasNext();) {
       PptSlice view = itor.next();
@@ -1026,7 +1051,7 @@ public class PptTopLevel extends Ppt {
 
     if (debugNISStats.isLoggable (Level.FINE))
       NIS.dump_stats (debugNISStats, this);
-
+    
     return (weakened_invs);
   }
 
