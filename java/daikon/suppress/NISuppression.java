@@ -93,13 +93,26 @@ public class NISuppression {
   public String check (PptTopLevel ppt, VarInfo[] vis, Invariant inv) {
 
     String status = NIS.VALID;
+    boolean set = false;
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor ssor = suppressors[i];
       String st = ssor.check (ppt, vis, inv);
-      if (st == NIS.MISSING)
-        status = NIS.MISSING;
-      else if (st != NIS.VALID) {
-        return (NIS.INVALID);
+      
+      if (!set) {
+        if (st == NIS.MISSING)
+          status = NIS.MISSING;
+        else if (st != NIS.VALID) {
+          status = (NIS.INVALID);
+          if (st == NIS.INVALID) {
+            return status;
+          }   
+            // !valid in this case means invalid or match
+            // If invalid, then stop immediately
+            // otherwise, check state of the rest of the suppressors
+            // This check is needed because we are reviving the 
+            // falsified method so match is now a valid status.
+            set = true;
+        }
       }
     }
     return (status);
@@ -198,10 +211,12 @@ public class NISuppression {
         if (inv.is_false())
           false_cnt++;
       }
+      
       // Fmt.pf ("  suppressor %s: %s/%s", suppressors[i], "" + a.size(),
       //       "" + false_cnt);
       total_false_cnt += false_cnt;
     }
+    
     if (total_false_cnt == 0)
       return;
 
@@ -540,7 +555,7 @@ public class NISuppression {
       List<NISuppressor> sors = new ArrayList<NISuppressor> (old_sors);
       for (int j = 0; j < s.suppressors.length; j++)
         sors.add (s.suppressors[j].translate (match));
-      new_suppressions.add (new NISuppression (sors, suppressee));
+      new_suppressions.add(new NISuppression (sors, suppressee));
     }
 
     return (new_suppressions);
