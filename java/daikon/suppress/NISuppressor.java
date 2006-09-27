@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Class that defines a suppressor invariant for use in non-instantiating
  * suppressions.  In non-instantiating suppressions, suppressor invariants
- * are defined independent of specific variables.  Intstead, arguments
+ * are defined independent of specific variables.  Instead, arguments
  * are identified by their variable index in the suppressee.
  */
 public class NISuppressor {
@@ -47,7 +47,7 @@ public class NISuppressor {
 
   /**
    * Sample invariant - used to check the suppressor over constants.
-   * this is a prototype invariant; that is, simple_inv.ppt == null.
+   * this is a prototype invariant; that is, sample_inv.ppt == null.
    **/
   Invariant sample_inv;
 
@@ -209,10 +209,13 @@ public class NISuppressor {
       VarInfo v1 = vis[v1_index];
 
       // Check to see if inv matches this suppressor.  The invariant class
-      // and variables must match for this to be true
-      if ((inv != null) &&
-          (inv.getClass() == inv_class) && (v1 == inv.ppt.var_infos[0])) {
-        return (state = NIS.MATCH);
+      // and variables must match for this to be true.  This check is only 
+      // needed for the falsified method.
+      if (!NIS.dkconfig_antecedent_method) {
+        if ((inv != null) &&
+            (inv.getClass() == inv_class) && (v1 == inv.ppt.var_infos[0])) {
+          return (state = NIS.MATCH);
+        }
       }
 
       // Check to see if the suppressor is true over all constants.
@@ -264,12 +267,15 @@ public class NISuppressor {
       VarInfo v2 = vis[v2_index];
 
       // Check to see if inv matches this suppressor.  The invariant class,
-      // variables, and swap must match for this to be true
-      if ((inv != null) && match (inv) && (v1 == inv.ppt.var_infos[0])
-          && (v2 == inv.ppt.var_infos[1])) {
-        if (NIS.debug.isLoggable (Level.FINE))
-          NIS.debug.fine ("Matches falsified inv " + inv.format());
-        return (state = NIS.MATCH);
+      // variables, and swap must match for this to be true.  This check is
+      // only needed in the falsified method.
+      if (!NIS.dkconfig_antecedent_method) {
+        if ((inv != null) && match(inv) && (v1 == inv.ppt.var_infos[0])
+            && (v2 == inv.ppt.var_infos[1])) {
+          if (NIS.debug.isLoggable(Level.FINE))
+            NIS.debug.fine("Matches falsified inv " + inv.format());
+          return (state = NIS.MATCH);
+        }
       }
 
       // Check to see if the suppressor is true over all constants.  This
@@ -298,7 +304,7 @@ public class NISuppressor {
       if (ppt.is_prev_missing(v1) || ppt.is_prev_missing(v2))
         return (state = NIS.MISSING);
 
-      // Check to see if this suppressor is true.  Note that we don't checked
+      // Check to see if this suppressor is true.  Note that we don't check
       // to see if the invariant has been falsified.  That is because we
       // do this processing as falsified invariants are removed from the lists.
       // An invariant that is still in the list, but marked falsified, is true
@@ -333,7 +339,7 @@ public class NISuppressor {
   }
 
   /**
-   * Returns true if inv matches this suppressor.  It is assummed that
+   * Returns true if inv matches this suppressor.  It is assumed that
    * inv's variables already match (i.e., that it was looked up in
    * compatible slice
    */
@@ -431,7 +437,7 @@ public class NISuppressor {
    */
   public String toString() {
 
-    String cname = UtilMDE.unqualified_name (inv_class);
+    String cname = inv_class.getCanonicalName();
 
     String status = state;
     if (status == NIS.NONE)
