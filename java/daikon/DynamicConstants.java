@@ -1,33 +1,24 @@
 package daikon;
 
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import daikon.inv.*;
+import daikon.inv.unary.*;
+import daikon.inv.binary.*;
+import daikon.inv.ternary.*;
+import daikon.suppress.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.stringsequence.*;
+import daikon.inv.ternary.threeScalar.*;
+import daikon.inv.binary.twoScalar.*;
 
-import utilMDE.Assert;
-import utilMDE.Fmt;
-import daikon.inv.Invariant;
-import daikon.inv.InvariantStatus;
-import daikon.inv.binary.twoScalar.LinearBinary;
-import daikon.inv.binary.twoScalar.LinearBinaryFloat;
-import daikon.inv.ternary.threeScalar.LinearTernary;
-import daikon.inv.ternary.threeScalar.LinearTernaryFloat;
-import daikon.inv.unary.scalar.OneOfFloat;
-import daikon.inv.unary.scalar.OneOfScalar;
-import daikon.inv.unary.sequence.OneOfFloatSequence;
-import daikon.inv.unary.sequence.OneOfSequence;
-import daikon.inv.unary.string.OneOfString;
-import daikon.inv.unary.stringsequence.OneOfStringSequence;
-import daikon.suppress.NIS;
+import java.io.*;
+import java.util.*;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import utilMDE.*;
 
 
 /**
@@ -304,7 +295,7 @@ public class DynamicConstants implements Serializable {
 
   /** Returns whether the specified variable is currently a constant. **/
   public boolean is_constant (VarInfo vi) {
-
+    
     return (all_vars[vi.varinfo_index].constant);
   }
 
@@ -860,7 +851,9 @@ public class DynamicConstants implements Serializable {
   /**
    * Create unary and binary constant invariants.  The slices and
    * invariants are created and returned, but not added to the
-   * ppt.
+   * ppt.  Note that when NIS.dkconfig_suppressor_list is turned
+   * on (default is on), only unary and binary invariants that can
+   * be suppressors in NIS suppressions are created.
    */
   public List<PptSlice> create_constant_invs() {
 
@@ -876,6 +869,14 @@ public class DynamicConstants implements Serializable {
       Constant con = con_list.get(i);
       if (!con.vi.isCanonical())
         continue;
+
+      // hashcode types are not involved in suppressions
+      if (NIS.dkconfig_skip_hashcode_type) {
+        if (con.vi.file_rep_type.isHashcode()) {
+          continue;
+        }
+      }
+
       leaders.add (con);
     }
 
@@ -884,40 +885,45 @@ public class DynamicConstants implements Serializable {
 
     // Unary slices/invariants
     for (Constant con : leaders) {
-      PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
 
-      if (NIS.dkconfig_suppressor_list)
+      PptSlice1 slice1 = new PptSlice1(ppt, con.vi);
+      
+      if (NIS.dkconfig_suppressor_list) {
         slice1.instantiate_invariants(NIS.suppressor_proto_invs);
-      else
+      } else {
         slice1.instantiate_invariants();
+      }      
 
       // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name(), con.val,
+
       if (con.count > 0) {
-        slice1.add_val_bu (con.val, mod, con.count);
+        slice1.add_val_bu(con.val, mod, con.count);
       }
       if (slice1.invs.size() > 0)
-        new_views.add (slice1);
+        new_views.add(slice1);
     }
 
+    
     // Binary slices/invariants
     for (int i = 0; i < leaders.size(); i++) {
       Constant con1 = leaders.get(i);
       for (int j = i; j < leaders.size(); j++) {
         Constant con2 = leaders.get(j);
-        if (!con1.vi.compatible (con2.vi))
+        if (!con1.vi.compatible(con2.vi))
           continue;
-        PptSlice2 slice2 = new PptSlice2 (ppt, con1.vi, con2.vi);
 
-        if (NIS.dkconfig_suppressor_list)
+        PptSlice2 slice2 = new PptSlice2(ppt, con1.vi, con2.vi);
+        if (NIS.dkconfig_suppressor_list) {
           slice2.instantiate_invariants(NIS.suppressor_proto_invs);
-        else
+        } else {
           slice2.instantiate_invariants();
+        }
 
         if (con1.count > 0 && con2.count > 0) {
-          slice2.add_val_bu (con1.val, con2.val, mod, mod, con1.count);
+          slice2.add_val_bu(con1.val, con2.val, mod, mod, con1.count);
         }
         if (slice2.invs.size() > 0)
-          new_views.add (slice2);
+          new_views.add(slice2);
       }
     }
 
@@ -936,9 +942,7 @@ public class DynamicConstants implements Serializable {
 
     return (new_views);
   }
-
-
-
+  
   public void print_missing (PrintWriter out) {
 
     for (int i = 0; i < missing_list.size(); i++) {
@@ -1013,6 +1017,4 @@ public class DynamicConstants implements Serializable {
     // Add the value to it
     slice1.add_val_bu (con.val, ValueTuple.MODIFIED, con.count);
   }
-
-
 }
