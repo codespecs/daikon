@@ -19,11 +19,6 @@ import java.util.*;
 //
 //  - Move the missingOutOfBounds check to is_slice_ok()
 //
-// Work to be done when all NI suppressions are not unary/binary -> ternary
-//
-//  - The apply_samples() routines will have to
-//    be applied iteratively when chains of NIS are supported.
-//
 
 /**
  * Main class for non-instantiating suppression.  Handles setup and other
@@ -41,17 +36,39 @@ public class NIS {
   /** Boolean.  If true, enable non-instantiating suppressions. **/
   public static boolean dkconfig_enabled = true;
 
-  /** Boolean. If true, use antecedent method for creating unsuppressed
-   *  invariants.
+  /** Boolean. If true, use antecedent method for NIS processing.
+   * If false, use falsified method for processing falsified
+   * invariants for NISuppressions.  Default is 'true'.
    */
   public static boolean dkconfig_antecedent_method = true;
-  
-  /** Boolean.  If true, use the specific list of suppressor related 
-   * invariant prototypes when creating constant invariants in the 
+
+  /** Boolean.  If true, use a combination of the falsified method for a small
+   * number of falsified invariants and the antecedent method for a large number
+   * (by setting NIS.dkconfig_antecedent_method).  Default is 'false'.
+   * Number is determined by NIS.dkconfig_hybrid_threshhold.
+   */
+  public static boolean dkconfig_hybrid_method = false;
+
+  /**
+   * Int.  Less and equal to this number means use the falsified method in
+   * the hybrid method of processing falsified invariants, while greater
+   * than this number means use the antecedent method.  Empirical data shows that
+   * number should not be more than 10.
+   */
+  public static int dkconfig_hybrid_threshhold = 5;
+
+
+  /** Boolean.  If true, use the specific list of suppressor related
+   * invariant prototypes when creating constant invariants in the
    * antecedent method.  Default is 'true'.
    */
   public static boolean dkconfig_suppressor_list = true;
-  
+
+  /** Boolean.  If true, skip variables of file rep type hashcode when creating
+   * invariants over constants in the antecedent method.  Default is 'true'.
+   */
+  public static boolean dkconfig_skip_hashcode_type = true;
+
   // Possible states for suppressors and suppressions.  When a suppression
   // is checked, it sets one of these states on each suppressor
   /** initial state -- suppressor has not been checked yet **/
@@ -69,13 +86,13 @@ public class NIS {
    * Map from invariant class to a list of all of the suppression sets
    * that contain a suppressor of that class.
    */
-  static Map<Class,List<NISuppressionSet>>
+  public static Map<Class,List<NISuppressionSet>>
     suppressor_map = new LinkedHashMap<Class,List<NISuppressionSet>>(256);
 
-  /** List of all suppressions */
+  /** List of all suppressions **/
   static List<NISuppressionSet> all_suppressions = new ArrayList<NISuppressionSet>();
-  
-  /** List of suppressor invariant prototypes */
+
+  /** List of suppressor invariant prototypes **/
   public static List<Invariant> suppressor_proto_invs = new ArrayList<Invariant>();
 
   /**
@@ -85,12 +102,23 @@ public class NIS {
    */
   public static List<Invariant> new_invs = new ArrayList<Invariant>();
 
+  /**
+   * List of invariants that are unsuppressed and then falsified by
+   * the current sample.  This list is cleared at the beginning of
+   * apply_samples() and falsified invariants are added as the current
+   * sample is applied to invariants in new_invs.  The list is only
+   * used when the falsified method is used for processing suppressions.
+   */
+  public static List<Invariant> newly_falsified = new ArrayList<Invariant>();
+
   // Statistics that are kept during processing.  Some of these are kept
-  // and/or make sense for some approches and not for others
+  // and/or make sense for some approaches and not for others
 
   /** Whether or not to keep statistics **/
   static boolean keep_stats = false;
-  /** Number of falsified invariants processed **/
+  /** Number of falsified invariants in the program point **/
+  static int false_cnts = 0;
+  /** Number of falsified invariants in the program point that are potential suppressors **/
   static int false_invs = 0;
   /** Number of suppressions processed **/
   static int suppressions_processed = 0;
@@ -102,8 +130,10 @@ public class NIS {
   static int created_invs_cnt = 0;
   /** Number of invariants that are still suppressed **/
   static int still_suppressed_cnt = 0;
-  /** Total time spent in NIS processing for this sample **/
-  static Stopwatch watch = new Stopwatch (false);
+
+  /** Total time spent in NIS processing **/
+  public static Stopwatch watch = new Stopwatch (false);
+
   /** First execution of dump_stats().  Used to dump a header **/
   static boolean first_time = true;
 
@@ -157,8 +187,15 @@ public class NIS {
         }
       }
     }
-    
-    if (dkconfig_suppressor_list) {
+
+    // map suppressor classes to suppression sets
+    // (now that recursive definitions are in place)
+    suppressor_map.clear();
+    for (NISuppressionSet suppression_set : all_suppressions) {
+      suppression_set.add_to_suppressor_map (suppressor_map);
+    }
+
+    if (NIS.dkconfig_suppressor_list) {
       // Set up the list of suppressor invariant prototypes
       for (Invariant i : Daikon.proto_invs) {
         if (suppressor_map.containsKey(i.getClass())) {
@@ -183,6 +220,20 @@ public class NIS {
     if (!dkconfig_enabled || dkconfig_antecedent_method)
       return;
 
+    if (NIS.dkconfig_skip_hashcode_type) {
+
+      boolean hashFound = false;
+
+      for (VarInfo vi : inv.ppt.var_infos) {
+        if (vi.file_rep_type.isScalar() && !vi.file_rep_type.isIntegral() && !vi.file_rep_type.isArray()) {
+          hashFound = true;
+        }
+      }
+
+      if (hashFound)
+        return;
+    }
+
     // Get the suppression sets (if any) associated with this invariant
     List<NISuppressionSet> ss_list = suppressor_map.get(inv.getClass());
     if (ss_list == null) {
@@ -192,7 +243,9 @@ public class NIS {
     // Count the number of falsified invariants that are antecedents
     if (keep_stats) {
       watch.start();
-      false_invs++;
+      if (PptTopLevel.first_pass_with_sample && suppressor_map.containsKey(inv.getClass())) {
+        false_invs++;
+      }
     }
 
     // Process each suppression set
@@ -205,8 +258,9 @@ public class NIS {
       suppressions_processed += ss.suppression_set.length;
     }
 
-    if (keep_stats)
+    if (keep_stats) {
       watch.stop();
+    }
   }
 
   /**
@@ -221,6 +275,7 @@ public class NIS {
    * is not itself a possible NI suppressor.
    */
   public static void apply_samples (ValueTuple vt, int count) {
+    newly_falsified.clear();
 
     if (NIS.debug.isLoggable (Level.FINE))
       NIS.debug.fine ("Applying samples to " + new_invs.size()
@@ -246,11 +301,17 @@ public class NIS {
       // If no variables are missing, apply the sample
       if (!missing) {
         InvariantStatus result = inv.add_sample (vt, count);
-        if (result == InvariantStatus.FALSIFIED)
+        if (result == InvariantStatus.FALSIFIED) {
+          if (NIS.dkconfig_antecedent_method)
           Assert.assertTrue (false, "inv " + inv.format()
                              + " falsified by sample "
                              + Debug.toString (inv.ppt.var_infos, vt)
                              + " at ppt " + inv.ppt);
+          else {
+            inv.falsify();
+            newly_falsified.add(inv);
+          }
+        }
       }
 
       // Add the invariant to its slice
@@ -260,7 +321,9 @@ public class NIS {
       inv.ppt.addInvariant (inv);
       if (Debug.logOn())
         inv.log (inv.format() + " added to slice");
-      created_invs_cnt++;
+
+      if (NIS.dkconfig_antecedent_method)
+        created_invs_cnt++;
     }
 
     // Make a second pass through the new invariants and make sure that
@@ -291,6 +354,7 @@ public class NIS {
     keep_stats = true;
     watch.clear();
     false_invs = 0;
+    false_cnts = 0;
     suppressions_processed = 0;
     new_invs_cnt = 0;
     false_invs_cnt = 0;
@@ -341,6 +405,28 @@ public class NIS {
    */
   public static void process_falsified_invs (PptTopLevel ppt, ValueTuple vt) {
 
+    // if using the hybrid method, need to know the number of falsified suppressor
+    // invariants before deciding which method to use
+    if (NIS.dkconfig_hybrid_method) {
+      int count = 0;
+      for (Iterator<Invariant> i = ppt.invariants_iterator(); i.hasNext();) {
+        Invariant inv = i.next();
+        if (inv.is_false()) {
+          false_cnts++;
+
+          if (suppressor_map.containsKey(inv.getClass()))
+            count++;
+        }
+
+      }
+
+      if (count > NIS.dkconfig_hybrid_threshhold)
+        dkconfig_antecedent_method = true;
+      else
+        dkconfig_antecedent_method = false;
+
+    }
+
     if (!dkconfig_enabled || !dkconfig_antecedent_method)
       return;
 
@@ -354,23 +440,24 @@ public class NIS {
       }
     }
 
-    // If there are no falsified invariants, there is nothing to do
+    // If there are no falsified invariants that are suppressors, there is nothing to do
     int false_cnt = 0;
     int inv_cnt = 0;
     for (Iterator<Invariant> i = ppt.invariants_iterator(); i.hasNext(); ) {
       Invariant inv = i.next();
-      if (inv.is_false())
+      if (inv.is_false() && suppressor_map.containsKey(inv.getClass()))
         false_cnt++;
       inv_cnt++;
     }
+
     // System.out.printf ("Invariants for ppt %s: %d\n", ppt, inv_cnt);
-    if (false_cnt == 0)
+    if (false_cnt == 0) {
       return;
+    }
+
     if (debugAnt.isLoggable (Level.FINE))
       debugAnt.fine ("at ppt " + ppt.name + " false_cnt = " + false_cnt);
-    false_invs = false_cnt;
-
-    watch.start();
+    //false_invs = false_cnt;
 
     if (debugAnt.isLoggable (Level.FINE))
       ppt.debug_invs (debugAnt);
@@ -379,8 +466,8 @@ public class NIS {
     Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap<VarComparability,Antecedents>();
     store_antecedents_by_comparability (ppt.views_iterator(), comp_ants);
     if (ppt.constants != null)
-      store_antecedents_by_comparability
-        (ppt.constants.create_constant_invs().iterator(), comp_ants);
+      store_antecedents_by_comparability(ppt.constants.create_constant_invs().iterator(), comp_ants);
+
     if (debugAnt.isLoggable (Level.FINE)) {
       for (Antecedents ants : comp_ants.values()) {
         debugAnt.fine (ants.toString());
@@ -454,6 +541,7 @@ public class NIS {
         }
       }
     }
+
     if (debugAnt.isLoggable (Level.FINE))
       debugAnt.fine ("Found " + unsuppressed_invs.size() +
                      " unsuppressed invariants: " + unsuppressed_invs);
@@ -484,9 +572,6 @@ public class NIS {
         new_invs.add (inv);
       }
     }
-
-
-    watch.stop();
   }
 
   /**
@@ -578,11 +663,28 @@ public class NIS {
 
     for (Iterator<PptSlice> i = slice_iterator; i.hasNext(); ) {
       PptSlice slice = i.next();
+
+      if (NIS.dkconfig_skip_hashcode_type) {
+
+        boolean hashFound = false;
+
+        for (VarInfo vi : slice.var_infos) {
+          if (vi.file_rep_type.isHashcode()) {
+            hashFound = true;
+          }
+        }
+
+        if (hashFound)
+          continue;
+      }
+
       for (Invariant inv : slice.invs) {
         if (!is_suppressor (inv.getClass()))
           continue;
+
         if (inv.is_false())
           false_invs++;
+
         VarComparability vc = inv.get_comparability();
         Antecedents ants = comp_ants.get (vc);
         if (ants == null) {
