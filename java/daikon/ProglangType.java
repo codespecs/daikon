@@ -613,6 +613,14 @@ public final class ProglangType
   public boolean isString() {
     return ((dimensions == 0) && baseIsString());
   }
+  
+  public boolean baseIsHashcode() {
+    return (base == BASE_HASHCODE);
+  }
+  
+  public boolean isHashcode() {
+    return ((dimensions == 0) && baseIsHashcode());
+  }
 
   /**
    * Does this type represent a pointer? Should only be applied to
