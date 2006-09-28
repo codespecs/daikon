@@ -19,6 +19,22 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+4.2.9 (September 1, 2006)
+
+
+Daikon
+
+  Daikon now uses a hybrid algorithm for processing suppressions.  The
+  hybrid algorithm uses a combination of the falsified algorithm 
+  and the antecedents algorithm (used previously).  The hybrid 
+  algorithm capitalizes on the fact that the falsified algorithm
+  performs well on a small number of falsified invariants, while the
+  antecedents algorithm works better on a large number of falsified
+  invariants.  The algorithm used can be overriden using the 
+  NIS.dkconfig_suppression_processor option, with HYBRID, ANTECEDENT, and
+  FALSIFIED as the possible values.  Note that consequently, 
+  NIS.dkconfig_antecedent_method has been eliminated as a configuration 
+  option.
 
 4.2.9 (September 1, 2006)
 
