@@ -211,7 +211,7 @@ public class NISuppressor {
       // Check to see if inv matches this suppressor.  The invariant class
       // and variables must match for this to be true.  This check is only 
       // needed for the falsified method.
-      if (!NIS.dkconfig_antecedent_method) {
+      if (!NIS.antecedent_method) {
         if ((inv != null) &&
             (inv.getClass() == inv_class) && (v1 == inv.ppt.var_infos[0])) {
           return (state = NIS.MATCH);
@@ -269,7 +269,7 @@ public class NISuppressor {
       // Check to see if inv matches this suppressor.  The invariant class,
       // variables, and swap must match for this to be true.  This check is
       // only needed in the falsified method.
-      if (!NIS.dkconfig_antecedent_method) {
+      if (!NIS.antecedent_method) {
         if ((inv != null) && match(inv) && (v1 == inv.ppt.var_infos[0])
             && (v2 == inv.ppt.var_infos[1])) {
           if (NIS.debug.isLoggable(Level.FINE))
@@ -332,7 +332,7 @@ public class NISuppressor {
    * @see #match(Invariant)
    */
   public boolean match_true (Invariant inv) {
-    if (NIS.dkconfig_antecedent_method)
+    if (NIS.antecedent_method)
       return (match (inv) && !inv.is_false());
     else
       return (match (inv));
