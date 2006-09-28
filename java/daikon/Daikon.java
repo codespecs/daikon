@@ -3,32 +3,178 @@
 
 package daikon;
 
-import daikon.split.*;
-import daikon.suppress.*;
-import daikon.inv.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.inv.binary.sequenceScalar.*;
-import daikon.inv.binary.sequenceString.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.OutputFormat;
-import daikon.config.Configuration;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.LineNumberReader;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-
-import java.util.regex.*;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
-import gnu.getopt.*;
-import utilMDE.*;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
+import utilMDE.Assert;
+import utilMDE.Fmt;
+import utilMDE.Stopwatch;
+import utilMDE.TextFile;
+import utilMDE.UtilMDE;
+import daikon.config.Configuration;
+import daikon.inv.Equality;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
+import daikon.inv.binary.sequenceScalar.Member;
+import daikon.inv.binary.sequenceScalar.MemberFloat;
+import daikon.inv.binary.sequenceScalar.SeqFloatEqual;
+import daikon.inv.binary.sequenceScalar.SeqFloatGreaterEqual;
+import daikon.inv.binary.sequenceScalar.SeqFloatGreaterThan;
+import daikon.inv.binary.sequenceScalar.SeqFloatLessEqual;
+import daikon.inv.binary.sequenceScalar.SeqFloatLessThan;
+import daikon.inv.binary.sequenceScalar.SeqIntEqual;
+import daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual;
+import daikon.inv.binary.sequenceScalar.SeqIntGreaterThan;
+import daikon.inv.binary.sequenceScalar.SeqIntLessEqual;
+import daikon.inv.binary.sequenceScalar.SeqIntLessThan;
+import daikon.inv.binary.sequenceString.MemberString;
+import daikon.inv.binary.twoScalar.FloatEqual;
+import daikon.inv.binary.twoScalar.FloatGreaterEqual;
+import daikon.inv.binary.twoScalar.FloatGreaterThan;
+import daikon.inv.binary.twoScalar.FloatLessEqual;
+import daikon.inv.binary.twoScalar.FloatLessThan;
+import daikon.inv.binary.twoScalar.FloatNonEqual;
+import daikon.inv.binary.twoScalar.IntEqual;
+import daikon.inv.binary.twoScalar.IntGreaterEqual;
+import daikon.inv.binary.twoScalar.IntGreaterThan;
+import daikon.inv.binary.twoScalar.IntLessEqual;
+import daikon.inv.binary.twoScalar.IntLessThan;
+import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.binary.twoScalar.LinearBinary;
+import daikon.inv.binary.twoScalar.LinearBinaryFloat;
+import daikon.inv.binary.twoScalar.NumericFloat;
+import daikon.inv.binary.twoScalar.NumericInt;
+import daikon.inv.binary.twoSequence.PairwiseFloatEqual;
+import daikon.inv.binary.twoSequence.PairwiseFloatGreaterEqual;
+import daikon.inv.binary.twoSequence.PairwiseFloatGreaterThan;
+import daikon.inv.binary.twoSequence.PairwiseFloatLessEqual;
+import daikon.inv.binary.twoSequence.PairwiseFloatLessThan;
+import daikon.inv.binary.twoSequence.PairwiseIntEqual;
+import daikon.inv.binary.twoSequence.PairwiseIntGreaterEqual;
+import daikon.inv.binary.twoSequence.PairwiseIntGreaterThan;
+import daikon.inv.binary.twoSequence.PairwiseIntLessEqual;
+import daikon.inv.binary.twoSequence.PairwiseIntLessThan;
+import daikon.inv.binary.twoSequence.PairwiseLinearBinary;
+import daikon.inv.binary.twoSequence.PairwiseLinearBinaryFloat;
+import daikon.inv.binary.twoSequence.PairwiseNumericFloat;
+import daikon.inv.binary.twoSequence.PairwiseNumericInt;
+import daikon.inv.binary.twoSequence.Reverse;
+import daikon.inv.binary.twoSequence.ReverseFloat;
+import daikon.inv.binary.twoSequence.SeqSeqFloatEqual;
+import daikon.inv.binary.twoSequence.SeqSeqFloatGreaterEqual;
+import daikon.inv.binary.twoSequence.SeqSeqFloatGreaterThan;
+import daikon.inv.binary.twoSequence.SeqSeqFloatLessEqual;
+import daikon.inv.binary.twoSequence.SeqSeqFloatLessThan;
+import daikon.inv.binary.twoSequence.SeqSeqIntEqual;
+import daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual;
+import daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan;
+import daikon.inv.binary.twoSequence.SeqSeqIntLessEqual;
+import daikon.inv.binary.twoSequence.SeqSeqIntLessThan;
+import daikon.inv.binary.twoSequence.SeqSeqStringEqual;
+import daikon.inv.binary.twoSequence.SeqSeqStringGreaterEqual;
+import daikon.inv.binary.twoSequence.SeqSeqStringGreaterThan;
+import daikon.inv.binary.twoSequence.SeqSeqStringLessEqual;
+import daikon.inv.binary.twoSequence.SeqSeqStringLessThan;
+import daikon.inv.binary.twoSequence.SubSequence;
+import daikon.inv.binary.twoSequence.SubSequenceFloat;
+import daikon.inv.binary.twoSequence.SubSet;
+import daikon.inv.binary.twoSequence.SubSetFloat;
+import daikon.inv.binary.twoSequence.SuperSequence;
+import daikon.inv.binary.twoSequence.SuperSequenceFloat;
+import daikon.inv.binary.twoSequence.SuperSet;
+import daikon.inv.binary.twoSequence.SuperSetFloat;
+import daikon.inv.binary.twoString.StringEqual;
+import daikon.inv.binary.twoString.StringGreaterEqual;
+import daikon.inv.binary.twoString.StringGreaterThan;
+import daikon.inv.binary.twoString.StringLessEqual;
+import daikon.inv.binary.twoString.StringLessThan;
+import daikon.inv.binary.twoString.StringNonEqual;
+import daikon.inv.ternary.threeScalar.FunctionBinary;
+import daikon.inv.ternary.threeScalar.FunctionBinaryFloat;
+import daikon.inv.ternary.threeScalar.LinearTernary;
+import daikon.inv.ternary.threeScalar.LinearTernaryFloat;
+import daikon.inv.unary.scalar.LowerBound;
+import daikon.inv.unary.scalar.LowerBoundFloat;
+import daikon.inv.unary.scalar.Modulus;
+import daikon.inv.unary.scalar.NonModulus;
+import daikon.inv.unary.scalar.NonZero;
+import daikon.inv.unary.scalar.NonZeroFloat;
+import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.inv.unary.scalar.RangeFloat;
+import daikon.inv.unary.scalar.RangeInt;
+import daikon.inv.unary.scalar.UpperBound;
+import daikon.inv.unary.scalar.UpperBoundFloat;
+import daikon.inv.unary.sequence.CommonFloatSequence;
+import daikon.inv.unary.sequence.CommonSequence;
+import daikon.inv.unary.sequence.EltLowerBound;
+import daikon.inv.unary.sequence.EltLowerBoundFloat;
+import daikon.inv.unary.sequence.EltNonZero;
+import daikon.inv.unary.sequence.EltNonZeroFloat;
+import daikon.inv.unary.sequence.EltOneOf;
+import daikon.inv.unary.sequence.EltOneOfFloat;
+import daikon.inv.unary.sequence.EltRangeFloat;
+import daikon.inv.unary.sequence.EltRangeInt;
+import daikon.inv.unary.sequence.EltUpperBound;
+import daikon.inv.unary.sequence.EltUpperBoundFloat;
+import daikon.inv.unary.sequence.EltwiseFloatEqual;
+import daikon.inv.unary.sequence.EltwiseFloatGreaterEqual;
+import daikon.inv.unary.sequence.EltwiseFloatGreaterThan;
+import daikon.inv.unary.sequence.EltwiseFloatLessEqual;
+import daikon.inv.unary.sequence.EltwiseFloatLessThan;
+import daikon.inv.unary.sequence.EltwiseIntEqual;
+import daikon.inv.unary.sequence.EltwiseIntGreaterEqual;
+import daikon.inv.unary.sequence.EltwiseIntGreaterThan;
+import daikon.inv.unary.sequence.EltwiseIntLessEqual;
+import daikon.inv.unary.sequence.EltwiseIntLessThan;
+import daikon.inv.unary.sequence.NoDuplicates;
+import daikon.inv.unary.sequence.NoDuplicatesFloat;
+import daikon.inv.unary.sequence.OneOfFloatSequence;
+import daikon.inv.unary.sequence.OneOfSequence;
+import daikon.inv.unary.sequence.SeqIndexFloatEqual;
+import daikon.inv.unary.sequence.SeqIndexFloatGreaterEqual;
+import daikon.inv.unary.sequence.SeqIndexFloatGreaterThan;
+import daikon.inv.unary.sequence.SeqIndexFloatLessEqual;
+import daikon.inv.unary.sequence.SeqIndexFloatLessThan;
+import daikon.inv.unary.sequence.SeqIndexFloatNonEqual;
+import daikon.inv.unary.sequence.SeqIndexIntEqual;
+import daikon.inv.unary.sequence.SeqIndexIntGreaterEqual;
+import daikon.inv.unary.sequence.SeqIndexIntGreaterThan;
+import daikon.inv.unary.sequence.SeqIndexIntLessEqual;
+import daikon.inv.unary.sequence.SeqIndexIntLessThan;
+import daikon.inv.unary.sequence.SeqIndexIntNonEqual;
+import daikon.inv.unary.string.OneOfString;
+import daikon.inv.unary.stringsequence.CommonStringSequence;
+import daikon.inv.unary.stringsequence.EltOneOfString;
+import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.split.ContextSplitterFactory;
+import daikon.split.SpinfoFileParser;
+import daikon.split.Splitter;
+import daikon.split.SplitterFactory;
+import daikon.split.SplitterList;
+import daikon.suppress.NIS;
+import daikon.suppress.NIS.SuppressionProcessor;
 
 /**
  * The "main" method is the main entry point for the Daikon invariant detector.
@@ -457,7 +603,21 @@ public final class Daikon {
       if (!Daikon.dkconfig_quiet)
       System.out.println(release_string);
     }
-
+    
+    // figure out which algorithm to use in NIS to process suppressions
+    if (NIS.dkconfig_suppression_processor == SuppressionProcessor.HYBRID) {
+      NIS.hybrid_method = true;
+    } else {
+      if (NIS.dkconfig_suppression_processor == SuppressionProcessor.ANTECEDENT) {
+        NIS.antecedent_method = true;
+        NIS.hybrid_method = false;
+      } else {
+        assert (NIS.dkconfig_suppression_processor == SuppressionProcessor.FALSIFIED);
+        NIS.antecedent_method = false;
+        NIS.hybrid_method = false;
+      }
+    }
+    
     // Create the list of all invariant types
     setup_proto_invs();
 
