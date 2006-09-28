@@ -36,18 +36,31 @@ public class NIS {
   /** Boolean.  If true, enable non-instantiating suppressions. **/
   public static boolean dkconfig_enabled = true;
 
+
+  /** Enum.  Signifies which algorithm is used by NIS to process suppressions. */
+  public enum SuppressionProcessor {HYBRID, ANTECEDENT, FALSIFIED}
+
+  /** SuppressionProcessor.  Determines the algorithm that NIS uses to process
+   * suppressions.  Possible values are declared in the enum SuppressionProcessor.
+   * By default the hybrid algorithm (a combination of the falsified method for a small number
+   * of falsified invariants and the antecedent method for a large number of
+   * falsified invariants) is used.  The only possible values are: HYBRID, ANTECEDENT and
+   * FALSIFIED.
+   */
+  public static SuppressionProcessor dkconfig_suppression_processor = SuppressionProcessor.HYBRID;
+
   /** Boolean. If true, use antecedent method for NIS processing.
    * If false, use falsified method for processing falsified
    * invariants for NISuppressions.  Default is 'true'.
    */
-  public static boolean dkconfig_antecedent_method = true;
+  public static boolean antecedent_method = true;
 
   /** Boolean.  If true, use a combination of the falsified method for a small
    * number of falsified invariants and the antecedent method for a large number
    * (by setting NIS.dkconfig_antecedent_method).  Default is 'false'.
    * Number is determined by NIS.dkconfig_hybrid_threshhold.
    */
-  public static boolean dkconfig_hybrid_method = false;
+  public static boolean hybrid_method = false;
 
   /**
    * Int.  Less and equal to this number means use the falsified method in
@@ -217,7 +230,7 @@ public class NIS {
    */
   public static void falsified (Invariant inv) {
 
-    if (!dkconfig_enabled || dkconfig_antecedent_method)
+    if (!dkconfig_enabled || antecedent_method)
       return;
 
     if (NIS.dkconfig_skip_hashcode_type) {
@@ -302,7 +315,7 @@ public class NIS {
       if (!missing) {
         InvariantStatus result = inv.add_sample (vt, count);
         if (result == InvariantStatus.FALSIFIED) {
-          if (NIS.dkconfig_antecedent_method)
+          if (NIS.antecedent_method)
           Assert.assertTrue (false, "inv " + inv.format()
                              + " falsified by sample "
                              + Debug.toString (inv.ppt.var_infos, vt)
@@ -322,7 +335,7 @@ public class NIS {
       if (Debug.logOn())
         inv.log (inv.format() + " added to slice");
 
-      if (NIS.dkconfig_antecedent_method)
+      if (NIS.antecedent_method)
         created_invs_cnt++;
     }
 
@@ -407,7 +420,7 @@ public class NIS {
 
     // if using the hybrid method, need to know the number of falsified suppressor
     // invariants before deciding which method to use
-    if (NIS.dkconfig_hybrid_method) {
+    if (NIS.hybrid_method) {
       int count = 0;
       for (Iterator<Invariant> i = ppt.invariants_iterator(); i.hasNext();) {
         Invariant inv = i.next();
@@ -421,13 +434,13 @@ public class NIS {
       }
 
       if (count > NIS.dkconfig_hybrid_threshhold)
-        dkconfig_antecedent_method = true;
+        antecedent_method = true;
       else
-        dkconfig_antecedent_method = false;
+        antecedent_method = false;
 
     }
 
-    if (!dkconfig_enabled || !dkconfig_antecedent_method)
+    if (!dkconfig_enabled || !antecedent_method)
       return;
 
     if (false) {
