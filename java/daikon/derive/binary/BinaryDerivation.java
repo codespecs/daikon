@@ -94,4 +94,12 @@ public abstract class BinaryDerivation
     return !(base1.isCanonical() && base2.isCanonical());
   }
 
+  public VarInfo var1() {
+    return base1;
+  }
+
+  public VarInfo var2() {
+    return base2;
+  }
+
 }
