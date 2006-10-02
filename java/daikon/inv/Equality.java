@@ -486,21 +486,27 @@ public final class Equality
       }
       else if (newLeader.isDerivedParamAndUninteresting() &&
 	       !var.isDerivedParamAndUninteresting()) {
-	newLeader = var;
+        // System.out.printf ("%s derived and uninteresting, %s is leader%n",
+        //                   newLeader, var);
+        newLeader = var;
       }
       else if (var.isDerivedParamAndUninteresting() &&
 	       !newLeader.isDerivedParamAndUninteresting()) {
 	// do nothing
       }
       else if (var.derivedDepth() < newLeader.derivedDepth()) {
-	newLeader = var;
+        // System.out.printf ("%s greater depth, %s is leader%n",
+        //                   newLeader, var);
+        newLeader = var;
       }
       else if (var.derivedDepth() > newLeader.derivedDepth()) {
 	// do nothing
       }
       // if we got here, this is the "all other things being equal" case
       else if (var.complexity() < newLeader.complexity()) {
-	newLeader = var;
+        // System.out.printf ("%s greater comlexity, %s is leader%n",
+        //                   newLeader, var);
+        newLeader = var;
       }
     }
     leaderCache = newLeader;
