@@ -44,22 +44,8 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
                                            + " to " + var2.name());
     }
 
-    if (var1.prestate_name().equals(var2.name())) {
-      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-        PrintInvariants.debugFiltering.fine ("\t(yes...)");
-      }
-      return true ;
-    }
-
-    if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine ("compared " + var2.prestate_name()
-                                           + " to " + var1.name());
-    }
-
-    if (var2.prestate_name().equals(var1.name())) {
-      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-        PrintInvariants.debugFiltering.fine ("\t(yes...)");
-      }
+    if (var1.is_prestate_version (var2) || var2.is_prestate_version(var1)) {
+      // System.err.printf ("prestate: var1 (%s) = var2 (%s)%n", var1, var2);
       return true;
     }
 
