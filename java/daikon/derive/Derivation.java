@@ -127,4 +127,87 @@ public abstract class Derivation
   public abstract boolean isSameFormula(Derivation other);
 
   public abstract boolean canBeMissing();
+
+  /**
+   * Returns the lower bound of a slice.  Throws an error if this is not
+   * a slice.  Slices should override.
+   */
+  public Quantify.Term get_lower_bound() {
+    throw new RuntimeException ("not a slice derivation: " + this);
+  }
+
+  /**
+   * Returns the lower bound of a slice.  Throws an error if this is not
+   * a slice.  Slices should override.
+   */
+  public Quantify.Term get_upper_bound() {
+    throw new RuntimeException ("not a slice derivation: " + this);
+  }
+
+  /**
+   * Returns the array variable that underlies this slice.  Throws an error
+   * if this is not a slice.  Slices should override.
+   */
+  public VarInfo get_array_var() {
+    throw new RuntimeException ("not a slice derivation: " + this);
+  }
+
+  /**
+   * Returns the name of this variable in ESC format.  If an index
+   * is specified, it is used as an array index.  It is an error to
+   * specify an index on a non-array variable
+   */
+  public String esc_name (String index) {
+    throw new RuntimeException ("esc_name not implemented for " + this);
+  }
+
+  /**
+   * Returns true if d is the prestate version of this.  Returns true
+   * if this and d are of the same derivation with the same formula
+   * and have the same bases.
+   */
+  public boolean is_prestate_version (Derivation d) {
+
+    // The derivations must be of the same type
+    if (getClass() != d.getClass())
+        return false;
+
+    // Each base of vi must be the prestate version of this
+    VarInfo[] base1 = getBases();
+    VarInfo[] base2 = d.getBases();
+    for (int ii = 0; ii < base1.length; ii++) {
+      if (!base1[ii].is_prestate_version(base2[ii]))
+        return false;
+    }
+
+    // The derivations must have the same formula (offset, start_from, etc)
+    return isSameFormula (d);
+  }
+
+  /** Returns a string that corresponds to the the specified shift **/
+  protected String shift_str (int shift) {
+    String shift_str = "";
+    if (shift != 0)
+      shift_str = String.format ("%+d", shift);
+    return (shift_str);
+  }
+
+  /**
+   * Returns the esc name of a variable which is included inside
+   * an an expression (such as orig(a[vi])).  If the expression
+   * is orig, the orig is implied for this variable.
+   */
+  protected String inside_esc_name (VarInfo vi, boolean in_orig, int shift) {
+    if (vi == null)
+      return "";
+
+    if (in_orig) {
+      if (vi.isPrestate())
+        return vi.postState.esc_name() + shift_str(shift);
+      else
+        return String.format ("\\new(%s)%s", vi.esc_name(), shift_str(shift));
+    } else
+      return vi.esc_name() + shift_str(shift);
+  }
+
 }
