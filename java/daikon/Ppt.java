@@ -94,9 +94,11 @@ public abstract class Ppt
    */
   public VarInfo find_var_by_name(String varname) {
     int i = indexOf(varname);
-    if (i == -1)
+    if (i == -1) {
+      if (varname.contains ("[]"))
+        return find_var_by_name (varname.replace ("[]", "[..]"));
       return (null);
-    else
+    } else
       return (var_infos[i]);
   }
 
