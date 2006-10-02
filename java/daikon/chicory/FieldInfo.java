@@ -145,12 +145,25 @@ public class FieldInfo extends DaikonVariableInfo
         return tag_field;
     }
 
+    /**
+     * Returns the kind of this variable.  Statics are top level
+     * variables, instance variables are fields
+     **/
     public VarInfo.VarKind get_var_kind() {
+      if (isStatic())
+        return VarInfo.VarKind.VARIABLE;
+      else
         return VarInfo.VarKind.FIELD;
     }
 
-    /** Returns the name of this field **/
+    /**
+     * Returns the name of this field.  Since statics are top level, they
+     * have no relative name.  Fields return their field name.
+     **/
     public String get_relative_name() {
+      if (isStatic())
+        return null;
+      else
         return field.getName();
     }
 
