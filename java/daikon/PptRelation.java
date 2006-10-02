@@ -417,7 +417,7 @@ public class PptRelation implements Serializable {
       String parent_name = vc.parent_variable;
       if (parent_name == null)
         parent_name = vc.name();
-      parent_name = parent_name.replace ("[..]", "[]");
+      // parent_name = parent_name.replace ("[..]", "[]");
 
       // System.out.printf ("---parent name %s%n", parent_name);
       VarInfo vp = parent.find_var_by_name (parent_name);
@@ -507,8 +507,10 @@ public class PptRelation implements Serializable {
       } else {
         // VarInfoName orig_name = vp.name.applyPrestate().intern();
         boolean found = rel.relate(vp, vp.prestate_name());
-        assert found : String.format ("vp %s orig_name %s parent %s child %s",
-                                      vp, vp.prestate_name(), parent, child);
+        assert found : String.format ("vp %s orig_name %s parent %s child %s "
+                                      + "with vars %s",
+                                      vp, vp.prestate_name(), parent.name(),
+                                      child.name(), child.var_names());
       }
     }
 
