@@ -1,6 +1,7 @@
 package daikon.derive.binary;
 
 import daikon.*;
+import daikon.derive.*;
 
 /**
  * Derivations of the form A[0..i] or A[i..<end>], derived from A and
@@ -59,6 +60,35 @@ public abstract class SequenceSubsequence
 
     return (vi);
 
+  }
+
+  /** Returns the lower bound of the slice **/
+  public Quantify.Term get_lower_bound() {
+    if (from_start) {
+      return new Quantify.Constant (0);
+    } else {
+      return new Quantify.VarPlusOffset (sclvar(), index_shift);
+    }
+  }
+
+  /** Returns the upper bound of the slice **/
+  public Quantify.Term get_upper_bound() {
+    if (from_start) {
+      return new Quantify.VarPlusOffset (sclvar(), index_shift);
+    } else {
+      return new Quantify.Length (seqvar(), -1);
+    }
+  }
+
+  /** Returns the array variable for this slice **/
+  public VarInfo get_array_var() {
+    return seqvar();
+  }
+
+  /** Returns the ESC name **/
+  public String esc_name (String index) {
+    return String.format ("%s[%s..%s]", seqvar().esc_name(),
+                 get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }
 
 }
