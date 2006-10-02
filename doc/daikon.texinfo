@@ -6183,6 +6183,9 @@ Produce output in the given format.  See @ref{Invariant syntax}.
 Output numbers of values and samples for invariants and program points;
 for debugging.
 
+@item --ppt-select-pattern
+Only outputs program points that match the specified regular expression
+
 @item --config @var{filename}
 Load the configuration settings specified in the given file.
 @xref{Configuration options}, for details.
