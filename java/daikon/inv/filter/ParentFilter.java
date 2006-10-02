@@ -63,9 +63,14 @@ public class ParentFilter extends InvariantFilter {
       for (int j = 0; j < pvis.length; j++) {
         pvis[j] = rel.parentVar (inv.ppt.var_infos[j]);
         if (pvis[j] == null) {
-          if (Debug.logDetail())
-            inv.log ("variable %s cannot be found in %s",
-                     inv.ppt.var_infos[j], rel);
+          if (Debug.logDetail()) {
+            inv.log ("variable %s [%s] cannot be found in %s",
+                     inv.ppt.var_infos[j],
+                     inv.ppt.var_infos[j].get_equalitySet_vars(), rel);
+            for (VarInfo evi : inv.ppt.var_infos[j].get_equalitySet_vars())
+              inv.log ("var %s index %d, dp %b, depth %d, complex %d, idp %s, name %s, param vars %s",
+                       evi, evi.varinfo_index, evi.isDerivedParamAndUninteresting(), evi.derivedDepth(), evi.complexity(), evi.isDerivedParam(), evi.get_VarInfoName(), evi.ppt.getParamVars());
+          }
           continue outer;
         }
       }
@@ -141,8 +146,17 @@ public class ParentFilter extends InvariantFilter {
         if (var_mismatch)
           continue;
 
-        inv.log ("Filtered by parent inv '" + pinv.format() + "' at ppt "
-                 + pslice.name());
+        if (inv.logOn()) {
+          inv.log ("Filtered by parent inv '%s' at ppt %s with rel %s",
+                   pinv.format(), pslice.name(), rel);
+          for (VarInfo cvi : inv.ppt.var_infos) {
+            inv.log ("child variable %s matches parent variable %s",
+                     cvi, rel.parentVar (cvi));
+            for (VarInfo evi : cvi.get_equalitySet_vars())
+              inv.log ("var %s index %d, dp %b, depth %d, complex %d",
+                       evi, evi.varinfo_index, evi.isDerivedParamAndUninteresting(), evi.derivedDepth(), evi.complexity());
+          }
+        }
         return (true);
       }
     }
