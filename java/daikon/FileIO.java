@@ -133,9 +133,11 @@ public final class FileIO {
 
   // Logging Categories
 
+  /** true prints info about variables marked as missing/nonsensical **/
+  public static boolean debug_missing = false;
+
   /** Debug tracer for reading. **/
   public static final Logger debugRead = Logger.getLogger("daikon.FileIO.read");
-
   /** Debug tracer for printing. **/
   public static final Logger debugPrint =
     Logger.getLogger("daikon.FileIO.printDtrace");
@@ -143,7 +145,7 @@ public final class FileIO {
   /** Debug tracer for printing variable values. **/
   public static final Logger debugVars = Logger.getLogger("daikon.FileIO.vars");
 
-  public static final SimpleLog debug_decl = new SimpleLog(true);
+  public static final SimpleLog debug_decl = new SimpleLog(false);
 
   /** Errors while processing ppt declarations */
   public static class DeclError extends IOException {
@@ -256,7 +258,7 @@ public final class FileIO {
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf (PptFlags.class);
     PptType ppt_type = PptType.POINT;
 
-    // Read the records the define this program point
+    // Read the records that define this program point
     while ((line = state.reader.readLine()) != null) {
       debug_decl.log ("read line %s%n", line);
       line = line.trim();
@@ -1551,6 +1553,7 @@ public final class FileIO {
             + ppt.name());
       }
 
+      // Read lines until an included variable is found
       while ((line != null)
              && !line.equals("")
              && !var_included(line)) {
@@ -1656,6 +1659,13 @@ public final class FileIO {
               + data_trace_state.filename + " line " + reader.getLineNumber());
         } else {
           // Keep track of variables that can be missing
+          if (debug_missing && !vi.canBeMissing) {
+              System.out.printf ("Var %s ppt %s at line %d missing%n",
+                               vi, ppt.name(),
+                               FileIO.data_trace_state.reader.getLineNumber());
+              System.out.printf ("val_index = %d, mods[val_index] = %d%n",
+                                 val_index, mods[val_index]);
+          }
           vi.canBeMissing = true;
         }
         vals[val_index] = null;
@@ -1668,13 +1678,11 @@ public final class FileIO {
           vals[val_index] = vi.rep_type.parse_value(value_rep);
           if (vals[val_index] == null) {
             mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
+            if (debug_missing && !vi.canBeMissing)
+              System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
+                               vi, ppt.name(),
+                               FileIO.data_trace_state.reader.getLineNumber());
             vi.canBeMissing = true;
-            if (false)
-              Fmt.pf(
-                "Var %s in ppt %s at line %s is null and not missing",
-                vi.name(),
-                ppt.name(),
-                "" + FileIO.data_trace_state.reader.getLineNumber());
           }
         } catch (Exception e) {
           throw new FileIOException(
@@ -1776,19 +1784,44 @@ public final class FileIO {
         }
       }
       Assert.assertTrue(invoc != null);
-      for (int i = 0; i < ppt.num_orig_vars; i++) {
-        vals[ppt.num_tracevars + i] = invoc.vals[i];
-        int mod = invoc.mods[i];
-        mods[ppt.num_tracevars + i] = mod;
-        // Possibly more efficient to set this all at once, late in
-        // the game; but this gets it done.
-        // It was once moved to PptTopLevel.add(ValueTuple,int), but it
-        // disappeared from there, so now it's back here.
-        // In the long run canBeMissing should perhaps go away
-        if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars + i])) {
-          vis[ppt.num_tracevars + i].canBeMissing = true;
-          Assert.assertTrue(vals[ppt.num_tracevars + i] == null);
+
+      // Loop through each orig variable and get its value/mod bits from
+      // the ENTER point.  vi_index is the index into var_infos at the
+      // ENTER point.  val_index is the index into vals[] and mods[] at
+      // ENTER point.  Note that vis[] includes static constants but
+      // vals[] and mods[] do not.  Also that we don't create orig versions
+      // of static constants
+      int vi_index = 0;
+      for (int val_index = 0; val_index < ppt.num_orig_vars; val_index++) {
+        VarInfo vi = vis[ppt.num_tracevars + ppt.num_static_constant_vars
+                         + val_index];
+        assert (!vi.is_static_constant) : "orig constant " + vi;
+
+        // Skip over constants in the entry point
+        while (invoc.ppt.var_infos[vi_index].is_static_constant)
+          vi_index++;
+
+        // Copy the vals and mod bits from entry to exit
+        vals[ppt.num_tracevars + val_index] = invoc.vals[val_index];
+        int mod = invoc.mods[val_index];
+        mods[ppt.num_tracevars + val_index] = mod;
+
+        // If the value was missing, mark this variable as can be missing
+        // Carefully check that we have orig version of the variable from
+        // the ENTER point.
+        if (ValueTuple.modIsMissingNonsensical (mod)) {
+          if (debug_missing && !vi.canBeMissing) {
+            System.out.printf ("add_orig: var %s missing[%d/%d]%n", vi,
+                               val_index, vi_index);
+          }
+          vi.canBeMissing = true;
+          assert invoc.vals[val_index] == null;
+          assert vi.name() == invoc.ppt.var_infos[vi_index].prestate_name()
+            : vi.name() + " != "+ invoc.ppt.var_infos[vi_index];
+          assert invoc.ppt.var_infos[vi_index].canBeMissing
+            : invoc.ppt.var_infos[vi_index];
         }
+        vi_index++;
       }
     }
   }
@@ -1837,14 +1870,17 @@ public final class FileIO {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
-    static final long serialVersionUID = 20020122L;
+    static final long serialVersionUID = 20060905L;
 
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
+      this.new_decl_format = FileIO.new_decl_format;
+
     }
     public PptMap map;
     public Configuration config;
+    public boolean new_decl_format = false;
   }
 
   public static void write_serialized_pptmap(PptMap map, File file)
@@ -1869,6 +1905,7 @@ public final class FileIO {
         if (use_saved_config) {
           Configuration.getInstance().overlap(record.config);
         }
+        FileIO.new_decl_format = record.new_decl_format;
         return (record.map);
       } else if (obj instanceof InvMap) {
         InvMap invs = (InvMap) obj;
@@ -2008,7 +2045,7 @@ public final class FileIO {
    * Class that holds all of the information from the declaration record
    * concerning a particular variable
    */
-  public static class VarDefinition implements java.io.Serializable {
+  public static class VarDefinition implements java.io.Serializable, Cloneable{
     static final long serialVersionUID = 20060524L;
     transient ParseState state;
     String name;
@@ -2027,6 +2064,24 @@ public final class FileIO {
     int parent_relation_id = 0;
     String parent_variable = null;
     Object static_constant_value = null;
+
+    public VarDefinition copy () {
+      try {
+        VarDefinition copy = (VarDefinition) this.clone();
+        copy.flags = flags.clone();
+        copy.lang_flags = lang_flags.clone();
+        return copy;
+      } catch (Throwable t) {
+        throw new RuntimeException (t);
+      }
+    }
+
+    /** Clears the parent relation if one existed **/
+    public void clear_parent_relation() {
+      parent_ppt = null;
+      parent_relation_id = 0;
+      parent_variable = null;
+    }
 
     /**
      * Initialize from the 'variable <name>' record.  Scanner should be
@@ -2105,6 +2160,7 @@ public final class FileIO {
       flags.add (parse_enum_val (scanner, VarFlags.class, "Flag"));
       while (scanner.hasNext())
         flags.add (parse_enum_val (scanner, VarFlags.class, "Flag"));
+      // System.out.printf ("flags for %s are %s%n", name, flags);
     }
 
     /**
