@@ -55,4 +55,9 @@ public final class SequenceMax
     return (other instanceof SequenceMax);
   }
 
+  /** Returns the ESC name **/
+  public String esc_name (String index) {
+    return String.format ("max(%s)", base.esc_name());
+  }
+
 }

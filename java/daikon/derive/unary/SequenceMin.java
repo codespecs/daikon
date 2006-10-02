@@ -56,4 +56,8 @@ public final class SequenceMin
     return (other instanceof SequenceMin);
   }
 
+  /** Returns the ESC name **/
+  public String esc_name (String index) {
+    return String.format ("min(%s)", base.esc_name());
+  }
 }

@@ -122,4 +122,10 @@ public final class CLASSNAME
       && (((CLASSNAME) other).index == this.index);
   }
 
+  /** Returns the ESC name **/
+  public String esc_name (String index) {
+    return String.format ("%s[0]", base.esc_name());
+  }
+
+
 }

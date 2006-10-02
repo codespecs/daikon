@@ -103,4 +103,13 @@ public final class SequenceLength
       && (((SequenceLength) other).shift == this.shift);
   }
 
+  /** Returns the ESC name **/
+  public String esc_name (String index) {
+    Quantify.Length  ql = new Quantify.Length (base, shift);
+    return ql.esc_name();
+
+    // return String.format ("%s.length%s", base.enclosing_var.esc_name(),
+    //                      shift_str (shift));
+  }
+
 }

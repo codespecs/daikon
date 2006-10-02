@@ -117,4 +117,16 @@ public final class SEQUENCESCALARSUBSCRIPT
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }
 
+  /** Returns the ESC name for sequence subsequence **/
+  public String esc_name (String index) {
+    if (seqvar().isPrestate())
+      return String.format ("\\old(%s[%s])",
+                            seqvar().enclosing_var.postState.esc_name(),
+                            inside_esc_name (sclvar(), true, index_shift));
+    else
+      return String.format ("%s[%s%s]", seqvar().enclosing_var.esc_name(),
+                            sclvar().esc_name(), shift_str(index_shift));
+
+  }
+
 }
