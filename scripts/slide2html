@@ -97,9 +97,11 @@
       $level_fmt[1]        = "<font size=4> %s </font>";
       $level_fmt[2]        = "<font size=3> %s </font>";
       $level_fmt[3]        = "<font size=2> %s </font>";
-    $outline_fmt[1]   = "<font size=4> %s </font>";
-    $outline_fmt[2]   = "<font size=3> %s </font>";
+      $outline_fmt[1]   = "<font size=4> %s </font>";
+      $outline_fmt[2]   = "<font size=3> %s </font>";
       $new_page            = false;
+    } else if ($arg == "-debug") {
+      $debug = true;
     } else if (strpos ($arg, "-") === 0) {
       usage ("Unexpected argument '$arg'");
       exit (1);
@@ -207,15 +209,23 @@
         else // numbered list
           echo "<ol>\n";
         $bullet->level++;
-        $bullet->indent_arr[$bullet->level] = $last_indent;
+        $bullet->indent_arr[$bullet->level] = $indent;
         $bullet->is_bullet_arr[$bullet->level] = $is_bullet;
+        if ($debug)
+          logmsg ("set indent at $bullet->level to $indent at $line\n");
       } else if ($indent < $bullet->indent) {
         echo substr ($blank, 0, $indent);
-        $bullet->level--;
-        if ($bullet->is_bullet_arr[$bullet->level])
-          echo "</ul>\n";
-        else
-          echo "</ol>\n";
+        do {
+          $bullet->level--;
+          if ($bullet->is_bullet_arr[$bullet->level])
+            echo "</ul>\n";
+          else
+            echo "</ol>\n";
+          $this_indent_level = $bullet->indent_arr[$bullet->level];
+          if ($debug)
+            logmsg ("indent = $indent, level = $bullet->level, "
+                 . "arr = $this_indent_level, line = $line\n");
+        } while ($bullet->indent_arr[$bullet->level] > $indent);
       }
       $bullet->indent = $indent;
       echo substr ($blank, 0, $indent);
@@ -240,9 +250,9 @@
       } while ($nline && !is_markup ($nline));
         // && (($nindent == $indent) || ($nindent == ($indent+2))));
       fseek ($fp, $pos);
-      $txt = ereg_replace ("@emph4{([^}]*)}", 
+      $txt = ereg_replace ("@emph4{([^}]*)}",
                            "<font size=4 color=blue><i>\\1</i></font>", $txt);
-      $txt = ereg_replace ("@emph5{([^}]*)}", 
+      $txt = ereg_replace ("@emph5{([^}]*)}",
                            "<font size=5 color=blue><i>\\1</i></font>", $txt);
       $txt = ereg_replace ("@var{([^}]*)}", "<i>\\1</i>", $txt);
       $txt = ereg_replace ("@pvar{([^}]*)}", "<code>\\1</code>", $txt);
@@ -326,5 +336,9 @@
 
     fputs ($stderr, $err_msg);
     fputs ($stderr, "\nusage slide2html [-small]\n");
+  }
+
+  function logmsg ($msg) {
+    fputs (STDERR, $msg);
   }
 ?>
