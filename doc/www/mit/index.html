@@ -32,9 +32,15 @@ href="../download/doc/daikon.html">Daikon manual</a> for more details.
 </p>
 
 <p>
-If you work in the Program Analysis Group, then you should also be familiar
-with the <a href="http://pag.csail.mit.edu/pag/logistics.html">logistics
-for work at PAG</a>.
+If you work in the Program Analysis Group, then you should also be
+familiar with the <a
+href="http://pag.csail.mit.edu/pag/logistics.html">logistics for work
+at PAG</a>.  In particular these instructions assume that you are
+using the pag startup files (pag-daikon.cshrc or pag-daikon.bashrc)
+described on that page.  Among other things, those startup files
+define the variables <tt>$pag</tt> (<tt>/afs/csail/group/pag</tt>) and
+<tt>$inv</tt> (<tt>~/research/invariants</tt>) which are used in the
+instructions below.
 </p>
 
 <p>Contents:</p>
@@ -173,7 +179,10 @@ manual</a>.
 
 <p>
 The following commands create and populate the
-<tt>~/research/invariants</tt> directory:
+<tt>~/research/invariants</tt> directory.  Note that <tt>$pag</tt> is
+defined in the pag-daikon startup files described in the <a
+href="http://pag.csail.mit.edu/pag/logistics.html">logistics</a> file.
+
 </p>
 <pre>
     mkdir ~/research
@@ -189,7 +198,8 @@ The following commands create and populate the
 
 <p>
 Before trying to compile (via <tt>make</tt> in any directory under
-<tt>$inv/java</tt>), log out and log back in, to set up your environment.
+<tt>~/research/invariants/java</tt>), log out and log back in, to set
+up your environment.
 </p>
 
 <p>
