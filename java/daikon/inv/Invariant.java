@@ -934,27 +934,6 @@ public abstract class Invariant
         for (int i=0; i<vis1.length; i++) {
           int tmp = vis1[i].varinfo_index - vis2[i].varinfo_index;
           if (tmp != 0) {
-            // This can happen when variable names have been changed by
-            // VarInfo.simplify_expression().  For now, hope for the best.
-            // (That is, hope it doesn't produce multiple invariants or
-            // confused formatting.)
-            // if (inv1.format().equals(inv2.format())) {
-            //   System.out.println("ICFP says different, but same formatting:");
-            //   System.out.println("  " + inv1.format() + " " + inv1.repr() + " at " + inv1.ppt.name());
-            //   System.out.println(" var #" + vis1[i].varinfo_index + " = " + vis1[i].name + " = " + vis1[i]);
-            //   System.out.println("  " + inv2.format() + " " + inv2.repr() + " at " + inv2.ppt.name());
-            //   System.out.println(" var #" + vis2[i].varinfo_index + " = " + vis2[i].name + " = " + vis2[i]);
-            // }
-
-            // // Debugging
-            // System.out.println("ICFP: compare var "
-            //                    + vis1[i].name.name() + " (index " + vis1[i].varinfo_index + ")"
-            //                    + " to " + vis2[i].name.name() + " (index " + vis2[i].varinfo_index + ")"
-            //                    + " => " + tmp
-            //                    + "\t\tfor " + inv1.format() + ", " + inv2.format());
-            // System.out.println("Vars for " + inv1.format() + ": " + inv1.repr());
-            // System.out.println("Vars for " + inv2.format() + ": " + inv2.repr());
-
             return tmp;
           }
         }
@@ -987,7 +966,11 @@ public abstract class Invariant
       // System.out.println("ICFP: default rule yields "
       //                    + inv1.format().compareTo(inv2.format())
       //                    + " for " + inv1.format() + ", " + inv2.format());
-      return inv1.format().compareTo(inv2.format());
+      if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format)
+        return inv1.format().replace ("[..]", "[]")
+          .compareTo (inv2.format().replace ("[..]", "[]"));
+      else
+        return inv1.format().compareTo(inv2.format());
     }
   }
 
