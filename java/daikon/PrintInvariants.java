@@ -5,6 +5,8 @@ import java.io.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.regex.*;
+
 import utilMDE.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
@@ -101,6 +103,23 @@ public final class PrintInvariants {
   public static boolean dkconfig_true_inv_cnt = false;
 
   /**
+   * If true, remove as many variables as possible that need to be indicated
+   * as 'post'.  Post variables occur when the subscript for a derived
+   * variable with an orig sequence is not orig.  For example: orig(a[post(i)])
+   * An equivalent expression involving only orig variables is substitued
+   * for the post variable when one exists.
+   */
+  public static boolean dkconfig_remove_post_vars = false;
+
+  /**
+   * In the new decl format print array names without as 'a[]' as
+   * opposed to 'a[..]'  This creates names that are more compatible
+   * with the old output.  This option has no effect in the old decl
+   * format
+   */
+  public static boolean dkconfig_old_array_names = true;
+
+  /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
   public static final Logger debug = Logger.getLogger("daikon.PrintInvariants");
@@ -131,6 +150,9 @@ public final class PrintInvariants {
 
   /** Whether we are doing output for testing.  Used only for IOA output. **/
   public static boolean test_output = false;
+
+  /** Regular expression that ppts must match to be printed **/
+  private static Pattern ppt_regexp;
 
   /**
    * Switch for whether to print discarded Invariants or not, default is false.
@@ -245,6 +267,16 @@ public final class PrintInvariants {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
+        } else if (Daikon.ppt_regexp_SWITCH.equals (option_name)) {
+          if (ppt_regexp != null)
+            throw new Error("multiple --" + Daikon.ppt_regexp_SWITCH
+                  + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            ppt_regexp = Pattern.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e.toString());
+          }
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
           catch (IllegalArgumentException e) {
@@ -344,7 +376,6 @@ public final class PrintInvariants {
           my_ppt.debug_print_tree (debug, 0, null);
       }
     }
-
 
     print_invariants(ppts);
   }
@@ -667,7 +698,12 @@ public final class PrintInvariants {
   public static void print_invariants_maybe(PptTopLevel ppt,
                                             PrintWriter out,
                                             PptMap all_ppts) {
+
     debugPrint.fine  ("Considering printing ppt " + ppt.name());
+
+    // Skip this ppt if it doesn't match ppt regular expression
+    if ((ppt_regexp != null) && !ppt_regexp.matcher(ppt.name()).find())
+      return;
 
     // Be silent if we never saw any samples.
     // (Maybe this test isn't even necessary, but will be subsumed by others,
@@ -732,13 +768,22 @@ public final class PrintInvariants {
       }
       out.println(ppt.name());
     }
+
+    // Note that this code puts out the variable list using daikon formatting
+    // for the names and not the output specific format.  It also includes
+    // both front end and daikon derived variables which are probably not
+    // appropriate
     if (Daikon.output_num_samples
         || (Daikon.output_format == OutputFormat.ESCJAVA)
         || (Daikon.output_format == OutputFormat.JML)
         || (Daikon.output_format == OutputFormat.DBCJAVA )) {
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++) {
-        out.print(" " + ppt.var_infos[i].name());
+        if (dkconfig_old_array_names && FileIO.new_decl_format)
+          out.print(" " + ppt.var_infos[i].name().replace ("[..]", "[]"));
+        else
+          out.print(" " + ppt.var_infos[i].name());
+
       }
       out.println();
     }
@@ -801,20 +846,20 @@ public final class PrintInvariants {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
         for (VarInfo vi : modified_vars)
-          out.print(" " + vi.name());
+          out.print(" " + (vi.old_var_name()));
         out.println();
       }
       if (reassigned_parameters.size() > 0) {
         // out.print("      Reassigned parameters:");
         out.print("      Modified primitive arguments:");
         for (VarInfo vi : reassigned_parameters)
-          out.print(" " + vi.name());
+          out.print(" " + vi.old_var_name());
         out.println();
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");
         for (VarInfo vi : unmodified_vars)
-          out.print(" " + vi.name());
+          out.print(" " + vi.old_var_name());
         out.println();
       }
     }
@@ -837,7 +882,7 @@ public final class PrintInvariants {
           out.print("assignable ");
         int inserted = 0;
         for (VarInfo vi : mods) {
-          String name = vi.name();
+          String name = vi.old_var_name();
           if (!name.equals("this")) {
             if (inserted>0) {
               out.print(", ");
@@ -959,6 +1004,9 @@ public final class PrintInvariants {
       debugPrint.fine ("Printing: [" + inv.repr_prob() + "]");
     }
 
+    if (dkconfig_old_array_names && FileIO.new_decl_format)
+      inv_rep = inv_rep.replace ("[..]", "[]");
+
     if (wrap_xml) {
       out.print("<INVINFO>");
       out.print("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
@@ -1008,6 +1056,7 @@ public final class PrintInvariants {
    **/
   public static void print_invariants(PptTopLevel ppt, PrintWriter out,
                                       PptMap ppt_map) {
+
 
     // make names easier to read before printing
     ppt.simplify_variable_names();
@@ -1129,6 +1178,10 @@ public final class PrintInvariants {
   private static void finally_print_the_invariants(List<Invariant> invariants,
                                                    PrintWriter out,
                                                    PptTopLevel ppt) {
+    //System.out.printf ("Ppt %s%n", ppt.name());
+    //for (VarInfo vi : ppt.var_infos)
+    // System.out.printf ("  var %s canbemissing = %b%n", vi, vi.canBeMissing);
+
     int index = 0;
     for (Invariant inv : invariants) {
       index++;
