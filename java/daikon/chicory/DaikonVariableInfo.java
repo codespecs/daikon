@@ -970,7 +970,7 @@ public abstract class DaikonVariableInfo
            childClass.typeName = classClassName + "[]";
            childClass.repTypeName = stringClassName + "[]" ;
 
-           addChild(childClass);
+           child.addChild(childClass);
        }
    }
 
