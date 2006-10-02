@@ -1565,11 +1565,14 @@ public final class Daikon {
           assert false;
           throw new Error("this can't happen: postvar is null");
         }
+        origvar.postState = postvar;
         origvar.comparability = postvar.comparability.makeAlias();
 
         // Add to new_vis
         new_vis[new_vis_index] = origvar;
         new_vis_index++;
+        //System.out.printf ("adding origvar %s to ppt %s%n", origvar.name(),
+        //                   exit_ppt.name());
       }
       Assert.assertTrue(new_vis_index == exit_ppt.num_orig_vars);
     }
