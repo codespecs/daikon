@@ -40,14 +40,16 @@ public class NIS {
   /** Enum.  Signifies which algorithm is used by NIS to process suppressions. */
   public enum SuppressionProcessor {HYBRID, ANTECEDENT, FALSIFIED}
 
-  /** SuppressionProcessor.  Determines the algorithm that NIS uses to process
-   * suppressions.  Possible values are declared in the enum SuppressionProcessor.
-   * By default the hybrid algorithm (a combination of the falsified method for a small number
-   * of falsified invariants and the antecedent method for a large number of
-   * falsified invariants) is used.  The only possible values are: HYBRID, ANTECEDENT and
-   * FALSIFIED.
+  /**
+   * Specifies the algorithm that NIS uses to process suppressions.
+   * Possible selections are 'HYBRID', 'ANTECEDENT', and 'FALSIFIED'.
+   * The default is the hybrid algorithm which uses the falsified
+   * algorithm when only a small number of invariants are falsified
+   * and the antecedent algorithm when a large number of invariants
+   * are falsified.
    */
-  public static SuppressionProcessor dkconfig_suppression_processor = SuppressionProcessor.HYBRID;
+  public static SuppressionProcessor dkconfig_suppression_processor
+    = SuppressionProcessor.HYBRID;
 
   /** Boolean. If true, use antecedent method for NIS processing.
    * If false, use falsified method for processing falsified
