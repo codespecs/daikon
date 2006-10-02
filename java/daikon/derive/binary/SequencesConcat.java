@@ -96,4 +96,10 @@ public final class SequencesConcat
     return (other instanceof SequencesConcat);
   }
 
+  /** Returns the ESC name for sequence subsequence **/
+  public String esc_name (String index) {
+    return String.format ("SequencesConcat[%s,%s]", var1().esc_name(),
+                          var2().esc_name());
+  }
+
 }

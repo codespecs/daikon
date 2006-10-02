@@ -230,4 +230,10 @@ public final class CLASSNAME
     return false;
   }
 
+  /** Returns the ESC name **/
+  public String esc_name (String index) {
+    return String.format ("predicate(%s,%s)", var1().esc_name(),
+                          var2().esc_name());
+  }
+
 }

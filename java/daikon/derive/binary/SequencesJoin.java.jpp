@@ -208,4 +208,8 @@ public final class CLASSNAME
     return (other instanceof CLASSNAME);
   }
 
+  /** Returns the ESC name **/
+  public String esc_name (String index) {
+    return String.format ("join[%s,%s]", var1().esc_name(), var2().esc_name());
+  }
 }
