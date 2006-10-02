@@ -513,7 +513,7 @@ public class DeclWriter extends DaikonWriter {
                          + relative_name);
 
         // Write out the enclosing variable
-        if (parent != null)
+        if ((parent != null) && !var.isStatic())
           outFile.println ("    enclosing-var " + escape (parent.getName()));
 
         // If this variable has multiple value, indicate it is an array
