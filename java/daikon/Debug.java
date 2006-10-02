@@ -643,6 +643,8 @@ public class Debug {
 
     for (Iterator<PptTopLevel> i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
+      if (ppt_match (ppt))
+        debugTrack.fine ("Matched ppt '" + ppt.name() + "' at " + msg);
       for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext(); ) {
         PptSlice slice = j.next();
         for (int k = 0; k < slice.invs.size(); k++ ) {
