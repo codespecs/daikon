@@ -19,23 +19,36 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
-4.2.9 (September 1, 2006)
+4.2.10 (October 2, 2006)
 
+Some enhancements and bug fixes were made to Daikon.  Programs with a
+large number of variables are handled more efficiently.  A number of
+configuration options were changed.  PrintInvariants supports a new
+command line option.
 
 Daikon
 
-  Daikon now uses a hybrid algorithm for processing suppressions.  The
-  hybrid algorithm uses a combination of the falsified algorithm 
-  and the antecedents algorithm (used previously).  The hybrid 
-  algorithm capitalizes on the fact that the falsified algorithm
-  performs well on a small number of falsified invariants, while the
-  antecedents algorithm works better on a large number of falsified
-  invariants.  The algorithm used can be overriden using the 
-  NIS.dkconfig_suppression_processor option, with HYBRID, ANTECEDENT, and
-  FALSIFIED as the possible values.  Note that consequently, 
-  NIS.dkconfig_antecedent_method has been eliminated as a configuration 
-  option.
+  User-visible changes
 
+    Suppression processing in Daikon has been optimized. It will
+    process program points with a large number of variables more
+    efficiently.  The configuration options related to suppression
+    have been changed.  See the documentation for details.
+
+    Added support for the --ppt-select-pattern command line option to
+    PrintInvariant.
+
+    By default, Daikon no longer replaces post variables with orig
+    variables that have the same values.  The old behavior can be
+    obtained by using the configuration option remove_post_vars.
+
+  Bug fixes
+
+    Previously, some information used to determine whether or not a
+    variable needed to be guarded was sometimes incorrect.  This
+    resulted in both unnecessary and missing guarding.  This has
+    been fixed.
+    
 4.2.9 (September 1, 2006)
 
 Bugs were fixed in Chicory, Kvasir, and Daikon.  Chicory was enhanced
