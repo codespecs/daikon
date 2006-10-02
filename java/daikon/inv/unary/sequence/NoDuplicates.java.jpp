@@ -137,7 +137,7 @@ public class CLASSNAME
       //           X[i] = X[j]
       " /\\ " + quant.getVarIndexedString(0) + " = " + quant.getVarIndexedString(1) +
       //  =>      i           =       j           )
-      ") => " + quant.getVarString(0) + " = " + quant.getVarString(1)
+      ") => " + quant.getFreeVarName(0) + " = " + quant.getFreeVarName(1)
       + quant.getClosingExp();
   }
 

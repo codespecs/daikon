@@ -322,7 +322,7 @@ public class CLASSNAME extends SUPERCLASS {
     Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
 
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarString(0) + " " + EQUALSIOAstring + " " +
+      " => " + quant.getFreeVarName(0) + " " + EQUALSIOAstring + " " +
       quant.getVarIndexedString(0) + quant.getClosingExp();
   }
 

@@ -129,8 +129,8 @@ public class CLASSNAME
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-                          quant1.getVarIndexed(0).ioa_name(),
-                          quant2.getVarIndexed(0).ioa_name())
+                          quant1.getVarIndexedString(0),
+                          quant2.getVarIndexedString(0))
       + quant1.getClosingExp();
   }
 

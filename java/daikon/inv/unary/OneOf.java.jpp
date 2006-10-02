@@ -642,7 +642,7 @@ public final class ONEOFSCALAR
     sort_rep();
 #if defined(IS_ELT)
     Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
-    String varname = quant.getVarString(0);
+    String varname = quant.getFreeVarName(0);
 #elif defined(IS_SCALAR)
     String varname = var().ioa_name();
 #endif

@@ -174,7 +174,7 @@ int_array
 Goal (daikon): a[] sorted by <
 Goal (java): daikon.Quant.eltwiseLT(a)
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1) ==> ((i+1 == j) ==> (a[i] < a[j])))
-Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ Free[i]+1 = Free[j]) => a[i] = a[j])
+Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ i+1 = j) => a[i] = a[j])
 Goal (jml): daikon.Quant.eltwiseLT(a)
 Goal (dbc): daikon.Quant.eltwiseLT(a)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1)) (EQ (+ |i| 1) |j|)) (< (select (select elems |a|) |i|) (select (select elems |a|) |j|))))

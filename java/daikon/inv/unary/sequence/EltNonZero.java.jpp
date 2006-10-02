@@ -206,7 +206,7 @@ public final class CLASSNAME
   /* IOA */
   public String format_ioa() {
     Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
-    String result = quant.getQuantifierExp() + quant.getVarString(0)
+    String result = quant.getQuantifierExp() + quant.getFreeVarName(0)
       + " \\in " + var().ioa_name() + " => " + quant.getVarIndexedString(0)
       + "~=";
     if (is_pointer()) {

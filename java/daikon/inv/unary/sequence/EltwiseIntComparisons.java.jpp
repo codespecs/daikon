@@ -231,7 +231,7 @@ public class CLASSNAME
     #else
       // i \in X /\ j \in X /\ i+1 = j => X[i] = X[j]
       result +=
-        " /\\ " + quant.getVarName(0) + "+1 = " + quant.getVarName(1);
+        " /\\ " + quant.getFreeVarName(0) + "+1 = " + quant.getFreeVarName(1);
     #endif
     result += ") => " + quant.getVarIndexedString(0) + " = " + quant.getVarIndexedString(1);
     return result + quant.getClosingExp();
