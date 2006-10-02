@@ -45,6 +45,13 @@ public abstract class VarInfoName
   static final long serialVersionUID = 20020614L;
 
   /**
+   * When true, apply orig directly to variables, do not apply
+   * orig to derived variables.  For example, create 'size(orig(a[]))'
+   * rather than 'orig(size(a[]))'
+   */
+  static boolean dkconfig_direct_orig = false;
+
+  /**
    * Given the standard String representation of a variable name (like
    * what appears in the normal output format), return the
    * corresponding VarInfoName. This method can't parse all the
@@ -59,6 +66,13 @@ public abstract class VarInfoName
 
     // Remove the array indication from the new decl format
     name = name.replace ("[..]", "[]");
+
+    // orig(x)
+    if (name.startsWith("orig(")) {
+      // throw new Error("orig() variables shouldn't appear in .decls files");
+      assert name.endsWith (")") : name;
+      return parse(name.substring(5, name.length() - 1)).applyPrestate();
+    }
 
     // x.class
     if (name.endsWith(DaikonVariableInfo.class_suffix)) {
@@ -126,13 +140,6 @@ public abstract class VarInfoName
         String field = name.substring(arrow+2);
         return parse(first).applyField(field);
       }
-    }
-
-    // orig(x)
-    if (name.startsWith("orig(")) {
-      throw new Error("orig() variables shouldn't appear in .decls files");
-      // Assert.assertTrue(name.endsWith(")"));
-      // return parse(name.substring(5, name.length() - 1)).applyPrestate();
     }
 
     // A.B, where A is complex: foo(x).y, x[7].y, etc.
@@ -867,16 +874,20 @@ public abstract class VarInfoName
     // The simple approach:
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
-    Elements elems = (new ElementsFinder(this)).elems();
-    if (elems == null) {
-      throw new Error(
-     "applySize should have elements to use in " + name() + ";" + Global.lineSep
-       + "that is, " + name() + " does not appear to be a sequence/collection." + Global.lineSep
-       + "Perhaps its name should be suffixed by \"[]\"?" + Global.lineSep
-       + " this.class = " + getClass().getName());
+    if (dkconfig_direct_orig) {
+      return new SizeOf (this).intern();
+    } else {
+      Elements elems = (new ElementsFinder(this)).elems();
+      if (elems == null) {
+        throw new Error(
+       "applySize should have elements to use in " + name() + ";" + Global.lineSep
+         + "that is, " + name() + " does not appear to be a sequence/collection." + Global.lineSep
+         + "Perhaps its name should be suffixed by \"[]\"?" + Global.lineSep
+         + " this.class = " + getClass().getName());
+      }
+      Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
+      return r.replace(this).intern();
     }
-    Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
-    return r.replace(this).intern();
   }
 
   /**
@@ -923,8 +934,8 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final Elements sequence;
-    public SizeOf(Elements sequence) {
+    public final VarInfoName sequence;
+    public SizeOf(VarInfoName  sequence) {
       Assert.assertTrue(sequence != null);
       this.sequence = sequence;
     }
@@ -956,11 +967,23 @@ public abstract class VarInfoName
     public VarInfoName getBase() {
       return null;
     }
+
+    /** Returns the hashcode that is the base of the array **/
+    public VarInfoName get_term() {
+      if (sequence instanceof Elements)
+        return ((Elements) sequence).term;
+      else if (sequence instanceof Prestate) {
+        VarInfoName term = ((Prestate) sequence).term;
+        return ((Elements)term).term;
+      }
+      throw new RuntimeException ("unexpected term in sizeof " + this);
+    }
+
     protected String esc_name_impl() {
-      return sequence.term.esc_name() + ".length";
+      return get_term().esc_name() + ".length";
     }
     protected String simplify_name_impl(boolean prestate) {
-      return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
+      return "(arrayLength " + get_term().simplify_name(prestate) + ")";
     }
     protected String ioa_name_impl() {
       return "size(" + sequence.ioa_name() + ")";
@@ -984,7 +1007,7 @@ public abstract class VarInfoName
       Derivation derived = v.derived;
       Assert.assertTrue(derived instanceof SequenceLength);
       VarInfo seqVarInfo = ((SequenceLength)derived).base;
-      String prefix = sequence.term.name_using(format, seqVarInfo);
+      String prefix = get_term().name_using(format, seqVarInfo);
       return "daikon.Quant.size(" + prefix + ")";
 //       if (seqVarInfo.type.pseudoDimensions() > seqVarInfo.type.dimensions()) {
 //         if (prefix.startsWith("daikon.Quant.collect")) {
@@ -3050,7 +3073,7 @@ public abstract class VarInfoName
     public NoReturnValue visitSizeOf(SizeOf o) {
       // don't visit the sequence; we aren't using the elements of it,
       // just the length, so we don't want to include it in the results
-      return o.sequence.term.accept(this);
+      return o.get_term().accept(this);
     }
     public NoReturnValue visitSubscript(Subscript o) {
       o.index.accept(this);
