@@ -74,14 +74,14 @@ public class PptTopLevel extends Ppt {
    * created at a higher program point. For experimental purposes only.
    */
   public static boolean dkconfig_remove_merged_invs = false;
-  
+
   /**
    * Boolean.  Needed by the NIS.falsified method when keeping stats
-   * to figure out how many falsified invariants are antecedents.  Only 
+   * to figure out how many falsified invariants are antecedents.  Only
    * the first pass of processing with the sample is counted toward the
-   * stats. 
+   * stats.
    */
-  public  static boolean first_pass_with_sample = true; 
+  public  static boolean first_pass_with_sample = true;
 
   /** Ppt attributes (specified in decl records) **/
   public enum PptFlags {STATIC, ENTER, EXIT, PRIVATE};
@@ -348,6 +348,10 @@ public class PptTopLevel extends Ppt {
     for (VarInfo vi : var_infos)
       vi.new_ppt();
 
+    // Relate the variables to one another
+    for (VarInfo vi : var_infos)
+      vi.relate_var();
+
   }
 
 
@@ -508,6 +512,11 @@ public class PptTopLevel extends Ppt {
       new_value_sets[old_vs_length + i] = ValueSet.factory(vis[i]);
     }
     value_sets = new_value_sets;
+
+    // Relate the variables to one another
+    for (VarInfo vi : vis)
+      vi.relate_var();
+
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -646,6 +655,8 @@ public class PptTopLevel extends Ppt {
         if (uderivs != null) {
           for (int udi = 0; udi < uderivs.length; udi++) {
             UnaryDerivation uderiv = uderivs[udi];
+            // System.out.printf ("processing uderiv %s %s%n", uderiv,
+            //                   uderiv.getVarInfo());
             if (!FileIO.var_included(uderiv.getVarInfo().name())) {
               continue;
             }
@@ -1007,18 +1018,18 @@ public class PptTopLevel extends Ppt {
     // Create any newly unsuppressed invariants
     NIS.process_falsified_invs(this, vt);
 
-    // NIS.newly_falsified is a list of invariants that are falsified by 
+    // NIS.newly_falsified is a list of invariants that are falsified by
     // the current sample when using the falsified method of processing
-    // suppressions.  The newly falsified invariants are added back to 
+    // suppressions.  The newly falsified invariants are added back to
     // the slices so that they can be processed.  Thus, the falsified method
-    // is used iteratively, since these newly falsified invariants may 
+    // is used iteratively, since these newly falsified invariants may
     // unsuppress new invariants.  In the antecedents method, the problem
     // does not exist, because of the way that recursive suppressions are
     // ordered.  This loop should be executed at least once, regardless of
-    // the algorithm for processing suppressions, hence the do loop.  For, 
+    // the algorithm for processing suppressions, hence the do loop.  For,
     // the antecedents method, the loop is executed only once because
     // the NIS.newly_falsified list will be empty.
-    
+
     do {
       // Remove any falsified invariants.  Make a copy of the original slices
       // since NISuppressions will add new slices/invariants as others are
@@ -1035,9 +1046,9 @@ public class PptTopLevel extends Ppt {
       NIS.apply_samples(vt, count);
       first_pass_with_sample = false;
     } while (NIS.newly_falsified.size() != 0);
-    
+
     first_pass_with_sample = true;
-    
+
     // Remove slices from the list if all of their invariants have died
     for (Iterator<PptSlice> itor = views_iterator(); itor.hasNext();) {
       PptSlice view = itor.next();
@@ -1051,7 +1062,7 @@ public class PptTopLevel extends Ppt {
 
     if (debugNISStats.isLoggable (Level.FINE))
       NIS.dump_stats (debugNISStats, this);
-    
+
     return (weakened_invs);
   }
 
@@ -3081,7 +3092,11 @@ public class PptTopLevel extends Ppt {
    **/
   public void simplify_variable_names() {
     for (VarInfo vi : Arrays.asList(var_infos)) {
+      // String original = vi.name();
       vi.simplify_expression();
+      // if (!original.equals (vi.name()))
+      //   System.out.printf ("modified var from %s to %s%n", original,
+      //                      vi.name());
     }
   }
 
@@ -3141,6 +3156,7 @@ public class PptTopLevel extends Ppt {
    * Check the rep invariants of this.  Throw an Error if not okay.
    **/
   public void repCheck() {
+    // System.out.printf ("repCheck of %s%n", name());
     // Check that the hashing of 'views' is working correctly. This
     // should really be beneath the abstraction layer of the hash
     // table, but it isn't because Java can't enforce the immutability
@@ -3163,6 +3179,10 @@ public class PptTopLevel extends Ppt {
       slice.repCheck();
     }
     if (equality_view != null) equality_view.repCheck();
+
+    // check variables for some possible errors
+    for (VarInfo vi : var_infos)
+      vi.var_check();
   }
 
   /**
