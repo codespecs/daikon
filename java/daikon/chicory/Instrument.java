@@ -163,8 +163,7 @@ public class Instrument implements ClassFileTransformer {
     }
 
     // Don't intrument our code
-    if (className.startsWith ("daikon/chicory")
-        && !className.equals ("daikon/chicory/Test")) {
+    if (is_chicory (className)) {
       debug_transform.log ("Not considering chicory class %s%n",fullClassName);
       return (null);
     }
@@ -1127,5 +1126,18 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  /**
+   * Returns whether or not the specified class is part of chicory
+   * itself (and thus should not be instrumented).  Some daikon classes
+   * that are used by Chicory are included here as well
+   */
+  private static boolean is_chicory (String classname) {
+    if (classname.startsWith ("daikon/chicory")
+        && !classname.equals ("daikon/chicory/Test"))
+      return true;
+    if (classname.equals ("daikon/PptTopLevel$PptType"))
+      return true;
+    return false;
+  }
 
 }
