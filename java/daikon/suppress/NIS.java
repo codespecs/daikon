@@ -36,7 +36,6 @@ public class NIS {
   /** Boolean.  If true, enable non-instantiating suppressions. **/
   public static boolean dkconfig_enabled = true;
 
-
   /** Enum.  Signifies which algorithm is used by NIS to process suppressions. */
   public enum SuppressionProcessor {HYBRID, ANTECEDENT, FALSIFIED}
 
@@ -44,33 +43,34 @@ public class NIS {
    * Specifies the algorithm that NIS uses to process suppressions.
    * Possible selections are 'HYBRID', 'ANTECEDENT', and 'FALSIFIED'.
    * The default is the hybrid algorithm which uses the falsified
-   * algorithm when only a small number of invariants are falsified
-   * and the antecedent algorithm when a large number of invariants
-   * are falsified.
+   * algorithm when only a small number of suppressions need to be processed
+   * and the antecedent algorithm when a large number of suppressions
+   * are processed.
    */
   public static SuppressionProcessor dkconfig_suppression_processor
     = SuppressionProcessor.HYBRID;
 
   /** Boolean. If true, use antecedent method for NIS processing.
    * If false, use falsified method for processing falsified
-   * invariants for NISuppressions.  Default is 'true'.
+   * invariants for NISuppressions.  Note this flag is for
+   * internal use only and is controlled by NIS.dkconfig_suppression_processor.
    */
   public static boolean antecedent_method = true;
 
   /** Boolean.  If true, use a combination of the falsified method for a small
-   * number of falsified invariants and the antecedent method for a large number
-   * (by setting NIS.dkconfig_antecedent_method).  Default is 'false'.
-   * Number is determined by NIS.dkconfig_hybrid_threshhold.
+   * number of suppressions to be processed and the antecedent method for a large number.
+   * Number is determined by NIS.dkconfig_hybrid_threshhold. Note this flag is for
+   * internal use only and is controlled by NIS.dkconfig_suppression_processor.
    */
-  public static boolean hybrid_method = false;
+  public static boolean hybrid_method = true;
 
   /**
    * Int.  Less and equal to this number means use the falsified method in
    * the hybrid method of processing falsified invariants, while greater
    * than this number means use the antecedent method.  Empirical data shows that
-   * number should not be more than 10.
+   * number should not be more than 10000.
    */
-  public static int dkconfig_hybrid_threshhold = 5;
+  public static int dkconfig_hybrid_threshhold = 2500;
 
 
   /** Boolean.  If true, use the specific list of suppressor related
@@ -104,7 +104,14 @@ public class NIS {
   public static Map<Class,List<NISuppressionSet>>
     suppressor_map = new LinkedHashMap<Class,List<NISuppressionSet>>(256);
 
-  /** List of all suppressions **/
+  /**
+   * Map from invariant class to the number of suppressions
+   * that contain a suppressor of that class.
+   */
+  public static Map<Class,Integer>
+    suppressor_map_suppression_count = new LinkedHashMap<Class,Integer>(256);
+
+  /** List of all suppressions */
   static List<NISuppressionSet> all_suppressions = new ArrayList<NISuppressionSet>();
 
   /** List of suppressor invariant prototypes **/
@@ -130,19 +137,21 @@ public class NIS {
   // and/or make sense for some approaches and not for others
 
   /** Whether or not to keep statistics **/
-  static boolean keep_stats = false;
-  /** Number of falsified invariants in the program point **/
-  static int false_cnts = 0;
+  public static boolean keep_stats = false;
+  /** Number of falsified invariants in the program point */
+  public static int false_cnts = 0;
   /** Number of falsified invariants in the program point that are potential suppressors **/
-  static int false_invs = 0;
+  public static int false_invs = 0;
   /** Number of suppressions processed **/
-  static int suppressions_processed = 0;
+  public static int suppressions_processed = 0;
+  /** Number of suppressions processed by the falsified method **/
+  public static int suppressions_processed_falsified = 0;
   /** Number of invariants that are no longer suppressed  by a suppression **/
   static int new_invs_cnt = 0;
   /** Number of new_invs_cnt that are falsified by the sample **/
-  static int false_invs_cnt = 0;
+  public static int false_invs_cnt = 0;
   /** Number of invariants actually created **/
-  static int created_invs_cnt = 0;
+  public static int created_invs_cnt = 0;
   /** Number of invariants that are still suppressed **/
   static int still_suppressed_cnt = 0;
 
@@ -218,6 +227,21 @@ public class NIS {
         }
       }
     }
+
+    // count the number of suppressions associated with each
+    // suppressor
+  //  if (NIS.hybrid_method) {
+      for (Class a : suppressor_map.keySet()) {
+
+      int x = 0;
+      List<NISuppressionSet> ss_list = suppressor_map.get(a);
+      for (NISuppressionSet ss : ss_list) {
+        x += ss.suppression_set.length;
+      }
+
+      suppressor_map_suppression_count.put(a, x);
+    }
+   // }
 
     if (Debug.logDetail() && debug.isLoggable (Level.FINE))
       dump (debug);
@@ -371,6 +395,19 @@ public class NIS {
     false_invs = 0;
     false_cnts = 0;
     suppressions_processed = 0;
+    suppressions_processed_falsified = 0;
+    new_invs_cnt = 0;
+    false_invs_cnt = 0;
+    created_invs_cnt = 0;
+    still_suppressed_cnt = 0;
+  }
+
+  public static void clear_sample_stats() {
+    keep_stats = true;
+    false_invs = 0;
+    false_cnts = 0;
+    suppressions_processed = 0;
+    suppressions_processed_falsified = 0;
     new_invs_cnt = 0;
     false_invs_cnt = 0;
     created_invs_cnt = 0;
@@ -426,20 +463,38 @@ public class NIS {
       int count = 0;
       for (Iterator<Invariant> i = ppt.invariants_iterator(); i.hasNext();) {
         Invariant inv = i.next();
+
+        if (NIS.dkconfig_skip_hashcode_type) {
+
+          boolean hashFound = false;
+
+          for (VarInfo vi : inv.ppt.var_infos) {
+            if (vi.file_rep_type.isHashcode()) {
+              hashFound = true;
+            }
+          }
+
+          if (hashFound)
+            continue;
+        }
+
         if (inv.is_false()) {
           false_cnts++;
 
-          if (suppressor_map.containsKey(inv.getClass()))
-            count++;
-        }
+          if (suppressor_map.containsKey(inv.getClass())) {
 
+            // use the following count update when splitting the hybrid method by the
+            // number of total suppressions associated with the falsified invariants
+            count = count + suppressor_map_suppression_count.get(inv.getClass());
+            suppressions_processed_falsified += suppressor_map_suppression_count.get(inv.getClass());
+          }
+        }
       }
 
       if (count > NIS.dkconfig_hybrid_threshhold)
         antecedent_method = true;
       else
         antecedent_method = false;
-
     }
 
     if (!dkconfig_enabled || !antecedent_method)
@@ -454,6 +509,7 @@ public class NIS {
                 v.file_rep_type, "" + ppt.is_constant(v), vs.repr_short());
       }
     }
+
 
     // If there are no falsified invariants that are suppressors, there is nothing to do
     int false_cnt = 0;
@@ -480,8 +536,10 @@ public class NIS {
     // Find all antecedents and organize them by their variables comparability
     Map<VarComparability,Antecedents> comp_ants = new LinkedHashMap<VarComparability,Antecedents>();
     store_antecedents_by_comparability (ppt.views_iterator(), comp_ants);
-    if (ppt.constants != null)
+
+    if (ppt.constants != null) {
       store_antecedents_by_comparability(ppt.constants.create_constant_invs().iterator(), comp_ants);
+    }
 
     if (debugAnt.isLoggable (Level.FINE)) {
       for (Antecedents ants : comp_ants.values()) {
