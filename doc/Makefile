@@ -48,7 +48,7 @@ images/dfepl-flow.png: images/dfepl-flow.eps
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 
-html: daikon.html developer.html daikonEclipseHelp.html
+html: daikon.html developer.html
 
 # The perl moves </ul> from after the table of contents to before it,
 # preventing it from being too deeply indented.  It's needed with makeinfo 4.2.

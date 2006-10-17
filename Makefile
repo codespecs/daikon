@@ -8,7 +8,7 @@ IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.png
 # old image files
 # gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html daikonEclipseHelp.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # The texinfo files are included so we can diff to see what has changed from
