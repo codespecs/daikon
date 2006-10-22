@@ -8172,22 +8172,10 @@ Toshiba.
 @section Citing Daikon
 
 If you wish to cite Daikon in a publication, we recommend that you
-reference one of the following papers in lieu of, or in addition to,
-referencing this manual and the Daikon website
-(@uref{http://pag.csail.mit.edu/daikon/pubs/}):
-
-``Dynamically discovering likely program invariants to support program
-evolution'' by Michael D. Ernst, Jake Cockrell, William G. Griswold, and
-David Notkin.  IEEE Transactions on Software Engineering, vol. 27,
-no. 2, Feb. 2001, pp. 1-25.  See
-@uref{http://pag.csail.mit.edu/daikon/pubs/invariants-tse2001-abstract.html}[
-
-``Efficient incremental algorithms for dynamic detection of likely
-invariants'' by Jeff H. Perkins and Michael D. Ernst. In Proceedings of
-the ACM SIGSOFT 12th Symposium on the Foundations of Software
-Engineering (FSE 2004), (Newport Beach, CA, USA), November 2-4, 2004,
-pp. 23-32.  See
-@uref{http://pag.csail.mit.edu/daikon/pubs/invariants-incremental-fse2004-abstract.html}.
+reference one of the scholarly papers listed at
+@uref{http://pag.csail.mit.edu/daikon/pubs/#invariant-detection} in lieu
+of, or in addition to, referencing this manual and the Daikon website
+(@uref{http://pag.csail.mit.edu/daikon/}).
 
 
 @node     File formats, Index, Details, Top

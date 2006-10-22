@@ -155,7 +155,7 @@ This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
 Additional information can be found in technical papers available from
-@uref{http://pag.csail.mit.edu/pubs/}.
+@uref{http://pag.csail.mit.edu/daikon/pubs/}.
 
 
 @node    Extending Daikon, Debugging Daikon, Introduction, Top
