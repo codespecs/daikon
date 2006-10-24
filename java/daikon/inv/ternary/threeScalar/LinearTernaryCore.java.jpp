@@ -1005,7 +1005,7 @@ public final class CLASSNAME
   // The vector normal to the plane can be calculated by doing the cross product
   // of two line segments on the plane (<point2 - point0> and <point1 - point0>)
   //
-  // Given the normal vector and and a point on the plane, the standard form
+  // Given the normal vector and a point on the plane, the standard form
   // of the plane is:
   // n1*x + n2*y + n3*z = p where p is the dot product of r and n
   //
