@@ -1725,7 +1725,7 @@ called the CVS trunk ``Daikon version @c trick version updater
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one
 large checkin on the trunk.  Later, development on version 3 became more
-common, some changes were merged from the trunk to the branch, and and
+common, some changes were merged from the trunk to the branch, and
 version 2 was finally retired (and no more changes were made to the
 branch) in December 2003.
 

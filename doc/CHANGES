@@ -648,7 +648,7 @@ Daikon
 Chicory
 
   Added command line options --trace-percent (only output the specified
-  percentage of program points) and and --watch-static-recursion (only
+  percentage of program points) and --watch-static-recursion (only
   output a particular static once).
 
 Removed components
