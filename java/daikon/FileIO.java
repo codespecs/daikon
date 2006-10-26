@@ -382,49 +382,35 @@ public final class FileIO {
         state.reader, state.filename);
     }
     ppt_name = ppt_name.intern();
+    VarInfo[] vi_array = read_VarInfos(state, ppt_name);
 
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
-      if (state.ppts_are_new)
-        throw new FileIOException("Duplicate declaration of program point \""
-                            + ppt_name + "\"", state.reader, state.filename);
-      else { // ppts are already in the map
-        skip_decl (state.reader);
+      if (state.ppts_are_new) { // yoav: ppts_are_new is always set to true, so we should remove it
+        PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+        VarInfo[] existing_vars = existing_ppt.var_infos;
+        if (existing_ppt.num_declvars!=vi_array.length)
+          throw new FileIOException("Duplicate declaration of program point \""
+                      + ppt_name + "\" with a different number of VarInfo objects: old VarInfo number="+existing_ppt.num_declvars+", new VarInfo number="+vi_array.length, state.reader, state.filename);
+
+        for (int i=0; i<vi_array.length; i++) {
+          String oldName = existing_vars[i].str_name();
+          String newName = vi_array[i].str_name();
+          if (!oldName.equals(newName))
+            throw new FileIOException("Duplicate declaration of program point \""
+                            + ppt_name + "\" with two different VarInfo: old VarInfo="+oldName+", new VarInfo="+newName, state.reader, state.filename);
+        }
+      } else { // ppts are already in the map
         return state.all_ppts.get (ppt_name);
       }
     }
 
-    // If we are excluding this ppt, just read the data and throw it away
+    // If we are excluding this ppt, just throw it away
     if (!ppt_included (ppt_name)) {
-      skip_decl (state.reader);
       omitted_declarations++;
       return null;
     }
 
-    // The var_infos that will populate the new program point
-    List<VarInfo> var_infos = new ArrayList<VarInfo>();
-
-    // Each iteration reads a variable name, type, and comparability.
-    // Possibly abstract this out into a separate function??
-    VarInfo vi;
-    while ((vi = read_VarInfo(state.reader, state.varcomp_format,
-                              state.file, ppt_name)) != null) {
-      for (int i=0; i<var_infos.size(); i++) {
-        if (vi.name() == var_infos.get(i).name()) {
-          throw new FileIOException("Duplicate variable name", state.reader,
-                                    state.filename);
-        }
-      }
-      // Can't do this test in read_VarInfo, it seems, because of the test
-      // against null above.
-      if (!var_included (vi.name())) {
-        continue;
-      }
-      var_infos.add(vi);
-    }
-
-    VarInfo[] vi_array = (VarInfo[])
-                            var_infos.toArray(new VarInfo[var_infos.size()]);
 
     // taking care of visibility information
     // the information is needed in the variable hierarchy because private methods
@@ -460,6 +446,32 @@ public final class FileIO {
     return newppt;
     // return new PptTopLevel(ppt_name, vi_array);
   }
+  private static VarInfo[] read_VarInfos(ParseState state, String ppt_name)
+    throws IOException {
+
+    // The var_infos that will populate the new program point
+    List<VarInfo> var_infos = new ArrayList<VarInfo>();
+
+    // Each iteration reads a variable name, type, and comparability.
+    // Possibly abstract this out into a separate function??
+    VarInfo vi;
+    while ((vi = read_VarInfo(state, ppt_name)) != null) {
+      for (int i=0; i<var_infos.size(); i++) {
+        if (vi.name() == var_infos.get(i).name()) {
+          throw new FileIOException("Duplicate variable name", state.reader,
+                                    state.filename);
+        }
+      }
+      // Can't do this test in read_VarInfo, it seems, because of the test
+      // against null above.
+      if (!var_included (vi.name())) {
+        continue;
+      }
+      var_infos.add(vi);
+    }
+
+    return var_infos.toArray(new VarInfo[var_infos.size()]);
+  }
 
   // So that warning message below is only printed once
   private static boolean seen_string_rep_type = false;
@@ -470,11 +482,13 @@ public final class FileIO {
    * declaration.
    **/
   private static VarInfo read_VarInfo(
-    LineNumberReader file,
-    int varcomp_format,
-    File filename,
+    ParseState state,
     String ppt_name)
     throws IOException {
+    LineNumberReader file = state.reader;
+    int varcomp_format = state.varcomp_format;
+    File filename = state.file;
+
     String line = file.readLine();
     if ((line == null) || (line.equals("")))
       return null;
