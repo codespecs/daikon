@@ -3,6 +3,7 @@ package daikon.chicory;
 import java.util.*;
 
 import daikon.*;
+import daikon.VarInfo.VarFlags;
 
 /**
  * The StringInfo class is a subtype of DaikonVariableInfo used for
@@ -142,5 +143,11 @@ public class StringInfo extends DaikonVariableInfo
         return "toString()";
     }
 
+  public EnumSet<VarFlags> get_var_flags() {
+    EnumSet<VarFlags> flags = super.get_var_flags().clone();
+    flags.add (VarFlags.SYNTHETIC);
+    flags.add (VarFlags.TO_STRING);
+    return (flags);
+  }
 
 }
