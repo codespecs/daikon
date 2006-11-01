@@ -91,4 +91,27 @@ public abstract class SequenceSubsequence
                  get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }
 
+  /** returns the JML name for the slice **/
+  public String jml_name (String index) {
+
+    // The slice routine needs the actual length as opposed to the
+    // highest legal index.
+    Quantify.Term upper = get_upper_bound();
+    if (upper instanceof Quantify.Length) {
+      ((Quantify.Length)upper).set_offset (0);
+    }
+
+    if (seqvar().isPrestate()) {
+      return String.format ("\\old(daikon.Quant.slice(%s, %s, %s))",
+                            seqvar().enclosing_var.postState.jml_name(),
+                            get_lower_bound().jml_name(true),
+                            upper.jml_name(true));
+    } else {
+      return String.format ("daikon.Quant.slice(%s, %s, %s)",
+                            seqvar().enclosing_var.jml_name(),
+                            get_lower_bound().jml_name(),
+                            upper.jml_name());
+    }
+  }
+
 }

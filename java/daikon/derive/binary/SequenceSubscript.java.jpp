@@ -13,6 +13,7 @@ The correct way to build the system is to run 'make'.
   #define SCALAR long
   #define SEQUENCESCALARSUBSCRIPT SequenceScalarSubscript
   #define INTERN(v) Intern.internedLong(v)
+  #define GET_ELEMENT "daikon.Quant.getElement_int"
 #elif defined(STRING)
   #define SCALAR String
   #define SEQUENCESCALARSUBSCRIPT SequenceStringSubscript
@@ -20,10 +21,12 @@ The correct way to build the system is to run 'make'.
     // In this particular case, the string is already interned.
   #endif
   #define INTERN(v) v
+  #define GET_ELEMENT "daikon.Quant.getElement_String"
 #elif defined(FLOAT)
   #define SCALAR double
   #define SEQUENCESCALARSUBSCRIPT SequenceFloatSubscript
   #define INTERN(v) Intern.internedDouble(v)
+  #define GET_ELEMENT "daikon.Quant.getElement_float"
 #else
   #error "One of SCALAR, FLOAT, or STRING must be defined"
 #endif
@@ -117,7 +120,7 @@ public final class SEQUENCESCALARSUBSCRIPT
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }
 
-  /** Returns the ESC name for sequence subsequence **/
+  /** Returns the ESC name for sequence subscript **/
   public String esc_name (String index) {
     if (seqvar().isPrestate())
       return String.format ("\\old(%s[%s])",
@@ -127,6 +130,36 @@ public final class SEQUENCESCALARSUBSCRIPT
       return String.format ("%s[%s%s]", seqvar().enclosing_var.esc_name(),
                             sclvar().esc_name(), shift_str(index_shift));
 
+  }
+
+  /** Returns the JML name for sequence subscript **/
+  public String jml_name (String index) {
+    String get_element = GET_ELEMENT;
+    if (seqvar().file_rep_type.baseIsHashcode())
+      get_element = "daikon.Quant.getElement_Object";
+    else if (seqvar().file_rep_type.baseIsBoolean())
+      get_element = "daikon.Quant.getElement_boolean";
+    if (seqvar().isPrestate())
+      return String.format ("\\old(%s(%s, %s))", get_element,
+                            seqvar().enclosing_var.postState.jml_name(),
+                            inside_jml_name (sclvar(), true, index_shift));
+    else
+      return String.format ("%s(%s, %s%s)", get_element,
+                            seqvar().enclosing_var.jml_name(),
+                            sclvar().jml_name(), shift_str (index_shift));
+  }
+
+  /** Return the simplify name for sequence subscript **/
+  public String simplify_name() {
+    String subscript = sclvar().simplify_name();
+    if (index_shift < 0)
+      subscript = String.format ("(- %s %d)", subscript, -index_shift);
+    else if (index_shift > 0)
+      subscript = String.format ("(+ %s %d)", subscript, index_shift);
+
+    return String.format ("(select (select elems %s) %s)",
+                          seqvar().enclosing_var.simplify_name(),
+                          subscript);
   }
 
 }

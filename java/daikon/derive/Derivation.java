@@ -162,6 +162,20 @@ public abstract class Derivation
   }
 
   /**
+   * Returns the name of this variable in JML format.  If an index
+   * is specified, it is used as an array index.  It is an error to
+   * specify an index on a non-array variable
+   */
+  public String jml_name (String index) {
+    return esc_name (index);
+  }
+
+  /** Returns the name of this variable in simplify format **/
+  public String simplify_name() {
+    throw new RuntimeException ("simplify_name not implemented for " + this);
+  }
+
+  /**
    * Returns true if d is the prestate version of this.  Returns true
    * if this and d are of the same derivation with the same formula
    * and have the same bases.
@@ -208,6 +222,24 @@ public abstract class Derivation
         return String.format ("\\new(%s)%s", vi.esc_name(), shift_str(shift));
     } else
       return vi.esc_name() + shift_str(shift);
+  }
+
+  /**
+   * Returns the jml name of a variable which is included inside
+   * an an expression (such as orig(a[vi])).  If the expression
+   * is orig, the orig is implied for this variable.
+   */
+  protected String inside_jml_name (VarInfo vi, boolean in_orig, int shift) {
+    if (vi == null)
+      return "";
+
+    if (in_orig) {
+      if (vi.isPrestate())
+        return vi.postState.jml_name() + shift_str(shift);
+      else
+        return String.format ("\\new(%s)%s", vi.jml_name(), shift_str(shift));
+    } else
+      return vi.jml_name() + shift_str(shift);
   }
 
 }
