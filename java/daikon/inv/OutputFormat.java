@@ -28,9 +28,6 @@ public final class OutputFormat
   /** Data Structure Repair Format */
   public static final OutputFormat REPAIR = new OutputFormat("Repair");
 
-  /** Whole names as single C/Java style indentifiers **/
-  public static final OutputFormat IDENTIFIER = new OutputFormat("Identifier");
-
   private final String name;
   public final String toString() { return "OutputFormat:" + name; }
 
@@ -59,7 +56,6 @@ public final class OutputFormat
     if (name.compareToIgnoreCase(JML.name) == 0) { return JML; }
     if (name.compareToIgnoreCase(SIMPLIFY.name) == 0) { return SIMPLIFY; }
     if (name.compareToIgnoreCase(REPAIR.name) == 0) { return REPAIR; }
-    if (name.compareToIgnoreCase(IDENTIFIER.name) == 0) { return IDENTIFIER; }
     return null;
   }
 
