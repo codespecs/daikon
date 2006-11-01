@@ -1,6 +1,7 @@
 package daikon.test;
 
 import daikon.*;
+import java.util.*;
 
 /**
  * A collection of useful helper methods that are common to many
@@ -44,6 +45,24 @@ public class Common
   }
 
   public static PptTopLevel makePptTopLevel(String pptname, VarInfo[] vars) {
+
+    // If any of the variables have enclosing variables, include those in
+    // the ppt as well.
+    List<VarInfo> vlist = new ArrayList<VarInfo>();
+    for (VarInfo vi : vars) {
+      if (vi.enclosing_var != null)
+        vlist.add (vi.enclosing_var);
+    }
+    if (vlist.size() > 0) {
+      VarInfo[] full = new VarInfo[vars.length + vlist.size()];
+      int index = 0;
+      for (VarInfo vi : vars)
+        full[index++] = vi;
+      for (VarInfo vi : vlist)
+        full[index++] = vi;
+      vars = full;
+    }
+
     PptTopLevel ppt = new PptTopLevel(pptname, vars);
     return ppt;
   }
