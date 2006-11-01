@@ -125,6 +125,15 @@ public final class VarComparabilityImplicit
     return cached_element_type;
   }
 
+  /**
+   * Determines the comparability of the length of this string.  Currently
+   * always returns unknown, but it would be best if string lengths were
+   * only comparable with other string lengths (or perhaps nothing)
+   */
+  public VarComparability string_length_type() {
+    return unknown;
+  }
+
   public VarComparability indexType(int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.

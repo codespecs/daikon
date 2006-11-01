@@ -36,6 +36,10 @@ public final class VarComparabilityNone
     return it;
   }
 
+  public VarComparability string_length_type() {
+    return it;
+  }
+
   public int hashCode() {
     return 0;
   }
