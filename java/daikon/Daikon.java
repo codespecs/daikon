@@ -165,6 +165,7 @@ import daikon.inv.unary.sequence.SeqIndexIntLessEqual;
 import daikon.inv.unary.sequence.SeqIndexIntLessThan;
 import daikon.inv.unary.sequence.SeqIndexIntNonEqual;
 import daikon.inv.unary.string.OneOfString;
+import daikon.inv.unary.string.PrintableString;
 import daikon.inv.unary.stringsequence.CommonStringSequence;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
@@ -603,7 +604,7 @@ public final class Daikon {
       if (!Daikon.dkconfig_quiet)
       System.out.println(release_string);
     }
-    
+
     // figure out which algorithm to use in NIS to process suppressions
     if (NIS.dkconfig_suppression_processor == SuppressionProcessor.HYBRID) {
       NIS.hybrid_method = true;
@@ -617,7 +618,7 @@ public final class Daikon {
         NIS.hybrid_method = false;
       }
     }
-    
+
     // Create the list of all invariant types
     setup_proto_invs();
 
@@ -1181,6 +1182,9 @@ public final class Daikon {
       // Range invariant (Range.java.jpp)
       proto_invs.addAll(RangeInt.get_proto_all());
       proto_invs.addAll(RangeFloat.get_proto_all());
+
+      // Printable String
+      proto_invs.add (PrintableString.get_proto());
 
       // Positive (x > 0) (Postive.java).  Positive is a sample invariant
       // that is only included as an example.
