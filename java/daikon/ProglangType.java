@@ -587,6 +587,10 @@ public final class ProglangType
             || (base == BASE_HASHCODE));
   }
 
+  public boolean baseIsBoolean() {
+    return (base == BASE_BOOLEAN);
+  }
+
   public boolean baseIsFloat() {
     return ((base == BASE_DOUBLE) || (base == BASE_FLOAT));
   }
@@ -613,11 +617,11 @@ public final class ProglangType
   public boolean isString() {
     return ((dimensions == 0) && baseIsString());
   }
-  
+
   public boolean baseIsHashcode() {
     return (base == BASE_HASHCODE);
   }
-  
+
   public boolean isHashcode() {
     return ((dimensions == 0) && baseIsHashcode());
   }
