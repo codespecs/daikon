@@ -105,11 +105,29 @@ public final class SequenceLength
 
   /** Returns the ESC name **/
   public String esc_name (String index) {
-    Quantify.Length  ql = new Quantify.Length (base, shift);
-    return ql.esc_name();
+    // This should be able to use Quantify.Length to calculate the name,
+    // but it can't because the old version formatted these slightly
+    // differently.  But this could be used when the old regression results
+    // are no longer needed.
+    // Quantify.Length  ql = new Quantify.Length (base, shift);
+    // return ql.esc_name();
 
-    // return String.format ("%s.length%s", base.enclosing_var.esc_name(),
-    //                      shift_str (shift));
+    if (base.isPrestate())
+      return String.format ("\\old(%s.length)%s",
+                  base.enclosing_var.postState.esc_name(), shift_str (shift));
+    else
+      return String.format ("%s.length%s", base.enclosing_var.esc_name(),
+                            shift_str (shift));
   }
 
+  /** Returns the JML name **/
+  public String jml_name (String index) {
+    Quantify.Length ql = new Quantify.Length (base, shift);
+    return ql.jml_name();
+  }
+
+  public String simplify_name () {
+    Quantify.Length ql = new Quantify.Length (base, shift);
+    return ql.simplify_name();
+  }
 }
