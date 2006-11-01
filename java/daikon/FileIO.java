@@ -112,7 +112,7 @@ public final class FileIO {
   public static long dkconfig_dtrace_line_count = 0;
 
   /** True if declaration records are in the new format **/
-  public static boolean new_decl_format = false;
+  public static boolean new_decl_format = true;
 
   /// Variables
 
@@ -1072,6 +1072,8 @@ public final class FileIO {
                       + ((Daikon.ppt_omit_regexp != null)
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
+
+    new_decl_format = false;
 
     data_trace_state = new ParseState(filename, is_decl_file, ppts_are_new,
                                       all_ppts);
@@ -2062,22 +2064,22 @@ public final class FileIO {
   public static class VarDefinition implements java.io.Serializable, Cloneable{
     static final long serialVersionUID = 20060524L;
     transient ParseState state;
-    String name;
-    VarKind kind = null;
-    String enclosing_var;
-    String relative_name = null;
-    RefType ref_type = RefType.POINTER;
-    int arr_dims = 0;
-    List<String> function_args = null;
-    ProglangType rep_type = null;
-    ProglangType declared_type = null;
-    EnumSet<VarFlags> flags = EnumSet.noneOf (VarFlags.class);
-    EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
-    VarComparability comparability = null;
-    String parent_ppt = null;
-    int parent_relation_id = 0;
-    String parent_variable = null;
-    Object static_constant_value = null;
+    public String name;
+    public VarKind kind = null;
+    public String enclosing_var;
+    public String relative_name = null;
+    public RefType ref_type = RefType.POINTER;
+    public int arr_dims = 0;
+    public List<String> function_args = null;
+    public ProglangType rep_type = null;
+    public ProglangType declared_type = null;
+    public EnumSet<VarFlags> flags = EnumSet.noneOf (VarFlags.class);
+    public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
+    public VarComparability comparability = null;
+    public String parent_ppt = null;
+    public int parent_relation_id = 0;
+    public String parent_variable = null;
+    public Object static_constant_value = null;
 
     public VarDefinition copy () {
       try {
@@ -2109,6 +2111,15 @@ public final class FileIO {
         comparability = VarComparabilityImplicit.unknown;
       else
         comparability = VarComparabilityNone.it;
+    }
+
+    public VarDefinition (String name, VarKind kind, ProglangType type) {
+      this.state = null;
+      this.name = name;
+      this.kind = kind;
+      this.rep_type = type;
+      this.declared_type = type;
+      comparability = VarComparabilityNone.it;
     }
 
     /**
