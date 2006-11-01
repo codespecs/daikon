@@ -19,17 +19,32 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
-4.1.11 (November 1, 2006)
+4.2.11 (November 1, 2006)
 
-Changed post variables in JML from a warning to \new
+Some enhancements and bug fixes were made to Daikon.  Repeated declarations
+are no longer an error.  A new invariant and derived variable were added.
 
-Added PrintableString
-Added StringLength
+Daikon
 
-Fixed bug in simplify output where the length of synthetic arrays
-(such as a[].getClass()) is used.
+  User-visible changes
 
+    Multiple declarations of a program point are now allowed if they
+    are identical to the previous declaration.  This makes it easier
+    to operate on multiple trace files.
 
+    Added an invariant (PrintableString) that is true if each character
+    in a string is printable.  PrintableString is not enabled by default.
+
+    Added a derived variable (StringLength) that represents the length
+    of a string.  StringLength is not enabled by default.
+
+    Post variables in JML output are marked as '\new' rather than generating
+    a warning.
+
+  Bug Fixes
+
+    Simplify output now correctly references the length of synthetic
+    arrays such as a[].getClass().
 
 4.2.10 (October 2, 2006)
 
