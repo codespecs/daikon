@@ -107,6 +107,8 @@ class FormatTestCase {
       try {
         if (resultCache == null)
           resultCache = (String)outputProducer.invoke(inv,outputProducerArgs);
+        if (FileIO.new_decl_format)
+          resultCache = VarInfo.old_var_names (resultCache);
         return resultCache;
       }
       catch (IllegalAccessException e) {
@@ -613,9 +615,33 @@ class FormatTestCase {
     // invariant, "b" for the second, and so on
     // - The ProglangType will be specified in the parameters
     // - The comparability will be none
-    VarInfo result = new VarInfo (new String(new char [] {(char)('a' + i)}) +
-                                  arrayModifier, type, type,
-                                  VarComparabilityNone.it, VarInfoAux.getDefault());
+    VarInfo result;
+    String base_name = new String(new char [] {(char)('a' + i)});
+    String name = base_name + arrayModifier;
+    if (FileIO.new_decl_format) {
+      if (arrayModifier != "") {
+        FileIO.VarDefinition vardef
+          = new FileIO.VarDefinition (base_name, VarInfo.VarKind.VARIABLE,
+                                      type.elementType());
+        VarInfo hashcode = new VarInfo (vardef);
+        vardef = new FileIO.VarDefinition (base_name + "[..]",
+                                           VarInfo.VarKind.ARRAY, type);
+        vardef.arr_dims = 1;
+        result = new VarInfo (vardef);
+        result.enclosing_var = hashcode;
+        assert result.enclosing_var.enclosing_var == null;
+        // System.out.printf ("Created %s [%s]%n", result, hashcode);
+      } else {
+        FileIO.VarDefinition vardef
+          = new FileIO.VarDefinition (name, VarInfo.VarKind.VARIABLE, type);
+        result = new VarInfo (vardef);
+        assert result.enclosing_var == null;
+        // System.out.printf ("Created %s%n", result);
+      }
+    } else {
+      result = new VarInfo (name, type, type,
+                            VarComparabilityNone.it, VarInfoAux.getDefault());
+    }
     return result;
   }
 
