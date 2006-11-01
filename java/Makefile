@@ -391,7 +391,7 @@ dcomp_rt.jar : dcomp_premain.jar
 
 # Install the local version of the dyncomp specific rt.jar
 install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
-	cp dcomp_rt.jar $(pag)/software/pkg/DynComp/
+	cp dcomp_rt.jar $(pag)/software/arch/common/pkg/DynComp/
 
 # Only rebuild the jar file, don't recreate the contents of $(DCOMP_RT)
 # useful if editing only one file in the jar
