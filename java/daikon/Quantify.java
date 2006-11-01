@@ -21,15 +21,6 @@ public class Quantify {
   }
 
   /**
-   * Interface implemented by derived variables that form a slice
-   * (eg, arr[i..j])
-   */
-  public interface Slice {
-    public Term get_lower_bound();
-    public Term get_upper_bound();
-  }
-
-  /**
    * Class the represents terms that can be used in variable expressions.
    * These include constants (such as 0 and 1), free variables used
    * for quantification (i, j, etc), and normal daikon variables
@@ -38,6 +29,9 @@ public class Quantify {
     public abstract String name();
     public String ioa_name() { return name(); }
     public String esc_name() { return name(); }
+    public String jml_name() { return esc_name(); }
+    public String jml_name(boolean in_prestate) { return jml_name(); }
+    public String simplify_name() { return name(); }
     protected static String name_with_offset (String name, int offset) {
       if (offset == 0)
         return name;
@@ -78,15 +72,55 @@ public class Quantify {
       return name_with_offset ("size(" + sequence.name() + ")", offset);
     }
     public String esc_name() {
-      VarInfo arr_var = sequence.get_base_array().enclosing_var;
+      VarInfo arr_var = sequence.get_base_array_hashcode();
       if (arr_var.isPrestate()) {
         return String.format ("\\old(%s)",
          name_with_offset (arr_var.postState.esc_name() + ".length", offset));
       } else { // array is not orig
         return name_with_offset (arr_var.esc_name() + ".length", offset);
       }
-      // String oname = name_with_offset (".length", offset);
-      // return arr_var.esc_name().replace("[]", oname);
+    }
+    public String jml_name() {
+      VarInfo arr_var = sequence.get_base_array_hashcode();
+      if (arr_var.isPrestate()) {
+        String name = String.format ("daikon.Quant.size(%s)",
+                                     arr_var.postState.jml_name());
+        return name_with_offset (String.format ("\\old(%s)", name), offset);
+        // return String.format ("\\old(%s)", name_with_offset (name, offset));
+      } else {
+        String name = String.format ("daikon.Quant.size(%s)",
+                                     arr_var.jml_name());
+        return name_with_offset (name, offset);
+      }
+    }
+    public String jml_name (boolean in_prestate) {
+      if (!in_prestate)
+        return jml_name();
+
+      VarInfo arr_var = sequence.get_base_array_hashcode();
+      if (arr_var.isPrestate()) {
+        String name = String.format ("daikon.Quant.size(%s)",
+                                     arr_var.postState.jml_name());
+        return name_with_offset (name, offset);
+      } else {
+        String name = String.format ("daikon.Quant.size(\\new(%s))",
+                                     arr_var.jml_name());
+        return name_with_offset (name, offset);
+      }
+    }
+    public String simplify_name() {
+      String length = String.format ("(arrayLength %s)",
+                   sequence.get_base_array_hashcode().simplify_name());
+      if (offset < 0)
+        return String.format ("(- %s %d)", length, -offset);
+      else if (offset > 0)
+        return String.format ("(+ %s %d)", length, offset);
+      else
+        return length;
+    }
+
+    public void set_offset (int offset) {
+      this.offset = offset;
     }
   }
 
@@ -112,13 +146,22 @@ public class Quantify {
     }
 
     public String esc_name() {
-      /*
+      return name_with_offset (var.esc_name(), offset);
+    }
+
+    public String jml_name() {
+      return name_with_offset (var.jml_name(), offset);
+    }
+
+    public String jml_name (boolean in_prestate) {
+      if (!in_prestate)
+        return jml_name();
+
       if (var.isPrestate())
-        return "\\old(" + name_with_offset (var.postState.esc_name(), offset)
-          + ")";
+        return name_with_offset (var.postState.jml_name(), offset);
       else
-      */
-        return name_with_offset (var.esc_name(), offset);
+        return name_with_offset (String.format ("\\new(%s)", var.jml_name()),
+                                 offset);
     }
   }
 
