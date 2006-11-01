@@ -19,6 +19,18 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+4.1.11 (November 1, 2006)
+
+Changed post variables in JML from a warning to \new
+
+Added PrintableString
+Added StringLength
+
+Fixed bug in simplify output where the length of synthetic arrays
+(such as a[].getClass()) is used.
+
+
+
 4.2.10 (October 2, 2006)
 
 Some enhancements and bug fixes were made to Daikon.  Programs with a
