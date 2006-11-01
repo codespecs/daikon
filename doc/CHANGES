@@ -19,6 +19,11 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+
+4.2.12
+
+---------------------------------------
+
 4.2.11 (November 1, 2006)
 
 Some enhancements and bug fixes were made to Daikon.  Repeated declarations
@@ -45,6 +50,8 @@ Daikon
 
     Simplify output now correctly references the length of synthetic
     arrays such as a[].getClass().
+
+---------------------------------------
 
 4.2.10 (October 2, 2006)
 
@@ -76,6 +83,8 @@ Daikon
     resulted in both unnecessary and missing guarding.  This has
     been fixed.
     
+---------------------------------------
+
 4.2.9 (September 1, 2006)
 
 Bugs were fixed in Chicory, Kvasir, and Daikon.  Chicory was enhanced
@@ -121,6 +130,8 @@ Kvasir
   to the same internal representation, but the difference can be visible
   in Daikon's output for values of type "float", because Daikon
   represents them internally with type "double".
+
+---------------------------------------
 
 4.2.8 (August 1, 2006)
 
