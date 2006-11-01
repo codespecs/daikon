@@ -479,7 +479,6 @@ public abstract class VarInfoName
     if (format == OutputFormat.JML) return jml_name(vi);
     if (format == OutputFormat.DBCJAVA) return dbc_name(vi);
     if (format == OutputFormat.IOA) return ioa_name();
-    if (format == OutputFormat.IDENTIFIER) return identifier_name();
     throw new UnsupportedOperationException
       ("Unknown format requested: " + format);
   }
@@ -885,8 +884,22 @@ public abstract class VarInfoName
          + "Perhaps its name should be suffixed by \"[]\"?" + Global.lineSep
          + " this.class = " + getClass().getName());
       }
-      Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
-      return r.replace(this).intern();
+
+      // If this is orig, replace the elems with sizeof, leaving orig
+      // where it is.  If it is not orig, simply return the sizeof the
+      // elems (ignoring anthing outside of the elems (like additional
+      // fields or typeof)).  This allows this code to work correctly
+      // for variables such as a[].b.c (returns size(a[])) or
+      // a[].getClass() (returns size(a[]))
+      if (this instanceof Prestate) {
+        VarInfoName size = (new SizeOf (elems)).intern();
+        return (new Prestate (size)).intern();
+        // Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
+        // return r.replace(this).intern();
+      } else {
+        return (new SizeOf (elems)).intern();
+      }
+
     }
   }
 
@@ -1731,8 +1744,9 @@ public abstract class VarInfoName
       return "\\post(" + term.java_name(v) + ")";
     }
     protected String jml_name_impl(VarInfo v) {
-      return "(warning: JML format cannot express a Poststate"
-        + " [repr=" + repr() + "])";
+      return "\\new(" + term.jml_name(v) + ")";
+      // return "(warning: JML format cannot express a Poststate"
+      //  + " [repr=" + repr() + "])";
     }
     protected String dbc_name_impl(VarInfo v) {
       return "(warning: DBC format cannot express a Poststate"
@@ -2299,7 +2313,7 @@ public abstract class VarInfoName
           return
             "daikon.Quant.slice("
             + sequence.name_using(format, ((SequenceSubsequence)derived).seqvar())
-            + ", 0,  "
+            + ", 0, "
             + j.name_using(format, ((SequenceSubsequence)derived).sclvar())
             + ")";
         } else {
