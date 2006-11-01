@@ -687,9 +687,9 @@ public final class ONEOFSCALAR
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
       INT value = elts[0];
-      length = var().get_ioa_size_name();
-      if (length != null)
-        length += " = " + value.length;
+      length = null;
+      if (!var().isSlice())
+        length = var().get_length().ioa_name() + " = " + value.length;
       Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
       if (no_nulls(0)) {
         forall = quant.getQuantifierExp() + quant.getVarIndexedString(0)
@@ -717,9 +717,8 @@ public final class ONEOFSCALAR
     }
 #elif defined(STRINGSEQUENCE)
     INT value = elts[0];
-    String size = var().get_ioa_size_name();
-    if (size != null)
-      result = size+ " = " + value.length;
+    if (!var().isSlice())
+      result = var().get_length().ioa_name() + " = " + value.length;
     else {
       String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname
@@ -863,10 +862,10 @@ public final class ONEOFSCALAR
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
       INT value = elts[0];
-      if (var().type.isArray()) {
-        length = var().get_esc_size_name();
-        if (length != null)
-          length += " == " + value.length;
+      if (var().isArray()) {
+        length = null;
+        if (!var().isSlice())
+          length = var().get_length().esc_name() + " == " + value.length;
         String[] form = VarInfo.esc_quantify (var());
         if (no_nulls(0)) {
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
