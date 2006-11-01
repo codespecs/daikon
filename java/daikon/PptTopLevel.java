@@ -560,6 +560,7 @@ public class PptTopLevel extends Ppt {
 
   transient UnaryDerivationFactory[] unaryDerivations =
     new UnaryDerivationFactory[] {
+      new StringLengthFactory(),
       new SequenceLengthFactory(),
       new SequenceInitialFactory(),
       new SequenceMinMaxSumFactory(),
