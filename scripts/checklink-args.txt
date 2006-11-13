@@ -5,6 +5,7 @@
 --exclude-broken 404:http://www.eclipse.org/legal/Eclipse%20EPL%202003_11_10%20Final_files/filelist.xml
 --exclude-broken 405:http://www.amazon.com/exec/obidos/tg/detail/-/0321205758/103-2932545-5299831?v=glance
 --exclude-broken 500:http://conferences.iee.org/icse2004/
+--exclude-broken 500:http://jcp.org/en/jsr/detail?id=308
 --exclude-broken 500:http://www.orbitz.com/
 --exclude-broken 500:https://ca.mit.edu:444/moira/showresult.jhtml?list=parg&operation=displaylistinfo
 --exclude-broken 500:https://eecsfacweb.mit.edu/
