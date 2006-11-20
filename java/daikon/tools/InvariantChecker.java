@@ -55,6 +55,7 @@ public class InvariantChecker {
   static Set<String> failedInvariants; //Yoav added
   static Set<String> allFailedInvariants; //Yoav added
   static LinkedHashSet<String> outputMatrix; //Yoav added
+  static LinkedHashSet<String> outputComma; //Yoav added
 
   public static void main(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
@@ -174,6 +175,7 @@ public class InvariantChecker {
     failedInvariants = new HashSet<String>();
     allFailedInvariants = new HashSet<String>();
     outputMatrix = new LinkedHashSet<String>();
+    outputComma = new LinkedHashSet<String>();
     File[] filesInDir = dir_file.listFiles();
     if (filesInDir == null || filesInDir.length==0)
           throw new Daikon.TerminationMessage("The directory "+dir_file+" is empty", usage);
@@ -190,9 +192,17 @@ public class InvariantChecker {
 
     output_stream.println("Building a matrix for invariants files "+invariants+" and dtrace files "+dtraces);
 
+
+    String firstLine = "";
+    for (File dtrace : dtraces)
+      firstLine += ","+dtrace;
+    firstLine += ",total";
+    outputComma.add(firstLine);
+
     for (File inFile : invariants) {
       inv_file = inFile;
       int invNum = 0;
+      String commaLine = inFile.toString();
       for (File dtrace : dtraces) {
         dtrace_files.clear();
         failedInvariants.clear();
@@ -202,15 +212,23 @@ public class InvariantChecker {
         assert invNum==invNum2;
         int failedCount = failedInvariants.size();
         allFailedInvariants.addAll(failedInvariants);
-        outputMatrix.add(inv_file+" - "+dtrace+": "+failedCount+" false positives, which is "+toPercentage(failedCount, invNum)+".");
+        String percent = toPercentage(failedCount, invNum);
+        commaLine += ","+percent;
+        outputMatrix.add(inv_file+" - "+dtrace+": "+failedCount+" false positives, which is "+percent +".");
         error_cnt = 0;
       }
       int failedCount = allFailedInvariants.size();
-      outputMatrix.add(inv_file+": "+failedCount+" false positives, out of "+invNum+", which is "+toPercentage(failedCount, invNum)+".");
+      String percent = toPercentage(failedCount, invNum);
+      commaLine += ","+percent;
+      outputComma.add(commaLine);
+      outputMatrix.add(inv_file+": "+failedCount+" false positives, out of "+invNum+", which is "+percent+".");
       allFailedInvariants.clear();
     }
     output_stream.println();
     for (String output : outputMatrix)
+      output_stream.println(output);
+    output_stream.println();
+    for (String output : outputComma)
       output_stream.println(output);
   }
   private static String toPercentage(int portion, int total) {
@@ -220,6 +238,20 @@ public class InvariantChecker {
   private static int checkInvariants() throws IOException {
     // Read the invariant file
     PptMap ppts = FileIO.read_serialized_pptmap (inv_file, true );
+
+    //Yoav: make sure we have unique invariants
+    Set<String> allInvariants = new HashSet<String>();
+    for (PptTopLevel ppt : ppts.all_ppts())
+      for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
+        PptSlice slice = i.next();
+        for (Invariant inv : slice.invs) {
+          String n = invariant2str(ppt, inv);
+          // We had this more than once:
+          // DataStructures.StackArTester.doNew(int):::ENTER Invariant=size >= 0
+          //assert !allInvariants.contains(n) : "ppt="+ppt.name+" Invariant="+inv.format()+" allInvariants="+allInvariants;
+          allInvariants.add(n);
+        }
+      }
 
     // Read and process the data trace files
     FileIO.Processor processor = new InvariantCheckProcessor();
@@ -231,7 +263,7 @@ public class InvariantChecker {
     progress.shouldStop = true;
     System.out.println ();
     System.out.println ("" + error_cnt + " Errors Found, out of "+ppts.size()+" invariants" );
-    return ppts.size();
+    return allInvariants.size();
   }
 
   /** Class to track matching ppt and its values. */
@@ -293,7 +325,6 @@ public class InvariantChecker {
     }
 
     private void add (PptTopLevel ppt, ValueTuple vt) {
-
       // Add the sample to any splitters
       if (ppt.has_splitters()) {
         for (PptSplitter ppt_split : ppt.splitters) {
@@ -362,9 +393,9 @@ public class InvariantChecker {
               debug_detail.fine (": : skipped non-active " + inv);
             continue;
           }
-          Invariant pre_inv = (Invariant) inv.clone();
           InvariantStatus status = inv.add_sample (vt, 1);
           if (status != InvariantStatus.NO_CHANGE) {
+            Invariant pre_inv = (Invariant) inv.clone();
             // Invariant pre_inv = inv;
             LineNumberReader lnr = FileIO.data_trace_state.reader;
             String line = (lnr == null) ? "?"
@@ -373,11 +404,14 @@ public class InvariantChecker {
             output_stream.println ("At ppt " + ppt.name + ", Invariant '"
                  + invName + "' invalidated by sample "
                  + Debug.toString (slice.var_infos, vt) + "at line " + line);
-            if (dir_file!=null) failedInvariants.add(invName);
+            if (dir_file!=null) failedInvariants.add(invariant2str(ppt, inv));
             error_cnt++;
           }
         }
       }
     }
+  }
+  private static String invariant2str(PptTopLevel ppt, Invariant inv) {
+    return ppt.name+" == "+inv.format();
   }
 }
