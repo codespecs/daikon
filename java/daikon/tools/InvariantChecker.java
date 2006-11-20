@@ -53,6 +53,7 @@ public class InvariantChecker {
 
   static File dir_file; //Yoav added
   static Set<String> failedInvariants; //Yoav added
+  static Set<String> allFailedInvariants; //Yoav added
   static LinkedHashSet<String> outputMatrix; //Yoav added
 
   public static void main(String[] args)
@@ -171,6 +172,7 @@ public class InvariantChecker {
 
     // Yoav additions:
     failedInvariants = new HashSet<String>();
+    allFailedInvariants = new HashSet<String>();
     outputMatrix = new LinkedHashSet<String>();
     File[] filesInDir = dir_file.listFiles();
     if (filesInDir == null || filesInDir.length==0)
@@ -193,15 +195,19 @@ public class InvariantChecker {
       int invNum = 0;
       for (File dtrace : dtraces) {
         dtrace_files.clear();
+        failedInvariants.clear();
         dtrace_files.add(dtrace.toString());
         int invNum2 = checkInvariants();
         if (invNum==0) invNum = invNum2;
         assert invNum==invNum2;
-        outputMatrix.add(inv_file+" - "+dtrace+": "+error_cnt+" false positives, which is "+toPercentage(error_cnt, invNum)+".");
+        int failedCount = failedInvariants.size();
+        allFailedInvariants.addAll(failedInvariants);
+        outputMatrix.add(inv_file+" - "+dtrace+": "+failedCount+" false positives, which is "+toPercentage(failedCount, invNum)+".");
         error_cnt = 0;
       }
-      outputMatrix.add(inv_file+": "+error_cnt+" false positives, out of "+invNum+", which is "+toPercentage(failedInvariants.size(), invNum)+".");
-      failedInvariants.clear();
+      int failedCount = allFailedInvariants.size();
+      outputMatrix.add(inv_file+": "+failedCount+" false positives, out of "+invNum+", which is "+toPercentage(failedCount, invNum)+".");
+      allFailedInvariants.clear();
     }
     output_stream.println();
     for (String output : outputMatrix)
@@ -315,7 +321,8 @@ public class InvariantChecker {
 
       // We should have received sample here before, or there is nothing
       // to check.
-      if (ppt.num_samples() <= 0)
+      // Yoav added: It can be that the different dtrace and inv files have different program points
+      if (false && ppt.num_samples() <= 0)
         Assert.assertTrue (ppt.num_samples() > 0, "ppt " + ppt.name
                             + " has 0 samples and "
                             + ppt.var_infos.length + " variables");
