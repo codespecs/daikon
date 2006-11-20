@@ -23,19 +23,18 @@ public class InvariantChecker {
   public static final Logger debug_detail
     = Logger.getLogger ("daikon.tools.InvariantCheckerDetail");
 
-  private static final Daikon.FileIOProgress progress
-    = new Daikon.FileIOProgress();
-
 
   private static final String output_SWITCH = "output";
+  private static final String dir_SWITCH = "dir";
 
   private static String usage =
     UtilMDE.joinLines(
-      "Usage: java daikon.PrintInvariants [OPTION]... <inv_file> "
+      "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> "
         + "<dtrace_file>",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
       "  --" + output_SWITCH + " output file",
+      "  --" + dir_SWITCH + " directory with invariant and dtrace files. We output a matrix saying how many invariants failed for each invariant file and each dtrace file.",
       "  --" + Daikon.config_option_SWITCH + " config_var=val",
       "      Sets the specified configuration variable.  ",
       "  --" + Daikon.debugAll_SWITCH,
@@ -51,6 +50,10 @@ public class InvariantChecker {
   static File output_file;
   static PrintStream output_stream = System.out;
   static int error_cnt = 0;
+
+  static File dir_file; //Yoav added
+  static Set<String> failedInvariants; //Yoav added
+  static LinkedHashSet<String> outputMatrix; //Yoav added
 
   public static void main(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
@@ -82,6 +85,7 @@ public class InvariantChecker {
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                   null, 0),
       new LongOpt(output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(dir_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null,
@@ -98,6 +102,11 @@ public class InvariantChecker {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
+        } else if (dir_SWITCH.equals (option_name)) {
+          dir_file = new File (g.getOptarg());
+          if (!dir_file.exists() || !dir_file.isDirectory())
+             throw new Daikon.TerminationMessage ("Error reading the directory "+dir_file);
+
         } else if (output_SWITCH.equals (option_name)) {
           output_file = new File (g.getOptarg());
           output_stream = new PrintStream (new FileOutputStream (output_file));
@@ -155,18 +164,68 @@ public class InvariantChecker {
         throw new Error("Unrecognized argument: " + file);
       }
     }
+    if (dir_file==null) {
+      checkInvariants();
+      return;
+    }
 
+    // Yoav additions:
+    failedInvariants = new HashSet<String>();
+    outputMatrix = new LinkedHashSet<String>();
+    File[] filesInDir = dir_file.listFiles();
+    if (filesInDir == null || filesInDir.length==0)
+          throw new Daikon.TerminationMessage("The directory "+dir_file+" is empty", usage);
+    ArrayList<File> invariants = new ArrayList<File>();
+    for(File f: filesInDir)
+       if (f.toString().indexOf(".inv") != -1) invariants.add(f);
+    if (invariants.size()==0)
+          throw new Daikon.TerminationMessage("Did not find any invariant files in the directory "+dir_file, usage);
+    ArrayList<File> dtraces = new ArrayList<File>();
+    for(File f: filesInDir)
+       if (f.toString().indexOf(".dtrace") != -1) dtraces.add(f);
+    if (dtraces.size()==0)
+          throw new Daikon.TerminationMessage("Did not find any dtrace files in the directory "+dir_file, usage);
+
+    output_stream.println("Building a matrix for invariants files "+invariants+" and dtrace files "+dtraces);
+
+    for (File inFile : invariants) {
+      inv_file = inFile;
+      int invNum = 0;
+      for (File dtrace : dtraces) {
+        dtrace_files.clear();
+        dtrace_files.add(dtrace.toString());
+        int invNum2 = checkInvariants();
+        if (invNum==0) invNum = invNum2;
+        assert invNum==invNum2;
+        outputMatrix.add(inv_file+" - "+dtrace+": "+error_cnt+" false positives, which is "+toPercentage(error_cnt, invNum)+".");
+        error_cnt = 0;
+      }
+      outputMatrix.add(inv_file+": "+error_cnt+" false positives, out of "+invNum+", which is "+toPercentage(failedInvariants.size(), invNum)+".");
+      failedInvariants.clear();
+    }
+    output_stream.println();
+    for (String output : outputMatrix)
+      output_stream.println(output);
+  }
+  private static String toPercentage(int portion, int total) {
+    double s = portion * 100;
+    return String.format("%.2f",s /total)+"%";
+  }
+  private static int checkInvariants() throws IOException {
     // Read the invariant file
     PptMap ppts = FileIO.read_serialized_pptmap (inv_file, true );
 
     // Read and process the data trace files
     FileIO.Processor processor = new InvariantCheckProcessor();
+
+    Daikon.FileIOProgress progress = new Daikon.FileIOProgress();
     progress.start();
     progress.clear();
     FileIO.read_data_trace_files (dtrace_files, ppts, processor, false);
     progress.shouldStop = true;
     System.out.println ();
-    System.out.println ("" + error_cnt + " Errors Found");
+    System.out.println ("" + error_cnt + " Errors Found, out of "+ppts.size()+" invariants" );
+    return ppts.size();
   }
 
   /** Class to track matching ppt and its values. */
@@ -303,9 +362,11 @@ public class InvariantChecker {
             LineNumberReader lnr = FileIO.data_trace_state.reader;
             String line = (lnr == null) ? "?"
                         : String.valueOf(lnr.getLineNumber());
+            String invName = pre_inv.format();
             output_stream.println ("At ppt " + ppt.name + ", Invariant '"
-                 + pre_inv.format() + "' invalidated by sample "
+                 + invName + "' invalidated by sample "
                  + Debug.toString (slice.var_infos, vt) + "at line " + line);
+            if (dir_file!=null) failedInvariants.add(invName);
             error_cnt++;
           }
         }
