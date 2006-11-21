@@ -2,6 +2,7 @@ package daikon.tools;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.filter.InvariantFilters;
 import utilMDE.*;
 
 import java.util.*;
@@ -34,7 +35,7 @@ public class InvariantChecker {
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
       "  --" + output_SWITCH + " output file",
-      "  --" + dir_SWITCH + " directory with invariant and dtrace files. We output a matrix saying how many invariants failed for each invariant file and each dtrace file.",
+      "  --" + dir_SWITCH + " directory with invariant and dtrace files. We output how many invariants failed for each invariant file. We check for failure against any sample in any dtrace file.",
       "  --" + Daikon.config_option_SWITCH + " config_var=val",
       "      Sets the specified configuration variable.  ",
       "  --" + Daikon.debugAll_SWITCH,
@@ -53,8 +54,8 @@ public class InvariantChecker {
 
   static File dir_file; //Yoav added
   static Set<String> failedInvariants; //Yoav added
-  static Set<String> allFailedInvariants; //Yoav added
-  static LinkedHashSet<String> outputMatrix; //Yoav added
+  static Set<String> testedInvariants; //Yoav added
+  static LinkedHashSet<String> outputLines; //Yoav added
   static LinkedHashSet<String> outputComma; //Yoav added
 
   public static void main(String[] args)
@@ -173,8 +174,8 @@ public class InvariantChecker {
 
     // Yoav additions:
     failedInvariants = new HashSet<String>();
-    allFailedInvariants = new HashSet<String>();
-    outputMatrix = new LinkedHashSet<String>();
+    testedInvariants = new HashSet<String>();
+    outputLines = new LinkedHashSet<String>();
     outputComma = new LinkedHashSet<String>();
     File[] filesInDir = dir_file.listFiles();
     if (filesInDir == null || filesInDir.length==0)
@@ -190,42 +191,39 @@ public class InvariantChecker {
     if (dtraces.size()==0)
           throw new Daikon.TerminationMessage("Did not find any dtrace files in the directory "+dir_file, usage);
 
-    output_stream.println("Building a matrix for invariants files "+invariants+" and dtrace files "+dtraces);
+    output_stream.println("Collecting data for invariants files "+invariants+" and dtrace files "+dtraces);
 
 
-    String firstLine = "";
-    for (File dtrace : dtraces)
-      firstLine += ","+dtrace;
-    firstLine += ",total";
-    outputComma.add(firstLine);
+    String commaLine = "";
+    for (File inFile : invariants) {
+      String name = inFile.getName().replace(".inv","").replace(".gz","");
+      commaLine += ","+name;
+    }
+    outputComma.add(commaLine);
 
+    commaLine = "";
     for (File inFile : invariants) {
       inv_file = inFile;
-      int invNum = 0;
-      String commaLine = inFile.toString();
-      for (File dtrace : dtraces) {
+      failedInvariants.clear();
+      testedInvariants.clear();
+      error_cnt = 0;
+
+      for (File dtrace: dtraces) {
         dtrace_files.clear();
-        failedInvariants.clear();
         dtrace_files.add(dtrace.toString());
-        int invNum2 = checkInvariants();
-        if (invNum==0) invNum = invNum2;
-        assert invNum==invNum2;
-        int failedCount = failedInvariants.size();
-        allFailedInvariants.addAll(failedInvariants);
-        String percent = toPercentage(failedCount, invNum);
-        commaLine += ","+percent;
-        outputMatrix.add(inv_file+" - "+dtrace+": "+failedCount+" false positives, which is "+percent +".");
-        error_cnt = 0;
+        checkInvariants();
       }
-      int failedCount = allFailedInvariants.size();
-      String percent = toPercentage(failedCount, invNum);
+
+      int failedCount = failedInvariants.size();
+      int testedCount = testedInvariants.size();
+      String percent = toPercentage(failedCount, testedCount);
       commaLine += ","+percent;
-      outputComma.add(commaLine);
-      outputMatrix.add(inv_file+": "+failedCount+" false positives, out of "+invNum+", which is "+percent+".");
-      allFailedInvariants.clear();
+      outputLines.add(inv_file+": "+failedCount+" false positives, out of "+testedCount+", which is "+percent+".");
     }
+    outputComma.add(commaLine);
+
     output_stream.println();
-    for (String output : outputMatrix)
+    for (String output : outputLines)
       output_stream.println(output);
     output_stream.println();
     for (String output : outputComma)
@@ -235,21 +233,22 @@ public class InvariantChecker {
     double s = portion * 100;
     return String.format("%.2f",s /total)+"%";
   }
-  private static int checkInvariants() throws IOException {
+  private static void checkInvariants() throws IOException {
     // Read the invariant file
     PptMap ppts = FileIO.read_serialized_pptmap (inv_file, true );
 
     //Yoav: make sure we have unique invariants
-    Set<String> allInvariants = new HashSet<String>();
+    Set<String> allInvariantsStr = new HashSet<String>();
+    Set<Invariant> allInvariants = new HashSet<Invariant>();
     for (PptTopLevel ppt : ppts.all_ppts())
       for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
         PptSlice slice = i.next();
         for (Invariant inv : slice.invs) {
           String n = invariant2str(ppt, inv);
-          // We had this more than once:
-          // DataStructures.StackArTester.doNew(int):::ENTER Invariant=size >= 0
-          //assert !allInvariants.contains(n) : "ppt="+ppt.name+" Invariant="+inv.format()+" allInvariants="+allInvariants;
-          allInvariants.add(n);
+          if (!allInvariants.contains(inv) && allInvariantsStr.contains(n))
+            throw new Daikon.TerminationMessage("Two invariants have the same ppt.name+inv.rep:"+n);
+          allInvariants.add(inv);
+          allInvariantsStr.add(n);
         }
       }
 
@@ -261,9 +260,8 @@ public class InvariantChecker {
     progress.clear();
     FileIO.read_data_trace_files (dtrace_files, ppts, processor, false);
     progress.shouldStop = true;
-    System.out.println ();
-    System.out.println ("" + error_cnt + " Errors Found, out of "+ppts.size()+" invariants" );
-    return allInvariants.size();
+    System.out.println ();    
+    System.out.println ("" + error_cnt + " Errors Found" );
   }
 
   /** Class to track matching ppt and its values. */
@@ -393,18 +391,33 @@ public class InvariantChecker {
               debug_detail.fine (": : skipped non-active " + inv);
             continue;
           }
+
+          if (dir_file!=null) {
+            if (inv.getConfidence()<Invariant.dkconfig_confidence_limit) //Yoav added
+              continue;
+            InvariantFilters fi = InvariantFilters.defaultFilters();
+            if (fi.shouldKeep(inv)==null)
+              continue;
+          }
+
+
+          String invRep = null;
+          if (dir_file!=null) {
+            invRep = invariant2str(ppt, inv);
+            testedInvariants.add(invRep);
+          }
+
           InvariantStatus status = inv.add_sample (vt, 1);
           if (status != InvariantStatus.NO_CHANGE) {
-            Invariant pre_inv = (Invariant) inv.clone();
-            // Invariant pre_inv = inv;
-            LineNumberReader lnr = FileIO.data_trace_state.reader;
-            String line = (lnr == null) ? "?"
-                        : String.valueOf(lnr.getLineNumber());
-            String invName = pre_inv.format();
-            output_stream.println ("At ppt " + ppt.name + ", Invariant '"
-                 + invName + "' invalidated by sample "
+            if (dir_file==null) {
+              LineNumberReader lnr = FileIO.data_trace_state.reader;
+              String line = (lnr == null) ? "?"
+                          : String.valueOf(lnr.getLineNumber());
+              output_stream.println ("At ppt " + ppt.name + ", Invariant '"
+                 + inv.format() + "' invalidated by sample "
                  + Debug.toString (slice.var_infos, vt) + "at line " + line);
-            if (dir_file!=null) failedInvariants.add(invariant2str(ppt, inv));
+            }
+            if (dir_file!=null) failedInvariants.add(invRep);
             error_cnt++;
           }
         }
@@ -412,6 +425,6 @@ public class InvariantChecker {
     }
   }
   private static String invariant2str(PptTopLevel ppt, Invariant inv) {
-    return ppt.name+" == "+inv.format();
+    return ppt.name+" == "+inv.repr()+inv.getClass()+ inv.varNames() + ": " + inv.format();
   }
 }
