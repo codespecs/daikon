@@ -1662,6 +1662,8 @@ these mistakes; don't let that happen to you!
 
 Recall that Daikon contains two sets of tests (@pxref{Testing}); you
 should include both in any analysis of Daikon's tests.
+(Or, if you can analyze only one of the two sets of tests, then clearly
+explain that the regression tests are the main tests.)
 
 Daikon intentionally does not contain tests for third-party libraries
 that are included (sometimes in source form) in the Daikon distribution.
