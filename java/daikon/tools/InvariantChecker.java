@@ -53,8 +53,9 @@ public class InvariantChecker {
   static int error_cnt = 0;
 
   static File dir_file; //Yoav added
-  static Set<String> failedInvariants; //Yoav added
-  static Set<String> testedInvariants; //Yoav added
+  static Set<Invariant> failedInvariants; //Yoav added
+  static Set<Invariant> testedInvariants; //Yoav added
+  static Set<Invariant> activeInvariants; //Yoav added
   static LinkedHashSet<String> outputLines; //Yoav added
   static LinkedHashSet<String> outputComma; //Yoav added
 
@@ -173,8 +174,9 @@ public class InvariantChecker {
     }
 
     // Yoav additions:
-    failedInvariants = new HashSet<String>();
-    testedInvariants = new HashSet<String>();
+    failedInvariants = new HashSet<Invariant>();
+    testedInvariants = new HashSet<Invariant>();
+    activeInvariants = new HashSet<Invariant>();
     outputLines = new LinkedHashSet<String>();
     outputComma = new LinkedHashSet<String>();
     File[] filesInDir = dir_file.listFiles();
@@ -193,6 +195,11 @@ public class InvariantChecker {
 
     output_stream.println("Collecting data for invariants files "+invariants+" and dtrace files "+dtraces);
 
+    dtrace_files.clear();
+    for (File dtrace: dtraces) {
+      dtrace_files.add(dtrace.toString());
+    }
+
 
     String commaLine = "";
     for (File inFile : invariants) {
@@ -208,11 +215,7 @@ public class InvariantChecker {
       testedInvariants.clear();
       error_cnt = 0;
 
-      for (File dtrace: dtraces) {
-        dtrace_files.clear();
-        dtrace_files.add(dtrace.toString());
-        checkInvariants();
-      }
+      checkInvariants();
 
       int failedCount = failedInvariants.size();
       int testedCount = testedInvariants.size();
@@ -237,18 +240,29 @@ public class InvariantChecker {
     // Read the invariant file
     PptMap ppts = FileIO.read_serialized_pptmap (inv_file, true );
 
+
+
+
     //Yoav: make sure we have unique invariants
-    Set<String> allInvariantsStr = new HashSet<String>();
+    InvariantFilters fi = InvariantFilters.defaultFilters();
+    //Set<String> allInvariantsStr = new HashSet<String>();
     Set<Invariant> allInvariants = new HashSet<Invariant>();
     for (PptTopLevel ppt : ppts.all_ppts())
       for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
         PptSlice slice = i.next();
         for (Invariant inv : slice.invs) {
-          String n = invariant2str(ppt, inv);
-          if (!allInvariants.contains(inv) && allInvariantsStr.contains(n))
-            throw new Daikon.TerminationMessage("Two invariants have the same ppt.name+inv.rep:"+n);
+          if (dir_file!=null) {
+            if (inv.getConfidence()<Invariant.dkconfig_confidence_limit)
+              continue;
+            if (fi.shouldKeep(inv)==null)
+              continue;
+            activeInvariants.add(inv);
+          }
+
+          //String n = invariant2str(ppt, inv);
+          //if (!allInvariants.contains(inv) && allInvariantsStr.contains(n)) throw new Daikon.TerminationMessage("Two invariants have the same ppt.name+inv.rep:"+n);
           allInvariants.add(inv);
-          allInvariantsStr.add(n);
+          //allInvariantsStr.add(n);
         }
       }
 
@@ -304,7 +318,13 @@ public class InvariantChecker {
       // If this is an enter point, just remember it for later
       if (ppt.ppt_name.isEnterPoint()) {
         Assert.assertTrue (nonce != null);
-        Assert.assertTrue (call_map.get (nonce) == null);
+        if (dir_file!=null) {
+          //Yoav: I had to do a hack to handle the case that several dtrace files are concatenated together,
+          // and Sung's dtrace files have unterminated calls, and when concatenating two files you can have the same nonce.
+          // So I have to remove the nonce found from the call_map
+          call_map.remove(nonce);
+        } else
+          Assert.assertTrue (call_map.get (nonce) == null);
         call_map.put (nonce, new EnterCall (ppt, vt));
         debug.fine ("Skipping enter sample");
         return;
@@ -392,19 +412,16 @@ public class InvariantChecker {
             continue;
           }
 
+          //Yoav added
           if (dir_file!=null) {
-            if (inv.getConfidence()<Invariant.dkconfig_confidence_limit) //Yoav added
-              continue;
-            InvariantFilters fi = InvariantFilters.defaultFilters();
-            if (fi.shouldKeep(inv)==null)
+            if (!activeInvariants.contains(inv))
               continue;
           }
 
 
-          String invRep = null;
+          //String invRep = invariant2str(ppt, inv);
           if (dir_file!=null) {
-            invRep = invariant2str(ppt, inv);
-            testedInvariants.add(invRep);
+            testedInvariants.add(inv);
           }
 
           InvariantStatus status = inv.add_sample (vt, 1);
@@ -417,7 +434,10 @@ public class InvariantChecker {
                  + inv.format() + "' invalidated by sample "
                  + Debug.toString (slice.var_infos, vt) + "at line " + line);
             }
-            if (dir_file!=null) failedInvariants.add(invRep);
+            if (dir_file!=null) {
+              failedInvariants.add(inv);
+              activeInvariants.remove(inv);
+            }
             error_cnt++;
           }
         }
