@@ -193,7 +193,7 @@ public class InvariantChecker {
     if (dtraces.size()==0)
           throw new Daikon.TerminationMessage("Did not find any dtrace files in the directory "+dir_file, usage);
 
-    output_stream.println("Collecting data for invariants files "+invariants+" and dtrace files "+dtraces);
+    System.out.println("Collecting data for invariants files "+invariants+" and dtrace files "+dtraces);
 
     dtrace_files.clear();
     for (File dtrace: dtraces) {
@@ -215,6 +215,7 @@ public class InvariantChecker {
       testedInvariants.clear();
       error_cnt = 0;
 
+      output_stream = new PrintStream (new FileOutputStream (inFile.toString()+".false-positives.txt"));
       checkInvariants();
 
       int failedCount = failedInvariants.size();
@@ -225,12 +226,12 @@ public class InvariantChecker {
     }
     outputComma.add(commaLine);
 
-    output_stream.println();
+    System.out.println();
     for (String output : outputLines)
-      output_stream.println(output);
-    output_stream.println();
+      System.out.println(output);
+    System.out.println();
     for (String output : outputComma)
-      output_stream.println(output);
+      System.out.println(output);
   }
   private static String toPercentage(int portion, int total) {
     double s = portion * 100;
@@ -426,14 +427,13 @@ public class InvariantChecker {
 
           InvariantStatus status = inv.add_sample (vt, 1);
           if (status != InvariantStatus.NO_CHANGE) {
-            if (dir_file==null) {
-              LineNumberReader lnr = FileIO.data_trace_state.reader;
-              String line = (lnr == null) ? "?"
-                          : String.valueOf(lnr.getLineNumber());
-              output_stream.println ("At ppt " + ppt.name + ", Invariant '"
-                 + inv.format() + "' invalidated by sample "
-                 + Debug.toString (slice.var_infos, vt) + "at line " + line);
-            }
+            LineNumberReader lnr = FileIO.data_trace_state.reader;
+            String line = (lnr == null) ? "?"
+                        : String.valueOf(lnr.getLineNumber());
+            output_stream.println ("At ppt " + ppt.name + ", Invariant '"
+               + inv.format() + "' invalidated by sample "
+               + Debug.toString (slice.var_infos, vt) + "at line " + line + " in file "+FileIO.data_trace_state.filename);
+
             if (dir_file!=null) {
               failedInvariants.add(inv);
               activeInvariants.remove(inv);
