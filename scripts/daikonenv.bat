@@ -17,7 +17,7 @@ if "%JDKDIR%"=="" (
   exit /b 2
 ) else (
   if not exist "%JDKDIR%" (
-    echo daikonenv.bat: JDKDIR is set to non-existent directory $JDKDIR
+    echo daikonenv.bat: JDKDIR is set to non-existent directory %JDKDIR%
     exit /b 2
   )
 )
@@ -27,16 +27,16 @@ if "%DAIKONDIR%"=="" (
   exit /b 2
 ) else (
   if not exist "%DAIKONDIR%" (
-    echo daikonenv.bat: DAIKONDIR is set to non-existent directory $DAIKONDIR
+    echo daikonenv.bat: DAIKONDIR is set to non-existent directory %DAIKONDIR%
     exit /b 2
   )
 )
 
 if "$DAIKONBIN"=="" (
-  if exist %DAIKONDIR%\bin (
+  if exist "%DAIKONDIR%\bin" (
     set DAIKONBIN=%DAIKONDIR%\bin
   ) else (
-    if exist %DAIKONDIR%\scripts (
+    if exist "%DAIKONDIR%\scripts" (
       set DAIKONBIN=%DAIKONDIR%\scripts
     ) else (
       echo daikon.bashrc: Cannot set DAIKONBIN
