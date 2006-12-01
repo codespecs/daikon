@@ -6824,6 +6824,10 @@ Print usage message.
 @item --output @var{output-file}
 Write any violations to the specified file.
 
+@item --dir @var{directory-name}
+Processes all invariant files in the given directory and reports the number of invariants that failed on any of the dtrace files in that directory.
+We only process invariants above the default confidence level and invariants that have not been filtered out by the default filters.
+
 @item --config_option @var{name}=@var{value}
 @itemx --dbg @var{category}
 @itemx --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
