@@ -1,8 +1,5 @@
 package daikon;
 
-import daikon.VarInfoName.QuantHelper;
-import daikon.VarInfoName.QuantHelper.QuantifyReturn;
-
 import java.util.*;
 
 /**
@@ -10,7 +7,37 @@ import java.util.*;
  */
 public class Quantify {
 
-  public enum QuantFlags {ELEMENT_WISE};
+  /** Flags describing how quantifications are to be built **/
+  public enum QuantFlags {
+    /** two indices where they refer to corresponding positions **/
+    ELEMENT_WISE,
+    /** two indices where the second is one more than the first **/
+    ADJACENT,
+    /** two indices are different **/
+    DISTINCT,
+    /** Return the names of the index variables **/
+    INCLUDE_INDEX;
+
+    /** set with just ELEMENT_WISE turned on **/
+    public static EnumSet<QuantFlags> element_wise() {
+      return EnumSet.of(QuantFlags.ELEMENT_WISE);
+    }
+
+    /** set with just ADJACENT turned on **/
+    public static EnumSet<QuantFlags> adjacent() {
+      return EnumSet.of(QuantFlags.ADJACENT);
+    }
+
+    /** set with just DISTINCT turned on **/
+    public static EnumSet<QuantFlags> distinct() {
+      return EnumSet.of(QuantFlags.DISTINCT);
+    }
+
+    /** set with just INCLUDE_INDEX turned on **/
+    public static EnumSet<QuantFlags> include_index() {
+      return EnumSet.of(QuantFlags.INCLUDE_INDEX);
+    }
+  }
 
   /** Returns a set with ELEMENT_WISE turned on if specified **/
   public static EnumSet<QuantFlags> get_flags (boolean elementwise) {
@@ -50,6 +77,9 @@ public class Quantify {
     }
     public String name() {
       return name;
+    }
+    public String simplify_name() {
+      return "|" + name + "|";
     }
   }
 
@@ -163,40 +193,56 @@ public class Quantify {
         return name_with_offset (String.format ("\\new(%s)", var.jml_name()),
                                  offset);
     }
+
+    public String simplify_name() {
+      if (offset < 0)
+        return String.format ("(- %s %d)", var.simplify_name(), -offset);
+      else if (offset > 0)
+        return String.format ("(+ %s %d)", var.simplify_name(), offset);
+      else
+        return var.simplify_name();
+    }
   }
 
   public static class QuantifyReturn {
-    public VarInfo[] vars;
-    // each element is Term[3] = <variable, lower, upper>
-    public List<Term[]> bound_vars;
+    /** variable being quantified **/
+    public VarInfo var;
+    /** index into the variable, if null, variable is not a sequence **/
+    public Term index;
+    public QuantifyReturn (VarInfo var) {
+      this.var = var;
+    }
   }
 
   /**
-   * Given a list of variables, changes all arrays and slices to
-   * subscripts by inserting a new free variable; also return bounds
-   * for the new variables.
-   * <root*> -> <root'*, <index, lower, upper>*>
-   * (The lengths of root* and root'* are the same; not sure about <i,l,u>*.)
+   * Given a list of sequences, determines a free variable that can be
+   * used as a subscript for each sequence.  If any of the vars are not
+   * sequences, no index is calculated for them.
    **/
-  public static QuantifyReturn quantify( VarInfo[] vars) {
+  public static QuantifyReturn[] quantify( VarInfo[] vars) {
     assert vars != null;
 
     // create empty result
-    QuantifyReturn result = new QuantifyReturn();
-    result.vars = vars.clone();
-    result.bound_vars = new ArrayList<Term[]>();
+    QuantifyReturn[] result = new QuantifyReturn[vars.length];
+    for (int ii = 0; ii < vars.length; ii++)
+      result[ii] = new QuantifyReturn (vars[ii]);
 
-    // all of the simple identifiers used by these variables
+    // Determine all of the simple identifiers used by these variables
     Set<String> simples = new HashSet<String>();
     for (VarInfo vi : vars) {
-      for (VarInfo cvar : vi.get_all_constituent_vars())
-        simples.add (vi.name());
+      for (String name : vi.get_all_simple_names())
+        simples.add (name);
     }
+    // System.out.printf ("simple names = %s\n", simples);
 
-    // Loop through each of the variables
+    // Loop through each of the variables, choosing an index for each
     char tmp = 'i';
     for (int ii = 0; ii < vars.length; ii++) {
       VarInfo vi = vars[ii];
+
+      // If this variable is not an array, there is not much to do
+      if (!vi.file_rep_type.isArray())
+        continue;
 
       // Get a unique free variable name
       String idx_name;
@@ -204,13 +250,7 @@ public class Quantify {
         idx_name = String.valueOf(tmp++);
       } while (simples.contains(idx_name));
       assert tmp <= 'z' : "Ran out of letters in quantification";
-      Term idx = new FreeVar(idx_name);
-
-      Term lower = vi.get_lower_bound();
-      Term upper = vi.get_upper_bound();
-
-      result.vars[ii] = vi;
-      result.bound_vars.add (new Term[] {idx, lower, upper});
+      result[ii].index = new FreeVar(idx_name);
     }
     return (result);
   }
@@ -228,7 +268,7 @@ public class Quantify {
     // private VarInfo[] sets;
     private VarInfo[] vars;
     private String quantifierExp;
-    private QuantifyReturn qret;
+    private QuantifyReturn[] qrets;
     private int numVars;
 
     public IOAQuantification (VarInfo v1) {
@@ -246,19 +286,19 @@ public class Quantify {
       numVars = sets.length;
 
       vars = sets.clone();
-      qret = quantify (vars);
+      qrets = quantify (vars);
 
 
       // Build the quantifier
       StringBuffer quantifier = new StringBuffer();
-      for (int i=0; i < qret.bound_vars.size(); i++) {
-        Term idx = qret.bound_vars.get(i)[0];
+      for (QuantifyReturn qret : qrets) {
+        if (qret.index == null)
+          continue;
         quantifier.append (quantifierUniversal);
-        quantifier.append (idx.ioa_name());
+        quantifier.append (qret.index.ioa_name());
         quantifier.append (" : ");
-        quantifier.append (sets[i].domainTypeIOA());
+        quantifier.append (qret.var.domainTypeIOA());
         quantifier.append (" ");
-
       }
       quantifierExp = quantifier.toString() + "(";
     }
@@ -288,19 +328,15 @@ public class Quantify {
     }
 
     public Term getFreeVar (int num) {
-      return qret.bound_vars.get(num) [0];
+      return qrets[num].index;
     }
 
     public String getFreeVarName (int num) {
-      return qret.bound_vars.get(num)[0].ioa_name();
+      return qrets[num].index.ioa_name();
     }
 
-    //public VarInfo getVarIndexed (int num) {
-    // }
-
     public String getVarIndexedString (int num) {
-      return qret.vars[num].apply_subscript (getFreeVarName (num));
-      // return getVarIndexed(num).ioa_name();
+      return qrets[num].var.apply_subscript (getFreeVarName (num));
     }
   }
 
@@ -387,6 +423,144 @@ public class Quantify {
       **/
     public String get_arr_vars_indexed (int num) {
       return arr_vars_indexed [num];
+    }
+  }
+
+  /**
+   * Class that represents an Simplify quantification over one or two variables
+   */
+  public static class SimplifyQuantification {
+
+    EnumSet<QuantFlags> flags;
+    String quantification;
+    String[] arr_vars_indexed;
+    String[] indices;
+
+    public SimplifyQuantification (EnumSet<QuantFlags> flags, VarInfo... vars){
+      this.flags = flags.clone();
+
+      assert vars != null;
+      assert (vars.length == 1) || (vars.length == 2) : vars.length;
+      assert vars[0].file_rep_type.isArray();
+
+      if (flags.contains (QuantFlags.ADJACENT)
+          || flags.contains (QuantFlags.DISTINCT))
+        assert vars.length == 2;
+
+     QuantifyReturn[] qrets = quantify(vars);
+
+      // build the forall predicate
+      StringBuffer int_list, conditions;
+      {
+        // "i j ..."
+        int_list = new StringBuffer();
+        // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
+        // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
+        conditions = new StringBuffer();
+        for (int i = 0; i < qrets.length; i++) {
+          Term idx = qrets[i].index;
+          if (idx == null)
+            continue;
+          VarInfo vi = qrets[i].var;
+          Term low = vi.get_lower_bound();
+          Term high = vi.get_upper_bound();
+          if (i != 0) {
+            int_list.append(" ");
+            conditions.append(" ");
+          }
+          int_list.append(idx.simplify_name());
+          conditions.append( "(<= " + low.simplify_name()
+                             + " " + idx.simplify_name() + ")");
+          conditions.append(" (<= " + idx.simplify_name() + " "
+                            + high.simplify_name() + ")");
+          if (flags.contains (QuantFlags.ELEMENT_WISE) && (i >= 1)) {
+            // Term[] _boundv = qret.bound_vars.get(i-1);
+            // Term _idx = _boundv[0], _low = _boundv[1];
+            Term _idx = qrets[i-1].index;
+            Term _low = qrets[i-1].var.get_lower_bound();
+            if (_low.simplify_name().equals(low.simplify_name())) {
+              conditions.append(" (EQ " + _idx.simplify_name() + " "
+                                + idx.simplify_name() + ")");
+            } else {
+              conditions.append(" (EQ (- " + _idx.simplify_name() + " "
+                                + _low.simplify_name() + ")");
+              conditions.append(    " (- " + idx.simplify_name() + " "
+                                    + low.simplify_name() + "))");
+            }
+          }
+          if (i == 1 && (flags.contains (QuantFlags.ADJACENT)
+                         || flags.contains (QuantFlags.DISTINCT))) {
+            // Term[] _boundv = qret.bound_vars.get(i-1);
+            // Term prev_idx = _boundv[0];
+            Term prev_idx = qrets[i-1].index;
+            if (flags.contains (QuantFlags.ADJACENT))
+              conditions.append(" (EQ (+ " + prev_idx.simplify_name() + " 1) "
+                                + idx.simplify_name() + ")");
+            if (flags.contains (QuantFlags.DISTINCT))
+              conditions.append(" (NEQ " + prev_idx.simplify_name() + " "
+                                + idx.simplify_name() + ")");
+          }
+        }
+      }
+      quantification = "(FORALL (" + int_list + ") " + "(IMPLIES (AND "
+        + conditions + ") ";
+
+      // stringify the terms
+      arr_vars_indexed = new String[vars.length];
+      for (int i=0; i < qrets.length; i++) {
+        QuantifyReturn qret = qrets[i];
+        if (qret.index != null) {
+          VarInfo arr_var = qret.var.get_array_var();
+          Term index = qret.index;
+          arr_vars_indexed[i] = arr_var.simplify_name (index.simplify_name());
+          // System.out.printf ("vi = %s, arr_var = %s\n", vi, arr_var);
+        } else
+          arr_vars_indexed[i] = qret.var.simplify_name();
+        // result[i+1] = qret.root_primes[i].simplify_name();
+      }
+
+      // stringify the indices,
+      // note that the index should be relative to the slice, not relative
+      // to the original array (we used to get this wrong)
+      indices = new String[vars.length];
+      for (int i=0; i < qrets.length; i++) {
+        // Term[] boundv = qret.bound_vars.get(i);
+        // Term idx_var = boundv[0];
+        QuantifyReturn qret = qrets[i];
+        if (qret.index == null)
+          continue;
+        String idx_var_name = qret.index.simplify_name();
+        String lower_bound = qret.var.get_lower_bound().simplify_name();
+        String idx_expr = "(- " + idx_var_name + " " + lower_bound + ")";
+        indices[i] = idx_expr;
+      }
+    }
+
+    /**
+     * Returns the quantification string that quantifies over each of the
+     * free variables.
+     **/
+    public String get_quantification() {
+      return quantification;
+    }
+
+    /**
+     * Returns the specified array variable indexed by its index.
+     * For example, if the array variable is 'a[]' and the index is 'i',
+     * returns 'select i a'
+     **/
+    public String get_arr_vars_indexed (int num) {
+      return arr_vars_indexed [num];
+    }
+
+    /** Returns the specified index **/
+    public String get_index (int num) {
+      return indices[num];
+    }
+
+    /** Returns the string to be appended to the end of the quantification **/
+    public String get_closer() {
+      return "))"; // close IMPLIES, FORALL
     }
   }
 }
