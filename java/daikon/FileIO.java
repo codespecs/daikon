@@ -384,6 +384,9 @@ public final class FileIO {
     ppt_name = ppt_name.intern();
     VarInfo[] vi_array = read_VarInfos(state, ppt_name);
 
+    // System.out.printf ("Ppt %s with %d variables\n", ppt_name,
+    //                   vi_array.length);
+
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
       if (state.ppts_are_new) { // yoav: ppts_are_new is always set to true, so we should remove it
@@ -972,7 +975,7 @@ public final class FileIO {
         count_lines = false;
       } else if (Daikon.dkconfig_progress_delay == -1) {
         count_lines = false;
-      } else if ((new File(filename)).length() == 0) {
+      } else if ((new File(raw_filename)).length() == 0) {
         // Either it's actually empty, or it's something like a pipe.
         count_lines = false;
       }
@@ -980,6 +983,10 @@ public final class FileIO {
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
         total_lines = UtilMDE.count_lines(raw_filename);
+      } else {
+        // System.out.printf ("no count %b %d %s %d %d\n", is_decl_file,
+        //                    dkconfig_dtrace_line_count, filename,
+        //  Daikon.dkconfig_progress_delay, (new File(raw_filename)).length());
       }
 
       // Open the reader stream
