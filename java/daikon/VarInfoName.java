@@ -3295,7 +3295,7 @@ public abstract class VarInfoName
 
     // Return a string distinct from any of the strings in "taken".
     private static String freshDistinctFrom(Set<String> taken) {
-      char c = 'a';
+      char c = 'i';
       String name;
       do {
         name = String.valueOf(c++);
@@ -3305,34 +3305,12 @@ public abstract class VarInfoName
 
     /**
      * Return a fresh variable name that doesn't appear in the given
-     * variable name.
-     **/
-    public static VarInfoName getFreeIndex(VarInfoName vin) {
-      Set<String> simples = new SimpleNamesVisitor(vin).simples();
-      return new FreeVar(freshDistinctFrom(simples));
-    }
-
-    /**
-     * Return a fresh variable name that doesn't appear in the given
      * variable names.
      **/
-    public static VarInfoName getFreeIndex(VarInfoName vin1,
-                                           VarInfoName vin2) {
-      Set<String> simples = new HashSet<String>(new SimpleNamesVisitor(vin1).simples());
-      simples.addAll(new SimpleNamesVisitor(vin2).simples());
-      return new FreeVar(freshDistinctFrom(simples));
-    }
-
-    /**
-     * Return a fresh variable name that doesn't appear in the given
-     * variable names.
-     **/
-    public static VarInfoName getFreeIndex(VarInfoName vin1,
-                                           VarInfoName vin2,
-                                           VarInfoName vin3) {
-      Set<String> simples = new HashSet<String>(new SimpleNamesVisitor(vin1).simples());
-      simples.addAll(new SimpleNamesVisitor(vin2).simples());
-      simples.addAll(new SimpleNamesVisitor(vin3).simples());
+    public static VarInfoName getFreeIndex(VarInfoName... vins) {
+      Set<String> simples = new HashSet<String>();
+      for (VarInfoName vin : vins)
+        simples.addAll (new SimpleNamesVisitor (vin).simples());
       return new FreeVar(freshDistinctFrom(simples));
     }
 
