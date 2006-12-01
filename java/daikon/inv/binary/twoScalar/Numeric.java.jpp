@@ -117,6 +117,7 @@ import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
+import daikon.Quantify.QuantFlags;
 
 import utilMDE.*;
 import java.util.*;
@@ -220,8 +221,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
         v1 = form[1];
         v2 = form[2];
       } else if (format == OutputFormat.SIMPLIFY) {
-        String[] form = VarInfo.simplify_quantify (var1(), var2(),
-                                                   /* elementwise */ true);
+        String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
+                                                   var1(), var2());
         fmt_str = form[0] + " " + fmt_str + " " + form[3];
         v1 = form[1];
         v2 = form[2];

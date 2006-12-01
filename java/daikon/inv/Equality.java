@@ -1,6 +1,7 @@
 package daikon.inv;
 
 import daikon.*;
+import daikon.Quantify.QuantFlags;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -300,7 +301,8 @@ public final class Equality
     if (leader.rep_type.isArray()) {
       for (VarInfo var : vars) {
         if (var == leader) continue;
-        String[] form = VarInfo.simplify_quantify (leader, var, true);
+        String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
+                                                   leader, var);
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
         result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);

@@ -42,6 +42,7 @@ import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
 import daikon.derive.binary.SEQUENCESPREDICATE;
 import daikon.derive.binary.SEQUENCESJOIN;
+import daikon.Quantify.QuantFlags;
 
 import utilMDE.*;
 
@@ -142,8 +143,8 @@ public class CLASSNAME
   }
 
   public String format_simplify() {
-    String[] form = VarInfo.simplify_quantify (var(), var(), false, false,
-                                               true);
+    String[] form = VarInfo.simplify_quantify (QuantFlags.distinct(), var(),
+                                               var());
     return form[0] + "(NEQ " + form[1] + " " + form[2] + ")"
       + form[3];
   }

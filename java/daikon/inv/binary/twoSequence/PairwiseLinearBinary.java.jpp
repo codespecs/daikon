@@ -33,6 +33,7 @@ import daikon.inv.*;
 import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
 import daikon.inv.binary.twoScalar.*;
+import daikon.Quantify.QuantFlags;
 import java.util.*;
 
 /**
@@ -135,8 +136,8 @@ public class CLASSNAME
   }
 
   public String format_simplify() {
-    String[] form = VarInfo.simplify_quantify (var1(), var2(),
-                                               /* elementwise */ true);
+    String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
+                                               var1(), var2());
     return form[0] + CORECLASS.format_simplify(form[1], form[2],
                                                core.a, core.b, core.c)
       + form[3];

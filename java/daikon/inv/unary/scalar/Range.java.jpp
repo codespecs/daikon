@@ -52,6 +52,7 @@ import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;
+import daikon.Quantify.QuantFlags;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -127,7 +128,8 @@ public abstract class RANGE extends SUPERCLASS {
         fmt_str = form[0] + "(" + fmt_str + ")" + form[2];
         v1 = form[1];
       } else if (format == OutputFormat.SIMPLIFY) {
-        String[] form = VarInfo.simplify_quantify (var1, /*elementwise*/true);
+        String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
+                                                   var1);
         fmt_str = form[0] + " " + fmt_str + " " + form[2];
         v1 = form[1];
       } else if (format == OutputFormat.IOA) {

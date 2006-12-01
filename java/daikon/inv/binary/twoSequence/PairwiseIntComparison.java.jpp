@@ -149,6 +149,7 @@ import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
+import daikon.Quantify.QuantFlags;
 
 import utilMDE.ArraysMDE;
 import utilMDE.Assert;
@@ -380,8 +381,8 @@ public class PAIRWISEINTEQUAL
   }
 
   public String format_simplify() {
-    String[] form = VarInfo.simplify_quantify (var1(), var2(),
-                                               /* elementwise */ true);
+    String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
+                                               var1(), var2());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 

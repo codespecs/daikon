@@ -118,6 +118,7 @@ import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
+import daikon.Quantify.QuantFlags;
 // import daikon.inv.binary.twoScalar.CORECLASS;
 import utilMDE.*;
 import java.util.*;
@@ -251,7 +252,8 @@ public class CLASSNAME
   }
 
   public String format_simplify() {
-    String[] form = VarInfo.simplify_quantify (var(), var(), false, true);
+    String[] form = VarInfo.simplify_quantify (QuantFlags.adjacent(),
+                                               var(), var());
 #if defined(EQUAL) || defined(EQUALFLOAT)
     String comparator = "EQ";
 #else
