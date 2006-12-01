@@ -10,6 +10,8 @@ import daikon.inv.*;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
 import daikon.Quantify;
+import daikon.Quantify.QuantFlags;
+import daikon.Quantify.QuantifyReturn;
 import utilMDE.*;
 import static daikon.FileIO.VarDefinition;
 
@@ -806,6 +808,32 @@ public final class VarInfo implements Cloneable, Serializable {
     return (vars);
   }
 
+  /**
+   * Returns a list of all of the simple names that make up this variable.
+   * this includes each field and function name in the variable.  If this
+   * variable is derived it includes the simple names from each of its bases.
+   * For example, 'this.item.a' would return a list with 'this', 'item', and
+   * 'a' and 'this.theArray[i]' would return 'this', 'theArray' and 'i'.
+   **/
+  public List<String> get_all_simple_names() {
+    assert FileIO.new_decl_format;
+    List<String> names = new ArrayList<String>();
+    if (isDerived()) {
+      for (VarInfo vi : derived.getBases()) {
+        names.addAll (vi.get_all_simple_names());
+      }
+    } else {
+      VarInfo start = (isPrestate() ? postState : this);
+      for (VarInfo vi = start; vi != null; vi = vi.enclosing_var) {
+        if (relative_name == null)
+          names.add (vi.name());
+        else
+          names.add (vi.relative_name);
+      }
+    }
+    return (names);
+
+  }
 
   public boolean isClosure() {
     // This should eventually turn into
@@ -2668,7 +2696,7 @@ public final class VarInfo implements Cloneable, Serializable {
    * Returns the lower bound of the array or slice.
    */
   public Quantify.Term get_lower_bound() {
-    assert file_rep_type.isArray();
+    assert file_rep_type.isArray() : "var " + name() + " rep " + file_rep_type;
     if (isDerived()) {
       return derived.get_lower_bound();
     } else {
@@ -2772,7 +2800,7 @@ public final class VarInfo implements Cloneable, Serializable {
   /** Returns the name of this variable in IOA format **/
   public String ioa_name() {
     if (!FileIO.new_decl_format)
-      return var_info_name.ioa_name();
+      return var_info_name.ioa_name();  // vin ok
 
     if (var_kind == VarKind.ARRAY)
       return enclosing_var.name();
@@ -2919,11 +2947,21 @@ public final class VarInfo implements Cloneable, Serializable {
     return (null);
   }
 
-
   /** Returns the name of this variable in simplify format **/
   public String simplify_name() {
+    return simplify_name (null);
+  }
+
+  /**
+   * Returns the name of this variable in simplify format.  If an index
+   * is specified, it is used as an array index.  It is an error to specify
+   * an index on a non-array variable
+    **/
+  public String simplify_name (String index) {
     if (!FileIO.new_decl_format)
       return var_info_name.simplify_name(); // vin ok
+
+    assert (index == null) || file_rep_type.isArray() : index + " " + name();
 
     // If this is a derived variable, the derivations builds the name
     if (derived != null)
@@ -2934,21 +2972,23 @@ public final class VarInfo implements Cloneable, Serializable {
     case FIELD:
       assert relative_name != null : this;
       return String.format ("(select |%s| %s)", relative_name,
-                            enclosing_var.simplify_name());
+                            enclosing_var.simplify_name(index));
     case FUNCTION:
       assert function_args == null : "function args not implemented";
       if (var_flags.contains (VarFlags.CLASSNAME))
-        return ("(typeof " + enclosing_var.simplify_name() +")");
+        return ("(typeof " + enclosing_var.simplify_name(index) +")");
       if (var_flags.contains (VarFlags.TO_STRING))
         return String.format ("(select |toString| %s)",
-                              enclosing_var.simplify_name());
+                              enclosing_var.simplify_name(index));
       if (enclosing_var != null)
-        return enclosing_var.simplify_name() + "." + relative_name + "()";
+        return enclosing_var.simplify_name(index) + "." + relative_name + "()";
       return str_name;
     case ARRAY:
-      //if (index == null)
-        return enclosing_var.simplify_name() + "[]";
-        //return enclosing_var.simplify_name() + "[" + index + "]";
+      if (index == null)
+        return String.format("(select elems %s)",
+                             enclosing_var.simplify_name());
+      return String.format ("(select (select elems %s) %s)",
+                            enclosing_var.simplify_name(), index);
     case VARIABLE:
       if (dkconfig_constant_fields_simplify && str_name.contains(".")) {
         String sel = null;
@@ -3002,12 +3042,10 @@ public final class VarInfo implements Cloneable, Serializable {
       result = get_length().simplify_name().intern();
 
     String old_result = null;
-    // if (!type.isArray())
-    //  return null;
-    if (!var_info_name.isApplySizeSafe())
+    if (!var_info_name.isApplySizeSafe()) // vin ok
       old_result = null;
     else
-      old_result = var_info_name.applySize().simplify_name().intern();
+      old_result = var_info_name.applySize().simplify_name().intern(); // vin ok
     if (FileIO.new_decl_format && (old_result != result)) {
       System.out.printf("%s: '%s' '%s'\n", this, result, old_result);
       System.out.printf (" basehashcode = %s\n", get_base_array_hashcode());
@@ -3081,7 +3119,7 @@ public final class VarInfo implements Cloneable, Serializable {
     } else {
       VarInfoName vin[] = new VarInfoName[vars.length];
       for (int ii = 0; ii < vars.length; ii++)
-        vin[ii] = vars[ii].var_info_name;
+        vin[ii] = vars[ii].var_info_name; // vin ok
       return VarInfoName.QuantHelper.format_esc (vin, elementwise);
     }
 
@@ -3107,10 +3145,24 @@ public final class VarInfo implements Cloneable, Serializable {
   /**
    * Returns a string array with 3 elements.  The first element is
    * the sequence, the second element is the lower bound, and the third
-   * element is the upper bound.
+   * element is the upper bound.  Returns null if this is not a direct
+   * array or slice.
    */
   public String[] simplifyNameAndBounds() {
-    return VarInfoName.QuantHelper.simplifyNameAndBounds (var_info_name);
+    if (!FileIO.new_decl_format)
+      return VarInfoName.QuantHelper.simplifyNameAndBounds (var_info_name); // vin ok
+
+    String[] results = new String[3];
+    if (is_direct_non_slice_array()
+        || (derived instanceof SequenceSubsequence)) {
+      results[0] = get_base_array_hashcode().simplify_name();
+      results[1] = get_lower_bound().simplify_name();
+      results[2] = get_upper_bound().simplify_name();
+      return results;
+    }
+
+    return null;
+
   }
 
   /**
@@ -3119,19 +3171,37 @@ public final class VarInfo implements Cloneable, Serializable {
    * (I don't know why).
    */
   public String[] get_simplify_slice_bounds() {
-    VarInfoName[] bounds = var_info_name.getSliceBounds();
-    if (bounds == null)
-      return null;
-    String[] str_bounds = new String[2];
-    str_bounds[0] = bounds[0].simplify_name();
-    str_bounds[1] = bounds[1].simplify_name();
-    return str_bounds;
+    if (!FileIO.new_decl_format) {
+      VarInfoName[] bounds = var_info_name.getSliceBounds(); // vin ok
+      if (bounds == null)
+        return null;
+      String[] str_bounds = new String[2];
+      str_bounds[0] = bounds[0].simplify_name();
+      str_bounds[1] = bounds[1].simplify_name();
+      return str_bounds;
+    }
+
+    String[] results = new String[2];
+    if (derived instanceof SequenceSubsequence) {
+      results[0] = get_lower_bound().simplify_name().intern();
+      results[1] = get_upper_bound().simplify_name().intern();
+    } else {
+      results = null;
+    }
+
+    return results;
+
   }
 
   /**
    * Return a string in simplify format that will seclect the
    * (index_base + index_off)-th element of the sequence specified by
    * this variable.
+   *
+   * @param simplify_index_name name of the index.  If free is false, this
+   * must be a number or null (null implies an index of 0)
+   * @param free true of simplify_index_name is variable name
+   * @param index_off offset from the index
    */
   public String get_simplify_selectNth (String simplify_index_name,
                                         boolean free, int index_off) {
@@ -3142,10 +3212,35 @@ public final class VarInfo implements Cloneable, Serializable {
       simplify_index_name
         = simplify_index_name.substring (1, simplify_index_name.length()-1);
 
-    VarInfoName select
-      = VarInfoName.QuantHelper.selectNth (this.var_info_name, simplify_index_name,
-                                           free, index_off);
-    return select.simplify_name();
+    // Use VarInfoName to handle the old format
+    if (!FileIO.new_decl_format) {
+      VarInfoName select
+        = VarInfoName.QuantHelper.selectNth (this.var_info_name, // vin ok
+                                        simplify_index_name, free, index_off);
+      // System.out.printf ("sNth: index %s, free %b, off %d, result '%s'\n",
+      //                     simplify_index_name, free, index_off,
+      //                     select.simplify_name());
+      return select.simplify_name();
+    }
+
+    // Calculate the index (including the offset if non-zero)
+    String complete_index = null;
+    if (!free) {
+      int index = 0;
+      if (simplify_index_name != null)
+        index = Integer.decode (simplify_index_name);
+      index += index_off;
+      complete_index = String.format ("%d", index);
+    } else {
+      if (index_off != 0)
+        complete_index = String.format ("(+ |%s| %d)", simplify_index_name,
+                                        index_off);
+      else
+        complete_index = String.format ("|%s|", simplify_index_name);
+    }
+
+    // Return the array properly indexed
+    return simplify_name (complete_index);
   }
 
   /**
@@ -3153,17 +3248,17 @@ public final class VarInfo implements Cloneable, Serializable {
    * variable in simplify format
    */
   public static String get_simplify_free_index (VarInfo... vars) {
-    if (vars.length == 1)
-      return VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name)
-        .simplify_name();
-    else if (vars.length == 2)
-      return VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name, vars[1].var_info_name)
-        .simplify_name();
-    else if (vars.length == 3)
-      return VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name, vars[1].var_info_name,
-                                                vars[2].var_info_name).simplify_name();
-    else
-      throw new Error ("unexpected length " + vars.length);
+    if (!FileIO.new_decl_format) {
+      VarInfoName[] vins = new VarInfoName[vars.length];
+      for (int ii = 0; ii < vars.length; ii++) {
+        vins[ii] = vars[ii].var_info_name; // vin ok
+      }
+      return VarInfoName.QuantHelper.getFreeIndex (vins).simplify_name();
+    }
+
+    // Get a free variable for each variable and return the first one
+    QuantifyReturn qret[] = Quantify.quantify (vars);
+    return qret[0].index.simplify_name();
   }
 
   /**
@@ -3171,73 +3266,36 @@ public final class VarInfo implements Cloneable, Serializable {
    * variable in simplify format
    */
   public static String[] get_simplify_free_indices (VarInfo... vars) {
-    if (vars.length == 1) {
-      VarInfoName index1_vin
-        = VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name);
-      String index2 = VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name,
-                                                   index1_vin).simplify_name();
-      return new String[] {index1_vin.name(), index2};
-    } else if (vars.length == 2) {
-      VarInfoName index1_vin
-        = VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name, vars[1].var_info_name);
-      String index2 = VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name,
-                                    vars[2].var_info_name, index1_vin).simplify_name();
-      return new String[] {index1_vin.name(), index2};
-    } else
-      throw new Error ("unexpected length " + vars.length);
-  }
+    if (!FileIO.new_decl_format) {
+      if (vars.length == 1) {
+        VarInfoName index1_vin
+          = VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name);  // vin ok
+        String index2 = VarInfoName.QuantHelper.getFreeIndex
+          (vars[0].var_info_name, index1_vin).simplify_name(); // vin ok
+        return new String[] {index1_vin.name(), index2};
+      } else if (vars.length == 2) {
+        VarInfoName index1_vin = VarInfoName.QuantHelper.getFreeIndex
+          (vars[0].var_info_name, vars[1].var_info_name); // vin ok
+        String index2 = VarInfoName.QuantHelper.getFreeIndex
+          (vars[0].var_info_name, vars[2].var_info_name, index1_vin) // vin ok
+          .simplify_name();
+        return new String[] {index1_vin.name(), index2};
+      } else
+        throw new Error ("unexpected length " + vars.length);
+    }
 
-  public static String[] simplify_quantify (VarInfo v1) {
-    VarInfoName vin[] = new VarInfoName[] { v1.var_info_name};
-    return VarInfoName.QuantHelper.format_simplify (vin, false, false,
-                                                    false, false);
-  }
-
-  public static String[] simplify_quantify (VarInfo v1, boolean elementwise) {
-    VarInfoName vin[] = new VarInfoName[] { v1.var_info_name};
-    return VarInfoName.QuantHelper.format_simplify (vin, elementwise, false,
-                                                    false, false);
-  }
-
-  public static String[] simplify_quantify (VarInfo v1,
-                                            boolean elementwise,
-                                            boolean adjacent,
-                                            boolean distinct,
-                                            boolean includeIndex) {
-    VarInfoName vin[] = new VarInfoName[] { v1.var_info_name};
-    return VarInfoName.QuantHelper.format_simplify (vin, elementwise, adjacent,
-                                                    distinct, includeIndex);
-  }
-
-  public static String[] simplify_quantify(VarInfo v1, VarInfo v2) {
-
-    return simplify_quantify (v1, v2, false, false, false, false);
-  }
-
-  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
-                                             boolean eltwise) {
-    return simplify_quantify (v1, v2, eltwise, false, false, false);
-  }
-
-  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
-                                           boolean eltwise,
-                                           boolean adjacent) {
-    return simplify_quantify (v1, v2, eltwise, adjacent, false, false);
-  }
-
-  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
-                                            boolean eltwise,
-                                            boolean adjacent,
-                                            boolean distinct) {
-    return simplify_quantify (v1, v2, eltwise, adjacent, distinct, false);
+    // Get a free variable for each variable
+    if (vars.length == 1)
+      vars = new VarInfo[] {vars[0], vars[0]};
+    QuantifyReturn qret[] = Quantify.quantify (vars);
+    return new String[] {qret[0].index.simplify_name(),
+                         qret[1].index.simplify_name()};
   }
 
   /**
    * Quantifies over the specified array variables in Simplify format.
-   * Returns a 4 element string array.  Element 0 is the
-   * quantification, Element 1 is the indexed form of variable 1,
-   * Element 2 is the indexed form of variable 3.  and Element 4 is
-   * the closer (whatever that is).
+   * Returns a string array that contains the quantification, indexed
+   * form of each variable, optionally the index itself, and the closer.
    *
    * If elementwise is true, include the additional contraint that
    * the indices (there must be exactly two in this case) refer to
@@ -3248,15 +3306,50 @@ public final class VarInfo implements Cloneable, Serializable {
    * additional strings, after the roots but before the closer, with
    * the names of the index variables.
    */
-  public static String[] simplify_quantify (VarInfo v1, VarInfo v2,
-                                            boolean elementwise,
-                                            boolean adjacent,
-                                            boolean distinct,
-                                            boolean includeIndex) {
-    VarInfoName vin[] = new VarInfoName[] { v1.var_info_name, v2.var_info_name};
-    return VarInfoName.QuantHelper.format_simplify (vin, elementwise,
-                                                    adjacent, distinct,
-                                                    includeIndex);
+  public static String[] simplify_quantify (EnumSet<QuantFlags> flags,
+                                            VarInfo ...vars) {
+
+    if (!FileIO.new_decl_format) {
+      // Get the names for each variable.
+      VarInfoName vin[] = new VarInfoName[vars.length];
+      for (int ii = 0; ii < vars.length; ii++)
+        vin[ii] = vars[ii].var_info_name; // vin ok
+
+      return VarInfoName.QuantHelper.format_simplify
+        (vin, flags.contains (QuantFlags.ELEMENT_WISE),
+         flags.contains (QuantFlags.ADJACENT),
+         flags.contains (QuantFlags.DISTINCT),
+         flags.contains (QuantFlags.INCLUDE_INDEX));
+    }
+
+    Quantify.SimplifyQuantification quant
+      = new Quantify.SimplifyQuantification (flags, vars);
+    boolean include_index = flags.contains (QuantFlags.INCLUDE_INDEX);
+    if ((vars.length == 1) && include_index)
+      return new String[] {quant.get_quantification(),
+                           quant.get_arr_vars_indexed(0),
+                           quant.get_index(0), quant.get_closer()};
+    else if (vars.length == 1)
+      return new String[] {quant.get_quantification(),
+                           quant.get_arr_vars_indexed(0),
+                           quant.get_closer()};
+    else if ((vars.length == 2) && include_index)
+      return new String[] {quant.get_quantification(),
+                           quant.get_arr_vars_indexed(0),
+                           quant.get_arr_vars_indexed(1),
+                           quant.get_index(0), quant.get_index(1),
+                           quant.get_closer()};
+    else // must be length 2 and no index
+      return new String[] {quant.get_quantification(),
+                           quant.get_arr_vars_indexed(0),
+                           quant.get_arr_vars_indexed(1),
+                           quant.get_closer()};
+
+  }
+
+  /** see simplify_quantify (EnumSet<QuantFlags>, VarInfo ...) **/
+  public static String[] simplify_quantify (VarInfo ...vars) {
+    return simplify_quantify (EnumSet.noneOf (QuantFlags.class), vars);
   }
 
   /**
@@ -3264,7 +3357,38 @@ public final class VarInfo implements Cloneable, Serializable {
    * numbers indicate more complexity.
    */
   public int complexity() {
-    return var_info_name.inOrderTraversal().size();
+    if (!FileIO.new_decl_format)
+      return var_info_name.inOrderTraversal().size(); // vin ok
+
+    int cnt = 0;
+    if (isDerived()) {
+      cnt += derived.complexity();
+      VarInfo[] bases = derived.getBases();
+      for (VarInfo vi : bases) {
+        cnt += vi.complexity();
+      }
+      // Adjust for the complexity change when a prestate is nested in
+      // another prestate.  This is just done to match the old version
+      if ((bases.length == 2) && bases[0].isPrestate()) {
+        if (bases[1].isPrestate())
+          cnt--;
+        else
+          cnt++;
+      }
+    } else {
+      if (isPrestate())
+        cnt++;
+      for (VarInfo vi = this; vi != null; vi = vi.enclosing_var) {
+        cnt++;
+      }
+    }
+
+    // int old_cnt = var_info_name.inOrderTraversal().size();
+    // if (cnt != old_cnt)
+    //   System.out.printf ("var %s, new cnt = %d, old cnt = %d [%s]\n",
+    //                 name(), cnt, old_cnt, var_info_name.inOrderTraversal());
+    return cnt;
+
   }
 
   /**
