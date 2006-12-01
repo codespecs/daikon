@@ -20,14 +20,38 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.2.12
+4.2.12 (December 1 2006)
+
+InvariantChecker was enhanced to handle multiple input files and count
+the violations for each file. Some minor enhancements and bugs fixes
+were made to Daikon.
 
 InvariantChecker
-Added --dir option:
-@item --dir @var{directory-name}
-Processes all invariant files in the given directory and reports the number of invariants that failed on any of the dtrace files in that directory.
-We only process invariants above the default confidence level and invariants that have not been filtered out by the default filters.
 
+  User-visible changes
+
+    Added a switch (--dir) that will apply all of the samples in any
+    dtrace files in the specified directory to all of the invariant
+    files in the directory.  The number of samples that violated an invariant
+    are reported for each invariant file.
+
+    Only invariants above the default confidence level and that have 
+    not been filtered out by the default filters are checked.
+
+Daikon
+
+  User-visible changes
+
+    Modified the simplify format of some invariants so that 'i' is used
+    as a free variable rather than 'a'.
+
+  Bug-fixes
+
+    The windows daikonenv.bat script was fixed to correctly handle
+    paths with blanks in the directory names
+
+    The percentage progress information was fixed to work on dtrace
+    files specified with full pathnames.
 
 ---------------------------------------
 
@@ -103,12 +127,12 @@ can cause problems on some versions of Linux.
 Chicory
 
   Chicory uses the Byte Code Engineering Library (BCEL) to instrument
-  classfiles.  Errors can occur if the application uses an incompatible
+  class files.  Errors can occur if the application uses an incompatible
   version of BCEL.  Chicory has been modified to identify and load its 
-  copy of BCEL when multiple copies of BCEL are in the classpath.  It will
-  also issue a warning if multiple copies of BCEL are in the classpath and
+  copy of BCEL when multiple copies of BCEL are in the class path.  It will
+  also issue a warning if multiple copies of BCEL are in the class path and
   the application version is not the first one.  This behavior can be
-  overriden with the default_bcel command line option 
+  overridden with the default_bcel command line option 
 
   Chicory only modifies classes that are instrumented.  Previous versions
   made unnecessary changes to uninstrumented classes.
@@ -588,7 +612,7 @@ Chicory
   Bug fixes
 
     Fixed a bug (reported by Christoph Csallner) where Chicory crashed
-    when the --std-vis (now std-visiblity) switch was used and a field
+    when the --std-vis (now std-visibility) switch was used and a field
     was accessed in a non-instrumented class (in this case an
     interface).
 
@@ -1085,7 +1109,7 @@ Daikon
 
     The manual includes a new section "minimal installation":  users who
     want to detect invariants only in Java programs merely need to put
-    daikon.jar on their classpath.
+    daikon.jar on their class path.
 
     By default, Daikon creates .inv.gz files containing a serialized
     representation of the invariants.  Previously, you had to specify the
@@ -1178,7 +1202,7 @@ Eclipse plug-in
 The 4.0.0 version of Daikon introduces many substantial enhancements.
 These improvements include:
  * Liberalized license permits unrestricted use.
- * New Java classfile front end ("Chicory") handles Java 5.0 (and earlier).
+ * New Java class file front end ("Chicory") handles Java 5.0 (and earlier).
  * Annotation and other source manipulation components handle Java 5.0.
  * New Eclipse plug-in eases running many components of the Daikon system.
  * New runtime checking tool can insert assertions into your programs.
@@ -1190,7 +1214,7 @@ License
   Daikon's licensing terms have been liberalized.  Daikon is now distributed
   without restrictions under an MIT/BSD-style license.
 
-Chicory:  classfile-based front end for Java
+Chicory:  class file-based front end for Java
 
   Chicory is a new Daikon front end for Java.  Its functionality is very
   similar to that of the dfej tool, and it supports most of the same
@@ -1298,7 +1322,7 @@ dfej
 
 Annotate
 
-  Annotate and other components of Daikon (including runtimecheker,
+  Annotate and other components of Daikon (including runtimechecker,
   described below) handle Java 5.0 code.  They continue to support all
   earlier versions of Java as well.
 
@@ -1912,11 +1936,11 @@ The dfec (C front end) section also makes more clear that dfec only
 supports programs that are BOTH legal ANSI/ISO C programs and legal
 C++ programs.
 
-The implementation of Sequence-Scalar, Seqeuence-Sequence and Pairwise
+The implementation of Sequence-Scalar, Sequence-Sequence and Pairwise
 comparisons has been changed to create separate invariants for each
 possible comparison (<, <=, ==, >=, >).  This should have no user
 visible ramifications except that the configuration options to disable
-comparisons have individual names (eg, SeqFloatEqual,
+comparisons have individual names (e.g., SeqFloatEqual,
 SeqFloatGreaterEqual, etc).  See the "List of Configuration Options"
 section of the user manual for more information.  These invariants are
 also documented in the "Invariant List" section of the user manual.
@@ -2295,3 +2319,25 @@ Added many index entries to manual.
 Added linear ternary invariants, of the form z = ax + by + c.
 
 ===========================================================================
+
+ LocalWords:  daikonenv PrintableString StringLength PrintInvariants guardNulls
+ LocalWords:  PrintInvariant LinearTernaryFloat LinearBinaryFloat LinearTernary
+ LocalWords:  noInvariantGuarding SeqIndex SeqIndexIntEqual DtraceDiff Quant
+ LocalWords:  SeqIndexFloatLessThan DerivedVariableFilter ajax typeOf mypackage
+ LocalWords:  DTRACELIMITTERMINATE MyClass arg retroweaver dfej's listclosure
+ LocalWords:  includeonly noajax tracefilename declsfiledir declsfiledirflat
+ LocalWords:  instrsourcedir instr runtimechecker Eclat dfepl basedir jarkarta
+ LocalWords:  oro ListImplementors LinearBinary getProperty EqualMinusOne OneOf
+ LocalWords:  EqualOne EqualZero GreaterEqual GreaterEqualZero BooleanVal dtype
+ LocalWords:  PowerOfTwo LinearyTernary InvMap PptMap MemberString StringEqual
+ LocalWords:  SeqSeqStringEqual SeqSeqStringGreaterThan SeqSeqStringLessThan
+ LocalWords:  SeqSeqStringGreaterEqual SeqSeqStringLessEqual StringComparison
+ LocalWords:  StringLessThan StringLessEqual StringGreaterThan SubSequence cont
+ LocalWords:  StringGreaterEqual SubSequenceFloat SuperSequence FuzzyFloat prob
+ LocalWords:  SuperSequenceFloat NonZeroFloat kmeans MergeEsc TraceSelect conf
+ LocalWords:  MakeInvariantChecker DTRACELIMIT MergeESC NonEqual LessThan nogui
+ LocalWords:  BitwiseComplement FunctionUnary suppressSplitterErrors SubSet src
+ LocalWords:  LogicalCompare VarComparability SuperSet SuperSetFloat GUI Ljava
+ LocalWords:  SeqFloatEqual SeqFloatGreaterEqual OutputFormat dci EDG JTB mdas
+ LocalWords:  ParseException Bugfix CreateSpinfoC CreateSpinfo runcluster xor
+ LocalWords:  createspinfo untruncate fns DTRACEAPPEND
