@@ -119,6 +119,7 @@ class FormatTestCase {
         System.out.println("^^^" + e.toString());
         System.out.println("^^^" + e.getMessage());
         System.out.println("^^^" + e.getCause());
+        e.printStackTrace();
         throw new RuntimeException ("unexpected exception", e);
         // throw new RuntimeException(e.toString() + e.getMessage()
         //                           + e.getCause());
