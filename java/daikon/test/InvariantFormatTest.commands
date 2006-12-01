@@ -427,7 +427,7 @@ Goal (esc): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputF
 Goal (ioa): Not valid for Sets or Arrays: a[] is the reverse of b[]
 Goal (jml): daikon.Quant.isReverse(a, b)
 Goal (dbc): daikon.Quant.isReverse(a, b)
-Goal (simplify): (AND (EQ (- (- (arrayLength |a|) 1) 0) (- (- (arrayLength |b|) 1) 0)) (<= 0 0) (< (- (arrayLength |a|) 1) (arrayLength |a|)) (<= 0 0) (< (- (arrayLength |b|) 1) (arrayLength |b|)) (FORALL (|c|) (IMPLIES (AND (<= 0 |c|) (< |c| (- (- (arrayLength |a|) 1) 0))) (EQ (select (select elems |a|) (+ 0 |c|)) (select (select elems |b|) (- (- (arrayLength |b|) 1) |c|))))))
+Goal (simplify): (AND (EQ (- (- (arrayLength |a|) 1) 0) (- (- (arrayLength |b|) 1) 0)) (<= 0 0) (< (- (arrayLength |a|) 1) (arrayLength |a|)) (<= 0 0) (< (- (arrayLength |b|) 1) (arrayLength |b|)) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (< |i| (- (- (arrayLength |a|) 1) 0))) (EQ (select (select elems |a|) (+ 0 |i|)) (select (select elems |b|) (- (- (arrayLength |b|) 1) |i|))))))
 
 ; a is subsequence of b
 daikon.inv.binary.twoSequence.SubSequence
