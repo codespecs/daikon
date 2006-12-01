@@ -172,7 +172,8 @@ public abstract class Derivation
 
   /** Returns the name of this variable in simplify format **/
   public String simplify_name() {
-    throw new RuntimeException ("simplify_name not implemented for " + this);
+    throw new RuntimeException ("simplify_name not implemented for "
+                                + this.getClass() + " (" + this + ")");
   }
 
   /**
@@ -196,6 +197,17 @@ public abstract class Derivation
 
     // The derivations must have the same formula (offset, start_from, etc)
     return isSameFormula (d);
+  }
+
+  /**
+   * Return the complexity of this derivation.  This is only for the
+   * derivation itself and not for the variables included in the derivation.
+   * The default implementation returns 1 (which is the added complexity of
+   * an derivation).  Subclasses that add additional complexity (such as an
+   * offset) should override
+   */
+  public int complexity() {
+    return 1;
   }
 
   /** Returns a string that corresponds to the the specified shift **/

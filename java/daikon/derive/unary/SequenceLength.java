@@ -130,4 +130,9 @@ public final class SequenceLength
     Quantify.Length ql = new Quantify.Length (base, shift);
     return ql.simplify_name();
   }
+
+  /** Adds one to the default complexity if shift is not 0 **/
+  public int complexity() {
+    return super.complexity() + ((shift != 0) ? 1 : 0);
+  }
 }

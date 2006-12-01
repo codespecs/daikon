@@ -114,4 +114,8 @@ public abstract class SequenceSubsequence
     }
   }
 
+  /** Adds one to the default complexity if index_shift is not 0 **/
+  public int complexity() {
+    return super.complexity() + ((index_shift != 0) ? 1 : 0);
+  }
 }
