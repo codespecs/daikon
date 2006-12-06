@@ -27,6 +27,8 @@ public class InvariantChecker {
 
   private static final String output_SWITCH = "output";
   private static final String dir_SWITCH = "dir";
+  private static final String conf_SWITCH = "conf";
+  private static final String filter_SWITCH = "filter";
 
   private static String usage =
     UtilMDE.joinLines(
@@ -35,7 +37,12 @@ public class InvariantChecker {
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
       "  --" + output_SWITCH + " output file",
-      "  --" + dir_SWITCH + " directory with invariant and dtrace files. We output how many invariants failed for each invariant file. We check for failure against any sample in any dtrace file.",
+      "  --" + conf_SWITCH,
+      "      Checks only invariants that are above the default confidence level",
+      "  --" + filter_SWITCH,
+      "      Checks only invariants that are not filtered by the default filters",
+      "  --" + dir_SWITCH + " directory with invariant and dtrace files",
+      "      We output how many invariants failed for each invariant file. We check for failure against any sample in any dtrace file.",
       "  --" + Daikon.config_option_SWITCH + " config_var=val",
       "      Sets the specified configuration variable.  ",
       "  --" + Daikon.debugAll_SWITCH,
@@ -53,16 +60,20 @@ public class InvariantChecker {
   static int error_cnt = 0;
 
   static File dir_file; //Yoav added
-  static Set<Invariant> failedInvariants; //Yoav added
-  static Set<Invariant> testedInvariants; //Yoav added
-  static Set<Invariant> activeInvariants; //Yoav added
-  static LinkedHashSet<String> outputLines; //Yoav added
-  static LinkedHashSet<String> outputComma; //Yoav added
+  static boolean doFilter;
+  static boolean doConf;
+  static HashSet<Invariant> failedInvariants = new HashSet<Invariant>(); //Yoav added
+  static HashSet<Invariant> testedInvariants = new HashSet<Invariant>(); //Yoav added
+  static HashSet<Invariant> activeInvariants = new HashSet<Invariant>(); //Yoav added
+  static LinkedHashSet<String> outputComma = new LinkedHashSet<String>(); //Yoav added
 
   public static void main(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {
     try {
+      if (args.length==0) {
+          throw new Daikon.TerminationMessage(usage);
+      }
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
       System.err.println(e.getMessage());
@@ -90,6 +101,8 @@ public class InvariantChecker {
                   null, 0),
       new LongOpt(output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(dir_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(conf_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(filter_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null,
@@ -106,6 +119,10 @@ public class InvariantChecker {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
+        } else if (conf_SWITCH.equals (option_name)) {
+          doConf = true;
+        } else if (filter_SWITCH.equals (option_name)) {
+          doFilter = true;
         } else if (dir_SWITCH.equals (option_name)) {
           dir_file = new File (g.getOptarg());
           if (!dir_file.exists() || !dir_file.isDirectory())
@@ -174,11 +191,6 @@ public class InvariantChecker {
     }
 
     // Yoav additions:
-    failedInvariants = new HashSet<Invariant>();
-    testedInvariants = new HashSet<Invariant>();
-    activeInvariants = new HashSet<Invariant>();
-    outputLines = new LinkedHashSet<String>();
-    outputComma = new LinkedHashSet<String>();
     File[] filesInDir = dir_file.listFiles();
     if (filesInDir == null || filesInDir.length==0)
           throw new Daikon.TerminationMessage("The directory "+dir_file+" is empty", usage);
@@ -215,20 +227,17 @@ public class InvariantChecker {
       testedInvariants.clear();
       error_cnt = 0;
 
-      output_stream = new PrintStream (new FileOutputStream (inFile.toString()+".false-positives.txt"));
+      output_stream = new PrintStream (new FileOutputStream (inFile.toString().replace(".inv","").replace(".gz","")+".false-positives.txt"));
       checkInvariants();
+      output_stream.close();
 
       int failedCount = failedInvariants.size();
       int testedCount = testedInvariants.size();
       String percent = toPercentage(failedCount, testedCount);
       commaLine += ","+percent;
-      outputLines.add(inv_file+": "+failedCount+" false positives, out of "+testedCount+", which is "+percent+".");
     }
     outputComma.add(commaLine);
 
-    System.out.println();
-    for (String output : outputLines)
-      System.out.println(output);
     System.out.println();
     for (String output : outputComma)
       System.out.println(output);
@@ -252,13 +261,12 @@ public class InvariantChecker {
       for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
         PptSlice slice = i.next();
         for (Invariant inv : slice.invs) {
-          if (dir_file!=null) {
-            if (inv.getConfidence()<Invariant.dkconfig_confidence_limit)
-              continue;
-            if (fi.shouldKeep(inv)==null)
-              continue;
-            activeInvariants.add(inv);
-          }
+          if (doConf && inv.getConfidence()<Invariant.dkconfig_confidence_limit)
+            continue;
+
+          if (doFilter && fi.shouldKeep(inv)==null)
+            continue;
+          activeInvariants.add(inv);
 
           //String n = invariant2str(ppt, inv);
           //if (!allInvariants.contains(inv) && allInvariantsStr.contains(n)) throw new Daikon.TerminationMessage("Two invariants have the same ppt.name+inv.rep:"+n);
@@ -277,6 +285,10 @@ public class InvariantChecker {
     progress.shouldStop = true;
     System.out.println ();    
     System.out.println ("" + error_cnt + " Errors Found" );
+    int failedCount = failedInvariants.size();
+    int testedCount = testedInvariants.size();
+    String percent = toPercentage(failedCount, testedCount);
+    System.out.println(inv_file+": "+failedCount+" false positives, out of "+testedCount+", which is "+percent+".");
   }
 
   /** Class to track matching ppt and its values. */
@@ -414,16 +426,12 @@ public class InvariantChecker {
           }
 
           //Yoav added
-          if (dir_file!=null) {
-            if (!activeInvariants.contains(inv))
+          if (!activeInvariants.contains(inv))
               continue;
-          }
 
 
           //String invRep = invariant2str(ppt, inv);
-          if (dir_file!=null) {
-            testedInvariants.add(inv);
-          }
+          testedInvariants.add(inv);
 
           InvariantStatus status = inv.add_sample (vt, 1);
           if (status != InvariantStatus.NO_CHANGE) {
@@ -434,10 +442,8 @@ public class InvariantChecker {
                + inv.format() + "' invalidated by sample "
                + Debug.toString (slice.var_infos, vt) + "at line " + line + " in file "+FileIO.data_trace_state.filename);
 
-            if (dir_file!=null) {
-              failedInvariants.add(inv);
-              activeInvariants.remove(inv);
-            }
+            failedInvariants.add(inv);
+            activeInvariants.remove(inv);
             error_cnt++;
           }
         }

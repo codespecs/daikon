@@ -35,8 +35,8 @@ InvariantChecker
     files in the directory.  The number of samples that violated an invariant
     are reported for each invariant file.
 
-    Only invariants above the default confidence level and that have 
-    not been filtered out by the default filters are checked.
+    Added a switch (--conf): Checks only invariants that are above the default confidence level.
+    Added a switch (--filter): Checks only invariants that are not filtered by the default filters.
 
 Daikon
 

@@ -6824,6 +6824,12 @@ Print usage message.
 @item --output @var{output-file}
 Write any violations to the specified file.
 
+@item --conf
+Checks only invariants that are above the default confidence level.
+
+@item --filter
+Checks only invariants that are not filtered by the default filters.
+
 @item --dir @var{directory-name}
 Processes all invariant files in the given directory and reports the number of invariants that failed on any of the dtrace files in that directory.
 We only process invariants above the default confidence level and invariants that have not been filtered out by the default filters.
