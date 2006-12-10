@@ -44,13 +44,24 @@
 #     currently permit using (say) jikes: prune-xlint.pl is hard-coded
 #     for "javac" output.
 
-# echo "all javac-xlint args: $*"
+# DEBUG_JAVAC_XLINT=1
 
-if [ "$1" == "-p" ]; then
-  # echo "found p option"
+if [ ! -z $DEBUG_JAVAC_XLINT ]; then
+  echo "all javac-xlint args: $*"
+  echo "javac-xlint arg 1: $1"
+fi
+
+# if [ "$1" == "-p" ]; then
+if [ "$1" = "-p" ]; then
+  if [ ! -z $DEBUG_JAVAC_XLINT ]; then
+    echo "found p option"
+  fi
   PRUNE_XLINT_ARGS=$2
   shift
   shift
+  if [ ! -z $DEBUG_JAVAC_XLINT ]; then
+    echo "all remaining javac-xlint args: $*"
+  fi
 fi
 
 ## Older option processing code.
@@ -80,7 +91,9 @@ shift
 #   exit 1
 # fi
 
-# echo ${SUPPLIED_JAVAC} -Xlint $* PIPED-INTO `dirname ${0}`/prune-xlint.pl -p "${PRUNE_XLINT_ARGS}"
+if [ ! -z $DEBUG_JAVAC_XLINT ]; then
+  echo ${SUPPLIED_JAVAC} -Xlint $* PIPED-INTO `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
+fi
 if [ ! -z "${PRUNE_XLINT_ARGS}" ]; then
   ${SUPPLIED_JAVAC} -Xlint $* 2>&1 | `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
 else
