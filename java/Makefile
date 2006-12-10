@@ -304,10 +304,11 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${INV}/scripts/prune-xlint.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} chicory dyncomp
+all_directly: ${AUTO_GENERATED_FILES} chicory dyncomp
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
+	# This creates ${AUTO_GENERATED_FILES_2}, so that shoudln't be a prerequisite.
 	$(MAKE) all_pass2
 
 .PHONY : daikon
@@ -355,8 +356,7 @@ dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) \
-		     --compare-sets-file=daikon/dcomp/std_dcomp_out.txt --no-jdk" \
+	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) --compare-sets-file=daikon/dcomp/std_dcomp_out.txt --no-jdk" \
 	  daikon/dcomp/Test
 	-diff -u daikon/dcomp/std_dcomp_out.goal daikon/dcomp/std_dcomp_out.txt \
 	  > daikon/dcomp/std_dcomp_out.diff
