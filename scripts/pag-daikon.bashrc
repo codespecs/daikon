@@ -59,7 +59,7 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 # Enable use of group bibliographies, and the "bibfind" command.
 # Private comments in bib files are not to be shared outside the group.
 export BIBINPUTS=.:$PAG/doc/wisdom/latest-read-only/bib:..:
-alias bibfind='java -jar $pag/software/pkg/lookup.jar -l -f $PAG/doc/wisdom/latest-read-only/bib/bibroot'
+alias bibfind='java -jar $pag/software/arch/common/pkg/lookup.jar -l -f $PAG/doc/wisdom/latest-read-only/bib/bibroot'
 
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
