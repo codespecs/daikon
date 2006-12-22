@@ -21,7 +21,7 @@ public final class MergeInvariants {
 
   private static String usage =
     UtilMDE.joinLines(
-      "Usage: java daikon.PrintInvariants [OPTION]... FILE",
+      "Usage: java daikon.MergeInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
       "  --" + Daikon.config_option_SWITCH,
