@@ -483,6 +483,7 @@ public final class Daikon {
   public static final String var_regexp_SWITCH = "var-select-pattern";
   public static final String var_omit_regexp_SWITCH = "var-omit-pattern";
   // Configuration options
+  public static final String server_SWITCH = "server"; //YOAV: server mode for Daikon: reads dtrace files as they appear
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
   // Debugging
@@ -491,6 +492,8 @@ public final class Daikon {
   public static final String track_SWITCH = "track";
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String mem_stat_SWITCH = "mem_stat";
+
+  public static File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
@@ -536,7 +539,9 @@ public final class Daikon {
       "  Each file is a declaration file or a data trace file; the file type",
       "  is determined by the file name (containing \".decls\" or \".dtrace\").",
       "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/."
+      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/.",
+      "  --"+server_SWITCH+" dir",
+      "  Server mode for Daikon in which it reads files from <dir> as they appear (sorted lexicographically) until it finds a file ending in '.end'"
       );
 
   /**
@@ -585,7 +590,7 @@ public final class Daikon {
     Set<String> dtrace_files = files.dtrace;
     Set<File> spinfo_files = files.spinfo;
     Set<File> map_files = files.map;
-    if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
+    if (server_dir==null && (decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       System.out.println("No .decls or .dtrace files specified");
       throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
     }
@@ -842,6 +847,7 @@ public final class Daikon {
         new LongOpt(var_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         // Configuration options
+        new LongOpt(server_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         // Debugging
@@ -1017,7 +1023,15 @@ public final class Daikon {
             break;
           }
           // Configuration options
-          else if (config_SWITCH.equals(option_name)) {
+          else if (server_SWITCH.equals(option_name)) {
+            String input_dir = g.getOptarg();
+            server_dir = new File(input_dir);
+            if (!server_dir.isDirectory() || !server_dir.canRead() || !server_dir.canWrite())
+              throw new RuntimeException(
+                "The server directory Could not open config file " + server_dir);
+            break;
+
+          } else if (config_SWITCH.equals(option_name)) {
             String config_file = g.getOptarg();
             try {
               InputStream stream =

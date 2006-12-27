@@ -830,6 +830,24 @@ public final class FileIO {
         }
       }
     }
+    if (Daikon.server_dir!=null) {
+      // Yoav: server mode
+      while(true) {
+        String[] dir_files = Daikon.server_dir.list();
+        Arrays.sort(dir_files);
+        boolean hasEnd = false;
+        for (String f:dir_files) {
+          if (f.endsWith(".end")) hasEnd = true;
+          if (f.endsWith(".end") || f.endsWith(".start")) continue;
+          if (files.contains(f)) continue;
+          files.add(f);
+          System.out.println("Reading "+f);
+          read_data_trace_file(new File(Daikon.server_dir,f).toString(), all_ppts, processor, false, ppts_are_new);
+        }
+        if (hasEnd) break;
+        try { Thread.sleep(1000); } catch(java.lang.InterruptedException e) {}
+      }
+    }
 
     process_unmatched_procedure_entries();
 
