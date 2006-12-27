@@ -1458,6 +1458,12 @@ Read a list of @file{.decl}, @file{.dtrace}, or @file{.spinfo} files from the
 given text file, one filename per line, as an alternative to providing
 them on the command line.
 
+
+@item --server @var{dirname}
+Server mode for Daikon in which it reads files from @var{dirname} as they appear (sorted lexicographically) until it finds a file ending in ``.end'', at which point it calculates and outputs the invariants.
+
+
+
 @item --omit_from_output [0rs]
 Omit some potentially redundant information from the serialized output
 file produced with @option{-o}.

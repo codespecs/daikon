@@ -45,6 +45,10 @@ Daikon
     Modified the simplify format of some invariants so that 'i' is used
     as a free variable rather than 'a'.
 
+    --server dir
+    Server mode for Daikon in which it reads files from <dir> as they appear (sorted lexicographically) until it finds a file ending in '.end'
+
+
   Bug-fixes
 
     The windows daikonenv.bat script was fixed to correctly handle
