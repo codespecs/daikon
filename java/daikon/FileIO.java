@@ -236,15 +236,16 @@ public final class FileIO {
     String line = top_line;
     Scanner scanner = new Scanner (line);
     String record_name = need (state, scanner, "'ppt'");
-    if (record_name != "ppt")
+    if (record_name != "ppt") { // interned
       decl_error (state, "found '%s' where 'ppt' expected", record_name);
+    }
     String ppt_name = need (state, scanner, "ppt name");
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
-      if (state.ppts_are_new)
+      if (state.ppts_are_new) {
         decl_error (state, "Duplicate declaration of ppt '%s'", ppt_name);
-      else { // ppts are already in the map
+      } else { // ppts are already in the map
         skip_decl (state.reader);
         return state.all_ppts.get (ppt_name);
       }
@@ -268,44 +269,44 @@ public final class FileIO {
       scanner = new Scanner (line);
       String record = scanner.next().intern();
       if (vardef == null) {
-        if (record == "parent") {
+        if (record == "parent") { // interned
           ppt_parents.add (parse_ppt_parent (state, scanner));
-        } else if (record == "flags") {
+        } else if (record == "flags") { // interned
           parse_ppt_flags (state, scanner, ppt_flags);
-        } else if (record == "variable") {
+        } else if (record == "variable") { // interned
           vardef = new VarDefinition (state, scanner);
           if (var_included (vardef.name))
             varmap.put (vardef.name, vardef);
-        } else if (record == "ppt-type") {
+        } else if (record == "ppt-type") { // interned
           ppt_type = parse_ppt_type (state, scanner);
         } else {
           decl_error (state, "record '%s' found where %s expected", record,
                       "'parent' or 'flags'");
         }
       } else { // there must be a current variable
-        if (record == "var-kind") {
+        if (record == "var-kind") { // interned
           vardef.parse_var_kind (scanner);
-        } else if (record == "enclosing-var") {
+        } else if (record == "enclosing-var") { // interned
           vardef.parse_enclosing_var (scanner);
-        } else if (record == "reference-type") {
+        } else if (record == "reference-type") { // interned
           vardef.parse_reference_type (scanner);
-        } else if (record == "array") {
+        } else if (record == "array") { // interned
           vardef.parse_array (scanner);
-        } else if (record == "rep-type") {
+        } else if (record == "rep-type") { // interned
           vardef.parse_rep_type (scanner);
-        } else if (record == "dec-type") {
+        } else if (record == "dec-type") { // interned
           vardef.parse_dec_type (scanner);
-        } else if (record == "flags") {
+        } else if (record == "flags") { // interned
           vardef.parse_flags (scanner);
-        } else if (record == "lang-flags") {
+        } else if (record == "lang-flags") { // interned
           vardef.parse_lang_flags (scanner);
-        } else if (record == "parent") {
+        } else if (record == "parent") { // interned
           vardef.parse_parent (scanner, ppt_parents);
-        } else if (record == "comparability") {
+        } else if (record == "comparability") { // interned
           vardef.parse_comparability (scanner);
-        } else if (record == "constant") {
+        } else if (record == "constant") { // interned
           vardef.parse_constant (scanner);
-        } else if (record == "variable") {
+        } else if (record == "variable") { // interned
           vardef = new VarDefinition (state, scanner);
           if (varmap.containsKey (vardef.name))
             decl_error (state, "var %s declared twice", vardef.name);
@@ -664,9 +665,9 @@ public final class FileIO {
     scanner.next();
     String version = need (state, scanner, "declaration version number");
     need_eol (state, scanner);
-    if (version == "2.0")
+    if (version == "2.0")       // interned
       new_decl_format = true;
-    else if (version == "1.0")
+    else if (version == "1.0")  // interned
       new_decl_format = false;
     else
       decl_error (state, "'%s' found where 1.0 or 2.0 expected",
@@ -832,7 +833,7 @@ public final class FileIO {
     }
     if (Daikon.server_dir!=null) {
       // Yoav: server mode
-      while(true) {
+      while (true) {
         String[] dir_files = Daikon.server_dir.list();
         Arrays.sort(dir_files);
         boolean hasEnd = false;
@@ -867,7 +868,7 @@ public final class FileIO {
     // go through each top level ppt, and make all_program_points
     // false if at least one of them is not a program point normally
     // found in traces from programming languages
-    for(Iterator<PptTopLevel> all_ppts_iter = all_ppts.ppt_all_iterator();
+    for (Iterator<PptTopLevel> all_ppts_iter = all_ppts.ppt_all_iterator();
         all_ppts_iter.hasNext(); ) {
       PptTopLevel ppt_top_level = all_ppts_iter.next();
 
@@ -886,7 +887,7 @@ public final class FileIO {
     // if all program points correspond to a programming language,
     // but the dataflow hierarchy has been turned off, then
     // suggest not using the --nohierarchy flag
-    //    if(all_program_points && (!Daikon.use_dataflow_hierarchy)) {
+    //    if (all_program_points && (!Daikon.use_dataflow_hierarchy)) {
     //      System.out.println("Warning: data trace appears to be over" +
     //                         " a program execution, but dataflow" +
     //                         " hierarchy has been turned off," +
@@ -897,7 +898,7 @@ public final class FileIO {
     // if some of the program points do not correspond to a
     // points from a programming language, and the dataflow
     // hierarchy is being used, suggest using the --nohierarchy flag.
-    if(Daikon.use_dataflow_hierarchy &&
+    if (Daikon.use_dataflow_hierarchy &&
         (!all_program_points) &&
         some_program_points) {
       System.out.println("Warning: Daikon is using a dataflow" +
@@ -1393,7 +1394,7 @@ public final class FileIO {
       }
 
       //OLD:if (ppt.ppt_name.isCombinedExitPoint()) {
-      if(ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
+      if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
         throw new RuntimeException("Bad program point name " + ppt.name
                                    + " is a combined exit point name");
       }
@@ -2175,9 +2176,9 @@ public final class FileIO {
     /** Parses the array record **/
     public void parse_array (Scanner scanner) throws DeclError {
       String arr_str = need (scanner, "array dimensions");
-      if (arr_str == "0")
+      if (arr_str == "0")       // interned
         arr_dims = 0;
-      else if (arr_str == "1")
+      else if (arr_str == "1")  // interned
         arr_dims = 1;
       else
         decl_error (state, "%s found where 0 or 1 expected", arr_str);
@@ -2322,7 +2323,7 @@ public final class FileIO {
       E[] all = enum_class.getEnumConstants();
       String msg = "";
       for (E e : all) {
-        if (msg != "")
+        if (msg != "")          // interned
           msg += ", ";
         msg += String.format ("'%s'", e.name().toLowerCase());
       }

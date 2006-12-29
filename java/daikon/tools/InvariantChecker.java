@@ -195,12 +195,12 @@ public class InvariantChecker {
     if (filesInDir == null || filesInDir.length==0)
           throw new Daikon.TerminationMessage("The directory "+dir_file+" is empty", usage);
     ArrayList<File> invariants = new ArrayList<File>();
-    for(File f: filesInDir)
+    for (File f: filesInDir)
        if (f.toString().indexOf(".inv") != -1) invariants.add(f);
     if (invariants.size()==0)
           throw new Daikon.TerminationMessage("Did not find any invariant files in the directory "+dir_file, usage);
     ArrayList<File> dtraces = new ArrayList<File>();
-    for(File f: filesInDir)
+    for (File f: filesInDir)
        if (f.toString().indexOf(".dtrace") != -1) dtraces.add(f);
     if (dtraces.size()==0)
           throw new Daikon.TerminationMessage("Did not find any dtrace files in the directory "+dir_file, usage);
@@ -283,7 +283,7 @@ public class InvariantChecker {
     progress.clear();
     FileIO.read_data_trace_files (dtrace_files, ppts, processor, false);
     progress.shouldStop = true;
-    System.out.println ();    
+    System.out.println ();
     System.out.println ("" + error_cnt + " Errors Found" );
     int failedCount = failedInvariants.size();
     int testedCount = testedInvariants.size();

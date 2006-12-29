@@ -87,7 +87,7 @@ public class StreamRedirectThread extends Thread
             }*/
 
             int nextChar;
-            while(true)
+            while (true)
             {
                 nextChar = in.read();
                 if (nextChar == -1)
