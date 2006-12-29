@@ -3,6 +3,7 @@
 --exclude-broken 403:http://www.elsevier.nl/locate/disc/
 --exclude-broken 403:https://www.csail.mit.edu/mrbs/
 --exclude-broken 404:http://www.eclipse.org/legal/Eclipse%20EPL%202003_11_10%20Final_files/filelist.xml
+--exclude-broken 404:file://afs/csail/group/pag/software/pkg/freshmeat-submit-1.6/freshmeat-submit.html
 --exclude-broken 405:http://www.amazon.com/exec/obidos/tg/detail/-/0321205758/103-2932545-5299831?v=glance
 --exclude-broken 500:http://conferences.iee.org/icse2004/
 --exclude-broken 500:http://jcp.org/en/jsr/detail?id=308
