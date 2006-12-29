@@ -308,7 +308,7 @@ all_directly: ${AUTO_GENERATED_FILES} chicory dyncomp
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
-	# This creates ${AUTO_GENERATED_FILES_2}, so that shoudln't be a prerequisite.
+	# This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
 
 .PHONY : daikon
@@ -681,7 +681,9 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # a duplicate class warning.
 # This could depend on java/daikon/config/ParameterDoclet.class (but that
 # will typically exist).
-../doc/config-options.texinfo: $(AUTO_GENERATED_FILES)
+# It depends on "all", which forces compilation, to avoid errors like
+#   "java.lang.ClassFormatError: Truncated class file".
+../doc/config-options.texinfo: $(AUTO_GENERATED_FILES) all
 	javadoc -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
