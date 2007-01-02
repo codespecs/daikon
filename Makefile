@@ -284,8 +284,7 @@ staging-to-www: $(STAGING_DIR)
 pubs:
 	$(MAKE) -C doc/www pubs
 
-doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo \
-			 doc/invariants-doc.texinfo
+doc/CHANGES: doc/daikon.texinfo
 	@echo "******************************************************************"
 	@echo "** doc/CHANGES file is not up-to-date with respect to doc files."
 	@echo "** doc/CHANGES must be modified by hand."
