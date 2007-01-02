@@ -3417,7 +3417,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Create the (empty) equality view for this ppt
-    Assert.assertTrue(equality_view == null);
+    assert (equality_view == null) : name() + ": " + equality_view;
     equality_view = new PptSliceEquality(this);
 
     // Get all of the binary relationships from the first child's
