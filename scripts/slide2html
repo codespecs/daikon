@@ -318,9 +318,9 @@
 
     // just echo through anything else
     } else {
-      if (($bullet->level > 0) && trim ($line))
-        printf ($level_fmt[$bullet->level], $line);
-      else
+      // if (($bullet->level > 0) && trim ($line))
+      //  printf ($level_fmt[$bullet->level], $line );
+      // else
         echo "$line\n";
     }
 
