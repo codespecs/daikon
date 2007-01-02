@@ -20,6 +20,32 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.13 (January 1 2007)
+
+A server mode was added to Daikon.  Two new command lined switches
+were added to InvariantChecker to more finely control what invariants
+are checked.
+
+InvariantChecker
+
+  User-visible changes
+
+    Added a switch (--conf) that checks only invariants that are above 
+    the default confidence level.
+
+    Added a switch (--filter) that checks only invariants that are not
+    filtered by the default filters.
+
+Daikon
+
+  User-visible changes
+
+    Added a server mode for daikon (specified by the --server switch).
+    In this mode, Daikon processes files that are placed in the specified
+    server directory until a filename that ends in '.end' is encountered.
+
+---------------------------------------
+
 4.2.12 (December 1 2006)
 
 InvariantChecker was enhanced to handle multiple input files and count
@@ -35,8 +61,8 @@ InvariantChecker
     files in the directory.  The number of samples that violated an invariant
     are reported for each invariant file.
 
-    Added a switch (--conf): Checks only invariants that are above the default confidence level.
-    Added a switch (--filter): Checks only invariants that are not filtered by the default filters.
+    Only invariants above the default confidence level and that have 
+    not been filtered out by the default filters are checked.
 
 Daikon
 
@@ -44,10 +70,6 @@ Daikon
 
     Modified the simplify format of some invariants so that 'i' is used
     as a free variable rather than 'a'.
-
-    --server dir
-    Server mode for Daikon in which it reads files from <dir> as they appear (sorted lexicographically) until it finds a file ending in '.end'
-
 
   Bug-fixes
 
