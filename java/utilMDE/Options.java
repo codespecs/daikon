@@ -182,7 +182,7 @@ public class Options {
       description = opt_results[2];
 
       // Get a constructor for non-primitive base types
-      if (!base_type.isPrimitive()) {
+      if (!base_type.isPrimitive() && !base_type.isEnum()) {
         try {
           if (base_type == Pattern.class) {
             factory = base_type.getMethod ("compile", String.class);
@@ -569,6 +569,8 @@ public class Options {
         try {
           if (oi.constructor != null)
             val = oi.constructor.newInstance (arg_value);
+          else if (oi.base_type.isEnum())
+            val = Enum.valueOf (oi.base_type, arg_value); // unchecked cast
           else
             val = oi.factory.invoke (null, arg_value);
         } catch (Exception e) {
@@ -652,6 +654,8 @@ public class Options {
       return "filename";
     else if (type == Pattern.class)
       return "regex";
+    else if (type.isEnum())
+      return ("enum");
     else
       return UtilMDE.unqualified_name (type.getName()).toLowerCase();
   }
