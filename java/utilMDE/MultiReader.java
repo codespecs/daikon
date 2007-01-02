@@ -307,8 +307,10 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     long line_number = get_line_number();
 
     // If this is a long entry
-    Matcher entry_match = entry_start_re.matcher (line);
-    if (entry_match.find()) {
+    Matcher entry_match = null;
+    if (entry_start_re != null)
+      entry_match = entry_start_re.matcher (line);
+    if ((entry_match != null) && entry_match.find()) {
 
       // Remove entry match from the line
       if (entry_match.groupCount() > 0) {
