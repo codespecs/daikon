@@ -423,6 +423,18 @@ lookup.jar : $(LOOKUP_JAVA_FILES) utilMDE/lookup.manifest utilMDE/html2textrc
 install-lookup: lookup.jar
 	cp lookup.jar $(pag)/software/pkg/
 
+#
+# TaskManager targerts
+#
+TASKMANAGER_JAVA_FILES := $(shell find utilMDE -name '*.java')
+task-manager : task_manager.jar
+task_manager.jar: $(TASKMANAGER_JAVA_FILES)
+	${JAVAC_COMMAND} $(TASKMANAGER_JAVA_FILES)
+	$(JAR) cfm task_manager.jar utilMDE/task_manager.manifest utilMDE/*.class
+
+install-task-manager: task_manager.jar
+	cp task_manager.jar $(pag)/software/pkg
+
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ${AUTO_GENERATED_FILES}
