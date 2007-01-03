@@ -4,6 +4,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.Enumeration;
+import java.text.DecimalFormat;
 
 /**
  * Date: 29/12/2006
@@ -31,8 +32,9 @@ public final class SplitDtrace {
     int recNum = dataNum-declNum;
     System.out.println("Number of DECLARE statements: "+declNum+" and number of empty lines: "+dataNum+" thus number of records is: "+(recNum));
 
+    DecimalFormat formatter = new DecimalFormat("000");
     for (int i=1; i<=100; i++) {
-      String out = filename.replace(".dtrace","."+i+".dtrace");
+      String out = filename.replace(".dtrace","."+ formatter.format(i) +".dtrace");
       System.out.println("Writing file "+out);
       OutputStream output = new FileOutputStream(out);
       if (isGz)
