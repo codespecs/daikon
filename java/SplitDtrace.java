@@ -33,27 +33,41 @@ public final class SplitDtrace {
     System.out.println("Number of DECLARE statements: "+declNum+" and number of empty lines: "+dataNum+" thus number of records is: "+(recNum));
 
     DecimalFormat formatter = new DecimalFormat("000");
-    for (int i=1; i<=100; i++) {
-      String out = filename.replace(".dtrace","."+ formatter.format(i) +".dtrace");
-      System.out.println("Writing file "+out);
-      OutputStream output = new FileOutputStream(out);
-      if (isGz)
-        output = new GZIPOutputStream(output);
-      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
-      reader = getStream(filename);
+//    for (int i=1; i<=100; i++) {
+//	  writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
+//    }
+    writeDtrace(filename, "second-half", recNum/2, 2+recNum);
+  }
+  private static void writeDtrace(String filename, String out_name, int fromRec, int toRec) throws IOException {
+	  String out = filename.replace(".dtrace","."+out_name+".dtrace");
+	  System.out.println("Writing file "+out);
+	  OutputStream output = new FileOutputStream(out);
+      boolean isGz = filename.endsWith(".dtrace.gz");
+	  if (isGz)
+		output = new GZIPOutputStream(output);
+	  BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
+	  BufferedReader reader = getStream(filename);
+      String line;
       while ((line=reader.readLine())!=null) {
-        writer.write(line); writer.newLine();
-        if (line.trim().equals("DECLARE")) break;
+		writer.write(line); writer.newLine();
+		if (line.trim().equals("DECLARE")) break;
+	  }
+	  int currRecCount = 0;
+      boolean isInDecl = true;
+      line=reader.readLine();
+      while (true) {
+		if ((currRecCount>=fromRec || isInDecl) && currRecCount<=toRec) { writer.write(line);  writer.newLine();}
+        boolean wasEmpty = false;
+        if (line.trim().equals("")) wasEmpty = true;
+        line=reader.readLine();
+        if (line==null) break;
+        if (wasEmpty) {
+            isInDecl = line.trim().equals("DECLARE");
+            if (!isInDecl) currRecCount++;
+        }
       }
-      int currRecCount = 2+recNum*i/100;
-      while ((line=reader.readLine())!=null) {
-        if (currRecCount>=0) { writer.write(line);  writer.newLine();}
-        if (line.trim().equals("")) currRecCount--;
-        if (line.trim().equals("DECLARE")) currRecCount++;
-      }
-      reader.close();
-      writer.close();
-    }
+	  reader.close();
+	  writer.close();
   }
   public static BufferedReader getStream(String filename) throws IOException {
     InputStream stream;
