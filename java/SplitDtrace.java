@@ -33,9 +33,9 @@ public final class SplitDtrace {
     System.out.println("Number of DECLARE statements: "+declNum+" and number of empty lines: "+dataNum+" thus number of records is: "+(recNum));
 
     DecimalFormat formatter = new DecimalFormat("000");
-//    for (int i=1; i<=100; i++) {
-//	  writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
-//    }
+    for (int i=1; i<=100; i++) {
+	  writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
+    }
     writeDtrace(filename, "second-half", recNum/2, 2+recNum);
   }
   private static void writeDtrace(String filename, String out_name, int fromRec, int toRec) throws IOException {
