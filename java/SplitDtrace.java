@@ -4,6 +4,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.text.DecimalFormat;
 
 /**
@@ -19,57 +22,105 @@ public final class SplitDtrace {
     BufferedReader reader = getStream(filename);
     String line;
     int declNum = 1;
-    int dataNum = 0;
-    while ((line=reader.readLine())!=null) {
-      if (line.trim().equals("DECLARE")) break;
+    int recNum = 0;
+    ArrayList<String> rec = new ArrayList<String>();
+    while(true) {
+      readRec(reader, rec);
+      if (isDeclare(rec)) break;
     }
-    while ((line=reader.readLine())!=null) {
-      if (line.trim().equals("")) dataNum++;
-      if (line.trim().equals("DECLARE")) declNum++;
+    while (true) {
+      readRec(reader, rec);
+      if (rec.size()==0) break;
+      if (isDeclare(rec)) declNum++;
+      else
+        recNum++;
     }
     reader.close();
 
-    int recNum = dataNum-declNum;
-    System.out.println("Number of DECLARE statements: "+declNum+" and number of empty lines: "+dataNum+" thus number of records is: "+(recNum));
+    System.out.println("Number of DECLARE statements: "+declNum+" and number of records is: "+recNum);
 
     DecimalFormat formatter = new DecimalFormat("000");
-    for (int i=1; i<=100; i++) {
-	  writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
-    }
+    //for (int i=1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
     writeDtrace(filename, "second-half", recNum/2, 2+recNum);
   }
   private static void writeDtrace(String filename, String out_name, int fromRec, int toRec) throws IOException {
 	  String out = filename.replace(".dtrace","."+out_name+".dtrace");
 	  System.out.println("Writing file "+out);
 	  OutputStream output = new FileOutputStream(out);
-      boolean isGz = filename.endsWith(".dtrace.gz");
+    boolean isGz = filename.endsWith(".dtrace.gz");
 	  if (isGz)
 		output = new GZIPOutputStream(output);
 	  BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
 	  BufferedReader reader = getStream(filename);
-      String line;
-      while ((line=reader.readLine())!=null) {
-		writer.write(line); writer.newLine();
-		if (line.trim().equals("DECLARE")) break;
-	  }
-	  int currRecCount = 0;
-      boolean isInDecl = true;
-      line=reader.readLine();
-      while (true) {
-		if ((currRecCount>=fromRec || isInDecl) && currRecCount<=toRec) { writer.write(line);  writer.newLine();}
-        boolean wasEmpty = false;
-        if (line.trim().equals("")) wasEmpty = true;
-        line=reader.readLine();
-        if (line==null) break;
-        if (wasEmpty) {
-            isInDecl = line.trim().equals("DECLARE");
-            if (!isInDecl) currRecCount++;
+
+    int currRecCount = 0;
+    HashSet<Integer> nonceSet = new HashSet<Integer>();
+    ArrayList<String> rec = new ArrayList<String>();
+    while(true) {
+      readRec(reader, rec);
+      if (isDeclare(rec)) writer.newLine();
+      writeRec(writer,rec);
+      if (isDeclare(rec)) break;
+    }
+    while (true) {
+      readRec(reader, rec);
+      if (rec.size()==0) break;
+      boolean isDecl = isDeclare(rec);
+      if ((currRecCount>=fromRec || isDecl) && currRecCount<=toRec) {
+        boolean shouldWrite = true;
+        if (!isDecl) {
+          int nonce = getNonce(rec);
+          if (isEnter(rec))
+            nonceSet.add(nonce);
+          else {
+            if (!isExit(rec)) throw new RuntimeException("Must be either ENTER or EXIT:"+rec);
+            if (!nonceSet.contains(nonce)) shouldWrite = false;
+            nonceSet.remove(nonce);
+          }
         }
+        if (shouldWrite) writeRec(writer,rec);
       }
+      if (!isDecl) currRecCount++;
+    }
 	  reader.close();
 	  writer.close();
   }
-  public static BufferedReader getStream(String filename) throws IOException {
+  static int getNonce(ArrayList<String> res) {
+    for(int i=0; i<res.size(); i++)
+      if (res.get(i).equals("this_invocation_nonce")) return Integer.parseInt(res.get(i+1));
+    throw new RuntimeException("no nonce: "+res);
+  }
+  static boolean isEnter(ArrayList<String> res) {
+    return res.get(0).contains(":::ENTER");
+  }
+  static boolean isExit(ArrayList<String> res) {
+    return res.get(0).contains(":::EXIT");
+  }
+  static boolean isDeclare(ArrayList<String> res) {
+    return res.get(0).equals("DECLARE");
+  }
+  static void writeRec(BufferedWriter writer, ArrayList<String> res) throws IOException {
+    for(String s : res) {
+      writer.write(s);
+      writer.newLine();
+    }
+    writer.newLine();
+  }
+  static boolean isEmpty(String l) {
+    return l.trim().equals("") || l.startsWith("#");
+  }
+  static void readRec(BufferedReader reader, ArrayList<String> res) throws IOException {
+    res.clear();
+    String line;
+    while((line=reader.readLine())!=null) { if (!isEmpty(line)) break; } //eat white space
+    while(line!=null) {
+      line = line.trim();
+      if (isEmpty(line)) break;
+      res.add(line.trim());
+      line=reader.readLine();
+    }
+  }
+  static BufferedReader getStream(String filename) throws IOException {
     InputStream stream;
     if (filename.endsWith(".dtrace.zip")) {
       ZipFile zipfile = new ZipFile(filename);
