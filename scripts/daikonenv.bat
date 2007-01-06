@@ -13,21 +13,21 @@ REM        files, instead of the default, which is to use daikon.jar.
 REM You should not need to edit this file directly.
 
 if "%JDKDIR%"=="" (
-  echo daikonenv.bat: JDKDIR environment variable is not set
+  echo exiting daikonenv.bat: JDKDIR environment variable is not set
   exit /b 2
 ) else (
   if not exist "%JDKDIR%" (
-    echo daikonenv.bat: JDKDIR is set to non-existent directory %JDKDIR%
+    echo exiting daikonenv.bat: JDKDIR is set to non-existent directory %JDKDIR%
     exit /b 2
   )
 )
 
 if "%DAIKONDIR%"=="" (
-  echo daikonenv.bat: DAIKONDIR environment variable is not set
+  echo exiting daikonenv.bat: DAIKONDIR environment variable is not set
   exit /b 2
 ) else (
   if not exist "%DAIKONDIR%" (
-    echo daikonenv.bat: DAIKONDIR is set to non-existent directory %DAIKONDIR%
+    echo exiting daikonenv.bat: DAIKONDIR is set to non-existent directory %DAIKONDIR%
     exit /b 2
   )
 )
@@ -39,7 +39,7 @@ if "$DAIKONBIN"=="" (
     if exist "%DAIKONDIR%\scripts" (
       set DAIKONBIN=%DAIKONDIR%\scripts
     ) else (
-      echo daikon.bashrc: Cannot set DAIKONBIN
+      echo exiting daikon.bashrc: Cannot set DAIKONBIN
       exit /b 2
     )
   )

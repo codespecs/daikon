@@ -12,18 +12,18 @@
 ## You should not need to edit this file directly.
 
 if [ -z "$JDKDIR" ]; then
-  echo "daikon.bashrc: JDKDIR environment variable is not set"
+  echo "exiting daikon.bashrc: JDKDIR environment variable is not set"
   return 2
 elif [ ! -d "$JDKDIR" -a "$JDKDIR" != "none" ]; then
-  echo "daikon.bashrc: JDKDIR is set to non-existent directory $JDKDIR"
+  echo "exiting daikon.bashrc: JDKDIR is set to non-existent directory $JDKDIR"
   return 2
 fi
 
 if [ -z "$DAIKONDIR" ]; then
-  echo "daikon.bashrc: DAIKONDIR environment variable is not set"
+  echo "exiting daikon.bashrc: DAIKONDIR environment variable is not set"
   return 2
 elif [ ! -d "$DAIKONDIR" ]; then
-  echo "daikon.bashrc: DAIKONDIR is set to non-existent directory $DAIKONDIR"
+  echo "exiting daikon.bashrc: DAIKONDIR is set to non-existent directory $DAIKONDIR"
   return 2
 fi
 
@@ -33,7 +33,7 @@ if [ -z "$DAIKONBIN" ]; then
   elif [ -d ${DAIKONDIR}/scripts ]; then
     export DAIKONBIN=${DAIKONDIR}/scripts
   else
-    echo "daikon.bashrc: Cannot set DAIKONBIN"
+    echo "exiting daikon.bashrc: Cannot set DAIKONBIN"
     return 2
   fi
 fi
