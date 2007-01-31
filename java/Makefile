@@ -10,7 +10,8 @@ JAVAC ?= javac
 JAVAC_ARGS ?= -g -J-Xmx800m
 ## If you do not wish to use the "javac-xlint" program, add to Makefile.user:
 ##   JAVAC_XLINT =
-JAVAC_XLINT ?= javac-xlint -p '(/jtb/)|(/junit/)'
+# Give full pathname so this works from cron jobs
+JAVAC_XLINT ?= $(INV)/scripts/javac-xlint -p '(/jtb/)|(/junit/)'
 JAR ?= jar
 JAVA ?= java -ea
 
