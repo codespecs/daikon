@@ -1387,7 +1387,12 @@ information from standard input.
 
 @cindex command line options for Daikon
 @cindex flags for Daikon
-The optional flags are described in the sections that follow.
+The optional flags are described in the sections that follow.  For
+further ways to control Daikon's behavior via configuration options, see
+@ref{Configuration options}, and see the list of options to the front
+end such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
+options}).
+
 
 @menu
 * Options to control Daikon output::  
@@ -2354,9 +2359,14 @@ supplying it to Daikon on the command line using the @option{--config
 in order, overriding the defaults.  You may wish to use the supplied
 example configuration file
 @file{daikon/java/daikon/config/example-settings.txt} as an example when
-creating your own configuration files.  (If you did not downloaded
-Daikon's sources, you will have to extract the example from
+creating your own configuration files.  (If you did not download
+Daikon's sources, you must extract the example from
 @file{daikon.jar} to read it.)
+
+You can also control Daikon's output via its command-line options
+(@pxref{Running Daikon}) and vis the command-line options to its front
+ends such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
+options}).
 
 You may also specify a configuration setting directly on the command line,
 using the @option{--config_option @var{name}=@var{value}} option.
@@ -2376,11 +2386,11 @@ output, but they do not affect the invariants that Daikon computes.
 
 This is a list of all Daikon configuration options.
 The configuration option name contains the
-Java classes in which it is defined.  (In the Daikon source code, the
+Java class in which it is defined.  (In the Daikon source code, the
 configuration value is stored in a variable whose name contains a
 @code{dkconfig_} prefix, but that should be irrelevant to users.)
-To learn more about a specific invariant or derived variable, see
-its source code.
+To learn more about a specific invariant or derived variable than
+appears in this manual, see its source code.
 
 @c The config options are categorized into sections by pattern-matching
 @c their names.  If you are adding new options, you might want to choose
@@ -3272,7 +3282,7 @@ Produce debugging information.
 @item --default_bcel
 Chicory uses the Byte Code Engineering Library (BCEL) to instrument
 classfiles.  Errors can occur if the application uses an incompatible
-version of BCEL.  By defeault, Chicory identifies and loads its 
+version of BCEL.  By default, Chicory identifies and loads its 
 copy of BCEL when multiple copies of BCEL are in the classpath.  It will
 also issue a warning if multiple copies of BCEL are in the classpath and
 the application version is not the first one.  When this option is
@@ -7185,6 +7195,17 @@ particular executions that Daikon observed.  Both types of facts are
 useful:  the former tell you about your program, and the latter tell you
 about your test suite (and how to improve it!).
 
+If you are unable to modify the test suite, or if the facts are true,
+you can reduce the amount of output that Daikon produces by restricting
+the variables or properties that Daikon considers.  See Daikon's
+command-line options (@pxref{Running Daikon}), including its
+configuration options (@pxref{Configuration options}).  For example, you
+can exclude whole classes of unhelpful invariants from Daikon's output.
+The options for the front ends --- such as Chicory (@pxref{Chicory
+options}) and Kvasir (@pxref{Kvasir options}) --- give additional
+control.  For example, they permit you to ignore specific variables
+or program points.
+
 
 @node    No samples, No return from procedure, Too much output, Daikon problems
 @subsection No samples and no output
@@ -8146,7 +8167,8 @@ Kathryn Shih,
 Matthew Tschantz,
 Iuliu Vasilescu,
 Chen Xiao,
-Tao Xie.
+Tao Xie,
+Jeff Yuan.
 
 Craig Kaplan carved the Daikon logo.
 
@@ -9012,4 +9034,5 @@ this.topOfStack
 @c  LocalWords:  isspace xvzf toplevel bottomlevel AUTOEXEC getClass decs func
 @c  LocalWords:  ptrs Misc isStruct winterDays summerDays usertype fooClass pty
 @c  LocalWords:  fooVar CPATH mangelrc Dsetjmp setjmp lstdc libgcc GCC's cpp's
-@c  LocalWords:  ifndef preinclude XTerm cl
+@c  LocalWords:  ifndef preinclude XTerm cl dirname cnt mwdefines url linux von
+@c  LocalWords:  libc Leitner Quinonez Rodric Rabbah
