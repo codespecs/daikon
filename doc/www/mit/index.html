@@ -89,9 +89,9 @@ instructions below.
 In order to become familiar with the theory of dynamic invariant detection
 and some details of the Daikon implementation, see the <a
 href="http://pag.csail.mit.edu/~mernst/research/#Invariant_detection">papers</a>.
-You are probably best off starting with the 
+You are probably best off starting with the
 <a href="http://pag.csail.mit.edu/daikon/pubs/daikon-tool-scp2006-abstract.html">overview paper</a>
-and then reading other papers as necessary for more technical details; the 
+and then reading other papers as necessary for more technical details; the
 <a href="http://pag.csail.mit.edu/~mernst/pubs/invariants-incremental-fse2004-abstract.html">incremental
 analysis paper</a>
 is a reasonable second paper to read.
@@ -440,7 +440,7 @@ HTML, info, or printed (PostScript and PDF) output.
 
 <p>
 You can edit the manual using an ordinary text editor.  Emacs has a
-useful Texinfo mode.  You can mimic the formatting commands that 
+useful Texinfo mode.  You can mimic the formatting commands that
 already appear in the manual, but it's also a good idea to read the
 <a href="http://texinfo.org">Texinfo documentation</a>.
 </p>
@@ -466,7 +466,7 @@ even be the same), and you may replace "@chapter" by "@section",
 Follow the Texinfo conventions for marking up text.  In particular:
 </p>
 <ul>
-  <li> Don't use regular double quotes (&quot;) in running text.  Instead, use 
+  <li> Don't use regular double quotes (&quot;) in running text.  Instead, use
   two single backquotes and two regular quotes, ``like this''.  Emacs will
   do this substitution for you if you are using its Texinfo mode.</li>
 
@@ -474,21 +474,21 @@ Follow the Texinfo conventions for marking up text.  In particular:
     <ul>
       <li>@code is for names of classes, functions, variables, keywords, and
       other fragments of source code.</li>
-      <li>@var is for meta-syntactic variables, not for referring to variables 
+      <li>@var is for meta-syntactic variables, not for referring to variables
       that appear literally in the source code.</li>
       <li>@file is for the names of files.</li>
       <li>@option is for command-line options.</li>
       <li>@samp is for sample input or output.  (Alternatively, you can use
       @example to set off longer input/output strings.)</li>
-      <li>@command should be avoided.  If you are referring to the program 
+      <li>@command should be avoided.  If you are referring to the program
       itself, just use the name of the program without special markup, e.g. GCC.
-      If you are referring to how to invoke the program from the shell, 
+      If you are referring to how to invoke the program from the shell,
       @samp is better, e.g. @samp{gcc -E}.</li>
     </ul>
   </li>
-  <li>Examples shouldn't include extra spaces on the left for 
-    indentation since Texinfo already adds some indentation.  Remember 
-    that in code examples you need to replace all curly braces with @{ and @} 
+  <li>Examples shouldn't include extra spaces on the left for
+    indentation since Texinfo already adds some indentation.  Remember
+    that in code examples you need to replace all curly braces with @{ and @}
     to quote them for Texinfo.
   </li>
   <li>Don't mix @example and @smallexample in the same section since it
@@ -582,7 +582,7 @@ target.
     <li> Rebuild everything.
 
     <pre>
-        make rebuild-everything    </pre> 
+        make rebuild-everything    </pre>
     </li>
 
     <li> Run the kvasir regression tests
@@ -604,7 +604,7 @@ target.
 
     <pre>
         cd $inv/doc
-        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo </pre> 
+        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo </pre>
 
     <p>Another good source of information is the cvs logs over the
     last month: </p>
@@ -644,11 +644,11 @@ target.
         make test-staged-dist    </pre>
     </li>
 
-    <li> Update the website. 
+    <li> Update the website.
 
     <pre>
         make staging-to-www
-        make pag-install </pre> 
+        make pag-install </pre>
 
     <p>
     Note that <code>make staging-to-www</code> will automatically
@@ -674,7 +674,7 @@ target.
       checklink.pl -q -r `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
     </li>
 
-    <li> Commit any changes back to CVS 
+    <li> Commit any changes back to CVS
 
     <pre>
         cd $inv
@@ -703,14 +703,14 @@ target.
 
     <p>
     Go to the <a
-    href="http://freshmeat.net/projects/daikon/">Daikon project</a> and 
+    href="http://freshmeat.net/projects/daikon/">Daikon project</a> and
     choose 'add releases' which is the first choice next to [Project].
     There enter the version number, type of release and the introductory
     paragraph from CHANGES for this release.
     </p>
 
-    <p> 
-    This could be automated.  See "man freshmeat-submit" 
+    <p>
+    This could be automated.  See "man freshmeat-submit"
     </p>
     </li>
 </ol>
@@ -732,7 +732,7 @@ target.
     <li> Update Mangel-Wurzel
     <pre>
     cd $inv/mangel-wurzel
-    cvs -q update </pre> 
+    cvs -q update </pre>
     </li>
 
     <li> Setup yourself to use Purify and switch over the license (if
@@ -761,7 +761,7 @@ target.
 
     <li> To make and copy new binary distribution for release:
     <pre>
-    make tar 
+    make tar
     make release</pre>
     </li>
 </ol>
@@ -822,7 +822,7 @@ Problems:
 </p>
 <ul>
 
-    <li> 
+    <li>
     When running the tests, the error '<code>Expected
     HOST_ALIGNMENT_REQUIRED is 8</code>' is seen.
     <br />
@@ -849,7 +849,7 @@ Problems:
 
 <p>
 Currently, we only have a single-user, single-machine license for Purify, and
-you can only run it on horseradish (unless you transfer the license to 
+you can only run it on horseradish (unless you transfer the license to
 another machine).  Purify itself is installed in the group directories:
 </p>
 
@@ -867,8 +867,8 @@ To run it:
     <code> /afs/csail.mit.edu/group/pag/software/pkg/Rational </code>.
     </li>
 
-    <li> Add the Purify bin directory 
-    (<code>$RATIONAL/releases/PurifyPlus.2003a.06.15/i386_linux2/bin</code>) 
+    <li> Add the Purify bin directory
+    (<code>$RATIONAL/releases/PurifyPlus.2003a.06.15/i386_linux2/bin</code>)
     to your path.
     </li>
 
@@ -887,7 +887,7 @@ To change the authorized user:
     user.
     </li>
 
-    <li> Restart the license manager:<pre> 
+    <li> Restart the license manager:<pre>
     cd $RATIONAL/config
     ./start_lmgrd_on_horseradish stop
     ./start_lmgrd_on_horseradish </pre>
@@ -900,7 +900,7 @@ To move the license to a different machine:
 
 <ol>
 
-    <li> Go to <a href="http://www.ibm.com/software/rational/support/licensing/">http://www.ibm.com/software/rational/support/licensing/</a> 
+    <li> Go to <a href="http://www.ibm.com/software/rational/">http://www.ibm.com/software/rational/</a>
     and create an account with
     your e-mail address.  Our account number is M211806-0-303 and our IBM
     customer number is 5549887.
@@ -913,7 +913,7 @@ To move the license to a different machine:
     you need to return the old key (for horseradish) and request a new
     one.
     <br />
-    The current license file is 
+    The current license file is
     <code>$RATIONAL/config/license_for_horseradish.upd</code>.
     </li>
 
@@ -969,7 +969,7 @@ To install Purify from scratch:
     </li>
 
     <li> Next it'll ask you to edit the options file.  You only need one
-    line in the file, like 
+    line in the file, like
 
     <pre>
     INCLUDE PurifyNT USER sjl </pre>
@@ -987,7 +987,7 @@ To install Purify from scratch:
     <pre>
     C:\Program Files\PurifyPlus&nbsp;for&nbsp;Windows\SETUP\</pre>
     and then open "purifyplusNT Setup Launcher".  Choose Rational Purify as
-    the product to install (our license doesn't include PureCoverage or 
+    the product to install (our license doesn't include PureCoverage or
     Quantify).  This will throw you back into the License Key Administrator
     again, but you don't have to do anything here.
     </li>
@@ -1001,10 +1001,10 @@ To install Purify from scratch:
 <a name="purify-windows-change-user"> To change the authorized user: </a>
 <ol>
 
-    <li> Go into <code>C:\Program&nbsp;Files\Rational\Common</code> 
+    <li> Go into <code>C:\Program&nbsp;Files\Rational\Common</code>
     and edit <code>Rational.opt</code> (make
-    sure it is the one listed as an OPT file and not a text file).  If 
-    your username includes spaces, be sure to enclose it in "double quotes". 
+    sure it is the one listed as an OPT file and not a text file).  If
+    your username includes spaces, be sure to enclose it in "double quotes".
     </li>
 
     <li> From the Windows Control Panel, go to Performance and Maintenance,
@@ -1041,7 +1041,7 @@ for C and C++.  It is the basis of the Mangel-Wurzel front end for Daikon.
 Reading the code of the EDG C++ Front End (and therefore any work on
 Mangel-Wurzel) requires signing a <a
 href="edg-nda-noncomm.pdf">non-disclosure agreement</a>.
-You just have to fill out pages 4 and 5; 
+You just have to fill out pages 4 and 5;
 "Developer" is MIT, and "Programmer" is you.
 <!-- This detail is no longer relevant with the form as of October 2005. -->
 <!-- The "date of the original agreement" is August 16, 2000. -->
@@ -1069,7 +1069,7 @@ at <code>src/il_def.h</code>.
     best to add /usr/vmware/bin to your path </li>
 
     <li> MIT has licenses for VMWare.  Send an email to software@csail.mit.edu
-    to get a license number.  From the vmware screen, choose 
+    to get a license number.  From the vmware screen, choose
     'help->Enter Serial Number' to enter the license. </li>
 
     <li> Start up VMWare by choosing 'Open existing virtual machine or team'
@@ -1120,7 +1120,7 @@ redirected to/from a pipe, which is how ptys are implemented in
 Cygwin.)  Also note that Purify only works on native Windows
 executables produced by the Visual C/C++ compiler, not by gcc.</li>
 
-<li> You need to set up some environment variables in your 
+<li> You need to set up some environment variables in your
 <code>.cshrc</code> or <code>.bashrc</code>,  like so:
 
 <p>For Daikon:</p>
@@ -1163,7 +1163,7 @@ useful to creat a shortcut named "Program_Files" to point to the "Program
 Files" directory since it's a pain dealing with pathnames with spaces
 in Cygwin.</li>
 
-<li> Make sure you have your <a href="#purify-windows">Purify license</a> 
+<li> Make sure you have your <a href="#purify-windows">Purify license</a>
 set up correctly.</li>
 
 <li> You might want to do a sanity check on your configuration stuff by
