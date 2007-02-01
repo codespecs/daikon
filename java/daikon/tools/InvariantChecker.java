@@ -58,10 +58,12 @@ public class InvariantChecker {
   static File output_file;
   static PrintStream output_stream = System.out;
   static int error_cnt = 0;
+  static int sample_cnt = 0;
 
   static File dir_file; //Yoav added
   static boolean doFilter;
   static boolean doConf;
+  static boolean quiet = true;
   static HashSet<Invariant> failedInvariants = new HashSet<Invariant>(); //Yoav added
   static HashSet<Invariant> testedInvariants = new HashSet<Invariant>(); //Yoav added
   static HashSet<Invariant> activeInvariants = new HashSet<Invariant>(); //Yoav added
@@ -109,7 +111,7 @@ public class InvariantChecker {
                   0),
       new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
-    Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
+    Getopt g = new Getopt("daikon.tools.InvariantChecker", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch(c) {
@@ -250,9 +252,6 @@ public class InvariantChecker {
     // Read the invariant file
     PptMap ppts = FileIO.read_serialized_pptmap (inv_file, true );
 
-
-
-
     //Yoav: make sure we have unique invariants
     InvariantFilters fi = InvariantFilters.defaultFilters();
     //Set<String> allInvariantsStr = new HashSet<String>();
@@ -261,11 +260,18 @@ public class InvariantChecker {
       for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
         PptSlice slice = i.next();
         for (Invariant inv : slice.invs) {
-          if (doConf && inv.getConfidence()<Invariant.dkconfig_confidence_limit)
+          if (doConf &&
+              inv.getConfidence()<Invariant.dkconfig_confidence_limit){
+            // System.out.printf ("inv ignored (conf): %s:%s\n", inv.ppt.name(),
+            //                   inv.format());
             continue;
+          }
 
-          if (doFilter && fi.shouldKeep(inv)==null)
+          if (doFilter && fi.shouldKeep(inv)==null) {
+            // System.out.printf ("inv ignored (filter): %s:%s\n",
+            //                     inv.ppt.name(), inv.format());
             continue;
+          }
           activeInvariants.add(inv);
 
           //String n = invariant2str(ppt, inv);
@@ -284,11 +290,18 @@ public class InvariantChecker {
     FileIO.read_data_trace_files (dtrace_files, ppts, processor, false);
     progress.shouldStop = true;
     System.out.println ();
-    System.out.println ("" + error_cnt + " Errors Found" );
+    System.out.printf ("%s: %,d errors found in %,d samples (%s)\n", inv_file,
+                       error_cnt, sample_cnt,
+                       toPercentage (error_cnt, sample_cnt));
     int failedCount = failedInvariants.size();
     int testedCount = testedInvariants.size();
     String percent = toPercentage(failedCount, testedCount);
     System.out.println(inv_file+": "+failedCount+" false positives, out of "+testedCount+", which is "+percent+".");
+    if (false) {
+      for (Invariant inv : failedInvariants) {
+        System.out.printf ("+%s:%s\n", inv.ppt.name(), inv.format());
+      }
+    }
   }
 
   /** Class to track matching ppt and its values. */
@@ -347,9 +360,16 @@ public class InvariantChecker {
       if (ppt.ppt_name.isExitPoint()) {
         Assert.assertTrue (nonce != null);
         EnterCall ec = call_map.get (nonce);
-        call_map.remove (nonce);
-        debug.fine ("Processing enter sample from " + ec.ppt.name);
-        add (ec.ppt, ec.vt);
+        if (ec != null) {
+          call_map.remove (nonce);
+          debug.fine ("Processing enter sample from " + ec.ppt.name);
+          add (ec.ppt, ec.vt);
+        } else { // didn't find the enter
+          if (!quiet)
+            System.out.printf ("couldn't find enter for nonce %d at ppt %s\n",
+                               nonce, ppt.name());
+          return;
+        }
       }
 
       add (ppt, vt);
@@ -426,22 +446,28 @@ public class InvariantChecker {
           }
 
           //Yoav added
-          if (!activeInvariants.contains(inv))
-              continue;
-
+          if (!activeInvariants.contains(inv)) {
+            // System.out.printf ("skipping invariant %s:%s\n", inv.ppt.name(),
+            //                   inv.format());
+            continue;
+          }
 
           //String invRep = invariant2str(ppt, inv);
           testedInvariants.add(inv);
 
           InvariantStatus status = inv.add_sample (vt, 1);
+          sample_cnt++;
           if (status != InvariantStatus.NO_CHANGE) {
             LineNumberReader lnr = FileIO.data_trace_state.reader;
             String line = (lnr == null) ? "?"
                         : String.valueOf(lnr.getLineNumber());
-            output_stream.println ("At ppt " + ppt.name + ", Invariant '"
-               + inv.format() + "' invalidated by sample "
-               + Debug.toString (slice.var_infos, vt) + "at line " + line + " in file "+FileIO.data_trace_state.filename);
-
+            if (!quiet) {
+              output_stream.println ("At ppt " + ppt.name + ", Invariant '"
+                                     + inv.format() + "' invalidated by sample "
+                                     + Debug.toString (slice.var_infos, vt)
+                                     + "at line " + line + " in file "
+                                     +FileIO.data_trace_state.filename);
+            }
             failedInvariants.add(inv);
             activeInvariants.remove(inv);
             error_cnt++;
