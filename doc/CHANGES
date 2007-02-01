@@ -20,6 +20,37 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.14 (February 1 2007)
+
+A new mode was added to Daikon that allows it to handle constants
+more efficiently.  Also, a new configuration option was added 
+and one was renamed.
+
+Daikon
+
+  User-visible changes
+
+    Daikon can now optionally ignore static constant variables during
+    processing (saving space and time) and include the names of those
+    constants in the output of sample dependent invariants (such
+    as OneOf, LowerBound, and UpperBound).  For example, if the
+    UpperBound invariant 'i < 1024' is found and a constant 'bufsize'
+    with the value 1024 exists, the invariant will be printed as
+    'i < bufsize'.  This mode is controlled by the configuration option 
+    daikon.PrintInvariants.static_const_infer.  It is not enabled by
+    default.
+
+    Normally, if a method exit is executed without a preceeding enter,
+    Daikon exits with an error.  If the new configuration option
+    daikon.FileIO.ignore_missing_enter is set to true, the unmatched exits
+    will be ignored instead.  This can make it easier to process parts
+    of a dtrace file.
+
+    The configuration option daikon.Daikon.disable_derived_variables was
+    renamed to daikon.derive.Derivation.disable_derived_variables 
+
+---------------------------------------
+
 4.2.13 (January 1 2007)
 
 A server mode was added to Daikon.  Two new command lined switches
