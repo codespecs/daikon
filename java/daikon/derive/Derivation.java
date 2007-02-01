@@ -23,6 +23,21 @@ public abstract class Derivation
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  // This definition is here so that it will show up in the manual
+  // with the other options for controlling derived variables
+  /**
+   * Boolean.  If true, Daikon will not create any derived variables.
+   * Derived variables, which are combinations of variables that appeared in
+   * the program, like <code>array[index]</code> if <code>array</code> and
+   * <code>index</code> appeared, can
+   * increase the number of properties Daikon finds, especially over
+   * sequences. However, derived variables increase Daikon's time and
+   * memory usage, sometimes dramatically. If false, individual kinds of
+   * derived variables can be enabled or disabled individually using
+   * configuration options under <samp>daikon.derive</samp>.
+   **/
+  public static boolean dkconfig_disable_derived_variables = false;
+
   /**
    * Debug tracer.
    **/

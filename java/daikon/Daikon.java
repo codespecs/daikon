@@ -33,6 +33,7 @@ import utilMDE.Stopwatch;
 import utilMDE.TextFile;
 import utilMDE.UtilMDE;
 import daikon.config.Configuration;
+import daikon.derive.Derivation;
 import daikon.inv.Equality;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
@@ -250,19 +251,6 @@ public final class Daikon {
    * exit points from a method.
    **/
   public static boolean dkconfig_disable_splitting = false;
-
-  /**
-   * Boolean.  If true, Daikon will not create any derived variables.
-   * Derived variables, which are combinations of variables that appeared in
-   * the program, like <code>array[index]</code> if <code>array</code> and
-   * <code>index</code> appeared, can
-   * increase the number of properties Daikon finds, especially over
-   * sequences. However, derived variables increase Daikon's time and
-   * memory usage, sometimes dramatically. If false, individual kinds of
-   * derived variables can be enabled or disabled individually using
-   * configuration options under <samp>daikon.derive</samp>.
-   **/
-  public static boolean dkconfig_disable_derived_variables = false;
 
   /**
    * Boolean.  Controls whether or not processing information is printed out.
@@ -1427,7 +1415,7 @@ public final class Daikon {
     // Create orig and derived variables
     progress = "Creating orig variables for: " + ppt.name;
     create_orig_vars (ppt, all_ppts);
-    if (!dkconfig_disable_derived_variables) {
+    if (!Derivation.dkconfig_disable_derived_variables) {
       progress = "Creating derived variables for: " + ppt.name;
       ppt.create_derived_variables();
     }
