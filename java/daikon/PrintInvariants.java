@@ -120,6 +120,17 @@ public final class PrintInvariants {
   public static boolean dkconfig_old_array_names = true;
 
   /**
+   * This enables a different way of treating static constant variables.
+   * They are not created into invariants into slices.  Instead, they are
+   * examined during print time.  If a unary invariant contains a value
+   * which matches the value of a static constant varible, the value
+   * will be replaced by the name of the variable, "if it makes sense".
+   * For example, if there is a static constant variable a = 1.  And there
+   * exists an invariant x <= 1, x <= a would be the result printed.
+   */
+  public static boolean dkconfig_static_const_infer = false;
+  
+  /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
   public static final Logger debug = Logger.getLogger("daikon.PrintInvariants");

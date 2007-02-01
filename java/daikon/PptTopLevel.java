@@ -2165,7 +2165,10 @@ public class PptTopLevel extends Ppt {
 
     if (!var.isCanonical())
       return (false);
-
+    
+    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant)
+      return (false);
+    
     return (true);
   }
 
@@ -2187,7 +2190,10 @@ public class PptTopLevel extends Ppt {
 
     if (!var.isCanonical())
       return (false);
-
+    
+    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant)
+      return (false);
+    
     return (true);
   }
 
@@ -2215,6 +2221,9 @@ public class PptTopLevel extends Ppt {
 
     // For now, variable must be integral or float
     if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat())
+      return (false);
+    
+    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant)
       return (false);
 
     return (true);

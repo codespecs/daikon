@@ -286,7 +286,34 @@ public class LOWERBOUNDCORE
 
 
   public double computeConfidence() {
+    if (PrintInvariants.dkconfig_static_const_infer && matchConstant())
+      return Invariant.CONFIDENCE_JUSTIFIED;
+    
     return 1 - computeProbability();
+  }
+  
+  public boolean matchConstant() {
+    PptTopLevel pptt = wrapper.ppt.parent;
+
+    for (VarInfo vi : pptt.var_infos) {
+      if (vi.is_static_constant) {
+        // If variable is a double, then use fuzzy comparison
+        if (vi.rep_type == ProglangType.DOUBLE) {
+          Double constantVal = (Double)vi.constantValue();
+          if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
+            return true;
+        }
+        // Otherwise just use the equals method
+        else {
+          Object constantVal = vi.constantValue();
+          if (constantVal.equals(MIN1)) {
+            return true;
+          }
+        }
+      }
+    }
+    
+    return false;
   }
 
   // used by computeConfidence

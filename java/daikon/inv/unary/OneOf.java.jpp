@@ -439,7 +439,63 @@ public final class ONEOFSCALAR
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
+
+#if defined(SCALAR) || defined(ELT) || defined(SEQUENCE) || defined(STRING) || defined(ELTSTRING)
+      if (PrintInvariants.dkconfig_static_const_infer) {
+        boolean curVarMatch = false;       
+        PptTopLevel pptt = ppt.parent;
+        for (VarInfo vi : pptt.var_infos) {
+          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+            Object constantVal = vi.constantValue();
+            if (constantVal.equals(elts[i])) {
+              sb.append(vi.name());
+              curVarMatch = true;
+            }
+          }
+        }
+        
+        if (curVarMatch == false) {
+          sb.append(TOSTRING(elts[i]));
+        }
+      }      
+      else {
+        sb.append(TOSTRING(elts[i]));
+      }
+#elif defined(FLOAT) || defined(ELTFLOAT)
+      if (PrintInvariants.dkconfig_static_const_infer) {
+        boolean curVarMatch = false;       
+        PptTopLevel pptt = ppt.parent;
+        for (VarInfo vi : pptt.var_infos) {
+          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+            // If variable is a double, then use fuzzy comparison
+            if (vi.rep_type == ProglangType.DOUBLE) {
+              Double constantVal = (Double)vi.constantValue();
+              if (Global.fuzzy.eq(constantVal, elts[i]) || (Double.isNaN(constantVal) && Double.isNaN(elts[i]))) {
+                sb.append(vi.name());
+                curVarMatch = true;
+              }
+            }
+            // Otherwise just use the equals method
+            else {
+              Object constantVal = vi.constantValue();
+              if (constantVal.equals(elts[i])) {
+                sb.append(vi.name());
+                curVarMatch = true;
+              }
+            }
+          }
+        }
+        
+        if (curVarMatch == false) {
+          sb.append(TOSTRING(elts[i]));
+        }
+      }      
+      else {
+        sb.append(TOSTRING(elts[i]));
+      }
+#else
       sb.append(TOSTRING(elts[i]));
+#endif
     }
     sb.append(" }");
     return sb.toString();
@@ -518,6 +574,17 @@ public final class ONEOFSCALAR
               ;
           }
         } else {
+          if (PrintInvariants.dkconfig_static_const_infer) {
+            PptTopLevel pptt = ppt.parent;
+            for (VarInfo vi : pptt.var_infos) {
+              if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+                Object constantVal = vi.constantValue();
+                if (constantVal.equals(elts[0])) {
+                  return varname + " == " + vi.name();
+                }
+              }
+            }
+          }
           return varname + " == " + TOSTRING(elts[0]);
         }
       #elif defined(SEQUENCE)
@@ -537,6 +604,17 @@ public final class ONEOFSCALAR
             return varname + " has only one value, of length " + value.length;
           }
         } else {
+          if (PrintInvariants.dkconfig_static_const_infer) {
+            PptTopLevel pptt = ppt.parent;
+            for (VarInfo vi : pptt.var_infos) {
+              if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+                Object constantVal = vi.constantValue();
+                if (constantVal.equals(elts[0])) {
+                  return varname + " == " + vi.name();
+                }
+              }
+            }
+          }
           return varname + " == " + TOSTRING(elts[0]);
         }
       #elif defined(STRING) || defined(ELTSTRING)
@@ -552,14 +630,46 @@ public final class ONEOFSCALAR
             if (str.startsWith("[")) {
               str = UtilMDE.classnameFromJvm(str);
             }
+            if (PrintInvariants.dkconfig_static_const_infer) {
+              PptTopLevel pptt = ppt.parent;
+              for (VarInfo vi : pptt.var_infos) {
+                if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+                  Object constantVal = vi.constantValue();
+                  if (constantVal.equals(str)) {
+                    return varname + " == " + vi.name();
+                  }
+                }
+              }
+            }
             // ".class" (which is a suffix for a type name) and not
             // getClassSuffix (which is a suffix for an expression).
             return varname + " == " + str + ".class";
           }
         }
-        #else
+      #elif defined(FLOAT) || defined(ELTFLOAT)
+        if (PrintInvariants.dkconfig_static_const_infer) {
+          PptTopLevel pptt = ppt.parent;
+          for (VarInfo vi : pptt.var_infos) {
+            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              if (vi.rep_type == ProglangType.DOUBLE) {
+                Double constantVal = (Double)vi.constantValue();
+                if (Global.fuzzy.eq(constantVal, elts[0]) || (Double.isNaN(constantVal) && Double.isNaN(elts[0]))) {
+                  return varname + " == " + vi.name();
+                }
+              }
+              else {
+                Object constantVal = vi.constantValue();
+                if (constantVal.equals(elts[0])) {
+                  return varname + " == " + vi.name();
+                }
+              }
+            }
+          }
+        }
+        return varname + " == " + TOSTRING(elts[0]);
+       #else
           return varname + " == " + TOSTRING(elts[0]);
-        #endif
+       #endif
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -588,6 +698,17 @@ public final class ONEOFSCALAR
         }
       } else {
         String varname = REPAIR_NAME;
+        if (PrintInvariants.dkconfig_static_const_infer) {
+          PptTopLevel pptt = ppt.parent;
+          for (VarInfo vi : pptt.var_infos) {
+            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              Object constantVal = vi.constantValue();
+              if (constantVal.equals(elts[0])) {
+                return varname + " = " + vi.name();
+              }
+            }
+          }
+        }
         return varname + " = " + TOSTRING(elts[0]);
       }
 #elif defined(SEQUENCE)
@@ -608,8 +729,55 @@ public final class ONEOFSCALAR
           return "$noprint(" + varname + " has only one value, of length " + value.length + ")";
         }
       } else {
+        if (PrintInvariants.dkconfig_static_const_infer) {
+          PptTopLevel pptt = ppt.parent;
+          for (VarInfo vi : pptt.var_infos) {
+            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              Object constantVal = vi.constantValue();
+              if (constantVal.equals(elts[0])) {
+                return varname + " == " + vi.name();
+              }
+            }
+          }
+        }
         return varname + " = " + TOSTRING(elts[0]);
       }
+#elif defined(FLOAT) || defined(ELTFLOAT)
+      String varname = REPAIR_NAME;
+      if (PrintInvariants.dkconfig_static_const_infer) {
+        PptTopLevel pptt = ppt.parent;
+        for (VarInfo vi : pptt.var_infos) {
+          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+            if (vi.rep_type == ProglangType.DOUBLE) {
+              Double constantVal = (Double)vi.constantValue();
+              if (Global.fuzzy.eq(constantVal, elts[0]) || (Double.isNaN(constantVal) && Double.isNaN(elts[0]))) {
+                return varname + " = " + vi.name();
+              }
+            }
+            else {
+              Object constantVal = vi.constantValue();
+              if (constantVal.equals(elts[0])) {
+                return varname + " = " + vi.name();
+              }
+            }
+          }
+        }
+      }
+      return varname + " = " + TOSTRING(elts[0]);
+#elif defined(STRING) || defined(ELTSTRING)
+      String varname = REPAIR_NAME;
+      if (PrintInvariants.dkconfig_static_const_infer) {
+        PptTopLevel pptt = ppt.parent;
+        for (VarInfo vi : pptt.var_infos) {
+          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+            Object constantVal = vi.constantValue();
+            if (constantVal.equals(elts[0])) {
+              return varname + " = " + vi.name();
+            }
+          }
+        }
+      }
+      return varname + " = " + TOSTRING(elts[0]);
 #else
       String varname = REPAIR_NAME;
       return varname + " = " + TOSTRING(elts[0]);
@@ -622,13 +790,65 @@ public final class ONEOFSCALAR
       for (int i=0; i<num_elts; i++) {
         if (i != 0)
           sb.append(" or ");
+#if defined(SCALAR) || defined(ELT) || defined(SEQUENCE) || defined(STRING) || defined(ELTSTRING)
+        if (PrintInvariants.dkconfig_static_const_infer) {
+          boolean curVarMatch = false;       
+          PptTopLevel pptt = ppt.parent;
+          for (VarInfo vi : pptt.var_infos) {
+            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              Object constantVal = vi.constantValue();
+              if (constantVal.equals(elts[i])) {
+                sb.append("("+varname+"="+vi.name()+")");
+                curVarMatch = true;
+              }
+            }
+          }       
+          if (curVarMatch == false) {
+            sb.append("("+varname+"="+TOSTRING(elts[i])+")");
+          }
+        }      
+        else {
+          sb.append("("+varname+"="+TOSTRING(elts[i])+")");
+        }
+      }
+#elif defined(FLOAT) || defined(ELTFLOAT)
+        if (PrintInvariants.dkconfig_static_const_infer) {
+          boolean curVarMatch = false;       
+          PptTopLevel pptt = ppt.parent;
+          for (VarInfo vi : pptt.var_infos) {
+            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              if (vi.rep_type == ProglangType.DOUBLE) {
+                Double constantVal = (Double)vi.constantValue();
+                if (Global.fuzzy.eq(constantVal, elts[i]) || (Double.isNaN(constantVal) && Double.isNaN(elts[i]))) {
+                  sb.append("("+varname+"="+vi.name()+")");
+                  curVarMatch = true;
+                }
+              }
+              else {
+                Object constantVal = vi.constantValue();
+                if (constantVal.equals(elts[i])) {
+                  sb.append("("+varname+"="+vi.name()+")");
+                  curVarMatch = true;
+                }
+              }
+            }
+          }     
+          if (curVarMatch == false) {
+            sb.append("("+varname+"="+TOSTRING(elts[i])+")");
+          }
+        }      
+        else {
+          sb.append("("+varname+"="+TOSTRING(elts[i])+")");
+        }
+      }
+#else
         sb.append("("+varname+"="+TOSTRING(elts[i])+")");
       }
+#endif           
       sb.append(")");
       return sb.toString();
     }
   }
-
 
 #if defined(STRING) || defined(ELTSTRING)
   private boolean is_type() {
@@ -652,7 +872,25 @@ public final class ONEOFSCALAR
     result = "";
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " \\/ ("; }
-      result += varname + " = " + TOSTRING(elts[i]) + ")";
+      if (PrintInvariants.dkconfig_static_const_infer) {
+        boolean curVarMatch = false;       
+        PptTopLevel pptt = ppt.parent;
+        for (VarInfo vi : pptt.var_infos) {
+          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+            Object constantVal = vi.constantValue();
+            if (constantVal.equals(elts[i])) {
+              result += varname + " = " + vi.name() + ")";
+              curVarMatch = true;
+            }
+          }
+        }
+        if (curVarMatch == false) {
+          result += varname + " = " + TOSTRING(elts[i]) + ")";
+        }
+      } 
+      else { 
+        result += varname + " = " + TOSTRING(elts[i]) + ")";
+      }
     }
     result += ")";
 
@@ -676,7 +914,34 @@ public final class ONEOFSCALAR
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + TOSTRING(elts[i]) + ")";
+        if (PrintInvariants.dkconfig_static_const_infer) {
+          boolean curVarMatch = false;       
+          PptTopLevel pptt = ppt.parent;
+          for (VarInfo vi : pptt.var_infos) {
+            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              if (vi.rep_type == ProglangType.DOUBLE) {
+                Double constantVal = (Double)vi.constantValue();
+                if (Global.fuzzy.eq(constantVal, elts[i]) || (Double.isNaN(constantVal) && Double.isNaN(elts[i]))) {
+                  result += "(" + varname + " = " + vi.name() + ")";
+                  curVarMatch = true;
+                }
+              }
+              else {
+                Object constantVal = vi.constantValue();
+                if (constantVal.equals(elts[i])) {
+                  result += "(" + varname + " = " + vi.name() + ")";
+                  curVarMatch = true;
+                }
+              }
+            }
+          }
+          if (curVarMatch == false)  { 
+            result += "(" + varname + " = " + TOSTRING(elts[i]) + ")";
+          }
+        }
+        else { 
+          result += "(" + varname + " = " + TOSTRING(elts[i]) + ")";
+        }
       }
     }
 #elif defined(IS_SEQUENCE_NUMERIC)
