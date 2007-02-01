@@ -58,6 +58,13 @@ public final class FileIO {
   // daikon.config.Configuration interface.
 
   /**
+   * When true, just ignore exit ppts that don't have a matching enter
+   * ppt rather than exiting with an error.  Unmatched exits can occur
+   * if only a portion of a dtrace file is processed
+   */
+  public static boolean dkconfig_ignore_missing_enter = false;
+
+  /**
    * Boolean.  When false, set modbits to 1 iff the printed
    * representation has changed.  When true, set modbits to 1 if the
    * printed representation has changed; leave other modbits as is.
@@ -1365,7 +1372,9 @@ public final class FileIO {
     // Add orig variables.  This must be above the check below because
     // it saves away the orig values from enter points for later use
     // by exit points.
-    add_orig_variables(ppt, vt.vals, vt.mods, nonce);
+    boolean ignore = add_orig_variables(ppt, vt.vals, vt.mods, nonce);
+    if (ignore)
+      return;
 
     // Only process the leaves of the ppt tree.
     // This test assumes that all leaves are numbered exit program points
@@ -1765,9 +1774,17 @@ public final class FileIO {
       "Expected blank line at line " + reader.getLineNumber() + ": " + line);
   }
 
-  public static void add_orig_variables(PptTopLevel ppt,
-                                        // HashMap cumulative_modbits,
-                                        Object[] vals, int[] mods, Integer nonce) {
+  /**
+   * If this is an function entry ppt, stores the values of all of the
+   * variables away for use at the exit.  If this is an exit, finds the
+   * values at enter and adds them as the value sof the orig variables.
+   * Normally returns false.  Returns true if this is an exit without
+   * a matching enter.  See dkconfig_ignore_missing_enter for more info.
+   * If true is returned, this ppt should be ignored by the caller
+   **/
+  public static boolean add_orig_variables(PptTopLevel ppt,
+                                     // HashMap cumulative_modbits,
+                                     Object[] vals, int[] mods, Integer nonce) {
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
@@ -1778,7 +1795,7 @@ public final class FileIO {
       } else {
         call_hashmap.put(nonce, invok);
       }
-      return;
+      return false;
     }
 
     if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
@@ -1810,7 +1827,13 @@ public final class FileIO {
         } else {
           // nonce != null
           invoc = call_hashmap.get(nonce);
-          if (invoc == null) {
+          if (dkconfig_ignore_missing_enter && (invoc == null)) {
+            //System.out.printf ("Didn't find call with nonce %d to match %s" +
+            //                   " ending at %s line %d\n", nonce, ppt.name(),
+            //                   data_trace_state.filename,
+            //                   data_trace_state.reader.getLineNumber());
+            return true;
+          } else if (invoc == null) {
             throw new Error(
               "Didn't find call with nonce "
                 + nonce
@@ -1866,6 +1889,7 @@ public final class FileIO {
         vi_index++;
       }
     }
+    return false;
   }
 
   /** Add derived variables **/
