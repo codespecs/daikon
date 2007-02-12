@@ -1,4 +1,5 @@
 --exclude-broken -1:http://whereis.mit.edu/map-jpg?selection=32&Buildings=go 
+--exclude-broken 302:http://www.hotelatmit.com/
 --exclude-broken 403:http://www.cs.washington.edu/orgs/student-affairs/gsc/jobs/
 --exclude-broken 403:http://www.elsevier.nl/locate/disc/
 --exclude-broken 403:https://www.csail.mit.edu/mrbs/
