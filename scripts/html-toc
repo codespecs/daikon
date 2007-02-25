@@ -3,7 +3,7 @@
 # Generate (to standard out) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
 # Thanks to C. Scott Ananian <cscott@cscott.net>
-# Time-stamp: <2006-04-07 17:24:11 mernst>
+# Time-stamp: <2007-02-24 19:30:27 mernst>
 
 # See html-update-toc for documentation.
 # (Typically, you will not run this program, but will use html-update-toc
@@ -46,7 +46,7 @@ while (<>) {
   } elsif (/<!-- omit from toc -->|<omit from toc>/) {
     # Check <omit from toc> because sometimes, a HTML comment is not appropriate.
     next;
-  } elsif (/<h([1-9])>
+  } elsif (/<h([1-9])(?: [^>]*)?>
 	   <a   # open the a start tag
 	   (?:\s+\w+\s*=\s*\"[^\"]*\")*? # allow random attributes
 	   \s+(?:name|id)\s*=\s*\"([^\"]*)\" # look for name or id attribute
@@ -70,14 +70,15 @@ while (<>) {
     $secname1 =~ s/[ \t]+$//;
     $secname2 =~ s/^[ \t]+//;
     $secname2 =~ s/[ \t]+$//;
-    my $sectitle = $secname1;
-    if ($sectitle eq "") {
+    my $sectitle;
+    if ($secname1 eq "") {
       $sectitle = $secname2;
-    }
-
-    if (($secname1 ne "") && ($secname2 ne "")) {
-      $errors .= "Duplicate section title: $_";
-      next;
+    } elsif ($secname2 eq "") {
+      $sectitle = $secname1;
+    } else {
+      # $errors .= "Merging two section titles (\"$secname1\" and \"$secname2\") found on one line: $_";
+      # next;
+      $sectitle = "$secname1 $secname2";
     }
 
     # if $level >= $thishlevel, we have an open <li>
