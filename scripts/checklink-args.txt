@@ -55,3 +55,4 @@
 --exclude-redirect-prefix http://pag.csail.mit.edu/~->http://people.csail.mit.edu/
 --exclude-redirect-prefix http://texi2html.cvshome.org/->https://texi2html.cvshome.org/
 --exclude-redirect-prefix http://www.csail.mit.edu/~->http://people.csail.mit.edu/
+--exclude-redirect http://www.dexonline.com/->http://www.dexonline.com/displayhome.ds
