@@ -3,7 +3,7 @@
 # Generate (to standard out) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
 # Thanks to C. Scott Ananian <cscott@cscott.net>
-# Time-stamp: <2007-02-24 19:30:27 mernst>
+# Time-stamp: <2007-03-12 15:42:39 mernst>
 
 # See html-update-toc for documentation.
 # (Typically, you will not run this program, but will use html-update-toc
@@ -37,6 +37,42 @@ sub exit_level {
   # returns with an open <li>
 }
 
+sub found_header ( $$$$ ) {
+  my ($thishlevel, $anchorname, $secname1, $secname2) = @_;
+
+  # Remove leading and trailing whitespace in section title.
+  $secname1 =~ s/^[ \t]+//;
+  $secname1 =~ s/[ \t]+$//;
+  $secname2 =~ s/^[ \t]+//;
+  $secname2 =~ s/[ \t]+$//;
+  my $sectitle;
+  if ($secname1 eq "") {
+    $sectitle = $secname2;
+  } elsif ($secname2 eq "") {
+    $sectitle = $secname1;
+  } else {
+    # $errors .= "Merging two section titles (\"$secname1\" and \"$secname2\") found on one line: $_";
+    # next;
+    $sectitle = "$secname1 $secname2";
+  }
+
+  # if $level >= $thishlevel, we have an open <li>
+  while ($level > $thishlevel) {
+    exit_level();
+  }
+  # close this <li>, unless we're going deeper
+  $output .= "</li>" if ($level == $thishlevel);
+  $output .= "\n" unless $level == 0;
+  while ($level < $thishlevel) {
+    enter_level();
+    $output .= (" " x ($level * 4 - 2)) . "<li>\n" if $level < $thishlevel;
+  }
+  $output .= ((" " x ($level * 4 - 2)) . "<li><a href=\"#$anchorname\">$sectitle</a>");
+  if ($level == 1) { $num_named_1++; }
+
+}
+
+
 
 # Main loop
 
@@ -47,6 +83,7 @@ while (<>) {
     # Check <omit from toc> because sometimes, a HTML comment is not appropriate.
     next;
   } elsif (/<h([1-9])(?: [^>]*)?>
+           (?:<!--[^>]*-->)?      # permit a comment
 	   <a   # open the a start tag
 	   (?:\s+\w+\s*=\s*\"[^\"]*\")*? # allow random attributes
 	   \s+(?:name|id)\s*=\s*\"([^\"]*)\" # look for name or id attribute
@@ -65,35 +102,24 @@ while (<>) {
     my $anchorname = $2;
     my $secname1 = $3;
     my $secname2 = $4;
-    # Remove leading and trailing whitespace in section title.
-    $secname1 =~ s/^[ \t]+//;
-    $secname1 =~ s/[ \t]+$//;
-    $secname2 =~ s/^[ \t]+//;
-    $secname2 =~ s/[ \t]+$//;
-    my $sectitle;
-    if ($secname1 eq "") {
-      $sectitle = $secname2;
-    } elsif ($secname2 eq "") {
-      $sectitle = $secname1;
-    } else {
-      # $errors .= "Merging two section titles (\"$secname1\" and \"$secname2\") found on one line: $_";
-      # next;
-      $sectitle = "$secname1 $secname2";
+    found_header($thishlevel, $anchorname, $secname1, $secname2);
+  } elsif (/<h([1-9])   # open the h start tag
+	   (?:\s+\w+\s*=\s*\"[^\"]*\")*? # allow random attributes
+	   \s+(?:name|id)\s*=\s*\"([^\"]*)\" # look for name or id attribute
+	   (?:\s+\w+\s*=\s*\"[^\"]*\")*? # allow random attributes
+	   \s*> # close the h start tag
+	   (.*?)  # the text of the anchor
+	   <\/h([1-9])>
+	   /ix) {
+    if ($debug) { print STDERR "match 3: <$1><$2><$3><$4>\n"; }
+    if ($1 ne $4) {
+      $errors .= "Non-matching heading tags $1 and $4: $_";
     }
-
-    # if $level >= $thishlevel, we have an open <li>
-    while ($level > $thishlevel) {
-      exit_level();
-    }
-    # close this <li>, unless we're going deeper
-    $output .= "</li>" if ($level == $thishlevel);
-    $output .= "\n" unless $level == 0;
-    while ($level < $thishlevel) {
-      enter_level();
-      $output .= (" " x ($level * 4 - 2)) . "<li>\n" if $level < $thishlevel;
-    }
-    $output .= ((" " x ($level * 4 - 2)) . "<li><a href=\"#$anchorname\">$sectitle</a>");
-    if ($level == 1) { $num_named_1++; }
+    my $thishlevel = $1;
+    my $anchorname = $2;
+    my $secname1 = $3;
+    my $secname2 = "";
+    found_header($thishlevel, $anchorname, $secname1, $secname2);
   } elsif (/<h([1-9])>(.*)<\/h([1-9])>/) {
     if ($1 == 1) {
       $num_unnamed_1++;
