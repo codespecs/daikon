@@ -144,7 +144,7 @@ public final class Configuration
     Assert.assertTrue(value != null);
 
     int dot = name.lastIndexOf('.');
-    Assert.assertTrue(dot >= 0, "Name must contain .");
+    Assert.assertTrue(dot >= 0, "Name must contain a period (.)");
 
     String classname = name.substring(0, dot);
     String fieldname = name.substring(dot+1);
