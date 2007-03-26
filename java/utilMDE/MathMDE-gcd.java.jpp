@@ -8,6 +8,16 @@ The correct way to build the system is to run 'make'.
 
   /** Return the greatest common divisor of the two arguments. */
   public static INT gcd(INT a, INT b) {
+  #ifdef GCD_DOUBLE
+    if (a == Double.POSITIVE_INFINITY
+        || a == Double.NEGATIVE_INFINITY
+        || Double.isNaN(a)
+        || b == Double.POSITIVE_INFINITY
+        || b == Double.NEGATIVE_INFINITY
+        || Double.isNaN(b)) {
+      return Double.NaN;
+    }
+  #endif
     // Euclid's method
     if (b == 0)
       return (Math.abs(a));
