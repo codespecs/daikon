@@ -48,7 +48,7 @@ public abstract class DaikonVariableInfo
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
-    /** Suffix for variables that represent a class, eg, "foo.getClass()". **/
+    /** Suffix for "typeOf" variables that represent a class, eg, "foo.getClass()". **/
     public static final String class_suffix = ".getClass()";
 
     /** Determines whether or not synthetic variables should be ignored **/
@@ -818,8 +818,8 @@ public abstract class DaikonVariableInfo
             return (false);
         if (type.isArray())
         {
-            Class theType = type.getComponentType();
-            return !(theType.isPrimitive());
+            Class eltType = type.getComponentType();
+            return !(eltType.isPrimitive());
         }
 
         if (type.getName().equals("java.lang.Object")) //Objects
