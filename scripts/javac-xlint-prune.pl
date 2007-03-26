@@ -54,7 +54,7 @@ while (defined(my $line = <>)) {
     next;
   }
   $data .= $line;
-  my @parts = split(/($file_line_re.*?^ *\^ *\n|^[0-9]+ (?:warnings|errors)\n)/sm, $data);
+  my @parts = split(/($file_line_re.*?^[ \t]*\^ *\n|^[0-9]+ (?:warnings?|errors?)\n)/sm, $data);
   if (scalar(@parts) == 1) {
     next;
   }
@@ -74,11 +74,11 @@ while (defined(my $line = <>)) {
   # if ($record eq "") { next; }
 
   ## Summary of number of errors/warnings
-  if ($record =~ /^([0-9]+) errors\n$/) {
+  if ($record =~ /^([0-9]+) errors?\n$/) {
     print $record;
     next;
   }
-  if ($record =~ /^([0-9]+) warnings\n$/) {
+  if ($record =~ /^([0-9]+) warnings?\n$/) {
     my $remaining_warnings = ($1 - $removed_warnings);
     if ($remaining_warnings > 0) {
       print "$remaining_warnings warnings\n";
@@ -92,7 +92,7 @@ while (defined(my $line = <>)) {
 
   ## Remove annotated "unchecked" warnings.
   if ($record =~ /: warning: \[unchecked\] unchecked.*\/\/ unchecked/s) {
-    if ($debug) { print "suppressed an unchecked warning"; }
+    if ($debug) { print "suppressed an unchecked warning\n"; }
     $removed_warnings++;
     next;
   }
