@@ -276,7 +276,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
   /** Returns the next line in the multi-file **/
   public String next() {
     try {
-    return readLine();
+      return readLine();
     } catch (IOException e) {
       throw new Error ("unexpected IOException", e);
     }
