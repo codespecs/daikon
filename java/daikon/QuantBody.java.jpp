@@ -330,7 +330,7 @@ The correct way to build the system is to run 'make'.
 
 #if 0
 This has nothing to do with INT.
-The test is ensures that it only appears once in the output.
+The test ensures that the method only appears once in the output.
 #endif
 #if (defined(INT))
   /*@ pure */ public static boolean pairwiseBitwiseComplement(Object[] seq1, Object[] seq2) {
@@ -384,7 +384,7 @@ The test is ensures that it only appears once in the output.
 
 #if 0
 This has nothing to do with INT.
-The test is ensures that it only appears once in the output.
+The test ensures that the method only appears once in the output.
 #endif
 #if (defined(INT))
   /*@ pure */ public static boolean pairwiseBitwiseSubset(Object[] seq1, Object[] seq2) {
