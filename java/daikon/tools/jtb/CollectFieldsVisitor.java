@@ -7,64 +7,68 @@ import utilMDE.Assert;
 
 /**
  * Method "fieldDeclarations" returns a list of all FieldDeclarations
- * declared in this class or in nested/inner classes.
+ * declared in this class (or, optionally, in nested classes).
  **/
-// This visitor previously included nested classes, but that didn't
-// seem like the right thing to do; we should treat each class
-// individually.
-
 class CollectFieldsVisitor extends DepthFirstVisitor {
 
-  private Vector<FieldDeclaration> fieldDecls = new Vector<FieldDeclaration>();
-  private int cachedSize = -1;
-  private FieldDeclaration[] fieldDeclsArray;
-  private String[] allNamesArray;
-  private String[] ownedNamesArray;
-  private String[] finalNamesArray;
+  public CollectFieldsVisitor(ClassOrInterfaceDeclaration n, boolean include_nested_classes) {
+    this.include_nested_classes = include_nested_classes;
+    n.accept(this);
+    updateCache();
+  }
+
+  /** True if this visitor should include nested classes, false otherwise. **/
+  private boolean include_nested_classes;
+
+  private List<FieldDeclaration> fieldDecls = new ArrayList<FieldDeclaration>();
+
+  // Why does this class store arrays instead of, say, List<String>?  Is
+  // that just for efficiency?
+  private List<String> allNames;
+  private List<String> ownedNames;
+  private List<String> finalNames;
+  // True if the above three lists are up-to-date.
+  private boolean cached = false;
 
   private void updateCache() {
-    if (cachedSize != fieldDecls.size()) {
-      fieldDeclsArray = fieldDecls.toArray(new FieldDeclaration[0]);
-      Vector<String> allNames = new Vector<String>();
-      Vector<String> ownedNames = new Vector<String>();
-      Vector<String> finalNames = new Vector<String>();
-      for (int i=0; i<fieldDeclsArray.length; i++) {
-        FieldDeclaration fd = fieldDeclsArray[i];
-        boolean isFinal = hasModifier(fd, "final");
-        Type fdtype = fd.f0;
-	// See specification in Annotate.java for which fields are owned.
-        // boolean isOwned = ! isPrimitive(fdtype);
-        boolean isOwned = Ast.isArray(fdtype);
-        {
-          String name = name(fd.f1);
+    if (cached) {
+      return;
+    }
+    allNames = new ArrayList<String>();
+    ownedNames = new ArrayList<String>();
+    finalNames = new ArrayList<String>();
+    for (FieldDeclaration fd : fieldDecls) {
+      boolean isFinal = hasModifier(fd, "final");
+      Type fdtype = fd.f0;
+      // See specification in Annotate.java for which fields are owned.
+      // boolean isOwned = ! isPrimitive(fdtype);
+      boolean isOwned = Ast.isArray(fdtype);
+      {
+        String name = name(fd.f1);
+        allNames.add(name);
+        if (isFinal)
+          finalNames.add(name);
+        if (isOwned)
+          ownedNames.add(name);
+      }
+      NodeListOptional fds = fd.f2;
+      if (fds.present()) {
+        for (int j=0; j<fds.size(); j++) {
+          // System.out.println("" + j + ": " + fds.elementAt(j));
+          NodeSequence ns = (NodeSequence) fds.elementAt(j);
+          if (ns.size() != 2) {
+            System.out.println("Bad length " + ns.size() + " for NodeSequence");
+          }
+          String name = name((VariableDeclarator) ns.elementAt(1));
           allNames.add(name);
           if (isFinal)
             finalNames.add(name);
           if (isOwned)
             ownedNames.add(name);
         }
-        NodeListOptional fds = fd.f2;
-        if (fds.present()) {
-          for (int j=0; j<fds.size(); j++) {
-            // System.out.println("" + j + ": " + fds.elementAt(j));
-            NodeSequence ns = (NodeSequence) fds.elementAt(j);
-            if (ns.size() != 2) {
-              System.out.println("Bad length " + ns.size() + " for NodeSequence");
-            }
-            String name = name((VariableDeclarator) ns.elementAt(1));
-            allNames.add(name);
-            if (isFinal)
-              finalNames.add(name);
-            if (isOwned)
-              ownedNames.add(name);
-          }
-        }
       }
-      allNamesArray = allNames.toArray(new String[0]);
-      ownedNamesArray = ownedNames.toArray(new String[0]);
-      finalNamesArray = finalNames.toArray(new String[0]);
-      cachedSize = fieldDecls.size();
     }
+    cached = true;
   }
 
   private String name(VariableDeclarator n) {
@@ -76,47 +80,46 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   }
 
 
-  // Returns a list of all FieldDeclarations declared in this class or in
-  // nested/inner classes.
-  public FieldDeclaration[] fieldDeclarations() {
+  /** Returns a list of all FieldDeclarations declared in this class or in
+   * nested/inner classes. **/
+  public List<FieldDeclaration> fieldDeclarations() {
     updateCache();
-    return fieldDeclsArray;
+    return fieldDecls;
   }
 
-  // Returns a list of all fields.
-  public String[] allFieldNames() {
+  /** Returns a list of all fields. **/
+  public List<String> allFieldNames() {
     updateCache();
-    return allNamesArray;
+    return allNames;
   }
 
-  // Returns a list of names of all fields with owner annotations.
-  public String[] ownedFieldNames() {
+  /** Returns a list of names of all fields with owner annotations. **/
+  public List<String> ownedFieldNames() {
     updateCache();
-    return ownedNamesArray;
+    return ownedNames;
   }
 
-  // Returns a list of all final fields.
-  public String[] finalFieldNames() {
+  /** Returns a list of all final fields. **/
+  public List<String> finalFieldNames() {
     updateCache();
-    return finalNamesArray;
+    return finalNames;
   }
 
   // Don't continue into nested classes, but do
   // explore them if they are the root.
   private boolean in_class = false;
   public void visit(ClassOrInterfaceDeclaration n) {
-    //Assert.assertTrue(! in_class);
-    in_class = true;
-    super.visit(n);
-    in_class = false;
+    assert ! cached;
+    if (include_nested_classes) {
+      super.visit(n);             // call "accept(this)" on each field
+    } else if (! in_class) {
+      // Can't combine these two bodies.  It's wrong to reset in_class to
+      // false if it was true (eg, for second level of nested class).
+      in_class = true;
+      super.visit(n);             // call "accept(this)" on each field
+      in_class = false;
+    }
   }
-//   public void visit(NestedClassDeclaration n) {
-//     if (! in_class) {
-//       in_class = true;
-//       super.visit(n);
-//       in_class = false;
-//     }
-//   }
 
   /**
    * f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
@@ -126,8 +129,8 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
    * f4 -> ";"
    */
   public void visit(FieldDeclaration n) {
+    assert ! cached;
     fieldDecls.add(n);
-
     super.visit(n);             // call "accept(this)" on each field
   }
 

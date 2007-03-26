@@ -10,6 +10,7 @@ import jtb.visitor.*;
 import daikon.*;
 import utilMDE.Assert;
 import utilMDE.ArraysMDE;
+import utilMDE.MultiReader;
 import utilMDE.UtilMDE;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
@@ -51,34 +52,32 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public List<String> javaFileLines;
 
   public PptMap ppts;
-  public boolean slashslash;       // whether to use // or /* style comments
-  public boolean insert_inexpressible; // whether to insert annotations not supported by ESC
-  public boolean lightweight;      // whether to use full JML specs or lightweight ESC specs instead
+  /** if true, use "//" comments; if false, use "/*" comments. **/
+  public boolean slashslash;
+  /** If true, insert annotations not supported by ESC. **/
+  public boolean insert_inexpressible;
+  /** If false, use full JML specs; if true, use lightweight ESC specs. **/
+  public boolean lightweight;
 
-  // whether to use reflection when trying to figure out if a method
-  // overrides/implements another method. If this variable is set to
-  // false, then Annotate will not try to determine if a method
-  // overrides/implements another method, which means that it will not
-  // try to add "also" tags to its output.
+  /**
+   * Whether to use reflection when trying to figure out if a method
+   * overrides/implements another method. If this variable is set to
+   * false, then Annotate will not try to determine if a method
+   * overrides/implements another method, which means that it will not
+   * try to add "also" tags to its output.
+   **/
   public boolean useReflection;
 
-  // If the --max_invariants_pp option is given, this variable is set
-  // to the maximum number of invariants out annotate per program point.
+  /**
+   * If the --max_invariants_pp option is given, this variable is set
+   * to the maximum number of invariants output by annotate per program point.
+   **/
   public int maxInvariantsPP;
 
 
   public Vector<NodeToken> addedComments = new Vector<NodeToken>();
 
-  /** List of "owned" fields in this and related classes. **/
-  private String[] ownedFieldNames;
-  /** List of "final" fields in this and related classes. **/
-  private String[] finalFieldNames;
-  /** List of fields in this and related classes such that the field
-   * has a  ".containsNull == false" invariant. **/
-  private String[] notContainsNullFieldNames;
-  /** List of fields in this and related classes such that the field
-   * has a  ".elementType == \type(...)" invariant. **/
-  private HashMap<String,String> elementTypeFieldNames;
+  private Stack<ClassFieldInfo> cfis = new Stack<ClassFieldInfo>();
 
   private PptNameMatcher pptMatcher;
 
@@ -91,64 +90,14 @@ public class AnnotateVisitor extends DepthFirstVisitor {
                          boolean useReflection,
                          int maxInvariantsPP) {
 
-    initialize(javafilename,
-               root,
-               ppts,
-               slashslash,
-               insert_inexpressible,
-               lightweight,
-               useReflection,
-               maxInvariantsPP);
-
-  }
-
-  private void initialize(String javafilename,
-                          Node root,
-                          PptMap ppts,
-                          boolean slashslash,
-                          boolean insert_inexpressible,
-                          boolean lightweight,
-                          boolean useReflection,
-                          int maxInvariantsPP) {
-
     this.pptMatcher = new PptNameMatcher(root);
 
-    // Read in the java file into a list of Strings.
+    // Read the Java file into a list of Strings.
     this.javaFileLines = new ArrayList<String>();
-    BufferedReader reader = null;
     try {
-      reader = UtilMDE.bufferedFileReader(javafilename);
-    } catch (FileNotFoundException e) {
-      throw new Error(e);
-    } catch (IOException e) {
-      throw new Error(e);
-    }
-    String line = null;
-    try {
-      line = reader.readLine();
-    } catch (IOException e) {
-      try {
-        reader.close();
-      } catch (IOException e2) {
-        // ignore second exception
+      for (String line : new MultiReader(javafilename)) {
+        this.javaFileLines.add(line);
       }
-      throw new Error(e);
-    }
-    while (line != null) {
-      this.javaFileLines.add(line);
-      try {
-        line = reader.readLine();
-      } catch (IOException e) {
-        try {
-          reader.close();
-        } catch (IOException e2) {
-          // ignore second exception
-        }
-        throw new Error(e);
-      }
-    }
-    try {
-      reader.close();
     } catch (IOException e) {
       throw new Error(e);
     }
@@ -160,6 +109,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     this.useReflection = useReflection;
     this.maxInvariantsPP = maxInvariantsPP;
   }
+
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
   void addComment(Node n, String comment, boolean first) {
@@ -197,23 +147,50 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   private boolean isOwned(String fieldname) {
-    return (ArraysMDE.indexOf(ownedFieldNames, fieldname) != -1);
+    for (ClassFieldInfo cfi : cfis) {
+      if (cfi.ownedFieldNames.contains(fieldname)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private boolean isFinal(String fieldname) {
-    return (ArraysMDE.indexOf(finalFieldNames, fieldname) != -1);
+    for (ClassFieldInfo cfi : cfis) {
+      if (cfi.finalFieldNames.contains(fieldname)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private boolean isNotContainsNull(String fieldname) {
-    return (ArraysMDE.indexOf(notContainsNullFieldNames, fieldname) != -1);
+    for (ClassFieldInfo cfi : cfis) {
+      if (cfi.notContainsNullFieldNames.contains(fieldname)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private boolean isElementType(String fieldname) {
-    return elementTypeFieldNames.containsKey(fieldname);
+    for (ClassFieldInfo cfi : cfis) {
+      if (cfi.elementTypeFieldNames.containsKey(fieldname)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private String elementType(String fieldname) {
-    return elementTypeFieldNames.get(fieldname);
+    for (ClassFieldInfo cfi : cfis) {
+      String result = cfi.elementTypeFieldNames.get(fieldname);
+      if (result != null) {
+        return result;
+      }
+    }
+    assert false;
+    return null;
   }
 
   // ClassDeclaration is a top-level (non-nested) construct.  Collect all
@@ -235,6 +212,16 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 //     super.visit(n);             // call "accept(this)" on each field
 //   }
 
+  class ClassFieldInfo {
+    // List<FieldDeclaration> fieldDecls;
+    List<String> allFieldNames;
+    List<String> ownedFieldNames;
+    List<String> finalFieldNames;
+    List<String> notContainsNullFieldNames;
+    Map<String,String> elementTypeFieldNames;
+  }
+
+
   // Insert object invariants for this class.
   // Insert owner assertions for fields.
 /**
@@ -252,34 +239,29 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     PptTopLevel object_ppt = ppts.get(pptname);
     if (object_ppt == null) {
       pptname = classname + ":::CLASS";
-      object_ppt = ppts.get(pptname);
+      object_ppt = ppts.get(pptname); // might *still* be null; we'll check later
     }
 
-    // Store and restore field names because we must deal with
-    // visiting inner classes (which have their own fields)
-    String[] old_owned = ownedFieldNames;
-    String[] old_final = finalFieldNames;
-    String[] old_notContainsNull = notContainsNullFieldNames;
-    HashMap<String,String> old_elementType = elementTypeFieldNames;
+    ClassFieldInfo cfi = new ClassFieldInfo();
     { // set fieldNames slots
-      CollectFieldsVisitor cfv = new CollectFieldsVisitor();
-      n.accept(cfv);
-      ownedFieldNames = cfv.ownedFieldNames();
-      finalFieldNames = cfv.finalFieldNames();
+      CollectFieldsVisitor cfv = new CollectFieldsVisitor(n, false);
+      cfi.ownedFieldNames = cfv.ownedFieldNames();
+      cfi.finalFieldNames = cfv.finalFieldNames();
       if (object_ppt == null) {
-        notContainsNullFieldNames = new String[0];
-        elementTypeFieldNames = new HashMap<String,String>();
+        cfi.notContainsNullFieldNames = new ArrayList<String>();
+        cfi.elementTypeFieldNames = new HashMap<String,String>();
       } else {
-        notContainsNullFieldNames = not_contains_null_fields(object_ppt, cfv);
-        elementTypeFieldNames = element_type_fields(object_ppt, cfv);
+        cfi.notContainsNullFieldNames = not_contains_null_fields(object_ppt, cfv.allFieldNames());
+        cfi.elementTypeFieldNames = element_type_fields(object_ppt, cfv.allFieldNames());
       }
+      cfis.push(cfi);
     }
 
     super.visit(n);             // call "accept(this)" on each field
 
     if (lightweight && (Daikon.output_format != OutputFormat.DBCJAVA)) {
-      for (int i=ownedFieldNames.length-1; i>=0; i--) {
-        addComment(n.f5.f1, javaLineComment("@ invariant" + " " + ownedFieldNames[i] + ".owner == this;"), true);
+      for (int i=cfi.ownedFieldNames.size()-1; i>=0; i--) {
+        addComment(n.f5.f1, javaLineComment("@ invariant" + " " + cfi.ownedFieldNames.get(i) + ".owner == this;"), true);
       }
     }
     if (object_ppt == null) {
@@ -290,10 +272,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       insertInvariants(n.f5.f1, inv_tag, obj_invs);
     }
 
-    ownedFieldNames = old_owned;
-    finalFieldNames = old_final;
-    notContainsNullFieldNames = old_notContainsNull;
-    elementTypeFieldNames = old_elementType;
+    cfis.pop();
   }
 
   // Given that this method works not on FieldDeclaration, but its grandparent,
@@ -344,31 +323,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return new InvariantsAndModifiedVars[] { requires_invs, ensures_invs };
   }
 
-
-  // Does not appear to be used (and doesn't typecheck, anyway). -MDE 7/12/2005
-  // HashMap<String,Collection<Invariant>> get_exceptions(PptMap ppts, ConstructorDeclaration n) {
-  //   HashMap<String,Collection<Invariant>> result = new HashMap<String,Collection<Invariant>>();
-  //
-  //   List<PptTopLevel> matching_ppts = pptMatcher.getMatches(ppts, n);
-  //
-  //   for (PptTopLevel ppt : matching_ppts) {
-  //     String prefix;
-  //     if (ppt.ppt_name.isThrowsPoint()) {
-  //       String exceptionName = "Not getting called"; // ppt.ppt_name.dontKnowHowToDoThis();
-  //       Collection<Invariant> exceptionInvariants;
-  //
-  //       if (result.containsValue(exceptionName)) {
-  //         exceptionInvariants = result.get(exceptionName);
-  //         exceptionInvariants.add(ppt.getInvariants());
-  //       } else {
-  //         exceptionInvariants = new Vector<Invariant>(ppt.getInvariants());
-  //         result.put(exceptionName, exceptionInvariants);
-  //       }
-  //     }
-  //   }
-  //
-  //   return result;
-  // }
 
   public void insertAlso(Node n) {
     addComment(n, "@ also" + lineSep, true);
@@ -473,8 +427,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
-    String ensures_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@post" : "ensures");
-    String requires_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@pre" : "requires");
+    String ensures_tag = Daikon.output_format.ensures_tag();
+    String requires_tag = Daikon.output_format.requires_tag();
 
     boolean isOverride = false;
     boolean isImplementation = false;
@@ -542,8 +496,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
-    String ensures_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@post" : "ensures");
-    String requires_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@pre" : "requires");
+    String ensures_tag = Daikon.output_format.ensures_tag();
+    String requires_tag = Daikon.output_format.requires_tag();
 
     if (!lightweight) {
       addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_END_COMMENT, true);
@@ -590,6 +544,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
+  // This seems to get inserted when nothing else does.  I guess it works
+  // around some problem with JML output.
   public void insertJMLWorkaround(Node n) {
     addComment(n, "@ requires true;" + lineSep, true);
   }
@@ -628,15 +584,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       //    Csnallner for this idea.
       // In the future, AnnotateVisitor should produce "assignable" clauses.
       doInsert = false;
-
-      /// Old version that put in "assignable \everything" unless a
-      /// heuristic indiated the method was pure.
-      // if (pureInJML(n)) {
-      //   doInsert = false;
-      // } else {
-      //   //System.out.println("^^^CURRLINE:" + Ast.formatCurrentLine(n) + "^^^");
-      //   inv = "assignable \\everything";
-      // }
     } else if (Daikon.output_format == OutputFormat.DBCJAVA) {
       // Modifies/assignable has no translation in Jtest DBC
       doInsert = false;
@@ -671,8 +618,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     boolean assignableInserted = false;
 
     int maxIndex = invs.invariants.size();
-    if (maxInvariantsPP > 0 && maxInvariantsPP < maxIndex) {
-      maxIndex = maxInvariantsPP;
+    if (maxInvariantsPP > 0) {
+      maxIndex = Math.min(maxIndex, maxInvariantsPP);
     }
 
     for (int i = maxIndex-1 ; i >= 0 ; i--) {
@@ -801,105 +748,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
 
-
-///////////////////////////////////////////////////////////////////////////
-/// Below this line all is cut-and-paste from FreqVisitor (or some such)
-///
-
-//   public void visit(MethodDeclaration method) {
-//     if (shouldInstrument(method)) {
-//       methodFreq(method);
-//     }
-//   }
-//
-//   protected static boolean shouldInstrument(MethodDeclaration method) {
-//     String returnType = Ast.getReturnType(method);
-//     List parameters = Ast.getParameters(method);
-//     return (!returnType.equals("void") && parameters.size() != 0);
-//   }
-//
-//   private static void methodFreq(MethodDeclaration method) {
-//     MemoVisitor.addImports(method);
-//     MemoVisitor.addCache(method, new MemoOptions());
-//     insertCacheUpdates(method);
-//   }
-//
-//   private static void insertCacheUpdates(MethodDeclaration method) {
-//     MemoVisitor.w = new StringWriter();
-//     MemoVisitor.p = new PrintWriter(MemoVisitor.w);
-//
-//     pl("{");
-//     initializeCache(method);
-//     pl("List $key;");
-//     MemoVisitor.createLookupKey(method, true);
-//     incrementFrequency(method);
-//
-//     String oldBody = Ast.getBody(method);
-//
-//     // Remove the first "{"
-//     int i = oldBody.indexOf('{');
-//     oldBody = oldBody.substring(i+1);
-//
-//     p(oldBody);
-//     Ast.setBody(method, MemoVisitor.w.toString());
-//   }
-//
-//   private static void initializeCache(MethodDeclaration method) {
-//     String cache = MemoVisitor.getCacheName(method);
-//     String fullName = Ast.getFullName(method);
-//
-//     pl("if (" + cache + "== null) {");
-//     pl(cache + "= new HashMap();");
-//     pl("Thread $printCacheThread = new Thread() {");
-//     pl("public void run() {");
-//     pl("synchronized(Thread.class) {");
-//     pl("SortedMap $m = new TreeMap();");
-//     pl("for (Iterator $i = " + cache +
-//        ".keySet().iterator(); $i.hasNext(); ) {");
-//     pl("Object $key = $i.next();");
-//     pl("Object $value = " + cache + ".get($key);");
-//     pl("if ($m.containsKey($value)) {");
-//     pl("int $oldFreqOfFreq = ((Integer) $m.get($value)).intValue() + 1;");
-//     pl("$m.put($value, new Integer($oldFreqOfFreq + 1));");
-//     pl("} else {");
-//     pl("$m.put($value, new Integer(1));");
-//     pl("}");
-//     pl("}");
-//     pl("System.out.println();");
-//     pl("System.out.println(\"Frequencies for method " + fullName + "\");");
-//     pl("while (!$m.isEmpty()) {");
-//     pl("Object $key = $m.lastKey();");
-//     pl("Object $value = $m.get($key);");
-//     pl("System.out.println($key + \"\t\" + $value);");
-//     pl("$m.remove($key);");
-//     pl("}");
-//     pl("}}};");
-//     pl("Runtime.getRuntime().addShutdownHook($printCacheThread);");
-//     pl("}");
-//   }
-//
-//   private static void incrementFrequency(MethodDeclaration method) {
-//     String cache = MemoVisitor.getCacheName(method);
-//
-//     pl("Integer $hash = new Integer($key.hashCode());");
-//     pl("if (" + cache + ".containsKey($hash)) {");
-//     pl("int $oldFreq = ((Integer) " + cache + ".get($hash)).intValue();");
-//     pl(cache + ".put($hash, new Integer($oldFreq + 1));");
-//     pl("} else {");
-//     pl(cache + ".put($hash, new Integer(1));");
-//     pl("}");
-//   }
-//
-//   // Convenience methods to provide more concise syntax
-//   private static void p(String s) {
-//     MemoVisitor.p.print(s);
-//   }
-//   private static void pl(String s) {
-//     MemoVisitor.p.println(s);
-//   }
-// }
-
-
   ///////////////////////////////////////////////////////////////////////////
   /// Subroutines
   ///
@@ -920,7 +768,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
 
   /**
-   * Find a variable for the given field.  The variable is either
+   * Find a Daikon variable for the given field.  The variable is either
    * "this.field" (for instance variables) or "ClassName.field" (for static
    * variables).
    **/
@@ -938,25 +786,28 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       // variable, for instance due to --std-visibility.  But I want to
       // throw an error instead, since I expect bugs to be more common
       // than such problems.)
-      System.out.println("Warning: Annotate: Daikon knows nothing about field " + field + " at " + ppt);
-      System.out.println("  ppt.var_infos:");
-      for (VarInfo pptvi : ppt.var_infos) {
-        System.out.println("    " + pptvi.name());
-      }
+      debug_field_problem(field, ppt);
       throw new Error("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
     }
     return vi;
   }
 
 
+  private void debug_field_problem(String field, PptTopLevel ppt) {
+    System.out.println("Warning: Annotate: Daikon knows nothing about field " + field + " at " + ppt);
+    System.out.println("  ppt.var_infos:");
+    for (VarInfo pptvi : ppt.var_infos) {
+      System.out.println("    " + pptvi.name());
+    }
+  }
+
+
   // Returns a list of fields with ".containsNull == false" invariants.
   // ppt is an :::OBJECT or :::CLASS program point.
-  String[] not_contains_null_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
+  List<String> not_contains_null_fields(PptTopLevel ppt, List<String> allFieldNames) {
     // System.out.println("not_contains_null_fields(" + ppt + ")");
-    Vector<String> result = new Vector<String>();
-    String[] fields = cfv.allFieldNames();
-    for (int i=0; i<fields.length; i++) {
-      String field = fields[i];
+    List<String> result = new ArrayList<String>();
+    for (String field : allFieldNames) {
       // System.out.println("field: " + field);
       VarInfo vi = findVar(field, ppt);
       PptSlice1 slice = ppt.findSlice(vi);
@@ -972,22 +823,19 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         }
       }
     }
-    return result.toArray(new String[0]);
+    return result;
   }
 
-  // Returns a HashMap fields with ".elementType == \type(...)" invariants,
+  // Returns a HashMap for fields with ".elementType == \type(...)" invariants,
   // mapping the field to the type.
   // ppt is an :::OBJECT or :::CLASS program point.
-  HashMap<String,String> element_type_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
+  HashMap<String,String> element_type_fields(PptTopLevel ppt, List<String> allFieldNames) {
     // System.out.println("element_type_fields(" + ppt + ")");
     HashMap<String,String> result = new HashMap<String,String>();
     // FieldDeclaration[] fdecls = cfv.fieldDeclarations();
-    String[] fields = cfv.allFieldNames();
     // System.out.println("fields: " + ArraysMDE.toString(fields));
-    for (int i=0; i<fields.length; i++) {
-      // FieldDeclaration fdecl = fields[i];
-      String field = fields[i];
-      // System.out.println("field: " + field);
+    for (String field : allFieldNames) {
+      // System.out.printf("element_type_fields (%s) field: %s%n", ppt, field);
       VarInfo vi = findVar(field, ppt);
       if (! (vi.type.isArray() || vi.type.isPseudoArray())) {
         continue;
@@ -997,13 +845,28 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
       String varname = vi.name();
       String elt_varname = varname + "[]";
+      VarInfo elt_vi = ppt.find_var_by_name (elt_varname);
+      if (elt_vi == null) {
+        debug_field_problem(elt_varname, ppt);
+      }
       assert ppt.find_var_by_name (elt_varname) != null
         : "Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt;
-      // This variable represents the types of the elements.
+      // et_varname variable represents the types of the elements.
       String et_varname = elt_varname + DaikonVariableInfo.class_suffix;
+      // System.out.printf("Found %s, seeking %s%n", elt_varname, et_varname);
+      // We found variable "a[]".  Now find "a[].getClass()".
+      // (Why might it not be present?)
+      // It might not be present if DaikonVariableInfo.shouldAddRuntimeClass would return false.
+      assert elt_vi.rep_type.isArray();
+      if (elt_vi.rep_type.dimensions() == 1 && elt_vi.rep_type.baseIsPrimitive()) {
+        continue;
+      }
       VarInfo et_vi = ppt.find_var_by_name (et_varname);
+      if (et_vi == null) {
+        debug_field_problem(et_varname, ppt);
+      }
       assert et_vi != null
-        : "Annotate: Daikon knows nothing about variable " + et_varname + " at " + ppt;
+        : "Annotate: Daikon knows nothing about variable " + et_varname + " at " + ppt + "\n  with allFieldNames = " + allFieldNames;
 
       // et_vi != null
       PptSlice1 slice = ppt.findSlice(et_vi);
@@ -1124,14 +987,15 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     }
 
-    Assert.assertTrue(expanded == untabbedIndex,
+    assert expanded == untabbedIndex :
                       "\nexpanded:" + expanded
                       + "\nuntabbedIndex:" + untabbedIndex
-                      + "\nL1: " + L1);
+                      + "\nL1: " + L1;
     return index;
 
   }
 
+  /** Return the whitespace at the front of the string. **/
   public static String precedingWhitespace(String s) {
     for (int i = 0 ; i < s.length() ; i++) {
       if (!Character.isWhitespace(s.charAt(i))) {
