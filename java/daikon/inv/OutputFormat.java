@@ -7,39 +7,43 @@ import java.util.*;
  * Enumeration type for output style.
  * (Should this be somewhere else?)
  **/
-public final class OutputFormat
-{
-  /** The standard, concise Daikon output format */
-  public static final OutputFormat DAIKON = new OutputFormat("Daikon");
-  /** Design-By-Contract for Java (used by Parasoft JContract) */
-  public static final OutputFormat DBCJAVA = new OutputFormat("DBC");
-  /** ESC/Java's annotation language */
-  public static final OutputFormat ESCJAVA = new OutputFormat("ESC/Java");
-    /** IOA language */
-  public static final OutputFormat IOA = new OutputFormat("IOA");
-  /** IOA language, sans invariant numbering */
-  public static final OutputFormat IOATEST = new OutputFormat("IOA_test");
-  /** Java boolean expression */
-  public static final OutputFormat JAVA = new OutputFormat("Java");
-  /** Java Modeling Language */
-  public static final OutputFormat JML = new OutputFormat("JML");
-  /** Simplify theorem prover */
-  public static final OutputFormat SIMPLIFY = new OutputFormat("Simplify");
-  /** Data Structure Repair Format */
-  public static final OutputFormat REPAIR = new OutputFormat("Repair");
+public enum OutputFormat {
 
-  private final String name;
-  public final String toString() { return "OutputFormat:" + name; }
+  /** The standard, concise Daikon output format */
+  DAIKON("Daikon"),
+  /** Design-By-Contract for Java (used by Parasoft JContract) */
+  DBCJAVA("DBC") {
+    public String ensures_tag() { return "@post"; }
+    public String requires_tag() { return "@pre"; }
+  },
+  /** ESC/Java's annotation language */
+  ESCJAVA("ESC/Java"),
+  /** IOA language */
+  IOA("IOA"),
+  /** IOA language, sans invariant numbering */
+  IOATEST("IOA_test"),
+  /** Java boolean expression */
+  JAVA("Java"),
+  /** Java Modeling Language */
+  JML("JML"),
+  /** Simplify theorem prover */
+  SIMPLIFY("Simplify"),
+  /** Data Structure Repair Format */
+  REPAIR("Repair");
+
+  String name;
+
+  OutputFormat(String name) { this.name = name; }
+
+  public String toString() { return "OutputFormat:" + name; }
 
   public boolean isJavaFamily() {
-    return (this == DBCJAVA || this == JML ||  this == JAVA);
+    return (this == DBCJAVA || this == JML || this == JAVA);
   }
 
-  // Nobody should ever construct these
-  private OutputFormat(String name) {
-    this.name = name;
-  }
-
+  // An alternative to valueOf(); the advantage is that it can be
+  // case-sensitive, can permit alternative names, etc.  An enum cannot
+  // override valueOf().
   /**
    * Return the appropriate OutputFormat for the given name, or null
    * if no such OutputFormat exists.
@@ -58,5 +62,8 @@ public final class OutputFormat
     if (name.compareToIgnoreCase(REPAIR.name) == 0) { return REPAIR; }
     return null;
   }
+
+  public String ensures_tag() { return "ensures"; }
+  public String requires_tag() { return "requires"; }
 
 }
