@@ -65,7 +65,7 @@ public class LemmaStack {
   /** Assume a list of lemmas. */
   private void assumeAll(Vector<Lemma> invs) throws TimeoutException {
     for (int i = 0; i < invs.size(); i++) {
-      assume((Lemma)invs.elementAt(i));
+      assume(invs.elementAt(i));
     }
   }
 
@@ -285,16 +285,16 @@ public class LemmaStack {
     popToMark(mark);
     if (holds) {
       Vector<Lemma> mini
-        = minimizeAssumptions((Lemma[])filtered.toArray(new Lemma[0]), result);
+        = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
       Set<Class> used = new HashSet<Class>();
       for (int i = 0; i < mini.size(); i++) {
-        Class c = ((Lemma)mini.elementAt(i)).invClass();
+        Class c = (mini.elementAt(i)).invClass();
         if (c != null)
           used.add(c);
       }
       for (int i = 0; i < mini.size(); i++) {
-        System.err.println(((Lemma)mini.elementAt(i)).summarize());
-        System.err.println(((Lemma)mini.elementAt(i)).formula);
+        System.err.println(mini.elementAt(i).summarize());
+        System.err.println(mini.elementAt(i).formula);
       }
       System.err.println("-----------------------------------");
       System.err.println(result);
@@ -350,7 +350,7 @@ public class LemmaStack {
     unAssumeAll(lemmas);
     Vector<Lemma> result;
     try {
-      Lemma[] lemmaAry = (Lemma[])lemmas.toArray(new Lemma[0]);
+      Lemma[] lemmaAry = lemmas.toArray(new Lemma[0]);
       // shuffle(lemmaAry, new Random());
       result = minimizeAssumptions(lemmaAry, str);
       assumeAll(lemmas);
@@ -388,7 +388,7 @@ public class LemmaStack {
       if (problems.size() == 0) {
         throw new SimplifyError("Minimization failed");
       }
-      Lemma bad = (Lemma)problems.elementAt(problems.size() - 1);
+      Lemma bad = problems.elementAt(problems.size() - 1);
       removeLemma(bad);
       System.err.print("x");
     } while (checkForContradiction() == 'T');
@@ -400,7 +400,7 @@ public class LemmaStack {
     unAssumeAll(lemmas);
     int spliceOut = -1;
     for (int i = 0; i < lemmas.size(); i++) {
-      Lemma lem = (Lemma)lemmas.elementAt(i);
+      Lemma lem = lemmas.elementAt(i);
       if (lem == bad) {
         spliceOut = i;
       } else {
@@ -451,7 +451,7 @@ public class LemmaStack {
    * Simplify. */
   public void dumpLemmas(java.io.PrintStream out) {
     for (int i = 0; i < lemmas.size(); i++) {
-      Lemma l = (Lemma)lemmas.elementAt(i);
+      Lemma l = lemmas.elementAt(i);
       out.println("(BG_PUSH " + l.formula + ")");
     }
   }

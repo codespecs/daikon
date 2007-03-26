@@ -96,7 +96,7 @@ public class Session
       if (dkconfig_simplify_timeout != 0) {
         newEnv.add("PROVER_KILL_TIME=" + dkconfig_simplify_timeout );
       }
-      String[] envArray = (String[])newEnv.toArray(new String[] {});
+      String[] envArray = newEnv.toArray(new String[] {});
       SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
       process =

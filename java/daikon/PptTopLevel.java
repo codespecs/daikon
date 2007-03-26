@@ -852,7 +852,7 @@ public class PptTopLevel extends Ppt {
       Global.debugDerive.fine(derived_vars);
     }
     Derivation[] result_array =
-      (Derivation[]) result.toArray(new Derivation[result.size()]);
+      result.toArray(new Derivation[result.size()]);
     return result_array;
   }
 
@@ -1035,7 +1035,7 @@ public class PptTopLevel extends Ppt {
       // Remove any falsified invariants.  Make a copy of the original slices
       // since NISuppressions will add new slices/invariants as others are
       // falsified.
-      PptSlice[] slices = (PptSlice[]) views.values().toArray(
+      PptSlice[] slices = views.values().toArray(
           new PptSlice[views.size()]);
       for (int i = 0; i < slices.length; i++) {
         slices[i].remove_falsified();
@@ -1507,7 +1507,7 @@ public class PptTopLevel extends Ppt {
       v2 = v1;
       v1 = tmp;
     }
-    return (PptSlice3) findSlice(v1, v2, v3);
+    return findSlice(v1, v2, v3);
   }
 
   /**
@@ -2165,10 +2165,10 @@ public class PptTopLevel extends Ppt {
 
     if (!var.isCanonical())
       return (false);
-    
+
     if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant)
       return (false);
-    
+
     return (true);
   }
 
@@ -2190,10 +2190,10 @@ public class PptTopLevel extends Ppt {
 
     if (!var.isCanonical())
       return (false);
-    
+
     if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant)
       return (false);
-    
+
     return (true);
   }
 
@@ -2222,7 +2222,7 @@ public class PptTopLevel extends Ppt {
     // For now, variable must be integral or float
     if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat())
       return (false);
-    
+
     if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant)
       return (false);
 
@@ -2717,7 +2717,7 @@ public class PptTopLevel extends Ppt {
           }
         }
       }
-      invs = (Invariant[]) printing.toArray(new Invariant[printing.size()]);
+      invs = printing.toArray(new Invariant[printing.size()]);
     }
 
     // For efficiency, bail if we don't have any invariants to mark as implied
@@ -3546,7 +3546,7 @@ public class PptTopLevel extends Ppt {
       non_missing_leaders.add(l);
     }
     VarInfo[] leaders = new VarInfo[non_missing_leaders.size()];
-    leaders = (VarInfo[]) non_missing_leaders.toArray(leaders);
+    leaders = non_missing_leaders.toArray(leaders);
 
     // Create any invariants in the children which are NI-suppressed and
     // remember the list for each child.  The same ppt can be a child
@@ -3656,7 +3656,7 @@ public class PptTopLevel extends Ppt {
       VarInfo[] pvis = parent_vis(rel, cslice);
       if (pvis == null)
         continue;
-      VarInfo[] pvis_sorted = (VarInfo[]) pvis.clone();
+      VarInfo[] pvis_sorted = pvis.clone();
       Arrays.sort(pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Create the parent slice
@@ -3852,7 +3852,7 @@ public class PptTopLevel extends Ppt {
       VarInfo[] pvis = parent_vis(rel, slice);
       if (pvis == null)
         continue;
-      VarInfo[] pvis_sorted = (VarInfo[]) pvis.clone();
+      VarInfo[] pvis_sorted = pvis.clone();
       Arrays.sort(pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Find the parent slice.  If it doesn't exist, there is nothing to do
@@ -4193,7 +4193,7 @@ public class PptTopLevel extends Ppt {
           + " : "
           + dfmt.format((double) slice_cnt / sample_cnt)
           + "/"
-          + dfmt.format((double) avg_inv_cnt / sample_cnt)
+          + dfmt.format(avg_inv_cnt / sample_cnt)
           + " : "
           + dfmt.format((double) instantiated_slice_cnt / sample_cnt)
           + "/"

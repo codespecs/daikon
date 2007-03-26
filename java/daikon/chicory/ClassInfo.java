@@ -16,7 +16,7 @@ public class ClassInfo {
   public String class_name;
 
   /** reflection object for this class **/
-  public Class clazz;
+  public Class<?> clazz;
 
   /** list of methods in the class **/
   public List<MethodInfo> method_infos = new ArrayList<MethodInfo>();

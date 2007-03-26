@@ -55,12 +55,10 @@ public class GenericTestClass <A, B extends String, C extends java.lang.Object, 
   // Ugh! But this is legal.
   List[] foo20(Comparable[][] x[], Object[] y[])[] { return null;}
 
-  public class Simple<U extends Map, V extends U.Entry> {
-
-    public void foo1 (V x) { }
-
-    public void foo2 (U.Entry x) { }
-
-  }
+  // This is not legal in Java 6.
+  // public class Simple<U extends Map, V extends U.Entry> {
+  //   public void foo1 (V x) { }
+  //   public void foo2 (U.Entry x) { }
+  // }
 
 }

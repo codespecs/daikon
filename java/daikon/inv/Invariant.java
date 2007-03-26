@@ -453,7 +453,7 @@ public abstract class Invariant
 
     Invariant result;
     // Clone it
-    result = (Invariant) this.clone();
+    result = this.clone();
 
     // Fix up the fields
     result.ppt = new_ppt;
@@ -484,7 +484,7 @@ public abstract class Invariant
    */
   public Invariant clone_and_permute (int[] permutation) {
 
-    Invariant result = (Invariant) this.clone();
+    Invariant result = this.clone();
     result = result.resurrect_done (permutation);
 
     if (logOn())
@@ -522,7 +522,7 @@ public abstract class Invariant
 
     Invariant result;
     // Clone it
-    result = (Invariant) this.clone();
+    result = this.clone();
 
     // Fix up the fields
     result.falsified = false;

@@ -2565,7 +2565,7 @@ class DCInstrument {
 
     // Get the class of the method
     ClassLoader loader = getClass().getClassLoader();
-    Class clazz = null;
+    Class<?> clazz = null;
     try {
       clazz = Class.forName (invoke.getClassName(pool), false, loader);
     } catch (Exception e) {

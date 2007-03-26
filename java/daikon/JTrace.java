@@ -132,7 +132,7 @@ public final class JTrace
 
         println(V_INFO, "JTrace: hosting target program `" + target + "'.");
 
-        Class   cls = null;
+        Class<?> cls = null;
         try {
             cls = Class.forName(target);
         } catch(ClassNotFoundException e) {

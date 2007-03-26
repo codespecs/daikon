@@ -221,7 +221,7 @@ public class WeakIdentityHashMap<K,V>
      */
     public WeakIdentityHashMap() {
         this.loadFactor = DEFAULT_LOAD_FACTOR;
-        threshold = (int)(DEFAULT_INITIAL_CAPACITY);
+        threshold = DEFAULT_INITIAL_CAPACITY;
         table = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // unchecked cast
     }
 
@@ -262,7 +262,7 @@ public class WeakIdentityHashMap<K,V>
      * Return internal representation of null key back to caller as null
      */
     private static <K> K unmaskNull(K key) {
-        return (K) (key == NULL_KEY ? null : key);
+        return (key == NULL_KEY ? null : key);
     }
 
     /**

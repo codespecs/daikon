@@ -203,8 +203,8 @@ public class FuzzyFloat {
   /*@ pure */ public boolean isElemMatch (double[] a1, double[] a2) {
 
     //don't change our parameters
-    a1 = (double[]) a1.clone();
-    a2 = (double[]) a2.clone();
+    a1 = a1.clone();
+    a2 = a2.clone();
 
     Arrays.sort (a1);
     Arrays.sort (a2);
@@ -317,8 +317,8 @@ public class FuzzyFloat {
   /*@ pure */ public boolean isSubset (double[] smaller, double[] bigger) {
 
     //don't change our parameters
-    smaller = (double[]) smaller.clone();
-    bigger = (double[]) bigger.clone();
+    smaller = smaller.clone();
+    bigger = bigger.clone();
 
     Arrays.sort (smaller);
     Arrays.sort (bigger);

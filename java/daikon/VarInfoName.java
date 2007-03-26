@@ -182,7 +182,7 @@ public abstract class VarInfoName
       return Repair.getRepair().convertArraytoSet(v.ppt,set,e,v);
     } else if (term instanceof Subscript) {
       Subscript s=(Subscript) term;
-      Elements e=(Elements) s.sequence;
+      Elements e= s.sequence;
       if (e.term instanceof Simple) {
         return Repair.getRepair().getRealSet(((Simple)e.term).name+"["+s.index.name()+"]",v.ppt);
       } else if (e.term instanceof Field) {
@@ -2737,7 +2737,7 @@ public abstract class VarInfoName
     extends AbstractVisitor<Elements>
   {
     public ElementsFinder (VarInfoName name) {
-      elems = (Elements) name.accept(this);
+      elems = name.accept(this);
     }
 
     // state and accessors
@@ -2801,7 +2801,7 @@ public abstract class VarInfoName
     }
 
     public VarInfoName replace(VarInfoName root) {
-      return (VarInfoName) root.accept(this);
+      return root.accept(this);
     }
 
     public VarInfoName visitSimple(Simple o) {
@@ -2809,11 +2809,11 @@ public abstract class VarInfoName
     }
     public VarInfoName visitSizeOf(SizeOf o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitSizeOf(o)).applySize();
+        super.visitSizeOf(o).applySize();
     }
     public VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
+        super.visitFunctionOf(o).applyFunction(o.function);
     }
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
@@ -2828,38 +2828,38 @@ public abstract class VarInfoName
     }
     public VarInfoName visitField(Field o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitField(o)).applyField(o.field);
+        super.visitField(o).applyField(o.field);
     }
     public VarInfoName visitTypeOf(TypeOf o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitTypeOf(o)).applyTypeOf();
+        super.visitTypeOf(o).applyTypeOf();
     }
     public VarInfoName visitPrestate(Prestate o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitPrestate(o)).applyPrestate();
+        super.visitPrestate(o).applyPrestate();
     }
     public VarInfoName visitPoststate(Poststate o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitPoststate(o)).applyPoststate();
+        super.visitPoststate(o).applyPoststate();
     }
     public VarInfoName visitAdd(Add o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitAdd(o)).applyAdd(o.amount);
+        super.visitAdd(o).applyAdd(o.amount);
     }
     public VarInfoName visitElements(Elements o) {
       return (o == old) ? _new :
-        ((VarInfoName) super.visitElements(o)).applyElements();
+        super.visitElements(o).applyElements();
     }
     public VarInfoName visitSubscript(Subscript o) {
       return (o == old) ? _new :
-        ((VarInfoName) o.sequence.accept(this)).
-        applySubscript((VarInfoName) o.index.accept(this));
+        o.sequence.accept(this).
+        applySubscript(o.index.accept(this));
     }
     public VarInfoName visitSlice(Slice o) {
       return (o == old) ? _new :
-        ((VarInfoName) o.sequence.accept(this)).
-        applySlice((o.i == null) ? null : ((VarInfoName) o.i.accept(this)),
-                   (o.j == null) ? null : ((VarInfoName) o.j.accept(this)));
+        o.sequence.accept(this).
+        applySlice((o.i == null) ? null : o.i.accept(this),
+                   (o.j == null) ? null : o.j.accept(this));
     }
   }
 
@@ -3622,7 +3622,7 @@ public abstract class VarInfoName
         return results;
       } else if (name instanceof Slice) {
         Slice slice = (Slice)name;
-        VarInfoName array = ((Elements)slice.sequence).term;
+        VarInfoName array = slice.sequence.term;
         results[0] = array.simplify_name(preState);
         results[1] = slice.getLowerBound().simplify_name(preState);
         results[2] = slice.getUpperBound().simplify_name(preState);
@@ -4104,7 +4104,7 @@ public abstract class VarInfoName
       repair.varcount=varcount;
       if (repair.definitiontable.containsKey(ppt)) {
         Definition d=repair.definitiontable.get(ppt);
-        Definition newd=(Definition)d.clone();
+        Definition newd=d.clone();
         repair.definitiontable.put(ppt,newd);
       }
       return repair;

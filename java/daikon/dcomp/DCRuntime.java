@@ -676,7 +676,7 @@ public final class DCRuntime {
     if (fi.isStatic()) {
       if (fi.isPrimitive()) {
         Field field = fi.getField();
-        Class clazz = field.getDeclaringClass();
+        Class<?> clazz = field.getDeclaringClass();
         String name = DCInstrument.tag_method_name (DCInstrument.GET_TAG,
                                      clazz.getName(), field.getName());
         try {
@@ -1920,7 +1920,7 @@ public final class DCRuntime {
       assert fi.isStatic();
       assert fi.isPrimitive();
       Field field = fi.getField();
-      Class clazz = field.getDeclaringClass();
+      Class<?> clazz = field.getDeclaringClass();
       String name = DCInstrument.tag_method_name (DCInstrument.GET_TAG,
                                      clazz.getName(), field.getName());
       try {

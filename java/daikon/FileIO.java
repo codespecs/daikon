@@ -1807,7 +1807,7 @@ public final class FileIO {
             throw new Error(
               "Function exit without corresponding entry: " + ppt.name());
           }
-          invoc = (Invocation) call_stack.pop();
+          invoc = call_stack.pop();
           while (invoc.ppt.ppt_name.getNameWithoutPoint() != fn_name) {
             // Should also mark as a function that made an exceptional exit
             // at runtime.
@@ -1822,7 +1822,7 @@ public final class FileIO {
                     + data_trace_state.filename
                     + " line "
                     + data_trace_state.reader.getLineNumber()));
-            invoc = (Invocation) call_stack.pop();
+            invoc = call_stack.pop();
           }
         } else {
           // nonce != null

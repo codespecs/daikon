@@ -220,7 +220,7 @@ public class SpinfoFileParser {
       }
       splittersForAllPpts.add(splittersForThisPpt.toArray(new SplitterObject[0]));
     }
-    return (SplitterObject[][]) splittersForAllPpts.toArray(new SplitterObject[0][0]);
+    return splittersForAllPpts.toArray(new SplitterObject[0][0]);
   }
 
   /**

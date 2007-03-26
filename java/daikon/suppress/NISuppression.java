@@ -35,7 +35,7 @@ public class NISuppression {
   public NISuppression (List<NISuppressor> suppressor_set,
                         NISuppressee suppressee) {
 
-    suppressors = (NISuppressor[])
+    suppressors =
       suppressor_set.toArray (new NISuppressor[suppressor_set.size()]);
     this.suppressee = suppressee;
   }
@@ -97,7 +97,7 @@ public class NISuppression {
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor ssor = suppressors[i];
       String st = ssor.check (ppt, vis, inv);
-      
+
       if (!set) {
         if (st == NIS.MISSING)
           status = NIS.MISSING;
@@ -105,11 +105,11 @@ public class NISuppression {
           status = (NIS.INVALID);
           if (st == NIS.INVALID) {
             return status;
-          }   
+          }
             // !valid in this case means invalid or match
             // If invalid, then stop immediately
             // otherwise, check state of the rest of the suppressors
-            // This check is needed because we are reviving the 
+            // This check is needed because we are reviving the
             // falsified method so match is now a valid status.
             set = true;
         }
@@ -211,12 +211,12 @@ public class NISuppression {
         if (inv.is_false())
           false_cnt++;
       }
-      
+
       // Fmt.pf ("  suppressor %s: %s/%s", suppressors[i], "" + a.size(),
       //       "" + false_cnt);
       total_false_cnt += false_cnt;
     }
-    
+
     if (total_false_cnt == 0)
       return;
 
@@ -420,7 +420,7 @@ public class NISuppression {
     if ((supor.v2_index != -1) && (vis[supor.v2_index] != null)
         && (vis[supor.v2_index] != inv.ppt.var_infos[1]))
       return (null);
-    VarInfo cvis[] = (VarInfo[]) vis.clone();
+    VarInfo cvis[] = vis.clone();
     cvis[supor.v1_index] = v1;
     if (supor.v2_index != -1) {
       cvis[supor.v2_index] = inv.ppt.var_infos[1];

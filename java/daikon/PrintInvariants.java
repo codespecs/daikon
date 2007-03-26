@@ -129,7 +129,7 @@ public final class PrintInvariants {
    * exists an invariant x <= 1, x <= a would be the result printed.
    */
   public static boolean dkconfig_static_const_infer = false;
-  
+
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
@@ -1050,7 +1050,7 @@ public final class PrintInvariants {
    * is sorted according to PptTopLevel.icfp.
    */
   public static List<Invariant> sort_invariant_list(List<Invariant> invs) {
-    Invariant[] invs_array = (Invariant[]) invs.toArray(new Invariant[invs.size()]);
+    Invariant[] invs_array = invs.toArray(new Invariant[invs.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Vector<Invariant> result = new Vector<Invariant>(invs_array.length);
@@ -1080,7 +1080,7 @@ public final class PrintInvariants {
       debugPrint.fine ("Variables for ppt "  + ppt.name());
       for (int i=0; i<ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
-        PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
+        PptTopLevel ppt_tl = vi.ppt;
         PptSlice slice1 = ppt_tl.findSlice(vi);
         debugPrint.fine ("      " + vi.name());
       }
@@ -1112,7 +1112,7 @@ public final class PrintInvariants {
     if (debugBound.isLoggable (Level.FINE))
       ppt.debug_unary_info (debugBound);
 
-    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(
+    Invariant[] invs_array = invs_vector.toArray(
       new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
@@ -1394,7 +1394,7 @@ public final class PrintInvariants {
     boolean print_invs = false;
 
     List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
-    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(
+    Invariant[] invs_array = invs_vector.toArray(
       new Invariant[invs_vector.size()]);
 
     Map<Class,Map<Class,Integer>> filter_map = new LinkedHashMap<Class,Map<Class,Integer>>();

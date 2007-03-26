@@ -673,7 +673,7 @@ public class DaikonSimple {
           while (k.hasNext()) {
 
             Invariant inv = k.next();
-            Invariant pre_inv = (Invariant) inv.clone();
+            Invariant pre_inv = inv.clone();
             InvariantStatus status = inv.add_sample(vt, 1);
             if (status == InvariantStatus.FALSIFIED) {
               k.remove();

@@ -25,7 +25,7 @@ public class NISuppressee {
   public int var_count;
   public Invariant sample_inv;
 
-  public NISuppressee (Class cls, int var_count) {
+  public NISuppressee (Class<?> cls, int var_count) {
     sup_class = cls;
     Assert.assertTrue ((var_count >= 1) && (var_count <=3));
     this.var_count = var_count;
@@ -44,7 +44,7 @@ public class NISuppressee {
    * Define a binary suppressee on the specified class with the
    * specified variable order
    */
-  public NISuppressee (Class cls, boolean swap) {
+  public NISuppressee (Class<?> cls, boolean swap) {
     sup_class = cls;
     this.var_count = 2;
 
@@ -212,7 +212,7 @@ public class NISuppressee {
         continue;
       if (!sample_inv.valid_types (vis))
         continue;
-      NIS.SupInv sinv = new NIS.SupInv (this, (VarInfo[]) vis.clone(), ppt);
+      NIS.SupInv sinv = new NIS.SupInv (this, vis.clone(), ppt);
       sinv.log ("Unspecified variable = " + v.name());
       created_list.add (sinv);
     }

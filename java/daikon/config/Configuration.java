@@ -191,7 +191,7 @@ public final class Configuration
     Assert.assertTrue(unparsed != null);
 
     Object value; // typed version of value
-    Class type = field.getType();
+    Class<?> type = field.getType();
 
     if (type.equals(Boolean.TYPE)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
@@ -222,7 +222,7 @@ public final class Configuration
         throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
       }
     } else if (type.equals(Double.TYPE)) {
-      assert Double.class == Double.TYPE;
+      // assert Double.class == Double.TYPE;
       try {
         value = Double.valueOf(unparsed);
       } catch (NumberFormatException e) {

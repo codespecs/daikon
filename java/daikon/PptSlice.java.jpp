@@ -118,7 +118,7 @@ public final class PPTSLICE1 extends PptSlice {
 
   /**
    * Creates all of the the invariants that are appropriate for this
-   * slice based on the list of invariants passed in.  
+   * slice based on the list of invariants passed in.
    * No invariants are created unless the variables in the
    * slice are compatible.  If the variables are compatible, invariants
    * that match the type of the slices variables are created.
@@ -402,7 +402,7 @@ public final class PPTSLICE1 extends PptSlice {
       for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.is_false()) continue;
-        Invariant clone = (Invariant) inv.clone();
+        Invariant clone = inv.clone();
         InvariantStatus status = inv.add(val1, val2, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
           inv.falsify();
@@ -446,7 +446,7 @@ public final class PPTSLICE1 extends PptSlice {
     for (int i=0; i < invs.size(); i++) {
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
       if (inv.is_false()) continue;
-      Invariant clone = (Invariant) inv.clone();
+      Invariant clone = inv.clone();
       InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
         inv.falsify();
@@ -490,7 +490,7 @@ public final class PPTSLICE1 extends PptSlice {
 
     // Sort the VarInfos by var_index and build a matching permutation
     // from the current order to the new order
-    VarInfo[] vis_sorted = (VarInfo[]) argNewVarInfos.clone();
+    VarInfo[] vis_sorted = argNewVarInfos.clone();
     Arrays.sort (vis_sorted, VarInfo.IndexComparator.getInstance());
     int[] permutation = PptTopLevel.build_permute (argNewVarInfos, vis_sorted);
 

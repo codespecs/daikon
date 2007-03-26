@@ -87,7 +87,7 @@ public final class TestUtilMDE extends TestCase {
       v.add(itor.next());
     int[] a = new int[v.size()];
     for (int i=0; i<a.length; i++)
-      a[i] = ((Integer)v.elementAt(i)).intValue();
+      a[i] = v.elementAt(i).intValue();
     return a;
   }
 
@@ -480,8 +480,8 @@ public final class TestUtilMDE extends TestCase {
 
         f1[5] = f2[i];
 
-        double[] f1_copy = (double []) f1.clone();
-        double[] f2_copy = (double []) f2.clone();
+        double[] f1_copy = f1.clone();
+        double[] f2_copy = f2.clone();
 
         assertTrue (ArraysMDE.isSubset (f1, f2));
         assert_arrays_equals (f1, f1_copy);
@@ -2011,7 +2011,7 @@ public final class TestUtilMDE extends TestCase {
       double[] a = new double[10];
       for (int i=0; i<a.length; i++)
         a[i] = i;
-      double[] a_copy = (double[]) a.clone();
+      double[] a_copy = a.clone();
       assertTrue(ff.indexOf(a, -1) == -1);
       assertTrue(ff.indexOf(a, 0) == 0);
       assertTrue(ff.indexOf(a, 7) == 7);
@@ -2058,14 +2058,14 @@ public final class TestUtilMDE extends TestCase {
       double[] f = new double[] { a[7], a[8]*offlow, a[9]*offhigh };
       double[] g = new double[] { a[7], 22, a[9] };
       double[] h = new double[] { a[7], a[8], a[9], 10 };
-      double[] a_copy = (double[]) a.clone();
-      double[] b_copy = (double[]) b.clone();
-      double[] c_copy = (double[]) c.clone();
-      double[] d_copy = (double[]) d.clone();
-      double[] e_copy = (double[]) e.clone();
-      double[] f_copy = (double[]) f.clone();
-      double[] g_copy = (double[]) g.clone();
-      double[] h_copy = (double[]) h.clone();
+      double[] a_copy = a.clone();
+      double[] b_copy = b.clone();
+      double[] c_copy = c.clone();
+      double[] d_copy = d.clone();
+      double[] e_copy = e.clone();
+      double[] f_copy = f.clone();
+      double[] g_copy = g.clone();
+      double[] h_copy = h.clone();
 
       assertTrue(ff.indexOf(a, b) == 0);
       assertTrue(ff.indexOf(a, c) == 0);
@@ -2132,8 +2132,8 @@ public final class TestUtilMDE extends TestCase {
         f2[8] = f2[8] * (1 - 2*offset);
 
         //test with each array the bigger one
-        double[] f1_copy = (double[]) f1.clone();
-        double[] f2_copy = (double[]) f2.clone();
+        double[] f1_copy = f1.clone();
+        double[] f2_copy = f2.clone();
         if ((j % 2) == 0) {
           assertTrue (!ff.isElemMatch (f1, f2));
         } else {
@@ -2167,14 +2167,14 @@ public final class TestUtilMDE extends TestCase {
       double[] a5 = new double[] { 0,1,2,3,4 };
       double[] a6 = new double[] { 0,1,5,3,4 };
       double[] a7 = new double[] { 1,2,3,4 };
-      double[] a0_copy = (double[]) a0.clone();
-      double[] a1_copy = (double[]) a1.clone();
-      double[] a2_copy = (double[]) a2.clone();
-      double[] a3_copy = (double[]) a3.clone();
-      double[] a4_copy = (double[]) a4.clone();
-      double[] a5_copy = (double[]) a5.clone();
-      double[] a6_copy = (double[]) a6.clone();
-      double[] a7_copy = (double[]) a7.clone();
+      double[] a0_copy = a0.clone();
+      double[] a1_copy = a1.clone();
+      double[] a2_copy = a2.clone();
+      double[] a3_copy = a3.clone();
+      double[] a4_copy = a4.clone();
+      double[] a5_copy = a5.clone();
+      double[] a6_copy = a6.clone();
+      double[] a7_copy = a7.clone();
 
       assertTrue(comparator.compare(a0, a1) == 0);
       assertTrue(comparator.compare(a1, a0) == 0);
@@ -2224,8 +2224,8 @@ public final class TestUtilMDE extends TestCase {
 
         f1[5] = f2[i] * offhigh;
 
-        double[] f1_copy = (double []) f1.clone();
-        double[] f2_copy = (double []) f2.clone();
+        double[] f1_copy = f1.clone();
+        double[] f2_copy = f2.clone();
 
         assertTrue (ff.isSubset (f1, f2));
         assert_arrays_equals (f1, f1_copy);

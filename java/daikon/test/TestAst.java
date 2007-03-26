@@ -98,11 +98,12 @@ public final class TestAst extends TestCase {
       assertEquals("Got: " + classDecls.get(0) + "\nExpected: " + expected,
                    Ast.getClassName(classDecls.get(0)), expected);
     }
-    {
-      String expected = "daikon.test.GenericTestClass.Simple";
-      assertEquals("Got: " + classDecls.get(1) + "\nExpected: " + expected,
-                   Ast.getClassName(classDecls.get(1)), expected);
-    }
+    // Illegal in Java 6
+    // {
+    //   String expected = "daikon.test.GenericTestClass.Simple";
+    //   assertEquals("Got: " + classDecls.get(1) + "\nExpected: " + expected,
+    //                Ast.getClassName(classDecls.get(1)), expected);
+    // }
 
     // Test method declarations
 
@@ -227,15 +228,17 @@ public final class TestAst extends TestCase {
     checkMatch("daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::ENTER", decl, matcher);
     checkMatch("daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::EXIT53", decl, matcher);
 
-    decl = methodDecls.get(22);
-    assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo1");
-    checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::EXIT12", decl, matcher);
-
-    decl = methodDecls.get(23);
-    assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo2");
-    checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::EXIT14", decl, matcher);
+    // Illegal in Java 6
+    //
+    // decl = methodDecls.get(22);
+    // assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo1");
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::ENTER", decl, matcher);
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::EXIT12", decl, matcher);
+    //
+    // decl = methodDecls.get(23);
+    // assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo2");
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::ENTER", decl, matcher);
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::EXIT14", decl, matcher);
 
   }
 }

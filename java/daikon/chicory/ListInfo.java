@@ -16,9 +16,9 @@ import daikon.*;
 public class ListInfo extends DaikonVariableInfo
 {
 
-    private Class listType;
+    private Class<? extends List> listType;
 
-    public ListInfo(String theName, Class theType)
+    public ListInfo(String theName, Class<? extends List> theType)
     {
         super(theName, true);
         listType = theType;

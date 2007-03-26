@@ -448,7 +448,7 @@ public final class Equality
   public void postProcess () {
     if (this.numSamples() == 0) return; // All were missing or not present
     PptTopLevel parent = this.ppt.parent;
-    VarInfo[] varArray = (VarInfo[]) this.vars.toArray(new VarInfo[0]);
+    VarInfo[] varArray = this.vars.toArray(new VarInfo[0]);
     if (debugPostProcess.isLoggable(Level.FINE)) {
       debugPostProcess.fine ("Doing postProcess: " + this.format_daikon());
       debugPostProcess.fine ("  at: " + this.ppt.parent.name());

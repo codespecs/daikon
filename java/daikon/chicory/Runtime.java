@@ -527,7 +527,7 @@ public class Runtime
 
         try
         {
-            Class rt = java.lang.Runtime.class;
+            Class<java.lang.Runtime> rt = java.lang.Runtime.class;
             rt.getMethod("addShutdownHook", new Class[]{java.lang.Thread.class});
             return true;
         }

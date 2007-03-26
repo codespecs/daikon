@@ -212,12 +212,13 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     expectedAnswerBuffer.append("/* */\n");
     expectedAnswerBuffer.append("List[]foo20(Comparable[][] x[], Object[] y[])[]\n");
     expectedAnswerBuffer.append("  Object  -->  Object\n");
-    expectedAnswerBuffer.append("  Map  -->  Map\n");
-    expectedAnswerBuffer.append("  U.Entry  -->  Map.Entry\n");
-    expectedAnswerBuffer.append("Method: voidfoo1(V x)\n");
-    expectedAnswerBuffer.append("  V  -->  Map.Entry\n");
-    expectedAnswerBuffer.append("Method: voidfoo2(U.Entry x)\n");
-    expectedAnswerBuffer.append("  U.Entry  -->  Map.Entry\n");
+    // This is illegal in Java 6.
+    // expectedAnswerBuffer.append("  Map  -->  Map\n");
+    // expectedAnswerBuffer.append("  U.Entry  -->  Map.Entry\n");
+    // expectedAnswerBuffer.append("Method: voidfoo1(V x)\n");
+    // expectedAnswerBuffer.append("  V  -->  Map.Entry\n");
+    // expectedAnswerBuffer.append("Method: voidfoo2(U.Entry x)\n");
+    // expectedAnswerBuffer.append("  U.Entry  -->  Map.Entry\n");
     expectedAnswerBuffer.append("\n");
 
   }

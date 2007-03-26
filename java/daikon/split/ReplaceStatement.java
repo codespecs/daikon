@@ -96,7 +96,7 @@ class ReplaceStatement {
    * Returns the MethodParameters of the method represented by this ReplaceStatement.
    */
   public MethodParameter[] getParameters() {
-    return (MethodParameter[]) parameters.clone();
+    return parameters.clone();
   }
 
   /**
@@ -139,7 +139,7 @@ class ReplaceStatement {
         MethodParameter methodParam = new MethodParameter(paramName, paramType);
         params.add(methodParam);
       }
-      parameters = (MethodParameter[]) params.toArray(new MethodParameter[0]);
+      parameters = params.toArray(new MethodParameter[0]);
     }
   }
 

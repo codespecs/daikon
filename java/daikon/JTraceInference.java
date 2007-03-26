@@ -107,7 +107,7 @@ class JTraceInference extends Thread
                     var_infos.add(vi);
                 }
                 VarInfo[] vi_array =
-                    (VarInfo[])var_infos.toArray(new VarInfo[0]);
+                    var_infos.toArray(new VarInfo[0]);
                 PptTopLevel ppt = new PptTopLevel(pptname, vi_array);
                 // FIXME: Toh added this so the code compiles.  This
                 // should instead use Alan's batching method.

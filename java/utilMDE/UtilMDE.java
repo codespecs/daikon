@@ -1127,7 +1127,7 @@ public final class UtilMDE {
   public static Method methodForName(String classname, String methodname, Class[] params)
     throws ClassNotFoundException, NoSuchMethodException, SecurityException {
 
-    Class c = Class.forName(classname);
+    Class<?> c = Class.forName(classname);
     Method m = c.getDeclaredMethod(methodname, params);
     return m;
   }

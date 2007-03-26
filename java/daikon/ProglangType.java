@@ -180,7 +180,7 @@ public final class ProglangType
 
     // now search for the right dimension
     for (int ii=0; ii<v.size(); ++ii) {
-      ProglangType candidate = (ProglangType)v.elementAt(ii);
+      ProglangType candidate = v.elementAt(ii);
       if (candidate.dimensions() == t_dims)
         return candidate;
     }
@@ -454,7 +454,7 @@ public final class ProglangType
         } catch (Exception e) {
           throw new Error(e.toString());
         }
-        value_strings = (String[]) v.toArray(new String[0]);
+        value_strings = v.toArray(new String[0]);
       } else {
         value_strings = Global.ws_regexp.split(value);
       }

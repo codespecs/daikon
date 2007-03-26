@@ -187,8 +187,8 @@ The correct way to build the system is to run 'make'.
   private static boolean check_first_and_last_nonmodulus(INT[] rm, UtilMDE.RemoveFirstAndLastIterator<INTEGER> rfali) {
     INT r = rm[0];
     INT m = rm[1];
-    INT first = ((INTEGER)rfali.getFirst()).INTValue();
-    INT last = ((INTEGER)rfali.getLast()).INTValue();
+    INT first = rfali.getFirst().INTValue();
+    INT last = rfali.getLast().INTValue();
     return ((r != mod_positive(first, m))
             && (r != mod_positive(last, m)));
   }

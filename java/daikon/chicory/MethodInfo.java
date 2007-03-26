@@ -2,6 +2,7 @@ package daikon.chicory;
 
 import java.util.*;
 import java.lang.reflect.*;
+
 /**
  * Keeps information about a method that is useful for writing out
  * decl and/or dtrace information.  Original information is filled

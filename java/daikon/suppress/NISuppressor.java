@@ -31,7 +31,7 @@ public class NISuppressor {
   int v3_index = -1;
 
   /** Invariant class. **/
-  Class inv_class;
+  Class<? extends Invariant> inv_class;
 
   /** True if the order of the variables was swapped. **/
   boolean swap = false;
@@ -54,7 +54,7 @@ public class NISuppressor {
   /**
    * Defines a unary suppressor.
    */
-  public NISuppressor (int v1_index, Class cls) {
+  public NISuppressor (int v1_index, Class<? extends Invariant> cls) {
 
     debug.fine (Fmt.spf ("creating %s over arg %s", cls.getName(),
                          Fmt.i (v1_index)));
@@ -79,7 +79,7 @@ public class NISuppressor {
   /**
    * Defines a binary suppressor.
    */
-  public NISuppressor (int v1_index, int v2_index, Class cls) {
+  public NISuppressor (int v1_index, int v2_index, Class<? extends Invariant> cls) {
 
     debug.fine (Fmt.spf ("creating %s over args %s and %s", cls.getName(),
                          Fmt.i (v1_index), Fmt.i(v2_index)));
@@ -101,7 +101,7 @@ public class NISuppressor {
     try {
       Method swap_method = cls.getMethod ("swap_class", (Class[])null);
       if (swap)
-        cls = (Class) swap_method.invoke (null, (Object[]) null);
+        cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object[]) null); // unchecked cast
     } catch (Exception e) {
       swap_class = false;
     }
@@ -209,7 +209,7 @@ public class NISuppressor {
       VarInfo v1 = vis[v1_index];
 
       // Check to see if inv matches this suppressor.  The invariant class
-      // and variables must match for this to be true.  This check is only 
+      // and variables must match for this to be true.  This check is only
       // needed for the falsified method.
       if (!NIS.antecedent_method) {
         if ((inv != null) &&

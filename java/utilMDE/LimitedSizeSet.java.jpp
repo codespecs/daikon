@@ -138,7 +138,7 @@ public class LIMITEDSIZEINTSET
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }
-    result.values = (INT[]) values.clone();
+    result.values = values.clone();
     return result;
   }
 

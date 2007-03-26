@@ -96,7 +96,7 @@ public final class VarComparabilityImplicit
     int dims = dim_reps.size();
     VarComparabilityImplicit[] index_types = new VarComparabilityImplicit[dims];
     for (int i=0; i<dims; i++) {
-      index_types[i] = parse((String)dim_reps.elementAt(i), null);
+      index_types[i] = parse(dim_reps.elementAt(i), null);
     }
     try {
       int base = Integer.parseInt(rep);

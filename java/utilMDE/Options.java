@@ -110,7 +110,7 @@ public class Options {
      * Class type of this field.  If the field is a list, the basetype
      * of the list.
      */
-    Class base_type;
+    Class<?> base_type;
 
     /** Default value of the option as a string **/
     String default_str = null;
@@ -185,7 +185,7 @@ public class Options {
       if (!base_type.isPrimitive() && !base_type.isEnum()) {
         try {
           if (base_type == Pattern.class) {
-            factory = base_type.getMethod ("compile", String.class);
+            factory = Pattern.class.getMethod ("compile", String.class);
           } else { // look for a string constructor
             constructor = base_type.getConstructor (String.class);
           }
@@ -570,7 +570,7 @@ public class Options {
           if (oi.constructor != null)
             val = oi.constructor.newInstance (arg_value);
           else if (oi.base_type.isEnum())
-            val = Enum.valueOf (oi.base_type, arg_value); // unchecked cast
+            val = Enum.valueOf ((Class<? extends Enum>)oi.base_type, arg_value); // unchecked cast
           else
             val = oi.factory.invoke (null, arg_value);
         } catch (Exception e) {
