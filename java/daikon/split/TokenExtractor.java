@@ -34,7 +34,7 @@ class TokenExtractor extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     TokenExtractor extractor = new TokenExtractor();
     root.accept(extractor);
-    return (NodeToken[]) extractor.tokens.toArray(new NodeToken[0]);
+    return extractor.tokens.toArray(new NodeToken[0]);
   }
 
   /**
@@ -46,7 +46,7 @@ class TokenExtractor extends DepthFirstVisitor {
   public static NodeToken[] extractTokens(Node root) {
     TokenExtractor extractor = new TokenExtractor();
     root.accept(extractor);
-    return (NodeToken[]) extractor.tokens.toArray(new NodeToken[0]);
+    return extractor.tokens.toArray(new NodeToken[0]);
   }
 
   /**

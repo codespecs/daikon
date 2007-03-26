@@ -102,7 +102,7 @@ public final class VarComparabilityImplicit
       int base = Integer.parseInt(rep);
       return new VarComparabilityImplicit(base, index_types, dims);
     } catch (NumberFormatException e) {
-      throw new Error(e.toString());
+      throw new Error(e);
     }
   }
 

@@ -201,7 +201,7 @@ public abstract class SplitterList
     } else {
       Vector<Splitter> splitters = new Vector<Splitter>();
       for (int i = 0; i < splitterArrays.size(); i++) {
-        Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
+        Splitter[] tempsplitters = splitterArrays.elementAt(i);
         for (int j = 0; j < tempsplitters.length; j++) {
           splitters.addElement(tempsplitters[j]);
         }
@@ -209,7 +209,7 @@ public abstract class SplitterList
       if (Global.debugSplit.isLoggable(Level.FINE)) {
         Global.debugSplit.fine ("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
       }
-      return (Splitter[])splitters.toArray(new Splitter[0]);
+      return splitters.toArray(new Splitter[0]);
     }
   }
 
@@ -227,7 +227,7 @@ public abstract class SplitterList
         // Weed out splitters with the same condition.
         if (!splitters.isEmpty()) {
           for (j = 0; j < splitters.size(); j++) {
-            if ((tempsplitter.condition().trim()).equals( ((Splitter)splitters.elementAt(j)).condition().trim())) {
+            if ((tempsplitter.condition().trim()).equals( splitters.elementAt(j).condition().trim())) {
               // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
               duplicate = true;
               break;
@@ -239,7 +239,7 @@ public abstract class SplitterList
         }
       }
     }
-    return (Splitter[])splitters.toArray(new Splitter[0]);
+    return splitters.toArray(new Splitter[0]);
   }
 
 }

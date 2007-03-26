@@ -120,7 +120,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
     Vector<TernaryDerivation> results2 = instantiateWithOrder(seqvar, sclvar2, sclvar1);
 
     results1.addAll(results2);
-    return (TernaryDerivation[]) results1.toArray(new TernaryDerivation[0]);
+    return results1.toArray(new TernaryDerivation[0]);
   }
 
   private Vector<TernaryDerivation> instantiateWithOrder(VarInfo seqvar, VarInfo startvar,
@@ -174,7 +174,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
 //           result.add(new SUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
 //           result.add(new SUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
 //         };
-//         return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
+//         return result.toArray(new BinaryDerivation[result.size()]);
 //       }
 //     }
 

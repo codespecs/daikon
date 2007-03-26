@@ -16,8 +16,8 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
 
   public Math__BigFloat_bmul__43() { } 
   public Math__BigFloat_bmul__43(Ppt ppt) { 
-    daikonreturn__p_varinfo = ppt.findVarByRepr("Field{_p}[return]");
-    daikonreturn_sign_varinfo = ppt.findVarByRepr("Field{sign}[return]");
+    daikonreturn__p_varinfo = ppt.find_var_by_name("return._p");
+    daikonreturn_sign_varinfo = ppt.find_var_by_name("return.sign");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -48,8 +48,8 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
-    VarInfo daikonreturn__p_vi = ppt.findVarByRepr("Field{_p}[return]");
-    VarInfo daikonreturn_sign_vi = ppt.findVarByRepr("Field{sign}[return]");
+    VarInfo daikonreturn__p_vi = ppt.find_var_by_name("return._p");
+    VarInfo daikonreturn_sign_vi = ppt.find_var_by_name("return.sign");
     if (daikonreturn__p_vi != null && daikonreturn_sign_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {daikonreturn__p_vi, daikonreturn_sign_vi});
     }

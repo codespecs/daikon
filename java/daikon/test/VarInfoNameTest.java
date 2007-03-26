@@ -58,7 +58,7 @@ public class VarInfoNameTest
     while (tok.hasMoreTokens()) {
       _actual.add(tok.nextToken());
     }
-    String[] actual = (String[]) _actual.toArray(new String[_actual.size()]);
+    String[] actual = _actual.toArray(new String[_actual.size()]);
 
     // put desired into goal
     List<String> _goal = new ArrayList<String>();
@@ -72,7 +72,7 @@ public class VarInfoNameTest
     } catch (IOException e) {
       throw new RuntimeException(e.toString());
     }
-    String[] goal = (String[]) _goal.toArray(new String[_goal.size()]);
+    String[] goal = _goal.toArray(new String[_goal.size()]);
 
     // diff desired and output
     diff(goal, actual);

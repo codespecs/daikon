@@ -214,7 +214,7 @@ public class CLASSNAME
       intersect = ArraysMDE.subarray(tmp, 0, size);
     }
 
-    intersect = (PRIMITIVE[]) Intern.intern(intersect);
+    intersect = Intern.intern(intersect);
     elts++;
     return InvariantStatus.NO_CHANGE;
   }

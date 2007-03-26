@@ -34,7 +34,7 @@ public final class Global {
     try {
       ws_regexp = Pattern.compile("[ \\t]+");
     } catch (Exception e) {
-      throw new Error(e.toString());
+      throw new Error(e);
     }
   }
 

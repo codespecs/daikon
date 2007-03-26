@@ -374,9 +374,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     cstr = cstr.replaceFirst ("Numeric", "PairwiseNumeric");
     cstr = cstr.replaceFirst ("twoScalar", "twoSequence");
     cstr = cstr.replaceFirst ("twoFloat", "twoSequence");
-    Class pairwise_class;
+    Class<? extends Invariant> pairwise_class;
     try {
-      pairwise_class = Class.forName (cstr);
+      pairwise_class = (Class<? extends Invariant>) Class.forName (cstr); // unchecked cast
     } catch (Exception e) {
       throw new Error ("can't create class for " + cstr, e);
     }

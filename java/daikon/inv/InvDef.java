@@ -63,7 +63,7 @@ public class InvDef {
     this.state = state;
   }
 
-  public InvDef (VarInfo v1, VarInfo v2, Class cls) {
+  public InvDef (VarInfo v1, VarInfo v2, Class<? extends Invariant> cls) {
 
     debug.fine ("creating " + cls.getName() + " " + v1.name() + ", " +
                 v2.name());
@@ -84,7 +84,7 @@ public class InvDef {
     try {
       Method swap_method = cls.getMethod ("swap_class", (Class[])null);
       if (swap)
-        cls = (Class) swap_method.invoke (null, (Object[])null);
+        cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object[])null); // unchecked cast
     } catch (Exception e) {
       swap_class = false;
     }

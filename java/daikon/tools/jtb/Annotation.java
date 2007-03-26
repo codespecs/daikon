@@ -179,7 +179,7 @@ public class Annotation {
       }
 
     }
-    return (Annotation[]) annos.toArray(new Annotation[] {
+    return annos.toArray(new Annotation[] {
     });
   }
 
@@ -346,7 +346,7 @@ public class Annotation {
       }
       break;
     }
-    return (Annotation[]) retval.toArray(new Annotation[] {
+    return retval.toArray(new Annotation[] {
     });
   }
 

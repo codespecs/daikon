@@ -16,8 +16,8 @@ public final class DataStructures_QueueAr_dequeue_25 extends Splitter {
 
   public DataStructures_QueueAr_dequeue_25() { } 
   public DataStructures_QueueAr_dequeue_25(Ppt ppt) { 
-    theArray_array_varinfo = ppt.findVarByRepr("Elements[Field{theArray}[this]]");
-    front_varinfo = ppt.findVarByRepr("Field{front}[this]");
+    theArray_array_varinfo = ppt.find_var_by_name("this.theArray[]");
+    front_varinfo = ppt.find_var_by_name("this.front");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -48,8 +48,8 @@ public final class DataStructures_QueueAr_dequeue_25 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
-    VarInfo theArray_array_vi = ppt.findVarByRepr("Elements[Field{theArray}[this]]");
-    VarInfo front_vi = ppt.findVarByRepr("Field{front}[this]");
+    VarInfo theArray_array_vi = ppt.find_var_by_name("this.theArray[]");
+    VarInfo front_vi = ppt.find_var_by_name("this.front");
     if (theArray_array_vi != null && front_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {theArray_array_vi, front_vi});
     }

@@ -1014,13 +1014,13 @@ The test is ensures that it only appears once in the output.
   /*@ pure */ public static boolean pairwiseEqual(java.util.AbstractCollection seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    return pairwiseEqual((_TYPE[])seq1.toArray(), seq2);
+    return pairwiseEqual(seq1.toArray(), seq2);
   }
 
   /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, java.util.AbstractCollection seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    return pairwiseEqual(seq1, (_TYPE[])seq2.toArray());
+    return pairwiseEqual(seq1, seq2.toArray());
   }
 #endif
 

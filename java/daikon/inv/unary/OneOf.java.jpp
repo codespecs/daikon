@@ -353,10 +353,10 @@ public final class ONEOFSCALAR
 
   public ONEOFSCALAR clone() {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
-    result.elts = (INT[]) elts.clone();
+    result.elts = elts.clone();
 #ifdef IS_SEQUENCE
     for (int i=0; i < num_elts; i++) {
-      result.elts[i] = Intern.intern((INT) elts[i].clone());
+      result.elts[i] = Intern.intern(elts[i].clone());
     }
 #endif
     result.num_elts = this.num_elts;
@@ -442,7 +442,7 @@ public final class ONEOFSCALAR
 
 #if defined(SCALAR) || defined(ELT) || defined(SEQUENCE) || defined(STRING) || defined(ELTSTRING)
       if (PrintInvariants.dkconfig_static_const_infer) {
-        boolean curVarMatch = false;       
+        boolean curVarMatch = false;
         PptTopLevel pptt = ppt.parent;
         for (VarInfo vi : pptt.var_infos) {
           if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -453,17 +453,17 @@ public final class ONEOFSCALAR
             }
           }
         }
-        
+
         if (curVarMatch == false) {
           sb.append(TOSTRING(elts[i]));
         }
-      }      
+      }
       else {
         sb.append(TOSTRING(elts[i]));
       }
 #elif defined(FLOAT) || defined(ELTFLOAT)
       if (PrintInvariants.dkconfig_static_const_infer) {
-        boolean curVarMatch = false;       
+        boolean curVarMatch = false;
         PptTopLevel pptt = ppt.parent;
         for (VarInfo vi : pptt.var_infos) {
           if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -485,11 +485,11 @@ public final class ONEOFSCALAR
             }
           }
         }
-        
+
         if (curVarMatch == false) {
           sb.append(TOSTRING(elts[i]));
         }
-      }      
+      }
       else {
         sb.append(TOSTRING(elts[i]));
       }
@@ -792,7 +792,7 @@ public final class ONEOFSCALAR
           sb.append(" or ");
 #if defined(SCALAR) || defined(ELT) || defined(SEQUENCE) || defined(STRING) || defined(ELTSTRING)
         if (PrintInvariants.dkconfig_static_const_infer) {
-          boolean curVarMatch = false;       
+          boolean curVarMatch = false;
           PptTopLevel pptt = ppt.parent;
           for (VarInfo vi : pptt.var_infos) {
             if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -802,18 +802,18 @@ public final class ONEOFSCALAR
                 curVarMatch = true;
               }
             }
-          }       
+          }
           if (curVarMatch == false) {
             sb.append("("+varname+"="+TOSTRING(elts[i])+")");
           }
-        }      
+        }
         else {
           sb.append("("+varname+"="+TOSTRING(elts[i])+")");
         }
       }
 #elif defined(FLOAT) || defined(ELTFLOAT)
         if (PrintInvariants.dkconfig_static_const_infer) {
-          boolean curVarMatch = false;       
+          boolean curVarMatch = false;
           PptTopLevel pptt = ppt.parent;
           for (VarInfo vi : pptt.var_infos) {
             if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -832,11 +832,11 @@ public final class ONEOFSCALAR
                 }
               }
             }
-          }     
+          }
           if (curVarMatch == false) {
             sb.append("("+varname+"="+TOSTRING(elts[i])+")");
           }
-        }      
+        }
         else {
           sb.append("("+varname+"="+TOSTRING(elts[i])+")");
         }
@@ -844,7 +844,7 @@ public final class ONEOFSCALAR
 #else
         sb.append("("+varname+"="+TOSTRING(elts[i])+")");
       }
-#endif           
+#endif
       sb.append(")");
       return sb.toString();
     }
@@ -873,7 +873,7 @@ public final class ONEOFSCALAR
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " \\/ ("; }
       if (PrintInvariants.dkconfig_static_const_infer) {
-        boolean curVarMatch = false;       
+        boolean curVarMatch = false;
         PptTopLevel pptt = ppt.parent;
         for (VarInfo vi : pptt.var_infos) {
           if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -887,8 +887,8 @@ public final class ONEOFSCALAR
         if (curVarMatch == false) {
           result += varname + " = " + TOSTRING(elts[i]) + ")";
         }
-      } 
-      else { 
+      }
+      else {
         result += varname + " = " + TOSTRING(elts[i]) + ")";
       }
     }
@@ -915,7 +915,7 @@ public final class ONEOFSCALAR
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
         if (PrintInvariants.dkconfig_static_const_infer) {
-          boolean curVarMatch = false;       
+          boolean curVarMatch = false;
           PptTopLevel pptt = ppt.parent;
           for (VarInfo vi : pptt.var_infos) {
             if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -935,11 +935,11 @@ public final class ONEOFSCALAR
               }
             }
           }
-          if (curVarMatch == false)  { 
+          if (curVarMatch == false)  {
             result += "(" + varname + " = " + TOSTRING(elts[i]) + ")";
           }
         }
-        else { 
+        else {
           result += "(" + varname + " = " + TOSTRING(elts[i]) + ")";
         }
       }
@@ -2104,7 +2104,7 @@ public final class ONEOFSCALAR
 
     // Create the initial parent invariant from the first child
     ONEOFSCALAR  first = (ONEOFSCALAR) invs.get(0);
-    ONEOFSCALAR result = (ONEOFSCALAR) first.clone();
+    ONEOFSCALAR result = first.clone();
     result.ppt = parent_ppt;
     #if defined (IS_SEQUENCE)
       for (int i = 0; i < result.num_elts; i++)

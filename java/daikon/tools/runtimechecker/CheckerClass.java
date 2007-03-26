@@ -41,7 +41,7 @@ public class CheckerClass {
 
     // Get the package and imports from clazz. We'll include them.
     CompilationUnit clazzCU = (CompilationUnit)Ast.getParent(CompilationUnit.class, clazz);
-    NodeOptional no = (NodeOptional)clazzCU.f0;
+    NodeOptional no = clazzCU.f0;
     String packageName = null;
     if (no.present()) {
       packageName = Ast.format(((PackageDeclaration)no.node).f1).trim();

@@ -93,9 +93,9 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
 
     //  Scroll to the last invariant table that was added.
     String lastTableName = "";
-    TreePath leadPath = (TreePath) tse.getNewLeadSelectionPath();
+    TreePath leadPath = tse.getNewLeadSelectionPath();
     if (leadPath == null)
-      leadPath = (TreePath) tse.getOldLeadSelectionPath();
+      leadPath = tse.getOldLeadSelectionPath();
     DefaultMutableTreeNode leadNode = (DefaultMutableTreeNode) leadPath.getLastPathComponent();
     if (leadNode.getUserObject().getClass() == daikon.PptTopLevel.class)
       lastTableName = ((PptTopLevel) leadNode.getUserObject()).name;
@@ -192,9 +192,9 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
 
   public void updateInvariantsDisplay() {
     for (int i = 0; i < tableModels.size(); i++ ) {
-      InvariantTableModel tableModel = (InvariantTableModel) tableModels.get( i );
+      InvariantTableModel tableModel = tableModels.get( i );
       tableModel.updateInvariantList( invariantFilters );
-      JPanel panel = (JPanel) tables.get( i );
+      JPanel panel = tables.get( i );
       resizeScrollPane( (JScrollPane) panel.getComponent( panel.getComponentCount() - 1 ));
       tableHeights.set( i, new Integer( (int) panel.getPreferredSize().getHeight()));
     }
@@ -212,7 +212,7 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
   void scrollToCurrentTable() {
     int height = 0;
     for (int i=0; i < currentTableIndex; i++)
-      height += ((Integer) tableHeights.get( i )).intValue();
+      height += tableHeights.get( i ).intValue();
     scrollPane.getViewport().setViewPosition( new Point( 0, height ));
   }
 

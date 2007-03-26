@@ -280,7 +280,7 @@ public class LOWERBOUND
 
   public LOWERBOUND clone() {
     LOWERBOUND result = (LOWERBOUND) super.clone();
-    result.core = (LOWERBOUNDCORE) core.clone();
+    result.core = core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -304,7 +304,7 @@ public class LOWERBOUND
         || (format == OutputFormat.IOA)
         || (format.isJavaFamily()))
     {
-    
+
       if (PrintInvariants.dkconfig_static_const_infer) {
         for (VarInfo vi : pptt.var_infos) {
           // Check is static constant, and variables are comparable
@@ -325,7 +325,7 @@ public class LOWERBOUND
           }
         }
       }
-      
+
       return name + " " + GTESTR + " " + MIN1;
     }
 
@@ -338,7 +338,7 @@ public class LOWERBOUND
     }
 
     if (format == OutputFormat.REPAIR) {
-        
+
       if (PrintInvariants.dkconfig_static_const_infer) {
         for (VarInfo vi : pptt.var_infos) {
           // Check is static constant, and variables are comparable
@@ -359,7 +359,7 @@ public class LOWERBOUND
           }
         }
       }
-      
+
 #ifdef BASE_FLOAT
       return "$noprintfloat(" + name + " " + GTESTR + " " + MIN1 + ")";
 #else
@@ -393,7 +393,7 @@ public class LOWERBOUND
   public String format_daikon() {
     PptTopLevel pptt = ppt.parent;
     String name = var().name();
-    
+
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
         if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -413,14 +413,14 @@ public class LOWERBOUND
         }
       }
     }
-    
+
     return var().name() + " elements " + GTESTR + " " + MIN1;
   }
 
   // ELTLOWEr || ELTUPPEr
   public String format_repair() {
     PptTopLevel pptt = ppt.parent;
-    
+
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
         if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -441,13 +441,13 @@ public class LOWERBOUND
         }
       }
     }
-    
+
     return var().repair_name() + GTESTR + " " + MIN1;
   }
 
   public String format_esc() {
     PptTopLevel pptt = ppt.parent;
-    
+
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
         if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -491,7 +491,7 @@ public class LOWERBOUND
 
   public String format_java_family(OutputFormat format) {
     PptTopLevel pptt = ppt.parent;
- 
+
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
         if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -521,7 +521,7 @@ public class LOWERBOUND
           }
         }
       }
-    }  
+    }
 #ifdef IS_ELT
     return
       "daikon.Quant.elts" + GTESTRDBC + "(" + var().name_using(format) + ", " + MIN1 + ")";
@@ -533,7 +533,7 @@ public class LOWERBOUND
 
   public String format_ioa() {
     PptTopLevel pptt = ppt.parent;
- 
+
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
         if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
@@ -708,7 +708,7 @@ public class LOWERBOUND
         return null;
       }
     }
-    
+
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((MIN1 < dkconfig_minimal_interesting) ||
         (MIN1 > dkconfig_maximal_interesting)) {
@@ -864,7 +864,7 @@ public class LOWERBOUND
 
     // Create the initial parent invariant from the first child
     LOWERBOUND first = (LOWERBOUND) invs.get(0);
-    LOWERBOUND result = (LOWERBOUND) first.clone();
+    LOWERBOUND result= first.clone();
     result.ppt = parent_ppt;
 
     // Loop through the rest of the child invariants

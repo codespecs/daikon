@@ -452,7 +452,7 @@ public final class ProglangType
             }
           }
         } catch (Exception e) {
-          throw new Error(e.toString());
+          throw new Error(e);
         }
         value_strings = v.toArray(new String[0]);
       } else {

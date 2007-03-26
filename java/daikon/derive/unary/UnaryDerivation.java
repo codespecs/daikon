@@ -17,15 +17,18 @@ public abstract class UnaryDerivation
 
   public UnaryDerivation(VarInfo vi) { base = vi; }
 
-  public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
+  public UnaryDerivation clone() {
     try {
-      UnaryDerivation result = (UnaryDerivation) this.clone();
-      result.base = new_vars[ArraysMDE.indexOf(old_vars, result.base)];
-      return result;
+      return (UnaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
-      throw new Error(e.toString());
+      throw new Error("This can't happen", e);
     }
+  }
+
+  public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
+    UnaryDerivation result = this.clone();
+    result.base = new_vars[ArraysMDE.indexOf(old_vars, result.base)];
+    return result;
   }
 
   public ValueAndModified computeValueAndModified(ValueTuple vt) {

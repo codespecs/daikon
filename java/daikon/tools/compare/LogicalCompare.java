@@ -95,7 +95,7 @@ public class LogicalCompare {
   private static Vector<Invariant> filterInvariants(Vector<Invariant> invs, boolean isPost) {
     Vector<Invariant> new_invs = new Vector<Invariant>();
     for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.elementAt(i);
+      Invariant inv = invs.elementAt(i);
       Invariant guarded_inv = inv;
 //       System.err.println("Examining " + inv.format());
       if (inv instanceof GuardingImplication)
@@ -179,7 +179,7 @@ public class LogicalCompare {
   private static Vector<Lemma> translateStraight(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
     for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.elementAt(i);
+      Invariant inv = invs.elementAt(i);
       lems.add(new InvariantLemma(inv));
     }
     return lems;
@@ -191,7 +191,7 @@ public class LogicalCompare {
   private static Vector<Lemma> translateRemovePre(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
     for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.elementAt(i);
+      Invariant inv = invs.elementAt(i);
       if (!inv.isAllPrestate())
         lems.add(new InvariantLemma(inv));
     }
@@ -205,7 +205,7 @@ public class LogicalCompare {
   private static Vector<Lemma> translateAddOrig(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
     for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.elementAt(i);
+      Invariant inv = invs.elementAt(i);
       lems.add(InvariantLemma.makeLemmaAddOrig(inv));
     }
     return lems;
@@ -230,7 +230,7 @@ public class LogicalCompare {
   private static int checkConsequences(Vector<Lemma> assumptions, Vector<Lemma> consequences) {
     Set<String> assumption_formulas = new HashSet<String>();
     for (int i = 0; i < assumptions.size(); i++) {
-      Lemma lem = (Lemma)assumptions.elementAt(i);
+      Lemma lem = assumptions.elementAt(i);
       assumption_formulas.add(lem.formula);
     }
 
@@ -277,14 +277,13 @@ public class LogicalCompare {
             Vector<Lemma> assume = lemmas.minimizeProof(inv);
             System.out.println();
             for (int j = 0; j < assume.size(); j++)
-              System.out.println(((Lemma)assume.elementAt(j)).summarize());
+              System.out.println(assume.elementAt(j).summarize());
             System.out.println("----------------------------------");
             System.out.println(inv.summarize());
             if (opt_show_formulas) {
               System.out.println();
               for (int j = 0; j < assume.size(); j++)
-                System.out.println("    "  + ((Lemma)assume.elementAt(j))
-                                   .formula);
+                System.out.println("    "  + assume.elementAt(j).formula);
               System.out.println("    ----------------------"
                                  + "--------------------");
               System.out.println("    " + inv.formula);

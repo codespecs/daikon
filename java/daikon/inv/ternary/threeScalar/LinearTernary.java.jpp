@@ -290,7 +290,7 @@ public class CLASSNAME
 
   public CLASSNAME clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
-    result.core = (CORECLASS) core.clone();
+    result.core = core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -330,7 +330,7 @@ public class CLASSNAME
   }
 
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
-    return ((CLASSNAME) clone()).add_modified(x, y, z, count);
+    return clone().add_modified(x, y, z, count);
   }
 
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {

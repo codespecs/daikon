@@ -87,7 +87,7 @@ public class CLASSNAME
 
   public CLASSNAME clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
-    result.core = (CORECLASS) core.clone();
+    result.core = core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -144,7 +144,7 @@ public class CLASSNAME
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
-    return ((CLASSNAME) clone()).add_modified(x_arr, y_arr, count);
+    return clone().add_modified(x_arr, y_arr, count);
   }
 
   public InvariantStatus add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {

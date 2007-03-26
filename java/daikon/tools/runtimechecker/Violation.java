@@ -239,7 +239,7 @@ public class Violation implements Serializable {
                 ret.add(v);
             }
         }
-        return (Violation[]) ret.toArray(new Violation[] {});
+        return ret.toArray(new Violation[] {});
     }
 
     /**
@@ -255,7 +255,7 @@ public class Violation implements Serializable {
                 ret.add(v);
             }
         }
-        return (Violation[])ret.toArray(new Violation[] {});
+        return ret.toArray(new Violation[] {});
     }
 
     /**
@@ -269,7 +269,7 @@ public class Violation implements Serializable {
                 ret.add(v);
             }
         }
-        return (Violation[])ret.toArray(new Violation[] {});
+        return ret.toArray(new Violation[] {});
     }
 
     /**
@@ -309,7 +309,7 @@ public class Violation implements Serializable {
                 // go on to next split
             }
         }
-        return (Violation[]) vios.toArray(new Violation[] {});
+        return vios.toArray(new Violation[] {});
     }
 
     public String toNiceString(String prefix, double confidenceThreshold) {
@@ -329,7 +329,7 @@ public class Violation implements Serializable {
             double confidenceThreshold) {
 
         // TODO; It is bizarre that withTime requires conversion to an array.
-        Violation[] vios_array = (Violation[])vios.toArray(new Violation[] {});
+        Violation[] vios_array = vios.toArray(new Violation[] {});
         Violation[] onEntry = Violation.withTime(vios_array, Violation.Time.onEntry);
         Violation[] onExit = Violation.withTime(vios_array, Violation.Time.onExit);
 

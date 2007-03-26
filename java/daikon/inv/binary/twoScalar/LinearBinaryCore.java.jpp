@@ -74,9 +74,9 @@ public final class CLASSNAME
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       if (x_cache != null)
-        result.x_cache = (PRIMITIVE[]) x_cache.clone();
+        result.x_cache = x_cache.clone();
       if (y_cache != null)
-        result.y_cache = (PRIMITIVE[]) y_cache.clone();
+        result.y_cache = y_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -330,8 +330,8 @@ public final class CLASSNAME
     for (int i=0; i<x_array.length-1; i++) {
       for (int j=i+1; j<x_array.length; j++) {
         // not long, lest we get wraparound
-        double xsep = ((double)x_array[i] - x_array[j]);
-        double ysep = ((double)y_array[i] - y_array[j]);
+        double xsep = x_array[i] - x_array[j];
+        double ysep = y_array[i] - y_array[j];
         double separation = xsep*xsep + ysep*ysep;
 #if defined(TYPEDOUBLE)
         // Roundoff error might result in 0.
@@ -638,7 +638,7 @@ public final class CLASSNAME
       if (!c.isActive())
         continue;
       if (result == null)
-        result = (CLASSNAME) c.clone();
+        result = c.clone();
       else {
         if (!Global.fuzzy.eq (result.a, c.a)
             || !Global.fuzzy.eq (result.b, c.b)

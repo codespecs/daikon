@@ -161,7 +161,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       	   // System.out.println( "name is " + name + ", className is " + className );
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       if (classNode == null) {
-	PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+	PptTopLevel topLevel = pptMap.get( name );
 	Assert.assertTrue(className != null);
 	root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
       }
@@ -183,7 +183,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	String programPointName = pptName.getPoint();
 	DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
 	if (programPointNode == null) {
-	  PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+	  PptTopLevel topLevel = pptMap.get( name );
 	  Assert.assertTrue(topLevel != null);
 	  classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
 	}
@@ -215,7 +215,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       //  under this method, simply add the node.  If there are already some program point
       //  nodes, add this node in order.  Eg, make sure EXIT23 goes after ENTER and before
       //  EXIT97.
-      PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+      PptTopLevel topLevel = pptMap.get( name );
       if (methodNode.getChildCount() == 0) {
 	Assert.assertTrue(topLevel != null);
 	methodNode.add( new DefaultMutableTreeNode( topLevel ));

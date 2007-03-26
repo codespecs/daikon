@@ -326,7 +326,7 @@ public class Property implements Serializable {
             }
 
         }
-        return (Property[])annos.toArray(new Property[] {});
+        return annos.toArray(new Property[] {});
     }
 
     // Maps into all the Property objects created.
@@ -366,7 +366,7 @@ public class Property implements Serializable {
             }
             break;
         }
-        return (Property[])retval.toArray(new Property[] {});
+        return retval.toArray(new Property[] {});
     }
 
     /**

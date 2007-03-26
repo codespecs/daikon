@@ -131,7 +131,7 @@ public class CommonStringSequence
       }
       intersect = ArraysMDE.subarray(tmp, 0, size);
     }
-    intersect = (String[]) Intern.intern(intersect);
+    intersect = Intern.intern(intersect);
     elts++;
     return InvariantStatus.NO_CHANGE;
   }

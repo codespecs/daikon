@@ -94,7 +94,7 @@ public final class SCALARSEQUENCESINTERSECTION
     }
 
     SCALAR[] intersect = ArraysMDE.subarray(tmp, 0, size);
-    intersect = (SCALAR[]) Intern.intern(intersect);
+    intersect = Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))

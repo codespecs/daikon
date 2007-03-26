@@ -15,7 +15,7 @@ public final class DataStructures_QueueAr_getFront_23 extends Splitter {
 
   public DataStructures_QueueAr_getFront_23() { } 
   public DataStructures_QueueAr_getFront_23(Ppt ppt) { 
-    currentSize_varinfo = ppt.findVarByRepr("Field{currentSize}[this]");
+    currentSize_varinfo = ppt.find_var_by_name("this.currentSize");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -44,7 +44,7 @@ public final class DataStructures_QueueAr_getFront_23 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
-    VarInfo currentSize_vi = ppt.findVarByRepr("Field{currentSize}[this]");
+    VarInfo currentSize_vi = ppt.find_var_by_name("this.currentSize");
     if (currentSize_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {currentSize_vi});
     }

@@ -938,7 +938,7 @@ public final class Daikon {
               ProglangType.list_implementors.add(
                 list_type_string);
             } catch (Exception e) {
-              throw new Error(e.toString());
+              throw new Error(e);
             }
             break;
           } else if (
@@ -961,7 +961,7 @@ public final class Daikon {
               ppt_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e.toString());
+              throw new Error(e);
             }
             break;
           } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
@@ -976,7 +976,7 @@ public final class Daikon {
               ppt_omit_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e.toString());
+              throw new Error(e);
             }
             break;
           } else if (var_regexp_SWITCH.equals(option_name)) {
@@ -991,7 +991,7 @@ public final class Daikon {
               var_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e.toString());
+              throw new Error(e);
             }
             break;
           } else if (var_omit_regexp_SWITCH.equals(option_name)) {
@@ -1006,7 +1006,7 @@ public final class Daikon {
               var_omit_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e.toString());
+              throw new Error(e);
             }
             break;
           }
@@ -1631,7 +1631,7 @@ public final class Daikon {
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
-      throw new Error(e.toString());
+      throw new Error(e);
     } finally {
       debugProgress.fine("Time spent on load_spinfo_files: "
                          + stopwatch.format());
@@ -1849,7 +1849,7 @@ public final class Daikon {
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
-      throw new Error(e.toString());
+      throw new Error(e);
     } finally {
       debugProgress.fine(
         "Time spent on read_data_trace_files: " + stopwatch.format());

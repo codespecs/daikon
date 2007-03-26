@@ -43,7 +43,7 @@ public class CoverageStats
 
     // We use reflection for Gretel calls so that people don't have to
     // download Gretel to build Daikon.
-    Class clazzListHits = Class.forName("residue.ListHits");
+    Class<?> clazzListHits = Class.forName("residue.ListHits");
 
     // setConfigFile(gretelFile);
     {

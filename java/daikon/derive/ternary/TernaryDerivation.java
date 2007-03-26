@@ -42,21 +42,24 @@ public abstract class TernaryDerivation
     base3 = vi3;
   }
 
+  public TernaryDerivation clone() {
+    try {
+      return (TernaryDerivation) super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new Error("This can't happen", e);
+    }
+  }
+
   public VarInfo[] getBases() {
     return new VarInfo[] { base1, base2, base3 };
   }
 
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
-    try {
-      TernaryDerivation result = (TernaryDerivation) this.clone();
-      result.base1 = new_vars[ArraysMDE.indexOf(old_vars, result.base1)];
-      result.base2 = new_vars[ArraysMDE.indexOf(old_vars, result.base2)];
-      result.base3 = new_vars[ArraysMDE.indexOf(old_vars, result.base3)];
-      return result;
-    } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
-      throw new Error(e.toString());
-    }
+    TernaryDerivation result = this.clone();
+    result.base1 = new_vars[ArraysMDE.indexOf(old_vars, result.base1)];
+    result.base2 = new_vars[ArraysMDE.indexOf(old_vars, result.base2)];
+    result.base3 = new_vars[ArraysMDE.indexOf(old_vars, result.base3)];
+    return result;
   }
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);

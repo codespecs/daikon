@@ -972,7 +972,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         }
       }
     }
-    return (String[]) result.toArray(new String[0]);
+    return result.toArray(new String[0]);
   }
 
   // Returns a HashMap fields with ".elementType == \type(...)" invariants,

@@ -35,20 +35,23 @@ public abstract class BinaryDerivation
     base2 = vi2;
   }
 
+  public BinaryDerivation clone() {
+    try {
+      return (BinaryDerivation) super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new Error("This can't happen", e);
+    }
+  }
+
   public VarInfo[] getBases() {
     return new VarInfo[] { base1, base2 };
   }
 
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
-    try {
-      BinaryDerivation result = (BinaryDerivation) this.clone();
-      result.base1 = new_vars[ArraysMDE.indexOf(old_vars, result.base1)];
-      result.base2 = new_vars[ArraysMDE.indexOf(old_vars, result.base2)];
-      return result;
-    } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
-      throw new Error(e.toString());
-    }
+    BinaryDerivation result = this.clone();
+    result.base1 = new_vars[ArraysMDE.indexOf(old_vars, result.base1)];
+    result.base2 = new_vars[ArraysMDE.indexOf(old_vars, result.base2)];
+    return result;
   }
 
   public ValueAndModified computeValueAndModified (ValueTuple vt) {

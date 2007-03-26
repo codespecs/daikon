@@ -11,6 +11,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(TYPELONG))
   #define CLASSNAME LinearTernaryCore
   #define PRIMITIVE long
+  #define DOUBLE_CAST(x) (double)(x)
   #define LINEAR_BINARY LinearBinary
   #define ONEOF OneOfScalar
   #define CLASSSTRING "LinearTernaryCore"
@@ -22,6 +23,7 @@ The correct way to build the system is to run 'make'.
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryCoreFloat
   #define PRIMITIVE double
+  #define DOUBLE_CAST(x) (x)
   #define LINEAR_BINARY LinearBinaryFloat
   #define ONEOF OneOfFloat
   #define CLASSSTRING "LinearTernaryCoreFloat"
@@ -159,7 +161,7 @@ public final class CLASSNAME
       for (int i=0; i<MINTRIPLES; i++) {
         Point p = def_points[i];
         if (p != null) {
-          result.def_points[i] = (Point) p.clone();
+          result.def_points[i] = p.clone();
         }
       }
       return result;
@@ -789,8 +791,8 @@ public final class CLASSNAME
       // plane (degenerate) is defined by x = A, z = By + C
       line_flag = Flag.X_CONSTANT;
       coefficients[0] = p0.x;
-      coefficients[1] = (p1.z-p0.z)/(double) (p1.y-p0.y);
-      coefficients[2] = (p0.z*p1.y-p0.y*p1.z)/(double)(p1.y-p0.y);
+      coefficients[1] = (p1.z-p0.z)/DOUBLE_CAST(p1.y-p0.y);
+      coefficients[2] = (p0.z*p1.y-p0.y*p1.z)/DOUBLE_CAST(p1.y-p0.y);
       coefficients[3] = 0;
       return;
     }
@@ -799,8 +801,8 @@ public final class CLASSNAME
       // plane (degenerate) is defined by y = B, z = Ax + C
       line_flag = Flag.Y_CONSTANT;
       coefficients[0] = p0.y;
-      coefficients[1] = (p1.z-p0.z)/(double) (p1.x-p0.x);
-      coefficients[2] = (p0.z*p1.x-p0.x*p1.z)/(double)(p1.x-p0.x);
+      coefficients[1] = (p1.z-p0.z)/DOUBLE_CAST(p1.x-p0.x);
+      coefficients[2] = (p0.z*p1.x-p0.x*p1.z)/DOUBLE_CAST(p1.x-p0.x);
       coefficients[3] = 0;
       return;
     }
@@ -809,8 +811,8 @@ public final class CLASSNAME
       // plane (degenerate) is defined by z = C, y = Ax + B
       line_flag = Flag.Z_CONSTANT;
       coefficients[0] = p0.z;
-      coefficients[1] = (p1.y-p0.y)/(double) (p1.x-p0.x);
-      coefficients[2] = (p0.y*p1.x-p0.x*p1.y)/(double)(p1.x-p0.x);
+      coefficients[1] = (p1.y-p0.y)/DOUBLE_CAST(p1.x-p0.x);
+      coefficients[2] = (p0.y*p1.x-p0.x*p1.y)/DOUBLE_CAST(p1.x-p0.x);
       coefficients[3] = 0;
       return;
     }
@@ -818,10 +820,10 @@ public final class CLASSNAME
       // no variables have a constant value
       // plane (degenerate) is defined by y = Ax + B, z = Cx + D
       line_flag = Flag.NO_CONSTANT_VARIABLES;
-      coefficients[0] = (p1.y-p0.y)/(double) (p1.x-p0.x);
-      coefficients[1] = (p0.y*p1.x-p0.x*p1.y)/(double)(p1.x-p0.x);
-      coefficients[2] = (p1.z-p0.z)/(double) (p1.x-p0.x);
-      coefficients[3] = (p0.z*p1.x-p0.x*p1.z)/(double)(p1.x-p0.x);
+      coefficients[0] = (p1.y-p0.y)/DOUBLE_CAST(p1.x-p0.x);
+      coefficients[1] = (p0.y*p1.x-p0.x*p1.y)/DOUBLE_CAST(p1.x-p0.x);
+      coefficients[2] = (p1.z-p0.z)/DOUBLE_CAST(p1.x-p0.x);
+      coefficients[3] = (p0.z*p1.x-p0.x*p1.z)/DOUBLE_CAST(p1.x-p0.x);
     }
   }
 
@@ -1364,7 +1366,7 @@ public final class CLASSNAME
       if (!c.isActive())
         continue;
       if (first == null)
-        first = (CLASSNAME) c.clone();
+        first = c.clone();
       else {
         if (!Global.fuzzy.eq (first.a, c.a)
             || !Global.fuzzy.eq (first.b, c.b)

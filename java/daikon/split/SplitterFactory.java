@@ -102,8 +102,7 @@ public class SplitterFactory {
 	      }
 	    }
 	    if (sp.size() >= 1) {
-	      SplitterList.put (ppt_name,
-				(Splitter[]) sp.toArray(new Splitter[0]));
+	      SplitterList.put (ppt_name, sp.toArray(new Splitter[0]));
 	    }
 	    // delete this entry in the splitter array to prevent it from
 	    // matching any other Ppts, since the documented behavior is that

@@ -53,7 +53,7 @@ public class ContextSplitterFactory
         MapfileEntry[] entries = parse_mapfile(file);
         splitters = make_context_splitters(entries, grain);
       } catch (IOException e) {
-        throw new Error(e.toString());
+        throw new Error(e);
       }
 
       for (int j=0; j < splitters.length; j++) {
@@ -180,7 +180,7 @@ public class ContextSplitterFactory
       throw (IOException)(new IOException("Malformed number").initCause(e));
     }
 
-    return (MapfileEntry[]) result.toArray(new MapfileEntry[result.size()]);
+    return result.toArray(new MapfileEntry[result.size()]);
   }
 
   /**
@@ -266,12 +266,12 @@ public class ContextSplitterFactory
       }
 
       // Collect all splitters for one callee_ppt_name
-      Splitter[] splitters_array = (Splitter[])
+      Splitter[] splitters_array =
         splitters.toArray(new Splitter[splitters.size()]);
       result.add(new PptNameAndSplitters(callee_ppt_name, splitters_array));
     }
 
-    return (PptNameAndSplitters[])
+    return
       result.toArray(new PptNameAndSplitters[result.size()]);
   }
 

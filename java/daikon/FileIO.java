@@ -2131,9 +2131,17 @@ public final class FileIO {
     public String parent_variable = null;
     public Object static_constant_value = null;
 
+    public VarDefinition clone() {
+      try {
+        return (VarDefinition) super.clone();
+      } catch (CloneNotSupportedException e) {
+        throw new Error("This can't happen: ", e);
+      }
+    }
+
     public VarDefinition copy () {
       try {
-        VarDefinition copy = (VarDefinition) this.clone();
+        VarDefinition copy = this.clone();
         copy.flags = flags.clone();
         copy.lang_flags = lang_flags.clone();
         return copy;

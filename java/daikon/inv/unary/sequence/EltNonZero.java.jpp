@@ -15,6 +15,7 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS SingleScalarSequence
   #define PRIMITIVE long
   #define NUMWRAPPER Long
+  #define DOUBLE_CAST(x) (double)(x)
   #define BASEISTYPE baseIsIntegral()
   #define PRIMITIVEVALUE longValue()
   #define ELTONEOF EltOneOf
@@ -32,6 +33,7 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS SingleFloatSequence
   #define PRIMITIVE double
   #define NUMWRAPPER Double
+  #define DOUBLE_CAST(x) (x)
   #define BASEISTYPE baseIsFloat()
   #define PRIMITIVEVALUE doubleValue()
   #define ELTONEOF EltOneOfFloat
@@ -288,7 +290,7 @@ public final class CLASSNAME
       // constraints) for the value to be zero; otherwise, the modulus
       // constraint implies non-zero.
       VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-      range = ((double)vs.max() - (double)vs.min() + 1) / modulus;
+      range = (DOUBLE_CAST(vs.max()) - vs.min() + 1) / modulus;
     }
     return 1.0/range;
   }

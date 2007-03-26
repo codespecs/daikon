@@ -7,6 +7,8 @@
 #if (defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
   #define SUPERCLASS SingleScalarSequence
   #define PRIMITIVE long
+  #define DOUBLE_CAST(x) (double)(x)
+  #define LONG_CAST(x) (x)
   #define ELEMENTISTYPE elementIsIntegral()
   #define ASSERTYPE INT_ARRAY
   #define BASEISTYPE baseIsIntegral
@@ -18,6 +20,8 @@
 #elif defined(EQUALFLOAT) || defined(NONEQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT)
   #define SUPERCLASS SingleFloatSequence
   #define PRIMITIVE double
+  #define DOUBLE_CAST(x) (x)
+  #define LONG_CAST(x) (long)(x)
   #define ELEMENTISTYPE elementIsFloat()
   #define ASSERTYPE DOUBLE_ARRAY
   #define BASEISTYPE baseIsFloat
@@ -383,13 +387,13 @@ public class CLASSNAME extends SUPERCLASS {
       if ((vs.min() > max_indx) || (vs.max() < 0))
         return Invariant.CONFIDENCE_UNJUSTIFIED;
       else {
-        long overlap = (long) (Math.min (vs.max(), max_indx)
-                                                    - Math.max (vs.min(), 0));
+        long overlap = LONG_CAST(Math.min (vs.max(), max_indx)
+                               - Math.max (vs.min(), 0));
         if (overlap < 0)
           return Invariant.CONFIDENCE_UNJUSTIFIED;
         overlap++;
         double range1 = (double)max_indx + 1;
-        double range2 = (double)vs.max() - vs.min() + 1;
+        double range2 = DOUBLE_CAST(vs.max()) - vs.min() + 1;
 
         // probability of being equal by chance
         //  = (overlap/range1) * (overlap/range2) * (1/overlap)

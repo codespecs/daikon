@@ -1084,7 +1084,7 @@ public final class TestUtilMDE extends TestCase {
       // assertTrue(MathMDE.pow(-3, 25) == ...);
     } catch (Exception e) {
       e.printStackTrace();
-      throw new Error(e.toString());
+      throw new Error(e);
     }
     {
       boolean exception = false;
@@ -1607,7 +1607,7 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(null != UtilMDE.methodForName("java.lang.Math.min(int,int)"));
     } catch (Exception e) {
       e.printStackTrace();
-      throw new Error(e.toString());
+      throw new Error(e);
     }
     try {
       java.lang.reflect.Method m = UtilMDE.methodForName("utilMDE.UtilMDE.methodForName()");
@@ -1615,7 +1615,7 @@ public final class TestUtilMDE extends TestCase {
       // nothing to do; this is the expected case
     } catch (Exception e) {
       e.printStackTrace();
-      throw new Error(e.toString());
+      throw new Error(e);
     }
 
 

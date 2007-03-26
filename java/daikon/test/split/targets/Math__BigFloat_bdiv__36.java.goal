@@ -15,7 +15,7 @@ public final class Math__BigFloat_bdiv__36 extends Splitter {
 
   public Math__BigFloat_bdiv__36() { } 
   public Math__BigFloat_bdiv__36(Ppt ppt) { 
-    $x__p_is_defined_varinfo = ppt.findVarByRepr("Field{is_defined}[Field{_p}[$x]]");
+    $x__p_is_defined_varinfo = ppt.find_var_by_name("$x._p.is_defined");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -44,7 +44,7 @@ public final class Math__BigFloat_bdiv__36 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
-    VarInfo $x__p_is_defined_vi = ppt.findVarByRepr("Field{is_defined}[Field{_p}[$x]]");
+    VarInfo $x__p_is_defined_vi = ppt.find_var_by_name("$x._p.is_defined");
     if ($x__p_is_defined_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {$x__p_is_defined_vi});
     }

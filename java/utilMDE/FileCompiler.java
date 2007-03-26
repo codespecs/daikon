@@ -25,7 +25,7 @@ public final class FileCompiler {
                           + "]+)\\.java");
     } catch (PatternSyntaxException me) {
       me.printStackTrace();
-      throw new Error("Error in regexp: " + me.toString());
+      throw new Error("Error in regexp", me);
     }
   }
 

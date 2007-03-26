@@ -286,7 +286,7 @@ public final class PrintInvariants {
             String regexp_string = g.getOptarg();
             ppt_regexp = Pattern.compile(regexp_string);
           } catch (Exception e) {
-            throw new Error(e.toString());
+            throw new Error(e);
           }
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }

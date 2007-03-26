@@ -395,7 +395,8 @@ class FormatTestCase {
 
     // System.out.println("On class " + className);
 
-    Class classToTest = getClass(className); // Load the class from file
+    // Load the class from file
+    Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className); // unchecked cast
 
     try {
       Field f = classToTest.getField("dkconfig_enabled");
@@ -557,7 +558,7 @@ class FormatTestCase {
    * @return an array of VarInfo objects that have the types corresponding
    *         to those in types
    **/
-  private static VarInfo [] getVarInfos(Class classToTest, ProglangType[] types) {
+  private static VarInfo [] getVarInfos(Class<? extends Invariant> classToTest, ProglangType[] types) {
     int numInfos = getArity(classToTest);
 
     if (numInfos == -1)
@@ -620,7 +621,7 @@ class FormatTestCase {
     String base_name = new String(new char [] {(char)('a' + i)});
     String name = base_name + arrayModifier;
     if (FileIO.new_decl_format) {
-      if (arrayModifier != "") {
+      if (arrayModifier != "") { // interned
         FileIO.VarDefinition vardef
           = new FileIO.VarDefinition (base_name, VarInfo.VarKind.VARIABLE,
                                       type.elementType());
@@ -985,7 +986,7 @@ class FormatTestCase {
    * @param theClass the class in which to find the add_modified method
    * @return the add_modified method if it exists, null otherwise
    */
-  private static Method getAddModified(Class theClass) {
+  private static Method getAddModified(Class<? extends Invariant> theClass) {
     Method[] methods = theClass.getMethods();
 
     Method currentMethod;
@@ -1029,7 +1030,7 @@ class FormatTestCase {
    * @return an instance of the class in theClass if one can be constructed,
    *         else throw a RuntimeException
    */
-  private static Invariant instantiateClass(Class theClass, PptSlice sl) {
+  private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
     try {
       Method get_proto = theClass.getMethod ("get_proto", new Class[] {});
       Invariant proto = (Invariant) get_proto.invoke (null, new Object[] {});
@@ -1057,7 +1058,7 @@ class FormatTestCase {
    * @return an instance of the class in theClass if one can be constructed,
    *         else throw a RuntimeException
    */
-  private static Invariant instantiateClass(Class theClass, PptSlice slice,
+  private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice slice,
                                          Class[] arg_types, Object[] arg_vals) {
     try {
       // Fmt.pf ("creating " + theClass);

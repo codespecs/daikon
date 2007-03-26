@@ -88,7 +88,7 @@ public final class SCALARSEQUENCESUNION
     }
 
     SCALAR[] union = ArraysMDE.subarray(tmp, 0, size);
-    union = (SCALAR[]) Intern.intern(union);
+    union = Intern.intern(union);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))

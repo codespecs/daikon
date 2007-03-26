@@ -85,7 +85,7 @@ public abstract class BinaryInvariant extends Invariant {
    * Searches for the specified binary invariant (by class) in the
    * specified slice.  Returns null if the invariant is not found
    */
-  protected Invariant find (Class cls, VarInfo v1, VarInfo v2) {
+  protected Invariant find (Class<? extends Invariant> cls, VarInfo v1, VarInfo v2) {
 
     // find the slice containing v1 and v2
     boolean fswap = false;
@@ -120,7 +120,7 @@ public abstract class BinaryInvariant extends Invariant {
     try {
       Method swap_method = cls.getMethod ("swap_class", (Class[])null);
       if (fswap)
-        cls = (Class) swap_method.invoke (null, (Object[])null);
+        cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object[])null); // unchecked cast
     } catch (Exception e) {
       swap_class = false;
     }

@@ -170,7 +170,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     functions = new LinkedHashMap<String,CLASSNAME[]>();
     Class[] subclasses = CLASSNAME.class.getDeclaredClasses();
     for (int ii = 0; ii < subclasses.length; ii++) {
-      Class subc = subclasses[ii];
+      Class<?> subc = subclasses[ii];
       String function = subc.getName();
       if (function.indexOf ("CLOVER") >= 0)
         continue;

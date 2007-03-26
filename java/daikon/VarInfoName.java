@@ -4868,7 +4868,7 @@ public abstract class VarInfoName
           newd=(Definition)super.clone();
         } catch (CloneNotSupportedException e) {
           // Can't happen because Definition directly extends Object
-          throw new Error("This can't happen: " + e.toString());
+          throw new Error("This can't happen", e);
         }
         rangetable = (Hashtable<String,String>) rangetable.clone(); // unchecked cast
         globaltable = (HashSet<String>) globaltable.clone(); // unchecked cast

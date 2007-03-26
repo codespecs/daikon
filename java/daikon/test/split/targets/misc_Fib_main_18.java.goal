@@ -15,7 +15,7 @@ public final class misc_Fib_main_18 extends Splitter {
 
   public misc_Fib_main_18() { } 
   public misc_Fib_main_18(Ppt ppt) { 
-    STEPS_varinfo = ppt.findVarByRepr("Field{STEPS}[Field{Fib}[misc]]");
+    STEPS_varinfo = ppt.find_var_by_name("misc.Fib.STEPS");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -44,7 +44,7 @@ public final class misc_Fib_main_18 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
-    VarInfo STEPS_vi = ppt.findVarByRepr("Field{STEPS}[Field{Fib}[misc]]");
+    VarInfo STEPS_vi = ppt.find_var_by_name("misc.Fib.STEPS");
     if (STEPS_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {STEPS_vi});
     }

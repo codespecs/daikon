@@ -342,7 +342,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         // System.out.println("filterNonVars removed " + varInfos[i].name.name());
       }
     }
-    return (VarInfo[]) filteredList.toArray(new VarInfo[0]);
+    return filteredList.toArray(new VarInfo[0]);
   }
 
   /**
@@ -709,7 +709,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         System.out.println("ParseException: " + e.toString());
       }
     }
-    return (VariableManager[]) variableManagerList.toArray(new VariableManager[0]);
+    return variableManagerList.toArray(new VariableManager[0]);
   }
 
   /**
@@ -802,7 +802,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
           inArrayIndex.push(Boolean.FALSE);
         } else if (tokens[i].kind == RPAREN) {
           inArrayIndex.pop();
-        } else if (((Boolean) inArrayIndex.peek()).booleanValue() &&
+        } else if (inArrayIndex.peek().booleanValue() &&
                    tokens[i].tokenImage.equals(name)) {
           if (type.equals("int") || type.equals("int_index")) {
             // Note the type can only equal "int_index" if the variable

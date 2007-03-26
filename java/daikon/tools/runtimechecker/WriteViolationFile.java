@@ -30,7 +30,7 @@ class WriteViolationFile {
     for (int i=0; i<main_args.length; i++) {
       main_args[i] = args[i+1];
     }
-    Class cls;
+    Class<?> cls;
     try {
       cls = Class.forName(class_name);
     } catch (Exception e) {

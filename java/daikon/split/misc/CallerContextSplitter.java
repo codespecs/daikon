@@ -45,7 +45,7 @@ public final class CallerContextSplitter
    **/
   public CallerContextSplitter(long[] ids, String condition) {
     this.caller_varinfo = null;
-    this.ids = (long[]) ids.clone();
+    this.ids = ids.clone();
     this.condition = condition;
   }
 

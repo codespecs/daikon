@@ -500,7 +500,8 @@ public class InvariantAddAndCheckTester extends TestCase {
       // End of file reached
       if (className == null) return true;
 
-      Class classToTest = getClass(className); // Load the class from file
+      // Load the class from file
+      Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className); // unchecked cast
 
       try {
         classToTest.getField("dkconfig_enabled"); // Enable if needs to be done
@@ -680,7 +681,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the add_modified method if it exists, null otherwise
      * @throws RuntimeException if check_modified does not exist.
      */
-    private static Method getAddModified(Class theClass) {
+    private static Method getAddModified(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
 
       Method currentMethod;
@@ -700,7 +701,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the check_modified method if it exists
      * @throws RuntimeException if check_modified does not exist.
      */
-    private static Method getCheckModified(Class theClass) {
+    private static Method getCheckModified(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
 
       Method currentMethod;
@@ -717,7 +718,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the method of invariant named by theClass
      *  that produces a String representation of the invariant.
      */
-    private static Method getOutputProducer(Class theClass) {
+    private static Method getOutputProducer(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
 
       Method currentMethod;
@@ -931,7 +932,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return an instance of the class in theClass if one can be constructed,
      *         else throw a RuntimeException
      */
-    private static Invariant instantiateClass(Class theClass, PptSlice sl) {
+    private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
       try {
         Method get_proto = theClass.getMethod ("get_proto", new Class[] {});
         Invariant proto = (Invariant) get_proto.invoke (null, new Object[] {});

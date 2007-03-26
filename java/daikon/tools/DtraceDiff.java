@@ -118,7 +118,7 @@ public class DtraceDiff {
 	    // System.out.println("Regexp = " + regexp_string);
 	    Daikon.ppt_regexp = Pattern.compile(regexp_string);
 	  } catch (Exception e) {
-	    throw new Error(e.toString());
+	    throw new Error(e);
 	  }
 	  break;
 	} else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
@@ -131,7 +131,7 @@ public class DtraceDiff {
 	    // System.out.println("Regexp = " + regexp_string);
 	    Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
 	  } catch (Exception e) {
-	    throw new Error(e.toString());
+	    throw new Error(e);
 	  }
 	  break;
 	} else if (Daikon.var_regexp_SWITCH.equals(option_name)) {
@@ -144,7 +144,7 @@ public class DtraceDiff {
 	    // System.out.println("Regexp = " + regexp_string);
 	    Daikon.var_regexp = Pattern.compile(regexp_string);
 	  } catch (Exception e) {
-	    throw new Error(e.toString());
+	    throw new Error(e);
 	  }
 	  break;
 	} else if (Daikon.var_omit_regexp_SWITCH.equals(option_name)) {
@@ -157,7 +157,7 @@ public class DtraceDiff {
 	    // System.out.println("Regexp = " + regexp_string);
 	    Daikon.var_omit_regexp = Pattern.compile(regexp_string);
 	  } catch (Exception e) {
-	    throw new Error(e.toString());
+	    throw new Error(e);
 	  }
 	  break;
 	} else if (Daikon.config_SWITCH.equals(option_name)) {
@@ -323,7 +323,7 @@ public class DtraceDiff {
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
-      throw new Error(e.toString());
+      throw new Error(e);
     }
   }
 
