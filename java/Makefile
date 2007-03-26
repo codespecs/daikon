@@ -674,12 +674,12 @@ doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
 	javadoc $(JAVADOC_FLAGS) -private $(JDOC_FILES)
 
-javadoc-jdk-lookup: doc-jdk-lookup
+javadoc-lookup: doc-javadoc-lookup
 
-## Fix up generated .html files for use by the Emacs `jdk-lookup' function.
-doc-jdk-lookup: doc
+## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
+doc-javadoc-lookup: doc
 	${INV}/scripts/jdk-add-munged-anchor-names `find doc -name '*.html'`
-	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
+	echo "Run javadoc-index-to-alist > ~/emacs/javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
 	javadoc -doclet daikon.config.InvariantDoclet \
