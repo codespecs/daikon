@@ -6672,6 +6672,19 @@ belongs to (@code{null} for object invariants).
 
 @end table
 
+@cindex Annotate warning: Daikon knows nothing about field
+@cindex Daikon knows nothing about field:  warning from Annotate
+If Annotate issues a warning message of the form
+@example
+  Warning: Annotate: Daikon knows nothing about field ...
+@end example
+@noindent
+then the Annotate tool found a variable in the source code that is was
+computed by Daikon.  This can happen if Daikon was run omitting the
+variable, for instance due to --std-visibility.  It can also happen due
+to a bug in Annotate or Daikon; if that is the case, please report it to
+the Daikon developers.
+
 @strong{Known bug (logical shift in Java).}
 Daikon's Java parser (adopted from javacc and JTB) accepts Java 1.5 syntax.
 An error in the new parser
