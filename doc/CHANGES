@@ -20,7 +20,38 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.2.14 (February 1 2007)
+4.2.15 (March 31, 2007)
+
+Daikon
+
+  User-visible changes
+
+    Error messages caused by bad configuration variables have been improved.
+
+  Bug-fixes
+
+    A GCD (greatest common divisor) routine has been fixes so that it
+    does not infinite-loop when called on (infinity, -infinity).
+
+    The Annotate tool, which inserts Daikon output in source code (as
+    stylized comments) has been restructured to fix two problems.
+    Annotate now handles nested classes, and it recognizes (some)
+    variables that Daikon intentionally omits.  These problems
+    previously caused Annotate to issue a warning of the form
+
+      Warning: Annotate: Daikon knows nothing about field ...
+
+    which means that Annotate found a variable in the source code that was
+    not processed by Daikon.
+
+  Implementation changes
+
+    Daikon now compiles cleanly when using Java 6.  (Java 6's compiler
+    issues more warning messages than Java 5's compiler does.)
+
+---------------------------------------
+
+4.2.14 (February 1, 2007)
 
 A new mode was added to Daikon that allows it to handle constants
 more efficiently.  Also, a new configuration option was added 
@@ -40,7 +71,7 @@ Daikon
     daikon.PrintInvariants.static_const_infer.  It is not enabled by
     default.
 
-    Normally, if a method exit is executed without a preceeding enter,
+    Normally, if a method exit is executed without a preceding enter,
     Daikon exits with an error.  If the new configuration option
     daikon.FileIO.ignore_missing_enter is set to true, the unmatched exits
     will be ignored instead.  This can make it easier to process parts
@@ -51,7 +82,7 @@ Daikon
 
 ---------------------------------------
 
-4.2.13 (January 1 2007)
+4.2.13 (January 1, 2007)
 
 A server mode was added to Daikon.  Two new command lined switches
 were added to InvariantChecker to more finely control what invariants
@@ -77,7 +108,7 @@ Daikon
 
 ---------------------------------------
 
-4.2.12 (December 1 2006)
+4.2.12 (December 1, 2006)
 
 InvariantChecker was enhanced to handle multiple input files and count
 the violations for each file. Some minor enhancements and bugs fixes
@@ -2379,7 +2410,7 @@ Added linear ternary invariants, of the form z = ax + by + c.
 
  LocalWords:  daikonenv PrintableString StringLength PrintInvariants guardNulls
  LocalWords:  PrintInvariant LinearTernaryFloat LinearBinaryFloat LinearTernary
- LocalWords:  noInvariantGuarding SeqIndex SeqIndexIntEqual DtraceDiff Quant
+ LocalWords:  noInvariantGuarding SeqIndex SeqIndexIntEqual DtraceDiff Quant ps
  LocalWords:  SeqIndexFloatLessThan DerivedVariableFilter ajax typeOf mypackage
  LocalWords:  DTRACELIMITTERMINATE MyClass arg retroweaver dfej's listclosure
  LocalWords:  includeonly noajax tracefilename declsfiledir declsfiledirflat
@@ -2397,4 +2428,9 @@ Added linear ternary invariants, of the form z = ax + by + c.
  LocalWords:  LogicalCompare VarComparability SuperSet SuperSetFloat GUI Ljava
  LocalWords:  SeqFloatEqual SeqFloatGreaterEqual OutputFormat dci EDG JTB mdas
  LocalWords:  ParseException Bugfix CreateSpinfoC CreateSpinfo runcluster xor
- LocalWords:  createspinfo untruncate fns DTRACEAPPEND
+ LocalWords:  createspinfo untruncate fns DTRACEAPPEND daikon texinfo html dvi
+ LocalWords:  pdf Javadoc API DAIKONDIR java GCD LowerBound UpperBound bufsize
+ LocalWords:  dtrace InvariantChecker dir JML getClass ppt orig vars Kvasir jdk
+ LocalWords:  BCEL bcel hashcode hashcodes Valgrind DynComp nohierarchy JDKDIR
+ LocalWords:  DynComp's DAIKONPARENT kvasir DBC pre NaN var dyncomp regex args
+ LocalWords:  decl varname dataflow comp Mangel Wurzel gzip stdout
