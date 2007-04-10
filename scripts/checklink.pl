@@ -7,6 +7,8 @@
 
 # Edited by Michael Ernst; we use a modified version of 3.6.2.26 (the last
 # 3.x release) in order to avoid some undesirable features of the 4.x series.
+# (For instance, the 4.x series respects certain annotations that are
+# intended to keep robots out, but this defeats the point of the checking.)
 
 # Original CVS Id:
 # Id: checklink.pl,v 3.6.2.26 2004/02/01 11:07:06 ville Exp
@@ -1383,7 +1385,7 @@ sub record_redirects ( \%$ )
     my $from_to = $from . '->' . $to;
 
     my $redirect_match = grep { $_ eq $from_to } @{$Opts{Exclude_Redirect}};
-    # print STDERR "Result $match of checking $from_to\n";
+    # print STDERR "Result $redirect_match of checking $from_to\n";
     my $match = grep { $_ eq $from_to } @{$Opts{Exclude_Redirect}};
     # print STDERR "Result $match of checking $from_to\n";
     if (! $match) {
