@@ -25,7 +25,7 @@ public final class Program {
 
   private HashMap<Integer, ArrayList<Line>> thread2bb = new HashMap<Integer, ArrayList<Line>>();
   private Execution execution = new Execution();
-
+  public static boolean useDominators = false;
   public void phase(Writer out, BufferedReader input) throws Throwable {
     if (out!=null) {
       // second phase: writing the output
@@ -37,14 +37,19 @@ public final class Program {
           "java.util.List\n" +
           "\n");
 
+      int max_var_num = 0;
       for (BasicBlock bb : execution.address2BB.values()) {
         out.write("DECLARE\n"+bb.getPPTName()+"\n");
-        for (BasicBlock d : bb.dominators)
+        max_var_num = Math.max(max_var_num, bb.binaryVariables.size());
+
+        TreeSet<BasicBlock> dominators = useDominators ? bb.dominators : new TreeSet<BasicBlock>();
+        if (!useDominators) dominators.add(bb);
+        for (BasicBlock d : dominators)
           for (BinaryVariable bv : d.binaryVariables)
             out.write(bv.getFullName(d)+"\nint\nint\n22\n");
         out.write("\n");
       }
-
+      System.out.println("max_var_num="+max_var_num);
       execution.setOutput(out);
     }
     int lineNo = 0;
@@ -127,19 +132,17 @@ public final class Program {
       }
     }
 
-    if (type.equals("BB")) {
-      //588	KERNEL32.dll:0x24fa	BB
-      // Note that some basic blocks don't have a start tag because determina merges basic blocks together
-      //bb.add( new Line( new BinaryVariable("__BB", addr), null) );
-    } else if (type.equals("BV")) {
+    if (type.equals("BV")) {
       //588	KERNEL32.dll:0x16fc6	BV	src_ebp	1245168
       String name = args[3];
       BinaryVariable bv = new BinaryVariable(name, addr);
       long value = parseHex(args[4]);
       bb.add( new Line(bv, value) );
     } else {
+      //588	KERNEL32.dll:0x24fa	BB
+      // Note that some basic blocks don't have a start tag because determina merges basic blocks together
       // ended a basic block
-      addBB(addr, bb, thread);
+      if (bb.size()>0) addBB(addr, bb, thread);
 
 
       if (type.equals("CALL") || type.equals("ICALL")) {
@@ -148,6 +151,9 @@ public final class Program {
         Address funcAddr = parseAddr(args[4]);
         Address returnAddr = parseAddr(args[6]);
         execution.callFunction(thread, funcAddr, returnAddr);
+
+      } else if (type.equals("BB")) {
+        // nothing to do
 
       } else if (type.equals("RET")) {
         //2748	KERNEL32.dll:0x16fc0	RET to KERNEL32.dll:0x16fc0

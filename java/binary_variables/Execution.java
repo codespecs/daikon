@@ -136,7 +136,10 @@ public final class Execution {
 
     if (out!=null) {
       out.write(bb.getPPTName()+"\n");
-      for (BasicBlock d : bb.dominators) {
+
+      TreeSet<BasicBlock> dominators = Program.useDominators ? bb.dominators : new TreeSet<BasicBlock>();
+      if (!Program.useDominators) dominators.add(bb);
+      for (BasicBlock d : dominators) {
         TreeSet<BinaryVariable> t = top.basicBlocks.get(d);
         for (BinaryVariable bv : t)
           out.write(bv.getFullName(d)+"\n"+bv.value+"\n1\n");
