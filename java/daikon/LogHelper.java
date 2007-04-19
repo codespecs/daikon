@@ -33,7 +33,7 @@ public final class LogHelper {
     // Logger.global.removeAllAppenders();
     {
       // Java 5 version
-      Logger global = Logger.global;
+      Logger global = Logger.global; // deprecation
       // Java 6 version (doesn't work in Java 5)
       // Logger global = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
       Handler[] handlers = global.getHandlers();
