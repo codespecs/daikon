@@ -18,9 +18,14 @@
    ;; Emacs source files
    "mernst/emacs/x?lisp/"
    "emacs[-/][0-9]+\.[0-9]+\\(\.[0-9]+\\)?/\\(lisp\\|src\\)/"
+   ;; Javac compiler
+   "annotations/\\(vendor-\\)?compiler/"
    )
   "List of regular expressions.  If any of them match a file name, then
-trailing whitespace is not removed from the file.")
+trailing whitespace is not removed from the file.
+These are typically source files whose style I shouldn't modify, because
+they are maintained by someone else, and I wish to minimize differences/patches."
+)
 
 (defun remove-trailing-whitespace-ignored-filename (filename)
   "Return t if FILENAME should not have trailing whitespace removed."
