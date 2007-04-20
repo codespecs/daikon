@@ -300,8 +300,8 @@ public class DtraceDiff {
 	      Object val2 = vt2.getValue(vis2[i]);
 	      if ((missing1 != missing2)
 		  || (! (missing1 || values_are_equal(vis1[i], val1, val2))))
-		ppt_var_value_error (vis1[i], state1, dtracefile1,
-				     vis2[i], state2, dtracefile2);
+		ppt_var_value_error (vis1[i], val1, state1, dtracefile1,
+				     vis2[i], val2, state2, dtracefile2);
 	    }
 	  }
 	  else
@@ -404,24 +404,24 @@ public class DtraceDiff {
 					  String dtracefile1,
 					  FileIO.ParseState state2,
 					  String dtracefile2) {
-    throw new Error ("Program point " + state1.ppt.name +
-		     " at line " + state1.lineNum +
-		     " in " + dtracefile1 +
-		     " does not match " + state2.ppt.name +
-		     " at line " + state2.lineNum +
-		     " in " + dtracefile2);
+    throw new Error
+      (String.format("Mismatched program point:%n"
+                     + "  ppt %s at %s:%d%n"
+                     + "  ppt %s at %s:%d",
+                     state1.ppt.name, dtracefile1, state1.lineNum,
+                     state2.ppt.name, dtracefile2, state2.lineNum));
   }
 
   private static void ppt_decl_error (FileIO.ParseState state1,
 				      String dtracefile1,
 				      FileIO.ParseState state2,
 				      String dtracefile2) {
-    throw new Error ("Declaration of program point " + state1.ppt.name +
-		     " referenced at line " + state1.lineNum +
-		     " in " + dtracefile1 +
-		     " does not match corresponding declaration referenced at line " +
-		     state2.lineNum +
-		     " in " + dtracefile2);
+    throw new Error
+      (String.format("Mismatched program point declaration:%n"
+                     + "  ppt %s at %s:%d%n"
+                     + "  ppt %s at %s:%d",
+                     state1.ppt.name, dtracefile1, state1.lineNum,
+                     state2.ppt.name, dtracefile2, state2.lineNum));
   }
 
   private static void ppt_var_decl_error (VarInfo vi1,
@@ -430,27 +430,33 @@ public class DtraceDiff {
 					  VarInfo vi2,
 					  FileIO.ParseState state2,
 					  String dtracefile2) {
-    throw new Error ("Declaration of variable " + vi1.name() +
-		     " in program point " + state1.ppt.name +
-		     " referenced at line " + state1.lineNum +
-		     " does not match corresponding declaration of " +
-		     vi2.name() +
-		     " referenced at line " + state2.lineNum +
-		     " in " + dtracefile2);
+    assert state1.ppt.name.equals(state2.ppt.name);
+    throw new Error
+      (String.format("Mismatched variable declaration in program point %s:%n"
+                     + "  variable %s at %s:%d%n"
+                     + "  variable %s at %s:%d",
+                     state1.ppt.name,
+                     vi1.name(), dtracefile1, state1.lineNum,
+                     vi2.name(), dtracefile2, state2.lineNum));
   }
 
   private static void ppt_var_value_error (VarInfo vi1,
+                                           Object val1,
 					   FileIO.ParseState state1,
 					   String dtracefile1,
 					   VarInfo vi2,
+                                           Object val2,
 					   FileIO.ParseState state2,
 					   String dtracefile2) {
-    throw new Error ("Value of variable " + vi1.name() +
-		     " in program point " + state1.ppt.name +
-		     " at line " + state1.lineNum +
-		     " does not match corresponding value in sample at line " +
-		     state2.lineNum +
-		     " in " + dtracefile2);
+    assert vi1.name().equals(vi2.name());
+    assert state1.ppt.name.equals(state2.ppt.name);
+    throw new Error
+      (String.format("Mismatched values for variable %s in program point %s:%n"
+                     + "  value %s at %s:%d%n"
+                     + "  value %s at %s:%d",
+                     vi1.name(), state1.ppt.name,
+                     val1, dtracefile1, state1.lineNum,
+                     val2, dtracefile2, state2.lineNum));
   }
 
 
