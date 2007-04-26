@@ -402,7 +402,7 @@ public class ChicoryPremain {
     private String extract_jar_path (URL url) {
       assert url.getProtocol().equals ("jar") : url.toString();
       String[] parts = url.getFile().split ("[:!]");
-      assert parts.length == 3;
+      assert parts.length == 3 : url.toString();
       assert parts[0].equals ("file");
       return parts[1];
     }
