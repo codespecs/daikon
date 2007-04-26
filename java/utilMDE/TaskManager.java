@@ -33,7 +33,7 @@ public class TaskManager {
   @Option ("-v Print progress information")
   public static boolean verbose = false;
 
-  @Option ("-f Specify output format (short_ascii, short_html)")
+  @Option ("-f Specify output format (short_ascii, short_html, milestone_html)")
   public static OutputFormat format = OutputFormat.short_ascii;
 
   @Option ("Regex that matches an entire comment (not just a comment start)")
@@ -154,20 +154,24 @@ public class TaskManager {
                             duration_str, task);
     }
 
-    public String toString_short_html() {
+    public String toString_short_html(double total) {
       String duration_str = String.format ("%s/%s", short_str (completed),
                                            short_str(duration));
       return String.format ("<tr> <td> %s </td><td> %s </td><td> "
-                            + "%s </td><td> %s </td></tr>",
-                            responsible, milestone, duration_str, task);
+                            + "%s </td><td> %f </td><td> %s </td></tr>",
+                            responsible, milestone, duration_str, total, task);
     }
 
-    public String toString_milestone_html() {
+    public String toString_milestone_html(double total) {
       String duration_str = String.format ("%s/%s", short_str (completed),
                                            short_str(duration));
-      return String.format ("<tr> <td> %s </td><td> %s </td><td> "
+      String resp_str = responsible;
+      if (resp_str.equals ("none"))
+        resp_str = "<font color=red><b>" + resp_str + "</b></font>";
+      return String.format ("<tr> <td> %s </td><td> %s </td><td> %.1f </td><td>"
                             + "<a href=%s?file=%s&line=%d> %s </a></td></tr>",
-                            responsible, duration_str, "show_task_details.php",
+                            resp_str, duration_str, total,
+                            "show_task_details.php",
                             filename, line_number, task);
     }
 
@@ -267,9 +271,16 @@ public class TaskManager {
 
   public String toString_short_html() {
     StringBuilder out = new StringBuilder();
+    double total = 0.0;
+    String responsible = null;
     out.append ("<table>" + lineSep);
     for (Task task : tasks) {
-      out.append (task.toString_short_html() + lineSep);
+      if (!task.responsible.equals (responsible)) {
+        responsible = task.responsible;
+        total = 0.0;
+      }
+      total += (task.duration.floatValue() - task.completed.floatValue());
+      out.append (task.toString_short_html(total) + lineSep);
     }
     out.append ("</table>" + lineSep);
     return (out.toString());
@@ -278,9 +289,19 @@ public class TaskManager {
   public String toString_milestone_html() {
     StringBuilder out = new StringBuilder();
     out.append ("<table border cellspacing=0 cellpadding=2>" + lineSep);
-    out.append ("<tr> <th> Responsible <th> C/D <th> Task </tr>" + lineSep);
+    out.append ("<tr> <th> Responsible <th> C/D <th> Total <th> Task </tr>"
+                + lineSep);
+    double total = 0.0;
+    String responsible = null;
     for (Task task : tasks) {
-      out.append (task.toString_milestone_html() + lineSep);
+      if (!task.responsible.equals (responsible)) {
+        if (responsible != null)
+          out.append ("<tr bgcolor=grey><td colspan=4></td></tr>" + lineSep);
+        responsible = task.responsible;
+        total = 0.0;
+      }
+      total += (task.duration.floatValue() - task.completed.floatValue());
+      out.append (task.toString_milestone_html(total) + lineSep);
     }
     out.append ("</table>" + lineSep);
     return (out.toString());
