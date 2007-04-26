@@ -405,7 +405,14 @@ class DCInstrument {
     TypeStack type_stack = null;
     if (use_StackVer) {
       StackVer stackver = new StackVer ();
-      VerificationResult vr = stackver.do_stack_ver (mg);
+      VerificationResult vr = null;
+      try {
+      vr = stackver.do_stack_ver (mg);
+      } catch (Exception e) {
+        System.out.printf ("Warning: StackVer failed for %s: %s\n", mg, e);
+        System.out.printf ("Method is NOT instrumented%n");
+        return;
+      }
       if (vr != VerificationResult.VR_OK) {
         System.out.printf ("Warning: StackVer failed for %s: %s%n", mg, vr);
         System.out.printf ("Method is NOT instrumented%n");
