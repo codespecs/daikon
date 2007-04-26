@@ -1,4 +1,4 @@
-// Created on Nov 9, 2004 by saff for edu.mit.csail.pag.testfactoring
+
 package daikon.dcomp;
 
 import java.io.*;
@@ -15,7 +15,7 @@ import org.apache.bcel.*;
 /**
  * Converts each file in the JDK.  Each method is doubled.  The new methods
  * are distinguished by a final parameter of type ?? and are instrumented to
- * track comparabiity.  User code will call the new methods, but
+ * track comparability.  User code will call the new methods, but
  * instrumentation code is unchanged and calls the original methods.
  */
 public class BuildJDK {
@@ -82,7 +82,7 @@ public class BuildJDK {
    *    <jarfile>   - jarfile to process
    *    <dest>      - destination directory in which to place instrumented
    *                  classes
-   *    <prefix>    - prefix of classes to be translated
+   *    <prefix>    - optional prefix of classes to be translated
    *
    * Instruments each class file in jarfile that begins with prefix
    * and puts the results in dest.
@@ -241,9 +241,6 @@ public class BuildJDK {
         // Get the binary for this class
         InputStream is = jfile.getInputStream(entry);
         ClassParser parser = new ClassParser(is, entryName);
-        // if (entryName.equals ("java/lang/ClassLoader.class"))
-        //  parser
-        //  = new ClassParser ("/scratch/jhp/jdk/java/lang/ClassLoader.class");
         JavaClass jc = parser.parse();
 
         classmap.put(jc.getClassName(), jc);
@@ -274,8 +271,7 @@ public class BuildJDK {
         }
       }
 
-      // Create the InterfaceMarker class (used to identify our empty
-      // constructors)
+      // Create the DcompMarker class (used to identify instrumented calls)
       ClassGen dcomp_marker = new ClassGen("java.lang.DCompMarker",
         "java.lang.Object", "DCompMarker.class", Constants.ACC_INTERFACE
         | Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT, new String[0]);
@@ -287,6 +283,11 @@ public class BuildJDK {
     }
   }
 
+  /**
+   * Looks up classname in classmap and instruments the class that is
+   * found.  Writes the resulting class to its corresponding location
+   * in the directory dfile.
+   **/
   private void processClassFile(Map<String, JavaClass> classmap, File dfile,
                                 String classname) throws java.io.IOException {
     JavaClass jc = classmap.get(classname);
@@ -294,9 +295,6 @@ public class BuildJDK {
       System.out.printf("processing target %s\n", classname);
     DCInstrument dci = new DCInstrument (jc, true, null);
     JavaClass inst_jc = dci.instrument_jdk();
-    // Build the translated class, wrapper class, and matching interface
-    // JavaClass ijc = ii.getInstrumentedClass(jc);
-    // Write them out
     File classfile = new File(classname.replace('.', '/') + ".class");
     File dir = new File(dfile, classfile.getParent());
     dir.mkdirs();
