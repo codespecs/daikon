@@ -1,11 +1,16 @@
 Daikon todo list.
-Time-stamp: <2004-05-06 18:40:07 mernst>
+Time-stamp: <2007-04-20 14:34:38 jhp>
 
 Projects
 
-  - Comparability
-      - Static
-      - Dynamic
+  - Optimize derived variables
+      - apply equality sets, constants, etc to the creation of derived
+        variables
+      - reduce the size of variables
+
+  - extend the hierarchy to subclasses and interfaces.
+
+  - Improve the splitting code and make it work for more than 2 children.
 
   - NIS enhancements
       - Optimize merging and checking falsified antecedents
@@ -19,8 +24,6 @@ Projects
   - Testing
       - Build better tests for NIS.  There's a number of internal
         consistency checks that would probably find additional errors
-      - Better test the global ppt.  Again, there are consistency checks
-        that would probably find errors.
       - We could possibly test our suppressions and obvious checks against
         simplify
       - Perhaps an overall testing strategy that uses the simple 
@@ -32,26 +35,6 @@ Projects
     class, percent invariants obvious by class, etc).  Make this easier
     to do in the future
 
-  - Add suppressions/obvious checks to match v2/simplify.  Also, better
-    organize the various filters for consistency
-
-  - Remove instantiated suppressions
-
-  - Remove top-down processing
-
-  - Fully support top-down processing
-
-  - Replace dfej with special version of jvm to simplify user experience
-    Also processing class files might be more resilient to language
-    changes.
-
-  - Online processing
-
-  - Optimize derived variables
-      - apply equality sets, constants, etc to the creation of derived
-        variables
-      - reduce the size of variables
-
   - Process daikon itself (at least the main directory) over a real test
     case.  Fix problems encountered.
 
@@ -60,16 +43,6 @@ Projects
     particular, a good way to include results as asserts.
 
 Issues/Bugs
-
-  mernst	5/6/04	Avoid loading of analyzed class files
-
-    Some analysis code loads classfiles containing target code, in order to
-    perform queries on its reflection structures (rather than parsing the
-    target classfiles).  This leads to unpredictable -- and potentially
-    dangerous -- side-effects, since it causes arbitrary code from the
-    static initialisers of the target application to be run within the
-    analysis thread.  These uses of Reflection structures need to be
-    replaced by classfile parsing (say, via BCEL).
 
   cpacheco	04/12/04	jmlc and ESC/Java2 regression tests
 
@@ -80,32 +53,6 @@ Issues/Bugs
 
     Make the overnight tests run javadoc and complain if it gives any
     warnings.
-
-  jhp	04/12/04	Mailing lists
-
-    Move all mailing lists from pag to lists.csail.mit.edu.  Update the
-    documentation, mailing lists, and certain places in the code to reflect
-    this change.  Stop mailman from running on pag, and instead use
-    /etc/aliases to forward mail that is sent to the old addresses.
-
-  jhp     03/25/04      LinearTernary ignores some initial points
-
-    LinearTernary chooses the 3 most separated points to define the
-    plane.  In the routine maxsep_triples, it writes these three points
-    into the first 3 slots of def_points.  These slots are used to
-    define the coefficients of the equation.  Unfortunately it does
-    not move the unused points into the upper parts of def_points, so
-    they are never checked for validity!
-
-  jhp     02/20/04      Check for \n in all of daikon
-
-    Java strings should not include \n as line separator.  They
-    should instead use the line.separator system property.  Failure
-    to do this can lead to errors on windows based systems.
-
-    The command: rgrep '\\n' | grep -v '\\\\' | grep -v ' *//'
-    found 181 instances of non-commented \n in the daikon source
-    code (rgrep does a recursive grep on .java and .jpp files).
 
   jhp     02/04/04      add checks for debug settings
 
@@ -136,6 +83,20 @@ Issues/Bugs
     this.  Then the out of bounds info would track with the sample which
     is correct.
 
+  jhp     11/20/03      missingOutOfBounds implemented poorly
+
+    The implementation of missingOutOfBounds by marking the variable
+    has proven to be a consistent problem.  It is common to want to
+    apply the same sample to different points (eg, the sample for
+    an exit point to one of its conditional points).  The missing out of
+    bounds info doesn't follow the sample and special code has to
+    be added.  I make this mistake every time.  And the solution is
+    not very efficient.
+
+    I think this would be much better if it used a missing bit like
+    other val related items.  Then out of bounds would track with the
+    value which is what we want.
+
   jhp     12/18/03      Fix/remove EltwiseIntComparison.hasSeenNonTrivialSample
 
     The only purpose for the class seems to be to force children to implement
@@ -155,34 +116,6 @@ Issues/Bugs
     the regression tests.  Its not clear if this should be included in the
     standard Daikon output as it is not necessarily interesting to users.
 
-  jhp     12/15/03      add flex to regression tests
-
-    We should add flex or some other program with a global program point.
-    It should be possible to make flex run in a reasonable amount of time
-    by limiting both the number of program points and the the size of
-    the trace file.
-
-  jhp     11/20/03      compare no-hierarchy to bottom up
-
-    There are some differences in output between the no-hierachy
-    switch and bottom up.  This should not be the case.  We should
-    check these and fix any problems.  These include FunctionUnary,
-    subseq, and others.
-
-  jhp     11/20/03      missingOutOfBounds implemented poorly
-
-    The implementation of missingOutOfBounds by marking the variable
-    has proven to be a consistent problem.  It is common to want to
-    apply the same sample to different points (eg, the sample for
-    an exit point to one of its conditional points).  The missing out of
-    bounds info doesn't follow the sample and special code has to
-    be added.  I make this mistake every time.  And the solution is
-    not very efficient.
-
-    I think this would be much better if it used a missing bit like
-    other val related items.  Then out of bounds would track with the
-    value which is what we want.
-
   jhp     11/19/03      DynamicConstants.dkconfig_OneOf_only
 
     If this is set to true, invariants will be missed during the merge
@@ -195,23 +128,6 @@ Issues/Bugs
     But if A and B are not in the same equality set (perhaps because
     they have different missing information) the A == B equality doesn't
     remove any invariants 
-
-  jhp     11/11/03      Equality.postProcess creates wrong string equality
-
-    The code appears to create the old StringComparison invariant rather
-    than StringEqual
-
-    11/14/03: note that this code has been moved to 
-    PptTopLevel.create_equality_inv().  It has a number of problems in
-    addition to that noted above.  It presumes that it will create
-    a new slice even though that is not necessarily the case.  It also
-    looks to see if an equality invariant is suppressed and removes it
-    if it is.  This does not seem correct.  Removing this creates diffs,
-    but they seem like correct diffs.
-
-    Also, it doesn't create stringarray comparisons (these are also not
-    created in other instantiate code).  This should be resolved as
-    well.
 
   jhp     11/10/03      Better solution for PptRelation and splitters
 
@@ -245,29 +161,11 @@ Issues/Bugs
     of each FunctionBinary function.   This needs to be changed to not
     show a separate class for each function
 
-  jhp     10/30/03      Add documentation for --track switch.  
-
-    Probably should add this to V2 as well.
-
   jhp     10/30/03      --track should do some error checking
 
     It would be nice if --track could do some sort of error checking.
     It should also only print out the tracked vars once, rather than after
     each --track switch.
-
-  jhp     10/30/03      finish check_vs_global() checking
-
-    check_vs_global makes sure there are no invariants that exist both
-    locally and at the global ppt.  It is called after adding samples
-    in PptTopLevel. This should be uncommented and any remaining problems
-    (which are few) fixed.
-
-  jhp     10/23/03      Global ppt needs to handle derived variables
-
-    The code that creates the relation between global variables at a ppt
-    and the global ppt doesn't handle derived variables correctly.  This
-    should use the same basic approach as in PptRelation.  Its not causing
-    a problem for now because flex doesn't enable derived variables
 
   jhp     09/02/03      Orig variables are not always found at exit point
 
@@ -279,36 +177,6 @@ Issues/Bugs
     Comparability is not checked when creating binary slices since we 
     creates slices between arrays and integers.  This can be fixed to
     properly check comparability before creating the slice
-
-   jhp     09/02/03     Fix comments in SuppressionLink.java
-
-     SuppressionLink.java says:
-
-      * Connects one Invariant to a set of suppressor invariants;
-      * immutable.
-
-     but also:
-
-       /**
-        * What stage of use this link is in.  Gets modified.  Can be one of
-        * CREATED, LINKED or UNLINKED.
-        **/
-       private int state = CREATED;
-
-     Which is right?
-
-     And SuppressionLink.java also says:
-
-        Each
-      * SuppressionLink is connected to exactly ONE invariant on each side.
-
-     but later:
-
-       private final List suppressors;
-
-     so this needs to be clarified as well.
-
-    
 
 Completed Issues
 
