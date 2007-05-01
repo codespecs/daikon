@@ -1,67 +1,87 @@
-TODO:
+Dyncomp Todo
 
-  - remove all standard use of /tmp so that multiple users on the same
-    machine can run.  
-  - Allow decl output file to be named directly
-  - Add a stub main like chicory so user doesn't have to directly deal
-    with premain and its odd argument style.
-  - Support reflection.  Because of the additional argument, reflection
-    finds the original code and not our code.  This means we don't 
-    accurately instrument.  This is the downside of adding the dcomp_marker
-    argument to user code (which is necessary only so that we don't have to
-    tell when calling between user code and the jdk)
-  - Change design so that everything doesn't have to be added into the
-    system classes.  We should be able to create a DCRuntime without a lot
-    of external dependencies.
-  - Native synopsis (could probably ignore for now)
-  - run experiments on javac
-  - Interface static final variables.  It seems that at least some of these
-    are placed into their users and not fetched.  That works fine, but
-    since we allocate a new tag each time it is referenced, we miss some
-    comparability.  Not if anything can be done about it.  It also not
-    clear that this is always the case but it working for now.
-  - Properly handle object methods.  Just ignoring them is not so good!
-  - Consider using Eric's stack code to replace BCEL (since BCEL breaks
-    on a few methods)
+  - Make the integer argument to ANEWARRAY be made comparable to
+    the array as an index 
 
-Can be put off
-  - Should the integer argument to ANEWARRAY be made comparable to
-    the array as an index (I think it should, but it doesn't feel
-    crucial)
   - Anything compared to an array length should become comparable to
     its index.  Perhaps that means that the tag  for the array should
     be the tag for its length.
+
   - boolean arrays probably don't work because I treat them as byte
     arrays.  This shouldn't be a problem for load, but store will
     try to pass a boolean to a byte.  We should be able to tell the
     difference by looking at the primitive on the top of stack for
     the store case.  Left alone until we encounter an array of booleans.
 
-Done:
-  - find experimental program (hopefully that ajax can run on).
-    We used bzip2.  Not the best, but something
-  - Try Eric's stack code
-    This seems to work fine.  Perhaps a bit slower than the BCEL version,
-    but it doesn't crash on the ones that the BCEL crashes on.
-  - How are we going to handle JDK static fields?  Perhaps a separate
-    tag array (will be really big!)
-    I used one big array with an offset for the JDK.  
-  - fix the omit/select code to always instrument, but not to collect
-    data on ppts that are not selected.
-  - Look through all of the opcodes and add one we are missing (non-integer
-    operations in general)
-  - Fix the dup_x2, dup2, dup2_x1, dup2_x2 instructions.  These
-    will currently fault if we find them.
-  - Arrays and index comparability.
-  - do we get the correct tag for return values (so that return comparability
-    is calculated correctly)? (this seems to work in stackar)
-  - merge decl information
-  - Finish off testing on StackAr
-  - swap support
-  - Handle non-integer primitives (long/double in particular)
-  - Make sure that the local/param tag array has enough room for doubles
-    and longs.  I think we can just continue to use the index directly
-    into that array, but we need to make sure that when there are doubles
-    or longs that we allocate enough space.  Perhaps the maxlocals call
-    can tell us, or we can just count them up.
-  
+  - Add a stub main like chicory so user doesn't have to directly deal
+    with premain and its odd argument style.  This should use the 
+    command line option parsing code in utilMDE/Options.java.  
+
+  - Remove all standard use of /tmp so that multiple users on the same
+    machine can run (this may be done)
+
+  - Allow decl output file to be named directly (I think this is done)
+
+  - Since DCRuntime is called from instrumented methods in the JDK, it
+    must be in the boot classpath.  Since DCRuntime refers to many other
+    classes in dyncomp, everything is currently put in the boot classpath.
+    It would be better if that was not necessary.  It should be possible
+    to change DCRuntime so that it doesn't have many external dependencies
+    and only it needs to be placed in the boot classpath.
+
+  - Properly handle object methods.  Just ignoring them is not so good!
+    The problem here is that we cannot add methods to object (we should
+    test this again, but I'm pretty sure that is the case).  We will thus
+    need to replace these calls somehow (or perhaps provide a synopsis for
+    their comparability).  We could argue that, for example, hashcode and
+    toString shouldn't change comparability.
+
+  - Support reflection.  Because of the additional argument, reflection
+    finds the original code and not our code.  This means we don't 
+    accurately instrument.  This is the downside of adding the dcomp_marker
+    argument to user code (which is necessary only so that we don't have to
+    tell when calling between user code and the jdk)
+
+    The dcomp_marker argument is added to the JDK code because we need
+    to have access to the original uninstrumented JDK code.  We need
+    this for our instrumentation code and also for the infrastructure
+    of starting up the user program.  we thus create two versions of
+    each JDK method (with and without the dcomp_marker argument).  The
+    version without the dcomp_marker argument is unchanged.  The version
+    with the dcomp_marker argument is instrumented.  This instrumentation
+    approach to the JDK allows all classes except Object to be
+    instrumented.
+
+    It is not always possible to tell when examining a subroutine call
+    whether or not it will call the JDK or user code (eg, an interface
+    call could be implemented by either the JDK or user code).  The
+    user code must thus also have the dcomp_marker argument so that it
+    is call compatible with the instrumented methods in the JDK.
+
+    A possible solution to this problem is to create two versions of each
+    user method (with and without the dcomp_marker argument).  BOTH 
+    versions would be instrumented.  Normally the version with the
+    dcomp_marker argument would be used.  But the version without the
+    dcomp_marker argument would be available for reflection.  Since the
+    names and arguments would be the same, no changes would be required
+    to support reflection.
+
+    If this works, it would be good to package up this instrumentation
+    technique so that it can easily be used for other projects
+
+  - We should provide a comparability synopsis for popular native
+    methods.
+
+  - Interface static final variables.  It seems that at least some of these
+    are placed into their users and not fetched.  That works fine, but
+    since we allocate a new tag each time it is referenced, we miss some
+    comparability.  Not sure if anything can be done about it.  It also not
+    clear that this is always the case but it is working for now.
+
+  - Consider using Eric's stack code to replace BCEL (since BCEL breaks
+    on a few methods).  Or replace it with something a bit more efficient.
+
+  - It would be good to rerun some experiments on javac and see how well
+    comparability works in reducing overhead and improving the results.
+    If it doesn't work as well as we had hoped we should understand why.
+
