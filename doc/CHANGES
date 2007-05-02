@@ -20,6 +20,23 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.2.16 (May 01, 2007)
+
+This is a maintenance release with few substantive changes.
+
+Daikon
+
+  Bug-fixes
+
+    A bug that occurred when Daikon.jar appeared twice in the classpath
+    on windows was fixed.
+
+DtraceDiff
+
+  User-visible changes
+
+    Error messages are more informative.
+
 4.2.15 (March 31, 2007)
 
 Configuration-variable-related Error messages were improved.
