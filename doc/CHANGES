@@ -37,6 +37,8 @@ DtraceDiff
 
     Error messages are more informative.
 
+-------------------------------------------------
+
 4.2.15 (March 31, 2007)
 
 Configuration-variable-related Error messages were improved.
