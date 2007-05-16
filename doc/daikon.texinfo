@@ -1583,7 +1583,7 @@ Do not process program points whose names match the regular expression,
 which uses Perl syntax.  This takes priority over the
 @option{--ppt-select-pattern} argument.
 
-@item --var-select-pattern=@var{ppt_regexp}
+@item --var-select-pattern=@var{var_regexp}
 Only process variables (whether in the trace file or derived) whose
 names match the regular expression, which uses Perl syntax.
 
@@ -1593,6 +1593,13 @@ match the regular expression, which uses Perl syntax.  This takes
 priority over the @option{--var-select-pattern} argument.
 
 @end table
+
+Note that all of the regular expressions used by Daikon use Java's
+regular expression processor which is similar to Perl's but not
+exactly the same.  Details are available at
+@uref{http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html#sum}.
+Multiple items can be matched by using the logical or operator (|).
+For example, @var{var1|var2|var3}.
 
 @node Daikon configuration options, Daikon debugging options, Processing only part of the trace file, Running Daikon
 @section Daikon configuration options
