@@ -1,6 +1,12 @@
 package binary_variables;
 
 /**
+ * Addressable is the common superclass of BasicBlock, BinaryVariable and Function,
+ * all these descendants are have an address component withing them,
+ * e.g., the starting address of the basic block or function,
+ * and the address of a binary variable.
+ * Addressable is uniquely determined by a combination of module+offset within the module.
+ *
  * Date: 27/02/2007
  */
 public class Addressable<T extends Addressable> implements Comparable<T> {
