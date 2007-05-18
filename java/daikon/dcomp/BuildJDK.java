@@ -240,9 +240,13 @@ public class BuildJDK {
 
         // Get the binary for this class
         InputStream is = jfile.getInputStream(entry);
-        ClassParser parser = new ClassParser(is, entryName);
-        JavaClass jc = parser.parse();
-
+        JavaClass jc = null;
+        try {
+          ClassParser parser = new ClassParser(is, entryName);
+          jc = parser.parse();
+        } catch (Exception e) {
+          throw new Error ("Failed to parse entry " + entry, e);
+        }
         classmap.put(jc.getClassName(), jc);
       }
 
