@@ -82,7 +82,7 @@ while (defined(my $line = <>)) {
   }
 
   ## Remove annotated warnings.
-  if ($record =~ /: warning: \[(.*)\].*\/\/ \1/s) {
+  if ($record =~ /: warning: \[(.*)\].*\/\/ ?\1/s) {
     if ($debug) { print "suppressed a \"$1\" warning\n"; }
     $removed_warnings++;
     next;
@@ -91,7 +91,7 @@ while (defined(my $line = <>)) {
   ## $file_regexp are crucial, as it might contain a top-level alternation
   ## ("|").
   if (defined($file_regexp) && ($record =~ /($file_regexp).*:[0-9]+: warning: /)) {
-    if ($debug) { print "suppressed an unchecked warning in pruned directory\n"; }
+    if ($debug) { print "suppressed a warning in pruned directory\n"; }
     $removed_warnings++;
     next;
   }
