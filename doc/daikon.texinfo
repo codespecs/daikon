@@ -3402,7 +3402,8 @@ data trace (@file{.dtrace}) files of variables and their values by
 examining the operation of the binary at
 runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
 It is built upon the Fjalar dynamic analysis framework for C and C++ programs
-(available at @uref{http://pag.csail.mit.edu/fjalar/}).
+(available at @uref{http://pag.csail.mit.edu/fjalar/}, but already
+included in the Daikon distribution).
 
 To use Kvasir, first compile your program using the DWARF-2 debugging
 format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
@@ -4888,7 +4889,8 @@ In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
 is also a source-based C/C++ front end, Mangel-Wurzel.  Unlike Kvasir, which
 runs only on Linux/x86 platforms, Mangel-Wurzel will run on nearly any
 Unix platform, as well as on Windows (with the Microsoft Visual C/C++
-compiler).  Mangel-Wurzel is missing a few features of Kvasir; for
+compiler).  If you have access to a Linux/x86 platform, we recommend use
+of Kvasir.  Mangel-Wurzel is missing a few features of Kvasir; for
 instance, Mangel-Wurzel outputs fewer variables.  Mangel-Wurzel requires
 the source code for your program, and it also requires the Purify
 program analysis tool from Rational Software.  You must install Purify
