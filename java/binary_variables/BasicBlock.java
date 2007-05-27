@@ -27,7 +27,6 @@ public final class BasicBlock extends Addressable<BasicBlock> implements XmlSeri
   }
   /**
    * For serialization in XML. See XmlSerialize.
-   * @return
    */
   public XmlWriter toXml() {
     XmlWriter xmlWriter = new XmlWriter();
