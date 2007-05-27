@@ -678,7 +678,7 @@ javadoc-lookup: doc-javadoc-lookup
 
 ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
 doc-javadoc-lookup: doc
-	${INV}/scripts/jdk-add-munged-anchor-names `find doc -name '*.html'`
+	find doc -name '*.html' | xargs -n 100 ${INV}/scripts/jdk-add-munged-anchor-names
 	echo "Run javadoc-index-to-alist > ~/emacs/javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
