@@ -99,6 +99,37 @@ class Test {
     }
   }
 
+
+  public static class D {
+    int i;
+    int j;
+
+    int[] a = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int b = 42;
+    int c = 18;
+    int d = 8;
+
+    D() {
+    }
+
+    public void compare() {
+      if (c > a.length) {
+        if (verbose) {
+          System.out.println("c > a.length");
+        }
+      }
+
+      for (i = 0; i < d; i++) {
+        if (a[i] > b) {
+          if (verbose) {
+            System.out.println("a[" + i + "] > b");
+          }
+        }
+      }
+    }
+  }
+
+
   public static class Arr {
 
     int[] big_arr = new int[90000];
@@ -168,6 +199,9 @@ class Test {
         out.println ("sa1 != sa2");
     }
     double_check (1.2, 56, 1);
+
+    D d1 = new D();
+    d1.compare();
 
   }
 

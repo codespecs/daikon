@@ -288,6 +288,12 @@ public final class DCRuntime {
     debug_primitive.log ("push_static_tag[%d] %s%n", static_num, static_tag);
   }
 
+  /** Pushes an array reference on the tag stack */
+  public static void push_array_tag (Object arr_ref) {
+    tag_stack.push (arr_ref);
+    debug_arr_index.log ("push_array_tag %s%n", arr_ref);
+  }
+
   /** Pops the top of the tag stack into the tag storage for static_num **/
   public static void pop_static_tag (int static_num) {
 

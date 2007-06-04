@@ -1059,12 +1059,11 @@ class DCInstrument {
       return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
     }
 
-    // TODO: For now push a constant tag for arraylength.  I think what
-    // should happen is that the tag for the array should get pushed on
-    // the tag stack.  That would cause anything that became comparable
-    // to the length to become comparable to the array as an index.
+    // Push the tag for the array onto the tag stack.  This causes
+    // anything comparable to the length to be comparable to the array
+    // as an index.
     case Constants.ARRAYLENGTH: {
-      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+      return array_length (inst);
     }
 
     case Constants.BIPUSH:
@@ -2347,6 +2346,29 @@ class DCInstrument {
     Type arr_type = new ArrayType(base_type, 1);
     il.append (dcr_call (method, Type.VOID, new Type[] {arr_type, Type.INT,
                                                         base_type}));
+    return (il);
+  }
+
+  /**
+   * Creates code that pushes the array's tag onto the tag stack, so
+   * that the index is comparable to the array length.  First, the
+   * arrayref is duplicated on the stack.  Then a method is called to
+   * push the array's tag onto the tag stack. Finally the original
+   * arraylength instruction is performed.
+   */
+  public InstructionList array_length (Instruction inst) {
+
+    InstructionList il = new InstructionList();
+
+    // Duplicate the array ref and pass it to DCRuntime which will push
+    // it onto the tag stack.
+    il.append (new DUP());
+    il.append (dcr_call ("push_array_tag", Type.VOID,
+                         new Type[] {Type.OBJECT}));
+
+    // Perform the original instruction
+    il.append (inst);
+
     return (il);
   }
 

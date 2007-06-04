@@ -492,3 +492,29 @@ Daikon Variable sets for daikon.dcomp.Test$B.comp() exit
   [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
   [1] [daikon.chicory.FieldInfo:this.a2a[].x]
   [1] [daikon.chicory.FieldInfo:this.a2a[].y]
+
+Daikon Variable sets for daikon.dcomp.Test$D.<init>() enter
+Daikon Variable sets for daikon.dcomp.Test$D.<init>() exit
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [1] [daikon.chicory.FieldInfo:this.a]
+  [1] [daikon.chicory.ArrayInfo:this.a[]]
+  [1] [daikon.chicory.FieldInfo:this.b]
+  [1] [daikon.chicory.FieldInfo:this.c]
+  [1] [daikon.chicory.FieldInfo:this.d]
+  [1] [daikon.chicory.FieldInfo:this.i]
+  [1] [daikon.chicory.FieldInfo:this.j]
+
+Daikon Variable sets for daikon.dcomp.Test$D.compare() enter
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [1] [daikon.chicory.FieldInfo:this.a]
+  [1] [daikon.chicory.ArrayInfo:this.a[]]
+  [1] [daikon.chicory.FieldInfo:this.b]
+  [1] [daikon.chicory.FieldInfo:this.c]
+  [1] [daikon.chicory.FieldInfo:this.d]
+  [1] [daikon.chicory.FieldInfo:this.i]
+  [1] [daikon.chicory.FieldInfo:this.j]
+Daikon Variable sets for daikon.dcomp.Test$D.compare() exit
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [4] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.c, daikon.chicory.FieldInfo:this.d, daikon.chicory.FieldInfo:this.i]
+  [2] [daikon.chicory.ArrayInfo:this.a[], daikon.chicory.FieldInfo:this.b]
+  [1] [daikon.chicory.FieldInfo:this.j]
