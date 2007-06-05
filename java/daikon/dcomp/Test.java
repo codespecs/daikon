@@ -104,12 +104,18 @@ class Test {
     int i;
     int j;
 
-    int[] a = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int alen = 10;
+    int[] a = new int[alen];
     int b = 42;
     int c = 18;
     int d = 8;
 
     D() {
+      int x = 0;
+      for (int ii = 0; ii < a.length; ii++) {
+        a[ii] = x;
+        x += 10;
+      }
     }
 
     public void compare() {

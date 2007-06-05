@@ -1139,14 +1139,14 @@ class DCInstrument {
       return discard_tag_code (inst, 1);
 
     // Discard the tag for the integer argument ANEWARRAY
-    // TODO: Should the integer argument be made comparable to the arry
-    // as an index?
     case Constants.ANEWARRAY:
     case Constants.NEWARRAY: {
-      return discard_tag_code (inst, 1);
+      return new_array (inst);
     }
 
     // Discard the tags for each dimension to MULTIANEWARRAY
+    // TODO: Make each integer argument comparable to the
+    // corresponding index.
     case Constants.MULTIANEWARRAY: {
       return discard_tag_code (inst, ((MULTIANEWARRAY)inst).getDimensions());
     }
@@ -2368,6 +2368,29 @@ class DCInstrument {
 
     // Perform the original instruction
     il.append (inst);
+
+    return (il);
+  }
+
+  /**
+   * Creates code to make the declared length of a new array
+   * comparable to its index.
+   */
+  public InstructionList new_array (Instruction inst) {
+    InstructionList il = new InstructionList();
+
+    // Perform the original instruction
+    il.append (inst);
+
+    // Duplicate the array ref from the top of the stack and pass it
+    // to DCRuntime which will push it onto the tag stack.
+    il.append (new DUP());
+    il.append (dcr_call ("push_array_tag", Type.VOID,
+                         new Type[] {Type.OBJECT}));
+
+    // Make the array and the count comparable. Also, pop the tags for
+    // the array and the count off the tag stack.
+    il.append (dcr_call ("cmp_op", Type.VOID, Type.NO_ARGS));
 
     return (il);
   }
