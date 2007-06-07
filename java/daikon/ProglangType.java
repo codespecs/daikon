@@ -308,7 +308,7 @@ public final class ProglangType
 
   // Like Long.parseLong(), but transform large unsigned longs (as
   // from C's unsigned long long) into the corresponding negative Java
-  // longs.
+  // longs.  Also handles hex values that begin with 0x
   private static long myParseLong(String value) {
     if (value.length() == 20 && value.charAt(0) == '1' ||
         value.length() == 19 && value.charAt(0) == '9' &&
@@ -326,6 +326,9 @@ public final class ProglangType
         subtracted = 9L*100000*100000*100000*1000; // 9*10^18
       }
       return Long.parseLong(rest) + subtracted;
+    } else if ((value.length() > 2) && (value.charAt(0) == '0')
+               && (value.charAt(1) == 'x')) {
+      return Long.parseLong (value.substring(2), 16);
     } else {
       return Long.parseLong(value);
     }
