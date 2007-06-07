@@ -20,6 +20,8 @@ import daikon.chicory.MethodInfo;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
 
+import daikon.DynComp;
+
 /**
  * Instruments a class file to perform Dynamic Comparability.
  */
@@ -2417,7 +2419,7 @@ class DCInstrument {
       return (false);
 
     // If any of the omit patterns match, exclude the ppt
-    for (Pattern p : Premain.ppt_omit_pattern) {
+    for (Pattern p : DynComp.ppt_omit_pattern) {
       // System.out.printf ("should_track: pattern '%s' on ppt '%s'\n",
       //                    p, pptname);
       if (p.matcher (pptname).find()) {
@@ -2427,11 +2429,11 @@ class DCInstrument {
     }
 
     // If there are no select patterns, everything matches
-    if (Premain.ppt_select_pattern.size() == 0)
+    if (DynComp.ppt_select_pattern.size() == 0)
       return (true);
 
     // One of the select patterns must match the ppt or the class to include
-    for (Pattern p : Premain.ppt_select_pattern) {
+    for (Pattern p : DynComp.ppt_select_pattern) {
       if (p.matcher (pptname).find()) {
         debug_track.log ("  matched pptname%n");
         return (true);
