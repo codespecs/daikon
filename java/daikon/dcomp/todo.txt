@@ -1,26 +1,11 @@
 Dyncomp Todo
 
-  - Make the integer argument to ANEWARRAY be made comparable to
-    the array as an index 
-
-  - Anything compared to an array length should become comparable to
-    its index.  Perhaps that means that the tag  for the array should
-    be the tag for its length.
-
-  - boolean arrays probably don't work because I treat them as byte
-    arrays.  This shouldn't be a problem for load, but store will
-    try to pass a boolean to a byte.  We should be able to tell the
-    difference by looking at the primitive on the top of stack for
-    the store case.  Left alone until we encounter an array of booleans.
-
-  - Add a stub main like chicory so user doesn't have to directly deal
-    with premain and its odd argument style.  This should use the 
-    command line option parsing code in utilMDE/Options.java.  
+  - Make the integer arguments to MULTIANEWARRAY be made comparable to
+    each dimension as an index (perhaps we should support only 2 or 3
+    dimensions)
 
   - Remove all standard use of /tmp so that multiple users on the same
     machine can run (this may be done)
-
-  - Allow decl output file to be named directly (I think this is done)
 
   - Since DCRuntime is called from instrumented methods in the JDK, it
     must be in the boot classpath.  Since DCRuntime refers to many other
