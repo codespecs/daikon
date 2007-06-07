@@ -94,7 +94,7 @@ public class PptTopLevel extends Ppt {
    * language point.  It is the default and can be used when the others
    * are not appropriate
    */
-  public enum PptType {POINT, CLASS, OBJECT, ENTER, EXIT, SUBEXIT}
+  public enum PptType {POINT, BASIC_BLOCK, CLASS, OBJECT, ENTER, EXIT, SUBEXIT}
 
   /** Type of this program point **/
   public PptType type;
