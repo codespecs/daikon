@@ -160,7 +160,11 @@ public abstract class VarInfoName
     }
 
     // ??
-    throw new UnsupportedOperationException("parse error: '" + name + "'");
+    if (FileIO.new_decl_format)
+      return (new Simple(name)).intern();
+    else
+      throw new UnsupportedOperationException("parse error: '" + name + "'");
+
   }
 
   /**

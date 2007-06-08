@@ -284,7 +284,13 @@ public final class VarInfo implements Cloneable, Serializable {
 
     // Create a VarInfoName from the external name.  This probably gets
     // removed in the long run.
-    var_info_name = VarInfoName.parse (vardef.name); // vin ok
+    try {
+      var_info_name = VarInfoName.parse (vardef.name); // vin ok
+    } catch (Exception e) {
+      var_info_name = null;
+      System.out.printf ("Warning: Can't parse %s as a VarInfoName",
+                         vardef.name);
+    }
     str_name = vardef.name.intern();
 
     // Copy info from vardef
@@ -3398,8 +3404,11 @@ public final class VarInfo implements Cloneable, Serializable {
    * functions as well
    */
   public boolean is_assignable_var() {
-    return !((var_info_name instanceof VarInfoName.TypeOf)
-             || (var_info_name instanceof VarInfoName.SizeOf));
+    if (!FileIO.new_decl_format)
+      return !((var_info_name instanceof VarInfoName.TypeOf)  // vin ok
+               || (var_info_name instanceof VarInfoName.SizeOf)); // vin ok
+
+    return !(is_typeof() || is_size());
   }
 
   /**
@@ -3408,8 +3417,12 @@ public final class VarInfo implements Cloneable, Serializable {
    * as 'orig(a.getClass())'.
    */
   public boolean is_typeof() {
-    return (var_info_name instanceof VarInfoName.TypeOf);
-    // return name.hasTypeOf();
+    if (!FileIO.new_decl_format)
+      return (var_info_name instanceof VarInfoName.TypeOf); // vin ok
+
+    // The isPrestate check doesn't seem necessary, but is required to
+    // match old behavior.
+    return !isPrestate() && var_flags.contains (VarFlags.CLASSNAME);
   }
 
   /**
@@ -3418,7 +3431,12 @@ public final class VarInfo implements Cloneable, Serializable {
    * 'org(a.getClass())'.
    */
   public boolean has_typeof() {
-    return var_info_name.hasTypeOf();
+    if (!FileIO.new_decl_format)
+      return var_info_name.hasTypeOf(); // vin ok
+
+    if (isPrestate())
+      return postState.has_typeof();
+    return is_typeof();
   }
 
   /**
