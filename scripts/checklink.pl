@@ -5,10 +5,23 @@
 # (c) 1999-2004 World Wide Web Consortium
 # based on Renaud Bruyeron's checklink.pl
 
-# Edited by Michael Ernst; we use a modified version of 3.6.2.26 (the last
-# 3.x release) in order to avoid some undesirable features of the 4.x series.
-# (For instance, the 4.x series respects certain annotations that are
-# intended to keep robots out, but this defeats the point of the checking.)
+# Edited by Michael Ernst.
+#
+# This is a modified version of 3.6.2.26.  The primary improvements are to
+# make the "quiet" mode more quiet.  Documents are not even mentioned
+# unless there is a warning/error, and the following flagss are added:
+#   --exclude-docs
+#   --exclude-redirect
+#   --exclude-redirect-prefix
+#   --exclude-broken
+# Redirection processing is reimplemented, and its error messags are improved.
+# Also, an infinite-loop bug is corrected.
+#
+# These changes build on version 3.6.2.26 (the last in the 3.x series) in
+# order to avoid some undesirable features of the 4.x series.  (For
+# instance, the 4.x series respects robot.txt files that are intended to
+# keep robots out, but this prevents any such links from being checked for
+# validity.)
 
 # Original CVS Id:
 # Id: checklink.pl,v 3.6.2.26 2004/02/01 11:07:06 ville Exp
@@ -2264,11 +2277,6 @@ Check the documents linked from the first one to depth n
 Scope of the documents checked in recursive mode. By default, for
 L<http://www.w3.org/TR/html4/Overview.html> for example, it would be
 L<http://www.w3.org/TR/html4/>.
-
-=item B<-o, --omit regexp>
-
-Perl regexp for URLs of documents that should not be checked, even
-if they would otherwise be within scope.
 
 =item B<-n, --noacclanguage>
 
