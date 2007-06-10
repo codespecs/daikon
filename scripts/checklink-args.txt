@@ -25,6 +25,7 @@
 --exclude-broken 501:https://web.mit.edu/21.guide/www/l-rec-wr.htm
 --exclude-broken 501:https://web.mit.edu/21.guide/www/toc.htm
 --exclude-docs /~adonovan/|mernst/(public_html/)?(ir95|advice/conference/)|daikon/download/jdoc|bugzilla/
+--exclude-docs http://pag.csail.mit.edu/jsr308/dist/doc/javac_lifecycle
 --exclude-redirect http://2006.ecoop.org/->http://www.emn.fr/x-info/ecoop2006/
 --exclude-redirect http://en.wikipedia.org/->http://en.wikipedia.org/wiki/Main_Page	
 --exclude-redirect http://groups.google.com/->http://groups-beta.google.com/
