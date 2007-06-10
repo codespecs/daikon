@@ -7,14 +7,19 @@
 
 # Edited by Michael Ernst.
 #
-# This is a modified version of 3.6.2.26.  The primary improvements are to
-# make the "quiet" mode more quiet.  Documents are not even mentioned
-# unless there is a warning/error, and the following flagss are added:
-#   --exclude-docs
-#   --exclude-redirect
-#   --exclude-redirect-prefix
-#   --exclude-broken
-# Redirection processing is reimplemented, and its error messags are improved.
+# This is a modified version of W3C Link Checker version 3.6.2.26.  The
+# primary improvements are to make the "quiet" mode more quiet.
+#  * This version only performs output for documents with a warning/error.
+#    By contrast, the W3C version prints information about each document that
+#    is processed, even if there is no warning/error.
+#  * This version adds flags to exclude certain documents or subtrees:
+#      --exclude-docs
+#      --exclude-redirect
+#      --exclude-redirect-prefix
+#      --exclude-broken
+#    These flags permit suppression of expected errors/warnings, so that
+#    unexpected ones are more noticeable.
+# Redirection processing is reimplemented, and its error messages are improved.
 # Also, an infinite-loop bug is corrected.
 #
 # These changes build on version 3.6.2.26 (the last in the 3.x series) in
