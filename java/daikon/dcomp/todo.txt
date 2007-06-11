@@ -1,5 +1,9 @@
 Dyncomp Todo
 
+  - Add documentation for Dyncomp to the daikon manual. Look at the
+    similar entries for Kvasir so that the explanations use the same
+    terms.
+
   - Make the integer arguments to MULTIANEWARRAY be made comparable to
     each dimension as an index (perhaps we should support only 2 or 3
     dimensions)
