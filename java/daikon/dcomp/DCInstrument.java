@@ -1147,11 +1147,17 @@ class DCInstrument {
       return new_array (inst);
     }
 
-    // Discard the tags for each dimension to MULTIANEWARRAY
-    // TODO: Make each integer argument comparable to the
-    // corresponding index.
+    // If the new array has 2 dimensions, make the integer arguments
+    // comparable to the corresponding indices of the new array.
+    // For any other number of dimensions, discard the tags for the
+    // arguments.
     case Constants.MULTIANEWARRAY: {
-      return discard_tag_code (inst, ((MULTIANEWARRAY)inst).getDimensions());
+      int dims = ((MULTIANEWARRAY)inst).getDimensions();
+      if (dims == 2) {
+        return multiarray2 (inst);
+      } else {
+        return discard_tag_code (inst, dims);
+      }
     }
 
     // Mark the array and its index as comparable.  Also for primitives,
@@ -2394,6 +2400,30 @@ class DCInstrument {
     // Make the array and the count comparable. Also, pop the tags for
     // the array and the count off the tag stack.
     il.append (dcr_call ("cmp_op", Type.VOID, Type.NO_ARGS));
+
+    return (il);
+  }
+
+  /**
+   * Creates code to make the declared lengths of a new
+   * two-dimensional array comparable to the corresponding indices.
+   */
+  public InstructionList multiarray2 (Instruction inst) {
+    InstructionList il = new InstructionList();
+
+    // Duplicate both count arguments
+    il.append (new DUP2());
+
+    // Perform the original instruction
+    il.append (inst);
+
+    // Duplicate the new arrayref and put it below the count arguments
+    // Stack is now: ..., arrayref, count1, count2, arrayref
+    il.append (new DUP_X2());
+
+    Type objArray = new ArrayType(Type.OBJECT, 1);
+    il.append (dcr_call ("multianewarray2", Type.VOID,
+                         new Type[] {Type.INT, Type.INT, objArray}));
 
     return (il);
   }

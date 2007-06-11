@@ -136,6 +136,55 @@ class Test {
   }
 
 
+  public static class E {
+    int i;
+    int j;
+
+    int ilen = 10;
+    int jlen = 3;
+    int[][] a = new int[ilen][jlen];
+    int b = 42;
+    int ci = 18;
+    int cj = 10;
+    int di = 8;
+    int dj = 2;
+
+    E() {
+      int x = 0;
+      for (int ii = 0; ii < a.length; ii++) {
+        for (int jj = 0; jj < a[ii].length; jj++) {
+          a[ii][jj] = x;
+          x += 10;
+        }
+      }
+    }
+
+    public void compare() {
+      if (ci > a.length) {
+        if (verbose) {
+          System.out.println("ci > a.length");
+        }
+      }
+
+      if (cj > a[0].length) {
+        if (verbose) {
+          System.out.println("cj > a[].length");
+        }
+      }
+
+      for (i = 0; i < di; i++) {
+        for (j = 0; j < dj; j++) {
+          if (a[i][j] > b) {
+            if (verbose) {
+              System.out.println("a[" + i + "][" + j + "] > b");
+            }
+          }
+        }
+      }
+    }
+  }
+
+
   public static class Arr {
 
     int[] big_arr = new int[90000];
@@ -208,6 +257,9 @@ class Test {
 
     D d1 = new D();
     d1.compare();
+
+    E e1 = new E();
+    e1.compare();
 
   }
 

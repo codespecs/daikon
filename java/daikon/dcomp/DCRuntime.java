@@ -464,6 +464,25 @@ public final class DCRuntime {
   }
 
   /**
+   * Make the count arguments to multianewarray comparable to the
+   * corresponding array indices. count1 is made comparable to the
+   * index of the given array (arr), and count2 is made comparable to the
+   * index of each array that is an element of arr.
+   */
+  public static void multianewarray2 (int count1, int count2, Object[] arr) {
+
+    Object count2tag = pop_check();
+    Object count1tag = pop_check();
+
+    TagEntry.union (count1tag, arr);
+
+    for (Object subarr : arr) {
+      TagEntry.union (count2tag, subarr);
+    }
+
+  }
+
+  /**
    * Called when a user method is entered.  Any daikon variables whose current
    * values are comparable are marked as comparable.
    *
