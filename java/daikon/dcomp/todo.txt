@@ -4,10 +4,6 @@ Dyncomp Todo
     similar entries for Kvasir so that the explanations use the same
     terms.
 
-  - Make the integer arguments to MULTIANEWARRAY be made comparable to
-    each dimension as an index (perhaps we should support only 2 or 3
-    dimensions)
-
   - Remove all standard use of /tmp so that multiple users on the same
     machine can run (this may be done)
 
@@ -74,3 +70,9 @@ Dyncomp Todo
     comparability works in reducing overhead and improving the results.
     If it doesn't work as well as we had hoped we should understand why.
 
+Known limitations:
+
+  - Integer arguments to MULTIANEWARRAY are made comparable to the
+    corresponding indices only for 2-dimensional arrays. Higher
+    dimensions are probably possible, but don't seem to be worth the
+    effort.
