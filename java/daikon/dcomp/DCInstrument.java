@@ -1140,7 +1140,8 @@ class DCInstrument {
     case Constants.TABLESWITCH:
       return discard_tag_code (inst, 1);
 
-    // Discard the tag for the integer argument ANEWARRAY
+    // Make the integer argument to ANEWARRAY comparable to the new
+    // array's index.
     case Constants.ANEWARRAY:
     case Constants.NEWARRAY: {
       return new_array (inst);
