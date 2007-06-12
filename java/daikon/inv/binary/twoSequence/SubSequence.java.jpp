@@ -313,7 +313,9 @@ public class CLASSNAME
            && (rep2 == ProglangType.DOUBLE_ARRAY)) ||
           ((rep1 == ProglangType.STRING_ARRAY)
            && (rep2 == ProglangType.STRING_ARRAY))
-          )) return new Object[] {null, null};
+          )) {
+      return new Object[] {null, null};
+    }
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("isObviousSubSequence " +
