@@ -33,7 +33,10 @@ public class DynComp {
   @Option("Ignore program points matching the regex")
   public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
-  @Option("Output file for comarability sets")
+  @Option("Don't output a comparability sets file")
+  public static boolean no_cset_file = false;
+
+  @Option("Output file for comparability sets (default: std out)")
   public static File compare_sets_file = null;
 
   @Option("Don't use an instrumented JDK")
@@ -49,7 +52,7 @@ public class DynComp {
   public static int nesting_depth = 2;
 
   public static String usage_synopsis
-    = "java -javaagent:dcomp_premain.jar=[options]";
+    = "java daikon.DynComp [options]";
 
   /**
    * Path to java agent jar file that performs the transformation.
@@ -129,12 +132,6 @@ public class DynComp {
   void start_target (String premain_args, String[] target_args) {
 
     String target_class = target_args[0].replaceFirst (".*[/.]", "");
-
-    // Default the cset file name to the <target-program-name>.txt-cset
-    if (compare_sets_file == null) {
-      compare_sets_file = new File (String.format ("%s.txt-cset", target_class));
-      premain_args += " --compare-sets-file=" + compare_sets_file;
-    }
 
     // Default the decls file to <target-program-name>.decls-DynComp
     if (decl_file == null) {

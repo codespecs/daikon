@@ -161,22 +161,23 @@ public class Premain {
     public void run() {
 
       // If requested, write the comparability data to a file
-      if (DynComp.compare_sets_file != null) {
-        if (DynComp.verbose)
-          System.out.println ("Writing comparability sets to "
-                              + DynComp.compare_sets_file);
-        PrintWriter compare_out = open (DynComp.compare_sets_file);
-        Stopwatch watch = new Stopwatch();
-        DCRuntime.print_all_comparable (compare_out);
-        compare_out.close();
-        if (DynComp.verbose)
-          System.out.printf ("Comparability sets written in %s%n",
-                             watch.format());
+      if (!DynComp.no_cset_file) {
+        if (DynComp.compare_sets_file != null) {
+          if (DynComp.verbose)
+            System.out.println ("Writing comparability sets to "
+                                + DynComp.compare_sets_file);
+          PrintWriter compare_out = open (DynComp.compare_sets_file);
+          Stopwatch watch = new Stopwatch();
+          DCRuntime.print_all_comparable (compare_out);
+          compare_out.close();
+          if (DynComp.verbose)
+            System.out.printf ("Comparability sets written in %s%n",
+                               watch.format());
+        } else {
+          System.out.println ("Writing comparability sets to standard output");
+          DCRuntime.print_all_comparable (new PrintWriter(System.out, true));
+        }
       }
-
-      // Write comparability sets to standard out
-      //if (verbose && (compare_sets_file == null))
-      //  DCRuntime.print_all_comparable (System.out);
 
       if (DynComp.verbose)
         DCRuntime.decl_stats();
