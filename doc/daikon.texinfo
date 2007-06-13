@@ -550,7 +550,7 @@ Windows users typically opt for the zip file.
 @itemize
 @item Windows:  Download the
 @uref{http://pag.csail.mit.edu/daikon/download/daikon.zip, zip file}
-extract it into, say, @file{C:\}.  This creates a directory
+and extract it into, say, @file{C:\}.  This creates a directory
 @file{C:\daikon} containing the Daikon distribution.
 
 @item Unix:  use one of the following sets of commands:
@@ -610,18 +610,19 @@ set DAIKONDIR=C:\daikon
 set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
 %DAIKONDIR%\bin\daikonenv.bat
 @end example
+
+One way to execute the commands is to put them in a batch file and
+manually execute that batch file from the command line.  You can also
+set the environment variables in the registry (right-click My Computer,
+and then click Properties; click the Advanced tab; click Environment
+variables), but that only reduces the number of steps you have to do for
+each shell from 3 (two variables plus running the @file{daikonenv.bat}
+file) to 1 (running the @file{daikonenv.bat} file).
+Query to users:  is there a good way to make the batch file get run
+automatically for each command shell?  If so, we'll put the answer here.
+
 @end itemize
 @noindent
-
-One way is to put these commands in a batch file and manually execute
-that batch file from the command line.  (Another way is to set the
-environment variables in the registry (right-click My Computer, and then
-click Properties; click the Advanced tab; click Environment variables),
-meaning you only have to run the @file{daikonenv.bat} file, but this
-gives relatively few benefits.  (Query to users:  is there a good way to
-make the batch file get run automatically?  If so, we'll put the answer
-here.))
-
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
