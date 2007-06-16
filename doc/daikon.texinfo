@@ -3397,7 +3397,9 @@ the target program.  The size is specified in the same manner as the
 @node Java DynComp, Kvasir, Chicory, Front ends
 @section DynComp dynamic comparability analysis for Java
 
-@cindex comparability
+@cindex DynComp, for Java
+@cindex abstract types, for Java
+@cindex comparability, for Java
 
 The DynComp dynamic comparability analysis tool performs dynamic type
 inference to group variables at each program point into comparability
@@ -4075,6 +4077,10 @@ for Kvasir's developers.
 
 @node    DynComp dynamic comparability analysis, Tracing only part of a program, Kvasir options, Kvasir
 @subsection DynComp dynamic comparability analysis
+
+@cindex DynComp, for C/C++
+@cindex abstract types, for C/C++
+@cindex comparability, for C/C++
 
 Kvasir comes with the DynComp dynamic comparability analysis tool, which
 performs dynamic type inference to group variables at each program point
