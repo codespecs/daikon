@@ -36,7 +36,7 @@ public class DynComp {
   @Option("Don't output a comparability sets file")
   public static boolean no_cset_file = false;
 
-  @Option("Output file for comparability sets (default: std out)")
+  @Option("Output file for comparability sets")
   public static File compare_sets_file = null;
 
   @Option("Don't use an instrumented JDK")
@@ -143,7 +143,7 @@ public class DynComp {
     // Default the decls file to <target-program-name>.decls-DynComp
     if (decl_file == null) {
       decl_file = new File (String.format ("%s.decls-DynComp", target_class));
-      premain_args += " --decl-file=" + decl_file;
+      premain_args = "--decl-file=" + decl_file + " " + premain_args;
     }
 
     // Get the current classpath
