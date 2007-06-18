@@ -60,6 +60,11 @@ class DCInstrument {
   private SimpleLog debug_track = new SimpleLog (false);
 
   /**
+   * Keeps track of the methods that were not successfully instrumented.
+   */
+  private List<String> skipped_methods = new ArrayList<String>();
+
+  /**
    * Specifies if the jdk is instrumented.  Calls to the JDK must be
    * modified to remove the arguments from the tag stack if it is not
    * instrumented.
@@ -413,11 +418,13 @@ class DCInstrument {
       } catch (Exception e) {
         System.out.printf ("Warning: StackVer failed for %s: %s\n", mg, e);
         System.out.printf ("Method is NOT instrumented%n");
+        skip_method (mg);
         return;
       }
       if (vr != VerificationResult.VR_OK) {
         System.out.printf ("Warning: StackVer failed for %s: %s%n", mg, vr);
         System.out.printf ("Method is NOT instrumented%n");
+        skip_method (mg);
         return;
       }
       assert vr == VerificationResult.VR_OK : " vr failed " + vr;
@@ -501,6 +508,22 @@ class DCInstrument {
 
       ih = next_ih;
     }
+  }
+
+  /**
+   * Adds the method name and containing class name to the list of
+   * uninstrumented methods.
+   */
+  private void skip_method (MethodGen mgen) {
+    skipped_methods.add(mgen.getClassName() + ":" + mgen.toString());
+  }
+
+  /**
+   * Returns the list of uninstrumented methods. (Note:
+   * instrument_jdk() needs to have been called first.)
+   */
+  public List<String> get_skipped_methods () {
+    return new ArrayList<String>(skipped_methods);
   }
 
   /**

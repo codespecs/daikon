@@ -76,6 +76,8 @@ public class BuildJDK {
 
   private static List<String> all_classes = new ArrayList<String>();
 
+  private static List<String> skipped_methods = new ArrayList<String>();
+
   /**
    * BuildJDK <jarfile> <dest> <prefix>
    *
@@ -158,6 +160,13 @@ public class BuildJDK {
       System.out.printf ("Writing all classes to %s%n", jdk_classes_file);
       for (String classname : all_classes) {
         pw.println (classname);
+      }
+
+      if (!skipped_methods.isEmpty()) {
+        System.out.println("The following methods could not be instrumented:");
+        for (String method : skipped_methods) {
+          System.out.println(method);
+        }
       }
 
     }
@@ -299,6 +308,7 @@ public class BuildJDK {
       System.out.printf("processing target %s\n", classname);
     DCInstrument dci = new DCInstrument (jc, true, null);
     JavaClass inst_jc = dci.instrument_jdk();
+    skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classname.replace('.', '/') + ".class");
     File dir = new File(dfile, classfile.getParent());
     dir.mkdirs();
