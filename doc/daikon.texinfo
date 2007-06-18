@@ -3560,12 +3560,14 @@ with the JDK. It is likely located at
 jar cmf @var{output-dir}/META-INF/MANIFEST.MF @var{out-file} -C @var{output-dir}
 @end example
 
-@noindent The resulting jar file should be placed on the boot classpath
-when running DynComp:
+@noindent The resulting jar file should be specified as the instrumented JDK when running DynComp:
 
 @example
-java -Xbootclasspath:@var{out-file}:$CLASSPATH daikon.DynComp MyClass args
+java daikon.DynComp --rt-file=@var{out-file} MyClass args
 @end example
+
+@noindent This will place @var{out-file} on the boot classpath for DynComp's
+execution.
 
 BuildJDK requires 20-40 minutes to complete; regular progress indicators
 are printed to standard output. If you encounter
