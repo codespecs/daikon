@@ -1,9 +1,5 @@
 Dyncomp Todo
 
-  - Add documentation for Dyncomp to the daikon manual. Look at the
-    similar entries for Kvasir so that the explanations use the same
-    terms.
-
   - Remove all standard use of /tmp so that multiple users on the same
     machine can run (this may be done)
 
@@ -20,6 +16,10 @@ Dyncomp Todo
     need to replace these calls somehow (or perhaps provide a synopsis for
     their comparability).  We could argue that, for example, hashcode and
     toString shouldn't change comparability.
+
+  - Allow the user to specify (via regexp) methods to be left
+    uninstrumented. This could be useful if the user has a hashcode
+    method that adds together otherwise uncomparable fields.
 
   - Support reflection.  Because of the additional argument, reflection
     finds the original code and not our code.  This means we don't 
