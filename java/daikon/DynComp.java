@@ -42,6 +42,9 @@ public class DynComp {
   @Option("Don't use an instrumented JDK")
   public static boolean no_jdk = false;
 
+  @Option("jar file containing an instrumented JDK")
+  public static File rt_file = new File("dcomp_rt.jar");
+
   @Option("use standard visibility")
   public static boolean std_visibility = false;
 
@@ -117,6 +120,10 @@ public class DynComp {
     }
     if (target_args.length == 0) {
       options.print_usage ("target program must be specified");
+      return (false);
+    }
+    if (!no_jdk && (rt_file == null || !rt_file.exists())) {
+      options.print_usage ("rt-file does not exist");
       return (false);
     }
 
@@ -206,6 +213,8 @@ public class DynComp {
     cmdlist.add (cp);
     cmdlist.add ("-ea");
     //    cmdlist.add ("-Xmx" + heap_size);
+    if (!no_jdk)
+      cmdlist.add ("-Xbootclasspath:" + rt_file + ":" + cp);
 
     cmdlist.add (String.format("-javaagent:%s=%s", premain, premain_args));
 
