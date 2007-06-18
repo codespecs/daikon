@@ -387,7 +387,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	install -d $(DCOMP_RT)
-	$(JAVA) -Xmx768m daikon.dcomp.BuildJDK $(ORIG_RT) $(DCOMP_RT)
+	$(JAVA) -Xmx1024m daikon.dcomp.BuildJDK $(ORIG_RT) $(DCOMP_RT)
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # Install the local version of the dyncomp specific rt.jar
