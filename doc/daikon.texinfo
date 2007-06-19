@@ -3614,7 +3614,8 @@ class name, the method name, or the program point name matches
 @ref{Program points in Chicory output}).
 
 This option can be specified multiple times, and may be used in
-conjunction with @option{--ppt-omit-pattern}.
+conjunction with @option{--ppt-omit-pattern}. If a program point matches
+both a select pattern and an omit pattern, it is omitted.
 
 @item --ppt-omit-pattern=@var{regex}
 Suppress program points that match @var{regex}.  Specifically, a
@@ -3624,7 +3625,8 @@ class name, the method name, or the program point name matches
 @ref{Program points in Chicory output}).
 
 This option can be specified multiple times, any may be used in
-conjunction with @option{--ppt-select-pattern}.
+conjunction with @option{--ppt-select-pattern}. If a program point
+matches both a select pattern and an omit pattern, it is omitted.
 
 @item --nesting-depth=@var{n}
 Depth to which to examine structure components (default 2).  This
