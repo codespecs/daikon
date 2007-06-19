@@ -126,7 +126,7 @@ class DCInstrument {
     new MethodDef ("clone", new Type[0]),
     new MethodDef ("equals", new Type[] {Type.OBJECT}),
     new MethodDef ("finalize", new Type[0]),
-    new MethodDef ("hashcode", new Type[0]),
+    new MethodDef ("hashCode", new Type[0]),
     new MethodDef ("toString", new Type[0]),
     new MethodDef ("wait", new Type[0]),
     new MethodDef ("wait", new Type[] {Type.LONG}),
