@@ -244,6 +244,7 @@ DynComp dynamic comparability analysis for Java
 
 * Instrumenting the JDK with DynComp::  
 * Java DynComp options::        
+* DynComp known bugs::          
 
 C/C++ front end Kvasir
 
@@ -3540,6 +3541,7 @@ and so is not comparable to the other variables.
 @menu
 * Instrumenting the JDK with DynComp::  
 * Java DynComp options::        
+* DynComp known bugs::          
 @end menu
 
 @node Instrumenting the JDK with DynComp, Java DynComp options, Java DynComp, Java DynComp
@@ -3566,8 +3568,8 @@ jar cmf @var{output-dir}/META-INF/MANIFEST.MF @var{out-file} -C @var{output-dir}
 java daikon.DynComp --rt-file=@var{out-file} MyClass args
 @end example
 
-@noindent This will place @var{out-file} on the boot classpath for DynComp's
-execution.
+@noindent Note: this will place both @var{out-file} and your current classpath
+on the boot classpath for DynComp's execution.
 
 BuildJDK requires 20-40 minutes to complete; regular progress indicators
 are printed to standard output. If you encounter
@@ -3580,7 +3582,7 @@ end of instrumentation. A list of all classes processed, including those
 that could not be instrumented, is created at
 @file{@var{output-dir}/java/lang/jdk_classes.txt}.
 
-@node Java DynComp options,  , Instrumenting the JDK with DynComp, Java DynComp
+@node Java DynComp options, DynComp known bugs, Instrumenting the JDK with DynComp, Java DynComp
 @subsection DynComp options
 
 DynComp is invoked as follows:
@@ -3638,8 +3640,15 @@ When this switch is on, DynComp traverses exactly those fields that are
 visible from a given program point.  For an example, see @ref{Variables
 in Chicory output}.
 
+@item --rt-file
+Specifies the location of the instrumented JDK (see @ref{Instrumenting
+the JDK with DynComp}). Defaults to @file{dcomp_rt.jar}. Both this file
+and the current classpath are placed on the boot classpath for DynComp's
+execution.
+
 @item --no-jdk
-When this switch is on, DynComp runs with an uninstrumented JDK.
+When this switch is on, DynComp runs with an uninstrumented JDK. When it
+is omitted, the instrumented JDK specified by @code{--rt-file} is used.
 
 @item --output-dir=@var{dir}
 The directory in which to create output files. Defaults to the current
@@ -3659,6 +3668,20 @@ output. This switch has no effect if @code{--no-cset-file} is specified
 on the command line.
 
 @end table
+
+
+@node DynComp known bugs,  , Java DynComp options, Java DynComp
+@subsection Known bugs and limitations
+
+@itemize
+@item DynComp does not correctly instrument the method of the Object class,
+e.g., @code{equals()} and @code{clone()}. As a result, DynComp may fail
+to recognize that two variables are related if they are compared using
+the @code{equals()} method.
+
+@item Reflection finds the original, uninstrumented code, and so DynComp may
+not accurately instrument code that uses reflection.
+@end itemize
 
 
 @node Kvasir, Mangel-Wurzel, Java DynComp, Front ends
