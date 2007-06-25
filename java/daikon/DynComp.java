@@ -21,8 +21,14 @@ public class DynComp {
   @Option("-v Print information about the classes being transformed")
   public static boolean verbose = false;
 
-  @Option("-d Dump the instrumented classes to /tmp/$USER/bin")
+  @Option("-d Dump the instrumented classes to disk")
   public static boolean debug = false;
+
+  @Option("Directory in which to create debug files")
+  public static File debug_dir = new File("debug");
+
+  @Option("Directory in which to create output files")
+  public static File output_dir = new File(".");
 
   @Option("-f Output filename for Daikon decl file")
   public static File decl_file = null;
@@ -47,9 +53,6 @@ public class DynComp {
 
   @Option("use standard visibility")
   public static boolean std_visibility = false;
-
-  @Option ("Directory in which to create output files")
-  public static File output_dir = new File(".");
 
   @Option("variable nesting depth")
   public static int nesting_depth = 2;
@@ -170,35 +173,24 @@ public class DynComp {
           }
       }
 
-    // If not on the classpath look in $(DAIKONDIR)/java/dcomp
+    // If not on the classpath look in $(DAIKONDIR)/java
     if (premain == null) {
       String daikon_dir = System.getenv ("DAIKONDIR");
       if (daikon_dir != null) {
         String file_separator = System.getProperty ("file.separator");
-        File poss_premain = new File (daikon_dir + file_separator + "java"
-                                      + file_separator + "dcomp",
+        File poss_premain = new File (daikon_dir + file_separator + "java",
                                       "dcomp_premain.jar");
         if (poss_premain.canRead())
           premain = poss_premain;
       }
     }
 
-    // If not found, try the daikon.jar file itself
-    if (premain == null) {
-      for (String path : cp.split(separator)) {
-        File poss_premain = new File(path);
-        if (poss_premain.getName().equals ("daikon.jar"))
-          if (poss_premain.canRead())
-            premain = poss_premain;
-      }
-    }
-
     // If we didn't find a premain, give up
     if (premain == null) {
       System.err.printf ("Can't find dcomp_premain.jar on the classpath\n");
-      System.err.printf ("or in $DAIKONDIR/java/dcomp\n");
+      System.err.printf ("or in $DAIKONDIR/java\n");
       System.err.printf ("It should be found in directory where Daikon was "
-                         + " installed\n");
+                         + "installed\n");
       System.err.printf ("Use the --premain switch to specify its location\n");
       System.err.printf ("or change your classpath to include it\n");
       System.exit (1);
