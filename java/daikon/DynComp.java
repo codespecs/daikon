@@ -33,17 +33,17 @@ public class DynComp {
   @Option("-f Output filename for Daikon decl file")
   public static File decl_file = null;
 
-  @Option("Only process program points matching the regex")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
-
-  @Option("Ignore program points matching the regex")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
-
   @Option("Don't output a comparability sets file")
   public static boolean no_cset_file = false;
 
   @Option("Output file for comparability sets")
   public static File compare_sets_file = null;
+
+  @Option("Only process program points matching the regex")
+  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+
+  @Option("Ignore program points matching the regex")
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
   @Option("Don't use an instrumented JDK")
   public static boolean no_jdk = false;
