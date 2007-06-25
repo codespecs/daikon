@@ -490,6 +490,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Jar file needed for Chicory front end
 	cp -p java/ChicoryPremain.jar /tmp/daikon/java
 
+	# Jar file needed for DynComp front end
+	cp -p java/dcomp_premain.jar /tmp/daikon/java
+
 	## Tools
 	cp -pR tools /tmp/daikon
 	(cd /tmp/daikon/tools; $(RM_TEMP_FILES); rm -f kmeans/kmeans; (cd hierarchical; rm -f clgroup cluster den difftbl) )
