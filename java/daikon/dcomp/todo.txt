@@ -1,8 +1,5 @@
 Dyncomp Todo
 
-  - Remove all standard use of /tmp so that multiple users on the same
-    machine can run (this may be done)
-
   - Since DCRuntime is called from instrumented methods in the JDK, it
     must be in the boot classpath.  Since DCRuntime refers to many other
     classes in dyncomp, everything is currently put in the boot classpath.
