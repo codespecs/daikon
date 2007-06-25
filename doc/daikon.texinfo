@@ -264,6 +264,10 @@ Pointer type disambiguation
 * Pointer type disambiguation example::  
 * Using pointer type disambiguation with partial program tracing::  
 
+Online execution
+
+* Online execution with DynComp::  
+
 Source-based C/C++ front end Mangel-Wurzel
 
 * Using Mangel-Wurzel::         
@@ -3716,7 +3720,8 @@ kvasir-dtrace ./program -option input.file
 @noindent
 to run your program and create a data trace file
 @file{daikon-output/program.dtrace}, which can be fed as input into
-Daikon.
+Daikon.  You can perform this step multiple times to create multiple
+data trace files for Daikon.
 You can also run Daikon without creating an intermediate data trace
 file; see @ref{Online execution}.
 
@@ -3745,7 +3750,7 @@ programs,,,./developer,Daikon Developer Manual}.
 Before using Kvasir, you must compile your program without optimization,
 and with the DWARF-2 format of debugging information (e.g, by using @code{gcc} for C
 programs and @code{g++} for C++ programs).
-DWARF-2 is the default format for debugging information in GCC 3, and
+DWARF-2 is the default format for debugging information in GCC 3 and later, and
 otherwise is produced by supplying the
 @option{-gdwarf-2} command line option.
 Also, remove any optimization flags, such as @option{-O} or @option{-O2},
@@ -3788,7 +3793,7 @@ Write the @file{.decls} file listing the names of functions and
 variables (called declarations) to the specified file name.  This forces
 Kvasir to generate separate
 @file{.decls} and @file{.dtrace} files instead of outputting everything to the
-@file{.dtrace} file, which is the default behavior.    If only a @file{.dtrace} file is
+@file{.dtrace} file, which is the default behavior.  If only a @file{.dtrace} file is
 created (default behavior), then it contains both variable declarations and a trace of
 values.  If separate @file{.decls} and @file{.dtrace} files are created,
 then the @file{.decls} file contains declarations and the @file{.dtrace}
@@ -3841,8 +3846,8 @@ available.
 
 @item --output-fifo
 
-Create the output @file{.decls} and @file{.dtrace} files as FIFOs (also
-known as ``named pipes'').  Kvasir will then open first the @file{.decls}
+Create the output @file{.dtrace} file as a FIFO (also
+known as a ``named pipes'').  Kvasir will then open first the @file{.decls}
 FIFO and then the @file{.dtrace} FIFO, blocking until another program
 (such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
 avoids the need for large trace files, but FIFOs are not supported by
@@ -4973,7 +4978,11 @@ The term ``online execution'' refers to running Daikon at the same time
 as the target program, without writing any information to a file.  This
 can avoid some I/O overhead, prevent filling up your disk with
 files, and in the future Daikon may be able to produce partial results
-as the target program is executing.
+as the target program is executing.  A limitation of online execution is
+that, unless FIFOs, or named pipes (@pxref{Online execution with DynComp})
+are used, it runs Daikon over only a single execution, as opposed to
+generalizing over multiple executions as can be done when writing to files
+and supplying all the files to Daikon.
 
 @cindex pipe, as data trace file
 
@@ -5011,9 +5020,9 @@ writing (or vice-versa).  When both a reader and a writer are ready, the
 FIFO connects the reader to the writer like a regular Unix pipe.
 
 The @option{--output-fifo} option causes Kvasir to create its output
-@file{.dtrace} file as a named pipes.  When Kvasir is
+@file{.dtrace} file as a named pipe.  When Kvasir is
 run with this option, Daikon needs to be run at the same time to read
-from the FIFOs, such as from another terminal or using the shell's
+from the FIFO, such as from another terminal or using the shell's
 @code{&} operator.
 
 For instance, the following two commands have the same effect as the
@@ -5027,6 +5036,14 @@ $DAIKON bzip2.dtrace
 
 The two commands (before and after the ampersand) could also be run in
 two different terminals.
+
+
+@menu
+* Online execution with DynComp::  
+@end menu
+
+@node Online execution with DynComp,  , Online execution, Online execution
+@subsubsection Online execution with DynComp
 
 When running Kvasir with DynComp (using the @file{--with-dyncomp}
 option), Kvasir generates the .decls file after it generates the .dtrace
@@ -5113,8 +5130,8 @@ Kvasir on a 64-bit machine, try adding the flag "--enable-only32bit" to
 the Valgrind configure line (as of August 2006, this is line 21 of the
 top-level Makefile).)
 Furthermore, Kvasir requires that your program have debugging
-information available in the DWARF-2 format, as produced by recent
-versions of GCC@.  Furthermore, the programs used by Kvasir should be
+information available in the DWARF-2 format, as produced by GCC version
+3 and later.  Furthermore, the programs used by Kvasir should be
 compiled without optimization.
 
 This subsection lists some of the known limitations of the
@@ -9301,7 +9318,7 @@ this.topOfStack
 @c  LocalWords:  InvariantsDisplay Ctrl ControlPanel checkbox kbd JDE prj jde
 @c  LocalWords:  autoload myA myList hashcodes MyA HashSetLinear HslIterator IA
 @c  LocalWords:  topAndPop init util DTRACEFILE DTRACEAPPEND Valgrind's AMD gz
-@c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo FIFOs AFS csv
+@c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo AFS csv
 @c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst pragma prog
 @c  LocalWords:  workflow accessor instr instrsourcedir TYPESAPPEND basedir cp
 @c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln nn gdb
