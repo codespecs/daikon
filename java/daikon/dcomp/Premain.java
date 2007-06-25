@@ -17,10 +17,6 @@ import daikon.DynComp;
 
 public class Premain {
 
-  public static File debug_dir = new File ("/tmp", System.getenv ("USER"));
-  public static File debug_bin_dir = new File (debug_dir, "bin");
-  public static File debug_orig_dir = new File (debug_dir, "orig");
-
   /**
    * Set of pre_instrumented jdk classes.  Needed so that we will instrument
    * classes generated on the fly in the jdk.
@@ -48,9 +44,6 @@ public class Premain {
                        "Instrumentation = '%s'\n", agentArgs, inst);
       System.out.printf ("Options settings: %n%s%n", options.settings());
     }
-
-    debug_bin_dir.mkdirs();
-    debug_orig_dir.mkdirs();
 
     // Read in the list of pre-instrumented classes
     if (!DynComp.no_jdk) {
@@ -89,7 +82,19 @@ public class Premain {
 
   static public class Transform implements ClassFileTransformer {
 
+    File debug_dir;
+    File debug_bin_dir;
+    File debug_orig_dir;
+
     public Transform() {
+      debug_dir = DynComp.debug_dir;
+      debug_bin_dir = new File (debug_dir, "bin");
+      debug_orig_dir = new File (debug_dir, "orig");
+
+      if (DynComp.debug) {
+        debug_bin_dir.mkdirs();
+        debug_orig_dir.mkdirs();
+      }
     }
 
     public byte[] transform (ClassLoader loader, String className,
