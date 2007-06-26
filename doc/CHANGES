@@ -20,13 +20,24 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.2.16 (May 01, 2007)
+4.3.0 (July 1, 2007)
+
+Daikon
+
+  Bug fixes
+
+    Distributed .jar and .class files are now runnable on a Java 5 (aka
+    Java 1.5) JVM, rather than requiring Java 6.
+
+-------------------------------------------------
+
+4.2.16 (May 1, 2007)
 
 This is a maintenance release with few substantive changes.
 
 Daikon
 
-  Bug-fixes
+  Bug fixes
 
     A bug that occurred when Daikon.jar appeared twice in the classpath
     on windows was fixed.
@@ -51,7 +62,7 @@ Daikon
 
     Error messages caused by bad configuration variables have been improved.
 
-  Bug-fixes
+  Bug fixes
 
     A GCD (greatest common divisor) routine has been fixes so that it
     does not infinite-loop when called on (infinity, -infinity).
@@ -156,7 +167,7 @@ Daikon
     Modified the simplify format of some invariants so that 'i' is used
     as a free variable rather than 'a'.
 
-  Bug-fixes
+  Bug fixes
 
     The windows daikonenv.bat script was fixed to correctly handle
     paths with blanks in the directory names
