@@ -15,7 +15,7 @@ clean:
 ifdef $DAIKONCLASS_SOURCES
 	$(MAKE) -C java clean
 endif
-	$(MAKE) -C clean
+	$(MAKE) -C kvasir/valgrind clean
 
 kvasir:
 	cd kvasir/valgrind && ./configure --prefix=`pwd`/../inst
