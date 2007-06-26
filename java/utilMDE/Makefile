@@ -31,7 +31,7 @@ all_stop_on_error:
 all_javac: all_javac_notest test
 
 all_notest:  ${AUTO_GENERATED_FILES}
-	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1 | ${INV}/scripts/javac-xlint-prune.pl
+	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1 | ${DAIKONBIN}/javac-xlint-prune.pl
 
 clean:
 	rm -f *.class

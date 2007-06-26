@@ -6,12 +6,12 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-JAVAC ?= javac
+JAVAC ?= javac -target 5
 JAVAC_ARGS ?= -g -J-Xmx800m
 ## If you do not wish to use the "javac-xlint" program, add to Makefile.user:
 ##   JAVAC_XLINT =
 # Give full pathname so this works from cron jobs
-JAVAC_XLINT ?= $(INV)/scripts/javac-xlint -p '(/jtb/)|(/junit/)'
+JAVAC_XLINT ?= ${DAIKONBIN}/javac-xlint -p '(/jtb/)|(/junit/)'
 JAR ?= jar
 JAVA ?= java -ea
 
@@ -26,6 +26,16 @@ JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 
 INV ?= ${DAIKONDIR}
 
+# Set DAIKONBIN to either scripts/ or bin/, whichever exists.
+ifeq "$(wildcard ${INV}/scripts)" "${INV}/scripts"
+     DAIKONBIN ?= ${INV}/scripts
+else
+     DAIKONBIN ?= ${INV}/bin
+endif
+
+# This only works for the development version, not the distributed version,
+# of Daikon.  But it should be harmless for the distributed version --
+# those .jar files simply won't be found.  (Right?)
 CLASSPATH := .:$(CLASSPATH):$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -302,7 +312,7 @@ all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Dif
 	$(MAKE) all_pass2
 
 xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${INV}/scripts/prune-xlint.pl
+	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${DAIKONBIN}/prune-xlint.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} chicory dyncomp
@@ -622,8 +632,9 @@ junit-all: junit
 	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.split.SplitterFactoryTest
 
 ###
-### Clover
+### Clover (code coverage)
 ###
+
 CLOVER := $(HOME)/clover
 CLOVER_CMD := ${JAVA} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
@@ -678,7 +689,7 @@ javadoc-lookup: doc-javadoc-lookup
 
 ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
 doc-javadoc-lookup: doc
-	find doc -name '*.html' | xargs -n 100 ${INV}/scripts/jdk-add-munged-anchor-names
+	find doc -name '*.html' | xargs -n 100 ${DAIKONBIN}/jdk-add-munged-anchor-names
 	echo "Run javadoc-index-to-alist > ~/emacs/javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
@@ -783,9 +794,9 @@ avoid-jpp:
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
-JAVA_CPP ?= (rm -f $@; ${INV}/scripts/java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
+JAVA_CPP ?= (rm -f $@; ${DAIKONBIN}/java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
 # Like the above, but also makes a backup file
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${INV}/scripts/java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${DAIKONBIN}/java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 
 # JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 ## Here are alternate ways of writing the same command:
