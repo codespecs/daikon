@@ -34,7 +34,7 @@
 @c @ifinfo
 @c @c This text appears only in the Info Version.
 @c
-@c Copyright 1998-2005
+@c Copyright 1998-2007
 @c @end ifinfo
 
 @c Avoid black boxes marking overfull hboxes in TeX output.
@@ -60,8 +60,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2005
-@c Copyright @copyright{} 1998-2001 Michael Ernst
+Copyright @copyright{} 1998-2007
 @end titlepage
 
 @html
@@ -8326,7 +8325,7 @@ conditions that place no restrictions on use.
 
 @cindex license
 
-Copyright @copyright{} 1998-2005 Massachusetts Institute of Technology
+Copyright @copyright{} 1998-2007 Massachusetts Institute of Technology
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
