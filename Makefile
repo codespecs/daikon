@@ -142,7 +142,7 @@ kvasir/config.status: kvasir/fjalar/Makefile.in valgrind-3/valgrind/VEX/pub/libv
 kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
 	cd kvasir && $(MAKE) --no-print-directory
 
-kvasir/fjalar/vgtool_fjalar.so: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
+kvasir/fjalar/vgpreload_fjalar.so: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
 	cd kvasir/fjalar && $(MAKE) --no-print-directory
 
 kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
