@@ -139,19 +139,19 @@ kvasir/fjalar/Makefile.in: valgrind-3/auto-everything.sh
 kvasir/config.status: kvasir/fjalar/Makefile.in valgrind-3/valgrind/VEX/pub/libvex.h
 	cd kvasir && ./configure --prefix=`pwd`/inst
 
-kvasir/coregrind/stage2: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
+kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
 	cd kvasir && $(MAKE) --no-print-directory
 
-kvasir/fjalar/vgtool_fjalar.so: kvasir/coregrind/stage2 $(wildcard kvasir/fjalar/*.[ch])
+kvasir/fjalar/vgtool_fjalar.so: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
 	cd kvasir/fjalar && $(MAKE) --no-print-directory
 
-kvasir/inst/bin/valgrind: kvasir/coregrind/stage2
+kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
 	cd kvasir && $(MAKE) install >/dev/null
 
-kvasir/inst/lib/valgrind/vgtool_fjalar.so: kvasir/fjalar/vgtool_fjalar.so
+kvasir/inst/lib/valgrind/vgpreload_fjalar.so: kvasir/fjalar/vgpreload_fjalar.so
 	cd kvasir/fjalar && $(MAKE) install >/dev/null
 
-kvasir: kvasir/inst/lib/valgrind/vgtool_fjalar.so kvasir/inst/bin/valgrind
+kvasir: kvasir/inst/lib/valgrind/vgpreload_fjalar.so kvasir/inst/bin/valgrind
 
 build-kvasir: kvasir
 
