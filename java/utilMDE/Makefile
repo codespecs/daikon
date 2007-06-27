@@ -5,7 +5,7 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
-JAVAC ?= javac
+JAVAC ?= javac -target 5
 JAVAC_ARGS ?= -g -J-Xmx800m -Xlint -Xmaxwarns 1000
 JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
