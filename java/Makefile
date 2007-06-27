@@ -6,8 +6,9 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-JAVAC ?= javac -target 5
-JAVAC_ARGS ?= -g -J-Xmx800m
+JAVAC ?= javac
+# Removed  "-J-Xmx800m", because it is incompatible with JDK 7.
+JAVAC_ARGS ?= -g -target 5
 ## If you do not wish to use the "javac-xlint" program, add to Makefile.user:
 ##   JAVAC_XLINT =
 # Give full pathname so this works from cron jobs
