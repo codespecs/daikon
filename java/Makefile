@@ -29,15 +29,19 @@ INV ?= ${DAIKONDIR}
 
 # Set DAIKONBIN to either scripts/ or bin/, whichever exists.
 ifeq "$(wildcard ${INV}/scripts)" "${INV}/scripts"
-     DAIKONBIN ?= ${INV}/scripts
+    DAIKONBIN ?= ${INV}/scripts
 else
-     DAIKONBIN ?= ${INV}/bin
+    DAIKONBIN ?= ${INV}/bin
 endif
 
-# This only works for the development version, not the distributed version,
-# of Daikon.  But it should be harmless for the distributed version --
-# those .jar files simply won't be found.  (Right?)
-CLASSPATH := .:$(CLASSPATH):$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+# These jar files only exist for the development version, not the
+# distributed version, of Daikon.  Avoid a (harmless but annoying) javac
+# error message that they don't exist.
+ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
+    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar
+endif
+
+CLASSPATH := .:$(CLASSPATH)${CLASSPATH_JARS}:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
