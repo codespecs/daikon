@@ -1124,7 +1124,7 @@ spurious).
 @item Run Daikon on the trace file.
 @example
 java daikon.Daikon \
-     --config_option daikon.Daikon.disable_derived_variables=true \
+     --config_option daikon.derive.Derivation.disable_derived_variables=true \
      daikon-output/wordplay.dtrace
 @end example
 
@@ -5012,7 +5012,7 @@ file.txt} to compress a text file (but start with a small one first).
 saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
 @command{$DAIKON} stands for the command that invokes Daikon, for
 instance @command{java -Xmx512m daikon.Daikon --config_option
-daikon.Daikon.disable_derived_variables=true}.)
+daikon.derive.Derivation.disable_derived_variables=true}.)
 
 @cindex named pipe, as data trace file
 @cindex FIFO, as data trace file
@@ -7815,7 +7815,7 @@ number of invariants to check is cubic in the number of variables at a
 single program point.  Derived variables (such as @code{a[i]},
 introduced whenever there is both an array @code{a} and an integer
 @code{i}) can increase the number of variables substantially.
-The @option{daikon.Daikon.disable_derived_variables} and individual
+The @option{daikon.derive.Derivation.disable_derived_variables} and individual
 @option{daikon.derive.*.*.enabled} configuration variables
 (@pxref{Options to enable/disable derived variables}) may be used
 to disable derived variables altogether or selectively, at the cost of
