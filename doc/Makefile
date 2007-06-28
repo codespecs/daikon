@@ -10,6 +10,16 @@ daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo \
 developer.info: developer.texinfo .fix-dev-menu
 	makeinfo $<
 
+ifdef SKIP_JAVA
+# If you know you haven't changed the Java code, or you don't care
+# about the parts of the documentation that are automatically
+# generated from it, running with SKIP_JAVA=1 will skip regenerating
+# the code-derived texinfo, which in turn avoids recompiling all of
+# Daikon, regenerating the splitter tests, and running the Daikon unit
+# tests.
+config-options:
+invariants-doc:
+else
 config-options:
 	cd ../java && $(MAKE) ../doc/config-options.texinfo
 
@@ -19,6 +29,7 @@ invariants-doc:
 # Always remake config-options.texinfo (../java/Makefile is more discerning)
 .PHONY : config-options
 .PHONY : invariants-doc
+endif
 
 # Don't want to make this a target of other rules because it updates the modification date.
 # Make forces me to double the dollar signs in the Perl code.
