@@ -70,7 +70,7 @@ public final class UnionInvariants {
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
         } else {
-          throw new RuntimeException("Unknown long option received: " +
+          throw new Daikon.TerminationMessage("Unknown option received: " +
                                      option_name);
         }
         break;
@@ -78,15 +78,17 @@ public final class UnionInvariants {
         System.out.println(usage);
         throw new Daikon.TerminationMessage();
       case 'o':
-        if (inv_file != null)
-          throw new Error("multiple serialization output files supplied on command line");
+          String inv_filename = g.getOptarg();
 
-        String inv_filename = g.getOptarg();
+          if (inv_file != null) {
+            throw new Daikon.TerminationMessage("multiple serialization output files supplied on command line: " + inv_file + " " + inv_filename);
+          }
+
         System.out.println("Inv filename = " + inv_filename);
         inv_file = new File(inv_filename);
 
         if (! UtilMDE.canCreateAndWrite(inv_file)) {
-          throw new Error("Cannot write to file " + inv_file);
+            throw new Daikon.TerminationMessage("Cannot write to serialization output file " + inv_file);
         }
         break;
         //

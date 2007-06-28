@@ -342,7 +342,7 @@ public final class VarInfo implements Cloneable, Serializable {
    * This cannot be done when creating the variable because the other variables
    * it is related to, may not yet exist.  Variables are related to their
    * enclosing variables (for fields, arrays, and functions) and to their
-   * parent variables in the PptHierarchy.  RuntimeErrors are thrown if
+   * parent variables in the PptHierarchy.  RuntimeExceptions are thrown if
    * any related variables do not exist.
    */
   public void relate_var() {

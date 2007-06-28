@@ -132,7 +132,7 @@ public final class ProglangType
       return intern("hashcode", candidate.dimensions);
     } else if (candidate.base == "float") { // interned
       return intern("double", candidate.dimensions);
-    } else if (candidate.base == "string") {
+    } else if (candidate.base == "string") { // interned
       return intern ("java.lang.String", candidate.dimensions);
     } else {
       return candidate;
@@ -382,7 +382,7 @@ public final class ProglangType
           return Intern.internedLong(b.longValue());
         }
         else
-          throw new Error("Bad character: " + value);
+          throw new IllegalArgumentException("Bad character: " + value);
         return Intern.internedLong(Character.getNumericValue(c));
       } else if (base == BASE_INT) {
         // File rep type might be int, boolean, or hashcode.
@@ -507,7 +507,7 @@ public final class ProglangType
         // ... then, intern the entire array, and return it
         return Intern.intern(value_strings);
       } else {
-        throw new Error("Can't yet deal with array of base type " + base);
+        throw new Error("Can't yet parse array of base type " + base);
       }
 
       // This is a more general technique; but when will we need

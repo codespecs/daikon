@@ -46,7 +46,7 @@ public abstract class VarComparability {
     } else if (format == IMPLICIT) {
       return VarComparabilityImplicit.parse(rep, vartype);
     } else {
-      throw new Error("bad format argument " + format
+      throw new IllegalArgumentException("bad format argument " + format
                       + " should have been in {0, 1, 2}");
     }
   }

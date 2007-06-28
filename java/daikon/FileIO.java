@@ -385,7 +385,7 @@ public final class FileIO {
     // We have just read the "DECLARE" line.
     String ppt_name = state.reader.readLine();
     if (ppt_name == null) {
-      throw new FileIOException(
+      throw new Daikon.TerminationMessage(
         "File ends with \"DECLARE\" with no following program point name",
         state.reader, state.filename);
     }
@@ -400,16 +400,19 @@ public final class FileIO {
       if (state.ppts_are_new) { // yoav: ppts_are_new is always set to true, so we should remove it
         PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
         VarInfo[] existing_vars = existing_ppt.var_infos;
-        if (existing_ppt.num_declvars!=vi_array.length)
-          throw new FileIOException("Duplicate declaration of program point \""
-                      + ppt_name + "\" with a different number of VarInfo objects: old VarInfo number="+existing_ppt.num_declvars+", new VarInfo number="+vi_array.length, state.reader, state.filename);
+        if (existing_ppt.num_declvars!=vi_array.length) {
+          throw new Daikon.TerminationMessage("Duplicate declaration of program point \""
+                      + ppt_name + "\" with a different number of VarInfo objects: old VarInfo number="+existing_ppt.num_declvars+", new VarInfo number="+vi_array.length,
+                                               state.reader, state.filename);
+        }
 
         for (int i=0; i<vi_array.length; i++) {
           String oldName = existing_vars[i].str_name();
           String newName = vi_array[i].str_name();
-          if (!oldName.equals(newName))
-            throw new FileIOException("Duplicate declaration of program point \""
-                            + ppt_name + "\" with two different VarInfo: old VarInfo="+oldName+", new VarInfo="+newName, state.reader, state.filename);
+          if (!oldName.equals(newName)) {
+            throw new Daikon.TerminationMessage("Duplicate declaration of program point \""
+                                                 + ppt_name + "\" with two different VarInfo: old VarInfo="+oldName+", new VarInfo="+newName, state.reader, state.filename);
+          }
         }
       } else { // ppts are already in the map
         return state.all_ppts.get (ppt_name);
@@ -469,8 +472,8 @@ public final class FileIO {
     while ((vi = read_VarInfo(state, ppt_name)) != null) {
       for (int i=0; i<var_infos.size(); i++) {
         if (vi.name() == var_infos.get(i).name()) {
-          throw new FileIOException("Duplicate variable name", state.reader,
-                                    state.filename);
+          throw new Daikon.TerminationMessage("Duplicate variable name " + vi.name(), state.reader,
+                                           state.filename);
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
@@ -511,7 +514,7 @@ public final class FileIO {
         (proglang_type_string_and_aux == null)
         || (file_rep_type_string == null)
         || (comparability_string == null))
-      throw new Error(
+      throw new Daikon.TerminationMessage(
         "End of file "
           + filename
           + " while reading variable "
@@ -542,9 +545,9 @@ public final class FileIO {
     // workaround when it didn't have a warning. But this has never
     // worked, so it's fatal.
     else if ("String[]".equals(file_rep_type_string)) {
-      throw new FileIOException("Representation type 'String[]' should be " +
-                                "'java.lang.String[]' instead for variable " +
-                                varname, file, filename);
+      throw new Daikon.TerminationMessage("Representation type 'String[]' should be " +
+                                           "'java.lang.String[]' instead for variable " + varname,
+                                           file, filename);
     }
     /// XXX
 
@@ -572,7 +575,7 @@ public final class FileIO {
       rep_type = file_rep_type.fileTypeToRepType();
       aux = VarInfoAux.parse(aux_string);
     } catch (IOException e) {
-      throw new FileIOException(file, filename, e);
+      throw new Daikon.TerminationMessage(file, filename, e);
     }
 
     if (static_constant_value_string != null) {
@@ -586,8 +589,8 @@ public final class FileIO {
     // Not a call to Assert.assert in order to avoid doing the (expensive)
     // string concatenations.
     if (!VarInfo.legalFileRepType(file_rep_type)) {
-      throw new FileIOException(
-        "Unsupported (file) representation type "
+      throw new Daikon.TerminationMessage(
+        "Unsupported representation type "
           + file_rep_type.format()
           + " (parsed as "
           + rep_type
@@ -598,7 +601,7 @@ public final class FileIO {
         filename);
     }
     if (!VarInfo.legalRepType(rep_type)) {
-      throw new FileIOException(
+      throw new Daikon.TerminationMessage(
         "Unsupported (converted) representation type "
           + file_rep_type.format()
           + " for variable "
@@ -641,8 +644,8 @@ public final class FileIO {
     } else { // old format
       comp_str = state.reader.readLine();
       if (comp_str == null) {
-        throw new FileIOException("Found end of file, expected comparability",
-                                  state.reader, state.filename);
+        throw new Daikon.TerminationMessage("Found end of file, expected comparability",
+                                         state.reader, state.filename);
       }
     }
 
@@ -651,8 +654,8 @@ public final class FileIO {
     } else if (comp_str.equals("implicit")) {
       return (VarComparability.IMPLICIT);
     } else {
-      throw new FileIOException("Unrecognized VarComparability '" + comp_str
-                                + "'", state.reader, state.filename);
+      throw new Daikon.TerminationMessage("Unrecognized VarComparability '" + comp_str
+                                       + "'", state.reader, state.filename);
     }
   }
 
@@ -1130,7 +1133,7 @@ public final class FileIO {
                                     data_trace_state.nonce);
         } catch (Error e) {
           if (! dkconfig_continue_after_file_exception) {
-            throw e;
+            throw new Daikon.TerminationMessage(e, data_trace_state.reader, data_trace_state.filename);
           } else {
             System.out.println ();
             System.out.println ("WARNING: Error while processing "
@@ -1260,14 +1263,19 @@ public final class FileIO {
       try {
         new PptName(ppt_name);
       } catch (Error e) {
-        throw new Error("Illegal program point name \"" + ppt_name + "\""
+        throw new Daikon.TerminationMessage("Illegal program point name \"" + ppt_name + "\""
                         + " at " + state.filename
                         + " line " + reader.getLineNumber());
       }
 
+      if (state.all_ppts.size() == 0) {
+        throw new Daikon.TerminationMessage("No declarations were provided before the first sample.  Perhaps you did not supply the proper .decls file to Daikon.  (Or, there could be a bug in the front end that created the .dtrace file " + state.filename
+                        + ".)");
+      }
+
       PptTopLevel ppt = state.all_ppts.get(ppt_name);
       if (ppt == null) {
-        throw new Error("No declaration was provided for program point " + ppt_name
+        throw new Daikon.TerminationMessage("No declaration was provided for program point " + ppt_name
                         + " which appears in dtrace file " + state.filename
                         + " at line " + reader.getLineNumber());
       }
@@ -1298,7 +1306,7 @@ public final class FileIO {
         Assert.assertTrue(nonce_name != null && nonce_name.equals("this_invocation_nonce"));
         String nonce_number = reader.readLine();
         if (nonce_number == null) {
-          throw new FileIOException("File ended while trying to read nonce",
+          throw new Daikon.TerminationMessage("File ended while trying to read nonce",
                                     reader,
                                     state.file);
         }
@@ -1403,6 +1411,7 @@ public final class FileIO {
 
       //OLD:if (ppt.ppt_name.isCombinedExitPoint()) {
       if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
+        // not Daikon.TerminationMessage; caller has more info (e.g., filename)
         throw new RuntimeException("Bad program point name " + ppt.name
                                    + " is a combined exit point name");
       }
@@ -1590,7 +1599,7 @@ public final class FileIO {
 
       String line = reader.readLine();
       if (line == null) {
-        throw new EOFException(
+        throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
             + data_trace_state.filename
             + " line "
@@ -1611,14 +1620,14 @@ public final class FileIO {
         line = reader.readLine(); // modbit
         if (line == null
             || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
-          throw new FileIOException("Bad modbit", reader,
-                                    data_trace_state.filename);
+          throw new Daikon.TerminationMessage("Bad modbit '" + line + "'",
+                                              reader, data_trace_state.filename);
         }
         line = reader.readLine(); // next variable name
       }
 
       if (!line.trim().equals (vi.str_name())) {
-        throw new FileIOException(
+        throw new Daikon.TerminationMessage(
           "Mismatch between .dtrace file and .decls file.  Expected variable "
             + vi.name()
             + ", got "
@@ -1630,7 +1639,7 @@ public final class FileIO {
       }
       line = reader.readLine();
       if (line == null) {
-        throw new EOFException(
+        throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
             + data_trace_state.filename
             + " line "
@@ -1645,7 +1654,7 @@ public final class FileIO {
       String value_rep = line;
       line = reader.readLine();
       if (line == null) {
-        throw new EOFException(
+        throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
             + data_trace_state.filename
             + " line "
@@ -1658,7 +1667,7 @@ public final class FileIO {
             + ppt.name());
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
-        throw new FileIOException("Bad modbit `" + line + "'",
+        throw new Daikon.TerminationMessage("Bad modbit `" + line + "'",
                                   reader, data_trace_state.filename);
       }
       int mod = ValueTuple.parseModified(line);
@@ -1735,7 +1744,7 @@ public final class FileIO {
             vi.canBeMissing = true;
           }
         } catch (Exception e) {
-          throw new FileIOException(
+          throw new Daikon.TerminationMessage(
             "Error while parsing value "
               + value_rep
               + " for variable "
@@ -1803,6 +1812,8 @@ public final class FileIO {
       {
         if (nonce == null) {
           if (call_stack.empty()) {
+            // Not Daikon.TerminationMessage:  caller knows context such as
+            // file name and line number.
             throw new Error(
               "Function exit without corresponding entry: " + ppt.name());
           }
@@ -1833,6 +1844,8 @@ public final class FileIO {
             //                   data_trace_state.reader.getLineNumber());
             return true;
           } else if (invoc == null) {
+            // Not Daikon.TerminationMessage:  caller knows context such as
+            // file name and line number.
             throw new Error(
               "Didn't find call with nonce "
                 + nonce
@@ -1996,8 +2009,9 @@ public final class FileIO {
       throw (IOException)(new IOException("Error while loading inv file").initCause(e));
     } catch (InvalidClassException e) {
       throw new IOException(
-        "It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file." + lineSep
-          + e.toString());
+        "It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file."
+        // + lineSep + e.toString()
+        );
     }
     // } catch (StreamCorruptedException e) { // already extends IOException
     // } catch (OptionalDataException e) {    // already extends IOException

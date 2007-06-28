@@ -95,7 +95,7 @@ public final class MergeInvariants {
                                 + g.getOptarg() + "' - " + error);
           }
         } else {
-          throw new RuntimeException("Unknown long option received: " +
+          throw new Daikon.TerminationMessage("Unknown long option received: " +
                                      option_name);
         }
         break;
@@ -105,15 +105,15 @@ public final class MergeInvariants {
         throw new Daikon.TerminationMessage();
 
       case 'o':
-        if (output_inv_file != null)
-          throw new Error("multiple serialization output files "
-                         + "supplied on command line");
-
         String output_inv_filename = g.getOptarg();
+
+        if (output_inv_file != null)
+            throw new Daikon.TerminationMessage("multiple serialization output files supplied on command line: " + output_inv_file + " " + output_inv_filename);
+
         output_inv_file = new File(output_inv_filename);
 
         if (! UtilMDE.canCreateAndWrite(output_inv_file)) {
-          throw new Error("Cannot write to file " + output_inv_file);
+            throw new Daikon.TerminationMessage("Cannot write to serialization output file " + output_inv_file);
         }
         break;
 
@@ -137,24 +137,24 @@ public final class MergeInvariants {
     for (int i = g.getOptind(); i < args.length; i++) {
       File file = new File (args[i]);
       if (! file.exists()) {
-        throw new Error("File " + file + " not found.");
+        throw new Daikon.TerminationMessage("File " + file + " not found.");
       }
       if (file.toString().indexOf (".inv") != -1)
         inv_files.add (file);
       else if (file.toString().indexOf (".decls") != -1) {
         if (decl_file != null)
-          throw new Error ("Only one decl file may be specified");
+          throw new Daikon.TerminationMessage("Only one decl file may be specified");
         decl_file = file;
       } else if (file.toString().indexOf(".spinfo") != -1) {
         splitter_files.add(file);
       } else {
-        throw new Error ("unexpected file: " + file);
+        throw new Daikon.TerminationMessage("Unrecognized file type: " + file);
       }
     }
 
     // Make sure at least two files were specified
     if (inv_files.size() < 2)
-      throw new Error ("Must specify at least two inv files");
+      throw new Daikon.TerminationMessage ("Must specify at least two inv files; only specified " + UtilMDE.nplural(inv_files.size(), "file"));
 
     // Read in each of the specified maps
     List<PptMap> pptmaps = new ArrayList<PptMap>();
@@ -172,7 +172,7 @@ public final class MergeInvariants {
     // if no decls file was specified
     if (decl_file == null) {
       if (splitter_files.size() > 0)
-        throw new Error(".spinfo files may only be specified along "
+        throw new Daikon.TerminationMessage(".spinfo files may only be specified along "
                         + "with a .decls file");
 
       // Read in the first map again to serve as a template
@@ -222,7 +222,7 @@ public final class MergeInvariants {
         PptMap pmap = pptmaps.get (j);
         PptTopLevel child = pmap.get (ppt.ppt_name);
         if ((decl_file == null) && (child == null))
-          throw new Error ("Can't find " + ppt.ppt_name + " in "
+          throw new Daikon.TerminationMessage ("Can't find  ppt " + ppt.ppt_name + " in "
                            + inv_files.get(j));
         if (child == null)
           continue;

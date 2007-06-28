@@ -81,7 +81,7 @@ public class FileIOException extends IOException {
     if (fileName == null || lineNumber == -1) {
       return super.toString();
     } else {
-      return "Error: " + super.toString()
+      return super.toString()
         + " on line " + lineNumber
         + " of file " + fileName;
     }

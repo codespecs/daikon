@@ -75,6 +75,7 @@ public final class Configuration
   private Configuration() {
   }
 
+  /** Lets callers differentiate between configuration problems and all others. **/
   public static class ConfigException extends RuntimeException {
     public ConfigException(String s, Throwable t) { super (s, t); }
     public ConfigException(String s) { super(s); }
@@ -130,7 +131,7 @@ public final class Configuration
 
     int eq = line.indexOf('=');
     if (eq <= 0) {
-      throw new RuntimeException("Error, setting must contain \"=\": " + line);
+      throw new ConfigException("Error, configuration setting must contain \"=\": " + line);
     }
 
     String name = line.substring(0, eq).trim();
@@ -247,7 +248,7 @@ public final class Configuration
         try {
           value = valueOf.invoke(null, unparsed);
         } catch (IllegalArgumentException e) {
-          throw new ConfigException(e.getMessage());
+          throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName() + ": " + e.getMessage());
         }
       } catch (NoSuchMethodException e) {
         // Can't happen, so RuntimeException instead of ConfigException

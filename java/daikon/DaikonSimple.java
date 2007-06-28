@@ -82,8 +82,9 @@ public class DaikonSimple {
       String message = e.getMessage();
       if (message != null) {
         System.err.println(message);
+        System.exit(1);
       }
-      System.exit(1);
+      System.exit(0);
     }
     // Any exception other than Daikon.TerminationMessage gets propagated.
     // This simplifies debugging by showing the stack trace.

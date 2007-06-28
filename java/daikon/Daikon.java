@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import utilMDE.Assert;
+import utilMDE.FileIOException;
 import utilMDE.Fmt;
 import utilMDE.Stopwatch;
 import utilMDE.TextFile;
@@ -535,11 +536,18 @@ public final class Daikon {
   /**
    * Thrown to indicate that main should not print a stack trace, but only
    * print the message itself to the user.
-   * If the string is null, then this is normal termination, not an error.
+   * Code in Daikon should throw this Exception in cases of user error, an
+   * throw other exceptions in cases of a Daikon bug or a system problem
+   * (like unpredictable IOExceptions).
+   * If the string is null, then this is normal termination, not an error;
+   * no message is printed.
    **/
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
     public TerminationMessage(String s) { super(s); }
+    public TerminationMessage(Exception e) { super(e.getMessage()); }
+    public TerminationMessage(String s, LineNumberReader reader, String fileName) {
+      super(new FileIOException(s, reader, fileName).getMessage()); }
     public TerminationMessage(Object... s) { super(UtilMDE.joinLines(s)); }
     public TerminationMessage() { super(); }
   }
@@ -552,15 +560,20 @@ public final class Daikon {
     try {
       mainHelper(args);
     } catch (Configuration.ConfigException e) {
+      // I don't think this can happen.  -MDE
       System.err.println(e.getMessage());
+      System.exit(1);
     } catch (TerminationMessage e) {
       if (e.getMessage() != null) {
         System.err.println(e.getMessage());
         System.exit(1);
+      } else {
+        System.exit(0);
       }
     }
-    // Any exception other than TerminationMessage gets propagated.  This
-    // simplifies debugging by showing the stack trace.
+    // Any exception other than TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+    // (TerminationMessages should be clear enough not to need a stack trace.)
   }
 
   /**
@@ -889,7 +902,7 @@ public final class Daikon {
                 // on the end (eg, a date, or ".gz").
                 File file = new File(filename);
                 if (!file.exists()) {
-                  throw new Error(
+                  throw new Daikon.TerminationMessage(
                     "File " + filename + " not found.");
                 }
                 if (filename.indexOf(".decls") != -1) {
@@ -901,7 +914,7 @@ public final class Daikon {
                 } else if (filename.indexOf(".map") != -1) {
                   map_files.add(file);
                 } else {
-                  throw new Error(
+                  throw new Daikon.TerminationMessage(
                     "Unrecognized file extension: "
                       + filename);
                 }
@@ -914,7 +927,7 @@ public final class Daikon {
             String f = g.getOptarg();
             for (int i = 0; i < f.length(); i++) {
               if ("0rs".indexOf(f.charAt(i)) == -1)
-                throw new RuntimeException(
+                throw new Daikon.TerminationMessage(
                   "omit_from_output flag letter '"
                     + f.charAt(i)
                     + "' is unknown");
@@ -926,7 +939,7 @@ public final class Daikon {
           else if (conf_limit_SWITCH.equals(option_name)) {
             double limit = Double.parseDouble(g.getOptarg());
             if ((limit < 0.0) || (limit > 1.0)) {
-              throw new Error(
+              throw new Daikon.TerminationMessage(
                 conf_limit_SWITCH + " must be between [0..1]");
             }
             Configuration.getInstance().apply(
@@ -938,7 +951,7 @@ public final class Daikon {
               ProglangType.list_implementors.add(
                 list_type_string);
             } catch (Exception e) {
-              throw new Error(e);
+              throw new Daikon.TerminationMessage("Problem parsing " + list_type_SWITCH + " option: " + e);
             }
             break;
           } else if (
@@ -951,73 +964,74 @@ public final class Daikon {
           // Process only part of the trace file
           else if (ppt_regexp_SWITCH.equals(option_name)) {
             if (ppt_regexp != null)
-              throw new Error(
+              throw new Daikon.TerminationMessage(
                 "multiple --"
                   + ppt_regexp_SWITCH
                   + " regular expressions supplied on command line");
+            String regexp_string = g.getOptarg();
             try {
-              String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               ppt_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e);
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + e.getMessage());
             }
             break;
           } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
             if (ppt_omit_regexp != null)
-              throw new Error(
+              throw new Daikon.TerminationMessage(
                 "multiple --"
                   + ppt_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
+            String regexp_string = g.getOptarg();
             try {
-              String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               ppt_omit_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e);
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + e.getMessage());
             }
             break;
           } else if (var_regexp_SWITCH.equals(option_name)) {
             if (var_regexp != null)
-              throw new Error(
+              throw new Daikon.TerminationMessage(
                 "multiple --"
                   + var_regexp_SWITCH
                   + " regular expressions supplied on command line");
+            String regexp_string = g.getOptarg();
             try {
-              String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               var_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e);
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + e.getMessage());
             }
             break;
           } else if (var_omit_regexp_SWITCH.equals(option_name)) {
             if (var_omit_regexp != null)
-              throw new Error(
+              throw new Daikon.TerminationMessage(
                 "multiple --"
                   + var_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
+            String regexp_string = g.getOptarg();
             try {
-              String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               var_omit_regexp =
                 Pattern.compile(regexp_string);
             } catch (Exception e) {
-              throw new Error(e);
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + e.getMessage());
             }
             break;
           }
-          // Configuration options
           else if (server_SWITCH.equals(option_name)) {
             String input_dir = g.getOptarg();
             server_dir = new File(input_dir);
             if (!server_dir.isDirectory() || !server_dir.canRead() || !server_dir.canWrite())
               throw new RuntimeException(
-                "The server directory Could not open config file " + server_dir);
+                "Could not open config file in server directory " + server_dir);
             break;
+
+          // Configuration options
 
           } else if (config_SWITCH.equals(option_name)) {
             String config_file = g.getOptarg();
@@ -1026,7 +1040,8 @@ public final class Daikon {
                 new FileInputStream(config_file);
               Configuration.getInstance().apply(stream);
             } catch (IOException e) {
-              throw new RuntimeException(
+              throw new Daikon.TerminationMessage(
+                // Is this the only possible reason for an IOException?
                 "Could not open config file " + config_file);
             }
             break;
@@ -1062,22 +1077,24 @@ public final class Daikon {
           } else if (mem_stat_SWITCH.equals(option_name)) {
             use_mem_monitor = true;
           } else {
-            throw new TerminationMessage(
-              "Unknown long option received: " + option_name);
+            throw new Daikon.TerminationMessage(
+              "Unknown option " + option_name + " on command line");
           }
           break;
         case 'h' :
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
         case 'o' :
-          if (inv_file != null)
-            throw new Error("multiple serialization output files supplied on command line");
-
           String inv_filename = g.getOptarg();
+
+          if (inv_file != null) {
+            throw new Daikon.TerminationMessage("multiple serialization output files supplied on command line: " + inv_file + " " + inv_filename);
+          }
+
           inv_file = new File(inv_filename);
 
           if (!UtilMDE.canCreateAndWrite(inv_file)) {
-            throw new Error("Cannot write to file " + inv_file);
+            throw new Daikon.TerminationMessage("Cannot write to serialization output file " + inv_file);
           }
           break;
           //
@@ -1101,7 +1118,7 @@ public final class Daikon {
       if (!filename.equals("-") && !filename.equals("+")) {
         file = new File(filename);
         if (!file.exists()) {
-            throw new Error("File " + file + " not found.");
+            throw new Daikon.TerminationMessage("File " + file + " not found.");
         }
         filename = file.toString();
       }
@@ -1124,7 +1141,7 @@ public final class Daikon {
 
             inv_file = new File(inv_filename);
              if (!UtilMDE.canCreateAndWrite(inv_file)) {
-           throw new Error("Cannot write to file " + inv_file);
+           throw new Daikon.TerminationMessage("Cannot write to file " + inv_file);
            }
         }
       } else if (filename.indexOf(".spinfo") != -1) {
@@ -1134,7 +1151,7 @@ public final class Daikon {
       } else if (filename.equals("-") || filename.equals("+")) {
         dtrace_files.add(filename);
       } else {
-        throw new Error("Unrecognized argument: " + file);
+        throw new Daikon.TerminationMessage("Unrecognized file type: " + file);
       }
     }
 
@@ -1569,7 +1586,7 @@ public final class Daikon {
           for (VarInfo cvi : exit_ppt.var_infos)
             System.out.printf ("  exit var = %s%n", cvi);
           assert false;
-          throw new Error("this can't happen: postvar is null");
+          throw new RuntimeException("this can't happen: postvar is null");
         }
         origvar.postState = postvar;
         origvar.comparability = postvar.comparability.makeAlias();
@@ -1609,7 +1626,7 @@ public final class Daikon {
     } catch (IOException e) {
       // System.out.println();
       // e.printStackTrace();
-      throw new Error("Error parsing decl file", e);
+      throw new Daikon.TerminationMessage("Error parsing decl file", e);
     } finally {
       debugProgress.fine(
         "Time spent on read_declaration_files: " + stopwatch.format());
@@ -1625,8 +1642,7 @@ public final class Daikon {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
       System.out.print(" (read ");
-      System.out.print(
-                       UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
@@ -2164,6 +2180,7 @@ public final class Daikon {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100))
+      // The number should already have been checked, so use Error instead of Daikon.TerminationMessage
       throw new Error(
         "ppt_perc of " + ppt_perc + " is out of range 1..100");
     if (ppt_perc == 100)
@@ -2203,12 +2220,12 @@ public final class Daikon {
     // exits from a method or enters without exits, etc)
     int ppt_cnt = (ppts.size() * ppt_perc) / 100;
     if (ppt_cnt == 0)
-      throw new Error(
+      throw new Daikon.TerminationMessage(
         "ppt_perc of "
-          + ppt_perc
-          + " over "
-          + ppts.size()
-          + " results in 0 ppts to process");
+        + ppt_perc
+        + "% results in processing 0 out of "
+        + ppts.size()
+        + " ppts");
     for (Iterator<String> i = ppts.iterator(); i.hasNext();) {
       String ppt_name = i.next();
       if (--ppt_cnt <= 0) {
@@ -2223,6 +2240,7 @@ public final class Daikon {
         return (ppt_name);
       }
     }
+    // Execution should not reach this line
     throw new Error("ppt_cnt " + ppt_cnt + " ppts.size " + ppts.size());
   }
 

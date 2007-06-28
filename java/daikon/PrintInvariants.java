@@ -280,13 +280,13 @@ public final class PrintInvariants {
           throw new Daikon.TerminationMessage();
         } else if (Daikon.ppt_regexp_SWITCH.equals (option_name)) {
           if (ppt_regexp != null)
-            throw new Error("multiple --" + Daikon.ppt_regexp_SWITCH
+            throw new Daikon.TerminationMessage("multiple --" + Daikon.ppt_regexp_SWITCH
                   + " regular expressions supplied on command line");
+          String regexp_string = g.getOptarg();
           try {
-            String regexp_string = g.getOptarg();
             ppt_regexp = Pattern.compile(regexp_string);
           } catch (Exception e) {
-            throw new Error(e);
+            throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + e.getMessage());
           }
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
@@ -310,7 +310,7 @@ public final class PrintInvariants {
             InputStream stream = new FileInputStream(config_file);
             Configuration.getInstance().apply(stream);
           } catch (IOException e) {
-            throw new RuntimeException("Could not open config file "
+            throw new Daikon.TerminationMessage("Could not open config file "
                                         + config_file);
           }
           break;
@@ -330,7 +330,7 @@ public final class PrintInvariants {
                                 + g.getOptarg() + "' - " + error);
           }
         } else {
-          throw new RuntimeException("Unknown long option received: " +
+          throw new Daikon.TerminationMessage("Unknown option received: " +
                                      option_name);
         }
         break;
@@ -468,7 +468,7 @@ public final class PrintInvariants {
            || (Daikon.dkconfig_guardNulls == "never") // interned
            || (Daikon.dkconfig_guardNulls == "missing")) // interned
         ) {
-      throw new Error("Bad guardNulls config option \"" + Daikon.dkconfig_guardNulls + "\", should be one of \"always\", \"never\", or \"missing\"");
+      throw new Daikon.TerminationMessage("Bad guardNulls config option value \"" + Daikon.dkconfig_guardNulls + "\", should be one of \"always\", \"never\", or \"missing\"");
     }
   }
 
@@ -581,13 +581,13 @@ public final class PrintInvariants {
     // User wants to specify the variable names of interest
     if (firstChar=='<') {
       if (temp.length() < 2)
-        throw new IllegalArgumentException("Missing '>'" + lineSep +usage);
+        throw new Daikon.TerminationMessage("Missing '>'" + lineSep + usage);
       if (temp.indexOf('>',1) == -1)
-        throw new IllegalArgumentException("Missing '>'" + lineSep +usage);
+        throw new Daikon.TerminationMessage("Missing '>'" + lineSep + usage);
       StringTokenizer parenTokens = new StringTokenizer(temp,"<>");
       if ((temp.indexOf('@')==-1 && parenTokens.countTokens() > 0)
           || (temp.indexOf('@')>-1 && parenTokens.countTokens() > 2))
-        throw new IllegalArgumentException("Too many brackets" + lineSep +usage);
+        throw new Daikon.TerminationMessage("Too many brackets" + lineSep + usage);
       StringTokenizer vars = new StringTokenizer(parenTokens.nextToken(),",");
       if (vars.hasMoreTokens()) {
         discVars = vars.nextToken();
@@ -600,7 +600,7 @@ public final class PrintInvariants {
         return;
       else {
         if (temp.charAt(temp.indexOf('>')+1) != '@')
-          throw new IllegalArgumentException("Must have '@' after '>'" + lineSep +usage);
+          throw new Daikon.TerminationMessage("Must have '@' after '>'" + lineSep + usage);
         else
           temp = temp.substring(temp.indexOf('>')+1);
       }
@@ -609,7 +609,7 @@ public final class PrintInvariants {
     // If it made it this far, the first char of temp has to be '@'
     Assert.assertTrue(temp.charAt(0) == '@');
     if (temp.length()==1)
-      throw new IllegalArgumentException("Must provide ppt name after '@'" + lineSep +usage);
+      throw new Daikon.TerminationMessage("Must provide ppt name after '@'" + lineSep +usage);
     discPpt = temp.substring(1);
   }
 
@@ -1003,7 +1003,8 @@ public final class PrintInvariants {
         return;
       }
     } else {
-      throw new IllegalStateException("Unknown output mode");
+      // This should not happen.
+      throw new IllegalStateException("Unknown output mode" + Daikon.output_format);
     }
     if (Daikon.output_num_samples) {
       inv_rep += num_values_samples;
