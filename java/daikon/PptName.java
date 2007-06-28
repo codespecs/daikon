@@ -312,10 +312,10 @@ public class PptName
 
   /**
    * @return true iff this program point is a constructor entry or exit.
-   * There are two ways in which this works.  With older decl files, the
-   * method name starts with <init>.  Newer decl files do not have <init>
-   * but their method name includes the class name.  For compatibility
-   * both mechanisms are checked.
+   * There are two ways in which this works.  With the older declaration
+   * format, the method name starts with <init>.  The newer declaration
+   * format does not have <init> but their method name includes the class
+   * name.  For compatibility both mechanisms are checked.
    **/
   public boolean isConstructor() {
 

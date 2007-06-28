@@ -68,9 +68,9 @@ public final class VarInfo implements Cloneable, Serializable {
   private VarInfoName var_info_name; // interned
 
   /**
-   * Name as specified in the decl file.  VarInfoName sometimes changes this
-   * name as part of parsing so that VarInfoName.name() doesn't return the
-   * original name
+   * Name as specified in the program point declaration.  VarInfoName
+   * sometimes changes this name as part of parsing so that
+   * VarInfoName.name() doesn't return the original name.
    */
   private String str_name; // interned
 
@@ -82,7 +82,7 @@ public final class VarInfo implements Cloneable, Serializable {
       return (var_info_name.name().intern());  // vin ok
   }
 
-  /** Returns the original name of the variable from the decl file **/
+  /** Returns the original name of the variable from the program point declaration. **/
   public String str_name() {
     return str_name;
   }
@@ -448,7 +448,7 @@ public final class VarInfo implements Cloneable, Serializable {
       else {  // one of the arguments has a different parent variable name
         String args = "";
         for (VarInfo vi : bases) {
-          if (args != "")
+          if (args != "")       // interned
             args += ",";
           args += vi.parent_variable;
         }
@@ -2348,11 +2348,12 @@ public final class VarInfo implements Cloneable, Serializable {
     } else { // new format
       List<VarInfo> result = new ArrayList<VarInfo>();
 
-      if (Daikon.dkconfig_guardNulls == "never")
+      if (Daikon.dkconfig_guardNulls == "never") // interned
         return result;
 
       // If this is never missing, nothing to guard
-      if ((Daikon.dkconfig_guardNulls == "missing") && !canBeMissing)
+      if ((Daikon.dkconfig_guardNulls == "missing") // interned
+          && !canBeMissing)
         return result;
 
       // Create a list of variables to be guarded from the list of all
@@ -2365,7 +2366,8 @@ public final class VarInfo implements Cloneable, Serializable {
         if (!vi.file_rep_type.isHashcode())
           continue;
         result.add (0, vi);
-        if ((Daikon.dkconfig_guardNulls == "missing") && !vi.canBeMissing)
+        if ((Daikon.dkconfig_guardNulls == "missing") // interned
+            && !vi.canBeMissing)
           break;
       }
       return (result);
@@ -3564,7 +3566,7 @@ public final class VarInfo implements Cloneable, Serializable {
                                 int begin_shift, VarInfo end, int end_shift) {
 
     String begin_str = inside_name (begin, seq.isPrestate(), begin_shift);
-    if (begin_str == "")
+    if (begin_str == "")        // interned
       begin_str = "0";
     String end_str = inside_name (end, seq.isPrestate(), end_shift);
 

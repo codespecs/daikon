@@ -833,7 +833,7 @@ public final class PrintInvariants {
         continue;
       }
 
-      // TODO: When we can get information from the decl file that
+      // TODO: When we can get information from the declaration that
       // indicates if a variable is 'final', we should add such a test
       // here.  For now we use the equality invariant between the
       // variable and its orig variable to determine if it has been

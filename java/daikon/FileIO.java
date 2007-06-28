@@ -1267,10 +1267,9 @@ public final class FileIO {
 
       PptTopLevel ppt = state.all_ppts.get(ppt_name);
       if (ppt == null) {
-        throw new Error("Program point " + ppt_name
-                        + " appears in dtrace file " + state.filename
-                        + " at line " + reader.getLineNumber()
-                        + " but not in any decl file");
+        throw new Error("No declaration was provided for program point " + ppt_name
+                        + " which appears in dtrace file " + state.filename
+                        + " at line " + reader.getLineNumber());
       }
 
       VarInfo[] vis = ppt.var_infos;
