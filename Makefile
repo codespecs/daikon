@@ -128,6 +128,12 @@ javadoc:
 
 ### Kvasir (C/C++ front end)
 
+ifeq ($(shell arch),x86_64)
+VALGRIND_ARCH := amd64
+else
+VALGRIND_ARCH := x86
+endif
+
 valgrind-3/auto-everything.sh:
 	cvs co -P valgrind-3
 	touch $@
@@ -142,16 +148,16 @@ kvasir/config.status: kvasir/fjalar/Makefile.in valgrind-3/valgrind/VEX/pub/libv
 kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
 	cd kvasir && $(MAKE) --no-print-directory
 
-kvasir/fjalar/vgpreload_fjalar.so: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
+kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
 	cd kvasir/fjalar && $(MAKE) --no-print-directory
 
 kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
 	cd kvasir && $(MAKE) install >/dev/null
 
-kvasir/inst/lib/valgrind/vgpreload_fjalar.so: kvasir/fjalar/vgpreload_fjalar.so
+kvasir/inst/lib/valgrind/$(VALGRIND_ARCH)-linux/fjalar: kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux
 	cd kvasir/fjalar && $(MAKE) install >/dev/null
 
-kvasir: kvasir/inst/lib/valgrind/vgpreload_fjalar.so kvasir/inst/bin/valgrind
+kvasir: kvasir/inst/lib/valgrind/$(VALGRIND_ARCH)-linux/fjalar kvasir/inst/bin/valgrind
 
 build-kvasir: kvasir
 

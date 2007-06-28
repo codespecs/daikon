@@ -5,9 +5,27 @@ all:
 ifdef $DAIKONCLASS_SOURCES
 	$(MAKE) -C java
 endif
-# This ought to check the output of /bin/arch as well:  it needs x86.
-ifeq (Linux,$(shell uname))
+ifeq (Linux i686,$(shell uname -sm))
 	$(MAKE) kvasir
+else
+ifeq (Linux i586,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+ifeq (Linux i486,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+ifeq (Linux i386,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+ifeq (Linux x86_64,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+	@echo "Not building Kvasir: it's only for Linux x86 and x86-64"
+	@echo "and this appears to be" `uname -sm`
+endif
+endif
+endif
+endif
 endif
 
 clean:
