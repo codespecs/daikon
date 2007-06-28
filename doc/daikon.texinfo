@@ -156,6 +156,7 @@ Detecting invariants in Java programs
 Detecting invariants in C/C++ programs
 
 * C examples::                  
+* Using DynComp with C programs::  
 * Dealing with large examples::  
 
 Detecting invariants in Perl programs
@@ -193,6 +194,7 @@ Enhancing Daikon output
 * Configuration options::       
 * Conditional invariants::      
 * Enhancing conditional invariant detection::  
+* Dynamic abstract type inference (DynComp)::  
 * Loop invariants::             
 
 Configuration options
@@ -1140,10 +1142,11 @@ documentation on its command-line options, see @ref{Kvasir}.
 
 @menu
 * C examples::                  
+* Using DynComp with C programs::  
 * Dealing with large examples::  
 @end menu
 
-@node    C examples, Dealing with large examples, Detecting invariants in C/C++ programs, Detecting invariants in C/C++ programs
+@node    C examples, Using DynComp with C programs, Detecting invariants in C/C++ programs, Detecting invariants in C/C++ programs
 @subsection C examples
 
 The Daikon distribution comes with several example C programs in the
@@ -1234,16 +1237,58 @@ For help understanding the invariants, see @ref{Interpreting output}.
 
 @end enumerate
 
+@node Using DynComp with C programs, Dealing with large examples, C examples, Detecting invariants in C/C++ programs
+@subsection Using DynComp with C programs
 
-@node    Dealing with large examples,  , C examples, Detecting invariants in C/C++ programs
+Optionally, the DynComp tool can be used along with Kvasir and Daikon.
+DynComp uses a dynamic analysis to infer which program variables can
+meaningfully be used together; Daikon can then use this information to
+restrict the invariants it considers, potentially improving both its
+performance and the usefulness of its results.
+
+DynComp is enabled as an extra mode of Kvasir; when running with DynComp
+enabled, Kvasir produces two output files instead of one: in addition to
+a @file{.dtrace} file containing a trace of a particular execution, the
+information about what variables and functions exist in a program, along
+with information grouping the variables into abstract types, is stored
+in a file with the extension @file{.decls}. Both of these files must be
+supplied to Daikon.
+
+For instance, to repeat the wordplay example with DynComp, first rerun
+@command{kvasir-dtrace} giving it the option @option{--with-dyncomp}:
+
+@example
+kvasir-dtrace --with-dyncomp \
+   ./wordplay -f words.txt 'daikon dynamic invariant detector'
+@end example
+
+Then, supply the @file{.decls} file when invoking Daikon:
+
+@example
+java daikon.Daikon \
+     --config_option daikon.derive.Derivation.disable_derived_variables=true \
+     daikon-output/wordplay.decls daikon-output/wordplay.dtrace
+@end example
+
+For instance, one effect of DynComp that can be seen in the wordplay
+example concerns the global variables @code{largestlet},
+@code{rec_anag_count}, @code{adjacentdups}, @code{specfirstword},
+@code{maxdepthspec}, and @code{silent}.
+These variables are all 0 in the sample execution (for instance, several
+of them correspond to command-line options that are not enabled), so
+without DynComp, Daikon gives the invariants that they are all equal.
+However, DynComp's analysis finds that the variables are of different
+abstract types, so it is not meaningful to compare them.
+When DynComp information is provided, Daikon instead gives separate
+invariants about the value of each variable.
+
+@node    Dealing with large examples,  , Using DynComp with C programs, Detecting invariants in C/C++ programs
 @subsection Dealing with large examples
 
 Since the default memory size used by Java virtual machines varies, we
 suggest that Daikon be run with at least 256 megabytes of
 memory (and perhaps much more), specified for many JVMs by the option @option{-Xmx256m}.
-(The schedule example uses even more space: we suggest specifying
-@option{-Xmx768m}, and avoiding the example altogether unless your
-workstation has at least a gigabyte of physical memory.)  For more
+For more
 information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
@@ -1252,14 +1297,15 @@ compress its output dtrace files.
 @c ; see @ref{dfec runtime customization}.
 
 In some cases, the time and space requirements of the examples can be
-reduced by reducing the length of the program run.  For instance, when
-the test.sh script contains many invocations of the program, some can
-be commented out.  The Rijndael example includes preprocessor
-definitions at the top of the @file{rijndaeltest-ref.c} that control
-how many iterations are performed.  However, Daikon's running time
+reduced by reducing the length of the program run.
+However, Daikon's running time
 depends on both the length of the test run and the size of the program
 (especially in its use of global variables and nested data
-structures).  For more techniques for using Daikon with large programs
+structures).
+The examples also demonstrate disabling derived variables, which
+significantly improves Daikon's performance at the cost of producing
+fewer invariants.
+For more techniques for using Daikon with large programs
 and long program runs, see @ref{Large dtrace files}.
 
 
@@ -2446,6 +2492,7 @@ This filter is only useful for ESC output.
 * Configuration options::       
 * Conditional invariants::      
 * Enhancing conditional invariant detection::  
+* Dynamic abstract type inference (DynComp)::  
 * Loop invariants::             
 @end menu
 
@@ -2471,7 +2518,7 @@ Daikon's sources, you must extract the example from
 @file{daikon.jar} to read it.)
 
 You can also control Daikon's output via its command-line options
-(@pxref{Running Daikon}) and vis the command-line options to its front
+(@pxref{Running Daikon}) and via the command-line options to its front
 ends such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
 options}).
 
@@ -2823,7 +2870,7 @@ PPT_NAME  simpleStack.isEmpty
 currentSize == 0
 @end smallexample
 
-@node    Enhancing conditional invariant detection, Loop invariants, Conditional invariants, Enhancing Daikon output
+@node    Enhancing conditional invariant detection, Dynamic abstract type inference (DynComp), Conditional invariants, Enhancing Daikon output
 @section Enhancing conditional invariant detection
 
 The built-in mechanisms (@pxref{Conditional invariants}) have
@@ -3006,9 +3053,42 @@ of the samples but not over the entire data set.
 
 @end table
 
+@node Dynamic abstract type inference (DynComp), Loop invariants, Enhancing conditional invariant detection, Enhancing Daikon output
+@section Dynamic abstract type inference (DynComp)
 
+Abstract types group variables that are used for related purposes in a
+program.
+Abstract types can be provided as additional input to Daikon, so that it
+only infers invariants between values of the same abstract type.
+This can improve Daikon's performance, because it reduces the number of
+potential invariants that must be checked, and also improve the
+relevance of its output, since invariants over unrelated variables are
+superfluous for many tasks.
+The Daikon distribution includes a tool named DynComp that dynamically
+infers abstract types (also called comparability types) from program
+executions.
+(In fact, there are two implementations of DynComp that use the same
+algorithm, one for Java programs and one for binaries compiled from C
+and C++ source code.
+When confusion would otherwise arise, we distinguish them as DynCompJ
+and DynCompB respectively.)
 
-@node    Loop invariants,  , Enhancing conditional invariant detection, Enhancing Daikon output
+Because abstract type inference must be performed before Daikon runs, it
+is integrated with the front-ends rather than directly as part of
+Daikon.
+The Java DynComp tool produces a comparability file that must then be
+supplied to the Chicory Java front-end.
+The Kvasir front-end for C/C++ binaries has a DynComp mode in which it
+produces a separate @file{.decls} file containing comparability
+information, which must be supplied to Daikon along with the
+@file{.dtrace} file.
+For examples of using DynComp with Java and C programs, see @ref{Using
+DynComp with Daikon} and @ref{Using DynComp with C programs}
+respectively.
+For full details about the DynComp tools for Java and C/C++, see
+@ref{Java DynComp} and @ref{DynComp dynamic comparability analysis}.
+
+@node    Loop invariants,  , Dynamic abstract type inference (DynComp), Enhancing Daikon output
 @section Loop invariants
 
 @cindex loop invariants
@@ -3822,7 +3902,7 @@ You can also run Daikon without creating an intermediate data trace
 file; see @ref{Online execution}.
 
 For information about installing Kvasir, see @ref{Installing Kvasir}.
-Kvasir only works under Linux running on an x86 processor; for full
+Kvasir only works under Linux running on an x86 or x86-64 processor; for full
 details, see @ref{Kvasir limitations}.
 For information about how to create an instrumenter for C that works on
 non-Linux or non-x86 platforms, see @ref{Instrumenting C
@@ -4140,13 +4220,21 @@ of pointer fields which all refer to one element.
 @item --with-dyncomp
 
 Run Kvasir with the DynComp dynamic
-comparability analysis tool to generate .decls files with variable
-comparability information in the format specified in the @ref{Program
-point declarations} section.  Variable comparability information can
-speed up the performance of Daikon and allow it to generate a more
-focused and relevant set of invariants.  This option may be used
-concurrently with @option{--decls-only} to only generate a .decls file
-without .dtrace.
+comparability analysis tool to determine which variables have the same
+abstract type.
+Variable comparability information can
+improve the performance of Daikon and allow it to generate a more
+focused and relevant set of invariants.
+Because it is not available until the end of execution, comparability
+information is always written to a separate @file{.decls} file (in the
+format specified in the @ref{Program point declarations} section), as if
+the @option{--decls-file} option had been specified
+(@option{--decls-file} can still be used to control the name of the
+file).
+This file must be provided to Daikon along with the @file{.dtrace}
+file.
+This option may also be used with @option{--decls-only} to only generate
+a @file{.decls} file without a @file{.dtrace}.
 
 @item --no-dyncomp-gc
 
@@ -5179,7 +5267,7 @@ previous run.
 @c Kvasir is the recommended C/C++ front end for use on Linux/x86.
 The source
 code for Kvasir is included in the main Daikon distribution, and is
-compiled by default on Linux/x86 based systems.
+compiled by default on Linux/x86 and Linux/x86-64 systems.
 
 To compile and install Kvasir, give the command @command{make kvasir}
 from the top-level Daikon directory:
@@ -5213,21 +5301,31 @@ from debugging information included in the executable in a standard
 format (DWARF-2).
 
 @cindex AMD64 architecture, and Kvasir
+@cindex Intel 64 architecture, and Kvasir
+@cindex IA-32e architecture, and Kvasir
+@cindex EM64T architecture, and Kvasir
 @cindex 64-bit AMD64 architecture, and Kvasir
-@cindex Kvasir, doesn't work on 64-bit architecture
 
 However, Kvasir has some limitations of its own.  Because Kvasir uses
-Valgrind, it shares Valgrind's limitation of working only under the
-Linux operating system, and only on Intel 386-compatible processors
+Valgrind, it shares Valgrind's processor and operating system limitations.
+Furthermore, of the platforms supported by Valgrind, the only ones
+currently supported by Kvasir are @code{x86-linux} and
+@code{amd64-linux}.
+@code{x86-linux} refers to Intel 386-compatible processors
 (the so-called IA-32 architecture) such as the Intel Pentium and the
-AMD Athlon.  (Kvasir only works on 32-bit binaries.
-Furthermore, it must be compiled in 32-bit mode; if you want to compile
-Kvasir on a 64-bit machine, try adding the flag "--enable-only32bit" to
-the Valgrind configure line (as of August 2006, this is line 21 of the
-top-level Makefile).)
-Furthermore, Kvasir requires that your program have debugging
+AMD Athlon, running Linux.
+@code{amd64-linux} refers to the 64-bit extension of the x86
+architecture found in many newer Intel and AMD processors, also
+variously referred to as x86-64, IA-32e, EM64T, and Intel 64, when
+running under a Linux kernel in 64-bit mode.
+The Itanium or IA-64 architecture is not supported.
+The Kvasir build process will automatically compile a 32-bit version, a
+64-bit version, or both, whichever are supported by your system's
+default compiler.
+
+Kvasir requires that your program have debugging
 information available in the DWARF-2 format, as produced by GCC version
-3 and later.  Furthermore, the programs used by Kvasir should be
+3 and later.  For the best results, the programs used by Kvasir should be
 compiled without optimization.
 
 This subsection lists some of the known limitations of the
@@ -5264,14 +5362,6 @@ versions can lead to incorrect output and, in some cases for version
 2.95, can cause Kvasir to crash.
 
 @item
-On some platforms (including, as of December 2004, recent versions of
-Debian), Kvasir crashes if run on statically-linked binaries.  To avoid
-this problem, do not use the @option{-static} flag when linking programs
-for use Kvasir.  If you want to link statically with a particular
-library, supply the path to its static version (@file{libfoo.a})
-directly to GCC instead.
-
-@item
 Kvasir is incompatible with some compiler optimizations.  It is
 definitely incompatible with the @option{-fomit-frame-pointer}
 optimization, and it may have trouble with other optimizations as
@@ -5283,7 +5373,7 @@ Kvasir always prints the contents of structures according to their
 compile-time type.  Programs that use generic pointers and structural
 equivalence to simulate object-orientation will have derived-class
 fields missing when a structure is passed via a base-class pointer.
-This limitation can now be overcome by manually coercing a pointer to a
+This limitation can be worked around by manually coercing a pointer to a
 particular type (@pxref{Pointer type coercion}).
 
 @end itemize
@@ -5301,7 +5391,8 @@ In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
 is also a source-based C/C++ front end, Mangel-Wurzel.  Unlike Kvasir, which
 runs only on Linux/x86 platforms, Mangel-Wurzel will run on nearly any
 Unix platform, as well as on Windows (with the Microsoft Visual C/C++
-compiler).  If you have access to a Linux/x86 platform, we recommend use
+compiler).  If you have access to a Linux/x86 platform (32 or 64-bit),
+we recommend use
 of Kvasir.  Mangel-Wurzel is missing a few features of Kvasir; for
 instance, Mangel-Wurzel outputs fewer variables.  Mangel-Wurzel requires
 the source code for your program, and it also requires the Purify

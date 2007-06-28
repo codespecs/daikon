@@ -29,6 +29,19 @@ Daikon
     Distributed .jar and .class files are now runnable on a Java 5 (aka
     Java 1.5) JVM, rather than requiring Java 6.
 
+Kvasir
+
+  Portability
+
+    Kvasir now runs on x86-64/Linux platforms: i.e., AMD64 and Intel
+    64 (aka EM64T or IA32e) processors running Linux in 64-bit mode.
+
+    We have copied into Kvasir a fix from the Valgrind development
+    tree to allow Kvasir to compile on systems where gcc uses
+    -fstack-protector by default, such as some recent Ubuntu
+    systems. (The symptom of the problem is a linking failure
+    mentioning '__stack_chk_fail'.)
+
 -------------------------------------------------
 
 4.2.16 (May 1, 2007)
