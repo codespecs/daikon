@@ -148,7 +148,9 @@ Example usage for Java, C/C++, and Perl
 Detecting invariants in Java programs
 
 * StackAr example::             
+* Using DynComp with Daikon::   
 * Understanding the invariants::  
+* Understanding DynComp::       
 * Second Java example::         
 
 Detecting invariants in C/C++ programs
@@ -794,7 +796,9 @@ and the Daikon output is written to the terminal.
 
 @menu
 * StackAr example::             
+* Using DynComp with Daikon::   
 * Understanding the invariants::  
+* Understanding DynComp::       
 * Second Java example::         
 @end menu
 
@@ -823,7 +827,7 @@ and the Daikon output is written to the terminal.
 @c For brief troubleshooting information, see @ref{Eclipse plug-in problems}.
 
 
-@node    StackAr example, Understanding the invariants, Detecting invariants in Java programs, Detecting invariants in Java programs
+@node    StackAr example, Using DynComp with Daikon, Detecting invariants in Java programs, Detecting invariants in Java programs
 @subsection StackAr example
 
 The Daikon distribution contains some sample programs that will help
@@ -926,7 +930,54 @@ For more information about the Annotate program, see @ref{Annotate}.
 @end enumerate
 
 
-@node    Understanding the invariants, Second Java example, StackAr example, Detecting invariants in Java programs
+@node    Using DynComp with Daikon, Understanding the invariants, StackAr example, Detecting invariants in Java programs
+@subsection Using DynComp with Daikon
+
+DynComp can help to filter Daikon's output by omitting invariants
+involving unrelated variables (see @ref{Java DynComp}). To do so, run
+DynComp on the target program first, then pass the resulting
+@file{.decls} file to Chicory. The process would be as follows:
+
+@enumerate
+@item
+Compile the program with the @option{-g} switch to enable debugging
+symbols.  (The program and test suite appear in the
+@file{DataStructures} subdirectory directory.)
+@example
+cd examples/java-examples/StackAr
+javac -g DataStructures/*.java
+@end example
+
+@item
+Run the program with DynComp to generate comparability information. You
+should produce an instrumented version of the JDK first (see
+@ref{Instrumenting the JDK with DynComp}). By default, comparability
+information is written to @file{StackArTester.decls-DynComp}.
+
+@example
+java daikon.DynComp DataStructures.StackArTester
+@end example
+
+@item
+Run the program under the control of the Chicory front end, including
+comparability information. Pass the information to Daikon, print the
+inferred invariants, and write a binary representation of the invariants
+to @file{StackArTester.inv.gz}. Note that this runs the target program
+for a second time.
+
+@example
+java daikon.Chicory --daikon \
+     --comparability-file=StackArTester.decls-DynComp \
+     DataStructures.StackArTester
+@end example
+
+@end enumerate
+
+You could split the third step into multiple steps, as described above,
+to gain more control over the invariant detection process.
+
+
+@node    Understanding the invariants, Understanding DynComp, Using DynComp with Daikon, Detecting invariants in Java programs
 @subsection Understanding the invariants
 
 This section examines some of the invariants for the StackAr example.
@@ -993,7 +1044,45 @@ modified by this method --- this method is an ``observer''.  The
 last invariant is not particularly interesting.
 
 
-@node    Second Java example,  , Understanding the invariants, Detecting invariants in Java programs
+@node    Understanding DynComp, Second Java example, Understanding the invariants, Detecting invariants in Java programs
+@subsection Understanding DynComp
+
+To get a sense of how DynComp helps eliminate uninteresting output, take
+a look at the invariants for the exit point at line 32 of the
+@code{createItem(int)} method.
+
+@example
+======================================================================
+DataStructures.StackArTester.createItem(int):::EXIT32
+this.phase == 4
+return.getClass() == int[].class
+this.s.topOfStack < orig(i)
+this.phase < orig(i)
+this.phase != size(this.s.theArray[])
+this.maxPhase < orig(i)
+======================================================================
+@end example
+
+The value of @code{phase} is always less than the value of
+@code{i}. While this is true for the observed executions, it is not a
+helpful invariant, since @code{phase} and @code{i} represent different
+abstract types; @code{i} is a number to be pushed onto the stack, while
+@code{phase} is used for program flow control. Although they are both
+@code{int}s, comparing the two is not meaningful, so this invariant,
+among others, is omitted from the output when Daikon is run with
+DynComp.
+
+@example
+======================================================================
+DataStructures.StackArTester.createItem(int):::EXIT32
+this.phase == 4
+return.getClass() == int[].class
+this.s.topOfStack < orig(i)
+======================================================================
+@end example
+
+
+@node    Second Java example,  , Understanding DynComp, Detecting invariants in Java programs
 @subsection A second Java example
 
 A second example is located in the @file{examples/java-examples/QueueAr} subdirectory.
@@ -3467,11 +3556,14 @@ java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
 @end example
 @noindent
 This runs your program and creates the file @file{MyClass.decls-DynComp}
-in the current directory. This decl file may be passed to Chicory using
-its @option{--comparability-file} switch (see @ref{Chicory options}); the
-comparability information will be incorporated into Chicory's
-output. DynComp also creates @file{MyClass.txt-cset}, which contains the
-same information in an easier-to-read format.
+in the current directory. DynComp also creates @file{MyClass.txt-cset},
+which contains the same information in an easier-to-read format. The
+@file{.decls} file may be passed to Chicory, as described in @ref{Using
+DynComp with Daikon}.
+@example
+java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
+     mypackage.MyClass arg1 arg2 arg3
+@end example
 
 See below for more options.
 
