@@ -5,6 +5,7 @@ all:
 ifdef $DAIKONCLASS_SOURCES
 	$(MAKE) -C java
 endif
+	$(MAKE) java/dcomp_rt.jar
 ifeq (Linux i686,$(shell uname -sm))
 	$(MAKE) kvasir
 else
@@ -34,6 +35,9 @@ ifdef $DAIKONCLASS_SOURCES
 	$(MAKE) -C java clean
 endif
 	$(MAKE) -C kvasir/valgrind clean
+
+java/dcomp_rt.jar:
+	$(MAKE) -C java dcomp_rt.jar
 
 kvasir:
 	cd kvasir/valgrind && ./configure --prefix=`pwd`/../inst
