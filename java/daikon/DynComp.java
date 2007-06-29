@@ -49,7 +49,7 @@ public class DynComp {
   public static boolean no_jdk = false;
 
   @Option("jar file containing an instrumented JDK")
-  public static File rt_file = new File("dcomp_rt.jar");
+  public static File rt_file = null;
 
   @Option("use standard visibility")
   public static boolean std_visibility = false;
@@ -125,8 +125,9 @@ public class DynComp {
       options.print_usage ("target program must be specified");
       return (false);
     }
-    if (!no_jdk && (rt_file == null || !rt_file.exists())) {
-      options.print_usage ("rt-file does not exist");
+    if (!no_jdk && rt_file != null && !rt_file.exists()) {
+      // if --rt-file was given, but doesn't exist
+      options.print_usage ("specified rt-file does not exist");
       return (false);
     }
 
@@ -194,6 +195,45 @@ public class DynComp {
       System.err.printf ("Use the --premain switch to specify its location\n");
       System.err.printf ("or change your classpath to include it\n");
       System.exit (1);
+    }
+
+
+    // Look for rt-file
+    if (!no_jdk) {
+      // Look for dcomp_rt.jar along the classpath
+      if (rt_file == null)
+      {
+        String[] cpath = cp.split(separator);
+        for (String path : cpath)
+        {
+          File poss_rt = new File(path, "dcomp_rt.jar");
+          if (poss_rt.canRead())
+            rt_file = poss_rt;
+        }
+      }
+
+      // If not on the classpath look in $(DAIKONDIR)/java
+      if (rt_file == null) {
+        String daikon_dir = System.getenv ("DAIKONDIR");
+        if (daikon_dir != null) {
+          String file_separator = System.getProperty ("file.separator");
+          File poss_rt = new File (daikon_dir + file_separator + "java",
+                                   "dcomp_rt.jar");
+          if (poss_rt.canRead())
+            rt_file = poss_rt;
+        }
+      }
+
+      // If we didn't find a rt-file, give up
+      if (rt_file == null) {
+        System.err.printf ("Can't find dcomp_rt.jar on the classpath "
+                           + "or in $DAIKONDIR/java\n");
+        System.err.printf ("Use the --rt-file switch to specify its location, "
+                           + "or change your classpath to include it\n");
+        System.err.printf ("See Daikon manual, section \"Instrumenting the "
+                           + "JDK with DynComp\" for help\n");
+        System.exit (1);
+      }
     }
 
 
