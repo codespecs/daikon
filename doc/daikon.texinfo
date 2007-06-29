@@ -249,6 +249,11 @@ DynComp dynamic comparability analysis for Java
 * Java DynComp options::        
 * DynComp known bugs::          
 
+Instrumenting the JDK with DynComp
+
+* Instrumenting the JDK using make::  
+* Instrumenting the JDK manually::  
+
 C/C++ front end Kvasir
 
 * Using Kvasir::                
@@ -984,8 +989,9 @@ java daikon.Chicory --daikon \
 
 @end enumerate
 
-You could split the third step into multiple steps, as described above,
-to gain more control over the invariant detection process.
+You could split the third step into multiple steps, as described in
+@ref{StackAr example}, to gain more control over the invariant detection
+process.
 
 
 @node    Understanding the invariants, Understanding DynComp, Using DynComp with Daikon, Detecting invariants in Java programs
@@ -3744,40 +3750,70 @@ and so is not comparable to the other variables.
 @node Instrumenting the JDK with DynComp, Java DynComp options, Java DynComp, Java DynComp
 @subsection Instrumenting the JDK with DynComp
 
+@menu
+* Instrumenting the JDK using make::  
+* Instrumenting the JDK manually::  
+@end menu
+
+If you did not already do so when installing Daikon (in
+@ref{Installation steps}), follow the instructions here to build an
+instrumented copy of the JDK.
+
+@node Instrumenting the JDK using make, Instrumenting the JDK manually, Instrumenting the JDK with DynComp, Instrumenting the JDK with DynComp
+@subsubsection Using @command{make}
+
 The BuildJDK tool creates an instrumented copy of the JDK. To use
-BuildJDK, use the following command:
+BuildJDK, use the following command in @file{$DAIKONDIR}:
 
 @example
-java daikon.dcomp.BuildJDK @var{original-rt-jar} @var{output-dir}
+make -C java dcomp_rt.jar
 @end example
 
-@noindent where @var{original-rt-jar} is the @file{rt.jar} file included 
-with the JDK. It is likely located at
-@file{@var{path-to-jdk}/jre/lib/rt.jar}. Then, create a new jar file:
+@noindent
+Make sure the @code{JDKDIR} environment variable is set to the directory
+containing your JDK. This command instruments the classes in the
+@file{rt.jar} file of the JDK, and creates a new file,
+@file{dcomp_rt.jar}, in the @file{java} directory.
 
-@example
-jar cmf @var{output-dir}/META-INF/MANIFEST.MF @var{out-file} -C @var{output-dir}
-@end example
-
-@noindent The resulting jar file should be specified as the instrumented JDK when running DynComp:
-
-@example
-java daikon.DynComp --rt-file=@var{out-file} MyClass args
-@end example
-
-@noindent Note: this will place both @var{out-file} and your current classpath
-on the boot classpath for DynComp's execution.
-
-BuildJDK requires 20-40 minutes to complete; regular progress indicators
-are printed to standard output. If you encounter
-@code{OutOfMemoryError}s, increase the maximum heap size using Java's
-@option{-Xmx} option. BuildJDK requires about 1024 MB of heap space.
+BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
+memory. Regular progress indicators are printed to standard output.
 
 There is a small number of methods in the JDK that DynComp is currently
 unable to instrument. The names of these methods will be printed at the
 end of instrumentation. A list of all classes processed, including those
 that could not be instrumented, is created at
 @file{@var{output-dir}/java/lang/jdk_classes.txt}.
+
+@node Instrumenting the JDK manually,  , Instrumenting the JDK using make, Instrumenting the JDK with DynComp
+@subsubsection Manually
+
+Alternatively, you can perform these steps manually in the @file{java}
+directory, without the aid of @command{make}.
+
+@example
+java daikon.dcomp.BuildJDK @var{original-rt-jar} @var{output-dir}
+@end example
+
+@noindent where @var{original-rt-jar} is the @file{rt.jar} file included 
+with the JDK. It is likely located at @file{$JDKDIR/jre/lib/rt.jar}. If
+you encounter @code{OutOfMemoryError}s, increase the maximum heap size
+using Java's @option{-Xmx} option. BuildJDK requires about 1024 MB of
+heap space. Then, create a new jar file:
+
+@example
+jar cmf @var{output-dir}/META-INF/MANIFEST.MF dcomp_rt.jar -C @var{output-dir}
+@end example
+
+@noindent If you choose a filename for the output file other than
+@file{dcomp_rt.jar}, then you must specify the new name on the command
+line when running DynComp:
+
+@example
+java daikon.DynComp --rt-file=@var{out-file} MyClass args
+@end example
+
+@noindent Note: both @file{dcomp_rt.jar} and your current classpath are placed
+on the boot classpath for DynComp's execution.
 
 @node Java DynComp options, DynComp known bugs, Instrumenting the JDK with DynComp, Java DynComp
 @subsection DynComp options
@@ -3850,14 +3886,15 @@ conjunction with @option{--ppt-select-pattern}. If a program point
 matches both a select pattern and an omit pattern, it is omitted.
 
 @item --no-jdk
-When this switch is on, DynComp runs with an uninstrumented JDK. When it
-is omitted, the instrumented JDK specified by @option{--rt-file} is used.
+When this switch is on, DynComp runs with an uninstrumented JDK, and the
+@option{--rt-file} switch is ignored.
 
 @item --rt-file
 Specifies the location of the instrumented JDK (see @ref{Instrumenting
-the JDK with DynComp}). Defaults to @file{dcomp_rt.jar}. Both this file
-and the current classpath are placed on the boot classpath for DynComp's
-execution.
+the JDK with DynComp}). If @option{--rt-file} is not specified, DynComp
+will search for a file named @file{dcomp_rt.jar} along the classpath,
+and in @file{$DAIKONDIR/java}. Both this file and the current classpath
+are placed on the boot classpath for DynComp's execution.
 
 @item --std-visibility
 When this switch is on, DynComp traverses exactly those fields that are
