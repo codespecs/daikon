@@ -100,7 +100,7 @@ It describes Daikon version 4.2.15, released March 31, 2007.
 * Running Daikon::              
 * Daikon output::               
 * Enhancing Daikon output::     
-* Front ends::                  
+* Front ends (instrumentation)::  
 * Tools::                       
 * Troubleshooting::             
 * Details::                     
@@ -223,7 +223,7 @@ Enhancing conditional invariant detection
 * Cluster analysis for splitters::  
 * Random selection for splitters::  
 
-Front ends
+Front ends (instrumentation)
 
 * Chicory::                     
 * Java DynComp::                
@@ -493,7 +493,7 @@ can be downloaded separately from
 @file{daikon.jar} on your classpath so that Java can find it.  You are
 now ready to use Daikon!
 
-Here are a few additional details.  You must have a Java 5.0 (or later)
+There are two additional requirements.  You must have a Java 5.0 (or later)
 JVM (@uref{http://java.sun.com,, Java Virtual Machine}).  The
 @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
@@ -632,7 +632,7 @@ and then click Properties; click the Advanced tab; click Environment
 variables), but that only reduces the number of steps you have to do for
 each shell from 3 (two variables plus running the @file{daikonenv.bat}
 file) to 1 (running the @file{daikonenv.bat} file).
-Query to users:  is there a good way to make the batch file get run
+Query to Windows users:  is there a good way to make the batch file get run
 automatically for each command shell?  If so, we'll put the answer here.
 
 @end itemize
@@ -646,8 +646,17 @@ You can examine the appropriate Daikon environment file to learn of
 other variables you can customize.
 
 @item
-Optionally, build various executables used by Daikon, such as the
-C/C++ front end Kvasir (@pxref{Installing Kvasir}).
+Optionally, run
+@example
+cd $DAIKONDIR
+make
+@end example
+to build various executables used by Daikon, such as the
+C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
+JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
+Note that running this make command may take 20 minutes or more,
+depending on your computer.
+
 Optionally, download other executables, such as the source-based C front
 end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 
@@ -766,7 +775,7 @@ Often, you can run a single command that performs both steps.
 
 This section briefly describes how to obtain data traces for Java, C,
 and Perl programs, and how to run Daikon.  For detailed information about
-these and other front ends that are available for Daikon, @ref{Front ends}.
+these and other front ends that are available for Daikon, @ref{Front ends (instrumentation)}.
 
 @menu
 * Detecting invariants in Java programs::  
@@ -1126,8 +1135,9 @@ java daikon.Daikon QueueArTester.dtrace.gz
 @section Detecting invariants in C/C++ programs
 
 In order to detect invariants over C or C++ programs, you must first install
-a C/C++ front end.  You can choose Kvasir (@pxref{Installing Kvasir}) or
-Mangel-Wurzel (@pxref{Mangel-Wurzel}).  This section gives examples
+a C/C++ front end (instrumenter).  You can choose Kvasir (@pxref{Kvasir}) or 
+Mangel-Wurzel (@pxref{Mangel-Wurzel}).  We recommend the use of Kvasir, and
+this section gives examples
 using Kvasir.
 
 To use the C/C++ front end Kvasir with your program, first make sure that
@@ -1493,6 +1503,14 @@ were declared, but since every stand-alone program uses the
 
 @node    Running Daikon, Daikon output, Example usage, Top
 @chapter Running Daikon
+
+This section describes how to run Daikon on a data trace
+(@file{.dtrace}) file, and describes Daikon's command-line options.
+This section assumes you have already run a front end (e.g., an
+instrumenter) to produce a @file{.dtrace} file (and optionally
+@file{.decl} and @file{.spinfo} files); to learn more about that
+process, @pxref{Example usage}, and @pxref{Front ends (instrumentation)}.
+
 
 Run the Daikon invariant detector via the command
 @example
@@ -2485,7 +2503,7 @@ This filter is only useful for ESC output.
 @end itemize
 
 
-@node    Enhancing Daikon output, Front ends, Daikon output, Top
+@node    Enhancing Daikon output, Front ends (instrumentation), Daikon output, Top
 @chapter Enhancing Daikon output
 
 @menu
@@ -3108,19 +3126,22 @@ properties that held at the call site.
 
 
 
-@node    Front ends, Tools, Enhancing Daikon output, Top
-@chapter Front ends
+@node    Front ends (instrumentation), Tools, Enhancing Daikon output, Top
+@chapter Front ends (instrumentation)
 
 @cindex front end
+@cindex instrumentation
 
 The Daikon invariant detector is a machine learning tool that finds
 patterns (invariants) in data.  That data can come from any source, but
 Daikon is typically used to find invariants over variable values in
 running programs.  A front end is a tool that converts data from some
-other format into Daikon's input format; for instance, a front end might
-cause a program to output a @file{.dtrace} file that Daikon can process.
+other format into Daikon's input format.  The most common type of front
+end is an instrumenter, which causes your program to output a
+@file{.dtrace} file that Daikon can process.
 
-This chapter describes several front ends that are part of Daikon.  It
+This chapter describes several front ends (instrumenters) that are part
+of Daikon.  It
 is relatively easy to build your own front end, if these do not serve
 your purpose; we are aware of a number of users who have done so.  For
 more information about building a new front end, see @ref{New front
@@ -3137,12 +3158,13 @@ ends,,,./developer,Daikon Developer Manual}.
 * Other front ends::            
 @end menu
 
-@node    Chicory, Java DynComp, Front ends, Front ends
+@node    Chicory, Java DynComp, Front ends (instrumentation), Front ends (instrumentation)
 @section Java front end Chicory
 
 @cindex front end for Java
 @cindex Java front end
-@cindex Chicory (Daikon front end for Java)
+@cindex instrumentation, of Java programs
+@cindex Chicory (front end for Java)
 
 The Daikon front end for Java, named Chicory, executes Java programs,
 creates data trace (@file{.dtrace}) files, and optionally runs Daikon on
@@ -3568,7 +3590,7 @@ the target program.  The size is specified in the same manner as the
 @end table
 
 
-@node Java DynComp, Kvasir, Chicory, Front ends
+@node Java DynComp, Kvasir, Chicory, Front ends (instrumentation)
 @section DynComp dynamic comparability analysis for Java
 
 @cindex DynComp, for Java
@@ -3867,12 +3889,13 @@ not accurately instrument code that uses reflection.
 @end itemize
 
 
-@node Kvasir, Mangel-Wurzel, Java DynComp, Front ends
+@node Kvasir, Mangel-Wurzel, Java DynComp, Front ends (instrumentation)
 @section C/C++ front end Kvasir
 
 @cindex Kvasir (binary front end for C)
-@cindex front end for C
+@cindex front end for C/C++
 @cindex C/C++ front end
+@cindex instrumentation, of C/C++ programs
 
 Daikon's front end for C and C++, named Kvasir, executes C and C++
 programs and creates
@@ -5383,12 +5406,13 @@ particular type (@pxref{Pointer type coercion}).
 
 
 
-@node Mangel-Wurzel, dfepl, Kvasir, Front ends
+@node Mangel-Wurzel, dfepl, Kvasir, Front ends (instrumentation)
 @section Source-based C/C++ front end Mangel-Wurzel
 
-@cindex Mangel-Wurzel (source-based front end for C)
-@cindex front end for C
-@cindex C/C++ front end
+@cindex Mangel-Wurzel (deprecated source-based front end for C)
+@cindex front end for C/C++ (deprecated)
+@cindex C/C++ front end (deprecated)
+@cindex instrumentation, of C/C++ programs (deprecated)
 
 In addition to the binary-based front end Kvasir (@ref{Kvasir}), there
 is also a source-based C/C++ front end, Mangel-Wurzel.  Unlike Kvasir, which
@@ -6208,12 +6232,13 @@ make
 
 
 
-@node dfepl, convertcsv.pl, Mangel-Wurzel, Front ends
+@node dfepl, convertcsv.pl, Mangel-Wurzel, Front ends (instrumentation)
 @section Perl front end dfepl
 
 @cindex front end for Perl
 @cindex Perl front end
-@cindex dfepl (Daikon front end for Perl)
+@cindex dfepl (front end for Perl)
+@cindex instrumentation, of Perl programs
 
 This section contains details about dfepl, the Daikon front end for
 Perl.  For a brief introduction to dfepl, see @ref{Perl examples} and
@@ -6587,7 +6612,7 @@ including external commands invoked.
 @end table
 
 
-@node convertcsv.pl, Other front ends, dfepl, Front ends
+@node convertcsv.pl, Other front ends, dfepl, Front ends (instrumentation)
 @section Comma-separated-value front end convertcsv.pl
 
 @cindex csv files
@@ -6622,7 +6647,7 @@ In a future release, the @option{--nohierarchy} option may not be necessary,
 but it should always be safe to use this option.
 
 
-@node    Other front ends,  , convertcsv.pl, Front ends
+@node    Other front ends,  , convertcsv.pl, Front ends (instrumentation)
 @section Other front ends
 
 It is relatively easy to create a Daikon front end for another language
@@ -6634,8 +6659,10 @@ Manual}.
 
 @cindex front end for IOA
 @cindex IOA front end
+@cindex instrumentation, of IOA programs
 @cindex front end for Lisp
 @cindex Lisp front end
+@cindex instrumentation, of Lisp programs
 
 A front end for the IOA programming language is distributed separately
 (see @uref{http://theory.csail.mit.edu/tds/ioa.html}).
@@ -6652,7 +6679,7 @@ Linux/x86; @pxref{Kvasir}) and
 Mangel-Wurzel (source-based, for all other platforms; @pxref{Mangel-Wurzel}).
 
 
-@node    Tools, Troubleshooting, Front ends, Top
+@node    Tools, Troubleshooting, Front ends (instrumentation), Top
 @chapter Tools for use with Daikon
 
 This chapter describes various tools that are included with the Daikon
@@ -7706,6 +7733,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 @subsection Too much output
 
 @cindex too much output from Daikon
+@cindex useless output from Daikon
 
 Sometimes, Daikon may produce a very large number of seemingly
 irrelevant properties that obscure the facts that you were hoping to
@@ -8749,10 +8777,11 @@ of, or in addition to, referencing this manual and the Daikon website
 
 @cindex file formats
 
-This chapter contains information about the file format of Daikon's input
-files.  It is of most information to those who
-wish to write a front end (@pxref{Front ends}), enabling Daikon to
-detect invariants in another programming language.
+This chapter contains information about the file format of Daikon's
+input files.  It is of most information to those who wish to write a
+front end, also known as an instrumenter (@pxref{Front ends
+(instrumentation)}), enabling Daikon to detect invariants in another
+programming language.
 
 Daikon's input is conventionally one or more @file{.dtrace} data trace
 files.  There are two basic types of records that can appear in Daikon's
