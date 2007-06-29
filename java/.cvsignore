@@ -1,9 +1,10 @@
 .classpath
-doc
-Makefile.user
 .findbugs-output
 ChicoryPremain.jar
-dcomp_premain.jar
-lookup.jar
-dcomp_rt.jar
+Makefile.user
 comparability.decls
+dcomp-rt
+dcomp_premain.jar
+dcomp_rt.jar
+doc
+lookup.jar
