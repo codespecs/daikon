@@ -3891,7 +3891,8 @@ When this switch is on, DynComp runs with an uninstrumented JDK, and the
 
 @item --rt-file
 Specifies the location of the instrumented JDK (see @ref{Instrumenting
-the JDK with DynComp}). If @option{--rt-file} is not specified, DynComp
+the JDK with DynComp}). This option is rarely necessary, because
+if @option{--rt-file} is not specified, DynComp
 will search for a file named @file{dcomp_rt.jar} along the classpath,
 and in @file{$DAIKONDIR/java}. Both this file and the current classpath
 are placed on the boot classpath for DynComp's execution.
