@@ -4256,6 +4256,11 @@ public class PptTopLevel extends Ppt {
       return ppt_name.isExitPoint();
   }
 
+  /** Is this a basic block ppt **/
+  public boolean is_basic_block() {
+    return type == PptType.BASIC_BLOCK;
+  }
+
   /** Is this a combined exit point? **/
   public boolean is_combined_exit() {
     if (type != null)
