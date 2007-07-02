@@ -453,7 +453,7 @@ Manual}), among others.  More often, users apply a programming language
 front end (also called an ``instrumenter'') to a program, causing
 executions of the program to write files in Daikon's format.  (For
 information about existing front ends, see @ref{Front
-ends,,,./daikon,Daikon User Manual}.)  When a general front end is not
+ends (instrumentation),,,./daikon,Daikon User Manual}.)  When a general front end is not
 available, it is possible to manually instrument a specific program so
 that it writes files in Daikon's format.  The resulting instrumented
 program is very similar to what an instrumenter would have created, so
