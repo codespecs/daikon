@@ -206,6 +206,8 @@ test-staged-dist: $(STAGING_DIR)
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
+	# Make sure that all of the class files are 1.5 (version 49) or earlier
+	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs check_version 49)
 	# Test the main target of the makefile
 	cd $(DISTTESTDIR)/daikon && make
 	# test basic operation (Chicory/Daikon)
