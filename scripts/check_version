@@ -1,0 +1,13 @@
+#! /bin/csh -f
+# usage <version> <classfile>
+# check that the version of the classfile is <= the specified version.
+# Used to ensure that classfiles are ok for a particular version of
+# java.  For example check_version 49 <classfile> check that the
+# classfile will run in a 1.5 JVM (1.6 classfiles are version 50)
+set version = `file $2 | sed -e 's/.*version //' | sed -e 's/[.]0$//'`
+if ($version > $1) then
+  echo $2 has version $version
+  exit -1
+else
+  exit 0
+endif

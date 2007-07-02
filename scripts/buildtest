@@ -10,4 +10,4 @@
 # 5. `cvs -d $CVS_REPOSITORY co invariants/scripts`
 # 6. `crontab $HOME/research/invariants/scripts/buildtest.crontab`
 cd $HOME/build
-exec /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --quiet --test_kvasir $*
+exec /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --quiet $*

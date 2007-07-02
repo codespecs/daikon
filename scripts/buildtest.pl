@@ -9,7 +9,10 @@
 # followng commands as user daikonbuildtest:
 #   cd $HOME/build
 #   /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --nocleanup
-# You can also run this script as any other user.
+# Make sure that . is either not in your path or at then end.  Otherwise,
+# some of the kvasir perl tests will fail trying to run the test version of
+# perl rather than the system version.  You can also run this script as 
+# any other user.
 
 use strict;
 use English;
@@ -18,9 +21,10 @@ use Cwd;
 
 # Process the command-line args
 my $usage =
-    "Usage: buildtest.pl [--quiet] [--test_kvasir] [--message=text]\n"
+    "Usage: buildtest.pl [--quiet] [--message=text]\n"
   . "                    [--rsync_location=machine:/path/invariants]\n"
-  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n";
+  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n"
+  . "                    [--skip_kvasir] [--skip_cross_checker]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # These flags permit only part of the tests to be run; good for debugging.
@@ -28,7 +32,9 @@ my $skip_daikon_build = 0;
 # When on, skip Daikon unit tests, Daikon system tests, and diff system tests
 my $skip_daikon = 0;
 # When on, test Kvasir
-my $test_kvasir = 0;
+my $test_kvasir = 1;
+# When on run daikon simple as a cross checker -- note: takes 3+ hours
+my $test_cross_checker = 1;
 # When set, get the sources by rsync from the given location, rather
 # than by CVS
 my $rsync_location;
@@ -49,6 +55,8 @@ while (scalar(@ARGV) > 0) {
     $test_kvasir = 1;
   } elsif ($arg eq "--skip_kvasir") {
     $test_kvasir = 0;
+  } elsif ($arg eq "--skip_cross_checker") {
+    $test_cross_checker = 0;
   } elsif ($arg =~ /^--rsync_location=(.*)$/) {
     $rsync_location = $1;
   } elsif ($arg =~ /^--message=(.*)$/s) {
@@ -90,6 +98,7 @@ if ($success{"daikon_checkout"}) {
   %ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
 }
 my $INV = $ENV{"INV"};
+print_log("INV = $INV\n");
 
 if (! $skip_daikon_build) {
   if ($success{"daikon_checkout"}) {
@@ -105,8 +114,9 @@ if (! $skip_daikon) {
   if ($success{"daikon_compile"}
       && $success{"tests_update"}) {
     $success{"daikon_unit_test"} = daikon_unit_test();
-    $success{"daikon_system_test"} = daikon_system_test();
-    $success{"diff_system_test"} = diff_system_test();
+    if ($success{"daikon_unit_test"}) {
+        $success{"daikon_system_test"} = daikon_system_test();
+    }
   }
 }
 
@@ -121,6 +131,10 @@ if ($test_kvasir and $success{"daikon_checkout"}) {
   if ($success{"kvasir_compile"} and $success{"daikon_compile"}) {
     $success{"kvasir_daikon_test"} = kvasir_daikon_test();
   }
+}
+
+if ($test_cross_checker and $success{"daikon_system_test"}) {
+    $success{"daikon_cross_checker"} = daikon_cross_checker();
 }
 
 # Print the output files for any steps that failed.  Output steps are
@@ -194,18 +208,13 @@ exit();
 # Check the invariants module out from CVS
 sub daikon_checkout {
   print_log("Checking out Daikon...");
+  my $cmd;
   if ($rsync_location) {
-    `rsync -e "ssh -x" -rav $rsync_location . &> daikon_checkout.out`;
+      $cmd = "rsync -e 'ssh -x' -rav $rsync_location . ";
   } else {
-    `cvs -d $CVS_REP co invariants &> daikon_checkout.out`;
+      $cmd = "cvs -d $CVS_REP co invariants ";
   }
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  } else {
-    print_log("OK\n");
-    return 1;
-  }
+  return buildtest_cmd ($cmd, "daikon_checkout.out");
 }
 
 
@@ -246,86 +255,53 @@ sub tests_update {
 # Compile daikon using javac
 sub daikon_compile {
   print_log("Compiling Daikon...");
-  `make -C $INV/java clean all_directly &> daikon_compile.out`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  } else {
-    print_log("OK\n");
-    return 1;
-  }
+  return buildtest_cmd ("make -C $INV/java clean all_directly",
+                        "daikon_compile.out");
 }
 
 
 # Run the daikon JUnit unit tests
 sub daikon_unit_test {
   print_log("Daikon unit tests...");
-  my $command = "make -C $INV/java/daikon junit-all " .
-    "&> daikon_unit_test.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  } else {
-    print_log("OK\n");
-    return 1;
-  }
+  return buildtest_cmd ("make -C $INV/java/daikon junit-all ", 
+                        "daikon_unit_test.out");
 }
 
 
 # Run the daikon system tests.  Scan the output for any nonzero
 # ".diff" filesizes.
 sub daikon_system_test {
-  # Standard test suite
-  my $TEST_SUITE = "txt-diff";
-  # Short test suites
-  #  my $TEST_SUITE = "do-print_tokens-txt-diff do-StreetNumberSet-txt-diff";
   print_log("Daikon system tests...");
 
-  my $command = "make -C $INV/tests/daikon-tests clean " .
-    "&> daikon_system_test_clean.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  my $succ = buildtest_cmd ("make -C $INV/tests/ clean", 
+                            "daikon_system_test_clean.out", "", "FAILED\n");
+  if (!$succ) { return $succ;}
+
+  my $log = "daikon_system_test.out";
 
   # Switch the two lines below if using a different RUN_JAVA variable
   # $command = "make RUN_JAVA=$RUN_JAVA $J2 -C $INV/tests/daikon-tests " .
-  $command = "make $J2 -C $INV/tests/daikon-tests " .
-    "$TEST_SUITE &> daikon_system_test.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  $succ = buildtest_cmd ("make $J2 -C $INV/tests/ diffs",
+                         $log, "", "FAILED\n");
+  if (!$succ) { return $succ; }
 
-  $command = "make -C $INV/tests/daikon-tests jml " .
-    "2>&1 | tee daikon_jml.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  # JML tests fail because JML doesn't support 1.5.  We could probably
+  # fix this by creating a 1.4 version of Quant.
+  #$succ = buildtest_cmd ("make -C $INV/tests/daikon-tests jml ", 
+  #                       $log, "", "FAILED\n");
+  #if (!$succ) { return $succ; } 
 
-  $command = "make -C $INV/tests/daikon-tests inv-checker " .
-    "2>&1 | tee daikon_inv_checker.out";
-  # TODO: Carlos, please re-enable this temporarily commented-out test.
-  # `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  $succ = buildtest_cmd ("make -C $INV/tests/daikon-tests inv-checker ", 
+                         $log, "", "FAILED\n");
+  if (!$succ) { return $succ; } 
 
-  $command = "make -C $INV/tests/daikon-tests summary " .
-    "2>&1 | tee daikon_system_test_summary.out";
-  my $result = `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  my $summary_file = "daikon_system_test_summary.out";
+  $succ = buildtest_cmd ("make -C $INV/tests/ summary ", 
+                         $summary_file);
+  if (!$succ) { return $succ; } 
 
-  foreach my $line (split /\n/,$result) {
+  open (SUM, $summary_file) or die "can't open $summary_file\n";
+  while (my $line = <SUM>) {
     next if ($line =~ /^make/);
     next if ($line =~ /^All tests succeeded.$/);
     if (!($line =~ /^0\s/)) {
@@ -343,23 +319,17 @@ sub daikon_system_test {
 sub diff_system_test {
   print_log("Diff system tests...");
 
-  my $command = "make $J2 -C $INV/tests/diff-tests " .
-    "&> diff_system_test.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  my $succ = buildtest_cmd ("make $J2 -C $INV/tests/diff-tests ", 
+                         "diff_system_test.out", "", "FAILED\n");
+  if (!$succ) { return $succ; } 
+                         
+  my $summary_file = "diff_system_test_summary.out";
+  $succ = buildtest_cmd ("make -C $INV/tests/diff-tests summary ", 
+                         $summary_file, "", "FAILED\n");
+  if (!$succ) { return $succ; } 
 
-  $command = "make -C $INV/tests/diff-tests summary " .
-    "2>&1 | tee diff_system_test_summary.out";
-  my $result = `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
-
-  foreach my $line (split /\n/,$result) {
+  open (SUM, $summary_file) or die "can't open $summary_file\n";
+  while (my $line = <SUM>) {
     next if ($line =~ /^make/);
     if (!($line =~ /^OK\s/)) {
       print_log("FAILED\n");
@@ -370,6 +340,17 @@ sub diff_system_test {
   print_log("OK\n");
   return 1;
 }
+
+# run the cross checker using daikon simple
+sub daikon_cross_checker() {
+    print_log ("Daikon cross checker...");
+
+    my $succ = buildtest_cmd ("make -C $INV/tests cross-checker-good", 
+                              "daikon_cross_checker.out");
+    return ($succ);
+}
+
+    
 
 
 sub kvasir_checkout {
@@ -390,29 +371,18 @@ sub kvasir_checkout {
 sub kvasir_compile {
   print_log("Compiling Kvasir...");
   my $log = "$DAIKONPARENT/kvasir_compile.out";
-  chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
-  qx[./configure --prefix=`pwd`/inst 2>&1 | tee -a $log];
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
-    return 0;
-  }
-  `make 2>&1 | tee -a $log`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
-    return 0;
-  }
-  `make install 2>&1 | tee -a $log`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
-    return 0;
-  } else {
-    print_log("OK\n");
-    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
-    return 1;
-  }
+  # chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
+
+  my $succ = buildtest_cmd ("cd $INV/kvasir && " .
+                            "./configure --prefix=`pwd`/inst", 
+                            $log, "", "FAILED\n");
+  if (!$succ) { return 0; }
+
+  $succ = buildtest_cmd ("cd $INV/kvasir && make", $log, "", "FAILED\n");
+  if (!$succ) { return 0; }
+
+  $succ = buildtest_cmd ("cd $INV/kvasir && make install", $log);
+  return $succ;
 }
 
 sub kvasir_regression_test {
@@ -420,23 +390,17 @@ sub kvasir_regression_test {
   my $TEST_SUITE = "nightly-summary";
   print_log("Kvasir regression tests...");
 
-  my $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE " .
-    "&> kvasir_regression_test.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  my $succ = buildtest_cmd ("make -C $INV/tests/kvasir-tests $TEST_SUITE ",
+                            "kvasir_regression_test.out", "", "FAILED\n");
+  if (!$succ) { return $succ; }
 
-  $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE-only " .
-    "2>&1 | tee kvasir_regression_test_summary.out";
-  my @results = `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  my $summary_file = "kvasir_regression_test_summary.out";
+  $succ = buildtest_cmd ("make -C $INV/tests/kvasir-tests $TEST_SUITE-only ",
+                         $summary_file, "", "FAILED\n");
+  if (!$succ) { return 0; }
 
-  foreach my $line (@results) {
+  open (SUM, $summary_file) or die "can't open $summary_file\n";
+  while (my $line = <SUM>) {
     next if ($line =~ /^make/);
     if ($line =~ /^FAILED\s/) {
       print_log("FAILED\n");
@@ -453,23 +417,17 @@ sub kvasir_daikon_test {
   my $TEST_SUITE = "nightly-summary";
   print_log("Kvasir Daikon tests...");
 
-  my $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE-w-daikon " .
-    "&> kvasir_daikon_test.out";
-  `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  my $succ = buildtest_cmd ("make -C $INV/tests/kvasir-tests "
+            . "$TEST_SUITE-w-daikon", "kvasir_daikon_test.out", "", "FAILED");
+  if (!$succ) { return $succ; }
 
-  $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE-only-w-daikon " .
-    "2>&1 | tee kvasir_daikon_test_summary.out";
-  my @results = `$command`;
-  if ($CHILD_ERROR) {
-    print_log("FAILED\n");
-    return 0;
-  }
+  my $summary_file = "kvasir_daikon_test_summary.out";
+  $succ = buildtest_cmd ("make -C $INV/tests/kvasir-tests "
+               . "$TEST_SUITE-only-w-daikon ", $summary_file, "", "FAILED\n");
+  if (!$succ) { return $succ; }
 
-  foreach my $line (@results) {
+  open (SUM, $summary_file) or die "can't open $summary_file\n";
+  while (my $line = <SUM>) {
     next if ($line =~ /^make/);
     if ($line =~ /^FAILED\s/) {
       print_log("FAILED\n");
@@ -492,6 +450,32 @@ sub print_log {
   close LOG;
 }
 
+# Executes the command in the first argument and APPENDS its results into 
+# the file in the second argument.  By default, prints 'FAILED'
+# to the log and returns 0 if the command fails and  prints 'OK' to the
+# log and returns 1 if it succeeds.  Optional 3rd and 4th arguments can specify
+# the strings to printed on success and failure respectively.
+# Note that if the cmd includes a pipe that the result is taken from
+# the status of the last item in the pipe.
+sub buildtest_cmd {
+    my ($cmd, $file, $pass, $fail) = @_;
+    if (!defined ($pass)) {
+        $pass = "OK\n";
+    }
+    if (!defined ($fail)) {
+        $fail = "FAILED\n";
+    }
+    my $full_cmd = "$cmd >>$file 2>&1";
+    # print "Executing '$full_cmd'\n";
+    my $err = system ($full_cmd);
+    if ($err) {
+        print_log($fail);
+        return 0;
+    } else {
+        print_log("$pass");
+        return 1;
+    }
+}
 
 # Source the file specified as an argument, and return the resulting
 # environment in a hash
