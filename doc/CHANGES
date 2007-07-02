@@ -22,6 +22,10 @@ Further documentation can be found in:
 
 4.3.0 (July 1, 2007)
 
+A new tool (DynComp) calculates variable comparability information
+for Java programs.  Kvasir has been enhanced to support x86-64 Linux
+platforms.
+
 Daikon
 
   Bug fixes
@@ -41,6 +45,14 @@ Kvasir
     -fstack-protector by default, such as some recent Ubuntu
     systems. (The symptom of the problem is a linking failure
     mentioning '__stack_chk_fail'.)
+
+DynComp Java
+
+  The DynComp tool for Java programs is available in this release.  This tool
+  performs dynamic type inference to determine which variables should (and
+  should not) be compared to one another when inferring invariants.  It
+  can make Daikon run faster and avoid generating irrelevant invariants.
+  See section 7.2 of the manual for more information.
 
 -------------------------------------------------
 
