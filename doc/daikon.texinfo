@@ -3870,10 +3870,9 @@ at runtime. For an example, see @ref{Variables in Chicory output}.
 @itemize
 @item
 DynComp does not correctly instrument all methods of the Object class,
-e.g., @code{clone()}.  (DynComp does instrument most uses of the
-@code{equals()} method.)  As a result, DynComp may fail
+e.g., @code{equals()} and @code{clone()}. As a result, DynComp may fail
 to recognize that two variables are related if they are compared using
-such methods.
+such methods. We expect to fix this in the next version.
 
 @item
 Reflection finds the original, uninstrumented code, and so DynComp may
