@@ -6,4 +6,4 @@ default:
 www-dist:
 	cd .. && $(MAKE) www-dist
 pag-install:
-	cd .. && $(MAKE) www-dist
+	cd .. && $(MAKE) pag-install
