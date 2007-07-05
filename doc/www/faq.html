@@ -67,14 +67,14 @@ a small set of easily comprehensible formulas.
 <p>
 The set of formulas that Daikon outputs is called an <em>operational
 abstraction</em>.  The operational abstraction states properties about a
-program's data structures -- the sort that might be written in an
+program's data structures &mdash; the sort that might be written in an
 <tt>assert</tt> statement or a formal specification.
 </p>
 
 <p>
 Here is a simple example of Daikon's output:  <a
 href="StackAr.html">StackAr.html</a>.  The colored annotations starting
-with "<font color="red"><tt>@</tt></font>" (in <a
+with &ldquo;<font color="red"><tt>@</tt></font>&rdquo; (in <a
 href="http://www.jmlspecs.org/">JML</a> format)
 were automatically detected by
 Daikon and automatically inserted in the source code.  Many other uses for
@@ -148,26 +148,26 @@ and pointers.)
 </p>
 <ul>
 <li>
-Seeing the "w >= 0" invariant, the programmer might remark, "I already knew
-that w is non-negative; that doesn't help me any."  (However, examining
+Seeing the &ldquo;w >= 0&rdquo; invariant, the programmer might remark, &ldquo;I already knew
+that w is non-negative; that doesn't help me.&rdquo;  (However, examining
 this invariant consumes little of the programmer's time.)
 </li>
 <li>
-Seeing the "x &lt; 10" invariant, the programmer might realize after a
+Seeing the &ldquo;x &lt; 10&rdquo; invariant, the programmer might realize after a
 moment's thought that the test suite is deficient:  it never manipulates
 data structures containing more than 9 elements.  This invariant has
 indicated not only a problem with the test suite, but exactly how to fix
 it.
 </li>
 <li>
-Seeing the "y = w + x" invariant, the programmer might suddenly understand
+Seeing the &ldquo;y = w + x&rdquo; invariant, the programmer might suddenly understand
 the operation of the algorithm or why certain parts of the program are
 coded in the way they are.  This can prevent long sessions of puzzlement
 over the system, and inserting the invariant as a comment can prevent
 others from going through the same confusion.
 </li>
 <li>
-Seeing the "z = 0 (mod 4)" invariant, the programmer might be confused
+Seeing the &ldquo;z = 0 (mod 4)&rdquo; invariant, the programmer might be confused
 about why z is always a multiple of 4.  The programmer has two options.
 <ol>
   <li>
@@ -180,7 +180,7 @@ The programmer can examine the program and test
   </li>
   <li>
 The other option is for the programmer not to investigate this property
-   further -- perhaps it is not directly relevant to the current task --
+   further &mdash; perhaps it is not directly relevant to the current task &mdash;
    but to be careful not to make changes that violate that property.
    Violating the property could introduce errors if other parts of the code
    depend on it.
@@ -220,8 +220,8 @@ improving test suites.
 <h2><a name="How_can_I_change_my_program...">How can I change my program to make Daikon work better?</a></h2>
 
 <p>
-Another way of stating this question is, "On what sort of programs does
-Daikon tend to perform poorly"
+Another way of stating this question is, &ldquo;On what sort of programs does
+Daikon tend to perform poorly?&rdquo;
 </p>
 
 <p>
@@ -249,8 +249,8 @@ that control what derived variables Daikon uses.
 
 <p>
 A daikon is a type of Asian radish.  Daikon is pronounced like the two
-English words die-con.  The name can be thought of as standing for "dynamic
-conjectures".
+English words die-con.  The name can be thought of as standing for &ldquo;dynamic
+conjectures&rdquo;.
 </p>
 
 
@@ -276,7 +276,7 @@ the manual.
 <p>
 If you have questions about using Daikon, first read the
 <a href="download/doc/">Daikon manual</a>, including the 
-<a href="download/doc/daikon.html#Troubleshooting">"Troubleshooting" section</a>.
+<a href="download/doc/daikon.html#Troubleshooting">&ldquo;Troubleshooting&rdquo; section</a>.
 If you have questions about modifying Daikon, also see the 
 <a href="download/doc/developer.html">Daikon developer manual</a>, the
 <a href="download/jdoc/">Javadoc comments</a>, and the
