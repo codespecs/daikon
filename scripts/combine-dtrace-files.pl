@@ -9,7 +9,6 @@ use English;
 
 my @headers;
 my %decls;                  # key is ppt name, value is array of lines
-my @decl_lines;         # lines for the currently-being-collected decl
 my @values;
 my $in_decl = 0;
 my $skipping_decl = 0;
@@ -53,6 +52,8 @@ while (<>) {
     # if get here, must be a value
     push @values, $_;
 }    
+
+# now print collected info to stdout
 
 foreach my $header (@headers) {
     print "$header";
