@@ -584,8 +584,15 @@ public final class FileIO {
       // Why can't the value be null?
       Assert.assertTrue(static_constant_value != null);
     }
-    VarComparability comparability =
-      VarComparability.parse(varcomp_format, comparability_string, prog_type);
+    VarComparability comparability = null;
+    try {
+      comparability = VarComparability.parse(varcomp_format,
+                                             comparability_string, prog_type);
+    } catch (Exception e) {
+      throw new Daikon.TerminationMessage
+        (String.format ("Error parsing comparability (%s) at line %d "
+                        + "in file %s", e, file.getLineNumber(), filename));
+    }
     // Not a call to Assert.assert in order to avoid doing the (expensive)
     // string concatenations.
     if (!VarInfo.legalFileRepType(file_rep_type)) {
