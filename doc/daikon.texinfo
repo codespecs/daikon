@@ -8981,9 +8981,6 @@ Use of the same number at different program points does not indicate any
 relationship between the variables, and a given variable may have a
 different comparability integer at different program points.
 
-If no comparability information is supplied (i.e., this line is blank), then
-the variable is considered comparable to all other variables of the same type.
-
 As an example, in the following code:
 @example
 int sum(int len, int[] a) @{
