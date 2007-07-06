@@ -711,4 +711,13 @@ public final class ProglangType
     return format();
   }
 
+  /**
+   * Returns whether or not this declared type is a function pointer
+   * Only valid if the front end marks the function pointer with the
+   * name '*func'
+   **/
+  public boolean is_function_pointer() {
+    return base.equals ("*func");
+  }
+
 }
