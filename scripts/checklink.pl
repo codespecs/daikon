@@ -386,7 +386,7 @@ sub parse_arguments ()
              'r|recursive'     => sub { $Opts{Depth} = -1
                                           if $Opts{Depth} == 0; },
              'l|location=s'    => \$Opts{Base_Location},
-             'exclude-docs=s', => \$Opts{Exclude_Docs},
+             'exclude-docs=s@', => \$Opts{Exclude_Docs},
              'exclude-redirect=s@', => \$Opts{Exclude_Redirect},
              'exclude-redirect-prefix=s@', => \$Opts{Exclude_Redirect_Prefix},
              'exclude-broken=s@', => \$Opts{Exclude_Broken},
@@ -842,8 +842,13 @@ sub in_recursion_scope ($)
 
   return undef if ($current eq $rel);     # Relative path not possible?
   return undef if ($rel =~ m|^(\.\.)?/|); # Relative path starts with ../ or /?
-  return undef if (defined($Opts{Exclude_Docs}) &&
-                   $current =~ $Opts{Exclude_Docs});
+  if (defined($Opts{Exclude_Docs})) {
+    for my $excluded_doc (@{$Opts{Exclude_Docs}}) {
+      if ($current =~ $excluded_doc) {
+        return undef;
+      }
+    }
+  }
   return 1;
 }
 
@@ -1607,6 +1612,9 @@ on how to solve this</a>.';
           'occurs.';
       } else {
         $whattodo = $todo->{$c};
+        if (! defined($whattodo)) {
+          $whattodo = 'No suggestion.';
+        }
       }
       # @@@ 303 and 307 ???
       if (defined($redirects{$u}) && ($c != 301) && ($c != 302)) {
