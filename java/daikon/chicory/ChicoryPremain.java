@@ -52,7 +52,7 @@ public class ChicoryPremain {
                                    ChicoryPremain.class);
     String[] target_args = options.parse_and_usage (agentArgs);
     if (target_args.length > 0) {
-      System.out.printf ("Unexpected arguments %s%n",
+      System.err.printf ("Unexpected ChicoryPremain arguments %s%n",
                          Arrays.toString (target_args));
       System.exit (1);
     }
@@ -89,7 +89,8 @@ public class ChicoryPremain {
 
     if (Chicory.doPurity())
       {
-        throw new RuntimeException("Executing a purity analysis is currently disabled");
+        System.err.println("Executing a purity analysis is currently disabled");
+        System.exit(1);
 
         //runPurityAnalysis(Chicory.target_program);
         //writePurityFile(Chicory.target_program + ".pure",
@@ -163,7 +164,9 @@ public class ChicoryPremain {
       }
     catch (FileNotFoundException e)
       {
-        throw new Error("Could not find file " + purityFileName, e);
+        System.err.printf("%nCould not find file %s%n", purityFileName);
+        Runtime.chicoryLoaderInstantiationError = true;
+        System.exit(1);
       }
     catch (IOException e)
       {
@@ -182,7 +185,7 @@ public class ChicoryPremain {
           }
         catch (IOException e)
           {
-            throw new Error("Error reading file " + purityFileName + ". Got exception e");
+            throw new Error("Error reading file " + purityFileName, e);
           }
 
         if (line != null) {
@@ -218,7 +221,7 @@ public class ChicoryPremain {
       }
     catch (FileNotFoundException e)
       {
-        throw new Error("Could not open " + fileName + " for writing. Got exception", e);
+        throw new Error("Could not open " + fileName + " for writing", e);
       }
 
     System.out.printf("Writing pure methods to %s%n", fileName);
@@ -318,13 +321,18 @@ public class ChicoryPremain {
       List<URL> bcel_urls = get_resource_list (bcel_classname);
       List<URL> pag_urls = get_resource_list (pag_marker_classname);
 
-      if (pag_urls.size() == 0)
-        throw new RuntimeException ("BCEL must be in the classpath."
-                                    + "Normally it is found in daikon.jar");
-      if (bcel_urls.size() < pag_urls.size())
-        throw new RuntimeException
-          (String.format ("Corrupted BCEL library, bcel %s, pag %s", bcel_urls,
-                          pag_urls));
+      if (pag_urls.size() == 0) {
+        System.err.printf("%nBCEL must be in the classpath.  "
+                           + "Normally it is found in daikon.jar .%n");
+        Runtime.chicoryLoaderInstantiationError = true;
+        System.exit(1);
+      }
+      if (bcel_urls.size() < pag_urls.size()) {
+        System.err.printf("%nCorrupted BCEL library, bcel %s, pag %s%n", bcel_urls,
+                           pag_urls);
+        Runtime.chicoryLoaderInstantiationError = true;
+        System.exit(1);
+      }
 
       // No need to do anything if only our versions of bcel are present
       if (bcel_urls.size() == pag_urls.size())
@@ -335,9 +343,12 @@ public class ChicoryPremain {
       while (bcel_index < bcel_urls.size()) {
         URL bcel = bcel_urls.get(bcel_index);
         URL pag = pag_urls.get(pag_index);
-        if (!pag.getProtocol().equals ("jar"))
-          throw new RuntimeException ("Daikon BCEL must be in jar file. "
-                                      + " Found at " + pag);
+        if (!pag.getProtocol().equals ("jar")) {
+          System.err.printf("%nDaikon BCEL must be in jar file. "
+                            + " Found at %s%n", pag);
+          Runtime.chicoryLoaderInstantiationError = true;
+          System.exit(1);
+        }
         if (same_location (bcel, pag)) {
           if (bcel_index == pag_index) {
             URL first_bcel = bcel;
@@ -347,13 +358,14 @@ public class ChicoryPremain {
               pag = (pag_index < pag_urls.size())
                 ? pag_urls.get(pag_index) : null;
             }
-            throw new RuntimeException
-              (String.format ("Daikon BCEL (%s) appears before target BCEL "
-              + "(%s). Please reorder classpath to put daikon.jar at the end",
-              first_bcel, bcel));
+            System.err.printf ("%nDaikon BCEL (%s) appears before target BCEL "
+              + "(%s).%nPlease reorder classpath to put daikon.jar at the end.%n",
+              first_bcel, bcel);
+            Runtime.chicoryLoaderInstantiationError = true;
+            System.exit(1);
           } else {
             bcel_jar = new JarFile (extract_jar_path (pag));
-            debug.log ("Daikon bcel found in jar %s%n", bcel_jar.getName());
+            debug.log ("Daikon BCEL found in jar %s%n", bcel_jar.getName());
             break;
           }
         } else { // non pag bcel found

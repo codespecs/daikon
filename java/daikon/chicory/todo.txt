@@ -5,6 +5,11 @@ When the task is complete, move it to the bottom of the file.
 
 Longer-term issues
       
+  - Add switch (--enable-globals or --enable-static-variables) to allow
+    instrumentation of static fields (Java's name for global variables).
+    Possibly have it take an argument indicating which fields to
+    include/ignore.
+
   - Add --exception switch to allow instrumentation of exceptions
 
   - Consider choosing a new file representation that would be both more

@@ -21,6 +21,9 @@ public class Runtime
     public static final boolean debug = false;
 
 
+    /** True if ChicoryPremain was unable to load. **/
+    public static boolean chicoryLoaderInstantiationError = false;
+
     /**
      * List of classes recently transformed.  This list is examined in
      * each enter/exit and the decl information for any new classes are
@@ -543,16 +546,14 @@ public class Runtime
      */
     private static void addShutdownHook()
     {
-        // Copied from daikon.Runtime
+        // Copied from daikon.Runtime, then modified
 
         java.lang.Runtime.getRuntime().addShutdownHook(new Thread()
         {
-
             public void run()
             {
                 if (!dtrace_closed)
                 {
-
                     // When the program being instrumented exits, the buffers
                     // of the "dtrace" (PrintStream) object are not flushed,
                     // so we miss the tail of the file.
@@ -560,26 +561,27 @@ public class Runtime
                     synchronized (Runtime.dtrace)
                     {
                         dtrace.println();
-                        // This lets us know we didn't lose any data.
+                        // These are for debugging, I assume. -MDE
                         for (Pattern p : ppt_omit_pattern)
                             dtrace.println ("# ppt-omit-pattern: " + p);
                         for (Pattern p : ppt_select_pattern)
                             dtrace.println ("# ppt-select-pattern: " + p);
+                        // This lets us know we didn't lose any data.
                         dtrace.println("# EOF (added by Runtime.addShutdownHook)");
                         dtrace.close();
                     }
-
-
                 }
-                if (all_classes.size() == 0)
+
+                if (chicoryLoaderInstantiationError) {
+                    // Warning messages have already been printed.
+                } else if (all_classes.size() == 0) {
                     System.out.println ("Chicory warning: No methods were "
                        + "instrumented, check the -ppt-select-pattern and "
                        + "-ppt-omit-pattern options");
-                if (printedRecords == 0)
+                } else if (printedRecords == 0) {
                     System.out.println ("Chicory Warning: "
                                         + "no records were printed");
-
-
+                }
             }
         });
     }
@@ -615,8 +617,8 @@ public class Runtime
 
         try
         {
-        err_thread.join();
-        out_thread.join();
+            err_thread.join();
+            out_thread.join();
         }
         catch(InterruptedException e)
         {

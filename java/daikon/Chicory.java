@@ -107,7 +107,7 @@ public class Chicory {
 
   /**
    * Daikon port number.  Daikon writes this to stdout when it is started
-   * in online mode
+   * in online mode.
    */
   private static int daikon_port = -1;
 
@@ -422,8 +422,9 @@ public class Chicory {
     else
       {
         // If no daikon command specified, show results and exit
-        if (result != 0)
+        if (result != 0) {
           System.out.printf ("Warning: Target exited with %d status\n", result);
+        }
         System.exit (result);
       }
   }
