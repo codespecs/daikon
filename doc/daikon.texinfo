@@ -4603,7 +4603,7 @@ y
 ..secondFileFunction()
 @end example
 
-The file format is quite straightforward.  Each section is marked by a
+The file format is straightforward.  Each section is marked by a
 special string ``@code{----SECTION----}'' on a line by itself followed
 immediately by a line that either denotes the program point name
 (formatted like how it appears in the .decls and .dtrace files) or the
