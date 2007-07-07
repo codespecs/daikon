@@ -236,6 +236,7 @@ Front ends (instrumentation)
 Java front end Chicory
 
 * Chicory options::             
+* Static fields (Global variables)::  
 
 Chicory options
 
@@ -3206,9 +3207,10 @@ with older versions of Java code.
 
 @menu
 * Chicory options::             
+* Static fields (Global variables)::  
 @end menu
 
-@node    Chicory options,  , Chicory, Chicory
+@node    Chicory options, Static fields (Global variables), Chicory, Chicory
 @subsection Chicory options
 
 Chicory is invoked as follows:
@@ -3476,6 +3478,7 @@ it writes a file that can be supplied to Daikon.
 
 @end table
 
+
 @node    Chicory miscellaneous options,  , Variables in Chicory output, Chicory options
 @subsubsection Chicory miscellaneous options
 
@@ -3589,6 +3592,35 @@ the target program.  The size is specified in the same manner as the
 -Xmx switch to java.
 
 @end table
+
+@node    Static fields (Global variables),  , Chicory options, Chicory
+@subsection Static fields (global variables)
+
+Chicory (Daikon's front end for Java) outputs the values of static
+fields in the current class, but not in other classes.  That means that
+Daikon cannot report properties over static fields in other classes,
+because it never sees their values.  (By contrast, Kvasir
+(@pxref{Kvasir}) supplies the values of C/C++ global variables to
+Daikon.)
+
+If this feature is important to you, ask the maintainers to add it to
+Daikon (or work with them to implement the enhancement).  In the
+meanwhile, here are two workarounds.
+
+@enumerate
+@item
+Add a static field whose type is the class containing the fields of
+interest.  You don't have to ever assign to the new field.  A
+disadvantage of this approach is that it gives you properties over the
+global variables as observed by each class (which might be different).
+
+@item
+At the beginning and end of each method, add a call to a dummy method
+that has access to all the globals (via adding the field mentioned above).
+This produces a single formula that is valid for all global variables at
+all times.
+@end enumerate
+
 
 
 @node Java DynComp, Kvasir, Chicory, Front ends (instrumentation)
