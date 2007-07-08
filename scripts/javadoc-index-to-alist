@@ -19,7 +19,7 @@ use FindBin qw($Bin);
 
 if (scalar(@ARGV) == 0) {
   @ARGV = read_and_glob_files("$Bin/javadoc-index-files");
-  print STDERR "ARGV (" . scalar(@ARGV) . " elements): @ARGV\n";
+  # print STDERR "ARGV (" . scalar(@ARGV) . " elements): @ARGV\n";
 }
 
 my $current_dir = `pwd`;
@@ -116,7 +116,7 @@ sub read_and_glob_files ( $ ) {
   my @result = ();
   open(FILES, $files_filename) || die("Could not open $files_filename");
   for my $index_filename (<FILES>) {
-    print STDERR "globbing: $index_filename\n";
+    # print STDERR "globbing: $index_filename\n";
     $index_filename =~ s/^\s+//;
     $index_filename =~ s/\s+$//;
     if (($index_filename eq "") || ($index_filename =~ /^#/)) {
@@ -124,13 +124,13 @@ sub read_and_glob_files ( $ ) {
     }
     # Use of "sort" makes the results more deterministic, easier to compare.
     my @globbed_files = sort(glob($index_filename));
-    print STDERR "Result: " . scalar(@globbed_files) . " files\n";
+    # print STDERR "Result: " . scalar(@globbed_files) . " files\n";
     if (scalar(@globbed_files) == 0) {
       print STDERR "Glob not found: $index_filename\n";
       next;
     }
     push @result, @globbed_files;
-    print STDERR "result now has " . scalar(@result) . " elements\n";
+    # print STDERR "result now has " . scalar(@result) . " elements\n";
   }
   close(FILES);
   return @result;
