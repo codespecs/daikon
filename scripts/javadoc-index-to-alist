@@ -1,0 +1,125 @@
+#!/usr/bin/env perl
+# Construct javadoc-index.el file for javadoc-lookup (look up Java docs from Emacs).
+# Michael Ernst <mernst@cs.washington.edu>
+
+# Run like this:
+#  javadoc-index-to-alist > ~/emacs/javadoc-index.el
+# With no arguments, it uses a default list.
+# You should run javadoc-add-munged-anchor-names first (see its documentation).
+
+use strict;
+use English;
+$WARNING = 1;
+
+use File::Find;
+
+if (scalar(@ARGV) == 0) {
+  # Use of "sort" makes the results more deterministic, easier to compare.
+  @ARGV = (
+           ## JDK
+           sort(glob("~mernst/java/jdk/docs/api/index-files/*.html")),
+           # sort(split(/\n/, `find ~mernst/java/jdk/docs/guide -name index-all.html`)),
+
+           ## Other packages
+	   sort(glob("~mernst/research/invariants/java/doc/index-all.html")), # omits Ajax
+           sort(glob("~mernst/research/typequals/annotations/checkers/doc/index-all.html")),
+
+	   # sort(glob("~mernst/java/JavaClass/docs/index-all.html")),
+	   sort(glob("~mernst/java/gnu/getopt/index-all.html")),
+	   sort(glob("~mernst/java/junit3.8.1/javadoc/index-all.html")),
+           sort(glob("~mernst/java/bcel/docs/api/index-all.html")),
+           sort(glob("~mernst/java/apache/commons-io-1.2/docs/index-all.html")),
+
+           ## Obsolete packages
+           # Use java.util.regexp in JDK1.4 instead
+	   # sort(glob("~mernst/java/OROMatcher-1.1/doc/api/*.html")),
+           # Use java.util.logging in JDK1.4 instead
+	   # sort(glob("~mernst/java/jakarta-log4j-1.2.7/docs/api/index-all.html")),
+	   );
+}
+
+my $current_dir = `pwd`;
+chomp($current_dir);
+$current_dir = "file:" . $current_dir . "/";
+
+print ";; For use by Emacs function javadoc-lookup.\n";
+print ";; Created by Perl script ~/bin/share/javadoc-index-to-alist on ", scalar(localtime), ".\n";
+# Not $PROGRAM_NAME because we aren't using the English module.
+print ";; Command line: $0 @ARGV\n";
+
+my %refs = ();
+my %javadoc_ignored_prefixes = ();
+
+for my $file (@ARGV) {
+  if (! -e $file) {
+    print STDERR "Didn't find $file\n";
+    next;
+  }
+  open(INDEX, $file) || die "Couldn't open $file";
+  my $this_dir = $file;
+  $this_dir =~ s%(^|/)[^/]*$%$1%;
+  if ($this_dir =~ m/^\//) {
+    # absolute directory
+    $this_dir = "file:$this_dir";
+  } else {
+    # perhaps ought to simplify
+    $this_dir = $current_dir . $this_dir;
+  }
+  my $prefix = $this_dir;
+  $prefix =~ s/\/index-files\//\//;
+  $javadoc_ignored_prefixes{$prefix} = 1;
+  while (<INDEX>) {
+    if (m%^  <dt> public interface <b>%) {
+      # print STDERR "Considering: $_";
+    }
+    if (m%^  <dt> public interface <b>(\w+)</b>%) {
+      $refs{$1} .= " \"" . $this_dir . $1 . ".html\"";
+    }
+    # Get rid of type parameters.
+    # This cannot just use the "g" modifier (global replace), because
+    # type parameters may be nested:  Enum<E extends Enum<E>>.
+    while (s%&lt;(<A HREF="[^ ]*" title="type parameter in [^ ]*?">[^ ]*?</A>( extends <A [^>]*>[^ <]*</A>)?,?)+&gt;%%) {
+      # empty body
+    }
+    if (m/\"type parameter in/) { die "Substitution failed:\n$_"; }
+
+    # This regexp is intentionally not anchored at its beginning or end,
+    # because sometimes line breaks are missing.
+    while (m%<DT>[ \t]*<A HREF="(.*?)"(?: title=".*?")?><B>(.*?)(\(.*?\))?</B></A>(\(.*?\))?(\.| - )%ig) {
+      # Either $3 or $4 could be set (but not both).
+      # my ($this_ref,$this_item,$this_args1,$this_args2) = ($1,$2,$3,$4);
+      my ($this_ref,$this_item) = ($1,$2);
+      if ($this_ref =~ /\"/) {
+        die "In $file, bad this_ref: $this_ref\nin $_";
+      }
+      if ($this_item =~ /\"/) {
+        die "In $file, bad this_item: $this_item\nin $_";
+      }
+      $this_ref = $this_dir . $this_ref;
+      $this_ref =~ s%/[^/]+/\.\./%/%g;
+      $this_ref =~ s%/(\./)+%/%g;
+      # print "<<<$this_dir>>><<<$this_ref>>><<<$this_item>>>\n";
+      # print "<<<$this_dir>>><<<$this_ref>>><<<$this_item>>><<<$this_args>>>\n";
+      $refs{$this_item} .= " \"$this_ref\"";
+    }
+  }
+}
+
+print "(setq javadoc-html-refs '(\n";
+# Reverse the list so that, when completion-ignore-case is t, "Class"
+# takes priority over the less-likely-to-be-desired "CLASS".
+for my $item (reverse sort keys %refs) {
+  # Sort for reproducibility of results
+  my $refs_sans_leading_trailing = $refs{$item};
+  $refs_sans_leading_trailing =~ s/^ "//;
+  $refs_sans_leading_trailing =~ s/"$//;
+  my @refs = split('" "', $refs_sans_leading_trailing);
+  my $sorted_refs = join('" "', sort(@refs));
+  print " (\"$item\" \"$sorted_refs\")\n"; }
+print "))\n";
+
+print "(setq javadoc-ignored-prefixes (list\n";
+for my $prefix (sort keys %javadoc_ignored_prefixes) {
+  print "  (concat \"^\" (regexp-quote \"$prefix\"))\n";
+}
+print "))\n";

@@ -2,9 +2,13 @@
 # (When debugging, change "-i" to "-i.bak" above.)
 # Michael Ernst <mernst@cs.washington.edu>
 
-# This supports the Emacs function `jdk-goto-ref' by inserting, into HTML
+# This supports the Emacs function `javadoc-lookup' by inserting, into HTML
 # documentation, anchor names of the form received by Netscape from other
-# processes such as Emacs.  After running this, re-rerun "jdk-index-to-alist".
+# processes such as Emacs. After running this, re-rerun "jdk-index-to-alist".
+
+# To do: state whehter this is safe to run multiple times (I think so).
+# To do: use a
+
 # Here are some example executions:
 #   jdk-add-munged-anchor-names ${HOME}/java/OROMatcher-1.1/doc/api/*.html
 #   jdk-add-munged-anchor-names ${HOME}/java/utilMDE/doc/utilMDE/*.html
