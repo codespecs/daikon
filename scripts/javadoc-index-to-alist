@@ -4,8 +4,10 @@
 
 # Run like this:
 #  javadoc-index-to-alist > ~/emacs/javadoc-index.el
-# With no arguments, it uses a default list.
-# You should run javadoc-add-munged-anchor-names first (see its documentation).
+# With no arguments, it uses a default list from file javadoc-index-files
+# in this directory.
+# This runs javadoc-escape-anchors if necessary (see its documentation).
+
 
 use strict;
 use English;
@@ -13,29 +15,11 @@ $WARNING = 1;
 
 use File::Find;
 
+use FindBin qw($Bin);
+
 if (scalar(@ARGV) == 0) {
-  # Use of "sort" makes the results more deterministic, easier to compare.
-  @ARGV = (
-           ## JDK
-           sort(glob("~mernst/java/jdk/docs/api/index-files/*.html")),
-           # sort(split(/\n/, `find ~mernst/java/jdk/docs/guide -name index-all.html`)),
-
-           ## Other packages
-	   sort(glob("~mernst/research/invariants/java/doc/index-all.html")), # omits Ajax
-           sort(glob("~mernst/research/typequals/annotations/checkers/doc/index-all.html")),
-
-	   # sort(glob("~mernst/java/JavaClass/docs/index-all.html")),
-	   sort(glob("~mernst/java/gnu/getopt/index-all.html")),
-	   sort(glob("~mernst/java/junit3.8.1/javadoc/index-all.html")),
-           sort(glob("~mernst/java/bcel/docs/api/index-all.html")),
-           sort(glob("~mernst/java/apache/commons-io-1.2/docs/index-all.html")),
-
-           ## Obsolete packages
-           # Use java.util.regexp in JDK1.4 instead
-	   # sort(glob("~mernst/java/OROMatcher-1.1/doc/api/*.html")),
-           # Use java.util.logging in JDK1.4 instead
-	   # sort(glob("~mernst/java/jakarta-log4j-1.2.7/docs/api/index-all.html")),
-	   );
+  @ARGV = read_and_glob_files("$Bin/javadoc-index-files");
+  print STDERR "ARGV (" . scalar(@ARGV) . " elements): @ARGV\n";
 }
 
 my $current_dir = `pwd`;
@@ -43,8 +27,8 @@ chomp($current_dir);
 $current_dir = "file:" . $current_dir . "/";
 
 print ";; For use by Emacs function javadoc-lookup.\n";
-print ";; Created by Perl script ~/bin/share/javadoc-index-to-alist on ", scalar(localtime), ".\n";
 # Not $PROGRAM_NAME because we aren't using the English module.
+print ";; Created by $0.\n";
 print ";; Command line: $0 @ARGV\n";
 
 my %refs = ();
@@ -55,6 +39,8 @@ for my $file (@ARGV) {
     print STDERR "Didn't find $file\n";
     next;
   }
+  # No need to run javadoc-escape-anchors run on the index file itself;
+  # just open it and use it.
   open(INDEX, $file) || die "Couldn't open $file";
   my $this_dir = $file;
   $this_dir =~ s%(^|/)[^/]*$%$1%;
@@ -123,3 +109,56 @@ for my $prefix (sort keys %javadoc_ignored_prefixes) {
   print "  (concat \"^\" (regexp-quote \"$prefix\"))\n";
 }
 print "))\n";
+
+
+sub read_and_glob_files ( $ ) {
+  my ($files_filename) = @_;
+  my @result = ();
+  open(FILES, $files_filename) || die("Could not open $files_filename");
+  for my $index_filename (<FILES>) {
+    print STDERR "globbing: $index_filename\n";
+    $index_filename =~ s/^\s+//;
+    $index_filename =~ s/\s+$//;
+    if (($index_filename eq "") || ($index_filename =~ /^#/)) {
+      next;
+    }
+    # Use of "sort" makes the results more deterministic, easier to compare.
+    my @globbed_files = sort(glob($index_filename));
+    print STDERR "Result: " . scalar(@globbed_files) . " files\n";
+    if (scalar(@globbed_files) == 0) {
+      print STDERR "Glob not found: $index_filename\n";
+      next;
+    }
+    push @result, @globbed_files;
+    print STDERR "result now has " . scalar(@result) . " elements\n";
+  }
+  close(FILES);
+  return @result;
+}
+
+
+
+# Files on which javadoc-escape-anchors has been run.
+my %jea_files = ();
+
+### It seems that this isn't necessary any longer.  (7/8/2007)
+# Run javadoc-escape-anchors on the given file.
+sub javadoc_escape_anchors_file ( $ ) {
+  my ($file) = @_;
+
+  if ($jea_files{$file}) {
+    return;
+  }
+  open(INDEX, $file) || die "Couldn't open $file";
+  my $firstline = <INDEX>;
+  close(INDEX);
+  if (! $firstline =~ /processed by javadoc-escape-anchors/) {
+    my $command = "javadoc-escape-anchors $file";
+    my $result = system($command);
+    if ($result != 0) {
+      print STDERR "Failure $? for shell command $command\n";
+    }
+  }
+  # Do this even on error, since we'll just get the same error over and over.
+  $jea_files{$file} = 1;
+}

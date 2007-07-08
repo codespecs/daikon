@@ -1,0 +1,77 @@
+#!/usr/bin/perl -p -i
+# (When debugging, change "-i" to "-i.bak" above.)
+# Michael Ernst <mernst@cs.washington.edu>
+
+### It seems that this isn't necessary any longer.  (7/8/2007)
+
+
+# javadoc-escape-anchors
+# This supports the Emacs function `javadoc-lookup' by inserting, into HTML
+# documentation, anchor names with special characters escaped (in the form
+# received by a browser from other processes such as Emacs).
+# It is safe to run this multiple times, because if it has already been, it
+# makes no further changes.
+
+# After running this, re-rerun "javadoc-index-to-alist".
+
+# To do: possibly use a file indicating which html files to process.
+# (Better to just have it called from javadoc-index-to-alist, so it never
+# needs to be called explicitly.)
+
+
+# Here are some example executions:
+#   javadoc-escape-anchors ${HOME}/java/OROMatcher-1.1/doc/api/*.html
+#   javadoc-escape-anchors ${HOME}/research/invariants/java/doc/utilMDE/*.html
+#   javadoc-escape-anchors `find ${HOME}/java/bobbyandjax/bobbydoc -name '*.html' -print`
+#   javadoc-escape-anchors ${HOME}/java/bobbyandjax/com/ibm/bobby/doc/*.html
+#   javadoc-escape-anchors `find ${HOME}/java/JavaClass/docs -name '*.html' -print`
+#   javadoc-escape-anchors `find ${HOME}/java/jakarta-log4j-1.2.7/docs -name '*.html' -print`
+#   find ${INV}/java/doc/ -name '*.html' -print | xargs javadoc-escape-anchors ``
+#   javadoc-escape-anchors `find ${HOME}/java/getopt-1.0.9/gnu/getopt/ -name '*.html' -print`
+#   javadoc-escape-anchors `find ${HOME}/java/jakarta-log4j-1.2.7/docs/ -name '*.html' -print`
+#   javadoc-escape-anchors `find ${HOME}/java/apache/commons-io-1.2/docs/ -name '*.html' -print`
+# Full JDK (put "sudo" before "xargs", not before "find"):
+#   find /usr/local/pkg/java/j2sdk1.4.1_01/docs/api -name '*.html' -print | xargs javadoc-escape-anchors
+#   find ${HOME}/java/docs/api -name '*.html' -print | xargs javadoc-escape-anchors
+#   find /g2/jdoc/jdk1.3/docs/api -name '*.html' -print | xargs javadoc-escape-anchors
+
+## Replaced by the use of FindBin.
+# BEGIN {
+#   unshift @INC, "$ENV{'INV'}/scripts";
+# }
+# use checkargs;
+
+use FindBin ();
+use lib "$FindBin::Bin";
+use checkargs;
+
+BEGIN {
+  $firstline = 1;         # true when processing the first line of the file
+  $disable = 0;           # true if file was previously processed, should not be re-processed
+}
+
+
+if ($firstline) {
+  if (/processed by javadoc-escape-anchors/) {
+    $disable = 1;
+  } else {
+    print "<!-- processed by javadoc-escape-anchors -->\n";
+  }
+  $firstline = 0;
+}
+
+if ((!$disable) && (/<A NAME=\"([^\"]*)\">(.*?)<\/A>/i) && ($1 =~ /[,\(\)]/))
+ { s/(<A NAME=\")([^\"]*)(\">.*?<\/A>)/munge_duplicate_url($1,$2,$3)/ieg; }
+
+sub munge_duplicate_url ( $$$ )
+{ my ($pre, $url, $post) = check_args(3, @_);
+  my $url_munged = $url;
+  # This list of replacements is from Emacs's `browse-url-netscape' function.
+  # (format "%%%x" (string-to-char ","))  ; "%2c"
+  # (format "%%%x" (string-to-char "("))  ; "%28"
+  # (format "%%%x" (string-to-char ")"))  ; "%29"
+  $url_munged =~ s/,/%2c/g;
+  $url_munged =~ s/\(/%28/g;
+  $url_munged =~ s/\)/%29/g;
+  return "<a name=\"$url_munged\">$pre$url$post</a>";
+}

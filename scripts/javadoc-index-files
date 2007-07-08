@@ -1,0 +1,23 @@
+# List of Javadoc index files, for javadoc-index-to-alist
+
+
+## JDK
+~mernst/java/jdk/docs/api/index-files/*.html
+# split(/\n/, `find ~mernst/java/jdk/docs/guide -name index-all.html`)
+
+## Other packages
+# "invariants" omits Ajax
+~mernst/research/invariants/java/doc/index-all.html
+~mernst/research/typequals/annotations/checkers/doc/index-all.html
+
+# ~mernst/java/JavaClass/docs/index-all.html
+~mernst/java/gnu/getopt/index-all.html
+~mernst/java/junit3.8.1/javadoc/index-all.html
+~mernst/java/bcel/docs/api/index-all.html
+~mernst/java/apache/commons-io-1.2/docs/index-all.html
+
+## Obsolete packages
+## Use java.util.regexp in JDK1.4 instead
+# ~mernst/java/OROMatcher-1.1/doc/api/*.html
+## Use java.util.logging in JDK1.4 instead
+# ~mernst/java/jakarta-log4j-1.2.7/docs/api/index-all.html
