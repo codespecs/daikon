@@ -9,6 +9,7 @@
 --exclude-broken 404:http://groups.google.com/group/jsr-305/web/proposed-annotations
 --exclude-broken 404:http://www.eclipse.org/legal/Eclipse%20EPL%202003_11_10%20Final_files/filelist.xml
 --exclude-broken 405:http://www.amazon.com/exec/obidos/tg/detail/-/0321205758/103-2932545-5299831?v=glance
+--exclude-broken 412:http://validator.w3.org/check?uri=referer
 --exclude-broken 500:http://conferences.iee.org/icse2004/
 --exclude-broken 500:http://jcp.org/en/jsr/detail?id=308
 --exclude-broken 500:http://www.orbitz.com/
@@ -24,8 +25,11 @@
 --exclude-broken 501:http://www.bizrate.com/
 --exclude-broken 501:https://web.mit.edu/21.guide/www/l-rec-wr.htm
 --exclude-broken 501:https://web.mit.edu/21.guide/www/toc.htm
---exclude-docs /~adonovan/|mernst/(public_html/)?(ir95|advice/conference/)|daikon/download/jdoc|bugzilla/
+--exclude-docs /~adonovan/
+--exclude-docs bugzilla/
+--exclude-docs daikon/download/jdoc
 --exclude-docs http://pag.csail.mit.edu/jsr308/dist/doc/javac_lifecycle
+--exclude-docs mernst/(public_html/)?(ir95|advice/conference/)
 --exclude-redirect http://2006.ecoop.org/->http://www.emn.fr/x-info/ecoop2006/
 --exclude-redirect http://en.wikipedia.org/->http://en.wikipedia.org/wiki/Main_Page	
 --exclude-redirect http://groups.google.com/->http://groups-beta.google.com/
