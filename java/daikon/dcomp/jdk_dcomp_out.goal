@@ -91,12 +91,11 @@ Daikon Variable sets for daikon.dcomp.Test.list_check(daikon.dcomp.Test$A a10, d
   [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
   [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
 Daikon Variable sets for daikon.dcomp.Test.list_check(daikon.dcomp.Test$A a10, daikon.dcomp.Test$A a11) exit
-  [1] [daikon.chicory.ParameterInfo:a10]
+  [2] [daikon.chicory.ParameterInfo:a10, daikon.chicory.ParameterInfo:a11]
   [1] [daikon.chicory.FieldInfo:a10.id]
   [1] [daikon.chicory.StringInfo:a10.id.toString]
   [1] [daikon.chicory.FieldInfo:a10.x]
   [1] [daikon.chicory.FieldInfo:a10.y]
-  [1] [daikon.chicory.ParameterInfo:a11]
   [1] [daikon.chicory.FieldInfo:a11.id]
   [1] [daikon.chicory.StringInfo:a11.id.toString]
   [1] [daikon.chicory.FieldInfo:a11.x]
@@ -239,6 +238,11 @@ Daikon Variable sets for daikon.dcomp.Test.java_check(I i1, I i2) exit
   [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
   [3] [daikon.chicory.ParameterInfo:i1, daikon.chicory.ParameterInfo:i2, daikon.chicory.ReturnInfo:return]
 
+Daikon Variable sets for daikon.dcomp.Test.equals(java.lang.Object obj) enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test.equals(java.lang.Object obj) exit
+  not called
+
 Daikon Variable sets for daikon.dcomp.Test$A.<init>(java.lang.String id) enter
   [1] [daikon.chicory.ParameterInfo:id]
   [1] [daikon.chicory.StringInfo:id.toString]
@@ -284,6 +288,22 @@ Daikon Variable sets for daikon.dcomp.Test$A.tta() exit
   [1] [daikon.chicory.StringInfo:this.id.toString]
   [2] [daikon.chicory.FieldInfo:this.x, daikon.chicory.FieldInfo:this.y]
 
+Daikon Variable sets for daikon.dcomp.Test$A.equals(java.lang.Object obj) enter
+  [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
+  [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
+  [1] [daikon.chicory.FieldInfo:this.id]
+  [1] [daikon.chicory.StringInfo:this.id.toString]
+  [1] [daikon.chicory.FieldInfo:this.x]
+  [1] [daikon.chicory.FieldInfo:this.y]
+Daikon Variable sets for daikon.dcomp.Test$A.equals(java.lang.Object obj) exit
+  [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
+  [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
+  [1] [daikon.chicory.ReturnInfo:return]
+  [1] [daikon.chicory.FieldInfo:this.id]
+  [1] [daikon.chicory.StringInfo:this.id.toString]
+  [1] [daikon.chicory.FieldInfo:this.x]
+  [1] [daikon.chicory.FieldInfo:this.y]
+
 Daikon Variable sets for daikon.dcomp.Test$Arr.<init>() enter
 Daikon Variable sets for daikon.dcomp.Test$Arr.<init>() exit
   [1] [daikon.chicory.ThisObjInfo:this]
@@ -299,6 +319,11 @@ Daikon Variable sets for daikon.dcomp.Test$Arr.tryit(I val1) exit
   [1] [daikon.chicory.ThisObjInfo:this]
   [1] [daikon.chicory.FieldInfo:this.big_arr]
   [3] [daikon.chicory.ArrayInfo:this.big_arr[], daikon.chicory.FieldInfo:this.val, daikon.chicory.ParameterInfo:val1]
+
+Daikon Variable sets for daikon.dcomp.Test$Arr.equals(java.lang.Object obj) enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test$Arr.equals(java.lang.Object obj) exit
+  not called
 
 Daikon Variable sets for daikon.dcomp.Test$C.<init>(java.lang.String id) enter
   [1] [daikon.chicory.ParameterInfo:id]
@@ -321,6 +346,11 @@ Daikon Variable sets for daikon.dcomp.Test$C.set_long(J l1) exit
   [1] [daikon.chicory.ThisObjInfo:this]
   [1] [daikon.chicory.FieldInfo:this.cid]
   [1] [daikon.chicory.StringInfo:this.cid.toString]
+
+Daikon Variable sets for daikon.dcomp.Test$C.equals(java.lang.Object obj) enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test$C.equals(java.lang.Object obj) exit
+  not called
 
 Daikon Variable sets for daikon.dcomp.Test$B.<init>() enter
 Daikon Variable sets for daikon.dcomp.Test$B.<init>() exit
@@ -493,6 +523,11 @@ Daikon Variable sets for daikon.dcomp.Test$B.comp() exit
   [1] [daikon.chicory.FieldInfo:this.a2a[].x]
   [1] [daikon.chicory.FieldInfo:this.a2a[].y]
 
+Daikon Variable sets for daikon.dcomp.Test$B.equals(java.lang.Object obj) enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test$B.equals(java.lang.Object obj) exit
+  not called
+
 Daikon Variable sets for daikon.dcomp.Test$D.<init>() enter
 Daikon Variable sets for daikon.dcomp.Test$D.<init>() exit
   [1] [daikon.chicory.ThisObjInfo:this]
@@ -518,6 +553,11 @@ Daikon Variable sets for daikon.dcomp.Test$D.compare() exit
   [5] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.alen, daikon.chicory.FieldInfo:this.c, daikon.chicory.FieldInfo:this.d, daikon.chicory.FieldInfo:this.i]
   [2] [daikon.chicory.ArrayInfo:this.a[], daikon.chicory.FieldInfo:this.b]
   [1] [daikon.chicory.FieldInfo:this.j]
+
+Daikon Variable sets for daikon.dcomp.Test$D.equals(java.lang.Object obj) enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test$D.equals(java.lang.Object obj) exit
+  not called
 
 Daikon Variable sets for daikon.dcomp.Test$E.<init>() enter
 Daikon Variable sets for daikon.dcomp.Test$E.<init>() exit
@@ -551,3 +591,106 @@ Daikon Variable sets for daikon.dcomp.Test$E.compare() exit
   [1] [daikon.chicory.DaikonClassInfo:this.a.getClass()]
   [5] [daikon.chicory.ArrayInfo:this.a[], daikon.chicory.FieldInfo:this.cj, daikon.chicory.FieldInfo:this.dj, daikon.chicory.FieldInfo:this.j, daikon.chicory.FieldInfo:this.jlen]
   [1] [daikon.chicory.FieldInfo:this.b]
+
+Daikon Variable sets for daikon.dcomp.Test$E.equals(java.lang.Object obj) enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test$E.equals(java.lang.Object obj) exit
+  not called
+
+Daikon Variable sets for daikon.dcomp.Test$F.<init>() enter
+Daikon Variable sets for daikon.dcomp.Test$F.<init>() exit
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
+  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
+  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
+  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
+  [1] [daikon.chicory.FieldInfo:this.int1]
+  [1] [daikon.chicory.FieldInfo:this.int2]
+  [1] [daikon.chicory.FieldInfo:this.obj1]
+  [1] [daikon.chicory.FieldInfo:this.obj2]
+
+Daikon Variable sets for daikon.dcomp.Test$F.compare() enter
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
+  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
+  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
+  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
+  [1] [daikon.chicory.FieldInfo:this.int1]
+  [1] [daikon.chicory.FieldInfo:this.int2]
+  [1] [daikon.chicory.FieldInfo:this.obj1]
+  [1] [daikon.chicory.FieldInfo:this.obj2]
+Daikon Variable sets for daikon.dcomp.Test$F.compare() exit
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
+  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
+  [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
+
+Daikon Variable sets for daikon.dcomp.Test$F.compare2() enter
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
+  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
+  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
+  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
+  [1] [daikon.chicory.FieldInfo:this.int1]
+  [1] [daikon.chicory.FieldInfo:this.int2]
+  [1] [daikon.chicory.FieldInfo:this.obj1]
+  [1] [daikon.chicory.FieldInfo:this.obj2]
+Daikon Variable sets for daikon.dcomp.Test$F.compare2() exit
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
+  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [1] [daikon.chicory.FieldInfo:this.int1]
+  [1] [daikon.chicory.FieldInfo:this.int2]
+  [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
+
+Daikon Variable sets for daikon.dcomp.Test$F.compare3() enter
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
+  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
+  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
+  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
+  [1] [daikon.chicory.FieldInfo:this.int1]
+  [1] [daikon.chicory.FieldInfo:this.int2]
+  [1] [daikon.chicory.FieldInfo:this.obj1]
+  [1] [daikon.chicory.FieldInfo:this.obj2]
+Daikon Variable sets for daikon.dcomp.Test$F.compare3() exit
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
+  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
+  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
+  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
+  [1] [daikon.chicory.FieldInfo:this.int1]
+  [1] [daikon.chicory.FieldInfo:this.int2]
+  [1] [daikon.chicory.FieldInfo:this.obj1]
+  [1] [daikon.chicory.FieldInfo:this.obj2]
+
+Daikon Variable sets for daikon.dcomp.Test$F.equals(java.lang.Object obj) enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test$F.equals(java.lang.Object obj) exit
+  not called
+
+Daikon Variable sets for daikon.dcomp.Test$Obj.<init>(I x, I y) enter
+  [1] [daikon.chicory.ParameterInfo:x]
+  [1] [daikon.chicory.ParameterInfo:y]
+Daikon Variable sets for daikon.dcomp.Test$Obj.<init>(I x, I y) exit
+  [1] [daikon.chicory.ThisObjInfo:this]
+  [2] [daikon.chicory.FieldInfo:this.x, daikon.chicory.ParameterInfo:x]
+  [2] [daikon.chicory.FieldInfo:this.y, daikon.chicory.ParameterInfo:y]
+
+Daikon Variable sets for daikon.dcomp.Test$Obj.equals(java.lang.Object obj) enter
+  [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
+  [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
+  [1] [daikon.chicory.FieldInfo:this.x]
+  [1] [daikon.chicory.FieldInfo:this.y]
+Daikon Variable sets for daikon.dcomp.Test$Obj.equals(java.lang.Object obj) exit
+  [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
+  [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
+  [1] [daikon.chicory.ReturnInfo:return]
+  [1] [daikon.chicory.FieldInfo:this.x]
+  [1] [daikon.chicory.FieldInfo:this.y]
+
+Daikon Variable sets for daikon.dcomp.Test$Obj.hashCode() enter
+  not called
+Daikon Variable sets for daikon.dcomp.Test$Obj.hashCode() exit
+  not called

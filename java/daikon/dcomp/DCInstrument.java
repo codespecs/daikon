@@ -117,14 +117,15 @@ class DCInstrument {
   };
 
   /**
-   * List of all of the object methods.  Since we can't instrument
-   * object, none of these can be instrumented.  I've also added
+   * List of Object methods.  Since we can't instrument Object, none
+   * of these can be instrumented, and most of them don't provide
+   * useful comparability information anyway.  I've also added
    * newInstance because of a problem with code that the JDK generates
    * for newInstance.
+   * The equals method IS instrumented.
    */
   private static MethodDef[] obj_methods = new MethodDef[] {
     new MethodDef ("clone", new Type[0]),
-    new MethodDef ("equals", new Type[] {Type.OBJECT}),
     new MethodDef ("finalize", new Type[0]),
     new MethodDef ("hashCode", new Type[0]),
     new MethodDef ("toString", new Type[0]),
@@ -217,6 +218,22 @@ class DCInstrument {
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
     boolean track_class = false;
+
+    // Have all top-level classes implement our interface
+    if (gen.getSuperclassName().equals("java.lang.Object")) {
+      // Add equals method if it doesn't already exist. This ensures
+      // that an instrumented version, equals(Object, DCompMarker),
+      // will be created in this class.
+      Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
+      if (eq == null) {
+        debug_instrument.log ("Added equals method");
+        add_equals_method (gen);
+      }
+
+      // Add DCompInstrumented interface and the required
+      // equals_dcomp_instrumented method.
+      add_dcomp_interface (gen);
+    }
 
     // Process each method
     for (Method m : gen.getMethods()) {
@@ -339,6 +356,22 @@ class DCInstrument {
     }
 
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
+
+    // Have all top-level classes implement our interface
+    if (gen.getSuperclassName().equals("java.lang.Object")) {
+      // Add equals method if it doesn't already exist. This ensures
+      // that an instrumented version, equals(Object, DCompMarker),
+      // will be created in this class.
+      Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
+      if (eq == null) {
+        debug_instrument.log ("Added equals method");
+        add_equals_method (gen);
+      }
+
+      // Add DCompInstrumented interface and the required
+      // equals_dcomp_instrumented method.
+      add_dcomp_interface (gen);
+    }
 
     // Process each method
     for (Method m : gen.getMethods()) {
@@ -1808,26 +1841,40 @@ class DCInstrument {
 
     // We don't instrument any of the Object methods
     String method_name = invoke.getMethodName(pool);
+    Type ret_type = invoke.getReturnType(pool);
+    Type[] arg_types = invoke.getArgumentTypes(pool);
     if (is_object_method (method_name, invoke.getArgumentTypes(pool)))
       callee_instrumented = false;
 
-    // If the callee is instrumented then, add the dcomp argument
-    if (callee_instrumented) {
+
+    // Replace calls to Object's equals method with calls to our
+    // replacement, a static method in DCRuntime
+    ObjectType javalangObject = new ObjectType("java.lang.Object");
+    if (method_name.equals("equals")
+        && ret_type == Type.BOOLEAN
+        && arg_types.length == 1
+        && arg_types[0].equals(javalangObject)) {
+
+      Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
+      il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime", "dcomp_equals",
+                                     ret_type, new_arg_types,
+                                     Constants.INVOKESTATIC));
+
+    } else if (callee_instrumented) {
+      // If the callee is instrumented then, add the dcomp argument
 
       // Add the DCompMarker argument so that the instrumented version
       // will be used
       il.append (new ACONST_NULL());
-      Type[] arg_types = add_type (invoke.getArgumentTypes(pool),
-                                   dcomp_marker);
-      il.append (ifact.createInvoke (classname, invoke.getMethodName(pool),
-                   invoke.getReturnType(pool), arg_types, invoke.getOpcode()));
+      Type[] new_arg_types = add_type (arg_types, dcomp_marker);
+      il.append (ifact.createInvoke (classname, method_name, ret_type,
+                                     new_arg_types, invoke.getOpcode()));
 
     } else { // not instrumented, discard the tags before making the call
 
       // Discard the tags for any primitive arguments passed to system
       // methods
       int primitive_cnt = 0;
-      Type[] arg_types = invoke.getArgumentTypes (pool);
       for (Type arg_type : arg_types) {
         if (arg_type instanceof BasicType)
           primitive_cnt++;
@@ -1836,7 +1883,6 @@ class DCInstrument {
         il.append (discard_tag_code (new NOP(), primitive_cnt));
 
       // Add a tag for the return type if it is primitive
-      Type ret_type = invoke.getReturnType (pool);
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
         // System.out.printf ("push tag for return  type of %s%n",
         //                   invoke.getReturnType(pool));
@@ -3189,6 +3235,77 @@ class DCInstrument {
     // add_line_numbers(set_method, il);
 
     return (set_method);
+  }
+
+  /**
+   * Adds the DCompInstrumented interface to the given class.
+   * Adds the following method to the class, so that it implements the
+   * DCompInstrumented interface:
+   *   public boolean equals_dcomp_instrumented(Object o) {
+   *     return this.equals(o, null);
+   *   }
+   * The method does nothing except call the instrumented equals
+   * method (boolean equals(Object, DCompMarker)).
+   */
+  public void add_dcomp_interface (ClassGen gen) {
+    gen.addInterface("daikon.dcomp.DCompInstrumented");
+    debug_instrument.log ("Added interface DCompInstrumented");
+
+    InstructionList il = new InstructionList();
+    MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.BOOLEAN,
+                                     new Type[] { Type.OBJECT },
+                                     new String[] { "obj" },
+                                     "equals_dcomp_instrumented",
+                                     gen.getClassName(), il, pool);
+
+    il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
+    il.append(ifact.createLoad(Type.OBJECT, 1));  // load obj
+    il.append(new ACONST_NULL());                 // use null for marker
+    il.append(ifact.createInvoke(gen.getClassName(),
+                                 "equals",
+                                 Type.BOOLEAN,
+                                 new Type[] { Type.OBJECT, dcomp_marker },
+                                 Constants.INVOKEVIRTUAL));
+    il.append(ifact.createReturn(Type.BOOLEAN));
+    method.setMaxStack();
+    method.setMaxLocals();
+    gen.addMethod(method.getMethod());
+    il.dispose();
+  }
+
+  /**
+   * Adds the following method to a class:
+   *   public boolean equals(Object obj) {
+   *     return this == obj;
+   *   }
+   * Must only be called if the Object equals method has not been
+   * overridden; if the equals method is already defined in the class,
+   * a ClassFormatError will result because of the duplicate method.
+   */
+  public void add_equals_method (ClassGen gen) {
+    InstructionList il = new InstructionList();
+    MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.BOOLEAN,
+                                     new Type[] { Type.OBJECT },
+                                     new String[] { "obj" }, "equals",
+                                     gen.getClassName(), il, pool);
+
+    il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
+    il.append(ifact.createLoad(Type.OBJECT, 1));  // load obj
+
+    BranchInstruction inst_acmpne = ifact.createBranchInstruction(Constants.IF_ACMPNE, null);
+    il.append(inst_acmpne);
+    il.append(new PUSH(pool, 1));
+    BranchInstruction inst_goto = ifact.createBranchInstruction(Constants.GOTO, null);
+    il.append(inst_goto);
+    InstructionHandle ih_pushfalse = il.append(new PUSH(pool, 0));
+    InstructionHandle ih_return = il.append(ifact.createReturn(Type.BOOLEAN));
+    inst_acmpne.setTarget(ih_pushfalse);
+    inst_goto.setTarget(ih_return);
+
+    method.setMaxStack();
+    method.setMaxLocals();
+    gen.addMethod(method.getMethod());
+    il.dispose();
   }
 
   /** Returns the tag accessor method name **/

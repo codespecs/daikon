@@ -185,6 +185,61 @@ class Test {
   }
 
 
+  // Tests the equals() method
+  public static class F {
+    Obj obj1;
+    Obj obj2;
+    Integer int1;
+    Integer int2;
+
+    int a1 = 4;
+    int b1 = 3;
+    int a2 = 4;
+    int b2 = 3;
+
+    F() {
+      obj1 = new Obj(a1, b1);
+      obj2 = new Obj(a2, b2);
+      int1 = new Integer(42);
+      int2 = new Integer(42);
+    }
+
+    // Should make obj1 and obj2 comparable
+    public void compare() {
+      // Uses the equals() method of a non-JDK class
+      if (obj2.equals(obj1)) {
+        if (verbose) {
+          System.out.println("obj2.equals(obj1)");
+        }
+      }
+
+      // Uses the equals() method of a JDK class
+      if (int1.equals(int2)) {
+        if (verbose) {
+          System.out.println("int1.equals(int2)");
+        }
+      }
+    }
+
+    // Should make obj1 and obj2 comparable
+    public void compare2() {
+      if (((Object)obj2).equals((Object)obj1)) {
+        if (verbose) {
+          System.out.println("((Object)obj2).equals((Object)obj1)");
+        }
+      }
+    }
+
+    // Should NOT change comparability
+    public void compare3() {
+      obj1.hashCode();
+      obj2.hashCode();
+      int1.hashCode();
+      int2.hashCode();
+    }
+  }
+
+
   public static class Arr {
 
     int[] big_arr = new int[90000];
@@ -196,6 +251,31 @@ class Test {
 
     public void tryit (int val1) {
       big_arr[71] = val1;
+    }
+  }
+
+
+  public static class Obj {
+    public int x;
+    public int y;
+
+    public Obj(int x, int y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    public boolean equals(Object obj) {
+      return (obj instanceof Obj)
+        && this.x == ((Obj)obj).x
+        && this.y == ((Obj)obj).y;
+    }
+
+    public int hashCode() {
+      return this.x + this.y;
+    }
+
+    public String toString() {
+      return String.valueOf(this.x) + String.valueOf(this.y);
     }
   }
 
@@ -261,6 +341,12 @@ class Test {
     E e1 = new E();
     e1.compare();
 
+    F f1 = new F();
+    f1.compare();
+    F f2 = new F();
+    f2.compare2();
+    F f3 = new F();
+    f3.compare3();
   }
 
   public static void list_check (A a10, A a11) {

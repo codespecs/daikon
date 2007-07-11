@@ -118,6 +118,26 @@ public final class DCRuntime {
       static_tags.add (null);
   }
 
+
+  /**
+   * Handles calls to instrumented equals() methods.
+   */
+  public static boolean dcomp_equals(Object o1, Object o2) {
+    // Make obj1 and obj2 comparable
+    if ((o1 != null) && (o2 != null))
+      TagEntry.union (o1, o2);
+
+    if (o1 instanceof DCompInstrumented) {
+      // Call the instrumented version
+      return ((DCompInstrumented)o1).equals_dcomp_instrumented(o2);
+    } else {
+      // Push tag for return value, and call the uninstrumented version
+      push_const();
+      return o1.equals(o2);
+    }
+  }
+
+
   /**
    * Handle object comparison.  Marks the two objects as comparable and
    * returns whether or not they are equal.  Used as part of a replacement
@@ -945,6 +965,9 @@ public final class DCRuntime {
     for (ClassInfo ci : all_classes) {
       for (MethodInfo mi : ci.method_infos) {
         if (mi.is_class_init())
+          continue;
+        // skip our added method
+        if (mi.method_name.equals("equals_dcomp_instrumented"))
           continue;
         ps.printf ("%n");
         print_comparable (ps, mi);
