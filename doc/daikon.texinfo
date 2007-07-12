@@ -586,11 +586,11 @@ This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 @end itemize
 
 @item
-Set up your environment.  You need to arrange for @file{daikon.jar} to
-be on your Java classpath.  One easy way to do this is to make your
-shell initialization file set the @env{DAIKONDIR} environment variable (to
+Set up your environment.  Your
+shell initialization file should set the @env{DAIKONDIR} environment variable (to
 an absolute pathname) and source the appropriate Daikon environment
-file.  (Alternately, you could set your classpath yourself.)
+file.  (Alternately, you could set the environment variables, such as
+classpath, yourself.)
 @itemize
 @item
 @cindex C shell
@@ -626,15 +626,17 @@ set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
 %DAIKONDIR%\bin\daikonenv.bat
 @end example
 
-One way to execute the commands is to put them in a batch file and
-manually execute that batch file from the command line.  You can also
-set the environment variables in the registry (right-click My Computer,
-and then click Properties; click the Advanced tab; click Environment
-variables), but that only reduces the number of steps you have to do for
-each shell from 3 (two variables plus running the @file{daikonenv.bat}
-file) to 1 (running the @file{daikonenv.bat} file).
+We recommend that you put all three commands in a batch file, and
+manually execute that batch file from the command line.
 Query to Windows users:  is there a good way to make the batch file get run
 automatically for each command shell?  If so, we'll put the answer here.
+
+@c You can also
+@c set the environment variables in the registry (right-click My Computer,
+@c and then click Properties; click the Advanced tab; click Environment
+@c variables), but that only reduces the number of steps you have to do for
+@c each shell from 3 (two variables plus running the @file{daikonenv.bat}
+@c file) to 1 (running the @file{daikonenv.bat} file).
 
 @end itemize
 @noindent
