@@ -398,12 +398,12 @@ A derived variable is an expression that does not appear in the source
 code as a variable, but that Daikon treats as a variable for purposes
 of invariant detection.  For instance, if there exists an array
 @samp{a} and an integer @samp{i}, then Daikon introduces the derived
-variable @samp{a[i]}.  This permits detection invariants over this
+variable @samp{a[i]}.  This permits detection of invariants over this
 quantity.
 
 (Describing how to create new variety of derived variable is still to
-be written.  For now, see the derived variables that appear in
-@file{$DAIKONDIR/java/daikon/derive/}.)
+be written.  For now, see the derived variables that appear in the Java
+files in directory @file{$DAIKONDIR/java/daikon/derive/}.)
 
 
 @node    New formatting for invariants, New front ends, New derived variables, Extending Daikon
