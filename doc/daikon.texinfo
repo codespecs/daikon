@@ -148,7 +148,7 @@ Example usage for Java, C/C++, and Perl
 Detecting invariants in Java programs
 
 * StackAr example::             
-* Using DynComp with Daikon::   
+* Using DynComp with Java programs::  
 * Understanding the invariants::  
 * Understanding DynComp::       
 * Second Java example::         
@@ -226,7 +226,7 @@ Enhancing conditional invariant detection
 Front ends (instrumentation)
 
 * Chicory::                     
-* Java DynComp::                
+* DynComp for Java::            
 * Kvasir::                      
 * Mangel-Wurzel::               
 * dfepl::                       
@@ -247,14 +247,14 @@ Chicory options
 DynComp dynamic comparability analysis for Java
 
 * Instrumenting the JDK with DynComp::  
-* Java DynComp options::        
-* DynComp known bugs::          
+* DynComp for Java options::    
+* DynComp for Java known bugs::          
 
 C/C++ front end Kvasir
 
 * Using Kvasir::                
 * Kvasir options::              
-* DynComp dynamic comparability analysis::  
+* DynComp for C/C++::           
 * Tracing only part of a program::  
 * Pointer type disambiguation::  
 * C++ support::                 
@@ -270,7 +270,7 @@ Pointer type disambiguation
 
 Online execution
 
-* Online execution with DynComp::  
+* Online execution with DynComp for C/C++::  
 
 Source-based C/C++ front end Mangel-Wurzel
 
@@ -810,7 +810,7 @@ and the Daikon output is written to the terminal.
 
 @menu
 * StackAr example::             
-* Using DynComp with Daikon::   
+* Using DynComp with Java programs::  
 * Understanding the invariants::  
 * Understanding DynComp::       
 * Second Java example::         
@@ -841,7 +841,7 @@ and the Daikon output is written to the terminal.
 @c For brief troubleshooting information, see @ref{Eclipse plug-in problems}.
 
 
-@node    StackAr example, Using DynComp with Daikon, Detecting invariants in Java programs, Detecting invariants in Java programs
+@node    StackAr example, Using DynComp with Java programs, Detecting invariants in Java programs, Detecting invariants in Java programs
 @subsection StackAr example
 
 The Daikon distribution contains some sample programs that will help
@@ -944,11 +944,11 @@ For more information about the Annotate program, see @ref{Annotate}.
 @end enumerate
 
 
-@node    Using DynComp with Daikon, Understanding the invariants, StackAr example, Detecting invariants in Java programs
-@subsection Using DynComp with Daikon
+@node    Using DynComp with Java programs, Understanding the invariants, StackAr example, Detecting invariants in Java programs
+@subsection Using DynComp with Java programs
 
 DynComp can help to filter Daikon's output by omitting invariants
-involving unrelated variables (see @ref{Java DynComp}). To do so, run
+involving unrelated variables (see @ref{DynComp for Java}). To do so, run
 DynComp on the target program first, then pass the resulting
 @file{.decls} file to Chicory. The process would be as follows:
 
@@ -992,7 +992,7 @@ You could split the third step into multiple steps, as described in
 process.
 
 
-@node    Understanding the invariants, Understanding DynComp, Using DynComp with Daikon, Detecting invariants in Java programs
+@node    Understanding the invariants, Understanding DynComp, Using DynComp with Java programs, Detecting invariants in Java programs
 @subsection Understanding the invariants
 
 This section examines some of the invariants for the StackAr example.
@@ -3080,6 +3080,12 @@ of the samples but not over the entire data set.
 
 Abstract types group variables that are used for related purposes in a
 program.
+For example, suppose that some @code{int} variables in your program
+are array lengths or indices, and other @code{int} variables 
+represent time.  Even thought these variables have the same type
+(@code{int}) in the programming language, they have different abstract
+types.
+
 Abstract types can be provided as additional input to Daikon, so that it
 only infers invariants between values of the same abstract type.
 This can improve Daikon's performance, because it reduces the number of
@@ -3105,10 +3111,10 @@ produces a separate @file{.decls} file containing comparability
 information, which must be supplied to Daikon along with the
 @file{.dtrace} file.
 For examples of using DynComp with Java and C programs, see @ref{Using
-DynComp with Daikon} and @ref{Using DynComp with C programs}
+DynComp with Java programs} and @ref{Using DynComp with C programs}
 respectively.
 For full details about the DynComp tools for Java and C/C++, see
-@ref{Java DynComp} and @ref{DynComp dynamic comparability analysis}.
+@ref{DynComp for Java} and @ref{DynComp for C/C++}.
 
 @node    Loop invariants,  , Dynamic abstract type inference (DynComp), Enhancing Daikon output
 @section Loop invariants
@@ -3154,7 +3160,7 @@ ends,,,./developer,Daikon Developer Manual}.
 
 @menu
 * Chicory::                     
-* Java DynComp::                
+* DynComp for Java::            
 * Kvasir::                      
 * Mangel-Wurzel::               
 * dfepl::                       
@@ -3162,7 +3168,7 @@ ends,,,./developer,Daikon Developer Manual}.
 * Other front ends::            
 @end menu
 
-@node    Chicory, Java DynComp, Front ends (instrumentation), Front ends (instrumentation)
+@node    Chicory, DynComp for Java, Front ends (instrumentation), Front ends (instrumentation)
 @section Java front end Chicory
 
 @cindex front end for Java
@@ -3625,7 +3631,7 @@ all times.
 
 
 
-@node Java DynComp, Kvasir, Chicory, Front ends (instrumentation)
+@node DynComp for Java, Kvasir, Chicory, Front ends (instrumentation)
 @section DynComp dynamic comparability analysis for Java
 
 @cindex DynComp, for Java
@@ -3696,7 +3702,7 @@ This runs your program and creates the file @file{MyClass.decls-DynComp}
 in the current directory. DynComp also creates @file{MyClass.txt-cset},
 which contains the same information in an easier-to-read format. The
 @file{.decls} file may be passed to Chicory, as described in @ref{Using
-DynComp with Daikon}.
+DynComp with Java programs}.
 @example
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
      mypackage.MyClass arg1 arg2 arg3
@@ -3772,11 +3778,11 @@ and so is not comparable to the other variables.
 
 @menu
 * Instrumenting the JDK with DynComp::  
-* Java DynComp options::        
-* DynComp known bugs::          
+* DynComp for Java options::    
+* DynComp for Java known bugs::          
 @end menu
 
-@node Instrumenting the JDK with DynComp, Java DynComp options, Java DynComp, Java DynComp
+@node Instrumenting the JDK with DynComp, DynComp for Java options, DynComp for Java, DynComp for Java
 @subsection Instrumenting the JDK with DynComp
 
 If you did not already do so when installing Daikon (in
@@ -3803,7 +3809,7 @@ end of instrumentation. The file @file{jdk_classes.txt}, found inside
 @file{dcomp_rt.jar}, contains a list of all classes processed, including
 those that could not be instrumented.
 
-@node Java DynComp options, DynComp known bugs, Instrumenting the JDK with DynComp, Java DynComp
+@node DynComp for Java options, DynComp for Java known bugs, Instrumenting the JDK with DynComp, DynComp for Java
 @subsection DynComp options
 
 DynComp is invoked as follows:
@@ -3898,7 +3904,7 @@ at runtime. For an example, see @ref{Variables in Chicory output}.
 @end table
 
 
-@node DynComp known bugs,  , Java DynComp options, Java DynComp
+@node DynComp for Java known bugs,  , DynComp for Java options, DynComp for Java
 @subsection Known bugs and limitations
 
 @itemize
@@ -3914,7 +3920,7 @@ not accurately instrument code that uses reflection.
 @end itemize
 
 
-@node Kvasir, Mangel-Wurzel, Java DynComp, Front ends (instrumentation)
+@node Kvasir, Mangel-Wurzel, DynComp for Java, Front ends (instrumentation)
 @section C/C++ front end Kvasir
 
 @cindex Kvasir (binary front end for C)
@@ -3962,7 +3968,7 @@ programs,,,./developer,Daikon Developer Manual}.
 @menu
 * Using Kvasir::                
 * Kvasir options::              
-* DynComp dynamic comparability analysis::  
+* DynComp for C/C++::           
 * Tracing only part of a program::  
 * Pointer type disambiguation::  
 * C++ support::                 
@@ -4005,7 +4011,7 @@ A number of options to Kvasir may be supplied on the command line
 before the argument that is the name of your program (@pxref{Kvasir options}).
 
 
-@node Kvasir options, DynComp dynamic comparability analysis, Using Kvasir, Kvasir
+@node Kvasir options, DynComp for C/C++, Using Kvasir, Kvasir
 @subsection Kvasir options
 
 To see a complete list of options, run this command: @command{kvasir-dtrace --help}
@@ -4264,7 +4270,7 @@ of pointer fields which all refer to one element.
 
 @end table
 
-@ref{DynComp dynamic comparability analysis}:
+@ref{DynComp for C/C++}:
 
 @table @option
 
@@ -4386,8 +4392,8 @@ for Kvasir's developers.
 
 @end table
 
-@node    DynComp dynamic comparability analysis, Tracing only part of a program, Kvasir options, Kvasir
-@subsection DynComp dynamic comparability analysis
+@node    DynComp for C/C++, Tracing only part of a program, Kvasir options, Kvasir
+@subsection DynComp dynamic comparability analysis for C/C++
 
 @cindex DynComp, for C/C++
 @cindex abstract types, for C/C++
@@ -4508,7 +4514,7 @@ never attempt to find invariants between @code{yr} and
 meaningless invariants (the savings are miniscule in this trivial
 example, but they can be rather dramatic in larger examples).
 
-@node    Tracing only part of a program, Pointer type disambiguation, DynComp dynamic comparability analysis, Kvasir
+@node    Tracing only part of a program, Pointer type disambiguation, DynComp for C/C++, Kvasir
 @subsection Tracing only part of a program
 
 When Kvasir is run on a target program of significant size, often times
@@ -5214,7 +5220,7 @@ as the target program, without writing any information to a file.  This
 can avoid some I/O overhead, prevent filling up your disk with
 files, and in the future Daikon may be able to produce partial results
 as the target program is executing.  A limitation of online execution is
-that, unless FIFOs, or named pipes (@pxref{Online execution with DynComp})
+that, unless FIFOs, or named pipes (@pxref{Online execution with DynComp for C/C++})
 are used, it runs Daikon over only a single execution, as opposed to
 generalizing over multiple executions as can be done when writing to files
 and supplying all the files to Daikon.
@@ -5274,11 +5280,11 @@ two different terminals.
 
 
 @menu
-* Online execution with DynComp::  
+* Online execution with DynComp for C/C++::  
 @end menu
 
-@node Online execution with DynComp,  , Online execution, Online execution
-@subsubsection Online execution with DynComp
+@node Online execution with DynComp for C/C++,  , Online execution, Online execution
+@subsubsection Online execution with DynComp for C/C++
 
 When running Kvasir with DynComp (using the @file{--with-dyncomp}
 option), Kvasir generates the .decls file after it generates the .dtrace
@@ -5446,7 +5452,8 @@ Unix platform, as well as on Windows (with the Microsoft Visual C/C++
 compiler).  If you have access to a Linux/x86 platform (32 or 64-bit),
 we recommend use
 of Kvasir.  Mangel-Wurzel is missing a few features of Kvasir; for
-instance, Mangel-Wurzel outputs fewer variables.  Mangel-Wurzel requires
+instance, Mangel-Wurzel outputs fewer variables and has no abstract type
+inference analysis ().  Mangel-Wurzel requires
 the source code for your program, and it also requires the Purify
 program analysis tool from Rational Software.  You must install Purify
 (either a paid or evaluation version) before you can use Mangel-Wurzel.
