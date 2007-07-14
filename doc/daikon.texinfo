@@ -1614,7 +1614,7 @@ produced the output that it did.)
 
 The ``Samples breakdown'' output indicates how many samples in the
 @file{.dtrace} file had a modified value (``m''), had an unmodified
-value (``u''), and had a missing value (``x'').  The summary uses a
+value (``u''), and had a nonsensical (missing) value (``x'').  The summary uses a
 capital letter if the sample had any of the corresponding type of
 variable, and a lower-case letter if it had none.  These types affect
 statistical tests that determine whether a particular invariant (that
@@ -2084,15 +2084,53 @@ restriction on trace names is that the VarInfoName @code{parse} method
 must be able to parse the name.)
 
 By convention, trace variables are similar to program variables and
-field accesses.  For example, @code{w}, @code{x.y.z}, @samp{a[i]}, and
-@samp{a[0].next} are legal trace variables.  As in languages such as
+field accesses.  For example, @code{w} and @code{x.y.z} are legal trace
+variables.  (So are @samp{a[i]}, and
+@samp{a[0].next}, but these are usually handled as derived variables
+instead; see below.)  As in languages such as
 Java and C, a period character represents field access and square
 brackets represent selecting an element of a sequence.
+
+@cindex derived variables, explanation of
+
+In addition to variables that appear in the trace file, Daikon creates
+additional variables, called ``derived variables'', by combining trace
+variables.  For example, for any array @code{a} and integer @code{i},
+Daikon creates a derived variable @code{a[i]}.  This is not a variable
+in the program (and this expression might not even appear in the source
+code), but it may still be useful to compute invariants over this
+expression.  For a list of derived variables and how to control Daikon's
+use of them, see @ref{Options to enable/disable derived variables}.
+
+@cindex nonsensical values for variables
+
+Some trace variables and derived variables may represent meaningless
+expressions.  Examples include
+@itemize
+@item
+@code{x} when @code{x} is uninitialized or deallocated,
+@item
+@code{x.y} when @code{x} is null (or uninitialized or deallocated)
+@item
+@code{a[i]} when @code{i} is outside the bounds of @code{a} (or
+uninitialized or deallocated, or @code{a} is null, uninitialized, or
+deallocated)
+@end itemize
+@noindent
+For trace variables, it is the responsibility of the front end to output
+the value ``nonsensical'' (@pxref{Data trace records}) rather than
+crashing the program or outputting a meaningless value.  (Determining
+when an expression's value is meaningless is the most challenging part
+of writing an instrumenter for a language like C, since it requires
+tracking memory allocation and initialization.)  For derived variables
+created by Daikon, Daikon does the same thing, setting values to
+``nonsensical'' when appropriate.
+
 
 The remainder of this section describes conventions for naming
 expressions.  Those that cannot be named by simple C/Java expressions
 are primarily related to arrays and sequences.  (In part, these special
-expressions are necessary because Daikon's can only handle variables of
+expressions are necessary because Daikon can only handle variables of
 scalar (integer, floating-point, boolean, String) and array-of-scalar
 types.  Daikon cannot handle structs, classes, or multi-dimensional
 arrays or structures, but such data structures can be represented as
@@ -2105,9 +2143,6 @@ relationship.)
 @code{a[i]} array access.
 @code{a} and @code{i} are themselves
 arbitrary variable names, of array and integral type, respectively.
-Since @code{a[i]} is not a variable in the program source code, it is
-called a ``derived variable''; see @ref{Options to enable/disable
-derived variables}.
 
 @item
 @cindex @code{-1} array index (counts from end of array)
@@ -9236,7 +9271,10 @@ but @samp{a} for the identity of the array itself.)
 @end itemize
 
 @cindex nonsensical values for variables
-The value may also be the string @code{nonsensical}.
+@cindex missing values for variables, see nonsensical values
+
+The value may also be the string @code{nonsensical} (sometimes also
+known as ``missing'').
 That means that the variable does not have a value because
 the expression that computes it cannot be evaluated.  For instance, if
 variable @code{a} has value @code{null}, then variable @code{a.b} would
