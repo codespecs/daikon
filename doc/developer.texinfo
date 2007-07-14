@@ -1405,32 +1405,32 @@ first token on the line followed by a colon.  The supported commands
 are:
 
 @deffn {SampleTester Command} decl: decl-file
-  This command specifies the declaration file to use.  This is a normal
-  decls file that should follow the format defined in the user manual.
+This command specifies the declaration file to use.  This is a normal
+decls file that should follow the format defined in the user manual.
 @end deffn
 
 @deffn {SampleTester Command} ppt: ppt
-  This command specifies the program point that will be used with following
-  vars, data, and assert commands.  The program point should be specified 
-  exactly as it appears in the decls file.
+This command specifies the program point that will be used with following
+vars, data, and assert commands.  The program point should be specified 
+exactly as it appears in the decls file.
 @end deffn
 
 @deffn {SampleTester Command} vars: var1 var2...
-  Specifies the variables that will be used on following data lines.
-  Each variable must match exactly a variable in the ppt.  Other
-  variables will be treated as missing.  
+Specifies the variables that will be used on following data lines.
+Each variable must match exactly a variable in the ppt.  Other
+variables will be treated as missing.  
 @end deffn
 
 @deffn {SampleTester Command} data: val1 val2...
-  Specifies the values for each of the previously specified variables.  The
-  values must match the type of the variables.  A single dash (-) indicates
-  that a variable is missing.
+Specifies the values for each of the previously specified variables.  The
+values must match the type of the variables.  A single dash (-) indicates
+that a variable is missing.
 @end deffn
 
 @deffn {SampleTester Command} assert: assertion
-  Specifies an assertion that should be true at this point (@pxref{Assertions}).
-  The negation of an assertion can be specified by adding an exclamation
-  point before the assertion (for example: @code{!inv("x > y", x, y})).
+Specifies an assertion that should be true at this point (@pxref{Assertions}).
+The negation of an assertion can be specified by adding an exclamation
+point before the assertion (for example: @code{!inv("x > y", x, y})).
 @end deffn
 
 @menu
@@ -1446,17 +1446,17 @@ The valid assertions for the assert: command are:
 
 @deffn Assertion inv format var1 ...
 
-  The inv assertion asserts that the specified invariant exists in the
-  current ppt.  The @var{format} argument is the result of calling 
-  @code{format()} on
-  the invariant.  This is how the invariant is recognized.  The remaining
-  arguments are the variables that make up the invariants slice.  These
-  must match exactly variables in the ppt.  The inv assertion returns true
-  iff the slice exists and an invariant is found within that slice that
-  matches @var{format}.
+The inv assertion asserts that the specified invariant exists in the
+current ppt.  The @var{format} argument is the result of calling 
+@code{format()} on
+the invariant.  This is how the invariant is recognized.  The remaining
+arguments are the variables that make up the invariants slice.  These
+must match exactly variables in the ppt.  The inv assertion returns true
+iff the slice exists and an invariant is found within that slice that
+matches @var{format}.
 
-  Optionally, @var{format} can be replaced by the fully qualified class name of
-  the invariant.  In this case, it is only necessary for the class to match.
+Optionally, @var{format} can be replaced by the fully qualified class name of
+the invariant.  In this case, it is only necessary for the class to match.
 @end deffn
 
 More assertions can easily be added to @file{SampleTester.java} as required.
