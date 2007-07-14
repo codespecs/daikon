@@ -52,12 +52,11 @@ doc: javadoc
 
 javadoc: $(JAVA_FILES)
 	mkdir -p doc
-	# javadoc 1.4 doesn't like being given package names; give all *.java files instead
 	javadoc -d doc utilMDE
 	# makes "doc" (the target of this rule) look up to date
 	touch doc
-	jdk-add-munged-anchor-names doc/utilMDE/*.html
-	@echo "Run jdk-index-to-alist (see ~/bin/share/jdk-index-to-alist)"
+	# jdk-add-munged-anchor-names doc/utilMDE/*.html
+	@echo "Optionally run jdk-index-to-alist (for Emacs support)"
 
 audit:
 	(cd ..; maudit utilMDE)
