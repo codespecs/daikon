@@ -2042,14 +2042,20 @@ source rather than a single location.  This concept is referred to as
 
 Two other program point tags that have special meaning to Daikon's hierarchy
 organization are @code{:::OBJECT} and @code{:::CLASS}.
-The former indicates object invariants (sometimes called representation
-invariants or class invariants) that always hold for any object of the
-given class, from the point of view of a client or user.  These
-properties hold at entry to and exit from every public method of the
-class (except not the entry to constructors, when fields are not yet
-initialized).
-The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only
-for static variables, which have only one value for all objects.
+The @code{:::OBJECT} tag indicates object invariants (sometimes called
+representation invariants or class invariants) over all the instance
+(member) and static fields of the class.  These properties always hold
+for any object of the given class, from the point of view of a client or
+user.  These properties hold at entry to and exit from every public
+method of the class (except not the entry to constructors, when fields
+are not yet initialized).
+
+The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only for
+static variables, which have only one value for all objects.  (Static
+fields are often used for different purposes than instance fields, and
+the @code{:::CLASS} tag separates these so that programmers can see the
+properties over the static fields without knowing which are the static
+fields and pick them out of the @code{:::OBJECT} program point.
 
 @cindex private methods
 
@@ -2117,7 +2123,9 @@ uninitialized or deallocated, or @code{a} is null, uninitialized, or
 deallocated)
 @end itemize
 @noindent
-For trace variables, it is the responsibility of the front end to output
+For trace variables, it is the responsibility of the front end to
+perform a check at run time whenever a variable's value is about to be
+output to the trace, and to output
 the value ``nonsensical'' (@pxref{Data trace records}) rather than
 crashing the program or outputting a meaningless value.  (Determining
 when an expression's value is meaningless is the most challenging part
