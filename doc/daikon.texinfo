@@ -248,7 +248,7 @@ DynComp dynamic comparability analysis for Java
 
 * Instrumenting the JDK with DynComp::  
 * DynComp for Java options::    
-* DynComp for Java known bugs::          
+* DynComp for Java known bugs::  
 
 C/C++ front end Kvasir
 
@@ -3675,11 +3675,12 @@ all times.
 
 
 @node DynComp for Java, Kvasir, Chicory, Front ends (instrumentation)
-@section DynComp dynamic comparability analysis for Java
+@section DynComp dynamic comparability (abstract type) analysis for Java
 
 @cindex DynComp, for Java
 @cindex abstract types, for Java
 @cindex comparability, for Java
+@cindex dynamic comparability, for Java
 
 The DynComp dynamic comparability analysis tool performs dynamic type
 inference to group variables at each program point into comparability
@@ -3822,7 +3823,7 @@ and so is not comparable to the other variables.
 @menu
 * Instrumenting the JDK with DynComp::  
 * DynComp for Java options::    
-* DynComp for Java known bugs::          
+* DynComp for Java known bugs::  
 @end menu
 
 @node Instrumenting the JDK with DynComp, DynComp for Java options, DynComp for Java, DynComp for Java
@@ -4436,11 +4437,12 @@ for Kvasir's developers.
 @end table
 
 @node    DynComp for C/C++, Tracing only part of a program, Kvasir options, Kvasir
-@subsection DynComp dynamic comparability analysis for C/C++
+@subsection DynComp dynamic comparability (abstract type) analysis for C/C++
 
 @cindex DynComp, for C/C++
 @cindex abstract types, for C/C++
 @cindex comparability, for C/C++
+@cindex dynamic comparability, for C/C++
 
 Kvasir comes with the DynComp dynamic comparability analysis tool, which
 performs dynamic type inference to group variables at each program point
