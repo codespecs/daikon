@@ -759,22 +759,25 @@ always translate anything listed in @env{CYGWIN_RUNNER_ENV} (e.g.,
 Detecting invariants involves two steps:
 @enumerate
 @item
-Obtain a data trace file by running your program under the control of a
-front end (also known as an instrumenter) that records information about
-variable values.  You can run your program over an input of your own
+Obtain one or more data trace files by running your program under the control of a
+front end (also known as an instrumenter or tracer) that records information about
+variable values.  You can run your program over one or more inputs of your own
 choosing, such as regression tests or a typical user input session.
-Often, you will choose to obtain trace data for only a certain part of
-your program; this can improve performance and avoid inundating you with
-output.
+You may choose to obtain trace data for only part of
+your program; this can avoid inundating you with
+output, and can also improve performance.
 
 @item
 Run the Daikon invariant detector over the data trace files
 (@pxref{Running Daikon}).  This detects invariants in the recorded
 information.  You can view the invariants textually, or process them
-with an additional program.
+with a variety of tools.
 @end enumerate
 @noindent
-Often, you can run a single command that performs both steps.
+Often, you can run a single command that performs both steps.  Among
+other benefits, this can avoid the need to create the data trace file by
+sending trace information directly from the instrumented program to
+Daikon, which is called ``online execution'' of Daikon.
 
 This section briefly describes how to obtain data traces for Java, C,
 and Perl programs, and how to run Daikon.  For detailed information about
@@ -859,13 +862,18 @@ cd examples/java-examples/StackAr
 javac -g DataStructures/*.java
 @end example
 
-@item Run the program under the control of the Chicory front end,
+@item
+Run the program under the control of the Chicory front end,
 pass the information to Daikon, print the inferred invariants, and write
 a binary representation of the invariants to @file{StackArTester.inv.gz}.
 
 @example
 java daikon.Chicory --daikon DataStructures.StackArTester
 @end example
+
+Alternately, replacing the @option{--daikon} argument by
+@option{--daikon-online} has the same effect, but does not write a data
+trace file to disk.
 
 @end enumerate
 
@@ -884,7 +892,7 @@ javac -g DataStructures/*.java
 @end example
 
 @item Run the program under the control of the Chicory front end, in
-order to create a @file{StackArTester.dtrace.gz} file.
+order to create a trace file named @file{StackArTester.dtrace.gz}.
 
 @example
 java daikon.Chicory DataStructures.StackArTester
@@ -896,7 +904,32 @@ java daikon.Chicory DataStructures.StackArTester
 java daikon.Daikon StackArTester.dtrace.gz
 @end example
 
-@item Examine the invariants.  (They were also printed to standard out
+Daikon can analyze multiple runs (executions) of the program.  You can
+supply Daikon with multiple trace files:
+
+@example
+java daikon.Chicory --dtrace-file=StackArTester1.dtrace.gz DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester2.dtrace.gz DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester3.dtrace.gz DataStructures.StackArTester
+java daikon.Daikon StackArTester*.dtrace.gz
+@end example
+
+@c @noindent
+@c or, you can append information from multiple runs in a single trace file
+@c (but in this case you cannot use a compressed trace file):
+@c 
+@c @example
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java daikon.Daikon StackArTester.dtrace
+@c @end example
+
+(In this example, all the runs are identical, so multiple runs yield the
+same invariants as one run.)
+
+@item
+Examine the invariants.  (They were also printed to standard out
 by the previous step.)
 
 There are various ways to do this.
@@ -956,7 +989,7 @@ DynComp on the target program first, then pass the resulting
 @item
 Compile the program with the @option{-g} switch to enable debugging
 symbols.  (The program and test suite appear in the
-@file{DataStructures} subdirectory directory.)
+@file{DataStructures} subdirectory of the @file{StackAr} directory.)
 @example
 cd examples/java-examples/StackAr
 javac -g DataStructures/*.java
@@ -1239,7 +1272,29 @@ example uses a configuration option to disable the use of derived
 variables; it can also run without that option, but takes significantly
 longer.
 
-@item Examine the invariants.  As described in @ref{StackAr example},
+Daikon can analyze multiple runs (executions) of the program.  You can
+supply Daikon with multiple trace files:
+
+@example
+kvasir-dtrace --dtrace-file=daikon-output/wordplay1.dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
+kvasir-dtrace --dtrace-file=daikon-output/wordplay2.dtrace ./wordplay -f words.txt 'better results from multiple runs'
+kvasir-dtrace --dtrace-file=daikon-output/wordplay3.dtrace ./wordplay -f words.txt 'more testing equals better testing'
+java -Xmx256m daikon.Daikon daikon-output/wordplay*.dtrace
+@end example
+
+@noindent
+or, you can append information from multiple runs in a single trace file:
+
+@example
+kvasir-dtrace --dtrace-file=daikon-output/wordplay-all.dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
+kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace ./wordplay -f words.txt 'better results from multiple runs'
+kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace ./wordplay -f words.txt 'more testing equals better testing'
+java -Xmx256m daikon.Daikon daikon-output/wordplay-all.dtrace
+@end example
+
+
+@item
+Examine the invariants.  As described in @ref{StackAr example},
 there are several ways to do this:
 @itemize
 @item Examine the output from running Daikon.
@@ -1314,7 +1369,7 @@ In some cases, the time and space requirements of the examples can be
 reduced by reducing the length of the program run.
 However, Daikon's running time
 depends on both the length of the test run and the size of the program
-(especially in its use of global variables and nested data
+data (such as its use of global variables and nested data
 structures).
 The examples also demonstrate disabling derived variables, which
 significantly improves Daikon's performance at the cost of producing
@@ -1465,7 +1520,8 @@ cd daikon-output
 java daikon.Daikon Birthday.decls test_bday-combined.dtrace
 @end example
 
-@item Examine the invariants.  They are printed to standard output, and
+@item
+Examine the invariants.  They are printed to standard output, and
 they are also saved to file @file{Birthday.inv.gz}, which you can
 manipulate with the PrintInvariants program and other Daikon tools.
 For example:
@@ -5184,8 +5240,8 @@ tracing, variable tracing, and disambiguation together all at once.
 @node    C++ support, Online execution, Pointer type disambiguation, Kvasir
 @subsection C++ support
 
-Kvasir supports C++, but we have done far more tests on C programs than
-on C++ programs, so our C++ support is not as mature as our C support.
+Kvasir supports C++, but Kvasir has been tested more on C programs than
+on C++ programs, so Kvasir's C++ support is not as mature as its C support.
 Here is a partial list of C++ features that Kvasir currently supports:
 
 @itemize @bullet
@@ -5269,6 +5325,8 @@ that, unless FIFOs, or named pipes (@pxref{Online execution with DynComp for C/C
 are used, it runs Daikon over only a single execution, as opposed to
 generalizing over multiple executions as can be done when writing to files
 and supplying all the files to Daikon.
+The Chicory front end for Java also supports online execution via its
+@option{--daikon-online} argument (@pxref{Chicory miscellaneous options}).
 
 @cindex pipe, as data trace file
 
