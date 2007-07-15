@@ -185,10 +185,10 @@ public final class Runtime {
     //    != null);
 
   public static void setDtrace(String filename, boolean append) {
+    System.out.printf("entered daikon.Runtime.setDtrace(%s, %b)%n", filename, append);
     if (no_dtrace) {
       throw new Error("setDtrace called when no_dtrace was specified");
     }
-    // System.out.println("calling setDtrace(" + filename + ")...");
     try {
       File file = new File(filename);
       File parent = file.getParentFile();
@@ -214,7 +214,7 @@ public final class Runtime {
     } else {
       System.err.println("Warning: .dtrace file may be incomplete if program is aborted");
     }
-    // System.out.println("...done calling setDtrace(" + filename + ")");
+    // System.out.printf("exited daikon.Runtime.setDtrace(%s, %b)%n", filename, append);
   }
 
   /**
