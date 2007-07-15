@@ -458,10 +458,11 @@ public class Runtime
         }
     }
 
+    // Copied from daikon.Runtime
     /** Specify the dtrace file to which to write **/
     public static void setDtrace(String filename, boolean append)
     {
-        // Copied from daikon.Runtime
+        System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);
 
         if (no_dtrace)
         {
@@ -502,7 +503,7 @@ public class Runtime
         {
             System.err.println("Warning: .dtrace file may be incomplete if program is aborted");
         }
-        // System.out.println("...done calling setDtrace(" + filename + ")");
+        // System.out.printf("exited daikon.chicory.Runtime.setDtrace(%s, %b)%n", filename, append);
     }
 
     /**
