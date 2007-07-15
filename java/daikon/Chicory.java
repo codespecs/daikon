@@ -277,7 +277,7 @@ public class Chicory {
     dtraceLim = System.getProperty(traceLimString);
     terminate = System.getProperty(traceLimTermString);
 
-    //run Daikon if we're in online mode
+    // Run Daikon if we're in online mode
     StreamRedirectThread daikon_err = null, daikon_out = null;
     if (daikon_online)
       {
@@ -382,25 +382,28 @@ public class Chicory {
                         cmdline);
       System.exit(1);
     }
-    int result = redirect_wait (chicory_proc);
+    int targetResult = redirect_wait (chicory_proc);
 
     if (daikon) {
       // Terminate if target didn't end properly
-      if (result != 0) {
-        System.out.printf ("Warning: Target exited with %d status\n", result);
-        System.out.printf ("Daikon not run\n");
-        System.exit (result);
+      if (targetResult != 0) {
+        System.out.printf ("Warning: Did not run Daikon because target exited with %d status\n", targetResult);
+        System.exit (targetResult);
       }
 
       runDaikon();
-      result = waitForDaikon();
-      System.exit(result);
+      int daikonResult = waitForDaikon();
+      System.exit(daikonResult);
     } else if (daikon_online) {
+      if (targetResult != 0) {
+        System.out.printf ("Warning: Target exited with %d status\n", targetResult);
+      }
+
       // Wait for the process to terminate and return the results
-      result = -1;
+      int daikonResult = 0;    // initialized to nonsense value to suppress compiler warning
       while (true) {
         try {
-          result = daikon_proc.waitFor();
+          daikonResult = daikon_proc.waitFor();
           break;
         } catch (InterruptedException e) {
           System.out.printf ("unexpected interrupt %s while waiting for "
@@ -417,16 +420,17 @@ public class Chicory {
                            + "threads to join", e);
       }
 
-      System.exit(result);
-    }
-    else
-      {
-        // If no daikon command specified, show results and exit
-        if (result != 0) {
-          System.out.printf ("Warning: Target exited with %d status\n", result);
-        }
-        System.exit (result);
+      if (daikonResult != 0) {
+        System.out.printf ("Warning: Daikon exited with %d status\n", daikonResult);
       }
+      System.exit(daikonResult);
+    } else {
+      // No daikon command specified, so just exit
+      if (targetResult != 0) {
+        System.out.printf ("Warning: Target exited with %d status\n", targetResult);
+      }
+      System.exit (targetResult);
+    }
   }
 
 
@@ -472,7 +476,7 @@ public class Chicory {
     return result;
   }
 
-  /** Wait for stream redirect threads to complete **/
+  /** Wait for stream redirect threads to complete and return its exit status **/
   public int redirect_wait (Process p) {
 
     // Create the redirect theads and start them
