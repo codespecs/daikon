@@ -8,9 +8,8 @@ import java.net.Socket;
 import java.util.*;
 
 /**
- * Runtime support for chicory daikon front end.
- * This class is a collection of methods.  It should
- * never be instantiated.
+ * Runtime support for Chicory, the Daikon front end for Java.
+ * This class is a collection of methods; it should never be instantiated.
  */
 public class Runtime
 {
@@ -575,12 +574,12 @@ public class Runtime
                 if (chicoryLoaderInstantiationError) {
                     // Warning messages have already been printed.
                 } else if (all_classes.size() == 0) {
-                    System.out.println ("Chicory warning: No methods were "
-                       + "instrumented, check the -ppt-select-pattern and "
-                       + "-ppt-omit-pattern options");
+                    System.out.println ("Chicory warning: No methods were instrumented.");
+                    if ((! ppt_select_pattern.isEmpty()) || (! ppt_omit_pattern.isEmpty())) {
+                        System.out.println ("Check the --ppt-select-pattern and --ppt-omit-pattern options");
+                    }
                 } else if (printedRecords == 0) {
-                    System.out.println ("Chicory Warning: "
-                                        + "no records were printed");
+                    System.out.println ("Chicory warning: no records were printed");
                 }
             }
         });
