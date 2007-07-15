@@ -1612,14 +1612,24 @@ The test can be added into the standard tests (either @samp{everything} or
 @c Tell those who receive the repository:
 @c   You can find a copy of the Daikon CVS repository at
 @c     http://pag.csail.mit.edu/~mernst/tmp/inv-cvs.tar.gz
-@c   The compressed repository is about 800 Mbytes in size.  Let me know me
-@c   when you have downloaded it, so I can remove the file, and please do
-@c   not distribute it to anyone else.  Before using it, carefully read the
-@c   "Analyzing historical versions of Daikon" section of the Daikon
-@c   Developer Manual.  Let us know if you have any problems, questions, or
-@c   suggestions; we will do our best to help.  Finally, please let us know
-@c   anything interesting you learn, and we wish you the best of luck with
-@c   your research!
+@c   The compressed repository is about 800 Mbytes in size.
+@c   Let me know when you have downloaded it, so I can remove the file.
+@c 
+@c   Please do not distribute it to anyone else.
+@c 
+@c   Before using it, carefully read the "Analyzing historical versions of
+@c   Daikon" section of the Daikon Developer Manual.  Contact us if you have any
+@c   problems, questions, or suggestions, so that we can correct problems both
+@c   for you and for other users of Daikon or of the CVS repository.  This can
+@c   also avoid misleading results that follow from incorrect assumptions about
+@c   the system.
+@c 
+@c   Please let us know anything interesting you learn about Daikon.  Also point
+@c   us at any publications that make use of Daikon, either as a test subject or
+@c   as one step in your methodology, both for our own edification and so we can
+@c   link to them from http://pag.csail.mit.edu/daikon/pubs/.
+@c 
+@c   We wish you the best of luck with your research!
 @c Some recent distributions:
 @c   1/7/2005   Miryung Kim <miryung@cs.washington.edu>
 @c   9/19/2005  Barbara Ryder <ryder@cs.rutgers.edu>, Xiaoxia Ren <xren@cs.rutgers.edu>, Frank Tip <ftip@us.ibm.com>
