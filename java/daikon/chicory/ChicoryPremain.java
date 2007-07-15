@@ -67,7 +67,7 @@ public class ChicoryPremain {
     } else {
       File trace_file_path = new File (Chicory.output_dir,
                                        Chicory.dtrace_file.getPath());
-      Runtime.setDtrace (trace_file_path.toString(), false);
+      Runtime.setDtraceMaybe (trace_file_path.toString());
     }
 
     // Setup argument fields in Runtime
