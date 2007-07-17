@@ -467,7 +467,7 @@ lists the variables in scope at that program point, and the front end
 must arrange that execution creates a data trace record (@pxref{Data
 trace records,,,./daikon,Daikon User Manual}) for each execution of that
 program point.  Conventionally, the way to create a data trace record is
-to insert a printf (or similar) statement that outputs the current
+to insert a @code{printf} (or similar) statement that outputs the current
 values of the variables of interest.
 
 
@@ -1133,7 +1133,7 @@ Suppression also cannot use relationships between variables.  For
 example, it cannot suppress ``x[i] = y[j]'' by ``(x[] = y[]) ^ (i =
 j)''.  Suppressor invariants can only use variables that are also in the
 invariant that is being suppressed.  In this example, only invariants
-using the variables ``x[i]'' and ``y[i]'' can be used as a supressors.
+using the variables ``x[i]'' and ``y[i]'' can be used as a suppressors.
 See @ref{New suppressors} for more information.
 
 @emph{Non-printing} is a post-pass that throws out any invariants that
@@ -1803,8 +1803,9 @@ trunk (respectively, the branch).
 @c  LocalWords:  diff InvariantFormatTest classpath ioa jml aString valueOf val
 @c  LocalWords:  deffn SampleTester decl subsubsection arg iff testsubject ajax
 @c  LocalWords:  jtb cvs checkin smallexample checkins printindex Dataflow gcc
-@c  LocalWords:  convertcsv Mangel-Wurzel malloc TerminationMessage un Mozilla FSE cd
-@c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo env
+@c  LocalWords:  convertcsv Mangel Wurzel malloc TerminationMessage un Mozilla FSE cd
+@c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo env di
 @c  LocalWords:  JDKDIR bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
-@c  LocalWords:  INST Xiaoxia regex
+@c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
+@c  LocalWords:  DiscardCode Kapfhammer GB
