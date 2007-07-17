@@ -244,7 +244,7 @@ Chicory options
 * Variables in Chicory output::  
 * Chicory miscellaneous options::  
 
-DynComp dynamic comparability analysis for Java
+DynComp dynamic comparability (abstract type) analysis for Java
 
 * Instrumenting the JDK with DynComp::  
 * DynComp for Java options::    
@@ -3198,7 +3198,8 @@ executions.
 algorithm, one for Java programs and one for binaries compiled from C
 and C++ source code.
 When confusion would otherwise arise, we distinguish them as DynCompJ
-and DynCompB respectively.)
+(or DynComp for Java)
+and DynCompB (or Dyncomp for C/C++) respectively.)
 
 Because abstract type inference must be performed before Daikon runs, it
 is integrated with the front-ends rather than directly as part of
@@ -9672,7 +9673,7 @@ this.topOfStack
 @c  LocalWords:  InvariantsDisplay Ctrl ControlPanel checkbox kbd JDE prj jde
 @c  LocalWords:  autoload myA myList hashcodes MyA HashSetLinear HslIterator IA
 @c  LocalWords:  topAndPop init util DTRACEFILE DTRACEAPPEND Valgrind's AMD gz
-@c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo AFS csv
+@c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo AFS csv rec
 @c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst pragma prog
 @c  LocalWords:  workflow accessor instr instrsourcedir TYPESAPPEND basedir cp
 @c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln nn gdb
@@ -9727,4 +9728,7 @@ this.topOfStack
 @c  LocalWords:  ptrs Misc isStruct winterDays summerDays usertype fooClass pty
 @c  LocalWords:  fooVar CPATH mangelrc Dsetjmp setjmp lstdc libgcc GCC's cpp's
 @c  LocalWords:  ifndef preinclude XTerm cl dirname cnt mwdefines url linux von
-@c  LocalWords:  libc Leitner Quinonez Rodric Rabbah
+@c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
+@c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
+@c  LocalWords:  maxdepthspec DynCompJ DynCompB cset jdk dcomp BuildJDK FIFOs
+@c  LocalWords:  amd Itanium Yuan
