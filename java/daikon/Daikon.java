@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -820,10 +821,13 @@ public final class Daikon {
       throw new Daikon.TerminationMessage();
     }
 
-    HashSet<File> decl_files = new HashSet<File>();
-    HashSet<String> dtrace_files = new HashSet<String>(); /* either file names or "-"*/
-    HashSet<File> spinfo_files = new HashSet<File>();
-    HashSet<File> map_files = new HashSet<File>();
+    // LinkedHashSet because it can be confusing to users if files (of the
+    // same type) are gratuitously processed in a different order than they
+    // were supplied on the command line.
+    HashSet<File> decl_files = new LinkedHashSet<File>();
+    HashSet<String> dtrace_files = new LinkedHashSet<String>(); /* either file names or "-"*/
+    HashSet<File> spinfo_files = new LinkedHashSet<File>();
+    HashSet<File> map_files = new LinkedHashSet<File>();
 
     LongOpt[] longopts =
       new LongOpt[] {
@@ -1822,7 +1826,7 @@ public final class Daikon {
   }
 
   /**
-   * The  data-processing routine of the daikon engine.  At this
+   * The data-processing routine of the daikon engine.  At this
    * point, the decls and spinfo files have been loaded, all of the
    * program points have been setup, and candidate invariants have
    * been instantiated.  This routine processes data to falsify the
