@@ -11,6 +11,38 @@ import java.util.*;
  * All refernences to the Objects are weak so that they will be removed from
  * the sets when no longer referenced.
  */
+
+/* Also, I am considering the convention that the parent of a root is itself
+ * rather than null, to avoid having to insert try-catches everywhere to
+ * handle NullPointerExceptions (this might be a moot point, as it hasn't
+ * been an issue thus far and I myself am more careful than that).
+ * 
+ * TODO:
+ *   Let A --> B and C --> D be in the same tree, where D is not a child of A
+ *   and B is not a child of C. When union(A, C), consider x = rank(C) - rank(B)
+ *   and y = rank(A) - rank(D). If either x or y is greater than 0, then A --> C
+ *   if x > y, and C --> A otherwise.
+ *   
+ *   Tracers should list line numbers and files where they are created.
+ *   
+ *   Union-by-rank on normal and tracer trees.
+ *
+ * -charlest
+ */
+
+/* In changing the information output into the "scratch" file foo.txt-cset,
+ * this is how I got information from this class to the text file:
+ * Writing .txt-cset is done by invoking print_comparable() in DCRuntime
+ * It gets a set of DaikonVariableInfos (henceforth DVIs) from get_comparable()
+ *      in DCRuntime, which takes a RootInfo (a fancy DVI) as a parameter
+ * get_comparable() creates a map between the immediate children of the RootInfo
+ *      and sets of their respective children by invoking
+ *      add_variable(map, immediate child)
+ * add_variable(map, node) accesses this class (!!!) to ask what the root of
+ *      node is, then adds the node to the set map.get(root); then it recursively
+ *      iterates itself on (map, children of node)
+ */
+
 class TagEntry extends WeakReference<Object> {
 
   /** Maps each object to its entry in the Union-Find datastructure **/
@@ -20,20 +52,33 @@ class TagEntry extends WeakReference<Object> {
   private static SimpleLog debug = new SimpleLog(false);
 
   /**
-   * Parent in the tree that represents the set for this element.  If null,
-   * this entry is the representive one
+   * Parent in the tree that represents the set for this element.  If this,
+   * this entry is the representative one
    */
   private TagEntry parent;
 
+  /**
+   * Element in the tree that this element interacted with.
+   * Important!: tracer is null if this has no tracer.
+   *
+   * if TRACING_ENABLED?
+   */
+  private TagEntry tracer;
+
   /** Create an entry as a separate set **/
   public TagEntry (Object obj) {
-    this (obj, null);
+    super(obj);
+    this.parent = null;
+    this.tracer = null;
+    // System.out.printf("Make %s with parent %s%n", this, this.parent);
   }
 
   /** Create an entry and add it to an existing set **/
   public TagEntry (Object obj, TagEntry parent) {
     super (obj);
     this.parent = parent;
+    this.tracer = parent; // if TRACING_ENABLED?
+    // System.out.printf("Made %s with parent p%s%n", this, this.parent);
   }
 
   /**
@@ -47,23 +92,23 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Merge the two sets identified by their roots
-   */
-  public static void union (TagEntry root1, TagEntry root2) {
-    assert root1.parent == null;
-    assert root2.parent == null;
-    if (root1 != root2)
-      root2.parent = root1;
-  }
-
-  /**
    * Merge the sets that contain the specified objects.  If this is the
    * first time either of the objects was seen, create an entry for it.
    */
   public static void union (Object obj1, Object obj2) {
     assert (obj1 != null) && (obj2 != null);
     debug.log ("union of '%s' and '%s'%n", obj1, obj2);
-    union (get_entry (obj1).find(), get_entry (obj2).find());
+    
+    TagEntry o1 = get_entry(obj1), o2 = get_entry(obj2);
+    TagEntry r1 = o1.find(), r2 = o2.find();
+    
+    // if TRACING_ENABLED?
+    
+    if (r1 != r2) {
+      r2.parent = r1;
+      o1.reroute(null); o2.reroute(null);
+      o2.tracer = o1;
+    }
   }
 
   /**
@@ -132,6 +177,21 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
+   * Recursively traces from this object to the root of its tracer tree,
+   * and reverses the direction of every pointer on the path, such that
+   * this object is now the root of its tracer tree. (Imprecise wording, I know)
+   */
+  public void reroute(TagEntry newTracer) {
+    try { this.tracer.reroute(this); }
+    catch (NullPointerException e) { }
+    finally { this.tracer = newTracer; }
+//    if(this.tracer != null) { System.out.println("Tracer not null"); this.tracer.reroute(this); }
+//    this.tracer = newTracer;
+  }
+  
+  public void rootMe() { this.reroute(null); }
+
+  /**
    * Returns each of the sets with elements in each set on a separate
    * line.
    */
@@ -140,6 +200,8 @@ class TagEntry extends WeakReference<Object> {
     LinkedHashMap<Object, List<Object>> sets
       = new LinkedHashMap<Object,List<Object>>();
 
+    /* Fill sets from object_map by placing every object in an ArrayList
+     * whose key is its root. */
     for (Object obj : object_map.keySet()) {
       Object rep = find (obj);
       List<Object> set = sets.get (rep);
@@ -168,4 +230,11 @@ class TagEntry extends WeakReference<Object> {
     return (out);
   }
 
+  /** Returns the tracer of this node **/
+  public TagEntry getTracer() { return tracer; }
+  
+  public TagEntry getTraceRoot() {
+    if (tracer == null) return this;
+    else return tracer.getTraceRoot();
+  }
 }
