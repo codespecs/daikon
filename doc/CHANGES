@@ -20,6 +20,28 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.3.1 (August 1, 2007)
+
+Kvasir
+
+  Bug fixes
+
+    A memory leak in Kvasir's handling of variable names has been
+    fixed.
+
+  Portability
+
+    An unneeded directory "auxprogs" whose presence caused a build
+    failure on some systems has been removed.
+
+DynComp (Binary)
+
+  Bug fixes
+
+    DynComp's treatment of "argc", "argv", and the environment pointer
+    "environ" now works consistently across different versions of the
+    C library.
+
 4.3.0 (July 1, 2007)
 
 A new tool (DynComp) calculates variable comparability information
