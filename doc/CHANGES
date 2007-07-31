@@ -42,6 +42,17 @@ DynComp (Binary)
     "environ" now works consistently across different versions of the
     C library.
 
+DynComp (Java)
+
+  Bug fixes
+
+    The equals method of Object is now instrumented. (The manual
+    incorrectly claimed that this was the case in version 4.3.0.)
+
+  [DETAILS NEEDED: cset file format has changed]
+
+-------------------------------------------------
+
 4.3.0 (July 1, 2007)
 
 A new tool (DynComp) calculates variable comparability information
