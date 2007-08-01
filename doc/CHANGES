@@ -53,7 +53,7 @@ DynComp (Java)
 
   Bug fixes
 
-    The equals method of Object is now instrumented. (The manual
+    The equals method of Object is now instrumented.  (The manual
     incorrectly claimed that this was the case in version 4.3.0.)
 
   [DETAILS NEEDED: cset file format has changed]
