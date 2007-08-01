@@ -42,6 +42,13 @@ DynComp (Binary)
     "environ" now works consistently across different versions of the
     C library.
 
+    The previous version of DynComp would crash if a 64-bit program
+    attempted to access memory at too large a virtual address, which
+    happened on systems with certain security options enabled.  The
+    range of supported addresses hase been increased to 1TB, which is
+    the maximum practical with the current data structure, and
+    overflows are now caught with an error message.
+
 DynComp (Java)
 
   Bug fixes
