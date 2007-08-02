@@ -1269,10 +1269,14 @@ public final class FileIO {
       // Parse the ppt name
       try {
         new PptName(ppt_name);
-      } catch (Error e) {
-        throw new Daikon.TerminationMessage("Illegal program point name \"" + ppt_name + "\""
-                        + " at " + state.filename
-                        + " line " + reader.getLineNumber());
+      } catch (Throwable t) {
+        if (t instanceof Daikon.TerminationMessage)
+          throw new Daikon.TerminationMessage ("%s: in %s line %d",
+                      t.getMessage(), state.filename, reader.getLineNumber());
+        else
+          throw new Daikon.TerminationMessage
+          (String.format ("Illegal program point name '%s' (%s) in %s line %d",
+             ppt_name, t.getMessage(), state.filename, reader.getLineNumber()));
       }
 
       if (state.all_ppts.size() == 0) {
