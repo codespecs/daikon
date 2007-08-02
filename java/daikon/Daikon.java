@@ -197,6 +197,9 @@ public final class Daikon {
    **/
   public static int dkconfig_progress_delay = 1000;
 
+  /** If true, show stack traces for errors such as file format errors **/
+  public static boolean dkconfig_show_stack_trace = false;
+
   public final static String release_version = "4.3.0";
   public final static String release_date = "July 1, 2007";
   public static final String release_string =
@@ -546,9 +549,12 @@ public final class Daikon {
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
     public TerminationMessage(String s) { super(s); }
+    public TerminationMessage(String format, Object... args) {
+      super (String.format (format, args));
+    }
     public TerminationMessage(Exception e) { super(e.getMessage()); }
-    public TerminationMessage(String s, LineNumberReader reader, String fileName) {
-      super(new FileIOException(s, reader, fileName).getMessage()); }
+    //public TerminationMessage(String s, LineNumberReader reader, String fileName) {
+    //      super(new FileIOException(s, reader, fileName).getMessage()); }
     public TerminationMessage(Object... s) { super(UtilMDE.joinLines(s)); }
     public TerminationMessage() { super(); }
   }
@@ -567,6 +573,8 @@ public final class Daikon {
     } catch (TerminationMessage e) {
       if (e.getMessage() != null) {
         System.err.println(e.getMessage());
+        if (dkconfig_show_stack_trace)
+          e.printStackTrace();
         System.exit(1);
       } else {
         System.exit(0);
@@ -2253,7 +2261,7 @@ public final class Daikon {
   * suppression and equality set optimizations (should yield the same
   * invariants as the simple incremental algorithm
   */
-  static void undoOpts(PptMap all_ppts) {
+  public static void undoOpts(PptMap all_ppts) {
 
     //undo suppressions
     Iterator<PptTopLevel> suppress_it = all_ppts.ppt_all_iterator();
