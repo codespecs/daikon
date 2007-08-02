@@ -1481,7 +1481,7 @@ public final class ONEOFSCALAR
             j = k;
           } else {
             // Output a single value
-            String nth = var().get_simplify_selectNth (offset, false, j);
+            String nth = var().get_simplify_selectNth_lower (j);
             if (nth == null) {
               String classname = this.getClass().toString().substring(6);
               result = "warning: method " + classname
