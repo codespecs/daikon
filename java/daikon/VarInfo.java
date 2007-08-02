@@ -3252,6 +3252,42 @@ public final class VarInfo implements Cloneable, Serializable {
   }
 
   /**
+   * Return a string in simplify format that will seclect the
+   * index_off element in a sequence that has a lower bound.
+   *
+   * @param simplify_index_name name of the index.  If free is false, this
+   * must be a number or null (null implies an index of 0)
+   * @param free true of simplify_index_name is variable name
+   * @param index_off offset from the index
+   */
+  public String get_simplify_selectNth_lower (int index_off) {
+
+    // Use VarInfoName to handle the old format
+    if (!FileIO.new_decl_format) {
+      VarInfoName[] bounds = var_info_name.getSliceBounds();
+      VarInfoName lower = null;
+      if (bounds != null)
+        lower = bounds[0];
+      VarInfoName select
+        = VarInfoName.QuantHelper.selectNth (var_info_name, // vin ok
+                                             lower, index_off);
+      return select.simplify_name();
+    }
+
+    // Calculate the index (including the offset if non-zero)
+    String complete_index = null;
+    Quantify.Term lower = get_lower_bound();
+    if (index_off != 0)
+      complete_index = String.format ("(+ |%s| %d)", lower.simplify_name(),
+                                      index_off);
+    else
+      complete_index = String.format ("|%s|", lower.simplify_name());
+
+    // Return the array properly indexed
+    return simplify_name (complete_index);
+  }
+
+  /**
    * Get a fresh variable name that doesn't appear in the given
    * variable in simplify format
    */
