@@ -476,7 +476,8 @@ public class PptSliceEquality
       if (slice.invs.size() == 0) {
         continue;
       }
-      Assert.assertTrue (parent.findSlice (slice.var_infos) == null);
+      assert (parent.findSlice (slice.var_infos) == null)
+        : parent.findSlice (slice.var_infos);
       slice.repCheck();
       parent.addSlice (slice);
     }
