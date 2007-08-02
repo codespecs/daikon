@@ -15,7 +15,7 @@ pubs:
 	cd pubs && $(MAKE) -f ../pubs-sources/Makefile html
 
 validate:
-	html-validate `find -name '*.html' -print`
+	validate `find -name '*.html' -print`
 
 .PHONY: pubs
 
