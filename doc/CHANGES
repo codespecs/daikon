@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.3.1 (August 1, 2007)
+4.3.1 (August 2, 2007)
 
 Kvasir
 
@@ -56,7 +56,27 @@ DynComp (Java)
     The equals method of Object is now instrumented.  (The manual
     incorrectly claimed that this was the case in version 4.3.0.)
 
-  [DETAILS NEEDED: cset file format has changed]
+Daikon
+
+  User-visible changes
+
+    Added the daikon.PrintInvariants.print_filtered configuration option.
+    When set to true all invariants that would have been filtered out
+    are printed along with the matching filter.
+
+    Added the daikon.Daikon.show_stack_trace configuration option.  When
+    set to true, a stack trace will be printed for user/input errors that
+    terminate Daikon prematurely.  Under normal circumstances, Daikon
+    just prints an informative error message when such an error occurs.
+
+    The input file and line number are printed when an incorrectly formatted
+    program point name is encountered in a trace file.
+
+  Bug Fixes
+
+    Fixed a bug (reported by Radu Vanciu) where Daikon crashed when
+    printing simplify output on some OneOfSequence invariants on a subsequence
+    with a lower bound.
 
 -------------------------------------------------
 
