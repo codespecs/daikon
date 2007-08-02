@@ -92,6 +92,9 @@ public final class PrintInvariants {
   /** If true, print all invariants without any filtering.  **/
   public static boolean dkconfig_print_all = false;
 
+  /** If true, print any filtered invariant and the filter that removed it **/
+  public static boolean dkconfig_print_filtered = false;
+
   /** print commented daikon version of invariants with repair output **/
   public static boolean dkconfig_repair_debug = false;
 
@@ -946,7 +949,12 @@ public final class PrintInvariants {
         }
       }
     } else if (Daikon.output_format == OutputFormat.SIMPLIFY) {
-      inv_rep = inv.format_using(Daikon.output_format);
+      try {
+        inv_rep = inv.format_using(Daikon.output_format);
+      } catch (Throwable t) {
+        throw new RuntimeException ("Error in simplify formatting of "
+                                    + inv.format(), t);
+      }
     } else if (Daikon.output_format == OutputFormat.IOA) {
 
       String invName = get_ioa_invname (invCounter, ppt);
@@ -1138,6 +1146,10 @@ public final class PrintInvariants {
       if (!dkconfig_print_all) {
         filter_result = fi.shouldKeep (inv);
         fi_accepted = (filter_result == null);
+        if (dkconfig_print_filtered && !fi_accepted) {
+          out.printf ("Invariant '%s' filtered by %s%n", inv.format(),
+                      filter_result);
+        }
       }
 
       if ((inv instanceof Implication)
