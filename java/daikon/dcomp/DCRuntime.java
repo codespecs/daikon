@@ -139,6 +139,101 @@ public final class DCRuntime {
 
 
   /**
+   * This map keeps track of active super.equals() calls.
+   *
+   * Each time we make a call on a particular Object, we keep track of
+   * which superclass's equals method we called last. If that Object
+   * makes another call to super.equals before the original call is
+   * done, then invoke the equals method of the next-higher class in
+   * the class hierarchy (i.e. the next superclass).
+   *
+   * The map maps an Object to the last Class whose equals method we
+   * invoked while invoking that Object's original super.equals call.
+   */
+  static HashMap<Object, Class<?>> active_calls =
+    new HashMap<Object, Class<?>>();
+
+
+  /**
+   * Handles super.equals(Object) calls.
+   */
+  public static boolean dcomp_super_equals(Object o1, Object o2) {
+    // Make obj1 and obj2 comparable
+    if ((o1 != null) && (o2 != null))
+      TagEntry.union (o1, o2);
+
+    Class<?> o1c = o1.getClass();
+    Class<?> o1super;
+
+    // Check to see if we're already in the middle of a super.equals
+    // call for this Object
+    if (null == active_calls.get(o1)) {
+      // No, we are not
+      o1super = o1c.getSuperclass();
+    } else {
+      // Yes, we are -- continue up the class hierarchy
+      o1super = active_calls.get(o1).getSuperclass();
+    }
+
+    // Update the active_calls map
+    active_calls.put(o1, o1super);
+
+    Class<?>[] o1superifaces = o1super.getInterfaces();
+
+    boolean instrumented = false;
+    for (Class<?> c : o1superifaces) {
+      if (c.getName().equals("daikon.dcomp.DCompInstrumented")) {
+        instrumented = true;
+        break;
+      }
+    }
+
+    boolean return_val;
+    Class<?> javalangobject, dcompmarker;
+
+    try{
+      javalangobject = Class.forName("java.lang.Object");
+
+      if (DCInstrument.jdk_instrumented) {
+        dcompmarker = Class.forName("java.lang.DCompMarker");
+      } else {
+        dcompmarker = Class.forName("daikon.dcomp.DCompMarker");
+      }
+    } catch (ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+
+    try {
+      // if the superclass whose method we are calling is instrumented...
+      if (instrumented) {
+        // call the instrumented version
+        Method m = o1super.getMethod("equals",
+                           new Class<?>[] { javalangobject, dcompmarker });
+        return_val = ((Boolean)(m.invoke(o1, o2, null)));
+      } else {
+        // call the uninstrumented version
+        push_const();   // push a tag for the return value
+        Method m = o1super.getMethod("equals",
+                           new Class<?>[] { javalangobject });
+        return_val = ((Boolean)(m.invoke(o1, o2)));
+      }
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    } catch (InvocationTargetException e) {
+      throw new RuntimeException(e);
+    }
+
+    // We are now done with the call, so remove the entry for this
+    // call from the active_calls map
+    active_calls.remove(o1);
+
+    return return_val;
+  }
+
+
+  /**
    * Handle object comparison.  Marks the two objects as comparable and
    * returns whether or not they are equal.  Used as part of a replacement
    * for IF_ACMPEQ
@@ -1306,20 +1401,20 @@ public final class DCRuntime {
       // necessary. -charlest
       List<DaikonVariableInfo> traceroots =
         new ArrayList<DaikonVariableInfo>();
-      
+
       for(DaikonVariableInfo normalroot : mi.traversalEnter) {
         traceroots.add((DaikonVariableInfo)
             TagEntry.get_entry(normalroot).getTraceRoot().get());
       }
       Collections.sort(traceroots);
-      
+
       for(DaikonVariableInfo tr : traceroots) {
         print_tree(ps, t, tr, 0);
         ps.printf("%n");
       }
     }
     ps.printf("%n");
-    
+
     t = get_comparable_traced(mi.traversalExit);
     ps.printf ("DynComp Traced Tree for %s exit%n",
         clean_decl_name(mi.toString()));
@@ -1331,19 +1426,19 @@ public final class DCRuntime {
       // necessary. -charlest
       List<DaikonVariableInfo> traceroots =
         new ArrayList<DaikonVariableInfo>();
-      
+
       for(DaikonVariableInfo normalroot : mi.traversalExit) {
         traceroots.add((DaikonVariableInfo)
             TagEntry.get_entry(normalroot).getTraceRoot().get());
       }
       Collections.sort(traceroots);
-      
+
       for(DaikonVariableInfo tr : traceroots) {
         print_tree(ps, t, tr, 0);
         ps.printf("%n");
       }
     }
-    
+
     // The commented out section below is the original print_comparable.
     // I am replacing it with a new one to view the tracer tree, because
     // there are other functions that depend on add_variable, which I
@@ -1352,7 +1447,7 @@ public final class DCRuntime {
     // shinyOutput modification that writes "Field foo" instead of
     // "daikon.chicory.FieldInfo:this.foo" does not affect anything else.
     //          -charlest
-    
+
     /*List<DVSet> l = get_comparable (mi.traversalEnter);
     ps.printf ("Daikon Variable sets for %s enter%n",
                clean_decl_name(mi.toString()));
@@ -1383,7 +1478,7 @@ public final class DCRuntime {
       }
     }*/
   }
-  
+
   /**
    * Prints to [stream] the segment of the tree that starts at [node],
    * interpreting [node] as [depth] steps from the root.
@@ -1400,11 +1495,11 @@ public final class DCRuntime {
         print_tree(ps, tree, child, depth + 1);
     } catch (NullPointerException e) { }
   }
-  
+
   /**
    * If on, returns an ArrayList of Strings that converts the usual
    * DVInfo.toString() output to a more readable form
-   * 
+   *
    * e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *    "daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
@@ -1415,7 +1510,7 @@ public final class DCRuntime {
       o.add(shinyOutput(dvi));
     return o;
   }
-  
+
   private static String shinyOutput(DaikonVariableInfo dv) {
     String dvtxt = dv.toString();
     String type = dvtxt.split(":")[0];
@@ -1434,8 +1529,8 @@ public final class DCRuntime {
     }
     return dvtxt;
   }
-  
-  
+
+
 /**
    * Set of Daikon variables.  Implements comparable on first DaikonVariable
    * in each set.
@@ -1456,7 +1551,7 @@ public final class DCRuntime {
     }
   }
 
-  
+
   /**
    * Gets a list of sets of comparable daikon variables.  For simplicity
    * the sets are represented as a list as well.  If the method has never
@@ -1492,7 +1587,7 @@ public final class DCRuntime {
     return (set_list);
 
   }
-  
+
   /**
    * Returns a map representing the tree of tracers.
    * Represents the tree as entries in a map with each parent node as the key
@@ -1501,7 +1596,7 @@ public final class DCRuntime {
    */
   static Map<DaikonVariableInfo, DVSet> get_comparable_traced (RootInfo root) {
     if (root == null) return null;
-    
+
     // List of all of the parent-child relationships, where parent-child
     //   represents the equivalence relation of being comparable.
     // The keyset of this Map is exactly the RootInfo node and the set of all
@@ -1509,13 +1604,13 @@ public final class DCRuntime {
     // The valueset of this Map is exactly the set of all nodes.
     Map<DaikonVariableInfo, DVSet> sets
       = new IdentityHashMap<DaikonVariableInfo, DVSet>();
-    
+
     for (DaikonVariableInfo child : root) add_variable_traced(sets, child);
     for (DVSet dvs : sets.values()) dvs.sort();
-    
+
     return sets;
   }
-  
+
   static void add_variable_traced(Map<DaikonVariableInfo, DVSet> sets,
                                   DaikonVariableInfo dv) {
     try {
@@ -1525,9 +1620,9 @@ public final class DCRuntime {
       if (set == null) { set = new DVSet(); sets.put(parent, set); }
       set.add(dv);
     } catch (NullPointerException e) { }
-    
+
     for (DaikonVariableInfo child : dv) add_variable_traced(sets, child);
-    
+
   }
 
   /**

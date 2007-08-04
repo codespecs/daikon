@@ -189,17 +189,23 @@ class Test {
   public static class F {
     Obj obj1;
     Obj obj2;
+    ObjSub os1;
+    ObjSub os2;
     Integer int1;
     Integer int2;
 
     int a1 = 4;
     int b1 = 3;
+    int c1 = 6;
     int a2 = 4;
     int b2 = 3;
+    int c2 = 6;
 
     F() {
       obj1 = new Obj(a1, b1);
       obj2 = new Obj(a2, b2);
+      os1 = new ObjSub(a1, b1, c1);
+      os2 = new ObjSub(a2, b2, c2);
       int1 = new Integer(42);
       int2 = new Integer(42);
     }
@@ -210,6 +216,13 @@ class Test {
       if (obj2.equals(obj1)) {
         if (verbose) {
           System.out.println("obj2.equals(obj1)");
+        }
+      }
+
+      // Uses an equals() method that calls super.equals()
+      if (os1.equals(os2)) {
+        if (verbose) {
+          System.out.println("os1.equals(os2)");
         }
       }
 
@@ -276,6 +289,23 @@ class Test {
 
     public String toString() {
       return String.valueOf(this.x) + String.valueOf(this.y);
+    }
+  }
+
+
+  public static class ObjSub extends Obj {
+    public int z;
+
+    public ObjSub(int x, int y, int z) {
+      super(x, y);
+      this.z = z;
+    }
+
+    // Overrides Obj.equals
+    public boolean equals(Object obj) {
+      return (obj instanceof ObjSub)
+        && super.equals(obj)
+        && this.z == ((ObjSub)obj).z;
     }
   }
 

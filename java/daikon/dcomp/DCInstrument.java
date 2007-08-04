@@ -1856,9 +1856,20 @@ class DCInstrument {
         && arg_types[0].equals(javalangObject)) {
 
       Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
-      il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime", "dcomp_equals",
-                                     ret_type, new_arg_types,
-                                     Constants.INVOKESTATIC));
+
+      if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+        // this is a super.equals(Object) call
+        il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
+                                       "dcomp_super_equals",
+                                       ret_type, new_arg_types,
+                                       Constants.INVOKESTATIC));
+      } else {
+        // just a regular equals(Object) call
+        il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
+                                       "dcomp_equals",
+                                       ret_type, new_arg_types,
+                                       Constants.INVOKESTATIC));
+      }
 
     } else if (callee_instrumented) {
       // If the callee is instrumented then, add the dcomp argument
