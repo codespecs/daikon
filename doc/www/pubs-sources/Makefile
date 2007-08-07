@@ -3,7 +3,8 @@
 ###########################################################################
 
 BIBDIR ?= /afs/csail.mit.edu/u/m/mernst/bib
-BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/pag.bib ${BIBDIR}/invariants.bib ${BIBDIR}/testing.bib
+# This should include every file with "usesDaikon" or "\"Invariant dectection\""
+BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invariants.bib ${BIBDIR}/pag.bib ${BIBDIR}/soft-eng.bib ${BIBDIR}/testing.bib ${BIBDIR}/types.bib
 BPHOME ?= /afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 BWBIN = ${BPHOME}/../bin
 MDEWWW ?= /afs/csail.mit.edu/u/m/mernst/www
