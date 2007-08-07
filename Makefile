@@ -452,7 +452,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cd java && tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
 	rm -rf /tmp/daikon/java/utilMDE/doc
 	## getopt
-	tar zxf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
+	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	## Apache packages
 	mkdir /tmp/daikon/java/org
 	mkdir /tmp/daikon/java/org/apache

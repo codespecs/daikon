@@ -1,16 +1,19 @@
-Packages in this directory:
+The easiest way to build and run Daikon is to put either java/, or else
+daikon.jar, on your classpath.
 
-JUnit 3.7 (junit.jar)
-- Automated unit testing framework
-- http://www.junit.org
+For external libraries in this directory, we supply both the original
+distribution (for completeness) and also, if the original distribution is
+not a .jar file, the .jar file (for use by Java).
 
-Jakarta ORO 2.0.3 (jakarta-oro.jar)
-- Text processing including Perl5 regular expressions
-- http://jakarta.apache.org/oro/
+BCEL 5.1 (bcel.jar)
+  - java class file reader/writer
+  - Our local changes partially support Java 1.5
+  - Built by jhp in ~jhp/research/jakarta-bcel
+    make bcel.jar
 
-Log4j 1.1.2 (log4j.jar)
-- Trace logging for debug
-- http://jakarta.apache.org/log4j
+Apache Commons IO components (commons-io.jar)
+- "Standard" library of IO utility
+- http://commons.apache.org/
 
 GNU getopt 1.0.8 (java-getopt.jar)
 - Command line option parser
@@ -25,10 +28,6 @@ GNU getopt 1.0.8 (java-getopt.jar)
   6. "jar cf java-getopt.jar gnu/"
 - http://www.urbanophile.com/arenn/coding/download.html
 
-Jakarta-BCEL 5.1 (bcel.jar)
-  - java class file reader/writer
-  - We have changes to this that partially support java 1.5
-  - Built by jhp in ~jhp/research/jakarta-bcel
-    make bcel.jar
-
-The easiest way to build and run Daikon is to put java/ on your classpath.
+JUnit (junit.jar)
+- Automated unit testing framework
+- http://www.junit.org
