@@ -125,7 +125,6 @@ class DCInstrument {
    * The equals method IS instrumented.
    */
   private static MethodDef[] obj_methods = new MethodDef[] {
-    new MethodDef ("clone", new Type[0]),
     new MethodDef ("finalize", new Type[0]),
     new MethodDef ("hashCode", new Type[0]),
     new MethodDef ("toString", new Type[0]),
@@ -228,6 +227,15 @@ class DCInstrument {
       if (eq == null) {
         debug_instrument.log ("Added equals method");
         add_equals_method (gen);
+      }
+
+      // Add clone method if it doesn't already exist. This ensures
+      // that an instrumented version, clone(DCompMarker), will be
+      // created in this class.
+      Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
+      if (cl == null) {
+        debug_instrument.log ("Added clone method");
+        add_clone_method (gen);
       }
 
       // Add DCompInstrumented interface and the required
@@ -366,6 +374,15 @@ class DCInstrument {
       if (eq == null) {
         debug_instrument.log ("Added equals method");
         add_equals_method (gen);
+      }
+
+      // Add clone method if it doesn't already exist. This ensures
+      // that an instrumented version, clone(DCompMarker), will be
+      // created in this class.
+      Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
+      if (cl == null) {
+        debug_instrument.log ("Added clone method");
+        add_clone_method (gen);
       }
 
       // Add DCompInstrumented interface and the required
@@ -1871,6 +1888,16 @@ class DCInstrument {
                                        Constants.INVOKESTATIC));
       }
 
+    } else if (method_name.equals("clone")
+               && ret_type.equals(javalangObject)
+               && arg_types.length == 0) {
+
+      Type[] new_arg_types = new Type[] {javalangObject};
+      il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
+                                     "dcomp_clone",
+                                     ret_type, new_arg_types,
+                                     Constants.INVOKESTATIC));
+
     } else if (callee_instrumented) {
       // If the callee is instrumented then, add the dcomp argument
 
@@ -3317,6 +3344,41 @@ class DCInstrument {
     method.setMaxLocals();
     gen.addMethod(method.getMethod());
     il.dispose();
+  }
+
+  /**
+   * Adds the following method to a class:
+   *   protected Object clone() throws CloneNotSupportedException {
+   *     return super.clone();
+   *   }
+   * Must only be called if the Object clone method has not been
+   * overridden; if the clone method is already defined in the class,
+   * a ClassFormatError will result because of the duplicate method.
+   */
+  public void add_clone_method (ClassGen gen) {
+    InstructionList il = new InstructionList();
+    MethodGen method = new MethodGen(Constants.ACC_PROTECTED, Type.OBJECT,
+                                     Type.NO_ARGS,
+                                     new String[] {  }, "clone",
+                                     gen.getClassName(), il, pool);
+
+    //    il.append(ifact.createNew("java.lang.CloneNotSupportedException"));
+    //    il.append(new DUP());
+    //    il.append(ifact.createInvoke("java.lang.CloneNotSupportedException",
+    //                                 "<init>", Type.VOID, Type.NO_ARGS,
+    //                                 Constants.INVOKESPECIAL));
+    //    il.append(InstructionConstants.ATHROW);
+    ReferenceType obj = new ObjectType("java.lang.Object");
+    il.append(ifact.createLoad(obj, 0));  // load this
+    il.append(ifact.createInvoke(gen.getSuperclassName(),
+                                 "clone",
+                                 obj,
+                                 Type.NO_ARGS,
+                                 Constants.INVOKESPECIAL));
+    il.append(ifact.createReturn(Type.OBJECT));
+    method.setMaxStack();
+    method.setMaxLocals();
+    gen.addMethod(method.getMethod());
   }
 
   /** Returns the tag accessor method name **/

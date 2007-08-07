@@ -253,6 +253,48 @@ class Test {
   }
 
 
+  // Tests the clone() method
+  public static class G {
+    static class Uncloneable {
+      protected Object clone() throws CloneNotSupportedException {
+        //        return super.clone();
+        throw new CloneNotSupportedException();
+      }
+    };
+
+    Obj obj1;
+    Obj obj2;
+    Uncloneable u1;
+    Uncloneable u2;
+
+    G() {
+      obj1 = new Obj(2, 9);
+      u1 = new Uncloneable();
+    }
+
+    public void compare() {
+      try {
+        obj2 = (Obj)(obj1.clone());
+        assert obj1.x == obj2.x : "Corresponding fields should be equal";
+        assert obj1.y == obj2.y : "Corresponding fields should be equal";
+      } catch (CloneNotSupportedException e) {
+        assert false : "Caught unexpected CloneNotSupportedException";
+      }
+
+      // Ensure the clone() method still works when not overridden
+      try {
+        u2 = (Uncloneable)(u1.clone());
+      } catch (CloneNotSupportedException e) {
+        return;
+      }
+
+      assert false : "Expected CloneNotSupportedException wasn't thrown";
+    }
+  }
+
+
+
+
   public static class Arr {
 
     int[] big_arr = new int[90000];
@@ -268,13 +310,17 @@ class Test {
   }
 
 
-  public static class Obj {
+  public static class Obj implements Cloneable {
     public int x;
     public int y;
 
     public Obj(int x, int y) {
       this.x = x;
       this.y = y;
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+      return super.clone();
     }
 
     public boolean equals(Object obj) {
@@ -377,6 +423,9 @@ class Test {
     f2.compare2();
     F f3 = new F();
     f3.compare3();
+
+    G g = new G();
+    g.compare();
   }
 
   public static void list_check (A a10, A a11) {

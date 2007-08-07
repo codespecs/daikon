@@ -139,23 +139,33 @@ public final class DCRuntime {
 
 
   /**
-   * This map keeps track of active super.equals() calls.
+   * This map keeps track of active super.equals() calls.<p>
    *
    * Each time we make a call on a particular Object, we keep track of
    * which superclass's equals method we called last. If that Object
    * makes another call to super.equals before the original call is
    * done, then invoke the equals method of the next-higher class in
-   * the class hierarchy (i.e. the next superclass).
+   * the class hierarchy (i.e. the next superclass).<p>
    *
    * The map maps an Object to the last Class whose equals method we
-   * invoked while invoking that Object's original super.equals call.
+   * invoked while invoking that Object's original super.equals
+   * call. Once the equals call terminates, whether by returning a
+   * value or by throwing an exception, the corresponding key is
+   * removed from this map.
    */
-  static HashMap<Object, Class<?>> active_calls =
+  static HashMap<Object, Class<?>> active_equals_calls =
+    new HashMap<Object, Class<?>>();
+
+  /**
+   * Tracks active super.clone() calls. (See active_equals_calls.)
+   */
+  static HashMap<Object, Class<?>> active_clone_calls =
     new HashMap<Object, Class<?>>();
 
 
   /**
-   * Handles super.equals(Object) calls.
+   * Handles <code>super.equals(Object)</code> calls.<p>
+   * @see active_equals_calls
    */
   public static boolean dcomp_super_equals(Object o1, Object o2) {
     // Make obj1 and obj2 comparable
@@ -167,16 +177,16 @@ public final class DCRuntime {
 
     // Check to see if we're already in the middle of a super.equals
     // call for this Object
-    if (null == active_calls.get(o1)) {
+    if (null == active_equals_calls.get(o1)) {
       // No, we are not
       o1super = o1c.getSuperclass();
     } else {
       // Yes, we are -- continue up the class hierarchy
-      o1super = active_calls.get(o1).getSuperclass();
+      o1super = active_equals_calls.get(o1).getSuperclass();
     }
 
-    // Update the active_calls map
-    active_calls.put(o1, o1super);
+    // Update the active_equals_calls map
+    active_equals_calls.put(o1, o1super);
 
     Class<?>[] o1superifaces = o1super.getInterfaces();
 
@@ -226,9 +236,94 @@ public final class DCRuntime {
     }
 
     // We are now done with the call, so remove the entry for this
-    // call from the active_calls map
-    active_calls.remove(o1);
+    // call from the active_equals_calls map
+    active_equals_calls.remove(o1);
 
+    return return_val;
+  }
+
+
+  /**
+   * Handles <code>clone()</code> calls.<p>
+   * This method throws Throwable because it may throw any checked
+   * exception that is thrown by <code>o.clone()</code>.
+   * @see active_clone_calls
+   */
+  public static Object dcomp_clone(Object o) throws Throwable {
+    Class<?> oc = o.getClass();   // "Don't call it that."
+
+    Class<?> target_class;  // The class whose method we will invoke
+    if (null == active_clone_calls.get(o))
+      target_class = oc;
+    else
+      target_class = active_clone_calls.get(o).getSuperclass();
+    active_clone_calls.put(o, target_class);
+
+    Class<?> dcomp_marker;
+    try {
+      if (DCInstrument.jdk_instrumented) {
+        dcomp_marker = Class.forName("java.lang.DCompMarker");
+      } else {
+        dcomp_marker = Class.forName("daikon.dcomp.DCompMarker");
+      }
+    } catch (ClassNotFoundException e) {
+      // The method call terminates here -- we must remember to remove
+      // this from the active calls map
+      active_clone_calls.remove(o);
+      throw new RuntimeException(e);
+    }
+
+    Object return_val;
+    Method m;
+
+    try {
+      if (target_class.getName().equals("java.lang.Object")) {
+        // call the uninstrumented Object.clone()
+        // Use getDeclaredMethod instead of getMethod because clone is
+        // protected
+        m = oc.getDeclaredMethod("clone", new Class<?>[] {});
+        return_val = m.invoke(o);
+      } else {
+        // every other class has an instrumented version
+        m = target_class.getDeclaredMethod("clone",
+                                           new Class<?>[] { dcomp_marker });
+
+        // Use length-1 array containing null to distinguish from just
+        // null, which indicates 0 arguments
+        return_val = m.invoke(o, new Object[] { null });
+      }
+    } catch (IllegalAccessException e) {
+      // This shouldn't happen
+      active_clone_calls.remove(o);
+      throw new RuntimeException(e);
+    } catch (NoSuchMethodException e) {
+      // This shouldn't happen
+      active_clone_calls.remove(o);
+      throw new RuntimeException(e);
+    } catch (InvocationTargetException e) {
+      // This might happen - if an exception is thrown from clone(),
+      // propagate it by rethrowing it
+      active_clone_calls.remove(o);
+      throw e.getCause();
+
+      //      Class<?>[] exceptionTypes = m.getExceptionTypes();
+      //
+      //      for (Class<?> ex : exceptionTypes) {
+      //        if (ex.isInstance(e.getCause())) {
+      //          // this exception was declared to be thrown, so rethrow it
+      //          throw e.getCause();
+      //        }
+      //      }
+      //
+      //      // otherwise, it was an unchecked exception - crash now
+      //      throw new RuntimeException(e);
+    }
+
+    // Make o and its clone comparable
+    if ((o != null) && (return_val != null)) {
+      TagEntry.union (o, return_val);
+    }
+    active_clone_calls.remove(o);
     return return_val;
   }
 
