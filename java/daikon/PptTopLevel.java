@@ -1370,19 +1370,20 @@ public class PptTopLevel extends Ppt {
       return;
 
     // Don't modify the actual parameter
-    slices_vector = (Vector<PptSlice>) slices_vector.clone(); // unchecked cast
+    @SuppressWarnings("unchecked")
+    Vector<PptSlice> slices_vector_copy = (Vector<PptSlice>) slices_vector.clone();
 
     // This might be a brand-new Slice, and instantiate_invariants for this
     // pass might not have come up with any invariants.
-    for (Iterator<PptSlice> itor = slices_vector.iterator(); itor.hasNext();) {
+    for (Iterator<PptSlice> itor = slices_vector_copy.iterator(); itor.hasNext();) {
       PptSlice slice = itor.next();
       if (slice.invs.size() == 0) {
-        // removes the element from slices_vector
+        // removes the element from slices_vector_copy
         itor.remove();
       }
     }
 
-    addSlices(slices_vector);
+    addSlices(slices_vector_copy);
   }
 
   /**

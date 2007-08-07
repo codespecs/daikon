@@ -286,7 +286,8 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     for (Map.Entry<String,Stack<ClassOrInterfaceType>> e : m.entrySet()) {
       String key = (String)e.getKey();
       Stack<ClassOrInterfaceType> oldStack = e.getValue();
-      Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>)oldStack.clone(); // unchecked cast
+      @SuppressWarnings("unchecked")
+      Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>)oldStack.clone();
       newMap.put(key, newStack);
     }
 

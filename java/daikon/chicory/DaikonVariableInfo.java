@@ -223,12 +223,13 @@ public abstract class DaikonVariableInfo
      * Returns a String representation of this object suitable for a .dtrace file
      * @param val The object whose value to print
      */
-    @SuppressWarnings("unchecked")
     public String getDTraceValueString(Object val)
     {
         if (isArray)
         {
-            return getValueStringOfListWithMod((List<Object>) val); // unchecked cast
+            @SuppressWarnings("unchecked")
+            List<Object> asList = (List<Object>) val;
+            return getValueStringOfListWithMod(asList);
         }
         else
         {
@@ -956,7 +957,9 @@ public abstract class DaikonVariableInfo
 
        if (implementsList(type))
        {
-           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List>)type); // unchecked cast
+
+           @SuppressWarnings("unchecked")
+           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List>)type);
 
            child.typeName = type.getName();
            child.repTypeName = "hashcode[]";

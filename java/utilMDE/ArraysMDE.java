@@ -896,7 +896,8 @@ public final class ArraysMDE {
     if (a == null && b == null) return null;
     if (a == null) return b;
     if (b == null) return a;
-    T[] result = (T[]) new Object[a.length + b.length]; // unchecked cast
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.length + b.length];
 
     System.arraycopy(a, 0, result, 0, a.length);
     System.arraycopy(b, 0, result, a.length, b.length);
@@ -913,7 +914,8 @@ public final class ArraysMDE {
     if (a == null && b == null) return null;
     if (a == null) return (T[]) b.toArray(); // unchecked cast
     if (b == null) return a;
-    T[] result = (T[]) new Object[a.length + b.size()]; // unchecked cast
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.length + b.size()];
 
     System.arraycopy(a, 0, result, 0, a.length);
     // System.arraycopy(b, 0, result, a.length, b.size());
@@ -933,7 +935,8 @@ public final class ArraysMDE {
     if (a == null && b == null) return null;
     if (a == null) return b;
     if (b == null) return (T[]) a.toArray(); // unchecked cast
-    T[] result = (T[]) new Object[a.size() + b.length]; // unchecked cast
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.size() + b.length];
 
     // System.arraycopy(a, 0, result, 0, a.size());
     for (int i=0; i<a.size(); i++) {
@@ -953,7 +956,8 @@ public final class ArraysMDE {
     if (a == null && b == null) return null;
     if (a == null) return (T[]) b.toArray(); // unchecked cast
     if (b == null) return (T[]) a.toArray(); // unchecked cast
-    T[] result = (T[]) new Object[a.size() + b.size()]; // unchecked cast
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.size() + b.size()];
 
     // System.arraycopy(a, 0, result, 0, a.length);
     for (int i=0; i<a.size(); i++) {

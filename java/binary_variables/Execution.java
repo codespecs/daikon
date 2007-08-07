@@ -186,7 +186,8 @@ line 518:
       while(true) {
         //System.out.println("values="+values + " bb="+bb + " address="+address+"\n\n\n");
         assert values.containsAll(bb.binaryVariables) : values + " bb="+bb + " address="+address;
-        TreeSet<BinaryVariable> tmp = (TreeSet<BinaryVariable>)values.clone(); // unchecked cast
+        @SuppressWarnings("unchecked")
+        TreeSet<BinaryVariable> tmp = (TreeSet<BinaryVariable>)values.clone();
         tmp.retainAll(bb.binaryVariables);
         addBB(top, bb, tmp);
 

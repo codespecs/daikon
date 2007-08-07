@@ -31,7 +31,9 @@ public class StringInfo extends DaikonVariableInfo
     {
         if (isArray)
         {
-            return getStringList((List)val); // unchecked cast
+            @SuppressWarnings("unchecked")
+            List valAsList = (List)val;
+            return getStringList(valAsList);
         }
         else
         {

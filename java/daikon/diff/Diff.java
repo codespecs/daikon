@@ -857,7 +857,8 @@ public final class Diff {
 
     if (classname != null) {
       Class cls = Class.forName(classname);
-      Comparator<Invariant> cmp = (Comparator<Invariant>) cls.newInstance(); // unchecked cast
+      @SuppressWarnings("unchecked")
+      Comparator<Invariant> cmp = (Comparator<Invariant>) cls.newInstance();
       return cmp;
     } else {
       return defaultComparator;

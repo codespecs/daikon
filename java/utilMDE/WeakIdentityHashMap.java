@@ -414,7 +414,8 @@ public class WeakIdentityHashMap<K,V>
      *	       <tt>null</tt> with the specified key.
      */
     public V put(K key, V value) {
-        K k = (K) maskNull(key); // unchecked cast
+        @SuppressWarnings("unchecked")
+        K k = (K) maskNull(key);
         int h = System.identityHashCode (k);
         Entry<K,V>[] tab = getTable();
         int i = indexFor(h, tab.length);
@@ -458,7 +459,8 @@ public class WeakIdentityHashMap<K,V>
             return;
         }
 
-        Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry[newCapacity]; // unchecked cast
+        @SuppressWarnings("unchecked")
+        Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry[newCapacity];
         transfer(oldTable, newTable);
         table = newTable;
 

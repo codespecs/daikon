@@ -396,7 +396,8 @@ class FormatTestCase {
     // System.out.println("On class " + className);
 
     // Load the class from file
-    Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className); // unchecked cast
+    @SuppressWarnings("unchecked")
+    Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className);
 
     try {
       Field f = classToTest.getField("dkconfig_enabled");

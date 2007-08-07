@@ -95,7 +95,9 @@ public class FieldInfo extends DaikonVariableInfo
     {
         if (isArray)
         {
-            return DTraceWriter.getFieldValues(field, (List<Object>) val); // unchecked cast
+            @SuppressWarnings("unchecked")
+            List<Object> valAsList = (List<Object>) val;
+            return DTraceWriter.getFieldValues(field, valAsList);
         }
         else
         {

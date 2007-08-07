@@ -847,13 +847,14 @@ public final class DCRuntime {
       if (fi.getType().isPrimitive()) {
         String tag_field_name = tag_field_name(fi.getField().getName());
         if (fi.isArray()) {
-          List<Object> parent_list = (List<Object>)parent; // unchecked
+          @SuppressWarnings("unchecked")
+          List<Object> parent_list = (List<Object>)parent;
           Field tag_field = null;
           List<Object> tag_list = new ArrayList<Object>(parent_list.size());
           for (Object parent_element : parent_list) {
             // if (tag_field == null)
-              //tag_field = fi.get_tag_field (tag_field_name,
-              //                              parent_element.getClass());
+            //   tag_field = fi.get_tag_field (tag_field_name,
+            //                                 parent_element.getClass());
             Object[] tags = field_map.get (parent_element);
             // assert tags != null : "array " + fi + " " + parent_element;
             if (tags == null)
@@ -939,7 +940,8 @@ public final class DCRuntime {
       tag = get_field_tag ((FieldInfo) dv, parent, obj);
 
     if (dv.isArray() && (tag instanceof List)) {
-      List<Object> elements = (List<Object>)tag; // unchecked cast
+      @SuppressWarnings("unchecked")
+      List<Object> elements = (List<Object>)tag;
       if (debug_timing.enabled())
         debug_timing.log ("  ArrayInfo %d elements", elements.size());
       for (Object atag : elements) {
@@ -2318,7 +2320,8 @@ public final class DCRuntime {
 
       // Object is an array of objects containing each item
       // assert obj == null: "primitive array object = " + obj_str (obj);
-      List<Object> parent_list = (List<Object>)parent; // unchecked
+      @SuppressWarnings("unchecked")
+      List<Object> parent_list = (List<Object>)parent;
       Field tag_field = null;
       List<Object> tag_list = new ArrayList<Object>(parent_list.size());
       for (Object parent_element : parent_list) {

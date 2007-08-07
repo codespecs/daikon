@@ -501,7 +501,8 @@ public class InvariantAddAndCheckTester extends TestCase {
       if (className == null) return true;
 
       // Load the class from file
-      Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className); // unchecked cast
+      @SuppressWarnings("unchecked")
+      Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className);
 
       try {
         classToTest.getField("dkconfig_enabled"); // Enable if needs to be done

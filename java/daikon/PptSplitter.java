@@ -159,7 +159,8 @@ public class PptSplitter implements Serializable {
     Assert.assertTrue (ppts.length == 2);
 
     // Create any NIS suppressed invariants in each conditional
-    List<Invariant> suppressed_invs[] = (ArrayList<Invariant>[]) new ArrayList[ppts.length]; // unchecked cast
+    @SuppressWarnings("unchecked")
+    List<Invariant> suppressed_invs[] = (ArrayList<Invariant>[]) new ArrayList[ppts.length];
     for (int i = 0; i < ppts.length; i++)
       suppressed_invs[i] = NIS.create_suppressed_invs (ppts[i]);
 
