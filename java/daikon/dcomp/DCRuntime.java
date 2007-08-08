@@ -305,18 +305,6 @@ public final class DCRuntime {
       // propagate it by rethrowing it
       active_clone_calls.remove(o);
       throw e.getCause();
-
-      //      Class<?>[] exceptionTypes = m.getExceptionTypes();
-      //
-      //      for (Class<?> ex : exceptionTypes) {
-      //        if (ex.isInstance(e.getCause())) {
-      //          // this exception was declared to be thrown, so rethrow it
-      //          throw e.getCause();
-      //        }
-      //      }
-      //
-      //      // otherwise, it was an unchecked exception - crash now
-      //      throw new RuntimeException(e);
     }
 
     // Make o and its clone comparable
