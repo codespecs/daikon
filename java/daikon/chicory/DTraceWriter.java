@@ -3,6 +3,7 @@ package daikon.chicory;
 import java.io.PrintStream;
 import java.lang.reflect.*;
 import java.util.*;
+import daikon.*;
 
 import daikon.Chicory;
 
@@ -187,6 +188,14 @@ public class DTraceWriter extends DaikonWriter
     {
         if (!curInfo.dTraceShouldPrint())
         {
+        	if (PrintInvariants.dkconfig_constant_infer) {
+                if (curInfo.dTraceShouldPrintChildren()) {
+        	        for (DaikonVariableInfo child : curInfo) {
+        	    	    Object childVal = child.getMyValFromParentVal(val);
+        	            traverseValue(mi, child, childVal);
+        	        }
+        	    }
+        	}    	            
             return;
         }
 

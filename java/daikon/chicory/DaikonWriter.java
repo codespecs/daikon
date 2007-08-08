@@ -3,6 +3,7 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import daikon.Chicory;
 import utilMDE.UtilMDE;
+import daikon.*;
 /**
  * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
  *
@@ -39,7 +40,12 @@ public abstract class DaikonWriter
         Class type = field.getType();
         int mod = field.getModifiers();
 
-        return Modifier.isFinal(mod) && Modifier.isStatic(mod) && type.isPrimitive();
+        if (PrintInvariants.dkconfig_constant_infer) {
+            return Modifier.isFinal(mod) && Modifier.isStatic(mod);
+        }
+        else {
+        	return Modifier.isFinal(mod) && Modifier.isStatic(mod) && type.isPrimitive();
+        }
     }
 
     /**

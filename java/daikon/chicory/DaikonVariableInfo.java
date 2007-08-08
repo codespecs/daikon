@@ -25,7 +25,7 @@ import daikon.VarInfo.VarFlags;
  */
 public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo>
-{
+{	
     /** The variable name, if appropriate to the subtype **/
     private final String name;
 
@@ -71,6 +71,9 @@ public abstract class DaikonVariableInfo
 
     /** True iff the DTraceWriter should print this variable **/
     protected boolean dtraceShouldPrint = true;
+    
+    /** True iff the DTraceWriter should print the children of this variable **/
+    protected boolean dtraceShouldPrintChildren = true;
 
     /**
      * If false, use standard dfej behavior (any field in an
@@ -717,8 +720,24 @@ public abstract class DaikonVariableInfo
         {
             ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
             String value = null;
-            if (cinfo != null)
-              value = cinfo.staticMap.get(theName);
+            boolean isPrimitive = true;
+            
+            if (cinfo != null) {
+                value = cinfo.staticMap.get(theName);
+                
+                if (PrintInvariants.dkconfig_constant_infer) {
+                    if (value == null) {
+                	    isPrimitive = false;
+                	    String className = field.getDeclaringClass().getName();
+                        // If the class has already been statically initalized, get its hash
+                	    if (Runtime.isInitialized(className)) {
+                		    try {
+                			    value = Integer.toString(System.identityHashCode(field.get(null)));
+                            } catch(Exception e) {}
+                	    }
+                    }
+                }
+            }
 
             // System.out.printf ("static final value = %s%n", value);
 
@@ -729,6 +748,9 @@ public abstract class DaikonVariableInfo
                 newField.repTypeName += " = " + value;
                 newField.const_val = value;
                 newField.dtraceShouldPrint = false;
+                if (PrintInvariants.dkconfig_constant_infer && isPrimitive) {
+                	newField.dtraceShouldPrintChildren = false;
+                }
             }
             //else
             //{
@@ -1221,6 +1243,11 @@ public abstract class DaikonVariableInfo
    public boolean dTraceShouldPrint()
    {
        return dtraceShouldPrint;
+   }
+   
+   public boolean dTraceShouldPrintChildren()
+   {
+       return dtraceShouldPrintChildren;
    }
 
     /**

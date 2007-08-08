@@ -133,6 +133,12 @@ public final class PrintInvariants {
    */
   public static boolean dkconfig_static_const_infer = false;
 
+  /** Switch to turn on experimental techniques on static constants.
+   *  This would treat static constant variables as true constants,
+   *  even if their value is not known at the time of compilation.
+   */
+  public static boolean dkconfig_constant_infer = false;
+ 
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
