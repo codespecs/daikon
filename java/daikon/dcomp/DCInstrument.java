@@ -3314,7 +3314,7 @@ class DCInstrument {
   /**
    * Adds the following method to a class:
    *   public boolean equals(Object obj) {
-   *     return this == obj;
+   *     return super.equals(obj);
    *   }
    * Must only be called if the Object equals method has not been
    * overridden; if the equals method is already defined in the class,
@@ -3329,17 +3329,12 @@ class DCInstrument {
 
     il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
     il.append(ifact.createLoad(Type.OBJECT, 1));  // load obj
-
-    BranchInstruction inst_acmpne = ifact.createBranchInstruction(Constants.IF_ACMPNE, null);
-    il.append(inst_acmpne);
-    il.append(new PUSH(pool, 1));
-    BranchInstruction inst_goto = ifact.createBranchInstruction(Constants.GOTO, null);
-    il.append(inst_goto);
-    InstructionHandle ih_pushfalse = il.append(new PUSH(pool, 0));
-    InstructionHandle ih_return = il.append(ifact.createReturn(Type.BOOLEAN));
-    inst_acmpne.setTarget(ih_pushfalse);
-    inst_goto.setTarget(ih_return);
-
+    il.append(ifact.createInvoke(gen.getSuperclassName(),
+                                 "equals",
+                                 Type.BOOLEAN,
+                                 new Type[] { Type.OBJECT },
+                                 Constants.INVOKESPECIAL));
+    il.append(ifact.createReturn(Type.BOOLEAN));
     method.setMaxStack();
     method.setMaxLocals();
     gen.addMethod(method.getMethod());
@@ -3362,23 +3357,17 @@ class DCInstrument {
                                      new String[] {  }, "clone",
                                      gen.getClassName(), il, pool);
 
-    //    il.append(ifact.createNew("java.lang.CloneNotSupportedException"));
-    //    il.append(new DUP());
-    //    il.append(ifact.createInvoke("java.lang.CloneNotSupportedException",
-    //                                 "<init>", Type.VOID, Type.NO_ARGS,
-    //                                 Constants.INVOKESPECIAL));
-    //    il.append(InstructionConstants.ATHROW);
-    ReferenceType obj = new ObjectType("java.lang.Object");
-    il.append(ifact.createLoad(obj, 0));  // load this
+    il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
     il.append(ifact.createInvoke(gen.getSuperclassName(),
                                  "clone",
-                                 obj,
+                                 Type.OBJECT,
                                  Type.NO_ARGS,
                                  Constants.INVOKESPECIAL));
     il.append(ifact.createReturn(Type.OBJECT));
     method.setMaxStack();
     method.setMaxLocals();
     gen.addMethod(method.getMethod());
+    il.dispose();
   }
 
   /** Returns the tag accessor method name **/
