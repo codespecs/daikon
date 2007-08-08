@@ -1,688 +1,526 @@
 
-Daikon Variable sets for daikon.dcomp.Test.<init>() enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test.<init>() exit
+DynComp Traced Tree for daikon.dcomp.Test.<init>() enter
   not called
 
-Daikon Variable sets for daikon.dcomp.Test.main([Ljava.lang.String; args) enter
-  [1] [daikon.chicory.ParameterInfo:args]
-  [1] [daikon.chicory.DaikonClassInfo:args.getClass()]
-  [1] [daikon.chicory.ArrayInfo:args[]]
-  [1] [daikon.chicory.StringInfo:args[].toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-Daikon Variable sets for daikon.dcomp.Test.main([Ljava.lang.String; args) exit
-  [1] [daikon.chicory.ParameterInfo:args]
-  [1] [daikon.chicory.DaikonClassInfo:args.getClass()]
-  [1] [daikon.chicory.ArrayInfo:args[]]
-  [1] [daikon.chicory.StringInfo:args[].toString]
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i, daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1, daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-
-Daikon Variable sets for daikon.dcomp.Test.test() enter
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-Daikon Variable sets for daikon.dcomp.Test.test() exit
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i, daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1, daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-
-Daikon Variable sets for daikon.dcomp.Test.list_check(daikon.dcomp.Test$A a10, daikon.dcomp.Test$A a11) enter
-  [1] [daikon.chicory.ParameterInfo:a10]
-  [1] [daikon.chicory.FieldInfo:a10.id]
-  [1] [daikon.chicory.StringInfo:a10.id.toString]
-  [1] [daikon.chicory.FieldInfo:a10.x]
-  [1] [daikon.chicory.FieldInfo:a10.y]
-  [1] [daikon.chicory.ParameterInfo:a11]
-  [1] [daikon.chicory.FieldInfo:a11.id]
-  [1] [daikon.chicory.StringInfo:a11.id.toString]
-  [1] [daikon.chicory.FieldInfo:a11.x]
-  [1] [daikon.chicory.FieldInfo:a11.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-Daikon Variable sets for daikon.dcomp.Test.list_check(daikon.dcomp.Test$A a10, daikon.dcomp.Test$A a11) exit
-  [1] [daikon.chicory.ParameterInfo:a10]
-  [1] [daikon.chicory.FieldInfo:a10.id]
-  [1] [daikon.chicory.StringInfo:a10.id.toString]
-  [1] [daikon.chicory.FieldInfo:a10.x]
-  [1] [daikon.chicory.FieldInfo:a10.y]
-  [1] [daikon.chicory.ParameterInfo:a11]
-  [1] [daikon.chicory.FieldInfo:a11.id]
-  [1] [daikon.chicory.StringInfo:a11.id.toString]
-  [1] [daikon.chicory.FieldInfo:a11.x]
-  [1] [daikon.chicory.FieldInfo:a11.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-
-Daikon Variable sets for daikon.dcomp.Test.double_check(D d1, java.lang.Integer wrapper, I i1) enter
-  [1] [daikon.chicory.ParameterInfo:d1]
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i, daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1, daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-  [1] [daikon.chicory.ParameterInfo:i1]
-  [1] [daikon.chicory.ParameterInfo:wrapper]
-Daikon Variable sets for daikon.dcomp.Test.double_check(D d1, java.lang.Integer wrapper, I i1) exit
-  [3] [daikon.chicory.ParameterInfo:d1, daikon.chicory.ParameterInfo:i1, daikon.chicory.ReturnInfo:return]
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i, daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [2] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1, daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-  [1] [daikon.chicory.ParameterInfo:wrapper]
-
-Daikon Variable sets for daikon.dcomp.Test.t1(daikon.dcomp.Test$A a1, daikon.dcomp.Test$A a2, daikon.dcomp.Test$A a3, daikon.dcomp.Test$A a4) enter
-  [1] [daikon.chicory.ParameterInfo:a1]
-  [1] [daikon.chicory.FieldInfo:a1.id]
-  [1] [daikon.chicory.StringInfo:a1.id.toString]
-  [4] [daikon.chicory.FieldInfo:a1.x, daikon.chicory.FieldInfo:a1.y, daikon.chicory.FieldInfo:daikon.dcomp.Test.i, daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.ParameterInfo:a2]
-  [1] [daikon.chicory.FieldInfo:a2.id]
-  [1] [daikon.chicory.StringInfo:a2.id.toString]
-  [1] [daikon.chicory.FieldInfo:a2.x]
-  [1] [daikon.chicory.FieldInfo:a2.y]
-  [1] [daikon.chicory.ParameterInfo:a3]
-  [1] [daikon.chicory.FieldInfo:a3.id]
-  [1] [daikon.chicory.StringInfo:a3.id.toString]
-  [1] [daikon.chicory.FieldInfo:a3.x]
-  [1] [daikon.chicory.FieldInfo:a3.y]
-  [1] [daikon.chicory.ParameterInfo:a4]
-  [1] [daikon.chicory.FieldInfo:a4.id]
-  [1] [daikon.chicory.StringInfo:a4.id.toString]
-  [1] [daikon.chicory.FieldInfo:a4.x]
-  [1] [daikon.chicory.FieldInfo:a4.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-Daikon Variable sets for daikon.dcomp.Test.t1(daikon.dcomp.Test$A a1, daikon.dcomp.Test$A a2, daikon.dcomp.Test$A a3, daikon.dcomp.Test$A a4) exit
-  [2] [daikon.chicory.ParameterInfo:a1, daikon.chicory.ParameterInfo:a2]
-  [1] [daikon.chicory.FieldInfo:a1.id]
-  [1] [daikon.chicory.StringInfo:a1.id.toString]
-  [4] [daikon.chicory.FieldInfo:a1.x, daikon.chicory.FieldInfo:a1.y, daikon.chicory.FieldInfo:daikon.dcomp.Test.i, daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.FieldInfo:a2.id]
-  [1] [daikon.chicory.StringInfo:a2.id.toString]
-  [1] [daikon.chicory.FieldInfo:a2.x]
-  [1] [daikon.chicory.FieldInfo:a2.y]
-  [1] [daikon.chicory.ParameterInfo:a3]
-  [1] [daikon.chicory.FieldInfo:a3.id]
-  [1] [daikon.chicory.StringInfo:a3.id.toString]
-  [1] [daikon.chicory.FieldInfo:a3.x]
-  [1] [daikon.chicory.FieldInfo:a3.y]
-  [1] [daikon.chicory.ParameterInfo:a4]
-  [1] [daikon.chicory.FieldInfo:a4.id]
-  [1] [daikon.chicory.StringInfo:a4.id.toString]
-  [1] [daikon.chicory.FieldInfo:a4.x]
-  [1] [daikon.chicory.FieldInfo:a4.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-
-Daikon Variable sets for daikon.dcomp.Test.java_check(I i1, I i2) enter
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-  [1] [daikon.chicory.ParameterInfo:i1]
-  [1] [daikon.chicory.ParameterInfo:i2]
-Daikon Variable sets for daikon.dcomp.Test.java_check(I i1, I i2) exit
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.i]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.j]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa1.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa1.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.id]
-  [1] [daikon.chicory.StringInfo:daikon.dcomp.Test.sa2.id.toString]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.x]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.sa2.y]
-  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test.verbose]
-  [1] [daikon.chicory.ParameterInfo:i1]
-  [1] [daikon.chicory.ParameterInfo:i2]
-  [1] [daikon.chicory.ReturnInfo:return]
-
-Daikon Variable sets for daikon.dcomp.Test.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test.equals(java.lang.Object obj) exit
+DynComp Traced Tree for daikon.dcomp.Test.<init>() exit
   not called
 
-Daikon Variable sets for daikon.dcomp.Test$A.<init>(java.lang.String id) enter
-  [1] [daikon.chicory.ParameterInfo:id]
-  [1] [daikon.chicory.StringInfo:id.toString]
-Daikon Variable sets for daikon.dcomp.Test$A.<init>(java.lang.String id) exit
-  [2] [daikon.chicory.ParameterInfo:id, daikon.chicory.FieldInfo:this.id]
-  [1] [daikon.chicory.StringInfo:id.toString]
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.StringInfo:this.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.x]
-  [1] [daikon.chicory.FieldInfo:this.y]
+DynComp Traced Tree for daikon.dcomp.Test.main([Ljava.lang.String; args) enter
+Parameter args
 
-Daikon Variable sets for daikon.dcomp.Test$A.add() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.id]
-  [1] [daikon.chicory.StringInfo:this.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.x]
-  [1] [daikon.chicory.FieldInfo:this.y]
-Daikon Variable sets for daikon.dcomp.Test$A.add() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.id]
-  [1] [daikon.chicory.StringInfo:this.id.toString]
-  [2] [daikon.chicory.FieldInfo:this.x, daikon.chicory.FieldInfo:this.y]
+StaticObj this
 
-Daikon Variable sets for daikon.dcomp.Test$A.add(I val) enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.id]
-  [1] [daikon.chicory.StringInfo:this.id.toString]
-  [3] [daikon.chicory.FieldInfo:this.x, daikon.chicory.FieldInfo:this.y, daikon.chicory.ParameterInfo:val]
-Daikon Variable sets for daikon.dcomp.Test$A.add(I val) exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.id]
-  [1] [daikon.chicory.StringInfo:this.id.toString]
-  [3] [daikon.chicory.FieldInfo:this.x, daikon.chicory.FieldInfo:this.y, daikon.chicory.ParameterInfo:val]
 
-Daikon Variable sets for daikon.dcomp.Test$A.tta() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.id]
-  [1] [daikon.chicory.StringInfo:this.id.toString]
-  [2] [daikon.chicory.FieldInfo:this.x, daikon.chicory.FieldInfo:this.y]
-Daikon Variable sets for daikon.dcomp.Test$A.tta() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.id]
-  [1] [daikon.chicory.StringInfo:this.id.toString]
-  [2] [daikon.chicory.FieldInfo:this.x, daikon.chicory.FieldInfo:this.y]
+DynComp Traced Tree for daikon.dcomp.Test.main([Ljava.lang.String; args) exit
+Parameter args
 
-Daikon Variable sets for daikon.dcomp.Test$A.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test$A.equals(java.lang.Object obj) exit
-  not called
+StaticObj this
 
-Daikon Variable sets for daikon.dcomp.Test$Arr.<init>() enter
-Daikon Variable sets for daikon.dcomp.Test$Arr.<init>() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.big_arr]
-  [2] [daikon.chicory.ArrayInfo:this.big_arr[], daikon.chicory.FieldInfo:this.val]
 
-Daikon Variable sets for daikon.dcomp.Test$Arr.tryit(I val1) enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.big_arr]
-  [2] [daikon.chicory.ArrayInfo:this.big_arr[], daikon.chicory.FieldInfo:this.val]
-  [1] [daikon.chicory.ParameterInfo:val1]
-Daikon Variable sets for daikon.dcomp.Test$Arr.tryit(I val1) exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.big_arr]
-  [3] [daikon.chicory.ArrayInfo:this.big_arr[], daikon.chicory.FieldInfo:this.val, daikon.chicory.ParameterInfo:val1]
+DynComp Traced Tree for daikon.dcomp.Test.test() enter
+StaticObj this
 
-Daikon Variable sets for daikon.dcomp.Test$Arr.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test$Arr.equals(java.lang.Object obj) exit
-  not called
 
-Daikon Variable sets for daikon.dcomp.Test$C.<init>(java.lang.String id) enter
-  [1] [daikon.chicory.ParameterInfo:id]
-  [1] [daikon.chicory.StringInfo:id.toString]
-Daikon Variable sets for daikon.dcomp.Test$C.<init>(java.lang.String id) exit
-  [2] [daikon.chicory.ParameterInfo:id, daikon.chicory.FieldInfo:this.cid]
-  [1] [daikon.chicory.StringInfo:id.toString]
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.StringInfo:this.cid.toString]
-  [1] [daikon.chicory.FieldInfo:this.long1]
+DynComp Traced Tree for daikon.dcomp.Test.test() exit
+StaticObj this
 
-Daikon Variable sets for daikon.dcomp.Test$C.set_long(J l1) enter
-  [1] [daikon.chicory.ParameterInfo:l1]
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.cid]
-  [1] [daikon.chicory.StringInfo:this.cid.toString]
-  [1] [daikon.chicory.FieldInfo:this.long1]
-Daikon Variable sets for daikon.dcomp.Test$C.set_long(J l1) exit
-  [2] [daikon.chicory.ParameterInfo:l1, daikon.chicory.FieldInfo:this.long1]
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.cid]
-  [1] [daikon.chicory.StringInfo:this.cid.toString]
 
-Daikon Variable sets for daikon.dcomp.Test$C.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test$C.equals(java.lang.Object obj) exit
-  not called
+DynComp Traced Tree for daikon.dcomp.Test.list_check(daikon.dcomp.Test$A a10, daikon.dcomp.Test$A a11) enter
+Parameter a10
 
-Daikon Variable sets for daikon.dcomp.Test$B.<init>() enter
-Daikon Variable sets for daikon.dcomp.Test$B.<init>() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.a1]
-  [1] [daikon.chicory.FieldInfo:this.a1.id]
-  [1] [daikon.chicory.StringInfo:this.a1.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1.x]
-  [1] [daikon.chicory.FieldInfo:this.a1.y]
-  [1] [daikon.chicory.FieldInfo:this.a1a]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a.getClass()]
-  [1] [daikon.chicory.ArrayInfo:this.a1a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].id]
-  [1] [daikon.chicory.StringInfo:this.a1a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].y]
-  [1] [daikon.chicory.FieldInfo:this.a2a]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a.getClass()]
-  [1] [daikon.chicory.ArrayInfo:this.a2a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].id]
-  [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].y]
-  [1] [daikon.chicory.FieldInfo:this.ii]
-  [1] [daikon.chicory.FieldInfo:this.jj]
+Parameter a11
 
-Daikon Variable sets for daikon.dcomp.Test$B.ecomp() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.a1]
-  [1] [daikon.chicory.FieldInfo:this.a1.id]
-  [1] [daikon.chicory.StringInfo:this.a1.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1.x]
-  [1] [daikon.chicory.FieldInfo:this.a1.y]
-  [1] [daikon.chicory.FieldInfo:this.a1a]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a.getClass()]
-  [1] [daikon.chicory.ArrayInfo:this.a1a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].id]
-  [1] [daikon.chicory.StringInfo:this.a1a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].y]
-  [1] [daikon.chicory.FieldInfo:this.a2a]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a.getClass()]
-  [1] [daikon.chicory.ArrayInfo:this.a2a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].id]
-  [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].y]
-  [1] [daikon.chicory.FieldInfo:this.ii]
-  [1] [daikon.chicory.FieldInfo:this.jj]
-Daikon Variable sets for daikon.dcomp.Test$B.ecomp() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.a1]
-  [1] [daikon.chicory.FieldInfo:this.a1.id]
-  [1] [daikon.chicory.StringInfo:this.a1.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1.x]
-  [1] [daikon.chicory.FieldInfo:this.a1.y]
-  [2] [daikon.chicory.FieldInfo:this.a1a, daikon.chicory.FieldInfo:this.ii]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a.getClass()]
-  [2] [daikon.chicory.ArrayInfo:this.a1a[], daikon.chicory.ArrayInfo:this.a2a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].id]
-  [1] [daikon.chicory.StringInfo:this.a1a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].y]
-  [2] [daikon.chicory.FieldInfo:this.a2a, daikon.chicory.FieldInfo:this.jj]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a.getClass()]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].id]
-  [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].y]
+StaticObj this
 
-Daikon Variable sets for daikon.dcomp.Test$B.p(daikon.dcomp.Test$A aval) enter
-  [1] [daikon.chicory.ParameterInfo:aval]
-  [1] [daikon.chicory.FieldInfo:aval.id]
-  [1] [daikon.chicory.StringInfo:aval.id.toString]
-  [1] [daikon.chicory.FieldInfo:aval.x]
-  [1] [daikon.chicory.FieldInfo:aval.y]
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.a1]
-  [1] [daikon.chicory.FieldInfo:this.a1.id]
-  [1] [daikon.chicory.StringInfo:this.a1.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1.x]
-  [1] [daikon.chicory.FieldInfo:this.a1.y]
-  [2] [daikon.chicory.FieldInfo:this.a1a, daikon.chicory.FieldInfo:this.ii]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a.getClass()]
-  [2] [daikon.chicory.ArrayInfo:this.a1a[], daikon.chicory.ArrayInfo:this.a2a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].id]
-  [1] [daikon.chicory.StringInfo:this.a1a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].y]
-  [2] [daikon.chicory.FieldInfo:this.a2a, daikon.chicory.FieldInfo:this.jj]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a.getClass()]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].id]
-  [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].y]
-Daikon Variable sets for daikon.dcomp.Test$B.p(daikon.dcomp.Test$A aval) exit
-  [1] [daikon.chicory.ParameterInfo:aval]
-  [1] [daikon.chicory.FieldInfo:aval.id]
-  [1] [daikon.chicory.StringInfo:aval.id.toString]
-  [1] [daikon.chicory.FieldInfo:aval.x]
-  [1] [daikon.chicory.FieldInfo:aval.y]
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.a1]
-  [1] [daikon.chicory.FieldInfo:this.a1.id]
-  [1] [daikon.chicory.StringInfo:this.a1.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1.x]
-  [1] [daikon.chicory.FieldInfo:this.a1.y]
-  [2] [daikon.chicory.FieldInfo:this.a1a, daikon.chicory.FieldInfo:this.ii]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a.getClass()]
-  [2] [daikon.chicory.ArrayInfo:this.a1a[], daikon.chicory.ArrayInfo:this.a2a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].id]
-  [1] [daikon.chicory.StringInfo:this.a1a[].id.toString]
-  [2] [daikon.chicory.FieldInfo:this.a1a[].x, daikon.chicory.FieldInfo:this.a1a[].y]
-  [2] [daikon.chicory.FieldInfo:this.a2a, daikon.chicory.FieldInfo:this.jj]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a.getClass()]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].id]
-  [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].y]
 
-Daikon Variable sets for daikon.dcomp.Test$B.comp() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.a1]
-  [1] [daikon.chicory.FieldInfo:this.a1.id]
-  [1] [daikon.chicory.StringInfo:this.a1.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1.x]
-  [1] [daikon.chicory.FieldInfo:this.a1.y]
-  [2] [daikon.chicory.FieldInfo:this.a1a, daikon.chicory.FieldInfo:this.ii]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a.getClass()]
-  [2] [daikon.chicory.ArrayInfo:this.a1a[], daikon.chicory.ArrayInfo:this.a2a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].id]
-  [1] [daikon.chicory.StringInfo:this.a1a[].id.toString]
-  [2] [daikon.chicory.FieldInfo:this.a1a[].x, daikon.chicory.FieldInfo:this.a1a[].y]
-  [2] [daikon.chicory.FieldInfo:this.a2a, daikon.chicory.FieldInfo:this.jj]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a.getClass()]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].id]
-  [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].y]
-Daikon Variable sets for daikon.dcomp.Test$B.comp() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.FieldInfo:this.a1]
-  [1] [daikon.chicory.FieldInfo:this.a1.id]
-  [1] [daikon.chicory.StringInfo:this.a1.id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a1.x]
-  [1] [daikon.chicory.FieldInfo:this.a1.y]
-  [4] [daikon.chicory.FieldInfo:this.a1a, daikon.chicory.FieldInfo:this.a2a, daikon.chicory.FieldInfo:this.ii, daikon.chicory.FieldInfo:this.jj]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a.getClass()]
-  [2] [daikon.chicory.ArrayInfo:this.a1a[], daikon.chicory.ArrayInfo:this.a2a[]]
-  [1] [daikon.chicory.DaikonClassInfo:this.a1a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a1a[].id]
-  [1] [daikon.chicory.StringInfo:this.a1a[].id.toString]
-  [2] [daikon.chicory.FieldInfo:this.a1a[].x, daikon.chicory.FieldInfo:this.a1a[].y]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a.getClass()]
-  [1] [daikon.chicory.DaikonClassInfo:this.a2a[].getClass()]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].id]
-  [1] [daikon.chicory.StringInfo:this.a2a[].id.toString]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].x]
-  [1] [daikon.chicory.FieldInfo:this.a2a[].y]
+DynComp Traced Tree for daikon.dcomp.Test.list_check(daikon.dcomp.Test$A a10, daikon.dcomp.Test$A a11) exit
+Parameter a10
 
-Daikon Variable sets for daikon.dcomp.Test$B.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test$B.equals(java.lang.Object obj) exit
+Parameter a11
+
+StaticObj this
+
+
+DynComp Traced Tree for daikon.dcomp.Test.double_check(D d1, java.lang.Integer wrapper, I i1) enter
+Parameter d1
+
+Parameter i1
+
+StaticObj this
+
+Parameter wrapper
+
+
+DynComp Traced Tree for daikon.dcomp.Test.double_check(D d1, java.lang.Integer wrapper, I i1) exit
+Parameter d1
+\--Parameter i1
+\--return
+
+Parameter d1
+\--Parameter i1
+\--return
+
+Parameter d1
+\--Parameter i1
+\--return
+
+StaticObj this
+
+Parameter wrapper
+
+
+DynComp Traced Tree for daikon.dcomp.Test.t1(daikon.dcomp.Test$A a1, daikon.dcomp.Test$A a2, daikon.dcomp.Test$A a3, daikon.dcomp.Test$A a4) enter
+Parameter a1
+
+Parameter a2
+
+Parameter a3
+
+Parameter a4
+
+StaticObj this
+
+
+DynComp Traced Tree for daikon.dcomp.Test.t1(daikon.dcomp.Test$A a1, daikon.dcomp.Test$A a2, daikon.dcomp.Test$A a3, daikon.dcomp.Test$A a4) exit
+Parameter a1
+\--Parameter a2
+
+Parameter a1
+\--Parameter a2
+
+Parameter a3
+
+Parameter a4
+
+StaticObj this
+
+
+DynComp Traced Tree for daikon.dcomp.Test.java_check(I i1, I i2) enter
+Parameter i1
+
+Parameter i2
+
+StaticObj this
+
+
+DynComp Traced Tree for daikon.dcomp.Test.java_check(I i1, I i2) exit
+Parameter i1
+
+Parameter i2
+
+return
+
+StaticObj this
+
+
+DynComp Traced Tree for daikon.dcomp.Test.equals(java.lang.Object obj) enter
   not called
 
-Daikon Variable sets for daikon.dcomp.Test$D.<init>() enter
-Daikon Variable sets for daikon.dcomp.Test$D.<init>() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.alen]
-  [1] [daikon.chicory.ArrayInfo:this.a[]]
-  [1] [daikon.chicory.FieldInfo:this.b]
-  [1] [daikon.chicory.FieldInfo:this.c]
-  [1] [daikon.chicory.FieldInfo:this.d]
-  [1] [daikon.chicory.FieldInfo:this.i]
-  [1] [daikon.chicory.FieldInfo:this.j]
-
-Daikon Variable sets for daikon.dcomp.Test$D.compare() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.alen]
-  [1] [daikon.chicory.ArrayInfo:this.a[]]
-  [1] [daikon.chicory.FieldInfo:this.b]
-  [1] [daikon.chicory.FieldInfo:this.c]
-  [1] [daikon.chicory.FieldInfo:this.d]
-  [1] [daikon.chicory.FieldInfo:this.i]
-  [1] [daikon.chicory.FieldInfo:this.j]
-Daikon Variable sets for daikon.dcomp.Test$D.compare() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [5] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.alen, daikon.chicory.FieldInfo:this.c, daikon.chicory.FieldInfo:this.d, daikon.chicory.FieldInfo:this.i]
-  [2] [daikon.chicory.ArrayInfo:this.a[], daikon.chicory.FieldInfo:this.b]
-  [1] [daikon.chicory.FieldInfo:this.j]
-
-Daikon Variable sets for daikon.dcomp.Test$D.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test$D.equals(java.lang.Object obj) exit
+DynComp Traced Tree for daikon.dcomp.Test.equals(java.lang.Object obj) exit
   not called
 
-Daikon Variable sets for daikon.dcomp.Test$E.<init>() enter
-Daikon Variable sets for daikon.dcomp.Test$E.<init>() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.ilen]
-  [1] [daikon.chicory.DaikonClassInfo:this.a.getClass()]
-  [2] [daikon.chicory.ArrayInfo:this.a[], daikon.chicory.FieldInfo:this.jlen]
-  [1] [daikon.chicory.FieldInfo:this.b]
-  [1] [daikon.chicory.FieldInfo:this.ci]
-  [1] [daikon.chicory.FieldInfo:this.cj]
-  [1] [daikon.chicory.FieldInfo:this.di]
-  [1] [daikon.chicory.FieldInfo:this.dj]
-  [1] [daikon.chicory.FieldInfo:this.i]
-  [1] [daikon.chicory.FieldInfo:this.j]
-
-Daikon Variable sets for daikon.dcomp.Test$E.compare() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.ilen]
-  [1] [daikon.chicory.DaikonClassInfo:this.a.getClass()]
-  [2] [daikon.chicory.ArrayInfo:this.a[], daikon.chicory.FieldInfo:this.jlen]
-  [1] [daikon.chicory.FieldInfo:this.b]
-  [1] [daikon.chicory.FieldInfo:this.ci]
-  [1] [daikon.chicory.FieldInfo:this.cj]
-  [1] [daikon.chicory.FieldInfo:this.di]
-  [1] [daikon.chicory.FieldInfo:this.dj]
-  [1] [daikon.chicory.FieldInfo:this.i]
-  [1] [daikon.chicory.FieldInfo:this.j]
-Daikon Variable sets for daikon.dcomp.Test$E.compare() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [5] [daikon.chicory.FieldInfo:this.a, daikon.chicory.FieldInfo:this.ci, daikon.chicory.FieldInfo:this.di, daikon.chicory.FieldInfo:this.i, daikon.chicory.FieldInfo:this.ilen]
-  [1] [daikon.chicory.DaikonClassInfo:this.a.getClass()]
-  [5] [daikon.chicory.ArrayInfo:this.a[], daikon.chicory.FieldInfo:this.cj, daikon.chicory.FieldInfo:this.dj, daikon.chicory.FieldInfo:this.j, daikon.chicory.FieldInfo:this.jlen]
-  [1] [daikon.chicory.FieldInfo:this.b]
-
-Daikon Variable sets for daikon.dcomp.Test$E.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test$E.equals(java.lang.Object obj) exit
+DynComp Traced Tree for daikon.dcomp.Test.clone() enter
   not called
 
-Daikon Variable sets for daikon.dcomp.Test$F.<init>() enter
-Daikon Variable sets for daikon.dcomp.Test$F.<init>() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
-  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
-  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
-  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
-  [1] [daikon.chicory.FieldInfo:this.int1]
-  [1] [daikon.chicory.FieldInfo:this.int2]
-  [1] [daikon.chicory.FieldInfo:this.obj1]
-  [1] [daikon.chicory.FieldInfo:this.obj2]
-
-Daikon Variable sets for daikon.dcomp.Test$F.compare() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
-  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
-  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
-  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
-  [1] [daikon.chicory.FieldInfo:this.int1]
-  [1] [daikon.chicory.FieldInfo:this.int2]
-  [1] [daikon.chicory.FieldInfo:this.obj1]
-  [1] [daikon.chicory.FieldInfo:this.obj2]
-Daikon Variable sets for daikon.dcomp.Test$F.compare() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
-  [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
-  [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
-
-Daikon Variable sets for daikon.dcomp.Test$F.compare2() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
-  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
-  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
-  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
-  [1] [daikon.chicory.FieldInfo:this.int1]
-  [1] [daikon.chicory.FieldInfo:this.int2]
-  [1] [daikon.chicory.FieldInfo:this.obj1]
-  [1] [daikon.chicory.FieldInfo:this.obj2]
-Daikon Variable sets for daikon.dcomp.Test$F.compare2() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
-  [1] [daikon.chicory.FieldInfo:this.int1]
-  [1] [daikon.chicory.FieldInfo:this.int2]
-  [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
-
-Daikon Variable sets for daikon.dcomp.Test$F.compare3() enter
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
-  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
-  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
-  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
-  [1] [daikon.chicory.FieldInfo:this.int1]
-  [1] [daikon.chicory.FieldInfo:this.int2]
-  [1] [daikon.chicory.FieldInfo:this.obj1]
-  [1] [daikon.chicory.FieldInfo:this.obj2]
-Daikon Variable sets for daikon.dcomp.Test$F.compare3() exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.obj1.x]
-  [2] [daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj2.x]
-  [2] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.obj1.y]
-  [2] [daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj2.y]
-  [1] [daikon.chicory.FieldInfo:this.int1]
-  [1] [daikon.chicory.FieldInfo:this.int2]
-  [1] [daikon.chicory.FieldInfo:this.obj1]
-  [1] [daikon.chicory.FieldInfo:this.obj2]
-
-Daikon Variable sets for daikon.dcomp.Test$F.equals(java.lang.Object obj) enter
-  not called
-Daikon Variable sets for daikon.dcomp.Test$F.equals(java.lang.Object obj) exit
+DynComp Traced Tree for daikon.dcomp.Test.clone() exit
   not called
 
-Daikon Variable sets for daikon.dcomp.Test$Obj.<init>(I x, I y) enter
-  [1] [daikon.chicory.ParameterInfo:x]
-  [1] [daikon.chicory.ParameterInfo:y]
-Daikon Variable sets for daikon.dcomp.Test$Obj.<init>(I x, I y) exit
-  [1] [daikon.chicory.ThisObjInfo:this]
-  [2] [daikon.chicory.FieldInfo:this.x, daikon.chicory.ParameterInfo:x]
-  [2] [daikon.chicory.FieldInfo:this.y, daikon.chicory.ParameterInfo:y]
+DynComp Traced Tree for daikon.dcomp.Test$A.<init>(java.lang.String id) enter
+Parameter id
 
-Daikon Variable sets for daikon.dcomp.Test$Obj.equals(java.lang.Object obj) enter
-  [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
-  [1] [daikon.chicory.FieldInfo:this.x]
-  [1] [daikon.chicory.FieldInfo:this.y]
-Daikon Variable sets for daikon.dcomp.Test$Obj.equals(java.lang.Object obj) exit
-  [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
-  [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
-  [1] [daikon.chicory.ReturnInfo:return]
-  [1] [daikon.chicory.FieldInfo:this.x]
-  [1] [daikon.chicory.FieldInfo:this.y]
 
-Daikon Variable sets for daikon.dcomp.Test$Obj.hashCode() enter
+DynComp Traced Tree for daikon.dcomp.Test$A.<init>(java.lang.String id) exit
+this
+
+Field id
+\--Parameter id
+
+
+DynComp Traced Tree for daikon.dcomp.Test$A.add() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$A.add() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$A.add(I val) enter
+this
+
+Field x
+\--Field y
+\--Parameter val
+
+
+DynComp Traced Tree for daikon.dcomp.Test$A.add(I val) exit
+this
+
+Field x
+\--Field y
+\--Parameter val
+
+
+DynComp Traced Tree for daikon.dcomp.Test$A.tta() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$A.tta() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$A.equals(java.lang.Object obj) enter
   not called
-Daikon Variable sets for daikon.dcomp.Test$Obj.hashCode() exit
+
+DynComp Traced Tree for daikon.dcomp.Test$A.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$A.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$A.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.<init>() enter
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.<init>() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.tryit(I val1) enter
+this
+
+Parameter val1
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.tryit(I val1) exit
+this
+
+Array big_arr[]
+\--Field val
+\--Parameter val1
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$Arr.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$C.<init>(java.lang.String id) enter
+Parameter id
+
+
+DynComp Traced Tree for daikon.dcomp.Test$C.<init>(java.lang.String id) exit
+this
+
+Field cid
+\--Parameter id
+
+
+DynComp Traced Tree for daikon.dcomp.Test$C.set_long(J l1) enter
+Parameter l1
+
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$C.set_long(J l1) exit
+this
+
+Field long1
+\--Parameter l1
+
+
+DynComp Traced Tree for daikon.dcomp.Test$C.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$C.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$C.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$C.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$B.<init>() enter
+
+DynComp Traced Tree for daikon.dcomp.Test$B.<init>() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$B.ecomp() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$B.ecomp() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$B.p(daikon.dcomp.Test$A aval) enter
+Parameter aval
+
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$B.p(daikon.dcomp.Test$A aval) exit
+Parameter aval
+
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$B.comp() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$B.comp() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$B.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$B.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$B.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$B.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$D.<init>() enter
+
+DynComp Traced Tree for daikon.dcomp.Test$D.<init>() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$D.compare() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$D.compare() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$D.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$D.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$D.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$D.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$E.<init>() enter
+
+DynComp Traced Tree for daikon.dcomp.Test$E.<init>() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$E.compare() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$E.compare() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$E.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$E.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$E.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$E.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$F.<init>() enter
+
+DynComp Traced Tree for daikon.dcomp.Test$F.<init>() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$F.compare() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$F.compare() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$F.compare2() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$F.compare2() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$F.compare3() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$F.compare3() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$F.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$F.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$F.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$F.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.<init>(I x, I y) enter
+Parameter x
+
+Parameter y
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.<init>(I x, I y) exit
+this
+
+Field x
+\--Parameter x
+
+Field y
+\--Parameter y
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.clone() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.clone() exit
+this
+\--return
+
+this
+\--return
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.equals(java.lang.Object obj) enter
+this
+\--Parameter obj
+
+this
+\--Parameter obj
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.equals(java.lang.Object obj) exit
+return
+
+this
+\--Parameter obj
+
+this
+\--Parameter obj
+
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.hashCode() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$Obj.hashCode() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$ObjSub.<init>(I x, I y, I z) enter
+Parameter x
+
+Parameter y
+
+Parameter z
+
+
+DynComp Traced Tree for daikon.dcomp.Test$ObjSub.<init>(I x, I y, I z) exit
+this
+
+Field z
+\--Parameter z
+
+Parameter x
+
+Parameter y
+
+
+DynComp Traced Tree for daikon.dcomp.Test$ObjSub.equals(java.lang.Object obj) enter
+this
+\--Parameter obj
+
+this
+\--Parameter obj
+
+
+DynComp Traced Tree for daikon.dcomp.Test$ObjSub.equals(java.lang.Object obj) exit
+return
+
+this
+\--Parameter obj
+
+this
+\--Parameter obj
+
+
+DynComp Traced Tree for daikon.dcomp.Test$G.<init>() enter
+
+DynComp Traced Tree for daikon.dcomp.Test$G.<init>() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$G.compare() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$G.compare() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$G.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$G.equals(java.lang.Object obj) exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$G.clone() enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$G.clone() exit
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$G$Uncloneable.<init>() enter
+
+DynComp Traced Tree for daikon.dcomp.Test$G$Uncloneable.<init>() exit
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$G$Uncloneable.clone() enter
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$G$Uncloneable.clone() exit
+return
+
+this
+
+
+DynComp Traced Tree for daikon.dcomp.Test$G$Uncloneable.equals(java.lang.Object obj) enter
+  not called
+
+DynComp Traced Tree for daikon.dcomp.Test$G$Uncloneable.equals(java.lang.Object obj) exit
   not called
