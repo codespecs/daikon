@@ -153,13 +153,13 @@ public final class DCRuntime {
    * value or by throwing an exception, the corresponding key is
    * removed from this map.
    */
-  static HashMap<Object, Class<?>> active_equals_calls =
+  static Map<Object, Class<?>> active_equals_calls =
     new HashMap<Object, Class<?>>();
 
   /**
    * Tracks active super.clone() calls. (See active_equals_calls.)
    */
-  static HashMap<Object, Class<?>> active_clone_calls =
+  static Map<Object, Class<?>> active_clone_calls =
     new HashMap<Object, Class<?>>();
 
 
