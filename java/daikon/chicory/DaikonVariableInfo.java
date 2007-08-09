@@ -25,7 +25,11 @@ import daikon.VarInfo.VarFlags;
  */
 public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo>
-{	
+{
+
+	/** switch to turn on experimental techniques on static constants */
+	public static boolean dkconfig_constant_infer = false;
+	
     /** The variable name, if appropriate to the subtype **/
     private final String name;
 
@@ -226,13 +230,12 @@ public abstract class DaikonVariableInfo
      * Returns a String representation of this object suitable for a .dtrace file
      * @param val The object whose value to print
      */
+    @SuppressWarnings("unchecked")
     public String getDTraceValueString(Object val)
     {
         if (isArray)
         {
-            @SuppressWarnings("unchecked")
-            List<Object> asList = (List<Object>) val;
-            return getValueStringOfListWithMod(asList);
+            return getValueStringOfListWithMod((List<Object>) val); // unchecked cast
         }
         else
         {
@@ -725,7 +728,7 @@ public abstract class DaikonVariableInfo
             if (cinfo != null) {
                 value = cinfo.staticMap.get(theName);
                 
-                if (PrintInvariants.dkconfig_constant_infer) {
+                if (DaikonVariableInfo.dkconfig_constant_infer) {
                     if (value == null) {
                 	    isPrimitive = false;
                 	    String className = field.getDeclaringClass().getName();
@@ -748,7 +751,7 @@ public abstract class DaikonVariableInfo
                 newField.repTypeName += " = " + value;
                 newField.const_val = value;
                 newField.dtraceShouldPrint = false;
-                if (PrintInvariants.dkconfig_constant_infer && isPrimitive) {
+                if (DaikonVariableInfo.dkconfig_constant_infer && isPrimitive) {
                 	newField.dtraceShouldPrintChildren = false;
                 }
             }
@@ -979,9 +982,7 @@ public abstract class DaikonVariableInfo
 
        if (implementsList(type))
        {
-
-           @SuppressWarnings("unchecked")
-           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List>)type);
+           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List>)type); // unchecked cast
 
            child.typeName = type.getName();
            child.repTypeName = "hashcode[]";
