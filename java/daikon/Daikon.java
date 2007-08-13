@@ -594,6 +594,9 @@ public final class Daikon {
    * @see TerminationMessage
    **/
   public static void mainHelper(final String[] args) {
+    // Cleanup from any previous runs
+    cleanup();
+
     // Read command line options
     FileOptions files = read_options(args, usage);
     Set<File> decls_files = files.decls;
@@ -641,6 +644,7 @@ public final class Daikon {
       DiscReasonMap.initialize();
     }
 
+    fileio_progress = new FileIOProgress();
     fileio_progress.start();
 
     // Load declarations and splitters
@@ -801,6 +805,30 @@ public final class Daikon {
     if (!Daikon.dkconfig_quiet) {
       System.out.println("Exiting Daikon.");
     }
+  }
+
+  /**
+   * Cleans up static variables so that mainHelper can be called more
+   * than once.
+   */
+  public static void cleanup() {
+
+    // Stop the thread that prints out progress information
+    if ((fileio_progress != null)
+        && (fileio_progress.getState() != Thread.State.NEW)) {
+      fileio_progress.shouldStop = true;
+      try {
+        fileio_progress.join (2000);
+      } catch (InterruptedException e) {
+      }
+      if (fileio_progress.getState() != Thread.State.TERMINATED) {
+        throw new TerminationMessage ("Can't stop fileio_progress thead");
+      }
+    }
+    fileio_progress = null;
+    progress = "";
+
+    proto_invs.clear();
   }
 
   // Structure for return value of read_options.
@@ -1726,7 +1754,7 @@ public final class Daikon {
   public static int dkconfig_progress_display_width = 80;
 
   /** A way to output FileIO progress information easily. */
-  private static final FileIOProgress fileio_progress = new FileIOProgress();
+  private static FileIOProgress fileio_progress = null;
   public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
