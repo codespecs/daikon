@@ -101,21 +101,19 @@ public class NIS {
    * Map from invariant class to a list of all of the suppression sets
    * that contain a suppressor of that class.
    */
-  public static Map<Class,List<NISuppressionSet>>
-    suppressor_map = new LinkedHashMap<Class,List<NISuppressionSet>>(256);
+  public static Map<Class,List<NISuppressionSet>> suppressor_map;
 
   /**
    * Map from invariant class to the number of suppressions
    * that contain a suppressor of that class.
    */
-  public static Map<Class,Integer>
-    suppressor_map_suppression_count = new LinkedHashMap<Class,Integer>(256);
+  public static Map<Class,Integer> suppressor_map_suppression_count;
 
   /** List of all suppressions */
-  static List<NISuppressionSet> all_suppressions = new ArrayList<NISuppressionSet>();
+  static List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes **/
-  public static List<Invariant> suppressor_proto_invs = new ArrayList<Invariant>();
+  public static List<Invariant> suppressor_proto_invs;
 
   /**
    * List of invariants that are unsuppressed by the current sample.
@@ -170,6 +168,13 @@ public class NIS {
 
     if (!dkconfig_enabled)
       return;
+
+    // Creating these here, rather than where they are declared allows
+    // this method to be called multiple times without a problem.
+    suppressor_map = new LinkedHashMap<Class,List<NISuppressionSet>>(256);
+    suppressor_map_suppression_count = new LinkedHashMap<Class,Integer>(256);
+    all_suppressions = new ArrayList<NISuppressionSet>();
+    suppressor_proto_invs = new ArrayList<Invariant>();
 
     // Get all defined suppressions.
     for (Invariant inv : Daikon.proto_invs) {
