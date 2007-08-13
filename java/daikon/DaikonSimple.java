@@ -80,6 +80,8 @@ public class DaikonSimple {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
       String message = e.getMessage();
+      if (Daikon.dkconfig_show_stack_trace)
+        e.printStackTrace();
       if (message != null) {
         System.err.println(message);
         System.exit(1);
