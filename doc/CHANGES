@@ -20,6 +20,19 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.3.2 (September 1, 2007)
+
+Kvasir
+
+  Bug fixes
+
+    When giving the hashcode values of function parameters, previous
+    versions of Kvasir sometimes used an internal pointer value. Kvasir
+    now correctly uses the address on the program's stack instead. Since
+    Daikon doesn't infer many invariants over hashcode values, the only
+    visible effect is that the presence or absence of "<reference value>
+    has only one value" invariants is more consistent.
+
 4.3.1 (August 2, 2007)
 
 Kvasir
