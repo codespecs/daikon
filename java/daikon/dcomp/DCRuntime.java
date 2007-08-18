@@ -1155,6 +1155,18 @@ public final class DCRuntime {
     }
   }
 
+  public static void trace_all_comparable(PrintWriter ps) {
+
+    for (ClassInfo ci : all_classes) {
+      for (MethodInfo mi : ci.method_infos) {
+        if (mi.is_class_init()) continue;
+        if (mi.method_name.equals("equals_dcomp_instrumented")) continue;
+        ps.printf("%n");
+        print_comparable_traced (ps, mi);
+      }
+    }
+  }
+
   public static void print_decl_file (PrintWriter ps) {
 
     // Write the file header
@@ -1469,71 +1481,15 @@ public final class DCRuntime {
   }
 
   /**
-   * Prints comparabilty information for the enter and exit points of
+   * Prints comparability information for the enter and exit points of
    * the specified method. By default, outputs to foo.txt-cset
+   */
+  /* TO DO: Find a way to make this work correctly without using normal
+   * get_comparable.
    */
   public static void print_comparable (PrintWriter ps, MethodInfo mi) {
 
-    Map<DaikonVariableInfo, DVSet> t =
-      get_comparable_traced(mi.traversalEnter);
-    ps.printf ("DynComp Traced Tree for %s enter%n",
-        clean_decl_name(mi.toString()));
-    if (t == null) ps.printf("  not called%n");
-    else {
-      // Like RootInfo, but for Tracer roots. I didn't feel the need to
-      // create a new class just to deal with this, but as more of
-      // tracing gets implemented, public class TraceInfo may become
-      // necessary. -charlest
-      List<DaikonVariableInfo> traceroots =
-        new ArrayList<DaikonVariableInfo>();
-
-      for(DaikonVariableInfo normalroot : mi.traversalEnter) {
-        traceroots.add((DaikonVariableInfo)
-            TagEntry.get_entry(normalroot).getTraceRoot().get());
-      }
-      Collections.sort(traceroots);
-
-      for(DaikonVariableInfo tr : traceroots) {
-        print_tree(ps, t, tr, 0);
-        ps.printf("%n");
-      }
-    }
-    ps.printf("%n");
-
-    t = get_comparable_traced(mi.traversalExit);
-    ps.printf ("DynComp Traced Tree for %s exit%n",
-        clean_decl_name(mi.toString()));
-    if (t == null) ps.printf("  not called%n");
-    else {
-      // Like RootInfo, but for Tracer roots. I didn't feel the need to
-      // create a new class just to deal with this, but as more of
-      // tracing gets implemented, public class TraceInfo may become
-      // necessary. -charlest
-      List<DaikonVariableInfo> traceroots =
-        new ArrayList<DaikonVariableInfo>();
-
-      for(DaikonVariableInfo normalroot : mi.traversalExit) {
-        traceroots.add((DaikonVariableInfo)
-            TagEntry.get_entry(normalroot).getTraceRoot().get());
-      }
-      Collections.sort(traceroots);
-
-      for(DaikonVariableInfo tr : traceroots) {
-        print_tree(ps, t, tr, 0);
-        ps.printf("%n");
-      }
-    }
-
-    // The commented out section below is the original print_comparable.
-    // I am replacing it with a new one to view the tracer tree, because
-    // there are other functions that depend on add_variable, which I
-    // would otherwise choose to modify. I know that editing this method
-    // does not interfere with anything else, because the earlier
-    // shinyOutput modification that writes "Field foo" instead of
-    // "daikon.chicory.FieldInfo:this.foo" does not affect anything else.
-    //          -charlest
-
-    /*List<DVSet> l = get_comparable (mi.traversalEnter);
+    List<DVSet> l = get_comparable (mi.traversalEnter);
     ps.printf ("Daikon Variable sets for %s enter%n",
                clean_decl_name(mi.toString()));
     if (l == null)
@@ -1542,7 +1498,7 @@ public final class DCRuntime {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
           continue;
-        ArrayList stuff = shinyOutput(set, true);
+        ArrayList stuff = shinyOutput(set, daikon.DynComp.shiny_print);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf ("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -1557,11 +1513,46 @@ public final class DCRuntime {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
           continue;
-        ArrayList stuff = shinyOutput(set, true);
+        ArrayList stuff = shinyOutput(set, daikon.DynComp.shiny_print);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf ("  [%d] %s%n", stuff.size(), stuff);
       }
-    }*/
+    }
+  }
+
+  public static void print_comparable_traced (PrintWriter ps, MethodInfo mi) {
+    List<DVSet> l = get_comparable (mi.traversalEnter);
+    Map<DaikonVariableInfo, DVSet> t =
+      get_comparable_traced(mi.traversalEnter);
+    ps.printf ("DynComp Traced Tree for %s enter%n",
+        clean_decl_name(mi.toString()));
+    if (t == null) ps.printf("  not called%n");
+    else {
+      for(DVSet set : l) {
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
+          continue;
+        print_tree(ps, t,
+            (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        ps.printf("%n");
+      }
+    }
+    ps.printf("%n");
+
+    l = get_comparable (mi.traversalExit);
+    t = get_comparable_traced(mi.traversalExit);
+    ps.printf ("DynComp Traced Tree for %s exit%n",
+        clean_decl_name(mi.toString()));
+    if (t == null) ps.printf("  not called%n");
+    else {
+      for(DVSet set : l) {
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
+          continue;
+        print_tree(ps, t,
+            (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        ps.printf("%n");
+      }
+    }
+    ps.printf("%n");
   }
 
   /**
@@ -1572,14 +1563,28 @@ public final class DCRuntime {
    */
   static void print_tree (PrintWriter ps, Map<DaikonVariableInfo, DVSet> tree,
                           DaikonVariableInfo node, int depth) {
-    for(int i = 0; i < depth - 1; i++) ps.printf("|  ");
-    if(depth > 0) ps.printf("\\--");
-    ps.printf("%s%n", shinyOutput(node));
-    try {
-      for(DaikonVariableInfo child : tree.get(node))
-        print_tree(ps, tree, child, depth + 1);
-    } catch (NullPointerException e) { }
+
+    /* This method, for some reason, triggers a segfault due to the way
+     * DVSets are handled conceptually. A trace-tree of one element creates
+     * a key-value pair DVI foo --> DVSet {foo}, whereas a trace-tree of
+     * two elements creates a key-value pair DVI foo --> DVSet {bar}.
+     */
+
+    if (depth == 0) {
+      ps.printf("%s%n", shinyOutput(node, daikon.DynComp.shiny_print));
+      if (tree.get(node) == null) return;
+      for (DaikonVariableInfo child : tree.get(node))
+        if (child != node) print_tree(ps, tree, child, depth + 1);
+    } else {
+      for (int i = 0; i < depth; i++) ps.printf("--");
+      ps.printf("%s (%s)%n", shinyOutput(node, daikon.DynComp.shiny_print)
+                           , TagEntry.get_line_trace(node));
+      if (tree.get(node) == null ) return;
+      for (DaikonVariableInfo child : tree.get(node))
+        if (child != node) print_tree(ps, tree, child, depth + 1);
+    }
   }
+
 
   /**
    * If on, returns an ArrayList of Strings that converts the usual
@@ -1588,15 +1593,15 @@ public final class DCRuntime {
    * e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *    "daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
-  private static ArrayList shinyOutput(DVSet l, boolean on) {
-    if(!on) { return l; }
+  private static ArrayList<String> shinyOutput(DVSet l, boolean on) {
     ArrayList<String> o = new ArrayList<String>();
     for(DaikonVariableInfo dvi : l)
-      o.add(shinyOutput(dvi));
+      o.add(shinyOutput(dvi, on));
     return o;
   }
 
-  private static String shinyOutput(DaikonVariableInfo dv) {
+  private static String shinyOutput(DaikonVariableInfo dv, boolean on) {
+    if (!on) return dv.toString();
     String dvtxt = dv.toString();
     String type = dvtxt.split(":")[0];
     type = type.substring(type.lastIndexOf(".") + 1);
@@ -1605,18 +1610,20 @@ public final class DCRuntime {
     else if (type.equals("ReturnInfo")) { dvtxt = "return"; }
     else if (type.endsWith("Info")) {
       type = type.substring(0, type.length() - 4);
-      if (name.startsWith("this.")) name = name.substring(5);
       if (name.endsWith(".getClass()")) {
         name = name.substring(0, name.length() - 11);
-        type = type + " Class of";
+        type = "Class of";
+      }
+      if (name.startsWith("this.")) {
+        name = name.substring(5);
+        if (!type.endsWith("Field")) type = (type + " Field").trim();
       }
       dvtxt = type + " " + name;
     }
     return dvtxt;
   }
 
-
-/**
+  /**
    * Set of Daikon variables.  Implements comparable on first DaikonVariable
    * in each set.
    */
@@ -1700,7 +1707,7 @@ public final class DCRuntime {
                                   DaikonVariableInfo dv) {
     try {
       DaikonVariableInfo parent =
-        (DaikonVariableInfo) TagEntry.get_entry(dv).getTracer().get();
+        (DaikonVariableInfo) TagEntry.tracer_find(dv);
       DVSet set = sets.get(parent);
       if (set == null) { set = new DVSet(); sets.put(parent, set); }
       set.add(dv);
@@ -1709,6 +1716,7 @@ public final class DCRuntime {
     for (DaikonVariableInfo child : dv) add_variable_traced(sets, child);
 
   }
+
 
   /**
    * Merges comparability so that the same variable have the same
@@ -1814,6 +1822,7 @@ public final class DCRuntime {
     debug_merge_comp.exdent();
   }
 
+
   /**
    * Adds this daikon variable and all of its children into their appropriate
    * sets (those of their leader) in sets.
@@ -1831,9 +1840,6 @@ public final class DCRuntime {
     set.add (dv);
 
     // Process the children
-    // DVI is not a collection itself, but it implements Iterable<DVI>, and
-    // its iterator() override just points to a List of its children
-    // -cit
     for (DaikonVariableInfo child : dv)
       add_variable (sets, child);
 

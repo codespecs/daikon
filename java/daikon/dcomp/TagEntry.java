@@ -8,39 +8,27 @@ import java.util.*;
 
 /**
  * Union/Find datastructure for Objects without the ranking optimization.
- * All refernences to the Objects are weak so that they will be removed from
+ * All references to the Objects are weak so that they will be removed from
  * the sets when no longer referenced.
  */
 
-/* Also, I am considering the convention that the parent of a root is itself
- * rather than null, to avoid having to insert try-catches everywhere to
- * handle NullPointerExceptions (this might be a moot point, as it hasn't
- * been an issue thus far and I myself am more careful than that).
- * 
+/* TagEntry now implements tracing, which means that if A trace-points to B,
+ * then we guarantee that A and B have directly interacted (stronger condition
+ * than being in the same comparability set). Additionally, each trace-point
+ * is tagged with a class name, method name, and line number indicating where
+ * the relevant interaction occurred.
+ *
  * TODO:
  *   Let A --> B and C --> D be in the same tree, where D is not a child of A
  *   and B is not a child of C. When union(A, C), consider x = rank(C) - rank(B)
  *   and y = rank(A) - rank(D). If either x or y is greater than 0, then A --> C
  *   if x > y, and C --> A otherwise.
- *   
+ *
  *   Tracers should list line numbers and files where they are created.
- *   
+ *
  *   Union-by-rank on normal and tracer trees.
  *
  * -charlest
- */
-
-/* In changing the information output into the "scratch" file foo.txt-cset,
- * this is how I got information from this class to the text file:
- * Writing .txt-cset is done by invoking print_comparable() in DCRuntime
- * It gets a set of DaikonVariableInfos (henceforth DVIs) from get_comparable()
- *      in DCRuntime, which takes a RootInfo (a fancy DVI) as a parameter
- * get_comparable() creates a map between the immediate children of the RootInfo
- *      and sets of their respective children by invoking
- *      add_variable(map, immediate child)
- * add_variable(map, node) accesses this class (!!!) to ask what the root of
- *      node is, then adds the node to the set map.get(root); then it recursively
- *      iterates itself on (map, children of node)
  */
 
 class TagEntry extends WeakReference<Object> {
@@ -64,6 +52,7 @@ class TagEntry extends WeakReference<Object> {
    * if TRACING_ENABLED?
    */
   private TagEntry tracer;
+  protected String trace_loc = "";
 
   /** Create an entry as a separate set **/
   public TagEntry (Object obj) {
@@ -98,18 +87,51 @@ class TagEntry extends WeakReference<Object> {
   public static void union (Object obj1, Object obj2) {
     assert (obj1 != null) && (obj2 != null);
     debug.log ("union of '%s' and '%s'%n", obj1, obj2);
-    
+
     TagEntry o1 = get_entry(obj1), o2 = get_entry(obj2);
     TagEntry r1 = o1.find(), r2 = o2.find();
-    
+
     // if TRACING_ENABLED?
-    
+
     if (r1 != r2) {
       r2.parent = r1;
-      o1.reroute(null); o2.reroute(null);
+      o1.rootMe(); o2.rootMe();
       o2.tracer = o1;
+      o2.trace_loc = generateTraceString();
     }
   }
+
+  public static String generateTraceString() {
+    ArrayList<StackTraceElement> blarg =
+      new ArrayList<StackTraceElement>(Arrays.asList(new Exception().getStackTrace()));
+    if (blarg.get(blarg.size() - 1).getClassName()
+				.equals("daikon.dcomp.Premain$ShutdownThread")) return "";
+    do blarg.remove(0);
+	while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime") ||
+           blarg.get(0).getClassName().equals("daikon.dcomp.TagEntry"));
+
+    if (daikon.DynComp.trace_line_depth == 1) {
+      StackTraceElement first = blarg.get(0);
+      return first.getClassName() + ":" +
+             first.getMethodName() + "(), " +
+             first.getLineNumber();
+    } else {
+			ArrayList<String> blarg2 = new ArrayList<String>(daikon.DynComp.trace_line_depth);
+			try {
+			  for (int i = 0; i < daikon.DynComp.trace_line_depth; i++) {
+					StackTraceElement ste = blarg.get(i);
+					String cname = ste.getClassName();
+					cname = cname.substring(cname.lastIndexOf("."));
+					String fname = ste.getMethodName();
+					int lnum = ste.getLineNumber();
+					blarg2.add(cname + ":" + fname + "(), " + lnum);
+				}
+			} catch (IndexOutOfBoundsException e) {}
+			String result = "";
+			for (String s : blarg2) result += s + " <- ";
+			return result.substring(0, result.length() - 4);
+    }
+	}
 
   /**
    * Find the entry associated with obj.  If an entry does not currently
@@ -122,6 +144,10 @@ class TagEntry extends WeakReference<Object> {
     if (entry == null)
       entry = create (obj);
     return (entry);
+  }
+
+  public static String get_line_trace (Object obj) {
+    return get_entry(obj).trace_loc;
   }
 
   /**
@@ -176,20 +202,39 @@ class TagEntry extends WeakReference<Object> {
     return (root_ref);
   }
 
+  public static Object tracer_find (Object obj) {
+    TagEntry entry = object_map.get(obj);
+    if (entry == null) { return obj; }
+    TagEntry tracer = entry.getTracer();
+    if (tracer == null) { return null; }
+    Object tr_ref = tracer.get();
+    if (tr_ref == null) tr_ref = tracer;
+    return (tr_ref);
+  }
+
+  public static Object troot_find (Object obj) {
+    TagEntry entry = object_map.get(obj);
+    if (entry == null) { return obj; }
+    TagEntry troot = entry.getTraceRoot();
+    Object tr_ref = troot.get();
+    if (tr_ref == null) tr_ref = troot;
+    return (tr_ref);
+  }
+
   /**
    * Recursively traces from this object to the root of its tracer tree,
    * and reverses the direction of every pointer on the path, such that
    * this object is now the root of its tracer tree. (Imprecise wording, I know)
    */
-  public void reroute(TagEntry newTracer) {
-    try { this.tracer.reroute(this); }
+  public void reroute(TagEntry newTracer, String tloc) {
+		try { this.tracer.reroute(this, trace_loc); }
     catch (NullPointerException e) { }
-    finally { this.tracer = newTracer; }
+    finally { this.tracer = newTracer; this.trace_loc = tloc; }
 //    if(this.tracer != null) { System.out.println("Tracer not null"); this.tracer.reroute(this); }
 //    this.tracer = newTracer;
   }
-  
-  public void rootMe() { this.reroute(null); }
+
+  public void rootMe() { this.reroute(null, ""); }
 
   /**
    * Returns each of the sets with elements in each set on a separate
@@ -232,7 +277,7 @@ class TagEntry extends WeakReference<Object> {
 
   /** Returns the tracer of this node **/
   public TagEntry getTracer() { return tracer; }
-  
+
   public TagEntry getTraceRoot() {
     if (tracer == null) return this;
     else return tracer.getTraceRoot();
