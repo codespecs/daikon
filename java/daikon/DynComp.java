@@ -57,6 +57,18 @@ public class DynComp {
   @Option("variable nesting depth")
   public static int nesting_depth = 2;
 
+  @Option("Shiny element output")
+  public static boolean shiny_print = false;
+
+  @Option("Trace output file")
+  public static File trace_sets_file = null;
+
+  @Option("Depth of call hierarchy for line tracing")
+  public static int trace_line_depth = 1;
+
+//  @Option("Enable tracing");
+//  public static boolean tracing_enabled = true;
+
   public static String usage_synopsis
     = "java daikon.DynComp [options]";
 
