@@ -63,7 +63,7 @@ public class FuzzyFloat {
    * @return true if d1 and d2 are considered equal, false otherwise
    */
 
-  /*@ pure */ public boolean eq (double d1, double d2) {
+  /* @ pure */ public boolean eq (double d1, double d2) {
 
     // NaNs are not considered equal.
     if (Double.isNaN(d1) && Double.isNaN(d2))
@@ -106,7 +106,7 @@ public class FuzzyFloat {
    *
    * @see #eq
    */
-  /*@ pure */ public boolean ne (double d1, double d2) {
+  /* @ pure */ public boolean ne (double d1, double d2) {
    return (!eq (d1, d2));
   }
 
@@ -116,7 +116,7 @@ public class FuzzyFloat {
    *
    * @see #eq
    */
-  /*@ pure */ public boolean lt (double d1, double d2) {
+  /* @ pure */ public boolean lt (double d1, double d2) {
     return ((d1 < d2) && ne (d1, d2));
   }
 
@@ -126,7 +126,7 @@ public class FuzzyFloat {
    *
    * @see #eq
    */
-  /*@ pure */ public boolean lte (double d1, double d2) {
+  /* @ pure */ public boolean lte (double d1, double d2) {
     return ((d1 <= d2) || eq (d1, d2));
   }
 
@@ -136,7 +136,7 @@ public class FuzzyFloat {
    *
    * @see #eq
    */
-  /*@ pure */ public boolean gt (double d1, double d2) {
+  /* @ pure */ public boolean gt (double d1, double d2) {
       return ((d1 > d2) && ne (d1, d2));
   }
 
@@ -146,7 +146,7 @@ public class FuzzyFloat {
    *
    * @see #eq
    */
-  /*@ pure */ public boolean gte (double d1, double d2) {
+  /* @ pure */ public boolean gte (double d1, double d2) {
     return ((d1 >= d2) || eq (d1, d2));
   }
 
@@ -158,7 +158,7 @@ public class FuzzyFloat {
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  /*@ pure */ public int indexOf (double[] a, double elt) {
+  /* @ pure */ public int indexOf (double[] a, double elt) {
      for (int i=0; i<a.length; i++)
        if (eq (elt, a[i]))
         return i;
@@ -175,7 +175,7 @@ public class FuzzyFloat {
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    **/
-  /*@ pure */ public int indexOf (double[] a, double[] sub) {
+  /* @ pure */ public int indexOf (double[] a, double[] sub) {
 
     int a_index_max = a.length - sub.length;
 
@@ -200,7 +200,7 @@ public class FuzzyFloat {
    *
    * @return true if a1 and a2 are set equivalent, false otherwise
    */
-  /*@ pure */ public boolean isElemMatch (double[] a1, double[] a2) {
+  /* @ pure */ public boolean isElemMatch (double[] a1, double[] a2) {
 
     //don't change our parameters
     a1 = a1.clone();
@@ -282,7 +282,7 @@ public class FuzzyFloat {
    * Lexically compares two double arrays.
    */
 
-  /*@ pure */ public class DoubleArrayComparatorLexical implements Comparator<double[]> {
+  /* @ pure */ public class DoubleArrayComparatorLexical implements Comparator<double[]> {
 
     /**
      * Lexically compares o1 and o2 as double arrays.
@@ -314,7 +314,7 @@ public class FuzzyFloat {
    * also a element of bigger) of bigger, false otherwise
    */
 
-  /*@ pure */ public boolean isSubset (double[] smaller, double[] bigger) {
+  /* @ pure */ public boolean isSubset (double[] smaller, double[] bigger) {
 
     //don't change our parameters
     smaller = smaller.clone();
