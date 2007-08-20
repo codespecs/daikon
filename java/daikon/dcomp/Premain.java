@@ -186,6 +186,21 @@ public class Premain {
           DCRuntime.print_all_comparable (new PrintWriter(System.out, true));
         }
       }
+      
+      if (DynComp.trace_sets_file != null) {
+        if (DynComp.verbose)
+          System.out.println ("Writing traced comparability sets to "
+                              + DynComp.trace_sets_file);
+        PrintWriter trace_out = open (DynComp.trace_sets_file);
+        Stopwatch watch = new Stopwatch();
+        DCRuntime.trace_all_comparable (trace_out);
+        trace_out.close();
+        if (DynComp.verbose)
+          System.out.printf ("Comparability sets written in %s%n",
+                             watch.format());
+      } else {
+        // Writing comparability sets to standard output?
+      }
 
       if (DynComp.verbose)
         DCRuntime.decl_stats();
