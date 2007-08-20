@@ -247,9 +247,63 @@ public final class DCRuntime {
    * Handles <code>clone()</code> calls.<p>
    * This method throws Throwable because it may throw any checked
    * exception that is thrown by <code>o.clone()</code>.
+   */
+  // XXX TODO consolidate this and dcomp_super_clone, since there is a
+  // lot of duplicated code
+  public static Object dcomp_clone(Object o) throws Throwable {
+    Class<?> target_class = o.getClass();
+
+    Class<?> dcomp_marker;
+    try {
+      if (DCInstrument.jdk_instrumented) {
+        dcomp_marker = Class.forName("java.lang.DCompMarker");
+      } else {
+        dcomp_marker = Class.forName("daikon.dcomp.DCompMarker");
+      }
+    } catch (ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+
+    Object return_val;
+    Method m;
+
+    try {
+      if (target_class.getName().equals("java.lang.Object")) {
+        // call the uninstrumented Object.clone()
+        // Use getDeclaredMethod instead of getMethod because clone is
+        // protected
+        m = target_class.getDeclaredMethod("clone", new Class<?>[] {});
+        return_val = m.invoke(o);
+      } else {
+        // every other class has an instrumented version
+        m = target_class.getDeclaredMethod("clone",
+                                           new Class<?>[] { dcomp_marker });
+
+        // Use length-1 array containing null to distinguish from just
+        // null, which indicates 0 arguments
+        return_val = m.invoke(o, new Object[] { null });
+      }
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    } catch (InvocationTargetException e) {
+      throw e.getCause();
+    }
+
+    // Make o and its clone comparable
+    if ((o != null) && (return_val != null)) {
+      TagEntry.union (o, return_val);
+    }
+
+    return return_val;
+  }
+
+  /**
+   * Handles <code>super.clone()</code> calls.<p>
    * @see active_clone_calls
    */
-  public static Object dcomp_clone(Object o) throws Throwable {
+  public static Object dcomp_super_clone(Object o) throws Throwable {
     Class<?> oc = o.getClass();   // "Don't call it that."
 
     Class<?> target_class;  // The class whose method we will invoke
