@@ -81,8 +81,6 @@ daikon_manual_html/daikon.html: daikon.texinfo
 	rm -rf daikon_manual_html/*
 	texi2html -split chapter -subdir daikon_manual_html $<
 	perl -pi -e '$$/ = "\n\n"; if (m|http://texi2html\.cvshome\.org|) { $$_ = ""; }' daikon_manual_html/daikon.html
-	mkdir daikon_manual_html/images
-	cp -p images/gui-InvariantsDisplay-small.jpg images/gui-ControlPanel.jpg images/context-gui.jpg daikon_manual_html/images
 
 developer_manual_html/developer.html: developer.texinfo
 	rm -rf developer_manual_html/*
@@ -104,7 +102,7 @@ developer.ps: developer.dvi
 
 pdf: daikon.pdf developer.pdf
 
-pdf-direct: daikon.texinfo daikon.dvi images/daikon-logo.pdf images/gui-InvariantsDisplay-small.pdf images/gui-ControlPanel.pdf images/context-gui.pdf images/dfepl-flow.pdf
+pdf-direct: daikon.texinfo daikon.dvi images/daikon-logo.pdf images/dfepl-flow.pdf
 	pdftex $<
 
 # daikon.pdf: daikon.ps

@@ -959,19 +959,6 @@ java daikon.tools.jtb.Annotate StackArTester.inv.gz \
 Now examine file @file{DataStructures/StackAr.java-escannotated}.
 For more information about the Annotate program, see @ref{Annotate}.
 
-@c @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
-@c contains a tree that hierarchically organizes program points according
-@c to their class and method.  Using the GUI, you can look at invariants
-@c for only the methods and program points you care about.
-@c
-@c @example
-@c java daikon.gui.treeGUI.InvariantsGUI StackArTester.inv.gz
-@c @end example
-
-@c @item Use the Daikon Context GUI to browse the invariants.  As you move
-@c the cursor in an editor window, the Context GUI displays the invariants
-@c applicable to the current location (class or method).  For details on
-@c running the Context GUI, see @ref{Context GUI}.
 
 @end itemize
 @end enumerate
@@ -1035,15 +1022,6 @@ The StackAr example is an array-based stack implementation.  Take a
 look at @file{DataStructures/StackAr.java} to get a sense of the
 implementation.  Now, look at the first section of Daikon output.
 
-@c   In
-@c the Tree GUI, expand the node labeled @command{StackAr}, then select the
-@c node labeled @command{StackAr:Object}.
-@c
-@c @emph{(Note: The invariants displayed in the Tree GUI may be different than the
-@c invariants written to standard out by Daikon.  This is because the
-@c invariants are being filtered differently.  We are currently working
-@c to resolve this issue.)}
-
 @example
 ======================================================================
 StackAr:::OBJECT
@@ -1064,13 +1042,10 @@ their index is no more than @code{topOfStack} and are null
 otherwise.
 
 Next, look at the invariants for the @code{top()} method.
-@c In
-@c the Tree GUI, expand the node labeled @command{top()Ljava/lang/Object;}.
 @code{top()} has two different exit points, at lines 78 and 79
 in the original source.  There is a set of invariants for each exit
 point, as well as a set of invariants that hold for all exit points.
 Look at the invariants when @code{top()} returns at line 79.
-@c In the Tree GUI, select the node labeled @command{EXIT79}.
 
 @example
 ======================================================================
@@ -1299,7 +1274,6 @@ there are several ways to do this:
 @itemize
 @item Examine the output from running Daikon.
 @item Use the PrintInvariants program to display the invariants.
-@c @item Use the Daikon Tree GUI to browse the invariants.  (Deprecated.)
 @end itemize
 @noindent
 For help understanding the invariants, see @ref{Interpreting output}.
@@ -1528,7 +1502,6 @@ For example:
 @example
 java daikon.PrintInvariants Birthday.inv.gz
 @end example
-@c java daikon.gui.treeGUI.InvariantsGUI Birthday.inv.gz
 
 Invariants produced from Perl programs can be examined using the same
 tools as other Daikon invariants.
@@ -7018,258 +6991,6 @@ interface, and accept objects of type Invariant.
 
 @end table
 
-@c @node    GUIs, Front ends, Daikon output, Top
-@c @chapter GUIs for displaying invariants
-@c
-@c By default, Daikon outputs a textual list of invariants; this list may
-@c be very long.  Daikon's graphical user interfaces (GUIs) are designed to
-@c make the task of browsing invariants easier.  However, we recommend
-@c viewing the textual output or using one of the other Daikon tools
-@c (@pxref{Tools}) rather than using one of the GUIs.
-@c @c There are two GUIs to choose from.  The Tree GUI that lets users browse
-@c @c the hierarchy of invariants directly.
-@c The Context GUI lets users browse
-@c the code in a text editor; the Context GUI concurrently displays the
-@c invariants for the browsed code.
-@c
-@c The Eclipse plug-in is not a GUI per se; rather, it helps to automate
-@c various Daikon-related tasks such as instrumenting programs, running
-@c them, and inserting invariants into source code as comments.
-@c
-@c
-@c @menu
-@c * Eclipse plug-in::
-@c * Context GUI::
-@c @end menu
-
-
-@c @node    Tree GUI, Context GUI, Eclipse plug-in, GUIs
-@c @section Tree-structured invariant browser
-@c @cindex Tree GUI
-@c @cindex GUI, tree
-@c
-@c The Tree GUI contains a tree that
-@c hierarchically organizes program points according to their class and
-@c method.  Using the Tree GUI, you can look at invariants for only the methods
-@c and program points you care about.  You can also sort invariants by a
-@c property (e.g., probability) or filter invariants (e.g., only look at
-@c invariants containing a certain variable).
-@c
-@c This invariant browser consists of two windows.  The main window is the
-@c Invariants Display, which gives a tree-structured view of program
-@c points; you can navigate through the program points and view invariants.
-@c The other window is the Filter Control Panel, where you can control
-@c which invariants from each program point are displayed in the Invariants
-@c Display.
-@c
-@c @menu
-@c * Invoking Tree GUI::
-@c * Invariants Display::
-@c * Control panel::
-@c @end menu
-@c
-@c @node    Invoking Tree GUI, Invariants Display, Tree GUI, Tree GUI
-@c @subsection Starting the invariant browser
-@c
-@c To use the Tree GUI, first make a @file{.inv} file by invoking Daikon with
-@c the @option{-o} option; for instance, to create @file{foo.inv}, run
-@c @example
-@c java daikon.Daikon -o foo.inv @var{decl-files...} @var{trace-files...}
-@c @end example
-@c
-@c Then, run the Tree GUI with the @file{.inv} file as an argument:
-@c @example
-@c java daikon.gui.treeGUI.InvariantsGUI foo.inv
-@c @end example
-@c
-@c If you run the Tree GUI with no arguments, it presents a file browser that
-@c asks you to choose a @file{.inv} file for viewing.
-@c
-@c
-@c @node    Invariants Display, Control panel, Invoking Tree GUI, Tree GUI
-@c @subsection Invariants Display
-@c
-@c @ifnotinfo
-@c @image{images/gui-InvariantsDisplay-small,3in,}
-@c @end ifnotinfo
-@c
-@c @table @strong
-@c @item File menu
-@c
-@c The @command{Load file} menu option brings up a file browser that you
-@c can use to select another @file{.inv} file.  The @command{Quit} menu
-@c options lets you quit the Tree GUI@.
-@c
-@c @item Program point tree
-@c The top part of the Invariants Display consists of the Program point
-@c tree --- a hierarchy of program points broken down by class and method.
-@c Click on various program points in the tree to see tables of invariants
-@c for those program points.  You may use the @key{Ctrl} and @key{Shift}
-@c keys to make an arbitrary selection of program points.  Selecting a
-@c class or method automatically selects all the program points
-@c associated with that method or class.
-@c
-@c @item Invariant tables
-@c Invariant tables that display the actual invariants appear at the bottom
-@c of the Invariants Display.
-@c
-@c @itemize @bullet
-@c @item
-@c Use @key{Alt} along with the @key{up} or @key{down} arrow keys to scroll
-@c by a table at a time.
-@c @item
-@c Sort a column in a table by clicking on the column header.  Shift-click
-@c to sort the column in reverse order.
-@c @end itemize
-@c
-@c @end table
-@c
-@c @node    Control panel,  , Invariants Display, Tree GUI
-@c @subsection Control panel
-@c
-@c The Control Panel determines which invariants are displayed.
-@c @c As of 2/2002
-@c (This picture of the Control Panel is slightly out of date; it needs to
-@c be updated.)
-@c
-@c @c Force a paragraph break so the image is on its own line.
-@c @*
-@c
-@c @ifnotinfo
-@c @image{images/gui-ControlPanel,3in,}
-@c @end ifnotinfo
-@c
-@c
-@c @menu
-@c * Property filters::
-@c * Variable filters::
-@c @end menu
-@c
-@c @node    Property filters, Variable filters, Control panel, Control panel
-@c @subsubsection Property filters
-@c @cindex property filters
-@c
-@c Property filters narrow down the list of invariants that are displayed.
-@c You can adjust which Property filters are being applied.  By default,
-@c all Property filters are enabled.
-@c
-@c For information about property filters, see @ref{Invariant filters}.
-@c
-@c @node    Variable filters,  , Property filters, Control panel
-@c @subsubsection Variable filters
-@c @cindex variable filters
-@c
-@c Variable filters let you display only the invariants that contain
-@c certain variables.  The left-hand box displays the variables that you
-@c are interested in.  By default, the box is empty and invariants containing
-@c any variables are displayed.  There are two ways to add variables to the
-@c variables list:
-@c @enumerate
-@c @item
-@c Type the name of the variable into the @command{Add variable}
-@c text field, and click the @command{Add variable} button (or just press
-@c @key{enter}).
-@c @item
-@c Each Invariant table in the Invariants Display has a @command{Show
-@c variables} button.  Click on that button to see a list of variables for
-@c that program point.  Select any set of variables and click the
-@c @command{Filter on selected variables} button.
-@c @end enumerate
-@c
-@c To remove variables from the variables list, select the variables in
-@c question and click on the @command{Remove selected
-@c variables} button.
-@c
-@c If you click on the @command{any variable} checkbox,
-@c invariants are displayed if they contain any of the variables in the
-@c variables list.  If you click on the @command{all
-@c variables} checkbox, invariants are displayed if they contain all
-@c of the variables in the variables list.
-
-
-
-@c @node    Context GUI,  , Eclipse plug-in, GUIs
-@c @section Context GUI
-@c @cindex Context GUI
-@c @cindex GUI, context
-@c
-@c The Daikon Context GUI displays invariants for the Java or C code displayed
-@c in a text editor or code browser; as the cursor moves, the invariant
-@c display is updated.
-@c (Before using the Context GUI, you must follow the installation
-@c instructions; see @ref{Installing the Context GUI}.)
-@c
-@c @c Force a paragraph break so the image is on its own line.
-@c @*
-@c
-@c @ifnotinfo
-@c @image{images/context-gui,5in,}
-@c @end ifnotinfo
-@c
-@c Currently, the Context GUI is integrated with the Emacs text editor.
-@c However, users can extend it to other Java or C editors.  The Context GUI can
-@c also be run stand-alone.  This provides the user the ability to browse
-@c the invariants without having to load up the text editor in case the
-@c user wants to do a quick lookup on invariants.
-@c
-@c @menu
-@c * Context GUI with Emacs::
-@c * Installing the Context GUI::
-@c @end menu
-@c
-@c @node    Context GUI with Emacs, Installing the Context GUI, Context GUI, Context GUI
-@c @subsection Running the Context GUI with Emacs
-@c @cindex Emacs, with Context GUI
-@c
-@c In order to use the Context GUI, perform the following steps:
-@c @enumerate
-@c @item
-@c Use the Daikon invariant detector to create a @file{.inv} file containing the
-@c invariants.
-@c @example
-@c   java daikon.Daikon -o foo.inv decl-files... trace-files...
-@c @end example
-@c
-@c
-@c
-@c @item
-@c
-@c Start the Context GUI by typing @kbd{M-x daikon-context-gui}
-@c while visiting a Java or C file in Emacs.  When prompted, select the
-@c appropriate @file{.inv} file, containing the invariants.
-@c
-@c @item
-@c Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
-@c
-@c @end enumerate
-@c
-@c
-@c
-@c @node    Installing the Context GUI,  , Context GUI with Emacs, Context GUI
-@c @subsection Installing the Context GUI
-@c
-@c If you wish to run the Daikon Context GUI (@pxref{Context GUI}), perform
-@c the following two steps:
-@c
-@c @enumerate
-@c @item
-@c If you wish to use the Context GUI with Java code, then
-@c download and install JDE, the Java Development Environment for Emacs,
-@c from @uref{http://jdee.sunsite.dk/}.
-@c If you wish to use the Context GUI with C code, no extra packages are needed.
-@c @item
-@c Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
-@c path.  Add the following to your @file{.emacs} or @file{prj.el} file:
-@c @example
-@c   ;; Daikon Context GUI
-@c   (add-to-list 'load-path
-@c                (substitute-in-file-name "$DAIKONDIR/emacs"))
-@c   (autoload 'daikon-context-gui "daikon-context-gui"
-@c             "Daikon Context GUI" t)
-@c   (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
-@c @end example
-@c @end enumerate
-
 
 @node    Annotate, Runtime-check instrumenter, Invariant Diff, Tools for manipulating invariants
 @subsection Annotate
@@ -8374,36 +8095,6 @@ external library has an error in parsing logical shift operators such as
 a few other invariants that cannot be properly formatted as Java code)
 are suppressed from the output of these tools.  (Annotate inserts them
 as comments, and runtimechecker silently ignores them.)
-
-
-@c @node    Tree GUI font errors, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
-@c @section Tree GUI font errors
-@c
-@c @cindex font not found
-@c
-@c When running the Tree GUI on Linux, you may get font errors such as the following:
-@c
-@c @example
-@c Font specified in font.properties not found
-@c   [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
-@c @end example
-@c
-@c These errors are harmless; the Tree GUI will still run correctly.  To
-@c prevent these errors from appearing in the future, take the following
-@c steps:
-@c
-@c @itemize @bullet
-@c @item
-@c Find out where your JDK root directory is.  In general, the JDK root directory
-@c is where you run java from: @file{@var{JDK_ROOT}/bin/java}.
-@c @item
-@c Edit @file{@var{JDK_ROOT}/jre/lib/font.properties}, and comment out all lines
-@c with the offending fonts.  For example, to eliminate the error messages
-@c shown above, one would comment out all lines containing "fontspecific".
-@c @end itemize
-@c
-@c If you don't have permission to edit @file{font.properties}, ask
-@c your system administrator to do so.
 
 
 @node    Chicory problems, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
