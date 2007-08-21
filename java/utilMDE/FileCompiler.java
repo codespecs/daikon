@@ -147,8 +147,8 @@ public final class FileCompiler {
       // Collect all the files that were not compiled into retry
       List<String> retry = new ArrayList<String>();
       String filenames = "";
-      for (int i = 0; i < fileNames.size(); i++) {
-        String sourceFileName = fileNames.get(i).trim();
+      for (String sourceFileName : fileNames) {
+        sourceFileName = sourceFileName.trim();
         String classFilePath = getClassFilePath(sourceFileName);
         if (! fileExists(classFilePath)) {
           if (! errors.contains(getClassName(sourceFileName))) {
