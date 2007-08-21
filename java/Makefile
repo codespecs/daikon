@@ -7,7 +7,11 @@
 -include Makefile.user
 
 JAVAC ?= javac
-# Removed  "-J-Xmx800m", because it is incompatible with JDK 7.
+# When "javac" is a shall script (as it is in OpenJDK 7 when compiled via
+# "ant" as opposed to being downloaded from Sun), the "-J" flags are passed
+# through to com.sun.tools.javac.Main rather than being passed to java.  So,
+# remove "-J-Xmx800m".  (When "javac" is an executable, it properly handles
+# "-J" flags.)
 JAVAC_ARGS ?= -g -target 5
 ## If you do not wish to use the "javac-xlint" program, add to Makefile.user:
 ##   JAVAC_XLINT =
