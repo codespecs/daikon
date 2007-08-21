@@ -631,8 +631,7 @@ public class SEQSEQINTEQUAL
           found.add (SEQSEQ_GT.find(slice));
           found.add (SEQSEQ_LE.find(slice));
           found.add (SEQSEQ_GE.find(slice));
-          for (int i = 0; i < found.size(); i++) {
-            Invariant inv = found.get (i);
+          for (Invariant inv : found) {
             if (inv != null) {
               if (logOn())
                 debug.log ("Obvious Dynamic from " + inv.format() +

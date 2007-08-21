@@ -84,14 +84,12 @@ public class SplitterFactoryTestUpdater {
                                         List<String> decls) {
     HashSet<File> declsFileSet = new HashSet<File>();
     HashSet<File> spinfoFiles = new HashSet<File>();
-    for (int i = 0; i < spinfos.size(); i++) {
-      String spinfoFile = spinfos.get(i);
+    for (String spinfoFile : spinfos) {
       spinfoFile = targetDir + spinfoFile;
       spinfoFiles.add(new File(spinfoFile));
     }
     spinfoFileLists.add(new ArrayList<File>(spinfoFiles));
-    for (int i = 0; i < decls.size(); i++) {
-      String declsFile = decls.get(i);
+    for (String declsFile : decls) {
       declsFile = targetDir + declsFile;
       declsFileSet.add(new File(declsFile));
     }
@@ -258,12 +256,12 @@ public class SplitterFactoryTestUpdater {
     ps.println("   */");
     ps.println("  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
     ps.println("    List<File> declsFiles = new ArrayList<File>();");
-    ps.println("    for (int i = 0; i < decls.size(); i++) {");
-    ps.println("      declsFiles.add(new File(decls.get(i)));");
+    ps.println("    for (String decl : decls) {");
+    ps.println("      declsFiles.add(new File(decl));");
     ps.println("    }");
     ps.println("    Set<File> spFiles = new HashSet<File>();");
-    ps.println("    for (int i = 0; i < spinfos.size(); i++) {");
-    ps.println("      spFiles.add(new File(spinfos.get(i)));");
+    ps.println("    for (String spinfo : spinfos) {");
+    ps.println("      spFiles.add(new File(spinfo));");
     ps.println("    }");
     ps.println("    try {");
     ps.println("      if (saveFiles) {");
@@ -331,8 +329,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("                     targetDir + f1 + \".goal\");");
     ps.println("  }");
     ps.println();
-    for (int i = 0; i < classNames.size(); i++) {
-      String className = classNames.get(i);
+    for (String className : classNames) {
       ps.println("  public static void test" + className + "() {");
       ps.println("    assertEqualFiles(\"" + className + ".java\");");
       ps.println("  }");
@@ -345,8 +342,7 @@ public class SplitterFactoryTestUpdater {
    * to code.
    */
   private static void appendSuite(PrintStream ps) {
-    for (int i = 0; i < classNames.size(); i++) {
-      String className = classNames.get(i);
+    for (String className : classNames) {
       ps.println("    suite.addTest(new SplitterFactoryTest(\"test" + className + "\"));");
     }
   }

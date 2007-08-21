@@ -10,6 +10,8 @@ import daikon.chicory.DaikonVariableInfo;
 
 import utilMDE.*;
 
+import checkers.quals.Interned;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -62,7 +64,7 @@ public abstract class VarInfoName
    * "name.equals(parse(e.name()))" might throw an exception, but if
    * it completes normally, the result should be true.
    **/
-  public static VarInfoName parse(String name) {
+  public static /*@Interned*/ VarInfoName parse(String name) {
 
     // Remove the array indication from the new decl format
     name = name.replace ("[..]", "[]");
@@ -207,7 +209,7 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * default output format
    **/
-  public String name() {
+  public /*@Interned*/ String name() {
     if (name_cached == null) {
       try {
         name_cached = name_impl().intern();
@@ -218,7 +220,7 @@ public abstract class VarInfoName
     }
     return name_cached;
   }
-  private String name_cached = null; // interned
+  private /*@Interned*/ String name_cached = null; // interned
 
   /**
    * Returns the String representation of this name in the default output
@@ -232,7 +234,7 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * esc style output format
    **/
-  public String esc_name() {
+  public /*@Interned*/ String esc_name() {
     if (esc_name_cached == null) {
       try {
         esc_name_cached = esc_name_impl().intern();
@@ -504,14 +506,14 @@ public abstract class VarInfoName
 
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
-  private static final WeakHashMap<VarInfoName,WeakReference<VarInfoName>> internTable = new WeakHashMap<VarInfoName,WeakReference<VarInfoName>>();
-  public VarInfoName intern() {
-    WeakReference<VarInfoName> ref = internTable.get(this);
+  private static final WeakHashMap<VarInfoName,WeakReference</*@Interned*/ VarInfoName>> internTable = new WeakHashMap<VarInfoName,WeakReference</*@Interned*/ VarInfoName>>();
+  public /*@Interned*/ VarInfoName intern() {
+    WeakReference</*@Interned*/ VarInfoName> ref = internTable.get(this);
     if (ref != null) {
-      VarInfoName result = ref.get();
+      /*@Interned*/ VarInfoName result = ref.get();
       return result;
     } else {
-      internTable.put(this, new WeakReference<VarInfoName>(this));
+      internTable.put(this, new WeakReference</*@Interned*/ VarInfoName>((/*@Interned*/ VarInfoName) this)); // cast is redundant (except in JSR 308)
       return this;
     }
   }

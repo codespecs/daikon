@@ -293,8 +293,7 @@ public class PptSplitter implements Serializable {
         // Copy each invariant permuted to the parent.
         // This permits them to be directly compared to one another.
         int[] permute = PptTopLevel.build_permute (cvis_sorted, cvis);
-        for (int j = 0; j < cslice.invs.size(); j++) {
-          Invariant orig_inv = cslice.invs.get (j);
+        for (Invariant orig_inv : cslice.invs) {
           Invariant inv = orig_inv.clone_and_permute (permute);
           inv.ppt = pslice;
           invs[childno].add (inv);
@@ -436,8 +435,7 @@ public class PptSplitter implements Serializable {
     }
 
     // Create double-implications for each exclusive invariant
-    for (int ii = 0; ii < exclusive_invs_vec.size(); ii++) {
-      Invariant[] invs = exclusive_invs_vec.get(ii);
+    for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] != invs[jj])
           add_implication (parent, con_invs[jj], invs[jj], true, orig_invs);
@@ -445,8 +443,7 @@ public class PptSplitter implements Serializable {
     }
 
     // Create single implication for each different invariant
-    for (int ii = 0; ii < different_invs_vec.size(); ii++) {
-      Invariant[] invs = different_invs_vec.get(ii);
+    for (Invariant[] invs : different_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (invs[jj] != null)
           add_implication (parent, con_invs[jj], invs[jj], false, orig_invs);
@@ -531,10 +528,8 @@ public class PptSplitter implements Serializable {
                                                  Invariants invs2) {
 
     Vector<Invariant[]> result = new Vector<Invariant[]>();
-    for (int i1=0; i1 < invs1.size(); i1++) {
-      for (int i2=0; i2 < invs2.size(); i2++) {
-        Invariant inv1 = invs1.get(i1);
-        Invariant inv2 = invs2.get(i2);
+    for (Invariant inv1 : invs1) {
+      for (Invariant inv2 : invs2) {
         // // This is a debugging tool, to make sure that various versions
         // // of isExclusiveFormula remain coordinated.  (That's also one
         // // reason we don't break out of the loop early:  also, there will

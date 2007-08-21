@@ -218,8 +218,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Instantiate all of the subclasses and return them
     List<Invariant> result = new ArrayList<Invariant>();
-    for (int ii = 0; ii < func_list.size(); ii++) {
-      CLASSNAME[] fb_arr = func_list.get (ii);
+    for (CLASSNAME[] fb_arr : func_list) {
       for (int jj = 1; jj < fb_arr.length; jj++) {
         CLASSNAME fb = fb_arr[jj];
         if (fb != null) {
@@ -256,8 +255,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     // Get the proto invariant for all of the subclasses and return them
-    for (int ii = 0; ii < func_list.size(); ii++) {
-      CLASSNAME[] fb_arr = func_list.get (ii);
+    for (CLASSNAME[] fb_arr : func_list) {
       for (int jj = 1; jj < fb_arr.length; jj++) {
         CLASSNAME fb = fb_arr[jj];
         if (fb != null) {

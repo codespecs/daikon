@@ -1361,8 +1361,7 @@ public final class CLASSNAME
 
     // Look for any active planes.  All must define the same plane
     CLASSNAME first = null;
-    for (int i = 0; i < cores.size(); i++) {
-      CLASSNAME c = cores.get (i);
+    for (CLASSNAME c : cores) {
       if (!c.isActive())
         continue;
       if (first == null)
@@ -1386,8 +1385,7 @@ public final class CLASSNAME
     // Note that while null points can't show up in a core that is not active
     // because it hasn't seen enough values, they can show up if the core
     // is not active because it is a line.
-    for (int i = 0; i < cores.size(); i++) {
-      CLASSNAME c = cores.get (i);
+    for (CLASSNAME c : cores) {
       if (c.isActive())
         continue;
       for (int j = 0; j < c.values_seen; j++) {

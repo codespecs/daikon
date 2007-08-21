@@ -88,8 +88,7 @@ public class CoverageStats
     // Display results
     int nall_sum = 0;
     int ncov_sum = 0;
-    for (int i = 0; i < relevant.size(); i++) {
-      String file = relevant.get(i);
+    for (String file : relevant) {
       if (all.get(file) == null) {
 	System.out.println(file + " not instrumented (?)");
 	continue;

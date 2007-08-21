@@ -965,8 +965,7 @@ public class PptTopLevel extends Ppt {
               + ": "
               + slice.var_infos[0].equalitySet.shortString());
         if (false) {
-          for (int k = 0; k < slice.invs.size(); k++) {
-            Invariant inv = slice.invs.get(k);
+          for (Invariant inv : slice.invs) {
             debugInstantiate.fine("-- invariant " + inv.format());
           }
         }
@@ -1082,8 +1081,7 @@ public class PptTopLevel extends Ppt {
     List<Invariant> weakened_invs = new ArrayList<Invariant>();
 
     // Loop through each invariant
-    inv_loop : for (int i = 0; i < inv_list.size(); i++) {
-      Invariant inv = inv_list.get(i);
+    inv_loop : for (Invariant inv : inv_list) {
       if (Debug.logDetail())
         inv.log("Processing in inv_add");
 
@@ -1259,8 +1257,7 @@ public class PptTopLevel extends Ppt {
       LowerBoundFloat lbf = null;
       UpperBound ub = null;
       UpperBoundFloat ubf = null;
-      for (int k = 0; k < slice.invs.size(); k++) {
-        Invariant inv = slice.invs.get(k);
+      for (Invariant inv : slice.invs) {
         if (inv instanceof LowerBound)
           lb = (LowerBound) inv;
         else if (inv instanceof LowerBoundFloat)
@@ -1298,8 +1295,7 @@ public class PptTopLevel extends Ppt {
 
     for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
       PptSlice slice = j.next();
-      for (int k = 0; k < slice.invs.size(); k++) {
-        Invariant inv = slice.invs.get(k);
+      for (Invariant inv : slice.invs) {
         Cnt cnt = inv_map.get(inv.getClass());
         if (cnt == null) {
           cnt = new Cnt();
@@ -1417,8 +1413,8 @@ public class PptTopLevel extends Ppt {
     if (cslice != null) {
       System.out.println ("Trying to add slice " + slice);
       System.out.println ("but, slice " + cslice + " already exists");
-      for (int i = 0; i < cslice.invs.size(); i++)
-        System.out.println(" -- inv " + cslice.invs.get(i));
+      for (Invariant inv : cslice.invs)
+        System.out.println(" -- inv " + inv);
     }
 
     views.put(sliceIndex(slice.var_infos), slice);
@@ -2541,8 +2537,7 @@ public class PptTopLevel extends Ppt {
 
     // Add implications from each splitter
     if (splitters != null) {
-      for (int i = 0; i < splitters.size(); i++) {
-        PptSplitter ppt_split = splitters.get(i);
+      for (PptSplitter ppt_split : splitters) {
         ppt_split.add_implications();
       }
     }
@@ -2878,8 +2873,8 @@ public class PptTopLevel extends Ppt {
           System.err.println("Warning: removal failed, punting");
           return;
         }
-        for (int j = 0; j < problems.size(); j++) {
-          Lemma problem = (Lemma) problems.elementAt(j);
+        for (Object problemObject : problems) {
+          Lemma problem = (Lemma) problemObject;
           if (demerits.containsKey(problem))
             demerits.put(
               problem,
@@ -3253,8 +3248,8 @@ public class PptTopLevel extends Ppt {
       return ("null");
 
     String out = "";
-    for (int i = 0; i < equality_view.invs.size(); i++) {
-      Equality e = (Equality) equality_view.invs.get(i);
+    for (Invariant inv : equality_view.invs) {
+      Equality e = (Equality) inv;
       Set<VarInfo> vars = e.getVars();
       String set_str = "";
       for (VarInfo v : vars) {
@@ -3340,8 +3335,7 @@ public class PptTopLevel extends Ppt {
     // there are some variable relationships with the child (note that
     // some ppt relationships such as constructor ENTER ppts to their
     // object ppts do not have any variable relationships)
-    for (int i = 0; i < children.size(); i++) {
-      PptRelation rel = children.get(i);
+    for (PptRelation rel : children) {
       if (rel.size() > 0)
         values_num_samples += rel.child.values_num_samples;
     }
@@ -3361,11 +3355,10 @@ public class PptTopLevel extends Ppt {
     Object[] vals = new Object[num_tracevars];
     int[] mods = new int[num_tracevars];
     ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
-    for (int childno = 0; childno < children.size(); childno++) {
-      PptRelation rel = children.get(childno);
+    for (PptRelation rel : children) {
       ModBitTracker child_mbtracker = rel.child.mbtracker;
       int child_mbsize = child_mbtracker.num_samples();
-      // System.out.println("mergeInvs child #" + childno + "=" + rel.child.name() + " has size " + child_mbsize + " for " + name());
+      // System.out.println("mergeInvs child #" + children.indexOf(rel) + "=" + rel.child.name() + " has size " + child_mbsize + " for " + name());
       for (int sampno = 0; sampno < child_mbsize; sampno++) {
         Arrays.fill(mods, ValueTuple.MISSING_FLOW);
         for (int j = 0; j < var_infos.length; j++) {
@@ -3382,8 +3375,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Merge the ValueSets.
-    for (int childno = 0; childno < children.size(); childno++) {
-      PptRelation rel = children.get(childno);
+    for (PptRelation rel : children) {
 
       for (int j = 0; j < var_infos.length; j++) {
         VarInfo parent_vi = var_infos[j];
@@ -3404,8 +3396,7 @@ public class PptTopLevel extends Ppt {
     // Currently just the "canBeMissing" field, which is needed by
     // guarding, and the flag that marks missing-out-of-bounds
     // derived variables
-    for (int i = 0; i < children.size(); i++) {
-      PptRelation rel = children.get(i);
+    for (PptRelation rel : children) {
       // This approach doesn't work correctly for the OBJECT_USER
       // relation case, because obj.field could be missing in a user PPT
       // when obj is null, but shouldn't be missing in the OBJECT PPT,
@@ -3481,8 +3472,8 @@ public class PptTopLevel extends Ppt {
     equality_view.instantiate_from_pairs(emap.keySet());
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Built equality sets ");
-      for (int i = 0; i < equality_view.invs.size(); i++) {
-        Equality e = (Equality) equality_view.invs.get(i);
+      for (Invariant inv : equality_view.invs) {
+        Equality e = (Equality) inv;
         debugMerge.fine("-- " + e.shortString());
       }
     }
@@ -3540,8 +3531,8 @@ public class PptTopLevel extends Ppt {
 
     // Create an array of leaders to build slices over
     List<VarInfo> non_missing_leaders = new ArrayList<VarInfo>(equality_view.invs.size());
-    for (int i = 0; i < equality_view.invs.size(); i++) {
-      VarInfo l = ((Equality) equality_view.invs.get(i)).leader();
+    for (Invariant inv : equality_view.invs) {
+      VarInfo l = ((Equality) inv).leader();
       if (l.missingOutOfBounds())
         continue;
       non_missing_leaders.add(l);
@@ -3554,8 +3545,7 @@ public class PptTopLevel extends Ppt {
     // more than once (with different variable relations), but we only
     // need to created the suppressed invariants once.
     Map<PptTopLevel,List<Invariant>> suppressed_invs = new LinkedHashMap<PptTopLevel,List<Invariant>>();
-    for (int i = 0; i < children.size(); i++) {
-      PptRelation rel = children.get(i);
+    for (PptRelation rel : children) {
       PptTopLevel child = rel.child;
       if (child.num_samples() == 0)
         continue;
@@ -3677,8 +3667,7 @@ public class PptTopLevel extends Ppt {
       //        + cslice + " with permute " + ArraysMDE.toString (permute));
 
       // Copy each child invariant to the parent
-      for (int j = 0; j < cslice.invs.size(); j++) {
-        Invariant child_inv = cslice.invs.get(j);
+      for (Invariant child_inv : cslice.invs) {
         Invariant parent_inv = child_inv.clone_and_permute(permute);
         parent_inv.ppt = pslice;
         pslice.invs.add(parent_inv);
@@ -3765,8 +3754,7 @@ public class PptTopLevel extends Ppt {
 
     if (debugConditional.isLoggable(Level.FINE)) {
       debugConditional.fine("Merge conditional for " + name());
-      for (int ii = 0; ii < children.size(); ii++) {
-        PptRelation rel = children.get(ii);
+      for (PptRelation rel : children) {
         debugConditional.fine("child: " + rel);
       }
     }
@@ -3777,8 +3765,7 @@ public class PptTopLevel extends Ppt {
       if (debugConditional.isLoggable(Level.FINE)) {
         debugConditional.fine(
           "Merge invariants for conditional " + ppt_cond.name());
-        for (int jj = 0; jj < ppt_cond.children.size(); jj++) {
-          PptRelation rel = ppt_cond.children.get(jj);
+        for (PptRelation rel : ppt_cond.children) {
           debugConditional.fine("child relation: " + rel);
           debugConditional.fine(
             "child equality set = " + rel.child.equality_sets_txt());
@@ -3924,8 +3911,9 @@ public class PptTopLevel extends Ppt {
                                       List<PptSlice> slices) {
 
     int inv_cnt = 0;
-    for (int i = 0; i < slices.size(); i++)
-      inv_cnt += slices.get(i).invs.size();
+    for (PptSlice slice : slices) {
+      inv_cnt += slice.invs.size();
+    }
     log.fine(slices.size() + descr + " slices with " + inv_cnt + " invariants");
 
   }
@@ -4031,9 +4019,9 @@ public class PptTopLevel extends Ppt {
       set_cnt = 0;
       var_cnt = 0;
       if (ppt.equality_view != null) {
-        for (int j = 0; j < ppt.equality_view.invs.size(); j++) {
+        for (Invariant inv : ppt.equality_view.invs) {
           set_cnt++;
-          Equality e = (Equality) ppt.equality_view.invs.get(j);
+          Equality e = (Equality) inv;
           Collection<VarInfo> vars = e.getVars();
           var_cnt += vars.size();
         }
@@ -4097,8 +4085,7 @@ public class PptTopLevel extends Ppt {
       if (show_invs) {
         for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext();) {
           PptSlice slice = j.next();
-          for (int k = 0; k < slice.invs.size(); k++) {
-            Invariant inv = slice.invs.get(k);
+          for (Invariant inv : slice.invs) {
             String falsify = "";
             if (inv.is_false())
               falsify = "(falsified) ";
@@ -4163,8 +4150,7 @@ public class PptTopLevel extends Ppt {
       long memory = 0;
       sample_cnt = slist.size();
       total_sample_cnt += sample_cnt;
-      for (int j = 0; j < slist.size(); j++) {
-        Stats stats = slist.get(j);
+      for (Stats stats : slist) {
         avg_equality_cnt += stats.set_cnt;
         avg_var_cnt += stats.var_cnt;
         equality_set_cnt += stats.set_cnt;

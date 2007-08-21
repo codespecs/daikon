@@ -197,8 +197,8 @@ public class TraceSelect {
         PrintWriter pwOut = new PrintWriter
           (UtilMDE.bufferedFileWriter (filePrefix));
 
-        for (int i = 0; i < al.size(); i++) {
-          pwOut.println (al.get(i));
+        for (String toPrint : al) {
+          pwOut.println (toPrint);
         }
         pwOut.flush();
         pwOut.close();

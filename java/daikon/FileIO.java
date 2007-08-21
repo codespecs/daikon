@@ -470,8 +470,8 @@ public final class FileIO {
     // Possibly abstract this out into a separate function??
     VarInfo vi;
     while ((vi = read_VarInfo(state, ppt_name)) != null) {
-      for (int i=0; i<var_infos.size(); i++) {
-        if (vi.name() == var_infos.get(i).name()) {
+      for (VarInfo vi2 : var_infos) {
+        if (vi.name() == vi2.name()) {
           throw new Daikon.TerminationMessage("Duplicate variable name " + vi.name(), state.reader,
                                            state.filename);
         }
@@ -776,8 +776,7 @@ public final class FileIO {
       System.arraycopy(vals, 0, new_vals, 0, vals.length);
       VarInfo[] vis = ppt.var_infos;
       // Warning: abstraction violation!
-      for (int i = 0; i < vis.length; i++) {
-        VarInfo vi = vis[i];
+      for (VarInfo vi : vis) {
         if ((vi.value_index != -1)
           && (vi.file_rep_type == ProglangType.HASHCODE)) {
           new_vals[vi.value_index] = canonical_hashcode;

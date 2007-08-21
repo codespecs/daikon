@@ -278,8 +278,8 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       Assert.assertTrue(sclvar.ppt == seqvar.ppt);
       Vector lbs = LINEARBINARY.findAll(sclvar);
       // System.out.println("For " + sclvar.name + ", " + lbs.size() + " LinearBinary invariants");
-      for (int i=0; i<lbs.size(); i++) {
-        LINEARBINARY lb = (LINEARBINARY) lbs.elementAt(i);
+      for (Object lbObject : lbs) {
+        LINEARBINARY lb = (LINEARBINARY) lbObject;
         // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b <-- old
         // Note that var2 comes before var1; this makes the most sense
         // if you think of them as "y" and "x". <-- old

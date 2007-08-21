@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import checkers.quals.Interned;
 
 /**
  * Represents additional information about a VarInfo that frontends
@@ -94,7 +95,7 @@ public final class VarInfoAux
    * Parse allow for quoted elements.  White space to the left and
    * right of keys and values do not matter, but inbetween does.
    **/
-  public static VarInfoAux parse (String inString) throws IOException {
+  public static /*@Interned*/ VarInfoAux parse (String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
     StreamTokenizer tok = new StreamTokenizer (inStringReader);
     tok.resetSyntax();
@@ -151,8 +152,8 @@ public final class VarInfoAux
     }
 
     // Interning
-    VarInfoAux result = new VarInfoAux(map);
-    result = result.intern();
+    VarInfoAux resultUninterned = new VarInfoAux(map);
+    /*@Interned*/ VarInfoAux result = resultUninterned.intern();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("New parse " + result);
       debug.fine ("Intern table size: " + new Integer(theMap.size()));
@@ -164,12 +165,12 @@ public final class VarInfoAux
   /**
    * Interned default options.
    **/
-  private static VarInfoAux theDefault = new VarInfoAux().intern();
+  private static /*@Interned*/ VarInfoAux theDefault = new VarInfoAux().intern();
 
   /**
-   * Create a new VarInfoAux with default optiosn.
+   * Create a new VarInfoAux with default options.
    **/
-  public static VarInfoAux getDefault () {
+  public static /*@Interned*/ VarInfoAux getDefault () {
     return theDefault;
   }
 
@@ -178,14 +179,14 @@ public final class VarInfoAux
   /**
    * Map for interning.
    **/
-  private static Map<VarInfoAux,VarInfoAux> theMap = null;
+  private static Map<VarInfoAux,/*@Interned*/ VarInfoAux> theMap = null;
 
 
 
   /**
    * Special handler for deserialization.
    **/
-  private Object readResolve() throws ObjectStreamException {
+  private /*@Interned*/ Object readResolve() throws ObjectStreamException {
     return this.intern();
   }
 
@@ -193,7 +194,7 @@ public final class VarInfoAux
   /**
    * Contains the actual hashMap for this.
    **/
-  private Map<String, String> map;
+  private Map</*@Interned*/ String, /*@Interned*/ String> map;
 
 
   /**
@@ -258,20 +259,20 @@ public final class VarInfoAux
    * Returns canonical representation of this.  Doesn't need to be
    * called by outside classes because these are always interned.
    **/
-  public VarInfoAux intern() {
-    if (this.isInterned) return this;
+  public /*@Interned*/ VarInfoAux intern() {
+    if (this.isInterned) return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
 
     if (theMap == null) {
-      theMap = new HashMap<VarInfoAux,VarInfoAux>();
+      theMap = new HashMap<VarInfoAux,/*@Interned*/ VarInfoAux>();
     }
 
-    VarInfoAux result;
+    /*@Interned*/ VarInfoAux result;
     if (theMap.containsKey(this)) {
       result = theMap.get(this);
     } else {
       // Intern values in map
-      theMap.put (this, this);
-      result = this;
+      theMap.put (this, (/*@Interned*/ VarInfoAux) this); // cast is redundant (except in JSR 308)
+      result = (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
       this.isInterned = true;
     }
     return result;

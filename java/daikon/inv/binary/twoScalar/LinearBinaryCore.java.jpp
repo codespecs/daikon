@@ -633,8 +633,7 @@ public final class CLASSNAME
 
     // Look for any active lines.  All must define the same line
     CLASSNAME result = null;
-    for (int i = 0; i < cores.size(); i++) {
-      CLASSNAME c = cores.get (i);
+    for (CLASSNAME c : cores) {
       if (!c.isActive())
         continue;
       if (result == null)
@@ -654,8 +653,7 @@ public final class CLASSNAME
       result.wrapper = wrapper;
 
     // Merge in any points from non-active cores
-    for (int i = 0; i < cores.size(); i++) {
-      CLASSNAME c = cores.get (i);
+    for (CLASSNAME c : cores) {
       if (c.isActive())
         continue;
       for (int j = 0; j < c.values_seen; j++) {

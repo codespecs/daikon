@@ -749,8 +749,7 @@ public class CLASSNAME
 
     List<Derivation> derivees = supervar.derivees();
     // For each variable derived from supervar ("B")
-    for (int i=0; i<derivees.size(); i++) {
-      Derivation der = derivees.get(i);
+    for (Derivation der : derivees) {
       // System.out.println("  ... der = " + der.getVarInfo().name() + " " + der);
       if (der instanceof SEQUENCESCALARSUBSEQUENCE) {
         // If that variable is "B[0..n]"

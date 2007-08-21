@@ -37,16 +37,16 @@ public final class LogHelper {
       // Java 6 version (doesn't work in Java 5)
       // Logger global = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
       Handler[] handlers = global.getHandlers();
-      for (int i=0; i<handlers.length; i++) {
-        global.removeHandler(handlers[i]);
+      for (Handler handler : handlers) {
+        global.removeHandler(handler);
       }
     }
 
 
     Logger root = Logger.getLogger ("");
     Handler[] handlers = root.getHandlers();
-    for (int i=0; i < handlers.length; i++)
-      root.removeHandler(handlers[i]);
+    for (Handler handler : handlers)
+      root.removeHandler(handler);
     root.addHandler (app);
     root.setLevel(l);
 

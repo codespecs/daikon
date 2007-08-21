@@ -5,6 +5,8 @@ import java.io.*;
 
 import utilMDE.*;
 
+import checkers.quals.Interned;
+
 /**
  * Represents the type of a variable, for its declared, dtrace file
  * representation, and internal representations.  ProgLangTypes are
@@ -179,8 +181,7 @@ public final class ProglangType
       return null;
 
     // now search for the right dimension
-    for (int ii=0; ii<v.size(); ++ii) {
-      ProglangType candidate = v.elementAt(ii);
+    for (ProglangType candidate : v) {
       if (candidate.dimensions() == t_dims)
         return candidate;
     }
@@ -210,6 +211,7 @@ public final class ProglangType
       return result;
     }
     result = new ProglangType(t_base, t_dims);
+    result = (ProglangType) new ProglangType(t_base, t_dims); // cast is redundant (except in JSR 308)
 
     Vector<ProglangType> v = all_known_types.get(t_base);
     if (v == null) {

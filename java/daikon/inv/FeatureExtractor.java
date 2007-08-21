@@ -188,8 +188,7 @@ public final class FeatureExtractor {
   // the string representations of those invariants in the same order
   private static ArrayList<String> getStrings(ArrayList<Invariant> invs) {
     ArrayList<String> answer = new ArrayList<String>();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant current = invs.get(i);
+    for (Invariant current : invs) {
       answer.add(current.ppt.parent.name + ":::" + current.format());
     }
     return answer;
@@ -205,17 +204,17 @@ public final class FeatureExtractor {
                                 ArrayList<String> nonusefuls)
     throws IOException, ClassNotFoundException {
 
-    ArrayList<Invariant> useful = new ArrayList<Invariant>();
-    ArrayList<Invariant> nonuseful = new ArrayList<Invariant>();
-    for (int i = 0; i < usefuls.size(); i++)
-      for (Iterator<Invariant> invs=readInvMap(new File(usefuls.get(i))).invariantIterator(); invs.hasNext(); )
-        useful.add(invs.next());
+    ArrayList<Invariant> usefulResult = new ArrayList<Invariant>();
+    ArrayList<Invariant> nonusefulResult = new ArrayList<Invariant>();
+    for (String useful : usefuls)
+      for (Iterator<Invariant> invs=readInvMap(new File(useful)).invariantIterator(); invs.hasNext(); )
+        usefulResult.add(invs.next());
 
-    for (int i = 0; i < nonusefuls.size(); i++)
-      for (Iterator<Invariant> invs=readInvMap(new File(nonusefuls.get(i))).invariantIterator(); invs.hasNext(); )
-        nonuseful.add(invs.next());
+    for (String nonuseful : nonusefuls)
+      for (Iterator<Invariant> invs=readInvMap(new File(nonuseful)).invariantIterator(); invs.hasNext(); )
+        nonusefulResult.add(invs.next());
 
-    return new Pair<ArrayList<Invariant>,ArrayList<Invariant>>(useful, nonuseful);
+    return new Pair<ArrayList<Invariant>,ArrayList<Invariant>>(usefulResult, nonusefulResult);
   }
 
   //   // Old version of loading invariants from a list of filenames.
@@ -243,8 +242,8 @@ public final class FeatureExtractor {
   //              FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
   //            goodppts.hasNext(); ) {
   //         List<Invariant> temp = goodppts.next().getInvariants();
-  //         for (int j = 0; j < temp.size(); j++)
-  //           good.add(temp.get(j).repr());
+  //         for (Invariant inv : temp)
+  //           good.add(inv.repr());
   //       }
   //
   //       // bad contains actual invariants in Buggy.inv
@@ -253,15 +252,15 @@ public final class FeatureExtractor {
   //              FileIO.read_serialized_pptmap(new File(args[i+1]),false).pptIterator();
   //            badppts.hasNext(); ) {
   //         List<Invariant> temp = badppts.next().getInvariants();
-  //         for (int j = 0; j < temp.size(); j++)
-  //           bad.add(temp.get(j));
+  //         for (Invarainat inv: temp)
+  //           bad.add(inv);
   //       }
   //
-  //       for (int j = 0; j < bad.size(); j++) {
-  //         if (good.contains(bad.get(j).repr()))
-  //           answer[1].add(bad.get(j));
+  //       for (Ivnvariant inv : bad) {
+  //         if (good.contains(inv.repr()))
+  //           answer[1].add(inv);
   //         else
-  //           answer[0].add(bad.get(j));
+  //           answer[0].add(inv);
   //       }
   //     }
   //     return answer;
@@ -344,8 +343,7 @@ public final class FeatureExtractor {
     DecimalFormat df = new DecimalFormat("0.0####");
     // Create a TreeSet allFets which has all the features of
     // the current (ith) vector and the other features filled in with 0s
-    for (int i = 0; i < features.size(); i++) {
-      TreeSet<IntDoublePair> allFets = features.get(i);
+    for (TreeSet<IntDoublePair> allFets : features) {
 
       // Debugging code to detect duplicates within allFets
       //

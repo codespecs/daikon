@@ -46,8 +46,8 @@ public abstract class Ppt
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
-    for (int i=0; i < var_infos.length; i++) {
-      var_infos[i].trimToSize();
+    for (VarInfo vi : var_infos) {
+      vi.trimToSize();
     }
   }
 
@@ -107,9 +107,8 @@ public abstract class Ppt
     // There's gotta be a faster way of doing this.  I don't want to
     // use a HashSet for var_infos because various things clobber
     // this.var_infos.
-    int result = 0;
-    for (int i = 0; i < var_infos.length; i++) {
-      if (var_infos[i] == vi) {
+    for (VarInfo elt : var_infos) {
+      if (elt == vi) {
         return true;
       }
     }

@@ -208,8 +208,7 @@ public class Debug {
    */
   public VarInfo visTracked (List<VarInfo> vis) {
 
-    for (int i = 0; i < vis.size(); i++) {
-      VarInfo v = vis.get(i);
+    for (VarInfo v : vis) {
       Set<VarInfo> evars = null;
       if (v.equalitySet != null)
         evars = v.equalitySet.getVars();
@@ -396,8 +395,7 @@ public class Debug {
     // Get a string with all of the variable names.  Each is separated by ': '
     // 3 variable slots are always setup for consistency
     String vars = "";
-    for (int i = 0; i < vis.length; i++) {
-      VarInfo v = vis[i];
+    for (VarInfo v: vis) {
       vars += v.name() + ": ";
     }
     for (int i = vis.length; i < 3; i++) {
@@ -564,8 +562,7 @@ public class Debug {
     boolean match = false;
 
     // Loop through each set of specified debug variables.
-    outer: for (int i = 0; i < debugTrackVars.length; i++) {
-      String[] cv = debugTrackVars[i];
+    outer: for (String[] cv : debugTrackVars) {
       if (cv.length != vis.length)
         continue;
       for (int j = 0; j < ourvars.length; j++)
@@ -626,8 +623,8 @@ public class Debug {
    */
   private static boolean strContainsElem (String str, String[] arr) {
 
-    for (int i = 0; i < arr.length; i++) {
-      if (str.indexOf (arr[i]) >= 0)
+    for (String elt : arr) {
+      if (str.indexOf (elt) >= 0)
         return (true);
     }
     return (false);
@@ -667,8 +664,7 @@ public class Debug {
 
     String out = "";
 
-    for (int i = 0; i < ppt.var_infos.length; i++) {
-      VarInfo v = ppt.var_infos[i];
+    for (VarInfo v : ppt.var_infos) {
       if (!v.isCanonical())
         continue;
       if (v.file_rep_type != ProglangType.INT)
@@ -688,12 +684,10 @@ public class Debug {
 
     String out = "";
 
-    for (int i = 0; i < ppt.var_infos.length; i++) {
-      VarInfo v = ppt.var_infos[i];
-      for (int j = 0; j < debugTrackVars.length; j++) {
-        String[] cv = debugTrackVars[j];
-        for (int k = 0; k < cv.length; k++) {
-          if (cv[k].equals (v.name())) {
+    for (VarInfo v : ppt.var_infos) {
+      for (String[] cv : debugTrackVars) {
+        for (String cv_elt : cv) {
+          if (cv_elt.equals (v.name())) {
             Object val = v.getValue (vt);
             int mod = vt.getModified (v);
             out += v.name() + "=";
@@ -737,8 +731,8 @@ public class Debug {
   public static String toString (VarInfo[] vis) {
 
     String vars = "";
-    for (int j = 0; j < vis.length; j++)
-      vars += vis[j].name() + " ";
+    for (VarInfo vi : vis)
+      vars += vi.name() + " ";
     return (vars);
   }
 
@@ -750,8 +744,7 @@ public class Debug {
 
     String out = "";
 
-    for (int i = 0; i < vis.length; i++) {
-      VarInfo v = vis[i];
+    for (VarInfo v : vis) {
       Object val = v.getValue (vt);
       int mod = vt.getModified (v);
       out += v.name() + "=";

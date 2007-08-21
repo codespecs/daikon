@@ -1685,8 +1685,8 @@ public final class VarInfo implements Cloneable, Serializable {
 
     {
       Vector lbs = LinearBinary.findAll(this);
-      for (int i = 0; i < lbs.size(); i++) {
-        LinearBinary lb = (LinearBinary) lbs.elementAt(i);
+      for (Object lbObject : lbs) {
+        LinearBinary lb = (LinearBinary) lbObject;
         if (this.equals(lb.var2())
           && (post != lb.var1().isPrestate())) {
 
@@ -2509,8 +2509,7 @@ public final class VarInfo implements Cloneable, Serializable {
     if (vlist == null)
       return ("null");
     ArrayList<String> vars = new ArrayList<String>(vlist.size());
-    for (int i = 0; i < vlist.size(); i++) {
-      VarInfo v = vlist.get(i);
+    for (VarInfo v : vlist) {
       if (v == null)
         vars.add("null");
       else

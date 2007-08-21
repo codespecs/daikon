@@ -239,8 +239,7 @@ public class DaikonSimple {
     // check here).
 
     Vector<PptSlice> unary_views = new Vector<PptSlice>(ppt.var_infos.length);
-    for (int i = 0; i < ppt.var_infos.length; i++) {
-      VarInfo vi = ppt.var_infos[i];
+    for (VarInfo vi : ppt.var_infos) {
 
       // /* if (!is_slice_ok(vi))
       // /* continue;
@@ -646,8 +645,7 @@ public class DaikonSimple {
         Iterator<Invariant> k = slice.invs.iterator();
         boolean missing = false;
 
-        for (int j = 0; j < slice.var_infos.length; j++) {
-          VarInfo v = slice.var_infos[j];
+        for (VarInfo v : slice.var_infos) {
           // If any var has encountered out of array bounds values,
           // stop all invariants in this slice. The presumption here is that
           // an index out of bounds implies that the derived variable (eg a[i])

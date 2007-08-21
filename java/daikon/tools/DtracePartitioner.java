@@ -108,8 +108,7 @@ public class DtracePartitioner
 
       // Build a hashmap of values to watch
       HashMap<Object/*String or Integer*/,String> nonceMap = new HashMap<Object,String>();
-      for (int i = 0; i < enters.size(); i++) {
-        String enterStr = enters.get(i);
+      for (String enterStr : enters) {
         // it could be an OBJECT or CLASS invocation ppt, ignore those
         // by putting them in the HashMap to themselves, they'll
         // be reaped up later

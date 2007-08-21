@@ -295,7 +295,7 @@ public class DynamicConstants implements Serializable {
 
   /** Returns whether the specified variable is currently a constant. **/
   public boolean is_constant (VarInfo vi) {
-    
+
     return (all_vars[vi.varinfo_index].constant);
   }
 
@@ -342,8 +342,7 @@ public class DynamicConstants implements Serializable {
   public int constant_leader_cnt() {
 
     int con_cnt = 0;
-    for (int i = 0; i < con_list.size(); i++) {
-      Constant con = con_list.get(i);
+    for (Constant con : con_list) {
       if (con.vi.isCanonical())
         con_cnt++;
     }
@@ -359,14 +358,12 @@ public class DynamicConstants implements Serializable {
                                      List<Constant> non_missing) {
 
     if (Debug.logOn()) {
-      for (int i = 0; i < noncons.size(); i++) {
-        Constant con = noncons.get (i);
+      for (Constant con : noncons) {
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "is non constant"
                     + " with val = " + Debug.toString(con.val)
                     + " with count = " + con.count);
       }
-      for (int i = 0; i < non_missing.size(); i++) {
-        Constant con = non_missing.get (i);
+      for (Constant con : non_missing) {
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "is non missing");
       }
     }
@@ -416,16 +413,14 @@ public class DynamicConstants implements Serializable {
 
     // Get list1 leaders
     Set<Constant> leaders1 = new LinkedHashSet<Constant>();
-    for (int i = 0; i < list1.size(); i++) {
-      Constant con = list1.get(i);
+    for (Constant con : list1) {
       if (con.vi.isCanonical())
         leaders1.add (con);
     }
 
     // Get list2 leaders
     Set<Constant> leaders2 = new LinkedHashSet<Constant>();
-    for (int i = 0; i < list2.size(); i++) {
-      Constant con = list2.get(i);
+    for (Constant con : list2) {
       if (con.vi.isCanonical())
         leaders2.add (con);
     }
@@ -530,18 +525,17 @@ public class DynamicConstants implements Serializable {
       int[] slice_cnt = {0, 0, 0, 0};
       int[] inv_cnt = {0, 0, 0, 0};
       int[] true_inv_cnt = {0, 0, 0, 0};
-      for (int i = 0; i < new_views.size(); i++) {
-        PptSlice slice = new_views.get (i);
-        for (int j = 0; j < slice.invs.size(); j++) {
-          Invariant inv = slice.invs.get (j);
+      for (PptSlice slice : new_views) {
+        for (Invariant inv : slice.invs) {
           inv.log ("created, falsified = " + inv.is_false());
           if (!inv.is_false())
             true_inv_cnt[slice.arity()]++;
           else {
             String vals = "";
-            for (int k = 0; k < slice.var_infos.length; k++)
-              vals += slice.var_infos[k].name() + "="
-                + Debug.toString (constant_value(slice.var_infos[k])) + " ";
+            for (VarInfo vi : slice.var_infos) {
+              vals += vi.name() + "="
+                + Debug.toString (constant_value(vi)) + " ";
+            }
             inv.log ("Invariant " + inv.format()
                      + " destroyed by constant values" + vals);
           }
@@ -792,8 +786,7 @@ public class DynamicConstants implements Serializable {
     // if requested, don't create any post-processed invariants
     if (no_post_process) {
       int con_count = 0;
-      for (int i = 0; i < con_list.size(); i++) {
-        Constant con = con_list.get(i);
+      for (Constant con : con_list) {
         if (!con.vi.isCanonical())
           continue;
         System.out.println ("  Not creating invariants over leader "
@@ -807,8 +800,7 @@ public class DynamicConstants implements Serializable {
     // If specified, create only OneOf invariants.  Also create a reflexive
     // equality invariant, since that is assumed to exist in many places
     if (dkconfig_OneOf_only) {
-      for (int i = 0; i < con_list.size(); i++) {
-        Constant con = con_list.get(i);
+      for (Constant con : con_list) {
         if (!con.vi.isCanonical())
           continue;
         instantiate_oneof (con);
@@ -834,8 +826,7 @@ public class DynamicConstants implements Serializable {
     instantiate_new_views (noncons, non_missing);
 
   /* Code to just create just unary slices for constants
-    for (int i = 0; i < con_list.size(); i++) {
-      Constant con = con_list.get(i);
+    for (Constant con : con_list) {
       if (!con.vi.isCanonical())
         continue;
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
@@ -865,8 +856,7 @@ public class DynamicConstants implements Serializable {
 
     // Get constant leaders
     List<Constant> leaders = new ArrayList<Constant>(100);
-    for (int i = 0; i < con_list.size(); i++) {
-      Constant con = con_list.get(i);
+    for (Constant con : con_list) {
       if (!con.vi.isCanonical())
         continue;
 
@@ -887,12 +877,12 @@ public class DynamicConstants implements Serializable {
     for (Constant con : leaders) {
 
       PptSlice1 slice1 = new PptSlice1(ppt, con.vi);
-      
+
       if (NIS.dkconfig_suppressor_list) {
         slice1.instantiate_invariants(NIS.suppressor_proto_invs);
       } else {
         slice1.instantiate_invariants();
-      }      
+      }
 
       // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name(), con.val,
 
@@ -903,7 +893,7 @@ public class DynamicConstants implements Serializable {
         new_views.add(slice1);
     }
 
-    
+
     // Binary slices/invariants
     for (int i = 0; i < leaders.size(); i++) {
       Constant con1 = leaders.get(i);
@@ -942,11 +932,10 @@ public class DynamicConstants implements Serializable {
 
     return (new_views);
   }
-  
+
   public void print_missing (PrintWriter out) {
 
-    for (int i = 0; i < missing_list.size(); i++) {
-      Constant con = missing_list.get(i);
+    for (Constant con : missing_list) {
       out.println (con.vi.name() + " is always missing");
     }
   }
@@ -965,11 +954,9 @@ public class DynamicConstants implements Serializable {
     // Process each variable at this ppt.  If the variable is missing at
     // each of the children, it is also missing here.  Ignore children that
     // have no mapping for this variable
-    for (int i = 0; i < ppt.var_infos.length; i++) {
-      VarInfo pvar = ppt.var_infos[i];
+    for (VarInfo pvar : ppt.var_infos) {
       boolean missing = true;
-      for (int j = 0; j < ppt.children.size(); j++) {
-        PptRelation rel = ppt.children.get(j);
+      for (PptRelation rel : ppt.children) {
         VarInfo cvar = rel.childVar (pvar);
         if ((cvar != null) && (rel.child.constants != null)
             && !rel.child.constants.is_missing (cvar)) {

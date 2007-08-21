@@ -254,9 +254,13 @@ class FormatTestCase {
     boolean passTest = true;
     boolean currentResult;
 
+    // Changing the loop to to
+    // for (SingleOutputTestCase sotc : testCases) {
+    //   currentResult = sotc.performTest(invariantToTest);
+    // yields an internal compiler exception (for JSR 308 compiler, 8/21/2007).
     for (int i=0; i<testCases.size(); i++) {
       currentResult = testCases.get(i).performTest(invariantToTest);
-      passTest = passTest &&  currentResult;
+      passTest = passTest && currentResult;
 
     }
     return passTest;

@@ -1957,8 +1957,8 @@ public final class Daikon {
     //       Fmt.pf ("ppt: %s", ppt.name);
     //       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
     //       continue;
-    //       for (int j = 0; j < ppt.equality_view.invs.size(); j++) {
-    //       Equality e = (Equality) ppt.equality_view.invs.get(j);
+    //       for (Invariant inv : ppt.equality_view.invs) {
+    //       Equality e = (Equality) inv;
     //       Fmt.pf ("    equality set = %s", e);
     //       }
     //     }
@@ -2079,8 +2079,7 @@ public final class Daikon {
       Fmt.pf ("  invariants = " + ppt.invariant_cnt());
       Map<ProglangType,Count> type_map = new LinkedHashMap<ProglangType,Count>();
       int leader_cnt = 0;
-      for (int j = 0; j < ppt.var_infos.length; j++) {
-        VarInfo v = ppt.var_infos[j];
+      for (VarInfo v : ppt.var_infos) {
         if (!v.isCanonical())
           continue;
         leader_cnt++;

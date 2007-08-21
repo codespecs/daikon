@@ -103,8 +103,8 @@ public class PptSlice0
   // quadratic.
   public void removeInvariants(List<Invariant> to_remove) {
     if (to_remove.size() < 10) {
-      for (int i=0; i<to_remove.size(); i++) {
-        removeInvariant(to_remove.get(i));
+      for (Invariant trinv : to_remove) {
+        removeInvariant(trinv);
       }
     } else {
       invs.removeMany(to_remove);
@@ -114,9 +114,9 @@ public class PptSlice0
         initInvariantsSeen();
       } else {
         // Faster to update
-        for (int i=0; i<to_remove.size(); i++) {
+        for (Invariant trinv : to_remove) {
           invariantsSeen.remove(new
-              ImplicationWrapper((Implication)to_remove.get(i)));
+              ImplicationWrapper((Implication)trinv));
         }
       }
     }

@@ -158,8 +158,7 @@ public final class MergeInvariants {
 
     // Read in each of the specified maps
     List<PptMap> pptmaps = new ArrayList<PptMap>();
-    for (int i = 0; i < inv_files.size(); i++) {
-      File file = inv_files.get(i);
+    for (File file: inv_files) {
       debugProgress.fine ("Processing " + file);
       PptMap ppts = FileIO.read_serialized_pptmap (file, false);
       ppts.repCheck();

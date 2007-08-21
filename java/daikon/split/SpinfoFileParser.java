@@ -193,8 +193,7 @@ public class SpinfoFileParser {
    */
   private SplitterObject[][] createSplitterObjects(List<List<String>> pptSections) {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
-    for (int i = 0; i < pptSections.size(); i++) {
-      List<String> pptSection = pptSections.get(i);
+    for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();
       if (pptSection.size() > 0) {
         String pptName = pptSection.get(0).trim();

@@ -48,11 +48,8 @@ public class ParentFilter extends InvariantFilter {
     if (inv.ppt.parent.parents == null)
       return (false);
 
-    // Loop through each parent ppt
-    outer: for (int i = 0; i < inv.ppt.parent.parents.size(); i++) {
-
-      // Get the parent/child relation information
-      PptRelation rel = inv.ppt.parent.parents.get (i);
+    // Loop through each parent ppt getting the parent/child relation info
+    outer: for (PptRelation rel : inv.ppt.parent.parents) {
 
       if (Debug.logDetail())
         inv.log ("  considering parent %s [%s]", rel, rel.parent.name());
@@ -96,8 +93,7 @@ public class ParentFilter extends InvariantFilter {
       // NonZero invariants if the parent invariant is 'this != null' since it
       // it is not obvious to the user that 'this != null' implies that all
       // references to the class are non null
-      for (int j = 0; j < pslice.invs.size(); j++) {
-        Invariant pinv = pslice.invs.get (j);
+      for (Invariant pinv : pslice.invs) {
         // System.out.printf ("  inv in parent slice: %s%n", pinv.format());
         if (pinv.isGuardingPredicate)
           continue;

@@ -10,8 +10,7 @@ import java.util.List;
 public class Main extends CommandHandler {
 
     protected void usageMessage(List<CommandHandler> handlers) {
-        for (int i = 0 ; i < handlers.size() ; i++) {
-            CommandHandler h = handlers.get(i);
+        for (CommandHandler h : handlers) {
             h.usageMessage();
         }
     }

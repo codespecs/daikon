@@ -116,9 +116,7 @@ public class InstrumentHandler extends CommandHandler {
 
             List<CheckerClass> checkerClasses = new ArrayList<CheckerClass>();
 
-            for (int j = 0 ; j < oneFile.roots.size() ; j++) {
-
-                TypeDeclaration decl = oneFile.roots.get(j);
+            for (TypeDeclaration decl : oneFile.roots) {
 
                 InstrumentVisitor v = new InstrumentVisitor(ppts, decl);
 

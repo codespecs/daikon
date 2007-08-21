@@ -48,14 +48,12 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
             }
         }
         /*
-        for (int i = 0; i < accum.size(); i++) {
-            Invariant inv = accum.get(i);
+        for (Invariant inv : accum) {
             inv.ppt.invs.clear();
         }
         */
         // Now add back everything in accum
-        for (int i = 0; i < accum.size(); i++) {
-            Invariant inv = accum.get(i);
+        for (Invariant inv : accum) {
             inv.ppt.addInvariant (inv);
         }
         System.out.println ("NONCE: " + nonce);

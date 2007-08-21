@@ -94,8 +94,7 @@ public class LogicalCompare {
 
   private static Vector<Invariant> filterInvariants(Vector<Invariant> invs, boolean isPost) {
     Vector<Invariant> new_invs = new Vector<Invariant>();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = invs.elementAt(i);
+    for (Invariant inv : invs) {
       Invariant guarded_inv = inv;
 //       System.err.println("Examining " + inv.format());
       if (inv instanceof GuardingImplication)
@@ -178,8 +177,7 @@ public class LogicalCompare {
   // changing the invariants.
   private static Vector<Lemma> translateStraight(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = invs.elementAt(i);
+    for (Invariant inv : invs) {
       lems.add(new InvariantLemma(inv));
     }
     return lems;
@@ -190,8 +188,7 @@ public class LogicalCompare {
   // routine's prestate.
   private static Vector<Lemma> translateRemovePre(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = invs.elementAt(i);
+    for (Invariant inv : invs) {
       if (!inv.isAllPrestate())
         lems.add(new InvariantLemma(inv));
     }
@@ -204,8 +201,7 @@ public class LogicalCompare {
   // poststate context.
   private static Vector<Lemma> translateAddOrig(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = invs.elementAt(i);
+    for (Invariant inv : invs) {
       lems.add(InvariantLemma.makeLemmaAddOrig(inv));
     }
     return lems;
@@ -214,8 +210,7 @@ public class LogicalCompare {
 //   // Print a vector of invariants and their Simplify translations, for
 //   // debugging purposes.
 //   private static void printInvariants(Vector<Invariant> invs) {
-//     for (int i = 0; i < invs.size(); i++) {
-//       Invariant inv = (Invariant)invs.elementAt(i);
+//     for (Invariant inv : invs) {
 //       System.out.println("   " + inv.format());
 //       System.out.println("(BG_PUSH "
 //                          + inv.format_using(OutputFormat.SIMPLIFY) +")");
@@ -229,14 +224,12 @@ public class LogicalCompare {
 
   private static int checkConsequences(Vector<Lemma> assumptions, Vector<Lemma> consequences) {
     Set<String> assumption_formulas = new HashSet<String>();
-    for (int i = 0; i < assumptions.size(); i++) {
-      Lemma lem = assumptions.elementAt(i);
+    for (Lemma lem : assumptions) {
       assumption_formulas.add(lem.formula);
     }
 
     int invalidCount = 0;
-    for (int i = 0; i < consequences.size(); i++) {
-      Lemma inv = consequences.elementAt(i);
+    for (Lemma inv : consequences) {
       char result;
       boolean identical = false;
       if (assumption_formulas.contains(inv.formula)) {
@@ -249,8 +242,7 @@ public class LogicalCompare {
       if (opt_minimize_classes) {
         if (result == 'T' && !identical) {
           Vector<Set<Class>> sets = lemmas.minimizeClasses(inv.formula);
-          for (int j = 0; j < sets.size(); j++) {
-            Set<Class> classes = sets.elementAt(j);
+          for (Set<Class> classes : sets) {
             Class inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
@@ -276,14 +268,14 @@ public class LogicalCompare {
           } else {
             Vector<Lemma> assume = lemmas.minimizeProof(inv);
             System.out.println();
-            for (int j = 0; j < assume.size(); j++)
-              System.out.println(assume.elementAt(j).summarize());
+            for (Lemma lem : assume)
+              System.out.println(lem.summarize());
             System.out.println("----------------------------------");
             System.out.println(inv.summarize());
             if (opt_show_formulas) {
               System.out.println();
-              for (int j = 0; j < assume.size(); j++)
-                System.out.println("    "  + assume.elementAt(j).formula);
+              for (Lemma lem : assume)
+                System.out.println("    "  + lem.formula);
               System.out.println("    ----------------------"
                                  + "--------------------");
               System.out.println("    " + inv.formula);

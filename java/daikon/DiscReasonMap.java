@@ -68,8 +68,8 @@ public final class DiscReasonMap {
     }
     Collections.sort(temp_vars);
     String vars_result = "";
-    for (int i = 0; i < temp_vars.size(); i++) {
-      vars_result += temp_vars.get(i) + ",";
+    for (String temp_var : temp_vars) {
+      vars_result += temp_var + ",";
       }*/
 
     HashMap<String,List<DiscardInfo>> ppt_hashmap = the_map.get(ppt);
@@ -77,8 +77,7 @@ public final class DiscReasonMap {
       List<DiscardInfo> disc_infos = ppt_hashmap.get(vars);
       if (disc_infos != null) {
         // Check to see if this invariant already has a DiscInfo
-        for (int i = 0; i < disc_infos.size(); i++) {
-          DiscardInfo di = disc_infos.get(i);
+        for (DiscardInfo di : disc_infos) {
           if (disc_info.className().equals(di.className())) {
             // We already have a reason for why the Invariant was discarded
             // Perhaps we could replace it with the new reason, but maybe we
@@ -125,8 +124,8 @@ public final class DiscReasonMap {
       // The user entered the vars in a specific order, but let's give
       // them matching invariants that have those vars in any order
       List<String> var_perms = invInfo.var_permutations();
-      for (int i = 0; i < var_perms.size(); i++) {
-        List<DiscardInfo> temp = vars_map_from_ppt.get(var_perms.get(i));
+      for (String var_perm : var_perms) {
+        List<DiscardInfo> temp = vars_map_from_ppt.get(var_perm);
         if (temp != null) {
           di_list.addAll(temp);
         }
@@ -135,8 +134,7 @@ public final class DiscReasonMap {
       di_list = all_vars_tied_from_ppt(invInfo.ppt());
     }
 
-    for (int i = 0; i < di_list.size(); i++) {
-      DiscardInfo di = di_list.get(i);
+    for (DiscardInfo di : di_list) {
       // Assert.assertTrue(di.discardCode() != DiscardCode.not_discarded);
       String shortName = di.className().substring(di.className().lastIndexOf('.')+1); // chop off hierarchical info
       if ((invInfo.className() == null) || invInfo.className().equals(di.className())

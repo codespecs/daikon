@@ -156,8 +156,7 @@ public class PptRelation implements Serializable {
   public boolean relate_same_name() {
 
     boolean relate_all = true;
-    for (int i = 0; i < parent.var_infos.length; i++) {
-      VarInfo vp = parent.var_infos[i];
+    for (VarInfo vp : parent.var_infos) {
       boolean relate_var = relate(vp, vp.name());
       if (!relate_var && !vp.isStaticConstant()) {
         // System.out.printf ("no relation for '%s' from %s-%s with vars %s%n",
@@ -285,8 +284,8 @@ public class PptRelation implements Serializable {
     }
 
     // Loop through each equality set in the child
-    for (int i = 0; i < child.equality_view.invs.size(); i++) {
-      Equality e = (Equality) child.equality_view.invs.get(i);
+    for (Invariant inv : child.equality_view.invs) {
+      Equality e = (Equality) inv;
       debug.fine("-- processing equality set " + e);
       Set<VarInfo> eqset = e.getVars();
       VarInfo[] varr = new VarInfo[eqset.size()];
@@ -336,8 +335,7 @@ public class PptRelation implements Serializable {
 
   private boolean relate(VarInfo parent_var, String viname) {
 
-    for (int j = 0; j < child.var_infos.length; j++) {
-      VarInfo vc = child.var_infos[j];
+    for (VarInfo vc : child.var_infos) {
       if (viname.equals(vc.name())) {
         child_to_parent_map.put(vc, parent_var);
         parent_to_child_map.put(parent_var, vc);
@@ -470,8 +468,7 @@ public class PptRelation implements Serializable {
     // Connect each each field in arg between parent and child.  Do this
     // by substituting args name for this in the parent and then looking
     // for a name match in the child
-    for (int i = 0; i < parent.var_infos.length; i++) {
-      VarInfo vp = parent.var_infos[i];
+    for (VarInfo vp : parent.var_infos) {
       // // Don't make any relationship for variable "this".
       // if (vp.isThis())
       //  continue;
@@ -496,8 +493,7 @@ public class PptRelation implements Serializable {
     // Look for orig versions of each non-derived parent variable in the child
     // Note that static constants don't have orig versions (since they are
     // known to be the same), so we connect to the post version instead.
-    for (int i = 0; i < parent.var_infos.length; i++) {
-      VarInfo vp = parent.var_infos[i];
+    for (VarInfo vp : parent.var_infos) {
       if (vp.derived != null)
         continue;
       if (vp.isStaticConstant()) {
@@ -522,8 +518,7 @@ public class PptRelation implements Serializable {
     // variable is really the same but the name is constructed differently)
 
     // Loop through each derived parent (ENTER) variable
-    for (int i = 0; i < parent.var_infos.length; i++) {
-      VarInfo vp = parent.var_infos[i];
+    for (VarInfo vp : parent.var_infos) {
       if (vp.derived == null)
         continue;
 
@@ -534,8 +529,7 @@ public class PptRelation implements Serializable {
         child_vp_bases[j] = rel.childVar(vp_bases[j]);
 
       // Loop through the child (exit) looking for a matching derived variable
-      for (int j = 0; j < child.var_infos.length; j++) {
-        VarInfo vc = child.var_infos[j];
+      for (VarInfo vc : child.var_infos) {
         if (vc.derived == null)
           continue;
         if (vc.derived.isSameFormula(vp.derived)) {
@@ -551,8 +545,7 @@ public class PptRelation implements Serializable {
 
     // Make sure every non-static ENTER variable was found in the EXIT point
     boolean all_found = true;
-    for (int i = 0; i < parent.var_infos.length; i++) {
-      VarInfo vp = parent.var_infos[i];
+    for (VarInfo vp : parent.var_infos) {
       if (vp.isStaticConstant())
         continue;
       if (!rel.parent_to_child_map.containsKey(vp)) {
@@ -567,8 +560,9 @@ public class PptRelation implements Serializable {
       }
     }
     if (!all_found) {
-      for (int j = 0; j < child.var_infos.length; j++)
-        System.out.println("    " + child.var_infos[j].name());
+      for (VarInfo vc : child.var_infos) {
+        System.out.println("    " + vc.name());
+      }
       //Assert.assertTrue (false, "Missing orig variable in EXIT");
     }
     return (rel);
@@ -805,8 +799,7 @@ public class PptRelation implements Serializable {
       if (dkconfig_enable_object_user) {
 
         debug.fine("-- Looking for variables with an OBJECT ppt");
-        for (int j = 0; j < ppt.var_infos.length; j++) {
-          VarInfo vc = ppt.var_infos[j];
+        for (VarInfo vc : ppt.var_infos) {
           String dstr = "-- -- var '" + vc.name() + "' - ";
           if (ppt.has_parent(vc)) {
             debug.fine(dstr + " Skipping, already has a parent");
@@ -892,8 +885,7 @@ public class PptRelation implements Serializable {
         List<SplitChild> split_children = new ArrayList<SplitChild>();
 
         // Create a list of children for this splitter
-        child_loop : for (int jj = 0; jj < ppt.children.size(); jj++) {
-          PptRelation rel = ppt.children.get(jj);
+        child_loop : for (PptRelation rel : ppt.children) {
           if (!rel.child.has_splitters())
             break;
           for (PptSplitter csplit : rel.child.splitters) {
@@ -1049,8 +1041,7 @@ public class PptRelation implements Serializable {
         List<SplitChild> split_children = new ArrayList<SplitChild>();
 
         // Create a list of children for this splitter
-        child_loop : for (int jj = 0; jj < ppt.children.size(); jj++) {
-          PptRelation rel = ppt.children.get(jj);
+        child_loop : for (PptRelation rel : ppt.children) {
           if (!rel.child.has_splitters())
             break;
           for (PptSplitter csplit : rel.child.splitters) {

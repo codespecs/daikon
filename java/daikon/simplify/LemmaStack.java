@@ -64,8 +64,8 @@ public class LemmaStack {
 
   /** Assume a list of lemmas. */
   private void assumeAll(Vector<Lemma> invs) throws TimeoutException {
-    for (int i = 0; i < invs.size(); i++) {
-      assume(invs.elementAt(i));
+    for (Lemma lem : invs) {
+      assume(lem);
     }
   }
 
@@ -82,7 +82,7 @@ public class LemmaStack {
    * it only works to unassume the things you most recently assumed,
    * but we aren't smart enough to check that. */
   private void unAssumeAll(Vector<Lemma> invs) {
-    for (int i = 0; i < invs.size(); i++) {
+    for (Lemma lem : invs) {
       unAssume();
     }
   }
@@ -146,9 +146,8 @@ public class LemmaStack {
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
   public void pushLemmas(Vector<Lemma> newLemmas) throws SimplifyError {
-    for (int i = 0; i < newLemmas.size(); i++) {
-      Lemma l = newLemmas.elementAt(i);
-      pushLemma(l);
+    for (Lemma lem : newLemmas) {
+      pushLemma(lem);
     }
   }
 
@@ -259,9 +258,9 @@ public class LemmaStack {
 
   private static Vector<Lemma> filterByClass(Vector<Lemma> lems, Set<Class> blacklist) {
     Vector<Lemma> new_lems = new Vector<Lemma>();
-    for (int i = 0; i < lems.size(); i++) {
-      if (!blacklist.contains(lems.elementAt(i).invClass())) {
-        new_lems.add(lems.elementAt(i));
+    for (Lemma lem : lems) {
+      if (!blacklist.contains(lem.invClass())) {
+        new_lems.add(lem);
       }
     }
     return new_lems;
@@ -287,14 +286,14 @@ public class LemmaStack {
       Vector<Lemma> mini
         = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
       Set<Class> used = new HashSet<Class>();
-      for (int i = 0; i < mini.size(); i++) {
-        Class c = (mini.elementAt(i)).invClass();
+      for (Lemma mlem : mini) {
+        Class c = mlem.invClass();
         if (c != null)
           used.add(c);
       }
-      for (int i = 0; i < mini.size(); i++) {
-        System.err.println(mini.elementAt(i).summarize());
-        System.err.println(mini.elementAt(i).formula);
+      for (Lemma mlem : mini) {
+        System.err.println(mlem.summarize());
+        System.err.println(mlem.formula);
       }
       System.err.println("-----------------------------------");
       System.err.println(result);
@@ -440,19 +439,17 @@ public class LemmaStack {
   /** Convenience method to print a vector of lemmas, in both their
    * human-readable and Simplify forms. */
   public static void printLemmas(java.io.PrintStream out, Vector<Lemma> v) {
-    for (int i = 0; i < v.size(); i++) {
-      Lemma l = v.elementAt(i);
-      out.println(l.summarize());
-      out.println("    " + l.formula);
+    for (Lemma lem : v) {
+      out.println(lem.summarize());
+      out.println("    " + lem.formula);
     }
   }
 
   /** Dump the state of the stack to a file, for debugging manually in
    * Simplify. */
   public void dumpLemmas(java.io.PrintStream out) {
-    for (int i = 0; i < lemmas.size(); i++) {
-      Lemma l = lemmas.elementAt(i);
-      out.println("(BG_PUSH " + l.formula + ")");
+    for (Lemma lem : lemmas) {
+      out.println("(BG_PUSH " + lem.formula + ")");
     }
   }
 

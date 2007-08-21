@@ -123,8 +123,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         }
 
         // Now to populate those ArrayLists
-        for (int i = 0; i < bigList.size(); i++) {
-            String str = bigList.get(i);
+        for (String str : bigList) {
             StringTokenizer st = new StringTokenizer (str, "$");
             String key = st.nextToken();
             String data = st.nextToken();
@@ -142,8 +141,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             System.out.println ();
             System.out.println (key + "*****************");
             System.out.println ();
-            for (int ii = 0; ii < al.size(); ii++) {
-                System.out.println (al.get(ii));
+            for (Object toPrint : al) {
+                System.out.println (toPrint);
             }
         }
         System.out.println ();
@@ -182,8 +181,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         }
 
         // Now to populate those ArrayLists
-        for (int i = 0; i < bigList.size(); i++) {
-            String str = bigList.get(i);
+        for (String str : bigList) {
             StringTokenizer st = new StringTokenizer (str, "$");
             String key = st.nextToken();
             String data = st.nextToken();
@@ -228,8 +226,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
                 lastPpt = thisPpt;
             }
-            for (int ii = 0; ii < al.size(); ii++) {
-                out.println (al.get(ii));
+            for (Object toPrint : al) {
+                out.println (toPrint);
 
             }
         }

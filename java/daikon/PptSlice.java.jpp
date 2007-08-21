@@ -230,8 +230,8 @@ public final class PPTSLICE1 extends PptSlice {
   public List<Invariant> add(ValueTuple full_vt, int count) {
 
     Assert.assertTrue(invs.size() > 0);
-    for (int i=0; i<invs.size(); i++) {
-      Assert.assertTrue(invs.get(i) != null);
+    for (Invariant inv : invs) {
+      Assert.assertTrue(inv != null);
     }
 
     #if defined(ARITY1)
@@ -254,8 +254,7 @@ public final class PPTSLICE1 extends PptSlice {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].missingOutOfBounds()) {
         List<Invariant> result = new ArrayList<Invariant>();
-        for (int j = 0; j < invs.size(); j++) {
-          Invariant inv = invs.get(j);
+        for (Invariant inv : invs) {
           if (PrintInvariants.print_discarded_invariants)
             DiscReasonMap.put(inv, DiscardCode.bad_sample,
                   var_infos[i].name() + " array index was out of bounds");
@@ -577,8 +576,7 @@ public final class PPTSLICE1 extends PptSlice {
 
     // Loop through all of the children of our top level parent
     child_loop:
-    for (int i = 0; i < parent.children.size(); i++) {
-      PptRelation rel = parent.children.get(i);
+    for (PptRelation rel : parent.children) {
       PptTopLevel ppt = rel.child;
 
       // Skip any children that have not seen any samples
@@ -659,8 +657,7 @@ public final class PPTSLICE1 extends PptSlice {
 
       // Add each invariant (permuted to match the parent varinfos)
       // to our list of invariants.
-      for (int j = 0; j < cslice.invs.size(); j++) {
-        Invariant orig_inv = cslice.invs.get (j);
+      for (Invariant orig_inv : cslice.invs) {
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
         if (inv.logOn()) {
@@ -690,8 +687,7 @@ public final class PPTSLICE1 extends PptSlice {
     // Invariant.Match.equals() defines if two invariants are of the
     // same 'type' for the purpose of merging invariants.
     Map<Invariant.Match,List<Invariant>> inv_map = new LinkedHashMap<Invariant.Match,List<Invariant>>();
-    for (int i = 0; i < all_invs.size(); i++) {
-      Invariant inv = all_invs.get (i);
+    for (Invariant inv : all_invs) {
       Invariant.Match imatch = new Invariant.Match (inv);
       List<Invariant> invs = inv_map.get (imatch);
       if (inv.logOn()) {
@@ -714,10 +710,10 @@ public final class PPTSLICE1 extends PptSlice {
         // this shouldn't happen
         System.out.println ("Found " + child_invs.size() + " invariants at "
                          + name() + " (" + valid_child_count + " children)");
-        for (int k = 0; k < child_invs.size(); k++ )
+        for (Invariant child_inv : child_invs)
           System.out.println ("-- Invariant = "
-                            + child_invs.get(k).format()
-                            + " @" + child_invs.get(k).ppt);
+                            + child_inv.format()
+                            + " @" + child_inv.ppt);
         Assert.assertTrue (child_invs.size() <= valid_child_count);
       }
       if (child_invs.size() == valid_child_count) {

@@ -152,10 +152,9 @@ public abstract class SplitterList
   //         return null;
   //       }
   //     } else {
-  //       Splitter[] tempsplitters;
   //       int counter = 0;
   //       for (int i = 0; i < splitterArrays.size(); i++) {
-  //         tempsplitters = (Splitter[])splitterArrays.elementAt(i);
+  //         Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
   //         for (int j = 0; j < tempsplitters.length; j++) {
   //           splitters.addElement(tempsplitters[j]);
   //           counter++;
@@ -200,8 +199,7 @@ public abstract class SplitterList
       return null;
     } else {
       Vector<Splitter> splitters = new Vector<Splitter>();
-      for (int i = 0; i < splitterArrays.size(); i++) {
-        Splitter[] tempsplitters = splitterArrays.elementAt(i);
+      for (Splitter[] tempsplitters : splitterArrays) {
         for (int j = 0; j < tempsplitters.length; j++) {
           splitters.addElement(tempsplitters[j]);
         }

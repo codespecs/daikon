@@ -1599,8 +1599,7 @@ public abstract class Invariant
     // This algorithm is inefficient.
     if (mustBeGuarded.size() > 1) {
       Invariants joinerViewInvs = ppt.parent.joiner_view.invs;
-      for (int i=0; i<joinerViewInvs.size(); i++) {
-        Invariant currentInv = joinerViewInvs.get(i);
+      for (Invariant currentInv : joinerViewInvs) {
         if (currentInv.isSameInvariant(guardingPredicate)) {
           return currentInv;
         }

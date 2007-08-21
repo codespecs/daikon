@@ -106,8 +106,8 @@ public abstract class PptSlice
    **/
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
-    for (int i=0; i<var_infos.length; i++) {
-      if (var_infos[i].includes_simple_name(name))
+    for (VarInfo vi : var_infos) {
+      if (vi.includes_simple_name(name))
         return true;
     }
     return false;
@@ -115,8 +115,8 @@ public abstract class PptSlice
 
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
-    for (int i = 0; i < var_infos.length; i++) {
-      if (!var_infos[i].isPrestateDerived())
+    for (VarInfo vi : var_infos) {
+      if (! vi.isPrestateDerived())
         return false;
     }
     return true;
@@ -148,8 +148,8 @@ public abstract class PptSlice
   // quadratic.
   public void removeInvariants(List<Invariant> to_remove) {
     if (to_remove.size() < 10) {
-      for (int i=0; i<to_remove.size(); i++) {
-        removeInvariant(to_remove.get(i));
+      for (Invariant trinv : to_remove) {
+        removeInvariant(trinv);
       }
     } else {
       int removed = invs.removeMany(to_remove);
@@ -346,8 +346,8 @@ public abstract class PptSlice
 
 
   public boolean containsOnlyGuardingPredicates() {
-    for (int i=0; i<invs.size(); i++) {
-      if (!invs.get(i).isGuardingPredicate)
+    for (Invariant inv : invs) {
+      if (!inv.isGuardingPredicate)
         return false;
     }
     return true;
@@ -404,8 +404,8 @@ public abstract class PptSlice
    **/
   public String toString() {
     StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < var_infos.length; i++) {
-      sb.append (" " + var_infos[i].name());
+    for (VarInfo vi : var_infos) {
+      sb.append (" " + vi.name());
     }
     return this.getClass().getName() + ": " + parent.ppt_name + " "
            + sb + " samples: " + num_samples();

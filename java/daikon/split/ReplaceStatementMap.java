@@ -21,8 +21,7 @@ class ReplaceStatementMap {
    */
   ReplaceStatementMap(List<ReplaceStatement> replaceStatements) {
     map = new HashMap<String,ReplaceStatement>();
-    for (int i = 0; i < replaceStatements.size(); i++) {
-      ReplaceStatement replaceStatement = replaceStatements.get(i);
+    for (ReplaceStatement replaceStatement : replaceStatements) {
       map.put(replaceStatement.getName(), replaceStatement);
     }
   }
