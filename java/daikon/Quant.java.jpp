@@ -78,7 +78,7 @@ public final class Quant {
    * Thus, for an array a, this never throws an exception, though a.length may.
    */
   // Not called from Quant; provided only for external use.
-  /*@ pure */ public static int size(Object o) {
+  /* @ pure */ public static int size(Object o) {
     if (o == null) { return Integer.MAX_VALUE; } // return default value
     java.lang.Class c = o.getClass();
     if (c.isArray()) {
@@ -94,13 +94,13 @@ public final class Quant {
    * If the argument is null, returns a default value (Integer.MAX_VALUE).
    */
   // Not called from Quant; provided only for external use.
-  /*@ pure */ public static int size(Collection o) {
+  /* @ pure */ public static int size(Collection o) {
     if (o == null) { return Integer.MAX_VALUE; } // return default value
     return o.size();
   }
 
   /** True iff the sequence contains no null elements. */
-  /*@ pure */ public static boolean eltsNonNull(Object[] seq1) {
+  /* pure */ public static boolean eltsNonNull(Object[] seq1) {
     if (seq1 == null) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (seq1[i] == null) {
@@ -162,35 +162,35 @@ public final class Quant {
 
   /** @see #noDups(Object[])
    */
-  /*@ pure */ public static boolean noDups(Object seq) {
+  /* pure */ public static boolean noDups(Object seq) {
     if (seq == null) { return false; }
     return noDups(toObjArray(seq));
   }
 
   /** @see #typeArray(Object[])
    */
-  /*@ pure */ public static String[] typeArray(Object seq) {
+  /* pure */ public static String[] typeArray(Object seq) {
     if (seq == null) { return null; }
     return typeArray(toObjArray(seq));
   }
 
   /** @see #eltwiseEqual(Object[])
    */
-  /*@ pure */ public static boolean eltwiseEqual(Object seq) {
+  /* pure */ public static boolean eltwiseEqual(Object seq) {
     if (seq == null) { return false; }
     return eltwiseEqual(toObjArray(seq));
   }
 
   /** @see #eltwiseNotEqual(Object[])
    */
-  /*@ pure */ public static boolean eltwiseNotEqual(Object seq) {
+  /* pure */ public static boolean eltwiseNotEqual(Object seq) {
     if (seq == null) { return false; }
     return eltwiseNotEqual(toObjArray(seq));
   }
 
   /** @see #concat(Object[], Object[])
    */
-  /*@ pure */ public static java.lang.Object[] concat(Object seq1, Object seq2) {
+  /* pure */ public static java.lang.Object[] concat(Object seq1, Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return concat(toObjArray(seq1), toObjArray(seq2));
@@ -198,7 +198,7 @@ public final class Quant {
 
   /** @see #union(Object[], Object[])
    */
-  /*@ pure */ public static java.lang.Object[] union(Object seq1, Object seq2) {
+  /* pure */ public static java.lang.Object[] union(Object seq1, Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return union(toObjArray(seq1), toObjArray(seq2));
@@ -206,7 +206,7 @@ public final class Quant {
 
   /** @see #intersection(Object[], Object[])
    */
-  /*@ pure */ public static java.lang.Object[] intersection(Object seq1, Object seq2) {
+  /* pure */ public static java.lang.Object[] intersection(Object seq1, Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return intersection(toObjArray(seq1), toObjArray(seq2));
@@ -214,7 +214,7 @@ public final class Quant {
 
   /** @see #setDiff(Object[], Object[])
    */
-  /*@ pure */ public static java.lang.Object[] setDiff(Object seq1, Object seq2) {
+  /* pure */ public static java.lang.Object[] setDiff(Object seq1, Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return setDiff(toObjArray(seq1), toObjArray(seq2));
@@ -222,7 +222,7 @@ public final class Quant {
 
   /** @see #setEqual(Object[], Object[])
    */
-  /*@ pure */ public static boolean setEqual(Object seq1, Object seq2) {
+  /* pure */ public static boolean setEqual(Object seq1, Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return setEqual(toObjArray(seq1), toObjArray(seq2));
@@ -230,7 +230,7 @@ public final class Quant {
 
   /** @see #isReverse(Object[], Object[])
    */
-  /*@ pure */ public static boolean isReverse(Object seq1, Object seq2) {
+  /* pure */ public static boolean isReverse(Object seq1, Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return isReverse(toObjArray(seq1), toObjArray(seq2));
@@ -238,7 +238,7 @@ public final class Quant {
 
   /** @see #pairwiseEqual(Object[], Object[])
    */
-  /*@ pure */ public static boolean pairwiseEqual(Object seq1, Object seq2) {
+  /* pure */ public static boolean pairwiseEqual(Object seq1, Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(toObjArray(seq1), toObjArray(seq2));
@@ -246,7 +246,7 @@ public final class Quant {
 
   /** @see #pairwiseNotEqual(Object[], Object[])
    */
-  /*@ pure */ public static boolean pairwiseNotEqual(Object seq1, Object seq2) {
+  /* pure */ public static boolean pairwiseNotEqual(Object seq1, Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseNotEqual(toObjArray(seq1), toObjArray(seq2));
@@ -254,7 +254,7 @@ public final class Quant {
 
   /** @see #lexEqual(Object[], Object[])
    */
-  /*@ pure */ public static boolean lexEqual(Object seq1, Object seq2) {
+  /* pure */ public static boolean lexEqual(Object seq1, Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return lexEqual(toObjArray(seq1), toObjArray(seq2));
@@ -262,7 +262,7 @@ public final class Quant {
 
   /** @see #lexNotEqual(Object[], Object[])
    */
-  /*@ pure */ public static boolean lexNotEqual(Object seq1, Object seq2) {
+  /* pure */ public static boolean lexNotEqual(Object seq1, Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return lexNotEqual(toObjArray(seq1), toObjArray(seq2));
@@ -270,33 +270,33 @@ public final class Quant {
 
   /** @see #memberOf(Object, Object[])
    */
-  /*@ pure */ public static boolean memberOf(java.lang.Object elt, Object arr) {
+  /* pure */ public static boolean memberOf(java.lang.Object elt, Object arr) {
     if (arr == null) { return false; }
     return memberOf(elt, toObjArray(arr));
   }
 
   /** @see #slice(Object[], int, int)
    */
-  /*@ pure */ public static java.lang.Object[] slice(Object seq, int start, int end) {
+  /* pure */ public static java.lang.Object[] slice(Object seq, int start, int end) {
     if (seq == null) { return null; }
     return slice(toObjArray(seq), start, end);
   }
 
   /** @see #eltsEqual(Object[], Object)
    */
-  /*@ pure */ public static boolean eltsEqual(Object arr, java.lang.Object elt) {
+  /* pure */ public static boolean eltsEqual(Object arr, java.lang.Object elt) {
     if (arr == null) { return false; }
     return eltsEqual(toObjArray(arr), elt);
   }
 
   /** @see #eltsNotEqual(Object[], Object)
    */
-  /*@ pure */ public static boolean eltsNotEqual(Object arr, java.lang.Object elt) {
+  /* pure */ public static boolean eltsNotEqual(Object arr, java.lang.Object elt) {
     if (arr == null) { return false; }
     return eltsNotEqual(toObjArray(arr), elt);
   }
 
-  /*@ pure */ public static boolean isIntegralType(Class c) {
+  /* pure */ public static boolean isIntegralType(Class c) {
     if (c == null) { return false; }
     return
       (c.equals(Byte.TYPE) ||
@@ -305,14 +305,14 @@ public final class Quant {
        c.equals(Long.TYPE));
   }
 
-  /*@ pure */ public static boolean isRealType(Class c) {
+  /* pure */ public static boolean isRealType(Class c) {
     if (c == null) { return false; }
     return
       (c.equals(Float.TYPE) ||
        c.equals(Double.TYPE));
   }
 
-  /*@ pure */ public static boolean isNumericType(Class c) {
+  /* pure */ public static boolean isNumericType(Class c) {
     if (c == null) { return false; }
     return isIntegralType(c) || isRealType(c);
   }

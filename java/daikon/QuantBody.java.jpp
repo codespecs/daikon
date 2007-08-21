@@ -124,7 +124,7 @@ The correct way to build the system is to run 'make'.
    * If the argument is null or not an array or collection, returns a
    * default value (BAD_VALUE).
    **/
-  /*@ pure */ public static _TYPE GET_ELEMENT (Object o, long i) {
+  /* pure */ public static _TYPE GET_ELEMENT (Object o, long i) {
     if (o == null) { return BAD_VALUE; } // return default value
     java.lang.Class c = o.getClass();
     if (c.isArray()) {
@@ -136,7 +136,7 @@ The correct way to build the system is to run 'make'.
     }
   }
 
-  /*@ pure */ public static _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
+  /* pure */ public static _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
     if (arr == null) { return BAD_VALUE; } // return default value
     return arr[(int)i];
   }
@@ -205,7 +205,7 @@ The correct way to build the system is to run 'make'.
    * array. If an element of the array is null, its slot in the returned
    * array is null.
    */
-  /*@ pure */ public static String[] typeArray(_TYPE[] seq) {
+  /* pure */ public static String[] typeArray(_TYPE[] seq) {
     if (seq == null) { return null; }
     String[] retval = new String[seq.length];
     for (int i = 0 ; i < seq.length ; i++) {
@@ -220,7 +220,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
   /** True iff both sequences are non-null and have the same length. */
-  /*@ pure */ public static boolean sameLength(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean sameLength(_TYPE[] seq1, _TYPE[] seq2) {
     return ((seq1 != null)
             && (seq2 != null)
             && seq1.length == seq2.length);
@@ -228,7 +228,7 @@ The correct way to build the system is to run 'make'.
 
 #ifdef COMPATIBLE
   /** True iff both sequences are non-null and have the same length. */
-  /*@ pure */ public static boolean sameLength(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean sameLength(_TYPE[] seq1, COMPATIBLE[] seq2) {
     return ((seq1 != null)
             && (seq2 != null)
             && seq1.length == seq2.length);
@@ -247,7 +247,7 @@ The correct way to build the system is to run 'make'.
    * </pre>
    *
    */
-  /*@ pure */ public static boolean pairwiseDivides(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseDivides(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (ne(seq1[i] % seq2[i], 0)) {
@@ -256,7 +256,7 @@ The correct way to build the system is to run 'make'.
     }
     return true;
   }
-  /*@ pure */ public static boolean pairwiseDivides(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseDivides(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (ne(seq1[i] % seq2[i], 0)) {
@@ -276,7 +276,7 @@ The correct way to build the system is to run 'make'.
    * </pre>
    *
    */
-  /*@ pure */ public static boolean pairwiseSquare(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseSquare(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (ne(seq1[i], seq2[i] * seq2[i])) {
@@ -285,7 +285,7 @@ The correct way to build the system is to run 'make'.
     }
     return true;
   }
-  /*@ pure */ public static boolean pairwiseSquare(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseSquare(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (ne(seq1[i], seq2[i] * seq2[i])) {
@@ -309,7 +309,7 @@ The correct way to build the system is to run 'make'.
    * </pre>
    *
    */
-  /*@ pure */ public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (seq1[i] != ~seq2[i]) {
@@ -318,7 +318,7 @@ The correct way to build the system is to run 'make'.
     }
     return true;
   }
-  /*@ pure */ public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (seq1[i] != ~seq2[i]) {
@@ -333,7 +333,7 @@ This has nothing to do with INT.
 The test ensures that the method only appears once in the output.
 #endif
 #if (defined(INT))
-  /*@ pure */ public static boolean pairwiseBitwiseComplement(Object[] seq1, Object[] seq2) {
+  /* pure */ public static boolean pairwiseBitwiseComplement(Object[] seq1, Object[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     if (! eltsNonNull(seq1)) { return false; }
     if (! eltsNonNull(seq2)) { return false; }
@@ -359,7 +359,7 @@ The test ensures that the method only appears once in the output.
    * </pre>
    *
    */
-  /*@ pure */ public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     if (seq1.length != seq2.length) {
@@ -372,7 +372,7 @@ The test ensures that the method only appears once in the output.
     }
     return true;
   }
-  /*@ pure */ public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (ne(seq1[i], (seq2[i] | seq1[i]))) {
@@ -387,7 +387,7 @@ This has nothing to do with INT.
 The test ensures that the method only appears once in the output.
 #endif
 #if (defined(INT))
-  /*@ pure */ public static boolean pairwiseBitwiseSubset(Object[] seq1, Object[] seq2) {
+  /* pure */ public static boolean pairwiseBitwiseSubset(Object[] seq1, Object[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     if (! eltsNonNull(seq1)) { return false; }
     if (! eltsNonNull(seq2)) { return false; }
@@ -413,7 +413,7 @@ The test ensures that the method only appears once in the output.
   //    * Requires: seq.length > 0
   //    * Returns the minimum element in the array.
   //    */
-  //   /*@ pure */ public static _TYPE min(_TYPE[] seq) {
+  //   /* pure */ public static _TYPE min(_TYPE[] seq) {
   //      //Assert.assertTrue(seq.length > 0);
   //     _TYPE retval = seq[0];
   //     for (int i = 1 ; i < seq.length ; i++) {
@@ -428,7 +428,7 @@ The test ensures that the method only appears once in the output.
   //    * Requires: seq.length > 0
   //    * Returns the minimum element in the array.
   //    */
-  //   /*@ pure */ public static _TYPE max(_TYPE[] seq) {
+  //   /* pure */ public static _TYPE max(_TYPE[] seq) {
   //      //Assert.assertTrue(seq.length > 0);
   //     _TYPE retval = seq[0];
   //     for (int i = 1 ; i < seq.length ; i++) {
@@ -448,14 +448,14 @@ The test ensures that the method only appears once in the output.
    * If either array is empty, returns only those elements in the other array.
    * If both arrays are empty, returns a new empty array.
    */
-  /*@ pure */ public static _TYPE[] concat(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static _TYPE[] concat(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return utilMDE.ArraysMDE.concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static CAST_TYPE[] concat(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static CAST_TYPE[] concat(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     // Cannot just use utilMDE.ArraysMDE.concat because the two arrays
@@ -476,14 +476,14 @@ The test ensures that the method only appears once in the output.
    * elements may be repeated, and their order may be different from the
    * order of elements in seq1 and seq2.
    */
-  /*@ pure */ public static _TYPE[] union(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static _TYPE[] union(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static CAST_TYPE[] union(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static CAST_TYPE[] union(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return concat(seq1, seq2);
@@ -496,7 +496,7 @@ The test ensures that the method only appears once in the output.
    * elements may be repeated, and their order may be different from the
    * order of elements in seq1 and seq2.
    */
-  /*@ pure */ public static _TYPE[] intersection(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static _TYPE[] intersection(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     _TYPE[] intermediate = new _TYPE[Math.min(seq1.length, seq2.length)];
@@ -510,7 +510,7 @@ The test ensures that the method only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static CAST_TYPE[] intersection(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static CAST_TYPE[] intersection(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     CAST_TYPE[] intermediate = new CAST_TYPE[Math.min(seq1.length, seq2.length)];
@@ -530,7 +530,7 @@ The test ensures that the method only appears once in the output.
    * elements may be repeated, and their order may be different from the
    * order of elements in seq1 and seq2.
    */
-  /*@ pure */ public static _TYPE[] setDiff(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static _TYPE[] setDiff(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     _TYPE[] intermediate = new _TYPE[seq1.length];
@@ -544,7 +544,7 @@ The test ensures that the method only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static CAST_TYPE[] setDiff(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static CAST_TYPE[] setDiff(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     CAST_TYPE[] intermediate = new CAST_TYPE[seq1.length];
@@ -561,7 +561,7 @@ The test ensures that the method only appears once in the output.
   /**
    * Retuns true iff seq1 and seq2 are equal when considered as sets.
    */
-  /*@ pure */ public static boolean setEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean setEqual(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     for (int i = 0; i < seq1.length ; i++) {
@@ -578,7 +578,7 @@ The test ensures that the method only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean setEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean setEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     for (int i = 0; i < seq1.length ; i++) {
@@ -606,7 +606,7 @@ The test ensures that the method only appears once in the output.
    * </pre>
    *
    */
-  /*@ pure */ public static boolean isReverse(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean isReverse(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     int length = seq1.length;
     for (int i = 0 ; i < length ; i++) {
@@ -618,7 +618,7 @@ The test ensures that the method only appears once in the output.
   }
 
 #if (defined(OBJECT))
-  /*@ pure */ public static boolean isReverse(Collection<? extends _TYPE> seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean isReverse(Collection<? extends _TYPE> seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     _TYPE[] seq1_array = seq1.toArray(new _TYPE[]{});
@@ -627,7 +627,7 @@ The test ensures that the method only appears once in the output.
 #endif
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean isReverse(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean isReverse(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     int length = seq1.length;
     for (int i = 0 ; i < length ; i++) {
@@ -653,7 +653,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..elt.length-1 } : elt[i] element_of arr
    *
    */
-  /*@ pure */ public static boolean subsetOf(Object elts, Object arr) {
+  /* pure */ public static boolean subsetOf(Object elts, Object arr) {
     if (arr == null) { return false; }
     if (elts == null) { return false; }
     if (!(elts.getClass().isArray() && arr.getClass().isArray())) {
@@ -716,7 +716,7 @@ The test is ensures that it only appears once in the output.
    * True iff seq1 is a subset of seq2, when the sequences are
    * considered as sets.
    */
-  /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean subsetOf(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
@@ -728,7 +728,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean subsetOf(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
@@ -741,14 +741,14 @@ The test is ensures that it only appears once in the output.
 #endif
 
 #if (defined(OBJECT))
-  /*@ pure */ public static boolean subsetOf(Collection<? extends _TYPE> seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean subsetOf(Collection<? extends _TYPE> seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     _TYPE[] seq1_array = seq1.toArray(new _TYPE[]{});
     return subsetOf(seq1_array, seq2);
   }
 
-  /*@ pure */ public static boolean subsetOf(_TYPE[] seq1, Collection<? extends _TYPE> seq2) {
+  /* pure */ public static boolean subsetOf(_TYPE[] seq1, Collection<? extends _TYPE> seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     _TYPE[] seq2_array = seq2.toArray(new _TYPE[]{});
@@ -760,7 +760,7 @@ The test is ensures that it only appears once in the output.
   /**
    * Returns true iff seq contains no duplicate elements.
    */
-  /*@ pure */ public static boolean noDups(_TYPE[] seq) {
+  /* pure */ public static boolean noDups(_TYPE[] seq) {
     if (seq == null) { return false; }
     return utilMDE.ArraysMDE.noDuplicates(seq);
   }
@@ -768,7 +768,7 @@ The test is ensures that it only appears once in the output.
  /**
   * Returns true iff elt is in array arr.
   */
-  /*@ pure */ public static boolean memberOf(_TYPE elt, _TYPE[] arr) {
+  /* pure */ public static boolean memberOf(_TYPE elt, _TYPE[] arr) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) { return true; }
@@ -777,7 +777,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean memberOf(_TYPE elt, COMPATIBLE[] arr) {
+  /* pure */ public static boolean memberOf(_TYPE elt, COMPATIBLE[] arr) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) { return true; }
@@ -787,7 +787,7 @@ The test is ensures that it only appears once in the output.
 #endif
 
 #if (defined(BYTE) || defined(SHORT))
-  /*@ pure */ public static boolean memberOf(long elt, _TYPE[] arr) {
+  /* pure */ public static boolean memberOf(long elt, _TYPE[] arr) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) { return true; }
@@ -801,7 +801,7 @@ The test is ensures that it only appears once in the output.
    * Returns a subsequence of seq with first elements seq[start] and
    * last element seq[end].
    */
-  /*@ pure */ public static _TYPE[] slice(_TYPE[] seq, int start, int end) {
+  /* pure */ public static _TYPE[] slice(_TYPE[] seq, int start, int end) {
     if (seq == null) { return null; }
     int sliceStart = start;
     int sliceEnd = end;
@@ -812,13 +812,13 @@ The test is ensures that it only appears once in the output.
     return utilMDE.ArraysMDE.subarray(seq, sliceStart, length);
   }
 
-  /*@ pure */ public static _TYPE[] slice(_TYPE[] seq, long start, int end) {
+  /* pure */ public static _TYPE[] slice(_TYPE[] seq, long start, int end) {
     return slice(seq, (int)start, end);
   }
-  /*@ pure */ public static _TYPE[] slice(_TYPE[] seq, int start, long end) {
+  /* pure */ public static _TYPE[] slice(_TYPE[] seq, int start, long end) {
     return slice(seq, start, (int)end);
   }
-  /*@ pure */ public static _TYPE[] slice(_TYPE[] seq, long start, long end) {
+  /* pure */ public static _TYPE[] slice(_TYPE[] seq, long start, long end) {
     return slice(seq, (int)start, (int)end);
   }
 
@@ -830,7 +830,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] == elt
    *
    */
-  /*@ pure */ public static boolean eltsEqual(_TYPE[] arr, _TYPE elt) {
+  /* pure */ public static boolean eltsEqual(_TYPE[] arr, _TYPE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (ne(arr[i], elt)) { return false; }
@@ -839,7 +839,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean eltsEqual(_TYPE[] arr, COMPATIBLE elt) {
+  /* pure */ public static boolean eltsEqual(_TYPE[] arr, COMPATIBLE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (ne(arr[i], elt)) { return false; }
@@ -855,7 +855,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] != elt
    *
    */
-  /*@ pure */ public static boolean eltsNotEqual(_TYPE[] arr, _TYPE elt) {
+  /* pure */ public static boolean eltsNotEqual(_TYPE[] arr, _TYPE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) { return false; }
@@ -864,7 +864,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean eltsNotEqual(_TYPE[] arr, COMPATIBLE elt) {
+  /* pure */ public static boolean eltsNotEqual(_TYPE[] arr, COMPATIBLE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) { return false; }
@@ -882,7 +882,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] > elt
    *
    */
-  /*@ pure */ public static boolean eltsGT(_TYPE[] arr, _TYPE elt) {
+  /* pure */ public static boolean eltsGT(_TYPE[] arr, _TYPE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (lte(arr[i], elt)) { return false; }
@@ -891,7 +891,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean eltsGT(_TYPE[] arr, COMPATIBLE elt) {
+  /* pure */ public static boolean eltsGT(_TYPE[] arr, COMPATIBLE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (lte(arr[i], elt)) { return false; }
@@ -907,7 +907,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] >= elt
    *
    */
-  /*@ pure */ public static boolean eltsGTE(_TYPE[] arr, _TYPE elt) {
+  /* pure */ public static boolean eltsGTE(_TYPE[] arr, _TYPE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (lt(arr[i], elt)) { return false; }
@@ -916,7 +916,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean eltsGTE(_TYPE[] arr, COMPATIBLE elt) {
+  /* pure */ public static boolean eltsGTE(_TYPE[] arr, COMPATIBLE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (lt(arr[i], elt)) { return false; }
@@ -932,7 +932,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] < elt
    *
    */
-  /*@ pure */ public static boolean eltsLT(_TYPE[] arr, _TYPE elt) {
+  /* pure */ public static boolean eltsLT(_TYPE[] arr, _TYPE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (gte(arr[i], elt)) { return false; }
@@ -941,7 +941,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean eltsLT(_TYPE[] arr, COMPATIBLE elt) {
+  /* pure */ public static boolean eltsLT(_TYPE[] arr, COMPATIBLE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (gte(arr[i], elt)) { return false; }
@@ -957,7 +957,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] <= elt
    *
    */
-  /*@ pure */ public static boolean eltsLTE(_TYPE[] arr, _TYPE elt) {
+  /* pure */ public static boolean eltsLTE(_TYPE[] arr, _TYPE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (gt(arr[i], elt)) { return false; }
@@ -966,7 +966,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean eltsLTE(_TYPE[] arr, COMPATIBLE elt) {
+  /* pure */ public static boolean eltsLTE(_TYPE[] arr, COMPATIBLE elt) {
     if (arr == null) { return false; }
     for (int i = 0 ; i < arr.length ; i++) {
       if (gt(arr[i], elt)) { return false; }
@@ -986,7 +986,7 @@ The test is ensures that it only appears once in the output.
    *
    */
 #if (defined(FLOAT) || defined(DOUBLE))
-  /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (_TYPE_WRAPPER_NAME.isNaN(seq1[i]) && _TYPE_WRAPPER_NAME.isNaN(seq2[i])) {
@@ -999,7 +999,7 @@ The test is ensures that it only appears once in the output.
     return true;
   }
 #else
-  /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (ne(seq1[i], seq2[i])) {
@@ -1011,13 +1011,13 @@ The test is ensures that it only appears once in the output.
 #endif
 
 #if (defined(OBJECT) || defined(STRING))
-  /*@ pure */ public static boolean pairwiseEqual(java.util.AbstractCollection seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseEqual(java.util.AbstractCollection seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(seq1.toArray(), seq2);
   }
 
-  /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, java.util.AbstractCollection seq2) {
+  /* pure */ public static boolean pairwiseEqual(_TYPE[] seq1, java.util.AbstractCollection seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(seq1, seq2.toArray());
@@ -1025,7 +1025,7 @@ The test is ensures that it only appears once in the output.
 #endif
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (ne(seq1[i], seq2[i])) {
@@ -1044,7 +1044,7 @@ The test is ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] != seq2[i]
    *
    */
-  /*@ pure */ public static boolean pairwiseNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (eq(seq1[i], seq2[i])) {
@@ -1055,7 +1055,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean pairwiseNotEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseNotEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (eq(seq1[i], seq2[i])) {
@@ -1076,7 +1076,7 @@ The test is ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] < seq2[i]
    *
    */
-  /*@ pure */ public static boolean pairwiseLT(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseLT(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (gte(seq1[i], seq2[i])) {
@@ -1087,7 +1087,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean pairwiseLT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseLT(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (gte(seq1[i], seq2[i])) {
@@ -1105,7 +1105,7 @@ The test is ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] <= seq2[i]
    *
    */
-  /*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseLTE(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (gt(seq1[i], seq2[i])) {
@@ -1116,7 +1116,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (gt(seq1[i], seq2[i])) {
@@ -1134,7 +1134,7 @@ The test is ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] > seq2[i]
    *
    */
-  /*@ pure */ public static boolean pairwiseGT(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseGT(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (lte(seq1[i], seq2[i])) {
@@ -1145,7 +1145,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean pairwiseGT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseGT(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (lte(seq1[i], seq2[i])) {
@@ -1163,7 +1163,7 @@ The test is ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] >= seq2[i]
    *
    */
-  /*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseGTE(_TYPE[] seq1, _TYPE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (lt(seq1[i], seq2[i])) {
@@ -1174,7 +1174,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean pairwiseGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (lt(seq1[i], seq2[i])) {
@@ -1191,14 +1191,14 @@ The test is ensures that it only appears once in the output.
    * Returns true iff seq1 is lexically equal to seq2.
    * For equality, "lexically" and "pairwise" are the same.
    */
-  /*@ pure */ public static boolean lexEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean lexEqual(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean lexEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean lexEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(seq1, seq2);
@@ -1208,14 +1208,14 @@ The test is ensures that it only appears once in the output.
   /**
    * Returns true iff seq1 is lexically not equal to seq2.
    */
-  /*@ pure */ public static boolean lexNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean lexNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return !lexEqual(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean lexNotEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean lexNotEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return !lexEqual(seq1, seq2);
@@ -1227,7 +1227,7 @@ The test is ensures that it only appears once in the output.
   /**
    * Returns true iff seq1 is lexically <  seq2.
    */
-  /*@ pure */ public static boolean lexLT(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean lexLT(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1246,7 +1246,7 @@ The test is ensures that it only appears once in the output.
 
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean lexLT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean lexLT(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1267,7 +1267,7 @@ The test is ensures that it only appears once in the output.
   /**
    * Returns true iff seq1 is lexically <= to seq2.
    */
-  /*@ pure */ public static boolean lexLTE(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean lexLTE(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1286,7 +1286,7 @@ The test is ensures that it only appears once in the output.
 
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean lexLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean lexLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
   if (seq1 == null) { return false; }
   if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1307,7 +1307,7 @@ The test is ensures that it only appears once in the output.
   /**
    * Returns true iff seq1 is lexically > to seq2.
    */
-  /*@ pure */ public static boolean lexGT(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean lexGT(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1 == null) { return false; }
   if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1326,7 +1326,7 @@ The test is ensures that it only appears once in the output.
 
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean lexGT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean lexGT(_TYPE[] seq1, COMPATIBLE[] seq2) {
   if (seq1 == null) { return false; }
   if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1347,7 +1347,7 @@ The test is ensures that it only appears once in the output.
   /**
    * Returns true iff seq1 is lexically >= to seq2.
    */
-  /*@ pure */ public static boolean lexGTE(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean lexGTE(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1 == null) { return false; }
   if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1365,7 +1365,7 @@ The test is ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@ pure */ public static boolean lexGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  /* pure */ public static boolean lexGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
   if (seq1 == null) { return false; }
   if (seq2 == null) { return false; }
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1392,7 +1392,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] == seq[i+1]
    *
    */
-  /*@ pure */ public static boolean eltwiseEqual(_TYPE[] seq) {
+  /* pure */ public static boolean eltwiseEqual(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
@@ -1411,7 +1411,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] != seq[i+1]
    *
    */
-  /*@ pure */ public static boolean eltwiseNotEqual(_TYPE[] seq) {
+  /* pure */ public static boolean eltwiseNotEqual(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
@@ -1432,7 +1432,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] < seq[i+1]
    *
    */
-  /*@ pure */ public static boolean eltwiseLT(_TYPE[] seq) {
+  /* pure */ public static boolean eltwiseLT(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
@@ -1451,7 +1451,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] <= seq[i+1]
    *
    */
-  /*@ pure */ public static boolean eltwiseLTE(_TYPE[] seq) {
+  /* pure */ public static boolean eltwiseLTE(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
@@ -1470,7 +1470,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] > seq[i+1]
    *
    */
-  /*@ pure */ public static boolean eltwiseGT(_TYPE[] seq) {
+  /* pure */ public static boolean eltwiseGT(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
@@ -1489,7 +1489,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] >= seq[i+1]
    *
    */
-  /*@ pure */ public static boolean eltwiseGTE(_TYPE[] seq) {
+  /* pure */ public static boolean eltwiseGTE(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
@@ -1511,7 +1511,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] == i
    *
    */
-  /*@ pure */ public static boolean eltsEqualIndex(_TYPE[] seq) {
+  /* pure */ public static boolean eltsEqualIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (ne(seq[i], i)) {
@@ -1528,7 +1528,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] != i
    *
    */
-  /*@ pure */ public static boolean eltsNotEqualIndex(_TYPE[] seq) {
+  /* pure */ public static boolean eltsNotEqualIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (eq(seq[i], i)) {
@@ -1545,7 +1545,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] < i
    *
    */
-  /*@ pure */ public static boolean eltsLtIndex(_TYPE[] seq) {
+  /* pure */ public static boolean eltsLtIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (gte(seq[i], i)) {
@@ -1562,7 +1562,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] <= i
    *
    */
-  /*@ pure */ public static boolean eltsLteIndex(_TYPE[] seq) {
+  /* pure */ public static boolean eltsLteIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (gt(seq[i], i)) {
@@ -1579,7 +1579,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] > i
    *
    */
-  /*@ pure */ public static boolean  eltsGtIndex(_TYPE[] seq) {
+  /* pure */ public static boolean  eltsGtIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (lte(seq[i], i)) {
@@ -1596,7 +1596,7 @@ The test is ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] >= i
    *
    */
-  /*@ pure */ public static boolean eltsGteIndex(_TYPE[] seq) {
+  /* pure */ public static boolean eltsGteIndex(_TYPE[] seq) {
   if (seq == null) { return false; }
     for (int i = 0 ; i < seq.length ; i++) {
       if (lt(seq[i], i)) {
@@ -1641,7 +1641,7 @@ The test is ensures that it only appears once in the output.
    *
    * Returns null if any array or field access causes an exception.
    */
-  /*@ pure */ public static _TYPE[] COLLECT_TYPE (Object object, String fieldStr) {
+  /* pure */ public static _TYPE[] COLLECT_TYPE (Object object, String fieldStr) {
 
     if (object == null) { return null; }
     if (fieldStr == null) { return null; }
@@ -1657,7 +1657,7 @@ The test is ensures that it only appears once in the output.
    * Operates on the fields specified in fields[fieldsStartIdx..].
    * @see COLLECT_TYPE(Object, String)
    */
-  /*@ pure */ private static _TYPE[] COLLECT_TYPE (Object object,
+  /* pure */ private static _TYPE[] COLLECT_TYPE (Object object,
                                                    String[] fields, int fieldsStartIdx) {
 
     if (object == null) { return null; }
@@ -1760,7 +1760,7 @@ The test is ensures that it only appears once in the output.
   // Returns the results of dereferencing the fields specified in
   // fields[fieldsStartIdx..] for 'object'.
   // Returns a default value if any field access causes an exception.
-  /*@ pure */ public static _TYPE COLLECT_TYPE_FIELD (Object object, String fieldStr) {
+  /* pure */ public static _TYPE COLLECT_TYPE_FIELD (Object object, String fieldStr) {
 
     if (object == null) { return BAD_VALUE; } // return default value
     if (fieldStr == null) { return BAD_VALUE; } // return default value
