@@ -185,7 +185,7 @@ public final class Runtime {
     //    != null);
 
   public static void setDtrace(String filename, boolean append) {
-    System.out.printf("entered daikon.Runtime.setDtrace(%s, %b)%n", filename, append);
+    // System.out.printf("entered daikon.Runtime.setDtrace(%s, %b)%n", filename, append);
     if (no_dtrace) {
       throw new Error("setDtrace called when no_dtrace was specified");
     }
