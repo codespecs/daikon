@@ -578,7 +578,7 @@ public final /*@Interned*/ class ProglangType
     return isIntegral();
   }
 
-  public boolean isScalar() @Interned {
+  public boolean isScalar() {
     // For reptypes, checking against INT is sufficient, rather than
     // calling isIntegral().
     return (isIntegral()
@@ -586,7 +586,7 @@ public final /*@Interned*/ class ProglangType
             || (this == BOOLEAN));
   }
 
-  public boolean baseIsScalar() @Interned {
+  public boolean baseIsScalar() {
     return (baseIsIntegral()
             || (base == BASE_BOOLEAN)
             || (base == BASE_HASHCODE));
@@ -648,7 +648,7 @@ public final /*@Interned*/ class ProglangType
    * children of a superclass, even though it's true for the
    * superclass.
    **/
-  public boolean comparableOrSuperclassEitherWay(ProglangType other) @Interned {
+  public boolean comparableOrSuperclassEitherWay(ProglangType other) {
     if (this == other)          // ProglangType objects are interned
       return true;
     if (this.dimensions != other.dimensions)
@@ -672,7 +672,7 @@ public final /*@Interned*/ class ProglangType
    * not the other way around.  This is a transitive method, but not
    * reflexive.
    **/
-  public boolean comparableOrSuperclassOf (ProglangType other) @Interned {
+  public boolean comparableOrSuperclassOf (ProglangType other) {
     if (this == other)          // ProglangType objects are interned
       return true;
     if (this.dimensions != other.dimensions)
