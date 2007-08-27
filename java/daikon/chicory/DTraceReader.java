@@ -1,9 +1,11 @@
 package daikon.chicory;
 
-import java.util.*;
-import java.io.*;
+import checkers.quals.Interned;
 
 import utilMDE.*;
+
+import java.util.*;
+import java.io.*;
 
 /**
  * Reads dtrace files and provides methods to access the information
@@ -58,11 +60,11 @@ public class DTraceReader extends DeclReader {
     if (ppt == null)
       throw new Error ("ppt " + ppt_name + " not declared");
 
-    List<VarInfo> vars = ppt.get_all_vars();
+    List<DeclVarInfo> vars = ppt.get_all_vars();
 
-    List<Object> var_data_list = new ArrayList<Object>();
-    for (VarInfo vi : vars) {
-      Object obj = vi.read_data (dtrace_file);
+    List</*@Interned*/ Object> var_data_list = new ArrayList</*@Interned*/ Object>();
+    for (DeclVarInfo vi : vars) {
+      /*@Interned*/ Object obj = vi.read_data (dtrace_file);
       var_data_list.add (obj);
     }
 
@@ -77,8 +79,8 @@ public class DTraceReader extends DeclReader {
     for (String ppt_name : ppts.keySet()) {
       System.out.printf ("Ppt: %s%n", ppt_name);
       DeclPpt ppt = ppts.get (ppt_name);
-      List<VarInfo> vis = ppt.get_all_vars();
-      for (List<Object> var_data_list : ppt.get_var_data()) {
+      List<DeclVarInfo> vis = ppt.get_all_vars();
+      for (List</*@Interned*/ Object> var_data_list : ppt.get_var_data()) {
         System.out.println ("----------------------\n");
         for (int ii = 0; ii < vis.size(); ii++) {
           System.out.printf ("  %-20s: %s%n", vis.get(ii).name,

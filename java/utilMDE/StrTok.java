@@ -3,6 +3,8 @@ package utilMDE;
 import java.util.*;
 import java.io.*;
 
+import checkers.quals.Interned;
+
 /**
  * Provides a somewhat simpler interface for tokenizing strings than
  * does StreamTokenizer.  All tokenizing is done by StreamTokenizer. <p>
@@ -15,13 +17,13 @@ import java.io.*;
  * from words and numbers).
  *
  * Other differences are: <ul>
- *  <Li> Automatic setup for tokenizing strings
+ *  <li> Automatic setup for tokenizing strings
  *  <li> Underscores are included in identifiers (words)
  *  <li> I/O errors (which should be impossible when tokenizing strings) are
  *       converted to RuntimeExceptions so that every call doesn't have to
  *       be included in a try block
  *  <li> Convenience functions isWord(), isQString(), and need()
- *  <li> String tokens are interned for easier comparisons.
+ *  <li> Returned string tokens are interned for easier comparisons.
  * </ul>
  */
 public class StrTok {
@@ -61,7 +63,7 @@ public class StrTok {
    * returns an empty string.  Delimiters are returned as one character
    * strings.  Quoted strings and words are returned as strings.
    */
-  public String nextToken() {
+  public /*@Interned*/ String nextToken() {
 
     // Get the next token.  Turn IO exceptions into runtime exceptions
     // so that callers don't have to catch them.
@@ -79,7 +81,7 @@ public class StrTok {
    * Returns the current token.
    * @see #nextToken()
    */
-  public String token() {
+  public /*@Interned*/ String token() {
 
     int ttype = stok.ttype;
 

@@ -12,6 +12,8 @@ import static daikon.VarInfo.VarKind;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.LangFlags;
 
+import checkers.quals.Interned;
+
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -242,11 +244,11 @@ public final class FileIO {
     // process the ppt record
     String line = top_line;
     Scanner scanner = new Scanner (line);
-    String record_name = need (state, scanner, "'ppt'");
+    /*@Interned*/ String record_name = need (state, scanner, "'ppt'");
     if (record_name != "ppt") { // interned
       decl_error (state, "found '%s' where 'ppt' expected", record_name);
     }
-    String ppt_name = need (state, scanner, "ppt name");
+    /*@Interned*/ String ppt_name = need (state, scanner, "ppt name");
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
@@ -274,7 +276,7 @@ public final class FileIO {
         break;
 
       scanner = new Scanner (line);
-      String record = scanner.next().intern();
+      /*@Interned*/ String record = scanner.next().intern();
       if (vardef == null) {
         if (record == "parent") { // interned
           ppt_parents.add (parse_ppt_parent (state, scanner));
@@ -666,12 +668,12 @@ public final class FileIO {
     }
   }
 
-  private static String read_input_language (ParseState state, String line)
+  private static /*@Interned*/ String read_input_language (ParseState state, String line)
     throws IOException {
 
     Scanner scanner = new Scanner (line);
     scanner.next();
-    String input_lang = need (state, scanner, "input language");
+    /*@Interned*/ String input_lang = need (state, scanner, "input language");
     need_eol (state, scanner);
     return input_lang;
   }
@@ -680,7 +682,7 @@ public final class FileIO {
     throws IOException {
     Scanner scanner = new Scanner (line);
     scanner.next();
-    String version = need (state, scanner, "declaration version number");
+    /*@Interned*/ String version = need (state, scanner, "declaration version number");
     need_eol (state, scanner);
     if (version == "2.0")       // interned
       new_decl_format = true;
@@ -2230,7 +2232,7 @@ public final class FileIO {
 
     /** Parses the array record **/
     public void parse_array (Scanner scanner) throws DeclError {
-      String arr_str = need (scanner, "array dimensions");
+      /*@Interned*/ String arr_str = need (scanner, "array dimensions");
       if (arr_str == "0")       // interned
         arr_dims = 0;
       else if (arr_str == "1")  // interned
@@ -2249,13 +2251,13 @@ public final class FileIO {
     }
 
     public void parse_rep_type (Scanner scanner) throws DeclError {
-      String rep_type_str = need (scanner, "rep type");
+      /*@Interned*/ String rep_type_str = need (scanner, "rep type");
       need_eol (scanner);
       rep_type = ProglangType.rep_parse (rep_type_str);
     }
 
     public void parse_dec_type (Scanner scanner) throws DeclError {
-      String declared_type_str = need (scanner, "declaration type");
+      /*@Interned*/ String declared_type_str = need (scanner, "declaration type");
       need_eol (scanner);
       declared_type = ProglangType.parse (declared_type_str);
     }
@@ -2283,7 +2285,7 @@ public final class FileIO {
 
     /** Parses a comparability record **/
     public void parse_comparability (Scanner scanner) throws DeclError {
-      String comparability_str = need (scanner, "comparability");
+      /*@Interned*/ String comparability_str = need (scanner, "comparability");
       need_eol (scanner);
       comparability = VarComparability.parse (state.varcomp_format,
                                             comparability_str, declared_type);
@@ -2314,7 +2316,7 @@ public final class FileIO {
 
     /** Parse a constant record **/
     public void parse_constant (Scanner scanner) throws DeclError {
-      String constant_str = need (scanner, "constant value");
+      /*@Interned*/ String constant_str = need (scanner, "constant value");
       need_eol (scanner);
       static_constant_value = rep_type.parse_value (constant_str);
     }
@@ -2323,7 +2325,7 @@ public final class FileIO {
      * Helper function, returns the next string token unescaped and
      * interned.  Throw a DeclError if there is no next token
      */
-    public String need (Scanner scanner, String description) throws DeclError {
+    public /*@Interned*/ String need (Scanner scanner, String description) throws DeclError {
       return (FileIO.need (state, scanner, description));
     }
 
@@ -2347,7 +2349,7 @@ public final class FileIO {
    * Helper function, returns the next string token unescaped and
    * interned.  Throw a DeclError if there is no next token
    */
-  public static String need (ParseState state, Scanner scanner,
+  public static /*@Interned*/ String need (ParseState state, Scanner scanner,
                              String description) throws DeclError {
     if (!scanner.hasNext())
       decl_error (state, "end-of-line found where %s expected", description);
@@ -2370,7 +2372,7 @@ public final class FileIO {
   public static <E extends Enum<E>> E parse_enum_val (ParseState state,
          Scanner scanner, Class<E> enum_class, String descr) throws DeclError {
 
-    String str = need (state, scanner, descr);
+    /*@Interned*/ String str = need (state, scanner, descr);
     try {
       E e = Enum.valueOf (enum_class, str.toUpperCase());
       return (e);
@@ -2378,7 +2380,7 @@ public final class FileIO {
       E[] all = enum_class.getEnumConstants();
       String msg = "";
       for (E e : all) {
-        if (msg != "")          // interned
+        if (msg != "")          // "interned": initialization-checking pattern
           msg += ", ";
         msg += String.format ("'%s'", e.name().toLowerCase());
       }
@@ -2393,7 +2395,7 @@ public final class FileIO {
   }
 
   /** Returns whether the line is the start of a ppt declaration **/
-  private static boolean is_declaration_header (String line) {
+  private static boolean is_declaration_header (/*@Interned*/ String line) {
     if (new_decl_format)
       return (line.startsWith ("ppt "));
     else

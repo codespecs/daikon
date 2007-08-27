@@ -4,10 +4,13 @@ import java.util.*;
 import java.util.regex.*;
 import java.io.*;
 
+import utilMDE.*;
+
+import checkers.quals.Interned;
+
 import daikon.chicory.DTraceReader;
 import daikon.chicory.DeclReader;
 import static daikon.chicory.DeclReader.*;
-import utilMDE.*;
 
 /**
  * Reads multiple dtrace files from web services and looks for fields
@@ -39,10 +42,10 @@ public class WSMatch {
   public static double min_composable_match = 0.60;
 
   /** Set of variables that are constant **/
-  public static Set<VarInfo> constants = new LinkedHashSet<VarInfo>();
+  public static Set<DeclVarInfo> constants = new LinkedHashSet<DeclVarInfo>();
 
   /** Set of variables that are duplicates of an input variable **/
-  public static Set<VarInfo> dups = new LinkedHashSet<VarInfo>();
+  public static Set<DeclVarInfo> dups = new LinkedHashSet<DeclVarInfo>();
 
   static SimpleLog debug_substitution = new SimpleLog (false);
   static SimpleLog debug_constants = new SimpleLog (false);
@@ -55,13 +58,13 @@ public class WSMatch {
    */
   public static class MatchInfo implements Comparable<MatchInfo> {
     DeclPpt ppt1;
-    VarInfo var1;
+    DeclVarInfo var1;
     DeclPpt ppt2;
-    VarInfo var2;
+    DeclVarInfo var2;
     double perc_match;
     List<RowMatch> matching_rows = new ArrayList<RowMatch>();
 
-    public MatchInfo (DeclPpt ppt1, VarInfo var1, DeclPpt ppt2, VarInfo var2,
+    public MatchInfo (DeclPpt ppt1, DeclVarInfo var1, DeclPpt ppt2, DeclVarInfo var2,
                       double perc_match) {
 
       this.ppt1 = ppt1;
@@ -89,13 +92,13 @@ public class WSMatch {
   }
 
   /**
-   * Pair of VarInfos suitable for a key in a hashmap.  The names of the
+   * Pair of DeclVarInfos suitable for a key in a hashmap.  The names of the
    * variables are used as their identifiers
    */
   public static class VarPair {
-    VarInfo v1;
-    VarInfo v2;
-    VarPair (VarInfo v1, VarInfo v2) {
+    DeclVarInfo v1;
+    DeclVarInfo v2;
+    VarPair (DeclVarInfo v1, DeclVarInfo v2) {
       this.v1 = v1;
       this.v2 = v2;
     }
@@ -135,13 +138,13 @@ public class WSMatch {
     Map<VarPair,MatchInfo> vars_match = new LinkedHashMap<VarPair,MatchInfo>();
 
     /** Input variables for program point 1 from the primary match **/
-    List<VarInfo> ppt1_inputs  = new ArrayList<VarInfo>();
+    List<DeclVarInfo> ppt1_inputs  = new ArrayList<DeclVarInfo>();
     /** Input variables for program point 2 from the primary match **/
-    List<VarInfo> ppt2_inputs  = new ArrayList<VarInfo>();
+    List<DeclVarInfo> ppt2_inputs  = new ArrayList<DeclVarInfo>();
     /** Output variables for program point 1 from the primary match **/
-    List<VarInfo> ppt1_outputs = new ArrayList<VarInfo>();
+    List<DeclVarInfo> ppt1_outputs = new ArrayList<DeclVarInfo>();
     /** Output variables for program point 2 from the primary match **/
-    List<VarInfo> ppt2_outputs = new ArrayList<VarInfo>();
+    List<DeclVarInfo> ppt2_outputs = new ArrayList<DeclVarInfo>();
 
     /** Best matches for input variables **/
     List<MatchInfo> input_matches = new ArrayList<MatchInfo>();
@@ -152,7 +155,7 @@ public class WSMatch {
     protected Substitution (MatchInfo primary) {
 
       // Find the inputs and outputs for ppt 1 from the primary match
-      for (VarInfo v : primary.ppt1.get_all_vars()) {
+      for (DeclVarInfo v : primary.ppt1.get_all_vars()) {
         if (!include_var (v))
           continue;
         if (constants.contains (v))
@@ -164,7 +167,7 @@ public class WSMatch {
       }
 
       // Find the inputs and outputs for ppt 2 from the primary match
-      for (VarInfo v : primary.ppt2.get_all_vars()) {
+      for (DeclVarInfo v : primary.ppt2.get_all_vars()) {
         if (!include_var (v))
           continue;
         if (constants.contains (v))
@@ -177,15 +180,15 @@ public class WSMatch {
 
       // Build the var match information for each combination of variables
       // input-input and output-output
-      for (VarInfo var1 : ppt1_inputs) {
-        for (VarInfo var2 : ppt2_inputs) {
+      for (DeclVarInfo var1 : ppt1_inputs) {
+        for (DeclVarInfo var2 : ppt2_inputs) {
           MatchInfo mi = compare_var (primary, primary.ppt1, var1,
                                       primary.ppt2, var2);
           vars_match.put (new VarPair (var1, var2), mi);
         }
       }
-      for (VarInfo var1 : ppt1_outputs) {
-        for (VarInfo var2 : ppt2_outputs) {
+      for (DeclVarInfo var1 : ppt1_outputs) {
+        for (DeclVarInfo var2 : ppt2_outputs) {
           MatchInfo mi = compare_var (primary, primary.ppt1, var1,
                                       primary.ppt2, var2);
           vars_match.put (new VarPair (var1, var2), mi);
@@ -232,8 +235,8 @@ public class WSMatch {
      * If multiple sets have the same number of elements, the set with the
      * higher average match percent is chosen.
      */
-    public List<MatchInfo> find_best_matches (List<VarInfo> vars1,
-                                              List<VarInfo> vars2,
+    public List<MatchInfo> find_best_matches (List<DeclVarInfo> vars1,
+                                              List<DeclVarInfo> vars2,
                                               double min_percent) {
 
       debug_substitution.log ("Looking for matches between %s and %s at %f%n",
@@ -259,7 +262,7 @@ public class WSMatch {
      * @param best_match The best match found so far.  Updated in place
      *    when a better match is found.
      */
-    private void matches (List<VarInfo> vars1, List<VarInfo> vars2,
+    private void matches (List<DeclVarInfo> vars1, List<DeclVarInfo> vars2,
                          int index, double min_perc,
                          List<MatchInfo> matches,
                          List<MatchInfo> best_match) {
@@ -281,17 +284,17 @@ public class WSMatch {
       // remaining variables in vars1.  Note that we only need to
       // explore the other variables once if we don't have a match (since
       // the result will be the same)
-      VarInfo v1 = vars1.get (index);
+      DeclVarInfo v1 = vars1.get (index);
       // System.out.printf ("Processing variable %s [%d/%d]%n", v1, index,
       //                   vars1.size());
       boolean no_match = false;
       for (int ii = 0; ii < vars2.size(); ii++) {
-        VarInfo v2 = vars2.get(ii);
+        DeclVarInfo v2 = vars2.get(ii);
         MatchInfo m = vars_match.get (new VarPair(v1, v2));
         if (m.perc_match > min_perc) {
           // System.out.printf ("Adding match %s%n", m);
           matches.add (m);
-          List<VarInfo> vars2_remaining = new ArrayList<VarInfo>(vars2);
+          List<DeclVarInfo> vars2_remaining = new ArrayList<DeclVarInfo>(vars2);
           vars2_remaining.remove (ii);
           matches (vars1, vars2_remaining, index+1, min_perc, matches,
                    best_match);
@@ -471,10 +474,10 @@ public class WSMatch {
     DeclPpt ppt1 = trace1.get_all_ppts().get(0);
     DeclPpt ppt2 = trace2.get_all_ppts().get(0);
 
-    for (VarInfo var1 : ppt1.get_all_vars()) {
+    for (DeclVarInfo var1 : ppt1.get_all_vars()) {
       if (!include_var (var1))
         continue;
-      for (VarInfo var2 : ppt2.get_all_vars()) {
+      for (DeclVarInfo var2 : ppt2.get_all_vars()) {
         if (!include_var (var2))
           continue;
         results.add (compare_var (ppt1, var1,  ppt2, var2));
@@ -487,25 +490,25 @@ public class WSMatch {
    * Compares all of the values on the specified variables.  Returns the
    * percentage of rows that match exactly once
    */
-  public static MatchInfo compare_var (DeclPpt ppt1, VarInfo var1,
-                                       DeclPpt ppt2, VarInfo var2) {
+  public static MatchInfo compare_var (DeclPpt ppt1, DeclVarInfo var1,
+                                       DeclPpt ppt2, DeclVarInfo var2) {
 
     //System.out.printf ("%s index = %d, %s index = %d\n", var1, var1.index,
     //                   var2, var2.index);
 
-    List<List<Object>> data1 = ppt1.get_var_data();
-    List<List<Object>> data2 = ppt2.get_var_data();
+    List<List</*@Interned*/ Object>> data1 = ppt1.get_var_data();
+    List<List</*@Interned*/ Object>> data2 = ppt2.get_var_data();
 
     MatchInfo m = new MatchInfo (ppt1, var1, ppt2, var2, 0.0);
 
     int possible_matches = Math.min (data1.size(), data2.size());
     int match_cnt = 0;
     for (int ii = 0; ii < data1.size(); ii++) {
-      List<Object> var_data1 = data1.get(ii);
+      List</*@Interned*/ Object> var_data1 = data1.get(ii);
       int mcnt1 = 0;
       int row = -1;
       for (int jj = 0; jj < data2.size(); jj++) {
-        List<Object> var_data2 = data2.get(jj);
+        List</*@Interned*/ Object> var_data2 = data2.get(jj);
         boolean match = compare_val (var1, var_data1.get(var1.index),
                                      var2, var_data2.get(var2.index));
         if (match) {
@@ -533,8 +536,8 @@ public class WSMatch {
    * Returns whether or not the two values are at least approximately
    * the same.  Nonsensical values are always different.
    */
-  public static boolean compare_val (VarInfo var1, Object data1,
-                                     VarInfo var2, Object data2) {
+  public static boolean compare_val (DeclVarInfo var1, /*@Interned*/ Object data1,
+                                     DeclVarInfo var2, /*@Interned*/ Object data2) {
 
     // System.out.printf ("Comparing %s = %s against %s = %s\n", var1, data1,
     //                   var2, data2);
@@ -586,10 +589,10 @@ public class WSMatch {
 
     List<MatchInfo> results = new ArrayList<MatchInfo>();
 
-    for (VarInfo var1 : match.ppt1.get_all_vars()) {
+    for (DeclVarInfo var1 : match.ppt1.get_all_vars()) {
       if (!include_var (var1))
         continue;
-      for (VarInfo var2 : match.ppt2.get_all_vars()) {
+      for (DeclVarInfo var2 : match.ppt2.get_all_vars()) {
         if (!include_var (var2))
           continue;
         if (is_input(var1) != is_input(var2))
@@ -606,17 +609,17 @@ public class WSMatch {
    * fill in matching_rows.
    */
   public static MatchInfo compare_var (MatchInfo match, DeclPpt ppt1,
-                                  VarInfo var1, DeclPpt ppt2, VarInfo var2) {
+                                  DeclVarInfo var1, DeclPpt ppt2, DeclVarInfo var2) {
 
-    List<List<Object>> data1 = ppt1.get_var_data();
-    List<List<Object>> data2 = ppt2.get_var_data();
+    List<List</*@Interned*/ Object>> data1 = ppt1.get_var_data();
+    List<List</*@Interned*/ Object>> data2 = ppt2.get_var_data();
 
     MatchInfo result = new MatchInfo (ppt1, var1, ppt2, var2, 0.0);
 
     int match_cnt = 0;
     for (RowMatch row : match.matching_rows) {
-      List<Object> var_data1 = data1.get(row.index1);
-      List<Object> var_data2 = data2.get(row.index2);
+      List</*@Interned*/ Object> var_data1 = data1.get(row.index1);
+      List</*@Interned*/ Object> var_data2 = data2.get(row.index2);
       boolean val_match = compare_val (var1, var_data1.get(var1.index),
                                        var2, var_data2.get(var2.index));
       if (val_match) {
@@ -634,13 +637,13 @@ public class WSMatch {
    * is one that has the same value for each data sample.  Null values are
    * ignored (as they are nonsensical)
    */
-  public static List<VarInfo> find_constants (DeclPpt ppt) {
+  public static List<DeclVarInfo> find_constants (DeclPpt ppt) {
 
-    List<VarInfo> constants = new ArrayList<VarInfo>();
-    List<List<Object>> data = ppt.get_var_data();
+    List<DeclVarInfo> constants = new ArrayList<DeclVarInfo>();
+    List<List</*@Interned*/ Object>> data = ppt.get_var_data();
 
     // Loop through each variable
-    for (VarInfo v : ppt.get_all_vars()) {
+    for (DeclVarInfo v : ppt.get_all_vars()) {
 
       boolean constant = true;
       boolean always_missing = true;
@@ -674,15 +677,15 @@ public class WSMatch {
    * Looks for output variables that are duplicates of an input variable.
    * Null (nonsensical) values are ignored.
    */
-  public static List<VarInfo> find_dups (DeclPpt ppt) {
+  public static List<DeclVarInfo> find_dups (DeclPpt ppt) {
 
-    List<VarInfo> dups = new ArrayList<VarInfo>();
-    List<List<Object>> data = ppt.get_var_data();
+    List<DeclVarInfo> dups = new ArrayList<DeclVarInfo>();
+    List<List</*@Interned*/ Object>> data = ppt.get_var_data();
 
     // Find the input and output variables
-    List<VarInfo> inputs = new ArrayList<VarInfo>();
-    List<VarInfo> outputs = new ArrayList<VarInfo>();
-    for (VarInfo v : ppt.get_all_vars()) {
+    List<DeclVarInfo> inputs = new ArrayList<DeclVarInfo>();
+    List<DeclVarInfo> outputs = new ArrayList<DeclVarInfo>();
+    for (DeclVarInfo v : ppt.get_all_vars()) {
       if (is_input (v))
         inputs.add (v);
       else
@@ -691,13 +694,13 @@ public class WSMatch {
 
     // Compare each input against each output.  If every available value
     // matches, note the output as a duplicate
-    for (VarInfo input : inputs) {
-      for (VarInfo output : outputs) {
+    for (DeclVarInfo input : inputs) {
+      for (DeclVarInfo output : outputs) {
         boolean duplicate = true;
         boolean always_missing = true;
-        for (List<Object> samples : data) {
-          Object input_val = samples.get (input.index);
-          Object output_val = samples.get (output.index);
+        for (List</*@Interned*/ Object> samples : data) {
+          /*@Interned*/ Object input_val = samples.get (input.index);
+          /*@Interned*/ Object output_val = samples.get (output.index);
           if (output_val != null)
             always_missing = false;
           if ((input_val == null) || (output_val == null))
@@ -749,7 +752,7 @@ public class WSMatch {
     }
   }
 
-  public static boolean is_input (VarInfo v) {
+  public static boolean is_input (DeclVarInfo v) {
     return v.name.startsWith ("input");
   }
 
@@ -758,7 +761,7 @@ public class WSMatch {
    * are duplicates or that are specified by the user to be ignored are
    * not included
    **/
-  public static boolean include_var (VarInfo var) {
+  public static boolean include_var (DeclVarInfo var) {
 
     if (dups.contains (var))
       return (false);
@@ -781,9 +784,9 @@ public class WSMatch {
     for (DTraceReader trace : traces) {
       for (DeclPpt ppt : trace.get_all_ppts()) {
         op_cnt++;
-        List<VarInfo> inputs = new ArrayList<VarInfo>();
-        List<VarInfo> outputs = new ArrayList<VarInfo>();
-        for (VarInfo v : ppt.get_all_vars()) {
+        List<DeclVarInfo> inputs = new ArrayList<DeclVarInfo>();
+        List<DeclVarInfo> outputs = new ArrayList<DeclVarInfo>();
+        for (DeclVarInfo v : ppt.get_all_vars()) {
           if (constants.contains (v)) {
             if (is_input(v)) input_constants++;
             else output_constants++;
@@ -813,9 +816,9 @@ public class WSMatch {
   }
 
   /** Prints each variable on a separate line **/
-  public static void print_vars (String prefix, List<VarInfo> vars) {
+  public static void print_vars (String prefix, List<DeclVarInfo> vars) {
 
-    for (VarInfo v : vars) {
+    for (DeclVarInfo v : vars) {
       String constant_str = "";
       if (constants.contains (v))
         constant_str = " [constant]";

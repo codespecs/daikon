@@ -246,7 +246,7 @@ public abstract class VarInfoName
     // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " + this.getClass().getName());
     return esc_name_cached;
   }
-  private String esc_name_cached = null; // interned
+  private /*@Interned*/ String esc_name_cached = null; // interned
 
 
   /**
@@ -267,7 +267,7 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * Simplify tool output format, in the given pre/post-state context.
    **/
-  protected String simplify_name(boolean prestate) {
+  protected /*@Interned*/ String simplify_name(boolean prestate) {
     int which = prestate ? 0 : 1;
     if (simplify_name_cached[which] == null) {
       try {
@@ -292,7 +292,7 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * IOA style output format
    **/
-  public String ioa_name() {
+  public /*@Interned*/ String ioa_name() {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("ioa_name: " + this.toString());
     }
@@ -307,7 +307,7 @@ public abstract class VarInfoName
     }
     return ioa_name_cached;
   }
-  private String ioa_name_cached = null; // interned
+  private /*@Interned*/ String ioa_name_cached = null; // interned
 
   /**
    * Reeturns the string representation of this name in IOA format.
@@ -322,7 +322,7 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * java style output format
    **/
-  public String java_name(VarInfo v) {
+  public /*@Interned*/ String java_name(VarInfo v) {
     if (java_name_cached == null) {
       try {
         java_name_cached = java_name_impl(v).intern();
@@ -333,7 +333,7 @@ public abstract class VarInfoName
     }
     return java_name_cached;
   }
-  private String java_name_cached = null; // interned
+  private /*@Interned*/ String java_name_cached = null; // interned
 
   /**
    * Return the String representation of this name in java format.
@@ -348,10 +348,10 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * java style output format
    **/
-  public String repair_name(VarInfo v) {
+  public /*@Interned*/ String repair_name(VarInfo v) {
       return repair_name_impl(v).intern();
   }
-  private String repair_name_cached = null; // interned
+  private /*@Interned*/ String repair_name_cached = null; // interned
 
   /**
    * Return the String representation of this name in the repair style
@@ -379,7 +379,7 @@ public abstract class VarInfoName
    * Return the String representation of this name in the JML style output
    * format
    */
-  public String jml_name(VarInfo v) {
+  public /*@Interned*/ String jml_name(VarInfo v) {
     if (jml_name_cached == null) {
       try {
         jml_name_cached = jml_name_impl(v).intern();
@@ -391,7 +391,7 @@ public abstract class VarInfoName
     // System.out.println("jml_name = " + jml_name_cached + " for " + name() + " of class " + this.getClass().getName());
     return jml_name_cached;
   }
-  private String jml_name_cached = null; // interned
+  private /*@Interned*/ String jml_name_cached = null; // interned
   /**
    * Returns the name in JML style output format.  Cached and interned by
    * jml_name()
@@ -429,7 +429,7 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * dbc style output format.
    **/
-  public String dbc_name(VarInfo var) {
+  public /*@Interned*/ String dbc_name(VarInfo var) {
     if (dbc_name_cached == null) {
       try {
         dbc_name_cached = dbc_name_impl(var).intern();
@@ -441,7 +441,7 @@ public abstract class VarInfoName
     return dbc_name_cached;
   }
 
-  private String dbc_name_cached = null; // interned
+  private /*@Interned*/ String dbc_name_cached = null; // interned
   /**
    * Return the name in the DBC style output format.  If v is null, uses
    * JML style instead.  Cached and interned by dbc_name()
@@ -452,7 +452,7 @@ public abstract class VarInfoName
    * Return the String representation of this name using only letters,
    * numbers, and underscores.
    */
-  public String identifier_name() {
+  public /*@Interned*/ String identifier_name() {
     if (identifier_name_cached == null) {
       try {
         identifier_name_cached = identifier_name_impl().intern();
@@ -464,7 +464,7 @@ public abstract class VarInfoName
     // System.out.println("identifier_name = " + identifier_name_cached + " for " + name() + " of class " + this.getClass().getName());
     return identifier_name_cached;
   }
-  private String identifier_name_cached = null; // interned
+  private /*@Interned*/ String identifier_name_cached = null; // interned
 
   /**
    * Returns the name using only letters, numbers, and underscores.  Cached
@@ -513,8 +513,9 @@ public abstract class VarInfoName
       /*@Interned*/ VarInfoName result = ref.get();
       return result;
     } else {
-      internTable.put(this, new WeakReference</*@Interned*/ VarInfoName>((/*@Interned*/ VarInfoName) this)); // cast is redundant (except in JSR 308)
-      return this;
+      /*@Interned*/ VarInfoName this_interned = (/*@Interned*/ VarInfoName) this; // cast is redundant (except in JSR 308)
+      internTable.put(this_interned, new WeakReference</*@Interned*/ VarInfoName>(this_interned));
+      return this_interned;
     }
   }
 
@@ -615,8 +616,8 @@ public abstract class VarInfoName
    * Replace the first instances of node by replacement, in the data
    * structure rooted at this.
    **/
-  public VarInfoName replace(VarInfoName node, VarInfoName replacement) {
-    if (node == replacement)
+  public /*@Interned*/ VarInfoName replace(VarInfoName node, VarInfoName replacement) {
+    if (node == replacement)    // "interned": equality optimization pattern
       return this;
     Replacer r = new Replacer(node, replacement);
     return r.replace(this).intern();
@@ -626,8 +627,8 @@ public abstract class VarInfoName
    * Replace all instances of node by replacement, in the data structure
    * rooted at this.
    **/
-  public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
-    if (node == replacement)
+  public /*@Interned*/ VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
+    if (node == replacement)    // "interned": equality optimization pattern
       return this;
 
     // Assert.assertTrue(! replacement.hasNode(node)); // no infinite loop
@@ -635,13 +636,12 @@ public abstract class VarInfoName
     // It doesn't make sense to assert this as we have plenty of times when
     // we want to replace x by y where y may contain x.
 
-    VarInfoName result = this;
     Replacer r = new Replacer(node, replacement);
 
     // This code used to loop as long as node was in result, but this isn't
     // necessary -- all occurances are replaced by replacer.
 
-    result = r.replace(result).intern();
+    /*@Interned*/ VarInfoName result = r.replace(result).intern();
     return result;
   }
 
@@ -653,7 +653,9 @@ public abstract class VarInfoName
   }
 
   public boolean equals(VarInfoName other) {
-    return (other == this) || ((other != null) && (this.repr().equals(other.repr())));
+    return ((other == this)     // "interned": equality optimization pattern
+            || ((other != null)
+                && (this.repr().equals(other.repr()))));
   }
 
   // This should be safe even in the absence of caching, because "repr()"
@@ -812,7 +814,7 @@ public abstract class VarInfoName
         String set=getRealSet(v,this);
         Repair.getRepair().noForceSet();
         return set;
-      } else if (v.get_VarInfoName()==this&&needrelation) {
+      } else if (v.get_VarInfoName()==this && needrelation) {
 	    Repair.getRepair().addSpecial();
 	    return "s_quant."+Repair.getRepair().getRelation(name,v.ppt);
       } else
@@ -875,7 +877,7 @@ public abstract class VarInfoName
    * Returns a name for the size of this (this object should be a
    * sequence).  Form is like "size(a[])" or "a.length".
    **/
-  public VarInfoName applySize() {
+  public /*@Interned*/ VarInfoName applySize() {
     // The simple approach:
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
@@ -1054,7 +1056,7 @@ public abstract class VarInfoName
    * Returns a name for a unary function applied to this object.
    * The result is like "sum(this)".
    **/
-  public VarInfoName applyFunction(String function) {
+  public /*@Interned*/ VarInfoName applyFunction(String function) {
     return (new FunctionOf(function, this)).intern();
   }
 
@@ -1064,7 +1066,7 @@ public abstract class VarInfoName
    * @param function the name of the function
    * @param vars The arguments to the function, of type VarInfoName
    **/
-  public static VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
+  public static /*@Interned*/ VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
     return (new FunctionOfN(function, vars)).intern();
   }
 
@@ -1269,7 +1271,7 @@ public abstract class VarInfoName
    * Returns a name for the intersection of with another sequence, like
    * "intersect(a[], b[])".
    **/
-  public VarInfoName applyIntersection(VarInfoName seq2) {
+  public /*@Interned*/ VarInfoName applyIntersection(VarInfoName seq2) {
     Assert.assertTrue(seq2 != null);
     return (new Intersection(this, seq2)).intern();
   }
@@ -1298,7 +1300,7 @@ public abstract class VarInfoName
    * Returns a name for the union of this with another sequence, like
    * "union(a[], b[])".
    **/
-  public VarInfoName applyUnion(VarInfoName seq2) {
+  public /*@Interned*/ VarInfoName applyUnion(VarInfoName seq2) {
     Assert.assertTrue(seq2 != null);
     return (new Union(this, seq2)).intern();
   }
@@ -1329,7 +1331,7 @@ public abstract class VarInfoName
    * Returns a 'getter' operation for some field of this name, like
    * a.foo if this is a.
    **/
-  public VarInfoName applyField(String field) {
+  public /*@Interned*/ VarInfoName applyField(String field) {
     return (new Field(this, field)).intern();
   }
 
@@ -1535,7 +1537,7 @@ public abstract class VarInfoName
    * Returns a name for the type of this object; form is like
    * "this.getClass()" or "\typeof(this)".
    **/
-  public VarInfoName applyTypeOf() {
+  public /*@Interned*/ VarInfoName applyTypeOf() {
     return (new TypeOf(this)).intern();
   }
 
@@ -1607,7 +1609,7 @@ public abstract class VarInfoName
    * Returns a name for a the prestate value of this object; form is
    * like "orig(this)" or "\old(this)".
    **/
-  public VarInfoName applyPrestate() {
+  public /*@Interned*/ VarInfoName applyPrestate() {
     if (this instanceof Poststate) {
       return ((Poststate)this).term;
     } else if ((this instanceof Add) && ((Add)this).term instanceof Poststate) {
@@ -1706,7 +1708,7 @@ public abstract class VarInfoName
    * Returns a name for a the poststate value of this object; form is
    * like "new(this)" or "\new(this)".
    **/
-  public VarInfoName applyPoststate() {
+  public /*@Interned*/ VarInfoName applyPoststate() {
     return (new Poststate(this)).intern();
   }
 
@@ -1770,7 +1772,7 @@ public abstract class VarInfoName
    * Returns a name for the this term plus a constant, like "this-1"
    * or "this+1".
    **/
-  public VarInfoName applyAdd(int amount) {
+  public /*@Interned*/ VarInfoName applyAdd(int amount) {
     if (amount == 0) {
       return this;
     } else {
@@ -1860,7 +1862,7 @@ public abstract class VarInfoName
    * Returns a name for the elements of a container (as opposed to the
    * identity of the container) like "this[]" or "(elements this)".
    **/
-  public VarInfoName applyElements() {
+  public /*@Interned*/ VarInfoName applyElements() {
     return (new Elements(this)).intern();
   }
 
@@ -2057,7 +2059,7 @@ public abstract class VarInfoName
    * Returns a name for an element selected from a sequence, like
    * "this[i]".
    **/
-  public VarInfoName applySubscript(VarInfoName index) {
+  public /*@Interned*/ VarInfoName applySubscript(VarInfoName index) {
     Assert.assertTrue(index != null);
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
@@ -2190,7 +2192,7 @@ public abstract class VarInfoName
    * like "this[i..j]".  If an endpoint is null, it means "from the
    * start" or "to the end".
    **/
-  public VarInfoName applySlice(VarInfoName i, VarInfoName j) {
+  public /*@Interned*/ VarInfoName applySlice(VarInfoName i, VarInfoName j) {
     // a[] -> a[index..]
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);

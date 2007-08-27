@@ -28,6 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import checkers.quals.Interned;
+
 import utilMDE.Assert;
 import utilMDE.FileIOException;
 import utilMDE.Fmt;
@@ -337,7 +339,7 @@ public final class Daikon {
    * <samp>(a != null) ==> (a.b == 5)</samp>.
    **/
   // Perhaps a better default would be "missing".
-  public static String dkconfig_guardNulls = "default";
+  public static /*@Interned*/ String dkconfig_guardNulls = "default";
 
   /**
    * When true compilation errors during splitter file generation

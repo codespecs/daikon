@@ -31,7 +31,7 @@ public final class VarInfoAux
    * elements, or whether there is a null at the end of this
    * collection that ends the collection.
    **/
-  public static final String NULL_TERMINATING = "nullTerminating";
+  public static final /*@Interned*/ String NULL_TERMINATING = "nullTerminating";
 
   /**
    * Whether this variable is a parameter to a method, or derived from
@@ -41,39 +41,39 @@ public final class VarInfoAux
    * parameter.  In Java, p.a is not a parameter, whereas in IOA, it
    * is.
    **/
-  public static final String IS_PARAM = "isParam";
+  public static final /*@Interned*/ String IS_PARAM = "isParam";
 
   /**
    * Whether repeated elements can exist in this collection.
    **/
-  public static final String HAS_DUPLICATES = "hasDuplicates";
+  public static final /*@Interned*/ String HAS_DUPLICATES = "hasDuplicates";
 
   /**
    * Whether order matters.
    **/
-  public static final String HAS_ORDER = "hasOrder";
+  public static final /*@Interned*/ String HAS_ORDER = "hasOrder";
 
   /**
    * Whether taking the size of this matters.
    **/
-  public static final String HAS_SIZE = "hasSize";
+  public static final /*@Interned*/ String HAS_SIZE = "hasSize";
 
   /**
    * Java-specific. The package name of the class that declares this
    * variable, if the variable is a field. If it's not a field of some
    * class, the value of this key is "no_package_name_string".
    */
-  public static final String PACKAGE_NAME = "declaringClassPackageName";
+  public static final /*@Interned*/ String PACKAGE_NAME = "declaringClassPackageName";
 
-  public static final String NO_PACKAGE_NAME = "no_package_name_string";
+  public static final /*@Interned*/ String NO_PACKAGE_NAME = "no_package_name_string";
 
   /**
    * Whether null has a special meaning for this variable or its members.
    **/
-  public static final String HAS_NULL = "hasNull";
+  public static final /*@Interned*/ String HAS_NULL = "hasNull";
 
-  public static final String TRUE = "true";
-  public static final String FALSE = "false";
+  public static final /*@Interned*/ String TRUE = "true";
+  public static final /*@Interned*/ String FALSE = "false";
 
   /**
    * Whether this variable is an inline structure or a reference to
@@ -84,7 +84,7 @@ public final class VarInfoAux
    * daikon (eg, data structure repair) need other information about
    * the variable
    */
-  public static final String IS_STRUCT = "isStruct";
+  public static final /*@Interned*/ String IS_STRUCT = "isStruct";
 
   /**
    * Return an interned VarInfoAux that represents a given string.
@@ -103,22 +103,21 @@ public final class VarInfoAux
     tok.quoteChar('\"');
     tok.ordinaryChars(',', ',');
     tok.ordinaryChars('=', '=');
-    Map<String,String> map = theDefault.map;
+    Map</*@Interned*/ String,/*@Interned*/ String> map = theDefault.map;
 
     String key = "";
     String value = "";
     boolean seenEqual = false;
     for (int tokInfo = tok.nextToken(); tokInfo != StreamTokenizer.TT_EOF;
          tokInfo = tok.nextToken()) {
-      if (map == theDefault.map) {
-        // We use default values if none are specified We initialize
-        // here rather than above to save time when there are no
-        // tokens.
+      if (map == theDefault.map) { // interned; initialization-checking pattern
+        // We use default values if none are specified.  We initialize
+        // here rather than above to save time when there are no tokens.
 
-        map = new HashMap<String,String>(theDefault.map);
+        map = new HashMap</*@Interned*/ String,/*@Interned*/ String>(theDefault.map);
       }
 
-      String token;
+      /*@Interned*/ String token;
       if (tok.ttype == StreamTokenizer.TT_WORD || tok.ttype == '\"') {
         token = tok.sval.trim().intern();
       } else {
@@ -156,7 +155,7 @@ public final class VarInfoAux
     /*@Interned*/ VarInfoAux result = resultUninterned.intern();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("New parse " + result);
-      debug.fine ("Intern table size: " + new Integer(theMap.size()));
+      debug.fine ("Intern table size: " + new Integer(interningMap.size()));
     }
     return result;
   }
@@ -179,7 +178,7 @@ public final class VarInfoAux
   /**
    * Map for interning.
    **/
-  private static Map<VarInfoAux,/*@Interned*/ VarInfoAux> theMap = null;
+  private static Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
 
 
 
@@ -206,7 +205,7 @@ public final class VarInfoAux
    * Make the default map here.
    **/
   private VarInfoAux () {
-    HashMap<String, String> defaultMap = new HashMap<String,String>();
+    HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap = new HashMap</*@Interned*/ String,/*@Interned*/ String>();
     // The following are default values.
     defaultMap.put (HAS_DUPLICATES, TRUE);
     defaultMap.put (HAS_ORDER, TRUE);
@@ -223,7 +222,7 @@ public final class VarInfoAux
   /**
    * Create a new VarInfoAux with default options.
    **/
-  private VarInfoAux (Map<String,String> map) {
+  private VarInfoAux (Map</*@Interned*/ String,/*@Interned*/ String> map) {
     this.map = map;
     this.isInterned = false;
   }
@@ -259,19 +258,20 @@ public final class VarInfoAux
    * Returns canonical representation of this.  Doesn't need to be
    * called by outside classes because these are always interned.
    **/
+  @SuppressWarnings("interned")
   public /*@Interned*/ VarInfoAux intern() {
     if (this.isInterned) return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
 
-    if (theMap == null) {
-      theMap = new HashMap<VarInfoAux,/*@Interned*/ VarInfoAux>();
+    if (interningMap == null) {
+      interningMap = new HashMap<VarInfoAux,/*@Interned*/ VarInfoAux>();
     }
 
     /*@Interned*/ VarInfoAux result;
-    if (theMap.containsKey(this)) {
-      result = theMap.get(this);
+    if (interningMap.containsKey(this)) {
+      result = interningMap.get(this);
     } else {
       // Intern values in map
-      theMap.put (this, (/*@Interned*/ VarInfoAux) this); // cast is redundant (except in JSR 308)
+      interningMap.put (this, (/*@Interned*/ VarInfoAux) this); // cast is redundant (except in JSR 308)
       result = (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
       this.isInterned = true;
     }
@@ -300,7 +300,7 @@ public final class VarInfoAux
    * Return a new VarInfoAux with the desired value set.
    * Does not modify this.
    **/
-  public VarInfoAux setValue (String key, String value) {
+  public /*@Interned*/ VarInfoAux setValue (String key, String value) {
     HashMap<String,String> newMap = new HashMap<String,String> (this.map);
     newMap.put (key.intern(), value.intern());
     return new VarInfoAux(newMap).intern();

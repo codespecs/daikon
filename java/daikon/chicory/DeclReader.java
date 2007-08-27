@@ -1,14 +1,16 @@
 package daikon.chicory;
 
-import java.util.*;
-import java.io.*;
+import checkers.quals.Interned;
 
 import utilMDE.*;
+
+import java.util.*;
+import java.io.*;
 
 /**
  * Reads declaration files and provides methods to access the information
  * within them.  A declaration file consists of a number of program points
- * and the variables for each program point
+ * and the variables for each program point.
  */
 public class DeclReader {
 
@@ -57,14 +59,14 @@ public class DeclReader {
   /**
    * Information about variables within a program point
    */
-  public static class VarInfo {
+  public static class DeclVarInfo {
     public String name;
     public String type;
     public String rep_type;
     public String comparability;
     public int index;
 
-    public VarInfo (String name, String type, String rep_type,
+    public DeclVarInfo (String name, String type, String rep_type,
                     String comparability, int index) {
       this.name = name;
       this.type = type;
@@ -135,7 +137,7 @@ public class DeclReader {
     /**
      * Reads a single value for this variable and returns it.
      */
-    public Object read_data (MultiReader reader) throws IOException {
+    public /*@Interned*/ Object read_data (MultiReader reader) throws IOException {
       String var_name = reader.readLine();
       if (!var_name.equals (this.name))
         throw new Error (var_name + " found where " + this.name
@@ -152,7 +154,7 @@ public class DeclReader {
           System.out.printf ("Unexpected integer value '%s', for variable %s "
                              + "treated as nonsensical%n", value, this.name);
         }
-        return (val);
+        return (Intern.intern(val));
       } else if (is_double()){
         Double val = null;
         try {
@@ -161,7 +163,7 @@ public class DeclReader {
           System.out.printf ("Unexpected double value '%s', for variable %s "
                              + "treated as nonsensical%n", value, this.name);
         }
-        return (val);
+        return (Intern.intern(val));
       } else if (is_string()) {
         if (value.startsWith("\"") && value.endsWith("\""))
           value = value.substring (1, value.length()-1);
@@ -175,7 +177,7 @@ public class DeclReader {
 
     }
 
-}
+  }
 
   /**
    * Information about the program point that is contained in the decl
@@ -184,7 +186,7 @@ public class DeclReader {
    */
   public static class DeclPpt {
     public String name;
-    public HashMap<String,VarInfo> vars = new LinkedHashMap<String,VarInfo>();
+    public HashMap<String,DeclVarInfo> vars = new LinkedHashMap<String,DeclVarInfo>();
 
     /**
      * List of values for the program point.  There is one entry in
@@ -192,7 +194,7 @@ public class DeclReader {
      * entry is a list of the values for each variable in the same
      * order as the variables were defined
      **/
-    List<List<Object>> data_values = new ArrayList<List<Object>>();
+    List<List</*@Interned*/ Object>> data_values = new ArrayList<List</*@Interned*/ Object>>();
 
     public DeclPpt (String name) {
       this.name = name;
@@ -202,7 +204,7 @@ public class DeclReader {
      * Read a single variable declaration from decl_file.  The file
      * must be positioned immediately before the variable name
      */
-    public VarInfo read_var (MultiReader decl_file)
+    public DeclVarInfo read_var (MultiReader decl_file)
       throws java.io.IOException{
 
       String name = decl_file.readLine().intern();
@@ -210,7 +212,7 @@ public class DeclReader {
       String rep_type = decl_file.readLine().intern();
       String comparability = decl_file.readLine().intern();
 
-      VarInfo var = new VarInfo (name, type, rep_type, comparability,
+      DeclVarInfo var = new DeclVarInfo (name, type, rep_type, comparability,
                                  vars.size());
       vars.put (name, var);
       return (var);
@@ -220,19 +222,19 @@ public class DeclReader {
      * Adds a record of data for this ppt.  The data must have one element
      * for each variable in the ppt and be ordered in the same way
      */
-    public void add_var_data (List<Object> var_data_list) {
+    public void add_var_data (List</*@Interned*/ Object> var_data_list) {
       assert var_data_list.size() == vars.size();
       data_values.add (var_data_list);
     }
 
-    public List<List<Object>> get_var_data() {
+    public List<List</*@Interned*/ Object>> get_var_data() {
       return data_values;
     }
 
     /**
-     * Returns the VarInfo named var_name or null if it doesn't exist
+     * Returns the DeclVarInfo named var_name or null if it doesn't exist
      */
-    public VarInfo find_var (String var_name) {
+    public DeclVarInfo find_var (String var_name) {
       return vars.get (var_name);
     }
 
@@ -251,8 +253,8 @@ public class DeclReader {
     }
 
     /** Returns the list of variables in their standard order **/
-    public List<VarInfo> get_all_vars() {
-      return new ArrayList<VarInfo> (vars.values());
+    public List<DeclVarInfo> get_all_vars() {
+      return new ArrayList<DeclVarInfo> (vars.values());
     }
 
   }
@@ -392,9 +394,9 @@ public class DeclReader {
         int ppt_total_set_size = 0;
 
         // Build a map from comparabilty to all of the variables with that comp
-        Map<String,List<VarInfo>> comp_map
-          = new LinkedHashMap<String,List<VarInfo>>();
-        for (VarInfo vi : ppt.vars.values()) {
+        Map<String,List<DeclVarInfo>> comp_map
+          = new LinkedHashMap<String,List<DeclVarInfo>>();
+        for (DeclVarInfo vi : ppt.vars.values()) {
 
           // Update the map that tracks the declared types for each rep type
           Map<String,Integer> dec_map = rep_map.get (vi.get_rep_type());
@@ -417,14 +419,14 @@ public class DeclReader {
                                vi.rep_type);
           String comp = vi.get_basic_comparability();
           if (!comp_map.containsKey (comp)) {
-            comp_map.put (comp, new ArrayList<VarInfo>());
+            comp_map.put (comp, new ArrayList<DeclVarInfo>());
           }
-          List<VarInfo> vi_list = comp_map.get (comp);
+          List<DeclVarInfo> vi_list = comp_map.get (comp);
           vi_list.add (vi);
         }
 
         // Print out the variables with each comparability
-        for (List<VarInfo> vi_list : comp_map.values()) {
+        for (List<DeclVarInfo> vi_list : comp_map.values()) {
           num_sets++;
           total_set_size += vi_list.size();
           if (print_each_set) {
@@ -477,7 +479,7 @@ public class DeclReader {
     for (DeclPpt ppt : ppts.values()) {
 
       // Loop through each variable
-      for (VarInfo vi : ppt.vars.values()) {
+      for (DeclVarInfo vi : ppt.vars.values()) {
 
         // Determine the comparabilty for this declared type.  Hashcodes
         // are not included because hashcodes of different declared types
@@ -510,7 +512,7 @@ public class DeclReader {
     for (DeclPpt ppt : ppts.values()) {
 
       // Loop through each variable
-      for (VarInfo vi : ppt.vars.values()) {
+      for (DeclVarInfo vi : ppt.vars.values()) {
 
         // Determine the comparabilty for this declared type.  Hashcodes
         // are not included because hashcodes of different declared types
@@ -545,7 +547,7 @@ public class DeclReader {
     for (DeclPpt ppt : ppts.values()) {
 
       // Loop through each variable
-      for (VarInfo vi : ppt.vars.values()) {
+      for (DeclVarInfo vi : ppt.vars.values()) {
 
         // Determine the comparabilty for this rep type.
         String rep_type = vi.get_rep_type();
@@ -586,7 +588,7 @@ public class DeclReader {
       decl_file.printf ("%nDECLARE%n%s%n", ppt.name);
 
       // Loop through each variable
-      for (VarInfo vi : ppt.vars.values()) {
+      for (DeclVarInfo vi : ppt.vars.values()) {
         decl_file.printf ("%s%n%s%n%s%n%s%n", vi.get_name(), vi.get_type(),
                           vi.get_rep_type(), vi.get_comparability());
       }

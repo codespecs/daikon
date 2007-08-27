@@ -15,6 +15,8 @@ import daikon.Quantify.QuantifyReturn;
 import utilMDE.*;
 import static daikon.FileIO.VarDefinition;
 
+import checkers.quals.Interned;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -29,7 +31,7 @@ import java.io.*;
  * also includes info about the variable's name, its declared type, its
  * file representation type, its internal type, and its comparability.
  **/
-public final class VarInfo implements Cloneable, Serializable {
+public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -65,7 +67,7 @@ public final class VarInfo implements Cloneable, Serializable {
    * points, because two different program points could contain unrelated
    * variables named "x".
    **/
-  private VarInfoName var_info_name; // interned
+  private /*@Interned*/ VarInfoName var_info_name; // interned
 
   /**
    * Name as specified in the program point declaration.  VarInfoName
@@ -75,7 +77,7 @@ public final class VarInfo implements Cloneable, Serializable {
   private String str_name; // interned
 
   /** returns the interned name of the variable **/
-  public String name() {
+  public /*@Interned*/ String name() {
     if (FileIO.new_decl_format)
       return str_name;
     else
@@ -83,7 +85,7 @@ public final class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns the original name of the variable from the program point declaration. **/
-  public String str_name() {
+  public /*@Interned*/ String str_name() {
     return str_name;
   }
 
@@ -92,7 +94,7 @@ public final class VarInfo implements Cloneable, Serializable {
    * within Daikon as these types vary with program language and
    * the like.  It's here more for information than anything else.
    **/
-  public ProglangType type; // interned
+  public ProglangType type; // interned (as are all ProglangType objects)
 
   /**
    * Type as written in the data trace file -- i.e., it is the
@@ -105,7 +107,7 @@ public final class VarInfo implements Cloneable, Serializable {
    * various sizes) and floats.
    * (In the variable name, "rep" stands for "representation".)
    **/
-  public ProglangType file_rep_type; // interned
+  public ProglangType file_rep_type; // interned (as are all ProglangType objects)
 
   /**
    * Type as internally stored by Daikon.  It contains less
@@ -115,7 +117,7 @@ public final class VarInfo implements Cloneable, Serializable {
    *
    * @see ProglangType#fileTypeToRepType()
    **/
-  public ProglangType rep_type; // interned
+  public ProglangType rep_type; // interned (as are all ProglangType objects)
 
   /** Comparability info. **/
   public VarComparability comparability;
@@ -448,7 +450,7 @@ public final class VarInfo implements Cloneable, Serializable {
       else {  // one of the arguments has a different parent variable name
         String args = "";
         for (VarInfo vi : bases) {
-          if (args != "")       // interned
+          if (args != "")       // "interned"; initialization-checking pattern
             args += ",";
           args += vi.parent_variable;
         }
@@ -1337,7 +1339,7 @@ public final class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns the variable (if any) the represents the size of this sequence **/
+  /** Returns the variable (if any) that represents the size of this sequence **/
   public VarInfo sequenceSize() {
     if (sequenceSize != null)
       return sequenceSize;
@@ -1347,7 +1349,7 @@ public final class VarInfo implements Cloneable, Serializable {
     for (int i = varinfo_index + 1; i < vis.length; i++) {
       VarInfo vi = vis[i];
       if ((vi.derived instanceof SequenceLength)
-        && (((SequenceLength) vi.derived).base == this)) {
+          && (((SequenceLength) vi.derived).base == this)) {
         sequenceSize = vi;
         return sequenceSize;
       }
@@ -2625,7 +2627,7 @@ public final class VarInfo implements Cloneable, Serializable {
   /**
    * Adds a subscript (or sequence) to an array variable.  This should
    * really just just substitute for '..', but the dots are currently
-   * removed for back compatability
+   * removed for back compatability.
    */
   public String apply_subscript (String subscript) {
     if (FileIO.new_decl_format) {
@@ -2640,13 +2642,13 @@ public final class VarInfo implements Cloneable, Serializable {
   /**
    * Adds a subscript (or subsequence) to an array name.  This should
    * really just substitute for '..', but the dots are currently removed
-   * for back compatibility
+   * for back compatibility.
    */
   public static String apply_subscript (String sequence, String subscript) {
     if (FileIO.new_decl_format) {
       return sequence.replace ("[..]", "[" + subscript + "]");
     } else {
-        return sequence.replace ("[]", "[" + subscript + "]");
+      return sequence.replace ("[]", "[" + subscript + "]");
     }
   }
 
@@ -2750,7 +2752,7 @@ public final class VarInfo implements Cloneable, Serializable {
    * Temporary to let things compile now that name is private.  Eventually
    * this should be removed.
    */
-  public VarInfoName get_VarInfoName() {
+  public /*@Interned*/ VarInfoName get_VarInfoName() {
     return (var_info_name); // vin ok
   }
 
@@ -3029,7 +3031,7 @@ public final class VarInfo implements Cloneable, Serializable {
   /**
    * Return the name of this variable in its prestate (orig)
    */
-  public String prestate_name() {
+  public /*@Interned*/ String prestate_name() {
     return ("orig(" + name() + ")").intern();
   }
 
@@ -3042,13 +3044,13 @@ public final class VarInfo implements Cloneable, Serializable {
    * (it seems) the same length approach for both, so we don't check isArray()
    */
   public String get_simplify_size_name() {
-    String result = null;
+    /*@Interned*/ String result = null;
     if (!file_rep_type.isArray() || isDerived())
       result = null;
     else
       result = get_length().simplify_name().intern();
 
-    String old_result = null;
+    /*@Interned*/ String old_result = null;
     if (!var_info_name.isApplySizeSafe()) // vin ok
       old_result = null;
     else
@@ -3601,7 +3603,7 @@ public final class VarInfo implements Cloneable, Serializable {
                                 int begin_shift, VarInfo end, int end_shift) {
 
     String begin_str = inside_name (begin, seq.isPrestate(), begin_shift);
-    if (begin_str == "")        // interned
+    if (begin_str == "") // interned (if the null string, not interned otherwise)
       begin_str = "0";
     String end_str = inside_name (end, seq.isPrestate(), end_shift);
 
@@ -3635,7 +3637,7 @@ public final class VarInfo implements Cloneable, Serializable {
                               seq.comparability, seq.aux);
     vi.setup_derived_base (seq, begin, end);
     vi.str_name = seq.apply_subscript (String.format ("%s..%s", begin_str,
-                                                      end_str));
+                                                      end_str)).intern();
 
     // If there is a parent ppt (set in setup_derived_base), set the
     // parent variable accordingly.  If all of the original variables, used
@@ -3712,7 +3714,7 @@ public final class VarInfo implements Cloneable, Serializable {
                               VarInfoAux.getDefault());
     vi.setup_derived_base (seq, index);
     vi.var_kind = VarInfo.VarKind.FIELD;
-    vi.str_name = seq.apply_subscript (index_str);
+    vi.str_name = seq.apply_subscript (index_str).intern();
     if (vi.parent_ppt != null) {
       if ((seq.parent_variable == null) &&
           ((index == null) || (index.parent_variable == null)))
@@ -3808,10 +3810,10 @@ public final class VarInfo implements Cloneable, Serializable {
     // Force orig to the outside if specified.
     if (swap_orig) {
       vi.str_name = String.format ("orig(%s(%s))%s", func_name,
-                                   seq.postState.name(), shift_str);
+                                   seq.postState.name(), shift_str).intern();
     } else {
       vi.str_name = String.format ("%s(%s)%s", func_name, seq.name(),
-                                   shift_str);
+                                   shift_str).intern();
     }
 
     if (vi.parent_ppt != null) {
@@ -3850,7 +3852,7 @@ public final class VarInfo implements Cloneable, Serializable {
     vi.function_args = null;
     vi.relative_name = func_name;
 
-    vi.str_name = String.format ("%s.%s()", str.name(), func_name);
+    vi.str_name = String.format ("%s.%s()", str.name(), func_name).intern();
 
     if (vi.parent_ppt != null) {
       if (str.parent_variable == null)

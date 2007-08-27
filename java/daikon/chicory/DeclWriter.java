@@ -187,7 +187,7 @@ public class DeclWriter extends DaikonWriter {
           String comp_str = curInfo.getCompareString();
           if (decl_ppt != null) {
             comp_str = "-1";
-            DeclReader.VarInfo varinfo = decl_ppt.find_var (curInfo.getName());
+            DeclReader.DeclVarInfo varinfo = decl_ppt.find_var (curInfo.getName());
             if (varinfo != null)
                 comp_str = varinfo.get_comparability();
           }
@@ -543,7 +543,7 @@ public class DeclWriter extends DaikonWriter {
         String comp_str = var.getCompareString();
         if (compare_ppt != null) {
           comp_str = "-1";
-          DeclReader.VarInfo varinfo = compare_ppt.find_var (var.getName());
+          DeclReader.DeclVarInfo varinfo = compare_ppt.find_var (var.getName());
           if (varinfo != null)
             comp_str = varinfo.get_comparability();
         }

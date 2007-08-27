@@ -4,6 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.io.IOException;
 import utilMDE.*;
+import checkers.quals.Interned;
 
 /**
  * PptName is an immutable ADT that represents naming data associated with a
@@ -23,13 +24,13 @@ public class PptName
   // Any of these except fullname can be null.  All but fullname are
   // derived from fullname.
   // These cannot be "final": they must be re-interned upon deserialization.
-  private String fullname;   // interned full program point name
+  private /*@Interned*/ String fullname;   // interned full program point name
   // fn_name and point together comprise fullname
-  private String fn_name;    // interned; the part of fullname before ":::"
-  private String point;      // interned post-separator (separator is ":::")
+  private /*@Interned*/ String fn_name;    // interned; the part of fullname before ":::"
+  private /*@Interned*/ String point;      // interned post-separator (separator is ":::")
   // cls and method together comprise fn_name
-  private String cls;        // interned fully-qualified class name
-  private String method;     // interned method signature, including types
+  private /*@Interned*/ String cls;        // interned fully-qualified class name
+  private /*@Interned*/ String method;     // interned method signature, including types
 
   // Representation invariant:
   //

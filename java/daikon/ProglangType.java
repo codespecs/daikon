@@ -35,7 +35,7 @@ import checkers.quals.Interned;
 // integral_types = ("int", "char", "float", "double", "integral", "boolean")
 // known_types = integral_types + ("pointer", "address")
 
-public final class ProglangType
+public final /*@Interned*/ class ProglangType
   implements Serializable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -44,7 +44,7 @@ public final class ProglangType
   static final long serialVersionUID = 20020122L;
 
   // With Vector search, this func was a hotspot (38%), so use a Map.
-  private static HashMap<String,Vector<ProglangType>> all_known_types = new HashMap<String,Vector<ProglangType>>();
+  private static HashMap</*@Interned*/ String,Vector<ProglangType>> all_known_types = new HashMap</*@Interned*/ String,Vector<ProglangType>>();
 
   // The set of (interned) names of classes that implement java.util.List.
   public static HashSet<String> list_implementors = new HashSet<String>();
@@ -61,8 +61,8 @@ public final class ProglangType
     list_implementors.add("java.util.Stack");
   }
 
-  private String base;          // interned name of base type
-  public String base() { return base; }
+  private /*@Interned*/ String base;          // interned name of base type
+  public /*@Interned*/ String base() { return base; }
   private int dimensions;       // number of dimensions
   public int dimensions() { return dimensions; }
   public boolean isArray() { return dimensions > 0; }
@@ -83,7 +83,7 @@ public final class ProglangType
    * representation.
    * basetype should be interned.
    **/
-  private ProglangType(String basetype, int dimensions) {
+  private ProglangType(/*@Interned*/ String basetype, int dimensions) {
     Assert.assertTrue(basetype == basetype.intern());
     this.base = basetype;
     this.dimensions = dimensions;
@@ -119,8 +119,8 @@ public final class ProglangType
       dims++;
       new_base = new_base.substring(0, new_base.length() - 2);
     }
-    new_base = new_base.intern();
-    return intern(new_base, dims);
+    /*@Interned*/ String new_base_interned = new_base.intern();
+    return intern(new_base_interned, dims);
   }
 
   /**
@@ -171,7 +171,7 @@ public final class ProglangType
 
   // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
   /** @param t_base must be interned **/
-  private static ProglangType find(String t_base, int t_dims) {
+  private static ProglangType find(/*@Interned*/ String t_base, int t_dims) {
 // Disabled for performance reasons! this assertion is sound though:
 //    Assert.assertTrue(t_base == t_base.intern());
 
@@ -203,15 +203,15 @@ public final class ProglangType
   //   return t;
   // }
 
-  private static ProglangType intern(String t_base, int t_dims) {
-// Disabled for performance reasons! this assertion is sound though:
-//    Assert.assertTrue(t_base == t_base.intern());
+  private static ProglangType intern(/*@Interned*/ String t_base, int t_dims) {
+    // Disabled for performance reasons! this assertion is sound though:
+    //    Assert.assertTrue(t_base == t_base.intern());
     ProglangType result = find(t_base, t_dims);
     if (result != null) {
       return result;
     }
     result = new ProglangType(t_base, t_dims);
-    result = (ProglangType) new ProglangType(t_base, t_dims); // cast is redundant (except in JSR 308)
+    // result = (ProglangType) new ProglangType(t_base, t_dims); // cast is redundant (except in JSR 308)
 
     Vector<ProglangType> v = all_known_types.get(t_base);
     if (v == null) {
@@ -249,35 +249,35 @@ public final class ProglangType
   // array is type.base() == ProglangType.BASE_CHAR.
 
   // Primitive types
-  static final String BASE_BOOLEAN = "boolean";
-  static final String BASE_BYTE = "byte";
-  static final String BASE_CHAR = "char";
-  static final String BASE_DOUBLE = "double";
-  static final String BASE_FLOAT = "float";
-  static final String BASE_INT = "int";
-  static final String BASE_LONG = "long";
-  static final String BASE_SHORT = "short";
+  static final /*@Interned*/ String BASE_BOOLEAN = "boolean";
+  static final /*@Interned*/ String BASE_BYTE = "byte";
+  static final /*@Interned*/ String BASE_CHAR = "char";
+  static final /*@Interned*/ String BASE_DOUBLE = "double";
+  static final /*@Interned*/ String BASE_FLOAT = "float";
+  static final /*@Interned*/ String BASE_INT = "int";
+  static final /*@Interned*/ String BASE_LONG = "long";
+  static final /*@Interned*/ String BASE_SHORT = "short";
 
   // Nonprimitive types
-  static final String BASE_OBJECT = "java.lang.Object";
-  static final String BASE_STRING = "java.lang.String";
-  static final String BASE_INTEGER = "java.lang.Integer";
+  static final /*@Interned*/ String BASE_OBJECT = "java.lang.Object";
+  static final /*@Interned*/ String BASE_STRING = "java.lang.String";
+  static final /*@Interned*/ String BASE_INTEGER = "java.lang.Integer";
   // "hashcode", "address", and "pointer" are identical;
   // "hashcode" is preferred.
-  static final String BASE_HASHCODE = "hashcode";
-  // static final String BASE_ADDRESS = "address";
-  // static final String BASE_POINTER = "pointer";
+  static final /*@Interned*/ String BASE_HASHCODE = "hashcode";
+  // static final /*@Interned*/ String BASE_ADDRESS = "address";
+  // static final /*@Interned*/ String BASE_POINTER = "pointer";
 
   // avoid duplicate allocations
   // No need for the Integer versions; use Long instead.
-  // static final Integer IntegerZero = Intern.internedInteger(0);
-  // static final Integer IntegerOne = Intern.internedInteger(1);
-  static final Long LongZero = Intern.internedLong(0);
-  static final Long LongOne = Intern.internedLong(1);
-  static final Double DoubleZero = Intern.internedDouble(0);
-  static final Double DoubleNaN = Intern.internedDouble(Double.NaN);
-  static final Double DoublePositiveInfinity = Intern.internedDouble(Double.POSITIVE_INFINITY);
-  static final Double DoubleNegativeInfinity = Intern.internedDouble(Double.NEGATIVE_INFINITY);
+  // static final /*@Interned*/ Integer IntegerZero = Intern.internedInteger(0);
+  // static final /*@Interned*/ Integer IntegerOne = Intern.internedInteger(1);
+  static final /*@Interned*/ Long LongZero = Intern.internedLong(0);
+  static final /*@Interned*/ Long LongOne = Intern.internedLong(1);
+  static final /*@Interned*/ Double DoubleZero = Intern.internedDouble(0);
+  static final /*@Interned*/ Double DoubleNaN = Intern.internedDouble(Double.NaN);
+  static final /*@Interned*/ Double DoublePositiveInfinity = Intern.internedDouble(Double.POSITIVE_INFINITY);
+  static final /*@Interned*/ Double DoubleNegativeInfinity = Intern.internedDouble(Double.NEGATIVE_INFINITY);
 
   /*
    *  Now that all other static initialisers are done, it is safe to
@@ -578,7 +578,7 @@ public final class ProglangType
     return isIntegral();
   }
 
-  public boolean isScalar() {
+  public boolean isScalar() @Interned {
     // For reptypes, checking against INT is sufficient, rather than
     // calling isIntegral().
     return (isIntegral()
@@ -586,7 +586,7 @@ public final class ProglangType
             || (this == BOOLEAN));
   }
 
-  public boolean baseIsScalar() {
+  public boolean baseIsScalar() @Interned {
     return (baseIsIntegral()
             || (base == BASE_BOOLEAN)
             || (base == BASE_HASHCODE));
@@ -648,7 +648,7 @@ public final class ProglangType
    * children of a superclass, even though it's true for the
    * superclass.
    **/
-  public boolean comparableOrSuperclassEitherWay(ProglangType other) {
+  public boolean comparableOrSuperclassEitherWay(ProglangType other) @Interned {
     if (this == other)          // ProglangType objects are interned
       return true;
     if (this.dimensions != other.dimensions)
@@ -672,7 +672,7 @@ public final class ProglangType
    * not the other way around.  This is a transitive method, but not
    * reflexive.
    **/
-  public boolean comparableOrSuperclassOf (ProglangType other) {
+  public boolean comparableOrSuperclassOf (ProglangType other) @Interned {
     if (this == other)          // ProglangType objects are interned
       return true;
     if (this.dimensions != other.dimensions)
@@ -702,7 +702,7 @@ public final class ProglangType
   public static String toString (ProglangType[] types) {
     String out = "[";
     for (int i = 0; i < types.length; i++) {
-      if (out != "[")           // interned
+      if (out != "[")           // interned; initialization-checking pattern
         out += ", ";
       out += types[i];
     }
