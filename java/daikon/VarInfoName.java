@@ -641,7 +641,7 @@ public abstract class VarInfoName
     // This code used to loop as long as node was in result, but this isn't
     // necessary -- all occurances are replaced by replacer.
 
-    /*@Interned*/ VarInfoName result = r.replace(result).intern();
+    /*@Interned*/ VarInfoName result = r.replace(this).intern();
     return result;
   }
 
