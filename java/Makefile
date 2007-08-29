@@ -606,6 +606,21 @@ jlint:
 audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
+
+# Interned type qualifier checker
+
+# JAVAC_ARGS ?= -g -target 5 -typeprocessor checkers.interned.InternedChecker
+JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
+JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=^daikon\.Daikon
+# Remove files that trigger bugs in the checker
+INTERNED_JAVA_FILES_SKIP = -skip FileIO.java -skip VarInfoName.java -skip WSMatch.java
+INTERNED_JAVA_FILES = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} '@Interned')
+
+intern:
+	# ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVAC_INTERNED_EXCLUDE} ${INTERNED_JAVA_FILES}
+	JAVAC_JAVA_ARGS=${JAVAC_INTERNED_EXCLUDE} ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
+
+
 ###
 ### Testing
 ###
