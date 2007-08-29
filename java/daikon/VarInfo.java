@@ -74,7 +74,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * sometimes changes this name as part of parsing so that
    * VarInfoName.name() doesn't return the original name.
    */
-  private String str_name; // interned
+  private /*@Interned*/ String str_name; // interned
 
   /** returns the interned name of the variable **/
   public /*@Interned*/ String name() {
