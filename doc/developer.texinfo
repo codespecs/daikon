@@ -1558,7 +1558,6 @@ StackAr.txt-esc.goal
 StackAr.txt-jml.goal
 StackAr.txt-merge-esc.goal
 StackAr.txt-merge-jml.goal
-StackAr.txt-repair.goal
 @end example
 
 The @file{Makefile} must contain the following entries.

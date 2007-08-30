@@ -1333,9 +1333,6 @@ VarInfoName issues:
   - ioa_name returns the name in IOA format.  Do we still use this?  Does
     it make sense if the input langauge is not IOA?
 
-  - repair_name returns the name in 'repair' format.  Is this the same as
-    C?  Does it make sense if the input language is not C?
-
   - What does '$noprint' mean?  Why do we use this?  I'm guessing there
     some advantage to having format still return something but have
     PrintInvariants not print it.  But this seems like a somewhat awkward
@@ -1355,13 +1352,6 @@ VarInfoName issues:
 
   - There are at least 10 cached variables within each VarInfoName.  If 
     there are many instances, this could take up a fair amount of space.
-
-Repair Issues:
-
-  - It seems that creating a repair formatted invariant has side effects
-    that must be undone if the invariant is not printed (which occurs
-    if it includes noprint or >> or >>> or some other invariants not
-    supported by repair.  It is unclear why these side effects are necessary.
 
 Other issues:
 

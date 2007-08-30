@@ -2016,13 +2016,6 @@ Produces output in the format expected by the Simplify automated theorem
 prover; for details, see
 @uref{http://research.compaq.com/SRC/esc/simplify/InputSyntax.html}.
 
-@cindex repair output format
-@cindex output format, repair
-@cindex data structure repair output format
-@cindex output format, data structure repair
-@item repair format
-This format is used by automated data structure repair tools.
-
 @end table
 
 
