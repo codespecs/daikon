@@ -22,6 +22,13 @@ Further documentation can be found in:
 
 4.3.2 (September 1, 2007)
 
+Daikon
+
+  User-visible changes
+
+    Elminated support for the "repair" output format.  We are not aware of
+    users who are still utilizing this format; let us know if you are.
+
 Kvasir
 
   Bug fixes
