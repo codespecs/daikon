@@ -91,11 +91,6 @@ public final class TestUtilMDE extends TestCase {
     return a;
   }
 
-  public static void testTestUtilMDE() {
-    int[] a = new int[] { 3,4,5 };
-    assert_arrays_equals(int_iterator_array(int_array_iterator(a)), a);
-  }
-
   public static <T> Vector<T> toVector(Iterator<T> itor) {
     Vector<T> v = new Vector<T>();
     for ( ; itor.hasNext() ; ) {
@@ -1843,6 +1838,11 @@ public final class TestUtilMDE extends TestCase {
 
     // This is tested by the tokens methods.
     // public static Vector makeVector(Enumeration e)
+  }
+
+  public static void testTestUtilMDE() {
+    int[] a = new int[] { 3,4,5 };
+    assert_arrays_equals(int_iterator_array(int_array_iterator(a)), a);
   }
 
   public static void testWeakHasherMap() {
