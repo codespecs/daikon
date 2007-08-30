@@ -44,8 +44,6 @@ public class AndJoiner
     }
     if (format == OutputFormat.DAIKON) {
       return UtilMDE.join(invStrings, " and ");
-    } else if (format == OutputFormat.REPAIR) {
-      return UtilMDE.join(invStrings, " and ");
     } else if (format == OutputFormat.ESCJAVA || format.isJavaFamily()) {
       return "(" + UtilMDE.join(invStrings, ") && (") + ")";
     } else if (format == OutputFormat.SIMPLIFY) {

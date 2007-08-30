@@ -337,36 +337,6 @@ public class LOWERBOUND
 #endif
     }
 
-    if (format == OutputFormat.REPAIR) {
-
-      if (PrintInvariants.dkconfig_static_const_infer) {
-        for (VarInfo vi : pptt.var_infos) {
-          // Check is static constant, and variables are comparable
-          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-            // If variable is a double, then use fuzzy comparison
-            if (vi.rep_type == ProglangType.DOUBLE) {
-              Double constantVal = (Double)vi.constantValue();
-              if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
-                return "(" + name + " " + GTESTR + " " + vi.name() + ")";
-            }
-            // Otherwise just use the equals method
-            else {
-              Object constantVal = vi.constantValue();
-              if (constantVal.equals(MIN1)) {
-                return "(" + name + " " + GTESTR + " " + vi.name() + ")";
-              }
-            }
-          }
-        }
-      }
-
-#ifdef BASE_FLOAT
-      return "$noprintfloat(" + name + " " + GTESTR + " " + MIN1 + ")";
-#else
-      return "(" + name + " " + GTESTR + " " + MIN1 + ")";
-#endif
-    }
-
     return format_unimplemented(format);
   }
 #else
@@ -377,8 +347,6 @@ public class LOWERBOUND
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
-    } else if (format == OutputFormat.REPAIR) {
-      return format_repair();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
     } else if (format == OutputFormat.SIMPLIFY) {
@@ -415,34 +383,6 @@ public class LOWERBOUND
     }
 
     return var().name() + " elements " + GTESTR + " " + MIN1;
-  }
-
-  // ELTLOWEr || ELTUPPEr
-  public String format_repair() {
-    PptTopLevel pptt = ppt.parent;
-
-    if (PrintInvariants.dkconfig_static_const_infer) {
-      for (VarInfo vi : pptt.var_infos) {
-        if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-          // If variable is a double, then use fuzzy comparison
-          if (vi.rep_type == ProglangType.DOUBLE) {
-            Double constantVal = (Double)vi.constantValue();
-            if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
-              return var().repair_name() + GTESTR + " " + vi.name();
-            }
-          }
-          // Otherwise just use the equals method
-          else {
-            Object constantVal = vi.constantValue();
-            if (constantVal.equals(MIN1)) {
-              return var().repair_name() + GTESTR + " " + vi.name();
-            }
-          }
-        }
-      }
-    }
-
-    return var().repair_name() + GTESTR + " " + MIN1;
   }
 
   public String format_esc() {

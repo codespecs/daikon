@@ -27,9 +27,7 @@ public enum OutputFormat {
   /** Java Modeling Language */
   JML("JML"),
   /** Simplify theorem prover */
-  SIMPLIFY("Simplify"),
-  /** Data Structure Repair Format */
-  REPAIR("Repair");
+  SIMPLIFY("Simplify");
 
   String name;
 
@@ -59,7 +57,6 @@ public enum OutputFormat {
     if (name.compareToIgnoreCase(JAVA.name) == 0) { return JAVA; }
     if (name.compareToIgnoreCase(JML.name) == 0) { return JML; }
     if (name.compareToIgnoreCase(SIMPLIFY.name) == 0) { return SIMPLIFY; }
-    if (name.compareToIgnoreCase(REPAIR.name) == 0) { return REPAIR; }
     return null;
   }
 

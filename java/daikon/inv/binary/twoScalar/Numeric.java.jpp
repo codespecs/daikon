@@ -616,8 +616,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ 0 (MOD %var1% %var2%))");
-      if (format == OutputFormat.REPAIR)
-        return ("$noprint(%var1% % %var2% == 0)");
       else
 
         #if defined(TYPEDOUBLE)
@@ -794,8 +792,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (* %var2% %var2))");
-      else if (format == OutputFormat.REPAIR)
-        return ("%var1% == %var2%*%var2%");
       else if (format.isJavaFamily()) {
         #if defined(TYPEDOUBLE)
         return ("daikon.Quant.fuzzy.eq(%var1%, %var2%*%var2%)");
@@ -855,8 +851,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return ("(IMPLIES (EQ %var1% 0) (EQ %var2% 0))");
-      } else if (format == OutputFormat.REPAIR) {
-        return ("(%var1% != 0) or (%var2% = 0)");
       } else if (format.isJavaFamily()) {
         return ("(!(%var1% == 0)) || (%var2% == 0)");
       } else {
@@ -929,8 +923,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (~ %var2%))");
-      else if (format==OutputFormat.REPAIR)
-        return ("$noprint(%var1% == ~%var2%)");
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -978,8 +970,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
       else if (format == OutputFormat.DAIKON)
         return ("%var2% is a bitwise subset of %var1%");
-      else if (format == OutputFormat.REPAIR)
-        return ("$noprint(%var2% is a bitwise subset of %var1%)");
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1066,8 +1056,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (|java-&| %var1% %var2%) 0)");
-      if (format == OutputFormat.REPAIR)
-        return ("$noprint((%var1% & %var2%) == 0)");
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1139,8 +1127,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (|java->>| %var1% %var2%) 0)");
-      else if (format == OutputFormat.REPAIR)
-        return ("$noprint(%var1% >> %var2% == 0)");
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {

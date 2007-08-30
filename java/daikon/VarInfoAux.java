@@ -31,7 +31,7 @@ public final class VarInfoAux
    * elements, or whether there is a null at the end of this
    * collection that ends the collection.
    **/
-  public static final /*@Interned*/ String NULL_TERMINATING = "nullTerminating";
+  public static final String NULL_TERMINATING = "nullTerminating";
 
   /**
    * Whether this variable is a parameter to a method, or derived from
@@ -41,39 +41,39 @@ public final class VarInfoAux
    * parameter.  In Java, p.a is not a parameter, whereas in IOA, it
    * is.
    **/
-  public static final /*@Interned*/ String IS_PARAM = "isParam";
+  public static final String IS_PARAM = "isParam";
 
   /**
    * Whether repeated elements can exist in this collection.
    **/
-  public static final /*@Interned*/ String HAS_DUPLICATES = "hasDuplicates";
+  public static final String HAS_DUPLICATES = "hasDuplicates";
 
   /**
    * Whether order matters.
    **/
-  public static final /*@Interned*/ String HAS_ORDER = "hasOrder";
+  public static final String HAS_ORDER = "hasOrder";
 
   /**
    * Whether taking the size of this matters.
    **/
-  public static final /*@Interned*/ String HAS_SIZE = "hasSize";
+  public static final String HAS_SIZE = "hasSize";
 
   /**
    * Java-specific. The package name of the class that declares this
    * variable, if the variable is a field. If it's not a field of some
    * class, the value of this key is "no_package_name_string".
    */
-  public static final /*@Interned*/ String PACKAGE_NAME = "declaringClassPackageName";
+  public static final String PACKAGE_NAME = "declaringClassPackageName";
 
-  public static final /*@Interned*/ String NO_PACKAGE_NAME = "no_package_name_string";
+  public static final String NO_PACKAGE_NAME = "no_package_name_string";
 
   /**
    * Whether null has a special meaning for this variable or its members.
    **/
-  public static final /*@Interned*/ String HAS_NULL = "hasNull";
+  public static final String HAS_NULL = "hasNull";
 
-  public static final /*@Interned*/ String TRUE = "true";
-  public static final /*@Interned*/ String FALSE = "false";
+  public static final String TRUE = "true";
+  public static final String FALSE = "false";
 
   /**
    * Whether this variable is an inline structure or a reference to
@@ -82,9 +82,9 @@ public final class VarInfoAux
    * for invariants over its hashcode.  Front ends include references
    * to inlined structures as variables because some tools that follow
    * daikon (eg, data structure repair) need other information about
-   * the variable
+   * the variable.
    */
-  public static final /*@Interned*/ String IS_STRUCT = "isStruct";
+  public static final String IS_STRUCT = "isStruct";
 
   /**
    * Return an interned VarInfoAux that represents a given string.

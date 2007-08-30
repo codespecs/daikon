@@ -122,8 +122,8 @@ public abstract class VarInfoName
       if (lbracket >= 0) {
         String seqname = name.substring(0, lbracket) + "[]";
         String idxname = name.substring(lbracket + 1, name.length() - 1);
-        VarInfoName seq = parse(seqname);
-        VarInfoName idx = parse(idxname);
+        /*@Interned*/ VarInfoName seq = parse(seqname);
+        /*@Interned*/ VarInfoName idx = parse(idxname);
         return seq.applySubscript(idx);
       }
     }
@@ -170,40 +170,6 @@ public abstract class VarInfoName
   }
 
   /**
-   * This method returns a set that contains the given VarInfoName.
-   * JHP: This has something to do with repair.  It is unclear what a
-   * 'set' is in this context.
-   */
-  static public String getRealSet(VarInfo v, VarInfoName term) {
-    if (term instanceof Simple) {
-      Simple simple=(Simple)term;
-      return Repair.getRepair().getRealSet(simple.name,v.ppt);
-    } else if (term instanceof Field) {
-      Field nfield=(Field)term;
-      String r=Repair.getRepair().getRelation(v.ppt,getRealSet(v,nfield.term),nfield.field,nfield.name());
-      return Repair.getRepair().getRange(v.ppt,r);
-    } else if (term instanceof Elements) {
-      Elements e=(Elements) term;
-      String set=Repair.getRepair().generateRangeSet(v.ppt,e.getLowerBound(),e.getUpperBound());
-      return Repair.getRepair().convertArraytoSet(v.ppt,set,e,v);
-    } else if (term instanceof Subscript) {
-      Subscript s=(Subscript) term;
-      Elements e= s.sequence;
-      if (e.term instanceof Simple) {
-        return Repair.getRepair().getRealSet(((Simple)e.term).name+"["+s.index.name()+"]",v.ppt);
-      } else if (e.term instanceof Field) {
-        Field nfield=(Field)e.term;
-        String r=Repair.getRepair().getRelation(v.ppt,getRealSet(v,nfield.term),nfield.field+"["+s.index.name()+"]",nfield.name());
-        return Repair.getRepair().getRange(v.ppt,r);
-      } else return "$error3("+term.name()+")";
-    } else if (term instanceof Slice) {
-      Slice s=(Slice) term;
-      String set=Repair.getRepair().generateRangeSet(v.ppt,s.getLowerBound(),s.getUpperBound());
-      return Repair.getRepair().convertArraytoSet(v.ppt,set,s,v);
-    } else return "$error1("+term.name()+")";
-  }
-
-  /**
    * Return the String representation of this name in the default
    * output format.
    * @return the string representation (interned) of this name, in the
@@ -224,7 +190,7 @@ public abstract class VarInfoName
 
   /**
    * Returns the String representation of this name in the default output
-   * format.  Results are cached by name().
+   * format.  Results are interned, then cached by name().
    */
   protected abstract String name_impl();
 
@@ -259,7 +225,7 @@ public abstract class VarInfoName
    * @return the string representation (interned) of this name, in the
    * Simplify tool output format in the pre-state context.
    **/
-  public String simplify_name() {
+  public /*@Interned*/ String simplify_name() {
     return simplify_name(false);
   }
 
@@ -279,7 +245,7 @@ public abstract class VarInfoName
     }
     return simplify_name_cached[which];
   }
-  private /*@Interned*/ String[] simplify_name_cached = new String[2]; // each interned
+  private String[/*@Interned*/] simplify_name_cached = new String[@Interned 2]; // each interned
 
   /**
    * Returns the String representation of this name in the simplify
@@ -340,40 +306,6 @@ public abstract class VarInfoName
    * Cached and interned by java_name()
    */
   protected abstract String java_name_impl(VarInfo v);
-
-  /**
-   * Return the String representation of this name in the repair style
-   * output format.
-   *
-   * @return the string representation (interned) of this name, in the
-   * java style output format
-   **/
-  public /*@Interned*/ String repair_name(VarInfo v) {
-      return repair_name_impl(v).intern();
-  }
-  private /*@Interned*/ String repair_name_cached = null; // interned
-
-  /**
-   * Return the String representation of this name in the repair style
-   * output format.  Interned (but not cached) by repair_name()
-   */
-  protected abstract String repair_name_impl(VarInfo v);
-
-  /**
-   * Returns the name of the base of this variable which appears to be
-   * the variable in which this variable is nested (eg, the base of x.y
-   * is x) (jhp 3/30/2006, this comment is a guess)
-   */
-  public abstract VarInfoName getBase();
-
-  /**
-   * Returns the name with 'name' substituted for the base of the variable.
-   * Its not entirely clear what this is used for.  I'm guessing this
-   * default implementation is never right.
-   */
-  public String gen_name(String name) {
-    return name();
-  }
 
   /**
    * Return the String representation of this name in the JML style output
@@ -478,7 +410,6 @@ public abstract class VarInfoName
   public String name_using(OutputFormat format, VarInfo vi) {
 
     if (format == OutputFormat.DAIKON) return name();
-    if (format == OutputFormat.REPAIR) return repair_name(vi);
     if (format == OutputFormat.SIMPLIFY) return simplify_name();
     if (format == OutputFormat.ESCJAVA) return esc_name();
     if (format == OutputFormat.JAVA) return java_name(vi);
@@ -523,9 +454,9 @@ public abstract class VarInfoName
   // ============================================================
   // Helpful constants
 
-  public static final VarInfoName ZERO = parse("0");
-  public static final VarInfoName THIS = parse("this");
-  public static final VarInfoName ORIG_THIS = parse("this").applyPrestate();
+  public static final /*@Interned*/ VarInfoName ZERO = parse("0");
+  public static final /*@Interned*/ VarInfoName THIS = parse("this");
+  public static final /*@Interned*/ VarInfoName ORIG_THIS = parse("this").applyPrestate();
 
   // ============================================================
   // Interesting observers
@@ -540,7 +471,7 @@ public abstract class VarInfoName
   /**
    * @return the nodes of this, as given by an inorder traversal.
    **/
-  public Collection<VarInfoName> inOrderTraversal() {
+  public Collection</*@Interned*/ VarInfoName> inOrderTraversal() /*@Interned*/ {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
 
@@ -548,7 +479,7 @@ public abstract class VarInfoName
    * @return true iff the given node can be found in this.  If the
    * node has children, the whole subtree must match.
    **/
-  public boolean hasNode(VarInfoName node) {
+  public boolean hasNode(/*@Interned*/ VarInfoName node) {
     return inOrderTraversal().contains(node);
   }
 
@@ -589,7 +520,7 @@ public abstract class VarInfoName
    * @return true if the given node is in a prestate context within
    * this tree; the node must be a member of this tree.
    **/
-  public boolean inPrestateContext(VarInfoName node) {
+  public boolean inPrestateContext(/*@Interned*/ VarInfoName node) /*@Interned*/ {
     return (new NodeFinder(this, node)).inPre();
   }
 
@@ -597,7 +528,7 @@ public abstract class VarInfoName
    * @return true if every variable in the name is an orig(...)
    * variable.
    **/
-  public boolean isAllPrestate() {
+  public boolean isAllPrestate() /*@Interned*/ {
     return new IsAllPrestateVisitor(this).result();
   }
 
@@ -605,7 +536,7 @@ public abstract class VarInfoName
    * @return true if this VarInfoName contains a simple variable whose
    * name is NAME.
    **/
-  public boolean includesSimpleName(String name) {
+  public boolean includesSimpleName(String name) /*@Interned*/ {
     return new SimpleNamesVisitor(this).simples().contains(name);
   }
 
@@ -613,10 +544,10 @@ public abstract class VarInfoName
   // Special producers, or other helpers
 
   /**
-   * Replace the first instances of node by replacement, in the data
+   * Replace the first instance of node by replacement, in the data
    * structure rooted at this.
    **/
-  public /*@Interned*/ VarInfoName replace(VarInfoName node, VarInfoName replacement) {
+  public /*@Interned*/ VarInfoName replace(/*@Interned*/ VarInfoName node, /*@Interned*/ VarInfoName replacement) /*@Interned*/ {
     if (node == replacement)    // "interned": equality optimization pattern
       return this;
     Replacer r = new Replacer(node, replacement);
@@ -627,7 +558,7 @@ public abstract class VarInfoName
    * Replace all instances of node by replacement, in the data structure
    * rooted at this.
    **/
-  public /*@Interned*/ VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
+  public /*@Interned*/ VarInfoName replaceAll(/*@Interned*/ VarInfoName node, /*@Interned*/ VarInfoName replacement) /*@Interned*/ {
     if (node == replacement)    // "interned": equality optimization pattern
       return this;
 
@@ -652,7 +583,7 @@ public abstract class VarInfoName
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
-  public boolean equals(VarInfoName other) {
+  public boolean equals(/*@Interned*/ VarInfoName other) /*@Interned*/ {
     return ((other == this)     // "interned": equality optimization pattern
             || ((other != null)
                 && (this.repr().equals(other.repr()))));
@@ -729,8 +660,6 @@ public abstract class VarInfoName
       ioa_name_cached = ioa_name_cached.intern();
     if (java_name_cached != null)
       java_name_cached = java_name_cached.intern();
-    if (repair_name_cached != null)
-      repair_name_cached = repair_name_cached.intern();
     if (jml_name_cached != null)
       jml_name_cached = jml_name_cached.intern();
     if (dbc_name_cached != null)
@@ -798,32 +727,6 @@ public abstract class VarInfoName
     protected String java_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
     }
-
-    protected String repair_name_impl(VarInfo v) {
-      return repair_name(v,true);
-    }
-
-    public String repair_name(VarInfo v, boolean needrelation) {
-      if ("return".equals(name))
-	    return "$noprint(return)";
-      else if (name.indexOf("*")!=-1) {
-        // Throw away all of these...we don't have a good way to
-        //   handle them currently.
-        return "$noprint(name)";
-      } else if (Repair.getRepair().isForceSet()) { // can just return a set
-        String set=getRealSet(v,this);
-        Repair.getRepair().noForceSet();
-        return set;
-      } else if (v.get_VarInfoName()==this && needrelation) {
-	    Repair.getRepair().addSpecial();
-	    return "s_quant."+Repair.getRepair().getRelation(name,v.ppt);
-      } else
-	    return Repair.getRepair().getSet(name,v.ppt);
-    }
-
-    public VarInfoName getBase() {
-      return null;
-    }
     protected String jml_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
     }
@@ -877,7 +780,7 @@ public abstract class VarInfoName
    * Returns a name for the size of this (this object should be a
    * sequence).  Form is like "size(a[])" or "a.length".
    **/
-  public /*@Interned*/ VarInfoName applySize() {
+  public /*@Interned*/ VarInfoName applySize() /*@Interned*/ {
     // The simple approach:
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
@@ -900,7 +803,7 @@ public abstract class VarInfoName
       // for variables such as a[].b.c (returns size(a[])) or
       // a[].getClass() (returns size(a[]))
       if (this instanceof Prestate) {
-        VarInfoName size = (new SizeOf (elems)).intern();
+        /*@Interned*/ VarInfoName size = (new SizeOf (elems)).intern();
         return (new Prestate (size)).intern();
         // Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
         // return r.replace(this).intern();
@@ -916,7 +819,7 @@ public abstract class VarInfoName
    * and upper bounds, which can be subtracted to get one less than
    * its size.
    */
-  public VarInfoName[] getSliceBounds() {
+  public VarInfoName[/*@Interned*/] getSliceBounds() /*@Interned*/ {
     VarInfoName vin = this;
     boolean inPrestate = false;
     if (vin instanceof Prestate) {
@@ -929,7 +832,7 @@ public abstract class VarInfoName
     if (!(vin instanceof Slice))
       return null;
     Slice slice = (Slice)vin;
-    VarInfoName[] ret = new VarInfoName[2];
+    VarInfoName[/*@Interned*/] ret = new VarInfoName[/*@Interned*/ 2];
     if (slice.i != null)
       ret[0] = slice.i;
     else
@@ -955,8 +858,8 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final VarInfoName sequence;
-    public SizeOf(VarInfoName  sequence) {
+    public final /*@Interned*/ VarInfoName sequence;
+    public SizeOf(/*@Interned*/ VarInfoName sequence) {
       Assert.assertTrue(sequence != null);
       this.sequence = sequence;
     }
@@ -981,16 +884,9 @@ public abstract class VarInfoName
       //   return seqname + ".size()";
       // }
     }
-    protected String repair_name_impl(VarInfo v) {
-      Repair.getRepair().addSpecial();
-      return "s_quant."+Repair.getRepair().getRelation("size("+sequence.name()+")",v.ppt);
-    }
-    public VarInfoName getBase() {
-      return null;
-    }
 
     /** Returns the hashcode that is the base of the array **/
-    public VarInfoName get_term() {
+    public /*@Interned*/ VarInfoName get_term() {
       if (sequence instanceof Elements)
         return ((Elements) sequence).term;
       else if (sequence instanceof Prestate) {
@@ -1056,7 +952,7 @@ public abstract class VarInfoName
    * Returns a name for a unary function applied to this object.
    * The result is like "sum(this)".
    **/
-  public /*@Interned*/ VarInfoName applyFunction(String function) {
+  public /*@Interned*/ VarInfoName applyFunction(String function) /*@Interned*/ {
     return (new FunctionOf(function, this)).intern();
   }
 
@@ -1066,7 +962,7 @@ public abstract class VarInfoName
    * @param function the name of the function
    * @param vars The arguments to the function, of type VarInfoName
    **/
-  public static /*@Interned*/ VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
+  public static /*@Interned*/ VarInfoName applyFunctionOfN(String function, List</*@Interned*/ VarInfoName> vars) {
     return (new FunctionOfN(function, vars)).intern();
   }
 
@@ -1076,7 +972,7 @@ public abstract class VarInfoName
    * @param function the name of the function
    * @param vars The arguments to the function
    **/
-  public static VarInfoName applyFunctionOfN(String function, VarInfoName[] vars) {
+  public static /*@Interned*/ VarInfoName applyFunctionOfN(String function, VarInfoName[/*@Interned*/] vars) {
     return applyFunctionOfN(function, Arrays.asList(vars));
   }
 
@@ -1088,8 +984,8 @@ public abstract class VarInfoName
     static final long serialVersionUID = 20020130L;
 
     public final String function;
-    public final VarInfoName argument;
-    public FunctionOf(String function, VarInfoName argument) {
+    public final /*@Interned*/ VarInfoName argument;
+    public FunctionOf(String function, /*@Interned*/ VarInfoName argument) {
       Assert.assertTrue(function != null);
       Assert.assertTrue(argument != null);
       this.function = function;
@@ -1114,12 +1010,6 @@ public abstract class VarInfoName
     }
     protected String java_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JAVA, v);
-    }
-    protected String repair_name_impl(VarInfo v) {
-      return function + "(" + argument.repair_name(v) + ")";
-    }
-    public VarInfoName getBase() {
-      return null;
     }
     protected String jml_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JML, v);
@@ -1157,14 +1047,14 @@ public abstract class VarInfoName
     static final long serialVersionUID = 20020130L;
 
     public final String function;
-    public final List<VarInfoName> args;
+    public final List</*@Interned*/ VarInfoName> args;
 
     /**
      * Construct a new function of multiple arguments.
      * @param function the name of the function
      * @param args the arguments to the function, of type VarInfoName
      **/
-    public FunctionOfN(String function, List<VarInfoName> args) {
+    public FunctionOfN(String function, List</*@Interned*/ VarInfoName> args) {
       Assert.assertTrue(function != null);
       Assert.assertTrue(args != null);
       this.args = args;
@@ -1187,17 +1077,6 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return function + "(" + elts_repr_commas() + ")";
-    }
-
-    protected String repair_name_impl(VarInfo vi) {
-      List<String> elts = new ArrayList<String>(args.size());
-      for (VarInfoName vin : args) {
-        elts.add(vin.name());
-      }
-      return function + "(" + UtilMDE.join(elts, ", ") + ")";
-    }
-    public VarInfoName getBase() {
-      return null;
     }
     protected String esc_name_impl() {
       return "(warning: format_esc() needs to be implemented: " +
@@ -1258,7 +1137,7 @@ public abstract class VarInfoName
     /**
      * Shortcut getter to avoid repeated type casting.
      **/
-    public VarInfoName getArg (int n) {
+    public /*@Interned*/ VarInfoName getArg (int n) {
       return args.get(n);
     }
     public <T> T accept(Visitor<T> v) {
@@ -1271,7 +1150,7 @@ public abstract class VarInfoName
    * Returns a name for the intersection of with another sequence, like
    * "intersect(a[], b[])".
    **/
-  public /*@Interned*/ VarInfoName applyIntersection(VarInfoName seq2) {
+  public /*@Interned*/ VarInfoName applyIntersection(VarInfoName seq2) /*@Interned*/ {
     Assert.assertTrue(seq2 != null);
     return (new Intersection(this, seq2)).intern();
   }
@@ -1286,8 +1165,8 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public Intersection(VarInfoName seq1, VarInfoName seq2) {
-      super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
+    public Intersection(/*@Interned*/ VarInfoName seq1, /*@Interned*/ VarInfoName seq2) {
+      super ("intersection", Arrays.asList(new VarInfoName[/* @ Interned*/] {seq1, seq2}));
     }
 
     protected String ioa_name_impl() {
@@ -1300,7 +1179,7 @@ public abstract class VarInfoName
    * Returns a name for the union of this with another sequence, like
    * "union(a[], b[])".
    **/
-  public /*@Interned*/ VarInfoName applyUnion(VarInfoName seq2) {
+  public /*@Interned*/ VarInfoName applyUnion(VarInfoName seq2) /*@Interned*/ {
     Assert.assertTrue(seq2 != null);
     return (new Union(this, seq2)).intern();
   }
@@ -1331,7 +1210,7 @@ public abstract class VarInfoName
    * Returns a 'getter' operation for some field of this name, like
    * a.foo if this is a.
    **/
-  public /*@Interned*/ VarInfoName applyField(String field) {
+  public /*@Interned*/ VarInfoName applyField(String field) /*@Interned*/ {
     return (new Field(this, field)).intern();
   }
 
@@ -1342,9 +1221,9 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final VarInfoName term;
+    public final /*@Interned*/ VarInfoName term;
     public final String field;
-    public Field(VarInfoName term, String field) {
+    public Field(/*@Interned*/ VarInfoName term, String field) {
       Assert.assertTrue(term != null);
       Assert.assertTrue(field != null);
       this.term = term;
@@ -1355,27 +1234,6 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return term.name() + "." + field;
-    }
-    public VarInfoName getBase() {
-      return term;
-    }
-    public String gen_name(String str) {
-      return str+"."+field;
-    }
-    protected String repair_name_impl(VarInfo v) {
-
-      if (field.indexOf("*")!=-1)
-        return "$noprint("+name_impl()+")";
-      if (Repair.getRepair().isForceSet()) {
-        String set=getRealSet(v,this);
-        Repair.getRepair().noForceSet();
-        return set;
-      } else {
-        String base=term.repair_name_impl(v);
-        String set=getRealSet(v,term);
-        String relation=Repair.getRepair().getRelation(v.ppt,set,field,this.name());
-        return base + "." + relation;
-      }
     }
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
@@ -1537,7 +1395,7 @@ public abstract class VarInfoName
    * Returns a name for the type of this object; form is like
    * "this.getClass()" or "\typeof(this)".
    **/
-  public /*@Interned*/ VarInfoName applyTypeOf() {
+  public /*@Interned*/ VarInfoName applyTypeOf() /*@Interned*/ {
     return (new TypeOf(this)).intern();
   }
 
@@ -1548,8 +1406,8 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final VarInfoName term;
-    public TypeOf(VarInfoName term) {
+    public final /*@Interned*/ VarInfoName term;
+    public TypeOf(/*@Interned*/ VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1558,13 +1416,6 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return term.name() + DaikonVariableInfo.class_suffix;
-    }
-    protected String repair_name_impl(VarInfo vi) {
-      return term.repair_name_impl(vi)+"$noprint"
-        + DaikonVariableInfo.class_suffix;
-    }
-    public VarInfoName getBase() {
-      return term;
     }
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
@@ -1609,7 +1460,7 @@ public abstract class VarInfoName
    * Returns a name for a the prestate value of this object; form is
    * like "orig(this)" or "\old(this)".
    **/
-  public /*@Interned*/ VarInfoName applyPrestate() {
+  public /*@Interned*/ VarInfoName applyPrestate() /*@Interned*/ {
     if (this instanceof Poststate) {
       return ((Poststate)this).term;
     } else if ((this instanceof Add) && ((Add)this).term instanceof Poststate) {
@@ -1628,8 +1479,8 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final VarInfoName term;
-    public Prestate(VarInfoName term) {
+    public final /*@Interned*/ VarInfoName term;
+    public Prestate(/*@Interned*/ VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1647,12 +1498,6 @@ public abstract class VarInfoName
     }
     protected String ioa_name_impl() {
       return "preState(" + term.ioa_name() + ")";
-    }
-    protected String repair_name_impl(VarInfo v) {
-      return "$noprint(old(" + term.repair_name(v) + "))";
-    }
-    public VarInfoName getBase() {
-      return null;
     }
     protected String java_name_impl(VarInfo v) {
       if (PrintInvariants.dkconfig_replace_prestate) {
@@ -1708,7 +1553,7 @@ public abstract class VarInfoName
    * Returns a name for a the poststate value of this object; form is
    * like "new(this)" or "\new(this)".
    **/
-  public /*@Interned*/ VarInfoName applyPoststate() {
+  public /*@Interned*/ VarInfoName applyPoststate() /*@Interned*/ {
     return (new Poststate(this)).intern();
   }
 
@@ -1722,8 +1567,8 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final VarInfoName term;
-    public Poststate(VarInfoName term) {
+    public final /*@Interned*/ VarInfoName term;
+    public Poststate(/*@Interned*/ VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1732,12 +1577,6 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return "post(" + term.name() + ")";
-    }
-    protected String repair_name_impl(VarInfo vi) {
-      return "post(" + term.repair_name(vi) + ")";
-    }
-    public VarInfoName getBase() {
-      return null;
     }
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
@@ -1772,7 +1611,7 @@ public abstract class VarInfoName
    * Returns a name for the this term plus a constant, like "this-1"
    * or "this+1".
    **/
-  public /*@Interned*/ VarInfoName applyAdd(int amount) {
+  public /*@Interned*/ VarInfoName applyAdd(int amount) /*@Interned*/ {
     if (amount == 0) {
       return this;
     } else {
@@ -1787,9 +1626,9 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final VarInfoName term;
+    public final /*@Interned*/ VarInfoName term;
     public final int amount;
-    public Add(VarInfoName term, int amount) {
+    public Add(/*@Interned*/ VarInfoName term, int amount) {
       Assert.assertTrue(term != null);
       this.term = term;
       this.amount = amount;
@@ -1802,15 +1641,6 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return term.name() + amount();
-    }
-    protected String repair_name_impl(VarInfo v) {
-      return term.repair_name(v) + amount();
-    }
-    public VarInfoName getBase() {
-      return term;
-    }
-    public String gen_name(String str) {
-      return str+"+"+amount();
     }
     protected String esc_name_impl() {
       return term.esc_name() + amount();
@@ -1849,12 +1679,12 @@ public abstract class VarInfoName
   }
 
   /** Returns a name for the decrement of this term, like "this-1". **/
-  public VarInfoName applyDecrement() {
+  public /*@Interned*/ VarInfoName applyDecrement() /*@Interned*/ {
     return applyAdd(-1);
   }
 
   /** Returns a name for the increment of this term, like "this+1". **/
-  public VarInfoName applyIncrement() {
+  public /*@Interned*/ VarInfoName applyIncrement() /*@Interned*/ {
     return applyAdd(+1);
   }
 
@@ -1862,7 +1692,7 @@ public abstract class VarInfoName
    * Returns a name for the elements of a container (as opposed to the
    * identity of the container) like "this[]" or "(elements this)".
    **/
-  public /*@Interned*/ VarInfoName applyElements() {
+  public /*@Interned*/ VarInfoName applyElements() /*@Interned*/ {
     return (new Elements(this)).intern();
   }
 
@@ -1873,8 +1703,8 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final VarInfoName term;
-    public Elements(VarInfoName term) {
+    public final /*@Interned*/ VarInfoName term;
+    public Elements(/*@Interned*/ VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1884,68 +1714,6 @@ public abstract class VarInfoName
     protected String name_impl() {
       return name_impl("");
     }
-    public VarInfoName getBase() {
-      return term.getBase();
-    }
-    public String gen_name(String str) {
-      if (term instanceof Elements)
-        return "$noprint";
-      else return term.gen_name(str);
-    }
-    protected String repair_name_impl(VarInfo vi) {
-      /* Generate set here */
-      VarInfoName lower, upper;
-
-      lower = getLowerBound();
-      upper = getUpperBound();
-
-      String set=Repair.getRepair().generateRangeSet(vi.ppt,lower,upper);
-      String set2=Repair.getRepair().convertArraytoSet(vi.ppt,set,this,vi);
-      if (set2.indexOf ("$noprint") != -1)
-          return "$noprint";
-      String index=Repair.getRepair().getQuantifierVar();
-      Repair.getRepair().appendQuantifier(index,set2);
-      return index;
-    }
-
-    public String repair_name(VarInfo vi) {
-      // Figure out what to replace needy with, and the appropriate
-      // bounds to use
-      VarInfoName lower, upper;
-
-      lower = getLowerBound();
-      upper = getUpperBound();
-
-
-      String set=Repair.getRepair().generateRangeSet(vi.ppt,lower,upper);
-      String relation=Repair.getRepair().convertArraytoRelation(vi.ppt,this,vi);
-      String index=Repair.getRepair().getQuantifierVar();
-      Repair.getRepair().appendQuantifier(index,set);
-      return index+"."+relation;
-    }
-
-    protected String repair_name_impl(String index,VarInfo vi) {
-      /* Need to fix */
-      return "$nop"+term.repair_name(vi)+"["+index+"]";
-    }
-
-    protected String repair_name_impl(int index,VarInfo v) {
-      /* Need to fix */
-      if (term instanceof Field) {
-        Field f=(Field)term;
-        Repair.getRepair().noForceSet();
-        String base=f.term.repair_name_impl(v);
-        String set=f.getRealSet(v,f.term);
-        String relation=Repair.getRepair().getRelation(v.ppt,set,f.field+"["+index+"]",this.name());
-
-        return base + "." + relation;
-      } else if (term instanceof Simple) {
-        Simple s=(Simple)term;
-        Repair.getRepair().addSpecial();
-        return "s_quant."+Repair.getRepair().getRelation(s.name_impl()+"["+index+"]",v.ppt);
-      } else return "$error2"+term.repair_name(v)+"["+index+"]";
-    }
-
     protected String name_impl(String index) {
       return term.name() + "[" + index + "]";
     }
@@ -2035,7 +1803,7 @@ public abstract class VarInfoName
    * Caller is subscripting an orig(a[]) array.  Take the requested
    * index and make it useful in that context.
    **/
-  static VarInfoName indexToPrestate(VarInfoName index) {
+  static VarInfoName indexToPrestate(/*@Interned*/ VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])
     // 2 orig(a[]) . index       -> orig(a[post(index)])
     if (index instanceof Prestate) {
@@ -2059,7 +1827,7 @@ public abstract class VarInfoName
    * Returns a name for an element selected from a sequence, like
    * "this[i]".
    **/
-  public /*@Interned*/ VarInfoName applySubscript(VarInfoName index) {
+  public /*@Interned*/ VarInfoName applySubscript(/*@Interned*/ VarInfoName index) /*@Interned*/ {
     Assert.assertTrue(index != null);
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
@@ -2073,7 +1841,7 @@ public abstract class VarInfoName
 
   // Given a sequence and subscript index, convert the index to an
   // explicit form if necessary (e.g. a[-1] becomes a[a.length-1])
-  static VarInfoName indexExplicit(Elements sequence, VarInfoName index) {
+  static VarInfoName indexExplicit(/*@Interned*/ Elements sequence, VarInfoName index) {
     if (!index.isLiteralConstant()) {
       return index;
     }
@@ -2094,8 +1862,8 @@ public abstract class VarInfoName
     static final long serialVersionUID = 20020130L;
 
     public final Elements sequence;
-    public final VarInfoName index;
-    public Subscript(Elements sequence, VarInfoName index) {
+    public final /*@Interned*/ VarInfoName index;
+    public Subscript(Elements sequence, /*@Interned*/ VarInfoName index) {
       Assert.assertTrue(sequence != null);
       Assert.assertTrue(index != null);
       this.sequence = sequence;
@@ -2106,37 +1874,6 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return sequence.name_impl(index.name());
-    }
-    protected String repair_name_impl(VarInfo v) {
-      if (Repair.getRepair().isForceSet()) {
-        String set=getRealSet(v,this);
-        Repair.getRepair().noForceSet();
-        return set;
-      } else if (index.isLiteralConstant()) {
-        if (sequence.term instanceof Field) {
-          Field f=(Field)sequence.term;
-
-          Repair.getRepair().noForceSet();
-          String base=f.term.repair_name_impl(v);
-          String set=f.getRealSet(v,f.term);
-          String relation=Repair.getRepair().getRelation(v.ppt,set,f.field+"["+index.name()+"]",this.name());
-
-          return base + "." + relation;
-        } else if (sequence.term instanceof Simple) {
-          Simple s=(Simple)sequence.term;
-          Repair.getRepair().addSpecial();
-          return "s_quant."+Repair.getRepair().getRelation(s.name_impl()+"["+index+"]",v.ppt);
-        } else return "$error2"+sequence.term.repair_name(v)+"["+index+"]";
-      } else
-        return sequence.repair_name_impl(index.repair_name(v),v);
-    }
-    public VarInfoName getBase() {
-      return sequence.getBase();
-    }
-    public String gen_name(String str) {
-      if (sequence instanceof Elements)
-        return "$noprint";
-      else return sequence.gen_name(str);
     }
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
@@ -2192,7 +1929,7 @@ public abstract class VarInfoName
    * like "this[i..j]".  If an endpoint is null, it means "from the
    * start" or "to the end".
    **/
-  public /*@Interned*/ VarInfoName applySlice(VarInfoName i, VarInfoName j) {
+  public /*@Interned*/ VarInfoName applySlice(/*@Interned*/ VarInfoName i, /*@Interned*/ VarInfoName j) /*@Interned*/ {
     // a[] -> a[index..]
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
@@ -2217,9 +1954,9 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final Elements sequence;
-    public final VarInfoName i, j;
-    public Slice(Elements sequence, VarInfoName i, VarInfoName j) {
+    public final /*@Interned*/ Elements sequence;
+    public final /*@Interned*/ VarInfoName i, j;
+    public Slice(/*@Interned*/ Elements sequence, /*@Interned*/ VarInfoName i, /*@Interned*/ VarInfoName j) {
       Assert.assertTrue(sequence != null);
       Assert.assertTrue((i != null) || (j != null));
       this.sequence = sequence;
@@ -2239,40 +1976,6 @@ public abstract class VarInfoName
                                 ((j == null) ? ""  : j.name())
                                 );
     }
-    public VarInfoName getBase() {
-      return sequence.getBase();
-    }
-    public String gen_name(String str) {
-      return sequence.gen_name(str);
-    }
-    protected String repair_name_impl(VarInfo v) {
-      /* Generate set here */
-      VarInfoName lower, upper;
-
-      lower = getLowerBound();
-      upper = getUpperBound();
-
-      String set=Repair.getRepair().generateRangeSet(v.ppt,lower,upper);
-      String set2=Repair.getRepair().convertArraytoSet(v.ppt,set,this,v);
-      String index=Repair.getRepair().getQuantifierVar();
-      Repair.getRepair().appendQuantifier(index,set2);
-      return index;
-    }
-    public String repair_name(VarInfo v) {
-      // Figure out what to replace needy with, and the appropriate
-      // bounds to use
-      VarInfoName lower, upper;
-
-      lower = getLowerBound();
-      upper = getUpperBound();
-
-      String set=Repair.getRepair().generateRangeSet(v.ppt,lower,upper);
-      String relation=Repair.getRepair().convertArraytoRelation(v.ppt,this,v);
-      String index=Repair.getRepair().getQuantifierVar();
-      Repair.getRepair().appendQuantifier(index,set);
-      return index+"."+relation;
-    }
-
     protected String esc_name_impl() {
       // return the default implementation for now.
       // return name_impl();
@@ -2797,6 +2500,7 @@ public abstract class VarInfoName
   /**
    * A Replacer is a Visitor that makes a copy of a tree, but
    * replaces some node (and its children) with another.
+   * The result is *not* interned; the client must do that if desired.
    **/
   public static class Replacer
     extends AbstractVisitor<VarInfoName>
@@ -2907,7 +2611,7 @@ public abstract class VarInfoName
   public static class InorderFlattener
     extends AbstractVisitor<NoReturnValue>
   {
-    public InorderFlattener(VarInfoName root) {
+    public InorderFlattener(/*@Interned*/ VarInfoName root) {
       root.accept(this);
     }
 
@@ -2915,7 +2619,7 @@ public abstract class VarInfoName
     private final List<VarInfoName> result = new ArrayList<VarInfoName>();
 
     /** Method returning the actual results (the nodes in order). **/
-    public List<VarInfoName> nodes() {
+    public List</*@Interned*/ VarInfoName> nodes() {
       return Collections.unmodifiableList(result);
     }
 
@@ -3045,7 +2749,7 @@ public abstract class VarInfoName
 
     // state and accessors
     /** @see #unquants() **/
-    private Set<VarInfoName>/*actually <Elements || Slice>*/ unquant;
+    private Set</*@Interned*/ VarInfoName>/*actually <Elements || Slice>*/ unquant;
 
     /**
      * @return Collection of the nodes under the root that need
@@ -3059,7 +2763,7 @@ public abstract class VarInfoName
     //  ary[row][col]            ==> { }
     //  ary[row][]               ==> { ary[row][] }
     //  ary[][]                  ==> { ary[], ary[][] }
-    public Set<VarInfoName> unquants() {
+    public Set</*@Interned*/ VarInfoName> unquants() {
       if (QuantHelper.debug.isLoggable(Level.FINE)) {
         QuantHelper.debug.fine ("unquants: " + unquant);
       }
@@ -3218,7 +2922,7 @@ public abstract class VarInfoName
       }
 
       // replace needy
-      VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
+      /*@Interned*/ VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
 
       Assert.assertTrue(root_prime != null);
       Assert.assertTrue(lower != null);
@@ -3232,7 +2936,7 @@ public abstract class VarInfoName
      * representing the (index_base+index_off)-th element of that
      * sequence. index_base may be null, to represent 0.
      **/
-    public static VarInfoName selectNth(VarInfoName root,
+    public static /*@Interned*/ VarInfoName selectNth(VarInfoName root,
                                         VarInfoName index_base,
                                         int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
@@ -3250,7 +2954,7 @@ public abstract class VarInfoName
           index_vin = new Simple(index_off + "");
         }
         VarInfoName to_replace = unquants.get(0);
-        VarInfoName[] replace_result = replace(root, to_replace, index_vin);
+        VarInfoName[/*@Interned*/] replace_result = replace(root, to_replace, index_vin);
         return replace_result[0];
       } else {
         Assert.assertTrue(false, "Can't handle multi-dim array in " +
@@ -3264,7 +2968,7 @@ public abstract class VarInfoName
      * representing the (index_base+index_off)-th element of that
      * sequence. index_base may be null, to represent 0.
      **/
-    public static VarInfoName selectNth(VarInfoName root,
+    public static /*@Interned*/ VarInfoName selectNth(VarInfoName root,
                                         String index_base,
                                         boolean free,
                                         int index_off) {
@@ -3315,7 +3019,7 @@ public abstract class VarInfoName
      * Return a fresh variable name that doesn't appear in the given
      * variable names.
      **/
-    public static VarInfoName getFreeIndex(VarInfoName... vins) {
+    public static /*@Interned*/ VarInfoName getFreeIndex(VarInfoName... vins) {
       Set<String> simples = new HashSet<String>();
       for (VarInfoName vin : vins)
         simples.addAll (new SimpleNamesVisitor (vin).simples());
@@ -3390,7 +3094,7 @@ public abstract class VarInfoName
           } while (simples.contains(idx_name));
           Assert.assertTrue(tmp <= 'z',
                             "Ran out of letters in quantification");
-          VarInfoName idx = (new FreeVar(idx_name)).intern();
+          /*@Interned*/ VarInfoName idx = (new FreeVar(idx_name)).intern();
 
           if (QuantHelper.debug.isLoggable(Level.FINE)) {
             QuantHelper.debug.fine ("idx: " + idx);
@@ -4069,831 +3773,6 @@ public abstract class VarInfoName
   public static class LexicalComparator implements Comparator<VarInfoName> {
     public int compare(VarInfoName name1, VarInfoName name2) {
       return name1.compareTo(name2);
-    }
-  }
-
-  /**
-   * This class stores the state used to generate a repair
-   * specification.  In particular, it stores quantifiers, mappings from
-   * fields to relations, and mappings from variables to sets.
-   **/
-  static public class Repair {
-    private static Repair repair;
-
-    public static Repair getRepair() {
-      if (repair==null)
-        repair=new Repair();
-      return repair;
-    }
-    Hashtable<Pair<String,Ppt>,String> settable=new Hashtable<Pair<String,Ppt>,String>();
-    Hashtable<Pair<String,Ppt>,String> relationtable=new Hashtable<Pair<String,Ppt>,String>();
-    Hashtable<Ppt,Definition> definitiontable=new Hashtable<Ppt,Definition>();
-    int tagnumber=0;
-    boolean forceset=false;
-    HashMap<String,String> revquantifiers=new LinkedHashMap<String,String>();
-    HashMap<String,String> quantifiers=new LinkedHashMap<String,String>(); // LinkedHashMap for deterministic output
-    HashSet<Pair<String,Ppt>> usednames=new HashSet<Pair<String,Ppt>>();
-
-
-    /** Creates a copy of the current Repair object state.  This copy
-     * can be used to revert the state if a problem with the current
-     * invariant is discovered. */
-
-    public Repair createCopy(Ppt ppt) {
-      Repair repair=new Repair();
-      repair.settable.putAll(settable);
-      repair.usednames.addAll(usednames);
-      repair.relationtable.putAll(relationtable);
-      repair.definitiontable.putAll(definitiontable);
-      repair.tagnumber=tagnumber;
-      repair.forceset=forceset;
-      repair.quantifiers.putAll(quantifiers);
-      repair.revquantifiers.putAll(revquantifiers);
-      repair.varcount=varcount;
-      if (repair.definitiontable.containsKey(ppt)) {
-        Definition d=repair.definitiontable.get(ppt);
-        Definition newd=d.clone();
-        repair.definitiontable.put(ppt,newd);
-      }
-      return repair;
-    }
-
-    /** Sets the current Repair object. */
-
-    public static void changeRepairObject(Repair r) {
-      Repair.repair=r;
-    }
-
-    public boolean isForceSet() {
-      return forceset;
-    }
-    public void noForceSet() {
-      forceset=false;
-    }
-    public void setForceSet() {
-      forceset=true;
-    }
-    /** This method returns a the range set for the relation given by
-     * the second parameter.*/
-    public String getRange(Ppt ppt, String relation) {
-      Definition d=definitiontable.get(ppt);
-      if (d==null)
-        return null;
-      return d.rangetable.get(relation);
-    }
-
-    /** This method resets the quantifier table. */
-    public void reset() {
-      revquantifiers=new LinkedHashMap<String,String>();
-      quantifiers=new LinkedHashMap<String,String>();
-      forceset=false;
-      varcount=0;
-    }
-
-    /** The repair system is designed to capture equality constriants
-     * using relations.  For constraints involving local variables, we
-     * may need to synthesize an "special" object.  */
-    public void addSpecial() {
-      appendQuantifier("s_quant","Special");
-    }
-
-    /** This method converts an array into a set, and returns the
-     * set. */
-    public String convertArraytoSet(Ppt ppt, String set, VarInfoName vin, VarInfo vi) {
-      VarInfoName vin2=null;
-      VarInfoName lower, upper;
-      if (vin instanceof Elements) {
-        Elements sequence = (Elements) vin;
-        lower = sequence.getLowerBound();
-        upper = sequence.getUpperBound();
-        vin2=sequence.term;
-      } else if (vin instanceof Slice) {
-        Slice slice = (Slice) vin;
-        lower = slice.getLowerBound();
-        upper = slice.getUpperBound();
-        vin2=slice.sequence.term;
-      } else {
-        // unreachable; placate javac
-        throw new IllegalStateException();
-      }
-
-      //      String intervalset=generateRangeSet(ppt,lower,upper);
-      // Unique set name based on range
-      Pair<String,Ppt> t=new Pair<String,Ppt>(vi.name()+".arrayset"+"///"+lower.name()+".."+upper.name(),ppt);
-
-      if (settable.containsKey(t)) {
-        String setname=settable.get(t);
-        return setname;
-      }
-      String setname=generateSetName(vin2.name(),ppt);
-
-      VarInfoName base=vin2.getBase();
-      if (vin2.name().indexOf('*')!=-1)
-        return "$noprint("+vin2.name()+")";
-
-      String baseset=null;
-      if (base!=null)
-        baseset=VarInfoName.getRealSet(vi, base);
-
-      //String set=VarInfoName.getRealSet(
-
-      String newrule2;
-      String lowername=lower.name();
-      String uppername=upper.name();
-
-      if (lower.name().indexOf("size")!=-1) {
-        VarInfo v = ((PptTopLevel)ppt).find_var_by_name (lower.name());
-        if (v != null) {
-          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
-          if (invs!=null&&invs.size()>0) {
-            Invariant inv=invs.get(0);
-            String invstring=inv.format_using(OutputFormat.DAIKON);
-            int indexof=invstring.indexOf('=');
-            lowername=invstring.substring(indexof+2);
-          }
-        }
-      }
-
-      if (upper.name().indexOf("size")!=-1) {
-        String initial=upper.name();
-        String prefix=initial;
-        String postfix="";
-        if (initial.indexOf('-')!=-1) {
-          prefix=initial.substring(0,initial.indexOf('-'));
-          postfix=initial.substring(initial.indexOf('-'));
-        }
-
-        VarInfo v =  ((PptTopLevel)ppt).find_var_by_name (prefix);
-        if (v != null) {
-          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
-          if (invs!=null&&invs.size()>0) {
-            Invariant inv=invs.get(0);
-            String invstring=inv.format_using(OutputFormat.DAIKON);
-            int indexof=invstring.indexOf('=');
-            uppername=invstring.substring(indexof+2)+postfix;
-          }
-        }
-      }
-
-      if (base!=null) {
-        String genname=vin2.gen_name("s2");
-        newrule2="[forall s2 in "+baseset+",for s="+lowername+" to "+uppername+
-          "], true => "+genname+"[s] in "+setname+";";
-      } else {
-        newrule2="[for s="+lowername+" to "+uppername+
-          "], true => "+vin2.name()+"[s] in "+setname+";";
-      }
-
-
-      appendModelRule(ppt,newrule2);
-      appendSetRelation(ppt,"set "+setname+"("+getTypedef(ppt,vin2.name())+");");
-
-      settable.put(t,setname);
-      return setname;
-    }
-
-    /** This method converts an array into a relation, and returns the
-     * relation. */
-    public String convertArraytoRelation(Ppt ppt, VarInfoName vin, VarInfo vi) {
-      VarInfoName vin2=null;
-      VarInfoName lower, upper;
-      if (vin instanceof Elements) {
-        Elements sequence = (Elements) vin;
-        lower = sequence.getLowerBound();
-        upper = sequence.getUpperBound();
-        vin2=sequence.term;
-      } else if (vin instanceof Slice) {
-        Slice slice = (Slice) vin;
-        lower = slice.getLowerBound();
-        upper = slice.getUpperBound();
-        vin2=slice.sequence.term;
-      } else {
-        // unreachable; placate javac
-        throw new IllegalStateException();
-      }
-
-      String intervalset=generateRangeSet(ppt,lower,upper);
-
-      Pair<String,Ppt> t=new Pair<String,Ppt>(vi.name()+".arrayrelation"+"///"+lower.name()+".."+upper.name(),ppt);
-
-      if (relationtable.containsKey(t)) {
-        String relationname=relationtable.get(t);
-        return relationname;
-      }
-      String relationname=generateRelationName(vin2.name(),ppt);
-
-      String rangeset=generateSetName("R"+vin2.name(),ppt);
-
-      VarInfoName base=vin2.getBase();
-
-      if (vin2.name().indexOf('*')!=-1)
-        return "$noprint("+vin2.name()+")";
-
-      String baseset=null;
-
-      if (base!=null)
-        baseset=VarInfoName.getRealSet(vi, base);
-
-      //      String set=VarInfoName.getRealSet(
-
-      String newrule;
-      String newrule2;
-      /*      if (base!=null) {
-        String genname=vin2.gen_name("s2");
-        newrule="[forall s2 in "+baseset+", for s="+lower.name()+" to "+upper.name()+
-          "], true => <s,"+genname+"[s]> in "+relationname+";";
-        newrule2="[forall s2 in "+baseset+",for s="+lower.name()+" to "+upper.name()+
-          "], true => "+genname+"[s] in "+rangeset+";";
-      } else {
-        newrule="[for s="+lower.name()+ " to "+upper.name()+
-          "], true => <s,"+vin2.name()+"[s]> in "+relationname+";";
-        newrule2="[for s="+lower.name()+" to "+upper.name()+
-          "], true => "+vin2.name()+"[s] in "+rangeset+";";
-          }*/
-
-      if (base!=null) {
-        String genname=vin2.gen_name("s2");
-        newrule="[forall s2 in "+baseset+", forall s in "+intervalset+
-          "], true => <s,"+genname+"[s]> in "+relationname+";";
-        newrule2="[forall s2 in "+baseset+",forall s in "+intervalset+
-          "], true => "+genname+"[s] in "+rangeset+";";
-      } else {
-        newrule="[forall s in "+intervalset+
-          "], true => <s,"+vin2.name()+"[s]> in "+relationname+";";
-        newrule2="[forall s in "+intervalset+
-          "], true => "+vin2.name()+"[s] in "+rangeset+";";
-      }
-      boolean nativetype=(getTypedef(ppt,vin2.name()).equals("int"));
-
-      if (!nativetype) {
-        appendModelRule(ppt,newrule2);
-        appendSetRelation(ppt,"set "+rangeset+"("+getTypedef(ppt,vin2.name())+");");
-      } else
-        rangeset=getTypedef(ppt,vin2.name());
-
-      Definition d=definitiontable.get(ppt);
-      d.rangetable.put(relationname,rangeset);
-      String setdef=relationname+": int ->"+rangeset+";";
-      appendModelRule(ppt,newrule);
-      appendSetRelation(ppt,setdef);
-
-      relationtable.put(t,relationname);
-      return relationname;
-    }
-
-    /** This method generates a set contain the range [0..var] */
-
-    public String generateRangeSet(Ppt ppt, VarInfoName lower, VarInfoName upper) {
-      Pair<String,Ppt> t=new Pair<String,Ppt>(lower.name()+"-"+upper.name()+".rangeset",ppt);
-
-      if (settable.containsKey(t)) {
-        String setname=settable.get(t);
-        return setname;
-      }
-      String setname=generateSetName("Range",ppt);
-
-
-      String uppername=upper.name();
-      String lowername=lower.name();
-      if (lower.name().indexOf("size")!=-1) {
-        VarInfo v = ((PptTopLevel)ppt).find_var_by_name (lower.name());
-        if (v != null) {
-          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
-          if (invs!=null&&invs.size()>0) {
-            Invariant inv=invs.get(0);
-            String invstring=inv.format_using(OutputFormat.DAIKON);
-            int indexof=invstring.indexOf('=');
-            lowername=invstring.substring(indexof+2);
-          }
-        }
-      }
-
-      if (upper.name().indexOf("size")!=-1) {
-        String initial=upper.name();
-        String prefix=initial;
-        String postfix="";
-        if (initial.indexOf('-')!=-1) {
-          prefix=initial.substring(0,initial.indexOf('-'));
-          postfix=initial.substring(initial.indexOf('-'));
-        }
-
-        VarInfo v = ((PptTopLevel)ppt).find_var_by_name (prefix);
-
-
-        if (v != null) {
-          List<Invariant> invs = ((PptTopLevel)ppt).find_assignment_inv (v);
-          if (invs!=null&&invs.size()>0) {
-            Invariant inv=invs.get(0);
-            String invstring=inv.format_using(OutputFormat.DAIKON);
-            int indexof=invstring.indexOf('=');
-            uppername=invstring.substring(indexof+2)+postfix;
-          }
-        }
-      }
-
-      String newrule="[for i="+lowername+" to "+uppername+"], true => i in "+setname+";";
-      String setdef="set "+setname+"(int);";
-      appendModelRule(ppt,newrule);
-      appendSetRelation(ppt,setdef);
-
-      if (lowername.indexOf(".")!=-1||lowername.indexOf("->")!=-1) {
-        Set<VarInfoName> roots=getRoot(lower);
-        for (VarInfoName vin : roots) {
-          String lowerrootvar=vin.name();
-          String vardef="";
-          if (!getType(ppt,lowerrootvar).equals("int"))
-            vardef=getType(ppt,lowerrootvar)+" "+lowerrootvar+";";
-          else
-            vardef="int "+lowerrootvar+";";
-          appendGlobal(ppt,vardef);
-        }
-      }
-
-      if (uppername.indexOf(".")!=-1||uppername.indexOf("->")!=-1) {
-        Set<VarInfoName> roots=getRoot(upper);
-        for (VarInfoName vin : roots) {
-          String upperrootvar=vin.name();
-          String vardef="";
-          if (!getType(ppt,upperrootvar).equals("int"))
-            vardef=getType(ppt,upperrootvar)+" "+upperrootvar+";";
-          else
-            vardef="int "+upperrootvar+";";
-          appendGlobal(ppt,vardef);
-        }
-      }
-
-      settable.put(t,setname);
-      return setname;
-    }
-
-    int varcount=0;
-    public String getQuantifierVar(String var) {
-      //      if (!quantifiers.containsKey(var)) {
-        return var;
-        //      } else
-        //        return var+(varcount++);
-    }
-
-    public String getQuantifierVar() {
-      return getQuantifierVar("i");
-    }
-
-    /** This method generates the current quantifier string. */
-    public String getQuantifiers() {
-      String str="";
-      for (Map.Entry<String,String> entry  : quantifiers.entrySet()) {
-        String key = entry.getKey();
-        String value = entry.getValue();
-
-        if (!str.equals(""))
-          str+=",";
-        str+="forall "+key+" in "+quantifiers.get(key);
-      }
-      return str;
-    }
-
-    /** This method appends a quantifier to the quantifier list. */
-    public void appendQuantifier(String q, String set) {
-      if (!quantifiers.containsKey(q)) {
-        quantifiers.put(q,set);
-        revquantifiers.put(set,q);
-      }
-    }
-
-    public String checkQuantifierVar(String set) {
-      if (revquantifiers.containsKey(set))
-        return revquantifiers.get(set);
-      else
-        return null;
-    }
-
-    /** This method takes in a program point, the domain set, a
-     * field, and the full field name fld, and returns the
-     * corresponding relation. */
-
-    public String getRelation(Ppt ppt, String set, String field, String fld) {
-      Pair<String,Ppt> t=new Pair<String,Ppt>(set + "///" + field,ppt);
-      if (relationtable.containsKey(t))
-        return relationtable.get(t);
-      String relationname=generateRelationName(field,ppt);
-      String rangeset=generateSetName("R"+field,ppt);
-      String newrule="[forall s in "+set+"], true => <s,s."+field+"> in "+relationname+";";
-      String newrule2="[forall s in "+set+"], true => s."+field+" in "+rangeset+";";
-      boolean nativetype=getTypedef(ppt,fld).equals("int");
-
-      if (!nativetype) {
-        appendSetRelation(ppt,"set "+rangeset+"("+getTypedef(ppt,fld)+");");
-        appendModelRule(ppt,newrule2);
-      } else
-        rangeset=getTypedef(ppt,fld);
-
-      Definition d=definitiontable.get(ppt);
-      d.rangetable.put(relationname,rangeset);
-      String setdef=relationname+": "+set+"->"+rangeset+";";
-      appendModelRule(ppt,newrule);
-      appendSetRelation(ppt,setdef);
-      relationtable.put(t,relationname);
-      return relationname;
-    }
-
-    /** This method takes in a local program variable and a program
-     * point, and returns a relation. */
-
-    public String getRelation(String programvar, Ppt ppt) {
-      Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
-      if (relationtable.containsKey(t))
-        return relationtable.get(t);
-      String relationname=generateRelationName(programvar,ppt);
-
-      Pair<String,Ppt> t2=new Pair<String,Ppt>(programvar,ppt);
-      boolean generatesetdef=true;
-      if (settable.containsKey(t2))
-        generatesetdef=false;
-      String setname=generateSetName(programvar,ppt);
-      String newrule="[forall s in Special], true => <s,"+programvar+"> in "+relationname+";";
-
-      appendModelRule(ppt,newrule);
-
-      if (generatesetdef&&
-          getTypedef(ppt,programvar).equals("int")) {
-        generatesetdef=false;
-        setname=getTypedef(ppt,programvar);
-      }
-
-      if (generatesetdef) {
-        //Generate set definition
-        String setdef="set "+setname+"("+getTypedef(ppt, programvar)+");";
-        appendSetRelation(ppt,setdef);
-        settable.put(t,setname);
-        String newruleset="[forall s in Special], true => "+programvar+" in "+setname+";";
-        appendModelRule(ppt,newruleset);
-      }
-
-      {
-        //Generate relation definition
-        String relationdef=relationname+": Special->"+setname+";";
-        appendSetRelation(ppt,relationdef);
-      }
-
-      {
-        //Generate global definition
-        String vardef="";
-        if (!getType(ppt,programvar).equals("int"))
-          vardef=getType(ppt,programvar)+" "+programvar+";";
-        else
-          vardef="int "+programvar+";";
-        appendGlobal(ppt,vardef);
-      }
-
-      if (!definitiontable.containsKey(ppt)) {
-        definitiontable.put(ppt,new Definition());
-      }
-      Definition d=definitiontable.get(ppt);
-      if (!d.generatespecial) {
-        //Generate special set
-        d.generatespecial=true;
-        appendSetRelation(ppt,"set Special(int);");
-        appendModelRule(ppt,"[],true => 0 in Special;");
-      }
-      //store relation in table and return it
-      relationtable.put(t,relationname);
-      return relationname;
-    }
-
-    /** This method takes in a program variable and a program point
-     * and returns the corresponding setname or a variable that
-     * quantifies over that set. */
-
-    public String getSet(String programvar, Ppt ppt) {
-      String setname=getRealSet(programvar,ppt);
-      if (forceset)
-        return setname;
-      else {
-        String qvar=checkQuantifierVar(setname);
-        if (qvar!=null) {
-          // Just reuse the old variable...its find for a singleton set, and looks better
-          return qvar;
-        } else {
-          String quantifiervar=getQuantifierVar(escapeString(programvar));
-          appendQuantifier(quantifiervar,setname);
-          return quantifiervar;
-        }
-      }
-    }
-
-    /** This method takes in a program variable and a program point
-     * and returns the corresponding setname. */
-
-    public String getRealSet(String programvar, Ppt ppt) {
-      Pair<String,Ppt> t=new Pair<String,Ppt>(programvar,ppt);
-
-      if (settable.containsKey(t)) {
-        String setname=settable.get(t);
-        return setname;
-      }
-      String setname=generateSetName(programvar,ppt);
-      String newrule="[], true => "+programvar+" in "+setname+";";
-      String setdef="set "+setname+"("+getTypedef(ppt, programvar)+");";
-      appendModelRule(ppt,newrule);
-      appendSetRelation(ppt,setdef);
-      String vardef="";
-      if (!getType(ppt,programvar).equals("int"))
-        vardef=getType(ppt,programvar)+" "+programvar+";";
-      else
-        vardef="int "+programvar+";";
-      appendGlobal(ppt,vardef);
-
-      settable.put(t,setname);
-      return setname;
-    }
-
-    /** This method returns the roots of a VarInfoName. */
-
-    public static Set<VarInfoName> getRoot(VarInfoName vi) {
-      while (true) {
-        if (vi instanceof Simple) {
-          HashSet<VarInfoName> hs=new HashSet<VarInfoName>();
-          hs.add(vi);
-          return hs;
-        } else if (vi instanceof QuantHelper.FreeVar) {
-          HashSet<VarInfoName> hs=new HashSet<VarInfoName>();
-          hs.add(vi);
-          return hs;
-        } else if (vi instanceof SizeOf) {
-          vi=((SizeOf)vi).sequence;
-        } else if (vi instanceof FunctionOf) {
-          vi=((FunctionOf)vi).argument;
-        } else if (vi instanceof Field) {
-          vi=((Field)vi).term;
-        } else if (vi instanceof TypeOf) {
-          vi=((TypeOf)vi).term;
-        } else if (vi instanceof Add) {
-          vi=((Add)vi).term;
-        } else if (vi instanceof Elements) {
-          vi=((Elements)vi).term;
-        } else if (vi instanceof Subscript) {
-          Set<VarInfoName> a=getRoot(((Subscript)vi).sequence);
-          a.addAll(getRoot(((Subscript)vi).index));
-          return a;
-        } else if (vi instanceof Slice) {
-          Set<VarInfoName> a=getRoot(((Slice)vi).sequence);
-          a.addAll(getRoot(((Slice)vi).i));
-          a.addAll(getRoot(((Slice)vi).j));
-          return a;
-        } else {
-          System.out.println("Unrecognized var: "+vi.name());
-          Set<VarInfoName> a=new HashSet<VarInfoName>();
-          return a;
-        }
-      }
-    }
-
-    /** This method returns the model definition rules for a given
-     * program point. */
-
-    public String getRules(Ppt ppt) {
-      Definition d=definitiontable.get(ppt);
-      if (d==null)
-        return null;
-      return d.modelrule;
-    }
-
-    /** This method returns the global definitions for a given program
-     * point. */
-
-    public String getGlobals(Ppt ppt) {
-      Definition d=definitiontable.get(ppt);
-      if (d==null)
-        return null;
-      return d.globaldecls;
-    }
-
-    /** This method returns the set and relation definitions for a
-     * given program point. */
-
-    public String getSetRelation(Ppt ppt) {
-      Definition d=definitiontable.get(ppt);
-      if (d==null)
-        return null;
-      return d.setrelation;
-    }
-
-    /** This method returns the type of a variable. */
-
-    static public String getType(Ppt ppt, String var) {
-      VarInfo vi=null;
-      if (var.indexOf("size(")==0)
-        return "int";
-      try {
-        vi=ppt.find_var_by_name(var);
-      } catch (Exception e) {
-        e.printStackTrace();
-        return "$error";
-      }
-      if (vi==null) {
-        System.out.println("Unknown var: "+var);
-        return "$unknown_var";
-      }
-
-      if (vi.type==null)
-        return "$unknown_type";
-      String str;
-
-      if (vi.file_rep_type.toString().equals("int"))
-        str="int";
-      else if (vi.file_rep_type.toString().equals("int[]"))
-        str="int[]";
-      else
-        str=vi.type.toString();
-
-      while (str.indexOf("[]")!=-1) {
-        int location=str.indexOf("[]");
-        str=str.substring(0,location)+"*"+str.substring(location+2,str.length());
-      }
-      if (str.equals("char"))
-        return "byte";
-
-      return str;
-    }
-
-    /** This method returns the type of a variable once
-     * dereferenced. */
-
-    static public String getTypedef(Ppt ppt, String var) {
-      String str=getType(ppt,var);
-      int last=str.lastIndexOf("*");
-      if (last!=-1) {
-        return str.substring(0,last);
-      } else return str;
-    }
-
-    /** This method generates a set name from a program variable. */
-
-    private String generateSetName(String programvar, Ppt p) {
-      String setnameprefix="S"+programvar;
-      String setname=setnameprefix;
-      tagnumber=0;
-      while (true) {
-        Pair<String,Ppt> t=new Pair<String,Ppt>(setname, p);
-        if (usednames.contains(t)) {
-          tagnumber++;
-          setname=setnameprefix+tagnumber;
-        } else {
-          usednames.add(t);
-          break;
-        }
-      }
-      return escapeString(setname);
-    }
-
-    /** This method generates a relation name from a program
-     * variable. */
-    private String generateRelationName(String fieldvar, Ppt p) {
-      String relnameprefix="R"+fieldvar;
-      String relname=relnameprefix;
-      tagnumber=0;
-      while (true) {
-        Pair<String,Ppt> t=new Pair<String,Ppt>(relname, p);
-        if (usednames.contains(t)) {
-          tagnumber++;
-          relname=relnameprefix+tagnumber;
-        } else {
-          usednames.add(t);
-          break;
-        }
-      }
-      return escapeString(relname);
-    }
-
-    /** This method appents a set or relation definition for a given
-     * program point. */
-
-    void appendSetRelation(Ppt p, String s) {
-      if (!definitiontable.containsKey(p)) {
-        definitiontable.put(p,new Definition());
-      }
-      Definition d=definitiontable.get(p);
-      d.appendSetRelation(s);
-    }
-
-    /** This method appends a model definition rule for a given
-     * program point. */
-
-    void appendModelRule(Ppt p, String s) {
-      if (!definitiontable.containsKey(p)) {
-        definitiontable.put(p,new Definition());
-      }
-      Definition d=definitiontable.get(p);
-      d.appendModelRule(s);
-    }
-
-
-    /** This method appends a global definition for a given program
-     * point. */
-    void appendGlobal(Ppt p, String s) {
-      if (!definitiontable.containsKey(p)) {
-        definitiontable.put(p,new Definition());
-      }
-      Definition d=definitiontable.get(p);
-      d.appendGlobal(s);
-    }
-
-    public static String escapeString(String s) {
-      s=s.replace('.','_');
-      s=s.replace('(','_');
-      s=s.replace(')','_');
-      s=s.replace('[','_');
-      s=s.replace(']','_');
-      s=s.replace('-','_');
-      return s;
-    }
-
-    // /** Generic tuple class.  Implements hashcode and equals.  */
-    /*     public static class Tuple {
-       Object a;
-       Object b;
-       Object c;
-
-       Tuple(Object a, Object b) {
-         this.a=a;
-         this.b=b;
-         this.c=null;
-       }
-       Tuple(Object a, Object b,Object c) {
-         this.a=a;
-         this.b=b;
-         this.c=c;
-       }
-       public int hashCode() {
-         int h=a.hashCode()^b.hashCode();
-         if (c!=null)
-           h^=c.hashCode();
-         return h;
-       }
-       public boolean equals(Object o) {
-         if (!((o instanceof Tuple)&&
-               ((Tuple)o).a.equals(a)&&
-               ((Tuple)o).b.equals(b)))
-           return false;
-         if (c==null&&((Tuple)o).c==null)
-           return true;
-         if (c==null||((Tuple)o).c==null)
-           return false;
-         return ((Tuple)o).c.equals(c);
-       }
-     }
-    */
-
-    /** This class stores information on a given program point. */
-
-    public static class Definition implements Cloneable {
-      String setrelation="";
-      String modelrule="";
-      String globaldecls="";
-      boolean generatespecial=false;
-
-      Hashtable<String,String> rangetable=new Hashtable<String,String>();
-      HashSet<String> globaltable=new HashSet<String>();
-
-      void appendGlobal(String g) {
-        /* Ensure that we haven't already defined the global. */
-        if (!globaltable.contains(g)) {
-          globaltable.add(g);
-          globaldecls+=g+"\n";
-        }
-      }
-
-      void appendSetRelation(String sr) {
-        setrelation+=sr+"\n";
-      }
-      void appendModelRule(String mr) {
-        modelrule+=mr+"\n";
-      }
-
-      public Definition clone() {
-        Definition newd;
-        try {
-          newd=(Definition)super.clone();
-        } catch (CloneNotSupportedException e) {
-          // Can't happen because Definition directly extends Object
-          throw new Error("This can't happen", e);
-        }
-        rangetable = (Hashtable<String,String>) rangetable.clone(); // unchecked cast
-        globaltable = (HashSet<String>) globaltable.clone(); // unchecked cast
-        return newd;
-      }
-
-      // Old implementation
-      // public Definition clone() {
-      //   Definition newd=new Definition();
-      //   newd.setrelation=setrelation;
-      //   newd.modelrule=modelrule;
-      //   newd.globaldecls=globaldecls;
-      //   newd.generatespecial=generatespecial;
-      //   newd.rangetable.putAll(rangetable);
-      //   newd.globaltable.addAll(globaltable);
-      //   return newd;
-      // }
     }
   }
 

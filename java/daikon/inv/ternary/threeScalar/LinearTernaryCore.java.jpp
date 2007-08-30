@@ -1158,10 +1158,6 @@ public final class CLASSNAME
       return format_simplify(vix, viy, viz, a, b, c, d);
     }
 
-    if (format == OutputFormat.REPAIR) {
-      return format_repair(vix, viy, viz, a, b, c, d);
-    }
-
     if ((format.isJavaFamily()))
       {
       #if defined(TYPEDOUBLE)
@@ -1242,42 +1238,6 @@ public final class CLASSNAME
     String str_axPbyPczPd = (dd == 0.0) ? str_axPbyPcz :
       "(+ " + str_axPbyPcz + " " + str_d + ")";
     return "(EQ 0 " + str_axPbyPczPd + ")";
-  }
-
-  public static String format_repair (String vix, String viy, String viz,
-                                  double da, double db, double dc, double dd) {
-    int ia = (int) da;
-    int ib = (int) db;
-    int ic = (int) dc;
-    int id = (int) dd;
-
-    String str_x = vix;
-    String str_y = viy;
-    String str_z = viz;
-
-    String str_a, str_b, str_c, str_d;
-    if (ia != da || ib != db || ic != dc || id != dd) {
-      // floating point
-
-      return "$noprint("+da+"*"+str_x+"+"+db+"*"+str_y+
-        "+"+dc+"*"+str_z+"+"+dd+"=0)";
-    } else {
-      // integer
-      str_a = Invariant.simplify_format_long(ia);
-      str_b = Invariant.simplify_format_long(ib);
-      str_c = Invariant.simplify_format_long(ic);
-      str_d = Invariant.simplify_format_long(id);
-    }
-
-    // ax + by + cz + d = 0
-
-    if (str_x.indexOf(".")!=-1) {
-      return str_x+"=(-"+str_b+"*"+str_y+"-"+str_c+"*"+str_z+"-"+str_d+ ")/"+str_a;
-    } else if (str_y.indexOf(".")!=-1) {
-      return str_y+"=(-"+str_a+"*"+str_x+"-"+str_c+"*"+str_z+"-"+str_d+ ")/"+str_b;
-    } else if (str_z.indexOf(".")!=-1) {
-      return str_z+"=(-"+str_a+"*"+str_x+"-"+str_b+"*"+str_y+"-"+str_d+ ")/"+str_c;
-    } else return "$noprint("+str_a+"*"+str_x+"+"+str_b+"*"+str_y+ "+"+str_c+"*"+str_z+"+"+str_d+"=0)";
   }
 
   public String format_using(OutputFormat format,

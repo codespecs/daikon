@@ -58,7 +58,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define NAME var().name()
-  #define REPAIR_NAME var().repair_name()
   #define NONZERO NonZero
   #define ELTONEOF EltOneOf
   #define LOWERBOUND LowerBound
@@ -77,7 +76,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define NAME var().name()
-  #define REPAIR_NAME var().repair_name()
   #define NONZERO NonZeroFloat
   #define ELTONEOF EltOneOfFloat
   #define LOWERBOUND LowerBoundFloat
@@ -94,7 +92,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name()
-  #define REPAIR_NAME var().repair_name()
 #elif defined(SEQUENCE)
   #define SCALARPKG sequence
   #define INT long[]
@@ -106,7 +103,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name()
-  #define REPAIR_NAME var().repair_name()
 #elif defined(FLOATSEQUENCE)
   #define SCALARPKG sequence
   #define INT double[]
@@ -118,7 +114,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
   #define NAME var().name()
-  #define REPAIR_NAME var().repair_name()
 #elif defined(STRINGSEQUENCE)
   #define SCALARPKG stringsequence
   #define INT String[]
@@ -130,7 +125,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name()
-  #define REPAIR_NAME var().repair_name()
 #elif defined(ELT)
   #define SCALARPKG sequence
   #define INT long
@@ -141,7 +135,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
   #define TOSTRING_SIMPLIFY(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : simplify_format_long(x))
   #define NAME var().name() + " elements"
-  #define REPAIR_NAME var().repair_name()
   #define NONZERO EltNonZero
   #define LOWERBOUND LowerBound
   #define UPPERBOUND UpperBound
@@ -157,7 +150,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define NAME var().name() + " elements"
-  #define REPAIR_NAME var().repair_name()
   #define NONZERO EltNonZeroFloat
   #define LOWERBOUND LowerBoundFloat
   #define UPPERBOUND UpperBoundFloat
@@ -170,7 +162,6 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name() + " elements"
-  #define REPAIR_NAME var().repair_name()
 #else
   #error "One of SCALAR, STRING, FLOAT, SEQUENCE, STRINGSEQUENCE, FLOATSEQUENCE, ELT, ELTSTRING, or ELTFLOAT must be defined"
 #endif
@@ -180,7 +171,6 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.SCALARPKG;
 
 import daikon.*;
-import daikon.VarInfoName.Repair;
 import daikon.inv.*;
 #ifdef IS_NUMERIC
   import daikon.derive.unary.*;
@@ -542,8 +532,6 @@ public final class ONEOFSCALAR
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
-    } else if (format == OutputFormat.REPAIR) {
-      return format_repair();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
     } else if (format == OutputFormat.SIMPLIFY) {
@@ -675,180 +663,6 @@ public final class ONEOFSCALAR
     }
   }
 
-  public String format_repair() {
-    if (num_elts == 1) {
-#if defined(SCALAR) || defined(ELT)
-      if (is_boolean()) {
-        String varname = REPAIR_NAME;
-        if ((elts[0] != 0) && (elts[0] != 1))
-            System.out.println ("WARNING:: Variable "
-            + varname + " is of type boolean, but has non boolean value: "
-            + elts[0]);
-        return varname + " = " + ((elts[0] == 0) ? "false" : "true");
-      } else if (is_hashcode()) {
-        if (elts[0] == 0) {
-          String varname = REPAIR_NAME;
-	  Repair.getRepair().setForceSet();
-          String str="sizeof("+varname + ") = 0";
-	  Repair.getRepair().noForceSet();
-          return str;
-        } else {
-	//One value case
-		return "$noprint(onevalue)";
-        }
-      } else {
-        String varname = REPAIR_NAME;
-        if (PrintInvariants.dkconfig_static_const_infer) {
-          PptTopLevel pptt = ppt.parent;
-          for (VarInfo vi : pptt.var_infos) {
-            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-              Object constantVal = vi.constantValue();
-              if (constantVal.equals(elts[0])) {
-                return varname + " = " + vi.name();
-              }
-            }
-          }
-        }
-        return varname + " = " + TOSTRING(elts[0]);
-      }
-#elif defined(SEQUENCE)
-      String varname = REPAIR_NAME;
-      if (is_hashcode()) {
-        // we only have one value, because add_modified dies if more
-        Assert.assertTrue(num_elts == 1);
-        INT value = elts[0];
-        if (value.length == 0) {
-          return "$noprint(" + varname + " = [])";
-        } else if ((value.length == 1) && (value[0] == 0)) {
-          return "(" + varname + " = null)";
-        } else if (no_nulls(0)) {
-          return "$noprint(" + varname + " contains no nulls and has only one value, of length " + value.length + ")";
-        } else if (all_nulls(0)) {
-          return "$noprint(" + varname + " contains only nulls and has only one value, of length " + value.length + ")";
-        } else {
-          return "$noprint(" + varname + " has only one value, of length " + value.length + ")";
-        }
-      } else {
-        if (PrintInvariants.dkconfig_static_const_infer) {
-          PptTopLevel pptt = ppt.parent;
-          for (VarInfo vi : pptt.var_infos) {
-            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-              Object constantVal = vi.constantValue();
-              if (constantVal.equals(elts[0])) {
-                return varname + " == " + vi.name();
-              }
-            }
-          }
-        }
-        return varname + " = " + TOSTRING(elts[0]);
-      }
-#elif defined(FLOAT) || defined(ELTFLOAT)
-      String varname = REPAIR_NAME;
-      if (PrintInvariants.dkconfig_static_const_infer) {
-        PptTopLevel pptt = ppt.parent;
-        for (VarInfo vi : pptt.var_infos) {
-          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-            if (vi.rep_type == ProglangType.DOUBLE) {
-              Double constantVal = (Double)vi.constantValue();
-              if (Global.fuzzy.eq(constantVal, elts[0]) || (Double.isNaN(constantVal) && Double.isNaN(elts[0]))) {
-                return varname + " = " + vi.name();
-              }
-            }
-            else {
-              Object constantVal = vi.constantValue();
-              if (constantVal.equals(elts[0])) {
-                return varname + " = " + vi.name();
-              }
-            }
-          }
-        }
-      }
-      return varname + " = " + TOSTRING(elts[0]);
-#elif defined(STRING) || defined(ELTSTRING)
-      String varname = REPAIR_NAME;
-      if (PrintInvariants.dkconfig_static_const_infer) {
-        PptTopLevel pptt = ppt.parent;
-        for (VarInfo vi : pptt.var_infos) {
-          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-            Object constantVal = vi.constantValue();
-            if (constantVal.equals(elts[0])) {
-              return varname + " = " + vi.name();
-            }
-          }
-        }
-      }
-      return varname + " = " + TOSTRING(elts[0]);
-#else
-      String varname = REPAIR_NAME;
-      return varname + " = " + TOSTRING(elts[0]);
-#endif
-    } else {
-      String varname = REPAIR_NAME;
-      sort_rep();
-      StringBuffer sb = new StringBuffer();
-      sb.append("(");
-      for (int i=0; i<num_elts; i++) {
-        if (i != 0)
-          sb.append(" or ");
-#if defined(SCALAR) || defined(ELT) || defined(SEQUENCE) || defined(STRING) || defined(ELTSTRING)
-        if (PrintInvariants.dkconfig_static_const_infer) {
-          boolean curVarMatch = false;
-          PptTopLevel pptt = ppt.parent;
-          for (VarInfo vi : pptt.var_infos) {
-            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-              Object constantVal = vi.constantValue();
-              if (constantVal.equals(elts[i])) {
-                sb.append("("+varname+"="+vi.name()+")");
-                curVarMatch = true;
-              }
-            }
-          }
-          if (curVarMatch == false) {
-            sb.append("("+varname+"="+TOSTRING(elts[i])+")");
-          }
-        }
-        else {
-          sb.append("("+varname+"="+TOSTRING(elts[i])+")");
-        }
-      }
-#elif defined(FLOAT) || defined(ELTFLOAT)
-        if (PrintInvariants.dkconfig_static_const_infer) {
-          boolean curVarMatch = false;
-          PptTopLevel pptt = ppt.parent;
-          for (VarInfo vi : pptt.var_infos) {
-            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-              if (vi.rep_type == ProglangType.DOUBLE) {
-                Double constantVal = (Double)vi.constantValue();
-                if (Global.fuzzy.eq(constantVal, elts[i]) || (Double.isNaN(constantVal) && Double.isNaN(elts[i]))) {
-                  sb.append("("+varname+"="+vi.name()+")");
-                  curVarMatch = true;
-                }
-              }
-              else {
-                Object constantVal = vi.constantValue();
-                if (constantVal.equals(elts[i])) {
-                  sb.append("("+varname+"="+vi.name()+")");
-                  curVarMatch = true;
-                }
-              }
-            }
-          }
-          if (curVarMatch == false) {
-            sb.append("("+varname+"="+TOSTRING(elts[i])+")");
-          }
-        }
-        else {
-          sb.append("("+varname+"="+TOSTRING(elts[i])+")");
-        }
-      }
-#else
-        sb.append("("+varname+"="+TOSTRING(elts[i])+")");
-      }
-#endif
-      sb.append(")");
-      return sb.toString();
-    }
-  }
 
 #if defined(STRING) || defined(ELTSTRING)
   private boolean is_type() {

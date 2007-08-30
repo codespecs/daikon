@@ -6,7 +6,6 @@ import java.io.*;
 import daikon.*;
 import utilMDE.Assert;
 
-
 /**
  * This is called by VarInfoName to parse varInfoNameTest<foo> files
  * and then apply various transformation tests on them.  To add your own test,

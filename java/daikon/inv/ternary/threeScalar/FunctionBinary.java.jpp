@@ -384,10 +384,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return format_simplify();
     }
 
-    if (format == OutputFormat.REPAIR) {
-      return format_repair();
-    }
-
     int var_order = get_var_order();
     String[] methodname = get_method_name();
 
@@ -421,43 +417,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     return format_unimplemented(format);
-  }
-
-  public String format_repair() {
-    int var_order = get_var_order();
-    String[] methodname = get_method_name();
-
-    VarInfo argresultvi = ppt.var_infos[var_indices[var_order][0]];
-    VarInfo arg1vi = ppt.var_infos[var_indices[var_order][1]];
-    VarInfo arg2vi = ppt.var_infos[var_indices[var_order][2]];
-
-    String argresult_name = argresultvi.repair_name();
-    String arg1_name = arg1vi.repair_name();
-    String arg2_name = arg2vi.repair_name();
-    String prefix="";
-    String postfix="";
-    String op=methodname[1];
-
-    if (methodname[1].equals(" % ")||
-        (methodname[1].equals(" | "))||
-        (methodname[1].equals(" || "))) {
-      prefix="$noprint(";
-      postfix=")";
-    }
-
-    if (methodname[1].equals(", ")) {
-      if (methodname[0].equals("java.lang.Math.min(")||
-          methodname[0].equals("java.lang.Math.max(")||
-          (methodname[0].equals("utilMDE.MathMDE.gcd("))||
-          (methodname[0].equals("java.lang.Math.pow("))||
-          (methodname[0].equals("utilMDE.MathMDE.logicalXor("))) {
-        prefix="$noprint(";
-        postfix=")";
-      }
-    }
-
-    return prefix+argresult_name + " = (" + methodname[0] + arg1_name
-      + op + arg2_name + methodname[2] + ")"+postfix;
   }
 
   public String format_simplify() {

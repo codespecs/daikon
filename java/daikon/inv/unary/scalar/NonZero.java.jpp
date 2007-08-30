@@ -45,7 +45,6 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.scalar;
 
 import daikon.*;
-import daikon.VarInfoName.Repair;
 import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
@@ -148,19 +147,6 @@ public class NONZERO
   }
 
   public String format_using(OutputFormat format) {
-    if (format == OutputFormat.REPAIR) {
-      if (zero(format).equals("null")) {
-        Repair.getRepair().setForceSet();
-        String repname=var().repair_name();
-        String ret="sizeof("+repname+")=1";
-        Repair.getRepair().noForceSet();
-        return ret;
-      } else {
-        String name = var().repair_name();
-	return name+"!="+zero(format);
-      }
-    }
-
     String name = var().name_using(format);
 
     if (format.isJavaFamily()) {

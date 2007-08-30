@@ -102,13 +102,6 @@ public class Implication
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
       String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
       return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
-    } else if (format == OutputFormat.REPAIR) {
-	if (iff) {
-	    return "((" + pred_fmt + ") and (" + consq_fmt + ")) or ((!"
-		+ pred_fmt + ") and (!" + consq_fmt + "))";
-	} else {
-	    return "(!" + pred_fmt + ") or (" + consq_fmt + ")";
-	}
     } else if (format == OutputFormat.IOA) {
       String arrow = (iff ? "  <=>  " : "  =>  ");
       return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";

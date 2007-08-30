@@ -596,9 +596,6 @@ public final class INTEQUAL
   }
 
   public String format_using(OutputFormat format) {
-    if (format == OutputFormat.REPAIR) {
-      return format_repair();
-    }
 
     String var1name = var1().name_using(format);
     String var2name = var2().name_using(format);
@@ -677,68 +674,6 @@ public final class INTEQUAL
     }
 
     return format_unimplemented(format);
-  }
-
-  public String format_repair() {
-    boolean lefthasfield=var1().name().indexOf(".")!=-1;
-    boolean righthasfield=var2().name().indexOf(".")!=-1;
-    String comparator = EQUALSstring;
-
-    String var1name;
-    String var2name;
-
-#if defined(GREATERTHAN) || defined(GREATEREQUAL)
-    /* Want all inequalities to be expressed in the same form if
-       possible.  That way changes are easily propagated upward. */
-
-    if (lefthasfield) {
-      /* No flip necessary */
-      var1name = var1().repair_name();
-      var2name = var2().simple_repair_name();
-    } else if (righthasfield) {
-      /* Need to flip */
-      comparator = INVEQUALSstring;
-      var1name=var2().repair_name();
-      var2name = var1().simple_repair_name();
-    } else {
-      /* Need to rewrite lefthand side */
-      var1name=var1().repair_name();
-      var2name = var2().simple_repair_name();
-    }
-#else
-    /* Daikon prints out equality sets with the left hand side being
-       the leader...  This causes problems with the repair tool
-       currently, so we flip them when possible */
-
-    if (righthasfield) {
-      /* Need to flip */
-      comparator = INVEQUALSstring;
-      var1name=var2().repair_name();
-      var2name = var1().simple_repair_name();
-    } else if (lefthasfield) {
-      /* No flip necessary */
-      var1name=var1().repair_name();
-      var2name = var2().simple_repair_name();
-    } else {
-      /* Need to rewrite righthand side */
-      comparator = INVEQUALSstring;
-      // This got odd diffs with respect to the old implementation.
-      // The old implementation does:
-      //    var1name=var2().name.repair_name(var1());
-      // Its unclear why it would make anysense to use var2's name with
-      // var1.  So I changed it and updated the goal files.
-      var1name = var2().repair_name();
-      var2name = var1().simple_repair_name();
-    }
-#endif
-
-#if defined(EQUAL_OP)
-    comparator = "=";
-#elif defined(NONEQUAL_OP)
-    comparator = "!=";
-#endif
-
-    return var1name + " " + comparator + " " + var2name;
   }
 
   public InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {

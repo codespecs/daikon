@@ -12,7 +12,6 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.OutputFormat;
-import daikon.VarInfoName.Repair;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;
@@ -92,9 +91,6 @@ public final class PrintInvariants {
   /** If true, print all invariants without any filtering.  **/
   public static boolean dkconfig_print_all = false;
 
-  /** print commented daikon version of invariants with repair output **/
-  public static boolean dkconfig_repair_debug = false;
-
   /**
    * If true, print the total number of true invariants.  This includes
    * invariants that are redundant and would normally not be printed
@@ -129,7 +125,7 @@ public final class PrintInvariants {
    * exists an invariant x <= 1, x <= a would be the result printed.
    */
   public static boolean dkconfig_static_const_infer = false;
- 
+
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
@@ -989,19 +985,6 @@ public final class PrintInvariants {
         }
       }
 
-    } else if (Daikon.output_format==OutputFormat.REPAIR) {
-      // Store copy of current repair state.
-      Repair oldstate = Repair.getRepair().createCopy(ppt);
-      inv_rep = inv.format_using(Daikon.output_format);
-      if (inv_rep.indexOf ("$noprint") != -1||
-          inv_rep.indexOf (">>") != -1||
-          inv_rep.indexOf (">>>") != -1||
-          inv_rep.indexOf ("&") != -1||
-          inv_rep.indexOf ("^") != -1||
-          inv_rep.indexOf ("<<") != -1) {
-        Repair.changeRepairObject(oldstate); // revert state
-        return;
-      }
     } else {
       throw new IllegalStateException("Unknown output mode");
     }
@@ -1029,13 +1012,6 @@ public final class PrintInvariants {
       out.print(" <DAIKONCLASS> " + inv.getClass().toString() + " </DAIKONCLASS> ");
       out.print(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
       out.println("</INVINFO>");
-    } else if (Daikon.output_format == OutputFormat.REPAIR) {
-      String quantifiers=Repair.getRepair().getQuantifiers();
-      Repair.getRepair().reset();
-      if (dkconfig_repair_debug) {
-        out.println("/*"+inv.format_using(OutputFormat.DAIKON)+"*/");
-      }
-      out.println("["+quantifiers+"],"+inv_rep+";");
     } else {
       out.println(inv_rep);
     }
@@ -1210,20 +1186,6 @@ public final class PrintInvariants {
       resetPrestateExpressions();
     }
 
-    if (Daikon.output_format == OutputFormat.REPAIR) {
-	if (Repair.getRepair().getRules(ppt)!=null) {
-	    out.println("-----------------------------------------------------------------------------");
-	    out.print(Repair.getRepair().getRules(ppt));
-	}
-	if (Repair.getRepair().getSetRelation(ppt)!=null) {
-	    out.println("-----------------------------------------------------------------------------");
-	    out.print(Repair.getRepair().getSetRelation(ppt));
-	}
-	if (Repair.getRepair().getGlobals(ppt)!=null) {
-	    out.println("-----------------------------------------------------------------------------");
-	    out.print(Repair.getRepair().getGlobals(ppt));
-	}
-    }
   }
 
   /**

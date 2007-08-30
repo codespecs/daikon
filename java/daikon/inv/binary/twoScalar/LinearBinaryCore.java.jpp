@@ -488,13 +488,6 @@ public final class CLASSNAME
                                     + "+ 0 * " + viy + " + 0 == 0");
     }
 
-    // The repair format output changes if these lines are removed, even
-    // though this code is dead, because formatting via repair has side
-    // effects.  This should be fixed, so that these dead lines of code can
-    // be removed.
-    // String xname = vix.name_using(format);
-    // String yname = viy.name_using(format);
-
     if (format.isJavaFamily()) {
 
       #if defined(TYPEDOUBLE)
@@ -513,30 +506,6 @@ public final class CLASSNAME
           + formatTerm(c, null, false)
            + " == 0";
       #endif
-    }
-
-    if (format == OutputFormat.REPAIR) {
-
-      String prefix="";
-      String postfix="";
-
-      String str_a, str_b;
-      if (u == (int)u && v == (int)v) {
-        // integer
-        str_a = Invariant.simplify_format_long((int)u);
-        str_b = Invariant.simplify_format_long((int)v);
-      } else {
-        str_a=Double.toString(u);
-        str_b=Double.toString(v);
-
-        prefix="$noprint(";
-        postfix=")";
-      }
-
-      if (viy.indexOf(".")!=-1)
-        return prefix+viy+"="+str_a+"*"+vix+"+"+str_b+postfix;
-      else
-        return prefix+vix+"=("+viy+"-"+str_b+")"+"/"+str_a+postfix;
     }
 
     if ((format == OutputFormat.DAIKON)
