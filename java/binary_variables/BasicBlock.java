@@ -12,7 +12,7 @@ import java.util.HashSet;
 public final class BasicBlock extends Addressable<BasicBlock> implements XmlSerialize {
   // useDominators determines if we should use dominators when outputing the dtrace file
   // In some cases there are many dominators and therefore there are too many variables in a program point.
-  public final static boolean useDominators = true;
+  public static final boolean useDominators = true;
 
   public final TreeSet<BinaryVariable> binaryVariables;
   public Function function; // the function can change since sometimes basic blocks are shared between several functions.

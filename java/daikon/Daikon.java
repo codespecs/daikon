@@ -202,8 +202,8 @@ public final class Daikon {
   /** If true, show stack traces for errors such as file format errors **/
   public static boolean dkconfig_show_stack_trace = false;
 
-  public final static String release_version = "4.3.1";
-  public final static String release_date = "August 2, 2007";
+  public static final String release_version = "4.3.1";
+  public static final String release_date = "August 2, 2007";
   public static final String release_string =
     "Daikon version "
       + release_version

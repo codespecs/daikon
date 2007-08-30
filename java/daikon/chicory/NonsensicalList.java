@@ -43,5 +43,5 @@ public class NonsensicalList extends AbstractList<Object>
         return (obj instanceof NonsensicalList);
     }
 
-    private final static NonsensicalList theList = new NonsensicalList();
+    private static final NonsensicalList theList = new NonsensicalList();
 }
