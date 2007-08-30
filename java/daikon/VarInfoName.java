@@ -279,7 +279,7 @@ public abstract class VarInfoName
     }
     return simplify_name_cached[which];
   }
-  private String[] simplify_name_cached = new String[2]; // each interned
+  private /*@Interned*/ String[] simplify_name_cached = new String[2]; // each interned
 
   /**
    * Returns the String representation of this name in the simplify
