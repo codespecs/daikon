@@ -25,6 +25,8 @@
 --exclude-broken 501:http://www.bizrate.com/
 --exclude-broken 501:https://web.mit.edu/21.guide/www/l-rec-wr.htm
 --exclude-broken 501:https://web.mit.edu/21.guide/www/toc.htm
+--exclude-broken 503:http://www.marriott.com/hotels/travel/boscb-boston-marriott-cambridge/
+--exclude-broken 503:http://www.marriott.com/hotels/travel/boscm-residence-inn-boston-cambridge/
 --exclude-docs /~adonovan/
 --exclude-docs bugzilla/
 --exclude-docs daikon/download/jdoc
@@ -62,6 +64,8 @@
 --exclude-redirect http://www.rational.com/licensing/->http://www-306.ibm.com/software/rational/support/licensing/
 --exclude-redirect http://www.usps.gov/ncsc/lookups/lookup_zip%2B4.html->http://www.usps.com/ncsc/lookups/lookup_zip%2b4.html	
 --exclude-redirect https://tree-api.dev.java.net/->https://www.dev.java.net/servlets/Login?cookieCheck=failed
+--exclude-redirect http://www.jmlspecs.org/->http://www.eecs.ucf.edu/~leavens/JML/
+--exclude-redirect-prefix http://pag.csail.mit.edu/->http://groups.csail.mit.edu/pag/
 --exclude-redirect-prefix http://pag.csail.mit.edu/->http://www.pag.csail.mit.edu/
 --exclude-redirect-prefix http://pag.csail.mit.edu/~->http://people.csail.mit.edu/
 --exclude-redirect-prefix http://texi2html.cvshome.org/->https://texi2html.cvshome.org/
