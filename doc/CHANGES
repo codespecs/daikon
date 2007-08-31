@@ -40,6 +40,15 @@ Kvasir
     visible effect is that the presence or absence of "<reference value>
     has only one value" invariants is more consistent.
 
+DynComp (Java)
+
+  Bug fixes
+
+    Calling the superclass equals method (i.e. super.equals(Object))
+    resulted in an infinite loop. This has been fixed.
+
+    The clone method of Object is now instrumented.
+
 4.3.1 (August 2, 2007)
 
 Kvasir
