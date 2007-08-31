@@ -248,6 +248,7 @@ DynComp dynamic comparability (abstract type) analysis for Java
 
 * Instrumenting the JDK with DynComp::  
 * DynComp for Java options::    
+* Instrumentation of Object methods::  
 * DynComp for Java known bugs::  
 
 C/C++ front end Kvasir
@@ -3846,6 +3847,7 @@ and so is not comparable to the other variables.
 @menu
 * Instrumenting the JDK with DynComp::  
 * DynComp for Java options::    
+* Instrumentation of Object methods::  
 * DynComp for Java known bugs::  
 @end menu
 
@@ -3876,7 +3878,7 @@ end of instrumentation. The file @file{jdk_classes.txt}, found inside
 @file{dcomp_rt.jar}, contains a list of all classes processed, including
 those that could not be instrumented.
 
-@node DynComp for Java options, DynComp for Java known bugs, Instrumenting the JDK with DynComp, DynComp for Java
+@node DynComp for Java options, Instrumentation of Object methods, Instrumenting the JDK with DynComp, DynComp for Java
 @subsection DynComp options
 
 DynComp is invoked as follows:
@@ -3971,16 +3973,40 @@ at runtime. For an example, see @ref{Variables in Chicory output}.
 @end table
 
 
-@node DynComp for Java known bugs,  , DynComp for Java options, DynComp for Java
+@node Instrumentation of Object methods, DynComp for Java known bugs, DynComp for Java options, DynComp for Java
+@subsection Instrumentation of Object methods
+
+DynComp is unable to directly instrument methods of the class
+@code{Object}, such as @code{clone} and @code{equals}. DynComp uses a
+few tricks, described here in brief, to track comparability in these
+methods.
+
+Calls such as @code{o1.equals(o2)} are replaced with calls to a static
+method in DynComp, @code{dcomp_equals(o1, o2)}. This static method
+dynamically determines whether or not @code{o1} is an instance of a
+class that has been instrumented by DynComp; every such class
+implements the interface @code{DCompInstrumented}. If so, it attempts
+to invoke the instrumented version of the @code{equals} method for
+@code{o1}. If not, or if @code{o1} has not overridden the
+@code{equals} method from @code{Object}, then no instrumented version
+exists, so the uninstrumented version is invoked.
+
+In either case, the references @code{o1} and @code{o2} are considered
+to be comparable. In a future release, we will provide a command-line
+switch to customize this behavior.
+
+The @code{clone} method operates in a similar manner, choosing
+dynamically to invoke the instrumented method or the uninstrumented
+method.  In the case of @code{clone}, the methods are invoked via
+reflection. In either case, the object being cloned and the resulting
+clone are made comparable to each other. Again, we will provide a
+switch to customize this behavior in a future release.
+
+
+@node DynComp for Java known bugs,  , Instrumentation of Object methods, DynComp for Java
 @subsection Known bugs and limitations
 
 @itemize
-@item
-DynComp does not correctly instrument the @code{clone()} method of the Object class.
-As a result, DynComp may fail
-to recognize that two variables are related if they are compared
-as part of the @code{clone()} method.
-
 @item
 Reflection finds the original, uninstrumented code, and so DynComp may
 not accurately instrument code that uses reflection.
