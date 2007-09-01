@@ -245,7 +245,8 @@ public abstract class VarInfoName
     }
     return simplify_name_cached[which];
   }
-  private String[/*@Interned*/] simplify_name_cached = new String[@Interned 2]; // each interned
+  private String[/*@Interned*/] simplify_name_cached
+    = new String[/*@Interned*/ 2]; // each interned
 
   /**
    * Returns the String representation of this name in the simplify
