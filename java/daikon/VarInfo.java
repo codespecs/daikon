@@ -1776,7 +1776,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       VarInfoName.Add add = (VarInfoName.Add) postexpr.term;
       /*@Interned*/ VarInfoName swapped =
         add.term.applyPoststate().applyAdd(add.amount);
-      var_info_name = (new VarInfoName.Replacer(postexpr, swapped)).replace(var_info_name).intern(); // vin ok
+      var_info_name = (new VarInfoName.Replacer(postexpr, swapped)).replace(var_info_name).intern(); // vin ok  // interning bugfix
       // start over
       simplify_expression();
       return;
@@ -1815,7 +1815,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
               add.amount);
         }
       }
-      var_info_name = (new VarInfoName.Replacer(postexpr, pre_expr)).replace(var_info_name).intern(); // vin ok
+      var_info_name = (new VarInfoName.Replacer(postexpr, pre_expr)).replace(var_info_name).intern(); // vin ok  // interning bugfix
       if (debugSimplifyExpression.isLoggable(Level.FINE))
         debugSimplifyExpression.fine("** Replaced with: " + var_info_name); // vin ok
     }
@@ -3614,7 +3614,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                               seq.comparability, seq.aux);
     vi.setup_derived_base (seq, begin, end);
     vi.str_name = seq.apply_subscript (String.format ("%s..%s", begin_str,
-                                                      end_str)).intern();
+                                                      end_str)).intern(); // interning bugfix
 
     // If there is a parent ppt (set in setup_derived_base), set the
     // parent variable accordingly.  If all of the original variables, used
@@ -3691,7 +3691,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                               VarInfoAux.getDefault());
     vi.setup_derived_base (seq, index);
     vi.var_kind = VarInfo.VarKind.FIELD;
-    vi.str_name = seq.apply_subscript (index_str).intern();
+    vi.str_name = seq.apply_subscript (index_str).intern(); // interning bugfix
     if (vi.parent_ppt != null) {
       if ((seq.parent_variable == null) &&
           ((index == null) || (index.parent_variable == null)))
@@ -3787,10 +3787,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Force orig to the outside if specified.
     if (swap_orig) {
       vi.str_name = String.format ("orig(%s(%s))%s", func_name,
-                                   seq.postState.name(), shift_str).intern();
+                                   seq.postState.name(), shift_str).intern(); // interning bugfix
     } else {
       vi.str_name = String.format ("%s(%s)%s", func_name, seq.name(),
-                                   shift_str).intern();
+                                   shift_str).intern(); // interning bugfix
     }
 
     if (vi.parent_ppt != null) {
@@ -3829,7 +3829,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     vi.function_args = null;
     vi.relative_name = func_name;
 
-    vi.str_name = String.format ("%s.%s()", str.name(), func_name).intern();
+    vi.str_name = String.format ("%s.%s()", str.name(), func_name).intern(); // interning bugfix
 
     if (vi.parent_ppt != null) {
       if (str.parent_variable == null)

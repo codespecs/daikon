@@ -154,7 +154,7 @@ public class DeclReader {
           System.out.printf ("Unexpected integer value '%s', for variable %s "
                              + "treated as nonsensical%n", value, this.name);
         }
-        return (Intern.intern(val));
+        return (Intern.intern(val)); // interning bugfix
       } else if (is_double()){
         Double val = null;
         try {
@@ -163,7 +163,7 @@ public class DeclReader {
           System.out.printf ("Unexpected double value '%s', for variable %s "
                              + "treated as nonsensical%n", value, this.name);
         }
-        return (Intern.intern(val));
+        return (Intern.intern(val)); // interning bugfix
       } else if (is_string()) {
         if (value.startsWith("\"") && value.endsWith("\""))
           value = value.substring (1, value.length()-1);
