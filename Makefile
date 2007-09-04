@@ -472,11 +472,18 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	#   (cd /tmp/daikon/java; ln -s $(JUNIT_VERSION)/junit .)
 	# Need to extract a jar file in the zip file, then unjar that.
 	# (src.jar only contains .java files, not .class files.)
-	mkdir /tmp/daikon/tmp-junit
-	unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/cpl-v10.html $(JUNIT_VERSION)/src.jar -d /tmp/daikon/tmp-junit
-	(cd /tmp/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; mv $(JUNIT_VERSION)/cpl-v10.html junit; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
-	rm -rf /tmp/daikon/tmp-junit
-	(cd /tmp/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
+
+	# JHP 9/4/2007: The lines commented out below were removed when the
+    # junit .zip file was removed from the CVS repository.  This happened
+    # when we updated to junit4.4.  It looks like we were compiling JUnit,
+    # though its surprising that was necessary.  Now we just extract from the
+    # jar file like we do for other jars that we include.
+	##mkdir /tmp/daikon/tmp-junit
+	##unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/cpl-v10.html $(JUNIT_VERSION)/src.jar -d /tmp/daikon/tmp-junit
+	##(cd /tmp/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; mv $(JUNIT_VERSION)/cpl-v10.html junit; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
+	##rm -rf /tmp/daikon/tmp-junit
+	##(cd /tmp/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
+	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
 
 	## Front ends
 	mkdir /tmp/daikon/front-end
