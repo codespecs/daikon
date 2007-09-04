@@ -20,7 +20,11 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.3.2 (September 1, 2007)
+4.3.2 (September 3, 2007)
+
+Bug fixes and minor enhancements were made to Daikon, Kvasir, and 
+DynComp (Java).  The "repair" output format is no longer supported
+by Daikon.
 
 Daikon
 
@@ -28,6 +32,12 @@ Daikon
 
     Elminated support for the "repair" output format.  We are not aware of
     users who are still utilizing this format; let us know if you are.
+
+  Bug fixes
+
+    Enhanced mainHelper (the programatic interface to Daikon) so that 
+    it can be called multiple times.  This allows a caller to process
+    multiple unrelated trace files within a single run.
 
 Kvasir
 
@@ -50,6 +60,9 @@ DynComp (Java)
     The clone method of Object is now instrumented.
 
 4.3.1 (August 2, 2007)
+
+Bug fixes and minor enhancements were made to Kvasir, DynComp (Java),
+DynComp (binary) and Daikon.
 
 Kvasir
 
