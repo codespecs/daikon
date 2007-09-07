@@ -81,8 +81,7 @@ public final class VarInfoAux
    * an inlined structure (or array), it doesn't make sense to look
    * for invariants over its hashcode.  Front ends include references
    * to inlined structures as variables because some tools that follow
-   * daikon (eg, data structure repair) need other information about
-   * the variable.
+   * daikon need other information about the variable.
    */
   public static final String IS_STRUCT = "isStruct";
 
