@@ -35,7 +35,7 @@ import java.util.*;
  * "a" with the function "sin" applied to it.
  **/
 public abstract class VarInfoName
-  implements Serializable, Comparable
+  implements Serializable, Comparable<VarInfoName>
 {
 
   /** Debugging Logger. **/
@@ -597,10 +597,11 @@ public abstract class VarInfoName
     return repr().hashCode();
   }
 
-  public int compareTo(Object o) {
-    int nameCmp = name().compareTo(((VarInfoName) o).name());
+  @SuppressWarnings("interned") // possible compiler bug, not sure
+  public int compareTo(VarInfoName other) {
+    int nameCmp = name().compareTo(other.name());
     if (nameCmp != 0) return nameCmp;
-    int reprCmp = repr().compareTo(((VarInfoName) o).repr());
+    int reprCmp = repr().compareTo(other.repr());
     return reprCmp;
   }
 
