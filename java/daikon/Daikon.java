@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -554,7 +556,9 @@ public final class Daikon {
     public TerminationMessage(String format, Object... args) {
       super (String.format (format, args));
     }
-    public TerminationMessage(Exception e) { super(e.getMessage()); }
+    // public TerminationMessage(Exception e) { super(e.getMessage()); }
+    public TerminationMessage(Exception e) {
+      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
     //public TerminationMessage(String s, LineNumberReader reader, String fileName) {
     //      super(new FileIOException(s, reader, fileName).getMessage()); }
     public TerminationMessage(Object... s) { super(UtilMDE.joinLines(s)); }
