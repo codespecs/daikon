@@ -1196,7 +1196,7 @@ public abstract class VarInfoName
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public Union(VarInfoName seq1, VarInfoName seq2) {
+    public Union(/*@Interned*/ VarInfoName seq1, /*@Interned*/ VarInfoName seq2) {
       super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
     }
 
@@ -1674,7 +1674,7 @@ public abstract class VarInfoName
       return v.visitAdd(this);
     }
     // override for cleanliness
-    public VarInfoName applyAdd(int _amount) {
+    public /*@Interned*/ VarInfoName applyAdd(int _amount) {
       int amt = _amount + this.amount;
       return (amt == 0) ? term : term.applyAdd(amt);
     }
@@ -1790,13 +1790,13 @@ public abstract class VarInfoName
     public <T> T accept(Visitor<T> v) {
       return v.visitElements(this);
     }
-    public VarInfoName getLowerBound() {
+    public /*@Interned*/ VarInfoName getLowerBound() {
       return ZERO;
     }
-    public VarInfoName getUpperBound() {
+    public /*@Interned*/ VarInfoName getUpperBound() {
       return applySize().applyDecrement();
     }
-    public VarInfoName getSubscript(/*@Interned*/ VarInfoName index) {
+    public /*@Interned*/ VarInfoName getSubscript(/*@Interned*/ VarInfoName index) {
       return applySubscript(index);
     }
   }
@@ -2092,13 +2092,13 @@ public abstract class VarInfoName
     public <T> T accept(Visitor<T> v) {
       return v.visitSlice(this);
     }
-    public VarInfoName getLowerBound() {
+    public /*@Interned*/ VarInfoName getLowerBound() {
       return (i != null) ? i : ZERO;
     }
-    public VarInfoName getUpperBound() {
+    public /*@Interned*/ VarInfoName getUpperBound() {
       return (j != null) ? j : sequence.getUpperBound();
     }
-    public VarInfoName getSubscript(VarInfoName index) {
+    public /*@Interned*/ VarInfoName getSubscript(VarInfoName index) {
       return sequence.getSubscript(index);
     }
   }
@@ -2203,16 +2203,16 @@ public abstract class VarInfoName
       return pre;
     }
     // visitor methods that get the job done
-    public VarInfoName visitSimple(Simple o) {
+    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
       return (o == goal) ? goal : null;
     }
-    public VarInfoName visitSizeOf(SizeOf o) {
+    public /*@Interned*/ VarInfoName visitSizeOf(SizeOf o) {
       return (o == goal) ? goal : super.visitSizeOf(o);
     }
-    public VarInfoName visitFunctionOf(FunctionOf o) {
+    public /*@Interned*/ VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == goal) ? goal : super.visitFunctionOf(o);
     }
-    public VarInfoName visitFunctionOfN(FunctionOfN o) {
+    public /*@Interned*/ VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName retval = null;
       for (VarInfoName vin : o.args) {
         retval = vin.accept(this);
@@ -2220,33 +2220,33 @@ public abstract class VarInfoName
       }
       return retval;
     }
-    public VarInfoName visitField(Field o) {
+    public /*@Interned*/ VarInfoName visitField(Field o) {
       return (o == goal) ? goal : super.visitField(o);
     }
-    public VarInfoName visitTypeOf(TypeOf o) {
+    public /*@Interned*/ VarInfoName visitTypeOf(TypeOf o) {
       return (o == goal) ? goal : super.visitTypeOf(o);
     }
-    public VarInfoName visitPrestate(Prestate o) {
+    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
       pre = true;
       return super.visitPrestate(o);
     }
-    public VarInfoName visitPoststate(Poststate o) {
+    public /*@Interned*/ VarInfoName visitPoststate(Poststate o) {
       pre = false;
       return super.visitPoststate(o);
     }
-    public VarInfoName visitAdd(Add o) {
+    public /*@Interned*/ VarInfoName visitAdd(Add o) {
       return (o == goal) ? goal : super.visitAdd(o);
     }
-    public VarInfoName visitElements(Elements o) {
+    public /*@Interned*/ VarInfoName visitElements(Elements o) {
       return (o == goal) ? goal : super.visitElements(o);
     }
-    public VarInfoName visitSubscript(Subscript o) {
+    public /*@Interned*/ VarInfoName visitSubscript(Subscript o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
       if (o.index.accept(this) != null) return goal;
       return null;
     }
-    public VarInfoName visitSlice(Slice o) {
+    public /*@Interned*/ VarInfoName visitSlice(Slice o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
       if ((o.i != null) && (o.i.accept(this) != null)) return goal;
@@ -2292,22 +2292,22 @@ public abstract class VarInfoName
      * Returns the part of root that is contained in this.goals, or
      * null if not found.
      **/
-    public VarInfoName getPart (VarInfoName root) {
+    public /*@Interned*/ VarInfoName getPart (VarInfoName root) {
       VarInfoName o = root.intern().accept(this);
       return o;
     }
 
     // visitor methods that get the job done
-    public VarInfoName visitSimple(Simple o) {
+    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
       return (goals.contains(o)) ? o : null;
     }
-    public VarInfoName visitSizeOf(SizeOf o) {
+    public /*@Interned*/ VarInfoName visitSizeOf(SizeOf o) {
       return (goals.contains(o)) ? o : o.sequence.intern().accept(this);
     }
-    public VarInfoName visitFunctionOf(FunctionOf o) {
+    public /*@Interned*/ VarInfoName visitFunctionOf(FunctionOf o) {
       return (goals.contains(o)) ? o : super.visitFunctionOf(o);
     }
-    public VarInfoName visitFunctionOfN(FunctionOfN o) {
+    public /*@Interned*/ VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName result = null;
       if (goals.contains(o)) return o;
       for (VarInfoName vin : o.args) {
@@ -2316,27 +2316,27 @@ public abstract class VarInfoName
       }
       return result;
     }
-    public VarInfoName visitField(Field o) {
+    public /*@Interned*/ VarInfoName visitField(Field o) {
       return (goals.contains(o)) ? o : super.visitField(o);
     }
-    public VarInfoName visitTypeOf(TypeOf o) {
+    public /*@Interned*/ VarInfoName visitTypeOf(TypeOf o) {
       return (goals.contains(o)) ? o : super.visitTypeOf(o);
     }
-    public VarInfoName visitPrestate(Prestate o) {
+    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
       if (goals.contains(o)) return o;
       return super.visitPrestate(o);
     }
-    public VarInfoName visitPoststate(Poststate o) {
+    public /*@Interned*/ VarInfoName visitPoststate(Poststate o) {
       if (goals.contains(o)) return o;
       return super.visitPoststate(o);
     }
-    public VarInfoName visitAdd(Add o) {
+    public /*@Interned*/ VarInfoName visitAdd(Add o) {
       return (goals.contains(o)) ? o : super.visitAdd(o);
     }
-    public VarInfoName visitElements(Elements o) {
+    public /*@Interned*/ VarInfoName visitElements(Elements o) {
       return (goals.contains(o)) ? o : super.visitElements(o);
     }
-    public VarInfoName visitSubscript(Subscript o) {
+    public /*@Interned*/ VarInfoName visitSubscript(Subscript o) {
       if (goals.contains(o)) return o;
       VarInfoName temp = o.sequence.accept(this);
       if (temp != null) return temp;
@@ -2344,7 +2344,7 @@ public abstract class VarInfoName
       if (temp != null) return temp;
       return null;
     }
-    public VarInfoName visitSlice(Slice o) {
+    public /*@Interned*/ VarInfoName visitSlice(Slice o) {
       if (goals.contains(o)) return o;
       VarInfoName temp = o.sequence.accept(this);
       if (temp != null) return temp;
@@ -2514,22 +2514,22 @@ public abstract class VarInfoName
       this._new = _new;
     }
 
-    public VarInfoName replace(VarInfoName root) {
+    public /*@Interned*/ VarInfoName replace(VarInfoName root) {
       return root.accept(this);
     }
 
-    public VarInfoName visitSimple(Simple o) {
+    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
       return (o == old) ? _new : o;
     }
-    public VarInfoName visitSizeOf(SizeOf o) {
+    public /*@Interned*/ VarInfoName visitSizeOf(SizeOf o) {
       return (o == old) ? _new :
         super.visitSizeOf(o).applySize();
     }
-    public VarInfoName visitFunctionOf(FunctionOf o) {
+    public /*@Interned*/ VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == old) ? _new :
         super.visitFunctionOf(o).applyFunction(o.function);
     }
-    public VarInfoName visitFunctionOfN(FunctionOfN o) {
+    public /*@Interned*/ VarInfoName visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
       // otherwise, create a new function and check if arguments get replaced
       if (o == old) return _new;
@@ -2540,36 +2540,36 @@ public abstract class VarInfoName
       }
       return VarInfoName.applyFunctionOfN(o.function, newArgs);
     }
-    public VarInfoName visitField(Field o) {
+    public /*@Interned*/ VarInfoName visitField(Field o) {
       return (o == old) ? _new :
         super.visitField(o).applyField(o.field);
     }
-    public VarInfoName visitTypeOf(TypeOf o) {
+    public /*@Interned*/ VarInfoName visitTypeOf(TypeOf o) {
       return (o == old) ? _new :
         super.visitTypeOf(o).applyTypeOf();
     }
-    public VarInfoName visitPrestate(Prestate o) {
+    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
       return (o == old) ? _new :
         super.visitPrestate(o).applyPrestate();
     }
-    public VarInfoName visitPoststate(Poststate o) {
+    public /*@Interned*/ VarInfoName visitPoststate(Poststate o) {
       return (o == old) ? _new :
         super.visitPoststate(o).applyPoststate();
     }
-    public VarInfoName visitAdd(Add o) {
+    public /*@Interned*/ VarInfoName visitAdd(Add o) {
       return (o == old) ? _new :
         super.visitAdd(o).applyAdd(o.amount);
     }
-    public VarInfoName visitElements(Elements o) {
+    public /*@Interned*/ VarInfoName visitElements(Elements o) {
       return (o == old) ? _new :
         super.visitElements(o).applyElements();
     }
-    public VarInfoName visitSubscript(Subscript o) {
+    public /*@Interned*/ VarInfoName visitSubscript(Subscript o) {
       return (o == old) ? _new :
         o.sequence.accept(this).
         applySubscript(o.index.accept(this));
     }
-    public VarInfoName visitSlice(Slice o) {
+    public /*@Interned*/ VarInfoName visitSlice(Slice o) {
       return (o == old) ? _new :
         o.sequence.accept(this).
         applySlice((o.i == null) ? null : o.i.accept(this),
@@ -2591,12 +2591,12 @@ public abstract class VarInfoName
       super(null, null);
     }
 
-    public VarInfoName visitSimple(Simple o) {
+    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
       if (o.name.equals("return")) return o;
       return o.applyPoststate();
     }
 
-    public VarInfoName visitPrestate(Prestate o) {
+    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
       return o.term;
     }
 
@@ -3032,8 +3032,8 @@ public abstract class VarInfoName
      * Record type for return value of the quantify method below.
      **/
     public static class QuantifyReturn {
-      public VarInfoName[] root_primes;
-      public Vector<VarInfoName[]> bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
+      public VarInfoName[/*@Interned*/] root_primes;
+      public Vector<VarInfoName[/*@Interned*/]> bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
     }
 
     // <root*> -> <root'*, <index, lower, upper>*>
@@ -3732,7 +3732,7 @@ public abstract class VarInfoName
   // Special JML capability, since JML cannot format a sequence of elements,
   // often what is wanted is the name of the reference (we have a[], we want
   // a. This function provides the appropriate name for these circumstances.
-  public VarInfoName JMLElementCorrector() {
+  public /*@Interned*/ VarInfoName JMLElementCorrector() {
     if (this instanceof Elements) {
       return ((Elements)this).term;
     } else if (this instanceof Slice) {
@@ -3755,7 +3755,7 @@ public abstract class VarInfoName
   public interface Transformer
   {
     /** Perform a transformation on the argument. */
-    public VarInfoName transform(VarInfoName v);
+    public /*@Interned*/ VarInfoName transform(VarInfoName v);
   }
 
   /**
@@ -3763,7 +3763,7 @@ public abstract class VarInfoName
    **/
   public static final Transformer IDENTITY_TRANSFORMER
     = new Transformer() {
-        public VarInfoName transform(VarInfoName v) {
+        public /*@Interned*/ VarInfoName transform(VarInfoName v) {
           return v;
         }
       };
@@ -3773,7 +3773,7 @@ public abstract class VarInfoName
    * Compare VarInfoNames alphabetically.
    **/
   public static class LexicalComparator implements Comparator<VarInfoName> {
-    public int compare(VarInfoName name1, VarInfoName name2) {
+    public int compare(/*@Interned*/ VarInfoName name1, /*@Interned*/ VarInfoName name2) {
       return name1.compareTo(name2);
     }
   }
