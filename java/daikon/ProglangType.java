@@ -699,14 +699,13 @@ public final /*@Interned*/ class ProglangType
     return sb.toString();
   }
 
+  @SuppressWarnings("interned") // initialization-checking pattern
   public static String toString (ProglangType[] types) {
-    String out = "[";
+    StringBuilderDelimited out = new StringBuilderDelimited(", ");
     for (int i = 0; i < types.length; i++) {
-      if (out != "[")           // interned; initialization-checking pattern
-        out += ", ";
-      out += types[i];
+      out.append(types[i]);
     }
-    return (out + "]");
+    return ("[" + out + "]");
   }
 
   public String toString() {

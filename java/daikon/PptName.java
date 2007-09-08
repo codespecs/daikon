@@ -191,7 +191,7 @@ public class PptName
    * May be null.
    * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;"
    **/
-  public String getNameWithoutPoint() {
+  public /*@Interned*/ String getNameWithoutPoint() {
     return fn_name;
     // if (cls == null && method == null) return null;
     // if (cls == null) return method;

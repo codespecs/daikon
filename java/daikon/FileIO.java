@@ -1191,7 +1191,7 @@ public final class FileIO {
           return;
         }
 
-      String line = line_.intern();
+      /*@Interned*/ String line = line_.intern();
 
       // First look for declarations in the dtrace stream
       if (is_declaration_header (line)) {
@@ -1806,7 +1806,7 @@ public final class FileIO {
                                      // HashMap cumulative_modbits,
                                      Object[] vals, int[] mods, Integer nonce) {
     VarInfo[] vis = ppt.var_infos;
-    String fn_name = ppt.ppt_name.getNameWithoutPoint();
+    /*@Interned*/ String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
     if (ppt_name.endsWith(enter_tag)) {
       Invocation invok = new Invocation(ppt, vals, mods);
@@ -2299,7 +2299,7 @@ public final class FileIO {
      parent_relation_id = Integer.parseInt (need (scanner, "parent id"));
      boolean found = false;
      for (ParentRelation pr : ppt_parents) {
-       if ((pr.parent_ppt_name == parent_ppt) && (pr.id ==parent_relation_id)){
+       if ((pr.parent_ppt_name == parent_ppt) && (pr.id == parent_relation_id)) {
          found = true;
          break;
        }
@@ -2378,11 +2378,9 @@ public final class FileIO {
       return (e);
     } catch (Exception exception) {
       E[] all = enum_class.getEnumConstants();
-      String msg = "";
+      StringBuilderDelimited msg = new StringBuilderDelimited(", ");
       for (E e : all) {
-        if (msg != "")          // "interned": initialization-checking pattern
-          msg += ", ";
-        msg += String.format ("'%s'", e.name().toLowerCase());
+        msg.append(String.format ("'%s'", e.name().toLowerCase()));
       }
       decl_error (state, "'%s' found where %s expected", str, msg);
       return (null);

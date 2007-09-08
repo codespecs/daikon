@@ -1796,7 +1796,7 @@ public abstract class VarInfoName
     public VarInfoName getUpperBound() {
       return applySize().applyDecrement();
     }
-    public VarInfoName getSubscript(VarInfoName index) {
+    public VarInfoName getSubscript(/*@Interned*/ VarInfoName index) {
       return applySubscript(index);
     }
   }
@@ -2148,8 +2148,8 @@ public abstract class VarInfoName
      **/
     public T visitFunctionOfN(FunctionOfN o) {
       T retval = null;
-      for (ListIterator i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
-        VarInfoName vin = (VarInfoName)i.previous();
+      for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
+        VarInfoName vin = i.previous();
         retval = vin.accept(this);
       }
       return retval;
@@ -2378,9 +2378,9 @@ public abstract class VarInfoName
 
     public Boolean visitFunctionOfN(FunctionOfN o) {
       Boolean retval = null;
-      for (ListIterator i = o.args.listIterator(o.args.size());
+      for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size());
            i.hasPrevious(); ) {
-        VarInfoName vin = (VarInfoName)i.previous();
+        VarInfoName vin = i.previous();
         retval = vin.accept(this);
         if (retval != null)
           return null;

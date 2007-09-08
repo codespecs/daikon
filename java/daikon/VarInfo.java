@@ -448,13 +448,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       if (!parent_vars_specified)
         parent_variable = null;
       else {  // one of the arguments has a different parent variable name
-        String args = "";
+        StringBuilderDelimited args = new StringBuilderDelimited(",");
         for (VarInfo vi : bases) {
-          if (args != "")       // "interned"; initialization-checking pattern
-            args += ",";
-          args += vi.parent_variable;
+          args.append(vi.parent_variable);
         }
-        parent_variable = String.format ("%s(%s)", name, args);
+        parent_variable = String.format ("%s(%s)", name, args.toString());
       }
     }
   }
