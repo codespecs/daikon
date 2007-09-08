@@ -1175,10 +1175,9 @@ public final class FileIO {
 
     LineNumberReader reader = state.reader;
 
-    // "line_" is uninterned, "line" is interned
-    for (String line_ = reader.readLine(); line_ != null;
-         line_ = reader.readLine()) {
-      if (line_.equals("") || isComment(line_)) {
+    for (String line = reader.readLine(); line != null;
+         line = reader.readLine()) {
+      if (line.equals("") || isComment(line)) {
         continue;
       }
       state.lineNum = reader.getLineNumber();
@@ -1191,7 +1190,7 @@ public final class FileIO {
           return;
         }
 
-      /*@Interned*/ String line = line_.intern();
+      // interning bugfix:  no need to intern "line" (after code change to is_declaration_header)
 
       // First look for declarations in the dtrace stream
       if (is_declaration_header (line)) {
@@ -1231,7 +1230,7 @@ public final class FileIO {
       }
       String ppt_name = line;
       if (new_decl_format)
-        ppt_name = unescape_decl(line).intern();
+        ppt_name = unescape_decl(line); // interning bugfix: no need to intern
       if (!ppt_included (ppt_name)) {
         // System.out.printf ("skipping ppt %s\n", line);
         while ((line != null) && !line.equals(""))
@@ -2393,11 +2392,11 @@ public final class FileIO {
   }
 
   /** Returns whether the line is the start of a ppt declaration **/
-  private static boolean is_declaration_header (/*@Interned*/ String line) {
+  private static boolean is_declaration_header (String line) {
     if (new_decl_format)
       return (line.startsWith ("ppt "));
     else
-      return (line == declaration_header);
+      return (line.equals(declaration_header));
   }
 
 
