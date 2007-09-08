@@ -8,6 +8,8 @@ import java.util.*;
 
 import utilMDE.*;
 
+import checkers.quals.Interned;
+
 
 /**
  * This is the data structure that holds the tuples of values seen so far
@@ -23,7 +25,7 @@ public final class ValueTuple implements Cloneable {
   public static Logger debug = Logger.getLogger("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.
-  public Object[] vals;
+  public /*@Interned*/ Object[/*@Interned*/] vals;
 
   // consider putting this in the first slot of "vals", to avoid the Object
   // overhead of a pair of val and mods.  Do I need to worry about trickery
@@ -35,11 +37,12 @@ public final class ValueTuple implements Cloneable {
   // the packed representation if appropriate.  (That does seem cleaner,
   // although it might be less efficient.)
 
-  public int[] mods;            // modification bit per value, possibly packed
-                                // into fewer ints than the vals above.
-                                // Don't use a single int because that
-                                // won't scale to (say) more than 16
-                                // values.
+  /**
+   * Modification bit per value, possibly packed into fewer ints than the
+   * vals field.  Don't use a single int because that won't scale to (say)
+   * more than 16 values.
+  **/
+  public /*@Interned*/ int[] mods;
 
 
   // Right now there are only three meaningful values for a mod:
@@ -221,6 +224,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   // Private constructor that doesn't perform interning.
+  @SuppressWarnings("interned") // interning constructor
   private ValueTuple(Object[] vals, int[] mods, boolean check) {
     Assert.assertTrue((!check) || Intern.isInterned(vals));
     Assert.assertTrue((!check) || Intern.isInterned(mods));
@@ -243,13 +247,14 @@ public final class ValueTuple implements Cloneable {
    * variables to take separate vals and mods arguments.  No one else
    * should use it!
    **/
+  @SuppressWarnings("interned") // interning constructor
   public static ValueTuple makeUninterned(Object[] vals, int[] mods) {
     return new ValueTuple(vals, mods, false);
   }
 
 
   /** Constructor that takes already-interned arguments. */
-  static ValueTuple makeFromInterned(Object[] vals, int[] mods) {
+  static ValueTuple makeFromInterned(/*@Interned*/ Object[/*@Interned*/] vals, int[] mods) {
     return new ValueTuple(vals, mods, true);
   }
 
