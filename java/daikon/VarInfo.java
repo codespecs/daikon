@@ -1564,7 +1564,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           : (vari_shift >= varj_shift));
     }
     // different variables
-    Assert.assertTrue(vari.ppt == varj.ppt);
+    @SuppressWarnings("interned") // assertion (PptTopLevel)
+    boolean samePpt = (vari.ppt == varj.ppt);
+    Assert.assertTrue(samePpt);
     PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
     if (indices_ppt == null)
       return false;
@@ -1726,6 +1728,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Check if two VarInfos are truly (non guarded) equal to each other
    * right now.
    **/
+  @SuppressWarnings("interned") // Equality
   public boolean isEqualTo(VarInfo other) {
     Assert.assertTrue(equalitySet != null);
     return this.equalitySet == other.equalitySet;
@@ -1835,7 +1838,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     VarInfo var1 = this;
     // Can only compare in the same ppt because otherwise
     // comparability info may not make sense.
-    Assert.assertTrue(var1.ppt == var2.ppt);
+    @SuppressWarnings("interned") // assertion (PptTopLevel)
+    boolean samePpt = (var1.ppt == var2.ppt);
+    Assert.assertTrue(samePpt);
 
     if (!comparableByType(var2)) {
       return false;
@@ -3545,6 +3550,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (FileIO.new_decl_format)
       return enclosing_var;
     else {
+      @SuppressWarnings("interned") // looks like a checker bug
       List</*@Interned*/ VarInfoName> traversal
         = new VarInfoName.InorderFlattener(var_info_name).nodes();
       if (traversal.size() <= 1) {
@@ -3578,7 +3584,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                                 int begin_shift, VarInfo end, int end_shift) {
 
     String begin_str = inside_name (begin, seq.isPrestate(), begin_shift);
-    if (begin_str == "") // interned (if the null string, not interned otherwise)
+    if (begin_str.equals("")) // interned if the null string, not interned otherwise
       begin_str = "0";
     String end_str = inside_name (end, seq.isPrestate(), end_shift);
 

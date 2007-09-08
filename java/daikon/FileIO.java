@@ -180,7 +180,7 @@ public final class FileIO {
   static final class ParentRelation implements java.io.Serializable {
     static final long serialVersionUID = 20060622L;
     PptRelationType rel_type;
-    String parent_ppt_name;
+    /*@Interned*/ String parent_ppt_name;
     int id;
     public String toString() { return parent_ppt_name + "[" + id + "] "
                                  + rel_type; };
@@ -349,8 +349,10 @@ public final class FileIO {
        Scanner scanner) throws DeclError {
 
     ParentRelation pr = new ParentRelation();
-    pr.rel_type = parse_enum_val (state, scanner, PptRelationType.class,
-                                  "relation type");
+    @SuppressWarnings("interned") // generic type inference
+    PptRelationType rel_type = parse_enum_val (state, scanner, PptRelationType.class,
+                                      "relation type");
+    pr.rel_type = rel_type;
     pr.parent_ppt_name = need (state, scanner, "ppt name");
     pr.id = Integer.parseInt (need (state, scanner, "relation id"));
     need_eol (state, scanner);
@@ -373,8 +375,8 @@ public final class FileIO {
   private static PptType parse_ppt_type (ParseState state, Scanner scanner)
     throws DeclError {
 
-    PptType ppt_type
-      = parse_enum_val (state, scanner, PptType.class, "ppt type");
+    @SuppressWarnings("interned") // generic type inference
+    PptType ppt_type = parse_enum_val (state, scanner, PptType.class, "ppt type");
     need_eol (state, scanner);
     return (ppt_type);
   }
@@ -486,7 +488,9 @@ public final class FileIO {
       var_infos.add(vi);
     }
 
-    return var_infos.toArray(new VarInfo[var_infos.size()]);
+    @SuppressWarnings("interned") // generic type inference
+    VarInfo[] result = var_infos.toArray(new VarInfo[var_infos.size()]);
+    return result;
   }
 
   // So that warning message below is only printed once
@@ -732,11 +736,13 @@ public final class FileIO {
     }
 
     // Print the Invocation on two lines, indented by two spaces
+    // The receiver Invocation may be canonicalized or not.
     String format() {
       return format(true);
     }
 
-    // Print the Invocation on one or two lines, indented by two spaces
+    // Print the Invocation on one or two lines, indented by two spaces.
+    // The receiver Invocation may be canonicalized or not.
     String format(boolean show_values) {
       if (! show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();
@@ -758,7 +764,7 @@ public final class FileIO {
         pw.print(ppt.var_infos[j].name() + "=");
 
         Object val = vals[j];
-        if (val == canonical_hashcode)
+        if (canonical_hashcode.equals(val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is little point.  val can be null, so it cannot be the receiver.
           pw.print("<hashcode>");
         else if (val instanceof int[])
           pw.print(ArraysMDE.toString((int[]) val));
@@ -773,7 +779,7 @@ public final class FileIO {
     }
 
     /** Change uses of hashcodes to canonical_hashcode. **/
-    public Invocation canonicalize() {
+    public /*@Interned*/ Invocation canonicalize() {
       Object[] new_vals = new Object[vals.length];
       System.arraycopy(vals, 0, new_vals, 0, vals.length);
       VarInfo[] vis = ppt.var_infos;
@@ -784,7 +790,7 @@ public final class FileIO {
           new_vals[vi.value_index] = canonical_hashcode;
         }
       }
-      return new Invocation(ppt, new_vals, mods);
+      return new /*@Interned*/ Invocation(ppt, new_vals, mods);
     }
 
     // Return true if the invocations print the same
@@ -1456,6 +1462,7 @@ public final class FileIO {
   }
 
   /** Returns non-null if this procedure has an unmatched entry. **/
+  @SuppressWarnings("interned") // PptTopLevel
   static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
     for (Invocation invok : call_hashmap.values()) {
       if (invok.ppt == ppt) {
@@ -1536,10 +1543,10 @@ public final class FileIO {
    * suppressing duplicates.
    **/
   static void print_invocations_grouped(Collection<Invocation> invocations) {
-    Map<Invocation,Integer> counter = new HashMap<Invocation,Integer>();
+    Map</*@Interned*/ Invocation,Integer> counter = new HashMap</*@Interned*/ Invocation,Integer>();
 
-    for (Invocation invok : invocations) {
-      invok = invok.canonicalize();
+    for (Invocation invok_noncanonical : invocations) {
+      /*@Interned*/ Invocation invok = invok_noncanonical.canonicalize();
       if (counter.containsKey(invok)) {
         Integer oldCount = counter.get(invok);
         Integer newCount = new Integer(oldCount.intValue() + 1);
@@ -1550,8 +1557,8 @@ public final class FileIO {
     }
 
     // Print the invocations in sorted order.
-    TreeSet<Invocation> keys = new TreeSet<Invocation>(counter.keySet());
-    for (Invocation invok : keys) {
+    TreeSet</*@Interned*/ Invocation> keys = new TreeSet</*@Interned*/ Invocation>(counter.keySet());
+    for (/*@Interned*/ Invocation invok : keys) {
       Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));
@@ -2150,7 +2157,7 @@ public final class FileIO {
     public EnumSet<VarFlags> flags = EnumSet.noneOf (VarFlags.class);
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
     public VarComparability comparability = null;
-    public String parent_ppt = null;
+    public /*@Interned*/ String parent_ppt = null;
     public int parent_relation_id = 0;
     public String parent_variable = null;
     public Object static_constant_value = null;
@@ -2209,7 +2216,9 @@ public final class FileIO {
      * kind.
      */
     public void parse_var_kind (Scanner scanner) throws DeclError {
-      kind = parse_enum_val (scanner, VarKind.class, "variable kind");
+      @SuppressWarnings("interned") // generic type inference
+      VarKind kind_local = parse_enum_val (scanner, VarKind.class, "variable kind");
+      kind = kind_local;
 
       if ((kind == VarKind.FIELD) || (kind == VarKind.FUNCTION)) {
         relative_name = need (scanner, "relative name");
@@ -2225,7 +2234,9 @@ public final class FileIO {
 
     /** Parses the reference-type record **/
     public void parse_reference_type (Scanner scanner) throws DeclError {
-      ref_type = parse_enum_val (scanner, RefType.class, "reference type");
+      @SuppressWarnings("interned") // generic type inference
+      RefType ref_type_local = parse_enum_val (scanner, RefType.class, "reference type");
+      ref_type = ref_type_local;
       need_eol (scanner);
     }
 

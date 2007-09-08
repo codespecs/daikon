@@ -439,13 +439,16 @@ public abstract class VarInfoName
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
   private static final WeakHashMap<VarInfoName,WeakReference</*@Interned*/ VarInfoName>> internTable = new WeakHashMap<VarInfoName,WeakReference</*@Interned*/ VarInfoName>>();
+  // This does not make any guarantee that the components of the
+  // VarInfoName are themselves interned.  Should it?  (I suspect so...)
   public /*@Interned*/ VarInfoName intern() {
     WeakReference</*@Interned*/ VarInfoName> ref = internTable.get(this);
     if (ref != null) {
       /*@Interned*/ VarInfoName result = ref.get();
       return result;
     } else {
-      /*@Interned*/ VarInfoName this_interned = (/*@Interned*/ VarInfoName) this; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("interned") // intern method
+      /*@Interned*/ VarInfoName this_interned = this;
       internTable.put(this_interned, new WeakReference</*@Interned*/ VarInfoName>(this_interned));
       return this_interned;
     }
@@ -472,6 +475,7 @@ public abstract class VarInfoName
   /**
    * @return the nodes of this, as given by an inorder traversal.
    **/
+  @SuppressWarnings("interned") // generic type inference
   public Collection</*@Interned*/ VarInfoName> inOrderTraversal() /*@Interned*/ {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
@@ -1805,7 +1809,7 @@ public abstract class VarInfoName
    * Caller is subscripting an orig(a[]) array.  Take the requested
    * index and make it useful in that context.
    **/
-  static VarInfoName indexToPrestate(/*@Interned*/ VarInfoName index) {
+  static /*@Interned*/ VarInfoName indexToPrestate(/*@Interned*/ VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])
     // 2 orig(a[]) . index       -> orig(a[post(index)])
     if (index instanceof Prestate) {
@@ -1842,8 +1846,9 @@ public abstract class VarInfoName
   }
 
   // Given a sequence and subscript index, convert the index to an
-  // explicit form if necessary (e.g. a[-1] becomes a[a.length-1])
-  static VarInfoName indexExplicit(/*@Interned*/ Elements sequence, VarInfoName index) {
+  // explicit form if necessary (e.g. a[-1] becomes a[a.length-1]).
+  // Result is not interned, because it is only ever used for printing.
+  static VarInfoName indexExplicit(Elements sequence, VarInfoName index) {
     if (!index.isLiteralConstant()) {
       return index;
     }
@@ -2098,7 +2103,7 @@ public abstract class VarInfoName
     public /*@Interned*/ VarInfoName getUpperBound() {
       return (j != null) ? j : sequence.getUpperBound();
     }
-    public /*@Interned*/ VarInfoName getSubscript(VarInfoName index) {
+    public /*@Interned*/ VarInfoName getSubscript(/*@Interned*/ VarInfoName index) {
       return sequence.getSubscript(index);
     }
   }
@@ -2148,8 +2153,8 @@ public abstract class VarInfoName
      **/
     public T visitFunctionOfN(FunctionOfN o) {
       T retval = null;
-      for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
-        VarInfoName vin = i.previous();
+      for (ListIterator</*@Interned*/ VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
+        /*@Interned*/ VarInfoName vin = i.previous();
         retval = vin.accept(this);
       }
       return retval;
@@ -2184,20 +2189,21 @@ public abstract class VarInfoName
    * Use to report whether a node is in a pre- or post-state context.
    * Throws an assertion error if a given goal isn't present.
    **/
+  @SuppressWarnings("interned") // equality checking pattern, etc.
   public static class NodeFinder
-    extends AbstractVisitor<VarInfoName>
+    extends AbstractVisitor</*@Interned*/ VarInfoName>
   {
     /**
      * Creates a new NodeFinder.
      * @param root the root of the tree to search
      * @param goal the goal to find
      **/
-    public NodeFinder(VarInfoName root, VarInfoName goal) {
+    public NodeFinder(/*@Interned*/ VarInfoName root, /*@Interned*/ VarInfoName goal) {
       this.goal = goal;
       Assert.assertTrue(root.accept(this) != null);
     }
     // state and accessors
-    private final VarInfoName goal;
+    private final /*@Interned*/ VarInfoName goal;
     private boolean pre;
     public boolean inPre() {
       return pre;
@@ -2213,7 +2219,7 @@ public abstract class VarInfoName
       return (o == goal) ? goal : super.visitFunctionOf(o);
     }
     public /*@Interned*/ VarInfoName visitFunctionOfN(FunctionOfN o) {
-      VarInfoName retval = null;
+      /*@Interned*/ VarInfoName retval = null;
       for (VarInfoName vin : o.args) {
         retval = vin.accept(this);
         if (retval != null) return retval;
@@ -2260,6 +2266,7 @@ public abstract class VarInfoName
    * in the VarInfoName tree using == comparison.  Recurse through
    * everything except fields, so in x.a, we don't look at a.
    **/
+  @SuppressWarnings("interned") // equality checking pattern, etc.
   public static class Finder
     extends AbstractVisitor<VarInfoName>
   {
@@ -2446,6 +2453,7 @@ public abstract class VarInfoName
    * Use to traverse a tree, find the first (elements ...) node, and
    * report whether it's in pre or post-state.
    **/
+  @SuppressWarnings("interned") // equality checking pattern, etc.
   public static class ElementsFinder
     extends AbstractVisitor<Elements>
   {
@@ -2504,6 +2512,7 @@ public abstract class VarInfoName
    * replaces some node (and its children) with another.
    * The result is *not* interned; the client must do that if desired.
    **/
+  @SuppressWarnings("interned") // equality checking pattern, etc.
   public static class Replacer
     extends AbstractVisitor<VarInfoName>
   {
