@@ -13,8 +13,9 @@ import java.util.*;
 // the same-named on in V2.  In V2, this is just for printing.  In V3,
 // this does all the canonicalizing, etc.
 
-// We don't need all these implementation details in the Javadoc that is
-// reproduced in the Daikon user manual!
+// This is a Java (not Javadoc) comment because the Daikon user manual
+// reproduces the Javadoc but doesn't need all these implementation
+// details.
 //
 // During checking, Equality keeps track of variables that are
 // comparable and equal, so we only need to instantiate (other)
