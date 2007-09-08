@@ -22,6 +22,7 @@ import static utilMDE.Options.ArgException;
 // Options.java
 // OrderedPairIterator.java
 // TestUtilMDE.java
+// StringBuilderDelimited.java
 // UtilMDE.java
 // WeakHasherMap.java
 
@@ -1338,6 +1339,21 @@ public final class TestUtilMDE extends TestCase {
     }
     return result;
   }
+
+  public void testStringBuilderDelimited() {
+    compareJoinAndSBD(new String[] { "foo", "bar", "baz" });
+    compareJoinAndSBD(new String[] { "foo" });
+    compareJoinAndSBD(new String[] { });
+  }
+
+  public void compareJoinAndSBD(String[] strings) {
+    StringBuilderDelimited sbd = new StringBuilderDelimited(",");
+    for (String str: strings) {
+      sbd.append(str);
+    }
+    assertTrue(sbd.toString().equals(UtilMDE.join(strings, ",")));
+  }
+
 
   // This cannot be static because it instantiates an inner class.
   public void testUtilMDE() {
