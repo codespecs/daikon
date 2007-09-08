@@ -42,6 +42,12 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
     return this;
   }
 
+  public StringBuilderDelimited append(Object o) {
+    appendDelimiter();
+    delegate.append(o.toString());
+    return this;
+  }
+
   public StringBuilderDelimited append(char c) {
     appendDelimiter();
     delegate.append(c);
