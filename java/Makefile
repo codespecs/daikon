@@ -614,7 +614,6 @@ JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
 JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=^daikon\.Daikon
 # Remove files that trigger bugs in the checker
 INTERNED_JAVA_FILES_SKIP =
-INTERNED_JAVA_FILES_SKIP = -skip FileIO.java
 INTERNED_JAVA_FILES = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} '@Interned')
 
 ## Other attempts:
