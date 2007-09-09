@@ -699,7 +699,6 @@ public final /*@Interned*/ class ProglangType
     return sb.toString();
   }
 
-  @SuppressWarnings("interned") // initialization-checking pattern
   public static String toString (ProglangType[] types) {
     StringBuilderDelimited out = new StringBuilderDelimited(", ");
     for (int i = 0; i < types.length; i++) {
