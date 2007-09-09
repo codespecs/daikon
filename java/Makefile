@@ -611,18 +611,34 @@ audit:
 
 # JAVAC_ARGS ?= -g -target 5 -typeprocessor checkers.interned.InternedChecker
 JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
-JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=^daikon\.Daikon
+# I cannot pass JAVAC_INTERNED_EXCLUDE on the command line to the version of javac that is a script, because that one doesn't respect "java" arguments.
+# Even so, the skipClasses variable seems not to be working for me (though
+# @SuppressWarnings is a better approach).
+JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=daikon.VarInfoName.NodeFinder
 # Remove files that trigger bugs in the checker
 INTERNED_JAVA_FILES_SKIP =
+INTERNED_JAVA_FILES_SKIP = -skip VarInfoName.java
+INTERNED_JAVA_FILES_SKIP_COUNTS = -skip Intern.java -skip VarInfoName.java
 INTERNED_JAVA_FILES = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} '@Interned')
+INTERNED_JAVA_FILES_COUNTS = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} '@Interned')
 
 ## Other attempts:
-# ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVAC_INTERNED_EXCLUDE} ${INTERNED_JAVA_FILES}
 # JAVAC_JAVA_ARGS=${JAVAC_INTERNED_EXCLUDE} ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
 intern: interned
 interned:
-	${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
+	JAVAC_JAVA_ARGS='${JAVAC_INTERNED_EXCLUDE}' ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
 
+interned-counts:
+	echo "Files: "
+	echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
+	echo "Lines: "
+	wc -l ${INTERNED_JAVA_FILES_COUNTS}
+	echo "@Interned annotations: "
+	grep "@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l
+	echo "New local vars: "
+	grep "interned = " ${INTERNED_JAVA_FILES_COUNTS} | wc -l
+	echo "@SuppressWarnings annotations:"
+	grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS}
 
 ###
 ### Testing
