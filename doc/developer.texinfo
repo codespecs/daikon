@@ -1636,6 +1636,7 @@ The test can be added into the standard tests (either @samp{everything} or
 @c   7/26/2006  Gregory Kapfhammer <gkapfham@allegheny.edu>
 @c  10/10/2006  Bob Evans <bobevans@agitar.com>
 @c   7/29/2007  John Hatcliff <hatcliff@cis.ksu.edu>
+@c   9/10/2007  Saurabh Sinha <saurabhsinha@in.ibm.com>, Vibha S Sinha <vibha.sinha@in.ibm.com>
 
 This section is intended primarily for researchers who are analyzing
 historical versions of Daikon.  A number of researchers (for example, in
