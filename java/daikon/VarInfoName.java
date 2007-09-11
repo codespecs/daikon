@@ -147,7 +147,6 @@ public abstract class VarInfoName
     // A.B, where A is complex: foo(x).y, x[7].y, etc.
     int dot = name.lastIndexOf('.');
     int arrow = name.lastIndexOf("->");
-
     if (dot>=0 && dot >arrow) {
       String first = name.substring(0, dot);
       String field = name.substring(dot+1);
@@ -161,7 +160,7 @@ public abstract class VarInfoName
       return parse(first).applyField(field);
     }
 
-    // ??
+    // New decl format permits arbitrary uninterpreted strings as names
     if (FileIO.new_decl_format)
       return (new Simple(name)).intern();
     else
@@ -190,7 +189,8 @@ public abstract class VarInfoName
 
   /**
    * Returns the String representation of this name in the default output
-   * format.  Results are interned, then cached by name().
+   * format.  Result is not interned; the client (name()) does so, then
+   * caches the interned value.
    */
   protected abstract String name_impl();
 
@@ -341,7 +341,7 @@ public abstract class VarInfoName
   // whether we're doing testing. If we are, then we know that the
   // VarInfo being passed is probably null, and we do something other
   // than the normal thing (which would probably be to signal an
-  // error). Unfortunately, this prevents testing of some those
+  // error). Unfortunately, this prevents testing of some of those
   // formats that make use of VarInfo information.
   public static boolean testCall = false;
 
@@ -456,14 +456,15 @@ public abstract class VarInfoName
 
 
   // ============================================================
-  // Helpful constants
+  // Constants
 
   public static final /*@Interned*/ VarInfoName ZERO = parse("0");
   public static final /*@Interned*/ VarInfoName THIS = parse("this");
   public static final /*@Interned*/ VarInfoName ORIG_THIS = parse("this").applyPrestate();
 
+
   // ============================================================
-  // Interesting observers
+  // Observers
 
   /**
    * @return true when this is "0", "-1", "1", etc.
@@ -500,6 +501,9 @@ public abstract class VarInfoName
     return false;
   }
 
+  /**
+   * @return true iff a TypeOf node exists in this
+   **/
   public boolean hasTypeOf() {
     return hasNodeOfType(VarInfoName.TypeOf.class);
   }
