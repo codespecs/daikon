@@ -1005,6 +1005,9 @@ public final class UtilMDE {
       return first;
     }
 
+    // Throws an error unless the RemoveFirstAndLastIterator has already
+    // been iterated all the way to its end (so the delegate is pointing to
+    // the last element).  Also, this is buggy when the delegate is empty.
     public T getLast() {
       if (itor.hasNext()) {
         throw new Error();
