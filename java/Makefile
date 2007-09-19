@@ -46,6 +46,9 @@ ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
 endif
 
 CLASSPATH := .:$(CLASSPATH)${CLASSPATH_JARS}:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+ifeq (cygwin,$(OSTYPE))
+  export CLASSPATH := $(shell cygpath -pw $(CLASSPATH))
+endif
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
@@ -664,7 +667,10 @@ check-serialize:
 junit:
 	@echo "Running unit (not system) tests..."
 	@echo java daikon.test.MasterUnitTester
-	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
+	@#jhp 9/19/07: not clear why this needs -server or classpath specified.
+	@#It doesn't work on windows that way for me.
+	@#@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
+	@${JAVA} daikon.test.MasterUnitTester
 
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
@@ -1436,6 +1442,11 @@ daikon/derive/unary/SequenceInitialFactory.java: daikon/derive/unary/SequenceIni
 daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/SequenceInitialFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
+
+dump :
+	echo "$(CLASSPATH)"
+	which java
+	echo $(OSTYPE)
 
 ###########################################################################
 ### Delete-on-error
