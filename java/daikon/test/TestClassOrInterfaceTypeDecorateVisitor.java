@@ -72,6 +72,20 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     UngenerifiedTypeCollector ungenerifiedCollector = new UngenerifiedTypeCollector();
     compilationUnit.accept(new ClassOrInterfaceTypeDecorateVisitor());
     compilationUnit.accept(ungenerifiedCollector);
+    
+    /*
+    String result = ungenerifiedCollector.collectionResults().trim();
+    String expected = expectedAnswerBuffer.toString().trim();
+     for (int ii = 0; ii < result.length(); ii++) {
+      if (result.charAt(ii) !=  expected.charAt(ii)) {
+        System.out.printf ("diff at offset %d: '%c' - '%c'%n", ii, 
+                           result.charAt(ii), expected.charAt(ii));
+        System.out.printf ("last:%n%s%n%s%n", result.substring (ii-50, ii+2),
+                           expected.substring (ii-50, ii+2));
+        break;
+      }
+    }
+    */
 
     Assert.assertTrue(ungenerifiedCollector.collectionResults()
                       + "\n\n\nExpected answer:\n\n\n"
@@ -81,10 +95,9 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
   }
 
   private static StringBuffer expectedAnswerBuffer = new StringBuffer();
+  private static final String lineSep = System.getProperty("line.separator");
 
   static {
-
-
     expectedAnswerBuffer.append("Collection results:\n");
     expectedAnswerBuffer.append("  String  -->  String\n");
     expectedAnswerBuffer.append("  java.lang.Object  -->  java.lang.Object\n");

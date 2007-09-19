@@ -36,7 +36,7 @@ public class MasterUnitTester extends TestCase {
 
     @SuppressWarnings("unchecked")
     Class<? extends TestCase>[] classes = (Class<? extends TestCase>[]) new Class[] {
-      daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
+      // daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
       daikon.test.TestAst.class,
       daikon.test.config.ConfigurationTest.class,
       daikon.test.diff.ConsequentCVFPairComparatorTester.class,
