@@ -1931,9 +1931,10 @@ public final class TestUtilMDE extends TestCase {
     Assert.assertTrue(c1.getNumberOfWrittenBytes() == 22);
     Assert.assertTrue(c1.getNumberOfPrintedChars() == 9);
     c1.println("foo");
-    Assert.assertTrue(c1.getNumberOfPrintedBytes() == 13);
-    Assert.assertTrue(c1.getNumberOfWrittenBytes() == 28);
-    Assert.assertTrue(c1.getNumberOfPrintedChars() == 13);
+    int ls_len = System.getProperty("line.separator").length();
+    Assert.assertTrue(c1.getNumberOfPrintedBytes() == (12 + ls_len));
+    Assert.assertTrue(c1.getNumberOfWrittenBytes() == (28));
+    Assert.assertTrue(c1.getNumberOfPrintedChars() == (12 + ls_len));
   }
 
 
