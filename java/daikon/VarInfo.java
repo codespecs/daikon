@@ -67,7 +67,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * points, because two different program points could contain unrelated
    * variables named "x".
    **/
-  private /*@Interned*/ VarInfoName var_info_name; // interned
+  private VarInfoName var_info_name; // interned
 
   /**
    * Name as specified in the program point declaration.  VarInfoName
@@ -496,7 +496,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Create the specified VarInfo **/
-  private VarInfo (/*@Interned*/ VarInfoName name, ProglangType type,
+  private VarInfo (VarInfoName name, ProglangType type,
                   ProglangType file_rep_type, VarComparability comparability,
                   boolean is_static_constant, Object static_constant_value,
                   VarInfoAux aux) {
@@ -557,7 +557,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Create the specified non-static VarInfo **/
-  private VarInfo (/*@Interned*/ VarInfoName name, ProglangType type,
+  private VarInfo (VarInfoName name, ProglangType type,
                   ProglangType file_rep_type, VarComparability comparability,
                   VarInfoAux aux) {
     this(name, type, file_rep_type, comparability, false, null, aux);
@@ -636,7 +636,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       result.canBeMissing = vi.canBeMissing;
 
     } else {
-      /*@Interned*/ VarInfoName newname = vi.var_info_name.applyPrestate(); // vin ok
+      VarInfoName newname = vi.var_info_name.applyPrestate(); // vin ok
       result =
         new VarInfo(newname,
           vi.type,
@@ -879,7 +879,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!FileIO.new_decl_format) {
       // Determine the result from VarInfoName
       Set<VarInfo> paramVars = ppt.getParamVars();
-      Set</*@Interned*/ VarInfoName> param_names = new LinkedHashSet</*@Interned*/ VarInfoName>();
+      Set<VarInfoName> param_names = new LinkedHashSet<VarInfoName>();
       for (VarInfo vi : paramVars)
         param_names.add (vi.var_info_name);  // vin ok
 
@@ -887,7 +887,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       VarInfoName.Finder finder = new VarInfoName.Finder(param_names);
       Object baseMaybe = finder.getPart(var_info_name);  // vin ok
       if (baseMaybe != null) {
-        /*@Interned*/ VarInfoName base = (/*@Interned*/ VarInfoName) baseMaybe;
+        VarInfoName base = (VarInfoName) baseMaybe;
         derivedParamCached = this.ppt.find_var_by_name (base.name());
         if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
           Global.debugSuppressParam.fine(
@@ -1018,7 +1018,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // boring if X stays the same (because it's obviously true).
       if (!FileIO.new_decl_format) {
         if (var_info_name instanceof VarInfoName.TypeOf) { // vin ok
-          /*@Interned*/ VarInfoName base = ((VarInfoName.TypeOf) var_info_name).term; // vin ok
+          VarInfoName base = ((VarInfoName.TypeOf) var_info_name).term; // vin ok
           VarInfo baseVar = ppt.find_var_by_name (base.name());
           if ((baseVar != null) && baseVar.isParam()) {
             Global.debugSuppressParam.fine("TypeOf returning true");
@@ -1028,7 +1028,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           }
         }
         if (var_info_name instanceof VarInfoName.SizeOf) { // vin ok
-          /*@Interned*/ VarInfoName base = ((VarInfoName.SizeOf) var_info_name).get_term(); // vin ok
+          VarInfoName base = ((VarInfoName.SizeOf) var_info_name).get_term(); // vin ok
           VarInfo baseVar = ppt.find_var_by_name (base.name());
           if (baseVar != null && baseVar.isParam()) {
             Global.debugSuppressParam.fine("SizeOf returning true");
@@ -1361,7 +1361,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       VarInfo size = ppt.find_var_by_name ("size(" + base.name() + ")");
       return size;
     } else {
-      /*@Interned*/ VarInfoName search = this.var_info_name; // vin ok
+      VarInfoName search = this.var_info_name; // vin ok
       boolean pre = false;
       if (search instanceof VarInfoName.Prestate) {
         search = ((VarInfoName.Prestate) search).term;
@@ -1429,7 +1429,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else {
       for (VarInfoName next : var_info_name.inOrderTraversal()) {  // vin ok
         if (next instanceof VarInfoName.Elements) {
-          /*@Interned*/ VarInfoName.Elements elems = (VarInfoName.Elements) next;
+          VarInfoName.Elements elems = (VarInfoName.Elements) next;
           VarInfo seq = ppt.find_var_by_name (elems.term.name());
           if (!seq.type.isArray()) {
             return false;
@@ -1653,13 +1653,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   // // takes an "orig()" var and gives a VarInfoName for a variable or
   // // expression in the post-state which is equal to this one.
-  // public /*@Interned*/ VarInfoName postStateEquivalent() {
+  // public VarInfoName postStateEquivalent() {
   //   return otherStateEquivalent(true);
   // }
 
   // takes a non-"orig()" var and gives a VarInfoName for a variable
   // or expression in the pre-state which is equal to this one.
-  public /*@Interned*/ VarInfoName preStateEquivalent() {
+  public VarInfoName preStateEquivalent() {
     return otherStateEquivalent(false);
   }
 
@@ -1671,7 +1671,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // This does *not* try the obvious thing of converting "foo" to
   // "orig(foo)"; it creates something new.  I need to clarify the
   // documentation.
-  public /*@Interned*/ VarInfoName otherStateEquivalent(boolean post) {
+  public VarInfoName otherStateEquivalent(boolean post) {
 
     assert !FileIO.new_decl_format;
 
@@ -1762,7 +1762,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     VarInfoName.Poststate postexpr = null;
     for (VarInfoName node : (new VarInfoName.InorderFlattener(var_info_name)).nodes()) { // vin ok
       if (node instanceof VarInfoName.Poststate) {
-        postexpr = (VarInfoName.Poststate) node;
+        // Remove temporary var when bug is fixed.
+        @SuppressWarnings("interned") // checker bug:  test case is InternedClass.castTest
+        VarInfoName.Poststate tempNode = (VarInfoName.Poststate) node;
+        postexpr = tempNode;
+        // old code; reinstate when bug is fixed
+        // postexpr = (VarInfoName.Poststate) node;
         break;
       }
     }
@@ -1774,8 +1779,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // if we have post(...+k) rewrite as post(...)+k
     if (postexpr.term instanceof VarInfoName.Add) {
+      @SuppressWarnings("interned") // checker bug:  test case is InternedClass.castTest
       VarInfoName.Add add = (VarInfoName.Add) postexpr.term;
-      /*@Interned*/ VarInfoName swapped =
+      VarInfoName swapped =
         add.term.applyPoststate().applyAdd(add.amount);
       var_info_name = (new VarInfoName.Replacer(postexpr, swapped)).replace(var_info_name).intern(); // vin ok  // interning bugfix
       // start over
@@ -1803,12 +1809,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           "** Punt because no VarInfo for postvar " + postexpr.term);
       return;
     }
-    /*@Interned*/ VarInfoName pre_expr = postvar.preStateEquivalent();
+    VarInfoName pre_expr = postvar.preStateEquivalent();
     if (pre_expr != null) {
       // strip off any orig() so we don't get orig(a[orig(i)])
       if (pre_expr instanceof VarInfoName.Prestate) {
         pre_expr = ((VarInfoName.Prestate) pre_expr).term;
       } else if (pre_expr instanceof VarInfoName.Add) {
+        @SuppressWarnings("interned") // checker bug:  test case is InternedClass.castTest
         VarInfoName.Add add = (VarInfoName.Add) pre_expr;
         if (add.term instanceof VarInfoName.Prestate) {
           pre_expr =
@@ -2002,8 +2009,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   //  **/
   // public static class LexicalComparator implements Comparator<VarInfo> {
   //   public int compare(VarInfo vi1, VarInfo vi2) {
-  //     /*@Interned*/ VarInfoName name1 = vi1.name;
-  //     /*@Interned*/ VarInfoName name2 = vi2.name;
+  //     VarInfoName name1 = vi1.name;
+  //     VarInfoName name2 = vi2.name;
   //     return name1.compareTo(name2);
   //   }
   // }
@@ -2101,7 +2108,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                            vi.canBeMissing));
         return result;
       }
-      private boolean shouldBeGuarded(/*@Interned*/ VarInfoName viname) {
+      private boolean shouldBeGuarded(VarInfoName viname) {
         // Not "shouldBeGuarded(ppt.findVar(viname))" because that
         // unnecessarily computes ppt.findVar(viname), if
         // dkconfig_guardNulls is "always".
@@ -2126,7 +2133,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return false;
 
       }
-      public List<VarInfo> visitSimple(/*@Interned*/ Simple o) {
+      public List<VarInfo> visitSimple(Simple o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         // No recursion:  no children
         if (! o.name.equals("this")) {
@@ -2137,7 +2144,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitSizeOf(/*@Interned*/ SizeOf o) {
+      public List<VarInfo> visitSizeOf(SizeOf o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.sequence.accept(this));
@@ -2148,7 +2155,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitFunctionOf(/*@Interned*/ FunctionOf o) {
+      public List<VarInfo> visitFunctionOf(FunctionOf o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.argument.accept(this));
@@ -2159,7 +2166,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitFunctionOfN(/*@Interned*/ FunctionOfN o) {
+      public List<VarInfo> visitFunctionOfN(FunctionOfN o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           for (VarInfoName arg : o.args) {
@@ -2172,7 +2179,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitField(/*@Interned*/ Field o) {
+      public List<VarInfo> visitField(Field o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
           Invariant.debugGuarding.fine(String.format("visitField: shouldBeGuarded(%s) => %s", o.name(), shouldBeGuarded(o)));
@@ -2186,7 +2193,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitTypeOf(/*@Interned*/ TypeOf o) {
+      public List<VarInfo> visitTypeOf(TypeOf o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.term.accept(this));
@@ -2197,7 +2204,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitPrestate(/*@Interned*/ Prestate o) {
+      public List<VarInfo> visitPrestate(Prestate o) {
         assert inPre == false;
         inPre = true;
         List<VarInfo> result = o.term.accept(this);
@@ -2208,7 +2215,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitPoststate(/*@Interned*/ Poststate o) {
+      public List<VarInfo> visitPoststate(Poststate o) {
         assert inPre == true;
         inPre = false;
         List<VarInfo> result = o.term.accept(this);
@@ -2219,7 +2226,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitAdd(/*@Interned*/ Add o) {
+      public List<VarInfo> visitAdd(Add o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.term.accept(this));
@@ -2230,7 +2237,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitElements(/*@Interned*/ Elements o) {
+      public List<VarInfo> visitElements(Elements o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.term.accept(this));
@@ -2241,7 +2248,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitSubscript(/*@Interned*/ Subscript o) {
+      public List<VarInfo> visitSubscript(Subscript o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.sequence.accept(this));
@@ -2253,7 +2260,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return result;
       }
-      public List<VarInfo> visitSlice(/*@Interned*/ Slice o) {
+      public List<VarInfo> visitSlice(Slice o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.sequence.accept(this));
@@ -2270,7 +2277,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       }
 
       // Convert to prestate variable name if appropriate
-      /*@Interned*/ VarInfoName applyPreMaybe(/*@Interned*/ VarInfoName vin) {
+      VarInfoName applyPreMaybe(VarInfoName vin) {
         if (inPre)
           return vin.applyPrestate();
         else
@@ -2281,7 +2288,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         //   1. "ppt.findVar("orig(" + vi.name() + ")")" does not work:
         //       "Error: orig() variables shouldn't appear in .decls files"
 
-        /*@Interned*/ VarInfoName viPreName = vi.var_info_name.applyPrestate(); // vin ok
+        VarInfoName viPreName = vi.var_info_name.applyPrestate(); // vin ok
         VarInfo viPre = ppt.find_var_by_name (vi.prestate_name());
         if (viPre == null) {
           System.out.printf("Can't find pre var %s (%s) at %s%n", viPreName.name(), viPreName, ppt);
@@ -2293,7 +2300,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return viPre;
       }
 
-      private List<VarInfo> addVar(List<VarInfo> result, /*@Interned*/ VarInfoName vin) {
+      private List<VarInfo> addVar(List<VarInfo> result, VarInfoName vin) {
         VarInfo vi = ppt.find_var_by_name(applyPreMaybe(vin).name());
         // vi could be null because some variable's prefix is not a
         // variable.  Example: for static variable "Class.staticvar",
@@ -2751,7 +2758,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Temporary to let things compile now that name is private.  Eventually
    * this should be removed.
    */
-  public /*@Interned*/ VarInfoName get_VarInfoName() {
+  public VarInfoName get_VarInfoName() {
     return (var_info_name); // vin ok
   }
 
@@ -3106,7 +3113,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return new String[] {quant.get_quantification(),
                        quant.get_arr_vars_indexed(0), vars[1].esc_name(), ")"};
     } else {
-      /*@Interned*/ VarInfoName vin[] = new /*@Interned*/ VarInfoName[vars.length];
+      VarInfoName vin[] = new VarInfoName[vars.length];
       for (int ii = 0; ii < vars.length; ii++)
         vin[ii] = vars[ii].var_info_name; // vin ok
       return VarInfoName.QuantHelper.format_esc (vin, elementwise);
@@ -3203,7 +3210,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // Use VarInfoName to handle the old format
     if (!FileIO.new_decl_format) {
-      /*@Interned*/ VarInfoName select
+      VarInfoName select
         = VarInfoName.QuantHelper.selectNth (this.var_info_name, // vin ok
                                         simplify_index_name, free, index_off);
       // System.out.printf ("sNth: index %s, free %b, off %d, result '%s'\n",
@@ -3246,10 +3253,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Use VarInfoName to handle the old format
     if (!FileIO.new_decl_format) {
       VarInfoName[/*@Interned*/] bounds = var_info_name.getSliceBounds();
-      /*@Interned*/ VarInfoName lower = null;
+      VarInfoName lower = null;
       if (bounds != null)
         lower = bounds[0];
-      /*@Interned*/ VarInfoName select
+      VarInfoName select
         = VarInfoName.QuantHelper.selectNth (var_info_name, // vin ok
                                              lower, index_off);
       return select.simplify_name();
@@ -3274,7 +3281,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   public static String get_simplify_free_index (VarInfo... vars) {
     if (!FileIO.new_decl_format) {
-      /*@Interned*/ VarInfoName[] vins = new /*@Interned*/ VarInfoName[vars.length];
+      VarInfoName[] vins = new VarInfoName[vars.length];
       for (int ii = 0; ii < vars.length; ii++) {
         vins[ii] = vars[ii].var_info_name; // vin ok
       }
@@ -3293,13 +3300,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static String[] get_simplify_free_indices (VarInfo... vars) {
     if (!FileIO.new_decl_format) {
       if (vars.length == 1) {
-        /*@Interned*/ VarInfoName index1_vin
+        VarInfoName index1_vin
           = VarInfoName.QuantHelper.getFreeIndex (vars[0].var_info_name);  // vin ok
         String index2 = VarInfoName.QuantHelper.getFreeIndex
           (vars[0].var_info_name, index1_vin).simplify_name(); // vin ok
         return new String[] {index1_vin.name(), index2};
       } else if (vars.length == 2) {
-        /*@Interned*/ VarInfoName index1_vin = VarInfoName.QuantHelper.getFreeIndex
+        VarInfoName index1_vin = VarInfoName.QuantHelper.getFreeIndex
           (vars[0].var_info_name, vars[1].var_info_name); // vin ok
         String index2 = VarInfoName.QuantHelper.getFreeIndex
           (vars[0].var_info_name, vars[2].var_info_name, index1_vin) // vin ok
@@ -3336,7 +3343,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     if (!FileIO.new_decl_format) {
       // Get the names for each variable.
-      /*@Interned*/ VarInfoName vin[] = new /*@Interned*/ VarInfoName[vars.length];
+      VarInfoName vin[] = new VarInfoName[vars.length];
       for (int ii = 0; ii < vars.length; ii++)
         vin[ii] = vars[ii].var_info_name; // vin ok
 
@@ -3551,7 +3558,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return enclosing_var;
     else {
       @SuppressWarnings("interned") // looks like a checker bug
-      List</*@Interned*/ VarInfoName> traversal
+      List<VarInfoName> traversal
         = new VarInfoName.InorderFlattener(var_info_name).nodes();
       if (traversal.size() <= 1) {
         // System.out.printf ("size <= 1, traversal = %s%n", traversal);
@@ -3571,7 +3578,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * name of arg.  Used to match up enter/exit variables with object variables
    **/
   public String replace_this (VarInfo arg) {
-    /*@Interned*/ VarInfoName parent_name = var_info_name.replaceAll (VarInfoName.THIS, arg.var_info_name);
+    VarInfoName parent_name = var_info_name.replaceAll (VarInfoName.THIS, arg.var_info_name);
     return parent_name.name();
   }
 
@@ -3588,7 +3595,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       begin_str = "0";
     String end_str = inside_name (end, seq.isPrestate(), end_shift);
 
-    /*@Interned*/ VarInfoName begin_name = (begin != null) ? begin.var_info_name : null;
+    VarInfoName begin_name = (begin != null) ? begin.var_info_name : null;
     String parent_format = "%s..";
     if (begin_shift == -1) {
       begin_name = begin_name.applyDecrement();
@@ -3600,7 +3607,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       assert begin_shift == 0;
     }
 
-    /*@Interned*/ VarInfoName end_name = (end != null) ? end.var_info_name : null;
+    VarInfoName end_name = (end != null) ? end.var_info_name : null;
     if (end_shift == -1) {
       end_name = end_name.applyDecrement();
       parent_format += "%s-1";
@@ -3612,7 +3619,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       parent_format += "%s";
     }
 
-    /*@Interned*/ VarInfoName new_name = seq.var_info_name.applySlice (begin_name, end_name);
+    VarInfoName new_name = seq.var_info_name.applySlice (begin_name, end_name);
 
     VarInfo vi = new VarInfo (new_name, seq.type, seq.file_rep_type,
                               seq.comparability, seq.aux);
@@ -3677,7 +3684,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     String index_str = inside_name (index, seq.isPrestate(), index_shift);
 
-    /*@Interned*/ VarInfoName index_name = null;
+    VarInfoName index_name = null;
     if (index == null)
       index_name = VarInfoName.parse (String.valueOf (index_shift));
     else {
@@ -3688,7 +3695,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         assert index_shift == 0 : "bad shift " + index_shift + " for " + index;
     }
 
-    /*@Interned*/ VarInfoName new_name = seq.var_info_name.applySubscript (index_name);
+    VarInfoName new_name = seq.var_info_name.applySubscript (index_name);
     VarInfo vi = new VarInfo (new_name, seq.type.elementType(),
                               seq.file_rep_type.elementType(),
                               seq.comparability.elementType(),
@@ -3722,7 +3729,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   public static VarInfo make_function (String function_name, VarInfo... vars) {
 
-    /*@Interned*/ VarInfoName[] vin = new /*@Interned*/ VarInfoName[vars.length];
+    VarInfoName[] vin = new VarInfoName[vars.length];
     for (int ii = 0; ii < vars.length; ii++)
       vin[ii] = vars[ii].var_info_name;
 
@@ -3746,7 +3753,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static VarInfo make_scalar_seq_func (String func_name,
                               ProglangType type, VarInfo seq, int shift) {
 
-    /*@Interned*/ VarInfoName viname = seq.var_info_name.applyFunction (func_name);
+    VarInfoName viname = seq.var_info_name.applyFunction (func_name);
     if (func_name.equals ("size"))
       viname = seq.var_info_name.applySize();
     String shift_name = "";
@@ -3819,7 +3826,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static VarInfo make_scalar_str_func (String func_name,
                               ProglangType type, VarInfo str) {
 
-    /*@Interned*/ VarInfoName viname = str.var_info_name.applyFunction (func_name);
+    VarInfoName viname = str.var_info_name.applyFunction (func_name);
 
     ProglangType ptype = type;
     ProglangType frtype = type;

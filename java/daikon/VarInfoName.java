@@ -21,6 +21,9 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.util.*;
 
+// This class is deprecated.  It should be removed as soon as Daikon no
+// longer supports the old decl format.
+
 // If you change this file, also change class daikon.test.VarInfoNameTest.
 
 /**
@@ -34,7 +37,8 @@ import java.util.*;
  * For example, "a" is a name, and "sin(a)" is a name that is the name
  * "a" with the function "sin" applied to it.
  **/
-public abstract class VarInfoName
+@SuppressWarnings("interned")
+public abstract /*@Interned*/ class VarInfoName
   implements Serializable, Comparable<VarInfoName>
 {
 
@@ -64,7 +68,7 @@ public abstract class VarInfoName
    * "name.equals(parse(e.name()))" might throw an exception, but if
    * it completes normally, the result should be true.
    **/
-  public static /*@Interned*/ VarInfoName parse(String name) {
+  public static VarInfoName parse(String name) {
 
     // Remove the array indication from the new decl format
     name = name.replace ("[..]", "[]");
@@ -122,8 +126,8 @@ public abstract class VarInfoName
       if (lbracket >= 0) {
         String seqname = name.substring(0, lbracket) + "[]";
         String idxname = name.substring(lbracket + 1, name.length() - 1);
-        /*@Interned*/ VarInfoName seq = parse(seqname);
-        /*@Interned*/ VarInfoName idx = parse(idxname);
+        VarInfoName seq = parse(seqname);
+        VarInfoName idx = parse(idxname);
         return seq.applySubscript(idx);
       }
     }
@@ -438,18 +442,18 @@ public abstract class VarInfoName
 
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
-  private static final WeakHashMap<VarInfoName,WeakReference</*@Interned*/ VarInfoName>> internTable = new WeakHashMap<VarInfoName,WeakReference</*@Interned*/ VarInfoName>>();
+  private static final WeakHashMap<VarInfoName,WeakReference<VarInfoName>> internTable = new WeakHashMap<VarInfoName,WeakReference<VarInfoName>>();
   // This does not make any guarantee that the components of the
   // VarInfoName are themselves interned.  Should it?  (I suspect so...)
-  public /*@Interned*/ VarInfoName intern() {
-    WeakReference</*@Interned*/ VarInfoName> ref = internTable.get(this);
+  public VarInfoName intern() {
+    WeakReference<VarInfoName> ref = internTable.get(this);
     if (ref != null) {
-      /*@Interned*/ VarInfoName result = ref.get();
+      VarInfoName result = ref.get();
       return result;
     } else {
       @SuppressWarnings("interned") // intern method
-      /*@Interned*/ VarInfoName this_interned = this;
-      internTable.put(this_interned, new WeakReference</*@Interned*/ VarInfoName>(this_interned));
+      VarInfoName this_interned = this;
+      internTable.put(this_interned, new WeakReference<VarInfoName>(this_interned));
       return this_interned;
     }
   }
@@ -458,9 +462,9 @@ public abstract class VarInfoName
   // ============================================================
   // Constants
 
-  public static final /*@Interned*/ VarInfoName ZERO = parse("0");
-  public static final /*@Interned*/ VarInfoName THIS = parse("this");
-  public static final /*@Interned*/ VarInfoName ORIG_THIS = parse("this").applyPrestate();
+  public static final VarInfoName ZERO = parse("0");
+  public static final VarInfoName THIS = parse("this");
+  public static final VarInfoName ORIG_THIS = parse("this").applyPrestate();
 
 
   // ============================================================
@@ -477,7 +481,7 @@ public abstract class VarInfoName
    * @return the nodes of this, as given by an inorder traversal.
    **/
   @SuppressWarnings("interned") // generic type inference
-  public Collection</*@Interned*/ VarInfoName> inOrderTraversal() /*@Interned*/ {
+  public Collection<VarInfoName> inOrderTraversal() /*@Interned*/ {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
 
@@ -485,7 +489,7 @@ public abstract class VarInfoName
    * @return true iff the given node can be found in this.  If the
    * node has children, the whole subtree must match.
    **/
-  public boolean hasNode(/*@Interned*/ VarInfoName node) {
+  public boolean hasNode(VarInfoName node) {
     return inOrderTraversal().contains(node);
   }
 
@@ -529,7 +533,7 @@ public abstract class VarInfoName
    * @return true if the given node is in a prestate context within
    * this tree; the node must be a member of this tree.
    **/
-  public boolean inPrestateContext(/*@Interned*/ VarInfoName node) /*@Interned*/ {
+  public boolean inPrestateContext(VarInfoName node) /*@Interned*/ {
     return (new NodeFinder(this, node)).inPre();
   }
 
@@ -556,7 +560,7 @@ public abstract class VarInfoName
    * Replace the first instance of node by replacement, in the data
    * structure rooted at this.
    **/
-  public /*@Interned*/ VarInfoName replace(/*@Interned*/ VarInfoName node, /*@Interned*/ VarInfoName replacement) /*@Interned*/ {
+  public VarInfoName replace(VarInfoName node, VarInfoName replacement) /*@Interned*/ {
     if (node == replacement)    // "interned": equality optimization pattern
       return this;
     Replacer r = new Replacer(node, replacement);
@@ -567,7 +571,7 @@ public abstract class VarInfoName
    * Replace all instances of node by replacement, in the data structure
    * rooted at this.
    **/
-  public /*@Interned*/ VarInfoName replaceAll(/*@Interned*/ VarInfoName node, /*@Interned*/ VarInfoName replacement) /*@Interned*/ {
+  public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) /*@Interned*/ {
     if (node == replacement)    // "interned": equality optimization pattern
       return this;
 
@@ -581,7 +585,7 @@ public abstract class VarInfoName
     // This code used to loop as long as node was in result, but this isn't
     // necessary -- all occurances are replaced by replacer.
 
-    /*@Interned*/ VarInfoName result = r.replace(this).intern();
+    VarInfoName result = r.replace(this).intern();
     return result;
   }
 
@@ -592,7 +596,7 @@ public abstract class VarInfoName
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
-  public boolean equals(/*@Interned*/ VarInfoName other) /*@Interned*/ {
+  public boolean equals(VarInfoName other) /*@Interned*/ {
     return ((other == this)     // "interned": equality optimization pattern
             || ((other != null)
                 && (this.repr().equals(other.repr()))));
@@ -681,7 +685,7 @@ public abstract class VarInfoName
   // Static inner classes that form the expression langugage
 
   /** A simple identifier like "a", etc. **/
-  public static class Simple extends VarInfoName {
+  public static /*@Interned*/ class Simple extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -790,7 +794,7 @@ public abstract class VarInfoName
    * Returns a name for the size of this (this object should be a
    * sequence).  Form is like "size(a[])" or "a.length".
    **/
-  public /*@Interned*/ VarInfoName applySize() /*@Interned*/ {
+  public VarInfoName applySize() /*@Interned*/ {
     // The simple approach:
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
@@ -813,7 +817,7 @@ public abstract class VarInfoName
       // for variables such as a[].b.c (returns size(a[])) or
       // a[].getClass() (returns size(a[]))
       if (this instanceof Prestate) {
-        /*@Interned*/ VarInfoName size = (new SizeOf (elems)).intern();
+        VarInfoName size = (new SizeOf (elems)).intern();
         return (new Prestate (size)).intern();
         // Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
         // return r.replace(this).intern();
@@ -862,14 +866,14 @@ public abstract class VarInfoName
    * The size of a contained sequence; form is like "size(sequence)"
    * or "sequence.length".
    **/
-  public static class SizeOf extends VarInfoName {
+  public static /*@Interned*/ class SizeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ VarInfoName sequence;
-    public SizeOf(/*@Interned*/ VarInfoName sequence) {
+    public final VarInfoName sequence;
+    public SizeOf(VarInfoName sequence) {
       Assert.assertTrue(sequence != null);
       this.sequence = sequence;
     }
@@ -896,7 +900,7 @@ public abstract class VarInfoName
     }
 
     /** Returns the hashcode that is the base of the array **/
-    public /*@Interned*/ VarInfoName get_term() {
+    public VarInfoName get_term() {
       if (sequence instanceof Elements)
         return ((Elements) sequence).term;
       else if (sequence instanceof Prestate) {
@@ -962,7 +966,7 @@ public abstract class VarInfoName
    * Returns a name for a unary function applied to this object.
    * The result is like "sum(this)".
    **/
-  public /*@Interned*/ VarInfoName applyFunction(String function) /*@Interned*/ {
+  public VarInfoName applyFunction(String function) /*@Interned*/ {
     return (new FunctionOf(function, this)).intern();
   }
 
@@ -972,7 +976,7 @@ public abstract class VarInfoName
    * @param function the name of the function
    * @param vars The arguments to the function, of type VarInfoName
    **/
-  public static /*@Interned*/ VarInfoName applyFunctionOfN(String function, List</*@Interned*/ VarInfoName> vars) {
+  public static VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
     return (new FunctionOfN(function, vars)).intern();
   }
 
@@ -982,20 +986,20 @@ public abstract class VarInfoName
    * @param function the name of the function
    * @param vars The arguments to the function
    **/
-  public static /*@Interned*/ VarInfoName applyFunctionOfN(String function, VarInfoName[/*@Interned*/] vars) {
+  public static VarInfoName applyFunctionOfN(String function, VarInfoName[/*@Interned*/] vars) {
     return applyFunctionOfN(function, Arrays.asList(vars));
   }
 
   /** A function over a term, like "sum(argument)". **/
-  public static class FunctionOf extends VarInfoName {
+  public static /*@Interned*/ class FunctionOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
     public final String function;
-    public final /*@Interned*/ VarInfoName argument;
-    public FunctionOf(String function, /*@Interned*/ VarInfoName argument) {
+    public final VarInfoName argument;
+    public FunctionOf(String function, VarInfoName argument) {
       Assert.assertTrue(function != null);
       Assert.assertTrue(argument != null);
       this.function = function;
@@ -1050,21 +1054,21 @@ public abstract class VarInfoName
 
 
   /** A function of multiple parameters. **/
-  public static class FunctionOfN extends VarInfoName {
+  public static /*@Interned*/ class FunctionOfN extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
     public final String function;
-    public final List</*@Interned*/ VarInfoName> args;
+    public final List<VarInfoName> args;
 
     /**
      * Construct a new function of multiple arguments.
      * @param function the name of the function
      * @param args the arguments to the function, of type VarInfoName
      **/
-    public FunctionOfN(String function, List</*@Interned*/ VarInfoName> args) {
+    public FunctionOfN(String function, List<VarInfoName> args) {
       Assert.assertTrue(function != null);
       Assert.assertTrue(args != null);
       this.args = args;
@@ -1147,7 +1151,7 @@ public abstract class VarInfoName
     /**
      * Shortcut getter to avoid repeated type casting.
      **/
-    public /*@Interned*/ VarInfoName getArg (int n) {
+    public VarInfoName getArg (int n) {
       return args.get(n);
     }
     public <T> T accept(Visitor<T> v) {
@@ -1160,7 +1164,7 @@ public abstract class VarInfoName
    * Returns a name for the intersection of with another sequence, like
    * "intersect(a[], b[])".
    **/
-  public /*@Interned*/ VarInfoName applyIntersection(VarInfoName seq2) /*@Interned*/ {
+  public VarInfoName applyIntersection(VarInfoName seq2) /*@Interned*/ {
     Assert.assertTrue(seq2 != null);
     return (new Intersection(this, seq2)).intern();
   }
@@ -1169,13 +1173,13 @@ public abstract class VarInfoName
    * Intersection of two sequences.  Extends FunctionOfN, and the
    * only change is that it does special formatting for IOA.
    **/
-  public static class Intersection extends FunctionOfN {
+  public static /*@Interned*/ class Intersection extends FunctionOfN {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public Intersection(/*@Interned*/ VarInfoName seq1, /*@Interned*/ VarInfoName seq2) {
+    public Intersection(VarInfoName seq1, VarInfoName seq2) {
       super ("intersection", Arrays.asList(new VarInfoName[/* @ Interned*/] {seq1, seq2}));
     }
 
@@ -1189,7 +1193,7 @@ public abstract class VarInfoName
    * Returns a name for the union of this with another sequence, like
    * "union(a[], b[])".
    **/
-  public /*@Interned*/ VarInfoName applyUnion(VarInfoName seq2) /*@Interned*/ {
+  public VarInfoName applyUnion(VarInfoName seq2) /*@Interned*/ {
     Assert.assertTrue(seq2 != null);
     return (new Union(this, seq2)).intern();
   }
@@ -1198,13 +1202,13 @@ public abstract class VarInfoName
    * Union of two sequences.  Extends FunctionOfN, and the
    * only change is that it does special formatting for IOA.
    **/
-  public static class Union extends FunctionOfN {
+  public static /*@Interned*/ class Union extends FunctionOfN {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public Union(/*@Interned*/ VarInfoName seq1, /*@Interned*/ VarInfoName seq2) {
+    public Union(VarInfoName seq1, VarInfoName seq2) {
       super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
     }
 
@@ -1220,20 +1224,20 @@ public abstract class VarInfoName
    * Returns a 'getter' operation for some field of this name, like
    * a.foo if this is a.
    **/
-  public /*@Interned*/ VarInfoName applyField(String field) /*@Interned*/ {
+  public VarInfoName applyField(String field) /*@Interned*/ {
     return (new Field(this, field)).intern();
   }
 
   /** A 'getter' operation for some field, like a.foo. **/
-  public static class Field extends VarInfoName {
+  public static /*@Interned*/ class Field extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ VarInfoName term;
+    public final VarInfoName term;
     public final String field;
-    public Field(/*@Interned*/ VarInfoName term, String field) {
+    public Field(VarInfoName term, String field) {
       Assert.assertTrue(term != null);
       Assert.assertTrue(field != null);
       this.term = term;
@@ -1405,19 +1409,19 @@ public abstract class VarInfoName
    * Returns a name for the type of this object; form is like
    * "this.getClass()" or "\typeof(this)".
    **/
-  public /*@Interned*/ VarInfoName applyTypeOf() /*@Interned*/ {
+  public VarInfoName applyTypeOf() /*@Interned*/ {
     return (new TypeOf(this)).intern();
   }
 
   /** The type of the term, like "term.getClass()" or "\typeof(term)". **/
-  public static class TypeOf extends VarInfoName {
+  public static /*@Interned*/ class TypeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ VarInfoName term;
-    public TypeOf(/*@Interned*/ VarInfoName term) {
+    public final VarInfoName term;
+    public TypeOf(VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1470,7 +1474,7 @@ public abstract class VarInfoName
    * Returns a name for a the prestate value of this object; form is
    * like "orig(this)" or "\old(this)".
    **/
-  public /*@Interned*/ VarInfoName applyPrestate() /*@Interned*/ {
+  public VarInfoName applyPrestate() /*@Interned*/ {
     if (this instanceof Poststate) {
       return ((Poststate)this).term;
     } else if ((this instanceof Add) && ((Add)this).term instanceof Poststate) {
@@ -1483,14 +1487,14 @@ public abstract class VarInfoName
   }
 
   /** The prestate value of a term, like "orig(term)" or "\old(term)". **/
-  public static class Prestate extends VarInfoName {
+  public static /*@Interned*/ class Prestate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ VarInfoName term;
-    public Prestate(/*@Interned*/ VarInfoName term) {
+    public final VarInfoName term;
+    public Prestate(VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1563,7 +1567,7 @@ public abstract class VarInfoName
    * Returns a name for a the poststate value of this object; form is
    * like "new(this)" or "\new(this)".
    **/
-  public /*@Interned*/ VarInfoName applyPoststate() /*@Interned*/ {
+  public VarInfoName applyPoststate() /*@Interned*/ {
     return (new Poststate(this)).intern();
   }
 
@@ -1571,14 +1575,14 @@ public abstract class VarInfoName
    * The poststate value of a term, like "new(term)".  Only used
    * within prestate, so like "orig(this.myArray[new(index)]".
    **/
-  public static class Poststate extends VarInfoName {
+  public static /*@Interned*/ class Poststate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ VarInfoName term;
-    public Poststate(/*@Interned*/ VarInfoName term) {
+    public final VarInfoName term;
+    public Poststate(VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1621,7 +1625,7 @@ public abstract class VarInfoName
    * Returns a name for the this term plus a constant, like "this-1"
    * or "this+1".
    **/
-  public /*@Interned*/ VarInfoName applyAdd(int amount) /*@Interned*/ {
+  public VarInfoName applyAdd(int amount) /*@Interned*/ {
     if (amount == 0) {
       return this;
     } else {
@@ -1630,15 +1634,15 @@ public abstract class VarInfoName
   }
 
   /** An integer amount more or less than some other value, like "x+2". **/
-  public static class Add extends VarInfoName {
+  public static /*@Interned*/ class Add extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ VarInfoName term;
+    public final VarInfoName term;
     public final int amount;
-    public Add(/*@Interned*/ VarInfoName term, int amount) {
+    public Add(VarInfoName term, int amount) {
       Assert.assertTrue(term != null);
       this.term = term;
       this.amount = amount;
@@ -1682,19 +1686,19 @@ public abstract class VarInfoName
       return v.visitAdd(this);
     }
     // override for cleanliness
-    public /*@Interned*/ VarInfoName applyAdd(int _amount) {
+    public VarInfoName applyAdd(int _amount) {
       int amt = _amount + this.amount;
       return (amt == 0) ? term : term.applyAdd(amt);
     }
   }
 
   /** Returns a name for the decrement of this term, like "this-1". **/
-  public /*@Interned*/ VarInfoName applyDecrement() /*@Interned*/ {
+  public VarInfoName applyDecrement() /*@Interned*/ {
     return applyAdd(-1);
   }
 
   /** Returns a name for the increment of this term, like "this+1". **/
-  public /*@Interned*/ VarInfoName applyIncrement() /*@Interned*/ {
+  public VarInfoName applyIncrement() /*@Interned*/ {
     return applyAdd(+1);
   }
 
@@ -1702,19 +1706,19 @@ public abstract class VarInfoName
    * Returns a name for the elements of a container (as opposed to the
    * identity of the container) like "this[]" or "(elements this)".
    **/
-  public /*@Interned*/ VarInfoName applyElements() /*@Interned*/ {
+  public VarInfoName applyElements() /*@Interned*/ {
     return (new Elements(this)).intern();
   }
 
   /** The elements of a container, like "term[]". **/
-  public static class Elements extends VarInfoName {
+  public static /*@Interned*/ class Elements extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ VarInfoName term;
-    public Elements(/*@Interned*/ VarInfoName term) {
+    public final VarInfoName term;
+    public Elements(VarInfoName term) {
       Assert.assertTrue(term != null);
       this.term = term;
     }
@@ -1798,13 +1802,13 @@ public abstract class VarInfoName
     public <T> T accept(Visitor<T> v) {
       return v.visitElements(this);
     }
-    public /*@Interned*/ VarInfoName getLowerBound() {
+    public VarInfoName getLowerBound() {
       return ZERO;
     }
-    public /*@Interned*/ VarInfoName getUpperBound() {
+    public VarInfoName getUpperBound() {
       return applySize().applyDecrement();
     }
-    public /*@Interned*/ VarInfoName getSubscript(/*@Interned*/ VarInfoName index) {
+    public VarInfoName getSubscript(VarInfoName index) {
       return applySubscript(index);
     }
   }
@@ -1813,7 +1817,7 @@ public abstract class VarInfoName
    * Caller is subscripting an orig(a[]) array.  Take the requested
    * index and make it useful in that context.
    **/
-  static /*@Interned*/ VarInfoName indexToPrestate(/*@Interned*/ VarInfoName index) {
+  static VarInfoName indexToPrestate(VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])
     // 2 orig(a[]) . index       -> orig(a[post(index)])
     if (index instanceof Prestate) {
@@ -1837,7 +1841,7 @@ public abstract class VarInfoName
    * Returns a name for an element selected from a sequence, like
    * "this[i]".
    **/
-  public /*@Interned*/ VarInfoName applySubscript(/*@Interned*/ VarInfoName index) /*@Interned*/ {
+  public VarInfoName applySubscript(VarInfoName index) /*@Interned*/ {
     Assert.assertTrue(index != null);
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
@@ -1866,15 +1870,15 @@ public abstract class VarInfoName
   }
 
   /** An element from a sequence, like "sequence[index]". **/
-  public static class Subscript extends VarInfoName {
+  public static /*@Interned*/ class Subscript extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
     public final Elements sequence;
-    public final /*@Interned*/ VarInfoName index;
-    public Subscript(Elements sequence, /*@Interned*/ VarInfoName index) {
+    public final VarInfoName index;
+    public Subscript(Elements sequence, VarInfoName index) {
       Assert.assertTrue(sequence != null);
       Assert.assertTrue(index != null);
       this.sequence = sequence;
@@ -1940,7 +1944,7 @@ public abstract class VarInfoName
    * like "this[i..j]".  If an endpoint is null, it means "from the
    * start" or "to the end".
    **/
-  public /*@Interned*/ VarInfoName applySlice(/*@Interned*/ VarInfoName i, /*@Interned*/ VarInfoName j) /*@Interned*/ {
+  public VarInfoName applySlice(VarInfoName i, VarInfoName j) /*@Interned*/ {
     // a[] -> a[index..]
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
@@ -1959,15 +1963,15 @@ public abstract class VarInfoName
   }
 
   /** A slice of elements from a sequence, like "sequence[i..j]". **/
-  public static class Slice extends VarInfoName {
+  public static /*@Interned*/ class Slice extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020130L;
 
-    public final /*@Interned*/ Elements sequence;
-    public final /*@Interned*/ VarInfoName i, j;
-    public Slice(/*@Interned*/ Elements sequence, /*@Interned*/ VarInfoName i, /*@Interned*/ VarInfoName j) {
+    public final Elements sequence;
+    public final VarInfoName i, j;
+    public Slice(Elements sequence, VarInfoName i, VarInfoName j) {
       Assert.assertTrue(sequence != null);
       Assert.assertTrue((i != null) || (j != null));
       this.sequence = sequence;
@@ -2101,13 +2105,13 @@ public abstract class VarInfoName
     public <T> T accept(Visitor<T> v) {
       return v.visitSlice(this);
     }
-    public /*@Interned*/ VarInfoName getLowerBound() {
+    public VarInfoName getLowerBound() {
       return (i != null) ? i : ZERO;
     }
-    public /*@Interned*/ VarInfoName getUpperBound() {
+    public VarInfoName getUpperBound() {
       return (j != null) ? j : sequence.getUpperBound();
     }
-    public /*@Interned*/ VarInfoName getSubscript(/*@Interned*/ VarInfoName index) {
+    public VarInfoName getSubscript(VarInfoName index) {
       return sequence.getSubscript(index);
     }
   }
@@ -2157,8 +2161,8 @@ public abstract class VarInfoName
      **/
     public T visitFunctionOfN(FunctionOfN o) {
       T retval = null;
-      for (ListIterator</*@Interned*/ VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
-        /*@Interned*/ VarInfoName vin = i.previous();
+      for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
+        VarInfoName vin = i.previous();
         retval = vin.accept(this);
       }
       return retval;
@@ -2195,68 +2199,68 @@ public abstract class VarInfoName
    **/
   @SuppressWarnings("interned") // equality checking pattern, etc.
   public static class NodeFinder
-    extends AbstractVisitor</*@Interned*/ VarInfoName>
+    extends AbstractVisitor<VarInfoName>
   {
     /**
      * Creates a new NodeFinder.
      * @param root the root of the tree to search
      * @param goal the goal to find
      **/
-    public NodeFinder(/*@Interned*/ VarInfoName root, /*@Interned*/ VarInfoName goal) {
+    public NodeFinder(VarInfoName root, VarInfoName goal) {
       this.goal = goal;
       Assert.assertTrue(root.accept(this) != null);
     }
     // state and accessors
-    private final /*@Interned*/ VarInfoName goal;
+    private final VarInfoName goal;
     private boolean pre;
     public boolean inPre() {
       return pre;
     }
     // visitor methods that get the job done
-    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       return (o == goal) ? goal : null;
     }
-    public /*@Interned*/ VarInfoName visitSizeOf(SizeOf o) {
+    public VarInfoName visitSizeOf(SizeOf o) {
       return (o == goal) ? goal : super.visitSizeOf(o);
     }
-    public /*@Interned*/ VarInfoName visitFunctionOf(FunctionOf o) {
+    public VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == goal) ? goal : super.visitFunctionOf(o);
     }
-    public /*@Interned*/ VarInfoName visitFunctionOfN(FunctionOfN o) {
-      /*@Interned*/ VarInfoName retval = null;
+    public VarInfoName visitFunctionOfN(FunctionOfN o) {
+      VarInfoName retval = null;
       for (VarInfoName vin : o.args) {
         retval = vin.accept(this);
         if (retval != null) return retval;
       }
       return retval;
     }
-    public /*@Interned*/ VarInfoName visitField(Field o) {
+    public VarInfoName visitField(Field o) {
       return (o == goal) ? goal : super.visitField(o);
     }
-    public /*@Interned*/ VarInfoName visitTypeOf(TypeOf o) {
+    public VarInfoName visitTypeOf(TypeOf o) {
       return (o == goal) ? goal : super.visitTypeOf(o);
     }
-    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       pre = true;
       return super.visitPrestate(o);
     }
-    public /*@Interned*/ VarInfoName visitPoststate(Poststate o) {
+    public VarInfoName visitPoststate(Poststate o) {
       pre = false;
       return super.visitPoststate(o);
     }
-    public /*@Interned*/ VarInfoName visitAdd(Add o) {
+    public VarInfoName visitAdd(Add o) {
       return (o == goal) ? goal : super.visitAdd(o);
     }
-    public /*@Interned*/ VarInfoName visitElements(Elements o) {
+    public VarInfoName visitElements(Elements o) {
       return (o == goal) ? goal : super.visitElements(o);
     }
-    public /*@Interned*/ VarInfoName visitSubscript(Subscript o) {
+    public VarInfoName visitSubscript(Subscript o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
       if (o.index.accept(this) != null) return goal;
       return null;
     }
-    public /*@Interned*/ VarInfoName visitSlice(Slice o) {
+    public VarInfoName visitSlice(Slice o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
       if ((o.i != null) && (o.i.accept(this) != null)) return goal;
@@ -2303,22 +2307,22 @@ public abstract class VarInfoName
      * Returns the part of root that is contained in this.goals, or
      * null if not found.
      **/
-    public /*@Interned*/ VarInfoName getPart (VarInfoName root) {
+    public VarInfoName getPart (VarInfoName root) {
       VarInfoName o = root.intern().accept(this);
       return o;
     }
 
     // visitor methods that get the job done
-    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       return (goals.contains(o)) ? o : null;
     }
-    public /*@Interned*/ VarInfoName visitSizeOf(SizeOf o) {
+    public VarInfoName visitSizeOf(SizeOf o) {
       return (goals.contains(o)) ? o : o.sequence.intern().accept(this);
     }
-    public /*@Interned*/ VarInfoName visitFunctionOf(FunctionOf o) {
+    public VarInfoName visitFunctionOf(FunctionOf o) {
       return (goals.contains(o)) ? o : super.visitFunctionOf(o);
     }
-    public /*@Interned*/ VarInfoName visitFunctionOfN(FunctionOfN o) {
+    public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName result = null;
       if (goals.contains(o)) return o;
       for (VarInfoName vin : o.args) {
@@ -2327,27 +2331,27 @@ public abstract class VarInfoName
       }
       return result;
     }
-    public /*@Interned*/ VarInfoName visitField(Field o) {
+    public VarInfoName visitField(Field o) {
       return (goals.contains(o)) ? o : super.visitField(o);
     }
-    public /*@Interned*/ VarInfoName visitTypeOf(TypeOf o) {
+    public VarInfoName visitTypeOf(TypeOf o) {
       return (goals.contains(o)) ? o : super.visitTypeOf(o);
     }
-    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       if (goals.contains(o)) return o;
       return super.visitPrestate(o);
     }
-    public /*@Interned*/ VarInfoName visitPoststate(Poststate o) {
+    public VarInfoName visitPoststate(Poststate o) {
       if (goals.contains(o)) return o;
       return super.visitPoststate(o);
     }
-    public /*@Interned*/ VarInfoName visitAdd(Add o) {
+    public VarInfoName visitAdd(Add o) {
       return (goals.contains(o)) ? o : super.visitAdd(o);
     }
-    public /*@Interned*/ VarInfoName visitElements(Elements o) {
+    public VarInfoName visitElements(Elements o) {
       return (goals.contains(o)) ? o : super.visitElements(o);
     }
-    public /*@Interned*/ VarInfoName visitSubscript(Subscript o) {
+    public VarInfoName visitSubscript(Subscript o) {
       if (goals.contains(o)) return o;
       VarInfoName temp = o.sequence.accept(this);
       if (temp != null) return temp;
@@ -2355,7 +2359,7 @@ public abstract class VarInfoName
       if (temp != null) return temp;
       return null;
     }
-    public /*@Interned*/ VarInfoName visitSlice(Slice o) {
+    public VarInfoName visitSlice(Slice o) {
       if (goals.contains(o)) return o;
       VarInfoName temp = o.sequence.accept(this);
       if (temp != null) return temp;
@@ -2527,22 +2531,22 @@ public abstract class VarInfoName
       this._new = _new;
     }
 
-    public /*@Interned*/ VarInfoName replace(VarInfoName root) {
+    public VarInfoName replace(VarInfoName root) {
       return root.accept(this);
     }
 
-    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       return (o == old) ? _new : o;
     }
-    public /*@Interned*/ VarInfoName visitSizeOf(SizeOf o) {
+    public VarInfoName visitSizeOf(SizeOf o) {
       return (o == old) ? _new :
         super.visitSizeOf(o).applySize();
     }
-    public /*@Interned*/ VarInfoName visitFunctionOf(FunctionOf o) {
+    public VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == old) ? _new :
         super.visitFunctionOf(o).applyFunction(o.function);
     }
-    public /*@Interned*/ VarInfoName visitFunctionOfN(FunctionOfN o) {
+    public VarInfoName visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
       // otherwise, create a new function and check if arguments get replaced
       if (o == old) return _new;
@@ -2553,36 +2557,36 @@ public abstract class VarInfoName
       }
       return VarInfoName.applyFunctionOfN(o.function, newArgs);
     }
-    public /*@Interned*/ VarInfoName visitField(Field o) {
+    public VarInfoName visitField(Field o) {
       return (o == old) ? _new :
         super.visitField(o).applyField(o.field);
     }
-    public /*@Interned*/ VarInfoName visitTypeOf(TypeOf o) {
+    public VarInfoName visitTypeOf(TypeOf o) {
       return (o == old) ? _new :
         super.visitTypeOf(o).applyTypeOf();
     }
-    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       return (o == old) ? _new :
         super.visitPrestate(o).applyPrestate();
     }
-    public /*@Interned*/ VarInfoName visitPoststate(Poststate o) {
+    public VarInfoName visitPoststate(Poststate o) {
       return (o == old) ? _new :
         super.visitPoststate(o).applyPoststate();
     }
-    public /*@Interned*/ VarInfoName visitAdd(Add o) {
+    public VarInfoName visitAdd(Add o) {
       return (o == old) ? _new :
         super.visitAdd(o).applyAdd(o.amount);
     }
-    public /*@Interned*/ VarInfoName visitElements(Elements o) {
+    public VarInfoName visitElements(Elements o) {
       return (o == old) ? _new :
         super.visitElements(o).applyElements();
     }
-    public /*@Interned*/ VarInfoName visitSubscript(Subscript o) {
+    public VarInfoName visitSubscript(Subscript o) {
       return (o == old) ? _new :
         o.sequence.accept(this).
         applySubscript(o.index.accept(this));
     }
-    public /*@Interned*/ VarInfoName visitSlice(Slice o) {
+    public VarInfoName visitSlice(Slice o) {
       return (o == old) ? _new :
         o.sequence.accept(this).
         applySlice((o.i == null) ? null : o.i.accept(this),
@@ -2604,12 +2608,12 @@ public abstract class VarInfoName
       super(null, null);
     }
 
-    public /*@Interned*/ VarInfoName visitSimple(Simple o) {
+    public VarInfoName visitSimple(Simple o) {
       if (o.name.equals("return")) return o;
       return o.applyPoststate();
     }
 
-    public /*@Interned*/ VarInfoName visitPrestate(Prestate o) {
+    public VarInfoName visitPrestate(Prestate o) {
       return o.term;
     }
 
@@ -2626,7 +2630,7 @@ public abstract class VarInfoName
   public static class InorderFlattener
     extends AbstractVisitor<NoReturnValue>
   {
-    public InorderFlattener(/*@Interned*/ VarInfoName root) {
+    public InorderFlattener(VarInfoName root) {
       root.accept(this);
     }
 
@@ -2634,7 +2638,7 @@ public abstract class VarInfoName
     private final List<VarInfoName> result = new ArrayList<VarInfoName>();
 
     /** Method returning the actual results (the nodes in order). **/
-    public List</*@Interned*/ VarInfoName> nodes() {
+    public List<VarInfoName> nodes() {
       return Collections.unmodifiableList(result);
     }
 
@@ -2764,7 +2768,7 @@ public abstract class VarInfoName
 
     // state and accessors
     /** @see #unquants() **/
-    private Set</*@Interned*/ VarInfoName>/*actually <Elements || Slice>*/ unquant;
+    private Set<VarInfoName>/*actually <Elements || Slice>*/ unquant;
 
     /**
      * @return Collection of the nodes under the root that need
@@ -2778,7 +2782,7 @@ public abstract class VarInfoName
     //  ary[row][col]            ==> { }
     //  ary[row][]               ==> { ary[row][] }
     //  ary[][]                  ==> { ary[], ary[][] }
-    public Set</*@Interned*/ VarInfoName> unquants() {
+    public Set<VarInfoName> unquants() {
       if (QuantHelper.debug.isLoggable(Level.FINE)) {
         QuantHelper.debug.fine ("unquants: " + unquant);
       }
@@ -2937,7 +2941,7 @@ public abstract class VarInfoName
       }
 
       // replace needy
-      /*@Interned*/ VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
+      VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
 
       Assert.assertTrue(root_prime != null);
       Assert.assertTrue(lower != null);
@@ -2951,7 +2955,7 @@ public abstract class VarInfoName
      * representing the (index_base+index_off)-th element of that
      * sequence. index_base may be null, to represent 0.
      **/
-    public static /*@Interned*/ VarInfoName selectNth(VarInfoName root,
+    public static VarInfoName selectNth(VarInfoName root,
                                         VarInfoName index_base,
                                         int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
@@ -2983,7 +2987,7 @@ public abstract class VarInfoName
      * representing the (index_base+index_off)-th element of that
      * sequence. index_base may be null, to represent 0.
      **/
-    public static /*@Interned*/ VarInfoName selectNth(VarInfoName root,
+    public static VarInfoName selectNth(VarInfoName root,
                                         String index_base,
                                         boolean free,
                                         int index_off) {
@@ -3034,7 +3038,7 @@ public abstract class VarInfoName
      * Return a fresh variable name that doesn't appear in the given
      * variable names.
      **/
-    public static /*@Interned*/ VarInfoName getFreeIndex(VarInfoName... vins) {
+    public static VarInfoName getFreeIndex(VarInfoName... vins) {
       Set<String> simples = new HashSet<String>();
       for (VarInfoName vin : vins)
         simples.addAll (new SimpleNamesVisitor (vin).simples());
@@ -3109,7 +3113,7 @@ public abstract class VarInfoName
           } while (simples.contains(idx_name));
           Assert.assertTrue(tmp <= 'z',
                             "Ran out of letters in quantification");
-          /*@Interned*/ VarInfoName idx = (new FreeVar(idx_name)).intern();
+          VarInfoName idx = (new FreeVar(idx_name)).intern();
 
           if (QuantHelper.debug.isLoggable(Level.FINE)) {
             QuantHelper.debug.fine ("idx: " + idx);
@@ -3745,7 +3749,7 @@ public abstract class VarInfoName
   // Special JML capability, since JML cannot format a sequence of elements,
   // often what is wanted is the name of the reference (we have a[], we want
   // a. This function provides the appropriate name for these circumstances.
-  public /*@Interned*/ VarInfoName JMLElementCorrector() {
+  public VarInfoName JMLElementCorrector() {
     if (this instanceof Elements) {
       return ((Elements)this).term;
     } else if (this instanceof Slice) {
@@ -3768,7 +3772,7 @@ public abstract class VarInfoName
   public interface Transformer
   {
     /** Perform a transformation on the argument. */
-    public /*@Interned*/ VarInfoName transform(VarInfoName v);
+    public VarInfoName transform(VarInfoName v);
   }
 
   /**
@@ -3776,7 +3780,7 @@ public abstract class VarInfoName
    **/
   public static final Transformer IDENTITY_TRANSFORMER
     = new Transformer() {
-        public /*@Interned*/ VarInfoName transform(VarInfoName v) {
+        public VarInfoName transform(VarInfoName v) {
           return v;
         }
       };
@@ -3786,7 +3790,7 @@ public abstract class VarInfoName
    * Compare VarInfoNames alphabetically.
    **/
   public static class LexicalComparator implements Comparator<VarInfoName> {
-    public int compare(/*@Interned*/ VarInfoName name1, /*@Interned*/ VarInfoName name2) {
+    public int compare(VarInfoName name1, VarInfoName name2) {
       return name1.compareTo(name2);
     }
   }
