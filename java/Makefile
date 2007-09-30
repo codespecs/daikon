@@ -617,7 +617,7 @@ JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
 # I cannot pass JAVAC_INTERNED_EXCLUDE on the command line to the version of javac that is a script, because that one doesn't respect "java" arguments.
 # Even so, the skipClasses variable seems not to be working for me (though
 # @SuppressWarnings is a better approach).
-JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=daikon.VarInfoName.NodeFinder
+# JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=daikon.VarInfoName.NodeFinder
 # Remove files that trigger bugs in the checker
 INTERNED_JAVA_FILES_SKIP =
 INTERNED_JAVA_FILES_SKIP = -skip VarInfoName.java
@@ -627,9 +627,17 @@ INTERNED_JAVA_FILES_COUNTS = $(shell search -list -name '*.java' ${INTERNED_JAVA
 
 ## Other attempts:
 # JAVAC_JAVA_ARGS=${JAVAC_INTERNED_EXCLUDE} ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
+# JAVAC_JAVA_ARGS='${JAVAC_INTERNED_EXCLUDE}' ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
+# JAVAC_JAVA_ARGS=-Xbootclasspath/p:/afs/csail.mit.edu/u/m/mernst/research/typequals/annotations/checkers/checkers.jar ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
 intern: interned
 interned:
-	JAVAC_JAVA_ARGS='${JAVAC_INTERNED_EXCLUDE}' ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
+
+# Run the interned checker on all Java files, not just those that contain an
+# @Interned annotation.
+interned-all:
+	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
 
 interned-counts:
 	echo "Files: "
@@ -799,6 +807,7 @@ showvars:
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
+	@echo CLASSPATH = ${CLASSPATH}
 
 showvar_JAVA_FILES:
 	@echo ${JAVA_FILES}
