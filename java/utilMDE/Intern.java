@@ -567,7 +567,7 @@ public final class Intern {
    **/
   public static int[] internSubsequence (/*@Interned*/ int[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
-    SequenceAndIndices<int[]> sai = new SequenceAndIndices<int[]> (seq, start, end);
+    SequenceAndIndices</*@Interned*/ int[]> sai = new SequenceAndIndices</*@Interned*/ int[]> (seq, start, end);
     WeakReference</*@Interned*/ int[]> lookup = internedIntSequenceAndIndices.get(sai);
     if (lookup != null) {
       return lookup.get();
@@ -584,7 +584,7 @@ public final class Intern {
    **/
   public static long[] internSubsequence (/*@Interned*/ long[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
-    SequenceAndIndices<long[]> sai = new SequenceAndIndices<long[]> (seq, start, end);
+    SequenceAndIndices</*@Interned*/ long[]> sai = new SequenceAndIndices</*@Interned*/ long[]> (seq, start, end);
     WeakReference</*@Interned*/ long[]> lookup = internedLongSequenceAndIndices.get(sai);
     if (lookup != null) {
       return lookup.get();
@@ -601,7 +601,7 @@ public final class Intern {
    **/
   public static double[] internSubsequence (/*@Interned*/ double[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
-    SequenceAndIndices<double[]> sai = new SequenceAndIndices<double[]> (seq, start, end);
+    SequenceAndIndices</*@Interned*/ double[]> sai = new SequenceAndIndices</*@Interned*/ double[]> (seq, start, end);
     WeakReference</*@Interned*/ double[]> lookup = internedDoubleSequenceAndIndices.get(sai);
     if (lookup != null) {
       return lookup.get();
@@ -618,7 +618,7 @@ public final class Intern {
    **/
   public static Object[] internSubsequence (/*@Interned*/ Object[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
-    SequenceAndIndices<Object[]> sai = new SequenceAndIndices<Object[]> (seq, start, end);
+    SequenceAndIndices</*@Interned*/ Object[]> sai = new SequenceAndIndices</*@Interned*/ Object[]> (seq, start, end);
     WeakReference</*@Interned*/ Object[]> lookup = internedObjectSequenceAndIndices.get(sai);
     if (lookup != null) {
       return lookup.get();
@@ -635,7 +635,7 @@ public final class Intern {
    **/
   public static String[] internSubsequence (/*@Interned*/ String[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
-    SequenceAndIndices<String[]> sai = new SequenceAndIndices<String[]> (seq, start, end);
+    SequenceAndIndices</*@Interned*/ String[]> sai = new SequenceAndIndices</*@Interned*/ String[]> (seq, start, end);
     WeakReference</*@Interned*/ String[]> lookup = internedStringSequenceAndIndices.get(sai);
     if (lookup != null) {
       return lookup.get();
