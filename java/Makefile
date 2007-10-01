@@ -16,9 +16,14 @@ JAVAC_ARGS ?= -g -target 5
 ## If you do not wish to use the "javac-xlint" program, add to Makefile.user:
 ##   JAVAC_XLINT =
 # Give full pathname so this works from cron jobs
-JAVAC_XLINT ?= ${DAIKONBIN}/javac-xlint -p '(/jtb/)|(/junit/)'
+JAVAC_XLINT ?= ${DAIKONBIN}/javac-xlint -p '([/\\]jtb[/\\])|([/\\]junit[/\\])'
+
 JAR ?= jar
-JAVA ?= java -ea
+ifeq (cygwin,$(OSTYPE))
+  JAVA ?= $(INV)/scripts/java-cygwin.sh -ea
+else
+  JAVA ?= java -ea
+endif
 
 ### end of user customizations
 
@@ -45,9 +50,24 @@ ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
     CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar
 endif
 
-CLASSPATH := .:$(CLASSPATH)${CLASSPATH_JARS}:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+# Add necessary items to the classpath if they are not already there
+ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
+  CLASSPATH := .:$(CLASSPATH)
+endif
+ifneq (bcel.jar,$(findstring bcel.jar,$(CLASSPATH)))
+  CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
+endif
+ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
+  CLASSPATH := $(CLASSPATH):${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+endif
+
+# On cygwin, translate the classpath to windows format.  Only do so if
+# this has not already been done (which is determined by looking for 
+# semicolons (;) in the classpath
 ifeq (cygwin,$(OSTYPE))
-  export CLASSPATH := $(shell cygpath -pw $(CLASSPATH))
+  ifneq (;,$(findstring ;,$(CLASSPATH)))
+    export CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
+  endif
 endif
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -381,7 +401,7 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
 	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) --compare-sets-file=daikon/dcomp/std_dcomp_out.txt --no-jdk" \
 	  daikon/dcomp/Test
-	-diff -u daikon/dcomp/std_dcomp_out.goal daikon/dcomp/std_dcomp_out.txt \
+	-diff -uw daikon/dcomp/std_dcomp_out.goal daikon/dcomp/std_dcomp_out.txt \
 	  > daikon/dcomp/std_dcomp_out.diff
 	@if test ! -s daikon/dcomp/std_dcomp_out.diff ; then echo No Errors; \
 	else echo Errors: more daikon/dcomp/std_dcomp_out.diff for details; fi
@@ -686,7 +706,7 @@ junit-all: junit
 	@# directory paths.  And these tests are slow, so we want them to
 	@# be separate anyway.
 	@echo java daikon.test.split.SplitterFactoryTest
-	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.split.SplitterFactoryTest
+	@${JAVA} daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover (code coverage)
@@ -1453,9 +1473,11 @@ daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/Sequen
 
 
 dump :
-	echo "$(CLASSPATH)"
+	@echo "CLASSPATH = $(CLASSPATH)"
+	@echo "CLASSPATH_W = $(CLASSPATH_W)"
 	which java
 	echo $(OSTYPE)
+	echo $(PATH)
 
 ###########################################################################
 ### Delete-on-error
