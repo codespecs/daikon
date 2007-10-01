@@ -618,6 +618,21 @@ public final class UtilMDE {
   }
 
 
+  /**
+   * Returns a string version of the name that can be used in java source.
+   * On Windows, the file will return a backslash separated string.  Since
+   * backslash is an escape character, it must be quoted itself inside
+   * the string.  
+   *
+   * The current implementation presumes that backslashes don't appear
+   * in filenames except as windows path separators.  That seems like a
+   * reasonable assumption
+   */
+  public static String java_source (File name) {
+
+    return name.getPath().replace ("\\", "\\\\");
+  }
+
   ///
   /// Reading and writing
   ///
