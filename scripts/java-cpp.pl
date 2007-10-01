@@ -27,7 +27,7 @@ use filetest 'access';  # needed for afs!
 $WARNING = 1;			# "-w" command-line switch
 
 my $debug = 0;
-# $debug = 1;
+#my $debug = 1;
 my $cleanup_tmpfiles = 1;
 # $cleanup_tmpfiles = 0;
 
