@@ -3,6 +3,7 @@ package daikon.test;
 import daikon.PptName;
 import daikon.tools.jtb.*;
 import junit.framework.*;
+import utilMDE.UtilMDE;
 
 import jtb.*;
 import jtb.visitor.*;
@@ -73,9 +74,14 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     compilationUnit.accept(new ClassOrInterfaceTypeDecorateVisitor());
     compilationUnit.accept(ungenerifiedCollector);
     
+
     /*
     String result = ungenerifiedCollector.collectionResults().trim();
     String expected = expectedAnswerBuffer.toString().trim();
+    UtilMDE.writeFile (new File ("expected.txt"), expected);
+    UtilMDE.writeFile (new File ("result.txt"), result);
+    */
+    /*
      for (int ii = 0; ii < result.length(); ii++) {
       if (result.charAt(ii) !=  expected.charAt(ii)) {
         System.out.printf ("diff at offset %d: '%c' - '%c'%n", ii, 
