@@ -304,8 +304,10 @@ public class SplitterFactoryTestUpdater {
     ps.println("    List<String> spinfoFiles;");
     ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
-        ps.println("    createSplitterFiles(\"" + spinfoFileLists.get(i).get(0)
-                   + "\", \"" + declsFileLists.get(i).get(0) + "\");");
+      ps.println("    createSplitterFiles(\"" 
+                 + UtilMDE.java_source(spinfoFileLists.get(i).get(0))
+                 + "\", \"" 
+                 + UtilMDE.java_source(declsFileLists.get(i).get(0)) + "\");");
     }
     ps.println("  }");
   }
