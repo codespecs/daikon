@@ -39,13 +39,14 @@ my $status = 0;                 # zero means normal completion
 my $data = "";
 
 while (defined(my $line = <>)) {
+  # print "line = <<<$line>>>\n";
   if ($line =~ /^\[/) {
     # Let "javac -verbose" messages through immediately
     print $line;
     next;
   }
   $data .= $line;
-  my @parts = split(/($file_line_re.*?^[ \t]*\^ *\n|^[0-9]+ (?:warnings?|errors?)\n)/sm, $data);
+  my @parts = split(/($file_line_re.*?^[ \t]*\^ *\r?\n|^[0-9]+ (?:warnings?|errors?)\r?\n)/sm, $data);
   if (scalar(@parts) == 1) {
     next;
   }
@@ -65,11 +66,11 @@ while (defined(my $line = <>)) {
   # if ($record eq "") { next; }
 
   ## Summary of number of errors/warnings
-  if ($record =~ /^([0-9]+) errors?\n$/) {
+  if ($record =~ /^([0-9]+) errors?\r?\n$/) {
     print $record;
     next;
   }
-  if ($record =~ /^([0-9]+) warnings?\n$/) {
+  if ($record =~ /^([0-9]+) warnings?\r?\n$/) {
     my $remaining_warnings = ($1 - $removed_warnings);
     if ($remaining_warnings > 0) {
       print "$remaining_warnings warnings\n";
@@ -78,6 +79,9 @@ while (defined(my $line = <>)) {
   }
 
   if ($record !~ /$file_line_re/) {
+    # print "START OF RECORD\n";
+    # print "$record\n";
+    # print "END OF RECORD\n";
     die "this can't happen";
   }
 
