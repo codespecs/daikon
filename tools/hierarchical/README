@@ -1,5 +1,7 @@
-Utilities for performing clustering on vector data or difference
-data, creating dendrograms. 
+Utilities for performing clustering on vector data or difference data,
+creating dendrograms.  This is used by the runcluster.pl program,
+which does cluster analysis to create splitters -- splitting
+conditions that enable Daikon to infer more conditional invariants.)
 
 Downloaded from
   http://odur.let.rug.nl/~kleiweg/clustering/clustering.html
@@ -7,4 +9,4 @@ on 31 July 2002.  The only change is to remove "denxview" from the
 default target in the Makefile.
 
 The above webpage is duplicated in this directory as clustering.html
-bug some links may not work in the local copy.
+but some links may not work in the local copy.
