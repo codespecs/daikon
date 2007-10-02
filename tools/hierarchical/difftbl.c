@@ -1,7 +1,7 @@
 /*
  * file: difftbl.c
  *
- * (c) P. Kleiweg 1998 - 2002
+ * (c) P. Kleiweg 1998 - 2004
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -10,7 +10,7 @@
  *
  */
 
-#define my_VERSION "1.03"
+#define my_VERSION "1.04"
 
 #define __NO_MATH_INLINES
 
@@ -38,7 +38,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <values.h>
 
 #define BUFSIZE 2047
 
@@ -216,7 +215,7 @@ int main (int argc, char *argv [])
     time (&tp);
     fprintf (
 	fp_out,
-        "# Created by %s, (c) Peter Kleiweg 1998 - 2002\n"
+        "# Created by %s, (c) Peter Kleiweg 1998 - 2004\n"
         "# More info: http://www.let.rug.nl/~kleiweg/clustering/\n"
         "# Input file: %s\n"
         "# Distance measure used: %s\n"
@@ -453,7 +452,7 @@ void syntax ()
 	stderr,
 	"\n"
 	"Vector difference, Version " my_VERSION "\n"
-	"(c) P. Kleiweg 1998 - 2002\n"
+	"(c) P. Kleiweg 1998 - 2004\n"
 	"\n"
 	"Usage: %s [-c|-e|-p|-s] [-o filename] [-P] [vector file]\n"
 	"\n"

@@ -1,7 +1,7 @@
 /*
  * file: clgroup.c
  *
- * (c) P. Kleiweg 2000 - 2002
+ * (c) P. Kleiweg 2000 - 2004
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -10,7 +10,7 @@
  *
  */
 
-#define clgroupVERSION "1.04"
+#define clgroupVERSION "1.22"
 
 #define __NO_MATH_INLINES
 
@@ -32,16 +32,12 @@
 #endif  /* __MSDOS__  */
 #include <ctype.h>
 #include <errno.h>
+#include <float.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <values.h>
-
-#ifndef MAXFLOAT
-#include <float.h>
-#define MAXFLOAT FLT_MAX
-#endif
 
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 
@@ -253,7 +249,7 @@ int main (int argc, char *argv [])
     groups = (int *) s_malloc (ngroup * sizeof (int));
     groups [0] = top;
     for (n = 1; n < ngroup; n++) {
-        f = - MAXFLOAT;
+        f = - FLT_MAX;
         for (i = 0; i < n; i++)
             if (groups [i] < used && cl [groups [i]].value > f) {
                 j = i;
@@ -261,8 +257,8 @@ int main (int argc, char *argv [])
 	    }
         cl [groups [j]].group [0] = n + 1;
         cl [groups [j]].group [1] = j + 1;
-        groups [n] = cl [groups [j]].n [0].cluster;
-        groups [j] = cl [groups [j]].n [1].cluster;
+        groups [n] = (cl [groups [j]].node [0] == CLS) ? cl [groups [j]].n [0].cluster : INT_MAX; 
+        groups [j] = (cl [groups [j]].node [1] == CLS) ? cl [groups [j]].n [1].cluster : INT_MAX;
 	setclgroups (groups [n], n + 1);
     }
 
@@ -273,18 +269,21 @@ int main (int argc, char *argv [])
 	for (j = 0; j < 2; j++)
 	    if (cl [i].node [j] == LBL) {
 		leaf [n].label = cl [i].n [j].label;
-		leaf [n++].group = -cl [i].group [j];
+		leaf [n++].group = indexed ? cl [i].group [j] : - cl [i].group [j];
 	    }
     qsort (leaf, used + 1, sizeof (LEAF), lcmp);
-    g2 = 0;
-    for (i = 0; i <= used; i++)
-	if (leaf [i].group < 0) {
-	    g1 = leaf [i].group;
-	    g2++;
-	    for (j = i; j <= used; j++)
-		if (leaf [j].group == g1)
-		    leaf [j].group = g2;
-	}
+    
+    if (! indexed) {
+	g2 = 0;
+	for (i = 0; i <= used; i++)
+	    if (leaf [i].group < 0) {
+		g1 = leaf [i].group;
+		g2++;
+		for (j = i; j <= used; j++)
+		    if (leaf [j].group == g1)
+			leaf [j].group = g2;
+	    }
+    }
 
     if (outfile) {
 	fp_out = fopen (outfile, "w");
@@ -539,7 +538,7 @@ void syntax (int err)
 	err ? stderr : stdout,
         "\n"
         "Cluster Grouping, Version " clgroupVERSION "\n"
-        "(c) P. Kleiweg 2000 - 2002\n"
+        "(c) P. Kleiweg 2000 - 2004\n"
 	"\n"
         "Usage: %s -n int [-i] [-o filename] [cluster file]\n"
         "\n"

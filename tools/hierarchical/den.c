@@ -1,7 +1,7 @@
 /*
  * File: den.c
  *
- * (c) P. Kleiweg 1997 - 2002
+ * (c) P. Kleiweg 1997 - 2005
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -10,7 +10,7 @@
  *
  */
 
-#define denVERSION "1.05"
+#define denVERSION "1.27"
 
 #define __NO_MATH_INLINES
 
@@ -31,23 +31,14 @@
 #endif  /* Unix */
 #include <ctype.h>
 #include <errno.h>
+#include <float.h>
+#include <limits.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <values.h>
-
-#ifndef MAXFLOAT
-#include <float.h>
-#define MAXFLOAT FLT_MAX
-#endif
-
-#ifndef MAXINT
-#include <limits.h>
-#define MAXINT INT_MAX
-#endif
 
 typedef enum { CLS, LBL } NODETYPE;
 typedef enum { RECT, TRI, ARC } LINKTYPE;
@@ -79,8 +70,10 @@ CLUSTER
 
 BOOL
     example = FALSE,
-    extended = FALSE,
+    eXtended = FALSE,
     patterns = FALSE,
+    symbols = FALSE,
+    numbers = FALSE,
     colorlink = FALSE,
     colorlabel = FALSE,
     labels = TRUE,
@@ -88,7 +81,10 @@ BOOL
     oe = FALSE,
     ruler = TRUE,
     first = TRUE,
-    mindefined = FALSE;
+    mindefined = FALSE,
+    use_rainbow = FALSE,
+    use_bright = FALSE,
+    use_usercolours = FALSE;
 
 LINKTYPE
     linktype = RECT;
@@ -137,7 +133,156 @@ char
 	"4 8 {< bf5f5fbfef5f5fef >}",
 	"5 4 {< 9f6f6fff         >}",
 	"6 6 {< af27ff27afff     >}",
-	"8 8 {< df99fdf7dfccfd7f >}"  };
+	"8 8 {< df99fdf7dfccfd7f >}" 
+    },
+    *sym [] = {
+	"    Symsize -2 div dup rmoveto\n"
+	"    Symsize 0 rlineto\n"
+	"    0 Symsize rlineto\n"
+	"    Symsize neg 0 rlineto\n"
+	"    closepath\n"
+	"    gsave 1 setgray fill grestore\n"
+	"    stroke\n",
+
+	"    currentpoint\n"
+	"    Symsize 2 div 0 rmoveto\n"
+	"    Symsize 2 div 0 360 arc\n"
+	"    closepath\n"
+	"    gsave 1 setgray fill grestore\n"
+	"    stroke\n",
+
+	"    Symsize -2 div dup rmoveto\n"
+	"    Symsize 0 rlineto\n"
+	"    Symsize -2 div Symsize rlineto\n"
+	"    closepath\n"
+	"    gsave 1 setgray fill grestore\n"
+	"    stroke\n",
+
+	"    currentpoint\n"
+	"    Symsize -2 div 0 rmoveto\n"
+	"    Symsize 0 rlineto\n"
+	"    Symsize 2 div sub moveto\n"
+	"    0 Symsize rlineto\n"
+	"    stroke\n",
+
+	"    Symsize -2 div dup rmoveto\n"
+	"    Symsize dup rlineto\n"
+	"    0 Symsize neg rmoveto\n"
+	"    Symsize neg Symsize rlineto\n"
+	"    stroke\n",
+
+	"    Symsize 2 div\n"
+	"    dup neg 0 exch rmoveto\n"
+	"    dup dup rlineto\n"
+	"    dup dup neg exch rlineto\n"
+	"    neg dup rlineto\n"
+	"    closepath\n"
+	"    gsave 1 setgray fill grestore\n"
+	"    stroke\n",
+
+	"    Symsize 2 div dup rmoveto\n"
+	"    Symsize neg 0 rlineto\n"
+	"    Symsize 2 div Symsize neg rlineto\n"
+	"    closepath\n"
+	"    gsave 1 setgray fill grestore\n"
+	"    stroke\n",
+
+	"    currentpoint\n"
+	"    sym0\n"
+	"    moveto\n"
+	"    sym4\n",
+
+	"    currentpoint\n"
+	"    sym3\n"
+	"    moveto\n"
+	"    sym4\n",
+
+	"    currentpoint\n"
+	"    sym5\n"
+	"    moveto\n"
+	"    sym3\n",
+
+	"    currentpoint\n"
+	"    sym1\n"
+	"    moveto\n"
+	"    sym3\n",
+
+	"    gsave\n"
+	"        1 setgray\n"
+	"        currentpoint\n"
+	"        0 Symsize -2 div rmoveto\n"
+	"        Symsize 2 div Symsize rlineto\n"
+	"        Symsize neg 0 rlineto\n"
+	"        closepath\n"
+	"        fill\n"
+	"        moveto\n"
+	"        0 Symsize 2 div rmoveto\n"
+	"        Symsize -2 div Symsize neg rlineto\n"
+	"        Symsize 0 rlineto\n"
+	"        closepath\n"
+	"        fill\n"
+	"    grestore\n"
+	"    0 Symsize -2 div rmoveto\n"
+	"    Symsize 2 div Symsize rlineto\n"
+	"    Symsize neg 0 rlineto\n"
+	"    Symsize 2 div Symsize neg rlineto\n"
+	"    0 Symsize rmoveto\n"
+	"    Symsize -2 div Symsize neg rlineto\n"
+	"    Symsize 0 rlineto\n"
+	"    Symsize -2 div Symsize rlineto\n"
+	"    stroke\n",
+
+	"    currentpoint\n"
+	"    sym0\n"
+	"    moveto\n"
+	"    sym3\n",
+
+	"    currentpoint\n"
+	"    Symsize 2 div 0 rmoveto\n"
+	"    2 copy Symsize 2 div 0 360 arc\n"
+	"    closepath\n"
+	"    gsave 1 setgray fill grestore\n"
+	"    moveto\n"
+	"    gsave\n"
+	"        clip\n"
+	"        sym4\n"
+	"    grestore\n"
+	"    stroke\n",
+
+	"    currentpoint\n"
+	"    sym0\n"
+	"    moveto\n"
+	"    2 setlinejoin\n"
+	"    sym2\n"
+	"    0 setlinejoin\n",
+
+	"    Symsize -2 div dup rmoveto\n"
+	"    Symsize 0 rlineto\n"
+	"    0 Symsize rlineto\n"
+	"    Symsize neg 0 rlineto\n"
+	"    closepath\n"
+	"    fill\n",
+
+	"    currentpoint\n"
+	"    Symsize 2 div 0 rlineto\n"
+	"    Symsize 2 div 0 360 arc\n"
+	"    closepath\n"
+	"    fill\n",
+
+	"    Symsize -2 div dup rmoveto\n"
+	"    Symsize 0 rlineto\n"
+	"    Symsize -2 div Symsize rlineto\n"
+	"    closepath\n"
+	"    fill\n",
+
+	"    Symsize 2 div\n"
+	"    dup neg 0 exch rmoveto\n"
+	"    dup dup rlineto\n"
+	"    dup dup neg exch rlineto\n"
+	"    neg dup rlineto\n"
+	"    closepath\n"
+	"    fill\n"
+    };
 
 #define defFONTSIZE 8
 
@@ -147,6 +292,8 @@ int
     labelcount = 0,
     *groups = NULL,
     ngroup = 1,
+    max_colors = 0,
+    n_colors = maxCOLORS,
     fontsize = defFONTSIZE,
     PSlevel = 1,
     top,
@@ -159,6 +306,7 @@ int
     leftmargin2;
 
 float
+    **usercolors = NULL,
     LineSkip = -1,
     LineSkip2 = -1,
     RulerSkip = -1,
@@ -166,11 +314,12 @@ float
     maxlabelwidth = 0.0,
     maxlabelwidth1 = 0.0,
     maxlabelwidth2 = 0.0,
-    maxvalue = -MAXFLOAT,
-    minvalue = MAXFLOAT;
+    maxvalue = -FLT_MAX,
+    minvalue = FLT_MAX;
 
 char
     *outfile = NULL,
+    *colorfile = NULL,
     **arg_v,
     *fontname,
     buffer [BUFSIZE + 1],
@@ -288,9 +437,13 @@ int main (int argc, char *argv [])
 	y2;
     float
         f,
-        step;
+        step,
+	r,
+	g,
+	b;
     BOOL
-        found;
+        found,
+	int2float;
     time_t
         tp;
 
@@ -340,20 +493,24 @@ int main (int argc, char *argv [])
 	return 0;
     }
 
-    if (patterns) {
+    if (patterns || symbols || numbers) {
 	if (colorlabel || colorlink)
-	    errit ("No colors wtih patterns");
-	if (ngroup < 2 || ngroup > maxCOLORS)
-	    errit ("Illegal number of patterns: %i", ngroup);
-	PSlevel = 2;
+	    errit ("No colours with %s", patterns ? "patterns" : (symbols ? "symbols" : "numbers"));
+	if ((ngroup < 2 || ngroup > n_colors) && ! numbers)
+	    errit ("Illegal number of %s: %i", patterns ? "patterns" : "symbols", ngroup);
+	if (patterns)
+	    PSlevel = 2;
 	labels = FALSE;
     }
 
-    if ((colorlink || colorlabel) && (ngroup < 2 || ngroup > maxCOLORS))
-	errit ("Invalid number of groups with colored labels or links");
+    if ((colorlink || colorlabel) && (ngroup < 2 || ngroup > n_colors) && ! use_rainbow)
+	errit ("Invalid number of groups with coloured labels or links. Try rainbow colours.");
+
+    if (use_rainbow && ! (colorlink || colorlabel))
+	errit ("Missing option -c and/or -C with rainbow colours");
 
     if (colorlabel && ! labels)
-	errit ("Color for no labels\n");
+	errit ("Colour for no labels\n");
 
     if (fontsize < 4)
 	errit ("fontsize too small");
@@ -362,6 +519,42 @@ int main (int argc, char *argv [])
 
     if (evenodd && ! labels)
 	errit("Placement of labels in two colums without labels");
+
+    if (use_usercolours && (colorlabel || colorlink)) {
+       int2float = FALSE;
+       n_colors = 0;
+       fp = fopen (colorfile, "r");
+       if (! fp)
+	   errit ("Opening file \"%s\": %s", colorfile, strerror (errno));
+       inputline = 0;
+       while (getline (FALSE)) {
+           if (n_colors == max_colors) {
+               max_colors += 16;
+               usercolors = (float **) s_realloc (usercolors, max_colors * sizeof (float**));
+           }
+           if (sscanf (buffer, "%f %f %f", &r, &g, &b) != 3)
+                errit ("Missing value(s) for in file \"%s\", line %i", colorfile, inputline);
+           if (r < 0 || r > 255)
+                errit ("Red component out of range in file \"%s\", line %i", colorfile, inputline);
+           if (g < 0 || g > 255)
+                errit ("Green component out of range in file \"%s\", line %i", colorfile, inputline);
+           if (b < 0 || b > 255)
+                errit ("Blue component out of range in file \"%s\", line %i", colorfile, inputline);
+           if (r > 1 || g > 1 || b > 1)
+               int2float = TRUE;
+           usercolors [n_colors] = s_malloc (3 * sizeof (float));
+           usercolors [n_colors][0] = r;
+           usercolors [n_colors][1] = g;
+           usercolors [n_colors][2] = b;
+           n_colors++;
+       }
+       fclose (fp);
+       if (int2float)
+           for (i = 0; i < n_colors; i++)
+               for (j = 0; j < 3; j++)
+                   usercolors [i][j] /= 255;
+       inputline = 0;
+    }
 
     switch (arg_c) {
         case 1:
@@ -385,6 +578,8 @@ int main (int argc, char *argv [])
         }
         if (sscanf (buffer, "%i %g%n", &(cl [used].index), &(cl [used].value), &i) < 2)
             errit ("Syntax error at line %i: \"%s\"", inputline, buffer);
+	if (cl [used].value > maxvalue)
+	    maxvalue = cl [used].value;
         memmove (buffer, buffer + i, strlen (buffer + i) + 1);
         trim ();
         if (buffer [0] && buffer [0] != '#') {
@@ -447,7 +642,6 @@ int main (int argc, char *argv [])
                 break;
 	    }
     } while (found);
-    maxvalue = cl [top].value;
 
     if (! mindefined) {
         for (i = 0; i < used; i++)
@@ -480,7 +674,7 @@ int main (int argc, char *argv [])
 	groups = (int *) s_malloc (ngroup * sizeof (int));
 	groups [0] = top;
 	for (n = 1; n < ngroup; n++) {
-	    f = - MAXFLOAT;
+	    f = - FLT_MAX;
 	    for (i = 0; i < n; i++)
 		if (groups [i] < used && cl [groups [i]].value > f) {
 		    j = i;
@@ -488,8 +682,8 @@ int main (int argc, char *argv [])
 		}
 	    cl [groups [j]].group [0] = n + 1;
 	    cl [groups [j]].group [1] = j + 1;
-	    groups [n] = cl [groups [j]].node [0] == CLS ? cl [groups [j]].n [0].cluster : MAXINT;
-	    groups [j] = cl [groups [j]].node [1] == CLS ? cl [groups [j]].n [1].cluster : MAXINT;
+	    groups [n] = (cl [groups [j]].node [0] == CLS) ? cl [groups [j]].n [0].cluster : (INT_MAX);
+	    groups [j] = (cl [groups [j]].node [1] == CLS) ? cl [groups [j]].n [1].cluster : (INT_MAX);
 	    setclgroups (groups [n], n + 1);
 	    /* setclgroups (groups [j], j + 1); */
 	}
@@ -536,6 +730,10 @@ int main (int argc, char *argv [])
     }
     if (patterns)
 	x1 = 100;
+    if (symbols)
+	x1 = 120;
+    if (numbers)
+	x1 = 110;
     x2 = urx;
     y1 = 700 - (used - ngroup + 1) * LineSkip - (ngroup - 1) * LineSkip2;
     if (ruler)
@@ -554,7 +752,7 @@ int main (int argc, char *argv [])
     );
     fprintf (fp_out, "%s", programname);
     fputs (
-        ", Version " denVERSION ", (c) P. Kleiweg 1997 - 2002\n"
+        ", Version " denVERSION ", (c) P. Kleiweg 1997 - 2005\n"
         "%%CreationDate: ",
         fp_out
     );
@@ -628,24 +826,19 @@ int main (int argc, char *argv [])
     if (colorlink)
 	fputs (
 	    "/clw { 1 setlinewidth } bind def\n"
-	    "/blw { .5 setlinewidth } bind def\n",
+	    "/blw { .5 setlinewidth } bind def\n"
+	    "\n",
 	    fp_out
 	);
     else
 	fputs (
-	    ".5 setlinewidth\n",
+	    ".5 setlinewidth\n"
+	    "\n",
 	    fp_out
 	);
 
     if (evenodd)
-	fputs ("\n/oelinewidth .2 def\n", fp_out);
-
-    fputs (
-        "\n"
-        "%%% End of User Options %%%\n"
-	"\n",
-        fp_out
-    );
+	fputs ("\n/oelinewidth .2 def\n\n", fp_out);
 
     if (patterns) {
 	fputs (
@@ -685,8 +878,32 @@ int main (int argc, char *argv [])
 	);
 	for (i = 0; i < ngroup; i++)
 	    fprintf (fp_out, "/c%-2i %s defpattern\n", i + 1, pat [i]);
+	fputs ("\n", fp_out);
+    }
+
+    if (numbers)
+	fputs ("/NumFontSize 12 def\n\n", fp_out);
+
+    if (symbols) {
 	fputs (
-	    "\n"
+	    "/Symsize 8 def\n"
+	    "/Symlw .7 def\n"
+	    "\n",
+	    fp_out
+	);
+	for (i = 0; i < ngroup; i++)
+	    fprintf (fp_out, "/c%-2i /sym%-2i def\n", i + 1, i);
+	fputs ("\n", fp_out);
+    }
+
+    fputs (
+        "%%% End of User Options %%%\n"
+	"\n",
+        fp_out
+    );
+
+    if (patterns)
+	fputs (
 	    "/c0 {\n"
 	    "    COL {\n"
 	    "        Y YY ne {\n"
@@ -702,7 +919,65 @@ int main (int argc, char *argv [])
 	    "        /COL false def\n"
 	    "    } if\n"
 	    "} bind def\n"
-	    "\n"
+	    "\n",
+	    fp_out
+	);
+
+    if (symbols) {
+	for (i = 0; i < ngroup; i++)
+	    fprintf (fp_out, "/sym%-2i {\n%s} bind def\n\n", i, sym [i]);
+	fputs (
+	    "/c0 {\n"
+	    "    COL {\n"
+	    "        140 Y moveto\n"
+	    "        135 Y lineto\n"
+	    "        135 YY lineto\n"
+	    "        140 YY lineto\n"
+	    "        stroke\n"
+	    "        currentlinewidth\n"
+	    "        130 Symsize 2 div sub  Y YY add 2 div moveto\n"
+	    "        gsave\n"
+	    "            1 setgray\n"
+	    "            Symsize -2 div 3 sub dup rmoveto\n"
+	    "            Symsize 6 add 0 rlineto\n"
+	    "            0 Symsize 6 add rlineto\n"
+	    "            Symsize 6 add neg 0 rlineto\n"
+	    "            closepath\n"
+	    "            fill\n"
+	    "        grestore\n"
+	    "        Symlw setlinewidth\n"
+	    "        P cvx exec\n"
+	    "        setlinewidth\n"
+	    "        /COL false def\n"
+	    "    } if\n"
+	    "} bind def\n"
+	    "\n",
+	    fp_out
+	);
+    }
+
+    if (numbers) {
+	fputs (
+	    "/c0 {\n"
+	    "    COL {\n"
+	    "        140 Y moveto\n"
+	    "        135 Y lineto\n"
+	    "        135 YY lineto\n"
+	    "        140 YY lineto\n"
+	    "        stroke\n"
+	    "        130 Y YY add 2 div Shift sub moveto\n"
+	    "        P 10 string cvs\n"
+	    "        dup stringwidth pop neg 0 rmoveto show\n"
+	    "        /COL false def\n"
+	    "    } if\n"
+	    "} bind def\n"
+	    "\n",
+	    fp_out
+	);
+    }
+
+    if (patterns || symbols || numbers)
+	fputs (
 	    "/col {\n"
 	    "    c0\n"
 	    "    /Y y def\n"
@@ -715,22 +990,33 @@ int main (int argc, char *argv [])
 	    "\n",
 	    fp_out
 	);
-    }
 
     if (colorlink || colorlabel) {
+	fprintf (fp_out, "/SETCOLOR { set%scolor } bind def\n", use_rainbow ? "hsb" : "rgb");
+	fprintf (fp_out, "/CURRENTCOLOR { current%scolor } bind def\n", use_rainbow ? "hsb" : "rgb");
 	fprintf (fp_out, "/c0 {\n    0 setgray%s\n    /COL false def\n} bind def\n", colorlink ? "\n    blw" : "");
-	for (i = 0; i < ngroup; i++)
-	    fprintf (
-		fp_out,
-	        "/c%i { %g %g %g } def\n",
-		i + 1,
-		colors [i][0],
-		colors [i][1],
-		colors [i][2]
-	    );
+	if (use_rainbow)
+            for (i = 0; i < ngroup; i++)
+                fprintf (
+                    fp_out,
+                    "/c%i { %.4f 1 %s } def\n",
+                    i + 1,
+                    ((float) i) / ngroup,
+                    ((i % 2) && ! use_bright) ? ".6" : "1"
+                );
+	else
+	    for (i = 0; i < ngroup; i++)
+		fprintf (
+		    fp_out,
+		    "/c%i { %g %g %g } def\n",
+		    i + 1,
+		    use_usercolours ? usercolors [i][0] : colors [i][0],
+		    use_usercolours ? usercolors [i][1] : colors [i][1],
+		    use_usercolours ? usercolors [i][2] : colors [i][2]
+		);
 	fputs (
 	    "/col {\n"
-	    "    setrgbcolor\n",
+	    "    SETCOLOR\n",
 	    fp_out
 	);
 	if (colorlink)
@@ -745,7 +1031,7 @@ int main (int argc, char *argv [])
 	);
     }
 
-    if (extended && PSlevel == 1)
+    if (eXtended && PSlevel == 1)
         fputs (
             "/ISOLatin1Encoding\n"
             "[/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
@@ -783,9 +1069,9 @@ int main (int argc, char *argv [])
             fp_out
         );
 
-    fputs (
-        extended
-          ? "/RE {\n"
+    if (eXtended)
+        fputs (
+            "/RE {\n"
             "    findfont\n"
             "    dup maxlength dict begin {\n"
             "        1 index /FID ne { def } { pop pop } ifelse\n"
@@ -795,13 +1081,21 @@ int main (int argc, char *argv [])
             "    currentdict end definefont pop\n"
             "} bind def\n"
             "\n"
-            "/Font-ISOlat1 ISOLatin1Encoding FontName RE\n"
-            "/Font-ISOlat1 findfont FontSize scalefont setfont\n"
-            "\n"
-          : "FontName findfont FontSize scalefont setfont\n"
-            "\n",
-            fp_out
-    );
+            "/Font-ISOlat1 ISOLatin1Encoding FontName RE\n",
+	    fp_out
+	);
+
+    if (numbers) {
+	fprintf (fp_out, "/Font1 %s findfont FontSize scalefont def\n", eXtended ? "/Font-ISOlat1" : "FontName");
+	fputs (
+	    "/Font2 FontName findfont NumFontSize scalefont def\n"
+	    "\n"
+	    "Font1 setfont\n",
+	    fp_out
+	);
+    } else
+	fprintf (fp_out, "%s findfont FontSize scalefont setfont\n\n", eXtended ? "/Font-ISOlat1" : "FontName");
+
     fputs (
         "gsave\n"
         "    newpath\n"
@@ -812,11 +1106,19 @@ int main (int argc, char *argv [])
         "/Up exch def\n"
 	"pop\n"
 	"neg /Down exch def\n"
-	"pop\n"
+	"pop\n",
+	fp_out
+    );
+    if (numbers)
+	fputs ("Font2 setfont\n", fp_out);
+    fputs (
         "gsave\n"
         "    newpath\n"
-        "    0 0 moveto\n"
-        "    (x) false charpath\n"
+        "    0 0 moveto\n",
+	fp_out
+    );
+    fprintf (fp_out, "    (%c) false charpath\n", numbers ? '1' : 'x');
+    fputs (
         "    pathbbox\n"
         "grestore\n"
         "2 div /Shift exch def\n"
@@ -842,7 +1144,7 @@ int main (int argc, char *argv [])
 	fp_out
     );
 
-    if (patterns)
+    if (patterns || symbols || numbers)
 	fputs (
 	    "/Cstroke {\n"
 	    "    COL { /YY y def } if\n"
@@ -855,10 +1157,10 @@ int main (int argc, char *argv [])
 	fputs (
 	    "/Cstroke {\n"
 	    "    COL {\n"
-	    "        currentrgbcolor\n"
+	    "        CURRENTCOLOR\n"
 	    "        0 setgray\n"
 	    "        stroke\n"
-	    "        setrgbcolor\n"
+	    "        SETCOLOR\n"
 	    "    } {\n"
 	    "        stroke\n"
 	    "    } ifelse\n"
@@ -902,15 +1204,25 @@ int main (int argc, char *argv [])
 	fputs (
 	    "/Cshow {\n"
 	    "    COL {\n"
-	    "        currentrgbcolor\n"
+	    "        CURRENTCOLOR\n"
 	    "        0 setgray\n"
 	    "        4 -1 roll\n"
 	    "        show\n"
-	    "        setrgbcolor\n"
+	    "        SETCOLOR\n"
 	    "    } {\n"
 	    "        show\n"
 	    "    } ifelse\n"
 	    "} bind def \n"
+	    "\n",
+	    fp_out
+	);
+    else if (numbers)
+	fputs (
+	    "/Cshow {\n"
+	    "    Font1 setfont\n"
+	    "    show\n"
+	    "    Font2 setfont\n"
+	    "} bind def\n"
 	    "\n",
 	    fp_out
 	);
@@ -1056,9 +1368,11 @@ int main (int argc, char *argv [])
 	fp_out
      );
 
-    if (ruler)
+    if (ruler) {
+	fputs ("% This draws the ruler\n", fp_out);
+	if (numbers)
+	    fputs ("Font1 setfont\n", fp_out);
 	fputs (
-	    "% This draws the ruler\n"
 	    "/setmark1 {\n"
 	    "    Min sub EXP Width mul Max Min sub EXP div LeftMargin add\n"
 	    "    y moveto\n"
@@ -1110,6 +1424,7 @@ int main (int argc, char *argv [])
 	    "\n",
 	    fp_out
 	);
+    }
 
     fputs (
         "end\n"
@@ -1152,8 +1467,8 @@ void process (int i)
                     first = FALSE;
                 else
                     fprintf (fp_out, "nl\n"); 
-		if (colorlabel || colorlink || patterns)
-		    fprintf (fp_out, "c%i col\n", currentgroup);
+		if (colorlabel || colorlink || patterns || symbols || numbers)
+		    fprintf (fp_out, "%s%i col\n", numbers ? "" : "c", currentgroup);
                 labelcount = 0;
             }
 	    if (labels)
@@ -1163,7 +1478,7 @@ void process (int i)
             labelcount++;
 	}
     }
-    if (ngroup > 1 && labelcount == 1 && (colorlink || colorlabel || patterns))
+    if (ngroup > 1 && labelcount == 1 && (colorlink || colorlabel || patterns || symbols || numbers))
 	    fputs ("c0\n", fp_out);
 
     fprintf (fp_out, "%g c\n", cl [i].value);
@@ -1220,7 +1535,7 @@ void psstring ()
             buf2 [j++] = '\\';
             sprintf (buf2 + j, "%03o", (unsigned) p [i]);
             j += 3;
-            extended = TRUE;
+            eXtended = TRUE;
         } else
             buf2 [j++] = p [i];
     }
@@ -1411,6 +1726,17 @@ void process_args ()
 	    case 'f':
 		fontsize = atoi (get_arg ());
 		break;
+	    case 'h':
+                use_rainbow = TRUE;
+                use_bright = FALSE;
+		break;
+	    case 'H':
+                use_rainbow = use_bright = TRUE;
+		break;
+	    case 'I':
+		numbers = TRUE;
+		patterns = symbols = FALSE;
+		break;
 	    case 'L':
 		labels = FALSE;
 		break;
@@ -1427,18 +1753,23 @@ void process_args ()
 		break;
 	    case 'P':
 		patterns = TRUE;
+		numbers = symbols = FALSE;
+		break;
+	    case 'Q':
+		symbols = TRUE;
+		numbers = patterns = FALSE;
 		break;
 	    case 'R':
 		ruler = FALSE;
 		break;
 	    case 'r':
-		RulerSkip = atoi (get_arg ());
+		RulerSkip = atof (get_arg ());
 		break;
 	    case 'S':
-		LineSkip2 = atoi (get_arg ());
+		LineSkip2 = atof (get_arg ());
 		break;
 	    case 's':
-		LineSkip = atoi (get_arg ());
+		LineSkip = atof (get_arg ());
 		break;
 	    case 'T':
 		fontname = "Times-Roman";
@@ -1447,6 +1778,10 @@ void process_args ()
 	    case 't':
 		linktype = TRI;
 		break;
+	    case 'u':
+                colorfile = get_arg ();
+		use_usercolours = TRUE;
+                break;
             default:
                 errit ("Illegal option '%s'", arg_v [1]);
         }
@@ -1473,15 +1808,15 @@ void syntax (int err)
     fprintf (
 	     err ? stderr : stdout,
         "\n"
-	"Grouped Color Dendrogram Generator, Version " denVERSION "\n"
-	"(c) P. Kleiweg 1997 - 2002\n"
+	"Grouped Colour Dendrogram Generator, Version " denVERSION "\n"
+	"(c) P. Kleiweg 1997 - 2005\n"
 	"\n"
-        "Usage: %s [-2] [-a] [-b float] [-c] [-C] [-e float] [-f int]\n"
-        "\t\t[-L] [-n int] [-o filename] [-p] [-r int] [-R] [-s int] [-S int]\n"
-        "\t\t[-t] [-T] [cluster file] > file.ps\n"
+        "Usage: %s [-2] [-a] [-b float] [-c] [-C] [-e float] [-f int] [-h] [-H]\n"
+        "\t\t[-L] [-n int] [-o filename] [-p] [-r float] [-R] [-s float] [-S float]\n"
+        "\t\t[-t] [-T] [-u colour file] [cluster file] > file.ps\n"
 	"\n"
-	"Usage: %s -P -n int [-a] [-b float] [-e float] [-f int]\n"
-        "\t\t[-o filename] [-r int] [-R] [-s int] [-S int]\n"
+	"Usage: %s -I|-P|-Q -n int [-a] [-b float] [-e float] [-f int]\n"
+        "\t\t[-o filename] [-r float] [-R] [-s float] [-S float]\n"
         "\t\t[-t] [-T] [cluster file] > file.ps\n"
 	"\n"
 	"Usage: %s -E [-o filename]\n"
@@ -1490,30 +1825,38 @@ void syntax (int err)
 	"\t-a : curved links (default: rectangular)\n"
         "\t-b : base offset, may be negative\n"
         "\t     (default: minimum of 0.0 and smallest value in cluster file)\n"
-        "\t-c : color links (with number of groups from 2 through %i)\n"
-        "\t-C : color labels (with number of groups from 2 through %i)\n"
+        "\t-c : colour links (with number of groups from 2 through %i)\n"
+        "\t-C : colour labels (with number of groups from 2 through %i)\n"
 	"\t-e : exponent (default: 1.0)\n"
 	"\t-E : example cluster file\n"
 	"\t-f : fontsize (default: %i)\n"
+        "\t-h : use rainbow colours, light and dark, instead of standard colours\n"
+	"\t\t(no limit to number of groups)\n"
+        "\t-H : use rainbow colours, light, instead of standard colours\n"
+	"\t\t(no limit to number of groups)\n"
+	"\t-I : cluster numbers (implies: -L)\n"
 	"\t-L : no labels\n"
         "\t-n : number of groups (default: 1)\n"
 	"\t-o : output file\n"
 	"\t-p : placement of labels in two columns\n"
 	"\t-P : patterns (implies: -2 -L, with number of groups from 2 through %i)\n"
+	"\t-Q : symbols (implies: -L, with number of groups from 2 through %i)\n"
 	"\t-r : line skip for ruler\n"
 	"\t-R : no ruler\n"
 	"\t-s : line skip within groups\n"
 	"\t-S : line skip between groups\n"
 	"\t-t : triangular links (default: rectangular)\n"
 	"\t-T : font Times-Roman (default: Helvetica)\n"
+	"\t-u : user-defined colours\n"
 	"\n",
 	programname,
 	programname,
 	programname,
-	maxCOLORS,
-	maxCOLORS,
+	n_colors,
+	n_colors,
 	defFONTSIZE,
-	maxCOLORS
+	n_colors,
+	n_colors
     );
     exit (err);
 }
