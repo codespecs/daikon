@@ -62,8 +62,8 @@ ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
 endif
 
 # On cygwin, translate the classpath to windows format.  Only do so if
-# this has not already been done (which is determined by looking for 
-# semicolons (;) in the classpath
+# this has not already been done, which is determined by looking for
+# semicolons (;) in the classpath.
 ifeq (cygwin,$(OSTYPE))
   ifneq (;,$(findstring ;,$(CLASSPATH)))
     export CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
