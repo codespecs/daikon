@@ -56,7 +56,7 @@ endif
 ## tools.jar must be on your classpath.
 setenv darwinos 0
 if ($?OSTYPE) then
-  if ("$OSTYPE" != "darwin") then
+  if ("$OSTYPE" == "darwin") then
     setenv darwinos 1
   endif
 endif
