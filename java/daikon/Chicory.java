@@ -297,23 +297,19 @@ public class Chicory {
         for (int i = 0; i < 100; i++)
           {
             String line;
-            try
-              {
-                line = daikonReader.readLine();
-              }
-            catch (IOException e1)
-              {
-                line = null;
-              }
+            try {
+              line = daikonReader.readLine();
+            } catch (IOException e1) {
+              System.out.printf ("Exception reading output from Daikon: %s%n",
+                                 e1);
+              line = null;
+            }
 
-            if (line == null)
-              {
-                throw new RuntimeException("Did not receive socket port from Daikon!");
-              }
-            else
-              {
-                //if (!line.startsWith("DaikonChicoryOnlinePort="))
-                System.out.println(line);
+            if (line == null) {
+              throw new RuntimeException ("Did not receive socket port from "
+                                          + "Daikon!");
+            } else {
+                System.out.println ("in: " + line);
 
                 if (line.startsWith("DaikonChicoryOnlinePort="))
                   {
@@ -325,6 +321,11 @@ public class Chicory {
                   }
               }
           }
+
+        if (daikon_port == -1) {
+          throw new RuntimeException ("After 100 lines of output, "
+                                      + "Daikon port not received");
+        }
 
         //continue reading daikon output in separate thread
         daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
@@ -431,7 +432,7 @@ public class Chicory {
       }
       System.exit (targetResult);
     }
-  }
+      }
 
 
   /**
