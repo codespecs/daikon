@@ -25,7 +25,7 @@ DIST_VERSION_FILES := ${README_PATHS} \
 	doc/daikon.texinfo doc/developer.texinfo \
 	doc/index.html doc/www/download/index.html
 SCRIPT_FILES := Makefile java-cpp.pl lines-from \
-	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
+	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl java-cygwin.sh \
 	dfepl dtrace-perl dtype-perl \
 	javac-xlint javac-xlint-prune.pl \
 	kvasir-dtrace \
