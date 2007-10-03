@@ -20,6 +20,12 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.3.3 (October 3, 2007)
+
+A number of problems with building Daikon on windows were resolved.
+Daikon now builds correctly with Cygwin.  The installation and build
+instructions were updated.
+
 4.3.2 (September 3, 2007)
 
 Bug fixes and minor enhancements were made to Daikon, Kvasir, and 
