@@ -20,7 +20,7 @@ JAVAC_XLINT ?= ${DAIKONBIN}/javac-xlint -p '([/\\]jtb[/\\])|([/\\]junit[/\\])'
 
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))
-  JAVA ?= $(INV)/scripts/java-cygwin.sh -ea
+  JAVA ?= $(DAIKONBIN)/java-cygwin.sh -ea
 else
   JAVA ?= java -ea
 endif
@@ -54,16 +54,18 @@ endif
 ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
   CLASSPATH := .:$(CLASSPATH)
 endif
-ifneq (bcel.jar,$(findstring bcel.jar,$(CLASSPATH)))
-  CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
+ifdef CLASSPATH_JARS
+  ifneq (bcel.jar,$(findstring bcel.jar,$(CLASSPATH)))
+    CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
+  endif
 endif
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
   CLASSPATH := $(CLASSPATH):${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
 endif
 
 # On cygwin, translate the classpath to windows format.  Only do so if
-# this has not already been done, which is determined by looking for
-# semicolons (;) in the classpath.
+# this has not already been done (which is determined by looking for
+# semicolons (;) in the classpath
 ifeq (cygwin,$(OSTYPE))
   ifneq (;,$(findstring ;,$(CLASSPATH)))
     export CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
