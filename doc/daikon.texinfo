@@ -546,7 +546,8 @@ you plan to use one of Daikon's front ends that work on binaries, such
 as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
 If you wish to edit the Daikon source code and re-compile Daikon, see
-@ref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
+@ref{Compiling Daikon,,,./developer,Daikon Developer Manual} in the 
+Daikon developers manual.
 
 
 @node  Installation steps, Windows command shells, Requirements, Complete installation
@@ -587,46 +588,39 @@ This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 @end itemize
 
 @item
-Set up your environment.  Your
-shell initialization file should set the @env{DAIKONDIR} environment variable (to
-an absolute pathname) and source the appropriate Daikon environment
-file.  (Alternately, you could set the environment variables, such as
-classpath, yourself.)
-@itemize
-@item
-@cindex C shell
-@cindex csh shell
-@cindex tcsh shell
-If you use the csh or tcsh shell, add the
-following to your @file{.cshrc} file:
-@example
-setenv JDKDIR @var{/usr/lib/j2sdk1.5-sun}
-setenv DAIKONDIR @var{daikonparent}/daikon
-source $DAIKONDIR/bin/daikon.cshrc
-@end example
-@noindent
-@item
-@cindex Bourne shell
-@cindex bash shell
-If you use the bash shell, add the following to your
-@file{.bash_profile} file:
-@example
-export JDKDIR=@var{/usr/lib/j2sdk1.5-sun}
-export DAIKONDIR=@var{daikonparent}/daikon
-source $DAIKONDIR/bin/daikon.bashrc
-@end example
-@item
-If you use Windows, you need to execute the following commands (in each
-shell that you start) before running Daikon.
-@c This does not work for me.
-@c add commands similar to the following to your
-@c startup file (typically @file{C:\WINDOWS\system32\AUTOEXEC.NT}):
-@example
-set DAIKONDIR=C:\daikon
-set JDKDIR=C:\Program Files\Java\jdk1.5.0_05
-%DAIKONDIR%\bin\daikonenv.bat
-@end example
+Set up your environment.  You need to define the following environment
+variables: 
 
+@itemize
+
+    @item @code{DAIKONDIR} --
+    @cindex DAIKONDIR
+
+    The full pathname to the daikon directory you extracted
+    above.  For example: @code{@var{daikonparent}/daikon} or @code{C:\daikon}.
+
+    @item @code{JDKDIR} -- 
+    @cindex JDKDIR
+
+    The full pathanme to the JDK.  For example:
+    @code{/usr/lib/j2sdk1.t-sun} or @code{C:\Program Files\Java\jdk1.5.0_05}
+
+@end itemize
+
+The commands to define environment variables vary depending on your 
+shell.  The csh and tcsh shells and their variants use @code{setenv} 
+(e.g., @code{setenv JDKDIR /usr/lib/j2sdk1.5-sun}).  The sh and bash shells and
+their variants use @code{export} 
+(e.g., @code{export JDKDIR=/usr/lib/jw2sdk1.5-sun}).  The Windows shell
+uses @code{set} (e.g., @code{set JDKDIR=C:\Program Files\Java\jdk1.5.0_05})
+
+You also need to source the appropriate Daikon startup file 
+(@code{daikon.cshrc}, @code{daikon.bashrc} or @code{daikonenv.bat}).
+These files are located in the @code{@var{daikonparent}/daikon/bin}
+directory.
+
+These customizations can be placed in your startup file, or executed
+each time that you wish to use Daikon.  
 We recommend that you put all three commands in a batch file, and
 manually execute that batch file from the command line.
 Query to Windows users:  is there a good way to make the batch file get run
@@ -638,9 +632,6 @@ automatically for each command shell?  If so, we'll put the answer here.
 @c variables), but that only reduces the number of steps you have to do for
 @c each shell from 3 (two variables plus running the @file{daikonenv.bat}
 @c file) to 1 (running the @file{daikonenv.bat} file).
-
-@end itemize
-@noindent
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
@@ -659,7 +650,13 @@ to build various executables used by Daikon, such as the
 C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 Note that running this make command may take 20 minutes or more,
-depending on your computer.
+depending on your computer.  
+
+Note that this step is @emph{not} required if you only want to use Daikon
+with its Java front end (Chicory).  Running @code{make} requires
+that @uref{http:http://www.cygwin.com/,Cygwin} be installed.  More
+information is available in @ref{Compiling
+Daikon,,,./developer,Daikon Developer Manual}.
 
 Optionally, download other executables, such as the source-based C front
 end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
