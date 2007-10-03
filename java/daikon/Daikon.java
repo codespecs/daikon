@@ -556,12 +556,14 @@ public final class Daikon {
     public TerminationMessage(String format, Object... args) {
       super (String.format (format, args));
     }
-    // public TerminationMessage(Exception e) { super(e.getMessage()); }
-    public TerminationMessage(Exception e) {
-      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
-    //public TerminationMessage(String s, LineNumberReader reader, String fileName) {
-    //      super(new FileIOException(s, reader, fileName).getMessage()); }
-    public TerminationMessage(Object... s) { super(UtilMDE.joinLines(s)); }
+    public TerminationMessage(Exception e) { super(e.getMessage()); }
+    //    public TerminationMessage(Exception e) {
+    //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
+    public TerminationMessage (Throwable e, LineNumberReader reader,
+                               String filename) {
+      super ("Error at line " + reader.getLineNumber() + " in file "
+             + filename, e);
+    }
     public TerminationMessage() { super(); }
   }
 
