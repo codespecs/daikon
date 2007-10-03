@@ -241,6 +241,11 @@ to fail.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
+To compile Daikon on Windows, the best approach is to install the Cygwin
+toolset (available at @uref{http://sources.redhat.com/cygwin/}), which
+contains everything you need to compile and run Unix programs under
+Windows.  You can install Cygwin by simply running the program found
+at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
 @node    New invariants, New derived variables, Compiling Daikon, Extending Daikon
 @section New invariants
