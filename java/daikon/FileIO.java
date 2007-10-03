@@ -581,7 +581,7 @@ public final class FileIO {
       rep_type = file_rep_type.fileTypeToRepType();
       aux = VarInfoAux.parse(aux_string);
     } catch (IOException e) {
-      throw new Daikon.TerminationMessage(file, filename, e);
+      throw new Daikon.TerminationMessage(e, file, filename.getPath());
     }
 
     if (static_constant_value_string != null) {
