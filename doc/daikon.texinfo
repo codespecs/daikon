@@ -3765,9 +3765,9 @@ java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
 @noindent
 This runs your program and creates the file @file{MyClass.decls-DynComp}
 in the current directory. DynComp also creates @file{MyClass.txt-cset},
-which contains the same information in an easier-to-read format. The
-@file{.decls} file may be passed to Chicory, as described in @ref{Using
-DynComp with Java programs}.
+which contains the same information and a further level of detail in an
+easier-to-read format. The @file{.decls} file may be passed to Chicory,
+as described in @ref{Using DynComp with Java programs}.
 @example
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
      mypackage.MyClass arg1 arg2 arg3
@@ -3820,9 +3820,10 @@ int
 
 @noindent The declarations file format is described in @ref{Program point declarations}.
 
-The @file{cset} and @file{.decls} files contain the same comparability
-information. This part of the generated @file{cset} corresponds to the
-@file{.decls} excerpt above:
+DynComp creates two representations of the comparability information in
+the files @file{foo.txt-cset} and @file{foo.txt-trace}. In the @file{cset}
+file, DynComp outputs comparability sets as sets. The above @file{.decls}
+output corresponds to the following in @file{cset}:
 
 @example
 Daikon Variable sets for Year.compute(I yr, I d1, I d2) enter
@@ -3835,11 +3836,71 @@ Daikon Variable sets for Year.compute(I yr, I d1, I d2) exit
   [1] [daikon.chicory.ParameterInfo:yr]
 @end example
 
+In the @file{trace} file, DynComp outputs comparability sets as trees,
+structured such that each variable in the tree has interacted with its
+children. The lack of a parent-child relationship between two variables
+in a set does not imply anything about whether they interacted.
+The above @file{.decls} output corresponds to the following in
+@file{trace}:
+
+@example
+Daikon Traced Tree for Year.compute(I yr, I d1, I d2) enter
+
+daikon.chicory.ParameterInfo:d1
+
+daikon.chicory.ParameterInfo:d2
+
+daikon.chicory.ParameterInfo:yr
+
+
+Daikon Traced Tree for Year.compute(I yr, I d1, I d2) exit
+
+daikon.chicory.ParameterInfo:d2
+--daikon.chicory.ParameterInfo:d1 ([Year:compute()-11])
+--daikon.chicory.ReturnInfo:return ([Year:compute()-11])
+
+daikon.chicory.ParameterInfo yr
+@end example
+
 @noindent The file here shows that @code{d1}, @code{d2}, and the return value of
 the @code{compute} method are in the same comparability set; this is
 correct, as they are all of the abstract type `days'. The variable
 @code{yr} is in its own comparability set; it has abstract type `year',
-and so is not comparable to the other variables.
+and so is not comparable to the other variables. In addition, the structure
+of the @code{[d1, d2, return]} set shows that at some point, @code{d1} interacted
+with @code{d2}, and that @code{d2} interacted with @code{return}. The absence of
+a @code{d1 -- return} edge does not imply that @code{d1} and @code{return} never
+interacted directly.
+
+In addition, non-root nodes in the @file{trace} trees can indicate a list of class names,
+method names, and line numbers at which values interacted, resulting in comparability
+between the preceding child node and its parent. In the above example, @code{d1}
+interacted with @code{d2} on line 11 of the @code{compute} method of the @code{Year}
+class.
+
+Duplicate values in this list represent the results of separate calls to
+another method which each of the relevant variables. For example, if @code{main} had calls
+@code{compute(year, summerDays, winterDays)} and @code{compute(year,schoolDays,breakDays)},
+then for @code{main} we might see
+
+@example
+daikon.chicory.FieldInfo:summerDays
+--daikon.chicory.FieldInfo:winterDays([Year:compute()-11])
+--daikon.chicory.FieldInfo:schoolDays([Year:compute()-11, Year:compute()-11])
+----daikon.chicory.FieldInfo:breakDays([Year:compute()-11])
+@end example
+
+Empty lists indicate that an assignment of one variable to the other occurred.
+
+Elements of these lists are essentially parts of stack traces. The maximum number
+of stack trace levels displayed is set by @code{--trace-line-depth}, which is equal to 1 by default.
+
+For these files, DynComp also has a @code{--abridged-vars} option that replaces text
+like @code{daikon.chicory.ParameterInfo:d2} with text like @code{Parameter d2} in the @file{cset}
+and @file{trace} files. It writes @code{this} instead of
+@code{daikon.chicory.ThisObjInfo:this}; and @code{return} instead of
+@code{daikon.chicory.ReturnInfo:return}. This option is on by default, and can be
+turned off with @code{--abridged-vars=false}.
 
 @menu
 * Instrumenting the JDK with DynComp::  
