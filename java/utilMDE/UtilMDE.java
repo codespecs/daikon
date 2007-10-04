@@ -622,7 +622,7 @@ public final class UtilMDE {
    * Returns a string version of the name that can be used in java source.
    * On Windows, the file will return a backslash separated string.  Since
    * backslash is an escape character, it must be quoted itself inside
-   * the string.  
+   * the string.
    *
    * The current implementation presumes that backslashes don't appear
    * in filenames except as windows path separators.  That seems like a
@@ -1349,17 +1349,16 @@ public final class UtilMDE {
     return result_array;
   }
 
-  // Perhaps this should try all possible line separators, not just the one
-  // for this specific operating system, in case it was fed files created
-  // elsewhere.
   /**
    * Return an array of Strings, one for each line in the argument.
    * Always returns an array of length at least 1 (it might contain only the
-   * empty string).
+   * empty string).  All common line separators (cr, lf, cr-lf, or lf-cr)
+   * are supported.  Note that a string that ends with a line separator
+   * will return an empty string as the last element of the array.
    * @see #split(String s, char delim)
    **/
   public static String[] splitLines(String s) {
-    return split(s, lineSep);
+    return s.split ("\r\n?|\n\r?", -1);
   }
 
   /**
