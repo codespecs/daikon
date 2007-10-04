@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/zsh -f
 
 # Convert a black on white Postscript image (as produced by dot) into
 # a black-on-transparent PNG of the specified width, with height
