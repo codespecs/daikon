@@ -75,12 +75,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     compilationUnit.accept(ungenerifiedCollector);
     
 
-    /*
-    String result = ungenerifiedCollector.collectionResults().trim();
-    String expected = expectedAnswerBuffer.toString().trim();
-    UtilMDE.writeFile (new File ("expected.txt"), expected);
-    UtilMDE.writeFile (new File ("result.txt"), result);
-    */
+
     /*
      for (int ii = 0; ii < result.length(); ii++) {
       if (result.charAt(ii) !=  expected.charAt(ii)) {
@@ -93,11 +88,26 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     }
     */
 
+    String result = ungenerifiedCollector.collectionResults().trim();
+    String[] result_arr = UtilMDE.splitLines (result);
+    String expected = expectedAnswerBuffer.toString().trim();
+    String[] expected_arr = UtilMDE.splitLines (expected);
+
+    // UtilMDE.writeFile (new File ("expected.txt"), expected);
+    // UtilMDE.writeFile (new File ("result.txt"), result);
+
+    assertEquals ("diff in buffer lengths", expected_arr.length, 
+                  result_arr.length);
+    for (int ii = 0; ii < expected_arr.length; ii++) {
+      Assert.assertEquals ("diff at line " + ii, expected_arr[ii], 
+                           result_arr[ii]);
+    }
+      /*
     Assert.assertTrue(ungenerifiedCollector.collectionResults()
                       + "\n\n\nExpected answer:\n\n\n"
                       + expectedAnswerBuffer.toString(),
                       ungenerifiedCollector.collectionResults().trim().equals(expectedAnswerBuffer.toString().trim()));
-
+      */
   }
 
   private static StringBuffer expectedAnswerBuffer = new StringBuffer();
