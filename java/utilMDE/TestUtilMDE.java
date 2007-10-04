@@ -2372,4 +2372,23 @@ public final class TestUtilMDE extends TestCase {
     assertEquals (t.ld.get(1).doubleValue(), 17.8);
   }
 
+  public static void testSplitLines() {
+
+    String str = "one\ntwo\n\rthree\r\nfour\rfive\n\n\nsix\r\n\r\n\r\n";
+    String[] sa = UtilMDE.splitLines (str);
+    // for (String s : sa)
+    //   System.out.printf ("'%s'\n", s);
+    assertEquals (sa.length, 11);
+    assertEquals (sa[0], "one");
+    assertEquals (sa[1], "two");
+    assertEquals (sa[2], "three");
+    assertEquals (sa[3], "four");
+    assertEquals (sa[4], "five");
+    assertEquals (sa[5], "");
+    assertEquals (sa[6], "");
+    assertEquals (sa[7], "six");
+    assertEquals (sa[8], "");
+    assertEquals (sa[9], "");
+    assertEquals (sa[10], "");
+  }
 }
