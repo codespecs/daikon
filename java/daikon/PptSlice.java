@@ -229,6 +229,7 @@ public abstract class PptSlice
    * It's somewhat less efficient than ArityPptnameComparator.
    **/
   public static final class ArityVarnameComparator implements Comparator<PptSlice> {
+    @SuppressWarnings("interned") // Equality
     public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2)
         return 0;
@@ -250,6 +251,7 @@ public abstract class PptSlice
    * on the same Ppt.
    **/
   public static final class ArityPptnameComparator implements Comparator<PptSlice> {
+    @SuppressWarnings("interned") // Equality
     public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2)
         return 0;
@@ -373,6 +375,7 @@ public abstract class PptSlice
    * Check the internals of this slice.  Each invariant in the slice
    * is checked for consistency and each inv.ppt must equal this
    */
+  @SuppressWarnings("interned") // PptTopLevel
   public void repCheck() {
 
     for (Invariant inv : invs) {

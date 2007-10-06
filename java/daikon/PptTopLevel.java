@@ -2902,7 +2902,7 @@ public class PptTopLevel extends Ppt {
         proverStack.popToMark(backgroundMark);
         boolean isInvariant = false;
         for (int i = 0; i < lemmas.length; i++) {
-          if (lemmas[i] == bad) {
+          if (lemmas[i] == bad) { // equality checking pattern
             present[i] = false;
             isInvariant = true;
           } else if (present[i]) {
@@ -3247,24 +3247,21 @@ public class PptTopLevel extends Ppt {
     if (equality_view == null)
       return ("null");
 
-    String out = "";
+    StringBuilderDelimited out = new StringBuilderDelimited(", ");
     for (Invariant inv : equality_view.invs) {
       Equality e = (Equality) inv;
       Set<VarInfo> vars = e.getVars();
-      String set_str = "";
+      StringBuilderDelimited set_str = new StringBuilderDelimited(",");
       for (VarInfo v : vars) {
-        if (set_str != "") // interned
-          set_str += ",";
-        set_str += v.name();
+        String name = v.name();
         if (v.missingOutOfBounds())
-          set_str += "{MOB}";
+          name += "{MOB}";
+        set_str.append(name);
       }
-      if (out != "") // interned
-        out += ", ";
-      out += "[" + set_str + "]";
+      out.append("[" + set_str + "]");
     }
 
-    return (out);
+    return (out.toString());
   }
 
   /**

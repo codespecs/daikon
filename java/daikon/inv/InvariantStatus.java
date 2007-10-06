@@ -1,10 +1,12 @@
 package daikon.inv;
 
+import checkers.quals.*;
+
 /**
  * This class is an enumerated type representing the possible results of
  * adding an sample to an invariant.
  */
-public final class InvariantStatus {
+public final /*@Interned*/ class InvariantStatus {
 
   private final String status;
 

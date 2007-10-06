@@ -204,9 +204,9 @@ public final class ValueTuple implements Cloneable {
    * @param vi the variable whose value is to be returned
    * @return the value of the variable at this ValueTuple
    **/
-  public Object getValue(VarInfo vi) {
+  public /*@Interned*/ Object getValue(VarInfo vi) {
     assert vi.value_index < vals.length : vi;
-    return vi.getValue(this);
+    return vi.getValue(this);   // this looks like a checker bug
   }
 
   /**
@@ -214,12 +214,12 @@ public final class ValueTuple implements Cloneable {
    * Note: For clients, getValue(VarInfo) is preferred to getValue(int).
    * @see #getValue(VarInfo)
    **/
-  Object getValue(int val_index) { return vals[val_index]; }
+  /*@Interned*/ Object getValue(int val_index) { return vals[val_index]; }
 
 
   /** Default constructor that interns its argument. */
-  public ValueTuple(Object[] vals, int[] mods) {
-    this.vals = Intern.intern(vals);
+  public ValueTuple(Object[/*@Interned*/] vals, int[/*@Interned*/] mods) {
+    this.vals = Intern.intern(vals); // checker error due to checker weakness.  The type of intern needs to be polymorphic.  It is Intern.intern (Object[]) -> @Interned Object[], but we want Intern.intern (Object[@Interned]) -> @Interned Object[@Interned]
     this.mods = Intern.intern(mods);
   }
 

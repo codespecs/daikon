@@ -143,7 +143,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public boolean is_static_constant;
 
   /** Null if not statically constant. **/
-  Object static_constant_value;
+  /*@Interned*/ Object static_constant_value;
 
   /** Whether and how derived.  Null if this is not derived. **/
   public Derivation derived;
@@ -497,9 +497,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Create the specified VarInfo **/
   private VarInfo (VarInfoName name, ProglangType type,
-                  ProglangType file_rep_type, VarComparability comparability,
-                  boolean is_static_constant, Object static_constant_value,
-                  VarInfoAux aux) {
+                   ProglangType file_rep_type, VarComparability comparability,
+                   boolean is_static_constant, /*@Interned*/ Object static_constant_value,
+                   VarInfoAux aux) {
 
     assert name != null;
     assert file_rep_type != null;
@@ -548,7 +548,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Create the specified VarInfo **/
   public VarInfo (String name, ProglangType type,
                   ProglangType file_rep_type, VarComparability comparability,
-                  boolean is_static_constant, Object static_constant_value,
+                  boolean is_static_constant, /*@Interned*/ Object static_constant_value,
                   VarInfoAux aux) {
     this (VarInfoName.parse(name), type, file_rep_type, comparability,
           is_static_constant, static_constant_value, aux);
@@ -575,7 +575,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Create a VarInfo with the same values as vi **/
   public VarInfo (VarInfo vi) {
     this (vi.name(), vi.type, vi.file_rep_type, vi.comparability,
-         vi.is_static_constant, vi.static_constant_value, vi.aux);
+          vi.is_static_constant, vi.static_constant_value, vi.aux);
     str_name = vi.str_name;
     canBeMissing = vi.canBeMissing;
     postState = vi.postState;
@@ -735,7 +735,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the static constant value of this variable.  The variable
-   * must be a static constant
+   * must be a static constant.
    */
   public Object constantValue() {
     if (isStaticConstant()) {
@@ -1123,7 +1123,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Get the value of this variable from a particular sample (ValueTuple).
    * @param vt the ValueTuple from which to extract the value
    **/
-  public Object getValue(ValueTuple vt) {
+  public /*@Interned*/ Object getValue(ValueTuple vt) {
     if (is_static_constant)
       return static_constant_value;
     else

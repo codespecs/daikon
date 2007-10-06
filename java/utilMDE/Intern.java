@@ -665,6 +665,7 @@ public final class Intern {
       this.seq = seq;
       this.start = start;
       this.end = end;
+      assert isInterned(seq);
     }
 
     @SuppressWarnings("unchecked")
@@ -685,6 +686,12 @@ public final class Intern {
     public int hashCode() {
       return seq.hashCode() + start * 30 - end * 2;
     }
+
+    // For debugging
+    public String toString() {
+      return "SAI(" + start + "," + end + ") from: " + ArraysMDE.toString(seq);
+    }
+
   }
 
   /**
@@ -694,7 +701,10 @@ public final class Intern {
    **/
   private static final class SequenceAndIndicesHasher<T> implements Hasher {
     public boolean equals(Object a1, Object a2) {
-      return ((SequenceAndIndices<T>) a1).equals ((SequenceAndIndices<T>) a2); // unchecked cast
+      SequenceAndIndices<T> sai1 = (SequenceAndIndices<T>) a1; // unchecked cast
+      SequenceAndIndices<T> sai2 = (SequenceAndIndices<T>) a2; // unchecked cast
+      // The SAI objects are *not* interned, but the arrays inside them are.
+      return sai1.equals(sai2);
     }
 
     public int hashCode(Object o) {

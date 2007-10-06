@@ -496,7 +496,9 @@ public class WSMatch {
     //System.out.printf ("%s index = %d, %s index = %d\n", var1, var1.index,
     //                   var2, var2.index);
 
+    @SuppressWarnings("interned") // checker bug
     List<List</*@Interned*/ Object>> data1 = ppt1.get_var_data();
+    @SuppressWarnings("interned") // checker bug
     List<List</*@Interned*/ Object>> data2 = ppt2.get_var_data();
 
     MatchInfo m = new MatchInfo (ppt1, var1, ppt2, var2, 0.0);
@@ -611,7 +613,9 @@ public class WSMatch {
   public static MatchInfo compare_var (MatchInfo match, DeclPpt ppt1,
                                   DeclVarInfo var1, DeclPpt ppt2, DeclVarInfo var2) {
 
+    @SuppressWarnings("interned") // checker bug
     List<List</*@Interned*/ Object>> data1 = ppt1.get_var_data();
+    @SuppressWarnings("interned") // checker bug
     List<List</*@Interned*/ Object>> data2 = ppt2.get_var_data();
 
     MatchInfo result = new MatchInfo (ppt1, var1, ppt2, var2, 0.0);
@@ -640,6 +644,7 @@ public class WSMatch {
   public static List<DeclVarInfo> find_constants (DeclPpt ppt) {
 
     List<DeclVarInfo> constants = new ArrayList<DeclVarInfo>();
+    @SuppressWarnings("interned") // checker bug
     List<List</*@Interned*/ Object>> data = ppt.get_var_data();
 
     // Loop through each variable
@@ -680,6 +685,7 @@ public class WSMatch {
   public static List<DeclVarInfo> find_dups (DeclPpt ppt) {
 
     List<DeclVarInfo> dups = new ArrayList<DeclVarInfo>();
+    @SuppressWarnings("interned") // checker bug
     List<List</*@Interned*/ Object>> data = ppt.get_var_data();
 
     // Find the input and output variables

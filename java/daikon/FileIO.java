@@ -2160,7 +2160,7 @@ public final class FileIO {
     public /*@Interned*/ String parent_ppt = null;
     public int parent_relation_id = 0;
     public String parent_variable = null;
-    public Object static_constant_value = null;
+    public /*@Interned*/ Object static_constant_value = null;
 
     public VarDefinition clone() {
       try {

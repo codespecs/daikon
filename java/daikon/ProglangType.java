@@ -338,14 +338,14 @@ public final /*@Interned*/ class ProglangType
 
   /**
    * Given a string representation of a value (of the type represented by
-   * this ProglangType), return the interpretation of that value.
-   * Canonicalize where possible.  If the type is an array and there
+   * this ProglangType), return the (canonicalized) interpretation of that value.
+   * If the type is an array and there
    * are any nonsensical elements in the array, the entire array is
    * considered to be nonsensical (indicated by returning null).  This
    * is not really correct, but it is a reasonable path to take for now
    * (jhp, Feb 12, 2005)
    */
-  public final Object parse_value(String value) {
+  public final /*@Interned*/ Object parse_value(String value) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
     String value_ = value;      // for debugging, I suppose
@@ -717,7 +717,8 @@ public final /*@Interned*/ class ProglangType
    * name '*func'
    **/
   public boolean is_function_pointer() {
-    return base.equals ("*func");
+    assert base == base.intern();
+    return base == "*func";     // interned
   }
 
 }
