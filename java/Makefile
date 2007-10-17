@@ -644,7 +644,8 @@ JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
 INTERNED_JAVA_FILES_SKIP =
 INTERNED_JAVA_FILES_SKIP = -skip VarInfoName.java
 INTERNED_JAVA_FILES_SKIP_COUNTS = -skip Intern.java -skip VarInfoName.java
-INTERNED_JAVA_FILES = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} '@Interned')
+# INTERNED_JAVA_FILES = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} '@Interned')
+INTERNED_JAVA_FILES = $(shell find . -type f -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 INTERNED_JAVA_FILES_COUNTS = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} '@Interned')
 
 ## Other attempts:
