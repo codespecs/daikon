@@ -662,6 +662,13 @@ interned-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
 
+# These targets run the Interned checker on just one file.  They use ${JAVAC}
+# instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
+interned-varinfo:
+	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/VarInfo.java
+interned-fileio:
+	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/FileIO.java
+
 interned-counts:
 	echo "Files: "
 	echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
