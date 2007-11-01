@@ -647,6 +647,28 @@ target.
         make test-staged-dist    </pre>
     </li>
 
+    <li> Test the distribution on a Windows machine.  On a Windows
+    machine with Cygwin installed, download the staged daikon.tar.gz
+    file, extract the files, set the appropriate environment variables
+    and run the top level makefile.  The commands below are for csh,
+    make the appropriate subsitutions for other shells.  This is
+    successful if the make command runs to conclusion with an error.
+    The last line should indicate that Kvasir was not build because
+    it is not a linux platform. <P>
+
+    Note that the build will take a fair amount of time because it 
+    builds the dyncomp instrumented JDK.
+    <pre>
+        wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+        tar xzvf daikon.tar.gz
+        setenv JDKDIR <i>jdk-directory</i>
+        setenv DAIKONDIR `pwd`/daikon
+        setenv DAIKONCLASS_SOURCES 1
+        source daikon/bin/daikon.cshrc
+        cd daikon
+        make
+    </pre>
+
     <li> Update the website.
 
     <pre>
