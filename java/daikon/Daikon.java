@@ -836,6 +836,25 @@ public final class Daikon {
     fileio_progress = null;
     progress = "";
 
+    // Reset statics.  Unfortunately, these must match the settings where
+    // these are declared and I don't know how to do that automatically.
+    inv_file = null;
+    no_text_output = false;
+    show_progress = false;
+    output_format = OutputFormat.DAIKON;
+    noversion_output = false;
+    output_num_samples = false;
+    omit_from_output = false;
+    omit_types = new boolean[256];
+    use_dataflow_hierarchy = true;
+    suppress_redundant_invariants_with_simplify = false;
+    ppt_regexp = null;
+    ppt_omit_regexp = null;
+    var_regexp = null;
+    var_omit_regexp = null;
+    server_dir = null;
+    use_mem_monitor = false;
+
     proto_invs.clear();
   }
 
