@@ -293,7 +293,8 @@ public class Chicory {
           = new BufferedReader(new InputStreamReader(daikonStdOut));
 
         // Examine up to 100 lines of Daikon output, looking for
-        // the "DaikonChicoryOnlinePort=" line.
+        // the "DaikonChicoryOnlinePort=" line.  Note that if file progress
+        // is turned on in Daikon, it may be proceeded by the time
         for (int i = 0; i < 100; i++)
           {
             String line;
@@ -309,12 +310,12 @@ public class Chicory {
               throw new RuntimeException ("Did not receive socket port from "
                                           + "Daikon!");
             } else {
-                System.out.println ("in: " + line);
+                System.out.println (line);
 
-                if (line.startsWith("DaikonChicoryOnlinePort="))
+                if (line.contains("DaikonChicoryOnlinePort="))
                   {
                     String portStr
-                      = line.substring("DaikonChicoryOnlinePort=".length());
+                      = line.replaceFirst(".*DaikonChicoryOnlinePort=", "");
                     daikon_port = Integer.decode (portStr);
                     System.out.println("GOT PORT STRING " + daikon_port);
                     break;
