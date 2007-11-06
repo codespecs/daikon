@@ -401,7 +401,9 @@ dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA) "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) --compare-sets-file=daikon/dcomp/std_dcomp_out.txt --no-jdk" \
+	$(JAVA) \
+	  daikon.DynComp $(DCOMP_ARGS) \
+	  --compare-sets-file=daikon/dcomp/std_dcomp_out.txt --no-jdk \
 	  daikon/dcomp/Test
 	-diff -uw daikon/dcomp/std_dcomp_out.goal daikon/dcomp/std_dcomp_out.txt \
 	  > daikon/dcomp/std_dcomp_out.diff
@@ -411,8 +413,8 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
 	$(JAVA_DCOMP) \
-	  "-javaagent:dcomp_premain.jar=$(DCOMP_ARGS) \
-	   --compare-sets-file=daikon/dcomp/jdk_dcomp_out.txt" daikon/dcomp/Test
+	   daikon.DynComp $(DCOMP_ARGS) \
+	   --compare-sets-file=daikon/dcomp/jdk_dcomp_out.txt daikon/dcomp/Test
 	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
 	  > daikon/dcomp/jdk_dcomp_out.diff
 	@cat daikon/dcomp/jdk_dcomp_out.diff
