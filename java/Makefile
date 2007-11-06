@@ -380,6 +380,15 @@ chicory-test : ChicoryPremain.jar
 	$(JAVA) -ea daikon.Chicory --verbose --debug --output-dir=/tmp \
 	  daikon.chicory.Test
 
+# Creates a copy of utilMDE under the package name daikon.util
+utilMDE-copy :
+	rm -rf daikon/util
+	cp -r utilMDE daikon/util
+	# change the package declarations
+	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
+	# change relevant imports
+	perl -p -i -e 's/utilMDE/daikon.util/g' daikon/util/*.java
+
 #
 # Dynamic Comparability (DynComp/Java)
 #
