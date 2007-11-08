@@ -12,6 +12,9 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.*;
 
+import daikon.util.Option;
+import daikon.util.Options;
+
 /**
  * Converts each file in the JDK.  Each method is doubled.  The new methods
  * are distinguished by a final parameter of type ?? and are instrumented to
@@ -19,6 +22,16 @@ import org.apache.bcel.*;
  * instrumentation code is unchanged and calls the original methods.
  */
 public class BuildJDK {
+
+  @Option("Don't track comparibility of primitive values")
+  public static boolean no_primitives = false;
+
+  @Option("Instrument the given classfiles from the specified source directory (by default, src must be a jar file)")
+  public static boolean classfiles = false;
+
+  /** Synopsis for the dcomp command line **/
+  public static final String synopsis
+    = "daikon.BuildJDK [options] src dest [class_prefix | classfiles...]";
 
   /**
    * Given an explicit rt.jar filename, or a root JDK or JRE directory, finds
@@ -93,14 +106,21 @@ public class BuildJDK {
 
     System.out.println("Starting at " + new Date());
 
-    if (args[0].equals ("-classfiles")) {
+    Options options = new Options (synopsis, BuildJDK.class);
+    options.ignore_options_after_arg (true);
+    String[] cl_args = options.parse_and_usage (args);
+    boolean ok = check_args(options, cl_args);
+    if (!ok)
+      System.exit(1);
 
-      // Arguments are -classfiles <srcdir> <destdir> <classfiles>...
-      File src_dir = new File(args[1]);
-      File dest_dir = new File(args[2]);
-      File[] class_files = new File[args.length-3];
-      for (int ii = 3; ii < args.length; ii++) {
-        class_files[ii-3] = new File(args[ii]);
+    if (classfiles) {
+
+      // Arguments are <srcdir> <destdir> <classfiles>...
+      File src_dir = new File(cl_args[0]);
+      File dest_dir = new File(cl_args[1]);
+      File[] class_files = new File[cl_args.length-2];
+      for (int ii = 2; ii < cl_args.length; ii++) {
+        class_files[ii-2] = new File(cl_args[ii]);
       }
 
       BuildJDK build = new BuildJDK();
@@ -134,12 +154,9 @@ public class BuildJDK {
 
     } else { // translate from jar file
 
-      assert (args.length == 2 || args.length == 3)
-        : "2 args req: jarfile dest-dir [class-prefix]";
-
-      final String potential_jar_file_name = args[0];
-      String dest_dir = args[1];
-      String prefix = args.length == 3 ? args[2] : "";
+      final String potential_jar_file_name = cl_args[0];
+      String dest_dir = cl_args[1];
+      String prefix = cl_args.length == 3 ? cl_args[2] : "";
 
       BuildJDK build = new BuildJDK();
       JarFile jfile = getJarFile(potential_jar_file_name);
@@ -171,6 +188,36 @@ public class BuildJDK {
 
     }
     System.out.println("done at " + new Date());
+  }
+
+  /**
+   * Check the resulting arguments for legality.  Prints a message and
+   * Returns false if there was an error
+   */
+  public static boolean check_args (Options options, String[] target_args) {
+
+    if (classfiles) {
+      if (target_args.length < 2) {
+        options.print_usage ("must specify source jar and destination dir");
+        return (false);
+      }
+      if (target_args.length < 3) {
+        options.print_usage ("must specify classfiles to instrument");
+        return (false);
+      }
+    } else {
+      if (target_args.length < 2) {
+        options.print_usage ("must specify source jar and destination dir");
+        return (false);
+      }
+      if (target_args.length > 3) {
+        options.print_usage ("too many arguments");
+        return (false);
+      }
+    }
+
+    return (true);
+
   }
 
   private static JarFile getJarFile(String potentialJarFileName)
@@ -307,7 +354,11 @@ public class BuildJDK {
     if (verbose)
       System.out.printf("processing target %s\n", classname);
     DCInstrument dci = new DCInstrument (jc, true, null);
-    JavaClass inst_jc = dci.instrument_jdk();
+    JavaClass inst_jc;
+    if (no_primitives)
+      inst_jc = dci.instrument_jdk_refs_only();
+    else
+      inst_jc = dci.instrument_jdk();
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classname.replace('.', '/') + ".class");
     File dir = new File(dfile, classfile.getParent());
