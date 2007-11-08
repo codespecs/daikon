@@ -1544,7 +1544,7 @@ public final class DCRuntime {
   public static void print_comparable (PrintWriter ps, MethodInfo mi) {
 
     List<DVSet> l = get_comparable (mi.traversalEnter);
-    ps.printf ("Daikon Variable sets for %s enter%n",
+    ps.printf ("Variable sets for %s enter%n",
                clean_decl_name(mi.toString()));
     if (l == null)
       ps.printf ("  not called%n");
@@ -1559,7 +1559,7 @@ public final class DCRuntime {
     }
 
     l = get_comparable (mi.traversalExit);
-    ps.printf ("Daikon Variable sets for %s exit%n",
+    ps.printf ("Variable sets for %s exit%n",
                clean_decl_name (mi.toString()));
     if (l == null)
       ps.printf ("  not called%n");
