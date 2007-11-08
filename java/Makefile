@@ -349,7 +349,7 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${DAIKONBIN}/prune-xlint.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} chicory dyncomp
+all_directly: ${AUTO_GENERATED_FILES} utilMDE-copy chicory dyncomp
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -380,19 +380,10 @@ chicory-test : ChicoryPremain.jar
 	$(JAVA) -ea daikon.Chicory --verbose --debug --output-dir=/tmp \
 	  daikon.chicory.Test
 
-# Creates a copy of utilMDE under the package name daikon.util
-utilMDE-copy :
-	rm -rf daikon/util
-	cp -r utilMDE daikon/util
-	# change the package declarations
-	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
-	# change relevant imports
-	perl -p -i -e 's/utilMDE/daikon.util/g' daikon/util/*.java
-
 #
 # Dynamic Comparability (DynComp/Java)
 #
-DCOMP_JAVA_FILES := daikon/dcomp/*java daikon/chicory/*.java utilMDE/*.java
+DCOMP_JAVA_FILES := daikon/dcomp/*java daikon/chicory/*.java daikon/util/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JDKDIR)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
@@ -400,7 +391,7 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 
 # Build DynComp/Java and run a sanity test
-dyncomp dcomp : dcomp_premain.jar dcomp-test
+dyncomp dcomp : dcomp_premain.jar dcomp-test utilMDE-copy
 dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
@@ -453,6 +444,26 @@ install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 # useful if editing only one file in the jar
 dyncomp-jdk-only dcomp-jdk-only :
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
+
+# Creates a copy of utilMDE under the package name daikon.util
+utilMDE-copy :
+	rm -rf daikon/util
+	cp -r utilMDE daikon/util
+	# change the package declarations
+	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
+	# change relevant imports
+	perl -p -i -e 's/utilMDE/daikon.util/g' daikon/util/*.java
+
+# Checks that daikon.util is imported by DynComp source files, rather
+# than utilMDE
+utilMDE-import-check :
+	@if [ -n "`grep '^import utilMDE' $(DCOMP_JAVA_FILES)`" ]; then \
+	echo "*** ERROR: Do not import utilMDE from DynComp code. It will be";\
+	echo " instrumented when DynComp is run. Please use the (identical)";\
+	echo " daikon.util package, which will not be instrumented.";\
+	echo "The following files import from utilMDE:";\
+	grep -n '^import utilMDE' $(DCOMP_JAVA_FILES); \
+	fi
 
 #
 # Web Services Matching targets
