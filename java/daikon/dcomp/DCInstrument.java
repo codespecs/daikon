@@ -453,6 +453,17 @@ class DCInstrument {
   }
 
   /**
+   * Instruments the original class to perform dynamic comparabilty and
+   * returns the new class definition.  A second version of each method
+   * in the class is created which is instrumented for comparability
+   * (Reference comparability only.)
+   */
+  public JavaClass instrument_jdk_refs_only() {
+    // XXX currently a stub
+    throw new RuntimeException("Not implemented yet!");
+  }
+
+  /**
    * Instrument the specified method for dynamic comparability
    */
   public void instrument_method (MethodGen mg) {
