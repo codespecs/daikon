@@ -317,6 +317,9 @@ public final class Intern {
    * Intern (canonicalize) an Integer.
    * Returns a canonical representation for the Integer.
    **/
+  // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
+  // values between -128 and 127 (but as of JDK 6, the Intern.valueOf
+  // javadocs don't promise the same).  This could take advantage of that.
   @SuppressWarnings("interned")
   public static /*@Interned*/ Integer intern(Integer a) {
     WeakReference</*@Interned*/ Integer> lookup = internedIntegers.get(a);
@@ -332,7 +335,7 @@ public final class Intern {
   // Not sure whether this convenience method is really worth it.
   /** Returns an interned Integer with value i. */
   public static /*@Interned*/ Integer internedInteger(int i) {
-    return intern(new Integer(i));
+    return intern(Integer.valueOf(i));
   }
 
   // Not sure whether this convenience method is really worth it.
@@ -346,6 +349,9 @@ public final class Intern {
    * Intern (canonicalize) a Long.
    * Returns a canonical representation for the Long.
    **/
+  // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
+  // values between -128 and 127 (but as of JDK 6, the Long.valueOf
+  // javadocs don't promise the same).  This could take advantage of that.
   @SuppressWarnings("interned")
   public static /*@Interned*/ Long intern(Long a) {
     WeakReference</*@Interned*/ Long> lookup =  internedLongs.get(a);
@@ -361,7 +367,7 @@ public final class Intern {
   // Not sure whether this convenience method is really worth it.
   /** Returns an interned Long with value i. */
   public static /*@Interned*/ Long internedLong(long i) {
-    return intern(new Long(i));
+    return intern(Long.valueOf(i));
   }
 
   // Not sure whether this convenience method is really worth it.
@@ -420,6 +426,9 @@ public final class Intern {
    * Intern (canonicalize) a Double.
    * Returns a canonical representation for the Double.
    **/
+  // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
+  // values between -128 and 127 (but as of JDK 6, the Double.valueOf
+  // javadocs don't promise the same).  This could take advantage of that.
   @SuppressWarnings("interned")
   public static /*@Interned*/ Double intern(Double a) {
     // Double.NaN == Double.Nan  always evaluates to false.
@@ -441,7 +450,7 @@ public final class Intern {
   // Not sure whether this convenience method is really worth it.
   /** Returns an interned Double with value i. */
   public static /*@Interned*/ Double internedDouble(double d) {
-    return intern(new Double(d));
+    return intern(Double.valueOf(d));
   }
 
   // Not sure whether this convenience method is really worth it.
