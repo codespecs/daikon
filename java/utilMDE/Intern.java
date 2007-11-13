@@ -318,8 +318,8 @@ public final class Intern {
    * Returns a canonical representation for the Integer.
    **/
   // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
-  // values between -128 and 127 (but as of JDK 6, the Intern.valueOf
-  // javadocs don't promise the same).  This could take advantage of that.
+  // values between -128 and 127 (and Intern.valueOf is intended to promise
+  // the same).  This could take advantage of that.
   @SuppressWarnings("interned")
   public static /*@Interned*/ Integer intern(Integer a) {
     WeakReference</*@Interned*/ Integer> lookup = internedIntegers.get(a);
@@ -350,8 +350,8 @@ public final class Intern {
    * Returns a canonical representation for the Long.
    **/
   // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
-  // values between -128 and 127 (but as of JDK 6, the Long.valueOf
-  // javadocs don't promise the same).  This could take advantage of that.
+  // values between -128 and 127 (and Long.valueOf is intended to promise
+  // the same).  This could take advantage of that.
   @SuppressWarnings("interned")
   public static /*@Interned*/ Long intern(Long a) {
     WeakReference</*@Interned*/ Long> lookup =  internedLongs.get(a);
@@ -427,8 +427,8 @@ public final class Intern {
    * Returns a canonical representation for the Double.
    **/
   // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
-  // values between -128 and 127 (but as of JDK 6, the Double.valueOf
-  // javadocs don't promise the same).  This could take advantage of that.
+  // values between -128 and 127 (and Double.valueOf is intended to promise
+  // the same).  This could take advantage of that.
   @SuppressWarnings("interned")
   public static /*@Interned*/ Double intern(Double a) {
     // Double.NaN == Double.Nan  always evaluates to false.
