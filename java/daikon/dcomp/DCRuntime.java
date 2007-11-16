@@ -6,10 +6,10 @@ import java.lang.reflect.*;
 import java.io.PrintWriter;
 
 import daikon.chicory.*;
-import utilMDE.WeakIdentityHashMap;
-import utilMDE.SimpleLog;
-import utilMDE.ArraysMDE;
-import utilMDE.Stopwatch;
+import daikon.util.WeakIdentityHashMap;
+import daikon.util.SimpleLog;
+import daikon.util.ArraysMDE;
+import daikon.util.Stopwatch;
 
 public final class DCRuntime {
 

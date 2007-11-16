@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-import daikon.*;
+import daikon.VarInfo;
 
 /**
  * A subtype of DaikonVariableInfo used for variables that are

@@ -2,7 +2,7 @@ package daikon.chicory;
 
 import java.lang.reflect.*;
 import daikon.Chicory;
-import utilMDE.UtilMDE;
+import daikon.util.UtilMDE;
 /**
  * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
  *

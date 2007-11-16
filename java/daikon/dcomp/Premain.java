@@ -10,7 +10,7 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 
-import utilMDE.*;
+import daikon.util.*;
 import daikon.chicory.DaikonVariableInfo;
 
 import daikon.DynComp;
@@ -186,7 +186,7 @@ public class Premain {
           DCRuntime.print_all_comparable (new PrintWriter(System.out, true));
         }
       }
-      
+
       if (DynComp.trace_sets_file != null) {
         if (DynComp.verbose)
           System.out.println ("Writing traced comparability sets to "

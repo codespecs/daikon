@@ -2,7 +2,7 @@ package daikon.chicory;
 
 import checkers.quals.Interned;
 
-import utilMDE.*;
+import daikon.util.*;
 
 import java.util.*;
 import java.io.*;

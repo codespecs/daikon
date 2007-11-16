@@ -3,7 +3,7 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.*;
 
-import daikon.*;
+import daikon.VarInfo;
 import static daikon.VarInfo.VarFlags;
 
 /**

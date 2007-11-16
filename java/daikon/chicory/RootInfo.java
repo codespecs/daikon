@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import daikon.*;
+import daikon.VarInfo;
 
 /**
  *  This is a subtype of DaikonVariableInfo and is used as a

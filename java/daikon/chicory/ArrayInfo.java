@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-import daikon.*;
+import daikon.VarInfo;
 
 /**
  *  The ArrayInfo class is a subtype of DaikonVariableInfo used for

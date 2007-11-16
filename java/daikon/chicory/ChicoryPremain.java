@@ -11,7 +11,7 @@ import java.util.jar.*;
 import java.net.URL;
 
 import daikon.Chicory;
-import utilMDE.*;
+import daikon.util.*;
 
 public class ChicoryPremain {
 

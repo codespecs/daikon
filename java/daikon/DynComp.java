@@ -7,7 +7,7 @@ import java.util.regex.PatternSyntaxException;
 
 import daikon.chicory.StreamRedirectThread;
 import daikon.dcomp.*;
-import utilMDE.*;
+import daikon.util.*;
 
 /**
  * This is the main class for DynComp. It uses the javaagent switch to

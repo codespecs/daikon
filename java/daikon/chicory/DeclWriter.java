@@ -7,7 +7,7 @@ import java.lang.reflect.*;
 import static daikon.PptTopLevel.PptType;
 import static daikon.VarInfo.*;
 import daikon.Chicory;
-import utilMDE.SimpleLog;
+import daikon.util.SimpleLog;
 
 /**
  *

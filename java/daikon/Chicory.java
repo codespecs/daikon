@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import daikon.chicory.*;
-import utilMDE.*;
+import daikon.util.*;
 
 /**
  * This is the main class for Chicory which transforms the class files

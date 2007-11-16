@@ -7,7 +7,7 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.List;
 
-import daikon.*;
+import daikon.VarInfo;
 
 /**
  * The ListInfo class is a subtype of DaikonVariableInfo used for

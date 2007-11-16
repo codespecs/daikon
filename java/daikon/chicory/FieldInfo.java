@@ -6,7 +6,7 @@ import java.lang.reflect.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import daikon.*;
+import daikon.VarInfo;
 import daikon.VarInfo.VarFlags;
 
 /**

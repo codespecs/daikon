@@ -11,9 +11,9 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
-import utilMDE.BCELUtil;
+import daikon.util.BCELUtil;
 
-import utilMDE.*;
+import daikon.util.*;
 import org.apache.commons.io.*;
 
 import daikon.chicory.MethodInfo;

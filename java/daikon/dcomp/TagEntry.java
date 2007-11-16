@@ -1,6 +1,6 @@
 package daikon.dcomp;
 
-import utilMDE.*;
+import daikon.util.*;
 import daikon.chicory.DaikonVariableInfo;
 
 import java.lang.ref.*;

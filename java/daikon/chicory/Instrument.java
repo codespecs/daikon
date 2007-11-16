@@ -24,7 +24,7 @@ import sun.nio.cs.ext.ISCII91;
 // uncomment this and uses of it below, to get bcel verify info
 // import edu.mit.csail.pag.testfactoring.verify.StackVer;
 
-import utilMDE.SimpleLog;
+import daikon.util.SimpleLog;
 
 import daikon.Chicory;
 

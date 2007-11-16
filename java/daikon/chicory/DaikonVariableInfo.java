@@ -4,7 +4,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
 
-import daikon.*;
+import daikon.Chicory;
+import daikon.VarInfo;
 import daikon.VarInfo.VarFlags;
 
 
@@ -29,7 +30,7 @@ public abstract class DaikonVariableInfo
 
 	/** switch to turn on experimental techniques on static constants */
 	public static boolean dkconfig_constant_infer = false;
-	
+
     /** The variable name, if appropriate to the subtype **/
     private final String name;
 
@@ -75,7 +76,7 @@ public abstract class DaikonVariableInfo
 
     /** True iff the DTraceWriter should print this variable **/
     protected boolean dtraceShouldPrint = true;
-    
+
     /** True iff the DTraceWriter should print the children of this variable **/
     protected boolean dtraceShouldPrintChildren = true;
 
@@ -724,10 +725,10 @@ public abstract class DaikonVariableInfo
             ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
             String value = null;
             boolean isPrimitive = true;
-            
+
             if (cinfo != null) {
                 value = cinfo.staticMap.get(theName);
-                
+
                 if (DaikonVariableInfo.dkconfig_constant_infer) {
                     if (value == null) {
                 	    isPrimitive = false;
@@ -1245,7 +1246,7 @@ public abstract class DaikonVariableInfo
    {
        return dtraceShouldPrint;
    }
-   
+
    public boolean dTraceShouldPrintChildren()
    {
        return dtraceShouldPrintChildren;
