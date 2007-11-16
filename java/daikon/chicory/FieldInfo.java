@@ -6,8 +6,6 @@ import java.lang.reflect.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import daikon.VarInfo;
-import daikon.VarInfo.VarFlags;
 
 /**
  * The OjbectInfo class is a subtype of DaikonVariableInfo used for
@@ -151,11 +149,11 @@ public class FieldInfo extends DaikonVariableInfo
      * Returns the kind of this variable.  Statics are top level
      * variables, instance variables are fields
      **/
-    public VarInfo.VarKind get_var_kind() {
+    public VarKind get_var_kind() {
       if (isStatic())
-        return VarInfo.VarKind.VARIABLE;
+        return VarKind.VARIABLE;
       else
-        return VarInfo.VarKind.FIELD;
+        return VarKind.FIELD;
     }
 
     /**

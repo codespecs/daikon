@@ -150,11 +150,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   // Various enums used for information about variables
   public enum RefType {POINTER, OFFSET};
+  public enum LangFlags {PUBLIC, PRIVATE, PROTECTED, STATIC, FINAL,
+                         SYNCHRONIZED, VOLATILE, TRANSIENT, ANNOTATION, ENUM};
+  // These enums are intentionally duplicated in Chicory and other
+  // front-ends. These values are written into decl files, and as
+  // such, should stay constant between front-ends. They should not be
+  // changed without good reason; if you do change them, make sure to
+  // also change the corresponding constants in Daikon front ends!
   public enum VarKind {FIELD, FUNCTION, ARRAY, VARIABLE, RETURN};
   public enum VarFlags {IS_PARAM, NO_DUPS, NOT_ORDERED, NO_SIZE, NOMOD,
                         SYNTHETIC, CLASSNAME, TO_STRING, NON_NULL};
-  public enum LangFlags {PUBLIC, PRIVATE, PROTECTED, STATIC, FINAL,
-                         SYNCHRONIZED, VOLATILE, TRANSIENT, ANNOTATION, ENUM};
 
 
   public RefType ref_type;

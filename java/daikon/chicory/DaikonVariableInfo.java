@@ -5,8 +5,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import daikon.Chicory;
-import daikon.VarInfo;
-import daikon.VarInfo.VarFlags;
 
 
 /**
@@ -1285,7 +1283,7 @@ public abstract class DaikonVariableInfo
     }
 
     /** Returns the kind of the variable (array, field, function, etc) **/
-    public abstract VarInfo.VarKind get_var_kind();
+    public abstract VarKind get_var_kind();
 
     /**
      * Returns the name of this variable relative to its enclosing variable.

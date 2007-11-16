@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
-import static daikon.PptTopLevel.PptType;
-import static daikon.VarInfo.*;
+import daikon.PptTopLevel.PptType;
 import daikon.Chicory;
 import daikon.util.SimpleLog;
 

@@ -2,8 +2,6 @@ package daikon.chicory;
 
 import java.util.*;
 
-import daikon.VarInfo;
-import static daikon.VarInfo.VarFlags;
 
 /**
  * The StaticObjInfo class is a subtype of DaikonVariableInfo used as
@@ -39,8 +37,8 @@ public class StaticObjInfo extends DaikonVariableInfo
     }
 
     /** 'this' is a top level variable **/
-    public VarInfo.VarKind get_var_kind() {
-        return VarInfo.VarKind.VARIABLE;
+    public VarKind get_var_kind() {
+        return VarKind.VARIABLE;
     }
 
 }

@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import daikon.VarInfo;
 
 /**
  * The PureMethodInfo class is a subtype of DaikonVariableInfo used
@@ -180,7 +179,7 @@ public class PureMethodInfo extends DaikonVariableInfo
 
     }
 
-    public VarInfo.VarKind get_var_kind() {
-        return VarInfo.VarKind.FUNCTION;
+    public VarKind get_var_kind() {
+        return VarKind.FUNCTION;
     }
 }

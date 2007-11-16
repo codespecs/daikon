@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import daikon.VarInfo;
 
 /**
  *  This is a subtype of DaikonVariableInfo and is used as a
@@ -151,7 +150,7 @@ public class RootInfo extends DaikonVariableInfo
         return root;
     }
 
-    public VarInfo.VarKind get_var_kind() {
+    public VarKind get_var_kind() {
         throw new RuntimeException ("No var-kind for RootInfo");
     }
 

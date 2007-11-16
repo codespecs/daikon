@@ -7,7 +7,6 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.List;
 
-import daikon.VarInfo;
 
 /**
  * The ListInfo class is a subtype of DaikonVariableInfo used for
@@ -71,7 +70,7 @@ public class ListInfo extends DaikonVariableInfo
     }
 
     /** Lists are arrays from Daikon's point of view **/
-    public VarInfo.VarKind get_var_kind() {
-        return VarInfo.VarKind.ARRAY;
+    public VarKind get_var_kind() {
+        return VarKind.ARRAY;
     }
 }

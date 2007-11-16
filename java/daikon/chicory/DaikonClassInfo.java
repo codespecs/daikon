@@ -6,8 +6,6 @@ package daikon.chicory;
 
 import java.util.*;
 
-import daikon.VarInfo;
-import daikon.VarInfo.VarFlags;
 
 /**
  * The DaikonClassInfo class is a subtype of DaikonVariableInfo used
@@ -78,8 +76,8 @@ public class DaikonClassInfo extends DaikonVariableInfo
     }
 
   /** Returns function since essentially this is a call to a pure function **/
-  public VarInfo.VarKind get_var_kind() {
-    return VarInfo.VarKind.FUNCTION;
+  public VarKind get_var_kind() {
+    return VarKind.FUNCTION;
   }
 
   /** Returns the name of this field **/

@@ -2,9 +2,6 @@ package daikon.chicory;
 
 import java.util.*;
 
-import daikon.VarInfo;
-import static daikon.VarInfo.VarFlags;
-
 /**
  * The ThisObjInfo class is a subtype of DaikonVariableInfo used for
  * variable types which represent the "this" object.s
@@ -33,8 +30,8 @@ public class ThisObjInfo extends DaikonVariableInfo
     }
 
     /** 'this' is a top level variable **/
-    public VarInfo.VarKind get_var_kind() {
-        return VarInfo.VarKind.VARIABLE;
+    public VarKind get_var_kind() {
+        return VarKind.VARIABLE;
     }
 
     /** Add IS_PARM to list of variable flags **/

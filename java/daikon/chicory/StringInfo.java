@@ -2,8 +2,6 @@ package daikon.chicory;
 
 import java.util.*;
 
-import daikon.VarInfo;
-import daikon.VarInfo.VarFlags;
 
 /**
  * The StringInfo class is a subtype of DaikonVariableInfo used for
@@ -136,8 +134,8 @@ public class StringInfo extends DaikonVariableInfo
     }
 
     /** toString is a function **/
-    public VarInfo.VarKind get_var_kind() {
-        return VarInfo.VarKind.FUNCTION;
+    public VarKind get_var_kind() {
+        return VarKind.FUNCTION;
     }
 
     /** Returns the name of this function **/

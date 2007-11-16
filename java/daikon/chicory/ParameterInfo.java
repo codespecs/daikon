@@ -3,8 +3,6 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.*;
 
-import daikon.VarInfo;
-import static daikon.VarInfo.VarFlags;
 
 /**
  * The ParameterInfo class is a subtype of DaikonVariableInfo used for
@@ -104,8 +102,8 @@ public class ParameterInfo extends DaikonVariableInfo
      * Parameters are not enclosed in other variable, so they are of
      * kind VARIABLE
      **/
-    public VarInfo.VarKind get_var_kind() {
-      return VarInfo.VarKind.VARIABLE;
+    public VarKind get_var_kind() {
+      return VarKind.VARIABLE;
     }
 
     /** Add IS_PARM to list of variable flags **/

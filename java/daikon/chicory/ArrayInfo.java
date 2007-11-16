@@ -1,6 +1,5 @@
 package daikon.chicory;
 
-import daikon.VarInfo;
 
 /**
  *  The ArrayInfo class is a subtype of DaikonVariableInfo used for
@@ -44,7 +43,7 @@ public class ArrayInfo extends DaikonVariableInfo
         return array_type;
     }
 
-    public VarInfo.VarKind get_var_kind() {
-        return VarInfo.VarKind.ARRAY;
+    public VarKind get_var_kind() {
+        return VarKind.ARRAY;
     }
 }
