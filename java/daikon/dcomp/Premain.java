@@ -120,7 +120,6 @@ public class Premain {
       // Don't instrument our own classes
       if ((className.startsWith ("daikon/dcomp/")
            && !className.startsWith ("daikon/dcomp/Test"))
-          || className.startsWith ("utilMDE")
           || className.startsWith ("daikon/chicory/"))
         return (null);
 
@@ -140,7 +139,12 @@ public class Premain {
 
         // Transform the file
         DCInstrument dci = new DCInstrument (c, false, loader);
-        JavaClass njc = dci.instrument();
+        JavaClass njc;
+        if (DynComp.no_primitives)
+          njc = dci.instrument_refs_only();
+        else
+          njc = dci.instrument();
+
         if (njc == null) {
           if (DynComp.verbose)
             System.out.printf ("Didn't instrument %s%n", c.getClassName());
@@ -176,14 +180,20 @@ public class Premain {
                                 + DynComp.compare_sets_file);
           PrintWriter compare_out = open (DynComp.compare_sets_file);
           Stopwatch watch = new Stopwatch();
-          DCRuntime.print_all_comparable (compare_out);
+          if (DynComp.no_primitives)
+            DCRuntime.print_all_comparable_refs_only (compare_out);
+          else
+            DCRuntime.print_all_comparable (compare_out);
           compare_out.close();
           if (DynComp.verbose)
             System.out.printf ("Comparability sets written in %s%n",
                                watch.format());
         } else {
           System.out.println ("Writing comparability sets to standard output");
-          DCRuntime.print_all_comparable (new PrintWriter(System.out, true));
+          if (DynComp.no_primitives)
+            DCRuntime.print_all_comparable_refs_only (new PrintWriter(System.out, true));
+          else
+            DCRuntime.print_all_comparable (new PrintWriter(System.out, true));
         }
       }
 
