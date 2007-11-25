@@ -36,7 +36,7 @@ JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 
 INV ?= ${DAIKONDIR}
 
-# Set DAIKONBIN to either scripts/ or bin/, whichever exists.
+# Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
 ifeq "$(wildcard ${INV}/scripts)" "${INV}/scripts"
     DAIKONBIN ?= ${INV}/scripts
 else
