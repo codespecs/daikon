@@ -391,7 +391,7 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 
 # Build DynComp/Java and run a sanity test
-dyncomp dcomp : dcomp_premain.jar dcomp-test utilMDE-copy
+dyncomp dcomp : utilMDE-copy dcomp_premain.jar dcomp-test
 dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
@@ -452,13 +452,16 @@ dyncomp-jdk-only dcomp-jdk-only :
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # Creates a copy of utilMDE under the package name daikon.util
+# Copied source files are read-only, to prevent accidental changes
+# XXX Insert warning or README to tell people not to change source files
 utilMDE-copy :
-	rm -rf daikon/util
-	cp -r utilMDE daikon/util
+	install -d daikon/util/
+	install -t daikon/util/ -m 444 utilMDE/*.java
 	# change the package declarations
 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
 	# change relevant imports
 	perl -p -i -e 's/utilMDE/daikon.util/g' daikon/util/*.java
+	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 
 # Checks that daikon.util is imported by DynComp source files, rather
 # than utilMDE
@@ -570,6 +573,7 @@ clean:
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
 	-rm -f ChicoryPremain.jar
 	-rm -f dcomp_premain.jar dcomp_rt.jar
+	-rm -rf daikon/util
 
 dist_clean: clean
 	-rm -f TAGS
