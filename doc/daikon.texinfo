@@ -4026,6 +4026,12 @@ This option can be specified multiple times, any may be used in
 conjunction with @option{--ppt-select-pattern}. If a program point
 matches both a select pattern and an omit pattern, it is omitted.
 
+@item --no-primitives
+Don't track primitives. When this switch is on, DynComp only tracks
+the comparability of object references; primitive values are
+ignored. Using this switch can greatly improve DynComp's runtime if
+you are not interested in primitive values.
+
 @item --no-jdk
 When this switch is on, DynComp runs with an uninstrumented JDK, and the
 @option{--rt-file} switch is ignored.
@@ -4088,6 +4094,9 @@ switch to customize this behavior in a future release.
 @item
 Reflection finds the original, uninstrumented code, and so DynComp may
 not accurately instrument code that uses reflection.
+@item
+Instrumentation of the @code{clone()} method may fail on particular
+invocations within private classes in the JDK.
 @end itemize
 
 
