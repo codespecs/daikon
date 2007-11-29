@@ -140,6 +140,13 @@ public final class FileIO {
   // Number of ignored declarations.
   public static int omitted_declarations = 0;
 
+  /**
+   * Map from function id to list of program points in that function.
+   * Valid for basic block program points only
+   **/
+  private static Map<String,List<PptTopLevel>> func_ppts
+    = new LinkedHashMap<String,List<PptTopLevel>>();
+
   // Logging Categories
 
   /** true prints info about variables marked as missing/nonsensical **/
@@ -267,6 +274,8 @@ public final class FileIO {
     List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf (PptFlags.class);
     PptType ppt_type = PptType.POINT;
+    List<String> ppt_successors = null;
+    String function_id = null;
 
     // Read the records that define this program point
     while ((line = state.reader.readLine()) != null) {
@@ -288,9 +297,14 @@ public final class FileIO {
             varmap.put (vardef.name, vardef);
         } else if (record == "ppt-type") { // interned
           ppt_type = parse_ppt_type (state, scanner);
+        } else if (record == "ppt-successors") { // interned
+          ppt_successors = parse_ppt_successors (state, scanner);
+        } else if (record == "ppt-func") { // interned
+          function_id = need (state, scanner, "function id");
+          need_eol (state, scanner);
         } else {
           decl_error (state, "record '%s' found where %s expected", record,
-                      "'parent' or 'flags'");
+                      "'parent', 'flags', or 'ppt-successors'");
         }
       } else { // there must be a current variable
         if (record == "var-kind") { // interned
@@ -339,8 +353,23 @@ public final class FileIO {
       vi_array[ii++] = new VarInfo (vd);
     }
 
+    // Build the program point
     PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents,
-                                         ppt_flags, vi_array);
+                            ppt_flags, ppt_successors, function_id, vi_array);
+
+    // Add this ppt tot the list of ppts for this function_id.  If we
+    // are still getting ppts for this function id, they should not have
+    // been yet combined
+    if (function_id != null) {
+      List<PptTopLevel> f_ppts = func_ppts.get (function_id);
+      if (f_ppts == null) {
+        f_ppts = new ArrayList<PptTopLevel>();
+        func_ppts.put (function_id, f_ppts);
+      }
+      for (PptTopLevel ppt : f_ppts)
+        assert !ppt.combined_ppts_init : ppt.name();
+      f_ppts.add (newppt);
+    }
     return newppt;
   }
 
@@ -379,6 +408,26 @@ public final class FileIO {
     PptType ppt_type = parse_enum_val (state, scanner, PptType.class, "ppt type");
     need_eol (state, scanner);
     return (ppt_type);
+  }
+
+  /** Parses a ppt-successors record and returns the successors **/
+  private static List<String> parse_ppt_successors (ParseState state,
+                                                    Scanner scanner)
+    throws DeclError {
+
+    List<String> succs = new ArrayList<String>();
+    String succ = need (state, scanner, "name of successor ppt");
+    if (!succ.endsWith (":::BB"))
+      succ = succ + ":::BB";
+    succs.add (succ);
+    while (scanner.hasNext()) {
+      succ = need (state, scanner, "name of successor ppt");
+      if (!succ.endsWith (":::BB"))
+        succ = succ + ":::BB";
+      succs.add (succ);
+    }
+    need_eol (state, scanner);
+    return (succs);
   }
 
 
@@ -1147,7 +1196,9 @@ public final class FileIO {
                                     data_trace_state.nonce);
         } catch (Error e) {
           if (! dkconfig_continue_after_file_exception) {
-            throw new Daikon.TerminationMessage(e, data_trace_state.reader, data_trace_state.filename);
+            throw new RuntimeException ("Error at line "
+                    + data_trace_state.reader.getLineNumber() + " in file "
+                    + data_trace_state.filename, e);
           } else {
             System.out.println ();
             System.out.println ("WARNING: Error while processing "
@@ -1415,9 +1466,6 @@ public final class FileIO {
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
 
-      //OLD:
-      //if (!ppt.ppt_name.isExitPoint())
-      //  return;
       if (ppt.ppt_name.isEnterPoint() ||
           ppt.ppt_name.isThrowsPoint() ||
           ppt.ppt_name.isObjectInstanceSynthetic() ||
@@ -1426,7 +1474,6 @@ public final class FileIO {
         return;
       }
 
-      //OLD:if (ppt.ppt_name.isCombinedExitPoint()) {
       if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
         // not Daikon.TerminationMessage; caller has more info (e.g., filename)
         throw new RuntimeException("Bad program point name " + ppt.name
@@ -1448,6 +1495,50 @@ public final class FileIO {
     // If we are only reading the sample, don't process them
     if (dkconfig_read_samples_only) {
       return;
+    }
+
+    // If this is an unitialized basic block ppt that is part of a
+    // function, initialize the relationships between basic blocks
+    // in the same function.  Note that all declarations for basic
+    // block ppts must have been received before data is recieved for
+    // any block in the same function
+    if (ppt.is_basic_block() && !ppt.combined_ppts_init
+        && (ppt.function_id != null)) {
+      List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
+      assert ppts != null : ppt.name() + " func id " + ppt.function_id;
+      assert ppts.size() > 0 : ppt.name();
+      for (PptTopLevel p : ppts) {
+        assert !p.combined_ppts_init : p.name();
+        if (p.ppt_successors != null) {
+          for (String successor : p.ppt_successors) {
+            PptTopLevel sp = all_ppts.get (successor);
+            assert sp != null : successor;
+            assert sp.function_id == ppt.function_id
+              : sp.function_id + " " + ppt.function_id;
+          }
+        }
+      }
+      if (true) {
+        System.out.printf ("Building combined ppts for func %s [ppt %s]\n",
+                           ppt.function_id, ppt.name());
+        for (PptTopLevel p : ppts) {
+          System.out.printf ("  %s\n", p.name());
+          if (p.ppt_successors != null) {
+            for (String successor : p.ppt_successors) {
+              System.out.printf ("    %s\n", all_ppts.get (successor).name());
+            }
+          }
+          p.combined_ppts_init = true;
+        }
+      }
+      PptCombined.combine_func_ppts (all_ppts, ppts);
+      System.out.printf ("Combined ppts:\n");
+      for (PptTopLevel p : ppts) {
+        System.out.printf ("  %s\n", p.name());
+        if (p.combined_ppt != null) {
+          System.out.printf ("    %s\n", p.combined_ppt.name());
+        }
+      }
     }
 
     ppt.add_bottom_up (vt, 1);
