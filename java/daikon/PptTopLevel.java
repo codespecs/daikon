@@ -56,7 +56,7 @@ public class PptTopLevel extends Ppt {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20060815L;
+  static final long serialVersionUID = 20071129L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -143,7 +143,7 @@ public class PptTopLevel extends Ppt {
   public final String name;
   public final PptName ppt_name;
 
-  public final String name() {
+  public String name() {
     return name;
   }
 
@@ -241,6 +241,27 @@ public class PptTopLevel extends Ppt {
   public List<ParentRelation> parent_relations = null;
 
   /**
+   * List of successor program point names.  Later changed into a list
+   * of successor PptTopLevel
+   */
+  public List<String>ppt_successors = null;
+
+  /** Identifier of the function (for basic blocks **/
+  public String function_id = null;
+
+  /**
+   * True if this basic block has been combined with other basic blocks
+   * to form combined program points.
+   */
+  public boolean combined_ppts_init = false;
+
+  /** Combined ppt that should be processed when this ppt is encountered */
+  public PptCombined combined_ppt = null;
+
+  /** True if this ppt is subsumed by some combined ppt **/
+  public boolean  combined_subsumed = false;
+
+  /**
    *  Flag that indicates whether or not invariants have been merged
    *  from all of this ppts children to form the invariants here.  Necessary
    *  because a ppt can have multiple parents and otherwise we'd needlessly
@@ -278,7 +299,8 @@ public class PptTopLevel extends Ppt {
   public Set/*<Invariant or VarInfo>*/ redundant_invs = new LinkedHashSet(0);
 
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
-                      EnumSet<PptFlags> flags, VarInfo[] var_infos) {
+                      EnumSet<PptFlags> flags, List<String> ppt_successors,
+                      String function_id, VarInfo[] var_infos) {
 
     this.name = name;
     if (!name.contains (":::")) {
@@ -288,6 +310,8 @@ public class PptTopLevel extends Ppt {
     this.flags = flags;
     this.type = type;
     this.parent_relations = parents;
+    this.ppt_successors = ppt_successors;
+    this.function_id = function_id;
     init_vars (var_infos);
   }
 
@@ -4264,4 +4288,7 @@ public class PptTopLevel extends Ppt {
   public String var_names() {
     return Arrays.toString (var_infos);
   }
+
+
+
 }
