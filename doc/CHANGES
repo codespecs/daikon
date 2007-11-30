@@ -20,6 +20,20 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.3.4 (December 1, 2007)
+
+DynComp (Java)
+
+  User-visible changes
+
+    DynComp can now be directed, with the --no-primitives switch, to
+    only track the comparability of object references, i.e. it will
+    ignore primitive values. If you are only interested in object
+    references, using the --no-primitives switch should allow DynComp
+    to run much more quickly on your program.
+
+----------------------------------------
+
 4.3.3 (October 3, 2007)
 
 A number of problems with building Daikon on Windows were resolved.
