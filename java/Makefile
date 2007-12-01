@@ -453,20 +453,20 @@ dyncomp-jdk-only dcomp-jdk-only :
 
 # Creates a copy of utilMDE under the package name daikon.util
 # Copied source files are read-only, to prevent accidental changes
-# XXX Insert warning or README to tell people not to change source files
-utilMDE-copy :
+utilMDE-copy : utilMDE-import-check
 	install -d daikon/util/
 	install -t daikon/util/ -m 444 utilMDE/*.java
 	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
 	# change the package declarations
 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
-	# change relevant imports
-	perl -p -i -e 's/utilMDE/daikon.util/g' daikon/util/*.java
+	# change relevant imports (make sure to get "import static" as well)
+	perl -p -i -e 's/^(import .*)utilMDE/\1daikon.util/g' daikon/util/*.java
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 
 # Checks that daikon.util is imported by DynComp source files, rather
 # than utilMDE
 utilMDE-import-check :
+	@echo "Checking that imports of utilMDE and daikon.util are correct..."
 	@if [ -n "`grep '^import utilMDE' $(DCOMP_JAVA_FILES)`" ]; then \
 	echo "*** ERROR: Do not import utilMDE from DynComp code. It will be";\
 	echo " instrumented when DynComp is run. Please use the (identical)";\
