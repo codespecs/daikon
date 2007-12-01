@@ -797,12 +797,12 @@ doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
 	#echo "JDOC_FILES: ${JDOC_FILES}"
 	# This requires that jdk/lib/tools.jar be on your classpath
-	javadoc -J-Xmx800m $(JAVADOC_FLAGS) $(JDOC_FILES)
+	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) $(JDOC_FILES)
 
 ## Make doc with private fields for people working on source code
 doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
-	javadoc $(JAVADOC_FLAGS) -private $(JDOC_FILES)
+	javadoc -J-Xmx1000m$(JAVADOC_FLAGS) -private $(JDOC_FILES)
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup
@@ -813,7 +813,7 @@ doc-private: $(AUTO_GENERATED_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/emacs/javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
-	javadoc -doclet daikon.config.InvariantDoclet \
+	javadoc -J-Xmx1000m -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -828,7 +828,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # It depends on "all", which forces compilation, to avoid errors like
 #   "java.lang.ClassFormatError: Truncated class file".
 ../doc/config-options.texinfo: $(AUTO_GENERATED_FILES) all
-	javadoc -doclet daikon.config.ParameterDoclet \
+	javadoc -J-Xmx1000m -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -841,7 +841,7 @@ doc-dkconfig: ../doc/config-options.texinfo
 # 		$(JDOC_FILES)
 
 ../doc/category-options.texinfo: $(AUTO_GENERATED_FILES)
-	javadoc -doclet daikon.config.ParameterDocletCategory \
+	javadoc -J-Xmx1000m -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
