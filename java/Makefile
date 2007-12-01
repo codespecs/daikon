@@ -457,6 +457,7 @@ dyncomp-jdk-only dcomp-jdk-only :
 utilMDE-copy :
 	install -d daikon/util/
 	install -t daikon/util/ -m 444 utilMDE/*.java
+	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
 	# change the package declarations
 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
 	# change relevant imports
