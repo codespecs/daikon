@@ -14,7 +14,7 @@ Further documentation can be found in:
    developer.ps, or developer.pdf.  It is available online at
    http://pag.csail.mit.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not
-   distributed with Daikon, but you can build it by executing the command
+   distributed with Daikon, alaobut you can build it by executing the command
      make -C $DAIKONDIR/java doc
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
@@ -22,15 +22,22 @@ Further documentation can be found in:
 
 4.3.4 (December 1, 2007)
 
+Dyncomp (Java) was enhanced with a number of new options.  It has a 
+new significantly faster mode where it only tracks references (and
+not primitives).  It also has additional output that makes it easier
+to determine where interactions occurred.
+
 DynComp (Java)
 
   User-visible changes
 
     DynComp can now be directed, with the --no-primitives switch, to
     only track the comparability of object references, i.e. it will
-    ignore primitive values. If you are only interested in object
-    references, using the --no-primitives switch should allow DynComp
-    to run much more quickly on your program.
+    ignore primitive values.  Dyncomp runs significantly faster when
+    only tracking references.
+
+    DynComp has a number of new command line options that provide 
+    information on the source of the interactions that merge variables.
 
 ----------------------------------------
 
