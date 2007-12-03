@@ -63,11 +63,9 @@ public class DtraceDiff {
     try {
       mainHelper(args);
       return true;
-    } catch (daikon.Daikon.TerminationMessage e) {
-      return true;
-    } catch (Error e) {
-      // System.out.printf ("Diff encountered error " + e.getMessage());
-      // e.printStackTrace();
+    } catch (DiffError de) {
+      // System.out.printf ("Diff error for args %s: %s%n",
+      //                     Arrays.toString(args), de.getMessage());
       return false;
     }
   }
@@ -221,6 +219,7 @@ public class DtraceDiff {
 				 Set<File> declsfile2,
 				 String dtracefile2) {
 
+    // System.out.printf ("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
     FileIO.new_decl_format = false;
 
     try {
@@ -253,6 +252,7 @@ public class DtraceDiff {
 		   || (state2.status == FileIO.ParseStatus.TRUNCATED))
 	    break;
 	}
+
 	// things had better be the same
 	if (state1.status == state2.status) {
 	  if (state1.status == FileIO.ParseStatus.SAMPLE) {
@@ -311,11 +311,11 @@ public class DtraceDiff {
 		 || (state1.status == FileIO.ParseStatus.TRUNCATED))
 	  return;  // either file reached truncation limit, return quietly
 	else if (state1.status == FileIO.ParseStatus.EOF) {
-	  throw new Error(String.format ("ppt %s (%s at line %d) is missing "
+	  throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
                                     + "at end of %s", state2.ppt.name(),
                                     dtracefile2, state2.lineNum, dtracefile1));
 	} else {
-	  throw new Error(String.format ("ppt %s (%s at line %d) is missing "
+	  throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
                                     + "at end of %s", state1.ppt.name(),
                                     dtracefile1, state1.lineNum, dtracefile2));
     }
@@ -404,7 +404,7 @@ public class DtraceDiff {
 					  String dtracefile1,
 					  FileIO.ParseState state2,
 					  String dtracefile2) {
-    throw new Error
+    throw new DiffError
       (String.format("Mismatched program point:%n"
                      + "  ppt %s at %s:%d%n"
                      + "  ppt %s at %s:%d",
@@ -416,7 +416,7 @@ public class DtraceDiff {
 				      String dtracefile1,
 				      FileIO.ParseState state2,
 				      String dtracefile2) {
-    throw new Error
+    throw new DiffError
       (String.format("Mismatched program point declaration:%n"
                      + "  ppt %s at %s:%d%n"
                      + "  ppt %s at %s:%d",
@@ -431,7 +431,7 @@ public class DtraceDiff {
 					  FileIO.ParseState state2,
 					  String dtracefile2) {
     assert state1.ppt.name.equals(state2.ppt.name);
-    throw new Error
+    throw new DiffError
       (String.format("Mismatched variable declaration in program point %s:%n"
                      + "  variable %s at %s:%d%n"
                      + "  variable %s at %s:%d",
@@ -450,7 +450,7 @@ public class DtraceDiff {
 					   String dtracefile2) {
     assert vi1.name().equals(vi2.name());
     assert state1.ppt.name.equals(state2.ppt.name);
-    throw new Error
+    throw new DiffError
       (String.format("Mismatched values for variable %s in program point %s:%n"
                      + "  value %s at %s:%d%n"
                      + "  value %s at %s:%d",
@@ -459,5 +459,14 @@ public class DtraceDiff {
                      val2, dtracefile2, state2.lineNum));
   }
 
+
+  /**
+   * Exception thrown for diffs.  Allows differences to be distinguished
+   * from other exceptions that might occur
+   */
+  public static class DiffError extends Error {
+    static final long serialVersionUID = 20071203L;
+    public DiffError (String err_msg) { super (err_msg); }
+  }
 
 }
