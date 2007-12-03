@@ -39,6 +39,15 @@ DynComp (Java)
     DynComp has a number of new command line options that provide 
     information on the source of the interactions that merge variables.
 
+Daikon
+
+  Bug fixes
+
+    The junit tests can now be run directly from the jar file.  All
+    necessary input files are resources in the jar file and the unit test
+    code handles them as resources.
+
+
 ----------------------------------------
 
 4.3.3 (October 3, 2007)
