@@ -111,13 +111,14 @@ public class SampleTester extends TestCase {
     daikon.LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE
                                : LogHelper.INFO);
 
-    String input_file = find_file ("daikon/test/SampleTester.commands");
-    if (input_file == null)
+    InputStream commands
+      = SampleTester.class.getResourceAsStream("SampleTester.commands");
+    if (commands == null)
       fail ("Input file SampleTester.commands missing." +
            " (Should be in daikon.test and it must be within the classpath)");
 
     SampleTester ts = new SampleTester();
-    ts.proc_sample_file (input_file);
+    ts.proc_sample_file (commands);
     Fmt.pf ("Test Passes");
   }
 
@@ -129,7 +130,7 @@ public class SampleTester extends TestCase {
     if (input_file_location == null)
       return (null);
     else
-      return (input_file_location.getFile());
+      return (input_file_location.toExternalForm());
   }
 
   /**
@@ -138,20 +139,17 @@ public class SampleTester extends TestCase {
    **/
   public void test_samples () throws IOException {
 
-    String input_file = find_file ("daikon/test/SampleTester.commands");
-    if (input_file == null)
+    InputStream commands
+      = getClass().getResourceAsStream("SampleTester.commands");
+    if (commands == null)
       fail ("Input file SampleTester.commands missing." +
            " (Should be in daikon.test and it must be within the classpath)");
 
-    // Fmt.pf ("pow (0, 0) = " + MathMDE.pow (0, 0));
-    // for (int jj = 2; jj <= 64*1024; jj = jj*2)
-    //   Fmt.pf ("pow (3, %s) = %s / %s", "" + jj, "" + Math.pow (6.0, jj), "" + Math.pow (4.0, jj));
-
     SampleTester ts = new SampleTester();
-    ts.proc_sample_file (input_file);
+    ts.proc_sample_file (commands);
   }
 
-  public void proc_sample_file (String fname) throws IOException {
+  public void proc_sample_file (InputStream commands) throws IOException {
 
     if (PrintInvariants.dkconfig_print_inv_class) {
       Fmt.pf ("Warning: turning off PrintInvariants.dkconfig_print_inv_class");
@@ -159,7 +157,8 @@ public class SampleTester extends TestCase {
     }
 
     this.fname = fname;
-    fp = UtilMDE.lineNumberFileReader(fname);
+    fp = new LineNumberReader (new InputStreamReader (commands));
+
     for (String line = fp.readLine(); line != null; line = fp.readLine()) {
 
       // Remove comments and skip blank lines
