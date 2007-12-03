@@ -461,10 +461,7 @@ public class Options {
     try {
       non_options = parse (args);
     } catch (ArgException ae) {
-      System.out.printf ("%s, Usage: %s%n", ae.getMessage(), usage_synopsis);
-      for (String use : usage()) {
-        System.out.printf ("  %s%n", use);
-      }
+      print_usage (ae.getMessage());
       System.exit (-1);
       // throw new Error ("usage error: ", ae);
     }
@@ -484,16 +481,20 @@ public class Options {
     try {
       non_options = parse (args);
     } catch (ArgException ae) {
-      System.out.printf ("%s, Usage: %s%n", ae.getMessage(), usage_synopsis);
-      for (String use : usage()) {
-        System.out.printf ("  %s%n", use);
-      }
+      print_usage (ae.getMessage());
       System.exit (-1);
       // throw new Error ("usage error: ", ae);
     }
     return (non_options);
   }
 
+  /** Prints a usage message **/
+  public void print_usage (String msg) {
+    System.out.printf ("%s, Usage: %s%n", msg, usage_synopsis);
+    for (String use : usage()) {
+      System.out.printf ("  %s%n", use);
+    }
+  }
 
   /**
    * Set the specified option to the value specified in arg_value.  Throws
