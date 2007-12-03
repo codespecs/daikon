@@ -37,7 +37,29 @@ SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS  \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
-DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt daikon/simplify/daikon-background.txt
+DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
+	daikon/simplify/daikon-background.txt \
+	daikon/test/InvariantFormatTest.commands \
+	daikon/test/SampleTester.commands \
+	daikon/test/SampleTester.decls \
+	daikon/test/SampleTesterGlobal.decls \
+	daikon/test/SampleTester.test \
+	daikon/test/varInfoNameTest.testEscForall \
+	daikon/test/varInfoNameTest.testEscForall.goal \
+	daikon/test/varInfoNameTest.testJML \
+	daikon/test/varInfoNameTest.testJML.goal \
+	daikon/test/varInfoNameTest.testParse \
+	daikon/test/varInfoNameTest.testParse.goal \
+	daikon/test/varInfoNameTest.testSubscript \
+	daikon/test/varInfoNameTest.testSubscript.goal \
+	daikon/test/GenericTestClass.java \
+	daikon/test/dtracediff/AllTypes.dtrace.gz \
+	daikon/test/dtracediff/Hanoi-badvar.dtrace.gz \
+	daikon/test/dtracediff/Hanoi-mungpointers.dtrace.gz \
+	daikon/test/dtracediff/Hanoi-badvalue.dtrace.gz \
+	daikon/test/dtracediff/Hanoi.dtrace.gz \
+	daikon/test/dtracediff/Hanoi-truncated.dtrace.gz
+
 # Find might be cleaner, but this works.
 # I don't know why, but a "-o name ." clause makes find err, so use grep instead
 # WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw -o name . -o name .. \) -prune -o -print)
@@ -257,6 +279,7 @@ staging: doc/CHANGES
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
 	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc
+	cp -pR doc/images $(STAGING_DIR)/download/doc/daikon_manual_html
 	cp -pR doc/developer_manual_html $(STAGING_DIR)/download/doc
 	cd doc/www && cp --parents -pf $(WWW_DAIKON_FILES) $(STAGING_DIR)
 	# Build pubs and copy the results
