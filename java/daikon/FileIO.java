@@ -22,6 +22,7 @@ import java.io.*;
 import java.io.Serializable;
 import java.net.*;
 import java.util.*;
+import java.util.zip.*;
 
 public final class FileIO {
 
@@ -1055,6 +1056,9 @@ public final class FileIO {
       this.ppts_are_new = ppts_are_new;
       all_ppts = ppts;
 
+      boolean is_url = raw_filename.startsWith ("file:")
+        || raw_filename.startsWith ("jar:");
+
       // Do we need to count the lines in the file?
       total_lines = 0;
       boolean count_lines = dkconfig_count_lines;
@@ -1064,6 +1068,8 @@ public final class FileIO {
         total_lines = dkconfig_dtrace_line_count;
         count_lines = false;
       } else if (filename.equals("-")) {
+        count_lines = false;
+      } else if (is_url) {
         count_lines = false;
       } else if (Daikon.dkconfig_progress_delay == -1) {
         count_lines = false;
@@ -1091,6 +1097,15 @@ public final class FileIO {
         InputStream chicoryInput = connectToChicory();
         InputStreamReader chicReader = new InputStreamReader(chicoryInput);
         reader = new LineNumberReader(chicReader);
+      } else if (is_url) {
+        URL url = new URL (raw_filename);
+        InputStream stream = url.openStream();
+        if (raw_filename.endsWith (".gz")) {
+          GZIPInputStream gzip_stream = new GZIPInputStream (stream);
+          reader = new LineNumberReader (new InputStreamReader (gzip_stream));
+        } else {
+          reader = new LineNumberReader (new InputStreamReader (stream));
+        }
       } else {
         reader = UtilMDE.lineNumberFileReader(raw_filename);
       }
