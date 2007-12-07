@@ -1525,11 +1525,26 @@ public final class FileIO {
       for (PptTopLevel p : ppts) {
         assert !p.combined_ppts_init : p.name();
         if (p.ppt_successors != null) {
-          for (String successor : p.ppt_successors) {
+          for (Iterator<String> it = p.ppt_successors.iterator();
+               it.hasNext(); ) {
+            String successor = it.next();
             PptTopLevel sp = all_ppts.get (successor);
-            assert sp != null : successor;
-            assert sp.function_id == ppt.function_id
-              : sp.function_id + " " + ppt.function_id;
+            if (sp == null) {
+              System.out.printf ("Warning: successor %s in ppt %s does not "
+                                 + "exist, removing\n", successor, p.name());
+              it.remove();
+            } else {
+              assert sp != null : successor;
+              if (sp.function_id != p.function_id) {
+                System.out.printf ("Warning: successor %s (func %s) in ppt %s "
+                                   + "(func %s) is not in same function\n",
+                           sp.name(), sp.function_id, p.name(), p.function_id);
+                it.remove();
+              } else {
+              assert sp.function_id == p.function_id
+                : sp.function_id + " " + p.function_id;
+              }
+            }
           }
         }
       }
