@@ -465,13 +465,16 @@ you may send mail to the list asking to be added.
 Shortcut for the impatient:  skip directly to @ref{Installation steps}.
 
 This section describes two ways to install Daikon.  The first gives a
-minimal installation that is adequate for the needs of most users.
-The second gives a complete installation that some users may prefer.
+minimal installation that is adequate for the needs of many users.
+The second gives a complete installation that permits you to use all of
+the functionality in the Daikon distribution.
 
 Use the minimal installation instructions if you only wish to detect
 invariants in Java programs.  Use the complete installation instructions
 (which are easy to follow) if you wish to detect invariants in C or Perl
-programs, or if you wish to edit the source code of Daikon itself.
+programs, if you wish to run certain other programs distributed with
+Daikon in its @file{bin/} directory, or if you wish to edit the source
+code of Daikon itself.
 
 Differences between various versions of Daikon appear
 in the file @file{doc/CHANGES} in the distribution.
@@ -499,6 +502,10 @@ There are two additional requirements.  You must have a Java 5.0 (or later)
 JVM (@uref{http://java.sun.com,, Java Virtual Machine}).  The
 @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
+
+Finally, see @ref{Installing Daikon} for situations where you should
+follow the complete installation instructions of @ref{Complete
+installation}.
 
 
 @node    Complete installation,  , Minimal installation, Installing Daikon
@@ -588,24 +595,16 @@ This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 @end itemize
 
 @item
-Set up your environment.  You need to define the following environment
-variables: 
+Set up your environment.  You need to set two environment variables and
+source a Daikon startup file.
 
 @itemize
 
-    @item @code{DAIKONDIR} --
-    @cindex DAIKONDIR
-
-    The full pathname to the daikon directory you extracted
-    above.  For example: @code{@var{daikonparent}/daikon} or @code{C:\daikon}.
-
-    @item @code{JDKDIR} -- 
-    @cindex JDKDIR
-
-    The full pathanme to the JDK.  For example:
-    @code{/usr/lib/j2sdk1.t-sun} or @code{C:\Program Files\Java\jdk1.5.0_05}
-
-@end itemize
+@item
+@cindex DAIKONDIR
+Define the @code{DAIKONDIR} environment variable to be 
+the full pathname to the daikon directory you extracted
+above.  For example: @code{@var{daikonparent}/daikon} or @code{C:\daikon}.
 
 The commands to define environment variables vary depending on your 
 shell.  The csh and tcsh shells and their variants use @code{setenv} 
@@ -614,10 +613,18 @@ their variants use @code{export}
 (e.g., @code{export JDKDIR=/usr/lib/jw2sdk1.5-sun}).  The Windows shell
 uses @code{set} (e.g., @code{set JDKDIR=C:\Program Files\Java\jdk1.5.0_05})
 
-You also need to source the appropriate Daikon startup file 
+@item
+Define the @code{JDKDIR} environment variable to be
+the full pathanme to the JDK.  For example:
+@code{/usr/lib/j2sdk1.t-sun} or @code{C:\Program Files\Java\jdk1.5.0_05}
+
+@item
+Source the appropriate Daikon startup file 
 (@code{daikon.cshrc}, @code{daikon.bashrc} or @code{daikonenv.bat}).
 These files are located in the @code{@var{daikonparent}/daikon/bin}
 directory.
+
+@end itemize
 
 These customizations can be placed in your startup file, or executed
 each time that you wish to use Daikon.  
@@ -653,7 +660,7 @@ Note that running this make command may take 20 minutes or more,
 depending on your computer.  
 
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).  Running @code{make} requires
+with its Java front end (Chicory).  On windows, running @code{make} requires
 that @uref{http:http://www.cygwin.com/,Cygwin} be installed.  More
 information is available in @ref{Compiling
 Daikon,,,./developer,Daikon Developer Manual}.
