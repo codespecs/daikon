@@ -94,7 +94,8 @@ public class PptTopLevel extends Ppt {
    * language point.  It is the default and can be used when the others
    * are not appropriate
    */
-  public enum PptType {POINT, BASIC_BLOCK, CLASS, OBJECT, ENTER, EXIT, SUBEXIT}
+  public enum PptType {POINT, BASIC_BLOCK, COMBINED_BASIC_BLOCK, CLASS, OBJECT,
+                       ENTER, EXIT, SUBEXIT}
 
   /** Type of this program point **/
   public PptType type;
@@ -260,6 +261,9 @@ public class PptTopLevel extends Ppt {
 
   /** True if this ppt is subsumed by some combined ppt **/
   public boolean  combined_subsumed = false;
+
+  /** The last set of values for this program point **/
+  public ValueTuple last_values = null;
 
   /**
    *  Flag that indicates whether or not invariants have been merged

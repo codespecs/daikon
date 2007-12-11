@@ -711,6 +711,11 @@ public final class Daikon {
       processOmissions(all_ppts);
     }
 
+    // Don't write any VAlueTuples out
+    for (PptTopLevel ppt : all_ppts.all_ppts()) {
+      ppt.last_values = null;
+    }
+
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
       try {

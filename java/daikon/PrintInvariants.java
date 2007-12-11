@@ -635,8 +635,10 @@ public final class PrintInvariants {
     // so that it is easier to look behind and ahead.
     PptTopLevel[] ppts = new PptTopLevel [all_ppts.size()];
     int ii = 0;
-    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator() ; itor.hasNext() ; )
+    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext();){
       ppts[ii++] = itor.next();
+      // System.out.printf ("considering ppt %s%n", ppts[ii-1].name());
+    }
 
     for (int i = 0 ; i < ppts.length; i++) {
       PptTopLevel ppt = ppts[i];

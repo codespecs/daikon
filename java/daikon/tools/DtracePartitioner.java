@@ -26,6 +26,7 @@ public class DtracePartitioner
   public DtracePartitioner (String filename) {
     try {
       this.fileName = filename;
+      // System.out.printf ("trying with file %s%n", fileName);
       br = UtilMDE.bufferedFileReader (fileName);
 
     } catch (IOException e) {e.printStackTrace(); }
