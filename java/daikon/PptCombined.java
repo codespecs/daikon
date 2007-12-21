@@ -167,37 +167,62 @@ public class PptCombined extends PptTopLevel {
    * program point for each program point with exactly one successor
    */
   public static void combine_func_ppts (PptMap all_ppts,
-                                        List<PptTopLevel> func_ppts) {
+          List<PptTopLevel> func_ppts) {
 
-    // Loop through each basic block ppt in the function
-    for (PptTopLevel ppt : func_ppts) {
+        List<List<PptTopLevel>> successorsGraph = new ArrayList<List<PptTopLevel>>();
+        
+        // Initialize the graph structure with each PPT in the function
+        for (PptTopLevel ppt : func_ppts) {
 
-      // Mark this ppt as initialized
-      ppt.combined_ppts_init = true;
-
-      // Skip any ppt that doesn't have exactly one successor
-      if ((ppt.ppt_successors == null) || (ppt.ppt_successors.size() != 1))
-        continue;
-
-      // Get the successor ppt
-      String succ = ppt.ppt_successors.get(0);
-      PptTopLevel succ_ppt = all_ppts.get (succ);
-
-      // If the successor already has a combined ppt, skip it
-      if (succ_ppt.combined_ppt != null)
-        continue;
-
-      // Build the combined program point that includes this ppt and its
-      // successor
-      List<PptTopLevel> combined_ppts = new ArrayList<PptTopLevel>();
-      combined_ppts.add (ppt);
-      combined_ppts.add (succ_ppt);
-      succ_ppt.combined_ppt = new PptCombined (combined_ppts);
-
-      // Presume that the new combined ppt subsumes both of these ppts
-      ppt.combined_subsumed = true;
-      succ_ppt.combined_subsumed = true;
+            List<PptTopLevel> successorRow = new ArrayList<PptTopLevel>();
+            successorRow.add(ppt);
+            
+            // Get the successors ppt
+            List<String> successors = ppt.ppt_successors;
+            
+            if (successors != null)
+                for (String successorName : successors) {
+                    PptTopLevel successorPPT = all_ppts.get(successorName);
+                    successorRow.add(successorPPT);
+                }
+             
+            successorsGraph.add(successorRow);
+        }   
+        
+        BasicBlockMerger<PptTopLevel> pptMerger = new BasicBlockMerger<PptTopLevel>(successorsGraph);
+        List<List<PptTopLevel>> combinedPPTs = pptMerger.mergeBasicBlocks();
+        List<PptTopLevel> pptIndex = pptMerger.getIndexes();
+        List<PptTopLevel> subsummedList = pptMerger.getSubsummedList();
+        
+        //initialize the PPT_Combined structures
+        for (PptTopLevel ppt : func_ppts) {
+            // Mark this ppt as initialized
+            ppt.combined_ppts_init = true;
+            
+            List<PptTopLevel> computedCombinedPPTs = combinedPPTs.get(pptIndex.indexOf(ppt));
+            //eliminate first element since it the current ppt itself
+            List<PptTopLevel> combined_ppts = computedCombinedPPTs.subList(1, computedCombinedPPTs.size());  
+            
+            if (subsummedList.get(pptIndex.indexOf(ppt)) == null) {
+                // the ppt is not subsummed by other ppts
+                ppt.combined_subsumed = false;
+                if (combined_ppts.isEmpty()) {
+                    // this is a zombie PPT (i.e., no parents, no children)
+                    ppt.combined_ppt = null;
+                    continue;
+                }
+                if (ppt.equals(combined_ppts.get(0)))
+                    // case when the combinedPPTs has only one single PPT,
+                    // namely the current PPT (this can happen in a function
+                    // with one single block)
+                    ppt.combined_ppt = null;
+                else
+                    ppt.combined_ppt = new PptCombined(combined_ppts);
+            } else { 
+                // ppt is subsummed by other PPTs
+                ppt.combined_subsumed = true;
+                ppt.combined_ppt = null;
+            }
+        }
     }
-  }
-
 }
