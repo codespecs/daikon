@@ -713,7 +713,7 @@ public final class Daikon {
       processOmissions(all_ppts);
     }
 
-    // Don't write any VAlueTuples out
+    // Don't write any ValueTuples out
     for (PptTopLevel ppt : all_ppts.all_ppts()) {
       ppt.last_values = null;
     }
