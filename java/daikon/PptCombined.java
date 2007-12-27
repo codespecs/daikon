@@ -28,7 +28,7 @@ public class PptCombined extends PptTopLevel {
     super ("combined_" + ppts.get(0).name(), PptType.COMBINED_BASIC_BLOCK,
            new ArrayList<ParentRelation>(), EnumSet.noneOf (PptFlags.class),
            null, ppts.get(0).function_id, combined_vis (ppts));
-    this.ppts = ppts;
+    this.ppts = new ArrayList<PptTopLevel>(ppts);
     init();
     System.out.printf ("Variables for combined ppt %s%n", name());
     if (debug) {
@@ -170,39 +170,39 @@ public class PptCombined extends PptTopLevel {
           List<PptTopLevel> func_ppts) {
 
         List<List<PptTopLevel>> successorsGraph = new ArrayList<List<PptTopLevel>>();
-        
+
         // Initialize the graph structure with each PPT in the function
         for (PptTopLevel ppt : func_ppts) {
 
             List<PptTopLevel> successorRow = new ArrayList<PptTopLevel>();
             successorRow.add(ppt);
-            
+
             // Get the successors ppt
             List<String> successors = ppt.ppt_successors;
-            
+
             if (successors != null)
                 for (String successorName : successors) {
                     PptTopLevel successorPPT = all_ppts.get(successorName);
                     successorRow.add(successorPPT);
                 }
-             
+
             successorsGraph.add(successorRow);
-        }   
-        
+        }
+
         BasicBlockMerger<PptTopLevel> pptMerger = new BasicBlockMerger<PptTopLevel>(successorsGraph);
         List<List<PptTopLevel>> combinedPPTs = pptMerger.mergeBasicBlocks();
         List<PptTopLevel> pptIndex = pptMerger.getIndexes();
         List<PptTopLevel> subsummedList = pptMerger.getSubsummedList();
-        
+
         //initialize the PPT_Combined structures
         for (PptTopLevel ppt : func_ppts) {
             // Mark this ppt as initialized
             ppt.combined_ppts_init = true;
-            
+
             List<PptTopLevel> computedCombinedPPTs = combinedPPTs.get(pptIndex.indexOf(ppt));
             //eliminate first element since it the current ppt itself
-            List<PptTopLevel> combined_ppts = computedCombinedPPTs.subList(1, computedCombinedPPTs.size());  
-            
+            List<PptTopLevel> combined_ppts = computedCombinedPPTs.subList(1, computedCombinedPPTs.size());
+
             if (subsummedList.get(pptIndex.indexOf(ppt)) == null) {
                 // the ppt is not subsummed by other ppts
                 ppt.combined_subsumed = false;
@@ -218,7 +218,7 @@ public class PptCombined extends PptTopLevel {
                     ppt.combined_ppt = null;
                 else
                     ppt.combined_ppt = new PptCombined(combined_ppts);
-            } else { 
+            } else {
                 // ppt is subsummed by other PPTs
                 ppt.combined_subsumed = true;
                 ppt.combined_ppt = null;
