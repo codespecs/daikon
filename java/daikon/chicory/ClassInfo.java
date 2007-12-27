@@ -81,14 +81,13 @@ public class ClassInfo {
             if (isInThisClass(pureMeth))
             {
                 boolean foundMatch = false;
-                for (MethodInfo mi: method_infos)
-                {
-                  // System.out.println(mi.member.toString() + "\n" + pureMeth + "\n\n");
-                    if (mi.member.toString().trim().equals(pureMeth))
-                    {
-                        foundMatch = true;
-                        break;
-                    }
+                for (MethodInfo mi: method_infos) {
+                  // System.out.printf("compare %s to pure %s%n",
+                  //                  mi.member.toString() , pureMeth);
+                  if (mi.member.toString().trim().equals(pureMeth)) {
+                    foundMatch = true;
+                    break;
+                  }
                 }
 
                 if (!foundMatch)
