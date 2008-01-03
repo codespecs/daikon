@@ -22,6 +22,8 @@ public class PptCombined extends PptTopLevel {
   List<PptTopLevel> ppts;
 
   private boolean debug = true;
+  
+  static int maxVarInfoSize = 200;
 
   public PptCombined (List<PptTopLevel> ppts) {
 
@@ -216,13 +218,64 @@ public class PptCombined extends PptTopLevel {
                     // namely the current PPT (this can happen in a function
                     // with one single block)
                     ppt.combined_ppt = null;
-                else
-                    ppt.combined_ppt = new PptCombined(combined_ppts);
+                else {// associate a PptCombined to this ppt.
+                    // If the var_infos for all combined blocks is
+                    // smaller than the threshold, associate one single PptCombined,
+                    // otherwise split this PptCombined into smaller chunks
+                    List<List<PptTopLevel>> partitions = splitCombinedPpts(combined_ppts);
+                    for (List<PptTopLevel> partition : partitions) {
+                        PptTopLevel splitPpt = partition.get(partition.size() - 1);
+                        
+                        //do not override a previously written PptCombined
+                        if (splitPpt.combined_ppt == null) 
+                            splitPpt.combined_ppt = new PptCombined(partition);
+                    }
+                }
             } else {
                 // ppt is subsummed by other PPTs
-                ppt.combined_subsumed = true;
-                ppt.combined_ppt = null;
+                
+                //check whether there was an artificial split
+                //at this ppt due to maxVarInfos
+                if (ppt.combined_ppt == null)
+                    ppt.combined_subsumed = true;
             }
         }
     }
+  
+  static List<List<PptTopLevel>> splitCombinedPpts(List<PptTopLevel> list) {
+        List<List<PptTopLevel>> result = new ArrayList<List<PptTopLevel>>();
+        List<PptTopLevel> partition = new ArrayList<PptTopLevel>();
+
+        int varInfosSize = 0;
+        for (PptTopLevel ppt : list) {
+            if (varInfosSize + ppt.var_infos.length <= maxVarInfoSize) {
+                varInfosSize += ppt.var_infos.length;
+                partition.add(ppt);
+            }
+            else { //create a new partition 
+                
+                // force at least one element per partition
+                // even when that element is larger than the threshold
+                if (partition.isEmpty()) {
+                    partition.add(ppt);
+                    
+                    result.add(partition);
+                    
+                    partition = new ArrayList<PptTopLevel>();
+                    varInfosSize = 0;
+                }
+                else {
+                    result.add(partition);
+                    
+                    partition = new ArrayList<PptTopLevel>();
+                    partition.add(ppt);
+                    varInfosSize = ppt.var_infos.length;
+                }
+            }
+        }
+        result.add(partition);
+        return result;
+    }
+  
+  
 }
