@@ -70,32 +70,42 @@ public class BasicBlockMerger<T> {
             if (predecessorList.size() > 0)
                 fillUpSubsumedListInformation(currentNode, predecessorList
                         .get(predecessorList.size() - 1));
-        } else {
-            // treat the case when the node is a join
+        } else { // treat the case when the node is a join
+           
+            //when the first entry node in a function is also a join node,
+            // that node should not be merged with its predecessors
+            if (predecessorList.size() == 0) {
+                // do nothing, but just add the current node as last entry 
+                // to the structure
+                extendedPredecessorList.add(currentNode);
+            } else {
+                
+                T matchingForkNode = findMatchingForkNode(currentNode);
 
-            T matchingForkNode = findMatchingForkNode(currentNode);
+                int indexOfFork;
+                if ((matchingForkNode == null)
+                        || (currentNode.equals(matchingForkNode)))
+                    indexOfFork = indexNodes.indexOf(predecessorList
+                            .get(predecessorList.size() - 1)); // findPreviousNodeIndex(currentNode);
+                else
+                    indexOfFork = indexNodes.indexOf(matchingForkNode);
 
-            int indexOfFork;
-            if ((matchingForkNode == null)
-                    || (currentNode.equals(matchingForkNode)))
-                indexOfFork = indexNodes.indexOf(predecessorList
-                        .get(predecessorList.size() - 1)); // findPreviousNodeIndex(currentNode);
-            else
-                indexOfFork = indexNodes.indexOf(matchingForkNode);
+                // since we do a DFS grap traversal, this ensures that by the
+                // time
+                // we process a node, its direct predecessors (e.g., forks) have
+                // been already processed
+                List<T> predecessorsOfFork = mergedGraph.get(indexOfFork);
 
-            // since we do a DFS grap traversal, this ensures that by the time
-            // we process a node, its direct predecessors (e.g., forks) have
-            // been already processed
-            List<T> predecessorsOfFork = mergedGraph.get(indexOfFork);
+                // skip the first element since it is the forkNode itself
+                for (int i = 1; i < predecessorsOfFork.size(); i++)
+                    extendedPredecessorList.add(predecessorsOfFork.get(i));
 
-            // skip the first element since it is the forkNode itself
-            for (int i = 1; i < predecessorsOfFork.size(); i++)
-                extendedPredecessorList.add(predecessorsOfFork.get(i));
-
-            extendedPredecessorList.add(currentNode);
-            if (predecessorsOfFork.size() > 0)
-                fillUpSubsumedListInformation(currentNode, predecessorsOfFork
-                        .get(predecessorsOfFork.size() - 1));
+                extendedPredecessorList.add(currentNode);
+                if (predecessorsOfFork.size() > 0)
+                    fillUpSubsumedListInformation(currentNode,
+                            predecessorsOfFork
+                                    .get(predecessorsOfFork.size() - 1));
+            }
         }
 
         mergedGraph.get(currentNodeIndex).addAll(extendedPredecessorList);
