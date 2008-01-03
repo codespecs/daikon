@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.sun.xml.internal.bind.v2.TODO;
+//import com.sun.xml.internal.bind.v2.TODO;
 
 import junit.framework.TestCase;
 import daikon.BasicBlockMerger;
@@ -427,6 +427,65 @@ public class BasicBlockMergerTest extends TestCase{
         expectedMergedBlocks.add(mergedForPpt1);
         expectedMergedBlocks.add(mergedForPpt2);
         expectedMergedBlocks.add(mergedForPpt3);
+
+        List<List<PptTopLevel>> actualMergedBlocks = new BasicBlockMerger<PptTopLevel>(
+                successors).mergeBasicBlocks();
+        System.out.println("output= " + actualMergedBlocks);
+        System.out.println();
+
+        assertEquals(expectedMergedBlocks, actualMergedBlocks);
+
+    }
+    
+    /**
+     *        0
+     *     ^  |  ^
+     *     |  v   \
+     *     \  1   |
+     *        |   |
+     *        v  / 
+     *        2   
+     *        
+     *        
+     *        
+     *       
+     * @throws Exception
+     */
+    
+    public void testFirstEntryNodeIsAlsoJoin() throws Exception {
+        PptTopLevel ppt0 = new PptTopLevel(":::0", new VarInfo[] {});
+        PptTopLevel ppt1 = new PptTopLevel(":::1", new VarInfo[] {});
+        PptTopLevel ppt2 = new PptTopLevel(":::2", new VarInfo[] {});
+
+        List<PptTopLevel> successorOfPpt0 = Arrays.asList(new PptTopLevel[] {
+                ppt0, ppt1 });
+
+        List<PptTopLevel> successorOfPpt1 = Arrays.asList(new PptTopLevel[] {
+                ppt1, ppt0, ppt2 });
+
+        List<PptTopLevel> successorOfPpt2 = Arrays.asList(new PptTopLevel[] {
+                ppt2, ppt0 });
+
+
+        List<List<PptTopLevel>> successors = new ArrayList<List<PptTopLevel>>();
+
+        successors.add(successorOfPpt0);
+        successors.add(successorOfPpt1);
+        successors.add(successorOfPpt2);
+
+        System.out.println("input= " + successors);
+
+        List<PptTopLevel> mergedForPpt0 = Arrays.asList(new PptTopLevel[] {
+                ppt0, ppt0 });
+        List<PptTopLevel> mergedForPpt1 = Arrays.asList(new PptTopLevel[] {
+                ppt1, ppt0, ppt1 });
+        List<PptTopLevel> mergedForPpt2 = Arrays.asList(new PptTopLevel[] {
+                ppt2, ppt0, ppt1, ppt2 });
+
+        List<List<PptTopLevel>> expectedMergedBlocks = new ArrayList<List<PptTopLevel>>();
+        expectedMergedBlocks.add(mergedForPpt0);
+        expectedMergedBlocks.add(mergedForPpt1);
+        expectedMergedBlocks.add(mergedForPpt2);
 
         List<List<PptTopLevel>> actualMergedBlocks = new BasicBlockMerger<PptTopLevel>(
                 successors).mergeBasicBlocks();
