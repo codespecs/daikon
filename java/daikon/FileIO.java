@@ -148,6 +148,14 @@ public final class FileIO {
   private static Map<String,List<PptTopLevel>> func_ppts
     = new LinkedHashMap<String,List<PptTopLevel>>();
 
+  /**
+   * If true, variables from basic blocks which predominate a basic block X
+   * will be included when X is processed.  This allows Daikon to find
+   * invariants between variables in different program points (basic blocks
+   * in this case)
+   */
+  public static boolean dkconfig_merge_basic_blocks = false;
+
   // Logging Categories
 
   /** true prints info about variables marked as missing/nonsensical **/
@@ -362,6 +370,8 @@ public final class FileIO {
     // are still getting ppts for this function id, they should not have
     // been yet combined
     if (function_id != null) {
+      System.out.printf ("Declaration of ppt %s with %d variables\n",
+                         newppt.name(), newppt.var_infos.length);
       List<PptTopLevel> f_ppts = func_ppts.get (function_id);
       if (f_ppts == null) {
         f_ppts = new ArrayList<PptTopLevel>();
@@ -1519,66 +1529,80 @@ public final class FileIO {
     // any block in the same function
     if (ppt.is_basic_block() && !ppt.combined_ppts_init
         && (ppt.function_id != null)) {
-      List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
-      assert ppts != null : ppt.name() + " func id " + ppt.function_id;
-      assert ppts.size() > 0 : ppt.name();
-      for (PptTopLevel p : ppts) {
-        assert !p.combined_ppts_init : p.name();
-        if (p.ppt_successors != null) {
-          for (Iterator<String> it = p.ppt_successors.iterator();
-               it.hasNext(); ) {
-            String successor = it.next();
-            PptTopLevel sp = all_ppts.get (successor);
-            if (sp == null) {
-              System.out.printf ("Warning: successor %s in ppt %s does not "
-                                 + "exist, removing\n", successor, p.name());
-              it.remove();
-            } else {
-              assert sp != null : successor;
-              if (sp.function_id != p.function_id) {
-                System.out.printf ("Warning: successor %s (func %s) in ppt %s "
-                                   + "(func %s) is not in same function\n",
-                           sp.name(), sp.function_id, p.name(), p.function_id);
+      if (!dkconfig_merge_basic_blocks) {
+        List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
+        for (PptTopLevel p : ppts) {
+          p.combined_subsumed = false;
+          p.combined_ppts_init = true;
+        }
+      } else {
+        List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
+        assert ppts != null : ppt.name() + " func id " + ppt.function_id;
+        assert ppts.size() > 0 : ppt.name();
+        for (PptTopLevel p : ppts) {
+          assert !p.combined_ppts_init : p.name();
+          if (p.ppt_successors != null) {
+            for (Iterator<String> it = p.ppt_successors.iterator();
+                 it.hasNext(); ) {
+              String successor = it.next();
+              PptTopLevel sp = all_ppts.get (successor);
+              if (sp == null) {
+                System.out.printf ("Warning: successor %s in ppt %s does not "
+                                   + "exist, removing\n", successor, p.name());
                 it.remove();
               } else {
-              assert sp.function_id == p.function_id
-                : sp.function_id + " " + p.function_id;
+                assert sp != null : successor;
+                if (sp.function_id != p.function_id) {
+                  System.out.printf ("Warning: successor %s (func %s) in "
+                            + "ppt %s (func %s) is not in same function\n",
+                            sp.name(), sp.function_id, p.name(), p.function_id);
+                  it.remove();
+                } else {
+                assert sp.function_id == p.function_id
+                  : sp.function_id + " " + p.function_id;
+                }
               }
             }
           }
         }
-      }
-      if (true) {
-        System.out.printf ("Building combined ppts for func %s [ppt %s]\n",
-                           ppt.function_id, ppt.name());
-        for (PptTopLevel p : ppts) {
-          System.out.printf ("  %s\n", p.name());
-          if (p.ppt_successors != null) {
-            for (String successor : p.ppt_successors) {
-              System.out.printf ("    %s\n", all_ppts.get (successor).name());
+        if (true) {
+          System.out.printf ("Building combined ppts for func %s [ppt %s]\n",
+                             ppt.function_id, ppt.name());
+          for (PptTopLevel p : ppts) {
+            System.out.printf ("  %s\n", p.name());
+            if (p.ppt_successors != null) {
+              for (String successor : p.ppt_successors) {
+                System.out.printf ("    %s\n", all_ppts.get (successor).name());
+              }
             }
+            p.combined_ppts_init = true;
           }
-          p.combined_ppts_init = true;
         }
-      }
-      // Build any combined program points and add them to the global map
-      PptCombined.combine_func_ppts (all_ppts, ppts);
-      for (PptTopLevel p : ppts) {
-        if (p.combined_ppt == null)
-          continue;
-        all_ppts.add (p.combined_ppt);
-      }
-      System.out.printf ("Combined ppts:\n");
-      for (PptTopLevel p : ppts) {
-        System.out.printf ("  %s\n", p.name());
-        if (p.combined_ppt != null) {
-          System.out.printf ("    %s\n", p.combined_ppt.name());
+        // Build any combined program points and add them to the global map
+        PptCombined.combine_func_ppts (all_ppts, ppts);
+        for (PptTopLevel p : ppts) {
+          if (p.combined_ppt == null)
+            continue;
+          all_ppts.add (p.combined_ppt);
+        }
+        System.out.printf ("Combined ppts:\n");
+        for (PptTopLevel p : ppts) {
+          System.out.printf ("  %s [%s]\n", p.name(),
+                             p.combined_subsumed ? "subsumed" : "standalone");
+          if (p.combined_ppt != null) {
+            System.out.printf ("    %s\n", p.combined_ppt.name());
+            System.out.printf ("      ");
+            for (PptTopLevel cp : p.combined_ppt.ppts) {
+              System.out.printf ("%s ", cp.name());
+            }
+            System.out.printf ("%n");
+          }
         }
       }
     }
 
     // If this is a basic block, remember its values
-    if (ppt.is_basic_block()) {
+    if (dkconfig_merge_basic_blocks && ppt.is_basic_block()) {
       // System.out.printf ("Stored VT for %s%n", ppt.name());
       ppt.last_values = vt;
     }

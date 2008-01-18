@@ -769,19 +769,22 @@ public final class Daikon {
         // Sometimes the program points actually differ in number of
         // samples seen due to differences in how Daikon and DaikonSimple
         // see the variable hierarchy.
-        System.out.println(
-        "====================================================");
-        System.out.println(ppt.name());
-        System.out.println(ppt.num_samples());
+        if (true) {
+          System.out.println(
+          "====================================================");
+          System.out.println(ppt.name());
+          System.out.println(ppt.num_samples());
 
-        for (Invariant inv : filtered_invs) {
-            System.out.println(inv.getClass());
-            System.out.println(inv);
+          for (Invariant inv : filtered_invs) {
+              System.out.println(inv.getClass());
+              System.out.println(inv);
+          }
         }
       }
 
       // exit the program
-      return;
+      if (true)
+        return;
     }
 
     // Display invariants
