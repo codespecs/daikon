@@ -120,6 +120,9 @@ developer.pdf: developer.dvi
 daikonEclipseHelp.html: ../eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html
 	cp -p $< $@
 
+# Note that the clean target does not remove invariants-doc.texinfo or
+# config-options.texinfo.
+
 clean: texi-clean
 	rm -f daikon.tmp \
 		daikon.info daikon.info-[0-9] \
