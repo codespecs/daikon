@@ -162,10 +162,20 @@ Remake it first if it is more than a week old."
         (let ((default-directory dir))
 	  (if (get-buffer "*make-daikon-info*")
 	      (kill-buffer "*make-daikon-info*"))
-	  (if (not (equal 0 (call-process "makeinfo" nil "*make-daikon-info*" nil texinfofile)))
-	      (progn
-		(pop-to-buffer "*make-daikon-info*")
-		(error "Makeinfo process failed.")))
+	  (let ((process-output
+		 ;; The `daikon-info' command intentionally does not
+		 ;; *update* these files before running makeinfo (it might
+		 ;; take too long).  But makeinfo fails if they do not exist.
+		 (if (and (file-exists-p "$inv/doc/invariants-doc.texinfo")
+			  (file-exists-p "$inv/doc/config-options.texinfo"))
+		     (call-process "makeinfo" nil "*make-daikon-info*" nil texinfofile)
+		   (progn
+		     (message "Looks like a new checkout, making Daikon manual might take a little while...")
+		     (call-process "make" nil "*make-daikon-info*" nil "all")))))
+	    (if (not (equal 0 process-output))
+		(progn
+		  (pop-to-buffer "*make-daikon-info*")
+		  (error "makeinfo failed."))))
           (sit-for 0 500)               ; let the filesystem find the new file
           ;; The above was synchronous and minimal;
           ;; the below is asynchronous and maximal.
