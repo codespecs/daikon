@@ -648,7 +648,7 @@ You can examine the appropriate Daikon environment file to learn of
 other variables you can customize.
 
 @item
-Optionally, run
+Optionally (it can take a long time), run
 @example
 cd $DAIKONDIR
 make
