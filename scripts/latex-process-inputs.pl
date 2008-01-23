@@ -26,14 +26,14 @@ my $ant_list_mode = 0;
 if (@ARGV[0] eq "-list") {
   $list_mode = 1;
   shift @ARGV;
-} elsif (@ARGV[0] eq "-list") {
+} elsif (@ARGV[0] eq "-antlist") {
   $list_mode = 1;
   $ant_list_mode = 1;
   shift @ARGV;
 }
 
 if (scalar(@ARGV) > 1) {
-  die "Supply exactly one file on the command line (got " . scalar(@ARGV) . ": " . join("", @ARGV) . ")";
+  die "Supply exactly one file on the command line (got " . scalar(@ARGV) . ": " . join(" ", @ARGV) . ")";
 }
 my @files = ($ARGV[0]);
 
@@ -86,12 +86,14 @@ if ((! $list_mode) && ($text =~ /\\bibliography\{.*?\}/)) {
 }
 
 if ($list_mode) {
-  for $file (@files) {
-    print "$file\n";
-  }
-} elsif ($list_mode) {
-  for $file (@files) {
-    print "      <arg value=\"$file\"/>\n";
+  if ($ant_list_mode) {
+    for $file (@files) {
+      print "      <arg value=\"$file\"/>\n";
+    }
+  } else {
+    for $file (@files) {
+      print "$file\n";
+    }
   }
 } else {
   print $text;
