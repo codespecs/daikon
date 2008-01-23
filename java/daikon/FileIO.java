@@ -1590,12 +1590,7 @@ public final class FileIO {
           System.out.printf ("  %s [%s]\n", p.name(),
                              p.combined_subsumed ? "subsumed" : "standalone");
           if (p.combined_ppt != null) {
-            System.out.printf ("    %s\n", p.combined_ppt.name());
-            System.out.printf ("      ");
-            for (PptTopLevel cp : p.combined_ppt.ppts) {
-              System.out.printf ("%s ", cp.name());
-            }
-            System.out.printf ("%n");
+            p.combined_ppt.dump();
           }
         }
       }
