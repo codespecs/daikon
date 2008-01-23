@@ -19,7 +19,7 @@ public class PptCombined extends PptTopLevel {
   static final long serialVersionUID = 20071129L;
 
   /** List of ppts that make up this combined ppt **/
-  List<PptTopLevel> ppts;
+  public List<PptTopLevel> ppts;
 
   private boolean debug = false;
 
@@ -164,7 +164,7 @@ public class PptCombined extends PptTopLevel {
    *    executed.   This field may be null if this bb ppt is completely
    *    subsumed by other combined ppts
    *    <li> Its combined_subsumed boolean field is set to true if this
-   *    ppt is subsumed by a combine dprogram point, false otherwise.
+   *    ppt is subsumed by a combined program point, false otherwise.
    *
    * The current implementation is just an example that creates a combined
    * program point for each program point with exactly one successor
@@ -237,8 +237,11 @@ public class PptCombined extends PptTopLevel {
 
                 //check whether there was an artificial split
                 //at this ppt due to maxVarInfos
-                if (ppt.combined_ppt == null)
-                    ppt.combined_subsumed = true;
+                if (ppt.combined_ppt == null) {
+                  ppt.combined_subsumed = true;
+                  ppt.combined_subsumed_by
+                    = subsummedList.get(pptIndex.indexOf(ppt));
+                }
             }
         }
     }
@@ -278,5 +281,20 @@ public class PptCombined extends PptTopLevel {
         return result;
     }
 
+  /** Dumps out the basic blocks that make up this combined ppt **/
+  void dump() {
+
+    System.out.printf ("    Combined PPT %s\n", name());
+    for (PptTopLevel ppt : ppts) {
+      System.out.printf ("      %s\n ", bb_short_name(ppt));
+    }
+  }
+
+  public static String bb_short_name (PptTopLevel ppt) {
+    String name = ppt.name.replaceFirst (".*:0x", "0x");
+    name = name.replace (":::BB", "");
+    long offset = Long.decode (name);
+    return String.format ("%04X", offset & 0xFFFF);
+  }
 
 }
