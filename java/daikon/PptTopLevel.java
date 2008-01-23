@@ -84,7 +84,7 @@ public class PptTopLevel extends Ppt {
   public  static boolean first_pass_with_sample = true;
 
   /** Ppt attributes (specified in decl records) **/
-  public enum PptFlags {STATIC, ENTER, EXIT, PRIVATE};
+  public enum PptFlags {STATIC, ENTER, EXIT, PRIVATE, RETURN};
 
   /** Attributes of this ppt **/
   public EnumSet<PptFlags> flags = EnumSet.noneOf (PptFlags.class);
@@ -261,6 +261,9 @@ public class PptTopLevel extends Ppt {
 
   /** True if this ppt is subsumed by some combined ppt **/
   public boolean  combined_subsumed = false;
+
+  /** The ppt whose combined ppt includes this one **/
+  public PptTopLevel combined_subsumed_by = null;
 
   /** The last set of values for this program point **/
   public ValueTuple last_values = null;
