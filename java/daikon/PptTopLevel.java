@@ -250,6 +250,9 @@ public class PptTopLevel extends Ppt {
   /** Identifier of the function (for basic blocks **/
   public String function_id = null;
 
+  /** Length of basic block (bytes) **/
+  public int bb_length;
+
   /**
    * True if this basic block has been combined with other basic blocks
    * to form combined program points.
@@ -307,7 +310,7 @@ public class PptTopLevel extends Ppt {
 
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
                       EnumSet<PptFlags> flags, List<String> ppt_successors,
-                      String function_id, VarInfo[] var_infos) {
+                      String function_id, int bb_length, VarInfo[] var_infos) {
 
     this.name = name;
     if (!name.contains (":::")) {
@@ -319,6 +322,7 @@ public class PptTopLevel extends Ppt {
     this.parent_relations = parents;
     this.ppt_successors = ppt_successors;
     this.function_id = function_id;
+    this.bb_length = bb_length;
     init_vars (var_infos);
   }
 
@@ -4296,6 +4300,25 @@ public class PptTopLevel extends Ppt {
     return Arrays.toString (var_infos);
   }
 
+  /** If this is a basic block, returns the offset in the DLL **/
+  public int bb_offset() {
+    assert is_basic_block() : name;
+    String offset_name = name.replaceFirst (".*:0x", "0x");
+    offset_name = offset_name.replace (":::BB", "");
+    return Integer.decode (offset_name);
+  }
 
+  /**
+   * Finds the ppt whose combined ppt subsumes this one.  Combined ppts must
+   * have been initialized
+   */
+  public PptTopLevel find_combined_ppt_leader() {
+    assert combined_ppts_init : name;
+    PptTopLevel ppt = this;
+    while (ppt.combined_ppt == null)
+      ppt = ppt.combined_subsumed_by;
+
+    return ppt;
+  }
 
 }

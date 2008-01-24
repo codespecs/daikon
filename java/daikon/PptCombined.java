@@ -29,7 +29,7 @@ public class PptCombined extends PptTopLevel {
 
     super ("combined_" + ppts.get(0).name(), PptType.COMBINED_BASIC_BLOCK,
            new ArrayList<ParentRelation>(), EnumSet.noneOf (PptFlags.class),
-           null, ppts.get(0).function_id, combined_vis (ppts));
+           null, ppts.get(0).function_id, -1, combined_vis (ppts));
     this.ppts = new ArrayList<PptTopLevel>(ppts);
     init();
     System.out.printf ("Combined ppt %s has %d variables%n", name(),
@@ -291,10 +291,9 @@ public class PptCombined extends PptTopLevel {
   }
 
   public static String bb_short_name (PptTopLevel ppt) {
-    String name = ppt.name.replaceFirst (".*:0x", "0x");
-    name = name.replace (":::BB", "");
-    long offset = Long.decode (name);
-    return String.format ("%04X", offset & 0xFFFF);
+    if (ppt == null)
+      return "null";
+    return String.format ("%04X", ppt.bb_offset() & 0xFFFF);
   }
 
 }

@@ -1570,7 +1570,7 @@ public final class Daikon {
 
         exit_ppt
           = new PptTopLevel(exit_name.getName(), PptTopLevel.PptType.EXIT,
-                            ppt.parent_relations, ppt.flags, null, null,
+                            ppt.parent_relations, ppt.flags, null, null, 0,
                             exit_vars);
 
         // exit_ppt.ppt_name.setVisibility(exitnn_name.getVisibility());

@@ -285,6 +285,7 @@ public final class FileIO {
     PptType ppt_type = PptType.POINT;
     List<String> ppt_successors = null;
     String function_id = null;
+    int bb_length = 0;
 
     // Read the records that define this program point
     while ((line = state.reader.readLine()) != null) {
@@ -311,9 +312,13 @@ public final class FileIO {
         } else if (record == "ppt-func") { // interned
           function_id = need (state, scanner, "function id");
           need_eol (state, scanner);
+        } else if (record == "ppt-length") { // interned
+          bb_length = Integer.decode(need (state, scanner, "length"));
+          need_eol (state, scanner);
         } else {
           decl_error (state, "record '%s' found where %s expected", record,
-                      "'parent', 'flags', or 'ppt-successors'");
+                      "'parent', 'flags', 'ppt-length', 'ppt-func'"
+                      + " or 'ppt-successors'");
         }
       } else { // there must be a current variable
         if (record == "var-kind") { // interned
@@ -364,7 +369,7 @@ public final class FileIO {
 
     // Build the program point
     PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents,
-                            ppt_flags, ppt_successors, function_id, vi_array);
+               ppt_flags, ppt_successors, function_id, bb_length, vi_array);
 
     // Add this ppt tot the list of ppts for this function_id.  If we
     // are still getting ppts for this function id, they should not have
@@ -1809,7 +1814,8 @@ public final class FileIO {
             + ", got "
             + line
             + " for program point "
-            + ppt.name(),
+          + ppt.name() + " at line " + reader.getLineNumber() + " in file "
+          + data_trace_state.filename,
           reader,
           data_trace_state.filename);
       }
