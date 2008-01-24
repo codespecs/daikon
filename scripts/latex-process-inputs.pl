@@ -86,12 +86,10 @@ if ((! $list_mode) && ($text =~ /\\bibliography\{.*?\}/)) {
 }
 
 if ($list_mode) {
-  if ($ant_list_mode) {
-    for $file (@files) {
+  for $file (@files) {
+    if ($ant_list_mode) {
       print "      <arg value=\"$file\"/>\n";
-    }
-  } else {
-    for $file (@files) {
+    } else {
       print "$file\n";
     }
   }
