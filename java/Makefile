@@ -455,6 +455,8 @@ dyncomp-jdk-only dcomp-jdk-only :
 # Copied source files are read-only, to prevent accidental changes
 utilMDE-copy : utilMDE-import-check
 	install -d daikon/util/
+	# Must compile utilMDE in order to create .java files from .jpp files.
+	make -C utilMDE
 	install -t daikon/util/ -m 444 utilMDE/*.java
 	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
 	# change the package declarations
