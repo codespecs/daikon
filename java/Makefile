@@ -81,7 +81,8 @@ endif
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print) \
-                    $(shell find utilMDE/ -name '*.java' -print)
+                    $(shell find utilMDE/ -name '*.java' -print) \
+                    $(shell find binary_variables/ -name '*.java' -print)
 
 TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${DAIKONBIN}/sort-directory-order.pl)
 
@@ -705,16 +706,21 @@ interned-fileio:
 	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/FileIO.java
 
 interned-counts:
-	echo "Files: "
-	echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
-	echo "Lines: "
-	wc -l ${INTERNED_JAVA_FILES_COUNTS}
-	echo "@Interned annotations: "
-	grep "@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l
-	echo "New local vars: "
-	grep "interned = " ${INTERNED_JAVA_FILES_COUNTS} | wc -l
-	echo "@SuppressWarnings annotations:"
-	grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS}
+	@echo -n "Files: "
+	@echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
+	@echo -n "Lines: "
+	@wc -l ${INTERNED_JAVA_FILES_COUNTS} | tail -1
+	@echo -n "@Interned annotations: "
+	@grep "@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l | tail -1
+	@echo -n "New local vars: "
+	@grep "interned = " ${INTERNED_JAVA_FILES_COUNTS} | wc -l
+	@echo "@SuppressWarnings annotations:"
+	@grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS}
+	# Echoing long lines is unhelpful (and confuses Emacs)
+	@echo -n "Daikon total files: "
+	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
+	@echo -n "Daikon total lines: "
+	@wc -l ${DAIKON_JAVA_FILES} | tail -1
 
 ###
 ### Testing
