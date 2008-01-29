@@ -27,7 +27,8 @@ public class PptCombined extends PptTopLevel {
 
   public PptCombined (List<PptTopLevel> ppts) {
 
-    super ("combined_" + ppts.get(0).name(), PptType.COMBINED_BASIC_BLOCK,
+    super (ppts.get(0).name() + ".." + ppts.get(ppts.size()-1).ppt_name.name(),
+           PptType.COMBINED_BASIC_BLOCK,
            new ArrayList<ParentRelation>(), EnumSet.noneOf (PptFlags.class),
            null, ppts.get(0).function_id, -1, combined_vis (ppts));
     this.ppts = new ArrayList<PptTopLevel>(ppts);
