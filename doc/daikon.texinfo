@@ -8278,11 +8278,13 @@ BCEL on your classpath.)
 @c and correct.
 
 
-@node    Reporting bugs, Known bugs, Chicory problems, Troubleshooting
-@section Reporting bugs
+@node    Reporting problems, Known bugs, Chicory problems, Troubleshooting
+@section Reporting problems
 
 @cindex reporting bugs
 @cindex bugs, reporting
+@cindex reporting problems
+@cindex problems, reporting
 
 If you have any questions, can suggest ways to improve the
 documentation, find bugs in the system, or have suggestions for its
@@ -8320,15 +8322,16 @@ to reproduce the problem), exactly what happened, and what
 you expected to happen instead.
 For instance, a transcript of your commands and the system's output
 may provide this information.  (A transcript is @strong{much} more
-useful than a vague description; don't just give English when you can
-give a more precise specification instead.)
+useful than a vague description; please don't give vague English when you can
+supply a more precise specification instead.)
 It is crucial that you not omit steps in your report.  Do not force the
 developers to speculate about what you did; that is a waste of their
 time, since you already have the knowledge.
 @item
 input files that permit the problem to be replicated (by following the
 detailed steps in your bug report).  The
-most important thing is the original, uninstrumented source files.
+most important thing is the original, uninstrumented source files (e.g.,
+@file{.java}), and any inputs/tests used when you ran the program.
 It is also helpful to include instrumented source files,
 @file{.decl} files, and @file{.dtrace} files.
 @item
