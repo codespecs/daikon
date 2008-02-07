@@ -322,7 +322,7 @@ Troubleshooting
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
 * Chicory problems::            
-* Reporting bugs::              
+* Reporting problems::          
 * Known bugs::                  
 * Further reading::             
 
@@ -7671,7 +7671,7 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * Large dtrace files::          
 * Parsing Java 5.0 code::       
 * Chicory problems::            
-* Reporting bugs::              
+* Reporting problems::          
 * Known bugs::                  
 * Further reading::             
 @end menu
@@ -8210,7 +8210,7 @@ are suppressed from the output of these tools.  (Annotate inserts them
 as comments, and runtimechecker silently ignores them.)
 
 
-@node    Chicory problems, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
+@node    Chicory problems, Reporting problems, Parsing Java 5.0 code, Troubleshooting
 @section Problems with Chicory
 
 Before reporting or investigating a problem with Chicory, always check
@@ -8347,7 +8347,7 @@ You may also wish to take advantage of the Daikon mailing lists
 (@pxref{Mailing lists}).
 
 
-@node    Known bugs, Further reading, Reporting bugs, Troubleshooting
+@node    Known bugs, Further reading, Reporting problems, Troubleshooting
 @section Known bugs
 
 @c @c Use the following if there are no known problems.
