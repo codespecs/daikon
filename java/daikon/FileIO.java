@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import java.io.*;
-import java.io.Serializable;
 import java.net.*;
 import java.util.*;
 import java.util.zip.*;
@@ -155,7 +154,7 @@ public final class FileIO {
    * in this case)
    */
   public static boolean dkconfig_merge_basic_blocks = false;
-
+  
   // Logging Categories
 
   /** true prints info about variables marked as missing/nonsensical **/
@@ -1583,6 +1582,21 @@ public final class FileIO {
             p.combined_ppts_init = true;
           }
         }
+        
+        // Compute predecessors for each basic block.
+        for (PptTopLevel p : ppts) {
+        	p.predecessors = new ArrayList<PptTopLevel>();
+        }
+        for (PptTopLevel p : ppts) {
+        	if (p.ppt_successors != null) {
+        		for (String succName : p.ppt_successors) {
+        			PptTopLevel succPpt = all_ppts.get(succName);
+        			assert succPpt != null;
+        			succPpt.predecessors.add(p);
+        		}
+        	}
+        }
+        
         // Build any combined program points and add them to the global map
         PptCombined.combine_func_ppts (all_ppts, ppts);
         for (PptTopLevel p : ppts) {

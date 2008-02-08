@@ -247,6 +247,14 @@ public class PptTopLevel extends Ppt {
    */
   public List<String>ppt_successors = null;
 
+  /**
+   * List of predecesor program points. Computed from ppt_successors.
+   * This field is only property set and used when creating combined program
+   * points.
+   */
+  public List<PptTopLevel>predecessors = null;
+
+  
   /** Identifier of the function (for basic blocks **/
   public String function_id = null;
 
@@ -4282,7 +4290,7 @@ public class PptTopLevel extends Ppt {
 
   /** Is this a combined exit point? **/
   public boolean is_combined_exit() {
-    if (type != null)
+    if (type != null)	
       return (type == PptType.EXIT);
     else
       return ppt_name.isCombinedExitPoint();

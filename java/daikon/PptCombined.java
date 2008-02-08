@@ -2,9 +2,17 @@ package daikon;
 
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
+import daikon.util.CollectionsExt;
+import daikon.util.UtilMDE;
 import daikon.FileIO.ParentRelation;
 
 import java.util.*;
+
+import asm.AsmFile;
+import asm.IInstruction;
+import asm.InstructionUtils;
+import asm.KillerInstruction;
+import asm.X86Instruction;
 
 /**
  * A program point which consists of a number of program points.  Invariants
@@ -25,6 +33,15 @@ public class PptCombined extends PptTopLevel {
 
   static int maxVarInfoSize = 10000;
 
+  private static AsmFile assemblies = null;
+
+  /**
+   * If non-null, we will compute redundant binary variables
+   * when creating a CombinedProgramPoint, using
+   * the assembly information in the file specified.
+   */
+  public static String dkconfig_asm_path_name = null;
+
   public PptCombined (List<PptTopLevel> ppts) {
 
     super (ppts.get(0).name() + ".." + ppts.get(ppts.size()-1).ppt_name.name(),
@@ -35,6 +52,13 @@ public class PptCombined extends PptTopLevel {
     init();
     System.out.printf ("Combined ppt %s has %d variables%n", name(),
                        var_infos.length);
+
+    // Compute redudant binary variables.
+    if (dkconfig_asm_path_name != null) {
+    	loadAssemblies(dkconfig_asm_path_name);
+    	computeRedundantVariables();
+    }
+
     if (debug) {
       for (VarInfo vi : var_infos) {
         System.out.printf ("  %s [%d/%d]%n", vi.name(), vi.varinfo_index,
@@ -43,7 +67,141 @@ public class PptCombined extends PptTopLevel {
     }
   }
 
-  /** Returns a name basic on its constituent ppts **/
+  // Preconditions: dkconfig_asm_path_name != null
+  private void loadAssemblies(String assembliesFile) {
+    assert dkconfig_asm_path_name != null;
+
+    if (assemblies == null)
+      assemblies = AsmFile.getAsmFile(assembliesFile);
+  }
+
+  // Preconditions: assemblies != null.
+  private void computeRedundantVariables() {
+    assert assemblies != null;
+    System.out.println("Computing redundant variables in combined ppt...");
+
+    // Create a list of instructions representing this ppt's execution flow.
+    List<IInstruction> path = new ArrayList<IInstruction>();
+    for (int i = ppts.size() - 1; i >= 0; i--) {
+      PptTopLevel ppt = ppts.get(i);
+      List<X86Instruction> instructionsForPpt = assemblies.getInstructions(ppt.name());
+      CollectionsExt.prepend(instructionsForPpt, path);
+      if (i > 0) {
+        // Find intermediate basic blocks: blocks that are on some path from
+        // the current ppt and its immediate dominator (the dominator right
+        // above the current basic block).
+        List<PptTopLevel> interBlocks = findIntermediateBlocks(ppt, ppts.get(i - 1));
+
+        if (interBlocks.size() > 0) {
+          // Find the set of instructions over all intermediate blocks.
+          Set<IInstruction> intermediateBlocksInstrs = new LinkedHashSet<IInstruction>();
+          for (PptTopLevel interBlock : interBlocks) {
+            List<X86Instruction> iis = assemblies.getInstructions(interBlock.name());
+            intermediateBlocksInstrs.addAll(iis);
+          }
+
+          // Create a killer instruction representing the set of intermediate
+          // block instructions.
+          path.add(0, new KillerInstruction(intermediateBlocksInstrs));
+        }
+      }
+    }
+
+    // Debugging: print path.
+    if (false) {
+      System.out.println("PATH:");
+      for (IInstruction instr : path)
+        System.out.println(instr);
+    }
+
+    // Sanity check: same variables obtained statically and dynamically.
+    //checkVarsOk();
+
+    // We currently do nothing with the redundant variables information.
+    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
+    printKillers(reds);
+  }
+
+  // Checks that variables in var_infos are the same are the variables
+  // obtained from the asm file for this set of basic blocks.
+  private void checkVarsOk() {
+
+    // Create the set of variables in var_infos.
+    Set<String> varsFromPpts = new LinkedHashSet<String>();
+    for (VarInfo vi : var_infos)
+      varsFromPpts.add(vi.name());
+
+    // Create the set of variables in asm file.
+    Set<String> varsFromAsm = new LinkedHashSet<String>();
+    for (PptTopLevel p : ppts) {
+      boolean firstInst = true;
+      for (IInstruction i : assemblies.getInstructions(p.name())) {
+        if (firstInst) {
+          // The dynamic technique always creates a variable
+          // for esp at the first address in the block.
+          // We add it here for comparison purposes.
+          varsFromAsm.add("bv:" + i.getAddress() + ":" + "esp");
+          firstInst = false;
+        }
+
+        for (String var : i.getLHSVars()) {
+          if (var.startsWith("[")) {
+            // For a variable of the form [x] (dereference),
+            // the dynamic technique always creates variable x.
+            // We add it here for comparison purposes.
+            varsFromAsm.add("bv:" + i.getAddress() + ":" + var.substring(1, var.length() - 1));
+
+          }
+          varsFromAsm.add("bv:" + i.getAddress() + ":" + var);
+        }
+      }
+    }
+
+    Set<String> all = new LinkedHashSet<String>();
+    all.addAll(varsFromPpts);
+    all.addAll(varsFromAsm);
+    List<String> allSorted = new ArrayList<String>(all);
+    Collections.sort(allSorted);
+
+    if (!varsFromPpts.equals(varsFromAsm)) {
+      System.out.println("ERROR: mismatched variables in combined ppt vs. asm file:");
+      System.out.println(UtilMDE.rpad("from var_infos:", 30) + UtilMDE.rpad("from asm file:", 30));
+      for (String s : allSorted) {
+        System.out.print(UtilMDE.rpad(varsFromPpts.contains(s) ? s : "", 30));
+        System.out.print(UtilMDE.rpad(varsFromAsm.contains(s) ? s : "", 30));
+        System.out.println();
+      }
+    }
+    throw new RuntimeException();
+  }
+
+  private void printKillers(Map<String, Set<String>> reds) {
+
+    System.out.println("REDUNDANT VARIABLES (leader followed by redundant variables):");
+    for (Map.Entry<String, Set<String>> e : reds.entrySet()) {
+      System.out.println(e.getKey() + " : " + e.getValue());
+    }
+  }
+
+  public static List<PptTopLevel> findIntermediateBlocks(PptTopLevel dest, PptTopLevel source) {
+
+    Set<PptTopLevel> ghostBBSet = new LinkedHashSet<PptTopLevel>();
+    Queue<PptTopLevel> toProcess = new LinkedList<PptTopLevel>();
+    toProcess.addAll(dest.predecessors);
+    while (!toProcess.isEmpty()) {
+      PptTopLevel p = toProcess.poll();
+      if (p == source)
+        continue;
+      ghostBBSet.add(p);
+      for (PptTopLevel parent: p.predecessors) {
+        if (!ghostBBSet.contains(parent))
+          toProcess.add(parent);
+      }
+    }
+    return new ArrayList<PptTopLevel>(ghostBBSet);
+  }
+
+/** Returns a name basic on its constituent ppts **/
   public String name() {
     String name = ppts.get(0).name();
     name += ".." + ppts.get(ppts.size()-1).ppt_name.name();
@@ -168,7 +326,7 @@ public class PptCombined extends PptTopLevel {
    *    ppt is subsumed by a combined program point, false otherwise.
    *
    * The current implementation is just an example that creates a combined
-   * program point for each program point with exactly one successor
+   * program point for each program point with exactly one successor // IS THIS TRUE? (CARLOS)
    */
   public static void combine_func_ppts (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {

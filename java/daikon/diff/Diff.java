@@ -2,6 +2,7 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
+
 import java.io.*;
 import java.util.*;
 import utilMDE.*;
