@@ -19,6 +19,9 @@ public class InstructionUtils {
    * that is not killed by any instruction executed between the variable
    * addresses.
    * 
+   * The redundant variables are returned as a map. For each entry <leader, reds> in
+   * the map, leader is a non-redundant variable, and val is a set of the variables
+   * that are redundant to the leader. 
    */
   public static Map<String, Set<String>> computeRedundantVars(List<IInstruction> path) {
 
