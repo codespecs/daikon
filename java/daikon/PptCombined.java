@@ -251,7 +251,8 @@ public class PptCombined extends PptTopLevel {
           mods[index] = ValueTuple.MISSING_NONSENSICAL;
         } else {
           vals[index] = ppt.last_values.vals[i];
-          assert (vals[index] != null);
+          // we now have some nonsensical values in our input
+          // assert (vals[index] != null);
           mods[index] = ppt.last_values.mods[i];
         }
         assert (!ppt.var_infos[i].isDerived());
