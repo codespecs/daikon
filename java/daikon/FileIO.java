@@ -1940,7 +1940,7 @@ public final class FileIO {
             vi.canBeMissing = true;
           }
         } catch (Exception e) {
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.TerminationMessage(e,
             "Error while parsing value "
               + value_rep
               + " for variable "
