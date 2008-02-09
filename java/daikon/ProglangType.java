@@ -390,6 +390,8 @@ public final /*@Interned*/ class ProglangType
         // File rep type might be int, boolean, or hashcode.
         // If we had the actual type, we could do error-checking here.
         // (Example:  no hashcode should be negative, nor any boolean > 1.)
+        if (value.equals ("nonsensical"))
+          return (null);
         if (value.equals("false") || value.equals("0"))
           return LongZero;
         if (value.equals("true") || value.equals("1"))
