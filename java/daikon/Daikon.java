@@ -561,10 +561,21 @@ public final class Daikon {
     public TerminationMessage(Exception e) { super(e.getMessage()); }
     //    public TerminationMessage(Exception e) {
     //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
+
+    public TerminationMessage (Throwable e, String msg, LineNumberReader reader,
+                               String filename) {
+      super ("Error at line " + reader.getLineNumber() + " in file "
+             + filename +": " + msg, e);
+    }
     public TerminationMessage (Throwable e, LineNumberReader reader,
                                String filename) {
       super ("Error at line " + reader.getLineNumber() + " in file "
              + filename, e);
+    }
+    public TerminationMessage (LineNumberReader reader, String filename,
+                               String msg) {
+      super ("Error at line " + reader.getLineNumber() + " in file "
+             + filename +": " + msg);
     }
     public TerminationMessage() { super(); }
   }
@@ -769,7 +780,7 @@ public final class Daikon {
         // Sometimes the program points actually differ in number of
         // samples seen due to differences in how Daikon and DaikonSimple
         // see the variable hierarchy.
-        if (true) {
+        if (false) {
           System.out.println(
           "====================================================");
           System.out.println(ppt.name());
@@ -783,7 +794,7 @@ public final class Daikon {
       }
 
       // exit the program
-      if (true)
+      if (false)
         return;
     }
 
