@@ -154,7 +154,7 @@ public final class FileIO {
    * in this case)
    */
   public static boolean dkconfig_merge_basic_blocks = false;
-  
+
   // Logging Categories
 
   /** true prints info about variables marked as missing/nonsensical **/
@@ -1540,6 +1540,7 @@ public final class FileIO {
           p.combined_ppts_init = true;
         }
       } else {
+        // Sanity check the ppts in this function
         List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
         assert ppts != null : ppt.name() + " func id " + ppt.function_id;
         assert ppts.size() > 0 : ppt.name();
@@ -1553,6 +1554,7 @@ public final class FileIO {
               if (sp == null) {
                 System.out.printf ("Warning: successor %s in ppt %s does not "
                                    + "exist, removing\n", successor, p.name());
+                assert false;
                 it.remove();
               } else {
                 assert sp != null : successor;
@@ -1560,6 +1562,7 @@ public final class FileIO {
                   System.out.printf ("Warning: successor %s (func %s) in "
                             + "ppt %s (func %s) is not in same function\n",
                             sp.name(), sp.function_id, p.name(), p.function_id);
+                  assert false;
                   it.remove();
                 } else {
                 assert sp.function_id == p.function_id
@@ -1582,7 +1585,7 @@ public final class FileIO {
             p.combined_ppts_init = true;
           }
         }
-        
+
         // Compute predecessors for each basic block.
         for (PptTopLevel p : ppts) {
         	p.predecessors = new ArrayList<PptTopLevel>();
@@ -1596,7 +1599,7 @@ public final class FileIO {
         		}
         	}
         }
-        
+
         // Build any combined program points and add them to the global map
         PptCombined.combine_func_ppts (all_ppts, ppts);
         for (PptTopLevel p : ppts) {
@@ -1610,6 +1613,7 @@ public final class FileIO {
                              p.combined_subsumed ? "subsumed" : "standalone");
           if (p.combined_ppt != null) {
             p.combined_ppt.dump();
+            p.combined_ppt.check();
           }
         }
       }

@@ -441,12 +441,43 @@ public class PptCombined extends PptTopLevel {
         return result;
     }
 
+  /**
+   * Checks the combined program point for correctness
+   */
+  void check() {
+    PptTopLevel leader = null;
+    PptTopLevel subsume_leader = null;
+    for (PptTopLevel ppt : ppts) {
+      if (ppt.combined_subsumed)
+        assert (ppt.combined_subsumed_by != null) : ppt.name();
+      else
+        assert (ppt.combined_subsumed_by == null) && (ppt.combined_ppt != null)
+          : ppt.name();
+
+      if (ppt.combined_ppt != null) {
+        assert leader != null
+          : String.format ("%s - %s", leader.name(), ppt.name());
+        leader = ppt;
+      } else {
+        if (subsume_leader == null)
+          subsume_leader = ppt.find_combined_ppt_leader();
+        assert subsume_leader == ppt.find_combined_ppt_leader()
+          : String.format ("%s - %s", leader.name(), ppt.name());
+      }
+    }
+  }
+
   /** Dumps out the basic blocks that make up this combined ppt **/
   void dump() {
 
     System.out.printf ("    Combined PPT %s\n", name());
     for (PptTopLevel ppt : ppts) {
-      System.out.printf ("      %s\n ", bb_short_name(ppt));
+      System.out.printf ("      %s: combined_subsumed:%b "
+                         + "combined_subsumed_by:%s combined_ppt: %s\n",
+                         bb_short_name (ppt), ppt.combined_subsumed,
+                         bb_short_name (ppt.combined_subsumed_by),
+                         ((ppt.combined_ppt == null)
+                          ? "null" : ppt.combined_ppt.name()));
     }
   }
 

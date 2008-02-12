@@ -4323,9 +4323,12 @@ public class PptTopLevel extends Ppt {
   public PptTopLevel find_combined_ppt_leader() {
     assert combined_ppts_init : name;
     PptTopLevel ppt = this;
-    System.out.printf ("looking for combined_ppt leader for %s\n", name());
+    // System.out.printf ("looking for combined_ppt leader for %s\n", name());
     while (ppt.combined_ppt == null) {
-      System.out.printf ("  ppt %s", ppt.name());
+      // System.out.printf ("  ppt %s", ppt.name());
+      assert (ppt.combined_subsumed_by != null)
+        : String.format ("ppt %s, combined_subsumed_by null/combined_ppt null",
+                         ppt.name());
       ppt = ppt.combined_subsumed_by;
     }
 
