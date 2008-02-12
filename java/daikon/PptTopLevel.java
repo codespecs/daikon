@@ -254,7 +254,7 @@ public class PptTopLevel extends Ppt {
    */
   public List<PptTopLevel>predecessors = null;
 
-  
+
   /** Identifier of the function (for basic blocks **/
   public String function_id = null;
 
@@ -4290,7 +4290,7 @@ public class PptTopLevel extends Ppt {
 
   /** Is this a combined exit point? **/
   public boolean is_combined_exit() {
-    if (type != null)	
+    if (type != null)
       return (type == PptType.EXIT);
     else
       return ppt_name.isCombinedExitPoint();
@@ -4323,8 +4323,11 @@ public class PptTopLevel extends Ppt {
   public PptTopLevel find_combined_ppt_leader() {
     assert combined_ppts_init : name;
     PptTopLevel ppt = this;
-    while (ppt.combined_ppt == null)
+    System.out.printf ("looking for combined_ppt leader for %s\n", name());
+    while (ppt.combined_ppt == null) {
+      System.out.printf ("  ppt %s", ppt.name());
       ppt = ppt.combined_subsumed_by;
+    }
 
     return ppt;
   }
