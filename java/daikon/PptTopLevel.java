@@ -422,7 +422,7 @@ public class PptTopLevel extends Ppt {
       ppt_name.isClassStaticSynthetic()) // display "MyClassName : CLASS"
       return ppt_name.getFullClassName() + " : " + FileIO.class_static_suffix;
     else // only display "EXIT184"
-      return ppt_name.getPoint();
+      return  name; //TODO line Changed By Danny Dig, to be restored to: ppt_name.getPoint();
   }
 
   /** Trim the collections used here, in hopes of saving space. **/
