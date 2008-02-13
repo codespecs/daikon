@@ -372,7 +372,7 @@ public class PptCombined extends PptTopLevel {
                     ppt.combined_ppt = null;
                     continue;
                 }
-                
+
                 // associate a PptCombined to this ppt.
                 // If the var_infos for all combined blocks is
                 // smaller than the threshold, associate one single PptCombined,
@@ -385,7 +385,7 @@ public class PptCombined extends PptTopLevel {
                     if (splitPpt.combined_ppt == null)
                         splitPpt.combined_ppt = new PptCombined(partition);
                 }
-                
+
             } else {
                 // ppt is subsummed by other PPTs
 
@@ -398,8 +398,8 @@ public class PptCombined extends PptTopLevel {
                 }
             }
         }
-        
-        // last pass to set the PPT_Combined value even 
+
+        // last pass to set the PPT_Combined value even
         // for subsumed ppts
         for (PptTopLevel ppt : func_ppts) {
             if (ppt.combined_ppt == null) {
@@ -412,7 +412,7 @@ public class PptCombined extends PptTopLevel {
                 ppt.combined_ppt = subsumedByPpt.combined_ppt;
             }
         }
-        
+
     }
 
   static List<List<PptTopLevel>> splitCombinedPpts(List<PptTopLevel> list) {
@@ -461,10 +461,20 @@ public class PptCombined extends PptTopLevel {
       return false;
     }
 
+    // Make sure that every ppt has a combined_ppt
+    for (PptTopLevel ppt : ppts) {
+      if (ppt.combined_ppt == null) {
+        System.out.printf ("ERROR: ppt %s has no combined ppt", ppt);
+        return false;
+      }
+    }
+
     // Make sure that each block is dominated by the previous one
     for (int i = ppts.size()-1; i > 0; i--) {
       PptTopLevel ppt = ppts.get (i);
       PptTopLevel prev = ppts.get(i-1);
+      // System.out.printf ("Checking %s dominated by %s\n", bb_short_name(ppt),
+      //                   bb_short_name (prev));
       if (!ppt.all_predecessors_goto (prev)) {
         System.out.printf ("ERROR: ppt %s not dominated by ppt %s", ppt.name(),
                            prev.name());
@@ -474,29 +484,6 @@ public class PptCombined extends PptTopLevel {
 
     return true;
 
-    /* Bad version
-    PptTopLevel leader = null;
-    PptTopLevel subsume_leader = null;
-    for (PptTopLevel ppt : ppts) {
-      if (ppt.combined_subsumed)
-        assert (ppt.combined_subsumed_by != null) : ppt.name();
-      else
-        assert (ppt.combined_subsumed_by == null) && (ppt.combined_ppt != null)
-          : ppt.name();
-
-      if (ppt.combined_ppt != null) {
-        assert leader != null
-          : String.format ("%s - %s", leader.name(), ppt.name());
-        leader = ppt;
-      } else {
-        if (subsume_leader == null)
-          subsume_leader = ppt.find_combined_ppt_leader();
-        assert subsume_leader == ppt.find_combined_ppt_leader()
-          : String.format ("%s - %s", subsume_leader.name(),
-                           ppt.find_combined_ppt_leader().name());
-      }
-    }
-    */
   }
 
   /** Dumps out the basic blocks that make up this combined ppt **/
@@ -529,15 +516,23 @@ public class PptCombined extends PptTopLevel {
         }
       }
       System.out.printf ("      %s: [%s] {%s} combined_subsumed:%b "
-                         + "combined_subsumed_by:%s combined_ppt: %s\n",
+                         + "combined_ppt: %s\n",
                          bb_short_name (ppt), succs, preds,
                          ppt.combined_subsumed,
-                         bb_short_name (ppt.combined_subsumed_by),
                          ((ppt.combined_ppt == null)
-                          ? "null" : ppt.combined_ppt.name()));
+                          ? "null" : ppt.combined_ppt.short_component_str()));
     }
   }
 
+
+  /** Returns a list of the component ppts that make up this combined ppt **/
+  public String short_component_str() {
+    StringBuilder sb = new StringBuilder();
+    for (PptTopLevel ppt : ppts) {
+      sb.append (String.format ("%s-", bb_short_name (ppt)));
+    }
+    return sb.deleteCharAt (sb.length()-1).toString();
+  }
 
   public static String bb_short_name (PptTopLevel ppt) {
     if (ppt == null)
