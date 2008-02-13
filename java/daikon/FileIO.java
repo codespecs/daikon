@@ -1612,7 +1612,7 @@ public final class FileIO {
             : p.combined_ppt.name();
           all_ppts.add (p.combined_ppt);
           p.combined_ppt.dump();
-          assert p.combined_ppt.check();
+          p.combined_ppt.check();
         }
       }
     }
