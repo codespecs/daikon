@@ -1602,19 +1602,17 @@ public final class FileIO {
 
         // Build any combined program points and add them to the global map
         PptCombined.combine_func_ppts (all_ppts, ppts);
+        System.out.printf ("Basic blocks in function %s:\n",
+                           ppts.get(0).name());
+        PptCombined.dump (ppts);
         for (PptTopLevel p : ppts) {
-          if (p.combined_ppt == null)
+          if (p.combined_subsumed)
             continue;
+          assert all_ppts.get (p.combined_ppt.name()) == null
+            : p.combined_ppt.name();
           all_ppts.add (p.combined_ppt);
-        }
-        System.out.printf ("Combined ppts:\n");
-        for (PptTopLevel p : ppts) {
-          System.out.printf ("  %s [%s]\n", p.name(),
-                             p.combined_subsumed ? "subsumed" : "standalone");
-          if (p.combined_ppt != null) {
-            p.combined_ppt.dump();
-            p.combined_ppt.check();
-          }
+          p.combined_ppt.dump();
+          assert p.combined_ppt.check();
         }
       }
     }
@@ -1627,10 +1625,8 @@ public final class FileIO {
 
     // Add the sample to the ppt.  Ppts that are part of a combined ppt
     // are handled as part of the combined ppt.
-    if (ppt.combined_ppt != null) {
+    if (!ppt.combined_subsumed) {
       ppt.combined_ppt.add_combined();
-    } else if (!ppt.combined_subsumed) {
-      ppt.add_bottom_up (vt, 1);
     }
 
     if (debugVars.isLoggable (Level.FINE))
