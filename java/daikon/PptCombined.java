@@ -444,7 +444,27 @@ public class PptCombined extends PptTopLevel {
   /**
    * Checks the combined program point for correctness
    */
-  void check() {
+  public boolean check() {
+
+    if (ppts.size() <= 0) {
+      System.out.printf ("ERROR: Size of %s ppts is %d\n", name(), ppts.size());
+      return false;
+    }
+
+    // Make sure that each block is dominated by the previous one
+    for (int i = ppts.size()-1; i > 0; i--) {
+      PptTopLevel ppt = ppts.get (i);
+      PptTopLevel prev = ppts.get(i-1);
+      if (!ppt.all_predecessors_goto (prev)) {
+        System.out.printf ("ERROR: ppt %s not dominated by ppt %s", ppt.name(),
+                           prev.name());
+        return false;
+      }
+    }
+
+    return true;
+
+    /* Bad version
     PptTopLevel leader = null;
     PptTopLevel subsume_leader = null;
     for (PptTopLevel ppt : ppts) {
@@ -462,24 +482,52 @@ public class PptCombined extends PptTopLevel {
         if (subsume_leader == null)
           subsume_leader = ppt.find_combined_ppt_leader();
         assert subsume_leader == ppt.find_combined_ppt_leader()
-          : String.format ("%s - %s", leader.name(), ppt.name());
+          : String.format ("%s - %s", subsume_leader.name(),
+                           ppt.find_combined_ppt_leader().name());
       }
     }
+    */
   }
 
   /** Dumps out the basic blocks that make up this combined ppt **/
   void dump() {
-
     System.out.printf ("    Combined PPT %s\n", name());
+    dump (ppts);
+  }
+
+  /** Dumps out the basic blocks in the list  **/
+  public static void dump(List<PptTopLevel> ppts) {
+
     for (PptTopLevel ppt : ppts) {
-      System.out.printf ("      %s: combined_subsumed:%b "
+      String succs = "";
+      if (ppt.ppt_successors != null) {
+        for (String succ : ppt.ppt_successors) {
+          PptTopLevel ppt_succ = Daikon.all_ppts.get (succ);
+          if (succs == "")
+            succs = bb_short_name (ppt_succ);
+          else
+            succs += " " + bb_short_name (ppt_succ);
+        }
+      }
+      String preds = "";
+      if (ppt.predecessors != null) {
+        for (PptTopLevel pred : ppt.predecessors) {
+          if (preds == "")
+            preds = bb_short_name (pred);
+          else
+            preds += " " + bb_short_name (pred);
+        }
+      }
+      System.out.printf ("      %s: [%s] {%s} combined_subsumed:%b "
                          + "combined_subsumed_by:%s combined_ppt: %s\n",
-                         bb_short_name (ppt), ppt.combined_subsumed,
+                         bb_short_name (ppt), succs, preds,
+                         ppt.combined_subsumed,
                          bb_short_name (ppt.combined_subsumed_by),
                          ((ppt.combined_ppt == null)
                           ? "null" : ppt.combined_ppt.name()));
     }
   }
+
 
   public static String bb_short_name (PptTopLevel ppt) {
     if (ppt == null)
