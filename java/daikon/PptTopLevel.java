@@ -4416,6 +4416,9 @@ public class PptTopLevel extends Ppt {
     assert false : String.format ("all paths into %s are loops", name());
     return false;
   }
+
+  private static Set<String> pred_map = new LinkedHashSet<String>();
+
   /**
    * Returns true if all predecessor basic blocks eventually end up at
    * the specified progrm point.  All paths must go to ppt for this
@@ -4424,8 +4427,16 @@ public class PptTopLevel extends Ppt {
    */
   public int all_predecessors_goto (PptTopLevel ppt,
                                       Set<PptTopLevel> visited_set) {
-    System.out.printf ("pred_goto: %04X - %04X\n", bb_offset(),
-                       ppt.bb_offset());
+    if (false) {
+      for (int i = 0; i < visited_set.size(); i++)
+        System.out.printf (" ");
+      System.out.printf ("pred_goto: %04X - %04X [%d]\n", bb_offset() & 0xFFFF,
+                         ppt.bb_offset() & 0xFFFF, pred_map.size());
+    }
+
+    if (pred_map.contains (name() + "-" + ppt.name()))
+      return 1;
+
     if (this == ppt)
       return 1;
 
@@ -4450,11 +4461,13 @@ public class PptTopLevel extends Ppt {
       if (pred_result == 0) {
         return 0;
       }
+      if ((pred_result & 1) == 1)
+        pred_map.add (name() + "-" + ppt.name());
       result |= pred_result;
     }
 
-    System.out.printf ("result from %04X - %04X = %d\n", bb_offset(),
-                       ppt.bb_offset(), result);
+    // System.out.printf ("result from %04X - %04X = %d\n", bb_offset(),
+    //                   ppt.bb_offset(), result);
     return result;
   }
 
