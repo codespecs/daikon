@@ -270,7 +270,11 @@ public class PptTopLevel extends Ppt {
   /** Combined ppt that should be processed when this ppt is encountered */
   public PptCombined combined_ppt = null;
 
-  /** True if this ppt is subsumed by some combined ppt **/
+  /**
+   * True if this ppt is subsumed by combined_ppt.  A different ppt is the
+   * trigger to the combined_ppt (ie, the ppt whose data is used to
+   * initiate the processing of a sample for the combined ppt
+   */
   public boolean  combined_subsumed = false;
 
   /** The ppt whose combined ppt includes this one **/
@@ -4334,5 +4338,125 @@ public class PptTopLevel extends Ppt {
 
     return ppt;
   }
+
+  /**
+   * Returns true if all successor basic blocks eventually end up at
+   * the specified progrm point.  All paths must go to ppt for this
+   * to return true
+   */
+  public boolean all_successors_goto (PptTopLevel ppt) {
+    assert is_basic_block();
+    assert ppt.is_basic_block();
+    Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
+    visited_set.add (this);
+    int result = all_successors_goto (ppt, visited_set);
+
+    // If at least one path finds ppt (and the others are loops)
+    // all non loop paths found ppt (note that paths that terminated
+    // before finding ppt are aborted above.
+    if ((result & 1) == 1)
+      return true;
+
+    // All of the paths are loops, very strange
+    assert false : String.format ("all paths from %s are loops", name());
+    return false;
+  }
+  /**
+   * Returns true if all successor basic blocks eventually end up at
+   * the specified progrm point.  All paths must go to ppt for this
+   * to return true.  The visited_set should contain each program
+   * point visited along this path so far.  A loop returns true as
+   * well.
+   */
+  public int all_successors_goto (PptTopLevel ppt,
+                                      Set<PptTopLevel> visited_set) {
+    if (this == ppt)
+      return 1;
+
+    if (visited_set.contains (ppt))
+      return 2;
+
+    if ((ppt.ppt_successors == null) || (ppt.ppt_successors.size() == 0))
+      return 0;
+
+    int result = 0;
+    for (String successor : ppt.ppt_successors) {
+      PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
+      Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
+      path_set.add (this);
+      if (result == 0)
+        return 0;
+      result |= ppt_succ.all_successors_goto (ppt, path_set);
+    }
+
+    return result;
+  }
+
+  /**
+   * Returns true if all prececessor basic blocks eventually end up at
+   * the specified program point.  All paths must go to ppt for this
+   * to return true
+   */
+  public boolean all_predecessors_goto (PptTopLevel ppt) {
+    assert is_basic_block();
+    assert ppt.is_basic_block();
+    Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
+    int result = all_predecessors_goto (ppt, visited_set);
+
+    if (result == 0)
+      return false;
+
+    // If at least one path finds ppt (and the others are loops)
+    // all non loop paths found ppt (note that paths that terminated
+    // before finding ppt are aborted above.
+    if ((result & 1) == 1)
+      return true;
+
+    // All of the paths are loops, very strange
+    assert false : String.format ("all paths into %s are loops", name());
+    return false;
+  }
+  /**
+   * Returns true if all predecessor basic blocks eventually end up at
+   * the specified progrm point.  All paths must go to ppt for this
+   * to return true.  The visited_set should contain each program
+   * point visited along this path so far.
+   */
+  public int all_predecessors_goto (PptTopLevel ppt,
+                                      Set<PptTopLevel> visited_set) {
+    System.out.printf ("pred_goto: %04X - %04X\n", bb_offset(),
+                       ppt.bb_offset());
+    if (this == ppt)
+      return 1;
+
+    if (visited_set.contains (this))
+      return 2;
+
+    if ((predecessors == null) || (predecessors.size() == 0)) {
+      String bad_path = "";
+      for (PptTopLevel p : visited_set)
+        bad_path += String.format ("%04X ", p.bb_offset() & 0xFFFF);
+      System.out.printf ("path misses %04X: %s%04X\n",
+                         ppt.bb_offset() & 0xFFFF, bad_path,
+                         bb_offset() & 0xFFFF);
+      return 0;
+    }
+
+    int result = 0;
+    for (PptTopLevel ppt_pred : predecessors) {
+      Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
+      path_set.add (this);
+      int pred_result = ppt_pred.all_predecessors_goto (ppt, path_set);
+      if (pred_result == 0) {
+        return 0;
+      }
+      result |= pred_result;
+    }
+
+    System.out.printf ("result from %04X - %04X = %d\n", bb_offset(),
+                       ppt.bb_offset(), result);
+    return result;
+  }
+
 
 }
