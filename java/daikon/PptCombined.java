@@ -326,8 +326,6 @@ public class PptCombined extends PptTopLevel {
    *    <li> Its combined_subsumed boolean field is set to true if this
    *    ppt is subsumed by a combined program point, false otherwise.
    *
-   * The current implementation is just an example that creates a combined
-   * program point for each program point with exactly one successor // IS THIS TRUE? (CARLOS)
    */
   public static void combine_func_ppts (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {
@@ -374,24 +372,20 @@ public class PptCombined extends PptTopLevel {
                     ppt.combined_ppt = null;
                     continue;
                 }
-                if (ppt.equals(combined_ppts.get(0)))
-                    // case when the combinedPPTs has only one single PPT,
-                    // namely the current PPT (this can happen in a function
-                    // with one single block)
-                    ppt.combined_ppt = null;
-                else {// associate a PptCombined to this ppt.
-                    // If the var_infos for all combined blocks is
-                    // smaller than the threshold, associate one single PptCombined,
-                    // otherwise split this PptCombined into smaller chunks
-                    List<List<PptTopLevel>> partitions = splitCombinedPpts(combined_ppts);
-                    for (List<PptTopLevel> partition : partitions) {
-                        PptTopLevel splitPpt = partition.get(partition.size() - 1);
+                
+                // associate a PptCombined to this ppt.
+                // If the var_infos for all combined blocks is
+                // smaller than the threshold, associate one single PptCombined,
+                // otherwise split this PptCombined into smaller chunks
+                List<List<PptTopLevel>> partitions = splitCombinedPpts(combined_ppts);
+                for (List<PptTopLevel> partition : partitions) {
+                    PptTopLevel splitPpt = partition.get(partition.size() - 1);
 
-                        //do not override a previously written PptCombined
-                        if (splitPpt.combined_ppt == null)
-                            splitPpt.combined_ppt = new PptCombined(partition);
-                    }
+                    // do not override a previously written PptCombined
+                    if (splitPpt.combined_ppt == null)
+                        splitPpt.combined_ppt = new PptCombined(partition);
                 }
+                
             } else {
                 // ppt is subsummed by other PPTs
 
@@ -404,6 +398,21 @@ public class PptCombined extends PptTopLevel {
                 }
             }
         }
+        
+        // last pass to set the PPT_Combined value even 
+        // for subsumed ppts
+        for (PptTopLevel ppt : func_ppts) {
+            if (ppt.combined_ppt == null) {
+                boolean subsumed = ppt.combined_subsumed;
+                PptTopLevel subsumedByPpt = ppt;
+                while (subsumed) {
+                    subsumedByPpt = subsumedByPpt.combined_subsumed_by;
+                    subsumed = subsumedByPpt.combined_subsumed;
+                }
+                ppt.combined_ppt = subsumedByPpt.combined_ppt;
+            }
+        }
+        
     }
 
   static List<List<PptTopLevel>> splitCombinedPpts(List<PptTopLevel> list) {
@@ -440,6 +449,7 @@ public class PptCombined extends PptTopLevel {
         result.add(partition);
         return result;
     }
+
 
   /**
    * Checks the combined program point for correctness
