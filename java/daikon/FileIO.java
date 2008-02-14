@@ -1608,6 +1608,10 @@ public final class FileIO {
         for (PptTopLevel p : ppts) {
           if (p.combined_subsumed)
             continue;
+          if (p.combined_ppt == null) {
+            System.out.printf ("ERROR: no combined ppt for %s\n", p);
+            continue;
+          }
           assert all_ppts.get (p.combined_ppt.name()) == null
             : p.combined_ppt.name();
           all_ppts.add (p.combined_ppt);
@@ -1617,17 +1621,23 @@ public final class FileIO {
       }
     }
 
-    // If this is a basic block, remember its values
-    if (dkconfig_merge_basic_blocks && ppt.is_basic_block()) {
-      // System.out.printf ("Stored VT for %s%n", ppt.name());
-      ppt.last_values = vt;
+    // merging basic blocks
+    if (dkconfig_merge_basic_blocks) {
+
+      // If this is a basic block, remember its values
+      if (ppt.is_basic_block()) {
+        ppt.last_values = vt;
+      }
+
+      // Add the sample to the ppt.  Ppts that are part of a combined ppt
+      // are handled as part of the combined ppt.
+      if (!ppt.combined_subsumed && (ppt.combined_ppt != null)) {
+        ppt.combined_ppt.add_combined();
+      }
+    } else {
+      ppt.add_bottom_up (vt, 1);
     }
 
-    // Add the sample to the ppt.  Ppts that are part of a combined ppt
-    // are handled as part of the combined ppt.
-    if (!ppt.combined_subsumed) {
-      ppt.combined_ppt.add_combined();
-    }
 
     if (debugVars.isLoggable (Level.FINE))
       debugVars.fine (ppt.name() + " vars: " + Debug.int_vars (ppt, vt));
