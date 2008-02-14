@@ -4417,7 +4417,7 @@ public class PptTopLevel extends Ppt {
     return false;
   }
 
-  private static Set<String> pred_map = new LinkedHashSet<String>();
+  static Set<String> pred_map = new LinkedHashSet<String>();
 
   /**
    * Returns true if all predecessor basic blocks eventually end up at
@@ -4461,13 +4461,13 @@ public class PptTopLevel extends Ppt {
       if (pred_result == 0) {
         return 0;
       }
-      if ((pred_result & 1) == 1)
-        pred_map.add (name() + "-" + ppt.name());
       result |= pred_result;
     }
 
     // System.out.printf ("result from %04X - %04X = %d\n", bb_offset(),
     //                   ppt.bb_offset(), result);
+    if ((result & 1) == 1)
+      pred_map.add (name() + "-" + ppt.name());
     return result;
   }
 

@@ -731,6 +731,7 @@ public final class Daikon {
 
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
+      PptTopLevel.pred_map = null;
       try {
         FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
