@@ -491,6 +491,14 @@ public class PptCombined extends PptTopLevel {
    *      P.combined_ppt != null
    *      P.combined_subsumed==true implies
    *        P.combined_ppt.trigger post-dominates P
+   *      P.combine_subsumed==false implies
+   *        P.combined_ppt.trigger == P
+   *
+   *  Note that trigger is not an actual field of PptCombined (though it
+   *  could be).  But it should always be the last ppt in the list of
+   *  ppts in the combined ppt:
+   *
+   *    trigger = PptCombined.ppts.get(PptCombined.ppts.size()-1)
    */
   public static void combine_func_ppts (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {
