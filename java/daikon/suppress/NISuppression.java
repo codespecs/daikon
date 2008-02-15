@@ -253,7 +253,7 @@ public class NISuppression {
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
    */
   private void find_suppressed_invs (Set<NIS.SupInv> unsuppressed_invs,
-                                     List<Invariant>antecedents[],
+                                     List<Invariant> antecedents[],
                                      VarInfo vis[], int idx) {
 
     // Loop through each antecedent that matches the current suppressor
@@ -316,7 +316,7 @@ public class NISuppression {
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
    */
   private void find_unsuppressed_invs (Set<NIS.SupInv> unsuppressed_invs,
-                                       List<Invariant>antecedents[],
+                                       List<Invariant> antecedents[],
                                        VarInfo vis[], int idx,
                                        boolean false_antecedents) {
 
@@ -583,7 +583,7 @@ public class NISuppression {
   /**
    * Returns a string describing each of the antecedents for each suppressor
    */
-  public String antecedents_for_suppression (List<Invariant>antecedents[]) {
+  public String antecedents_for_suppression (List<Invariant> antecedents[]) {
 
     String sep = Global.lineSep;
 

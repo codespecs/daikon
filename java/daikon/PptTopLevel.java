@@ -245,14 +245,14 @@ public class PptTopLevel extends Ppt {
    * List of successor program point names.  Later changed into a list
    * of successor PptTopLevel
    */
-  public List<String>ppt_successors = null;
+  public List<String> ppt_successors = null;
 
   /**
    * List of predecesor program points. Computed from ppt_successors.
    * This field is only property set and used when creating combined program
    * points.
    */
-  public List<PptTopLevel>predecessors = null;
+  public List<PptTopLevel> predecessors = null;
 
 
   /** Identifier of the function (for basic blocks **/

@@ -445,24 +445,27 @@ public class PptCombined extends PptTopLevel {
   }
 
   /**
-   * Creates combined program points that cover multiple basic
-   * blocks.  Each basic block ppt is combined with any basic blocks
-   * that dominate it (always occur before it).
+   * Creates combined program points that cover multiple basic blocks.
+   * Given a list of basic block ppts, each one is made into a combined
+   * program point along with any basic blocks that dominate it (always
+   * occur before it).
    *
    * The input is a list of the basic block ppts that make up the
-   * function.  Each bb ppt contains a list of the names of all of the
-   * basic blocks that directly succeed it.  That list is used to
-   * calculate the dominators.
+   * function.  The first element in the list is the function entry.
+   * In each bb ppt, field ppt_successors contains a list of the names
+   * of all of the basic blocks that directly succeed it.  That list
+   * is used to calculate the dominators.
    *
    * Each program point in the function is modified as follows: <ul>
-   *   <li> Its combined_ppts_init flag is set to true
-   *   <li> Its combined_ppt field is set to point to the combined
-   *    program point that should be processed when this bb ppt is
-   *    executed.   This field may be null if this bb ppt is completely
-   *    subsumed by other combined ppts
-   *    <li> Its combined_subsumed boolean field is set to true if this
-   *    ppt is subsumed by a combined program point, false otherwise.
-   *
+   *   <li> Its combined_ppts_init flag is set to true.
+   *   <li> Its combined_subsumed boolean field is set to true if this
+   *    ppt has a postdominator (in which case it is subsumed by that
+   *    ppt's combined program point).
+   *   <li> Its combined_ppt field is set to point to the (newly created)
+   *    combined program point that should be processed when this bb ppt is
+   *    executed.  Invariants:
+   *      combined_ppt==null iff combined_subsumed==true .
+   *      combined_ppt.combined_subsumed==false
    */
   public static void combine_func_ppts (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {
@@ -678,7 +681,7 @@ public class PptCombined extends PptTopLevel {
       if (ppt.ppt_successors != null) {
         for (String succ : ppt.ppt_successors) {
           PptTopLevel ppt_succ = Daikon.all_ppts.get (succ);
-          if (succs == "")
+          if (succs == "")      // "interned"
             succs = bb_short_name (ppt_succ);
           else
             succs += " " + bb_short_name (ppt_succ);
@@ -687,7 +690,7 @@ public class PptCombined extends PptTopLevel {
       String preds = "";
       if (ppt.predecessors != null) {
         for (PptTopLevel pred : ppt.predecessors) {
-          if (preds == "")
+          if (preds == "")      // "interned"
             preds = bb_short_name (pred);
           else
             preds += " " + bb_short_name (pred);
@@ -746,7 +749,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   // Checks that if two variables are said to be redundant by Carlos's
-  // analysis, they are deemed equal by daiokn's dynamic analysis.
+  // analysis, they are deemed equal by Daikon's dynamic analysis.
   public static void redundantVarsTest(PptMap all_ppts) {
 
     for (PptTopLevel ppt : all_ppts.all_ppts()) {
