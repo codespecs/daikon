@@ -174,6 +174,30 @@ public class InstructionUtilsTest extends TestCase {
     assertRedundants(reds, "bv:0x04:esi", "bv:0x05:esi");
   }
 
+    // A kill of any memor location makes any deref var non-redundant.
+  public static void testComputeRedundantVars7() {
+    List<IInstruction> path = new ArrayList<IInstruction>();
+    addX86Instruction(path, "x.dll:0x01 pop eax [4+ebx] -> ecx");
+    addX86Instruction(path, "x.dll:0x02 pop esi edi -> [0+ecx]");
+    addX86Instruction(path, "x.dll:0x03 push [4+ebx] ebx ->  ebx");
+
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
+    assertEquals(reds.toString(), 0, reds.size());
+  }
+
+  public static void testComputeRedundantVars8() {
+    List<IInstruction> path = new ArrayList<IInstruction>();
+    addX86Instruction(path, "x.dll:0x01 pop eax [4+ebx] -> ecx");
+    addX86Instruction(path, "x.dll:0x02 pop esi edi -> ebx");
+    addX86Instruction(path, "x.dll:0x03 push [4+ebx] ebx ->  ebx");
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
+    assertEquals(reds.toString(), 0, reds.size());
+  }
+
   private static void addX86Instruction(List<IInstruction> path, String string) {
     X86Instruction i = X86Instruction.parseInstruction(string);
     path.add(i);
