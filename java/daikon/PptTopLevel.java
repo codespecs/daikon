@@ -4347,9 +4347,14 @@ public class PptTopLevel extends Ppt {
   public boolean all_successors_goto (PptTopLevel ppt) {
     assert is_basic_block();
     assert ppt.is_basic_block();
+
+    System.out.printf ("Checking that ppt %s -> ppt %s\n", this, ppt);
+
     Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
-    visited_set.add (this);
     int result = all_successors_goto (ppt, visited_set);
+
+    if (result == 0)
+      return false;
 
     // If at least one path finds ppt (and the others are loops)
     // all non loop paths found ppt (note that paths that terminated
@@ -4358,39 +4363,66 @@ public class PptTopLevel extends Ppt {
       return true;
 
     // All of the paths are loops, very strange
-    assert false : String.format ("all paths from %s are loops", name());
+    assert false : String.format ("all paths from %s to %s are loops", name(),
+                                  ppt.name());
     return false;
   }
+
+  static Set<String> succ_map = new LinkedHashSet<String>();
+
   /**
    * Returns true if all successor basic blocks eventually end up at
    * the specified progrm point.  All paths must go to ppt for this
    * to return true.  The visited_set should contain each program
-   * point visited along this path so far.  A loop returns true as
-   * well.
+   * point visited along this path so far.
    */
   public int all_successors_goto (PptTopLevel ppt,
-                                      Set<PptTopLevel> visited_set) {
+                                  Set<PptTopLevel> visited_set) {
+    if (false) {
+      for (int i = 0; i < visited_set.size(); i++)
+        System.out.printf (" ");
+      System.out.printf ("succ_goto: %04X - %04X [%d]\n", bb_offset() & 0xFFFF,
+                         ppt.bb_offset() & 0xFFFF, succ_map.size());
+    }
+
+    if (succ_map.contains (name() + "-" + ppt.name()))
+      return 1;
+
     if (this == ppt)
       return 1;
 
-    if (visited_set.contains (ppt))
+    if (visited_set.contains (this))
       return 2;
 
-    if ((ppt.ppt_successors == null) || (ppt.ppt_successors.size() == 0))
+    if ((ppt_successors == null) || (ppt_successors.size() == 0)) {
+      String bad_path = "";
+      for (PptTopLevel p : visited_set)
+        bad_path += String.format ("%04X ", p.bb_offset() & 0xFFFF);
+      System.out.printf ("succ path misses %04X: %s%04X\n",
+                         ppt.bb_offset() & 0xFFFF, bad_path,
+                         bb_offset() & 0xFFFF);
       return 0;
+    }
 
     int result = 0;
-    for (String successor : ppt.ppt_successors) {
+    for (String successor : ppt_successors) {
       PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
-      if (result == 0)
+      int succ_result = ppt_succ.all_successors_goto (ppt, path_set);
+      if (succ_result == 0) {
         return 0;
-      result |= ppt_succ.all_successors_goto (ppt, path_set);
+      }
+      result |= succ_result;
     }
 
+    // System.out.printf ("result from %04X - %04X = %d\n", bb_offset(),
+    //                   ppt.bb_offset(), result);
+    if ((result & 1) == 1)
+      succ_map.add (name() + "-" + ppt.name());
     return result;
   }
+
 
   /**
    * Returns true if all prececessor basic blocks eventually end up at
@@ -4400,6 +4432,10 @@ public class PptTopLevel extends Ppt {
   public boolean all_predecessors_goto (PptTopLevel ppt) {
     assert is_basic_block();
     assert ppt.is_basic_block();
+
+    System.out.printf ("Checking that ppt %s <- ppt %s\n", ppt, this);
+
+
     Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
     int result = all_predecessors_goto (ppt, visited_set);
 
