@@ -59,14 +59,16 @@ public class StackOffsets {
             return;
           }
           OffsetInfo past_offset = offset_map.get(vi);
-          Integer cur_offset = int_val(vi, vt) - entry_esp.peek();
+          Integer cur_offset = int_val(vi, vt);
           if (cur_offset == null) {
             System.out.printf ("unexpected nonsense val for ppt %s (func %s) "
                                + "(line %d)\n", ppt.name(), ppt.function_id,
                                FileIO.data_trace_state.reader.getLineNumber());
           } else if (past_offset == null) {
+            cur_offset -= entry_esp.peek();
             offset_map.put (vi, new OffsetInfo (cur_offset));
           } else {
+            cur_offset -= entry_esp.peek();
             if (cur_offset != past_offset.offset) {
               System.out.printf ("Mismatch at %s: %d - %d [%d]\n", vi.name(),
                              cur_offset, past_offset.offset, past_offset.cnt);
