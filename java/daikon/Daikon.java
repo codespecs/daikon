@@ -731,6 +731,8 @@ public final class Daikon {
       ppt.last_values = null;
     }
 
+    PptCombined.redundantVarsTest(all_ppts);
+
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
       PptTopLevel.pred_map = null;
@@ -746,9 +748,8 @@ public final class Daikon {
             + e.toString());
       }
     }
-    
-    PptCombined.redundantVarsTest(all_ppts);
-    
+
+
 //     if ((Daikon.dkconfig_guardNulls == "always") // interned
 //         || (Daikon.dkconfig_guardNulls == "missing")) { // interned
 //       // This side-effects the PptMap, but it has already been saved
