@@ -4435,7 +4435,6 @@ public class PptTopLevel extends Ppt {
 
     System.out.printf ("Checking that ppt %s <- ppt %s\n", ppt, this);
 
-
     Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
     int result = all_predecessors_goto (ppt, visited_set);
 
