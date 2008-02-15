@@ -447,25 +447,50 @@ public class PptCombined extends PptTopLevel {
   /**
    * Creates combined program points that cover multiple basic blocks.
    * Given a list of basic block ppts, each one is made into a combined
-   * program point along with any basic blocks that dominate it (always
-   * occur before it).
+   * program point along with any basic blocks that pre-dominate it (always
+   * execute previously to it).
    *
    * The input is a list of the basic block ppts that make up the
    * function.  The first element in the list is the function entry.
-   * In each bb ppt, field ppt_successors contains a list of the names
+   * In each bb ppt, the field ppt_successors contains a list of the names
    * of all of the basic blocks that directly succeed it.  That list
    * is used to calculate the dominators.
    *
-   * Each program point in the function is modified as follows: <ul>
-   *   <li> Its combined_ppts_init flag is set to true.
-   *   <li> Its combined_subsumed boolean field is set to true if this
-   *    ppt has a postdominator (in which case it is subsumed by that
-   *    ppt's combined program point).
-   *   <li> Its combined_ppt field is set to point to the (newly created)
-   *    combined program point that should be processed when this bb ppt is
-   *    executed.  Invariants:
-   *      combined_ppt==null iff combined_subsumed==true .
-   *      combined_ppt.combined_subsumed==false
+   * The resulting combined ppt has samples added to it when its
+   * 'trigger' ppt is executed.  The trigger is always the last ppt in
+   * the combined program point.  The trigger is thus dominated by all
+   * of the other basic blocks in the combined ppt.  That guarantees
+   * that samples for those basic blocks were received before the
+   * trigger.  Those samples are just saved away when they are
+   * received.  When the trigger ppt is executed, its samples are
+   * combined with the samples from the other (previously executed)
+   * basic blocks and the combined sample is processed by the combined
+   * program point.
+   *
+   * It is not necessary to create a unique combined program point for
+   * each basic block.  Consider two basic blocks (A and B).  If A is
+   * a pre-dominator of B, A will be included in B's combined program
+   * point.  If A is post-dominated by B, it can share B's combined
+   * program point (because the combined program point for B will have
+   * seen all of the samples for A).  We say that A is 'subsumed by'
+   * B.
+   *
+   * Each program point (referred to as P) in the function is
+   * modified as follows: <ul>
+   *   <li> P's combined_ppts_init flag is set to true.
+   *   <li> P's combined_ppt field is set to point to the (newly created)
+   *    combined ppt that will contain its invariants.  This
+   *    combined ppt must see all of the samples for P.  That implies that
+   *    the trigger for the combined ppt must post-dominate P.  This is
+   *    obviously true when P is the trigger.
+   *   <li> If P is not the trigger, its combined_subsumed boolean field is
+   *    set to true
+   *    executed.
+   * </ul>
+   * Invariants:
+   *      P.combined_ppt != null
+   *      P.combined_subsumed==true implies
+   *        P.combined_ppt.trigger post-dominates P
    */
   public static void combine_func_ppts (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {
