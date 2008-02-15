@@ -1,9 +1,6 @@
 package daikon.asm;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents an x86 instruction.
@@ -114,7 +111,7 @@ public class X86Instruction implements IInstruction {
   public static X86Instruction parseInstruction(String s) {
     if (s == null)
       throw new IllegalArgumentException("String cannot be null.");
-    String[] tokens = s.trim().split("\\s");
+    String[] tokens = s.trim().split("\\s+");
     if (tokens.length < 2)
       throw new IllegalArgumentException("Invalid instruction string: " + s);
 
@@ -159,8 +156,9 @@ public class X86Instruction implements IInstruction {
     // Set resultVars.
     inst.killedVars = new ArrayList<String>();
     for (; i < tokens.length; i++) {
-      if (!isValidRHSVar(tokens[i]))
+      if (!isValidRHSVar(tokens[i])) {
         throw new IllegalArgumentException("Invalid instruction string: " + s);
+      }
       inst.killedVars.add(tokens[i]);
     }
 
