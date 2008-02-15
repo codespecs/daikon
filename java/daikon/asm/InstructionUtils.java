@@ -1,0 +1,242 @@
+package daikon.asm;
+
+import java.util.*;
+import daikon.util.*;
+
+/**
+ * Utility methods that operate on collections of instructions.
+ *
+ */
+public class InstructionUtils {
+
+  /**
+   * Computes a partition over the variables in the given path. Two variables
+   * are in the same partition iff they are comparable. Two variables are
+   * comparable if they appear in the same instruction.
+   */
+  public static List<List<String>> computeComparableSets(List<IInstruction> path) {
+
+    // The elements of the partition.
+    Set<String> vars = getAllVarNames(path);
+
+    // Stores the sets that make up the partition. Initially, the
+    // partition consists of singleton sets, one per variable.
+    DSForest<String> partition = new DSForest<String>();
+    for (String v : vars)
+      partition.makeSet(v);
+
+    for (IInstruction instr : path) {
+      
+      if (instr instanceof X86Instruction) {
+        processComparables((X86Instruction)instr, vars, partition);
+      } else {
+        assert instr instanceof KillerInstruction;
+        for (X86Instruction ki : ((KillerInstruction) instr).getInstructions()) {
+          processComparables(ki, vars, partition);
+        }
+      }
+    }
+    
+    List<List<String>> retval = new ArrayList<List<String>>();
+    for (List<String> lo : partition.asLists()) {
+      List<String> block = new ArrayList<String>();
+      retval.add(block);
+      for (Object o : lo) {
+        assert o != null;
+        assert o instanceof String : o.getClass();
+        block.add((String) o);
+      }
+    }
+    return retval;
+  }
+  
+  private static void processComparables(X86Instruction instr, Set<String> vars, DSForest<String> partition) {
+    Set<String> vi = new LinkedHashSet<String>();
+    for (String v : vars) {
+      if (instr.getBinaryVarNames().contains(v)) {
+        vi.add(v);
+        continue;
+      }
+      if (instr.kills(v)) {
+        vi.add(v);
+        continue;
+      }
+    }
+    if (vi.size() <= 1) return; // Nothing to union.
+    List<String> viList = new ArrayList<String>(vi);
+    String e1 = viList.get(0);
+    for (int i = 1; i < viList.size(); i++) {
+      partition.union(e1, viList.get(i));
+    }
+  }
+
+  public static Set<String> getAllVarNames(List<IInstruction> path) {
+    Set<String> ret = new LinkedHashSet<String>();
+    for (IInstruction i : path) {
+      ret.addAll(i.getBinaryVarNames());
+    }
+    return ret;
+  }
+
+  // Dead code. We used this to compute an upper bound on the number
+  // of possible redundant variables, assuming that every reuse of
+  // a variable was redundant.
+  //
+  // To compute the upper limit, replace the invocations of
+  // computeRedundantVars() with this call instead.
+  public static Map<String, Set<String>> computeRedundantVarsFake(
+      List<IInstruction> path) {
+    Map<String, Set<String>> redundants = new LinkedHashMap<String, Set<String>>();
+    Set<String> varsUsedPreviously = new LinkedHashSet<String>();
+    Map<String, String> leaders = new LinkedHashMap<String, String>();
+    for (IInstruction instr : path) {
+      for (String varName : instr.getBinaryVarNames()) {
+        String varFullName = "bv:" + instr.getAddress() + ":" + varName;
+        if (!varsUsedPreviously.contains(varName)) {
+          // Make it a leader.
+          redundants.put(varFullName, new LinkedHashSet<String>());
+          varsUsedPreviously.add(varName);
+          leaders.put(varName, varFullName);
+        } else {
+          // Add it to redundants.
+          redundants.get(leaders.get(varName)).add(varFullName);
+        }
+      }
+    }
+    Map<String, Set<String>> redundantsFinal = new LinkedHashMap<String, Set<String>>();
+    for (Map.Entry<String, Set<String>> e : redundants.entrySet()) {
+      if (!e.getValue().isEmpty()) {
+        redundantsFinal.put(e.getKey(), e.getValue());
+      }
+    }
+    return redundantsFinal;
+  }
+  
+  /**
+   * Computes a set of binary variables that are guaranteed to be redundant.
+   *
+   * The redundant variables are returned as a map. Each entry <rvar, leader>
+   * represents a redundant variable rvar and its leader. If a variable is
+   * not in the map, it is not redundant.
+   */
+  public static Map<String, String> computeRedundantVars(List<IInstruction> path) {
+
+    // For the purposes of this code, we will say that an instruction occurs
+    // at a particular `time' where time is just the instruction's index in the path.
+    //
+    // Given a binary variable <address>:<name>, we refer to <name> as its
+    // `base name', and to <address>:<name> as its `full name'.
+
+    // Maps base names to the last time the bv was killed.
+    Map<String, Integer> timeKilled = new LinkedHashMap<String, Integer>();
+
+    // Maps base names to the last time a bv with the given base name
+    // was declared a leader.
+    Map<String, Integer> leaders = new LinkedHashMap<String, Integer>();
+
+    // Maps full names to the set of other full names that represent
+    // variables that are redundant to the key. We call the key the `leader'.
+    Map<String, Set<String>> redundantVars = new LinkedHashMap<String, Set<String>>();
+
+    // For debugging only: the set of all addresses seen so far.
+    Set<String> addresses = new LinkedHashSet<String>();
+
+    // We detect redundant variables as follows.
+    // For each bv var that appears in the LHS of instruction i (appearing
+    // at time t):
+    //
+    // if this is the first time we have seen var:
+    //     make t:var a leader
+    //     set its killed time to -1 (it's never been killed)
+    // else (we've seen it before)
+    //     if var was last killed after it was declared a leader
+    //       make it a leader
+    //     else
+    //       it's redundant. Add it to the appropriate redundant set.
+    for (int time = 0; time < path.size(); time++) {
+
+      IInstruction instr = path.get(time);
+
+      if (!(instr instanceof KillerInstruction)) {
+
+        // Sanity check: we're processing a new instruction.
+        String instrAddress = instr.getAddress();
+        assert !addresses.contains(instrAddress);
+        addresses.add(instrAddress);
+
+        for (String var : instr.getBinaryVarNames()) {
+
+          // If we've never seen this variable, make it a leader.
+          if (!leaders.keySet().contains(var)) {
+            leaders.put(var, time);
+            timeKilled.put(var, -1);
+            redundantVars.put("bv:" + instrAddress + ":" + var,
+                new LinkedHashSet<String>());
+
+          } else { // If we've seen it, it may be a leader or redundant.
+            assert timeKilled.get(var) != null;
+            assert leaders.get(var) != null;
+            if (timeKilled.get(var) >= leaders.get(var)) {
+              // It was killed by a ghost instruction.
+              // Make it a leader.
+              leaders.put(var, time);
+              redundantVars.put("bv:" + instrAddress + ":" + var,
+                  new LinkedHashSet<String>());
+
+            } else {
+              // It's redundant. Add it to redundant list.
+              // Find the leader
+              String leaderName = "bv:" + path.get(leaders.get(var)).getAddress() + ":"
+                  + var;
+              String varName = "bv:" + instr.getAddress() + ":" + var;
+              redundantVars.get(leaderName).add(varName);
+            }
+          }
+        }
+      }
+      // Update kill list.
+      for (String var : leaders.keySet()) {
+        if (instr.kills(var))
+          timeKilled.put(var, time);
+      }
+    }
+    
+    
+    // Keep only entries with redundant variables.
+    // Also, compute statistics for redundant variables obtained via the analysis.
+    int totalRedVars = 0;
+    int totalVars = 0;
+    Map<String,String> result = new LinkedHashMap<String, String>();
+    //Map<String, Set<String>> redundantVarsFinal = new LinkedHashMap<String, Set<String>>();
+    for (Map.Entry<String, Set<String>> e : redundantVars.entrySet()) {
+      totalVars++;
+      if (!e.getValue().isEmpty()) {
+        for (String rvar : e.getValue()) {
+          result.put(rvar, e.getKey());
+        }
+        //redundantVarsFinal.put(e.getKey(), e.getValue());
+        cum_redsperleader += e.getValue().size();
+        sam_redsperleader++;
+        totalRedVars += e.getValue().size();  
+      }
+    }
+    cum_redratio += (totalRedVars / (double)totalVars);
+    sam_redratio++;
+
+    //return redundantVarsFinal;
+    return result;
+  }
+  
+  private static double cum_redratio = 0;
+  private static int sam_redratio = 0;
+  private static double cum_redsperleader = 0;
+  private static int sam_redsperleader = 0;
+  
+  public static void printStats() {
+    System.out.println("average redundant variable ratio per ppt: "
+        + Double.toString(cum_redratio / sam_redratio));
+    System.out.println("average redundant variables per leader: "
+        + Double.toString(cum_redsperleader / sam_redsperleader));
+  }
+
+}

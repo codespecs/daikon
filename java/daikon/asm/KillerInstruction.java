@@ -1,4 +1,4 @@
-package asm;
+package daikon.asm;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,9 +14,13 @@ import java.util.Set;
  */
 public class KillerInstruction implements IInstruction {
 
-  private Collection<IInstruction> instructions;
+  private Collection<X86Instruction> instructions;
 
-  public KillerInstruction(Collection<IInstruction> instructions) {
+  public Collection<X86Instruction> getInstructions() {
+    return instructions;
+  }
+  
+  public KillerInstruction(Collection<X86Instruction> instructions) {
     if (instructions == null) throw new IllegalArgumentException("instructions cannot be null.");
     this.instructions = instructions;
   }
@@ -25,12 +29,12 @@ public class KillerInstruction implements IInstruction {
     throw new UnsupportedOperationException();
   }
 
-  public Set<String> getLHSVars() {
+  public Set<String> getBinaryVarNames() {
     return Collections.emptySet();
   }
 
   public boolean kills(String var) {
-    for (IInstruction i : instructions)
+    for (X86Instruction i : instructions)
       if (i.kills(var))
         return true;
     return false;
@@ -38,8 +42,8 @@ public class KillerInstruction implements IInstruction {
 
   public String toString() {
     StringBuilder b = new StringBuilder();
-    for (IInstruction i : instructions) {
-      b.append("(killer)" + i + "\n");
+    for (X86Instruction i : instructions) {
+      b.append("(potential)" + i + "\n");
     }
     return b.toString();
   }

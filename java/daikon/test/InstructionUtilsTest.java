@@ -8,35 +8,39 @@ import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import asm.IInstruction;
-import asm.InstructionUtils;
-import asm.KillerInstruction;
-import asm.X86Instruction;
+import daikon.asm.IInstruction;
+import daikon.asm.InstructionUtils;
+import daikon.asm.KillerInstruction;
+import daikon.asm.X86Instruction;
 
 public class InstructionUtilsTest extends TestCase {
 
   public static void testComputeRedundantVars1() {
     List<IInstruction> path = new ArrayList<IInstruction>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
     assertEquals(reds.toString(), 0, reds.size());
-    
+
     addX86Instruction(path, "x.dll:0x02 pop eax ebx -> ecx edx");
-    
+
     reds = InstructionUtils.computeRedundantVars(path);
-    
+
     assertEquals(reds.toString(), 2, reds.size());
-    assertRedundants(reds, "0x01:eax", "0x02:eax");
-    assertRedundants(reds, "0x01:ebx", "0x02:ebx");
+    assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
+    assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx");
   }
 
-  private static void assertRedundants(Map<String, Set<String>> redMap,
+  private static void assertRedundants(Map<String, String> redMap,
       String leader, String... redundantVars) {
     if (redundantVars.length == 0) return;
     Set<String> redExpected = new LinkedHashSet<String>(Arrays.asList(redundantVars));
-    Set<String> redActual = redMap.get(leader);
+    Set<String> redActual = new LinkedHashSet<String>(); //redMap.get(leader);
+    for (Map.Entry<String, String> e : redMap.entrySet()) {
+      if (e.getValue().equals(leader))
+        redActual.add(e.getKey());
+    }
     assertEquals(leader, redExpected, redActual);
   }
 
@@ -45,37 +49,37 @@ public class InstructionUtilsTest extends TestCase {
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop ecx edx");
 
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
     assertEquals(reds.toString(), 0, reds.size());
   }
-  
+
   public static void testComputeRedundantVars1b() {
     List<IInstruction> path = new ArrayList<IInstruction>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop ebx eax");
 
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
     assertEquals(reds.toString(), 2, reds.size());
-    assertRedundants(reds, "0x01:eax", "0x02:eax");
-    assertRedundants(reds, "0x01:ebx", "0x02:ebx");
+    assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
+    assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx");
   }
-  
+
   public static void testComputeRedundantVars2() {
     List<IInstruction> path = new ArrayList<IInstruction>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x03 pop eax ebx -> eax ebx");
 
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
-    assertEquals(reds.toString(), 2, reds.size());
-    assertRedundants(reds, "0x01:eax", "0x02:eax", "0x03:eax");
-    assertRedundants(reds, "0x01:ebx", "0x02:ebx", "0x03:ebx");
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
+    assertEquals(reds.toString(), 4, reds.size());
+    assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax", "bv:0x03:eax");
+    assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx", "bv:0x03:ebx");
   }
 
   public static void testComputeRedundantVars3() {
@@ -83,41 +87,41 @@ public class InstructionUtilsTest extends TestCase {
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop eax ebx ecx -> ecx eax");
     addX86Instruction(path, "x.dll:0x03 pop eax ebx -> ecx eax");
-    addX86Instruction(path, "x.dll:0x04 pop exx eyx -> ezx eux");
-    addX86Instruction(path, "x.dll:0x05 pop eax ebx exx -> ezx eux");
+    addX86Instruction(path, "x.dll:0x04 pop esi edi -> ebp esp");
+    addX86Instruction(path, "x.dll:0x05 pop eax ebx esi -> ebp esp");
 
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
-    assertEquals(reds.toString(), 3, reds.size());
-    assertRedundants(reds, "0x01:eax", "0x02:eax");
-    assertRedundants(reds, "0x01:ebx", "0x02:ebx", "0x03:ebx", "0x05:ebx");
-    assertRedundants(reds, "0x04:exx", "0x05:exx");
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
+    assertEquals(reds.toString(), 5, reds.size());
+    assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
+    assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx", "bv:0x03:ebx", "bv:0x05:ebx");
+    assertRedundants(reds, "bv:0x04:esi", "bv:0x05:esi");
   }
-  
+
   public static void testComputeRedundantVars4() {
     List<IInstruction> path = new ArrayList<IInstruction>();
     addX86Instruction(path, "x.dll:0x01 pop eax");
     addX86Instruction(path, "x.dll:0x02 pop eax");
     addX86Instruction(path, "x.dll:0x03 pop eax");
-    addX86Instruction(path, "x.dll:0x04 pop exx");
+    addX86Instruction(path, "x.dll:0x04 pop esi");
     addX86Instruction(path, "x.dll:0x05 pop eax");
 
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
-    assertEquals(reds.toString(), 1, reds.size());
-    assertRedundants(reds, "0x01:eax", "0x02:eax", "0x03:eax", "0x05:eax");
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
+    assertEquals(reds.toString(), 3, reds.size());
+    assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax", "bv:0x03:eax", "bv:0x05:eax");
   }
 
   public static void testComputeRedundantVars5() {
-    
+
     // This killer instruction should have no effect because it
     // kills variables that are not in any real instruction.
-    List<IInstruction> instrsForKiller = new ArrayList<IInstruction>();
-    addX86Instruction(instrsForKiller, "x.dll:0x00 pop eax ebx -> a3 a4");
-    KillerInstruction killer = new KillerInstruction(instrsForKiller);
-    
+    X86Instruction i = X86Instruction.parseInstruction("x.dll:0x00 pop eax ebx -> ax bx");
+    new ArrayList<X86Instruction>().add(i);
+    KillerInstruction killer = new KillerInstruction(new ArrayList<X86Instruction>());
+
     List<IInstruction> path = new ArrayList<IInstruction>();
     path.add(killer);
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
@@ -126,28 +130,30 @@ public class InstructionUtilsTest extends TestCase {
     path.add(killer);
     addX86Instruction(path, "x.dll:0x03 pop eax ebx -> ecx eax");
     path.add(killer);
-    addX86Instruction(path, "x.dll:0x04 pop exx eyx -> ezx eux");
+    addX86Instruction(path, "x.dll:0x04 pop esi edi -> ebp esp");
     path.add(killer);
-    addX86Instruction(path, "x.dll:0x05 pop eax ebx exx -> ezx eux");
+    addX86Instruction(path, "x.dll:0x05 pop eax ebx esi -> ebp esp");
     path.add(killer);
 
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
-    assertEquals(reds.toString(), 3, reds.size());
-    assertRedundants(reds, "0x01:eax", "0x02:eax");
-    assertRedundants(reds, "0x01:ebx", "0x02:ebx", "0x03:ebx", "0x05:ebx");
-    assertRedundants(reds, "0x04:exx", "0x05:exx");
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
+    assertEquals(reds.toString(), 5, reds.size());
+    assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
+    assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx", "bv:0x03:ebx", "bv:0x05:ebx");
+    assertRedundants(reds, "bv:0x04:esi", "bv:0x05:esi");
   }
-  
+
  public static void testComputeRedundantVars6() {
-    
+
     // Should be like previous test, but no redundant ebx or eax variables.
-    List<IInstruction> instrsForKiller = new ArrayList<IInstruction>();
-    addX86Instruction(instrsForKiller, "x.dll:0x00 pop eax ebx -> ebx a4");
-    addX86Instruction(instrsForKiller, "x.dll:0x00 pop eax ebx -> eax");
+    List<X86Instruction> instrsForKiller = new ArrayList<X86Instruction>();
+    X86Instruction i = X86Instruction.parseInstruction("x.dll:0x00 pop eax ebx -> ebx ax");
+    instrsForKiller.add(i);
+    i = X86Instruction.parseInstruction("x.dll:0x00 pop eax ebx -> eax");
+    instrsForKiller.add(i);
     KillerInstruction killer = new KillerInstruction(instrsForKiller);
-    
+
     List<IInstruction> path = new ArrayList<IInstruction>();
     path.add(killer);
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
@@ -156,21 +162,21 @@ public class InstructionUtilsTest extends TestCase {
     path.add(killer);
     addX86Instruction(path, "x.dll:0x03 pop eax ebx -> ecx eax");
     path.add(killer);
-    addX86Instruction(path, "x.dll:0x04 pop exx eyx -> ezx eux");
+    addX86Instruction(path, "x.dll:0x04 pop esi edi -> ebp esp");
     path.add(killer);
-    addX86Instruction(path, "x.dll:0x05 pop eax ebx exx -> ezx eux");
+    addX86Instruction(path, "x.dll:0x05 pop eax ebx esi -> ebp esp");
     path.add(killer);
 
-    
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    
+
+    Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
+
     assertEquals(reds.toString(), 1, reds.size());
-    assertRedundants(reds, "0x04:exx", "0x05:exx");
+    assertRedundants(reds, "bv:0x04:esi", "bv:0x05:esi");
   }
-  
+
   private static void addX86Instruction(List<IInstruction> path, String string) {
     X86Instruction i = X86Instruction.parseInstruction(string);
     path.add(i);
   }
-  
+
 }

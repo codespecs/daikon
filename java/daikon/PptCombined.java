@@ -3,16 +3,23 @@ package daikon;
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
 import daikon.util.CollectionsExt;
+import daikon.util.Pair;
 import daikon.util.UtilMDE;
 import daikon.FileIO.ParentRelation;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.*;
 
-import asm.AsmFile;
-import asm.IInstruction;
-import asm.InstructionUtils;
-import asm.KillerInstruction;
-import asm.X86Instruction;
+import daikon.asm.AsmFile;
+import daikon.asm.IInstruction;
+import daikon.asm.InstructionUtils;
+import daikon.asm.KillerInstruction;
+import daikon.asm.X86Instruction;
 
 /**
  * A program point which consists of a number of program points.  Invariants
@@ -35,6 +42,8 @@ public class PptCombined extends PptTopLevel {
 
   private static AsmFile assemblies = null;
 
+  public Map<String, String> rvars = null;
+
   /**
    * If non-null, we will compute redundant binary variables
    * when creating a CombinedProgramPoint, using
@@ -42,22 +51,25 @@ public class PptCombined extends PptTopLevel {
    */
   public static String dkconfig_asm_path_name = null;
 
-  public PptCombined (List<PptTopLevel> ppts) {
+  /**
+   * If redundant variables are being computed, the results
+   * of the redundancy analysis are printed to this stream.
+   * See dkconfig_asm_path_name above.
+   */
+  public static String dkconfig_rvars_file = null;
+  private static PrintStream rvars_stream = null;
+
+  public PptCombined (List<PptTopLevel> ppts, CombinedVisResults vis) {
 
     super (ppts.get(0).name() + ".." + ppts.get(ppts.size()-1).ppt_name.name(),
            PptType.COMBINED_BASIC_BLOCK,
            new ArrayList<ParentRelation>(), EnumSet.noneOf (PptFlags.class),
-           null, ppts.get(0).function_id, -1, combined_vis (ppts));
+           null, ppts.get(0).function_id, -1, vis.var_infos);
     this.ppts = new ArrayList<PptTopLevel>(ppts);
+    this.rvars = vis.rvarMap; // May be null.
     init();
     System.out.printf ("Combined ppt %s has %d variables%n", name(),
                        var_infos.length);
-
-    // Compute redudant binary variables.
-    if (dkconfig_asm_path_name != null) {
-    	loadAssemblies(dkconfig_asm_path_name);
-    	computeRedundantVariables();
-    }
 
     if (debug) {
       for (VarInfo vi : var_infos) {
@@ -67,24 +79,61 @@ public class PptCombined extends PptTopLevel {
     }
   }
 
-  // Preconditions: dkconfig_asm_path_name != null
-  private void loadAssemblies(String assembliesFile) {
-    assert dkconfig_asm_path_name != null;
-
+  private static void loadAssemblies(String assembliesFile) {
     if (assemblies == null)
       assemblies = AsmFile.getAsmFile(assembliesFile);
   }
 
+  private static void openRvarsStream() {
+    if (rvars_stream == null && dkconfig_rvars_file != null) {
+      try {
+        rvars_stream = new PrintStream(new FileOutputStream(dkconfig_rvars_file), true);
+      } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
   // Preconditions: assemblies != null.
-  private void computeRedundantVariables() {
+  private static Map<String, String> computeRedundantVariables(List<PptTopLevel> ppts) {
     assert assemblies != null;
-    System.out.println("Computing redundant variables in combined ppt...");
+    //System.out.println("Computing redundant variables in combined ppt...");
 
     // Create a list of instructions representing this ppt's execution flow.
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = null;
+    path = createPath(ppts);
+
+
+    // We currently do nothing with the redundant variables information.
+    Map<String,String> result = InstructionUtils.computeRedundantVars(path);
+
+    // Debugging: print path.
+    if (false) {
+      System.out.println("\n\nPATH:");
+      for (IInstruction instr : path) {
+        if (instr instanceof X86Instruction) {
+          debugPrint(instr, false, result);
+        } else {
+          for (X86Instruction potentialI : ((KillerInstruction)instr).getInstructions()) {
+            debugPrint(potentialI, true, result);
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private static List<IInstruction> createPath(List<PptTopLevel> ppts) {
+    List<IInstruction> path;
+    path = new ArrayList<IInstruction>();
     for (int i = ppts.size() - 1; i >= 0; i--) {
       PptTopLevel ppt = ppts.get(i);
       List<X86Instruction> instructionsForPpt = assemblies.getInstructions(ppt.name());
+      if (instructionsForPpt == null) {
+        String errorMsg = "Assembly file does not contain any instructions for ppt " + ppt.name();
+        throw new RuntimeException(errorMsg);
+      }
       CollectionsExt.prepend(instructionsForPpt, path);
       if (i > 0) {
         // Find intermediate basic blocks: blocks that are on some path from
@@ -94,9 +143,13 @@ public class PptCombined extends PptTopLevel {
 
         if (interBlocks.size() > 0) {
           // Find the set of instructions over all intermediate blocks.
-          Set<IInstruction> intermediateBlocksInstrs = new LinkedHashSet<IInstruction>();
+          Set<X86Instruction> intermediateBlocksInstrs = new LinkedHashSet<X86Instruction>();
           for (PptTopLevel interBlock : interBlocks) {
             List<X86Instruction> iis = assemblies.getInstructions(interBlock.name());
+            if (iis == null) {
+              String errorMsg = "Assembly file does not contain any instructions for ppt " + ppt.name();
+              throw new RuntimeException(errorMsg);
+            }
             intermediateBlocksInstrs.addAll(iis);
           }
 
@@ -106,36 +159,52 @@ public class PptCombined extends PptTopLevel {
         }
       }
     }
+    return path;
+  }
 
-    // Debugging: print path.
-    if (false) {
-      System.out.println("PATH:");
-      for (IInstruction instr : path)
-        System.out.println(instr);
+  private static void debugPrint(IInstruction instr, boolean isPotential, Map<String, String> redundantVariables) {
+    System.out.print(UtilMDE.rpad((isPotential ? "*" : " ") + instr.toString(), 60));
+    System.out.print("VARS: ");
+    for (String s :  instr.getBinaryVarNames()) System.out.print(" " + s);
+    System.out.println("  RVARS:" + printRedudant(instr, redundantVariables));
+  }
+
+  private static String printRedudant(IInstruction instr, Map<String, String> redundantVariables) {
+    StringBuilder ret = new StringBuilder();
+    for (String var : instr.getBinaryVarNames()) {
+      String fullName = "bv:" + instr.getAddress() + ":" + var;
+      String leader = redundantVariables.get(fullName);
+      if (leader == null)
+        continue;
+      String leaderVarName = leader.split(":")[1];
+      ret.append(var + " (" + leaderVarName + ")");
     }
-
-    // Sanity check: same variables obtained statically and dynamically.
-    //checkVarsOk();
-
-    // We currently do nothing with the redundant variables information.
-    Map<String, Set<String>> reds = InstructionUtils.computeRedundantVars(path);
-    printKillers(reds);
+    return ret.toString();
   }
 
   // Checks that variables in var_infos are the same are the variables
   // obtained from the asm file for this set of basic blocks.
-  private void checkVarsOk() {
+  // Happens to return number of variables (TODO remove this ugliness).
+  private static int checkVarsOk(List<PptTopLevel> ppts, List<VarInfo> list) {
 
     // Create the set of variables in var_infos.
     Set<String> varsFromPpts = new LinkedHashSet<String>();
-    for (VarInfo vi : var_infos)
+    for (VarInfo vi : list) {
       varsFromPpts.add(vi.name());
+    }
 
     // Create the set of variables in asm file.
     Set<String> varsFromAsm = new LinkedHashSet<String>();
     for (PptTopLevel p : ppts) {
       boolean firstInst = true;
-      for (IInstruction i : assemblies.getInstructions(p.name())) {
+
+      List<X86Instruction> instructions = assemblies.getInstructions(p.name());
+      if (instructions == null) {
+        String errorMsg = "Assembly file does not contain any instructions for ppt " + p.name();
+        throw new RuntimeException(errorMsg);
+      }
+
+      for (IInstruction i : instructions) {
         if (firstInst) {
           // The dynamic technique always creates a variable
           // for esp at the first address in the block.
@@ -144,11 +213,13 @@ public class PptCombined extends PptTopLevel {
           firstInst = false;
         }
 
-        for (String var : i.getLHSVars()) {
+        for (String var : i.getBinaryVarNames()) {
           if (var.startsWith("[")) {
             // For a variable of the form [x] (dereference),
             // the dynamic technique always creates variable x.
             // We add it here for comparison purposes.
+            //
+            // FIX this is a misleading variable list!
             varsFromAsm.add("bv:" + i.getAddress() + ":" + var.substring(1, var.length() - 1));
 
           }
@@ -164,24 +235,30 @@ public class PptCombined extends PptTopLevel {
     Collections.sort(allSorted);
 
     if (!varsFromPpts.equals(varsFromAsm)) {
-      System.out.println("ERROR: mismatched variables in combined ppt vs. asm file:");
+      System.out.println("WARNING: mismatched variables in combined ppt vs. asm file:");
       System.out.println(UtilMDE.rpad("from var_infos:", 30) + UtilMDE.rpad("from asm file:", 30));
       for (String s : allSorted) {
-        System.out.print(UtilMDE.rpad(varsFromPpts.contains(s) ? s : "", 30));
-        System.out.print(UtilMDE.rpad(varsFromAsm.contains(s) ? s : "", 30));
-        System.out.println();
+        if (!iff(varsFromPpts.contains(s), varsFromAsm.contains(s))) {
+          System.out.print(UtilMDE.rpad(varsFromPpts.contains(s) ? s : "", 30));
+          System.out.print(UtilMDE.rpad(varsFromAsm.contains(s) ? s : "", 30));
+          System.out.println();
+        }
       }
+      //throw new RuntimeException();
     }
-    throw new RuntimeException();
+    return varsFromPpts.size();
   }
 
-  private void printKillers(Map<String, Set<String>> reds) {
-
-    System.out.println("REDUNDANT VARIABLES (leader followed by redundant variables):");
-    for (Map.Entry<String, Set<String>> e : reds.entrySet()) {
-      System.out.println(e.getKey() + " : " + e.getValue());
+  private static boolean iff(boolean b, boolean c) {
+    if (b) {
+      if (c) return true; // b true, c true
+      else return false; // b true, c false
+    } else {
+      if (!c) return true; // b false, c false
+      else return false; // b false, c true
     }
   }
+
 
   public static List<PptTopLevel> findIntermediateBlocks(PptTopLevel dest, PptTopLevel source) {
 
@@ -245,6 +322,12 @@ public class PptCombined extends PptTopLevel {
     for (PptTopLevel ppt : ppts) {
       int filled_slots = ppt.num_orig_vars + ppt.num_tracevars;
       for (int i = 0; i < filled_slots; i++) {
+
+        // If var was statically found to be redundant, don't add.
+        if (rvars != null && rvars.containsKey(ppt.var_infos[i].name())) {
+          continue;
+        }
+
         if (ppt.last_values == null) {
           //System.out.printf ("no last valfor %s in %s%n", ppt.name(), name());
           vals[index] = null;
@@ -260,6 +343,7 @@ public class PptCombined extends PptTopLevel {
       }
     }
     assert (index == (num_orig_vars + num_tracevars));
+    assert (index == vals_array_size);
 
     // add the derived variables
     while (index < vals_array_size) {
@@ -279,33 +363,86 @@ public class PptCombined extends PptTopLevel {
 
   }
 
+  private static class CombinedVisResults {
+    public final VarInfo[] var_infos;
+    public final Map<String,String> rvarMap; // May be null.
+    public CombinedVisResults(VarInfo[] vis, Map<String,String> rvarMap) {
+      this.var_infos = vis;
+      this.rvarMap = rvarMap;
+    }
+  }
+
   /**
-   * Build a combined VarInfo array for all of the ppts
+   * Build a combined VarInfo array for all of the ppts.
+   * If dkconfig_asm_path_name was given as a configuration option,
+   * compute redundant variables from the asm file, and do not
+   * include them in the varInfo array.
    */
-  private static VarInfo[] combined_vis (List<PptTopLevel> ppts) {
+  private static CombinedVisResults combined_vis (List<PptTopLevel> ppts) {
 
     assert (ppts.size() > 0) : "No ppts in list";
 
-    // Allocate an array of the combined size
-    int len = 0;
-    for (PptTopLevel ppt : ppts) {
-      len += ppt.var_infos.length;
-    }
-    VarInfo[] vis = new VarInfo[len];
-
-    // Create a new VarInfo for each VarInfo in the ppt list
-    int index = 0;
+    // Create a list of candidate varinfos that may become part
+    // of the final list.
+    List<VarInfo> candidateList = new ArrayList<VarInfo>();
     for (PptTopLevel ppt : ppts) {
       for (VarInfo vi : ppt.var_infos) {
         if (vi.isDerived())
           continue;
-        vis[index++] = new VarInfo (vi.vardef);
+        candidateList.add(new VarInfo(vi.vardef));
       }
     }
 
-    return (vis);
-  }
 
+    Map<String, String> redundantVariables = null;
+
+    // Compute redudant binary variables.
+    if (dkconfig_asm_path_name != null) {
+
+      // Load the asm file. If already loaded, does nothing.
+      loadAssemblies(dkconfig_asm_path_name);
+
+      // Open the rvars output stream. If already open, does nothing.
+      openRvarsStream();
+
+      // Sanity check: same variables obtained statically and dynamically.
+      if (true) checkVarsOk(ppts, candidateList);
+
+      // Compute redundant variables for the variables in the given ppts
+      // using the information in the asm file.
+      redundantVariables = computeRedundantVariables(ppts);
+
+      // Print out rvars info.
+      String cppt_name = ppts.get(0).name() + ".." + ppts.get(ppts.size() - 1).ppt_name.name();
+      if (true) {
+        System.out.println("Redundant vars for ppt " + cppt_name);
+        for (Map.Entry<String, String> e : redundantVariables.entrySet()) {
+          System.out.println("   " + e.getKey() + "(" + e.getValue() + ")");
+        }
+        System.out.println("End redundant vars");
+      }
+      if (dkconfig_rvars_file != null) {
+        assert rvars_stream != null;
+        rvars_stream.println("===========================================================================");
+        rvars_stream.println(cppt_name);
+        for (Map.Entry<String, String> e : redundantVariables.entrySet()) {
+          rvars_stream.println(e.getKey() + "(" + e.getValue() + ")");
+        }
+      }
+    }
+
+    // Create a new VarInfo for each VarInfo in the ppt list.
+    // If redundantVariables != null, don't add redundant variables.
+    List<VarInfo> finalList = new ArrayList<VarInfo>();
+    for (VarInfo vi : candidateList) {
+      if (redundantVariables != null
+          && redundantVariables.containsKey(vi.name()))
+        continue;
+      finalList.add(vi);
+    }
+
+    return new CombinedVisResults(finalList.toArray(new VarInfo[0]), redundantVariables);
+  }
 
   /**
    * Creates combined program points that cover multiple basic
@@ -382,8 +519,10 @@ public class PptCombined extends PptTopLevel {
                     PptTopLevel splitPpt = partition.get(partition.size() - 1);
 
                     // do not override a previously written PptCombined
-                    if (splitPpt.combined_ppt == null)
-                        splitPpt.combined_ppt = new PptCombined(partition);
+                    if (splitPpt.combined_ppt == null) {
+                      CombinedVisResults vis = combined_vis(partition);
+                        splitPpt.combined_ppt = new PptCombined(partition, vis);
+                    }
                 }
 
             } else {
@@ -481,7 +620,7 @@ public class PptCombined extends PptTopLevel {
         return false;
       }
     }
-
+    System.out.println("check returned true.");
     return true;
 
   }
@@ -538,6 +677,94 @@ public class PptCombined extends PptTopLevel {
     if (ppt == null)
       return "null";
     return String.format ("%04X", ppt.bb_offset() & 0xFFFF);
+  }
+
+  public static void main(String[] args) throws IOException {
+
+
+    // Load the asm file.
+    loadAssemblies(args[1]);
+
+    // Read in the invariants
+    System.out.println("Reading invariants...");
+    String filename = args[0];
+    PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
+                                                true // use saved config
+                                                );
+
+    dkconfig_asm_path_name = args[1];
+
+    for (PptTopLevel p : ppts.all_ppts()) {
+      if (p instanceof PptCombined) {
+        PptCombined cp = (PptCombined)p;
+        CombinedVisResults res = combined_vis(cp.ppts); // This calls the redundancy computing code.
+        cp.rvars = res.rvarMap;
+      }
+    }
+
+    System.out.println("Testing redundant variables...");
+    redundantVarsTest(ppts);
+  }
+
+  // Checks that if two variables are said to be redundant by Carlos's
+  // analysis, they are deemed equal by daiokn's dynamic analysis.
+  public static void redundantVarsTest(PptMap all_ppts) {
+
+    for (PptTopLevel ppt : all_ppts.all_ppts()) {
+      if (ppt instanceof PptCombined) {
+        PptCombined cp = (PptCombined) ppt;
+        int numRedVars = 0;
+        if (cp.rvars == null)
+          continue;
+        for (Map.Entry<String, String> e : cp.rvars.entrySet()) {
+          String rvar = e.getKey();
+          String leader = e.getValue();
+          //System.out.println("Testing " + rvar);
+          numRedVars++;
+
+          if (cp.num_samples() == 0)
+            continue;
+
+          VarInfo leaderVI = cp.var_infos[cp.indexOf(leader)];
+
+          // The rvar will should not be in cp.var_infos because
+          // it was deemed redundant. However, it should still be part of
+          // the var_infos for a child program point.
+          VarInfo rvarVI = null;
+          assert cp.indexOf(rvar) == -1;
+          for (PptTopLevel childppt : cp.ppts) {
+            int index = childppt.indexOf(rvar);
+            if (index == -1)
+              continue;
+            rvarVI = childppt.var_infos[index];
+            break;
+          }
+          assert rvarVI != null;
+          if (!cp.is_equal(leaderVI.canonicalRep(), rvarVI.canonicalRep())) {
+            //printNumSamples(cp);
+            if (!cp.check()) // This signals an error in dominator computation.
+              continue;
+            String msg = "Not equal: " + leaderVI.toString() + " and "
+                + rvarVI.toString() + ", PPT name: " + ppt.name()
+                + ", num_samples=" + cp.num_samples();
+            System.out.println(msg);
+            //printNumSamples(cp);
+            //throw new RuntimeException(msg);
+          } else {
+            //System.out.print("!");
+          }
+        }
+      }
+    }
+  }
+
+  private static void printNumSamples(PptCombined cp) {
+    System.out.println("NUMSAMPLES:");
+    System.out.println("CPPT " + cp.name() + ", id=" + System.identityHashCode(cp) + ", samples " + cp.num_samples());
+    for (PptTopLevel p : cp.ppts) {
+      System.out.println(p.name() + " has samples #" + p.num_samples() +  " ppt.combined_ppt: " + (p.combined_ppt != null? p.combined_ppt.name() : "null") + ", id=" + System.identityHashCode(cp));
+    }
+    System.out.println("END");
   }
 
 }

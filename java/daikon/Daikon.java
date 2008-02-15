@@ -16,6 +16,7 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -183,6 +184,7 @@ import daikon.split.SplitterFactory;
 import daikon.split.SplitterList;
 import daikon.suppress.NIS;
 import daikon.suppress.NIS.SuppressionProcessor;
+import daikon.util.Pair;
 
 /**
  * The "main" method is the main entry point for the Daikon invariant detector.
@@ -743,7 +745,9 @@ public final class Daikon {
             + e.toString());
       }
     }
-
+    
+    PptCombined.redundantVarsTest(all_ppts);
+    
 //     if ((Daikon.dkconfig_guardNulls == "always") // interned
 //         || (Daikon.dkconfig_guardNulls == "missing")) { // interned
 //       // This side-effects the PptMap, but it has already been saved

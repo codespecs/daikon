@@ -1,4 +1,4 @@
-package asm;
+package daikon.asm;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -84,12 +84,17 @@ public class AsmFile {
         name = line;
 
         // Read instructions
+        boolean isFirstInstruction = true;
         line = reader.readLine();
         if (line == null)
             throw new RuntimeException(parseError(reader.getLineNumber(),
                                                   errorMessage5));
         while (line != null && !line.isEmpty()) {
             X86Instruction instr = X86Instruction.parseInstruction(line);
+            if (isFirstInstruction) {
+              instr.isFirstInBlock = true;
+              isFirstInstruction = false;
+            }
             instr.owner = name;
             instructions.add(instr);
             line = reader.readLine();

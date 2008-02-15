@@ -1,4 +1,4 @@
-package asm;
+package daikon.asm;
 
 import java.util.Set;
 
@@ -7,7 +7,7 @@ import java.util.Set;
  */
 public interface IInstruction {
 
-  public abstract Set<String> getLHSVars();
+  public abstract Set<String> getBinaryVarNames();
 
   public abstract String toString();
 
