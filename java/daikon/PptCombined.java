@@ -595,6 +595,8 @@ public class PptCombined extends PptTopLevel {
    */
   public boolean check() {
 
+    System.out.printf ("Checking combined ppt %s\n", name());
+
     if (ppts.size() <= 0) {
       System.out.printf ("ERROR: Size of %s ppts is %d\n", name(), ppts.size());
       return false;
@@ -603,7 +605,7 @@ public class PptCombined extends PptTopLevel {
     // Make sure that every ppt has a combined_ppt
     for (PptTopLevel ppt : ppts) {
       if (ppt.combined_ppt == null) {
-        System.out.printf ("ERROR: ppt %s has no combined ppt", ppt);
+        System.out.printf ("ERROR: ppt %s has no combined ppt\n", ppt);
         return false;
       }
     }
@@ -615,12 +617,49 @@ public class PptCombined extends PptTopLevel {
       // System.out.printf ("Checking %s dominated by %s\n", bb_short_name(ppt),
       //                   bb_short_name (prev));
       if (!ppt.all_predecessors_goto (prev)) {
-        System.out.printf ("ERROR: ppt %s not dominated by ppt %s", ppt.name(),
-                           prev.name());
+        System.out.printf ("ERROR: ppt %s not dominated by ppt %s\n",
+                           ppt.name(), prev.name());
         return false;
       }
     }
-    System.out.println("check returned true.");
+
+    // Make sure that the last ppt is the only trigger for the combined ppt
+    PptTopLevel trigger = ppts.get(ppts.size()-1);
+    if (trigger.combined_ppt != this) {
+      System.out.printf ("ERROR: trigger ppt %s combined ppt is %s not %s\n",
+                         trigger, trigger.combined_ppt, combined_ppt);
+      return false;
+    }
+    if (trigger.combined_subsumed) {
+      System.out.printf ("ERROR: trigger ppt %s is combined_subsumed in %s\n",
+                         trigger, this);
+      return false;
+    }
+    for (int i = 0; i < ppts.size()-1; i++) {
+      PptTopLevel ppt = ppts.get(i);
+      if (!ppt.combined_subsumed && (ppt.combined_ppt == this)) {
+        System.out.printf ("ERROR: multiple triggers (%s) to %s\n", ppt, this);
+        return false;
+      }
+    }
+
+    // Make sure that every ppt that is combined_subsumed and has this
+    // combined ppt always flows to the trigger.  This guarantees that
+    // all ppts whose invariants are calculated in this combined ppt
+    // see all of their samples
+    for (PptTopLevel ppt : ppts) {
+      if (ppt == trigger)
+        continue;
+      if (ppt.combined_subsumed && (ppt.combined_ppt == this)) {
+        if (!ppt.all_successors_goto (trigger)) {
+          System.out.printf ("ERROR ppt %s does not flow to trigger ppt %s\n",
+                             ppt, trigger);
+          return false;
+        }
+      }
+    }
+
+    System.out.printf ("Finished checking combined ppt %s\n", name());
     return true;
 
   }
