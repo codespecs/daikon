@@ -121,7 +121,7 @@ public class X86Instruction implements IInstruction {
     String[] dllAddr = tokens[0].split(":");
     if (dllAddr.length != 2)
       throw new IllegalArgumentException("Invalid instruction string: " + s);
-    if (!dllAddr[0].endsWith(".dll"))
+    if (!(dllAddr[0].endsWith(".dll") || dllAddr[0].endsWith(".exe")))
       throw new IllegalArgumentException("Invalid instruction string: " + s);
     inst.dllName = dllAddr[0];
     if (!dllAddr[1].startsWith("0x"))
