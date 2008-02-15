@@ -1599,6 +1599,16 @@ public final class FileIO {
         		}
         	}
         }
+        // The function entry should be able should be strongly connected
+        for (int i = 1; i < ppts.size(); i++) {
+          PptTopLevel p = ppts.get(i);
+          assert ppts.get(0).connected (p) : p;
+        }
+        // Every block except the first should have at least one predecessor
+        for (int i = 1; i < ppts.size(); i++) {
+          PptTopLevel p = ppts.get(i);
+          assert p.predecessors.size() > 0 : p;
+        }
 
         // Build any combined program points and add them to the global map
         PptCombined.combine_func_ppts (all_ppts, ppts);

@@ -4340,6 +4340,71 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Returns true if there is a connection (using successors) from this
+   * ppt to ppt
+   */
+  public boolean connected (PptTopLevel ppt) {
+    assert is_basic_block();
+    assert ppt.is_basic_block();
+
+    System.out.printf ("Checking that ppt %s connects to ppt %s\n", this, ppt);
+
+    Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
+    return connected (ppt, visited_set);
+  }
+
+  static Set<String> conn_map = new LinkedHashSet<String>();
+  static Set<String> noconn_map = new LinkedHashSet<String>();
+
+  /**
+   * Returns true if all successor basic blocks eventually end up at
+   * the specified progrm point.  All paths must go to ppt for this
+   * to return true.  The visited_set should contain each program
+   * point visited along this path so far.
+   */
+  public boolean connected (PptTopLevel ppt, Set<PptTopLevel> visited_set) {
+
+    if (false) {
+      for (int i = 0; i < visited_set.size(); i++)
+        System.out.printf (" ");
+      System.out.printf ("connected: %04X - %04X [%d]\n", bb_offset() & 0xFFFF,
+                         ppt.bb_offset() & 0xFFFF, succ_map.size());
+    }
+
+    if (conn_map.contains (name() + "-" + ppt.name()))
+      return true;
+
+    if (noconn_map.contains (name() + "-" + ppt.name()))
+      return false;
+
+    if (this == ppt)
+      return true;
+
+    if (visited_set.contains (this))
+      return false;
+
+    if ((ppt_successors == null) || (ppt_successors.size() == 0)) {
+      return false;
+    }
+
+    for (String successor : ppt_successors) {
+      PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
+      Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
+      path_set.add (this);
+      boolean succ_result = ppt_succ.connected (ppt, path_set);
+      if (succ_result) {
+        conn_map.add (name() + "-" + ppt.name());
+        return true;
+      }
+    }
+
+    // All paths failed
+    noconn_map.add (name() + "-" + ppt.name());
+    return (false);
+  }
+
+
+  /**
    * Returns true if all successor basic blocks eventually end up at
    * the specified progrm point.  All paths must go to ppt for this
    * to return true
