@@ -627,7 +627,9 @@ public class PptCombined extends PptTopLevel {
 
 
   /**
-   * Checks the combined program point for correctness
+   * Checks the combined program point for correctness.  Returns true
+   * if all is well.  Prints messages preceeded with 'ERROR' to stdout
+   * and returns false on errors.
    */
   public boolean check() {
 
@@ -698,6 +700,32 @@ public class PptCombined extends PptTopLevel {
     System.out.printf ("Finished checking combined ppt %s\n", name());
     return true;
 
+  }
+
+  /**
+   * Checks all of the ppts in a function for validity after combined
+   * program points are created.  Only performs checks that can't be
+   * done in check.  Returns true if all is well.  Prints messages
+   * preceeded with 'ERROR' to stdout and returns false on errors.
+   */
+  public static boolean check_func_ppts (List<PptTopLevel> ppts) {
+
+    // Make sure every ppt was placed in a combined ppt
+    for (PptTopLevel ppt : ppts) {
+      if (ppt.combined_ppt == null) {
+        System.out.printf ("ERROR: Ppt %s doesn't refer to a combined ppt\n",
+                           ppt);
+        return (false);
+      }
+      if (!ppt.combined_ppt.ppts.contains (ppt)) {
+        System.out.printf ("ERROR: ppt %s in combined ppt %s, is not in its "
+                           + "ppt list %s\n", ppt, ppt.combined_ppt,
+                           ppt.combined_ppt.ppts);
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /** Dumps out the basic blocks that make up this combined ppt **/

@@ -1623,6 +1623,7 @@ public final class FileIO {
         System.out.printf ("Basic blocks in function %s:\n",
                            ppts.get(0).name());
         PptCombined.dump (ppts);
+        PptCombined.check_func_ppts (ppts);
         for (PptTopLevel p : ppts) {
           if (p.combined_subsumed)
             continue;
