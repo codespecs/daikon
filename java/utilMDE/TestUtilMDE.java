@@ -15,6 +15,7 @@ import static utilMDE.Options.ArgException;
 // CountingPrintWriter.java
 // Digest.java
 // FuzzyFloat.java
+// GraphMDE.java
 // Hasher.java
 // Intern.java
 // LimitedSizeIntSet.java
@@ -2391,4 +2392,12 @@ public final class TestUtilMDE extends TestCase {
     assertEquals (sa[9], "");
     assertEquals (sa[10], "");
   }
+
+
+  public static void testGraphMDE() {
+
+    // I should add some tests.
+
+  }
+
 }
