@@ -731,7 +731,7 @@ public final class Daikon {
       ppt.last_values = null;
     }
 
-    PptCombined.redundantVarsTest(all_ppts);
+    //PptCombined.redundantVarsTest(all_ppts);
 
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
