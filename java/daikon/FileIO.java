@@ -1581,6 +1581,7 @@ public final class FileIO {
         if (true) {
           System.out.printf ("Building combined ppts for func %s [ppt %s]\n",
                              ppt.function_id, ppt.name());
+          System.out.println ("Successor graph:");
           for (PptTopLevel p : ppts) {
             System.out.printf ("  %s\n", p.name());
             if (p.ppt_successors != null) {
@@ -1619,7 +1620,12 @@ public final class FileIO {
         }
 
         // Build any combined program points and add them to the global map
+        System.out.printf ("Calling combine_func_ppts for function %s:\n",
+                           ppts.get(0).name());
+        // For debugging, choose one of the following two lines.
         PptCombined.combine_func_ppts (all_ppts, ppts);
+        // PptCombined.combine_func_ppts_2 (all_ppts, ppts);
+
         System.out.printf ("Basic blocks in function %s:\n",
                            ppts.get(0).name());
         PptCombined.dump (ppts);

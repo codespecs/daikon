@@ -643,16 +643,28 @@ public class PptCombined extends PptTopLevel {
       pred.put(ppt, new LinkedHashSet<PptTopLevel>());
     }
     for (PptTopLevel ppt : func_ppts) {
-      for (String succName : ppt.ppt_successors) {
-        PptTopLevel succPpt = all_ppts.get(succName);
-        succ.get(ppt).add(succPpt);
-        pred.get(succPpt).add(ppt);
+      if (ppt.ppt_successors != null) {
+        for (String succName : ppt.ppt_successors) {
+          PptTopLevel succPpt = all_ppts.get(succName);
+          succ.get(ppt).add(succPpt);
+          pred.get(succPpt).add(ppt);
+        }
       }
     }
 
     // Compute pre- and post-dominators
     Map<PptTopLevel,Set<PptTopLevel>> predoms = GraphMDE.dominators(pred);
     Map<PptTopLevel,Set<PptTopLevel>> postdoms = GraphMDE.dominators(succ);
+
+    for (PptTopLevel ppt : func_ppts) {
+      assert predoms.get(ppt).contains(ppt);
+      assert postdoms.get(ppt).contains(ppt);
+    }
+
+    System.out.println("predominators:");
+    GraphMDE.print(predoms, System.out, 2);
+    System.out.println("postdominators:");
+    GraphMDE.print(postdoms, System.out, 2);
 
     // Find all post-dominators of each program point that are
     // pre-dominated by it.
@@ -668,51 +680,94 @@ public class PptCombined extends PptTopLevel {
       }
     }
 
+    // Sanity checks
+    assert pp.keySet().size() == func_ppts.size();
+    for (PptTopLevel ppt : func_ppts) {
+      Set<PptTopLevel> this_pp = pp.get(ppt);
+      if (! this_pp.contains(ppt)) {
+        System.out.printf("ppt: %s, this_pp.size %s%n", ppt, this_pp.size());
+        for (PptTopLevel pp_elt : this_pp) {
+          System.out.printf("pp_elt: %s%n", pp_elt);
+        }
+      }
+      assert this_pp.contains(ppt);
+    }
+    for (PptTopLevel ppt1 : func_ppts) {
+      Set<PptTopLevel> this_pp = pp.get(ppt1);
+      for (PptTopLevel ppt2 : this_pp) {
+        assert this_pp.containsAll(pp.get(ppt2));
+      }
+    }
+
+
     // Compute triggers:  last postdominator that is pre-dominated by this
     // (that is, last element of pp).
     Map<PptTopLevel,PptTopLevel> trigger = new LinkedHashMap<PptTopLevel, PptTopLevel>();
 
-    // I choose to do this iteratively, for convenience.
+    // If there is just one candidate, that is the trigger.
+    for (PptTopLevel ppt : func_ppts) {
+      Set<PptTopLevel> this_pp = pp.get(ppt);
+      assert this_pp.size() >= 1;
+      if (this_pp.size() == 1) {
+        assert this_pp.contains(ppt);
+        trigger.put(ppt, ppt);
+        System.out.printf("this_pp has size 1 for %s%n", ppt);
+      }
+    }
     // Iterate in reverse order.  Not necessary, but more efficient.
     List<PptTopLevel> func_ppts_rev = new ArrayList<PptTopLevel>(func_ppts);
     Collections.reverse(func_ppts_rev);
     boolean changed = true;
     while (changed) {
+      changed = false;
       for (PptTopLevel ppt : func_ppts_rev) {
         if (trigger.containsKey(ppt)) {
+          // We already found the trigger for this ppt.
           continue;
         }
         Set<PptTopLevel> this_pp = pp.get(ppt);
-        if (this_pp.size() == 1) {
-          assert this_pp.contains(ppt);
-          trigger.put(ppt, ppt);
-          changed = true;
-          continue;
-        }
+        assert this_pp.size() >= 1;
         // Sanity check: no more than 1 trigger should already be set
         {
-          int num_triggers = 0;
+          Set<PptTopLevel> this_triggers = new LinkedHashSet<PptTopLevel>();
+          System.out.printf("Finding candidate triggers for %s%n", ppt);
           for (PptTopLevel candidate : this_pp) {
             if (trigger.containsKey(candidate)) {
-              num_triggers++;
+              this_triggers.add(trigger.get(candidate));
+              System.out.printf(" Candidate trigger %s is the trigger of %s%n", trigger.get(candidate), candidate);
             }
           }
-          assert num_triggers <= 1;
+          if (this_triggers.size() > 1) {
+            System.out.printf("Too many candidate triggers for %s%n", ppt);
+            for (PptTopLevel this_trig : this_triggers) {
+              System.out.printf("  %s%n", this_trig);
+            }
+          }
+          assert this_triggers.size() <= 1;
         }
         for (PptTopLevel candidate : this_pp) {
           if (trigger.containsKey(candidate)) {
-            trigger.put(ppt, candidate);
+            trigger.put(ppt, trigger.get(candidate));
             changed = true;
+          } else {
+            System.out.printf("for %s, failed candidate %s%n", ppt, candidate);
           }
         }
       }
+    }
+
+    for (PptTopLevel ppt : func_ppts_rev) {
+      if (! trigger.containsKey(ppt)) {
+        System.out.printf("No trigger: ppt %s; this_pp %s%n", ppt, pp.get(ppt));
+      }
+      assert trigger.containsKey(ppt);
     }
 
     // Make the combined program points.
     Map<PptTopLevel,PptCombined> trigger_comb = new LinkedHashMap<PptTopLevel, PptCombined>();
     for (PptTopLevel ppt : func_ppts) {
       if (trigger.get(ppt) == ppt) {
-        List<PptTopLevel> ppts_to_combine = new ArrayList<PptTopLevel>(postdoms.get(ppt));
+        List<PptTopLevel> ppts_to_combine = new ArrayList<PptTopLevel>(predoms.get(ppt));
         PptCombined pptc = new PptCombined(ppts_to_combine, combined_vis(ppts_to_combine));
         trigger_comb.put(ppt, pptc);
       }
@@ -721,7 +776,9 @@ public class PptCombined extends PptTopLevel {
     // Actually do the work of side-effecting the ppts.
     for (PptTopLevel ppt : func_ppts) {
       ppt.combined_ppts_init = true;
-      ppt.combined_ppt = trigger_comb.get(ppt);
+      ppt.combined_ppt = trigger_comb.get(trigger.get(ppt));
+      assert ppt.combined_ppt != null;
+      assert ppt.combined_ppt.ppts.contains(ppt);
       ppt.combined_subsumed = (trigger.get(ppt) != ppt);
     }
 
@@ -821,8 +878,9 @@ public class PptCombined extends PptTopLevel {
         return (false);
       }
       if (!ppt.combined_ppt.ppts.contains (ppt)) {
-        System.out.printf ("ERROR: ppt %s in combined ppt %s, is not in its "
-                           + "ppt list %s\n", ppt, ppt.combined_ppt,
+        System.out.printf ("ERROR: ppt %s in combined ppt %s, "
+                           + "is not in its ppt list %s\n",
+                           ppt, ppt.combined_ppt,
                            ppt.combined_ppt.ppts);
         return false;
       }
