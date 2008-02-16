@@ -5,6 +5,7 @@ import daikon.derive.ValueAndModified;
 import daikon.util.CollectionsExt;
 import daikon.util.Pair;
 import daikon.util.UtilMDE;
+import daikon.util.GraphMDE;
 import daikon.FileIO.ParentRelation;
 
 import java.io.File;
@@ -479,13 +480,14 @@ public class PptCombined extends PptTopLevel {
    * modified as follows: <ul>
    *   <li> P's combined_ppts_init flag is set to true.
    *   <li> P's combined_ppt field is set to point to the (newly created)
-   *    combined ppt that will contain its invariants.  This
+   *    combined ppt that will contain its invariants.  The trigger for that
+   *    combined ppt is P's last postdominator that P predominates (which
+   *    may be P itself).  This
    *    combined ppt must see all of the samples for P.  That implies that
    *    the trigger for the combined ppt must post-dominate P.  This is
    *    obviously true when P is the trigger.
    *   <li> If P is not the trigger, its combined_subsumed boolean field is
-   *    set to true
-   *    executed.
+   *    set to true.
    * </ul>
    * Invariants:
    *      P.combined_ppt != null
@@ -624,6 +626,107 @@ public class PptCombined extends PptTopLevel {
         result.add(partition);
         return result;
     }
+
+
+  /**
+   * See combine_func_ppts.
+   * This is an alternate implementation of the same specification.
+   **/
+  public static void combine_func_ppts_2 (PptMap all_ppts,
+          List<PptTopLevel> func_ppts) {
+
+    // Compute convenience maps: succ and pred
+    Map<PptTopLevel,Set<PptTopLevel>> succ = new LinkedHashMap<PptTopLevel,Set<PptTopLevel>>(func_ppts.size());
+    Map<PptTopLevel,Set<PptTopLevel>> pred = new LinkedHashMap<PptTopLevel,Set<PptTopLevel>>(func_ppts.size());
+    for (PptTopLevel ppt : func_ppts) {
+      succ.put(ppt, new LinkedHashSet<PptTopLevel>());
+      pred.put(ppt, new LinkedHashSet<PptTopLevel>());
+    }
+    for (PptTopLevel ppt : func_ppts) {
+      for (String succName : ppt.ppt_successors) {
+        PptTopLevel succPpt = all_ppts.get(succName);
+        succ.get(ppt).add(succPpt);
+        pred.get(succPpt).add(ppt);
+      }
+    }
+
+    // Compute pre- and post-dominators
+    Map<PptTopLevel,Set<PptTopLevel>> predoms = GraphMDE.dominators(pred);
+    Map<PptTopLevel,Set<PptTopLevel>> postdoms = GraphMDE.dominators(succ);
+
+    // Find all post-dominators of each program point that are
+    // pre-dominated by it.
+    // "pp" = "predominated_postdominators".
+    Map<PptTopLevel,Set<PptTopLevel>> pp = new LinkedHashMap<PptTopLevel,Set<PptTopLevel>>();
+    for (PptTopLevel ppt : func_ppts) {
+      Set<PptTopLevel> this_pp = new LinkedHashSet<PptTopLevel>();
+      pp.put(ppt, this_pp);
+      for (PptTopLevel candidate : postdoms.get(ppt)) {
+        if (predoms.get(candidate).contains(ppt)) {
+          this_pp.add(candidate);
+        }
+      }
+    }
+
+    // Compute triggers:  last postdominator that is pre-dominated by this
+    // (that is, last element of pp).
+    Map<PptTopLevel,PptTopLevel> trigger = new LinkedHashMap<PptTopLevel, PptTopLevel>();
+
+    // I choose to do this iteratively, for convenience.
+    // Iterate in reverse order.  Not necessary, but more efficient.
+    List<PptTopLevel> func_ppts_rev = new ArrayList<PptTopLevel>(func_ppts);
+    Collections.reverse(func_ppts_rev);
+    boolean changed = true;
+    while (changed) {
+      for (PptTopLevel ppt : func_ppts_rev) {
+        if (trigger.containsKey(ppt)) {
+          continue;
+        }
+        Set<PptTopLevel> this_pp = pp.get(ppt);
+        if (this_pp.size() == 1) {
+          assert this_pp.contains(ppt);
+          trigger.put(ppt, ppt);
+          changed = true;
+          continue;
+        }
+        // Sanity check: no more than 1 trigger should already be set
+        {
+          int num_triggers = 0;
+          for (PptTopLevel candidate : this_pp) {
+            if (trigger.containsKey(candidate)) {
+              num_triggers++;
+            }
+          }
+          assert num_triggers <= 1;
+        }
+        for (PptTopLevel candidate : this_pp) {
+          if (trigger.containsKey(candidate)) {
+            trigger.put(ppt, candidate);
+            changed = true;
+          }
+        }
+      }
+    }
+
+    // Make the combined program points.
+    Map<PptTopLevel,PptCombined> trigger_comb = new LinkedHashMap<PptTopLevel, PptCombined>();
+    for (PptTopLevel ppt : func_ppts) {
+      if (trigger.get(ppt) == ppt) {
+        List<PptTopLevel> ppts_to_combine = new ArrayList<PptTopLevel>(postdoms.get(ppt));
+        PptCombined pptc = new PptCombined(ppts_to_combine, combined_vis(ppts_to_combine));
+        trigger_comb.put(ppt, pptc);
+      }
+    }
+
+    // Actually do the work of side-effecting the ppts.
+    for (PptTopLevel ppt : func_ppts) {
+      ppt.combined_ppts_init = true;
+      ppt.combined_ppt = trigger_comb.get(ppt);
+      ppt.combined_subsumed = (trigger.get(ppt) != ppt);
+    }
+
+  }
+
 
 
   /**
