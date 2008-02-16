@@ -1,6 +1,7 @@
 package utilMDE;
 
 import java.util.*;
+import java.io.*;
 
 /* Graph utilities.  Does not model a graph. */
 public class GraphMDE {
@@ -30,7 +31,9 @@ public class GraphMDE {
   //        DOM[n] := new_set
   //        Changed := true
 
-  /** Computes, for each node in the graph, its set of (pre-)dominators **/
+  /** Computes, for each node in the graph, its set of (pre-)dominators.
+   * Supply a successor graph if you want post-dominators.
+  **/
   public static
   <T> Map<T,Set<T>> dominators(Map<T,Set<T>> preds) {
 
@@ -58,6 +61,7 @@ public class GraphMDE {
 
     boolean changed = true;
     while (changed) {
+      changed = false;
       for (T node : non_roots) {
         Set<T> new_doms = null;
         for (T pred : preds.get(node)) {
@@ -69,6 +73,7 @@ public class GraphMDE {
             new_doms.retainAll(dom_of_pred);
           }
         }
+        new_doms.add(node);
         if (! dom.get(node).equals(new_doms)) {
           dom.put(node, new_doms);
           changed = true;
@@ -76,8 +81,25 @@ public class GraphMDE {
       }
     }
 
+    for (T node : preds.keySet()) {
+      assert dom.get(node).contains(node);
+    }
+
     return dom;
   }
 
+  public static
+  <T> void print(Map<T,Set<T>> graph, PrintStream ps, int indent) {
+    String indentString = "";
+    for (int i=0; i<indent; i++) {
+      indentString += " ";
+    }
+    for (T node : graph.keySet()) {
+      ps.printf("%s%s%n", indentString, node);
+      for (T child : graph.get(node)) {
+        ps.printf("  %s%s%n", indentString, child);
+      }
+    }
+  }
 
 }

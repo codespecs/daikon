@@ -2396,7 +2396,44 @@ public final class TestUtilMDE extends TestCase {
 
   public static void testGraphMDE() {
 
-    // I should add some tests.
+    // Figure 1 from http://www.boost.org/libs/graph/doc/lengauer_tarjan_dominator.htm#fig:dominator-tree-example
+
+    Map<Integer, Set<Integer>> preds1 = new LinkedHashMap<Integer, Set<Integer>>();
+    Map<Integer, Set<Integer>> succs1 = new LinkedHashMap<Integer, Set<Integer>>();
+    for (int i=0; i<=7; i++) {
+      preds1.put(new Integer(i), new LinkedHashSet<Integer>());
+      succs1.put(new Integer(i), new LinkedHashSet<Integer>());
+    }
+    succs1.get(0).add(1);    preds1.get(1).add(0);
+    succs1.get(1).add(2);    preds1.get(2).add(1);
+    succs1.get(1).add(3);    preds1.get(3).add(1);
+    succs1.get(2).add(7);    preds1.get(7).add(2);
+    succs1.get(3).add(4);    preds1.get(4).add(3);
+    succs1.get(4).add(5);    preds1.get(5).add(4);
+    succs1.get(4).add(6);    preds1.get(6).add(4);
+    succs1.get(5).add(7);    preds1.get(7).add(5);
+    succs1.get(6).add(4);    preds1.get(4).add(6);
+    Map<Integer,Set<Integer>> dom1post = GraphMDE.dominators(succs1);
+    assert dom1post.get(0).toString().equals("[0, 1, 7]");
+    assert dom1post.get(1).toString().equals("[1, 7]");
+    assert dom1post.get(2).toString().equals("[2, 7]");
+    assert dom1post.get(3).toString().equals("[3, 4, 5, 7]");
+    assert dom1post.get(4).toString().equals("[4, 5, 7]");
+    assert dom1post.get(5).toString().equals("[5, 7]");
+    assert dom1post.get(6).toString().equals("[4, 5, 6, 7]");
+    assert dom1post.get(7).toString().equals("[7]");
+
+    Map<Integer,Set<Integer>> dom1pre = GraphMDE.dominators(preds1);
+    assert dom1pre.get(0).toString().equals("[0]");
+    assert dom1pre.get(1).toString().equals("[0, 1]");
+    assert dom1pre.get(2).toString().equals("[0, 1, 2]");
+    assert dom1pre.get(3).toString().equals("[0, 1, 3]");
+    assert dom1pre.get(4).toString().equals("[0, 1, 3, 4]");
+    assert dom1pre.get(5).toString().equals("[0, 1, 3, 4, 5]");
+    assert dom1pre.get(6).toString().equals("[0, 1, 3, 4, 6]");
+    assert dom1pre.get(7).toString().equals("[0, 1, 7]");
+
+    // I should add some more tests.
 
   }
 
