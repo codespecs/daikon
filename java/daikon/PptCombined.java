@@ -445,24 +445,60 @@ public class PptCombined extends PptTopLevel {
   }
 
   /**
-   * Creates combined program points that cover multiple basic
-   * blocks.  Each basic block ppt is combined with any basic blocks
-   * that dominate it (always occur before it).
+   * Creates combined program points that cover multiple basic blocks.
+   * Given a list of basic block ppts, each one is made into a combined
+   * program point along with any basic blocks that pre-dominate it (always
+   * execute previously to it).
    *
    * The input is a list of the basic block ppts that make up the
-   * function.  Each bb ppt contains a list of the names of all of the
-   * basic blocks that directly succeed it.  That list is used to
-   * calculate the dominators.
+   * function.  The first element in the list is the function entry.
+   * In each bb ppt, the field ppt_successors contains a list of the names
+   * of all of the basic blocks that directly succeed it.  That list
+   * is used to calculate the dominators.
    *
-   * Each program point in the function is modified as follows: <ul>
-   *   <li> Its combined_ppts_init flag is set to true
-   *   <li> Its combined_ppt field is set to point to the combined
-   *    program point that should be processed when this bb ppt is
-   *    executed.   This field may be null if this bb ppt is completely
-   *    subsumed by other combined ppts
-   *    <li> Its combined_subsumed boolean field is set to true if this
-   *    ppt is subsumed by a combined program point, false otherwise.
+   * The resulting combined ppt has samples added to it when its
+   * 'trigger' ppt is executed.  The trigger is always the last ppt in
+   * the combined program point.  The trigger is thus dominated by all
+   * of the other basic blocks in the combined ppt.  That guarantees
+   * that samples for those basic blocks were received before the
+   * trigger.  Those samples are just saved away when they are
+   * received.  When the trigger ppt is executed, its samples are
+   * combined with the samples from the other (previously executed)
+   * basic blocks and the combined sample is processed by the combined
+   * program point.
    *
+   * It is not necessary to create a unique combined program point for
+   * each basic block.  Consider two basic blocks (A and B).  If A is
+   * a pre-dominator of B, A will be included in B's combined program
+   * point.  If A is post-dominated by B, it can share B's combined
+   * program point (because the combined program point for B will have
+   * seen all of the samples for A).  We say that A is 'subsumed by'
+   * B.
+   *
+   * Each program point (referred to as P) in the function is
+   * modified as follows: <ul>
+   *   <li> P's combined_ppts_init flag is set to true.
+   *   <li> P's combined_ppt field is set to point to the (newly created)
+   *    combined ppt that will contain its invariants.  This
+   *    combined ppt must see all of the samples for P.  That implies that
+   *    the trigger for the combined ppt must post-dominate P.  This is
+   *    obviously true when P is the trigger.
+   *   <li> If P is not the trigger, its combined_subsumed boolean field is
+   *    set to true
+   *    executed.
+   * </ul>
+   * Invariants:
+   *      P.combined_ppt != null
+   *      P.combined_subsumed==true implies
+   *        P.combined_ppt.trigger post-dominates P
+   *      P.combine_subsumed==false implies
+   *        P.combined_ppt.trigger == P
+   *
+   *  Note that trigger is not an actual field of PptCombined (though it
+   *  could be).  But it should always be the last ppt in the list of
+   *  ppts in the combined ppt:
+   *
+   *    trigger = PptCombined.ppts.get(PptCombined.ppts.size()-1)
    */
   public static void combine_func_ppts (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {
@@ -678,7 +714,7 @@ public class PptCombined extends PptTopLevel {
       if (ppt.ppt_successors != null) {
         for (String succ : ppt.ppt_successors) {
           PptTopLevel ppt_succ = Daikon.all_ppts.get (succ);
-          if (succs == "")
+          if (succs == "")      // "interned"
             succs = bb_short_name (ppt_succ);
           else
             succs += " " + bb_short_name (ppt_succ);
@@ -687,7 +723,7 @@ public class PptCombined extends PptTopLevel {
       String preds = "";
       if (ppt.predecessors != null) {
         for (PptTopLevel pred : ppt.predecessors) {
-          if (preds == "")
+          if (preds == "")      // "interned"
             preds = bb_short_name (pred);
           else
             preds += " " + bb_short_name (pred);
@@ -749,7 +785,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   // Checks that if two variables are said to be redundant by Carlos's
-  // analysis, they are deemed equal by daiokn's dynamic analysis.
+  // analysis, they are deemed equal by Daikon's dynamic analysis.
   public static void redundantVarsTest(PptMap all_ppts) {
 
     for (PptTopLevel ppt : all_ppts.all_ppts()) {
