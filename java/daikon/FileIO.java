@@ -1610,12 +1610,15 @@ public final class FileIO {
           // The function entry should be able should be strongly connected
           for (int i = 1; i < ppts.size(); i++) {
             PptTopLevel p = ppts.get(i);
-            assert ppts.get(0).connected (p) : p;
+            if (!ppts.get(0).connected (p))
+              System.out.printf ("ERROR: ppt %s in func %s is not connected\n",
+                                 p, ppts.get(0));
           }
           // Every block except the first should have at least one predecessor
           for (int i = 1; i < ppts.size(); i++) {
             PptTopLevel p = ppts.get(i);
-            assert p.predecessors.size() > 0 : p;
+            if (p.predecessors.size() == 0)
+              System.out.printf ("ERROR: ppt %s has no predecessors\n", p);
           }
         }
 
@@ -1623,13 +1626,13 @@ public final class FileIO {
         System.out.printf ("Calling combine_func_ppts for function %s:\n",
                            ppts.get(0).name());
         // For debugging, choose one of the following two lines.
-        PptCombined.combine_func_ppts (all_ppts, ppts);
-        // PptCombined.combine_func_ppts_2 (all_ppts, ppts);
+        // PptCombined.combine_func_ppts (all_ppts, ppts);
+        PptCombined.combine_func_ppts_2 (all_ppts, ppts);
 
         System.out.printf ("Basic blocks in function %s:\n",
                            ppts.get(0).name());
         PptCombined.dump (ppts);
-        PptCombined.check_func_ppts (ppts);
+        assert PptCombined.check_func_ppts (ppts);
         for (PptTopLevel p : ppts) {
           if (p.combined_subsumed)
             continue;
@@ -1641,7 +1644,7 @@ public final class FileIO {
             : p.combined_ppt.name();
           all_ppts.add (p.combined_ppt);
           p.combined_ppt.dump();
-          p.combined_ppt.check();
+          assert p.combined_ppt.check();
         }
       }
     }
