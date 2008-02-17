@@ -31,9 +31,12 @@ public class GraphMDE {
   //        DOM[n] := new_set
   //        Changed := true
 
+  // The two algorithms are essentially the same; this implementation uses
+  // follows the Wikipedia one.
+
   /** Computes, for each node in the graph, its set of (pre-)dominators.
    * Supply a successor graph if you want post-dominators.
-  **/
+   **/
   public static
   <T> Map<T,List<T>> dominators(Map<T,List<T>> preds) {
 
