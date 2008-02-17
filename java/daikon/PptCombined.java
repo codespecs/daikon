@@ -856,7 +856,7 @@ public class PptCombined extends PptTopLevel {
     }
 
     PptTopLevel trigger;
-    boolean ppts_in_dominator_order = false;
+    boolean ppts_in_dominator_order = true;
 
     if (ppts_in_dominator_order) {
 
