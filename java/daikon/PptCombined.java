@@ -62,7 +62,8 @@ public class PptCombined extends PptTopLevel {
 
   public PptCombined (List<PptTopLevel> ppts, CombinedVisResults vis) {
 
-    super (ppts.get(0).name() + ".." + ppts.get(ppts.size()-1).ppt_name.name(),
+    // old name: ppts.get(0).name()+".."+ppts.get(ppts.size()-1).ppt_name.name()
+    super ("CP:" + short_component_str (ppts),
            PptType.COMBINED_BASIC_BLOCK,
            new ArrayList<ParentRelation>(), EnumSet.noneOf (PptFlags.class),
            null, ppts.get(0).function_id, -1, vis.var_infos);
@@ -280,12 +281,13 @@ public class PptCombined extends PptTopLevel {
   }
 
 /** Returns a name basic on its constituent ppts **/
+/*
   public String name() {
     String name = ppts.get(0).name();
     name += ".." + ppts.get(ppts.size()-1).ppt_name.name();
     return name;
   }
-
+*/
   /**
    * Initialize the ppt.  This is similar to init_ppt in Daikon.java
    * except that orig variables are never created (they don't make sense
@@ -489,12 +491,21 @@ public class PptCombined extends PptTopLevel {
    *   <li> If P is not the trigger, its combined_subsumed boolean field is
    *    set to true.
    * </ul>
-   * Invariants:
+   * Invariants over P:
    *      P.combined_ppt != null
    *      P.combined_subsumed==true implies
    *        P.combined_ppt.trigger post-dominates P
    *      P.combine_subsumed==false implies
    *        P.combined_ppt.trigger == P
+   *
+   * Invariants over the combined ppt C:
+   *    C.ppts[i] pre-dominates C.ppts[i+1]
+   *    trigger = C.ppts[sizeof(C.ppts)-1]
+   *    trigger.combine_subsumed==false;
+   *    trigger.combined_ppt == C
+   *    for (P : C.ppts[0..sizeof(C.ppts)-2])
+   *      P.combined_subsumed==false implies P.combined_ppt != C
+   *      P.combined_ppt == C implies Trigger post-dominates P
    *
    *  Note that trigger is not an actual field of PptCombined (though it
    *  could be).  But it should always be the last ppt in the list of
@@ -808,36 +819,69 @@ public class PptCombined extends PptTopLevel {
       }
     }
 
-    // Make sure that each block is dominated by the previous one
-    for (int i = ppts.size()-1; i > 0; i--) {
-      PptTopLevel ppt = ppts.get (i);
-      PptTopLevel prev = ppts.get(i-1);
-      // System.out.printf ("Checking %s dominated by %s\n", bb_short_name(ppt),
-      //                   bb_short_name (prev));
-      if (!ppt.all_predecessors_goto (prev)) {
-        System.out.printf ("ERROR: ppt %s not dominated by ppt %s\n",
-                           ppt.name(), prev.name());
+    PptTopLevel trigger;
+    boolean ppts_in_dominator_order = false;
+
+    if (ppts_in_dominator_order) {
+
+      // Make sure that each block is dominated by the previous one
+      for (int i = ppts.size()-1; i > 0; i--) {
+        PptTopLevel ppt = ppts.get (i);
+        PptTopLevel prev = ppts.get(i-1);
+        // System.out.printf ("Checking %s dominated by %s\n", bb_short_name(ppt),
+        //                   bb_short_name (prev));
+        if (!ppt.all_predecessors_goto (prev)) {
+          System.out.printf ("ERROR: ppt %s not dominated by ppt %s\n",
+                             ppt.name(), prev.name());
+          return false;
+        }
+      }
+
+      // Make sure that the last ppt is the only trigger for the combined ppt
+      trigger = ppts.get(ppts.size()-1);
+      if (trigger.combined_ppt != this) {
+        System.out.printf ("ERROR: trigger ppt %s combined ppt is %s not %s\n",
+                           trigger, trigger.combined_ppt, combined_ppt);
         return false;
       }
-    }
-
-    // Make sure that the last ppt is the only trigger for the combined ppt
-    PptTopLevel trigger = ppts.get(ppts.size()-1);
-    if (trigger.combined_ppt != this) {
-      System.out.printf ("ERROR: trigger ppt %s combined ppt is %s not %s\n",
-                         trigger, trigger.combined_ppt, combined_ppt);
-      return false;
-    }
-    if (trigger.combined_subsumed) {
-      System.out.printf ("ERROR: trigger ppt %s is combined_subsumed in %s\n",
-                         trigger, this);
-      return false;
-    }
-    for (int i = 0; i < ppts.size()-1; i++) {
-      PptTopLevel ppt = ppts.get(i);
-      if (!ppt.combined_subsumed && (ppt.combined_ppt == this)) {
-        System.out.printf ("ERROR: multiple triggers (%s) to %s\n", ppt, this);
+      if (trigger.combined_subsumed) {
+        System.out.printf ("ERROR: trigger ppt %s is combined_subsumed in %s\n",
+                           trigger, this);
         return false;
+      }
+      for (int i = 0; i < ppts.size()-1; i++) {
+        PptTopLevel ppt = ppts.get(i);
+        if (!ppt.combined_subsumed && (ppt.combined_ppt == this)) {
+          System.out.printf ("ERROR: multiple triggers (%s) to %s\n", ppt,
+                             this);
+          return false;
+        }
+      }
+    } else { // ppts are NOT in dominator order
+
+      //Find the trigger (and make sure there is only one)
+      trigger = null;
+      for (PptTopLevel ppt : ppts) {
+        if (!ppt.combined_subsumed && (ppt.combined_ppt == this)) {
+          if (trigger == null)
+            trigger = ppt;
+          else {
+            System.out.printf ("ERROR: multiple triggers (%s,%s) for %s\n",
+                               trigger, ppt, this);
+            return false;
+          }
+        }
+      }
+
+      // Make sure every other block pre-dominates the trigger
+      for (PptTopLevel ppt : ppts) {
+        if (ppt == trigger)
+          continue;
+        if (!trigger.all_predecessors_goto (ppt)) {
+          System.out.printf ("ERROR: %s does not pre-dominate trigger %s\n",
+                             ppt, trigger);
+          return false;
+        }
       }
     }
 
@@ -930,12 +974,18 @@ public class PptCombined extends PptTopLevel {
 
   /** Returns a list of the component ppts that make up this combined ppt **/
   public String short_component_str() {
+    return short_component_str (ppts);
+  }
+
+  /** Returns a list of the component ppts that make up this combined ppt **/
+  public static String short_component_str(List<PptTopLevel> ppts) {
     StringBuilder sb = new StringBuilder();
     for (PptTopLevel ppt : ppts) {
       sb.append (String.format ("%s-", bb_short_name (ppt)));
     }
     return sb.deleteCharAt (sb.length()-1).toString();
   }
+
 
   public static String bb_short_name (PptTopLevel ppt) {
     if (ppt == null)
