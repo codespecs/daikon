@@ -35,15 +35,15 @@ public class GraphMDE {
    * Supply a successor graph if you want post-dominators.
   **/
   public static
-  <T> Map<T,Set<T>> dominators(Map<T,Set<T>> preds) {
+  <T> Map<T,List<T>> dominators(Map<T,List<T>> preds) {
 
-    Set<T> nodes = preds.keySet();
+    List<T> nodes = new ArrayList<T>(preds.keySet());
 
-    // Consider computing roots, for convenience
-    HashSet<T> roots = new HashSet<T>();
+    // Compute roots & non-roots, for convenience
+    List<T> roots = new ArrayList<T>();
     List<T> non_roots = new ArrayList<T>();
 
-    Map<T,Set<T>> dom = new HashMap<T,Set<T>>();
+    Map<T,List<T>> dom = new HashMap<T,List<T>>();
 
     // Initialize result:  for roots just the root, otherwise everything
     for (T node : preds.keySet()) {
@@ -51,10 +51,10 @@ public class GraphMDE {
         // This is a root
         roots.add(node);
         // Its only dominator is itself.
-        dom.put(node, Collections.singleton(node));
+        dom.put(node, new ArrayList<T>(Collections.singleton(node)));
       } else {
         non_roots.add(node);
-        dom.put(node, new HashSet<T>(nodes));
+        dom.put(node, new ArrayList<T>(nodes));
       }
     }
     assert roots.size() + non_roots.size() == nodes.size();
@@ -63,12 +63,12 @@ public class GraphMDE {
     while (changed) {
       changed = false;
       for (T node : non_roots) {
-        Set<T> new_doms = null;
+        List<T> new_doms = null;
         for (T pred : preds.get(node)) {
-          Set<T> dom_of_pred = dom.get(pred);
+          List<T> dom_of_pred = dom.get(pred);
           if (new_doms == null) {
             // make copy because we may side-effect new_doms
-            new_doms = new HashSet<T>(dom_of_pred);
+            new_doms = new ArrayList<T>(dom_of_pred);
           } else {
             new_doms.retainAll(dom_of_pred);
           }
@@ -89,7 +89,7 @@ public class GraphMDE {
   }
 
   public static
-  <T> void print(Map<T,Set<T>> graph, PrintStream ps, int indent) {
+  <T> void print(Map<T,List<T>> graph, PrintStream ps, int indent) {
     String indentString = "";
     for (int i=0; i<indent; i++) {
       indentString += " ";
