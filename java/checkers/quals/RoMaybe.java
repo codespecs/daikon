@@ -12,7 +12,7 @@ import static java.lang.annotation.ElementType.*;
  * invocation. {@code @RoMaybe} has the same behavior as creating two copies
  * of the method signature, one where all of its ocurrences are substituted with
  * {@code @ReadOnly}, and one where all of its occurences are substituted with
- * {@code @Mutable); that is, if it were possible to have annotation overloading,
+ * {@code @Mutable}; that is, if it were possible to have annotation overloading,
  * <pre>
  * &#064;RoMaybe getA() &#064;RoMaybe {return a;}
  * </pre>
@@ -23,8 +23,8 @@ import static java.lang.annotation.ElementType.*;
  * </pre>
  *
  * As a first example, if {@code @RoMaybe} appears in the return type of a
- * method, at the method invocation it will be interpreted as {@code
- * @ReadOnly} if any the arguments passed to parameter annotated with
+ * method, at the method invocation it will be interpreted as {@code @ReadOnly}
+ * if any the arguments passed to parameter annotated with
  * {@code @ReadOnly} is a readonly instance, or if the receiver type
  * is readonly and the method is invocated from a readonly context. That is,
  * <pre>
@@ -70,8 +70,7 @@ import static java.lang.annotation.ElementType.*;
  * annotated with {@code @RoMaybe} suffer the same restrictions inside
  * the method body as parameters annotated with {@code @ReadOnly}, and
  * methods with receiver type annotated as {@code @RoMaybe} suffer the
- * same restrictions as methods with receiver type annotated as {@code
- * @ReadOnly}.
+ * same restrictions as methods with receiver type annotated as {@code @ReadOnly}.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

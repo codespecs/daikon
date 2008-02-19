@@ -165,7 +165,7 @@ public final class DCRuntime {
 
   /**
    * Handles <code>super.equals(Object)</code> calls.<p>
-   * @see active_equals_calls
+   * @see #active_equals_calls
    */
   public static boolean dcomp_super_equals(Object o1, Object o2) {
     // Make obj1 and obj2 comparable
@@ -301,7 +301,7 @@ public final class DCRuntime {
 
   /**
    * Handles <code>super.clone()</code> calls.<p>
-   * @see active_clone_calls
+   * @see #active_clone_calls
    */
   public static Object dcomp_super_clone(Object o) throws Throwable {
     Class<?> oc = o.getClass();   // "Don't call it that."

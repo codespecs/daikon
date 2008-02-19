@@ -36,7 +36,7 @@ public class BasicBlockMerger<T> {
 
     /**
      * initial implementation to merge Basic Blocks
-     * 
+     *
      * @return A structure indicating what are the other PPTs that need to be
      *         combined with the current PPT
      */
@@ -71,15 +71,15 @@ public class BasicBlockMerger<T> {
                 fillUpSubsumedListInformation(currentNode, predecessorList
                         .get(predecessorList.size() - 1));
         } else { // treat the case when the node is a join
-           
+
             //when the first entry node in a function is also a join node,
             // that node should not be merged with its predecessors
             if (predecessorList.size() == 0) {
-                // do nothing, but just add the current node as last entry 
+                // do nothing, but just add the current node as last entry
                 // to the structure
                 extendedPredecessorList.add(currentNode);
             } else {
-                
+
                 T matchingForkNode = findMatchingForkNode(currentNode);
 
                 int indexOfFork;
@@ -153,20 +153,20 @@ public class BasicBlockMerger<T> {
         SearchNodeUtility<T> successorSearch = new SearchNodeUtility<T>(graph);
 
         List<T> visitedNodes = new ArrayList<T>();
-        
+
         // initialize the visitedNodes with the adjacents of the joinNode.
         // This forces the search to look only in the true predecessors
         // of the joinNode (otherwise, the search would look into successor
-        // nodes that happen to be predecessors as well (for example see 
+        // nodes that happen to be predecessors as well (for example see
         // BasicBlockMergerTest.testOneCycle() )
         List<T> adjacentsToJoinNode = graph.get(indexNodes.indexOf(joinNode));
         for (int i = 0; i < adjacentsToJoinNode.size(); i++)
             visitedNodes.add(adjacentsToJoinNode.get(i));
-        
+
         T earlierFork = predecessorSearch.findDepthFirstStopAtCondition(
                 joinNode, visitedNodes);
 
-        
+
 
         boolean foundEarliestFork = false;
         while (!foundEarliestFork) {
@@ -174,7 +174,7 @@ public class BasicBlockMerger<T> {
             // any fork, see BasicBlockMerger.testOneCycle
             if (earlierFork == null)
                 return null;
-            
+
             List<T> copyVisitedNodes = new ArrayList<T>();
             copyVisitedNodes.addAll(visitedNodes);
             // if it is possible to come back to the join, without visiting
@@ -183,7 +183,7 @@ public class BasicBlockMerger<T> {
                     joinNode, copyVisitedNodes);
             if (!foundEarliestFork)
                 earlierFork = predecessorSearch.findDepthFirstStopAtCondition(
-                        earlierFork, copyVisitedNodes); 
+                        earlierFork, copyVisitedNodes);
         }
 
         return earlierFork;
@@ -238,8 +238,8 @@ public class BasicBlockMerger<T> {
 
     /**
      * precondition: This method can be called ONLY after calling
-     * {@link BasicBlockMerger.computeTransposedGraph()}
-     * 
+     * {@link BasicBlockMerger#computeTransposedGraph()}
+     *
      */
     public void computeJoinNodes() {
         joins = new ArrayList<T>();
