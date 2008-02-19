@@ -1633,6 +1633,7 @@ public final class FileIO {
                            ppts.get(0).name());
         PptCombined.dump (ppts);
         assert PptCombined.check_func_ppts (ppts);
+        // PptCombined.check_func_ppts (ppts);
         for (PptTopLevel p : ppts) {
           if (p.combined_subsumed)
             continue;
@@ -1645,6 +1646,7 @@ public final class FileIO {
           all_ppts.add (p.combined_ppt);
           p.combined_ppt.dump();
           assert p.combined_ppt.check();
+          // p.combined_ppt.check();
         }
       }
     }
