@@ -14,19 +14,19 @@ public class InstructionUtils {
    * are in the same partition iff they are comparable. Two variables are
    * comparable if they appear in the same instruction.
    */
-  public static List<List<String>> computeComparableSets(List<IInstruction> path) {
+  public static Set<Set<String>> computeComparableSets(List<IInstruction> path) {
 
     // The elements of the partition.
     Set<String> vars = getAllVarNames(path);
 
     // Stores the sets that make up the partition. Initially, the
     // partition consists of singleton sets, one per variable.
-    DSForest<String> partition = new DSForest<String>();
+    DSForest partition = new DSForest();
     for (String v : vars)
-      partition.makeSet(v);
+      partition.add(v);
 
     for (IInstruction instr : path) {
-      
+
       if (instr instanceof X86Instruction) {
         processComparables((X86Instruction)instr, vars, partition);
       } else {
@@ -36,37 +36,28 @@ public class InstructionUtils {
         }
       }
     }
-    
-    List<List<String>> retval = new ArrayList<List<String>>();
-    for (List<String> lo : partition.asLists()) {
-      List<String> block = new ArrayList<String>();
-      retval.add(block);
-      for (Object o : lo) {
-        assert o != null;
-        assert o instanceof String : o.getClass();
-        block.add((String) o);
-      }
-    }
-    return retval;
+
+    return partition.getSets();
   }
-  
-  private static void processComparables(X86Instruction instr, Set<String> vars, DSForest<String> partition) {
-    Set<String> vi = new LinkedHashSet<String>();
+
+  private static void processComparables(X86Instruction instr, Set<String> vars, DSForest partition) {
+    List<String> comparables = new ArrayList<String>();
+
+    Set<String> bvs = instr.getBinaryVarNames();
     for (String v : vars) {
-      if (instr.getBinaryVarNames().contains(v)) {
-        vi.add(v);
+      if (bvs.contains(v)) {
+        comparables.add(v);
         continue;
       }
       if (instr.kills(v)) {
-        vi.add(v);
+        comparables.add(v);
         continue;
       }
     }
-    if (vi.size() <= 1) return; // Nothing to union.
-    List<String> viList = new ArrayList<String>(vi);
-    String e1 = viList.get(0);
-    for (int i = 1; i < viList.size(); i++) {
-      partition.union(e1, viList.get(i));
+    if (comparables.size() <= 1) return; // Nothing to union.
+    String e1 = comparables.get(0);
+    for (int i = 1; i < comparables.size(); i++) {
+      partition.union(e1, comparables.get(i));
     }
   }
 
@@ -111,7 +102,7 @@ public class InstructionUtils {
     }
     return redundantsFinal;
   }
-  
+
   /**
    * Computes a set of binary variables that are guaranteed to be redundant.
    *
@@ -200,8 +191,8 @@ public class InstructionUtils {
           timeKilled.put(var, time);
       }
     }
-    
-    
+
+
     // Keep only entries with redundant variables.
     // Also, compute statistics for redundant variables obtained via the analysis.
     int totalRedVars = 0;
@@ -217,7 +208,7 @@ public class InstructionUtils {
         //redundantVarsFinal.put(e.getKey(), e.getValue());
         cum_redsperleader += e.getValue().size();
         sam_redsperleader++;
-        totalRedVars += e.getValue().size();  
+        totalRedVars += e.getValue().size();
       }
     }
     cum_redratio += (totalRedVars / (double)totalVars);
@@ -226,12 +217,12 @@ public class InstructionUtils {
     //return redundantVarsFinal;
     return result;
   }
-  
+
   private static double cum_redratio = 0;
   private static int sam_redratio = 0;
   private static double cum_redsperleader = 0;
   private static int sam_redsperleader = 0;
-  
+
   public static void printStats() {
     System.out.println("average redundant variable ratio per ppt: "
         + Double.toString(cum_redratio / sam_redratio));

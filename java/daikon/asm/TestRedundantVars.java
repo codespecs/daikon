@@ -13,13 +13,15 @@ import java.util.Map;
  * Input: 3 text files associated with the same dtrace file:
  *
  *
- *   args[0] : a file that we'll call
- *   `without.txt', the resulting invariants (in textual form) of
- *   running daikon without redundant variable analysis.
+ *   args[0] : a file that we'll call `without.txt', the resulting
+ *   text of running `daikon.PrintInvariants --config_option
+ *   daikon.PrintInvariants.print_all=true' on an invariant file
+ *   created without redundant variable analysis.
  *
- *   args[1] : a file that we'll call
- *   `with.txt', the resulting invariants (in textual form) of running
- *   daikon with redundant variable analysis.
+ *   args[1] : a file that we'll call `with.txt', the resulting text
+ *   of running `daikon.PrintInvariants --config_option
+ *   daikon.PrintInvariants.print_all=true' on an invriant file
+ *   created with redundant variable analysis.
  *
  *   args[2] : a file that we'll call
  *   `reds.txt', the file with redundant var info produced when running
@@ -55,6 +57,9 @@ public class TestRedundantVars {
         reds =    PptFile.getPptFile(args[2]);
         System.out.println(reds.records.size() + " records.");
 
+
+        boolean success = true;
+
         for (Map.Entry<String, List<String>> e : reds.records.entrySet()) {
 
             if (e.getValue().size() == 0) {
@@ -62,35 +67,59 @@ public class TestRedundantVars {
                 continue;
             }
 
-            process_ppt(e.getKey());
+            if (!process_ppt(e.getKey())) {
+                success = false;
+            }
         }
+
+        if (!success)
+            System.exit(1);
     }
 
-    private static void process_ppt(String ppt) {
+    // Returns true iff all tests pass.
+    private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);
-        if (invsWithout == null)  {System.out.println("ppt not found in without: " + ppt); return; }
         List<String> invsWith = with.records.get(ppt);
-        if (invsWithout == null)  {System.out.println("ppt not found in with: " + ppt); return; }
+
+        if (invsWithout == null) {
+            assert invsWith == null : ppt.toString();
+            return true; // We don't consider missing ppts as failures.
+        }
+
+        assert invsWith != null;
+
         List<String> redVars = reds.records.get(ppt);
         assert redVars != null : ppt;
 
+        boolean success = true;
+
         for (String invWithout : invsWithout) {
             if (mentionsVar(invWithout, redVars)) {
-                if (invsWith.contains(invWithout))
+                if (invsWith.contains(invWithout)) {
                     System.out.println(context("Invariant from daikon-w/o-anal mentions rvars, but also present in daikon-w-anal", ppt, invWithout, invsWith, invsWithout, redVars));
+                    success = false;
+                }
             } else {
-                if (!( invsWith.contains(invWithout)))
+                if (!( invsWith.contains(invWithout))) {
                     System.out.println(context("Invariant from daikon-w/o-anal does not mention rvars, but not present in daikon-w-anal", ppt, invWithout, invsWith, invsWithout, redVars));
+                    success = false;
+                }
             }
         }
 
         for (String invWith : invsWith) {
-            if (mentionsVar(invWith, redVars))
+            if (mentionsVar(invWith, redVars)) {
                 System.out.println(context("Invariant from daikon-w-anal mentiones rvars", ppt, invWith, invsWith, invsWithout, redVars));
-            if (!(invsWithout.contains(invWith)))
+                success = false;
+            }
+            if (!(invsWithout.contains(invWith))) {
                 System.out.println(context("Invariant from daikon-w-anal not present in daikon-w/o-anal", ppt, invWith, invsWith, invsWithout, redVars));
+                success = false;
+            }
         }
+
+        return success;
     }
 
     private static String context(String message, String ppt, String inv, List<String> invsWith, List<String> invsWithout,

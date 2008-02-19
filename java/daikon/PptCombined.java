@@ -112,6 +112,8 @@ public class PptCombined extends PptTopLevel {
     // Debugging: print path.
     if (false) {
       System.out.println("\n\nPATH:");
+      System.out.println(" NOTE: Instructions in blocks between dominators are preceded by \"*\"");
+      System.out.println("       and may or may not have been executed in the path.");
       for (IInstruction instr : path) {
         if (instr instanceof X86Instruction) {
           debugPrint(instr, false, result);
@@ -164,7 +166,8 @@ public class PptCombined extends PptTopLevel {
     return path;
   }
 
-  private static void debugPrint(IInstruction instr, boolean isPotential, Map<String, String> redundantVariables) {
+  private static void debugPrint(IInstruction instr, boolean isPotential,
+                                 Map<String, String> redundantVariables) {
     System.out.print(UtilMDE.rpad((isPotential ? "*" : " ") + instr.toString(), 60));
     System.out.print("VARS: ");
     for (String s :  instr.getBinaryVarNames()) System.out.print(" " + s);
@@ -237,7 +240,7 @@ public class PptCombined extends PptTopLevel {
     Collections.sort(allSorted);
 
     if (!varsFromPpts.equals(varsFromAsm)) {
-      System.out.println("WARNING: mismatched variables in combined ppt vs. asm file:");
+      System.out.println("ERROR: mismatched variables in combined ppt vs. asm file:");
       System.out.println(UtilMDE.rpad("from var_infos:", 30) + UtilMDE.rpad("from asm file:", 30));
       for (String s : allSorted) {
         if (!iff(varsFromPpts.contains(s), varsFromAsm.contains(s))) {
@@ -267,6 +270,15 @@ public class PptCombined extends PptTopLevel {
     Set<PptTopLevel> visited = new LinkedHashSet<PptTopLevel>();
     Queue<PptTopLevel> toProcess = new LinkedList<PptTopLevel>();
     toProcess.addAll(dest.predecessors);
+    if (!dest.predecessors.contains(dest)) {
+      // Check to see if this basic block really does not have a
+      // self-loop. If it does, output warning message (but in galar)
+      // and add the loop ourselves.
+      if (has_self_cycle(dest)) {
+        System.out.println("ERROR: Missing self-loop in successor list of: " + dest.toString());
+        toProcess.add(dest);
+      }
+    }
     while (!toProcess.isEmpty()) {
       PptTopLevel p = toProcess.poll();
       if (p == source)
@@ -278,6 +290,46 @@ public class PptCombined extends PptTopLevel {
       }
     }
     return new ArrayList<PptTopLevel>(visited);
+  }
+
+  // WORKAROUND FOR BUG IN GALAR, which does not output self-cycles.
+  private static boolean has_self_cycle(PptTopLevel ppt) {
+    assert assemblies != null;
+
+    // Find out of last instruction is a jump instruction.
+    List<X86Instruction> instructionsForPpt = assemblies.getInstructions(ppt.name());
+    if (instructionsForPpt.size() == 0)
+      return false;
+    X86Instruction lastInstr = instructionsForPpt.get(instructionsForPpt.size() -1);
+    if (lastInstr.getOpName().charAt(0) != 'j') // It's not a jump instruction
+      return false;
+
+    // Last instruction is a jump. Find the last 4 digits of the jump address.
+    assert lastInstr.getArgs().size() == 1 : lastInstr.toString();
+    String operand = lastInstr.getArgs().get(0);
+    if (!operand.startsWith("$0x"))
+      return false; // Not of the form "<jump instr> <constant>"
+    String operand_last_4_digits = last_4_digits(operand.substring(1) /* without the $ */);
+
+    // Now, find the last 4 digits of this block's address.
+    assert ppt.name().indexOf(":0x") != -1;
+    int start = ppt.name().indexOf(":0x") + 1;
+    assert ppt.name().indexOf(":::") != -1;
+    int end = ppt.name().indexOf(":::");
+    String block_last_4_digits = last_4_digits(ppt.name().substring(start, end));
+
+    // If the last 4 digits of the block's address and the jump
+    // address match, the block has a self-cycle.
+    if (operand_last_4_digits.equals(block_last_4_digits))
+      return true;
+
+    return false;
+
+  }
+
+  private static String last_4_digits(String address) {
+    assert address.startsWith("0x") : address;
+    return address.substring(address.length() - 4, address.length());
   }
 
 /** Returns a name basic on its constituent ppts **/
@@ -327,8 +379,12 @@ public class PptCombined extends PptTopLevel {
       for (int i = 0; i < filled_slots; i++) {
 
         // If var was statically found to be redundant, don't add.
-        if (rvars != null && rvars.containsKey(ppt.var_infos[i].name())) {
-          continue;
+        if (rvars != null) {
+          VarInfo vi = ppt.var_infos[i];
+          if (rvars.containsKey(vi.name())) {
+            assert !vi.vardef.declared_type.is_function_pointer();
+            continue;
+          }
         }
 
         if (ppt.last_values == null) {
@@ -415,6 +471,8 @@ public class PptCombined extends PptTopLevel {
       // using the information in the asm file.
       redundantVariables = computeRedundantVariables(ppts);
 
+      System.out.println("Redundant variable (static) analysis found " + redundantVariables.size() + " rvars.");
+
       // Print out rvars info.
       String cppt_name = ppts.get(0).name() + ".." + ppts.get(ppts.size() - 1).ppt_name.name();
       if (false) {
@@ -437,14 +495,31 @@ public class PptCombined extends PptTopLevel {
     // Create a new VarInfo for each VarInfo in the ppt list.
     // If redundantVariables != null, don't add redundant variables.
     List<VarInfo> finalList = new ArrayList<VarInfo>();
+    Map<String, String> finalRvars = new LinkedHashMap<String, String>();
     for (VarInfo vi : candidateList) {
-      if (redundantVariables != null
-          && redundantVariables.containsKey(vi.name()))
-        continue;
-      finalList.add(vi);
+
+      boolean is_function_ptr = vi.vardef.declared_type.is_function_pointer();
+
+      if (is_function_ptr) {
+        // Variable's type is is function pointers. Always add it to
+        // the var_info list, and never to the rvars map.
+        finalList.add(vi);
+
+      } else if (redundantVariables != null
+                 && redundantVariables.containsKey(vi.name())) {
+
+        // Variable is considered redundant. Don't add it to var_info
+        // list, and add it to final rvars map.
+        finalRvars.put(vi.name(), redundantVariables.get(vi.name()));
+      } else {
+
+        // Variable is not redundant. Add it to var_info list, but
+        // don't add it to rvars map.
+        finalList.add(vi);
+      }
     }
 
-    return new CombinedVisResults(finalList.toArray(new VarInfo[0]), redundantVariables);
+    return new CombinedVisResults(finalList.toArray(new VarInfo[0]), finalRvars);
   }
 
   // This method should be removed in favor of combine_func_ppts_2, and the
@@ -995,13 +1070,17 @@ public class PptCombined extends PptTopLevel {
     }
 
     System.out.println("Testing redundant variables...");
-    redundantVarsTest(ppts);
+    int exitCode = redundantVarsTest(ppts);
+
+    System.exit(exitCode);
   }
 
   // Checks that if two variables are said to be redundant by Carlos's
   // analysis, they are deemed equal by Daikon's dynamic analysis.
-  public static void redundantVarsTest(PptMap all_ppts) {
-
+  //
+  // Returns 0 if all tests pass, 1 if something goes wrong.
+  public static int redundantVarsTest(PptMap all_ppts) {
+    int retval = 0;
     for (PptTopLevel ppt : all_ppts.all_ppts()) {
       if (ppt instanceof PptCombined) {
         PptCombined cp = (PptCombined) ppt;
@@ -1028,21 +1107,49 @@ public class PptCombined extends PptTopLevel {
             if (!cp.check()) // This signals an error in dominator computation.
               continue;
 
-            String msg = "Not equal: " + leaderVI.toString() + " and "
-              + rvarVI.toString()
-              + "\nPPT name: " + ppt.name()
-              + "\nnum_samples=" + cp.num_samples()
-              + "\nrvar samples=" + cp.num_samples(rvarVI)
-              + "\nrvar is_missing=" + cp.is_missing(rvarVI)
-              + "\nleader samples=" + cp.num_samples(leaderVI)
-              + "\nleader is_missing=" + cp.is_missing(leaderVI)
-              + "\nrvar+leader samples=" + cp.num_samples(rvarVI,leaderVI);
-            System.out.println("rvar value set:" + cp.value_sets[rvarVI.value_index].repr_short());
-            System.out.println("leader value set:" + cp.value_sets[leaderVI.value_index].repr_short());
+            retval = 1;
+
+            String msg = "\n\nBEGIN ERROR: Two variables found redundant via static analysis\n"
+              + "are not equal dynamically. The two variables are:"
+              + "\nleader: " + leaderVI.toString()
+              + "\nrvar:" + rvarVI.toString()
+              + "\nMore information about the variabes and their ppts:"
+              + "\n   PPT name: " + ppt.name()
+              + "\n   num_samples=" + cp.num_samples()
+              + "\n   rvar samples=" + cp.num_samples(rvarVI)
+              + "\n   rvar is_missing=" + cp.is_missing(rvarVI)
+              + "\n   leader samples=" + cp.num_samples(leaderVI)
+              + "\n   leader is_missing=" + cp.is_missing(leaderVI)
+              + "\n   rvar+leader samples=" + cp.num_samples(rvarVI,leaderVI)
+              + "\n   leader value set:" + cp.value_sets[leaderVI.value_index].repr_short()
+              + "\n   rvar value set:" + cp.value_sets[rvarVI.value_index].repr_short();
             System.out.println(msg);
-            //System.out.println("rvar last_values.isMissing:" + cp.last_values.isMissing(rvarVI));
-            //System.out.println("leader last_values.isMissing:" + cp.last_values.isMissing(leaderVI));
-            printNumSamples(cp);
+            System.out.println("   Combined ppt:");
+            System.out.println("      name=" + cp.name());
+            System.out.println("      id=" + System.identityHashCode(cp));
+            System.out.println("      samples " + cp.num_samples());
+            System.out.println("      children ppts:");
+            for (PptTopLevel p : cp.ppts) {
+              System.out.println("         " + p.name());
+            }
+
+            // Create a list of instructions representing this ppt's execution flow.
+            System.out.println("   Instruction path, including potential blocks between dominators:");
+            List<IInstruction> path = null;
+            path = createPath(cp.ppts);
+            System.out.println(" NOTE: Instructions in blocks between dominators are preceded by \"*\"");
+            System.out.println("       and may or may not have been executed in the path.");
+            for (IInstruction instr : path) {
+              if (instr instanceof X86Instruction) {
+                debugPrint(instr, false, cp.rvars);
+              } else {
+                for (X86Instruction potentialI : ((KillerInstruction)instr).getInstructions()) {
+                  debugPrint(potentialI, true, cp.rvars);
+                }
+              }
+            }
+
+            System.out.println("END ERROR");
             //throw new RuntimeException(msg);
           } else {
             //System.out.print("!");
@@ -1050,15 +1157,7 @@ public class PptCombined extends PptTopLevel {
         }
       }
     }
-  }
-
-  private static void printNumSamples(PptCombined cp) {
-    System.out.println("NUMSAMPLES:");
-    System.out.println("CPPT " + cp.name() + ", id=" + System.identityHashCode(cp) + ", samples " + cp.num_samples());
-    for (PptTopLevel p : cp.ppts) {
-      System.out.println(p.name() + " has samples #" + p.num_samples() +  " ppt.combined_ppt: " + (p.combined_ppt != null? p.combined_ppt.name() : "null") + ", id=" + System.identityHashCode(cp));
-    }
-    System.out.println("END");
+    return retval;
   }
 
 }

@@ -2,25 +2,41 @@ package daikon.asm;
 
 import java.util.*;
 
-class DSForest <T> {
+/**
+ * Implements a partition of distinct elements into disjoint
+ * sets. Each set in the partition is represented as a tree.
+ *
+ * The operation add(String t) add a new element t to the partition.
+ *
+ * The operation union(String t1, T t2) unions the (possibly distinct) sets
+ * containing t1 and t2.
+ *
+ * The operation getSets() returns the sets of the partition.
+ *
+ * This implementation has the additional requirement that all new
+ * elements added to the partition must be non-equal, where equality
+ * is determined according to the equals/hashCode methods. In other
+ * words, if at some point the operation add(t) is performed for some
+ * t, and t1.equals(t2), then attempting to perform add(t2) will
+ * result in an IllegalArgumentException.
+ */
+public class DSForest {
 
-  IdentityHashMap<T, DSForestNode> elements =
-    new IdentityHashMap<T, DSForestNode>();
+  // Maps the elements of the partition to their corresponding nodes.
+  HashMap<String, DSForestNode> elements =
+    new LinkedHashMap<String, DSForestNode>();
 
-  public static int idCounter = 0;
-  
-  // We don't want to iterate over IdentityHashMap because
-  // its iterative behavior is non-deterministic. So we
-  // keep the nodes as a separate list.
-  List<DSForestNode> nodes = new ArrayList<DSForestNode>();
+  // Counter for node unique ids.
+  private static int idCounter = 0;
 
+  // A node in the tree.
   private class DSForestNode {
-    public T element;
+    public String element;
     public DSForestNode parent;
     public int rank;
     public int id;
-    
-    public DSForestNode(T element) {
+
+    public DSForestNode(String element) {
       this.element = element;
       this.parent = this;
       this.rank = 0;
@@ -29,16 +45,19 @@ class DSForest <T> {
     }
   }
 
-  // If e is not already in the forest,
-  //   makes a new singleton set containing e
-  // Else
-  //   throws an IllegalArgumentException.
-  public void makeSet(T e) {
+  /**
+   * If e != null and is not already in the forest, adds e to the
+   * forest. Otherwise throws an IllegalArgumentException.
+   */
+  public void add(String e) {
+    if (e == null)
+      throw new IllegalArgumentException("Element cannot be null.");
     if (elements.containsKey(e))
-      throw new IllegalArgumentException("Element already in forest.");
+      throw new IllegalArgumentException("Element already in disjoin-set forest.");
+
+    // Make a new singleton set containing e.
     DSForestNode n = new DSForestNode(e);
     elements.put(e, n);
-    nodes.add(n);
   }
 
   private DSForestNode find(DSForestNode n) {
@@ -50,10 +69,12 @@ class DSForest <T> {
     }
   }
 
-  // x and y must be elements of the forest.
-  // If e1 == e2, or e1 and e2 are in the same set, has no effect.
-  // Otherwise, unions the sets containing e1 and e2.
-  public void union(T x, T y) {
+  /**
+   * x and y must be elements of the forest.  If e1.equals(e2), or e1
+   * and e2 are already in the same set, has no effect.  Otherwise,
+   * unions the sets containing e1 and e2.
+   */
+  public void union(String x, String y) {
     DSForestNode xNode = elements.get(x);
     if (xNode == null) throw new IllegalArgumentException();
     DSForestNode yNode = elements.get(y);
@@ -74,25 +95,25 @@ class DSForest <T> {
 
   // Returns the current state of the forest. Each list represents
   // one disjoint set.
-  public List<List<T>> asLists() {
+  public Set<Set<String>> getSets() {
 
-    Map<Integer, List<T>> sets =
-      new LinkedHashMap<Integer, List<T>>();
+    Map<Integer, Set<String>> sets = new LinkedHashMap<Integer, Set<String>>();
+    Set<Set<String>> retval = new LinkedHashSet<Set<String>>();
 
-    for (DSForestNode n : nodes) {
+    for (DSForestNode n : elements.values()) {
       int rootId = find(n).id;
-      List<T> set = sets.get(rootId);
+      Set<String> set = sets.get(rootId);
       if (set == null) {
-        set = new ArrayList<T>();
+        set = new LinkedHashSet<String>();
         sets.put(rootId, set);
       }
       set.add(n.element);
     }
 
-    List<List<T>> retval = new ArrayList<List<T>>();
-    for (List<T> l : sets.values()) {
-      retval.add(l);
+    for (Set<String> set : sets.values()) {
+      retval.add(set);
     }
+
     return retval;
   }
 }

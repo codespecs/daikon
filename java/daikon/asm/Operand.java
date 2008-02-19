@@ -13,65 +13,6 @@ import java.util.regex.Pattern;
  */
 public class Operand {
 
-//  public static class IndexOffsetMatchResult {
-//    String indexRegister;
-//    String offsetRegister;
-//    String withoutBrackets;
-//    public IndexOffsetMatchResult(String indexRegister, String offsetRegister, String withoutBrackets) {
-//      this.indexRegister = indexRegister;
-//      this.offsetRegister = offsetRegister;
-//      this.withoutBrackets = withoutBrackets;
-//    }
-//  }
-//  
-//  //If the string looks like this: [0+eax+(edx*4)]
-//  static IndexOffsetMatchResult matchBaseIndexExpr(String s) {
-//    IndexOffsetMatchResult retval = null;
-//    if (s.startsWith("[")) {
-//      assert s.endsWith("]");
-//      String withoutBracks = s.substring(1, s.length() - 1);
-//      String[] terms = withoutBracks.split("\\+");
-//      if (terms.length == 3) {
-//        String last = terms[2];
-//        if (!last.startsWith("(") && last.endsWith(")")) return null;
-//        String lastNoParens = last.substring(1, last.length() - 1);
-//        String[] terms2 = lastNoParens.split("\\*");
-//        if (terms2.length != 2) return null;
-//        String indexRegister = terms2[0];
-//        assert Operand.isExtendedRegister(indexRegister) : indexRegister;
-//        String offsetRegister = terms[1];
-//        assert Operand.isExtendedRegister(offsetRegister) : offsetRegister;
-//        retval = new IndexOffsetMatchResult(indexRegister, offsetRegister, withoutBracks);
-//      }
-//    }
-//    return retval;
-//  }
-//
-//  // Matches strings that look like "[-4+ebx]"
-//  static String matchSimpleDeref(String s) {
-//    if (!s.startsWith("["))
-//      return null;
-//    String withoutBracks = s.substring(1, s.length() - 1);
-//    String[] terms = withoutBracks.split("\\+");
-//    if (terms.length != 2)
-//      return null;
-//    if (!isInteger(terms[0]))
-//      return null;
-//    if (!isExtendedRegister(terms[1]))
-//      return null;
-//    return terms[1];
-//  }
-//
-
-//  private static boolean isInteger(String string) {
-//    try {
-//      Integer.parseInt(string);
-//    } catch (NumberFormatException e) {
-//      return false;
-//    }
-//    return true;
-//  }
-
   private static Set<String> registers8Bit;
   static {
     registers8Bit = new LinkedHashSet<String>();
@@ -84,11 +25,11 @@ public class Operand {
     registers8Bit.add("cl");
     registers8Bit.add("dl");
   }
-  
+
   static boolean is8BitReg(String s) {
     return registers8Bit.contains(s);
   }
-  
+
   private static Set<String> registers16Bit;
   static {
     registers16Bit = new LinkedHashSet<String>();
@@ -101,7 +42,7 @@ public class Operand {
     registers16Bit.add("sp");
     registers16Bit.add("bp");
   }
-  
+
   static boolean is16BitReg(String s) {
     return registers16Bit.contains(s);
   }
@@ -127,14 +68,14 @@ public class Operand {
     b.append("|esp");
     registers32Bit.add("ebp");
     b.append("|ebp");
-    
+
     registers32BitRegExp = Pattern.compile(b.toString());
   }
-  
+
   static boolean isExtendedReg(String s) {
     return registers32Bit.contains(s);
   }
-  
+
   private static Set<String> registersFPU;
   static {
     registersFPU = new LinkedHashSet<String>();
@@ -147,12 +88,12 @@ public class Operand {
     registersFPU.add("st6");
     registersFPU.add("st7");
   }
-  
+
   static boolean isFPUReg(String s) {
     return registersFPU.contains(s);
   }
 
-  
+
   static boolean isRegister(String s) {
     if (is8BitReg(s))
       return true;
@@ -164,7 +105,7 @@ public class Operand {
       return true;
     return false;
   }
-  
+
   static List<String> getExtendedRegisters(String expr) {
     Matcher m = registers32BitRegExp.matcher(expr);
     List<String> result = new ArrayList<String>();
@@ -173,7 +114,7 @@ public class Operand {
     }
     return result;
   }
-  
+
   static boolean isConstant(String s) {
     return (s.startsWith("$"));
   }
@@ -181,12 +122,12 @@ public class Operand {
   public static boolean isDeref(String s) {
     return (s.startsWith("[") && s.endsWith("]"));
   }
-  
+
   // Looks something like [32991844+]
   static boolean isDerefdNumber(String s) {
 
     if (!isDeref(s)) return false;
-    
+
     String withoutBrackets = s.substring(1, s.length() - 1);
     // TODO a regexp would be more succint.
     for (int i = 0; i < withoutBrackets.length(); i++) {

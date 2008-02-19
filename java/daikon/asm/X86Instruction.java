@@ -27,6 +27,14 @@ public class X86Instruction implements IInstruction {
   private X86Instruction() {
   }
 
+  public String getOpName() {
+    return opName;
+  }
+
+  public List<String> getArgs() {
+    return args;
+  }
+
   public Set<String> getBinaryVarNames() {
     Set<String> retval = new LinkedHashSet<String>();
 
@@ -190,7 +198,6 @@ public class X86Instruction implements IInstruction {
   }
 
   private static Set<String> varsUnmodifiedByCallOp;
-
   static {
     varsUnmodifiedByCallOp = new LinkedHashSet<String>();
     varsUnmodifiedByCallOp.add("ebx");
@@ -207,8 +214,68 @@ public class X86Instruction implements IInstruction {
 
     assert Operand.isRegister(var) ? Operand.isExtendedReg(var) : true;
 
-    if (opName.equals("call")) {
+    if (opName.startsWith("call")) {
       return !varsUnmodifiedByCallOp.contains(var);
+    }
+
+    if (var.equals("eax")) {
+      if (killedVars.contains(var) || killedVars.contains("ax")
+          || killedVars.contains("ah") || killedVars.contains("al"))
+        return true;
+      else
+        return false;
+    }
+
+    if (var.equals("ebx")) {
+      if (killedVars.contains(var) || killedVars.contains("bx")
+          || killedVars.contains("bh") || killedVars.contains("bl"))
+        return true;
+      else
+        return false;
+    }
+
+    if (var.equals("ecx")) {
+      if (killedVars.contains(var) || killedVars.contains("cx")
+          || killedVars.contains("ch") || killedVars.contains("cl"))
+        return true;
+      else
+        return false;
+    }
+
+    if (var.equals("edx")) {
+      if (killedVars.contains(var) || killedVars.contains("dx")
+          || killedVars.contains("dh") || killedVars.contains("dl"))
+        return true;
+      else
+        return false;
+    }
+
+    if (var.equals("edi")) {
+      if (killedVars.contains(var) || killedVars.contains("di"))
+        return true;
+      else
+        return false;
+    }
+
+    if (var.equals("esi")) {
+      if (killedVars.contains(var) || killedVars.contains("si"))
+        return true;
+      else
+        return false;
+    }
+
+    if (var.equals("esp")) {
+      if (killedVars.contains(var) || killedVars.contains("sp"))
+        return true;
+      else
+        return false;
+    }
+
+    if (var.equals("ebp")) {
+      if (killedVars.contains(var) || killedVars.contains("bp"))
+        return true;
+      else
+        return false;
     }
 
     if (Operand.isRegister(var)) {
