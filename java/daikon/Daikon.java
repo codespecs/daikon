@@ -737,6 +737,7 @@ public final class Daikon {
     if (inv_file != null) {
       PptTopLevel.pred_map = null;
       PptTopLevel.succ_map = null;
+      PptTopLevel.conn_map = null;
       try {
         FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
