@@ -63,7 +63,7 @@ public class PptCombined extends PptTopLevel {
   public PptCombined (List<PptTopLevel> ppts, CombinedVisResults vis) {
 
     // old name: ppts.get(0).name()+".."+ppts.get(ppts.size()-1).ppt_name.name()
-    super ("CP:" + short_component_str (ppts),
+    super (ppts.get(0).name() + ".." + short_component_str (ppts),
            PptType.COMBINED_BASIC_BLOCK,
            new ArrayList<ParentRelation>(), EnumSet.noneOf (PptFlags.class),
            null, ppts.get(0).function_id, -1, vis.var_infos);
