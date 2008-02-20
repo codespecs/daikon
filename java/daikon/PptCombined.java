@@ -471,7 +471,8 @@ public class PptCombined extends PptTopLevel {
       // using the information in the asm file.
       redundantVariables = computeRedundantVariables(ppts);
 
-      System.out.println("Redundant variable (static) analysis found " + redundantVariables.size() + " rvars.");
+      System.out.println("Redundant variable (static) analysis found " + redundantVariables.size()
+                         + "/" + candidateList.size() + " rvars.");
 
       // Print out rvars info.
       String cppt_name = ppts.get(0).name() + ".." + ppts.get(ppts.size() - 1).ppt_name.name();
@@ -647,7 +648,7 @@ public class PptCombined extends PptTopLevel {
                     // do not override a previously written PptCombined
                     if (splitPpt.combined_ppt == null) {
                       CombinedVisResults vis = combined_vis(partition);
-                        splitPpt.combined_ppt = new PptCombined(partition, vis);
+                      splitPpt.combined_ppt = new PptCombined(partition, vis);
                     }
                 }
 

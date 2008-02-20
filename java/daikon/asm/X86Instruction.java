@@ -13,9 +13,9 @@ public class X86Instruction implements IInstruction {
 
   private String opName;
 
-  private List<String> args;
+  List<String> args;
 
-  private List<String> killedVars;
+  List<String> killedVars;
 
   protected boolean isFirstInBlock = false;
 
@@ -51,8 +51,9 @@ public class X86Instruction implements IInstruction {
       if (Operand.isFPUReg(s))
         continue;
 
-      // If the string looks like this: [0+eax+(edx*4)]
-      // return the string without brackets, and return eax.
+      // If the string looks like this: [0+eax+(edx*4)] return the
+      // string without brackets, and return eax.  There's some
+      // ugliness about lea, which is a special case.
       if (Operand.isDeref(s)) {
         List<String> regs = Operand.getExtendedRegisters(s);
         assert regs.size() == 1 || regs.size() == 2 : s;
@@ -60,6 +61,14 @@ public class X86Instruction implements IInstruction {
         if (regs.size() == 1) {
           if (opName.equals("lea")) {
             retval.add(s.substring(1, s.length() - 1));
+            // More lea ugliness. I'm just trying to match the
+            // variables from the dtrace file.
+            // If instruction is something like
+            //  lea [-2++(eax*4)] -> eax
+            // then we do return "eax" as well.
+            if (s.contains("++")) {
+              retval.add(regs.get(0));
+            }
             continue;
           }
         } else { // regs.size() == 2
@@ -285,16 +294,34 @@ public class X86Instruction implements IInstruction {
     if (Operand.isDeref(var)) {
       if (killedVars.contains(var))
         return true;
-      for (String killedVar : killedVars) {
-        if (Operand.isDeref(killedVar))
-          return true;
-      }
       for (String reg : Operand.getExtendedRegisters(var)) {
-        if (killedVars.contains(reg))
-          return true;
+        for (String killedVar : killedVars) {
+          // [...eax...] killed by [...eax...]
+          // [...eax...] killed by eax
+          // Note that this assumes that non-extended registers
+          // are never inside a dereference expression (which
+          // appears to be true for all asm files I've seen).
+          if (killedVar.contains(reg)) {
+            return true;
+          }
+        }
       }
       return false;
     }
+
+//     if (Operand.isDeref(var)) {
+//       if (killedVars.contains(var))
+//         return true;
+//       for (String killedVar : killedVars) {
+//         if (Operand.isDeref(killedVar))
+//           return true;
+//       }
+//       for (String reg : Operand.getExtendedRegisters(var)) {
+//         if (killedVars.contains(reg))
+//           return true;
+//       }
+//       return false;
+//     }
 
     // It may be something like "16+ebx". Do a quick sanity check.
     if (var.indexOf('+') != -1) {

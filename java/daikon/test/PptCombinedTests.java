@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class PptCombinedTests extends TestCase {
 
-  public void testFindGhosts1() {
+  public void testFindIntermediateBlocks1() {
 
     PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
     PptTopLevel p2 = new PptTopLevel("ppt:::2", new VarInfo[0]);
@@ -29,7 +29,7 @@ public class PptCombinedTests extends TestCase {
 
   }
 
- public void testFindGhosts2() {
+ public void testFindIntermediateBlocks2() {
 
     PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
     PptTopLevel p2 = new PptTopLevel("ppt:::2", new VarInfo[0]);
@@ -52,7 +52,7 @@ public class PptCombinedTests extends TestCase {
 
   }
 
- public void testFindGhosts3() {
+ public void testFindIntermediateBlocks3() {
 
    PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
    PptTopLevel p2 = new PptTopLevel("ppt:::2", new VarInfo[0]);
@@ -66,7 +66,7 @@ public class PptCombinedTests extends TestCase {
    assertListDoesNotContain(list, p1);
  }
 
- public void testFindGhosts4() {
+ public void testFindIntermediateBlocks4() {
 
    PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
    PptTopLevel p2 = new PptTopLevel("ppt:::2", new VarInfo[0]);

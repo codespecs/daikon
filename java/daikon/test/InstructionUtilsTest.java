@@ -184,7 +184,8 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 0, reds.size());
+    assertEquals(reds.toString(), 1, reds.size());
+    assertRedundants(reds, "bv:0x01:[4+ebx]", "bv:0x03:[4+ebx]");
   }
 
   public static void testComputeRedundantVars8() {
