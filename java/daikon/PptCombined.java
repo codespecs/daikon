@@ -985,7 +985,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   /** Dumps out the basic blocks that make up this combined ppt **/
-  void dump() {
+  public void dump() {
     System.out.printf ("    Combined PPT %s\n", name());
     dump (ppts);
   }
@@ -1013,15 +1013,21 @@ public class PptCombined extends PptTopLevel {
             preds += " " + bb_short_name (pred);
         }
       }
-      System.out.printf ("      %s: [%s] {%s} combined_subsumed:%b "
+      System.out.printf ("      %s: [%s] {%s} %s "
                          + "combined_ppt: %s\n",
                          bb_short_name (ppt), succs, preds,
-                         ppt.combined_subsumed,
+                         ppt.combined_subsumed ? "subsumed" : "trigger",
                          ((ppt.combined_ppt == null)
-                          ? "null" : ppt.combined_ppt.short_component_str()));
+                          ? "null" : ppt.combined_ppt.short_name()));
     }
   }
 
+
+  public String short_name() {
+    String start = bb_short_name(ppts.get(0));
+    String end = bb_short_name(ppts.get(ppts.size()-1));
+    return (start + ".." + end);
+  }
 
   /** Returns a list of the component ppts that make up this combined ppt **/
   public String short_component_str() {
