@@ -95,13 +95,20 @@ shift
 #   exit 1
 # fi
 
-echo $* > /tmp/javac_files
+# Put filenames in a file in order to avoid errors due to overly long
+# command lines.
+FILES_FILE=/tmp/javac-xlint-files-$$
+echo $* > $FILES_FILE
 
 if [ ! -z $DEBUG_JAVAC_XLINT ]; then
-  echo ${SUPPLIED_JAVAC} -Xlint @C:/cygwin/tmp/javac_files PIPED-INTO `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
+  echo ${SUPPLIED_JAVAC} -Xlint @$FILES_FILE PIPED-INTO `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
 fi
 if [ ! -z "${PRUNE_XLINT_ARGS}" ]; then
-  ${SUPPLIED_JAVAC} -Xlint @C:/cygwin/tmp/javac_files 2>&1 | `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
+  ${SUPPLIED_JAVAC} -Xlint @$FILES_FILE 2>&1 | `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
 else
-  ${SUPPLIED_JAVAC} -Xlint @C:/cygwin/tmp/javac_files 2>&1 | `dirname ${0}`/javac-xlint-prune.pl
+  ${SUPPLIED_JAVAC} -Xlint @$FILES_FILE 2>&1 | `dirname ${0}`/javac-xlint-prune.pl
 fi
+
+STATUS=$?
+rm -f $FILES_FILE
+exit $STATUS
