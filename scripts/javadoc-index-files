@@ -9,7 +9,7 @@
 # "invariants" omits Ajax
 ~mernst/research/invariants/java/doc/index-all.html
 ~mernst/research/typequals/annotations/checkers/doc/index-all.html
-
+~mernst/java/XOM-1.1/apidocs/index-files/index-*.html
 # ~mernst/java/JavaClass/docs/index-all.html
 ~mernst/java/gnu/getopt/index-all.html
 ~mernst/java/junit3.8.1/javadoc/index-all.html

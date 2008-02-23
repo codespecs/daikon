@@ -39,7 +39,7 @@ for my $file (@ARGV) {
     print STDERR "Didn't find $file\n";
     next;
   }
-  # No need to run javadoc-escape-anchors run on the index file itself;
+  # No need to run javadoc-escape-anchors on the index file itself;
   # just open it and use it.
   open(INDEX, $file) || die "Couldn't open $file";
   my $this_dir = $file;
@@ -71,6 +71,7 @@ for my $file (@ARGV) {
 
     # This regexp is intentionally not anchored at its beginning or end,
     # because sometimes line breaks are missing.
+    # (Problem: Distributed XOM Javadocs do not use <B>...</B> tags.
     while (m%<DT>[ \t]*<A HREF="(.*?)"(?: title=".*?")?><B>(.*?)(\(.*?\))?</B></A>(\(.*?\))?(\.| - )%ig) {
       # Either $3 or $4 could be set (but not both).
       # my ($this_ref,$this_item,$this_args1,$this_args2) = ($1,$2,$3,$4);
