@@ -122,6 +122,7 @@ import daikon.inv.ternary.threeScalar.FunctionBinary;
 import daikon.inv.ternary.threeScalar.FunctionBinaryFloat;
 import daikon.inv.ternary.threeScalar.LinearTernary;
 import daikon.inv.ternary.threeScalar.LinearTernaryFloat;
+import daikon.inv.unary.scalar.IsPointer;
 import daikon.inv.unary.scalar.LowerBound;
 import daikon.inv.unary.scalar.LowerBoundFloat;
 import daikon.inv.unary.scalar.Modulus;
@@ -1283,6 +1284,8 @@ public final class Daikon {
       // NonZero (NonZero.java.jpp)
       proto_invs.add(NonZero.get_proto());
       proto_invs.add(NonZeroFloat.get_proto());
+      
+      proto_invs.add(IsPointer.get_proto());
 
       // Lower and Upper bound (Bound.java.jpp)
       proto_invs.add(LowerBound.get_proto());
