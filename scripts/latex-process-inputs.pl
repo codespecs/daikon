@@ -85,13 +85,13 @@ if ((! $list_mode) && ($text =~ /\\bibliography\{.*?\}/)) {
   $text =~ s/\\bibliography\{.*?\}/$bib/i;
 }
 
-if ($list_mode) {
+if ($ant_list_mode) {
   for $file (@files) {
-    if ($ant_list_mode) {
-      print "      <arg value=\"$file\"/>\n";
-    } else {
-      print "$file\n";
-    }
+    print "      <arg value=\"$file\"/>\n";
+  }
+} elsif ($list_mode) {
+  for $file (@files) {
+    print "$file\n";
   }
 } else {
   print $text;
