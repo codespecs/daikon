@@ -91,6 +91,8 @@ for my $file (@ARGV) {
   }
 }
 
+# I can't do this because javadoc-lookup.el loads javadoc-index.el.
+# print "(eval-when-compile '(require 'javadoc-lookup))\n";
 print "(setq javadoc-html-refs '(\n";
 # Reverse the list so that, when completion-ignore-case is t, "Class"
 # takes priority over the less-likely-to-be-desired "CLASS".
