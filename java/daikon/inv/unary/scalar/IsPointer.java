@@ -32,7 +32,7 @@ public class IsPointer extends SingleScalar {
 
     private static final long serialVersionUID = 20080221L;
     
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = false;
 
     // pointers values in ff_prepare.dtrace were starting from 65536,
     // in other dtrace files, the pointer values were even larger
