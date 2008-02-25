@@ -110,5 +110,7 @@ else
 fi
 
 STATUS=$?
-rm -f $FILES_FILE
+if [ -z $DEBUG_JAVAC_XLINT ]; then
+  rm -f $FILES_FILE
+fi
 exit $STATUS
