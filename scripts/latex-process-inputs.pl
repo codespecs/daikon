@@ -23,7 +23,10 @@ my $debug = 0;
 # Process command-line arguments
 my $list_mode = 0;              # boolean indicating list mode vs. inline mode
 my $ant_list_mode = 0;
-if (@ARGV[0] eq "-list") {
+if (@ARGV[0] eq "-help") {
+  print "Optional arguments: -list -antlist\n";
+  exit(0);
+} elsif (@ARGV[0] eq "-list") {
   $list_mode = 1;
   shift @ARGV;
 } elsif (@ARGV[0] eq "-antlist") {
