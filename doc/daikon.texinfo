@@ -5577,7 +5577,7 @@ compiled without optimization.
 
 This subsection lists some of the known limitations of the
 current Kvasir release; if you encounter any problems other than listed
-here, please report them as bugs (@pxref{Reporting bugs}).  The
+here, please report them as bugs (@pxref{Reporting problems}).  The
 limitations are listed roughly in decreasing order of severity.
 
 @itemize @bullet
@@ -8264,7 +8264,7 @@ ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
 BCEL on your classpath.)
 
 
-@c @node    Eclipse plug-in problems, Reporting bugs, dfej problems, Troubleshooting
+@c @node    Eclipse plug-in problems, Reporting problems, dfej problems, Troubleshooting
 @c @section Problems with Eclipse plug-in
 @c
 @c @cindex Eclipse plug-in, troubleshooting
