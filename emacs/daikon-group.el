@@ -166,8 +166,8 @@ Remake it first if it is more than a week old."
 		 ;; The `daikon-info' command intentionally does not
 		 ;; *update* these files before running makeinfo (it might
 		 ;; take too long).  But makeinfo fails if they do not exist.
-		 (if (and (file-exists-p "$inv/doc/invariants-doc.texinfo")
-			  (file-exists-p "$inv/doc/config-options.texinfo"))
+		 (if (and (file-exists-p (concat dir "invariants-doc.texinfo"))
+			  (file-exists-p (concat dir "config-options.texinfo")))
 		     (call-process "makeinfo" nil "*make-daikon-info*" nil texinfofile)
 		   (progn
 		     (message "Looks like a new checkout, making Daikon manual might take a little while...")
