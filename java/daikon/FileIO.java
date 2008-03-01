@@ -376,7 +376,7 @@ public final class FileIO {
     PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents,
                ppt_flags, ppt_successors, function_id, bb_length, vi_array);
 
-    // Add this ppt tot the list of ppts for this function_id.  If we
+    // Add this ppt to the list of ppts for this function_id.  If we
     // are still getting ppts for this function id, they should not have
     // been yet combined
     if (function_id != null) {
