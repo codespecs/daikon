@@ -20,6 +20,18 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.3.5
+
+Daikon
+
+  Bug fixes
+
+    Permit guarding invariants (the left-hand-sides of implications) to be
+    EltNonZero as well as NonZero invariants, to accommodate guarded
+    invariants over array contents.
+
+----------------------------------------
+
 4.3.4 (December 1, 2007)
 
 Dyncomp (Java) was enhanced with a number of new options.  It has a 
@@ -46,7 +58,6 @@ Daikon
     The junit tests can now be run directly from the jar file.  All
     necessary input files are resources in the jar file and the unit test
     code handles them as resources.
-
 
 ----------------------------------------
 
