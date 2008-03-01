@@ -672,6 +672,7 @@ audit:
 
 # JAVAC_ARGS ?= -g -target 5 -typeprocessor checkers.interned.InternedChecker
 JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
+JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
 # I cannot pass JAVAC_INTERNED_EXCLUDE on the command line to the version of javac that is a script, because that one doesn't respect "java" arguments.
 # Even so, the skipClasses variable seems not to be working for me (though
 # @SuppressWarnings is a better approach).
@@ -694,6 +695,7 @@ interned:
 
 # Run the interned checker on all Java files, not just those that contain an
 # @Interned annotation.
+# Takes 10 minutes on swsmde, 60 minutes on mdelap (as of 3/1/2008).
 interned-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
