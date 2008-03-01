@@ -671,7 +671,8 @@ audit:
 # Interned type qualifier checker
 
 # JAVAC_ARGS ?= -g -target 5 -typeprocessor checkers.interned.InternedChecker
-JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
+# JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
+JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker -Alint=-dotequals
 JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
 # I cannot pass JAVAC_INTERNED_EXCLUDE on the command line to the version of javac that is a script, because that one doesn't respect "java" arguments.
 # Even so, the skipClasses variable seems not to be working for me (though
