@@ -1744,7 +1744,7 @@ public abstract class Invariant
     if (! valid_types(slice.var_infos)) {
       System.out.printf("this.getClass(): %s%n", this.getClass());
       System.out.printf("slice: %s%n", slice);
-      System.out.printf("slice.var_infos: %s%n", (Object)slice.var_infos);
+      System.out.printf("slice.var_infos (length %d): %s%n", slice.var_infos.length, (Object)slice.var_infos);
       System.out.printf("ppt: %s%n", ppt);
       // Can't do this, as this might be a "prototype" invariant.
       // System.out.printf("this: %s%n", this.repr());
@@ -1756,7 +1756,7 @@ public abstract class Invariant
     Invariant inv = instantiate_dyn (slice);
     Assert.assertTrue (inv != null);
     if (inv.ppt == null) {
-      // Save creating the message if the check succeeds
+      // Avoid creating the message if the check succeeds
       Assert.assertTrue (inv.ppt != null, "invariant class " + inv.getClass());
     }
     return (inv);
