@@ -2019,6 +2019,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   //     return name1.compareTo(name2);
   //   }
   // }
+
   /**
    * Create a guarding predicate for this VarInfo, that is, an
    * invariant that ensures that this object is available for access
@@ -2340,13 +2341,19 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         assert ((! vi.isDerived()) || vi.isDerived())
           : "addVar on derived variable: " + vi;
         // Don't guard primitives
-        if (vi.file_rep_type.isScalar() && ! vi.type.isScalar()
+        if (// TODO: ***** make changes here *****
+            // vi.file_rep_type.isScalar() &&
+            ! vi.type.isScalar()
             // (vi.type.isArray() || vi.type.isObject())
             ) {
           result.add(vi);
+        } else {
+          if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
+            Invariant.debugGuarding.fine(String.format("addVarInfo did not add %s: %s (%s) %s (%s)", vi, vi.file_rep_type.isScalar(), vi.file_rep_type, vi.type.isScalar(), vi.type));
+          }
         }
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(String.format("addVarInfo(%s) => %s%n", vi, result));
+          Invariant.debugGuarding.fine(String.format("addVarInfo(%s) => %s", vi, result));
         }
         return result;
       }
