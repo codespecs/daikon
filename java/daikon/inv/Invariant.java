@@ -1745,9 +1745,13 @@ public abstract class Invariant
       System.out.printf("this.getClass(): %s%n", this.getClass());
       System.out.printf("slice: %s%n", slice);
       System.out.printf("slice.var_infos (length %d): %s%n", slice.var_infos.length, (Object)slice.var_infos);
+      for (VarInfo vi : slice.var_infos) {
+        System.out.printf("  var_info: %s %s%n", vi, vi.type);
+      }
       System.out.printf("ppt: %s%n", ppt);
-      // Can't do this, as this might be a "prototype" invariant.
-      // System.out.printf("this: %s%n", this.repr());
+      if (this.ppt != null) {
+        System.out.printf("this: %s%n", this.repr());
+      }
     }
     assert valid_types(slice.var_infos)
       : String.format("valid_types(%s) = false for %s", slice.var_infos, this);

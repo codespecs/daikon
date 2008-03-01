@@ -21,11 +21,17 @@ public abstract class SingleScalarSequence
     // System.out.println("Created SingleScalarSequence invariant " + this + " at " + ppt);
   }
 
-  /** Returns whether or not the specified types are valid  **/
-  public final boolean valid_types (VarInfo[] vis) {
+  /** Returns whether or not the specified types are valid.
+  * (Static version of method.) **/
+  public static final boolean valid_types_static (VarInfo[] vis) {
     return ((vis.length == 1)
             && vis[0].file_rep_type.baseIsScalar()
             && vis[0].file_rep_type.isArray());
+  }
+
+  /** Returns whether or not the specified types are valid  **/
+  public final boolean valid_types (VarInfo[] vis) {
+    return valid_types_static(vis);
   }
 
   public VarInfo var() {

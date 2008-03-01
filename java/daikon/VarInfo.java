@@ -7,7 +7,8 @@ import daikon.derive.ternary.*;
 import daikon.VarInfoName.*;
 import daikon.PrintInvariants;
 import daikon.inv.*;
-import daikon.inv.unary.scalar.NonZero;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.Quantify;
 import daikon.Quantify.QuantFlags;
@@ -2058,7 +2059,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // result.falsified to true?  We know it's true because
       // result's children were missing.  However, some forms of
       // filtering might remove it from slice.
-      result = NonZero.get_proto().instantiate(slice);
+      VarInfo[] vis = slice.var_infos;
+      if (SingleScalar.valid_types_static(vis)) {
+        result = NonZero.get_proto().instantiate(slice);
+      } else if (SingleScalarSequence.valid_types_static(vis)) {
+        result = EltNonZero.get_proto().instantiate(slice);
+      } else {
+        throw new Error("Bad VarInfos");
+      }
       if (result == null)
         // Return null if NonZero invariant is not applicable to this variable.
         return null;

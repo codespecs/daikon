@@ -25,10 +25,16 @@ public abstract class SingleScalar
     return ppt.var_infos[0];
   }
 
+  /** Returns whether or not the specified types are valid for unary scalar.
+   *  (Static version of method.)
+   **/
+  public static final boolean valid_types_static (VarInfo[] vis) {
+    return ((vis.length == 1) && vis[0].file_rep_type.isScalar());
+  }
+
   /** Returns whether or not the specified types are valid for unary scalar **/
   public final boolean valid_types (VarInfo[] vis) {
-
-    return ((vis.length == 1) && vis[0].file_rep_type.isScalar());
+    return valid_types_static(vis);
   }
 
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
