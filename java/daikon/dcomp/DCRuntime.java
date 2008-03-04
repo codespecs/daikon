@@ -1963,7 +1963,7 @@ public final class DCRuntime {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
           continue;
-        ArrayList stuff = shinyOutput(set, daikon.DynComp.shiny_print);
+        ArrayList<String> stuff = shinyOutput(set, daikon.DynComp.shiny_print);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf ("  [%d] %s%n", stuff.size(), stuff);
       }
