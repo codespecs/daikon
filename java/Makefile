@@ -350,12 +350,15 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${DAIKONBIN}/prune-xlint.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} utilMDE-copy chicory dyncomp
+all_directly: ${AUTO_GENERATED_FILES} utilMDE-copy
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
 	# This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
+	# These can't be prerequisites because they depend on .class files from Daikon itself.
+	$(MAKE) chicory
+	$(MAKE) dyncomp
 
 .PHONY : daikon
 daikon: compile_daikon junit
@@ -370,6 +373,8 @@ compile_daikon : $(AUTO_GENERATED_FILES)
 #
 CHICORY_JAVA_FILES := daikon/Chicory.java daikon/chicory/*.java utilMDE/*.java
 
+# This actually requires Daikon to already be compiled.
+# It would be good to make that an explicit prerequisite.
 chicory : ChicoryPremain.jar
 ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 					 daikon/chicory/manifest.txt
@@ -464,7 +469,7 @@ utilMDE-copy : utilMDE-import-check
 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)utilMDE/\1daikon.util/g' daikon/util/*.java
-	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
+	$(JAVAC_COMMAND) daikon/util/*.java
 
 # Checks that daikon.util is imported by DynComp source files, rather
 # than utilMDE
