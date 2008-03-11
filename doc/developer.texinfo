@@ -90,6 +90,7 @@ It describes Daikon version 4.3.4, released December 3, 2007.
 Extending Daikon
 
 * Compiling Daikon::            
+* Using Eclipse::               
 * New invariants::              
 * New derived variables::       
 * New formatting for invariants::  
@@ -171,6 +172,7 @@ This chapter describes how to customize or modify Daikon.
 
 @menu
 * Compiling Daikon::            
+* Using Eclipse::               
 * New invariants::              
 * New derived variables::       
 * New formatting for invariants::  
@@ -179,7 +181,7 @@ This chapter describes how to customize or modify Daikon.
 * System.exit::                 
 @end menu
 
-@node    Compiling Daikon, New invariants, Extending Daikon, Extending Daikon
+@node    Compiling Daikon, Using Eclipse, Extending Daikon, Extending Daikon
 @section Compiling Daikon
 @cindex compiling daikon
 
@@ -247,7 +249,32 @@ contains everything you need to compile and run Unix programs under
 Windows.  You can install Cygwin by simply running the program found
 at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
-@node    New invariants, New derived variables, Compiling Daikon, Extending Daikon
+
+@node    Using Eclipse, New invariants, Compiling Daikon, Extending Daikon
+@section Using Eclipse
+@cindex Eclipse
+
+[To be improved.]
+
+Here is one way to use Eclipse to edit Daikon.
+
+First, make sure that Daikon builds cleanly from the command line.
+
+File > Import > General > Existing Projects into Workspace
+
+Choose the ``java'' directory of your Daikon checkout
+
+Project > properties > Java build path:
+ libraries : ``add external jars'' everything in the lib/ directory,
+   plus also the tools.jar file in the lib/ directory of your JDK.
+   (I'm not sure why, but ``add jars'' doesn't show all .jar files in the directory.)
+  
+ Source: 
+   add ``Daikon'', remove ``Daikon/src''.
+   Default output folder: change from ``Daikon/bin'' to ``Daikon''.
+
+
+@node    New invariants, New derived variables, Using Eclipse, Extending Daikon
 @section New invariants
 
 @cindex new invariants
