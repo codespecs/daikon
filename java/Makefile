@@ -573,13 +573,16 @@ daikon/Runtime.class: daikon/Runtime.java
 # file (whose source file was renamed).  Or, run "orphaned-class-files".
 # The (slight) downside is that the regenerated .class files might cause some
 # Make rules to unnecessarily re-run, if the code hasn't actually changed.
-clean:
+clean_class_files:
 	-rm -f `find . -name "*.class" -print`
 	# java/daikon might be a symbolic link; the alternative is to pass
 	# "-follow" to the above find command, but I don't necessarily
 	# want to remove everything reachable through symbolic links.
 	-rm -f `find daikon -follow -name "*.class" -print`
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
+
+clean:
+	${MAKE} clean_class_files
 	-rm -f ChicoryPremain.jar
 	-rm -f dcomp_premain.jar dcomp_rt.jar
 	-rm -rf daikon/util
