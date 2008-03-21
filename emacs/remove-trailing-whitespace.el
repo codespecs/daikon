@@ -20,6 +20,8 @@
    "emacs[-/][0-9]+\.[0-9]+\\(\.[0-9]+\\)?/\\(lisp\\|src\\)/"
    ;; Javac compiler
    "annotations/\\(vendor-\\)?compiler/"
+   ;; FreePastry
+   "pastry/src/"
    )
   "List of regular expressions.  If any of them match a file name, then
 trailing whitespace is not removed from the file.
