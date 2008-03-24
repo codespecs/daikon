@@ -49,6 +49,12 @@ public final /*@Interned*/ class ProglangType
   // The set of (interned) names of classes that implement java.util.List.
   public static HashSet<String> list_implementors = new HashSet<String>();
 
+  /**
+   * If true, treat 32 bit values whose high bit is as a negative
+   * number (rather than as a 32 bit unsigned)
+   */
+  public static boolean dkconfig_convert_to_signed = false;
+
   static {
     // XXX for now, hard-code these list-implementing types. We should
     // make the front-end dump the language-specific ones into .decls.
@@ -328,11 +334,22 @@ public final /*@Interned*/ class ProglangType
         subtracted = 9L*100000*100000*100000*1000; // 9*10^18
       }
       return Long.parseLong(rest) + subtracted;
-    } else if ((value.length() > 2) && (value.charAt(0) == '0')
-               && (value.charAt(1) == 'x')) {
-      return Long.parseLong (value.substring(2), 16);
     } else {
-      return Long.parseLong(value);
+      long val;
+      if ((value.length() > 2) && (value.charAt(0) == '0')
+               && (value.charAt(1) == 'x')) {
+        val = Long.parseLong (value.substring(2), 16);
+      } else {
+        val = Long.parseLong(value);
+      }
+      // presume that 32 bit values are signed
+      if (dkconfig_convert_to_signed && (((val & 0x80000000L) == 0x80000000L)
+                                       && ((val & 0xFFFFFFFF00000000L) == 0))) {
+        long orig = val;
+        val |= 0xFFFFFFFF00000000L;
+        // System.out.printf ("Warning: converted %d to %d\n", orig, val);
+      }
+      return val;
     }
   }
 
