@@ -43,6 +43,10 @@ public class PptCombined extends PptTopLevel {
 
   private static AsmFile assemblies = null;
 
+  /**
+   * Map from the name of a redundant variable to its leader (the earliest
+   * executed variable with guaranteed statically to have the same value).
+   */
   public Map<String, String> rvars = null;
 
   /**
