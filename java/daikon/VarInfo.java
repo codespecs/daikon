@@ -2716,13 +2716,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the VarInfo that represents the hashcode of the base array
-   * of this array.  For example, if the array is a[].b.c, returns a
+   * of this array.  For example, if the array is a[].b.c, returns a.
+   * Returns null if there is no such variable.
    */
   public VarInfo get_base_array_hashcode() {
     if (FileIO.new_decl_format)
       return get_base_array().enclosing_var;
     else {
       Elements elems = (new ElementsFinder(var_info_name)).elems(); // vin ok
+      // System.out.printf ("term.name() = %s\n", elems.term.name());
       return ppt.find_var_by_name (elems.term.name());
     }
   }
@@ -3054,8 +3056,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     /*@Interned*/ String result = null;
     if (!file_rep_type.isArray() || isDerived())
       result = null;
-    else
+    else {
+      // System.out.printf ("Getting size name for %s [%s]\n", name(),
+      //                    get_length());
       result = get_length().simplify_name().intern();
+    }
 
     /*@Interned*/ String old_result = null;
     if (!var_info_name.isApplySizeSafe()) // vin ok
