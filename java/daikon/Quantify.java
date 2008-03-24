@@ -98,11 +98,14 @@ public class Quantify {
       this.sequence = sequence;
       this.offset = offset;
     }
+    public String toString() {
+      return name();
+    }
     public String name() {
       return name_with_offset ("size(" + sequence.name() + ")", offset);
     }
     public String esc_name() {
-      VarInfo arr_var = sequence.get_base_array_hashcode();
+      VarInfo arr_var = get_check_array_var ("ESC");
       if (arr_var.isPrestate()) {
         return String.format ("\\old(%s)",
          name_with_offset (arr_var.postState.esc_name() + ".length", offset));
@@ -111,7 +114,7 @@ public class Quantify {
       }
     }
     public String jml_name() {
-      VarInfo arr_var = sequence.get_base_array_hashcode();
+      VarInfo arr_var = get_check_array_var ("JML");
       if (arr_var.isPrestate()) {
         String name = String.format ("daikon.Quant.size(%s)",
                                      arr_var.postState.jml_name());
@@ -127,7 +130,7 @@ public class Quantify {
       if (!in_prestate)
         return jml_name();
 
-      VarInfo arr_var = sequence.get_base_array_hashcode();
+      VarInfo arr_var = get_check_array_var ("JML");
       if (arr_var.isPrestate()) {
         String name = String.format ("daikon.Quant.size(%s)",
                                      arr_var.postState.jml_name());
@@ -139,8 +142,9 @@ public class Quantify {
       }
     }
     public String simplify_name() {
+      VarInfo arr_var = get_check_array_var ("Simplify");
       String length = String.format ("(arrayLength %s)",
-                   sequence.get_base_array_hashcode().simplify_name());
+                                     arr_var.simplify_name());
       if (offset < 0)
         return String.format ("(- %s %d)", length, -offset);
       else if (offset > 0)
@@ -151,6 +155,22 @@ public class Quantify {
 
     public void set_offset (int offset) {
       this.offset = offset;
+    }
+
+    /**
+     * Looks up the array variable which is the base of this array.
+     * Throws a TerminationMessage exception if one does not exist.
+     **/
+    private VarInfo get_check_array_var(String output_format) {
+      VarInfo arr_var = sequence.get_base_array_hashcode();
+      if (arr_var != null)
+        return arr_var;
+
+      throw new Daikon.TerminationMessage
+        ("Error: Can't create %s expression for the size of an array: "
+         + "No base array (hashcode) variable declared for array '%s'"
+         + " in program point %s", output_format, sequence.name(),
+         sequence.ppt.name());
     }
   }
 
