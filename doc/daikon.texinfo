@@ -615,7 +615,7 @@ uses @code{set} (e.g., @code{set JDKDIR=C:\Program Files\Java\jdk1.5.0_05})
 
 @item
 Define the @code{JDKDIR} environment variable to be
-the full pathanme to the JDK.  For example:
+the full pathname to the JDK.  For example:
 @code{/usr/lib/j2sdk1.t-sun} or @code{C:\Program Files\Java\jdk1.5.0_05}
 
 @item
@@ -7704,33 +7704,49 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 
 @cindex too much output from Daikon
 @cindex useless output from Daikon
+@cindex irrelevant output from Daikon
 
 Sometimes, Daikon may produce a very large number of seemingly
 irrelevant properties that obscure the facts that you were hoping to
-see.  Usually, such output indicates a deficiency in your test suite:
+see.  Which properties are irrelevant depends on your current task, so
+Daikon provides ways for you to customize its output.  See Daikon's
+command-line options (@pxref{Running Daikon}), and the techniques for
+enhancing its output (@pxref{Enhancing Daikon output}), including its
+configuration options (@pxref{Configuration options}).  The options for
+the front ends --- such as Chicory (@pxref{Chicory options}) and Kvasir
+(@pxref{Kvasir options}) --- give additional control.
+
+Some irrelevant properties are over unrelated variables, like comparing
+an array index to elements of the array.  You should always use the
+DynComp tool (see @ref{DynComp for Java}, @ref{DynComp for C/C++}) to
+avoid producing such properties.
+
+Some irrelevant properties are not relevant to the domain (e.g., bitwise
+operations).  You can exclude whole classes of unhelpful invariants from
+Daikon's output (@pxref{Options to enable/disable specific invariants}).
+
+Some irrelevant properties are over variables you do not care about, or
+are in parts of the program that you do not care about.  You can exclude
+certain variables or procedures from Daikon's output (see
+@ref{Processing only part of the trace file} and @ref{Options to
+enable/disable derived variables}).
+
+Some irrelevant output indicates a deficiency in your test suite:
 your test suite is so small that many arbitrary properties hold over it.
 This happens when the test suite does not execute the code with a broad
 distribution of values, but only executes the code with a few specific
 values.  This problem disappears if you augment your test suite so that
 it exercises the code with more different values.
 
-Each property that Daikon produces is a true fact about how the target
+More generally, each property that Daikon produces is a true fact about
+how the target
 program behaved.  However, some of these facts would be true for any
 execution of the target program, and others are accidents of the
-particular executions that Daikon observed.  Both types of facts are
+particular executions that Daikon observed.  Both types of facts may be
 useful:  the former tell you about your program, and the latter tell you
 about your test suite (and how to improve it!).
 
-If you are unable to modify the test suite, or if the facts are true,
-you can reduce the amount of output that Daikon produces by restricting
-the variables or properties that Daikon considers.  See Daikon's
-command-line options (@pxref{Running Daikon}), including its
-configuration options (@pxref{Configuration options}).  For example, you
-can exclude whole classes of unhelpful invariants from Daikon's output.
-The options for the front ends --- such as Chicory (@pxref{Chicory
-options}) and Kvasir (@pxref{Kvasir options}) --- give additional
-control.  For example, they permit you to ignore specific variables
-or program points.
+
 
 
 @node    No samples, No return from procedure, Too much output, Daikon problems
@@ -9538,4 +9554,4 @@ this.topOfStack
 @c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
 @c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
 @c  LocalWords:  maxdepthspec DynCompJ DynCompB cset jdk dcomp BuildJDK FIFOs
-@c  LocalWords:  amd Itanium Yuan
+@c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented
