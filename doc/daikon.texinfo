@@ -7731,6 +7731,11 @@ certain variables or procedures from Daikon's output (see
 @ref{Processing only part of the trace file} and @ref{Options to
 enable/disable derived variables}).
 
+Some irrelevant properties are logically redundant --- multiple
+properties express the same facts in different ways.  You can eliminate
+such properties from Daikon's output (@pxref{Options to control
+invariant detection}).
+
 Some irrelevant output indicates a deficiency in your test suite:
 your test suite is so small that many arbitrary properties hold over it.
 This happens when the test suite does not execute the code with a broad
