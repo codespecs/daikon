@@ -7663,7 +7663,7 @@ reading, so they are compared with a ``fuzzy'' rather than exact equality test.
 @cindex error messages
 
 This chapter gives solutions for certain problems you might have with
-Daikon; it also tells you how to report bugs in a useful manner.
+Daikon.  It also tells you how to report bugs in a useful manner.
 
 
 @menu
