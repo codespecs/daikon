@@ -1,0 +1,94 @@
+#! /usr/bin/env php
+<?php
+//
+// Runs some make commands in parallel.  Could be more general purpose,
+// but right now is specific to running the regression tests in parallel
+//
+{
+  $HOME = getenv ("HOME");
+  include "$HOME/phplib/utils.php";
+
+  $debug = false;
+  $target = "";
+  $max_procs = 4;
+
+  // Process arguments
+  for ($i = 1; $i < count ($argv); $i++) {
+    $arg = $argv[$i];
+    if (($arg == "-debug") || ($arg == "-d"))
+      $debug = true;
+    else if (strpos ($arg, "-") === 0) {
+      echo "Unexpected argument $arg\n";
+      usage();
+    } else {
+      $target .= "$arg ";
+    }
+  }
+
+  $cmds = array();
+  $pout = popen ("make -n $target PARALLEL=true", "r");
+  while (!feof ($pout)) {
+    $line = rtrim (fgets ($pout, 1024));
+    // echo "line = '$line'\n";
+    if (starts_with ($line, "echo exec")) {
+      $cmd = str_replace ("echo exec", "", $line);
+      echo "++$cmd\n";
+      $cmds[] = $cmd;
+    }
+  }
+
+  /*
+  $fp = start_cmd ("make -C daikon-tests/BinaryTree txt-diff");
+  while (true) {
+    if (feof ($fp)) {
+      echo "done\n";
+      exit (1);
+    }
+    $output = fgets ($fp);
+    if ($output === false)
+      sleep (1);
+    else
+      echo $output;
+  }
+  */
+
+  // Start the initial commands
+  for ($ii = 0; $ii < $max_procs; $ii++) {
+    $cmd = array_shift ($cmds);
+    $stdout[$ii] = start_cmd ($cmd);
+    $running[$ii] = $cmd;
+  }
+
+  while (true) {
+    $output_cnt = 0;
+    for ($ii = 0; $ii < count($running); $ii++) {
+      if (feof ($stdout[$ii])) {
+        echo "Finished command $running[$ii]\n";
+        echo $out[$ii];
+        unset ($running[$ii]);
+        unset ($stdout[$ii]);
+        break;
+      }
+      $output = fgets ($stdout[$ii], 4096);
+      if ($output !== false)
+        $output_cnt++;
+      while ($output !== false) {
+        $out[$ii] .= $output;
+        $output = fgets ($stdout[$ii], 4096);
+      }
+    }
+    if (count ($running) == 0)
+      break;
+    if ($output_cnt == 0)
+      sleep (1);
+  }
+}
+
+function start_cmd ($cmd) {
+  $fp = popen ($cmd, "r");
+  $res = stream_set_blocking ($fp, 0);
+  if (!$res)
+    echo "Can't set blocking on $fp\n";
+  echo "Starting command '$cmd'\n";
+  return ($fp);
+}
