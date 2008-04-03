@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.3.5
+4.3.5 (April 3 2008)
 
 Daikon
 
@@ -29,6 +29,41 @@ Daikon
     Permit guarding invariants (the left-hand-sides of implications) to be
     EltNonZero as well as NonZero invariants, to accommodate guarded
     invariants over array contents.
+
+    Create better error messages when declaration records for
+    expected enclosing variables for arrays are not present.
+
+  User-visible changes
+
+    Added IsPointer invariant.  The IsPointer invariant is true if
+    the corresponding variable only takes on legitimate pointer
+    values (in an x86 executable).  IsPointer is disabled by default
+
+    Added support for program points that are basic blocks.  Using
+    variables at the basic block level allows intra-procedural
+    invariants (such as loop invariants) to be found.  There is 
+    also support for combining multiple basic blocks into a single
+    program points so that invariants can be found over variables from
+    different basic blocks.  See the configuration option
+    daikon.FileIO.merge_basic_blocks for more information.
+
+    Added the configuration option daikon.ProglangType.convert_to_signed
+    (default false).  If true, 32 bit values whose high bit is on, are 
+    treated as negative numbers.
+
+  Documentation
+
+    The differences between a minimal and complete installation are 
+    better explained.  The installation instructions are improved.
+
+    A section on removing irrelevant output was added.
+
+    A section on using Eclipse for editing the Daikon source was added.
+
+
+
+
+
 
 ----------------------------------------
 
