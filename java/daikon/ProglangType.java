@@ -50,7 +50,7 @@ public final /*@Interned*/ class ProglangType
   public static HashSet<String> list_implementors = new HashSet<String>();
 
   /**
-   * If true, treat 32 bit values whose high bit is as a negative
+   * If true, treat 32 bit values whose high bit is on, as a negative
    * number (rather than as a 32 bit unsigned)
    */
   public static boolean dkconfig_convert_to_signed = false;
