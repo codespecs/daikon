@@ -18,13 +18,10 @@ import daikon.inv.ValueSet;
  * would not make any sense for pointers. Determining whether a 32-bit variable
  * is a pointer can thus spare the computation of many irrelevant invariants.
  *
- * Jeff suggested the following heuristic: if all samples observed for an
- * integer variable are greater than 100000 or smaller than -100000, then
- * it is likely that the integer variable represents a pointer (also,
- * we allow 0 as a valid value for a pointer). This heuristic was confirmed
- * by observing the sample values for those variables that we knew for sure
- * that are pointers (e.g., their file_rep_type == HASHCODE and type == *data).
- *
+ * The basic approach is to discard the invariant if any values that are
+ * not valid pointers are encountered.  By default values between -100,000
+ * and 100,00 (except 0) are considered to be invalid pointers.  This
+ * approach has been experimentally confirmed on Windows x86 executables.
  */
 public class IsPointer extends SingleScalar {
 
