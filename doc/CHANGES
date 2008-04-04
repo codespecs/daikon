@@ -22,6 +22,10 @@ Further documentation can be found in:
 
 4.3.5 (April 3 2008)
 
+Daikon was enhanced to better support program points that are basic
+blocks.  Also, some minor enhancements and bugs fixes were made and the 
+documentation was improved.
+
 Daikon
 
   Bug fixes
