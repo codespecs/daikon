@@ -686,10 +686,12 @@ JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
 # Even so, the skipClasses variable seems not to be working for me (though
 # @SuppressWarnings is a better approach).
 # JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=daikon.VarInfoName.NodeFinder
-# Remove files that trigger bugs in the checker
+## Remove files that trigger bugs in the checker
+# INTERNED_JAVA_FILES_SKIP = -skip VarInfoName.java
 INTERNED_JAVA_FILES_SKIP =
-INTERNED_JAVA_FILES_SKIP = -skip VarInfoName.java
-INTERNED_JAVA_FILES_SKIP_COUNTS = -skip Intern.java -skip VarInfoName.java
+# INTERNED_JAVA_FILES_SKIP_COUNTS = -skip Intern.java -skip VarInfoName.java
+INTERNED_JAVA_FILES_SKIP_COUNTS =
+## Which files to check.
 # INTERNED_JAVA_FILES = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} '@Interned')
 INTERNED_JAVA_FILES = $(shell find . -type f -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 INTERNED_JAVA_FILES_COUNTS = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} '@Interned')
@@ -702,12 +704,20 @@ intern: interned
 interned:
 	${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
 
+interned-all:
+	cat interned-all-output
+
 # Run the interned checker on all Java files, not just those that contain an
 # @Interned annotation.
 # Takes 10 minutes on swsmde, 60 minutes on mdelap (as of 3/1/2008).
-interned-all:
+interned-all-real:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
+
+interned-all-output: FORCE
+	${MAKE} interned-all-real | tee $@
+
+FORCE:
 
 # These targets run the Interned checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
