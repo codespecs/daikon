@@ -289,7 +289,7 @@ public final class FileIO {
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf (PptFlags.class);
     PptType ppt_type = PptType.POINT;
     List<String> ppt_successors = null;
-    String function_id = null;
+    /*@Interned*/ String function_id = null;
     int bb_length = 0;
 
     // Read the records that define this program point
@@ -599,7 +599,7 @@ public final class FileIO {
           + ppt_name);
     int equals_index = file_rep_type_string.indexOf(" = ");
     String static_constant_value_string = null;
-    Object static_constant_value = null;
+    /*@Interned*/ Object static_constant_value = null;
     boolean is_static_constant = false;
     if (equals_index != -1) {
       is_static_constant = true;
@@ -1571,8 +1571,8 @@ public final class FileIO {
                   assert false;
                   it.remove();
                 } else {
-                assert sp.function_id == p.function_id
-                  : sp.function_id + " " + p.function_id;
+                  assert sp.function_id == p.function_id
+                    : sp.function_id + " " + p.function_id;
                 }
               }
             }

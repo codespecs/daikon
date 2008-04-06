@@ -283,14 +283,14 @@ public final class Intern {
   public static int numDoubleArrays() { return internedDoubleArrays.size(); }
   public static int numStringArrays() { return internedStringArrays.size(); }
   public static int numObjectArrays() { return internedObjectArrays.size(); }
-  public static Iterator<Integer> integers() { return internedIntegers.keySet().iterator(); }
-  public static Iterator<Long> longs() { return internedLongs.keySet().iterator(); }
-  public static Iterator<int[]> intArrays() { return internedIntArrays.keySet().iterator(); }
-  public static Iterator<long[]> longArrays() { return internedLongArrays.keySet().iterator(); }
-  public static Iterator<Double> doubles() { return internedDoubles.keySet().iterator(); }
-  public static Iterator<double[]> doubleArrays() { return internedDoubleArrays.keySet().iterator(); }
-  public static Iterator<String[]> stringArrays() { return internedStringArrays.keySet().iterator(); }
-  public static Iterator<Object[]> objectArrays() { return internedObjectArrays.keySet().iterator(); }
+  public static Iterator</*@Interned*/ Integer> integers() { return internedIntegers.keySet().iterator(); }
+  public static Iterator</*@Interned*/Long> longs() { return internedLongs.keySet().iterator(); }
+  public static Iterator</*@Interned*/ int[]> intArrays() { return internedIntArrays.keySet().iterator(); }
+  public static Iterator</*@Interned*/ long[]> longArrays() { return internedLongArrays.keySet().iterator(); }
+  public static Iterator</*@Interned*/ Double> doubles() { return internedDoubles.keySet().iterator(); }
+  public static Iterator</*@Interned*/ double[]> doubleArrays() { return internedDoubleArrays.keySet().iterator(); }
+  public static Iterator</*@Interned*/ String[]> stringArrays() { return internedStringArrays.keySet().iterator(); }
+  public static Iterator</*@Interned*/ Object[]> objectArrays() { return internedObjectArrays.keySet().iterator(); }
 
   // Interns a String.
   // Delegates to the builtin String.intern() method.  Provided for
@@ -708,7 +708,7 @@ public final class Intern {
    * to their contents.
    * @see Hasher
    **/
-  private static final class SequenceAndIndicesHasher<T> implements Hasher {
+  private static final class SequenceAndIndicesHasher<T extends /*@Interned*/ Object> implements Hasher {
     public boolean equals(Object a1, Object a2) {
       SequenceAndIndices<T> sai1 = (SequenceAndIndices<T>) a1; // unchecked cast
       SequenceAndIndices<T> sai2 = (SequenceAndIndices<T>) a2; // unchecked cast

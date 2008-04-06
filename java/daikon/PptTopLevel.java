@@ -29,6 +29,8 @@ import java.text.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import checkers.quals.Interned;
+
 import utilMDE.*;
 
 /**
@@ -257,7 +259,7 @@ public class PptTopLevel extends Ppt {
 
 
   /** Identifier of the function (for basic blocks **/
-  public String function_id = null;
+  public /*@Interned*/ String function_id = null;
 
   /** Length of basic block (bytes) **/
   public int bb_length;
@@ -323,7 +325,7 @@ public class PptTopLevel extends Ppt {
 
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
                       EnumSet<PptFlags> flags, List<String> ppt_successors,
-                      String function_id, int bb_length, VarInfo[] var_infos) {
+                      /*@Interned*/ String function_id, int bb_length, VarInfo[] var_infos) {
 
     this.name = name;
     if (!name.contains (":::")) {

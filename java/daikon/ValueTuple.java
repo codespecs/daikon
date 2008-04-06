@@ -285,7 +285,7 @@ public final class ValueTuple implements Cloneable {
 
   /** Return a new ValueTuple containing this one's first len elements. **/
   public ValueTuple trim(int len) {
-    Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
+    Object[/*@Interned*/] new_vals = ArraysMDE.subarray(vals, 0, len);
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
   }
@@ -374,7 +374,7 @@ public final class ValueTuple implements Cloneable {
    **/
   public ValueTuple slice(int[] indices) {
     int new_len = indices.length;
-    Object[] new_vals = new Object[new_len];
+    Object[/*@Interned*/] new_vals = new Object[/*@Interned*/ new_len];
     int[] new_mods = new int[new_len];
     for (int i=0; i<new_len; i++) {
       new_vals[i] = vals[indices[i]];

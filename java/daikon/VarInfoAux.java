@@ -302,7 +302,7 @@ public final class VarInfoAux
    * Does not modify this.
    **/
   public /*@Interned*/ VarInfoAux setValue (String key, String value) {
-    HashMap<String,String> newMap = new HashMap<String,String> (this.map);
+    HashMap</*@Interned*/ String,/*@Interned*/ String> newMap = new HashMap</*@Interned*/ String,/*@Interned*/ String> (this.map);
     newMap.put (key.intern(), value.intern());
     return new VarInfoAux(newMap).intern();
   }
