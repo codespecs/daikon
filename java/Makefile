@@ -704,20 +704,30 @@ intern: interned
 interned:
 	${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
 
-interned-all:
-	cat interned-all-output
-
 # Run the interned checker on all Java files, not just those that contain an
 # @Interned annotation.
-# Takes 10 minutes on swsmde, 60 minutes on mdelap (as of 3/1/2008).
-interned-all-real:
+interned-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
 
-interned-all-output: FORCE
-	${MAKE} interned-all-real | tee $@
-
-FORCE:
+## Optimization from when the checkers were slower.
+# interned-all: interned-all-output
+# 	cat $<
+# 
+# # Takes 10 minutes on swsmde, 60 minutes on mdelap (as of 3/1/2008).
+# # (Probably much faster now, not clear if this is needed any more...)
+# interned-all-real:
+# 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
+# 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
+# 
+# interned-all-output:
+# 	${MAKE} interned-all-real | tee $@
+# 
+# interned-all-output-force: FORCE
+# 	rm -f interned-all-output
+# 	${MAKE} interned-all-output
+# 
+# FORCE:
 
 # These targets run the Interned checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
