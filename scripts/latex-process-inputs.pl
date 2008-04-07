@@ -11,6 +11,7 @@
 #     Additionally, the body of each comment is removed, to prevent revealing
 #     more information than we want.  (Actually, each comment is replaced by
 #     an empty comment, to prevent changes in paragraph breaks.)
+#     (This could perhaps be replaced by the "expand" module of the rubber program.)
 #  2. List mode: List all the files that are (transitively) "\input".
 #     This can be useful for getting a list of source files in a logical order,
 #     for example to be used in a Makefile or Ant buildfile (use -antlist).
