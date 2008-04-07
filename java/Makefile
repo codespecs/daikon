@@ -678,28 +678,20 @@ audit:
 
 # Interned type qualifier checker
 
-# JAVAC_ARGS ?= -g -target 5 -typeprocessor checkers.interned.InternedChecker
 # JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
 JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker -Alint=-dotequals
 JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
-# I cannot pass JAVAC_INTERNED_EXCLUDE on the command line to the version of javac that is a script, because that one doesn't respect "java" arguments.
-# Even so, the skipClasses variable seems not to be working for me (though
-# @SuppressWarnings is a better approach).
-# JAVAC_INTERNED_EXCLUDE = -Dcheckers.skipClasses=daikon.VarInfoName.NodeFinder
-## Remove files that trigger bugs in the checker
-# INTERNED_JAVA_FILES_SKIP = -skip VarInfoName.java
-INTERNED_JAVA_FILES_SKIP =
-# INTERNED_JAVA_FILES_SKIP_COUNTS = -skip Intern.java -skip VarInfoName.java
+## Remove files that are not fully annotated, but contain the string "@Interned".
+# INTERNED_JAVA_FILES_SKIP =
+INTERNED_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
+# I should perhaps not count Interned.java, which implements interning and
+# so has very many annotations.  Also, VarInfoName is obsolete (and of flawed
+# design) but has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNED_JAVA_FILES_SKIP_COUNTS =
 ## Which files to check.
-# INTERNED_JAVA_FILES = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} '@Interned')
-INTERNED_JAVA_FILES = $(shell find . -type f -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
-INTERNED_JAVA_FILES_COUNTS = $(shell search -list -name '*.java' ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} '@Interned')
+INTERNED_JAVA_FILES = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
+INTERNED_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 
-## Other attempts:
-# JAVAC_JAVA_ARGS=${JAVAC_INTERNED_EXCLUDE} ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
-# JAVAC_JAVA_ARGS='${JAVAC_INTERNED_EXCLUDE}' ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
-# JAVAC_JAVA_ARGS=-Xbootclasspath/p:/afs/csail.mit.edu/u/m/mernst/research/typequals/annotations/checkers/checkers.jar ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
 intern: interned
 interned:
 	${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
@@ -710,25 +702,6 @@ interned-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
 
-## Optimization from when the checkers were slower.
-# interned-all: interned-all-output
-# 	cat $<
-# 
-# # Takes 10 minutes on swsmde, 60 minutes on mdelap (as of 3/1/2008).
-# # (Probably much faster now, not clear if this is needed any more...)
-# interned-all-real:
-# 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
-# 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
-# 
-# interned-all-output:
-# 	${MAKE} interned-all-real | tee $@
-# 
-# interned-all-output-force: FORCE
-# 	rm -f interned-all-output
-# 	${MAKE} interned-all-output
-# 
-# FORCE:
-
 # These targets run the Interned checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
 interned-varinfo:
@@ -736,18 +709,21 @@ interned-varinfo:
 interned-fileio:
 	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/FileIO.java
 
+# Problem with these computations: double-counting of dakion/util/ directory.
+# "tail -1" is required when wc is given multiple arguments
 interned-counts:
-	@echo -n "Files: "
+	@echo -n "Annotated files: "
 	@echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
-	@echo -n "Lines: "
+	@echo -n "Lines in annotated files: "
 	@wc -l ${INTERNED_JAVA_FILES_COUNTS} | tail -1
 	@echo -n "@Interned annotations: "
-	@grep "@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l | tail -1
+	@grep "@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l
+	# Problems with this computation:  isInterned boolean variable.
 	@echo -n "New local vars: "
 	@grep "interned = " ${INTERNED_JAVA_FILES_COUNTS} | wc -l
-	@echo "@SuppressWarnings annotations:"
+	@echo -n "@SuppressWarnings annotations: "
+	@grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS} | wc -l
 	@grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS}
-	# Echoing long lines is unhelpful (and confuses Emacs)
 	@echo -n "Daikon total files: "
 	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
 	@echo -n "Daikon total lines: "
