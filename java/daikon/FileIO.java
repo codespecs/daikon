@@ -399,7 +399,6 @@ public final class FileIO {
        Scanner scanner) throws DeclError {
 
     ParentRelation pr = new ParentRelation();
-    @SuppressWarnings("interned") // generic type inference
     PptRelationType rel_type = parse_enum_val (state, scanner, PptRelationType.class,
                                       "relation type");
     pr.rel_type = rel_type;
@@ -425,7 +424,6 @@ public final class FileIO {
   private static PptType parse_ppt_type (ParseState state, Scanner scanner)
     throws DeclError {
 
-    @SuppressWarnings("interned") // generic type inference
     PptType ppt_type = parse_enum_val (state, scanner, PptType.class, "ppt type");
     need_eol (state, scanner);
     return (ppt_type);
@@ -558,7 +556,6 @@ public final class FileIO {
       var_infos.add(vi);
     }
 
-    @SuppressWarnings("interned") // generic type inference
     VarInfo[] result = var_infos.toArray(new VarInfo[var_infos.size()]);
     return result;
   }
@@ -2434,7 +2431,6 @@ public final class FileIO {
      * kind.
      */
     public void parse_var_kind (Scanner scanner) throws DeclError {
-      @SuppressWarnings("interned") // generic type inference
       VarKind kind_local = parse_enum_val (scanner, VarKind.class, "variable kind");
       kind = kind_local;
 
@@ -2452,7 +2448,6 @@ public final class FileIO {
 
     /** Parses the reference-type record **/
     public void parse_reference_type (Scanner scanner) throws DeclError {
-      @SuppressWarnings("interned") // generic type inference
       RefType ref_type_local = parse_enum_val (scanner, RefType.class, "reference type");
       ref_type = ref_type_local;
       need_eol (scanner);

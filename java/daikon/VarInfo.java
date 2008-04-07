@@ -1769,7 +1769,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     for (VarInfoName node : (new VarInfoName.InorderFlattener(var_info_name)).nodes()) { // vin ok
       if (node instanceof VarInfoName.Poststate) {
         // Remove temporary var when bug is fixed.
-        @SuppressWarnings("interned") // checker bug:  test case is InternedClass.castTest
         VarInfoName.Poststate tempNode = (VarInfoName.Poststate) node;
         postexpr = tempNode;
         // old code; reinstate when bug is fixed
@@ -1785,7 +1784,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // if we have post(...+k) rewrite as post(...)+k
     if (postexpr.term instanceof VarInfoName.Add) {
-      @SuppressWarnings("interned") // checker bug:  test case is InternedClass.castTest
       VarInfoName.Add add = (VarInfoName.Add) postexpr.term;
       VarInfoName swapped =
         add.term.applyPoststate().applyAdd(add.amount);
@@ -1821,7 +1819,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       if (pre_expr instanceof VarInfoName.Prestate) {
         pre_expr = ((VarInfoName.Prestate) pre_expr).term;
       } else if (pre_expr instanceof VarInfoName.Add) {
-        @SuppressWarnings("interned") // checker bug:  test case is InternedClass.castTest
         VarInfoName.Add add = (VarInfoName.Add) pre_expr;
         if (add.term instanceof VarInfoName.Prestate) {
           pre_expr =
@@ -3579,7 +3576,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (FileIO.new_decl_format)
       return enclosing_var;
     else {
-      @SuppressWarnings("interned") // looks like a checker bug
       List<VarInfoName> traversal
         = new VarInfoName.InorderFlattener(var_info_name).nodes();
       if (traversal.size() <= 1) {

@@ -267,11 +267,11 @@ public final class Intern {
     internedDoubleArrays = new WeakHasherMap</*@Interned*/ double[],WeakReference</*@Interned*/ double[]>>(new DoubleArrayHasher());
     internedStringArrays = new WeakHasherMap</*@Interned*/ String[],WeakReference</*@Interned*/ String[]>>(new StringArrayHasher());
     internedObjectArrays = new WeakHasherMap</*@Interned*/ Object[],WeakReference</*@Interned*/ Object[]>>(new ObjectArrayHasher());
-    internedIntSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ int[]>,WeakReference</*@Interned*/ int[]>>(new SequenceAndIndicesHasher<int[]>());
-    internedLongSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ long[]>,WeakReference</*@Interned*/ long[]>>(new SequenceAndIndicesHasher<long[]>());
-    internedDoubleSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ double[]>,WeakReference</*@Interned*/ double[]>>(new SequenceAndIndicesHasher<double[]>());
-    internedObjectSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ Object[]>,WeakReference</*@Interned*/ Object[]>>(new SequenceAndIndicesHasher<Object[]>());
-    internedStringSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ String[]>,WeakReference</*@Interned*/ String[]>>(new SequenceAndIndicesHasher<String[]>());
+    internedIntSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ int[]>,WeakReference</*@Interned*/ int[]>>(new SequenceAndIndicesHasher</*@Interned*/ int[]>());
+    internedLongSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ long[]>,WeakReference</*@Interned*/ long[]>>(new SequenceAndIndicesHasher</*@Interned*/ long[]>());
+    internedDoubleSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ double[]>,WeakReference</*@Interned*/ double[]>>(new SequenceAndIndicesHasher</*@Interned*/ double[]>());
+    internedObjectSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ Object[]>,WeakReference</*@Interned*/ Object[]>>(new SequenceAndIndicesHasher</*@Interned*/ Object[]>());
+    internedStringSequenceAndIndices = new WeakHasherMap<SequenceAndIndices</*@Interned*/ String[]>,WeakReference</*@Interned*/ String[]>>(new SequenceAndIndicesHasher</*@Interned*/ String[]>());
   }
 
   // For testing only
@@ -598,8 +598,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      long[] subseq = ArraysMDE.subarray(seq, start, end - start);
-      subseq = Intern.intern (subseq);
+      long[] subseq_uninterned = ArraysMDE.subarray(seq, start, end - start);
+      /*@Interned*/ long[] subseq = Intern.intern (subseq_uninterned);
       internedLongSequenceAndIndices.put (sai, new WeakReference</*@Interned*/ long[]>(subseq));
       return subseq;
     }
@@ -615,8 +615,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      double[] subseq = ArraysMDE.subarray(seq, start, end - start);
-      subseq = Intern.intern (subseq);
+      double[] subseq_uninterned = ArraysMDE.subarray(seq, start, end - start);
+      /*@Interned*/ double[] subseq = Intern.intern (subseq_uninterned);
       internedDoubleSequenceAndIndices.put (sai, new WeakReference</*@Interned*/ double[]>(subseq));
       return subseq;
     }
@@ -632,8 +632,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      Object[] subseq = ArraysMDE.subarray(seq, start, end - start);
-      subseq = Intern.intern (subseq);
+      Object[] subseq_uninterned = ArraysMDE.subarray(seq, start, end - start);
+      /*@Interned*/ Object[] subseq = Intern.intern (subseq_uninterned);
       internedObjectSequenceAndIndices.put (sai, new WeakReference</*@Interned*/ Object[]>(subseq));
       return subseq;
     }
@@ -649,8 +649,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      String[] subseq = ArraysMDE.subarray(seq, start, end - start);
-      subseq = Intern.intern (subseq);
+      String[] subseq_uninterned = ArraysMDE.subarray(seq, start, end - start);
+      /*@Interned*/ String[] subseq = Intern.intern (subseq_uninterned);
       internedStringSequenceAndIndices.put (sai, new WeakReference</*@Interned*/ String[]>(subseq));
       return subseq;
     }

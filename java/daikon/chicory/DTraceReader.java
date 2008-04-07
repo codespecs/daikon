@@ -68,7 +68,7 @@ public class DTraceReader extends DeclReader {
       var_data_list.add (obj);
     }
 
-    ppt.add_var_data (var_data_list); // an interned warning here looks like an interned checker bug
+    ppt.add_var_data (var_data_list);
   }
 
   /**

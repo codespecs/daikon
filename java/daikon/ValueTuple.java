@@ -206,7 +206,7 @@ public final class ValueTuple implements Cloneable {
    **/
   public /*@Interned*/ Object getValue(VarInfo vi) {
     assert vi.value_index < vals.length : vi;
-    return vi.getValue(this);   // this looks like a checker bug
+    return vi.getValue(this);
   }
 
   /**
@@ -285,6 +285,7 @@ public final class ValueTuple implements Cloneable {
 
   /** Return a new ValueTuple containing this one's first len elements. **/
   public ValueTuple trim(int len) {
+    @SuppressWarnings("interned") // polymorphism
     Object[/*@Interned*/] new_vals = ArraysMDE.subarray(vals, 0, len);
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);

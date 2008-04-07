@@ -480,7 +480,6 @@ public abstract /*@Interned*/ class VarInfoName
   /**
    * @return the nodes of this, as given by an inorder traversal.
    **/
-  @SuppressWarnings("interned") // generic type inference
   public Collection<VarInfoName> inOrderTraversal() /*@Interned*/ {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
