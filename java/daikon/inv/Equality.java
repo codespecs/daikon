@@ -3,6 +3,8 @@ package daikon.inv;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 
+import checkers.quals.Interned;
+
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -10,7 +12,7 @@ import java.util.*;
 
 
 // Note that this Invariant is used in a *very* different way from
-// the same-named on in V2.  In V2, this is just for printing.  In V3,
+// the same-named one in V2.  In V2, this is just for printing.  In V3,
 // this does all the canonicalizing, etc.
 
 // This is a Java (not Javadoc) comment because the Daikon user manual
@@ -42,7 +44,7 @@ import java.util.*;
  * that print as <samp>x == y</samp> and <samp>x == z</samp>.
  *
  **/
-public final class Equality
+public final /*(at)Interned*/ class Equality
   extends Invariant
 {
    // We are Serializable, so we specify a version to allow changes to

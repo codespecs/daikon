@@ -48,6 +48,7 @@ The correct way to build the system is to run 'make'.
 #if defined(SCALAR)
   #define SCALARPKG scalar
   #define INT long
+  #define INT_PRINTED long
   #define ONEOFSCALAR OneOfScalar
   #define ONEOFSCALAR_STRING "OneOfScalar"
   #define SINGLESCALAR SingleScalar
@@ -69,6 +70,7 @@ The correct way to build the system is to run 'make'.
   #define JAVA_EQUALS_STRING(x) ".equals(" + x + ")"
   #define SCALARPKG scalar
   #define INT double
+  #define INT_PRINTED double
   #define ONEOFSCALAR OneOfFloat
   #define ONEOFSCALAR_STRING "OneOfFloat"
   #define SINGLESCALAR SingleFloat
@@ -85,7 +87,8 @@ The correct way to build the system is to run 'make'.
   #undef JAVA_EQUALS_STRING
   #define JAVA_EQUALS_STRING(x) ".equals(" + x + ")"
   #define SCALARPKG string
-  #define INT String
+  #define INT /*(at)Interned*/ String
+  #define INT_PRINTED String
   #define ONEOFSCALAR OneOfString
   #define ONEOFSCALAR_STRING "OneOfString"
   #define SINGLESCALAR SingleString
@@ -94,7 +97,8 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(SEQUENCE)
   #define SCALARPKG sequence
-  #define INT long[]
+  #define INT long[/*(at)Interned*/]
+  #define INT_PRINTED long[]
   #define ONEOFSCALAR OneOfSequence
   #define ONEOFSCALAR_STRING "OneOfSequence"
   #define SINGLESCALAR SingleScalarSequence
@@ -105,7 +109,8 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(FLOATSEQUENCE)
   #define SCALARPKG sequence
-  #define INT double[]
+  #define INT double[/*(at)Interned*/]
+  #define INT_PRINTED double[]
   #define ONEOFSCALAR OneOfFloatSequence
   #define ONEOFSCALAR_STRING "OneOfSequenceFloat"
   #define SINGLESCALAR SingleFloatSequence
@@ -116,7 +121,8 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(STRINGSEQUENCE)
   #define SCALARPKG stringsequence
-  #define INT String[]
+  #define INT String[/*(at)Interned*/]
+  #define INT_PRINTED String[]
   #define ONEOFSCALAR OneOfStringSequence
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
   #define SINGLESCALAR SingleStringSequence
@@ -128,6 +134,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(ELT)
   #define SCALARPKG sequence
   #define INT long
+  #define INT_PRINTED long
   #define NUMWRAPPER Long
   #define ONEOFSCALAR EltOneOf
   #define ONEOFSCALAR_STRING "EltOneOf"
@@ -143,6 +150,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.eq(a, b) || (Double.isNaN(a) && Double.isNaN(b)))
   #define SCALARPKG sequence
   #define INT double
+  #define INT_PRINTED double
   #define NUMWRAPPER Double
   #define ONEOFSCALAR EltOneOfFloat
   #define ONEOFSCALAR_STRING "EltOneOfFloat"
@@ -155,7 +163,8 @@ The correct way to build the system is to run 'make'.
   #define UPPERBOUND UpperBoundFloat
 #elif defined(ELTSTRING)
   #define SCALARPKG stringsequence
-  #define INT String
+  #define INT /*(at)Interned*/ String
+  #define INT_PRINTED String
   #define ONEOFSCALAR EltOneOfString
   #define ONEOFSCALAR_STRING "EltOneOfString"
   #define SINGLESCALAR SingleStringSequence
@@ -182,6 +191,8 @@ import daikon.inv.*;
   import daikon.inv.binary.twoSequence.SubSequence;
 #endif
 
+import checkers.quals.Interned;
+
 import utilMDE.*;
 
 import java.io.*;
@@ -207,14 +218,14 @@ import java.util.*;
    */
 #elif defined (IS_SCALAR) || defined (IS_SEQUENCE)
   /**
-   * Represents INT variables that take on only a few distinct
+   * Represents INT_PRINTED variables that take on only a few distinct
    * values. Prints as either
    * <samp>x == c</samp> (when there is only one value)
    * or as <samp>x one of {c1, c2, c3}</samp> (when there are multiple values).
    */
 #else
   /**
-   * Represents sequences of INT values where the elements of the sequence
+   * Represents sequences of INT_PRINTED values where the elements of the sequence
    * take on only a few distinct values.  Prints as either
    * <samp>x[] == c</samp> (when there is only one value), or as
    * <samp>x[] one of {c1, c2, c3}</samp> (when there are multiple values).
@@ -1355,86 +1366,6 @@ public final class ONEOFSCALAR
     return result;
   }
 
-  /* Old version with interleaved #ifdefs, replaced with following version
-     using separate ELT and non-elt routines with a shared subroutine
-#if defined(IS_ELT)
-  public InvariantStatus add_modified(INT[] a, int count) {
-    InvariantStatus status = InvariantStatus.NO_CHANGE;
-  OUTER:
-   for (int ai=0; ai<a.length; ai++) {
-    INT v = a[ai];
-#else
-  public InvariantStatus add_modified(INT v, int count) {
-    InvariantStatus status = InvariantStatus.NO_CHANGE;
-  #if !(defined(SCALAR) || defined(FLOAT))
-    Assert.assertTrue(Intern.isInterned(v));
-#endif
-#endif
-    for (int i=0; i<num_elts; i++) {
-      //if (logDetail())
-      //  log ("add_modified (" + v + ")");
-      if (EQUALS (elts[i], v)) {
-#if defined(IS_ELT)
-        continue OUTER;
-#else
-        return InvariantStatus.NO_CHANGE;
-#endif
-      }
-    }
-    if (num_elts == dkconfig_size) {
-      if (logOn() || debug.isLoggable(Level.FINE))
-        log (debug, "destroy of '" + format() + "' add_modified (" + v + ")");
-      destroyAndFlow();
-      return;
-    }
-#if defined(STRING) || defined(ELTSTRING)
-    if (is_type() && (num_elts == 1)) {
-      destroyAndFlow();
-      return;
-    }
-#elif defined(SEQUENCE)
-    if (is_hashcode() && (num_elts == 1)) {
-      destroyAndFlow();
-      return;
-    }
-#elif defined(SCALAR) || defined(ELT)
-    if ((is_boolean() && (num_elts == 1))
-        || (is_hashcode() && (num_elts == 2))) {
-      destroyAndFlow();
-      return;
-    }
-
-    if (is_hashcode() && (num_elts == 1)) {
-      // Permit two object values only if one of them is null
-      if ((elts[0] != 0) && (v != 0)) {
-        destroyAndFlow();
-        return;
-      }
-    }
-#endif
-    // We are significantly changing our state (not just zeroing in on
-    // a constant), so we have to flow a copy before we do so.  We even
-    // need to clone if this has 0 elements becuase otherwise, lower
-    // ppts will get versions of this with multiple elements once this is
-    // expanded.
-    cloneAndFlow();
-
-    elts[num_elts] = v;
-    num_elts++;
-    status = InvariantStatus.WEAKENED;
-#if defined(IS_ELT)
-   }
-#endif
-  return status;
-#if 0
-  This duplication is just to make all the close braces in the file line up.
-#endif
-#if defined(IS_ELT)
-  }
-#else
-  }
-#endif
-  */
 
 #if defined(IS_ELT)
 
