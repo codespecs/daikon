@@ -5159,7 +5159,7 @@ Kvasir with the @option{--disambig} option, we create the
 Kvasir to change how the pointer is treated.  (We run Kvasir twice on the same
 program, but we edit the @file{.disambig} file in between the runs.)
 @example
-kvasir-dtrace @var{...options...} --disambig --smart-disambig @var{myprog}.c
+kvasir-dtrace @var{...options...} --disambig --smart-disambig @var{myprog}
 @end example
 
 This creates the @file{@var{myprog}.disambig} file.  It contains, at the top:
@@ -5191,7 +5191,7 @@ option causes Kvasir to open the existing
 @file{@var{myprog}.disambig} file, read the definitions, and alter
 the output accordingly:
 @example
-kvasir-dtrace @var{...options...} --disambig @var{myprog}.c
+kvasir-dtrace @var{...options...} --disambig @var{myprog}
 @end example
 
 This tells Kvasir to output @code{bar} as a @samp{P}ointer to a single
