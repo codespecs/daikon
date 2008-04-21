@@ -347,7 +347,7 @@ all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Dif
 	$(MAKE) all_pass2
 
 xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${DAIKONBIN}/prune-xlint.pl
+	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${DAIKONBIN}/javac-xlint-prune.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} utilMDE-copy
@@ -894,8 +894,7 @@ showvar_JAVA_FILES:
 showvar_CLASS_FILES:
 	@echo $(subst .java,.class,${JAVA_FILES})
 
-list_java_files:
-	@echo $(JAVA_FILES)
+list_java_files: showvar_JAVA_FILES
 
 
 ###########################################################################
