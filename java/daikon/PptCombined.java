@@ -527,8 +527,7 @@ public class PptCombined extends PptTopLevel {
     return new CombinedVisResults(finalList.toArray(new VarInfo[0]), finalRvars);
   }
 
-  // This method should be removed in favor of combine_func_ppts_2, and the
-  // Javadoc comment moved to combine_func_ppts_2.
+
   /**
    * Creates combined program points that cover multiple basic blocks.
    * Given a list of basic block ppts, each one is made into a combined
@@ -596,136 +595,6 @@ public class PptCombined extends PptTopLevel {
    *    trigger = PptCombined.ppts.get(PptCombined.ppts.size()-1)
    */
   public static void combine_func_ppts (PptMap all_ppts,
-          List<PptTopLevel> func_ppts) {
-
-        List<List<PptTopLevel>> successorsGraph = new ArrayList<List<PptTopLevel>>();
-
-        // Initialize the graph structure with each PPT in the function
-        for (PptTopLevel ppt : func_ppts) {
-
-            List<PptTopLevel> successorRow = new ArrayList<PptTopLevel>();
-            successorRow.add(ppt);
-
-            // Get the successors ppt
-            List<String> successors = ppt.ppt_successors;
-
-            if (successors != null)
-                for (String successorName : successors) {
-                    PptTopLevel successorPPT = all_ppts.get(successorName);
-                    successorRow.add(successorPPT);
-                }
-
-            successorsGraph.add(successorRow);
-        }
-
-        BasicBlockMerger<PptTopLevel> pptMerger = new BasicBlockMerger<PptTopLevel>(successorsGraph);
-        List<List<PptTopLevel>> combinedPPTs = pptMerger.mergeBasicBlocks();
-        List<PptTopLevel> pptIndex = pptMerger.getIndexes();
-        List<PptTopLevel> subsummedList = pptMerger.getSubsummedList();
-
-        //initialize the PPT_Combined structures
-        for (PptTopLevel ppt : func_ppts) {
-            // Mark this ppt as initialized
-            ppt.combined_ppts_init = true;
-
-            List<PptTopLevel> computedCombinedPPTs = combinedPPTs.get(pptIndex.indexOf(ppt));
-            //eliminate first element since it the current ppt itself
-            List<PptTopLevel> combined_ppts = computedCombinedPPTs.subList(1, computedCombinedPPTs.size());
-
-            if (subsummedList.get(pptIndex.indexOf(ppt)) == null) {
-                // the ppt is not subsummed by other ppts
-                ppt.combined_subsumed = false;
-                if (combined_ppts.isEmpty()) {
-                    // this is a zombie PPT (i.e., no parents, no children)
-                    ppt.combined_ppt = null;
-                    continue;
-                }
-
-                // associate a PptCombined to this ppt.
-                // If the var_infos for all combined blocks is
-                // smaller than the threshold, associate one single PptCombined,
-                // otherwise split this PptCombined into smaller chunks
-                List<List<PptTopLevel>> partitions = splitCombinedPpts(combined_ppts);
-                for (List<PptTopLevel> partition : partitions) {
-                    PptTopLevel splitPpt = partition.get(partition.size() - 1);
-
-                    // do not override a previously written PptCombined
-                    if (splitPpt.combined_ppt == null) {
-                      CombinedVisResults vis = combined_vis(partition);
-                      splitPpt.combined_ppt = new PptCombined(partition, vis);
-                    }
-                }
-
-            } else {
-                // ppt is subsummed by other PPTs
-
-                //check whether there was an artificial split
-                //at this ppt due to maxVarInfos
-                if (ppt.combined_ppt == null) {
-                  ppt.combined_subsumed = true;
-                  ppt.combined_subsumed_by
-                    = subsummedList.get(pptIndex.indexOf(ppt));
-                }
-            }
-        }
-
-        // last pass to set the PPT_Combined value even
-        // for subsumed ppts
-        for (PptTopLevel ppt : func_ppts) {
-            if (ppt.combined_ppt == null) {
-                boolean subsumed = ppt.combined_subsumed;
-                PptTopLevel subsumedByPpt = ppt;
-                while (subsumed) {
-                    subsumedByPpt = subsumedByPpt.combined_subsumed_by;
-                    subsumed = subsumedByPpt.combined_subsumed;
-                }
-                ppt.combined_ppt = subsumedByPpt.combined_ppt;
-            }
-        }
-
-    }
-
-  static List<List<PptTopLevel>> splitCombinedPpts(List<PptTopLevel> list) {
-        List<List<PptTopLevel>> result = new ArrayList<List<PptTopLevel>>();
-        List<PptTopLevel> partition = new ArrayList<PptTopLevel>();
-
-        int varInfosSize = 0;
-        for (PptTopLevel ppt : list) {
-            if (varInfosSize + ppt.var_infos.length <= maxVarInfoSize) {
-                varInfosSize += ppt.var_infos.length;
-                partition.add(ppt);
-            }
-            else { //create a new partition
-
-                // force at least one element per partition
-                // even when that element is larger than the threshold
-                if (partition.isEmpty()) {
-                    partition.add(ppt);
-
-                    result.add(partition);
-
-                    partition = new ArrayList<PptTopLevel>();
-                    varInfosSize = 0;
-                }
-                else {
-                    result.add(partition);
-
-                    partition = new ArrayList<PptTopLevel>();
-                    partition.add(ppt);
-                    varInfosSize = ppt.var_infos.length;
-                }
-            }
-        }
-        result.add(partition);
-        return result;
-    }
-
-
-  /**
-   * See combine_func_ppts.
-   * This is an alternate implementation of the same specification.
-   **/
-  public static void combine_func_ppts_2 (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {
 
     // Compute convenience maps: graph successors and predecessors

@@ -39,7 +39,7 @@ public class CoverageStats
     throws Exception
   {
     String gretelFile = args[0];
-    List<String> relevant = Arrays.asList(args).subList(1, args.length);
+    List<String> relevant = Arrays.<String>asList(args).subList(1, args.length);
 
     // We use reflection for Gretel calls so that people don't have to
     // download Gretel to build Daikon.

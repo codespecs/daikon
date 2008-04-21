@@ -151,7 +151,7 @@ public class PptSliceEquality
     }
     // Ensure determinism
     Arrays.sort (newInvs, EqualityComparator.theInstance);
-    invs.addAll (Arrays.asList (newInvs));
+    invs.addAll (Arrays.<Invariant>asList (newInvs));
     Assert.assertTrue (varCount == var_infos.length); // Check that we get all vis
   }
 
@@ -349,7 +349,7 @@ public class PptSliceEquality
 
     // Sort for determinism
     Arrays.sort (resultArray, EqualityComparator.theInstance);
-    List<Equality> result = Arrays.asList (resultArray);
+    List<Equality> result = Arrays.<Equality>asList (resultArray);
     Assert.assertTrue (result.size() > 0);
     return result;
   }
@@ -384,7 +384,7 @@ public class PptSliceEquality
        Arrays.sort(
          resultArray,
          PptSliceEquality.EqualityComparator.theInstance);
-       List<Equality> result = Arrays.asList(resultArray);
+       List<Equality> result = Arrays.<Equality>asList(resultArray);
        Assert.assertTrue(result.size() > 0);
        return result;
      }

@@ -1622,9 +1622,7 @@ public final class FileIO {
         // Build any combined program points and add them to the global map
         System.out.printf ("Calling combine_func_ppts for function %s:\n",
                            ppts.get(0).name());
-        // For debugging, choose one of the following two lines.
-        // PptCombined.combine_func_ppts (all_ppts, ppts);
-        PptCombined.combine_func_ppts_2 (all_ppts, ppts);
+        PptCombined.combine_func_ppts (all_ppts, ppts);
 
         System.out.printf ("Basic blocks in function %s:\n",
                            ppts.get(0).name());

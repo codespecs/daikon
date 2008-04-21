@@ -416,7 +416,7 @@ public class PptTopLevel extends Ppt {
 
   /** Iterate through each variable at this ppt **/
   public Iterator<VarInfo> var_info_iterator() {
-    return Arrays.asList(var_infos).iterator();
+    return Arrays.<VarInfo>asList(var_infos).iterator();
   }
 
   // This method is added as somewhat of a hack for the TreeGUI.  In the
@@ -1446,11 +1446,11 @@ public class PptTopLevel extends Ppt {
    * to be used as an index in the views hashtable.
    */
   private List<Integer> sliceIndex(VarInfo[] vis) {
-    Integer[] a = new Integer[vis.length];
+    List<Integer> result = new ArrayList<Integer>(vis.length);
     for (int i = 0; i < vis.length; i++) {
-      a[i] = new Integer(vis[i].varinfo_index);
+      result.add(vis[i].varinfo_index);
     }
-    return Arrays.asList(a);
+    return result;
   }
 
   /**
@@ -3147,7 +3147,7 @@ public class PptTopLevel extends Ppt {
    * doesn't have anything like post().
    **/
   public void simplify_variable_names() {
-    for (VarInfo vi : Arrays.asList(var_infos)) {
+    for (VarInfo vi : var_infos) {
       // String original = vi.name();
       vi.simplify_expression();
       // if (!original.equals (vi.name()))

@@ -986,7 +986,7 @@ public abstract /*@Interned*/ class VarInfoName
    * @param vars The arguments to the function
    **/
   public static VarInfoName applyFunctionOfN(String function, VarInfoName[/*@Interned*/] vars) {
-    return applyFunctionOfN(function, Arrays.asList(vars));
+    return applyFunctionOfN(function, Arrays.<VarInfoName>asList(vars));
   }
 
   /** A function over a term, like "sum(argument)". **/
@@ -1179,7 +1179,7 @@ public abstract /*@Interned*/ class VarInfoName
     static final long serialVersionUID = 20020130L;
 
     public Intersection(VarInfoName seq1, VarInfoName seq2) {
-      super ("intersection", Arrays.asList(new VarInfoName[/* @ Interned*/] {seq1, seq2}));
+      super ("intersection", Arrays.asList(seq1, seq2));
     }
 
     protected String ioa_name_impl() {
@@ -1208,7 +1208,7 @@ public abstract /*@Interned*/ class VarInfoName
     static final long serialVersionUID = 20020130L;
 
     public Union(VarInfoName seq1, VarInfoName seq2) {
-      super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
+      super ("intersection", Arrays.asList(seq1, seq2));
     }
 
     protected String ioa_name_impl() {

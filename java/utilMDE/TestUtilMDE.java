@@ -77,10 +77,10 @@ public final class TestUtilMDE extends TestCase {
   ///
 
   public static Iterator<Integer> int_array_iterator(int[] nums) {
-    Integer[] o = new Integer[nums.length];
+    List<Integer> asList = new ArrayList<Integer>(nums.length);
     for (int i=0; i<nums.length; i++)
-      o[i] = new Integer(nums[i]);
-    return Arrays.asList(o).iterator();
+      asList.add(nums[i]);
+    return asList.iterator();
   }
 
   public static int[] int_iterator_array(Iterator<Integer> itor) {
@@ -2288,7 +2288,7 @@ public final class TestUtilMDE extends TestCase {
     List ac = Arrays.asList (new Object[] {a, c});
     List bc = Arrays.asList (new Object[] {b, c});
 
-    List<Object> abc = Arrays.asList (new Object[] {a,b,c});
+    List<Object> abc = Arrays.asList (a,b,c);
     List<List<Object>> combo1 = UtilMDE.create_combinations (1, 0, abc);
     assertTrue (combo1.size() == 3);
     assertTrue (combo1.contains (a_list));

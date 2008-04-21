@@ -59,14 +59,14 @@ public class UnionVisitorTester extends TestCase {
     Invariant O_1 = new DiffDummyInvariant(sliceo, "O", 0);
 
     InvMap map1 = new InvMap();
-    map1.put(A, Arrays.asList(new Invariant[] {W, X1, Y}));
-    map1.put(B, Arrays.asList(new Invariant[] {Y}));
-    map1.put(D, Arrays.asList(new Invariant[] {M_001, N_001, O_1}));
+    map1.put(A, Arrays.asList(W, X1, Y));
+    map1.put(B, Arrays.asList(Y));
+    map1.put(D, Arrays.asList(M_001, N_001, O_1));
 
     InvMap map2 = new InvMap();
-    map2.put(A, Arrays.asList(new Invariant[] {W, X2, Z}));
-    map2.put(C, Arrays.asList(new Invariant[] {Z}));
-    map2.put(D, Arrays.asList(new Invariant[] {M_1, N_0001}));
+    map2.put(A, Arrays.asList(W, X2, Z));
+    map2.put(C, Arrays.asList(Z));
+    map2.put(D, Arrays.asList(M_1, N_0001));
 
     diff.setAllInvComparators(new Invariant.ClassVarnameFormulaComparator());
     RootNode root = diff.diffInvMap(map1, map2);
@@ -75,10 +75,10 @@ public class UnionVisitorTester extends TestCase {
     InvMap result = v.getResult();
 
     InvMap expected = new InvMap();
-    expected.put(A, Arrays.asList(new Invariant[] {W, X1, X2, Y, Z}));
-    expected.put(B, Arrays.asList(new Invariant[] {Y}));
-    expected.put(C, Arrays.asList(new Invariant[] {Z}));
-    expected.put(D, Arrays.asList(new Invariant[] {M_001, N_0001, O_1}));
+    expected.put(A, Arrays.asList(W, X1, X2, Y, Z));
+    expected.put(B, Arrays.asList(Y));
+    expected.put(C, Arrays.asList(Z));
+    expected.put(D, Arrays.asList(M_001, N_0001, O_1));
 
     assertEquals(expected.toString(), result.toString());
   }

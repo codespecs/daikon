@@ -742,9 +742,10 @@ public class Ast {
     String ast_methodname = getName(methoddecl);
     List<FormalParameter> ast_params = getParameters(methoddecl);
 
-    List<Method> publicMethods = Arrays.asList(c.getMethods());
-    List<Method> declaredMethods = Arrays.asList(c.getDeclaredMethods());
-    List<Method> allMethods = new ArrayList<Method>(publicMethods);
+    List<Method> publicMethods = Arrays.<Method>asList(c.getMethods());
+    List<Method> declaredMethods = Arrays.<Method>asList(c.getDeclaredMethods());
+    List<Method> allMethods = new ArrayList<Method>();
+    allMethods.addAll(publicMethods);
     allMethods.addAll(declaredMethods);
 
     Method[] meths = allMethods.toArray(new Method[0]);
@@ -778,9 +779,10 @@ public class Ast {
     List<FormalParameter> ast_params = getParameters(constructordecl);
 
 
-    List<Constructor> publicConstructors = Arrays.asList(c.getConstructors());
-    List<Constructor> declaredConstructors = Arrays.asList(c.getDeclaredConstructors());
-    List<Constructor> allConstructors = new ArrayList<Constructor>(publicConstructors);
+    List<Constructor> publicConstructors = Arrays.<Constructor>asList(c.getConstructors());
+    List<Constructor> declaredConstructors = Arrays.<Constructor>asList(c.getDeclaredConstructors());
+    List<Constructor> allConstructors = new ArrayList<Constructor>();
+    allConstructors.addAll(publicConstructors);
     allConstructors.addAll(declaredConstructors);
 
     Constructor[] constrs = allConstructors.toArray(new Constructor[0]);

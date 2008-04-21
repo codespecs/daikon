@@ -56,14 +56,14 @@ public class MinusVisitorTester extends TestCase {
     Invariant unjO = new DiffDummyInvariant(sliceo, "O", false);
 
     InvMap map1 = new InvMap();
-    map1.put(A, Arrays.asList(new Invariant[] {W, X1, Y}));
-    map1.put(B, Arrays.asList(new Invariant[] {Y}));
-    map1.put(D, Arrays.asList(new Invariant[] {M, unjN, unjO}));
+    map1.put(A, Arrays.asList(W, X1, Y));
+    map1.put(B, Arrays.asList(Y));
+    map1.put(D, Arrays.asList(M, unjN, unjO));
 
     InvMap map2 = new InvMap();
-    map2.put(A, Arrays.asList(new Invariant[] {W, X2, Z}));
-    map2.put(C, Arrays.asList(new Invariant[] {Z}));
-    map2.put(D, Arrays.asList(new Invariant[] {unjM, N}));
+    map2.put(A, Arrays.asList(W, X2, Z));
+    map2.put(C, Arrays.asList(Z));
+    map2.put(D, Arrays.asList(unjM, N));
 
     diff.setAllInvComparators(new Invariant.ClassVarnameFormulaComparator());
     RootNode root = diff.diffInvMap(map1, map2, false);
@@ -72,9 +72,9 @@ public class MinusVisitorTester extends TestCase {
     InvMap result = v.getResult();
 
     InvMap expected = new InvMap();
-    expected.put(A, Arrays.asList(new Invariant[] {X1, Y}));
-    expected.put(B, Arrays.asList(new Invariant[] {Y}));
-    expected.put(D, Arrays.asList(new Invariant[] {M}));
+    expected.put(A, Arrays.asList(X1, Y));
+    expected.put(B, Arrays.asList(Y));
+    expected.put(D, Arrays.asList(M));
 
     assertEquals(expected.toString(), result.toString());
   }

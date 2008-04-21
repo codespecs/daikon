@@ -27,7 +27,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
 
   public Iterator<NISuppression> iterator() {
-    return (Arrays.asList(suppression_set).iterator());
+    List<NISuppression> asList = Arrays.<NISuppression>asList(suppression_set);
+    return asList.iterator();
   }
 
   /**

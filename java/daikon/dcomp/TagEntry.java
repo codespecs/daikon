@@ -103,7 +103,7 @@ class TagEntry extends WeakReference<Object> {
 
   public static String generateTraceString() {
     ArrayList<StackTraceElement> blarg =
-      new ArrayList<StackTraceElement>(Arrays.asList(new Exception().getStackTrace()));
+      new ArrayList<StackTraceElement>(Arrays.<StackTraceElement>asList(new Exception().getStackTrace()));
     if (blarg.get(blarg.size() - 1).getClassName()
 				.equals("daikon.dcomp.Premain$ShutdownThread")) return "";
     do blarg.remove(0);

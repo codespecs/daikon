@@ -418,7 +418,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     enclosing_var = null;
     arr_dims = base.arr_dims;
     var_kind = VarKind.FUNCTION;
-    function_args = Arrays.asList (bases);
+    function_args = Arrays.<VarInfo>asList (bases);
 
     // Build the string name
     List<String> arg_names = new ArrayList<String>();

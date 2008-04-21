@@ -56,7 +56,7 @@ public class RootInfo extends DaikonVariableInfo
 
         // Print each parameter
         root.addParameters(mi.class_info, mi.member,
-                           Arrays.asList(mi.arg_names), /*offset = */ "",
+                           Arrays.<String>asList(mi.arg_names), /*offset = */ "",
                            depth);
 
         return root;
@@ -90,7 +90,7 @@ public class RootInfo extends DaikonVariableInfo
 
         // Print arguments
         root.addParameters(mi.class_info, mi.member,
-                           Arrays.asList(mi.arg_names), /*offset = */ "",
+                           Arrays.<String>asList(mi.arg_names), /*offset = */ "",
                            depth);
 
         // Print return type information for methods only and not constructors

@@ -72,7 +72,7 @@ public class NISuppression {
   }
 
   public Iterator<NISuppressor> suppressor_iterator() {
-    return Arrays.asList(suppressors).iterator();
+    return Arrays.<NISuppressor>asList(suppressors).iterator();
   }
 
   /**

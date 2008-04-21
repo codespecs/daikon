@@ -269,7 +269,7 @@ public class PptNameMatcher {
       ppt_args = new String[0];
     }
 
-    return Arrays.asList(ppt_args);
+    return Arrays.<String>asList(ppt_args);
   }
 
 
