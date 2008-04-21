@@ -7,11 +7,11 @@ import java.lang.annotation.*;
 import checkers.metaquals.*;
 import checkers.nonnull.NonNullChecker;
 
-import com.sun.source.tree.Tree;
-
-
 /**
- * Indicates that a variable may have a null value.
+ * A method receiver annotation that indicates that non-null fields might be
+ * null within the body of the method, e.g., if {@code this} is {@code Raw},
+ * {@code this.field} might be null even if {@code field} was declared to be
+ * {@link NonNull}.
  * 
  * <p>
  * 
@@ -24,8 +24,8 @@ import com.sun.source.tree.Tree;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({FIELD, LOCAL_VARIABLE, METHOD, PARAMETER, TYPE})
-@TypeQualifier @QualifierRoot
-@ImplicitFor(trees={Tree.Kind.NULL_LITERAL})
-public @interface Nullable {
-
+@TypeQualifier
+@SubtypeOf( { Nullable.class } )
+public @interface Raw {
+    //Class<?> upTo() default Object.class;
 }
