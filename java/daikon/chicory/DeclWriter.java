@@ -341,11 +341,12 @@ public class DeclWriter extends DaikonWriter {
      */
     private void print_class_ppt (ClassInfo cinfo, String name,
                                   DeclReader comp_info) {
-      System.out.printf ("print_class_ppt on cinfo %s%n", cinfo);
+      // System.out.printf ("print_class_ppt on cinfo %s%n", cinfo);
       if (num_class_vars (cinfo) == 0)
         return;
 
       outFile.println ("ppt " + escape (name));
+      outFile.println ("ppt-type class");
 
       // Print out the static fields
       for (DaikonVariableInfo childOfRoot
@@ -365,6 +366,7 @@ public class DeclWriter extends DaikonWriter {
                                   DeclReader comp_info) {
 
       outFile.println ("ppt " + escape (name));
+      outFile.println ("ppt-type object");
       RootInfo root = RootInfo.getObjectPpt(cinfo, Runtime.nesting_depth);
 
       // If there are any static variables, add the relation to
@@ -419,7 +421,7 @@ public class DeclWriter extends DaikonWriter {
     /** Number that identifies this relation within this ppt **/
     int id;
 
-    static SimpleLog debug = new SimpleLog (true);
+    static SimpleLog debug = new SimpleLog (false);
 
     /** Create a VarRelation **/
     public VarRelation (String parent_ppt_name, String type,
@@ -578,8 +580,8 @@ public class DeclWriter extends DaikonWriter {
             assert (index != -1) : "Relation " + relation + " not found in "
               + relations;
             relation = relations.get (index);
-            System.out.printf ("Found class relation %s for cinfo %s%n",
-                               relation, cinfo);
+            // System.out.printf ("Found class relation %s for cinfo %s%n",
+            //                   relation, cinfo);
           } else {
             System.out.printf ("No class relation found for cinfo %s%n",
                                cinfo);
@@ -651,7 +653,7 @@ public class DeclWriter extends DaikonWriter {
         // System.out.printf ("*Found match for %s : %s%n", decl_type, ci);
         String ppt_marker = ":::OBJECT";
         if (is_static_method && (var instanceof StaticObjInfo)) {
-          System.out.printf ("num_class_vars for classinfo %s%n", ci);
+          // System.out.printf ("num_class_vars for classinfo %s%n", ci);
           if (num_class_vars (ci) == 0)
             return null;
           ppt_marker = ":::CLASS";
