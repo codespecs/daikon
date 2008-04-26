@@ -419,17 +419,9 @@ public class PptTopLevel extends Ppt {
     return Arrays.<VarInfo>asList(var_infos).iterator();
   }
 
-  // This method is added as somewhat of a hack for the TreeGUI.  In the
-  // gui, PptTopLevel are stored as nodes in a tree.  Swing obtains the
-  // string to display in the actual JTree by calling toString().
+  /** Returns the full name of the ppt **/
   public String toString() {
-    if (ppt_name.isObjectInstanceSynthetic()) // display "MyClassName : OBJECT"
-      return ppt_name.getFullClassName() + " : " + FileIO.object_suffix;
-    else if (
-      ppt_name.isClassStaticSynthetic()) // display "MyClassName : CLASS"
-      return ppt_name.getFullClassName() + " : " + FileIO.class_static_suffix;
-    else // only display "EXIT184"
-      return  name; //TODO line Changed By Danny Dig, to be restored to: ppt_name.getPoint();
+    return name();
   }
 
   /** Trim the collections used here, in hopes of saving space. **/
@@ -1854,6 +1846,36 @@ public class PptTopLevel extends Ppt {
     // Look for the invariant
     return (slice.is_inv_true(inv));
   }
+
+  /** Returns whether or not v1 is always non-zero **/
+  public boolean is_nonzero (VarInfo v) {
+
+    // find the slice for v.  If the slice doesn't exist, the non-zero
+    // invariant can't exist
+    PptSlice slice = findSlice(v.canonicalRep());
+    if (slice == null) {
+      // System.out.printf ("No slice for variable %s [leader %s]\n", v,
+      //                   v.canonicalRep());
+      return false;
+    }
+
+    // Get a prototype of the invariant we are looking for
+    Invariant proto = NonZero.get_proto();
+    if (proto == null)
+      return false;
+
+    // Debug print the other invariants in this slice.
+    if (false && !slice.is_inv_true (proto)) {
+      System.out.printf ("%d invariants for variable %s in ppt %s\n",
+                         slice.invs.size(), v, name());
+      for (Invariant inv : slice.invs) {
+        System.out.printf ("Invariant %s in ppt %s\n", inv.format(), name());
+      }
+    }
+
+    return slice.is_inv_true (proto);
+  }
+
 
   /**
    * Returns whether or not the specified variables are equal (ie,
@@ -4309,6 +4331,14 @@ public class PptTopLevel extends Ppt {
       return (type == PptType.SUBEXIT);
     else
       return (ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint());
+  }
+
+  /** Is this a ppt that represents an object? **/
+  public boolean is_object() {
+    if (type != null)
+      return (type == PptType.OBJECT);
+    else
+      return ppt_name.isObjectInstanceSynthetic();
   }
 
   public String var_names() {
