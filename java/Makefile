@@ -80,9 +80,10 @@ endif
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
-DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print) \
-                    $(shell find utilMDE/ -name '*.java' -print) \
-                    $(shell find binary_variables/ -name '*.java' -print)
+DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*') \
+                    $(shell find utilMDE/ -name '*.java' -not -name '*\#*')
+
+#                    $(shell find binary_variables/ -name '*.java' -print)
 
 TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${DAIKONBIN}/sort-directory-order.pl)
 
