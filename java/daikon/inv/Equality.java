@@ -3,8 +3,6 @@ package daikon.inv;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 
-import checkers.quals.Interned;
-
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;

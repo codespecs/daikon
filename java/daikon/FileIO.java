@@ -12,8 +12,6 @@ import static daikon.VarInfo.VarKind;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.LangFlags;
 
-import checkers.quals.Interned;
-
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;

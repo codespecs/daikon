@@ -31,8 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import checkers.quals.Interned;
-
 import utilMDE.Assert;
 import utilMDE.FileIOException;
 import utilMDE.Fmt;
@@ -1284,7 +1282,7 @@ public final class Daikon {
       // NonZero (NonZero.java.jpp)
       proto_invs.add(NonZero.get_proto());
       proto_invs.add(NonZeroFloat.get_proto());
-      
+
       proto_invs.add(IsPointer.get_proto());
 
       // Lower and Upper bound (Bound.java.jpp)

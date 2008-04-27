@@ -18,8 +18,6 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import checkers.quals.*;
-
 import utilMDE.*;
 
 /**

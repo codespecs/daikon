@@ -1,7 +1,7 @@
 ### User customizations
 
 # Put user-specific changes in your own Makefile.user
-#  (such as changes to UTILMDE_DIR or JAVAC).
+#  (such as changes to UTILMDE_DIR or JAVAC or JAVAC_EXTRA_FILES).
 # Make will silently continue if file does not exist.
 -include Makefile.user
 

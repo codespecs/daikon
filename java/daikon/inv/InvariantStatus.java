@@ -1,7 +1,5 @@
 package daikon.inv;
 
-import checkers.quals.*;
-
 /**
  * This class is an enumerated type representing the possible results of
  * adding an sample to an invariant.

@@ -1,7 +1,5 @@
 package daikon.chicory;
 
-import checkers.quals.Interned;
-
 import daikon.util.*;
 
 import java.util.*;

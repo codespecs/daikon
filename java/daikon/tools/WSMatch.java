@@ -6,8 +6,6 @@ import java.io.*;
 
 import utilMDE.*;
 
-import checkers.quals.Interned;
-
 import daikon.chicory.DTraceReader;
 import daikon.chicory.DeclReader;
 import static daikon.chicory.DeclReader.*;

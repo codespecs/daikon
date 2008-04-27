@@ -191,8 +191,6 @@ import daikon.inv.*;
   import daikon.inv.binary.twoSequence.SubSequence;
 #endif
 
-import checkers.quals.Interned;
-
 import utilMDE.*;
 
 import java.io.*;

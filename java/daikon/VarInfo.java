@@ -16,8 +16,6 @@ import daikon.Quantify.QuantifyReturn;
 import utilMDE.*;
 import static daikon.FileIO.VarDefinition;
 
-import checkers.quals.Interned;
-
 import java.util.logging.Logger;
 import java.util.logging.Level;
 

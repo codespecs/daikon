@@ -3,8 +3,6 @@ package utilMDE;
 import java.util.*;
 import java.io.*;
 
-import checkers.quals.Interned;
-
 /**
  * Provides a somewhat simpler interface for tokenizing strings than
  * does StreamTokenizer.  All tokenizing is done by StreamTokenizer. <p>

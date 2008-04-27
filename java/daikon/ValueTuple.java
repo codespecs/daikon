@@ -8,8 +8,6 @@ import java.util.*;
 
 import utilMDE.*;
 
-import checkers.quals.Interned;
-
 
 /**
  * This is the data structure that holds the tuples of values seen so far
