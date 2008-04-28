@@ -308,6 +308,7 @@ Tools for manipulating invariants
 * Printing invariants::         
 * Invariant Diff::              
 * Annotate::                    
+* AnnotateNullable::            
 * Runtime-check instrumenter::  
 * InvariantChecker::            
 * LogicalCompare::              
@@ -6925,7 +6926,7 @@ This section gives information about tools that manipulate invariants
 * Printing invariants::         
 * Invariant Diff::              
 * Annotate::                    
-* AnnotateNullable::
+* AnnotateNullable::            
 * Runtime-check instrumenter::  
 * InvariantChecker::            
 * LogicalCompare::              
@@ -7204,29 +7205,93 @@ An error in the new parser
 may produce illegal Java in the annotated file, if the source file to be
 annotated includes logical shift operators. @xref{Known bugs}.
 
+
 @node    AnnotateNullable, Runtime-check instrumenter, Annotate, Tools for manipulating invariants
 @subsection AnnotateNullable
 
 @cindex AnnotateNullable tool
+@cindex NonNull type inference
+@cindex Nullable type inference
+@cindex @@NonNull type inference
+@cindex @@Nullable type inference
+@cindex type inference, Nullable
+@cindex inference, of Nullable type
 
-AnnotateNullable uses an invariant file to determine which reference
-variables in a Java program ever contained a null value during execution.  It 
-writes to standard out annotations for those variables in  
-@uref{http://pag.csail.mit.edu/jsr308/nnotation-file-utilities/annotation-file-format.pdf, 
-,annotation file} format.  @uref{http://groups.csail.mit.edu/pag/jsr308/annotation-file-utilities/, , Annotation file utilities} can insert those
-annotations into source files that can be checked by a NonNull type
-checker.
+AnnotateNullable determines which variables in a Java program were ever
+null during execution.  Its primary use is for performing inference for
+a type system that detects null dereference errors.  An example of such
+a type system is distibuted as part of the
+@uref{http://groups.csail.mit.edu/pag/jsr308/, JSR 308 Checkers Framework}.
 
-AnnotateNullable determines which variables have seen null values by
-looking at the NonZero invariant.  If that invariant is @emph{not} present,
-then the variables must have seen at least one null value.
+The type system requires a programmer to annotate some references
+with @code{@@Nullable}, meaning the variable might be null; references
+that are left unannotated are never null at run time.  (Alternately, the
+type system might use @code{@@NonNull} for references that are never
+null, and no annotation for references that might be null; the tool
+supports either choice of syntax.)  The type system then warns the
+programmer about possible null dereference errors.
 
-Since only the NonZero invariant is used, Daikon processing time can
-be significantly reduced by turning off derived variables and all
-invariants other than @code{daikon.inv.unary.scalar.NonZero}.  This is
-not necessary, for correct operation, but can significantly improve
-performance.  A daikon configuration file (annotate_nullable.config)
-for this purpose is available in the daikon directory.
+The type system is useful, but writing all the annotations is tedious.
+The AnnotateNullable tool automatically determines a subset of the
+proper @code{@@Nullable} annotations.  A programmer may need to write a
+few more annotations, but that is much easier than writing them all.
+
+To automatically insert @code{@@Nullable} annotations in your program,
+follow these steps:
+
+@enumerate
+@item
+Run your application one or more times to create a trace file.  As
+always, the runs should exercise the application as thoroughly as
+possible.  No incorrect @code{@@Nullable} annotations are ever produced,
+but more thorough runs produce a larger number of @code{@@Nullable}
+annotations.
+
+@example
+java daikon.Chicory --new_decl_format --dtrace-file=an.dtrace.gz @emph{your-command-and-options}
+@end example
+
+@item Run Daikon on the resulting dtrace file:
+
+@example
+java daikon.Daikon an.dtrace.gz an.dtrace.gz --config @var{daikondir}/java/daikon/annotate_nullable.config
+@end example
+
+The example uses the @file{annotate_nullable.config} configuration file
+that is included in the Daikon distribution.
+You may use any configuration file, or none, as long as the NonZero
+invariant is enabled.  The @file{annotate_nullable.config} enables
+@emph{only} the NonZero invariant.  This makes Daikon run much faster,
+but the resulting @file{.inv} file is useful only for the
+AnnotateNullable tool.
+
+@c This is an implementation detail, so leave it out of the manual.
+@c AnnotateNullable determines which variables have seen null values by
+@c looking at the NonZero invariant.  If NonZero is @emph{not} present for
+@c a variable @code{v}, then during the program execution, @code{v} must
+@c have been null at least once.
+
+@item
+Run the AnnotateNullable tool to create an annotation index file.
+AnnotateNullable writes its output to standard out, so you should
+redirect its output to a @file{.jaif} file.
+
+@example
+java daikon.AnnotateNullable -p @var{package} an.inv.gz > nullable-annotations.jaif
+@end example
+
+@item
+Use the
+@uref{http://groups.csail.mit.edu/pag/jsr308/annotation-file-utilities/,
+Annotation File Utilites} to insert the annotations in your Java
+file.
+
+@example
+insert-annotations @var{mypackage.MyClass} nullable-annotations.jaif
+@end example
+
+@end enumerate
+
 
 AnnotateNullable is invoked as follows:
 @example
@@ -7240,15 +7305,18 @@ The flags are:
 Specifies the package of each class that is annotated.  This option is
 required.
 
-@item --new_format
-Specifies that the new annotation output format should be used.  This
-format is not yet supported by the annotation file utilities
+@c This format will never be supported, so there is no point in
+@c documenting it.
+@c @item --new_format
+@c Specifies that the new annotation output format should be used.  This
+@c format is not yet supported by the annotation file utilities.
 
 @item -n --nonnull-annotations
 Adds NonNull annotations as well as Nullable annotations.  Unlike Nullable
-annotation, NonNull annotations are not necessarily correct
+annotation, NonNull annotations are not guaranteed to be correct.
 
 @end table
+
 
 @node    Runtime-check instrumenter, InvariantChecker, AnnotateNullable, Tools for manipulating invariants
 @subsection Runtime-check instrumenter (runtimechecker)
@@ -7379,6 +7447,7 @@ Daikon's Java parser (adopted from javacc and JTB) accepts Java 1.5 syntax.
 An error in the new parser
 may produce illegal Java in the instrumented file, if the source file to
 be instrumented includes logical shift operators. @xref{Known bugs}.
+
 
 @node    InvariantChecker, LogicalCompare, Runtime-check instrumenter, Tools for manipulating invariants
 @subsection InvariantChecker
