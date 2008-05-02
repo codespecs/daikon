@@ -688,7 +688,7 @@ INTERNED_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.j
 # I should perhaps not count Interned.java, which implements interning and
 # so has very many annotations.  Also, VarInfoName is obsolete (and of flawed
 # design) but has 60 @Interned annotations and quite a few SuppressWarnings.
-INTERNED_JAVA_FILES_SKIP_COUNTS =
+INTERNED_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
 ## Which files to check.
 INTERNED_JAVA_FILES = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 INTERNED_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
@@ -715,13 +715,13 @@ interned-fileio:
 interned-counts:
 	@echo -n "Annotated files: "
 	@echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
+	#@echo ${INTERNED_JAVA_FILES_COUNTS}
 	@echo -n "Lines in annotated files: "
 	@wc -l ${INTERNED_JAVA_FILES_COUNTS} | tail -1
 	@echo -n "@Interned annotations: "
 	@grep "@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l
-	# Problems with this computation:  isInterned boolean variable.
-	@echo -n "New local vars: "
-	@grep "interned = " ${INTERNED_JAVA_FILES_COUNTS} | wc -l
+	@echo -n "Commented @Interned annotations: "
+	@grep -E "//.*@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l
 	@echo -n "@SuppressWarnings annotations: "
 	@grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS} | wc -l
 	@grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS}

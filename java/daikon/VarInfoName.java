@@ -606,7 +606,6 @@ public abstract /*@Interned*/ class VarInfoName
     return repr().hashCode();
   }
 
-  @SuppressWarnings("interned") // possible compiler bug, not sure
   public int compareTo(VarInfoName other) {
     int nameCmp = name().compareTo(other.name());
     if (nameCmp != 0) return nameCmp;
@@ -984,7 +983,9 @@ public abstract /*@Interned*/ class VarInfoName
    * @param vars The arguments to the function
    **/
   public static VarInfoName applyFunctionOfN(String function, VarInfoName[/*@Interned*/] vars) {
-    return applyFunctionOfN(function, Arrays.<VarInfoName>asList(vars));
+    // This causes an odd error with the Interned checker:
+    // return applyFunctionOfN(function, Arrays.</*@Interned*/ VarInfoName>asList(vars));
+    return applyFunctionOfN(function, Arrays.asList(vars));
   }
 
   /** A function over a term, like "sum(argument)". **/

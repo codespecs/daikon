@@ -217,7 +217,7 @@ public final class ValueTuple implements Cloneable {
 
   /** Default constructor that interns its argument. */
   public ValueTuple(Object[/*@Interned*/] vals, int[] mods) {
-    this.vals = Intern.intern(vals); // checker error due to checker weakness.  The type of intern needs to be polymorphic.  It is Intern.intern (Object[]) -> @Interned Object[], but we want Intern.intern (Object[@Interned]) -> @Interned Object[@Interned]
+    this.vals = Intern.intern(vals);
     this.mods = Intern.intern(mods);
   }
 

@@ -1559,14 +1559,16 @@ public final class FileIO {
                 it.remove();
               } else {
                 assert sp != null : successor;
-                if (sp.function_id != p.function_id) {
+                @SuppressWarnings("interned") // PptTopLevel
+                boolean same_function_id = (sp.function_id == p.function_id);
+                if (! same_function_id) {
                   System.out.printf ("Warning: successor %s (func %s) in "
                             + "ppt %s (func %s) is not in same function\n",
                             sp.name(), sp.function_id, p.name(), p.function_id);
                   assert false;
                   it.remove();
                 } else {
-                  assert sp.function_id == p.function_id
+                  assert same_function_id
                     : sp.function_id + " " + p.function_id;
                 }
               }

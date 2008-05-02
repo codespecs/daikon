@@ -123,8 +123,7 @@ public final /*@Interned*/ class ProglangType
       dims++;
       new_base = new_base.substring(0, new_base.length() - 2);
     }
-    /*@Interned*/ String new_base_interned = new_base.intern();
-    return intern(new_base_interned, dims);
+    return intern(new_base.intern(), dims);
   }
 
   /**
@@ -215,7 +214,6 @@ public final /*@Interned*/ class ProglangType
       return result;
     }
     result = new ProglangType(t_base, t_dims);
-    // result = (ProglangType) new ProglangType(t_base, t_dims); // cast is redundant (except in JSR 308)
 
     Vector<ProglangType> v = all_known_types.get(t_base);
     if (v == null) {

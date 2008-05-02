@@ -150,8 +150,7 @@ public final class VarInfoAux
     }
 
     // Interning
-    VarInfoAux resultUninterned = new VarInfoAux(map);
-    /*@Interned*/ VarInfoAux result = resultUninterned.intern();
+    VarInfoAux result = new VarInfoAux(map).intern();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("New parse " + result);
       debug.fine ("Intern table size: " + new Integer(interningMap.size()));
