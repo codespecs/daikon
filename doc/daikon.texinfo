@@ -5,7 +5,8 @@
 @c %**end of header
 
 @c To update all the nodes and menus all at once:   C-u C-c C-u m
-@c You shouldn't need to do that, though; the Makefile does it for you.
+@c You shouldn't need to do that, though; the Makefile does it for you
+@c (and fixes up an @ifhtml issue).
 
 @c I can't get this to work, don't know why.  MDE 4/2001.
 @c @alias directory = file
