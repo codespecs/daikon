@@ -3000,6 +3000,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       if (index == null)
         return String.format("(select elems %s)",
                              enclosing_var.simplify_name());
+      if (false && index.equals("|0|")) {
+        System.err.printf ("index = %s\n", index);
+        Throwable t = new Throwable();
+        t.printStackTrace();
+      }
       return String.format ("(select (select elems %s) %s)",
                             enclosing_var.simplify_name(), index);
     case VARIABLE:
@@ -3282,13 +3287,21 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Calculate the index (including the offset if non-zero)
     String complete_index = null;
     Quantify.Term lower = get_lower_bound();
-    if (index_off != 0)
-      complete_index = String.format ("(+ |%s| %d)", lower.simplify_name(),
-                                      index_off);
-    else
-      complete_index = String.format ("|%s|", lower.simplify_name());
+    String lower_name = lower.simplify_name();
+    if (!(lower instanceof Quantify.Constant))
+      lower_name = String.format ("|%s|", lower_name);
+    if (index_off != 0) {
+      if (lower instanceof Quantify.Constant)
+        complete_index = String.format ("%d",
+                            ((Quantify.Constant) lower).get_value() + index_off);
+      else
+        complete_index = String.format ("(+ %s %d)", lower_name, index_off);
+    } else
+      complete_index = String.format ("%s", lower_name);
 
     // Return the array properly indexed
+    // System.err.printf ("lower bound type = %s [%s] %s\n", lower,
+    //                   lower.getClass(), complete_index);
     return simplify_name (complete_index);
   }
 
