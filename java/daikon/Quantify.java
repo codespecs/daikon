@@ -88,6 +88,7 @@ public class Quantify {
     int val;
     public Constant (int val) { this.val = val; }
     public String name() { return "" + val; }
+    public int get_value() { return val; }
   }
 
   /** Represents the length of a sequence  and an optional offset **/
