@@ -1,12 +1,15 @@
 package utilMDE;
 
 import java.util.Stack;
+import java.io.PrintStream;
 
 public final class SimpleLog {
 
   public String indent_str = "";
   public boolean enabled;
   public boolean line_oriented = true;
+
+  public PrintStream logfile = System.out;
 
   public static class LongVal {
     public long val;
@@ -24,6 +27,15 @@ public final class SimpleLog {
 
   public SimpleLog() {
     this (true);
+  }
+
+  public SimpleLog (String filename, boolean enabled) {
+    this (enabled);
+    try {
+      logfile = new PrintStream (filename);
+    } catch (Exception e) {
+      throw new RuntimeException ("Can't open " + filename, e);
+    }
   }
 
   public final boolean enabled() {
@@ -68,9 +80,9 @@ public final class SimpleLog {
   public final void log (String format, Object... args) {
 
     if (enabled) {
-      System.out.print (indent_str);
       format = fix_format(format);
-      System.out.printf (format, args);
+      logfile.print (indent_str);
+      logfile.printf (format, args);
     }
 
   }
@@ -100,13 +112,13 @@ public final class SimpleLog {
 
     if (enabled) {
       long elapsed = System.currentTimeMillis() - start_times.peek().val;
-      System.out.print (indent_str);
+      logfile.print (indent_str);
       if (elapsed > 1000)
-        System.out.printf ("[%,f secs] ", elapsed/1000.0);
+        logfile.printf ("[%,f secs] ", elapsed/1000.0);
       else
-        System.out.print ("[" + elapsed + " ms] ");
+        logfile.print ("[" + elapsed + " ms] ");
       format = fix_format(format);
-      System.out.printf (format, args);
+      logfile.printf (format, args);
       // start_time();
     }
   }
