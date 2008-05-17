@@ -3944,7 +3944,8 @@ containing your JDK@.  This command instruments the classes in the
 BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
 memory.  Regular progress indicators are printed to standard output.
 
-You can ignore errors and warnings issued during the instrumentation process.
+You can ignore warnings issued during the instrumentation process, so
+long as the make target itself completes normally.
 
 There is a small number of methods in the JDK that DynComp is currently
 unable to instrument.  The names of these methods will be printed at the
