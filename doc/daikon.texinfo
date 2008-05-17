@@ -3922,6 +3922,10 @@ turned on with @code{--abridged-vars}.
 @node Instrumenting the JDK with DynComp, DynComp for Java options, DynComp for Java, DynComp for Java
 @subsection Instrumenting the JDK with DynComp
 
+@cindex dcomp_rt.jar file for DynComp
+@cindex intrumented JDK, for DynComp
+@cindex JDK, instrumented for DynComp
+
 If you did not already do so when installing Daikon (in
 @ref{Installation steps}), follow the instructions here to build an
 instrumented copy of the JDK@.  Use the following command in
@@ -3940,11 +3944,14 @@ containing your JDK@.  This command instruments the classes in the
 BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
 memory.  Regular progress indicators are printed to standard output.
 
+You can ignore errors and warnings issued during the instrumentation process.
+
 There is a small number of methods in the JDK that DynComp is currently
 unable to instrument.  The names of these methods will be printed at the
 end of instrumentation.  The file @file{jdk_classes.txt}, found inside
 @file{dcomp_rt.jar}, contains a list of all classes processed, including
 those that could not be instrumented.
+
 
 @node DynComp for Java options, Instrumentation of Object methods, Instrumenting the JDK with DynComp, DynComp for Java
 @subsection DynComp options
