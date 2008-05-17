@@ -550,7 +550,7 @@ If you plan to use one of Daikon's source-based front ends, such as
 Mangel-Wurzel (@pxref{Mangel-Wurzel}), then you need a compiler
 for whatever language your target programs are written in.  For
 instance, if you wish to analyze C or C++ programs, you need a C or C++
-compiler such as GCC.  Source code and a compiler are not necessary if
+compiler such as GCC@.  Source code and a compiler are not necessary if
 you plan to use one of Daikon's front ends that work on binaries, such
 as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
@@ -617,7 +617,7 @@ uses @code{set} (e.g., @code{set JDKDIR=C:\Program Files\Java\jdk1.5.0_05})
 
 @item
 Define the @code{JDKDIR} environment variable to be
-the full pathname to the JDK.  For example:
+the full pathname to the JDK@.  For example:
 @code{/usr/lib/j2sdk1.t-sun} or @code{C:\Program Files\Java\jdk1.5.0_05}
 
 @item
@@ -975,9 +975,9 @@ For more information about the Annotate program, see @ref{Annotate}.
 @subsection Using DynComp with Java programs
 
 DynComp can help to filter Daikon's output by omitting invariants
-involving unrelated variables (see @ref{DynComp for Java}). To do so, run
+involving unrelated variables (see @ref{DynComp for Java}).  To do so, run
 DynComp on the target program first, then pass the resulting
-@file{.decls} file to Chicory. The process would be as follows:
+@file{.decls} file to Chicory.  The process would be as follows:
 
 @enumerate
 @item
@@ -990,9 +990,9 @@ javac -g DataStructures/*.java
 @end example
 
 @item
-Run the program with DynComp to generate comparability information. You
+Run the program with DynComp to generate comparability information.  You
 should produce an instrumented version of the JDK first (see
-@ref{Instrumenting the JDK with DynComp}). By default, comparability
+@ref{Instrumenting the JDK with DynComp}).  By default, comparability
 information is written to @file{StackArTester.decls-DynComp}.
 
 @example
@@ -1001,9 +1001,9 @@ java daikon.DynComp DataStructures.StackArTester
 
 @item
 Run the program under the control of the Chicory front end, including
-comparability information. Pass the information to Daikon, print the
+comparability information.  Pass the information to Daikon, print the
 inferred invariants, and write a binary representation of the invariants
-to @file{StackArTester.inv.gz}. Note that this runs the target program
+to @file{StackArTester.inv.gz}.  Note that this runs the target program
 for a second time.
 
 @example
@@ -1094,10 +1094,10 @@ this.maxPhase < orig(i)
 @end example
 
 The value of @code{phase} is always less than the value of
-@code{i}. While this is true for the observed executions, it is not a
+@code{i}.  While this is true for the observed executions, it is not a
 helpful invariant, since @code{phase} and @code{i} represent different
 abstract types; @code{i} is a number to be pushed onto the stack, while
-@code{phase} is used for program flow control. Although they are both
+@code{phase} is used for program flow control.  Although they are both
 @code{int}s, comparing the two is not meaningful, so this invariant,
 among others, is omitted from the output when Daikon is run with
 DynComp.
@@ -1301,7 +1301,7 @@ enabled, Kvasir produces two output files instead of one: in addition to
 a @file{.dtrace} file containing a trace of a particular execution, the
 information about what variables and functions exist in a program, along
 with information grouping the variables into abstract types, is stored
-in a file with the extension @file{.decls}. Both of these files must be
+in a file with the extension @file{.decls}.  Both of these files must be
 supplied to Daikon.
 
 For instance, to repeat the wordplay example with DynComp, first rerun
@@ -3485,7 +3485,7 @@ class @code{pack2.A} whether or not @code{pack1.B} is instrumented.
 By default, Chicory outputs all fields in instrumented classes (even
 those that would not be accessible in Java code at the given program point)
 and outputs no fields from uninstrumented classes (even those that are
-accessible). When you supply
+accessible).  When you supply
 @option{--std-visibility}, consider also supplying @option{--purity-file} to
 enrich the set of expressions in Daikon's output.
 
@@ -3534,9 +3534,9 @@ The string is formatted as the method access modifiers, if any, followed
 by the method return type, followed by a space, followed by the class
 declaring the method, followed by a period, followed by the method name,
 followed by a parenthesized, comma-separated list of the method's formal
-parameter types. If the method throws checked exceptions, the parameter
+parameter types.  If the method throws checked exceptions, the parameter
 list is followed by a space, followed by the word throws followed by a
-comma-separated list of the thrown exception types. For example:
+comma-separated list of the thrown exception types.  For example:
 @example
 public boolean java.lang.Object.equals(java.lang.Object)
 @end example
@@ -3577,7 +3577,7 @@ Produce debugging information.
 @item --default_bcel
 Chicory uses the Byte Code Engineering Library (BCEL) to instrument
 classfiles.  Errors can occur if the application uses an incompatible
-version of BCEL.  By default, Chicory identifies and loads its 
+version of BCEL@.  By default, Chicory identifies and loads its 
 copy of BCEL when multiple copies of BCEL are in the classpath.  It will
 also issue a warning if multiple copies of BCEL are in the classpath and
 the application version is not the first one.  When this option is
@@ -3715,11 +3715,11 @@ all times.
 The DynComp dynamic comparability analysis tool performs dynamic type
 inference to group variables at each program point into comparability
 sets (see @ref{Program point declarations} for the numeric
-representation format of these sets). All variables in each
+representation format of these sets).  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
 than the few basic declared types (e.g., int, float) provided by the
-language. Consider the example below:
+language.  Consider the example below:
 
 @example
 public class Year @{
@@ -3761,7 +3761,7 @@ invariant such as @code{winterDays < year} is true but meaningless
 because days and years are not comparable).
 
 To use DynComp, run your program as you normally would, but replace the
-@command{java} command with @command{java daikon.DynComp}. For instance,
+@command{java} command with @command{java daikon.DynComp}.  For instance,
 if you usually run
 @example
 java mypackage.MyClass arg1 arg2 arg3
@@ -3773,9 +3773,9 @@ java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
 @end example
 @noindent
 This runs your program and creates the file @file{MyClass.decls-DynComp}
-in the current directory. DynComp also creates @file{MyClass.txt-cset},
+in the current directory.  DynComp also creates @file{MyClass.txt-cset},
 which contains the same information and a further level of detail in an
-easier-to-read format. The @file{.decls} file may be passed to Chicory,
+easier-to-read format.  The @file{.decls} file may be passed to Chicory,
 as described in @ref{Using DynComp with Java programs}.
 @example
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
@@ -3786,7 +3786,7 @@ See below for more options.
 
 While you may run DynComp with the standard JDK, using the
 @option{--no-jdk} switch, you can obtain more accurate results by using a
-copy of the JDK that has been instrumented with DynComp. See
+copy of the JDK that has been instrumented with DynComp.  See
 @ref{Instrumenting the JDK with DynComp}, below, for instructions.
 
 This is part of a sample @file{.decls} file generated by running DynComp on the example above:
@@ -3830,8 +3830,8 @@ int
 @noindent The declarations file format is described in @ref{Program point declarations}.
 
 DynComp creates two representations of the comparability information in
-the files @file{foo.txt-cset} and @file{foo.txt-trace}. In the @file{cset}
-file, DynComp outputs comparability sets as sets. The above @file{.decls}
+the files @file{foo.txt-cset} and @file{foo.txt-trace}.  In the @file{cset}
+file, DynComp outputs comparability sets as sets.  The above @file{.decls}
 output corresponds to the following in @file{cset}:
 
 @example
@@ -3847,7 +3847,7 @@ Daikon Variable sets for Year.compute(I yr, I d1, I d2) exit
 
 In the @file{trace} file, DynComp outputs comparability sets as trees,
 structured such that each variable in the tree has interacted with its
-children. The lack of a parent-child relationship between two variables
+children.  The lack of a parent-child relationship between two variables
 in a set does not imply anything about whether they interacted.
 The above @file{.decls} output corresponds to the following in
 @file{trace}:
@@ -3873,22 +3873,22 @@ daikon.chicory.ParameterInfo yr
 
 @noindent The file here shows that @code{d1}, @code{d2}, and the return value of
 the @code{compute} method are in the same comparability set; this is
-correct, as they are all of the abstract type `days'. The variable
+correct, as they are all of the abstract type `days'.  The variable
 @code{yr} is in its own comparability set; it has abstract type `year',
-and so is not comparable to the other variables. In addition, the structure
+and so is not comparable to the other variables.  In addition, the structure
 of the @code{[d1, d2, return]} set shows that at some point, @code{d1} interacted
-with @code{d2}, and that @code{d2} interacted with @code{return}. The absence of
+with @code{d2}, and that @code{d2} interacted with @code{return}.  The absence of
 a @code{d1 -- return} edge does not imply that @code{d1} and @code{return} never
 interacted directly.
 
 In addition, non-root nodes in the @file{trace} trees can indicate a list of class names,
 method names, and line numbers at which values interacted, resulting in comparability
-between the preceding child node and its parent. In the above example, @code{d1}
+between the preceding child node and its parent.  In the above example, @code{d1}
 interacted with @code{d2} on line 11 of the @code{compute} method of the @code{Year}
 class.
 
 Duplicate values in this list represent the results of separate calls to
-another method which each of the relevant variables. For example, if @code{main} had calls
+another method which each of the relevant variables.  For example, if @code{main} had calls
 @code{compute(year, summerDays, winterDays)} and
 @code{compute(year,schoolDays,breakDays)}, then for @code{main} we might see
 
@@ -3902,14 +3902,14 @@ daikon.chicory.FieldInfo:summerDays
 Empty lists indicate that no non-assignment interactions occurred in the series of
 interactions connecting the two variables.
 
-Elements of these lists are essentially parts of stack traces. The maximum number
+Elements of these lists are essentially parts of stack traces.  The maximum number
 of stack trace levels displayed is set by @code{--trace-line-depth}, which is equal to 1 by default.
 
 For these files, DynComp also has a @code{--abridged-vars} option that replaces text
 like @code{daikon.chicory.ParameterInfo:d2} with text like @code{Parameter d2} in the @file{cset}
-and @file{trace} files. It writes @code{this} instead of
+and @file{trace} files.  It writes @code{this} instead of
 @code{daikon.chicory.ThisObjInfo:this}; and @code{return} instead of
-@code{daikon.chicory.ReturnInfo:return}. This option is off by default, but can be
+@code{daikon.chicory.ReturnInfo:return}.  This option is off by default, but can be
 turned on with @code{--abridged-vars}.
 
 @menu
@@ -3924,7 +3924,7 @@ turned on with @code{--abridged-vars}.
 
 If you did not already do so when installing Daikon (in
 @ref{Installation steps}), follow the instructions here to build an
-instrumented copy of the JDK. Use the following command in
+instrumented copy of the JDK@.  Use the following command in
 @file{$DAIKONDIR}:
 
 @example
@@ -3933,16 +3933,16 @@ make -C java dcomp_rt.jar
 
 @noindent
 Make sure the @code{JDKDIR} environment variable is set to the directory
-containing your JDK. This command instruments the classes in the
+containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
 BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
-memory. Regular progress indicators are printed to standard output.
+memory.  Regular progress indicators are printed to standard output.
 
 There is a small number of methods in the JDK that DynComp is currently
-unable to instrument. The names of these methods will be printed at the
-end of instrumentation. The file @file{jdk_classes.txt}, found inside
+unable to instrument.  The names of these methods will be printed at the
+end of instrumentation.  The file @file{jdk_classes.txt}, found inside
 @file{dcomp_rt.jar}, contains a list of all classes processed, including
 those that could not be instrumented.
 
@@ -3974,15 +3974,15 @@ Dump the instrumented classes to @file{/tmp/$USER/bin}.
 
 @item --debug-dir
 The directory in which to dump instrumented class files (only if
-@option{--debug} is specified). Defaults to @file{debug} in the current
+@option{--debug} is specified).  Defaults to @file{debug} in the current
 working directory.
 
 @item --output-dir=@var{dir}
-The directory in which to create output files. Defaults to the current
+The directory in which to create output files.  Defaults to the current
 working directory.
 
 @item --decl-file=@var{file}
-Output filename for decl file suitable for input to Daikon. Defaults to
+Output filename for decl file suitable for input to Daikon.  Defaults to
 @file{@var{target_program}.decls-DynComp}.
 
 @item --no-cset-file
@@ -3990,26 +3990,26 @@ When this switch is on, output of the @file{cset} file is suppressed.
 
 @item --compare-sets-file=@var{file}
 Output filename for a more easily human-readable file summarizing
-comparability sets. The default behavior is to print to standard
-output. This switch has no effect if @option{--no-cset-file} is specified
+comparability sets.  The default behavior is to print to standard
+output.  This switch has no effect if @option{--no-cset-file} is specified
 on the command line.
 
 @item --trace-sets-file=@var{file}
 Output filename for a human-readable file showing some of the interactions
-that occurred. Default behavior is to not create the file.
+that occurred.  Default behavior is to not create the file.
 
 @item --trace-line-depth=@var{n}
 Controls size of the stack displayed in tracing the interactions that
-occurred. Default behavior is to only display one element in the stack --
+occurred.  Default behavior is to only display one element in the stack --
 that is, display at most the topmost function on the stack when the
-interaction occurred. This switch has no effect if @option{--trace-sets-file}
+interaction occurred.  This switch has no effect if @option{--trace-sets-file}
 is not specified, or is null.
 
 @item --abridged-vars
 When this switch is on, DynComp abridges the variables printed in the files
 specified by @option{--compare-sets-file} and @option{--trace-sets-file}.
 For example, DynComp with output
-``Field foo'' instead of ``dyncomp.chicory.FieldInfo:MyClass.foo''. In particular,
+``Field foo'' instead of ``dyncomp.chicory.FieldInfo:MyClass.foo''.  In particular,
 it replaces ``dyncomp.chicory.ReturnInfo:return'' with ``return'' and
 ``dyncomp.chicory.ThisObjInfo:this'' with ``this''.
 
@@ -4017,28 +4017,28 @@ it replaces ``dyncomp.chicory.ReturnInfo:return'' with ``return'' and
 Only emit program points that match @var{regex}.  Specifically, a
 program point is considered to match @var{regex} if the fully qualified
 class name, the method name, or the program point name matches
-@var{regex}. The behavior of this switch is the same as in Chicory (see
+@var{regex}.  The behavior of this switch is the same as in Chicory (see
 @ref{Program points in Chicory output}).
 
 This option can be specified multiple times, and may be used in
-conjunction with @option{--ppt-omit-pattern}. If a program point matches
+conjunction with @option{--ppt-omit-pattern}.  If a program point matches
 both a select pattern and an omit pattern, it is omitted.
 
 @item --ppt-omit-pattern=@var{regex}
 Suppress program points that match @var{regex}.  Specifically, a
 program point is considered to match @var{regex} if the fully qualified
 class name, the method name, or the program point name matches
-@var{regex}. The behavior of this switch is the same as in Chicory (see
+@var{regex}.  The behavior of this switch is the same as in Chicory (see
 @ref{Program points in Chicory output}).
 
 This option can be specified multiple times, any may be used in
-conjunction with @option{--ppt-select-pattern}. If a program point
+conjunction with @option{--ppt-select-pattern}.  If a program point
 matches both a select pattern and an omit pattern, it is omitted.
 
 @item --no-primitives
-Don't track primitives. When this switch is on, DynComp only tracks
+Don't track primitives.  When this switch is on, DynComp only tracks
 the comparability of object references; primitive values are
-ignored. Using this switch can greatly improve DynComp's runtime if
+ignored.  Using this switch can greatly improve DynComp's runtime if
 you are not interested in primitive values.
 
 @item --no-jdk
@@ -4047,10 +4047,10 @@ When this switch is on, DynComp runs with an uninstrumented JDK, and the
 
 @item --rt-file
 Specifies the location of the instrumented JDK (see @ref{Instrumenting
-the JDK with DynComp}). This option is rarely necessary, because
+the JDK with DynComp}).  This option is rarely necessary, because
 if @option{--rt-file} is not specified, DynComp
 will search for a file named @file{dcomp_rt.jar} along the classpath,
-and in @file{$DAIKONDIR/java}. Both this file and the current classpath
+and in @file{$DAIKONDIR/java}.  Both this file and the current classpath
 are placed on the boot classpath for DynComp's execution.
 
 @item --std-visibility
@@ -4061,7 +4061,7 @@ in Chicory output}.
 @item --nesting-depth=@var{n}
 Depth to which to examine structure components (default 2).  This
 parameter determines which variables the front end causes to be output
-at runtime. For an example, see @ref{Variables in Chicory output}.
+at runtime.  For an example, see @ref{Variables in Chicory output}.
 
 @end table
 
@@ -4070,29 +4070,29 @@ at runtime. For an example, see @ref{Variables in Chicory output}.
 @subsection Instrumentation of Object methods
 
 DynComp is unable to directly instrument methods of the class
-@code{Object}, such as @code{clone} and @code{equals}. DynComp uses a
+@code{Object}, such as @code{clone} and @code{equals}.  DynComp uses a
 few tricks, described here in brief, to track comparability in these
 methods.
 
 Calls such as @code{o1.equals(o2)} are replaced with calls to a static
-method in DynComp, @code{dcomp_equals(o1, o2)}. This static method
+method in DynComp, @code{dcomp_equals(o1, o2)}.  This static method
 dynamically determines whether or not @code{o1} is an instance of a
 class that has been instrumented by DynComp; every such class
-implements the interface @code{DCompInstrumented}. If so, it attempts
+implements the interface @code{DCompInstrumented}.  If so, it attempts
 to invoke the instrumented version of the @code{equals} method for
-@code{o1}. If not, or if @code{o1} has not overridden the
+@code{o1}.  If not, or if @code{o1} has not overridden the
 @code{equals} method from @code{Object}, then no instrumented version
 exists, so the uninstrumented version is invoked.
 
 In either case, the references @code{o1} and @code{o2} are considered
-to be comparable. In a future release, we will provide a command-line
+to be comparable.  In a future release, we will provide a command-line
 switch to customize this behavior.
 
 The @code{clone} method operates in a similar manner, choosing
 dynamically to invoke the instrumented method or the uninstrumented
 method.  In the case of @code{clone}, the methods are invoked via
-reflection. In either case, the object being cloned and the resulting
-clone are made comparable to each other. Again, we will provide a
+reflection.  In either case, the object being cloned and the resulting
+clone are made comparable to each other.  Again, we will provide a
 switch to customize this behavior in a future release.
 
 
@@ -4105,7 +4105,7 @@ Reflection finds the original, uninstrumented code, and so DynComp may
 not accurately instrument code that uses reflection.
 @item
 Instrumentation of the @code{clone()} method may fail on particular
-invocations within private classes in the JDK.
+invocations within private classes in the JDK@.
 @end itemize
 
 
@@ -4418,7 +4418,7 @@ Specifies the name of the pointer type disambiguation file
 If this file exists, Kvasir uses it to make decisions about how
 to output the referents of pointer variables.  If the file does not exist,
 then Kvasir creates it.  This file may then be edited and used on
-subsequent runs. This option initializes but does not fully execute the
+subsequent runs.  This option initializes but does not fully execute the
 target program (unless it is run with the @option{--smart-disambig}
 option).
 
@@ -4427,7 +4427,7 @@ Tells Kvasir to create or read pointer type disambiguation
 (@pxref{Pointer type disambiguation}) with the default filename,
 which is @file{@var{myprog}.disambig} in the same
 directory as the target program, where @var{myprog} is the name of the
-target program. This is equivalent to
+target program.  This is equivalent to
 @samp{--disambig-file=@file{@var{myprog}.disambig}}.
 
 @item --smart-disambig
@@ -4645,7 +4645,7 @@ the only time saved is I/O time).  Other DynComp options are listed in
 the @ref{Kvasir options} section.  Running Kvasir with DynComp takes
 more memory and longer time than running Kvasir alone, but remember that
 DynComp only needs to be run once to generate a @file{.decls} file with
-comparability information. That one file can be passed into Daikon along
+comparability information.  That one file can be passed into Daikon along
 with many different @file{.dtrace} files generated during subsequent
 Kvasir runs without DynComp.
 
@@ -4940,7 +4940,7 @@ same directory as the target program (by default).  The @option{--disambig}
 option instructs Kvasir to read this file if it exists.  (If it does not exist,
 Kvasir produces the file automatically and, if invoked along with the
 @option{--smart-disambig} option, heuristically infers whether each
-pointer variable refers to single or multiple elements. Thus, users can
+pointer variable refers to single or multiple elements.  Thus, users can
 edit this file for use on subsequent runs rather than having to create it
 from scratch.)  The disambig file lists all the program points and user-defined
 types, and under each, lists certain types of variables along with their
@@ -4977,7 +4977,7 @@ along with @option{--smart-disambig}, Kvasir automatically infers a default 'A' 
 @item
 'P': a pointer to a single element.  (For a pointer to a struct, each
 field will be output as a single instance, and child aggregate types
-will be output recursively. This extra information obtained from struct
+will be output recursively.  This extra information obtained from struct
 pointers is a powerful consequence of pointer type disambiguation.  This
 will be the default if the @option{--disambig-ptrs} option is used.)
 @end enumerate
@@ -5198,7 +5198,7 @@ kvasir-dtrace @var{...options...} --disambig @var{myprog}
 
 This tells Kvasir to output @code{bar} as a @samp{P}ointer to a single
 element, which in turn causes Daikon to generate a much more concise
-set of invariants. Notice that @w{@code{bar->numbers}} no longer has to be
+set of invariants.  Notice that @w{@code{bar->numbers}} no longer has to be
 ``flattened'' because @code{bar} is now a pointer to one struct, so
 Daikon can recognize @w{@code{bar->numbers}} as a single-dimensional
 array (Daikon uses a Java-like syntax, replacing the arrow '->' symbol
@@ -5368,7 +5368,7 @@ names are appended onto the variable names to make them unique.  For
 example, if @code{this} is an instance of a class that inherits from
 another class called @code{fooClass} which has a member variable
 @code{fooVar}, then Kvasir prints out @code{fooVar} as
-@code{this->fooClass.fooVar}. This correctly handles the case of
+@code{this->fooClass.fooVar}.  This correctly handles the case of
 multiple inheritance as well as several layers of inheritance.  Thus,
 object invariants capture properties of a class's own member variables
 as well as those of its superclasses' member variables.
@@ -6054,7 +6054,7 @@ doesn't output the contents of the array.
 Specify the maximum @var{size} of one-dimensional arrays, which are
 output as sequences in the .dtrace file.  If the static array dimension is
 larger than @var{size}, then Mangel-Wurzel doesn't output the contents of
-the array. The default is 100.
+the array.  The default is 100.
 
 @item --ignore-system-structs
 If you specify this option, Mangel-Wurzel ignores fields of
@@ -6176,7 +6176,7 @@ instrumented code is executed.  You should also use mangel to link
 your program.
 
 The wurzel preprocessor produces the same dialect of code that it receives as
-input, that is C, C99, or C++.  It does not translate C++ to C.  This ensures
+input, that is C, C99, or C++.  It does not translate C++ to C@.  This ensures
 that preprocessed code is link-compatible with system C++ libraries and other
 code that is not processed with wurzel.
 
@@ -6263,7 +6263,7 @@ new @file{mwdefines.h} file.
 @subsubsection Using Mangel-Wurzel on Windows
 
 Rational Purify on Windows only supports the Microsoft Visual C/C++ compiler,
-not GCC.  Therefore Mangel-Wurzel will only work with the Microsoft compiler
+not GCC@.  Therefore Mangel-Wurzel will only work with the Microsoft compiler
 on this platform as well.  Currently, Mangel-Wurzel is not integrated with
 the Visual Studio IDE, and runs as a command-line utility only.
 
@@ -7358,7 +7358,7 @@ present in the classpath when the instrumented classes are compiled and
 executed.
 
 Invariants are evaluated at the program points at which they should
-hold. Three things can happen when evaluating an
+hold.  Three things can happen when evaluating an
 invariant:
 
 @itemize @bullet
@@ -7368,9 +7368,9 @@ Program execution continues normally.
 
 @item
 It evaluates to false, which means that the invariant doesn't
-hold. In this case the corresponding
+hold.  In this case the corresponding
 @code{daikon.tools.runtimechecker.Property} is added to a list in the
-class @code{daikon.tools.runtimechecker.Runtime}. A programmer can
+class @code{daikon.tools.runtimechecker.Runtime}.  A programmer can
 obtain the growing list of violated invariants through the method
 @code{daikon.tools.runtimechecker.Runtime.getViolations()}. (See
 that class for other useful methods.)
@@ -7965,7 +7965,7 @@ Exception in thread "main" java.lang.UnsupportedClassVersionError:
 daikon/Daikon (Unsupported major.minor version 49.0)
 @end example
 @noindent
-indicates that you are trying to run Daikon on an older JVM.  You need to
+indicates that you are trying to run Daikon on an older JVM@.  You need to
 install a newer version of Java in order to run Daikon.
 
 
@@ -8505,22 +8505,22 @@ You may also wish to take advantage of the Daikon mailing lists
 @itemize @bullet
 @item
 This problem affects @ref{Annotate} and the @ref{Runtime-check
-instrumenter}, which output Java source code. If
+instrumenter}, which output Java source code.  If
 the java file to be annotated/instrumented uses logical
 shift operators (@code{>>}, @code{<<}, and @code{>>>}), the
 annotated/instrumented java may contain extra brackets in these
-operators. For example, the expression @code{x << y} in the input source
+operators.  For example, the expression @code{x << y} in the input source
 file may erroneously be translated as @code{x <<<<<< y} in the
 annotated/instrumented file.
 
 This error's presence will be immediately apparent if you try to compile
 the annotated/instrumented file and it fails to compile because the
-extra brackets make it syntactically illegal. In this case, the best
+extra brackets make it syntactically illegal.  In this case, the best
 solution we can recommend is that you manually fix the occurrence of the
 logical shift operator.
 
 This error is caused by a bug in the parser generator that generates
-Daikon's Java parser. We expect it will be fixed by the next release.
+Daikon's Java parser.  We expect it will be fixed by the next release.
 @end itemize
 
 @node    Further reading,  , Known bugs, Troubleshooting
@@ -8616,7 +8616,7 @@ in size.  Daikon 3 also introduces the idea of a @emph{dataflow
 hierarchy}, a way to relate and connect program points based on their
 variables.
 
-Daikon 4 includes new binary front ends for Java and for C.  These front
+Daikon 4 includes new binary front ends for Java and for C@.  These front
 ends make Daikon much easier to use.  Daikon 4 makes @file{.decls} files
 optional; program point declarations are permitted to appear in
 @file{.dtrace} files.  Daikon 4 is released under more liberal licensing
@@ -8713,7 +8713,7 @@ the MemCheck Valgrind tool, copyright 2000-2004 Julian Seward, the
 readelf program of the GNU Binutils, copyright 1998-2003 the Free
 Software Foundation, Inc., the GNU C Library, copyright 1995, 1996,
 1997, 2000  the Free Software Foundation, Inc., and the Diet libc,
-copyright Felix von Leitner et al. Kvasir is free software; you can
+copyright Felix von Leitner et al.  Kvasir is free software; you can
 redistribute it and/or modify it under the terms of the GNU General
 Public License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later version.
