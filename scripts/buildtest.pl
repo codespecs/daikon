@@ -9,9 +9,9 @@
 # followng commands as user daikonbuildtest:
 #   cd $HOME/build
 #   /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --nocleanup
-# Make sure that . is either not in your path or at then end.  Otherwise,
+# Make sure that . is either not in your path or at the end.  Otherwise,
 # some of the kvasir perl tests will fail trying to run the test version of
-# perl rather than the system version.  You can also run this script as 
+# perl rather than the system version.  You can also run this script as
 # any other user.
 
 use strict;
@@ -263,7 +263,7 @@ sub daikon_compile {
 # Run the daikon JUnit unit tests
 sub daikon_unit_test {
   print_log("Daikon unit tests...");
-  return buildtest_cmd ("make -C $INV/java/daikon junit-all ", 
+  return buildtest_cmd ("make -C $INV/java/daikon junit-all ",
                         "daikon_unit_test.out");
 }
 
@@ -273,7 +273,7 @@ sub daikon_unit_test {
 sub daikon_system_test {
   print_log("Daikon system tests...");
 
-  my $succ = buildtest_cmd ("make -C $INV/tests/ clean", 
+  my $succ = buildtest_cmd ("make -C $INV/tests/ clean",
                             "daikon_system_test_clean.out", "", "FAILED\n");
   if (!$succ) { return $succ;}
 
@@ -287,18 +287,18 @@ sub daikon_system_test {
 
   # JML tests fail because JML doesn't support 1.5.  We could probably
   # fix this by creating a 1.4 version of Quant.
-  #$succ = buildtest_cmd ("make -C $INV/tests/daikon-tests jml ", 
+  #$succ = buildtest_cmd ("make -C $INV/tests/daikon-tests jml ",
   #                       $log, "", "FAILED\n");
-  #if (!$succ) { return $succ; } 
+  #if (!$succ) { return $succ; }
 
-  $succ = buildtest_cmd ("make -C $INV/tests/daikon-tests inv-checker ", 
+  $succ = buildtest_cmd ("make -C $INV/tests/daikon-tests inv-checker ",
                          $log, "", "FAILED\n");
-  if (!$succ) { return $succ; } 
+  if (!$succ) { return $succ; }
 
   my $summary_file = "daikon_system_test_summary.out";
-  $succ = buildtest_cmd ("make -C $INV/tests/ summary ", 
+  $succ = buildtest_cmd ("make -C $INV/tests/ summary ",
                          $summary_file);
-  if (!$succ) { return $succ; } 
+  if (!$succ) { return $succ; }
 
   open (SUM, $summary_file) or die "can't open $summary_file\n";
   while (my $line = <SUM>) {
@@ -319,14 +319,14 @@ sub daikon_system_test {
 sub diff_system_test {
   print_log("Diff system tests...");
 
-  my $succ = buildtest_cmd ("make $J2 -C $INV/tests/diff-tests ", 
+  my $succ = buildtest_cmd ("make $J2 -C $INV/tests/diff-tests ",
                          "diff_system_test.out", "", "FAILED\n");
-  if (!$succ) { return $succ; } 
-                         
+  if (!$succ) { return $succ; }
+
   my $summary_file = "diff_system_test_summary.out";
-  $succ = buildtest_cmd ("make -C $INV/tests/diff-tests summary ", 
+  $succ = buildtest_cmd ("make -C $INV/tests/diff-tests summary ",
                          $summary_file, "", "FAILED\n");
-  if (!$succ) { return $succ; } 
+  if (!$succ) { return $succ; }
 
   open (SUM, $summary_file) or die "can't open $summary_file\n";
   while (my $line = <SUM>) {
@@ -345,12 +345,12 @@ sub diff_system_test {
 sub daikon_cross_checker() {
     print_log ("Daikon cross checker...");
 
-    my $succ = buildtest_cmd ("make -C $INV/tests cross-checker-good", 
+    my $succ = buildtest_cmd ("make -C $INV/tests cross-checker-good",
                               "daikon_cross_checker.out");
     return ($succ);
 }
 
-    
+
 
 
 sub kvasir_checkout {
@@ -374,7 +374,7 @@ sub kvasir_compile {
   # chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
 
   my $succ = buildtest_cmd ("cd $INV/kvasir && " .
-                            "./configure --prefix=`pwd`/inst", 
+                            "./configure --prefix=`pwd`/inst",
                             $log, "", "FAILED\n");
   if (!$succ) { return 0; }
 
@@ -450,7 +450,7 @@ sub print_log {
   close LOG;
 }
 
-# Executes the command in the first argument and APPENDS its results into 
+# Executes the command in the first argument and APPENDS its results into
 # the file in the second argument.  By default, prints 'FAILED'
 # to the log and returns 0 if the command fails and  prints 'OK' to the
 # log and returns 1 if it succeeds.  Optional 3rd and 4th arguments can specify
