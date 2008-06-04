@@ -7228,24 +7228,24 @@ annotated includes logical shift operators. @xref{Known bugs}.
 
 AnnotateNullable determines which variables in a Java program were ever
 null during execution.  Its primary use is for performing inference for
-a type system that detects null dereference errors.  An example of such
-a type system is distibuted as part of the
-@uref{http://groups.csail.mit.edu/pag/jsr308/, JSR 308 Checkers Framework}.
+a type system that detects null dereference errors.  An example is the
+Nullness checker that is part of the
+@uref{http://groups.csail.mit.edu/pag/jsr308/, JSR 308 Checker Framework}.
 
 The type system requires a programmer to annotate some references
 with @code{@@Nullable}, meaning the variable might be null; references
 that are left unannotated are never null at run time.  (Alternately, the
 type system might use @code{@@NonNull} for references that are never
-null, and no annotation for references that might be null; the tool
-supports either choice of syntax.)  The type system then warns the
-programmer about possible null dereference errors.
+null, and leave unannotated for references that might be null.  The
+Nullness checker supports either choice of syntax.)  The type system
+then warns the programmer about possible null dereference errors.
 
 The type system is useful, but writing all the annotations is tedious.
-The AnnotateNullable tool automatically determines a subset of the
+The AnnotateNullable tool automatically and soundly determines a subset of the
 proper @code{@@Nullable} annotations.  A programmer may need to write a
 few more annotations, but that is much easier than writing them all.
 
-To automatically insert @code{@@Nullable} annotations in your program,
+To insert @code{@@Nullable} annotations in your program,
 follow these steps:
 
 @enumerate
@@ -7322,7 +7322,7 @@ required.
 
 @item -n --nonnull-annotations
 Adds NonNull annotations as well as Nullable annotations.  Unlike Nullable
-annotation, NonNull annotations are not guaranteed to be correct.
+annotations, NonNull annotations are not guaranteed to be correct.
 
 @end table
 
