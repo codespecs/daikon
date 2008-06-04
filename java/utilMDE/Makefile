@@ -6,9 +6,9 @@
 -include Makefile.user
 
 JAVAC ?= javac
-# Removed "-J-Xmx800m", because it is incompatible with JDK 7
+# Removed "-J-Xmx800m", because it is incompatible with JDK 7.
 JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
-JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.quals.*' ${JAVAC} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea

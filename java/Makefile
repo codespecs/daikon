@@ -27,7 +27,7 @@ endif
 
 ### end of user customizations
 
-JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 
 
 ###########################################################################
