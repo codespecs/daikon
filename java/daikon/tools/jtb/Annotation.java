@@ -213,6 +213,7 @@ public class Annotation {
     return kind;
   }
 
+  // This class should really be an enum.
   /**
    * <p> A class representing the kind of an annotation. An invariant
    * is either <code>Kind.enter</code>, <code>Kind.exit</code>, or
@@ -335,19 +336,21 @@ public class Annotation {
   }
 
 
-  /**
-   * The annotations in <code>annas</code> of kind <code>kind</code>.
-   */
-  public static Annotation[] getKind(Annotation[] annas, Kind kind) {
-    List<Annotation> retval = new ArrayList<Annotation>();
-    for (int i = 0; i < annas.length; i++) {
-      if (kind == annas[i].kind) {
-        retval.add(annas[i]);
-      }
-      break;
-    }
-    return retval.toArray(new Annotation[] {
-    });
-  }
+  // This is never used, and the "break" clause seems to be buggy, so
+  // that this returns at most one property.
+  // /**
+  //  * The annotations in <code>annas</code> of kind <code>kind</code>.
+  //  */
+  // public static Annotation[] getKind(Annotation[] annas, Kind kind) {
+  //   List<Annotation> retval = new ArrayList<Annotation>();
+  //   for (int i = 0; i < annas.length; i++) {
+  //     if (kind == annas[i].kind) {
+  //       retval.add(annas[i]);
+  //     }
+  //     break;
+  //   }
+  //   return retval.toArray(new Annotation[] {
+  //   });
+  // }
 
 }

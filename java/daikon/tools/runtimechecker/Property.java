@@ -355,19 +355,21 @@ public class Property implements Serializable {
         }
     }
 
-    /**
-     * The properties in <code>annas</code> with the given kind.
-     */
-    public static Property[] getKind(Property[] annas, Kind kind) {
-        List<Property> retval = new ArrayList<Property>();
-        for (int i = 0; i < annas.length; i++) {
-            if (kind == annas[i].kind) {
-                retval.add(annas[i]);
-            }
-            break;
-        }
-        return retval.toArray(new Property[] {});
-    }
+    // This is never used, and the "break" clause seems to be buggy, so
+    // that this returns at most one property.
+    // /**
+    //  * The properties in <code>annas</code> with the given kind.
+    //  */
+    // public static Property[] getKind(Property[] annas, Kind kind) {
+    //     List<Property> retval = new ArrayList<Property>();
+    //     for (int i = 0; i < annas.length; i++) {
+    //         if (kind == annas[i].kind) {
+    //             retval.add(annas[i]);
+    //         }
+    //         break;
+    //     }
+    //     return retval.toArray(new Property[] {});
+    // }
 
     /**
      * <p>
