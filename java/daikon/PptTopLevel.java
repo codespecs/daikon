@@ -640,7 +640,6 @@ public class PptTopLevel extends Ppt {
    * are passed in.  All the results involve at least one VarInfo
    * object at an index i such that vi_index_min <= i < vi_index_limit
    * (and possibly other VarInfos outside that range).
-   * @return a Vector of VarInfo
    **/
   private Derivation[] derive(int vi_index_min, int vi_index_limit) {
     boolean debug_bin_possible = false;
@@ -2931,7 +2930,7 @@ public class PptTopLevel extends Ppt {
       int worstWheel = 0;
       do {
         // But try to recover anyway
-        Vector problems = proverStack.minimizeContradiction();
+        Vector<Lemma> problems = proverStack.minimizeContradiction();
         if (LemmaStack.dkconfig_print_contradictions) {
           System.err.println("Minimal set:");
           LemmaStack.printLemmas(
@@ -2943,8 +2942,7 @@ public class PptTopLevel extends Ppt {
           System.err.println("Warning: removal failed, punting");
           return;
         }
-        for (Object problemObject : problems) {
-          Lemma problem = (Lemma) problemObject;
+        for (Lemma problem : problems) {
           if (demerits.containsKey(problem))
             demerits.put(
               problem,

@@ -1753,8 +1753,12 @@ public final class UtilMDE {
   /**
    * Return a Vector of the Strings returned by
    * {@link java.util.StringTokenizer#StringTokenizer(String,String,boolean)} with the given arguments.
+   * <p>
+   * The static type is Vector<Object> because StringTokenizer extends
+   * Enumeration<Object> instead of Enumeration<String> as it should
+   * (probably due to backward-compatibility).
    **/
-  public static Vector tokens(String str, String delim, boolean returnTokens) {
+  public static Vector<Object> tokens(String str, String delim, boolean returnTokens) {
     return makeVector(new StringTokenizer(str, delim, returnTokens));
   }
 
@@ -1762,7 +1766,7 @@ public final class UtilMDE {
    * Return a Vector of the Strings returned by
    * {@link java.util.StringTokenizer#StringTokenizer(String,String)} with the given arguments.
    **/
-  public static Vector tokens(String str, String delim) {
+  public static Vector<Object> tokens(String str, String delim) {
     return makeVector(new StringTokenizer(str, delim));
   }
 
@@ -1770,7 +1774,7 @@ public final class UtilMDE {
    * Return a Vector of the Strings returned by
    * {@link java.util.StringTokenizer#StringTokenizer(String)} with the given arguments.
    **/
-  public static Vector tokens(String str) {
+  public static Vector<Object> tokens(String str) {
     return makeVector(new StringTokenizer(str));
   }
 
@@ -1845,7 +1849,7 @@ public final class UtilMDE {
   ///
 
   /** Returns a vector containing the elements of the enumeration. */
-  public static <T> Vector makeVector(Enumeration<T> e) {
+  public static <T> Vector<T> makeVector(Enumeration<T> e) {
     Vector<T> result = new Vector<T>();
     while (e.hasMoreElements()) {
       result.addElement(e.nextElement());

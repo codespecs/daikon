@@ -276,7 +276,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // This ought to be abstracted out, maybe
     {
       Assert.assertTrue(sclvar.ppt == seqvar.ppt);
-      Vector lbs = LINEARBINARY.findAll(sclvar);
+      Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(sclvar);
       // System.out.println("For " + sclvar.name + ", " + lbs.size() + " LinearBinary invariants");
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;

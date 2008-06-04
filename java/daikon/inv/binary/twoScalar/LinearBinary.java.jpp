@@ -251,7 +251,7 @@ public class CLASSNAME
 
   // Returns a vector of LinearBinary objects.
   // This ought to produce an iterator instead.
-  public static Vector findAll(VarInfo vi) {
+  public static Vector<CLASSNAME> findAll(VarInfo vi) {
     Vector<CLASSNAME> result = new Vector<CLASSNAME>();
     for (Iterator<PptSlice> itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = itor.next();

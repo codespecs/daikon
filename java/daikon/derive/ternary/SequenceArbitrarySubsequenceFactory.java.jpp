@@ -224,7 +224,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
 
     {
       Assert.assertTrue(startvar.ppt == seqvar.ppt);
-      Vector lbs = LINEARBINARY.findAll(startvar);
+      Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(startvar);
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;
         // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b <-- old
@@ -256,7 +256,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
 
     {
       Assert.assertTrue(endvar.ppt == seqvar.ppt);
-      Vector lbs = LINEARBINARY.findAll(endvar);
+      Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(endvar);
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;
         // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b <-- old

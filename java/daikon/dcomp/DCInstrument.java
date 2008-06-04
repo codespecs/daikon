@@ -1868,10 +1868,12 @@ class DCInstrument {
    */
   public void add_exit (MethodGen mg, MethodInfo mi, int method_info_index) {
 
-    // Iterator over all of the exit line numbers for this method
+    // Iterator over all of the exit line numbers for this method, in order.
+    // We will read one element from it each time that we encounter a
+    // return instruction.
     Iterator<Integer> exit_iter = mi.exit_locations.iterator();
 
-    // Loop through each instruction
+    // Loop through each instruction, looking for return instructions.
     InstructionList il = mg.getInstructionList();
     for (InstructionHandle ih = il.getStart(); ih != null; ) {
 
