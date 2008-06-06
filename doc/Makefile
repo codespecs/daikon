@@ -67,6 +67,12 @@ daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo .fix-m
 	makeinfo --html --no-split $<
 	perl -pi -e '$$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$$1|; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|,\nPrevious:<a rel=previous href="#dir">\(dir\)</a>,\nUp:<a rel=up href="#dir">\(dir\)</a>||; s|,\nPrevious:&nbsp;<a rel="previous" accesskey="p" href="#dir">\(dir\)</a>,\nUp:&nbsp;<a rel="up" accesskey="u" href="#dir">\(dir\)</a>||;' daikon.html
 
+# just builds from texinfo.  Much faster than rebuilding the files from
+# javadoc
+daikon-fast: daikon.texinfo .fix-menu
+	makeinfo --html --no-split $<
+	perl -pi -e '$$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$$1|; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|,\nPrevious:<a rel=previous href="#dir">\(dir\)</a>,\nUp:<a rel=up href="#dir">\(dir\)</a>||; s|,\nPrevious:&nbsp;<a rel="previous" accesskey="p" href="#dir">\(dir\)</a>,\nUp:&nbsp;<a rel="up" accesskey="u" href="#dir">\(dir\)</a>||;' daikon.html
+
 developer.html: developer.texinfo .fix-menu
 	makeinfo --html --no-split $<
 	perl -pi -e '$$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$$1|; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|,\nPrevious:<a rel=previous href="#dir">\(dir\)</a>,\nUp:<a rel=up href="#dir">\(dir\)</a>||; s|,\nPrevious:&nbsp;<a rel="previous" accesskey="p" href="#dir">\(dir\)</a>,\nUp:&nbsp;<a rel="up" accesskey="u" href="#dir">\(dir\)</a>||;' developer.html

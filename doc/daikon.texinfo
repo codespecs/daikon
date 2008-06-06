@@ -364,18 +364,26 @@ File formats
 * Declarations::                
 * Data trace records::          
 * Example files::               
+* Version 1 Declarations::      
 
 Declarations
 
+* Declaration Version::         
+* Variable Comparability::      
 * Program point declarations::  
-* pptname format::              
-* VarComparability declaration::  
-* ListImplementors declaration::  
+* Variable Declarations::       
 
 Example files
 
 * Example declaration file::    
 * Example data trace file::     
+
+Version 1 Declarations
+
+* V1 Program point declarations::  
+* V1 pptname format::           
+* V1 VarComparability declaration::  
+* V1 ListImplementors declaration::  
 
 @end detailmenu
 @end ifnothtml
@@ -1733,7 +1741,7 @@ yield stronger filtering.
 Indicate that the given class implements the @code{java.util.List}
 interface.  The preferred mechanism for indicating such information is
 the @code{ListImplementors} section of the @file{.decls} file.
-See @ref{ListImplementors declaration}.
+See @ref{V1 ListImplementors declaration}.
 
 @item --nohierarchy
 @cindex hierarchy, disabling
@@ -8926,6 +8934,7 @@ that must be associated with the @file{.dtrace} file.
 * Declarations::                
 * Data trace records::          
 * Example files::               
+* Version 1 Declarations::      
 @end menu
 
 @node    Conventions, Declarations, File formats, File formats
@@ -8937,115 +8946,172 @@ Each record is separated by one or more blank lines.
 To permit easier parsing by programs, each piece of information in a record
 appears on a separate line.
 
-Outside a record, any line starting with a pound sign (#) is ignored as
+Outside a record, any line starting with a pound sign (# or //) is ignored as
 a comment.  Comments are not permitted inside a record.
 
-
-@node    Declarations, Data trace records, Conventions, File formats
+@node Declarations, Data trace records, Conventions, File formats
 @section Declarations
 
-@cindex declaration format
-@cindex .decls file
-
-A declarations file can contain program point declarations,
-@code{VarComparability} declarations, and @code{ListImplementors declarations}.
+Daikon declarations define the declaration record version,
+comparability type, and each program point and its variables.
+Information is specified in named fields.  Fields with defaults can be
+omitted.  Each field is specified on a separate line in the format
+@code{<field-name> <field-value>}.  Indentation should be used to aid in
+readibility.
 
 @menu
+* Declaration Version::         
+* Variable Comparability::      
 * Program point declarations::  
-* pptname format::              
-* VarComparability declaration::  
-* ListImplementors declaration::  
+* Variable Declarations::       
 @end menu
 
-@node    Program point declarations, pptname format, Declarations, Declarations
+@node Declaration Version, Variable Comparability, Declarations, Declarations
+@subsection Declaration Version
+
+The declaration version is specified in a field in the following format:
+@example
+decl-version <version>
+@end example
+The current version is 2.0.  Previous versions (see @ref{Version 1
+Declarations}) did not include a version field and are identified by
+the lack of this field.  The declaration version field must be the
+first field specified in the file.
+
+@node Variable Comparability, Program point declarations, Declaration Version, Declarations
+@subsection Variable Comparability
+
+The type of variable comparability is specified in a field in the following
+format:
+@example
+var-comparability <comparability-type>
+@end example
+The possible values for @var{comparability-type} are @code{implicit} and
+@code{none}.  The @code{implicit} type is the default is described in 
+@ref{Program point declarations}.
+
+@node Program point declarations, Variable Declarations, Variable Comparability, Declarations
 @subsection Program point declarations
 
 The format of a program point declaration is:
 @example
-DECLARE
-program-point-name
-varname1
-declared-type1 [# auxiliary-information1]
-representation-type1 [= constant-value1]
-comparable1
-varname2
-declared-type2 [# auxiliary-information2]
-representation-type2 [= constant-value2]
-comparable2
+ppt <ppt-name>
+<ppt-fields>
+<ppt-fields>
+...
+<variable-declaration>
+<variable-declaration>
 ...
 @end example
 
-Program point information includes:
-@itemize @bullet
-@item
-name (``tag'') of this program point, an arbitrary string containing no
-tab or newline characters.  This name contains information such as the
-class name or method name; what information is contained depends on
-which instrumenter is being used.  @xref{pptname format}, for a full
-specification of the naming format.
+The program point name can include any characters.  Blanks must be
+escaped as @code{\_} and backslashes as @code{\\}.  Program point names must
+be distinct.
 
+The following program point fields (ppt-fields) can be specified:
+@itemize 
+@item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
 
-@item
-for each variable:
-@itemize @bullet
-@item
-name: a string containing no tabs or newlines.  @xref{Variable names}.
+Specifies the name of a parent program point.  A parent program point
+is a point whose samples should include all of the sample at this
+program point.  For example, an object program point is a parent of
+each of the method program points in that object.  Multiple parent
+fields can be specified.  
 
-@item
-declared type: this is what the programmer used in the declaration of
-the variable.  Array types must be suffixed by the proper number of
-@samp{[]} to indicate their dimensionality.  Names for standard types
-should use Java's names (e.g., @code{int}, @code{boolean}, etc.), but names for
-user-defined or language-specific types can be arbitrary strings.
+The @var{relation-type} is the type of parent-child relationship in
+the hierarchy.  Possible relationship types are @code{parent} and
+@code{user}.
 
-@item
-auxiliary information: optionally, Daikon can be given information
-about the meaning of the variable to help it better interpret the
-values it later sees.  Information is provided as a comma-separated
-list of items, with each item in the form of @samp{key = value}.  Unrecognized
-keys are silently ignored.  All values are
-either @samp{true} or @samp{false}.  Mainly, this information is used for
-collections, which are presented to Daikon as arrays.  Valid keys are:
+The @var{relation-id} is a unique integer that identifies this parent
+relation.  They are used when defining the the specific parent
+relations for variables.
 
-@table @code
+@item @code{ppt-type <type>}
 
-@item hasDuplicates
-Whether a collection can contain duplicates.  If it
-cannot, Daikon does not check for some invariants that only have
-meaning for collections that can contain duplicate elements.
+Specifies the @var{type} of the program point.  Possible program point
+types are @code{point}, @code{class}, @code{object}, @code{enter}, 
+@code{exit}, @code{subexit}.
 
-@item hasOrder
-Whether order has meaning for a collection.  If order does
-not have meaning in a collection, then Daikon does not check for
-element-wise comparisons between it and other collections.
+@item @code{flags <flags>}
 
-@item hasNull
-Whether zero has the special meaning null for the variable or
-collection.  If it does, then Daikon checks for whether a value or the
-elements in a collection are null.
+Specifies one or more flags for this ppt.  The possible flags are:
+@code{static}, @code{enter}, @code{exit}, @code{private}, @code{return}.
 
-@item nullTerminated
-Whether a collection has a value (usually null) that
-ends its representation.  If it does, then Daikon looks at the
-collection's size and at the collection's size-1 as ``interesting''
-values.  If it does not, then Daikon only looks at the collection's
-size.
+@end itemize
 
-@item isParam
-Whether a given variable is a parameter to a method.  If a
-variable is a parameter, Daikon avoids printing some information that
-would be considered uninteresting for parameters.  First, invariants
-that use the parameter variable @code{p} in its post-state form are not
-printed.  Second, invariants that use fields of @code{p} (such as @code{p.x})
-are printed only if @code{p} has not changed.  Lastly, some immutable
-characteristics, such as the size of arrays and data types are not
-printed (both can be changed if @code{p} is changed, but then, @code{p}
-would no longer be interesting).
+@node Variable Declarations,  , Program point declarations, Declarations
+@subsection Variable Declarations
 
-@end table
+The format of a variable declaration is:
+@example
+variable <name>
+  <variable-fields>
+  <variable-fields>
+  ...
+@end example
 
-@item
-representation type:  this describes what will appear in the data
+External variable names should match as much as possible the legal
+variable name in the input language.  All characters are legal
+except for '@code{..}'.  Blanks must be escaped with @code{\_} and backslashes
+with @code{\\}.  If the variable is an array '@code{..}'  marks the location of
+array indices within the variable name.  Some examples of names are:
+@example
+this.theArray
+this.theArray[..]
+this.stack.getClass()
+@end example
+
+The following variable fields can be specified:
+@itemize
+
+@item @code{var-kind <kind> [<relative-name>]}
+
+Specifies the variable kind.  Possible values are: @code{field}, @code{function},
+@code{array}, @code{variable}, @code{return}.  If @code{field} or @code{function}
+are specified, the relative name of the field or function must be
+specified.  For example, if the variable is @code{this.theArray}, the
+relative name is @code{theArray}.  Pointers to arrays are of type
+@code{field}.  The arrays themselves (a sequence of values) are of 
+type @code{array}.  
+
+@item @code{enclosing-var <enclosing-var-name>}
+
+The variable that contains this variable.  Required for fields and
+arrays and optional for functions.  If specified for functions, the
+function is an instance method.  If not specified the function is
+static.  A variable is specified by its name.  The enclosing-var must
+be defined.  If a variable is omitted (eg, by the omit-var switch),
+any variable for which it is the enclosing variable must be omitted as
+well.
+
+For example, if the variable is @code{this.theArray}, the
+enclosing variable is @code{this}
+
+@item @code{reference-type pointer|offset}
+
+Specifies the kind of reference for variables which are structures or
+classes.  The possible values are @code{pointer} or @code{offset}.  In
+C, @code{pointer} is used if the variable is a pointer, @code{offset}
+is used when the structure is placed inline.  Pointer would be used
+for all references to java objects.  Defaults to pointer.
+
+@item @code{array <dim>}
+
+The number of array dimensions inherited or declared by this variable.
+The valid values are 0 or 1.  This should be specified for any variable
+that has multiple values.  If not specified it defaults to 0.  Future
+versions of Daikon may support more levels of arrays.
+
+@item @code{dec-type <language-declaration>}
+
+This is what the programmer used in the declaration of the variable.
+Names for standard types should use Java's names (e.g., @code{int},
+@code{boolean}, etc.), but names for user-defined or language-specific
+types can be arbitrary strings.
+
+@item @code{rep-type <daikon-type>}
+
+This describes what will appear in the data
 trace file.  For instance, the declared type might be @code{char[]} but
 the representation type might be @code{java.lang.String}.  Or, the declared
 type might be @code{Object} but the representation type might be
@@ -9060,27 +9126,70 @@ are considered uninteresting for the purposes of output; they are
 intended for unique object identifiers like memory addresses or the
 return value of Java's @code{Object.hashCode} method.
 
-The representation type may optionally be followed by an equals
-sign and a value; in that case, the variable is known to have a
-compile-time constant value and should be omitted from the data
-trace file.
-@end itemize
-@item
-@cindex comparability, for variables
-@cindex variable comparability
-comparable variables.  This information indicates
-which other variables are comparable to this one.
-This may be obtained dynamically, via type-inference based analysis, or
-in some other manner.
+@item @code{flags <flags>}
 
-A comparability for a non-array type is a signed integer.  Two variables
-at the same program point
-are considered comparable if both integers are the same, or if either
-integer is negative.
-A comparability for an array type must contain an
-integer for each index and for the contents; for instance, @samp{5[22][17]}
-for a two-dimensional array.  Comparisons succeed if comparisons over
-each component succeed.
+One or more flags may be specified.  Possible values are: 
+@itemize
+
+@item @code{is_param}
+
+Indicates that a given variable is a parameter to a method.  If a
+variable is a parameter, Daikon avoids printing some information that
+would be considered uninteresting for parameters.  First, invariants
+that use the parameter variable @code{p} in its post-state form are not
+printed.  Second, invariants that use fields of @code{p} (such as @code{p.x})
+are printed only if @code{p} has not changed.  Lastly, some immutable
+characteristics, such as the size of arrays and data types are not
+printed (both can be changed if @code{p} is changed, but then, @code{p}
+would no longer be interesting).
+
+@item @code{no_dups}
+
+Indicates that a collection can not contain duplicates.
+If it cannot, Daikon does not check for some invariants that only have
+meaning for collections that can contain duplicate elements.
+
+@item @code{not_ordered}
+
+Indicates that the order of a collection does not have meaning.  In
+this case, Daikon does not check for element-wise comparisons between
+it and other collections.
+
+@item @code{synthetic}
+
+Indicates that the variable was added by the front end and is not
+manifest in the input program.  
+
+@item @code{classname} 
+
+Indicates that the variable indicates the classname of its 
+enclosing variable.
+
+@item @code{to_string} 
+
+Indicates that the variable is the string representation of its
+enclosing variable.
+
+@item @code{non_null}
+
+Indicates that the variable can't take on a null value.  In this
+case, Daikon will not check for the NonZero invariant.
+
+@end itemize
+
+@item @code{comparability <comparability-key>}
+
+The @var{comparability-key} indicates which other variables are
+comparable to this one.  This may be obtained dynamically, via
+type-inference based analysis, or in some other manner.
+
+A comparability for a non-array type is a signed integer.  Two
+variables at the same program point are considered comparable if both
+integers are the same, or if either integer is negative.  A
+comparability for an array type must contain an integer for each index
+and for the contents; for instance, @samp{5[22][17]} for a
+two-dimensional array.  Comparisons succeed if comparisons over each
+component succeed.
 
 Variables at different program points are never compared to one another.
 Use of the same number at different program points does not indicate any
@@ -9098,166 +9207,42 @@ int sum(int len, int[] a) @{
 @end example
 variables @code{i} and @code{len} are comparable to one another (and
 to indices of array @code{a}).  Furthermore, the result is comparable
-to the elements of array @code{a}.  A declaration file for these
+to the elements of array @code{a}.  The comparability keys for these
 variables might look like
 @example
-len
-int
-int
-5
-a
-int[]
-int[]
-8[5]
-return
-int
-int
-8
+len     - comparability 5
+a       - comparability 8[5]
+return  - comparability 8
 @end example
+
+@item @code{parent <parent-ppt> <rel-id> [<parent-variable>]}
+
+Specifies the parent variable of this variable in the program
+point/variable hierarchy.  The @var{parent-ppt} is the name of the
+parent program point.  The @var{rel-id} must be one of the
+relationship ids specified for this program point.  The
+@var{parent-variable} is the name of this variable's parent in the
+parent program point.  If the names are the same, it can be omitted.
+
+@item @code{constant <value>}
+
+Specifies a constant value for this variable.  If the variable has
+compile-time constant value, it must be omitted from the data trace
+records.
+
+@item @code{function-args <arg1> <arg2> ...}
+
+Specifies the arguments to a function (if any).  Specified by the
+external name of the argument variables.  Multiple arguments are
+blank separated.  For example
+@example
+function-args a.b this.f1
+@end example
+specifies that the function takes two arguments which are @code{a.b} and
+@code{this.f1}.  As with enclosing variables, each of the arguments must
+be defined as variables.
 
 @end itemize
-
-@c Future enhancements may include:
-@c @itemize @bullet
-@c @item
-@c permit variables to be omitted if they haven't changed (but always
-@c outputting the bit permits us to write a sanity checker)
-@c @item
-@c permit variables to appear in any order (not sure this is so worthwhile)
-@c @item
-@c specify which @file{.decl} files should be used (including their pathnames
-@c and/or MD5 hashes)
-@c @end itemize
-
-@node    pptname format, VarComparability declaration, Program point declarations, Declarations
-@subsection Program point name format specification
-
-Instrumenting code creates a @file{.decls} file that contains program
-point names such as:
-
-@example
-DataStructures.StackAr.push(java.lang.Object):::ENTER
-DataStructures.StackAr.push(java.lang.Object):::EXIT99
-PolyCalc.RatNum.RatNum(int, int):::ENTER
-PolyCalc.RatNum.RatNum(int, int):::EXIT55
-PolyCalc.RatNum.RatNum(int, int):::EXIT67
-@end example
-
-This section describes the format of these program point names.  Someone
-writing an instrumenter for a new language must be sure to follow this
-format specification.
-
-A program point name is a string with no tabs or newlines in it.  The basic
-format is @samp{@var{topLevel}.@var{bottomLevel}:::@var{pptInfo}}.
-For the first example given above, the top level of the hierarchy would
-be @code{DataStructures.StackAr}, the bottom level would be
-@code{push(java.lang.Object)}, and the
-program point information would be @code{ENTER}.
-
-@var{topLevel} may contain any number of periods (@samp{.}). @var{bottomLevel}
-and @var{pptInfo} may not contain any periods.  The string @samp{:::} may only
-appear once.
-
-@var{topLevel} and @var{pptInfo} are required (i.e., they must be non-empty),
-as are the period to the right of @var{topLevel} and the colons to the
-left of @var{pptInfo}.  However, @var{bottomLevel} is optional.
-
-By convention, for Java @var{topLevel} consists of the class name, and
-@var{bottomLevel} consists of the method name and method signature.
-
-For C, @var{topLevel} consists of a filename (or a single period for
-global functions), and @var{bottomLevel}
-could consist of a function name and signature.
-More precisely, names of C program points follow these conventions:
-
-@itemize @bullet
-@item
-Names of program points for file-static functions are prefixed with the name
-of the source file, with @samp{.} characters mapped to @samp{_},
-followed by a @samp{.}.
-
-@item Names of program points for
-file-scope functions with external linkage are prefixed with @samp{..}.
-For example, a global function program point might be named
-@samp{..main():::ENTER}., the first period denoting that it is global in
-scope and the second denoting the separator between the @var{toplevel}
-and @var{bottomlevel} parts of the name.
-
-@item
-Names of C++ functions that are class or namespace members are prefixed
-with the name(s) of their classes or namespaces, with the C++ @samp{::}
-syntax mapped onto the Java @samp{.} syntax used by Daikon.
-@end itemize
-
-For IOA, @var{topLevel} consists of an Automaton name and
-@var{bottomLevel} consists of information for a transition state.
-
-
-
-By convention, the entry and exit points for a function have names of
-a special form so that they can be associated with one another.
-(Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
-convention permits Daikon to generate pre-state variables
-(@pxref{Variable names}) automatically at procedure exit points, so
-front ends need not output them explicitly.  When there
-are multiple exit points, then each one should be suffixed by a number
-(such as a line number, for example, @code{foo::EXIT22}).  Daikon produces
-the main (non-numbered) @code{:::EXIT} point automatically.  All the
-numbered exits should contain the same set of variables; in general,
-this means that local variables are not included at exit points.
-Daikon currently requires that declarations for @code{:::ENTER} program
-points appear before any declarations for matching @code{:::EXIT} program
-points.
-
-Another convention is to have another program point whose
-@var{bottomLevel} is empty and whose @var{pptInfo} is  @code{OBJECT}:
-for example, @code{StackAr:::OBJECT}.  This contains the
-representation invariant (sometimes called the object invariant) of a
-class.  This program point is created automatically by Daikon; it need
-not appear in a trace file.
-
-@c This program point is not created automatically by Daikon, because
-@c there isn't a way to know whether a particular method is a private
-@c helper method or not --- that is, whether the representation
-@c invariants should hold on entry to and exit from it.
-
-
-
-@node VarComparability declaration, ListImplementors declaration, pptname format, Declarations
-@subsection VarComparability declaration
-
-There is a special @code{VarComparability} declaration that controls how
-the comparability field in program point declarations is interpreted.
-The default @code{VarComparability} is @code{implicit}, which means
-ordinary comparability as described in @ref{Program point declarations}.
-(The name @code{implicit} is retained for historical reasons.)
-You can override it as
-follows:
-@example
-VarComparability
-none
-@end example
-@noindent
-As with all records in Daikon input files, a
-blank line is required between this record and the next one.
-
-@node ListImplementors declaration,  , VarComparability declaration, Declarations
-@subsection ListImplementors declaration
-
-This declaration can be used to indicate classes that implement the
-@code{java.util.List} interface, and should be treated as sequences
-for the purposes of invariant detection.  The syntax is as follows:
-
-@example
-ListImplementors
-classname1
-classname2
-...
-@end example
-
-The @samp{--list_type} command-line option to Daikon can also be used to
-specify classes which implement lists; see
-@ref{Options to control invariant detection}, for information.
 
 
 @node    Data trace records, Example files, Declarations, File formats
@@ -9343,7 +9328,7 @@ entry.  For non-concurrent systems, this nonce is not necessary and may be
 omitted.
 
 
-@node    Example files,  , Data trace records, File formats
+@node    Example files, Version 1 Declarations, Data trace records, File formats
 @section Example files
 
 Here are portions of two files @file{StackArTester.decls} and
@@ -9365,90 +9350,175 @@ This is part of the file @file{StackArTester.decls}, a declaration file for
 the @file{StackAr.java} program (@pxref{StackAr example}).
 
 @example
-DECLARE
-StackAr.push(java.lang.Object):::ENTER
-x
-Object
-int
-1
-x.getClass()
-Class
-String
--1
-this.theArray
-Object[]
-int
--2
-this.theArray.getClass()
-Class
-String
--1
-this.theArray[]
-Object[]
-int[]
-1
-this.theArray[].getClass()
-Class[]
-String[]
--1
-this.topOfStack
-int
-int
-0
+ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
+ppt-type enter
+parent parent DataStructures.StackAr:::OBJECT 1
+  variable this
+    var-kind variable 
+    dec-type DataStructures.StackAr
+    rep-type hashcode
+    flags is_param
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray
+    var-kind field theArray
+    enclosing-var this
+    dec-type java.lang.Object[]
+    rep-type hashcode
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray.getClass()
+    var-kind function getClass()
+    enclosing-var this.theArray
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray[..]
+    var-kind array 
+    enclosing-var this.theArray
+    array 1
+    dec-type java.lang.Object[]
+    rep-type hashcode[]
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray[..].getClass()
+    var-kind function getClass()
+    enclosing-var this.theArray[..]
+    array 1
+    dec-type java.lang.Class[]
+    rep-type java.lang.String[]
+    flags synthetic classname
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.topOfStack
+    var-kind field topOfStack
+    enclosing-var this
+    dec-type int
+    rep-type int
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable x
+    var-kind variable 
+    dec-type java.lang.Object
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable x.getClass()
+    var-kind function getClass()
+    enclosing-var x
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
 
-DECLARE
-StackAr.push(java.lang.Object):::EXIT96
-x
-Object
-int
-1
-x.getClass()
-Class
-String
--1
-this.theArray
-Object[]
-int
--2
-this.theArray.getClass()
-Class
-String
--1
-this.theArray[]
-Object[]
-int[]
-1
-this.theArray[].getClass()
-Class[]
-String[]
--1
-this.topOfStack
-int
-int
-0
+ppt DataStructures.StackAr.push(java.lang.Object):::EXIT99
+ppt-type subexit
+parent parent DataStructures.StackAr:::OBJECT 1
+  variable this
+    var-kind variable 
+    dec-type DataStructures.StackAr
+    rep-type hashcode
+    flags is_param
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray
+    var-kind field theArray
+    enclosing-var this
+    dec-type java.lang.Object[]
+    rep-type hashcode
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray.getClass()
+    var-kind function getClass()
+    enclosing-var this.theArray
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray[..]
+    var-kind array 
+    enclosing-var this.theArray
+    array 1
+    dec-type java.lang.Object[]
+    rep-type hashcode[]
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.theArray[..].getClass()
+    var-kind function getClass()
+    enclosing-var this.theArray[..]
+    array 1
+    dec-type java.lang.Class[]
+    rep-type java.lang.String[]
+    flags synthetic classname
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable this.topOfStack
+    var-kind field topOfStack
+    enclosing-var this
+    dec-type int
+    rep-type int
+    comparability 22
+    parent DataStructures.StackAr:::OBJECT 1
+  variable x
+    var-kind variable 
+    dec-type java.lang.Object
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable x.getClass()
+    var-kind function getClass()
+    enclosing-var x
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
 
-DECLARE
-StackAr:::OBJECT
-this.theArray
-Object[]
-int
--2
-this.theArray.getClass()
-Class
-String
--1
-this.theArray[]
-Object[]
-int[]
-1
-this.theArray[].getClass()
-Class[]
-String[]
--1
-this.topOfStack
-int
-int
-0
+ppt DataStructures.StackAr:::OBJECT
+ppt-type object
+  variable this
+    var-kind variable 
+    dec-type DataStructures.StackAr
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable this.theArray
+    var-kind field theArray
+    enclosing-var this
+    dec-type java.lang.Object[]
+    rep-type hashcode
+    comparability 22
+  variable this.theArray.getClass()
+    var-kind function getClass()
+    enclosing-var this.theArray
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
+  variable this.theArray[..]
+    var-kind array 
+    enclosing-var this.theArray
+    array 1
+    dec-type java.lang.Object[]
+    rep-type hashcode[]
+    comparability 22
+  variable this.theArray[..].getClass()
+    var-kind function getClass()
+    enclosing-var this.theArray[..]
+    array 1
+    dec-type java.lang.Class[]
+    rep-type java.lang.String[]
+    flags synthetic classname
+    comparability 22
+  variable this.topOfStack
+    var-kind field topOfStack
+    enclosing-var this
+    dec-type int
+    rep-type int
+    comparability 22
+
 @end example
 
 
@@ -9598,6 +9668,327 @@ this.topOfStack
 
 ...
 @end example
+
+@node    Version 1 Declarations,  , Example files, File formats
+@section Version 1 Declarations
+
+@cindex declaration format
+@cindex .decls file
+
+This section describes the original version (1.0) of declaration
+records.  These are now obsolete and should not be used.
+
+A declarations file can contain program point declarations,
+@code{VarComparability} declarations, and @code{ListImplementors declarations}.
+
+@menu
+* V1 Program point declarations::  
+* V1 pptname format::           
+* V1 VarComparability declaration::  
+* V1 ListImplementors declaration::  
+@end menu
+
+@node    V1 Program point declarations, V1 pptname format, Version 1 Declarations, Version 1 Declarations
+@subsection V1 Program point declarations
+
+The format of a program point declaration is:
+@example
+DECLARE
+program-point-name
+varname1
+declared-type1 [# auxiliary-information1]
+representation-type1 [= constant-value1]
+comparable1
+varname2
+declared-type2 [# auxiliary-information2]
+representation-type2 [= constant-value2]
+comparable2
+...
+@end example
+
+Program point information includes:
+@itemize @bullet
+@item
+name (``tag'') of this program point, an arbitrary string containing no
+tab or newline characters.  This name contains information such as the
+class name or method name; what information is contained depends on
+which instrumenter is being used.  @xref{V1 pptname format}, for a full
+specification of the naming format.
+
+
+@item
+for each variable:
+@itemize @bullet
+@item
+name: a string containing no tabs or newlines.  @xref{Variable names}.
+
+@item
+declared type: this is what the programmer used in the declaration of
+the variable.  Array types must be suffixed by the proper number of
+@samp{[]} to indicate their dimensionality.  Names for standard types
+should use Java's names (e.g., @code{int}, @code{boolean}, etc.), but names for
+user-defined or language-specific types can be arbitrary strings.
+
+@item
+auxiliary information: optionally, Daikon can be given information
+about the meaning of the variable to help it better interpret the
+values it later sees.  Information is provided as a comma-separated
+list of items, with each item in the form of @samp{key = value}.  Unrecognized
+keys are silently ignored.  All values are
+either @samp{true} or @samp{false}.  Mainly, this information is used for
+collections, which are presented to Daikon as arrays.  Valid keys are:
+
+@table @code
+
+@item hasDuplicates
+Whether a collection can contain duplicates.  If it
+cannot, Daikon does not check for some invariants that only have
+meaning for collections that can contain duplicate elements.
+
+@item hasOrder
+Whether order has meaning for a collection.  If order does
+not have meaning in a collection, then Daikon does not check for
+element-wise comparisons between it and other collections.
+
+@item hasNull
+Whether zero has the special meaning null for the variable or
+collection.  If it does, then Daikon checks for whether a value or the
+elements in a collection are null.
+
+@item nullTerminated
+Whether a collection has a value (usually null) that
+ends its representation.  If it does, then Daikon looks at the
+collection's size and at the collection's size-1 as ``interesting''
+values.  If it does not, then Daikon only looks at the collection's
+size.
+
+@item isParam
+Whether a given variable is a parameter to a method.  If a
+variable is a parameter, Daikon avoids printing some information that
+would be considered uninteresting for parameters.  First, invariants
+that use the parameter variable @code{p} in its post-state form are not
+printed.  Second, invariants that use fields of @code{p} (such as @code{p.x})
+are printed only if @code{p} has not changed.  Lastly, some immutable
+characteristics, such as the size of arrays and data types are not
+printed (both can be changed if @code{p} is changed, but then, @code{p}
+would no longer be interesting).
+
+@end table
+
+@item
+representation type:  this describes what will appear in the data
+trace file.  For instance, the declared type might be @code{char[]} but
+the representation type might be @code{java.lang.String}.  Or, the declared
+type might be @code{Object} but the representation type might be
+@code{hashcode}, if the address of the object is written to the data trace
+file.
+
+The representation type should be one of @code{boolean}, @code{int},
+@code{hashcode}, @code{double}, or @code{java.lang.String}; or an
+array of one of those (indicated by a @code{[]} suffix, as in Java).
+Hashcodes are treated like integers, except that their actual values
+are considered uninteresting for the purposes of output; they are
+intended for unique object identifiers like memory addresses or the
+return value of Java's @code{Object.hashCode} method.
+
+The representation type may optionally be followed by an equals
+sign and a value; in that case, the variable is known to have a
+compile-time constant value and should be omitted from the data
+trace file.
+@end itemize
+@item
+@cindex comparability, for variables
+@cindex variable comparability
+comparable variables.  This information indicates
+which other variables are comparable to this one.
+This may be obtained dynamically, via type-inference based analysis, or
+in some other manner.
+
+A comparability for a non-array type is a signed integer.  Two variables
+at the same program point
+are considered comparable if both integers are the same, or if either
+integer is negative.
+A comparability for an array type must contain an
+integer for each index and for the contents; for instance, @samp{5[22][17]}
+for a two-dimensional array.  Comparisons succeed if comparisons over
+each component succeed.
+
+Variables at different program points are never compared to one another.
+Use of the same number at different program points does not indicate any
+relationship between the variables, and a given variable may have a
+different comparability integer at different program points.
+
+As an example, in the following code:
+@example
+int sum(int len, int[] a) @{
+  int sum=0;
+  for (int i=0; i++; i<len)
+    sum += a[i];
+  return sum;
+@}
+@end example
+variables @code{i} and @code{len} are comparable to one another (and
+to indices of array @code{a}).  Furthermore, the result is comparable
+to the elements of array @code{a}.  A declaration file for these
+variables might look like
+@example
+len
+int
+int
+5
+a
+int[]
+int[]
+8[5]
+return
+int
+int
+8
+@end example
+
+@end itemize
+
+@c Future enhancements may include:
+@c @itemize @bullet
+@c @item
+@c permit variables to be omitted if they haven't changed (but always
+@c outputting the bit permits us to write a sanity checker)
+@c @item
+@c permit variables to appear in any order (not sure this is so worthwhile)
+@c @item
+@c specify which @file{.decl} files should be used (including their pathnames
+@c and/or MD5 hashes)
+@c @end itemize
+
+@node    V1 pptname format, V1 VarComparability declaration, V1 Program point declarations, Version 1 Declarations
+@subsection Program point name format specification
+
+Instrumenting code creates a @file{.decls} file that contains program
+point names such as:
+
+@example
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+DataStructures.StackAr.push(java.lang.Object):::EXIT99
+PolyCalc.RatNum.RatNum(int, int):::ENTER
+PolyCalc.RatNum.RatNum(int, int):::EXIT55
+PolyCalc.RatNum.RatNum(int, int):::EXIT67
+@end example
+
+This section describes the format of these program point names.  Someone
+writing an instrumenter for a new language must be sure to follow this
+format specification.
+
+A program point name is a string with no tabs or newlines in it.  The basic
+format is @samp{@var{topLevel}.@var{bottomLevel}:::@var{pptInfo}}.
+For the first example given above, the top level of the hierarchy would
+be @code{DataStructures.StackAr}, the bottom level would be
+@code{push(java.lang.Object)}, and the
+program point information would be @code{ENTER}.
+
+@var{topLevel} may contain any number of periods (@samp{.}). @var{bottomLevel}
+and @var{pptInfo} may not contain any periods.  The string @samp{:::} may only
+appear once.
+
+@var{topLevel} and @var{pptInfo} are required (i.e., they must be non-empty),
+as are the period to the right of @var{topLevel} and the colons to the
+left of @var{pptInfo}.  However, @var{bottomLevel} is optional.
+
+By convention, for Java @var{topLevel} consists of the class name, and
+@var{bottomLevel} consists of the method name and method signature.
+
+For C, @var{topLevel} consists of a filename (or a single period for
+global functions), and @var{bottomLevel}
+could consist of a function name and signature.
+More precisely, names of C program points follow these conventions:
+
+@itemize @bullet
+@item
+Names of program points for file-static functions are prefixed with the name
+of the source file, with @samp{.} characters mapped to @samp{_},
+followed by a @samp{.}.
+
+@item Names of program points for
+file-scope functions with external linkage are prefixed with @samp{..}.
+For example, a global function program point might be named
+@samp{..main():::ENTER}., the first period denoting that it is global in
+scope and the second denoting the separator between the @var{toplevel}
+and @var{bottomlevel} parts of the name.
+
+@item
+Names of C++ functions that are class or namespace members are prefixed
+with the name(s) of their classes or namespaces, with the C++ @samp{::}
+syntax mapped onto the Java @samp{.} syntax used by Daikon.
+@end itemize
+
+For IOA, @var{topLevel} consists of an Automaton name and
+@var{bottomLevel} consists of information for a transition state.
+
+
+
+By convention, the entry and exit points for a function have names of
+a special form so that they can be associated with one another.
+(Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
+convention permits Daikon to generate pre-state variables
+(@pxref{Variable names}) automatically at procedure exit points, so
+front ends need not output them explicitly.  When there
+are multiple exit points, then each one should be suffixed by a number
+(such as a line number, for example, @code{foo::EXIT22}).  Daikon produces
+the main (non-numbered) @code{:::EXIT} point automatically.  All the
+numbered exits should contain the same set of variables; in general,
+this means that local variables are not included at exit points.
+Daikon currently requires that declarations for @code{:::ENTER} program
+points appear before any declarations for matching @code{:::EXIT} program
+points.
+
+Another convention is to have another program point whose
+@var{bottomLevel} is empty and whose @var{pptInfo} is  @code{OBJECT}:
+for example, @code{StackAr:::OBJECT}.  This contains the
+representation invariant (sometimes called the object invariant) of a
+class.  This program point is created automatically by Daikon; it need
+not appear in a trace file.
+
+@c This program point is not created automatically by Daikon, because
+@c there isn't a way to know whether a particular method is a private
+@c helper method or not --- that is, whether the representation
+@c invariants should hold on entry to and exit from it.
+
+
+
+@node V1 VarComparability declaration, V1 ListImplementors declaration, V1 pptname format, Version 1 Declarations
+@subsection V1 VarComparability declaration
+
+There is a special @code{VarComparability} declaration that controls how
+the comparability field in program point declarations is interpreted.
+The default @code{VarComparability} is @code{implicit}, which means
+ordinary comparability as described in @ref{Program point declarations}.
+(The name @code{implicit} is retained for historical reasons.)
+You can override it as
+follows:
+@example
+VarComparability
+none
+@end example
+@noindent
+As with all records in Daikon input files, a
+blank line is required between this record and the next one.
+
+@node V1 ListImplementors declaration,  , V1 VarComparability declaration, Version 1 Declarations
+@subsection V1 ListImplementors declaration
+
+This declaration can be used to indicate classes that implement the
+@code{java.util.List} interface, and should be treated as sequences
+for the purposes of invariant detection.  The syntax is as follows:
+
+@example
+ListImplementors
+classname1
+classname2
+...
+@end example
+
+The @samp{--list_type} command-line option to Daikon can also be used to
+specify classes which implement lists; see
+@ref{Options to control invariant detection}, for information.
 
 
 
