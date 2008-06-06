@@ -69,6 +69,15 @@ public class DynComp {
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
 
+  // Options for use in dynamically tracing the input parameters
+  // associated with a particular branch.  Setting these options turns
+  // off normal DynComp behavior
+  @Option("Branch to trace")
+  public static String branch = null;
+
+  @Option ("Method that contains a test sequence")
+  public static String input_method = null;
+
 //  @Option("Enable tracing");
 //  public static boolean tracing_enabled = true;
 
@@ -143,6 +152,12 @@ public class DynComp {
     if (!no_jdk && rt_file != null && !rt_file.exists()) {
       // if --rt-file was given, but doesn't exist
       options.print_usage ("specified rt-file does not exist");
+      return (false);
+    }
+
+    if ((branch == null) != (input_method == null)) {
+      options.print_usage ("Dynamic tracing options 'branch' and "
+                           + "'input_method' must both be specified");
       return (false);
     }
 
