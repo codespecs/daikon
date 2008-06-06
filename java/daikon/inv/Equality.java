@@ -484,6 +484,7 @@ public final /*(at)Interned*/ class Equality
   public void pivot() {
     VarInfo newLeader = null;
     for (VarInfo var : vars) {
+      // System.out.printf ("  processing %s\n", var);
       if (newLeader == null) {
         newLeader = var;
       }
@@ -495,15 +496,15 @@ public final /*(at)Interned*/ class Equality
       }
       else if (var.isDerivedParamAndUninteresting() &&
 	       !newLeader.isDerivedParamAndUninteresting()) {
-	// do nothing
+        // do nothing
       }
       else if (var.derivedDepth() < newLeader.derivedDepth()) {
         // System.out.printf ("%s greater depth, %s is leader%n",
-        //                   newLeader, var);
+        //                    newLeader, var);
         newLeader = var;
       }
       else if (var.derivedDepth() > newLeader.derivedDepth()) {
-	// do nothing
+        // do nothing
       }
       // if we got here, this is the "all other things being equal" case
       else if (var.complexity() < newLeader.complexity()) {
@@ -512,6 +513,9 @@ public final /*(at)Interned*/ class Equality
         newLeader = var;
       }
     }
+    // System.out.printf ("%s complexity = %d, %s complexity = %d\n", leaderCache,
+    //                    leaderCache.complexity(), newLeader,
+    //                    newLeader.complexity());
     leaderCache = newLeader;
   }
 
