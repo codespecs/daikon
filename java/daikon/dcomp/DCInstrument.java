@@ -11,6 +11,7 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
+import org.apache.bcel.verifier.exc.AssertionViolatedException;
 import daikon.util.BCELUtil;
 
 import daikon.util.*;
@@ -27,42 +28,44 @@ import daikon.DynComp;
  */
 class DCInstrument {
 
-  private JavaClass orig_class;
-  private ClassGen gen;
-  private ConstantPoolGen pool;
-  private boolean in_jdk;
-  private InstructionFactory ifact;
-  private ClassLoader loader;
+  protected JavaClass orig_class;
+  protected ClassGen gen;
+  protected ConstantPoolGen pool;
+  protected boolean in_jdk;
+  protected InstructionFactory ifact;
+  protected ClassLoader loader;
 
   /** Local that stores the tag frame for the current method **/
-  private LocalVariableGen tag_frame_local;
+  protected LocalVariableGen tag_frame_local;
 
   // Argument descriptors
-  private static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
+  protected static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
   // private Type[] two_ints = new Type[] {Type.INT, Type.INT};
-  private static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
-  private static Type[] string_arg = new Type[] {Type.STRING};
-  private static Type[] integer_arg = new Type[] {Type.INT};
-  private static Type[] object_arg = new Type[] {Type.OBJECT};
+  protected static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
+  protected static Type[] string_arg = new Type[] {Type.STRING};
+  protected static Type[] integer_arg = new Type[] {Type.INT};
+  protected static Type[] long_arg = new Type[] {Type.LONG};
+  protected static Type[] object_arg = new Type[] {Type.OBJECT};
 
   // Type descriptors
-  private static Type object_arr = new ArrayType (Type.OBJECT, 1);
+  protected static Type object_arr = new ArrayType (Type.OBJECT, 1);
   // private Type int_arr = new ArrayType (Type.INT, 1);
-  private static ObjectType throwable = new ObjectType ("java.lang.Throwable");
-  private static ObjectType dcomp_marker = null;
+  protected static ObjectType throwable = new ObjectType ("java.lang.Throwable");
+  protected static ObjectType dcomp_marker = null;
+  protected static ObjectType javalangObject = new ObjectType("java.lang.Object");
 
   // Debug loggers
-  private SimpleLog debug_instrument = new SimpleLog (false);
-  private SimpleLog debug_instrument_inst = new SimpleLog (false);
-  private SimpleLog debug_native = new SimpleLog (false);
-  private SimpleLog debug_dup = new SimpleLog (false);
-  private SimpleLog debug_add_dcomp = new SimpleLog (false);
-  private SimpleLog debug_track = new SimpleLog (false);
+  protected static SimpleLog debug_instrument = new SimpleLog (false);
+  protected static SimpleLog debug_instrument_inst = new SimpleLog (false);
+  protected static SimpleLog debug_native = new SimpleLog (false);
+  protected static SimpleLog debug_dup = new SimpleLog (false);
+  protected static SimpleLog debug_add_dcomp = new SimpleLog (false);
+  protected static SimpleLog debug_track = new SimpleLog (false);
 
   /**
    * Keeps track of the methods that were not successfully instrumented.
    */
-  private List<String> skipped_methods = new ArrayList<String>();
+  protected List<String> skipped_methods = new ArrayList<String>();
 
   /**
    * Specifies if the jdk is instrumented.  Calls to the JDK must be
@@ -70,15 +73,15 @@ class DCInstrument {
    * instrumented.
    */
   public static boolean jdk_instrumented = true;
-  private static boolean exclude_object = true;
-  private static boolean use_StackVer = true;
+  protected static boolean exclude_object = true;
+  protected static boolean use_StackVer = true;
 
   /**
    * Don't instrument toString functions.  Useful in debugging since
    * we call toString on objects from our code (which then triggers
    * (recursive) instrumentation)
    */
-  private static boolean ignore_toString = true;
+  protected static boolean ignore_toString = true;
 
   /**
    * Double client methods like we do in the JDK.  This allows our
@@ -86,7 +89,7 @@ class DCInstrument {
    * code when they call other methods (because original versions of
    * those other methods will exist
    */
-  private static boolean double_client = true;
+  protected static boolean double_client = true;
 
   public static final String SET_TAG = "set_tag";
   public static final String GET_TAG = "get_tag";
@@ -109,7 +112,7 @@ class DCInstrument {
    * of a load.  We call a special runtime method for this so that we
    * can check for this in other cases
    */
-  private static String[] uninit_classes = new String[] {
+  protected static String[] uninit_classes = new String[] {
     "java.lang.String",
     "java.lang.Class",
     "java.lang.StringBuilder",
@@ -124,7 +127,7 @@ class DCInstrument {
    * for newInstance.
    * The equals method IS instrumented.
    */
-  private static MethodDef[] obj_methods = new MethodDef[] {
+  protected static MethodDef[] obj_methods = new MethodDef[] {
     new MethodDef ("finalize", new Type[0]),
     new MethodDef ("hashCode", new Type[0]),
     new MethodDef ("toString", new Type[0]),
@@ -157,6 +160,33 @@ class DCInstrument {
           return (false);
       return (true);
     }
+
+    public boolean equals (Object obj) {
+      if (!(obj instanceof MethodDef))
+        return false;
+      MethodDef md = (MethodDef)obj;
+      return equals (md.name, md.arg_types);
+    }
+
+    public int hashCode() {
+      int code = name.hashCode();
+      for (Type arg : arg_types)
+        code += arg.hashCode();
+      return code;
+    }
+
+  }
+
+  /** Class that defines a range of byte code within a method **/
+  static class CodeRange {
+    int start_pc;
+    int len;
+    CodeRange (int start_pc, int len) {
+      this.start_pc = start_pc; this.len = len;
+    }
+    public boolean contains (int offset) {
+      return (offset >= start_pc) && (offset < (start_pc + len));
+    }
   }
 
   /**
@@ -178,6 +208,11 @@ class DCInstrument {
     // System.out.printf ("DCInstrument %s%n", orig_class.getClassName());
   }
 
+  /** Returns true if we are instrumenting for dataflow **/
+  public boolean is_data_flow() {
+    return this instanceof DFInstrument;
+  }
+
   /**
    * Instruments the original class to perform dynamic comparabilty and
    * returns the new class definition
@@ -186,16 +221,7 @@ class DCInstrument {
 
     String classname = gen.getClassName();
 
-    // Removed this check (1/20/06) as we are already doing this in premain.
-    // Probably a better solution is needed.
-    // Don't instrument classes in the JDK.  They are already instrumented.
-    // Do instrument javac (its not in the JDK)
-    // TODO: crosscheck the class for instrumentation rather than by name.
-    //if (BCELUtil.in_jdk (gen)
-    //    && !classname.startsWith ("com.sun.tools.javac")) {
-    //  debug_track.log ("Skipping jdk class %s%n", gen.getClassName());
-    //  return (null);
-    // }
+    // Don't need to check for JDK classes, that is done in the caller
 
     // Don't instrument DynComp classes. (But DO instrument Daikon classes.)
     if (classname.startsWith ("daikon.chicory") ||
@@ -220,6 +246,9 @@ class DCInstrument {
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
     boolean track_class = false;
 
+    // Handle clone methods for this class
+    handle_clone (gen);
+
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
       // Add equals method if it doesn't already exist. This ensures
@@ -229,15 +258,6 @@ class DCInstrument {
       if (eq == null) {
         debug_instrument.log ("Added equals method");
         add_equals_method (gen);
-      }
-
-      // Add clone method if it doesn't already exist. This ensures
-      // that an instrumented version, clone(DCompMarker), will be
-      // created in this class.
-      Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
-      if (cl == null) {
-        debug_instrument.log ("Added clone method");
-        add_clone_method (gen);
       }
 
       // Add DCompInstrumented interface and the required
@@ -293,10 +313,14 @@ class DCInstrument {
         tag_frame_local = create_tag_frame_local (mg);
 
         if (has_code) {
-          instrument_method (mg);
+          instrument_method (m, mg);
           if (track) {
             add_enter (mg, mi, DCRuntime.methods.size()-1);
             add_exit (mg, mi, DCRuntime.methods.size()-1);
+          } else if (is_data_flow()) {
+            if (has_specified_method (DynComp.input_method, classname, m))
+              System.out.printf ("found input method %s: %s.%s\n",
+                                 DynComp.input_method, classname, m);
           }
           add_create_tag_frame (mg);
           handle_exceptions (mg);
@@ -390,6 +414,9 @@ class DCInstrument {
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
     boolean track_class = false;
 
+    // properly account for clone methods
+    handle_clone (gen);
+
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
       // Add equals method if it doesn't already exist. This ensures
@@ -399,15 +426,6 @@ class DCInstrument {
       if (eq == null) {
         debug_instrument.log ("Added equals method");
         add_equals_method (gen);
-      }
-
-      // Add clone method if it doesn't already exist. This ensures
-      // that an instrumented version, clone(DCompMarker), will be
-      // created in this class.
-      Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
-      if (cl == null) {
-        debug_instrument.log ("Added clone method");
-        add_clone_method (gen);
       }
 
       // Add DCompInstrumented interface and the required
@@ -535,6 +553,9 @@ class DCInstrument {
 
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
 
+    // properly account for clone methods
+    handle_clone (gen);
+
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
       // Add equals method if it doesn't already exist. This ensures
@@ -544,15 +565,6 @@ class DCInstrument {
       if (eq == null) {
         debug_instrument.log ("Added equals method");
         add_equals_method (gen);
-      }
-
-      // Add clone method if it doesn't already exist. This ensures
-      // that an instrumented version, clone(DCompMarker), will be
-      // created in this class.
-      Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
-      if (cl == null) {
-        debug_instrument.log ("Added clone method");
-        add_clone_method (gen);
       }
 
       // Add DCompInstrumented interface and the required
@@ -595,7 +607,7 @@ class DCInstrument {
 
         // Instrument the method
         if (has_code) {
-          instrument_method (mg);
+          instrument_method (m, mg);
           add_create_tag_frame (mg);
           handle_exceptions (mg);
         }
@@ -643,6 +655,9 @@ class DCInstrument {
 
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
 
+    // properly account for clone methods
+    handle_clone (gen);
+
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
       // Add equals method if it doesn't already exist. This ensures
@@ -652,15 +667,6 @@ class DCInstrument {
       if (eq == null) {
         debug_instrument.log ("Added equals method");
         add_equals_method (gen);
-      }
-
-      // Add clone method if it doesn't already exist. This ensures
-      // that an instrumented version, clone(DCompMarker), will be
-      // created in this class.
-      Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
-      if (cl == null) {
-        debug_instrument.log ("Added clone method");
-        add_clone_method (gen);
       }
 
       // Add DCompInstrumented interface and the required
@@ -733,30 +739,17 @@ class DCInstrument {
   /**
    * Instrument the specified method for dynamic comparability
    */
-  public void instrument_method (MethodGen mg) {
+  public void instrument_method (Method m, MethodGen mg) {
 
     // Get Stack information
     StackTypes stack_types = null;
     TypeStack type_stack = null;
     if (use_StackVer) {
-      StackVer stackver = new StackVer ();
-      VerificationResult vr = null;
-      try {
-      vr = stackver.do_stack_ver (mg);
-      } catch (Exception e) {
-        System.out.printf ("Warning: StackVer failed for %s: %s\n", mg, e);
-        System.out.printf ("Method is NOT instrumented%n");
+      stack_types = bcel_calc_stack_types (mg);
+      if (stack_types == null) {
         skip_method (mg);
         return;
       }
-      if (vr != VerificationResult.VR_OK) {
-        System.out.printf ("Warning: StackVer failed for %s: %s%n", mg, vr);
-        System.out.printf ("Method is NOT instrumented%n");
-        skip_method (mg);
-        return;
-      }
-      assert vr == VerificationResult.VR_OK : " vr failed " + vr;
-      stack_types = stackver.get_stack_types();
     } else { // Use Eric's version
       type_stack = new TypeStack (mg);
     }
@@ -810,14 +803,24 @@ class DCInstrument {
       VerificationResult vr = null;
       try {
       vr = stackver.do_stack_ver (mg);
-      } catch (Exception e) {
-        System.out.printf ("Warning: StackVer failed for %s: %s\n", mg, e);
+      } catch (AssertionViolatedException e) {
+        System.out.printf ("Warning: BCEL verification failed for %s%n", mg);
+        if (DynComp.verbose)
+          System.out.printf ("Exception: %s%n", e);
         System.out.printf ("Method is NOT instrumented%n");
         skip_method (mg);
         return;
+      } catch (Exception e) {
+        System.out.printf ("Warning: Unexpected exception in BCEL verify "
+                           + "for %s: %s%n", mg, e);
+        System.out.printf ("Method is NOT instrumented%n");
+        skip_method (mg);
       }
+
       if (vr != VerificationResult.VR_OK) {
-        System.out.printf ("Warning: StackVer failed for %s: %s%n", mg, vr);
+        System.out.printf ("Warning: BCEL verification failed for %s%n", mg);
+        if (DynComp.verbose)
+          System.out.printf ("Verification error: %s%n", vr);
         System.out.printf ("Method is NOT instrumented%n");
         skip_method (mg);
         return;
@@ -867,8 +870,8 @@ class DCInstrument {
    * Adds the method name and containing class name to the list of
    * uninstrumented methods.
    */
-  private void skip_method (MethodGen mgen) {
-    skipped_methods.add(mgen.getClassName() + ":" + mgen.toString());
+  protected void skip_method (MethodGen mgen) {
+    skipped_methods.add(mgen.getClassName() + "." + mgen.getName());
   }
 
   /**
@@ -1289,11 +1292,7 @@ class DCInstrument {
     // top of the stack is a primitive, we need to do the same on the
     // tag stack.  Otherwise, we need do nothing.
     case Constants.DUP: {
-      Type top = stack.peek();
-      if (is_primitive (top)) {
-        return build_il (dcr_call ("dup", Type.VOID, Type.NO_ARGS), inst);
-      }
-      return (null);
+      return dup_tag (inst, stack);
     }
 
     // Duplicates the item on the top of the stack and inserts it 2
@@ -1302,196 +1301,50 @@ class DCInstrument {
     // value is not a primitive, then we need only to insert the duped
     // value down 1 on the tag stack (which contains only primitives)
     case Constants.DUP_X1: {
-      Type top = stack.peek();
-      if (!is_primitive (top))
-        return (null);
-      String method = "dup_x1";
-      if (!is_primitive (stack.peek(1)))
-        method = "dup";
-      return build_il (dcr_call (method, Type.VOID, Type.NO_ARGS), inst);
+      return dup_x1_tag (inst, stack);
     }
 
-      // Duplicates either the top 2 category 1 values or a single
-      // category 2 value and inserts it 2 or 3 values down on the
-      // stack.
+    // Duplicates either the top 2 category 1 values or a single
+    // category 2 value and inserts it 2 or 3 values down on the
+    // stack.
     case Constants.DUP2_X1: {
-      String op = null;
-      Type top = stack.peek();
-      if (is_category2 (top)) {
-        if (is_primitive (stack.peek(1)))
-          op = "dup_x1";
-        else // not a primitive, so just dup
-          op = "dup";
-      } else if (is_primitive (top)) {
-        if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
-          op = "dup2_x1";
-        else if (is_primitive (stack.peek(1)))
-          op = "dup2";
-        else if (is_primitive (stack.peek(2)))
-          op = "dup_x1";
-        else // neither value 1 nor value 2 is primitive
-          op = "dup";
-      } else { // top is not primitive
-        if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
-          op = "dup_x1";
-        else if (is_primitive (stack.peek(1)))
-          op = "dup";
-        else // neither of the top two values are primitive
-          op = null;
-      }
-      if (debug_dup.enabled())
-        debug_dup.log ("DUP2_X1 -> %s [... %s]%n", op,
-                       stack_contents (stack, 3));
-
-      if (op != null)
-        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
-      return (null);
+      return dup2_x1_tag (inst, stack);
     }
 
     // Duplicate either one category 2 value or two category 1 values.
     case Constants.DUP2: {
-      Type top = stack.peek();
-      String op = null;
-      if (is_category2 (top))
-        op = "dup";
-      else if (is_primitive (top) && is_primitive(stack.peek(1)))
-        op = "dup2";
-      else if (is_primitive (top) || is_primitive(stack.peek(1)))
-        op = "dup";
-      else // both of the top two items are not primitive, nothing to dup
-        op = null;
-      if (debug_dup.enabled())
-        debug_dup.log ("DUP2 -> %s [... %s]%n", op,
-                       stack_contents (stack, 2));
-      if (op != null)
-        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
-      return (null);
+      return dup2_tag (inst, stack);
     }
 
     // Dup the category 1 value on the top of the stack and insert it either
     // two or three values down on the stack.
     case Constants.DUP_X2: {
-      Type top = stack.peek();
-      String op = null;
-      if (is_primitive (top)) {
-        if (is_category2 (stack.peek(1)))
-          op = "dup_x1";
-        else if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
-          op = "dup_x2";
-        else if (is_primitive (stack.peek(1)) || is_primitive(stack.peek(2)))
-          op = "dup_x1";
-        else
-          op = "dup";
-      }
-      if (debug_dup.enabled())
-        debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
-                       stack_contents (stack, 3));
-      if (op != null)
-        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
-      return (null);
+      return dup_x2 (inst, stack);
     }
 
     case Constants.DUP2_X2: {
-      Type top = stack.peek();
-      String op = null;
-      if (is_category2 (top)) {
-        if (is_category2 (stack.peek(1)))
-          op = "dup_x1";
-        else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2)))
-          op = "dup_x2";
-        else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2)))
-          op = "dup_x1";
-        else // both values are references
-          op = "dup";
-      } else if (is_primitive (top)) {
-        if (is_category2 (stack.peek(1)))
-          assert false : "not supposed to happen " + stack_contents(stack, 3);
-        else if (is_category2(stack.peek(2))) {
-          if (is_primitive (stack.peek(1)))
-            op = "dup2_x1";
-          else
-            op = "dup_x1";
-        } else if (is_primitive (stack.peek(1))) {
-          if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
-            op = "dup2_x2";
-          else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
-            op = "dup2_x1";
-          else // both 2 and 3 are references
-            op = "dup2";
-        } else { // 1 is a reference
-          if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
-            op = "dup_x2";
-          else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
-            op = "dup_x1";
-          else // both 2 and 3 are references
-            op = "dup";
-        }
-      } else { // top is a reference
-        if (is_category2 (stack.peek(1)))
-          assert false : "not supposed to happen " + stack_contents(stack, 3);
-        else if (is_category2(stack.peek(2))) {
-          if (is_primitive (stack.peek(1)))
-            op = "dup_x1";
-          else
-            op = null; // nothing to dup
-        } else if (is_primitive (stack.peek(1))) {
-          if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
-            op = "dup_x2";
-          else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
-            op = "dup_x1";
-          else // both 2 and 3 are references
-            op = "dup";
-        } else { // 1 is a reference
-          op = null; // nothing to dup
-        }
-      }
-      if (debug_dup.enabled())
-        debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
-                       stack_contents (stack, 3));
-      if (op != null)
-        return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
-      return (null);
+      return dup2_x2 (inst, stack);
     }
 
     // Pop instructions discard the top of the stack.  We want to discard
     // the top of the tag stack iff the item on the top of the stack is a
     // primitive.
     case Constants.POP: {
-      Type top = stack.peek();
-      if (is_primitive (top))
-        return discard_tag_code (inst, 1);
-      return (null);
+      return pop_tag (inst, stack);
     }
 
     // Pops either the top 2 category 1 values or a single category 2 value
     // from the top of the stack.  We must do the same to the tag stack
     // if the values are primitives.
     case Constants.POP2: {
-      Type top = stack.peek();
-      if (is_category2 (top))
-        return discard_tag_code (inst, 1);
-      else {
-        int cnt = 0;
-        if (is_primitive (top))
-          cnt++;
-        if (is_primitive (stack.peek(1)))
-          cnt++;
-        if (cnt > 0)
-          return discard_tag_code (inst, cnt);
-      }
-      return (null);
+      return pop2_tag (inst, stack);
     }
 
     // Swaps the two category 1 types on the top of the stack.  We need
     // to swap the top of the tag stack if the two top elements on the
     // real stack are primitives.
     case Constants.SWAP: {
-      Type type1 = stack.peek();
-      Type type2 = stack.peek(1);
-      if (is_primitive(type1) && is_primitive(type2)) {
-        return build_il (dcr_call ("swap", Type.VOID, Type.NO_ARGS), inst);
-      }
-      return (null);
+      return swap_tag (inst, stack);
     }
 
     case Constants.IF_ICMPEQ:
@@ -1513,12 +1366,10 @@ class DCInstrument {
 
     case Constants.GETSTATIC: {
       return load_store_field (mg, ((GETSTATIC) inst));
-      // return load_store_static ((GETSTATIC) inst, "push_static_tag");
     }
 
     case Constants.PUTSTATIC: {
       return load_store_field (mg, ((PUTSTATIC) inst));
-      // return load_store_static ((PUTSTATIC) inst, "pop_static_tag");
     }
 
     case Constants.DLOAD:
@@ -1572,14 +1423,7 @@ class DCInstrument {
     case Constants.LDC:
     case Constants.LDC_W:
     case Constants.LDC2_W: {
-      Type type;
-      if (inst instanceof LDC) // LDC_W extends LDC
-        type = ((LDC)inst).getType (pool);
-      else
-        type = ((LDC2_W)inst).getType (pool);
-      if (!(type instanceof BasicType))
-        return null;
-      return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+      return ldc_tag (inst, stack);
     }
 
     // Push the tag for the array onto the tag stack.  This causes
@@ -1673,12 +1517,7 @@ class DCInstrument {
     // For any other number of dimensions, discard the tags for the
     // arguments.
     case Constants.MULTIANEWARRAY: {
-      int dims = ((MULTIANEWARRAY)inst).getDimensions();
-      if (dims == 2) {
-        return multiarray2 (inst);
-      } else {
-        return discard_tag_code (inst, dims);
-      }
+      return multi_newarray_dc (inst);
     }
 
     // Mark the array and its index as comparable.  Also for primitives,
@@ -1722,20 +1561,13 @@ class DCInstrument {
     case Constants.IRETURN:
     case Constants.LRETURN:
     case Constants.RETURN: {
-      Type type = mg.getReturnType();
-      InstructionList il = new InstructionList();
-      if ((type instanceof BasicType) && (type != Type.VOID))
-        il.append (dcr_call ("normal_exit_primitive", Type.VOID,Type.NO_ARGS));
-      else
-        il.append (dcr_call ("normal_exit", Type.VOID, Type.NO_ARGS));
-      il.append (inst);
-      return (il);
+      return return_tag (mg, inst);
     }
 
-    // Handles calls outside of instrumented code by discarding the tags.
-    // This may not work correctly for interfaces (who do we tell if we
-    // are instrumenting the destination.  This code needs to be updated
-    // when we instrument the JDK.
+    // Handle subroutine calls.  Calls to instrumented code are modified
+    // to call the instrumented version (with the DCompMarker argument).
+    // Calls to uninstrumented code (rare) discard primitive arguments
+    // from the tag stack and produce an arbitrary return tag.
     case Constants.INVOKESTATIC:
     case Constants.INVOKEVIRTUAL:
     case Constants.INVOKESPECIAL:
@@ -1802,6 +1634,7 @@ class DCInstrument {
     }
 
   }
+
 
 
   /**
@@ -1974,7 +1807,6 @@ class DCInstrument {
 
     // Replace calls to Object's equals method with calls to our
     // replacement, a static method in DCRuntime
-    ObjectType javalangObject = new ObjectType("java.lang.Object");
     if (method_name.equals("equals")
         && ret_type == Type.BOOLEAN
         && arg_types.length == 1
@@ -2000,24 +1832,9 @@ class DCInstrument {
                && ret_type.equals(javalangObject)
                && arg_types.length == 0) {
 
-      Type[] new_arg_types = new Type[] {javalangObject};
-
-      if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
-        // this is a super.clone() call
-        il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
-                                       "dcomp_super_clone",
-                                       ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
-      } else {
-        // just a regular clone() call
-        il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
-                                       "dcomp_clone",
-                                       ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
-      }
+      il = instrument_clone_call (invoke);
 
     } else if (callee_instrumented) {
-      // If the callee is instrumented then, add the dcomp argument
 
       // Add the DCompMarker argument so that the instrumented version
       // will be used
@@ -2049,6 +1866,136 @@ class DCInstrument {
     return (il);
   }
 
+  public InstructionList instrument_clone_call (InvokeInstruction invoke) {
+
+    InstructionList il = new InstructionList();
+    ObjectType dcomp_clone = new ObjectType ("daikon.dcomp.DCompClone");
+
+    Type[] new_arg_types = new Type[] {dcomp_marker};
+    String method_name = invoke.getMethodName(pool);
+    Type ret_type = invoke.getReturnType(pool);
+    String classname = invoke.getClassName (pool);
+
+    // if this is a super.clone() call
+    if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+
+      // If there is an instrumented clone to call
+      if (has_instrumented_clone (classname)) {
+        il.append (new ACONST_NULL());
+        il.append (ifact.createInvoke (classname, method_name, ret_type,
+                                       new_arg_types, invoke.getOpcode()));
+      } else { // no instrumented clone to call
+
+        // handle the uninstrumented clone
+        il.append (new DUP());
+        il.append (invoke);
+        il.append (dcr_call ("uninstrumented_clone", Type.OBJECT, two_objects));
+      }
+
+    } else { // just a regular clone() call
+
+      // If the object has an instrumented clone method, call it
+      // otherwise call the uninstrumented method.
+
+      // Duplicate the object reference to be cloned
+      il.append (new DUP());
+
+      // Test object and jump if there is not an instrumented version of clone
+      il.append (ifact.createInstanceOf (dcomp_clone));
+      BranchHandle ifeq_branch = il.append (new IFEQ(null));
+
+      // Call the instrumented version of clone
+      il.append (new ACONST_NULL());
+      il.append (ifact.createInvoke (classname, method_name, ret_type,
+                                        new_arg_types, invoke.getOpcode()));
+
+      // Jump to the end
+      BranchHandle goto_branch = il.append (new GOTO(null));
+
+      // Call the uninstrumented version of clone and handle the interaction
+      InstructionHandle else_target = il.append (new DUP());
+      il.append (invoke);
+      il.append (dcr_call ("uninstrumented_clone", Type.OBJECT, two_objects));
+
+      InstructionHandle endif_target = il.append (new NOP());
+
+      // Fixup the jump targets
+      ifeq_branch.setTarget (else_target);
+      goto_branch.setTarget (endif_target);
+    }
+
+    return (il);
+  }
+
+  /**
+   * Determine if there is an instrumented clone to call in the
+   * specified class or any of its superclasses.
+   * We can safely use reflection here because all superclasses must
+   * have been loaded before this class was loaded.
+   **/
+  protected boolean has_instrumented_clone (String classname) {
+
+    // Since we can't instrument Object, it never has an instrumented clone
+    if (classname.equals ("java.lang.Object"))
+      return false;
+
+    // Loop through this class and each of its superclasses.  If a clone
+    // method is found in a class that is instrumented, return true.
+    try {
+      for (Class<?> c = Class.forName (classname);
+           !c.getName().equals ("java.lang.Object");
+           c = c.getSuperclass()) {
+
+        // If the class is not instrumented, clone cannot be instrumented
+        // We presume here that an uninstrumented class does not have
+        // any instrumented superclasses
+        if (!is_instrumented (c))
+          return false;
+
+        // Look for a clone method.  If there is one, we should have
+        // instrumented it.
+        java.lang.reflect.Method m = null;
+        try {
+          m = c.getDeclaredMethod("clone", new Class<?>[] {});
+        } catch (Exception e) {
+        }
+        if (m != null)
+          return true;
+      }
+    } catch (Exception e) {
+      System.out.printf ("Unexpected exception in Class.forName (%s): %s%n",
+                         classname, e);
+      return false;
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns whether or not the specified class is instrumented.  Object
+   * is never instrumented and returns false.  Otherwise true is returned
+   * unless the class in in the JDK and we are using an uninstrumented JDK
+   */
+  protected boolean is_instrumented (Class<?> c) {
+
+    if (c.equals (java.lang.Object.class))
+      return false;
+
+    // If we are instrumenting the JDK, presume any class other than
+    // object is instrumented.
+    if (in_jdk)
+      return true;
+
+    // If the class is part of the JDK
+    if (BCELUtil.in_jdk (c.getName())) {
+      if (DynComp.no_jdk)
+        return false;
+      else
+        return true;
+    } else { // not part of the jdk
+      return true;
+    }
+  }
 
   /**
    * Similar to handle_invoke, but doesn't perform special handling
@@ -2490,7 +2437,7 @@ class DCInstrument {
    * exit locations are filled in, but the reflection information is
    * not generated
    */
-  private MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
+  protected MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
 
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();
@@ -2754,6 +2701,32 @@ class DCInstrument {
   }
 
   /**
+   * Returns true if this method is the method identified by method_id.
+   * The method is encoded as 'classname:method'.  The classname is the
+   * fully qualified class name.  The method is this simple method name
+   * (no signature).
+   */
+  public boolean has_specified_method (String method_id, String classname,
+                                       Method m) {
+
+    // Get the classname and method name
+    String[] sa = method_id.split(":");
+    String m_classname = sa[0];
+    String m_name = sa[1];
+    // System.out.printf ("has_specified_method: %s:%s - %s.%s\n", m_classname,
+    //                    m_name, classname, m.getName());
+
+    if (!m_classname.equals (classname))
+      return false;
+
+    if (!m_name.equals (m.getName()))
+      return false;
+
+    return true;
+  }
+
+
+  /**
    * Returns whether or not this ppt should be included.  A ppt is included
    * if it matches ones of the select patterns and doesn't match any of the
    * omit patterns.
@@ -2761,6 +2734,10 @@ class DCInstrument {
   public boolean should_track (String classname, String pptname) {
 
     debug_track.log ("Considering tracking ppt %s %s%n", classname, pptname);
+
+    // If we are tracing values to a branch, we don't track anything
+    if (is_data_flow())
+      return (false);
 
     // Don't track any JDK classes
     if (classname.startsWith ("java.") || classname.startsWith ("com.")
@@ -2827,7 +2804,7 @@ class DCInstrument {
   }
 
   /** Convenience function to call a static method in DCRuntime **/
-  private InvokeInstruction dcr_call (String method_name, Type ret_type,
+  protected InvokeInstruction dcr_call (String method_name, Type ret_type,
                                              Type[] arg_types) {
 
     return ifact.createInvoke (DCRuntime.class.getName(), method_name,
@@ -2838,11 +2815,291 @@ class DCInstrument {
    * Create the code to call discard_tag(tag_count) and append inst to the
    * end of that code
    */
-  private InstructionList discard_tag_code (Instruction inst, int tag_count) {
+  protected InstructionList discard_tag_code (Instruction inst, int tag_count) {
     InstructionList il = new InstructionList();
     il.append (ifact.createConstant (tag_count));
     il.append (dcr_call ("discard_tag", Type.VOID, integer_arg));
     append_inst (il, inst);
+    return (il);
+  }
+
+  /**
+   * Duplicates the item on the top of stack.  If the value on the
+   * top of the stack is a primitive, we need to do the same on the
+   * tag stack.  Otherwise, we need do nothing.
+   */
+  InstructionList dup_tag (Instruction inst, OperandStack stack) {
+    Type top = stack.peek();
+    if (is_primitive (top)) {
+      return build_il (dcr_call ("dup", Type.VOID, Type.NO_ARGS), inst);
+    }
+    return (null);
+  }
+
+  /**
+   * Duplicates the item on the top of the stack and inserts it 2
+   * values down in the stack.  If the value at the top of the stack
+   * is not a primitive, there is nothing to do here.  If the second
+   * value is not a primitive, then we need only to insert the duped
+   * value down 1 on the tag stack (which contains only primitives)
+   **/
+  InstructionList dup_x1_tag (Instruction inst, OperandStack stack) {
+      Type top = stack.peek();
+      if (!is_primitive (top))
+        return (null);
+      String method = "dup_x1";
+      if (!is_primitive (stack.peek(1)))
+        method = "dup";
+      return build_il (dcr_call (method, Type.VOID, Type.NO_ARGS), inst);
+    }
+
+  /**
+   * Duplicates either the top 2 category 1 values or a single
+   * category 2 value and inserts it 2 or 3 values down on the
+   * stack.
+   */
+  InstructionList dup2_x1_tag (Instruction inst, OperandStack stack) {
+    String op = null;
+    Type top = stack.peek();
+    if (is_category2 (top)) {
+      if (is_primitive (stack.peek(1)))
+        op = "dup_x1";
+      else // not a primitive, so just dup
+        op = "dup";
+    } else if (is_primitive (top)) {
+      if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
+        op = "dup2_x1";
+      else if (is_primitive (stack.peek(1)))
+        op = "dup2";
+      else if (is_primitive (stack.peek(2)))
+        op = "dup_x1";
+      else // neither value 1 nor value 2 is primitive
+        op = "dup";
+    } else { // top is not primitive
+      if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
+        op = "dup_x1";
+      else if (is_primitive (stack.peek(1)))
+        op = "dup";
+      else // neither of the top two values are primitive
+        op = null;
+    }
+    if (debug_dup.enabled())
+      debug_dup.log ("DUP2_X1 -> %s [... %s]%n", op,
+                     stack_contents (stack, 3));
+
+    if (op != null)
+      return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+    return (null);
+  }
+
+
+  /**
+   * Duplicate either one category 2 value or two category 1 values.
+   * The instruction is implemented as necessary on the tag stack.
+   */
+  InstructionList dup2_tag (Instruction inst, OperandStack stack) {
+    Type top = stack.peek();
+    String op = null;
+    if (is_category2 (top))
+      op = "dup";
+    else if (is_primitive (top) && is_primitive(stack.peek(1)))
+      op = "dup2";
+    else if (is_primitive (top) || is_primitive(stack.peek(1)))
+      op = "dup";
+    else // both of the top two items are not primitive, nothing to dup
+      op = null;
+    if (debug_dup.enabled())
+      debug_dup.log ("DUP2 -> %s [... %s]%n", op,
+                     stack_contents (stack, 2));
+    if (op != null)
+      return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+    return (null);
+  }
+
+  /**
+   * Dup the category 1 value on the top of the stack and insert it either
+   * two or three values down on the stack.
+   */
+  InstructionList dup_x2 (Instruction inst, OperandStack stack) {
+    Type top = stack.peek();
+    String op = null;
+    if (is_primitive (top)) {
+      if (is_category2 (stack.peek(1)))
+        op = "dup_x1";
+      else if (is_primitive (stack.peek(1)) && is_primitive (stack.peek(2)))
+        op = "dup_x2";
+      else if (is_primitive (stack.peek(1)) || is_primitive(stack.peek(2)))
+        op = "dup_x1";
+      else
+        op = "dup";
+    }
+    if (debug_dup.enabled())
+      debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
+                     stack_contents (stack, 3));
+    if (op != null)
+      return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+    return (null);
+  }
+
+  /**
+   * Duplicate the top one or two operand stack values and insert two, three,
+   * or four values down
+   */
+  InstructionList dup2_x2 (Instruction inst, OperandStack stack) {
+    Type top = stack.peek();
+    String op = null;
+    if (is_category2 (top)) {
+      if (is_category2 (stack.peek(1)))
+        op = "dup_x1";
+      else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2)))
+        op = "dup_x2";
+      else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2)))
+        op = "dup_x1";
+      else // both values are references
+        op = "dup";
+    } else if (is_primitive (top)) {
+      if (is_category2 (stack.peek(1)))
+        assert false : "not supposed to happen " + stack_contents(stack, 3);
+      else if (is_category2(stack.peek(2))) {
+        if (is_primitive (stack.peek(1)))
+          op = "dup2_x1";
+        else
+          op = "dup_x1";
+      } else if (is_primitive (stack.peek(1))) {
+        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
+          op = "dup2_x2";
+        else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
+          op = "dup2_x1";
+        else // both 2 and 3 are references
+          op = "dup2";
+      } else { // 1 is a reference
+        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
+          op = "dup_x2";
+        else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
+          op = "dup_x1";
+        else // both 2 and 3 are references
+          op = "dup";
+      }
+    } else { // top is a reference
+      if (is_category2 (stack.peek(1)))
+        assert false : "not supposed to happen " + stack_contents(stack, 3);
+      else if (is_category2(stack.peek(2))) {
+        if (is_primitive (stack.peek(1)))
+          op = "dup_x1";
+        else
+          op = null; // nothing to dup
+      } else if (is_primitive (stack.peek(1))) {
+        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3)))
+          op = "dup_x2";
+        else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3)))
+          op = "dup_x1";
+        else // both 2 and 3 are references
+          op = "dup";
+      } else { // 1 is a reference
+        op = null; // nothing to dup
+      }
+    }
+    if (debug_dup.enabled())
+      debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
+                     stack_contents (stack, 3));
+    if (op != null)
+      return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
+    return (null);
+  }
+
+  /**
+   * Pop instructions discard the top of the stack.  We want to discard
+   * the top of the tag stack iff the item on the top of the stack is a
+   * primitive.
+   */
+  InstructionList pop_tag (Instruction inst, OperandStack stack) {
+    Type top = stack.peek();
+    if (is_primitive (top))
+      return discard_tag_code (inst, 1);
+    return (null);
+  }
+
+  /**
+   * Pops either the top 2 category 1 values or a single category 2 value
+   * from the top of the stack.  We must do the same to the tag stack
+   * if the values are primitives.
+   */
+  InstructionList pop2_tag (Instruction inst, OperandStack stack) {
+    Type top = stack.peek();
+    if (is_category2 (top))
+      return discard_tag_code (inst, 1);
+    else {
+      int cnt = 0;
+      if (is_primitive (top))
+        cnt++;
+      if (is_primitive (stack.peek(1)))
+        cnt++;
+      if (cnt > 0)
+        return discard_tag_code (inst, cnt);
+    }
+    return (null);
+  }
+
+  /**
+   * Swaps the two category 1 types on the top of the stack.  We need
+   * to swap the top of the tag stack if the two top elements on the
+   * real stack are primitives.
+   */
+  InstructionList swap_tag (Instruction inst, OperandStack stack) {
+    Type type1 = stack.peek();
+    Type type2 = stack.peek(1);
+    if (is_primitive(type1) && is_primitive(type2)) {
+      return build_il (dcr_call ("swap", Type.VOID, Type.NO_ARGS), inst);
+    }
+    return (null);
+  }
+
+  /**
+   * Adjusts the tag stack for load constant opcodes.  If the constant is
+   * a primitive, pushes its tag on the tag stack.  If the constant is a
+   * reference (string, class), does nothing
+   */
+  InstructionList ldc_tag (Instruction inst, OperandStack stack) {
+    Type type;
+    if (inst instanceof LDC) // LDC_W extends LDC
+      type = ((LDC)inst).getType (pool);
+    else
+      type = ((LDC2_W)inst).getType (pool);
+    if (!(type instanceof BasicType))
+      return null;
+    return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
+  }
+
+  /**
+   * Handle the instruction that allocates multi-dimensional arrays.
+   * If the new array has 2 dimensions, make the integer arguments
+   * comparable to the corresponding indices of the new array.
+   * For any other number of dimensions, discard the tags for the
+   * arguments.  Higher dimensions should really be handled as well,
+   * but there are very few cases of this and the resulting code would
+   * be quite complex (see multiarray2 for details)
+   */
+  InstructionList multi_newarray_dc (Instruction inst) {
+    int dims = ((MULTIANEWARRAY)inst).getDimensions();
+    if (dims == 2) {
+      return multiarray2 (inst);
+    } else {
+      return discard_tag_code (inst, dims);
+    }
+  }
+
+  /**
+   * Prefix the call to return with a call that handles returns for the
+   * tag stack
+   */
+  InstructionList return_tag (MethodGen mg, Instruction inst) {
+    Type type = mg.getReturnType();
+    InstructionList il = new InstructionList();
+    if ((type instanceof BasicType) && (type != Type.VOID))
+      il.append (dcr_call ("normal_exit_primitive", Type.VOID,Type.NO_ARGS));
+    else
+      il.append (dcr_call ("normal_exit", Type.VOID, Type.NO_ARGS));
+    il.append (inst);
     return (il);
   }
 
@@ -2852,7 +3109,7 @@ class DCInstrument {
    * instructions to the list -- but you can create new ones and append
    * them.
    */
-  private void append_inst (InstructionList il, Instruction inst) {
+  protected void append_inst (InstructionList il, Instruction inst) {
 
     if (inst instanceof LOOKUPSWITCH) {
       LOOKUPSWITCH ls = (LOOKUPSWITCH)inst;
@@ -2875,7 +3132,7 @@ class DCInstrument {
    * Returns whether or not the specified type is a primitive (int, float,
    * double, etc)
    */
-  private boolean is_primitive (Type type) {
+  protected boolean is_primitive (Type type) {
     return ((type instanceof BasicType) && (type != Type.VOID));
   }
 
@@ -2883,7 +3140,7 @@ class DCInstrument {
    * Returns whether or not the specified type is a category 2 (8 byte)
    * type
    */
-  private boolean is_category2 (Type type) {
+  protected boolean is_category2 (Type type) {
     return ((type == Type.DOUBLE) || (type == Type.LONG));
   }
 
@@ -2891,7 +3148,7 @@ class DCInstrument {
    * Returns the type of the last instruction that modified the top of
    * stack.  A gross attempt to figure out what is on the top of stack.
    */
-  private Type find_last_push (InstructionHandle ih) {
+  protected Type find_last_push (InstructionHandle ih) {
 
     for (ih = ih.getPrev(); ih != null; ih = ih.getPrev()) {
       Instruction inst = ih.getInstruction();
@@ -2906,7 +3163,7 @@ class DCInstrument {
   }
 
   /** Convenience function to build an instruction list **/
-  private InstructionList build_il (Instruction... instructions) {
+  protected InstructionList build_il (Instruction... instructions) {
     InstructionList il = new InstructionList();
     for (Instruction inst : instructions)
       append_inst (il, inst);
@@ -2917,7 +3174,7 @@ class DCInstrument {
    * Replace instruction ih in list il with the instructions in new_il.  If
    * new_il is null, do nothing
    */
-  private static void replace_instructions (InstructionList il,
+  protected static void replace_instructions (InstructionList il,
                                 InstructionHandle ih, InstructionList new_il) {
 
     if (new_il == null)
@@ -3600,11 +3857,14 @@ class DCInstrument {
     debug_instrument.log ("Added interface DCompInstrumented");
 
     InstructionList il = new InstructionList();
-    MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.BOOLEAN,
-                                     new Type[] { Type.OBJECT },
-                                     new String[] { "obj" },
-                                     "equals_dcomp_instrumented",
-                                     gen.getClassName(), il, pool);
+    int flags = Constants.ACC_PUBLIC;
+    if (gen.isInterface())
+      flags = Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT;
+    MethodGen method = new MethodGen (flags, Type.BOOLEAN,
+                                      new Type[] { Type.OBJECT },
+                                      new String[] { "obj" },
+                                      "equals_dcomp_instrumented",
+                                      gen.getClassName(), il, pool);
 
     il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
     il.append(ifact.createLoad(Type.OBJECT, 1));  // load obj
@@ -3632,7 +3892,10 @@ class DCInstrument {
    */
   public void add_equals_method (ClassGen gen) {
     InstructionList il = new InstructionList();
-    MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.BOOLEAN,
+    int flags = Constants.ACC_PROTECTED;
+    if (gen.isInterface())
+      flags = Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT;
+    MethodGen method = new MethodGen(flags, Type.BOOLEAN,
                                      new Type[] { Type.OBJECT },
                                      new String[] { "obj" }, "equals",
                                      gen.getClassName(), il, pool);
@@ -3652,6 +3915,19 @@ class DCInstrument {
   }
 
   /**
+   * Marks the class as implementing a clone method.  Callers will call
+   * the instrumented version of clone if it exists, otherwise they
+   * will call the uninstrumented version
+   */
+  public void handle_clone (ClassGen gen) {
+    Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
+    if (cl == null)
+      return;
+
+    gen.addInterface("daikon.dcomp.DCompClone");
+  }
+
+  /**
    * Adds the following method to a class:
    *   protected Object clone() throws CloneNotSupportedException {
    *     return super.clone();
@@ -3662,7 +3938,10 @@ class DCInstrument {
    */
   public void add_clone_method (ClassGen gen) {
     InstructionList il = new InstructionList();
-    MethodGen method = new MethodGen(Constants.ACC_PROTECTED, Type.OBJECT,
+    int flags = Constants.ACC_PROTECTED;
+    if (gen.isInterface())
+      flags = Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT;
+    MethodGen method = new MethodGen(flags, Type.OBJECT,
                                      Type.NO_ARGS,
                                      new String[] {  }, "clone",
                                      gen.getClassName(), il, pool);
@@ -3819,7 +4098,7 @@ class DCInstrument {
    * table is missing the entry for the additional parameter.  This
    * method creates a correct array of locals and returns it.
    */
-  private LocalVariableGen[] get_fix_locals (MethodGen mg) {
+  protected LocalVariableGen[] get_fix_locals (MethodGen mg) {
 
     LocalVariableGen[] locals = mg.getLocalVariables();
     Type[] arg_types = mg.getArgumentTypes();
@@ -3867,10 +4146,38 @@ class DCInstrument {
   }
 
   /**
+   * Calculates the types on the stack for each instruction using the
+   * BCEL stack verification routines
+   */
+  protected StackTypes bcel_calc_stack_types (MethodGen mg) {
+
+    StackVer stackver = new StackVer ();
+    VerificationResult vr = null;
+    try {
+    vr = stackver.do_stack_ver (mg);
+    } catch (Exception e) {
+      System.out.printf ("Warning: StackVer exception for %s.%s%n",
+                         mg.getClassName(), mg.getName());
+      // System.out.printf ("Exception: %s%n", e);
+      System.out.printf ("Method is NOT instrumented%n");
+      return (null);
+    }
+    if (vr != VerificationResult.VR_OK) {
+      System.out.printf ("Warning: StackVer failed for %s.%s: %s%n",
+                         mg.getClassName(), mg.getName(), vr);
+      System.out.printf ("Method is NOT instrumented%n");
+      return (null);
+    }
+    assert vr == VerificationResult.VR_OK : " vr failed " + vr;
+    return stackver.get_stack_types();
+  }
+
+
+  /**
    * Creates a method with a DcompMarker argument that does nothing but
    * call the corresponding method without the DCompMarker argument
    */
-  private MethodGen create_dcomp_stub (MethodGen mg) {
+  protected MethodGen create_dcomp_stub (MethodGen mg) {
 
     InstructionList il = new InstructionList();
     Type ret_type = mg.getReturnType();
@@ -3942,8 +4249,51 @@ class DCInstrument {
   /**
    * Return the fully qualified fieldname of the specified field
    */
-  private String full_name (JavaClass jc, Field f) {
+  protected String full_name (JavaClass jc, Field f) {
     return jc.getClassName() + "." + f.getName();
   }
+
+  /**
+   * Compare the two methods of creating an operand stack for all of
+   * the methods in this class.
+   */
+  public void compare_type_stacks() {
+
+    // Process each method
+    for (Method m : gen.getMethods()) {
+      MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
+      compare_type_stacks (mg);
+    }
+  }
+
+  /**
+   * Compare the two methods of creating an operand stack for the
+   * specified method.  This will consistently fail becaues the pag
+   * method is not as precise as BCEL.  The problems could probably
+   * be fixed.
+   */
+  public void compare_type_stacks (MethodGen mg) {
+
+    StackTypes bcel_stack = bcel_calc_stack_types (mg);
+    TypeStack pag_stack = new TypeStack (mg);
+    InstructionList il = mg.getInstructionList();
+    OperandStack bcel_os = null;
+    OperandStack pag_os = null;
+    for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
+      System.out.printf (" instruction %s\n", ih);
+      pag_os = pag_stack.getAfterInst (ih);
+      if (ih.getNext() == null)
+        break;
+      bcel_os = bcel_stack.get (ih.getNext().getPosition());
+      assert (pag_os.size() == bcel_os.size()) : pag_os + "-" + bcel_os;
+      for (int ii = 0; ii < pag_os.size(); ii++) {
+        System.out.printf ("checking at position %d\n", ii);
+        assert pag_os.peek(ii).equals (bcel_os.peek(ii)) :
+        String.format ("%s.%s: offset %d %s-%s%n", mg.getClassName(),
+                       mg.getName(), ii, pag_os.peek(ii), bcel_os.peek(ii));
+      }
+    }
+  }
+
 
 }
