@@ -87,6 +87,23 @@ public final class SimpleLog {
 
   }
 
+  public final void log_tb (String format, Object... args) {
+    if (enabled) {
+      log (format, args);
+      tb();
+    }
+  }
+
+  public final void tb() {
+    Throwable t = new Throwable();
+    t.fillInStackTrace();
+    StackTraceElement[] ste_arr = t.getStackTrace();
+    for (int ii = 2; ii < ste_arr.length; ii++) {
+      StackTraceElement ste = ste_arr[ii];
+      logfile.printf ("%s  %s%n", indent_str, ste);
+    }
+  }
+
   private final String fix_format (String format) {
 
     if (!line_oriented)
