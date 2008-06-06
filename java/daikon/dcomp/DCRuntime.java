@@ -66,6 +66,7 @@ public final class DCRuntime {
   public static final SimpleLog debug_timing = new SimpleLog (false);
   public static final SimpleLog debug_decl_print = new SimpleLog (false);
   public static final SimpleLog time_decl = new SimpleLog (false);
+  public static final SimpleLog debug_df = new SimpleLog (false);
 
   /** Simplifies printouts for debugging if we ignore toString **/
   private static boolean ignore_toString = true;
@@ -101,6 +102,14 @@ public final class DCRuntime {
    * from Object for debugging purposes
    */
   private static class UninitFieldTag {
+    String descr = null;
+    Throwable stack_trace = null;
+    public UninitFieldTag() {}
+    public UninitFieldTag(String descr) { this.descr = descr; }
+    public UninitFieldTag(String descr, Throwable stack_trace) {
+      this.descr = descr;
+      this.stack_trace = stack_trace;
+    }
   }
 
   /**
@@ -109,6 +118,49 @@ public final class DCRuntime {
    */
   private static class UninitArrayElem {
   }
+
+  /**
+   * Class uses as a tag for the results of a binary operation.  Only
+   * different from Object for debugging purposes
+   */
+  private static class BinOp {
+  }
+
+  /**
+   * Class used in dataflow that tracks the source of each value
+   */
+  public static class ValueSource {
+    String descr;
+    Throwable stack_trace = null;
+    ValueSource (String descr) { this.descr = descr; }
+    ValueSource (String descr, Throwable stack_trace) {
+      this.descr = descr;
+      this.stack_trace = stack_trace;
+    }
+    public Throwable get_stack_trace() {
+      return stack_trace;
+    }
+    public String toString() {
+      return descr;
+    }
+  }
+
+  /**
+   * Map in Dataflow from tag to the set of valus that have contributed
+   * to its current value
+   */
+  public static WeakIdentityHashMap<Object,Set<ValueSource>> tag_map
+    = new WeakIdentityHashMap<Object,Set<ValueSource>>();
+
+  /**
+   * Map from tag to dataflow values for the length of an array.  There
+   * should only be entries for arrays
+   **/
+  public static WeakIdentityHashMap<Object,Set<ValueSource>> df_arrlen_map
+    = new WeakIdentityHashMap<Object,Set<ValueSource>>();
+
+  public static List<Set<ValueSource>> branch_tags
+    = new ArrayList<Set<ValueSource>>();
 
   /** Perform any initialization required before instrumentation begins **/
   public static void init() {
@@ -268,7 +320,10 @@ public final class DCRuntime {
     Method m;
 
     try {
-      if (target_class.getName().equals("java.lang.Object")) {
+      if (target_class.getName().equals ("[Ljava.lang.Class;")) {
+        Class<?>[] ca = (Class<?>[])o;
+        return_val = ca.clone();
+      } else if (target_class.getName().equals("java.lang.Object")) {
         // call the uninstrumented Object.clone()
         // Use getDeclaredMethod instead of getMethod because clone is
         // protected
@@ -286,7 +341,8 @@ public final class DCRuntime {
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     } catch (NoSuchMethodException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("error finding clone in "
+                                 + target_class.getName(), e);
     } catch (InvocationTargetException e) {
       throw e.getCause();
     }
@@ -331,7 +387,11 @@ public final class DCRuntime {
     Method m;
 
     try {
-      if (target_class.getName().equals("java.lang.Object")) {
+      if (target_class.getName().startsWith ("[L")) {
+        // Arrays can't use reflection
+        Object[] oa = (Object[])o;
+        return_val = oa.clone();
+      } else if (target_class.getName().equals("java.lang.Object")) {
         // call the uninstrumented Object.clone()
         // Use getDeclaredMethod instead of getMethod because clone is
         // protected
@@ -369,6 +429,16 @@ public final class DCRuntime {
     return return_val;
   }
 
+  /**
+   * Handle an uninstrumented clone call by making the two objects
+   * comparable.  Really should make all of their fields comparable
+   * instead.  Returns the cloned object.
+   */
+  public static Object uninstrumented_clone (Object orig_obj,
+                                             Object clone_obj) {
+    TagEntry.union (orig_obj, clone_obj);
+    return clone_obj;
+  }
 
   /**
    * Handle object comparison.  Marks the two objects as comparable and
@@ -1955,6 +2025,8 @@ public final class DCRuntime {
   public static void print_comparable (PrintWriter ps, MethodInfo mi) {
 
     List<DVSet> l = get_comparable (mi.traversalEnter);
+    if (!daikon.DynComp.shiny_print)
+      ps.printf ("Daikon ");
     ps.printf ("Variable sets for %s enter%n",
                clean_decl_name(mi.toString()));
     if (l == null)
@@ -1970,6 +2042,8 @@ public final class DCRuntime {
     }
 
     l = get_comparable (mi.traversalExit);
+    if (!daikon.DynComp.shiny_print)
+      ps.printf ("Daikon ");
     ps.printf ("Variable sets for %s exit%n",
                clean_decl_name (mi.toString()));
     if (l == null)
@@ -2411,8 +2485,13 @@ public final class DCRuntime {
     Object[] obj_tags = field_map.get (obj);
     if (obj_tags != null) {
       Object tag = obj_tags[field_num];
-      if (tag == null)
-        obj_tags[field_num] = tag = new UninitFieldTag();
+      if (tag == null) {
+        Throwable stack_trace = new Throwable();
+        stack_trace.fillInStackTrace();
+        obj_tags[field_num] = tag
+          = new UninitFieldTag(obj.getClass().getName() + ":uninit-field:"
+                               + field_num, stack_trace);
+      }
       tag_stack.push (tag);
       if (debug_primitive.enabled())
         debug_primitive.log ("push_field_tag %s [%s] %d = %s%n", obj,
@@ -2425,7 +2504,10 @@ public final class DCRuntime {
       field_map.put (obj, obj_tags);
       if (debug_primitive.enabled())
         debug_primitive.log ("push_field_tag: Created tag storage%n");
-      Object tag = new UninitFieldTag();
+      Throwable stack_trace = new Throwable();
+      stack_trace.fillInStackTrace();
+      Object tag = new UninitFieldTag(obj.getClass().getName() + ":uninit-field"
+                                      + field_num, stack_trace);
       obj_tags[field_num] = tag;
       tag_stack.push (tag);
       if (debug_primitive.enabled())
@@ -2983,5 +3065,520 @@ public final class DCRuntime {
     public Object get_tag (Object parent, Object obj) {
       return (obj);
     }
+  }
+
+  // Dataflow specific routines
+
+  /**
+   * Determines the values associated with the object and pushes a new
+   * tag on the tag stack that refers to those same values.  Used when
+   * the result value of an operation on an object has the same dataflow
+   * as that of the object
+   */
+  public static void dup_obj_tag_val(Object obj) {
+    Set<ValueSource> values = tag_map.get (obj);
+    Object tag = new Object();
+    tag_map.put (tag, values);
+    tag_stack.push (tag);
+  }
+
+  /**
+   * Finds the DF for the length of the specified array and pushes a
+   * tag on the tag stack that refers to that DF.  Used for arraylength
+   * opcodes
+   */
+  public static void arraylen_df (Object arr) {
+    Set<ValueSource> len_df = df_arrlen_map.get (arr);
+    Object tag = new Object();
+    tag_map.put (tag, len_df);
+    tag_stack.push (tag);
+  }
+
+  /**
+   * Builds a new value set that contains only this value (as described
+   * in descr).  Allocates a new tag, associates it with the value set and
+   * pushes it on the tag stack.  Used when a constant is pushed
+   */
+  public static void push_const_src (String descr) {
+    Set<ValueSource> values = new HashSet<ValueSource>(1);
+    Throwable stack_trace = new Throwable();
+    stack_trace.fillInStackTrace();
+    values.add (new ValueSource (descr, stack_trace));
+    Object tag = new Constant();
+    tag_map.put (tag, values);
+    tag_stack.push (tag);
+  }
+
+  /**
+   * Handle a binary operation on the two items at the top of the tag
+   * stack.  Binary operations pop the two items off of the top of the
+   * stack perform an operation and push the result back on the stack.
+   * The tags of the two items on the top of the stack must be popped
+   * off and a new tag created and pushed that refers to the sources
+   * of each of the operands.
+   */
+  public static void binary_tag_df () {
+    debug_primitive.log ("binary tag df%n");
+    check_method_marker();
+    Object tag1 = tag_stack.pop();
+    check_method_marker();
+    Object tag2 = tag_stack.pop();
+    Object tag = new BinOp();
+    union_df (tag, tag1, tag2);
+    tag_stack.push (tag);
+  }
+
+  /**
+   * Sets up the dataflow information for a new object.  The object is
+   * associated with the specified description
+   */
+  public static void setup_obj_df (Object obj, String descr) {
+
+    // Create a new DF for the object
+    Set<ValueSource> values = new HashSet<ValueSource>(1);
+    Throwable t = new Throwable();
+    t.fillInStackTrace();
+    values.add (new ValueSource (descr, t));
+    tag_map.put (obj, values);
+  }
+
+
+  /**
+   * Sets up the dataflow information for an array allocation.  The length
+   * of the array is associated with the size argument (on the top of the
+   * tag stack).  The array itself is associated wit the specified description
+   */
+  public static void setup_array_df (Object arr_ref, String descr) {
+
+    // associate the DF for the size with the length param of the array
+    Object size_tag = pop_check();
+    Set<ValueSource> size_values
+      = new HashSet<ValueSource>(tag_map.get(size_tag));
+    df_arrlen_map.put (arr_ref, size_values);
+
+    // Create a new DF for the array itself
+    Set<ValueSource> values = new HashSet<ValueSource>(1);
+    values.add (new ValueSource (descr));
+    tag_map.put (arr_ref, values);
+  }
+
+  /**
+   * Sets up the dataflow information for an multi-dimensional array
+   * allocation.  The multi-dimensional array allocate instruction takes
+   * the size of each dimension from the stack.  The tags for each of these
+   * sizes are thus on the tag stack.  The length of each allocated array
+   * is associated with its size argument.  The array itself is
+   * associated wit the specified description
+   */
+  public static void setup_multiarray_df (Object arr, int dims, String descr) {
+
+    // Get the tags for each dimension
+    Object[] tags = new Object[dims];
+    while (--dims >= 0)
+      tags[dims] = pop_check();
+
+    // Create a description for the array allocation
+    Set<ValueSource> values = new HashSet<ValueSource>(1);
+    values.add (new ValueSource (descr));
+
+    setup_multiarray_df (0, tags, values, arr);
+
+  }
+
+  /**
+   * Recursive routine that sets up the length and reference information
+   * for an array of possibly multiple dimensions
+   *
+   *    @param dim   Index into tags array of the tag for this dimension
+   *                 of the array
+   *    @param tags  The tags for the size of each dimension of the array
+   *    @param descr Description of the array allocation
+   *    @param arr   The array.  Should have tags.length - dim dimensions
+   */
+  private static void setup_multiarray_df (int dim, Object[] tags,
+                                           Set<ValueSource> descr, Object arr) {
+
+    // Relate array length of the outermost array to its size
+    Object size_tag = tags[dim];
+    Set<ValueSource> size_values
+      = new HashSet<ValueSource>(tag_map.get(size_tag));
+    df_arrlen_map.put (arr, size_values);
+
+    // Create a new DF for the array itself
+    tag_map.put (arr, descr);
+
+    // Loop through each element of the array
+    int len = Array.getLength (arr);
+    for (int ii = 0; ii < len; ii++) {
+      Object subarr = Array.get (arr, ii);
+      setup_multiarray_df (dim+1, tags, descr, subarr);
+    }
+  }
+
+  /**
+   * Handles the various primitive (int, double, etc) array load
+   * instructions.  The tag for the index is removed from the tag
+   * stack and the tag for the array element is pushed on the stack.
+   * The resulting DF value is the union of the index DF and the array
+   * element DF (since the changing the index, will definitely change
+   * the value).  This method handles array elements whose tags have
+   * not previously been set.  This can happen when the JVM sets an
+   * array element directly and there is no corresponding java code
+   * that can set the tag.
+   */
+  public static void primitive_array_load_df (Object arr_ref, int index) {
+
+    Object index_tag = pop_check();
+
+    // Get the tag for the element
+    Object elem_tag;
+    Object[] obj_tags = field_map.get (arr_ref);
+    if (obj_tags != null) {
+      elem_tag = obj_tags[index];
+      if (elem_tag == null)
+        obj_tags[index] = elem_tag = new UninitArrayElem();
+      if (debug_primitive.enabled())
+        debug_primitive.log ("arrayload null-ok %s[%d] = %s%n", arr_ref,
+                             index, obj_str(obj_tags[index]));
+    } else {
+      int length = Array.getLength (arr_ref);
+      obj_tags = new Object[length];
+      field_map.put (arr_ref, obj_tags);
+      elem_tag = new UninitArrayElem();
+      obj_tags[index] = elem_tag;
+      if (debug_primitive.enabled())
+        debug_primitive.log ("arrayload null-ok %s[%d] = null%n", arr_ref,
+                             index);
+    }
+
+    // Create the tag for the result
+    Object result_tag = new Object();
+
+    // The result DF is the union of the index DF and the element DF
+    union_df (result_tag, index_tag, elem_tag);
+
+    // Push the result tag on the tag stack
+    tag_stack.push (result_tag);
+  }
+
+  /**
+   * Handles the aaload instruction.  The tag for the index is popped
+   * from the tag stack.  The DF value for the result is the union of
+   * the index DF and the array element DF (since the changing the
+   * index, will definitely change the value).  Note that no tag is
+   * pushed on the tag stack because the result is not a primitive.
+   */
+  public static void ref_array_load_df (Object arr_ref, int index) {
+
+    // Get the tag for the index
+    Object index_tag = pop_check();
+
+    // Get the element
+    Object elem = Array.get (arr_ref, index);
+
+    // If the element does not have a source, then it must have come from
+    // an externally initialized array (like args).  Indicate its source
+    // as the array.
+    if (tag_map.get (elem) == null) {
+      Throwable t = new Throwable();
+      StackTraceElement ste = t.getStackTrace()[1];
+      Set<ValueSource> val = new HashSet<ValueSource>(1);
+      String descr = String.format ("%s.%s:uninit-arr-elem@L%d",
+                ste.getClassName(), ste.getMethodName(), ste.getLineNumber());
+      val.add (new ValueSource (descr));
+      tag_map.put (elem, val);
+    }
+
+    // The result DF is the union of the element DF and the index DF
+    union_df (elem, elem, index_tag);
+
+  }
+
+  /**
+   * Creates a value set that is the union of the value sets from tag1
+   * and tag2 and assigns that value set to result_tag
+   */
+  private static void union_df (Object result_tag, Object tag1, Object tag2) {
+
+    // Get the DF for the first tag.  If the tag is from an uninitialized
+    // Field, create a ValueSource based on the uninitialized field description
+    Set<ValueSource> val1 = tag_map.get (tag1);
+    if (val1 == null) {
+      assert tag1 instanceof UninitFieldTag : "no value for tag " + tag1;
+      UninitFieldTag uft = (UninitFieldTag) tag1;
+      val1 = new HashSet<ValueSource>(1);
+      val1.add (new ValueSource (uft.descr, uft.stack_trace));
+      tag_map.put (tag1, val1);
+    }
+
+    // Get the DF for the second tag.  If the tag is from an uninitialized
+    // Field, create a ValueSource based on the uninitialized field description
+    Set<ValueSource> val2 = tag_map.get (tag2);
+    if (val2 == null) {
+      assert tag2 instanceof UninitFieldTag;
+      UninitFieldTag uft = (UninitFieldTag) tag2;
+      val2 = new HashSet<ValueSource>(1);
+      val2.add (new ValueSource (uft.descr, uft.stack_trace));
+      tag_map.put (tag2, val2);
+    }
+    Set<ValueSource> values = new HashSet<ValueSource>(val1);
+    values.addAll (val2);
+    debug_df.log_tb ("Union of %s and %s", val1, val2);
+    tag_map.put (result_tag, values);
+  }
+
+  /**
+   * Pop the tags for the value to be stored and the index off of the
+   * tag stack, create a new tag whose DF is the union of the index DF and
+   * the value DF, and store that tag in the arrays tag array
+   */
+  private static void primitive_array_store_df (Object arr_ref, int length,
+                                             int index) {
+
+    // look for the tag storage for this array
+    Object[] obj_tags = field_map.get (arr_ref);
+
+    // If none has been allocated, allocate the space and associate it with
+    // the array
+    if (obj_tags == null) {
+      obj_tags = new Object[length];
+      field_map.put (arr_ref, obj_tags);
+    }
+
+    // Get the tags for the value to be stored and the index off of
+    // the tag stack
+    Object value_tag = pop_check();
+    Object index_tag = pop_check();
+
+    // Create a new tag for the array element and set its DF to the union
+    // of that of the index and the value
+    Object elem_tag = new Object();
+    union_df (elem_tag, value_tag, index_tag);
+
+    // Store the element tag in the tag array for the array
+    obj_tags[index] = elem_tag;
+  }
+
+  /**
+   * Execute an aastore instruction and mark the array and its index as
+   * comparable.
+   */
+  public static void aastore_df (Object[] arr, int index, Object val) {
+
+    assert val != null;
+
+    // Get the tag for index
+    Object index_tag = pop_check();
+
+    System.out.printf ("aastore_df: val = %s, index = %d, tag = %s%n",
+                       val, index, index_tag);
+
+    // Set the values tag to the union of its current DF and the index
+    union_df (val, val, index_tag);
+
+    // Store the value
+    arr[index] = val;
+  }
+
+  /**
+   * Execute an bastore instruction and manipulate the tags accordingly.
+   * @see #primitive_array_store_df
+   */
+  public static void bastore_df (byte[] arr, int index, byte val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store_df (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+
+  /**
+   * Execute an castore instruction and manipulate the tags accordingly.
+   * @see #primitive_array_store_df
+   */
+  public static void castore_df (char[] arr, int index, char val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store_df (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+
+  /**
+   * Execute an dastore instruction and manipulate the tags accordingly.
+   * @see #primitive_array_store_df
+   */
+  public static void dastore_df (double[] arr, int index, double val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store_df (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+
+  /**
+   * Execute an fastore instruction and manipulate the tags accordingly.
+   * @see #primitive_array_store_df
+   */
+  public static void fastore_df (float[] arr, int index, float val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store_df (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+
+  /**
+   * Execute an iastore instruction and manipulate the tags accordingly.
+   * @see #primitive_array_store_df
+   */
+  public static void iastore_df (int[] arr, int index, int val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store_df (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+
+  /**
+   * Execute an lastore instruction and manipulate the tags accordingly.
+   * @see #primitive_array_store_df
+   */
+  public static void lastore_df (long[] arr, int index, long val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store_df (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+
+  /**
+   * Execute an sastore instruction and manipulate the tags accordingly.
+   * @see #primitive_array_store_df
+   */
+  public static void sastore_df (short[] arr, int index, short val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store_df (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+
+  /**
+   * Prints the DF for the tag on the top of the tag stack
+   */
+  public static void prim_branch_df() {
+    Object tag = pop_check();
+    branch_tags.add (tag_map.get (tag));
+    System.out.printf ("primitive DF in branch: %s\n", tag_map.get (tag));
+  }
+
+  //
+  // Routines used as summaries for the JDK
+  //
+
+  /**
+   * Handle tags for uninstrumented methods that take one primitive
+   * argument (tag on the tag stack) and return an object.  The DF of
+   * the argument is passed to the returned object.
+   **/
+  private static void prim_to_obj (Object obj) {
+    Object tag = pop_check();
+    Set<ValueSource> vs = tag_map.get(tag);
+    assert (vs != null) : "no vs for " + tag;
+    tag_map.put (obj, vs);
+  }
+
+  /**
+   * Handles DF for methods that take one reference argument and return
+   * a reference.  The DF of the dest is set to that of the source.
+   */
+  private static void obj_to_obj (Object src, Object dest) {
+    Set<ValueSource> vs = tag_map.get (src);
+    assert vs != null;
+    tag_map.put (dest, vs);
+  }
+
+  /**
+   * Handles tags for methods that take one reference argument and return
+   * a primitive.  A new tag is allocated for the primitive and pushed on
+   * the tag stack.  The tag has the same DF as the input object
+   */
+  private static void obj_to_prim (Object obj) {
+    Set<ValueSource> vs = tag_map.get (obj);
+    assert vs != null;
+    Object tag = new Object();
+    tag_map.put (tag, vs);
+    push_tag (tag);
+  }
+
+
+  /** DF of result is equal to DF of argument **/
+  public static Integer Integer_valueOf (int val) {
+    Integer obj = Integer.valueOf (val);
+    prim_to_obj (obj);
+    return (obj);
+  }
+
+  /** DF of result is equal to DF of argument **/
+  public static Integer Integer_decode(String str) {
+    Integer val = Integer.decode (str);
+    obj_to_obj (str, val);
+    return val;
+  }
+
+  /** DF of result is equal to DF of argument **/
+  public static Long Long_valueOf (long val) {
+    Long obj = Long.valueOf (val);
+    prim_to_obj (obj);
+    return obj;
+  }
+
+  /**
+   * Calculates dataflow for o1.equals(o2).  If o1 is instrumented
+   * the instrumentedversion calculates the dataflow.  If o2 is not
+   * instrumented, we set the dataflow of the result to the union of
+   * the DF of each object.  This may not be optimum if o1 implements
+   * equals.
+   */
+  public static boolean equals_df (Object o1, Object o2) {
+    if (o1 instanceof DCompInstrumented) {
+      DCompInstrumented dci = (DCompInstrumented) o1;
+      debug_df.log_tb ("calling instrumented equals on %s and %s", o1, o2);
+      boolean result = dci.equals_dcomp_instrumented (o2);
+      return (result);
+    } else { // the equals is not instrumented
+      debug_df.log_tb ("uninstrumented equals on %s and %s", o1, o2);
+      Object tag = new Object();
+      union_df (tag, o1, o2);
+      push_tag (tag);
+      return (o1.equals(o2));
+    }
+  }
+
+  /**
+   * Handles a call to an uninstrumented super equals.  Makes the
+   * result DF depend on the DF of the two input objects.  Does not
+   * execute the super call itself, that must be done in the caller.
+   */
+  public static void super_equals_df (Object o1, Object o2) {
+    debug_df.log_tb ("uninstrumented equals on %s and %s", o1, o2);
+    Object tag = new Object();
+    union_df (tag, o1, o2);
+    push_tag (tag);
   }
 }
