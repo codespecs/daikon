@@ -91,6 +91,18 @@ public class BuildJDK {
 
   private static List<String> skipped_methods = new ArrayList<String>();
 
+  public static String[] known_skipped_methods = new String[] {
+      "sun.rmi.transport.proxy.RMIMasterSocketFactory.createSocket",
+      "sun.awt.X11.XWindowPeer.handleButtonPressRelease",
+      "com.sun.jmx.snmp.daemon.CommunicatorServer.run",
+      "sun.nio.ch.SocketChannelImpl.read0",
+      "sun.nio.ch.SocketChannelImpl.read",
+      "sun.rmi.transport.proxy.RMIMasterSocketFactory.createSocket",
+      "java.nio.channels.SocketChannel.open",
+      "sun.security.provider.PolicyFile.init",
+      "java.io.Console.readPassword",
+  };
+
   /**
    * BuildJDK <jarfile> <dest> <prefix>
    *
@@ -179,12 +191,8 @@ public class BuildJDK {
         pw.println (classname);
       }
 
-      if (!skipped_methods.isEmpty()) {
-        System.out.println("The following methods could not be instrumented:");
-        for (String method : skipped_methods) {
-          System.out.println(method);
-        }
-      }
+      // Print out any methods that could not be instrumetned
+      print_skipped_methods();
 
     }
     System.out.println("done at " + new Date());
@@ -354,6 +362,10 @@ public class BuildJDK {
     if (verbose)
       System.out.printf("processing target %s\n", classname);
     DCInstrument dci = new DCInstrument (jc, true, null);
+    if (false) {
+      System.out.printf ("Comparing type stacks for class %s%n", classname);
+      dci.compare_type_stacks();
+    }
     JavaClass inst_jc;
     if (no_primitives)
       inst_jc = dci.instrument_jdk_refs_only();
@@ -397,5 +409,50 @@ public class BuildJDK {
   private List<String> classesWithoutInterfaces() {
     return Arrays.asList("java.lang.Object", "java.lang.String",
                          "java.lang.Class");
+  }
+
+  /**
+   * Print out information about any methods that were not instrumented.
+   * This happens when a method fails BCEL's verifier (which is more
+   * strict than Java's).  Any failures which have not been previously
+   * seen are noted.
+   */
+  private static void print_skipped_methods() {
+
+    if (skipped_methods.isEmpty())
+      return;
+
+    // Determine if all of them were known to be bad
+    List<String> known_bad_list = Arrays.asList(known_skipped_methods);
+    boolean all_known = true;
+    for (String method : skipped_methods) {
+      if (!known_bad_list.contains (method)) {
+        all_known = false;
+        break;
+      }
+    }
+
+    if (all_known) {
+      System.out.printf
+        ("Warning, the following JDK methods could not be instrumented.%n"
+         + "These are known problems.  Dyncomp will still work as long as%n"
+         + "these methods are not called by your applications.%n");
+      for (String method : skipped_methods) {
+        System.out.printf ("  %s%n", method);
+      }
+    } else { // some methods have not been previously seen
+      System.out.printf
+        ("Warning: the following JDK methods could not be instrumetned.%n"
+         + "Some of these are known problems, others are unexpected%n"
+         + "Please report the new ones so we can look into them.%n"
+         + "Dyncomp will still work as long as these methods are not called%n"
+         + "by your applications.%n");
+      for (String method : skipped_methods) {
+        if (known_bad_list.contains (method))
+          System.out.printf ("  %s%n", method);
+        else
+          System.out.printf ("  [unexpected] %s%n", method);
+      }
+    }
   }
 }
