@@ -138,7 +138,11 @@ public class Premain {
         }
 
         // Transform the file
-        DCInstrument dci = new DCInstrument (c, false, loader);
+        DCInstrument dci;
+        if (DynComp.branch != null) {
+          dci = new DFInstrument (c, false, loader);
+        } else
+          dci = new DCInstrument (c, false, loader);
         JavaClass njc;
         if (DynComp.no_primitives)
           njc = dci.instrument_refs_only();
@@ -151,14 +155,15 @@ public class Premain {
           return (null);
         } else {
           if (DynComp.debug) {
-            System.out.printf ("Dumping to %s%n", debug_bin_dir);
+            System.out.printf ("Dumping %s to %s%n", njc.getClassName(),
+                               debug_bin_dir);
             njc.dump (new File (debug_bin_dir, njc.getClassName() + ".class"));
             BCELUtil.dump (njc, debug_bin_dir);
           }
           return (njc.getBytes());
         }
       } catch (Throwable e) {
-        System.out.printf ("Unexpected Error: %n");
+        System.out.printf ("Unexpected Error: %s%n", e);
         e.printStackTrace();
         throw new RuntimeException ("Unexpected error", e);
       }
@@ -171,6 +176,27 @@ public class Premain {
   public static class ShutdownThread extends Thread {
 
     public void run() {
+
+      // If DataFlow, print out the DF for the specified branch
+      if (DynComp.branch != null) {
+        System.out.printf ("Branch %s executed %d times\n", DynComp.branch,
+                           DCRuntime.branch_tags.size());
+        for (Set<DCRuntime.ValueSource> vs : DCRuntime.branch_tags) {
+          System.out.printf ("  ---------------%n");
+          for (DCRuntime.ValueSource src : vs) {
+            System.out.printf ("  %s%n", src);
+            Throwable st = src.get_stack_trace();
+            if (st != null) {
+              for (StackTraceElement ste : st.getStackTrace()) {
+                if (ste.getClassName().startsWith ("daikon.dcomp.DCRuntime"))
+                  continue;
+                System.out.printf ("    %s%n", ste);
+              }
+            }
+          }
+        }
+        return;
+      }
 
       // If requested, write the comparability data to a file
       if (!DynComp.no_cset_file) {
