@@ -140,6 +140,8 @@ public class PptTopLevel extends Ppt {
   public static final Logger debugNISStats =
     Logger.getLogger("daikon.PptTopLevel.NISStats");
 
+  public static final SimpleLog debug_varinfo = new SimpleLog (false);
+
   // These used to appear in Ppt, were moved down to PptToplevel
   public final String name;
   public final PptName ppt_name;
@@ -346,6 +348,9 @@ public class PptTopLevel extends Ppt {
   }
 
   private void init_vars (VarInfo[] var_infos) {
+
+    debug_varinfo.log_tb ("initializing var_infos %s",
+                           Arrays.toString(var_infos));
 
     this.var_infos = var_infos;
     int val_idx = 0;

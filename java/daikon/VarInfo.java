@@ -3419,8 +3419,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * numbers indicate more complexity.
    */
   public int complexity() {
-    if (!FileIO.new_decl_format)
+    if (!FileIO.new_decl_format) {
+      // System.out.printf ("%s - %s\n", this, var_info_name.repr());
       return var_info_name.inOrderTraversal().size(); // vin ok
+    }
 
     int cnt = 0;
     if (isDerived()) {
