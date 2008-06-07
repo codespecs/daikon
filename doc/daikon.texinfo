@@ -8952,11 +8952,16 @@ a comment.  Comments are not permitted inside a record.
 @node Declarations, Data trace records, Conventions, File formats
 @section Declarations
 
-Daikon declarations define the declaration record version,
-comparability type, and each program point and its variables.
+@cindex declaration format
+@cindex .decls file
+
+A declaration file (decls file) first states the declaration file format
+version number and the 
+comparability type, then defines each program point and its variables.
 Information is specified in named fields.  Fields with defaults can be
 omitted.  Each field is specified on a separate line in the format
-@code{<field-name> <field-value>}.  Indentation should be used to aid in
+@code{<field-name> <field-value>}.  Indentation is ignored, so it may be
+used to aid
 readibility.
 
 @menu
@@ -8966,8 +8971,9 @@ readibility.
 * Variable Declarations::       
 @end menu
 
+
 @node Declaration Version, Variable Comparability, Declarations, Declarations
-@subsection Declaration Version
+@subsection Declaration version
 
 The declaration version is specified in a field in the following format:
 @example
@@ -8978,8 +8984,12 @@ Declarations}) did not include a version field and are identified by
 the lack of this field.  The declaration version field must be the
 first field specified in the file.
 
+
 @node Variable Comparability, Program point declarations, Declaration Version, Declarations
-@subsection Variable Comparability
+@subsection Variable comparability
+
+@cindex comparability, for variables
+@cindex variable comparability
 
 The type of variable comparability is specified in a field in the following
 format:
@@ -8987,8 +8997,9 @@ format:
 var-comparability <comparability-type>
 @end example
 The possible values for @var{comparability-type} are @code{implicit} and
-@code{none}.  The @code{implicit} type is the default is described in 
-@ref{Program point declarations}.
+@code{none}.  The @code{implicit} type is the default.  It is described in 
+@ref{V1 Program point declarations}.
+
 
 @node Program point declarations, Variable Declarations, Variable Comparability, Declarations
 @subsection Program point declarations
@@ -9004,16 +9015,16 @@ ppt <ppt-name>
 ...
 @end example
 
-The program point name can include any characters.  Blanks must be
-escaped as @code{\_} and backslashes as @code{\\}.  Program point names must
-be distinct.
+The program point name can include any character.  Blanks must be
+replaced by @code{\_}, and backslashes must be escaped as @code{\\}.
+Program point names must be distinct.
 
 The following program point fields (ppt-fields) can be specified:
 @itemize 
 @item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
 
 Specifies the name of a parent program point.  A parent program point
-is a point whose samples should include all of the sample at this
+is a point whose samples should include all of the samples at this
 program point.  For example, an object program point is a parent of
 each of the method program points in that object.  Multiple parent
 fields can be specified.  
@@ -9040,7 +9051,8 @@ Specifies one or more flags for this ppt.  The possible flags are:
 @end itemize
 
 @node Variable Declarations,  , Program point declarations, Declarations
-@subsection Variable Declarations
+@subsection Variable declarations
+@cindex declaration file format
 
 The format of a variable declaration is:
 @example
@@ -9051,9 +9063,10 @@ variable <name>
 @end example
 
 External variable names should match as much as possible the legal
-variable name in the input language.  All characters are legal
-except for '@code{..}'.  Blanks must be escaped with @code{\_} and backslashes
-with @code{\\}.  If the variable is an array '@code{..}'  marks the location of
+variable name in the input language.  All characters are legal in a
+name, but blanks must be represented as @code{\_} and
+backslashes as @code{\\}.
+If the variable is an array, '@code{..}' marks the location of
 array indices within the variable name.  Some examples of names are:
 @example
 this.theArray
@@ -9672,8 +9685,7 @@ this.topOfStack
 @node    Version 1 Declarations,  , Example files, File formats
 @section Version 1 Declarations
 
-@cindex declaration format
-@cindex .decls file
+@cindex .decls file (version 1)
 
 This section describes the original version (1.0) of declaration
 records.  These are now obsolete and should not be used.
@@ -9797,8 +9809,8 @@ compile-time constant value and should be omitted from the data
 trace file.
 @end itemize
 @item
-@cindex comparability, for variables
-@cindex variable comparability
+@cindex comparability, for variables (decls format version 1)
+@cindex variable comparability (decls format version 1)
 comparable variables.  This information indicates
 which other variables are comparable to this one.
 This may be obtained dynamically, via type-inference based analysis, or
