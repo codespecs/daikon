@@ -250,6 +250,20 @@ Windows.  You can install Cygwin by simply running the program found
 at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
 
+
+@node    CVS repository, New invariants, Compiling Daikon, Extending Daikon
+@section CVS repository
+@cindex CVS repository
+
+The layout of the Daikon CVS repository differs slightly from that of
+the distribution.  For example, the top-level directory is named
+@file{invariants/} instead of @file{daikon/}, and the subdirectory with
+helper programs is named @file{scripts/} instead of @file{bin/}.
+
+For information about obtaining Daikon via CVS, see
+@uref{http://groups.csail.mit.edu/pag/daikon/mit/}.
+
+
 @node    Using Eclipse, New invariants, Compiling Daikon, Extending Daikon
 @section Using Eclipse
 @cindex Eclipse
