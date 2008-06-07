@@ -626,7 +626,7 @@ public final class UtilMDE {
    *
    * The current implementation presumes that backslashes don't appear
    * in filenames except as windows path separators.  That seems like a
-   * reasonable assumption
+   * reasonable assumption.
    */
   public static String java_source (File name) {
 
