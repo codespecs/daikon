@@ -37,7 +37,7 @@ endif
 .fix-menu: daikon.texinfo
 	@echo "Updating menus in daikon.texinfo..."
 	@cp daikon.texinfo daikon.texinfo.new
-	@emacs --batch daikon.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:' && exit $${PIPESTATUS[0]}
+	@emacs -q --batch daikon.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:' && exit $${PIPESTATUS[0]}
 	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' daikon.texinfo.new
 	@if cmp daikon.texinfo daikon.texinfo.new >/dev/null 2>&1; then echo "daikon.texinfo unchanged"; rm -f daikon.texinfo.new; else mv daikon.texinfo.new daikon.texinfo; fi
 	touch .fix-menu
@@ -45,7 +45,7 @@ endif
 .fix-dev-menu: developer.texinfo
 	@echo "Updating menus in developer.texinfo..."
 	@cp developer.texinfo developer.texinfo.new
-	@emacs --batch developer.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:' && exit $${PIPESTATUS[0]}
+	@emacs -q --batch developer.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:' && exit $${PIPESTATUS[0]}
 	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' developer.texinfo.new
 	@if cmp developer.texinfo developer.texinfo.new >/dev/null 2>&1; then echo "developer.texinfo unchanged"; rm -f developer.texinfo.new; else mv developer.texinfo.new developer.texinfo; fi
 	touch .fix-dev-menu
