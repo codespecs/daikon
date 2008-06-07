@@ -151,7 +151,7 @@ javadoc:
 
 ### Kvasir (C/C++ front end)
 
-ifeq ($(shell arch),x86_64)
+ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
 else
 VALGRIND_ARCH := x86
