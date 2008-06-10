@@ -3,7 +3,7 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
-import utilMDE.*;
+import daikon.util.*;
 
 import daikon.Chicory;
 
