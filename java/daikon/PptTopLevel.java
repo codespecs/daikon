@@ -1894,7 +1894,9 @@ public class PptTopLevel extends Ppt {
     // Get a prototype of the invariant we are looking for
     Invariant proto = null;
     if (v1.rep_type.isScalar()) {
-      Assert.assertTrue(v2.rep_type.isScalar());
+      assert v2.rep_type.isScalar()
+        : String.format ("v1 %s rep %s, v2 %s rep %s", v1, v1.rep_type, v2,
+                         v2.rep_type);
       proto = IntEqual.get_proto();
     } else if (v1.rep_type.isFloat()) {
       Assert.assertTrue(v2.rep_type.isFloat());
