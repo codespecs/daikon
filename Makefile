@@ -189,6 +189,7 @@ build-kvasir: kvasir
 rebuild-everything:
 	${MAKE} -C $(inv)/java very-clean
 	${MAKE} -C $(inv)/java tags compile
+	${MAKE} -C $(inv)/java dcomp_rt.jar
 	${MAKE} -C $(inv)/doc clean
 	${MAKE} -C $(inv)/doc
 	-${MAKE} -C $(inv)/kvasir distclean
