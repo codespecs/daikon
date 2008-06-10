@@ -1974,7 +1974,8 @@ public final class DCRuntime {
           comp--;   // negate increment of comp below
         } else if (dv.isHashcode() && non_hashcode_vars) {
           dv_comp_map.put (dv, comp+1);
-          arr_index_map.put (dv.getName() + "[]", comp);
+          DaikonVariableInfo array_child = dv.array_child();
+          arr_index_map.put (array_child.getName(), comp);
         } else {
           dv_comp_map.put (dv, comp);
         }
@@ -2025,8 +2026,6 @@ public final class DCRuntime {
   public static void print_comparable (PrintWriter ps, MethodInfo mi) {
 
     List<DVSet> l = get_comparable (mi.traversalEnter);
-    if (!daikon.DynComp.shiny_print)
-      ps.printf ("Daikon ");
     ps.printf ("Variable sets for %s enter%n",
                clean_decl_name(mi.toString()));
     if (l == null)
@@ -2042,8 +2041,6 @@ public final class DCRuntime {
     }
 
     l = get_comparable (mi.traversalExit);
-    if (!daikon.DynComp.shiny_print)
-      ps.printf ("Daikon ");
     ps.printf ("Variable sets for %s exit%n",
                clean_decl_name (mi.toString()));
     if (l == null)
