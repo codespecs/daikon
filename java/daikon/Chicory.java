@@ -61,7 +61,7 @@ public class Chicory {
   public static boolean debug_ppt_names = false;
 
   @Option ("Create the new declaration record format")
-  public static boolean new_decl_format = false;
+  public static boolean new_decl_format = true;
 
   @Option ("Use first BCEL on classpath rather than PAG's version")
   public static boolean default_bcel = false;
