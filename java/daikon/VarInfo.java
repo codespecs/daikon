@@ -872,8 +872,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * use these cached values.
    **/
   public boolean isDerivedParam() {
-    if (isDerivedParamCached != null)
+    if (isDerivedParamCached != null) {
+      // System.out.printf ("var %s is-derived-param = %b\n", name(),
+      //                   isDerivedParamCached);
       return isDerivedParamCached.booleanValue();
+    }
 
     boolean result = false;
     if (isParam() && !isPrestate())
@@ -917,6 +920,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       }
     }
 
+    // System.out.printf ("var %s is-derived-param = %b\n", name(), result);
     isDerivedParamCached = result ? Boolean.TRUE : Boolean.FALSE;
     return result;
   }
