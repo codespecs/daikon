@@ -3,6 +3,7 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
+import utilMDE.*;
 
 import daikon.Chicory;
 
@@ -40,6 +41,8 @@ public abstract class DaikonVariableInfo
 
     /** Print debug information about the variables **/
     static boolean debug_vars = false;
+
+    private static SimpleLog debug_array = new SimpleLog (true);
 
     /**default string for comparability info**/
     private static final String compareInfoDefaultString = "22";
@@ -119,6 +122,10 @@ public abstract class DaikonVariableInfo
         children = new ArrayList<DaikonVariableInfo> ();
         isArray = arr;
 
+        if ((theName != null) &&
+            (theName.contains ("[..]") || theName.contains ("[]")) && !isArray)
+            debug_array.log_tb ("%s is not an array", theName);
+
      }
 
     /**
@@ -126,6 +133,9 @@ public abstract class DaikonVariableInfo
      */
     public String getName()
     {
+        if (name == null)
+            return null;
+
         if (Chicory.new_decl_format)
             return name.replaceFirst ("\\[]", "[..]");
         else
@@ -1263,6 +1273,16 @@ public abstract class DaikonVariableInfo
     {
         return isArray;
     }
+
+    /** Returns the direct child that is an array, null if one does not exist **/
+    public DaikonVariableInfo array_child() {
+        for (DaikonVariableInfo dv : children) {
+            if (dv.isArray())
+                return dv;
+        }
+        return null;
+    }
+
 
     /** Returns whether or not this variable has a rep type of hashcode **/
     public boolean isHashcode()
