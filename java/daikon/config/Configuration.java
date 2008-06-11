@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import utilMDE.Assert;
-import utilMDE.Fmt;
 import utilMDE.TextFile;
 
 /**
@@ -263,9 +262,6 @@ public final class Configuration
     } else {
       throw new ConfigException("Internal error: Unsupported type " + type.getName() + " for configuration option " + field.toString());
     }
-
-    // Fmt.pf ("setting %s.%s to %s", field.getDeclaringClass(),
-    //         field.getName(), value);
 
     try {
       field.set(null, value);

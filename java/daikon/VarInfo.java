@@ -1556,8 +1556,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     int varj_shift,
     boolean test_lessequal) {
 
-        // Fmt.pf ("comparing variables %s and %s in ppt %s", vari.name(),
-        //        varj.name(), vari.ppt.name());
+        // System.out.printf ("comparing variables %s and %s in ppt %s%n",
+        //        vari.name(), varj.name(), vari.ppt.name());
         // Throwable stack = new Throwable("debug traceback");
         // stack.fillInStackTrace();
         // stack.printStackTrace();

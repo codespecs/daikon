@@ -649,7 +649,7 @@ public class DynamicConstants implements Serializable {
             continue;
 
           if (debug.isLoggable (Level.FINE))
-            debug.fine (Fmt.spf ("considering slice %s %s %s", con1, con2,
+            debug.fine (String.format ("considering slice %s %s %s", con1, con2,
                                  con3));
 
           // Look for a linearbinary over two variables.  If it doesn't
@@ -702,7 +702,7 @@ public class DynamicConstants implements Serializable {
             continue;
 
           if (debug.isLoggable (Level.FINE))
-            debug.fine (Fmt.spf ("considering slice %s %s %s", con1, con2,
+            debug.fine (String.format ("considering slice %s %s %s", con1, con2,
                                  con3));
 
           // Create the ternary slice
@@ -882,8 +882,6 @@ public class DynamicConstants implements Serializable {
       } else {
         slice1.instantiate_invariants();
       }
-
-      // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name(), con.val,
 
       if (con.count > 0) {
         slice1.add_val_bu(con.val, mod, con.count);

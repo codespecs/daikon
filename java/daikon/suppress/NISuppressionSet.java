@@ -430,7 +430,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     if (slice == null) {
       VarInfo[] newvis = vis.clone();
       slice = new PptSlice3 (ppt, newvis);
-      // Fmt.pf ("Adding slice " + slice);
       ppt.addSlice (slice);
     }
 
@@ -445,7 +444,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     if (Daikon.dkconfig_internal_check) {
       for (Invariant new_inv : new_invs) {
         if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
-          Assert.assertTrue (false, Fmt.spf ("inv %s:%s already in new_invs "
+          Assert.assertTrue (false, String.format("inv %s:%s already in new_invs "
                         + "(slice %s)", inv.getClass(), inv.format(), slice));
       }
     }
@@ -464,7 +463,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         PrintInvariants.print_all_invs (ppt, vis[1], vis[2], "  ");
         PrintInvariants.print_all_invs (ppt, vis[0], vis[2], "  ");
         Debug.check (Daikon.all_ppts, "assert failure");
-        Assert.assertTrue (false, Fmt.spf ("inv %s:%s already in slice %s",
+        Assert.assertTrue (false, String.format("inv %s:%s already in slice %s",
                         inv.getClass(), inv.format(), slice));
       }
     }
@@ -534,7 +533,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       swap_sups[i] = new NISuppression (sors, std_sup.suppressee.swap());
     }
     NISuppressionSet new_ss = new NISuppressionSet (swap_sups);
-    // Fmt.pf ("Converted %s to %s", this, new_ss);
     return (new_ss);
   }
 

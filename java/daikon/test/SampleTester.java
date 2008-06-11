@@ -119,7 +119,7 @@ public class SampleTester extends TestCase {
 
     SampleTester ts = new SampleTester();
     ts.proc_sample_file (commands);
-    Fmt.pf ("Test Passes");
+    System.out.println ("Test Passes");
   }
 
   private static String find_file (String fname) {
@@ -152,7 +152,8 @@ public class SampleTester extends TestCase {
   public void proc_sample_file (InputStream commands) throws IOException {
 
     if (PrintInvariants.dkconfig_print_inv_class) {
-      Fmt.pf ("Warning: turning off PrintInvariants.dkconfig_print_inv_class");
+      System.out.println ("Warning: turning off " +
+                          "PrintInvariants.dkconfig_print_inv_class");
       PrintInvariants.dkconfig_print_inv_class = false;
     }
 
@@ -349,7 +350,6 @@ public class SampleTester extends TestCase {
     stok.quoteChar ('"');
     stok.set_error_handler ( new StrTok.Error() {
         public void tok_error(String s) {parse_error(s);}});
-    // Fmt.pf ("Tokenizing string '%s'", assert_string);
 
     // Get the assertion name
     String name = stok.nextToken();
@@ -360,11 +360,11 @@ public class SampleTester extends TestCase {
     do {
       String arg = stok.nextToken();
       if (!stok.isWord() && !stok.isQString())
-        parse_error (Fmt.spf ("%s found where argument expected", arg));
+        parse_error (String.format ("%s found where argument expected", arg));
       args.add (arg);
     } while (stok.nextToken() == ","); // interned
     if (stok.token() != ")")    // interned
-      parse_error (Fmt.spf ("%s found where ')' expected", stok.token()));
+      parse_error (String.format ("%s found where ')' expected", stok.token()));
 
     // process the specific assertion
     boolean result = false;
@@ -384,8 +384,8 @@ public class SampleTester extends TestCase {
     if (negate) result = !result;
 
     if (!result) {
-      fail (Fmt.spf ("Assertion %s fails in file %s at line %s", assertion,
-                     fname, Fmt.i(fp.getLineNumber())));
+      fail (String.format ("Assertion %s fails in file %s at line %d", assertion,
+                     fname, fp.getLineNumber()));
     }
   }
 
@@ -408,7 +408,8 @@ public class SampleTester extends TestCase {
     String arg0 = args.get(0);
     if (arg0.startsWith ("\"")) {
       format = arg0.substring(1, arg0.length()-1);
-      debug.fine (Fmt.spf ("Looking for format: '%s' in ppt %s", format, ppt));
+      debug.fine (String.format ("Looking for format: '%s' in ppt %s", format,
+                                 ppt));
     } else { // must be a classname
       try {
         cls = Class.forName (arg0);
@@ -423,8 +424,8 @@ public class SampleTester extends TestCase {
     for (int i = 0; i < vis.length; i++) {
       vis[i] = ppt.find_var_by_name (args.get(i+1));
       if (vis[i] == null)
-        parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
-                              args.get(i+1), ppt.name()));
+        parse_error (String.format ("Variable '%s' not found at ppt %s",
+                                    args.get(i+1), ppt.name()));
     }
     PptSlice slice = ppt.findSlice (vis);
     if (slice == null)
@@ -436,7 +437,7 @@ public class SampleTester extends TestCase {
         return (true);
       if ((format != null) && format.equals (inv.format()))
         return (true);
-      debug.fine (Fmt.spf ("trace %s: '%s'", inv.getClass(), inv.format()));
+      debug.fine (String.format ("trace %s: '%s'", inv.getClass(), inv.format()));
     }
     return (false);
   }
@@ -460,18 +461,18 @@ public class SampleTester extends TestCase {
     for (int i = 0; i < vis.length; i++) {
       vis[i] = ppt.find_var_by_name (args.get(i));
       if (vis[i] == null)
-        parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
+        parse_error (String.format ("Variable '%s' not found at ppt %s",
                               args.get(i), ppt.name()));
     }
     PptSlice slice = ppt.findSlice (vis);
     if (slice == null) {
-      Fmt.pf ("No invariants found for vars: %s", Debug.toString(vis));
+      System.out.println("No invariants found for vars: " +  Debug.toString(vis));
       return (true);
     }
 
     // Look for a matching invariant in the slices invariant list
     for (Invariant inv : slice.invs) {
-      Fmt.pf ("found %s: %s", inv.getClass(), inv.format());
+      System.out.printf ("found %s: %s%n", inv.getClass(), inv.format());
     }
     return (true);
   }
@@ -489,8 +490,8 @@ public class SampleTester extends TestCase {
     for (String arg : args) {
       VarInfo v = ppt.find_var_by_name (arg);
       if (v == null)
-        parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
-                            arg, ppt.name()));
+        parse_error (String.format ("Variable '%s' not found at ppt %s",
+                                    arg, ppt.name()));
       if (!ppt.constants.is_constant (v))
         return (false);
     }
@@ -499,8 +500,8 @@ public class SampleTester extends TestCase {
 
   private void parse_error (String msg) {
 
-    fail (Fmt.spf ("Error parsing %s at line %s: %s",
-                                fname, Fmt.i(fp.getLineNumber()), msg));
+    fail (String.format ("Error parsing %s at line %d: %s",
+                         fname, fp.getLineNumber(), msg));
   }
 
 }

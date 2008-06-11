@@ -308,12 +308,13 @@ public class PptSliceEquality
         addToBindingList (multiMap, dummyMissing, vi);
       } else {
         if (vi.getValue(vt) == null) {
-          Fmt.pf ("null value for variable %s, mod=%s at ppt %s",
-                vi.name(), "" + vt.getModified(vi), parent.name());
+          System.out.printf ("null value for variable %s, mod=%d at ppt %s%n",
+                vi.name(), vt.getModified(vi), parent.name());
           VarInfo rv = parent.find_var_by_name ("return");
-          Fmt.pf ("return value = " + Debug.toString (rv.getValue(vt)));
-          Fmt.pf("At line number "
-		 + FileIO.data_trace_state.reader.getLineNumber());
+          System.out.println ("return value = "
+                              + Debug.toString (rv.getValue(vt)));
+          System.out.println ("At line number "
+                              + FileIO.data_trace_state.reader.getLineNumber());
         }
         addToBindingList (multiMap, vi.getValue(vt), vi);
       }

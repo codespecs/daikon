@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 
 import utilMDE.Assert;
 import utilMDE.FileIOException;
-import utilMDE.Fmt;
 import utilMDE.Stopwatch;
 import utilMDE.TextFile;
 import utilMDE.UtilMDE;
@@ -1975,9 +1974,7 @@ public final class Daikon {
 
     if (FileIO.dkconfig_read_samples_only) {
       throw new Daikon.TerminationMessage(
-        Fmt.spf(
-          "Finished reading %s samples",
-          "" + FileIO.samples_processed));
+        String.format("Finished reading %d samples", FileIO.samples_processed));
     }
 
     if (all_ppts.size() == 0) {
@@ -2012,16 +2009,16 @@ public final class Daikon {
     // Print equality set info
     //     for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
     //       PptTopLevel ppt = i.next();
-    //       Fmt.pf ("ppt: %s", ppt.name);
+    //       System.out.printf ("ppt: %s", ppt.name);
     //       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
     //       continue;
     //       for (Invariant inv : ppt.equality_view.invs) {
     //       Equality e = (Equality) inv;
-    //       Fmt.pf ("    equality set = %s", e);
+    //       System.out.printf ("    equality set = %s", e);
     //       }
     //     }
 
-    // Fmt.pf ("printing ternary invariants");
+    // System.out.printf ("printing ternary invariants");
     // PrintInvariants.print_all_ternary_invs (all_ppts);
     // System.exit(0);
 
@@ -2132,9 +2129,9 @@ public final class Daikon {
       if (ppt.num_samples() == 0)
         continue;
       ppt_w_sample_cnt++;
-      Fmt.pf ("%s", ppt.name());
-      Fmt.pf ("  samples    = " + ppt.num_samples());
-      Fmt.pf ("  invariants = " + ppt.invariant_cnt());
+      System.out.printf ("%s%n", ppt.name());
+      System.out.printf ("  samples    = %n" + ppt.num_samples());
+      System.out.printf ("  invariants = %n" + ppt.invariant_cnt());
       Map<ProglangType,Count> type_map = new LinkedHashMap<ProglangType,Count>();
       int leader_cnt = 0;
       for (VarInfo v : ppt.var_infos) {
@@ -2146,16 +2143,16 @@ public final class Daikon {
           type_map.put (v.file_rep_type, cnt = new Count(0));
         cnt.val++;
       }
-      Fmt.pf ("  vars       = " + ppt.var_infos.length);
-      Fmt.pf ("  leaders    = " + leader_cnt);
+      System.out.println ("  vars       = " + ppt.var_infos.length);
+      System.out.println ("  leaders    = " + leader_cnt);
       for (Map.Entry<ProglangType,Count> e : type_map.entrySet()) {
         ProglangType file_rep_type = e.getKey();
         Count cnt = e.getValue();
-        Fmt.pf ("  %s  = %s", file_rep_type, "" + cnt.val);
+        System.out.printf ("  %s  = %d%n", file_rep_type, cnt.val);
       }
     }
-    Fmt.pf ("Total ppt count     = " + all_ppt_cnt);
-    Fmt.pf ("PPts w/sample count = " + ppt_w_sample_cnt);
+    System.out.println ("Total ppt count     = " + all_ppt_cnt);
+    System.out.println ("PPts w/sample count = " + ppt_w_sample_cnt);
   }
 
   /**

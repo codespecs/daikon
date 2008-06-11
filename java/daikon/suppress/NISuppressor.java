@@ -56,8 +56,8 @@ public class NISuppressor {
    */
   public NISuppressor (int v1_index, Class<? extends Invariant> cls) {
 
-    debug.fine (Fmt.spf ("creating %s over arg %s", cls.getName(),
-                         Fmt.i (v1_index)));
+    debug.fine (String.format ("creating %s over arg %d", cls.getName(),
+                               v1_index));
 
     this.v1_index = v1_index;
     this.inv_class = cls;
@@ -81,8 +81,8 @@ public class NISuppressor {
    */
   public NISuppressor (int v1_index, int v2_index, Class<? extends Invariant> cls) {
 
-    debug.fine (Fmt.spf ("creating %s over args %s and %s", cls.getName(),
-                         Fmt.i (v1_index), Fmt.i(v2_index)));
+    debug.fine (String.format ("creating %s over args %d and %d", cls.getName(),
+                         v1_index, v2_index));
 
     // put the variables in their standard order
     if (v1_index > v2_index) {
@@ -293,10 +293,10 @@ public class NISuppressor {
           valid = (status == InvariantStatus.NO_CHANGE);
         }
         if (NIS.debug.isLoggable (Level.FINE))
-          NIS.debug.fine (Fmt.spf ("constant args (%s, %s) = %s ",
+          NIS.debug.fine (String.format ("constant args (%s, %s) = %b ",
                        Debug.toString (ppt.constants.constant_value(v1)),
                        Debug.toString (ppt.constants.constant_value(v2)),
-                       "" + valid));
+                       valid));
         return (state = (valid ? NIS.VALID : NIS.INVALID));
       }
 
@@ -369,16 +369,13 @@ public class NISuppressor {
       return (sse.sup_class == inv_class);
     else {
       if (sse.sup_class != inv_class) {
-        // Fmt.pf ("match = -false for sse %s and ssor %s", sse, this);
         return (false);
       }
       if (!swap_class) {
         BinaryInvariant binv = (BinaryInvariant) sse.sample_inv;
         boolean match = (binv.is_symmetric() || (swap == binv.get_swap()));
-        // Fmt.pf ("match = %s for sse %s and ssor %s", "" + match, sse, this);
         return (match);
       }
-      // Fmt.pf ("match = -true for sse %s and ssor %s", sse, this);
       return (true);
     }
 
@@ -444,16 +441,16 @@ public class NISuppressor {
       status = "";
 
     if (v2_index == -1)
-      return (Fmt.spf ("%s(%s) [%s]", cname, varname[v1_index], status));
+      return (String.format ("%s(%s) [%s]", cname, varname[v1_index], status));
     else if (v3_index == -1) {
       if (swap && !swap_class)
-        return (Fmt.spf ("%s(%s,%s) [%s]", cname, varname[v2_index],
+        return (String.format ("%s(%s,%s) [%s]", cname, varname[v2_index],
                varname[v1_index], status));
       else
-        return (Fmt.spf ("%s(%s,%s) [%s]", cname, varname[v1_index],
+        return (String.format ("%s(%s,%s) [%s]", cname, varname[v1_index],
                varname[v2_index], status));
     } else
-      return (Fmt.spf ("%s(%s,%s,%s) [%s]", cname, varname[v1_index],
+      return (String.format ("%s(%s,%s,%s) [%s]", cname, varname[v1_index],
                        varname[v2_index], varname[v3_index], status));
   }
 

@@ -370,7 +370,6 @@ public final /*@Interned*/ class ProglangType
     if (dimensions == 0) {
       if (base == BASE_STRING) {
         if (value.equals("null")) {
-          // Fmt.pf ("dimensions = 0, base = string");
           return null;
         }
         if (! (value.startsWith("\"") && value.endsWith("\""))) {
@@ -432,7 +431,6 @@ public final /*@Interned*/ class ProglangType
       value = value.trim();
 
       if (value.equals("null")) {
-        // Fmt.pf ("dimensions = 1");
         return null;
       }
 

@@ -1066,9 +1066,6 @@ class FormatTestCase {
   private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice slice,
                                          Class[] arg_types, Object[] arg_vals) {
     try {
-      // Fmt.pf ("creating " + theClass);
-      // for (int i = 0; i < arg_types.length; i++)
-      //   Fmt.pf ("  arg %s = %s", arg_types[i], arg_vals[i]);
       Method get_proto = theClass.getMethod ("get_proto", arg_types);
       Invariant proto = (Invariant) get_proto.invoke (null, arg_vals);
 

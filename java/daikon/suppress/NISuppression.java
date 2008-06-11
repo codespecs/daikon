@@ -161,7 +161,7 @@ public class NISuppression {
 
     // debug = suppressee.sup_class.getName().indexOf("NonZero") != -1;
     if (debug)
-      Fmt.pf ("In find_suppressed_invs for " + this);
+      System.out.println ("In find_suppressed_invs for " + this);
 
     // Get the antecedents that match our suppressors.  Return if there are
     // no antecedents for a particular suppressor.
@@ -175,7 +175,7 @@ public class NISuppression {
     find_suppressed_invs (suppressed_invs, antecedents, vis, 0);
 
     if (debug)
-      Fmt.pf ("  suppressed invariants: " + suppressed_invs);
+      System.out.println ("  suppressed invariants: " + suppressed_invs);
 
   }
 
@@ -203,7 +203,6 @@ public class NISuppression {
       return;
 
     int total_false_cnt = 0;
-    // Fmt.pf ("antecedents for suppression " + this);
     for (int i = 0; i < antecedents.length; i++) {
       List<Invariant> a = antecedents[i];
       int false_cnt = 0;
@@ -212,8 +211,6 @@ public class NISuppression {
           false_cnt++;
       }
 
-      // Fmt.pf ("  suppressor %s: %s/%s", suppressors[i], "" + a.size(),
-      //       "" + false_cnt);
       total_false_cnt += false_cnt;
     }
 
@@ -228,11 +225,8 @@ public class NISuppression {
     // int old_size = unsuppressed_invs.size();
     find_unsuppressed_invs (unsuppressed_invs, antecedents, vis, 0, false);
     // watch.stop();
-    // Fmt.pf ("Found %s invariants in %s msecs",
-    //        "" + (unsuppressed_invs.size() - old_size),
-    //        "" + watch.elapsedMillis());
     if (debug)
-      Fmt.pf ("  unsuppressed invariants: " + unsuppressed_invs);
+      System.out.println ("  unsuppressed invariants: " + unsuppressed_invs);
 
   }
 
@@ -348,14 +342,15 @@ public class NISuppression {
         // true antecedents is included.
         if (!false_antecedents && !inv.is_false()) {
           if (debug)
-            Fmt.pf ("Skipping %s, no false antecedents", VarInfo.toString(cvis));
+            System.out.printf ("Skipping %s, no false antecedents%n",
+                               VarInfo.toString(cvis));
           continue;
         }
 
         // Create descriptions of the suppressed invariants
         List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt);
         if (debug)
-          Fmt.pf ("created %s new invariants", new_invs);
+          System.out.printf ("created %s new invariants", new_invs);
         unsuppressed_invs.addAll (new_invs);
 
         // Check to insure that none of the invariants already exists
@@ -426,14 +421,14 @@ public class NISuppression {
       cvis[supor.v2_index] = inv.ppt.var_infos[1];
     }
     if (debug)
-      Fmt.pf ("Placed antecedent '%s' into cvis %s", inv.format(),
-              VarInfo.toString(cvis));
+      System.out.printf ("Placed antecedent '%s' into cvis %s%n", inv.format(),
+                         VarInfo.toString(cvis));
 
     // Make sure the resulting variables are in the proper order and are
     // compatible
     if (!vis_order_ok (cvis) || !vis_compatible (cvis)) {
       if (debug)
-        Fmt.pf ("Skipping, cvis has bad order or is incompatible");
+        System.out.println("Skipping, cvis has bad order or is incompatible");
       return (null);
     }
 
@@ -463,8 +458,8 @@ public class NISuppression {
     }
 
     if (debug)
-      Fmt.pf (suppressee.sup_class.getName() + " " +
-              antecedents_for_suppression (antecedents));
+      System.out.println (suppressee.sup_class.getName() + " " +
+                          antecedents_for_suppression (antecedents));
 
     return (antecedents);
   }

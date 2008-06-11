@@ -166,7 +166,7 @@ public class StrTok {
     if (tok.equals(t))
       return;
 
-    err.tok_error (Fmt.spf ("Token %s found where %s expected", t, tok));
+    err.tok_error (String.format ("Token %s found where %s expected", t, tok));
   }
 
 }

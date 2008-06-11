@@ -88,25 +88,24 @@ public class InvMatch {
 
     // InvTranslate xlate = new InvTranslate();
     // xlate.translate (inv_x_lt_y, inv_p_lt_q);
-    // Fmt.pf ("lt : " + xlate);
 
     // Try to matchup the program points
     List<List<InvTranslate>> valid_translations = match_ppt (ppt35, ppt40);
 
     // Dump all of the valid translations
-    Fmt.pf ("Valid Translations:");
+    System.out.println ("Valid Translations:");
     for (List<InvTranslate> current_translation : valid_translations) {
-      Fmt.pf ("  Translation: ");
+      System.out.println ("  Translation: ");
       for (InvTranslate xlate : current_translation) {
-        Fmt.pf ("    %s", xlate);
+        System.out.printf ("    %s%n", xlate);
       }
     }
 
     List<InvTranslate> best_translation
       = best_translation (valid_translations);
-    Fmt.pf (Global.lineSep + "Best Translation");
+    System.out.println (Global.lineSep + "Best Translation");
     for (InvTranslate xlate : best_translation) {
-      Fmt.pf ("  %s", xlate);
+      System.out.printf ("  %s%n", xlate);
     }
 
   }
@@ -142,9 +141,9 @@ public class InvMatch {
       Iterator<Invariant> invi = ppt1.invariants_iterator();
       for (List<InvTranslate> inv_xlate_list : xlate_list) {
         Invariant inv = invi.next();
-        Fmt.pf ("%s translations:", inv.format());
+        System.out.printf ("%s translations:%n", inv.format());
         for (InvTranslate xlate : inv_xlate_list) {
-          Fmt.pf ("  %s", xlate);
+          System.out.printf ("  %s%n", xlate);
         }
       }
     }

@@ -1254,12 +1254,12 @@ public final class PrintInvariants {
         }
       }
 
-      Fmt.pf ("");
-      Fmt.pf ("%s - %s samples, %s slices, %s invariants (%s linearternary)",
-              ppt.name(),"" + ppt.num_samples(), "" + slice_cnt, "" + inv_cnt,
-              "" + lt_cnt);
-      Fmt.pf ("    total slice count = " + total_slice_cnt +
-              ", total_inv_cnt = " + total_inv_cnt);
+      System.out.println ();
+      System.out.printf ("%s - %d samples, %d slices, %d invariants "
+                         + "(%d linearternary)%n", ppt.name(), ppt.num_samples(),
+                         slice_cnt, inv_cnt, lt_cnt);
+      System.out.println ("    total slice count = " + total_slice_cnt +
+                          ", total_inv_cnt = " + total_inv_cnt);
 
       // Loop through each ternary slice
       for (Iterator<PptSlice> si = ppt.views_iterator(); si.hasNext(); ) {
@@ -1275,7 +1275,8 @@ public final class PrintInvariants {
             var_str += "["
                  + Debug.toString(ppt.constants.constant_value(vis[i]))+ "] ";
         }
-        Fmt.pf ("  Slice %s - %s invariants", var_str, "" + slice.invs.size());
+        System.out.printf ("  Slice %s - %d invariants%n", var_str,
+                           slice.invs.size());
 
         // Loop through each invariant (skipping ternary ones)
         for (Invariant inv : slice.invs) {
@@ -1290,12 +1291,13 @@ public final class PrintInvariants {
             suppress = "ERROR: Should be suppressed by " + ss;
 
           // Print the invariant
-          Fmt.pf ("    %s [%s] %s", inv.format(),
-                  UtilMDE.unqualified_name(inv.getClass()), suppress);
+          System.out.printf ("    %s [%s] %s%n", inv.format(),
+                             UtilMDE.unqualified_name(inv.getClass()), suppress);
 
           // Print all unary and binary invariants over the same variables
           for (int i = 0; i < vis.length; i++) {
-            Fmt.pf ("      %s is %s", vis[i].name(),vis[i].file_rep_type);
+            System.out.printf ("      %s is %s%n", vis[i].name(),
+                               vis[i].file_rep_type);
             print_all_invs (ppt, vis[i], "      ");
           }
           print_all_invs (ppt, vis[0], vis[1], "      ");
@@ -1311,19 +1313,20 @@ public final class PrintInvariants {
    */
   public static void print_all_invs (PptTopLevel ppt, VarInfo vi,
                                      String indent) {
-    String name = Fmt.spf ("%s [%s]", vi.name(), vi.file_rep_type);
+    String name = String.format ("%s [%s]", vi.name(), vi.file_rep_type);
     if (ppt.is_missing (vi))
-      Fmt.pf ("%s%s missing", indent, name);
+      System.out.printf ("%s%s%n missing%n", indent, name);
     else if (ppt.is_constant (vi))
-      Fmt.pf ("%s%s = %s", indent, name,
-              Debug.toString(ppt.constants.constant_value(vi)));
+      System.out.printf ("%s%s = %s%n", indent, name,
+                          Debug.toString(ppt.constants.constant_value(vi)));
     else {
       PptSlice slice = ppt.findSlice (vi);
       if (slice != null)
         print_all_invs (slice, indent);
 
       if (slice == null)
-        Fmt.pf ("%s%s has %s values", indent, name, "" + ppt.num_values (vi));
+        System.out.printf ("%s%s has %d values%s", indent, name,
+                           ppt.num_values (vi));
     }
   }
 
@@ -1343,8 +1346,8 @@ public final class PrintInvariants {
       return;
 
     for (Invariant inv : slice.invs) {
-      Fmt.pf ("%s%s [%s]", indent, inv.format(),
-              UtilMDE.unqualified_name(inv.getClass()));
+      System.out.printf ("%s%s [%s]%n", indent, inv.format(),
+                         UtilMDE.unqualified_name(inv.getClass()));
     }
 
   }

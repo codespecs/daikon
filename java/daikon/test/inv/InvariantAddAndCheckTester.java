@@ -20,7 +20,6 @@ import java.util.Vector;
 import junit.framework.*;
 
 import utilMDE.Assert;
-import utilMDE.Fmt;
 
 /**
  * This is a tester for the results of adding or checking an sample

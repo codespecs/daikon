@@ -1967,17 +1967,10 @@ public class PptTopLevel extends Ppt {
 
     boolean found = (inv != null) && slice.is_inv_true(inv);
     if (false) {
-      Fmt.pf(
-        "Looking for %s [%s] <= %s [%s] in ppt %s",
-        v1.name(),
-        "" + v1_shift,
-        v2.name(),
-        "" + v2_shift,
-        this.name());
-      Fmt.pf(
-        "Searched for invariant %s, found = %s",
-        (inv == null) ? "null" : inv.format(),
-        "" + found);
+      System.out.printf ("Looking for %s [%d] <= %s [%d] in ppt %s%n", v1.name(),
+                         v1_shift, v2.name(), v2_shift, this.name());
+      System.out.printf ("Searched for invariant %s, found = %b",
+                         (inv == null) ? "null" : inv.format(), found);
     }
     return (found);
   }
@@ -3385,7 +3378,6 @@ public class PptTopLevel extends Ppt {
         rel.child.mergeInvs();
     }
 
-    //Fmt.pf ("Merging ppt " + name + " with " + children.size() + " children");
     if (debugMerge.isLoggable(Level.FINE))
       debugMerge.fine("Processing ppt " + name());
 
@@ -3596,8 +3588,6 @@ public class PptTopLevel extends Ppt {
    */
   public void merge_invs_multiple_children() {
 
-    // Fmt.pf ("merging multiple children of " + name);
-
     // There shouldn't be any slices when we start
     Assert.assertTrue(views.size() == 0);
 
@@ -3671,7 +3661,6 @@ public class PptTopLevel extends Ppt {
             continue;
           PptSlice3 slice3 =
             new PptSlice3(this, leaders[i], leaders[j], leaders[k]);
-          // Fmt.pf ("Considering slice " + slice3);
 
           slice3.merge_invariants();
 
@@ -3703,8 +3692,6 @@ public class PptTopLevel extends Ppt {
    */
   public void merge_invs_one_child() {
 
-    // Fmt.pf ("merging single child of " + name);
-
     Assert.assertTrue(views.size() == 0);
     Assert.assertTrue(children.size() == 1);
 
@@ -3735,8 +3722,6 @@ public class PptTopLevel extends Ppt {
 
       // Build the permute from the child to the parent slice
       int[] permute = build_permute(pvis, pvis_sorted);
-      // Fmt.pf ("Created parent slice " + pslice + " from child slice "
-      //        + cslice + " with permute " + ArraysMDE.toString (permute));
 
       // Copy each child invariant to the parent
       for (Invariant child_inv : cslice.invs) {
@@ -3789,8 +3774,8 @@ public class PptTopLevel extends Ppt {
         for (VarInfo test_pv : pv.equalitySet.getVars()) {
           VarInfo test_cv = rel.childVar (test_pv);
           if (test_cv.canonicalRep() != cv.canonicalRep()) {
-            Fmt.pf("pv.equalitySet = " + pv.equalitySet);
-            Fmt.pf("cv.equalitySet = " + cv.equalitySet);
+            System.out.println ("pv.equalitySet = " + pv.equalitySet);
+            System.out.println ("cv.equalitySet = " + cv.equalitySet);
             Assert.assertTrue (false, "parent variable " + test_pv
                                + " child " + test_cv
                                + " is not in the same child equality set as "

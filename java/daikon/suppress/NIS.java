@@ -212,7 +212,6 @@ public class NIS {
           continue;
         for (NISuppressionSet suppressor_ss : suppressor_ss_list) {
           suppressor_ss.recurse_definitions (ss);
-          // Fmt.pf ("New recursed suppressions: " + suppressor_ss);
         }
       }
     }
@@ -328,7 +327,7 @@ public class NIS {
     // Loop through each invariant
     for (Invariant inv : new_invs) {
       if (inv.is_false())
-        Assert.assertTrue (!inv.is_false(), Fmt.spf ("inv %s in ppt %s is "
+        Assert.assertTrue (!inv.is_false(), String.format ("inv %s in ppt %s is "
             + " false before sample is applied ", inv.format(), inv.ppt));
 
       // Looks to see if any variables are missing.  This can happen
@@ -383,7 +382,6 @@ public class NIS {
         inv.log ("removed, still suppressed in second pass");
         inv.ppt.invs.remove (inv);
         i.remove();
-        // Fmt.pf ("Invariant %s suppressed in second pass", inv.format());
       }
     }
 
@@ -506,12 +504,12 @@ public class NIS {
       return;
 
     if (false) {
-      Fmt.pf ("Variables for ppt " + ppt.name());
+      System.out.println ("Variables for ppt " + ppt.name());
       for (int i = 0; i < ppt.var_infos.length; i++) {
         VarInfo v = ppt.var_infos[i];
         ValueSet vs = v.get_value_set();
-        Fmt.pf ("  %s %s %s %s %s", v.comparability, v.name(),
-                v.file_rep_type, "" + ppt.is_constant(v), vs.repr_short());
+        System.out.printf ("  %s %s %s %b %s%n", v.comparability, v.name(),
+                v.file_rep_type, ppt.is_constant(v), vs.repr_short());
       }
     }
 
@@ -560,16 +558,18 @@ public class NIS {
         List<Invariant> eq_invs = ants.get (IntEqual.class);
         if ((eq_invs != null) && (eq_invs.size() > 1000)) {
           Map<VarInfo,Count> var_map = new LinkedHashMap<VarInfo,Count>();
-          Fmt.pf ("ppt %s, comparability %s has %s equality invariants",
-                  ppt.name, ants.comparability, "" + eq_invs.size());
+          System.out.printf ("ppt %s, comparability %s has %s equality invs%n",
+                  ppt.name, ants.comparability, eq_invs.size());
           for (Invariant inv  : eq_invs) {
             IntEqual ie = (IntEqual) inv;
             VarInfo v1 = ie.ppt.var_infos[0];
             VarInfo v2 = ie.ppt.var_infos[1];
             if (ppt.is_constant(v1) && ppt.is_constant(v2))
-              Fmt.pf ("inv %s has two constant variables", ie.format());
+              System.out.printf ("inv %s has two constant variables%n",
+                                 ie.format());
             if (!v1.compatible (v2))
-              Fmt.pf ("inv %s has incompatible variables", ie.format());
+              System.out.printf ("inv %s has incompatible variables%n",
+                                 ie.format());
             Count cnt = var_map.get (v1);
             if (cnt == null) {
               cnt = new Count (0);
@@ -583,11 +583,11 @@ public class NIS {
             }
             cnt.val++;
           }
-          Fmt.pf ("%s distinct variables", "" + var_map.size());
+          System.out.printf ("%d distinct variables%n", var_map.size());
           for (VarInfo key : var_map.keySet()) {
             Count cnt = var_map.get (key);
-            Fmt.pf (" %s %s %s ", key.comparability, key.name(),
-                    "" + cnt.val);
+            System.out.printf (" %s %s %d %n", key.comparability, key.name(),
+                               cnt.val);
           }
         }
       }
@@ -597,7 +597,6 @@ public class NIS {
     // possibly create any newly unsuppressed invariants
     for (Iterator<Antecedents> i = comp_ants.values().iterator(); i.hasNext(); ) {
       Antecedents ants = i.next();
-      // Fmt.pf ("ants = " + ants);
       if (ants.false_cnt == 0)
         i.remove();
     }
@@ -811,7 +810,6 @@ public class NIS {
    */
   public static void remove_suppressed_invs (PptTopLevel ppt) {
 
-    // Fmt.pf ("Removing suppressed invariants for " + ppt.name);
     for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
       PptSlice slice = i.next();
       for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
@@ -844,9 +842,9 @@ public class NIS {
       for (ListIterator<NISuppressionSet> j = suppression_set_list.listIterator(); j.hasNext();) {
         NISuppressionSet ss = j.next();
         if (j.previousIndex() > 0)
-          log.fine (Fmt.spf ("        : %s", ss));
+          log.fine (String.format ("        : %s", ss));
         else
-          log.fine (Fmt.spf ("%s: %s", sclass, ss));
+          log.fine (String.format ("%s: %s", sclass, ss));
       }
     }
   }
