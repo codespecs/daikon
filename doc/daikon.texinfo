@@ -3955,11 +3955,13 @@ memory.  Regular progress indicators are printed to standard output.
 You can ignore warnings issued during the instrumentation process, so
 long as the make target itself completes normally.
 
-There is a small number of methods in the JDK that DynComp is currently
-unable to instrument.  The names of these methods will be printed at the
-end of instrumentation.  The file @file{jdk_classes.txt}, found inside
-@file{dcomp_rt.jar}, contains a list of all classes processed, including
-those that could not be instrumented.
+There are a small number of methods in the JDK that DynComp is
+currently unable to instrument.  The names of these methods will be
+printed at the end of instrumentation.  This is not a problem unless
+your application calls these methods (directly or indirectly).  The
+file @file{jdk_classes.txt}, found inside @file{dcomp_rt.jar},
+contains a list of all classes processed, including those that could
+not be instrumented.
 
 
 @node DynComp for Java options, Instrumentation of Object methods, Instrumenting the JDK with DynComp, DynComp for Java
@@ -8946,8 +8948,9 @@ Each record is separated by one or more blank lines.
 To permit easier parsing by programs, each piece of information in a record
 appears on a separate line.
 
-Outside a record, any line starting with a pound sign (# or //) is ignored as
-a comment.  Comments are not permitted inside a record.
+Outside a record, any line starting with a pound sign (#) or double
+slashes (//) is ignored as a comment.  Comments are not permitted
+inside a record.
 
 @node Declarations, Data trace records, Conventions, File formats
 @section Declarations

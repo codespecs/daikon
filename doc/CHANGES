@@ -20,6 +20,55 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.4.0 (June 11 2008)
+
+A new format for declaration records in Daikon trace data was
+introduced and the AnnotateNullable tool was released.  A number 
+of bugs were fixed.
+
+Daikon
+
+  User-visible changes
+
+    Daikon supports a new format for declration records.  This format
+    allows front ends more flexibility and an increased ability to use
+    arbitrary variable names.  The program point hierarchy and relationships
+    between variables are explicitly stated in their declarations rather
+    than being inferred from variable names.  See Appendix A of the
+    user manual for more information.
+
+Chicory
+
+  User-visible changes
+
+    Creates the new declaration format by default.  
+
+AnnotateNullable
+
+  AnnotateNullable determines which variables in a Java program were
+  ever null during execution. Its primary use is for performing
+  inference for a type system that detects null dereference errors. An
+  example is the Nullness checker that is part of the JSR 308 Checker
+  Framework (see http://groups.csail.mit.edu/pag/jsr308/).  See section
+  8.1.4 of the Daikon user manual for more information.
+
+DynComop
+
+  User-visible changes
+
+    Enhanced the build of dcomp_rt.jar to limit expected error messages and
+    make clear if any unexpected problems were encountered in the build.
+
+  Bug-fixes
+
+    Fixed a problem with clone where the instrumentation incorrectly added a 
+    call to a instrumented version of clone where it did not exist.
+
+    Fixed some problems with the instrumentation of equals.
+
+    Support new declaration format
+
+
 4.3.5 (April 3 2008)
 
 Daikon was enhanced to better support program points that are basic
