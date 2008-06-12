@@ -4,7 +4,7 @@
 # LaTeX file.
 #
 # This script has two modes:
-#  1. Inline mode:  Create a single LaTeX file for the document,
+#  1. Inline mode (the default):  Create a single LaTeX file for the document,
 #     by inlining "\input" commands.
 #     The result is appropriate to be sent to a publisher.
 #       latex-process-inputs.pl main-file.tex > onefile.tex
