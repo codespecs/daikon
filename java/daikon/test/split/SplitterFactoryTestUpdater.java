@@ -246,8 +246,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  private static void createSplitterFiles(String spinfo, String decl) {");
     ps.println("    List<String> spinfoFiles = new ArrayList<String>();");
     ps.println("    spinfoFiles.add(spinfo);");
-    ps.println("    List<String> declsFiles = new ArrayList<String>();");
-    ps.println("    declsFiles.add(decl);");
+    ps.println("    List<String> declsFiles = Collections.singletonList(decl);");
     ps.println("    createSplitterFiles(spinfoFiles, declsFiles);");
     ps.println("  }");
     ps.println();
@@ -304,9 +303,9 @@ public class SplitterFactoryTestUpdater {
     ps.println("    List<String> spinfoFiles;");
     ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
-      ps.println("    createSplitterFiles(\"" 
+      ps.println("    createSplitterFiles(\""
                  + UtilMDE.java_source(spinfoFileLists.get(i).get(0))
-                 + "\", \"" 
+                 + "\", \""
                  + UtilMDE.java_source(declsFileLists.get(i).get(0)) + "\");");
     }
     ps.println("  }");

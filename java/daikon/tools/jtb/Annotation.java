@@ -140,8 +140,7 @@ public class Annotation {
    * or several annotations.  Malformed annotations are ignored.
    */
   public static Annotation[] findAnnotations(String annoString) {
-    List<String> l = new ArrayList<String>();
-    l.add(annoString);
+    List<String> l = Collections.singletonList(annoString);
     return findAnnotations(l);
   }
 

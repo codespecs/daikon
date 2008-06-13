@@ -109,8 +109,7 @@ public class PptSliceEquality
       // Debug.debugTrack.fine ("Vars for " + parent.name());
       for (int i = 0; i < var_infos.length; i++) {
         VarInfo vi = var_infos[i];
-        List<VarInfo> vi_list = new ArrayList<VarInfo>(1);
-        vi_list.add (vi);
+        List<VarInfo> vi_list = Collections.singletonList(vi);
         Equality eq = new Equality (vi_list, this);
         invs.add (eq);
         // System.out.println ("  eq set = " + eq.shortString());
@@ -342,8 +341,7 @@ public class PptSliceEquality
       resultCount++;
     }
     for (VarInfo oob : out_of_bounds) {
-      List<VarInfo> list = new LinkedList<VarInfo>();
-      list.add (oob);
+      List<VarInfo> list = Collections.singletonList(oob);
       resultArray[resultCount] = new Equality (list, this);
       resultCount++;
     }

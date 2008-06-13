@@ -89,8 +89,7 @@ public final class DiscReasonMap {
         }
         disc_infos.add(disc_info);
       } else {
-        List<DiscardInfo> temp = new ArrayList<DiscardInfo>();
-        temp.add(disc_info);
+        List<DiscardInfo> temp = Collections.singletonList(disc_info);
         ppt_hashmap.put(vars, temp);
       }
     } else {

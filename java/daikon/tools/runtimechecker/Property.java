@@ -3,6 +3,7 @@ package daikon.tools.runtimechecker;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -289,8 +290,7 @@ public class Property implements Serializable {
      * none, one, or several properties. Ignores malformed properties.
      */
     public static Property[] findProperties(String annoString) {
-        List<String> l = new ArrayList<String>();
-        l.add(annoString);
+        List<String> l = Collections.singletonList(annoString);
         return findProperties(l);
     }
 
