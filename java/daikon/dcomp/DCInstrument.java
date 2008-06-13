@@ -40,12 +40,18 @@ class DCInstrument {
 
   // Argument descriptors
   protected static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
+  protected static Type[] object_string = new Type[] {Type.OBJECT, Type.STRING};
   // private Type[] two_ints = new Type[] {Type.INT, Type.INT};
   protected static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
   protected static Type[] string_arg = new Type[] {Type.STRING};
   protected static Type[] integer_arg = new Type[] {Type.INT};
+  protected static Type[] float_arg = new Type[] {Type.FLOAT};
+  protected static Type[] double_arg = new Type[] {Type.DOUBLE};
+  protected static Type[] boolean_arg = new Type[] {Type.BOOLEAN};
   protected static Type[] long_arg = new Type[] {Type.LONG};
   protected static Type[] object_arg = new Type[] {Type.OBJECT};
+  protected static Type[] CharSequence_arg
+    = new Type[] {new ObjectType ("java.lang.CharSequence")};
 
   // Type descriptors
   protected static Type object_arr = new ArrayType (Type.OBJECT, 1);
@@ -187,6 +193,9 @@ class DCInstrument {
     public boolean contains (int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
+    public String toString() {
+      return String.format ("Code range: %d..%d", start_pc, start_pc+len);
+    }
   }
 
   /**
@@ -317,10 +326,6 @@ class DCInstrument {
           if (track) {
             add_enter (mg, mi, DCRuntime.methods.size()-1);
             add_exit (mg, mi, DCRuntime.methods.size()-1);
-          } else if (is_data_flow()) {
-            if (has_specified_method (DynComp.input_method, classname, m))
-              System.out.printf ("found input method %s: %s.%s\n",
-                                 DynComp.input_method, classname, m);
           }
           add_create_tag_frame (mg);
           handle_exceptions (mg);
@@ -3339,6 +3344,19 @@ class DCInstrument {
       return (new_types);
   }
 
+
+  /**
+   * Returns a type array with new_type inserted at the beginning
+   */
+  public static Type[] insert_type (Type new_type, Type[] types) {
+      Type[] new_types = new Type[types.length + 1];
+      for (int ii = 0; ii < types.length; ii++) {
+        new_types[ii+1] = types[ii];
+      }
+      new_types[0] = new_type;
+      return (new_types);
+  }
+
   /**
    * Returns a String array with new_string added to the end of arr
    */
@@ -4294,6 +4312,5 @@ class DCInstrument {
       }
     }
   }
-
 
 }
