@@ -195,6 +195,40 @@ public class Premain {
             }
           }
         }
+
+        // if an output file was requested, write the index of each local
+        // in the test sequence that was associated with the dataflow to
+        // the file in the format <local-offset> <local-offset>...
+        // The file contains exactly one line.
+        if (DynComp.dataflow_out != null) {
+          PrintWriter dataflow_fp = null;
+          try {
+            dataflow_fp = new PrintWriter (DynComp.dataflow_out);
+          } catch (Exception e) {
+            throw new RuntimeException ("Can't open dataflow output file"
+                                        + DynComp.dataflow_out, e);
+          }
+          if (DCRuntime.exit_exception != null) {
+            System.out.printf ("Writing error output to %s%n",
+                               DynComp.dataflow_out);
+            dataflow_fp.printf ("Error: %s%n", DCRuntime.exit_exception);
+            DCRuntime.exit_exception.printStackTrace (dataflow_fp);
+          } else { // no error was encountered, results should be good
+
+            System.out.printf ("Writing dataflow output to %s%n",
+                               DynComp.dataflow_out);
+            Set<Integer> locals = new HashSet<Integer>();
+            for (Set<DCRuntime.ValueSource> vs : DCRuntime.branch_tags) {
+              for (DCRuntime.ValueSource src : vs) {
+                if (src.descr.startsWith ("local-store")) {
+                  locals.add (Integer.decode(src.descr.split (" ")[1]));
+                }
+              }
+            }
+            dataflow_fp.printf ("%s%n", locals);
+          }
+          dataflow_fp.close();
+        }
         return;
       }
 
