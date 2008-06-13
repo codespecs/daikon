@@ -29,6 +29,9 @@ class DFInstrument extends DCInstrument {
 
   public static SimpleLog debug = new SimpleLog (true);
 
+  /** True if the current method is the test sequence **/
+  private static boolean test_sequence = false;
+
   /**
    * Map from methods in the JDK to our methods that replace them.
    * There is one map for each class with replacement methods.
@@ -40,7 +43,15 @@ class DFInstrument extends DCInstrument {
     = new LinkedHashMap<String,Map<MethodDef,String>>();
   private static Map<MethodDef,String> Integer_map
     = new LinkedHashMap<MethodDef,String>();
+  private static Map<MethodDef,String> Float_map
+    = new LinkedHashMap<MethodDef,String>();
+  private static Map<MethodDef,String> Double_map
+    = new LinkedHashMap<MethodDef,String>();
   private static Map<MethodDef,String> Long_map
+    = new LinkedHashMap<MethodDef,String>();
+  private static Map<MethodDef,String> Boolean_map
+    = new LinkedHashMap<MethodDef,String>();
+  private static Map<MethodDef,String> StringBuffer_map
     = new LinkedHashMap<MethodDef,String>();
   static {
     Integer_map.put (new MethodDef ("valueOf", integer_arg), "Integer_valueOf");
@@ -48,6 +59,17 @@ class DFInstrument extends DCInstrument {
     jdk_method_map.put ("java.lang.Integer", Integer_map);
     Long_map.put (new MethodDef ("valueOf", long_arg), "Long_valueOf");
     jdk_method_map.put ("java.lang.Long", Long_map);
+    Float_map.put (new MethodDef ("valueOf", float_arg), "Float_valueOf");
+    jdk_method_map.put ("java.lang.Float", Float_map);
+    Double_map.put (new MethodDef ("valueOf", double_arg), "Double_valueOf");
+    jdk_method_map.put ("java.lang.Double", Double_map);
+    Boolean_map.put (new MethodDef ("valueOf", boolean_arg), "Boolean_valueOf");
+    jdk_method_map.put ("java.lang.Boolean", Boolean_map);
+    StringBuffer_map.put (new MethodDef ("append", CharSequence_arg),
+                          "StringBuffer_append");
+    StringBuffer_map.put (new MethodDef ("append", string_arg),
+                          "StringBuffer_append");
+    jdk_method_map.put ("java.lang.StringBuffer", StringBuffer_map);
   }
   /**
    * Initialize with the original class and whether or not the class
@@ -67,8 +89,17 @@ class DFInstrument extends DCInstrument {
 
     // See if this method has branch information
     CodeRange branch_cr = find_branch (DynComp.branch, gen.getClassName(), m);
-    debug.log ("branch_cr for method %s.%s = %s", mg.getClassName(),
-               mg.getName(), branch_cr);
+    if (branch_cr != null)
+      debug.log ("branch_cr for method %s.%s = %s", mg.getClassName(),
+                 mg.getName(), branch_cr);
+
+    // See if this method is the test sequence
+    test_sequence = false;
+    if (has_specified_method (DynComp.input_method, mg.getClassName(), m)) {
+      test_sequence = true;
+      debug.log ("test sequence method: %s.%s", mg.getClassName(),
+                 mg.getName());
+    }
 
     // Get Stack information
     StackTypes stack_types = null;
@@ -163,6 +194,20 @@ class DFInstrument extends DCInstrument {
         return discard_tag_code (inst, 1);
       }
     }
+
+    // These instructions compare the top of stack to Null.  There is
+    // no work to do unless this is branch of interest, in which
+    // case we want to note the dataflow at the branch.
+    case Constants.IFNONNULL:
+    case Constants.IFNULL: {
+      if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
+        debug.log ("generating code for branch at %s:%s", mg.getName(), inst);
+        return build_il (dcr_call ("ref_branch_df", Type.OBJECT, object_arg),
+                         inst);
+      }
+      return (null);
+    }
+
 
     // Instanceof pushes either 0 or 1 on the stack depending on whether
     // the object on top of stack is of the specified type.  The resulting
@@ -315,8 +360,12 @@ class DFInstrument extends DCInstrument {
     case Constants.LSTORE_1:
     case Constants.LSTORE_2:
     case Constants.LSTORE_3: {
-      return load_store_local ((StoreInstruction) inst, tag_frame_local,
-                               "pop_local_tag");
+      if (test_sequence)
+        return load_store_local ((StoreInstruction) inst, tag_frame_local,
+                                 "pop_local_tag_df");
+      else
+        return load_store_local ((StoreInstruction) inst, tag_frame_local,
+                                 "pop_local_tag");
     }
 
     case Constants.LDC:
@@ -499,6 +548,25 @@ class DFInstrument extends DCInstrument {
     case Constants.ATHROW:
       return build_il (dcr_call ("throw_op", Type.VOID, Type.NO_ARGS), inst);
 
+    // Stores of references into a local.  If this is the test sequence we
+    // want to include a reference to this local in the dataflow for the
+    // object
+    case Constants.ASTORE:
+    case Constants.ASTORE_0:
+    case Constants.ASTORE_1:
+    case Constants.ASTORE_2:
+    case Constants.ASTORE_3: {
+      if (test_sequence) {
+        LocalVariableInstruction lvi = (LocalVariableInstruction)inst;
+        return build_il (new DUP(),
+                         ifact.createConstant (lvi.getIndex()),
+                         dcr_call ("pop_local_obj_df", Type.VOID, object_int),
+                         inst);
+      } else {
+        return null;
+      }
+    }
+
     // Opcodes that don't need any modifications.  Here for reference
     case Constants.ACONST_NULL:
     case Constants.ALOAD:
@@ -506,11 +574,6 @@ class DFInstrument extends DCInstrument {
     case Constants.ALOAD_1:
     case Constants.ALOAD_2:
     case Constants.ALOAD_3:
-    case Constants.ASTORE:
-    case Constants.ASTORE_0:
-    case Constants.ASTORE_1:
-    case Constants.ASTORE_2:
-    case Constants.ASTORE_3:
     case Constants.CHECKCAST:
     case Constants.D2F:     // double to float
     case Constants.D2I:     // double to integer
@@ -528,8 +591,6 @@ class DFInstrument extends DCInstrument {
     case Constants.I2F:     // integer to float
     case Constants.I2L:     // integer to long
     case Constants.I2S:     // integer to short
-    case Constants.IFNONNULL:
-    case Constants.IFNULL:
     case Constants.IINC:    // increment local variable by a constant
     case Constants.INEG:    // negate integer on top of stack
     case Constants.JSR:     // pushes return address on the stack, but that
@@ -571,12 +632,19 @@ class DFInstrument extends DCInstrument {
       type = ((LDC2_W)inst).getType (pool);
       value = ((LDC2_W)inst).getValue (pool);
     }
-    if (!(type instanceof BasicType))
-      return null;
-    String descr = mg.getName() + ": constant " + value;
-    return build_il (ifact.createConstant (descr),
-                     dcr_call ("push_const_src", Type.VOID, string_arg),
-                     inst);
+    if (type instanceof BasicType) {
+      String descr = mg.getName() + ": constant " + value;
+      return build_il (ifact.createConstant (descr),
+                       dcr_call ("push_const_src", Type.VOID, string_arg),
+                       inst);
+    } else { // Must be a string or class
+      String descr = mg.getName() + ": consant " + value;
+      return build_il (inst,
+                       new DUP(),
+                       ifact.createConstant (descr),
+                       dcr_call ("push_const_obj_src", Type.VOID,object_string)
+                       );
+    }
   }
 
   /**
@@ -738,7 +806,7 @@ class DFInstrument extends DCInstrument {
       if (lnum == line) {
         int len;
         int next_line = i+1;
-        if (i < lna.length)
+        if (next_line < lna.length)
           len = lna[next_line].getStartPC()-1;
         else
           len = m.getCode().getCode().length;
@@ -809,8 +877,15 @@ class DFInstrument extends DCInstrument {
 
       // If there is a replacement method, call that method instead and return
       if (replacement_method != null) {
-        il.append (dcr_call (replacement_method, ret_type, arg_types));
-        System.out.printf ("Calling replacement method %s%n", replacement_method);
+        if (invoke.getOpcode() == Constants.INVOKEVIRTUAL) {
+          Type invoke_class = invoke.getReferenceType(pool);
+          arg_types = insert_type (invoke_class, arg_types);
+          il.append (dcr_call (replacement_method, ret_type, arg_types));
+        } else { // static call
+          il.append (dcr_call (replacement_method, ret_type, arg_types));
+        }
+        System.out.printf ("insert call to replacement method %s(%s)%n",
+                           replacement_method, Arrays.toString(arg_types));
         return (il);
       }
 
@@ -870,15 +945,15 @@ class DFInstrument extends DCInstrument {
         && method_name.equals ("<init>")) {
       // System.out.printf ("is (non-super) constructor\n");
       int call_size = arg_types.length + 1;
-      if (call_size >= stack.size())
-        System.out.printf ("nothing on stack for %s.%s %s init call @%d%n",
-                           mg.getClassName(),mg.getName(),
-                           invoke.getClassName(pool), position);
-      else {
+      if (call_size >= stack.size()) {
+        // System.out.printf ("nothing on stack for %s.%s %s init call @%d%n",
+        //                   mg.getClassName(),mg.getName(),
+        //                   invoke.getClassName(pool), position);
+      } else {
         Type top_after_invoke = stack.peek (call_size);
-        System.out.printf ("top of stack for %s.%s %s init call @%d = %s\n",
-                           mg.getClassName(),mg.getName(),
-                           invoke.getClassName(pool), position, top_after_invoke);
+        // System.out.printf ("top of stack for %s.%s %s init call @%d = %s\n",
+        //                   mg.getClassName(),mg.getName(),
+        //              invoke.getClassName(pool), position, top_after_invoke);
         if (top_after_invoke instanceof UninitializedObjectType) {
           UninitializedObjectType uot = (UninitializedObjectType)top_after_invoke;
           assert uot.getInitialized().equals (invoke.getReferenceType(pool))
