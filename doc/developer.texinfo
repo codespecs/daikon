@@ -90,6 +90,7 @@ It describes Daikon version 4.3.5, released April 3, 2008.
 Extending Daikon
 
 * Compiling Daikon::            
+* CVS repository::              
 * Using Eclipse::               
 * New invariants::              
 * New derived variables::       
@@ -172,6 +173,7 @@ This chapter describes how to customize or modify Daikon.
 
 @menu
 * Compiling Daikon::            
+* CVS repository::              
 * Using Eclipse::               
 * New invariants::              
 * New derived variables::       
@@ -181,7 +183,7 @@ This chapter describes how to customize or modify Daikon.
 * System.exit::                 
 @end menu
 
-@node    Compiling Daikon, Using Eclipse, Extending Daikon, Extending Daikon
+@node    Compiling Daikon, CVS repository, Extending Daikon, Extending Daikon
 @section Compiling Daikon
 @cindex compiling daikon
 
@@ -251,7 +253,7 @@ at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
 
 
-@node    CVS repository, New invariants, Compiling Daikon, Extending Daikon
+@node    CVS repository, Using Eclipse, Compiling Daikon, Extending Daikon
 @section CVS repository
 @cindex CVS repository
 
@@ -264,7 +266,7 @@ For information about obtaining Daikon via CVS, see
 @uref{http://groups.csail.mit.edu/pag/daikon/mit/}.
 
 
-@node    Using Eclipse, New invariants, Compiling Daikon, Extending Daikon
+@node    Using Eclipse, New invariants, CVS repository, Extending Daikon
 @section Using Eclipse
 @cindex Eclipse
 
