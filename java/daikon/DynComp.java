@@ -78,6 +78,9 @@ public class DynComp {
   @Option ("Method that contains a test sequence")
   public static String input_method = null;
 
+  @Option ("Output file for DataFlow information")
+  public static File dataflow_out = null;
+
 //  @Option("Enable tracing");
 //  public static boolean tracing_enabled = true;
 
