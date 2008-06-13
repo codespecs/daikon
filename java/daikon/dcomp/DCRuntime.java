@@ -35,6 +35,9 @@ public final class DCRuntime {
   /** static count in the JDK.  Used as an offset for non-jdk code **/
   static int max_jdk_static = 100000;
 
+  /** If the application exits with an exception, it should be placed here **/
+  public static Throwable exit_exception = null;
+
   /**
    * Map from each primitive static name to the offset in static_tags
    */
@@ -124,6 +127,13 @@ public final class DCRuntime {
    * different from Object for debugging purposes
    */
   private static class BinOp {
+  }
+
+  /**
+   * Class used as a tag when a value is stored in a local in the
+   * test sequence.  Only different from object for debugging purposes
+   */
+  private static class PrimStore {
   }
 
   /**
@@ -3107,6 +3117,19 @@ public final class DCRuntime {
   }
 
   /**
+   * Builds a new value set that contains only this value (as described
+   * in descr).  Associates the object with the value set
+   * Used when a constant string/class (ldc) is pushed
+   */
+  public static void push_const_obj_src (Object obj, String descr) {
+    Set<ValueSource> values = new HashSet<ValueSource>(1);
+    Throwable stack_trace = new Throwable();
+    stack_trace.fillInStackTrace();
+    values.add (new ValueSource (descr, stack_trace));
+    tag_map.put (obj, values);
+  }
+
+  /**
    * Handle a binary operation on the two items at the top of the tag
    * stack.  Binary operations pop the two items off of the top of the
    * stack perform an operation and push the result back on the stack.
@@ -3123,6 +3146,41 @@ public final class DCRuntime {
     Object tag = new BinOp();
     union_df (tag, tag1, tag2);
     tag_stack.push (tag);
+  }
+
+  /**
+   * Pops the top of the tag stack into tag_frame[index].
+   * Adds the local's index to the DF.  Used to determine what
+   * variables in the test sequence have seen this value.  Should
+   * only be called if the pop is in the test sequence method
+   **/
+  public static void pop_local_tag_df (Object[] tag_frame, int index) {
+
+    check_method_marker();
+    Object tag = tag_stack.pop();
+    assert tag != null : "index " + index;
+    Object newtag = new PrimStore();
+    Set<ValueSource> val = get_value_set (tag);
+    Throwable stack_trace = new Throwable();
+    stack_trace.fillInStackTrace();
+    Set<ValueSource> newval = new HashSet<ValueSource>(val);
+    newval.add (new ValueSource ("local-store " + index, stack_trace));
+    tag_map.put (newtag, newval);
+    tag_frame[index] = newtag;
+    if (debug_primitive.enabled())
+      debug_primitive.log ("pop_local_tag[%d] %s%n", index, tag_frame[index]);
+
+  }
+
+  /**
+   * Adds the specified local to the DataFlow for obj.  Should only be
+   * called if the store is in the test sequence method
+   */
+  public static void pop_local_obj_df (Object obj, int index) {
+    Set<ValueSource> val = get_value_set (obj);
+    Throwable stack_trace = new Throwable();
+    stack_trace.fillInStackTrace();
+    val.add (new ValueSource ("local-store " + index, stack_trace));
   }
 
   /**
@@ -3299,25 +3357,13 @@ public final class DCRuntime {
 
     // Get the DF for the first tag.  If the tag is from an uninitialized
     // Field, create a ValueSource based on the uninitialized field description
-    Set<ValueSource> val1 = tag_map.get (tag1);
-    if (val1 == null) {
-      assert tag1 instanceof UninitFieldTag : "no value for tag " + tag1;
-      UninitFieldTag uft = (UninitFieldTag) tag1;
-      val1 = new HashSet<ValueSource>(1);
-      val1.add (new ValueSource (uft.descr, uft.stack_trace));
-      tag_map.put (tag1, val1);
-    }
+    Set<ValueSource> val1 = get_value_set (tag1);
 
     // Get the DF for the second tag.  If the tag is from an uninitialized
     // Field, create a ValueSource based on the uninitialized field description
-    Set<ValueSource> val2 = tag_map.get (tag2);
-    if (val2 == null) {
-      assert tag2 instanceof UninitFieldTag;
-      UninitFieldTag uft = (UninitFieldTag) tag2;
-      val2 = new HashSet<ValueSource>(1);
-      val2.add (new ValueSource (uft.descr, uft.stack_trace));
-      tag_map.put (tag2, val2);
-    }
+    Set<ValueSource> val2 = get_value_set (tag2);
+
+    // Union the two sets of values and associate them with the result tag
     Set<ValueSource> values = new HashSet<ValueSource>(val1);
     values.addAll (val2);
     debug_df.log_tb ("Union of %s and %s", val1, val2);
@@ -3362,8 +3408,6 @@ public final class DCRuntime {
    */
   public static void aastore_df (Object[] arr, int index, Object val) {
 
-    assert val != null;
-
     // Get the tag for index
     Object index_tag = pop_check();
 
@@ -3371,7 +3415,8 @@ public final class DCRuntime {
                        val, index, index_tag);
 
     // Set the values tag to the union of its current DF and the index
-    union_df (val, val, index_tag);
+    if (val != null)
+      union_df (val, val, index_tag);
 
     // Store the value
     arr[index] = val;
@@ -3484,6 +3529,51 @@ public final class DCRuntime {
     System.out.printf ("primitive DF in branch: %s\n", tag_map.get (tag));
   }
 
+  /**
+   * Prints the DF for the object on the top of the stack.  Returns the
+   * object so that it is still on the top of the program stack
+   **/
+  public static Object ref_branch_df(Object obj) {
+    branch_tags.add (tag_map.get (obj));
+    System.out.printf ("Reference DF for object %s in branch: %s\n",
+                       obj, tag_map.get(obj));
+    return obj;
+  }
+
+  /**
+   * Returns the ValueSet associated with tag.  If there is no value
+   * set and the tag is an uninitialized field, creates a new ValueSet
+   * from the information in UninitFieldTag and associates it with tag.
+   * If the tag is an instance of Throwable (which may be created without a
+   * corresponding new), create a ValueSource for this location.
+   */
+  private static Set<ValueSource> get_value_set (Object tag) {
+    Set<ValueSource> val = tag_map.get (tag);
+    if (val == null) {
+      if (tag instanceof Throwable) {
+        val = new HashSet<ValueSource>(1);
+        Throwable stack_trace = new Throwable();
+        stack_trace.fillInStackTrace();
+        val.add (new ValueSource ("Throwable", stack_trace));
+        tag_map.put (tag, val);
+      } else if (tag instanceof UninitFieldTag) {
+        UninitFieldTag uft = (UninitFieldTag) tag;
+        val = new HashSet<ValueSource>(1);
+        val.add (new ValueSource (uft.descr, uft.stack_trace));
+        tag_map.put (tag, val);
+      } else { // unexpected null
+        System.out.printf ("WARNING: no value for tag '%s'%n", tag);
+        val = new HashSet<ValueSource>(1);
+        Throwable stack_trace = new Throwable();
+        stack_trace.fillInStackTrace();
+        val.add (new ValueSource ("Throwable", stack_trace));
+        tag_map.put (tag, val);
+      }
+
+    }
+    return val;
+  }
+
   //
   // Routines used as summaries for the JDK
   //
@@ -3532,6 +3622,27 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to DF of argument **/
+  public static Float Float_valueOf (float val) {
+    Float obj = Float.valueOf (val);
+    prim_to_obj (obj);
+    return (obj);
+  }
+
+  /** DF of result is equal to DF of argument **/
+  public static Double Double_valueOf (double val) {
+    Double obj = Double.valueOf (val);
+    prim_to_obj (obj);
+    return (obj);
+  }
+
+  /** DF of result is equal to DF of argument **/
+  public static Boolean Boolean_valueOf (boolean val) {
+    Boolean obj = Boolean.valueOf (val);
+    prim_to_obj (obj);
+    return (obj);
+  }
+
+/** DF of result is equal to DF of argument **/
   public static Integer Integer_decode(String str) {
     Integer val = Integer.decode (str);
     obj_to_obj (str, val);
@@ -3543,6 +3654,15 @@ public final class DCRuntime {
     Long obj = Long.valueOf (val);
     prim_to_obj (obj);
     return obj;
+  }
+
+  /** DF of result is equal to the union of the DF of the two arguments **/
+  public static StringBuffer StringBuffer_append (StringBuffer buff,
+                                                  CharSequence s) {
+    StringBuffer result = buff.append (s);
+    union_df (result, buff, s);
+    System.out.printf ("Append '%s' to '%s'", s, buff);
+    return result;
   }
 
   /**
