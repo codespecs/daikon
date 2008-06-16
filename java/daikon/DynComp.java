@@ -279,7 +279,7 @@ public class DynComp {
     cmdlist.add ("-ea");
     //    cmdlist.add ("-Xmx" + heap_size);
     if (!no_jdk)
-      cmdlist.add ("-Xbootclasspath:" + rt_file + ":" + cp);
+      cmdlist.add ("-Xbootclasspath:" + rt_file + separator + cp);
 
     cmdlist.add (String.format("-javaagent:%s=%s", premain, premain_args));
 
