@@ -175,6 +175,7 @@ my %Opts =
   ( Command_Line      => $cmdline,
     Quiet             => 0,
     Summary_Only      => 0,
+    No_Times          => 0,
     Verbose           => 0,
     Progress          => 0,
     HTML              => 0,
@@ -375,6 +376,7 @@ sub parse_arguments ()
                                         $Opts{Summary_Only} = 1;
                                       },
              's|summary'       => \$Opts{Summary_Only},
+             'no-times'        => \$Opts{No_Times},
              'b|broken'        => sub { $Opts{Redirects} = 0;
                                         $Opts{Dir_Redirects} = 0;
                                       },
@@ -555,6 +557,8 @@ sub check_uri ($$$;$)
     # Before fetching the document, we don't know if we'll be within the
     # recursion scope or not (think redirects).
     if (! &in_recursion_scope($response->{absolute_uri})) {
+      hprintf("Not in recursion scope: %s\n")
+        if ($Opts{Verbose});
       return -1;
     }
   }
@@ -632,6 +636,8 @@ sub check_uri ($$$;$)
   # Check links
   #############
 
+  &hprintf("Recording all the links found: %d\n", scalar (keys %{$p->{Links}}))
+    if ($Opts{Verbose});
   my %links;
   # Record all the links found
   foreach my $link (keys %{$p->{Links}}) {
@@ -666,6 +672,8 @@ sub check_uri ($$$;$)
   }
 
   # Build the list of broken URI's
+  &hprintf("Checking %d links to build list of broken URI's\n", scalar (keys %links))
+    if ($Opts{Verbose});
   my %broken;
   foreach my $u (keys %links) {
 
@@ -709,7 +717,7 @@ sub check_uri ($$$;$)
       }
     }
   }
-  &hprintf("Processed in %ss.\n", &time_diff($start, &get_timestamp()))
+  &hprintf("Processed%s.\n", &time_diff_formatted($start, &get_timestamp()))
     unless $Opts{Summary_Only};
 
   # Display results
@@ -968,8 +976,8 @@ sub get_uri ($$;$\%$$$$)
   }
   # Record the redirects
   $response->{Redirects} = $ua->{Redirects};
-  &hprintf(" fetched in %ss\n",
-           &time_diff($start, &get_timestamp())) if $verbose_progress;
+  &hprintf(" fetched%s\n",
+           &time_diff_formatted($start, &get_timestamp())) if $verbose_progress;
 
   $response->{OriginalCode}    = $code;
   $response->{OriginalMessage} = $message;
@@ -1041,6 +1049,9 @@ sub parse_document ($$$$;$)
 {
   my ($uri, $location, $document, $links, $rec_needs_links) = @_;
 
+  print("parse_document($uri, $location, ..., $links, $rec_needs_links)\n")
+    if $Opts{Verbose};
+
   my $p;
 
   if (defined($results{$uri}{parsing})) {
@@ -1077,8 +1088,8 @@ sub parse_document ($$$$;$)
   if (! $Opts{Summary_Only}) {
     my $stop = &get_timestamp();
     print "\r" if $Opts{Progress};
-    &hprintf(" done (%d lines in %ss).\n",
-             $p->{Total}, &time_diff($start, $stop));
+    &hprintf(" done (%d lines%s).\n",
+             $p->{Total}, &time_diff_formatted($start, $stop));
   }
 
   # Save the results before exiting
@@ -1392,6 +1403,15 @@ sub time_diff ($$)
     $_ /= 1_000_000;
   }
   return(sprintf("%.1f", ($stop[0]+$stop[1])-($start[0]+$start[1])));
+}
+
+sub time_diff_formatted ($$)
+{
+  if ($Opts{No_Times}) {
+    return "";
+  } else {
+    return(sprintf(" in %ss", time_diff($_[0], $_[1])));
+  }
 }
 
 ########################
@@ -2306,6 +2326,10 @@ No output if no errors are found.
 =item B<-v, --verbose>
 
 Verbose mode.
+
+=item B<--no-times>
+
+Do not show elapsed times.  Makes output more deterministic.
 
 =item B<-i, --indicator>
 
