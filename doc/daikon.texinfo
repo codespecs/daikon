@@ -7252,8 +7252,9 @@ then warns the programmer about possible null dereference errors.
 
 The type system is useful, but writing all the annotations is tedious.
 The AnnotateNullable tool automatically and soundly determines a subset of the
-proper @code{@@Nullable} annotations.  A programmer may need to write a
-few more annotations, but that is much easier than writing them all.
+proper @code{@@Nullable} annotations.  Each annotation that it infers is
+correct.  The programmer may need to write some additional
+@code{@@Nullable} annotations, but that is much easier than writing them all.
 
 To insert @code{@@Nullable} annotations in your program,
 follow these steps:
