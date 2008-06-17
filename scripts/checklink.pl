@@ -1317,7 +1317,9 @@ sub check_validity ($$\%\%)
     }
     # Do it then
     $p = &parse_document($uri, $response->base(),
-                         $response->as_string(), 0);
+                         $response->as_string(), 0,
+                         # Default to true, just in case we need it later.
+                         1);
   } else {
     # We already had the information
     $p->{Anchors} = $results{$uri}{parsing}{Anchors};
