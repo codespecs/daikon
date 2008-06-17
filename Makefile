@@ -392,7 +392,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	# jar xf java/lib/java-getopt.jar -C /tmp/${USER}/daikon-jar
 	# jar xf java/lib/junit.jar -C /tmp/${USER}/daikon-jar
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
+	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar)
@@ -480,7 +480,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	## getopt
 	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	## intern checker
-	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/checkers.jar)
+	# (cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	## Apache packages
 	mkdir /tmp/daikon/java/org
 	mkdir /tmp/daikon/java/org/apache
