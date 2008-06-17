@@ -461,10 +461,13 @@ dyncomp-jdk-only dcomp-jdk-only :
 # Creates a copy of utilMDE under the package name daikon.util
 # Copied source files are read-only, to prevent accidental changes
 utilMDE-copy : utilMDE-import-check
+	/bin/rm -rf daikon/util
 	install -d daikon/util/
 	# Must compile utilMDE in order to create .java files from .jpp files.
 	make -C utilMDE
-	install -t daikon/util/ -m 444 utilMDE/*.java
+	cp utilMDE/*.java daikon/util
+	chmod 444 daikon/util/*.java
+	#install -t daikon/util/ -m 444 utilMDE/*.java
 	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
 	# change the package declarations
 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
@@ -1537,6 +1540,7 @@ dump :
 	which java
 	echo $(OSTYPE)
 	echo $(PATH)
+	echo $(DAIKONBIN)
 
 ###########################################################################
 ### Delete-on-error
