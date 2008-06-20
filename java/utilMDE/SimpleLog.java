@@ -8,6 +8,7 @@ public final class SimpleLog {
   public String indent_str = "";
   public boolean enabled;
   public boolean line_oriented = true;
+  public boolean always_tb = false;
 
   public PrintStream logfile = System.out;
 
@@ -20,9 +21,14 @@ public final class SimpleLog {
 
   public Stack<LongVal> start_times = new Stack<LongVal>();
 
-  public SimpleLog (boolean enabled) {
+  public SimpleLog (boolean enabled, boolean always_tb) {
     this.enabled = enabled;
+    this.always_tb = always_tb;
     start_times.push (new LongVal(System.currentTimeMillis()));
+  }
+
+  public SimpleLog (boolean enabled) {
+    this (enabled, false);
   }
 
   public SimpleLog() {
@@ -83,6 +89,8 @@ public final class SimpleLog {
       format = fix_format(format);
       logfile.print (indent_str);
       logfile.printf (format, args);
+      if (always_tb)
+        tb();
     }
 
   }
