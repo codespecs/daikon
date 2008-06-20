@@ -432,4 +432,22 @@ public class BCELUtil {
             && (arg_types.length == 1) && arg_types[0].equals(string_array));
   }
 
+  /** Returns the java classname that corresponds to type **/
+  public static String type_to_classname (Type type) {
+    String signature = type.getSignature();
+    return UtilMDE.classnameFromJvm (signature);
+  }
+
+  /** Returns the class that corresponds to type **/
+  public static Class type_to_class (Type type) {
+
+    String classname = type_to_classname (type);
+    try {
+      Class c = UtilMDE.classForName (classname);
+      return c;
+    } catch (Exception e) {
+      throw new RuntimeException ("can't find class for " + classname, e);
+    }
+  }
+
 }
