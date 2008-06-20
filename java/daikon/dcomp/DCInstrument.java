@@ -49,9 +49,12 @@ class DCInstrument {
   protected static Type[] double_arg = new Type[] {Type.DOUBLE};
   protected static Type[] boolean_arg = new Type[] {Type.BOOLEAN};
   protected static Type[] long_arg = new Type[] {Type.LONG};
+  protected static Type[] short_arg = new Type[] {Type.SHORT};
   protected static Type[] object_arg = new Type[] {Type.OBJECT};
   protected static Type[] CharSequence_arg
     = new Type[] {new ObjectType ("java.lang.CharSequence")};
+  protected static Type javalangClass = new ObjectType ("java.lang.Class");
+  protected static Type[] class_str = new Type[] {javalangClass, Type.STRING};
 
   // Type descriptors
   protected static Type object_arr = new ArrayType (Type.OBJECT, 1);
@@ -82,10 +85,14 @@ class DCInstrument {
   protected static boolean exclude_object = true;
   protected static boolean use_StackVer = true;
 
+  public static Map<String,ClassGen> instrumented_classes
+    = new LinkedHashMap<String,ClassGen>();
+
   /**
    * Don't instrument toString functions.  Useful in debugging since
    * we call toString on objects from our code (which then triggers
-   * (recursive) instrumentation)
+   * (recursive) instrumentation).  This doesn't seem to be necessary
+   * if double_client (below) is true.
    */
   protected static boolean ignore_toString = true;
 
@@ -194,7 +201,7 @@ class DCInstrument {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
     public String toString() {
-      return String.format ("Code range: %d..%d", start_pc, start_pc+len);
+      return String.format ("Code range: %d..%d", start_pc, start_pc+len-1);
     }
   }
 
@@ -255,8 +262,8 @@ class DCInstrument {
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
     boolean track_class = false;
 
-    // Handle clone methods for this class
-    handle_clone (gen);
+    // Handle object methods for this class
+    handle_object (gen);
 
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
@@ -340,6 +347,9 @@ class DCInstrument {
           mg.removeLocalVariables();
         }
 
+        // Do any required post processing on the method
+        post_process (m, mg);
+
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables (mg);
 
@@ -374,6 +384,10 @@ class DCInstrument {
     }
 
     return (gen.getJavaClass().copy());
+  }
+
+  // DynComp has not specific post processing
+  public void post_process (Method m, MethodGen mg) {
   }
 
   /**
@@ -419,8 +433,8 @@ class DCInstrument {
     ClassInfo class_info = new ClassInfo (gen.getClassName(), loader);
     boolean track_class = false;
 
-    // properly account for clone methods
-    handle_clone (gen);
+    // properly account for object methods
+    handle_object (gen);
 
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
@@ -558,8 +572,8 @@ class DCInstrument {
 
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
 
-    // properly account for clone methods
-    handle_clone (gen);
+    // properly account for object methods
+    handle_object (gen);
 
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
@@ -660,8 +674,8 @@ class DCInstrument {
 
     debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
 
-    // properly account for clone methods
-    handle_clone (gen);
+    // properly account for object methods
+    handle_object (gen);
 
     // Have all top-level classes implement our interface
     if (gen.getSuperclassName().equals("java.lang.Object")) {
@@ -892,6 +906,9 @@ class DCInstrument {
    * occurs, the tag stack is cleaned up and the exception is rethrown.
    */
   public void handle_exceptions (MethodGen mgen) {
+
+    if (mgen.getName().equals ("main"))
+      return;
 
     InstructionList il = new InstructionList();
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
@@ -1790,32 +1807,25 @@ class DCInstrument {
    */
   InstructionList handle_invoke (InvokeInstruction invoke) {
 
+    // Get information about the call
     String classname = invoke.getClassName (pool);
-
-    InstructionList il = new InstructionList();
-
-    boolean callee_instrumented = !BCELUtil.in_jdk (classname)
-      || (jdk_instrumented // && classname.startsWith ("java")
-          && (exclude_object && !classname.equals ("java.lang.Object")));
-
-    // Don't instrument daikon.util (our copy of utilMDE)
-    if (classname.startsWith ("daikon.util"))
-      callee_instrumented = false;
-
-    // We don't instrument any of the Object methods
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
+
+    InstructionList il = new InstructionList();
+
+    // Determine if the callee is instrumented.
+    boolean callee_instrumented = callee_instrumented (classname);
     if (is_object_method (method_name, invoke.getArgumentTypes(pool)))
       callee_instrumented = false;
 
+    // System.out.printf ("handle invoke %s, method = %s, ignore_toString = %b%n",
+    //                     invoke, method_name, ignore_toString);
 
     // Replace calls to Object's equals method with calls to our
     // replacement, a static method in DCRuntime
-    if (method_name.equals("equals")
-        && ret_type == Type.BOOLEAN
-        && arg_types.length == 1
-        && arg_types[0].equals(javalangObject)) {
+    if (is_object_equals (method_name, ret_type, arg_types)) {
 
       Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
 
@@ -1833,11 +1843,11 @@ class DCInstrument {
                                        Constants.INVOKESTATIC));
       }
 
-    } else if (method_name.equals("clone")
-               && ret_type.equals(javalangObject)
-               && arg_types.length == 0) {
+    } else if (is_object_clone(method_name, ret_type, arg_types) ||
+               (is_object_toString(method_name, ret_type, arg_types)
+                && !ignore_toString)) {
 
-      il = instrument_clone_call (invoke);
+      il = instrument_object_call (invoke, "");
 
     } else if (callee_instrumented) {
 
@@ -1852,13 +1862,7 @@ class DCInstrument {
 
       // Discard the tags for any primitive arguments passed to system
       // methods
-      int primitive_cnt = 0;
-      for (Type arg_type : arg_types) {
-        if (arg_type instanceof BasicType)
-          primitive_cnt++;
-      }
-      if (primitive_cnt > 0)
-        il.append (discard_tag_code (new NOP(), primitive_cnt));
+      il.append (discard_primitive_tags (arg_types));
 
       // Add a tag for the return type if it is primitive
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
@@ -1871,45 +1875,115 @@ class DCInstrument {
     return (il);
   }
 
-  public InstructionList instrument_clone_call (InvokeInstruction invoke) {
+  /**
+   * Return instructions that will discard any primitive tags corresponding
+   * to the specified arguments.  An empty instruction list will be returned
+   * if there are now primitive arguments
+   */
+  InstructionList discard_primitive_tags (Type[] arg_types) {
 
     InstructionList il = new InstructionList();
-    ObjectType dcomp_clone = new ObjectType ("daikon.dcomp.DCompClone");
+    int primitive_cnt = 0;
+    for (Type arg_type : arg_types) {
+      if (arg_type instanceof BasicType)
+        primitive_cnt++;
+    }
+    if (primitive_cnt > 0)
+      il.append (discard_tag_code (new NOP(), primitive_cnt));
+    return il;
+  }
 
-    Type[] new_arg_types = new Type[] {dcomp_marker};
+  /** Returns whether or not the specified classname is instrumented **/
+  boolean callee_instrumented (String classname) {
+
+    // Out copy of daikon.util is not instrumented.  It would be odd, though,
+    // to see calls to this.
+    if (classname.startsWith ("daikon.util"))
+      return false;
+
+    // If its not a JDK class, presume its instrumented.
+    if (!BCELUtil.in_jdk (classname))
+        return true;
+
+    // If the JDK is instrumented, then everthing but object is instrumented
+    if (jdk_instrumented
+        && (exclude_object && !classname.equals ("java.lang.Object")))
+      return true;
+
+    return (false);
+  }
+
+  /** Returns true if the specified method is Object.equals() **/
+  boolean is_object_equals (String method_name, Type ret_type, Type[] args) {
+    return (method_name.equals("equals")
+            && ret_type == Type.BOOLEAN
+            && args.length == 1
+            && args[0].equals(javalangObject));
+  }
+
+  /** Returns true if the specified method is Object.clone() **/
+  boolean is_object_clone (String method_name, Type ret_type, Type[] args) {
+      return method_name.equals("clone") && ret_type.equals(javalangObject)
+        && (args.length == 0);
+  }
+
+  /** Returns true if the specified method is Object.toString() **/
+  boolean is_object_toString (String method_name, Type ret_type, Type[] args) {
+    return method_name.equals ("toString") && ret_type.equals(Type.STRING)
+      && (args.length == 0);
+  }
+
+  /**
+   * Instrument calls to the object methods clone and toString.  In each
+   * case, an instrumented version is called if it exists, the non-instrumented
+   * version if it does not.  Could be used for other Object methods without
+   * arguments.
+   */
+  public InstructionList instrument_object_call (InvokeInstruction invoke,
+                                                 String dcr_suffix) {
+
+    InstructionList il = new InstructionList();
+
+    Type[] arg_types = invoke.getArgumentTypes(pool);
+    Type[] new_arg_types = add_type (arg_types, dcomp_marker);
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     String classname = invoke.getClassName (pool);
+    String dcr_method_name = "uninstrumented_" + method_name + dcr_suffix;
 
-    // if this is a super.clone() call
+    // Create the interface type that indicates whether or not this method exists
+    String cap_method_name = method_name.substring(0,1).toUpperCase()
+      + method_name.substring(1);
+    ObjectType dcomp_interface
+      = new ObjectType ("daikon.dcomp.DComp" + cap_method_name);
+
+    // For now only handle methods without any arguments
+    assert arg_types.length == 0 : invoke;
+
+    // if this is a super call
     if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
 
-      // If there is an instrumented clone to call
-      if (has_instrumented_clone (classname)) {
-        il.append (new ACONST_NULL());
-        il.append (ifact.createInvoke (classname, method_name, ret_type,
-                                       new_arg_types, invoke.getOpcode()));
-      } else { // no instrumented clone to call
+      // If the superclass has an instrumented method, call it
+      // otherwise call the uninstrumented method.  This has to be
+      // done inline, because the call to super can only take place
+      // in this class.  We check at runtime to see if the superclass
+      // has an instrumented version of the method.  This is safe because
+      // at runtime the superclass must already be loaded.
 
-        // handle the uninstrumented clone
-        il.append (new DUP());
-        il.append (invoke);
-        il.append (dcr_call ("uninstrumented_clone", Type.OBJECT, two_objects));
-      }
+      // push the class of the superclass
+      il.append (new LDC (pool.addClass (classname)));
 
-    } else { // just a regular clone() call
+      // push the name of the method
+      il.append (ifact.createConstant (method_name));
 
-      // If the object has an instrumented clone method, call it
-      // otherwise call the uninstrumented method.
+      // Call the method that tests to see if an instrumented version of
+      // method_name exists in the superclass
+      il.append (dcr_call ("has_instrumented", Type.BOOLEAN, class_str));
 
-      // Duplicate the object reference to be cloned
-      il.append (new DUP());
-
-      // Test object and jump if there is not an instrumented version of clone
-      il.append (ifact.createInstanceOf (dcomp_clone));
+      // Test result and jump if there is no instrumented version of the method
       BranchHandle ifeq_branch = il.append (new IFEQ(null));
 
-      // Call the instrumented version of clone
+      // Call the instrumented version of the method
       il.append (new ACONST_NULL());
       il.append (ifact.createInvoke (classname, method_name, ret_type,
                                         new_arg_types, invoke.getOpcode()));
@@ -1917,10 +1991,66 @@ class DCInstrument {
       // Jump to the end
       BranchHandle goto_branch = il.append (new GOTO(null));
 
-      // Call the uninstrumented version of clone and handle the interaction
+      // Call the uninstrumented version of the method and handle the interaction
       InstructionHandle else_target = il.append (new DUP());
       il.append (invoke);
-      il.append (dcr_call ("uninstrumented_clone", Type.OBJECT, two_objects));
+      il.append (dcr_call (dcr_method_name, ret_type,
+                           new Type[] {Type.OBJECT, ret_type}));
+
+      InstructionHandle endif_target = il.append (new NOP());
+
+      // Fixup the jump targets
+      ifeq_branch.setTarget (else_target);
+      goto_branch.setTarget (endif_target);
+
+      /* Old version which tries to check at instrumentation time.  This
+         fails because the superclass is not necessarily instrumented
+         before the subclass
+      // If there is an instrumented version to call
+      if (has_instrumented (method_name, ret_type, arg_types, classname)) {
+        il.append (new ACONST_NULL());
+        il.append (ifact.createInvoke (classname, method_name, ret_type,
+                                       new_arg_types, invoke.getOpcode()));
+      } else { // no instrumented method to call
+
+        // Make the normal call and then call into DCR with the original
+        // object and teh result of the normal call.  This allows appropriate
+        // processing to take place.  Note that the 'super' call must take
+        // place inline, it can't take place in DCRuntime (which would be easier)
+        il.append (new DUP());
+        il.append (invoke);
+        il.append (dcr_call (dcr_method_name , ret_type,
+                             new Type[] {Type.OBJECT, ret_type}));
+      }
+      */
+
+    } else { // a regular (non-super) clone() call
+
+      // If the object has an instrumented clone method, call it
+      // otherwise call the uninstrumented method.  This has to be
+      // done inline, because clone is protected.  Other calls don't require
+      // this, but can be handled in the same fashion.
+
+      // Duplicate the object reference whose method is being called
+      il.append (new DUP());
+
+      // Test object and jump if there is no instrumented version of the method
+      il.append (ifact.createInstanceOf (dcomp_interface));
+      BranchHandle ifeq_branch = il.append (new IFEQ(null));
+
+      // Call the instrumented version of the method
+      il.append (new ACONST_NULL());
+      il.append (ifact.createInvoke (classname, method_name, ret_type,
+                                        new_arg_types, invoke.getOpcode()));
+
+      // Jump to the end
+      BranchHandle goto_branch = il.append (new GOTO(null));
+
+      // Call the uninstrumented version of the method and handle the interaction
+      InstructionHandle else_target = il.append (new DUP());
+      il.append (invoke);
+      il.append (dcr_call (dcr_method_name, ret_type,
+                           new Type[] {Type.OBJECT, ret_type}));
 
       InstructionHandle endif_target = il.append (new NOP());
 
@@ -1933,35 +2063,61 @@ class DCInstrument {
   }
 
   /**
-   * Determine if there is an instrumented clone to call in the
+   * Determine if the specified method is instrumented in the
    * specified class or any of its superclasses.
    * We can safely use reflection here because all superclasses must
    * have been loaded before this class was loaded.
    **/
-  protected boolean has_instrumented_clone (String classname) {
+  protected boolean has_instrumented (String method_name, Type return_type,
+                                      Type[] arg_types, String classname) {
 
-    // Since we can't instrument Object, it never has an instrumented clone
+    // Since we can't instrument Object, it never has an instrumented method
     if (classname.equals ("java.lang.Object"))
       return false;
 
-    // Loop through this class and each of its superclasses.  If a clone
+    // Loop through this class and each of its superclasses. If the
+    // method is found in a class that is instrumented, return true.
+    while (classname != null) {
+      ClassGen gen = instrumented_classes.get (classname);
+      if (gen == null) {
+        System.out.printf ("can't find superclass %s%n", classname);
+        return false;
+      }
+      String signature = Type.getMethodSignature (return_type, arg_types);
+      Method method = gen.containsMethod (method_name, signature);
+      System.out.printf ("looking for %s %s in %s : ;%s%n", method_name,
+                         signature, gen.getClassName(), method);
+      if (method != null)
+        return true;
+      classname = gen.getSuperclassName();
+    }
+    if (true)
+      return (false);
+
+    // Turn the arg_types into an array of classes
+    Class[] arg_classes = new Class[arg_types.length];
+    for (int ii = 0; ii < arg_types.length; ii++)
+      arg_classes[ii] = BCELUtil.type_to_class (arg_types[ii]);
+
+    // Loop through this class and each of its superclasses.  If the
     // method is found in a class that is instrumented, return true.
     try {
-      for (Class<?> c = Class.forName (classname);
+      for (Class<?> c = Class.forName (classname, false,
+                                       this.getClass().getClassLoader());
            !c.getName().equals ("java.lang.Object");
            c = c.getSuperclass()) {
 
-        // If the class is not instrumented, clone cannot be instrumented
+        // If the class is not instrumented, the method cannot be instrumented
         // We presume here that an uninstrumented class does not have
         // any instrumented superclasses
         if (!is_instrumented (c))
           return false;
 
-        // Look for a clone method.  If there is one, we should have
+        // Look for the method.  If there is one, we should have
         // instrumented it.
         java.lang.reflect.Method m = null;
         try {
-          m = c.getDeclaredMethod("clone", new Class<?>[] {});
+          m = c.getDeclaredMethod(method_name, arg_classes);
         } catch (Exception e) {
         }
         if (m != null)
@@ -3933,17 +4089,21 @@ class DCInstrument {
   }
 
   /**
-   * Marks the class as implementing a clone method.  Callers will call
-   * the instrumented version of clone if it exists, otherwise they
-   * will call the uninstrumented version
+   * Marks the class as implementing various object methods (currently clone
+   * and toString).  Callers will call the instrumented version of the
+   * method if it exists, otherwise they will call the uninstrumented version
    */
-  public void handle_clone (ClassGen gen) {
+  public void handle_object (ClassGen gen) {
+    instrumented_classes.put (gen.getClassName(), gen);
     Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
-    if (cl == null)
-      return;
+    if (cl != null)
+      gen.addInterface("daikon.dcomp.DCompClone");
 
-    gen.addInterface("daikon.dcomp.DCompClone");
+    Method ts = gen.containsMethod ("toString", "()Ljava/lang/String;");
+    if (ts != null)
+      gen.addInterface ("daikon.dcomp.DCompToString");
   }
+
 
   /**
    * Adds the following method to a class:
