@@ -273,7 +273,7 @@ public class DynComp {
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<String>();
     cmdlist.add ("java");
-
+    // cmdlist.add ("-verbose:class");
     cmdlist.add ("-cp");
     cmdlist.add (cp);
     cmdlist.add ("-ea");
