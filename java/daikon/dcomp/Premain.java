@@ -106,6 +106,8 @@ public class Premain {
                            byte[] classfileBuffer)
                                   throws IllegalClassFormatException {
 
+      // System.out.printf ("transform on %s%n", className);
+
       // Don't instrument JDK classes (but allow instrumentation of the java
       // compiler)
       if ((className.startsWith ("java/") || className.startsWith ("com/")
@@ -183,6 +185,10 @@ public class Premain {
                            DCRuntime.branch_tags.size());
         for (Set<DCRuntime.ValueSource> vs : DCRuntime.branch_tags) {
           System.out.printf ("  ---------------%n");
+          if (vs == null) {
+            System.out.printf ("  Warning: null vs encountered%n");
+            continue;
+          }
           for (DCRuntime.ValueSource src : vs) {
             System.out.printf ("  %s%n", src);
             Throwable st = src.get_stack_trace();
@@ -217,11 +223,14 @@ public class Premain {
 
             System.out.printf ("Writing dataflow output to %s%n",
                                DynComp.dataflow_out);
-            Set<Integer> locals = new HashSet<Integer>();
+            Set<String> locals = new LinkedHashSet<String>();
             for (Set<DCRuntime.ValueSource> vs : DCRuntime.branch_tags) {
+              if (vs == null)
+                continue;
               for (DCRuntime.ValueSource src : vs) {
                 if (src.descr.startsWith ("local-store")) {
-                  locals.add (Integer.decode(src.descr.split (" ")[1]));
+                  int local_index = Integer.decode(src.descr.split (" ")[1]);
+                  locals.add (DFInstrument.test_seq_locals[local_index]);
                 }
               }
             }
