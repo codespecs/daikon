@@ -69,7 +69,8 @@ public final class DCRuntime {
   public static final SimpleLog debug_timing = new SimpleLog (false);
   public static final SimpleLog debug_decl_print = new SimpleLog (false);
   public static final SimpleLog time_decl = new SimpleLog (false);
-  public static final SimpleLog debug_df = new SimpleLog (false);
+  public static final SimpleLog debug_df = new SimpleLog (true);
+  public static final SimpleLog debug_df_branch = new SimpleLog (true, true);
 
   /** Simplifies printouts for debugging if we ignore toString **/
   private static boolean ignore_toString = true;
@@ -172,12 +173,15 @@ public final class DCRuntime {
   public static List<Set<ValueSource>> branch_tags
     = new ArrayList<Set<ValueSource>>();
 
+  public static Class dcompmarker = null;
+
   /** Perform any initialization required before instrumentation begins **/
   public static void init() {
 
     // Initialize the array of static tags
     while (static_tags.size() <= max_jdk_static)
       static_tags.add (null);
+
   }
 
 
@@ -440,6 +444,47 @@ public final class DCRuntime {
   }
 
   /**
+   * Returns true if c or any of its superclasses has an instrumented
+   * version of method.  method should be an Object method with no
+   * arguments
+   */
+  public static boolean has_instrumented (Class<?> c, String method_name) {
+
+    // initialize the Class for DCompMarker if it is not already initialized.
+    // This needs tobe done her rather than in the initializer to avoid some
+    // order dependencies in loading
+    if (dcompmarker == null) {
+      try {
+        if (DCInstrument.jdk_instrumented) {
+          dcompmarker = Class.forName("java.lang.DCompMarker");
+        } else {
+          dcompmarker = Class.forName("daikon.dcomp.DCompMarker");
+        }
+      } catch (Exception e) {
+        throw new RuntimeException ("unexpected error finding DCompMarker", e);
+      }
+    }
+
+    System.out.printf ("has_instrumented: %s %s %s%n", c, method_name,
+                       dcompmarker);
+
+    Class[] args = new Class[] {dcompmarker};
+    while (!c.getName().equals ("java.lang.Object")) {
+      java.lang.reflect.Method m = null;
+      try {
+        m = c.getDeclaredMethod (method_name, args);
+      } catch (Exception e) {
+      }
+      System.out.printf ("Class %s instrumented %s = %s%n", c, method_name, m);
+      if (m != null) {
+        return true;
+      }
+      c = c.getSuperclass();
+    }
+    return (false);
+  }
+
+  /**
    * Handle an uninstrumented clone call by making the two objects
    * comparable.  Really should make all of their fields comparable
    * instead.  Returns the cloned object.
@@ -449,6 +494,16 @@ public final class DCRuntime {
     TagEntry.union (orig_obj, clone_obj);
     return clone_obj;
   }
+
+  /**
+   * Handle an uninstrumented toString call.  Since comparability doesn't
+   * seem to be related to toString, this does nothing.
+   */
+  public static String uninstrumented_toString (Object orig_obj,
+                                                String result) {
+    return result;
+  }
+
 
   /**
    * Handle object comparison.  Marks the two objects as comparable and
@@ -3526,7 +3581,7 @@ public final class DCRuntime {
   public static void prim_branch_df() {
     Object tag = pop_check();
     branch_tags.add (tag_map.get (tag));
-    System.out.printf ("primitive DF in branch: %s\n", tag_map.get (tag));
+    debug_df_branch.log ("primitive DF in branch: %s\n", tag_map.get (tag));
   }
 
   /**
@@ -3535,9 +3590,22 @@ public final class DCRuntime {
    **/
   public static Object ref_branch_df(Object obj) {
     branch_tags.add (tag_map.get (obj));
-    System.out.printf ("Reference DF for object %s in branch: %s\n",
-                       obj, tag_map.get(obj));
+    debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
+                         obj, tag_map.get(obj));
     return obj;
+  }
+
+  /**
+   * Prints the DF for the specified objects. Used for if_acmpeq and
+   * if_acmpne
+   **/
+  public static void ref2_branch_df(Object obj1, Object obj2) {
+    branch_tags.add (tag_map.get (obj1));
+    branch_tags.add (tag_map.get (obj2));
+    debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
+                         obj1, tag_map.get(obj1));
+    debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
+                         obj2, tag_map.get(obj2));
   }
 
   /**
@@ -3562,17 +3630,41 @@ public final class DCRuntime {
         val.add (new ValueSource (uft.descr, uft.stack_trace));
         tag_map.put (tag, val);
       } else { // unexpected null
-        System.out.printf ("WARNING: no value for tag '%s'%n", tag);
         val = new HashSet<ValueSource>(1);
         Throwable stack_trace = new Throwable();
         stack_trace.fillInStackTrace();
         val.add (new ValueSource ("Throwable", stack_trace));
         tag_map.put (tag, val);
+        System.out.printf ("WARNING: no value for tag '%s'%n", tag);
+        stack_trace.printStackTrace (System.out);
       }
 
     }
     return val;
   }
+
+  /**
+   * Handle an uninstrumented clone call by transferring the dataflow
+   * from the original object to the clone. Really should transfer the
+   * dataflow of each primitive field instead.
+   * Returns the cloned object.
+   */
+  public static Object uninstrumented_clone_df (Object orig_obj,
+                                                Object clone_obj) {
+    obj_to_obj (orig_obj, clone_obj);
+    return clone_obj;
+  }
+
+  /**
+   * Handle an uninstrumented toString call.  Transfers the dataflow from
+   * the orig object to the string.
+   */
+  public static String uninstrumented_toString_df (Object orig_obj,
+                                                   String result) {
+    obj_to_obj (orig_obj, result);
+    return result;
+  }
+
 
   //
   // Routines used as summaries for the JDK
@@ -3637,7 +3729,8 @@ public final class DCRuntime {
 
   /** DF of result is equal to DF of argument **/
   public static Boolean Boolean_valueOf (boolean val) {
-    Boolean obj = Boolean.valueOf (val);
+    // Boolean obj = Boolean.valueOf (val);
+    Boolean obj = new Boolean(val);
     prim_to_obj (obj);
     return (obj);
   }
@@ -3656,12 +3749,35 @@ public final class DCRuntime {
     return obj;
   }
 
+  /** DF of result is equal to DF of argument **/
+  public static Short Short_valueOf (short val) {
+    Short obj = Short.valueOf (val);
+    prim_to_obj (obj);
+    return obj;
+  }
+
+  /** DF of result is equal to DF of argument **/
+  public static String String_valueOf (Object obj) {
+    String str = String.valueOf (obj);
+    obj_to_obj (obj, str);
+    return str;
+  }
+
   /** DF of result is equal to the union of the DF of the two arguments **/
   public static StringBuffer StringBuffer_append (StringBuffer buff,
                                                   CharSequence s) {
+    System.out.printf ("Append '%s' to '%s'%n", s, buff);
     StringBuffer result = buff.append (s);
     union_df (result, buff, s);
-    System.out.printf ("Append '%s' to '%s'", s, buff);
+    return result;
+  }
+
+  /** DF of result is equal to the union of the DF of the two arguments **/
+  public static StringBuffer StringBuffer_append (StringBuffer buff,
+                                                  String s) {
+    System.out.printf ("Append '%s' to '%s'%n", s, buff);
+    StringBuffer result = buff.append (s);
+    union_df (result, buff, s);
     return result;
   }
 
@@ -3679,7 +3795,9 @@ public final class DCRuntime {
       boolean result = dci.equals_dcomp_instrumented (o2);
       return (result);
     } else { // the equals is not instrumented
-      debug_df.log_tb ("uninstrumented equals on %s and %s", o1, o2);
+      debug_df.log_tb ("uninstrumented equals on %X:%s and %X:%s",
+                       System.identityHashCode(o1), o1,
+                       System.identityHashCode(o2), o2);
       Object tag = new Object();
       union_df (tag, o1, o2);
       push_tag (tag);
