@@ -32,6 +32,9 @@ class DFInstrument extends DCInstrument {
   /** True if the current method is the test sequence **/
   private static boolean test_sequence = false;
 
+  /** Array from local variable index to local variable name in the test seq **/
+  public static String[] test_seq_locals = null;
+
   /**
    * Map from methods in the JDK to our methods that replace them.
    * There is one map for each class with replacement methods.
@@ -49,9 +52,13 @@ class DFInstrument extends DCInstrument {
     = new LinkedHashMap<MethodDef,String>();
   private static Map<MethodDef,String> Long_map
     = new LinkedHashMap<MethodDef,String>();
+  private static Map<MethodDef,String> Short_map
+    = new LinkedHashMap<MethodDef,String>();
   private static Map<MethodDef,String> Boolean_map
     = new LinkedHashMap<MethodDef,String>();
   private static Map<MethodDef,String> StringBuffer_map
+    = new LinkedHashMap<MethodDef,String>();
+  private static Map<MethodDef,String> String_map
     = new LinkedHashMap<MethodDef,String>();
   static {
     Integer_map.put (new MethodDef ("valueOf", integer_arg), "Integer_valueOf");
@@ -59,6 +66,8 @@ class DFInstrument extends DCInstrument {
     jdk_method_map.put ("java.lang.Integer", Integer_map);
     Long_map.put (new MethodDef ("valueOf", long_arg), "Long_valueOf");
     jdk_method_map.put ("java.lang.Long", Long_map);
+    Short_map.put (new MethodDef ("valueOf", short_arg), "Short_valueOf");
+    jdk_method_map.put ("java.lang.Short", Short_map);
     Float_map.put (new MethodDef ("valueOf", float_arg), "Float_valueOf");
     jdk_method_map.put ("java.lang.Float", Float_map);
     Double_map.put (new MethodDef ("valueOf", double_arg), "Double_valueOf");
@@ -70,6 +79,9 @@ class DFInstrument extends DCInstrument {
     StringBuffer_map.put (new MethodDef ("append", string_arg),
                           "StringBuffer_append");
     jdk_method_map.put ("java.lang.StringBuffer", StringBuffer_map);
+    String_map.put (new MethodDef ("valueOf", object_arg),
+                          "String_valueOf");
+    jdk_method_map.put ("java.lang.String", String_map);
   }
   /**
    * Initialize with the original class and whether or not the class
@@ -78,6 +90,7 @@ class DFInstrument extends DCInstrument {
   public DFInstrument (JavaClass orig_class, boolean in_jdk,
                        ClassLoader loader) {
     super (orig_class, in_jdk, loader);
+    ignore_toString = false;
     debug.log ("dataflow instrumentation of %s", gen.getClassName());
   }
 
@@ -149,7 +162,34 @@ class DFInstrument extends DCInstrument {
     }
   }
 
+  /**
+   * Post processes instrumented methods.  If the method is the test
+   * sequence, the local variable table is saved so that we can
+   * translate from indices back to variables
+   */
+  public void post_process (Method m, MethodGen mg) {
 
+    if (!test_sequence)
+      return;
+
+    LocalVariable[] lvt
+      = mg.getMethod().getLocalVariableTable().getLocalVariableTable();
+      // = mg.getLocalVariableTable(pool).getLocalVariableTable();
+
+    System.out.printf ("Local variable table for test sequence %s%n",
+                       mg.getName());
+    int max_index = 0;
+    for (LocalVariable lv : lvt) {
+      System.out.printf ("local variable %s index %d%n", lv.getName(),
+                         lv.getIndex());
+      if (lv.getIndex() > max_index)
+        max_index = lv.getIndex();
+    }
+    test_seq_locals = new String[max_index+1];
+    for (LocalVariable lv : lvt) {
+      test_seq_locals[lv.getIndex()] = lv.getName();
+    }
+}
 
   /**
    * Transforms instructions to track dataflow.  Returns a list
@@ -169,13 +209,18 @@ class DFInstrument extends DCInstrument {
 
     switch (inst.getOpcode()) {
 
-    // Object comparison in a jump doesn't create any direct dataflow
-    // so we do nothing here.  At some point however, we should enhance
-    // the system so that all tags created in either branch include both
-    // of these objects.
+    // if this is a frontier branch, remember the DF of the objects being
+    // compared, otherwise do nothing
     case Constants.IF_ACMPEQ:
-    case Constants.IF_ACMPNE:
-      return null;
+    case Constants.IF_ACMPNE: {
+      if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
+        return build_il (new DUP2(),
+                         dcr_call ("ref2_branch_df", Type.VOID, two_objects),
+                         inst);
+      } else { // not a branch of interest
+        return null;
+      }
+    }
 
     // These instructions compare the integer on the top of the stack
     // to zero.  There is no dataflow here, so we need only
@@ -804,13 +849,13 @@ class DFInstrument extends DCInstrument {
       LineNumber ln = lna[i];
       int lnum = ln.getLineNumber();
       if (lnum == line) {
-        int len;
+        int last_pc;
         int next_line = i+1;
         if (next_line < lna.length)
-          len = lna[next_line].getStartPC()-1;
+          last_pc = lna[next_line].getStartPC()-1;
         else
-          len = m.getCode().getCode().length;
-        return new CodeRange (ln.getStartPC(), len);
+          last_pc = m.getCode().getCode().length;
+        return new CodeRange (ln.getStartPC(), (last_pc - ln.getStartPC()) + 1);
       }
       if (lnum < min_line)
         min_line = lnum;
@@ -837,22 +882,16 @@ class DFInstrument extends DCInstrument {
   InstructionList handle_invoke_df (MethodGen mg, InvokeInstruction invoke,
                                     OperandStack stack, int position) {
 
+    // Get information about the call
     String classname = invoke.getClassName (pool);
-
-    InstructionList il = new InstructionList();
-
-    boolean callee_instrumented = !BCELUtil.in_jdk (classname)
-      || (jdk_instrumented // && classname.startsWith ("java")
-          && (exclude_object && !classname.equals ("java.lang.Object")));
-
-    // Don't instrument daikon.util (our copy of utilMDE)
-    if (classname.startsWith ("daikon.util"))
-      callee_instrumented = false;
-
-    // We don't instrument any of the Object methods
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
+
+    InstructionList il = new InstructionList();
+
+    // Determine if the callee is instrumented.
+    boolean callee_instrumented = callee_instrumented (classname);
     if (is_object_method (method_name, invoke.getArgumentTypes(pool)))
       callee_instrumented = false;
 
@@ -891,12 +930,10 @@ class DFInstrument extends DCInstrument {
 
       // Handle equals by calling a static method that calculates DF
       // and delegates appropriately
-      if (method_name.equals ("equals") && (arg_types.length == 1)
-          && (arg_types[0].equals(javalangObject))) {
+      if (is_object_equals (method_name, ret_type, arg_types)) {
+
         if (invoke.getOpcode() == Constants.INVOKEVIRTUAL) {
           il.append (dcr_call ("equals_df", ret_type, two_objects));
-          System.out.printf ("Adding call to equals_df in method %s%n",
-                             mg.getName());
           return (il);
         } else { // super call
           il.append (new DUP2());
@@ -904,17 +941,17 @@ class DFInstrument extends DCInstrument {
           il.append (invoke);
           return (il);
         }
+
+      } else if (is_object_clone(method_name, ret_type, arg_types) ||
+               (is_object_toString(method_name, ret_type, arg_types)
+                && !ignore_toString)) {
+
+        return  instrument_object_call (invoke, "_df");
       }
 
       // Discard the tags for any primitive arguments passed to system
       // methods
-      int primitive_cnt = 0;
-      for (Type arg_type : arg_types) {
-        if (arg_type instanceof BasicType)
-          primitive_cnt++;
-      }
-      if (primitive_cnt > 0)
-        il.append (discard_tag_code (new NOP(), primitive_cnt));
+      il.append (discard_primitive_tags (arg_types));
 
       // Add a tag for the return type if it is primitive
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
