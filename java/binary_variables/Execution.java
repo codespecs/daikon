@@ -193,10 +193,16 @@ line 518:
 
         values.removeAll(bb.binaryVariables);
         if (values.size()==0) break;
-        bb = f.basicBlocks.tailSet(bb, false).first();
+        // JHP 6/19/08, fixed so it will compile, not correct!
+        // bb = f.basicBlocks.tailSet(bb, false).first();
+        bb = f.basicBlocks.tailSet(bb).first();
       }
     }
   }
+
+  /**
+   * In this case, the BB is guaranteed to match the values (see asserts at top)
+   */
   private void addBB(StackEntry top, BasicBlock bb, TreeSet<BinaryVariable> values) throws Throwable {
     // Make sure "bb" has the same set of BVs
     assert bb.binaryVariables.equals(values) : "values="+values+"\noldValues="+bb.binaryVariables; // it ignore the value in the binary variable

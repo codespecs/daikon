@@ -78,7 +78,7 @@ public class AsmFile {
             throw new RuntimeException(parseError(reader.getLineNumber(),
                                                   errorMessage3));
 
-        if (line.trim().isEmpty()) // Name should not be empty.
+        if (line.trim().length() == 0) // Name should not be empty.
             throw new RuntimeException(parseError(reader.getLineNumber(),
                                                   errorMessage4));
         name = line;
@@ -89,7 +89,7 @@ public class AsmFile {
         if (line == null)
             throw new RuntimeException(parseError(reader.getLineNumber(),
                                                   errorMessage5));
-        while (line != null && !line.isEmpty()) {
+        while (line != null && (line.length() != 0)) {
             X86Instruction instr = X86Instruction.parseInstruction(line);
             if (isFirstInstruction) {
               instr.isFirstInBlock = true;
@@ -113,7 +113,7 @@ public class AsmFile {
             String line = reader.readLine();
             if (line == null)
                 return false;
-            if (line.trim().isEmpty())
+            if (line.trim().length() == 0)
                 continue;
             reader.reset();
             return true;

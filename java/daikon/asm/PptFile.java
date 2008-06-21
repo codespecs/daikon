@@ -45,7 +45,7 @@ public class PptFile {
             if (readingPptName) {
                 // Read ppt name.
                 assert line != null;
-                assert !line.trim().isEmpty();
+                assert line.trim().length() != 0;
                 assert !line.startsWith("====================") : "line " + reader.getLineNumber();
                 name = line;
                 //System.out.println("NAME " + name);
