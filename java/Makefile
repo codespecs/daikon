@@ -27,7 +27,7 @@ endif
 
 ### end of user customizations
 
-JAVAC_COMMAND = jsr308_imports='checkers.interned.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -682,8 +682,8 @@ audit:
 
 # Interned type qualifier checker
 
-# JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker
-JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InternedChecker -Alint=-dotequals
+# JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InterningChecker
+JAVAC_INTERNED_ARGS = -typeprocessor checkers.interning.InterningChecker -Alint=-dotequals
 JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
 ## Remove files that are not fully annotated, but contain the string "@Interned".
 # INTERNED_JAVA_FILES_SKIP =
