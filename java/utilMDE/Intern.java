@@ -514,7 +514,8 @@ public final class Intern {
    * they are compared using their equals() methods.
    **/
   @SuppressWarnings("interned")
-  public static /*@Interned*/ Object[] intern(Object[] a) {
+  // I don't know if it's reasonable to get the body to typecheck with the @PolyInterned signature.
+  public static /*@Interned*/ Object[/*@PolyInterned*/] intern(Object[/*@PolyInterned*/] a) {
     WeakReference</*@Interned*/ Object[]> lookup = internedObjectArrays.get(a);
     if (lookup != null) {
       return lookup.get();
