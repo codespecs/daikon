@@ -41,7 +41,7 @@ class DCInstrument {
   // Argument descriptors
   protected static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
   protected static Type[] object_string = new Type[] {Type.OBJECT, Type.STRING};
-  // private Type[] two_ints = new Type[] {Type.INT, Type.INT};
+  protected static Type[] two_ints = new Type[] {Type.INT, Type.INT};
   protected static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
   protected static Type[] string_arg = new Type[] {Type.STRING};
   protected static Type[] integer_arg = new Type[] {Type.INT};
