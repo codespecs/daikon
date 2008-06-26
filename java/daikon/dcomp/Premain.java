@@ -12,6 +12,8 @@ import org.apache.bcel.generic.*;
 
 import daikon.util.*;
 import daikon.chicory.DaikonVariableInfo;
+import daikon.dcomp.DCRuntime.BranchInfo;
+import daikon.dcomp.DCRuntime.ValueSource;
 
 import daikon.DynComp;
 
@@ -181,22 +183,23 @@ public class Premain {
 
       // If DataFlow, print out the DF for the specified branch
       if (DynComp.branch != null) {
-        System.out.printf ("Branch %s executed %d times\n", DynComp.branch,
+        System.err.printf ("Branch %s executed %d times\n", DynComp.branch,
                            DCRuntime.branch_tags.size());
-        for (Set<DCRuntime.ValueSource> vs : DCRuntime.branch_tags) {
-          System.out.printf ("  ---------------%n");
-          if (vs == null) {
-            System.out.printf ("  Warning: null vs encountered%n");
+        for (BranchInfo bi : DCRuntime.branch_tags) {
+          System.err.printf ("  --------------- compare-to: %s%n",
+                             bi.compared_to);
+          if (bi.value_source == null) {
+            System.err.printf ("  Warning: null vs encountered%n");
             continue;
           }
-          for (DCRuntime.ValueSource src : vs) {
-            System.out.printf ("  %s%n", src);
+          for (ValueSource src : bi.value_source) {
+            System.err.printf ("  %s%n", src);
             Throwable st = src.get_stack_trace();
             if (st != null) {
               for (StackTraceElement ste : st.getStackTrace()) {
                 if (ste.getClassName().startsWith ("daikon.dcomp.DCRuntime"))
                   continue;
-                System.out.printf ("    %s%n", ste);
+                System.err.printf ("    %s%n", ste);
               }
             }
           }
@@ -223,18 +226,30 @@ public class Premain {
 
             System.out.printf ("Writing dataflow output to %s%n",
                                DynComp.dataflow_out);
-            Set<String> locals = new LinkedHashSet<String>();
-            for (Set<DCRuntime.ValueSource> vs : DCRuntime.branch_tags) {
-              if (vs == null)
-                continue;
-              for (DCRuntime.ValueSource src : vs) {
-                if (src.descr.startsWith ("local-store")) {
-                  int local_index = Integer.decode(src.descr.split (" ")[1]);
-                  locals.add (DFInstrument.test_seq_locals[local_index]);
+            Map<String,Set<String>> locals
+              = new LinkedHashMap<String,Set<String>>();
+            for (BranchInfo bi : DCRuntime.branch_tags) {
+              for (ValueSource vs : bi.value_source) {
+                if (vs == null)
+                  continue;
+                if (vs.descr.startsWith ("local-store")) {
+                  int local_index = Integer.decode(vs.descr.split (" ")[1]);
+                  String local_name = DFInstrument.test_seq_locals[local_index];
+                  Set<String> compare_to_set = locals.get (local_name);
+                  if (compare_to_set == null) {
+                    compare_to_set = new LinkedHashSet<String>();
+                    locals.put (local_name, compare_to_set);
+                  }
+                  compare_to_set.add (bi.compared_to);
                 }
               }
             }
-            dataflow_fp.printf ("%s%n", locals);
+            for (String local : locals.keySet()) {
+              dataflow_fp.printf ("%s ", local);
+              for (String ct : locals.get(local))
+                dataflow_fp.printf ("%s ", ct);
+              dataflow_fp.println();
+            }
           }
           dataflow_fp.close();
         }
