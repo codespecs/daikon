@@ -233,7 +233,8 @@ class DFInstrument extends DCInstrument {
     case Constants.IFLE: {
       if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
         debug.log ("generating code for branch at %s:%s", mg.getName(), inst);
-        return build_il (dcr_call ("prim_branch_df", Type.VOID, Type.NO_ARGS),
+        return build_il (ifact.createConstant (0),
+                         dcr_call ("prim_branch_df", Type.VOID, integer_arg),
                          inst);
       } else { // not a branch of interest
         return discard_tag_code (inst, 1);
@@ -247,7 +248,7 @@ class DFInstrument extends DCInstrument {
     case Constants.IFNULL: {
       if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
         debug.log ("generating code for branch at %s:%s", mg.getName(), inst);
-        return build_il (dcr_call ("ref_branch_df", Type.OBJECT, object_arg),
+        return build_il (dcr_call ("ref_cmp_null_df", Type.OBJECT, object_arg),
                          inst);
       }
       return (null);
@@ -337,8 +338,8 @@ class DFInstrument extends DCInstrument {
     case Constants.IF_ICMPNE: {
       if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
         debug.log ("generating code for branch at %s:%s", mg.getName(), inst);
-        return build_il (dcr_call ("prim_branch_df", Type.VOID, Type.NO_ARGS),
-                         dcr_call ("prim_branch_df", Type.VOID, Type.NO_ARGS),
+        return build_il (new DUP2(),
+                         dcr_call ("int2_branch_df", Type.VOID, two_ints),
                          inst);
       } else { // not a branch of interest
         return discard_tag_code (inst, 2);

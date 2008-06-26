@@ -170,8 +170,26 @@ public final class DCRuntime {
   public static WeakIdentityHashMap<Object,Set<ValueSource>> df_arrlen_map
     = new WeakIdentityHashMap<Object,Set<ValueSource>>();
 
-  public static List<Set<ValueSource>> branch_tags
-    = new ArrayList<Set<ValueSource>>();
+  /**
+   * Information about a value encountered at a branch.
+   */
+  public static class BranchInfo {
+    /** the sources of the value **/
+    public Set<ValueSource> value_source;
+    /** What the value was compared to in the branch **/
+    public String compared_to;
+    public BranchInfo (Set<ValueSource> value_source, String compared_to) {
+      this.value_source = value_source;
+      this.compared_to = compared_to;
+    }
+    public String toString() {
+      return String.format ("%s:%s", value_source, compared_to);
+    }
+  }
+
+  /** Information about each of the values encountered at a frontier branch**/
+  public static List<BranchInfo> branch_tags
+    = new ArrayList<BranchInfo>();
 
   public static Class dcompmarker = null;
 
@@ -3578,34 +3596,52 @@ public final class DCRuntime {
   /**
    * Prints the DF for the tag on the top of the tag stack
    */
-  public static void prim_branch_df() {
+  public static void prim_branch_df(int compared_to) {
     Object tag = pop_check();
-    branch_tags.add (tag_map.get (tag));
-    debug_df_branch.log ("primitive DF in branch: %s\n", tag_map.get (tag));
+    BranchInfo bi = new BranchInfo(tag_map.get (tag),
+                                   String.format ("%d", compared_to));
+    branch_tags.add (bi);
+    debug_df_branch.log ("primitive DF in branch: %s", bi);
   }
 
   /**
-   * Prints the DF for the object on the top of the stack.  Returns the
-   * object so that it is still on the top of the program stack
+   * Captures the DF information for a frontier branch over two integers
+   */
+  public static void int2_branch_df (int val1, int val2) {
+    Object tag1 = pop_check();
+    Object tag2 = pop_check();
+    BranchInfo bi1 = new BranchInfo (tag_map.get (tag1), String.valueOf (val2));
+    BranchInfo bi2 = new BranchInfo (tag_map.get (tag2), String.valueOf (val1));
+    branch_tags.add (bi1);
+    branch_tags. add (bi2);
+    debug_df_branch.log ("int2 DF in branch: %s - %s", bi1, bi2);
+  }
+
+  /**
+   * Captures the DF information for a branch that compares the specified
+   * object to null.  Returns the object so it can be used in the comparison
    **/
-  public static Object ref_branch_df(Object obj) {
-    branch_tags.add (tag_map.get (obj));
+  public static Object ref_cmp_null_df (Object obj) {
+    BranchInfo bi = new BranchInfo (tag_map.get (obj), "null");
+    branch_tags.add (bi);
     debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
-                         obj, tag_map.get(obj));
+                         obj, bi);
     return obj;
   }
 
   /**
-   * Prints the DF for the specified objects. Used for if_acmpeq and
-   * if_acmpne
+   * Captures the DF information for a branch that compares the two specified
+   * objects.  Used for if_acmpeq and if_acmpne
    **/
   public static void ref2_branch_df(Object obj1, Object obj2) {
-    branch_tags.add (tag_map.get (obj1));
-    branch_tags.add (tag_map.get (obj2));
+    BranchInfo bi1 = new BranchInfo (tag_map.get (obj1), "object");
+    BranchInfo bi2 = new BranchInfo (tag_map.get (obj2), "object");
+    branch_tags.add (bi1);
+    branch_tags.add (bi2);
     debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
-                         obj1, tag_map.get(obj1));
+                         obj1, bi1);
     debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
-                         obj2, tag_map.get(obj2));
+                         obj2, bi2);
   }
 
   /**
