@@ -149,7 +149,7 @@ public class SessionManager
         System.out.print("...");
       }
     } catch (SimplifyError e) {
-      System.err.println("Could not utilize Simpilify: " + e);
+      System.err.println("Could not utilize Simplify: " + e);
       return null;
     }
 
