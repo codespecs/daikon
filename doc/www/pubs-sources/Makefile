@@ -54,4 +54,4 @@ abstracts-testsubject:
 	${BWBIN}/htmlabstract-split.pl -headfoot ../pubs-sources/abstract-headfoot-testsubject.html abstracts-unsplit.html
 	rm abstracts-unsplit.html
 
-.PHONY: abstracts html HTML clean-abstracts
+.PHONY: abstracts html HTML clean-abstracts writable-abstracts
