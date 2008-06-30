@@ -671,11 +671,20 @@ depending on your computer.
 
 Note that this step is @emph{not} required if you only want to use Daikon
 with its Java front end (Chicory).  On windows, running @code{make} requires
-that @uref{http:http://www.cygwin.com/,Cygwin} be installed.  More
+that @uref{http://www.cygwin.com/,Cygwin} be installed.  More
 information is available in @ref{Compiling
 Daikon,,,./developer,Daikon Developer Manual}.
 
-Optionally, download other executables, such as the source-based C front
+Optionally, download other executables, such as
+@c
+the Simplify theorem
+prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}),
+@c
+the Z3
+theorem prover (@uref{http://research.microsoft.com/projects/Z3/}; Z3
+replaces Simplify but is only distributed for Windows),
+@c
+and the source-based C front
 end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 
 @end enumerate
@@ -1767,10 +1776,9 @@ eliminate even more redundant output, and should be used if it is
 important that absolutely no redundancies appear in the output.
 
 Simplify must be separately obtained (from
-@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to take advantage of this option.  Beware that the process of
-detecting redundant invariants can sometimes be time-consuming; the
-amount of effort Simplify exerts for each invariant can be controlled
+@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed in
+order to take advantage of this option.  Beware that Simplify can run slowly;
+the amount of effort Simplify exerts for each invariant can be controlled
 using the @option{daikon.simplify.Session.simplify_max_iterations} and
 @option{daikon.simplify.Session.simplify_timeout} configuration
 options.
@@ -1968,10 +1976,10 @@ expected by Parasoft's Jtest tool (@uref{http://www.parasoft.com}).
 The Extended Static Checker for Java (ESC/Java) is a programming tool
 for finding errors in Java programs by checking annotations that are
 inserted in source code; for more details, see
-@uref{http://research.compaq.com/SRC/esc/}.  Daikon's ESC/Java format
+@uref{http://www.hpl.hp.com/downloads/crl/jtk/}.  Daikon's ESC/Java format
 (which can also be specified as ESC format) is intended for use with the
 original ESC/Java tool.  Use Daikon's JML format for use with the
-@uref{http://www.sos.cs.kun.nl/sos/research/escjava/index.html, ,ESC/Java2}
+@uref{http://kind.ucd.ie/products/opensource/ESCJava2/, ,ESC/Java2}
 tool.
 
 
@@ -2014,10 +2022,10 @@ These expression are obviously not valid Java code.
 @item JML format
 Produces output in JML (Java Modeling Language,
 @uref{http://www.jmlspecs.org}); for details, see the
-@uref{http://www.cs.iastate.edu/~leavens/JML.html, ,JML Manual}.  JML
+@uref{http://www.cs.ucf.edu/~leavens/JML/, ,JML Manual}.  JML
 format lets you use the various JML tools on Daikon invariants,
 including runtime assertion checking and the
-@uref{http://www.sos.cs.kun.nl/sos/research/escjava/index.html, ,ESC/Java2}
+@uref{http://kind.ucd.ie/products/opensource/ESCJava2/, ,ESC/Java2}
 tool.
 
 @c This implementation detail not relevant to users
@@ -2028,8 +2036,9 @@ tool.
 @cindex output format, Simplify
 @item Simplify format
 Produces output in the format expected by the Simplify automated theorem
-prover; for details, see
-@uref{http://research.compaq.com/SRC/esc/simplify/InputSyntax.html}.
+prover; for details, see the 
+@c was: @uref{http://research.compaq.com/SRC/esc/simplify/InputSyntax.html}
+@uref{http://www.hpl.hp.com/downloads/crl/jtk/,,Simplify distribution}.
 
 @end table
 
@@ -2561,7 +2570,7 @@ implied) invariants from its output; see
 Daikon can use the Simplify theorem-prover to eliminate even more
 implied invariants than Daikon's built-in tests are able to eliminate.
 Simplify must be separately obtained (from
-@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed in
 order to take advantage of this filter.
 
 If you don't also specify the @option{--suppress_redundant} command-line
@@ -3560,8 +3569,8 @@ name, it is searched for in the configuration directory specified via
 @option{--configs=@var{directory}}, or in the current directory if no
 configuration directory is specified.
 
-One way to create a @file{.pure} file is to run the Purity Analysis Kit,
-available at @uref{http://www.mit.edu/~salcianu/purity/}.  If you supply
+One way to create a @file{.pure} file is to run the Purity Analysis Kit
+(@uref{http://jppa.sourceforge.net/}).  If you supply
 the @option{--daikon-purity-file} when running the Purity Analysis Kit,
 it writes a file that can be supplied to Daikon.
 
@@ -7535,7 +7544,7 @@ automatic theorem prover whether they satisfy a precise version of
 this relationship.
 
 Simplify must be separately obtained (from
-@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed in
 order to use this program.
 
 The LogicalCompare program takes two mandatory arguments, which are
@@ -8052,7 +8061,7 @@ The warning ``Could not utilize Simplify'' indicates that the Simplify
 theorem-prover could not be run; this usually indicates that the
 Simplify binary was not found on the user's path.
 Simplify must be separately obtained (from
-@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed.
+@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed.
 
 If Simplify is not used, certain redundant (logically implied)
 invariants may appear in Daikon's output.  The output is
