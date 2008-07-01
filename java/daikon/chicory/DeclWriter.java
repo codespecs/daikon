@@ -62,7 +62,7 @@ public class DeclWriter extends DaikonWriter {
         // Determine comparability string
         String comparability = "none";
         if (Runtime.comp_info != null)
-            comparability = "implict";
+            comparability = "implicit";
 
         if (Chicory.new_decl_format) {
           outFile.printf ("decl-version 2.0%n");
