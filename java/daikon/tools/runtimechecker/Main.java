@@ -2,6 +2,7 @@ package daikon.tools.runtimechecker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Main entrypoint for the instrumenter.
@@ -17,8 +18,8 @@ public class Main extends CommandHandler {
 
     public void nonStaticMain(String[] args) {
 
-        List<CommandHandler> handlers = new ArrayList<CommandHandler>();
-        handlers.add(new InstrumentHandler());
+        List<CommandHandler> handlers
+            = Collections.singletonList ((CommandHandler)new InstrumentHandler());
 
         if (args.length < 1) {
             System.err.println("ERROR:  No command given.");
