@@ -48,10 +48,12 @@ public class StreamRedirectThread extends Thread
 
     private final Reader in;
     private final Writer out;
-    //private final PrintStream outWriter;
+    private final PrintStream outWriter;
 
     private static final int BUFFER_SIZE = 2048;
     //private static final int BUFFER_SIZE = 1;
+
+    private boolean line_by_line = false;
 
     /**
      * Set up for copy.
@@ -64,9 +66,15 @@ public class StreamRedirectThread extends Thread
         super(name);
         this.in = new InputStreamReader(in);
         this.out = new OutputStreamWriter(out);
-        //this.outWriter = new PrintStream(out);
+        this.outWriter = new PrintStream(out);
 
         setPriority(Thread.MAX_PRIORITY - 1);
+    }
+
+    public StreamRedirectThread (String name, InputStream in, OutputStream out,
+                                 boolean line_by_line) {
+        this (name, in, out);
+        this.line_by_line = line_by_line;
     }
 
     /**
@@ -76,28 +84,29 @@ public class StreamRedirectThread extends Thread
     {
         try
         {
-            //BufferedReader br = new BufferedReader(in, BUFFER_SIZE);
+            if (line_by_line) {
+                BufferedReader br = new BufferedReader(in, BUFFER_SIZE);
 
-            //char[] cbuf = new char[BUFFER_SIZE];
-            //int count;
+                char[] cbuf = new char[BUFFER_SIZE];
+                int count;
 
-            /*String line = null;
-            while ((line = br.readLine()) != null) {
-                outWriter.println(line);
-            }*/
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    outWriter.println(line);
+                }
+            } else {
+                int nextChar;
+                while (true) {
+                    nextChar = in.read();
+                    if (nextChar == -1)
+                        break;
 
-            int nextChar;
-            while (true)
-            {
-                nextChar = in.read();
-                if (nextChar == -1)
-                    break;
+                    out.write(nextChar);
+                    out.flush();
+                }
 
-                out.write(nextChar);
                 out.flush();
             }
-
-            out.flush();
         }
         catch (IOException exc)
         {
