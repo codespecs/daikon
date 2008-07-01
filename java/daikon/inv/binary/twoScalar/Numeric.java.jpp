@@ -184,8 +184,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    *
    * The generic format string is obtained from the subclass specific
    * get_format_str().  Instances of %varN% are replaced by the variable
-   * name in the specified format.  If the format is IOA, == is replaced
-   * by =.
+   * name in the specified format.
    */
   public String format_using(OutputFormat format) {
 
@@ -226,8 +225,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
         fmt_str = form[0] + " " + fmt_str + " " + form[3];
         v1 = form[1];
         v2 = form[2];
-      } else if (format == OutputFormat.IOA) {
-        fmt_str += " ***";
       } else if (format == OutputFormat.DAIKON) {
         fmt_str += " (elementwise)";
       }
@@ -248,9 +245,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
     fmt_str = UtilMDE.replaceString(fmt_str, "%var2%", v2);
 
-    if (format == OutputFormat.IOA)
-      fmt_str = fmt_str.replaceAll ("==", "="); // "interned"
-    else if (false && (format == OutputFormat.DAIKON)) {
+    if (false && (format == OutputFormat.DAIKON)) {
       fmt_str = "[" + getClass() + "]" + fmt_str + " ("
              + var1().get_value_info() + ", " + var2().get_value_info() +  ")";
     }

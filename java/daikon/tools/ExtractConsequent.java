@@ -163,7 +163,6 @@ public class ExtractConsequent {
         Map<String,HashedConsequent> conditions = entry.getValue();
         StringBuffer conjunctionJava = new StringBuffer();
         StringBuffer conjunctionDaikon = new StringBuffer();
-        StringBuffer conjunctionIOA = new StringBuffer();
         StringBuffer conjunctionESC = new StringBuffer();
         StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
         int count = 0;
@@ -177,22 +176,19 @@ public class ExtractConsequent {
           }
           String javaStr = cond.inv.format_using(OutputFormat.JAVA);
           String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
-          String ioaStr = cond.inv.format_using(OutputFormat.IOA);
           String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
           String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr,
-                                    ioaStr, escStr, simplifyStr));
+                                    escStr, simplifyStr));
 //           allConds.add(condIndex);
           if (count > 0) {
             conjunctionJava.append(" && ");
             conjunctionDaikon.append(" and ");
-            conjunctionIOA.append(" /\\ ");
             conjunctionESC.append(" && ");
             conjunctionSimplify.append(" ");
           }
           conjunctionJava.append(javaStr);
           conjunctionDaikon.append(daikonStr);
-          conjunctionIOA.append(ioaStr);
           conjunctionESC.append(escStr);
           conjunctionSimplify.append(simplifyStr);
         }
@@ -208,7 +204,6 @@ public class ExtractConsequent {
         } else {
           allConds.add(combineDummy(conjunctionJava.toString(),
                                     conjunctionDaikon.toString(),
-                                    conjunctionIOA.toString(),
                                     conjunctionESC.toString(),
                                     conjunctionSimplify.toString()));
         }
@@ -227,13 +222,11 @@ public class ExtractConsequent {
     pw.flush();
   }
 
-  static String combineDummy(String inv, String daikonStr, String ioa, String esc,
+  static String combineDummy(String inv, String daikonStr, String esc,
                              String simplify) {
     StringBuffer combined = new StringBuffer(inv);
     combined.append(lineSep + "\tDAIKON_FORMAT ");
     combined.append(daikonStr);
-    combined.append(lineSep + "\tIOA_FORMAT ");
-    combined.append(ioa);
     combined.append(lineSep + "\tESC_FORMAT ");
     combined.append(esc);
     combined.append(lineSep + "\tSIMPLIFY_FORMAT ");

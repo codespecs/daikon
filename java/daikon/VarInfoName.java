@@ -257,34 +257,6 @@ public abstract /*@Interned*/ class VarInfoName
   protected abstract String simplify_name_impl(boolean prestate);
 
   /**
-   * Return the string representation of this name in IOA format.
-   * @return the string representation (interned) of this name, in the
-   * IOA style output format
-   **/
-  public /*@Interned*/ String ioa_name() {
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("ioa_name: " + this.toString());
-    }
-
-    if (ioa_name_cached == null) {
-      try {
-        ioa_name_cached = ioa_name_impl().intern();
-      } catch (RuntimeException e) {
-        System.err.println("name = " + name());
-        throw e;
-      }
-    }
-    return ioa_name_cached;
-  }
-  private /*@Interned*/ String ioa_name_cached = null; // interned
-
-  /**
-   * Reeturns the string representation of this name in IOA format.
-   * Results are cached by ioa_name().
-   **/
-  protected abstract String ioa_name_impl();
-
-  /**
    * Return the String representation of this name in the java style
    * output format.
    *
@@ -418,7 +390,6 @@ public abstract /*@Interned*/ class VarInfoName
     if (format == OutputFormat.JAVA) return java_name(vi);
     if (format == OutputFormat.JML) return jml_name(vi);
     if (format == OutputFormat.DBCJAVA) return dbc_name(vi);
-    if (format == OutputFormat.IOA) return ioa_name();
     throw new UnsupportedOperationException
       ("Unknown format requested: " + format);
   }
@@ -621,36 +592,6 @@ public abstract /*@Interned*/ class VarInfoName
   }
 
 
-  // ============================================================
-  // IOA
-
-  /**
-   * Format this in IOA format.
-   **/
-  public String ioaFormatVar(String varname) {
-    /*
-    int this_index = varname.indexOf("this.");
-    int class_index = varname.indexOf(classname+".");
-    String ioa_name = varname;
-
-    while ((this_index>=0) || (class_index>=0)) {
-      if (this_index>=0) {
-        ioa_name = varname.substring(this_index+5, varname.length());
-        if (this_index>0)
-          ioa_name = varname.substring(0, this_index) + ioa_name;
-      } else if (class_index>=0) {
-        ioa_name = varname.substring(class_index+classname.length(), varname.length());
-        if (class_index>0)
-          ioa_name = varname.substring(0, class_index) + ioa_name;
-      }
-      this_index = ioa_name.indexOf("this.");
-      class_index = ioa_name.indexOf(classname+".");
-      }
-    return ioa_name;
-    */
-    return varname;
-  }
-
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
@@ -666,8 +607,6 @@ public abstract /*@Interned*/ class VarInfoName
       simplify_name_cached[0] = simplify_name_cached[0].intern();
     if (simplify_name_cached[1] != null)
       simplify_name_cached[1] = simplify_name_cached[1].intern();
-    if (ioa_name_cached != null)
-      ioa_name_cached = ioa_name_cached.intern();
     if (java_name_cached != null)
       java_name_cached = java_name_cached.intern();
     if (jml_name_cached != null)
@@ -708,10 +647,6 @@ public abstract /*@Interned*/ class VarInfoName
     }
     protected String esc_name_impl() {
       return "return".equals(name) ? "\\result" : name;
-    }
-
-    protected String ioa_name_impl() {
-      return ioaFormatVar(name);
     }
 
     protected String simplify_name_impl(boolean prestate) {
@@ -912,9 +847,6 @@ public abstract /*@Interned*/ class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return "(arrayLength " + get_term().simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl() {
-      return "size(" + sequence.ioa_name() + ")";
-    }
     protected String java_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.JAVA, v);
     }
@@ -1017,9 +949,6 @@ public abstract /*@Interned*/ class VarInfoName
       return "(warning: format_simplify() needs to be implemented: " +
         function + " on " + argument.repr() + ")";
     }
-    protected String ioa_name_impl() {
-      return function + "(" + argument.ioa_name() + ")**";
-    }
     protected String java_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JAVA, v);
     }
@@ -1098,13 +1027,6 @@ public abstract /*@Interned*/ class VarInfoName
       return "(warning: format_simplify() needs to be implemented: " +
         function + " on " + elts_repr_commas() + ")";
     }
-    protected String ioa_name_impl() {
-      List<String> elts = new ArrayList<String>(args.size());
-      for (VarInfoName vin : args) {
-        elts.add(vin.ioa_name());
-      }
-      return function + "(" + UtilMDE.join(elts, ", ") + ")";
-    }
 
     protected String java_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JAVA, v);
@@ -1181,10 +1103,6 @@ public abstract /*@Interned*/ class VarInfoName
       super ("intersection", Arrays.asList(seq1, seq2));
     }
 
-    protected String ioa_name_impl() {
-      return "(" + getArg(0).ioa_name() + " \\I " + getArg(1).ioa_name() + ")";
-    }
-
   }
 
   /**
@@ -1208,10 +1126,6 @@ public abstract /*@Interned*/ class VarInfoName
 
     public Union(VarInfoName seq1, VarInfoName seq2) {
       super ("intersection", Arrays.asList(seq1, seq2));
-    }
-
-    protected String ioa_name_impl() {
-      return "(" + getArg(0).ioa_name() + " \\U " + getArg(1).ioa_name() + ")";
     }
 
   }
@@ -1253,9 +1167,6 @@ public abstract /*@Interned*/ class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + Simple.simplify_name_impl(field, false) + " "
         + term.simplify_name(prestate) + ")";
-    }
-    protected String ioa_name_impl() {
-      return term.ioa_name() + "." + field;
     }
     protected String java_name_impl(VarInfo v) {
       return java_family_name(OutputFormat.JAVA, v);
@@ -1435,9 +1346,6 @@ public abstract /*@Interned*/ class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return "(typeof " + term.simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl() {
-      return "(typeof " + term.ioa_name() + ")**";
-    }
 
     protected String javaFamilyFormat(String varname, boolean isArray) {
       if (isArray) {
@@ -1507,9 +1415,6 @@ public abstract /*@Interned*/ class VarInfoName
     }
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(true);
-    }
-    protected String ioa_name_impl() {
-      return "preState(" + term.ioa_name() + ")";
     }
     protected String java_name_impl(VarInfo v) {
       if (PrintInvariants.dkconfig_replace_prestate) {
@@ -1596,9 +1501,6 @@ public abstract /*@Interned*/ class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(false);
     }
-    protected String ioa_name_impl() {
-      return term.ioa_name() + "'";
-    }
     protected String java_name_impl(VarInfo v) {
       return "\\post(" + term.java_name(v) + ")";
     }
@@ -1661,9 +1563,6 @@ public abstract /*@Interned*/ class VarInfoName
       return (amount < 0) ?
         "(- " + term.simplify_name(prestate) + " " + (-amount) + ")" :
         "(+ " + term.simplify_name(prestate) + " " + amount + ")";
-    }
-    protected String ioa_name_impl() {
-      return term.ioa_name() + amount();
     }
     protected String java_name_impl(VarInfo v) {
       return term.java_name(v) + amount();
@@ -1738,12 +1637,6 @@ public abstract /*@Interned*/ class VarInfoName
     }
     protected String simplify_name_impl(boolean prestate) {
       return "(select elems " + term.simplify_name(prestate) + ")";
-    }
-    protected String ioa_name_impl() {
-      return term.ioa_name();
-    }
-    protected String ioa_name_impl(String index) {
-      return term.ioa_name() + "[" + index + "]";
     }
     protected String java_name_impl(VarInfo v) {
       return term.java_name(v);
@@ -1895,9 +1788,6 @@ public abstract /*@Interned*/ class VarInfoName
       return "(select " + sequence.simplify_name(prestate) + " " +
         indexExplicit(sequence, index).simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl() {
-      return sequence.ioa_name_impl(indexExplicit(sequence, index).ioa_name());
-    }
     protected String java_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.JAVA, v);
     }
@@ -1997,15 +1887,6 @@ public abstract /*@Interned*/ class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       System.out.println(" seq: " + sequence + " " + i + " " + j);
       throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
-    }
-    protected String ioa_name_impl() {
-      // Need to be in form: \A e (i <= e <= j) => seq[e]"
-      String result = "\\A e:Int (";
-      result += ((i == null) ? "0" : i.ioa_name()) + " <= e <= ";
-      result += ((j == null) ? "size(" + sequence.ioa_name_impl() + ")" :
-                 j.ioa_name()) + ") => ";
-      result += sequence.ioa_name_impl("e");
-      return result;
     }
     protected String java_name_impl(VarInfo v) {
       return slice_helper(OutputFormat.JAVA, v);
@@ -3130,32 +3011,6 @@ public abstract /*@Interned*/ class VarInfoName
 
       return result;
     }
-
-
-    /**
-     * Takes return values from QuantHelper.format_ioa and returns
-     * variable names from it.
-     **/
-    public static String forma_ioa_var (String[] quantExp, int varNum) {
-      return quantExp[1 + varNum * 2];
-    }
-
-    /**
-     * Takes return values from QuantHelper.format_ioa and returns
-     * the variable subscripted with respect to the expression's set.
-     **/
-    public static String forma_ioa_subscript (String[] quantExp, int varNum) {
-      return quantExp[varNum * 2 + 2];
-    }
-
-    /**
-     * Takes return values from QuantHelper.format_ioa and returns
-     * the variable subscripted with respect to the expression's set.
-     **/
-    public static String forma_ioa_in_exp (String[] quantExp, int varNum) {
-      return quantExp[varNum * 2 + 1] + " \\in " + "Ops";
-    }
-
 
     // <root*> -> <string string* string>
     /**

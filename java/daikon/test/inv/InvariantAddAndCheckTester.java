@@ -157,7 +157,6 @@ public class InvariantAddAndCheckTester extends TestCase {
     result.add("daikon");
     result.add("java");
     result.add("esc");
-    result.add("ioa");
     result.add("jml");
     result.add("dbc");
     result.add("simplify");

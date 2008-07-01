@@ -148,7 +148,6 @@ public class SUBSET
 
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format.isJavaFamily()) {
@@ -166,27 +165,6 @@ public class SUBSET
     #else
     return v1 + " is a superset of " + v2;
     #endif
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    String result;
-    String v1 = var1().ioa_name();
-    String v2 = var2().ioa_name();
-    #if (defined(SUB) || defined(SUBFLOAT))
-    result = v1 + " \\subseteq " + v2;
-    #else
-    result = v2 + " \\subseteq " + v1;
-    #endif
-
-    // if (var1().isIOAArray() || var2().isIOAArray()) {
-      // Temporarily disabled because IOA frontend outputs sets as
-      // arrays for comparability.
-
-      // result += " *** (Invalid syntax for arrays)";
-    // }
-
-    return result;
   }
 
   public String format_esc() {

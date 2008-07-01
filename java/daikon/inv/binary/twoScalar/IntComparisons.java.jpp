@@ -601,14 +601,8 @@ public final class INTEQUAL
     String var2name = var2().name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.IOA)) {
+        || (format == OutputFormat.ESCJAVA)) {
       String comparator = EQUALSstring;
-      #if defined(EQUAL_OP)
-        if (format == OutputFormat.IOA) comparator = "=";
-      #elif defined(NONEQUAL_OP)
-        if (format == OutputFormat.IOA) comparator = "~=";
-      #endif
       return var1name + " " + comparator + " " + var2name;
     }
 

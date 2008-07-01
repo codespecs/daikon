@@ -27,7 +27,6 @@ public class SplitterObject implements Comparable<SplitterObject> {
   public String javaFormat     = null;
   public String escFormat      = null;
   public String simplifyFormat = null;
-  public String ioaFormat      = null;
   public String jmlFormat      = null;
   public String dbcFormat      = null;
 
@@ -60,7 +59,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       }
       DummyInvariant dummy = new DummyInvariant(null);
       dummy.setFormats(daikonFormat, javaFormat, escFormat, simplifyFormat,
-                       ioaFormat, jmlFormat, dbcFormat, dummyDesired);
+                       jmlFormat, dbcFormat, dummyDesired);
       splitter.makeDummyInvariant(dummy);
       errorMessage = "Splitter exists " + this.toString();
       exists = true;

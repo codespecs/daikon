@@ -106,7 +106,6 @@ public class CLASSNAME
 
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
     return format_unimplemented(format);
@@ -114,15 +113,6 @@ public class CLASSNAME
 
   public String format_daikon() {
     return (printIntersect() + " subset of " + var().name());
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    String vname = var().ioa_name();
-    if (var().isIOASet())
-      return printIntersect() + " \\in " + vname;
-    else
-      return "(" + printIntersect() + " \\in " + vname + ") ***";
   }
 
   private String format_simplify() {

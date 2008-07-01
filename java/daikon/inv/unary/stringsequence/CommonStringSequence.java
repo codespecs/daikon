@@ -74,19 +74,12 @@ public class CommonStringSequence
 
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
 
     return format_unimplemented(format);
   }
 
   public String format_daikon() {
     return (printIntersect() + " subset of " + var().name());
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    String vname = var().ioa_name();
-    return (printIntersect() + " \\in " + vname);
   }
 
   public InvariantStatus check_modified(String[] a, int count) {

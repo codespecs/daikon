@@ -29,7 +29,6 @@ public class DummyInvariant
   private String javaFormat;
   private String escFormat;
   private String simplifyFormat;
-  private String ioaFormat;
   private String jmlFormat;
   private String dbcFormat;
 
@@ -46,7 +45,7 @@ public class DummyInvariant
   }
 
   public void setFormats(String daikonStr, String java, String esc,
-                         String simplify, String ioa, String jml,
+                         String simplify, String jml,
                          String dbc, boolean desired) {
     if (daikonStr != null)
       daikonFormat = daikonStr;
@@ -56,8 +55,6 @@ public class DummyInvariant
       escFormat = esc;
     if (simplify != null)
       simplifyFormat = simplify;
-    if (ioa != null)
-      ioaFormat = ioa;
     if (jml != null)
       jmlFormat = jml;
     if (dbc != null)
@@ -72,7 +69,6 @@ public class DummyInvariant
     inv.javaFormat = this.javaFormat;
     inv.escFormat = this.escFormat;
     inv.simplifyFormat = this.simplifyFormat;
-    inv.ioaFormat = this.ioaFormat;
     inv.valid = false; // Not valid until we find a slice for it
     Assert.assertTrue(!this.negated, "Only instantiated invariants " +
                       "should be negated");
@@ -153,7 +149,6 @@ public class DummyInvariant
 
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
@@ -200,15 +195,6 @@ public class DummyInvariant
       return "(NOT " + simplifyFormat + ")";
     else
       return simplifyFormat;
-  }
-
-  public String format_ioa() {
-    if (ioaFormat == null)
-      return "format_ioa not implemented for dummy invariant";
-    if (negated)
-      return "~(" + ioaFormat + ")";
-    else
-      return ioaFormat;
   }
 
   public String format_jml() {

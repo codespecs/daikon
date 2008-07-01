@@ -265,8 +265,6 @@ public final class CLASSNAME
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
-    } else if (format == OutputFormat.IOA) {
-      return format_ioa();
 #ifdef IS_SCALAR
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
@@ -288,10 +286,6 @@ public final class CLASSNAME
     return "( (daikon.inv.FormatJavaHelper.memberOf("
       + sclvar().name()
       + " , " + seqvar().name() + " ) == true ) ";
-  }
-
-  public String format_ioa() {
-    return sclvar().ioa_name() + " \\in " + seqvar().ioa_name();
   }
 
   public String format_java_family(OutputFormat format) {

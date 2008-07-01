@@ -301,7 +301,6 @@ public class LOWERBOUND
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.IOA)
         || (format.isJavaFamily()))
     {
 
@@ -347,8 +346,6 @@ public class LOWERBOUND
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
-    } else if (format == OutputFormat.IOA) {
-      return format_ioa();
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
@@ -467,62 +464,6 @@ public class LOWERBOUND
       "daikon.Quant.elts" + GTESTRDBC + "(" + var().name_using(format) + ", " + MIN1 + ")";
 #else
     String varname = var().name_using(format);
-    return varname + " " + GTESTR + " " + MIN1;
-#endif
-  }
-
-  public String format_ioa() {
-    PptTopLevel pptt = ppt.parent;
-
-    if (PrintInvariants.dkconfig_static_const_infer) {
-      for (VarInfo vi : pptt.var_infos) {
-        if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
-          // If variable is a double, then use fuzzy comparison
-          if (vi.rep_type == ProglangType.DOUBLE) {
-            Double constantVal = (Double)vi.constantValue();
-            if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
-#ifdef IS_ELT
-              Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
-              String result = quant.getQuantifierExp()
-              + quant.getMembershipRestriction(0)
-              + " => " + quant.getVarIndexedString(0) + " " + GTESTR + " " + vi.name()
-              + quant.getClosingExp();
-              return result;
-#else
-              String varname = var().name.ioa_name();
-              return varname + " " + GTESTR + " " + vi.name();
-#endif
-            }
-          }
-          // Otherwise just use the equals method
-          else {
-            Object constantVal = vi.constantValue();
-            if (constantVal.equals(MIN1)) {
-#ifdef IS_ELT
-              Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
-              String result = quant.getQuantifierExp()
-              + quant.getMembershipRestriction(0)
-              + " => " + quant.getVarIndexedString(0) + " " + GTESTR + " " + vi.name()
-              + quant.getClosingExp();
-              return result;
-#else
-              String varname = var().name.ioa_name();
-              return varname + " " + GTESTR + " " + vi.name();
-#endif
-            }
-          }
-        }
-      }
-    }
-#ifdef IS_ELT
-    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
-    String result = quant.getQuantifierExp()
-      + quant.getMembershipRestriction(0)
-      + " => " + quant.getVarIndexedString(0) + " " + GTESTR + " " + MIN1
-      + quant.getClosingExp();
-    return result;
-#else
-    String varname = var().name.ioa_name();
     return varname + " " + GTESTR + " " + MIN1;
 #endif
   }

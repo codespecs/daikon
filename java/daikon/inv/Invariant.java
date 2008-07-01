@@ -752,9 +752,6 @@ public abstract class Invariant
    * requested format.  Made public so cores can call it.
    **/
   public String format_unimplemented(OutputFormat request) {
-    if ((request == OutputFormat.IOA) && debugPrint.isLoggable(Level.FINE)) {
-      debugPrint.fine ("Format_ioa: " + this.toString());
-    }
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
       + " needs to be implemented: " + format();
@@ -770,8 +767,7 @@ public abstract class Invariant
   public String format_too_few_samples(OutputFormat request, String attempt) {
     if (request == OutputFormat.SIMPLIFY) {
       return "(AND)";
-    } else if (request == OutputFormat.IOA ||
-               request == OutputFormat.JAVA ||
+    } else if (request == OutputFormat.JAVA ||
                request == OutputFormat.ESCJAVA ||
                request == OutputFormat.JML ||
                request == OutputFormat.DBCJAVA ) {

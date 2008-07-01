@@ -1489,52 +1489,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  /// IOA functions
-  ///
-
-  /** Return true if declared type is Set (IOA syntax). **/
-  public boolean isIOASet() {
-    return type.base().startsWith("Set");
-    // && type.base().indexOf('(') >= 0;
-  }
-
-  /** Return true if declared type is Set (IOA syntax). **/
-  public boolean isIOAArray() {
-    return type.base().startsWith("Array");
-    //  && type.base().indexOf('(') >= 0;
-  }
-
-  /** Return declared element type (in string) of IOA Set or Array. **/
-  public String elementTypeIOA() {
-    String result;
-    int begin;
-    int end = type.base().indexOf(')');
-    if (this.isIOASet()) {
-      begin = type.base().indexOf('(') + 1;
-    } else if (this.isIOAArray()) {
-      begin = type.base().indexOf(',') + 2;
-    } else {
-      return null;
-    }
-    return type.base().substring(begin, end);
-  }
-
-  /** Return declared domain type (in string) of an IOA Array. **/
-  public String domainTypeIOA() {
-    String result;
-    if (this.isIOAArray()) {
-      int begin = type.base().indexOf('(');
-      int end = type.base().indexOf(',');
-      result = type.base().substring(begin + 1, end);
-      daikon.inv.Invariant.debugPrint.fine("domainTypeIOA: " + result);
-      return result;
-    } else {
-      // Always the same domain otherwise
-      return "Int";
-    }
-  }
-
-  ///////////////////////////////////////////////////////////////////////////
   /// Utility functions
   ///
 
@@ -2793,7 +2747,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (format == OutputFormat.JAVA) return java_name();
     if (format == OutputFormat.JML) return jml_name();
     if (format == OutputFormat.DBCJAVA) return dbc_name();
-    if (format == OutputFormat.IOA) return ioa_name();
     throw new UnsupportedOperationException
       ("Unknown format requested: " + format);
   }
@@ -2812,16 +2765,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return var_info_name.dbc_name (this); // vin ok
 
     return jml_name();
-  }
-
-  /** Returns the name of this variable in IOA format **/
-  public String ioa_name() {
-    if (!FileIO.new_decl_format)
-      return var_info_name.ioa_name();  // vin ok
-
-    if (var_kind == VarKind.ARRAY)
-      return enclosing_var.name();
-    return name();
   }
 
   /**
@@ -3150,22 +3093,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   }
 
-  /**
-   * Returns the IOA quantifier for the specified variable
-   */
-  public static Quantify.IOAQuantification get_ioa_quantify (VarInfo var) {
-
-    return new Quantify.IOAQuantification (var);
-  }
-
-  /**
-   * Returns the IOA quantifier for the specified variables
-   */
-  public static Quantify.IOAQuantification get_ioa_quantify (VarInfo var1,
-                                                             VarInfo var2) {
-
-    return new Quantify.IOAQuantification (var1, var2);
-  }
 
   /**
    * Returns a string array with 3 elements.  The first element is

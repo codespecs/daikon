@@ -135,10 +135,7 @@ public class NONZERO
   private String zero(OutputFormat format) {
 #ifdef SCALAR
     if (is_pointer()) {
-      if (format == OutputFormat.IOA)
-        return "nil";
-      else
-        return "null";
+      return "null";
     } else
 #endif
     {
@@ -170,10 +167,6 @@ public class NONZERO
 
     if (format == OutputFormat.SIMPLIFY) {
       return "(NEQ " + var().simplifyFixup(name) + " " + zero(format) + ")";
-    }
-
-    if (format == OutputFormat.IOA) {
-      return name + " ~= " + zero(format);
     }
 
     return format_unimplemented(format);

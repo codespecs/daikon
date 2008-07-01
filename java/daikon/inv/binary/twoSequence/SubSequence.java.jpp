@@ -143,7 +143,6 @@ public class CLASSNAME
 
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format.isJavaFamily()) { return format_unimplemented(format); }
 
@@ -154,19 +153,6 @@ public class CLASSNAME
     String v1 = SUB_VAR().name();
     String v2 = SUPER_VAR().name();
     return v1 + " is a subsequence of " + v2;
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    String result;
-    result = SUB_VAR().ioa_name() + " \\subseteq "
-           + SUPER_VAR().ioa_name();
-
-    if (var1().isIOAArray() || var2().isIOAArray()) {
-      result += " *** (Invalid syntax for arrays)";
-    }
-
-    return result;
   }
 
   public String format_simplify() {

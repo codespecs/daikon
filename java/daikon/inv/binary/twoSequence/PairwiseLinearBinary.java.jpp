@@ -109,7 +109,6 @@ public class CLASSNAME
     }
 
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     //if (format == OutputFormat.JML) return format_jml();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
@@ -119,20 +118,6 @@ public class CLASSNAME
   public String format_daikon() {
     return core.format_using(OutputFormat.DAIKON, var1().name(),
                              var2().name());
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    if (var1().isIOASet() || var2().isIOASet())
-      return "Not valid for sets: " + format();
-    Quantify.IOAQuantification quant1 = VarInfo.get_ioa_quantify (var1());
-    Quantify.IOAQuantification quant2 = VarInfo.get_ioa_quantify (var2());
-
-    return quant1.getQuantifierExp()
-      + core.format_using(OutputFormat.IOA,
-                          quant1.getVarIndexedString(0),
-                          quant2.getVarIndexedString(0))
-      + quant1.getClosingExp();
   }
 
   public String format_simplify() {

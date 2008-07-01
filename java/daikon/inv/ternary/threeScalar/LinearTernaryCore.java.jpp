@@ -1182,11 +1182,9 @@ public final class CLASSNAME
 
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.IOA))
+        || (format == OutputFormat.ESCJAVA))
       {
         String eq = " == ";
-        if (format == OutputFormat.IOA) eq = " = ";
         return formatTerm(a, vix, true)
           + formatTerm(b, viy, (a == 0))
           + formatTerm(c, viz, (a == 0) && (b == 0))

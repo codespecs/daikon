@@ -112,8 +112,7 @@ public abstract class RANGE extends SUPERCLASS {
    *
    * The generic format string is obtained from the subclass specific
    * get_format_str().  Instances of %var1% are replaced by the variable
-   * name in the specified format.  If the format is IOA, == is replaced
-   * by =.
+   * name in the specified format.
    */
   public String format_using(OutputFormat format) {
 
@@ -132,16 +131,12 @@ public abstract class RANGE extends SUPERCLASS {
                                                    var1);
         fmt_str = form[0] + " " + fmt_str + " " + form[2];
         v1 = form[1];
-      } else if (format == OutputFormat.IOA) {
-        fmt_str += " ***";
       } else if (format == OutputFormat.DAIKON) {
         fmt_str += " (elementwise)";
       }
     #endif
 
     fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
-    if (format == OutputFormat.IOA)
-      fmt_str = fmt_str.replaceAll ("==", "="); // "interned"
     return (fmt_str);
   }
 

@@ -54,7 +54,6 @@ public class Quantify {
    */
   public static abstract class Term {
     public abstract String name();
-    public String ioa_name() { return name(); }
     public String esc_name() { return name(); }
     public String jml_name() { return esc_name(); }
     public String jml_name(boolean in_prestate) { return jml_name(); }
@@ -276,90 +275,6 @@ public class Quantify {
     return (result);
   }
 
-  /**
-   * It's too complex (and error prone) to hold quantification
-   * results for IOA in a string array; so we create a helper object
-   * that has accessors.  Otherwise this works just like a
-   * format_ioa method here would work.
-   **/
-  public static class IOAQuantification {
-    private static final String quantifierExistential = "\\E ";
-    private static final String quantifierUniversal = "\\A ";
-
-    // private VarInfo[] sets;
-    private VarInfo[] vars;
-    private String quantifierExp;
-    private QuantifyReturn[] qrets;
-    private int numVars;
-
-    public IOAQuantification (VarInfo v1) {
-      this (new VarInfo[] { v1 });
-    }
-
-    public IOAQuantification (VarInfo v1, VarInfo v2) {
-      this (new VarInfo[] { v1, v2 });
-    }
-
-    public IOAQuantification (VarInfo[] sets) {
-      assert sets != null;
-
-      // this.sets = sets;
-      numVars = sets.length;
-
-      vars = sets.clone();
-      qrets = quantify (vars);
-
-
-      // Build the quantifier
-      StringBuffer quantifier = new StringBuffer();
-      for (QuantifyReturn qret : qrets) {
-        if (qret.index == null)
-          continue;
-        quantifier.append (quantifierUniversal);
-        quantifier.append (qret.index.ioa_name());
-        quantifier.append (" : ");
-        quantifier.append (qret.var.domainTypeIOA());
-        quantifier.append (" ");
-      }
-      quantifierExp = quantifier.toString() + "(";
-    }
-
-    public String getQuantifierExp() {
-      // \A i : DomainType
-      return quantifierExp;
-    }
-
-    public String getMembershipRestrictions() {
-      StringBuffer sb = new StringBuffer();
-      for (int i = 0; i < numVars; i++) {
-        if (i != 0) sb.append(" /\\ ");
-        sb.append (getMembershipRestriction(i));
-      }
-      return sb.toString();
-    }
-
-    public String getMembershipRestriction(int num) {
-      return getFreeVar(num).ioa_name() + " \\in " + vars[num].ioa_name();
-    }
-
-    public String getClosingExp() {
-      // This isn't very smart right now, but maybe later we can
-      // pretty print based on whether we need parens or not
-      return ")";
-    }
-
-    public Term getFreeVar (int num) {
-      return qrets[num].index;
-    }
-
-    public String getFreeVarName (int num) {
-      return qrets[num].index.ioa_name();
-    }
-
-    public String getVarIndexedString (int num) {
-      return qrets[num].var.apply_subscript (getFreeVarName (num));
-    }
-  }
 
   /**
    * Class that represents an ESC quantification over one or two variables

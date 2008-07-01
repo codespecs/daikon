@@ -18,10 +18,6 @@ public enum OutputFormat {
   },
   /** ESC/Java's annotation language */
   ESCJAVA("ESC/Java"),
-  /** IOA language */
-  IOA("IOA"),
-  /** IOA language, sans invariant numbering */
-  IOATEST("IOA_test"),
   /** Java boolean expression */
   JAVA("Java"),
   /** Java Modeling Language */
@@ -52,8 +48,6 @@ public enum OutputFormat {
     if (name.compareToIgnoreCase(DBCJAVA.name) == 0) { return DBCJAVA; }
     if (name.compareToIgnoreCase(ESCJAVA.name) == 0) { return ESCJAVA; }
     if (name.compareToIgnoreCase("ESC") == 0) { return ESCJAVA; }
-    if (name.compareToIgnoreCase(IOA.name) == 0) { return IOA; }
-    if (name.compareToIgnoreCase(IOATEST.name) == 0) { return IOATEST; }
     if (name.compareToIgnoreCase(JAVA.name) == 0) { return JAVA; }
     if (name.compareToIgnoreCase(JML.name) == 0) { return JML; }
     if (name.compareToIgnoreCase(SIMPLIFY.name) == 0) { return SIMPLIFY; }

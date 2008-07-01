@@ -41,7 +41,6 @@
   #define COMPARE ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "eltsEqual"
-  #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
 #elif defined(EQUALFLOAT)
   #define SEQINTEQUAL SeqFloatEqual
@@ -50,7 +49,6 @@
   #define COMPARE ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "eltsEqual"
-  #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
 #elif defined(LESSTHAN)
   #define SEQINTEQUAL SeqIntLessThan
@@ -59,7 +57,6 @@
   #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "eltsLT"
-  #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
 #elif defined(LESSTHANFLOAT)
   #define SEQINTEQUAL SeqFloatLessThan
@@ -68,7 +65,6 @@
   #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "eltsLT"
-  #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
 #elif defined(LESSEQUAL)
   #define SEQINTEQUAL SeqIntLessEqual
@@ -77,7 +73,6 @@
   #define COMPARE <=
   #define EQUALSstring "<="
   #define EQUALSstringDBC "eltsLTE"
-  #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
 #elif defined(LESSEQUALFLOAT)
   #define SEQINTEQUAL SeqFloatLessEqual
@@ -86,7 +81,6 @@
   #define COMPARE <=
   #define EQUALSstring "<="
   #define EQUALSstringDBC "eltsLTE"
-  #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
 #elif defined(GREATERTHAN)
   #define SEQINTEQUAL SeqIntGreaterThan
@@ -95,7 +89,6 @@
   #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "eltsGT"
-  #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
 #elif defined(GREATERTHANFLOAT)
   #define SEQINTEQUAL SeqFloatGreaterThan
@@ -104,7 +97,6 @@
   #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "eltsGT"
-  #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
 #elif defined(GREATEREQUAL)
   #define SEQINTEQUAL SeqIntGreaterEqual
@@ -113,7 +105,6 @@
   #define COMPARE >=
   #define EQUALSstring ">="
   #define EQUALSstringDBC "eltsGTE"
-  #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
 #elif defined(GREATEREQUALFLOAT)
   #define SEQINTEQUAL SeqFloatGreaterEqual
@@ -122,7 +113,6 @@
   #define COMPARE >=
   #define EQUALSstring ">="
   #define EQUALSstringDBC "eltsGTE"
-  #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
 #else
   #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
@@ -267,7 +257,6 @@ public final class SEQINTEQUAL
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
@@ -276,13 +265,6 @@ public final class SEQINTEQUAL
 
   public String format_daikon() {
     return seqvar().name() + " elements " + EQUALSstring + " " + sclvar().name();
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (seqvar());
-    return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexedString(0) + EQUALSIOAstring + sclvar().ioa_name() + quant.getClosingExp();
   }
 
   public String format_esc() {

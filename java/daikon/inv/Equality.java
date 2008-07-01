@@ -173,7 +173,6 @@ public final /*(at)Interned*/ class Equality
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     // Commented out by MDE 7/27/2003.  I can't figure out whether
     // to just change JAVA_IDENTIFIER to IDENTIFIER, or whether other
@@ -214,17 +213,6 @@ public final /*(at)Interned*/ class Equality
       clauses.add(String.format("(%s == %s)", leaderName, var.name()));
     }
     return UtilMDE.join(clauses, " && ");
-  }
-
-  public String format_ioa() {
-    VarInfo leader = leader();
-    String leaderName = leader.ioa_name();
-    List<String> clauses = new ArrayList<String>();
-    for (VarInfo var : vars) {
-      if (leader == var) continue;
-      clauses.add(var.ioa_name() + " = " + leaderName);
-    }
-    return UtilMDE.join(clauses, " /\\ ");
   }
 
 

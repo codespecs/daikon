@@ -411,11 +411,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    if (format == OutputFormat.IOA) {
-      return argresult_name + " = " + methodname[0] + arg1_name
-                + methodname[1] + arg2_name + methodname[2] + " ***";
-    }
-
     return format_unimplemented(format);
   }
 

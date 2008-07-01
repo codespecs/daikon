@@ -81,10 +81,6 @@ public class Modulus
       return var().name() + " == " + remainder + "  (mod " + modulus + ")";
     }
 
-    if (format == OutputFormat.IOA) {
-      return "mod(" + var().ioa_name() + ", " + modulus + ") = " + remainder;
-    }
-
     if (format.isJavaFamily()) {
       name = var().name_using(format);
       if (var().type.isFloat()) {

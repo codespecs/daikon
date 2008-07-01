@@ -101,10 +101,6 @@ public class NonModulus
       return format_too_few_samples(format, null);
     }
 
-    if (format == OutputFormat.IOA) {
-      return "mod(" + name + ", " + modulus + ") ~= " + remainder;
-    }
-
     if (format.isJavaFamily()) {
 
       if (var().type.isFloat()) {

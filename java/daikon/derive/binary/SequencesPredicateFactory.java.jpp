@@ -86,11 +86,6 @@ public final class CLASSNAME extends BinaryDerivationFactory {
     // Now we finally can derive
 
 
-    if (!var1.domainTypeIOA().equals(var2.domainTypeIOA())) {
-      debug.fine ("Incorrect domains");
-      return null;
-    }
-
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (var1.ppt + ": " + var1.name() + " and " +
                    var2.name() + " are worth deriving from");

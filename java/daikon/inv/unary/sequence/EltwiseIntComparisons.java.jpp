@@ -203,7 +203,6 @@ public class CLASSNAME
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
@@ -219,23 +218,6 @@ public class CLASSNAME
 #else
     return (var().name() + " sorted by " + COMPARATORSTRING);
 #endif
-  }
-
-
-  /* IOA */
-  public String format_ioa() {
-    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var(), var());
-
-    String result = quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) + " /\\ " + quant.getMembershipRestriction(1);
-    #if defined(EQUAL) || defined(EQUALFLOAT)
-      // i \in X /\ j \in X => X[i] = X[j]
-    #else
-      // i \in X /\ j \in X /\ i+1 = j => X[i] = X[j]
-      result +=
-        " /\\ " + quant.getFreeVarName(0) + "+1 = " + quant.getFreeVarName(1);
-    #endif
-    result += ") => " + quant.getVarIndexedString(0) + " = " + quant.getVarIndexedString(1);
-    return result + quant.getClosingExp();
   }
 
   public String format_esc() {

@@ -40,7 +40,6 @@
   #define COMPARE ==
   #define SYMMETRIC_OP
   #define EQUALSstring "=="
-  #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
   #define EQUALSQUANTstring "Equal"
 #elif defined(EQUALFLOAT)
@@ -49,7 +48,6 @@
   #define COMPARE ==
   #define SYMMETRIC_OP
   #define EQUALSstring "=="
-  #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
   #define EQUALSQUANTstring "Equal"
 #elif defined(NONEQUAL)
@@ -58,7 +56,6 @@
   #define COMPARE !=
   #define SYMMETRIC_OP
   #define EQUALSstring "!="
-  #define EQUALSIOAstring "~="
   #define EQUALSSIMPLIFYstring "NEQ"
   #define EQUALSQUANTstring "NotEqual"
 #elif defined(NONEQUALFLOAT)
@@ -67,7 +64,6 @@
   #define COMPARE !=
   #define SYMMETRIC_OP
   #define EQUALSstring "!="
-  #define EQUALSIOAstring "~="
   #define EQUALSSIMPLIFYstring "NEQ"
   #define EQUALSQUANTstring "NotEqual"
 #elif defined(LESSTHAN)
@@ -76,7 +72,6 @@
   #define EQUALS(a,b) (a < b)
   #define COMPARE <
   #define EQUALSstring "<"
-  #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
   #define EQUALSQUANTstring "Lt"
 #elif defined(LESSTHANFLOAT)
@@ -85,7 +80,6 @@
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
   #define COMPARE <
   #define EQUALSstring "<"
-  #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
   #define EQUALSQUANTstring "Lt"
 #elif defined(LESSEQUAL)
@@ -94,7 +88,6 @@
   #define EQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
-  #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
   #define EQUALSQUANTstring "Lte"
 #elif defined(LESSEQUALFLOAT)
@@ -103,7 +96,6 @@
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
   #define COMPARE <=
   #define EQUALSstring "<="
-  #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
   #define EQUALSQUANTstring "Lte"
 #elif defined(GREATERTHAN)
@@ -112,7 +104,6 @@
   #define EQUALS(a,b) (a > b)
   #define COMPARE >
   #define EQUALSstring ">"
-  #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
   #define EQUALSQUANTstring "Gt"
 #elif defined(GREATERTHANFLOAT)
@@ -121,7 +112,6 @@
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
   #define COMPARE >
   #define EQUALSstring ">"
-  #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
   #define EQUALSQUANTstring "Gt"
 #elif defined(GREATEREQUAL)
@@ -130,7 +120,6 @@
   #define EQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
-  #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
   #define EQUALSQUANTstring "Gte"
 #elif defined(GREATEREQUALFLOAT)
@@ -139,7 +128,6 @@
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
   #define COMPARE >=
   #define EQUALSstring ">="
-  #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
   #define EQUALSQUANTstring "Gte"
 #else
@@ -296,7 +284,6 @@ public class CLASSNAME extends SUPERCLASS {
     // format_java_family() can handle all the Java family output.
 
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
@@ -311,18 +298,6 @@ public class CLASSNAME extends SUPERCLASS {
     } else {
       return var().name() + " " + EQUALSstring + " (index)";
     }
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    if (var().isIOASet())
-      return "Not valid for Sets: " + format();
-
-    Quantify.IOAQuantification quant = VarInfo.get_ioa_quantify (var());
-
-    return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getFreeVarName(0) + " " + EQUALSIOAstring + " " +
-      quant.getVarIndexedString(0) + quant.getClosingExp();
   }
 
   // Bad code here: if the first index is changed from i this breaks

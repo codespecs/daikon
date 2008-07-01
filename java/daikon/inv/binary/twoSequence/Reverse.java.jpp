@@ -107,7 +107,6 @@ public class CLASSNAME
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
     return format_unimplemented(format);
@@ -115,11 +114,6 @@ public class CLASSNAME
 
   public String format_daikon() {
     return var1().name() + " is the reverse of " + var2().name();
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    return "Not valid for Sets or Arrays: " + format();
   }
 
   public String format_java_family(OutputFormat format) {
