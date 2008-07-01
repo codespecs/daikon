@@ -313,9 +313,9 @@ public class DynComp {
 
     // Create the redirect theads and start them
     StreamRedirectThread err_thread
-      = new StreamRedirectThread("stderr", p.getErrorStream(), System.err);
+      = new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
     StreamRedirectThread out_thread
-      = new StreamRedirectThread("stdout", p.getInputStream(), System.out);
+      = new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
     err_thread.start();
     out_thread.start();
 
