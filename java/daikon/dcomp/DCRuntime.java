@@ -483,8 +483,8 @@ public final class DCRuntime {
       }
     }
 
-    System.out.printf ("has_instrumented: %s %s %s%n", c, method_name,
-                       dcompmarker);
+    // System.out.printf ("has_instrumented: %s %s %s%n", c, method_name,
+    //                   dcompmarker);
 
     Class[] args = new Class[] {dcompmarker};
     while (!c.getName().equals ("java.lang.Object")) {
@@ -3743,6 +3743,7 @@ public final class DCRuntime {
 
 
   /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.Integer.valueOf")
   public static Integer Integer_valueOf (int val) {
     Integer obj = Integer.valueOf (val);
     prim_to_obj (obj);
@@ -3750,6 +3751,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.Float.valueOf")
   public static Float Float_valueOf (float val) {
     Float obj = Float.valueOf (val);
     prim_to_obj (obj);
@@ -3757,6 +3759,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.Double.valueOf")
   public static Double Double_valueOf (double val) {
     Double obj = Double.valueOf (val);
     prim_to_obj (obj);
@@ -3764,6 +3767,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.Boolean.valueOf")
   public static Boolean Boolean_valueOf (boolean val) {
     // Boolean obj = Boolean.valueOf (val);
     Boolean obj = new Boolean(val);
@@ -3772,6 +3776,7 @@ public final class DCRuntime {
   }
 
 /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.Integer.decode")
   public static Integer Integer_decode(String str) {
     Integer val = Integer.decode (str);
     obj_to_obj (str, val);
@@ -3779,6 +3784,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.Long.valueOf")
   public static Long Long_valueOf (long val) {
     Long obj = Long.valueOf (val);
     prim_to_obj (obj);
@@ -3786,6 +3792,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.Short.valueOf")
   public static Short Short_valueOf (short val) {
     Short obj = Short.valueOf (val);
     prim_to_obj (obj);
@@ -3793,6 +3800,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to DF of argument **/
+  @DFSum ("static-java.lang.String.valueOf")
   public static String String_valueOf (Object obj) {
     String str = String.valueOf (obj);
     obj_to_obj (obj, str);
@@ -3800,6 +3808,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to the union of the DF of the two arguments **/
+  @DFSum ("instance-java.lang.StringBuffer.append")
   public static StringBuffer StringBuffer_append (StringBuffer buff,
                                                   CharSequence s) {
     System.out.printf ("Append '%s' to '%s'%n", s, buff);
@@ -3809,6 +3818,7 @@ public final class DCRuntime {
   }
 
   /** DF of result is equal to the union of the DF of the two arguments **/
+  @DFSum ("instance-java.lang.StringBuffer.append")
   public static StringBuffer StringBuffer_append (StringBuffer buff,
                                                   String s) {
     System.out.printf ("Append '%s' to '%s'%n", s, buff);
