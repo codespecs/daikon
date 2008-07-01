@@ -331,6 +331,7 @@ Troubleshooting
 Problems running Daikon
 
 * Too much output::             
+* Missing output invariants::   
 * No samples::                  
 * No return from procedure::    
 * Unsupported class version::   
@@ -3967,11 +3968,9 @@ long as the make target itself completes normally.
 There are a small number of methods in the JDK that DynComp is
 currently unable to instrument.  The names of these methods will be
 printed at the end of instrumentation.  This is not a problem unless
-your application calls these methods (directly or indirectly).  The
-file @file{jdk_classes.txt}, found inside @file{dcomp_rt.jar},
-contains a list of all classes processed, including those that could
-not be instrumented.
-
+your application calls these methods (directly or indirectly).  
+If one of those methods are called, a NoSuchMethodException will
+be generated when the call is attempted.
 
 @node DynComp for Java options, Instrumentation of Object methods, Instrumenting the JDK with DynComp, DynComp for Java
 @subsection DynComp options
@@ -5556,6 +5555,17 @@ make kvasir
 This will check that you have the appropriate prerequisites (such as
 GCC), configure Kvasir for your machine, compile it, and install
 it in the directory @file{kvasir/inst}.
+
+You may see warnings about the 'missing' script.  These can be ignored.
+
+Note that Kvasir requires a version of glibc between 2.2 and 2.5.  It
+checks for this and will not build with other versions.  If your
+system is not compatible with those versions (it is not advisable to
+install multiple versions of glibc at once), a possible workaround
+would be to install an older linux distribution using a virtual
+machine (QEMU or VMWare) For instance, to match what we currently use
+for development, you could use Debian stable (Etch) with gcc 3.3
+installed.
 
 Once Kvasir has been installed, it can be used via the
 @file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
@@ -7277,7 +7287,7 @@ but more thorough runs produce a larger number of @code{@@Nullable}
 annotations.
 
 @example
-java daikon.Chicory --new_decl_format --dtrace-file=an.dtrace.gz @emph{your-command-and-options}
+java daikon.Chicory --dtrace-file=an.dtrace.gz @emph{your-command-and-options}
 @end example
 
 @item Run Daikon on the resulting dtrace file:
@@ -7832,6 +7842,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 
 @menu
 * Too much output::             
+* Missing output invariants::   
 * No samples::                  
 * No return from procedure::    
 * Unsupported class version::   
@@ -7843,7 +7854,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 @end menu
 
 
-@node    Too much output, No samples, Daikon problems, Daikon problems
+@node    Too much output, Missing output invariants, Daikon problems, Daikon problems
 @subsection Too much output
 
 @cindex too much output from Daikon
@@ -7896,9 +7907,35 @@ useful:  the former tell you about your program, and the latter tell you
 about your test suite (and how to improve it!).
 
 
+@node Missing output invariants, No samples, Too much output, Daikon problems
+@subsection Missing output invariants
 
+Daikon will sometimes not output invariants that are expected.  There 
+are a number of reasons why this may happen:
 
-@node    No samples, No return from procedure, Too much output, Daikon problems
+@itemize
+@item There is a sample that violate the invariant
+@item The invariant is true, but does not pass one of the output filters
+@item One or more of the variables in the invariant always has the same
+value as another variable.  Daikon only prints invariants over one
+variable (the leader) from the set of equal variables (@pxref{Equal variables}).
+@item The program point had no samples (@pxref{No samples}).
+@end itemize
+
+There are two command line options (--disc_reason and --track) that
+will display information about invariants that are not printed.  The
+@var{--disc_reason} option will indicate why a particular invariant
+was discarded in most cases.  If it does not provide enough
+information, try the @var{--track} option which traces the invariant
+through all of Daikon's processing steps.  See @ref{Daikon debugging
+options} for more information.
+
+Note that in each case the description (class, variables, program
+point) of the invariant must be entered carefully.  It may be helpful
+to try the option on a similar invariant that is printed to make sure
+that each is specified correctly.
+
+@node    No samples, No return from procedure, Missing output invariants, Daikon problems
 @subsection No samples and no output
 
 @cindex no output from Daikon
