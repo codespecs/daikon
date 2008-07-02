@@ -85,9 +85,6 @@ class DCInstrument {
   protected static boolean exclude_object = true;
   protected static boolean use_StackVer = true;
 
-  public static Map<String,ClassGen> instrumented_classes
-    = new LinkedHashMap<String,ClassGen>();
-
   /**
    * Don't instrument toString functions.  Useful in debugging since
    * we call toString on objects from our code (which then triggers
@@ -2067,6 +2064,10 @@ class DCInstrument {
    * specified class or any of its superclasses.
    * We can safely use reflection here because all superclasses must
    * have been loaded before this class was loaded.
+   *
+   * The above statement is NOT true.  Calling this routine will change
+   * the order of loading and cause other problems.
+
    **/
   protected boolean has_instrumented (String method_name, Type return_type,
                                       Type[] arg_types, String classname) {
@@ -2078,7 +2079,7 @@ class DCInstrument {
     // Loop through this class and each of its superclasses. If the
     // method is found in a class that is instrumented, return true.
     while (classname != null) {
-      ClassGen gen = instrumented_classes.get (classname);
+      ClassGen gen = null; // instrumented_classes.get (classname);
       if (gen == null) {
         System.out.printf ("can't find superclass %s%n", classname);
         return false;
@@ -4094,7 +4095,6 @@ class DCInstrument {
    * method if it exists, otherwise they will call the uninstrumented version
    */
   public void handle_object (ClassGen gen) {
-    instrumented_classes.put (gen.getClassName(), gen);
     Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
     if (cl != null)
       gen.addInterface("daikon.dcomp.DCompClone");
