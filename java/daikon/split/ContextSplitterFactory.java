@@ -34,7 +34,7 @@ public class ContextSplitterFactory
 
   /**
    * @param files set of File objects to read from
-   * @param grain one ofthe GRAIN constants defined in this class
+   * @param grain one of the GRAIN constants defined in this class
    *
    * Read all the map files in the given collection, create callsite
    * splitters from them, and put the splitters into SplitterList.
