@@ -461,26 +461,19 @@ files in directory @file{$DAIKONDIR/java/daikon/derive/}.)
 @cindex new output formats
 @cindex adding new output formats
 
-Daikon can print invariants in five formats:  its native format, Java
-format, IOA format (for use with the IOA programming language), ESC
+Daikon can print invariants in multiple formats, including its native
+format, Java format, ESC
 format (which is a subset of the JML specification language), and
 Simplify format (for use by the Simplify theorem-prover).
 
-To support a new output format, you need to do three things:
+To support a new output format, you need to do two things:
 @itemize @bullet
 @item
-@c Add, to every subclass of @samp{Invariant}, a
-@c @samp{format_@var{newtype}()} method.  Each subclass of Invariant
-@c already has three such methods --- @samp{format()}, @samp{format_esc()},
-@c and @samp{format_simplify()} --- for you to crib from.
-Add a new static final field to the class
-@code{daikon.inv.Invariant.OutputFormat}, which acts as an enumeration.
+In @code{daikon.inv.Invariant.OutputFormat}, add a new static final
+field and also update the @code{get} method.
 @item
-Edit, in every subclass of @code{Invariant}, the
+In every subclass of @code{Invariant}, edit the
 @code{format_using} method to handle the new @code{OutputFormat}.
-@item
-Edit @file{PrintInvariants.java} and @file{Daikon.java}
-to enable selecting your new output format.
 @end itemize
 
 
