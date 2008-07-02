@@ -17,7 +17,7 @@ HTML: abstracts index.html
 
 # Remove generated files.
 clean-abstracts:
-	rm *-abstract.html
+	\rm -f *-abstract.html
 
 index.html:
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-INVARIANTDETECTION -headfoot ../pubs-sources/index-headfoot.html -to $(notdir $@)-1 -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
@@ -27,7 +27,12 @@ index.html:
 	../pubs-sources/fix-homedir-tilde.pl $@
 
 writable-abstracts:
+# A chmod command fails if there are no arguments.  But this might be
+# called when no *-abstract.html files exist.  So create a dummy file,
+# include it on the command line, and remove it afterward.  This is gross.
+	@touch dummy-abstract.html
 	chmod -f +w *-abstract.html
+	@\rm -f dummy-abstract.html
 
 # Creates *-abstract.html files.
 abstracts: writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
@@ -38,7 +43,7 @@ abstracts-invariantdetection:
 	${BWBIN}/htmlabstract-split.pl \
 	  -headfoot ../pubs-sources/abstract-headfoot-technique.html \
 	  abstracts-unsplit.html
-	rm abstracts-unsplit.html
+	\rm -f abstracts-unsplit.html
 
 abstracts-methodology:
 	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${MDEWWW}/pubs/link-names -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
