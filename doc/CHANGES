@@ -20,6 +20,55 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.4.1 (July 1 2008)
+
+A number of bugs were fixed in Daikon, Chicory and DynComp.  The 
+user manual was improved.  Support for IOA format was removed from
+Daikon.
+
+Daikon
+
+  User visible changes
+
+    - Removed support for IOA format
+
+  Bug fixes
+
+    - Removed unintentional dependency on 1.6 JDK routines.  Only 1.5
+      is required for Daikon.
+
+  Documentation
+    
+    - Added troubleshooting section when expected invariants are not
+      reported.
+
+Chicory
+
+  Bug fixes
+
+    - fixed typo in comparability type when comparability information
+      is included.
+
+DynComp
+
+  Bug fixes
+
+    - fixed the classpath specification on windows to use the correct
+      path specifier.
+
+    - Changed handling of the subprocess so that stdout and stderr output
+      is not mixed character by character.
+
+    - fixed a problem where DynComp would hang on the mac
+
+    - calls to clone are now correctly handled.
+
+  Documentation
+
+    - Indicated that a NoSuchMethodException will be generated if a method
+      in the JDK that could not be instrumented is called.
+
+
 4.4.0 (June 11 2008)
 
 A new format for declaration records in Daikon trace data was
