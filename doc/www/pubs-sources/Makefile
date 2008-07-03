@@ -17,6 +17,7 @@ HTML: abstracts index.html
 
 # Remove generated files.
 clean-abstracts:
+	@touch dummy-abstract.html
 	\rm -f *-abstract.html
 
 index.html:
@@ -30,6 +31,9 @@ writable-abstracts:
 # A chmod command fails if there are no arguments.  But this might be
 # called when no *-abstract.html files exist.  So create a dummy file,
 # include it on the command line, and remove it afterward.  This is gross.
+# An alternative:
+#   ls | egrep '-abstract\.html$' | xargs --no-run-if-empty chmod -f +w
+# "--no-run-if-empty" is a GNU extension.
 	@touch dummy-abstract.html
 	chmod -f +w *-abstract.html
 	@\rm -f dummy-abstract.html
