@@ -35,9 +35,9 @@ public enum OutputFormat {
     return (this == DBCJAVA || this == JML || this == JAVA);
   }
 
-  // An alternative to valueOf(); the advantage is that it can be
-  // case-sensitive, can permit alternative names, etc.  An enum cannot
-  // override valueOf().
+  // We define the get() method instead of using valueOf() because get()
+  // can be case-sensitive, can permit alternative names, etc.  An enum
+  // cannot override valueOf().
   /**
    * Return the appropriate OutputFormat for the given name, or null
    * if no such OutputFormat exists.
