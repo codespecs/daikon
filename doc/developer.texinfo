@@ -471,6 +471,8 @@ To support a new output format, you need to do two things:
 @item
 In @code{daikon.inv.Invariant.OutputFormat}, add a new static final
 field and also update the @code{get} method.
+@c (if it returns null, then you
+@c will get an ``Unknown output format'' error message when you run Daikon.)
 @item
 In every subclass of @code{Invariant}, edit the
 @code{format_using} method to handle the new @code{OutputFormat}.
