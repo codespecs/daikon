@@ -73,7 +73,7 @@ DynComp
 4.4.0 (June 11 2008)
 
 A new format for declaration records in Daikon trace data was
-introduced and the AnnotateNullable tool was released.  A number 
+introduced.  The AnnotateNullable tool was released.  A number 
 of bugs were fixed.
 
 Daikon
