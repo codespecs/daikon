@@ -137,21 +137,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20060609L;
 
-  // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff binary numeric invariants should be considered.
-   **/
-  public static boolean dkconfig_enabled = true;
-
   protected CLASSNAME(PptSlice ppt, boolean swap) {
     super(ppt);
     this.swap = swap;
-  }
-
-  /** Returns whether or not this invariant is enabled **/
-  public boolean enabled() {
-    return dkconfig_enabled;
   }
 
   /**
@@ -604,6 +592,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff divides invariants should be considered. **/
+    public static boolean dkconfig_enabled = true;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
+
     protected Invariant instantiate_dyn (PptSlice slice) {
       return new Divides (slice, swap);
     }
@@ -780,6 +776,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
       else return proto;
     }
 
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff square invariants should be considered. **/
+    public static boolean dkconfig_enabled = true;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
     protected Invariant instantiate_dyn (PptSlice slice) {
       return new Square (slice, swap);
     }
@@ -838,6 +841,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (swap) return proto_swap;
       else return proto;
     }
+
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff zero-track invariants should be considered. **/
+    public static boolean dkconfig_enabled = true;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
 
     protected Invariant instantiate_dyn (PptSlice slice) {
       return new ZeroTrack (slice, swap);
@@ -907,6 +918,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (proto);
     }
 
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff bitwise complement invariants should be considered. **/
+    public static boolean dkconfig_enabled = true;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
+
     protected Invariant instantiate_dyn (PptSlice slice) {
       return new BitwiseComplement (slice);
     }
@@ -955,6 +974,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (swap) return proto_swap;
       else return proto;
     }
+
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff bitwise subset invariants should be considered. **/
+    public static boolean dkconfig_enabled = true;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
 
     public Invariant instantiate_dyn (PptSlice slice) {
       return new BitwiseSubset (slice, swap);
@@ -1044,6 +1071,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (proto);
     }
 
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff BitwiseAndZero invariants should be considered. **/
+    public static boolean dkconfig_enabled = true;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
+
     public Invariant instantiate_dyn (PptSlice slice) {
       return new BitwiseAndZero (slice);
     }
@@ -1114,6 +1149,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (swap) return proto_swap;
       else return proto;
     }
+
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff ShiftZero invariants should be considered. **/
+    public static boolean dkconfig_enabled = true;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
 
     protected Invariant instantiate_dyn (PptSlice slice) {
       return new ShiftZero (slice, swap);
