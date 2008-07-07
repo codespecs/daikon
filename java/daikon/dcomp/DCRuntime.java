@@ -3608,8 +3608,8 @@ public final class DCRuntime {
    * Captures the DF information for a frontier branch over two integers
    */
   public static void int2_branch_df (int val1, int val2) {
-    Object tag1 = pop_check();
     Object tag2 = pop_check();
+    Object tag1 = pop_check();
     BranchInfo bi1 = new BranchInfo (tag_map.get (tag1), String.valueOf (val2));
     BranchInfo bi2 = new BranchInfo (tag_map.get (tag2), String.valueOf (val1));
     branch_tags.add (bi1);
@@ -3741,6 +3741,13 @@ public final class DCRuntime {
     push_tag (tag);
   }
 
+
+  /** DF of result is equal to DF of argument **/
+  @DFSum ("instance-java.lang.Integer.intValue")
+  public static int Integer_intValue (Integer obj) {
+    obj_to_prim (obj);
+    return obj.intValue();
+  }
 
   /** DF of result is equal to DF of argument **/
   @DFSum ("static-java.lang.Integer.valueOf")
