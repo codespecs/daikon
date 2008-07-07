@@ -221,14 +221,29 @@ public final class UtilMDE {
 
   /**
    * Like @link{Class.forName(String)}, but works when the string
-   * represents a primitive type, too.
+   * represents a primitive type, too.  If the original name can't
+   * be found, it also tries looking for the name with the last '.'
+   * changed to a dollar sign ($).  This accounts for inner classes
+   * which are sometimes separated with '.'.
    **/
   public static Class classForName(String className) throws ClassNotFoundException {
     Class result = primitiveClasses.get(className);
     if (result != null)
       return result;
-    else
-      return Class.forName(className);
+    else {
+      try {
+        return Class.forName(className);
+      } catch (ClassNotFoundException e) {
+        int pos = className.lastIndexOf('.');
+        String inner_name = className.substring (0, pos) + "$"
+          + className.substring (pos+1);
+        try {
+          return Class.forName (inner_name);
+        } catch (ClassNotFoundException ee) {
+          throw e;
+        }
+      }
+    }
   }
 
   private static HashMap<String,String> primitiveClassesJvm = new HashMap<String,String>(8);
