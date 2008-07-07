@@ -1754,7 +1754,7 @@ The CVS manual
 (@pxref{Branching and merging,,,cvs,CVS --- Concurrent Versions System})
 @end ifinfo
 @ifnotinfo
-(see section @uref{https://www.cvshome.org/docs/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
+(see section @uref{http://ximbiot.com/cvs/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
 @end ifnotinfo
 describes CVS branches:
 
