@@ -36,54 +36,6 @@ class DFInstrument extends DCInstrument {
   public static String[] test_seq_locals = null;
 
   /**
-   * Map from methods in the JDK to our methods that replace them.
-   * There is one map for each class with replacement methods.
-   * The replacement methods properly propogate DF and delegate the
-   * calculations to the original method.  Each replacement method takes
-   * exactly the same arguments and returns the same value.
-   */
-  private static Map<String,Map<MethodDef,String>> jdk_method_map
-    = new LinkedHashMap<String,Map<MethodDef,String>>();
-  private static Map<MethodDef,String> Integer_map
-    = new LinkedHashMap<MethodDef,String>();
-  private static Map<MethodDef,String> Float_map
-    = new LinkedHashMap<MethodDef,String>();
-  private static Map<MethodDef,String> Double_map
-    = new LinkedHashMap<MethodDef,String>();
-  private static Map<MethodDef,String> Long_map
-    = new LinkedHashMap<MethodDef,String>();
-  private static Map<MethodDef,String> Short_map
-    = new LinkedHashMap<MethodDef,String>();
-  private static Map<MethodDef,String> Boolean_map
-    = new LinkedHashMap<MethodDef,String>();
-  private static Map<MethodDef,String> StringBuffer_map
-    = new LinkedHashMap<MethodDef,String>();
-  private static Map<MethodDef,String> String_map
-    = new LinkedHashMap<MethodDef,String>();
-  static {
-    Integer_map.put (new MethodDef ("valueOf", integer_arg), "Integer_valueOf");
-    Integer_map.put (new MethodDef ("decode", string_arg), "Integer_decode");
-    jdk_method_map.put ("java.lang.Integer", Integer_map);
-    Long_map.put (new MethodDef ("valueOf", long_arg), "Long_valueOf");
-    jdk_method_map.put ("java.lang.Long", Long_map);
-    Short_map.put (new MethodDef ("valueOf", short_arg), "Short_valueOf");
-    jdk_method_map.put ("java.lang.Short", Short_map);
-    Float_map.put (new MethodDef ("valueOf", float_arg), "Float_valueOf");
-    jdk_method_map.put ("java.lang.Float", Float_map);
-    Double_map.put (new MethodDef ("valueOf", double_arg), "Double_valueOf");
-    jdk_method_map.put ("java.lang.Double", Double_map);
-    Boolean_map.put (new MethodDef ("valueOf", boolean_arg), "Boolean_valueOf");
-    jdk_method_map.put ("java.lang.Boolean", Boolean_map);
-    StringBuffer_map.put (new MethodDef ("append", CharSequence_arg),
-                          "StringBuffer_append");
-    StringBuffer_map.put (new MethodDef ("append", string_arg),
-                          "StringBuffer_append");
-    jdk_method_map.put ("java.lang.StringBuffer", StringBuffer_map);
-    String_map.put (new MethodDef ("valueOf", object_arg),
-                          "String_valueOf");
-    jdk_method_map.put ("java.lang.String", String_map);
-  }
-  /**
    * Initialize with the original class and whether or not the class
    * is part of the JDK
    */
@@ -909,7 +861,8 @@ class DFInstrument extends DCInstrument {
 
       // Determine if there is a replacement method that will calculate DF
       String replacement_method = null;
-      Map<MethodDef,String> class_method_map = jdk_method_map.get (classname);
+      Map<MethodDef,String> class_method_map
+        = SummaryInfo.jdk_method_map.get (classname);
       if (class_method_map != null) {
         MethodDef md = new MethodDef (method_name, arg_types);
         replacement_method = class_method_map.get (md);
@@ -921,6 +874,8 @@ class DFInstrument extends DCInstrument {
           Type invoke_class = invoke.getReferenceType(pool);
           arg_types = insert_type (invoke_class, arg_types);
           il.append (dcr_call (replacement_method, ret_type, arg_types));
+        } else if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+          constructor_summary (il, invoke, replacement_method);
         } else { // static call
           il.append (dcr_call (replacement_method, ret_type, arg_types));
         }
@@ -1010,5 +965,23 @@ class DFInstrument extends DCInstrument {
     return (il);
   }
 
+  /**
+   * Make a summary call for a constructor.  This is different from
+   * other summary calls because the summary call can't duplicate the
+   * actions of the original call.  The newly initialized object can
+   * only be passed to a constructor (until the constructor has returned).
+   * We thus duplicate the parameters to the constructor and then make
+   * the summary call.
+   *
+   * The current implementation only handles constructors with 8 bytes
+   * of arguments.  More arguments can be supported in the future by
+   * copying the parameters to a local.  This version uses dup which
+   * is limited to 4 or 8 bytes.
+   */
+
+  public void constructor_summary (InstructionList il, InvokeInstruction invoke,
+                                   String replacement_method) {
+    assert false;
+  }
 
 }
