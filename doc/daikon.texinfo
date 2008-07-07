@@ -414,9 +414,7 @@ program computes, and then reports properties that were true over the
 observed executions.
 @c Daikon's output, which is sometimes called an ``operational abstraction'',
 @c looks like a formal specification, or the contents of assert statements.
-Daikon can detect properties in C, C++, Java,
-Perl, and IOA programs;
-@c not very helpful: @uref{http://theory.csail.mit.edu/tds/ioa/, ,IOA}
+Daikon can detect properties in C, C++, Java, and Perl programs;
 in spreadsheet files; and in other data sources.  (Dynamic invariant
 detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications; as
@@ -456,12 +454,12 @@ The following mailing lists (and their archives) are available:
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
 To subscribe, visit
-@uref{http://lists.csail.mit.edu/mailman/listinfo/daikon-announce}.
+@uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce}.
 @item daikon-discuss@@lists.csail.mit.edu
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@uref{http://lists.csail.mit.edu/mailman/listinfo/daikon-discuss}.
+@uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-discuss}.
 @item daikon-developers@@lists.csail.mit.edu
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
@@ -1984,13 +1982,6 @@ original ESC/Java tool.  Use Daikon's JML format for use with the
 tool.
 
 
-@cindex IOA output format
-@cindex output format, IOA
-@item IOA format
-IOA is a formal language for describing computational processes that are
-modeled using I/O automata; for details, see
-@uref{http://theory.csail.mit.edu/tds/ioa/}.
-
 @cindex Java output format
 @cindex output format, Java
 @item Java format
@@ -2831,8 +2822,8 @@ code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
 Indented lines beginning with @option{DAIKON_FORMAT},
-@option{JAVA_FORMAT}, @option{ESC_FORMAT}, @option{SIMPLIFY_FORMAT},
-or @option{IOA_FORMAT} may be used to specify how to represent the
+@option{JAVA_FORMAT}, @option{ESC_FORMAT}, or @option{SIMPLIFY_FORMAT}
+may be used to specify how to represent the
 condition specified by the splitter in each of Daikon's output
 formats, to allow the splitting condition to be used as a dummy
 invariant.
@@ -6926,7 +6917,7 @@ Manual}.
 @cindex instrumentation, of Lisp programs
 
 A front end for the IOA programming language is distributed separately
-(see @uref{http://theory.csail.mit.edu/tds/ioa.html}).
+(see @uref{http://groups.csail.mit.edu/tds/ioa.html}).
 
 An earlier version of Daikon included a Lisp front end, but it is no
 longer supported.
