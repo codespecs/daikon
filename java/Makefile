@@ -397,10 +397,11 @@ DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 
-# Build DynComp/Java and run a sanity test
+# Build DynComp/Java, check the DF summary info and run a sanity test
 dyncomp dcomp : utilMDE-copy dcomp_premain.jar dcomp-test
 dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
+	$(JAVA) daikon.dcomp.SummaryInfo
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
 
