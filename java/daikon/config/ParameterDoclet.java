@@ -167,6 +167,8 @@ public class ParameterDoclet
    * category.
    **/
   public void process(String fullname, String name, String desc) {
+    // System.out.printf ("%s - %s%n", fullname, name);
+
     if ("".equals(desc.trim()))
       desc = NO_DESCRIPTION;
 
@@ -186,7 +188,7 @@ public class ParameterDoclet
       int i = field.lastIndexOf('.');
       String classname = field.substring(0, i);
       String fieldname = field.substring(i+1);
-      Class c = Class.forName(classname);
+      Class c = UtilMDE.classForName (classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);
       Object value = f.get(null);
       return "The default value is `" + value + "'.";
@@ -225,6 +227,15 @@ public class ParameterDoclet
       for (String field : keys) {
 	String desc = categories[c].fields.get(field);
 	String defstr = getDefaultString(field);
+
+    // Simpler format for debugging
+    if (false) {
+      String value = defstr.replaceFirst (".*`", "");
+      value = value.replaceFirst ("'.*", "");
+      out.printf ("@item %s %s%n%n", value, field);
+      continue;
+    }
+
 
 	// @item [field]
 	//  [desc]

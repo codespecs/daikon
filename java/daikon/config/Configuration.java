@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import utilMDE.Assert;
 import utilMDE.TextFile;
+import utilMDE.UtilMDE;
 
 /**
  * This class applies settings from a configuration file that lists
@@ -157,9 +158,11 @@ public final class Configuration
     Assert.assertTrue(fieldname != null);
     Assert.assertTrue(value != null);
 
+    // Use UtilMDE version of class.forName so that we can refer to
+    // inner classes using '.' as well as '$'
     Class clazz;
     try {
-      clazz = Class.forName(classname);
+      clazz = UtilMDE.classForName(classname);
     } catch (ClassNotFoundException e) {
       throw new ConfigException("Configuration option attempts to use nonexistent class " + classname, e);
     } catch (LinkageError e) {
