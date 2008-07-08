@@ -685,7 +685,12 @@ audit:
 
 # JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InterningChecker
 JAVAC_INTERNED_ARGS = -typeprocessor checkers.interning.InterningChecker -Alint=-dotequals
+JAVAC_NULLNESS_ARGS = -typeprocessor checkers.nullness.NullnessChecker
+JAVAC_NULLNESS_STUBS = -sourcepath $checkers/jdk/nullness/src
+JAVAC_JAVARI_ARGS = -typeprocessor checkers.javari.JavariChecker
+JAVAC_JAVARI_STUBS = -sourcepath $checkers/jdk/nullness/src
 JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
+JAVAC_IGJ_STUBS = -sourcepath $checkers/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
 # INTERNED_JAVA_FILES_SKIP =
 INTERNED_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
@@ -697,26 +702,53 @@ INTERNED_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java
 INTERNED_JAVA_FILES = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 INTERNED_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 
-intern: interned
-interned:
+intern: check-interning
+interned: check-interning
+check-interning:
 	${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
 
 # Run the interned checker on all Java files, not just those that contain an
 # @Interned annotation.
-interned-all:
+interned-all: check-interning-all
+check-interning-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
 
+check-nullness-all:
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVA_FILES}
+
+check-nullness-all-withstubs:
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
+
+check-igj-all:
+	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVA_FILES}
+
+check-igj-all-withstubs:
+	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
+	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${JAVA_FILES}
+
+check-javari-all:
+	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVA_FILES}
+
+check-javari-all-withstubs:
+	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
+	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
+
 # These targets run the Interned checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
-interned-varinfo:
+check-interned-varinfo:
 	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/VarInfo.java
-interned-fileio:
+check-interned-fileio:
 	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/FileIO.java
 
 # Problem with these computations: double-counting of dakion/util/ directory.
 # "tail -1" is required when wc is given multiple arguments
-interned-counts:
+interned-counts: interning-counts
+interning-counts:
 	@echo -n "Annotated files: "
 	@echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
 	#@echo ${INTERNED_JAVA_FILES_COUNTS}
