@@ -1784,41 +1784,51 @@ options.
 
 @end table
 
+
 @node Processing only part of the trace file, Daikon configuration options, Options to control invariant detection, Running Daikon
 @section Processing only part of the trace file
 
 Using @option{--ppt-select-pattern} and @option{--ppt-omit-pattern} can
 save time even if there are no samples for the excluded program points,
-as Daikon can skip the declarations and need not initializing data
+as Daikon can skip the declarations and need not initialize data
 structures that would be used if samples were encountered.
 
 @table @option
 @item --ppt-select-pattern=@var{ppt_regexp}
-Only process program points whose names match the regular expression,
-which uses Perl syntax.
+Only process program points whose names match the regular expression.
+The @option{--ppt-omit-pattern} argument takes precedence over this argument.
 
 @item --ppt-omit-pattern=@var{ppt_regexp}
-Do not process program points whose names match the regular expression,
-which uses Perl syntax.  This takes priority over the
-@option{--ppt-select-pattern} argument.
+Do not process program points whose names match the regular expression.
+This takes precedence over the @option{--ppt-select-pattern} argument.
 
 @item --var-select-pattern=@var{var_regexp}
 Only process variables (whether in the trace file or derived) whose
-names match the regular expression, which uses Perl syntax.
+names match the regular expression.
+The @option{--var-omit-pattern} argument takes precedence over this argument.
 
 @item --var-omit-pattern=@var{var_regexp}
 Ignore variables (whether in the trace file or derived) whose names
-match the regular expression, which uses Perl syntax.  This takes
-priority over the @option{--var-select-pattern} argument.
+match the regular expression.
+This takes priority over the @option{--var-select-pattern} argument.
 
 @end table
 
-Note that all of the regular expressions used by Daikon use Java's
-regular expression processor which is similar to Perl's but not
+The @var{...-omit-pattern} arguments take precedence:  if a name matches
+an omit pattern, it is excluded.  If a name does not match an omit
+pattern, it is tested against the select pattern (if any).  If any
+select patterns are specified, the name must match one of the patterns
+in order to be included.  If no select patterns are specified, then any
+ppt name that does not match the omit patterns is included.
+
+
+All of the regular expressions used by Daikon use Java's
+regular expression syntax, which is similar to Perl's but not
 exactly the same.  Details are available at
 @uref{http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html#sum}.
-Multiple items can be matched by using the logical or operator (|).
-For example, @var{var1|var2|var3}.
+Multiple items can be matched by using the logical or operator (|), 
+for example @var{var1|var2|var3}.
+
 
 @node Daikon configuration options, Daikon debugging options, Processing only part of the trace file, Running Daikon
 @section Daikon configuration options
@@ -7768,17 +7778,15 @@ Specify a single configuration setting.
 @xref{Configuration options}, for details.
 
 @item --ppt-select-pattern=@var{ppt_regexp}
-Only process program points whose names match the regular expression,
-which uses Perl syntax.
+Only process program points whose names match the regular expression.
 
 @item --ppt-omit-pattern=@var{ppt_regexp}
-Do not process program points whose names match the regular expression,
-which uses Perl syntax.  This takes priority over the
-@option{--ppt-select-pattern} argument.
+Do not process program points whose names match the regular expression.
+This takes priority over the @option{--ppt-select-pattern} argument.
 
 @item --var-select-pattern=@var{ppt_regexp}
 Only process variables (whether in the trace file or derived) whose
-names match the regular expression, which uses Perl syntax.
+names match the regular expression.
 
 @item --var-omit-pattern=@var{var_regexp}
 Ignore variables (whether in the trace file or derived) whose names
