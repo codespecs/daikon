@@ -58,4 +58,9 @@ public final class StringLength extends UnaryDerivation
     return String.format ("%s.length()", base.enclosing_var.jml_name());
   }
 
+  /** Returns the simplify name **/
+  public String simplify_name () {
+    return String.format ("(stringLength %s)", base.enclosing_var.simplify_name());
+  }
+
 }
