@@ -157,6 +157,10 @@ public class SampleTester extends TestCase {
       PrintInvariants.dkconfig_print_inv_class = false;
     }
 
+    // Enable expected invariants
+    daikon.inv.ternary.threeScalar.FunctionBinary.dkconfig_enabled = true;
+    daikon.inv.ternary.threeScalar.FunctionBinaryFloat.dkconfig_enabled = true;
+
     this.fname = fname;
     fp = new LineNumberReader (new InputStreamReader (commands));
 
