@@ -845,7 +845,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
     /** Boolean.  True iff zero-track invariants should be considered. **/
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
@@ -921,7 +921,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
     /** Boolean.  True iff bitwise complement invariants should be considered. **/
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
@@ -978,7 +978,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
     /** Boolean.  True iff bitwise subset invariants should be considered. **/
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
@@ -1074,7 +1074,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
     /** Boolean.  True iff BitwiseAndZero invariants should be considered. **/
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
@@ -1153,7 +1153,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
     /** Boolean.  True iff ShiftZero invariants should be considered. **/
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
