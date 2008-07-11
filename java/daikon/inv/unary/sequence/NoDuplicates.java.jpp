@@ -68,7 +68,7 @@ public class CLASSNAME
   /**
    * Boolean.  True iff NoDuplicates invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.inv.unary.sequence." + CLASSSTRING);

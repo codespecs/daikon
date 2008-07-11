@@ -112,7 +112,7 @@ public class CLASSNAME
   /**
    * Boolean.  True iff SubSequence invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);

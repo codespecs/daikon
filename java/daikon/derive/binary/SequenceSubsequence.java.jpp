@@ -45,7 +45,7 @@ public final class SEQUENCESCALARSUBSEQUENCE
    * Boolean.  True iff SEQUENCESCALARSUBSEQUENCE derived variables
    * should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   /**
    * Represents a subsequence of a sequence.  The subsequence a[i..j]
