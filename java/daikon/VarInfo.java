@@ -1046,6 +1046,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           }
         }
       } else { // new decl format
+        assert enclosing_var != null : this;
+
         // The class of a parameter can't change in the caller
         if (var_flags.contains (VarFlags.CLASSNAME) && enclosing_var.isParam())
           return true;
