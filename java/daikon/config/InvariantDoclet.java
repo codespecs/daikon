@@ -18,6 +18,23 @@ public class InvariantDoclet
   private static final String lineSep = System.getProperty("line.separator");
 
   /**
+   * Invariants that match any of the specified regular expressions
+   * are purposefully missing enable variables.  Any others will
+   * throw an exception
+   */
+  private static String[] invs_without_enables = new String[]
+    {
+      "FunctionBinary.*",
+      ".*RangeFloat.*",
+      ".*RangeInt.*",
+      "AndJoiner",
+      "DummyInvariant",
+      "Equality",
+      "GuardingImplication",
+      "Implication",
+    };
+
+  /**
    * Entry point for this doclet (invoked by javadoc).
    **/
   public static boolean start(RootDoc doc)
@@ -242,6 +259,19 @@ public class InvariantDoclet
         out.println (comment);
       }
 
+      // Make sure that all invariants have enable variables
+      if (true && (find_enabled (dc) == -1)) {
+        boolean ok_without_enable = false;
+        for (String re : invs_without_enables) {
+          if (dc.name().matches ("^" + re + "$")) {
+            ok_without_enable = true;
+            break;
+          }
+        }
+        if (!ok_without_enable)
+          throw new RuntimeException ("No enable variable for " + dc.name());
+      }
+
       // Note whether this invariant is turned off by default
       if (find_enabled (dc) == 0) {
         out.println ();
@@ -325,7 +355,7 @@ public class InvariantDoclet
           String fullname = field.qualifiedName();
           int i = fullname.lastIndexOf('.');
           String classname = fullname.substring(0, i);
-          Class c = Class.forName(classname);
+          Class c = UtilMDE.classForName(classname);
           Field f = c.getField (enable_name);
           Object value = f.get(null);
           if (((Boolean) value).booleanValue())
