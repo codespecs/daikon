@@ -9,23 +9,35 @@
   #define SUPERCLASS SingleScalar
   #define PRIMITIVE long
   #define BASE_IS_TYPE baseIsIntegral()
+  #define ONEOF OneOfScalar
+  #define LOWER_BOUND LowerBound
+  #define UPPER_BOUND UpperBound
 #elif defined(FLOAT)
   #define RANGE RangeFloat
   #define SUPERCLASS SingleFloat
   #define PRIMITIVE double
   #define BASE_IS_TYPE baseIsFloat()
+  #define ONEOF OneOfFloat
+  #define LOWER_BOUND LowerBoundFloat
+  #define UPPER_BOUND UpperBoundFloat
 #elif defined(SCALARSEQ)
   #define SEQ
   #define RANGE EltRangeInt
   #define SUPERCLASS SingleScalarSequence
   #define PRIMITIVE long
   #define BASE_IS_TYPE baseIsIntegral()
+  #define ONEOF EltOneOf
+  #define LOWER_BOUND EltLowerBound
+  #define UPPER_BOUND EltUpperBound
 #elif defined(FLOATSEQ)
   #define SEQ
   #define RANGE EltRangeFloat
   #define SUPERCLASS SingleFloatSequence
   #define PRIMITIVE double
   #define BASE_IS_TYPE baseIsFloat()
+  #define ONEOF EltOneOfFloat
+  #define LOWER_BOUND EltLowerBoundFloat
+  #define UPPER_BOUND EltUpperBoundFloat
 #else
   #error "TYPELONG, TYPEDOUBLE, TYPELONGSEQ, or TYPEDOUBLESEQ  must be defined"
 #endif
@@ -76,20 +88,8 @@ public abstract class RANGE extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040311L;
 
-  // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff range invariants should be considered.
-   **/
-  public static boolean dkconfig_enabled = true;
-
   protected RANGE (PptSlice ppt) {
     super (ppt);
-  }
-
-  /** returns whether or not this invariant is enabled **/
-  public boolean enabled() {
-    return dkconfig_enabled;
   }
 
   /**
@@ -119,7 +119,7 @@ public abstract class RANGE extends SUPERCLASS {
     String fmt_str = get_format_str (format);
 
     VarInfo var1 = ppt.var_infos[0];
-    String v1 = var1.name_using(format);
+    String v1 = null;
 
     #if defined(SEQ)
       if (format == OutputFormat.ESCJAVA) {
@@ -135,6 +135,9 @@ public abstract class RANGE extends SUPERCLASS {
         fmt_str += " (elementwise)";
       }
     #endif
+
+    if (v1 == null)
+      v1 = var1.name_using(format);
 
     fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
     return (fmt_str);
@@ -183,13 +186,21 @@ public abstract class RANGE extends SUPERCLASS {
 
 
   /**
-   * All range invariants are obvious since they are all represented
-   * by some version of OneOf or Bound.
+   * All range invariants except Even and PowerOfTwo are obvious since they
+   * represented by some version of OneOf or Bound.
    */
   public DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     return new DiscardInfo (this, DiscardCode.obvious,
                             "Implied by Oneof or Bound");
+  }
+
+  /**
+   * Looks for a OneOf invariant over vis.  Used by Even and PowerOfTwo
+   * to dynamically suppress those invariants if a OneOf exists
+   */
+  protected ONEOF find_oneof (VarInfo[] vis) {
+    return (ONEOF) ppt.parent.find_inv_by_class (vis, ONEOF.class);
   }
 
   /**
@@ -249,6 +260,11 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return ONEOF.dkconfig_enabled;
+    }
+
     /** instantiates the invariant on the specified slice **/
     public Invariant instantiate_dyn (PptSlice slice) {
       return new EqualZero (slice);
@@ -289,6 +305,11 @@ public abstract class RANGE extends SUPERCLASS {
       if (proto == null)
         proto = new EqualOne (null);
       return proto;
+    }
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return ONEOF.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice **/
@@ -333,6 +354,11 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return ONEOF.dkconfig_enabled;
+    }
+
     /** instantiates the invariant on the specified slice **/
     public Invariant instantiate_dyn (PptSlice slice) {
       return new EqualMinusOne (slice);
@@ -375,6 +401,11 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return LOWER_BOUND.dkconfig_enabled;
+    }
+
     /** instantiates the invariant on the specified slice **/
     public Invariant instantiate_dyn (PptSlice slice) {
       return new GreaterEqualZero (slice);
@@ -415,6 +446,11 @@ public abstract class RANGE extends SUPERCLASS {
       if (proto == null)
         proto = new GreaterEqual64 (null);
       return proto;
+    }
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return LOWER_BOUND.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice **/
@@ -460,6 +496,11 @@ public abstract class RANGE extends SUPERCLASS {
       return (proto);
     }
 
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
+    }
+
     /** instantiates the invariant on the specified slice **/
     public Invariant instantiate_dyn (PptSlice slice) {
       return new BooleanVal (slice);
@@ -478,10 +519,10 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
   /**
-   * Internal invariant representing longs whose values are always a
-   * power of 2 (exactly one bit is set).  Used for non-instantiating
-   * suppressions.  Will never print since this really doesn't seem
-   * that interesting.
+   * Invariant representing longs whose values are always a power of 2
+   * (exactly one bit is set).  Used for non-instantiating
+   * suppressions.  Since this is not covered by the Bound or OneOf
+   * invariants it is printed.
    */
   public static class PowerOfTwo extends RANGE {
 
@@ -489,6 +530,9 @@ public abstract class RANGE extends SUPERCLASS {
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
+
+    /** Boolean.  True if PowerOfTwo invariants should be considered **/
+    public static boolean dkconfig_enabled = true;
 
     protected PowerOfTwo (PptSlice ppt) {
       super (ppt);
@@ -501,6 +545,11 @@ public abstract class RANGE extends SUPERCLASS {
       if (proto == null)
         proto = new PowerOfTwo (null);
       return (proto);
+    }
+
+    /** returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice **/
@@ -525,12 +574,26 @@ public abstract class RANGE extends SUPERCLASS {
     public boolean eq_check (PRIMITIVE x) {
       return ((x >= 1) && ((x & (x - 1)) == 0));
     }
+
+    /**
+     * Since PowerOfTwo is not covered by Bound or OneOf, it is not obvious
+     * (and should thus be printed)
+     */
+     public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+
+       ONEOF oneof = find_oneof (vis);
+       if (oneof != null)
+         return new DiscardInfo (this, DiscardCode.obvious, "Implied by Oneof");
+
+       return null;
+     }
+
   }
 
   /**
-   * Internal invariant representing longs whose values are always even.
-   * Used for non-instantiating suppressions.  Will never print since
-   * this really doesn't seem that interesting.
+   * Invariant representing longs whose values are always even.
+   * Used for non-instantiating suppressions.  Since this is not
+   * covered by the Bound or OneOf invariants it is printed.
    */
   public static class Even extends RANGE {
 
@@ -538,6 +601,9 @@ public abstract class RANGE extends SUPERCLASS {
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
+
+    /** Boolean.  True if PowerOfTwo invarianst should be considered **/
+    public static boolean dkconfig_enabled = true;
 
     protected Even (PptSlice ppt) {
       super (ppt);
@@ -550,6 +616,11 @@ public abstract class RANGE extends SUPERCLASS {
       if (proto == null)
         proto = new Even (null);
       return proto;
+    }
+
+    /** returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice **/
@@ -567,6 +638,19 @@ public abstract class RANGE extends SUPERCLASS {
     public boolean eq_check (PRIMITIVE x) {
       return ((x & 1) == 0);
     }
+
+    /**
+     * Since Even is not covered by Bound or OneOf, it is not obvious
+     * (and should thus be printed)
+     */
+     public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+       // If there is a oneof, it implies this
+       ONEOF oneof = find_oneof (vis);
+       if (oneof != null)
+         return new DiscardInfo (this, DiscardCode.obvious, "Implied by Oneof");
+
+       return null;
+     }
   }
 
   /**
@@ -586,6 +670,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     private static Bound0_63 proto;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() {
+      return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
+    }
 
     /** returns the prototype invariant **/
     public static Invariant get_proto() {
