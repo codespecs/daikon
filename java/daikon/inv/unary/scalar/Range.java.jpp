@@ -603,7 +603,7 @@ public abstract class RANGE extends SUPERCLASS {
     static final long serialVersionUID = 20040113L;
 
     /** Boolean.  True if PowerOfTwo invarianst should be considered **/
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = false;
 
     protected Even (PptSlice ppt) {
       super (ppt);
