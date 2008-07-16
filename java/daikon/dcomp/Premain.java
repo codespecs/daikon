@@ -13,7 +13,7 @@ import org.apache.bcel.generic.*;
 import daikon.util.*;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.dcomp.DCRuntime.BranchInfo;
-import daikon.dcomp.DCRuntime.ValueSource;
+import daikon.dcomp.ValueSource;
 
 import daikon.DynComp;
 
@@ -192,17 +192,7 @@ public class Premain {
             System.err.printf ("  Warning: null vs encountered%n");
             continue;
           }
-          for (ValueSource src : bi.value_source) {
-            System.err.printf ("  %s%n", src);
-            Throwable st = src.get_stack_trace();
-            if (st != null) {
-              for (StackTraceElement ste : st.getStackTrace()) {
-                if (ste.getClassName().startsWith ("daikon.dcomp.DCRuntime"))
-                  continue;
-                System.err.printf ("    %s%n", ste);
-              }
-            }
-          }
+          System.err.printf ("%s%n", bi.value_source.tree_dump());
         }
 
         // if an output file was requested, write the index of each local
@@ -229,21 +219,18 @@ public class Premain {
             Map<String,Set<String>> locals
               = new LinkedHashMap<String,Set<String>>();
             for (BranchInfo bi : DCRuntime.branch_tags) {
-              for (ValueSource vs : bi.value_source) {
-                if (vs == null)
-                  continue;
-                if (vs.descr.startsWith ("local-store")) {
-                  int local_index = Integer.decode(vs.descr.split (" ")[1]);
-                  String local_name = DFInstrument.test_seq_locals[local_index];
-                  Set<String> compare_to_set = locals.get (local_name);
-                  if (compare_to_set == null) {
-                    compare_to_set = new LinkedHashSet<String>();
-                    locals.put (local_name, compare_to_set);
-                  }
-                  compare_to_set.add (bi.compared_to);
+              Map<String,Set<String>> bi_locals
+                = bi.value_source.get_var_compares (bi.compared_to);
+              for (String local : bi_locals.keySet()) {
+                Set<String> compare_to_set = locals.get (local);
+                if (compare_to_set == null) {
+                  compare_to_set = new LinkedHashSet<String>();
+                  locals.put (local, compare_to_set);
                 }
+                compare_to_set.addAll (bi_locals.get (local));
               }
             }
+
             for (String local : locals.keySet()) {
               dataflow_fp.printf ("%s ", local);
               for (String ct : locals.get(local))
@@ -322,12 +309,23 @@ public class Premain {
     }
   }
 
+  /**
+   * Returns the local name (eg, var0, var1) that corresponds to a specific
+   * local-store
+   */
+  public static String seq_local_name (String local_store) {
+    assert local_store.startsWith ("local-store");
+    int local_index = Integer.decode(local_store.split (" ")[1]);
+    String local_name = DFInstrument.test_seq_locals[local_index];
+    return (local_name);
+  }
+
   public static PrintWriter open (File filename) {
     try {
       return new PrintWriter (new BufferedWriter (new FileWriter (filename)));
       //return new PrintWriter (filename);
       //return new PrintStream (new BufferedWriter
-      //            (new OutputStreamWriter (new FileOutputStream(filename))));
+      //            (new Outpu32tStreamWriter (new FileOutputStream(filename))));
     } catch (Exception e) {
       throw new Error ("Can't open " + filename, e);
     }
