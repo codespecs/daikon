@@ -725,7 +725,7 @@ public abstract class DaikonVariableInfo
                                                     isArray);
 
         newField.typeName = type_name;
-        newField.repTypeName = getRepName(type, isArray) + arr_str;
+        newField.repTypeName = getRepName(type, false) + arr_str;
 
 
         if (DaikonWriter.isStaticConstField(field) && !isArray)
@@ -826,6 +826,8 @@ public abstract class DaikonVariableInfo
         else if (type.getName().equals("java.lang.String"))
         {
             // if we are printing the actual array, the rep type is "java.lang.String"
+            if (true)
+                return "hashcode";
             if (asArray)
                 return "java.lang.String";
             // otherwise, it is just a hashcode
