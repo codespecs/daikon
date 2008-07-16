@@ -398,7 +398,8 @@ public final /*@Interned*/ class ProglangType
         else
           throw new IllegalArgumentException("Bad character: " + value);
         return Intern.internedLong(Character.getNumericValue(c));
-      } else if (base == BASE_INT) {
+      } else if ((base == BASE_INT) || (base == BASE_BOOLEAN)
+                 || (base== BASE_LONG) || (base == BASE_SHORT)) {
         // File rep type might be int, boolean, or hashcode.
         // If we had the actual type, we could do error-checking here.
         // (Example:  no hashcode should be negative, nor any boolean > 1.)
