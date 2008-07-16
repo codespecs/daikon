@@ -331,6 +331,7 @@ public class DtraceDiff {
 					   Object val1,
 					   Object val2) {
     ProglangType type = vi.file_rep_type;
+    // System.out.printf ("values_are_equal type = %s%n", type);
     if (type.isArray ()) {
       // array case
       if (type.isPointerFileRep()) {
@@ -371,6 +372,7 @@ public class DtraceDiff {
 	  return false;
 	for (int i = 0; i<v1.length; i++)
 	  {
+        // System.out.printf ("string array[%d] %s %s%n", i, v1[i], v2[i]);
 	    if ((v1[i] == null) && (v2[i] == null))
 	      ;
 	    else if ((v1[i] == null) || (v2[i] == null))
