@@ -50,6 +50,9 @@ public final class DCRuntime {
   /** Tag stack **/
   public static Stack<Object> tag_stack = new Stack<Object>();
 
+  /** ValueSet used for the null reference value **/
+  private static ValueSource null_value_source = new ValueSource ("null");
+
   /**
    * Object used to mark procedure entries in the tag stack.  It is pushed
    * on the stack at entry and checked on exit to make sure it is in on the
@@ -138,47 +141,28 @@ public final class DCRuntime {
   }
 
   /**
-   * Class used in dataflow that tracks the source of each value
-   */
-  public static class ValueSource {
-    String descr;
-    Throwable stack_trace = null;
-    ValueSource (String descr) { this.descr = descr; }
-    ValueSource (String descr, Throwable stack_trace) {
-      this.descr = descr;
-      this.stack_trace = stack_trace;
-    }
-    public Throwable get_stack_trace() {
-      return stack_trace;
-    }
-    public String toString() {
-      return descr;
-    }
-  }
-
-  /**
    * Map in Dataflow from tag to the set of valus that have contributed
    * to its current value
    */
-  public static WeakIdentityHashMap<Object,Set<ValueSource>> tag_map
-    = new WeakIdentityHashMap<Object,Set<ValueSource>>();
+  public static WeakIdentityHashMap<Object,ValueSource> tag_map
+    = new WeakIdentityHashMap<Object,ValueSource>();
 
   /**
    * Map from tag to dataflow values for the length of an array.  There
    * should only be entries for arrays
    **/
-  public static WeakIdentityHashMap<Object,Set<ValueSource>> df_arrlen_map
-    = new WeakIdentityHashMap<Object,Set<ValueSource>>();
+  public static WeakIdentityHashMap<Object,ValueSource> df_arrlen_map
+    = new WeakIdentityHashMap<Object,ValueSource>();
 
   /**
    * Information about a value encountered at a branch.
    */
   public static class BranchInfo {
     /** the sources of the value **/
-    public Set<ValueSource> value_source;
+    public ValueSource value_source;
     /** What the value was compared to in the branch **/
     public String compared_to;
-    public BranchInfo (Set<ValueSource> value_source, String compared_to) {
+    public BranchInfo (ValueSource value_source, String compared_to) {
       this.value_source = value_source;
       this.compared_to = compared_to;
     }
@@ -3156,7 +3140,7 @@ public final class DCRuntime {
    * as that of the object
    */
   public static void dup_obj_tag_val(Object obj) {
-    Set<ValueSource> values = tag_map.get (obj);
+    ValueSource values = tag_map.get (obj);
     Object tag = new Object();
     tag_map.put (tag, values);
     tag_stack.push (tag);
@@ -3168,7 +3152,7 @@ public final class DCRuntime {
    * opcodes
    */
   public static void arraylen_df (Object arr) {
-    Set<ValueSource> len_df = df_arrlen_map.get (arr);
+    ValueSource len_df = df_arrlen_map.get (arr);
     Object tag = new Object();
     tag_map.put (tag, len_df);
     tag_stack.push (tag);
@@ -3180,10 +3164,9 @@ public final class DCRuntime {
    * pushes it on the tag stack.  Used when a constant is pushed
    */
   public static void push_const_src (String descr) {
-    Set<ValueSource> values = new HashSet<ValueSource>(1);
     Throwable stack_trace = new Throwable();
     stack_trace.fillInStackTrace();
-    values.add (new ValueSource (descr, stack_trace));
+    ValueSource values = new ValueSource (descr, stack_trace);
     Object tag = new Constant();
     tag_map.put (tag, values);
     tag_stack.push (tag);
@@ -3195,10 +3178,9 @@ public final class DCRuntime {
    * Used when a constant string/class (ldc) is pushed
    */
   public static void push_const_obj_src (Object obj, String descr) {
-    Set<ValueSource> values = new HashSet<ValueSource>(1);
     Throwable stack_trace = new Throwable();
     stack_trace.fillInStackTrace();
-    values.add (new ValueSource (descr, stack_trace));
+    ValueSource values = new ValueSource (descr, stack_trace);
     tag_map.put (obj, values);
   }
 
@@ -3217,7 +3199,7 @@ public final class DCRuntime {
     check_method_marker();
     Object tag2 = tag_stack.pop();
     Object tag = new BinOp();
-    union_df (tag, tag1, tag2);
+    binary_op_df ("math-op", tag, tag1, tag2);
     tag_stack.push (tag);
   }
 
@@ -3233,13 +3215,13 @@ public final class DCRuntime {
     Object tag = tag_stack.pop();
     assert tag != null : "index " + index;
     Object newtag = new PrimStore();
-    Set<ValueSource> val = get_value_set (tag);
+    ValueSource val = get_value_source (tag);
     Throwable stack_trace = new Throwable();
     stack_trace.fillInStackTrace();
-    Set<ValueSource> newval = new HashSet<ValueSource>(val);
-    newval.add (new ValueSource ("local-store " + index, stack_trace));
+    ValueSource newval = new ValueSource ("local-store " + index, stack_trace);
     tag_map.put (newtag, newval);
     tag_frame[index] = newtag;
+    debug_df.log_tb ("primitive local-store %s->%s", index, val);
     if (debug_primitive.enabled())
       debug_primitive.log ("pop_local_tag[%d] %s%n", index, tag_frame[index]);
 
@@ -3250,10 +3232,17 @@ public final class DCRuntime {
    * called if the store is in the test sequence method
    */
   public static void pop_local_obj_df (Object obj, int index) {
-    Set<ValueSource> val = get_value_set (obj);
+    if (obj == null) {
+      debug_df.log_tb ("object local-store %s null ignored", index);
+      return;
+    }
+    ValueSource val = get_value_source (obj);
     Throwable stack_trace = new Throwable();
     stack_trace.fillInStackTrace();
-    val.add (new ValueSource ("local-store " + index, stack_trace));
+    debug_df.log_tb ("object local-store %s->%s", index, val);
+    ValueSource values = new ValueSource ("local-store " + index, stack_trace,
+                                          val, null);
+    tag_map.put (obj, values);
   }
 
   /**
@@ -3263,10 +3252,9 @@ public final class DCRuntime {
   public static void setup_obj_df (Object obj, String descr) {
 
     // Create a new DF for the object
-    Set<ValueSource> values = new HashSet<ValueSource>(1);
     Throwable t = new Throwable();
     t.fillInStackTrace();
-    values.add (new ValueSource (descr, t));
+    ValueSource values = new ValueSource (descr, t);
     tag_map.put (obj, values);
   }
 
@@ -3280,13 +3268,11 @@ public final class DCRuntime {
 
     // associate the DF for the size with the length param of the array
     Object size_tag = pop_check();
-    Set<ValueSource> size_values
-      = new HashSet<ValueSource>(tag_map.get(size_tag));
+    ValueSource size_values = tag_map.get(size_tag);
     df_arrlen_map.put (arr_ref, size_values);
 
     // Create a new DF for the array itself
-    Set<ValueSource> values = new HashSet<ValueSource>(1);
-    values.add (new ValueSource (descr));
+    ValueSource values = new ValueSource (descr);
     tag_map.put (arr_ref, values);
   }
 
@@ -3306,8 +3292,7 @@ public final class DCRuntime {
       tags[dims] = pop_check();
 
     // Create a description for the array allocation
-    Set<ValueSource> values = new HashSet<ValueSource>(1);
-    values.add (new ValueSource (descr));
+    ValueSource values = new ValueSource (descr);
 
     setup_multiarray_df (0, tags, values, arr);
 
@@ -3324,12 +3309,11 @@ public final class DCRuntime {
    *    @param arr   The array.  Should have tags.length - dim dimensions
    */
   private static void setup_multiarray_df (int dim, Object[] tags,
-                                           Set<ValueSource> descr, Object arr) {
+                                           ValueSource descr, Object arr) {
 
     // Relate array length of the outermost array to its size
     Object size_tag = tags[dim];
-    Set<ValueSource> size_values
-      = new HashSet<ValueSource>(tag_map.get(size_tag));
+    ValueSource size_values = tag_map.get(size_tag);
     df_arrlen_map.put (arr, size_values);
 
     // Create a new DF for the array itself
@@ -3383,7 +3367,7 @@ public final class DCRuntime {
     Object result_tag = new Object();
 
     // The result DF is the union of the index DF and the element DF
-    union_df (result_tag, index_tag, elem_tag);
+    binary_op_df ("array-load", result_tag, index_tag, elem_tag);
 
     // Push the result tag on the tag stack
     tag_stack.push (result_tag);
@@ -3410,15 +3394,14 @@ public final class DCRuntime {
     if (tag_map.get (elem) == null) {
       Throwable t = new Throwable();
       StackTraceElement ste = t.getStackTrace()[1];
-      Set<ValueSource> val = new HashSet<ValueSource>(1);
       String descr = String.format ("%s.%s:uninit-arr-elem@L%d",
                 ste.getClassName(), ste.getMethodName(), ste.getLineNumber());
-      val.add (new ValueSource (descr));
+      ValueSource val = new ValueSource (descr);
       tag_map.put (elem, val);
     }
 
     // The result DF is the union of the element DF and the index DF
-    union_df (elem, elem, index_tag);
+    binary_op_df ("array-index", elem, elem, index_tag);
 
   }
 
@@ -3426,19 +3409,21 @@ public final class DCRuntime {
    * Creates a value set that is the union of the value sets from tag1
    * and tag2 and assigns that value set to result_tag
    */
-  private static void union_df (Object result_tag, Object tag1, Object tag2) {
+  private static void binary_op_df (String descr, Object result_tag,
+                                Object tag1, Object tag2) {
 
-    // Get the DF for the first tag.  If the tag is from an uninitialized
-    // Field, create a ValueSource based on the uninitialized field description
-    Set<ValueSource> val1 = get_value_set (tag1);
+    // Get the DF for the first tag.
+    ValueSource val1 = get_value_source (tag1);
 
-    // Get the DF for the second tag.  If the tag is from an uninitialized
-    // Field, create a ValueSource based on the uninitialized field description
-    Set<ValueSource> val2 = get_value_set (tag2);
+    // Get the DF for the second tag.
+    ValueSource val2 = get_value_source (tag2);
 
-    // Union the two sets of values and associate them with the result tag
-    Set<ValueSource> values = new HashSet<ValueSource>(val1);
-    values.addAll (val2);
+    // Get the stack trace of this location
+    Throwable stack_trace = new Throwable();
+    stack_trace.fillInStackTrace();
+
+    // Create a new ValueSource node with val1 and val2 the subtrees.
+    ValueSource values = new ValueSource (descr, stack_trace, val1, val2);
     debug_df.log_tb ("Union of %s and %s", val1, val2);
     tag_map.put (result_tag, values);
   }
@@ -3466,10 +3451,10 @@ public final class DCRuntime {
     Object value_tag = pop_check();
     Object index_tag = pop_check();
 
-    // Create a new tag for the array element and set its DF to the union
-    // of that of the index and the value
+    // Create a new tag for the array element and create a new DF tree with
+    // the index and value as the subtrees.
     Object elem_tag = new Object();
-    union_df (elem_tag, value_tag, index_tag);
+    binary_op_df ("array-store", elem_tag, value_tag, index_tag);
 
     // Store the element tag in the tag array for the array
     obj_tags[index] = elem_tag;
@@ -3484,12 +3469,12 @@ public final class DCRuntime {
     // Get the tag for index
     Object index_tag = pop_check();
 
-    System.out.printf ("aastore_df: val = %s, index = %d, tag = %s%n",
-                       val, index, index_tag);
+    debug_df.log ("aastore_df: val = %s, index = %d, tag = %s%n",
+                  val, index, index_tag);
 
-    // Set the values tag to the union of its current DF and the index
+    // The values new DF has the index and the current DF as its subtrees
     if (val != null)
-      union_df (val, val, index_tag);
+      binary_op_df ("array-store", val, val, index_tag);
 
     // Store the value
     arr[index] = val;
@@ -3645,32 +3630,33 @@ public final class DCRuntime {
   }
 
   /**
-   * Returns the ValueSet associated with tag.  If there is no value
-   * set and the tag is an uninitialized field, creates a new ValueSet
-   * from the information in UninitFieldTag and associates it with tag.
-   * If the tag is an instance of Throwable (which may be created without a
-   * corresponding new), create a ValueSource for this location.
+   * Returns the ValueSource tree associated with tag.  If nothing is
+   * associated with tag and the tag is an uninitialized field,
+   * creates a new ValueSource tree from the information in
+   * UninitFieldTag and associates it with tag.  If the tag is an
+   * instance of Throwable (which may be created without a
+   * corresponding new), create a ValueSource tree for this location.
    */
-  private static Set<ValueSource> get_value_set (Object tag) {
-    Set<ValueSource> val = tag_map.get (tag);
+  private static ValueSource get_value_source (Object tag) {
+    if (tag == null)
+      return null_value_source;
+
+    ValueSource val = tag_map.get (tag);
     if (val == null) {
       if (tag instanceof Throwable) {
-        val = new HashSet<ValueSource>(1);
         Throwable stack_trace = new Throwable();
         stack_trace.fillInStackTrace();
-        val.add (new ValueSource ("Throwable", stack_trace));
+        val = new ValueSource ("Throwable", stack_trace);
         tag_map.put (tag, val);
       } else if (tag instanceof UninitFieldTag) {
         UninitFieldTag uft = (UninitFieldTag) tag;
-        val = new HashSet<ValueSource>(1);
-        val.add (new ValueSource (uft.descr, uft.stack_trace));
+        val = new ValueSource (uft.descr, uft.stack_trace);
         tag_map.put (tag, val);
       } else { // unexpected null
-        val = new HashSet<ValueSource>(1);
         Throwable stack_trace = new Throwable();
         stack_trace.fillInStackTrace();
-        val.add (new ValueSource ("Throwable", stack_trace));
-        tag_map.put (tag, val);
+        val = new ValueSource ("no-info", stack_trace);
+        // tag_map.put (tag, val);
         System.out.printf ("WARNING: no value for tag '%s'%n", tag);
         stack_trace.printStackTrace (System.out);
       }
@@ -3713,7 +3699,7 @@ public final class DCRuntime {
    **/
   private static void prim_to_obj (Object obj) {
     Object tag = pop_check();
-    Set<ValueSource> vs = tag_map.get(tag);
+    ValueSource vs = tag_map.get(tag);
     assert (vs != null) : "no vs for " + tag;
     tag_map.put (obj, vs);
   }
@@ -3723,7 +3709,7 @@ public final class DCRuntime {
    * a reference.  The DF of the dest is set to that of the source.
    */
   private static void obj_to_obj (Object src, Object dest) {
-    Set<ValueSource> vs = tag_map.get (src);
+    ValueSource vs = tag_map.get (src);
     assert vs != null;
     tag_map.put (dest, vs);
   }
@@ -3734,7 +3720,7 @@ public final class DCRuntime {
    * the tag stack.  The tag has the same DF as the input object
    */
   private static void obj_to_prim (Object obj) {
-    Set<ValueSource> vs = tag_map.get (obj);
+    ValueSource vs = tag_map.get (obj);
     assert vs != null;
     Object tag = new Object();
     tag_map.put (tag, vs);
@@ -3820,7 +3806,7 @@ public final class DCRuntime {
                                                   CharSequence s) {
     System.out.printf ("Append '%s' to '%s'%n", s, buff);
     StringBuffer result = buff.append (s);
-    union_df (result, buff, s);
+    binary_op_df ("StringBuffer_append", result, buff, s);
     return result;
   }
 
@@ -3830,7 +3816,7 @@ public final class DCRuntime {
                                                   String s) {
     System.out.printf ("Append '%s' to '%s'%n", s, buff);
     StringBuffer result = buff.append (s);
-    union_df (result, buff, s);
+    binary_op_df ("StringBuffer_append", result, buff, s);
     return result;
   }
 
@@ -3852,7 +3838,7 @@ public final class DCRuntime {
                        System.identityHashCode(o1), o1,
                        System.identityHashCode(o2), o2);
       Object tag = new Object();
-      union_df (tag, o1, o2);
+      binary_op_df ("equals", tag, o1, o2);
       push_tag (tag);
       return (o1.equals(o2));
     }
@@ -3866,7 +3852,7 @@ public final class DCRuntime {
   public static void super_equals_df (Object o1, Object o2) {
     debug_df.log_tb ("uninstrumented equals on %s and %s", o1, o2);
     Object tag = new Object();
-    union_df (tag, o1, o2);
+    binary_op_df ("equals", tag, o1, o2);
     push_tag (tag);
   }
 }
