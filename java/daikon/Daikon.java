@@ -1960,8 +1960,8 @@ public final class Daikon {
       // }
       // System.out.println();
     } catch (IOException e) {
-      System.out.println();
-      e.printStackTrace();
+      // System.out.println();
+      // e.printStackTrace();
       throw new Error(e);
     } finally {
       debugProgress.fine(
