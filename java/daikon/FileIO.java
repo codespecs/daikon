@@ -2539,7 +2539,11 @@ public final class FileIO {
     public void parse_constant (Scanner scanner) throws DeclError {
       /*@Interned*/ String constant_str = need (scanner, "constant value");
       need_eol (scanner);
-      static_constant_value = rep_type.parse_value (constant_str);
+      try {
+        static_constant_value = rep_type.parse_value (constant_str);
+      } catch (Error e) {
+        decl_error (state, e.getMessage());
+      }
     }
 
     /**
