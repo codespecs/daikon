@@ -13,7 +13,7 @@ import java.util.*;
  * 0.0001 (0.01%) to be considered equal; set this value with set_rel_diff.
  * Note that zero is never equal to a non-zero number using this method. <p>
  *
- * Additionally two NaN values are always considered equal. <p>
+ * Two NaN floats * are not considered equal (consistent with the == operator).
  **/
 
 public class FuzzyFloat {
