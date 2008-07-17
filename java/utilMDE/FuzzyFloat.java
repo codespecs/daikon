@@ -10,10 +10,11 @@ import java.util.*;
  *
  * Floating point numbers are compared for equality by dividing them by
  * one another and comparing the ratio.  By default they must be within
- * 0.0001 (0.01%) to be considered equal; set this value with set_rel_diff.
+ * 0.0001 (0.01%) to be considered equal; supply this value to the
+ * FuzzyFloat constructor, or set the value with the set_rel_diff method.
  * Note that zero is never equal to a non-zero number using this method. <p>
  *
- * Two NaN floats * are not considered equal (consistent with the == operator).
+ * Two NaN floats are not considered equal (consistent with the == operator).
  **/
 
 public class FuzzyFloat {
@@ -23,7 +24,11 @@ public class FuzzyFloat {
   /** Maximum ratio between two floats that will act as equal. */
   double max_ratio = 1.0001;
 
-  /** True if ratio test turned off. */
+  /**
+   * True if ratio test turned off.
+   * This occurs exactly if the class is instantiated with the relative
+   * difference 0.
+   */
   boolean off = false;
 
   public FuzzyFloat () {
