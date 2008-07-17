@@ -1666,7 +1666,7 @@ produced the output that it did.)
 
 The ``Samples breakdown'' output indicates how many samples in the
 @file{.dtrace} file had a modified value (``m''), had an unmodified
-value (``u''), and had a nonsensical (missing) value (``x'').  The summary uses a
+value (``u''), and had a missing value (``x'').  The summary uses a
 capital letter if the sample had any of the corresponding type of
 variable, and a lower-case letter if it had none.  These types affect
 statistical tests that determine whether a particular invariant (that
@@ -2092,7 +2092,7 @@ Two other program point tags that have special meaning to Daikon's hierarchy
 organization are @code{:::OBJECT} and @code{:::CLASS}.
 The @code{:::OBJECT} tag indicates object invariants (sometimes called
 representation invariants or class invariants) over all the instance
-(member) and static fields of the class.  These properties always hold
+(member) fields and static fields of the class.  These properties always hold
 for any object of the given class, from the point of view of a client or
 user.  These properties hold at entry to and exit from every public
 method of the class (except not the entry to constructors, when fields
@@ -2156,6 +2156,7 @@ code), but it may still be useful to compute invariants over this
 expression.  For a list of derived variables and how to control Daikon's
 use of them, see @ref{Options to enable/disable derived variables}.
 
+@cindex missing values for variables, see nonsensical values
 @cindex nonsensical values for variables
 
 Some trace variables and derived variables may represent meaningless
@@ -3696,6 +3697,8 @@ the target program.  The size is specified in the same manner as the
 @node    Static fields (Global variables),  , Chicory options, Chicory
 @subsection Static fields (global variables)
 
+@cindex Static fields (global variables) in Java programs
+
 Chicory (Daikon's front end for Java) outputs the values of static
 fields in the current class, but not in other classes.  That means that
 Daikon cannot report properties over static fields in other classes,
@@ -3703,8 +3706,9 @@ because it never sees their values.  (By contrast, Kvasir
 (@pxref{Kvasir}) supplies the values of C/C++ global variables to
 Daikon.)
 
-If this feature is important to you, ask the maintainers to add it to
-Daikon (or work with them to implement the enhancement).  In the
+If you need Daikon to include all static variables when processing each
+class, then ask the maintainers to add that feature to
+Chicory (or work with them to implement the enhancement).  In the
 meanwhile, here are two workarounds.
 
 @enumerate
