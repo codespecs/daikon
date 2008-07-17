@@ -726,6 +726,7 @@ public final class FeatureExtractor {
       value = val;
     }
 
+    @Override
     public boolean equals(Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
@@ -740,12 +741,20 @@ public final class FeatureExtractor {
     }
 
     // Compares an Object to this
-    // Throws ClassCastException if o is not an IntDoublePair
+    // Throws ClassCastException if argument is not an IntDoublePair
+    @Override
     public int compareTo(IntDoublePair p) {
-      if (this.number != p.number)
-        return this.number - p.number;
-      else
-        return (int) (this.value - p.value);
+      if (this.number < p.number) {
+        return -1;
+      } else if (this.number > p.number) {
+        return 1;
+      } else if (this.value < p.value) {
+        return -1;
+      } else if (this.value > p.value) {
+        return 1;
+      } else {
+        return 0;
+      }
     }
   }
 

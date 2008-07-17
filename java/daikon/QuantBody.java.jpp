@@ -86,8 +86,13 @@ The correct way to build the system is to run 'make'.
 #define COLLECT_TYPE_FIELD collect ## _TYPE ## _field
 #define GET_ELEMENT getElement_ ## _TYPE
 
+#if 0
+  This file gets included multiple times, so it is crucial to undefine
+  any macro that might not be defined on every path.
+#endif
 #undef COMPATIBLE
 #undef CAST_TYPE
+#undef COMPATIBLE_IS_DIFFERENT
 #if defined(BYTE)
   #define COMPATIBLE int
   #define CAST_TYPE int
@@ -99,10 +104,12 @@ The correct way to build the system is to run 'make'.
 #if defined(LONG)
   #define COMPATIBLE int
   #define CAST_TYPE long
+  #define COMPATIBLE_IS_DIFFERENT 1
 #endif
 #if defined(DOUBLE)
   #define COMPATIBLE float
   #define CAST_TYPE double
+  #define COMPATIBLE_IS_DIFFERENT 1
 #endif
 #if defined(FLOAT)
   #define COMPATIBLE double
@@ -288,7 +295,11 @@ The correct way to build the system is to run 'make'.
   /* pure */ public static boolean pairwiseSquare(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
+#if defined(COMPATIBLE_IS_DIFFERENT)
+      if (ne(seq1[i], ((CAST_TYPE) seq2[i]) * ((CAST_TYPE) seq2[i]))) {
+#else
       if (ne(seq1[i], seq2[i] * seq2[i])) {
+#endif
         return false;
       }
     }

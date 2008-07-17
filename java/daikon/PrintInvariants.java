@@ -1262,7 +1262,7 @@ public final class PrintInvariants {
         print_all_invs (slice, indent);
 
       if (slice == null)
-        System.out.printf ("%s%s has %d values%s", indent, name,
+        System.out.printf ("%s%s has %d values%n", indent, name,
                            ppt.num_values (vi));
     }
   }
