@@ -92,7 +92,10 @@ The correct way to build the system is to run 'make'.
 #endif
 #undef COMPATIBLE
 #undef CAST_TYPE
-#undef COMPATIBLE_IS_DIFFERENT
+#if 0
+  CAST_TYPE is different than either COMPATIBLE or _TYPE.  This tells which.
+#endif
+#undef CAST_TYPE_IS_DIFFERENT_THAN_COMPATIBLE
 #if defined(BYTE)
   #define COMPATIBLE int
   #define CAST_TYPE int
@@ -104,12 +107,12 @@ The correct way to build the system is to run 'make'.
 #if defined(LONG)
   #define COMPATIBLE int
   #define CAST_TYPE long
-  #define COMPATIBLE_IS_DIFFERENT 1
+  #define CAST_TYPE_IS_DIFFERENT_THAN_COMPATIBLE 1
 #endif
 #if defined(DOUBLE)
   #define COMPATIBLE float
   #define CAST_TYPE double
-  #define COMPATIBLE_IS_DIFFERENT 1
+  #define CAST_TYPE_IS_DIFFERENT_THAN_COMPATIBLE 1
 #endif
 #if defined(FLOAT)
   #define COMPATIBLE double
@@ -295,7 +298,7 @@ The correct way to build the system is to run 'make'.
   /* pure */ public static boolean pairwiseSquare(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (! sameLength(seq1, seq2)) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
-#if defined(COMPATIBLE_IS_DIFFERENT)
+#if defined(CAST_TYPE_IS_DIFFERENT_THAN_COMPATIBLE)
       if (ne(seq1[i], ((CAST_TYPE) seq2[i]) * ((CAST_TYPE) seq2[i]))) {
 #else
       if (ne(seq1[i], seq2[i] * seq2[i])) {
@@ -473,10 +476,17 @@ The test ensures that the method only appears once in the output.
     // have different types.  This essentially inlines that method.
     int newLength = seq1.length + seq2.length;
     CAST_TYPE[] retval = new CAST_TYPE[newLength];
+#ifdef CAST_TYPE_IS_DIFFERENT_THAN_COMPATIBLE
     System.arraycopy(seq1, 0, retval, 0, seq1.length);
     for (int j = 0 ; j < seq2.length ; j++) {
       retval[seq1.length+j] = seq2[j];
     }
+#else
+    for (int j = 0 ; j < seq1.length ; j++) {
+      retval[j] = seq1[j];
+    }
+    System.arraycopy(seq2, 0, retval, seq1.length, seq2.length);
+#endif
     return retval;
   }
 #endif

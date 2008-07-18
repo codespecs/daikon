@@ -2317,7 +2317,7 @@ public abstract /*@Interned*/ class VarInfoName
     public Boolean visitPrestate(Prestate o) {
       // orig(...) is all prestate unless it contains post(...)
       return (new IsAllNonPoststateVisitor(o).result())
-        ? Boolean.valueOf(true) : null;
+        ? Boolean.TRUE : null;
     }
   }
 
@@ -2328,7 +2328,7 @@ public abstract /*@Interned*/ class VarInfoName
 
     public Boolean visitSimple(Simple o) {
       // Any var not inside a post() isn't poststate
-      return Boolean.valueOf(true);
+      return Boolean.TRUE;
     }
     public Boolean visitPoststate(Poststate o) {
       // If we see a post(...), we aren't all poststate.

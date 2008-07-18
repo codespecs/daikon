@@ -441,7 +441,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration) Ast.create(
                 "ClassOrInterfaceBodyDeclaration",
                 new Class[] { Boolean.TYPE },
-                new Object[] { Boolean.valueOf(false) },  // isInterface == false
+                new Object[] { Boolean.FALSE },  // isInterface == false
                 modifiers_declaration_stringbuffer.toString());
         Ast.addDeclaration(c, d);
         NodeSequence ns = (NodeSequence) d.f0.choice;
@@ -556,14 +556,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * @return
      */
     private ClassOrInterfaceBodyDeclaration isInstrumentedDecl() {
-        StringBuffer code = new StringBuffer();
-        code.append("public static boolean isDaikonInstrumented() { return true; }");
-        return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
-                                                            new Class[] { Boolean.TYPE },
-                                                            new Object[] { Boolean.valueOf(false) },  // isInterface == false
-
-                                                            code
-                                                            .toString());
+        return (ClassOrInterfaceBodyDeclaration)
+            Ast.create("ClassOrInterfaceBodyDeclaration",
+                       new Class[] { Boolean.TYPE },
+                       new Object[] { Boolean.FALSE },  // isInterface == false
+                       "public static boolean isDaikonInstrumented() { return true; }");
     }
 
     /**
@@ -576,7 +573,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("}");
         return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
                                                             new Class[] { Boolean.TYPE },
-                                                            new Object[] { Boolean.valueOf(false) },  // isInterface == false
+                                                            new Object[] { Boolean.FALSE },  // isInterface == false
 
                                                             code
                                                             .toString());
@@ -591,7 +588,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 	code.append("private static daikon.tools.runtimechecker.Property[] daikonProperties;");
         return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
                                                             new Class[] { Boolean.TYPE },
-                                                            new Object[] { Boolean.valueOf(false) },  // isInterface == false
+                                                            new Object[] { Boolean.FALSE },  // isInterface == false
 
                                                             code
                                                             .toString());
@@ -623,7 +620,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
                                                             new Class[] { Boolean.TYPE },
-                                                            new Object[] { Boolean.valueOf(false) },  // isInterface == false
+                                                            new Object[] { Boolean.FALSE },  // isInterface == false
 
                                                             code
                                                             .toString());
@@ -644,7 +641,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("}" + daikon.Global.lineSep + "");
         return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
                                                             new Class[] { Boolean.TYPE },
-                                                            new Object[] { Boolean.valueOf(false) },  // isInterface == false
+                                                            new Object[] { Boolean.FALSE },  // isInterface == false
                                                             code.toString());
     }
 
@@ -662,7 +659,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("}" + daikon.Global.lineSep + "");
         return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
                                                             new Class[] { Boolean.TYPE },
-                                                            new Object[] { Boolean.valueOf(false) },  // isInterface == false
+                                                            new Object[] { Boolean.FALSE },  // isInterface == false
                                                             code.toString());
     }
 
