@@ -29,6 +29,9 @@ public class ValueSource {
   /** Right subtree for binary operations **/
   ValueSource right;
 
+  /** ValueSet used for the null reference value **/
+  public static ValueSource null_value_source = new ValueSource ("null");
+
   private static final String lineSep = System.getProperty("line.separator");
 
   ValueSource (String descr) { this.descr = descr; }
@@ -52,6 +55,20 @@ public class ValueSource {
    */
   public Map<String,Set<String>> get_var_compares (String compare_to) {
 
+    // Look to see if there are any comparisons to null.  Add these as
+    // compare_to values if they exist.  Note that null is really the
+    // only interesting compare-to value at this point.  An object isn't
+    // interesting and at this point, we aren't trying to indicate direct
+    // test-sequence comparisons (we presume any variables mentioned might
+    // be compared)
+    Set<String> other_compares = new LinkedHashSet<String>();
+    for (ValueSource vs : get_node_list()) {
+      if (vs.descr.equals ("equals")) {
+        if ((vs.left == null_value_source) || (vs.right == null_value_source))
+          other_compares.add ("null");
+      }
+    }
+
     Map<String,Set<String>> var_compares
       = new LinkedHashMap<String,Set<String>>();
     for (String var : get_vars()) {
@@ -61,6 +78,7 @@ public class ValueSource {
         var_compares.put (var, compare_to_set);
       }
       compare_to_set.add (compare_to);
+      compare_to_set.addAll (other_compares);
     }
     return var_compares;
   }

@@ -50,9 +50,6 @@ public final class DCRuntime {
   /** Tag stack **/
   public static Stack<Object> tag_stack = new Stack<Object>();
 
-  /** ValueSet used for the null reference value **/
-  private static ValueSource null_value_source = new ValueSource ("null");
-
   /**
    * Object used to mark procedure entries in the tag stack.  It is pushed
    * on the stack at entry and checked on exit to make sure it is in on the
@@ -3639,7 +3636,7 @@ public final class DCRuntime {
    */
   private static ValueSource get_value_source (Object tag) {
     if (tag == null)
-      return null_value_source;
+      return ValueSource.null_value_source;
 
     ValueSource val = tag_map.get (tag);
     if (val == null) {
