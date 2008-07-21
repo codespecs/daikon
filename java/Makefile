@@ -85,7 +85,7 @@ DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*') \
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
-TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${DAIKONBIN}/sort-directory-order.pl)
+TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${DAIKONBIN}/sort-directory-order.pl)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -695,7 +695,7 @@ JAVAC_IGJ_STUBS = -sourcepath $checkers/jdk/nullness/src
 # INTERNED_JAVA_FILES_SKIP =
 INTERNED_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
 # I should perhaps not count Interned.java, which implements interning and
-# so has very many annotations.  Also, VarInfoName is obsolete (and of flawed
+# so has very many annotations.  Also, VarInfoName is obsolescent (and of flawed
 # design) but has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNED_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
 ## Which files to check.
