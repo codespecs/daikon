@@ -20,16 +20,19 @@ public class Pair<T1,T2> {
   public boolean equals(Object obj) {
     if (obj instanceof Pair) {
       Pair other = (Pair) obj;
-      boolean aEquals = ((this.a == null && other.a == null) ||
-                         (this.a.equals(other.a)));
-      boolean bEquals = ((this.b == null && other.b == null) ||
-                         (this.b.equals(other.b)));
+      boolean aEquals = ((this.a == other.a)
+                         || (this.a != null && (this.a.equals(other.a))));
+      boolean bEquals = ((this.b == other.b)
+                         || (this.b != null && (this.b.equals(other.b))));
       return aEquals && bEquals;
     } else {
       return false;
     }
   }
 
+  // If fields a and b were made final, then the hashcode could be cached.
+  // (And if they aren't final, it's a bit odd to be calling hashCode.)
+  // But then the class would not be useful for mutable pairs.
   public int hashCode() {
     return (((a == null) ? 0 : a.hashCode()) +
             ((b == null) ? 0 : b.hashCode()));
