@@ -23,7 +23,10 @@ The correct way to build the system is to run 'make'.
   #define nonmodulus_strict_INT nonmodulus_strict_long
   #define nonmodulus_strict_INT_internal nonmodulus_strict_long_internal
   #define MissingNumbersIteratorINT MissingNumbersIteratorLong
+#if 0
   #define CastToInt(expr) new Long(expr).intValue()
+#endif
+  #define CastToInt(expr) ((int) (expr))
 #else
   #error "One of PARAM_INT or PARAM_LONG must be defined"
 #endif

@@ -3,8 +3,8 @@ package daikon.inv;
 import java.io.*;
 import daikon.inv.filter.*;
 
-/** DiscardCode is an enumeration type where the instances
- *  represent reasons why an invariant is falsified or disregarded.
+/** DiscardCode is an enumeration type.
+ *  It represents reasons why an invariant is falsified or disregarded.
  *  Methods that decide whether an Invariant should be printed later
  *  (such as isObviousImplied()), side effect Invariants to contain
  *  DiscardCode instances in their discardCode field slot.
@@ -38,6 +38,9 @@ import daikon.inv.filter.*;
  *  var_filtered // Doesn't contain a desirable variable
  *
  *  filtered // filtered by some other means not in the above list
+ *
+ * There is no representation for an invariant that is *not* discarded;
+ * don't use a DiscardCode in that situation.
  */
 
 public class DiscardCode implements Comparable<DiscardCode>, Serializable {
@@ -46,9 +49,6 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031016L;
-
-  // /** used when an invariant has not been discarded */
-  // public static final DiscardCode not_discarded = new DiscardCode(-1);
 
   /** used when an invariant is implied by other known invariants */
   public static final DiscardCode obvious = new DiscardCode(0);
@@ -104,17 +104,20 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     this.enumValue = enumValue;
   }
 
-  /** The enumeration members in assorted order: <br>
-      // not_discarded,
+  /** The enumeration members in sorted order: <br>
       obvious, bad_sample, bad_confidence, [unused], not_enough_samples, non_canonical_var,<br>
       implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
   public int compareTo(DiscardCode o) {
-    Integer thisValue = new Integer(this.enumValue);
-    Integer oValue = new Integer( o.enumValue );
-    return thisValue.compareTo(oValue);
+    if (this.enumValue < o.enumValue) {
+      return -1;
+    } else if (this.enumValue == o.enumValue) {
+      return 0;
+    } else {
+      return 1;
+    }
   }
 
   /** Returns the DiscardCode most associated with the given filter */
@@ -181,9 +184,6 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    *@throws ObjectStreamException
    **/
   public Object readResolve() throws ObjectStreamException {
-    // if (enumValue==-1)
-    //   return not_discarded;
-    // else
     if (enumValue==0)
       return obvious;
     else if (enumValue==1)
