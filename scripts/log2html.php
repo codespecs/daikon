@@ -138,6 +138,8 @@ function process_line ($line, $tb) {
   }
 }
 
+  $file = $_REQUEST['file'];
+
   if ($file) {
     $file = str_replace ("~jhp/", "/afs/csail.mit.edu/u/j/jhp/", $file);
     if (strpos ($file, "daikon") === false) {
