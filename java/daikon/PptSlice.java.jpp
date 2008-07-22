@@ -474,6 +474,21 @@ public final class PPTSLICE1 extends PptSlice {
     Assert.assertTrue(invariant != null);
     // Assert.assertTrue(invariant.ppt == this);
 
+    if (Daikon.dkconfig_internal_check) {
+      // Don't add a check here to ensure that the invairant is not suppressed
+      // in some cases (see NIS.apply_samples), a suppressed invariant is
+      // added and them later removed when the suppression is found
+      // if (invariant.is_ni_suppressed()) {
+        // System.out.printf ("suppressed invariant %s is being added to ppt %s "
+        //                    + "with %d samples%n", invariant.format(), this,
+        //                    this.num_samples());
+        // NISuppressionSet ss = invariant.get_ni_suppressions();
+        // ss.suppressed (invariant.ppt);
+        // System.out.printf ("suppression = %s%n", ss);
+        // assert false;
+     // }
+    }
+
     invs.add(invariant);
     Global.instantiated_invariants++;
     if (invariant.logOn())
@@ -711,9 +726,8 @@ public final class PPTSLICE1 extends PptSlice {
         System.out.println ("Found " + child_invs.size() + " invariants at "
                          + name() + " (" + valid_child_count + " children)");
         for (Invariant child_inv : child_invs)
-          System.out.println ("-- Invariant = "
-                            + child_inv.format()
-                            + " @" + child_inv.ppt);
+          System.out.printf ("-- Invariant = %s [%s] @%s%n", child_inv.format(),
+                             child_inv.getClass(), child_inv.ppt);
         Assert.assertTrue (child_invs.size() <= valid_child_count);
       }
       if (child_invs.size() == valid_child_count) {
