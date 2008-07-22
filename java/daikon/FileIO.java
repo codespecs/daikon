@@ -1290,7 +1290,11 @@ public final class FileIO {
         if (state.ppt != null) {
           if (!state.all_ppts.containsName (state.ppt.name())) {
             state.all_ppts.add(state.ppt);
-            Daikon.init_ppt(state.ppt, state.all_ppts);
+            try {
+              Daikon.init_ppt(state.ppt, state.all_ppts);
+            } catch (Exception e) {
+              decl_error (state, "unexpected error: %s", e);
+            }
           }
         }
         state.status = ParseStatus.DECL;
