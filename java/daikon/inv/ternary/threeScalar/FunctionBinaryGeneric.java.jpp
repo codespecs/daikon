@@ -550,8 +550,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
 
-        // (r == arg1) && (arg1 == arg2) ==> r = arg1 &  arg2
-        new NISuppression (result_eq_arg1, arg1_eq_arg2, suppressee),
+        // (r == arg1) && (arg1 == arg2) && (r == arg2) ==> r = arg1 &  arg2
+        new NISuppression (result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                           suppressee),
 
         // (r == arg1) && (arg1 bitwise subset arg2)
         new NISuppression (result_eq_arg1, arg1_bw_subset_arg2, suppressee),
@@ -631,8 +632,10 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
 
-        // (r == arg1) && (arg1 == arg2) && (r >= 0) ==> r = Gcd (arg1, arg2)
-        new NISuppression (result_eq_arg1, arg1_eq_arg2, result_ge_0, suppressee),
+        // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r >= 0)
+        //    ==> r = Gcd (arg1, arg2)
+        new NISuppression (result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                           result_ge_0, suppressee),
 
         // (r == arg1) && (arg2 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
         new NISuppression (result_eq_arg1, result_ge_0, arg2_eq_0, suppressee),
@@ -671,9 +674,10 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
 
-        // (r == arg1) && (arg1 == arg2) && (r is boolean) ==> r = arg1 && arg2
-        new NISuppression (result_eq_arg1, arg1_eq_arg2, result_boolean,
-                           suppressee),
+        // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r is boolean)
+        //    ==> r = arg1 && arg2
+        new NISuppression (result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                           result_boolean, suppressee),
 
         // (r == 0) && (arg1 == 0) && (arg2 is boolean) ==> r = arg1 && arg2
         new NISuppression (result_eq_0, arg1_eq_0, arg2_boolean, suppressee),
@@ -702,9 +706,22 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
 
-        // (r == arg1) && (arg1 == arg2) && (r is boolean) ==> r = arg1 | arg2
-        new NISuppression (result_eq_arg1, arg1_eq_arg2, result_boolean,
-                           suppressee),
+        // Note that
+        // x == y && y == z does NOT imply x == z because of possibly
+        // missing values.  For example:
+        //
+        //  Sample    X         Y           Z
+        //    1       1         1           missing
+        //    2       0         missing     1
+        //    3       missing   0           0
+        //
+        //  The best solution seems to be to include all three
+        //  equalities for the suppression
+
+        // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r is boolean)
+        //    ==> r = arg1 | arg2
+        new NISuppression (result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                           result_boolean, suppressee),
 
         // (r == arg1) && (arg2 == 0) && (r is boolean) ==> r = arg1 | arg2
         new NISuppression (result_eq_arg1, result_boolean, arg2_eq_0,
