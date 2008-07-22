@@ -642,6 +642,7 @@ public class NIS {
       Invariant inv = supinv.instantiate (ppt);
       if (inv != null) {
         if (Daikon.dkconfig_internal_check) {
+          assert !inv.is_ni_suppressed() : "Still suppressed: " + inv.format();
           if (inv.ppt.find_inv_exact (inv) != null)
             Assert.assertTrue (false, "inv " + inv.format()
                                + " already exists in ppt " + ppt.name);
