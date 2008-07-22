@@ -736,13 +736,13 @@ public final class FeatureExtractor {
     }
 
     //returns a valid hashCode
+    @Override
     public int hashCode() {
       return number;
     }
 
     // Compares an Object to this
     // Throws ClassCastException if argument is not an IntDoublePair
-    @Override
     public int compareTo(IntDoublePair p) {
       if (this.number < p.number) {
         return -1;
