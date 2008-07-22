@@ -172,8 +172,11 @@ public class NISuppressee {
    * be specified by vis if a slot in vis is null.  The slot will be
    * filled by all leaders that can correctly fill the slot and SupInv
    * created for each. @return a list describing all of the invariants
+   * The cinv array is an array of the actual invariants that were
+   * found for each slot.  It is used for for debug printing only.
    */
-  public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt) {
+  public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt,
+                                    Invariant cinvs[]) {
 
     List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 
@@ -191,8 +194,11 @@ public class NISuppressee {
     if (missing_index == -1) {
       if (ppt.is_slice_ok (vis, vis.length)
           && NISuppression.vis_compatible (vis)
-          && sample_inv.valid_types (vis))
-        created_list.add (new NIS.SupInv (this, vis, ppt));
+          && sample_inv.valid_types (vis)) {
+        NIS.SupInv sinv = new NIS.SupInv (this, vis, ppt);
+        sinv.log ("Created for invariants: " + Arrays.toString (cinvs));
+        created_list.add (sinv);
+      }
       return (created_list);
     }
 
@@ -214,6 +220,7 @@ public class NISuppressee {
         continue;
       NIS.SupInv sinv = new NIS.SupInv (this, vis.clone(), ppt);
       sinv.log ("Unspecified variable = " + v.name());
+      sinv.log ("Created for invariants: " + Arrays.toString (cinvs));
       created_list.add (sinv);
     }
     return (created_list);

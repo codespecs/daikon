@@ -223,7 +223,8 @@ public class NISuppression {
     // watch.clear();
     // watch.start();
     // int old_size = unsuppressed_invs.size();
-    find_unsuppressed_invs (unsuppressed_invs, antecedents, vis, 0, false);
+    Invariant[] cinvs = new Invariant[antecedents.length];
+    find_unsuppressed_invs (unsuppressed_invs, antecedents, vis, 0, false, cinvs);
     // watch.stop();
     if (debug)
       System.out.println ("  unsuppressed invariants: " + unsuppressed_invs);
@@ -264,7 +265,7 @@ public class NISuppression {
       if ((idx + 1) == suppressors.length) {
 
         // Create descriptions of the suppressed invariants
-        List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt);
+        List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt, null);
         unsuppressed_invs.addAll (new_invs);
 
         // Check to insure that none of the invariants already exists
@@ -312,7 +313,8 @@ public class NISuppression {
   private void find_unsuppressed_invs (Set<NIS.SupInv> unsuppressed_invs,
                                        List<Invariant> antecedents[],
                                        VarInfo vis[], int idx,
-                                       boolean false_antecedents) {
+                                       boolean false_antecedents,
+                                       Invariant[] cinvs) {
 
     boolean all_true_at_end = ((idx + 1) == suppressors.length)
       && !false_antecedents;
@@ -321,15 +323,17 @@ public class NISuppression {
     NISuppressor s = suppressors[idx];
     for (Invariant inv : antecedents[idx]) {
       PptTopLevel ppt = inv.ppt.parent;
+      cinvs[idx] = inv;
 
       // If this is the last suppressor, no previous antecedents were
       // false, and this antecedent is not false either, we can stop
       // checking.  The antecedent lists are sorted so that the false
       // ones are first.  There is no need to look at antecedents that
       // are all true.
-      if (all_true_at_end && !inv.is_false())
+      if (all_true_at_end && !inv.is_false()) {
+        cinvs[idx] = null;
         return;
-
+      }
       // See if this antecedent can be used with the ones we have found so far
       VarInfo[] cvis = consider_inv (inv, s, vis);
       if (cvis == null)
@@ -348,7 +352,7 @@ public class NISuppression {
         }
 
         // Create descriptions of the suppressed invariants
-        List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt);
+        List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt, cinvs);
         if (debug)
           System.out.printf ("created %s new invariants", new_invs);
         unsuppressed_invs.addAll (new_invs);
@@ -367,9 +371,10 @@ public class NISuppression {
       } else {
         // Recursively process the next suppressor
         find_unsuppressed_invs (unsuppressed_invs, antecedents, cvis, idx + 1,
-                                false_antecedents || inv.is_false());
+                                false_antecedents || inv.is_false(), cinvs);
       }
     }
+    cinvs[idx] = null;
   }
 
   /**
