@@ -917,7 +917,20 @@ public class PptTopLevel extends Ppt {
     // Doable, but commented out for efficiency
     // repCheck();
 
-    // System.out.println ("Processing samples at " + name());
+    // Debug print some (program specific) variables
+    if (false) {
+      System.out.println ("Processing samples at " + name());
+      String out = "";
+      for (int i = 0; i < vt.size(); i++) {
+        VarInfo vi = var_infos[i];
+        if (!vi.name().startsWith ("xx"))
+          continue;
+        out += String.format ("%s %b %s ", vi.name(), vt.isMissing(i),
+                              vt.getValue (vi));
+      }
+      if (out != "")
+        System.out.printf ("%s vals: %s%n", name(), out);
+    }
 
     Assert.assertTrue(
       vt.size() == var_infos.length - num_static_constant_vars,
@@ -1106,6 +1119,22 @@ public class PptTopLevel extends Ppt {
 
     if (debugNISStats.isLoggable (Level.FINE))
       NIS.dump_stats (debugNISStats, this);
+
+    // At this point, no invariant should exist that is suppressed
+    if (Daikon.dkconfig_internal_check) {
+      for (Iterator<PptSlice> itor = views_iterator(); itor.hasNext();) {
+        PptSlice slice = itor.next();
+        for (Invariant inv : slice.invs) {
+          if (inv.is_ni_suppressed()) {
+            NISuppressionSet ss = inv.get_ni_suppressions();
+            ss.suppressed (inv.ppt);
+            System.out.printf ("suppressed: %s by suppression set %s in ppt %s",
+                               inv.format(), ss, slice);
+            assert false;
+          }
+        }
+      }
+    }
 
     return (weakened_invs);
   }
@@ -3587,6 +3616,14 @@ public class PptTopLevel extends Ppt {
    * children, performing the merge, and then removing them.
    */
   public void merge_invs_multiple_children() {
+
+    // Debug print ppt and children
+    if (false) {
+      System.out.printf ("Merging invariants for ppt %s%n", this);
+      for (PptRelation rel : children) {
+        System.out.printf ("child: %s%n", rel);
+      }
+    }
 
     // There shouldn't be any slices when we start
     Assert.assertTrue(views.size() == 0);
