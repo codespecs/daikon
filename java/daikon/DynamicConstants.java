@@ -476,6 +476,8 @@ public class DynamicConstants implements Serializable {
           continue;
         }
         PptSlice2 slice2 = new PptSlice2 (ppt, c1.vi, c2.vi);
+        // System.out.printf ("instantiating slice %s [%d %d]%n", slice2,
+        //                   c1.count, c2.count);
         slice2.instantiate_invariants();
         if (c1.count > 0 && c2.count > 0) {
           slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
