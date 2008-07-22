@@ -46,6 +46,12 @@ public class NISuppressor {
   String state = NIS.NONE;
 
   /**
+   * information about the suppressor for the current check.  This is just
+   * used for debugging purposes
+   */
+  String current_state_str = null;
+
+  /**
    * Sample invariant - used to check the suppressor over constants.
    * this is a prototype invariant; that is, sample_inv.ppt == null.
    **/
@@ -231,12 +237,18 @@ public class NISuppressor {
         }
         if (NIS.debug.isLoggable(Level.FINE))
           NIS.debug.fine("constant args - " + valid);
+        if (valid)
+          current_state_str = "true over constant " + ppt.constants.constant_value(v1);
+        else
+          current_state_str = "invalid over constant " + ppt.constants.constant_value(v1);
         return (state = (valid ? NIS.VALID : NIS.INVALID));
       }
 
       // Check to see the variable is missing
-      if (ppt.is_prev_missing(v1))
+      if (ppt.is_prev_missing(v1)) {
+        current_state_str = "missing";
         return (state = NIS.MISSING);
+      }
 
       // Check to see if this suppressor is true.  Note that we don't check
       // to see if the invariant has been falsified.  That is because we
@@ -246,10 +258,13 @@ public class NISuppressor {
       PptSlice slice = ppt.findSlice (v1);
       if (slice != null) {
         for (Invariant slice_inv : slice.invs) {
-          if (match_true (slice_inv))
+          if (match_true (slice_inv)) {
+            current_state_str = "invariant " + slice_inv.format();
             return (state = NIS.VALID);
+          }
         }
       }
+      current_state_str = "invariant not found";
       return (state = NIS.INVALID);
 
     } else /* must be binary */ {
@@ -297,12 +312,18 @@ public class NISuppressor {
                        Debug.toString (ppt.constants.constant_value(v1)),
                        Debug.toString (ppt.constants.constant_value(v2)),
                        valid));
+        current_state_str = "true over constants " + ppt.constants.constant_value(v1)
+          + " and " + ppt.constants.constant_value(v2);
+        if (!valid)
+          current_state_str = "not " + current_state_str;
         return (state = (valid ? NIS.VALID : NIS.INVALID));
       }
 
       // Check to see if either variable is missing
-      if (ppt.is_prev_missing(v1) || ppt.is_prev_missing(v2))
+      if (ppt.is_prev_missing(v1) || ppt.is_prev_missing(v2)) {
+        current_state_str = "missing";
         return (state = NIS.MISSING);
+      }
 
       // Check to see if this suppressor is true.  Note that we don't check
       // to see if the invariant has been falsified.  That is because we
@@ -317,6 +338,7 @@ public class NISuppressor {
             if (NIS.debug.isLoggable (Level.FINE))
               NIS.debug.fine ("suppressor matches inv " + slice_inv.format()
                            + " " + !slice_inv.is_false());
+            current_state_str = "invariant " + slice_inv.format();
             return (state = NIS.VALID);
           }
         }
@@ -423,6 +445,7 @@ public class NISuppressor {
   /** clears the state of this suppressor to NIS.none **/
   public void clear_state() {
     state = NIS.NONE;
+    current_state_str = null;
   }
 
   static String[] varname = new String[] { "x", "y", "z" };
@@ -439,6 +462,9 @@ public class NISuppressor {
     String status = state;
     if (status == NIS.NONE)
       status = "";
+
+    if (current_state_str != null)
+      status = status + " [" + current_state_str + "]";
 
     if (v2_index == -1)
       return (String.format ("%s(%s) [%s]", cname, varname[v1_index], status));
