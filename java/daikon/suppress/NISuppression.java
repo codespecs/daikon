@@ -306,6 +306,9 @@ public class NISuppression {
    *                            are placed into vis.
    * @param idx                 Current index into suppressors and antecedents
    * @param false_antecedents   True if a false antecedent has been found
+   * @param cinvs               The invariants associated with the current
+   *                            set of antecedents.  Used only for debug
+   *                            printing
    *
    * @see find_unsuppressed_invs (Set, List, VarInfo[], int)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
