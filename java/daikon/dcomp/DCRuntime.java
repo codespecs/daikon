@@ -3613,17 +3613,28 @@ public final class DCRuntime {
 
   /**
    * Captures the DF information for a branch that compares the two specified
-   * objects.  Used for if_acmpeq and if_acmpne
+   * objects.  Used for if_acmpeq and if_acmpne.  This should really put
+   * the DF of the object being compared to in BranchInfo, but right now
+   * it only accepts a single string.  We find the dataflow of both objects
+   * that are compared, because a BranchInfo is added to the list for both
+   * of the objects.
    **/
   public static void ref2_branch_df(Object obj1, Object obj2) {
-    BranchInfo bi1 = new BranchInfo (tag_map.get (obj1), "object");
-    BranchInfo bi2 = new BranchInfo (tag_map.get (obj2), "object");
-    branch_tags.add (bi1);
-    branch_tags.add (bi2);
-    debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
-                         obj1, bi1);
-    debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
-                         obj2, bi2);
+    if (obj1 != null) {
+      BranchInfo bi1 = new BranchInfo (tag_map.get (obj1),
+                                       ((obj2 == null) ? "null" : "object"));
+      branch_tags.add (bi1);
+      debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
+                           obj1, bi1);
+    }
+
+    if (obj2 != null) {
+      BranchInfo bi2 = new BranchInfo (tag_map.get (obj2),
+                                       ((obj1 == null) ? "null" : "object"));
+      branch_tags.add (bi2);
+      debug_df_branch.log ("Reference DF for object '%s' in branch: %s\n",
+                           obj2, bi2);
+    }
   }
 
   /**
