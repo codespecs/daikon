@@ -991,6 +991,9 @@ public abstract class DaikonVariableInfo
        if (isArray || type.isPrimitive() || type.isArray())
            return;
 
+       // System.out.printf ("checking %s %sto for list implementation = %b%n",
+       //                    type, theName, implementsList (type));
+
        if (implementsList(type))
        {
            DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List>)type); // unchecked cast
@@ -1070,11 +1073,11 @@ public abstract class DaikonVariableInfo
     */
    public static boolean implementsList(Class type)
    {
-       //System.out.println(type);
+       // System.out.println(type);
        Class[] interfaces = type.getInterfaces();
        for (Class inter: interfaces)
        {
-           //System.out.println("implements: " + inter.getName());
+           // System.out.println("  implements: " + inter.getName());
            if (inter.equals(java.util.List.class))
                return true;
        }

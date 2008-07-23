@@ -219,6 +219,7 @@ public class Premain {
             Map<String,Set<String>> locals
               = new LinkedHashMap<String,Set<String>>();
             for (BranchInfo bi : DCRuntime.branch_tags) {
+              System.out.printf ("Processing bi %s%n", bi);
               Map<String,Set<String>> bi_locals
                 = bi.value_source.get_var_compares (bi.compared_to);
               for (String local : bi_locals.keySet()) {
