@@ -456,7 +456,7 @@ public class LemmaStack {
   private static SortedSet<Long> ints_seen = new TreeSet<Long>();
 
   /** Keep track that we've seen this number in formulas, for the sake
-   * of assumeOrdering. */
+   * of pushOrdering. */
   public static void noticeInt(long i) {
     ints_seen.add(new Long(i));
   }
@@ -464,6 +464,11 @@ public class LemmaStack {
   public static void clearInts() {
     ints_seen = new TreeSet<Long>();
   }
+
+  /** Integers smaller in absolute value than this will be printed
+   * directly. Larger integers will be printed abstractly (see
+   * Invariant.simplify_format_long and a comment there for details) */
+  public static final long SMALL_INTEGER = 32000;
 
   /** For all the integers we've seen, tell Simplify about the
    * ordering between them. */
@@ -478,7 +483,8 @@ public class LemmaStack {
         SimpUtil.formatInteger(l) + ")";
       Lemma lem = new Lemma(last_long + " < " + l, formula);
       pushLemma(lem);
-      if (l > -32000 && l < 32000) {
+      if (l > -SMALL_INTEGER && l < SMALL_INTEGER) {
+        // Only give the concrete value for "small" integers.
         String eq_formula = "(EQ " + l + " " + SimpUtil.formatInteger(l) + ")";
         Lemma eq_lem = new Lemma(l + " == " + l, eq_formula);
         pushLemma(eq_lem);
