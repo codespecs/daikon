@@ -294,8 +294,9 @@ public final class ONEOFSCALAR
       return;
 
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
-    Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for " + ONEOFSCALAR_STRING);
+    assert var().is_array() :
+    String.format ("ProglangType (var %s type %s) must be pseudo-array for %s",
+                   var().name(), var().type, ONEOFSCALAR_STRING);
 #endif
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==

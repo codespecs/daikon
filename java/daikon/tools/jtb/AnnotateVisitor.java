@@ -837,7 +837,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     for (String field : allFieldNames) {
       // System.out.printf("element_type_fields (%s) field: %s%n", ppt, field);
       VarInfo vi = findVar(field, ppt);
-      if (! (vi.type.isArray() || vi.type.isPseudoArray())) {
+      if (!vi.is_array()) {
         continue;
       }
       if (vi.type.elementType().isPrimitive()) {
