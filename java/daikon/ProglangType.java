@@ -72,17 +72,6 @@ public final /*@Interned*/ class ProglangType
   public boolean isArray() { return dimensions > 0; }
 
   /**
-   * The pseudo-dimensions is always at least as large as the
-   * dimensions.  Dimensions is always the array depth of the type,
-   * while pseudo also incorporates knowledge of Lists.  So List
-   * has dims 0 but pseudo-dims as 1.
-   **/
-  public int pseudoDimensions() { return pseudoDimensions; }
-  private int pseudoDimensions;
-
-  public boolean isPseudoArray() { return pseudoDimensions > 0; }
-
-  /**
    * No public constructor:  use parse() instead to get a canonical
    * representation.
    * basetype should be interned.
@@ -91,22 +80,7 @@ public final /*@Interned*/ class ProglangType
     Assert.assertTrue(basetype == basetype.intern());
     this.base = basetype;
     this.dimensions = dimensions;
-    pseudoDimensions = dimensions;
 
-    /*
-     * We support the rendering of objects as lists for a range of
-     * classes derived from specific list abstraction classes.  This
-     * requires us to know whether a class is in fact some kind of
-     * list, so that we can treat is as a higher-dimensioned object.
-     *
-     * This is dual to the Implements(List) predicate in DFEJ.
-     *
-     * The list is supplied in the top of each .decls file, and also
-     * as --list_type <type> switches to Daikon.
-     */
-
-    if (list_implementors.contains(basetype))
-      pseudoDimensions++;
   }
 
   /**
@@ -239,10 +213,12 @@ public final /*@Interned*/ class ProglangType
    * They may themselves be arrays if this is multidimensional.
    **/
   public ProglangType elementType() {
-    if (pseudoDimensions > dimensions)
-      return OBJECT;
+    // Presume that if there are no dimensions, this must be a list of
+    // objects.  Callers should really find this out from other information
+    // in the variable, but this will old code that relied on the pseudo
+    // dimensions of lists to work
     if (dimensions == 0)
-      throw new Error("Called elementType on non-array type " + format());
+      return OBJECT;
     Assert.assertTrue(base == base.intern(), "Uninterned base " + base);
     return ProglangType.intern(base, dimensions-1);
   }
