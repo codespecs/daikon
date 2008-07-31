@@ -19,6 +19,13 @@ public class Runtime
     /** debug flag **/
     public static final boolean debug = false;
 
+    /**
+     * Flag indicating that a dtrace record is currently being written
+     * used to prevent a call to instrumented code that occurs as part
+     * of generating a dtrace record (eg, toArray when processing lists
+     * or pure functions) from generating a nested dtrace record
+     */
+    public static boolean in_dtrace = false;
 
     /** True if ChicoryPremain was unable to load. **/
     public static boolean chicoryLoaderInstantiationError = false;
@@ -208,42 +215,55 @@ public class Runtime
       if (dontProcessPpts())
         return;
 
-      int num_new_classes = 0;
-      synchronized (new_classes) {
-        num_new_classes = new_classes.size();
-      }
-      if (num_new_classes > 0)
-        process_new_classes();
+      // Make sure that the in_dtrace flag matches the stack trace
+      // check_in_dtrace();
 
-      MethodInfo mi = methods.get(mi_index);
-      mi.call_cnt++;
+      // Ignore this call if we are already processing a dtrace record
+      if (in_dtrace)
+        return;
 
-      // If sampling, check to see if we are capturing this sample
-      boolean capture = true;
-      if (sample_start > 0) {
-        if (mi.call_cnt <= sample_start)
-          ;
-        else if (mi.call_cnt <= (sample_start*10))
-          capture = (mi.call_cnt % 10) == 0;
-        else if (mi.call_cnt <= (sample_start*100))
-          capture = (mi.call_cnt % 100) == 0;
-        else if (mi.call_cnt <= (sample_start*1000))
-          capture = (mi.call_cnt % 1000) == 0;
-        else
-          capture = (mi.call_cnt % 10000) == 0;
-        callstack.push (new CallInfo (nonce, capture));
-      }
+      // Note that we are processing a dtrace record until we return
+      in_dtrace = true;
+      try {
+        int num_new_classes = 0;
+        synchronized (new_classes) {
+          num_new_classes = new_classes.size();
+        }
+        if (num_new_classes > 0)
+          process_new_classes();
 
-      if (capture) {
-        mi.capture_cnt++;
-        // long start = System.currentTimeMillis();
-        dtrace_writer.methodEntry(mi, nonce, obj, args);
-        // long duration = System.currentTimeMillis() - start;
-        //System.out.println ("Enter " + mi + " " + duration + "ms"
-        //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
-      } else {
-        //System.out.println ("skipped " + mi
-        //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
+        MethodInfo mi = methods.get(mi_index);
+        mi.call_cnt++;
+
+        // If sampling, check to see if we are capturing this sample
+        boolean capture = true;
+        if (sample_start > 0) {
+          if (mi.call_cnt <= sample_start)
+            ;
+          else if (mi.call_cnt <= (sample_start*10))
+            capture = (mi.call_cnt % 10) == 0;
+          else if (mi.call_cnt <= (sample_start*100))
+            capture = (mi.call_cnt % 100) == 0;
+          else if (mi.call_cnt <= (sample_start*1000))
+            capture = (mi.call_cnt % 1000) == 0;
+          else
+            capture = (mi.call_cnt % 10000) == 0;
+          callstack.push (new CallInfo (nonce, capture));
+        }
+
+        if (capture) {
+          mi.capture_cnt++;
+          // long start = System.currentTimeMillis();
+          dtrace_writer.methodEntry(mi, nonce, obj, args);
+          // long duration = System.currentTimeMillis() - start;
+          //System.out.println ("Enter " + mi + " " + duration + "ms"
+          //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
+        } else {
+          //System.out.println ("skipped " + mi
+          //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
+        }
+      } finally {
+        in_dtrace = false;
       }
     }
 
@@ -263,29 +283,68 @@ public class Runtime
       if (dontProcessPpts())
         return;
 
-      int num_new_classes = 0;
-      synchronized (new_classes) {
-        num_new_classes = new_classes.size();
-      }
-      if (num_new_classes > 0)
-        process_new_classes();
+      // Make sure that the in_dtrace flag matches the stack trace
+      // check_in_dtrace();
 
-      // Skip this call if it was not sampled at entry to the method
-      if (sample_start > 0) {
-        CallInfo ci = callstack.pop();
-        while (ci.nonce != nonce)
-          ci = callstack.pop();
-        if (!ci.captured)
-          return;
-      }
+      // Ignore this call if we are already processing a dtrace record
+      if (in_dtrace)
+        return;
 
-      // Write out the infromation for this method
-      MethodInfo mi = methods.get(mi_index);
-      // long start = System.currentTimeMillis();
-      dtrace_writer.methodExit(mi, nonce, obj, args, ret_val,
-                               exitLineNum);
-      // long duration = System.currentTimeMillis() - start;
-      // System.out.println ("Exit " + mi + " " + duration + "ms");
+      // Note that we are processing a dtrace record until we return
+      in_dtrace = true;
+      try {
+
+        int num_new_classes = 0;
+        synchronized (new_classes) {
+          num_new_classes = new_classes.size();
+        }
+        if (num_new_classes > 0)
+          process_new_classes();
+
+        // Skip this call if it was not sampled at entry to the method
+        if (sample_start > 0) {
+          CallInfo ci = callstack.pop();
+          while (ci.nonce != nonce)
+            ci = callstack.pop();
+          if (!ci.captured)
+            return;
+        }
+
+        // Write out the infromation for this method
+        MethodInfo mi = methods.get(mi_index);
+        // long start = System.currentTimeMillis();
+        dtrace_writer.methodExit(mi, nonce, obj, args, ret_val,
+                                 exitLineNum);
+        // long duration = System.currentTimeMillis() - start;
+        // System.out.println ("Exit " + mi + " " + duration + "ms");
+      } finally {
+        in_dtrace = false;
+      }
+    }
+
+    /**
+     * Checks the in_dtrace flag by looking back up the stack trace.
+     * Throws an exception if there is a discrepancy.
+     */
+    private static void check_in_dtrace() {
+
+      Throwable st = new Throwable();
+      st.fillInStackTrace();
+      List<StackTraceElement> enter_exit_list
+        = new ArrayList<StackTraceElement>();
+      for (StackTraceElement ste : st.getStackTrace()) {
+        if (ste.getClassName().endsWith ("chicory.Runtime")
+            && (ste.getMethodName().equals ("enter")
+                || ste.getMethodName().equals ("exit")))
+          enter_exit_list.add (ste);
+      }
+      if (in_dtrace && (enter_exit_list.size() <= 1)) {
+        throw new RuntimeException ("in dtrace and stack contains "
+                                    + enter_exit_list);
+      } else if (!in_dtrace && (enter_exit_list.size() > 1)) {
+        throw new RuntimeException ("not in dtrace and stack contains "
+                                    + enter_exit_list);
+      }
     }
 
     /**
