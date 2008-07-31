@@ -1298,7 +1298,7 @@ public abstract /*@Interned*/ class VarInfoName
       if (format == OutputFormat.JAVA) {
         return
           // On one line to enable searches for "collect.*_field".
-          "daikon.Quant.collect" + collectType + (v.type.pseudoDimensions() == 0 ? "_field" : "")
+          "daikon.Quant.collect" + collectType + (!v.is_array() ? "_field" : "")
           + "(" + packageNamePrefix + object + ", " + "\"" + fields + "\"" + ")";
       } else {
         return
