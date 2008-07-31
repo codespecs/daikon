@@ -510,10 +510,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert legalFileRepType(file_rep_type) : "Unsupported representation type "
       + file_rep_type.format() + "/" + file_rep_type.getClass() + " "
       + ProglangType.HASHCODE.getClass() + " for variable " + name;
-    // Ensure that the type and rep type are somewhat consistent
     assert type != null;
-    assert type.pseudoDimensions() >= file_rep_type.dimensions() :
-      "Types dimensions incompatibility: "+ type + " vs. " + file_rep_type;
     assert comparability != null;
     // COMPARABILITY TEST
     // Assert.assertTrue(
@@ -1276,19 +1273,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Return true if this is a pointer or reference to another object.
    **/
   public boolean is_reference() {
-    // If the program type has a higher dimension than the rep type,
-    // we are taking a hash or something.
-    if (type.pseudoDimensions() > rep_type.pseudoDimensions()) {
-      return true;
-    }
 
-    // The dimensions are the same.  If the rep type is integral but
-    // the program type isn't primitive, we have a hash, too.
-    if (rep_type.baseIsIntegral() && (!type.baseIsPrimitive())) {
-      return true;
-    }
-
-    return false;
+    // This used to check to see if the item was a list and some other
+    // odd things, but hashcode seems like the right check.
+    return rep_type.isHashcode();
   }
 
   /**
@@ -1408,6 +1396,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   public boolean isIndex() {
     return ((file_rep_type == ProglangType.INT) && type.isIndex());
+  }
+
+  public boolean is_array() {
+    if (FileIO.new_decl_format)
+      return (arr_dims > 0);
+    else
+      return rep_type.isArray();
   }
 
   /**
@@ -1939,7 +1934,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public boolean indexCompatible(VarInfo sclvar) {
     VarInfo seqvar = this;
     if (Daikon.check_program_types) {
-      if (!(seqvar.type.isPseudoArray() && sclvar.isIndex())) {
+      if (!seqvar.is_array() || !sclvar.isIndex()) {
         return false;
       }
     }
@@ -2417,8 +2412,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   public PptTopLevel find_object_ppt(PptMap all_ppts) {
 
-    // Pseudo arrays don't have types
-    if (type.isPseudoArray())
+    // Arrays don't have types
+    if (is_array())
       return (null);
 
     // build the name of the object ppt based on the variable type
