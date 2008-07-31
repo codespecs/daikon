@@ -364,6 +364,7 @@ public final class FileIO {
       return null;
     }
 
+    // Build the var infos from the var definitions.
     VarInfo[] vi_array = new VarInfo[varmap.size()];
     int ii = 0;
     for (VarDefinition vd : varmap.values()) {
