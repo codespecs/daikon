@@ -7,18 +7,83 @@ This file lists significant user-visible changes to Daikon.
 Further documentation can be found in:
  * the Daikon Manual.  Its source is file daikon.texinfo; formatted, it
    appears as daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
-   It is available online at
+   It is available on-line at
    http://pag.csail.mit.edu/daikon/download/doc/daikon.html .
  * the Daikon Developer Manual.  Its source is file developer.texinfo;
    formatted, it appears as developer.html, developer.info, developer.dvi,
-   developer.ps, or developer.pdf.  It is available online at
+   developer.ps, or developer.pdf.  It is available on-line at
    http://pag.csail.mit.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not
-   distributed with Daikon, alaobut you can build it by executing the command
+   distributed with Daikon, but you can build it by executing the command
      make -C $DAIKONDIR/java doc
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+
+4.4.2 (August 1 2008)
+
+The set of invariants and derived variables enabled by default was
+changed to provide more relevant invariants.  Configuration options
+were added for some invariants.  Bugs were fixed in Daikon and Chicory.
+
+Daikon
+
+  User visible changes
+
+    The following less common invariants are no longer enabled by
+    default: SubSequence, SuperSequence, FunctionBinary, NoDuplicates,
+    SeqIndex, Divides, Square, ZeroTrack, BitwiseAndZero,
+    BitwiseComplement, BitwiseSubset, and ShiftZero.  Their
+    configuration options can be used to enable them if desired.
+
+    Individual enable configuration options were added for the Numeric
+    invariants Divides, Square, ZeroTrack, BitwiseAndZero, BitwiseComplement,
+    BitwiseSubset, and ShiftZero.  Also for the Range invariants Even and
+    PowerOfTwo.
+
+    The other Range invariants (which provide information similar to the
+    Upper/LowerBound and OneOf invariants and are used for non-instantiating 
+    suppressions) are enabled if their corresponding Bound
+    or OneOf invariants are enabled.  The invariants EqualZero, EqualOne, 
+    EqualMinusOne, are enabled if OneOf is enabled.  The invariants
+    GreaterEqualZero, GreaterEqual64, BooleanVal, and Bound0_63 are enabled
+    if the Upper/LowerBound invariants are enabled.
+
+    The Range invariants PowerOfTwo and Even will now print if they
+    are enabled.  A dynamic obvious check was added so that they are
+    considered obvious if there is a OneOf invariant over the same variable.
+
+    Modified the CommonSequence invariant to not consider common sequences
+    over hashcodes (pointers).  This can be overridden with the
+    daikon.inv.unary.sequence.CommonSequence.hashcode_seqs configuration
+    option.
+
+  Bug Fixes
+
+    - Fixed the Simplify output for StringLength derived variables
+
+    - Fixed a bug where Boolean constants were not parsed correctly in
+      the new declaration format
+
+    - Any suppressions that included 'result == arg1' and 'arg1 == arg2'
+      were augmented to include 'result == arg2'.  Invariants are not necessarily 
+      transitive due to missing variables.  Under certain conditions this
+      problem could lead to an assertion failure in Daikon.
+
+    - Fixed some problems with supporting user implementations of java.util.List
+      as sequences.
+
+Chicory
+
+  Bug Fixes
+
+    - Prevented unintended recursion that occurred if processing a variable in 
+      one dtrace record called instrumented code (eg, calling toArray as
+      part of processing a list or pure functions).  Recursive calls to
+      enter() or exit() are simply ignored.
+
+    
+
 
 4.4.1 (July 1 2008)
 
@@ -56,7 +121,7 @@ DynComp
     - Fixed the classpath specification on windows to use the correct
       path specifier.
 
-    - Changed handling of the subprocess so that stdout and stderr output
+    - Changed handling of the sub-process so that stdout and stderr output
       is not mixed character by character.
 
     - Fixed a problem where DynComp would hang on the Mac
@@ -80,7 +145,7 @@ Daikon
 
   User-visible changes
 
-    Daikon supports a new format for declration records.  This format
+    Daikon supports a new format for declaration records.  This format
     allows front ends more flexibility and an increased ability to use
     arbitrary variable names.  The program point hierarchy and relationships
     between variables are explicitly stated in their declarations rather
@@ -102,7 +167,7 @@ AnnotateNullable
   Framework (see http://groups.csail.mit.edu/pag/jsr308/).  See section
   8.1.4 of the Daikon user manual for more information.
 
-DynComop
+DynComp
 
   User-visible changes
 
@@ -189,7 +254,7 @@ Daikon
 
   Bug fixes
 
-    The junit tests can now be run directly from the jar file.  All
+    The JUNIT tests can now be run directly from the jar file.  All
     necessary input files are resources in the jar file and the unit test
     code handles them as resources.
 
@@ -213,12 +278,12 @@ Daikon
 
   User-visible changes
 
-    Elminated support for the "repair" output format.  We are not aware of
+    Eliminated support for the "repair" output format.  We are not aware of
     users who are still utilizing this format; let us know if you are.
 
   Bug fixes
 
-    Enhanced mainHelper (the programatic interface to Daikon) so that 
+    Enhanced mainHelper (the programmatic interface to Daikon) so that 
     it can be called multiple times.  This allows a caller to process
     multiple unrelated trace files within a single run.
 
@@ -2777,4 +2842,8 @@ Added linear ternary invariants, of the form z = ax + by + c.
  LocalWords:  dtrace InvariantChecker dir JML getClass ppt orig vars Kvasir jdk
  LocalWords:  BCEL bcel hashcode hashcodes Valgrind DynComp nohierarchy JDKDIR
  LocalWords:  DynComp's DAIKONPARENT kvasir DBC pre NaN var dyncomp regex args
- LocalWords:  decl varname dataflow comp Mangel Wurzel gzip stdout
+ LocalWords:  decl varname dataflow comp Mangel Wurzel gzip stdout NoDuplicates
+ LocalWords:  FunctionBinary ZeroTrack BitwiseAndZero BitwiseSubset ShiftZero
+ LocalWords:  CommonSequence toArray IOA classpath stderr NoSuchMethodException
+ LocalWords:  AnnotateNullable JSR dcomp EltNonZero NonZero IsPointer JUNIT
+ LocalWords:  Cygwin mainHelper
