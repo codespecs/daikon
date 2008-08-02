@@ -100,13 +100,19 @@ shift
 FILES_FILE=/tmp/javac-xlint-files-$$
 echo $* > $FILES_FILE
 
+# Fixup the filename for cygwin
+JAVA_FILES_FILE=$FILES_FILE
+if [ "$OSTYPE" == "cygwin" ]; then
+    JAVA_FILES_FILE=`cygpath -w $JAVA_FILES_FILE`
+fi
+
 if [ ! -z $DEBUG_JAVAC_XLINT ]; then
-  echo ${SUPPLIED_JAVAC} -Xlint @$FILES_FILE PIPED-INTO `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
+  echo ${SUPPLIED_JAVAC} -Xlint @$JAVA_FILES_FILE PIPED-INTO `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
 fi
 if [ ! -z "${PRUNE_XLINT_ARGS}" ]; then
-  ${SUPPLIED_JAVAC} -Xlint @$FILES_FILE 2>&1 | `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
+  ${SUPPLIED_JAVAC} -Xlint @$JAVA_FILES_FILE 2>&1 | `dirname ${0}`/javac-xlint-prune.pl -p "${PRUNE_XLINT_ARGS}"
 else
-  ${SUPPLIED_JAVAC} -Xlint @$FILES_FILE 2>&1 | `dirname ${0}`/javac-xlint-prune.pl
+  ${SUPPLIED_JAVAC} -Xlint @$JAVA_FILES_FILE 2>&1 | `dirname ${0}`/javac-xlint-prune.pl
 fi
 
 STATUS=$?
