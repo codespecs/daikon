@@ -2,7 +2,7 @@
 
 all:
 	$(MAKE) -C bin
-ifdef $DAIKONCLASS_SOURCES
+ifdef DAIKONCLASS_SOURCES
 	$(MAKE) -C java
 endif
 	$(MAKE) java/dcomp_rt.jar
@@ -31,7 +31,7 @@ endif
 
 clean:
 	$(MAKE) -C bin clean
-ifdef $DAIKONCLASS_SOURCES
+ifdef DAIKONCLASS_SOURCES
 	$(MAKE) -C java clean
 endif
 	$(MAKE) -C kvasir/valgrind clean
