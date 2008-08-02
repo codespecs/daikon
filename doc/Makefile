@@ -86,12 +86,14 @@ html-chap: daikon_manual_html/daikon.html developer_manual_html/developer.html
 daikon_manual_html/daikon.html: daikon.texinfo
 	rm -rf daikon_manual_html/*
 # Alternatively, run "makeinfo -html", but it doesn't support "-split chapter", only split into nodes or --no-split
+# However, as of texi2html, the cross-references seem to assume the other document was processed without "-split chapter", instead splitting into nodes.
 	texi2html -split chapter -subdir daikon_manual_html $<
 	perl -pi -e '$$/ = "\n\n"; if (m|http://texi2html\.cvshome\.org|) { $$_ = ""; }' daikon_manual_html/daikon.html
 
 developer_manual_html/developer.html: developer.texinfo
 	rm -rf developer_manual_html/*
 # Alternatively, run "makeinfo -html", but it doesn't support "-split chapter", only split into nodes or --no-split
+# However, as of texi2html, the cross-references seem to assume the other document was processed without "-split chapter", instead splitting into nodes.
 	texi2html -split chapter -subdir developer_manual_html $<
 
 daikon.dvi: daikon.texinfo config-options.texinfo invariants-doc.texinfo
