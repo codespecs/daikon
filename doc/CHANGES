@@ -20,6 +20,17 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.4.3 (September 2008)
+
+Kvasir
+
+  Bug fixes
+
+    Fixed an issue with VarComparability being inserted into a dtrace file
+    twice when in append mode
+
+----------------------------------------
+
 4.4.2 (August 1 2008)
 
 The set of invariants and derived variables enabled by default was
