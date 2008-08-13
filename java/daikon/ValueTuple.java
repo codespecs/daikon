@@ -40,7 +40,7 @@ public final class ValueTuple implements Cloneable {
    * vals field.  Don't use a single int because that won't scale to (say)
    * more than 16 values.
   **/
-  public /*@Interned*/ int[] mods;
+  public int /*@Interned*/ [] mods;
 
 
   // Right now there are only three meaningful values for a mod:
@@ -216,13 +216,13 @@ public final class ValueTuple implements Cloneable {
 
 
   /** Default constructor that interns its argument. */
-  public ValueTuple(Object[/*@Interned*/] vals, int[] mods) {
+  public ValueTuple(/*@Interned*/ Object[] vals, int[] mods) {
     this.vals = Intern.intern(vals);
     this.mods = Intern.intern(mods);
   }
 
   // Private constructor that doesn't perform interning.
-  @SuppressWarnings("interned") // interning constructor
+  @SuppressWarnings("interning") // interning constructor
   private ValueTuple(Object[] vals, int[] mods, boolean check) {
     Assert.assertTrue((!check) || Intern.isInterned(vals));
     Assert.assertTrue((!check) || Intern.isInterned(mods));
@@ -245,7 +245,7 @@ public final class ValueTuple implements Cloneable {
    * variables to take separate vals and mods arguments.  No one else
    * should use it!
    **/
-  @SuppressWarnings("interned") // interning constructor
+  @SuppressWarnings("interning") // interning constructor
   public static ValueTuple makeUninterned(Object[] vals, int[] mods) {
     return new ValueTuple(vals, mods, false);
   }
@@ -284,8 +284,8 @@ public final class ValueTuple implements Cloneable {
 
   /** Return a new ValueTuple containing this one's first len elements. **/
   public ValueTuple trim(int len) {
-    @SuppressWarnings("interned") // polymorphism
-    Object[/*@Interned*/] new_vals = ArraysMDE.subarray(vals, 0, len);
+    @SuppressWarnings("interning") // polymorphism
+    /*@Interned*/ Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
   }
@@ -374,7 +374,7 @@ public final class ValueTuple implements Cloneable {
    **/
   public ValueTuple slice(int[] indices) {
     int new_len = indices.length;
-    Object[/*@Interned*/] new_vals = new Object[/*@Interned*/ new_len];
+    /*@Interned*/ Object[] new_vals = new /*@Interned*/ Object[new_len];
     int[] new_mods = new int[new_len];
     for (int i=0; i<new_len; i++) {
       new_vals[i] = vals[indices[i]];

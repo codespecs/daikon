@@ -681,10 +681,10 @@ audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
 
-# Interned type qualifier checker
+# Interning type qualifier checker
 
-# JAVAC_INTERNED_ARGS = -typeprocessor checkers.interned.InterningChecker
-JAVAC_INTERNED_ARGS = -typeprocessor checkers.interning.InterningChecker -Alint=-dotequals
+# JAVAC_INTERNING_ARGS = -typeprocessor checkers.interning.InterningChecker
+JAVAC_INTERNING_ARGS = -typeprocessor checkers.interning.InterningChecker -Alint=-dotequals
 JAVAC_NULLNESS_ARGS = -typeprocessor checkers.nullness.NullnessChecker
 JAVAC_NULLNESS_STUBS = -sourcepath $checkers/jdk/nullness/src
 JAVAC_JAVARI_ARGS = -typeprocessor checkers.javari.JavariChecker
@@ -692,27 +692,27 @@ JAVAC_JAVARI_STUBS = -sourcepath $checkers/jdk/nullness/src
 JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
 JAVAC_IGJ_STUBS = -sourcepath $checkers/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
-# INTERNED_JAVA_FILES_SKIP =
-INTERNED_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
-# I should perhaps not count Interned.java, which implements interning and
+# INTERNING_JAVA_FILES_SKIP =
+INTERNING_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
+# I should perhaps not count Intern.java, which implements interning and
 # so has very many annotations.  Also, VarInfoName is obsolescent (and of flawed
 # design) but has 60 @Interned annotations and quite a few SuppressWarnings.
-INTERNED_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
+INTERNING_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
 ## Which files to check.
-INTERNED_JAVA_FILES = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
-INTERNED_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNED_JAVA_FILES_SKIP} ${INTERNED_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
+INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
+INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 
 intern: check-interning
-interned: check-interning
+interning: check-interning
 check-interning:
-	${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${INTERNED_JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${INTERNING_JAVA_FILES}
 
-# Run the interned checker on all Java files, not just those that contain an
+# Run the interning checker on all Java files, not just those that contain an
 # @Interned annotation.
-interned-all: check-interning-all
+interning-all: check-interning-all
 check-interning-all:
-	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_INTERNED_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
 
 check-nullness-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
@@ -738,29 +738,28 @@ check-javari-all-withstubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
 
-# These targets run the Interned checker on just one file.  They use ${JAVAC}
+# These targets run the Interning checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
-check-interned-varinfo:
-	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/VarInfo.java
-check-interned-fileio:
-	${JAVAC} ${JAVAC_INTERNED_ARGS} daikon/FileIO.java
+check-interning-varinfo:
+	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/VarInfo.java
+check-interning-fileio:
+	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
 
 # Problem with these computations: double-counting of dakion/util/ directory.
 # "tail -1" is required when wc is given multiple arguments
-interned-counts: interning-counts
 interning-counts:
 	@echo -n "Annotated files: "
-	@echo ${INTERNED_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
-	#@echo ${INTERNED_JAVA_FILES_COUNTS}
+	@echo ${INTERNING_JAVA_FILES_COUNTS} | sed 's/ /\n/g' | wc -l
+	#@echo ${INTERNING_JAVA_FILES_COUNTS}
 	@echo -n "Lines in annotated files: "
-	@wc -l ${INTERNED_JAVA_FILES_COUNTS} | tail -1
+	@wc -l ${INTERNING_JAVA_FILES_COUNTS} | tail -1
 	@echo -n "@Interned annotations: "
-	@grep "@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l
+	@grep "@Interned" ${INTERNING_JAVA_FILES_COUNTS} | wc -l
 	@echo -n "Commented @Interned annotations: "
-	@grep -E "//.*@Interned" ${INTERNED_JAVA_FILES_COUNTS} | wc -l
+	@grep -E "//.*@Interned" ${INTERNING_JAVA_FILES_COUNTS} | wc -l
 	@echo -n "@SuppressWarnings annotations: "
-	@grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS} | wc -l
-	@grep -n '@SuppressWarnings("interned")' ${INTERNED_JAVA_FILES_COUNTS}
+	@grep -n '@SuppressWarnings("interning")' ${INTERNING_JAVA_FILES_COUNTS} | wc -l
+	@grep -n '@SuppressWarnings("interning")' ${INTERNING_JAVA_FILES_COUNTS}
 	@echo -n "Daikon total files: "
 	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
 	@echo -n "Daikon total lines: "

@@ -1564,7 +1564,7 @@ public final class FileIO {
                 it.remove();
               } else {
                 assert sp != null : successor;
-                @SuppressWarnings("interned") // PptTopLevel
+                @SuppressWarnings("interning") // PptTopLevel
                 boolean same_function_id = (sp.function_id == p.function_id);
                 if (! same_function_id) {
                   System.out.printf ("Warning: successor %s (func %s) in "
@@ -1679,7 +1679,7 @@ public final class FileIO {
   }
 
   /** Returns non-null if this procedure has an unmatched entry. **/
-  @SuppressWarnings("interned") // PptTopLevel
+  @SuppressWarnings("interning") // PptTopLevel
   static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
     for (Invocation invok : call_hashmap.values()) {
       if (invok.ppt == ppt) {

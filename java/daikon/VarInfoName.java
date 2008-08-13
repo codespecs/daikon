@@ -35,7 +35,7 @@ import java.util.*;
  * For example, "a" is a name, and "sin(a)" is a name that is the name
  * "a" with the function "sin" applied to it.
  **/
-@SuppressWarnings("interned")
+@SuppressWarnings("interning")
 public abstract /*@Interned*/ class VarInfoName
   implements Serializable, Comparable<VarInfoName>
 {
@@ -247,8 +247,8 @@ public abstract /*@Interned*/ class VarInfoName
     }
     return simplify_name_cached[which];
   }
-  private String[/*@Interned*/] simplify_name_cached
-    = new String[/*@Interned*/ 2]; // each interned
+  private /*@Interned*/ String[] simplify_name_cached
+    = new /*@Interned*/ String[2]; // each interned
 
   /**
    * Returns the String representation of this name in the simplify
@@ -420,7 +420,7 @@ public abstract /*@Interned*/ class VarInfoName
       VarInfoName result = ref.get();
       return result;
     } else {
-      @SuppressWarnings("interned") // intern method
+      @SuppressWarnings("interning") // intern method
       VarInfoName this_interned = this;
       internTable.put(this_interned, new WeakReference<VarInfoName>(this_interned));
       return this_interned;
@@ -764,7 +764,7 @@ public abstract /*@Interned*/ class VarInfoName
    * and upper bounds, which can be subtracted to get one less than
    * its size.
    */
-  public VarInfoName[/*@Interned*/] getSliceBounds() /*@Interned*/ {
+  public /*@Interned*/ VarInfoName[] getSliceBounds() /*@Interned*/ {
     VarInfoName vin = this;
     boolean inPrestate = false;
     if (vin instanceof Prestate) {
@@ -777,7 +777,7 @@ public abstract /*@Interned*/ class VarInfoName
     if (!(vin instanceof Slice))
       return null;
     Slice slice = (Slice)vin;
-    VarInfoName[/*@Interned*/] ret = new VarInfoName[/*@Interned*/ 2];
+    VarInfoName[/*@Interned*/] ret = new /*@Interned*/ VarInfoName[2];
     if (slice.i != null)
       ret[0] = slice.i;
     else
@@ -914,7 +914,7 @@ public abstract /*@Interned*/ class VarInfoName
    * @param function the name of the function
    * @param vars The arguments to the function
    **/
-  public static VarInfoName applyFunctionOfN(String function, VarInfoName[/*@Interned*/] vars) {
+  public static VarInfoName applyFunctionOfN(String function, /*@Interned*/ VarInfoName[] vars) {
     // This causes an odd error with the Interned checker:
     // return applyFunctionOfN(function, Arrays.</*@Interned*/ VarInfoName>asList(vars));
     return applyFunctionOfN(function, Arrays.asList(vars));
@@ -2076,7 +2076,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Use to report whether a node is in a pre- or post-state context.
    * Throws an assertion error if a given goal isn't present.
    **/
-  @SuppressWarnings("interned") // equality checking pattern, etc.
+  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class NodeFinder
     extends AbstractVisitor<VarInfoName>
   {
@@ -2153,7 +2153,7 @@ public abstract /*@Interned*/ class VarInfoName
    * in the VarInfoName tree using == comparison.  Recurse through
    * everything except fields, so in x.a, we don't look at a.
    **/
-  @SuppressWarnings("interned") // equality checking pattern, etc.
+  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class Finder
     extends AbstractVisitor<VarInfoName>
   {
@@ -2340,7 +2340,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Use to traverse a tree, find the first (elements ...) node, and
    * report whether it's in pre or post-state.
    **/
-  @SuppressWarnings("interned") // equality checking pattern, etc.
+  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class ElementsFinder
     extends AbstractVisitor<Elements>
   {
@@ -2399,7 +2399,7 @@ public abstract /*@Interned*/ class VarInfoName
    * replaces some node (and its children) with another.
    * The result is *not* interned; the client must do that if desired.
    **/
-  @SuppressWarnings("interned") // equality checking pattern, etc.
+  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class Replacer
     extends AbstractVisitor<VarInfoName>
   {
@@ -2852,7 +2852,7 @@ public abstract /*@Interned*/ class VarInfoName
           index_vin = new Simple(index_off + "");
         }
         VarInfoName to_replace = unquants.get(0);
-        VarInfoName[/*@Interned*/] replace_result = replace(root, to_replace, index_vin);
+        /*@Interned*/ VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         return replace_result[0];
       } else {
         Assert.assertTrue(false, "Can't handle multi-dim array in " +
@@ -2928,8 +2928,8 @@ public abstract /*@Interned*/ class VarInfoName
      * Record type for return value of the quantify method below.
      **/
     public static class QuantifyReturn {
-      public VarInfoName[/*@Interned*/] root_primes;
-      public Vector<VarInfoName[/*@Interned*/]> bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
+      public /*@Interned*/ VarInfoName[] root_primes;
+      public Vector</*@Interned*/ VarInfoName[]> bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
     }
 
     // <root*> -> <root'*, <index, lower, upper>*>

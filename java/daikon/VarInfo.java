@@ -597,6 +597,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
+  @SuppressWarnings("interning")  // temporary?
   public VarInfo clone() throws CloneNotSupportedException {
     return (VarInfo) super.clone();
   }
@@ -1523,7 +1524,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           : (vari_shift >= varj_shift));
     }
     // different variables
-    @SuppressWarnings("interned") // assertion (PptTopLevel)
+    @SuppressWarnings("interning") // assertion (PptTopLevel)
     boolean samePpt = (vari.ppt == varj.ppt);
     Assert.assertTrue(samePpt);
     PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
@@ -1687,7 +1688,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Check if two VarInfos are truly (non guarded) equal to each other
    * right now.
    **/
-  @SuppressWarnings("interned") // Equality
+  @SuppressWarnings("interning") // Equality
   public boolean isEqualTo(VarInfo other) {
     Assert.assertTrue(equalitySet != null);
     return this.equalitySet == other.equalitySet;
@@ -1801,7 +1802,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     VarInfo var1 = this;
     // Can only compare in the same ppt because otherwise
     // comparability info may not make sense.
-    @SuppressWarnings("interned") // assertion (PptTopLevel)
+    @SuppressWarnings("interning") // assertion (PptTopLevel)
     boolean samePpt = (var1.ppt == var2.ppt);
     Assert.assertTrue(samePpt);
 
@@ -3121,7 +3122,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   public String[] get_simplify_slice_bounds() {
     if (!FileIO.new_decl_format) {
-      VarInfoName[/*@Interned*/] bounds = var_info_name.getSliceBounds(); // vin ok
+      /*@Interned*/ VarInfoName[] bounds = var_info_name.getSliceBounds(); // vin ok
       if (bounds == null)
         return null;
       String[] str_bounds = new String[2];
@@ -3202,7 +3203,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // Use VarInfoName to handle the old format
     if (!FileIO.new_decl_format) {
-      VarInfoName[/*@Interned*/] bounds = var_info_name.getSliceBounds();
+      /*@Interned*/ VarInfoName[] bounds = var_info_name.getSliceBounds();
       VarInfoName lower = null;
       if (bounds != null)
         lower = bounds[0];

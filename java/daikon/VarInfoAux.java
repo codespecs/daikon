@@ -107,7 +107,7 @@ public final class VarInfoAux
     boolean seenEqual = false;
     for (int tokInfo = tok.nextToken(); tokInfo != StreamTokenizer.TT_EOF;
          tokInfo = tok.nextToken()) {
-      @SuppressWarnings("interned") // initialization-checking pattern
+      @SuppressWarnings("interning") // initialization-checking pattern
       boolean mapUnchanged = (map == theDefault.map);
       if (mapUnchanged) {
         // We use default values if none are specified.  We initialize
@@ -256,7 +256,7 @@ public final class VarInfoAux
    * Returns canonical representation of this.  Doesn't need to be
    * called by outside classes because these are always interned.
    **/
-  @SuppressWarnings("interned") // intern method
+  @SuppressWarnings("interning") // intern method
   private /*@Interned*/ VarInfoAux intern() {
     if (this.isInterned) return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
 

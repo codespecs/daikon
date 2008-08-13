@@ -327,7 +327,7 @@ public class PptSliceEquality
       List<VarInfo> list = entry.getValue();
       Assert.assertTrue (list.size() > 0);
       Equality eq = new Equality (list, this);
-      @SuppressWarnings("interned") // Special value
+      @SuppressWarnings("interning") // Special value
       boolean isMissing = (key == dummyMissing);
       if (isMissing) {
         eq.setSamples (leader.numSamples() - count);
@@ -587,7 +587,7 @@ public class PptSliceEquality
     }
   }
 
-  @SuppressWarnings("interned") // PptTopLevel
+  @SuppressWarnings("interning") // PptTopLevel
   public void repCheck() {
     for (Invariant inv : invs) {
       inv.repCheck();
