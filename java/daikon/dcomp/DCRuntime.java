@@ -69,8 +69,8 @@ public final class DCRuntime {
   public static final SimpleLog debug_timing = new SimpleLog (false);
   public static final SimpleLog debug_decl_print = new SimpleLog (false);
   public static final SimpleLog time_decl = new SimpleLog (false);
-  public static final SimpleLog debug_df = new SimpleLog (true);
-  public static final SimpleLog debug_df_branch = new SimpleLog (true, true);
+  public static final SimpleLog debug_df = new SimpleLog (false);
+  public static final SimpleLog debug_df_branch = new SimpleLog (false, true);
 
   /** Simplifies printouts for debugging if we ignore toString **/
   private static boolean ignore_toString = true;
@@ -3218,6 +3218,7 @@ public final class DCRuntime {
     ValueSource newval = new ValueSource ("local-store " + index, stack_trace);
     tag_map.put (newtag, newval);
     tag_frame[index] = newtag;
+    debug_timing.log_time ("Store into local %s", index);
     debug_df.log_tb ("primitive local-store %s->%s", index, val);
     if (debug_primitive.enabled())
       debug_primitive.log ("pop_local_tag[%d] %s%n", index, tag_frame[index]);
@@ -3236,6 +3237,7 @@ public final class DCRuntime {
     ValueSource val = get_value_source (obj);
     Throwable stack_trace = new Throwable();
     stack_trace.fillInStackTrace();
+    debug_timing.log_time ("Store into local %s", index);
     debug_df.log_tb ("object local-store %s->%s", index, val);
     ValueSource values = new ValueSource ("local-store " + index, stack_trace,
                                           val, null);
@@ -3421,7 +3423,7 @@ public final class DCRuntime {
 
     // Create a new ValueSource node with val1 and val2 the subtrees.
     ValueSource values = new ValueSource (descr, stack_trace, val1, val2);
-    debug_df.log_tb ("Union of %s and %s", val1, val2);
+    debug_df.log_tb ("binary-op %s: %s and %s", descr, val1, val2);
     tag_map.put (result_tag, values);
   }
 
