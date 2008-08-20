@@ -2338,14 +2338,22 @@ public final class TestUtilMDE extends TestCase {
    */
   public static class TestOptions {
 
-    @Option ("list of patterns") List<Pattern> lp = new ArrayList<Pattern>();
-    @Option ("-a <filename> argument 1") String arg1 = "/tmp/foobar";
-    @Option ("argument 2") String arg2;
-    @Option ("-d double value") double temperature;
-    @Option ("-f the input file") File input_file;
-    @Option ("-b boolean") boolean bool;
-    @Option ("-i Integer") Integer integer_reference;
-    @Option ("list of doubles") List<Double> ld = new ArrayList<Double>();
+    @Option ("list of patterns")
+      public List<Pattern> lp = new ArrayList<Pattern>();
+    @Option ("-a <filename> argument 1")
+      public String arg1 = "/tmp/foobar";
+    @Option ("argument 2")
+      public String arg2;
+    @Option ("-d double value")
+      public double temperature;
+    @Option ("-f the input file")
+      public File input_file;
+    @Option ("-b boolean")
+      public boolean bool;
+    @Option ("-i Integer")
+      public Integer integer_reference;
+    @Option ("list of doubles")
+      public List<Double> ld = new ArrayList<Double>();
   }
 
   /**
