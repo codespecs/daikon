@@ -102,7 +102,7 @@ echo $* > $FILES_FILE
 
 # Fixup the filename for cygwin
 JAVA_FILES_FILE=$FILES_FILE
-if [ "$OSTYPE" == "cygwin" ]; then
+if [ "$OSTYPE" = "cygwin" ]; then
     JAVA_FILES_FILE=`cygpath -w $JAVA_FILES_FILE`
 fi
 
