@@ -2,7 +2,6 @@ package daikon;
 
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
-import daikon.util.CollectionsExt;
 import daikon.util.Pair;
 import daikon.util.UtilMDE;
 import daikon.util.GraphMDE;
@@ -142,7 +141,7 @@ public class PptCombined extends PptTopLevel {
         String errorMsg = "Assembly file does not contain any instructions for ppt " + ppt.name();
         throw new RuntimeException(errorMsg);
       }
-      CollectionsExt.prepend(instructionsForPpt, path);
+      path.addAll (0, instructionsForPpt);
       if (i > 0) {
         // Find intermediate basic blocks: blocks that are on some path from
         // the current ppt and its immediate dominator (the dominator right
