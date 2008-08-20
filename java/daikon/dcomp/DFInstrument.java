@@ -27,7 +27,7 @@ import daikon.DynComp;
  */
 class DFInstrument extends DCInstrument {
 
-  public static SimpleLog debug = new SimpleLog (true);
+  public static SimpleLog debug = new SimpleLog (false);
 
   /** True if the current method is the test sequence **/
   private static boolean test_sequence = false;
@@ -128,12 +128,12 @@ class DFInstrument extends DCInstrument {
       = mg.getMethod().getLocalVariableTable().getLocalVariableTable();
       // = mg.getLocalVariableTable(pool).getLocalVariableTable();
 
-    System.out.printf ("Local variable table for test sequence %s%n",
-                       mg.getName());
+    debug.log ("Local variable table for test sequence %s%n",
+               mg.getName());
     int max_index = 0;
     for (LocalVariable lv : lvt) {
-      System.out.printf ("local variable %s index %d%n", lv.getName(),
-                         lv.getIndex());
+      debug.log  ("local variable %s index %d%n", lv.getName(),
+                  lv.getIndex());
       if (lv.getIndex() > max_index)
         max_index = lv.getIndex();
     }
@@ -879,8 +879,8 @@ class DFInstrument extends DCInstrument {
         } else { // static call
           il.append (dcr_call (replacement_method, ret_type, arg_types));
         }
-        System.out.printf ("insert call to replacement method %s(%s)%n",
-                           replacement_method, Arrays.toString(arg_types));
+        debug.log ("insert call to replacement method %s(%s)%n",
+                   replacement_method, Arrays.toString(arg_types));
         return (il);
       }
 
