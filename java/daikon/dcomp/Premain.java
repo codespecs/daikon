@@ -183,16 +183,20 @@ public class Premain {
 
       // If DataFlow, print out the DF for the specified branch
       if (DynComp.branch != null) {
-        System.err.printf ("Branch %s executed %d times\n", DynComp.branch,
-                           DCRuntime.branch_tags.size());
-        for (BranchInfo bi : DCRuntime.branch_tags) {
-          System.err.printf ("  --------------- compare-to: %s%n",
-                             bi.compared_to);
-          if (bi.value_source == null) {
-            System.err.printf ("  Warning: null vs encountered%n");
-            continue;
+
+        if (DynComp.verbose) {
+          System.err.printf ("Branch %s executed %d times\n", DynComp.branch,
+                             DCRuntime.branch_tags.size());
+          for (BranchInfo bi : DCRuntime.branch_tags) {
+            DCRuntime.debug_timing.log_time ("writing branch data");
+            System.err.printf ("  --------------- compare-to: %s%n",
+                               bi.compared_to);
+            if (bi.value_source == null) {
+              System.err.printf ("  Warning: null vs encountered%n");
+              continue;
+            }
+            System.err.printf ("%s%n", bi.value_source.tree_dump());
           }
-          System.err.printf ("%s%n", bi.value_source.tree_dump());
         }
 
         // if an output file was requested, write the index of each local
@@ -219,7 +223,7 @@ public class Premain {
             Map<String,Set<String>> locals
               = new LinkedHashMap<String,Set<String>>();
             for (BranchInfo bi : DCRuntime.branch_tags) {
-              System.out.printf ("Processing bi %s%n", bi);
+              DCRuntime.debug_timing.log_time ("Processing bi %s%n", bi);
               Map<String,Set<String>> bi_locals
                 = bi.value_source.get_var_compares (bi.compared_to);
               for (String local : bi_locals.keySet()) {
