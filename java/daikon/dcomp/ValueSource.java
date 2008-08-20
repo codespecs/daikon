@@ -32,6 +32,8 @@ public class ValueSource {
   /** ValueSet used for the null reference value **/
   public static ValueSource null_value_source = new ValueSource ("null");
 
+  private static String blank_string;
+
   private static final String lineSep = System.getProperty("line.separator");
 
   ValueSource (String descr) { this.descr = descr; }
@@ -93,7 +95,7 @@ public class ValueSource {
 
     Set<String> varnames = new LinkedHashSet<String>();
     for (ValueSource vs : get_node_list()) {
-      System.out.printf ("get_vars: processing node %s%n", vs.descr);
+      // System.out.printf ("get_vars: processing node %s%n", vs.descr);
       if (vs.descr.startsWith ("local-store")) {
         int local_index = Integer.decode(vs.descr.split (" ")[1]);
         String local_name = DFInstrument.test_seq_locals[local_index];
@@ -137,27 +139,45 @@ public class ValueSource {
   }
 
   public String tree_dump () {
-    return tree_dump (0);
+    StringBuilder out = new StringBuilder();
+    return tree_dump (out, 0).toString();
   }
 
-  public String tree_dump(int indent) {
+  /** make sure that the blank string is long enough for the specified size **/
+  private void ensure_blank_len (int size) {
+    if (size > blank_string.length()) {
+      while (blank_string.length() < size)
+        blank_string += " ";
+    }
+  }
 
-    String indent_str = "";
-    for (int i = 0; i < indent; i++)
-      indent_str += " ";
-    String out = String.format ("%s-%s", indent_str, descr);
+  public StringBuilder tree_dump(StringBuilder out, int indent) {
+
+    // Make sure the blank string is long enough for the indent.
+    ensure_blank_len (indent+2);
+
+    out.append (blank_string, 0, indent);
+    out.append ('-');
+    out.append (descr);
     if (stack_trace != null) {
-      indent_str += "   ";
       for (StackTraceElement ste : stack_trace.getStackTrace()) {
         if (ste.getClassName().startsWith ("daikon.dcomp.DCRuntime"))
           continue;
-        out += String.format ("%n%s%s", indent_str, ste);
+        out.append (lineSep);
+        out.append (blank_string, 0, indent+2);
+        out.append (ste);
       }
     }
-    if (left != null)
-      out += lineSep + left.tree_dump (indent+2);
-    if (right != null)
-      out += lineSep + right.tree_dump (indent+2);
+    if (left != null) {
+      out.append (lineSep);
+      left.tree_dump (out, indent+2);
+    }
+
+    if (right != null) {
+      out.append (lineSep);
+      right.tree_dump (out, indent+2);
+    }
+
     return out;
   }
 }
