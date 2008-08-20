@@ -14,19 +14,26 @@ import com.sun.javadoc.FieldDoc;
  * annotation is used to identify fields that are associated with a
  * command line option.  Both the short (-) and long option formats
  * (--) are supported.  The name of the option is the name of the
- * field (with some exceptions noted below).  The primitive types
- * boolean, int, and double are supported.  All reference types that
- * have a constructor with a single string parameter are supported as
- * well.  Pattern (created with a factory) is supported as a special
- * case.  Primitives can also be represented as wrappers (Boolean,
- * Integer, Double).  Use of the wrappers allows a primitive argument
- * not to have a default value. <p>
+ * field (with some exceptions noted below). <p>
  *
- * Lists of any valid reference type are also supported.  If an option
- * as a list, it can be specified multiple times and each entry will
- * be added to the list.  Non list options overwrite the previous value
- * if specified multiple times.  Lists must be initialized to a valid
- * list before using Options on that list. <p>
+ * The field may be of the following types:
+ * <ul>
+ *   <li>Primitive types:  boolean, int, and double.
+ *       (Primitives can also be represented as wrappers (Boolean,
+ *       Integer, Double).  Use of the wrappers allows a primitive argument
+ *       not to have a default value.)
+ *   <li>Reference types that have a constructor with a single string
+ *       parameter.
+ *   <li>java.util.regex.Pattern.
+ *   <li>Lists of any supported reference type.  Lists must be initialized
+ *       to a valid list (e.g., the empty list) before using Options on
+ *       that list.
+ * </ul> <p>
+ *
+ * An option may be specified multiple times.  If the option is a
+ * list, each entry is be added to the list.  If the option is not a
+ * list, then only the last occurence is used (subsequent occurences
+ * overwrite the previous value).  <p>
  *
  * The option annotation {@link Option} specifies the optional short
  * name, optional type name, and long description.  The long name is taken
@@ -44,7 +51,7 @@ import com.sun.javadoc.FieldDoc;
  *
  *  public static class Test {
  *
- *    &#064;Option ("-o specifies the output file ")
+ *    &#064;Option ("-o <filename> the output file ")
  *    public static File outfile = "/tmp/foobar";
  *
  *    &#064;Option ("-i ignore case")
@@ -55,8 +62,8 @@ import com.sun.javadoc.FieldDoc;
  *
  *    public static void main (String[] args) throws ArgException {
  *
- *     Options options = new Options ("Test [options] files", new Test());
- *     String[] file_args = options.parse_and_usage (args);
+ *      Options options = new Options ("Test [options] files", new Test());
+ *      String[] file_args = options.parse_and_usage (args);
  *    }
  *  }
  *</pre>
@@ -66,12 +73,16 @@ import com.sun.javadoc.FieldDoc;
  *  <li> Short options are only supported as separate entries (eg, -a -b)
  *  and not as a single group (eg -ab).
  *
- *  <li> Types without a string constructor and the other primitive types
- *  are not supported.
+ *  <li> Not all primitive types are supported.
  *
- *  <li>  Non option information could be supported in the same manner
+ *  <li> Types without a string constructor are not supported.
+ *
+ *  <li>  Non-option information could be supported in the same manner
  *  as options which would be cleaner than simply returning all of the
- *  non-options as an array
+ *  non-options as an array.
+ *
+ *  <li>  The "--no-long" option to turn off a boolean option named "long"
+ *  is not supported.
  * </ul>
  **/
 public class Options {
@@ -779,6 +790,7 @@ public class Options {
 
     // Get the short name (if any)
     if (val.startsWith("-")) {
+      assert val.substring(2,3).equals(" ");
       short_name = val.substring (1, 2);
       description = val.substring (3);
     } else {
