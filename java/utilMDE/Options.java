@@ -155,7 +155,7 @@ public class Options {
       // Get the default value (if any)
       Object default_obj = null;
       if (!Modifier.isPublic (field.getModifiers()))
-        throw new Error ("option field " + field + " is not public");
+        throw new Error ("option field is not public: " + field);
       try {
         default_obj = field.get (obj);
         if (default_obj != null)
