@@ -15,6 +15,7 @@
 ~mernst/java/junit3.8.1/javadoc/index-all.html
 ~mernst/java/bcel/docs/api/index-all.html
 ~mernst/java/apache/commons-io-1.2/docs/index-all.html
+~mernst/java/iCal4j/docs/api/index-all.html
 
 ## Obsolete packages
 ## Use java.util.regexp in JDK1.4 instead
