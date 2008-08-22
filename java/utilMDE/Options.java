@@ -37,7 +37,8 @@ import com.sun.javadoc.FieldDoc;
  *
  * The option annotation {@link Option} specifies the optional short
  * name, optional type name, and long description.  The long name is taken
- * from the name of the variable. <p>
+ * from the name of the variable; when the name contains an underscore,
+ * users may substitute a hyphen on the command line instead. <p>
  *
  * On the command line, the values for options are specified in the
  * form '--long=value', '-short=value', '--long value' or '-short
@@ -403,7 +404,7 @@ public class Options {
   /**
    * Parses a command line and sets the options accordingly.  Any
    * non-option arguments are returned.  Any unknown option or other
-   * errors throws an ArgException
+   * errors throws an ArgException.
    */
   public String[] parse (String[] args) throws ArgException {
 
@@ -463,7 +464,7 @@ public class Options {
 
   /**
    * Parses a command line and sets the options accordingly.  Any
-   * non-option arguments are returned.  If an error occurs prints
+   * non-option arguments are returned.  If an error occurs, prints
    * the usage and terminates the program.  The program is terminated
    * rather than throwing an error to create cleaner output.  See parse().
    */
