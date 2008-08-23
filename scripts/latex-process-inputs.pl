@@ -42,7 +42,6 @@ if (scalar(@ARGV) > 1) {
 my @files = ($ARGV[0]);
 
 # I ought to abstract this out into a (recursively-called) procedure.
-# inputs
 my $text = "";
 my $line;
 while ($line = <>) {
@@ -50,9 +49,9 @@ while ($line = <>) {
   # kill comments on the line
   $line =~ s/((^|[^\\])%).*?$/$1/;
 
-  while ($line =~ s/\\(verbatim)?input\{([a-z0-9_\.-]+)\}/___TOKEN___/i) {
+  while ($line =~ s/\\(verbatim)?(input|include)\{([a-z0-9_\.-]+)\}/___TOKEN___/i) {
     my $verbatim_p = ($1 eq "verbatim");
-    my $file = "$2";
+    my $file = "$3";
     if ($file !~ m/\./) {
       $file .= ".tex";
     }
