@@ -495,9 +495,9 @@ public final /*@Interned*/ class ProglangType
         return Intern.intern(result);
       } else if (base == BASE_STRING) {
         // First, intern each String in the array ...
-        Intern.internStrings(value_strings);
+        /*@Interned*/ String[] value_strings_elts_interned = Intern.internStrings(value_strings);
         // ... then, intern the entire array, and return it
-        return Intern.intern(value_strings);
+        return Intern.intern(value_strings_elts_interned);
       } else {
         throw new Error("Can't yet parse array of base type " + base);
       }

@@ -15,12 +15,15 @@ public final class Intern {
 
   /**
    * Replace each element of the array by its interned version.
+   * Side-effects the array, but also returns it.
    * @see String#intern
    **/
-  public static void internStrings(String[] a) {
+  @SuppressWarnings("interning")
+  public static /*@Interned*/ String[] internStrings(String[] a) {
     for (int i=0; i<a.length; i++)
       if (a[i] != null)
         a[i] = a[i].intern();
+    return a;
   }
 
 
@@ -251,8 +254,8 @@ public final class Intern {
   private static WeakHasherMap<SequenceAndIndices<int /*@Interned*/ []>,WeakReference<int /*@Interned*/ []>> internedIntSequenceAndIndices;
   private static WeakHasherMap<SequenceAndIndices<long /*@Interned*/ []>,WeakReference<long /*@Interned*/ []>> internedLongSequenceAndIndices;
   private static WeakHasherMap<SequenceAndIndices<double /*@Interned*/ []>,WeakReference<double /*@Interned*/ []>> internedDoubleSequenceAndIndices;
-  private static WeakHasherMap<SequenceAndIndices<Object /*@Interned*/ []>,WeakReference</*@Interned*/ Object /*@Interned*/ []>> internedObjectSequenceAndIndices;
-  private static WeakHasherMap<SequenceAndIndices<String /*@Interned*/ []>,WeakReference</*@Interned*/ String /*@Interned*/ []>> internedStringSequenceAndIndices;
+  private static WeakHasherMap<SequenceAndIndices</*@Interned*/ Object /*@Interned*/ []>,WeakReference</*@Interned*/ Object /*@Interned*/ []>> internedObjectSequenceAndIndices;
+  private static WeakHasherMap<SequenceAndIndices</*@Interned*/ String /*@Interned*/ []>,WeakReference</*@Interned*/ String /*@Interned*/ []>> internedStringSequenceAndIndices;
 
   static {
     internedIntegers = new WeakHasherMap</*@Interned*/ Integer,WeakReference</*@Interned*/ Integer>>(new IntegerHasher());
@@ -625,13 +628,14 @@ public final class Intern {
   /**
    * @see #internSubsequence(int[], int, int)
    **/
-  public static Object /*@Interned*/ [] internSubsequence (/*@Interned*/ Object /*@Interned*/ [] seq, int start, int end) {
+  public static /*@Interned*/ Object /*@Interned*/ [] internSubsequence (/*@Interned*/ Object /*@Interned*/ [] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
     SequenceAndIndices</*@Interned*/ Object /*@Interned*/ []> sai = new SequenceAndIndices</*@Interned*/ Object /*@Interned*/ []> (seq, start, end);
-    WeakReference<Object /*@Interned*/ []> lookup = internedObjectSequenceAndIndices.get(sai);
+    WeakReference</*@Interned*/ Object /*@Interned*/ []> lookup = internedObjectSequenceAndIndices.get(sai);
     if (lookup != null) {
       return lookup.get();
     } else {
+      /*@Interned*/ Object /*@Interned*/ [] subseq_uninterned_ii = ArraysMDE.subarray(seq, start, end - start);
       /*@Interned*/ Object[] subseq_uninterned = ArraysMDE.subarray(seq, start, end - start);
       /*@Interned*/ Object /*@Interned*/ [] subseq = Intern.intern (subseq_uninterned);
       internedObjectSequenceAndIndices.put (sai, new WeakReference</*@Interned*/ Object /*@Interned*/ []>(subseq));
@@ -645,7 +649,7 @@ public final class Intern {
   public static String /*@Interned*/ [] internSubsequence (/*@Interned*/ String /*@Interned*/ [] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
     SequenceAndIndices</*@Interned*/ String /*@Interned*/ []> sai = new SequenceAndIndices</*@Interned*/ String /*@Interned*/ []> (seq, start, end);
-    WeakReference<String /*@Interned*/ []> lookup = internedStringSequenceAndIndices.get(sai);
+    WeakReference</*@Interned*/ String /*@Interned*/ []> lookup = internedStringSequenceAndIndices.get(sai);
     if (lookup != null) {
       return lookup.get();
     } else {
