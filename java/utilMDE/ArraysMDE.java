@@ -11,6 +11,7 @@ import java.util.*;
  * This complements @link{java.util.Arrays}.
  * Also, some routines also handle Collections.
  **/
+@SuppressWarnings("interning")
 public final class ArraysMDE {
   private ArraysMDE() { throw new Error("do not instantiate"); }
 
