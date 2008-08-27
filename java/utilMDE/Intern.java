@@ -635,7 +635,6 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ Object /*@Interned*/ [] subseq_uninterned_ii = ArraysMDE.subarray(seq, start, end - start);
       /*@Interned*/ Object[] subseq_uninterned = ArraysMDE.subarray(seq, start, end - start);
       /*@Interned*/ Object /*@Interned*/ [] subseq = Intern.intern (subseq_uninterned);
       internedObjectSequenceAndIndices.put (sai, new WeakReference</*@Interned*/ Object /*@Interned*/ []>(subseq));
