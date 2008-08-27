@@ -699,7 +699,7 @@ INTERNING_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.
 # design) but has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
 ## Which files to check.
-INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
+INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -wholename ./daikon/util -prune -o -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 
 intern: check-interning
