@@ -25,7 +25,7 @@ public class CommonStringSequence
   public static boolean dkconfig_enabled = false;
 
   private int elts;
-  private /*@Interned*/ String[] intersect = null;
+  private String[] intersect = null;
 
   protected CommonStringSequence(PptSlice ppt) {
     super(ppt);
