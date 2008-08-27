@@ -25,7 +25,7 @@ public class CommonStringSequence
   public static boolean dkconfig_enabled = false;
 
   private int elts;
-  private String[] intersect = null;
+  private /*@Interned*/ String[] intersect = null;
 
   protected CommonStringSequence(PptSlice ppt) {
     super(ppt);
@@ -108,7 +108,7 @@ public class CommonStringSequence
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect==null) {
-      intersect = a;
+      intersect = Intern.intern(a);
       return InvariantStatus.NO_CHANGE;
     } else {
       String[] tmp = new String[intersect.length];
@@ -122,9 +122,8 @@ public class CommonStringSequence
       if (size==0) {
         return InvariantStatus.FALSIFIED;
       }
-      intersect = ArraysMDE.subarray(tmp, 0, size);
+      intersect = Intern.intern(ArraysMDE.subarray(tmp, 0, size));
     }
-    intersect = Intern.intern(intersect);
     elts++;
     return InvariantStatus.NO_CHANGE;
   }
