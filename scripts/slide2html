@@ -198,6 +198,7 @@
     // else if this is a bullet or numbered list
     } else if (eregi ("^ *<l[in]>", $line)) {
 
+      // echo "processing bullet $line\n";
       $is_bullet = eregi ("^ *<li>", $line);
 
       // Put out a bullet according to indentation
@@ -250,18 +251,7 @@
       } while ($nline && !is_markup ($nline));
         // && (($nindent == $indent) || ($nindent == ($indent+2))));
       fseek ($fp, $pos);
-      $txt = ereg_replace ("@emph4{([^}]*)}",
-                           "<font size=4 color=blue><i>\\1</i></font>", $txt);
-      $txt = ereg_replace ("@emph5{([^}]*)}",
-                           "<font size=5 color=blue><i>\\1</i></font>", $txt);
-      $txt = ereg_replace ("@var{([^}]*)}", "<i>\\1</i>", $txt);
-      $txt = ereg_replace ("@pvar{([^}]*)}", "<code>\\1</code>", $txt);
-      $txt = str_replace (" ^ ", " &and ", $txt);
-      $txt = str_replace (" <= ", " &le ", $txt);
-      $txt = str_replace (" >= ", " &ge ", $txt);
-      $txt = str_replace (" != ", " &ne ", $txt);
-      $txt = str_replace (" => ", " &nbsp;&rArr&nbsp; ", $txt);
-      $txt = str_replace (" !=> ", " &nbsp;&ne;>&nbsp; ", $txt);
+      $txt = fix_txt ($txt);
       printf ($level_fmt[$bullet->level + $level_inc] . "\n", "$txt");
 
     // else if this slide is an image
@@ -321,7 +311,7 @@
       // if (($bullet->level > 0) && trim ($line))
       //  printf ($level_fmt[$bullet->level], $line );
       // else
-        echo "$line\n";
+      echo fix_txt ("$line\n");
     }
 
     $last_indent = $indent;
@@ -330,6 +320,27 @@
 
   // Close off any bullets from the previous slide
   $bullet->close_open_bullets();
+
+  /**
+   * Replaces ascii versions of symbols (eg, >=) with their corresponding
+   * html entities
+   */
+  function fix_txt ($txt) {
+    $txt = ereg_replace ("@emph4{([^}]*)}",
+                         "<font size=4 color=blue><i>\\1</i></font>", $txt);
+    $txt = ereg_replace ("@emph5{([^}]*)}",
+                         "<font size=5 color=blue><i>\\1</i></font>", $txt);
+    $txt = ereg_replace ("@var{([^}]*)}", "<i>\\1</i>", $txt);
+    $txt = ereg_replace ("@pvar{([^}]*)}", "<code>\\1</code>", $txt);
+    $txt = str_replace (" ^ ", " &and ", $txt);
+    $txt = str_replace (" <= ", " &le ", $txt);
+    $txt = str_replace (" >= ", " &ge ", $txt);
+    $txt = str_replace (" != ", " &ne ", $txt);
+    $txt = str_replace (" => ", " &nbsp;&rArr&nbsp; ", $txt);
+    $txt = str_replace (" !=> ", " &nbsp;&ne;>&nbsp; ", $txt);
+    $txt = str_replace ("...", "&hellip;", $txt);
+  return $txt;
+}
 
   function usage ($err_msg) {
     $stderr = fopen ("php://stderr", "w");
