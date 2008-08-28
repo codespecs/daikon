@@ -23,11 +23,27 @@ Further documentation can be found in:
 4.4.3 (September 2008)
 
 Kvasir
+    
+  Kvasir has been updated to produce trace files using the new 
+  format for declaration records. This format should allow
+  for future improvements with regards to readability. the old
+  format can be produced using the flag '--old-decls-format'
+ 
+  User visible changes
+
+    The new declarations format has allowed for some improved handling
+    for determining object invariants in C/C++. Kvasir can now produce
+    object declarations for C/C++ structs. This option is, by default,
+    off and can be turned on with '--parent-records'
 
   Bug fixes
 
     Fixed an issue with VarComparability being inserted into a dtrace file
     twice when in append mode
+
+    Fixed an issue where C++ references were not being dereferenced
+    correctly leading to memory locations to appear in trace files
+    as opposed to the value being referenced    
 
 ----------------------------------------
 
