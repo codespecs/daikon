@@ -703,8 +703,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
       // ensure that var1.varinfo_index <= var2.varinfo_index
       if(var1.varinfo_index > var2.varinfo_index) {
-      	var1 = vis[1];
-      	var2 = vis[0];
+        var1 = vis[1];
+        var2 = vis[0];
       }
 
       // Find slice corresponding to these two variables.
@@ -723,7 +723,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       for(Invariant inv : ppt2.invs) {
         #if defined(TYPEDOUBLE)
         if(inv instanceof LinearBinaryFloat) {
-        	LinearBinaryFloat linv = (LinearBinaryFloat) inv;
+          LinearBinaryFloat linv = (LinearBinaryFloat) inv;
         #else
         if(inv instanceof LinearBinary) {
           LinearBinary linv = (LinearBinary) inv;

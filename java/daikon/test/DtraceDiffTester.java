@@ -23,7 +23,7 @@ public class DtraceDiffTester extends TestCase {
   }
 
   private static boolean diff(String option, String optval,
-			      String file1, String file2) {
+                              String file1, String file2) {
     //System.out.println("Diff: " + file1 + " " + file2);
     return DtraceDiff.mainTester(new String[] {option, optval, find(file1), find(file2)});
   }
@@ -56,11 +56,11 @@ public class DtraceDiffTester extends TestCase {
     // test that command-line options work (to avoid comparing ppts with
     // a missing variable)
     assertTrue(diff("--ppt-omit-pattern", "six170.Hanoi.showTowers*",
-		    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
+                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
     assertTrue(diff("--var-omit-pattern", "this.height",
-		    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
+                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
     assertTrue(diff("--ppt-select-pattern", "six170.Hanoi.moveDisk*",
-		    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
+                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
     // needs to test --var-select-pattern
   }
 

@@ -27,7 +27,7 @@ public final class BinaryVariable extends Addressable<BinaryVariable> implements
     this.value = value;
     // If I don't replace illegal characters (such as []()+*-) I get an error in Daikon:
     //Exception in thread "main" java.lang.UnsupportedOperationException: parse error: '[8+esp]_buf'
-	  // at daikon.VarInfoName.parse(VarInfoName.java:163)
+    // at daikon.VarInfoName.parse(VarInfoName.java:163)
     // todo: find a better replacement that is 1-1 (so we can replace back to the original name)
     fullName = (name.replace('[','_').replace(']','_').replace('(','_').replace(')','_').replace('+','_').replace('*','_').replace('-','_')
         +"_"+getAddr()).intern();

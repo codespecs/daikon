@@ -44,14 +44,14 @@ public final class SplitDtrace {
     writeDtrace(filename, "second-half", recNum/2, 2+recNum);
   }
   private static void writeDtrace(String filename, String out_name, int fromRec, int toRec) throws IOException {
-	  String out = filename.replace(".dtrace","."+out_name+".dtrace");
-	  System.out.println("Writing file "+out);
-	  OutputStream output = new FileOutputStream(out);
+    String out = filename.replace(".dtrace","."+out_name+".dtrace");
+    System.out.println("Writing file "+out);
+    OutputStream output = new FileOutputStream(out);
     boolean isGz = filename.endsWith(".dtrace.gz");
-	  if (isGz)
-		output = new GZIPOutputStream(output);
-	  BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
-	  BufferedReader reader = getStream(filename);
+    if (isGz)
+      output = new GZIPOutputStream(output);
+    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
+    BufferedReader reader = getStream(filename);
 
     int currRecCount = 0;
     HashSet<Integer> nonceSet = new HashSet<Integer>();
@@ -82,8 +82,8 @@ public final class SplitDtrace {
       }
       if (!isDecl) currRecCount++;
     }
-	  reader.close();
-	  writer.close();
+    reader.close();
+    writer.close();
   }
   static int getNonce(ArrayList<String> res) {
     for(int i=0; i<res.size(); i++)

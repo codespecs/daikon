@@ -85,9 +85,9 @@ public class ParameterDoclet
     public DocCategory (String prefix, String name, String desc, String blurb) {
       prefixPattern = prefix;
       if (name == null)
-	fieldName = null;
+        fieldName = null;
       else
-	fieldName = Configuration.PREFIX + name;
+        fieldName = Configuration.PREFIX + name;
       description = desc;
       longBlurb = blurb;
       fields = new HashMap<String,String> ();
@@ -104,28 +104,28 @@ public class ParameterDoclet
       // to the order and the parent document knows the filter option comes
       // first (for node linking).
       new DocCategory("daikon.inv.filter.", "enabled",
-		      "Options to enable/disable filters",
-		      "@cindex filters, enabling/disabling\n"
+                      "Options to enable/disable filters",
+                      "@cindex filters, enabling/disabling\n"
                       + "These configuration options enable or disable filters that suppress printing of certain invariants.  Invariants are filtered if they are found to be true but are considered uninteresting or redundant.  See @ref{Invariant filters}, for more information."),
       new DocCategory("daikon.inv.", "enabled",
-		      "Options to enable/disable specific invariants",
-		      "@cindex invariants, enabling/disabling\n"
-		      + "These options control whether Daikon looks for specific kinds of invariants.  See @ref{Invariant list}, for more information about the corresponding invariants."),
+                      "Options to enable/disable specific invariants",
+                      "@cindex invariants, enabling/disabling\n"
+                      + "These options control whether Daikon looks for specific kinds of invariants.  See @ref{Invariant list}, for more information about the corresponding invariants."),
       new DocCategory("daikon.inv.", null,
-		      "Other invariant configuration parameters",
-		      "@cindex invariants, configuring\n"
-		      + "The configuration options listed in this section parameterize the behavior of certain invariants.  See @ref{Invariant list}, for more information about the invariants."),
+                      "Other invariant configuration parameters",
+                      "@cindex invariants, configuring\n"
+                      + "The configuration options listed in this section parameterize the behavior of certain invariants.  See @ref{Invariant list}, for more information about the invariants."),
       new DocCategory("daikon.derive.", null,
-		      "Options to enable/disable derived variables",
-		      "@cindex derived variables, enabling/disabling\n"
+                      "Options to enable/disable derived variables",
+                      "@cindex derived variables, enabling/disabling\n"
                       + "These options control whether Daikon looks for invariants involving certain forms of derived variables.  Also see @ref{Variable names}."),
       new DocCategory("daikon.simplify.", null,
-		      "Simplify interface configuration options",
+                      "Simplify interface configuration options",
                       "@cindex Simplify theorem prover, configuring\n"
-		      + "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."),
+                      + "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."),
       new DocCategory(null, null,
-		      "General configuration options",
-		      "This section lists miscellaneous configuration options for Daikon.") };
+                      "General configuration options",
+                      "This section lists miscellaneous configuration options for Daikon.") };
   }
 
   /**
@@ -174,11 +174,11 @@ public class ParameterDoclet
 
     for (int i = 0; i < categories.length; i++) {
       if (((categories[i].prefixPattern == null) ||
-	   fullname.startsWith(categories[i].prefixPattern)) &&
-	  ((categories[i].fieldName == null) ||
-	   name.equals(categories[i].fieldName))) {
-	categories[i].fields.put(fullname, desc);
-	break;
+           fullname.startsWith(categories[i].prefixPattern)) &&
+          ((categories[i].fieldName == null) ||
+           name.equals(categories[i].fieldName))) {
+        categories[i].fields.put(fullname, desc);
+        break;
       }
     }
   }
@@ -225,35 +225,35 @@ public class ParameterDoclet
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
       for (String field : keys) {
-	String desc = categories[c].fields.get(field);
-	String defstr = getDefaultString(field);
+        String desc = categories[c].fields.get(field);
+        String defstr = getDefaultString(field);
 
-    // Simpler format for debugging
-    if (false) {
-      String value = defstr.replaceFirst (".*`", "");
-      value = value.replaceFirst ("'.*", "");
-      out.printf ("@item %s %s%n%n", value, field);
-      continue;
-    }
+        // Simpler format for debugging
+        if (false) {
+          String value = defstr.replaceFirst (".*`", "");
+          value = value.replaceFirst ("'.*", "");
+          out.printf ("@item %s %s%n%n", value, field);
+          continue;
+        }
 
 
-	// @item [field]
-	//  [desc]
-	out.println("@item " + field);
-	// Remove leading spaces, which throw off Info.
-	desc = UtilMDE.replaceString (desc, lineSep + " ", lineSep);
-	// Hmmm, causes trouble with embedded @refs!
-	//desc = UtilMDE.replaceString (desc, "{", "@{");
-	//desc = UtilMDE.replaceString (desc, "}", "@}");
-	desc = UtilMDE.replaceString (desc, "<br>", "@*");
-	desc = UtilMDE.replaceString (desc, "<p>", "@*@*");
-	desc = UtilMDE.replaceString (desc, "<samp>", "@samp{");
-	desc = UtilMDE.replaceString (desc, "</samp>", "}");
-	desc = UtilMDE.replaceString (desc, "<code>", "@code{");
-	desc = UtilMDE.replaceString (desc, "</code>", "}");
-	out.println(desc);
-	out.println(defstr);
-	out.println();
+        // @item [field]
+        //  [desc]
+        out.println("@item " + field);
+        // Remove leading spaces, which throw off Info.
+        desc = UtilMDE.replaceString (desc, lineSep + " ", lineSep);
+        // Hmmm, causes trouble with embedded @refs!
+        //desc = UtilMDE.replaceString (desc, "{", "@{");
+        //desc = UtilMDE.replaceString (desc, "}", "@}");
+        desc = UtilMDE.replaceString (desc, "<br>", "@*");
+        desc = UtilMDE.replaceString (desc, "<p>", "@*@*");
+        desc = UtilMDE.replaceString (desc, "<samp>", "@samp{");
+        desc = UtilMDE.replaceString (desc, "</samp>", "}");
+        desc = UtilMDE.replaceString (desc, "<code>", "@code{");
+        desc = UtilMDE.replaceString (desc, "</code>", "}");
+        out.println(desc);
+        out.println(defstr);
+        out.println();
       }
       out.println("@end table");
       out.println();
@@ -271,15 +271,15 @@ public class ParameterDoclet
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
       for (String field : keys) {
-	String desc = categories[c].fields.get(field);
-	String defstr = getDefaultString(field);
+        String desc = categories[c].fields.get(field);
+        String defstr = getDefaultString(field);
 
-	// [field]
-	//   [desc]
-	out.println("  " + field);
-	out.println("    " + desc);
-	out.println("    " + defstr);
-	out.println();
+        // [field]
+        //   [desc]
+        out.println("  " + field);
+        out.println("    " + desc);
+        out.println("    " + defstr);
+        out.println();
       }
     }
   }
@@ -289,7 +289,7 @@ public class ParameterDoclet
       List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
       Collections.sort(keys);
       for (String field : keys) {
-	out.println(field);
+        out.println(field);
       }
     }
   }

@@ -105,9 +105,9 @@ class TagEntry extends WeakReference<Object> {
     ArrayList<StackTraceElement> blarg =
       new ArrayList<StackTraceElement>(Arrays.<StackTraceElement>asList(new Exception().getStackTrace()));
     if (blarg.get(blarg.size() - 1).getClassName()
-				.equals("daikon.dcomp.Premain$ShutdownThread")) return "";
+        .equals("daikon.dcomp.Premain$ShutdownThread")) return "";
     do blarg.remove(0);
-	while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime") ||
+    while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime") ||
            blarg.get(0).getClassName().equals("daikon.dcomp.TagEntry"));
 
     if (daikon.DynComp.trace_line_depth == 1) {
@@ -116,22 +116,22 @@ class TagEntry extends WeakReference<Object> {
              first.getMethodName() + "(), " +
              first.getLineNumber();
     } else {
-			ArrayList<String> blarg2 = new ArrayList<String>(daikon.DynComp.trace_line_depth);
-			try {
-			  for (int i = 0; i < daikon.DynComp.trace_line_depth; i++) {
-					StackTraceElement ste = blarg.get(i);
-					String cname = ste.getClassName();
-					cname = cname.substring(cname.lastIndexOf("."));
-					String fname = ste.getMethodName();
-					int lnum = ste.getLineNumber();
-					blarg2.add(cname + ":" + fname + "(), " + lnum);
-				}
-			} catch (IndexOutOfBoundsException e) {}
-			String result = "";
-			for (String s : blarg2) result += s + " <- ";
-			return result.substring(0, result.length() - 4);
+      ArrayList<String> blarg2 = new ArrayList<String>(daikon.DynComp.trace_line_depth);
+      try {
+        for (int i = 0; i < daikon.DynComp.trace_line_depth; i++) {
+          StackTraceElement ste = blarg.get(i);
+          String cname = ste.getClassName();
+          cname = cname.substring(cname.lastIndexOf("."));
+          String fname = ste.getMethodName();
+          int lnum = ste.getLineNumber();
+          blarg2.add(cname + ":" + fname + "(), " + lnum);
+        }
+      } catch (IndexOutOfBoundsException e) {}
+      String result = "";
+      for (String s : blarg2) result += s + " <- ";
+      return result.substring(0, result.length() - 4);
     }
-	}
+  }
 
   /**
    * Find the entry associated with obj.  If an entry does not currently
@@ -227,7 +227,7 @@ class TagEntry extends WeakReference<Object> {
    * this object is now the root of its tracer tree. (Imprecise wording, I know)
    */
   public void reroute(TagEntry newTracer, String tloc) {
-		try { this.tracer.reroute(this, trace_loc); }
+    try { this.tracer.reroute(this, trace_loc); }
     catch (NullPointerException e) { }
     finally { this.tracer = newTracer; this.trace_loc = tloc; }
 //    if(this.tracer != null) { System.out.println("Tracer not null"); this.tracer.reroute(this); }
@@ -263,7 +263,7 @@ class TagEntry extends WeakReference<Object> {
       List<Object> set = sets.get (rep);
       String line = "";
       for (Object entry : set) {
-        if (line != "")
+        if (line != "")         // "interned"
           line += ", ";
         if (entry instanceof DaikonVariableInfo)
           line += String.format ("%s ", ((DaikonVariableInfo)entry).getName());

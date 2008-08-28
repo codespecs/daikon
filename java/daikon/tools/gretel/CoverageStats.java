@@ -90,8 +90,8 @@ public class CoverageStats
     int ncov_sum = 0;
     for (String file : relevant) {
       if (all.get(file) == null) {
-	System.out.println(file + " not instrumented (?)");
-	continue;
+        System.out.println(file + " not instrumented (?)");
+        continue;
       }
       int nall = all.get(file).size();
       int ncov = (covered.get(file) == null) ? 0 : covered.get(file).size();
@@ -101,8 +101,8 @@ public class CoverageStats
     }
     double pct = ((double) ncov_sum) / nall_sum;
     System.out.println("Total coverage "
-		       + ncov_sum + " of " + nall_sum + " lines ==> "
-		       + (new DecimalFormat("0.00").format(pct)) + " %");
+                       + ncov_sum + " of " + nall_sum + " lines ==> "
+                       + (new DecimalFormat("0.00").format(pct)) + " %");
   }
 
 }

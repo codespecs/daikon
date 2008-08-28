@@ -477,13 +477,13 @@ public final /*(at)Interned*/ class Equality
         newLeader = var;
       }
       else if (newLeader.isDerivedParamAndUninteresting() &&
-	       !var.isDerivedParamAndUninteresting()) {
+               !var.isDerivedParamAndUninteresting()) {
         // System.out.printf ("%s derived and uninteresting, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       }
       else if (var.isDerivedParamAndUninteresting() &&
-	       !newLeader.isDerivedParamAndUninteresting()) {
+               !newLeader.isDerivedParamAndUninteresting()) {
         // do nothing
       }
       else if (var.derivedDepth() < newLeader.derivedDepth()) {

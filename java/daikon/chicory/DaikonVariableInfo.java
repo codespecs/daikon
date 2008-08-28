@@ -27,8 +27,8 @@ public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo>
 {
 
-	/** switch to turn on experimental techniques on static constants */
-	public static boolean dkconfig_constant_infer = false;
+    /** switch to turn on experimental techniques on static constants */
+    public static boolean dkconfig_constant_infer = false;
 
     /** The variable name, if appropriate to the subtype **/
     private final String name;
@@ -739,14 +739,14 @@ public abstract class DaikonVariableInfo
 
                 if (DaikonVariableInfo.dkconfig_constant_infer) {
                     if (value == null) {
-                	    isPrimitive = false;
-                	    String className = field.getDeclaringClass().getName();
+                        isPrimitive = false;
+                        String className = field.getDeclaringClass().getName();
                         // If the class has already been statically initalized, get its hash
-                	    if (Runtime.isInitialized(className)) {
-                		    try {
-                			    value = Integer.toString(System.identityHashCode(field.get(null)));
+                        if (Runtime.isInitialized(className)) {
+                            try {
+                                value = Integer.toString(System.identityHashCode(field.get(null)));
                             } catch(Exception e) {}
-                	    }
+                        }
                     }
                 }
             }
@@ -761,7 +761,7 @@ public abstract class DaikonVariableInfo
                 newField.const_val = value;
                 newField.dtraceShouldPrint = false;
                 if (DaikonVariableInfo.dkconfig_constant_infer && isPrimitive) {
-                	newField.dtraceShouldPrintChildren = false;
+                    newField.dtraceShouldPrintChildren = false;
                 }
             }
             //else

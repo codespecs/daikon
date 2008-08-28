@@ -300,9 +300,9 @@ public class InvariantDoclet
         for (FieldDoc f : config_vars) {
           out.print("    @item ");
           out.println("@samp{" +
-		      UtilMDE.replaceString(f.qualifiedName(),
+                      UtilMDE.replaceString(f.qualifiedName(),
                                             Configuration.PREFIX, "")
-		      + "}");
+                      + "}");
         }
         out.println("    @end itemize");
       }

@@ -81,35 +81,35 @@ public class SplitterFactory {
    */
 
   public static void load_splitters (PptTopLevel ppt,
-				     List<SpinfoFileParser> splitters)
+                                     List<SpinfoFileParser> splitters)
   {
     for (SpinfoFileParser fileParser : splitters) {
       SplitterObject[][] splitterObjects = fileParser.getSplitterObjects();
       StatementReplacer statementReplacer = fileParser.getReplacer();
       for (int i = 0; i < splitterObjects.length; i++) {
-	int numsplitters = splitterObjects[i].length;
-	if (numsplitters != 0) {
-	  String ppt_name = splitterObjects[i][0].getPptName();
-	  if (matchPpt(ppt_name, ppt)) {
+        int numsplitters = splitterObjects[i].length;
+        if (numsplitters != 0) {
+          String ppt_name = splitterObjects[i][0].getPptName();
+          if (matchPpt(ppt_name, ppt)) {
             // Writes, compiles, and loads the splitter .java files.
-	    loadSplitters(splitterObjects[i], ppt, statementReplacer);
-	    Vector<Splitter> sp = new Vector<Splitter>();
-	    for (int k = 0; k < numsplitters; k++) {
-	      if (splitterObjects[i][k].splitterExists()) {
-		sp.addElement(splitterObjects[i][k].getSplitter());
-	      } else if (! Daikon.dkconfig_suppressSplitterErrors) {
-		System.out.println(splitterObjects[i][k].getError());
-	      }
-	    }
-	    if (sp.size() >= 1) {
-	      SplitterList.put (ppt_name, sp.toArray(new Splitter[0]));
-	    }
-	    // delete this entry in the splitter array to prevent it from
-	    // matching any other Ppts, since the documented behavior is that
-	    // it only matches one.
-	    splitterObjects[i] = new SplitterObject[0];
-	  }
-	}
+            loadSplitters(splitterObjects[i], ppt, statementReplacer);
+            Vector<Splitter> sp = new Vector<Splitter>();
+            for (int k = 0; k < numsplitters; k++) {
+              if (splitterObjects[i][k].splitterExists()) {
+                sp.addElement(splitterObjects[i][k].getSplitter());
+              } else if (! Daikon.dkconfig_suppressSplitterErrors) {
+                System.out.println(splitterObjects[i][k].getError());
+              }
+            }
+            if (sp.size() >= 1) {
+              SplitterList.put (ppt_name, sp.toArray(new Splitter[0]));
+            }
+            // delete this entry in the splitter array to prevent it from
+            // matching any other Ppts, since the documented behavior is that
+            // it only matches one.
+            splitterObjects[i] = new SplitterObject[0];
+          }
+        }
       }
     }
   }
@@ -213,7 +213,7 @@ public class SplitterFactory {
     if (ppt_name.endsWith(":::EXIT")) {
       String regex = UtilMDE.patternQuote(ppt_name) + "[0-9]+";
       if (matchPptRegex(regex, ppt))
-	return true;
+        return true;
     }
 
     // look for corresponding EXIT ppt. This is because the exit ppt usually has

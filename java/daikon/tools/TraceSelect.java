@@ -153,7 +153,7 @@ public class TraceSelect {
     try {
 
       // invokeBuffer = new ArrayList();
-      //	    fileName = args[1];
+      // fileName = args[1];
 
       System.out.println ("*******Processing********");
 
@@ -240,8 +240,8 @@ public class TraceSelect {
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println ("Created file: " + dtraceName);
-    String[] daikonArgs = {	 dtraceName,
-                                 "-o", dtraceName + ".inv"};
+    String[] daikonArgs = { dtraceName,
+                            "-o", dtraceName + ".inv"};
 
     // this part adds on the rest of the decls files
     ArrayList<String> al = new ArrayList<String> ();
@@ -314,35 +314,35 @@ class InvocationComparator implements Comparator<String> {
     /** Requires:  s1 and s2 are String representations of invocations
      *  from a tracefile. */
     public int compare (String s1, String s2) {
-        if (s1 == s2) {
-            return 0;
-        }
+      if (s1 == s2) {
+        return 0;
+      }
 
-	// sorts first by program point
-	int pptCompare = s1.substring (0, s1.indexOf(":::")).compareTo
-	    (s2.substring (0, s2.indexOf(":::")));
-	if (pptCompare != 0) return pptCompare;
+      // sorts first by program point
+      int pptCompare = s1.substring (0, s1.indexOf(":::")).compareTo
+        (s2.substring (0, s2.indexOf(":::")));
+      if (pptCompare != 0) return pptCompare;
 
-	// next sorts based on the other stuff
-	int nonce1 = getNonce (s1);
-	int nonce2 = getNonce (s2);
-	int type1 = getType (s1);
-	int type2 = getType (s2);
-	// This makes sure nounce takes priority, ties are broken
-	// so that ENTER comes before EXIT for the same program point
-	return 3 * (nonce1 - nonce2) + (type1 - type2);
+      // next sorts based on the other stuff
+      int nonce1 = getNonce (s1);
+      int nonce2 = getNonce (s2);
+      int type1 = getType (s1);
+      int type2 = getType (s2);
+      // This makes sure nounce takes priority, ties are broken
+      // so that ENTER comes before EXIT for the same program point
+      return 3 * (nonce1 - nonce2) + (type1 - type2);
     }
 
     private int getNonce (String s1) {
-	if (s1.indexOf ("OBJECT") != -1 ||
-	    s1.indexOf ("CLASS") != -1) {
-	    // it's ok, no chance of overflow wrapa round
-	    return Integer.MAX_VALUE;
-	}
-	StringTokenizer st = new StringTokenizer(s1);
-	st.nextToken();
-	st.nextToken();
-	return Integer.parseInt (st.nextToken());
+      if (s1.indexOf ("OBJECT") != -1 ||
+          s1.indexOf ("CLASS") != -1) {
+        // it's ok, no chance of overflow wrapa round
+        return Integer.MAX_VALUE;
+      }
+      StringTokenizer st = new StringTokenizer(s1);
+      st.nextToken();
+      st.nextToken();
+      return Integer.parseInt (st.nextToken());
     }
 
     private int getType(String s1) {

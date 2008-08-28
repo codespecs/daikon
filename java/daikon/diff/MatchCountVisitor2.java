@@ -87,8 +87,8 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
       // which one we choose when adding to recall -LL
       correctSet.add (key1);
 
-      //	System.out.println("K1: " + key1);
-      //        System.out.println ("K2: " + key2);
+      // System.out.println("K1: " + key1);
+      // System.out.println ("K2: " + key2);
 
       String thisPptName1 = inv1.ppt.name();
       // System.out.println ("NAME1: " + tmpStr1);

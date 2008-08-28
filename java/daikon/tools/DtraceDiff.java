@@ -20,26 +20,26 @@ public class DtraceDiff {
   private static String usage =
     UtilMDE.joinLines(
         "Usage: DtraceDiff [OPTION]... [DECLS1]... DTRACE1 [DECLS2]... DTRACE2",
-	"DTRACE1 and DTRACE2 are the data trace files to be compared.",
-	"You may optionally specify corresponding DECLS files for each one.",
-	"If no DECLS file is specified, it is assumed that the declarations",
-	"are included in the data trace file instead.",
-	"OPTIONs are:",
-	"  -h, --" + Daikon.help_SWITCH,
-	"      Display this usage message",
-	"  --" + Daikon.ppt_regexp_SWITCH,
-	"      Only include ppts matching regexp",
-	"  --" + Daikon.ppt_omit_regexp_SWITCH,
-	"      Omit all ppts matching regexp",
-	"  --" + Daikon.var_regexp_SWITCH,
-	"      Only include variables matching regexp",
-	"  --" + Daikon.var_omit_regexp_SWITCH,
-	"      Omit all variables matching regexp",
-	"  --" + Daikon.config_SWITCH,
-	"      Specify a configuration file ",
-	"  --" + Daikon.config_option_SWITCH,
-	"      Specify a configuration option ",
-	"See the Daikon manual for more information."
+        "DTRACE1 and DTRACE2 are the data trace files to be compared.",
+        "You may optionally specify corresponding DECLS files for each one.",
+        "If no DECLS file is specified, it is assumed that the declarations",
+        "are included in the data trace file instead.",
+        "OPTIONs are:",
+        "  -h, --" + Daikon.help_SWITCH,
+        "      Display this usage message",
+        "  --" + Daikon.ppt_regexp_SWITCH,
+        "      Only include ppts matching regexp",
+        "  --" + Daikon.ppt_omit_regexp_SWITCH,
+        "      Omit all ppts matching regexp",
+        "  --" + Daikon.var_regexp_SWITCH,
+        "      Only include variables matching regexp",
+        "  --" + Daikon.var_omit_regexp_SWITCH,
+        "      Omit all variables matching regexp",
+        "  --" + Daikon.config_SWITCH,
+        "      Specify a configuration file ",
+        "  --" + Daikon.config_option_SWITCH,
+        "      Specify a configuration option ",
+        "See the Daikon manual for more information."
         );
 
 
@@ -100,88 +100,88 @@ public class DtraceDiff {
     while ((c = g.getopt()) != -1) {
       switch(c) {
 
-	// long option
+        // long option
       case 0:
         String option_name = longopts[g.getLongind()].getName();
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
-	} else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
-	  if (Daikon.ppt_regexp != null)
-	    throw new Error("multiple --"
-			    + Daikon.ppt_regexp_SWITCH
-			    + " regular expressions supplied on command line");
-	  try {
-	    String regexp_string = g.getOptarg();
-	    // System.out.println("Regexp = " + regexp_string);
-	    Daikon.ppt_regexp = Pattern.compile(regexp_string);
-	  } catch (Exception e) {
-	    throw new Error(e);
-	  }
-	  break;
-	} else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
-	  if (Daikon.ppt_omit_regexp != null)
-	    throw new Error("multiple --"
-			    + Daikon.ppt_omit_regexp_SWITCH
-			    + " regular expressions supplied on command line");
-	  try {
-	    String regexp_string = g.getOptarg();
-	    // System.out.println("Regexp = " + regexp_string);
-	    Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
-	  } catch (Exception e) {
-	    throw new Error(e);
-	  }
-	  break;
-	} else if (Daikon.var_regexp_SWITCH.equals(option_name)) {
-	  if (Daikon.var_regexp != null)
-	    throw new Error("multiple --"
-			    + Daikon.var_regexp_SWITCH
-			    + " regular expressions supplied on command line");
-	  try {
-	    String regexp_string = g.getOptarg();
-	    // System.out.println("Regexp = " + regexp_string);
-	    Daikon.var_regexp = Pattern.compile(regexp_string);
-	  } catch (Exception e) {
-	    throw new Error(e);
-	  }
-	  break;
-	} else if (Daikon.var_omit_regexp_SWITCH.equals(option_name)) {
-	  if (Daikon.var_omit_regexp != null)
-	    throw new Error("multiple --"
-			    + Daikon.var_omit_regexp_SWITCH
-			    + " regular expressions supplied on command line");
-	  try {
-	    String regexp_string = g.getOptarg();
-	    // System.out.println("Regexp = " + regexp_string);
-	    Daikon.var_omit_regexp = Pattern.compile(regexp_string);
-	  } catch (Exception e) {
-	    throw new Error(e);
-	  }
-	  break;
-	} else if (Daikon.config_SWITCH.equals(option_name)) {
-	  String config_file = g.getOptarg();
-	  try {
-	    InputStream stream =
-	      new FileInputStream(config_file);
-	    Configuration.getInstance().apply(stream);
-	  } catch (IOException e) {
-	    throw new RuntimeException("Could not open config file "
-				       + config_file);
-	  }
-	  break;
-	} else if (Daikon.config_option_SWITCH.equals(option_name)) {
-	  String item = g.getOptarg();
-	  Configuration.getInstance().apply(item);
-	  break;
+        } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
+          if (Daikon.ppt_regexp != null)
+            throw new Error("multiple --"
+                            + Daikon.ppt_regexp_SWITCH
+                            + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            // System.out.println("Regexp = " + regexp_string);
+            Daikon.ppt_regexp = Pattern.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e);
+          }
+          break;
+        } else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
+          if (Daikon.ppt_omit_regexp != null)
+            throw new Error("multiple --"
+                            + Daikon.ppt_omit_regexp_SWITCH
+                            + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            // System.out.println("Regexp = " + regexp_string);
+            Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e);
+          }
+          break;
+        } else if (Daikon.var_regexp_SWITCH.equals(option_name)) {
+          if (Daikon.var_regexp != null)
+            throw new Error("multiple --"
+                            + Daikon.var_regexp_SWITCH
+                            + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            // System.out.println("Regexp = " + regexp_string);
+            Daikon.var_regexp = Pattern.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e);
+          }
+          break;
+        } else if (Daikon.var_omit_regexp_SWITCH.equals(option_name)) {
+          if (Daikon.var_omit_regexp != null)
+            throw new Error("multiple --"
+                            + Daikon.var_omit_regexp_SWITCH
+                            + " regular expressions supplied on command line");
+          try {
+            String regexp_string = g.getOptarg();
+            // System.out.println("Regexp = " + regexp_string);
+            Daikon.var_omit_regexp = Pattern.compile(regexp_string);
+          } catch (Exception e) {
+            throw new Error(e);
+          }
+          break;
+        } else if (Daikon.config_SWITCH.equals(option_name)) {
+          String config_file = g.getOptarg();
+          try {
+            InputStream stream =
+              new FileInputStream(config_file);
+            Configuration.getInstance().apply(stream);
+          } catch (IOException e) {
+            throw new RuntimeException("Could not open config file "
+                                       + config_file);
+          }
+          break;
+        } else if (Daikon.config_option_SWITCH.equals(option_name)) {
+          String item = g.getOptarg();
+          Configuration.getInstance().apply(item);
+          break;
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
         }
 
-	//short options
+        //short options
       case 'h':
-	System.out.println(usage);
-	throw new Daikon.TerminationMessage();
+        System.out.println(usage);
+        throw new Daikon.TerminationMessage();
 
       case '?':
         break; // getopt() already printed an error
@@ -215,9 +215,9 @@ public class DtraceDiff {
   }
 
   public static void dtraceDiff (Set<File> declsfile1,
-				 String dtracefile1,
-				 Set<File> declsfile2,
-				 String dtracefile2) {
+                                 String dtracefile1,
+                                 Set<File> declsfile2,
+                                 String dtracefile2) {
 
     // System.out.printf ("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
     FileIO.new_decl_format = false;
@@ -233,89 +233,89 @@ public class DtraceDiff {
         new FileIO.ParseState (dtracefile2, false, true, ppts2);
 
       while (true) {
-	// *** should do some kind of progress bar here?
-	// read from dtracefile1 until we get a data trace record or EOF
-	while (true) {
-	  FileIO.read_data_trace_record (state1);
-	  if (state1.status == FileIO.ParseStatus.SAMPLE)
-	    break;
-	  else if ((state1.status == FileIO.ParseStatus.EOF)
-		   || (state1.status == FileIO.ParseStatus.TRUNCATED))
-	    break;
-	}
-	// read from dtracefile2 until we get a data trace record or EOF
-	while (true) {
-	  FileIO.read_data_trace_record (state2);
-	  if (state2.status == FileIO.ParseStatus.SAMPLE)
-	    break;
-	  else if ((state2.status == FileIO.ParseStatus.EOF)
-		   || (state2.status == FileIO.ParseStatus.TRUNCATED))
-	    break;
-	}
+        // *** should do some kind of progress bar here?
+        // read from dtracefile1 until we get a data trace record or EOF
+        while (true) {
+          FileIO.read_data_trace_record (state1);
+          if (state1.status == FileIO.ParseStatus.SAMPLE)
+            break;
+          else if ((state1.status == FileIO.ParseStatus.EOF)
+                   || (state1.status == FileIO.ParseStatus.TRUNCATED))
+            break;
+        }
+        // read from dtracefile2 until we get a data trace record or EOF
+        while (true) {
+          FileIO.read_data_trace_record (state2);
+          if (state2.status == FileIO.ParseStatus.SAMPLE)
+            break;
+          else if ((state2.status == FileIO.ParseStatus.EOF)
+                   || (state2.status == FileIO.ParseStatus.TRUNCATED))
+            break;
+        }
 
-	// things had better be the same
-	if (state1.status == state2.status) {
-	  if (state1.status == FileIO.ParseStatus.SAMPLE) {
-	    PptTopLevel ppt1 = state1.ppt;
-	    PptTopLevel ppt2 = state2.ppt;
-	    ValueTuple vt1 = state1.vt;
-	    ValueTuple vt2 = state2.vt;
-	    VarInfo[] vis1 = ppt1.var_infos;
-	    VarInfo[] vis2 = ppt2.var_infos;
+        // things had better be the same
+        if (state1.status == state2.status) {
+          if (state1.status == FileIO.ParseStatus.SAMPLE) {
+            PptTopLevel ppt1 = state1.ppt;
+            PptTopLevel ppt2 = state2.ppt;
+            ValueTuple vt1 = state1.vt;
+            ValueTuple vt2 = state2.vt;
+            VarInfo[] vis1 = ppt1.var_infos;
+            VarInfo[] vis2 = ppt2.var_infos;
 
-	    // Check to see that Ppts match the first time we encounter them
-	    PptTopLevel foundppt = pptmap.get(ppt1);
-	    if (foundppt == null) {
-	      if (!ppt1.name.equals(ppt2.name))
-		ppt_mismatch_error (state1, dtracefile1, state2, dtracefile2);
-	      for (int i = 0;
-		   (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars);
-		   i++) {
-		// *** what about comparability and aux info?
-		if ((!vis1[i].name().equals(vis2[i].name()))
-		    || (vis1[i].is_static_constant != vis2[i].is_static_constant)
-		    || ((vis1[i].is_static_constant) &&
-			!values_are_equal (vis1[i],
-					   vis1[i].constantValue(),
-					   vis2[i].constantValue()))
-		    || ((vis1[i].type != vis2[i].type) ||
-			(vis1[i].file_rep_type != vis2[i].file_rep_type)))
-		  ppt_var_decl_error (vis1[i], state1, dtracefile1,
-				      vis2[i], state2, dtracefile2);
-	      }
-	      if (ppt1.num_tracevars != ppt2.num_tracevars)
-		ppt_decl_error (state1, dtracefile1, state2, dtracefile2);
-	      pptmap.put(ppt1, ppt2);
-	    } else if (foundppt != ppt2) {
-	      ppt_mismatch_error (state1, dtracefile1, state2, dtracefile2);
-	    }
+            // Check to see that Ppts match the first time we encounter them
+            PptTopLevel foundppt = pptmap.get(ppt1);
+            if (foundppt == null) {
+              if (!ppt1.name.equals(ppt2.name))
+                ppt_mismatch_error (state1, dtracefile1, state2, dtracefile2);
+              for (int i = 0;
+                   (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars);
+                   i++) {
+                // *** what about comparability and aux info?
+                if ((!vis1[i].name().equals(vis2[i].name()))
+                    || (vis1[i].is_static_constant != vis2[i].is_static_constant)
+                    || ((vis1[i].is_static_constant) &&
+                        !values_are_equal (vis1[i],
+                                           vis1[i].constantValue(),
+                                           vis2[i].constantValue()))
+                    || ((vis1[i].type != vis2[i].type) ||
+                        (vis1[i].file_rep_type != vis2[i].file_rep_type)))
+                  ppt_var_decl_error (vis1[i], state1, dtracefile1,
+                                      vis2[i], state2, dtracefile2);
+              }
+              if (ppt1.num_tracevars != ppt2.num_tracevars)
+                ppt_decl_error (state1, dtracefile1, state2, dtracefile2);
+              pptmap.put(ppt1, ppt2);
+            } else if (foundppt != ppt2) {
+              ppt_mismatch_error (state1, dtracefile1, state2, dtracefile2);
+            }
 
-	    // check to see that variables on this pair of samples match
-	    for (int i = 0; i < ppt1.num_tracevars; i++) {
-	      if (vis1[i].is_static_constant)
-		continue;
-	      boolean missing1 = vt1.isMissingNonsensical(vis1[i]);
-	      boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
-	      Object val1 = vt1.getValue(vis1[i]);
-	      Object val2 = vt2.getValue(vis2[i]);
-	      if ((missing1 != missing2)
-		  || (! (missing1 || values_are_equal(vis1[i], val1, val2))))
-		ppt_var_value_error (vis1[i], val1, state1, dtracefile1,
-				     vis2[i], val2, state2, dtracefile2);
-	    }
-	  }
-	  else
-	    return;  // EOF on both files ==> normal return
-	}
-	else if ((state1.status == FileIO.ParseStatus.TRUNCATED)
-		 || (state1.status == FileIO.ParseStatus.TRUNCATED))
-	  return;  // either file reached truncation limit, return quietly
-	else if (state1.status == FileIO.ParseStatus.EOF) {
-	  throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
+            // check to see that variables on this pair of samples match
+            for (int i = 0; i < ppt1.num_tracevars; i++) {
+              if (vis1[i].is_static_constant)
+                continue;
+              boolean missing1 = vt1.isMissingNonsensical(vis1[i]);
+              boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
+              Object val1 = vt1.getValue(vis1[i]);
+              Object val2 = vt2.getValue(vis2[i]);
+              if ((missing1 != missing2)
+                  || (! (missing1 || values_are_equal(vis1[i], val1, val2))))
+                ppt_var_value_error (vis1[i], val1, state1, dtracefile1,
+                                     vis2[i], val2, state2, dtracefile2);
+            }
+          }
+          else
+            return;  // EOF on both files ==> normal return
+        }
+        else if ((state1.status == FileIO.ParseStatus.TRUNCATED)
+                 || (state1.status == FileIO.ParseStatus.TRUNCATED))
+          return;  // either file reached truncation limit, return quietly
+        else if (state1.status == FileIO.ParseStatus.EOF) {
+          throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
                                     + "at end of %s", state2.ppt.name(),
                                     dtracefile2, state2.lineNum, dtracefile1));
-	} else {
-	  throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
+        } else {
+          throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
                                     + "at end of %s", state1.ppt.name(),
                                     dtracefile1, state1.lineNum, dtracefile2));
     }
@@ -328,84 +328,84 @@ public class DtraceDiff {
   }
 
   private static boolean values_are_equal (VarInfo vi,
-					   Object val1,
-					   Object val2) {
+                                           Object val1,
+                                           Object val2) {
     ProglangType type = vi.file_rep_type;
     // System.out.printf ("values_are_equal type = %s%n", type);
     if (type.isArray ()) {
       // array case
       if (type.isPointerFileRep()) {
-	long[] v1 = (long[])val1;
-	long[] v2 = (long[])val2;
-	if (v1.length != v2.length)
-	  return false;
-	for (int i = 0; i<v1.length; i++)
-	  if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i]))
-	    return false;
-	return true;
+        long[] v1 = (long[])val1;
+        long[] v2 = (long[])val2;
+        if (v1.length != v2.length)
+          return false;
+        for (int i = 0; i<v1.length; i++)
+          if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i]))
+            return false;
+        return true;
       }
       else if (type.baseIsScalar()) {
-	long[] v1 = (long[])val1;
-	long[] v2 = (long[])val2;
-	if (v1.length != v2.length)
-	  return false;
-	for (int i = 0; i<v1.length; i++)
-	  if (v1[i] != v2[i])
-	    return false;
-	return true;
+        long[] v1 = (long[])val1;
+        long[] v2 = (long[])val2;
+        if (v1.length != v2.length)
+          return false;
+        for (int i = 0; i<v1.length; i++)
+          if (v1[i] != v2[i])
+            return false;
+        return true;
       }
       else if (type.baseIsFloat()) {
-	double[] v1 = (double[])val1;
-	double[] v2 = (double[])val2;
-	if (v1.length != v2.length)
-	  return false;
-	for (int i = 0; i<v1.length; i++)
+        double[] v1 = (double[])val1;
+        double[] v2 = (double[])val2;
+        if (v1.length != v2.length)
+          return false;
+        for (int i = 0; i<v1.length; i++)
           if (!((Double.isNaN(v1[i]) && Double.isNaN(v2[i]))
                 || Global.fuzzy.eq(v1[i], v2[i])))
             return false;
-	return true;
+        return true;
       }
       else if (type.baseIsString()) {
-	String[] v1 = (String[])val1;
-	String[] v2 = (String[])val2;
-	if (v1.length != v2.length)
-	  return false;
-	for (int i = 0; i<v1.length; i++)
-	  {
+        String[] v1 = (String[])val1;
+        String[] v2 = (String[])val2;
+        if (v1.length != v2.length)
+          return false;
+        for (int i = 0; i<v1.length; i++)
+          {
         // System.out.printf ("string array[%d] %s %s%n", i, v1[i], v2[i]);
-	    if ((v1[i] == null) && (v2[i] == null))
-	      ;
-	    else if ((v1[i] == null) || (v2[i] == null))
-	      return false;
-	    else if (!v1[i].equals(v2[i]))
-	      return false;
-	  }
-	return true;
+            if ((v1[i] == null) && (v2[i] == null))
+              ;
+            else if ((v1[i] == null) || (v2[i] == null))
+              return false;
+            else if (!v1[i].equals(v2[i]))
+              return false;
+          }
+        return true;
       }
     } else {
       // scalar case
       if (type.isPointerFileRep()) {
-	Long v1 = ((Long)val1).longValue();
-	Long v2 = ((Long)val2).longValue();
-	return !(((v1 == 0) || (v2 == 0)) && (v1 != v2));
+        Long v1 = ((Long)val1).longValue();
+        Long v2 = ((Long)val2).longValue();
+        return !(((v1 == 0) || (v2 == 0)) && (v1 != v2));
       }
       else if (type.isScalar())
-	return (((Long)val1).longValue() == ((Long)val2).longValue());
+        return (((Long)val1).longValue() == ((Long)val2).longValue());
       else if (type.isFloat()) {
         double d1 = ((Double)val1).doubleValue();
         double d2 = ((Double)val2).doubleValue();
-	return ((Double.isNaN(d1) && Double.isNaN(d2))
+        return ((Double.isNaN(d1) && Double.isNaN(d2))
                 || Global.fuzzy.eq (d1, d2));
       } else if (type.isString())
-	return (((String)val1).equals((String)val2));
+        return (((String)val1).equals((String)val2));
     }
     throw new Error ("Unexpected value type found");  // should never happen
   }
 
   private static void ppt_mismatch_error (FileIO.ParseState state1,
-					  String dtracefile1,
-					  FileIO.ParseState state2,
-					  String dtracefile2) {
+                                          String dtracefile1,
+                                          FileIO.ParseState state2,
+                                          String dtracefile2) {
     throw new DiffError
       (String.format("Mismatched program point:%n"
                      + "  ppt %s at %s:%d%n"
@@ -415,9 +415,9 @@ public class DtraceDiff {
   }
 
   private static void ppt_decl_error (FileIO.ParseState state1,
-				      String dtracefile1,
-				      FileIO.ParseState state2,
-				      String dtracefile2) {
+                                      String dtracefile1,
+                                      FileIO.ParseState state2,
+                                      String dtracefile2) {
     throw new DiffError
       (String.format("Mismatched program point declaration:%n"
                      + "  ppt %s at %s:%d%n"
@@ -427,11 +427,11 @@ public class DtraceDiff {
   }
 
   private static void ppt_var_decl_error (VarInfo vi1,
-					  FileIO.ParseState state1,
-					  String dtracefile1,
-					  VarInfo vi2,
-					  FileIO.ParseState state2,
-					  String dtracefile2) {
+                                          FileIO.ParseState state1,
+                                          String dtracefile1,
+                                          VarInfo vi2,
+                                          FileIO.ParseState state2,
+                                          String dtracefile2) {
     assert state1.ppt.name.equals(state2.ppt.name);
     throw new DiffError
       (String.format("Mismatched variable declaration in program point %s:%n"
@@ -444,12 +444,12 @@ public class DtraceDiff {
 
   private static void ppt_var_value_error (VarInfo vi1,
                                            Object val1,
-					   FileIO.ParseState state1,
-					   String dtracefile1,
-					   VarInfo vi2,
+                                           FileIO.ParseState state1,
+                                           String dtracefile1,
+                                           VarInfo vi2,
                                            Object val2,
-					   FileIO.ParseState state2,
-					   String dtracefile2) {
+                                           FileIO.ParseState state2,
+                                           String dtracefile2) {
     assert vi1.name().equals(vi2.name());
     assert state1.ppt.name.equals(state2.ppt.name);
     throw new DiffError

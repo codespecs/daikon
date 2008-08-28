@@ -503,8 +503,8 @@ public final class CLASSNAME
 
     // sometimes the points are still null
     if (dummy[0] == null) {
-    	return InvariantStatus.FALSIFIED;
-   	}
+      return InvariantStatus.FALSIFIED;
+    }
 
     // calculate the coefficients of the equation (a, b, c, d)
     double[] coef = calc_tri_linear (dummy);
@@ -601,9 +601,9 @@ public final class CLASSNAME
 
     // dummy[0] could be null when all the points are NaN
     if (dummy[0] == null) {
-    	// line_flag == Flag.NO_LINE so the invariant
-    	// will try to fit a plane to the points and fail
-    	return;
+      // line_flag == Flag.NO_LINE so the invariant
+      // will try to fit a plane to the points and fail
+      return;
     } else {
       // find the equation (coefficients now stored in coefficients[])
       calc_bi_linear(dummy);
@@ -646,7 +646,7 @@ public final class CLASSNAME
       return EQUAL(coefficients[0], y) && EQUAL(coefficients[1], z);
 
     case X_CONSTANT:
-     	return EQUAL(coefficients[0], x) && EQUAL(z, coefficients[1] * y + coefficients[2]);
+      return EQUAL(coefficients[0], x) && EQUAL(z, coefficients[1] * y + coefficients[2]);
 
     case Y_CONSTANT:
       return EQUAL(coefficients[0], y) && EQUAL(z, coefficients[1] * x + coefficients[2]);

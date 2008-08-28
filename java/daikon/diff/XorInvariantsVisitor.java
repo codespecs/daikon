@@ -29,9 +29,9 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
     }
 
     public void visit (InvNode node) {
-	Invariant inv1 = node.getInv1();
-	Invariant inv2 = node.getInv2();
-	// do nothing if they are unique
+        Invariant inv1 = node.getInv1();
+        Invariant inv2 = node.getInv2();
+        // do nothing if they are unique
 
         if (shouldPrint (inv1, inv2)) {
             // do nothing, keep both

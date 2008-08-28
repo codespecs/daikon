@@ -34,32 +34,32 @@ public class Runtime {
      * Returns the list of violations.
      */
     public static synchronized List<Violation> getViolations() {
-	List<Violation> retval = new ArrayList<Violation>();
-	for (Violation v : violations) {
-	    retval.add(v);
-	}
-	return retval;
+        List<Violation> retval = new ArrayList<Violation>();
+        for (Violation v : violations) {
+            retval.add(v);
+        }
+        return retval;
     }
 
     /**
      * Empty the violations list.
      */
     public static synchronized void resetViolations() {
-	violations = new ArrayList<Violation>();
+        violations = new ArrayList<Violation>();
     }
 
     /**
      * True if the violations list is empty.
      */
     public static synchronized boolean violationsEmpty() {
-	return violations.isEmpty();
+        return violations.isEmpty();
     }
 
     /**
      * Add a violation to the violations list.
      */
     public static synchronized void violationsAdd(Violation v) {
-	violations.add(v);
+        violations.add(v);
     }
 
 }

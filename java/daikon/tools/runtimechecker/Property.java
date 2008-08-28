@@ -535,20 +535,20 @@ public class Property implements Serializable {
     private Object readResolve() throws ObjectStreamException {
         try {
 
-	    Property anno = get(kind(), daikonRep(), method());
-	    Assert.assertTrue(anno.invRep == null || anno.invRep.equals(this.invRep),
-			      "anno.invRep==" + anno.invRep + " this.invRep==" + this.invRep);
-	    Assert.assertTrue(anno.daikonClass == null || anno.daikonClass.equals(this.daikonClass),
-			      "anno.daikonClass==" + anno.daikonClass + " this.daikonClass==" + this.daikonClass);
-	    Assert.assertTrue(anno.confidence == 0 || anno.confidence == this.confidence,
-			      "anno.confidence==" + anno.confidence + " this.confidence==" + this.confidence);
-	    if (anno.invRep == null) {
-		anno.invRep = this.invRep;
-		anno.daikonClass = this.daikonClass;
-		anno.confidence = this.confidence;
-	    }
+            Property anno = get(kind(), daikonRep(), method());
+            Assert.assertTrue(anno.invRep == null || anno.invRep.equals(this.invRep),
+                              "anno.invRep==" + anno.invRep + " this.invRep==" + this.invRep);
+            Assert.assertTrue(anno.daikonClass == null || anno.daikonClass.equals(this.daikonClass),
+                              "anno.daikonClass==" + anno.daikonClass + " this.daikonClass==" + this.daikonClass);
+            Assert.assertTrue(anno.confidence == 0 || anno.confidence == this.confidence,
+                              "anno.confidence==" + anno.confidence + " this.confidence==" + this.confidence);
+            if (anno.invRep == null) {
+                anno.invRep = this.invRep;
+                anno.daikonClass = this.daikonClass;
+                anno.confidence = this.confidence;
+            }
 
-	    return anno;
+            return anno;
 
         } catch (MalformedPropertyException e) {
             throw new Error(e);

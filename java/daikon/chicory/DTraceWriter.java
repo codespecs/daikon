@@ -187,14 +187,14 @@ public class DTraceWriter extends DaikonWriter
     {
         if (!curInfo.dTraceShouldPrint())
         {
-        	if (DaikonVariableInfo.dkconfig_constant_infer) {
+            if (DaikonVariableInfo.dkconfig_constant_infer) {
                 if (curInfo.dTraceShouldPrintChildren()) {
-        	        for (DaikonVariableInfo child : curInfo) {
-        	    	    Object childVal = child.getMyValFromParentVal(val);
-        	            traverseValue(mi, child, childVal);
-        	        }
-        	    }
-        	}    	            
+                    for (DaikonVariableInfo child : curInfo) {
+                        Object childVal = child.getMyValFromParentVal(val);
+                        traverseValue(mi, child, childVal);
+                    }
+                }
+            }
             return;
         }
 

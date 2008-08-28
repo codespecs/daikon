@@ -1787,11 +1787,11 @@ public final class Daikon {
     }
     if (pconds != null) {
       if (Global.debugSplit.isLoggable(Level.FINE)) {
-	Global.debugSplit.fine(
-			       "Got "
-			       + UtilMDE.nplural(pconds.length, "splitter")
-			       + " for "
-			       + ppt.name());
+        Global.debugSplit.fine(
+                               "Got "
+                               + UtilMDE.nplural(pconds.length, "splitter")
+                               + " for "
+                               + ppt.name());
       }
       ppt.addConditions(pconds);
     }
@@ -1886,9 +1886,9 @@ public final class Daikon {
           "Used memory: "
             + (java.lang.Runtime.getRuntime().totalMemory()
               - java.lang.Runtime.getRuntime().freeMemory()));
-	if (FileIO.data_trace_state != null)
-	  debugTrace.fine("Active slices: " +
-			  FileIO.data_trace_state.all_ppts.countSlices());
+        if (FileIO.data_trace_state != null)
+          debugTrace.fine("Active slices: " +
+                          FileIO.data_trace_state.all_ppts.countSlices());
       }
     }
     private String message() {

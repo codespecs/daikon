@@ -1597,16 +1597,16 @@ public final class FileIO {
 
         // Compute predecessors for each basic block.
         for (PptTopLevel p : ppts) {
-        	p.predecessors = new ArrayList<PptTopLevel>();
+          p.predecessors = new ArrayList<PptTopLevel>();
         }
         for (PptTopLevel p : ppts) {
-        	if (p.ppt_successors != null) {
-        		for (String succName : p.ppt_successors) {
-        			PptTopLevel succPpt = all_ppts.get(succName);
-        			assert succPpt != null;
-        			succPpt.predecessors.add(p);
-        		}
-        	}
+          if (p.ppt_successors != null) {
+            for (String succName : p.ppt_successors) {
+              PptTopLevel succPpt = all_ppts.get(succName);
+              assert succPpt != null;
+              succPpt.predecessors.add(p);
+            }
+          }
         }
         if (dkconfig_check_bb_connections) {
           // The function entry should be able should be strongly connected

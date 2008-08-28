@@ -106,14 +106,14 @@ public final class PPTSLICE1 extends PptSlice {
   public final int arity() {
     return ARITY;
   }
-	/**
+  /**
    * Creates all of the the invariants that are appropriate for this
    * slice.  No invariants are created unless the variables in the
    * slice are compatible.  If the variables are compatible, invariants
    * that match the type of the slices variables are created.
    **/
   public void instantiate_invariants() {
-  	instantiate_invariants(Daikon.proto_invs);
+    instantiate_invariants(Daikon.proto_invs);
   }
 
   /**

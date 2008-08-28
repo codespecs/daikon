@@ -86,16 +86,16 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             PptTopLevel ppt = i.next();
 
             if (ppt.ppt_name.isExitPoint()
-		&& !ppt.ppt_name.isCombinedExitPoint()) {
-		continue;
-	    }
+                && !ppt.ppt_name.isCombinedExitPoint()) {
+                continue;
+            }
 
             List<Invariant> invList = filterInvariants(daikon.tools.jtb.Ast.getInvariants(ppt, pptmap));
             for (Invariant inv : invList) {
-		xmlStringToIndex.put(toProperty(inv).xmlString(), Integer.toString(varNumCounter));
-		varNumCounter++;
-	    }
-	}
+                xmlStringToIndex.put(toProperty(inv).xmlString(), Integer.toString(varNumCounter));
+                varNumCounter++;
+            }
+        }
     }
 
     /**
@@ -195,8 +195,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             Ast.addDeclaration(clazz, classInvDecl);
             Ast.addDeclaration(clazz, getInvariantsDecl());
             Ast.addDeclaration(clazz, isInstrumentedDecl());
-	    Ast.addDeclaration(clazz, staticPropertyDecl());
-	    Ast.addDeclaration(clazz, staticPropertyInit());
+            Ast.addDeclaration(clazz, staticPropertyDecl());
+            Ast.addDeclaration(clazz, staticPropertyInit());
         }
     }
 
@@ -585,7 +585,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     private ClassOrInterfaceBodyDeclaration staticPropertyDecl() {
         StringBuffer code = new StringBuffer();
 
-	code.append("private static daikon.tools.runtimechecker.Property[] daikonProperties;");
+        code.append("private static daikon.tools.runtimechecker.Property[] daikonProperties;");
         return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
                                                             new Class[] { Boolean.TYPE },
                                                             new Object[] { Boolean.FALSE },  // isInterface == false
@@ -597,9 +597,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     private ClassOrInterfaceBodyDeclaration staticPropertyInit() {
         StringBuffer code = new StringBuffer();
 
-	code.append("static {\n");
-	code.append("try {\n");
-	code.append("daikonProperties = new daikon.tools.runtimechecker.Property[" + varNumCounter  + "];\n");
+        code.append("static {\n");
+        code.append("try {\n");
+        code.append("daikonProperties = new daikon.tools.runtimechecker.Property[" + varNumCounter  + "];\n");
 
         for (Map.Entry e : xmlStringToIndex.entrySet()) {
             code.append("daikonProperties[" + e.getValue() + "] = ");
@@ -608,7 +608,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             code.append(e.getKey());
             code.append("\"");
             code.append(");\n");
-	}
+        }
 
         code.append("} catch (Exception e) {");
         code.append(" System.err.println(\"malformed invariant. This is probably a bug in the daikon.tools.runtimechecker tool; please submit a bug report.\");");
@@ -772,13 +772,13 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     //    declaredThrowable. This can cause compilation to fail. ]]
     private void exitChecks(StringBuffer code,
             List<PptTopLevel> matching_ppts, PptMap pptmap,
-	   List<String> declaredThrowables, boolean isStatic) {
+           List<String> declaredThrowables, boolean isStatic) {
 
-// 	List<String> declaredThrowablesLocal = new ArrayList<String>(declaredThrowables);
-// 	declaredThrowablesLocal.remove("java.lang.RuntimeException");
-// 	declaredThrowablesLocal.remove("RuntimeException");
-// 	declaredThrowablesLocal.remove("java.lang.Error");
-// 	declaredThrowablesLocal.remove("Error");
+//      List<String> declaredThrowablesLocal = new ArrayList<String>(declaredThrowables);
+//      declaredThrowablesLocal.remove("java.lang.RuntimeException");
+//      declaredThrowablesLocal.remove("RuntimeException");
+//      declaredThrowablesLocal.remove("java.lang.Error");
+//      declaredThrowablesLocal.remove("Error");
 
         // Count this program point exit.
         code.append("daikon.tools.runtimechecker.Runtime.numNormalPptExits++;");
@@ -794,16 +794,16 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 //             code.append("  throw t_instrument;");
 //         }
 
-// 	code.append("} catch (java.lang.RuntimeException t_instrument) {");
-// 	code.append("  methodThrewSomething_instrument = true;");
+//      code.append("} catch (java.lang.RuntimeException t_instrument) {");
+//      code.append("  methodThrewSomething_instrument = true;");
 //         // Count this program point exit.
 //         code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
-// 	code.append("  throw t_instrument;");
-// 	code.append("} catch (java.lang.Error t_instrument) {");
+//      code.append("  throw t_instrument;");
+//      code.append("} catch (java.lang.Error t_instrument) {");
 //         // Count this program point exit.
 //         code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
-// 	code.append("  methodThrewSomething_instrument = true;");
-// 	code.append("  throw t_instrument;");
+//      code.append("  methodThrewSomething_instrument = true;");
+//      code.append("  throw t_instrument;");
 
 //         code.append("} finally {");
 
@@ -817,9 +817,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Check postconditions.
         for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isExitPoint()
-		&& ppt.ppt_name.isCombinedExitPoint()) {
+                && ppt.ppt_name.isCombinedExitPoint()) {
                 List<Invariant> postconditions = filterInvariants(Ast
-								     .getInvariants(ppt, pptmap));
+                                                                     .getInvariants(ppt, pptmap));
                 appendInvariantChecks(postconditions, code, "daikon.tools.runtimechecker.Violation.Time.onExit");
             }
         }
@@ -896,7 +896,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isExitPoint()
-		&& ppt.ppt_name.isCombinedExitPoint()) {
+                && ppt.ppt_name.isCombinedExitPoint()) {
                 List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
                 List<InvProp> finalList = null;
                 if (majorProperties) {
@@ -962,7 +962,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         for (PptTopLevel ppt : matching_ppts) {
             if (ppt.ppt_name.isExitPoint()
-		&& ppt.ppt_name.isCombinedExitPoint()) {
+                && ppt.ppt_name.isCombinedExitPoint()) {
                 List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
                 List<InvProp> finalList = null;
                 if (majorProperties) {

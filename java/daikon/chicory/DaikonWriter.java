@@ -43,7 +43,7 @@ public abstract class DaikonWriter
             return Modifier.isFinal(mod) && Modifier.isStatic(mod);
         }
         else {
-        	return Modifier.isFinal(mod) && Modifier.isStatic(mod) && type.isPrimitive();
+            return Modifier.isFinal(mod) && Modifier.isStatic(mod) && type.isPrimitive();
         }
     }
 

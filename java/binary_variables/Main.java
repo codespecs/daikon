@@ -128,23 +128,23 @@ public final class Main {
         //todo: Sung has a bug in his trace file where sometimes this invariant fails:
         /*
 line 509:
-1512	buf.exe:0x1923	BB	# 0x00401923
-1512	buf.exe:0x1923	BV	esi	0x00140650
-1512	buf.exe:0x1923	BV	[4+esi]	0x140178	# 0x00140654
-1512	buf.exe:0x1927	BV	esi	0x00140650
-1512	buf.exe:0x1927	BV	[0+esi]	0x140178	# 0x00140650
-1512	buf.exe:0x1933	BV	esi	0x00140650
-1512	buf.exe:0x1936	BV	eax	0x00140650
-1512	buf.exe:0x191f	BV	esi	0x00140658     ******************************** 0x191f < 0x1936
-1512	buf.exe:0x191f	BV	eax	0x00140750
-1512	buf.exe:0x1921 CBR to buf.exe:0x193d #op=OP_jnb_short
+1512    buf.exe:0x1923  BB      # 0x00401923
+1512    buf.exe:0x1923  BV      esi     0x00140650
+1512    buf.exe:0x1923  BV      [4+esi] 0x140178        # 0x00140654
+1512    buf.exe:0x1927  BV      esi     0x00140650
+1512    buf.exe:0x1927  BV      [0+esi] 0x140178        # 0x00140650
+1512    buf.exe:0x1933  BV      esi     0x00140650
+1512    buf.exe:0x1936  BV      eax     0x00140650
+1512    buf.exe:0x191f  BV      esi     0x00140658     ******************************** 0x191f < 0x1936
+1512    buf.exe:0x191f  BV      eax     0x00140750
+1512    buf.exe:0x1921 CBR to buf.exe:0x193d #op=OP_jnb_short
 
 without any jump in between...
         */
         if (false)
           assert offset <= bv.address; // sometimes you have the same address, e.g.,
-          //buf.exe:0x10fa	BV	eax	0x0012ffe0
-          //buf.exe:0x10fa	BV	esp	0x0012ffb4
+          //buf.exe:0x10fa      BV      eax     0x0012ffe0
+          //buf.exe:0x10fa      BV      esp     0x0012ffb4
         offset = bv.address;
       }
     }
@@ -221,21 +221,21 @@ without any jump in between...
     }
 
     if (type.equals("BV")) { // binary variable
-      //588	KERNEL32.dll:0x16fc6	BV	src_ebp	1245168
+      //588     KERNEL32.dll:0x16fc6    BV      src_ebp 1245168
       String name = args[3];
       long value = parseHex(args[4]);
       BinaryVariable bv = new BinaryVariable(name, addr, value);
       bb.add(bv);
     } else {
-      //588	KERNEL32.dll:0x24fa	BB
+      //588     KERNEL32.dll:0x24fa     BB
       // Note that some basic blocks don't have a start tag because determina merges basic blocks together
       // ended a basic block
       if (bb.size()>0) addBB(addr, bb, thread);
 
 
       if (type.equals("CALL") || type.equals("ICALL")) { // function call (either direct or indirect)
-        //1796	KERNEL32.dll:0xb3ca MBR to ntdll.dll:0x13171
-        //2748	KERNEL32.dll:0x16fce ICALL to ntdll.dll:0xe642 ret KERNEL32.dll:0x16fd4
+        //1796  KERNEL32.dll:0xb3ca MBR to ntdll.dll:0x13171
+        //2748  KERNEL32.dll:0x16fce ICALL to ntdll.dll:0xe642 ret KERNEL32.dll:0x16fd4
         Address funcAddr = parseAddr(args[4]);
         Address returnAddr = parseAddr(args[6]);
         execution.callFunction(thread, funcAddr, returnAddr);
@@ -244,11 +244,11 @@ without any jump in between...
         // nothing to do, since I implicitly end a basic block when I find a control-flow change (such as call, ret, or jump)
 
       } else if (type.equals("RET")) { // function return
-        //2748	KERNEL32.dll:0x16fc0	RET to KERNEL32.dll:0x16fc0
+        //2748  KERNEL32.dll:0x16fc0    RET to KERNEL32.dll:0x16fc0
         Address returnAddr = parseAddr(args[4]);
         execution.returnFunction(thread, returnAddr);
       } else if (type.equals("CBR") || type.equals("UBR") || type.equals("MBR")) { // jump (conditional, unconditional, multi-way branch)
-        //588	simple.exe:0x2a07 CBR to simple.exe:0x2a02
+        //588   simple.exe:0x2a07 CBR to simple.exe:0x2a02
         //Address targetAddr = parseAddr(args[4]);
         // We saw that a call and return can be in different modules:  assert targetAddr.module.equals(addr.module);
       } else

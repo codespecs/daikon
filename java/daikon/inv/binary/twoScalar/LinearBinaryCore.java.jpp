@@ -499,12 +499,12 @@ public final class CLASSNAME
           + ")";
       #else
         int a = (int) u;
-   			int b = (int) v;
-   			int c = (int) w;
+        int b = (int) v;
+        int c = (int) w;
         return formatTerm(a, vix, true)
           + formatTerm(b, viy, false)
           + formatTerm(c, null, false)
-           + " == 0";
+          + " == 0";
       #endif
     }
 

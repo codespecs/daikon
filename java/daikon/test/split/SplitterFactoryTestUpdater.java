@@ -112,13 +112,13 @@ public class SplitterFactoryTestUpdater {
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
         String fileName = fileNames[i];
-	String fromName = tempDir.getPath() + File.separator + fileName;
-	String toName = targetDir + fileName + ".goal";
-	boolean moveSuccess = moveFile(fromName, toName);
-	if (! moveSuccess) {
+        String fromName = tempDir.getPath() + File.separator + fileName;
+        String toName = targetDir + fileName + ".goal";
+        boolean moveSuccess = moveFile(fromName, toName);
+        if (! moveSuccess) {
           // This is consistently failing for me; not sure why.  -MDE 7/8/2005
           System.out.printf("Failed to move %s to %s%n", fromName, toName);
-	}
+        }
         String javaFileName = new File(fileName).getName();
         String className =
           javaFileName.substring(0, javaFileName.length()-".java".length());

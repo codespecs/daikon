@@ -236,8 +236,8 @@ public class CreateSpinfo {
       List<String> methodsList = new ArrayList<String>(replaceStatements.keySet());
       Collections.sort(methodsList);
       for (String declaration : methodsList) {
-	output.println(declaration);
-	output.println(removeNewlines(replaceStatements.get(declaration)));
+        output.println(declaration);
+        output.println(removeNewlines(replaceStatements.get(declaration)));
       }
       output.println();
     }
@@ -248,14 +248,14 @@ public class CreateSpinfo {
       method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {
-	if (packageName != null) {
-	  method = packageName + "." + method;
+        if (packageName != null) {
+          method = packageName + "." + method;
         }
-	output.println("PPT_NAME " + method);
-	for (int i = 0; i < method_conds.size(); i++) {
-	  output.println(removeNewlines(method_conds.get(i)));
-	}
-	output.println();
+        output.println("PPT_NAME " + method);
+        for (int i = 0; i < method_conds.size(); i++) {
+          output.println(removeNewlines(method_conds.get(i)));
+        }
+        output.println();
       }
     }
   }
