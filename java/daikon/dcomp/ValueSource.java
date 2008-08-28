@@ -32,7 +32,7 @@ public class ValueSource {
   /** ValueSet used for the null reference value **/
   public static ValueSource null_value_source = new ValueSource ("null");
 
-  private static String blank_string;
+  private static String blank_string = "                 ";
 
   private static final String lineSep = System.getProperty("line.separator");
 
