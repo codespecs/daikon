@@ -701,7 +701,7 @@ public final class UtilMDE {
       reader.close();
       return contents.toString();
     } catch (Exception e) {
-      throw new Error ("Unexpected error in writeFile", e);
+      throw new Error ("Unexpected error in readFile", e);
     }
   }
 
