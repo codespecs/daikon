@@ -1893,6 +1893,8 @@ class DCInstrument {
   /** Returns whether or not the specified classname is instrumented **/
   boolean callee_instrumented (String classname) {
 
+    // System.out.printf ("Checking callee instrumented on %s\n", classname);
+
     // Out copy of daikon.util is not instrumented.  It would be odd, though,
     // to see calls to this.
     if (classname.startsWith ("daikon.util"))
