@@ -37,6 +37,7 @@ writable-abstracts:
 	@touch dummy-abstract.html
 	chmod -f +w *-abstract.html
 	@\rm -f dummy-abstract.html
+	@\rm -f abstracts-unsplit.html
 
 # Creates *-abstract.html files.
 abstracts: writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
