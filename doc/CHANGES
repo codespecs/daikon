@@ -22,7 +22,7 @@ Further documentation can be found in:
 
 4.4.3 (September 2008)
 
-Kvasir
+Kvasir 
     
   Kvasir has been updated to produce trace files using the new 
   format for declaration records. This format should allow
@@ -35,6 +35,10 @@ Kvasir
     for determining object invariants in C/C++. Kvasir can now produce
     object declarations for C/C++ structs. This option is, by default,
     off and can be turned on with '--parent-records'
+
+    Kvasir's version of Valgrind has been updated to support newer versions
+    of glibc. Kvasir should now support all versions of glibc supported by
+    Valgrind 3.3.1(glibc 2.2-28)
 
   Bug fixes
 
