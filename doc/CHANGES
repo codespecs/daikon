@@ -22,13 +22,16 @@ Further documentation can be found in:
 
 4.4.3 (September 2008)
 
-Kvasir 
-    
-  Kvasir has been updated to produce trace files using the new 
+Kvasir was updated to create the new format for declaration records.
+Kvasir was also upgraded to support newer versions of glibc.
+
+Kvasir
+
+  Kvasir has been updated to produce trace files using the new
   format for declaration records. This format should allow
   for future improvements with regards to readability. the old
   format can be produced using the flag '--old-decls-format'
- 
+
   User visible changes
 
     The new declarations format has allowed for some improved handling
@@ -47,13 +50,13 @@ Kvasir
 
     Fixed an issue where C++ references were not being dereferenced
     correctly leading to memory locations to appear in trace files
-    as opposed to the value being referenced    
+    as opposed to the value being referenced
 
 ----------------------------------------
 
 4.4.2 (August 1 2008)
 
-The set of invariants and derived variables enabled by default was
+Daikon's set of invariants and derived variables enabled by default was
 changed to provide more relevant invariants.  Configuration options
 were added for some invariants.  Bugs were fixed in Daikon and Chicory.
 
@@ -113,8 +116,7 @@ Chicory
       part of processing a list or pure functions).  Recursive calls to
       enter() or exit() are simply ignored.
 
-    
-
+----------------------------------------
 
 4.4.1 (July 1 2008)
 
