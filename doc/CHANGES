@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.4.3 (September 2008)
+4.5.0 (September 3 2008)
 
 Kvasir was updated to create the new format for declaration records.
 Kvasir was also upgraded to support newer versions of glibc.
