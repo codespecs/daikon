@@ -53,7 +53,8 @@ endif
 	@cp -f developer.texinfo developer.texinfo.new
 	@echo "If the emacs command fails, see file update-menus-output.txt ."
 	emacs -q --batch developer.texinfo.new --eval "(progn (require 'texinfo) (texinfo-master-menu t) (save-buffer))" > update-menus-output.txt 2>&1
-	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' developer.texinfo.new
+	@rm -f update-menus-output.txt
+	@perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' developer.texinfo.new
 	@if cmp developer.texinfo developer.texinfo.new >/dev/null 2>&1; then echo "developer.texinfo unchanged"; rm -f developer.texinfo.new; else mv developer.texinfo.new developer.texinfo; fi
 	touch .fix-dev-menu
 
