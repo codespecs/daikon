@@ -101,15 +101,16 @@ public class ClassInfo {
   }
 
   /**
-   * Determines if fully qualified method name is in this class
-   * Example methodName: public static String doStuff(int, java.lang.Object)
+   * Determines if fully qualified method name is in this class.
+   * Example methodName:
+   * public static String mypackage.MyClass.doStuff(int, java.lang.Object)
    */
   private boolean isInThisClass(String methodName)
   {
       // A heuristical way to determine if the method is in this class.
-      // Match anything of the form: ____class_name____(____
+      // Match anything of the form: ____class_name.____(____
       // Where ____ corresponds to any sequence of characters
-      return methodName.matches(".*" + class_name + ".*\\(.*");
+      return methodName.matches(".*" + class_name + "\\..*\\(.*");
   }
 
   /** dumps all of the class info to the specified stream **/
