@@ -42,7 +42,7 @@ endif
 # On the other hand, the command is usually pretty quick, so maybe seeing the filtered output immediately isn't necessary (or at all, unless there's trouble).
 # 	@emacs -q --batch daikon.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v "^Loading .*\.el" | grep -v "^Loading .*\.\.\.$$" | grep -v "^No /etc/mailname. Reverting to default\.\.\.$$" | grep -v '^Updated level ".*" menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:' && exit $${PIPESTATUS[0]}
 	@echo "If the emacs command fails, see file update-menus-output.txt ."
-	emacs -q --batch daikon.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' > update-menus-output.txt 2>&1
+	emacs -q --batch daikon.texinfo.new --eval "(progn (require 'texinfo) (texinfo-master-menu t) (save-buffer))" > update-menus-output.txt 2>&1
 	@rm -f update-menus-output.txt
 	@perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' daikon.texinfo.new
 	@if cmp daikon.texinfo daikon.texinfo.new >/dev/null 2>&1; then echo "daikon.texinfo unchanged"; rm -f daikon.texinfo.new; else mv daikon.texinfo.new daikon.texinfo; fi
