@@ -51,7 +51,8 @@ endif
 .fix-dev-menu: developer.texinfo
 	@echo "Updating menus in developer.texinfo..."
 	@cp -f developer.texinfo developer.texinfo.new
-	@emacs -q --batch developer.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:' && exit $${PIPESTATUS[0]}
+	@echo "If the emacs command fails, see file update-menus-output.txt ."
+	emacs -q --batch developer.texinfo.new --eval "(progn (require 'texinfo) (texinfo-master-menu t) (save-buffer))" > update-menus-output.txt 2>&1
 	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' developer.texinfo.new
 	@if cmp developer.texinfo developer.texinfo.new >/dev/null 2>&1; then echo "developer.texinfo unchanged"; rm -f developer.texinfo.new; else mv developer.texinfo.new developer.texinfo; fi
 	touch .fix-dev-menu
