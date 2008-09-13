@@ -11,6 +11,7 @@
 --exclude-broken 404:file://afs/csail/group/pag/software/pkg/freshmeat-submit-1.6/freshmeat-submit.html
 --exclude-broken 404:http://groups.google.com/group/jsr-305/
 --exclude-broken 404:http://groups.google.com/group/jsr-305/web/proposed-annotations
+--exclude-broken 404:http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/tree/AnnotatedTypeTree.html?is-external=true
 --exclude-broken 404:http://www.eclipse.org/legal/Eclipse%20EPL%202003_11_10%20Final_files/filelist.xml
 --exclude-broken 405:http://www.amazon.com/exec/obidos/tg/detail/-/0321205758/103-2932545-5299831?v=glance
 --exclude-broken 412:http://validator.w3.org/check?uri=referer
@@ -36,6 +37,13 @@
 --exclude-docs daikon/download/jdoc
 --exclude-docs http://pag.csail.mit.edu/jsr308/dist/doc/javac_lifecycle
 --exclude-docs mernst/(public_html/)?(ir95|advice/conference/)
+--exclude-fragment http://groups.csail.mit.edu/pag/jsr308/current/doc/checkers/igj/quals/I.html#annotation_type_element_detail
+--exclude-fragment http://groups.csail.mit.edu/pag/jsr308/current/doc/checkers/quals/DefaultQualifiers.html#annotation_type_element_detail
+--exclude-fragment http://groups.csail.mit.edu/pag/jsr308/current/doc/checkers/quals/ImplicitFor.html#annotation_type_element_detail
+--exclude-fragment http://java.sun.com/javase/6/docs/api/javax/lang/model/SourceVersion.html?is-external=true#RELEASE_7
+--exclude-fragment http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/util/SimpleTreeVisitor.html?is-external=true#visitAnnotatedType(com.sun.source.tree.AnnotatedTypeTree,%20P)
+--exclude-fragment http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/util/SimpleTreeVisitor.html?is-external=true#visitAnnotatedType(com.sun.source.tree.AnnotatedTypeTree,%20P)
+--exclude-fragment http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/util/TreeScanner.html?is-external=true#visitAnnotatedType(com.sun.source.tree.AnnotatedTypeTree,%20P)
 --exclude-redirect http://2006.ecoop.org/->http://www.emn.fr/x-info/ecoop2006/
 --exclude-redirect http://en.wikipedia.org/->http://en.wikipedia.org/wiki/Main_Page	
 --exclude-redirect http://groups.google.com/->http://groups-beta.google.com/

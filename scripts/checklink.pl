@@ -17,6 +17,7 @@
 #      --exclude-redirect
 #      --exclude-redirect-prefix
 #      --exclude-broken
+#      --exclude-fragment
 #    These flags permit suppression of expected errors/warnings, so that
 #    unexpected ones are more noticeable.
 # Redirection processing is reimplemented, and its error messages are improved.
@@ -196,6 +197,7 @@ my %Opts =
     Exclude_Redirect  => undef,
     Exclude_Redirect_Prefix => undef,
     Exclude_Broken    => undef,
+    Exclude_Fragment  => undef,
     Masquerade        => 0,
     Masquerade_From   => '',
     Masquerade_To     => '',
@@ -392,6 +394,7 @@ sub parse_arguments ()
              'exclude-redirect=s@', => \$Opts{Exclude_Redirect},
              'exclude-redirect-prefix=s@', => \$Opts{Exclude_Redirect_Prefix},
              'exclude-broken=s@', => \$Opts{Exclude_Broken},
+             'exclude-fragment=s@', => \$Opts{Exclude_Fragment},
              'u|user=s'        => \$Opts{User},
              'p|password=s'    => \$Opts{Password},
              't|timeout=i'     => \$Opts{Timeout},
@@ -459,6 +462,7 @@ Options:
                               URI.  The \"->\" is literal text.
   --exclude-broken CODE:URI   Do not report a broken link with the given CODE.
                               CODE is HTTP response, or -1 for robots exclusion.
+  --exclude-fragment URL#FRAG   Do not report the given a broken fragment.
   -n/--noacclanguage          Do not send an Accept-Language header.
   -L/--languages              Languages accepted$langs.
   -q/--quiet                  No output if no errors are found.  Implies -s.
@@ -1327,9 +1331,11 @@ sub check_validity ($$\%\%)
   # Check that the fragments exist
   foreach my $fragment (keys %{$links->{$uri}{fragments}}) {
     if (defined($p->{Anchors}{$fragment})
-        || &escape_match($fragment, $p->{Anchors})) {
+        || &escape_match($fragment, $p->{Anchors})
+        || grep { $_ eq "$uri#$fragment" } @{$Opts{Exclude_Fragment}}) {
       $results{$uri}{fragments}{$fragment} = 1;
     } else {
+      # Broken fragment
       $results{$uri}{fragments}{$fragment} = 0;
     }
   }
