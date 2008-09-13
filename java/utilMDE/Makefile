@@ -8,10 +8,13 @@
 JAVAC ?= javac
 # Removed "-J-Xmx800m", because it is incompatible with JDK 7.
 JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
+# When using the JSR 308 compiler, this expects checkers.jar on the classpath
 JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*' ${JAVAC} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea
+
+CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
@@ -68,7 +71,7 @@ utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 	mkdir /tmp/utilMDE
 	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE
-	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${DAIKONDIR}/java/lib/junit.jar:${DAIKONDIR}/java/lib/checkers.jar:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' all_notest doc)
+	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' all_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
 	mv /tmp/utilMDE.tar.gz .
