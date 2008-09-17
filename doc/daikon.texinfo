@@ -6889,8 +6889,8 @@ including external commands invoked.
 @cindex spreadsheet files
 
 Daikon can process data from spreadsheets such as Excel.  In order to
-use such files, first save them in comma-separated-value, also known
-as csv or comma-delimited, format.
+use such files, first save them in @uref{http://en.wikipedia.org/wiki/Comma-separated_values, ,comma-separated-value}, also known
+as csv or comma-delimited or comma-separated-list, format.
 Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
 @file{.decls} file) to be used by Daikon by running the
 @command{convertcsv.pl} program found in the @file{$DAIKONDIR/bin}
@@ -6899,9 +6899,10 @@ directory.  For example,
 convertcsv.pl myfile.csv
 @end example
 @noindent
-produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
-@command{convertcsv.pl} without any arguments in order to see a usage
-message.  
+produces files @file{myfile.decls} and @file{myfile.dtrace}.
+
+Important:  run @command{convertcsv.pl} without any arguments in order
+to see a usage message.
 
 In order to ensure all data is processed, use Daikon with the 
 @option{--nohierarchy} option, as follows: 
