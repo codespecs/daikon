@@ -18,13 +18,14 @@ use checkargs;
 
 # TODO:
 #   If using "-m interpolate", then what about missing values before the
-#   first non-missing value?  Need to permit a second argument to specify
-#   what to do in that case (?).
+#   first non-missing value?  Perhaps permit a second argument to specify
+#   what to do in that case, though leaving it as missing seems reasonable.
 
 my $USAGE =
   "Usage: convertcsv.pl [options] <inputfilename>
   Options:
-     -m [behavior]:  behavior for missing values in the csv file
+     -m [behavior]:  behavior for missing values in the csv file.
+                     (A value is missing if solely whitespace.)
         -m nonsensical : use Daikon \"nonsensical\" values.
         -m old         : use the last non-missing value of the variable
                          (*DEFAULT*).
@@ -38,6 +39,10 @@ my $USAGE =
                           <declarationsfilename> to create the
                           data trace file.  No .decls file
                           will be created.
+
+  Input:  A file in CSV (comma-separated values) format.  The first row
+          contains variable names.  Each subsequent row contains one value
+          for each variable.
 
   Output: If <inputfilename> has a \".csv\" extension, creates
           a declaration file and a data trace file named by
