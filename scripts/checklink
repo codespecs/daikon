@@ -1118,6 +1118,8 @@ EOF
         }
       }
 
+      no warnings 'recursion';
+
       if ($depth < 0) {
         &check_uri($params, $u, 0, -1, $cookie, $uri);
       } else {
