@@ -983,10 +983,6 @@ EOF
   # Record all the links found
   while (my ($link, $lines) = each(%{$p->{Links}})) {
     my $link_uri = URI->new($link);
-    # Remove repeated slashes, to avoid duplicated checking or infinite
-    # recursion.  Don't match the double slashes in "http://", however.
-    $link_uri =~ s|([^:])//+|$1/|g;
-
     my $abs_link_uri = URI->new_abs($link_uri, $base);
 
     if ($Opts{Masquerade}) {
@@ -1597,6 +1593,9 @@ sub add_link
 {
   my ($self, $uri, $base, $line) = @_;
   if (defined($uri)) {
+    # Remove repeated slashes after the . or .. in relative links, to avoid
+    # duplicated checking or infinite recursion.
+    $uri =~ s|^(\.\.?/)/+|$1|o;
     $uri = URI->new_abs($uri, $base) if defined($base);
     $self->{Links}{$uri}{$line}++;
   }
