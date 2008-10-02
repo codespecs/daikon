@@ -4215,17 +4215,25 @@ In the second step of using Kvasir, run your program as you normally
 would, but prepend the command @command{kvasir-dtrace} to the beginning.
 For instance, if you normally run your program with the command
 @example
-./program -option input.file
+./myprogram -option input.file
 @end example
 @noindent
 just say
 @example
-kvasir-dtrace ./program -option input.file
+kvasir-dtrace ./myprogram -option input.file
 @end example
 @noindent
 As well as running your program (more slowly than usual), this command
 also creates a directory @file{daikon-output} in the current
 directory containing a @file{program.dtrace} file suitable as input to Daikon.
+
+Kvasir's first argument, the program name, should be given as a
+pathname, as shown above.  If you usually just give a program name that
+is not in the current directory but is found in your path, you may need
+to modify your command to specify a pathname.  For example:
+@example
+kvasir-dtrace `which myprogram` -option input.file
+@end example
 
 A number of options to Kvasir may be supplied on the command line
 before the argument that is the name of your program (@pxref{Kvasir options}).
