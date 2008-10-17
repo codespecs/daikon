@@ -405,15 +405,6 @@ if (defined($Opts{Exclude})) {
   eval { $Opts{Exclude} = qr/$Opts{Exclude}/o; };
   &usage(1, "Error in exclude regexp: $@") if $@;
 }
-## This seems to infinite-loop.
-# # Should do the same with $Opts{Exclude_Docs}, but it's tricky because
-# # perl data structures suck.
-# if (defined($Opts{Exclude_Docs})) {
-#   for (my $i=0; $i <= scalar(@{$Opts{Exclude_Docs}}); $i++) {
-#     eval { ${$Opts{Exclude_Docs}}[$i] = qr/${$Opts{Exclude_Docs}}[$i]/o; };
-#     &usage(1, "Error in exclude-docs regexp: $@") if $@;
-#   }
-# }
 if (defined($Opts{Trusted})) {
   eval { $Opts{Trusted} = qr/$Opts{Trusted}/io; };
   &usage(1, "Error in trusted domains regexp: $@") if $@;
@@ -719,7 +710,9 @@ Options:
                             URI.  The \"->\" is literal text.
  --exclude-broken CODE:URI  Do not report a broken link with the given CODE.
                             CODE is HTTP response, or -1 for robots exclusion.
+                            The \":\" is literal text.
  --exclude-fragment URL#FRAG  Do not report the given broken fragment.
+                            The \"#\" is literal text.
  -L, --languages LANGS      Accept-Language header to send.  The special value
                             'auto' causes autodetection from the environment.
  -R, --no-referer           Do not send the Referer HTTP header.
@@ -1114,6 +1107,8 @@ EOF
         }
       }
 
+      # This is an inherently recursive algorithm, so Perl's warning is not
+      # helpful.  You may wish to comment this out when debugging, though.
       no warnings 'recursion';
 
       if ($depth < 0) {
@@ -1915,18 +1910,18 @@ sub record_redirects (\%$)
 # Determine if a request is redirected
 sub is_redirected ($%)
 {
-  my ($uri, %my_redirects) = @_;
-  return(defined($my_redirects{$uri}));
+  my ($uri, %redirects) = @_;
+  return(defined($redirects{$uri}));
 }
 
 # Get a list of redirects for a URI
 sub get_redirects ($%)
 {
-  my ($uri, %my_redirects) = @_;
+  my ($uri, %redirects) = @_;
   my @history = ($uri);
   my %seen = ($uri => 1); # for tracking redirect loops
   my $loop = 0;
-  while ($my_redirects{$uri}) {
+  while ($redirects{$uri}) {
     $uri = $redirects{$uri};
     push(@history, $uri);
     if ($seen{$uri}) {
