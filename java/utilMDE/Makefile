@@ -51,6 +51,9 @@ tags:
 test:
 	set JAVA_COMPILER=NONE; ${JAVA} utilMDE.TestUtilMDE
 
+run-chicory:
+	set JAVA_COMPILER=NONE; ${JAVA} -ea daikon.Chicory --output-dir=/tmp utilMDE.TestUtilMDE --shortrun
+
 doc: javadoc
 
 javadoc: $(JAVA_FILES)

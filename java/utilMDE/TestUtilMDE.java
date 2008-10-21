@@ -30,7 +30,15 @@ import static utilMDE.Options.ArgException;
 /** Test code for the utilMDE package. */
 public final class TestUtilMDE extends TestCase {
 
+  // If true, do 100 instead of 100000 iterations when testing randomElements.
+  // This saves only a little time.  However, it is significant when running
+  // under instrumentation such as that of Chicory.
+  static boolean short_run = false;
+
   public static void main(String[] args) {
+    if ((args.length > 0) && args[0].equals("--shortrun")) {
+      short_run = true;
+    }
     junit.textui.TestRunner.run(new TestSuite(TestUtilMDE.class));
   }
 
@@ -1574,10 +1582,11 @@ public final class TestUtilMDE extends TestCase {
     {
       int itor_size = 10;
       int num_elts_limit = 12;
-      int tries = 100000;
+      int tries = short_run ? 100 : 100000;
+      double ratio_limit = .02;
       Random r = new Random(20020311);
       // System.out.println();
-      // "i++" here works, but is slow
+      // "i++" instead of "i+=3" here works, but is slow
       for (int i=1; i<num_elts_limit; i+=3) {
         int[] totals = new int[num_elts_limit];
         for (int j=0; j<tries; j++) {
@@ -1602,8 +1611,8 @@ public final class TestUtilMDE extends TestCase {
           int expected = tries * i_truncated / itor_size;
           double ratio = (double)this_total / (double)expected;
           // System.out.print(((k<10) ? " " : "") + k + " " + this_total + "\t");
-          // System.out.print("exp=" + expected + "\t" + "ratio=" + ratio + "\t");
-          Assert.assertTrue(k >= itor_size || (ratio > .98 && ratio < 1.02));
+          // System.out.print("\nExp=" + expected + "\t" + "ratio=" + ratio + "\t");
+          Assert.assertTrue(k >= itor_size || (ratio > ratio_limit && ratio < 1/ratio_limit));
         }
         // System.out.println();
       }
