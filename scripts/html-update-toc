@@ -2,7 +2,7 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
-# Time-stamp: <2007-11-03 15:54:19 mernst>
+# Time-stamp: <2008-10-21 21:02:31 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -13,7 +13,7 @@
 #   <!-- end toc -->
 # To get started, just add those three lines near the top of the file.
 
-# The table of contents contains links to header lines these forms:
+# The table of contents contains links to header lines of these forms:
 #   <h3 id="key">Subheading</h3>
 #   <h3><a name="key">Subheading</a></h3>
 # Header lines without "id=..." or "<a name=...>" anchor tags are ignored
@@ -27,7 +27,7 @@
 # pattern-matches against specific lines in the document.  That means that
 # it will generate table-of-contents lines for commented-out sections of a
 # document.  To ensure that a header line doesn't appear in the table of
-# contents, start a comment startss on that line, such as:
+# contents, start a comment on that line, such as:
 #   <!-- <h2>...</h2>  ...
 
 
@@ -36,22 +36,14 @@
 #   (defun html-add-heading-anchors ()
 #     "Add anchors to section headings in an HTML document."
 #     (interactive)
+#     (require 'dired)
 #     (save-excursion
 #       (goto-char (point-min))
-#       (query-replace-regexp "^\\(<h[1-6]>\\)\\([^<>\n]*\\)\\(</h[1-6]>\\)\\s-*$"
-#                             "\\1<a name=\"\\2\">\\2</a>\\3")
-#       ;; now convert spaces to underscores in anchors
-#       (require 'dired)
-#       (goto-char (point-min))
-#       (while (re-search-forward "^\\(<h[1-6]><a name=\"\\)\\([^<> \"\n]* [^<>\"\n]*\\)\\(\">\\)" nil t)
-#         (let ((s1 (match-string 1))
-#               (s2 (match-string 2))
-#               (s3 (match-string 3)))
-#           (replace-match
-#            (concat s1
-#                    (save-match-data (dired-replace-in-string " " "_" s2))
-#                    s3)
-#            nil nil)))))
+#       (while (re-search-forward "^\\(<h[1-6]\\)\\([^>]*>\\)\\([^<>\n]+\\)\\(</h[1-6]>\\)[ \t]*" nil t)
+#         (let ((hextra (match-string 2))
+#               (hname (match-string 3)))
+#           (if (not (save-match-data (string-match " id=" hextra)))
+#               (replace-match (concat " id=\"" (save-match-data (dired-replace-in-string " " "_" hname)) "\"" hextra) nil t nil 2))))))
 
 
 use strict;
@@ -81,11 +73,13 @@ $contents_end_quoted =~ s/\n/\\n/g;
 $contents_end_quoted =~ s/\r/\\r/g;
 
 FILELOOP: for my $file (@ARGV) {
-  # print STDERR "Examining $file\n";
+  if ($debug) { print STDERR "Examining $file\n"; }
   if (($file eq "-q") || ($file eq "--quiet") || ($file eq "-quiet")) {
     $quiet = 1;
+    next;
   }
   if ($file !~ /\.html?$/) {
+    if ($debug) { print STDERR "Skipping $file:  does not end in .htm or .html\n"; }
     next;
   }
   if (! open(FILE, $file)) {
