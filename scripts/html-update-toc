@@ -2,7 +2,7 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
-# Time-stamp: <2008-10-21 21:02:31 mernst>
+# Time-stamp: <2008-10-21 21:14:34 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -43,7 +43,10 @@
 #         (let ((hextra (match-string 2))
 #               (hname (match-string 3)))
 #           (if (not (save-match-data (string-match " id=" hextra)))
-#               (replace-match (concat " id=\"" (save-match-data (dired-replace-in-string " " "_" hname)) "\"" hextra) nil t nil 2))))))
+#               (let ((anchor-name
+#                      (save-match-data (dired-replace-in-string " " "_"
+#                                         (dired-replace-in-string "'" "" hname)))))
+#                 (replace-match (concat " id=\"" anchor-name "\"" hextra) nil t nil 2)))))))
 
 
 use strict;
