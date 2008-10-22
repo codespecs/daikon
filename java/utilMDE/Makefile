@@ -20,22 +20,32 @@ JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
+ALL_CLASS_FILES := ${ALL_JAVA_FILES:.java=.class}
 AUTO_GENERATED_FILES = \
 	MathMDE.java \
 	LimitedSizeIntSet.java
 
 default: all
 
-all: all_stop_on_error
+all: test
 
-# Don't bother to run the unit tests if the compilation failed.
-all_stop_on_error:
-	$(MAKE) --stop all_notest test
+## Old version
+# all: all_stop_on_error
+# # Don't bother to run the unit tests if the compilation failed.
+# all_stop_on_error:
+# 	$(MAKE) --stop all_notest test
+# all_notest:  ${AUTO_GENERATED_FILES}
 
-all_javac: all_javac_notest test
+compile_notest:  .class-files-timestamp
 
-all_notest:  ${AUTO_GENERATED_FILES}
+# Don't do this.  We want to create .class-files-timestamp after the
+# compilation succeeds.  So, no targets for .class files in this Makefile.
+# ${ALL_CLASS_FILES}: .class-files-timestamp
+
+# Creates ${ALL_CLASS_FILES} also.
+.class-files-timestamp: ${ALL_JAVA_FILES}
 	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1 | ${DAIKONBIN}/javac-xlint-prune.pl
+	touch .class-files-timestamp
 
 clean:
 	rm -f *.class
@@ -43,13 +53,19 @@ clean:
 very_clean: clean
 	rm -f ${AUTO_GENERATED_FILES}
 
-tags:
+tags: TAGS
+TAGS: ${ALL_JAVA_FILES}
 	etags ${ALL_JAVA_FILES}
 
 # This "set" form doesn't seem to work for me (maybe needs to be export?).
 # Used to depend on targets "clean all", but I want to run this in "all".
-test:
+test: .test-timestamp
+
+# Using compile_notest instead of .class-files-timestamp as the
+# prerequisite doesn't work.
+.test-timestamp: .class-files-timestamp
 	set JAVA_COMPILER=NONE; ${JAVA} utilMDE.TestUtilMDE
+	touch .test-timestamp
 
 run-chicory:
 	set JAVA_COMPILER=NONE; ${JAVA} -ea daikon.Chicory --output-dir=/tmp utilMDE.TestUtilMDE --shortrun
@@ -64,9 +80,6 @@ javadoc: $(JAVA_FILES)
 	# jdk-add-munged-anchor-names doc/utilMDE/*.html
 	@echo "Optionally run jdk-index-to-alist (for Emacs support)"
 
-audit:
-	(cd ..; maudit utilMDE)
-
 # No need to do "make doc" or "make all" before running this.
 # (This includes .class files, so users don't need to recompile.)
 utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
@@ -74,7 +87,7 @@ utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 	mkdir /tmp/utilMDE
 	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE
-	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' all_notest doc)
+	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' compile doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
 	mv /tmp/utilMDE.tar.gz .
@@ -105,6 +118,9 @@ LimitedSizeIntSet.java: LimitedSizeSet.java.jpp
 ###########################################################################
 ###
 ###
+
+.PHONY: default all compile_notest clean very_clean tags test run-chicory javadoc showvars
+
 
 # Existence of this rule means that a target is deleted if has just changed
 # and its rule commands exit with nonzero status.  It's needed for the
