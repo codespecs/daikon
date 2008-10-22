@@ -351,13 +351,13 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${DAIKONBIN}/javac-xlint-prune.pl
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} utilMDE-copy
+all_directly: ${AUTO_GENERATED_FILES} utilMDE-import-check utilMDE-copy
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
-	# This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
+# This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
-	# These can't be prerequisites because they depend on .class files from Daikon itself.
+# These can't be prerequisites because they depend on .class files from Daikon itself.
 	$(MAKE) chicory
 	$(MAKE) dyncomp
 
@@ -398,7 +398,7 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 
 # Build DynComp/Java, check the DF summary info and run a sanity test
-dyncomp dcomp : utilMDE-copy dcomp_premain.jar dcomp-test
+dyncomp dcomp : utilMDE-import-check utilMDE-copy dcomp_premain.jar dcomp-test
 dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 	$(JAVA) daikon.dcomp.SummaryInfo
@@ -459,13 +459,16 @@ install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 dyncomp-jdk-only dcomp-jdk-only :
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
-# Creates a copy of utilMDE under the package name daikon.util
-# Copied source files are read-only, to prevent accidental changes
-utilMDE-copy : utilMDE-import-check
+utilMDE/.class-files-timestamp:
+	$(MAKE) -C utilMDE
+
+# daikon.util is a copy of utilMDE.
+# Copied source files are read-only, to prevent accidental changes.
+utilMDE-copy : daikon/util/README
+
+daikon/util/README : utilMDE/.class-files-timestamp
 	/bin/rm -rf daikon/util
 	install -d daikon/util/
-	# Must compile utilMDE in order to create .java files from .jpp files.
-	make -C utilMDE
 	cp utilMDE/*.java daikon/util
 	chmod 444 daikon/util/*.java
 	#install -t daikon/util/ -m 444 utilMDE/*.java
@@ -475,6 +478,24 @@ utilMDE-copy : utilMDE-import-check
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)utilMDE/\1daikon.util/g' daikon/util/*.java
 	$(JAVAC_COMMAND) daikon/util/*.java
+
+## Old version.  Unfortunately, it always re-made everything.
+## That is unnecessarily slow, and it also produces a lot of output that
+## obscures the interesting output.
+# utilMDE-copy : utilMDE-import-check
+# 	/bin/rm -rf daikon/util
+# 	install -d daikon/util/
+# 	# Must compile utilMDE in order to create .java files from .jpp files.
+# 	make -C utilMDE
+# 	cp utilMDE/*.java daikon/util
+# 	chmod 444 daikon/util/*.java
+# 	#install -t daikon/util/ -m 444 utilMDE/*.java
+# 	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
+# 	# change the package declarations
+# 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
+# 	# change relevant imports (make sure to get "import static" as well)
+# 	perl -p -i -e 's/^(import .*)utilMDE/\1daikon.util/g' daikon/util/*.java
+# 	$(JAVAC_COMMAND) daikon/util/*.java
 
 # Checks that daikon.util is imported by DynComp source files, rather
 # than utilMDE
