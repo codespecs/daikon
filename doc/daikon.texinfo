@@ -7275,15 +7275,15 @@ a type system that detects null dereference errors.  An example is the
 Nullness checker that is part of the
 @uref{http://groups.csail.mit.edu/pag/jsr308/, JSR 308 Checker Framework}.
 
-The type system requires a programmer to annotate some references
+The Nullness checker requires a programmer to annotate some references
 with @code{@@Nullable}, meaning the variable might be null; references
 that are left unannotated are never null at run time.  (Alternately, the
-type system might use @code{@@NonNull} for references that are never
+checker can use @code{@@NonNull} for references that are never
 null, and leave unannotated for references that might be null.  The
-Nullness checker supports either choice of syntax.)  The type system
+Nullness checker supports either choice of default.)  The checker
 then warns the programmer about possible null dereference errors.
 
-The type system is useful, but writing all the annotations is tedious.
+The Nullness checker is useful, but writing all the annotations is tedious.
 The AnnotateNullable tool automatically and soundly determines a subset of the
 proper @code{@@Nullable} annotations.  Each annotation that it infers is
 correct.  The programmer may need to write some additional
@@ -7307,7 +7307,7 @@ java daikon.Chicory --dtrace-file=an.dtrace.gz @emph{your-command-and-options}
 @item Run Daikon on the resulting dtrace file:
 
 @example
-java daikon.Daikon an.dtrace.gz an.dtrace.gz --config @var{daikondir}/java/daikon/annotate_nullable.config
+java daikon.Daikon an.dtrace.gz --no_text_output --config @var{daikondir}/java/daikon/annotate_nullable.config
 @end example
 
 The example uses the @file{annotate_nullable.config} configuration file
@@ -7330,17 +7330,18 @@ AnnotateNullable writes its output to standard out, so you should
 redirect its output to a @file{.jaif} file.
 
 @example
-java daikon.AnnotateNullable -p @var{package} an.inv.gz > nullable-annotations.jaif
+java daikon.AnnotateNullable an.inv.gz > nullable-annotations.jaif
 @end example
 
 @item
 Use the
 @uref{http://groups.csail.mit.edu/pag/jsr308/annotation-file-utilities/,
-Annotation File Utilites} to insert the annotations in your Java
+Annotation File Utilites} to insert the annotations in your .class or .java
 file.
 
 @example
 insert-annotations @var{mypackage.MyClass} nullable-annotations.jaif
+insert-annotations-to-source nullable-annotations.jaif mypackage/MyClass.java annotated/mypackage/MyClass.java
 @end example
 
 @end enumerate
@@ -7354,15 +7355,6 @@ java daikon.AnnotateNullable @i{[@var{flags}]} @var{inv-file}
 The flags are:
 
 @table @option
-@item -p --out-package
-Specifies the package of each class that is annotated.  This option is
-required.
-
-@c This format will never be supported, so there is no point in
-@c documenting it.
-@c @item --new_format
-@c Specifies that the new annotation output format should be used.  This
-@c format is not yet supported by the annotation file utilities.
 
 @item -n --nonnull-annotations
 Adds NonNull annotations as well as Nullable annotations.  Unlike Nullable
