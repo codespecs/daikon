@@ -161,6 +161,19 @@ public class PptName
   }
 
   /**
+   * @return a guess at the package name.
+   * May be null.
+   **/
+  public String getPackageName() {
+    if (cls == null) return null;
+    int pt = cls.lastIndexOf('.');
+    if (pt == -1)
+      return null;
+    else
+      return cls.substring(0, pt);
+  }
+
+  /**
    * @return the full name which can uniquely identify a method within
    * a class.  The name includes symbols for the argument types and
    * return type.
