@@ -1895,7 +1895,7 @@ public final class DCRuntime {
 
     Stopwatch watch = null;
 
-    time_decl.start_time();
+    time_decl.reset_start_time();
     time_decl.indent ("Printing decl file for class %s%n", ci.class_name);
 
     // Make sure that two variables have the same comparability at all
@@ -1945,7 +1945,7 @@ public final class DCRuntime {
     // long start = System.currentTimeMillis();
     // watch.reset();
 
-    time_decl.start_time();
+    time_decl.reset_start_time();
     time_decl.indent ("Print decls for method '%s'", mi.method_name);
     List<DVSet> l = get_comparable (mi.traversalEnter);
     // comp_list_ms += watch.snapshot(); watch.reset();
