@@ -34,10 +34,13 @@
 ;;; Java and C mode
 ;;;
 
-;; Use guess-offset in favor of c-set-basic-offset
-(require 'guess-offset)
-(setq guess-offset-minimum-superiority 1.33) ; default 2
-;; (load "c-set-basic-offset")
+;; Use dtrt-indent in favor of guess-offset and c-set-basic-offset
+(require 'dtrt-indent)
+(dtrt-indent-mode 1)
+(setq dtrt-indent-min-indent-superiority 50.0) ; default 100.0
+;; (require 'guess-offset)
+;; (setq guess-offset-minimum-superiority 1.33) ; default 2
+;; ;; (load "c-set-basic-offset")
 
 (load "remove-trailing-whitespace")
 (defun unset-indent-tabs-mode ()
