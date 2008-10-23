@@ -13,6 +13,7 @@ import static daikon.PptTopLevel.PptType;
  * determines which variables have seen null values by looking at the
  * NonZero invariant.  If that invariant is NOT present, then the
  * variables must have seen at least one null value.
+ * <p>
  *
  * Since only the NonZero invariant is used, Daikon processing time can be
  * significantly reduced by turning off derived variables and all invariants
@@ -23,9 +24,9 @@ public class AnnotateNullable {
 
   static PptMap ppts = null;
 
-  static SimpleLog verbose = new SimpleLog (false);
+  static SimpleLog verbose = new SimpleLog (/*enabled=*/ false);
 
-  static SimpleLog debug = new SimpleLog (false);
+  static SimpleLog debug = new SimpleLog (/*enabled=*/ false);
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
@@ -150,19 +151,24 @@ public class AnnotateNullable {
   }
 
   /**
-   * Get the annotation for the specified variable.  Returns @Nullable
-   * if samples were found for this variable and at least one sample
-   * contained a null value.
+   * Get the annotation for the specified variable.  Returns @Nullable if
+   * samples were found for this variable and at least one sample contained
+   * a null value.  Returns an empty string if no annotation is applicable.
+   * Otherwise, the return value contains a trailing space.
    */
   public static String get_annotation (PptTopLevel ppt, VarInfo vi) {
 
     String annotation = "";
     if (nonnull_annotations)
-      // annotation = "@checkers.nullness.quals.NonNull";
-      annotation = "@NonNull";
+      annotation = "NonNull";
     if ((ppt.num_samples (vi) > 0) && !ppt.is_nonzero (vi))
-      // annotation = "@checkers.nullness.quals.Nullable";
-      annotation = "@Nullable";
+      annotation = "Nullable";
+    if (annotation != "") {     // interned
+      // if (! stub_format) {
+      //   annotation = "checkers.nullness.quals." + annotation;
+      // }
+      annotation = "@" + annotation + " ";
+    }
     return annotation;
   }
 
@@ -189,6 +195,7 @@ public class AnnotateNullable {
     String return_annotation = "";
     if (retvar != null) {
       return_annotation = get_annotation (ppt, retvar);
+
     }
 
     // Look up the annotation for each parameter.
@@ -238,8 +245,12 @@ public class AnnotateNullable {
       if (vi.parent_ppt != null)
         continue;
 
-      // Skip 'this' variables
+      // Skip 'this' variables (we know they are non-null)
       if (vi.name().equals ("this"))
+        continue;
+      // Likewise for getClass(), a method call that is supplied to Daikon
+      // like an oddly-named variable
+      if (field_name(vi).equals ("getClass()"))
         continue;
 
       // Skip any variable that is enclosed by a variable other than
