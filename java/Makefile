@@ -861,7 +861,8 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
-JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
+# JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
+JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | ${DAIKONBIN}/sort-directory-order.pl)
 #JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
 javadoc: doc
