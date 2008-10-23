@@ -464,6 +464,8 @@ utilMDE/.class-files-timestamp:
 
 # daikon.util is a copy of utilMDE.
 # Copied source files are read-only, to prevent accidental changes.
+# Use this file as a "canary" for copying everything.
+# (This can go wrong, however...)
 utilMDE-copy : daikon/util/README
 
 daikon/util/README : utilMDE/.class-files-timestamp

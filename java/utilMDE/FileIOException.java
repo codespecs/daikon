@@ -58,13 +58,13 @@ public class FileIOException extends IOException {
   // interface with just one or the other.
 
   public FileIOException(String s, String fileName, int lineNumber) {
-    this(s);
+    super(s);
     this.fileName = fileName;
     this.lineNumber = lineNumber;
   }
 
   public FileIOException(String s, Throwable cause, String fileName, int lineNumber) {
-    this(s, cause);
+    super(s, cause);
     this.fileName = fileName;
     this.lineNumber = lineNumber;
   }
@@ -130,13 +130,11 @@ public class FileIOException extends IOException {
 
   public String toString() {
     String result = super.toString();
-    if (lineNumber != -1) {
-      result += " on line " + lineNumber;
-      if (fileName != null) {
-        result += " of file " + fileName;
-      }
-    } else if (fileName != null) {
+    if (fileName != null) {
       result += " in file " + fileName;
+    }
+    if (lineNumber != -1) {
+      result += " at line " + lineNumber;
     }
     return result;
   }

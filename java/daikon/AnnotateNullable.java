@@ -69,10 +69,10 @@ public class AnnotateNullable {
       System.out.println ("import checkers.nullness.quals.NonNull;");
       System.out.println();
     } else {
-      System.out.println ("package checkers.quals:");
+      System.out.println ("package checkers.nullness.quals:");
       System.out.println ("annotation visible @Nullable");
       System.out.println();
-      System.out.println ("package checkers.quals:");
+      System.out.println ("package checkers.nullness.quals:");
       System.out.println ("annotation visible @NonNull");
       System.out.println();
     }
