@@ -44,7 +44,7 @@ public class StrTok {
    * Default Class for error handling.  Throws a RuntimeException when an
    * error occurs.
    *
-   * @see StrTok#set_error_handler(StrTok.Error)
+   * @see #set_error_handler(Error)
    */
   public static class Error {
 
