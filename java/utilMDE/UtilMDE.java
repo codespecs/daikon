@@ -1379,7 +1379,7 @@ public final class UtilMDE {
   /**
    * Concatenate the string representations of the objects, placing the
    * delimiter between them.
-   * @see ArraysMDE#toString(int[])
+   * @see utilMDE.ArraysMDE#toString(int[])
    **/
   public static String join(Object[] a, String delim) {
     if (a.length == 0) return "";
@@ -1393,7 +1393,7 @@ public final class UtilMDE {
   /**
    * Concatenate the string representations of the objects, placing the
    * system-specific line separator between them.
-   * @see ArraysMDE#toString(int[])
+   * @see utilMDE.ArraysMDE#toString(int[])
    **/
   public static String joinLines(Object... a) {
     return join(a, lineSep);
