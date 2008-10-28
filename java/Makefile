@@ -502,13 +502,16 @@ daikon/util/README : utilMDE/.class-files-timestamp
 # Checks that daikon.util is imported by DynComp source files, rather
 # than utilMDE
 utilMDE-import-check :
-	@echo "Checking that imports of utilMDE and daikon.util are correct..."
+	@echo -n "Checking that imports of utilMDE and daikon.util are correct..."
 	@if [ -n "`grep '^import utilMDE' $(DCOMP_JAVA_FILES)`" ]; then \
-	echo "*** ERROR: Do not import utilMDE from DynComp code. It will be";\
-	echo " instrumented when DynComp is run. Please use the (identical)";\
-	echo " daikon.util package, which will not be instrumented.";\
-	echo "The following files import from utilMDE:";\
+	echo ""; \
+	echo "*** ERROR: Do not import utilMDE from DynComp code. It will be"; \
+	echo " instrumented when DynComp is run. Please use the (identical)"; \
+	echo " daikon.util package, which will not be instrumented."; \
+	echo "The following files import from utilMDE:"; \
 	grep -n '^import utilMDE' $(DCOMP_JAVA_FILES); \
+	else \
+	echo "done"; \
 	fi
 
 #
@@ -871,7 +874,7 @@ javadoc: doc
 
 doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
-	#echo "JDOC_FILES: ${JDOC_FILES}"
+#echo "JDOC_FILES: ${JDOC_FILES}"
 	# This requires that jdk/lib/tools.jar be on your classpath
 	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) $(JDOC_FILES)
 
