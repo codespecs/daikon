@@ -928,7 +928,7 @@ public class PptTopLevel extends Ppt {
         out += String.format ("%s %b %s ", vi.name(), vt.isMissing(i),
                               vt.getValue (vi));
       }
-      if (out != "")
+      if (out != "")            // interned
         System.out.printf ("%s vals: %s%n", name(), out);
     }
 
@@ -3144,7 +3144,9 @@ public class PptTopLevel extends Ppt {
     return viewsAsCollection().iterator();
   }
 
-  /** Iterate over all of the invariants at this ppt **/
+  /**
+   * Iterate over all of the invariants at this ppt (but not any implications).
+   **/
   public Iterator<Invariant> invariants_iterator() {
     return new UtilMDE.MergedIterator<Invariant>(views_iterator_iterator());
   }
