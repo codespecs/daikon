@@ -220,7 +220,7 @@ public class TaskManager {
   public static void main (String args[]) throws IOException {
 
     Options options = new Options (usage_string, TaskManager.class);
-    String[] filenames = options.parse_and_usage (args);
+    String[] filenames = options.parse_or_usage (args);
 
     if (verbose)
       System.out.printf ("Option settings: %s%n", options.settings());

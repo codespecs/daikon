@@ -119,8 +119,8 @@ public class DynComp {
 
     // Parse our arguments
     Options options = new Options (synopsis, DynComp.class);
-    options.ignore_options_after_arg (true);
-    String[] target_args = options.parse_and_usage (args);
+    // options.ignore_options_after_arg (true);
+    String[] target_args = options.parse_or_usage (args);
     boolean ok = check_args (options, target_args);
     if (!ok)
       System.exit (1);

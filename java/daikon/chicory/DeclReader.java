@@ -327,7 +327,7 @@ public class DeclReader {
 
     Options options = new Options ("DeclReader [options] decl-files...",
                                    DeclReader.class);
-    String[] files = options.parse_and_usage (args);
+    String[] files = options.parse_or_usage (args);
     boolean print_each_set = !avg_size;
 
     // If reading/dumping dtrace file, just read one file and dump it

@@ -361,7 +361,7 @@ public class WSMatch {
 
     Options options = new Options ("WSMatch [options] dtrace-files...",
                                    WSMatch.class);
-    String[] files = options.parse_and_usage (args);
+    String[] files = options.parse_or_usage (args);
 
     // Read in all of the files.  Change all ppt names to include the
     // filenames since some operation names are the same

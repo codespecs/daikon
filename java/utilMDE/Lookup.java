@@ -116,7 +116,7 @@ public class Lookup {
   @Option ("Regex that matches an include directive; group 1 is the file name")
   public static String include_re = "\\\\include\\{(.*)\\}";
 
-  /** Platform specific line separator **/
+  /** Platform-specific line separator **/
   private static final String lineSep = System.getProperty("line.separator");
 
   /** One line synopsis of usage **/
@@ -130,7 +130,7 @@ public class Lookup {
   public static void main (String args[]) throws IOException {
 
     Options options = new Options (usage_string, Lookup.class);
-    String[] keywords = options.parse_and_usage (args);
+    String[] keywords = options.parse_or_usage (args);
 
     // If help was requested, print it and exit
     if (help) {
@@ -277,7 +277,7 @@ public class Lookup {
   }
 
   /**
-   * Entry point for creating html documentation
+   * Entry point for creating HTML documentation.
    */
   public static boolean start (RootDoc doc) {
 
@@ -287,7 +287,7 @@ public class Lookup {
   }
 
   /**
-   * Returns the next entry.  If no more entries are available returns null.
+   * Returns the next entry.  If no more entries are available, returns null.
    */
   public static Entry old_get_entry (MultiReader reader) throws IOException {
 
@@ -355,7 +355,7 @@ public class Lookup {
     }
   }
 
-  /** Returns the first line of entry **/
+  /** Returns the first line of entry. **/
   public static String first_line (String entry) {
 
     int ii = entry.indexOf (lineSep);

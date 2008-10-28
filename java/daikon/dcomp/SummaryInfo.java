@@ -50,7 +50,7 @@ public class SummaryInfo {
     init();
   }
 
-  String invoke_type;
+  String invoke_type;           // interned
   String original_classname;
   String original_methodname;
   java.lang.reflect.Method method;
@@ -81,7 +81,7 @@ public class SummaryInfo {
     invoke_type = si[0].intern();
 
     // Make sure the invoke type is either instance or static
-    if ((invoke_type != "instance") && (invoke_type != "static"))
+    if ((invoke_type != "instance") && (invoke_type != "static")) // interned
       throw new BadSummaryAnnotation ("method %s: found '%s' where "
                     + "'instance' or 'static' expected", method, invoke_type);
 
@@ -116,7 +116,7 @@ public class SummaryInfo {
 
   /** Returns the type of each parameter of the original method **/
   public Class<?>[] original_params() {
-    if (invoke_type == "static") {
+    if (invoke_type == "static") { // interned
       return method.getParameterTypes();
     } else {
       Class<?>[] all_args = method.getParameterTypes();
@@ -179,7 +179,7 @@ public class SummaryInfo {
   public static void main (String[] args) throws ClassNotFoundException{
 
     Options options = new Options (synopsis, SummaryInfo.class);
-    options.parse_and_usage (args);
+    options.parse_or_usage (args);
 
     Class dcr = daikon.dcomp.DCRuntime.class;
     int errs = 0;

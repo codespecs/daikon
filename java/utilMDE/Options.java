@@ -1,3 +1,8 @@
+// The two files
+//   Option.java
+//   Options.java
+// together comprise the implementation of command-line processing.
+
 package utilMDE;
 
 import java.io.*;
@@ -10,11 +15,43 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.FieldDoc;
 
 /**
- * Class that reads and sets command line options.  The Option
- * annotation is used to identify fields that are associated with a
- * command line option.  Both the short (-) and long option formats
- * (--) are supported.  The name of the option is the name of the
- * field (with some exceptions noted below). <p>
+ * The Options class parses command-line options and sets fields in your
+ * program accordingly.  Each field that is annotated with &#064;{@link
+ * utilMDE.Option} is set from a command-line argument of the same name.  By using
+ * annotations and Javadoc comments, this class reduces both boilerplate
+ * code and the potential for documentation to get out of sync with code.
+ * <p>
+ *
+ * The main entry point is {@link #parse_or_usage(String[])}.
+ * Typical use in your program is:
+ * <!-- Maybe expand this example a bit. -->
+ * <pre>
+ *    public static void main(String[] args) {
+ *      MyProgram myInstance = new MyProgram();
+ *      Options options = new Options("MyProgram [options] infile outfile",
+ *                                    myInstance, MyUtilityClass.class);
+ *      // Sets fields in object instance, and sets static fields in
+ *      // class MyUtilityClass.
+ *      // Returns the original command line, with all options removed.
+ *      String[] file_args = options.parse_or_usage (args);
+ *      ...
+ * </pre>
+ *
+ * The {@link Option} annotation on a field specifies user documentation
+ * and, optionally, a one-character short name that users may supply on the
+ * command line.  The long name is taken from the name of the variable;
+ * when the name contains an underscore, users may substitute a hyphen on
+ * the command line instead. <p>
+ *
+ * On the command line, the values for options are specified in the form
+ * '--longname=value', '-shortname=value', '--longname value', or
+ * '-shortname value'.  The value is mandatory for all options except
+ * booleans.  Booleans are set to true if no value is specified. <p>
+ *
+ * An option may be specified multiple times.  If the field is a
+ * list, each entry is be added to the list.  If the field is not a
+ * list, then only the last occurrence is used (subsequent occurrences
+ * overwrite the previous value).  <p>
  *
  * The field may be of the following types:
  * <ul>
@@ -30,29 +67,13 @@ import com.sun.javadoc.FieldDoc;
  *       that list.
  * </ul> <p>
  *
- * An option may be specified multiple times.  If the option is a
- * list, each entry is be added to the list.  If the option is not a
- * list, then only the last occurence is used (subsequent occurences
- * overwrite the previous value).  <p>
+ * <b>Example:</b> <p>
  *
- * The option annotation {@link Option} specifies the optional short
- * name, optional type name, and long description.  The long name is taken
- * from the name of the variable; when the name contains an underscore,
- * users may substitute a hyphen on the command line instead. <p>
- *
- * On the command line, the values for options are specified in the
- * form '--long=value', '-short=value', '--long value' or '-short
- * value'.  The value is mandatory for all options except booleans.
- * Booleans are set to true if no value is specified. <p>
- *
- * Any non-options (entries that don't begin with -- or -) in the
- * argument list are returned. <p>
- *
- * Simple example: <pre>
+ * Given this code: <pre>
  *
  *  public static class Test {
  *
- *    &#064;Option ("-o <filename> the output file ")
+ *    &#064;Option ("-o &lt;filename&gt; the output file ")
  *    public static File outfile = "/tmp/foobar";
  *
  *    &#064;Option ("-i ignore case")
@@ -61,10 +82,9 @@ import com.sun.javadoc.FieldDoc;
  *    &#064;Option ("-t set the initial temperature")
  *    public static double temperature = 75.0;
  *
- *    public static void main (String[] args) throws ArgException {
- *
+ *    public static void main (String[] args) {
  *      Options options = new Options ("Test [options] files", new Test());
- *      String[] file_args = options.parse_and_usage (args);
+ *      String[] file_args = options.parse_or_usage (args);
  *    }
  *  }
  *</pre>
@@ -78,13 +98,18 @@ import com.sun.javadoc.FieldDoc;
  *
  *  <li> Types without a string constructor are not supported.
  *
- *  <li>  Non-option information could be supported in the same manner
+ *  <li> Does not support "--" to terminate the options and begin the
+ *  non-option command line arguments.
+ *
+ *  <li> Non-option information could be supported in the same manner
  *  as options which would be cleaner than simply returning all of the
  *  non-options as an array.
  *
- *  <li>  The "--no-long" option to turn off a boolean option named "long"
+ *  <li> The "--no-long" option to turn off a boolean option named "long"
  *  is not supported.
  * </ul>
+ *
+ * @see utilMDE.Option
  **/
 public class Options {
 
@@ -97,7 +122,7 @@ public class Options {
     /** Option information for the field **/
     Option option;
 
-    /** Object containing the field.  Null if the field is static **/
+    /** Object containing the field.  Null if the field is static. **/
     Object obj;
 
     /** Short (one character) argument name **/
@@ -109,12 +134,12 @@ public class Options {
     /** Argument description **/
     String description;
 
-    /** JavaDoc description **/
+    /** Javadoc description **/
     String jdoc;
 
     /**
      * Name of the argument type.  Defaults to the type of the field, but
-     * user can override this in the option string
+     * user can override this in the option string.
      */
     String type_name;
 
@@ -127,7 +152,7 @@ public class Options {
     /** Default value of the option as a string **/
     String default_str = null;
 
-    /** If the option is a list, this references that list **/
+    /** If the option is a list, this references that list. **/
     List list = null;
 
     /** Constructor that takes one String for the type **/
@@ -211,7 +236,7 @@ public class Options {
     }
 
     /**
-     * Returns whether or not this option has a required argument
+     * Returns whether or not this option has a required argument.
      */
     public boolean argument_required() {
       Class type = field.getType();
@@ -231,7 +256,7 @@ public class Options {
     }
 
     /**
-     * Returns a one line description of the option
+     * Returns a one-line description of the option.
      */
     public String toString() {
       String short_name_str = "";
@@ -241,19 +266,19 @@ public class Options {
                             field);
     }
 
-    /** Returns the class that declares this option **/
+    /** Returns the class that declares this option. **/
     public Class get_declaring_class() {
       return field.getDeclaringClass();
     }
   }
 
   /**
-   * Ignore options after the first non-option
-   * @see #ignore_options_after_arg(boolean)
+   * Whether to parse options after a non-option command-line argument.
+   * @see #parse_options_after_arg(boolean)
    **/
-  private boolean ignore_options_after_arg = false;
+  private boolean parse_options_after_arg = false;
 
-  /** All of the non-argument options as a single string **/
+  /** All of the argument options as a single string **/
   private String options_str = "";
 
   /** First specified class **/
@@ -267,43 +292,43 @@ public class Options {
     = new LinkedHashMap<String,OptionInfo>();
 
   /**
-   * Convert underscores to dashes in long options.  The underscore name
-   * will work as well, but the dashed name will be used in the usage
+   * Convert underscores to dashes in long options in usage messages.  Uses
+   * may specify either the the underscore or dashed name on the command
+   * line.
    */
   private boolean use_dashes = true;
 
-  /** Synopsis of usage (e.g., prog [options] arg1, arg2, ...) **/
+  /** Synopsis of usage.  Example:  "prog [options] arg1, arg2, ..." **/
   String usage_synopsis = "";
 
   // Debug loggers
   private SimpleLog debug_options = new SimpleLog (false);
 
   /**
-   * Setup option processing on the specified array of objects or
-   * classes.  If an element is a class, each of the options must be
-   * static.  Otherwise the element is assumed to be an object that
-   * contains some option fields.  In that case, the fields can be either
-   * static or instance fields.  The names must be unique over all of
-   * the elements
+   * Prepare for option processing.  Creates an object that will set fields
+   * in all the given arguments.  An argument to this method may be a
+   * Class, in which case its static fields are set.  The names of all the
+   * options (that is, the fields annotated with &#064;{@link Option}) must be
+   * unique across all the arguments.
    */
-  public Options (Object... classes) {
-    this ("", classes);
+  public Options (Object... args) {
+    this ("", args);
   }
 
   /**
-   * Setup option processing on the specified array of objects or
-   * classes.  If an element is a class, each of the options must be
-   * static.  Otherwise the element is assumed to be an object that
-   * contains some option fields.  In that case, the fields can be either
-   * static or instance fields.  The names must be unique over all of
-   * the elements
+   * Prepare for option processing.  Creates an object that will set fields
+   * in all the given arguments.  An argument to this method may be a
+   * Class, in which case its static fields are set.  The names of all the
+   * options (that is, the fields annotated with &#064;{@link Option}) must be
+   * unique across all the arguments.
+   * @param usage_synopsis A synopsis of how to call your program
    */
-  public Options (String usage_synopsis, Object... classes) {
+  public Options (String usage_synopsis, Object... args) {
 
     this.usage_synopsis = usage_synopsis;
 
     // Loop through each specified object or class
-    for (Object obj : classes) {
+    for (Object obj : args) {
 
       if (obj instanceof Class) {
 
@@ -353,18 +378,92 @@ public class Options {
   }
 
   /**
-   * Set whether or not options after the first non option (first argument)
-   * should be treated as arguments and not as options.  Useful if the
-   * arguments are actually arguments/options for another program or for
-   * some other reason include items that start with '-' or '--'
+   * If true, Options will parse arguments even after a non-option
+   * command-line argument.  This is useful if it is desired to permit
+   * users to write options at the end of a command line.  The default
+   * behavior of false is useful to permit arguments to start with '-' or
+   * '--', for example if some arguments are actually options/arguments for
+   * another program.
    */
+  public void parse_options_after_arg (boolean val) {
+    parse_options_after_arg = val;
+  }
+
+  /** @deprecated Use {@link #parse_options_after_arg(boolean)}. */
+  @Deprecated
   public void ignore_options_after_arg (boolean val) {
-    ignore_options_after_arg = val;
+    parse_options_after_arg = !val;
   }
 
   /**
-   * Parses a command line that is encoded in a single string.  Quoted
-   * string with both single and double quotes are supported.
+   * Parses a command line and sets the options accordingly.
+   * @return all non-option arguments
+   * @throws ArgException if the command line contains unknown option or
+   * misused options.
+   */
+  public String[] parse (String[] args) throws ArgException {
+
+    List<String> non_options = new ArrayList<String>();
+    boolean ignore_options = false;
+
+    // Loop through each argument
+    for (int ii = 0; ii < args.length; ii++) {
+      String arg = args[ii];
+      if (arg.startsWith ("--") && !ignore_options) {
+        int eq_pos = arg.indexOf ('=');
+        String arg_name = arg;
+        String arg_value = null;
+        if (eq_pos > 0) {
+          arg_name = arg.substring (0, eq_pos);
+          arg_value = arg.substring (eq_pos+1);
+        }
+        OptionInfo oi = name_map.get (arg_name);
+        if (oi == null)
+          throw new ArgException ("unknown option '" + arg + "'");
+        if (oi.argument_required() && (arg_value == null)) {
+          ii++;
+          if (ii >= args.length)
+            throw new ArgException ("option %s requires an argument", arg);
+          arg_value = args[ii];
+        }
+        // System.out.printf ("arg_name = '%s', arg_value='%s'%n", arg_name,
+        //                    arg_value);
+        set_arg (oi, arg_name, arg_value);
+      } else if (arg.startsWith ("-") && !ignore_options) {
+        int eq_pos = arg.indexOf ('=');
+        String arg_name = arg;
+        String arg_value = null;
+        if (eq_pos > 0) {
+          arg_name = arg.substring (0, eq_pos);
+          arg_value = arg.substring (eq_pos+1);
+        }
+        OptionInfo oi = name_map.get (arg_name);
+        if (oi == null)
+          throw new ArgException ("unknown option '" + arg + "'");
+        if (oi.argument_required() && (arg_value == null)) {
+          ii++;
+          if (ii >= args.length)
+            throw new ArgException ("option %s requires an argument", arg);
+          arg_value = args[ii];
+        }
+        set_arg (oi, arg_name, arg_value);
+      } else { // not an option
+        if (! parse_options_after_arg)
+          ignore_options = true;
+        non_options.add (arg);
+      }
+
+    }
+    return (non_options.toArray (new String[non_options.size()]));
+  }
+
+  /**
+   * Parses a command line and sets the options accordingly.  This method
+   * splits the argument string into command line arguments, respecting
+   * single and double quotes, then calls parse(String[]).
+   * @return all non-option arguments
+   * @throws ArgException if the command line contains unknown option or
+   * misused options.
    * @see #parse(String[])
    */
   public String[] parse (String args) throws ArgException {
@@ -402,117 +501,117 @@ public class Options {
   }
 
   /**
-   * Parses a command line and sets the options accordingly.  Any
-   * non-option arguments are returned.  Any unknown option or other
-   * errors throws an ArgException.
+   * Parses a command line and sets the options accordingly.  If an error
+   * occurs, prints the usage and terminates the program.  The program is
+   * terminated rather than throwing an error to create cleaner output.
+   * @return all non-option arguments
+   * @see #parse(String[])
    */
-  public String[] parse (String[] args) throws ArgException {
+  public String[] parse_or_usage (String[] args) {
 
-    List<String> non_options = new ArrayList<String>();
-    boolean ignore_options = false;
+    String non_options[] = null;
 
-    // Loop through each argument
-    for (int ii = 0; ii < args.length; ii++) {
-      String arg = args[ii];
-      if (arg.startsWith ("--") && !ignore_options) {
-        int eq_pos = arg.indexOf ('=');
-        String arg_name = arg;
-        String arg_value = null;
-        if (eq_pos > 0) {
-          arg_name = arg.substring (0, eq_pos);
-          arg_value = arg.substring (eq_pos+1);
-        }
-        OptionInfo oi = name_map.get (arg_name);
-        if (oi == null)
-          throw new ArgException ("unknown argument '" + arg + "'");
-        if (oi.argument_required() && (arg_value == null)) {
-          ii++;
-          if (ii >= args.length)
-            throw new ArgException ("option %s requires an argument", arg);
-          arg_value = args[ii];
-        }
-        // System.out.printf ("arg_name = '%s', arg_value='%s'%n", arg_name,
-        //                    arg_value);
-        set_arg (oi, arg_name, arg_value);
-      } else if (arg.startsWith ("-") && !ignore_options) {
-        int eq_pos = arg.indexOf ('=');
-        String arg_name = arg;
-        String arg_value = null;
-        if (eq_pos > 0) {
-          arg_name = arg.substring (0, eq_pos);
-          arg_value = arg.substring (eq_pos+1);
-        }
-        OptionInfo oi = name_map.get (arg_name);
-        if (oi == null)
-          throw new ArgException ("unknown argument '" + arg + "'");
-        if (oi.argument_required() && (arg_value == null)) {
-          ii++;
-          if (ii >= args.length)
-            throw new ArgException ("option %s requires an argument", arg);
-          arg_value = args[ii];
-        }
-        set_arg (oi, arg_name, arg_value);
-      } else { // not an option
-        if (ignore_options_after_arg)
-          ignore_options = true;
-        non_options.add (arg);
-      }
-
+    try {
+      non_options = parse (args);
+    } catch (ArgException ae) {
+      print_usage (System.out, ae.getMessage());
+      System.exit (-1);
+      // throw new Error ("usage error: ", ae);
     }
-    return (non_options.toArray (new String[non_options.size()]));
+    return (non_options);
   }
 
   /**
-   * Parses a command line and sets the options accordingly.  Any
-   * non-option arguments are returned.  If an error occurs, prints
-   * the usage and terminates the program.  The program is terminated
-   * rather than throwing an error to create cleaner output.  See parse().
+   * Parses a command line and sets the options accordingly.  If an error
+   * occurs, prints the usage and terminates the program.  The program is
+   * terminated rather than throwing an error to create cleaner output.
+   * This method splits the argument string into command line arguments,
+   * respecting single and double quotes, then calls parse_or_usage(String[]).
+   * @return all non-option arguments
+   * @see #parse_or_usage(String[])
    */
+  public String[] parse_or_usage (String args) {
+
+    String non_options[] = null;
+
+    try {
+      non_options = parse (args);
+    } catch (ArgException ae) {
+      print_usage (System.out, ae.getMessage());
+      System.exit (-1);
+      // throw new Error ("usage error: ", ae);
+    }
+    return (non_options);
+  }
+
+  /** @deprecated Use {@link #parse_or_usage(String[])}. */
+  @Deprecated
   public String[] parse_and_usage (String[] args) {
+    return parse_or_usage(args);
+  }
 
-    String non_options[] = null;
+  /** @deprecated Use {@link #parse_or_usage(String)}. */
+  @Deprecated
+  public String[] parse_and_usage (String args) {
+    return parse_or_usage(args);
+  }
 
-    try {
-      non_options = parse (args);
-    } catch (ArgException ae) {
-      print_usage (ae.getMessage());
-      System.exit (-1);
-      // throw new Error ("usage error: ", ae);
+
+  // The point of having this distinct from the next one is that %
+  // characters in the message are not messed with.
+  /** Prints a message followed by indented usage information. **/
+  public void print_usage (PrintStream ps, String msg) {
+    ps.println (msg);
+    ps.printf("Usage: %s%n", usage_synopsis);
+    for (String use : usage()) {
+      ps.printf ("  %s%n", use);
     }
-    return (non_options);
   }
 
   /**
-   * Parses a command line and sets the options accordingly.  Any
-   * non-option arguments are returned.  If an error occurs prints
-   * the usage and terminates the program.  The program is terminated
-   * rather than throwing an error to create cleaner output.  See parse().
+   * Prints the specified message followed by indented usage information.
    */
-  public String[] parse_and_usage (String args) {
-
-    String non_options[] = null;
-
-    try {
-      non_options = parse (args);
-    } catch (ArgException ae) {
-      print_usage (ae.getMessage());
-      System.exit (-1);
-      // throw new Error ("usage error: ", ae);
+  public void print_usage (PrintStream ps, String format, Object... args) {
+    ps.printf (format, args);
+    ps.printf ("Usage: %s%n", usage_synopsis);
+    for (String use : usage()) {
+      ps.printf ("  %s%n", use);
     }
-    return (non_options);
   }
 
-  /** Prints a usage message **/
-  public void print_usage (String msg) {
-    System.out.printf ("%s, Usage: %s%n", msg, usage_synopsis);
-    for (String use : usage()) {
-      System.out.printf ("  %s%n", use);
+  /**
+   * Returns an array of Strings, where each String describes the usage of
+   * one command-line option.
+   **/
+  public String[] usage () {
+
+    List<String> uses = new ArrayList<String>();
+
+    // Determine the length of the longest option
+    int max_len = 0;
+    for (OptionInfo oi : options) {
+      int len = oi.synopsis().length();
+      if (len > max_len)
+        max_len = len;
     }
+
+    // Create the usage string
+    for (OptionInfo oi : options) {
+      String default_str = "[no default]";
+      if (oi.default_str != null)
+        default_str = String.format ("[default %s]", oi.default_str);
+      String use = String.format ("%-" + max_len + "s - %s %s",
+                                  oi.synopsis(), oi.description, default_str);
+      uses.add (use);
+    }
+
+    return uses.toArray (new String[uses.size()]);
+
   }
 
   /**
    * Set the specified option to the value specified in arg_value.  Throws
-   * an ArgException if there are any errors
+   * an ArgException if there are any errors.
    */
   public void set_arg (OptionInfo oi, String arg_name, String arg_value)
     throws ArgException {
@@ -525,10 +624,15 @@ public class Options {
       options_str += " ";
     options_str += arg_name;
     if (arg_value != null) {
-      if (arg_value.contains (" "))
-        options_str += "='" + arg_value + "'";
-      else
+      if (! arg_value.contains (" ")) {
         options_str += "=" + arg_value;
+      } else if (! arg_value.contains ("'")) {
+        options_str += "='" + arg_value + "'";
+      } else if (! arg_value.contains ("\"")) {
+        options_str += "=\"" + arg_value + "\"";
+      } else {
+        throw new ArgException("Can't quote for interal debugging: " + arg_value);
+      }
     }
     // Argument values are required for everything but booleans
     if ((arg_value == null) && (type != Boolean.TYPE)
@@ -608,58 +712,7 @@ public class Options {
 
 
   /**
-   * Returns an array of Strings describing the usage of the command line
-   * options defined in options (one element per option)
-   **/
-  public String[] usage () {
-
-    List<String> uses = new ArrayList<String>();
-
-    // Determine the length of the longest option
-    int max_len = 0;
-    for (OptionInfo oi : options) {
-      int len = oi.synopsis().length();
-      if (len > max_len)
-        max_len = len;
-    }
-
-    // Create the usage string
-    for (OptionInfo oi : options) {
-      String default_str = "[no default]";
-      if (oi.default_str != null)
-        default_str = String.format ("[default %s]", oi.default_str);
-      String use = String.format ("%-" + max_len + "s - %s %s",
-                                  oi.synopsis(), oi.description, default_str);
-      uses.add (use);
-    }
-
-    return uses.toArray (new String[uses.size()]);
-
-  }
-
-  /**
-   * Returns a string containing all of the options that were set and
-   * their arguments (essentially the contents of args[] without all
-   * non-options removed)
-   */
-  public String get_options_str() {
-    return (options_str);
-  }
-
-  /**
-   * Prints the specified message followed by usage information
-   */
-  public void print_usage (String format, Object... args) {
-
-    System.out.printf (format, args);
-    System.out.printf (". Usage: %s%n", usage_synopsis);
-    for (String use : usage()) {
-      System.out.printf ("  %s%n", use);
-    }
-  }
-
-  /**
-   * Returns a short name for the specified type for use in messages
+   * Returns a short name for the specified type for use in messages.
    */
   private static String type_short_name (Class type) {
 
@@ -676,7 +729,21 @@ public class Options {
   }
 
   /**
-   * returns a string containing the current setting for each option
+   * Returns a string containing all of the options that were set and their
+   * arguments.  This is essentially the contents of args[] with all
+   * non-options removed.
+   * @see #settings()
+   */
+  public String get_options_str() {
+    return (options_str);
+  }
+
+  /**
+   * Returns a string containing the current setting for each option, in a
+   * format that can be parsed by Options.  This differs from
+   * get_options_str() in that it contains each known option exactly once:
+   * it never contains duplicates, and it contains every known option even
+   * if the option was not specified on the command line.
    */
   public String settings () {
 
@@ -705,7 +772,8 @@ public class Options {
   }
 
   /**
-   * Returns all of the defined options on separate lines
+   * Returns a description of all of the known options.
+   * Each option is described on its own line in the output.
    */
   public String toString() {
 
@@ -719,7 +787,7 @@ public class Options {
 
 
   /**
-   * Exceptions encountered during argument processing
+   * Exceptions encountered during argument processing.
    */
   public static class ArgException extends Exception {
     static final long serialVersionUID = 20051223L;
@@ -730,7 +798,7 @@ public class Options {
   }
 
   /**
-   * Entry point for creating html documentation
+   * Entry point for creating HTML documentation.
    */
   public void jdoc (RootDoc doc) {
 
@@ -782,7 +850,7 @@ public class Options {
    * Parse an option value and return its three components (short_name,
    * type_name, and description).  The short_name and type_name are null
    * if they are not specified in the string.  There are always three
-   * elements in the array
+   * elements in the array.
    */
   private static String[] parse_option (String val) {
 
@@ -811,27 +879,27 @@ public class Options {
     return new String[] {short_name, type_name, description};
   }
 
-  /**
-   * Test  class with some defined arguments
-   */
-  public static class Test {
+//   /**
+//    * Test class with some defined arguments.
+//    */
+//   private static class Test {
+//
+//     @Option ("generic") List<Pattern> lp = new ArrayList<Pattern>();
+//     @Option ("-a <filename> argument 1") String arg1 = "/tmp/foobar";
+//     @Option ("argument 2") String arg2;
+//     @Option ("-d double value") double temperature;
+//     @Option ("-f the input file") File input_file;
+//   }
+//
+//   /**
+//    * Simple example
+//    */
+//   private static void main (String[] args) throws ArgException {
+//
+//     Options options = new Options ("test", new Test());
+//     System.out.printf ("Options:%n%s", options);
+//     options.parse_or_usage (args);
+//     System.out.printf ("Results:%n%s", options.settings());
+//   }
 
-    @Option ("generic") List<Pattern> lp = new ArrayList<Pattern>();
-    @Option ("-a <filename> argument 1") String arg1 = "/tmp/foobar";
-    @Option ("argument 2") String arg2;
-    @Option ("-d double value") double temperature;
-    @Option ("-f the input file") File input_file;
-  }
-
-  /**
-   * Simple example
-   */
-  public static void main (String[] args) throws ArgException {
-
-    Test t = new Test();
-    Options options = new Options ("test", new Test());
-    System.out.printf ("Options:%n%s", options);
-    options.parse_and_usage (args);
-    System.out.printf ("Results:%n%s", options.settings());
-  }
 }

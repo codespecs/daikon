@@ -119,8 +119,8 @@ public class BuildJDK {
     System.out.println("Starting at " + new Date());
 
     Options options = new Options (synopsis, BuildJDK.class);
-    options.ignore_options_after_arg (true);
-    String[] cl_args = options.parse_and_usage (args);
+    // options.ignore_options_after_arg (true);
+    String[] cl_args = options.parse_or_usage (args);
     boolean ok = check_args(options, cl_args);
     if (!ok)
       System.exit(1);

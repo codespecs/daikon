@@ -50,7 +50,7 @@ public class ChicoryPremain {
     // Parse our arguments using Chicory's argument parser
     Options options = new Options (Chicory.synopsis, Chicory.class,
                                    ChicoryPremain.class);
-    String[] target_args = options.parse_and_usage (agentArgs);
+    String[] target_args = options.parse_or_usage (agentArgs);
     if (target_args.length > 0) {
       System.err.printf ("Unexpected ChicoryPremain arguments %s%n",
                          Arrays.toString (target_args));

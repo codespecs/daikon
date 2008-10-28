@@ -29,7 +29,7 @@ public class Premain {
     throws IOException {
 
     Options options = new Options (DynComp.usage_synopsis, DynComp.class, Premain.class);
-    String[] args = options.parse_and_usage (agentArgs.split ("  *"));
+    String[] args = options.parse_or_usage (agentArgs.split ("  *"));
     if (args.length > 0) {
       options.print_usage ("Unexpected argument %s", args[0]);
       System.exit (-1);
