@@ -41,7 +41,7 @@ public class AnnotateNullable {
 
   /**
    * Adds NonNull annotations as well as Nullable annotations.  Unlike Nullable
-   * annotation, NonNull annotations are not necessarily correct.
+   * annotations, NonNull annotations are not necessarily correct.
    */
   @Option ("-n Insert NonNull as well as Nullable annotations")
   public static boolean nonnull_annotations = false;
@@ -50,7 +50,7 @@ public class AnnotateNullable {
 
     Options options = new Options ("utilMDE.AnnotateNullable [options] "
                                    + "<inv_file>", AnnotateNullable.class);
-    String[] inv_files = options.parse_and_usage (args);
+    String[] inv_files = options.parse_or_usage (args);
     assert inv_files.length == 1;
 
     // Read the serialized invariant file
@@ -158,9 +158,11 @@ public class AnnotateNullable {
    */
   public static String get_annotation (PptTopLevel ppt, VarInfo vi) {
 
-    String annotation = "";
-    if (nonnull_annotations)
-      annotation = "NonNull";
+    if (vi.type.isPrimitive()) {
+      return "";
+    }
+
+    String annotation = (nonnull_annotations ? "NonNull" : "");
     if ((ppt.num_samples (vi) > 0) && !ppt.is_nonzero (vi))
       annotation = "Nullable";
     if (annotation != "") {     // interned
