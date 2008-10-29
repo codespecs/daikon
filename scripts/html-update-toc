@@ -2,7 +2,7 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
-# Time-stamp: <2008-10-21 21:14:34 mernst>
+# Time-stamp: <2008-10-29 14:04:27 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -58,9 +58,11 @@ my $debug = 0;
 
 my $quiet = 0;
 
-# read by paragraphs (remember that this is a string, not a regexp)
+# Read by paragraphs (remember that this is a string, not a regexp).
 # (Warning: this doesn't work for DOS files, but I hack around that via
 # the $contents_end regexp.)
+# (Also, when paragraphs are separated by more than 2 newlines, this makes
+# Perl treat the input as if it contains some empty paragraphs.)
 $INPUT_RECORD_SEPARATOR = "\n\n";
 
 # TODO:
@@ -89,7 +91,7 @@ FILELOOP: for my $file (@ARGV) {
     print STDERR "Skipping $file:  can't open\n";
     next;
   }
-  # Only check the first 10 paragraphs
+  # Only check the first 10 paragraphs (see above for caveat).
   for (my $i=0; $i<10; $i++) {
     my $line = <FILE>;
     if (! defined($line)) {
