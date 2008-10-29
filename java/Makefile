@@ -459,13 +459,14 @@ install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 dyncomp-jdk-only dcomp-jdk-only :
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
-utilMDE/.class-files-timestamp:
+# Double colon means always rerun the rules, even though there are no prerequisites and the target exists.
+utilMDE/.class-files-timestamp::
 	$(MAKE) -C utilMDE
 
 # daikon.util is a copy of utilMDE.
 # Copied source files are read-only, to prevent accidental changes.
 # Use this file as a "canary" for copying everything.
-# (This can go wrong, however...)
+.PHONY: utilMDE-copy
 utilMDE-copy : daikon/util/README
 
 daikon/util/README : utilMDE/.class-files-timestamp
