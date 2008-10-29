@@ -20,6 +20,8 @@
    "emacs[-/][0-9]+\.[0-9]+\\(\.[0-9]+\\)?/\\(lisp\\|src\\)/"
    ;; Javac compiler
    "annotations/\\(vendor-\\)?compiler/"
+   ;; ASM bytecode manipulation library
+   "annotations/asmx?/"
    ;; FreePastry
    "pastry/src/"
    )
