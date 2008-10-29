@@ -514,7 +514,7 @@ public class Options {
     try {
       non_options = parse (args);
     } catch (ArgException ae) {
-      print_usage (System.out, ae.getMessage());
+      print_usage (ae.getMessage());
       System.exit (-1);
       // throw new Error ("usage error: ", ae);
     }
@@ -537,7 +537,7 @@ public class Options {
     try {
       non_options = parse (args);
     } catch (ArgException ae) {
-      print_usage (System.out, ae.getMessage());
+      print_usage (ae.getMessage());
       System.exit (-1);
       // throw new Error ("usage error: ", ae);
     }
@@ -557,24 +557,13 @@ public class Options {
   }
 
 
-  // This method is distinct from
-  //   print_usage (PrintStream ps, String format, Object... args)
-  // because % characters in the message are not interpreted.
-  /** Prints a message followed by indented usage information. **/
-  public void print_usage (PrintStream ps, String msg) {
-    print_usage(ps, "%s%n", msg);
-  }
-
-  /** Prints, to standard output, a message followed by indented usage information. **/
-  public void print_usage (String msg) {
-    print_usage(System.out, msg);
-  }
+  /// This is a lot of methods, but it does save a tad of typing for the
+  /// programmer.
 
   /**
-   * Prints the specified message followed by indented usage information.
+   * Prints usage information.
    */
-  public void print_usage (PrintStream ps, String format, Object... args) {
-    ps.printf (format, args);
+  public void print_usage (PrintStream ps) {
     ps.printf ("Usage: %s%n", usage_synopsis);
     for (String use : usage()) {
       ps.printf ("  %s%n", use);
@@ -582,7 +571,37 @@ public class Options {
   }
 
   /**
-   * Prints, to standard output, the specified message followed by indented usage information.
+   * Prints, to standard output, usage information.
+   */
+  public void print_usage () {
+    print_usage (System.out);
+  }
+
+
+  // This method is distinct from
+  //   print_usage (PrintStream ps, String format, Object... args)
+  // because % characters in the message are not interpreted.
+  /** Prints a message followed by indented usage information. **/
+  public void print_usage (PrintStream ps, String msg) {
+    ps.println (msg);
+    print_usage (ps);
+  }
+
+  /** Prints, to standard output, a message followed by usage information. **/
+  public void print_usage (String msg) {
+    print_usage (System.out, msg);
+  }
+
+  /**
+   * Prints a message followed by usage information.
+   */
+  public void print_usage (PrintStream ps, String format, Object... args) {
+    ps.printf (format, args);
+    print_usage (ps);
+  }
+
+  /**
+   * Prints, to standard output, a message followed by usage information.
    */
   public void print_usage (String format, Object... args) {
     print_usage(System.out, format, args);
