@@ -42,10 +42,18 @@ compile_notest:  .class-files-timestamp
 # compilation succeeds.  So, no targets for .class files in this Makefile.
 # ${ALL_CLASS_FILES}: .class-files-timestamp
 
-# Creates ${ALL_CLASS_FILES} also.
+# Creates ${ALL_CLASS_FILES}.
 .class-files-timestamp: ${ALL_JAVA_FILES}
 	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1 | ${DAIKONBIN}/javac-xlint-prune.pl
 	touch .class-files-timestamp
+
+jar: utilMDE.jar
+utilMDE.jar: ${ALL_CLASS_FILES}
+	rm -rf utilMDE
+	mkdir utilMDE
+	cp -p ${ALL_CLASS_FILES} utilMDE
+	jar cf utilMDE.jar utilMDE
+	rm -rf utilMDE
 
 clean:
 	rm -f *.class
@@ -119,7 +127,7 @@ LimitedSizeIntSet.java: LimitedSizeSet.java.jpp
 ###
 ###
 
-.PHONY: default all compile_notest clean very_clean tags test run-chicory javadoc showvars
+.PHONY: default all compile_notest jar clean very_clean tags test run-chicory javadoc showvars
 
 
 # Existence of this rule means that a target is deleted if has just changed
