@@ -154,7 +154,7 @@ public class DynComp {
     }
     if (!no_jdk && rt_file != null && !rt_file.exists()) {
       // if --rt-file was given, but doesn't exist
-      options.print_usage ("specified rt-file does not exist");
+      options.print_usage ("rt-file %s does not exist", rt_file);
       return (false);
     }
 
