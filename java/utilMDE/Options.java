@@ -557,15 +557,17 @@ public class Options {
   }
 
 
-  // The point of having this distinct from the next one is that %
-  // characters in the message are not messed with.
+  // This method is distinct from
+  //   print_usage (PrintStream ps, String format, Object... args)
+  // because % characters in the message are not interpreted.
   /** Prints a message followed by indented usage information. **/
   public void print_usage (PrintStream ps, String msg) {
-    ps.println (msg);
-    ps.printf("Usage: %s%n", usage_synopsis);
-    for (String use : usage()) {
-      ps.printf ("  %s%n", use);
-    }
+    print_usage(ps, "%s%n", msg);
+  }
+
+  /** Prints, to standard output, a message followed by indented usage information. **/
+  public void print_usage (String msg) {
+    print_usage(System.out, msg);
   }
 
   /**
@@ -577,6 +579,13 @@ public class Options {
     for (String use : usage()) {
       ps.printf ("  %s%n", use);
     }
+  }
+
+  /**
+   * Prints, to standard output, the specified message followed by indented usage information.
+   */
+  public void print_usage (String format, Object... args) {
+    print_usage(System.out, format, args);
   }
 
   /**
