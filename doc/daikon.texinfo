@@ -2110,11 +2110,11 @@ method of the class (except not the entry to constructors, when fields
 are not yet initialized).
 
 The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only for
-static variables, which have only one value for all objects.  (Static
-fields are often used for different purposes than instance fields, and
-the @code{:::CLASS} tag separates these so that programmers can see the
-properties over the static fields without knowing which are the static
-fields and pick them out of the @code{:::OBJECT} program point.
+static variables, which have only one value for all objects.  Static
+fields and instance fields are often used for different purposes.
+Daikon's separation of the two types of fields permits programmers to
+see the properties over the static fields without knowing which are the
+static fields and pick them out of the @code{:::OBJECT} program point.
 
 @cindex private methods
 
