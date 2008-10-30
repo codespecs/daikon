@@ -16,9 +16,9 @@ import static daikon.PptTopLevel.PptType;
  * <p>
  *
  * Since only the NonZero invariant is used, Daikon processing time can be
- * significantly reduced by turning off derived variables and all invariants
- * other than daikon.inv.unary.scalar.NonZero.  This is not necessary, however,
- * for correct operation.
+ * significantly reduced by turning off derived variables and all
+ * invariants other than daikon.inv.unary.scalar.NonZero.  This is not
+ * necessary, however, for correct operation.
  */
 public class AnnotateNullable {
 
@@ -86,22 +86,42 @@ public class AnnotateNullable {
         continue;
 
       // Skip program points that are not OBJECT ppts
-      if (ppt.is_object())
+      if (ppt.is_object()) {
         process_class (ppt);
-
+      }
     }
   }
+
+  // Returns null if no corresponding class ppt exists
+  private static PptTopLevel class_for_object(PptTopLevel object_ppt) {
+    PptTopLevel class_ppt = null;
+    if (object_ppt.parents.size() > 0) {
+      assert object_ppt.parents.size() == 1 : object_ppt;
+      class_ppt = object_ppt.parents.get(0).parent;
+    }
+    return class_ppt;
+  }
+
+  // Returns null if no corresponding object ppt exists
+  private static PptTopLevel object_for_class(PptTopLevel class_ppt) {
+    PptTopLevel object_ppt = null;
+    for (PptRelation child_relation : class_ppt.children) {
+      PptTopLevel child = child_relation.child;
+      if (child.is_object()) {
+        assert object_ppt == null; // shouldn't have two children that are both is_object() ?
+        object_ppt = child;
+      }
+    }
+    return object_ppt;
+  }
+
 
   // Process a class, including all its methods.
   // Takes the object program point as its argument.
   public static void process_class (PptTopLevel object_ppt) {
 
     // Get the class program point (if any)
-    PptTopLevel class_ppt = null;
-    if (object_ppt.parents.size() > 0) {
-      assert object_ppt.parents.size() == 1 : object_ppt;
-      class_ppt = object_ppt.parents.get(0).parent;
-    }
+    PptTopLevel class_ppt = class_for_object(object_ppt);
 
     String class_samples = "-";
     if (class_ppt != null)
@@ -134,7 +154,21 @@ public class AnnotateNullable {
     // Process member (non-static) fields
     process_obj_fields (object_ppt);
 
-    // Process each method
+    // Process static methods
+    if (class_ppt != null) {
+      for (PptRelation child_rel : class_ppt.children) {
+        PptTopLevel child = child_rel.child;
+        // Skip enter ppts, all of the info is at the exit.
+        if (child.type == PptType.ENTER)
+          continue;
+        if (child.type == PptType.OBJECT)
+          continue;
+        debug.log ("processing static method %s, type %s", child, child.type);
+        process_method (child);
+      }
+    }
+
+    // Process member (non-static) methods
     for (PptRelation child_rel : object_ppt.children) {
       PptTopLevel child = child_rel.child;
       // Skip enter ppts, all of the info is at the exit.
@@ -247,11 +281,11 @@ public class AnnotateNullable {
       if (vi.parent_ppt != null)
         continue;
 
-      // Skip 'this' variables (we know they are non-null)
+      // Skip 'this' variables (we know they are non-null).
       if (vi.name().equals ("this"))
         continue;
       // Likewise for getClass(), a method call that is supplied to Daikon
-      // like an oddly-named variable
+      // like an oddly-named variable.
       if (field_name(vi).equals ("getClass()"))
         continue;
 
