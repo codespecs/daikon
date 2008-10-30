@@ -4368,6 +4368,12 @@ public class PptTopLevel extends Ppt {
       return ppt_name.isObjectInstanceSynthetic();
   }
 
+  /** Is this a ppt that represents a class? **/
+  public boolean is_class() {
+    return (type != null && type == PptType.CLASS);
+  }
+
+
   public String var_names() {
     return Arrays.toString (var_infos);
   }
