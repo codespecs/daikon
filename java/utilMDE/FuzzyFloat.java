@@ -44,7 +44,7 @@ public class FuzzyFloat {
   }
 
   /**
-   * Set the relative diff after creation.
+   * Set the relative diff.
    *
    * @see #FuzzyFloat
    */

@@ -887,245 +887,6 @@ public final class ArraysMDE {
     return result;
   }
 
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static <T> T[] concat(T[] a, T[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static <T> T[] concat(T[] a, List<T> b) {
-    if (a == null && b == null) return null;
-    if (a == null) return (T[]) b.toArray(); // unchecked cast
-    if (b == null) return a;
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.length + b.size()];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    // System.arraycopy(b, 0, result, a.length, b.size());
-    for (int i=0; i<b.size(); i++) {
-      result[i+a.length] = b.get(i);
-    }
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static <T> T[] concat(List<T> a, T[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return (T[]) a.toArray(); // unchecked cast
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.size() + b.length];
-
-    // System.arraycopy(a, 0, result, 0, a.size());
-    for (int i=0; i<a.size(); i++) {
-      result[i] = a.get(i);
-    }
-    System.arraycopy(b, 0, result, a.size(), b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static <T> T[] concat(List<T> a, List<T> b) {
-    if (a == null && b == null) return null;
-    if (a == null) return (T[]) b.toArray(); // unchecked cast
-    if (b == null) return (T[]) a.toArray(); // unchecked cast
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.size() + b.size()];
-
-    // System.arraycopy(a, 0, result, 0, a.length);
-    for (int i=0; i<a.size(); i++) {
-      result[i] = a.get(i);
-    }
-    // System.arraycopy(b, 0, result, a.length, b.length);
-    for (int i=0; i<b.size(); i++) {
-      result[i+a.size()] = b.get(i);
-    }
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static String[] concat(String[] a, String[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    String[] result = new String[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static byte[] concat(byte[] a, byte[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    byte[] result = new byte[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static boolean[] concat(boolean[] a, boolean[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    boolean[] result = new boolean[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static char[] concat(char[] a, char[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    char[] result = new char[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static double[] concat(double[] a, double[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    double[] result = new double[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static float[] concat(float[] a, float[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    float[] result = new float[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static int[] concat(int[] a, int[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    int[] result = new int[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static long[] concat(long[] a, long[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    long[] result = new long[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
-   * Returns a new array unless one argument is null, in which case
-   * it returns the other array.
-   **/
-  public static short[] concat(short[] a, short[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    short[] result = new short[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// subarray testing
@@ -1341,6 +1102,287 @@ public final class ArraysMDE {
       if (sub[i] != a[a_offset+i])
         return false;
     return true;
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// concatenation
+  ///
+
+  // Concat used to return null if both arguments are null.  That is
+  // convenient for the implementer, but not so good for clients.
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static <T> T[] concat(T[] a, T[] b) {
+    if (a == null && b == null) {
+      @SuppressWarnings("unchecked")
+      T[] result = (T[]) new Object[0];
+      return result;
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static <T> T[] concat(T[] a, List<T> b) {
+    if (a == null && b == null) {
+      @SuppressWarnings("unchecked")
+      T[] result = (T[]) new Object[0];
+      return result;
+    }
+    if (a == null) return (T[]) b.toArray(); // unchecked cast
+    if (b == null) return a;
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.length + b.size()];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    // System.arraycopy(b, 0, result, a.length, b.size());
+    for (int i=0; i<b.size(); i++) {
+      result[i+a.length] = b.get(i);
+    }
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static <T> T[] concat(List<T> a, T[] b) {
+    if (a == null && b == null) {
+      @SuppressWarnings("unchecked")
+      T[] result = (T[]) new Object[0];
+      return result;
+    }
+    if (a == null) return b;
+    if (b == null) return (T[]) a.toArray(); // unchecked cast
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.size() + b.length];
+
+    // System.arraycopy(a, 0, result, 0, a.size());
+    for (int i=0; i<a.size(); i++) {
+      result[i] = a.get(i);
+    }
+    System.arraycopy(b, 0, result, a.size(), b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static <T> T[] concat(List<T> a, List<T> b) {
+    if (a == null && b == null) {
+      @SuppressWarnings("unchecked")
+      T[] result = (T[]) new Object[0];
+      return result;
+    }
+    if (a == null) return (T[]) b.toArray(); // unchecked cast
+    if (b == null) return (T[]) a.toArray(); // unchecked cast
+    @SuppressWarnings("unchecked")
+    T[] result = (T[]) new Object[a.size() + b.size()];
+
+    // System.arraycopy(a, 0, result, 0, a.length);
+    for (int i=0; i<a.size(); i++) {
+      result[i] = a.get(i);
+    }
+    // System.arraycopy(b, 0, result, a.length, b.length);
+    for (int i=0; i<b.size(); i++) {
+      result[i+a.size()] = b.get(i);
+    }
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static String[] concat(String[] a, String[] b) {
+    if (a == null && b == null) {
+      return new String[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    String[] result = new String[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static byte[] concat(byte[] a, byte[] b) {
+    if (a == null && b == null) {
+      return new byte[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    byte[] result = new byte[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static boolean[] concat(boolean[] a, boolean[] b) {
+    if (a == null && b == null) {
+      return new boolean[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    boolean[] result = new boolean[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static char[] concat(char[] a, char[] b) {
+    if (a == null && b == null) {
+      return new char[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    char[] result = new char[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static double[] concat(double[] a, double[] b) {
+    if (a == null && b == null) {
+      return new double[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    double[] result = new double[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static float[] concat(float[] a, float[] b) {
+    if (a == null && b == null) {
+      return new float[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    float[] result = new float[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static int[] concat(int[] a, int[] b) {
+    if (a == null && b == null) {
+      return new int[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    int[] result = new int[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static long[] concat(long[] a, long[] b) {
+    if (a == null && b == null) {
+      return new long[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    long[] result = new long[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return an array that contains all the elements of both argument
+   * arrays, in order.  If both arguments are null, returns null.
+   * Returns a new array unless one argument is null, in which case
+   * it returns the other array.
+   **/
+  public static short[] concat(short[] a, short[] b) {
+    if (a == null && b == null) {
+      return new short[0];
+    }
+    if (a == null) return b;
+    if (b == null) return a;
+    short[] result = new short[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
   }
 
 

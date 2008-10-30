@@ -451,6 +451,46 @@ public final class UtilMDE {
     return count;
   }
 
+  /** Tries to infer the line separator used in a file. **/
+  public static String inferLineSeparator(String filename) throws IOException {
+    BufferedReader r = UtilMDE.bufferedFileReader(filename);
+    int unix = 0;
+    int dos = 0;
+    int mac = 0;
+    while (true) {
+      String s = r.readLine();
+      if (s == null) {
+        break;
+      }
+      if (s.endsWith("\r\n")) {
+        dos++;
+      } else if (s.endsWith("\r")) {
+        mac++;
+      } else if (s.endsWith("\n")) {
+        unix++;
+      } else {
+        // This can happen only if the last line is not terminated.
+      }
+    }
+    if ((dos > mac && dos > unix)
+        || (lineSep.equals("\r\n") && dos >= unix && dos >= mac)) {
+      return "\r\n";
+    }
+    if ((mac > dos && mac > unix)
+        || (lineSep.equals("\r") && mac >= dos && mac >= unix)) {
+      return "\n";
+    }
+    if ((unix > dos && unix > mac)
+        || (lineSep.equals("\n") && unix >= dos && unix >= mac)) {
+      return "\n";
+    }
+    // The two non-preferred line endings are tied and have more votes than
+    // the preferred line ending.  Give up.
+    return lineSep;
+  }
+
+
+
   /**
    * Returns true iff files have the same contents.
    */

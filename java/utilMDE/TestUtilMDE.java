@@ -145,6 +145,8 @@ public final class TestUtilMDE extends TestCase {
                          new int[] { -2,3 });
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 3 }),
                          new int[] { 3,3 });
+    assertTrue(ArraysMDE.min_max(new int[] { }) == null);
+    assertTrue(ArraysMDE.min_max(new long[] { }) == null);
 
     // public static int sum(int[] a)
     assertTrue(0 == ArraysMDE.sum(new int[0]));
@@ -1231,6 +1233,9 @@ public final class TestUtilMDE extends TestCase {
     testModulus.check(new int[] {3,11,43,51}, new int[] { 3,8 });
     testModulus.check(new int[] {3,11,47,55}, new int[] { 3,4 });
     testModulus.check(new int[] {2383,4015,-81,463,-689}, new int[] { 15,32 });
+    testModulus.check(new int[] {3,7}, null);
+    testModulus.check(new int[] {2,3,5,7}, null);
+    testModulus.check(new int[] {2,19,101}, null);
 
     testModulus.check_iterator(new int[] {3,7,47,51}, new int[] { 3,4 });
     testModulus.check_iterator(new int[] {3,11,43,51}, new int[] { 3,8 });

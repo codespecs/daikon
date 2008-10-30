@@ -48,7 +48,7 @@ compile_notest:  .class-files-timestamp
 	touch .class-files-timestamp
 
 jar: utilMDE.jar
-utilMDE.jar: ${ALL_CLASS_FILES}
+utilMDE.jar: .class-files-timestamp
 	rm -rf utilMDE
 	mkdir utilMDE
 	cp -p ${ALL_CLASS_FILES} utilMDE

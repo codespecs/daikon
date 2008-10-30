@@ -88,6 +88,7 @@ public class ClassFileVersion {
   }
 
 
+  /** Returns null if there is an error or the input isn't a class file. */
   public static double[] versionNumbers(InputStream is) {
     try {
       DataInputStream dis = new DataInputStream(is);

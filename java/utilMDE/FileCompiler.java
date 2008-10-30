@@ -88,7 +88,7 @@ public final class FileCompiler {
   }
 
   /**
-   * @param filename the path of the java source to be compiled
+   * @param filename the path of the Java source to be compiled
    * @return The process which executed the external compile command
    **/
   private TimeLimitProcess compile_source(String filename) {
