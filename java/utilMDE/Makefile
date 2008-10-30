@@ -78,6 +78,9 @@ test: .test-timestamp
 run-chicory:
 	set JAVA_COMPILER=NONE; ${JAVA} -ea daikon.Chicory --output-dir=/tmp utilMDE.TestUtilMDE --shortrun
 
+run-chicory-arrays:
+	set JAVA_COMPILER=NONE; ${JAVA} -ea daikon.Chicory --ppt-select-pattern=ArraysMDE --output-dir=/tmp utilMDE.TestUtilMDE --shortrun
+
 doc: javadoc
 
 javadoc: $(JAVA_FILES)
