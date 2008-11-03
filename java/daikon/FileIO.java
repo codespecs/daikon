@@ -269,16 +269,6 @@ public final class FileIO {
     }
     /*@Interned*/ String ppt_name = need (state, scanner, "ppt name");
 
-    // Check to see if the program point is new
-    if (state.all_ppts.containsName(ppt_name)) {
-      if (state.ppts_are_new) {
-        decl_error (state, "Duplicate declaration of ppt '%s'", ppt_name);
-      } else { // ppts are already in the map
-        skip_decl (state.reader);
-        return state.all_ppts.get (ppt_name);
-      }
-    }
-
     // Information that will populate the new program point
     Map<String,VarDefinition> varmap
       = new LinkedHashMap<String,VarDefinition>();
@@ -369,6 +359,16 @@ public final class FileIO {
     int ii = 0;
     for (VarDefinition vd : varmap.values()) {
       vi_array[ii++] = new VarInfo (vd);
+    }
+
+    // Check to see if the program point is new
+    if (state.all_ppts.containsName(ppt_name)) {
+      if (state.ppts_are_new) {
+        PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+        check_decl_match (state, existing_ppt, vi_array);
+      } else { // ppts are already in the map
+        return state.all_ppts.get (ppt_name);
+      }
     }
 
     // Build the program point
@@ -468,23 +468,9 @@ public final class FileIO {
 
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
-      if (state.ppts_are_new) { // yoav: ppts_are_new is always set to true, so we should remove it
+      if (state.ppts_are_new) {
         PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
-        VarInfo[] existing_vars = existing_ppt.var_infos;
-        if (existing_ppt.num_declvars!=vi_array.length) {
-          throw new Daikon.TerminationMessage("Duplicate declaration of program point \""
-                      + ppt_name + "\" with a different number of VarInfo objects: old VarInfo number="+existing_ppt.num_declvars+", new VarInfo number="+vi_array.length,
-                                               state.reader, state.filename);
-        }
-
-        for (int i=0; i<vi_array.length; i++) {
-          String oldName = existing_vars[i].str_name();
-          String newName = vi_array[i].str_name();
-          if (!oldName.equals(newName)) {
-            throw new Daikon.TerminationMessage("Duplicate declaration of program point \""
-                                                 + ppt_name + "\" with two different VarInfo: old VarInfo="+oldName+", new VarInfo="+newName, state.reader, state.filename);
-          }
-        }
+        check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
         return state.all_ppts.get (ppt_name);
       }
@@ -2284,6 +2270,37 @@ public final class FileIO {
       return (false);
     } else {
       return true;
+    }
+  }
+
+  /**
+   * Checks the specified array of variables to see if it matches
+   * exactly thevariables in the existing ppt.  Throws an error if
+   * there are any differences.  Used to ensure that a new ppt with the
+   * same name as an existing ppt is exactly the same
+   */
+  static void check_decl_match (ParseState state, PptTopLevel existing_ppt,
+                                VarInfo[] vi_array) {
+
+    VarInfo[] existing_vars = existing_ppt.var_infos;
+    if (existing_ppt.num_declvars!=vi_array.length) {
+      throw new Daikon.TerminationMessage
+        ("Duplicate declaration of program point \"" + existing_ppt.name()
+         + "\" with a different number of VarInfo objects: "
+         + "old VarInfo number=" + existing_ppt.num_declvars
+         + ", new VarInfo number="+vi_array.length,
+         state.reader, state.filename);
+        }
+
+    for (int i=0; i<vi_array.length; i++) {
+      String oldName = existing_vars[i].str_name();
+      String newName = vi_array[i].str_name();
+      if (!oldName.equals(newName)) {
+        throw new Daikon.TerminationMessage
+          ("Duplicate declaration of program point \""
+           + existing_ppt.name() + "\" with two different VarInfo: old VarInfo="
+           + oldName+", new VarInfo="+newName, state.reader, state.filename);
+      }
     }
   }
 
