@@ -308,6 +308,7 @@ Tools for use with Daikon
 Tools for manipulating invariants
 
 * Printing invariants::         
+* MergeInvariants::             
 * Invariant Diff::              
 * Annotate::                    
 * AnnotateNullable::            
@@ -6994,6 +6995,7 @@ This section gives information about tools that manipulate invariants
 
 @menu
 * Printing invariants::         
+* MergeInvariants::             
 * Invariant Diff::              
 * Annotate::                    
 * AnnotateNullable::            
@@ -7003,7 +7005,7 @@ This section gives information about tools that manipulate invariants
 @end menu
 
 
-@node    Printing invariants, Invariant Diff, Tools for manipulating invariants, Tools for manipulating invariants
+@node    Printing invariants, MergeInvariants, Tools for manipulating invariants, Tools for manipulating invariants
 @subsection Printing invariants
 
 @cindex printing invariants
@@ -7058,7 +7060,54 @@ Developer Manual}.
 @end table
 
 
-@node    Invariant Diff, Annotate, Printing invariants, Tools for manipulating invariants
+@node   MergeInvariants, Invariant Diff, Printing invariants, Tools for manipulating invariants
+@subsection MergeInvariants
+
+@cindex invariant merge
+@cindex merge invariants
+
+The MergeInvariants utility merges multiple serialized invariant files
+to create a single serialized invariant file that contains the
+invariants that are true across each of the input files.  The results
+of merging N serialized invariant files should be the same as running
+Daikon on the N original dtrace files.
+
+MergeInvariants is invoked as follows:
+@example
+java daikon.MergeInvariants @i{[@var{flags}]...} @var{file1} @var{file2}...
+@end example
+
+@var{file1} and @var{file2} are files containing serialized invariants
+produced by running Daikon.  At least two invariant files must be specified.
+
+MergeInvariants shares many flags with Daikon.
+These flags are only briefly summarized here.
+For more information about these flags, see @ref{Daikon configuration options}.
+
+@table @option
+@item -h --help
+Print usage message.
+
+@item -o @var{inv_file}
+Output serialized invariants to the specified file; they can later be
+postprocessed, compared, etc.  If not specified, the results are written
+to standard out.
+
+@item --config_option @var{name}=@var{value}
+Specify a single configuration setting.
+@xref{Configuration options}, for details.
+
+@item --dbg @var{category}
+Enable debug loggers.
+
+@item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
+Track information on specified invariant class, variables and program point.
+For more information, also see @ref{Track logging,,,./developer,Daikon
+Developer Manual}.
+@end table
+
+
+@node    Invariant Diff, Annotate, MergeInvariants, Tools for manipulating invariants
 @subsection Invariant Diff
 
 @cindex invariant diff
@@ -8260,10 +8309,8 @@ the one that Daikon would have computed, had Daikon been able to
 process your entire program over its full test suite.  First, use the
 techniques below (@pxref{Reducing program points}) to split your
 @file{.dtrace} file into parts.  Next, run Daikon on each resulting
-@file{.dtrace} file.  Finally, use the union function of @ref{Invariant
-Diff} to combine the resulting @file{.inv} files into one.
-@c A more correct way to merge the resulting .inv files would be with
-@c the MergeInvariants tool, but it is not yet documented,
+@file{.dtrace} file.  Finally, use the @ref{MergeInvariants} tool 
+to combine the resulting @file{.inv} files into one.
 
 Independently from the above techniques, you can run Daikon online.
 The term ``online execution'' refers to running Daikon at the same time
