@@ -314,7 +314,8 @@ public abstract class Invariant
     boolean just = (!falsified
                     && (getConfidence() >= dkconfig_confidence_limit));
     if (logOn())
-      log ("justified = " + just + ", confidence = " + getConfidence());
+      log ("justified = " + just + ", confidence = " + getConfidence()
+           + ", samples = " + ppt.num_samples());
     return (just);
   }
 

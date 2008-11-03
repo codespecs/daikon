@@ -705,7 +705,8 @@ public final class PrintInvariants {
                                             PrintWriter out,
                                             PptMap all_ppts) {
 
-    debugPrint.fine  ("Considering printing ppt " + ppt.name());
+    debugPrint.fine  ("Considering printing ppt " + ppt.name()
+                      + ", samples = " + ppt.num_samples());
 
     // Skip this ppt if it doesn't match ppt regular expression
     if ((ppt_regexp != null) && !ppt_regexp.matcher(ppt.name()).find())
@@ -737,6 +738,11 @@ public final class PrintInvariants {
       }
     }
 
+    if (false) {
+      for (PptSlice slice : ppt.viewsAsCollection())
+        System.out.printf ("slice = %s, inv cnt = %d\n", slice,
+                           slice.invs.size());
+    }
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
     out.println("==========================================="
