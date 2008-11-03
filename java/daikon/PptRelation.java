@@ -1070,6 +1070,20 @@ public class PptRelation implements Serializable {
 
     }
 
+    // Loop over each ppt and create an equality view and invariants for
+    // any ppt without children that doesn't already have them.  This can
+    // happen when there are ppts such as OBJECT or CLASS that don't end up
+    // with any children (due to the program source or because of ppt filtering
+    for (Iterator<PptTopLevel> pi = all_ppts.pptIterator(); pi.hasNext();) {
+      PptTopLevel ppt = pi.next();
+      if ((ppt.children.size() == 0) && (ppt.equality_view == null)) {
+        assert ppt.ppt_name.isObjectInstanceSynthetic() ||
+          ppt.ppt_name.isClassStaticSynthetic() : ppt;
+        ppt.equality_view = new PptSliceEquality(ppt);
+        ppt.equality_view.instantiate_invariants();
+      }
+    }
+
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
