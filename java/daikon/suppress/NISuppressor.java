@@ -166,6 +166,18 @@ public class NISuppressor {
   }
 
   /**
+   * Returns whether or not this suppressor invariant could be instantiated
+   * over the specified variables.  A suppressor that canot be instantiated
+   * over the variables cannot possibly suppress. Consider the NonZero
+   * invariant.  It is suppressed by EqualsOne.  But while NonZero is
+   * valid over all variables, EqualsOne is only valid over non-pointer
+   * variables.  Thus the suppression is only valid over non-pointer variables.
+   */
+  public boolean instantiate_ok(VarInfo[] vis) {
+    return sample_inv.instantiate_ok (vis);
+  }
+
+  /**
    * Sets the status of this suppressor with regards to the specified
    * vis and falsified invariant.  The status consists of whether or
    * not the suppressor is valid (true) and whether or not it matches
@@ -213,6 +225,14 @@ public class NISuppressor {
     if (v2_index == -1) {
 
       VarInfo v1 = vis[v1_index];
+
+      // If the underlying inariant can't be instantiated over these variables,
+      // this can't possibly be true
+      if (!instantiate_ok(new VarInfo[] {v1})) {
+        // System.out.printf ("suppressor %s invalid over variable %s\n",
+        //                   this, v1);
+        return (state = NIS.INVALID);
+      }
 
       // Check to see if inv matches this suppressor.  The invariant class
       // and variables must match for this to be true.  This check is only
@@ -280,6 +300,14 @@ public class NISuppressor {
       }
       VarInfo v1 = vis[v1_index];
       VarInfo v2 = vis[v2_index];
+
+      // If the underlying inariant can't be instantiated over these variables,
+      // this can't possibly be true
+      if (!instantiate_ok(new VarInfo[] {v1, v2})) {
+        // System.out.printf ("suppressor %s invalid over variables %s & %s\n",
+        //                  this, v1, v2);
+        return (state = NIS.INVALID);
+      }
 
       // Check to see if inv matches this suppressor.  The invariant class,
       // variables, and swap must match for this to be true.  This check is
