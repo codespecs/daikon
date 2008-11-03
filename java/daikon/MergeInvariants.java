@@ -7,6 +7,19 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import utilMDE.*;
 
+import daikon.suppress.NIS;
+
+/**
+ * Merges invariants from multiple invariant files into a single invariant
+ * file.  It does this by forming a hierarchy over the ppts from each
+ * invariant file and using the normal hierarchy merging code to merge
+ * the invariants.
+ *
+ * The ppts from each invariant file are merged to create a single ppt
+ * map that contains the ppts from all of the files.  At each leaf of the
+ * merged map, a hierarchy is formed to the ppts from each of the input
+ * files.
+ */
 public final class MergeInvariants {
   private MergeInvariants() { throw new Error("do not instantiate"); }
 
@@ -58,7 +71,12 @@ public final class MergeInvariants {
   public static void mainHelper(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {
+
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+
+
     LongOpt[] longopts = new LongOpt[] {
+      new LongOpt (Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                   null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -156,13 +174,21 @@ public final class MergeInvariants {
     if (inv_files.size() < 2)
       throw new Daikon.TerminationMessage ("Must specify at least two inv files; only specified " + UtilMDE.nplural(inv_files.size(), "file"));
 
+    // Setup the default for guarding
+    PrintInvariants.validateGuardNulls();
+
+    // Initialize the prototype invariants and NI suppressions
+    Daikon.setup_proto_invs();
+    NIS.init_ni_suppression();
+
     // Read in each of the specified maps
     List<PptMap> pptmaps = new ArrayList<PptMap>();
     for (File file: inv_files) {
       debugProgress.fine ("Processing " + file);
-      PptMap ppts = FileIO.read_serialized_pptmap (file, false);
+      PptMap ppts = FileIO.read_serialized_pptmap (file, true);
       ppts.repCheck();
       pptmaps.add (ppts);
+      Debug.check (ppts, "After initial reading of " + file);
     }
 
     // Merged ppt map (result of merging each specified inv file)
@@ -174,21 +200,48 @@ public final class MergeInvariants {
         throw new Daikon.TerminationMessage(".spinfo files may only be specified along "
                         + "with a .decls file");
 
-      // Read in the first map again to serve as a template
-      File file = inv_files.get(0);
-      debugProgress.fine ("Reading " + file + " as merge template");
-      merge_ppts = FileIO.read_serialized_pptmap (file, true);
+      // Read in each of the maps again to build a template which contains all
+      // of the program points from each map.
+      for (File file : inv_files) {
+        debugProgress.fine ("Reading " + file + " as merge template");
+        if (merge_ppts == null)
+          merge_ppts = FileIO.read_serialized_pptmap (file, true);
+        else {
+          PptMap pmap = FileIO.read_serialized_pptmap (file, true);
+          for (Iterator<PptTopLevel> ii = pmap.pptIterator();
+               ii.hasNext(); ) {
+            PptTopLevel ppt = ii.next();
+            if (merge_ppts.containsName (ppt.name())) {
+              // System.out.printf ("Not adding ppt %s from %s\n", ppt, file);
+              continue;
+            }
+            merge_ppts.add (ppt);
+            // System.out.printf ("Adding ppt %s from %s\n", ppt, file);
+
+            // Make sure that the parents of this ppt are already in
+            // the map.  This will be true if all possible children of
+            // any ppt are always included in the same invariant file.
+            // For example, all possible enter/exit points should be
+            // included with each object point.  This is true for Chicory
+            // as long as ppt filtering didn't remove some ppts.
+            for (PptRelation rel : ppt.parents)
+              assert merge_ppts.get (rel.parent.name()) == rel.parent
+                : ppt + " - " + rel;
+          }
+        }
+      }
 
       // Remove all of the slices, equality sets, to start
       debugProgress.fine ("Cleaning ppt map in preparation for merge");
-      for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
+      for (Iterator<PptTopLevel> i = merge_ppts.ppt_all_iterator();
+           i.hasNext(); ) {
         PptTopLevel ppt = i.next();
         ppt.clean_for_merge();
       }
 
     } else {
 
-      // Build the result ppmap from the specific decls file
+      // Build the result pptmap from the specific decls file
       debugProgress.fine ("Building result ppt map from decls file");
       Daikon.create_splitters(splitter_files);
       List<File> decl_files = new ArrayList<File>();
@@ -206,26 +259,32 @@ public final class MergeInvariants {
     debugProgress.fine ("Building hierarchy between leaves of the maps");
     for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
-      if (!ppt.ppt_name.isExitPoint())
+
+      // Skip everything that is not a final exit point
+      if (!ppt.ppt_name.isExitPoint()) {
+        assert ppt.children.size() > 0 : ppt;
         continue;
-      if (ppt.ppt_name.isCombinedExitPoint())
-        continue;
-      // Remove any relations down to conditionals, since we want to
-      // build the ppt from the matching points in the specified maps
-      for (Iterator<PptRelation> j = ppt.children.iterator(); j.hasNext(); ) {
-        PptRelation rel = j.next();
-        if (rel.getRelationType() == PptRelation.PptRelationType.PPT_PPTCOND)
-          j.remove();
       }
+      if (ppt.ppt_name.isCombinedExitPoint()) {
+        assert ppt.children.size() > 0 : ppt;
+        continue;
+      }
+
+      // System.out.printf ("Including ppt %s, %d children\n", ppt,
+      //                   ppt.children.size());
+
+      // Splitters should not have any children to begin with
+      if (ppt.has_splitters())
+        for (PptSplitter ppt_split : ppt.splitters)
+          for (PptTopLevel p : ppt_split.ppts)
+            assert p.children.size() == 0 : p;
+
+      // Loop over each of the input ppt maps, looking for the same ppt
       for (int j = 0; j < pptmaps.size(); j++ ) {
         PptMap pmap = pptmaps.get (j);
-        PptTopLevel child = pmap.get (ppt.ppt_name);
-        if ((decl_file == null) && (child == null))
-          throw new Daikon.TerminationMessage ("Can't find  ppt " + ppt.ppt_name + " in "
-                           + inv_files.get(j));
+        PptTopLevel child = pmap.get (ppt.name());
+        // System.out.printf ("found child %s from pmap %d\n", child, j);
         if (child == null)
-          continue;
-        if (child.num_samples() == 0)
           continue;
         if (child.equality_view == null)
           System.out.println ("equality_view == null in child ppt: "
@@ -234,10 +293,36 @@ public final class MergeInvariants {
           System.out.println ("equality_view.invs == null in child ppt: "
                               + child.name() + " (" + inv_files.get(j) + ")"
                               + " samples = " + child.num_samples());
-        PptRelation rel = PptRelation.newMergeChildRel (ppt, child);
-        setup_conditional_merge (rel, ppt, child);
+
+        // Remove the equality invariants added during equality post
+        // processing.  These are not over leaders and will cause problems
+        // in the merge
+        child.remove_equality_invariants();
+        child.in_merge = false;
+
+        // Remove implications, they don't merge correctly
+        child.remove_implications();
+
+        // If the ppt has splitters, attach the child's splitters to the
+        // splitters.  Don't attach the ppt itself, as its invariants can
+        // be built from the invariants in the splitters.
+        if (ppt.has_splitters()) {
+          setup_conditional_merge (ppt, child);
+        } else {
+          PptRelation rel = PptRelation.newMergeChildRel (ppt, child);
+        }
       }
+
+      // Make sure at least one child was found
+      assert ppt.children.size() > 0 : ppt;
+      if (ppt.has_splitters())
+        for (PptSplitter ppt_split : ppt.splitters)
+          for (PptTopLevel p : ppt_split.ppts)
+            assert p.children.size() > 0 : p;
     }
+
+    // Check the resulting PptMap for consistency
+    merge_ppts.repCheck();
 
     // Debug print the hierarchy is a more readable manner
     if (debug.isLoggable(Level.FINE)) {
@@ -255,8 +340,8 @@ public final class MergeInvariants {
 
     // Equality post processing
     debugProgress.fine ("Equality Post Processing");
-    for (Iterator<PptTopLevel> itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = itor.next();
+    for (Iterator<PptTopLevel> i = merge_ppts.ppt_all_iterator(); i.hasNext();){
+      PptTopLevel ppt = i.next();
       ppt.postProcessEquality();
     }
 
@@ -287,7 +372,7 @@ public final class MergeInvariants {
       }
     }
 
-    // Write serialized output - must be done before guarding invariants
+    // Write serialized output
     debugProgress.fine ("Writing Output");
     if (output_inv_file != null) {
       try {
@@ -309,9 +394,10 @@ public final class MergeInvariants {
    * the same number of splitters setup in the same order.  The splitter
    * match can't be checked because splitters can't be read back in.
    */
-  private static void setup_conditional_merge (PptRelation rel,
-                                        PptTopLevel ppt, PptTopLevel child) {
+  private static void setup_conditional_merge (PptTopLevel ppt,
+                                               PptTopLevel child) {
 
+    // Both ppt and child should have splitters
     if (ppt.has_splitters() != child.has_splitters()) {
       System.err.println("Merge ppt " + ppt.name +
                          (ppt.has_splitters() ? " has " : "doesn't have ") +
@@ -319,9 +405,12 @@ public final class MergeInvariants {
                          (child.has_splitters() ? " does" : " doesn't"));
       Assert.assertTrue(false);
     }
+
+    // Nothing to do if there are no splitters here
     if (!ppt.has_splitters())
       return;
 
+    // Both ppt and child should have the same number of splitters
     if (ppt.splitters.size() != child.splitters.size()) {
       System.err.println("Merge ppt " + ppt.name + " has " +
                          ((ppt.splitters.size() > child.splitters.size()) ?
@@ -330,10 +419,17 @@ public final class MergeInvariants {
                          child.name + " (" + child.splitters.size() + ")");
       Assert.assertTrue(false);
     }
+
+    // Create a relation from each conditional ppt to its corresponding
+    // conditional ppt in the child.
     for (int ii = 0; ii < ppt.splitters.size(); ii++) {
       PptSplitter ppt_split = ppt.splitters.get(ii);
       PptSplitter child_split = child.splitters.get(ii);
-      ppt_split.add_relation (rel, child_split);
+      for (int jj = 0; jj < ppt_split.ppts.length; jj++) {
+        child_split.ppts[jj].remove_equality_invariants();
+        child_split.ppts[jj].in_merge = false;
+        PptRelation.newMergeChildRel (ppt_split.ppts[jj], child_split.ppts[jj]);
+      }
     }
   }
 
