@@ -298,7 +298,7 @@ public class PptTopLevel extends Ppt {
   // Used to prevent calling mergeInvs() recursively on a child in such
   // a way as to cause an infinite loop, even if there is a loop in the
   // PPT hierarchy.
-  private boolean in_merge = false;
+  public boolean in_merge = false;
 
   /**
    * Flag that indicates whether or not invariants that are duplicated
@@ -1481,6 +1481,8 @@ public class PptTopLevel extends Ppt {
    **/
   public void addSlice(PptSlice slice) {
 
+    // System.out.printf ("Adding slice %s to ppt %s\n", slice, this);
+
     // Make sure the slice doesn't already exist (should never happen)
     PptSlice cslice = findSlice (slice.var_infos);
     if (cslice != null) {
@@ -1488,7 +1490,11 @@ public class PptTopLevel extends Ppt {
       System.out.println ("but, slice " + cslice + " already exists");
       for (Invariant inv : cslice.invs)
         System.out.println(" -- inv " + inv);
+      assert false;
     }
+
+    // Make sure that the slice is valid (they are not always valid)
+    // slice.repCheck();
 
     views.put(sliceIndex(slice.var_infos), slice);
     if (Debug.logOn())
@@ -2676,7 +2682,7 @@ public class PptTopLevel extends Ppt {
     }
     if (num_samples() == 0)
       return;
-    Assert.assertTrue(equality_view != null, "ppt = " + ppt_name);
+    assert equality_view != null : "ppt = " + ppt_name +" children = " + children;
     Invariants equalityInvs = equality_view.invs;
 
     // Pivot invariants to new equality leaders if needed, if old
@@ -3278,12 +3284,19 @@ public class PptTopLevel extends Ppt {
     for (List<Integer> this_key : views.keySet()) {
       Assert.assertTrue(views.containsKey(this_key));
     }
+
+    // System.out.printf ("equality for %s = %s\n", this, equality_view);
+
     // We could check a lot more than just that slices are okay.  For
     // example, we could ensure that flow graph is correct.
     for (PptSlice slice : viewsAsCollection()) {
       slice.repCheck();
     }
     if (equality_view != null) equality_view.repCheck();
+
+    // This should only be true while processing the hierarchy.  Normally
+    // repcheck isn't called there.
+    assert in_merge == false : this;
 
     // check variables for some possible errors
     for (VarInfo vi : var_infos)
@@ -3323,7 +3336,19 @@ public class PptTopLevel extends Ppt {
       var_rel = "[" + parent_rel.parent_to_child_var_string() + "]";
 
     // Put out this item
-    l.fine(indent_str + ppt_name + ": " + rel_type + ": " + var_rel);
+    l.fine(String.format ("%s %s[%08X]: %s: %d: %s", indent_str, ppt_name,
+                          System.identityHashCode(this), rel_type,
+                          num_samples(), var_rel));
+
+    // Put out each slice.
+    if (false) {
+      for (Iterator<PptSlice> i = views_iterator(); i.hasNext();) {
+        PptSlice cslice = i.next();
+        l.fine (indent_str + "++ " + cslice);
+        for (VarInfo vi : cslice.var_infos)
+          assert vi.isCanonical() : vi;
+      }
+    }
 
     // Put out children if this is the primary relationship.  Limiting
     // this to primary relations simplifies the tree for viewing while
@@ -3388,23 +3413,32 @@ public class PptTopLevel extends Ppt {
    */
   public void mergeInvs() {
 
-    Daikon.debugProgress.fine ("Merging ppt " + name + " with " +
-                               children.size() + " children, "
-                               + var_infos.length + " variables");
+    Daikon.debugProgress.fine
+      (String.format ("Merging ppt %s[%08X] with %d children, %d parents, "
+                      + "%d variables",
+                      name, System.identityHashCode(this), children.size(),
+                      parents.size(), var_infos.length));
 
     // If we don't have any children, there is nothing to do.
-    if (children.size() == 0)
+    if (children.size() == 0) {
+      assert equality_view != null : this;
       return;
+    }
 
     // If this has already been done (because this ppt has multiple parents)
     // there is nothing to do.
-    if (invariants_merged)
+    if (invariants_merged) {
+      assert equality_view != null : this;
       return;
+    }
 
     in_merge = true;
 
     // First do this for any children.
     for (PptRelation rel : children) {
+      // System.out.printf ("merging child %s[%08X], in_merge = %b\n",
+      //                   rel.child, System.identityHashCode(rel.child),
+      //                   rel.child.in_merge);
       if (!rel.child.in_merge)
         rel.child.mergeInvs();
     }
@@ -3437,7 +3471,7 @@ public class PptTopLevel extends Ppt {
 
     // Merge any always missing variables from the children
     if (Daikon.dkconfig_use_dynamic_constant_optimization) {
-      Assert.assertTrue(constants == null);
+      assert constants == null : this;
       constants = new DynamicConstants(this);
       constants.merge();
     }
@@ -3445,6 +3479,15 @@ public class PptTopLevel extends Ppt {
     // Merge the ModBitTracker.
     // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
     // array.
+    if (false) {
+      System.out.printf ("in ppt %s\n", name());
+      System.out.printf ("  num_tracevars = %d\n", num_tracevars);
+      System.out.printf ("  mbtracker.num_vars() = %d\n", mbtracker.num_vars());
+      for (int ii = 0; ii < var_infos.length; ii++) {
+        System.out.printf ("    Variable %s, index = %d\n", var_infos[ii],
+                           var_infos[ii].value_index);
+      }
+    }
     int num_tracevars = mbtracker.num_vars();
     // warning: shadows field of same name
     Object[] vals = new Object[num_tracevars];
@@ -3525,6 +3568,8 @@ public class PptTopLevel extends Ppt {
       debugMerge.fine(
         "looking at " + c1.child.name() + " " + c1.child.num_samples());
       if (c1.child.num_samples() > 0) {
+        // System.out.printf ("First child equality set: %s\n",
+        //                     c1.child.equality_view);
         emap = c1.get_child_equalities_as_parent();
         if (debugMerge.isLoggable(Level.FINE))// check before stringifying emap
           debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
@@ -3534,6 +3579,7 @@ public class PptTopLevel extends Ppt {
     if (emap == null) {
       equality_view.instantiate_invariants();
       invariants_merged = true;
+      in_merge = false;
       return;
     }
 
@@ -3572,6 +3618,8 @@ public class PptTopLevel extends Ppt {
         debugMerge.fine("-- " + e.shortString());
       }
     }
+
+    // System.out.printf ("New equality set = %s\n", equality_view);
 
     if (debugTimeMerge.isLoggable(Level.FINE))
       debugTimeMerge.fine("    equality sets etc = " + watch.stop_start());
@@ -3636,6 +3684,11 @@ public class PptTopLevel extends Ppt {
       VarInfo l = ((Equality) inv).leader();
       if (l.missingOutOfBounds())
         continue;
+      if (constants.is_missing (l)) {
+        // System.out.printf ("skipping leader %s in ppt %s, always missing\n",
+        //                   l, name());
+        continue;
+      }
       non_missing_leaders.add(l);
     }
     VarInfo[] leaders = new VarInfo[non_missing_leaders.size()];
@@ -3739,6 +3792,8 @@ public class PptTopLevel extends Ppt {
     // Loop through each slice
     for (Iterator<PptSlice> i = rel.child.views_iterator(); i.hasNext();) {
       PptSlice cslice = i.next();
+
+      // System.out.printf ("Processing slice %s\n", cslice);
 
       // Matching parent variable info.  Skip this slice if there isn't a
       // match for each variable (such as with an enter-exit relation)
@@ -3887,6 +3942,41 @@ public class PptTopLevel extends Ppt {
     // parents = new ArrayList();
     // children = new ArrayList();
     invariants_merged = false;
+    in_merge = false;
+    constants = null;
+    mbtracker = new ModBitTracker(mbtracker.num_vars());
+    remove_implications();
+    values_num_samples = 0;
+
+  }
+
+  /**
+   * Remove the equality invariants added during equality post
+   * processing.  These are not over leaders and can causes in some uses
+   * of the ppt.  In particular, they cause problems during merging.
+   */
+  public void remove_equality_invariants() {
+
+    List<PptSlice> slices_to_remove = new ArrayList<PptSlice>();
+    for (PptSlice slice : viewsAsCollection()) {
+      if (slice.var_infos.length != 2)
+        continue;
+      if (slice.var_infos[0].isCanonical() && slice.var_infos[1].isCanonical())
+        continue;
+      assert (slice.var_infos[0].canonicalRep()
+              == slice.var_infos[1].canonicalRep()) : slice;
+      slices_to_remove.add(slice);
+    }
+    for (PptSlice slice : slices_to_remove)
+      removeSlice (slice);
+  }
+
+  /**
+   * Remove all of the implications from this program point.  Can be used
+   * when recalculating implications.  Actually removes the entire joiner_view.
+   */
+  public void remove_implications() {
+    joiner_view = new PptSlice0(this);
   }
 
   /**
