@@ -27,14 +27,29 @@ public class PptMap
     }
   }
 
+  /**
+   * Get the pptname named 'name' from the map.  Note that conditional
+   * program points are not stored in the map by name.  They are only
+   * available through their parent
+   */
   public PptTopLevel get(String name) {
     return nameToPpt.get(name);
   }
 
+  /**
+   * Get the pptname 'name' from the map.  Note that conditional
+   * program points are not stored in the map by name.  They are only
+   * available through their parent
+   */
   public PptTopLevel get(PptName name) {
     return get(name.toString());
   }
 
+  /**
+   * Returns whether or not 'name' is in the map.  Note that conditional
+   * program points are not stored in the map by name.  They are only
+   * available through their parent
+   */
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }
