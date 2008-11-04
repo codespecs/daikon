@@ -382,7 +382,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
 	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' CLASSPATH=${CLASSPATH}:/tmp/${USER}/daikon-jar all_directly
-	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' all_notest
+	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' compile_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
 	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/${USER}/daikon-jar
