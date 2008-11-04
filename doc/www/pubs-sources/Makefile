@@ -8,6 +8,8 @@ BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invari
 BPHOME ?= /afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 BWBIN = ${BPHOME}/../bin
 MDEWWW ?= /afs/csail.mit.edu/u/m/mernst/www
+LINK_NAMES = ${MDEWWW}/pubs/link-names
+#LINK_NAMES = /afs/csail.mit.edu/u/j/jhp/afstmp/pubs/link-names
 PERLLIB := $(HOME)/research/invariants/scripts:/afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 ###########################################################################
 
@@ -43,7 +45,7 @@ writable-abstracts:
 abstracts: writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
 
 abstracts-invariantdetection:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${MDEWWW}/pubs/link-names -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${LINK_NAMES} -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl \
 	  -headfoot ../pubs-sources/abstract-headfoot-technique.html \
@@ -51,7 +53,7 @@ abstracts-invariantdetection:
 	\rm -f abstracts-unsplit.html
 
 abstracts-methodology:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${MDEWWW}/pubs/link-names -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${LINK_NAMES} -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl \
 	  -headfoot ../pubs-sources/abstract-headfoot-methodology.html \
@@ -59,7 +61,7 @@ abstracts-methodology:
 	rm abstracts-unsplit.html
 
 abstracts-testsubject:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${MDEWWW}/pubs/link-names -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"usesdaikonastestsubject"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${LINK_NAMES} -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"usesdaikonastestsubject"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl -headfoot ../pubs-sources/abstract-headfoot-testsubject.html abstracts-unsplit.html
 	rm abstracts-unsplit.html
