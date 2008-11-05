@@ -1,11 +1,13 @@
 #!/usr/bin/env perl
+
+# Usage:
+#   html-add-favicon.pl atT.png `find . -iname '*.html'`
+# Both the .png and the .html filenames should be relative (not absolute),
+# as in the given example.
+
 use strict;
 use English;
 $WARNING = 1;
-
-# Usage:
-#   html-add-favicon.pl atT.png `findfile '*.html'`
-
 
 use File::Basename;
 
@@ -18,7 +20,6 @@ if ($ico_file !~ /\.png$/) {
   die "Only handles .png files";
 }
 
-# Each file argument should be relative to the directory containing the icon file.
 for my $arg (@ARGV) {
 
   my $linkdir = dirname($arg);
@@ -28,6 +29,7 @@ for my $arg (@ARGV) {
   if ($linkdir ne "") {
     $linkdir .= "/";
   }
+  # This is ugly, but it handles two capitalizations of "</head>".
   `preplace '</head>' '<link rel="icon" type="image/png" href="$linkdir$ico_file" />\n</head>' $arg`;
   `preplace '</HEAD>' '<link rel="icon" type="image/png" href="$linkdir$ico_file" />\n</HEAD>' $arg`;
 }
