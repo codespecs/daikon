@@ -1,7 +1,11 @@
 #!/usr/bin/env perl
 
+# This program takes as arguments a .png file for a "favicon" and a set of
+# .html files.  It makes each HTML file use the given favicon.
+#
 # Usage:
 #   html-add-favicon.pl atT.png `find . -iname '*.html'`
+#
 # Both the .png and the .html filenames should be relative (not absolute),
 # as in the given example.
 
