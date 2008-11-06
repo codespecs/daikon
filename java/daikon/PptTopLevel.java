@@ -4429,6 +4429,14 @@ public class PptTopLevel extends Ppt {
       return ppt_name.isExitPoint();
   }
 
+  /** is this an enter ppt **/
+  public boolean is_enter() {
+    if (type != null)
+      return (type == PptType.ENTER);
+    else
+      return ppt_name.isEnterPoint();
+  }
+
   /** Is this a basic block ppt **/
   public boolean is_basic_block() {
     return type == PptType.BASIC_BLOCK;
