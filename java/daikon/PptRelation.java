@@ -1077,8 +1077,7 @@ public class PptRelation implements Serializable {
     for (Iterator<PptTopLevel> pi = all_ppts.pptIterator(); pi.hasNext();) {
       PptTopLevel ppt = pi.next();
       if ((ppt.children.size() == 0) && (ppt.equality_view == null)) {
-        assert ppt.ppt_name.isObjectInstanceSynthetic() ||
-          ppt.ppt_name.isClassStaticSynthetic() : ppt;
+        assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
         ppt.equality_view.instantiate_invariants();
       }
