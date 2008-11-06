@@ -127,6 +127,7 @@ public class DeclWriter extends DaikonWriter {
             // Print exit program point for EACH exit location in the method
             // (that was encountered during this execution of the program)
             Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
+            assert theExits.size() > 0 : mi;
             for (Integer exitLoc : theExits)
             {
                 // Get the root of the method's traversal pattern
@@ -282,7 +283,8 @@ public class DeclWriter extends DaikonWriter {
                       comp_info);
 
         // Print exit program point for EACH exit location in the method
-        // (that was encountered during this execution of the program)
+        // Note that there may not be any exits.  They may get filtered out,
+        // or some methods don't have an exit (only a throw)
         Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
         for (Integer exitLoc : theExits) {
           // Get the root of the method's traversal pattern
