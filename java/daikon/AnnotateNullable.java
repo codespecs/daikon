@@ -28,6 +28,12 @@ public class AnnotateNullable {
 
   static SimpleLog debug = new SimpleLog (/*enabled=*/ false);
 
+  /**
+   * Map from a class name to the list of static functions for that class
+   */
+  static Map<String,List<PptTopLevel>> class_map
+    = new LinkedHashMap<String,List<PptTopLevel>>();
+
   // The package for the previous class.  Used to reduce duplication in
   // output file.
   static String last_package = null;
@@ -76,6 +82,70 @@ public class AnnotateNullable {
       System.out.println ("annotation visible @NonNull");
       System.out.println();
     }
+
+    // Find all exit ppts that do not have a parent and determine what
+    // class they are associated with.  These are static methods for classes
+    // without any static variables (no class ppt is created if there are no
+    // static variables)
+
+    // First find all of the classes
+    for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
+      PptTopLevel ppt = ii.next();
+      if (ppt.is_object()) {
+        String classname = ppt.name().replace (":::OBJECT", "");
+        assert !class_map.containsKey (classname) : classname;
+        List<PptTopLevel> static_methods = new ArrayList<PptTopLevel>();
+        class_map.put (classname, static_methods);
+      }
+    }
+
+    // Then, add combined exit points for static methods to their class.  A
+    // static method can be identified because it will not have the OBJECT
+    // point as a parent.
+    for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
+      PptTopLevel ppt = ii.next();
+      if (!ppt.is_combined_exit() || !is_static_method(ppt))
+        continue;
+
+      String name = ppt.name().replaceFirst ("[(].*$", "");
+      int lastdot = name.lastIndexOf ('.');
+      String classname = name.substring (0, lastdot);
+      // System.out.printf ("classname for ppt %s is '%s'\n", name, classname);
+      List<PptTopLevel> static_methods = class_map.get (classname);
+      assert static_methods != null : classname;
+      static_methods.add (ppt);
+    }
+
+    // Debug print all of the static methods
+    if (false) {
+      for (String classname : class_map.keySet()) {
+        System.out.printf ("class %s static methods: %s\n", classname,
+                           class_map.get(classname));
+      }
+    }
+
+    // Make sure that the static methods found by inference, match those
+    // found for any class ppts
+    for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
+      PptTopLevel ppt = ii.next();
+      if (ppt.is_class()) {
+        List<PptTopLevel> static_methods
+          = class_map.get (ppt.name().replace (":::CLASS", ""));
+        int child_cnt = 0;
+        for (PptRelation child_rel : ppt.children) {
+          PptTopLevel child = child_rel.child;
+          // Skip enter ppts, all of the info is at the exit.
+          if (child.type == PptType.ENTER)
+            continue;
+          if (child.type == PptType.OBJECT)
+            continue;
+          child_cnt++;
+          assert static_methods.contains (child) : child;
+        }
+        assert child_cnt == static_methods.size() : static_methods;
+      }
+    }
+
 
     // Process each class.
     for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
@@ -166,6 +236,11 @@ public class AnnotateNullable {
         debug.log ("processing static method %s, type %s", child, child.type);
         process_method (child);
       }
+    } else {
+      List<PptTopLevel> static_methods
+        = class_map.get (object_ppt.ppt_name.getFullClassName());
+      for (PptTopLevel child : static_methods)
+        process_method (child);
     }
 
     // Process member (non-static) methods
@@ -348,5 +423,23 @@ public class AnnotateNullable {
       return field_name.substring(pt+1);
   }
 
+
+  /**
+   * Returns whether or not the method of the specified ppt
+   * is static or not.  The ppt must be an exit ppt.  Exit ppts
+   * that do not have an object as a parent are inferred to be static.
+   * This does not work for enter ppts, because constructors do not
+   * have the object as a parent on entry.
+   */
+  public static boolean is_static_method (PptTopLevel ppt) {
+
+    assert ppt.is_exit() : ppt;
+    for (PptRelation rel : ppt.parents) {
+      if (rel.parent.is_object())
+        return false;
+    }
+
+    return true;
+  }
 
 }
