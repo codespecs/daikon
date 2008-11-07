@@ -170,7 +170,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   public void testShouldAddFrequency() throws Exception {
     // Invoke private method using reflection
     Method m = DetailedStatisticsVisitor.class.getDeclaredMethod
-      ("shouldAddFrequency", new Class[] {Invariant.class, Invariant.class});
+      ("shouldAddFrequency", new Class<?>[] {Invariant.class, Invariant.class});
     m.setAccessible(true);
 
     Boolean b = (Boolean) m.invoke

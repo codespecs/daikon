@@ -8,7 +8,7 @@ package daikon.chicory;
 public class ArrayInfo extends DaikonVariableInfo
 {
     /** Component type of the array **/
-    Class array_type = null;
+    Class<?> array_type = null;
 
     /**
      * Constructs an ArrayInfo object with the specified name
@@ -16,7 +16,7 @@ public class ArrayInfo extends DaikonVariableInfo
      * @param theName The variable name. Should end with "[]"
      * @param array_type component type of the array
      */
-    public ArrayInfo (String theName, Class array_type) {
+    public ArrayInfo (String theName, Class<?> array_type) {
 
         super (theName, true);
         this.array_type = array_type;
@@ -38,7 +38,7 @@ public class ArrayInfo extends DaikonVariableInfo
             return DTraceWriter.getListFromArray(value);
     }
 
-    public Class getType()
+    public Class<?> getType()
     {
         return array_type;
     }

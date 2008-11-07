@@ -295,7 +295,7 @@ class FormatTestCase {
    * @return a Class object representing the class name if such a class is
    *         defined, otherwise null
    **/
-  private static Class getClass(String classInfo) {
+  private static Class<?> getClass(String classInfo) {
     try {
       return ClassLoader.getSystemClassLoader().loadClass(classInfo);
     }
@@ -372,7 +372,7 @@ class FormatTestCase {
     String[] tokens = line.split ("  *");
     String className = tokens[0];
     int arg_count = (tokens.length - 1) / 2;
-    Class[] arg_types  = new Class[arg_count];
+    Class<?>[] arg_types  = new Class<?>[arg_count];
     Object[] arg_vals = new Object[arg_count];
     int arg_index = 0;
     for (int i = 1; i < tokens.length; i+=2) {
@@ -382,7 +382,7 @@ class FormatTestCase {
                                     + arg_type_name);
       String arg_val = tokens[i+1];
       Object val;
-      Class val_type;
+      Class<?> val_type;
       if (arg_type_name == "boolean") { // interned
         val = Boolean.valueOf (arg_val);
         val_type = boolean.class;
@@ -492,7 +492,7 @@ class FormatTestCase {
         //   catch (NoSuchMethodException e) {
            try {
             outputProducer =
-              classToTest.getMethod("format_using", new Class [] {OutputFormat.class});
+              classToTest.getMethod("format_using", new Class<?> [] {OutputFormat.class});
             OutputFormat output_format = OutputFormat.get(format);
             if (output_format == null) {
               throw new RuntimeException("bad output format " + format);
@@ -584,7 +584,7 @@ class FormatTestCase {
    * @param classToTest the invariant type in question
    * @return the arity of the invariant if it can be determined, -1 otherwise
    **/
-  private static int getArity(Class classToTest) {
+  private static int getArity(Class<? extends Invariant> classToTest) {
     if (UnaryInvariant.class.isAssignableFrom(classToTest))
       return 1;
     else if (BinaryInvariant.class.isAssignableFrom(classToTest))
@@ -912,7 +912,7 @@ class FormatTestCase {
 
     Method addModified = getAddModified(inv.getClass());
     int sampleSize = samples.get(0).length;
-    Class currentClass;
+    Class<?> currentClass;
 
     // System.out.println(sampleSize);
 
@@ -1037,7 +1037,7 @@ class FormatTestCase {
    */
   private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
     try {
-      Method get_proto = theClass.getMethod ("get_proto", new Class[] {});
+      Method get_proto = theClass.getMethod ("get_proto", new Class<?>[] {});
       Invariant proto = (Invariant) get_proto.invoke (null, new Object[] {});
       Invariant inv = proto.instantiate (sl);
 

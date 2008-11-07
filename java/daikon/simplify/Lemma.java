@@ -1,5 +1,7 @@
 package daikon.simplify;
 
+import daikon.inv.Invariant;
+
 import java.util.Vector;
 
 /** A lemma is an object that wraps a Simplify formula representing
@@ -25,7 +27,7 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /** If this lemma came from an invariant, get its class. */
-  public Class invClass() {
+  public Class<? extends Invariant> invClass() {
     return null;
   }
 

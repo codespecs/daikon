@@ -259,7 +259,7 @@ public class DTraceWriter extends DaikonWriter
         if ((theObj == null) || (theObj instanceof NonsensicalObject))
             return nonsenseValue;
 
-        Class fieldType = classField.getType();
+        Class<?> fieldType = classField.getType();
 
         if (!classField.isAccessible())
             classField.setAccessible(true);
@@ -322,7 +322,7 @@ public class DTraceWriter extends DaikonWriter
         if (!classField.isAccessible())
             classField.setAccessible(true);
 
-        Class fieldType = classField.getType();
+        Class<?> fieldType = classField.getType();
 
         if (Chicory.checkStaticInit)
         {
@@ -400,7 +400,7 @@ public class DTraceWriter extends DaikonWriter
         int len = Array.getLength(arrayVal);
         List<Object> arrList = new ArrayList<Object>(len);
 
-        Class arrType = arrayVal.getClass().getComponentType();
+        Class<?> arrType = arrayVal.getClass().getComponentType();
 
         // have to wrap primitives in our wrappers
         // otherwise, couldn't distinguish from a wrapped object in the
@@ -502,7 +502,7 @@ public class DTraceWriter extends DaikonWriter
 
         for (Object ref: theVals)
         {
-            Class type = null;
+            Class<?> type = null;
 
             if (ref != null)
             {
@@ -529,7 +529,7 @@ public class DTraceWriter extends DaikonWriter
      * @param runtime Should we use the runtime type or declared type?
      * @return The variable's type, with primitive wrappers removed
      */
-    public static Class removeWrappers(Object val, Class declared, boolean runtime)
+    public static Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime)
     {
         if (!(val instanceof Runtime.PrimitiveWrapper))
         {

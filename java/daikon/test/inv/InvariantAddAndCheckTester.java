@@ -739,7 +739,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a Class object representing the class name if such a class is
      *         defined, otherwise null
      **/
-    private static Class getClass(String classInfo) {
+    private static Class<?> getClass(String classInfo) {
       try {
         return ClassLoader.getSystemClassLoader().loadClass(classInfo);
       }
@@ -787,7 +787,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return an array of VarInfo objects that have the types corresponding
      *         to those in types
      **/
-    private static VarInfo [] getVarInfos(Class classToTest, ProglangType[] types) {
+    private static VarInfo [] getVarInfos(Class<? extends Invariant> classToTest, ProglangType[] types) {
       int numInfos = getArity(classToTest);
 
       if (numInfos == -1)
@@ -841,7 +841,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @param classToTest the invariant type in question
      * @return the arity of the invariant if it can be determined, -1 otherwise
      **/
-    private static int getArity(Class classToTest) {
+    private static int getArity(Class<? extends Invariant> classToTest) {
       if (UnaryInvariant.class.isAssignableFrom(classToTest))
         return 1;
       else if (BinaryInvariant.class.isAssignableFrom(classToTest))
@@ -933,7 +933,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
       try {
-        Method get_proto = theClass.getMethod ("get_proto", new Class[] {});
+        Method get_proto = theClass.getMethod ("get_proto", new Class<?>[] {});
         Invariant proto = (Invariant) get_proto.invoke (null, new Object[] {});
         Invariant inv = proto.instantiate (sl);
         return (inv);

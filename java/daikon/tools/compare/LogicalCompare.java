@@ -217,7 +217,7 @@ public class LogicalCompare {
 //     }
 //   }
 
-  private static String shortName(Class c) {
+  private static String shortName(Class<?> c) {
     String name = c.getName();
     return name.substring(name.lastIndexOf('.') + 1);
   }
@@ -241,15 +241,15 @@ public class LogicalCompare {
 
       if (opt_minimize_classes) {
         if (result == 'T' && !identical) {
-          Vector<Set<Class>> sets = lemmas.minimizeClasses(inv.formula);
-          for (Set<Class> classes : sets) {
-            Class inv_class = inv.invClass();
+          Vector<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
+          for (Set<Class<? extends Invariant>> classes : sets) {
+            Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
               System.out.print(" " + shortName(inv_class));
               classes.remove(inv_class);
             }
-            for (Class c : classes) {
+            for (Class<? extends Invariant> c : classes) {
               System.out.print(" " + shortName(c));
             }
             System.out.println();

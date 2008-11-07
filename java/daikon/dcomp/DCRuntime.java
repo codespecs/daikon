@@ -172,7 +172,8 @@ public final class DCRuntime {
   public static List<BranchInfo> branch_tags
     = new ArrayList<BranchInfo>();
 
-  public static Class dcompmarker = null;
+  /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker **/
+  public static Class<?> dcompmarker = null;
 
   /** Perform any initialization required before instrumentation begins **/
   public static void init() {
@@ -264,10 +265,14 @@ public final class DCRuntime {
     }
 
     boolean return_val;
-    Class<?> javalangobject, dcompmarker;
+    Class<Object> javalangobject;
+    /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker **/
+    Class<?> dcompmarker;
 
-    try{
-      javalangobject = Class.forName("java.lang.Object");
+    try {
+      @SuppressWarnings("unchecked")
+      Class<Object> javalangobject_tmp = (Class<Object>) Class.forName("java.lang.Object");
+      javalangobject = javalangobject_tmp;
 
       if (DCInstrument.jdk_instrumented) {
         dcompmarker = Class.forName("java.lang.DCompMarker");
@@ -467,7 +472,7 @@ public final class DCRuntime {
     // System.out.printf ("has_instrumented: %s %s %s%n", c, method_name,
     //                   dcompmarker);
 
-    Class[] args = new Class[] {dcompmarker};
+    Class<?>[] args = new Class<?>[] {dcompmarker};
     while (!c.getName().equals ("java.lang.Object")) {
       java.lang.reflect.Method m = null;
       try {
@@ -1443,7 +1448,7 @@ public final class DCRuntime {
     if (dv instanceof FieldInfo)
       tag = get_field_tag ((FieldInfo) dv, parent, obj);
 
-    if (dv.isArray() && (tag instanceof List)) {
+    if (dv.isArray() && (tag instanceof List<?>)) {
       @SuppressWarnings("unchecked")
       List<Object> elements = (List<Object>)tag;
       if (debug_timing.enabled())
@@ -1601,7 +1606,7 @@ public final class DCRuntime {
     if (dv instanceof FieldInfo)
       tag = get_field_tag_refs_only ((FieldInfo) dv, parent, obj);
 
-    if (dv.isArray() && (tag instanceof List)) {
+    if (dv.isArray() && (tag instanceof List<?>)) {
       @SuppressWarnings("unchecked")
       List<Object> elements = (List<Object>)tag;
       if (debug_timing.enabled())
@@ -2558,7 +2563,7 @@ public final class DCRuntime {
         debug_primitive.log ("push_field_tag %s [%s] %d = %s%n", obj,
                      obj.getClass().getName(), field_num, obj_tags[field_num]);
     } else {
-      Class obj_class = obj.getClass();
+      Class<?> obj_class = obj.getClass();
       int fcnt = num_prim_fields (obj.getClass());
       assert field_num < fcnt : obj.getClass() + " " + field_num + " " + fcnt;
       obj_tags = new Object[fcnt];
@@ -2591,7 +2596,7 @@ public final class DCRuntime {
     // required (the number of primitive fields), allocate the space,
     // and associate it with the object.
     if (obj_tags == null) {
-      Class obj_class = obj.getClass();
+      Class<?> obj_class = obj.getClass();
       int fcnt = num_prim_fields (obj.getClass());
       assert field_num < fcnt : obj.getClass() + " " + field_num + " " + fcnt;
       obj_tags = new Object[fcnt];
@@ -2615,7 +2620,7 @@ public final class DCRuntime {
      * Return the number of primitive fields in clazz and all of its
      * superclasses
      */
-    public static int num_prim_fields (Class clazz) {
+    public static int num_prim_fields (Class<?> clazz) {
       if (clazz == Object.class)
         return 0;
       else {
@@ -2845,7 +2850,7 @@ public final class DCRuntime {
   /**
    * Returns whether or not the specified class is initialized
    */
-  public static boolean is_class_init (Class clazz) {
+  public static boolean is_class_init (Class<?> clazz) {
     return (init_classes.contains (clazz.getName()));
   }
 
@@ -3016,7 +3021,7 @@ public final class DCRuntime {
     boolean is_class_initialized = false;
 
     /** Class that contains the field **/
-    Class declaring_class;
+    Class<?> declaring_class;
 
     /** Initialize for this field **/
     public StaticReferenceTag (FieldInfo fi) {

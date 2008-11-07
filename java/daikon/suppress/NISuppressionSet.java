@@ -36,9 +36,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * the suppressor to this. If the same suppressor class appears more
    * than once, the suppression is only added once.
    */
-  public void add_to_suppressor_map (Map<Class,List<NISuppressionSet>> suppressor_map) {
+  public void add_to_suppressor_map (Map<Class<? extends Invariant>,List<NISuppressionSet>> suppressor_map) {
 
-    Set<Class> all_suppressors = new LinkedHashSet<Class>();
+    Set<Class<? extends Invariant>> all_suppressors = new LinkedHashSet<Class<? extends Invariant>>();
 
     // Loop through each suppression in the suppression set
     for (int i = 0; i < suppression_set.length; i++) {

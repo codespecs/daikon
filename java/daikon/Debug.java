@@ -151,8 +151,11 @@ public class Debug {
   /** True if the cached variables are printable. **/
   public boolean cache_match = true;
 
+  // Note that throughout this file, inv_class is not necessarily a
+  // subclass of Invariant -- for instance, it might be a subclass of
+  // BinaryDerivationFactory.
   /** cached class */
-  public Class cache_class;
+  public Class<?> cache_class;
 
   /** cached ppt */
   public Ppt cache_ppt;
@@ -165,7 +168,7 @@ public class Debug {
    * don't have to set them.
    **/
 
-  public Debug (Class c, Ppt ppt, VarInfo[] vis) {
+  public Debug (Class<?> c, Ppt ppt, VarInfo[] vis) {
     set (c, ppt, vis);
   }
 
@@ -175,7 +178,7 @@ public class Debug {
    * the constructor directly, since it doesn't create the object if it
    * doesn't have to
    */
-  public static Debug newDebug (Class c, Ppt ppt, VarInfo[] vis) {
+  public static Debug newDebug (Class<?> c, Ppt ppt, VarInfo[] vis) {
     if (logOn() && class_match (c) && ppt_match (ppt) && var_match (vis))
       return new Debug (c, ppt, vis);
     else
@@ -189,7 +192,7 @@ public class Debug {
    * a debug object that will print if any of the variables in vis are
    * being tracked (and c and ppt match)
    */
-  public Debug (Class c, Ppt ppt, List<VarInfo> vis) {
+  public Debug (Class<?> c, Ppt ppt, List<VarInfo> vis) {
 
     VarInfo v = visTracked (vis);
     if (v != null) {
@@ -254,7 +257,7 @@ public class Debug {
    * don't have to set them.
    **/
 
-  void set (Class c, Ppt ppt, VarInfo[] vis) {
+  void set (Class<?> c, Ppt ppt, VarInfo[] vis) {
     cache_class = c;
     cache_ppt = ppt;
     cache_vis = vis;
@@ -331,7 +334,7 @@ public class Debug {
    * #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
 
-  public static void log (Logger debug, Class inv_class, Ppt ppt, String msg) {
+  public static void log (Logger debug, Class<?> inv_class, Ppt ppt, String msg) {
     if (ppt == null)
       log (debug, inv_class, ppt, null, msg);
     else
@@ -375,7 +378,7 @@ public class Debug {
    * @see #log(String)
    */
 
-  public static void log (Logger debug, Class inv_class, Ppt ppt,
+  public static void log (Logger debug, Class<?> inv_class, Ppt ppt,
                           VarInfo[] vis, String msg) {
 
     // Try to log via the logger first
@@ -447,7 +450,7 @@ public class Debug {
    *
    * @return whether or not it logged anything
    */
-  public static boolean log (Class inv_class, Ppt ppt, String msg) {
+  public static boolean log (Class<?> inv_class, Ppt ppt, String msg) {
 
     return (log (inv_class, ppt, ppt.var_infos, msg));
   }
@@ -460,7 +463,7 @@ public class Debug {
    *
    * @return whether or not it logged anything
    */
-  public static boolean log (Class inv_class, Ppt ppt, VarInfo[] vis,
+  public static boolean log (Class<?> inv_class, Ppt ppt, VarInfo[] vis,
                              String msg) {
 
     if (!debugTrack.isLoggable(Level.FINE))
@@ -527,7 +530,7 @@ public class Debug {
    * Returns whether or not the specified class matches the classes being
    * tracked
    */
-  public static boolean class_match (Class inv_class) {
+  public static boolean class_match (Class<?> inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
       return (strContainsElem (inv_class.getName(), debugTrackClass));

@@ -13,14 +13,14 @@ import java.util.*;
  */
 public class StaticObjInfo extends DaikonVariableInfo
 {
-    public Class type;
+    public Class<?> type;
 
     public StaticObjInfo()
     {
         super("this");
     }
 
-    public StaticObjInfo (Class type)
+    public StaticObjInfo (Class<?> type)
     {
         super ("this");
         this.type = type;

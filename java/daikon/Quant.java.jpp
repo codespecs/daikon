@@ -80,11 +80,11 @@ public final class Quant {
   // Not called from Quant; provided only for external use.
   /* pure */ public static int size(Object o) {
     if (o == null) { return Integer.MAX_VALUE; } // return default value
-    java.lang.Class c = o.getClass();
+    java.lang.Class<?> c = o.getClass();
     if (c.isArray()) {
       return java.lang.reflect.Array.getLength(o);
-    } else if (o instanceof Collection) {
-      return ((Collection)o).size();
+    } else if (o instanceof Collection<?>) {
+      return ((Collection<?>)o).size();
     } else {
       return Integer.MAX_VALUE; // return default value
     }
@@ -94,7 +94,7 @@ public final class Quant {
    * If the argument is null, returns a default value (Integer.MAX_VALUE).
    */
   // Not called from Quant; provided only for external use.
-  /* pure */ public static int size(Collection o) {
+  /* pure */ public static int size(Collection<?> o) {
     if (o == null) { return Integer.MAX_VALUE; } // return default value
     return o.size();
   }
@@ -296,7 +296,7 @@ public final class Quant {
     return eltsNotEqual(toObjArray(arr), elt);
   }
 
-  /* pure */ public static boolean isIntegralType(Class c) {
+  /* pure */ public static boolean isIntegralType(Class<?> c) {
     if (c == null) { return false; }
     return
       (c.equals(Byte.TYPE) ||
@@ -305,14 +305,14 @@ public final class Quant {
        c.equals(Long.TYPE));
   }
 
-  /* pure */ public static boolean isRealType(Class c) {
+  /* pure */ public static boolean isRealType(Class<?> c) {
     if (c == null) { return false; }
     return
       (c.equals(Float.TYPE) ||
        c.equals(Double.TYPE));
   }
 
-  /* pure */ public static boolean isNumericType(Class c) {
+  /* pure */ public static boolean isNumericType(Class<?> c) {
     if (c == null) { return false; }
     return isIntegralType(c) || isRealType(c);
   }
@@ -322,7 +322,7 @@ public final class Quant {
    */
   public static Object[] toObjArray(Object o) {
     if (o == null) { return null; }
-    if (o instanceof java.util.AbstractCollection) {
+    if (o instanceof java.util.AbstractCollection<?>) {
       @SuppressWarnings("unchecked")
         AbstractCollection<Object> ac = (AbstractCollection<Object>)o;
       return ac.toArray(new java.lang.Object[]{});

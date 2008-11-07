@@ -33,7 +33,7 @@ public class InvDef {
   int v3_index = -1;
 
   /** invariant class. **/
-  Class inv_class;
+  Class<? extends Invariant> inv_class;
 
   /** State to check for invariants with state. **/
   Object state;
@@ -53,12 +53,12 @@ public class InvDef {
   public static final long[] elts_one = {1};
   public static final double[] elts_one_float = {1.0};
 
-  public InvDef (VarInfo v1, Class cls) {
+  public InvDef (VarInfo v1, Class<? extends Invariant> cls) {
     this.v1 = v1;
     inv_class = cls;
   }
 
-  public InvDef (VarInfo v1, Class cls, Object state) {
+  public InvDef (VarInfo v1, Class<? extends Invariant> cls, Object state) {
     this (v1, cls);
     this.state = state;
   }
@@ -82,7 +82,7 @@ public class InvDef {
     // get the class
     swap_class = true;
     try {
-      Method swap_method = cls.getMethod ("swap_class", (Class[])null);
+      Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
       if (swap)
         cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object[])null); // unchecked cast
     } catch (Exception e) {
@@ -96,20 +96,20 @@ public class InvDef {
 
   /**
    * Defines a ternary invariant independent of specific variables by
-   * using the var_info instead.  The class must be correctly permutted
+   * using the var_info instead.  The class must be correctly permuted
    * to match the variable order (i.e., the indices must be 0, 1, 2).
    * This is ok for now, since we are only using these to define
    * suppressees and we always know the correct permuation in that
    * instance
    */
-  public InvDef (int v1_index, int v2_index, int v3_index, Class cls) {
+  public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant> inv_class) {
 
     Assert.assertTrue (v1_index < v2_index);
     Assert.assertTrue (v2_index < v3_index);
     this.v1_index = v1_index;
     this.v2_index = v2_index;
     this.v3_index = v3_index;
-    this.inv_class = cls;
+    this.inv_class = inv_class;
   }
 
 

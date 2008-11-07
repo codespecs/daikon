@@ -3,9 +3,9 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import daikon.Chicory;
 import daikon.util.UtilMDE;
+
 /**
  * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
- *
  */
 public abstract class DaikonWriter
 {
@@ -36,7 +36,7 @@ public abstract class DaikonWriter
      */
     protected static boolean isStaticConstField(Field field)
     {
-        Class type = field.getType();
+        Class<?> type = field.getType();
         int mod = field.getModifiers();
 
         if (DaikonVariableInfo.dkconfig_constant_infer) {
@@ -175,20 +175,20 @@ public abstract class DaikonWriter
       String ppt_name = null;
 
       String fullname;
-      Class args[];
-      Class declaring_class = member.getDeclaringClass();
+      Class<?>[] args;
+      Class<?> declaring_class = member.getDeclaringClass();
       if (member instanceof Method) {
         Method method = (Method) member;
         fullname = declaring_class.getName() + "." + method.getName();
         args = method.getParameterTypes();
       } else {
-        Constructor constructor = (Constructor) member;
+        Constructor<?> constructor = (Constructor<?>) member;
         fullname = declaring_class.getName() + "."
           + UtilMDE.unqualified_name (declaring_class);
         args = constructor.getParameterTypes();
       }
       String arg_str = "";
-      for (Class arg : args) {
+      for (Class<?> arg : args) {
         if (arg_str.length() > 0)
           arg_str += ", ";
         if (arg.isArray())
@@ -213,7 +213,7 @@ public abstract class DaikonWriter
         if (Chicory.debug_ppt_names)
           System.out.printf ("methodName2: '%s' '%s'%n", name, point);
 
-        if (method instanceof Constructor) {
+        if (method instanceof Constructor<?>) {
             name = fixDuplicateConstructorName(name, method.getName());
 
             if (Chicory.debug_ppt_names)
@@ -318,7 +318,7 @@ public abstract class DaikonWriter
      * Returns the class name of the specified class in 'java' format
      * (i.e., as the class would have been declared in java source code)
      */
-    public static String stdClassName (Class type)
+    public static String stdClassName (Class<?> type)
     {
         return Runtime.classnameFromJvm (type.getName());
     }

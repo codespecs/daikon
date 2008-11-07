@@ -47,7 +47,7 @@ public class RootInfo extends DaikonVariableInfo
         // the depth goes deeper there ('this' is not counted).  This
         // guarantees that any static variables in the class are found here
         // and not below.
-        if (!(mi.member instanceof Constructor)) {
+        if (!(mi.member instanceof Constructor<?>)) {
             root.addClassVars(mi.class_info,
                               Modifier.isStatic(mi.member.getModifiers()),
                               mi.member.getDeclaringClass(), /*offset = */ "",
@@ -96,7 +96,7 @@ public class RootInfo extends DaikonVariableInfo
         // Print return type information for methods only and not constructors
         if (mi.member instanceof Method)
         {
-            Class returnType = ((Method) mi.member).getReturnType();
+            Class<?> returnType = ((Method) mi.member).getReturnType();
             if (!(returnType.equals(Void.TYPE)))
             {
                 // add a new ReturnInfo object to the traversal tree

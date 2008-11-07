@@ -163,7 +163,7 @@ public class ParameterDoclet
   public static String UNKNOWN_DEFAULT = "The default value is not known.";
 
   /**
-   * Add <name, desc> pair to the map field 'fields' for the appropriate
+   * Add (name, desc) pair to the map field 'fields' for the appropriate
    * category.
    **/
   public void process(String fullname, String name, String desc) {
@@ -188,7 +188,7 @@ public class ParameterDoclet
       int i = field.lastIndexOf('.');
       String classname = field.substring(0, i);
       String fieldname = field.substring(i+1);
-      Class c = UtilMDE.classForName (classname);
+      Class<?> c = UtilMDE.classForName (classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);
       Object value = f.get(null);
       return "The default value is `" + value + "'.";

@@ -101,13 +101,13 @@ public class NIS {
    * Map from invariant class to a list of all of the suppression sets
    * that contain a suppressor of that class.
    */
-  public static Map<Class,List<NISuppressionSet>> suppressor_map;
+  public static Map<Class<? extends Invariant>,List<NISuppressionSet>> suppressor_map;
 
   /**
    * Map from invariant class to the number of suppressions
    * that contain a suppressor of that class.
    */
-  public static Map<Class,Integer> suppressor_map_suppression_count;
+  public static Map<Class<? extends Invariant>,Integer> suppressor_map_suppression_count;
 
   /** List of all suppressions */
   static List<NISuppressionSet> all_suppressions;
@@ -171,8 +171,8 @@ public class NIS {
 
     // Creating these here, rather than where they are declared allows
     // this method to be called multiple times without a problem.
-    suppressor_map = new LinkedHashMap<Class,List<NISuppressionSet>>(256);
-    suppressor_map_suppression_count = new LinkedHashMap<Class,Integer>(256);
+    suppressor_map = new LinkedHashMap<Class<? extends Invariant>,List<NISuppressionSet>>(256);
+    suppressor_map_suppression_count = new LinkedHashMap<Class<? extends Invariant>,Integer>(256);
     all_suppressions = new ArrayList<NISuppressionSet>();
     suppressor_proto_invs = new ArrayList<Invariant>();
 
@@ -235,7 +235,7 @@ public class NIS {
     // count the number of suppressions associated with each
     // suppressor
   //  if (NIS.hybrid_method) {
-      for (Class a : suppressor_map.keySet()) {
+      for (Class<? extends Invariant> a : suppressor_map.keySet()) {
 
       int x = 0;
       List<NISuppressionSet> ss_list = suppressor_map.get(a);
@@ -826,7 +826,7 @@ public class NIS {
   /**
    * Returns true if the specified class is an antecedent in any NI suppression
    */
-  public static boolean is_suppressor (Class cls) {
+  public static boolean is_suppressor (Class<? extends Invariant> cls) {
     return (suppressor_map.containsKey (cls));
   }
 
@@ -838,7 +838,7 @@ public class NIS {
     if (!log.isLoggable(Level.FINE))
       return;
 
-    for (Class sclass : suppressor_map.keySet()) {
+    for (Class<? extends Invariant> sclass : suppressor_map.keySet()) {
       List<NISuppressionSet> suppression_set_list = suppressor_map.get (sclass);
       for (ListIterator<NISuppressionSet> j = suppression_set_list.listIterator(); j.hasNext();) {
         NISuppressionSet ss = j.next();
@@ -978,7 +978,7 @@ public class NIS {
      * antecedent invariants of that class.  Allows fast access to
      * invariants by type
      */
-    Map<Class,List<Invariant>> antecedent_map;
+    Map<Class<? extends Invariant>,List<Invariant>> antecedent_map;
 
     /** Number of antecedents that are false **/
     int false_cnt = 0;
@@ -986,7 +986,7 @@ public class NIS {
     /** Create with specified comparability */
     public Antecedents (VarComparability comparability) {
 
-      antecedent_map = new LinkedHashMap<Class,List<Invariant>>();
+      antecedent_map = new LinkedHashMap<Class<? extends Invariant>,List<Invariant>>();
       this.comparability = comparability;
     }
 
@@ -1052,7 +1052,7 @@ public class NIS {
      * Returns a list of all of the antecedent invariants of the specified
      * class.  Returns NULL if there are none of that class
      */
-    public List<Invariant> get (Class cls) {
+    public List<Invariant> get (Class<? extends Invariant> cls) {
 
       return antecedent_map.get (cls);
     }
@@ -1064,7 +1064,7 @@ public class NIS {
 
       String out = "Comparability " + comparability + " : ";
 
-      for (Class iclass : antecedent_map.keySet()) {
+      for (Class<? extends Invariant> iclass : antecedent_map.keySet()) {
         out += UtilMDE.unqualified_name (iclass) + " : ";
         List<Invariant> ilist = antecedent_map.get (iclass);
         for (Invariant inv : ilist) {

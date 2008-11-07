@@ -590,7 +590,7 @@ public class Runtime
         try
         {
             Class<java.lang.Runtime> rt = java.lang.Runtime.class;
-            rt.getMethod("addShutdownHook", new Class[]{java.lang.Thread.class});
+            rt.getMethod("addShutdownHook", new Class<?>[]{java.lang.Thread.class});
             return true;
         }
         catch (Exception e)
@@ -693,7 +693,7 @@ public class Runtime
      * @param type declaring class
      * @return ClassInfo structure corresponding to type
      */
-    public static ClassInfo getClassInfoFromClass(Class type)
+    public static ClassInfo getClassInfoFromClass(Class<?> type)
     {
         try {
           synchronized (Runtime.all_classes) {

@@ -355,7 +355,7 @@ public class InvariantDoclet
           String fullname = field.qualifiedName();
           int i = fullname.lastIndexOf('.');
           String classname = fullname.substring(0, i);
-          Class c = UtilMDE.classForName(classname);
+          Class<?> c = UtilMDE.classForName(classname);
           Field f = c.getField (enable_name);
           Object value = f.get(null);
           if (((Boolean) value).booleanValue())

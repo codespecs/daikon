@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.Iterator;
 import utilMDE.*;
+import daikon.inv.Invariant;
 
 /**
  * A stack of Lemmas that shadows the stack of assumptions that
@@ -256,7 +257,7 @@ public class LemmaStack {
     return new_invs;
   }
 
-  private static Vector<Lemma> filterByClass(Vector<Lemma> lems, Set<Class> blacklist) {
+  private static Vector<Lemma> filterByClass(Vector<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
     Vector<Lemma> new_lems = new Vector<Lemma>();
     for (Lemma lem : lems) {
       if (!blacklist.contains(lem.invClass())) {
@@ -267,12 +268,13 @@ public class LemmaStack {
   }
 
   private void minimizeClasses_rec(String result, Vector<Lemma> lems,
-                                   Set<Class> exclude,
-                                   Set<Set<Class>> black, Set<Set<Class>> gray,
-                                   Set<Set<Class>> found) throws TimeoutException {
-    for (Set<Class> known : found) {
+                                   Set<Class<? extends Invariant>> exclude,
+                                   Set<Set<Class<? extends Invariant>>> black,
+                                   Set<Set<Class<? extends Invariant>>> gray,
+                                   Set<Set<Class<? extends Invariant>>> found) throws TimeoutException {
+    for (Set<Class<? extends Invariant>> known : found) {
       // If known and exclude are disjoint, return
-      Set<Class> exclude2 = new HashSet<Class>(exclude);
+      Set<Class<? extends Invariant>> exclude2 = new HashSet<Class<? extends Invariant>>(exclude);
       exclude2.retainAll(known);
       if (exclude2.isEmpty())
         return;
@@ -285,9 +287,9 @@ public class LemmaStack {
     if (holds) {
       Vector<Lemma> mini
         = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
-      Set<Class> used = new HashSet<Class>();
+      Set<Class<? extends Invariant>> used = new HashSet<Class<? extends Invariant>>();
       for (Lemma mlem : mini) {
-        Class c = mlem.invClass();
+        Class<? extends Invariant> c = mlem.invClass();
         if (c != null)
           used.add(c);
       }
@@ -300,8 +302,8 @@ public class LemmaStack {
       System.err.println();
 
       found.add(used);
-      for (Class c : used) {
-        Set<Class> step = new HashSet<Class>(exclude);
+      for (Class<? extends Invariant> c : used) {
+        Set<Class<? extends Invariant>> step = new HashSet<Class<? extends Invariant>>(exclude);
         step.add(c);
         if (!black.contains(step) && !gray.contains(step)) {
           gray.add(step);
@@ -312,16 +314,16 @@ public class LemmaStack {
     black.add(exclude);
   }
 
-  public Vector<Set<Class>> minimizeClasses(String result) {
+  public Vector<Set<Class<? extends Invariant>>> minimizeClasses(String result) {
     Vector<Lemma> assumptions = new Vector<Lemma>(lemmas);
-    Vector<Set<Class>> found = new Vector<Set<Class>>();
+    Vector<Set<Class<? extends Invariant>>> found = new Vector<Set<Class<? extends Invariant>>>();
     try {
       unAssumeAll(lemmas);
       if (checkString(result) == 'F') {
-        Set<Class> exclude = new HashSet<Class>();
-        Set<Set<Class>> black = new HashSet<Set<Class>>();
-        Set<Set<Class>> gray = new HashSet<Set<Class>>();
-        Set<Set<Class>> found_set = new HashSet<Set<Class>>();
+        Set<Class<? extends Invariant>> exclude = new HashSet<Class<? extends Invariant>>();
+        Set<Set<Class<? extends Invariant>>> black = new HashSet<Set<Class<? extends Invariant>>>();
+        Set<Set<Class<? extends Invariant>>> gray = new HashSet<Set<Class<? extends Invariant>>>();
+        Set<Set<Class<? extends Invariant>>> found_set = new HashSet<Set<Class<? extends Invariant>>>();
         minimizeClasses_rec(result, assumptions, exclude, black, gray,
                             found_set);
         found.addAll(found_set);

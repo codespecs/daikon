@@ -21,17 +21,17 @@ import java.util.*;
  */
 public class NISuppressee {
 
-  public Class sup_class;
+  public Class<? extends Invariant> sup_class;
   public int var_count;
   public Invariant sample_inv;
 
-  public NISuppressee (Class<?> cls, int var_count) {
+  public NISuppressee (Class<? extends Invariant> cls, int var_count) {
     sup_class = cls;
     Assert.assertTrue ((var_count >= 1) && (var_count <=3));
     this.var_count = var_count;
 
     try {
-      Method get_proto = cls.getMethod ("get_proto", new Class[] {});
+      Method get_proto = cls.getMethod ("get_proto", new Class<?>[] {});
       sample_inv = (Invariant)get_proto.invoke (null, new Object[] {});
       Assert.assertTrue (sample_inv != null, cls.getName());
     } catch (Exception e) {
@@ -44,13 +44,13 @@ public class NISuppressee {
    * Define a binary suppressee on the specified class with the
    * specified variable order
    */
-  public NISuppressee (Class<?> cls, boolean swap) {
+  public NISuppressee (Class<? extends Invariant> cls, boolean swap) {
     sup_class = cls;
     this.var_count = 2;
 
     try {
       Method get_proto = cls.getMethod ("get_proto",
-                                        new Class[] {boolean.class});
+                                        new Class<?>[] {boolean.class});
       sample_inv = (Invariant)get_proto.invoke (null,
                                     new Object[] {Boolean.valueOf(swap)});
       Assert.assertTrue (sample_inv != null, cls.getName());

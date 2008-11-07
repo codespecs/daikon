@@ -33,10 +33,12 @@ public final class Configuration
 
   protected static final String PREFIX = "dkconfig_";
 
-  private static final Class STRING_CLASS;
+  private static final Class<String> STRING_CLASS;
   static {
     try {
-      STRING_CLASS = Class.forName("java.lang.String");
+      @SuppressWarnings("unchecked")
+      Class<String> STRING_CLASS_tmp = (Class<String>) Class.forName("java.lang.String");
+      STRING_CLASS = STRING_CLASS_tmp;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -160,7 +162,7 @@ public final class Configuration
 
     // Use UtilMDE version of class.forName so that we can refer to
     // inner classes using '.' as well as '$'
-    Class clazz;
+    Class<?> clazz;
     try {
       clazz = UtilMDE.classForName(classname);
     } catch (ClassNotFoundException e) {
@@ -172,7 +174,7 @@ public final class Configuration
     apply(clazz, fieldname, value);
   }
 
-  public void apply(Class clazz, String fieldname, String value) {
+  public void apply(Class<?> clazz, String fieldname, String value) {
     Assert.assertTrue(clazz != null);
     Assert.assertTrue(fieldname != null);
     Assert.assertTrue(value != null);
@@ -242,7 +244,7 @@ public final class Configuration
     } else if (type.getSuperclass().getName().equals("java.lang.Enum")) {
       try {
         java.lang.reflect.Method valueOf
-          = type.getDeclaredMethod("valueOf", new Class[] { STRING_CLASS });
+          = type.getDeclaredMethod("valueOf", new Class<?>[] { STRING_CLASS });
         if (valueOf == null) {
           // Can't happen, so RuntimeException instead of ConfigException
           throw new RuntimeException("Didn't find valueOf in " + type);

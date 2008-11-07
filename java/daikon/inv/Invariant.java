@@ -1068,7 +1068,7 @@ public abstract class Invariant
    **/
   // This implementation should be made more efficient, because it's used in
   // suppression.  We should somehow index invariants by their type.
-  public static Invariant find(Class invclass, PptSlice ppt) {
+  public static Invariant find(Class<? extends Invariant> invclass, PptSlice ppt) {
     for (Invariant inv : ppt.invs) {
       if (inv.getClass() == invclass)
         return inv;

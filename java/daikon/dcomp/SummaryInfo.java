@@ -133,7 +133,7 @@ public class SummaryInfo {
    */
   public String toString() {
     List<String> param_names = new ArrayList<String>();
-    for (Class p : original_params())
+    for (Class<?> p : original_params())
       param_names.add (p.getSimpleName());
 
     return String.format ("%s %s.%s(%s)", invoke_type, original_classname,
@@ -146,7 +146,7 @@ public class SummaryInfo {
    */
   public static void init() {
 
-    Class dcr = daikon.dcomp.DCRuntime.class;
+    Class<DCRuntime> dcr = daikon.dcomp.DCRuntime.class;
     java.lang.reflect.Method[] methods = dcr.getDeclaredMethods();
     for (java.lang.reflect.Method m : methods) {
       DFSum dfs = m.getAnnotation (DFSum.class);
@@ -181,7 +181,7 @@ public class SummaryInfo {
     Options options = new Options (synopsis, SummaryInfo.class);
     options.parse_or_usage (args);
 
-    Class dcr = daikon.dcomp.DCRuntime.class;
+    Class<DCRuntime> dcr = daikon.dcomp.DCRuntime.class;
     int errs = 0;
 
     java.lang.reflect.Method[] methods = dcr.getDeclaredMethods();

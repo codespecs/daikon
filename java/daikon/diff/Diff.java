@@ -771,9 +771,9 @@ public final class Diff {
     Iterator<Pair<Invariant,Invariant>> opi = new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(),
                                            invPairComparator);
     while (opi.hasNext()) {
-      Pair invariants = opi.next();
-      Invariant inv1 = (Invariant) invariants.a;
-      Invariant inv2 = (Invariant) invariants.b;
+      Pair<Invariant,Invariant> invariants = opi.next();
+      Invariant inv1 = invariants.a;
+      Invariant inv2 = invariants.b;
       if (!includeUnjustified) {
         if ((inv1 != null) && !(inv1.justified())) {
           inv1 = null;
@@ -857,7 +857,7 @@ public final class Diff {
     ClassNotFoundException, InstantiationException, IllegalAccessException {
 
     if (classname != null) {
-      Class cls = Class.forName(classname);
+      Class<?> cls = Class.forName(classname);
       @SuppressWarnings("unchecked")
       Comparator<Invariant> cmp = (Comparator<Invariant>) cls.newInstance();
       return cmp;

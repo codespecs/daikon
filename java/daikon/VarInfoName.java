@@ -464,7 +464,7 @@ public abstract /*@Interned*/ class VarInfoName
   /**
    * @return true iff a node of the given type exists in this
    **/
-  public boolean hasNodeOfType(Class type) {
+  public boolean hasNodeOfType(Class<?> type) {
     for (VarInfoName vin : inOrderTraversal()) {
       if (type.equals(vin.getClass())) {
         return true;

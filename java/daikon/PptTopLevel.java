@@ -317,11 +317,12 @@ public class PptTopLevel extends Ppt {
    **/
   public PptSliceEquality equality_view;
 
-  // The set of redundant_invs is filled in by the below method
-  // mark_implied_via_simplify.  Contents are either Invariant
-  // objects, or, in the case of Equality invariants, the canonical
-  // VarInfo for the equality.  (This is gross.)
-  public Set/*<Invariant or VarInfo>*/ redundant_invs = new LinkedHashSet(0);
+  // The redundant_invs* variables are filled in by method
+  // mark_implied_via_simplify.
+  /** Redundant invariants, except for Equality invariants. */
+  public Set<Invariant> redundant_invs = new LinkedHashSet<Invariant>(0);
+  /** The canonical VarInfo for the equality. */
+  public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<VarInfo>(0);
 
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
                       EnumSet<PptFlags> flags, List<String> ppt_successors,
@@ -1362,9 +1363,9 @@ public class PptTopLevel extends Ppt {
    * map is from the invariant class to an integer cnt of the number of
    * that class
    */
-  public Map<Class,Cnt> invariant_cnt_by_class() {
+  public Map<Class<? extends Invariant>,Cnt> invariant_cnt_by_class() {
 
-    Map<Class,Cnt> inv_map = new LinkedHashMap<Class,Cnt>();
+    Map<Class<? extends Invariant>,Cnt> inv_map = new LinkedHashMap<Class<? extends Invariant>,Cnt>();
 
     for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
       PptSlice slice = j.next();
@@ -1617,7 +1618,7 @@ public class PptTopLevel extends Ppt {
    * specified class.  If the slice or the invariant does not exist, returns
    * null.
    */
-  public Invariant find_inv_by_class(VarInfo[] vis, Class cls) {
+  public Invariant find_inv_by_class(VarInfo[] vis, Class<? extends Invariant> cls) {
 
     PptSlice slice = findSlice(vis);
     if (slice == null)
@@ -3081,12 +3082,11 @@ public class PptTopLevel extends Ppt {
   /** Mark an invariant as redundant. */
   private void flagRedundant(Invariant inv) {
     if (inv instanceof Equality) {
-      // ick ick ick
       // Equality is not represented with a permanent invariant
       // object, so store the canonical variable instead.
-      redundant_invs.add(((Equality) inv).leader()); // unchecked cast due to polymorphic container
+      redundant_invs_equality.add(((Equality) inv).leader());
     } else {
-      redundant_invs.add(inv);  // unchecked cast due to polymorphic container -MDE
+      redundant_invs.add(inv);
     }
   }
 
@@ -3214,8 +3214,9 @@ public class PptTopLevel extends Ppt {
   public static final Comparator<Invariant> icfp =
     new Invariant.InvariantComparatorForPrinting();
 
-  static Comparator arityVarnameComparator
+  static Comparator<PptSlice> arityVarnameComparator
     = new PptSlice.ArityVarnameComparator();
+
 
   /////////////////////////////////////////////////////////////////////////////
   ///// Invariant guarding
@@ -4193,7 +4194,7 @@ public class PptTopLevel extends Ppt {
     int const_inv_cnt = 0;
     int constant_leader_cnt = 0;
     public static boolean cnt_inv_classes = false;
-    Map<Class,Cnt> inv_map = null;
+    Map<Class<? extends Invariant>,Cnt> inv_map = null;
     public static boolean show_invs = false;
     public static boolean show_tern_slices = false;
 
@@ -4262,7 +4263,7 @@ public class PptTopLevel extends Ppt {
                         + memory + ": "
                         + time);
       if (cnt_inv_classes) {
-        for (Class inv_class : inv_map.keySet()) {
+        for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);
         }

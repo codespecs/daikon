@@ -1644,9 +1644,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     {
-      Vector lbs = LinearBinary.findAll(this);
-      for (Object lbObject : lbs) {
-        LinearBinary lb = (LinearBinary) lbObject;
+      Vector<LinearBinary> lbs = LinearBinary.findAll(this);
+      for (LinearBinary lb : lbs) {
         if (this.equals(lb.var2())
           && (post != lb.var1().isPrestate())) {
 
@@ -1995,13 +1994,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     PptSlice slice = ppt.get_or_instantiate_slice(this);
 
     Invariant result;
+    Class<NonZero> NonZero_class;
     try {
-      result =
-        Invariant.find(Class.forName("daikon.inv.unary.scalar.NonZero"),
-                       slice);
+      @SuppressWarnings("unchecked")
+      Class<NonZero> NonZero_class_tmp = (Class<NonZero>) Class.forName("daikon.inv.unary.scalar.NonZero");
+      NonZero_class = NonZero_class_tmp;
     } catch (ClassNotFoundException e) {
       throw new Error("Could not locate class object for daikon.inv.unary.scalar.NonZero");
     }
+    // result = Invariant.find(NonZero_class, slice);
+    result = Invariant.find(NonZero.class, slice);
 
     // Check whether the predicate already exists
     if (result == null) {

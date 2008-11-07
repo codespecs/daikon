@@ -39,7 +39,7 @@ class WriteViolationFile {
     }
     Method main_method;
     try {
-      main_method = cls.getMethod("main", new Class[] { String[].class });
+      main_method = cls.getMethod("main", new Class<?>[] { String[].class });
     } catch (Exception e) {
       throw new Error("Cannot find main method in class " + class_name);
     }

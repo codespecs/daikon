@@ -405,7 +405,7 @@ public class SampleTester extends TestCase {
       parse_error ("bad argument count (" + args.size() +
                     ") for invariant assertion");
 
-    Class cls = null;
+    Class<?> cls = null;
     String format = null;
 
     // If the first argument is a quoted string
@@ -457,7 +457,7 @@ public class SampleTester extends TestCase {
       parse_error ("bad argument count (" + args.size() +
                     ") for show_invs");
 
-    Class cls = null;
+    Class<?> cls = null;
     String format = null;
 
     // Build a vis to match the specified variables

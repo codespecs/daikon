@@ -99,7 +99,7 @@ public class DiffTester extends TestCase {
 
     // Invoke private method using reflection
     Method mAddViews = PptTopLevel.class.getDeclaredMethod
-      ("addViews", new Class[] {Vector.class});
+      ("addViews", new Class<?>[] {Vector.class});
     mAddViews.setAccessible(true);
 
     {

@@ -15,9 +15,9 @@ import java.util.List;
 public class ListInfo extends DaikonVariableInfo
 {
 
-    private Class<? extends List> listType;
+    private Class<? extends List<?>> listType;
 
-    public ListInfo(String theName, Class<? extends List> theType)
+    public ListInfo(String theName, Class<? extends List<?>> theType)
     {
         super(theName, true);
         listType = theType;
@@ -31,7 +31,7 @@ public class ListInfo extends DaikonVariableInfo
         Method arrayMethod = null;
         try
         {
-            arrayMethod = listType.getMethod("toArray", new Class[0]);
+            arrayMethod = listType.getMethod("toArray", new Class<?>[0]);
         }
         catch (NoSuchMethodException e)
         {

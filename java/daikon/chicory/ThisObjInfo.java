@@ -8,14 +8,14 @@ import java.util.*;
  */
 public class ThisObjInfo extends DaikonVariableInfo
 {
-    public Class type;
+    public Class<?> type;
 
     public ThisObjInfo()
     {
         super("this");
     }
 
-    public ThisObjInfo (Class type)
+    public ThisObjInfo (Class<?> type)
     {
         super ("this");
         this.type = type;

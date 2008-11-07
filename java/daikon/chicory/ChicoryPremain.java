@@ -118,7 +118,8 @@ public class ChicoryPremain {
       try {
         transformer
           = loader.loadClass ("daikon.chicory.Instrument").newInstance();
-        Class c = transformer.getClass();
+        @SuppressWarnings("unchecked")
+        Class<Instrument> c = (Class<Instrument>) transformer.getClass();
         // System.out.printf ("Classloader of tranformer = %s%n",
         //                    c.getClassLoader());
       } catch (Exception e) {
@@ -462,7 +463,7 @@ public class ChicoryPremain {
       }
 
       // If we've already loaded the class, just return that one
-      Class c = findLoadedClass (name);
+      Class<?> c = findLoadedClass (name);
       if (c != null) {
         if (resolve)
           resolveClass (c);

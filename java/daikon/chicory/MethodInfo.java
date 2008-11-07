@@ -34,7 +34,7 @@ public class MethodInfo {
   public String[] arg_type_strings;
 
   /** Array of argument types as classes for this method **/
-  public Class[] arg_types;
+  public Class<?>[] arg_types;
 
   /** exit locations for this method **/
   public List<Integer> exit_locations;
@@ -89,8 +89,8 @@ public class MethodInfo {
     this.is_included = is_included;
   }
 
-  private static HashMap<String,Class> primitive_classes
-    = new HashMap<String,Class>(8);
+  private static HashMap<String,Class<?>> primitive_classes
+    = new HashMap<String,Class<?>>(8);
   static {
     primitive_classes.put("Z", Boolean.TYPE);
     primitive_classes.put("B", Byte.TYPE);
@@ -106,11 +106,11 @@ public class MethodInfo {
   public void initViaReflection () {
 
     // Get the Class for each argument type
-    arg_types = new Class[arg_names.length];
+    arg_types = new Class<?>[arg_names.length];
     for (int ii = 0; ii < arg_type_strings.length; ii++) {
       try {
         String aname = arg_type_strings[ii];
-        Class c = primitive_classes.get (aname);
+        Class<?> c = primitive_classes.get (aname);
 
         if (c == null)
         {
@@ -149,7 +149,7 @@ public class MethodInfo {
         // Only consider purity on non-abstract, non-static, non-constructor
         // methods which return a value and take no parameters!
         if (!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&
-                !(member instanceof Constructor) &&
+                !(member instanceof Constructor<?>) &&
                 !((Method) member).getReturnType().equals(Void.TYPE) &&
                 ((Method) member).getParameterTypes().length == 0)
         {
@@ -217,7 +217,7 @@ public class MethodInfo {
   }
 
   /** Returns the turn type of the method.  Constructors return Void.TYPE **/
-  public Class return_type() {
+  public Class<?> return_type() {
     if (member instanceof Method) {
       Method m = (Method) member;
       return m.getReturnType();

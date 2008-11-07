@@ -47,7 +47,7 @@ public class CoverageStats
 
     // setConfigFile(gretelFile);
     {
-      Method m = clazzListHits.getMethod("setConfigFile", new Class[] { String.class });
+      Method m = clazzListHits.getMethod("setConfigFile", new Class<?>[] { String.class });
       m.invoke(null, new Object[] { gretelFile });
     }
 
@@ -55,9 +55,9 @@ public class CoverageStats
     // hits = getHits(); misses = getMisses();
     {
       Method m;
-      m = clazzListHits.getMethod("getHits", (Class[])null);
+      m = clazzListHits.getMethod("getHits", (Class<?>[])null);
       hits = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null); // unchecked cast
-      m = clazzListHits.getMethod("getMisses", (Class[])null);
+      m = clazzListHits.getMethod("getMisses", (Class<?>[])null);
       misses = (Map<String,Set<Integer>>) m.invoke(null, (Object[])null); // unchecked cast
     }
 

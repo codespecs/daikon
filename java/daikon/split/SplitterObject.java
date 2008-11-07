@@ -46,7 +46,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
    * Must not be null.
    */
   public void load (SplitterLoader loader) {
-    Class tempClass = loader.load_Class(className, directory + className + ".class");
+    Class<?> tempClass = loader.load_Class(className, directory + className + ".class");
     if (tempClass != null) {
       try {
         splitter = (Splitter) tempClass.newInstance();

@@ -37,7 +37,7 @@ public class FieldInfo extends DaikonVariableInfo
        is_primitive = field.getType().isPrimitive();
 
        // Calculate the offset of this field in its class
-       Class clazz = field.getDeclaringClass();
+       Class<?> clazz = field.getDeclaringClass();
        if (!field.getType().isPrimitive() || clazz.isInterface()) {
            field_num = -1;
            return;
@@ -62,7 +62,7 @@ public class FieldInfo extends DaikonVariableInfo
      * Return the number of primitive fields in clazz and all of its
      * superclasses
      */
-    public static int num_prim_fields (Class clazz)
+    public static int num_prim_fields (Class<?> clazz)
     {
         if (clazz == Object.class)
             return 0;
@@ -115,7 +115,7 @@ public class FieldInfo extends DaikonVariableInfo
         return field;
     }
 
-    public Class getType()
+    public Class<?> getType()
     {
         return (field.getType());
     }
@@ -131,7 +131,7 @@ public class FieldInfo extends DaikonVariableInfo
 
 
     Field tag_field = null;
-    public Field get_tag_field (String tag_field_name, Class parent_class)
+    public Field get_tag_field (String tag_field_name, Class<?> parent_class)
     {
         if (tag_field == null)
         {

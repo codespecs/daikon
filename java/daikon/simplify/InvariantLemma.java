@@ -23,16 +23,19 @@ public class InvariantLemma extends Lemma {
   }
 
   /** If this lemma came from an invariant, get its class. */
-  public Class invClass() {
-    Class c;
+  public Class<? extends Invariant> invClass() {
+    Class<? extends Invariant> c;
     if (invariant instanceof GuardingImplication) {
       c = ((Implication)invariant).consequent().getClass();
     } else {
       c = invariant.getClass();
     }
-    Class outer = c.getDeclaringClass();
-    if (outer != null)
-      c = outer;
+    Class<?> outer = c.getDeclaringClass();
+    if (outer != null) {
+      @SuppressWarnings("unchecked")
+      Class <? extends Invariant> c_tmp = (Class<? extends Invariant>) outer;
+      c = c_tmp;
+    }
     return c;
   }
 

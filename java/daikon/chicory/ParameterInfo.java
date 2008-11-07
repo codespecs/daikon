@@ -33,7 +33,7 @@ public class ParameterInfo extends DaikonVariableInfo
     private final int param_offset;
 
     /** Argument type **/
-    private final Class argType;
+    private final Class<?> argType;
 
     /** True if this parameter is of a primitive type **/
     boolean isPrimitive;
@@ -42,7 +42,7 @@ public class ParameterInfo extends DaikonVariableInfo
      * Constructs an ParameterInfo object with the specified name
      * @param theName The variable name (used in the declaration)
      */
-    public ParameterInfo(String theName, int theArgNum, Class argType,
+    public ParameterInfo(String theName, int theArgNum, Class<?> argType,
                          int param_offset)
     {
         super(theName);
@@ -88,7 +88,7 @@ public class ParameterInfo extends DaikonVariableInfo
         throw new RuntimeException("Parameters have no parent value");
     }
 
-    public Class getType()
+    public Class<?> getType()
     {
         return (argType);
     }

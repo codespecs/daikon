@@ -236,7 +236,7 @@ public final class Runtime {
   private static boolean supportsAddShutdownHook() {
     try {
       Class<java.lang.Runtime> rt = java.lang.Runtime.class;
-      rt.getMethod("addShutdownHook", new Class[] {
+      rt.getMethod("addShutdownHook", new Class<?>[] {
         java.lang.Thread.class
       });
       return true;
@@ -623,10 +623,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print(a[0] == null ? 0 : ((List)a[0]).size());
+      ps.print(a[0] == null ? 0 : ((List<?>)a[0]).size());
       for (int i=1; i<a.length; i++) {
         ps.print(' ');
-        ps.print(a[i] == null ? 0 : ((List)a[i]).size());
+        ps.print(a[i] == null ? 0 : ((List<?>)a[i]).size());
       }
     }
     ps.println(']');

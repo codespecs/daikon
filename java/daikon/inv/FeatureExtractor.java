@@ -17,6 +17,7 @@ import daikon.*;
 import daikon.diff.*;
 import utilMDE.*;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class FeatureExtractor {
   private FeatureExtractor() { throw new Error("do not instantiate"); }
 
@@ -231,7 +232,7 @@ public final class FeatureExtractor {
   //
   //     // returns two ArrayLists (in an array) of Useful invariants and
   //     // non-useful invariants
-  //     ArrayList<Invariant>[] answer = (ArrayList<Invariant>[]) new ArrayList[2];
+  //     ArrayList<Invariant>[] answer = (ArrayList<Invariant>[]) new ArrayList<Invariant>[2];
   //     answer[0] = new ArrayList<Invariant>();
   //     answer[1] = new ArrayList<Invariant>();
   //
@@ -285,8 +286,8 @@ public final class FeatureExtractor {
       IntDoublePair pair = new IntDoublePair(num, 0);
       allFeatures.add(pair);
       String name;
-      if (key instanceof Class)
-        name = ((Class) key).getName() + "Bool";
+      if (key instanceof Class<?>)
+        name = ((Class<?>) key).getName() + "Bool";
       else if (key instanceof String) {
         name = (String) key;
       }
@@ -530,10 +531,10 @@ public final class FeatureExtractor {
 
     //get a set of all Invariant classes
     File top = new File(CLASSES);
-    ArrayList<Class> classes = getInvariantClasses(top);
+    List<Class<? extends Invariant>> classes = getInvariantClasses(top);
 
     for (int i = 0; i < classes.size(); i++) {
-      Class currentClass = classes.get(i);
+      Class<? extends Invariant> currentClass = classes.get(i);
       Field[] fields = currentClass.getFields();
       Method[] methods = currentClass.getMethods();
       //handle the class
@@ -596,9 +597,9 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  private static ArrayList<Class> getInvariantClasses(File top)
+  private static List<Class<? extends Invariant>> getInvariantClasses(File top)
     throws ClassNotFoundException {
-    ArrayList<Class> answer = new ArrayList<Class>();
+    List<Class<? extends Invariant>> answer = new ArrayList<Class<? extends Invariant>>();
     if (top.isDirectory()) {
       File[] all = top.listFiles();
       for (int i = 0; i < all.length; i++)
@@ -618,7 +619,8 @@ public final class FeatureExtractor {
           name.substring(name.indexOf(".ver3") + 5);
 
       try {
-        Class current = Class.forName(name);
+        @SuppressWarnings("unchecked")
+        Class<? extends Invariant> current = (Class<? extends Invariant>) Class.forName(name);
         if ((Invariant.class.isAssignableFrom(current)) ||
             (Ppt.class.isAssignableFrom(current)) ||
             (VarInfo.class.isAssignableFrom(current))) {

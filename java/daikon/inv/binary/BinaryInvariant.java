@@ -118,7 +118,7 @@ public abstract class BinaryInvariant extends Invariant {
     // find that class.
     boolean swap_class = true;
     try {
-      Method swap_method = cls.getMethod ("swap_class", (Class[])null);
+      Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
       if (fswap)
         cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object[])null); // unchecked cast
     } catch (Exception e) {

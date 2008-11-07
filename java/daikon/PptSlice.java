@@ -472,7 +472,7 @@ public abstract class PptSlice
    * Returns the invariant that matches the specified class if it
    * exists.  Otherwise returns null.
    */
-  public Invariant find_inv_by_class (Class cls) {
+  public Invariant find_inv_by_class (Class<? extends Invariant> cls) {
 
     for (Invariant inv : invs) {
       if ((inv.getClass() == cls))

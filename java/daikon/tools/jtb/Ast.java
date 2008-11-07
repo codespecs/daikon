@@ -135,7 +135,7 @@ public class Ast {
 
   // Creates an AST from a String
   public static Node create(String type, String stringRep) {
-    return create(type, new Class[]{}, new Object[]{}, stringRep);
+    return create(type, new Class<?>[]{}, new Object[]{}, stringRep);
   }
 
 

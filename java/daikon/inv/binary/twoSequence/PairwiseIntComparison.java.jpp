@@ -324,7 +324,7 @@ public class PAIRWISEINTEQUAL
    * Returns the class that corresponds to this class with its variable
    * order swapped.
    */
-  public static Class swap_class () {
+  public static Class<PAIRWISEINTEQUAL_SWAP> swap_class () {
     return PAIRWISEINTEQUAL_SWAP.class;
   }
 #endif

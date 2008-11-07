@@ -30,7 +30,7 @@ public class StringInfo extends DaikonVariableInfo
         if (isArray)
         {
             @SuppressWarnings("unchecked")
-            List valAsList = (List)val;
+            List<?> valAsList = (List<?>)val;
             return getStringList(valAsList);
         }
         else
@@ -47,7 +47,7 @@ public class StringInfo extends DaikonVariableInfo
      * @param theValues A list of values, each is a String or NonsensicalObject or NonsensicalList.
      * @return a space-separated String of the elements in theValues
      */
-    public static String getStringList(List theValues)
+    public static String getStringList(List<?> theValues)
     {
         if (theValues == null)
         {
@@ -66,7 +66,7 @@ public class StringInfo extends DaikonVariableInfo
         StringBuffer buf = new StringBuffer();
 
         buf.append("[");
-        for (Iterator iter = theValues.iterator(); iter.hasNext();)
+        for (Iterator<?> iter = theValues.iterator(); iter.hasNext();)
         {
             Object str = iter.next();
 

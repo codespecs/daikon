@@ -124,9 +124,9 @@ public final class SplitDtrace {
     InputStream stream;
     if (filename.endsWith(".dtrace.zip")) {
       ZipFile zipfile = new ZipFile(filename);
-      Enumeration e = zipfile.entries();
+      Enumeration<? extends ZipEntry> e = zipfile.entries();
       if (!e.hasMoreElements()) throw new RuntimeException("No entries in the gz");
-      ZipEntry entry = (ZipEntry) e.nextElement();
+      ZipEntry entry = e.nextElement();
       if (e.hasMoreElements()) throw new RuntimeException("More than one entry in the gz");
       stream = zipfile.getInputStream(entry);
     } else if (filename.endsWith(".dtrace.gz")) {

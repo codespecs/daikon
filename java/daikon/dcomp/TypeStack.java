@@ -1196,7 +1196,7 @@ public final class TypeStack
         testClass(Type.class);
     }
 
-    public static void testClass(Class testClass) throws ClassNotFoundException
+    public static void testClass(Class<?> testClass) throws ClassNotFoundException
     {
         System.out.printf("testing %s...", testClass);
 
@@ -1308,7 +1308,7 @@ public final class TypeStack
     {
         // System.out.printf("%s --- %s --- %s%n", t, t1, t2);
 
-        Class c = t.getClass();
+        Class<?> c = t.getClass();
         return (c.isInstance(t1)) && (c.isInstance(t2));
     }
 

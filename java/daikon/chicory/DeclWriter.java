@@ -87,7 +87,7 @@ public class DeclWriter extends DaikonWriter {
      * @param type the ClassType type
      * @return the correctly formulated String
      */
-    public static String classObjectName(Class type)
+    public static String classObjectName(Class<?> type)
     {
         return (type.getName() + ":::OBJECT");
     }
@@ -604,7 +604,7 @@ public class DeclWriter extends DaikonWriter {
    * Returns the string to write to the output file for the specified
    * enum.  Currently this is just the name of the enum in lower case
    */
-  private String out_name (Enum e) {
+  private String out_name (Enum<?> e) {
     return e.name().toLowerCase();
   }
 

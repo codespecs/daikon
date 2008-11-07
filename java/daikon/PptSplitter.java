@@ -159,7 +159,7 @@ public class PptSplitter implements Serializable {
     Assert.assertTrue (ppts.length == 2);
 
     // Create any NIS suppressed invariants in each conditional
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     List<Invariant> suppressed_invs[] = (ArrayList<Invariant>[]) new ArrayList[ppts.length];
     for (int i = 0; i < ppts.length; i++)
       suppressed_invs[i] = NIS.create_suppressed_invs (ppts[i]);
@@ -600,10 +600,10 @@ public class PptSplitter implements Serializable {
     for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {
-      Pair pair = opi.next();
+      Pair<Invariant,Invariant> pair = opi.next();
       if (pair.a != null && pair.b != null) {
-        Invariant inv1 = (Invariant) pair.a;
-        Invariant inv2 = (Invariant) pair.b;
+        Invariant inv1 = pair.a;
+        Invariant inv2 = pair.b;
         result.add(inv1);
       }
     }

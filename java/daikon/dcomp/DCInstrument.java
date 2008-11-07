@@ -2098,7 +2098,7 @@ class DCInstrument {
       return (false);
 
     // Turn the arg_types into an array of classes
-    Class[] arg_classes = new Class[arg_types.length];
+    Class<?>[] arg_classes = new Class<?>[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++)
       arg_classes[ii] = BCELUtil.type_to_class (arg_types[ii]);
 
@@ -2521,7 +2521,7 @@ class DCInstrument {
 
     // Look up the class using this classes class loader.  This may
     // not be the best way to accomplish this.
-    Class obj_class = null;
+    Class<?> obj_class = null;
     try {
       obj_class = Class.forName (obj_type.getClassName(), false, loader);
     } catch (Exception e) {
@@ -3405,7 +3405,7 @@ class DCInstrument {
 
     // Get the arguments to the method
     Type[] arg_types = invoke.getArgumentTypes (pool);
-    Class[] arg_classes = new Class[arg_types.length];
+    Class<?>[] arg_classes = new Class<?>[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++) {
       arg_classes[ii] = type_to_class (arg_types[ii], loader);
     }
@@ -3416,7 +3416,7 @@ class DCInstrument {
     String classes = clazz.getName();
     try {
       if (method_name.equals("<init>")) {
-        Constructor c = clazz.getDeclaredConstructor (arg_classes);
+        Constructor<?> c = clazz.getDeclaredConstructor (arg_classes);
         modifiers = c.getModifiers();
       } else if (clazz.isInterface()) {
         return (false);  // presume interfaces aren't native...
@@ -3449,7 +3449,7 @@ class DCInstrument {
    * loaded but not initialized.  The specified loader must be able to
    * find it.  If load is null, the default loader will be used.
    */
-  public static Class type_to_class (Type t, ClassLoader loader) {
+  public static Class<?> type_to_class (Type t, ClassLoader loader) {
 
     if (loader == null)
       loader = DCInstrument.class.getClassLoader();

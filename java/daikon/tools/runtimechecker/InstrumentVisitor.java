@@ -29,6 +29,7 @@ import java.lang.reflect.*;
  * Visitor that instruments a Java source file (i.e. adds code at
  * certain places) to check invariant violations at runtime.
  */
+@SuppressWarnings("rawtypes")
 public class InstrumentVisitor extends DepthFirstVisitor {
 
 
@@ -56,7 +57,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // The methods and constructors that were visited (in other words,
     // those explicitly declared in the source).
     public List<Method> visitedMethods = new ArrayList<Method>();
-    public List<Constructor> visitedConstructors = new ArrayList<Constructor>();
+    public List<Constructor<?>> visitedConstructors = new ArrayList<Constructor<?>>();
 
 
     // [[ TODO: I'm using xmlString() because it will definitely give

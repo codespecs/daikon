@@ -67,8 +67,8 @@ public class Premain {
     }
 
     // Find out what classes are already loaded
-    Class[] loaded_classes = inst.getAllLoadedClasses();
-    for (Class loaded_class : loaded_classes) {
+    Class<?>[] loaded_classes = inst.getAllLoadedClasses();
+    for (Class<?> loaded_class : loaded_classes) {
       // System.out.printf ("loaded class = %s\n", loaded_class.getName());
     }
 

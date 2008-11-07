@@ -71,7 +71,7 @@ public class NISuppressor {
     // Create a sample invariant
     try {
       Method get_proto = inv_class.getMethod ("get_proto",
-                                                new Class[] {});
+                                                new Class<?>[] {});
       sample_inv = (Invariant) get_proto.invoke (null, new Object[] {});
       Assert.assertTrue (sample_inv != null);
     } catch (Exception e) {
@@ -105,7 +105,7 @@ public class NISuppressor {
     // get the class
     swap_class = true;
     try {
-      Method swap_method = cls.getMethod ("swap_class", (Class[])null);
+      Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
       if (swap)
         cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object[]) null); // unchecked cast
     } catch (Exception e) {
@@ -119,12 +119,12 @@ public class NISuppressor {
     try {
       try {
         Method get_proto = inv_class.getMethod ("get_proto",
-                               new Class[] {boolean.class});
+                               new Class<?>[] {boolean.class});
         sample_inv = (Invariant)get_proto.invoke (null,
                                   new Object[] {Boolean.valueOf(swap)});
       } catch (NoSuchMethodException e) {
         Method get_proto = inv_class.getMethod ("get_proto",
-                               new Class[] {});
+                               new Class<?>[] {});
         sample_inv = (Invariant)get_proto.invoke (null, new Object[] {});
       }
     } catch (Exception e) {
@@ -466,7 +466,7 @@ public class NISuppressor {
 
 
   /** Returns the invariant class of this suppressor **/
-  public Class get_inv_class() {
+  public Class<? extends Invariant> get_inv_class() {
     return (inv_class);
   }
 

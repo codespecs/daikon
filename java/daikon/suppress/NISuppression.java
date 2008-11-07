@@ -451,8 +451,8 @@ public class NISuppression {
    */
   List<Invariant>[] antecedents_for_suppressors (NIS.Antecedents ants) {
 
-    @SuppressWarnings("unchecked")
-    List<Invariant> antecedents[] = (List<Invariant>[]) new List [suppressors.length];
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    List<Invariant> antecedents[] = (List<Invariant>[]) new List[suppressors.length];
 
     // Find the list of antecedents that matches each suppressor.  If any
     // suppressor doesn't have any matching antecedents, there can't be

@@ -136,11 +136,11 @@ The correct way to build the system is to run 'make'.
    **/
   /* pure */ public static _TYPE GET_ELEMENT (Object o, long i) {
     if (o == null) { return BAD_VALUE; } // return default value
-    java.lang.Class c = o.getClass();
+    java.lang.Class<?> c = o.getClass();
     if (c.isArray()) {
       return ARRAY_GET_NAME (o, (int)i);
-    } else if (o instanceof java.util.AbstractCollection) {
-      return ARRAY_GET_NAME (((java.util.AbstractCollection)o).toArray(), (int)i);
+    } else if (o instanceof java.util.AbstractCollection<?>) {
+      return ARRAY_GET_NAME (((java.util.AbstractCollection<?>)o).toArray(), (int)i);
     } else {
       return BAD_VALUE; // return default value
     }
@@ -688,8 +688,8 @@ The test is ensures that it only appears once in the output.
     // This implementation simply calls either subsetOf(long[], long[]) or
     // subsetOf(double[], double[]).
 
-    Class eltsType = elts.getClass().getComponentType();
-    Class arrType = arr.getClass().getComponentType();
+    Class<?> eltsType = elts.getClass().getComponentType();
+    Class<?> arrType = arr.getClass().getComponentType();
     if (isIntegralType(eltsType) && isIntegralType(arrType)) {
       // Both arrays are int/long
       // Cast both arrays to long and call subsetOf(long[],long[])
@@ -1032,13 +1032,13 @@ The test is ensures that it only appears once in the output.
 #endif
 
 #if (defined(OBJECT) || defined(STRING))
-  /* pure */ public static boolean pairwiseEqual(java.util.AbstractCollection seq1, _TYPE[] seq2) {
+  /* pure */ public static boolean pairwiseEqual(java.util.AbstractCollection<_TYPE> seq1, _TYPE[] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(seq1.toArray(), seq2);
   }
 
-  /* pure */ public static boolean pairwiseEqual(_TYPE[] seq1, java.util.AbstractCollection seq2) {
+  /* pure */ public static boolean pairwiseEqual(_TYPE[] seq1, java.util.AbstractCollection<_TYPE> seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(seq1, seq2.toArray());
@@ -1687,8 +1687,8 @@ The test is ensures that it only appears once in the output.
 
     Object fieldObj = null;
     try {
-      Field field = (object instanceof java.lang.Class)
-        ? ((Class)object).getDeclaredField(fields[fieldsStartIdx])
+      Field field = (object instanceof java.lang.Class<?>)
+        ? ((Class<?>)object).getDeclaredField(fields[fieldsStartIdx])
         : object.getClass().getDeclaredField(fields[fieldsStartIdx]);
       field.setAccessible(true);
       // Class cls = field.getType();
@@ -1749,10 +1749,10 @@ The test is ensures that it only appears once in the output.
 
       if (daikon.ProglangType.list_implementors.contains(fieldObj.getClass().getName())) {
 
-        java.util.AbstractCollection collection = (java.util.AbstractCollection)fieldObj;
+        java.util.AbstractCollection<?> collection = (java.util.AbstractCollection<?>)fieldObj;
         _TYPE[] intermediate = new _TYPE[collection.size()];
         int index = 0;
-        for (Iterator i = collection.iterator() ; i.hasNext() ; ) {
+        for (Iterator<?> i = collection.iterator() ; i.hasNext() ; ) {
           _TYPE[] oneEltArray = COLLECT_TYPE (i.next(), fields, fieldsStartIdx + 1);
           //Assert.assertTrue(oneEltArray.length == 1);
           intermediate[index++] = oneEltArray[0];
@@ -1797,8 +1797,8 @@ The test is ensures that it only appears once in the output.
 
       try {
         Field field =
-          (fieldObj instanceof java.lang.Class)
-          ? ((Class)fieldObj).getDeclaredField(fieldName)
+          (fieldObj instanceof java.lang.Class<?>)
+          ? ((Class<?>)fieldObj).getDeclaredField(fieldName)
           : fieldObj.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         fieldObj = field.get(fieldObj);
