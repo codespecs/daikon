@@ -682,8 +682,10 @@ public final class Intern {
 
     @SuppressWarnings("unchecked")
     public boolean equals (Object other) {
-      if (other instanceof SequenceAndIndices) {
-        return equals((SequenceAndIndices<T>) other); // unchecked
+      if (other instanceof SequenceAndIndices<?>) {
+        @SuppressWarnings("unchecked")
+        SequenceAndIndices<T> other_sai = (SequenceAndIndices<T>) other;
+        return equals(other_sai);
       } else {
         return false;
       }

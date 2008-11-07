@@ -2292,15 +2292,15 @@ public final class TestUtilMDE extends TestCase {
     Object a = new Object();
     Object b = new Object();
     Object c = new Object();
-    List a_list = Arrays.asList (new Object[] {a});
-    List b_list = Arrays.asList (new Object[] {b});
-    List c_list = Arrays.asList (new Object[] {c});
-    List aa = Arrays.asList (new Object[] {a, a});
-    List bb = Arrays.asList (new Object[] {b, b});
-    List cc = Arrays.asList (new Object[] {c, c});
-    List ab = Arrays.asList (new Object[] {a, b});
-    List ac = Arrays.asList (new Object[] {a, c});
-    List bc = Arrays.asList (new Object[] {b, c});
+    List<Object> a_list = Arrays.<Object>asList (new Object[] {a});
+    List<Object> b_list = Arrays.<Object>asList (new Object[] {b});
+    List<Object> c_list = Arrays.<Object>asList (new Object[] {c});
+    List<Object> aa = Arrays.<Object>asList (new Object[] {a, a});
+    List<Object> bb = Arrays.<Object>asList (new Object[] {b, b});
+    List<Object> cc = Arrays.<Object>asList (new Object[] {c, c});
+    List<Object> ab = Arrays.<Object>asList (new Object[] {a, b});
+    List<Object> ac = Arrays.<Object>asList (new Object[] {a, c});
+    List<Object> bc = Arrays.<Object>asList (new Object[] {b, c});
 
     List<Object> abc = Arrays.asList (a,b,c);
     List<List<Object>> combo1 = UtilMDE.create_combinations (1, 0, abc);
@@ -2323,13 +2323,13 @@ public final class TestUtilMDE extends TestCase {
     Integer i1 = new Integer(1);
     Integer i2 = new Integer(2);
 
-    List combo3 = UtilMDE.create_combinations (1, 0, 2);
+    List<ArrayList<Integer>> combo3 = UtilMDE.create_combinations (1, 0, 2);
     assertTrue (combo3.size() == 3);
     assertTrue (combo3.contains (Arrays.asList (new Integer [] {i0})));
     assertTrue (combo3.contains (Arrays.asList (new Integer [] {i1})));
     assertTrue (combo3.contains (Arrays.asList (new Integer [] {i2})));
 
-    List combo4 = UtilMDE.create_combinations (2, 0, 2);
+    List<ArrayList<Integer>> combo4 = UtilMDE.create_combinations (2, 0, 2);
     assertTrue (combo4.size() == 6);
     assertTrue (combo4.contains (Arrays.asList (new Integer[] { i0, i0})));
     assertTrue (combo4.contains (Arrays.asList (new Integer[] { i0, i1})));

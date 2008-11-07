@@ -207,7 +207,7 @@ public final class UtilMDE {
   /// Class
   ///
 
-  private static HashMap<String,Class> primitiveClasses = new HashMap<String,Class>(8);
+  private static HashMap<String,Class<?>> primitiveClasses = new HashMap<String,Class<?>>(8);
   static {
     primitiveClasses.put("boolean", Boolean.TYPE);
     primitiveClasses.put("byte", Byte.TYPE);
@@ -226,8 +226,8 @@ public final class UtilMDE {
    * changed to a dollar sign ($).  This accounts for inner classes
    * which are sometimes separated with '.'.
    **/
-  public static Class classForName(String className) throws ClassNotFoundException {
-    Class result = primitiveClasses.get(className);
+  public static Class<?> classForName(String className) throws ClassNotFoundException {
+    Class<?> result = primitiveClasses.get(className);
     if (result != null)
       return result;
     else {
@@ -392,13 +392,13 @@ public final class UtilMDE {
    * order to call defineClass.
    **/
   private static class PromiscuousLoader extends ClassLoader {
-    public Class loadClassFromFile(String className, String pathname) throws FileNotFoundException, IOException {
+    public Class<?> loadClassFromFile(String className, String pathname) throws FileNotFoundException, IOException {
       FileInputStream fi = new FileInputStream(pathname);
       int numbytes = fi.available();
       byte[] classBytes = new byte[numbytes];
       fi.read(classBytes);
       fi.close();
-      Class return_class = defineClass(className, classBytes, 0, numbytes);
+      Class<?> return_class = defineClass(className, classBytes, 0, numbytes);
       resolveClass(return_class);
       return return_class;
     }
@@ -410,7 +410,7 @@ public final class UtilMDE {
    * @param pathname the pathname of a .class file
    * @return a Java Object corresponding to the Class defined in the .class file
    **/
-  public static Class loadClassFromFile(String className, String pathname) throws FileNotFoundException, IOException {
+  public static Class<?> loadClassFromFile(String className, String pathname) throws FileNotFoundException, IOException {
     return thePromiscuousLoader.loadClassFromFile(className, pathname);
   }
 
@@ -1165,7 +1165,7 @@ public final class UtilMDE {
     String classname = method.substring(0,dotpos);
     String methodname = method.substring(dotpos+1, oparenpos);
     String all_argnames = method.substring(oparenpos+1, cparenpos).trim();
-    Class[] argclasses = args_seen.get(all_argnames);
+    Class<?>[] argclasses = args_seen.get(all_argnames);
     if (argclasses == null) {
       String[] argnames;
       if (all_argnames.equals("")) {
@@ -1174,7 +1174,7 @@ public final class UtilMDE {
         argnames = split(all_argnames, ',');
       }
 
-      argclasses = new Class[argnames.length];
+      argclasses = new Class<?>[argnames.length];
       for (int i=0; i<argnames.length; i++) {
         String argname = argnames[i].trim();
         int numbrackets = 0;
@@ -1296,7 +1296,7 @@ public final class UtilMDE {
    * Returns the object in this set that is equal to key.
    * The Set abstraction doesn't provide this; it only provides "contains".
    **/
-  public static Object getFromSet(Set set, Object key) {
+  public static Object getFromSet(Set<?> set, Object key) {
     if (key == null) {
       return null;
     }
@@ -2011,7 +2011,7 @@ public final class UtilMDE {
    * specified class.  For example if qualified name of the class
    * is java.lang.String, String will be returned.
    **/
-  public static String unqualified_name (Class cls) {
+  public static String unqualified_name (Class<?> cls) {
 
     return (unqualified_name (cls.getName()));
   }

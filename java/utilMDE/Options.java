@@ -153,10 +153,11 @@ public class Options {
     String default_str = null;
 
     /** If the option is a list, this references that list. **/
-    List list = null;
+    // Not type-safe; must suppress warnings
+    List<Object> list = null;
 
     /** Constructor that takes one String for the type **/
-    Constructor constructor = null;
+    Constructor<?> constructor = null;
 
     /** Factory that takes a string (some classes don't have a string const) */
     Method factory = null;
@@ -198,11 +199,13 @@ public class Options {
         Type raw_type = pt.getRawType();
         if (!raw_type.equals (List.class))
           throw new Error ("Unsupported option type " + pt);
-        this.list = (List) default_obj;
+        @SuppressWarnings("unchecked")
+        List<Object> default_obj_as_list = (List<Object>) default_obj;
+        this.list = default_obj_as_list;
         if (this.list == null)
           throw new Error ("List option " + field + " must be initialized");
         // System.out.printf ("list default = %s%n", list);
-        this.base_type = (Class) pt.getActualTypeArguments()[0];
+        this.base_type = (Class<?>) pt.getActualTypeArguments()[0];
 
         // System.out.printf ("Param type for %s = %s%n", field, pt);
         // System.out.printf ("raw type = %s, type = %s%n", pt.getRawType(),
@@ -239,7 +242,7 @@ public class Options {
      * Returns whether or not this option has a required argument.
      */
     public boolean argument_required() {
-      Class type = field.getType();
+      Class<?> type = field.getType();
       return ((type != Boolean.TYPE) && (type != Boolean.class));
     }
 
@@ -267,7 +270,7 @@ public class Options {
     }
 
     /** Returns the class that declares this option. **/
-    public Class get_declaring_class() {
+    public Class<?> get_declaring_class() {
       return field.getDeclaringClass();
     }
   }
@@ -282,7 +285,7 @@ public class Options {
   private String options_str = "";
 
   /** First specified class **/
-  private Class main_class = null;
+  private Class<?> main_class = null;
 
   /** List of all of the defined options **/
   private List<OptionInfo> options = new ArrayList<OptionInfo>();
@@ -330,12 +333,12 @@ public class Options {
     // Loop through each specified object or class
     for (Object obj : args) {
 
-      if (obj instanceof Class) {
+      if (obj instanceof Class<?>) {
 
         if (main_class == null)
-          main_class = (Class) obj;
+          main_class = (Class<?>) obj;
 
-        Field[] fields = ((Class) obj).getDeclaredFields();
+        Field[] fields = ((Class<?>) obj).getDeclaredFields();
         for (Field f : fields) {
           debug_options.log ("Considering field %s with annotations %s%n", f,
                              Arrays.toString(f.getDeclaredAnnotations()));
@@ -645,7 +648,7 @@ public class Options {
     throws ArgException {
 
     Field f = oi.field;
-    Class type = oi.base_type;
+    Class<?> type = oi.base_type;
 
     // Keep track of all of the options specified
     if (options_str.length() > 0)
@@ -714,12 +717,15 @@ public class Options {
         // of parse error from the constructor
         Object val = null;
         try {
-          if (oi.constructor != null)
+          if (oi.constructor != null) {
             val = oi.constructor.newInstance (arg_value);
-          else if (oi.base_type.isEnum())
-            val = Enum.valueOf ((Class<? extends Enum>)oi.base_type, arg_value); // unchecked cast
-          else
+          } else if (oi.base_type.isEnum()) {
+            @SuppressWarnings({"unchecked","rawtypes"})
+            Object tmpVal = Enum.valueOf ((Class<? extends Enum>)oi.base_type, arg_value);
+            val = tmpVal;
+          } else {
             val = oi.factory.invoke (null, arg_value);
+          }
         } catch (Exception e) {
           throw new ArgException ("Invalid argument (%s) for argument %s",
                                   arg_value, arg_name);
@@ -742,7 +748,7 @@ public class Options {
   /**
    * Returns a short name for the specified type for use in messages.
    */
-  private static String type_short_name (Class type) {
+  private static String type_short_name (Class<?> type) {
 
     if (type.isPrimitive())
       return type.getName();
@@ -864,7 +870,7 @@ public class Options {
 
   }
 
-  ClassDoc find_class_doc (RootDoc doc, Class c) {
+  ClassDoc find_class_doc (RootDoc doc, Class<?> c) {
 
     for (ClassDoc cd : doc.classes()) {
       if (cd.qualifiedName().equals (c.getName())) {

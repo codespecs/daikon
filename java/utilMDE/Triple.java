@@ -22,8 +22,9 @@ public class Triple<T1,T2,T3> {
   }
 
   public boolean equals(Object obj) {
-    if (obj instanceof Triple) {
-      Triple other = (Triple) obj;
+    if (obj instanceof Triple<?,?,?>) {
+      @SuppressWarnings("unchecked")
+      Triple<T1,T2,T3> other = (Triple<T1,T2,T3>) obj;
       boolean aEquals = ((this.a == other.a)
                          || (this.a != null && (this.a.equals(other.a))));
       boolean bEquals = ((this.b == other.b)

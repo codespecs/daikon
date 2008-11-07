@@ -448,13 +448,14 @@ public final class WeakHasherMap<K,V> extends AbstractMap<K,V> implements Map<K,
 
 	public int size() {
 	    int j = 0;
-	    for (Iterator i = iterator(); i.hasNext(); i.next()) j++;
+	    for (Iterator<Map.Entry<K,V>> i = iterator(); i.hasNext(); i.next()) j++;
 	    return j;
 	}
 
 	public boolean remove(Object o) {
 	    processQueue();
-	    if (!(o instanceof Map.Entry)) return false;
+	    if (!(o instanceof Map.Entry<?,?>)) return false;
+            @SuppressWarnings("unchecked")
 	    Map.Entry<K,V> e = (Map.Entry<K,V>)o; // unchecked cast
 	    Object ev = e.getValue();
 	    WeakKey wk = WeakKeyCreate(e.getKey());

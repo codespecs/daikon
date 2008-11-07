@@ -304,6 +304,7 @@ public class BCELUtil {
   }
 
   // TODO: write Javadoc
+  @SuppressWarnings("rawtypes")
   public static String instruction_descr(InstructionList il,
       ConstantPoolGen pool) {
 
@@ -440,11 +441,12 @@ public class BCELUtil {
   }
 
   /** Returns the class that corresponds to type **/
+  @SuppressWarnings("rawtypes")
   public static Class type_to_class (Type type) {
 
     String classname = type_to_classname (type);
     try {
-      Class c = UtilMDE.classForName (classname);
+      Class<?> c = UtilMDE.classForName (classname);
       return c;
     } catch (Exception e) {
       throw new RuntimeException ("can't find class for " + classname, e);

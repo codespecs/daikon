@@ -196,7 +196,9 @@ public class WeakIdentityHashMap<K,V>
         int capacity = 1;
         while (capacity < initialCapacity)
             capacity <<= 1;
-        table = (Entry<K,V>[]) new Entry[capacity]; // unchecked cast
+        @SuppressWarnings("rawtypes")
+        Entry<K,V>[] tmpTable = (Entry<K,V>[]) new Entry[capacity]; // unchecked cast
+        table = tmpTable;
         this.loadFactor = loadFactor;
         threshold = (int)(capacity * loadFactor);
     }
@@ -222,7 +224,9 @@ public class WeakIdentityHashMap<K,V>
     public WeakIdentityHashMap() {
         this.loadFactor = DEFAULT_LOAD_FACTOR;
         threshold = DEFAULT_INITIAL_CAPACITY;
-        table = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // unchecked cast
+        @SuppressWarnings({"unchecked","rawtypes"})
+        Entry<K,V>[] tmpTable = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // unchecked cast
+        table = tmpTable;
     }
 
     /**
@@ -459,7 +463,7 @@ public class WeakIdentityHashMap<K,V>
             return;
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked","rawtypes"})
         Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry[newCapacity];
         transfer(oldTable, newTable);
         table = newTable;
@@ -578,10 +582,11 @@ public class WeakIdentityHashMap<K,V>
 
     /** Special version of remove needed by Entry set */
     Entry<K,V> removeMapping(Object o) {
-        if (!(o instanceof Map.Entry))
+        if (!(o instanceof Map.Entry<?,?>))
             return null;
         Entry<K,V>[] tab = getTable();
-        Map.Entry entry = (Map.Entry)o;
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        Map.Entry<K,V> entry = (Map.Entry<K,V>)o;
         Object k = maskNull(entry.getKey());
         int h = hasher (k);
         int i = indexFor(h, tab.length);
@@ -642,7 +647,7 @@ public class WeakIdentityHashMap<K,V>
 
 	Entry<K,V>[] tab = getTable();
         for (int i = tab.length ; i-- > 0 ;)
-            for (Entry e = tab[i] ; e != null ; e = e.next)
+            for (Entry<K,V> e = tab[i] ; e != null ; e = e.next)
                 if (value.equals(e.value))
                     return true;
 	return false;
@@ -654,7 +659,7 @@ public class WeakIdentityHashMap<K,V>
     private boolean containsNullValue() {
 	Entry<K,V>[] tab = getTable();
         for (int i = tab.length ; i-- > 0 ;)
-            for (Entry e = tab[i] ; e != null ; e = e.next)
+            for (Entry<K,V> e = tab[i] ; e != null ; e = e.next)
                 if (e.value==null)
                     return true;
 	return false;
@@ -696,9 +701,10 @@ public class WeakIdentityHashMap<K,V>
         }
 
         public boolean equals(Object o) {
-            if (!(o instanceof Map.Entry))
+            if (!(o instanceof Map.Entry<?,?>))
                 return false;
-            Map.Entry e = (Map.Entry)o;
+            @SuppressWarnings({"rawtypes", "unchecked"})
+            Map.Entry<Object,Object> e = (Map.Entry<Object,Object>)o;
             Object k1 = getKey();
             Object k2 = e.getKey();
             if (eq (k1, k2)) {
@@ -947,11 +953,12 @@ public class WeakIdentityHashMap<K,V>
         }
 
         public boolean contains(Object o) {
-            if (!(o instanceof Map.Entry))
+            if (!(o instanceof Map.Entry<?,?>))
                 return false;
-            Map.Entry e = (Map.Entry)o;
+            @SuppressWarnings({"rawtypes", "unchecked"})
+            Map.Entry<Object,Object> e = (Map.Entry<Object,Object>)o;
             Object k = e.getKey();
-            Entry candidate = getEntry(e.getKey());
+            Entry<K,V> candidate = getEntry(e.getKey());
             return candidate != null && candidate.equals(e);
         }
 
@@ -1012,9 +1019,10 @@ public class WeakIdentityHashMap<K,V>
         }
 
         public boolean equals(Object o) {
-            if (!(o instanceof Map.Entry))
-            return false;
-            Map.Entry e = (Map.Entry)o;
+            if (!(o instanceof Map.Entry<?,?>))
+                return false;
+            @SuppressWarnings({"rawtypes", "unchecked"})
+            Map.Entry<Object,Object> e = (Map.Entry<Object,Object>)o;
             return WeakIdentityHashMap.eq(key, e.getKey())
                 && eq(value, e.getValue());
         }

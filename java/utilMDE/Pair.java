@@ -18,8 +18,9 @@ public class Pair<T1,T2> {
   }
 
   public boolean equals(Object obj) {
-    if (obj instanceof Pair) {
-      Pair other = (Pair) obj;
+    if (obj instanceof Pair<?, ?>) { // generics are not checked at run time!
+      @SuppressWarnings("unchecked")
+      Pair<T1, T2> other = (Pair<T1, T2>) obj;
       boolean aEquals = ((this.a == other.a)
                          || (this.a != null && (this.a.equals(other.a))));
       boolean bEquals = ((this.b == other.b)

@@ -345,7 +345,7 @@ public final class ArraysMDE {
    *    or -1 if no such element is found in the list.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(List a, Object elt) {
+  public static int indexOf(List<?> a, Object elt) {
     return a.indexOf(elt);
   }
 
@@ -357,7 +357,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the list.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(List a, Object elt, int minindex, int indexlimit) {
+  public static int indexOf(List<?> a, Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt.equals(a.get(i)))
         return i;
@@ -400,7 +400,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the list.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(List a, Object elt) {
+  public static int indexOfEq(List<?> a, Object elt) {
     for (int i=0; i<a.size(); i++)
       if (elt == a.get(i))
         return i;
@@ -415,7 +415,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the list.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(List a, Object elt, int minindex, int indexlimit) {
+  public static int indexOfEq(List<?> a, Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a.get(i))
         return i;
@@ -567,7 +567,7 @@ public final class ArraysMDE {
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    **/
-  public static int indexOf(List a, Object[] sub) {
+  public static int indexOf(List<?> a, Object[] sub) {
     int a_index_max = a.size() - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
       if (isSubarray(a, sub, i))
@@ -583,7 +583,7 @@ public final class ArraysMDE {
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    **/
-  public static int indexOfEq(List a, Object[] sub) {
+  public static int indexOfEq(List<?> a, Object[] sub) {
     int a_index_max = a.size() - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
       if (isSubarrayEq(a, sub, i))
@@ -599,7 +599,7 @@ public final class ArraysMDE {
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    **/
-  public static int indexOf(Object[] a, List sub) {
+  public static int indexOf(Object[] a, List<?> sub) {
     int a_index_max = a.length - sub.size() + 1;
     for (int i=0; i<=a_index_max; i++)
       if (isSubarray(a, sub, i))
@@ -615,7 +615,7 @@ public final class ArraysMDE {
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    **/
-  public static int indexOfEq(Object[] a, List sub) {
+  public static int indexOfEq(Object[] a, List<?> sub) {
     int a_index_max = a.length - sub.size() + 1;
     for (int i=0; i<=a_index_max; i++)
       if (isSubarrayEq(a, sub, i))
@@ -631,7 +631,7 @@ public final class ArraysMDE {
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    **/
-  public static int indexOf(List a, List sub) {
+  public static int indexOf(List<?> a, List<?> sub) {
     int a_index_max = a.size() - sub.size() + 1;
     for (int i=0; i<=a_index_max; i++)
       if (isSubarray(a, sub, i))
@@ -647,7 +647,7 @@ public final class ArraysMDE {
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    **/
-  public static int indexOfEq(List a, List sub) {
+  public static int indexOfEq(List<?> a, List<?> sub) {
     int a_index_max = a.size() - sub.size() + 1;
     for (int i=0; i<=a_index_max; i++)
       if (isSubarrayEq(a, sub, i))
@@ -935,7 +935,7 @@ public final class ArraysMDE {
    * @return the first index at which the second array starts in the first array,
    *    or -1 if no such element is found in the array.
    **/
-  public static boolean isSubarray(Object[] a, List sub, int a_offset) {
+  public static boolean isSubarray(Object[] a, List<?> sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.size();
     if (a_len < sub_len)
@@ -953,7 +953,7 @@ public final class ArraysMDE {
    * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
-  public static boolean isSubarrayEq(Object[] a, List sub, int a_offset) {
+  public static boolean isSubarrayEq(Object[] a, List<?> sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.size();
     if (a_len < sub_len)
@@ -971,7 +971,7 @@ public final class ArraysMDE {
    * @return the first index at which the second array starts in the first array,
    *    or -1 if no such element is found in the array.
    **/
-  public static boolean isSubarray(List a, Object[] sub, int a_offset) {
+  public static boolean isSubarray(List<?> a, Object[] sub, int a_offset) {
     int a_len = a.size() - a_offset;
     int sub_len = sub.length;
     if (a_len < sub_len)
@@ -989,7 +989,7 @@ public final class ArraysMDE {
    * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
-  public static boolean isSubarrayEq(List a, Object[] sub, int a_offset) {
+  public static boolean isSubarrayEq(List<?> a, Object[] sub, int a_offset) {
     int a_len = a.size() - a_offset;
     int sub_len = sub.length;
     if (a_len < sub_len)
@@ -1007,7 +1007,7 @@ public final class ArraysMDE {
    * @return the first index at which the second array starts in the first array,
    *    or -1 if no such element is found in the array.
    **/
-  public static boolean isSubarray(List a, List sub, int a_offset) {
+  public static boolean isSubarray(List<?> a, List<?> sub, int a_offset) {
     int a_len = a.size() - a_offset;
     int sub_len = sub.size();
     if (a_len < sub_len)
@@ -1025,7 +1025,7 @@ public final class ArraysMDE {
    * @return the first index at which the second array starts in the first array,
    *    or -1 if the element is not found in the array.
    **/
-  public static boolean isSubarrayEq(List a, List sub, int a_offset) {
+  public static boolean isSubarrayEq(List<?> a, List<?> sub, int a_offset) {
     int a_len = a.size() - a_offset;
     int sub_len = sub.size();
     if (a_len < sub_len)
@@ -1445,7 +1445,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(List a) {
+  public static String toString(List<?> a) {
     return toString(a, false);
   }
 
@@ -1454,7 +1454,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toStringQuoted(List a) {
+  public static String toStringQuoted(List<?> a) {
     return toString(a, true);
   }
 
@@ -1463,7 +1463,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(List a, boolean quoted) {
+  public static String toString(List<?> a, boolean quoted) {
     if (a == null) {
       return "null";
     }
@@ -1615,8 +1615,8 @@ public final class ArraysMDE {
       return toString((long[]) obj);
     } else if (obj instanceof Object[]) {
       return toString((Object[]) obj);
-    } else if (obj instanceof List) {
-      return toString((List) obj);
+    } else if (obj instanceof List<?>) {
+      return toString((List<?>) obj);
     } else {
       throw new IllegalArgumentException("Argument is " + ((obj == null) ? "null" :
                                          "of class " + obj.getClass().getName()));
@@ -1639,8 +1639,8 @@ public final class ArraysMDE {
       return ((long[]) obj).length;
     } else if (obj instanceof Object[]) {
       return ((Object[]) obj).length;
-    } else if (obj instanceof List) {
-      return ((List) obj).size();
+    } else if (obj instanceof List<?>) {
+      return ((List<?>) obj).size();
     } else {
       throw new IllegalArgumentException("Argument is " + ((obj == null) ? "null" :
                                          "of class " + obj.getClass().getName()));
@@ -2331,6 +2331,6 @@ public final class ArraysMDE {
   // "private static Vector v;" doesn't work, nor does
   // "static { new java.util.Vector(); }", nor does "private Vector v".
   // Yuck!
-  public Vector javadocLossage;
+  public Vector<?> javadocLossage;
 
 }
