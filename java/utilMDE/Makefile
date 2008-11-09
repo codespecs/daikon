@@ -9,17 +9,19 @@ JAVAC ?= javac
 # Removed "-J-Xmx800m", because it is incompatible with JDK 7.
 JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
 # When using the JSR 308 compiler, this expects checkers.jar on the classpath
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*' ${JAVAC} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea
 
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
-JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
+# Might contain duplicates if ${AUTO_GENERATED_FILES} already exists.  Is that a problem?
+JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print) ${AUTO_GENERATED_FILES}
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
+# This isn't quite right, since it includes .class files for helper .jpp files.
 ALL_CLASS_FILES := ${ALL_JAVA_FILES:.java=.class}
 AUTO_GENERATED_FILES = \
 	MathMDE.java \
@@ -124,6 +126,23 @@ MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp Mat
 
 LimitedSizeIntSet.java: LimitedSizeSet.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEINT)
+
+
+###########################################################################
+###
+###
+
+JAVAC_NULLNESS_ARGS = -typeprocessor checkers.nullness.NullnessChecker
+JAVAC_NULLNESS_STUBS = -sourcepath ${checkers}/jdk/nullness/src
+
+check-nullness: check-nullness-utilmde
+
+check-nullness-utilmde: check-nullness-utilmde-withstubs
+
+check-nullness-utilmde-withstubs:
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
+
 
 
 ###########################################################################

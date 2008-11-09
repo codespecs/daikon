@@ -536,7 +536,7 @@ public final class Intern {
    * If the argument is an array, its elements should themselves be
    * interned.
    **/
-  public static /*@Interned*/ Object intern(Object a) {
+  public static /*@Interned*/ /*@Nullable*/ Object intern(/*@Nullable*/ Object a) {
     if (a == null) {
       return null;
     } else if (a instanceof String) {
@@ -681,7 +681,7 @@ public final class Intern {
     }
 
     @SuppressWarnings("unchecked")
-    public boolean equals (Object other) {
+    public boolean equals (/*@Nullable*/ Object other) {
       if (other instanceof SequenceAndIndices<?>) {
         @SuppressWarnings("unchecked")
         SequenceAndIndices<T> other_sai = (SequenceAndIndices<T>) other;
@@ -715,8 +715,10 @@ public final class Intern {
    **/
   private static final class SequenceAndIndicesHasher<T extends /*@Interned*/ Object> implements Hasher {
     public boolean equals(Object a1, Object a2) {
-      SequenceAndIndices<T> sai1 = (SequenceAndIndices<T>) a1; // unchecked cast
-      SequenceAndIndices<T> sai2 = (SequenceAndIndices<T>) a2; // unchecked cast
+      @SuppressWarnings("unchecked")
+      SequenceAndIndices<T> sai1 = (SequenceAndIndices<T>) a1;
+      @SuppressWarnings("unchecked")
+      SequenceAndIndices<T> sai2 = (SequenceAndIndices<T>) a2;
       // The SAI objects are *not* interned, but the arrays inside them are.
       return sai1.equals(sai2);
     }

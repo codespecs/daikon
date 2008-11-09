@@ -240,7 +240,7 @@ public final class VarInfoAux
   }
 
 
-  public boolean equals(Object o) {
+  public boolean equals(/*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {

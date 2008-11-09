@@ -136,7 +136,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // Is this necessary?  It will be inhereited from Object.
-  // public boolean equals(Object o) {
+  // public boolean equals(/*@Nullable*/ Object o) {
   //   return this == o;
   // }
 

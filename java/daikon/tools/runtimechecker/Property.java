@@ -77,7 +77,7 @@ public class Property implements Serializable {
             this.xmlname = xmlname;
         }
 
-        public boolean equals(Object o) {
+        public boolean equals(/*@Nullable*/ Object o) {
             if (o == null) {
                 return false;
             }
@@ -155,7 +155,7 @@ public class Property implements Serializable {
      * Two properties are equal if their fields <code>daikonRep</code>,
      * <code>method</code> and <code>kind</code> are equal.
      */
-    public boolean equals(Object o) {
+    public boolean equals(/*@Nullable*/ Object o) {
         if (o == null) {
             return false;
         }

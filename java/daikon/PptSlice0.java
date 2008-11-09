@@ -180,7 +180,7 @@ public class PptSlice0
     }
 
     // Returns the value of "isSameInvariant()".
-    public boolean equals(Object o) {
+    public boolean equals(/*@Nullable*/ Object o) {
       if (o == null)
         return false;
       Assert.assertTrue(o instanceof ImplicationWrapper);

@@ -5,8 +5,8 @@ package utilMDE;
  * class, so it can be used in more places.
  **/
 public class Pair<T1,T2> {
-  public T1 a;
-  public T2 b;
+  public /*@Nullable*/ T1 a;
+  public /*@Nullable*/ T2 b;
 
   public Pair(T1 a, T2 b) {
     this.a = a;
@@ -17,7 +17,7 @@ public class Pair<T1,T2> {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
 
-  public boolean equals(Object obj) {
+  public boolean equals(/*@Nullable*/ Object obj) {
     if (obj instanceof Pair<?, ?>) { // generics are not checked at run time!
       @SuppressWarnings("unchecked")
       Pair<T1, T2> other = (Pair<T1, T2>) obj;

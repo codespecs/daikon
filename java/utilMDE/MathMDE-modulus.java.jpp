@@ -19,10 +19,11 @@ The correct way to build the system is to run 'make'.
    * Return an array of two integers (r,m) such that each number in NUMS is equal to r (mod m).
    * The largest possible modulus is used, and the trivial constraint that all
    * integers are equal to 0 mod 1 is not returned (null is returned instead).
+   * Also, return null if the array is less than 3 elements long.
    **/
-  public static INT[] modulus(INT[] nums) {
+  public static INT /*@Nullable*/ [] modulus(INT[] nums) {
     if (nums.length < 3)
-    return null;
+      return null;
 
     INT modulus = Math.abs(gcd_differences(nums));
     if (modulus == 1)
@@ -41,7 +42,7 @@ The correct way to build the system is to run 'make'.
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
    **/
-  public static INT[] modulus_INT(Iterator<INTEGER> itor) {
+  public static INT /*@Nullable*/ [] modulus_INT(Iterator<INTEGER> itor) {
     if (!itor.hasNext())
       return null;
     INT avalue = itor.next().INTValue();
@@ -85,7 +86,7 @@ The correct way to build the system is to run 'make'.
    * like other numbers in the input, or they can merely be checked for the
    * condition without the strict density requirement.
    **/
-  public static INT[] modulus_strict(INT[] nums, boolean nonstrict_ends) {
+  public static INT /*@Nullable*/ [] modulus_strict(INT[] nums, boolean nonstrict_ends) {
     int first_index = 0;
     int last_index = nums.length-1;
     INT first_nonstrict = 0; // arbitrary initial value
@@ -125,7 +126,7 @@ The correct way to build the system is to run 'make'.
    * For documentation, see modulus_strict(INT[], boolean).
    * @see #modulus_strict(int[], boolean)
    **/
-  public static INT[] modulus_strict_INT(Iterator<INTEGER> itor, boolean nonstrict_ends) {
+  public static INT /*@Nullable*/ [] modulus_strict_INT(Iterator<INTEGER> itor, boolean nonstrict_ends) {
     if (!itor.hasNext())
       return null;
 

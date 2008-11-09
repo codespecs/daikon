@@ -64,7 +64,7 @@ public class Violation implements Serializable {
             this.xmlname = xmlname;
         }
 
-        public boolean equals(Object o) {
+        public boolean equals(/*@Nullable*/ Object o) {
             if (o == null) {
                 return false;
             }
@@ -211,7 +211,7 @@ public class Violation implements Serializable {
     /**
      * Two violations are equal if their properties and times are equal.
      */
-    public boolean equals(Object o) {
+    public boolean equals(/*@Nullable*/ Object o) {
         if (o == null) {
             return false;
         }

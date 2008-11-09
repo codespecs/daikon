@@ -127,10 +127,9 @@ line 518:
     StackEntry top = stack.get(stack.size()-1);
     Function f = top.function;
 
-    BasicBlock bb;
     if (!address2BB.containsKey(address)){
       // Adding a new basic block
-      bb = new BasicBlock(address, values, f);
+      BasicBlock bb = new BasicBlock(address, values, f);
       address2BB.put(address, bb);
 
       assert !f.basicBlocks.contains(bb);
@@ -156,7 +155,7 @@ line 518:
       checkValidity();
     }
 
-    bb = address2BB.get(address);
+    BasicBlock bb = address2BB.get(address);
     // sometimes we this bb belongs to a different function because there are optimization that removes function calls
     // (and share code between several functions)
     if (!bb.function.equals(f)) {

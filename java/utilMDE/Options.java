@@ -123,10 +123,10 @@ public class Options {
     Option option;
 
     /** Object containing the field.  Null if the field is static. **/
-    Object obj;
+    /*@Nullable*/ Object obj;
 
     /** Short (one character) argument name **/
-    String short_name;
+    /*@Nullable*/ String short_name;
 
     /** Long argument name **/
     String long_name;
@@ -135,7 +135,7 @@ public class Options {
     String description;
 
     /** Javadoc description **/
-    String jdoc;
+    /*@Nullable*/ String jdoc;
 
     /**
      * Name of the argument type.  Defaults to the type of the field, but
@@ -150,17 +150,17 @@ public class Options {
     Class<?> base_type;
 
     /** Default value of the option as a string **/
-    String default_str = null;
+    /*@Nullable*/ String default_str = null;
 
     /** If the option is a list, this references that list. **/
     // Not type-safe; must suppress warnings
-    List<Object> list = null;
+    /*@Nullable*/ List<Object> list = null;
 
     /** Constructor that takes one String for the type **/
-    Constructor<?> constructor = null;
+    /*@Nullable*/ Constructor<?> constructor = null;
 
-    /** Factory that takes a string (some classes don't have a string const) */
-    Method factory = null;
+    /** Factory that takes a string (some classes don't have a string constructor) */
+    /*@Nullable*/ Method factory = null;
 
     /**
      * Create the specified option.  If obj is null, the field must be
@@ -168,7 +168,7 @@ public class Options {
      * from the option annotation.  The long name is the name of the
      * field.  The default value is the current value of the field.
      */
-    OptionInfo (Field field, Option option, Object obj) {
+    OptionInfo (Field field, Option option, /*@Nullable*/ Object obj) {
       this.field = field;
       this.option = option;
       this.obj = obj;
@@ -284,8 +284,8 @@ public class Options {
   /** All of the argument options as a single string **/
   private String options_str = "";
 
-  /** First specified class **/
-  private Class<?> main_class = null;
+  /** First specified class.  Void stands for "not yet initialized". **/
+  private Class<?> main_class = Void.TYPE;
 
   /** List of all of the defined options **/
   private List<OptionInfo> options = new ArrayList<OptionInfo>();
@@ -335,7 +335,7 @@ public class Options {
 
       if (obj instanceof Class<?>) {
 
-        if (main_class == null)
+        if (main_class == Void.TYPE)
           main_class = (Class<?>) obj;
 
         Field[] fields = ((Class<?>) obj).getDeclaredFields();
@@ -352,7 +352,7 @@ public class Options {
 
       } else { // must be an object that contains option fields
 
-        if (main_class == null)
+        if (main_class == Void.TYPE)
           main_class = obj.getClass();
 
         Field[] fields = obj.getClass().getDeclaredFields();
@@ -714,7 +714,7 @@ public class Options {
 
         // Create an instance of the correct type by passing the argument value
         // string to the constructor.  The only expected error is some sort
-        // of parse error from the constructor
+        // of parse error from the constructor.
         Object val = null;
         try {
           if (oi.constructor != null) {
@@ -724,12 +724,17 @@ public class Options {
             Object tmpVal = Enum.valueOf ((Class<? extends Enum>)oi.base_type, arg_value);
             val = tmpVal;
           } else {
+            if (oi.factory == null) {
+              throw new Error("No constructor or factory for argument " + arg_name);
+            }
             val = oi.factory.invoke (null, arg_value);
           }
         } catch (Exception e) {
           throw new ArgException ("Invalid argument (%s) for argument %s",
                                   arg_value, arg_name);
         }
+
+        assert val != null;
 
         // Set the value
         if (oi.list != null)
@@ -870,7 +875,7 @@ public class Options {
 
   }
 
-  ClassDoc find_class_doc (RootDoc doc, Class<?> c) {
+  /*@Nullable*/ ClassDoc find_class_doc (RootDoc doc, Class<?> c) {
 
     for (ClassDoc cd : doc.classes()) {
       if (cd.qualifiedName().equals (c.getName())) {
@@ -886,12 +891,12 @@ public class Options {
    * if they are not specified in the string.  There are always three
    * elements in the array.
    */
-  private static String[] parse_option (String val) {
+  private static /*@Nullable*/ String[] parse_option (String val) {
 
     // Get the short name, long name, and description
-    String short_name = null;
+    String short_name;
     String type_name = null;
-    String description = null;
+    @NonNull String description;
 
     // Get the short name (if any)
     if (val.startsWith("-")) {
@@ -910,7 +915,7 @@ public class Options {
     }
 
     // Return the result
-    return new String[] {short_name, type_name, description};
+    return new /*@Nullable*/ String[] {short_name, type_name, description};
   }
 
 //   /**

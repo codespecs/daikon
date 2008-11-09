@@ -232,7 +232,7 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
-    public boolean equals(Object o) {
+    public boolean equals(/*@Nullable*/ Object o) {
       if (o == null) {
         return false;
       }
@@ -289,7 +289,7 @@ public class Annotation {
    * Two annotations are equal iff their fields "daikonRep", "method"
    * and "kind" are equal.
    */
-  public boolean equals(Object o) {
+  public boolean equals(/*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }

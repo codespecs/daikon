@@ -187,7 +187,7 @@ public class PAIRWISEINTEQUAL
   /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
   public static Invariant get_proto() {
     if (proto == null)
-      proto = new PAIRWISEINTEQUAL ((PptSlice) null);
+      proto = new PAIRWISEINTEQUAL ((/*@Nullable*/ PptSlice) null);
     return (proto);
   }
 

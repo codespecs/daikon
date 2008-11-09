@@ -43,7 +43,7 @@ public class LIMITEDSIZEINTSET
 
   // If null, then at least num_values distinct values have been seen.
   // The size is not separately stored, because that would take extra space.
-  protected INT[] values;
+  protected INT /*@Nullable*/ [] values;
   // The number of active elements (equivalently, the first unused index).
   int num_values;
 
@@ -75,6 +75,7 @@ public class LIMITEDSIZEINTSET
   public void addAll(LIMITEDSIZEINTSET s) {
     if (repNulled())
       return;
+    assert values != null;
     if (s.repNulled()) {
       if (size() + s.size() >= values.length) {
         num_values = values.length+1;
@@ -84,6 +85,7 @@ public class LIMITEDSIZEINTSET
         throw new Error("Arg is rep-nulled, but isn't enough to rep-null this.");
       }
     }
+    assert s.values != null;
     for (int i=0; i<s.size(); i++) {
       add(s.values[i]);
       if (repNulled()) {
@@ -138,7 +140,9 @@ public class LIMITEDSIZEINTSET
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }
-    result.values = values.clone();
+    if (values != null) {
+      result.values = values.clone();
+    }
     return result;
   }
 

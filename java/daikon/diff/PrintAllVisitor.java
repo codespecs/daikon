@@ -55,7 +55,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
       ps.print("<");
       if (ppt1 == null) {
-        ps.print((String) null);
+        ps.print((/*@Nullable*/ String) null);
       } else {
         ps.print(ppt1.name());
       }
@@ -63,7 +63,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
       if (ppt1 == null || ppt2 == null || !ppt1.name().equals(ppt2.name())) {
         ps.print(", ");
         if (ppt2 == null) {
-          ps.print((String) null);
+          ps.print((/*@Nullable*/ String) null);
         } else {
           ps.print(ppt2.name());
         }
@@ -90,14 +90,14 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     bufPrint("  " + "<");
 
     if (inv1 == null) {
-      bufPrint((String) null);
+      bufPrint((/*@Nullable*/ String) null);
     } else {
       printInvariant(inv1);
 
     }
     bufPrint(", ");
     if (inv2 == null) {
-      bufPrint((String) null);
+      bufPrint((/*@Nullable*/ String) null);
     } else {
       printInvariant(inv2);
     }

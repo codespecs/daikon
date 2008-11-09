@@ -211,7 +211,7 @@ public final class ArraysMDE {
    * Return a two-element array containing the smallest and largest values in the array.
    * Return null if the array has length 0.
    **/
-  public static int[] min_max(int[] a) {
+  public static int /*@Nullable*/ [] min_max(int[] a) {
     if (a.length == 0)
       // throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(int[])");
       return null;
@@ -228,7 +228,7 @@ public final class ArraysMDE {
    * Return a two-element array containing the smallest and largest values in the array.
    * Return null if the array has length 0.
    **/
-  public static long[] min_max(long[] a) {
+  public static long /*@Nullable*/ [] min_max(long[] a) {
     if (a.length == 0)
       // throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(long[])");
       return null;
@@ -247,7 +247,8 @@ public final class ArraysMDE {
   public static int element_range(int[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(int[])");
-    int[] min_max = min_max(a);
+    @SuppressWarnings("nullness") // array length is non-zero, so result is non-null
+    int /*@NonNull*/ [] min_max = min_max(a);
     return min_max[1] - min_max[0];
   }
 
@@ -257,7 +258,8 @@ public final class ArraysMDE {
   public static long element_range(long[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(long[])");
-    long[] min_max = min_max(a);
+    @SuppressWarnings("nullness") // array length is non-zero, so result is non-null
+    long /*@NonNull*/ [] min_max = min_max(a);
     return min_max[1] - min_max[0];
   }
 
@@ -371,7 +373,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(Object[] a, Object elt) {
+  public static int indexOfEq(Object[] a, /*@Nullable*/ Object elt) {
     for (int i=0; i<a.length; i++)
       if (elt == a[i])
         return i;
@@ -386,7 +388,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(Object[] a, Object elt, int minindex, int indexlimit) {
+  public static int indexOfEq(Object[] a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a[i])
         return i;
@@ -400,7 +402,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the list.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(List<?> a, Object elt) {
+  public static int indexOfEq(List<?> a, /*@Nullable*/ Object elt) {
     for (int i=0; i<a.size(); i++)
       if (elt == a.get(i))
         return i;
@@ -415,7 +417,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the list.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(List<?> a, Object elt, int minindex, int indexlimit) {
+  public static int indexOfEq(List<?> a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a.get(i))
         return i;
@@ -1112,6 +1114,13 @@ public final class ArraysMDE {
   // Concat used to return null if both arguments are null.  That is
   // convenient for the implementer, but not so good for clients.
 
+  // Exists to suppress warnings
+  private static <T> T[] toTArray(List<T> lst) {
+    @SuppressWarnings("unchecked")
+    T[] asArray = (T[]) lst.toArray();
+    return asArray;
+  }
+
   /**
    * Return an array that contains all the elements of both argument
    * arrays, in order.
@@ -1146,7 +1155,7 @@ public final class ArraysMDE {
       T[] result = (T[]) new Object[0];
       return result;
     }
-    if (a == null) return (T[]) b.toArray(); // unchecked cast
+    if (a == null) return toTArray(b);
     if (b == null) return a;
     @SuppressWarnings("unchecked")
     T[] result = (T[]) new Object[a.length + b.size()];
@@ -1172,7 +1181,7 @@ public final class ArraysMDE {
       return result;
     }
     if (a == null) return b;
-    if (b == null) return (T[]) a.toArray(); // unchecked cast
+    if (b == null) return toTArray(a);
     @SuppressWarnings("unchecked")
     T[] result = (T[]) new Object[a.size() + b.length];
 
@@ -1196,8 +1205,8 @@ public final class ArraysMDE {
       T[] result = (T[]) new Object[0];
       return result;
     }
-    if (a == null) return (T[]) b.toArray(); // unchecked cast
-    if (b == null) return (T[]) a.toArray(); // unchecked cast
+    if (a == null) return toTArray(b);
+    if (b == null) return toTArray(a);
     @SuppressWarnings("unchecked")
     T[] result = (T[]) new Object[a.size() + b.size()];
 
@@ -1399,7 +1408,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(Object[] a) {
+  public static String toString(Object @Nullable [] a) {
     return toString(a, false);
   }
 
@@ -1408,7 +1417,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toStringQuoted(Object[] a) {
+  public static String toStringQuoted(Object @Nullable [] a) {
     return toString(a, true);
   }
 
@@ -1417,7 +1426,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(Object[] a, boolean quoted) {
+  public static String toString(Object @Nullable [] a, boolean quoted) {
     if (a == null) {
       return "null";
     }
@@ -2287,7 +2296,7 @@ public final class ArraysMDE {
     if (a.length == 0)
       return false;
     // The cast ensures that the right version of IndexOfEq gets called.
-    return indexOfEq(a, (Object) null) >= 0;
+    return indexOfEq(a, (/*@Nullable*/ Object) null) >= 0;
   }
 
   /**
@@ -2308,7 +2317,7 @@ public final class ArraysMDE {
     if (a.size() == 0)
       return false;
     // The cast ensures that the right version of IndexOfEq gets called.
-    return indexOfEq(a, (Object) null) >= 0;
+    return indexOfEq(a, (/*@Nullable*/ Object) null) >= 0;
   }
 
   /**

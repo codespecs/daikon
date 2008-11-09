@@ -41,6 +41,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     public String filename;
     public long line_number;
 
+    // filename is non-null; if there isn't a name, provide a dummy value
     public ReaderInfo (BufferedReader reader, String filename) {
       this.reader = reader;
       this.filename = filename;
@@ -56,26 +57,26 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
   private Stack<ReaderInfo> readers = new Stack<ReaderInfo>();
 
   /** Regular expression that specifies an include file. **/
-  private Pattern include_re = null;
+  private /*@Nullable*/ Pattern include_re = null;
 
   /** Regular expression that matches a comment **/
-  private Pattern comment_re = null;
+  private /*@Nullable*/ Pattern comment_re = null;
 
   /**
    * Regular expression that starts a long entry (paragraph).
    * By default, paragraphs are separated by blank lines.
    */
-  public Pattern entry_start_re = null;
+  public /*@Nullable*/ Pattern entry_start_re = null;
 
   /**
    * Regular expression that terminates a long entry.  Long entries
    * can also be terminated by the start of a new long entry or the
    * end of the current file.
    */
-  public Pattern entry_stop_re = null;
+  public /*@Nullable*/ Pattern entry_stop_re = null;
 
   /** Line that is pushed back to be reread **/
-  String pushback_line = null;
+  /*@Nullable*/ String pushback_line = null;
 
   /** Platform-specific line separator **/
   private static final String lineSep = System.getProperty("line.separator");
@@ -107,7 +108,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
      * Return a description of the entry body that matches the specified
      * regular expression.  If no match is found, reeturns the first_line
      */
-    String get_description (Pattern re) {
+    String get_description (/*@Nullable*/ Pattern re) {
 
       if (re == null)
         return first_line;
@@ -133,8 +134,8 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    *                      The expression should define one group that contains
    *                      the include file name
    */
-  public MultiReader (BufferedReader reader, String comment_re,
-                      String include_re) {
+  public MultiReader (BufferedReader reader, /*@Nullable*/ String comment_re,
+                      /*@Nullable*/ String include_re) {
 
     readers.push (new ReaderInfo (reader, null));
     if (comment_re != null)
@@ -160,8 +161,8 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    *                      The expression should define one group that contains
    *                      the include file name
    */
-  public MultiReader (File file, String comment_re,
-                      String include_re) throws IOException {
+  public MultiReader (File file, /*@Nullable*/ String comment_re,
+                      /*@Nullable*/ String include_re) throws IOException {
     this ((UtilMDE.bufferedFileReader (file)), comment_re, include_re);
     readers.peek().filename = file.toString();
   }
@@ -176,8 +177,8 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    * Create a new MultiReader starting with the specified file.
    * @see #MultiReader(File,String,String)
    */
-  public MultiReader (String filename, String comment_re,
-                      String include_re) throws IOException {
+  public MultiReader (String filename, /*@Nullable*/ String comment_re,
+                      /*@Nullable*/ String include_re) throws IOException {
     this (new File(filename), comment_re, include_re);
   }
 
@@ -192,7 +193,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    * a line that is completely a comment is completely ignored (and
    * not returned as a blank line).  Returns null at end of file.
    */
-  public String readLine() throws IOException {
+  public /*@Nullable*/ String readLine() throws IOException {
 
     // System.out.printf ("Entering size = %d%n", readers.size());
 
@@ -273,8 +274,11 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     return true;
   }
 
-  /** Returns the next line in the multi-file **/
-  public String next() {
+  /**
+   * Returns the next line in the multi-file.
+   * Returns null at end of file.
+   **/
+  public /*@Nullable*/ String next() {
     try {
       return readLine();
     } catch (IOException e) {
@@ -292,7 +296,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    * by blank lines unless the entry started with entry_start_re (@see
    * set_entry_start_stop).  If no more entries are available returns null.
    */
-  public Entry get_entry() throws IOException {
+  public /*@Nullable*/ Entry get_entry() throws IOException {
 
     // Skip any preceeding blank lines
     String line = readLine();
@@ -371,7 +375,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    * Reads the next line from the current reader.  If EOF is encountered
    * pop out to the next reader.  Returns null if there is no more input
    */
-  private String get_next_line() throws IOException {
+  private /*@Nullable*/ String get_next_line() throws IOException {
 
     if (readers.size() == 0)
       return (null);

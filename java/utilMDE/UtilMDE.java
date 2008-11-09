@@ -372,7 +372,8 @@ public final class UtilMDE {
       } else {
         String maybe = classnameFromJvm(arglist.substring(pos, nonarray_pos+1));
         if (maybe == null) {
-          return null;
+          // return null;
+          throw new Error("Malformed arglist: " + arglist);
         }
         result += maybe;
         pos = nonarray_pos+1;
@@ -615,6 +616,9 @@ public final class UtilMDE {
    */
   public static void deleteDir(File dir) {
     File[] files = dir.listFiles();
+    if (files == null) {
+      return;
+    }
     for (int i = 0; i < files.length; i++) {
       files[i].delete();
     }
@@ -1009,7 +1013,7 @@ public final class UtilMDE {
       this.itor = itor; this.filter = filter;
     }
 
-    T current;
+    /*@Nullable*/ T current;
     boolean current_valid = false;
 
     public boolean hasNext() {
@@ -1041,7 +1045,7 @@ public final class UtilMDE {
    **/
   public static final class RemoveFirstAndLastIterator<T> implements Iterator<T> {
     Iterator<T> itor;
-    T nothing = null;           // was Object nothing = new Object();
+    /*@Nullable*/ T nothing = (/*@Nullable*/ T) null;           // was Object nothing = new Object();
     T first = nothing;
     T current = nothing;
 
@@ -1235,10 +1239,25 @@ public final class UtilMDE {
 
   /**
    * Set the property only if it was not previously set.
+   * @deprecated use setDefaultMaybe
    * @see Properties#getProperty
    * @see Properties#setProperty
    **/
-  public static String setDefault(Properties p, String key, String value) {
+  @Deprecated
+  public static /*@Nullable*/ String setDefault(Properties p, String key, String value) {
+    String currentValue = p.getProperty(key);
+    if (currentValue == null) {
+      p.setProperty(key, value);
+    }
+    return currentValue;
+  }
+
+  /**
+   * Set the property only if it was not previously set.
+   * @see Properties#getProperty
+   * @see Properties#setProperty
+   **/
+  public static /*@Nullable*/ String setDefaultMaybe(Properties p, String key, String value) {
     String currentValue = p.getProperty(key);
     if (currentValue == null) {
       p.setProperty(key, value);
@@ -1295,8 +1314,9 @@ public final class UtilMDE {
   /**
    * Returns the object in this set that is equal to key.
    * The Set abstraction doesn't provide this; it only provides "contains".
+   * Returns null if the argument is null, or if it isn't in the set.
    **/
-  public static Object getFromSet(Set<?> set, Object key) {
+  public static /*@Nullable*/ Object getFromSet(Set<?> set, Object key) {
     if (key == null) {
       return null;
     }

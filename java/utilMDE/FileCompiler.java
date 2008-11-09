@@ -89,9 +89,10 @@ public final class FileCompiler {
 
   /**
    * @param filename the path of the Java source to be compiled
-   * @return The process which executed the external compile command
+   * @return The process which executed the external compile command.
+   *    Return null if there is an IOException.  (Maybe it should throw IOException instead?)
    **/
-  private TimeLimitProcess compile_source(String filename) {
+  private /*@Nullable*/ TimeLimitProcess compile_source(String filename) {
     String command = compiler + " " + filename;
     // System.out.println ("\nexecuting compile command: " + command);
 
@@ -106,9 +107,10 @@ public final class FileCompiler {
 
   /**
    * @param filenames the paths of the java source to be compiled as Strings.
-   * @return The process that executed the external compile command
+   * @return The process that executed the external compile command,
+   * or null if an empty list of filenames is provided.
    **/
-  private TimeLimitProcess compile_source(List<String> filenames) {
+  private /*@Nullable*/ TimeLimitProcess compile_source(List<String> filenames) {
     int num_files = filenames.size();
 
     if (num_files > 0) {

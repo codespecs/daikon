@@ -84,7 +84,7 @@ public class InvDef {
     try {
       Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
       if (swap)
-        cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object[])null); // unchecked cast
+        cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object /*@Nullable*/ [])null); // unchecked cast
     } catch (Exception e) {
       swap_class = false;
     }

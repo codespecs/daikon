@@ -107,11 +107,11 @@ public class Lookup {
   @Option ("Regex that denotes the end of a long entry")
   public static Pattern entry_stop_re = Pattern.compile ("^<entry");
 
-  @Option ("Regex that finds an entry's description")
-  public static Pattern description_re = null;
+  @Option ("Regex that finds an entry's description (for long entries)")
+  public static /*@Nullable*/ Pattern description_re = null;
 
   @Option ("Regex that matches an entire comment (not just a comment start)")
-  public static String comment_re = "^%.*";
+  public static /*@Nullable*/ String comment_re = "^%.*";
 
   @Option ("Regex that matches an include directive; group 1 is the file name")
   public static String include_re = "\\\\include\\{(.*)\\}";
@@ -153,6 +153,11 @@ public class Lookup {
       options.print_usage ("Error: No keywords specified");
       System.exit (254);
     }
+
+    // comment_re starts out non-null and the option processing code can't
+    // make it null, so no null pointer exception is possible in the
+    // if statement predicate that immediately follows this assertion.
+    assert comment_re != null;
 
     // If the comment regular expression is empty, turn off comment processing
     if (comment_re.equals (""))
@@ -289,7 +294,7 @@ public class Lookup {
   /**
    * Returns the next entry.  If no more entries are available, returns null.
    */
-  public static Entry old_get_entry (MultiReader reader) throws IOException {
+  public static /*@Nullable*/ Entry old_get_entry (MultiReader reader) throws IOException {
 
     try {
 

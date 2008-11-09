@@ -729,7 +729,7 @@ public final class FeatureExtractor {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(/*@Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
         return ((number == other.number) && (value == other.value));

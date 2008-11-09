@@ -18,7 +18,7 @@ import java.io.*;
 public class FileIOException extends IOException {
   static final long serialVersionUID = 20050923L;
 
-  public final String fileName;
+  public final /*@Nullable*/ String fileName;
   public final int lineNumber;
 
   ///
@@ -35,9 +35,8 @@ public class FileIOException extends IOException {
   /// Without a message (with a Throwable instead)
   ///
 
-  public FileIOException(Throwable cause) {
-    super(cause.getMessage());
-    initCause(cause);
+  public FileIOException(/*@Nullable*/ Throwable cause) {
+    super(cause);
     fileName = null;
     lineNumber = -1;
   }
@@ -46,24 +45,28 @@ public class FileIOException extends IOException {
   /// Without a Reader
   ///
 
-  public FileIOException(String s) {
-    this(s, null, /*filename=*/ (String)null);
+  public FileIOException(/*@Nullable*/ String s) {
+    super(s);
+    fileName = null;
+    lineNumber = -1;
   }
 
-  public FileIOException(String s, Throwable cause) {
-    this(s, null, /*filename=*/ (String)null, cause);
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ Throwable cause) {
+    super(s, cause);
+    fileName = null;
+    lineNumber = -1;
   }
 
   // Design choice:  require filename and linenumber, don't support
   // interface with just one or the other.
 
-  public FileIOException(String s, String fileName, int lineNumber) {
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ String fileName, int lineNumber) {
     super(s);
     this.fileName = fileName;
     this.lineNumber = lineNumber;
   }
 
-  public FileIOException(String s, Throwable cause, String fileName, int lineNumber) {
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ Throwable cause, /*@Nullable*/ String fileName, int lineNumber) {
     super(s, cause);
     this.fileName = fileName;
     this.lineNumber = lineNumber;
@@ -76,33 +79,36 @@ public class FileIOException extends IOException {
   // I cannot infer the filename from the reader, because LineNumberReader
   // gives no access to the underlying stream.
 
-  public FileIOException(LineNumberReader reader, Throwable cause) {
-    this(reader, /*fileName=*/ (String)null, cause);
+  public FileIOException(/*@Nullable*/ LineNumberReader reader, /*@Nullable*/ Throwable cause) {
+    this(reader, /*fileName=*/ (/*@Nullable*/ String)null, cause);
   }
 
-  public FileIOException(String s, LineNumberReader reader) {
-    this(s, reader, /*fileName=*/ (String)null);
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ LineNumberReader reader) {
+    this(s, reader, /*fileName=*/ (/*@Nullable*/ String)null);
   }
 
-  public FileIOException(String s, LineNumberReader reader, Throwable cause) {
-    this(s, reader, /*fileName=*/ (String)null, cause);
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ LineNumberReader reader, /*@Nullable*/ Throwable cause) {
+    this(s, reader, /*fileName=*/ (/*@Nullable*/ String)null, cause);
   }
 
   ///////////////////////////////////////////////////////////////////////////
   /// With a filename
   ///
 
-  public FileIOException(String s, LineNumberReader reader, String fileName) {
-    this(s, reader, fileName, /*cause=*/ null);
-  }
-
-  public FileIOException(LineNumberReader reader, String fileName, Throwable cause) {
-    this(cause.getMessage(), reader, fileName, cause);
-  }
-
-  public FileIOException(String s, LineNumberReader reader, String fileName, Throwable cause) {
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ LineNumberReader reader, /*@Nullable*/ String fileName) {
     super(s);
-    if (cause != null) initCause(cause);
+    this.fileName = fileName;
+    this.lineNumber = getLineNumber(reader);
+  }
+
+  public FileIOException(/*@Nullable*/ LineNumberReader reader, /*@Nullable*/ String fileName, /*@Nullable*/ Throwable cause) {
+    super(cause);
+    this.fileName = fileName;
+    this.lineNumber = getLineNumber(reader);
+  }
+
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ LineNumberReader reader, /*@Nullable*/ String fileName, /*@Nullable*/ Throwable cause) {
+    super(s, cause);
     this.fileName = fileName;
     this.lineNumber = getLineNumber(reader);
   }
@@ -111,16 +117,18 @@ public class FileIOException extends IOException {
   /// With a File
   ///
 
-  public FileIOException(String s, LineNumberReader reader, File file) {
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ LineNumberReader reader, File file) {
     this(s, reader, file.getName());
   }
 
-  public FileIOException(String s, LineNumberReader reader, File file, Throwable cause) {
+  public FileIOException(/*@Nullable*/ String s, /*@Nullable*/ LineNumberReader reader, File file, /*@Nullable*/ Throwable cause) {
     this(s, reader, file.getName(), cause);
   }
 
-  public FileIOException(LineNumberReader reader, File file, Throwable cause) {
-    this(cause.getMessage(), reader, file.getName(), cause);
+  public FileIOException(/*@Nullable*/ LineNumberReader reader, File file, /*@Nullable*/ Throwable cause) {
+    super(cause);
+    this.fileName = file.getName();
+    this.lineNumber = getLineNumber(reader);
   }
 
 
@@ -143,7 +151,7 @@ public class FileIOException extends IOException {
   // Assumes the "reader" field is already set.
   // Not a setter method because field lineNumber is final, but
   // still clearer to abstract out.
-  private int getLineNumber(LineNumberReader reader) {
+  private int getLineNumber(/*@Nullable*/ LineNumberReader reader) /*@Raw*/ {
     if (reader != null) {
       return reader.getLineNumber();
     } else {

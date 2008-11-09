@@ -27,7 +27,7 @@ endif
 
 ### end of user customizations
 
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -713,11 +713,11 @@ audit:
 # JAVAC_INTERNING_ARGS = -typeprocessor checkers.interning.InterningChecker
 JAVAC_INTERNING_ARGS = -typeprocessor checkers.interning.InterningChecker -Alint=-dotequals
 JAVAC_NULLNESS_ARGS = -typeprocessor checkers.nullness.NullnessChecker
-JAVAC_NULLNESS_STUBS = -sourcepath $checkers/jdk/nullness/src
+JAVAC_NULLNESS_STUBS = -sourcepath ${checkers}/jdk/nullness/src
 JAVAC_JAVARI_ARGS = -typeprocessor checkers.javari.JavariChecker
-JAVAC_JAVARI_STUBS = -sourcepath $checkers/jdk/nullness/src
+JAVAC_JAVARI_STUBS = -sourcepath ${checkers}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
-JAVAC_IGJ_STUBS = -sourcepath $checkers/jdk/nullness/src
+JAVAC_IGJ_STUBS = -sourcepath ${checkers}/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
 # INTERNING_JAVA_FILES_SKIP =
 INTERNING_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
@@ -741,7 +741,9 @@ check-interning-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
 
-check-nullness-all:
+check-nullness-all: check-nullness-all-withstubs
+
+check-nullness-all-nostubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVA_FILES}
 
@@ -749,7 +751,7 @@ check-nullness-all-withstubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
 
-check-igj-all:
+check-igj-all-nostubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVA_FILES}
 
@@ -757,7 +759,7 @@ check-igj-all-withstubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${JAVA_FILES}
 
-check-javari-all:
+check-javari-all-nostubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVA_FILES}
 

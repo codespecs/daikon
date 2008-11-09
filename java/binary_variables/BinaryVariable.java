@@ -38,7 +38,10 @@ public final class BinaryVariable extends Addressable<BinaryVariable> implements
     int res = super.compareTo(o);
     return res==0 ? name.compareTo(o.name) : res;
   }
-  public boolean equals(Object o) {
+  public boolean equals(/*@Nullable*/ Object o) {
+    if (o == null) {
+      return false;
+    }
     BinaryVariable b = (BinaryVariable)o;
     return super.equals(o) && b.name.equals(name);
   }

@@ -155,9 +155,10 @@ The correct way to build the system is to run 'make'.
 
   /**
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
-   * m) but all missing numbers in their range are.
+   * m) but all missing numbers in their range are.  Returns null if the
+   * input array has 0 length.
    **/
-  public static INT[] nonmodulus_strict(INT[] nums) {
+  public static INT /*@Nullable*/ [] nonmodulus_strict(INT[] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -169,7 +170,7 @@ The correct way to build the system is to run 'make'.
     return nonmodulus_strict_INT_internal(new MissingNumbersIteratorINT(nums, true));
   }
 
-  private static INT[] nonmodulus_strict_INT_internal(Iterator<INTEGER> missing) {
+  private static INT /*@Nullable*/ [] nonmodulus_strict_INT_internal(Iterator<INTEGER> missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
     // modulus_strict.
@@ -197,7 +198,7 @@ The correct way to build the system is to run 'make'.
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
    **/
-  public static INT[] nonmodulus_strict_INT(Iterator<INTEGER> nums) {
+  public static INT /*@Nullable*/ [] nonmodulus_strict_INT(Iterator<INTEGER> nums) {
     return nonmodulus_strict_INT_internal(new MissingNumbersIteratorINT(nums, true));
   }
 
@@ -208,7 +209,7 @@ The correct way to build the system is to run 'make'.
   //  * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
   //  * m) but all missing numbers in their range are.
   //  */
-  // public static INT[] nonmodulus_strict(INT[] nums) {
+  // public static INT /*@Nullable*/ [] nonmodulus_strict(INT[] nums) {
   //   // This implementation is particularly inefficient; find a better way to
   //   // compute this.  Perhaps obtain the new modulus numbers incrementally
   //   // instead of all at once.
@@ -228,7 +229,7 @@ The correct way to build the system is to run 'make'.
    **/
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulus_strict instead.
-  public static INT[] nonmodulus_nonstrict(INT[] nums) {
+  public static INT /*@Nullable*/ [] nonmodulus_nonstrict(INT[] nums) {
     if (nums.length < 4)
       return null;
     int max_modulus = CastToInt(Math.min(nums.length/2, ArraysMDE.element_range(nums)/2));

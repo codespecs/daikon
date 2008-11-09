@@ -560,7 +560,7 @@ public abstract /*@Interned*/ class VarInfoName
   // ============================================================
   // The usual Object methods
 
-  public boolean equals(Object o) {
+  public boolean equals(/*@Nullable*/ Object o) {
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
