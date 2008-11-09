@@ -57,7 +57,9 @@ public class StringInfo extends DaikonVariableInfo
 
         // assert !NonsensicalList.isNonsensicalList (theValues);
         if (NonsensicalList.isNonsensicalList (theValues)
-            || theValues instanceof NonsensicalObject)
+            // How can this happen, given the declared type of theValues?
+            // || theValues instanceof NonsensicalObject
+            )
         {
             //buf.append("nonsensical");
             return "nonsensical" + DaikonWriter.lineSep + "2";
