@@ -896,7 +896,7 @@ public class Options {
     // Get the short name, long name, and description
     String short_name;
     String type_name = null;
-    @NonNull String description;
+    /*@NonNull*/ String description;
 
     // Get the short name (if any)
     if (val.startsWith("-")) {

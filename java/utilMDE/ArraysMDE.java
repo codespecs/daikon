@@ -1408,7 +1408,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(Object @Nullable [] a) {
+  public static String toString(Object /*@Nullable*/ [] a) {
     return toString(a, false);
   }
 
@@ -1417,7 +1417,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toStringQuoted(Object @Nullable [] a) {
+  public static String toStringQuoted(Object /*@Nullable*/ [] a) {
     return toString(a, true);
   }
 
@@ -1426,7 +1426,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(Object @Nullable [] a, boolean quoted) {
+  public static String toString(Object /*@Nullable*/ [] a, boolean quoted) {
     if (a == null) {
       return "null";
     }

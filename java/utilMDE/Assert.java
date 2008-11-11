@@ -19,7 +19,7 @@ public final class Assert {
    * if the condition does not hold.  Named "assertTrue" instead of
    * "assert" because "assert" is a Java 1.4 keyword.
    **/
-  public static final void assertTrue(boolean b, @Nullable String s) {
+  public static final void assertTrue(boolean b, /*@Nullable*/ String s) {
     if (enabled && !b)
       throw new AssertionException(s);
   }
@@ -33,7 +33,7 @@ public final class Assert {
   /** Error class for failed assertions. **/
   public static final class AssertionException extends Error {
     static final long serialVersionUID = 20050923L;
-    public AssertionException(@Nullable String s) {
+    public AssertionException(/*@Nullable*/ String s) {
       super(s);
     }
   }
