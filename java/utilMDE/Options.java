@@ -279,7 +279,7 @@ public class Options {
    * Whether to parse options after a non-option command-line argument.
    * @see #parse_options_after_arg(boolean)
    **/
-  private boolean parse_options_after_arg = false;
+  private boolean parse_options_after_arg = true;
 
   /** All of the argument options as a single string **/
   private String options_str = "";
@@ -383,10 +383,10 @@ public class Options {
   /**
    * If true, Options will parse arguments even after a non-option
    * command-line argument.  This is useful if it is desired to permit
-   * users to write options at the end of a command line.  The default
-   * behavior of false is useful to permit arguments to start with '-' or
-   * '--', for example if some arguments are actually options/arguments for
-   * another program.
+   * users to write options at the end of a command line.  Not
+   * treating arguments that start with dash as options is useful to
+   * permit arguments to start with '-' or '--', for example if some
+   * arguments are actually options/arguments for another program.
    */
   public void parse_options_after_arg (boolean val) {
     parse_options_after_arg = val;
@@ -412,7 +412,9 @@ public class Options {
     // Loop through each argument
     for (int ii = 0; ii < args.length; ii++) {
       String arg = args[ii];
-      if (arg.startsWith ("--") && !ignore_options) {
+      if (arg.equals ("--")) {
+        ignore_options = true;
+      } else if (arg.startsWith ("--") && !ignore_options) {
         int eq_pos = arg.indexOf ('=');
         String arg_name = arg;
         String arg_value = null;

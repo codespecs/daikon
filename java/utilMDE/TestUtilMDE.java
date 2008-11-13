@@ -2394,6 +2394,22 @@ public final class TestUtilMDE extends TestCase {
     assertEquals (t.bool, false);
     assertEquals (t.ld.get(0).doubleValue(), 34.6);
     assertEquals (t.ld.get(1).doubleValue(), 17.8);
+
+    // Test non-options
+    t.bool = false;
+    String[] args = options.parse (new String[] {"one", "two", "three", "-b"});
+    assert args[0].equals ("one") : args[0];
+    assert args[1].equals ("two") : args[1];
+    assert args[2].equals ("three") : args[2];
+    assert t.bool;
+
+    // Test --
+    t.bool = false;
+    args = options.parse (new String[] { "--", "one", "two", "-b"});
+    assert args[0].equals ("one") : args[0];
+    assert args[1].equals ("two") : args[1];
+    assert args[2].equals ("-b") : args[2];
+    assert !t.bool;
   }
 
   public static void testSplitLines() {
