@@ -283,7 +283,7 @@ public final class UtilMDE {
    * the single character JVM name (eg, I, D, etc).  Returns null
    * primitive_name is not a valid name
    */
-  public static String primitive_name_to_jvm (String primitive_name) {
+  public static @Nullable String primitive_name_to_jvm (String primitive_name) {
     return primitiveClassesJvm.get (primitive_name);
   }
 

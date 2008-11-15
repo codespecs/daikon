@@ -68,7 +68,7 @@ public class GraphMDE {
       for (T node : non_roots) {
         List<T> new_doms = null;
         for (T pred : preds.get(node)) {
-          List<T> dom_of_pred = dom.get(pred);
+          @NonNull List<T> dom_of_pred = dom.get(pred);
           if (new_doms == null) {
             // make copy because we may side-effect new_doms
             new_doms = new ArrayList<T>(dom_of_pred);

@@ -41,7 +41,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     public String filename;
     public long line_number;
 
-    // filename is non-null; if there isn't a name, provide a dummy value
+    // filename is non-null; if there isn't a name, clients should provide a dummy value
     public ReaderInfo (BufferedReader reader, String filename) {
       this.reader = reader;
       this.filename = filename;
@@ -134,10 +134,10 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    *                      The expression should define one group that contains
    *                      the include file name
    */
-  public MultiReader (BufferedReader reader, /*@Nullable*/ String comment_re,
+  public MultiReader (BufferedReader reader, String filename, /*@Nullable*/ String comment_re,
                       /*@Nullable*/ String include_re) {
 
-    readers.push (new ReaderInfo (reader, null));
+    readers.push (new ReaderInfo (reader, filename));
     if (comment_re != null)
       this.comment_re = Pattern.compile (comment_re);
     if (include_re != null)
@@ -147,7 +147,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
   /** Create a MultiReader that does not support comments or include directives.
    * @see #MultiReader(BufferedReader,String,String) **/
   public MultiReader (BufferedReader reader) {
-    this (reader, null, null);
+    this (reader, reader.toString(), null, null);
   }
 
   /**
@@ -163,8 +163,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    */
   public MultiReader (File file, /*@Nullable*/ String comment_re,
                       /*@Nullable*/ String include_re) throws IOException {
-    this ((UtilMDE.bufferedFileReader (file)), comment_re, include_re);
-    readers.peek().filename = file.toString();
+    this ((UtilMDE.bufferedFileReader (file)), file.toString(), comment_re, include_re);
   }
 
   /** Create a MultiReader that does not support comments or include directives.
@@ -278,9 +277,14 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    * Returns the next line in the multi-file.
    * Returns null at end of file.
    **/
-  public /*@Nullable*/ String next() {
+  public String next() {
     try {
-      return readLine();
+      String result = readLine();
+      if (result != null) {
+        return result;
+      } else {
+        throw new NoSuchElementException();
+      }
     } catch (IOException e) {
       throw new Error ("unexpected IOException", e);
     }
@@ -315,6 +319,8 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     if (entry_start_re != null)
       entry_match = entry_start_re.matcher (line);
     if ((entry_match != null) && entry_match.find()) {
+      assert entry_start_re != null;
+      assert entry_stop_re != null;
 
       // Remove entry match from the line
       if (entry_match.groupCount() > 0) {

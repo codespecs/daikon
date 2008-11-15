@@ -213,15 +213,16 @@ public class Options {
       }
 
       // Get the short name, type name, and description from the annotation
-      String[] opt_results = parse_option (option.value());
-      short_name = opt_results[0];
-      type_name = opt_results[1];
-      if (type_name == null) {
+      ParseResult pr = parse_option (option.value());
+      short_name = pr.short_name;
+      if (pr.type_name != null) {
+        type_name = pr.type_name;
+      } else {
         type_name = type_short_name (base_type);
         if (list != null)
           type_name += "[]";
       }
-      description = opt_results[2];
+      description = pr.description;
 
       // Get a constructor for non-primitive base types
       if (!base_type.isPrimitive() && !base_type.isEnum()) {
@@ -887,17 +888,28 @@ public class Options {
     return (null);
   }
 
+  private static class ParseResult {
+    @Nullable String short_name;
+    @Nullable String type_name;
+    String description;
+    ParseResult(@Nullable String short_name, @Nullable String type_name, String description) {
+      this.short_name = short_name;
+      this.type_name = type_name;
+      this.description = description;
+    }
+  }
+
+
   /**
    * Parse an option value and return its three components (short_name,
    * type_name, and description).  The short_name and type_name are null
-   * if they are not specified in the string.  There are always three
-   * elements in the array.
+   * if they are not specified in the string.
    */
-  private static /*@Nullable*/ String[] parse_option (String val) {
+  private static ParseResult parse_option (String val) {
 
     // Get the short name, long name, and description
     String short_name;
-    String type_name = null;
+    String type_name;
     /*@NonNull*/ String description;
 
     // Get the short name (if any)
@@ -914,10 +926,12 @@ public class Options {
     if (description.startsWith ("<")) {
       type_name = description.substring (1).replaceFirst (">.*", "");
       description = description.replaceFirst ("<.*> ", "");
+    } else {
+      type_name = null;
     }
 
     // Return the result
-    return new /*@Nullable*/ String[] {short_name, type_name, description};
+    return new ParseResult(short_name, type_name, description);
   }
 
 //   /**
