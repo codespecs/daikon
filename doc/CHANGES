@@ -32,18 +32,17 @@ Daikon
   User visible changes
 
     A new front end for Eiffel programs is available.  See 
-    http://se.inf.ethz.ch/people/polikarpova/citadel.html}
+    http://se.inf.ethz.ch/people/polikarpova/citadel.html .
 
     A new tool (MergeInvariants) for merging serialized invariant files has
-    been added.  See section 8,1.2 of the user manual for more information
+    been added.  See section 8.1.2 of the user manual for more information.
 
     The command line options for the AnnotateNullable tool have been
     slightly changed and some bugs have been fixed.  See section 8.1.5 of
     the user manual for more information.
 
-    Daikon has been modified to accept duplicate program point definitions in
-    trace files as long as they have exactly the same variables as the previous
-    definition.
+    Daikon permits duplicate program point definitions in trace files as
+    long as they have exactly the same variables as the previous definition.
 
   Bug fixes
 
@@ -136,20 +135,20 @@ Daikon
       the new declaration format
 
     - Any suppressions that included 'result == arg1' and 'arg1 == arg2'
-      were augmented to include 'result == arg2'.  Invariants are not necessarily 
-      transitive due to missing variables.  Under certain conditions this
-      problem could lead to an assertion failure in Daikon.
+      were augmented to include 'result == arg2'.  Invariants are not
+      necessarily transitive due to missing variables.  Under certain
+      conditions this problem could lead to an assertion failure in Daikon.
 
-    - Fixed some problems with supporting user implementations of java.util.List
-      as sequences.
+    - Fixed some problems with supporting user implementations of
+      java.util.List as sequences.
 
 Chicory
 
   Bug Fixes
 
-    - Prevented unintended recursion that occurred if processing a variable in 
-      one dtrace record called instrumented code (eg, calling toArray as
-      part of processing a list or pure functions).  Recursive calls to
+    - Prevented unintended recursion that occurred if processing a variable
+      in one dtrace record called instrumented code (e.g., calling toArray
+      as part of processing a list or pure functions).  Recursive calls to
       enter() or exit() are simply ignored.
 
 ----------------------------------------
@@ -404,7 +403,7 @@ DynComp (Binary)
     The previous version of DynComp would crash if a 64-bit program
     attempted to access memory at too large a virtual address, which
     happened on systems with certain security options enabled.  The
-    range of supported addresses hase been increased to 1TB, which is
+    range of supported addresses has been increased to 1TB, which is
     the maximum practical with the current data structure, and
     overflows are now caught with an error message.
 
@@ -434,8 +433,8 @@ Daikon
   Bug Fixes
 
     Fixed a bug (reported by Radu Vanciu) where Daikon crashed when
-    printing simplify output on some OneOfSequence invariants on a subsequence
-    with a lower bound.
+    printing simplify output on some OneOfSequence invariants on a
+    subsequence with a lower bound.
 
 -------------------------------------------------
 
@@ -2891,12 +2890,12 @@ Added linear ternary invariants, of the form z = ax + by + c.
  LocalWords:  noInvariantGuarding SeqIndex SeqIndexIntEqual DtraceDiff Quant ps
  LocalWords:  SeqIndexFloatLessThan DerivedVariableFilter ajax typeOf mypackage
  LocalWords:  DTRACELIMITTERMINATE MyClass arg retroweaver dfej's listclosure
- LocalWords:  includeonly noajax tracefilename declsfiledir declsfiledirflat
+ LocalWords:  includeonly noajax tracefilename declsfiledir declsfiledirflat rt
  LocalWords:  instrsourcedir instr runtimechecker Eclat dfepl basedir jarkarta
  LocalWords:  oro ListImplementors LinearBinary getProperty EqualMinusOne OneOf
  LocalWords:  EqualOne EqualZero GreaterEqual GreaterEqualZero BooleanVal dtype
  LocalWords:  PowerOfTwo LinearyTernary InvMap PptMap MemberString StringEqual
- LocalWords:  SeqSeqStringEqual SeqSeqStringGreaterThan SeqSeqStringLessThan
+ LocalWords:  SeqSeqStringEqual SeqSeqStringGreaterThan SeqSeqStringLessThan co
  LocalWords:  SeqSeqStringGreaterEqual SeqSeqStringLessEqual StringComparison
  LocalWords:  StringLessThan StringLessEqual StringGreaterThan SubSequence cont
  LocalWords:  StringGreaterEqual SubSequenceFloat SuperSequence FuzzyFloat prob
@@ -2914,5 +2913,8 @@ Added linear ternary invariants, of the form z = ax + by + c.
  LocalWords:  decl varname dataflow comp Mangel Wurzel gzip stdout NoDuplicates
  LocalWords:  FunctionBinary ZeroTrack BitwiseAndZero BitwiseSubset ShiftZero
  LocalWords:  CommonSequence toArray IOA classpath stderr NoSuchMethodException
- LocalWords:  AnnotateNullable JSR dcomp EltNonZero NonZero IsPointer JUNIT
- LocalWords:  Cygwin mainHelper
+ LocalWords:  AnnotateNullable JSR dcomp EltNonZero NonZero IsPointer JUNIT AMD
+ LocalWords:  Cygwin mainHelper MergeInvariants glibc decls structs Nullness un
+ LocalWords:  auxprogs argc argv Radu Vanciu OneOfSequence fstack chk bashrc
+ LocalWords:  cshrc config disambig Christoph Csallner std configs dfec Xlint
+ LocalWords:  MacOS int premain
