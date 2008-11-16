@@ -889,10 +889,10 @@ public class Options {
   }
 
   private static class ParseResult {
-    @Nullable String short_name;
-    @Nullable String type_name;
+    /*@Nullable*/ String short_name;
+    /*@Nullable*/ String type_name;
     String description;
-    ParseResult(@Nullable String short_name, @Nullable String type_name, String description) {
+    ParseResult(/*@Nullable*/ String short_name, /*@Nullable*/ String type_name, String description) {
       this.short_name = short_name;
       this.type_name = type_name;
       this.description = description;

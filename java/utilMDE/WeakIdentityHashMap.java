@@ -270,7 +270,7 @@ public class WeakIdentityHashMap<K,V>
      * Returns internal representation of null key back to caller as null.
      */
     @SuppressWarnings("unchecked")
-    private static <K> @Nullable K unmaskNull(Object key) {
+    private static <K> /*@Nullable*/ K unmaskNull(Object key) {
         return (K) (key == NULL_KEY ? null : key);
     }
 
