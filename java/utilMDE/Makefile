@@ -1,7 +1,7 @@
 ### User customizations
 
 # Put user-specific changes in your own Makefile.user
-#  (such as changes to UTILMDE_DIR or JAVAC or JAVAC_EXTRA_FILES).
+#  (such as changes to UTILMDE_DIR or JAVAC or JAVAC_EXTRA_ARGS).
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
@@ -9,12 +9,16 @@ JAVAC ?= javac
 # Removed "-J-Xmx800m", because it is incompatible with JDK 7.
 JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
 # When using the JSR 308 compiler, this expects checkers.jar on the classpath
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} ${JAVAC_ARGS}
+# The "-classpath" argument is only necessary when using the JSR 308 javac,
+# since it's a shell command for "javac -jar ..." which ignores the
+# CLASSPATH environment variable and thus must be supplied explicitly.
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${UTILMDE_CLASSPATH} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea
 
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
+UTILMDE_CLASSPATH=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar
 
 # Might contain duplicates if ${AUTO_GENERATED_FILES} already exists.  Is that a problem?
 JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print) ${AUTO_GENERATED_FILES}
@@ -100,7 +104,7 @@ utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 	mkdir /tmp/utilMDE
 	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE
-	(cd /tmp/utilMDE; make JAVAC_EXTRA_ARGS='-classpath .:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' compile_notest doc)
+	(cd /tmp/utilMDE; make compile_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
 	mv /tmp/utilMDE.tar.gz .

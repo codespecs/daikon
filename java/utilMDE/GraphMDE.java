@@ -3,7 +3,8 @@ package utilMDE;
 import java.util.*;
 import java.io.*;
 
-/* Graph utilities.  Does not model a graph. */
+/* Graph utility methods.  This class does not model a graph:  all methods
+ * are static. */
 public class GraphMDE {
 
   // Algorithms for computing dominators:
@@ -34,7 +35,8 @@ public class GraphMDE {
   // The two algorithms are essentially the same; this implementation uses
   // follows the Wikipedia one.
 
-  /** Computes, for each node in the graph, its set of (pre-)dominators.
+  /**
+   * Computes, for each node in the graph, its set of (pre-)dominators.
    * Supply a successor graph if you want post-dominators.
    **/
   public static

@@ -145,7 +145,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
   }
 
   /** Create a MultiReader that does not support comments or include directives.
-   * @see #MultiReader(BufferedReader,String,String) **/
+   * @see #MultiReader(BufferedReader,String,String,String) **/
   public MultiReader (BufferedReader reader) {
     this (reader, reader.toString(), null, null);
   }
@@ -227,6 +227,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     if (include_re != null) {
       Matcher m = include_re.matcher (line);
       if (m.matches()) {
+        @SuppressWarnings("nullness")
         File filename = new File (UtilMDE.fix_filename(m.group (1)));
         // System.out.printf ("Trying to include filename %s%n", filename);
         if (!filename.isAbsolute()) {
@@ -253,7 +254,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
   /**
    * Returns whether or not there is another line to read.  Any IOExceptions
    * are turned into errors (because the definition of hasNext() in Iterator
-   * doesn't throw any exceptions
+   * doesn't throw any exceptions).
    **/
   public boolean hasNext() {
     if (pushback_line != null)
@@ -324,7 +325,9 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
       // Remove entry match from the line
       if (entry_match.groupCount() > 0) {
-        line = entry_match.replaceFirst (entry_match.group(1));
+        @SuppressWarnings("nullness")
+        /*@NonNull*/ String match_group_1 = entry_match.group(1);
+        line = entry_match.replaceFirst (match_group_1);
       }
 
       // Description is the first line
@@ -337,6 +340,9 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
         body.append (line);
         body.append (lineSep);
         line = readLine();
+        if (line == null) {
+          throw new IOException("File terminated unexpectedly (didn't find entry terminator)");
+        }
         entry_match = entry_start_re.matcher(line);
         end_entry_match = entry_stop_re.matcher(line);
       }

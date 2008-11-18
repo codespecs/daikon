@@ -13,16 +13,17 @@ import com.sun.javadoc.*;
  * the tasks associated with a specific milestone or person and total
  * the amount of work required.
  */
+@SuppressWarnings("nullness")
 public class TaskManager {
 
   public enum OutputFormat {short_ascii, short_html, milestone_html};
 
   // Command line options
   @Option ("-r Include only those tasks assigned to the specified person")
-  public static String responsible = null;
+  /*@Nullable*/ public static String responsible = null;
 
   @Option ("-m Include only those tasks required for the specified milestone")
-  public static String milestone = null;
+  /*@Nullable*/ public static String milestone = null;
 
   @Option ("-c Include only completed tasks")
   public static boolean completed = false;
@@ -55,10 +56,10 @@ public class TaskManager {
 
     String task;
     String responsible;
-    Date assigned_date;
+    /*@Nullable*/ Date assigned_date;
     String milestone;
-    Float duration;
-    Float completed;
+    /*@Nullable*/ Float duration;
+    /*@Nullable*/ Float completed;
     String description;
     String notes;
 
@@ -99,6 +100,7 @@ public class TaskManager {
 
         // parse the value based on the item and store it away
         if (item.equals ("task")) {
+          assert value != null;
           task = value;
         } else if (item.equals ("responsible")) {
           if (value == null)
@@ -118,6 +120,7 @@ public class TaskManager {
             }
           }
         } else if (item.equals ("milestone")) {
+          assert value != null;
           milestone = value;
         } else if (item.equals ("duration")) {
           if (value == null)
@@ -132,6 +135,7 @@ public class TaskManager {
         } else if (item.equals("description")) {
           description = value;
         } else if (item.equals("notes")) {
+          assert value != null;
           notes = value;
         } else {
           throw new IOException ("unknown field " + item);

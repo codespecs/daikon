@@ -520,7 +520,12 @@ public class Options {
     try {
       non_options = parse (args);
     } catch (ArgException ae) {
-      print_usage (ae.getMessage());
+      String message = ae.getMessage();
+      if (message != null) {
+        print_usage (message);
+      } else {
+        print_usage ();
+      }
       System.exit (-1);
       // throw new Error ("usage error: ", ae);
     }
@@ -543,7 +548,12 @@ public class Options {
     try {
       non_options = parse (args);
     } catch (ArgException ae) {
-      print_usage (ae.getMessage());
+      String message = ae.getMessage();
+      if (message != null) {
+        print_usage (message);
+      } else {
+        print_usage ();
+      }
       System.exit (-1);
       // throw new Error ("usage error: ", ae);
     }

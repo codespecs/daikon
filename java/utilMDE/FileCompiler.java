@@ -12,7 +12,11 @@ import java.util.regex.*;
 public final class FileCompiler {
 
   public static Runtime runtime = java.lang.Runtime.getRuntime();
-  /** Matches the names of Java source files, without directory name. **/
+  /**
+   * Matches the names of Java source files, without directory name.
+   * Match group 1 is the class name:  the basse filename without the
+   * ".java" extension..
+   **/
   static Pattern java_filename_pattern;
   /** External command used to compile Java files. **/
   private String compiler;
@@ -53,7 +57,7 @@ public final class FileCompiler {
    * Compiles the files given by fileNames.
    * @param fileNames pathes to the files to be compiled as Strings.
    */
-  public void compileFiles(List<String> fileNames) {
+  public void compileFiles(List<String> fileNames) throws IOException {
 
     // Start a process to compile all of the files (in one command)
     TimeLimitProcess p = compile_source (fileNames);
@@ -89,20 +93,13 @@ public final class FileCompiler {
 
   /**
    * @param filename the path of the Java source to be compiled
-   * @return The process which executed the external compile command.
    *    Return null if there is an IOException.  (Maybe it should throw IOException instead?)
    **/
-  private /*@Nullable*/ TimeLimitProcess compile_source(String filename) {
+  private TimeLimitProcess compile_source(String filename) throws IOException {
     String command = compiler + " " + filename;
     // System.out.println ("\nexecuting compile command: " + command);
 
-    try {
-      return new TimeLimitProcess(runtime.exec(command), timeLimit);
-    } catch (IOException e) {
-      System.err.println("IOException while compiling " + filename);
-      System.err.println(e.toString());
-    }
-    return null;
+    return new TimeLimitProcess(runtime.exec(command), timeLimit);
   }
 
   /**
@@ -110,25 +107,21 @@ public final class FileCompiler {
    * @return The process that executed the external compile command,
    * or null if an empty list of filenames is provided.
    **/
-  private /*@Nullable*/ TimeLimitProcess compile_source(List<String> filenames) {
+  private TimeLimitProcess compile_source(List<String> filenames) throws IOException {
     int num_files = filenames.size();
 
-    if (num_files > 0) {
-      String to_compile = filenames.get(0);
-      for (int i = 1; i < num_files; i++) {
-        to_compile += (" " + filenames.get(i));
-      }
-
-      String command = compiler + " " + to_compile;
-      // System.out.println ("\nexecuting compile command: " + command);
-      try {
-        return new TimeLimitProcess(runtime.exec(command), timeLimit);
-      } catch (IOException e) {
-        System.err.println("IOException while compiling files");
-        System.err.println(e.toString());
-      }
+    if (num_files == 0) {
+      throw new Error("no files to compile were provided");
     }
-    return null;
+
+    String to_compile = filenames.get(0);
+    for (int i = 1; i < num_files; i++) {
+      to_compile += (" " + filenames.get(i));
+    }
+
+    String command = compiler + " " + to_compile;
+    // System.out.println ("\nexecuting compile command: " + command);
+    return new TimeLimitProcess(runtime.exec(command), timeLimit);
   }
 
   /**
@@ -138,13 +131,15 @@ public final class FileCompiler {
    * compile all the files supplied to it if some of them contain
    * errors. So some "good" files end up not being compiled.
    */
-  private void recompile_without_errors (List<String> fileNames, String errorString) {
+  private void recompile_without_errors (List<String> fileNames, String errorString) throws IOException {
     // search the error string and extract the files with errors.
     if (errorString != null) {
-      HashSet<String> errors = new HashSet<String>();
+      HashSet<String> errorClasses = new HashSet<String>();
       Matcher m = java_filename_pattern.matcher(errorString);
       while (m.find()) {
-        errors.add(m.group(1));
+        @SuppressWarnings("nullness")
+        /*@NonNull*/ String sansExtension = m.group(1);
+        errorClasses.add(sansExtension);
       }
       // Collect all the files that were not compiled into retry
       List<String> retry = new ArrayList<String>();
@@ -153,7 +148,7 @@ public final class FileCompiler {
         sourceFileName = sourceFileName.trim();
         String classFilePath = getClassFilePath(sourceFileName);
         if (! fileExists(classFilePath)) {
-          if (! errors.contains(getClassName(sourceFileName))) {
+          if (! errorClasses.contains(getClassName(sourceFileName))) {
             retry.add(sourceFileName);
             filenames += " " + sourceFileName;
           }

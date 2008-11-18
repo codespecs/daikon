@@ -75,18 +75,25 @@ public class LIMITEDSIZEINTSET
   public void addAll(LIMITEDSIZEINTSET s) {
     if (repNulled())
       return;
-    assert values != null;
     if (s.repNulled()) {
-      if (size() + s.size() >= values.length) {
-        num_values = values.length+1;
+      assert values != null;
+      int values_length = values.length;
+      // We don't know whether the elements of this and the argument were
+      // disjoint.  There might be anywhere from max(size(), s.size()) to
+      // (size() + s.size()) elements in the resulting set.
+      if (s.size() > values_length) {
+        num_values = values_length+1;
         values = null;
         return;
       } else {
-        throw new Error("Arg is rep-nulled, but isn't enough to rep-null this.");
+        throw new Error("Arg is rep-nulled, so we don't know its values and can't add them to this.");
       }
     }
     assert s.values != null;
     for (int i=0; i<s.size(); i++) {
+      // The assertion before the loop doesn't quiet the nullness checker
+      // because the checker can't know that "s.size()" has no side effects.
+      assert s.values != null;
       add(s.values[i]);
       if (repNulled()) {
         return;

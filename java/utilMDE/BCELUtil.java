@@ -350,6 +350,7 @@ public class BCELUtil {
    * Sets the locals to 'this' and each of the arguments. Any other locals are
    * removed. An instruction list with at least one instruction must exist.
    */
+  @SuppressWarnings("nullness")
   public static void setup_init_locals(MethodGen mg) {
 
     // Get the parameter types and names.
@@ -362,8 +363,7 @@ public class BCELUtil {
 
     // Add a local for the instance variable (this)
     if (!mg.isStatic())
-      mg
-          .addLocalVariable("this", new ObjectType(mg.getClassName()), null,
+      mg.addLocalVariable("this", new ObjectType(mg.getClassName()), null,
               null);
 
     // Add a local for each parameter

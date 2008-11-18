@@ -94,7 +94,7 @@ public class TextFile implements Iterable<String> {
 	implements Iterator<String>
     {
 	LineNumberReader in;
-	String nextline;
+	/*@Nullable*/ String nextline;
 	boolean closed = false;
 
 	public TextFileIterator(File f, /*@Nullable*/ String charsetName)
@@ -121,6 +121,7 @@ public class TextFile implements Iterable<String> {
 	}
 
 	public String next() {
+            assert nextline != null;
 	    String returnValue = nextline;
 	    getNextLine();
 	    return returnValue;

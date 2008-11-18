@@ -1,6 +1,3 @@
-// Consider using ReferenceMap from Google Collections instead.
-// An advantage is that it is maintained by someone besides me...
-
 /*
  * @(#)WeakHashMap.java	1.30 04/02/19
  *
@@ -22,6 +19,11 @@ import java.lang.ref.ReferenceQueue;
  * the object's hash code.  All equality checks are identity checks
  * (==) rather than objet equality (.equals); @see{IdentityHashMap}
  * for more information on the changes made in an identity hash map.
+ * <p>
+ *
+ * Consider using ReferenceMap from Google Collections instead.
+ * An advantage is that it is externally maintained...
+ * <p>
  *
  * The remainder of the Javadoc is taken from @see{WeakHashMap}.
  * <p>
@@ -1001,10 +1003,11 @@ public class WeakIdentityHashMap<K,V>
             WeakIdentityHashMap.this.clear();
         }
 
+        @SuppressWarnings({"rawtypes","unchecked"})
 	private List<Map.Entry<K,V>> deepCopy() {
 	    List<Map.Entry<K,V>> list = new ArrayList<Map.Entry<K,V>>(size());
 	    for (Map.Entry<K,V> e : this)
-		list.add(new AbstractMap.SimpleEntry<K,V>(e));
+		list.add(new AbstractMap.SimpleEntry(e));
 	    return list;
 	}
 

@@ -7,7 +7,7 @@ import utilMDE.*;
  * Contains a pair of Invariants.  Resides in the third level of the tree.
  * Has no children.
  **/
-public class InvNode extends Node<Invariant,NoType> {
+public class InvNode extends Node<Invariant,Void> {
 
   /** Either inv1 or inv2 may be null, but not both. **/
   public InvNode(Invariant inv1, Invariant inv2) {

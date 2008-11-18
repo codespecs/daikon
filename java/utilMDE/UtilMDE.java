@@ -1233,7 +1233,7 @@ public final class UtilMDE {
    * @see Properties#getProperty
    * @see Properties#setProperty
    **/
-  public static String appendProperty(Properties p, String key, String value) {
+  public static /*@Nullable*/ String appendProperty(Properties p, String key, String value) {
     return (String)p.setProperty(key, p.getProperty(key, "") + value);
   }
 
