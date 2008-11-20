@@ -343,6 +343,9 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
         if (line == null) {
           throw new IOException("File terminated unexpectedly (didn't find entry terminator)");
         }
+        // Re-asserting is necessary because readLine might have side-effected the fields.
+        assert entry_start_re != null;
+        assert entry_stop_re != null;
         entry_match = entry_start_re.matcher(line);
         end_entry_match = entry_stop_re.matcher(line);
       }

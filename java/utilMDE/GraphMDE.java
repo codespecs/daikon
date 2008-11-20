@@ -69,7 +69,9 @@ public class GraphMDE {
       changed = false;
       for (T node : non_roots) {
         List<T> new_doms = null;
+        assert preds.containsKey(node);
         for (T pred : preds.get(node)) {
+          assert dom.containsKey(pred);
           /*@NonNull*/ List<T> dom_of_pred = dom.get(pred);
           if (new_doms == null) {
             // make copy because we may side-effect new_doms
@@ -79,6 +81,7 @@ public class GraphMDE {
           }
         }
         new_doms.add(node);
+        assert dom.containsKey(node);
         if (! dom.get(node).equals(new_doms)) {
           dom.put(node, new_doms);
           changed = true;
@@ -87,6 +90,7 @@ public class GraphMDE {
     }
 
     for (T node : preds.keySet()) {
+      assert dom.containsKey(node);
       assert dom.get(node).contains(node);
     }
 
