@@ -52,13 +52,13 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
     return this;
   }
 
-  public StringBuilderDelimited append(CharSequence csq) {
+  public StringBuilderDelimited append(/*@Nullable*/ CharSequence csq) {
     appendDelimiter();
     delegate.append(csq);
     return this;
   }
 
-  public StringBuilderDelimited append(CharSequence csq, int start, int end) {
+  public StringBuilderDelimited append(/*@Nullable*/ CharSequence csq, int start, int end) {
     appendDelimiter();
     delegate.append(csq, start, end);
     return this;
