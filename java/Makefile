@@ -25,6 +25,8 @@ else
   JAVA ?= java -ea
 endif
 
+CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
+
 ### end of user customizations
 
 # JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
@@ -712,13 +714,13 @@ audit:
 
 # Interning type qualifier checker
 
-# JAVAC_INTERNING_ARGS = -typeprocessor checkers.interning.InterningChecker
-JAVAC_INTERNING_ARGS = -typeprocessor checkers.interning.InterningChecker -Alint=-dotequals
-JAVAC_NULLNESS_ARGS = -typeprocessor checkers.nullness.NullnessChecker
+# JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker
+JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals
+JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker
 JAVAC_NULLNESS_STUBS = -sourcepath ${checkers}/jdk/nullness/src
-JAVAC_JAVARI_ARGS = -typeprocessor checkers.javari.JavariChecker
+JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker
 JAVAC_JAVARI_STUBS = -sourcepath ${checkers}/jdk/nullness/src
-JAVAC_IGJ_ARGS = -typeprocessor checkers.igj.IGJChecker
+JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker
 JAVAC_IGJ_STUBS = -sourcepath ${checkers}/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
 # INTERNING_JAVA_FILES_SKIP =
@@ -734,6 +736,7 @@ INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP
 intern: check-interning
 interning: check-interning
 check-interning:
+	which javac
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those that contain an
