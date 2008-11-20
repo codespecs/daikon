@@ -33,7 +33,9 @@ for my $arg (@ARGV) {
   if ($linkdir ne "") {
     $linkdir .= "/";
   }
+  $headtext = "<link rel=\"icon\" type=\"image/png\" href=\"$linkdir$ico_file\" />";
+
   # This is ugly, but it handles two capitalizations of "</head>".
-  `preplace '</head>' '<link rel="icon" type="image/png" href="$linkdir$ico_file" />\n</head>' $arg`;
-  `preplace '</HEAD>' '<link rel="icon" type="image/png" href="$linkdir$ico_file" />\n</HEAD>' $arg`;
+  `preplace '(<link rel="icon"[^>]*>\n)?</head>' '$headtext\n</head>' $arg`;
+  `preplace '(<link rel="icon"[^>]*>\n)?</HEAD>' '$headtext\n</HEAD>' $arg`;
 }
