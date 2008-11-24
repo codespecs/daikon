@@ -17,6 +17,7 @@ JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.qua
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea
 
+CHECKERS ?= ${HOME}/research/typequals/annotations/checkers
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 UTILMDE_CLASSPATH=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar
 
@@ -137,7 +138,7 @@ LimitedSizeIntSet.java: LimitedSizeSet.java.jpp
 ###
 
 JAVAC_NULLNESS_ARGS = -typeprocessor checkers.nullness.NullnessChecker
-JAVAC_NULLNESS_STUBS = -sourcepath ${checkers}/jdk/nullness/src
+JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 
 check-nullness: check-nullness-utilmde
 
