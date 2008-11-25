@@ -42,3 +42,9 @@ PairwiseFloatLessEqual.java
 PairwiseFloatGreaterEqual.java
 PairwiseNumericInt.java
 PairwiseNumericFloat.java
+PairwiseString.java
+PairwiseStringEqual.java
+PairwiseStringGreaterEqual.java
+PairwiseStringGreaterThan.java
+PairwiseStringLessEqual.java
+PairwiseStringLessThan.java
