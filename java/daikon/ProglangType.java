@@ -563,6 +563,10 @@ public final /*@Interned*/ class ProglangType
     return ((dimensions == 1) && baseIsFloat());
   }
 
+  public boolean elementIsString() {
+    return ((dimensions == 1) && baseIsString());
+  }
+
   // Return true if this variable is sensible as an array index.
   public boolean isIndex() {
     return isIntegral();
