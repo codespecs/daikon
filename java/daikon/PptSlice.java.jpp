@@ -726,8 +726,9 @@ public final class PPTSLICE1 extends PptSlice {
         System.out.println ("Found " + child_invs.size() + " invariants at "
                          + name() + " (" + valid_child_count + " children)");
         for (Invariant child_inv : child_invs)
-          System.out.printf ("-- Invariant = %s [%s] @%s%n", child_inv.format(),
-                             child_inv.getClass(), child_inv.ppt);
+          System.out.printf ("-- Invariant = '%s' [%s] @%s%n",
+                             child_inv.repr(), child_inv.getClass(),
+                             child_inv.ppt);
         Assert.assertTrue (child_invs.size() <= valid_child_count);
       }
       if (child_invs.size() == valid_child_count) {
