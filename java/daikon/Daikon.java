@@ -70,11 +70,17 @@ import daikon.inv.binary.twoScalar.LinearBinary;
 import daikon.inv.binary.twoScalar.LinearBinaryFloat;
 import daikon.inv.binary.twoScalar.NumericFloat;
 import daikon.inv.binary.twoScalar.NumericInt;
+import daikon.inv.binary.twoString.StdString;
 import daikon.inv.binary.twoSequence.PairwiseFloatEqual;
 import daikon.inv.binary.twoSequence.PairwiseFloatGreaterEqual;
 import daikon.inv.binary.twoSequence.PairwiseFloatGreaterThan;
 import daikon.inv.binary.twoSequence.PairwiseFloatLessEqual;
 import daikon.inv.binary.twoSequence.PairwiseFloatLessThan;
+import daikon.inv.binary.twoSequence.PairwiseStringEqual;
+import daikon.inv.binary.twoSequence.PairwiseStringGreaterEqual;
+import daikon.inv.binary.twoSequence.PairwiseStringGreaterThan;
+import daikon.inv.binary.twoSequence.PairwiseStringLessEqual;
+import daikon.inv.binary.twoSequence.PairwiseStringLessThan;
 import daikon.inv.binary.twoSequence.PairwiseIntEqual;
 import daikon.inv.binary.twoSequence.PairwiseIntGreaterEqual;
 import daikon.inv.binary.twoSequence.PairwiseIntGreaterThan;
@@ -84,6 +90,7 @@ import daikon.inv.binary.twoSequence.PairwiseLinearBinary;
 import daikon.inv.binary.twoSequence.PairwiseLinearBinaryFloat;
 import daikon.inv.binary.twoSequence.PairwiseNumericFloat;
 import daikon.inv.binary.twoSequence.PairwiseNumericInt;
+import daikon.inv.binary.twoSequence.PairwiseString;
 import daikon.inv.binary.twoSequence.Reverse;
 import daikon.inv.binary.twoSequence.ReverseFloat;
 import daikon.inv.binary.twoSequence.SeqSeqFloatEqual;
@@ -1395,6 +1402,9 @@ public final class Daikon {
       // Numeric invariants (from Numeric.java.jpp)
       proto_invs.addAll(NumericInt.get_proto_all());
       proto_invs.addAll(NumericFloat.get_proto_all());
+
+      // Standard binary string invariants
+      proto_invs.addAll(StdString.get_proto_all());
     }
 
     // Binary sequence-sequence invariants
@@ -1402,6 +1412,9 @@ public final class Daikon {
       // Numeric invariants (from Numeric.java.jpp)
       proto_invs.addAll(PairwiseNumericInt.get_proto_all());
       proto_invs.addAll(PairwiseNumericFloat.get_proto_all());
+
+      // Pairwise string invariants (also from Numeric.java.jpp)
+      proto_invs.addAll(PairwiseString.get_proto_all());
 
       // Lexical sequence comparisons (from SeqComparison.java.jpp)
       proto_invs.add(SeqSeqIntEqual.get_proto());
@@ -1431,6 +1444,11 @@ public final class Daikon {
       proto_invs.add(PairwiseFloatGreaterThan.get_proto());
       proto_invs.add(PairwiseFloatLessEqual.get_proto());
       proto_invs.add(PairwiseFloatGreaterEqual.get_proto());
+      proto_invs.add(PairwiseStringEqual.get_proto());
+      proto_invs.add(PairwiseStringLessThan.get_proto());
+      proto_invs.add(PairwiseStringGreaterThan.get_proto());
+      proto_invs.add(PairwiseStringLessEqual.get_proto());
+      proto_invs.add(PairwiseStringGreaterEqual.get_proto());
 
       // Array Reverse (from Reverse.java.jpp)
       proto_invs.add(Reverse.get_proto());
