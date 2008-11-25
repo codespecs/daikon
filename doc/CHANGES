@@ -54,6 +54,7 @@ Daikon
     are no longer considered.  Using such suppressors could cause otherwise
     valid invariants to be missed.
 
+----------------------------------------
 
 4.5.0 (September 3 2008)
 
