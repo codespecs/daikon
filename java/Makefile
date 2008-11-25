@@ -194,6 +194,7 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoScalar/FloatGreaterEqual.java \
 	daikon/inv/binary/twoScalar/NumericInt.java \
 	daikon/inv/binary/twoScalar/NumericFloat.java \
+	daikon/inv/binary/twoString/StdString.java \
 	daikon/inv/binary/twoScalar/LinearBinaryCore.java \
 	daikon/inv/binary/twoScalar/LinearBinaryCoreFloat.java \
 	daikon/inv/binary/twoScalar/LinearBinary.java \
@@ -244,8 +245,16 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/PairwiseFloatGreaterEqual.java \
 	daikon/inv/binary/twoSequence/PairwiseLinearBinary.java \
 	daikon/inv/binary/twoSequence/PairwiseLinearBinaryFloat.java \
+	daikon/inv/binary/twoSequence/PairwiseStringEqual.java \
+	daikon/inv/binary/twoSequence/PairwiseStringLessThan.java \
+	daikon/inv/binary/twoSequence/PairwiseStringGreaterThan.java \
+	daikon/inv/binary/twoSequence/PairwiseStringLessEqual.java \
+	daikon/inv/binary/twoSequence/PairwiseStringGreaterEqual.java \
+	daikon/inv/binary/twoSequence/PairwiseLinearBinary.java \
+	daikon/inv/binary/twoSequence/PairwiseLinearBinaryFloat.java \
 	daikon/inv/binary/twoSequence/PairwiseNumericInt.java \
 	daikon/inv/binary/twoSequence/PairwiseNumericFloat.java \
+	daikon/inv/binary/twoSequence/PairwiseString.java \
 	daikon/inv/binary/twoSequence/TwoSequence.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequenceString.java \
@@ -1345,6 +1354,9 @@ daikon/inv/binary/twoScalar/NumericInt.java: daikon/inv/binary/twoScalar/Numeric
 daikon/inv/binary/twoScalar/NumericFloat.java: daikon/inv/binary/twoScalar/Numeric.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
+daikon/inv/binary/twoString/StdString.java: daikon/inv/binary/twoScalar/Numeric.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=TYPESTRING)
+
 daikon/inv/binary/twoScalar/LinearBinaryCore.java: daikon/inv/binary/twoScalar/LinearBinaryCore.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
@@ -1471,6 +1483,21 @@ daikon/inv/binary/twoSequence/PairwiseFloatLessEqual.java: daikon/inv/binary/two
 daikon/inv/binary/twoSequence/PairwiseFloatGreaterEqual.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp daikon/inv/suppressionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=GREATEREQUALFLOAT)
 
+daikon/inv/binary/twoSequence/PairwiseStringEqual.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp daikon/inv/suppressionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=EQUALSTRING)
+
+daikon/inv/binary/twoSequence/PairwiseStringLessThan.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp daikon/inv/suppressionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSTHANSTRING)
+
+daikon/inv/binary/twoSequence/PairwiseStringGreaterThan.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp daikon/inv/suppressionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATERTHANSTRING)
+
+daikon/inv/binary/twoSequence/PairwiseStringLessEqual.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp daikon/inv/suppressionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSEQUALSTRING)
+
+daikon/inv/binary/twoSequence/PairwiseStringGreaterEqual.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp daikon/inv/suppressionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATEREQUALSTRING)
+
 daikon/inv/binary/twoSequence/PairwiseLinearBinary.java: daikon/inv/binary/twoSequence/PairwiseLinearBinary.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
@@ -1482,6 +1509,9 @@ daikon/inv/binary/twoSequence/PairwiseNumericInt.java: daikon/inv/binary/twoScal
 
 daikon/inv/binary/twoSequence/PairwiseNumericFloat.java: daikon/inv/binary/twoScalar/Numeric.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLESEQ)
+
+daikon/inv/binary/twoSequence/PairwiseString.java: daikon/inv/binary/twoScalar/Numeric.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=TYPESTRINGSEQ)
 
 daikon/derive/ternary/SequenceScalarArbitrarySubsequence.java: daikon/derive/ternary/SequenceArbitrarySubsequence.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
