@@ -5,6 +5,7 @@
 #endif
 
 #if (defined(TYPELONG))
+  #define PACKAGE twoScalar
   #define CLASSNAME NumericInt
   #define SUPERCLASS TwoScalar
   #define PRIMITIVE long
@@ -26,6 +27,7 @@
   #define LESS_EQUAL IntLessEqual
   #define BOUND0_63 RangeInt.Bound0_63
 #elif defined(TYPEDOUBLE)
+  #define PACKAGE twoScalar
   #define CLASSNAME NumericFloat
   #define SUPERCLASS TwoFloat
   #define PRIMITIVE double
@@ -47,7 +49,31 @@
   #define EQUALITY FloatEqual
   #define LESS_EQUAL FloatLessEqual
   #define BOUND0_63 RangeFloat.Bound0_63
+#elif (defined(TYPESTRING))
+  #define STRING
+  #define PACKAGE twoString
+  #define CLASSNAME StdString
+  #define SUPERCLASS TwoString
+  #define PRIMITIVE String
+  #define EQUALS(a,b) (a.equals(b))
+  #define VALUE_SET
+  #define ONEOF
+  #define ONEOF_ZERO
+  #define ONEOF_PLUS_MINUS_ONE
+  #define ONEOF_MINUS_ONE
+  #define ONEOF_ONE
+  #define SEQ_SUBSCRIPT SequenceStringSubscript
+  #define NONZERO
+  #define BASE_IS_TYPE isString()
+  #define EQUAL_ONE
+  #define EQUAL_MINUS_ONE
+  #define EQUAL_ZERO
+  #define GREATER_EQUAL_ZERO
+  #define EQUALITY StringEqual
+  #define LESS_EQUAL
+  #define BOUND0_63
 #elif defined(TYPELONGSEQ)
+  #define PACKAGE twoSequence
   #define SEQ
   #define CLASSNAME PairwiseNumericInt
   #define SUPERCLASS TwoSequence
@@ -70,6 +96,7 @@
   #define GREATER_EQUAL_ZERO EltRangeInt.GreaterEqualZero
   #define BASE_IS_TYPE baseIsIntegral()
 #elif defined(TYPEDOUBLESEQ)
+  #define PACKAGE twoSequence
   #define SEQ
   #define CLASSNAME PairwiseNumericFloat
   #define SUPERCLASS TwoSequenceFloat
@@ -90,19 +117,41 @@
   #define NONZERO EltNonZeroFloat
   #define GREATER_EQUAL_ZERO EltRangeFloat.GreaterEqualZero
   #define BASE_IS_TYPE baseIsFloat()
+#elif defined (TYPESTRINGSEQ)
+  #define PACKAGE twoSequence
+  #define STRING
+  #define SEQ
+  #define CLASSNAME PairwiseString
+  #define SUPERCLASS TwoSequenceString
+  #define PRIMITIVE String
+  #define EQUALS(a,b) (a.equals(b))
+  #define VALUE_SET ValueSet.ValueSetStringArray
+  #define ONEOF EltOneOf
+  #define ONEOF_ZERO
+  #define ONEOF_PLUS_MINUS_ONE
+  #define ONEOF_MINUS_ONE
+  #define SEQ_SUBSEQUENCE SequenceStringSubsequence
+  #define EQUAL_ONE
+  #define EQUAL_MINUS_ONE
+  #define EQUAL_ZERO
+  #define GREATER_EQUAL_ZERO
+  #define EQUALITY PairwiseStringEqual
+  #define LESS_EQUAL
+  #define BOUND0_63
+  #define NONZERO
+  #define GREATER_EQUAL_ZERO
+  #define BASE_IS_TYPE baseIsString()
 #else
-  #error "TYPELONG, TYPEDOUBLE, TYPELONGSEQ, or TYPEDOUBLESEQ  must be defined"
+  #error "TYPELONG, TYPEDOUBLE, TYPESTRING, TYPELONGSEQ, TYPESTRINGSEQ or TYPEDOUBLESEQ  must be defined"
 #endif
 
 #if (defined(SEQ))
   #define VAR1 x[]
   #define VAR2 y[]
-  #define PACKAGE twoSequence
   #define COMMENT_TXT corresponding elements of two sequences of PRIMITIVE
 #else
   #define VAR1 x
   #define VAR2 y
-  #define PACKAGE twoScalar
   #define COMMENT_TXT two PRIMITIVE scalars
 #endif
 
@@ -115,6 +164,7 @@ import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoString.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
@@ -148,7 +198,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
    */
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    // base type must be integral
     ProglangType type1 = vis[0].file_rep_type;
     ProglangType type2 = vis[1].file_rep_type;
     if (!type1.BASE_IS_TYPE || !type2.BASE_IS_TYPE) {
@@ -184,23 +233,27 @@ public abstract class CLASSNAME extends SUPERCLASS {
     String v2 = null;
 
     #if defined(SEQ)
-      if (format.isJavaFamily()) {
-        v1 = var1().name_using(format);
-        v2 = var2().name_using(format);
-        if (this instanceof Divides) {
-          return "daikon.Quant.pairwiseDivides(" + v1 + ", " + v2 + ")";
-        } else if (this instanceof Square) {
-          return "daikon.Quant.pairwiseSquare(" + v1 + ", " + v2 + ")";
-      #if defined(TYPELONG) || defined(TYPELONGSEQ)
-        } else if (this instanceof BitwiseComplement) {
-          return "daikon.Quant.pairwiseBitwiseComplement(" + v1 + ", " + v2 + ")";
-        } else if (this instanceof BitwiseSubset) {
-          return "daikon.Quant.pairwiseBitwiseSubset(" + v1 + ", " + v2 + ")";
-      #endif
-        } else {
-          return format_unimplemented(format);
+        if (format.isJavaFamily()) {
+          #if defined(STRING)
+            return format_unimplemented(format);
+          #else
+            v1 = var1().name_using(format);
+            v2 = var2().name_using(format);
+            if (this instanceof Divides) {
+              return "daikon.Quant.pairwiseDivides(" + v1 + ", " + v2 + ")";
+            } else if (this instanceof Square) {
+              return "daikon.Quant.pairwiseSquare(" + v1 + ", " + v2 + ")";
+          #if defined(TYPELONG) || defined(TYPELONGSEQ)
+            } else if (this instanceof BitwiseComplement) {
+              return "daikon.Quant.pairwiseBitwiseComplement(" +v1+", "+v2+ ")";
+            } else if (this instanceof BitwiseSubset) {
+              return "daikon.Quant.pairwiseBitwiseSubset(" +v1+ ", " + v2 + ")";
+          #endif
+            } else {
+              return format_unimplemented(format);
+            }
+          #endif
         }
-      }
 
       if (format == OutputFormat.ESCJAVA) {
         String[] form = VarInfo.esc_quantify (var1(), var2());
@@ -521,10 +574,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public static List<Invariant> get_proto_all() {
 
     List<Invariant> result = new ArrayList<Invariant>();
-    result.add (Divides.get_proto (false));
-    result.add (Divides.get_proto (true));
-    result.add (Square.get_proto (false));
-    result.add (Square.get_proto (true));
+    #if (defined(STRING))
+        result.add (SubString.get_proto(false));
+        result.add (SubString.get_proto(true));
+    #else
+      result.add (Divides.get_proto (false));
+      result.add (Divides.get_proto (true));
+      result.add (Square.get_proto (false));
+      result.add (Square.get_proto (true));
+    #endif
     #if defined(TYPELONG) || defined(TYPELONGSEQ)
       result.add (BitwiseComplement.get_proto());
       result.add (BitwiseSubset.get_proto (false));
@@ -539,24 +597,27 @@ public abstract class CLASSNAME extends SUPERCLASS {
       result.add (ShiftZero.get_proto (false));
       result.add (ShiftZero.get_proto (true));
     #endif
+    // System.out.printf ("%s get proto: %s\n", CLASSNAME.class, result);
     return (result);
   }
 
   // suppressor definitions, used by many of the classes below
   protected static NISuppressor
-    var1_eq_0       = new NISuppressor (0, EQUAL_ZERO.class),
-    var2_eq_0       = new NISuppressor (1, EQUAL_ZERO.class),
-    var1_ge_0       = new NISuppressor (0, GREATER_EQUAL_ZERO.class),
-    var2_ge_0       = new NISuppressor (1, GREATER_EQUAL_ZERO.class),
-    var1_eq_1       = new NISuppressor (0, EQUAL_ONE.class),
-    var2_eq_1       = new NISuppressor (1, EQUAL_ONE.class),
-    var1_eq_minus_1 = new NISuppressor (0, EQUAL_MINUS_ONE.class),
-    var2_eq_minus_1 = new NISuppressor (1, EQUAL_MINUS_ONE.class),
-    var1_ne_0       = new NISuppressor (0, NONZERO.class),
-    var2_ne_0       = new NISuppressor (1, NONZERO.class),
+    #if !defined(STRING)
+      var1_eq_0       = new NISuppressor (0, EQUAL_ZERO.class),
+      var2_eq_0       = new NISuppressor (1, EQUAL_ZERO.class),
+      var1_ge_0       = new NISuppressor (0, GREATER_EQUAL_ZERO.class),
+      var2_ge_0       = new NISuppressor (1, GREATER_EQUAL_ZERO.class),
+      var1_eq_1       = new NISuppressor (0, EQUAL_ONE.class),
+      var2_eq_1       = new NISuppressor (1, EQUAL_ONE.class),
+      var1_eq_minus_1 = new NISuppressor (0, EQUAL_MINUS_ONE.class),
+      var2_eq_minus_1 = new NISuppressor (1, EQUAL_MINUS_ONE.class),
+      var1_ne_0       = new NISuppressor (0, NONZERO.class),
+      var2_ne_0       = new NISuppressor (1, NONZERO.class),
+      var1_le_var2    = new NISuppressor (0, 1, LESS_EQUAL.class),
+    #endif
     var1_eq_var2    = new NISuppressor (0, 1, EQUALITY.class),
-    var2_eq_var1    = new NISuppressor (0, 1, EQUALITY.class),
-    var1_le_var2    = new NISuppressor (0, 1, LESS_EQUAL.class);
+    var2_eq_var1    = new NISuppressor (0, 1, EQUALITY.class);
 
   #if defined(TYPELONG) || defined(TYPELONGSEQ)
     protected static NISuppressor var2_valid_shift =
@@ -567,6 +628,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   // Int and Float Numeric Invariants
   //
 
+#if !defined(STRING)
   /**
    * Represents the divides without remainder invariant between
    * COMMENT_TXT.  Prints as <samp>VAR1 % VAR2 == 0</samp>.
@@ -894,6 +956,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   }
 
+#endif !STRING
+
 #if defined(TYPELONG) || defined(TYPELONGSEQ)
 
   /**
@@ -1201,5 +1265,90 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
 #endif
 
+//
+// Standard String invariants
+//
+
+#if defined(STRING)
+  /**
+   * Represents the substring invariant between
+   * COMMENT_TXT.  Prints as <samp>VAR1 is a substring of VAR2</samp>.
+   */
+  public static class SubString extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20081113L;
+
+    protected SubString (PptSlice ppt, boolean swap) {
+      super(ppt, swap);
+    }
+
+    private static SubString proto = new SubString (null, false);
+    private static SubString proto_swap = new SubString (null, true);
+
+    public static Invariant get_proto (boolean swap) {
+      if (swap) {
+        return (proto_swap);
+      } else {
+        return (proto);
+      }
+    }
+
+    // Variables starting with dkconfig_ should only be set via the
+    // daikon.config.Configuration interface.
+    /** Boolean.  True iff SubString invariants should be considered. **/
+    public static boolean dkconfig_enabled = false;
+
+    /** Returns whether or not this invariant is enabled **/
+    public boolean enabled() { return dkconfig_enabled; }
+
+    protected Invariant instantiate_dyn (PptSlice slice) {
+      return new SubString (slice, swap);
+    }
+
+    public String get_format_str (OutputFormat format) {
+      if (format == OutputFormat.DAIKON) {
+        return "%var1% is a substring of %var2%";
+      } else if (format.isJavaFamily()) {
+        return "%var2%.contains(%var1%)";
+      } else {
+        return format_unimplemented(format);
+      }
+    }
+
+    public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
+      return (y.contains (x));
+    }
+
+    /** Justified as long as there are samples **/
+    protected double computeConfidence() {
+      if (ppt.num_samples() == 0) {
+        return Invariant.CONFIDENCE_UNJUSTIFIED;
+      }
+
+      return Invariant.CONFIDENCE_JUSTIFIED;
+    }
+
+    /**
+     * Returns a list of non-instantiating suppressions for this invariant.
+     */
+    public NISuppressionSet get_ni_suppressions() {
+      if (swap) return (suppressions_swap);
+      else return (suppressions);
+    }
+
+    /** definition of this invariant (the suppressee) (unswapped) **/
+    private static NISuppressee suppressee
+      = new NISuppressee (SubString.class, false);
+
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+          // v1 == v2 ==> v1 subsequence v2
+          new NISuppression (var1_eq_var2, suppressee),
+      });
+    private static NISuppressionSet suppressions_swap = suppressions.swap();
+  }
+#endif
 
 }
