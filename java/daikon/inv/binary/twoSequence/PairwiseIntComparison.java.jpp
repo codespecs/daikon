@@ -4,8 +4,8 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#if !(defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
-  #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
+#if !(defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT) || defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATERTHANSTRING) || defined(GREATEREQUALSTRING))
+  #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, GREATEREQUALFLOAT, EQUALSTRING, LESSTHANStRING, LESSEQUALSTRING GREATERTHANSTRING, or GREATEREQUALSTRING must be defined"
 #endif
 
 #if (defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
@@ -28,6 +28,17 @@ The correct way to build the system is to run 'make'.
   #define EQUAL_CLASS PairwiseFloatEqual
   #define GREATER_THAN_CLASS PairwiseFloatGreaterThan
   #define LESS_THAN_CLASS PairwiseFloatLessThan
+  #elif (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATERTHANSTRING) || defined(GREATEREQUALSTRING))
+  #define SUPERCLASS TwoSequenceString
+  #define PRIMITIVE String
+  #define ELEMENTISTYPE elementIsString()
+  #define BASE_IS_SCALAR baseIsString()
+  #define SUBSEQUENCE SubSequenceString
+  #define SEQ_SUBSEQUENCE SequenceStringSubsequence
+  #define EQUAL_CLASS PairwiseStringEqual
+  #define GREATER_THAN_CLASS PairwiseStringGreaterThan
+  #define LESS_THAN_CLASS PairwiseStringLessThan
+
 #endif
 
 #if defined(EQUAL)
@@ -46,6 +57,14 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring "=="
   #define EQUALSstringDBC "pairwiseEqual"
   #define EQUALSSIMPLIFYstring "EQ"
+#elif defined(EQUALSTRING)
+  #define PAIRWISEINTEQUAL PairwiseStringEqual
+  #define PAIRWISEINTEQUALstring "PairwiseStringEqual"
+  #define EQUALS(a,b) (a != null && b!= null && a.equals(b))
+  #define COMPARE ==
+  #define EQUALSstring "=="
+  #define EQUALSstringDBC "pairwiseEqual"
+  #define EQUALSSIMPLIFYstring "EQ"
 #elif defined(LESSTHAN)
   #define PAIRWISEINTEQUAL PairwiseIntLessThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseIntGreaterThan
@@ -60,6 +79,15 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatGreaterThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define COMPARE <
+  #define EQUALSstring "<"
+  #define EQUALSstringDBC "pairwiseLT"
+  #define EQUALSSIMPLIFYstring "<"
+#elif defined(LESSTHANSTRING)
+  #define PAIRWISEINTEQUAL PairwiseStringLessThan
+  #define PAIRWISEINTEQUAL_SWAP PairwiseStringGreaterThan
+  #define PAIRWISEINTEQUALstring "PairwiseStringLessThan"
+  #define EQUALS(a,b) (a != null && b != null && a.compareTo(b) < 0)
   #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "pairwiseLT"
@@ -86,6 +114,17 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring "<="
   #define EQUALSstringDBC "pairwiseLTE"
   #define EQUALSSIMPLIFYstring "<="
+#elif defined(LESSEQUALSTRING)
+  #define PAIRWISEINTEQUAL PairwiseStringLessEqual
+  #define PAIRWISEINTEQUAL_SWAP PairwiseStringGreaterEqual
+  #define PAIRWISELT_SUPP PairwiseStringLessThan
+  #define PAIRWISEEQ_SUPP PairwiseStringEqual
+  #define PAIRWISEINTEQUALstring "PairwiseStringLessEqual"
+  #define EQUALS(a,b) (a != null && b != null && a.compareTo (b) <= 0)
+  #define COMPARE <=
+  #define EQUALSstring "<="
+  #define EQUALSstringDBC "pairwiseLTE"
+  #define EQUALSSIMPLIFYstring "<="
 #elif defined(GREATERTHAN)
   #define PAIRWISEINTEQUAL PairwiseIntGreaterThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseIntLessThan
@@ -100,6 +139,15 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatLessThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define COMPARE >
+  #define EQUALSstring ">"
+  #define EQUALSstringDBC "pairwiseGT"
+  #define EQUALSSIMPLIFYstring ">"
+#elif defined(GREATERTHANSTRING)
+  #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
+  #define PAIRWISEINTEQUAL_SWAP PairwiseStringLessThan
+  #define PAIRWISEINTEQUALstring "PairwiseStringGreaterThan"
+  #define EQUALS(a,b) (a != null && b != null && a.compareTo(b) > 0)
   #define COMPARE >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "pairwiseGT"
@@ -126,8 +174,19 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring ">="
   #define EQUALSstringDBC "pairwiseGTE"
   #define EQUALSSIMPLIFYstring ">="
+#elif defined(GREATEREQUALSTRING)
+  #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
+  #define PAIRWISEINTEQUAL_SWAP PairwiseStringLessEqual
+  #define PAIRWISELT_SUPP PairwiseStringGreaterThan
+  #define PAIRWISEEQ_SUPP PairwiseStringEqual
+  #define PAIRWISEINTEQUALstring "PairwiseStringGreaterEqual"
+  #define EQUALS(a,b) (a != null && b != null && a.compareTo(b) >= 0)
+  #define COMPARE >=
+  #define EQUALSstring ">="
+  #define EQUALSstringDBC "pairwiseGTE"
+  #define EQUALSSIMPLIFYstring ">="
 #else
-  #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
+  #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, GREATEREQUALFLOAT, EQUALSTRING, LESSTHANStRING, LESSEQUALSTRING GREATERTHANSTRING, or GREATEREQUALSTRING must be defined"
 #endif
 
 // ***** This file is automatically generated from PairwiseIntComparison.java.jpp
@@ -202,7 +261,7 @@ public class PAIRWISEINTEQUAL
     if (!valid_types (vis))
       return (false);
 
-    #if !(defined(EQUAL) || defined(EQUALFLOAT))
+    #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       if (!(vis[0].type.ELEMENTISTYPE && vis[1].type.ELEMENTISTYPE))
         return false;
     #endif
@@ -212,10 +271,13 @@ public class PAIRWISEINTEQUAL
 
   /** instantiates the invariant on the specified slice **/
   protected Invariant instantiate_dyn (PptSlice slice) {
-    return (new PAIRWISEINTEQUAL(slice));
+    Invariant inv = new PAIRWISEINTEQUAL(slice);
+    if (logOn())
+      inv.log ("instantiate");
+    return inv;
   }
 
-  #if !(defined(EQUAL) || defined(EQUALFLOAT))
+  #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
   protected PAIRWISEINTEQUAL(PAIRWISEINTEQUAL_SWAP swapped_pic) {
     super(swapped_pic.ppt);
     if (logOn())
@@ -228,8 +290,8 @@ public class PAIRWISEINTEQUAL
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
-    Object[] obv1 = SUBSEQUENCE.isObviousSubSequence(var1, var2);
-    Object[] obv2 = SUBSEQUENCE.isObviousSubSequence(var2, var1);
+    Object[] obv1 = SubSequence.isObviousSubSequence(var1, var2);
+    Object[] obv2 = SubSequence.isObviousSubSequence(var2, var1);
     if (obv1[1] != null) {
       Global.implied_noninstantiated_invariants++;
       return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
@@ -306,14 +368,14 @@ public class PAIRWISEINTEQUAL
   }
 
   protected Invariant resurrect_done_swapped() {
-    #if (defined(EQUAL) || defined(EQUALFLOAT))
+    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return this;
     #else
       return new PAIRWISEINTEQUAL_SWAP(this);
     #endif
   }
 
-#if (defined(EQUAL) || defined(EQUALFLOAT))
+  #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
   public boolean is_symmetric() {
     return (true);
   }
@@ -408,7 +470,7 @@ public class PAIRWISEINTEQUAL
     if (num_values == 0) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     } else {
-#if (defined(EQUAL) || defined(EQUALFLOAT))
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       // It's an equality invariant
       return Invariant.CONFIDENCE_JUSTIFIED;
 #else
@@ -452,7 +514,7 @@ public class PAIRWISEINTEQUAL
     v1_gt_v2 = new NISuppressor (0, 1, GREATER_THAN_CLASS.class),
     v1_lt_v2 = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
 
-  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined (GREATEREQUALSTRING)
     private static NISuppressionSet suppressions =
       new NISuppressionSet (new NISuppression[] {
 
@@ -463,7 +525,7 @@ public class PAIRWISEINTEQUAL
         new NISuppression (v1_gt_v2, suppressee),
 
       });
-  #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+  #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(LESSEQUALSTRING)
     private static NISuppressionSet suppressions =
       new NISuppressionSet (new NISuppression[] {
 
