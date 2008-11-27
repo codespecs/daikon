@@ -64,6 +64,7 @@ utilMDE.jar: .class-files-timestamp
 
 clean:
 	rm -f *.class
+	rm .class-files-timestamp
 
 very_clean: clean
 	rm -f ${AUTO_GENERATED_FILES}
@@ -88,13 +89,12 @@ run-chicory:
 run-chicory-arrays:
 	set JAVA_COMPILER=NONE; ${JAVA} -ea daikon.Chicory --ppt-select-pattern=ArraysMDE --output-dir=/tmp utilMDE.TestUtilMDE --shortrun
 
+
 doc: javadoc
 
 javadoc: $(JAVA_FILES)
 	mkdir -p doc
 	javadoc -d doc utilMDE
-	# makes "doc" (the target of this rule) look up to date
-	touch doc
 	# jdk-add-munged-anchor-names doc/utilMDE/*.html
 	@echo "Optionally run jdk-index-to-alist (for Emacs support)"
 
@@ -154,7 +154,7 @@ check-nullness-utilmde-withstubs:
 ###
 ###
 
-.PHONY: default all compile_notest jar clean very_clean tags test run-chicory javadoc showvars
+.PHONY: default all compile_notest jar clean very_clean tags test run-chicory javadoc showvars doc
 
 
 # Existence of this rule means that a target is deleted if has just changed
