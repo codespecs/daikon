@@ -20,6 +20,22 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.5.2 (December 1 2008)
+
+Some new String invariants were added to Daikon.
+
+Daikon
+
+  User visible changes
+
+    Added elementwise String comparison (equal, lessthan, greaterthan,
+    lessthanequal, greaterthan equal) invariants (enabled by default).
+
+    Added a SubString invariant and an elementwise SubString invariant
+    (disabled by default)
+
+----------------------------------------
+
 4.5.1 (November 3 2008)
 
 A new front end for Eiffel is available and a new tool (MergeInvariants) 
