@@ -31,7 +31,7 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 # JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
 ## This version omits JAVAC_XLINT
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -366,7 +366,8 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} utilMDE-import-check utilMDE-copy
 	@echo ${JAVAC_COMMAND} '*.java ...'
-	@${JAVAC_COMMAND} ${JAVA_FILES}
+	@echo ${JAVA_FILES} > java_files.txt
+	${JAVAC_COMMAND} @java_files.txt
 	@chmod -w ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
@@ -966,7 +967,7 @@ showvars:
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
-	@echo CLASSPATH = ${CLASSPATH}
+	@echo CLASSPATH = "${CLASSPATH}"
 
 showvar_JAVA_FILES:
 	@echo ${JAVA_FILES}
@@ -1638,6 +1639,7 @@ dump :
 	echo $(OSTYPE)
 	echo $(PATH)
 	echo $(DAIKONBIN)
+	@echo "JAVAC_COMMAND = $(JAVAC_COMMAND)"
 
 ###########################################################################
 ### Delete-on-error
