@@ -12,14 +12,15 @@ JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
 # The "-classpath" argument is only necessary when using the JSR 308 javac,
 # since it's a shell command for "javac -jar ..." which ignores the
 # CLASSPATH environment variable and thus must be supplied explicitly.
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${UTILMDE_CLASSPATH} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${UTILMDE_CLASSPATH}' ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea
 
 CHECKERS ?= ${HOME}/research/typequals/annotations/checkers
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
-UTILMDE_CLASSPATH=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar
+#UTILMDE_CLASSPATH=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar
+UTILMDE_CLASSPATH= $(CLASSPATH)
 
 # Might contain duplicates if ${AUTO_GENERATED_FILES} already exists.  Is that a problem?
 JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print) ${AUTO_GENERATED_FILES}
@@ -116,6 +117,7 @@ showvars:
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo JAVA_LINT_FILES = $(JAVA_LINT_FILES)
 	@echo JAVA_CPP_FILES = $(JAVA_CPP_FILES)
+	@echo CLASSPATH = "$(CLASSPATH)"
 
 
 ###########################################################################
