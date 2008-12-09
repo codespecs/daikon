@@ -12,18 +12,22 @@
 ## You should not need to edit this file directly.
 
 if (! $?JDKDIR) then
-  echo "exiting daikon.cshrc: JDKDIR environment variable is not set"
+  echo "JDKDIR environment variable is not set."
+  echo "Bailing out of daikon.cshrc ." 
   exit 2
 else if (! -d $JDKDIR && $JDKDIR != "none") then
-  echo "exiting daikon.cshrc: JDKDIR is set to non-existent directory $JDKDIR"
+  echo "JDKDIR is set to non-existent directory: $JDKDIR"
+  echo "Bailing out of daikon.cshrc ." 
   exit 2
 endif
 
 if (! $?DAIKONDIR) then
-  echo "exiting daikon.cshrc: DAIKONDIR environment variable is not set"
+  echo "DAIKONDIR environment variable is not set."
+  echo "Bailing out of daikon.cshrc ." 
   exit 2
 else if (! -d $DAIKONDIR) then
-  echo "exiting daikon.cshrc: DAIKONDIR is set to non-existent directory $DAIKONDIR"
+  echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
+  echo "Bailing out of daikon.cshrc ." 
   exit 2
 endif
 
@@ -33,7 +37,8 @@ if (! $?DAIKONBIN) then
   else if ( -d ${DAIKONDIR}/scripts ) then
     setenv DAIKONBIN ${DAIKONDIR}/scripts
   else
-    echo "exiting daikon.cshrc: Cannot set DAIKONBIN"
+    echo "Cannot choose a value for environment variable DAIKONBIN."
+    echo "Bailing out of daikon.cshrc ." 
     exit 2
   endif
 endif
