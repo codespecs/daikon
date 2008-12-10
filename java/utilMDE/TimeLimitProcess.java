@@ -38,15 +38,15 @@ public class TimeLimitProcess {
   }
 
   /**
-   * Returns true if the process has timed out (run for more than the
-   * timeLimit msecs specified in the constructor)
+   * Returns true if the process has timed out (has run for more than the
+   * timeLimit msecs specified in the constructor).
    */
   boolean timed_out() {
     return (timed_out);
   }
 
   /**
-   * Returns the timeout time in msecs
+   * Returns the timeout time in msecs.
    */
   long timeout_msecs() {
     return (timeLimit);

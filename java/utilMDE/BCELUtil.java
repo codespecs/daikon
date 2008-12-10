@@ -28,7 +28,7 @@ import org.apache.bcel.generic.RETURN;
 
 
 /**
- * Static utility methods for working with BCEL
+ * Static utility methods for working with BCEL.
  */
 public class BCELUtil {
 
@@ -83,7 +83,7 @@ public class BCELUtil {
   }
 
   /**
-   * Returns the attribute name for the specified attribute
+   * Returns the attribute name for the specified attribute.
    */
   public static String get_attribute_name(Attribute a) {
 
@@ -186,7 +186,7 @@ public class BCELUtil {
   }
 
   /**
-   * Checks all of the methods in gen for consistency
+   * Checks all of the methods in gen for consistency.
    */
   public static void checkMgens(final ClassGen gen) {
 
@@ -320,7 +320,7 @@ public class BCELUtil {
   }
 
   /**
-   * Return a description of the local variables (one per line)
+   * Return a description of the local variables (one per line).
    */
   public static String local_var_descr(MethodGen mg) {
 
@@ -416,7 +416,7 @@ public class BCELUtil {
   }
 
   /**
-   * Returns the attribute name for the specified attribute
+   * Returns the attribute name for the specified attribute.
    */
   public static String get_attribute_name (Attribute a, ConstantPoolGen pool) {
 
@@ -428,7 +428,7 @@ public class BCELUtil {
 
   /**
    * Returns whether or not this is a standard main method (static,
-   * name is 'main', and one argument of string array
+   * name is 'main', and one argument of string array.
    */
   public static boolean is_main (MethodGen mg) {
     Type[] arg_types = mg.getArgumentTypes();

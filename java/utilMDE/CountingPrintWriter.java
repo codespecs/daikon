@@ -8,7 +8,7 @@ import java.io.*;
 
 /**
  * <p> Prints formatted representations of objects to a text-output
- * stream counting the number of bytes & characters printed. </p><br>
+ * stream counting the number of bytes and characters printed. </p>
  *
  * <p> Methods in this class never throw I/O exceptions. The client may
  * inquire as to whether any errors have occurred by invoking
@@ -21,11 +21,11 @@ public class CountingPrintWriter extends PrintWriter {
 
   /** Number of written bytes using 'write' methods. */
   private int writtenBytes;
-  /** Number of printed bytes using 'print' & 'println' methods. */
+  /** Number of printed bytes using 'print' and 'println' methods. */
   private int printedBytes;
   /** Number of written chars using write methods. */
   private int writtenChars;
-  /** Number of printed chars using 'print' & 'println' methods. */
+  /** Number of printed chars using 'print' and 'println' methods. */
   private int printedChars;
 
   // Constructors

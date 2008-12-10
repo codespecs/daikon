@@ -270,7 +270,7 @@ public final class WeakHasherMap<K,V> extends AbstractMap<K,V> implements Map<K,
 
     /**
      * Returns the number of key-value mappings in this map.
-     * <strong>Note:</strong> <em>In contrast with most implementations of the
+     * <strong>Note:</strong> <em>In contrast to most implementations of the
      * <code>Map</code> interface, the time required by this operation is
      * linear in the size of the map.</em>
      */

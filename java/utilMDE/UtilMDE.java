@@ -279,10 +279,12 @@ public final class UtilMDE {
   }
 
   /**
-   * Convert a primitive java type name (eg, int, double, etc) to
-   * the single character JVM name (eg, I, D, etc).  Returns null
-   * primitive_name is not a valid name
+   * Convert a primitive java type name (e.g., "int", "double", etc.) to
+   * the single character JVM name (e.g., "I", "D", etc.).  Returns null if
+   * primitive_name is not a valid name.
    */
+  // Implemenation note:  shouldn't this throw an exception rather than
+  // returning null?
   public static /*@Nullable*/ String primitive_name_to_jvm (String primitive_name) {
     return primitiveClassesJvm.get (primitive_name);
   }
@@ -667,7 +669,7 @@ public final class UtilMDE {
   // A better name would be "expandFilename"; "fix"is too vague. -MDE
   /**
    * Fixes a file name to do tilde expansion (to the users home directory)
-   * There maybe other logical things to do as well
+   * There maybe other logical things to do as well.
    */
   public static String fix_filename (String name) {
     if (name.contains ("~"))
@@ -1230,6 +1232,7 @@ public final class UtilMDE {
 
   /**
    * Set the property to its previous value concatenated to the given value.
+   * Returns the previous value.
    * @see Properties#getProperty
    * @see Properties#setProperty
    **/

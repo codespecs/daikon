@@ -760,13 +760,13 @@ public class WeakIdentityHashMap<K,V>
 
         /**
          * Strong reference needed to avoid disappearance of key
-         * between hasNext and next
+         * between hasNext and next.
          */
         Object nextKey = null;
 
         /**
          * Strong reference needed to avoid disappearance of key
-         * between nextEntry() and any use of the entry
+         * between nextEntry() and any use of the entry.
          */
 	Object currentKey = null;
 

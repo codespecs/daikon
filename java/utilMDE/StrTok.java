@@ -49,7 +49,7 @@ public class StrTok {
   public static class Error {
 
     /**
-     * Called when an unexpected token is found (see {@link #need(String)})
+     * Called when an unexpected token is found (see {@link #need(String)}).
      */
     public void tok_error (String s) {
       throw new RuntimeException ("StrTok error: " + s);

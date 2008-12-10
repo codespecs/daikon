@@ -35,6 +35,9 @@ public class FileIOException extends IOException {
   /// Without a message (with a Throwable instead)
   ///
 
+  // Argument is not nullable despite the documentation of Throwable:
+  // if cause is null, the super call throws a null pointer exception.
+  // This looks like a JDK bug.  -MDE 12/9/2008
   public FileIOException(/*@Nullable*/ Throwable cause) {
     super(cause);
     fileName = null;

@@ -106,7 +106,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
     /**
      * Return a description of the entry body that matches the specified
-     * regular expression.  If no match is found, reeturns the first_line
+     * regular expression.  If no match is found, returns the first_line.
      */
     String get_description (/*@Nullable*/ Pattern re) {
 
@@ -388,7 +388,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
   /**
    * Reads the next line from the current reader.  If EOF is encountered
-   * pop out to the next reader.  Returns null if there is no more input
+   * pop out to the next reader.  Returns null if there is no more input.
    */
   private /*@Nullable*/ String get_next_line() throws IOException {
 
@@ -421,7 +421,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
   /**
    * Set the regular expressions for the start and stop of long
-   * entries (multiple lins that are read as a group by get_entry())
+   * entries (multiple lins that are read as a group by get_entry()).
    */
   public void set_entry_start_stop (String entry_start_re,
                                     String entry_stop_re) {
@@ -431,7 +431,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
   /**
    * Set the regular expressions for the start and stop of long
-   * entries (multiple lins that are read as a group by get_entry())
+   * entries (multiple lins that are read as a group by get_entry()).
    */
   public void set_entry_start_stop (Pattern entry_start_re,
                                     Pattern entry_stop_re) {
@@ -441,7 +441,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
   /**
    * Puts the specified line back in the input.  Only one line can be
-   * put back
+   * put back.
    */
   public void putback (String line) {
     assert pushback_line == null : "push back '" + line + "' when '"

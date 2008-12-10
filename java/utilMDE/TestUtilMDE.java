@@ -2349,7 +2349,7 @@ public final class TestUtilMDE extends TestCase {
   }
 
   /**
-   * Test class for Options testing
+   * Test class for Options testing.
    */
   public static class TestOptions {
 
@@ -2372,7 +2372,7 @@ public final class TestUtilMDE extends TestCase {
   }
 
   /**
-   * Test command line option parsing (Options)
+   * Test command line option parsing (Options).
    */
   public static void testOptions() throws ArgException {
 

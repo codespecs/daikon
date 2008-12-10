@@ -692,9 +692,9 @@ public final class Intern {
     }
 
     public boolean equals (SequenceAndIndices<T> other) {
-      return (this.seq == other.seq) &&
-        this.start == other.start &&
-        this.end == other.end;
+      return ((this.seq == other.seq)
+              && this.start == other.start
+              && this.end == other.end);
     }
 
     public int hashCode() {
