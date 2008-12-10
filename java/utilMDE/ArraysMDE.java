@@ -318,6 +318,9 @@ public final class ArraysMDE {
    * @see java.util.List#indexOf(java.lang.Object)
    **/
   public static int indexOf(Object[] a, Object elt) {
+    if (elt == null) {
+      return indexOfEq(a, elt);
+    }
     for (int i=0; i<a.length; i++)
       if (elt.equals(a[i]))
         return i;
@@ -333,6 +336,9 @@ public final class ArraysMDE {
    * @see java.util.List#indexOf(java.lang.Object)
    **/
   public static int indexOf(Object[] a, Object elt, int minindex, int indexlimit) {
+    if (elt == null) {
+      return indexOfEq(a, elt, minindex, indexlimit);
+        }
     for (int i=minindex; i<indexlimit; i++)
       if (elt.equals(a[i]))
         return i;
@@ -360,6 +366,9 @@ public final class ArraysMDE {
    * @see java.util.List#indexOf(java.lang.Object)
    **/
   public static int indexOf(List<?> a, Object elt, int minindex, int indexlimit) {
+    if (elt == null) {
+      return indexOfEq(a, elt, minindex, indexlimit);
+    }
     for (int i=minindex; i<indexlimit; i++)
       if (elt.equals(a.get(i)))
         return i;
