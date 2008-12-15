@@ -6,6 +6,23 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
+#
+# Do some basic configuration checking:;;;;;
+#  - Make sure uname and OSTYPE match up
+#  - On windows, Make sure that find is the unix find and not the windows find
+#
+ifeq (cygwin,$(OSTYPE))
+  FIND_VERSION := $(shell find -version)
+  ifneq (GNU,$(findstring GNU,$(FIND_VERSION)))
+    $(error the find command in the path must be the Linux(GNU) find $(FIND_VERSION))
+  endif
+else
+  UNAME := $(shell uname)
+  ifeq (CYGWIN,$(findstring CYGWIN,$(UNAME)))
+    $(error uname returns '$(UNAME)', but OSTYPE is not 'cygwin')
+  endif
+endif
+
 JAVAC ?= javac
 # When "javac" is a shall script (as it is in OpenJDK 7 when compiled via
 # "ant" as opposed to being downloaded from Sun), the "-J" flags are passed
@@ -455,7 +472,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	install -d $(DCOMP_RT)
-	$(JAVA) -Xmx1536m daikon.dcomp.BuildJDK $(ORIG_RT) $(DCOMP_RT)
+	$(JAVA) -Xmx1024m daikon.dcomp.BuildJDK $(ORIG_RT) $(DCOMP_RT)
 	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
