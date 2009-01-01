@@ -34,13 +34,13 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
     }
   }
 
-  public StringBuilderDelimited append(String str) {
+  public StringBuilderDelimited append(/*@Nullable*/ String str) {
     appendDelimiter();
     delegate.append(str);
     return this;
   }
 
-  public StringBuilderDelimited append(Object o) {
+  public StringBuilderDelimited append(/*@Nullable*/ Object o) {
     appendDelimiter();
     delegate.append(o.toString());
     return this;

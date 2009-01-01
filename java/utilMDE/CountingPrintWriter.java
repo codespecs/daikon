@@ -316,7 +316,7 @@ public class CountingPrintWriter extends PrintWriter {
    * Print a String and then terminate the line. This method behaves
    * as though it invokes print(String) and then println().
    */
-  public void println(String x) {
+  public void println(/*@Nullable*/ String x) {
     print(x);
     println();
   }
