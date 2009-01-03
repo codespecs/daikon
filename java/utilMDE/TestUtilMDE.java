@@ -12,8 +12,10 @@ import static utilMDE.Options.ArgException;
 // Files to test:
 // ArraysMDE.java
 // Assert.java
+// ClassFileVersion.java
 // CountingPrintWriter.java
 // Digest.java
+// FileIOException.java
 // FuzzyFloat.java
 // GraphMDE.java
 // Hasher.java
@@ -188,6 +190,8 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(ArraysMDE.indexOf(a, new Integer(9)) == 9);
       assertTrue(ArraysMDE.indexOf(a, new Integer(10)) == -1);
       assertTrue(ArraysMDE.indexOf(a, new Integer(20)) == -1);
+      assertTrue(ArraysMDE.indexOf(a, (Object) null) == -1);
+      assertTrue(ArraysMDE.indexOf(a, (Object) null, 1, 5) == -1);
 
       assertTrue(ArraysMDE.indexOfEq(a, new Integer(-1)) == -1);
       assertTrue(ArraysMDE.indexOfEq(a, new Integer(0)) == -1);
@@ -195,9 +199,22 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(ArraysMDE.indexOfEq(a, new Integer(9)) == -1);
       assertTrue(ArraysMDE.indexOfEq(a, new Integer(10)) == -1);
       assertTrue(ArraysMDE.indexOfEq(a, new Integer(20)) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, (Object) null) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, (Object) null, 1, 5) == -1);
       assertTrue(ArraysMDE.indexOfEq(a, a[0]) == 0);
       assertTrue(ArraysMDE.indexOfEq(a, a[7]) == 7);
       assertTrue(ArraysMDE.indexOfEq(a, a[9]) == 9);
+    }
+
+    // public static int indexOf(List<?> a, Object elt)
+    // public static int indexOf(List<?> a, Object elt, int minindex, int indexlimit)
+    // public static int indexOfEq(List<?> a, Object elt, int minindex, int indexlimit)
+    // public static int indexOfEq(List<?> a, Object elt)
+    {
+      assertTrue(ArraysMDE.indexOf((List<?>) new ArrayList<Object>(), (Object) null) == -1);
+      assertTrue(ArraysMDE.indexOf((List<?>) new ArrayList<Object>(), (Object) null, 0, -1) == -1);
+      assertTrue(ArraysMDE.indexOfEq((List<?>) new ArrayList<Object>(), (Object) null) == -1);
+      assertTrue(ArraysMDE.indexOfEq((List<?>) new ArrayList<Object>(), (Object) null, 0, -1) == -1);
     }
 
     // public static int indexOf(int[] a, int elt)
@@ -327,6 +344,19 @@ public final class TestUtilMDE extends TestCase {
     // public static boolean isSubarray(boolean[] a, boolean[] sub, int a_offset)
     // (The subarray tests are missing; I hope that the array indexOf
     // operations above test them sufficiently.)
+
+    // public static String toString(Object /*@Nullable*/ [] a)
+    // public static String toStringQuoted(Object /*@Nullable*/ [] a)
+    // public static String toString(Object /*@Nullable*/ [] a, boolean quoted)
+    // public static String toString(List<?> a)
+    // public static String toStringQuoted(List<?> a)
+    // public static String toString(List<?> a, boolean quoted)
+    {
+      assertTrue(ArraysMDE.toString((Object[]) null).equals("null"));
+      assertTrue(ArraysMDE.toStringQuoted((Object[]) null).equals("null"));
+      assertTrue(ArraysMDE.toString((List<?>) null).equals("null"));
+      assertTrue(ArraysMDE.toStringQuoted((List<?>) null).equals("null"));
+    }
 
     // static String toString(int[] a)
     assertTrue(ArraysMDE.toString(new int[] { }).equals("[]"));
@@ -1926,6 +1956,16 @@ public final class TestUtilMDE extends TestCase {
 
   }
 
+  public static void testAssert() {
+    new Assert.AssertionException(null);
+  }
+
+  public static void testClassFileVersion() {
+    // public static double [] versionNumbers(InputStream is)
+    Assert.assertTrue(ClassFileVersion.versionNumbers(new ByteArrayInputStream(new byte[0])) == null);
+  }
+
+
   /**
    * Tests whether CountingPrintWriter
    * counts the bytes printed, written for
@@ -1951,6 +1991,10 @@ public final class TestUtilMDE extends TestCase {
     Assert.assertTrue(c1.getNumberOfPrintedBytes() == (12 + ls_len));
     Assert.assertTrue(c1.getNumberOfWrittenBytes() == (28));
     Assert.assertTrue(c1.getNumberOfPrintedChars() == (12 + ls_len));
+    c1.print((String) null);
+    c1.print((Object) null);
+    c1.println((String) null);
+    // need to add assertions about what got printed.
   }
 
 
@@ -1982,6 +2026,10 @@ public final class TestUtilMDE extends TestCase {
     long[] l1 = Intern.intern(new long[] {1, 2, 3, 4, 5, 6});
     Assert.assertTrue (l1 == Intern.internSubsequence (l1, 0, l1.length));
   }
+
+  // To do
+  // public static void testFileIOException() {
+  // }
 
   /**
    * Test the comparison, indexof, and set equivalence calls in fuzzy
