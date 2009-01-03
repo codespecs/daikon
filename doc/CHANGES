@@ -20,6 +20,27 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.5.3 (January 2 2009)
+
+Resolved a number of problems in the build scripts and documentation for a
+complete Windows installation.
+
+Daikon
+
+  Bug fixes
+
+    Some build problems on Windows were fixed.  Checks were added to
+    ensure that the correct version of find is found and the OSTYPE
+    is set correctly.
+
+  Documentation
+
+    The complete installation for Windows now requires Cygwin.  The
+    instructions were largely rewritten to make the required setup
+    clear (particularly the format of filenames and paths).
+
+----------------------------------------
+
 4.5.2 (December 1 2008)
 
 Some new String invariants were added to Daikon.
