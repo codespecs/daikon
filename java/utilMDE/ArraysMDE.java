@@ -317,7 +317,7 @@ public final class ArraysMDE {
    *    or -1 if no such element is found in the array.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(Object[] a, Object elt) {
+  public static int indexOf(Object[] a, /*@Nullable*/ Object elt) {
     if (elt == null) {
       return indexOfEq(a, elt);
     }
@@ -335,7 +335,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the array.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(Object[] a, Object elt, int minindex, int indexlimit) {
+  public static int indexOf(Object[] a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     if (elt == null) {
       return indexOfEq(a, elt, minindex, indexlimit);
         }
@@ -353,7 +353,7 @@ public final class ArraysMDE {
    *    or -1 if no such element is found in the list.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(List<?> a, Object elt) {
+  public static int indexOf(List<?> a, /*@Nullable*/ Object elt) {
     return a.indexOf(elt);
   }
 
@@ -365,7 +365,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the list.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(List<?> a, Object elt, int minindex, int indexlimit) {
+  public static int indexOf(List<?> a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     if (elt == null) {
       return indexOfEq(a, elt, minindex, indexlimit);
     }
@@ -1424,6 +1424,7 @@ public final class ArraysMDE {
   /**
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
+   * Furthermore, each element is quoted like a Java String.
    * @see java.util.Vector#toString
    **/
   public static String toStringQuoted(Object /*@Nullable*/ [] a) {
@@ -1433,6 +1434,7 @@ public final class ArraysMDE {
   /**
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
+   * Furthermore, if quoted is true, then each element is quoted like a Java String.
    * @see java.util.Vector#toString
    **/
   public static String toString(Object /*@Nullable*/ [] a, boolean quoted) {
@@ -1463,7 +1465,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(List<?> a) {
+  public static String toString(/*@Nullable*/ List<?> a) {
     return toString(a, false);
   }
 
@@ -1472,7 +1474,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toStringQuoted(List<?> a) {
+  public static String toStringQuoted(/*@Nullable*/ List<?> a) {
     return toString(a, true);
   }
 
@@ -1481,7 +1483,7 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
-  public static String toString(List<?> a, boolean quoted) {
+  public static String toString(/*@Nullable*/ List<?> a, boolean quoted) {
     if (a == null) {
       return "null";
     }
