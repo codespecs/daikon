@@ -42,7 +42,7 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
 
   public StringBuilderDelimited append(/*@Nullable*/ Object o) {
     appendDelimiter();
-    delegate.append(o.toString());
+    delegate.append(o);
     return this;
   }
 
