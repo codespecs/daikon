@@ -122,7 +122,7 @@ Introduction
 
 Installing Daikon
 
-* Minimal installation::        
+* Simple installation::         
 * Complete installation::       
 
 Complete installation instructions
@@ -476,11 +476,11 @@ you may send mail to the list asking to be added.
 Shortcut for the impatient:  skip directly to @ref{Installation steps}.
 
 This section describes two ways to install Daikon.  The first gives a
-minimal installation that is adequate for the needs of many users.
+simple installation that is adequate for the needs of many users.
 The second gives a complete installation that permits you to use all of
 the functionality in the Daikon distribution.
 
-Use the minimal installation instructions if you only wish to detect
+Use the simple installation instructions if you only wish to detect
 invariants in Java programs.  Use the complete installation instructions
 (which are easy to follow) if you wish to detect invariants in C or Perl
 programs, if you wish to run certain other programs distributed with
@@ -495,12 +495,12 @@ discussions with other Daikon users and developers.
 
 
 @menu
-* Minimal installation::        
+* Simple installation::         
 * Complete installation::       
 @end menu
 
-@node    Minimal installation, Complete installation, Installing Daikon, Installing Daikon
-@section Minimal installation instructions
+@node    Simple installation, Complete installation, Installing Daikon, Installing Daikon
+@section Simple installation instructions
 
 Daikon is written in Java.  In order to run Daikon, all you really need
 is the @file{daikon.jar} file, which is included in the distribution or
@@ -519,18 +519,16 @@ follow the complete installation instructions of @ref{Complete
 installation}.
 
 
-@node    Complete installation,  , Minimal installation, Installing Daikon
+@node    Complete installation,  , Simple installation, Installing Daikon
 @section Complete installation instructions
 
 This section gives step-by-step instructions for installing Daikon.
-The instructions in @ref{Installation steps} are targeted for
-Unix users.  If you use another operating system such as Windows, you
-may need to adjust the instructions, for example to change the shell
-quoting conventions.  (Contributions to this manual
-for other operating systems are welcome.)
-If you wish to compile, not just run, Daikon, see @ref{Compiling
-Daikon,,,./developer,Daikon Developer Manual}.
+The instructions in @ref{Installation steps} and the scripts used
+there are targeted for Unix users.  To perform a complete install on
+Windows, it is necessary to install the Cygwin toolset.
 
+For more complete information on compiling Daikon see @ref{Compiling
+Daikon,,,./developer,Daikon Developer Manual} in the Daikon developers manual.
 
 @menu
 * Requirements::                
@@ -543,7 +541,15 @@ Daikon,,,./developer,Daikon Developer Manual}.
 @subsection Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
-(@uref{http://java.sun.com,, Java Virtual Machine}).
+(@uref{http://java.sun.com,, Java Virtual Machine}).  You must also
+have a Java 5.0 (or later) compiler.
+
+To install Daikon on Windows, the best approach is to install the Cygwin
+toolset (available at @uref{http://sources.redhat.com/cygwin/}), which
+contains everything you need to compile and run Unix programs under
+Windows.  You can install Cygwin by simply running the program found
+at @uref{http://sources.redhat.com/cygwin/setup.exe}.  The default
+installation is sufficient.
 
 @menu
 * Optional requirements::       
@@ -582,13 +588,6 @@ as a tar file from
 The two files contain the same information; you only need one of them.
 Windows users typically opt for the zip file.
 
-@itemize
-@item Windows:  Download the
-@uref{http://pag.csail.mit.edu/daikon/download/daikon.zip, zip file}
-and extract it into, say, @file{C:\}.  This creates a directory
-@file{C:\daikon} containing the Daikon distribution.
-
-@item Unix:  use one of the following sets of commands:
 @example
 cd @var{daikonparent}
 wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
@@ -603,31 +602,38 @@ unzip daikon.zip
 @end example
 @noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
-@end itemize
 
 @item
-Set up your environment.  You need to set two environment variables and
-source a Daikon startup file.
+Set up your environment.  You need to set two environment variables
+and source a Daikon startup file.  The commands to define environment
+variables vary depending on your shell.  The csh and tcsh shells and
+their variants use @code{setenv} (e.g., @code{setenv JDKDIR
+/usr/lib/j2sdk1.5-sun}).  The sh and bash shells and their variants
+use @code{export} (e.g., @code{export JDKDIR=/usr/lib/jw2sdk1.5-sun}).
+Do not use a Windows shell.
 
 @itemize
 
 @item
 @cindex DAIKONDIR
 Define the @code{DAIKONDIR} environment variable to be 
-the full pathname to the daikon directory you extracted
-above.  For example: @code{@var{daikonparent}/daikon} or @code{C:\daikon}.
+the full @emph{Unix} pathname to the daikon directory you extracted
+above.  For example: @code{@var{daikonparent}/daikon}.  On Windows
+use the Cygwin/Unix path (e.g., @code{/cygdrive/c/daikon}) rather than the
+windows path (@code{C:\daikon}).
 
-The commands to define environment variables vary depending on your 
-shell.  The csh and tcsh shells and their variants use @code{setenv} 
-(e.g., @code{setenv JDKDIR /usr/lib/j2sdk1.5-sun}).  The sh and bash shells and
-their variants use @code{export} 
-(e.g., @code{export JDKDIR=/usr/lib/jw2sdk1.5-sun}).  The Windows shell
-uses @code{set} (e.g., @code{set JDKDIR=C:\Program Files\Java\jdk1.5.0_05})
 
 @item
-Define the @code{JDKDIR} environment variable to be
-the full pathname to the JDK@.  For example:
-@code{/usr/lib/j2sdk1.t-sun} or @code{C:\Program Files\Java\jdk1.5.0_05}
+Define the @code{JDKDIR} environment variable to be the full
+@emph{Unix} pathname to the JDK@.  For example:
+@code{/usr/lib/j2sdk1.t-sun} or @code{/cygdrive/c/Program
+Files/Java/jdk1.5.0_05}.  On Windows, you may need to avoid pathnames
+with spaces.  This can be done by using the @code{ln} command to add a
+symbolic link without spaces to @code{Program Files}.
+@example
+    cd /cygdrive/c
+    ln -s "Program Files" program_files
+@end example
 
 @item
 Source the appropriate Daikon startup file 
@@ -641,8 +647,6 @@ These customizations can be placed in your startup file, or executed
 each time that you wish to use Daikon.  
 We recommend that you put all three commands in a batch file, and
 manually execute that batch file from the command line.
-Query to Windows users:  is there a good way to make the batch file get run
-automatically for each command shell?  If so, we'll put the answer here.
 
 @c You can also
 @c set the environment variables in the registry (right-click My Computer,
@@ -659,12 +663,29 @@ You can examine the appropriate Daikon environment file to learn of
 other variables you can customize.
 
 @item
-Optionally (it can take a long time), run
+Customize @code{make} variables.  The @code{Makefile} in
+@code{$DAIKONDIR/java} can be customized by adding a
+@code{Makefile.user} file to that directory.  It is more convenient to
+set some variables here than as environment variables.  The build
+process needs the Java @code{CLASSPATH} defined to include
+@code{$DAIKONDIR/java}.  Note that the classpath must be defined in
+Unix format (cygwin paths and colon separators).  For example, add the
+following line to @code{$DAIKONDIR/java/Makefile.user}.
+@example
+  export CLASSPATH := $(DAIKONDIR)/java
+@end example
+In Windows, also define the @code{OSTYPE} variable to be @code{cygwin}.
+@example
+  OSTYPE = cygwin
+@end example
+
+@item
+Compile Daikon and build other tools by running @code{make}.
 @example
 cd $DAIKONDIR
 make
 @end example
-to build various executables used by Daikon, such as the
+This builds the various executables used by Daikon, such as the
 C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 Note that running this make command may take 20 minutes or more,
@@ -719,25 +740,32 @@ double-clicking would not supply the proper arguments to the program.
 @subsubsection Windows command line
 
 The first option is to run Daikon using native Windows utilities.
-Before running Daikon, you must invoke the @file{daikonenv.bat} batch
-file (once) in the Windows command shell to set up the environment
-properly.  To automatically run something (such as a batch file) every
-time the Windows command shell is started, set the value of this
-registry key to the program you want to run:
-@example
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\AutoRun
-@end example
-@noindent
+The is done in the normal fashion.  The @code{CLASSPATH} must include
+either @code{$DAIKONDIR/daikon.jar} or @code{$DAIKONDIR/java} (if you
+have recompiled the Daikon source).  The @code{CLASSPATH} should be
+specified in Windows format (Windows paths and semicolon separators).
 
-@c This feels quite irrelevant; omit?
-You may also wish to set two registry entries to enable automatic completion:
-@example
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\CompletionChar
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\PathCompletionChar
-@end example
-@noindent
-The values for these registry entries are ASCII key codes.  Tab is 9.
+@c JHP Jan 2 2009: I comment out the below.  I don't think the environment
+@c is necessary to run Daikon, only to build it.
+@c
+@c Before running Daikon, you must invoke the @file{daikonenv.bat} batch
+@c file (once) in the Windows command shell to set up the environment
+@c properly.  To automatically run something (such as a batch file) every
+@c time the Windows command shell is started, set the value of this
+@c registry key to the program you want to run:
+@c @example
+@c HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\AutoRun
+@c @end example
+@c @noindent
 
+@c @c This feels quite irrelevant; omit?
+@c You may also wish to set two registry entries to enable automatic completion:
+@c @example
+@c HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\CompletionChar
+@c HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\PathCompletionChar
+@c @end example
+@c @noindent
+@c The values for these registry entries are ASCII key codes.  Tab is 9.
 
 @node    Cygwin shell,  , Windows command line, Windows command shells
 @subsubsection Cygwin shell
@@ -751,31 +779,47 @@ Windows.  You can install Cygwin by simply running the program found
 at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
 There is an incompatibility between Cygwin and programs compiled for
-Windows.  (The incompatibility does not exist if the program was
-compiled for Cygwin.)  The incompatibility is that Windows programs
-use the semicolon (@samp{;}) as their path separator (for instance,
-for @env{CLASSPATH}), but Unix and Cygwin programs use the colon (@samp{:})
-as their path separator.
+Windows (such as Java).  (The incompatibility does not exist if the
+program was compiled for Cygwin.)  The incompatibility is that Windows
+programs use the semicolon (@samp{;}) as their path separator (for
+instance, for @env{CLASSPATH}), but Unix and Cygwin programs use the
+colon (@samp{:}) as their path separator.
 
-The @file{cygwin-runner.pl} script in the @file{bin/} directory may
-help you run windows-native Java tools from within the Cygwin
-environment.  It translates Unix @samp{:}-separated pathlists to
-Windows @samp{;}-separated pathlists, changes filenames to their 8.3
-``old style'' name (e.g., @file{My Documents} to @file{MYDOCU~1}),
-changes forward slashes to backslashes, and translates paths with
-Cygwin mount points to simple @file{C:\}-like paths.
+The @code{Makefiles} used to build Daikon will change the Unix style
+@code{CLASSPATH} (e.g., .;/cygdrive/c/daikon/java) into a Windows
+style @code{CLASSPATH} (.;C:\daikon\java) when necessary.  The
+@code{CLASSPATH} must be in Unix format for the build to work
+correctly.
 
-For now, @file{cygwin-runner.pl} doesn't touch environment variables,
-but you can still use it for classpath by getting your classpath onto
-the command line explicitly:
-@example
-$ dfej -classpath $CLASSPATH DataStructures/StackAr.java
-@end example
-(It would be nice to patch cygwin-runner to translate environment
-variables, too.  For example, always translate @env{CLASSPATH}, or
-always translate anything listed in @env{CYGWIN_RUNNER_ENV} (e.g.,
-@samp{CYGWIN_RUNNER_ENV="PATH:CLASSPATH:PWD"}) so users can set
-@env{CYGWIN_RUNNER_ENV} in their dotfiles or various wrappers.)
+However, when running any Java program (such as Daikon or Chicory),
+the @code{CLASSPATH} should be specified in Windows format.  That is
+why the build instructions suggest specifying the @code{CLASSPATH} in
+the @code{$DAIKONDIR/java/Makefile.user} file -- so that the required
+unix definition is not part of the environment.
+
+@c JHP Jan 2 2008: I removed this as I don't think this a problem for
+@c a user that isn't trying to write scripts on two platforms.  They
+@c can just specify the classpath as Java expects it.
+@c 
+@c The @file{cygwin-runner.pl} script in the @file{bin/} directory may
+@c help you run windows-native Java tools from within the Cygwin
+@c environment.  It translates Unix @samp{:}-separated pathlists to
+@c Windows @samp{;}-separated pathlists, changes filenames to their 8.3
+@c ``old style'' name (e.g., @file{My Documents} to @file{MYDOCU~1}),
+@c changes forward slashes to backslashes, and translates paths with
+@c Cygwin mount points to simple @file{C:\}-like paths.
+
+@c For now, @file{cygwin-runner.pl} doesn't touch environment variables,
+@c but you can still use it for classpath by getting your classpath onto
+@c the command line explicitly:
+@c @example
+@c dfej -classpath $CLASSPATH DataStructures/StackAr.java
+@c @end example
+@c (It would be nice to patch cygwin-runner to translate environment
+@c variables, too.  For example, always translate @env{CLASSPATH}, or
+@c always translate anything listed in @env{CYGWIN_RUNNER_ENV} (e.g.,
+@c @samp{CYGWIN_RUNNER_ENV="PATH:CLASSPATH:PWD"}) so users can set
+@c @env{CYGWIN_RUNNER_ENV} in their dotfiles or various wrappers.)
 
 
 @node    Example usage, Running Daikon, Installing Daikon, Top

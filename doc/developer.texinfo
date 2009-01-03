@@ -251,7 +251,16 @@ contains everything you need to compile and run Unix programs under
 Windows.  You can install Cygwin by simply running the program found
 at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
-
+When setting up environment pathnamne variables under Windows/Cygwin
+(such as @command{JDKDIR} or @command{CLASSPATH}) make sure that the
+pathname is specified in Unix format (e.g., @samp{/cygdrive/c/daikon}
+rather than @samp{C:\daikon}).  Cygwin expects Unix style pathnames
+and the Makefile will convert them to Windows pathnames when necessary
+(such as when using Windows programs such as Java).  The
+@command{CLASSPATH} environment variable should use colons (:) rather
+than semicolons (;) as a separator.  Using windows pathnames or
+separators is a common source of errors that will result in odd error
+messages and build failures.
 
 @node    CVS repository, Using Eclipse, Compiling Daikon, Extending Daikon
 @section CVS repository
