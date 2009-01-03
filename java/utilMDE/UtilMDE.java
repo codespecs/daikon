@@ -280,13 +280,15 @@ public final class UtilMDE {
 
   /**
    * Convert a primitive java type name (e.g., "int", "double", etc.) to
-   * the single character JVM name (e.g., "I", "D", etc.).  Returns null if
-   * primitive_name is not a valid name.
+   * the single character JVM name (e.g., "I", "D", etc.).
+   * Throws IllegalArgumentException if primitive_name is not a valid name.
    */
-  // Implemenation note:  shouldn't this throw an exception rather than
-  // returning null?
-  public static /*@Nullable*/ String primitive_name_to_jvm (String primitive_name) {
-    return primitiveClassesJvm.get (primitive_name);
+  public static String primitive_name_to_jvm (String primitive_name) {
+    String result = primitiveClassesJvm.get (primitive_name);
+    if (result == null) {
+      throw new IllegalArgumentException("Not the name of a primitive type: " + primitive_name);
+    }
+    return result;
   }
 
   /**
