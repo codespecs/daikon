@@ -47,11 +47,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 4.5.2
+@center Daikon version 4.5.3
 
 @sp 1
-@c Daikon version 4.5.2 date
-@center December 1 2008
+@c Daikon version 4.5.3 date
+@center January 2, 2009
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -72,7 +72,7 @@ Copyright @copyright{} 1998-2007
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 4.5.2, released December 1 2008.
+@c It describes Daikon version 4.5.3, released January 2, 2009.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -91,7 +91,7 @@ Copyright @copyright{} 1998-2007
 @c
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 4.5.2, released December 1 2008.
+It describes Daikon version 4.5.3, released January 2, 2009.
 @end ifnottex
 
 @menu
@@ -8747,7 +8747,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 4.5.2, released December 1 2008.
+This manual describes Daikon version 4.5.3, released January 2, 2009.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -8761,7 +8761,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 4.5.2
+@cindex Daikon version 4.5.3
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited

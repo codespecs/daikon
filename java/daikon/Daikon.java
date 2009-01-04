@@ -213,8 +213,8 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "4.5.2";
-  public final static String release_date = "December 1 2008";
+  public final static String release_version = "4.5.3";
+  public final static String release_date = "January 2, 2009";
   public final static String release_string =
     "Daikon version "
       + release_version
