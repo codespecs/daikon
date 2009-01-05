@@ -777,21 +777,49 @@ public final class UtilMDE {
   // In Python, inlining this gave a 10x speed improvement.
   // Will the same be true for Java?
   /**
-   * Increment the Integer which is indexed by key in the HashMap.
+   * Increment the Integer which is indexed by key in the Map.
    * If the key isn't in the HashMap, it is added.
    * Throws an error if the key is in the HashMap but maps to a non-Integer.
    **/
-  public static <T> Integer incrementHashMap(HashMap<T,Integer> hm, T key, int count) {
-    Integer old = hm.get(key);
+  public static <T> Integer incrementMap(Map<T,Integer> m, T key, int count) {
+    Integer old = m.get(key);
     int new_total;
     if (old == null) {
       new_total = count;
     } else {
       new_total = old.intValue() + count;
     }
-    return hm.put(key, new Integer(new_total));
+    return m.put(key, new Integer(new_total));
   }
 
+  public static <K,V> String mapToString(Map<K,V> m) {
+    StringBuilder sb = new StringBuilder();
+    mapToString(sb, m, "");
+    return sb.toString();
+  }
+
+  /**
+   * Write a multi-line representation of the map into the given Appendable
+   * (e.g., a StringBuilder).
+   */
+  public static <K,V> void mapToString(Appendable sb, Map<K,V> m, String linePrefix) {
+    try {
+      for (Map.Entry<K, V> entry : m.entrySet()) {
+        sb.append(linePrefix);
+        sb.append(entry.getKey().toString());
+        sb.append(" => ");
+        sb.append(entry.getValue().toString());
+        sb.append(lineSep);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
+  ///
+  /// Hashing
+  ///
 
   // In hashing, there are two separate issues.  First, one must convert
   // the input datum into an integer.  Then, one must transform the
