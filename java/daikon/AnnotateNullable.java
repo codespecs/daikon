@@ -12,7 +12,7 @@ import static daikon.PptTopLevel.PptType;
  * an annotation file (to standard out) with those variables.  It
  * determines which variables have seen null values by looking at the
  * NonZero invariant.  If that invariant is NOT present, then the
- * variables must have seen at least one null value.
+ * variable must have been null at least once.
  * <p>
  *
  * Since only the NonZero invariant is used, Daikon processing time can be
