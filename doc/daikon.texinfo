@@ -702,8 +702,8 @@ Optionally, download other executables, such as
 the Simplify theorem
 prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}),
 @c
-the Z3
-theorem prover (@uref{http://research.microsoft.com/projects/Z3/}; Z3
+the Z3 theorem 
+prover (@uref{http://research.microsoft.com/en-us/um/redmond/projects/z3}; Z3
 replaces Simplify but is only distributed for Windows),
 @c
 and the source-based C front
