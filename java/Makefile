@@ -48,7 +48,7 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 # JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
 ## This version omits JAVAC_XLINT
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
 
 
 ###########################################################################
