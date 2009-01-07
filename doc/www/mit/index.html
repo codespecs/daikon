@@ -581,6 +581,10 @@ target.
     <p>The <tt>cvs -q diff</tt> command should produce no output. </p>
     </li>
 
+    <li> Make sure that Daikon compiles under Java 5
+    <pre>
+        make -C $inv/java JAVAC=$pag/software/pkg/jdk1.5.0_17/bin/javac clean all </pre>
+
     <li> Rebuild everything.
 
     <pre>
