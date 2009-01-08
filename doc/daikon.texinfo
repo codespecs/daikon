@@ -484,8 +484,8 @@ Use the simple installation instructions if you only wish to detect
 invariants in Java programs.  Use the complete installation instructions
 (which are easy to follow) if you wish to detect invariants in C or Perl
 programs, if you wish to run certain other programs distributed with
-Daikon in its @file{bin/} directory, or if you wish to edit the source
-code of Daikon itself.
+Daikon in its @file{bin/} directory, or if you wish to edit and
+recompile the source code of Daikon itself.
 
 Differences between various versions of Daikon appear
 in the file @file{doc/CHANGES} in the distribution.
@@ -514,7 +514,7 @@ JVM (@uref{http://java.sun.com,, Java Virtual Machine}).  The
 @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
 
-Finally, see @ref{Installing Daikon} for situations where you should
+@xref{Installing Daikon} for situations where you should
 follow the complete installation instructions of @ref{Complete
 installation}.
 
@@ -527,8 +527,8 @@ The instructions in @ref{Installation steps} and the scripts used
 there are targeted for Unix users.  To perform a complete install on
 Windows, it is necessary to install the Cygwin toolset.
 
-For more complete information on compiling Daikon see @ref{Compiling
-Daikon,,,./developer,Daikon Developer Manual} in the Daikon developers manual.
+For more complete information on compiling Daikon, @pxref{Compiling
+Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
 
 @menu
 * Requirements::                
@@ -681,6 +681,9 @@ In Windows, also define the @code{OSTYPE} variable to be @code{cygwin}.
 
 @item
 Compile Daikon and build other tools by running @code{make}.
+Note that this step is @emph{not} required if you only want to use Daikon
+with its Java front end (Chicory).    
+
 @example
 cd $DAIKONDIR
 make
@@ -688,26 +691,27 @@ make
 This builds the various executables used by Daikon, such as the
 C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
+For more
+information about compiling Daikon, see @ref{Compiling
+Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
+
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
-
-Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).  On windows, running @code{make} requires
-that @uref{http://www.cygwin.com/,Cygwin} be installed.  More
-information is available in @ref{Compiling
-Daikon,,,./developer,Daikon Developer Manual}.
+On Windows, running @code{make} requires
+that @uref{http://www.cygwin.com/,Cygwin} be installed.
 
 Optionally, download other executables, such as
 @c
 the Simplify theorem
 prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}),
 @c
+or
 the Z3 theorem 
 prover (@uref{http://research.microsoft.com/en-us/um/redmond/projects/z3}; Z3
-replaces Simplify but is only distributed for Windows),
-@c
-and the source-based C front
-end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
+can replace Simplify but is only distributed for Windows).
+@c @c
+@c and the source-based C front
+@c end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 
 @end enumerate
 
