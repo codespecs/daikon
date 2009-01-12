@@ -763,7 +763,6 @@ INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP
 intern: check-interning
 interning: check-interning
 check-interning:
-	/usr/bin/which javac
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those that contain an
