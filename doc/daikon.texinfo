@@ -2757,6 +2757,18 @@ it depends on the predicate @code{arg < 0} being true.  An
 @emph{implication} is a compound invariant that includes both the
 predicate and the conditional invariant (also called the consequent).
 
+@cindex context-sensitive invariant
+@cindex call-site-dependent invariant
+
+Another type of implication is a @i{context-sensitive} invariant --- a
+fact about method A that is true only when A is called by method B, but
+not true in general about A.  Implications can be used to construct
+context-sensitive invariants:  set a variable that depends on the call
+site, then compute an implication whose predicate tests that variable.
+For an example, see the paper ``Selecting, refining, and evaluating
+predicates for program analysis''
+(@uref{http://groups.csail.mit.edu/pag/daikon/pubs/predicates-tr914-abstract.html}).
+
 Daikon must be supplied with the predicate for an implication.  Daikon has
 certain built-in predicates that it uses for finding conditional invariants;
 examples are which return statement was executed in a procedure and whether a
@@ -3273,6 +3285,7 @@ For full details about the DynComp tools for Java and C/C++, see
 @section Loop invariants
 
 @cindex loop invariants
+@cindex local variables
 
 Daikon does not by default output loop invariants.  Daikon can detect
 invariants at any location where it is provided with variable values,
@@ -3283,7 +3296,8 @@ Here is one way to cause Daikon to produce loop invariants.  At the top
 of a loop (or at any other location in the program at which you would
 like to obtain invariants), insert a call to a dummy procedure that does
 not work but returns immediately.  Pass, as arguments to the dummy
-procedure, all variables of interest.  Daikon will produce (identical)
+procedure, all variables of interest (including local variables).
+Daikon will produce (identical)
 preconditions and postconditions for the dummy procedure; these are
 properties that held at the call site.
 
