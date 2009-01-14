@@ -8662,11 +8662,16 @@ the problem exists in Daikon as distributed.
 a description of exactly what you did (in sufficient detail for others
 to reproduce the problem), exactly what happened, and what
 you expected to happen instead.
-For instance, a transcript of your commands and the system's output
-may provide this information.  (A transcript is @strong{much} more
-useful than a vague description; please don't give vague English when you can
-supply a more precise specification instead.)
-It is crucial that you not omit steps in your report.  Do not force the
+One good way to describe what you did is a list of
+commands that, if executed, reproduces your error.  A good way to show
+what happened is a transcript of execution of all of the commands.  (A
+list of commands and a transcript are @strong{much} more useful than a
+vague description; please don't give vague English when you can supply a
+more precise specification instead.)  It is crucial that you not omit
+steps in your report.  For example, include instructions for installing
+your software and all customizations to the software or your
+environment, including all relevant environment variables.  Please do
+not force the
 developers to speculate about what you did; that is a waste of their
 time, since you already have the knowledge.
 @item
@@ -8683,7 +8688,7 @@ any other information that you consider relevant.
 When users provide an inadequate bug report,
 it is frequently more difficult for us to reproduce an error than to correct
 it.  If you make it easy for us to reproduce and verify the problem, then it is
-much more likely to be corrected.
+much more likely to be corrected.  Thanks for helping us to help you!
 
 You may also wish to take advantage of the Daikon mailing lists
 (@pxref{Mailing lists}).
