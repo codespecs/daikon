@@ -143,7 +143,12 @@ public class Instrument implements ClassFileTransformer {
     // not be able to access daikon.chicory.Runtime (because it is not
     // on the boot classpath.  Previously this code skipped classes
     // that started with java, com, javax, or sun, but this is not
-    // correct in many cases.
+    // correct in many cases.  Most boot classes have the null loader,
+    // but some generated classes (such as those in sun.reflect) will
+    // have a non-null loader.  Some of these have a null parent loader,
+    // but some do not.  The check for the sun.reflect package is a hack
+    // to catch all of these.  A more consistent mechanism to determine
+    // boot classes would be preferrable.
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher (fullClassName);
       if (matcher.find()) {
@@ -152,14 +157,20 @@ public class Instrument implements ClassFileTransformer {
         return (null);
       }
     } else if (loader == null) {
-        debug_transform.log ("ignoring system class %s, class loader == null",
-                             fullClassName);
+      debug_transform.log ("ignoring system class %s, class loader == null",
+                           fullClassName);
+      return (null);
+    } else if (loader.getParent() == null) {
+      debug_transform.log ("ignoring system class %s, parent loader == null\n",
+                           fullClassName);
       return (null);
     } else if (fullClassName.startsWith ("sun.reflect")) {
-      System.out.printf ("class = %s, loader = %s, domain = %s, mod = %08x, "
-                         + "synthetic=%b%n", fullClassName, loader,
-                         protectionDomain, classBeingRedefined.getModifiers(),
-                         classBeingRedefined.isSynthetic());
+      debug_transform.log ("ignoring system class %s, in sun.reflect package",
+                           fullClassName);
+      return (null);
+    } else if (fullClassName.startsWith ("com.sun")) {
+      System.out.printf ("Class from com.sun package %s with nonnull loaders\n",
+                         fullClassName);
     }
 
     // Don't intrument our code
@@ -168,7 +179,8 @@ public class Instrument implements ClassFileTransformer {
       return (null);
     }
 
-      debug_transform.log ("transforming class %s%n", className);
+      debug_transform.log ("transforming class %s, loader %s - %s%n", className,
+                           loader, loader.getParent());
 
     // Parse the bytes of the classfile, die on any errors
     JavaClass c = null;
