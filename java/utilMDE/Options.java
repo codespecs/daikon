@@ -657,7 +657,7 @@ public class Options {
    * Set the specified option to the value specified in arg_value.  Throws
    * an ArgException if there are any errors.
    */
-  public void set_arg (OptionInfo oi, String arg_name, String arg_value)
+  public void set_arg (OptionInfo oi, String arg_name, /*@Nullable*/ String arg_value)
     throws ArgException {
 
     Field f = oi.field;
@@ -679,29 +679,30 @@ public class Options {
       }
     }
     // Argument values are required for everything but booleans
-    if ((arg_value == null) && (type != Boolean.TYPE)
-        && (type != Boolean.class))
-      throw new ArgException ("Value required for option " + arg_name);
+    if (arg_value == null) {
+      if ((type != Boolean.TYPE)
+          || (type != Boolean.class)) {
+        arg_value = "true";
+      } else {
+        throw new ArgException ("Value required for option " + arg_name);
+      }
+    }
 
     try {
       if (type.isPrimitive()) {
         if (type == Boolean.TYPE) {
-            boolean val = false;
-            if (arg_value == null) {
-              val = true;
-            } else {
-              arg_value = arg_value.toLowerCase();
-              if (arg_value.equals ("true") || (arg_value.equals ("t")))
-                val = true;
-              else if (arg_value.equals ("false") || arg_value.equals ("f"))
-                val = false;
-              else
-                throw new ArgException ("Bad boolean value for %s: %s", arg_name,
-                                        arg_value);
-            }
-            arg_value = (val) ? "true" : "false";
-            // System.out.printf ("Setting %s to %s%n", arg_name, val);
-            f.setBoolean (oi.obj, val);
+          boolean val;
+          arg_value = arg_value.toLowerCase();
+          if (arg_value.equals ("true") || (arg_value.equals ("t")))
+            val = true;
+          else if (arg_value.equals ("false") || arg_value.equals ("f"))
+            val = false;
+          else
+            throw new ArgException ("Bad boolean value for %s: %s", arg_name,
+                                    arg_value);
+          arg_value = (val) ? "true" : "false";
+          // System.out.printf ("Setting %s to %s%n", arg_name, val);
+          f.setBoolean (oi.obj, val);
         } else if (type == Integer.TYPE) {
           int val = 0;
           try {

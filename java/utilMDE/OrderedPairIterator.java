@@ -12,7 +12,7 @@ import java.util.*;
  * it's appropriate to use set intersection/difference instead.
  */
 // T need not extend Comparable<T>, because a comparator can be passed in.
-public class OrderedPairIterator<T> implements java.util.Iterator<Pair<T,T>> {
+public class OrderedPairIterator<T> implements java.util.Iterator<Pair</*@Nullable*/ T,/*@Nullable*/ T>> {
 
   Iterator<T> itor1, itor2;
   /*@Nullable*/ T next1, next2;
