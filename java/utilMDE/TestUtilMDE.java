@@ -3,6 +3,7 @@ package utilMDE;
 import junit.framework.*;
 import java.util.*;
 import java.io.*;
+import java.text.*;
 import java.util.regex.*;
 import static utilMDE.Options.ArgException;
 
@@ -1616,16 +1617,31 @@ public final class TestUtilMDE extends TestCase {
       public void remove() { throw new UnsupportedOperationException(); }
     }
     {
+      // Typically, no progress reports are printed, because the loop
+      // finishes in well under 1 minute.  Users will see progress reports
+      // when this class is slowed down by instrumentation.
+      Calendar nextNotification = Calendar.getInstance();
+      nextNotification.add(Calendar.MINUTE, 1);
+      DateFormat df = new SimpleDateFormat();
+
       int itor_size = 10;
       int num_elts_limit = 12;
       int tries = short_run ? 100 : 100000;
       double ratio_limit = .02;
       Random r = new Random(20020311);
-      // System.out.println();
       // "i++" instead of "i+=3" here works, but is slow
       for (int i=1; i<num_elts_limit; i+=3) {
         int[] totals = new int[num_elts_limit];
         for (int j=0; j<tries; j++) {
+          if (j % 100 == 0) {
+            Calendar now = Calendar.getInstance();
+            if (now.after(nextNotification)) {
+              System.out.printf("%s: iteration (%d,%d) out of (%d,%d)%n",
+                                df.format(nextNotification.getTime()),
+                                i, j, num_elts_limit, tries);
+              nextNotification.add(Calendar.MINUTE, 1);
+            }
+          }
           List<Integer> chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
           for (int m=0; m<chosen.size(); m++) {
             for (int n=m+1; n<chosen.size(); n++) {
