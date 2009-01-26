@@ -249,6 +249,8 @@ public class WeakIdentityHashMap<K,V>
      * Value representing null keys inside tables.
      */
     // This is problematic because it isn't of the right type.
+    // We can't lie here to the type system by claiming it is of type K,
+    // because NULL_KEY is a static field but K is a per-instance type parameter.
     private static final Object NULL_KEY = new Object();
 
     /**
@@ -262,6 +264,7 @@ public class WeakIdentityHashMap<K,V>
     /**
      * Return internal representation of null key back to caller as null
      */
+    @SuppressWarnings("unchecked")
     private static <K> /*@Nullable*/ K unmaskNull(Object key) {
         return (key == NULL_KEY ? null : (K) key);
     }
