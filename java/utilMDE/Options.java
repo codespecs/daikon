@@ -17,9 +17,11 @@ import com.sun.javadoc.FieldDoc;
 /**
  * The Options class parses command-line options and sets fields in your
  * program accordingly.  Each field that is annotated with &#064;{@link
- * utilMDE.Option} is set from a command-line argument of the same name.  By using
- * annotations and Javadoc comments, this class reduces both boilerplate
- * code and the potential for documentation to get out of sync with code.
+ * utilMDE.Option} is set from a command-line argument of the same name.
+ * The Options class can also create usage messages and HTML documentation.
+ * The Options class interprets annotations and Javadoc comments, so that
+ * you do not have to write duplicative, boilerplate code and
+ * documentation that could get out of sync with the rest of your program.
  * <p>
  *
  * The main entry point is {@link #parse_or_usage(String[])}.
@@ -48,6 +50,13 @@ import com.sun.javadoc.FieldDoc;
  * '-shortname value'.  The value is mandatory for all options except
  * booleans.  Booleans are set to true if no value is specified. <p>
  *
+ * All arguments that start with '-' are processed as options.  To
+ * terminate option processing at the first non-option argument, see {@link
+ * #parse_options_after_arg(boolean)}.  Also, the special option '--'
+ * terminates option processing; all subsequent arguments are passed to the
+ * program (along with any preceding non-option arguments) without being
+ * scanned for options. <p>
+ *
  * An option may be specified multiple times.  If the field is a
  * list, each entry is be added to the list.  If the field is not a
  * list, then only the last occurrence is used (subsequent occurrences
@@ -57,8 +66,8 @@ import com.sun.javadoc.FieldDoc;
  * <ul>
  *   <li>Primitive types:  boolean, int, and double.
  *       (Primitives can also be represented as wrappers (Boolean,
- *       Integer, Double).  Use of the wrappers allows a primitive argument
- *       not to have a default value.)
+ *       Integer, Double).  Use of a wrapper type allows the argument
+ *       to have no default value.)
  *   <li>Reference types that have a constructor with a single string
  *       parameter.
  *   <li>java.util.regex.Pattern.
@@ -69,7 +78,8 @@ import com.sun.javadoc.FieldDoc;
  *
  * <b>Example:</b> <p>
  *
- * Given this code: <pre>
+ * <!-- Example needs some more words of explanation and example command lines. -->
+ * <!-- Given this code: --> <pre>
  *
  *  public static class Test {
  *
@@ -92,21 +102,18 @@ import com.sun.javadoc.FieldDoc;
  * Limitations: <ul>
  *
  *  <li> Short options are only supported as separate entries (eg, -a -b)
- *  and not as a single group (eg -ab).
+ *  and not as a single group (eg, -ab).
  *
  *  <li> Not all primitive types are supported.
  *
  *  <li> Types without a string constructor are not supported.
- *
- *  <li> Does not support "--" to terminate the options and begin the
- *  non-option command line arguments.
  *
  *  <li> Non-option information could be supported in the same manner
  *  as options which would be cleaner than simply returning all of the
  *  non-options as an array.
  *
  *  <li> The "--no-long" option to turn off a boolean option named "long"
- *  is not supported.
+ *  is not supported; use "--long=false" instead.
  * </ul>
  *
  * @see utilMDE.Option
@@ -383,11 +390,10 @@ public class Options {
 
   /**
    * If true, Options will parse arguments even after a non-option
-   * command-line argument.  This is useful if it is desired to permit
-   * users to write options at the end of a command line.  Not
-   * treating arguments that start with dash as options is useful to
-   * permit arguments to start with '-' or '--', for example if some
-   * arguments are actually options/arguments for another program.
+   * command-line argument.  Setting this to true is useful to permit users
+   * to write options at the end of a command line.  Setting this to false
+   * is useful to avoid processing arguments that are actually
+   * options/arguments for another program that this one will invoke.
    */
   public void parse_options_after_arg (boolean val) {
     parse_options_after_arg = val;
