@@ -36,7 +36,7 @@ public class AnnotateNullable {
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
-  static String last_package = null;
+  static String last_package = "";
 
   /**
    * Write an output file in the stub class format (see the Checker
@@ -196,10 +196,15 @@ public class AnnotateNullable {
     String class_samples = "-";
     if (class_ppt != null)
       class_samples = String.format ("%d", class_ppt.num_samples());
-    String ppt_package = object_ppt.ppt_name.getPackageName().intern();
+    String ppt_package = object_ppt.ppt_name.getPackageName();
+    if (ppt_package == null) {
+      ppt_package = "";
+    } else {
+      ppt_package = ppt_package.intern();
+    }
     if (stub_format) {
       if (ppt_package != last_package) {
-        // This will print "null" if we switch from a package to the
+        // This will print the empty string if we switch from a package to the
         // unnamed package.  That is intentional.
         System.out.printf ("package %s;\n\n", ppt_package);
         last_package = ppt_package;
