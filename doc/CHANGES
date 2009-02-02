@@ -20,6 +20,41 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.5.4 (February 2 2009)
+
+Bugs were fixed in Chicory and AnnotateNullable.  Daikon's
+documentation was improved.
+
+Chicory
+
+    Bug fixes
+
+        A problem the occurred when a purity file is specified 
+        was resolved.
+
+        In some circumstances, when classes are dynamically created at
+        runtime, Chicory would incorrectly determine that the class
+        was a user class (i.e., not part of the JDK).  This would
+        result in classloader areas.  This has been resolved
+
+Daikon
+
+    Documentation
+
+        The Daikon user manual was improved with more detailed information 
+        on compiling Daikon, creating implications, and the information
+        required with bug reports.
+    
+AnnotateNullable
+
+    Bug fixes
+
+        A null pointer exception that occurred in the case of the 
+        default package was fixed.
+ 
+
+-------------------------------------------
+
 4.5.3 (January 2 2009)
 
 Resolved a number of problems in the build scripts and documentation for a
