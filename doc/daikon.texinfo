@@ -3289,18 +3289,50 @@ For full details about the DynComp tools for Java and C/C++, see
 
 Daikon does not by default output loop invariants.  Daikon can detect
 invariants at any location where it is provided with variable values,
-but the front ends do not currently supply Daikon with variable values
+but currently Daikon's front ends do not supply Daikon with variable values
 at loop heads.
 
-Here is one way to cause Daikon to produce loop invariants.  At the top
-of a loop (or at any other location in the program at which you would
-like to obtain invariants), insert a call to a dummy procedure that does
-not work but returns immediately.  Pass, as arguments to the dummy
-procedure, all variables of interest (including local variables).
-Daikon will produce (identical)
-preconditions and postconditions for the dummy procedure; these are
-properties that held at the call site.
+You could extend a front end to output more variable values, or you
+could write a new front end.
 
+Alternately, here is a way to use the current front ends to produce loop
+invariants.  This workaround requires you to change your program, but it
+requires no change to Daikon or its front ends.
+
+At the top of a loop (or at any other location in the program at which
+you would like to obtain invariants), insert a call to a dummy procedure
+that does not work but returns immediately.  Pass, as arguments to the
+dummy procedure, all variables of interest (including local variables).
+Daikon will produce (identical) preconditions and postconditions for the
+dummy procedure; these are properties that held at the call site.
+
+For instance, you might change the original code
+@example
+  public void calculate(int x) @{
+    int tmp = 0;
+    while (x > 0) @{
+      // you desire to compute an invariant here
+      tmp=tmp+x;
+      x=x-1;
+    @}
+  @}
+@end example
+@noindent
+into
+@example
+  public void calculate(int x) @{
+    int tmp = 0;
+    while (x > 0) @{
+      calculate_loophead(x, tmp);
+      tmp=tmp+x;
+      x=x-1;
+    @}
+  @}
+
+  // dummy procedure
+  public void calculate_loophead(int x, int tmp) @{
+  @}
+@end example
 
 
 @node    Front ends (instrumentation), Tools, Enhancing Daikon output, Top
