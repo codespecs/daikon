@@ -1,0 +1,47 @@
+#! /bin/tcsh -f
+#
+#  build_all_list_file <sources> <main> <javac>
+#
+# Builds a list of the java files used by a class or classes.  This is
+# determined by running the java compiler on that class and looking
+# to see what class files are built.  The class files are
+# built in a temporary directory which is later deleted.
+#
+#   sources     -- directory containing all of the possible sources
+#   main        -- main file to compile.  Multiple files can be specified
+#                  (in quotes).  Must be full pathname to file
+#   javac       -- java compiler command to use.  Can just be 'javac'
+#
+#  The list of all files used by <main> is written to standard out
+
+# get the arguments
+if ($#argv != 3) then
+    echo "build_all_list_file takes 3 arguments"
+    exit 1
+endif
+set sources = $argv[1]
+set main = "$argv[2]"
+set javac = $argv[3]
+
+# determine if we have gnu find.  Gnu find requires -noleaf on AFS filesystems
+set find_args = ""
+set gnu = `find --version |& grep -c GNU`
+if ($gnu) set find_args = "-noleaf"
+
+# compile the java files 
+set scratch = `mktemp -t -d build_all_list_file.XXXXXX`
+$javac -d $scratch -sourcepath $sources $main 
+
+# get all of the class files built and convert their names back to
+# relative java filenames.  If the corresponding java file doesn't exist,
+# discard the file (this happens for inner classes, two classes in a file,
+# and perhaps some other cases)
+cd $scratch
+set files = `find . $find_args -name '*.class' | fgrep -v '$' | sed s/class/java/ | sed 's/\.\///' | sort`
+foreach file ($files)
+    if (-e $sources/$file) echo $file
+end
+cd ..
+    
+# remove the temporary directory
+/bin/rm -rf $scratch
