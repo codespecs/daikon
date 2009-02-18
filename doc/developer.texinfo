@@ -470,10 +470,8 @@ files in directory @file{$DAIKONDIR/java/daikon/derive/}.)
 @cindex new output formats
 @cindex adding new output formats
 
-Daikon can print invariants in multiple formats, including its native
-format, Java format, ESC
-format (which is a subset of the JML specification language), and
-Simplify format (for use by the Simplify theorem-prover).
+Daikon can print invariants in multiple formats
+(@pxref{Invariant syntax,,,./daikon,Daikon User Manual}).
 
 To support a new output format, you need to do two things:
 @itemize @bullet

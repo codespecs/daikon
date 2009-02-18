@@ -1975,6 +1975,14 @@ run-time checking of the invariants (see @ref{Runtime-check instrumenter},
 and @ref{InvariantChecker}), and to do various other operations.  See
 @ref{Tools}, for descriptions of such tools.
 
+If you wish to write your own tools for processing invariants, you have
+two general options.  You can parse Daikon's textual output, or you can
+write Java code that processes the @file{.inv} file.  The @file{.inv}
+file is simply a serialized
+@uref{http://groups.csail.mit.edu/pag/daikon/download/jdoc/daikon/PptMap.html,@code{PptMap}}
+object.  In addition to reading the Javadoc, you can examine how the
+other tools use this data structure.
+
 
 @menu
 * Invariant syntax::            
@@ -1994,6 +2002,9 @@ of Daikon (@pxref{Options to control Daikon output}), PrintInvariants
 (@pxref{Printing invariants}), and Annotate (@pxref{Annotate}).
 When passed on the command line, the format names are case-insensitive:
 @option{--format JML} and @option{--format jml} have the same effect.
+
+You can enhance Daikon to produce output in other formats.  See
+@ref{New formatting for invariants,,,./developer,Daikon Developer Manual}
 
 @cindex invariant output format
 @cindex output format, for invariants

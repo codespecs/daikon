@@ -5,7 +5,13 @@ import java.util.*;
 
 import utilMDE.*;
 
-/** Maps from a name (a String) to a PptTopLevel. */
+/**
+ * Maps from a program point name (a String) to a PptTopLevel.<p>
+ *
+ * This is the major data structure of Daikon.  All the invariants can be
+ * found in it, and an .inv file contains (only) the serialized form of
+ * this object.
+ */
 public class PptMap
   implements Serializable
 {
