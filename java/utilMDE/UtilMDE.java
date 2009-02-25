@@ -1011,7 +1011,7 @@ public final class UtilMDE {
   /**
    * An Iterator that returns the elements in each of its argument
    * Iterators, in turn.  The argument is an Iterator of Iterators.
-   * Like MergedIterator2, but generlaized to arbitrary number of iterators.
+   * Like MergedIterator2, but generalized to arbitrary number of iterators.
    **/
   public static final class MergedIterator<T> implements Iterator<T> {
     Iterator<Iterator<T>> itorOfItors;
@@ -1181,7 +1181,7 @@ public final class UtilMDE {
   ///
 
   // maps from a string of arg names to an array of Class objects.
-  static HashMap<String,Class[]> args_seen = new HashMap<String,Class[]>();
+  static HashMap<String,Class<?>[]> args_seen = new HashMap<String,Class<?>[]>();
 
   public static Method methodForName(String method)
     throws ClassNotFoundException, NoSuchMethodException, SecurityException {
@@ -1233,7 +1233,7 @@ public final class UtilMDE {
     return methodForName(classname, methodname, argclasses);
   }
 
-  public static Method methodForName(String classname, String methodname, Class[] params)
+  public static Method methodForName(String classname, String methodname, Class<?>[] params)
     throws ClassNotFoundException, NoSuchMethodException, SecurityException {
 
     Class<?> c = Class.forName(classname);
