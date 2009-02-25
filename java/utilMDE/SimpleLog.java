@@ -212,7 +212,11 @@ public final class SimpleLog {
   public final void log_time (String format, Object... args) {
 
     if (enabled) {
-      long elapsed = System.currentTimeMillis() - start_times.peek();
+      Long start_time = start_times.peek();
+      if (start_time == null) {
+        throw new Error("Too many pops before calling log_time");
+      }
+      long elapsed = System.currentTimeMillis() - start_time.longValue();
       logfile.print (indent_str);
       if (elapsed > 1000)
         logfile.printf ("[%,f secs] ", elapsed/1000.0);
