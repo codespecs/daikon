@@ -117,7 +117,7 @@ import java.lang.ref.ReferenceQueue;
  * @see		java.util.HashMap
  * @see		java.lang.ref.WeakReference
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"unchecked", "rawtypes", "nullness"})
 public class WeakIdentityHashMap<K,V>
     extends AbstractMap<K,V>
     implements Map<K,V> {
@@ -197,7 +197,9 @@ public class WeakIdentityHashMap<K,V>
         int capacity = 1;
         while (capacity < initialCapacity)
             capacity <<= 1;
-        table = (Entry<K,V>[]) new Entry[capacity]; // unchecked cast
+        @SuppressWarnings("unchecked")
+        Entry<K,V>[] tmpTable = (Entry<K,V>[]) new Entry[capacity];
+        table = tmpTable;
         this.loadFactor = loadFactor;
         threshold = (int)(capacity * loadFactor);
     }
@@ -223,7 +225,9 @@ public class WeakIdentityHashMap<K,V>
     public WeakIdentityHashMap() {
         this.loadFactor = DEFAULT_LOAD_FACTOR;
         threshold = DEFAULT_INITIAL_CAPACITY;
-        table = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // unchecked cast
+        @SuppressWarnings("unchecked")
+        Entry<K,V>[] tmpTable = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY];
+        table = tmpTable;
     }
 
     /**
@@ -294,7 +298,7 @@ public class WeakIdentityHashMap<K,V>
      */
     private void expungeStaleEntries() {
 	Entry<K,V> e;
-        // These types look wronge to me.
+        // These types look wrong to me.
         while ( (e = (Entry<K,V>) queue.poll()) != null) { // unchecked cast
             int h = e.hash;
             int i = indexFor(h, table.length);

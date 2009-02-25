@@ -179,6 +179,7 @@ public final class WeakHasherMap<K,V> extends AbstractMap<K,V> implements Map<K,
 	    // if (!(o instanceof WeakKey)) return false;
             if (!(o.getClass().equals(WeakKey.class))) return false;
 	    Object t = this.get();
+            @SuppressWarnings("unchecked")
 	    Object u = ((WeakKey)o).get();
 	    if ((t == null) || (u == null)) return false;
 	    if (t == u) return true;
