@@ -57,10 +57,10 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
   private Stack<ReaderInfo> readers = new Stack<ReaderInfo>();
 
   /** Regular expression that specifies an include file. **/
-  private /*@Nullable*/ Pattern include_re = null;
+  private final /*@Nullable*/ Pattern include_re;
 
   /** Regular expression that matches a comment **/
-  private /*@Nullable*/ Pattern comment_re = null;
+  private final /*@Nullable*/ Pattern comment_re;
 
   /**
    * Regular expression that starts a long entry (paragraph).
@@ -134,14 +134,18 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    *                      The expression should define one group that contains
    *                      the include file name
    */
-  public MultiReader (BufferedReader reader, String filename, /*@Nullable*/ String comment_re,
-                      /*@Nullable*/ String include_re) {
+  public MultiReader (BufferedReader reader, String filename, /*@Nullable*/ String comment_re_string,
+                      /*@Nullable*/ String include_re_string) {
 
     readers.push (new ReaderInfo (reader, filename));
-    if (comment_re != null)
-      this.comment_re = Pattern.compile (comment_re);
-    if (include_re != null)
-      this.include_re = Pattern.compile (include_re);
+    if (comment_re_string == null)
+      comment_re = null;
+    else
+      comment_re = Pattern.compile (comment_re_string);
+    if (include_re_string == null)
+      include_re = null;
+    else
+      include_re = Pattern.compile (include_re_string);
   }
 
   /** Create a MultiReader that does not support comments or include directives.
