@@ -205,6 +205,7 @@ public final class WeakHasherMap<K,V> extends AbstractMap<K,V> implements Map<K,
        each public mutator in this class.  We don't invoke this method in
        public accessors because that can lead to surprising
        ConcurrentModificationExceptions. */
+    @SuppressWarnings("unchecked")
     private void processQueue() {
 	WeakKey wk;
 	while ((wk = (WeakKey)queue.poll()) != null) { // unchecked cast
