@@ -1045,7 +1045,10 @@ public final class UtilMDE {
       this.itor = itor; this.filter = filter;
     }
 
-    /*@Nullable*/ T current;
+    @SuppressWarnings("unchecked")
+    T invalid_t = (T) new Object();
+
+    T current = invalid_t;
     boolean current_valid = false;
 
     public boolean hasNext() {
@@ -1059,6 +1062,7 @@ public final class UtilMDE {
     public T next() {
       if (hasNext()) {
         current_valid = false;
+        assert current != invalid_t;
         return current;
       } else {
         throw new NoSuchElementException();
@@ -1077,7 +1081,10 @@ public final class UtilMDE {
    **/
   public static final class RemoveFirstAndLastIterator<T> implements Iterator<T> {
     Iterator<T> itor;
-    /*@Nullable*/ T nothing = (/*@Nullable*/ T) null;           // was Object nothing = new Object();
+    // I don't think this works, because the iterator might itself return null
+    // /*@Nullable*/ T nothing = (/*@Nullable*/ T) null;
+    @SuppressWarnings("unchecked")
+    T nothing = (T) new Object();
     T first = nothing;
     T current = nothing;
 
