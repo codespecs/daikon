@@ -666,10 +666,17 @@ run:	all
 run_gui:	all
 	${JAVA} daikon.gui.InvariantsGUI /g1/users/mhao/daikon/inv_files/dsaa.inv 2>&1 | grep -v Font
 
+# When doing certain search/replace, it makes sense to omit generated files
+tags-without-generated-files:
+	tags-nogen
+tags-nogen: very-
+	${MAKE} tags-nogen-noclean
+# Separate target to force make to run again and re-compute TAG_FILES
+tags-nogen-noclean:
+	@etags -l java ${TAG_FILES}
+
 etags:	tags
-
 TAGS:	tags
-
 tags:
 	@echo etags '*.java ...'
 	@etags -l java ${TAG_FILES}
@@ -741,13 +748,13 @@ audit:
 
 # Interning type qualifier checker
 
-# JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker
-JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker
+# JAVAC_INTERNING_ARGS = -proc:only -processor checkers.interning.InterningChecker
+JAVAC_INTERNING_ARGS = -proc:only -processor checkers.interning.InterningChecker -Alint=-dotequals
+JAVAC_NULLNESS_ARGS = -proc:only -processor checkers.nullness.NullnessChecker
 JAVAC_NULLNESS_STUBS = -sourcepath ${checkers}/jdk/nullness/src
-JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker
+JAVAC_JAVARI_ARGS = -proc:only -processor checkers.javari.JavariChecker
 JAVAC_JAVARI_STUBS = -sourcepath ${checkers}/jdk/nullness/src
-JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker
+JAVAC_IGJ_ARGS = -proc:only -processor checkers.igj.IGJChecker
 JAVAC_IGJ_STUBS = -sourcepath ${checkers}/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
 # INTERNING_JAVA_FILES_SKIP =
@@ -759,6 +766,8 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.jav
 ## Which files to check.
 INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -wholename ./daikon/util -prune -o -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
+#
+NULLNESS_JAVA_FILES = $(shell find utilMDE -name '*.java' -print) $(shell find daikon/inv -name '*.java' -print)
 
 intern: check-interning
 interning: check-interning
@@ -780,7 +789,7 @@ check-nullness-all-nostubs:
 
 check-nullness-all-withstubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
 check-igj-all-nostubs:
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ...
