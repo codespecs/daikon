@@ -235,7 +235,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
         File filename = new File (UtilMDE.fix_filename(m.group (1)));
         // System.out.printf ("Trying to include filename %s%n", filename);
         if (!filename.isAbsolute()) {
-          @SuppressWarnings("nullness")n
+          @SuppressWarnings("nullness")
           /*@NonNull*/ ReaderInfo reader = readers.peek();
           File current_filename = new File (reader.filename);
           File current_parent = current_filename.getParentFile();
