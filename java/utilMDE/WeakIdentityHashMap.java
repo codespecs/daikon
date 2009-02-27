@@ -268,9 +268,10 @@ public class WeakIdentityHashMap<K,V>
     /**
      * Return internal representation of null key back to caller as null
      */
+    // Argument is actually either of type K, or is NULL_KEY.
     @SuppressWarnings("unchecked")
-    private static <K> /*@Nullable*/ K unmaskNull(Object key) {
-        return (key == NULL_KEY ? null : (K) key);
+    private static <K> /*@Nullable*/ K unmaskNull(K key) {
+        return (key == NULL_KEY ? null : key);
     }
 
     /**
