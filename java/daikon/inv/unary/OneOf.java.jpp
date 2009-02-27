@@ -1376,7 +1376,7 @@ public final class ONEOFSCALAR
     }
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
@@ -1388,7 +1388,7 @@ public final class ONEOFSCALAR
   }
 
 #if defined(IS_NUMERIC)
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -1453,7 +1453,7 @@ public final class ONEOFSCALAR
     return null;
   }
 #elif defined(IS_ELT_NUMERIC)
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;

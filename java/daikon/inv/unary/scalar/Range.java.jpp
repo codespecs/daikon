@@ -189,7 +189,7 @@ public abstract class RANGE extends SUPERCLASS {
    * All range invariants except Even and PowerOfTwo are obvious since they
    * represented by some version of OneOf or Bound.
    */
-  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     return new DiscardInfo (this, DiscardCode.obvious,
                             "Implied by Oneof or Bound");
@@ -579,7 +579,7 @@ public abstract class RANGE extends SUPERCLASS {
      * Since PowerOfTwo is not covered by Bound or OneOf, it is not obvious
      * (and should thus be printed)
      */
-     public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
        ONEOF oneof = find_oneof (vis);
        if (oneof != null)
@@ -643,7 +643,7 @@ public abstract class RANGE extends SUPERCLASS {
      * Since Even is not covered by Bound or OneOf, it is not obvious
      * (and should thus be printed)
      */
-     public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
        // If there is a oneof, it implies this
        ONEOF oneof = find_oneof (vis);
        if (oneof != null)

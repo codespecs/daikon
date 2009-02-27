@@ -480,7 +480,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return null;
   }
 
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

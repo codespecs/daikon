@@ -223,7 +223,7 @@ public final class SEQINTEQUAL
    * uninteresting comparisons (except when op is GreaterEqual for max
    * and LessEqual for min)
    */
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     SequenceMin seqmin = null;
     SequenceMax seqmax = null;
@@ -359,7 +359,7 @@ public final class SEQINTEQUAL
    *  (A[] == [])                        ==> (x op A[])
    *
    */
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

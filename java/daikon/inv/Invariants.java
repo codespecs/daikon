@@ -34,7 +34,7 @@ public final class Invariants
   }
 
   // Override superclass implementation
-  public boolean remove(Object o) {
+  public boolean remove(/*@Nullable*/ Object o) {
     boolean result = super.remove(o);
     // Perhaps trim to size.
     // The test I really want is "if size() < capacity()/2".

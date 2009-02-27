@@ -1125,7 +1125,7 @@ public abstract class Invariant
    * extending isObviousStatically(VarInfo[]) because it is more
    * general.
    **/
-  public final DiscardInfo isObviousStatically() {
+  public final /*@Nullable*/ DiscardInfo isObviousStatically() {
     return isObviousStatically(this.ppt.var_infos);
   }
 
@@ -1141,7 +1141,7 @@ public abstract class Invariant
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
    **/
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     return null;
   }
 
@@ -1185,7 +1185,7 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
-  public DiscardInfo isObviousStatically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
@@ -1197,7 +1197,7 @@ public abstract class Invariant
   /**
    * Recurse through vis and generate the cartesian product of ...
    **/
-  protected DiscardInfo isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
+  protected /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
@@ -1229,7 +1229,7 @@ public abstract class Invariant
    * should override isObviousStatically or isObviousDynamically.  Wherever
    * possible, suppression, rather than this, should do the dynamic checking.
    **/
-  public final DiscardInfo isObvious() {
+  public final /*@Nullable*/ DiscardInfo isObvious() {
     // Actually actually, we'll eliminate invariants as they become obvious
     // rather than on output; the point of this is to speed up computation.
     // // Actually, we do need to check isObviousDerived after all because we
@@ -1265,7 +1265,7 @@ public abstract class Invariant
    * "super.isObviousDynamically(vis)".  Since this method is
    * dynamic, it should only be called after all processing.
    **/
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     Assert.assertTrue (!Daikon.isInferencing);
     Assert.assertTrue(vis.length <= 3, "Unexpected more-than-ternary invariant");
     if (! ArraysMDE.noDuplicates(vis)) {
@@ -1302,7 +1302,7 @@ public abstract class Invariant
    * <p> This method is final because subclasses should extend
    * isObviousDynamically(VarInfo[]) since that method is more general.
    **/
-  public final DiscardInfo isObviousDynamically() {
+  public final /*@Nullable*/ DiscardInfo isObviousDynamically() {
     Assert.assertTrue (!Daikon.isInferencing);
     return isObviousDynamically (ppt.var_infos);
   }
@@ -1320,7 +1320,7 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
-  public DiscardInfo isObviousDynamically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     DiscardInfo result = isObviousDynamically();
     if (result != null)
       return result;
@@ -1337,7 +1337,7 @@ public abstract class Invariant
    * combination.  The combinations are generated via recursive calls to
    * this routine.
    **/
-  protected DiscardInfo isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
+  protected /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {

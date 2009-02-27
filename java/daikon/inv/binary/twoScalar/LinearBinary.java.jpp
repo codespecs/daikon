@@ -174,7 +174,7 @@ public class CLASSNAME
     return true;
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Obvious derived
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
@@ -206,7 +206,7 @@ public class CLASSNAME
     return super.isObviousStatically(vis);
   }
 
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;

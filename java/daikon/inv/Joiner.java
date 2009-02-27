@@ -51,7 +51,7 @@ public abstract class Joiner
     return false;
   }
 
-  public DiscardInfo isObviousImplied() {
+  public /*@Nullable*/ DiscardInfo isObviousImplied() {
     return null;
   }
 

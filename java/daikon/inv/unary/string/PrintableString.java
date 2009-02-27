@@ -86,7 +86,7 @@ public final class PrintableString extends SingleString
    * is for static constants which are obviously printable (or not)
    * from their values
    */
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (vis[0].isStaticConstant()) {
       return new DiscardInfo(this, DiscardCode.obvious, vis[0].name()
                              + " is a static constant.");

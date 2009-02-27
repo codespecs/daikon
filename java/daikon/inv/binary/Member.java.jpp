@@ -120,7 +120,7 @@ public final class CLASSNAME
     return new CLASSNAME (slice);
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (isObviousMember(sclvar(vis), seqvar(vis))) {
       log ("scalar is obvious member of");
       return new DiscardInfo(this, DiscardCode.obvious, sclvar().name()
@@ -359,7 +359,7 @@ public final class CLASSNAME
    *   (A subset B)                 ==> A[i] in B
    * </pre>
    */
-  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     if (Debug.logOn())
       Debug.log (getClass(), ppt.parent, vis, "is obvious check" + format());

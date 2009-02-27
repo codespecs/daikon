@@ -278,7 +278,7 @@ public class SUBSET
     return SUBSEQUENCE.isObviousSubSequence(subvar, supervar);
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 

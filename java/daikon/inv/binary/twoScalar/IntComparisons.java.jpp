@@ -815,7 +815,7 @@ public final class INTEQUAL
    *  obviousness rather than the cartesian product on the equality
    *  set.
    **/
-  public DiscardInfo isObviousStatically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
     } else {
@@ -830,7 +830,7 @@ public final class INTEQUAL
    *  obviousness rather than the cartesian product on the equality
    *  set.
    **/
-  public DiscardInfo isObviousDynamically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousDynamically(this.ppt.var_infos);
     } else {
@@ -839,7 +839,7 @@ public final class INTEQUAL
   }
 #endif
 
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // JHP: We might consider adding a check over bounds.   If
     // x < c and y > c then we know that x < y.  Similarly for

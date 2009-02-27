@@ -285,7 +285,7 @@ public final class CLASSNAME
     return false;
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (!vis[0].aux.getFlag(VarInfoAux.HAS_NULL)) {
       // If it's not a number and null doesn't have special meaning...
       return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + vis[0].name());
@@ -294,7 +294,7 @@ public final class CLASSNAME
   }
 
 
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;

@@ -494,7 +494,7 @@ public class SEQSEQINTEQUAL
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
    **/
-  public DiscardInfo isObviousStatically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically (this.ppt.var_infos);
     } else {
@@ -507,7 +507,7 @@ public class SEQSEQINTEQUAL
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
    **/
-  public DiscardInfo isObviousDynamically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (logOn())
       log ("Considering dynamically_someInEquality");
     if (var1().equalitySet == var2().equalitySet) {
@@ -517,7 +517,7 @@ public class SEQSEQINTEQUAL
     }
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     #ifdef NUMERIC
       VarInfo var1 = vis[0];
       VarInfo var2 = vis[1];
@@ -532,7 +532,7 @@ public class SEQSEQINTEQUAL
     return super.isObviousStatically (vis);
   }
 
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;

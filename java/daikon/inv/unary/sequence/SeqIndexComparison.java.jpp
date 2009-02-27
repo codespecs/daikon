@@ -418,7 +418,7 @@ public class CLASSNAME extends SUPERCLASS {
    * A[] = {2, 3, 4}, A[] is a subsequence of B[] and B[i] == i,
    * but A[i] = i is not true.
    */
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

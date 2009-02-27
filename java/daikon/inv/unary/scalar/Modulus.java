@@ -258,7 +258,7 @@ public class Modulus
    *    size(x[]) = r (mod m) ==> size(x[])-1 = (r-1) (mod m)
    * </pre>
    **/
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // Do not show x-1 = a (mod b).  There must be a different mod
     // invariant over x.  JHP: This should really find the invariant rather

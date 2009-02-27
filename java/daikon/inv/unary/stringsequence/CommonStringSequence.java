@@ -132,7 +132,7 @@ public class CommonStringSequence
     throw new Error("Not yet implemented");
   }
 
-  public DiscardInfo isObviousImplied() {
+  public /*@Nullable*/ DiscardInfo isObviousImplied() {
     return null;
   }
 

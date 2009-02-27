@@ -121,14 +121,14 @@ public class Implication
     }
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     Assert.assertTrue (vis.length > 0);
     for (int ii = 0; ii < vis.length; ii++ )
       Assert.assertTrue (vis[ii] != null);
     return orig_right.isObviousStatically(vis);
   }
 
-  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
     Assert.assertTrue (vis.length > 0);
     for (int ii = 0; ii < vis.length; ii++ )
       Assert.assertTrue (vis[ii] != null);
@@ -156,7 +156,7 @@ public class Implication
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
    **/
-  public DiscardInfo isObviousStatically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
 //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
 //     if (result != null) return result;
@@ -180,7 +180,7 @@ public class Implication
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
    **/
-  public DiscardInfo isObviousDynamically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
 
     // If the consequent is ni-suppressed in its original program point,
     // then it is obvious from some set of other invariants.  Those invariants

@@ -69,7 +69,7 @@ public class AndJoiner
   }
 
 
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     // Don't call super.isObviousDynamically(vis);
 
     DiscardInfo leftObvious = left.isObviousDynamically(vis);
@@ -82,7 +82,7 @@ public class AndJoiner
     return null;
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     DiscardInfo leftObvious = left.isObviousStatically(vis);
     DiscardInfo rightObvious = right.isObviousStatically(vis);
     if (leftObvious != null && rightObvious != null) {

@@ -430,7 +430,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 #endif
 
-  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null)
@@ -751,7 +751,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
      * @return non-null value iff this invariant is obvious from
      *          other invariants in the same slice
      **/
-    public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
       // First call super type's method, and if it returns non-null, then
       // this invariant is already known to be obvious, so just return
       // whatever reason the super type returned.

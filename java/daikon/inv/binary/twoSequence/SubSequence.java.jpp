@@ -471,7 +471,7 @@ public class CLASSNAME
     return null;
   }
 
-  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     VarInfo subvar = SUB_VAR(vis);
     VarInfo supervar = SUPER_VAR(vis);
@@ -508,7 +508,7 @@ public class CLASSNAME
 
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
-  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // System.out.println("checking isObviousImplied for: " + format());
     if (debug.isLoggable(Level.FINE)) {

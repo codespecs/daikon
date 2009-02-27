@@ -286,7 +286,7 @@ public class PAIRWISEINTEQUAL
   #endif
 
 
-  public DiscardInfo isObviousStatically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically (VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
@@ -313,7 +313,7 @@ public class PAIRWISEINTEQUAL
     return super.isObviousStatically (vis);
   }
 
-  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
