@@ -235,7 +235,9 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
         File filename = new File (UtilMDE.fix_filename(m.group (1)));
         // System.out.printf ("Trying to include filename %s%n", filename);
         if (!filename.isAbsolute()) {
-          File current_filename = new File (readers.peek().filename);
+          @SuppressWarnings("nullness")n
+          /*@NonNull*/ ReaderInfo reader = readers.peek();
+          File current_filename = new File (reader.filename);
           File current_parent = current_filename.getParentFile();
           filename = new File (current_parent, filename.toString());
           // System.out.printf ("absolute filename = %s %s %s%n",
@@ -399,28 +401,36 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     if (readers.size() == 0)
       return (null);
 
-    ReaderInfo ri = readers.peek();
-    String line = ri.reader.readLine();
-    ri.line_number++;
+    @SuppressWarnings("nullness") // ri != null because readers.size != 0
+    /*@NonNull*/ ReaderInfo ri1 = readers.peek();
+    String line = ri1.reader.readLine();
+    ri1.line_number++;
     while (line == null) {
       readers.pop();
       if (readers.empty())
         return (null);
-      ri = readers.peek();
-      line = ri.reader.readLine();
-      ri.line_number++;
+      @SuppressWarnings("nullness") // ri != null because readers.size != 0
+      /*@NonNull*/ ReaderInfo ri2 = readers.peek();
+      line = ri2.reader.readLine();
+      ri2.line_number++;
     }
     return (line);
   }
 
   /** Returns the current filename **/
   public String get_filename() {
-    return readers.peek().filename;
+    ReaderInfo ri = readers.peek();
+    if (ri == null)
+      throw new Error("Past end of input");
+    return ri.filename;
   }
 
   /** Returns the current line number in the current file **/
   public long get_line_number() {
-    return readers.peek().line_number;
+    ReaderInfo ri = readers.peek();
+    if (ri == null)
+      throw new Error("Past end of input");
+    return ri.line_number;
   }
 
   /**
