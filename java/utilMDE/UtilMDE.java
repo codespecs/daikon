@@ -781,7 +781,7 @@ public final class UtilMDE {
    * If the key isn't in the HashMap, it is added.
    * Throws an error if the key is in the HashMap but maps to a non-Integer.
    **/
-  public static <T> Integer incrementMap(Map<T,Integer> m, T key, int count) {
+  public static <T> /*@Nullable*/ Integer incrementMap(Map<T,Integer> m, T key, int count) {
     Integer old = m.get(key);
     int new_total;
     if (old == null) {
