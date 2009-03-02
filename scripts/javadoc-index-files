@@ -2,9 +2,9 @@
 
 
 ## JDK
-~mernst/java/jdk/docs/api/index-files/*.html
-~mernst/java/jdk/docs/jdk/api/javac/tree/index-all.html
-~mernst/java/jdk/docs/jdk/api/javadoc/doclet/index-all.html
+~mernst/java/jdk-docs/api/index-files/*.html
+~mernst/java/jdk-docs/jdk/api/javac/tree/index-all.html
+~mernst/java/jdk-docs/jdk/api/javadoc/doclet/index-all.html
 # split(/\n/, `find ~mernst/java/jdk/docs/guide -name index-all.html`)
 
 ## Other libraries
